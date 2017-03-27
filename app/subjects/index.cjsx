@@ -15,6 +15,8 @@ module.exports = React.createClass
   displayName: 'Subject'
 
   getInitialState: ->
+    collections: null
+    isFavorite: false
     subject: null
 
   componentWillMount: ->
@@ -25,8 +27,25 @@ module.exports = React.createClass
 
   setSubject: ->
     subjectId = @props.params.id.toString()
-    apiClient.type('subjects').get(subjectId).then (subject) =>
+    apiClient.type('subjects').get(subjectId)
+    .then (subject) =>
       @setState {subject}
+      @getCollections(subject)
+
+  getCollections: (subject) ->
+    query =
+      subject_id: subject.id
+      page_size: 20
+      sort: '-created_at'
+      include: 'owner'
+
+    apiClient.type('collections').get(query)
+      .then (collections) =>
+        isFavorite = false
+        if collections and @props.user?
+          favoriteCollection = collections.filter((collection) => collection.favorite and @props.project.id in collection.links.projects)
+          isFavorite = subject.id in favoriteCollection[0].links.subjects if favoriteCollection.length > 0
+        @setState {collections, isFavorite}
 
   render: ->
     <div className="subject-page talk">
@@ -35,16 +54,17 @@ module.exports = React.createClass
           {if @state.subject
             <div>
               <h1>Subject {@state.subject.id}</h1>
-
               <SubjectViewer
                 subject={@state.subject}
                 user={@props.user}
                 project={@props.project}
                 linkToFullImage={true}
-                metadataFilters={['#']} />
+                metadataFilters={['#']}
+                isFavorite={@state.isFavorite}
+              />
 
               <SubjectCommentList subject={@state.subject} {...@props} />
-              <SubjectCollectionList subject={@state.subject} {...@props} />
+              <SubjectCollectionList collections={@state.collections} {...@props} />
               <SubjectDiscussionList subject={@state.subject} {...@props} />
               <SubjectMentionList subject={@state.subject} {...@props} />
               <SubjectCommentForm subject={@state.subject} {...@props} />

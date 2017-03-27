@@ -11,11 +11,13 @@ module.exports = React.createClass
     subject: React.PropTypes.object # a subject response from panoptes
     project: React.PropTypes.object # a project response from panoptes
     user: React.PropTypes.object
+    isFavorite: React.PropTypes.bool
 
   getDefaultProps: ->
     subject: null
     project: null
     user: null
+    isFavorite: false
 
   getInitialState: ->
     favorites: null
@@ -39,29 +41,20 @@ module.exports = React.createClass
       .get({project_ids: @props.project?.id, favorite: true, owner: @props.user.login})
       .then ([favorites]) -> if favorites? then favorites else null
 
-  findSubjectInCollection: (favorites) ->
-    if @props.subject.hasOwnProperty 'favorite'
-      Promise.resolve @props.subject.favorite
-    else if favorites?
-      favorites.get('subjects', id: @props.subject.id)
-        .then ([subject]) -> subject?
-    else
-      Promise.resolve false
-
   componentWillMount: ->
-    @findFavoriteCollection()
-      .then (favorites) =>
-        @setState {favorites}
-        @findSubjectInCollection(favorites)
-        .then (favorited) =>
-          @setState {favorited}
-
+    @favoriteSubject(@props.isFavorite)
 
   componentDidUpdate: (prevProps) ->
     if prevProps.subject isnt @props.subject
-      @findSubjectInCollection(@state.favorites)
-      .then (favorited) =>
-        @setState {favorited}
+      @favoriteSubject(@props.isFavorite)
+
+  componentWillReceiveProps: (nextProps) ->
+    if @props.isFavorite isnt nextProps.isFavorite
+      @favoriteSubject(nextProps.isFavorite)
+
+  favoriteSubject: (isFavorite) ->
+    favorited = isFavorite
+    @setState {favorited}
 
   addSubjectTo: (collection) ->
     @setState favorited: true
@@ -72,22 +65,39 @@ module.exports = React.createClass
     collection.removeLink('subjects', [@props.subject.id.toString()])
 
   createFavorites: ->
-    display_name = getFavoritesName(@props.project)
-    project = @props.project?.id
-    subjects = [@props.subject.id]
-    favorite = true
+    new Promise (resolve, reject) =>
+      @findFavoriteCollection()
+        .catch (err) ->
+          reject err
+        .then (favorites) =>
+          if favorites?
+            @setState {favorites}
+            resolve favorites
+          else
+            display_name = getFavoritesName(@props.project)
+            project = @props.project?.id
+            subjects = []
+            favorite = true
 
-    links = {subjects}
-    links.projects = [ project ] if project?
-    collection = {favorite, display_name, links}
-
-    @setState favorited: true
-    apiClient.type('collections').create(collection).save()
+            links = {subjects}
+            links.projects = [ project ] if project?
+            collection = {favorite, display_name, links}
+            apiClient.type('collections')
+              .create(collection)
+              .save()
+              .catch (err) ->
+                reject err
+              .then (favorites) =>
+                @setState {favorites}
+                resolve favorites
 
   toggleFavorite: ->
     if @props.user?
       if not @state.favorites?
+        @setState favorited: true
         @createFavorites()
+        .then (favorites) =>
+          @addSubjectTo(favorites)
         @logSubjLike 'favorite'
       else if @state.favorited
         @removeSubjectFrom(@state.favorites)

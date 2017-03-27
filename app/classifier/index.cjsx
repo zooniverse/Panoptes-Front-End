@@ -159,6 +159,7 @@ Classifier = React.createClass
         user={@props.user}
         project={@props.project}
         subject={@props.subject}
+        isFavorite={@props.subject.favorite}
         workflow={@props.workflow}
         preferences={@props.preferences}
         classification={currentClassification}
