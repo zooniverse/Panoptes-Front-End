@@ -12,11 +12,10 @@ const workflows = [
   { id: '2', display_name: 'Cool Workflow', getMeta: meta }
 ];
 
-const project = { id: '1', configuration: {}};
-
-const createHref = function(channel) { return { bind: function(event, callback) { } }};
-const isActive = function(channel) { return { bind: function(event, callback) { } }};
-const context = { router: { createHref, isActive }};
+const context = { router: {
+  createHref: () => {},
+  isActive: () => {}
+}};
 
 describe('WorkflowsPage', function () {
   let wrapper;
