@@ -32,6 +32,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     subject: null
+    isFavorite: false
     user: null
     playFrameDuration: 667
     playIterations: 3
@@ -158,7 +159,7 @@ module.exports = React.createClass
               <span>
                 {unless @props.workflow?.configuration?.disable_favorites
                   <span>
-                    <FavoritesButton className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />{' '}
+                    <FavoritesButton className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} isFavorite={@props.isFavorite} />{' '}
                   </span>}
                 <CollectionsManagerIcon className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />
               </span>
