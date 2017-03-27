@@ -13,6 +13,7 @@ ProjectPageController = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
     initialLoadComplete: React.PropTypes.bool
+    router: React.PropTypes.object.isRequired
 
   propTypes:
     params: React.PropTypes.object
@@ -108,7 +109,7 @@ ProjectPageController = React.createClass
 
           awaitProjectCompleteness = Promise.resolve(project.completeness > 0.99)
 
-          awaitProjectRoles = apiClient.type('project_roles').get(project.links.project_roles).catch((error) => console.error(error))
+          awaitProjectRoles = apiClient.type('project_roles').get({ project_id: project.id, page_size: 50 }).catch((error) => console.error(error))
 
           awaitPreferences = @getUserProjectPreferences(project, user)
 
@@ -143,10 +144,6 @@ ProjectPageController = React.createClass
       .then =>
         @setState loading: false
 
-  canFetchWorkflowByQuery: (project, user) ->
-    if project?
-      'allow workflow query' in project.experimental_tools or @checkUserRoles(project, user)
-
   getUserProjectPreferences: (project, user) ->
     @listenToPreferences null
 
@@ -173,9 +170,15 @@ ProjectPageController = React.createClass
 
   getSelectedWorkflow: (project, preferences) ->
     @setState({ loadingSelectedWorkflow: true })
-    # preference workflow query, then user selected workflow, then project owner set workflow, then default workflow
+    # preference workflow query by admin/owner/collab, then workflow query if in project settings, then user selected workflow, then project owner set workflow, then default workflow
     # if none of those are set, select random workflow
-    if @props.location.query?.workflow? and @canFetchWorkflowByQuery(project, @props.user)
+    activeFilter = true
+    if @props.location.query?.workflow? and @checkUserRoles(project, @props.user)
+      selectedWorkflowID = @props.location.query.workflow
+      activeFilter = false
+      unless preferences?.preferences.selected_workflow is selectedWorkflowID
+        @handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID)
+    else if @props.location.query?.workflow? and 'allow workflow query' in project?.experimental_tools
       selectedWorkflowID = @props.location.query.workflow
       unless preferences?.preferences.selected_workflow is selectedWorkflowID
         @handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID)
@@ -188,7 +191,7 @@ ProjectPageController = React.createClass
     else
       selectedWorkflowID = @selectRandomWorkflow(project)
 
-    @getWorkflow(selectedWorkflowID)
+    @getWorkflow(selectedWorkflowID, activeFilter)
 
   selectRandomWorkflow: (project) ->
     linkedWorkflows = project.links.workflows
@@ -200,8 +203,13 @@ ProjectPageController = React.createClass
       # console.log 'Chose random workflow', linkedWorkflows[randomIndex]
       linkedWorkflows[randomIndex]
 
-  getWorkflow: (selectedWorkflowID) ->
-    apiClient.type('workflows').get({ active: true, id: "#{selectedWorkflowID}", project_id: @state.project.id })
+  getWorkflow: (selectedWorkflowID, activeFilter = true) ->
+    query =
+      id: "#{selectedWorkflowID}",
+      project_id: @state.project.id
+    if activeFilter
+      query['active'] = true
+    apiClient.type('workflows').get(query)
       .catch (error) =>
         console.error error
         # TODO: Handle 404 once json-api-client error handling is fixed.
@@ -211,6 +219,8 @@ ProjectPageController = React.createClass
           @setState({ loadingSelectedWorkflow: false, workflow })
         else
           console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
+          if @props.location.query?.workflow?
+            @context.router.push "/projects/#{@state.project.slug}/classify"
           @clearInactiveWorkflow(selectedWorkflowID)
             .then(@getSelectedWorkflow(@state.project, @state.preferences))
 
@@ -229,8 +239,8 @@ ProjectPageController = React.createClass
       Promise.resolve(null)
 
   checkUserRoles: (project, user) ->
-    currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user.id)
-    roles = currentUserRoleSets[0].roles
+    currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user?.id)
+    roles = currentUserRoleSets[0]?.roles or []
 
     isAdmin() or 'owner' in roles or 'collaborator' in roles
 
