@@ -93,7 +93,7 @@ ProjectPageController = React.createClass
 
     slug = ownerName + '/' + projectName
 
-    apiClient.type('projects').get({ slug, include: 'avatar,background,owners,project_roles' })
+    apiClient.type('projects').get({ slug, include: 'avatar,background,project_roles' })
       .then ([project]) =>
         @setState {project}
 
