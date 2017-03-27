@@ -58,7 +58,14 @@ export default class LabStatus extends React.Component {
     
     return (
       <div className="lab-status">
+        {/*
         <button className="fa fa-close" onClick={this.hide.bind(this)} autoFocus={true}></button>
+        //Unlike App Status, we prevent the closing of the message since we
+        //can't get a consistent 'state' across every instance of Lab Status,
+        //meaning users will get annoyed if they close the message on Project 13
+        //but the message pops up again in Project 15. Removing the option to
+        //close will remove the expectation (-shaun 20170327)
+        */}
         <div className="message">{this.state.message}</div>
       </div>
     );

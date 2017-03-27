@@ -11,6 +11,7 @@ workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 DragReorderable = require 'drag-reorderable'
+`import LabStatus from '../../partials/lab-status.jsx';`
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
@@ -175,6 +176,7 @@ EditProjectPage = React.createClass
       <hr />
 
       <div className="column">
+        <LabStatus />
         <ChangeListener target={@props.project} handler={=>
           propsWithoutChildren = Object.assign {}, @props
           delete propsWithoutChildren.children
