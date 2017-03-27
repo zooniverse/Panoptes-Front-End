@@ -56,13 +56,17 @@ module.exports = React.createClass
     {_inProgress, points} = @props.mark
     path = createPathFromCoords points
 
+    lineClass = if _inProgress then 'drawing' else 'clickable'
+
     <DrawingToolRoot tool={this}>
       <path d={path}
         strokeWidth={GRAB_STROKE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)}
         strokeOpacity="0"
         fill="none"
-        className="clickable" />
-      <path d={path} fill="none" className="clickable" />
+        className={lineClass} />
+      <path d={path}
+        fill="none"
+        className={lineClass} />
 
       {if @props.selected
         deletePosition = @getDeletePosition points

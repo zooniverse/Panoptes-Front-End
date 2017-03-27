@@ -95,12 +95,13 @@ module.exports = React.createClass
     { _currentlyDrawing, _inProgress, points } = @props.mark
     path = createPathFromCoords points
     fill = if _inProgress then 'none' else @props.color
+    lineClass = if _inProgress then 'drawing' else 'clickable'
 
     <DrawingToolRoot tool={this}>
       <path d={path}
         fill={fill}
         fillOpacity="0.2"
-        className="clickable" />
+        className={lineClass} />
 
       {if @props.selected
         [firstPoint, ..., lastPoint] = points
