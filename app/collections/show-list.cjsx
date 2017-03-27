@@ -1,4 +1,5 @@
 React = require 'react'
+apiClient = require 'panoptes-client/lib/api-client'
 intersection = require 'lodash.intersection'
 pick = require 'lodash.pick'
 Translate = require 'react-translate-component'
@@ -21,12 +22,14 @@ SubjectNode = React.createClass
     geordi: React.PropTypes.object.isRequired
 
   getInitialState: ->
+    isFavorite: false
     project: null
 
   componentWillMount: ->
     @fetchProject(@props.subject)
       .then (project) =>
         @setState {project}
+        @isFavorite(project)
 
   fetchProject: (subject) ->
     projectRequest = if @props.collection?.links.project?
@@ -45,10 +48,27 @@ SubjectNode = React.createClass
 
     return hasPermission
 
+  isFavorite: (project) ->
+    if @props.collection.favorite
+      @setState isFavorite: @props.collection.favorite
+    else if @props.user?
+      query = {
+        favorite: true
+        project_ids: project.id
+        owner: @props.user.login
+      }
+      isFavorite = false
+
+      apiClient.type('collections').get(query)
+        .then ([favoritesCollection]) =>
+          if favoritesCollection?
+            isFavorite = @props.subject.id in favoritesCollection.links.subjects
+          @setState({ isFavorite })
+
   render: ->
     logClick = @context.geordi?.makeHandler? 'about-menu'
     <div className="collection-subject-viewer">
-      <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project} isFavorite={@props.collection.favorite}>
+      <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project} isFavorite={@state.isFavorite}>
         {if @isOwnerOrCollaborator()
           <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
             <i className="fa fa-close" />

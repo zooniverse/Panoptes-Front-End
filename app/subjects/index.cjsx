@@ -42,9 +42,9 @@ module.exports = React.createClass
     apiClient.type('collections').get(query)
       .then (collections) =>
         isFavorite = false
-        if collections?
-          collections.forEach (collection) =>
-            isFavorite = collection.favorite and subject.id in collection.links.subjects and @props.project.id in collection.links.projects and @props.user?
+        if collections and @props.user?
+          favoriteCollection = collections.filter((collection) => collection.favorite and @props.project.id in collection.links.projects)
+          isFavorite = subject.id in favoriteCollection[0].links.subjects if favoriteCollection.length > 0
         @setState {collections, isFavorite}
 
   render: ->
