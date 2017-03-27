@@ -4,6 +4,7 @@ import DefaultClassificationSummary from './default-classification-summary';
 import GSGoldStandardSummary from './gs-gold-standard-summary';
 import MetadataBasedFeedback from './metadata-based-feedback';
 import WorldWideTelescope from './world-wide-telescope';
+import FeedbackSummary from './feedback/feedback-summary';
 
 /* eslint-disable multiline-ternary, react/forbid-prop-types */
 
@@ -22,6 +23,8 @@ class ClassificationSummary extends React.Component {
     };
 
     this.hasExpert = !!this.props.expertClassification;
+
+    this.isFeedbackEnabled = this.isFeedbackEnabled.bind(this);
   }
 
   isSubjectASim() {
@@ -44,8 +47,26 @@ class ClassificationSummary extends React.Component {
     );
   }
 
+  isFeedbackEnabled() {
+    const { tasks } = this.props.workflow;
+    return Object.keys(tasks)
+      .map(key => tasks[key].feedback && tasks[key].feedback.enabled)
+      .includes(true);
+  }
+
   render() {
     const tools = this.props.project.experimental_tools || [];
+
+
+    if (this.isFeedbackEnabled()) {
+      return (
+        <FeedbackSummary
+          classification={this.props.classification}
+          subject={this.props.subject}
+          workflow={this.props.workflow}
+        />
+      );
+    }
 
     if (this.props.hasGSGoldStandard) {
       return (
