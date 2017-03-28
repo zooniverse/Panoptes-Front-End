@@ -2,6 +2,7 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 {Link} = require 'react-router'
 ZooniverseLogo = require '../partials/zooniverse-logo'
+`import FeaturedProject from './home-common/featured-project';`
 HomePageSocial = require './home-not-logged-in/social'
 HomePagePromoted = require './home-not-logged-in/promoted'
 
@@ -40,6 +41,10 @@ module.exports = React.createClass
           </button>
         </section>
       </div>
+      
+      <div className="flex-container">
+        <FeaturedProject />
+      </div>
 
       <div className="flex-container">
         <section className="home-discover" ref="discover">
@@ -52,7 +57,7 @@ module.exports = React.createClass
             contribute to real discoveries.
           </p>
 
-          <Link to="/projects" className="discover-button">Choose a Project</Link>
+          <Link to="/projects" className="alternate-button">Choose a Project</Link>
         </section>
       </div>
 
