@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Markdown } from 'markdownz';
 import getSubjectLocation from '../../../lib/get-subject-location.coffee';
 import Thumbnail from '../../../components/thumbnail';
@@ -37,14 +38,16 @@ const ProjectHomePage = (props) => {
             const location = getSubjectLocation(subject);
             return (
               <div className="project-home-page__talk-image" key={subject.id}>
-                <Thumbnail
-                  alt=""
-                  controls={false}
-                  format={location.format}
-                  height={300}
-                  src={location.src}
-                  width={600}
-                />
+                <Link to={`/projects/${props.project.slug}/talk/subjects/${subject.id}`} >
+                  <Thumbnail
+                    alt=""
+                    controls={false}
+                    format={location.format}
+                    height={300}
+                    src={location.src}
+                    width={600}
+                  />
+                </Link>
               </div>
             );
           })}
