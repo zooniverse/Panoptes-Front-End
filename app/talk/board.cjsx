@@ -73,6 +73,8 @@ module.exports = React.createClass
         discussions.map (discussion) ->
           subject_ids.push discussion.focus_id if discussion.focus_id and discussion.focus_type is 'Subject'
           author_ids.push discussion.latest_comment.user_id if discussion.latest_comment?
+        author_ids = author_ids.filter (id, i) -> author_ids.indexOf(id) is i
+        subject_ids = subject_ids.filter (id, i) -> subject_ids.indexOf(id) is i
 
         apiClient
           .type 'users'
