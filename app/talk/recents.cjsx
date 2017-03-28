@@ -71,6 +71,8 @@ module.exports = React.createClass
       comments.map (comment) =>
         author_ids.push comment.user_id
         subject_ids.push comment.focus_id if comment.focus_id.length
+      author_ids = author_ids.filter (id, i) -> author_ids.indexOf(id) is i
+      subject_ids = subject_ids.filter (id, i) -> subject_ids.indexOf(id) is i
 
       apiClient
         .type 'users'
