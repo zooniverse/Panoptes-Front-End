@@ -15,7 +15,8 @@ export default class Thumbnail extends React.Component {
   }
 
   getThumbnailSrc({ origin, width, height, src }) {
-    const srcPath = src.split('//').pop();
+    let srcPath = src.split('//').pop();
+    srcPath = srcPath.replace('static.zooniverse.org/', '');
     return (`${origin}/${width}x${height}/${srcPath}`);
   }
 
