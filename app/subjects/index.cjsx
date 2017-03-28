@@ -43,7 +43,7 @@ module.exports = React.createClass
       .then (collections) =>
         isFavorite = false
         if collections and @props.user?
-          favoriteCollection = collections.filter((collection) => collection.favorite and @props.project.id in collection.links.projects)
+          favoriteCollection = collections.filter((collection) => collection.favorite and collection.links.owner.id is @props.user.id and @props.project.id in collection.links.projects)
           isFavorite = subject.id in favoriteCollection[0].links.subjects if favoriteCollection.length > 0
         @setState {collections, isFavorite}
 
