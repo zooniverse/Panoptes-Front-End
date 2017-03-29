@@ -4,7 +4,7 @@
 
 A spin-off of the AppStatus component, for the Lab page.
 
-(shaun.a.noordin 20170327)
+(shaun.a.noordin 20170329)
 ********************************************************************************
  */
 
@@ -18,44 +18,68 @@ export default class LabStatus extends React.Component {
   constructor(props) {
     super(props);
     this.button = null;
-    
+
     this.state = {
       show: false,
-      message: '',
+      message: ''
     };
+    this.hide = this.hide.bind(this);
   }
-  
-  componentDidMount() {  //Display only first time user loads zooniverse.org
-    fetch(APP_STATUS_URL, { mode: 'cors' })
-    .then((response) => {
-      if (!response.ok) {
-        console.error('LabStatus: ERROR')
-        throw Error(response.statusText);
-      }
-      
-      return response.text();
-    })
-    .then((text) => {
-      console.log('LabStatus: Received status data from ' + APP_STATUS_URL + '.');
-      const cleanedText = (text) ? text.trim() : '';  //If text is just white space or newlines...
-      if (cleanedText === '') {  //...ignore it.
-        console.log('LabStatus: Nothing to report.');
-      } else {
-        this.setState({
-          show: true,
-          message: cleanedText,
-        });
-      }
-    })
-    .catch((err) => {
-      console.error('LabStatus: No status data from ' + APP_STATUS_URL + '. ', err);
+
+  componentDidMount() {  // Display only first time user loads zooniverse.org
+    if (typeof fetch === 'function') { // conditional required to support webview on iOS < 10.3
+      fetch(APP_STATUS_URL, { mode: 'cors' })
+      .then((response) => {
+        if (!response.ok) {
+          console.error('LabStatus: ERROR')
+          throw Error(response.statusText);
+        }
+
+        return response.text();
+      })
+      .then((text) => {
+        console.log('LabStatus: Received status data from ' + APP_STATUS_URL + '.');
+        this.setStatus(text);
+      })
+      .catch((err) => {
+        console.error('LabStatus: No status data from ' + APP_STATUS_URL + '. ', err);
+      });
+    } else {
+      const request = new XMLHttpRequest();
+      request.onreadystatechange = () => {
+        if (request.readyState === 4 && request.status === 200) {
+          this.setStatus(request.responseText);
+        } else if (request.readyState === 4) {
+          console.log('LabStatus: No status data from ' + APP_STATUS_URL + '. Assuming everything is OK.');
+        }
+      };
+      request.open('GET', APP_STATUS_URL, true);
+      request.send();
+    }
+  }
+
+  setStatus(text) {
+    const cleanedText = (text) ? text.trim() : '';  // If text is just white space or newlines...
+    if (cleanedText === '') {  // ...ignore it.
+      console.log('LabStatus: Nothing to report.');
+    } else {
+      this.setState({
+        show: true,
+        message: cleanedText
+      });
+    }
+  }
+
+  hide() {
+    this.setState({
+      show: false
     });
   }
-  
+
   render() {
     if (!this.state.show) return null;
     if (!this.state.message || this.state.message === '') return null;
-    
+
     return (
       <div className="lab-status">
         {/*
@@ -69,11 +93,5 @@ export default class LabStatus extends React.Component {
         <div className="message">{this.state.message}</div>
       </div>
     );
-  }
-  
-  hide() {
-    this.setState({
-      show: false,
-    });
   }
 }
