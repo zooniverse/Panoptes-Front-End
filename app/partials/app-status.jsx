@@ -3,7 +3,7 @@
 ===================
 
 The AppStatus banner has one job: it displays a static message to the users, if
-it detects a non-empty "status message" file at a specified static URL. 
+it detects a non-empty 'status message' file at a specified static URL. 
 (The static resource is defined by the hardcoded APP_STATUS_URL.)
 
 Intended use: Zooniverse admins can manually change the status file (e.g. via
@@ -17,7 +17,8 @@ Expected Input/Output:
 
 Assumptions:
 * the static "status message" resource is stored on a reliable, scalable host.
-* fetch() polyfill is available.
+* fetch() polyfill is available in most browsers, except for
+*   on iOS UIWebview < 10.3.  In this case XHR is used instead.
 
 See https://github.com/zooniverse/Panoptes-Front-End/issues/3530 for initial
 feature specs.
@@ -36,55 +37,73 @@ export default class AppStatus extends React.Component {
   constructor(props) {
     super(props);
     this.button = null;
-    
+
     this.state = {
       show: false,
-      message: '',
+      message: ''
     };
+    this.hide = this.hide.bind(this);
   }
-  
-  componentDidMount() {  //Display only first time user loads zooniverse.org
-    fetch(APP_STATUS_URL, { mode: 'cors' })
-    .then((response) => {
-      if (!response.ok) {
-        console.error('AppStatus: ERROR')
-        throw Error(response.statusText);
-      }
-      
-      return response.text();
-    })
-    .then((text) => {
-      console.log('AppStatus: Received status data from ' + APP_STATUS_URL + '.');
-      const cleanedText = (text) ? text.trim() : '';  //If text is just white space or newlines...
-      if (cleanedText === '') {  //...ignore it.
-        console.log('AppStatus: Nothing to report.');
-      } else {
-        this.setState({
-          show: true,
-          message: cleanedText,
-        });
-      }
-    })
-    .catch((err) => {
-      console.error('AppStatus: No status data from ' + APP_STATUS_URL + '. ', err);
+
+  componentDidMount() {  // Display only first time user loads zooniverse.org
+    if (typeof fetch === 'function') { // conditional required to support webview on iOS < 10.3
+      fetch(APP_STATUS_URL, { mode: 'cors' })
+      .then((response) => {
+        if (!response.ok) {
+          console.error('AppStatus: ERROR')
+          throw Error(response.statusText);
+        }
+
+        return response.text();
+      })
+      .then((text) => {
+        console.log('AppStatus: Received status data from ' + APP_STATUS_URL + '.');
+        this.setStatus(text);
+      })
+      .catch((err) => {
+        console.error('AppStatus: No status data from ' + APP_STATUS_URL + '. ', err);
+      });
+    } else {
+      const request = new XMLHttpRequest();
+      request.onreadystatechange = () => {
+        if (request.readyState === 4 && request.status === 200) {
+          this.setStatus(request.responseText);
+        } else if (request.readyState === 4) {
+          console.log('AppStatus: No status data from ' + APP_STATUS_URL + '. Assuming everything is OK.');
+        }
+      };
+      request.open('GET', APP_STATUS_URL, true);
+      request.send();
+    }
+  }
+
+  setStatus(text) {
+    const cleanedText = (text) ? text.trim() : '';  // If text is just white space or newlines...
+    if (cleanedText === '') {  // ...ignore it.
+      console.log('AppStatus: Nothing to report.');
+    } else {
+      this.setState({
+        show: true,
+        message: cleanedText
+      });
+    }
+  }
+
+  hide() {
+    this.setState({
+      show: false
     });
   }
-  
+
   render() {
     if (!this.state.show) return null;
     if (!this.state.message || this.state.message === '') return null;
-    
+
     return (
       <div className="app-status">
-        <button className="fa fa-close" onClick={this.hide.bind(this)} autoFocus={true}></button>
+        <button className="fa fa-close" onClick={this.hide} autoFocus={true} />
         <div className="message">{this.state.message}</div>
       </div>
     );
-  }
-  
-  hide() {
-    this.setState({
-      show: false,
-    });
   }
 }
