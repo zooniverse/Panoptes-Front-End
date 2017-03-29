@@ -48,9 +48,9 @@ export default class CollectionSettings extends React.Component {
 
           {!this.state.isDeleting &&
             <div>
-              <button className="major-button" onClick={handleDelete}>Yes, delete it!</button>
-              {' '}
               <button className="minor-button" autoFocus={true} onClick={resolve}>No, don&apos;t delete it.</button>
+              {' '}
+              <button className="major-button" onClick={handleDelete}>Yes, delete it!</button>
             </div>}
         </div>
       );
