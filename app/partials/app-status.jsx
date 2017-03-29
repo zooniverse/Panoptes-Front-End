@@ -3,7 +3,7 @@
 ===================
 
 The AppStatus banner has one job: it displays a static message to the users, if
-it detects a non-empty "status message" file at a specified static URL. 
+it detects a non-empty 'status message' file at a specified static URL. 
 (The static resource is defined by the hardcoded APP_STATUS_URL.)
 
 Intended use: Zooniverse admins can manually change the status file (e.g. via
@@ -36,22 +36,23 @@ export default class AppStatus extends React.Component {
   constructor(props) {
     super(props);
     this.button = null;
-    
+
     this.state = {
       show: false,
-      message: '',
+      message: ''
     };
+    this.hide = this.hide.bind(this);
   }
-  
-  componentDidMount() {  //Display only first time user loads zooniverse.org
-    if (typeof fetch === 'function'){ //conditional required to support webview on iOS < 10.3
+
+  componentDidMount() {  // Display only first time user loads zooniverse.org
+    if (typeof fetch === 'function') { // conditional required to support webview on iOS < 10.3
       fetch(APP_STATUS_URL, { mode: 'cors' })
       .then((response) => {
         if (!response.ok) {
           console.error('AppStatus: ERROR')
           throw Error(response.statusText);
         }
-        
+
         return response.text();
       })
       .then((text) => {
@@ -62,7 +63,7 @@ export default class AppStatus extends React.Component {
         console.error('AppStatus: No status data from ' + APP_STATUS_URL + '. ', err);
       });
     } else {
-      var request = new XMLHttpRequest();
+      const request = new XMLHttpRequest();
       request.onreadystatechange = () => {
         if (request.readyState === 4 && request.status === 200) {
           this.setStatus(request.responseText);
@@ -70,38 +71,38 @@ export default class AppStatus extends React.Component {
           console.log('AppStatus: No status data from ' + APP_STATUS_URL + '. Assuming everything is OK.');
         }
       };
-      request.open("GET", APP_STATUS_URL, true);
+      request.open('GET', APP_STATUS_URL, true);
       request.send();
     }
   }
-  
+
   setStatus(text) {
-    const cleanedText = (text) ? text.trim() : '';  //If text is just white space or newlines...
-    if (cleanedText === '') {  //...ignore it.
+    const cleanedText = (text) ? text.trim() : '';  // If text is just white space or newlines...
+    if (cleanedText === '') {  // ...ignore it.
       console.log('AppStatus: Nothing to report.');
     } else {
       this.setState({
         show: true,
-        message: cleanedText,
+        message: cleanedText
       });
     }
+  }
+
+  hide() {
+    this.setState({
+      show: false
+    });
   }
 
   render() {
     if (!this.state.show) return null;
     if (!this.state.message || this.state.message === '') return null;
-    
+
     return (
       <div className="app-status">
-        <button className="fa fa-close" onClick={this.hide.bind(this)} autoFocus={true}></button>
+        <button className="fa fa-close" onClick={this.hide} autoFocus={true} />
         <div className="message">{this.state.message}</div>
       </div>
     );
-  }
-  
-  hide() {
-    this.setState({
-      show: false,
-    });
   }
 }
