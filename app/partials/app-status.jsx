@@ -17,7 +17,8 @@ Expected Input/Output:
 
 Assumptions:
 * the static "status message" resource is stored on a reliable, scalable host.
-* fetch() polyfill is available.
+* fetch() polyfill is available in most browsers, except for
+*   on iOS UIWebview < 10.3.  In this case XHR is used instead.
 
 See https://github.com/zooniverse/Panoptes-Front-End/issues/3530 for initial
 feature specs.
