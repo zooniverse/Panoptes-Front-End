@@ -44,32 +44,49 @@ export default class AppStatus extends React.Component {
   }
   
   componentDidMount() {  //Display only first time user loads zooniverse.org
-    fetch(APP_STATUS_URL, { mode: 'cors' })
-    .then((response) => {
-      if (!response.ok) {
-        console.error('AppStatus: ERROR')
-        throw Error(response.statusText);
-      }
-      
-      return response.text();
-    })
-    .then((text) => {
-      console.log('AppStatus: Received status data from ' + APP_STATUS_URL + '.');
-      const cleanedText = (text) ? text.trim() : '';  //If text is just white space or newlines...
-      if (cleanedText === '') {  //...ignore it.
-        console.log('AppStatus: Nothing to report.');
-      } else {
-        this.setState({
-          show: true,
-          message: cleanedText,
-        });
-      }
-    })
-    .catch((err) => {
-      console.error('AppStatus: No status data from ' + APP_STATUS_URL + '. ', err);
-    });
+    if (typeof fetch === 'function'){ //conditional required to support webview on iOS < 10.3
+      fetch(APP_STATUS_URL, { mode: 'cors' })
+      .then((response) => {
+        if (!response.ok) {
+          console.error('AppStatus: ERROR')
+          throw Error(response.statusText);
+        }
+        
+        return response.text();
+      })
+      .then((text) => {
+        console.log('AppStatus: Received status data from ' + APP_STATUS_URL + '.');
+        this.setStatus(text);
+      })
+      .catch((err) => {
+        console.error('AppStatus: No status data from ' + APP_STATUS_URL + '. ', err);
+      });
+    } else {
+      var request = new XMLHttpRequest();
+      request.onreadystatechange = () => {
+        if (request.readyState === 4 && request.status === 200) {
+          this.setStatus(request.responseText);
+        } else if (request.readyState === 4) {
+          console.log('AppStatus: No status data from ' + APP_STATUS_URL + '. Assuming everything is OK.');
+        }
+      };
+      request.open("GET", APP_STATUS_URL, true);
+      request.send();
+    }
   }
   
+  setStatus(text) {
+    const cleanedText = (text) ? text.trim() : '';  //If text is just white space or newlines...
+    if (cleanedText === '') {  //...ignore it.
+      console.log('AppStatus: Nothing to report.');
+    } else {
+      this.setState({
+        show: true,
+        message: cleanedText,
+      });
+    }
+  }
+
   render() {
     if (!this.state.show) return null;
     if (!this.state.message || this.state.message === '') return null;
