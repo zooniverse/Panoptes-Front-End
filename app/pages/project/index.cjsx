@@ -29,6 +29,8 @@ ProjectPageController = React.createClass
   getInitialState: ->
     background: null
     error: null
+    guide: null
+    guideIcons: null
     loading: false
     loadingSelectedWorkflow: false
     owner: null
@@ -124,6 +126,7 @@ ProjectPageController = React.createClass
           ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
               @setState({ background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
               @getSelectedWorkflow(project, preferences)
+              @loadFieldGuide(project.id)
             ).catch((error) => @setState({ error }); console.error(error); );
 
         else
@@ -257,6 +260,15 @@ ProjectPageController = React.createClass
       if @props.user?
         @state.preferences.save()
 
+  loadFieldGuide: (projectId) ->
+    apiClient.type('field_guides').get(project_id: projectId).then ([guide]) =>
+      @setState {guide}
+      guide?.get('attached_images', page_size: 100)?.then (images) =>
+        guideIcons = {}
+        for image in images
+          guideIcons[image.id] = image
+        @setState {guideIcons}
+
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
     betaApproved = @state.project?.beta_approved
@@ -270,6 +282,8 @@ ProjectPageController = React.createClass
         <ProjectPage
           {...@props}
           background={@state.background}
+          guide={@state.guide}
+          guideIcons={@state.guideIcons}
           loading={@state.loading}
           loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
           onChangePreferences={@handlePreferencesChange}

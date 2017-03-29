@@ -1,6 +1,6 @@
 React = require 'react'
 {Markdown} = require 'markdownz'
-CroppedImage = require './cropped-image'
+CroppedImage = require '../../components/cropped-image'
 
 module.exports = React.createClass
   displayName: 'FieldGuide'
