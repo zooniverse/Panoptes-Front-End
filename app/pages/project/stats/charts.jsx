@@ -284,6 +284,12 @@ Graph.defaultProps = {
     axisY: {
       onlyInteger: true,
     },
+    chartPadding: {
+      top: 15,
+      right: 15,
+      bottom: 5,
+      left: 15
+    },
   },
   optionsSmall: {
     axisX: {
