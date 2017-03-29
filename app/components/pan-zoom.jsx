@@ -6,6 +6,7 @@ const PanZoom = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     enabled: React.PropTypes.bool,
+    frameType: React.PropTypes.string.isRequired,
     frameDimensions: React.PropTypes.shape({
       height: React.PropTypes.number,
       width: React.PropTypes.number
@@ -77,7 +78,7 @@ const PanZoom = React.createClass({
     return (
       <div>
         {children}
-        {this.props.enabled ?
+        {(this.props.enabled && this.props.frameType === "image") ?
           <div className="pan-zoom-controls" >
             <div className="draw-pan-toggle" >
               <div className={this.state.panEnabled ? '' : 'active'} >

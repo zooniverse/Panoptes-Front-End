@@ -13,7 +13,7 @@ describe('PanZoom', function () {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = shallow(<PanZoom enabled={true} />);
+      wrapper = shallow(<PanZoom enabled={true} frameType={"image"} />);
     });
 
     it('should render a zoom-in, a zoom-out, rotate, and reset button', function () {
@@ -40,7 +40,7 @@ describe('PanZoom', function () {
       let zoomInButton;
 
       beforeEach(function () {
-        wrapper = mount(<PanZoom enabled={true} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} />);
         zoomInButton = wrapper.find('button.zoom-in');
         wrapper.instance().handleFocus('zoomIn');
       });
@@ -59,7 +59,7 @@ describe('PanZoom', function () {
       const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
 
       beforeEach(function () {
-        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} frameDimensions={originalFrameDimensions} />);
       });
 
       it('returns false if there is room to zoom out', function () {
@@ -80,7 +80,7 @@ describe('PanZoom', function () {
       const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
 
       beforeEach(function () {
-        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} frameDimensions={originalFrameDimensions} />);
       });
 
       it('returns false if state.rotation is not 0', function () {
@@ -108,7 +108,7 @@ describe('PanZoom', function () {
       let zoomSpy;
 
       beforeEach(function () {
-        wrapper = mount(<PanZoom enabled={true} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} />);
         clearZoomingTimeout = sinon.spy(wrapper.instance(), 'clearZoomingTimeout');
         zoomSpy = sinon.spy(wrapper.instance(), 'zoom');
       });
@@ -145,7 +145,7 @@ describe('PanZoom', function () {
     describe('#keyDownZoomButton()', function () {
       it('it should call #zoom()', function () {
         const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
-        const wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        const wrapper = mount(<PanZoom enabled={true} frameType={"image"} frameDimensions={originalFrameDimensions} />);
         const zoomSpy = sinon.spy(wrapper.instance(), 'zoom');
         const change = 10;
         const keyEvent = { which: 13, preventDefault() { return 'This is a mock'; } };
@@ -161,7 +161,7 @@ describe('PanZoom', function () {
 
     describe('#stopZoom()', function () {
       it('should set this.state.zooming to false', function () {
-        const wrapper = mount(<PanZoom enabled={true} />);
+        const wrapper = mount(<PanZoom enabled={true} frameType={"image"} />);
         const clickEvent = { stopPropagation() { return 'This is a mock'; } };
         const continuousZoomSpy = sinon.spy(wrapper.instance(), 'continuousZoom');
         wrapper.setState({ zooming: true });
@@ -175,7 +175,7 @@ describe('PanZoom', function () {
     describe('#zoomReset()', function () {
       it('should reset the viewBoxDimensions to the orignal frame dimensions', function () {
         const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
-        const wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        const wrapper = mount(<PanZoom enabled={true} frameType={"image"} frameDimensions={originalFrameDimensions} />);
         wrapper.setState({ viewBoxDimensions: { width: 50, heigth: 50, x: 25, y: 25 } });
         wrapper.instance().zoomReset();
 
@@ -185,7 +185,7 @@ describe('PanZoom', function () {
 
     describe('#togglePanOn()', function () {
       it('should set this.state.panEnabled to true', function () {
-        const wrapper = mount(<PanZoom enabled={true} />);
+        const wrapper = mount(<PanZoom enabled={true} frameType={"image"} />);
         wrapper.instance().togglePanOn();
 
         assert.equal(wrapper.state('panEnabled'), true);
@@ -194,7 +194,7 @@ describe('PanZoom', function () {
 
     describe('#togglePanOff()', function () {
       it('should set this.state.panEnabled to false', function () {
-        const wrapper = mount(<PanZoom enabled={true} />);
+        const wrapper = mount(<PanZoom enabled={true} frameType={"image"} />);
         wrapper.instance().togglePanOff();
 
         assert.equal(wrapper.state('panEnabled'), false);
@@ -205,7 +205,7 @@ describe('PanZoom', function () {
       let wrapper;
 
       beforeEach(function () {
-        wrapper = mount(<PanZoom enabled={true} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} />);
       });
 
       it('should change the this.state.keyPanZoomEnabled from true to false', function () {
@@ -229,7 +229,7 @@ describe('PanZoom', function () {
       const zoomedViewBoxDimensions = { width: 50, height: 50, x: 25, y: 25 };
 
       beforeEach(function () {
-        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} frameDimensions={originalFrameDimensions} />);
         wrapper.setState({ viewBoxDimensions: zoomedViewBoxDimensions, panEnabled: true });
       });
 
@@ -252,7 +252,7 @@ describe('PanZoom', function () {
       let wrapper;
 
       beforeEach(function () {
-        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} frameDimensions={originalFrameDimensions} />);
         panHorizontalSpy = sinon.spy(wrapper.instance(), 'panHorizontal');
         panVerticalSpy = sinon.spy(wrapper.instance(), 'panVertical');
         zoomSpy = sinon.spy(wrapper.instance(), 'zoom');
@@ -348,7 +348,7 @@ describe('PanZoom', function () {
 
       beforeEach(function () {
         originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
-        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} frameDimensions={originalFrameDimensions} />);
         wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 25, y: 25 } });
       });
 
@@ -384,7 +384,7 @@ describe('PanZoom', function () {
 
       beforeEach(function () {
         originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
-        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} frameDimensions={originalFrameDimensions} />);
         wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 25, y: 25 } });
       });
 
@@ -420,7 +420,7 @@ describe('PanZoom', function () {
 
       beforeEach(function () {
         originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
-        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        wrapper = mount(<PanZoom enabled={true} frameType={"image"} frameDimensions={originalFrameDimensions} />);
       });
 
       it('should add 90 to this.state.rotation', function () {
