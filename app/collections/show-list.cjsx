@@ -1,4 +1,5 @@
 React = require 'react'
+{Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 intersection = require 'lodash.intersection'
 pick = require 'lodash.pick'
@@ -7,7 +8,8 @@ counterpart = require 'counterpart'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
-{Link} = require 'react-router'
+CollectionsManager = require './manager'
+Dialog = require 'modal-form/dialog'
 
 VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
 
@@ -65,6 +67,9 @@ SubjectNode = React.createClass
             isFavorite = @props.subject.id in favoritesCollection.links.subjects
           @setState({ isFavorite })
 
+  handleSelect: (action) ->
+    @props.handleSelect @props.subject.id, action
+
   render: ->
     logClick = @context.geordi?.makeHandler? 'about-menu'
     <div className="collection-subject-viewer">
@@ -72,13 +77,18 @@ SubjectNode = React.createClass
           <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
             <span></span>
           </Link>
-          {if @isOwnerOrCollaborator()
+          {if @isOwnerOrCollaborator() and !@props.selecting
             <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
               <i className="fa fa-close" />
             </button>}
-          <button className="collection-subject-viewer-circle-open" onClick={@props.selectSubject}>
-            <i className="fa fa-circle-o" />
-          </button>
+          {if @props.selecting and !@props.selected
+            <button className="collection-subject-viewer-circle-open" onClick={@handleSelect.bind @, 'add'}>
+              <i className="fa fa-circle-o" />
+            </button>}
+          {if @props.selecting and @props.selected
+            <button className="collection-subject-viewer-circle-open" onClick={@handleSelect.bind @, 'delete'}>
+              <i className="fa fa-check" />
+            </button>}
       </SubjectViewer>
     </div>
 
@@ -93,6 +103,8 @@ module.exports = React.createClass
     subjects: null
     error: null
     selecting: false
+    selected: []
+    collectionsManaging: false
 
   componentWillMount: ->
     @fetchCollectionSubjects pick @props.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
@@ -124,8 +136,30 @@ module.exports = React.createClass
       pathname: @props.location.pathname
       query: nextQuery
 
+  openCollectionsManager: ->
+    @setState {collectionsManaging: true}
+
+  closeCollectionsManager: ->
+    @setState {collectionsManaging: false}
+
   toggleSelect: ->
-    @setState selecting: !@state.selecting
+    @setState selecting: !@state.selecting, selected: []
+
+  selected: (subjectID) ->
+    if @state.selected?.indexOf(subjectID) isnt -1
+      true
+    else
+      false
+
+  handleSelect: (subjectID, action) ->
+    selected = @state.selected
+    if action is 'add'
+      selected.push subjectID
+      @setState {selected}
+    if action is 'delete'
+      index = selected.indexOf subjectID
+      selected.splice index, 1
+      @setState {selected}
 
   handleDeleteSubject: (subject) ->
     subjects = @state.subjects
@@ -137,8 +171,19 @@ module.exports = React.createClass
       .then =>
         @props.collection.uncacheLink 'subjects'
 
-  selectSubject: (subject) ->
-    console.log subject
+  addSubjects: () ->
+
+    console.log 'add subjects ', @state.selected
+
+  deleteSubjects: () ->
+    subjects = @state.subjects.filter((subject) => @state.selected.indexOf(subject.id) is -1)
+    @setState {subjects}
+
+    @props.collection.removeLink 'subjects', @state.selected
+      .then =>
+        @props.collection.uncacheLink 'subjects'
+
+    @toggleSelect()
 
   render: ->
     if @state.subjects?
@@ -152,8 +197,16 @@ module.exports = React.createClass
           <div>
           {if @state.selecting
             <div className="collection-buttons-container">
-              <button className="select-images-button">Add to Collection</button>
-              <button className="select-images-button">Remove from Collection</button>
+              <button
+                className="select-images-button"
+                onClick={@openCollectionsManager}>
+                <span>Add stuff</span>
+              </button>
+              {if @state.collectionsManaging
+                <Dialog tag="div" closeButton={true} onCancel={@closeCollectionsManager}>
+                <CollectionsManager user={@props.user} project={@props.project} subject={undefined} onSuccess={@closeCollectionsManager} />
+                </Dialog>}
+              <button className="select-images-button" onClick={@deleteSubjects}>Remove from Collection</button>
               <button className="select-images-button" onClick={@toggleSelect}>Cancel</button>
             </div>
           else
@@ -169,8 +222,10 @@ module.exports = React.createClass
                   subject={subject}
                   user={@props.user}
                   roles={@props.roles}
+                  selecting={@state.selecting}
+                  selected={@selected(subject.id)}
+                  handleSelect={@handleSelect}
                   onDelete={@handleDeleteSubject.bind @, subject}
-                  selectSubject={@selectSubject.bind @, subject}
                 />
               }
             </div>
