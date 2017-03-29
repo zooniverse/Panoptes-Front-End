@@ -1,162 +1,81 @@
 import React from 'react';
 import { Link } from 'react-router';
-import apiClient from 'panoptes-client/lib/api-client';
 import LoadingIndicator from '../../components/loading-indicator';
 import Paginator from '../../talk/lib/paginator';
 
-const DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set';
+const SubjectSetsPage = ({ onPageChange, createNewSubjectSet, subjectSets, error, creationInProgress, labPath, loading }) => {
+  const meta = subjectSets.length ? subjectSets[0].getMeta() : {};
 
-export default class SubjectSetsPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      subjectSetCreationError: null,
-      subjectSetCreationInProgress: false,
-      subjectSets: []
-    };
+  return (
+    <div>
+      <div className="form-label">Subject sets</div>
+      <ul className="nav-list">
+        {subjectSets.map((subjectSet) => {
+          const subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>;
+          return (
+            <li key={subjectSet.id}>
+              <Link
+                activeClassName="active"
+                className="nav-list-item"
+                title="A subject is an image (or group of images) to be analyzed."
+                to={labPath(`/subject-set/${subjectSet.id}`)}
+              >
+                {subjectSetListLabel}
+              </Link>
+            </li>
+          );
+        })}
 
-    this.onPageChange = this.onPageChange.bind(this);
-    this.createNewSubjectSet = this.createNewSubjectSet.bind(this);
-  }
-
-  componentDidMount() {
-    this._isMounted = true;
-
-    const page = this.props.location.query.page || 1;
-    this.getSubjectSets(page);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const newPage = nextProps.location.query.page;
-    if (newPage !== this.props.location.query.page) {
-      this.getSubjectSets(newPage);
-    }
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  onPageChange(page) {
-    const nextQuery = Object.assign({}, this.props.location.query, { page });
-    this.context.router.push({
-      pathname: this.props.location.pathname,
-      query: nextQuery
-    });
-  }
-
-  getSubjectSets(page = 1) {
-    this.props.project.get('subject_sets', { sort: 'display_name', page })
-    .then((subjectSets) => {
-      this.setState({ subjectSets, loading: false });
-    });
-  }
-
-  createNewSubjectSet() {
-    const subjectSet = apiClient.type('subject_sets').create({
-      display_name: DEFAULT_SUBJECT_SET_NAME,
-      links:
-        { project: this.props.project.id }
-    });
-
-    this.setState({
-      subjectSetCreationError: null,
-      subjectSetCreationInProgress: true
-    });
-
-    subjectSet.save()
-      .then(() => {
-        this.context.router.push(`/lab/${this.props.project.id}/subject-set/${subjectSet.id}`);
-      })
-      .catch((error) => {
-        this.setState({ subjectSetCreationError: error });
-      })
-      .then(() => {
-        this.props.project.uncacheLink('subject_sets');
-        if (this._isMounted) {
-          this.setState({ subjectSetCreationInProgress: false });
-        }
-      });
-  }
-
-  labPath(postFix = '') {
-    return `/lab/${this.props.project.id}${postFix}`;
-  }
-
-  render() {
-    const meta = this.state.subjectSets.length ? this.state.subjectSets[0].getMeta() : {};
-
-    return (
-      <div>
-        <div className="form-label">Subject sets</div>
-        <ul className="nav-list">
-          {this.state.subjectSets.map((subjectSet) => {
-            const subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>;
-            return (
-              <li key={subjectSet.id}>
-                <Link
-                  activeClassName="active"
-                  className="nav-list-item"
-                  title="A subject is an image (or group of images) to be analyzed."
-                  to={this.labPath(`/subject-set/${subjectSet.id}`)}
-                >
-                  {subjectSetListLabel}
-                </Link>
-              </li>
-            );
-          })}
-
-          {(this.state.subjectSets.length === 0 && this.state.loading === false) && (
-            <p>No subject sets are currently associated with this project.</p>
-          )}
-
-          <li className="nav-list-item">
-            <button
-              type="button"
-              onClick={this.createNewSubjectSet}
-              disabled={this.state.subjectSetCreationInProgress}
-              title="A subject is an image (or group of images) to be analyzed."
-            >
-              New subject set{' '}
-              <LoadingIndicator off={!this.state.subjectSetCreationInProgress} />
-            </button>{' '}
-            {this.state.subjectSetCreationError && (
-              <div className="form-help error">{this.state.subjectSetCreationError.message}</div>
-            )}
-          </li>
-        </ul>
-
-        {this.state.subjectSets.length > 0 && (
-          <Paginator
-            className="talk"
-            page={meta.page}
-            onPageChange={this.onPageChange}
-            pageCount={meta.page_count}
-          />
+        {(subjectSets.length === 0 && loading === false) && (
+          <p>No subject sets are currently associated with this project.</p>
         )}
 
-      </div>
-    );
-  }
-}
+        <li className="nav-list-item">
+          <button
+            type="button"
+            onClick={createNewSubjectSet}
+            disabled={creationInProgress}
+            title="A subject is an image (or group of images) to be analyzed."
+          >
+            New subject set{' '}
+            <LoadingIndicator off={!creationInProgress} />
+          </button>{' '}
+          {error && (
+            <div className="form-help error">{error.message}</div>
+          )}
+        </li>
+      </ul>
 
-SubjectSetsPage.contextTypes = {
-  router: React.PropTypes.object.isRequired
+      {subjectSets.length > 0 && (
+        <Paginator
+          className="talk"
+          page={meta.page}
+          onPageChange={onPageChange}
+          pageCount={meta.page_count}
+        />
+      )}
+
+    </div>
+  );
 };
 
 SubjectSetsPage.defaultProps = {
-  project: {}
+  subjectSets: []
 };
 
 SubjectSetsPage.propTypes = {
-  location: React.PropTypes.shape({
-    pathname: React.PropTypes.string,
-    query: React.PropTypes.object
+  createNewSubjectSet: React.PropTypes.func,
+  creationInProgress: React.PropTypes.bool,
+  labPath: React.PropTypes.func,
+  loading: React.PropTypes.bool,
+  error: React.PropTypes.shape({
+    message: React.PropTypes.string
   }),
   project: React.PropTypes.shape({
-    get: React.PropTypes.func,
-    id: React.PropTypes.string,
-    uncacheLink: React.PropTypes.func
-  })
+    id: React.PropTypes.string
+  }),
+  onPageChange: React.PropTypes.func,
+  subjectSets: React.PropTypes.arrayOf(React.PropTypes.object)
 };
+
+export default SubjectSetsPage;

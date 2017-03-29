@@ -17,7 +17,7 @@ React = require 'react'
 `import NotificationsPage from './pages/notifications';`
 `import SubjectPageController from './subjects';`
 `import WorkflowsPage from './pages/lab/workflows';`
-`import SubjectSetsPage from './pages/lab/subject-sets';`
+`import SubjectSetsPage from './components/subject-sets';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
