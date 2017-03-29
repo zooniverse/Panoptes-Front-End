@@ -24,7 +24,7 @@ export default class CollectionSettings extends React.Component {
     this.props.collection.listen('delete', this.redirect);
   }
 
-  componentDidUnMount() {
+  componentWillUnmount() {
     this.props.collection.stopListening('delete');
   }
 
@@ -50,7 +50,7 @@ export default class CollectionSettings extends React.Component {
             <div>
               <button className="major-button" onClick={handleDelete}>Yes, delete it!</button>
               {' '}
-              <button className="minor-button" onClick={resolve}>No, don't delete it.</button>
+              <button className="minor-button" autoFocus={true} onClick={resolve}>No, don&apos;t delete it.</button>
             </div>}
         </div>
       );
@@ -147,15 +147,13 @@ CollectionSettings.contextTypes = {
 
 CollectionSettings.defaultProps = {
   canCollaborate: false,
-  collection: {},
-  user: null
+  collection: {}
 };
 
 CollectionSettings.propTypes = {
   canCollaborate: React.PropTypes.bool,
   collection: React.PropTypes.shape({
     private: React.PropTypes.bool
-  }),
-  user: React.PropTypes.object
+  })
 };
 

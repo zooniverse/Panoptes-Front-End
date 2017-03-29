@@ -1,14 +1,9 @@
 import React from 'react';
 import assert from 'assert';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import DisplayNameSlugEditor from '../partials/display-name-slug-editor';
 import CollectionSettings from './settings';
-
-const user = {
-  id: '2',
-  login: 'username'
-};
 
 const collection = {
   id: '1',
@@ -23,7 +18,7 @@ describe('<CollectionSettings />', function() {
   let deleteButton;
   before(function() {
     confirmationSpy = sinon.spy(CollectionSettings.prototype, 'confirmDelete');
-    wrapper = shallow(<CollectionSettings canCollaborate={true} collection={collection} user={user} />, { context: { router: {} } });
+    wrapper = shallow(<CollectionSettings canCollaborate={true} collection={collection} />, { context: { router: {} } });
     deleteButton = wrapper.find('button.error');
   });
 
