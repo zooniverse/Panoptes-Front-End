@@ -126,6 +126,14 @@ class ProjectStatus extends Component {
       <div className="project-status">
         <ProjectIcon project={this.state.project} />
         <div className="project-status__section">
+          <h4>Information</h4>
+          <ul>
+            <li>Id: {this.state.project.id}</li>
+            <li>Classification count: {this.state.project.classifications_count}</li>
+            <li>Subjects count: {this.state.project.subjects_count}</li>
+            <li>Retired subjects count: {this.state.project.retired_subjects_count}</li>
+            <li>Volunteer count: {this.state.project.classifiers_count}</li>
+          </ul>
           <h4>Visibility Settings</h4>
           <ul className="project-status__section-list">
             <li>Private: <Toggle project={this.state.project} field="private" trueLabel="Private" falseLabel="Public" /></li>
