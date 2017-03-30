@@ -197,7 +197,7 @@ export default class Classifier extends React.Component {
   }
 
   subjectIsGravitySpyGoldStandard() {
-    this.props.workflow.configuration.gravity_spy_gold_standard && this.props.subject.metadata['#Type'] === 'Gold';
+    return (this.props.workflow.configuration.gravity_spy_gold_standard && this.props.subject.metadata['#Type'] === 'Gold');
   }
 
   render() {
