@@ -43,6 +43,7 @@ const CollectionPage = React.createClass({
 
   getInitialState() {
     return {
+      canCollaborate: false,
       owner: null,
     };
   },
@@ -57,6 +58,7 @@ const CollectionPage = React.createClass({
 
   componentDidMount() {
     document.documentElement.classList.add('on-collection-page');
+    this.canCollaborate();
   },
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -70,13 +72,15 @@ const CollectionPage = React.createClass({
   },
 
   canCollaborate() {
-    if (!this.props.user) return false;
+    let canCollaborate;
+    if (!this.props.user) { canCollaborate = false; }
 
-    return this.props.roles.some((role) => {
+    this.props.roles.some((role) => {
       const idMatch = (role.links.owner.id === this.props.user.id);
       const isOwner = role.roles.includes('owner');
       const isCollaborator = role.roles.includes('collaborator');
-      return (isOwner || isCollaborator) && idMatch;
+      canCollaborate = (isOwner || isCollaborator) && idMatch;
+      this.setState({ canCollaborate });
     });
   },
 
@@ -102,7 +106,7 @@ const CollectionPage = React.createClass({
             <Avatar user={this.state.owner} />
             {this.props.collection.display_name}
           </IndexLink>
-          {this.canCollaborate() ?
+          {this.state.canCollaborate ?
             <span>
               <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="tabbed-content-tab" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
                 <Translate content="collectionPage.settings" />
@@ -122,9 +126,10 @@ const CollectionPage = React.createClass({
         </nav>
         <div className="collection-container talk">
           {React.cloneElement(this.props.children, {
-            user: this.props.user,
+            canCollaborate: this.state.canCollaborate,
             collection: this.props.collection,
             roles: this.props.roles,
+            user: this.props.user
           })}
         </div>
       </div>
@@ -170,6 +175,15 @@ const CollectionPageWrapper = React.createClass({
     }
   },
 
+  componentWillUnmount() {
+    this.state.collection.stopListening('change', this.listenToCollection);
+  },
+
+  listenToCollection() {
+    const collection = this.state.collection;
+    this.setState({ collection });
+  },
+
   title() {
     return this.state.collection ? this.state.collection.display_name : '(Loading)';
   },
@@ -196,6 +210,8 @@ const CollectionPageWrapper = React.createClass({
         }
       })
       .then(([collection]) => {
+        collection.listen('change', this.listenToCollection);
+
         return apiClient.type('collection_roles')
           .get({
             collection_id: collection.id,

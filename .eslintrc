@@ -3,6 +3,7 @@
   "plugins": ["react"],
   "env": {
     "browser": true,
+    "mocha": true
   },
   "rules": {
     "react/jsx-boolean-value": ["error","always"],
@@ -14,7 +15,7 @@
     "comma-dangle": ["warn", "never"],
     "import/extensions": "off",
     "import/no-unresolved": "off",
-    "jsx-no-bind": "off",
+    "react/jsx-no-bind": "off",
     "max-len": "off",
     "multiline-ternary": ["warn", "never"],
     "no-else-return": "off",
