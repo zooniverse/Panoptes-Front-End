@@ -1,6 +1,6 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import SubjectSetsPage from '../pages/lab/subject-sets';
+import SubjectSetsPage from './subject-sets';
 
 const DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set';
 
@@ -88,12 +88,9 @@ export default class SubjectSetsContainer extends React.Component {
       <SubjectSetsPage
         createNewSubjectSet={this.createNewSubjectSet}
         labPath={this.labPath}
-        loading={this.state.loading}
         onPageChange={this.onPageChange}
         project={this.props.project}
-        error={this.state.subjectSetCreationError}
-        creationInProgress={this.state.subjectSetCreationInProgress}
-        subjectSets={this.state.subjectSets}
+        {...this.state}
       />
     );
   }

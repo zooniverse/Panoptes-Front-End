@@ -13,17 +13,18 @@ const subjectSets = [
   { id: '2', display_name: 'Cool Subject Set', getMeta: meta }
 ];
 
-const context = { router: {}};
-
 describe('SubjectSetsPage', function () {
   let wrapper;
+  const newShortcut = sinon.spy();
 
   before(function () {
     wrapper = shallow(
-      <SubjectSetsPage />,
-      { disableLifecycleMethods: true, context }
+      <SubjectSetsPage
+        labPath={(url) => { return url; }}
+        createNewSubjectSet={newShortcut}
+      />
     );
-    wrapper.setState({ loading: false });
+    wrapper.setProps({ loading: false });
   });
 
   it('will display a message when no subject sets are present', function () {
@@ -32,20 +33,16 @@ describe('SubjectSetsPage', function () {
   });
 
   it('will display the correct amount of subject sets', function () {
-    wrapper.setState({ subjectSets });
+    wrapper.setProps({ subjectSets });
     assert.equal(wrapper.find('Link').length, 2);
   });
 
-  it('will display a paginator', function () {
-    wrapper.setState({ subjectSets });
-    assert.equal(wrapper.find('Paginator').length, 1);
+  it('should call the subject set create handler', function () {
+    wrapper.find('button').simulate('click');
+    sinon.assert.called(newShortcut);
   });
 
-  it('will allow for the creation of a new subject set', function () {
-    const newSubjectStub = sinon.stub(wrapper.instance(), 'createNewSubjectSet');
-    wrapper.instance().forceUpdate();
-    wrapper.update();
-    wrapper.find('button').simulate('click');
-    sinon.assert.called(newSubjectStub);
+  it('will display a paginator', function () {
+    assert.equal(wrapper.find('Paginator').length, 1);
   });
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
+import sinon from 'sinon';
 import WorkflowsPage from './workflows';
 
 const meta = () => {
@@ -12,20 +13,24 @@ const workflows = [
   { id: '2', display_name: 'Cool Workflow', getMeta: meta }
 ];
 
-const context = { router: {
-  createHref: () => {},
-  isActive: () => {}
-}};
+const project = {
+  configuration: {}
+};
 
 describe('WorkflowsPage', function () {
   let wrapper;
+  const newWorkflow = sinon.spy();
 
   before(function () {
     wrapper = shallow(
-      <WorkflowsPage />,
-      { disableLifecycleMethods: true, context }
+      <WorkflowsPage
+        labPath={(url) => { return url; }}
+        handleWorkflowReorder={() => {}}
+        project={project}
+        showCreateWorkflow={newWorkflow}
+      />
     );
-    wrapper.setState({ loading: false });
+    wrapper.setProps({ loading: false });
   });
 
   it('will display a message when no workflows are present', function () {
@@ -34,13 +39,13 @@ describe('WorkflowsPage', function () {
   });
 
   it('will display the correct amount of workflows', function () {
-    wrapper.setState({ workflows, loading: false });
+    wrapper.setProps({ workflows });
     assert.equal(wrapper.find('DragReorderable').render().find('li').length, 2);
   });
 
-  it('will display a form to create a new workflow', function () {
+  it('should call the workflow create handler', function () {
     wrapper.find('button').simulate('click');
-    assert.equal(wrapper.find('WorkflowCreateForm').length, 1);
+    sinon.assert.called(newWorkflow);
   });
 
   it('will display a paginator', function () {

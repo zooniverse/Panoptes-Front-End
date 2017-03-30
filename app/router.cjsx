@@ -18,6 +18,8 @@ React = require 'react'
 `import SubjectPageController from './subjects';`
 `import WorkflowsPage from './pages/lab/workflows';`
 `import SubjectSetsPage from './components/subject-sets';`
+`import WorkflowsContainer from './pages/lab/workflows-container';`
+`import SubjectSetsContainer from './pages/lab/subject-sets-container';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -199,8 +201,8 @@ module.exports =
       <Route path="data-exports" component={require './pages/lab/data-dumps'} />
       <Route path="tutorial" component={require './pages/lab/tutorial'} />
       <Route path="guide" component={require './pages/lab/field-guide'} />
-      <Route path="workflows" component={WorkflowsPage} />
-      <Route path="subjectsets" component={SubjectSetsPage} />
+      <Route path="workflows" component={WorkflowsContainer} />
+      <Route path="subjectsets" component={SubjectSetsContainer} />
       <Route path="mini-course" component={require './pages/lab/mini-course'} />
     </Route>
     <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
