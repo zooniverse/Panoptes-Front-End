@@ -16,7 +16,6 @@ import interventionMonitor from '../lib/intervention-monitor';
 import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
-import PotentialFieldGuide from '../components/potential-field-guide';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -347,7 +346,6 @@ export default class Classifier extends React.Component {
             </p>
           }
         </div>
-        <PotentialFieldGuide guide={this.props.guide} guideIcons={this.props.guideIcons} />
       </div>
     );
   }
@@ -369,10 +367,6 @@ Classifier.propTypes = {
   }),
   demoMode: React.PropTypes.bool,
   expertClassifier: React.PropTypes.bool,
-  guide: React.PropTypes.shape({
-    id: React.PropTypes.string
-  }),
-  guideIcons: React.PropTypes.object,
   minicourse: React.PropTypes.shape({
     id: React.PropTypes.string,
     steps: React.PropTypes.array
