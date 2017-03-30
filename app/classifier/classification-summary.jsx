@@ -24,6 +24,18 @@ class ClassificationSummary extends React.Component {
     this.hasExpert = !!this.props.expertClassification;
   }
 
+  isSubjectASim() {
+    const simMetadataField = this.props.subject.metadata['#sim'];
+
+    if (typeof simMetadataField === 'string') {
+      return simMetadataField.toLowerCase() === 'true';
+    } else if (typeof simMetadataField === 'boolean') {
+      return simMetadataField;
+    }
+
+    return false;
+  }
+
   render() {
     const tools = this.props.project.experimental_tools || [];
 
@@ -80,11 +92,11 @@ class ClassificationSummary extends React.Component {
           </div> : '' }
 
         <div>
+          {this.props.workflow.configuration.sim_notification && this.isSubjectASim() &&
+            <p style={{ fontWeight: 'bold' }}>This was a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>}
           <strong>
             { this.state.showExpert ? 'Expert Classification:' : 'Your classification:' }
           </strong>
-          {this.props.workflow.configuration.sim_notification && this.props.subject.metadata['#sim'] &&
-            <p style={{fontWeight: 'bold'}}>This was a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>}
           <DefaultClassificationSummary
             workflow={this.props.workflow}
             classification={this.state.showExpert ? this.props.expertClassification : this.props.classification}
