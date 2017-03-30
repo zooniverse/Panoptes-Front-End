@@ -26,6 +26,7 @@ export default class Classifier extends React.Component {
     this.handleAnnotationChange = this.handleAnnotationChange.bind(this);
     this.handleSubjectImageLoad = this.handleSubjectImageLoad.bind(this);
     this.completeClassification = this.completeClassification.bind(this);
+    this.toggleExpertClassification = this.toggleExpertClassification.bind(this);
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
