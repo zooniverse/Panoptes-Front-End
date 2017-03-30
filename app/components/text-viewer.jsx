@@ -19,20 +19,11 @@ class TextViewer extends Component {
     })
     .then((content) => {
       this.setState({ content });
-      ReactDOM.findDOMNode(this).dispatchEvent(new Event('load'));
     })
     .catch((e) => {
       const content = e.message;
       this.setState({ content });
     });
-  }
-
-  componentDidMount() {
-    ReactDOM.findDOMNode(this).addEventListener('load', this.props.onLoad);
-  }
-
-  componentWillUnmount() {
-    ReactDOM.findDOMNode(this).removeEventListener('load', this.props.onLoad);
   }
 
   render() {
@@ -47,10 +38,26 @@ class TextViewer extends Component {
       content = `Unsupported format: ${this.props.format}`;
     }
     return (
-      <div className="text-viewer" >
+      <div ref={(element) => {this.onLoadForText(element);}} className="text-viewer" >
         { content }
       </div>
     );
+  }
+
+  onLoadForText(element) {
+    // mock event for frame-viewer
+    // sometimes element is null, not sure why
+    if (!element === null) {
+      let e = {
+        target: {
+          naturalWidth: 0,
+          naturalHeight: 0
+        }
+      };
+      e.target.naturalWidth = element.getBoundingClientRect().width;
+      e.target.naturalHeight = element.getBoundingClientRect().height;
+      this.props.onLoad(e);
+    }
   }
 }
 
