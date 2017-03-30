@@ -21,7 +21,6 @@ experimentsClient = require '../lib/experiments-client'
 TaskNav = require('./task-nav').default
 ExpertOptions = require('./expert-options').default
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
-PotentialFieldGuide = require '../components/potential-field-guide'
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -281,7 +280,6 @@ Classifier = React.createClass
           </p>
         }
       </div>
-      <PotentialFieldGuide guide={@props.guide} guideIcons={@props.guideIcons} />
     </div>
 
   # Whenever a subject image is loaded in the annotator, record its size at that time.
@@ -363,14 +361,9 @@ module.exports = React.createClass
   getInitialState: ->
     subject: null
     expertClassifier: null
-    guide: null
-    guideIcons: null
     userRoles: []
     tutorial: null
     minicourse: null
-
-  componentWillMount: ->
-    @loadFieldGuide(@props.project.id)
 
   componentDidMount: ->
     @checkExpertClassifier()
@@ -401,16 +394,6 @@ module.exports = React.createClass
 
     unless nextProps.classification is @props.classification
       @loadClassification nextProps.classification
-
-  loadFieldGuide: (projectId) ->
-    apiClient.type('field_guides').get(project_id: projectId).then ([guide]) =>
-      @setState {guide}
-      guide?.get('attached_images', page_size: 100)?.then (images) =>
-        guideIcons = {}
-        for image in images
-          guideIcons[image.id] = image
-        @setState {guideIcons}
-
 
   loadClassification: (classification) ->
 # TODO: These underscored references are temporary stopgaps.

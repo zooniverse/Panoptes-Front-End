@@ -6,6 +6,7 @@ Translate = require 'react-translate-component'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
+PotentialFieldGuide = require './potential-field-guide'
 
 counterpart.registerTranslations 'en',
   project:
@@ -51,6 +52,8 @@ ProjectPage = React.createClass
 
   getDefaultProps: ->
     background: null
+    guide: null
+    guideIcons: null
     loading: false
     owner: {}
     preferences: null
@@ -216,6 +219,8 @@ ProjectPage = React.createClass
 
       {unless @props.project.launch_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
+      {unless @props.location.pathname is projectPath
+        <PotentialFieldGuide guide={@props.guide} guideIcons={@props.guideIcons} />}
     </div>
 
 module.exports = ProjectPage
