@@ -10,6 +10,7 @@ class TextViewer extends Component {
     this.state = {
       content: '',
     };
+    this.onLoadForText = this.onLoadForText.bind(this);
   }
 
   componentWillMount() {
@@ -45,8 +46,7 @@ class TextViewer extends Component {
   }
 
   onLoadForText(element) {
-    // mock event for frame-viewer
-    // sometimes element is null, not sure why
+    // mock event for frame-viewer's #handleLoad() method
     if (!element === null) {
       let e = {
         target: {

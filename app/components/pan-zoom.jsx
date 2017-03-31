@@ -42,9 +42,23 @@ const PanZoom = React.createClass({
   componentDidMount() {
     // these events enable a user to navigate an image using arrows, +, and - keys,
     // while the user is in pan and zoom mode.
-    if (this.props.enabled) {
+    if (this.props.enabled && this.props.frameType === "image") {
       addEventListener('keydown', this.frameKeyPan);
       addEventListener('wheel', this.frameKeyPan);
+    }
+  },
+
+  componentWillReceiveProps(nextProps){
+    if (nextProps.enabled) {
+      if (nextProps.frameType === "image"){
+        // when the frame is an image, add the pan-zoom event listeners
+        addEventListener('keydown', this.frameKeyPan);
+        addEventListener('wheel', this.frameKeyPan);
+      } else if (!(nextProps.frameType === "image") && this.props.frameType === "image"){
+        // when switching from an image frame to an non-image frame, remove the pan-zoom event listeners
+        removeEventListener('keydown', this.frameKeyPan);
+        removeEventListener('wheel', this.frameKeyPan);
+      }
     }
   },
 
