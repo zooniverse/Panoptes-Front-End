@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
 const SUPPORTED_TYPES = ['text'];
 const SUPPORTED_FORMATS = ['plain'];
@@ -8,7 +7,7 @@ class TextViewer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: '',
+      content: ''
     };
     this.onLoadForText = this.onLoadForText.bind(this);
   }
@@ -27,24 +26,6 @@ class TextViewer extends Component {
     });
   }
 
-  render() {
-    let { content } = this.state;
-    if (content === "") {
-      return null;
-    }
-    if (SUPPORTED_TYPES.indexOf(this.props.type) === -1) {
-      content = `Unsupported type: ${this.props.type}`;
-    }
-    if (SUPPORTED_FORMATS.indexOf(this.props.format) === -1) {
-      content = `Unsupported format: ${this.props.format}`;
-    }
-    return (
-      <div ref={(element) => {this.onLoadForText(element);}} className="text-viewer" >
-        { content }
-      </div>
-    );
-  }
-
   onLoadForText(element) {
     // mock event for frame-viewer's #handleLoad() method
     if (!element === null) {
@@ -59,19 +40,37 @@ class TextViewer extends Component {
       this.props.onLoad(e);
     }
   }
+
+  render() {
+    let { content } = this.state;
+    if (content === '') {
+      return null;
+    }
+    if (SUPPORTED_TYPES.indexOf(this.props.type) === -1) {
+      content = `Unsupported type: ${this.props.type}`;
+    }
+    if (SUPPORTED_FORMATS.indexOf(this.props.format) === -1) {
+      content = `Unsupported format: ${this.props.format}`;
+    }
+    return (
+      <div ref={(element) => { this.onLoadForText(element); }} className="text-viewer" >
+        { content }
+      </div>
+    );
+  }
 }
 
 TextViewer.propTypes = {
   src: React.PropTypes.string.isRequired,
   type: React.PropTypes.string,
   format: React.PropTypes.string,
-  onLoad: React.PropTypes.func,
+  onLoad: React.PropTypes.func
 };
 
 TextViewer.defaultProps = {
   type: 'text',
   format: 'plain',
-  onLoad: (e) => { console.log('text loaded', e); },
+  onLoad: (e) => { console.log('text loaded', e); }
 };
 
 export default TextViewer;

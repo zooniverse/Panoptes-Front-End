@@ -42,19 +42,19 @@ const PanZoom = React.createClass({
   componentDidMount() {
     // these events enable a user to navigate an image using arrows, +, and - keys,
     // while the user is in pan and zoom mode.
-    if (this.props.enabled && this.props.frameType === "image") {
+    if (this.props.enabled && this.props.frameType === 'image') {
       addEventListener('keydown', this.frameKeyPan);
       addEventListener('wheel', this.frameKeyPan);
     }
   },
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     if (nextProps.enabled) {
-      if (nextProps.frameType === "image"){
+      if (nextProps.frameType === 'image') {
         // when the frame is an image, add the pan-zoom event listeners
         addEventListener('keydown', this.frameKeyPan);
         addEventListener('wheel', this.frameKeyPan);
-      } else if (!(nextProps.frameType === "image") && this.props.frameType === "image"){
+      } else if (!(nextProps.frameType === 'image') && this.props.frameType === 'image') {
         // when switching from an image frame to an non-image frame, remove the pan-zoom event listeners
         removeEventListener('keydown', this.frameKeyPan);
         removeEventListener('wheel', this.frameKeyPan);
@@ -92,7 +92,7 @@ const PanZoom = React.createClass({
     return (
       <div>
         {children}
-        {(this.props.enabled && this.props.frameType === "image") ?
+        {(this.props.enabled && this.props.frameType === 'image') ?
           <div className="pan-zoom-controls" >
             <div className="draw-pan-toggle" >
               <div className={this.state.panEnabled ? '' : 'active'} >
@@ -153,7 +153,7 @@ const PanZoom = React.createClass({
   },
 
   cannotResetZoomRotate() {
-    return this.cannotZoomOut() && this.state.rotation === 0
+    return this.cannotZoomOut() && this.state.rotation === 0;
   },
 
   continuousZoom(change) {
