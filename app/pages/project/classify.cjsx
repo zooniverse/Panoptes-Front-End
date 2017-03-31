@@ -230,7 +230,7 @@ module.exports = React.createClass
 
   saveClassificationAndLoadAnotherSubject: ->
     @saveClassification()
-      .then @loadAnotherSubject()
+    @loadAnotherSubject()
 
   saveClassification: ->
     if @context.geordi.keys["experiment"]?
