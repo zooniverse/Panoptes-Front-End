@@ -4,6 +4,7 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var DashboardPlugin = require('webpack-dashboard/plugin');
 
 var config = {
   devtool: 'eval-source-map',
@@ -28,7 +29,8 @@ var config = {
       template: 'views/index.ejs',
       inject: 'body',
       filename: 'index.html'
-    })
+    }),
+    new DashboardPlugin({ port: 3736 })
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css'],
