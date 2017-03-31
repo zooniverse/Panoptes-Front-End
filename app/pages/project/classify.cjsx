@@ -230,7 +230,7 @@ module.exports = React.createClass
 
   saveClassificationAndLoadAnotherSubject: ->
     @saveClassification()
-      .then @loadAnotherSubject()
+    @loadAnotherSubject()
 
   saveClassification: ->
     if @context.geordi.keys["experiment"]?
@@ -247,15 +247,15 @@ module.exports = React.createClass
     else
       classification.save()
 
+    Split.classificationCreated(classification)
+    {workflow, subjects} = classification.links
+    seenThisSession.add workflow, subjects
     savingClassification
       .then (classification) =>
         if @state.demoMode
           console?.log 'Demo mode: Did NOT save classification'
         else
           console?.log 'Saved classification', classification.id
-          Split.classificationCreated(classification)
-          {workflow, subjects} = classification.links
-          seenThisSession.add workflow, subjects
           classification.destroy()
         @saveAllQueuedClassifications()
       .catch (error) =>

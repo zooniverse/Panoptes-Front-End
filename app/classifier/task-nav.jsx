@@ -197,6 +197,7 @@ class TaskNav extends React.Component {
           }
           {completed &&
             <Link
+              onClick={this.props.nextSubject}
               to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
               className="talk standard-button"
             >
