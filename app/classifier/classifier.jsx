@@ -116,14 +116,15 @@ export default class Classifier extends React.Component {
         workflow_id: this.props.workflow.id,
         subject_id: subject.id
       };
-    }
+    
 
-    apiClient.type('subject_workflow_statuses')
-    .get(query)
-    .then(([sws]) => {
-      const classificationCount = sws.classifications_count ? sws.classifications_count : 0;
-      this.setState({ classificationCount });
-    });
+      apiClient.type('subject_workflow_statuses')
+      .get(query)
+      .then(([sws]) => {
+        const classificationCount = sws.classifications_count ? sws.classifications_count : 0;
+        this.setState({ classificationCount });
+      });
+    }
   }
 
   loadSubject(subject) {
