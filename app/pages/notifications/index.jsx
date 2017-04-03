@@ -25,13 +25,13 @@ export default class NotificationsPage extends React.Component {
     };
   }
 
-  componentDidMount() { // eslint-disable-line
+  componentDidMount() {
     if (this.props.user) {
       this.getProjectNotifications();
     }
   }
 
-  componentWillReceiveProps(nextProps) { // eslint-disable-line
+  componentWillReceiveProps(nextProps) {
     if (nextProps.user !== null && nextProps.user !== this.props.user) {
       this.getProjectNotifications();
     }
