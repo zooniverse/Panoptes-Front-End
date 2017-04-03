@@ -12,6 +12,7 @@ import ExpandableMenu from './expandable-menu';
 
 counterpart.registerTranslations('en', {
   accountMenu: {
+    messages: 'Messages',
     profile: 'Profile',
     home: 'Home',
     settings: 'Settings',
@@ -71,12 +72,37 @@ class AccountBar extends React.Component {
   render() {
     return (
       <span className="account-bar">
+        <NotificationsLink params={this.props.params} user={this.context.user} linkProps={{
+          className: 'site-nav__link site-nav__icon site-nav__icon--notifications',
+          activeClassName: 'site-nav__link--active',
+          onClick: this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
+        }} />
+
+        <Link
+          to="/inbox"
+          className="site-nav__link site-nav__icon site-nav__icon--inbox"
+          activeClassName="site-nav__link--active"
+          aria-label={`
+            Inbox ${this.state.unread ? 'with unread messages' : ''}
+          `.trim()}
+          onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.inbox', 'top-menu') : null}
+        >
+          <span
+            className={`
+              site-nav__inbox-link
+              ${this.state.unread ? 'site-nav__inbox-link--unread' : ''}
+            `.trim()}
+          >
+            <Translate content="accountMenu.messages" />
+          </span>
+        </Link>
+
         <ExpandableMenu
           className="site-nav__modal"
           trigger={
             <span className="site-nav__link">
               <strong>{this.context.user.display_name}</strong>{' '}
-              <Avatar className="site-nav__user-avatar" user={this.context.user} size="2em" />
+              <i className="fa fa-chevron-down" />
             </span>
           }
           triggerProps={{
@@ -150,35 +176,6 @@ class AccountBar extends React.Component {
           </PassContext>
         </ExpandableMenu>
 
-        <span className="site-nav__link-buncher" />
-
-        <Link
-          to="/inbox"
-          className="site-nav__link site-nav__icon site-nav__icon--inbox"
-          activeClassName="site-nav__link--active"
-          aria-label={`
-            Inbox ${this.state.unread ? 'with unread messages' : ''}
-          `.trim()}
-          onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.inbox', 'top-menu') : null}
-        >
-          <span
-            className={`
-              site-nav__inbox-link
-              ${this.state.unread ? 'site-nav__inbox-link--unread' : ''}
-            `.trim()}
-          >
-            {this.state.unread ?
-              <i className="fa fa-envelope fa-fw" />
-            :
-              <i className="fa fa-envelope-o fa-fw" />}
-          </span>
-        </Link>
-
-        <NotificationsLink params={this.props.params} user={this.context.user} linkProps={{
-          className: 'site-nav__link site-nav__icon site-nav__icon--notifications',
-          activeClassName: 'site-nav__link--active',
-          onClick: this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
-        }} />
       </span>
     );
   }

@@ -1,8 +1,8 @@
 .site-nav
   align-items: baseline
+  background: black
   display: flex
-  font-size: 14px
-  justify-content: space-between
+  font-size: 0.75em
   padding: 0.5em 1em
 
   &__main-links
@@ -15,11 +15,13 @@
 
   &__link
     border-bottom: 2px solid transparent
-    color: inherit
+    color: LIGHT_GREY
+    letter-spacing: 0.1em
     display: inline-block
     opacity: 0.7
-    padding: 0.5em 1em 0.3em
+    padding: 0.5em 1.5em 0.3em 1.5em
     text-decoration: inherit
+    text-transform: uppercase
     white-space: nowrap;
 
     &:hover
@@ -70,6 +72,12 @@
       background: transparent
       z-index: 1 // TODO: Apply this everywhere.
 
+    div .site-nav__link
+      color: black
+      letter-spacing: 0em
+      padding: 0.5em 1.5em 0.3em
+      text-transform: capitalize
+
     &.modal-form
       margin-top: 0.2em
 
@@ -79,6 +87,7 @@
 
   .account-bar
   .login-bar
+    margin-left: auto
     z-index: 2
 
   .site-nav__reveal-toggle
