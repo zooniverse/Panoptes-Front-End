@@ -51,8 +51,12 @@
 
       &:focus,
       &:hover
+        border: HIGHLIGHT_COLOR
         background-color: HIGHLIGHT_COLOR
         color: white
+
+      &:disabled
+        opacity: 0.5
 
     .collection-subjects-list
       display: flex
@@ -62,7 +66,6 @@
       width: 18em
       border: 1px solid #cdcdcd
       border-radius: 5px
-      position: relative
       margin: 0 1.66em 1.66em 0
       text-align: center
       display: flex
@@ -116,7 +119,7 @@
       .collection-subject-viewer-select
         color: white
         background: transparent
-        font-size: 3em
+        font-size: 4em
         border: none
         width: 100%
 

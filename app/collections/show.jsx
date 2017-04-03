@@ -114,7 +114,7 @@ const CollectionPage = React.createClass({
               {this.props.collection.display_name}
             </IndexLink>
             {(roles.length > 0) ?
-              <span> [ {roles.toString()} ] </span> :
+              <span> [ {roles.join(', ')} ] </span> :
               null
             }
             <br />

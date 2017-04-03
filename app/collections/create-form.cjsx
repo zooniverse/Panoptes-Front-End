@@ -31,8 +31,6 @@ module.exports = React.createClass
     links.project = +@props.project if @props.project?
     links.subjects = @props.subjectIDs if @props.subjectIDs.length > 0
 
-    console.log links
-
     collection = {
       display_name: displayName
       private: notPublic
