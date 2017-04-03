@@ -1,9 +1,12 @@
-.app-status
+.app-status, .lab-status
   background: BACKGROUND
   color: FOREGROUND
-  border: 1px solid ZOONIVERSE_TEAL
+  border: 0.2em solid BURNT_ORANGE
   border-radius: 1em
   padding: 0.5em 1em
+  box-shadow: 0 0.15em 0.2em FOREGROUND
+
+.app-status
   position: fixed
   left: 50%
   bottom: 1em
@@ -11,24 +14,12 @@
   width: 80%
   max-width: 40em
   z-index: 1000
-  box-shadow: 0 0 0.5em BACKGROUND
-
+  
   button.fa-close
     float: right
     cursor: pointer
 
 .lab-status
-  background: BACKGROUND
-  color: FOREGROUND
-  border: 0.2em solid BURNT_ORANGE
-  border-radius: 1em
-  padding: 0.5em 1em
   margin: 1em auto
   width: 40em
   max-width: 80%
-  z-index: 1000
-  box-shadow: 0 0.15em 0.2em FOREGROUND
-
-  button.fa-close
-    float: right
-    cursor: pointer
