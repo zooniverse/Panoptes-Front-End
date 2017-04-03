@@ -2,6 +2,12 @@ React = require 'react'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
+Translate = require 'react-translate-component'
+counterpart = require 'counterpart'
+
+counterpart.registerTranslations 'en',
+  notificationsLink:
+    notifications: 'Notifications'
 
 module.exports = React.createClass
   displayName: 'NotificationsLink'
@@ -10,10 +16,7 @@ module.exports = React.createClass
     unreadNotificationsCount: React.PropTypes.number
 
   label: ->
-    if @context.unreadNotificationsCount > 0
-      <i className="fa fa-bell fa-fw" />
-    else
-      <i className="fa fa-bell-o fa-fw" />
+    <Translate content="notificationsLink.notifications" />
 
   ariaLabel: ->
     if @context.unreadNotificationsCount > 0
