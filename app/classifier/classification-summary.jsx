@@ -91,7 +91,7 @@ class ClassificationSummary extends React.Component {
 
     if (this.showExoplanetSimFeedback()) {
       return (
-        <p style={{ fontWeight: 'bold' }}>This was a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>
+        <p style={{ fontWeight: 'bold' }}>Well done! You've found a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>
       );
     }
 
