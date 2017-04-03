@@ -21,7 +21,7 @@ export default class FeaturedProject extends React.Component {
         </div>
         <h2>Stargazing Live</h2>
         <p>The Zooniverse has teamed up with <a href="http://www.abc.net.au/tv/programs/stargazing-live/">ABC Stargazing Live</a> and researchers at UC Santa Cruz to bring you Exoplanet Explorers. Help us discover new worlds today!</p>
-        <Link to="/projects/ianc2/exoplanet-explorers" className="alternate-button">April 4: Exoplanet Explorer</Link>
+        <Link to="/projects/ianc2/exoplanet-explorers" className="alternate-button">April 4: Exoplanet Explorers</Link>
       </section>
     );
   }
