@@ -36,6 +36,14 @@ class ClassificationSummary extends React.Component {
     return false;
   }
 
+  showExoplanetSimFeedback() {
+    return (this.props.workflow.configuration &&
+      this.props.workflow.configuration.sim_notification &&
+      this.isSubjectASim() &&
+      this.props.classification.annotations[0].value === 0
+    );
+  }
+
   render() {
     const tools = this.props.project.experimental_tools || [];
 
@@ -81,9 +89,9 @@ class ClassificationSummary extends React.Component {
       );
     }
 
-    if (this.props.workflow.configuration && this.props.workflow.configuration.sim_notification && this.isSubjectASim()) {
+    if (this.showExoplanetSimFeedback()) {
       return (
-        <p style={{ fontWeight: 'bold' }}>This was a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>
+        <p style={{ fontWeight: 'bold' }}>Well done! You've found a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>
       );
     }
 
