@@ -106,6 +106,12 @@ module.exports = React.createClass
     selected: []
     collectionsManaging: false
 
+  getDefaultProps: ->
+    project: null
+
+  propTypes:
+    project: React.PropTypes.object
+
   componentWillMount: ->
     @fetchCollectionSubjects pick @props.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
       .then (subjects) =>
@@ -171,10 +177,6 @@ module.exports = React.createClass
       .then =>
         @props.collection.uncacheLink 'subjects'
 
-  addSubjects: () ->
-
-    console.log 'add subjects ', @state.selected
-
   deleteSubjects: () ->
     subjects = @state.subjects.filter((subject) => @state.selected.indexOf(subject.id) is -1)
     @setState {subjects}
@@ -199,14 +201,15 @@ module.exports = React.createClass
             <div className="collection-buttons-container">
               <button
                 className="select-images-button"
-                onClick={@openCollectionsManager}>
-                <span>Add stuff</span>
+                onClick={@openCollectionsManager}
+                disabled={@state.selected.length < 1}>
+                <span>Add to Collection</span>
               </button>
               {if @state.collectionsManaging
                 <Dialog tag="div" closeButton={true} onCancel={@closeCollectionsManager}>
-                <CollectionsManager user={@props.user} project={@props.project} subject={undefined} onSuccess={@closeCollectionsManager} />
+                <CollectionsManager user={@props.user} project={@props.project} subjectIDs={@state.selected} onSuccess={@closeCollectionsManager} />
                 </Dialog>}
-              <button className="select-images-button" onClick={@deleteSubjects}>Remove from Collection</button>
+              <button className="select-images-button" onClick={@deleteSubjects} disabled={@state.selected.length < 1}>Remove from Collection</button>
               <button className="select-images-button" onClick={@toggleSelect}>Cancel</button>
             </div>
           else

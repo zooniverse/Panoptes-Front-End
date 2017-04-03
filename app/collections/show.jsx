@@ -129,9 +129,10 @@ const CollectionPage = React.createClass({
         <div className="talk">
           {React.cloneElement(this.props.children, {
             canCollaborate: this.state.canCollaborate,
+            user: this.props.user,
+            project: this.props.project,
             collection: this.props.collection,
-            roles: this.props.roles,
-            user: this.props.user
+            roles: this.props.roles
           })}
         </div>
       </div>
