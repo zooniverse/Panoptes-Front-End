@@ -41,6 +41,7 @@ module.exports =
       <Route path="publications" component={require './pages/about/publications-page'} />
       <Route path="acknowledgements" component={require './pages/about/acknowledgements'} />
       <Route path="contact" component={require './pages/about/contact-page'} />
+      <Route path="volunteering" component={require './pages/about/volunteering-page'} />
     </Route>
 
     <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
