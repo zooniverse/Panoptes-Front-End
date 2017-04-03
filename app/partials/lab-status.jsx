@@ -23,7 +23,6 @@ export default class LabStatus extends React.Component {
       show: false,
       message: ''
     };
-    this.hide = this.hide.bind(this);
   }
 
   componentDidMount() {  // Display only first time user loads zooniverse.org
@@ -68,12 +67,6 @@ export default class LabStatus extends React.Component {
         message: cleanedText
       });
     }
-  }
-
-  hide() {
-    this.setState({
-      show: false
-    });
   }
 
   render() {
