@@ -97,6 +97,15 @@ const CollectionPage = React.createClass({
     const profileLink = `${baseLink}/users/${this.state.owner.login}`;
     const collectionsLinkMessageKey = `collectionPage.${baseType}Link`;
 
+    let roles;
+    if (this.props.roles.some(collectionRole => collectionRole.links.owner.id === this.props.user.id)) {
+      const userRole = this.props.roles.filter(collectionRole =>
+      collectionRole.links.owner.id === this.props.user.id);
+      roles = userRole[0].roles;
+    } else {
+      roles = []
+    }
+
     return (
       <div className="collections-page">
         <div className="collection-header">
@@ -104,6 +113,10 @@ const CollectionPage = React.createClass({
             <IndexLink to={baseCollectionLink} className="collection-title">
               {this.props.collection.display_name}
             </IndexLink>
+            {(roles.length > 0) ?
+              <span> [ {roles.toString()} ] </span> :
+              null
+            }
             <br />
             <Link to={profileLink} className="collection-owner">
               BY {this.state.owner.display_name}

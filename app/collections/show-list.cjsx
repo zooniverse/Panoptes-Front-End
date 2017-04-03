@@ -74,21 +74,26 @@ SubjectNode = React.createClass
     logClick = @context.geordi?.makeHandler? 'about-menu'
     <div className="collection-subject-viewer">
       <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project} isFavorite={@state.isFavorite}>
-          <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
-            <span></span>
-          </Link>
+          {if !@props.selecting
+            <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
+              <span></span>
+            </Link>}
           {if @isOwnerOrCollaborator() and !@props.selecting
             <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
               <i className="fa fa-close" />
             </button>}
           {if @props.selecting and !@props.selected
-            <button className="collection-subject-viewer-circle-open" onClick={@handleSelect.bind @, 'add'}>
-              <i className="fa fa-circle-o" />
-            </button>}
+            <div className="collection-subject-viewer-selecting">
+              <button className="collection-subject-viewer-select" onClick={@handleSelect.bind @, 'add'}>
+                <i className="fa fa-circle-o" />
+              </button>
+            </div>}
           {if @props.selecting and @props.selected
-            <button className="collection-subject-viewer-circle-open" onClick={@handleSelect.bind @, 'delete'}>
+            <div className="collection-subject-viewer-selecting">
+              <button className="collection-subject-viewer-select" onClick={@handleSelect.bind @, 'delete'}>
               <i className="fa fa-check" />
-            </button>}
+              </button>
+            </div>}
       </SubjectViewer>
     </div>
 

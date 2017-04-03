@@ -62,13 +62,18 @@
       width: 18em
       border: 1px solid #cdcdcd
       border-radius: 5px
+      position: relative
       margin: 0 1.66em 1.66em 0
       text-align: center
-      display: inline-block
-      position: relative
+      display: flex
+      flex-direction: column
+      justify-content: center
 
       .subject-video-controls
         display: initial
+
+      .subject-image-frame
+        margin: auto
 
     img
       width: 100%
@@ -81,11 +86,39 @@
       top: 0
       left: 0
 
-    // .collection-subject-viewer-delete-button
+    .collection-subject-viewer-delete-button
+      background: white
+      border: none
+      border-bottom-left-radius: 50%
+      cursor: pointer
+      display: flex
+      height: 1.3em
+      margin-left: -2px
+      position: absolute
+      right: -0.3em
+      top: -0.3em
+      width: 1.3em
+      z-index: 1
 
-    // .collection-subject-viewer-circle-open
+      &:hover
+        color: red
 
-    // .collection-subject-viewer-circle-checked
+    .collection-subject-viewer-selecting
+      height: 100%
+      width: 100%
+      position: absolute
+      top: 0
+      left: 0
+      display: flex
+      justify-content: center
+      align-content: center
+
+      .collection-subject-viewer-select
+        color: white
+        background: transparent
+        font-size: 3em
+        border: none
+        width: 100%
 
   .collection-settings-tab
     max-width: 800px
