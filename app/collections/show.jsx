@@ -42,7 +42,7 @@ const CollectionPage = React.createClass({
   getInitialState() {
     return {
       canCollaborate: false,
-      owner: null,
+      owner: null
     };
   },
 
@@ -113,9 +113,7 @@ const CollectionPage = React.createClass({
             <IndexLink to={baseCollectionLink} className="collection-title">
               {this.props.collection.display_name}
             </IndexLink>
-            {(roles.length > 0) ?
-              <span> [ {roles.join(', ')} ] </span> :
-              null
+            {(roles.length > 0) ? <span> [ {roles.join(', ')} ] </span> : null
             }
             <br />
             <Link to={profileLink} className="collection-owner">
@@ -162,7 +160,7 @@ const CollectionPageWrapper = React.createClass({
     user: React.PropTypes.object,
     params: React.PropTypes.shape({
       collection_owner: React.PropTypes.string,
-      collection_name: React.PropTypes.string,
+      collection_name: React.PropTypes.string
     })
   },
 
