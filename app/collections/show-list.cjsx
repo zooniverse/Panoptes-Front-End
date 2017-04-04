@@ -49,8 +49,8 @@ SubjectNode = React.createClass
     return hasPermission
 
   isFavorite: (project) ->
-    if @props.collection.favorite
-      @setState isFavorite: @props.collection.favorite
+    if @props.collection.favorite and @props.collection.links.owner.id is @props.user.id
+      @setState isFavorite: true
     else if @props.user?
       query = {
         favorite: true
