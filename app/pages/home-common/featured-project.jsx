@@ -9,13 +9,13 @@ Featured Project Component
 */
 
 import React from 'react';
-import {Link} from 'react-router'
+import { Link } from 'react-router';
 
 export default class FeaturedProject extends React.Component {
   render() {
     return (
       <section className="home-featured">
-        <h1>Featured Project</h1>
+        <h1 className="secondary-kicker">Featured Project</h1>
         <div className="home-featured-images">
           <img src="./assets/featured-projects/featured-project-20170407-etchacell.jpg" />
         </div>
