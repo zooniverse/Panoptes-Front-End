@@ -8,27 +8,25 @@ class TextViewer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: '',
+      content: 'Loading…'
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    const root = ReactDOM.findDOMNode(this);
+    root.addEventListener('load', this.props.onLoad);
     fetch(this.props.src, { mode: 'cors' })
     .then((response) => {
       return response.text();
     })
     .then((content) => {
       this.setState({ content });
-      ReactDOM.findDOMNode(this).dispatchEvent(new Event('load'));
+      root.dispatchEvent(new Event('load'));
     })
     .catch((e) => {
       const content = e.message;
       this.setState({ content });
     });
-  }
-
-  componentDidMount() {
-    ReactDOM.findDOMNode(this).addEventListener('load', this.props.onLoad);
   }
 
   componentWillUnmount() {
@@ -37,9 +35,6 @@ class TextViewer extends Component {
 
   render() {
     let { content } = this.state;
-    if (content === "") {
-      return null;
-    }
     if (SUPPORTED_TYPES.indexOf(this.props.type) === -1) {
       content = `Unsupported type: ${this.props.type}`;
     }
