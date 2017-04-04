@@ -58,19 +58,14 @@
       &:disabled
         opacity: 0.5
 
-    .collection-subjects-list
-      display: flex
-      flex-flow: row wrap
-
     .collection-subject-viewer
       width: 18em
       border: 1px solid #cdcdcd
       border-radius: 5px
       margin: 0 1.66em 1.66em 0
       text-align: center
-      display: flex
-      flex-direction: column
-      justify-content: center
+      display: inline-block
+      position: relative
 
       .subject-video-controls
         display: initial
@@ -106,22 +101,24 @@
       &:hover
         color: red
 
-    .collection-subject-viewer-selecting
+    .collection-subject-viewer-select-button
       height: 100%
       width: 100%
       position: absolute
       top: 0
       left: 0
-      display: flex
-      justify-content: center
-      align-content: center
+      border: none
+      text-align: center
+      background: transparent
 
-      .collection-subject-viewer-select
+      &:hover
+        background-color: transparent
+
+      .collection-subject-viewer-circle
+        vertical-align: middle
         color: white
-        background: transparent
-        font-size: 4em
-        border: none
-        width: 100%
+        font-size: 6em
+        text-shadow: 1px 1px 25px COPY
 
   .collection-settings-tab
     max-width: 800px

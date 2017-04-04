@@ -83,17 +83,13 @@ SubjectNode = React.createClass
               <i className="fa fa-close" />
             </button>}
           {if @props.selecting and !@props.selected
-            <div className="collection-subject-viewer-selecting">
-              <button className="collection-subject-viewer-select" onClick={@handleSelect.bind @, 'add'}>
-                <i className="fa fa-circle-o" />
-              </button>
-            </div>}
+            <button className="collection-subject-viewer-select-button" onClick={@handleSelect.bind @, 'add'}>
+              <i className="fa fa-circle-o collection-subject-viewer-circle" />
+            </button>}
           {if @props.selecting and @props.selected
-            <div className="collection-subject-viewer-selecting">
-              <button className="collection-subject-viewer-select" onClick={@handleSelect.bind @, 'delete'}>
-              <i className="fa fa-check" />
-              </button>
-            </div>}
+            <button className="collection-subject-viewer-select-button" onClick={@handleSelect.bind @, 'delete'}>
+              <i className="fa fa-check-circle collection-subject-viewer-circle" />
+            </button>}
       </SubjectViewer>
     </div>
 
@@ -222,7 +218,7 @@ module.exports = React.createClass
               <button className="select-images-button" onClick={@toggleSelect}>Select Images</button>
             </div>
           }
-            <div className="collection-subjects-list">
+            <div>
               {@state.subjects.map (subject) =>
                 <SubjectNode
                   key={subject.id}

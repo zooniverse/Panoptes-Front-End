@@ -103,7 +103,7 @@ const CollectionPage = React.createClass({
       collectionRole.links.owner.id === this.props.user.id);
       roles = userRole[0].roles;
     } else {
-      roles = []
+      roles = [];
     }
 
     return (
@@ -163,12 +163,12 @@ const CollectionPageWrapper = React.createClass({
     params: React.PropTypes.shape({
       collection_owner: React.PropTypes.string,
       collection_name: React.PropTypes.string,
-    }),
+    })
   },
 
   getDefaultProps() {
     return {
-      params: null,
+      params: null
     };
   },
 
@@ -177,7 +177,7 @@ const CollectionPageWrapper = React.createClass({
       collection: null,
       roles: null,
       error: false,
-      loading: false,
+      loading: false
     };
   },
 
@@ -206,7 +206,7 @@ const CollectionPageWrapper = React.createClass({
 
   fetchCollection() {
     this.setState({
-      loading: true,
+      loading: true
     });
 
     apiClient.type('collections')
@@ -216,13 +216,13 @@ const CollectionPageWrapper = React.createClass({
       )
       .then(([collection]) => {
         if (collection) {
-          return [collection]
+          return [collection];
         } else {
           return apiClient.type('collections')
           .get({
             id: this.props.params.collection_name,
             include: ['owner']
-          })
+          });
         }
       })
       .then(([collection]) => {
@@ -230,21 +230,21 @@ const CollectionPageWrapper = React.createClass({
 
         return apiClient.type('collection_roles')
           .get({
-            collection_id: collection.id,
+            collection_id: collection.id
           })
           .then((roles) => {
             this.setState({
               error: false,
               loading: false,
               collection,
-              roles,
+              roles
             });
           });
       })
       .catch((e) => {
         this.setState({
           error: e,
-          loading: false,
+          loading: false
         });
       });
   },
@@ -252,15 +252,15 @@ const CollectionPageWrapper = React.createClass({
   render() {
     const classes = classNames({
       'content-container': true,
-      'collection-page-with-project-context': !!this.props.project,
+      'collection-page-with-project-context': !!this.props.project
     });
     const { project, user } = this.props;
     let output = null;
     if (this.state.collection) {
-      output =
+      output = (
         <CollectionPage project={project} user={user} collection={this.state.collection} roles={this.state.roles}>
           {this.props.children}
-        </CollectionPage>;
+        </CollectionPage>);
     }
     if (this.state.error) {
       output = <Translate component="p" content="collectionsPageWrapper.error" />;
@@ -273,7 +273,7 @@ const CollectionPageWrapper = React.createClass({
         {output}
       </div>
     );
-  },
+  }
 });
 
 export default CollectionPageWrapper;
