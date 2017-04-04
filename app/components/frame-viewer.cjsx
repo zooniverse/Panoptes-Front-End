@@ -50,7 +50,7 @@ module.exports = React.createClass
         <TextViewer  src={src} type={type} format={format} frame={@props.frame} onLoad={@handleLoad} /> 
 
     if FrameWrapper
-      <PanZoom ref="panZoom" enabled={zoomEnabled} frameDimensions={@state.frameDimensions}>
+      <PanZoom ref="panZoom" enabled={zoomEnabled} frameType={type} frameDimensions={@state.frameDimensions}>
         <FrameWrapper 
           frame={frame} 
           naturalWidth={@state.frameDimensions?.width or 0} 
