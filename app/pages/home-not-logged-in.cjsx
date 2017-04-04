@@ -30,18 +30,14 @@ module.exports = React.createClass
             <source type="video/mp4" src="./assets/home-video.mp4"></source>
           </video>
 
-          <h1>THE ZO<ZooniverseLogo />NIVERSE</h1>
-          <h2 className="lighter">is people powered research</h2>
+          <h5 className="main-kicker">welcome to the zooniverse</h5>
+          <h1 className="main-headline">People-powered research</h1>
           <div className="home-intro-buttons">
-            <button className="standard-button" onClick={@scrollDown}>Learn More</button>
-            <Link to="/projects" className="intro-button">Get Started</Link>
+            <Link to="/projects" className="intro-button">See All Projects</Link>
           </div>
-          <button className="home-link-down" onClick={@scrollDown}>
-            <i className="fa fa-angle-down" onClick={@scrollDown} />
-          </button>
         </section>
       </div>
-      
+
       <div className="flex-container">
         <FeaturedProject />
       </div>
