@@ -32,6 +32,18 @@ $flex-section
   .modal-form .site-nav__link
     color: #000000
 
+  .main-kicker
+    color: #addde0
+    line-height: 1em
+    font-family: 'Oswald', sans-serif;
+    font-size: 2em
+    letter-spacing: 0.18em
+    text-transform: uppercase
+
+  .main-headline
+    font-size: 6em
+    font-weight: 700
+
   h1, h2
     color: #FFFFFF
     font-size: 3em
@@ -39,10 +51,9 @@ $flex-section
     @media (max-width: 900px)
       font-size: 2em
 
-    &.lighter
-      font-weight: 400
-
 .on-home-page
+  font-family: 'Karla', sans-serif;
+
   *:focus
     outline: none
 
@@ -121,14 +132,11 @@ $flex-section
     @media (max-width: 900px)
       display: none
 
-  .home-intro, .home-promoted
-    h1
-      font-size: 3.5em
-
   .home-intro
     background-color: WHITE
+    min-height: 30vw // video is 2:1 aspect ratio and 100% width
+    justify-content: flex-end
     z-index: 0
-    min-height: 50vw // video is 2:1 aspect ratio and 100% width
 
     video
       display: none
@@ -157,17 +165,13 @@ $flex-section
       justify-content: center
 
     .intro-button
-      border: 0
-      border-radius: 6px
-      box-shadow: rgba(0, 0, 0, 0.5) 0 1px 2px 0
-      background: rgba(255, 255, 255, 0.9)
-      padding: 0.75em 1.75em
-      transition: background 500ms ease
-      margin: 50px 10px 0 10px
+      border: 1px solid #F0B200
+      background: transparent
+      color: white
       font-size: 1.5em
-      font-weight: bold
+      margin: 0.8em 0 3.5em 0
+      padding: 0.75em 2.75em
       text-decoration: none
-      color: ZOONIVERSE_TEAL
 
       @media (max-width: 900px)
         margin-top: 20px
@@ -175,7 +179,7 @@ $flex-section
       &:hover,
       &:active,
       &:focus
-        background: LIGHT-BLUE-GREEN
+        background: #F0B200
         color: #FFFFFF
 
   .home-featured
