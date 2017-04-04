@@ -40,12 +40,19 @@ $flex-section
     letter-spacing: 0.18em
     text-transform: uppercase
 
+  .tertiary-kicker
+    color: #5c5c5c
+    font-size: 1.4em
+    font-weight: 700
+    letter-spacing: 0.22em
+    text-transform: uppercase
+
   .main-headline
     font-size: 6em
     font-weight: 700
 
   .secondary-kicker
-    color: #00979d
+    color: TEAL_MID
     font-family: 'Oswald', sans-serif
     font-size: 1.6em
     letter-spacing: 0.16em
@@ -55,17 +62,22 @@ $flex-section
     color: #5c5c5c
     font-size: 4.25em
 
+  .tertiary-headline
+    color: #5c5c5c
+    font-size: 3.25em
+
   .display-body
     color: #000000
     font-size: 1.5em
     font-weight: 700
+    line-height: 1.2em
 
     a
       color: #007482
       text-decoration: none
 
       &:hover
-        color: #00979d
+        color: TEAL_MID
 
       &:visited
         color: #005d69
@@ -82,6 +94,24 @@ $flex-section
     &:hover
       background: #cc9200
       border-color: #cc9200
+
+  .primary-button
+    border: 1px solid #F0B200
+    background: transparent
+    color: #000000
+    font-size: 1.25em
+    margin: 0.8em 0 3.5em 0
+    padding: 1.25vh 3vw
+    text-decoration: none
+
+    @media (max-width: 900px)
+      margin-top: 20px
+
+    &:hover,
+    &:active,
+    &:focus
+      background: #F0B200
+      color: #FFFFFF
 
   h1, h2
     color: #FFFFFF
@@ -266,23 +296,53 @@ $flex-section
       margin-top: 20px
 
   .home-discover
-    padding: 50px 0
     background-color: BACKGROUND_COLOR
+    display: flex
+    flex-direction: row
+    padding: 50px 0
+    text-align: left
+
+    input[type="text"]
+      border: 1px solid TEAL_DARK
+      width: 22em
+      height: 2.8em
+      padding-left: 1em
+      padding-right: 50px
+
+    input[type="submit"]
+      margin-left: -50px
+      height: 3.2em
+      width: 10em
+      background: TEAL_DARK
+      color: white
+      border: 0
+      -webkit-appearance: none
+
+    hr
+      border-color: white
+      margin-bottom: 2em
 
     @media (max-width: 900px)
       min-height: auto
 
-    h1, p
-      color: ZOONIVERSE_NAVY
+    img
+      max-height: 40em
+      width: auto
 
-    p
-      margin: 20px auto
-      width: 50vw
-      font-size: 2em
+    &__content
+      flex: 2 0 0
+      margin: 0 3em 0 10em
 
-      @media (max-width: 900px)
-        width: 90vw
-        font-size: 1.5em
+      p
+        margin-top: 0em
+
+      button
+        margin-right: 1em
+        margin-bottom: 1.5em
+        padding: 0.8em 5.5em
+
+    &__image
+      flex: 1 0 0
 
   .home-promoted
     padding: 0

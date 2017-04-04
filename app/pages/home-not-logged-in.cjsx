@@ -3,6 +3,7 @@ ReactDOM = require 'react-dom'
 {Link} = require 'react-router'
 ZooniverseLogo = require '../partials/zooniverse-logo'
 `import FeaturedProject from './home-common/featured-project';`
+`import HomePageDiscover from './home-not-logged-in/discover';`
 HomePageSocial = require './home-not-logged-in/social'
 HomePagePromoted = require './home-not-logged-in/promoted'
 
@@ -43,18 +44,7 @@ module.exports = React.createClass
       </div>
 
       <div className="flex-container">
-        <section className="home-discover" ref="discover">
-          <h1>Discover, teach, and learn</h1>
-
-          <p>
-            The Zooniverse enables everyone to take part in real cutting edge
-            research in many fields across the sciences, humanities, and more.
-            The Zooniverse creates opportunities for you to unlock answers and
-            contribute to real discoveries.
-          </p>
-
-          <Link to="/projects" className="alternate-button">Choose a Project</Link>
-        </section>
+        <HomePageDiscover />
       </div>
 
       <div className="flex-container">
