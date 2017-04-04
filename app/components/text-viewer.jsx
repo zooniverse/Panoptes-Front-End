@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
 const SUPPORTED_TYPES = ['text'];
 const SUPPORTED_FORMATS = ['plain'];
@@ -7,21 +6,21 @@ const SUPPORTED_FORMATS = ['plain'];
 class TextViewer extends Component {
   constructor(props) {
     super(props);
+    this.element = null;
     this.state = {
       content: 'Loading…'
     };
   }
 
   componentDidMount() {
-    const root = ReactDOM.findDOMNode(this);
-    root.addEventListener('load', this.props.onLoad);
+    this.element.addEventListener('load', this.props.onLoad);
     fetch(this.props.src, { mode: 'cors' })
     .then((response) => {
       return response.text();
     })
     .then((content) => {
       this.setState({ content });
-      root.dispatchEvent(new Event('load'));
+      this.element.dispatchEvent(new Event('load'));
     })
     .catch((e) => {
       const content = e.message;
@@ -30,7 +29,7 @@ class TextViewer extends Component {
   }
 
   componentWillUnmount() {
-    ReactDOM.findDOMNode(this).removeEventListener('load', this.props.onLoad);
+    this.element.removeEventListener('load', this.props.onLoad);
   }
 
   render() {
@@ -42,7 +41,7 @@ class TextViewer extends Component {
       content = `Unsupported format: ${this.props.format}`;
     }
     return (
-      <div className="text-viewer" >
+      <div ref={(element) => { this.element = element; }} className="text-viewer" >
         { content }
       </div>
     );
@@ -53,13 +52,13 @@ TextViewer.propTypes = {
   src: React.PropTypes.string.isRequired,
   type: React.PropTypes.string,
   format: React.PropTypes.string,
-  onLoad: React.PropTypes.func,
+  onLoad: React.PropTypes.func
 };
 
 TextViewer.defaultProps = {
   type: 'text',
   format: 'plain',
-  onLoad: (e) => { console.log('text loaded', e); },
+  onLoad: (e) => { console.log('text loaded', e); }
 };
 
 export default TextViewer;
