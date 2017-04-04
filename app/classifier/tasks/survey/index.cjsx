@@ -41,11 +41,12 @@ module.exports = React.createClass
   getInitialState: ->
     filters: {}
     selectedChoiceID: ''
+    focusedChoice: ''
 
   render: ->
     <div className="survey-task">
       {if @state.selectedChoiceID is ''
-        <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} annotation={@props.annotation} />
+        <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} onRemove={@handleRemove} annotation={@props.annotation} focusedChoice={@state.focusedChoice} />
       else
         <Choice task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
     </div>
@@ -63,11 +64,20 @@ module.exports = React.createClass
     newAnnotation = Object.assign {}, @props.annotation, _choiceInProgress: true
     @props.onChange newAnnotation
 
+  handleRemove: (choiceID) ->
+    selectedChoices = (item.choice for item in @props.annotation.value)
+    index = selectedChoices.indexOf choiceID
+    @props.annotation.value.splice index, 1
+    newAnnotation = Object.assign {}, @props.annotation
+    @props.onChange newAnnotation
+
   clearFilters: ->
     @setState filters: {}
 
   clearSelection: ->
-    @setState selectedChoiceID: ''
+    @setState 
+      selectedChoiceID: ''
+      focusedChoice: @state.selectedChoiceID
     newAnnotation = Object.assign {}, @props.annotation, _choiceInProgress: false
     @props.onChange newAnnotation
 

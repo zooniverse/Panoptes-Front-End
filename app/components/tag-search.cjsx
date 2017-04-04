@@ -1,13 +1,32 @@
 React = require 'react'
 Select = require 'react-select'
 apiClient = require 'panoptes-client/lib/api-client'
-debounce = require 'debounce'
 
 module.exports = React.createClass
   displayName: 'TagSearch'
 
+  propTypes:
+    multi: React.PropTypes.bool
+    value: React.PropTypes.array
+
   getDefaultProps: ->
     multi: true
+    value: []
+  
+  getInitialState: ->
+    tags: []
+  
+  componentWillMount: ->
+    @setState tags: @props.value
+  
+  componentWillReceiveProps: (newProps) ->
+    @setState tags: newProps.value unless newProps.value is @state.tags
+
+  onChange: (options) ->
+    tags = options.map (option) ->
+      option.value
+    @setState {tags}
+    @props.onChange options
 
   searchTags: (value, callback) ->
     if value is ''
@@ -20,17 +39,18 @@ module.exports = React.createClass
           { options: opts }
 
   saveCurrent: ({target}) ->
-    value = target.value
-    unless value is ''
-      @refs.tagSearch.addValue(value)
-
-  handleInputChange: (value) ->
-    if value.slice("-1") is ","
-      @refs.tagSearch.addValue(value.slice(0, -1))
+    tags = @state.tags
+    unless target.value is ''
+      tags.push target.value
+      @setState {tags}
+      options = tags.map (tag) ->
+        label: tag, value: tag
+      @props.onChange options
 
   render: ->
-    value = @props.value.join(',')
-    <Select
+    value = @state.tags.map (tag) ->
+      {label: tag, value: tag}
+    <Select.Async
       ref="tagSearch"
       multi={@props.multi}
       name={@props.name}
@@ -39,6 +59,5 @@ module.exports = React.createClass
       className="search standard-input"
       closeAfterClick={false}
       onBlur={@saveCurrent}
-      onChange={@props.onChange}
-      onInputChange={@handleInputChange}
-      asyncOptions={debounce(@searchTags, 200)} />
+      onChange={@onChange}
+      loadOptions={@searchTags} />

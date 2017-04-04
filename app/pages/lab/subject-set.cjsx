@@ -1,7 +1,6 @@
 React = require 'react'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../../components/change-listener'
 Papa = require 'papaparse'
@@ -48,7 +47,7 @@ SubjectSetListingRow = React.createClass
     @props.onRemove @props.subject
 
 SubjectSetListingTable = React.createClass
-  displayName: 'SubjectSetListing'
+  displayName: 'SubjectSetListingTable'
 
   getDefaultProps: ->
     subjects: []
@@ -70,13 +69,23 @@ SubjectSetListing = React.createClass
     subjectSet: {}
 
   getInitialState: ->
-    page: 1
     pageCount: NaN
+    subjects: null
 
-  render: ->
+  componentWillReceiveProps: (nextProps) ->
+    if @props.subjectSet.id isnt nextProps.subjectSet.id
+      @setSubjectResources(nextProps.subjectSet.id, 1)
+    else
+      # this updates the page number, when uploading new subjects
+      @setSubjectResources(nextProps.subjectSet.id, nextProps.page)
+
+  componentWillMount: ->
+    @setSubjectResources(@props.subjectSet.id, @props.page)
+
+  setSubjectResources: (subjetSetId, page) ->
     gettingSetMemberSubjects = apiClient.type('set_member_subjects').get
-      subject_set_id: @props.subjectSet.id
-      page: @state.page
+      subject_set_id: subjetSetId
+      page: page
 
     gettingSetMemberSubjects.then ([setMemberSubject]) =>
       newPageCount = setMemberSubject?.getMeta().page_count
@@ -84,21 +93,33 @@ SubjectSetListing = React.createClass
         @setState pageCount: newPageCount
 
     gettingSubjects = gettingSetMemberSubjects.get 'subject'
+    gettingSubjects.then( (subjects) =>
+      @setState 
+        subjects: subjects
+    ).catch( (error) =>
+      console.log error
+    )
 
-    <div>
-      <PromiseRenderer promise={gettingSubjects} then={(subjects) =>
-        <SubjectSetListingTable subjects={subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
-      } />
-      <nav className="pagination">
-        Page <select value={@state.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @setState page: e.target.value}>
-          {if isNaN @state.pageCount
-            <option>?</option>
-          else
-            for p in [1..@state.pageCount]
-              <option key={p} value={p}>{p}</option>}
-        </select> of {@state.pageCount || '?'}
-      </nav>
-    </div>
+  newPage: (pageValue) ->
+    @props.newPage(pageValue)
+    @setSubjectResources(@props.subjectSet.id, pageValue)
+
+  render: ->
+    if @state.subjects
+      <div>
+        <SubjectSetListingTable subjects={@state.subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
+        <nav className="pagination">
+          Page <select value={@props.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @newPage(e.target.value)}>
+            {if isNaN @state.pageCount
+              <option>?</option>
+            else
+              for p in [1..@state.pageCount]
+                <option key={p} value={p}>{p}</option>}
+          </select> of {@state.pageCount || '?'}
+        </nav>
+      </div>
+    else
+      null
 
   previewSubject: (subject) ->
     alert <div className="content-container subject-preview">
@@ -106,7 +127,17 @@ SubjectSetListing = React.createClass
     </div>
 
   removeSubject: (subject) ->
+    lastSubjectOnPage = (@state.subjects.length % 20 is 1)
+
+    pageValue = @props.page
+    
+    # if the removed subject is the last subject on the page,
+    # set the page number to the previous page
+    if lastSubjectOnPage
+      pageValue = @props.page - 1
+
     @props.subjectSet.removeLink('subjects', subject.id).then =>
+      @newPage(pageValue)
       announceSetChange()
 
 EditSubjectSetPage = React.createClass
@@ -127,18 +158,27 @@ EditSubjectSetPage = React.createClass
     successfulCreates: []
     successfulUploads: []
     creationErrors: []
+    page: 1
+
+  componentWillReceiveProps: (nextProps) ->
+    # for new subject sets, set the page number to 1
+    if @props.subjectSet.id isnt nextProps.subjectSet.id
+      @newPage(1)
 
   subjectLimitMessage: (project_subject_count, user) ->
     "The project has " + project_subject_count + " uploaded subjects. " +
     "You have uploaded " + user.uploaded_subjects_count + " subjects from an " +
-    "allowance of " + user.subject_limit + ". Your uploaded subject count is the tally of all subjects (including those deleted) that your account has uploaded through the project builder or Zooniverse API."
+    "allowance of " + user.subject_limit + ". Your uploaded subject count is the tally of all subjects " +
+    "(including those deleted) that your account has uploaded through the project builder or Zooniverse API."
 
   render: ->
     <div>
       <h3>{@props.subjectSet.display_name} #{@props.subjectSet.id}</h3>
       <p className="form-help">A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the “manifest”) defining their properties, and the images themselves.</p>
       <p className="form-help">Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it’s best to just have all their subjects in 1 set, but not all.</p>
-      <p className="form-help">{@subjectLimitMessage(@props.project.subjects_count, @props.user)} </p>
+      <p className="form-help">
+        {@subjectLimitMessage(@props.project.subjects_count, @props.user)} Please <a href='https://www.zooniverse.org/about/contact'> contact us</a> to request changes to your allowance.
+      </p>
       <p className="form-help"><strong>We strongly recommend uploading subjects in batches of 500 - 1,000 at a time.</strong></p>
 
       <form onSubmit={@handleSubmit}>
@@ -155,7 +195,7 @@ EditSubjectSetPage = React.createClass
       <hr />
 
       This set contains {@props.subjectSet.set_member_subjects_count} subjects:<br />
-      <SubjectSetListing subjectSet={@props.subjectSet} />
+      <SubjectSetListing subjectSet={@props.subjectSet} page={@state.page} newPage={@newPage} />
 
       <hr />
 
@@ -208,6 +248,9 @@ EditSubjectSetPage = React.createClass
           <span className="form-help error">{@state.deletionError.message}</span>}
       </p>
     </div>
+
+  newPage: (pageValue) ->
+    @setState page: pageValue
 
   handleSubmit: (e) ->
     e.preventDefault()
@@ -304,6 +347,7 @@ EditSubjectSetPage = React.createClass
           creationErrors: errors
           manifests: {}
           files: {}
+          page: 1
         announceSetChange()
 
   deleteSubjectSet: ->
@@ -331,9 +375,31 @@ module.exports = React.createClass
   getDefaultProps: ->
     params: null
 
+  getInitialState: ->
+    subject_set: null
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.params.subjectSetID isnt @props.params.subjectSetID
+      @setSubjectSet(nextProps.params.subjectSetID)
+
+  componentWillMount: ->
+    @setSubjectSet(@props.params.subjectSetID)
+
+  setSubjectSet: (subjectSetId) ->
+    subject_set = apiClient.type('subject_sets').get subjectSetId
+
+    subject_set.then( (subject_set) =>
+      @setState subject_set: subject_set
+    ).catch( (error) =>
+      console.log error
+    )
+
   render: ->
-    <PromiseRenderer promise={apiClient.type('subject_sets').get @props.params.subjectSetID}>{(subjectSet) =>
+    if @state.subject_set
+      subjectSet = @state.subject_set
       <ChangeListener target={subjectSet}>{=>
         <EditSubjectSetPage {...@props} subjectSet={subjectSet} />
       }</ChangeListener>
-    }</PromiseRenderer>
+    else
+      null
+

@@ -2,10 +2,12 @@ React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../lib/put-file'
 FileButton = require '../components/file-button'
-{MarkdownEditor} = (require 'markdownz').default
+{MarkdownEditor} = require 'markdownz'
 debounce = require 'debounce'
 DragReorderable = require 'drag-reorderable'
 classnames = require 'classnames'
+AutoSave = require '../components/auto-save'
+handleInputChange = require '../lib/handle-input-change'
 
 ProjectModalStepEditor = React.createClass
   getDefaultProps: ->
@@ -82,7 +84,7 @@ ProjectModalEditor = React.createClass
 
     for step, index in stepsInNewOrder
       stepReorderedIndex = index if @props.projectModal.steps[@state.stepToEdit].content is step.content
-      
+
     @props.onStepOrderChange stepsInNewOrder
     @setState stepToEdit: stepReorderedIndex
 
@@ -92,7 +94,7 @@ ProjectModalEditor = React.createClass
 
   renderStepList: (step, i) ->
     step._key ?= Math.random()
-    buttonClasses = classnames 
+    buttonClasses = classnames
       "selected": @state.stepToEdit is i
       "project-modal-step-list-item-button": true
 
@@ -108,7 +110,11 @@ ProjectModalEditor = React.createClass
   render: ->
     <div className="project-modal-editor">
       <div className="project-modal-header">
-        <p className="form-label">{@props.kind} #{@props.projectModal.id}</p>
+        <AutoSave tag="label" resource={@props.projectModal}>
+          <span className="form-label">{@props.kind} #{@props.projectModal.id}</span>
+          <br />
+          <input type="text" name="display_name" value={@props.projectModal.display_name} className="standard-input full" onChange={handleInputChange.bind @props.projectModal} />
+        </AutoSave>
         <p><button className="pill-button" onClick={@props.onProjectModalDelete}>Delete {@props.kind}</button></p>
       </div>
       {if @props.projectModal.steps.length is 0
@@ -289,7 +295,8 @@ ProjectModalCreator = React.createClass
       kind: @props.kind
       links:
         project: @props.project.id
-        
+      display_name: "new #{@props.kind} title"
+
     @setState error: null
     apiClient.type('tutorials').create(projectModalData).save()
       .then (createdProjectModal) =>
@@ -329,7 +336,7 @@ ProjectModalEditorFetcher = React.createClass
       projectModals: null
     apiClient.type('tutorials').get project_id: project.id
       .then (projectModals) =>
-        filteredProjectModals = 
+        filteredProjectModals =
           if @props.kind is "tutorial"
             projectModal for projectModal in projectModals when projectModal.kind is @props.kind or projectModal.kind is null
           else if @props.kind is "mini-course"

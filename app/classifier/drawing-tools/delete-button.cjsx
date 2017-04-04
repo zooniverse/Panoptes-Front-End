@@ -1,6 +1,6 @@
 React = require 'react'
 
-RADIUS = 8
+RADIUS = if screen.width < 900 then 11 else 8
 STROKE_COLOR = 'white'
 FILL_COLOR = 'black'
 STROKE_WIDTH = 1.5
@@ -22,10 +22,11 @@ module.exports = React.createClass
     destroyTransitionDuration: 300
 
   render: ->
+    matrix = @props.getScreenCurrentTransformationMatrix()
     transform = "
       translate(#{@props.x}, #{@props.y})
       rotate(#{@props.rotate})
-      scale(#{1 / @props.tool.props.scale.horizontal}, #{1 / @props.tool.props.scale.vertical})
+      matrix( #{1/matrix.a} 0 0 #{1/matrix.d} 0 0)
     "
 
     <g className="clickable drawing-tool-delete-button" transform={transform} stroke={STROKE_COLOR} strokeWidth={STROKE_WIDTH} onClick={@destroyTool}>

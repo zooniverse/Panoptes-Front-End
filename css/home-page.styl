@@ -1,8 +1,4 @@
 LIGHT-BLUE-GREEN = #5CBDC1
-DARK-BLUE-GREEN = #007482
-DARK-BLUE = #0C4881
-VERY-DARK-BLUE = #020D26
-ORANGE-HIGHLIGHT = #E45950
 WHITE = #FFFFFF
 
 $absolute-fill
@@ -87,7 +83,29 @@ $flex-section
     &:active,
     &:focus
       background: #FFFFFF
-      color: DARK-BLUE-GREEN
+      color: ZOONIVERSE_TEAL
+
+  .alternate-button
+    border: 2px solid
+    border-radius: 6px
+    border-color: ZOONIVERSE_NAVY
+    background: none
+    padding: 0.75em 1.75em
+    transition: background 500ms ease
+    margin: 50px 10px 0 10px
+    font-size: 1.5em
+    font-weight: bold
+    text-decoration: none
+    color: ZOONIVERSE_NAVY
+
+    @media (max-width: 900px)
+      margin-top: 20px
+
+    &:hover,
+    &:active,
+    &:focus
+      background: ZOONIVERSE_NAVY
+      color: #FFFFFF
 
   .home-link-down
     position: absolute
@@ -149,7 +167,7 @@ $flex-section
       font-size: 1.5em
       font-weight: bold
       text-decoration: none
-      color: DARK-BLUE-GREEN
+      color: ZOONIVERSE_TEAL
 
       @media (max-width: 900px)
         margin-top: 20px
@@ -160,11 +178,58 @@ $flex-section
         background: LIGHT-BLUE-GREEN
         color: #FFFFFF
 
+  .home-featured
+    padding: 50px 30px
+    min-height: 40vw
+    background: #fff
+    
+    h1
+      color: COPY
+      font-size: 1.3em
+      text-transform: uppercase
+    
+    h2
+      color: ZOONIVERSE_NAVY
+    
+    p
+      color: FOREGROUND
+      width: 70vw
+      font-size: 2em
+      
+      a
+        font-size: inherit
+
+      @media (max-width: 900px)
+        width: 100%
+      
+    .home-featured-images
+      margin: 1em 0
+      display: flex
+      flex-direction: row
+      justify-content: center
+      align-items: center
+      
+      img
+        max-width: 50vw
+        display: block
+        margin: 1vw
+        flex: 1 1 auto
+        
+        @media (max-width: 900px)
+          max-width: 80vw
+    
+    .alternate-button
+      margin-top: 20px
+
   .home-discover
-    background-color: WHITE
+    padding: 50px 0
+    background-color: BACKGROUND_COLOR
+    
+    @media (max-width: 900px)
+      min-height: auto
 
     h1, p
-      color: DARK-BLUE
+      color: ZOONIVERSE_NAVY
 
     p
       margin: 20px auto
@@ -172,30 +237,8 @@ $flex-section
       font-size: 2em
 
       @media (max-width: 900px)
-        width: 100%
+        width: 90vw
         font-size: 1.5em
-
-    .discover-button
-      border: 2px solid
-      border-radius: 6px
-      border-color: DARK-BLUE
-      background: none
-      padding: 0.75em 1.75em
-      transition: background 500ms ease
-      margin: 50px 10px 0 10px
-      font-size: 1.5em
-      font-weight: bold
-      text-decoration: none
-      color: DARK-BLUE
-
-      @media (max-width: 900px)
-        margin-top: 20px
-
-      &:hover,
-      &:active,
-      &:focus
-        background: DARK-BLUE
-        color: #FFFFFF
 
   .home-promoted
     padding: 0
@@ -236,7 +279,7 @@ $flex-section
 
     .layer
       @extends $absolute-fill
-      background: linear-gradient(top, rgba(DARK-BLUE-GREEN, 0.25), rgba(DARK-BLUE-GREEN, 0.4))
+      background: linear-gradient(top, rgba(ZOONIVERSE_TEAL, 0.25), rgba(ZOONIVERSE_TEAL, 0.4))
 
     .description
       position: relative
@@ -310,17 +353,18 @@ $flex-section
 
   .home-social
     background-color: WHITE
-    padding: 50px 30px
+    border-top: 1px solid #333
+    padding: 50px 0
 
     @media (max-width: 900px)
       padding 2em
 
     h1
-      color: DARK-BLUE
+      color: ZOONIVERSE_NAVY
       margin: 20px auto
 
     h2, h2 a
-      color: DARK-BLUE
+      color: ZOONIVERSE_NAVY
       margin: 20px auto
       font-size: 20px
       text-decoration: none
@@ -405,4 +449,4 @@ $flex-section
       margin-bottom: 3vh
 
       &:hover
-        background: lighten(LIGHT_GREEN_HEADER, 20%)
+        background: lighten(TEAL_MID, 20%)

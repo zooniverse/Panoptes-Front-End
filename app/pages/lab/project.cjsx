@@ -11,6 +11,7 @@ workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 DragReorderable = require 'drag-reorderable'
+`import LabStatus from '../../partials/lab-status.jsx';`
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
@@ -125,7 +126,7 @@ EditProjectPage = React.createClass
           <li>
             <br />
             <div className="nav-list-header">Subject sets</div>
-            <PromiseRenderer promise={@props.project.get 'subject_sets', sort: 'display_name', page_size: 100}>{(subjectSets) =>
+            <PromiseRenderer promise={@props.project.get 'subject_sets', sort: 'display_name', page_size: 250}>{(subjectSets) =>
               <ul className="nav-list">
                 {renderSubjectSetListItem = (subjectSet) ->
                   subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>
@@ -153,13 +154,13 @@ EditProjectPage = React.createClass
             <div className="nav-list-header">Need some help?</div>
             <ul className="nav-list">
               <li>
-                <Link className="nav-list-item" to="/lab-how-to">Read a tutorial</Link>
+                <Link className="nav-list-item" to="/help">Read a tutorial</Link>
               </li>
               <li>
                 <Link to="/talk/18" className="nav-list-item">Ask for help on talk</Link>
               </li>
               <li>
-                <Link to="/glossary" className="nav-list-item">Glossary</Link>
+                <Link to="/help/glossary" className="nav-list-item">Glossary</Link>
               </li>
             </ul>
           </li>
@@ -175,6 +176,7 @@ EditProjectPage = React.createClass
       <hr />
 
       <div className="column">
+        <LabStatus />
         <ChangeListener target={@props.project} handler={=>
           propsWithoutChildren = Object.assign {}, @props
           delete propsWithoutChildren.children

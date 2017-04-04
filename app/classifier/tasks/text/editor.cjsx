@@ -2,7 +2,7 @@ React = require 'react'
 alert = require '../../../lib/alert'
 AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
-{MarkdownEditor} = (require 'markdownz').default
+{MarkdownEditor} = require 'markdownz'
 MarkdownHelp = require '../../../partials/markdown-help'
 NextTaskSelector = require '../next-task-selector'
 

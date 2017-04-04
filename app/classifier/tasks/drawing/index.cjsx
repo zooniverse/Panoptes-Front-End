@@ -4,8 +4,8 @@ Summary = require './summary'
 MarkingInitializer = require './marking-initializer'
 MarkingsRenderer = require './markings-renderer'
 HidePreviousMarksToggle = require './hide-previous-marks-toggle'
-GenericTask = require '../generic'
-{Markdown} = (require 'markdownz').default
+GenericTask = require('../generic.jsx').default
+{Markdown} = require 'markdownz'
 icons = require './icons'
 drawingTools = require '../../drawing-tools'
 GridButtons = require './grid-buttons'
@@ -58,7 +58,7 @@ module.exports = React.createClass
         (marksByTool[i] ? 0) >= (toolDescription.min ? 0)
 
     areMarksComplete: (task, annotation) ->
-      tasks = require '..' # Circular
+      tasks = require('..').default # Circular
       for mark in annotation.value
         toolDescription = task.tools[mark.tool]
         for detail, i in toolDescription.details ? [] when detail.required
@@ -74,7 +74,8 @@ module.exports = React.createClass
       @areMarksComplete(task, annotation) and @areThereEnoughMarks(task, annotation) and annotation.value.length >= (task.required ? 0)
 
   getDefaultProps: ->
-    task: null
+    task:
+      tools: []
     annotation: null
     onChange: Function.prototype
 

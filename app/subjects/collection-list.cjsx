@@ -6,30 +6,17 @@ CollectionPreview = require '../collections/preview'
 module.exports = React.createClass
   displayName: 'SubjectCollectionList'
 
-  componentWillMount: ->
-    @getCollections()
-
-  getInitialState: ->
+  getDefaultProps: ->
     collections: null
 
-  getCollections: ->
-    query =
-      subject_id: @props.subject.id
-      page_size: 20
-      sort: '-created_at'
-      include: 'owner'
-
-    apiClient.type('collections').get(query).then (collections) =>
-      @setState {collections}
-
   render: ->
-    return <Loading /> unless @state.collections
+    return <Loading /> unless @props.collections
 
-    if @state.collections.length > 0
+    if @props.collections.length > 0
       <div className="subject-collection-list">
         <h2>Collections:</h2>
         <div className="subject-collection-list-container">
-          {for collection in @state.collections
+          {for collection in @props.collections
             <CollectionPreview project={@props.project} key={"collection-#{ collection.id }"} collection={collection} />}
         </div>
       </div>

@@ -32,12 +32,12 @@ module.exports = React.createClass
     }
 
     apiClient.type('collections').create(collection).save()
-      .catch (e) =>
-        @setState error: e
       .then (collection) =>
         @refs.name.value = ''
         @refs.private.value = true
         @props.onSubmit collection
+      .catch (e) =>
+        @setState error: e
 
   handleNameInputChange: ->
     @setState collectionNameLength: @refs.name.value.length

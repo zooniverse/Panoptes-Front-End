@@ -102,7 +102,9 @@ ProjectsPage.childContextTypes = {
 
 ProjectsPage.propTypes = {
   children: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
+  location: React.PropTypes.shape({
+    query: React.PropTypes.object,
+  }),
 };
 
 ProjectsPage.defaultProps = {

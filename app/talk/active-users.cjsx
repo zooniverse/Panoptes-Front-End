@@ -3,6 +3,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 {sugarApiClient} = require 'panoptes-client/lib/sugar'
 {Link} = require 'react-router'
 Paginator = require './lib/paginator'
+activeUserCache = require('./lib/active-user-cache').default
 
 module.exports = React.createClass
   displayName: 'ActiveUsers'
@@ -11,7 +12,7 @@ module.exports = React.createClass
     geordi: React.PropTypes.object
 
   getInitialState: ->
-    userRecords: { }
+    userRecords: activeUserCache
     users: []
     total: 0
     pageCount: 0
@@ -33,16 +34,16 @@ module.exports = React.createClass
 
       @fetchUncachedUsers(onPage).then(@cacheUsers).then (users) =>
         activeUsers = (@state.userRecords[id] for id in onPage when @state.userRecords[id]?)
-        @setState userRecords: @state.userRecords, users: activeUsers, page: page, pageCount: pageCount, total: userIds.length
+        @setState userRecords: activeUserCache, users: activeUsers, page: page, pageCount: pageCount, total: userIds.length
         @restartTimer()
       .catch =>
         @restartTimer()
 
   cacheUsers: (users) ->
-    @state.userRecords[user.id] = user for user in users
+    activeUserCache[user.id] = user for user in users
 
   fetchUncachedUsers: (ids) ->
-    cachedIds = Object.keys @state.userRecords
+    cachedIds = Object.keys activeUserCache
     uncachedIds = (id for id in ids when id not in cachedIds)
 
     if uncachedIds.length > 0
@@ -81,7 +82,7 @@ module.exports = React.createClass
 
   restartTimer: ->
     @resetTimer()
-    @updateTimeout = setTimeout @update, 10000
+    @updateTimeout = setTimeout @update, 60000
 
   userLink: (user) ->
     baseLink = "/"

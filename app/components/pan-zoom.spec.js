@@ -16,9 +16,10 @@ describe('PanZoom', function () {
       wrapper = shallow(<PanZoom enabled={true} />);
     });
 
-    it('should render a zoom-in, a zoom-out, and reset button', function () {
+    it('should render a zoom-in, a zoom-out, rotate, and reset button', function () {
       assert.equal(wrapper.find('button.zoom-out').length, 1);
       assert.equal(wrapper.find('button.zoom-in').length, 1);
+      assert.equal(wrapper.find('button.rotate').length, 1);
       assert.equal(wrapper.find('button.reset').length, 1);
     });
 
@@ -71,6 +72,33 @@ describe('PanZoom', function () {
         wrapper.setState({ viewBoxDimensions: { width: 100, height: 100, x: 0, y: 0 } });
 
         assert.equal(wrapper.instance().cannotZoomOut(), true);
+      });
+    });
+
+    describe('#cannotResetZoomRotate', function() {
+      let wrapper;
+      const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+
+      beforeEach(function () {
+        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+      });
+
+      it('returns false if state.rotation is not 0', function () {
+        wrapper.setState({ viewBoxDimensions: { width: 100, height: 100, x: 0, y: 0 }, rotation: 90 });
+
+        assert.equal(wrapper.instance().cannotResetZoomRotate(), false);
+      });
+
+      it('returns false if there frameDimensions are not identical to viewBoxDimensions', function () {
+        wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 0, y: 0 }, rotation: 0 });
+
+        assert.equal(wrapper.instance().cannotResetZoomRotate(), false);
+      });
+
+      it('returns true if there is not room to zoom out and degrees rotated is 0', function () {
+        wrapper.setState({ viewBoxDimensions: { width: 100, height: 100, x: 0, y: 0 }, rotation: 0 });
+        
+        assert.equal(wrapper.instance().cannotResetZoomRotate(), true);
       });
     });
 
@@ -383,6 +411,29 @@ describe('PanZoom', function () {
         wrapper.instance().panVertical(200);
 
         assert.equal(wrapper.state('viewBoxDimensions').y, ceiling);
+      });
+    });
+
+    describe('#rotateClockwise()', function () {
+      let originalFrameDimensions;
+      let wrapper;
+
+      beforeEach(function () {
+        originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+      });
+
+      it('should add 90 to this.state.rotation', function () {
+        wrapper.instance().rotateClockwise();
+
+        assert.equal(wrapper.state('rotation'), 90);
+      });
+
+      it('should create a new transformation statement with the updated rotation', function () {
+        wrapper.instance().rotateClockwise();
+        let updatedTransformation = `rotate(90 ${wrapper.props().frameDimensions.width / 2} ${wrapper.props().frameDimensions.height / 2})`
+
+        assert.equal(wrapper.state('transform'), updatedTransformation);
       });
     });
   });

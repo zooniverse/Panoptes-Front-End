@@ -1,22 +1,23 @@
 React = require 'react'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
-DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
-{MarkdownEditor} = (require 'markdownz').default
+{MarkdownEditor} = require 'markdownz'
 MarkdownHelp = require '../../partials/markdown-help'
 alert = require('../../lib/alert')
 {DISCIPLINES} = require '../../components/disciplines'
 Select = require 'react-select'
-`import CharLimit from '../../components/char-limit'`
-`import ExternalLinksEditor from './external-links-editor'`
+`import CharLimit from '../../components/char-limit';`
+`import ExternalLinksEditor from './external-links-editor';`
+`import DisplayNameSlugEditor from '../../partials/display-name-slug-editor';`
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
+
+DISCIPLINE_NAMES = (discipline.value for discipline in DISCIPLINES)
 
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
@@ -26,57 +27,72 @@ module.exports = React.createClass
 
   getInitialState: ->
     {disciplineTagList, otherTagList} = @splitTags()
-    avatarError: null
-    backgroundError: null
     disciplineTagList: disciplineTagList
     otherTagList: otherTagList
+    researchers: []
+    avatar: null
+    background: null
+    error: null
+
+  componentWillMount: ->
+    @props.project.get('project_roles', page_size: 100).then (roles) =>
+      scientists = for role in roles when 'scientist' in role.roles or 'owner' in role.roles
+        role.links.owner.id
+      apiClient.type('users').get(scientists).then (researchers) =>
+        @setState({ researchers })
+
+    avatar = @props.project.get('avatar')
+      .catch (error) =>
+        console.log error
+    background = @props.project.get('background')
+      .catch (error) =>
+        console.log error
+    Promise.all([avatar, background])
+      .then ([avatar, background]) =>
+        @setState {avatar, background}
 
   splitTags: (kind) ->
     disciplineTagList = []
     otherTagList = []
     for t in @props.project.tags
-      if DISCIPLINES.some((el) -> el.value == t)
-        disciplineTagList.push(t)
+      name = t[1]
+      if name in DISCIPLINE_NAMES
+        disciplineTagList.push name
       else
-        otherTagList.push(t)
+        otherTagList.push name
     {disciplineTagList, otherTagList}
+
+  researcherOptions: ->
+    options = []
+    for researcher in @state.researchers
+      options.push Object.assign value: researcher.id, label: researcher.display_name
+    options.push Object.assign value: @props.project.display_name, label: "#{@props.project.display_name} Avatar"
+    options
 
   render: ->
     # Failures on media GETs are acceptable here,
     # but the JSON-API lib doesn't cache failed requests,
     # so do it manually:
-
-    @avatarGet ?= @props.project.get 'avatar'
-      .catch ->
-        null
-
-    @backgroundGet ?= @props.project.get 'background'
-      .catch ->
-        null
+    avatarPlaceholder = <div className="form-help content-container">Drop an avatar image here</div>
+    backgroundPlaceholder = <div className="form-help content-container">Drop a background image here</div>
 
     <div>
       <p className="form-help">Input the basic information about your project, and set up its home page.</p>
       <div className="columns-container">
         <div>
           Avatar<br />
-          <PromiseRenderer promise={@avatarGet} then={(avatar) =>
-            placeholder = <div className="form-help content-container">Drop an avatar image here</div>
-            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
-          } />
-          {if @state.avatarError
-            <div className="form-help error">{@state.avatarError.toString()}</div>}
+          <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={@state.avatar?.src} placeholder={avatarPlaceholder} onChange={@handleMediaChange.bind this, 'avatar'} />
+          {if @state.error
+            <div className="form-help error">{@state.error.toString()}</div>}
 
           <p><small className="form-help">Pick a logo to represent your project. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50 KB.</small></p>
 
           <hr />
 
           Background image<br />
-          <PromiseRenderer promise={@backgroundGet} then={(background) =>
-            placeholder = <div className="form-help content-container">Drop a background image here</div>
-            <ImageSelector maxSize={MAX_BACKGROUND_SIZE} src={background?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
-          } />
-          {if @state.backgroundError
-            <div className="form-help error">{@state.backgroundError.toString()}</div>}
+          <ImageSelector maxSize={MAX_BACKGROUND_SIZE} src={@state.background?.src} placeholder={backgroundPlaceholder} onChange={@handleMediaChange.bind this, 'background'} />
+          {if @state.error
+            <div className="form-help error">{@state.error.toString()}</div>}
 
           <p><small className="form-help">This image will be the background for all of your project pages, including your project’s front page. To add an image, either drag and drop or left click to open your file viewer. For best results, use good quality images no more than 256 KB.</small></p>
 
@@ -123,14 +139,29 @@ module.exports = React.createClass
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit={500} string={@props.project.workflow_description ? ''} /></small>
           </p>
 
-          <p>
+          <div>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Researcher Quote</span>
+              <br />
+              <Select
+                className="researcher-quote"
+                placeholder="Choose a Researcher"
+                onChange={@handleResearcherChange}
+                options={@researcherOptions()}
+                value={@props.project?.configuration?.researcherID} />
+              <textarea className="standard-input full" name="researcher_quote" value={@props.project.researcher_quote} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
+            <small className="form-help">This text will appear on a project landing page alongside an avatar of the selected researcher. <CharLimit limit={255} string={@props.project.researcher_quote ? ''} /></small>
+          </div>
+
+          <div>
             <AutoSave resource={@props.project}>
               <span className="form-label">Announcement Banner</span>
               <br />
-              <textarea className="standard-input full" name="configuration.announcement" value={@props.project.configuration?.announcement} onChange={handleInputChange.bind @props.project} />
+              <MarkdownEditor className="full" name="configuration.announcement" rows="2" value={@props.project.configuration?.announcement} project={@props.project} onChange={handleInputChange.bind @props.project} onHelp={-> alert <MarkdownHelp/>}/>
             </AutoSave>
             <small className="form-help">This text will appear as a banner at the top of all your project's pages. Only use this when you've got a big important announcement to make!</small>
-          </p>
+          </div>
 
           <div>
             <AutoSave resource={@props.project}>
@@ -165,14 +196,22 @@ module.exports = React.createClass
       </div>
     </div>
 
-  handleDisciplineTagChange: (value) ->
-    newTags = if value is '' then [] else value.split(',')
+  handleDisciplineTagChange: (options) ->
+    newTags = options.map (option) ->
+      option.value
     @setState disciplineTagList: newTags
     allTags = newTags.concat @state.otherTagList
     @handleTagChange(allTags)
 
-  handleOtherTagChange: (value) ->
-    newTags = if value is '' then [] else value.split(',')
+  handleResearcherChange: (option) ->
+    @props.project.update({
+      'configuration.researcherID': option?.value || ""
+    })
+    @props.project.save()
+
+  handleOtherTagChange: (options) ->
+    newTags = options.map (option) ->
+      option.value
     @setState otherTagList: newTags
     allTags = @state.disciplineTagList.concat newTags
     @handleTagChange(allTags)

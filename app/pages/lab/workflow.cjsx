@@ -8,12 +8,13 @@ ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {Link} = require 'react-router'
 MultiImageSubjectOptionsEditor = require '../../components/multi-image-subject-options-editor'
-tasks = require '../../classifier/tasks'
+tasks = require('../../classifier/tasks').default
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
-ShortcutEditor = require '../../components/shortcut-editor'
+classnames = require 'classnames'
+`import ShortcutEditor from '../../classifier/tasks/shortcut-editor';`
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -72,9 +73,11 @@ EditWorkflowPage = React.createClass
 
     stats_completeness_type = @props.workflow.configuration.stats_completeness_type ? 'retirement'
 
-    disabledStyle =
-      opacity: 0.4
-      pointerEvents: 'none'
+    projectLiveWorkflowActive = @props.project.live and @props.workflow.active
+    projectLiveWorkflowInactive = @props.project.live and !@props.workflow.active
+    disabledIfLive = classnames({ 'disabled-section': projectLiveWorkflowActive })
+    disabledIfWorkflowInactive = classnames({ 'disabled-section': projectLiveWorkflowInactive })
+    taskEditorClasses = classnames({'column': true, 'disabled-section': projectLiveWorkflowActive})
 
     <div className="edit-workflow-page">
       <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
@@ -89,8 +92,8 @@ EditWorkflowPage = React.createClass
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       <p className="form-help">If you have multiple workflows you can rearrange the order in which they are listed on your project's front page by clicking and dragging on the left gray tab next to each workflow title in the left menu bar.</p>
       {if @props.project.live and @props.workflow.active
-        <p className="form-help warning"><strong>You cannot edit an active workflow if the project is live.</strong></p>}
-      <div className="columns-container" style={disabledStyle if @props.project.live and @props.workflow.active}>
+        <p className="form-help warning"><strong>If the project is live, you cannot edit tasks in an active workflow, but other workflow settings can be changed.</strong></p>}
+      <div className="columns-container">
         <div className="column">
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
@@ -102,7 +105,7 @@ EditWorkflowPage = React.createClass
 
             <br />
 
-            <div>
+            <div className={disabledIfLive}>
               <div className="nav-list standalone">
                 <span className="nav-list-header">Tasks</span>
                 <br />
@@ -246,13 +249,14 @@ EditWorkflowPage = React.createClass
               <hr />
             </div>}
 
-          <div>
+          <div className={disabledIfWorkflowInactive}>
             <AutoSave resource={@props.project}>
               <span className="form-label">Set as default</span><br />
               <small className="form-help">If you have more than one workflow, you can set which should be default. Only one can be default.</small>
+              {<span><br /><small className="form-help">Inactive workflows on live projects cannot be made default.</small></span> if projectLiveWorkflowInactive}
               <br />
               <label>
-                <input ref="defaultWorkflow" type="checkbox" checked={@props.project.configuration?.default_workflow is @props.workflow.id} onChange={@handleDefaultWorkflowToggle} />
+                <input ref="defaultWorkflow" type="checkbox" disabled={projectLiveWorkflowInactive} checked={@props.project.configuration?.default_workflow is @props.workflow.id} onChange={@handleDefaultWorkflowToggle} />
                 Default workflow
               </label>
             </AutoSave>
@@ -289,6 +293,24 @@ EditWorkflowPage = React.createClass
               <hr />
             </div>}
 
+          {if 'sim notification' in @props.project.experimental_tools
+            <div>
+              <div>
+                <AutoSave resource={@props.workflow}>
+                  <span className="form-label">Simulation subject notification</span><br />
+                  <small className="form-help">Simulation subject notification will display a small message in the classification summary that lets the volunteer know the subject is a simulation.</small><br /><br />
+                  <small className="form-help">For this feature to work, it requires hidden subject metadata with the column label <code>{'#sim'}</code> and the value set to <code>true</code> or <code>false.</code></small>
+                  <br />
+                  <label>
+                    <input type="checkbox" checked={@props.workflow.configuration.sim_notification} onChange={@handleSetSimNotification} />
+                    Simluation subject notification
+                  </label>
+                </AutoSave>
+              </div>
+
+              <hr />
+            </div>}
+
           {if 'Gravity Spy Gold Standard' in @props.project.experimental_tools
             <div>
               <div>
@@ -307,6 +329,22 @@ EditWorkflowPage = React.createClass
 
             </div>}
 
+          <div>
+            <div>
+              <AutoSave resource={@props.workflow}>
+                <span className="form-label">Pan and zoom</span><br />
+                <small className="form-help">Pan and zoom allows the user to zoom in and out and pan image subjects in the classification interface.</small>
+                <br />
+                <label>
+                  <input ref="panAndZoomToggle" type="checkbox" checked={@props.workflow.configuration.pan_and_zoom} onChange={@handleSetPanAndZoom} />
+                  Pan and Zoom
+                </label>
+              </AutoSave>
+            </div>
+
+            <hr />
+          </div>
+
           <AutoSave tag="div" resource={@props.workflow}>
             <span className="form-label">Multi-image options</span><br />
             <small className="form-help">Choose how to display multiple images</small>
@@ -314,6 +352,24 @@ EditWorkflowPage = React.createClass
           </AutoSave>
 
           <hr />
+
+          {if 'enable subject flags' in @props.project.experimental_tools
+            <div>
+              <div>
+                <AutoSave resource={@props.workflow}>
+                  <span className="form-label">Subject Flags</span><br />
+                  <small className="form-help">Flags allow volunteers to mark subjects as inappropriate.</small>
+                  <br />
+                  <label>
+                    <input type="checkbox" onChange={@enableSubjectFlags} checked={@props.workflow.configuration.enable_subject_flags}/>
+                    Enable Subject Flags
+                  </label>
+                </AutoSave>
+              </div>
+
+              <hr />
+
+            </div>}
 
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
@@ -352,19 +408,19 @@ EditWorkflowPage = React.createClass
 
             </div>}
 
-          <div style={pointerEvents: 'all'}>
+          <div>
             <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>Test this workflow</a>
           </div>
 
           <hr />
 
-          <div style={pointerEvents: 'all'}>
+          <div>
             <Link to="/lab/#{@props.project.id}/workflow/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
           </div>
 
           <hr />
 
-          <div>
+          <div className={disabledIfLive}>
             <small>
               <button type="button" className="minor-button" disabled={@state.deletionInProgress} data-busy={@state.deletionInProgress || null} onClick={@handleDelete}>
                 Delete this workflow
@@ -375,7 +431,7 @@ EditWorkflowPage = React.createClass
           </div>
         </div>
 
-        <div className="column">
+        <div className={taskEditorClasses}>
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
             <div>
@@ -415,8 +471,8 @@ EditWorkflowPage = React.createClass
 
   renderSubjectSets: ->
     projectAndWorkflowSubjectSets = Promise.all [
-      @props.project.get 'subject_sets', sort: 'display_name', page_size: 100
-      @props.workflow.get 'subject_sets', sort: 'display_name', page_size: 100
+      @props.project.get 'subject_sets', sort: 'display_name', page_size: 250
+      @props.workflow.get 'subject_sets', sort: 'display_name', page_size: 250
     ]
 
     <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
@@ -456,7 +512,7 @@ EditWorkflowPage = React.createClass
             toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
               <input type={if tutorials.length is 1 then "checkbox" else "radio"} checked={assignedTutorial} onChange={toggleTutorial} />
-              Tutorial #{tutorial.id}
+              Tutorial #{tutorial.id} {" - #{tutorial.display_name}" if tutorial.display_name}
             </label>}
         </form>
       else
@@ -477,7 +533,7 @@ EditWorkflowPage = React.createClass
             toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
               <input type={if projectTutorials.length is 1 then "checkbox" else "radio"} checked={assignedTutorial} onChange={toggleTutorial} />
-              Mini-Course #{tutorial.id}
+              Mini-Course #{tutorial.id} {" - #{tutorial.display_name}" if tutorial.display_name}
             </label>}
         </form>
       else
@@ -502,6 +558,10 @@ EditWorkflowPage = React.createClass
     @props.workflow.update changes
     @setState selectedTaskKey: nextTaskID
 
+  handleSetPanAndZoom: (e) ->
+    @props.workflow.update
+      'configuration.pan_and_zoom': e.target.checked
+
   handleSetHideClassificationSummaries: (e) ->
     @props.workflow.update
       'configuration.hide_classification_summaries': e.target.checked
@@ -510,6 +570,10 @@ EditWorkflowPage = React.createClass
     @props.workflow.update
       'configuration.persist_annotations': e.target.checked
 
+  handleSetSimNotification: (e) ->
+    @props.workflow.update
+      'configuration.sim_notification': e.target.checked
+
   handleSetInvert: (e) ->
     @props.workflow.update
       'configuration.invert_subject': e.target.checked
@@ -517,6 +581,10 @@ EditWorkflowPage = React.createClass
   handleSetGravitySpyGoldStandard: (e) ->
     @props.workflow.update
       'configuration.gravity_spy_gold_standard': e.target.checked
+
+  enableSubjectFlags: (e) ->
+    @props.workflow.update
+      'configuration.enable_subject_flags': e.target.checked
 
   handleSetWorldWideTelescope: (e) ->
     if !@props.workflow.configuration.custom_summary

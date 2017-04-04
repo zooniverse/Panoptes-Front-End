@@ -7,8 +7,9 @@ surveyEditorHelp = require './editor-help'
 AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
 NextTaskSelector = require '../next-task-selector'
-MediaArea = require '../../../components/media-area'
-{Markdown} = (require 'markdownz').default
+# `import MediaArea from '../../../pages/lab/media-area/';`
+MediaArea = require('../../../pages/lab/media-area/').default
+{Markdown} = require 'markdownz'
 Papa = require 'papaparse'
 
 module.exports = React.createClass
@@ -367,7 +368,7 @@ module.exports = React.createClass
     value?.charAt(0).toUpperCase() in ['T', 'X', 'Y', '1']
 
   makeID: (string) ->
-    string.replace(/[aeiouy\W]/gi, '').toUpperCase()
+    string.replace(/\W/g, '').toUpperCase()
 
   createChoice: (name) ->
     choiceID = @makeID name

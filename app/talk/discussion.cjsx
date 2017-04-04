@@ -2,24 +2,22 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 Comment = require './comment'
 CommentBox = require './comment-box'
-commentValidations = require './lib/comment-validations'
-{getErrors} = require './lib/validations'
 talkClient = require 'panoptes-client/lib/talk-client'
+apiClient = require 'panoptes-client/lib/api-client'
 Paginator = require './lib/paginator'
 SingleSubmitButton = require '../components/single-submit-button'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {Link} = require 'react-router'
-Avatar = require '../partials/avatar'
-DisplayRoles = require './lib/display-roles'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
 merge = require 'lodash.merge'
 FollowDiscussion = require './follow-discussion'
-PopularTags = require './popular-tags'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
+`import DiscussionComment from './discussion-comment';`
+`import PopularTags from './popular-tags';`
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -38,6 +36,9 @@ module.exports = React.createClass
     reply: null
     moderationOpen: false
     boards: []
+    authors: {}
+    subjects: {}
+    author_roles: {}
 
   getDefaultProps: ->
     location: query: page: 1
@@ -49,6 +50,18 @@ module.exports = React.createClass
     if @props.params.discussion isnt nextProps.params.discussion
       @setDiscussion(nextProps.params.discussion)
         .then => @setComments(nextProps.location.query.page ? 1)
+        .then =>
+          if nextProps.user isnt @props.user
+            talkClient
+              .type 'roles'
+              .get
+                user_id: nextProps.user?.id
+                section: ['zooniverse', @state.discussion.section]
+                is_shown: true
+                page_size: 100
+              .then (roles) =>
+                @setState {roles}
+
     else if nextProps.location.query.page isnt @props.location.query.page
       @setComments(nextProps.location.query.page)
 
@@ -56,10 +69,10 @@ module.exports = React.createClass
     @shouldScrollToBottom = true if @props.location.query?.scrollToLastComment
 
   componentWillMount: ->
-    @setDiscussion().then =>
+    @setDiscussion().then (discussion) =>
       if @props.location.query?.comment
         commentId = @props.location.query.comment
-        comments = @state.discussion.links.comments
+        comments = discussion.links.comments
         commentNumber = comments.indexOf(commentId) + 1
         page = Math.ceil commentNumber / PAGE_SIZE
 
@@ -69,28 +82,68 @@ module.exports = React.createClass
             pathname: @props.location.pathname
             query: @props.location.query
 
+      if @props.user?
+        talkClient
+          .type 'roles'
+          .get
+            user_id: @props.user.id
+            section: ['zooniverse', @state.discussion.section]
+            is_shown: true
+            page_size: 100
+          .then (roles) =>
+            @setState {roles}
+
       @setComments(@props.location.query.page ? 1)
-    
-    if @props.user?
-      talkClient
-        .type 'roles'
-        .get 
-          user_id: @props.user.id
-          section: ['zooniverse', @state.discussion.section]
-          is_shown: true
-          page_size: 100
-        .then (roles) =>
-          @setState {roles}
 
   commentsRequest: (page) ->
     {board, discussion} = @props.params
     talkClient.type('comments').get({discussion_id: discussion, page_size: PAGE_SIZE, page})
 
   setComments: (page = @props.location.query?.page) ->
+    subject_ids = []
+    author_ids = []
+    authors = {}
+    subjects = {}
+    author_roles = {}
     @commentsRequest(page)
       .then (comments) =>
         if comments.length
           commentsMeta = comments[0]?.getMeta() ? {}
+          comments.map (comment) ->
+            author_ids.push comment.user_id
+            subject_ids.push comment.focus_id if comment.focus_id
+          author_ids = author_ids.filter (id, i) -> author_ids.indexOf(id) is i
+          subject_ids = subject_ids.filter (id, i) -> subject_ids.indexOf(id) is i
+
+          apiClient
+            .type 'users'
+            .get
+              id: author_ids
+            .then (users) =>
+              users.map (user) -> authors[user.id] = user
+              @setState {authors}
+
+          apiClient
+            .type 'subjects'
+            .get
+              id: subject_ids
+            .then (comment_subjects) =>
+              comment_subjects.map (subject) -> subjects[subject.id] = subject
+              @setState {subjects}
+
+          talkClient
+            .type 'roles'
+            .get
+              user_id: author_ids
+              section: ['zooniverse', @state.discussion.section]
+              is_shown: true
+              page_size: 100
+            .then (roles) =>
+              roles.map (role) ->
+                author_roles[role.user_id] ?= []
+                author_roles[role.user_id].push role
+              @setState {author_roles}
+
           @setState {comments, commentsMeta}, =>
             if @shouldScrollToBottom
               @scrollToBottomOfDiscussion()
@@ -117,7 +170,7 @@ module.exports = React.createClass
     @discussionsRequest(discussion)
       .then (discussion) =>
         @setState {discussion: discussion[0]}
-        
+
         talkClient
           .type 'boards'
           .get
@@ -125,6 +178,13 @@ module.exports = React.createClass
             page_size: 100
           .then (boards) =>
             @setState {boards}
+
+        discussion[0]
+
+  onSubmitComment: (comment) ->
+    @setCommentsMeta().then =>
+      @setComments @state.commentsMeta?.page_count
+      @setState {reply: null}
 
   onUpdateComment: (textContent, subject, commentId) ->
     {discussion} = @props.params
@@ -145,26 +205,6 @@ module.exports = React.createClass
     if window.confirm("Are you sure that you want to delete this comment?")
       talkClient.type('comments').get(id: commentId).delete()
         .then (deleted) => @setComments(@props.location.query.page)
-
-  onSubmitComment: (e, textContent, subject, reply) ->
-    {discussion} = @props.params
-    user_id = @props.user.id
-    discussion_id = +discussion
-    body = textContent
-    focus_id = +subject?.id ? null
-    reply_id = reply.comment.id if reply
-    focus_type = 'Subject' if !!focus_id
-
-    comment = merge {},
-      {user_id, discussion_id, body},
-      {focus_id, focus_type} if !!focus_id,
-      {reply_id} if reply
-
-    talkClient.type('comments').create(comment).save()
-      .then (comment) =>
-        @setCommentsMeta().then =>
-          @setComments(@state.commentsMeta?.page_count)
-          @setState {reply: null}
 
   onLikeComment: (commentId) ->
     talkClient.type('comments').get(commentId)
@@ -191,6 +231,9 @@ module.exports = React.createClass
       key={data.id}
       index={i}
       data={data}
+      author={@state.authors[data.user_id]}
+      subject={@state.subjects[data.focus_id]}
+      roles={@state.author_roles[data.user_id]}
       active={+data.id is +@props.location.query?.comment}
       user={@props.user}
       locked={@state.discussion?.locked}
@@ -211,12 +254,6 @@ module.exports = React.createClass
             @context.router.push "/projects/#{owner}/#{name}/talk"
           else
             @context.router.push "/talk"
-
-  commentValidations: (commentBody) ->
-    # TODO: return true if any additional validations fail
-    commentValidationErrors = getErrors(commentBody, commentValidations)
-    @setState {commentValidationErrors}
-    !!commentValidationErrors.length
 
   onEditSubmit: (e) ->
     e.preventDefault()
@@ -338,6 +375,15 @@ module.exports = React.createClass
           <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
             {@state.comments.map(@comment)}
           </div>
+          {<DiscussionComment
+            params={@props.params}
+            project={@props.project}
+            user={@props.user}
+            roles={@state.roles}
+            discussion={discussion}
+            reply={@state.reply}
+            onSubmitComment={@onSubmitComment}
+            onClearReply={=> @setState {reply: null}} /> unless discussion?.locked}
         </section>
 
         <div className="talk-sidebar">
@@ -361,33 +407,4 @@ module.exports = React.createClass
 
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
 
-      {if discussion?.locked
-        @lockedMessage()
-      else if @props.user?
-        baseLink = "/"
-        if @props.project?
-          baseLink += "projects/#{@props.project.slug}/"
-        <section>
-          <div className="talk-comment-author">
-            <Avatar user={@props.user} />
-            <p>
-              <Link to="#{baseLink}users/#{@props.user.login}">{@props.user.display_name}</Link>
-            </p>
-            <div className="user-mention-name">@{@props.user.login}</div>
-            <DisplayRoles roles={@state.roles} section={discussion.section} />
-          </div>
-
-          <CommentBox
-            user={@props.user}
-            project={@props.project}
-            validationCheck={@commentValidations}
-            validationErrors={@state.commentValidationErrors}
-            onSubmitComment={@onSubmitComment}
-            reply={@state.reply}
-            logSubmit={true}
-            onClickClearReply={=> @setState({reply: null})}
-            header={null} />
-        </section>
-      else
-        <p>Please <button className="link-style" type="button" onClick={@promptToSignIn}>sign in</button> to contribute to the discussion</p>}
     </div>

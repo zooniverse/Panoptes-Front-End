@@ -26,7 +26,7 @@ module.exports = React.createClass
     </Draggable>
 
   handleInitStart: (e) ->
-    tasks = require '..' # Circular
+    tasks = require('..').default # Circular
 
     taskDescription = @props.workflow.tasks[@props.annotation.task]
     mark = @props.annotation.value[@props.annotation.value.length - 1]

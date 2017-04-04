@@ -9,9 +9,9 @@ $survey-task-pill-button
   border-radius: 3px
   color: white
   display: inline-block
-  font-size: 10px
+  font-size: 12px
   font-weight: bold
-  padding: 0 0.5em
+  padding: 0.25em 0.75em
 
 .survey-identification-remove
   @extends $reset-button
@@ -205,13 +205,19 @@ $survey-task-pill-button
   border-radius: 50%
   color: white
   display: inline-block
-  height: 1em
+  height: .5em
   overflow: hidden
   text-indent: 1em
-  width: 1em
+  width: .5em
+  
+  input[type=radio]
+    position: absolute
+    height: 0
+    width: 0
+    left: -100px
 
   &.active
-    background: white
+    opacity: .3
 
 .survey-task-choice
   background:  #f7f7f7
@@ -307,6 +313,10 @@ $survey-task-pill-button
     background: MAIN_HIGHLIGHT
     color: white
 
+  &[data-focused]
+    background: SECOND_HIGHLIGHT
+    color: white
+
   span
     cursor: pointer
 
@@ -315,7 +325,7 @@ $survey-task-pill-button
     position: absolute
 
 .warning
-  background-color: rgba(WARNING, 0.5)
+  background-color: rgba(HIGHLIGHT_COLOR, 0.5)
 
 .details
   &:hover

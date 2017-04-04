@@ -9,9 +9,10 @@ module.exports = React.createClass
   displayName: 'Notification'
 
   propTypes:
+    data: React.PropTypes.object.isRequired
+    notification: React.PropTypes.object.isRequired
     project: React.PropTypes.object
     user: React.PropTypes.object.isRequired
-    notification: React.PropTypes.object.isRequired
 
   renderNotification: ->
     switch @props.notification.source_type
@@ -28,8 +29,7 @@ module.exports = React.createClass
 
   render: ->
     {notification} = @props
-    delivered = if notification.delivered then '' else 'unread'
     key = "#{ notification.source_type }-notification-#{ notification.source_id }"
-    <div className={"#{ delivered } notification"} key={key}>
+    <div className="notification" key={key}>
       {@renderNotification()}
     </div>

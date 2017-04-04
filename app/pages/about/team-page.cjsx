@@ -7,7 +7,7 @@ counterpart.registerTranslations 'en',
     nav:
       showAll: 'Show All'
       oxford: 'Oxford'
-      chicago: 'Chicago'
+      chicago: 'The Adler Planetarium'
       minnesota: 'Minnesota'
       portsmouth: 'Portsmouth'
       california: 'California'
@@ -155,9 +155,9 @@ counterpart.registerTranslations 'en',
         been getting more into data science). He worked on both Galaxy Zoo and Radio Galaxy Zoo,
         and developed advanced tools for the volunteers.'''
       lauraTrouille:
-        title: 'Adler Planetarium Zooniverse Director'
+        title: 'Zooniverse co-I'
         bio: '''In July 2015, Laura became Director of Citizen Science at the Adler Planetarium and
-        co-lead of the Zooniverse. While earning her Ph.D. in 2010 studying galaxy evolution,
+        co-I of the Zooniverse. While earning her Ph.D. in 2010 studying galaxy evolution,
         she embodied cosmic collisions as a roller derby queen aptly named ‘The Big Bang’.'''
       lauraWhyte:
         title: 'Adler Planetarium Zooniverse Director'

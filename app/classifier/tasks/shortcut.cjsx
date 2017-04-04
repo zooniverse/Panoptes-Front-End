@@ -1,5 +1,5 @@
 React = require 'react'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 
 Summary = React.createClass
   displayName: 'ShortcutSummary'
@@ -41,10 +41,14 @@ module.exports = React.createClass
       value: null
 
   getDefaultProps: ->
-    annotation: null
+    annotation: 
+      task: null
+      value: null
     classification: null
-    task: null
-    workflow: null
+    task:
+      unlinkedTask: null
+    workflow:
+      tasks:[]
 
   getInitialState: ->
     index: null
@@ -63,18 +67,19 @@ module.exports = React.createClass
     @props.classification.update 'annotations'
 
   render: ->
-    options = @props.workflow.tasks[@props.task.unlinkedTask].answers
+    options = @props.workflow.tasks[@props.task.unlinkedTask]?.answers
+    options ?= []
 
-    <div>
+    <div className="unlinked-shortcut">
 
       {for answer, i in options
           answer._key ?= Math.random()
           <p key={answer._key}>
-            <label className="answer-button">
-              <small className="unlinked-shortcut #{if i is @state.index then 'active' else ''}">
+            <label key={answer._key} className="answer minor-button answer-button #{if i is @state.index then 'active' else ''}">
+              <small>
                 <strong>
                   <input type="checkbox" checked={i is @state.index} onChange={@toggleShortcut.bind this, i, answer} />
-                    {answer.label}
+                    {' '}{answer.label}
                 </strong>
               </small>
             </label>

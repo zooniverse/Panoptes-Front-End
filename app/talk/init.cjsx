@@ -1,6 +1,7 @@
 React = require 'react'
 BoardPreview = require './board-preview'
 ActiveUsers = require './active-users'
+apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 HandlePropChanges = require '../lib/handle-prop-changes'
 Moderation = require './lib/moderation'
@@ -10,12 +11,13 @@ CreateSubjectDefaultButton = require './lib/create-subject-default-button'
 CreateBoardForm = require './lib/create-board-form'
 Loading = require '../components/loading-indicator'
 SingleSubmitButton = require '../components/single-submit-button'
-PopularTags = require './popular-tags'
 ZooniverseTeam = require './lib/zoo-team.cjsx'
 alert = require '../lib/alert'
 AddZooTeamForm = require './add-zoo-team-form'
 DragReorderable = require 'drag-reorderable'
 Paginator = require './lib/paginator'
+
+`import PopularTags from './popular-tags';`
 
 module.exports = React.createClass
   displayName: 'TalkInit'
@@ -37,6 +39,8 @@ module.exports = React.createClass
 
   getInitialState: ->
     boards: []
+    authors: {}
+    author_roles: {}
     boardsMeta: {}
     loading: true
     moderationOpen: false
@@ -49,13 +53,48 @@ module.exports = React.createClass
       @setBoards({}, nextProps)
 
   setBoards: (propValue, props = @props) ->
+    author_ids = []
     talkClient.type('boards').get(section: props.section, page_size: 20, page: props.location.query.page)
       .then (boards) =>
         boardsMeta = boards[0]?.getMeta()
         @setState {boards, boardsMeta, loading: false}
+        boards.map (board) ->
+          user_id = board.latest_discussion?.latest_comment.user_id
+          author_ids.push user_id if user_id?
+
+        apiClient
+          .type 'users'
+          .get
+            id: author_ids
+          .then (users) =>
+            users.map (user) => 
+              @setState (prevState, props) ->
+                prevState.authors[user.id] = user
+
+        talkClient
+          .type 'roles'
+          .get
+            user_id: author_ids
+            section: ['zooniverse', @props.section]
+            is_shown: true
+            page_size: 100
+          .then (roles) =>
+            roles.map (role) =>
+              @setState (prevState, props) ->
+                prevState.author_roles[role.user_id] ?= []
+                prevState.author_roles[role.user_id].push role
 
   boardPreview: (data, i) ->
-    <BoardPreview {...@props} key={i} data={data} />
+    user_id = data.latest_discussion?.latest_comment.user_id
+    roles = @state.author_roles[user_id]
+    roles ?= []
+    <BoardPreview
+      {...@props}
+      key={i}
+      data={data}
+      author={@state.authors[user_id]}
+      roles={roles}
+    />
 
   boardOrders: ->
     <DragReorderable
@@ -157,9 +196,9 @@ module.exports = React.createClass
           <section>
             <h3>
               {if @props.section is 'zooniverse'
-                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/talk/recents" {...@props}>Recent Comments</Link>
+                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/talk/recents">Recent Comments</Link>
               else
-                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents" {...@props}>Recent Comments</Link>
+                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents">Recent Comments</Link>
               }
             </h3>
           </section>

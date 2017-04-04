@@ -1,37 +1,39 @@
 counterpart = require 'counterpart'
 React = require 'react'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
   callForProjects:
    pageContent: '''
     ## Call for Biomedical Project Proposals
+    Would your research benefit from the involvement of thousands of volunteers? We are currently seeking proposals for biomedical projects to be developed as part of the Zooniverse platform. The Zooniverse is the world’s largest and most successful online platform for crowd-sourced research; we currently have over 1.5 million registered volunteers working in collaboration with professional researchers on more than 50 research projects across a range of disciplines, from physics to biology.
 
-    Would your research benefit from the involvement of hundreds or even thousands of volunteers? We are currently seeking proposals for biomedical projects to be developed as part of the Zooniverse.org platform.
+    Using our unique [Project Builder](/lab) you can create your own Zooniverse project for free with a set of tried and tested tools, including multiple-choice questions and region marking or drawing tools. If we don’t yet offer the tools you need, please propose your project below; we are particularly interested in developing novel projects that extend the functionality of our platform.
 
-    Zooniverse is the world’s largest and most successful online platform for crowd-sourced research; we currently have over 1.5 million registered volunteers working in collaboration with professional researchers on more than 40 research projects across a range of disciplines, from astronomy to biology.
-
-    You can see examples of our current biomedical projects at Zooniverse.org. These include [Microscopy Masters](https://www.zooniverse.org/projects/jbrugg/microscopy-masters), where citizen scientists classify cryo-electron microscopy images to advance understanding of protein and virus structure, and [Worm Watch Lab](https://www.wormwatchlab.org/), which aims to improve understanding of the relationship between genes and behaviour.
-
-    Using our unique [Project Builder](/lab) tool you can now build your own Zooniverse project. If your project requires tools that don’t yet exist on the Zooniverse platform, please propose your project using the form below. We are particularly interested in developing projects that extend the functionality our platform.
+    &nbsp;
 
     ### Project Selection
+    We are looking for biomedical projects that will help us expand the functionality of the Zooniverse and build on the selection of tools available to researchers via our platform. Projects may involve a processing task applied to images, graphs, videos or another data format, data collection, or a combination of the two. Successful projects will be developed and hosted by the Zooniverse team, in close collaboration with the applicants.
 
-    Successful projects will be selected from responses to this call, and will be developed and hosted by the Zooniverse team in close collaboration with the applicants. Project proposals are expected to clearly describe the research question addressed and intended research outputs. Those writing proposals should review the existing range of Zooniverse projects.
+    Examples of our current biomedical projects include [Microscopy Masters](https://www.zooniverse.org/projects/jbrugg/microscopy-masters), where volunteers classify cryo-electron microscopy images to advance understanding of protein and virus structure, and [Worm Watch Lab](https://www.wormwatchlab.org/), which aims to improve understanding of the relationship between genes and behaviour.
+
+    &nbsp;
 
     ### Selection Criteria:
 
-    1.	Alignment with biomedical research (long-term aim of research is to improve human health outcomes).
-    2.	Merit and usefulness of the data expected to result from the project. 
-    3.	Novelty of the problem; projects which require extending the capability of the Zooniverse platform or serve as case studies for crowdsourcing in new areas are encouraged.
+    1.	Projects extending the capability of the Zooniverse platform or serving as case studies for crowdsourcing in new areas are encouraged.
+    2.  Alignment with biomedical research (long-term aim of research is to improve human health outcomes).
+    3.	Merit and usefulness of the data expected to result from the project. 
+
+    &nbsp;
 
     ### Deadline
 
-    We will begin reviewing proposals from December 4th, but project proposals are welcomed until January 31st.
+    Project proposals are accepted on a rolling basis. Applications will be reviewed at the beginning of each month.
 
+    &nbsp;
 
-    [SUBMIT A PROPOSAL](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)
-
+    [SUBMIT A BIOMEDICAL PROPOSAL](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)
 
     '''
 

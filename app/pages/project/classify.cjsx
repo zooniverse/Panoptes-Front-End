@@ -4,28 +4,16 @@ ReactDOM = require 'react-dom'
 TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
-FinishedBanner = require './finished-banner'
+`import FinishedBanner from './finished-banner';`
 Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
-MiniCourse = require '../../lib/mini-course'
-`import CustomSignInPrompt from './custom-sign-in-prompt'`
-`import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog'`
+`import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 experimentsClient = require '../../lib/experiments-client'
+{Split} = require('seven-ten')
+{VisibilitySplit} = require('seven-ten')
+
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
-
-PROMPT_MINI_COURSE_EVERY = 5
-
-SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
-
-if SKIP_CELLECT
-  console?.warn 'Intelligent subject selection disabled'
-
-# Classification count tracked for mini-course prompt
-classificationsThisSession = 0
-
-auth.listen ->
-  classificationsThisSession = 0
 
 # Map each project ID to a promise of its last randomly-selected workflow ID.
 # This is to maintain the same random workflow for each project when none is specified by the user.
@@ -85,6 +73,7 @@ module.exports = React.createClass
     rejected: null
 
   componentDidMount: () ->
+    Split.classifierVisited();
     if @props.workflow and not @props.loadingSelectedWorkflow
       @loadAppropriateClassification(@props)
 
@@ -176,28 +165,29 @@ module.exports = React.createClass
 
     # If there aren't any left (or there weren't any to begin with), refill the list.
     if upcomingSubjects.forWorkflow[workflow.id].length is 0
-      # console.log 'Fetching subjects'
+      # console.log 'Fetching subjects', workflow.id
       @maybePromptWorkflowAssignmentDialog(@props)
       subjectQuery =
         workflow_id: workflow.id
-        sort: 'queued' unless SKIP_CELLECT
       if subjectSet?
         subjectQuery.subject_set_id = subjectSet.id
 
-      fetchSubjects = apiClient.type('subjects').get subjectQuery
+      fetchSubjects = apiClient.get('/subjects/queued', subjectQuery)
         .catch (error) ->
           if error.message.indexOf('please try again') is -1
             throw error
           else
             new Promise (resolve, reject) ->
               fetchSubjectsAgain = ->
-                apiClient.type('subjects').get subjectQuery
+                apiClient.get('/subjects/queued', subjectQuery)
                   .then resolve
                   .catch reject
               setTimeout fetchSubjectsAgain, 2000
         .then (subjects) ->
           nonLoadedSubjects = (newSubject for newSubject in subjects when newSubject isnt subjectToLoad)
-          upcomingSubjects.forWorkflow[workflow.id].push nonLoadedSubjects...
+          filteredSubjects = nonLoadedSubjects.filter((subject) => !subject.already_seen && !subject.retired)
+          subjectsToLoad = if filteredSubjects.length > 0 then filteredSubjects else nonLoadedSubjects
+          upcomingSubjects.forWorkflow[workflow.id].push subjectsToLoad...
 
       # If we're filling this list for the first time, we won't have a subject selected, so try again.
       subject ?= fetchSubjects.then ->
@@ -217,10 +207,6 @@ module.exports = React.createClass
       {if @props.projectIsComplete
         <FinishedBanner project={@props.project} />}
 
-      {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
-        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
-          <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
-        </CustomSignInPrompt>}
       {if @state.classification?
         <Classifier
           {...@props}
@@ -230,6 +216,7 @@ module.exports = React.createClass
           onComplete={@saveClassification}
           onCompleteAndLoadAnotherSubject={@saveClassificationAndLoadAnotherSubject}
           onClickNext={@loadAnotherSubject}
+          splits={@props.splits}
         />
       else if @state.rejected?.classification?
         <code>Please try again. Something went wrong: {@state.rejected.classification.toString()}</code>
@@ -243,7 +230,7 @@ module.exports = React.createClass
 
   saveClassificationAndLoadAnotherSubject: ->
     @saveClassification()
-      .then @loadAnotherSubject()
+    @loadAnotherSubject()
 
   saveClassification: ->
     if @context.geordi.keys["experiment"]?
@@ -260,23 +247,20 @@ module.exports = React.createClass
     else
       classification.save()
 
+    Split.classificationCreated(classification)
+    {workflow, subjects} = classification.links
+    seenThisSession.add workflow, subjects
     savingClassification
       .then (classification) =>
         if @state.demoMode
           console?.log 'Demo mode: Did NOT save classification'
         else
           console?.log 'Saved classification', classification.id
-          classification.get('subjects')
-            .then (subjects) =>
-              seenThisSession.add @props.workflow, subjects
-              classification.destroy()
+          classification.destroy()
         @saveAllQueuedClassifications()
       .catch (error) =>
         console?.warn 'Failed to save classification:', error
         @queueClassification classification
-
-      classificationsThisSession += 1
-      @maybeLaunchMiniCourse()
 
     return savingClassification
 
@@ -314,18 +298,9 @@ module.exports = React.createClass
 
     @loadAppropriateClassification(@props) if @props.workflow?
 
-  maybeLaunchMiniCourse: ->
-    if classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
-      MiniCourse.startIfNecessary({
-        workflow: @props.workflow,
-        preferences: @props.preferences,
-        project: @props.project,
-        user: @props.user
-      })
-
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog
-      WorkflowAssignmentDialog.start()
+      WorkflowAssignmentDialog.start({splits: props.splits})
         .then =>
           @setState { promptWorkflowAssignmentDialog: false }
         .then =>

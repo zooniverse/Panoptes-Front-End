@@ -1,32 +1,54 @@
 .about-tabs
   @extends $reset-button
   border: 2px solid transparent
-  color: TEAL_GREEN
+  color: TEAL_MID
   font-size: 0.8em
   font-weight: bold
-  margin-bottom: 3em
-  margin-right: 1em
-  margin-top: 2em
+  margin: 1.75vh 0.5vw
   padding: .4em 1.2vw
   text-transform: capitalize
 
   &:hover
-    border: 2px solid TEAL_GREEN
+    border: 2px solid TEAL_MID
     border-radius: .5em
 
   &.active
-    border: 2px solid TEAL_GREEN
+    border: 2px solid TEAL_MID
     border-radius: .5em
 
 .about-tab-editor
   strong:first-of-type
     color: BURNT_ORANGE
   strong:last-of-type
-    color: DARK_BLUE
+    color: ZOONIVERSE_NAVY
 
 .tabbed-content-tabs
   margin: 1em 3vw
   text-align: center
+
+  .responsive-break
+    display: none
+
+    @media (max-width: 400px)
+      display: block
+
+  .beta-approved
+    img
+      border: 3px solid TEAL_MID
+      border-radius: 100%
+
+    p
+      color: TEAL_MID
+      font-size: 0.8em
+      margin: 0
+
+    div, span
+      display: inherit
+      font-size: 1em
+      font-weight: 300
+      line-height: 1.25em
+      line-spacing: 0.25em
+      vertical-align: middle
 
 .tabbed-content-tab
   @extends $reset-button
@@ -40,5 +62,5 @@
     border-bottom-color: rgba(gray, 0.5)
 
   &.active
-    border-bottom-color: MAIN_HIGHLIGHT
+    border-bottom-color: TEAL_MID
     font-weight: bold

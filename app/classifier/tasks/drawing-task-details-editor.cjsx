@@ -82,7 +82,7 @@ module.exports = React.createClass
   handleAddTask: (task) ->
     switch task
       when 'single'
-        TaskChoice = require './single'
+        TaskChoice = require('./single').default
       when 'text'
         TaskChoice = require './text'
     @props.task.tools[@props.toolIndex].details.push TaskChoice.getDefaultTask()

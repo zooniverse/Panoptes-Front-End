@@ -4,6 +4,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 ModalFormDialog = require 'modal-form/dialog'
 projectActions = require './actions/project'
 LandingPage = require './landing-page'
+`import LabStatus from '../../partials/lab-status.jsx';`
 
 ProjectLink = React.createClass
   getDefaultProps: ->
@@ -233,6 +234,7 @@ module.exports = React.createClass
   render: ->
     if @props.user?
       <div>
+        <LabStatus />
         <ProjectList
           title="Your projects"
           page={@props.location.query['owned-page']}
@@ -243,11 +245,11 @@ module.exports = React.createClass
         <div className="content-container">
           <p style={textAlign: 'center'}>
             <button type="button" className="major-button" onClick={@showProjectCreator}>Create a new project</button>{' '}
-            <Link to="/lab-how-to" className="standard-button">How To</Link>{' '}
-            <Link to="/lab-policies" className="standard-button">Policies</Link>{' '}
-            <Link to="/lab-best-practices/introduction" className="standard-button">Best Practices</Link>{' '}
+            <Link to="/help" className="standard-button">How-to</Link>{' '}
+            <Link to="/help/glossary" className="standard-button">Glossary</Link>{' '}
+            <Link to="/help/lab-policies" className="standard-button">Policies</Link>{' '}
+            <Link to="lab-best-practices/introduction" className="standard-button">Best Practices</Link>{' '}
             <Link to="/talk/18" className="standard-button">Project Builder Talk</Link>{' '}
-            <Link to="/glossary" className="standard-button">Glossary</Link>
           </p>
         </div>
         {if @state.creationInProgress

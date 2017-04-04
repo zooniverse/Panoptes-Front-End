@@ -41,3 +41,24 @@ module.exports =
   grid: <svg viewBox="0 0 100 100">
     <polyline className="shape" points="0, 25 50, 25 50, 75 0, 75 0, 25 50, 25 100, 25 100, 75 50, 75 50, 25" />
   </svg>
+
+  triangle: <svg viewBox="0 0 100 100">
+    <polygon className="shape" points="50, 12 95, 90 5,90 "/>
+    <ellipse className="shape" cx="50" cy="64" rx="17" ry="9"/>
+  </svg>
+
+  freehandLine: <svg viewBox="0 0 100 100">
+    <path d="M10,50 Q25,10,50,50,75,90,90,50" fill={'none'} />
+  </svg>
+
+  freehandShape: <svg viewBox="0 0 100 100">
+    <path d="M20,60 C10,10,80,10,50,50 C20,90 90,90 80,40 z" />
+  </svg>
+
+  freehandSegmentLine: <svg viewBox="0 0 100 100">
+    <path d="M10,50 Q25,10,50,50,75,90,90,50" fill={'none'} />
+  </svg>
+
+  freehandSegmentShape: <svg viewBox="0 0 100 100">
+    <path d="M20,60 C10,10,80,10,50,50 C20,90 90,90 80,40 z" />
+  </svg>

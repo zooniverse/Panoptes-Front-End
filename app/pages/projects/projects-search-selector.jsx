@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 import Select from 'react-select';
-import debounce from 'debounce';
 
 class SearchSelector extends Component {
   constructor(props) {
@@ -11,51 +10,45 @@ class SearchSelector extends Component {
     this.searchByName = this.searchByName.bind(this);
   }
 
-  navigateToProject(projectId) {
-    apiClient.type('projects').get(projectId)
-      .then(project => {
-        if (project.redirect != null && project.redirect.length !== 0) {
-          return browserHistory.push(project.redirect);
-        }
-        return browserHistory.push(['/projects', project.slug].join('/'));
-      });
+  navigateToProject(option) {
+    const projectUrl = option.value;
+    if (projectUrl.match(/^http.*/)) {
+      window.location.assign(projectUrl);
+    } else {
+      browserHistory.push(['/projects', projectUrl].join('/'));
+    }
   }
 
-  searchByName(value, callback) {
+  searchByName(value) {
     const query = {
       search: '%' + value + '%',
       cards: true,
       launch_approved: !apiClient.params.admin ? true : undefined,
     };
     if ((value != null ? value.trim().length : undefined) > 3) {
-      apiClient.type('projects').get(query, {
+      return apiClient.type('projects').get(query, {
         page_size: 10,
       }).then(projects => {
         const opts = projects.map(project => ({
-          value: project.id,
-          label: project.display_name,
-          project,
+          value: project.redirect || project.slug,
+          label: project.display_name
         }));
-        return callback(null, {
-          options: opts || [],
-        });
+        return { options: opts };
       });
+    } else {
+      return Promise.resolve({ options: [] });
     }
-    return callback(null, {
-      options: [],
-    });
   }
 
   render() {
     return (
-      <Select
+      <Select.Async
         multi={false}
         name="resourcesid"
         placeholder="Name:"
         value=""
         searchPromptText="Search by name"
-        closeAfterClick
-        asyncOptions={debounce(this.searchByName, 2000)}
+        loadOptions={this.searchByName}
         onChange={this.navigateToProject}
         className="search card-search standard-input"
       />

@@ -1,12 +1,24 @@
 {
   "extends": "airbnb",
   "plugins": ["react"],
+  "env": {
+    "browser": true,
+    "mocha": true
+  },
   "rules": {
+    "react/jsx-boolean-value": ["error","always"],
     "react/prefer-es6-class": 0,
     "react/prefer-stateless-function": 0,
     "react/no-multi-comp": 0,
+    "array-callback-return": "off", 
     "arrow-body-style": ["warn", "always"],
+    "comma-dangle": ["warn", "never"],
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "react/jsx-no-bind": "off",
+    "max-len": "off",
+    "multiline-ternary": ["warn", "never"],
     "no-else-return": "off",
-    "max-len": "off"
+    "object-curly-spacing": ["error", "always", { "objectsInObjects": false }]
   }
 }

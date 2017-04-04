@@ -2,6 +2,7 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 {Link} = require 'react-router'
 DiscussionPreview = require './discussion-preview'
+apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 FollowBoard = require './follow-board'
 NewDiscussionForm = require './discussion-new-form'
@@ -15,9 +16,10 @@ merge = require 'lodash.merge'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
-PopularTags = require './popular-tags'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
+
+`import PopularTags from './popular-tags';`
 
 promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
@@ -32,6 +34,9 @@ module.exports = React.createClass
 
   getInitialState: ->
     discussions: []
+    authors: {}
+    author_roles: {}
+    subjects: {}
     board: {}
     discussionsMeta: {}
     newDiscussionOpen: false
@@ -61,8 +66,46 @@ module.exports = React.createClass
   setDiscussions: (page = @props.location.query.page) ->
     @discussionsRequest(page)
       .then (discussions) =>
+        subject_ids = []
+        author_ids = []
         discussionsMeta = discussions[0]?.getMeta()
         @setState {discussions, discussionsMeta, loading: false}
+        discussions.map (discussion) ->
+          subject_ids.push discussion.focus_id if discussion.focus_id and discussion.focus_type is 'Subject'
+          author_ids.push discussion.latest_comment.user_id if discussion.latest_comment?
+        author_ids = author_ids.filter (id, i) -> author_ids.indexOf(id) is i
+        subject_ids = subject_ids.filter (id, i) -> subject_ids.indexOf(id) is i
+
+        apiClient
+          .type 'users'
+          .get
+            id: author_ids
+          .then (users) =>
+            users.map (user) => 
+              @setState (prevState, props) ->
+                prevState.authors[user.id] = user
+
+        talkClient
+          .type 'roles'
+          .get
+            user_id: author_ids
+            section: ['zooniverse', @props.section]
+            is_shown: true
+            page_size: 100
+          .then (roles) =>
+            roles.map (role) =>
+              @setState (prevState, props) ->
+                prevState.author_roles[role.user_id] ?= []
+                prevState.author_roles[role.user_id].push role
+
+        apiClient
+          .type 'subjects'
+          .get
+            id: subject_ids
+          .then (discussion_subjects) =>
+            discussion_subjects.map (subject) =>
+              @setState (prevState, props) ->
+                prevState.subjects[subject.id] = subject
 
   boardRequest: ->
     id = @props.params.board.toString()
@@ -81,7 +124,17 @@ module.exports = React.createClass
     @setDiscussions()
 
   discussionPreview: (discussion, i) ->
-    <DiscussionPreview {...@props} key={i} discussion={discussion} />
+    user_id = discussion.latest_comment?.user_id
+    roles = @state.author_roles[user_id]
+    roles ?= []
+    <DiscussionPreview
+      {...@props}
+      key={i}
+      discussion={discussion}
+      subject={@state.subjects[discussion.focus_id]}
+      author={@state.authors[user_id]}
+      roles={roles}
+    />
 
   onClickDeleteBoard: ->
     projectName = @state.board.title.toLowerCase()

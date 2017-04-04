@@ -1,5 +1,6 @@
 React = require 'react'
 StickyModalForm = require 'modal-form/sticky'
+ModalFocus = require('../../components/modal-focus').default
 
 STROKE_WIDTH = 1.5
 SELECTED_STROKE_WIDTH = 2.5
@@ -52,7 +53,7 @@ module.exports = React.createClass
       </g>
 
       {if toolProps.selected and not toolProps.mark._inProgress and toolProps.details? and toolProps.details.length isnt 0
-        tasks = require '../tasks'
+        tasks = require('../tasks').default
 
         detailsAreComplete = toolProps.details.every (detailTask, i) =>
           TaskComponent = tasks[detailTask.type]
@@ -62,14 +63,16 @@ module.exports = React.createClass
             true
 
         <StickyModalForm ref="detailsForm" style={SEMI_MODAL_FORM_STYLE} underlayStyle={SEMI_MODAL_UNDERLAY_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
-          {for detailTask, i in toolProps.details
-            detailTask._key ?= Math.random()
-            TaskComponent = tasks[detailTask.type]
-            <TaskComponent autoFocus={i is 0} key={detailTask._key} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />}
-          <hr />
-          <p style={textAlign: 'center'}>
-            <button type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
-          </p>
+          <ModalFocus onEscape={@handleDetailsFormClose} preserveFocus={false}>
+            {for detailTask, i in toolProps.details
+              detailTask._key ?= Math.random()
+              TaskComponent = tasks[detailTask.type]
+              <TaskComponent autoFocus={i is 0} key={detailTask._key} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />}
+            <hr />
+            <p style={textAlign: 'center'}>
+              <button autoFocus={toolProps.details[0].type in ['single', 'multiple']} type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
+            </p>
+          </ModalFocus>
         </StickyModalForm>}
     </g>
 

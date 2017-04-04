@@ -3,34 +3,64 @@
 
 @require "./zoo-font"
 @require "../node_modules/drag-reorderable/style.css"
+@require '../node_modules/chartist/dist/chartist.min.css'
+@require '../node_modules/rc-slider/assets/index.css'
 
+// App and layout
+@require "./app"
 @require "./typography"
 @require "./layout"
+@require "./site-nav"
+@require "./site-footer"
 
+// General elements, not react components
 @require './tables'
 @require './buttons'
+@require "./forms"
+@require "./markdown-video"
+
+// Stand alone components
 @require './upload-drop-target'
 @require './media-area'
 @require './image-selector'
-@require "./forms"
 @require './avatars'
-@require "./tabbed-content"
-@require "./nav-list"
 @require "./modal-form"
 @require "./dialog"
-@require "./video"
+@require "./blurred-image"
+@require "./circle-ribbon"
+@require './filmstrip'
+@require './disciplines-slider'
+@require "./loading-indicator"
+@require "./owned-card"
+@require "./project-icon"
+@require './markdown-editor'
+@require './search'
+@require './subject-viewer'
+@require './frame-annotator'
+@require './app-status'
 
+// Home page
+@require "./home-page"
+@require "./home-page-for-user"
+@require "./news-pullout"
+@require "./recent-messages"
+
+// Generic secondary page
 @require "./secondary-page"
 
-@require "./home-page"
+// Specific secondary pages
+@require "./tabbed-content"
 @require "./owned-list-pages"
-@require "./project-list-pages"
+@require './collections-page'
 @require "./about-page"
 @require "./get-involved-page.styl"
 @require "./team-page"
 @require "./publications-page"
 @require "./landing-page"
+@require "./admin-page"
+@require "./best-practices-page"
 
+// Project
 @require "./project-page"
 @require './dashboard'
 @require './classify'
@@ -38,51 +68,34 @@
 @require './tutorial'
 @require './mini-course-dialog'
 @require './workflow-assignment-dialog'
-@require './disciplines-slider'
 @require './survey-task'
 @require "./drawing-tool"
 @require "./dropdown-task"
 @require "./text-task"
-@require "./classification-summary"
-@require './edit-media-page'
+@require "./grid-buttons"
+@require './project-stats-page'
+@require "./default-classification-summary"
+@require './world-wide-telescope'
+
+// Lab
 @require "./lab"
+@require "./nav-list"
 @require "./field-guide-editor"
 @require "./project-modal-editor"
-@require "./best-practices-page"
-@require "./admin-page"
-@require "./grid-buttons"
+@require './workflow-editor'
+@require './workflow-visualizer'
 
+// User profile
 @require "./user-profile"
 @require "./profile-feed-comment-link"
-@require "./stats-project-icon"
-@require "./classifications-ribbon"
 @require "./settings"
+@require "./notification-section"
 
-@require "./loading-indicator"
-@require "./owned-card"
-@require "./project-card"
-
-@require './markdown-editor'
-
+// Talk
 @require './favorites-button'
 @require './talk'
 @require './talk-project'
 @require './inbox'
-@require './collections'
-@require './subject'
-@require './frame-annotator'
 @require "./paginator"
 @require './moderations'
 @require './subject-page'
-
-@require './workflow-editor'
-@require './user-search'
-
-@require '/color-label'
-@require './workflow-visualizer'
-@require './worldwide'
-
-@require '/filmstrip'
-@require '../node_modules/chartist/dist/chartist.min.css'
-@require './project-stats-page'
-@require '../node_modules/rc-slider/assets/index.css'

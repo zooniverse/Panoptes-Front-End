@@ -1,21 +1,14 @@
 React = require 'react'
-apiClient =  require 'panoptes-client/lib/api-client'
 moment = require 'moment'
 
 module.exports = React.createClass
   displayName: 'DataRequestNotification'
 
   propTypes:
+    data: React.PropTypes.object.isRequired
+    notification: React.PropTypes.object.isRequired
     project: React.PropTypes.object
     user: React.PropTypes.object.isRequired
-    notification: React.PropTypes.object.isRequired
-
-  getInitialState: ->
-    projectName: null
-
-  componentWillMount: ->
-    apiClient.type('projects').get(@props.notification.project_id).then (project) =>
-      @setState projectName: project.display_name
 
   stopPropagation: (e) ->
     e.stopPropagation()
@@ -23,8 +16,10 @@ module.exports = React.createClass
   render: ->
     notification = @props.notification
     <div className="data-request-notification talk-module">
+      {if notification.delivered is false
+        <i title="Unread" className="fa fa-star fa-lg" />}
       <p className="title">
-        Data export from {@state.projectName}
+        Data export from {@props.data.projectName}
       </p>
 
       <div className="bottom">

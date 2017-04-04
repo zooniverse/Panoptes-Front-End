@@ -6,9 +6,9 @@ auth.listen 'change', ->
   subjectsSeenThisSession.splice 0
 
 module.exports =
-  add: (workflow, subjects) ->
-    for subject in subjects
-      subjectsSeenThisSession.push "#{workflow.id}/#{subject.id}"
+  add: (workflow_id, subject_ids) ->
+    for subject_id in subject_ids
+      subjectsSeenThisSession.push "#{workflow_id}/#{subject_id}"
 
   check: (workflow, subject) ->
     "#{workflow.id}/#{subject.id}" in subjectsSeenThisSession

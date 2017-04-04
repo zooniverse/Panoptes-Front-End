@@ -2,9 +2,10 @@ React = require 'react'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
-Thumbnail = require '../components/thumbnail'
-apiClient = require 'panoptes-client/lib/api-client'
 getSubjectLocation = require '../lib/get-subject-location'
+
+# `import Thumbnail from '../components/thumbnail';`
+Thumbnail = require('../components/thumbnail').default
 
 module.exports = React.createClass
   displayName: 'TalkDiscussionPreview'
@@ -15,21 +16,8 @@ module.exports = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
   
-  getInitialState: ->
-    subject: null
-  
-  componentDidMount: ->
-    @updateSubject @props.discussion
-
-  componentWillReceiveProps: (newProps) ->
-    @updateSubject newProps.discussion if newProps.discussion isnt @props.discussion
-
-  updateSubject: (discussion)->
-    if discussion.focus_id and discussion.focus_type is 'Subject'
-      apiClient.type 'subjects'
-        .get discussion.focus_id
-        .then (subject) =>
-          @setState {subject}
+  getDefaultProps: ->
+    project: {}
 
   logDiscussionClick: ->
     @context.geordi?.logEvent
@@ -40,18 +28,14 @@ module.exports = React.createClass
 
     if (@props.params?.owner and @props.params?.name) # get from url if possible
       {owner, name} = @props.params
-      projectTalk = "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
-      <Link to={projectTalk} onClick={@logDiscussionClick.bind null, this}>{discussion.title}</Link>
+      "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
-    else if @props.project # otherwise fetch from project
+    else if @props.project.slug # otherwise fetch from project
       [owner, name] = @props.project.slug.split('/')
-      projectTalk = "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
-      <Link to={projectTalk} onClick={@logDiscussionClick.bind null, this}>{discussion.title}</Link>
+      "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
     else # link to zooniverse main talk
-      <Link to="/talk/#{discussion.board_id}/#{discussion.id}" onClick={@logDiscussionClick.bind null, this}>
-        {discussion.title}
-      </Link>
+      "/talk/#{discussion.board_id}/#{discussion.id}"
 
   render: ->
     {params, discussion} = @props
@@ -60,18 +44,31 @@ module.exports = React.createClass
     <div className="talk-discussion-preview">
       <div className="preview-content">
 
-        {if @state.subject?
+        {if @props.subject?
+          subject = getSubjectLocation(@props.subject)
           <div className="subject-preview">
-            <Thumbnail src={getSubjectLocation(@state.subject).src} width={100} />
+            <Link to={@discussionLink()} onClick={@logDiscussionClick.bind null, this}>
+              <Thumbnail src={subject.src} format={subject.format} width={100} height={150} controls={false} />
+            </Link>
           </div>
         }
 
         <h1>
           {<i className="fa fa-thumb-tack talk-sticky-pin"></i> if discussion.sticky}
-          {@discussionLink()}
+          <Link to={@discussionLink()} onClick={@logDiscussionClick.bind null, this}>
+            {discussion.title}
+          </Link>
         </h1>
 
-        <LatestCommentLink {...@props} project={@props.project} discussion={discussion} comment={@props.comment} preview={true} />
+        <LatestCommentLink
+          {...@props}
+          project={@props.project}
+          discussion={discussion}
+          comment={@props.comment}
+          author={@props.author}
+          roles={@props.roles}
+          preview={true}
+        />
 
       </div>
       <div className="preview-stats">

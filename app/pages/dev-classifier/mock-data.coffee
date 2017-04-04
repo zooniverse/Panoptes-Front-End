@@ -32,7 +32,8 @@ workflow = apiClient.type('workflows').create
     enable_switching_flipbook_and_separate: true
     multi_image_layout: 'grid3'
     invert_subject: true
-    persist_annotations: true
+    persist_annotations: false
+    pan_and_zoom: true
 
   first_task: 'init'
 
@@ -51,6 +52,13 @@ workflow = apiClient.type('workflows').create
         {label: 'Survey the image', next: 'survey'}
         {label: 'Maybe select something', next: 'dropdown'}
         {label: 'We’re done here.', next: null}
+      ]
+      unlinkedTask: 'shortcut'
+
+    shortcut:
+      type: 'shortcut'
+      answers: [
+        {label: "Nothing Here"}
       ]
 
     combo:
@@ -120,9 +128,16 @@ workflow = apiClient.type('workflows').create
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
         {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
         {type: 'ellipse', label: 'Ellipse '.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
+        {type: 'triangle', label: 'Triangle', color: 'salmon'}
         {type: 'bezier', label: 'Bezier', color: 'orange', details: MISC_DRAWING_DETAILS}
         {type: 'column', label: 'Column Rectangle', color: 'darkgreen'}
         {type: 'grid', label: 'Grid', color: 'purple'}
+        {type: 'freehandLine', label: 'Freehand Line', color: 'deepskyblue'}
+        {type: 'freehandShape', label: 'Freehand Shape', color: 'darkseagreen'}
+        {type: 'freehandSegmentLine', label: 'Freehand Segment Line', color: 'gold'}
+        {type: 'freehandSegmentShape', label: 'Freehand Segment Shape', color: 'goldenrod'}
+
+
       ]
       next: 'survey'
 
@@ -291,144 +306,145 @@ workflow = apiClient.type('workflows').create
       next: 'write'
       type: 'dropdown'
       instruction: "Select something, or if it's not an option - write it!"
+      help: "Actual option values are 16-digit alphanumeric strings or if presets from editor then specific ids."
       selects: [
         {
-          id: "cd1c7a8a13726"
-          title: "Country"
+          id: "countryID"
+          title: "Country (required:true)"
           required: true
           options: {
             '*': [
-              {value: "USA", label: "United States of America"},
-              {value: "Canada", label: "Canada"},
-              {value: "Mypos", label: "Mypos"}
+              {value: "USA-value", label: "United States of America"},
+              {value: "Canada-value", label: "Canada"},
+              {value: "Mypos-value", label: "Mypos"}
             ]
           }
         },
         {
-          id: "26971f135cb4b"
-          title: "State/Province"
+          id: "stateID"
+          title: "State (conditional:Country,required:true,allowCreate:false)"
           required: true
           allowCreate: false
-          condition: "cd1c7a8a13726"
+          condition: "countryID"
           options: {
-            'USA': [
+            'USA-value': [
               {value: "HI", label: "Hawaii"},
               {value: "IL", label: "Illinois"},
               {value: "WI", label: "Wisconsin"}
             ],
-            'Canada': [
+            'Canada-value': [
               {value: "AB", label: "Alberta"},
               {value: "ON", label: "Ontario"},
               {value: "QC", label: "Quebec"}
             ],
-            'Mypos': [
-              {value: "Gondor", label: "Gondor"},
-              {value: "Rohan", label: "Rohan"},
-              {value: "Shire", label: "Shire"}
+            'Mypos-value': [
+              {value: "Gondor-value", label: "Gondor"},
+              {value: "Rohan-value", label: "Rohan"},
+              {value: "Shire-value", label: "Shire"}
             ]
           }
         },
         {
-          id: "8f7afd193da42"
-          title: "County"
-          allowCreate: false
-          condition: "26971f135cb4b"
-          options: {
-            'USA;HI': [
-              {value: "Honolulu", label: "Honolulu"},
-              {value: "Maui", label: "Maui"}
-            ],
-            'USA;IL': [
-              {value: "Cook", label: "Cook"},
-              {value: "Lake", label: "Lake"}
-            ],
-            'Canada;AB': [
-              {value: "Rocky View", label: "Rocky View"},
-              {value: "Parkland", label: "Parkland"}
-            ],
-            'Canada;QC': [
-              {value: "Montreal", label: "Montreal"},
-              {value: "Capitale-Nationale", label: "Capitale-Nationale"}
-            ],
-            'Mypos;Rohan': [
-              {value: "Gotham County", label: "Gotham County"},
-              {value: "Metropolis County", label: "Metropolis County"}
-            ],
-            'Mypos;Shire': [
-              {value: "Municipality of Bikini Bottom", label: "Municipality of Bikini Bottom"},
-              {value: "Elbonia", label: "Elbonia"}
-            ]
-          }
-        },
-        {
-          id: "fdd12d9f1ad52"
-          title: "City"
-          allowCreate: false
-          condition: "8f7afd193da42"
-          options: {
-            'USA;HI;Honolulu': [
-              {value: "Honolulu", label: "Honolulu city"}
-            ],
-            'USA;IL;Cook': [
-              {value: "Chicago", label: "Chicago"},
-              {value: "Evanston", label: "Evanston"}
-            ],
-            'USA;IL;Lake': [
-              {value: "Waukegan", label: "Waukegan"},
-              {value: "Wheeling", label: "Wheeling"}
-            ],
-            'Canada;AB;Rocky View': [
-              {value: "Airdrie", label: "Airdrie"},
-              {value: "Chestermere", label: "Chestermere"}
-            ],
-            'Canada;QC;Capitale-Nationale': [
-              {value: "Quebec City", label: "Quebec City"},
-              {value: "Saint-Raymond", label: "Saint-Raymond"}
-            ],
-            'Mypos;Rohan;Gotham County': [
-              {value: "Gotham", label: "Gotham"}
-            ],
-            'Mypos;Rohan;Metropolis County': [
-              {value: "Metropolis", label: "Metropolis"}
-            ],
-            'Mypos;Shire;Municipality of Bikini Bottom': [
-              {value: "Bikini Bottom", label: "Bikini Bottom"}
-            ],
-            'Mypos;Shire;Elbonia': [
-              {value: "Townbert", label: "Townbert"}
-            ]
-          }
-        },
-        {
-          id: "e45fdf113f07e"
-          title: "Best State Sports Team"
+          id: "countyID"
+          title: "County (condition:State,allowCreate:true)"
           allowCreate: true
-          condition: "26971f135cb4b"
+          condition: "stateID"
           options: {
-            'USA;HI': [
-              {value: "59d8b49f6a0bc", label: "Sharks"},
-              {value: "1df102313d355", label: "Rainbow Warriors"}
+            'USA-value;HI': [
+              {value: "Honolulu-value", label: "Honolulu"},
+              {value: "Maui-value", label: "Maui"}
             ],
-            'USA;IL': [
-              {value: "b085abfe3c4d9", label: "Bears"},
-              {value: "964419c0f3ade", label: "Bulls"},
-              {value: "e4430cd2c0be", label: "Blackhawks"}
+            'USA-value;IL': [
+              {value: "Cook-value", label: "Cook"},
+              {value: "Lake-value", label: "Lake"}
             ],
-            'Canada;AB': [
-              {value: "6df716c19bf73", label: "Oilers"},
-              {value: "23843c7b8ca3a", label: "Flames"}
+            'Canada-value;AB': [
+              {value: "RockyView-value", label: "Rocky View"},
+              {value: "Parkland-value", label: "Parkland"}
             ],
-            'Canada;QC': [
-              {value: "105ee8e45828c", label: "Canadiens"},
-              {value: "ade89b3bed25c", label: "Expos"}
+            'Canada-value;QC': [
+              {value: "Montreal-value", label: "Montreal"},
+              {value: "Capitale-Nationale-value", label: "Capitale-Nationale"}
             ],
-            'Mypos;Shire': [
-              {value: "084f28a8999be", label: "Mighty Ducks"},
-              {value: "b52ad46b3818e", label: "Little Giants"}
+            'Mypos-value;Rohan-value': [
+              {value: "GothamCounty-value", label: "Gotham County"},
+              {value: "MetropolisCounty-value", label: "Metropolis County"}
             ],
-            'Mypos;Rohan': [
-              {value: "df7cb03611f08", label: "Shelbyville Shelbyvillians"},
-              {value: "fac0841caac4e", label: "Springfield Isotopes"}
+            'Mypos-value;Shire-value': [
+              {value: "BikiniBottom-value", label: "Municipality of Bikini Bottom"},
+              {value: "Elbonia-value", label: "Elbonia"}
+            ]
+          }
+        },
+        {
+          id: "cityID"
+          title: "City (condition:County,allowCreate:false)"
+          allowCreate: false
+          condition: "countyID"
+          options: {
+            'USA-value;HI;Honolulu-value': [
+              {value: "Honolulu-value", label: "Honolulu city"}
+            ],
+            'USA-value;IL;Cook-value': [
+              {value: "Chicago-value", label: "Chicago"},
+              {value: "Evanston-value", label: "Evanston"}
+            ],
+            'USA-value;IL;Lake-value': [
+              {value: "Waukegan-value", label: "Waukegan"},
+              {value: "Wheeling-value", label: "Wheeling"}
+            ],
+            'Canada-value;AB;RockyView-value': [
+              {value: "Airdrie-value", label: "Airdrie"},
+              {value: "Chestermere-value", label: "Chestermere"}
+            ],
+            'Canada-value;QC;Capitale-Nationale-value': [
+              {value: "QuebecCity-value", label: "Quebec City"},
+              {value: "Saint-Raymond-value", label: "Saint-Raymond"}
+            ],
+            'Mypos-value;Rohan-value;GothamCounty-value': [
+              {value: "Gotham-value", label: "Gotham"}
+            ],
+            'Mypos-value;Rohan-value;MetropolisCounty-value': [
+              {value: "Metropolis-value", label: "Metropolis"}
+            ],
+            'Mypos-value;Shire-value;BikiniBottom-value': [
+              {value: "BikiniBottom-value", label: "Bikini Bottom"}
+            ],
+            'Mypos-value;Shire-value;Elbonia-value': [
+              {value: "Townbert-value", label: "Townbert"}
+            ]
+          }
+        },
+        {
+          id: "teamID"
+          title: "Best State Team (condition:State,allowCreate:true)"
+          allowCreate: true
+          condition: "stateID"
+          options: {
+            'USA-value;HI': [
+              {value: "Sharks-value", label: "Sharks"},
+              {value: "RainbowWarriors-value", label: "Rainbow Warriors"}
+            ],
+            'USA-value;IL': [
+              {value: "Bears-value", label: "Bears"},
+              {value: "Bulls-value", label: "Bulls"},
+              {value: "Blackhawks-value", label: "Blackhawks"}
+            ],
+            'Canada-value;AB': [
+              {value: "Oilers-value", label: "Oilers"},
+              {value: "Flames-value", label: "Flames"}
+            ],
+            'Canada-value;QC': [
+              {value: "Candiens-value", label: "Canadiens"},
+              {value: "Expos-value", label: "Expos"}
+            ],
+            'Mypos-value;Shire-value': [
+              {value: "MightyDucks-value", label: "Mighty Ducks"},
+              {value: "LittleGiants-value", label: "Little Giants"}
+            ],
+            'Mypos-value;Rohan-value': [
+              {value: "Shelbyvillians-value", label: "Shelbyville Shelbyvillians"},
+              {value: "Isotopes-value", label: "Springfield Isotopes"}
             ]
           }
         }
@@ -454,8 +470,8 @@ workflow = apiClient.type('workflows').create
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
-  # Images originally from lorempixel.com shared under CC BY-SA, 
-  # but the service is often slow and/or fails to load at all. 
+  # Images originally from lorempixel.com shared under CC BY-SA,
+  # but the service is often slow and/or fails to load at all.
   # Noted original source next to each.
   locations: if navigator?.onLine
     [
@@ -522,7 +538,7 @@ subject = apiClient.type('subjects').create
 project = apiClient.type('projects').create
   id: 'MOCK_PROJECT_FOR_CLASSIFIER'
   title: "The Dev Classifier"
-  experimental_tools: ['pan and zoom']
+  experimental_tools: []
 
 preferences = apiClient.type('project_preferences').create
   preferences: {}

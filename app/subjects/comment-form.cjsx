@@ -1,5 +1,5 @@
 React = require 'react'
-{History, Link} = require 'react-router'
+{Link} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
 NewDiscussionForm = require '../talk/discussion-new-form'
 QuickSubjectCommentForm= require '../talk/quick-subject-comment-form'
@@ -9,7 +9,9 @@ alert = require '../lib/alert'
 
 module.exports = React.createClass
   displayName: 'SubjectCommentForm'
-  mixins: [History]
+
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   componentWillMount: ->
     Promise.all([@getBoards(), @getSubjectDefaultBoard()]).then =>
@@ -31,7 +33,7 @@ module.exports = React.createClass
     {owner, name} = @props.params
     board = createdDiscussion.board_id
     discussion = createdDiscussion.id
-    @history.pushState(null, "/projects/#{owner}/#{name}/talk/#{board}/#{discussion}")
+    @context.router.push "/projects/#{owner}/#{name}/talk/#{board}/#{discussion}"
 
   linkToClassifier: (text) ->
     [owner, name] = @props.project.slug.split('/')

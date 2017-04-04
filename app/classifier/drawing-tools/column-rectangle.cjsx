@@ -50,24 +50,27 @@ module.exports = React.createClass
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={x + width + 20} y={15} />
+          <DeleteButton tool={this} x={x + width + 20} y={15} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
 
-          <DragHandle x={x} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleLeftDrag} />
-          <DragHandle x={x + width} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleRightDrag} />
+          <DragHandle x={x} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleLeftDrag} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
+          <DragHandle x={x + width} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleRightDrag} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
         </g>}
     </DrawingToolRoot>
 
   handleMainDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.x += difference.x
     @props.onChange @props.mark
 
   handleLeftDrag: (e, d) ->
-    if @props.mark.width - d.x / @props.scale.horizontal >= MINIMUM_WIDTH
-      @props.mark.x += d.x / @props.scale.horizontal
-      @props.mark.width -= d.x / @props.scale.horizontal
+    difference = @props.normalizeDifference(e, d)
+    if @props.mark.width - difference.x >= MINIMUM_WIDTH
+      @props.mark.x += difference.x
+      @props.mark.width -= difference.x 
       @props.onChange @props.mark
 
   handleRightDrag: (e, d) ->
-    if @props.mark.width + d.x / @props.scale.horizontal >= MINIMUM_WIDTH
-      @props.mark.width += d.x / @props.scale.horizontal
+    difference = @props.normalizeDifference(e, d)
+    if @props.mark.width + difference.x >= MINIMUM_WIDTH
+      @props.mark.width += difference.x
       @props.onChange @props.mark

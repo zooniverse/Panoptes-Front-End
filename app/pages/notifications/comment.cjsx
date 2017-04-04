@@ -1,31 +1,49 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
+{Markdown} = require 'markdownz'
+{Link} = require 'react-router'
+moment = require 'moment'
 Loading = require '../../components/loading-indicator'
-Comment = require '../../talk/search-result'
+Avatar = require '../../partials/avatar'
 
 module.exports = React.createClass
   displayName: 'CommentNotification'
 
   propTypes:
+    data: React.PropTypes.object.isRequired
+    notification: React.PropTypes.object
     project: React.PropTypes.object
     user: React.PropTypes.object.isRequired
-    notification: React.PropTypes.object.isRequired
+
+  getDefaultProps: ->
+    startedDiscussion: false
 
   getInitialState: ->
     comment: null
 
-  componentWillMount: ->
-    talkClient.type('comments').get(@props.notification.source_id).then (comment) =>
-      @setState {comment}
-
   render: ->
-    if @state.comment
-      <div className="talk-comment">
-        <Comment
-          data={@state.comment}
-          user={@props.user}
-          project={@props.project}
-          params={@props.params} />
+    notification = @props.notification
+    comment = @props.data.comment
+    commentUser = @props.data.commentUser
+
+    if @props.data.comment
+      <div className="conversation-message talk-module">
+        {if notification.delivered is false and !@props.startedDiscussion
+          <i title="Unread" className="fa fa-star fa-lg" />}
+
+        <Link to={notification.url} className="message-link">
+          {comment.discussion_title}
+        </Link>
+
+        <Markdown>{comment.body}</Markdown>
+
+        <div className="bottom">
+          <Link className="user-profile-link" to="/users/#{commentUser.login}">
+            <Avatar user={commentUser} />{' '}{commentUser.display_name}
+          </Link>{' '}
+          <Link to={notification.url} className="time-ago">
+            {moment(comment.created_at).fromNow()}
+          </Link>
+        </div>
       </div>
     else
       <div className="talk-module">

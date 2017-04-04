@@ -53,7 +53,7 @@ module.exports = React.createClass
               Processing your request.
             </span>
           else
-            <span>Never requested.</span>
+            <span>Never previously requested.</span>
         }</PromiseRenderer>
         <br />
       </small>

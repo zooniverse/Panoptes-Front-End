@@ -30,3 +30,5 @@ require('./lib/log-deployed-commit')()
 
 # Just for console access:
 window?.zooAPI = require 'panoptes-client/lib/api-client'
+window?.talkAPI = require 'panoptes-client/lib/talk-client'
+require('./lib/split-config')

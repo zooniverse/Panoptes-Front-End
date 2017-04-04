@@ -2,7 +2,7 @@ React = require 'react'
 moment = require 'moment'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 {Link} = require 'react-router'
 
 module.exports = React.createClass

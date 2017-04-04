@@ -60,20 +60,21 @@ class ProjectFilteringInterface extends Component {
       delete query.tags;
     }
     apiClient.type('projects').get(query)
-      .then(projects => {
+      .then((projects) => {
         if (projects.length > 0) {
-          const pages = (projects[0] !== null && projects[0].getMeta() !== null)
-            ? projects[0].getMeta().page_count
-            : 0;
-          const projectCount = (projects[0] !== null && projects[0].getMeta() !== null)
-            ? projects[0].getMeta().count
-            : 0;
+          const hasMeta = (projects[0] !== null && projects[0].getMeta() !== null);
+          let pages = 0, projectCount = 0;
+          if (hasMeta) {
+            const meta = projects[0].getMeta();
+            pages = meta.page_count;
+            projectCount = meta.count;
+          }
           this.setState({ projects, pages, projectCount });
         } else {
           this.setState({ projects: [], pages: 0, projectCount: 0 });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ error });
       })
       .then(() => {
@@ -88,7 +89,7 @@ class ProjectFilteringInterface extends Component {
 
   handleSortChange(sort) {
     const page = '1';
-    this.props.onChangeQuery({ sort, page });
+    this.props.onChangeQuery({ sort: sort.value, page });
   }
 
   handlePageChange(page) {
@@ -100,7 +101,7 @@ class ProjectFilteringInterface extends Component {
     let pageStart = null;
     let pageEnd = null;
     if (this.state.projectCount > 0) {
-      pageStart = this.props.page * 20 - 20 + 1;
+      pageStart = ((this.props.page - 1) * 20) + 1;
       pageEnd = Math.min(this.props.page * 20, this.state.projectCount);
       showingMessage = 'projects.countMessage';
     } else {
@@ -111,7 +112,7 @@ class ProjectFilteringInterface extends Component {
         <Translate
           pageStart={pageStart}
           pageEnd={pageEnd}
-          count={this.state.projectCount}
+          projectCount={this.state.projectCount}
           content={showingMessage}
         />
       </p>
@@ -120,12 +121,12 @@ class ProjectFilteringInterface extends Component {
 
   renderPageSelector() {
     const { page } = this.props;
-    return (this.state.pages > 1)
-      ? <PageSelector
-          currentPage={+page}
-          totalPages={this.state.pages}
-          onChange={this.handlePageChange}
-        />
+    return (this.state.pages > 1) ?
+      <PageSelector
+        currentPage={+page}
+        totalPages={this.state.pages}
+        onChange={this.handlePageChange}
+      />
       : null;
   }
 

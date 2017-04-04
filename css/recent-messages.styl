@@ -1,0 +1,68 @@
+.recent-conversations-list
+  padding: 0
+
+  &__item
+    display: block
+
+.recent-conversation-link
+  align-items: center
+  background: white
+  border: 1px solid gray
+  color: black
+  display: flex
+  margin-bottom: -1px
+  padding: 1ch 1em
+  text-decoration: none
+
+  @media (max-width: 600px)
+    display: block
+
+  &:hover
+    box-shadow: 0 0 0 1px BACKGROUND_COLOR inset
+
+  &--first
+    border-radius: 0.3em 0.3em 0 0
+
+  &--last
+    border-radius: 0 0 0.3em 0.3em
+
+  &__direction
+    flex-basis: 3em
+    flex-shrink: 0
+    margin: 0 0.5ch;
+    opacity: 0.5
+    text-align: right
+
+  &__partner
+    flex-basis: 10em
+    flex-shrink: 0
+    font-weight: bold
+    margin: 0 0.5ch;
+
+  &__partner-avatar
+    border-radius: 50%
+    flex-shrink: 0
+    height: 2em
+    margin: 0 0.5ch;
+    vertical-align: middle
+    width: 2em
+
+  &__preview
+    margin: 0 0.5ch
+    overflow: hidden
+    white-space: nowrap
+
+    div
+      overflow: hidden
+      white-space: nowrap
+      text-overflow: ellipsis
+
+  &__title
+    font-size: 1.2em
+    font-weight: bold
+    white-space: nowrap
+
+  &__body-preview
+    font-size: 0.8em
+    line-height: 1.5em
+    max-height: 3.5em

@@ -1,3 +1,6 @@
+.researcher-quote
+  z-index: 2
+
 .data-exports
   .row
     margin: 0.8em 0
@@ -75,10 +78,14 @@
 
     .error
       padding: 0 10px
-      color: FAILURE
+      color: ALERT_COLOR
 
 .external-links-table
   >.drag-reorderable
     > [draggable]
       >td:first-of-type
         border-left: 1ch solid rgba(gray, 0.2)
+
+.disabled-section
+  pointer-events: none
+  opacity: 0.4

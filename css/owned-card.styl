@@ -49,17 +49,19 @@
     font-style: italic
 
   .card-button
-    background: LIGHT_GREEN_HEADER
+    background: TEAL_MID
     min-height: 35px
     padding: 0.6em
     position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
     width: 180px
 
     &:hover
-      background: lighten(LIGHT_GREEN_HEADER, 20%)
+      background: lighten(TEAL_MID, 20%)
 
 .collection-card
+  background: url('/assets/simple-pattern.png') center center repeat
   border-radius: 1em
+  position: relative
 
   .name
     margin-bottom: 1em
@@ -69,26 +71,27 @@
     line-height: 1.45em
     max-height: 2.9em
 
-  .owner,
-  .private
+    .fa-lock
+      margin-left: 0.3em
+
+  .owner
     margin: 0 auto
     height: 1.5em
-  .owner-private
-    height: 1.8em
-  .owner-public
-    height: 3.6em
 
-  .badge
+  &__badge
     background: rgba(black, 0.4)
-    border-radius: 2em
+    border-radius: 100%
     color: white
-    float: right
     font-weight: bold
     height: 1.5em
     margin: 0.2em 0.2em 0 0
     padding: 0 0.5em
+    position: absolute
+    right: 0
+    z-index: 1
 
 .project-card
+  border-radius: 1em
   height: 270px
   position: relative
   text-align: center
@@ -114,15 +117,14 @@
 
       span
         display: inline-block
-        vertical-align: middle
         line-height: normal
+        vertical-align: middle
 
     .description
       color: COPY
-      font-size: 0.8em
+      font-size: 0.9em
       height: 150px
       margin: 0.8em 0
-      font-size: 0.9em
       overflow: hidden
       text-align: center
 

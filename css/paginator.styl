@@ -6,6 +6,7 @@
 
   .paginator-page-selector
     display: inline-block
+    margin: 0 0.25em
 
     > select, > select > option
       color: black
@@ -14,9 +15,9 @@
     background: none
     color: FOREGROUND
     &:hover
-      background: FAILURE
+      background: ALERT_COLOR
       color: #fff
-      border-color: darken(FAILURE, 10%)
+      border-color: darken(ALERT_COLOR, 10%)
 
   .paginator-next
     background: none

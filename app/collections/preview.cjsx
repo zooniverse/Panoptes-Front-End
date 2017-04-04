@@ -2,9 +2,10 @@ React = require 'react'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../components/loading-indicator'
-Thumbnail = require '../components/thumbnail'
 Avatar = require '../partials/avatar'
 getSubjectLocation = require '../lib/get-subject-location'
+
+`import Thumbnail from '../components/thumbnail';`
 
 module.exports = React.createClass
   displayName: 'CollectionPreview'
@@ -28,6 +29,8 @@ module.exports = React.createClass
       @setState {subjects}
 
   render: ->
+    maxWidth = if innerWidth < 400 then 75 else 100
+
     <div className="collection-preview">
       <div className="collection">
         <p className="title">
@@ -42,13 +45,15 @@ module.exports = React.createClass
         </p>
         <div className="subject-previews">
           {if @state.subjects
-            <div>
-              {for subject in @state.subjects
-                <Thumbnail
-                  key={"collection-preview-#{@props.collection.id}-#{subject.id}"}
-                  src={getSubjectLocation(subject).src}
-                  width={100} />}
-            </div>
+            <Link to="/projects/#{@props.project.slug}/collections/#{@props.collection.slug}">
+              <div>
+                {for subject in @state.subjects
+                  <Thumbnail
+                    key={"collection-preview-#{@props.collection.id}-#{subject.id}"}
+                    src={getSubjectLocation(subject).src}
+                    width={maxWidth} />}
+              </div>
+            </Link>
           else
             <Loading />}
         </div>

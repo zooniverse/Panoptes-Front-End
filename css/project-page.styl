@@ -16,10 +16,10 @@
       color: BURNT_ORANGE
 
     h2, h3, h4, h5, h6
-      color: DARK_BLUE
+      color: ZOONIVERSE_NAVY
 
     a
-      color: DARK_BLUE
+      color: ZOONIVERSE_NAVY
 
   .team-list
     padding: 0
@@ -30,6 +30,13 @@
 
     &__display-name
       whitespace: nowrap
+      a
+        color: #00979d
+
+    &__login
+      whitespace: nowrap
+      color: #afaeae
+      font-size: 0.8em
 
     &__project-roles
       display: flex
@@ -42,6 +49,17 @@
 .on-project-page
   background: FOREGROUND
   color: BACKGROUND
+
+.beta-border
+  border: 0.3em solid TEAL_MID
+  box-sizing: border-box
+  height: 100%
+  left: 0
+  pointer-events: none
+  position: fixed
+  top: 0
+  width: 100%
+  z-index: 2
 
 .project-page
   color: white
@@ -131,66 +149,253 @@
   flex-direction: column
   flex: 1 0 auto
   font-size: 14px
+  justify-content: center
+
+  button, a.standard-button
+    background: white
+    border: 2px solid #00979d
+    border-radius: .5em
+    color: #00979d
+    margin-right: 1.5em
+    padding: 0.8em 1.4vw
+
+    &:hover
+      background: #00979d
+      border: 2px solid #00979d
+      color: white
+
+  h4
+    text-transform: uppercase
 
   .call-to-action-container
-    min-height: 500px
     align-items: center
     display flex
     flex: 1 0 auto
     flex-direction: column
     justify-content: center
+    margin-top: 1.5em
 
-  .description
-    font-size: 2.2em
-    font-weight: 700
-    line-height: 1.5em
-    margin: 50px 0 40px 0
-    max-width: 100%
-    max-width: 800px
+    &__buttons
+      display: flex
+      flex-direction: column
+
+    a, button
+      background: none
+      border: none
+      color: white
+      cursor: pointer
+      margin: 0
+      padding: 0
+
+      &:hover
+        background: none
+        border: none
+
+  &__container
+    display: flex
+    flex-flow: row wrap
+
+  &__centering
     text-align: center
+    padding: 5vh 10vw 15vh 10vw
 
-  .workflow-description
+    .learn-more
+      background: transparent
+      border: 2px solid white
+      color: white
+
+      &:hover
+        background-color: white
+        border: 2px solid white
+        color: #00979d
+
+    .get-started
+      border: 2px solid white
+      outline: none
+
+  &__description
+    font-size: 2em
+    font-weight: 600
     line-height: 1.5em
-    margin: 10px 0 30px 0
+    margin: 0 auto
+    max-width: 500px
+    padding-top: 15vh
+    text-align: center
+    width: 100%
+
+  &__content
+    color: #0f7481
+    padding: 5vh 10vw
+
+  .call-to-action-button--disabled
+    background: white
+    border: 2px solid #00979d
+    border-radius: .5em
+    color: #00979d
+    cursor: not-allowed
+    margin-right: 1.5em
+    padding: 0.8em 1.4vw
+    pointer-events: none
+    opacity: 0.4
+
+  &__researcher-words
+    background-color: white
+    color: ZOONIVERSE_NAVY
+    display: flex
+    flex: 2 0 auto
+    flex-direction: column
+    width: 250px
+    padding: 3em 4vw
+    position: relative
+
+    div
+      display: flex
+
+    h4
+      margin: 0 0 1em 6em
+
+    img
+      border-radius: 50%
+      float: left
+      height: 5em
+      margin-right: 1em
+      min-width: 5em
+
+    span
+      font-size: 1.75em
+      font-style: italic
+
+  @media (min-width: 1000px)
+    &__researcher-words:before
+      left: 100%
+      top: 7em
+      content: " "
+      position: absolute
+      border-bottom: 12px solid transparent
+      border-left: 25px solid white
+      border-top: 12px solid transparent
+
+  &__about-text
+    background-color: #0f7481
+    flex: 3 1 auto
+    padding: 3em 3em 4em 3em
+    text-align: center
+    width: 600px
+
+    a
+      background: none
+      border: none
+      color: #EFF2F5
+      font-weight: bold
+      margin: 0
+      padding: 0
+
+      &:hover
+        background: none
+        border: none
+        color: #F0B200
+
+    hr
+      background-color: white
+
+    img
+      max-width: 100%
+
+    p
+      line-height: 1.75
+
+  &__talk-image
+    text-align: center
+    background: black
+    border: 0.1em solid white
+    flex: 2 0 auto
+    max-height: 240px
+    width: 240px
+
+    img, video
+      height: 100%
+      width: 100%
+
+    img
+      object-fit: cover
+
+    video
+      object-fit: fill
+
+  &__talk-stat
+    background: white
+    color: ZOONIVERSE_NAVY
+    display: flex
+    flex: 2 0 auto
+    flex-direction: column
+    justify-content: center
+    min-height: 10em
+    padding: 2em 2em 2em 4em
+    position: relative
+    width: 200px
+
+    span
+      font-size: 1.2em
+      margin-bottom: 0.75em
+
+    .join-in
+      border: 2px solid ZOONIVERSE_NAVY
+      color: ZOONIVERSE_NAVY
+      width: 4em
+
+      &:hover
+        background-color: ZOONIVERSE_NAVY
+        border: 2px solid ZOONIVERSE_NAVY
+
+  &__talk-stat:before
+    right: 100%
+    top: 3em
+    content: " "
+    position: absolute
+    border-bottom: 12px solid transparent
+    border-right: 25px solid white
+    border-top: 12px solid transparent
+
+  .workflow-choice
+    background-color: white
+    box-shadow: 0 3px 3px 0px rgb(239,242,245)
+    position: relative
+    z-index: 1
+
+    h4
+      margin-bottom: 1em
+      text-transform: none
+
+  .workflow-choice:before
+    position: absolute
+    left: 55%
+    bottom: 100%
+    width: 0
+    height: 0
+    content: " "
+    border-bottom: 20px solid white
+    border-left: 10px solid transparent
+    border-right: 10px solid transparent
 
   .standard-button
     margin-top: 10px
     font-weight: 700
     line-height: 1.7em
 
-  hr
-    margin: 50px 0 0 0
-
-  .introduction
-    background: #fff
-    margin: 0
-    padding: 1.5em 3vw
-    width: 100%
-    box-sizing: border-box
-
-    .about-project
-      text-transform: uppercase
-      font-weight: 700
-      line-height: 2.5em
-      font-size: 15px
-      color: FOREGROUND
-      text-align: center
-      max-width: 800px
-      margin: 0 auto 1em
-
-   .markdown
-      color: #646464
-      line-height: 1.4em
-      text-align: center
-      max-width: 800px
-      margin: 0 auto
+  .markdown
+    line-height: 1.4em
+    text-align: center
+    max-width: 800px
+    margin: 0 auto
 
 .project-disclaimer
-  justify-content: center
-  text-align: center
-  padding: 2em 0
+  background-color: #007482
+  color: rgba(white, 0.5)
   font-size: .75em
-  color: #CDCDCD
+  justify-content: center
+  margin: 0
+  padding: 2em 0em
+  text-align: center
 
 .collection-page-with-project-context,
 .project-text-content
@@ -208,7 +413,7 @@
       background-color: #0072ff
 
   a
-    color: LIGHT_GREEN_HEADER
+    color: TEAL_MID
 
 &.in-project-context
   .pill-button
@@ -231,23 +436,42 @@
     border: 2px solid PROJECT_SUBMENU_BLUE
 
 .project-metadata
-  padding: 1.5em 3vw
-  margin: 0
-  background: rgba(0,0,0,0.8)
+  background: #eff2f5
+  color: ZOONIVERSE_NAVY
+  flex: 7 2 auto
+  padding: 3em 10vw
 
-  &-header
-    text-align: center
-    margin-bottom: 1.5em
-    :first-child
-      font-weight: bold
+  a
+    background: none
+    border: none
+    color: ZOONIVERSE_NAVY
+    font-weight: bold
+    padding: 0
+    text-transform: uppercase
+
+    &:hover
+      background: none
+      border: none
+      color: lighten(ZOONIVERSE_NAVY, 15%)
+
+  &-status-bar
+    margin: 2.5em 0
 
   &-stats
     align-items: center
     display: flex
     flex-wrap: wrap
-    justify-content: space-around
+    justify-content: space-between
 
   &-stat
+    margin: 0 1vw
     text-align: center
     :first-child
       font-size: 2em
+
+    &__value
+      border-bottom: 2px solid #F0B200
+      color: #F0B200
+
+    &__label
+      margin-top: 0.6em

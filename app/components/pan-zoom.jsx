@@ -1,7 +1,17 @@
+/* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
 import React from 'react';
 
 const PanZoom = React.createClass({
-  
+
+  propTypes: {
+    children: React.PropTypes.node,
+    enabled: React.PropTypes.bool,
+    frameDimensions: React.PropTypes.shape({
+      height: React.PropTypes.number,
+      width: React.PropTypes.number
+    })
+  },
+
   getDefaultProps() {
     return {
       enabled: false,
@@ -9,9 +19,9 @@ const PanZoom = React.createClass({
         height: 0,
         width: 0
       }
-    }
+    };
   },
-  
+
   getInitialState() {
     return {
       panEnabled: false,
@@ -22,24 +32,23 @@ const PanZoom = React.createClass({
         height: 0
       },
       zooming: false,
-      zoomingTimeoutId: null
-    }
+      zoomingTimeoutId: null,
+      rotation: 0,
+      transform: ''
+    };
   },
-  
+
   componentDidMount() {
     // these events enable a user to navigate an image using arrows, +, and - keys,
     // while the user is in pan and zoom mode.
-    addEventListener("keydown", this.frameKeyPan);
-    addEventListener("wheel", this.frameKeyPan);
+    if (this.props.enabled) {
+      addEventListener('keydown', this.frameKeyPan);
+      addEventListener('wheel', this.frameKeyPan);
+    }
   },
 
-  componentWillUnmount() {
-    removeEventListener("keydown", this.frameKeyPan);
-    removeEventListener("wheel", this.frameKeyPan);
-  },
-  
   componentWillUpdate(newProps) {
-    if (newProps.frameDimensions == this.props.frameDimensions) return;
+    if (newProps.frameDimensions === this.props.frameDimensions) return;
     this.setState({
       viewBoxDimensions: {
         width: newProps.frameDimensions.width,
@@ -49,87 +58,101 @@ const PanZoom = React.createClass({
       }
     });
   },
-  
+
+  componentWillUnmount() {
+    removeEventListener('keydown', this.frameKeyPan);
+    removeEventListener('wheel', this.frameKeyPan);
+  },
+
   render() {
     const children = React.Children.map(this.props.children, (child) => {
-          return React.cloneElement(child, {
-            viewBoxDimensions: this.state.viewBoxDimensions,
-            panByDrag: this.panByDrag,
-            panEnabled: this.state.panEnabled
-          })
-        });
+      return React.cloneElement(child, {
+        viewBoxDimensions: this.state.viewBoxDimensions,
+        panByDrag: this.panByDrag,
+        panEnabled: this.state.panEnabled,
+        transform: this.state.transform,
+        rotation: this.state.rotation
+      });
+    });
     return (
       <div>
-      {children}
-      {this.props.enabled ?
-        <div className="pan-zoom-controls" >
-          <div className="draw-pan-toggle" >
-            <div className={this.state.panEnabled ? "" : "active"} >
-              <button title="annotate" className="fa fa-mouse-pointer" onClick={this.togglePanOff}/>
+        {children}
+        {this.props.enabled ?
+          <div className="pan-zoom-controls" >
+            <div className="draw-pan-toggle" >
+              <div className={this.state.panEnabled ? '' : 'active'} >
+                <button title="annotate" className="fa fa-mouse-pointer" onClick={this.togglePanOff} />
+              </div>
+              <div className={this.state.panEnabled ? 'active' : ''}>
+                <button title="pan" ref="pan" className="fa fa-arrows" onClick={this.handleFocus.bind(this, 'pan')} onFocus={this.togglePanOn} onBlur={this.togglePanOff} />
+              </div>
             </div>
-            <div className={this.state.panEnabled ? "active" : ""}>
-              <button title="pan" ref="pan" className="fa fa-arrows" onClick={this.handleFocus.bind(this, "pan")} onFocus={this.togglePanOn} onBlur={this.togglePanOff}/>
+            <div>
+              <button
+                title="zoom out"
+                ref="zoomOut"
+                className={`zoom-out fa fa-minus ${this.cannotZoomOut() ? 'disabled' : ''}`}
+                onMouseDown={this.continuousZoom.bind(this, 1.1)}
+                onMouseUp={this.stopZoom}
+                onKeyDown={this.keyDownZoomButton.bind(this, 1.1)}
+                onKeyUp={this.stopZoom}
+                onFocus={this.togglePanOn}
+                onBlur={this.togglePanOff}
+                onClick={this.handleFocus.bind(this, 'zoomOut')}
+              />
+            </div>
+            <div>
+              <button
+                title="zoom in"
+                ref="zoomIn"
+                className="zoom-in fa fa-plus"
+                onMouseDown={this.continuousZoom.bind(this, 0.9)}
+                onMouseUp={this.stopZoom}
+                onKeyDown={this.keyDownZoomButton.bind(this, 0.9)}
+                onKeyUp={this.stopZoom}
+                onFocus={this.togglePanOn}
+                onBlur={this.togglePanOff}
+                onClick={this.handleFocus.bind(this, 'zoomIn')}
+              />
+            </div>
+            <div>
+              <button title="rotate" className={'rotate fa fa-repeat'} onClick={this.rotateClockwise} />
+            </div>
+            <div>
+              <button title="reset zoom levels" className={'reset fa fa-refresh' + (this.cannotResetZoomRotate() ? ' disabled' : '')} onClick={this.zoomReset} />
             </div>
           </div>
-          <div>
-            <button
-              title="zoom out"
-              ref="zoomOut"
-              className={"zoom-out fa fa-minus" + (this.cannotZoomOut() ? " disabled" : "") }
-              onMouseDown={ this.continuousZoom.bind(this, 1.1 ) }
-              onMouseUp={this.stopZoom}
-              onKeyDown={this.keyDownZoomButton.bind(this,1.1)}
-              onKeyUp={this.stopZoom}
-              onFocus={this.togglePanOn}
-              onBlur={this.togglePanOff}
-              onClick={this.handleFocus.bind(this, "zoomOut")}
-            />
-          </div>
-          <div>
-            <button
-              title="zoom in"
-              ref="zoomIn"
-              className="zoom-in fa fa-plus"
-              onMouseDown={this.continuousZoom.bind(this, .9)}
-              onMouseUp={this.stopZoom}
-              onKeyDown={this.keyDownZoomButton.bind(this,.9)}
-              onKeyUp={this.stopZoom}
-              onFocus={this.togglePanOn}
-              onBlur={this.togglePanOff}
-              onClick={this.handleFocus.bind(this, "zoomIn")}
-            />
-          </div>
-          <div>
-            <button title="reset zoom levels" className={"reset fa fa-refresh" + (this.cannotZoomOut() ? " disabled" : "")} onClick={ this.zoomReset } ></button>
-          </div>
-        </div>
-        : ""
-      }
+          : ''
+        }
       </div>
-    )
+    );
   },
-  
+
   handleFocus(ref) {
     this.refs[ref].focus();
     this.togglePanOn();
   },
 
   cannotZoomOut() {
-    return this.props.frameDimensions.width == this.state.viewBoxDimensions.width && this.props.frameDimensions.height == this.state.viewBoxDimensions.height;
+    return this.props.frameDimensions.width === this.state.viewBoxDimensions.width && this.props.frameDimensions.height === this.state.viewBoxDimensions.height;
+  },
+
+  cannotResetZoomRotate() {
+    return this.cannotZoomOut() && this.state.rotation === 0
   },
 
   continuousZoom(change) {
     this.clearZoomingTimeout();
-    if (change == 0) return;
-    this.setState( {zooming: true}, () => {
+    if (change === 0) return;
+    this.setState({ zooming: true }, () => {
       let zoomNow = () => {
         // if !this.state.zooming, we don't want to continuously call setTimeout.
         // !this.state.zooming will be the case after a user creates a mouseup event.
         if (!this.state.zooming) return;
         this.zoom(change);
         this.clearZoomingTimeout();
-        this.setState( {zoomingTimeoutId: setTimeout(zoomNow, 200)} );
-      }
+        this.setState({ zoomingTimeoutId: setTimeout(zoomNow, 200) });
+      };
       zoomNow();
     });
   },
@@ -143,14 +166,14 @@ const PanZoom = React.createClass({
   zoom(change) {
     this.clearZoomingTimeout();
     if (!this.state.zooming) return;
-    let newNaturalWidth = this.state.viewBoxDimensions.width * change;
-    let newNaturalHeight = this.state.viewBoxDimensions.height * change;
+    const newNaturalWidth = this.state.viewBoxDimensions.width * change;
+    const newNaturalHeight = this.state.viewBoxDimensions.height * change;
 
-    let newNaturalX = this.state.viewBoxDimensions.x - (newNaturalWidth - this.state.viewBoxDimensions.width) / 2;
-    let newNaturalY = this.state.viewBoxDimensions.y - (newNaturalHeight - this.state.viewBoxDimensions.height) / 2;
+    const newNaturalX = this.state.viewBoxDimensions.x - ((newNaturalWidth - this.state.viewBoxDimensions.width) / 2);
+    const newNaturalY = this.state.viewBoxDimensions.y - ((newNaturalHeight - this.state.viewBoxDimensions.height) / 2);
 
     if ((newNaturalWidth > this.props.frameDimensions.width) || (newNaturalHeight * change > this.props.frameDimensions.height)) {
-      this.zoomReset()
+      this.zoomReset();
     } else {
       this.setState({
         viewBoxDimensions: {
@@ -165,8 +188,8 @@ const PanZoom = React.createClass({
 
   keyDownZoomButton(change, e) {
     // only zoom if a user presses enter on the zoom button.
-    if (e.which == 13) {
-      this.setState({zooming: true}, () => {
+    if (e.which === 13) {
+      this.setState({ zooming: true }, () => {
         this.zoom(change);
       });
     }
@@ -174,10 +197,10 @@ const PanZoom = React.createClass({
 
   stopZoom(e) {
     e.stopPropagation();
-    this.setState({zooming: false});
+    this.setState({ zooming: false });
     this.continuousZoom(0);
   },
-  
+
   zoomReset() {
     this.setState({
       viewBoxDimensions: {
@@ -185,32 +208,34 @@ const PanZoom = React.createClass({
         height: this.props.frameDimensions.height,
         x: 0,
         y: 0
-      }
+      },
+      rotation: 0,
+      transform: `rotate(${0} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
     });
   },
 
   togglePanOn() {
-    if (!this.state.panEnabled) this.setState({panEnabled: true});
+    if (!this.state.panEnabled) this.setState({ panEnabled: true });
   },
-  
+
   togglePanOff() {
-    this.setState({panEnabled: false});
+    this.setState({ panEnabled: false });
   },
-  
+
   toggleKeyPanZoom() {
-    this.setState({keyPanZoomEnabled: !this.state.keyPanZoomEnabled});
+    this.setState({ keyPanZoomEnabled: !this.state.keyPanZoomEnabled });
   },
-  
+
   panByDrag(e, d) {
     if (!this.state.panEnabled) return;
 
-    let maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width) + (this.props.frameDimensions.width * 0.6);
-    let minumumX = -(this.props.frameDimensions.width * 0.6);
-    let changedX = this.state.viewBoxDimensions.x -= d.x;
+    const maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width) + (this.props.frameDimensions.width * 0.6);
+    const minumumX = -(this.props.frameDimensions.width * 0.6);
+    const changedX = this.state.viewBoxDimensions.x -= d.x;
 
-    let maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height) + (this.props.frameDimensions.height * 0.6);
-    let minimumY = -(this.props.frameDimensions.height * 0.6);
-    let changedY = this.state.viewBoxDimensions.y -= d.y;
+    const maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height) + (this.props.frameDimensions.height * 0.6);
+    const minimumY = -(this.props.frameDimensions.height * 0.6);
+    const changedY = this.state.viewBoxDimensions.y -= d.y;
 
     this.setState({
       viewBoxDimensions: {
@@ -224,7 +249,7 @@ const PanZoom = React.createClass({
 
   frameKeyPan(e) {
     if (!this.state.panEnabled) return;
-    let keypress = e.which;
+    const keypress = e.which;
     switch (keypress) {
       // left
       case 37:
@@ -250,29 +275,30 @@ const PanZoom = React.createClass({
       case 187:
       case 61:
         e.preventDefault();
-        this.setState({zooming: true});
-        this.zoom(.9);
+        this.setState({ zooming: true });
+        this.zoom(0.9);
         break;
       // zoom in - Chrome(189), Firefox(173)
       case 189:
       case 173:
-        e.preventDefault()
-        this.setState({zooming: true});
+        e.preventDefault();
+        this.setState({ zooming: true });
         this.zoom(1.1);
         break;
       // zooming by wheel
       case 1:
         e.preventDefault();
-        this.setState({zooming: true});
+        this.setState({ zooming: true });
         (e.deltaY > 0) ? this.zoom(1.1) : this.zoom(0.9);
         break;
+      // no default
     }
   },
 
   panHorizontal(direction) {
-    let maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width) + (this.props.frameDimensions.width * 0.6);
-    let minumumX = -(this.props.frameDimensions.width * 0.6);
-    let changedX = this.state.viewBoxDimensions.x + direction;
+    const maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width) + (this.props.frameDimensions.width * 0.6);
+    const minumumX = -(this.props.frameDimensions.width * 0.6);
+    const changedX = this.state.viewBoxDimensions.x + direction;
     this.setState({
       viewBoxDimensions: {
         x: Math.max(minumumX, Math.min(changedX, maximumX)),
@@ -284,9 +310,9 @@ const PanZoom = React.createClass({
   },
 
   panVertical(direction) {
-    let maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height) + (this.props.frameDimensions.height * 0.6);
-    let minimumY = -(this.props.frameDimensions.height * 0.6);
-    let changedY = this.state.viewBoxDimensions.y + direction;
+    const maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height) + (this.props.frameDimensions.height * 0.6);
+    const minimumY = -(this.props.frameDimensions.height * 0.6);
+    const changedY = this.state.viewBoxDimensions.y + direction;
     this.setState({
       viewBoxDimensions: {
         x: this.state.viewBoxDimensions.x,
@@ -295,8 +321,15 @@ const PanZoom = React.createClass({
         height: this.state.viewBoxDimensions.height
       }
     });
+  },
+
+  rotateClockwise() {
+    const newRotation = this.state.rotation + 90;
+    this.setState({
+      rotation: newRotation,
+      transform: `rotate(${newRotation} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
+    });
   }
-  
 });
 
 export default PanZoom;

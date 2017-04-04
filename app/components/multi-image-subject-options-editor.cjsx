@@ -31,6 +31,7 @@ module.exports = React.createClass
     mode = @props.workflow.configuration?.multi_image_mode or @defaultMode
     cloneMarksChecked = @props.workflow?.configuration.multi_image_clone_markers or false
     enableSwitchingChecked = @props.workflow?.configuration.enable_switching_flipbook_and_separate or false
+    iterations = @props.workflow?.configuration.playIterations ? 3
     <ChangeListener target={@props.workflow}>{ =>
       <div className="multi-image-subject-layout-editor">
         <div>
@@ -56,10 +57,26 @@ module.exports = React.createClass
         <div>
           <input type="checkbox" id="multi_image_clone_markers" name="multi_image_clone_markers" checked={cloneMarksChecked} onChange={@toggleCloneMarks} />
           <label htmlFor="multi_image_clone_markers">Clone markers in all frames</label>
-        </div>  
+        </div>
+        <div>
+          <label htmlFor="flipbook_play_iterations">Flipbook Play Iterations</label> {' '}
+          <input
+            type="number"
+            id="flipbook_play_iterations"
+            placeholder="∞"
+            value={iterations}
+            name="flipbook_play_iterations"
+            min="1"
+            max="100"
+            step="1"
+            onChange={@toggleInfiniteLoop}
+          />
+          <br />
+          <small>An empty iteration value denotes infinite loop.</small>
+        </div>
       </div>
     }</ChangeListener>
-    
+
   toggleCloneMarks: (e) ->
     @props.workflow.update
       'configuration.multi_image_clone_markers': e.target.checked
@@ -67,6 +84,10 @@ module.exports = React.createClass
   toggleEnableSwitching: (e) ->
     @props.workflow.update
       'configuration.enable_switching_flipbook_and_separate': e.target.checked
+
+  toggleInfiniteLoop: (e) ->
+    @props.workflow.update
+      'configuration.playIterations': e.target.value
 
   handleSelectMode: (e) ->
     mode = e.target.value

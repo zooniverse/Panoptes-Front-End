@@ -74,6 +74,7 @@ module.exports = React.createClass
     newState[errorProp] = null
     @setState newState
 
+    console.log @props.user._getURL(type)
     apiClient.post @props.user._getURL(type), media: content_type: file.type
       .then ([resource]) =>
         putFile resource.src, file, {'Content-Type': file.type}

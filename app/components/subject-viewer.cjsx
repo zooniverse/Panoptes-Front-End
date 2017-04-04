@@ -1,7 +1,7 @@
 React = require 'react'
 FavoritesButton = require '../collections/favorites-button'
 Dialog = require 'modal-form/dialog'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 FrameViewer = require './frame-viewer'
@@ -32,6 +32,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     subject: null
+    isFavorite: false
     user: null
     playFrameDuration: 667
     playIterations: 3
@@ -50,10 +51,20 @@ module.exports = React.createClass
   getInitialState: ->
     loading: true
     playing: false
-    frame: @props.frame ? 0
+    frame: @getInitialFrame()
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
+
+  getInitialFrame: ->
+    {frame, allowFlipbook, subject} = @props
+    default_frame = parseInt(subject.metadata.default_frame, 10)
+    initialFrame = 0
+    if frame?
+      initialFrame = frame
+    else if allowFlipbook and typeof default_frame is 'number' and !isNaN(default_frame) and default_frame > 0 and default_frame <= subject.locations.length
+      initialFrame = default_frame - 1 
+    initialFrame
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.subject is @props.subject
@@ -101,12 +112,12 @@ module.exports = React.createClass
             else
               <span className="subject-frame-play-controls">
                 {if @state.playing
-                  <button aria-label="Pause" title="Pause" type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
-                    <i className="fa fa-pause fa-fw"></i>
+                  <button aria-label="Pause" title="Pause" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, false}>
+                    <i className="fa fa-pause fa-lg fa-fw"></i>
                   </button>
                 else
-                  <button aria-label="Play" title="Play" type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
-                    <i className="fa fa-play fa-fw"></i>
+                  <button aria-label="Play" title="Play" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, true}>
+                    <i className="fa fa-play fa-lg fa-fw"></i>
                   </button>}
               </span>}
           </span>
@@ -148,7 +159,7 @@ module.exports = React.createClass
               <span>
                 {unless @props.workflow?.configuration?.disable_favorites
                   <span>
-                    <FavoritesButton className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />{' '}
+                    <FavoritesButton className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} isFavorite={@props.isFavorite} />{' '}
                   </span>}
                 <CollectionsManagerIcon className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />
               </span>
@@ -213,18 +224,22 @@ module.exports = React.createClass
 
   setPlaying: (playing) ->
     @setState {playing}
-    if playing
-      @nextFrame()
-      @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
+    totalFrames = @props.subject.locations.length
+    flips = totalFrames * @props.playIterations
+    infiniteLoop = @props.playIterations is ''
+    counter = 0
 
-      autoStopDelay = @props.subject.locations.length * @props.playFrameDuration * @props.playIterations
-      @_autoStop = setTimeout @setPlaying.bind(this, false), autoStopDelay
-    else
-      clearInterval @_playingInterval
-      clearTimeout @_autoStop
+    flip = =>
+      if @state.playing is on and (counter < flips or infiniteLoop is on)
+        counter++
+        @handleFrameChange (@state.frame + 1) %% totalFrames
+        setTimeout flip, @props.playFrameDuration
+        if counter is flips and infiniteLoop is off
+          @setPlaying false
+      else @setPlaying false
 
-  nextFrame: ->
-    @handleFrameChange (@state.frame + 1) %% @props.subject.locations.length
+    if playing is on
+      setTimeout flip, 0
 
   handleFrameChange: (frame) ->
     @setState {frame}

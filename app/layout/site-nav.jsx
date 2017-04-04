@@ -12,8 +12,6 @@ import AccountBar from './account-bar';
 import LoginBar from './login-bar';
 import SiteSubnav from './site-subnav';
 
-import style from './site-nav.styl';
-void style;
 
 const MAX_MOBILE_WIDTH = 875;
 const ZOO_LOGO = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;

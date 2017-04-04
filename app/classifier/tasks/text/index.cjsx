@@ -1,6 +1,6 @@
 React = require 'react'
-{Markdown} = (require 'markdownz').default
-GenericTask = require '../generic'
+{Markdown} = require 'markdownz'
+GenericTask = require('../generic.jsx').default
 TextTaskEditor = require './editor'
 
 NOOP = Function.prototype
@@ -48,8 +48,10 @@ module.exports = React.createClass
       annotation.value isnt '' or not task.required
 
   getDefaultProps: ->
-    task: null
-    annotation: null
+    task:
+      instruction: ''
+    annotation:
+      value: null
     onChange: NOOP
 
   getInitialState: ->

@@ -4,7 +4,7 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
 
   @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/comet-hunters']
   # during dev (for staging):
-  # @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/planet-four-terrains']
+  # @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/planet-four-terrains', 'srallen086/workflow-assignment-testing']
 
   keys:
     projectToken: 'zooHome'

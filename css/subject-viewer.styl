@@ -1,0 +1,102 @@
+.subject-viewer
+  min-width: 0
+  max-width: 100%
+
+  .default-root-style
+    display: block
+
+  .subject-frame-pips
+    .subject-frame-pip
+      &.active
+        font-weight: 700
+
+  video
+    width: 100%
+
+  .subject-video-controls
+    display: inline-block
+    position: relative
+    width: 30vw
+
+  .video-scrubber
+    width: 80%
+
+  .video-speed
+    white-space: nowrap
+    display: inline-block
+    padding: .3em 0
+    line-height: .8
+    vertical-align: middle
+
+    label
+      overflow: hidden
+      padding: 0 .3em
+
+      input[type=radio]
+        position: absolute
+        left: -50px
+        height: 0
+        width: 0
+
+        &:checked + span
+          color: MAIN_HIGHLIGHT
+
+  .subject-container
+    > *
+      max-width: 100%
+
+    .frame-annotator
+      flex: 9
+
+    .text-viewer
+      background-color: #404040
+      color: white
+      padding: 2%
+      white-space: pre-wrap
+
+    image.pan-active
+      cursor: all-scroll
+    .pan-zoom-controls
+      text-align: center
+      background: grey;
+      border-radius: .1em;
+      .draw-pan-toggle
+        background-color: #F9F9F9
+        border: solid 1px #989898
+        border-radius: .2em
+        div
+          border-radius: .1em
+          transition: background-color .5s
+          &.active
+            background-color: #43BBFD
+            color: black
+            border: none
+        button
+          background-color: transparent
+          border:none
+
+      button
+        background-color: #f9f9f9
+        border: solid 1px #989898
+        -webkit-border-radius: 0.2em
+        border-radius: 0.2em
+        &.disabled
+          background-color: #bbc0c0
+          color: #575959
+
+  // Multi-image layouts
+  &:not(.subject-viewer--flipbook)
+    .subject-container
+      align-items: center
+      justify-content: space-between
+    &.subject-viewer--layout-grid2
+      .subject-container > *
+        width: 49%
+    &.subject-viewer--layout-grid3
+      .subject-container > *
+        width: 33%
+
+.subject
+  .subject-tools
+    button:not(:last-child)
+      margin-right: 0.5em

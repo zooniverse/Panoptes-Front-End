@@ -1,0 +1,66 @@
+.notification-section
+  @extends .content-container
+  background-color: #EDEDED
+  border-radius: 4px
+  margin: 1.5em 10%
+  overflow: hidden
+  padding: 1em 5%
+
+  &__container
+    align-items: center
+    display: flex
+    justify-content: center
+
+  &__item
+    width: 33%
+
+  &__error
+    background: rgba(red, 0.3)
+    font-size: 0.8em
+    font-weight: bold
+    padding: 0.5em 2em
+    text-align: center
+
+  &__title
+    color: #646464
+    text-align: center
+    text-decoration: none
+    text-transform: capitalize
+
+  &__img
+    border-radius: 50%
+    max-width: 40px
+    max-height: 40px
+
+  &__item-count
+    display: inline-block
+    font-size: 0.8em
+    padding: 0em 2em
+
+  &__expand
+    float: right
+
+  button
+    background: none !important
+    border: none !important
+    outline: none
+    position: absolute
+
+    &:hover
+      color: inherit !important
+
+  .fa-star
+    color: #F0B200
+    float: right
+
+.notifications-title
+  margin: 0 10% 1em 10%
+  padding: 1em 0 0.75em 0
+  text-align: center
+
+  &__project
+    background: #f7f7f7
+    border: 2px solid #f2f1f1
+    border-radius: 4px
+    margin: 0 10%
+    padding: 5px

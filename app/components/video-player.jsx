@@ -5,34 +5,41 @@ const IS_IE = 'ActiveXObject' in window;
 const VideoPlayer = React.createClass({
 
   propTypes: {
-    frame: React.PropTypes.number,
-    src: React.PropTypes.string,
-    type: React.PropTypes.string,
-    format: React.PropTypes.string,
-    onLoad: React.PropTypes.func,
     children: React.PropTypes.node,
+    format: React.PropTypes.string,
+    frame: React.PropTypes.number,
+    onLoad: React.PropTypes.func,
+    showControls: React.PropTypes.bool,
+    src: React.PropTypes.string,
+    type: React.PropTypes.string
+  },
+
+  getDefaultProps() {
+    return {
+      showControls: true
+    };
   },
 
   getInitialState() {
     return {
       playing: false,
-      playbackRate: 1,
+      playbackRate: 1
     };
   },
 
   componentDidMount() {
-    if (!!this.refs.videoScrubber) {
+    if (this.refs.videoScrubber) {
       this.refs.videoScrubber.value = 0;
       if (IS_IE) this.refs.videoScrubber.addEventListener('change', this.seekVideo);
     }
   },
 
   componentDidUpdate() {
-    if (!!this.refs.videoPlayer) this.refs.videoPlayer.playbackRate = this.state.playbackRate;
+    if (this.refs.videoPlayer) this.refs.videoPlayer.playbackRate = this.state.playbackRate;
   },
 
   componentWillUnmount() {
-    if (!!this.refs.videoScrubber && IS_IE) {
+    if (this.refs.videoScrubber && IS_IE) {
       this.refs.videoScrubber.removeEventListener('change', this.seekVideo);
     }
   },
@@ -84,7 +91,7 @@ const VideoPlayer = React.createClass({
         <span>
           {rate}&times;
         </span>
-      </label>)
+      </label>),
     );
   },
 
@@ -99,48 +106,52 @@ const VideoPlayer = React.createClass({
           type={`${this.props.type}/${this.props.format}`}
           preload="auto"
           onCanPlay={this.props.onLoad}
+          onClick={this.playVideo.bind(this, !this.state.playing)}
           onEnded={this.endVideo}
           onTimeUpdate={this.updateScrubber}
         >
           Your browser does not support the video format. Please upgrade your browser.
         </video>
-        <span className="subject-video-controls">
-          <span className="subject-frame-play-controls">
-          {(this.state.playing) ?
-            <button
-              type="button"
-              className="secret-button"
-              aria-label="Pause"
-              onClick={this.playVideo.bind(this, false)}
-            >
-              <i className="fa fa-pause fa-fw"></i>
-            </button> :
-            <button
-              type="button"
-              className="secret-button"
-              aria-label="Play"
-              onClick={this.playVideo.bind(this, true)}
-            >
-              <i className="fa fa-play fa-fw"></i>
-            </button>
-            }
+
+        {this.props.showControls && (
+          <span className="subject-video-controls">
+            <span className="subject-frame-play-controls">
+              {(this.state.playing) ?
+                <button
+                  type="button"
+                  className="secret-button"
+                  aria-label="Pause"
+                  onClick={this.playVideo.bind(this, false)}
+                >
+                  <i className="fa fa-pause fa-fw" />
+                </button> :
+                <button
+                  type="button"
+                  className="secret-button"
+                  aria-label="Play"
+                  onClick={this.playVideo.bind(this, true)}
+                >
+                  <i className="fa fa-play fa-fw" />
+                </button>
+                }
+            </span>
+            <input
+              type="range"
+              className="video-scrubber"
+              ref="videoScrubber"
+              min="0"
+              step="any"
+              onChange={this.seekVideo}
+            />
+            <span className="video-speed">
+            Speed: {this.renderSpeedControls(rates)}
+            </span>
           </span>
-          <input
-            type="range"
-            className="video-scrubber"
-            ref="videoScrubber"
-            min="0"
-            step="any"
-            onChange={this.seekVideo}
-          />
-          <span className="video-speed">
-          Speed: {this.renderSpeedControls(rates)}
-          </span>
-        </span>
+        )}
         {this.props.children}
       </div>
     );
-  },
+  }
 
 });
 

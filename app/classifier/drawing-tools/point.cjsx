@@ -5,10 +5,10 @@ Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 isInBounds = require '../../lib/is-in-bounds'
 
-RADIUS = 
+RADIUS =
   large: 10
   small: 2
-SELECTED_RADIUS = 
+SELECTED_RADIUS =
   large: 20
   small: 10
 CROSSHAIR_SPACE = 0.2
@@ -28,22 +28,19 @@ module.exports = React.createClass
     initMove: ({x, y}) ->
       {x, y}
 
-    initValid: (mark, {containerRect, scale}) ->
-      markRect =
-        left: containerRect.left + (mark.x * scale.vertical)
-        top: containerRect.top + (mark.y * scale.horizontal)
-        width: 1
-        height: 1
-      isInBounds markRect, containerRect
+    initValid: (mark, {naturalHeight, naturalWidth}) ->
+      notBeyondWidth = mark.x < naturalWidth
+      notBeyondHeight = mark.y < naturalHeight
+      notBeyondWidth and notBeyondHeight
 
     initRelease: ->
       _inProgress: false
-    
+
     options: ['size']
 
   getDefaultProps: ->
     size: 'large'
-  
+
   getDeleteButtonPosition: ->
     theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)
     x: (SELECTED_RADIUS.large / @props.scale.horizontal) * Math.cos theta
@@ -73,10 +70,11 @@ module.exports = React.createClass
       </Draggable>
 
       {if @props.selected
-        <DeleteButton tool={this} {...@getDeleteButtonPosition()} />}
+        <DeleteButton tool={this} {...@getDeleteButtonPosition()}  getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />}
     </DrawingToolRoot>
 
   handleDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.y += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e,d)
+    @props.mark.x += difference.x
+    @props.mark.y += difference.y
     @props.onChange @props.mark

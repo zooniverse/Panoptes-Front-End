@@ -1,5 +1,43 @@
-@import "jsplumb"
-@import "react-resizable"
+._jsPlumb_connector
+  z-index: 0
+
+/** DISABLE TEXT SELECTION (SET ON BODY WHEN DRAGGING IS OCCURRING) **/
+._jsPlumb_drag_select *
+  -webkit-touch-callout: none
+  user-select: none
+
+._jsPlumb_endpoint
+  z-index:19
+
+._jsPlumb_overlay
+  z-index:20
+
+._jsPlumb_endpoint
+  cursor: pointer
+  
+.resize-triggers
+  visibility: hidden
+
+.resize-triggers, .resize-triggers > div, .contract-trigger:before
+  content: " "
+  display: block
+  position: absolute
+  top: 0
+  left: 0
+  height: 90%
+  width: 100%
+  overflow: hidden
+  z-index: 0
+
+.expand-trigger > div
+  z-index: 0
+
+.contract-trigger:before
+  width: 200%
+  height: 200%
+
+.resize-triggers > div
+  overflow: auto
 
 .answer-item
   padding-left: 15px
