@@ -111,24 +111,6 @@ export default class Classifier extends React.Component {
     this.setState({ annotations });
   }
 
-  loadClassificationsCount(subject) {
-    let query = {};
-    if (this.props.splits && this.props.splits['subject.first-to-classify']) {
-      query = {
-        workflow_id: this.props.workflow.id,
-        subject_id: subject.id
-      };
-    
-
-      apiClient.type('subject_workflow_statuses')
-      .get(query)
-      .then(([sws]) => {
-        const classificationCount = sws.classifications_count ? sws.classifications_count : 0;
-        this.setState({ classificationCount });
-      });
-    }
-  }
-
   loadSubject(subject) {
     this.setState({
       expertClassification: null,
@@ -140,8 +122,6 @@ export default class Classifier extends React.Component {
     if (this.props.project.experimental_tools && this.props.project.experimental_tools.indexOf('expert comparison summary') > -1) {
       this.getExpertClassification(this.props.workflow, this.props.subject);
     }
-
-    this.loadClassificationsCount(subject);
 
     preloadSubject(subject)
     .then(() => {
@@ -261,7 +241,7 @@ export default class Classifier extends React.Component {
               classification={currentClassification}
               expertClassification={this.state.expertClassification}
               splits={this.props.splits}
-              classificationCount={this.state.classificationCount}
+              classificationCount={this.props.classificationCount}
               hasGSGoldStandard={this.subjectIsGravitySpyGoldStandard()}
               toggleExpertClassification={this.toggleExpertClassification}
             />
@@ -369,6 +349,7 @@ Classifier.propTypes = {
     stopListening: React.PropTypes.func,
     update: React.PropTypes.func
   }),
+  classificationCount: React.PropTypes.number,
   demoMode: React.PropTypes.bool,
   expertClassifier: React.PropTypes.bool,
   minicourse: React.PropTypes.shape({
@@ -413,6 +394,7 @@ Classifier.propTypes = {
 
 Classifier.defaultProps = {
   classification: null,
+  classificationCount: 0,
   demoMode: false,
   minicourse: null,
   preferences: null,

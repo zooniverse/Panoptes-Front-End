@@ -118,22 +118,7 @@
     width: 4em
 
 .project-announcement-banner
-  border: 2px solid
-  border-radius: 0.2em
-  box-shadow: 0 2px 4px rgba(black, 0.3)
-  box-sizing: border-box
-  color: white
-  margin: 0 3vw
-  padding: 0 1.5vw
-  text-align: center
-
-  &.custom-sign-in-banner
-    display: flex
-    justify-content: space-between
-    margin: 0 0 3vh
-
-    p
-      display: inline-block
+  @extends $announcement-banner
 
   &.informational
     background: MAIN_HIGHLIGHT
