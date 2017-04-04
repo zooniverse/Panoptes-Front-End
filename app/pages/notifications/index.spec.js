@@ -2,8 +2,9 @@
 
 import React from 'react';
 import assert from 'assert';
-import Notifications from './notifications';
+import Notifications from './index';
 import { mount, shallow } from 'enzyme';
+import sinon from 'sinon';
 
 const testNotifications = [
   { id: '123',
@@ -21,7 +22,8 @@ const testNotifications = [
 ];
 
 describe('Notifications', function() {
-  let wrapper, notifications;
+  let wrapper;
+  let notifications;
 
   describe('it will display according to user', function() {
     it('will ask user to sign in', function() {
@@ -30,8 +32,10 @@ describe('Notifications', function() {
     });
 
     it('will notify when no notifications present', function() {
+      const stub = sinon.stub(Notifications.prototype, 'componentDidMount');
       wrapper = mount(<Notifications user={{ id: 1 }} />);
       assert(wrapper.contains(<span>You have no notifications.</span>));
+      stub.restore();
     });
   });
 
@@ -39,9 +43,10 @@ describe('Notifications', function() {
     beforeEach(function () {
       wrapper = shallow(
         <Notifications user={{ id: 1 }} />,
+        { disableLifecycleMethods: true }
       );
       wrapper.instance().groupNotifications(testNotifications);
-      notifications = shallow(wrapper.instance().renderNotifications())
+      notifications = shallow(wrapper.instance().renderNotifications());
     });
 
     it('will place zooniverse section first', function() {
@@ -57,19 +62,20 @@ describe('Notifications', function() {
     beforeEach(function () {
       wrapper = shallow(
         <Notifications user={{ id: 1 }} />,
+        { disableLifecycleMethods: true }
       );
       wrapper.setState({ expanded: 'project-1234' });
       wrapper.instance().groupNotifications(testNotifications);
-      notifications = shallow(wrapper.instance().renderNotifications())
+      notifications = shallow(wrapper.instance().renderNotifications());
     });
 
     it('will open the active project', function() {
-      let activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-1234');
+      const activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-1234');
       assert.equal(activeProject.prop('expanded'), true);
     });
 
     it('will keep other projects closed', function() {
-      let activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-4321');
+      const activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-4321');
       assert.equal(activeProject.prop('expanded'), false);
     });
   });
