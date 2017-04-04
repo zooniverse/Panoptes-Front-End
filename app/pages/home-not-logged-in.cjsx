@@ -33,7 +33,7 @@ module.exports = React.createClass
           <h5 className="main-kicker">welcome to the zooniverse</h5>
           <h1 className="main-headline">People-powered research</h1>
           <div className="home-intro-buttons">
-            <Link to="/projects" className="intro-button">See All Projects</Link>
+            <Link to="/projects" className="primary-button">See All Projects</Link>
           </div>
         </section>
       </div>
