@@ -121,7 +121,7 @@ const CollectionPage = React.createClass({
             </Link>
           </div>
           <nav className="collection-nav">
-            {isOwner ?
+            {this.state.canCollaborate ?
               <span>
                 <Link to={`${baseCollectionLink}/settings`} className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
                   <Translate content="collectionPage.settings" />
