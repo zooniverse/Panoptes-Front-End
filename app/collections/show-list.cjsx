@@ -1,15 +1,15 @@
 React = require 'react'
 {Link} = require 'react-router'
+Translate = require 'react-translate-component'
 apiClient = require 'panoptes-client/lib/api-client'
 intersection = require 'lodash.intersection'
 pick = require 'lodash.pick'
-Translate = require 'react-translate-component'
 counterpart = require 'counterpart'
+alert = require '../lib/alert'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
 CollectionsManager = require './manager'
-Dialog = require 'modal-form/dialog'
 
 VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
 
@@ -143,13 +143,6 @@ module.exports = React.createClass
 
     return hasPermission
 
-  openCollectionsManager: ->
-    @setState {collectionsManaging: true}
-
-  closeCollectionsManager: ->
-    @setState {collectionsManaging: false}
-    @toggleSelect()
-
   toggleSelect: ->
     @setState selecting: !@state.selecting, selected: []
 
@@ -165,6 +158,12 @@ module.exports = React.createClass
       index = selected.indexOf subjectID
       selected.splice index, 1
       @setState {selected}
+
+  promptCollectionManager: ->
+    alert (resolve) =>
+      <CollectionsManager user={@props.user} project={@props.project} subjectIDs={@state.selected} onSuccess={resolve} />
+
+    @toggleSelect()
 
   handleDeleteSubject: (subject) ->
     subjects = @state.subjects
@@ -200,14 +199,10 @@ module.exports = React.createClass
             <div className="collection-buttons-container">
               <button
                 className="select-images-button"
-                onClick={@openCollectionsManager}
+                onClick={@promptCollectionManager}
                 disabled={@state.selected.length < 1}>
                 Add to Collection
               </button>
-              {if @state.collectionsManaging
-                <Dialog tag="div" closeButton={true} onCancel={@closeCollectionsManager}>
-                <CollectionsManager user={@props.user} project={@props.project} subjectIDs={@state.selected} onSuccess={@closeCollectionsManager} />
-                </Dialog>}
               {if @isOwnerOrCollaborator()
                 <button className="select-images-button" onClick={@deleteSubjects} disabled={@state.selected.length < 1}>Remove from Collection</button>}
               <button className="select-images-button" onClick={@toggleSelect}>Cancel</button>
