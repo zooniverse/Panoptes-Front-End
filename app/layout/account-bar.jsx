@@ -5,7 +5,6 @@ import auth from 'panoptes-client/lib/auth';
 import talkClient from 'panoptes-client/lib/talk-client';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
-import Avatar from '../partials/avatar';
 import PassContext from '../components/pass-context';
 import NotificationsLink from '../talk/lib/notifications-link';
 import ExpandableMenu from './expandable-menu';
@@ -25,11 +24,13 @@ counterpart.registerTranslations('en', {
 class AccountBar extends React.Component {
   constructor(props) {
     super(props);
-    this.handleSignOutClick = this.handleSignOutClick.bind(this);
-    this.lookUpUnread = this.lookUpUnread.bind(this);
     this.state = {
+      messageCount: 0,
       unread: false
     };
+
+    this.handleSignOutClick = this.handleSignOutClick.bind(this);
+    this.lookUpUnread = this.lookUpUnread.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +56,7 @@ class AccountBar extends React.Component {
       page_size: 1
     }).then((conversations) => {
       this.setState({
+        messageCount: conversations.length,
         unread: conversations.length > 0
       });
     });
@@ -94,6 +96,7 @@ class AccountBar extends React.Component {
             `.trim()}
           >
             <Translate content="accountMenu.messages" />
+            {this.state.unread && (` (${this.state.messageCount})`)}
           </span>
         </Link>
 
