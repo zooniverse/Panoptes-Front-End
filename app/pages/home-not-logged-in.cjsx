@@ -4,6 +4,7 @@ ReactDOM = require 'react-dom'
 ZooniverseLogo = require '../partials/zooniverse-logo'
 `import FeaturedProject from './home-common/featured-project';`
 `import HomePageDiscover from './home-not-logged-in/discover';`
+`import HomePageResearch from './home-not-logged-in/research';`
 HomePageSocial = require './home-not-logged-in/social'
 HomePagePromoted = require './home-not-logged-in/promoted'
 
@@ -49,6 +50,10 @@ module.exports = React.createClass
 
       <div className="flex-container">
         <HomePagePromoted />
+      </div>
+
+      <div className="flex-container">
+        <HomePageResearch />
       </div>
 
       <div className="flex-container">
