@@ -40,7 +40,7 @@ export default class FrameViewer extends React.Component {
   }
 
   render() {
-    const zoomEnabled = this.props.workflow.configuration.pan_and_zoom;
+    const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom;
     const FrameWrapper = this.props.frameWrapper;
     const { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
 
