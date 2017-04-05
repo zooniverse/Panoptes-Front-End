@@ -5,7 +5,7 @@ import counterpart from 'counterpart';
 import LoginDialog from '../../partials/login-dialog';
 
 counterpart.registerTranslations('en', {
-  discoverPage: {
+  discoverHomePage: {
     signIn: 'Sign in',
     register: 'Register'
   }
@@ -42,11 +42,11 @@ export default class HomePageDiscover extends React.Component {
           </p>
 
           <button type="button" value="sign-in" className="primary-button" onClick={this.showDialog}>
-            <Translate content="discoverPage.signIn" />
+            <Translate content="discoverHomePage.signIn" />
           </button>
 
           <button type="button" value="register" className="primary-button-light" onClick={this.showDialog}>
-            <Translate content="discoverPage.register" />
+            <Translate content="discoverHomePage.register" />
           </button>
 
           <hr />

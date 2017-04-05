@@ -66,12 +66,26 @@ $flex-section
     color: #5c5c5c
     font-size: 3.25em
 
+  .class-counter
+    color: TEAL_MID
+    font-family: 'Oswald', sans-serif
+    font-size: 10em
+    font-weight: 300
+    letter-spacing: 0.02em
+
   .display-body
     color: #000000
-    font-size: 1.5em
+    font-size: 1.4em
     font-weight: 700
     line-height: 1.2em
 
+  .regular-body
+    color: #000000
+    font-size: 1.4em
+    font-weight: 400
+    line-height: 1.2em
+
+  .regular-body, .display-body
     a
       color: #007482
       text-decoration: none
@@ -294,6 +308,47 @@ $flex-section
 
     .alternate-button
       margin-top: 20px
+
+  .home-research
+    background-color: white
+    display: flex
+    flex-direction: column
+    padding: 50px 0
+    text-align: left
+
+    &__content
+      margin: 2.5em 16em
+      column-count: 2
+      -moz-column-count: 2
+      -webkit-column-count: 2
+      column-gap: 3em
+      -moz-column-gap: 3em
+      -webkit-column-gap: 3em
+
+    &__buttons
+      align-items: center
+
+      button
+        margin: 1em
+        padding: 0.6em 3.2em
+
+    &__researchers
+      display: flex
+      flex-flow: row nowrap
+      margin: 6em 0
+
+      img
+        max-height: 250px
+        width: auto
+
+    &__container
+      display: flex
+      flex-direction: column
+      margin: 2.5em 16em
+      text-align: center
+
+      div
+        margin: 2em 4em
 
   .home-discover
     background-color: BACKGROUND_COLOR
