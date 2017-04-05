@@ -1,9 +1,9 @@
 import React from 'react';
-import LoadingIndicator from '../components/loading-indicator';
 import getSubjectLocation from '../lib/get-subject-location';
 import VideoPlayer from './video-player';
 import PanZoom from './pan-zoom';
 import TextViewer from './text-viewer';
+import ImageViewer from './image-viewer';
 
 export default class FrameViewer extends React.Component {
   constructor(props) {
@@ -44,36 +44,14 @@ export default class FrameViewer extends React.Component {
     const { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
     const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && type === 'image';
 
-    const frameDisplay = ((subject) => {
+    const FileViewer = ((subject) => {
       switch (subject) {
         case 'image':
-          return (
-            <div className="subject-image-frame" >
-              <img
-                role="presentation"
-                ref="subjectImage"
-                className="subject pan-active"
-                src={src}
-                onLoad={this.handleLoad}
-                tabIndex={0}
-                onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
-                onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
-              />
-
-              {this.state.loading && (
-                <div className="loading-cover" style={this.constructor.overlayStyle} >
-                  <LoadingIndicator />
-                </div>
-              )}
-            </div>);
+          return ImageViewer;
         case 'video':
-          return (
-            <VideoPlayer src={src} type={type} format={format} frame={this.props.frame} onLoad={this.handleLoad} />
-          );
+          return VideoPlayer;
         case 'text':
-          return (
-            <TextViewer src={src} type={type} format={format} frame={this.props.frame} onLoad={this.handleLoad} />
-          );
+          return TextViewer;
         default:
           return null;
       }
@@ -95,12 +73,32 @@ export default class FrameViewer extends React.Component {
             modification={this.props.modification || {}}
             onChange={this.props.onChange}
           >
-            {frameDisplay}
+            <FileViewer
+              ref="subjectImage"
+              src={src}
+              type={type}
+              format={format}
+              frame={this.props.frame}
+              onLoad={this.handleLoad}
+              onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
+              onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
+            />
           </FrameWrapper>
         </PanZoom>
       );
     } else {
-      return frameDisplay;
+      return (
+        <FileViewer
+          ref="subjectImage"
+          src={src}
+          type={type}
+          format={format}
+          frame={this.props.frame}
+          onLoad={this.handleLoad}
+          onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
+          onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
+        />
+      );
     }
   }
 }
