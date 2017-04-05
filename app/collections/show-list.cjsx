@@ -39,17 +39,6 @@ SubjectNode = React.createClass
     else
       subject.get('project')
 
-  isOwnerOrCollaborator: ->
-    collaboratorOrOwnerRoles = @props.roles.filter (collectionRoles) ->
-      intersection(['owner', 'collaborator'], collectionRoles.roles).length
-
-    hasPermission = false
-    collaboratorOrOwnerRoles.forEach (roleSet) =>
-      if roleSet.links.owner.id is @props.user?.id
-        hasPermission = true
-
-    return hasPermission
-
   isFavorite: (project) ->
     if @props.collection.favorite and @props.collection.links.owner.id is @props.user.id
       @setState isFavorite: true
@@ -78,7 +67,7 @@ SubjectNode = React.createClass
             <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
               <span></span>
             </Link>}
-          {if @isOwnerOrCollaborator() and !@props.selecting
+          {if @props.hasPermission and !@props.selecting
             <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
               <i className="fa fa-close" />
             </button>}
@@ -143,20 +132,29 @@ module.exports = React.createClass
       pathname: @props.location.pathname
       query: nextQuery
 
+  isOwnerOrCollaborator: ->
+    collaboratorOrOwnerRoles = @props.roles.filter (collectionRoles) ->
+      intersection(['owner', 'collaborator'], collectionRoles.roles).length
+
+    hasPermission = false
+    collaboratorOrOwnerRoles.forEach (roleSet) =>
+      if roleSet.links.owner.id is @props.user?.id
+        hasPermission = true
+
+    return hasPermission
+
   openCollectionsManager: ->
     @setState {collectionsManaging: true}
 
   closeCollectionsManager: ->
     @setState {collectionsManaging: false}
+    @toggleSelect()
 
   toggleSelect: ->
     @setState selecting: !@state.selecting, selected: []
 
   selected: (subjectID) ->
-    if @state.selected?.indexOf(subjectID) isnt -1
-      true
-    else
-      false
+    @state.selected?.indexOf(subjectID) isnt -1
 
   handleSelect: (subjectID, action) ->
     selected = @state.selected
@@ -204,18 +202,19 @@ module.exports = React.createClass
                 className="select-images-button"
                 onClick={@openCollectionsManager}
                 disabled={@state.selected.length < 1}>
-                <span>Add to Collection</span>
+                Add to Collection
               </button>
               {if @state.collectionsManaging
                 <Dialog tag="div" closeButton={true} onCancel={@closeCollectionsManager}>
                 <CollectionsManager user={@props.user} project={@props.project} subjectIDs={@state.selected} onSuccess={@closeCollectionsManager} />
                 </Dialog>}
-              <button className="select-images-button" onClick={@deleteSubjects} disabled={@state.selected.length < 1}>Remove from Collection</button>
+              {if @isOwnerOrCollaborator()
+                <button className="select-images-button" onClick={@deleteSubjects} disabled={@state.selected.length < 1}>Remove from Collection</button>}
               <button className="select-images-button" onClick={@toggleSelect}>Cancel</button>
             </div>
           else
             <div className="collection-buttons-container">
-              <button className="select-images-button" onClick={@toggleSelect}>Select Images</button>
+              <button className="select-images-button" onClick={@toggleSelect}>Select Subjects</button>
             </div>
           }
             <div>
@@ -225,7 +224,7 @@ module.exports = React.createClass
                   collection={@props.collection}
                   subject={subject}
                   user={@props.user}
-                  roles={@props.roles}
+                  hasPermission={@isOwnerOrCollaborator}
                   selecting={@state.selecting}
                   selected={@selected(subject.id)}
                   handleSelect={@handleSelect}
