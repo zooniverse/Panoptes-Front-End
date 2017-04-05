@@ -14,7 +14,22 @@ class TextViewer extends Component {
 
   componentDidMount() {
     this.element.addEventListener('load', this.props.onLoad);
-    fetch(this.props.src, { mode: 'cors' })
+    this.loadText(this.props.src);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.src !== this.props.src) {
+      this.setState({ content: 'Loading…' });
+      this.loadText(newProps.src);
+    }
+  }
+
+  componentWillUnmount() {
+    this.element.removeEventListener('load', this.props.onLoad);
+  }
+
+  loadText(src) {
+    fetch(src, { mode: 'cors' })
     .then((response) => {
       return response.text();
     })
@@ -26,10 +41,6 @@ class TextViewer extends Component {
       const content = e.message;
       this.setState({ content });
     });
-  }
-
-  componentWillUnmount() {
-    this.element.removeEventListener('load', this.props.onLoad);
   }
 
   render() {
