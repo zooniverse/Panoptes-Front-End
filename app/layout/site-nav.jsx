@@ -27,8 +27,8 @@ counterpart.registerTranslations('en', {
     daily: 'Daily Zooniverse',
     blog: 'Blog',
     lab: 'Build a project',
-    admin: 'Admin',
-  },
+    admin: 'Admin'
+  }
 });
 
 const SiteNav = React.createClass({
@@ -38,16 +38,16 @@ const SiteNav = React.createClass({
     initialLoadComplete: React.PropTypes.bool,
     user: React.PropTypes.object,
     router: routerShape,
-    geordi: React.PropTypes.object,
+    geordi: React.PropTypes.object
   },
 
   propTypes: {
-    onToggle: React.PropTypes.func,
+    onToggle: React.PropTypes.func
   },
 
   getInitialState() {
     return {
-      isMobile: true,
+      isMobile: true
     };
   },
 
@@ -73,7 +73,7 @@ const SiteNav = React.createClass({
     }
     this.resizeTimeout = setTimeout(() => {
       this.setState({
-        isMobile: innerWidth < MAX_MOBILE_WIDTH,
+        isMobile: innerWidth < MAX_MOBILE_WIDTH
       }, () => {
         this.resizeTimeout = NaN;
       });
@@ -84,7 +84,7 @@ const SiteNav = React.createClass({
     return (
       <span
         className={classnames('site-nav__main-links', {
-          'site-nav__main-links--vertical': this.state.isMobile,
+          'site-nav__main-links--vertical': this.state.isMobile
         })}
       >
         {!!this.state.isMobile &&
@@ -129,7 +129,7 @@ const SiteNav = React.createClass({
         >
           <Translate content="siteNav.talk" />
         </Link>{' '}
-        
+
         <Link
           to="/lab"
           className="site-nav__link"
@@ -234,7 +234,7 @@ const SiteNav = React.createClass({
         {this.state.isMobile && this.renderMobileLinksMenu()}
       </nav>
     );
-  },
+  }
 });
 
 export default SiteNav;
