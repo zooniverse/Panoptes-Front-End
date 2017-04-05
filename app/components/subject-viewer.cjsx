@@ -2,12 +2,12 @@ React = require 'react'
 FavoritesButton = require '../collections/favorites-button'
 Dialog = require 'modal-form/dialog'
 {Markdown} = require 'markdownz'
+classnames = require 'classnames'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
-FrameViewer = require './frame-viewer'
-classnames = require 'classnames'
 FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
+`import FrameViewer from './frame-viewer';`
 
 NOOP = Function.prototype
 
@@ -63,7 +63,7 @@ module.exports = React.createClass
     if frame?
       initialFrame = frame
     else if allowFlipbook and typeof default_frame is 'number' and !isNaN(default_frame) and default_frame > 0 and default_frame <= subject.locations.length
-      initialFrame = default_frame - 1 
+      initialFrame = default_frame - 1
     initialFrame
 
   componentWillReceiveProps: (nextProps) ->
