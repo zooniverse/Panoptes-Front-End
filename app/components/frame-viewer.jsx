@@ -57,7 +57,7 @@ export default class FrameViewer extends React.Component {
       }
     })(type);
 
-    if (FrameWrapper) {
+    if (FrameWrapper && type === 'image') {
       return (
         <PanZoom ref={(c) => { this.panZoom = c; }} enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
           <FrameWrapper
