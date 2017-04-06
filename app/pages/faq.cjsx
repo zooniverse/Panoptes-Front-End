@@ -23,6 +23,7 @@ counterpart.registerTranslations 'en',
         You can find more details on how to cite the Zooniverse in research publications using data derived from use of the Zooniverse Project Builder on our [Acknowledgements page](/about/acknowledgements).
       - **What browser version does Zooniverse support?**
         We support major browsers up to the second to last version.
+
       Didn\'t find the answer to your question? Ask on [Zooniverse Talk](/talk) or [get in touch](/about/contact).
 
     '''
