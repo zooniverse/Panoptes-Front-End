@@ -27,6 +27,7 @@ export default class Classifier extends React.Component {
     this.handleSubjectImageLoad = this.handleSubjectImageLoad.bind(this);
     this.completeClassification = this.completeClassification.bind(this);
     this.toggleExpertClassification = this.toggleExpertClassification.bind(this);
+    this.updateAnnotations = this.updateAnnotations.bind(this);
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
@@ -37,11 +38,8 @@ export default class Classifier extends React.Component {
   }
 
   componentWillMount() {
-    this.props.classification.listen('change', () => {
-      const { annotations } = this.props.classification;
-      this.setState({ annotations });
-    });
-    this.props.classification.update(); // reset state.annotations
+    this.props.classification.listen('change', this.updateAnnotations);
+    this.updateAnnotations();
   }
 
   componentDidMount() {
@@ -67,24 +65,21 @@ export default class Classifier extends React.Component {
     }
 
     if (nextProps.classification !== this.props.classification) {
-      this.props.classification.stopListening('change', () => {
-        const { annotations } = this.props.classification;
-        this.setState({ annotations });
-      });
+      const { annotations } = nextProps.classification;
+      this.setState({ annotations });
+    }
+  }
 
-      nextProps.classification.listen('change', () => {
-        const { annotations } = nextProps.classification;
-        this.setState({ annotations });
-      });
-      nextProps.classification.update(); // reset state.annotations from the new classification
+  componentDidUpdate(prevProps) {
+    if (prevProps.classification !== this.props.classification) {
+      prevProps.classification.stopListening('change', this.updateAnnotations);
+      this.props.classification.listen('change', this.updateAnnotations);
+      this.updateAnnotations();
     }
   }
 
   componentWillUnmount() {
-    this.props.classification.stopListening('change', () => {
-      const { annotations } = this.props.classification;
-      this.setState({ annotations });
-    });
+    this.props.classification.stopListening('change', this.updateAnnotations);
     try {
       !!this.context.geordi && this.context.geordi.forget(['subjectID']);
     } catch (err) {
@@ -109,6 +104,11 @@ export default class Classifier extends React.Component {
         this.setState({ expertClassification });
       }
     });
+  }
+
+  updateAnnotations() {
+    const { annotations } = this.props.classification;
+    this.setState({ annotations });
   }
 
   loadClassificationsCount(subject) {
