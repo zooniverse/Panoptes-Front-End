@@ -47,8 +47,4 @@ describe('WorkflowsPage', function () {
     wrapper.find('button').simulate('click');
     sinon.assert.called(newWorkflow);
   });
-
-  it('will display a paginator', function () {
-    assert.equal(wrapper.find('Paginator').length, 1);
-  });
 });

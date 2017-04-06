@@ -71,7 +71,7 @@ export default class WorkflowsContainer extends React.Component {
 
   handleWorkflowCreation(workflow) {
     this.hideCreateWorkflow();
-    const newLocation = Object.assign({}, this.props.location, { pathname: `/lab/${this.props.project.id}/workflow/${workflow.id}` });
+    const newLocation = Object.assign({}, this.props.location, { pathname: `/lab/${this.props.project.id}/workflows/${workflow.id}` });
     this.context.router.push(newLocation);
     this.props.project.uncacheLink('workflows');
     this.props.project.uncacheLink('subject_sets'); // An "expert" subject set is automatically created with each workflow.

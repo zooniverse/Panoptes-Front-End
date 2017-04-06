@@ -20,8 +20,6 @@ export default class SubjectSetsContainer extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
-
     const page = this.props.location.query.page || 1;
     this.getSubjectSets(page);
   }
@@ -31,10 +29,6 @@ export default class SubjectSetsContainer extends React.Component {
     if (newPage !== this.props.location.query.page) {
       this.getSubjectSets(newPage);
     }
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 
   onPageChange(page) {
@@ -66,16 +60,16 @@ export default class SubjectSetsContainer extends React.Component {
 
     subjectSet.save()
       .then(() => {
-        this.context.router.push(`/lab/${this.props.project.id}/subject-set/${subjectSet.id}`);
+        this.context.router.push(`/lab/${this.props.project.id}/subject-sets/${subjectSet.id}`);
       })
       .catch((error) => {
-        this.setState({ subjectSetCreationError: error });
+        this.setState({
+          subjectSetCreationError: error,
+          subjectSetCreationInProgress: false
+        });
       })
       .then(() => {
         this.props.project.uncacheLink('subject_sets');
-        if (this._isMounted) {
-          this.setState({ subjectSetCreationInProgress: false });
-        }
       });
   }
 
@@ -87,9 +81,9 @@ export default class SubjectSetsContainer extends React.Component {
     return (
       <SubjectSetsPage
         createNewSubjectSet={this.createNewSubjectSet}
+        defaultSubjectSetName={DEFAULT_SUBJECT_SET_NAME}
         labPath={this.labPath}
         onPageChange={this.onPageChange}
-        project={this.props.project}
         {...this.state}
       />
     );

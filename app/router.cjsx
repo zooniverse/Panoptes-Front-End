@@ -192,17 +192,17 @@ module.exports =
       </Route>
       <Route path="collaborators" component={require './pages/lab/collaborators'} />
       <Route path="media" component={EditMediaPage} />
-      <Route path="workflow/:workflowID" component={require './pages/lab/workflow'} />
+      <Route path="workflows/:workflowID" component={require './pages/lab/workflow'} />
       <Route path="workflow/:workflowID/visualize" component={require './pages/lab/workflow-viewer'} />
       <Route path="workflow/:workflowID/visualise" component={require './pages/lab/workflow-viewer'} />
-      <Route path="subject-set/:subjectSetID" component={require './pages/lab/subject-set'} />
+      <Route path="subject-sets/:subjectSetID" component={require './pages/lab/subject-set'} />
       <Route path="visibility" component={require './pages/lab/visibility'} />
       <Route path="talk" component={require './pages/lab/talk'} />
       <Route path="data-exports" component={require './pages/lab/data-dumps'} />
       <Route path="tutorial" component={require './pages/lab/tutorial'} />
       <Route path="guide" component={require './pages/lab/field-guide'} />
       <Route path="workflows" component={WorkflowsContainer} />
-      <Route path="subjectsets" component={SubjectSetsContainer} />
+      <Route path="subject-sets" component={SubjectSetsContainer} />
       <Route path="mini-course" component={require './pages/lab/mini-course'} />
     </Route>
     <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />

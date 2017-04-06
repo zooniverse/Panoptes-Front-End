@@ -9,16 +9,19 @@ const SubjectSetsPage = (props) => {
   return (
     <div>
       <div className="form-label">Subject sets</div>
+      <small>
+        Subject sets are a group of data presented to volunteers in a project. A subject is typically
+        an image, graph, photo, audio recording, video, or a collection of these different things.
+      </small>
       <ul className="nav-list">
         {props.subjectSets.map((subjectSet) => {
-          const subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>;
+          const subjectSetListLabel = subjectSet.display_name || <i>{props.defaultSubjectSetName}</i>;
           return (
             <li key={subjectSet.id}>
               <Link
                 activeClassName="active"
                 className="nav-list-item"
-                title="A subject is an image (or group of images) to be analyzed."
-                to={props.labPath(`/subject-set/${subjectSet.id}`)}
+                to={props.labPath(`/subject-sets/${subjectSet.id}`)}
               >
                 {subjectSetListLabel}
               </Link>
@@ -34,14 +37,13 @@ const SubjectSetsPage = (props) => {
           <button
             type="button"
             onClick={props.createNewSubjectSet}
-            disabled={props.creationInProgress}
-            title="A subject is an image (or group of images) to be analyzed."
+            disabled={props.subjectSetCreationInProgress}
           >
             New subject set{' '}
-            <LoadingIndicator off={!props.creationInProgress} />
+            <LoadingIndicator off={!props.subjectSetCreationInProgress} />
           </button>{' '}
-          {props.error && (
-            <div className="form-help error">{props.error.message}</div>
+          {props.subjectSetCreationError && (
+            <div className="form-help error">{props.subjectSetCreationError.message}</div>
           )}
         </li>
       </ul>
@@ -65,13 +67,14 @@ SubjectSetsPage.defaultProps = {
 
 SubjectSetsPage.propTypes = {
   createNewSubjectSet: React.PropTypes.func,
-  creationInProgress: React.PropTypes.bool,
+  defaultSubjectSetName: React.PropTypes.string,
   labPath: React.PropTypes.func,
   loading: React.PropTypes.bool,
-  error: React.PropTypes.shape({
+  onPageChange: React.PropTypes.func,
+  subjectSetCreationError: React.PropTypes.shape({
     message: React.PropTypes.string
   }),
-  onPageChange: React.PropTypes.func,
+  subjectSetCreationInProgress: React.PropTypes.bool,
   subjectSets: React.PropTypes.arrayOf(React.PropTypes.object)
 };
 

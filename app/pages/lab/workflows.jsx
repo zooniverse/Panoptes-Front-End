@@ -2,17 +2,14 @@ import React from 'react';
 import { Link } from 'react-router';
 import DragReorderable from 'drag-reorderable';
 import ModalFormDialog from 'modal-form/dialog';
-import Paginator from '../../talk/lib/paginator';
 import WorkflowCreateForm from './workflow-create-form';
 import LoadingIndicator from '../../components/loading-indicator';
 
 const WorkflowsPage = (props) => {
-  const meta = props.workflows.length ? props.workflows[0].getMeta() : {};
-
   const renderWorkflow = ((workflow) => {
     return (
       <li key={workflow.id}>
-        <Link key={workflow.id} to={props.labPath(`/workflow/${workflow.id}`)} className="nav-list-item" activeClassName="active">
+        <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)} className="nav-list-item" activeClassName="active">
           {workflow.display_name}
           {workflow.id === props.project.configuration.default_workflow && (
             <span title="Default workflow">{' '}*{' '}</span>
@@ -26,6 +23,9 @@ const WorkflowsPage = (props) => {
     <div>
       <div className="form-label">Workflows</div>
 
+      <small>A workflow is the sequence of tasks that you’re asking volunteers to perform.</small> <br />
+      <small> An asterisk (*) denotes a default workflow. </small>
+
       <DragReorderable tag="ul" className="nav-list" items={props.workflows} render={renderWorkflow} onChange={props.handleWorkflowReorder} />
 
       {(props.workflows.length === 0 && props.loading === false) && (
@@ -37,7 +37,6 @@ const WorkflowsPage = (props) => {
           type="button"
           onClick={props.showCreateWorkflow}
           disabled={props.workflowCreationInProgress}
-          title="A workflow is the sequence of tasks that you’re asking volunteers to perform."
         >
           New workflow{' '}
           <LoadingIndicator off={!props.workflowCreationInProgress} />
@@ -54,15 +53,6 @@ const WorkflowsPage = (props) => {
             workflowActiveStatus={!props.project.live}
           />
         </ModalFormDialog>
-      )}
-
-      {props.workflows.length > 0 && (
-        <Paginator
-          className="talk"
-          page={meta.page}
-          onPageChange={props.onPageChange}
-          pageCount={meta.page_count}
-        />
       )}
 
     </div>
@@ -83,7 +73,6 @@ WorkflowsPage.propTypes = {
   handleWorkflowReorder: React.PropTypes.func,
   labPath: React.PropTypes.func,
   loading: React.PropTypes.bool,
-  onPageChange: React.PropTypes.func,
   project: React.PropTypes.shape({
     configuration: React.PropTypes.object,
     id: React.PropTypes.string,

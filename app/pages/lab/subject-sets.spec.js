@@ -15,13 +15,13 @@ const subjectSets = [
 
 describe('SubjectSetsPage', function () {
   let wrapper;
-  const newShortcut = sinon.spy();
+  const newSubjectSet = sinon.spy();
 
   before(function () {
     wrapper = shallow(
       <SubjectSetsPage
         labPath={(url) => { return url; }}
-        createNewSubjectSet={newShortcut}
+        createNewSubjectSet={newSubjectSet}
       />
     );
     wrapper.setProps({ loading: false });
@@ -39,7 +39,7 @@ describe('SubjectSetsPage', function () {
 
   it('should call the subject set create handler', function () {
     wrapper.find('button').simulate('click');
-    sinon.assert.called(newShortcut);
+    sinon.assert.called(newSubjectSet);
   });
 
   it('will display a paginator', function () {

@@ -53,7 +53,7 @@ EditWorkflowPage = React.createClass
 
   handleWorkflowCreation: (workflow) ->
     @hideCreateWorkflow()
-    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
+    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflows/#{workflow.id}"
     @context.router.push newLocation
     @props.project.uncacheLink 'workflows'
     @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
