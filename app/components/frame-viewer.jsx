@@ -1,9 +1,7 @@
 import React from 'react';
 import getSubjectLocation from '../lib/get-subject-location';
-import VideoPlayer from './video-player';
 import PanZoom from './pan-zoom';
-import TextViewer from './text-viewer';
-import ImageViewer from './image-viewer';
+import FileViewer from './file-viewer';
 
 export default class FrameViewer extends React.Component {
   constructor(props) {
@@ -44,19 +42,6 @@ export default class FrameViewer extends React.Component {
     const { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
     const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && type === 'image';
 
-    const FileViewer = ((subject) => {
-      switch (subject) {
-        case 'image':
-          return ImageViewer;
-        case 'video':
-          return VideoPlayer;
-        case 'text':
-          return TextViewer;
-        default:
-          return null;
-      }
-    })(type);
-
     if (FrameWrapper) {
       if (type === 'image') {
         return (
@@ -75,7 +60,6 @@ export default class FrameViewer extends React.Component {
               onChange={this.props.onChange}
             >
               <FileViewer
-                ref="subjectImage"
                 src={src}
                 type={type}
                 format={format}
@@ -91,7 +75,6 @@ export default class FrameViewer extends React.Component {
         return (
           <div className="frame-annotator">
             <FileViewer
-              ref="subjectImage"
               src={src}
               type={type}
               format={format}
@@ -106,7 +89,6 @@ export default class FrameViewer extends React.Component {
     } else {
       return (
         <FileViewer
-          ref="subjectImage"
           src={src}
           type={type}
           format={format}
