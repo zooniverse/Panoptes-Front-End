@@ -56,8 +56,11 @@ SubjectNode = React.createClass
             isFavorite = @props.subject.id in favoritesCollection.links.subjects
           @setState({ isFavorite })
 
-  handleSelect: (action) ->
-    @props.handleSelect @props.subject.id, action
+  toggleSelect: (e) ->
+    if e.target.checked
+      @props.addSelected()
+    else
+      @props.removeSelected()
 
   render: ->
     logClick = @context.geordi?.makeHandler? 'about-menu'
@@ -67,18 +70,15 @@ SubjectNode = React.createClass
             <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
               <span></span>
             </Link>}
-          {if @props.hasPermission and !@props.selecting
+          {if @props.canCollaborate and !@props.selecting
             <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
               <i className="fa fa-close" />
             </button>}
-          {if @props.selecting and !@props.selected
-            <button className="collection-subject-viewer-select-button" onClick={@handleSelect.bind @, 'add'}>
-              <i className="fa fa-circle-o collection-subject-viewer-circle" />
-            </button>}
-          {if @props.selecting and @props.selected
-            <button className="collection-subject-viewer-select-button" onClick={@handleSelect.bind @, 'delete'}>
-              <i className="fa fa-check-circle collection-subject-viewer-circle" />
-            </button>}
+          {if @props.selecting
+            <label className="collection-subject-viewer-select">
+              <i className={"collection-subject-viewer-circle " + if @props.selected then "fa fa-check-circle" else "fa fa-circle-o"} />
+              <input type="checkbox" checked={@props.selected} onChange={@toggleSelect}/>
+            </label>}
       </SubjectViewer>
     </div>
 
@@ -94,7 +94,6 @@ module.exports = React.createClass
     error: null
     selecting: false
     selected: []
-    collectionsManaging: false
 
   getDefaultProps: ->
     project: null
@@ -132,38 +131,28 @@ module.exports = React.createClass
       pathname: @props.location.pathname
       query: nextQuery
 
-  isOwnerOrCollaborator: ->
-    collaboratorOrOwnerRoles = @props.roles.filter (collectionRoles) ->
-      intersection(['owner', 'collaborator'], collectionRoles.roles).length
-
-    hasPermission = false
-    collaboratorOrOwnerRoles.forEach (roleSet) =>
-      if roleSet.links.owner.id is @props.user?.id
-        hasPermission = true
-
-    return hasPermission
-
-  toggleSelect: ->
+  toggleSelecting: ->
     @setState selecting: !@state.selecting, selected: []
+
+  addSelected: (subjectID) ->
+    selected = @state.selected
+    selected.push subjectID
+    @setState {selected}
+
+  removeSelected: (subjectID) ->
+    selected = @state.selected
+    index = selected.indexOf subjectID
+    selected.splice index, 1
+    @setState {selected}
 
   selected: (subjectID) ->
     @state.selected?.indexOf(subjectID) isnt -1
-
-  handleSelect: (subjectID, action) ->
-    selected = @state.selected
-    if action is 'add'
-      selected.push subjectID
-      @setState {selected}
-    if action is 'delete'
-      index = selected.indexOf subjectID
-      selected.splice index, 1
-      @setState {selected}
 
   promptCollectionManager: ->
     alert (resolve) =>
       <CollectionsManager user={@props.user} project={@props.project} subjectIDs={@state.selected} onSuccess={resolve} />
 
-    @toggleSelect()
+    @toggleSelecting()
 
   handleDeleteSubject: (subject) ->
     subjects = @state.subjects
@@ -183,7 +172,7 @@ module.exports = React.createClass
       .then =>
         @props.collection.uncacheLink 'subjects'
 
-    @toggleSelect()
+    @toggleSelecting()
 
   render: ->
     if @state.subjects?
@@ -203,13 +192,13 @@ module.exports = React.createClass
                 disabled={@state.selected.length < 1}>
                 Add to Collection
               </button>
-              {if @isOwnerOrCollaborator()
+              {if @props.canCollaborate
                 <button className="select-images-button" onClick={@deleteSubjects} disabled={@state.selected.length < 1}>Remove from Collection</button>}
-              <button className="select-images-button" onClick={@toggleSelect}>Cancel</button>
+              <button className="select-images-button" onClick={@toggleSelecting}>Cancel</button>
             </div>
           else
             <div className="collection-buttons-container">
-              <button className="select-images-button" onClick={@toggleSelect}>Select Subjects</button>
+              <button className="select-images-button" onClick={@toggleSelecting}>Select Subjects</button>
             </div>
           }
             <div>
@@ -219,10 +208,11 @@ module.exports = React.createClass
                   collection={@props.collection}
                   subject={subject}
                   user={@props.user}
-                  hasPermission={@isOwnerOrCollaborator}
+                  canCollaborate={@props.canCollaborate}
                   selecting={@state.selecting}
                   selected={@selected(subject.id)}
-                  handleSelect={@handleSelect}
+                  addSelected={@addSelected.bind @, subject.id}
+                  removeSelected={@removeSelected.bind @, subject.id}
                   onDelete={@handleDeleteSubject.bind @, subject}
                 />
               }

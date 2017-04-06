@@ -104,21 +104,27 @@
       &:hover
         color: red
 
-    .collection-subject-viewer-select-button
+    .collection-subject-viewer-select
       height: 100%
       width: 100%
       position: absolute
       top: 0
       left: 0
       border: none
-      text-align: center
       background: transparent
+      display: flex
+      flex-direction: column
+      justify-content: center
 
       &:hover
         background-color: transparent
+        cursor: pointer
+
+      input
+        position: absolute
+        left: -9999px
 
       .collection-subject-viewer-circle
-        vertical-align: middle
         color: white
         font-size: 6em
         text-shadow: 1px 1px 25px COPY
@@ -133,8 +139,8 @@
     text-align: center
 
 .collections-manager
-  margin: 1em 1em
-  padding: 1em 1em
+  margin: 1em
+  padding: 1em
 
   h1
     margin-bottom: 20px

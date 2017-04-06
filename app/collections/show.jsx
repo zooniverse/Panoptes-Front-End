@@ -71,15 +71,18 @@ const CollectionPage = React.createClass({
 
   canCollaborate() {
     let canCollaborate;
-    if (!this.props.user) { canCollaborate = false; }
+    if (!this.props.user) {
+      canCollaborate = false;
+    } else {
+      canCollaborate = this.props.roles.some((role) => {
+        const idMatch = (role.links.owner.id === this.props.user.id);
+        const isOwner = role.roles.includes('owner');
+        const isCollaborator = role.roles.includes('collaborator');
+        return (isOwner || isCollaborator) && idMatch;
+      });
+    }
 
-    this.props.roles.some((role) => {
-      const idMatch = (role.links.owner.id === this.props.user.id);
-      const isOwner = role.roles.includes('owner');
-      const isCollaborator = role.roles.includes('collaborator');
-      canCollaborate = (isOwner || isCollaborator) && idMatch;
-      this.setState({ canCollaborate });
-    });
+    this.setState({ canCollaborate });
   },
 
   render() {
