@@ -1,7 +1,7 @@
 import React from 'react';
 import assert from 'assert';
 import { mount, shallow } from 'enzyme';
-import VideoPlayer from './video-player';
+import VideoPlayer from './file-viewer/video-player';
 import FrameViewer from './frame-viewer';
 import FrameAnnotator from '../classifier/frame-annotator';
 

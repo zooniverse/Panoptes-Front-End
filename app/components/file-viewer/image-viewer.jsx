@@ -1,5 +1,5 @@
 import React from 'react';
-import LoadingIndicator from '../components/loading-indicator';
+import LoadingIndicator from '../loading-indicator';
 
 class ImageViewer extends React.Component {
   constructor(props) {
