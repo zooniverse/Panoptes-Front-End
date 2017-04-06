@@ -44,7 +44,7 @@ describe('FrameViewer', function () {
 
   describe('if loading other subjects', function() {
     it('should load a video subject correctly', function () {
-      const wrapper = shallow(<FrameViewer subject={videoSubject} />);
+      const wrapper = mount(<FrameViewer subject={videoSubject} />);
       assert.equal(wrapper.find(VideoPlayer).length, 1);
     });
 
