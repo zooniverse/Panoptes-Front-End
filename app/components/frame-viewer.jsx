@@ -80,8 +80,6 @@ export default class FrameViewer extends React.Component {
               format={format}
               frame={this.props.frame}
               onLoad={this.handleLoad}
-              onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
-              onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
             />
           </div>
         );
@@ -94,8 +92,6 @@ export default class FrameViewer extends React.Component {
           format={format}
           frame={this.props.frame}
           onLoad={this.handleLoad}
-          onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
-          onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
         />
       );
     }
