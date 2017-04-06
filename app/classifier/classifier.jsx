@@ -41,6 +41,7 @@ export default class Classifier extends React.Component {
       const { annotations } = this.props.classification;
       this.setState({ annotations });
     });
+    this.props.classification.update(); // reset state.annotations
   }
 
   componentDidMount() {
@@ -75,6 +76,7 @@ export default class Classifier extends React.Component {
         const { annotations } = nextProps.classification;
         this.setState({ annotations });
       });
+      nextProps.classification.update(); // reset state.annotations from the new classification
     }
   }
 
