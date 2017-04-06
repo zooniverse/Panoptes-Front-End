@@ -76,8 +76,8 @@ SubjectNode = React.createClass
             </button>}
           {if @props.selecting
             <label className="collection-subject-viewer-select">
-              <i className={"collection-subject-viewer-circle " + if @props.selected then "fa fa-check-circle" else "fa fa-circle-o"} />
               <input type="checkbox" checked={@props.selected} onChange={@toggleSelect}/>
+              <i className={"collection-subject-viewer-circle " + if @props.selected then "fa fa-check-circle" else "fa fa-circle-o"} />
             </label>}
       </SubjectViewer>
     </div>
