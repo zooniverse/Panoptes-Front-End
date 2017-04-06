@@ -100,9 +100,12 @@ const CollectionPage = React.createClass({
     const profileLink = `${baseLink}/users/${this.state.owner.login}`;
     const collectionsLinkMessageKey = `collectionPage.${baseType}Link`;
 
-    const userRole = this.props.roles.filter((collectionRole) => {
-      return collectionRole.links.owner.id === this.props.user.id;
-    });
+    let userRole = [];
+    if (!!this.props.user) {
+      userRole = this.props.roles.filter((collectionRole) => {
+        return collectionRole.links.owner.id === this.props.user.id;
+      });
+    }
 
     return (
       <div className="collections-page">
