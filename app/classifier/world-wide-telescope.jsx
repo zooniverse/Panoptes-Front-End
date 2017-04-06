@@ -1,5 +1,5 @@
 import React from 'react';
-import crypto from 'crypto';
+import shortid from 'shortid';
 
 class SimplePoint {
   constructor(x, y) {
@@ -359,7 +359,7 @@ class Plate {
   }
 
   computeName() {
-    return crypto.createHash('md5').update(new Date().toString()).digest('hex').slice(0, 10);
+    return (shortid.generate());
   }
 
   getWwtUrl() {

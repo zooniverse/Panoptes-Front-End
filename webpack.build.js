@@ -20,14 +20,10 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.HEAD_COMMIT': JSON.stringify(process.env.HEAD_COMMIT),
     }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       mangle: true,
       stats: true,
-      compress: {
-        warnings: false,
-      },
+      sourceMap: true
     }),
     new CopyWebpackPlugin([
       { from: 'public', to: '.' },
@@ -38,7 +34,8 @@ module.exports = {
       filename: 'index.html',
     }),
     new webpack.NoErrorsPlugin(),
-    new ExtractTextPlugin('[name]-[contenthash].css', {
+    new ExtractTextPlugin({
+      filename: '[name]-[contenthash].css',
       allChunks: true,
     }),
     new SplitByPathPlugin([
@@ -49,33 +46,54 @@ module.exports = {
     ]),
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css'],
-    modulesDirectories: ['.', 'node_modules'],
+    extensions: ['.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css'],
+    modules: ['.', 'node_modules'],
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'babel',
+      use: 'babel-loader',
     }, {
       test: /\.cjsx$/,
       exclude: /node_modules/,
-      loaders: ['babel', 'coffee', 'cjsx'],
+      use: [{
+        loader:'babel-loader'
+      }, {
+        loader: 'coffee-loader'
+      }, {
+        loader: 'cjsx-loader'
+      }],
     }, {
       test: /\.coffee$/,
-      loaders: ['babel', 'coffee'],
-    }, {
-      test: /\.json?$/,
-      loader: 'json',
+      use: [{
+        loader: 'babel-loader'
+      }, {
+        loader: 'coffee-loader'
+      }],
     }, {
       test: /\.css$/,
-      loader: ExtractTextPlugin.extract('style-loader', 'css-loader?root=../public'),
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader', 
+        use: {
+          loader: 'css-loader',
+          options: { root: '../public' }
+        }
+      }),
     }, {
       test: /\.styl$/,
-      loader: ExtractTextPlugin.extract('style-loader', 'css-loader?root=../public!stylus-loader'),
+      loader: ExtractTextPlugin.extract({
+        fallback: 'style-loader', 
+        use: [{
+          loader: 'css-loader'
+          options: { root: '../public' },
+        }, {
+          loader: 'stylus-loader'
+        }]
+      }),
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
-      loader: 'file-loader',
+      use: 'file-loader',
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/],
