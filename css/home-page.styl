@@ -25,13 +25,21 @@ $flex-section
     top: 0
     left: 0
 
-  .zooniverse-logo, .site-nav__link
+  .site-nav__link
     opacity: 1
     color: #FFFFFF
 
   .modal-form .site-nav__link
     color: #000000
 
+  h1, h2
+    color: #FFFFFF
+    font-size: 3em
+
+    @media (max-width: 900px)
+      font-size: 2em
+
+.home-page-not-logged-in
   .main-kicker
     color: #addde0
     line-height: 1em
@@ -127,94 +135,6 @@ $flex-section
       background: #F0B200
       color: #FFFFFF
 
-  h1, h2
-    color: #FFFFFF
-    font-size: 3em
-
-    @media (max-width: 900px)
-      font-size: 2em
-
-.on-home-page
-  font-family: 'Karla', sans-serif;
-
-  *:focus
-    outline: none
-
-  section
-    @extends $flex-section
-    position: relative
-    min-height: 40vw
-
-    @media (max-width: 900px)
-      min-height: 100vh
-      padding-top: 2em
-      padding-bottom: 2em
-
-  .zooniverse-logo
-    position: relative
-    width: 0.82em  // oddly-specific, but it aligns with text
-    top: 0.14em
-
-  .standard-button
-    border: 2px solid
-    border-radius: 6px
-    border-color: #FFFFFF
-    background: none
-    padding: 0.75em 1.75em
-    transition: background 500ms ease
-    margin: 50px 10px 0 10px
-    font-size: 1.5em
-    font-weight: bold
-    text-decoration: none
-
-    @media (max-width: 900px)
-      margin-top: 20px
-
-    &:visited
-      color: #FFFFFF
-
-    &:hover,
-    &:active,
-    &:focus
-      background: #FFFFFF
-      color: ZOONIVERSE_TEAL
-
-  .alternate-button
-    border: 2px solid
-    border-radius: 6px
-    border-color: ZOONIVERSE_NAVY
-    background: none
-    padding: 0.75em 1.75em
-    transition: background 500ms ease
-    margin: 50px 10px 0 10px
-    font-size: 1.5em
-    font-weight: bold
-    text-decoration: none
-    color: ZOONIVERSE_NAVY
-
-    @media (max-width: 900px)
-      margin-top: 20px
-
-    &:hover,
-    &:active,
-    &:focus
-      background: ZOONIVERSE_NAVY
-      color: #FFFFFF
-
-  .home-link-down
-    position: absolute
-    bottom: 0
-    left: 0
-    width: 100%
-    text-align: center
-    border: none
-    background: none
-    color: #FFFFFF
-    font-size: 5em
-
-    @media (max-width: 900px)
-      display: none
-
   .home-intro
     background-color: WHITE
     min-height: 30vw // video is 2:1 aspect ratio and 100% width
@@ -242,11 +162,6 @@ $flex-section
       z-index: -1
       object-fit: cover
 
-    .home-intro-buttons
-      display: flex
-      flex-flow: row wrap
-      justify-content: center
-
     .primary-button
       border: 1px solid #F0B200
       background: transparent
@@ -264,6 +179,46 @@ $flex-section
       &:focus
         background: #F0B200
         color: #FFFFFF
+
+.on-home-page
+  font-family: 'Karla', sans-serif;
+
+  *:focus
+    outline: none
+
+  section
+    @extends $flex-section
+    position: relative
+    min-height: 40vw
+
+    @media (max-width: 900px)
+      min-height: 100vh
+      padding-top: 2em
+      padding-bottom: 2em
+
+  .standard-button
+    border: 2px solid
+    border-radius: 6px
+    border-color: #FFFFFF
+    background: none
+    padding: 0.75em 1.75em
+    transition: background 500ms ease
+    margin: 50px 10px 0 10px
+    font-size: 1.5em
+    font-weight: bold
+    text-decoration: none
+
+    @media (max-width: 900px)
+      margin-top: 20px
+
+    &:visited
+      color: #FFFFFF
+
+    &:hover,
+    &:active,
+    &:focus
+      background: #FFFFFF
+      color: ZOONIVERSE_TEAL
 
   .home-featured
     padding: 50px 30px
@@ -305,9 +260,6 @@ $flex-section
 
         @media (max-width: 900px)
           max-width: 80vw
-
-    .alternate-button
-      margin-top: 20px
 
   .home-research
     background-color: white
