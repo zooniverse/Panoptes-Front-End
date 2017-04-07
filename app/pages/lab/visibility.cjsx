@@ -61,9 +61,9 @@ module.exports = React.createClass
       ).then(() => @forceUpdate())
 
   handleWorkflowStatsVisibility: (workflow, e) ->
-    checked = !e.target.checked
+    hidden = !e.target.checked
 
-    workflow.update({ 'configuration.stats_hidden': checked }).save()
+    workflow.update({ 'configuration.stats_hidden': hidden }).save()
       .catch((error) =>
         @setState { error }
       ).then(() => @forceUpdate())
