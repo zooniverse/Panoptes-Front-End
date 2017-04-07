@@ -61,9 +61,9 @@ module.exports = React.createClass
       ).then(() => @forceUpdate())
 
   handleWorkflowStatsVisibility: (workflow, e) ->
-    checked = e.target.checked
+    hidden = !e.target.checked
 
-    workflow.update({ 'configuration.stats_hidden': checked }).save()
+    workflow.update({ 'configuration.stats_hidden': hidden }).save()
       .catch((error) =>
         @setState { error }
       ).then(() => @forceUpdate())
@@ -169,6 +169,9 @@ module.exports = React.createClass
             {@state.workflows.map (workflow) =>
               setting = workflow.active
               stats_completeness_type = workflow.configuration.stats_completeness_type ? 'retirement'
+              statsVisible = workflow.active
+              if workflow.configuration.stats_hidden != undefined
+                statsVisible = !workflow.configuration.stats_hidden
               <tr key={workflow.id}>
                 <td>
                   {workflow.id}
@@ -214,11 +217,11 @@ module.exports = React.createClass
                     <input
                       type="checkbox"
                       name="stats_hidden.#{workflow.id}"
-                      value={workflow.configuration.stats_hidden}
-                      checked={workflow.configuration.stats_hidden}
+                      value={statsVisible}
+                      checked={statsVisible}
                       onChange={@handleWorkflowStatsVisibility.bind(this, workflow)}
                     />
-                    Hide on Stats Page
+                    Show on Stats Page
                   </label>
                   &emsp;
                 </td>
@@ -246,6 +249,6 @@ module.exports = React.createClass
       </p>
       <p className="form-label">Statistics Visbiility</p>
       <p className="form-help">
-        Active workflows are visible on the project's statistics page by default. If there is a reason to hide an active workflow from the statistics page, such as a workflow being used in an a/b split experiment, then toggle the "Hide on Stats Page" checkbox.
+        Active workflows are visible on the project's statistics page by default, and inactive projects are hidden by default. If there is a reason to hide an active workflow from the statistics page, such as a workflow being used in an a/b split experiment, or a reason to show an inactive workflow, then toggle the "Show on Stats Page" checkbox.
       </p>
     </div>

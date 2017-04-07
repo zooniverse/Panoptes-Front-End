@@ -13,7 +13,7 @@ class ProjectStatsPageController extends React.Component {
     this.getWorkflows = this.getWorkflows.bind(this);
 
     this.state = {
-      workflowList: [],
+      workflowList: []
     };
   }
 
@@ -29,23 +29,32 @@ class ProjectStatsPageController extends React.Component {
 
   getWorkflows(project) {
     const fields = [
+      'active',
       'classifications_count',
       'completeness',
       'configuration',
       'display_name',
       'retired_set_member_subjects_count',
-      'retirement,subjects_count',
+      'retirement,subjects_count'
     ];
     const query = {
-      active: true,
-      fields: fields.join(','),
+      fields: fields.join(',')
     };
     getWorkflowsInOrder(project, query)
       .then((workflows) => {
         const workflowsSetToBeVisible =
-          workflows.filter((workflow) => { 
-            return (!workflow.configuration.stats_hidden ? workflow : null);
-        })
+          workflows.filter((workflow) => {
+            let statsVisible = workflow.active;
+            if (workflow.configuration.stats_hidden !== undefined) {
+              statsVisible = !workflow.configuration.stats_hidden;
+            }
+            // statsVisible = statsVisible || !workflow.configuration.stats_hidden;
+            // let statsVisible = !workflow.configuration.stats_hidden;
+            // if (!workflow.active) {
+            //   statsVisible = !(workflow.configuration.stats_hidden === undefined) && statsVisible;
+            // }
+            return (statsVisible ? workflow : null);
+          });
         this.setState({ workflowList: workflowsSetToBeVisible });
       });
   }
@@ -96,7 +105,7 @@ class ProjectStatsPageController extends React.Component {
       totalVolunteers: this.props.project.classifiers_count,
       currentClassifications: this.props.project.activity,
       workflows: this.state.workflowList,
-      startDate: this.props.project.launch_date,
+      startDate: this.props.project.launch_date
     };
 
     return <ProjectStatsPage {...queryProps} />;
@@ -107,7 +116,7 @@ ProjectStatsPageController.contextTypes = { router: React.PropTypes.object };
 
 ProjectStatsPageController.propTypes = {
   project: React.PropTypes.object,
-  params: React.PropTypes.object,
+  params: React.PropTypes.object
 };
 
 module.exports = ProjectStatsPageController;
