@@ -1,7 +1,6 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 {Link} = require 'react-router'
-ZooniverseLogo = require '../partials/zooniverse-logo'
 `import FeaturedProject from './home-common/featured-project';`
 `import HomePageDiscover from './home-not-logged-in/discover';`
 `import HomePageResearch from './home-not-logged-in/research';`
@@ -34,9 +33,7 @@ module.exports = React.createClass
 
           <h5 className="main-kicker">welcome to the zooniverse</h5>
           <h1 className="main-headline">People-powered research</h1>
-          <div className="home-intro-buttons">
-            <Link to="/projects" className="primary-button">See All Projects</Link>
-          </div>
+          <Link to="/projects" className="primary-button">See All Projects</Link>
         </section>
       </div>
 
