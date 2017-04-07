@@ -44,17 +44,11 @@ class ProjectStatsPageController extends React.Component {
       .then((workflows) => {
         const workflowsSetToBeVisible =
           workflows.filter((workflow) => {
-            if (workflow.active) {
-              return (!workflow.configuration.stats_hidden ? workflow : null);
-            } else {
-              // if stats_hidden has never been set on an inactive workflow
-              // make it hidden by default.
-              if ((workflow.configuration.stats_hidden === undefined) || (workflow.configuration.stats_hidden)) {
-                return null;
-              } else {
-                return workflow;
-              }
+            let stats_visible = !workflow.configuration.stats_hidden
+            if (!workflow.active) {
+              stats_visible = !(workflow.configuration.stats_hidden === undefined) && stats_visible
             }
+            return (stats_visible ? workflow : null)
         })
         this.setState({ workflowList: workflowsSetToBeVisible });
       });
