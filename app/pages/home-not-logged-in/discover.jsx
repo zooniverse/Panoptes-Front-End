@@ -45,17 +45,18 @@ export default class HomePageDiscover extends React.Component {
             <Translate content="discoverHomePage.signIn" />
           </button>
 
-          <button type="button" value="register" className="primary-button-light" onClick={this.showDialog}>
+          <button type="button" value="register" className="primary-button primary-button--light" onClick={this.showDialog}>
             <Translate content="discoverHomePage.register" />
           </button>
 
           <hr />
 
-          <h1 className="tertiary-kicker">Zooniverse Newsletter</h1>
+          <h1 className="tertiary-kicker">Do science, anywhere</h1>
 
-          <p className="display-body">Be the first to learn about new projects, new findings, and everything Zooniverse.</p>
+          <p className="display-body display-body--regular">Bring the Zooniverse with you. Download the app for iOS and Android devices.</p>
 
-          <input type="text" placeholder="your email" /><input type="submit" />
+          <img role="presentation" src="/assets/home-appStore.png" />
+          <img role="presentation" src="/assets/home-googlePlay.png" />
 
         </div>
 

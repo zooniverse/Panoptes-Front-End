@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
+import statsClient from 'panoptes-client/lib/stats-client';
 import { Link } from 'react-router';
 import LoginDialog from '../../partials/login-dialog';
 
@@ -18,7 +19,7 @@ counterpart.registerTranslations('en', {
     labs: 'Zooniverse Labs',
     meetResearchers: 'Meet the researchers who\'ve created projects for free on the Zooniverse.',
     real: 'Real researchers, real results',
-    researcherIntro: 'Some information about researchers',
+    researcherIntro: 'Some information about researchers. ',
     researcher: 'here is some other text about researchers that we are very proud about and we couldn\'t do it without them',
     signIn: 'Sign in',
     register: 'Register',
@@ -29,7 +30,28 @@ counterpart.registerTranslations('en', {
 export default class HomePageResearch extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      count: 42000000
+    };
     this.showDialog = this.showDialog.bind(this);
+  }
+
+  componentDidMount() {
+    this.getClassificationCounts();
+  }
+
+  getClassificationCounts() {
+    let count = 0;
+    statsClient.query({
+      period: 'year',
+      type: 'classification'
+    })
+    .then((data) => {
+      data.map((statObject) => {
+        count += statObject.doc_count;
+      });
+      this.setState({ count });
+    });
   }
 
   showDialog(event) {
@@ -46,7 +68,7 @@ export default class HomePageResearch extends React.Component {
     return (
       <section className="home-research">
         <Translate className="tertiary-kicker" content="researchHomePage.works" />
-        <h1 className="class-counter">Placeholder</h1>
+        <h1 className="class-counter">{this.state.count.toLocaleString()}</h1>
         <Translate className="main-kicker" content="researchHomePage.classifications" />
 
         <div className="home-research__content">
@@ -54,14 +76,14 @@ export default class HomePageResearch extends React.Component {
           <Translate className="regular-body" content="researchHomePage.about" />
         </div>
 
-        <h3 className="tertiary-kicker">Sign in or register to get started</h3>
 
         <div className="home-research__buttons">
+          <h3 className="tertiary-kicker">Sign in or register to get started</h3>
           <button type="button" value="sign-in" className="primary-button" onClick={this.showDialog}>
             <Translate content="researchHomePage.signIn" />
           </button>
 
-          <button type="button" value="register" className="primary-button-light" onClick={this.showDialog}>
+          <button type="button" value="register" className="primary-button primary-button--light" onClick={this.showDialog}>
             <Translate content="researchHomePage.register" />
           </button>
         </div>
@@ -81,7 +103,7 @@ export default class HomePageResearch extends React.Component {
           </div>
 
           <div className="home-research__buttons">
-            <Link to="/lab" className="primary-button-light">Zooniverse Labs</Link>
+            <Link to="/lab" className="primary-button primary-button--light">Zooniverse Labs</Link>
           </div>
         </div>
 
