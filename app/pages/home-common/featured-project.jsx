@@ -17,11 +17,11 @@ export default class FeaturedProject extends React.Component {
       <section className="home-featured">
         <h1>Featured Project</h1>
         <div className="home-featured-images">
-          <img src="./assets/featured-projects/featured-project-20170403-stargazing-live.jpg" />
+          <img src="./assets/featured-projects/featured-project-20170407-etchacell.jpg" />
         </div>
-        <h2>Stargazing Live</h2>
-        <p>The Zooniverse has teamed up with <a href="http://www.abc.net.au/tv/programs/stargazing-live/">ABC Stargazing Live</a> and researchers at UC Santa Cruz to bring you Exoplanet Explorers. Help us discover new worlds today!</p>
-        <Link to="/projects/ianc2/exoplanet-explorers" className="alternate-button">April 4: Exoplanet Explorers</Link>
+        <h2>New Project Launch - Etch a Cell</h2>
+        <p>The Zooniverse has just launched a brand new project to help improve understanding of cell biology.</p>
+        <Link to="/projects/h-spiers/etch-a-cell" className="alternate-button">Get involved!</Link>
       </section>
     );
   }
