@@ -42,9 +42,9 @@ $flex-section
 .home-page-not-logged-in
   .main-kicker
     color: #addde0
-    line-height: 1em
+    line-height: 1vh
     font-family: 'Oswald', sans-serif
-    font-size: 2.3em
+    font-size: 2em
     letter-spacing: 0.18em
     text-transform: uppercase
 
@@ -56,13 +56,13 @@ $flex-section
     text-transform: uppercase
 
   .main-headline
-    font-size: 6em
+    font-size: 5em
     font-weight: 700
 
   .secondary-kicker
     color: TEAL_MID
     font-family: 'Oswald', sans-serif
-    font-size: 1.6em
+    font-size: 1.5em
     letter-spacing: 0.16em
     text-transform: uppercase
 
@@ -72,7 +72,9 @@ $flex-section
 
   .tertiary-headline
     color: #5c5c5c
-    font-size: 3.25em
+    font-size: 3em
+    font-weight: 700
+    line-height: 1.2em
 
   .class-counter
     color: TEAL_MID
@@ -80,18 +82,16 @@ $flex-section
     font-size: 10em
     font-weight: 300
     letter-spacing: 0.02em
+    line-height: 1em
 
   .display-body
     color: #000000
-    font-size: 1.4em
+    font-size: 1.2em
     font-weight: 700
-    line-height: 1.2em
+    line-height: 1.4em
 
-  .regular-body
-    color: #000000
-    font-size: 1.4em
-    font-weight: 400
-    line-height: 1.2em
+    &--regular
+      font-weight: 400
 
   .regular-body, .display-body
     a
@@ -104,26 +104,14 @@ $flex-section
       &:visited
         color: #005d69
 
-  .primary-button-light
-    border: 1px solid #F0B200
-    background: #F0B200
-    color: white
-    font-size: 1.25em
-    margin: 0.8em 0 3.5em 0
-    padding: 1.25vh 3vw
-    text-decoration: none
-
-    &:hover
-      background: #cc9200
-      border-color: #cc9200
-
   .primary-button
-    border: 1px solid #F0B200
     background: transparent
-    color: #000000
+    border: 1px solid #cc9200
+    color: white
+    cursor: pointer
     font-size: 1.25em
     margin: 0.8em 0 3.5em 0
-    padding: 1.25vh 3vw
+    padding: 0.8em 3.5em
     text-decoration: none
 
     @media (max-width: 900px)
@@ -132,8 +120,17 @@ $flex-section
     &:hover,
     &:active,
     &:focus
-      background: #F0B200
+      background: #cc9200
       color: #FFFFFF
+
+    &--light
+      background: #F0B200
+      border: 1px solid #F0B200
+      color: white
+
+      &:hover
+        background: #cc9200
+        border-color: #cc9200
 
   .home-intro
     background-color: WHITE
@@ -162,23 +159,94 @@ $flex-section
       z-index: -1
       object-fit: cover
 
-    .primary-button
-      border: 1px solid #F0B200
-      background: transparent
-      color: white
-      font-size: 1.5em
-      margin: 0.8em 0 3.5em 0
-      padding: 1.25vh 3.5vw
-      text-decoration: none
+    .main-kicker
+      margin-top: 8em
 
-      @media (max-width: 900px)
-        margin-top: 20px
+  .home-research
+    padding: 5em 0
+    text-align: left
 
-      &:hover,
-      &:active,
-      &:focus
-        background: #F0B200
-        color: #FFFFFF
+    button
+      margin-right: 1.25em
+      margin-bottom: 1em
+      padding: 0.8em 5em
+
+    button[class=primary-button]
+      color: black
+
+    .main-kicker
+      line-height: 8vh
+
+    &__content
+      margin: 2em 14em 3.5em 14em
+      column-count: 2
+      -moz-column-count: 2
+      -webkit-column-count: 2
+      column-gap: 3em
+      -moz-column-gap: 3em
+      -webkit-column-gap: 3em
+
+    &__buttons
+      .tertiary-kicker
+        font-size: 1em
+        text-align: center
+
+    &__researchers
+      display: flex
+      flex-flow: row nowrap
+      margin: 6em 0
+      width: 100%
+
+      img
+        flex: 2 0 auto
+        max-height: 240px
+        width: 240px
+
+    &__container
+      display: flex
+      flex-direction: column
+      padding: 0 20em
+      text-align: center
+
+      div
+        margin: 2em 8em
+
+  .home-discover
+    background-color: BACKGROUND_COLOR
+    display: flex
+    flex-direction: row
+    padding: 5em 0
+    text-align: left
+
+    hr
+      border-color: white
+      margin-bottom: 2em
+
+    @media (max-width: 900px)
+      min-height: auto
+
+    img
+      max-height: 38em
+      width: auto
+
+    &__content
+      flex: 2 0 0
+      margin: 0 3em 0 10em
+
+      img
+        max-height: 3.25em
+        margin-right: 1.25em
+
+      p
+        margin-top: 0.6em
+
+      button
+        margin-right: 1.25em
+        margin-bottom: 1em
+        padding: 0.8em 5em
+
+      button[class=primary-button]
+        color: black
 
 .on-home-page
   font-family: 'Karla', sans-serif;
@@ -260,96 +328,6 @@ $flex-section
 
         @media (max-width: 900px)
           max-width: 80vw
-
-  .home-research
-    background-color: white
-    display: flex
-    flex-direction: column
-    padding: 50px 0
-    text-align: left
-
-    &__content
-      margin: 2.5em 16em
-      column-count: 2
-      -moz-column-count: 2
-      -webkit-column-count: 2
-      column-gap: 3em
-      -moz-column-gap: 3em
-      -webkit-column-gap: 3em
-
-    &__buttons
-      align-items: center
-
-      button
-        margin: 1em
-        padding: 0.6em 3.2em
-
-    &__researchers
-      display: flex
-      flex-flow: row nowrap
-      margin: 6em 0
-
-      img
-        max-height: 250px
-        width: auto
-
-    &__container
-      display: flex
-      flex-direction: column
-      margin: 2.5em 16em
-      text-align: center
-
-      div
-        margin: 2em 4em
-
-  .home-discover
-    background-color: BACKGROUND_COLOR
-    display: flex
-    flex-direction: row
-    padding: 50px 0
-    text-align: left
-
-    input[type="text"]
-      border: 1px solid TEAL_DARK
-      width: 22em
-      height: 2.8em
-      padding-left: 1em
-      padding-right: 50px
-
-    input[type="submit"]
-      margin-left: -50px
-      height: 3.2em
-      width: 10em
-      background: TEAL_DARK
-      color: white
-      border: 0
-      -webkit-appearance: none
-
-    hr
-      border-color: white
-      margin-bottom: 2em
-
-    @media (max-width: 900px)
-      min-height: auto
-
-    img
-      max-height: 40em
-      width: auto
-
-    &__content
-      flex: 2 0 0
-      margin: 0 3em 0 10em
-
-      p
-        margin-top: 0em
-
-      button
-        margin-right: 1em
-        margin-bottom: 1.5em
-        padding: 0.8em 5.5em
-
-    &__image
-      flex: 1 0 0
 
   .home-promoted
     padding: 0
