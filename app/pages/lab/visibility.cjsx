@@ -169,9 +169,9 @@ module.exports = React.createClass
             {@state.workflows.map (workflow) =>
               setting = workflow.active
               stats_completeness_type = workflow.configuration.stats_completeness_type ? 'retirement'
-              stats_visible = !workflow.configuration.stats_hidden
-              if !workflow.active
-                stats_visible = !(workflow.configuration.stats_hidden == undefined) && stats_visible
+              statsVisible = workflow.active
+              if workflow.configuration.stats_hidden != undefined
+                statsVisible = !workflow.configuration.stats_hidden
               <tr key={workflow.id}>
                 <td>
                   {workflow.id}
@@ -217,8 +217,8 @@ module.exports = React.createClass
                     <input
                       type="checkbox"
                       name="stats_hidden.#{workflow.id}"
-                      value={stats_visible}
-                      checked={stats_visible}
+                      value={statsVisible}
+                      checked={statsVisible}
                       onChange={@handleWorkflowStatsVisibility.bind(this, workflow)}
                     />
                     Show on Stats Page
