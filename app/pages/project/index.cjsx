@@ -198,13 +198,13 @@ ProjectPageController = React.createClass
 
   selectRandomWorkflow: (project) ->
     linkedActiveWorkflows = project.links.active_workflows
-    if linkedActiveWorkflows.length is 0
-      throw new Error "No workflows for project #{project.id}"
-      project.uncacheLink 'workflows'
-    else
+    if linkedActiveWorkflows.length > 0
       randomIndex = Math.floor Math.random() * linkedActiveWorkflows.length
       # console.log 'Chose random workflow', linkedActiveWorkflows[randomIndex]
       linkedActiveWorkflows[randomIndex]
+    else
+      throw new Error "No workflows for project #{project.id}"
+      project.uncacheLink 'workflows'
 
   getWorkflow: (selectedWorkflowID, activeFilter = true) ->
     query =
