@@ -19,9 +19,9 @@ export default class FeaturedProject extends React.Component {
         <div className="home-featured-images">
           <img src="./assets/featured-projects/featured-project-20170531-galaxy-nurseries.jpg" />
         </div>
-        <h2>Introducing the 100th Zooniverse project - Galaxy Nurseries</h2>
-        <p>Help researchers figure out how our universe has changed over time by finding baby galaxies.</p>
-        <Link to="projects/hughdickinson/galaxy-nurseries" className="alternate-button">Get involved!</Link>
+        <h2 className="secondary-headline">Introducing the 100th Zooniverse project - Galaxy Nurseries</h2>
+        <p className="display-body">Help researchers figure out how our universe has changed over time by finding baby galaxies.</p>
+        <Link to="projects/hughdickinson/galaxy-nurseries" className="primary-button primary-button--light">Get involved!</Link>
       </section>
     );
   }
