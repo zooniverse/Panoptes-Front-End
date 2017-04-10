@@ -1,70 +1,59 @@
 import React from 'react';
-import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
-import LoginDialog from '../../partials/login-dialog';
 
 counterpart.registerTranslations('en', {
   discoverHomePage: {
+    appAnnounce: 'Bring the Zooniverse with you. Download the app for iOS and Android devices.',
     signIn: 'Sign in',
-    register: 'Register'
+    register: 'Register',
+    research: `
+      The Zooniverse enables everyone to take part in real cutting edge
+      research in many fields across the sciences, humanities, and more.
+      The Zooniverse creates opportunities for you to unlock answers and
+      contribute to real discoveries.
+    `
   }
 });
 
-export default class HomePageDiscover extends React.Component {
-  constructor(props) {
-    super(props);
-    this.showDialog = this.showDialog.bind(this);
-  }
+const HomePageDiscover = ({ showDialog }) => {
+  return (
+    <section className="home-discover">
+      <div className="home-discover__content">
+        <h3 className="secondary-kicker">What&apos;s This?</h3>
+        <h1 className="tertiary-headline">Discover, teach, and learn</h1>
 
-  showDialog(event) {
-    const which = event.currentTarget.value;
-    this.context.geordi.logEvent({
-      type: which === 'sign-in' ? 'login' : 'register-link'
-    });
-    alert((resolve) => {
-      return <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />;
-    });
-  }
+        <Translate className="display-body" component="p" content="discoverHomePage.research" />
 
-  render() {
-    return (
-      <section className="home-discover" ref="discover">
-        <div className="home-discover__content">
-          <h3 className="secondary-kicker">What&apos;s This?</h3>
-          <h1 className="tertiary-headline">Discover, teach, and learn</h1>
+        <button type="button" value="sign-in" className="primary-button" onClick={showDialog}>
+          <Translate content="discoverHomePage.signIn" />
+        </button>
 
-          <p className="display-body">
-            The Zooniverse enables everyone to take part in real cutting edge
-            research in many fields across the sciences, humanities, and more.
-            The Zooniverse creates opportunities for you to unlock answers and
-            contribute to real discoveries.
-          </p>
+        <button type="button" value="register" className="primary-button primary-button--light" onClick={showDialog}>
+          <Translate content="discoverHomePage.register" />
+        </button>
 
-          <button type="button" value="sign-in" className="primary-button" onClick={this.showDialog}>
-            <Translate content="discoverHomePage.signIn" />
-          </button>
+        <hr />
 
-          <button type="button" value="register" className="primary-button primary-button--light" onClick={this.showDialog}>
-            <Translate content="discoverHomePage.register" />
-          </button>
+        <h1 className="tertiary-kicker">Do science, anywhere</h1>
 
-          <hr />
+        <Translate className="display-body display-body--regular" component="p" content="discoverHomePage.appAnnounce" />
 
-          <h1 className="tertiary-kicker">Do science, anywhere</h1>
+        <img role="presentation" src="/assets/home-appStore.png" />
+        <img role="presentation" src="/assets/home-googlePlay.png" />
 
-          <p className="display-body display-body--regular">Bring the Zooniverse with you. Download the app for iOS and Android devices.</p>
+      </div>
 
-          <img role="presentation" src="/assets/home-appStore.png" />
-          <img role="presentation" src="/assets/home-googlePlay.png" />
+      <div className="home-discover__image">
+        <img role="presentation" src="/assets/home-computer.png" />
+      </div>
 
-        </div>
+    </section>
+  );
+};
 
-        <div className="home-discover__image">
-          <img role="presentation" src="/assets/home-computer.png" />
-        </div>
+HomePageDiscover.propTypes = {
+  showDialog: React.PropTypes.func
+};
 
-      </section>
-    );
-  }
-}
+export default HomePageDiscover;
