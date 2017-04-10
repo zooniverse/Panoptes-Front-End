@@ -4,6 +4,7 @@ Translate = require 'react-translate-component'
 apiClient = require 'panoptes-client/lib/api-client'
 intersection = require 'lodash.intersection'
 pick = require 'lodash.pick'
+classNames = require 'classnames'
 counterpart = require 'counterpart'
 alert = require '../lib/alert'
 Paginator = require '../talk/lib/paginator'
@@ -64,6 +65,11 @@ SubjectNode = React.createClass
 
   render: ->
     logClick = @context.geordi?.makeHandler? 'about-menu'
+    subjectSelectClasses = classNames({
+      "collection-subject-viewer-circle": true,
+      "fa fa-check-circle": !!@props.selected,
+      "fa fa-circle-o": !@props.selected
+    })
     <div className="collection-subject-viewer">
       <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project} isFavorite={@state.isFavorite}>
           {if !@props.selecting
@@ -77,7 +83,7 @@ SubjectNode = React.createClass
           {if @props.selecting
             <label className="collection-subject-viewer-select">
               <input type="checkbox" checked={@props.selected} onChange={@toggleSelect}/>
-              <i className={"collection-subject-viewer-circle " + if @props.selected then "fa fa-check-circle" else "fa fa-circle-o"} />
+              <i className={subjectSelectClasses} />
             </label>}
       </SubjectViewer>
     </div>
@@ -150,9 +156,7 @@ module.exports = React.createClass
 
   promptCollectionManager: ->
     alert (resolve) =>
-      <CollectionsManager user={@props.user} project={@props.project} subjectIDs={@state.selected} onSuccess={resolve} />
-
-    @toggleSelecting()
+      <CollectionsManager user={@props.user} project={@props.project} subjectIDs={@state.selected} onSuccess={() => @toggleSelecting(); resolve();} />
 
   handleDeleteSubject: (subject) ->
     subjects = @state.subjects
@@ -187,18 +191,25 @@ module.exports = React.createClass
           {if @state.selecting
             <div className="collection-buttons-container">
               <button
-                className="select-images-button"
+                type="button"
+                className="select-subjects-button"
                 onClick={@promptCollectionManager}
                 disabled={@state.selected.length < 1}>
                 Add to Collection
               </button>
               {if @props.canCollaborate
-                <button className="select-images-button" onClick={@deleteSubjects} disabled={@state.selected.length < 1}>Remove from Collection</button>}
-              <button className="select-images-button" onClick={@toggleSelecting}>Cancel</button>
+                <button
+                  type="button"
+                  className="select-subjects-button"
+                  onClick={@deleteSubjects}
+                  disabled={@state.selected.length < 1}>
+                  Remove from Collection
+                </button>}
+              <button type="button" className="select-subjects-button" onClick={@toggleSelecting}>Cancel</button>
             </div>
-          else
+          else if @props.user?
             <div className="collection-buttons-container">
-              <button className="select-images-button" onClick={@toggleSelecting}>Select Subjects</button>
+              <button type="button" className="select-subjects-button" onClick={@toggleSelecting}>Select Subjects</button>
             </div>
           }
             <div>
