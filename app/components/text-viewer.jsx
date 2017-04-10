@@ -35,7 +35,7 @@ class TextViewer extends Component {
       this.setState({ content: cachedContent });
     } else {
       this.setState({ content: 'Loading…' });
-      fetch(src, { mode: 'cors' })
+      fetch(src + '?=')
       .then((response) => {
         return response.text();
       })
