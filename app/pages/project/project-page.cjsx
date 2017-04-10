@@ -117,7 +117,7 @@ ProjectPage = React.createClass
   render: ->
     betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
-    onHomePage = projectPath is @props.location.pathname
+    onHomePage = @props.routes[2].path is undefined
     avatarClasses = classnames('tabbed-content-tab', {
       'beta-approved': betaApproved
     })
