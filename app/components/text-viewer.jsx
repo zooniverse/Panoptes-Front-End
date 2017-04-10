@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 const SUPPORTED_TYPES = ['text'];
 const SUPPORTED_FORMATS = ['plain'];
 
+const cache = {};
+
 class TextViewer extends Component {
   constructor(props) {
     super(props);
     this.element = null;
     this.state = {
-      content: 'Loading…'
+      content: ''
     };
   }
 
@@ -19,7 +21,6 @@ class TextViewer extends Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.src !== this.props.src) {
-      this.setState({ content: 'Loading…' });
       this.loadText(newProps.src);
     }
   }
@@ -29,18 +30,25 @@ class TextViewer extends Component {
   }
 
   loadText(src) {
-    fetch(src, { mode: 'cors' })
-    .then((response) => {
-      return response.text();
-    })
-    .then((content) => {
-      this.setState({ content });
-      this.element.dispatchEvent(new Event('load'));
-    })
-    .catch((e) => {
-      const content = e.message;
-      this.setState({ content });
-    });
+    const cachedContent = cache[src];
+    if (cachedContent) {
+      this.setState({ content: cachedContent });
+    } else {
+      this.setState({ content: 'Loading…' });
+      fetch(src, { mode: 'cors' })
+      .then((response) => {
+        return response.text();
+      })
+      .then((content) => {
+        cache[src] = content;
+        this.setState({ content });
+        this.element.dispatchEvent(new Event('load'));
+      })
+      .catch((e) => {
+        const content = e.message;
+        this.setState({ content });
+      });
+    }
   }
 
   render() {
