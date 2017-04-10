@@ -129,11 +129,11 @@ module.exports = React.createClass
 
   loadClassificationsCount: (subject) ->
     query = {};
-    # Split 'classifier.first-to-classify.visible' is a visibility split on 
+    # Split 'subject.first-to-classify.visible' is a visibility split on 
     # a generic pre-classification notification banner on the classify page.
     # Split 'subject.first-to-classify' is a text split in the classification summary.
     # Projects need classification summarys visible for this to work.
-    if @props.splits and subject and (@props.splits['classifier.first-to-classify.visible'] or @props.splits['subject.first-to-classify'])
+    if @props.splits and subject and (@props.splits['subject.first-to-classify.visible'] or @props.splits['subject.first-to-classify'])
       query =
         workflow_id: @props.workflow.id,
         subject_id: subject.id
@@ -151,8 +151,8 @@ module.exports = React.createClass
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
         </CustomSignInPrompt>}
 
-      {if @state.classificationCount is 0 and @props.splits['classifier.first-to-classify.visible']
-        <VisibilitySplit splits={@props.splits} splitKey={'classifier.first-to-classify.visible'} elementKey={'div'}>
+      {if @state.classificationCount is 0 and @props.splits['subject.first-to-classify.visible']
+        <VisibilitySplit splits={@props.splits} splitKey={'subject.first-to-classify.visible'} elementKey={'div'}>
           <div className="classifier-announcement-banner classifier-announcement-banner--yellow">
             <p>You're the first person to see this subject!</p>
           </div>
