@@ -26,6 +26,8 @@ counterpart.registerTranslations('en', {
 });
 
 const HomePageResearch = ({ count, showDialog }) => {
+  const width = window.innerWidth;
+
   return (
     <section className="home-research">
       <Translate className="tertiary-kicker" content="researchHomePage.works" />
@@ -50,8 +52,14 @@ const HomePageResearch = ({ count, showDialog }) => {
 
       <div className="home-research__researchers">
         <img role="presentation" src="/assets/home-researchers1.jpg" />
-        <img role="presentation" src="/assets/home-researchers2.jpg" />
-        <img role="presentation" src="/assets/home-researchers3.jpg" />
+
+        {width > 450 && (
+          <img role="presentation" src="/assets/home-researchers2.jpg" />
+        )}
+
+        {width > 750 && (
+          <img role="presentation" src="/assets/home-researchers3.jpg" />
+        )}
       </div>
 
       <div className="home-research__container">

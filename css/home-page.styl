@@ -44,7 +44,7 @@ $flex-section
     color: #addde0
     line-height: 1vh
     font-family: 'Oswald', sans-serif
-    font-size: 2em
+    font-size: 3.2vh
     letter-spacing: 0.18em
     text-transform: uppercase
 
@@ -56,7 +56,7 @@ $flex-section
     text-transform: uppercase
 
   .main-headline
-    font-size: 5em
+    font-size: 8vh
     font-weight: 700
 
   .secondary-kicker
@@ -68,7 +68,7 @@ $flex-section
 
   .secondary-headline
     color: #5c5c5c
-    font-size: 4.25em
+    font-size: 7vh
 
   .tertiary-headline
     color: #5c5c5c
@@ -79,7 +79,7 @@ $flex-section
   .class-counter
     color: TEAL_MID
     font-family: 'Oswald', sans-serif
-    font-size: 10em
+    font-size: 12vh
     font-weight: 300
     letter-spacing: 0.02em
     line-height: 1em
@@ -110,9 +110,11 @@ $flex-section
     color: white
     cursor: pointer
     font-size: 1.25em
-    margin: 0.8em 0 3.5em 0
-    padding: 0.8em 3.5em
+    margin: 1vh 2vw 3.5vh 0
+    padding: 1vh 3.5vw
     text-decoration: none
+    max-width: 35vw
+    width: 150px
 
     @media (max-width: 900px)
       margin-top: 20px
@@ -134,8 +136,10 @@ $flex-section
 
   .home-intro
     background-color: WHITE
-    min-height: 30vw // video is 2:1 aspect ratio and 100% width
     justify-content: flex-end
+    min-height: 30vw // video is 2:1 aspect ratio and 100% width
+    padding: 2em 0
+    text-align: center
     z-index: 0
 
     video
@@ -159,17 +163,12 @@ $flex-section
       z-index: -1
       object-fit: cover
 
-    .main-kicker
-      margin-top: 8em
+    .primary-button
+      width: 100px
 
   .home-research
     padding: 5em 0
     text-align: left
-
-    button
-      margin-right: 1.25em
-      margin-bottom: 1em
-      padding: 0.8em 5em
 
     button[class=primary-button]
       color: black
@@ -187,6 +186,8 @@ $flex-section
       -webkit-column-gap: 3em
 
     &__buttons
+      text-align: center
+
       .tertiary-kicker
         font-size: 1em
         text-align: center
@@ -200,22 +201,23 @@ $flex-section
       img
         flex: 2 0 auto
         max-height: 240px
-        width: 240px
+        width: 90px
 
     &__container
       display: flex
       flex-direction: column
-      padding: 0 20em
+      padding: 0 15vw
       text-align: center
 
       div
-        margin: 2em 8em
+        margin: 2em 10vw
 
   .home-discover
     background-color: BACKGROUND_COLOR
     display: flex
     flex-direction: row
-    padding: 5em 0
+    flex-wrap: wrap
+    padding: 5vh 0
     text-align: left
 
     hr
@@ -226,12 +228,16 @@ $flex-section
       min-height: auto
 
     img
-      max-height: 38em
+      max-height: 50vh
       width: auto
+
+    &__image
+      flex: 1 0 0
+      text-align: right
 
     &__content
       flex: 2 0 0
-      margin: 0 3em 0 10em
+      margin: 0 10vw
 
       a
         img
@@ -240,11 +246,6 @@ $flex-section
 
       p
         margin-top: 0.6em
-
-      button
-        margin-right: 1.25em
-        margin-bottom: 1em
-        padding: 0.8em 5em
 
       button[class=primary-button]
         color: black
@@ -293,6 +294,9 @@ $flex-section
     padding: 50px 30px
     min-height: 40vw
     background: #fff
+
+    .primary-button
+      width: 100px
 
     p
       width: 50vw
