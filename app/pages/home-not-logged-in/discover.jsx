@@ -39,8 +39,13 @@ const HomePageDiscover = ({ showDialog }) => {
 
         <Translate className="display-body display-body--regular" component="p" content="discoverHomePage.appAnnounce" />
 
-        <img role="presentation" src="/assets/home-appStore.png" />
-        <img role="presentation" src="/assets/home-googlePlay.png" />
+        <a href="https://itunes.apple.com/us/app/zooniverse/id1194130243?mt=8">
+          <img role="presentation" src="/assets/home-appStore.png" />
+        </a>
+
+        <a href="http://play.google.com/store/apps/details?id=com.zooniversemobile">
+          <img role="presentation" src="/assets/home-googlePlay.png" />
+        </a>
 
       </div>
 
