@@ -53,6 +53,7 @@ class TextViewer extends Component {
 
   render() {
     let { content } = this.state;
+    const isLoading = (this.state.content === 'Loading…');
     if (SUPPORTED_TYPES.indexOf(this.props.type) === -1) {
       content = `Unsupported type: ${this.props.type}`;
     }
@@ -60,7 +61,7 @@ class TextViewer extends Component {
       content = `Unsupported format: ${this.props.format}`;
     }
     return (
-      <div ref={(element) => { this.element = element; }} className="text-viewer" >
+      <div ref={(element) => { this.element = element; }} className={isLoading ? 'text-viewer-loading' : 'text-viewer'} >
         { content }
       </div>
     );
