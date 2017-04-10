@@ -59,11 +59,19 @@ class TextViewer extends Component {
     if (SUPPORTED_FORMATS.indexOf(this.props.format) === -1) {
       content = `Unsupported format: ${this.props.format}`;
     }
-    return (
-      <div ref={(element) => { this.element = element; }} className="text-viewer" >
-        { content }
-      </div>
-    );
+    if (content === 'Loading…') {
+      return(
+        <div ref={(element) => { this.element = element; }} className="text-viewer-loading" >
+          { content }
+        </div>
+      );
+    } else {
+      return (
+        <div ref={(element) => { this.element = element; }} className="text-viewer" >
+          { content }
+        </div>
+      );
+    }
   }
 }
 
