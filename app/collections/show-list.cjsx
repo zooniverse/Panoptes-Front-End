@@ -61,7 +61,7 @@ SubjectNode = React.createClass
 
       apiClient.type('collections').get(query)
         .then ([favoritesCollection]) =>
-          if favoritesCollection?
+          if favoritesCollection? and favoritesCollection.links.subjects?
             isFavorite = @props.subject.id in favoritesCollection.links.subjects
           @setState({ isFavorite })
 
