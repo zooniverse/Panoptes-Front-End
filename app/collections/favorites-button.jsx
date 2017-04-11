@@ -89,6 +89,7 @@ export default class FavoritesButton extends React.Component {
         this.findFavoriteCollection()
           .catch((err) => { reject(err); })
           .then((favorites) => {
+            console.log('favorites', favorites)
             if (favorites) {
               this.setState({ favorites });
               resolve(favorites);
@@ -109,7 +110,7 @@ export default class FavoritesButton extends React.Component {
                 .catch((err) => { reject(err); })
                 .then((newFavorites) => {
                   this.setState({ favorites: newFavorites });
-                  resolve(favorites);
+                  resolve(newFavorites);
                 });
             }
           });
@@ -121,6 +122,7 @@ export default class FavoritesButton extends React.Component {
     if (this.props.user) {
       if (!this.state.favorites) {
         this.setState({ favorited: true });
+        console.log('no favs');
         this.createFavorites()
           .then((favorites) => { this.addSubjectTo(favorites); });
         this.logSubjLike('favorite');
@@ -147,7 +149,7 @@ export default class FavoritesButton extends React.Component {
 
     return (
       <button
-        className="favorites-button #{@props.className ? ''}"
+        className={`favorites-button ${this.props.className || ''}`}
         type="button"
         title={(this.state.favorited) ? 'Unfavorite' : 'Favorite'}
         onClick={this.toggleFavorite}
@@ -166,6 +168,7 @@ FavoritesButton.defaultProps = {
 };
 
 FavoritesButton.propTypes = {
+  className: React.PropTypes.string,
   isFavorite: React.PropTypes.bool,
   subject: React.PropTypes.shape({ id: React.PropTypes.string }).isRequired,
   project: React.PropTypes.shape({
