@@ -241,7 +241,7 @@ EditSubjectSetPage = React.createClass
       <p>
         <small>
           <button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteSubjectSet}>
-            Delete this subject set and its {@props.subjectSet.set_member_subjects_count} subjects
+            Delete this subject set and unlink its {@props.subjectSet.set_member_subjects_count} subjects
           </button>
         </small>{' '}
         {if @state.deletionError?
@@ -353,7 +353,7 @@ EditSubjectSetPage = React.createClass
   deleteSubjectSet: ->
     @setState deletionError: null
 
-    confirmed = confirm 'Really delete this subject set and all its subjects?'
+    confirmed = confirm 'Really delete this subject set and unlink its subjects?\nNote that subjects will still be added to your user quota.'
 
     if confirmed
       @setState deletionInProgress: true
