@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router';
-import Avatar from '../partials/avatar';
 import Thumbnail from '../components/thumbnail';
 
 const CollectionPreview = (props) => {
@@ -14,10 +13,9 @@ const CollectionPreview = (props) => {
             {props.collection.display_name}
           </Link>
           {' '}by{' '}
-          {props.owner &&
-            <Link className="user-profile-link" to="/projects/#{props.project.slug}/users/#{props.owner.login}">
-              <Avatar user={props.owner} />{' '}{props.owner.display_name}
-            </Link>}
+          <Link className="user-profile-link" to={`/projects/${props.project.slug}/${props.collection.links.owner.href}`}>
+            {props.collection.links.owner.display_name}
+          </Link>
         </p>
         {props.collection.default_subject &&
           <div className="subject-previews">
@@ -36,6 +34,12 @@ CollectionPreview.propTypes = {
   collection: React.PropTypes.shape({
     default_subject: React.PropTypes.string,
     display_name: React.PropTypes.string,
+    links: React.PropTypes.shape({
+      owner: React.PropTypes.shape({
+        display_name: React.PropTypes.string,
+        href: React.PropTypes.string
+      }),
+    }),
     slug: React.PropTypes.string
   }),
   owner: React.PropTypes.shape({
