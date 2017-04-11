@@ -101,7 +101,7 @@ const NewsSection = React.createClass({
   render() {
     const projLink = `${window.location.origin}/projects/${this.state.newestProject.slug}`;
     const avatarSrc = !!this.state.newestAvatar ? this.state.newestAvatar.src : null;
-    const recentProjects = 
+    const recentProjects =
       this.props.updatedProjects
       .slice()
       .sort((a, b) => { return new Date(b.updated_at) - new Date(a.updated_at); })
@@ -128,7 +128,7 @@ const NewsSection = React.createClass({
               return this.renderUpdatedProjects(project);
             })}
           </div>
-          
+
           <div className="home-page-news-pullout news-section">
             <h4> Recent Publications </h4>
             {this.state.publications.map((article) => {

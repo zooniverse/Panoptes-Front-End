@@ -6,10 +6,11 @@ import counterpart from 'counterpart';
 import apiClient from 'panoptes-client/lib/api-client';
 import LoginDialog from '../partials/login-dialog';
 import alert from '../lib/alert';
+import Publications from '../lib/publications';
 import FeaturedProject from './home-common/featured-project';
+import HomePageSocial from './home-common/social';
 import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
-import HomePageSocial from './home-not-logged-in/social';
 import HomePagePromoted from './home-not-logged-in/promoted';
 import FEATURED_PROJECTS from '../lib/featured-projects';
 
@@ -83,6 +84,43 @@ export default class HomePage extends React.Component {
         this.resizeTimeout = NaN;
       });
     }, 100);
+
+  getNewestProject() {
+    apiClient.type('projects').get({ page_size: 1, sort: '-launch_date' })
+    .then(([newestProject]) => {
+      this.setState({ newestProject });
+    });
+  }
+
+  getNewestPublication() {
+    const articles = [];
+    Object.keys(Publications).forEach((category) => {
+      Publications[category].map((project) => {
+        return articles.push(...project.publications);
+      });
+    });
+    const newestPublication = articles.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    }).shift();
+    return this.setState({ newestPublication });
+  }
+
+  getUpdatedProjects() {
+    const query = { launch_approved: true, page_size: 3, sort: '-updated_at' };
+    apiClient.type('projects').get(query)
+    .then((recentProjects) => {
+      this.setState({ recentProjects });
+    });
+  }
+
+  getBlogPosts() {
+    const request = new XMLHttpRequest();
+    request.open('GET', `${talkClient.root}/social`, true);
+    request.onload = () => {
+      const data = JSON.parse(request.responseText);
+      this.setState({ blogPosts: data.posts });
+    };
+    request.send();
   }
 
   showDialog(event) {
@@ -150,7 +188,12 @@ export default class HomePage extends React.Component {
         </div>
 
         <div className="flex-container">
-          <HomePageSocial />
+          <HomePageSocial
+            blogPosts={this.state.blogPosts}
+            newestProject={this.state.newestProject}
+            newestPublication={this.state.newestPublication}
+            recentProjects={this.state.recentProjects}
+          />
         </div>
       </div>
     );

@@ -322,6 +322,12 @@ $flex-section
     @media (max-width: 900px)
       font-size: 2em
 
+  .timestamp-label
+    color: #000000
+    font-size: 2vh
+    font-weight: 700
+    text-transform: uppercase
+
   .class-counter
     color: TEAL_MID
     font-family: 'Oswald', sans-serif
@@ -334,6 +340,7 @@ $flex-section
       font-size: 4em
 
   .display-body
+    font-size: 1.2em
     font-weight: 700
 
   .regular-body, .display-body
@@ -437,61 +444,98 @@ $flex-section
       border-bottom: 1px solid LIGHT_GREY
 
   .home-social
-    background-color: WHITE
-    border-top: 1px solid #333
-    padding: 50px 0
+    display: flex
+    background-color: BACKGROUND_COLOR
+    padding: 10vh 0
+
+    .primary-button, .primary-button--light
+      margin: auto 0 1vh 0
+      padding: 1vh 0.5vw
+      text-align: center
+      width: 125px
+
+    a[class=primary-button]
+      color: black
+
+    a
+      text-decoration: none
 
     @media (max-width: 900px)
       padding 2em
 
-    h1
-      color: ZOONIVERSE_NAVY
-      margin: 20px auto
+    &__italic-link
+      color: TEAL_MID
+      font-style: italic
 
-    h2, h2 a
-      color: ZOONIVERSE_NAVY
-      margin: 20px auto
-      font-size: 20px
-      text-decoration: none
+    &__icons
+      margin-top: 1.5vh
+      overflow: hidden
+      width: 20vw
 
-    .home-social-columns
-      width: 100%
+      i
+        color: TEAL_MID
+        font-size: 1.25em
+        margin: 0 0.5vw
+
+      span
+        position: relative
+
+      span:before, span:after
+        content: ""
+        position: absolute
+        top: 50%
+        width: 20vw
+        height: 1px
+        background: TEAL_LIGHT
+
+      span:before
+        right: 100%
+        margin-right: 15px
+
+      span:after
+        left: 100%
+        margin-left: 15px
+
+    &__project-card
+      background-color: white
+      height: 38em
+      margin: 3vh 0
+      width: 26em
+
+      &--background
+        height: 50%
+
+      &--content
+        box-sizing: border-box
+        display: flex
+        flex-direction: column
+        height: 50%
+        padding: 2.5vh 2.5vw
+
+    &__content
       display: flex
       flex-direction: row
-      justify-content: space-around
+      margin: 2vh 0
+      text-align: left
+      width: 100%
 
-      @media (max-width: 900px)
-        display: block
+      .tertiary-headline
+        margin-bottom: 5vh
 
-      .home-social-column
-        text-align: left
+    &__news
+      display: flex
+      flex: 2 0 0
+      flex-direction: column
+      margin: 8vh 8vw 3vh 5vw
 
-        ul
-          list-style: none
-          padding: 0
+    &__daily
+      display: flex
+      flex: 5 0 0
+      flex-direction: column
+      margin: 8vh 5vw 3vh 0
 
-          li
-            margin: 0 0 2.5em 0
-            max-width: 100vw
-
-            @media (min-width: 900px)
-              max-width: 25vw
-
-            h3
-              font-weight: bolder
-              line-height: 15px
-
-            h3, p
-              a
-                color: inherit
-                display: block
-                overflow: hidden
-                text-decoration: none
-                text-overflow: ellipses
-
-        .home-social-timestamp
-          margin: 0.5em 0
-          font-size: 1.25em
+    &__project-update
+      margin: 2vh 0
 
 .home-page
   background: #f4f4f4
