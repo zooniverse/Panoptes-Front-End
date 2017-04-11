@@ -89,7 +89,6 @@ export default class FavoritesButton extends React.Component {
         this.findFavoriteCollection()
           .catch((err) => { reject(err); })
           .then((favorites) => {
-            console.log('favorites', favorites)
             if (favorites) {
               this.setState({ favorites });
               resolve(favorites);
@@ -122,7 +121,6 @@ export default class FavoritesButton extends React.Component {
     if (this.props.user) {
       if (!this.state.favorites) {
         this.setState({ favorited: true });
-        console.log('no favs');
         this.createFavorites()
           .then((favorites) => { this.addSubjectTo(favorites); });
         this.logSubjLike('favorite');
