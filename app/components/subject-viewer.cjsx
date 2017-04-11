@@ -71,6 +71,10 @@ module.exports = React.createClass
       clearTimeout @signInAttentionTimeout
       @setState loading: true
 
+  componentDidUpdate: (prevProps) ->
+    if @props.subject isnt prevProps.subject
+      @setState frame: @getInitialFrame()
+
   logSubjClick: (logType) ->
     @context.geordi?.logEvent
       type: logType
