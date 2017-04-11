@@ -20,6 +20,10 @@ module.exports = React.createClass
   displayName: 'TalkQuickSubjectCommentForm'
 
   propTypes:
+    params: React.PropTypes.shape({
+      name: React.PropTypes.string.isRequired,
+      owner: React.PropTypes.string.isRequired
+    }).isRequired
     subject: React.PropTypes.object
     user: React.PropTypes.object
 
@@ -28,6 +32,12 @@ module.exports = React.createClass
 
   getInitialState: ->
     commentValidationErrors: []
+
+  getDefaultProps: ->
+    params: {
+      name: ''
+      owner: ''
+    }
 
   commentValidations: (commentBody) ->
     commentErrors = getErrors(commentBody, commentValidations)
