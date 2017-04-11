@@ -1,5 +1,5 @@
 React = require 'react'
-FavoritesButton = require '../collections/favorites-button'
+`import FavoritesButton from '../collections/favorites-button';`
 Dialog = require 'modal-form/dialog'
 {Markdown} = require 'markdownz'
 classnames = require 'classnames'
