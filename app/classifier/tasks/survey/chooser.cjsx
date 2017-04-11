@@ -114,7 +114,7 @@ module.exports = React.createClass
                   {if value.image?
                     <img src={@props.task.images[value.image]} alt={value.label} className="survey-task-chooser-characteristic-value-icon" />
                   else
-                    <img alt={value.label} className="survey-task-chooser-characteristic-value-icon" />}
+                    value.label}
                 </button>}
 
               <button type="submit" className="survey-task-chooser-characteristic-clear-button" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
