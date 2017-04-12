@@ -23,12 +23,17 @@ module.exports = React.createClass
       'site-nav__inbox-link--unread': unread
     })
 
-    <span className={rootClasses}>
-      <Translate content="notificationsLink.notifications" />
-      {if unread
-        " (#{count})"
-      }
-    </span>
+    if @props.isMobile && @context.unreadNotificationsCount > 0
+      <i className="fa fa-bell fa-fw" />
+    else if @props.isMobile
+      <i className="fa fa-bell-o fa-fw" />
+    else
+      <span className={rootClasses}>
+        <Translate content="notificationsLink.notifications" />
+        {if unread
+          " (#{count})"
+        }
+      </span>
 
   ariaLabel: ->
     if @context.unreadNotificationsCount > 0

@@ -21,7 +21,7 @@ counterpart.registerTranslations('en', {
   }
 });
 
-class AccountBar extends React.Component {
+export default class AccountBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,10 +71,26 @@ class AccountBar extends React.Component {
     auth.signOut();
   }
 
+  renderMessages() {
+    const mobile = this.state.unread ? <i className="fa fa-envelope fa-fw" /> : <i className="fa fa-envelope-o fa-fw" />;
+
+    if (this.props.isMobile) {
+      return mobile;
+    } else {
+      return (
+        <div>
+          <Translate content="accountMenu.messages" />
+          {this.state.unread && (` (${this.state.messageCount})`)}
+        </div>
+      );
+    }
+  }
+
   render() {
     return (
       <span className="account-bar">
-        <NotificationsLink params={this.props.params} user={this.context.user} linkProps={{
+
+        <NotificationsLink isMobile={this.props.isMobile} params={this.props.params} user={this.context.user} linkProps={{
           className: 'site-nav__link site-nav__icon site-nav__icon--notifications',
           activeClassName: 'site-nav__link--active',
           onClick: this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
@@ -95,8 +111,7 @@ class AccountBar extends React.Component {
               ${this.state.unread ? 'site-nav__inbox-link--unread' : ''}
             `.trim()}
           >
-            <Translate content="accountMenu.messages" />
-            {this.state.unread && (` (${this.state.messageCount})`)}
+            {this.renderMessages()}
           </span>
         </Link>
 
@@ -120,7 +135,6 @@ class AccountBar extends React.Component {
                 className="site-nav__link"
                 onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.profile') : null}
               >
-                <i className="fa fa-user fa-fw" />{' '}
                 <Translate content="accountMenu.profile" />
               </Link>
               <br />
@@ -130,7 +144,6 @@ class AccountBar extends React.Component {
                 className="site-nav__link"
                 onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.home') : null}
               >
-                <i className="fa fa-home fa-fw" />{' '}
                 <Translate content="accountMenu.home" />
               </Link>
               <br />
@@ -140,7 +153,6 @@ class AccountBar extends React.Component {
                 className="site-nav__link"
                 onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.settings') : null}
               >
-                <i className="fa fa-cogs fa-fw" />{' '}
                 <Translate content="accountMenu.settings" />
               </Link>
               <br />
@@ -150,7 +162,6 @@ class AccountBar extends React.Component {
                 className="site-nav__link"
                 onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.collections') : null}
               >
-                <i className="fa fa-image fa-fw" />{' '}
                 <Translate content="accountMenu.collections" />
               </Link>
               <br />
@@ -160,7 +171,6 @@ class AccountBar extends React.Component {
                 className="site-nav__link"
                 onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.favorites') : null}
               >
-                <i className="fa fa-star fa-fw" />{' '}
                 <Translate content="accountMenu.favorites" />
               </Link>
               <hr />
@@ -171,7 +181,6 @@ class AccountBar extends React.Component {
                 onClick={this.handleSignOutClick}
               >
                 <span className="site-nav__link">
-                  <i className="fa fa-sign-out fa-fw" />{' '}
                   <Translate content="accountMenu.signOut" />
                 </span>
               </button>
@@ -191,7 +200,6 @@ AccountBar.contextTypes = {
 };
 
 AccountBar.propTypes = {
-  params: React.PropTypes.array
+  params: React.PropTypes.array,
+  isMobile: React.PropTypes.bool
 };
-
-export default AccountBar;

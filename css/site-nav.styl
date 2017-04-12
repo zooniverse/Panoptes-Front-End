@@ -17,10 +17,10 @@
     border-bottom: 2px solid transparent
     color: LIGHT_GREY
     display: inline-block
-    font-size: 0.825em
+    font-size: 1em
     letter-spacing: 0.1em
     opacity: 0.7
-    padding: 0.5em 1.5em 0.3em 1.5em
+    padding: 0.5em 0.9vw 0.3em 0.9vw
     text-decoration: inherit
     text-transform: uppercase
     white-space: nowrap;
@@ -38,10 +38,7 @@
     padding: 0.5em 0.5em 0.3em 0.5em
 
     &--inbox
-      margin-left: 0.5em
-
-    &--notifications
-      margin-right: 1em
+      margin: 0 1em
 
   &__inbox-link
     position: relative
@@ -57,22 +54,33 @@
     margin: -0.3em 0
 
   &__modal
+    text-align: right
+
+    &.modal-form-trigger
+      margin-right: 1em
+
     &.modal-form-underlay
       background: transparent
       z-index: 1 // TODO: Apply this everywhere.
 
-    div .site-nav__link
-      color: black
-      letter-spacing: 0em
-      padding: 0.5em 1.5em 0.3em
-      text-transform: capitalize
+    div .site-nav__link, span .site-nav__link
+      color: white
+      font-size: 0.75em
+      font-weight: 600
+      letter-spacing: 0.1em
+      padding: 0.75em 1.5em 0.3em
+      text-transform: uppercase
+
+      &:hover
+        background: rgba(white, 0.2)
 
     &.modal-form
-      margin-top: 0.2em
+      background-color: TEAL_MID
+      border-radius: 0
+      margin-top: 0.5em
 
     &.modal-form-pointer
-      height: 1.5em // TODO: Why's this weird?
-      width: 1.5em // TODO: Why's this weird?
+      background: transparent
 
   .account-bar
   .login-bar
