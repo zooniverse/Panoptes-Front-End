@@ -45,8 +45,8 @@ PanoptesApp = React.createClass
       @setState {unreadNotificationsCount}
 
     auth.listen 'change', @handleAuthChange
-    generateSessionID()
     @handleAuthChange()
+    generateSessionID()
 
   componentWillUnmount: ->
     auth.stopListening 'change', @handleAuthChange

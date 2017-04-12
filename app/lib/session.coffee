@@ -1,7 +1,8 @@
 stored = sessionStorage?.getItem('session_id')
 
 generateSessionID = () ->
-  sha2 = require('crypto').createHash('sha256')
+  hash = require('hash.js')
+  sha2 = hash.sha256()
   id = sha2.update("#{Math.random() * 10000 }#{Date.now()}#{Math.random() * 1000}").digest('hex')
   ttl = fiveMinutesFromNow()
   stored = {id, ttl}
