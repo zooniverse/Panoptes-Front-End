@@ -85,7 +85,7 @@ module.exports = {
       loader: ExtractTextPlugin.extract({
         fallback: 'style-loader', 
         use: [{
-          loader: 'css-loader'
+          loader: 'css-loader',
           options: { root: '../public' },
         }, {
           loader: 'stylus-loader'
