@@ -13,7 +13,7 @@ import LoginBar from './login-bar';
 import SiteSubnav from './site-subnav';
 
 
-const MAX_MOBILE_WIDTH = 875;
+const MAX_MOBILE_WIDTH = 915;
 const ZOO_LOGO = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
 const HAMBURGER_MENU = <span style={{ display: 'inline-block', transform: 'scale(2.5, 2)' }}>≡</span>;
 
@@ -73,7 +73,7 @@ const SiteNav = React.createClass({
     }
     this.resizeTimeout = setTimeout(() => {
       this.setState({
-        isMobile: innerWidth < MAX_MOBILE_WIDTH
+        isMobile: innerWidth <= MAX_MOBILE_WIDTH
       }, () => {
         this.resizeTimeout = NaN;
       });
@@ -222,7 +222,7 @@ const SiteNav = React.createClass({
             <i className="fa fa-spinner fa-spin fa-fw"></i>
           </span>}
 
-        {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar params={this.props.params} /> : <LoginBar />)}
+        {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar isMobile={this.state.isMobile} params={this.props.params} /> : <LoginBar />)}
 
         {!!this.props.onToggle && !this.state.isMobile &&
           <button
