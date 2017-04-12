@@ -1,45 +1,59 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
 const SUPPORTED_TYPES = ['text'];
 const SUPPORTED_FORMATS = ['plain'];
 
+const cache = {};
+
 class TextViewer extends Component {
   constructor(props) {
     super(props);
+    this.element = null;
     this.state = {
-      content: '',
+      content: ''
     };
   }
 
-  componentWillMount() {
-    fetch(this.props.src, { mode: 'cors' })
-    .then((response) => {
-      return response.text();
-    })
-    .then((content) => {
-      this.setState({ content });
-      ReactDOM.findDOMNode(this).dispatchEvent(new Event('load'));
-    })
-    .catch((e) => {
-      const content = e.message;
-      this.setState({ content });
-    });
+  componentDidMount() {
+    this.element.addEventListener('load', this.props.onLoad);
+    this.loadText(this.props.src);
   }
 
-  componentDidMount() {
-    ReactDOM.findDOMNode(this).addEventListener('load', this.props.onLoad);
+  componentWillReceiveProps(newProps) {
+    if (newProps.src !== this.props.src) {
+      this.loadText(newProps.src);
+    }
   }
 
   componentWillUnmount() {
-    ReactDOM.findDOMNode(this).removeEventListener('load', this.props.onLoad);
+    this.element.removeEventListener('load', this.props.onLoad);
+  }
+
+  loadText(src) {
+    const cachedContent = cache[src];
+    if (cachedContent) {
+      this.setState({ content: cachedContent });
+    } else {
+      this.setState({ content: 'Loading…' });
+      fetch(src + '?=')
+      .then((response) => {
+        return response.text();
+      })
+      .then((content) => {
+        cache[src] = content;
+        this.setState({ content });
+        this.element.dispatchEvent(new Event('load'));
+      })
+      .catch((e) => {
+        const content = e.message;
+        this.setState({ content });
+      });
+    }
   }
 
   render() {
     let { content } = this.state;
-    if (content === "") {
-      return null;
-    }
+    const isLoading = (this.state.content === 'Loading…');
     if (SUPPORTED_TYPES.indexOf(this.props.type) === -1) {
       content = `Unsupported type: ${this.props.type}`;
     }
@@ -47,7 +61,7 @@ class TextViewer extends Component {
       content = `Unsupported format: ${this.props.format}`;
     }
     return (
-      <div className="text-viewer" >
+      <div ref={(element) => { this.element = element; }} className={isLoading ? 'text-viewer-loading' : 'text-viewer'} >
         { content }
       </div>
     );
@@ -58,13 +72,13 @@ TextViewer.propTypes = {
   src: React.PropTypes.string.isRequired,
   type: React.PropTypes.string,
   format: React.PropTypes.string,
-  onLoad: React.PropTypes.func,
+  onLoad: React.PropTypes.func
 };
 
 TextViewer.defaultProps = {
   type: 'text',
   format: 'plain',
-  onLoad: (e) => { console.log('text loaded', e); },
+  onLoad: (e) => { console.log('text loaded', e); }
 };
 
 export default TextViewer;
