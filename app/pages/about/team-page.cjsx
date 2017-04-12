@@ -50,6 +50,9 @@ counterpart.registerTranslations 'en',
         title: 'Technical Lead'
         bio: '''Arfon was co-founder and Technical Lead of the Zooniverse for the first five years of the project.
         Arfon served as Director of Citizen Science at the Adler Planetarium and co-lead of the Zooniverse until fall 2013.'''
+      beckyRother:
+        title: 'Visual Designer'
+        bio: '''Becky joined the Zooniverse team as designer in 2017. With a background in mobile apps and product design and a degree in journalism, she's excited to use her powers for good with the Zooniverse team.''' 
       beverleyNewing:
         title: 'Web Developer Intern'
         bio: '''Beverley is an English and German literature graduate, now working as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.'''
@@ -128,12 +131,12 @@ counterpart.registerTranslations 'en',
         bio: '''Jen works on Galaxy Zoo education in her role as the SEPnet/Ogden Outreach Officer
         for the Institute of Cosmology and Gravitation, and has a PhD in astrophysics. Active
         galactic nuclei were her first love.'''
-      jordanMartin:
-        title: 'Visual Designer'
-        bio: '''Jordan joined at the Adler Planetarium as Zooniverse's Visual Designer
-        starting in 2015. She spends her time making our user interfaces beautiful,
-        engaging, and a rewarding experience. At home she spends time with her
-        two cats and many houseplants.'''
+      # jordanMartin:
+      #  title: 'Visual Designer'
+      #  bio: '''Jordan joined at the Adler Planetarium as Zooniverse's Visual Designer
+      #  starting in 2015. She spends her time making our user interfaces beautiful,
+      #  engaging, and a rewarding experience. At home she spends time with her
+      #  two cats and many houseplants.'''
       julieFeldt:
         title: 'Educator'
         bio: '''Julie has a background in space physics and museum studies. She works on educational
@@ -188,9 +191,9 @@ counterpart.registerTranslations 'en',
         bio: '''A PhD student at the University of Minnesota, Melanie works on combining machine learning
         with volunteer votes for classification tasks on the Galaxy Zoo project with the goal of classifying
         *billions* of galaxies that future telescopes will see.'''
-      michaelParrish:
-        title: 'Rails/Backend Developer'
-        bio: '''Software developer at the Zooniverse. He pwns databases daily. Dog, fishing, snakes, and bourbon.'''
+      # michaelParrish:
+      #  title: 'Rails/Backend Developer'
+      #  bio: '''Software developer at the Zooniverse. He pwns databases daily. Dog, fishing, snakes, and bourbon.'''
       perryRoper:
         title: 'Developer'
         bio: 'Perry was a developer with the Zooniverse, based in Oxford.'
@@ -211,6 +214,9 @@ counterpart.registerTranslations 'en',
         title: 'Developer'
         bio: '''Roger builds front end interfaces for the Zooniverse, and enjoys coding, music and rebuilding
         motorbikes in his spare time.'''
+      samanthaBlickham:
+        title: 'IMLS Postdoctoral Fellow'
+        bio: '''Samantha Blickhan is the IMLS Postdoctoral Fellow in the Department of Citizen Science at the Adler Planetarium, working on transcription projects for the Zooniverse. She received her Ph.D. in Musicology from Royal Holloway, University of London, with a thesis on the palaeography of British song notation in the 12th and 13th centuries. Her research interests include music and perception, and their relationships with writing systems, technology and pedagogy..'''   
       sandorKruk:
         title: 'Researcher'
         bio: '''Sandor is a graduate student working on his PhD in Astrophysics at Oxford.
