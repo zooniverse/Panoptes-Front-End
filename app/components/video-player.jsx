@@ -2,54 +2,48 @@ import React from 'react';
 
 const IS_IE = 'ActiveXObject' in window;
 
-const VideoPlayer = React.createClass({
+class VideoPlayer extends React.Component {
+  constructor(props) {
+    super(props);
 
-  propTypes: {
-    children: React.PropTypes.node,
-    format: React.PropTypes.string,
-    frame: React.PropTypes.number,
-    onLoad: React.PropTypes.func,
-    showControls: React.PropTypes.bool,
-    src: React.PropTypes.string,
-    type: React.PropTypes.string
-  },
+    this.player = null;
+    this.scrubber = null;
 
-  getDefaultProps() {
-    return {
-      showControls: true
-    };
-  },
+    this.endVideo = this.endVideo.bind(this);
+    this.playVideo = this.playVideo.bind(this);
+    this.seekVideo = this.seekVideo.bind(this);
+    this.setPlayRate = this.setPlayRate.bind(this);
+    this.updateScrubber = this.updateScrubber.bind(this);
 
-  getInitialState() {
-    return {
+    this.state = {
       playing: false,
       playbackRate: 1
     };
-  },
+  }
 
   componentDidMount() {
-    if (this.refs.videoScrubber) {
-      this.refs.videoScrubber.value = 0;
-      if (IS_IE) this.refs.videoScrubber.addEventListener('change', this.seekVideo);
+    if (this.scrubber) {
+      this.scrubber.value = 0;
+      if (IS_IE) this.scrubber.addEventListener('change', this.seekVideo);
     }
-  },
+  }
 
   componentDidUpdate() {
-    if (this.refs.videoPlayer) this.refs.videoPlayer.playbackRate = this.state.playbackRate;
-  },
+    if (this.player) this.player.playbackRate = this.state.playbackRate;
+  }
 
   componentWillUnmount() {
-    if (this.refs.videoScrubber && IS_IE) {
-      this.refs.videoScrubber.removeEventListener('change', this.seekVideo);
+    if (this.scrubber && IS_IE) {
+      this.scrubber.removeEventListener('change', this.seekVideo);
     }
-  },
+  }
 
   setPlayRate(e) {
     this.setState({ playbackRate: parseFloat(e.target.value) });
-  },
+  }
 
   playVideo(playing) {
-    const player = this.refs.videoPlayer;
+    const { player } = this;
     if (!player) return;
 
     this.setState({ playing });
@@ -59,41 +53,41 @@ const VideoPlayer = React.createClass({
     } else {
       player.pause();
     }
-  },
+  }
 
   seekVideo() {
-    const player = this.refs.videoPlayer;
-    const scrubber = this.refs.videoScrubber;
+    const { player, scrubber } = this;
     player.currentTime = scrubber.value;
-  },
+  }
 
   endVideo() {
     this.setState({ playing: false });
-  },
+  }
 
   updateScrubber() {
-    const player = this.refs.videoPlayer;
-    const scrubber = this.refs.videoScrubber;
+    const { player, scrubber } = this;
     if (!scrubber.getAttribute('max')) scrubber.setAttribute('max', player.duration);
     scrubber.value = player.currentTime;
-  },
+  }
 
   renderSpeedControls(rates) {
-    return rates.map((rate, i) => (
-      <label key={`rate-${i}`} className="secret-button">
-        <input
-          type="radio"
-          name={`playRate${this.props.frame}`}
-          value={rate}
-          checked={rate === this.state.playbackRate}
-          onChange={this.setPlayRate}
-        />
-        <span>
-          {rate}&times;
-        </span>
-      </label>),
-    );
-  },
+    return rates.map((rate, i) => {
+      return (
+        <label key={`rate-${i}`} className="secret-button">
+          <input
+            type="radio"
+            name={`playRate${this.props.frame}`}
+            value={rate}
+            checked={rate === this.state.playbackRate}
+            onChange={this.setPlayRate}
+          />
+          <span>
+            {rate}&times;
+          </span>
+        </label>
+      );
+    });
+  }
 
   render() {
     const rates = [0.25, 0.5, 1];
@@ -101,7 +95,7 @@ const VideoPlayer = React.createClass({
       <div className="subject-video-frame">
         <video
           className="subject"
-          ref="videoPlayer"
+          ref={(element) => { this.player = element; }}
           src={this.props.src}
           type={`${this.props.type}/${this.props.format}`}
           preload="auto"
@@ -138,7 +132,7 @@ const VideoPlayer = React.createClass({
             <input
               type="range"
               className="video-scrubber"
-              ref="videoScrubber"
+              ref={(element) => { this.scrubber = element; }}
               min="0"
               step="any"
               onChange={this.seekVideo}
@@ -153,6 +147,20 @@ const VideoPlayer = React.createClass({
     );
   }
 
-});
+}
+
+VideoPlayer.propTypes = {
+  children: React.PropTypes.node,
+  format: React.PropTypes.string,
+  frame: React.PropTypes.number,
+  onLoad: React.PropTypes.func,
+  showControls: React.PropTypes.bool,
+  src: React.PropTypes.string,
+  type: React.PropTypes.string
+};
+
+VideoPlayer.defaultProps = {
+  showControls: true
+};
 
 export default VideoPlayer;
