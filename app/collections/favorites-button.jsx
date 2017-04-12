@@ -147,6 +147,7 @@ export default class FavoritesButton extends React.Component {
 
     return (
       <button
+        aria-label={(this.state.favorited) ? 'Unfavorite' : 'Favorite'}
         className={`favorites-button ${this.props.className || ''}`}
         type="button"
         title={(this.state.favorited) ? 'Unfavorite' : 'Favorite'}
