@@ -1,9 +1,7 @@
 import React from 'react';
-import LoadingIndicator from '../components/loading-indicator';
 import getSubjectLocation from '../lib/get-subject-location';
-import VideoPlayer from './video-player';
 import PanZoom from './pan-zoom';
-import TextViewer from './text-viewer';
+import FileViewer from './file-viewer';
 
 export default class FrameViewer extends React.Component {
   constructor(props) {
@@ -44,63 +42,58 @@ export default class FrameViewer extends React.Component {
     const { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
     const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && type === 'image';
 
-    const frameDisplay = ((subject) => {
-      switch (subject) {
-        case 'image':
-          return (
-            <div className="subject-image-frame" >
-              <img
-                role="presentation"
-                ref="subjectImage"
-                className="subject pan-active"
+    if (FrameWrapper) {
+      if (type === 'image') {
+        return (
+          <PanZoom ref={(c) => { this.panZoom = c; }} enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
+            <FrameWrapper
+              frame={this.props.frame}
+              naturalWidth={this.state.frameDimensions.width || 0}
+              naturalHeight={this.state.frameDimensions.height || 0}
+              workflow={this.props.workflow}
+              subject={this.props.subject}
+              classification={this.props.classification}
+              annotation={this.props.annotation}
+              loading={this.state.loading}
+              preferences={this.props.preferences}
+              modification={this.props.modification || {}}
+              onChange={this.props.onChange}
+            >
+              <FileViewer
                 src={src}
+                type={type}
+                format={format}
+                frame={this.props.frame}
                 onLoad={this.handleLoad}
-                tabIndex={0}
                 onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
                 onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
               />
-
-              {this.state.loading && (
-                <div className="loading-cover" style={this.constructor.overlayStyle} >
-                  <LoadingIndicator />
-                </div>
-              )}
-            </div>);
-        case 'video':
-          return (
-            <VideoPlayer src={src} type={type} format={format} frame={this.props.frame} onLoad={this.handleLoad} />
-          );
-        case 'text':
-          return (
-            <TextViewer src={src} type={type} format={format} frame={this.props.frame} onLoad={this.handleLoad} />
-          );
-        default:
-          return null;
+            </FrameWrapper>
+          </PanZoom>
+        );
+      } else {
+        return (
+          <div className="frame-annotator">
+            <FileViewer
+              src={src}
+              type={type}
+              format={format}
+              frame={this.props.frame}
+              onLoad={this.handleLoad}
+            />
+          </div>
+        );
       }
-    })(type);
-
-    if (FrameWrapper) {
-      return (
-        <PanZoom ref={(c) => { this.panZoom = c; }} enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
-          <FrameWrapper
-            frame={this.props.frame}
-            naturalWidth={this.state.frameDimensions.width || 0}
-            naturalHeight={this.state.frameDimensions.height || 0}
-            workflow={this.props.workflow}
-            subject={this.props.subject}
-            classification={this.props.classification}
-            annotation={this.props.annotation}
-            loading={this.state.loading}
-            preferences={this.props.preferences}
-            modification={this.props.modification || {}}
-            onChange={this.props.onChange}
-          >
-            {frameDisplay}
-          </FrameWrapper>
-        </PanZoom>
-      );
     } else {
-      return frameDisplay;
+      return (
+        <FileViewer
+          src={src}
+          type={type}
+          format={format}
+          frame={this.props.frame}
+          onLoad={this.handleLoad}
+        />
+      );
     }
   }
 }
