@@ -90,6 +90,7 @@ const CollectionPage = React.createClass({
       return null;
     }
 
+    const title = `${this.props.collection.display_name} (${this.props.collection.links.subjects ? this.props.collection.links.subjects.length : null})`;
     const baseType = this.props.collection.favorite ? 'favorites' : 'collections';
     let baseLink = '';
     if (!!this.props.project) {
@@ -107,32 +108,37 @@ const CollectionPage = React.createClass({
       });
     }
 
+    let displayRole = '';
+    if (userRole.length > 0) {
+      if (userRole[0].roles.includes('owner')) {
+        displayRole = ` (you're the ${userRole[0].roles.join(', ')})`;
+      } else {
+        displayRole = ` (you're a ${userRole[0].roles.join(', ')})`;
+      }
+    }
+
     return (
       <div className="collections-page">
         <div className="collection-header">
           <div>
             <IndexLink to={baseCollectionLink} className="collection-title">
-              {this.props.collection.display_name}
+              {title}
             </IndexLink>
-            {(userRole.length > 0) ? <span> [ {userRole[0].roles.join(', ')} ] </span> : null
-            }
             <br />
             <Link to={profileLink} className="collection-owner">
               BY {this.state.owner.display_name}
             </Link>
+            {displayRole}
           </div>
           <nav className="collection-nav">
             {this.state.canCollaborate ?
-              <span>
-                <Link to={`${baseCollectionLink}/settings`} className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
-                  <Translate content="collectionPage.settings" />
-                </Link>
-                <Link to={`${baseCollectionLink}/collaborators`} className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
+              <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
+                <Translate content="collectionPage.settings" />
+              </Link> : null}
+            {this.state.canCollaborate ?
+                <Link to={`${baseCollectionLink}/collaborators`} activeClassName="active" className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
                   <Translate content="collectionPage.collaborators" />
-                </Link>
-              </span> :
-              null
-            }
+                </Link> : null}
             <Link to={baseCollectionsLink} className="collection-nav-item">
               <Translate content={collectionsLinkMessageKey} user={this.state.owner.display_name} />
             </Link>

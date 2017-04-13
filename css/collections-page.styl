@@ -6,10 +6,14 @@
   .collection-header
     display: flex
     flex: 1 0 auto
-    margin-bottom: 3em
+    margin-bottom: 2em
     font-size: 0.8em
     color: COPY
     justify-content: space-between
+
+    @media (max-width: 900px)
+      flex-direction: column
+      margin-bottom: 1em
 
   .collection-title
     @extends $reset-button
@@ -25,10 +29,22 @@
     align-items: flex-end
     justify-content: space-between
 
+    @media (max-width: 900px)
+      flex-direction: column
+      align-items: flex-start
+
   .collection-nav-item
     @extends $reset-button
     margin-left: 1.5em
     text-transform: uppercase
+    text-align: center
+
+    @media (max-width: 900px)
+      margin: 0.6em 0
+
+    &.active
+      border-bottom: 1px solid TEAL_MID
+      font-weight: bold
 
   .collections-show
     margin: 0 auto
@@ -37,6 +53,11 @@
       display: flex
       justify-content: flex-end
       margin-bottom: 2em
+
+      @media (max-width: 900px)
+        flex-direction: column
+        justify-content: center
+        align-content: center
 
     .select-subjects-button
       @extends $reset-button
@@ -48,6 +69,9 @@
       padding: 0.6em 1.2em
       text-align: center
       font-size: 0.8em
+
+      @media (max-width: 900px)
+        margin: 1em
 
       &:focus,
       &:hover
@@ -67,10 +91,14 @@
       display: inline-block
       position: relative
 
+      @media (max-width: 900px)
+        display: block
+        margin: 0 auto
+
       .subject-video-controls
         display: initial
 
-      .subject-media-frame
+      .subject-image-frame
         margin: auto
 
     img
