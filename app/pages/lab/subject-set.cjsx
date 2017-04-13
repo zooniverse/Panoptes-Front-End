@@ -199,7 +199,7 @@ EditSubjectSetPage = React.createClass
 
       <hr />
 
-      {if @props.user.uploaded_subjects_count >= @props.user.subject_limit and !localStorage.adminFlag
+      {if @props.user.uploaded_subjects_count >= @props.user.subject_limit and !isAdmin()
         <p>You've reached your subject upload limit. Please <a href='/about/contact'> contact us</a> to request changes to your allowance.'</p>
       else
         <p>
