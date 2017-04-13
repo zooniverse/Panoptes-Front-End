@@ -437,6 +437,13 @@ beckyRother:
     bio: counterpart "team.content.jimODonnell.bio"
     image: "/assets/team/jim.jpg"
     location: "oxford"
+  jordanMartin:
+    name: "Jordan Martin"
+    twitter: "Jordanwhitneym"
+    title: counterpart "team.content.jordanMartin.title"
+    bio: counterpart "team.content.jordanMartin.bio"
+    image: "/assets/team/jordan.jpg"
+    location: "alumni"
   julieFeldt:
     name: "Julie Feldt"
     title: counterpart "team.content.julieFeldt.title"
@@ -512,11 +519,11 @@ beckyRother:
     image: "/assets/team/melanie.jpg"
     location: "minnesota"
   michaelParrish:		
-    name: "Michael Parrish"		
-    twitter: "michael_parrish"		
-    title: counterpart "team.content.michaelParrish.title"		
-    bio: counterpart "team.content.michaelParrish.bio"		
-    image: "/assets/team/michael.png"		
+    name: "Michael Parrish"
+    twitter: "michael_parrish"
+    title: counterpart "team.content.michaelParrish.title"
+    bio: counterpart "team.content.michaelParrish.bio"
+    image: "/assets/team/michael.png"
     location: "alumni"
   perryRoper:
     name: "Perry Roper"
