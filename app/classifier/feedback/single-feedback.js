@@ -1,8 +1,3 @@
-// TODO: move searching through each subject feedback field here
-// once we can limit which to check in the lab UI
-
-// TODO: handle invalid feedback
-
 const singleFeedback = (annotation, subject, workflow, activeFeedbackRules) => {
   const { metadata } = subject;
   const taskFeedback = { question: workflow.tasks[annotation.task].question };
