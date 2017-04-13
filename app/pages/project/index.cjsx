@@ -30,7 +30,7 @@ ProjectPageController = React.createClass
     background: null
     error: null
     guide: null
-    guideIcons: null
+    guideIcons: {}
     loading: false
     loadingSelectedWorkflow: false
     owner: null
