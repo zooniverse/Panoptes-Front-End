@@ -8,11 +8,10 @@ const SubjectSetsPage = (props) => {
 
   return (
     <div>
-      <div className="form-label">Subject sets</div>
-      <small>
-        Subject sets are a group of data presented to volunteers in a project. A subject is typically
-        an image, graph, photo, audio recording, video, or a collection of these different things.
-      </small>
+      <header className="form-label">Subject sets</header>
+      <p>
+        Subject sets are a group of data presented to volunteers in a project.
+      </p>
       <ul className="nav-list">
         {props.subjectSets.map((subjectSet) => {
           const subjectSetListLabel = subjectSet.display_name || <i>{props.defaultSubjectSetName}</i>;
