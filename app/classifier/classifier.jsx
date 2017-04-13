@@ -271,6 +271,7 @@ export default class Classifier extends React.Component {
             annotation={currentAnnotation}
             classification={currentClassification}
             completeClassification={this.completeClassification}
+            disabled={this.state.subjectLoading}
             nextSubject={this.props.onClickNext}
             project={this.props.project}
             subject={this.props.subject}

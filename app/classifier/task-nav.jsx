@@ -124,7 +124,7 @@ class TaskNav extends React.Component {
     const onFirstAnnotation = !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
 
     // Should we disable the "Next" or "Done" buttons?
-    let waitingForAnswer = false;
+    let waitingForAnswer = this.props.disabled;
     if (TaskComponent && TaskComponent.isAnnotationComplete && this.props.annotation) {
       waitingForAnswer = !this.props.annotation.shortcut && !TaskComponent.isAnnotationComplete(task, this.props.annotation, this.props.workflow);
     }
@@ -233,6 +233,7 @@ TaskNav.propTypes = {
     metadata: React.PropTypes.object
   }),
   completeClassification: React.PropTypes.func,
+  disabled: React.PropTypes.bool,
   nextSubject: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
   project: React.PropTypes.shape({
@@ -251,6 +252,10 @@ TaskNav.propTypes = {
     first_task: React.PropTypes.string,
     tasks: React.PropTypes.object
   })
+};
+
+TaskNav.defaultProps = {
+  disabled: false
 };
 
 export default TaskNav;
