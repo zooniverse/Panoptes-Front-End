@@ -29,6 +29,7 @@ module.exports = React.createClass
       when 'crop' then ['instruction']
       when 'text' then ['instruction']
       when 'slider' then ['instruction']
+      when 'highlighter' then ['instruction', 'highlighterLabels']
 
     isAQuestion = @props.task.type in ['single', 'multiple']
     canBeRequired = @props.task.type in ['single', 'multiple', 'text']
@@ -117,6 +118,23 @@ module.exports = React.createClass
                         </AutoSave>
                       </div>
 
+                  when 'highlighter'
+                    <div className="workflow-choice-setting" >
+                      <AutoSave resource={@props.workflow} >
+                        Color{' '}
+                        <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
+                          <option value="#ff0000">Red</option>
+                          <option value="#ffff00">Yellow</option>
+                          <option value="#00ff00">Green</option>
+                          <option value="#00ffff">Cyan</option>
+                          <option value="#0000ff">Blue</option>
+                          <option value="#ff00ff">Magenta</option>
+                          <option value="#000000">Black</option>
+                          <option value="#ffffff">White</option>
+                        </select>
+                      </AutoSave>
+                    </div>
+
                   when 'drawing'
                     options = drawingTools[choice.type].options ? []
                     [<div key="type" className="workflow-choice-setting">
@@ -202,6 +220,10 @@ module.exports = React.createClass
                 <small className="form-help">The answers will be displayed next to each checkbox, so this text is as important as the main text and help text for guiding the volunteers. Keep your answers as minimal as possible -- any more than 5 answers can discourage new users.</small><br />
                 <small className="form-help">The “Next task” selection describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).</small>
               </div>
+            when 'highlighterLabels'
+              <div> 
+                <small className="form-help"> Add labels for the highlighter tool.</small>
+              </div>
             when 'tools'
               <div>
                 <small className="form-help">Select which marks you want for this task, and what to call each of them. The tool name will be displayed on the classification page next to each marking option. Use the simplest tool that will give you the results you need for your research.</small><br />
@@ -248,10 +270,16 @@ module.exports = React.createClass
     switch type
       when 'answers' then @addAnswer()
       when 'tools' then @addTool()
+      when 'highlighterLabels' then @addHighlighterLabels()
 
   addAnswer: ->
     @props.task.answers.push
       label: 'Enter an answer'
+    @props.workflow.update 'tasks'
+
+  addHighlighterLabels: ->
+    @props.task.highlighterLabels.push
+      label: 'Enter label'
     @props.workflow.update 'tasks'
 
   addTool: ->
