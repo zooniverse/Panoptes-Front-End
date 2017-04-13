@@ -511,6 +511,13 @@ beckyRother:
     bio: counterpart "team.content.melanieBeck.bio"
     image: "/assets/team/melanie.jpg"
     location: "minnesota"
+  michaelParrish:		
+    name: "Michael Parrish"		
+    twitter: "michael_parrish"		
+    title: counterpart "team.content.michaelParrish.title"		
+    bio: counterpart "team.content.michaelParrish.bio"		
+    image: "/assets/team/michael.png"		
+    location: "alumni"
   perryRoper:
     name: "Perry Roper"
     title: counterpart "team.content.perryRoper.title"
