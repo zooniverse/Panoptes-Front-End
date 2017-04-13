@@ -198,13 +198,13 @@ ProjectPageController = React.createClass
 
   selectRandomWorkflow: (project) ->
     linkedActiveWorkflows = project.links.active_workflows
-    if linkedActiveWorkflows.length is 0
-      throw new Error "No workflows for project #{project.id}"
-      project.uncacheLink 'workflows'
-    else
+    if linkedActiveWorkflows?.length > 0
       randomIndex = Math.floor Math.random() * linkedActiveWorkflows.length
       # console.log 'Chose random workflow', linkedActiveWorkflows[randomIndex]
       linkedActiveWorkflows[randomIndex]
+    else
+      @workflowSelectionErrorHandler()
+
 
   getWorkflow: (selectedWorkflowID, activeFilter = true) ->
     query =
@@ -222,10 +222,15 @@ ProjectPageController = React.createClass
           @setState({ loadingSelectedWorkflow: false, workflow })
         else
           console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
-          if @props.location.query?.workflow?
-            @context.router.push "/projects/#{@state.project.slug}/classify"
-          @clearInactiveWorkflow(selectedWorkflowID)
-            .then(@getSelectedWorkflow(@state.project, @state.preferences))
+          if selectedWorkflowID is @state.project.configuration?.default_workflow
+            # If a project still has an inactive workflow set as a default workflow prior to this being fix in the lab.
+            # Don't try again and get caught in a loop
+            @workflowSelectionErrorHandler()
+          else
+            if @props.location.query?.workflow?
+              @context.router.push "/projects/#{@state.project.slug}/classify"
+            @clearInactiveWorkflow(selectedWorkflowID)
+              .then(@getSelectedWorkflow(@state.project, @state.preferences))
 
   clearInactiveWorkflow: (selectedWorkflowID) ->
     preferences = @state.preferences
@@ -240,6 +245,10 @@ ProjectPageController = React.createClass
       preferences.save()
     else
       Promise.resolve(null)
+
+  workflowSelectionErrorHandler: () ->
+    throw new Error "No active workflows for project #{@state.project.id}"
+    @state.project.uncacheLink 'workflows'
 
   checkUserRoles: (project, user) ->
     currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user?.id)
