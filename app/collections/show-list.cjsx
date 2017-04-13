@@ -77,12 +77,20 @@ SubjectNode = React.createClass
               <span></span>
             </Link>}
           {if @props.canCollaborate and !@props.selecting
-            <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
+            <button
+              type="button"
+              aria-label="Delete"
+              className="collection-subject-viewer-delete-button"
+              onClick={@props.onDelete}>
               <i className="fa fa-close" />
             </button>}
           {if @props.selecting
             <label className="collection-subject-viewer-select">
-              <input type="checkbox" checked={@props.selected} onChange={@toggleSelect}/>
+              <input
+                aria-label={if @props.selected then "Selected" else "Not Selected"}
+                type="checkbox"
+                checked={@props.selected}
+                onChange={@toggleSelect}/>
               <i className={subjectSelectClasses} />
             </label>}
       </SubjectViewer>
@@ -168,7 +176,16 @@ module.exports = React.createClass
       .then =>
         @props.collection.uncacheLink 'subjects'
 
-  deleteSubjects: () ->
+  confirmDeleteSubjects: ->
+    alert (resolve) =>
+      <div className="confirm-delete-dialog content-container">
+        <p>Are you sure you want to delete {@state.selected.length} subjects from this collection? This action is irreversible!</p>
+        <button className="minor-button" autoFocus={true} onClick={resolve}>No, don&apos;t delete the subjects.</button>
+        {' '}
+        <button className="major-button" onClick={() => @deleteSubjects(); resolve();}>Yes, delete the subjects selected!</button>
+      </div>
+
+  deleteSubjects: ->
     subjects = @state.subjects.filter((subject) => @state.selected.indexOf(subject.id) is -1)
     @setState {subjects}
 
@@ -201,7 +218,7 @@ module.exports = React.createClass
                 <button
                   type="button"
                   className="select-subjects-button"
-                  onClick={@deleteSubjects}
+                  onClick={@confirmDeleteSubjects}
                   disabled={@state.selected.length < 1}>
                   Remove from Collection
                 </button>}
