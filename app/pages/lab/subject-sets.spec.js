@@ -29,7 +29,7 @@ describe('SubjectSetsPage', function () {
 
   it('will display a message when no subject sets are present', function () {
     const message = 'No subject sets are currently associated with this project.';
-    assert.equal(wrapper.find('p').text(), message);
+    assert.equal(wrapper.find('#no-subject-set').text(), message);
   });
 
   it('will display the correct amount of subject sets', function () {

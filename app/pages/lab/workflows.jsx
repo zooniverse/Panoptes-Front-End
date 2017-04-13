@@ -29,7 +29,7 @@ const WorkflowsPage = (props) => {
       <DragReorderable tag="ul" className="nav-list" items={props.workflows} render={renderWorkflow} onChange={props.handleWorkflowReorder} />
 
       {(props.workflows.length === 0 && props.loading === false) && (
-        <p>No workflows are currently associated with this project.</p>
+        <p id="no-workflows">No workflows are currently associated with this project.</p>
       )}
 
       <div className="nav-list-item">

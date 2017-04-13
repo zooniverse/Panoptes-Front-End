@@ -35,7 +35,7 @@ describe('WorkflowsPage', function () {
 
   it('will display a message when no workflows are present', function () {
     const message = 'No workflows are currently associated with this project.';
-    assert.equal(wrapper.find('p').text(), message);
+    assert.equal(wrapper.find('#no-workflows').text(), message);
   });
 
   it('will display the correct amount of workflows', function () {
