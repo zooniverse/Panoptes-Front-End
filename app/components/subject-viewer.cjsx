@@ -58,7 +58,7 @@ module.exports = React.createClass
 
   getInitialFrame: ->
     {frame, allowFlipbook, subject} = @props
-    default_frame = parseInt(subject.metadata.default_frame, 10)
+    default_frame = parseInt(subject.metadata?.default_frame, 10)
     initialFrame = 0
     if frame?
       initialFrame = frame
