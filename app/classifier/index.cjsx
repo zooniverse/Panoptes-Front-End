@@ -141,7 +141,7 @@ module.exports = React.createClass
       apiClient.type('subject_workflow_statuses')
       .get(query)
       .then ([sws]) =>
-        classificationCount = if sws.classifications_count then sws.classifications_count else 0
+        classificationCount = if sws?.classifications_count then sws.classifications_count else 0
         @setState({ classificationCount });
 
   render: ->
@@ -151,7 +151,7 @@ module.exports = React.createClass
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
         </CustomSignInPrompt>}
 
-      {if @state.classificationCount is 0 and @props.splits['subject.first-to-classify.visible']
+      {if @state.classificationCount is 0 and @props.splits?['subject.first-to-classify.visible']
         <VisibilitySplit splits={@props.splits} splitKey={'subject.first-to-classify.visible'} elementKey={'div'}>
           <div className="classifier-announcement-banner classifier-announcement-banner--yellow">
             <p>You're the first person to see this subject!</p>
