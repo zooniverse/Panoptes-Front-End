@@ -179,10 +179,12 @@ module.exports = React.createClass
   confirmDeleteSubjects: ->
     alert (resolve) =>
       <div className="confirm-delete-dialog content-container">
-        <p>Are you sure you want to delete {@state.selected.length} subjects from this collection? This action is irreversible!</p>
-        <button className="minor-button" autoFocus={true} onClick={resolve}>No, don&apos;t delete the subjects.</button>
+        <p>Are you sure you want to remove {@state.selected.length} subjects from this collection?</p>
+        <div style={{ textAlign: "center" }}>
+          <button className="minor-button" autoFocus={true} onClick={resolve}>Cancel</button>
         {' '}
-        <button className="major-button" onClick={() => @deleteSubjects(); resolve();}>Yes, delete the subjects selected!</button>
+          <button className="major-button" onClick={() => @deleteSubjects(); resolve();}>Yes</button>
+        </div>
       </div>
 
   deleteSubjects: ->
