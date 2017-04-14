@@ -2,6 +2,7 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import { Link } from 'react-router';
+import ProjectCard from '../home-common/project-card';
 
 counterpart.registerTranslations('en', {
   promotedHomePage: {
@@ -14,11 +15,15 @@ counterpart.registerTranslations('en', {
   }
 });
 
-const HomePagePromoted = ({ }) => {
+const HomePagePromoted = ({ promotedProjects }) => {
   return (
     <section className="home-promoted">
       <Translate className="tertiary-kicker" content="promotedHomePage.discover" />
       <Translate className="display-body" content="promotedHomePage.participate" />
+
+      {promotedProjects.map((project) => {
+        return <ProjectCard key={project.id} project={project} />;
+      })}
 
       <Link to="/projects" className="primary-button primary-button--light">See All Projects</Link>
     </section>
@@ -26,6 +31,7 @@ const HomePagePromoted = ({ }) => {
 };
 
 HomePagePromoted.propTypes = {
+  promotedProjects: React.PropTypes.arrayOf(React.PropTypes.object)
 };
 
 export default HomePagePromoted;

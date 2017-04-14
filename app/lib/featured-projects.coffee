@@ -22,5 +22,5 @@ else
     image: '/assets/featured-projects/376.jpg'
     title: 'Shakespeare\'s World'
   '1734':
-    image: '/assets/featured-projects/26.jpg'
+    image: '/assets/featured-projects/3098.jpg'
     title: 'Muon Hunter'

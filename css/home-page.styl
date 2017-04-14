@@ -402,115 +402,16 @@ $flex-section
           max-width: 80vw
 
   .home-promoted
-    padding: 0
+    background-color: BACKGROUND_COLOR
 
-    .promoted-projects
-      width: 100%
-
-      .promoted-project
-        @extends $flex-section
-        @extends $absolute-fill
-
-        *
-          opacity: 0
-
-        .description
-          top: 50px
-          transition: top 0ms
-
-        &.current
-          *
-            opacity: 1
-            z-index: 2
-
-          .description
-            top: 10px
-            transition: all 750ms ease-out
-
-          .layer
-            z-index: 1
-
-          .background-image
-            z-index: 0
-
-    .background-image
-      @extends $absolute-fill
-      object-fit: cover
-      transition: opacity 750ms ease-out
-
-    .layer
-      @extends $absolute-fill
-      background: linear-gradient(top, rgba(ZOONIVERSE_TEAL, 0.25), rgba(ZOONIVERSE_TEAL, 0.4))
-
-    .description
-      position: relative
-      margin-top: 10px
-      margin-bottom: 10px
-      font-size: 3em
-      color: #FFFFFF
-
-      @media (max-width: 900px)
-        font-size: 2em
-
-    &:hover
-      .controls
-        opacity: 1
-
-    .controls
-      opacity: 0
-      transition: opacity 500ms ease-in-out
-      color: #FFFFFF
-
-      &.angles
-        position: absolute
-        font-size: 4em
-        border: 3px solid #FFFFFF
-        border-radius: 50%
-        text-align: center
-        width: 25px
-        height: 25px
-        line-height: 25px
-        top: calc(50% - 12.5px) // vertically centered
-        padding: 10px
-        cursor: pointer
-
-        &.fa-angle-left
-          left: 50px
-
-        &.fa-angle-right
-          right: 50px
-
-      &.circles
-        position: absolute
-        bottom: 15%
-        left: 0
-        width: 100%
-        text-align: center
-
-        .fa-circle, .fa-circle-o
-          margin: 0 5px 0 5px
-          cursor: pointer
-
-      @media (max-width: 900px)
-        &.angles
-          display: none
-
-        &.circles
-          opacity: 1
-          font-size: 1.5em
-
-          .fa-circle, .fa-circle-o
-            margin: 0 15px
-
-    .owner
-      position: absolute
-      bottom: 50px
-      left: 2vw
-      margin: 0
-      color: #FFFFFF
-
-      @media (max-width: 900px)
-        display: none
+    &:before
+      content: ""
+      position : absolute
+      text-align: center
+      top: 0
+      height: 1px
+      width: 85%
+      border-bottom: 1px solid LIGHT_GREY
 
   .home-social
     background-color: WHITE
