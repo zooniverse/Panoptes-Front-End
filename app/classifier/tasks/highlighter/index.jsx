@@ -2,6 +2,7 @@ import React from 'react';
 import { Markdown } from 'markdownz';
 import GenericTaskEditor from '../generic-editor';
 import GenericTask from '../generic';
+import LabelRenderer from './label-renderer';
 
 export default class Highlighter extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ export default class Highlighter extends React.Component {
   }
 
   handleChange(toolIndex, e) {
+    debugger;
     if (e.target.checked) {
       const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
       this.props.onChange(newAnnotation);
@@ -52,6 +54,8 @@ export default class Highlighter extends React.Component {
 }
 
 Highlighter.Editor = GenericTaskEditor;
+
+Highlighter.InsideSubject = LabelRenderer;
 
 Highlighter.getDefaultTask = () => {
   return (
