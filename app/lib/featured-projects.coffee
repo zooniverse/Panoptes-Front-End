@@ -1,26 +1,26 @@
 module.exports = if process.env.NODE_ENV is 'production'
-  '376':
-    caption: 'needs you to decipher handwriting'
-    image: '/assets/featured-projects/376.jpg'
-  '26':
-    caption: 'needs you to find new worlds'
-    image: '/assets/featured-projects/26.jpg'
   '60':
-    caption: 'needs you to identify species'
     image: '/assets/featured-projects/60.jpg'
+    title: 'Chimp & See'
   '21':
-    caption: 'needs you to analyze galaxies'
     image: '/assets/featured-projects/21.jpg'
-else
-  '1625':
-    caption: 'needs you to decipher handwriting'
+    title: 'Galaxy Zoo'
+  '376':
     image: '/assets/featured-projects/376.jpg'
-  '1626':
-    caption: 'needs you to find new worlds'
+    title: 'Shakespeare\'s World'
+  '3098':
     image: '/assets/featured-projects/26.jpg'
-  '1627':
-    caption: 'needs you to identify species'
+    title: 'Muon Hunter'
+else
+  '1731':
     image: '/assets/featured-projects/60.jpg'
-  '1628':
-    caption: 'needs you to analyze galaxies'
+    title: 'Chimp & See'
+  '1732':
     image: '/assets/featured-projects/21.jpg'
+    title: 'Galaxy Zoo'
+  '1733':
+    image: '/assets/featured-projects/376.jpg'
+    title: 'Shakespeare\'s World'
+  '1734':
+    image: '/assets/featured-projects/26.jpg'
+    title: 'Muon Hunter'
