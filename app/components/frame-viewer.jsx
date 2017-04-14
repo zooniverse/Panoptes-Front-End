@@ -41,7 +41,6 @@ export default class FrameViewer extends React.Component {
     const FrameWrapper = this.props.frameWrapper;
     const { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
     const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && type === 'image';
-
     if (FrameWrapper) {
       return (
         <PanZoom ref={(c) => { this.panZoom = c; }} enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
