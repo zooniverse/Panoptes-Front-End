@@ -6,41 +6,47 @@ import { Link } from 'react-router';
 counterpart.registerTranslations('en', {
   researchHomePage: {
     aboutIntro: `
-      Here is some text to talk about what the Zooniverse is all about.
+      The Zooniverse makes an impact.
     `,
     about: `
-      We will provide some good stuff here and everyone will get excited
-      and want to join the Zooniverse. We will have a ton of classifications every day and people will be quite excited. A bunch of universities
-      will also decide to work with us and we will have some neat stories published and whatnot.
+      Over the past decade, Zooniverse volunteers have helped scientists make pivotal
+      discoveries by participating in over 90 projects from the humanities to science and medicine.
+      Volunteers have discovered new planets, assisted in disaster-relief, and even documented
+      wildlife populations from Chicago to Mozambique. The Zooniverse community grows daily
+      with over 1.5 million registered users answering the call to become citizen-science volunteers.
     `,
     classifications: 'Classifications so far',
+    labs: 'Zooniverse Labs',
     meetResearchers: 'Meet the researchers who\'ve created projects for free on the Zooniverse.',
     options: 'Sign in or register to get started',
     real: 'Real researchers, real results',
-    researcherIntro: 'Some information about researchers. ',
-    researcher: 'here is some other text about researchers that we are very proud about and we couldn\'t do it without them',
+    researcherIntro: 'The Zooniverse is collaborative. ',
+    researcher: `
+      At the heart of each Zooniverse project is a team of researchers passionate about working with
+      volunteers to better understand their data. Researchers take part in project creation, data analysis,
+      and even communicate directly with volunteers through Zooniverse Talk.
+      `,
     signIn: 'Sign in',
     register: 'Register',
     works: 'The Zooniverse Works'
   }
 });
 
-const HomePageResearch = ({ count, showDialog }) => {
-  const width = window.innerWidth;
-
+const HomePageResearch = ({ count, screenWidth, showDialog }) => {
   return (
     <section className="home-research">
       <Translate className="tertiary-kicker" content="researchHomePage.works" />
       <h1 className="class-counter">{count.toLocaleString()}</h1>
       <Translate className="main-kicker" content="researchHomePage.classifications" />
 
-      <div className="home-research__content">
+      <div className="home-research__columns">
         <Translate className="display-body" content="researchHomePage.aboutIntro" />
         <Translate className="regular-body" content="researchHomePage.about" />
       </div>
 
       <div className="home-research__buttons">
-        <Translate className="tertiary-kicker" component="h3" content="researchHomePage.options" />
+        <Translate className="tertiary-kicker" content="researchHomePage.options" />
+        <br />
         <button type="button" value="sign-in" className="primary-button" onClick={showDialog}>
           <Translate content="researchHomePage.signIn" />
         </button>
@@ -53,16 +59,16 @@ const HomePageResearch = ({ count, showDialog }) => {
       <div className="home-research__researchers">
         <img role="presentation" src="/assets/home-researchers1.jpg" />
 
-        {width > 450 && (
+        {screenWidth > 550 && (
           <img role="presentation" src="/assets/home-researchers2.jpg" />
         )}
 
-        {width > 750 && (
+        {screenWidth > 900 && (
           <img role="presentation" src="/assets/home-researchers3.jpg" />
         )}
       </div>
 
-      <div className="home-research__container">
+      <div className="home-research__content">
         <Translate className="tertiary-kicker" content="researchHomePage.real" />
         <Translate className="tertiary-headline" content="researchHomePage.meetResearchers" />
         <div>
@@ -70,8 +76,10 @@ const HomePageResearch = ({ count, showDialog }) => {
           <Translate className="regular-body" content="researchHomePage.researcher" />
         </div>
 
-        <div className="home-research__buttons">
-          <Link to="/lab" className="primary-button primary-button--light">Zooniverse Labs</Link>
+        <div>
+          <Link to="/lab" className="primary-button primary-button--light">
+            <Translate content="researchHomePage.labs" />
+          </Link>
         </div>
       </div>
 
@@ -81,6 +89,7 @@ const HomePageResearch = ({ count, showDialog }) => {
 
 HomePageResearch.propTypes = {
   count: React.PropTypes.number,
+  screenWidth: React.PropTypes.number,
   showDialog: React.PropTypes.func
 };
 
