@@ -5,6 +5,8 @@ import counterpart from 'counterpart';
 counterpart.registerTranslations('en', {
   discoverHomePage: {
     appAnnounce: 'Bring the Zooniverse with you. Download the app for iOS and Android devices.',
+    discover: 'Discover, teach, and learn',
+    doScience: 'Do science, anywhere',
     signIn: 'Sign in',
     register: 'Register',
     research: `
@@ -12,7 +14,8 @@ counterpart.registerTranslations('en', {
       research in many fields across the sciences, humanities, and more.
       The Zooniverse creates opportunities for you to unlock answers and
       contribute to real discoveries.
-    `
+    `,
+    what: 'What\'s this?'
   }
 });
 
@@ -20,8 +23,9 @@ const HomePageDiscover = ({ showDialog }) => {
   return (
     <section className="home-discover">
       <div className="home-discover__content">
-        <h3 className="secondary-kicker">What&apos;s This?</h3>
-        <h1 className="tertiary-headline">Discover, teach, and learn</h1>
+        <Translate className="secondary-kicker" content="discoverHomePage.what" />
+        <br />
+        <Translate className="tertiary-headline" content="discoverHomePage.discover" />
 
         <Translate className="display-body" component="p" content="discoverHomePage.research" />
 
@@ -35,9 +39,9 @@ const HomePageDiscover = ({ showDialog }) => {
 
         <hr />
 
-        <h1 className="tertiary-kicker">Do science, anywhere</h1>
+        <Translate className="tertiary-kicker" content="discoverHomePage.doScience" />
 
-        <Translate className="display-body display-body--regular" component="p" content="discoverHomePage.appAnnounce" />
+        <Translate className="regular-body" component="p" content="discoverHomePage.appAnnounce" />
 
         <a href="https://itunes.apple.com/us/app/zooniverse/id1194130243?mt=8">
           <img role="presentation" src="/assets/home-appStore.png" />
