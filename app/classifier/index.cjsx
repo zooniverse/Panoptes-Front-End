@@ -50,7 +50,7 @@ module.exports = React.createClass
     userRoles: []
     tutorial: null
     minicourse: null
-    classificationCount: 0
+    classificationCount: null
 
   componentDidMount: ->
     @checkExpertClassifier()

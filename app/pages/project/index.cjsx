@@ -84,6 +84,7 @@ ProjectPageController = React.createClass
           break
     else
       Split.clear()
+      @setState { splits: null }
       @context.geordi?.forget ['experiment','cohort']
 
   fetchProjectData: (ownerName, projectName, user) ->
