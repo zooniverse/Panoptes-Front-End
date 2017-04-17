@@ -77,7 +77,7 @@ class ClassificationSummary extends React.Component {
 
     if (this.props.workflow.configuration &&
         this.props.workflow.configuration.custom_summary &&
-        this.props.workflow.configuration.custom_summary.includes('worldwide telescope')) {
+        this.props.workflow.configuration.custom_summary.includes('world_wide_telescope')) {
       return (
         <strong>
           <WorldWideTelescope
