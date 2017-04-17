@@ -41,59 +41,72 @@ $flex-section
 
 .home-page-not-logged-in
   .main-kicker
-    color: #addde0
-    line-height: 1vh
+    color: TEAL_LIGHT
     font-family: 'Oswald', sans-serif
-    font-size: 3.2vh
+    font-size: 1.5em
     letter-spacing: 0.18em
+    text-transform: uppercase
+
+    @media (max-width: 900px)
+      font-size: 1em
+
+  .secondary-kicker
+    color: TEAL_MID
+    font-family: 'Oswald', sans-serif
+    font-size: 1em
+    letter-spacing: 0.16em
     text-transform: uppercase
 
   .tertiary-kicker
     color: #5c5c5c
-    font-size: 1.4em
+    font-size: 1em
     font-weight: 700
     letter-spacing: 0.22em
     text-transform: uppercase
 
   .main-headline
-    font-size: 8vh
+    color: #ffffff
+    font-size: 3.25em
     font-weight: 700
 
-  .secondary-kicker
-    color: TEAL_MID
-    font-family: 'Oswald', sans-serif
-    font-size: 1.5em
-    letter-spacing: 0.16em
-    text-transform: uppercase
+    @media (max-width: 900px)
+      font-size: 2em
 
   .secondary-headline
     color: #5c5c5c
-    font-size: 7vh
+    font-size: 2.5em
+    font-weight: 700
+    line-height: 1.25em
+
+    @media (max-width: 900px)
+      font-size: 2em
 
   .tertiary-headline
     color: #5c5c5c
-    font-size: 3em
+    font-size: 2.25em
     font-weight: 700
     line-height: 1.2em
+
+    @media (max-width: 900px)
+      font-size: 2em
 
   .class-counter
     color: TEAL_MID
     font-family: 'Oswald', sans-serif
-    font-size: 12vh
+    font-size: 8em
     font-weight: 300
     letter-spacing: 0.02em
-    line-height: 1em
+    line-height: 1.2em
+
+    @media (max-width: 900px)
+      font-size: 4em
 
   .display-body
-    color: #000000
-    font-size: 1.2em
     font-weight: 700
-    line-height: 1.4em
-
-    &--regular
-      font-weight: 400
 
   .regular-body, .display-body
+    font-size: 0.8em
+
     a
       color: #007482
       text-decoration: none
@@ -109,15 +122,11 @@ $flex-section
     border: 1px solid #cc9200
     color: white
     cursor: pointer
-    font-size: 1.25em
-    margin: 1vh 2vw 3.5vh 0
-    padding: 1vh 3.5vw
+    font-size: 0.8em
+    margin: 0.75em 1em 0.75em 0
+    padding: 0.75em 0.75em
     text-decoration: none
-    max-width: 35vw
     width: 150px
-
-    @media (max-width: 900px)
-      margin-top: 20px
 
     &:hover,
     &:active,
@@ -135,7 +144,7 @@ $flex-section
         border-color: #cc9200
 
   .home-intro
-    background-color: WHITE
+    box-sizing: border-box
     justify-content: flex-end
     min-height: 30vw // video is 2:1 aspect ratio and 100% width
     padding: 2em 0
@@ -163,9 +172,6 @@ $flex-section
       z-index: -1
       object-fit: cover
 
-    .primary-button
-      width: 100px
-
   .home-research
     padding: 5em 0
     text-align: left
@@ -173,24 +179,26 @@ $flex-section
     button[class=primary-button]
       color: black
 
-    .main-kicker
-      line-height: 8vh
-
-    &__content
-      margin: 2em 14em 3.5em 14em
+    &__columns
+      margin: 2em 12em
       column-count: 2
       -moz-column-count: 2
       -webkit-column-count: 2
-      column-gap: 3em
-      -moz-column-gap: 3em
-      -webkit-column-gap: 3em
+      column-gap: 2.5em
+      -moz-column-gap: 2.5em
+      -webkit-column-gap: 2.5em
+
+      @media (max-width: 900px)
+        margin: 2em 5em
 
     &__buttons
       text-align: center
 
       .tertiary-kicker
-        font-size: 1em
-        text-align: center
+        font-size: 0.65em
+
+      button
+        margin-top: 1.5em
 
     &__researchers
       display: flex
@@ -200,29 +208,35 @@ $flex-section
 
       img
         flex: 2 0 auto
-        max-height: 240px
+        max-height: 20em
         width: 90px
 
-    &__container
+    &__content
       display: flex
       flex-direction: column
       padding: 0 15vw
       text-align: center
 
+      .tertiary-kicker
+        margin-bottom: 1.25em
+
       div
-        margin: 2em 10vw
+        box-sizing: border-box
+        margin: 1.5em 4vw
+
+        a
+          padding: 0.8em 3em
 
   .home-discover
     background-color: BACKGROUND_COLOR
     display: flex
     flex-direction: row
     flex-wrap: wrap
-    padding: 5vh 0
+    padding: 2em 0
     text-align: left
 
     hr
       border-color: white
-      margin-bottom: 2em
 
     @media (max-width: 900px)
       min-height: auto
@@ -241,11 +255,8 @@ $flex-section
 
       a
         img
-          max-height: 2.25em
-          margin-right: 1.25em
-
-      p
-        margin-top: 0.6em
+          max-height: 2em
+          margin-right: 1em
 
       button[class=primary-button]
         color: black
@@ -310,9 +321,6 @@ $flex-section
     padding: 50px 30px
     min-height: 40vw
     background: #fff
-
-    .primary-button
-      width: 100px
 
     p
       width: 50vw

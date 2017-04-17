@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import statsClient from 'panoptes-client/lib/stats-client';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
 import LoginDialog from '../partials/login-dialog';
 import alert from '../lib/alert';
 import FeaturedProject from './home-common/featured-project';
@@ -9,23 +11,37 @@ import HomePageResearch from './home-not-logged-in/research';
 import HomePageSocial from './home-not-logged-in/social';
 import HomePagePromoted from './home-not-logged-in/promoted';
 
+counterpart.registerTranslations('en', {
+  notLoggedInHomePage: {
+    projects: 'See All Projects',
+    powered: 'People-powered research',
+    welcome: 'welcome to the zooniverse'
+  }
+});
+
 export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
+    this.resizeTimeout = NaN;
     this.state = {
-      count: 42000000
+      count: 42000000,
+      screenWidth: 0
     };
 
     this.showDialog = this.showDialog.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount() {
     document.documentElement.classList.add('on-home-page-not-logged-in');
+    addEventListener('resize', this.handleResize);
+    this.handleResize();
     this.getClassificationCounts();
   }
 
   componentWillUnmount() {
     document.documentElement.classList.remove('on-home-page-not-logged-in');
+    removeEventListener('resize', this.handleResize);
   }
 
   getClassificationCounts() {
@@ -40,6 +56,19 @@ export default class HomePage extends React.Component {
       });
       this.setState({ count }); // number will only appear on production
     });
+  }
+
+  handleResize() {
+    if (!isNaN(this.resizeTimeout)) {
+      clearTimeout(this.resizeTimeout);
+    }
+    this.resizeTimeout = setTimeout(() => {
+      this.setState({
+        screenWidth: innerWidth
+      }, () => {
+        this.resizeTimeout = NaN;
+      });
+    }, 100);
   }
 
   showDialog(event) {
@@ -61,9 +90,11 @@ export default class HomePage extends React.Component {
               <source type="video/mp4" src="./assets/home-video.mp4" />
             </video>
 
-            <h5 className="main-kicker">welcome to the zooniverse</h5>
-            <h1 className="main-headline">People-powered research</h1>
-            <Link to="/projects" className="primary-button">See All Projects</Link>
+            <Translate className="main-kicker" content="notLoggedInHomePage.welcome" />
+            <Translate className="main-headline" content="notLoggedInHomePage.powered" />
+            <Link to="/projects" className="primary-button">
+              <Translate content="notLoggedInHomePage.projects" />
+            </Link>
           </section>
         </div>
 
@@ -80,7 +111,7 @@ export default class HomePage extends React.Component {
         </div>
 
         <div className="flex-container">
-          <HomePageResearch count={this.state.count} showDialog={this.showDialog} />
+          <HomePageResearch count={this.state.count} screenWidth={this.state.screenWidth} showDialog={this.showDialog} />
         </div>
 
         <div className="flex-container">
