@@ -1,6 +1,18 @@
 import React from 'react';
 import merge from 'lodash.merge';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
+
 import feedbackTypes from './types';
+
+counterpart.registerTranslations('en', {
+  feedbackEditor: {
+    title: 'Feedback',
+    enable: 'Enable feedback on this task',
+    notAvailable: 'Feedback is not available for this task.',
+    help: 'Feedback can help your volunteers improve their accuracy by checking their classification of known subjects, and reporting back on the results in the classification summary.',
+  }
+});
 
 export default class FeedbackEditor extends React.Component {
   constructor(props) {
@@ -21,7 +33,12 @@ export default class FeedbackEditor extends React.Component {
 
     return (
       <div>
-        <div className="form-label">Feedback</div>
+        <div className="form-label">
+          <Translate content="feedbackEditor.title" />
+        </div>
+        <small className="form-help">
+          <Translate content="feedbackEditor.help" />
+        </small>
 
         { (this.isFeedbackAvailable(task))
           ? this.renderFeedbackEnable(task)
@@ -59,7 +76,7 @@ export default class FeedbackEditor extends React.Component {
             onChange={this.handleEnableFeedback}
           />
           {' '}
-          Enable feedback on this task
+          <Translate content="feedbackEditor.enable" />
         </label>
         {' '}
       </div>
@@ -72,7 +89,7 @@ export default class FeedbackEditor extends React.Component {
   }
 
   renderNoFeedback() {
-    return <div>Feedback is not available for this task.</div>;
+    return <Translate content="feedbackEditor.notAvailable" />;
   }
 }
 

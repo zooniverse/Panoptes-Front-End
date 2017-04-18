@@ -1,6 +1,17 @@
 import React from 'react';
 import ModalFormDialog from 'modal-form/dialog';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
+
 import SingleEditForm from './single-edit-form'
+
+counterpart.registerTranslations('en', {
+  singleFeedbackEditor: {
+    addType: 'Add a feedback type',
+    edit: 'Edit',
+    del: 'Delete',
+  },
+});
 
 export default class SingleFeedbackEditor extends React.Component {
   constructor(props) {
@@ -28,10 +39,14 @@ export default class SingleFeedbackEditor extends React.Component {
       : null;
 
     return (
-      <div>
+      <div className="feedback-section">
         <div>
-          <button onClick={this.openEditModal}>Add a feedback type</button>
           {feedbackItems}
+          <button className="feedback-section__new-feedback-button standard-button" onClick={this.openEditModal}>
+            <i className="fa fa-plus-circle"></i>
+            {' '}
+            <Translate content="singleFeedbackEditor.addType" />
+          </button>
         </div>
       </div>
     );
@@ -86,14 +101,18 @@ export default class SingleFeedbackEditor extends React.Component {
   renderFeedbackItem(item, index) {
     const editModalFn = this.openEditModal.bind(this, item, index);
     const deleteItem = this.deleteFeedbackItem.bind(this, index);
-    const showIcon = (item.valid) ? null : (<i className="fa fa-exclamation-circle fa-fw" style={{ color: "red"}}></i>);
+    const showIcon = (item.valid) ? null : (<i className="fa fa-exclamation-circle fa-fw"></i>);
 
     return (
-      <div key={`field-${item.id}`}>
+      <div key={`field-${item.id}`} className="feedback-section__feedback-item">
         {showIcon}
-        {item.id}
-        <button onClick={editModalFn}>Edit</button>
-        <button onClick={deleteItem}>Delete</button>
+        <span className="feedback-section__feedback-item-label">{item.id}</span>
+        <button onClick={editModalFn}>
+          <Translate content="singleFeedbackEditor.edit" />
+        </button>
+        <button onClick={deleteItem}>
+          <Translate content="singleFeedbackEditor.del" />
+        </button>
       </div>
     );
   }

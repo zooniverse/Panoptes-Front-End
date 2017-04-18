@@ -1,11 +1,34 @@
 import React from 'react';
 import Select from 'react-select';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
 
-const fieldDescriptions = {
-  id: 'ID',
-  defaultSuccessMessage: 'Default success message',
-  defaultFailureMessage: 'Default failure message',
-};
+counterpart.registerTranslations('en', {
+  singleEditForm: {
+    title: 'Edit Feedback',
+    save: 'Save',
+    cancel: 'Cancel',
+    fields: {
+      id: {
+        title: 'ID',
+        help: 'A unique field used to identify a feedback type.',
+      },
+      defaultSuccessMessage: {
+        title: 'Default success message',
+        help: 'The message to show to the volunteer when they make a correct classification. Can be overridden using subject metadata.',
+      },
+      defaultFailureMessage: {
+        title: 'Default failure message',
+        help: 'The message to show to the volunteer when they make an incorrect classification. Can be overridden using subject metadata.',
+      },
+      answer: {
+        title: 'Select correct answer',
+        help: 'The correct answer in the task for this feedback type.',
+        noAnswer: 'No answer',
+      },
+    }
+  }
+});
 
 export default class SingleEditForm extends React.Component {
   constructor(props) {
@@ -29,12 +52,18 @@ export default class SingleEditForm extends React.Component {
   render() {
     const inputFields = ['id', 'defaultSuccessMessage', 'defaultFailureMessage'];
     return (
-      <div>
-        <span className="form-label">Edit feedback</span>
+      <div className="single-edit-feedback-modal">
+        <Translate content="singleEditForm.title" className="form-label" />
         {inputFields.map(this.renderInput)}
         {this.renderAnswerSelect()}
-        <button onClick={this.handleSave} disabled={!this.state.valid}>Save</button>
-        <button onClick={this.handleCancel}>Cancel</button>
+        <div className="single-edit-feedback-modal__buttons">
+          <button onClick={this.handleCancel} className="minor-button">
+            <Translate content="singleEditForm.cancel" />
+          </button>
+          <button onClick={this.handleSave} disabled={!this.state.valid} className="major-button">
+            <Translate content="singleEditForm.save" />
+          </button>
+        </div>
       </div>
     );
   }
@@ -65,7 +94,10 @@ export default class SingleEditForm extends React.Component {
     }));
 
     if (!this.props.task.required) {
-      options.unshift({ label: 'No answer', value: '-1' })
+      options.unshift({
+        label: counterpart('singleEditForm.fields.answer.noAnswer'),
+        value: '-1',
+      });
     }
 
     const selected = (this.state.answerIndex)
@@ -74,7 +106,12 @@ export default class SingleEditForm extends React.Component {
 
     return (
       <label>
-        <span>Select correct answer</span>
+        <div>
+          <Translate content="singleEditForm.fields.answer.title" />
+        </div>
+        <small className="form-help">
+            <Translate content="singleEditForm.fields.answer.help" />
+          </small>
         <Select
           clearable={false}
           searchable={false}
@@ -90,7 +127,12 @@ export default class SingleEditForm extends React.Component {
     return (
       <div key={field}>
         <label>
-          <span>{fieldDescriptions[field]}</span>
+          <div>
+            <Translate content={`singleEditForm.fields.${field}.title`} />
+          </div>
+          <small className="form-help">
+            <Translate content={`singleEditForm.fields.${field}.help`} />
+          </small>
           <input
             type="text"
             name={field}
