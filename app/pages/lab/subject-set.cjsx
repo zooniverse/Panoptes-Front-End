@@ -130,7 +130,7 @@ SubjectSetListing = React.createClass
     lastSubjectOnPage = (@state.subjects.length % 20 is 1)
 
     pageValue = @props.page
-    
+
     # if the removed subject is the last subject on the page,
     # set the page number to the previous page
     if lastSubjectOnPage
@@ -404,4 +404,3 @@ module.exports = React.createClass
       }</ChangeListener>
     else
       null
-

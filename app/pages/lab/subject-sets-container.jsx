@@ -1,6 +1,5 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import SubjectSetsPage from './subject-sets';
 
 const DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set';
 
@@ -78,14 +77,19 @@ export default class SubjectSetsContainer extends React.Component {
   }
 
   render() {
+    const hookProps = {
+      createNewSubjectSet: this.createNewSubjectSet,
+      defaultSubjectSetName: DEFAULT_SUBJECT_SET_NAME,
+      labPath: this.labPath,
+      onPageChange: this.onPageChange
+    };
+
+    const allProps = Object.assign({}, this.state, this.props, hookProps);
+
     return (
-      <SubjectSetsPage
-        createNewSubjectSet={this.createNewSubjectSet}
-        defaultSubjectSetName={DEFAULT_SUBJECT_SET_NAME}
-        labPath={this.labPath}
-        onPageChange={this.onPageChange}
-        {...this.state}
-      />
+      <div>
+        {React.cloneElement(this.props.children, allProps)}
+      </div>
     );
   }
 }
@@ -99,6 +103,7 @@ SubjectSetsContainer.defaultProps = {
 };
 
 SubjectSetsContainer.propTypes = {
+  children: React.PropTypes.node,
   location: React.PropTypes.shape({
     pathname: React.PropTypes.string,
     query: React.PropTypes.object

@@ -1,6 +1,5 @@
 import React from 'react';
 import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
-import WorkflowsPage from './workflows';
 
 export default class WorkflowsContainer extends React.Component {
   constructor(props) {
@@ -15,32 +14,15 @@ export default class WorkflowsContainer extends React.Component {
     this.handleWorkflowCreation = this.handleWorkflowCreation.bind(this);
     this.hideCreateWorkflow = this.hideCreateWorkflow.bind(this);
     this.showCreateWorkflow = this.showCreateWorkflow.bind(this);
-    this.onPageChange = this.onPageChange.bind(this);
     this.handleWorkflowReorder = this.handleWorkflowReorder.bind(this);
   }
 
   componentDidMount() {
-    const page = this.props.location.query.page || 1;
-    this.getWorkflowList(page);
+    this.getWorkflowList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const newPage = nextProps.location.query.page;
-    if (newPage !== this.props.location.query.page) {
-      this.getWorkflowList(newPage);
-    }
-  }
-
-  onPageChange(page) {
-    const nextQuery = Object.assign({}, this.props.location.query, { page });
-    this.context.router.push({
-      pathname: this.props.location.pathname,
-      query: nextQuery
-    });
-  }
-
-  getWorkflowList(page = 1) {
-    getWorkflowsInOrder(this.props.project, { fields: 'display_name', page_size: 20, page })
+  getWorkflowList() {
+    getWorkflowsInOrder(this.props.project, { fields: 'display_name' })
     .then((workflows) => {
       this.setState({ workflows, loading: false });
     });
@@ -82,13 +64,16 @@ export default class WorkflowsContainer extends React.Component {
       hideCreateWorkflow: this.hideCreateWorkflow,
       handleWorkflowCreation: this.handleWorkflowCreation,
       handleWorkflowReorder: this.handleWorkflowReorder,
-      onPageChange: this.onPageChange,
       showCreateWorkflow: this.showCreateWorkflow,
       labPath: this.labPath
     };
 
+    const allProps = Object.assign({}, this.props, this.state, hookProps);
+
     return (
-      <WorkflowsPage {...this.props} {...hookProps} {...this.state} />
+      <div>
+        {React.cloneElement(this.props.children, allProps)}
+      </div>
     );
   }
 }
@@ -104,6 +89,7 @@ WorkflowsContainer.defaultProps = {
 };
 
 WorkflowsContainer.propTypes = {
+  children: React.PropTypes.node,
   location: React.PropTypes.shape({
     pathname: React.PropTypes.string,
     query: React.PropTypes.object
