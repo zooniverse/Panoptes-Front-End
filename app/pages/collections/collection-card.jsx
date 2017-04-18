@@ -1,31 +1,19 @@
 import React from 'react';
-import apiClient from 'panoptes-client/lib/api-client';
 import FlexibleLink from '../../components/flexible-link';
 
 export default class CollectionCard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.refreshImage = this.refreshImage.bind(this);
+    this.setSubjectPreview = this.setSubjectPreview.bind(this);
   }
 
   componentDidMount() {
-    this.refreshImage(this.props.coverSrc);
+    this.setSubjectPreview(this.props.collection.default_subject_src);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.coverSrc !== this.props.coverSrc) {
-      this.refreshImage(nextProps.coverSrc);
-    }
-  }
-
-  collectionOwner() {
-    apiClient.type(this.props.collection.links.owner.type).get(this.props.collection.links.owner.id);
-  }
-
-  refreshImage(src) {
-    const source = src.includes('.mp4') ? '/assets/simple-pattern.png' : src;
-    this.collectionCard.style.backgroundImage = `url('${source}')`;
+  setSubjectPreview(src) {
+    this.collectionCard.style.backgroundImage = `url('https://${this.props.collection.default_subject_src}')`;
     this.collectionCard.style.backgroundPosition = 'initial';
     this.collectionCard.style.backgroundRepeat = 'no-repeat';
     this.collectionCard.style.backgroundSize = 'cover';
@@ -50,7 +38,8 @@ export default class CollectionCard extends React.Component {
     return (
       <FlexibleLink {...linkProps}>
         <div className="collection-card" ref={(c) => { this.collectionCard = c; }}>
-          <span className="collection-card__badge">{this.props.subjectCount}</span>
+          {this.props.collection.links.subjects &&
+            <span className="collection-card__badge">{this.props.collection.links.subjects.length}</span>}
           <svg viewBox="0 0 2 1" width="100%" />
           <div className="details">
             <div className="name">
@@ -77,17 +66,14 @@ CollectionCard.propTypes = {
     private: React.PropTypes.bool,
     slug: React.PropTypes.string
   }).isRequired,
-  coverSrc: React.PropTypes.string,
   linkTo: React.PropTypes.string.isRequired,
-  subjectCount: React.PropTypes.number,
   shared: React.PropTypes.bool,
   translationObjectName: React.PropTypes.string.isRequired
 };
 
 CollectionCard.defaultProps = {
   collection: {},
-  coverSrc: '/assets/simple-pattern.png',
   linkTo: '',
-  subjectCount: 0,
+  shared: false,
   translationObjectName: ''
 };

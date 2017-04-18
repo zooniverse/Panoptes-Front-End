@@ -6,7 +6,6 @@ Translate = require 'react-translate-component'
 CollectionsNav = require './nav'
 classNames = require 'classnames'
 Paginator = require '../../talk/lib/paginator'
-`import getCollectionCovers from '../../lib/get-collection-covers';`
 
 List = React.createClass
   displayName: 'List'
@@ -28,7 +27,6 @@ List = React.createClass
 
   getInitialState: ->
     collections: null # has to be null initially, rather than [], in order to display the loading message
-    collectionCovers: {}
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
@@ -80,8 +78,6 @@ List = React.createClass
       .get query
       .then (collections) =>
         @setState {collections}
-        getCollectionCovers(collections).then (collectionCovers) =>
-          @setState {collectionCovers}
 
   shared: (collection) ->
     if (@props.params.collection_owner is @props.user?.login) or (@props.params.profile_name is @props.user?.login)
@@ -152,14 +148,13 @@ List = React.createClass
             </div>
             <div className="collections-card-list">
               {for collection in @state.collections
-                 <CollectionCard
-                   key={collection.id}
-                   collection={collection}
-                   coverSrc={@state.collectionCovers[collection.id]}
-                   linkTo={@cardLink(collection)}
-                   translationObjectName={@props.translationObjectName}
-                   subjectCount={collection.links.subjects?.length}
-                   shared={@shared(collection)} /> }
+                <CollectionCard
+                  key={collection.id}
+                  collection={collection}
+                  linkTo={@cardLink(collection)}
+                  translationObjectName={@props.translationObjectName}
+                  shared={@shared(collection)}
+                />}
             </div>
             <nav>
               {if meta

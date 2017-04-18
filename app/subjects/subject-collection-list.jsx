@@ -1,6 +1,6 @@
 import React from 'react';
 import Loading from '../components/loading-indicator';
-import CollectionPreview from '../collections/preview';
+import CollectionCard from '../pages/collections/collection-card';
 
 const SubjectCollectionList = (props) => {
   if (!props.collections) {
@@ -12,15 +12,14 @@ const SubjectCollectionList = (props) => {
   }
 
   return (
-    <div className="subject-collection-list">
+    <div className="collection-card-list">
       <h2>Collections:</h2>
-      <div className="subject-collection-list-container">
+      <div>
         {props.collections.map((collection) => {
           return (
-            <CollectionPreview
+            <CollectionCard
               key={`collection-${collection.id}`}
               collection={collection}
-              project={props.project}
             />
           );
         })}
