@@ -1,14 +1,20 @@
 import React from 'react';
 import Loading from '../components/loading-indicator';
 import CollectionCard from '../pages/collections/collection-card';
+import Paginator from '../talk/lib/paginator';
 
 const SubjectCollectionList = (props) => {
+  let meta;
   if (!props.collections) {
     return (<Loading />);
   }
 
   if (props.collections && props.collections.length === 0) {
     return (<p>There are no collections yet</p>);
+  }
+
+  if (props.collections) {
+    meta = props.collections[0].getMeta();
   }
 
   return (
@@ -24,6 +30,12 @@ const SubjectCollectionList = (props) => {
           );
         })}
       </div>
+      <Paginator
+        className='talk'
+        page={meta.page}
+        onPageChange={props.onCollectionsPageChange}
+        pageCount={meta.page_count}
+      />
     </div>
   );
 };

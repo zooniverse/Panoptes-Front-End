@@ -29,19 +29,23 @@ export default class SubjectPageContainer extends React.Component {
   setSubject() {
     const subjectId = this.props.params.id.toString();
     apiClient.type('subjects').get(subjectId)
-    .then((subject) => {
-      this.setState({ subject });
-      this.getCollections(subject);
-    })
+      .then((subject) => {
+        this.setState({ subject });
+        this.getCollections(subject);
+      });
   }
 
-  getCollections(subject) {
+  getCollections(subject, page) {
     const query = {
       subject_id: subject.id,
-      page_size: 20,
+      page_size: 6,
       sort: '-created_at',
       include: 'owner'
     };
+
+    if (page) {
+      query.page = page;
+    }
 
     apiClient.type('collections').get(query)
       .then((collections) => {
@@ -59,6 +63,10 @@ export default class SubjectPageContainer extends React.Component {
         }
         this.setState({ collections, isFavorite });
       });
+  }
+
+  onCollectionsPageChange(page) {
+    this.getCollections(this.state.subject, page);
   }
 
   render() {
