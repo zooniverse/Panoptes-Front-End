@@ -1,24 +1,22 @@
 import React from 'react';
-import apiClient from 'panoptes-client/lib/api-client';
 import { IndexLink, Link } from 'react-router';
 import Translate from 'react-translate-component';
+import apiClient from 'panoptes-client/lib/api-client';
+import classNames from 'classnames';
 import counterpart from 'counterpart';
-import Avatar from '../partials/avatar';
 import Loading from '../components/loading-indicator';
 import TitleMixin from '../lib/title-mixin';
-import classNames from 'classnames';
 
 counterpart.registerTranslations('en', {
   collectionPage: {
-    settings: 'Settings',
+    settings: 'Collection Settings',
     collaborators: 'Collaborators',
     collectionsLink: '%(user)s\'s Collections',
-    favoritesLink: '%(user)s\'s Favorites',
-    userLink: '%(user)s\'s Profile',
+    favoritesLink: '%(user)s\'s Favorites'
   },
   collectionsPageWrapper: {
-    error: 'There was an error retrieving this collection.',
-  },
+    error: 'There was an error retrieving this collection.'
+  }
 });
 
 const CollectionPage = React.createClass({
@@ -28,23 +26,23 @@ const CollectionPage = React.createClass({
     collection: React.PropTypes.object.isRequired,
     project: React.PropTypes.object,
     children: React.PropTypes.node,
-    roles: React.PropTypes.array,
+    roles: React.PropTypes.array
   },
 
   contextTypes: {
-    geordi: React.PropTypes.object,
+    geordi: React.PropTypes.object
   },
 
   getDefaultProps() {
     return {
-      collection: null,
+      collection: null
     };
   },
 
   getInitialState() {
     return {
       canCollaborate: false,
-      owner: null,
+      owner: null
     };
   },
 
@@ -73,15 +71,18 @@ const CollectionPage = React.createClass({
 
   canCollaborate() {
     let canCollaborate;
-    if (!this.props.user) { canCollaborate = false; }
+    if (!this.props.user) {
+      canCollaborate = false;
+    } else {
+      canCollaborate = this.props.roles.some((role) => {
+        const idMatch = (role.links.owner.id === this.props.user.id);
+        const isOwner = role.roles.includes('owner');
+        const isCollaborator = role.roles.includes('collaborator');
+        return (isOwner || isCollaborator) && idMatch;
+      });
+    }
 
-    this.props.roles.some((role) => {
-      const idMatch = (role.links.owner.id === this.props.user.id);
-      const isOwner = role.roles.includes('owner');
-      const isCollaborator = role.roles.includes('collaborator');
-      canCollaborate = (isOwner || isCollaborator) && idMatch;
-      this.setState({ canCollaborate });
-    });
+    this.setState({ canCollaborate });
   },
 
   render() {
@@ -89,6 +90,7 @@ const CollectionPage = React.createClass({
       return null;
     }
 
+    const title = `${this.props.collection.display_name} (${this.props.collection.links.subjects ? this.props.collection.links.subjects.length : null})`;
     const baseType = this.props.collection.favorite ? 'favorites' : 'collections';
     let baseLink = '';
     if (!!this.props.project) {
@@ -99,42 +101,61 @@ const CollectionPage = React.createClass({
     const profileLink = `${baseLink}/users/${this.state.owner.login}`;
     const collectionsLinkMessageKey = `collectionPage.${baseType}Link`;
 
+    let userRole = [];
+    if (!!this.props.user) {
+      userRole = this.props.roles.filter((collectionRole) => {
+        return collectionRole.links.owner.id === this.props.user.id;
+      });
+    }
+
+    let displayRole = '';
+    if (userRole.length > 0) {
+      if (userRole[0].roles.includes('owner')) {
+        displayRole = ` (you're the ${userRole[0].roles.join(', ')})`;
+      } else {
+        displayRole = ` (you're a ${userRole[0].roles.join(', ')})`;
+      }
+    }
+
     return (
       <div className="collections-page">
-        <nav className="collection-nav tabbed-content-tabs">
-          <IndexLink to={baseCollectionLink} activeClassName="active" className="tabbed-content-tab" onClick={!!this.logClick ? this.logClick.bind(this, 'view-collection') : null}>
-            <Avatar user={this.state.owner} />
-            {this.props.collection.display_name}
-          </IndexLink>
-          {this.state.canCollaborate ?
-            <span>
-              <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="tabbed-content-tab" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
+        <div className="collection-header">
+          <div>
+            <IndexLink to={baseCollectionLink} className="collection-title">
+              {title}
+            </IndexLink>
+            <br />
+            <Link to={profileLink} className="collection-owner">
+              BY {this.state.owner.display_name}
+            </Link>
+            {displayRole}
+          </div>
+          <nav className="collection-nav">
+            {this.state.canCollaborate ?
+              <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
                 <Translate content="collectionPage.settings" />
-              </Link>
-              <Link to={`${baseCollectionLink}/collaborators`} activeClassName="active" className="tabbed-content-tab" onClick={!!this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
-                <Translate content="collectionPage.collaborators" />
-              </Link>
-            </span> :
-            null
-          }
-          <Link to={baseCollectionsLink} className="tabbed-content-tab">
-            <Translate content={collectionsLinkMessageKey} user={this.state.owner.display_name} />
-          </Link>
-          <Link to={profileLink} activeClassName="active" className="tabbed-content-tab">
-            <Translate content="collectionPage.userLink" user={this.state.owner.display_name} />
-          </Link>
-        </nav>
-        <div className="collection-container talk">
+              </Link> : null}
+            {this.state.canCollaborate ?
+                <Link to={`${baseCollectionLink}/collaborators`} activeClassName="active" className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
+                  <Translate content="collectionPage.collaborators" />
+                </Link> : null}
+            <Link to={baseCollectionsLink} className="collection-nav-item">
+              <Translate content={collectionsLinkMessageKey} user={this.state.owner.display_name} />
+            </Link>
+          </nav>
+        </div>
+        <div className="talk">
           {React.cloneElement(this.props.children, {
             canCollaborate: this.state.canCollaborate,
+            user: this.props.user,
+            project: this.props.project,
             collection: this.props.collection,
-            roles: this.props.roles,
-            user: this.props.user
+            roles: this.props.roles
           })}
         </div>
       </div>
     );
-  },
+  }
 });
 
 const CollectionPageWrapper = React.createClass({
@@ -146,13 +167,13 @@ const CollectionPageWrapper = React.createClass({
     user: React.PropTypes.object,
     params: React.PropTypes.shape({
       collection_owner: React.PropTypes.string,
-      collection_name: React.PropTypes.string,
-    }),
+      collection_name: React.PropTypes.string
+    })
   },
 
   getDefaultProps() {
     return {
-      params: null,
+      params: null
     };
   },
 
@@ -161,7 +182,7 @@ const CollectionPageWrapper = React.createClass({
       collection: null,
       roles: null,
       error: false,
-      loading: false,
+      loading: false
     };
   },
 
@@ -190,7 +211,7 @@ const CollectionPageWrapper = React.createClass({
 
   fetchCollection() {
     this.setState({
-      loading: true,
+      loading: true
     });
 
     apiClient.type('collections')
@@ -200,13 +221,13 @@ const CollectionPageWrapper = React.createClass({
       )
       .then(([collection]) => {
         if (collection) {
-          return [collection]
+          return [collection];
         } else {
           return apiClient.type('collections')
           .get({
             id: this.props.params.collection_name,
             include: ['owner']
-          })
+          });
         }
       })
       .then(([collection]) => {
@@ -214,21 +235,21 @@ const CollectionPageWrapper = React.createClass({
 
         return apiClient.type('collection_roles')
           .get({
-            collection_id: collection.id,
+            collection_id: collection.id
           })
           .then((roles) => {
             this.setState({
               error: false,
               loading: false,
               collection,
-              roles,
+              roles
             });
           });
       })
       .catch((e) => {
         this.setState({
           error: e,
-          loading: false,
+          loading: false
         });
       });
   },
@@ -236,15 +257,15 @@ const CollectionPageWrapper = React.createClass({
   render() {
     const classes = classNames({
       'content-container': true,
-      'collection-page-with-project-context': !!this.props.project,
+      'collection-page-with-project-context': !!this.props.project
     });
     const { project, user } = this.props;
     let output = null;
     if (this.state.collection) {
-      output =
+      output = (
         <CollectionPage project={project} user={user} collection={this.state.collection} roles={this.state.roles}>
           {this.props.children}
-        </CollectionPage>;
+        </CollectionPage>);
     }
     if (this.state.error) {
       output = <Translate component="p" content="collectionsPageWrapper.error" />;
@@ -257,7 +278,7 @@ const CollectionPageWrapper = React.createClass({
         {output}
       </div>
     );
-  },
+  }
 });
 
 export default CollectionPageWrapper;

@@ -3,17 +3,84 @@
   flex: 1 0 auto
   flex-direction: column
 
-  .collection-container
-    padding: 0 3vw
+  .collection-header
+    display: flex
+    flex: 1 0 auto
+    margin-bottom: 2em
+    font-size: 0.8em
+    color: COPY
+    justify-content: space-between
 
-  .collection-settings-tab
-    max-width: 800px
-    margin: 0 auto
+    @media (max-width: 900px)
+      flex-direction: column
+      margin-bottom: 1em
+
+  .collection-title
+    @extends $reset-button
+    font-size: 1.5em
+    font-weight: bold
+
+  .collection-owner
+    @extends $reset-button
+    text-transform: uppercase
+
+  .collection-nav
+    display: flex
+    align-items: flex-end
+    justify-content: space-between
+
+    @media (max-width: 900px)
+      flex-direction: column
+      align-items: flex-start
+
+  .collection-nav-item
+    @extends $reset-button
+    margin-left: 1.5em
+    text-transform: uppercase
+    text-align: center
+
+    @media (max-width: 900px)
+      margin: 0.6em 0
+
+    &.active
+      border-bottom: 1px solid TEAL_MID
+      font-weight: bold
 
   .collections-show
-    flex-wrap: wrap
-    max-width: 1200px
     margin: 0 auto
+
+    .collection-buttons-container
+      display: flex
+      justify-content: flex-end
+      margin-bottom: 2em
+
+      @media (max-width: 900px)
+        flex-direction: column
+        justify-content: center
+        align-content: center
+
+    .select-subjects-button
+      @extends $reset-button
+      margin-left: 1.5em
+      min-width: 10em
+      border-radius: 2px
+      border: HIGHLIGHT_COLOR
+      background-color: transparent
+      padding: 0.6em 1.2em
+      text-align: center
+      font-size: 0.8em
+
+      @media (max-width: 900px)
+        margin: 1em
+
+      &:focus,
+      &:hover
+        border: HIGHLIGHT_COLOR
+        background-color: HIGHLIGHT_COLOR
+        color: white
+
+      &:disabled
+        opacity: 0.5
 
     .collection-subject-viewer
       width: 18em
@@ -24,12 +91,22 @@
       display: inline-block
       position: relative
 
+      @media (max-width: 900px)
+        display: block
+        margin: 0 auto
+
       .subject-video-controls
         display: initial
+
+      .subject-image-frame
+        margin: auto
 
     img
       width: 100%
       max-height: 250px
+
+    .subject-video-controls
+      z-index: 1
 
     .subject-link
       height: 100%
@@ -55,25 +132,47 @@
       &:hover
         color: red
 
+    .collection-subject-viewer-select
+      height: 100%
+      width: 100%
+      position: absolute
+      top: 0
+      left: 0
+      border: none
+      background: transparent
+      display: flex
+      flex-direction: column
+      justify-content: center
+
+      &:hover
+        background-color: transparent
+        cursor: pointer
+
+      input
+        position: absolute
+        left: -9999px
+
+        &:focus + i
+          text-shadow: 0 0 25px COBOLT_BLUE
+
+      .collection-subject-viewer-circle
+        color: white
+        font-size: 6em
+        text-shadow: 0 0 25px COPY
+
+  .collection-settings-tab
+    max-width: 800px
+    margin: 0 auto
+
   .helpful-tip
     color: #777
     font-style: italic
     text-align: center
 
-.collection-nav
-  margin-left: 0
-  margin-top: 2em
-  text-align: left
-
-  .tabbed-content-tab
-    position: relative
-
-  .avatar
-    height: 4em
-    vertical-align: middle
-    margin: -2em 1vw -2em 0px
-
 .collections-manager
+  margin: 1em
+  padding: 1em
+
   h1
     margin-bottom: 20px
 

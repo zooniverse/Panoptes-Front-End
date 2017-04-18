@@ -1,13 +1,16 @@
 React = require 'react'
+{Link} = require 'react-router'
+Translate = require 'react-translate-component'
 apiClient = require 'panoptes-client/lib/api-client'
 intersection = require 'lodash.intersection'
 pick = require 'lodash.pick'
-Translate = require 'react-translate-component'
+classNames = require 'classnames'
 counterpart = require 'counterpart'
+alert = require '../lib/alert'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
-{Link} = require 'react-router'
+CollectionsManager = require './manager'
 
 VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
 
@@ -37,17 +40,6 @@ SubjectNode = React.createClass
     else
       subject.get('project')
 
-  isOwnerOrCollaborator: ->
-    collaboratorOrOwnerRoles = @props.roles.filter (collectionRoles) ->
-      intersection(['owner', 'collaborator'], collectionRoles.roles).length
-
-    hasPermission = false
-    collaboratorOrOwnerRoles.forEach (roleSet) =>
-      if roleSet.links.owner.id is @props.user?.id
-        hasPermission = true
-
-    return hasPermission
-
   isFavorite: (project) ->
     if @props.collection.favorite and @props.collection.links.owner.id is @props.user.id
       @setState isFavorite: true
@@ -65,17 +57,42 @@ SubjectNode = React.createClass
             isFavorite = @props.subject.id in favoritesCollection.links.subjects
           @setState({ isFavorite })
 
+  toggleSelect: (e) ->
+    if e.target.checked
+      @props.addSelected()
+    else
+      @props.removeSelected()
+
   render: ->
     logClick = @context.geordi?.makeHandler? 'about-menu'
+    subjectSelectClasses = classNames({
+      "collection-subject-viewer-circle": true,
+      "fa fa-check-circle": !!@props.selected,
+      "fa fa-circle-o": !@props.selected
+    })
     <div className="collection-subject-viewer">
       <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project} isFavorite={@state.isFavorite}>
-        {if @isOwnerOrCollaborator()
-          <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
-            <i className="fa fa-close" />
-          </button>}
-          <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
-            <span></span>
-          </Link>
+          {if !@props.selecting
+            <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
+              <span></span>
+            </Link>}
+          {if @props.canCollaborate and !@props.selecting
+            <button
+              type="button"
+              aria-label="Delete"
+              className="collection-subject-viewer-delete-button"
+              onClick={@props.onDelete}>
+              <i className="fa fa-close" />
+            </button>}
+          {if @props.selecting
+            <label className="collection-subject-viewer-select">
+              <input
+                aria-label={if @props.selected then "Selected" else "Not Selected"}
+                type="checkbox"
+                checked={@props.selected}
+                onChange={@toggleSelect}/>
+              <i className={subjectSelectClasses} />
+            </label>}
       </SubjectViewer>
     </div>
 
@@ -89,6 +106,14 @@ module.exports = React.createClass
   getInitialState: ->
     subjects: null
     error: null
+    selecting: false
+    selected: []
+
+  getDefaultProps: ->
+    project: null
+
+  propTypes:
+    project: React.PropTypes.object
 
   componentWillMount: ->
     @fetchCollectionSubjects pick @props.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
@@ -120,6 +145,27 @@ module.exports = React.createClass
       pathname: @props.location.pathname
       query: nextQuery
 
+  toggleSelecting: ->
+    @setState selecting: !@state.selecting, selected: []
+
+  addSelected: (subjectID) ->
+    selected = @state.selected
+    selected.push subjectID
+    @setState {selected}
+
+  removeSelected: (subjectID) ->
+    selected = @state.selected
+    index = selected.indexOf subjectID
+    selected.splice index, 1
+    @setState {selected}
+
+  selected: (subjectID) ->
+    @state.selected?.indexOf(subjectID) isnt -1
+
+  promptCollectionManager: ->
+    alert (resolve) =>
+      <CollectionsManager user={@props.user} project={@props.project} subjectIDs={@state.selected} onSuccess={() => @toggleSelecting(); resolve();} />
+
   handleDeleteSubject: (subject) ->
     subjects = @state.subjects
     index = subjects.indexOf subject
@@ -129,6 +175,27 @@ module.exports = React.createClass
     @props.collection.removeLink 'subjects', [subject.id.toString()]
       .then =>
         @props.collection.uncacheLink 'subjects'
+
+  confirmDeleteSubjects: ->
+    alert (resolve) =>
+      <div className="confirm-delete-dialog content-container">
+        <p>Are you sure you want to remove {@state.selected.length} subjects from this collection?</p>
+        <div style={{ textAlign: "center" }}>
+          <button className="minor-button" autoFocus={true} onClick={resolve}>Cancel</button>
+        {' '}
+          <button className="major-button" onClick={() => @deleteSubjects(); resolve();}>Yes</button>
+        </div>
+      </div>
+
+  deleteSubjects: ->
+    subjects = @state.subjects.filter((subject) => @state.selected.indexOf(subject.id) is -1)
+    @setState {subjects}
+
+    @props.collection.removeLink 'subjects', @state.selected
+      .then =>
+        @props.collection.uncacheLink 'subjects'
+
+    @toggleSelecting()
 
   render: ->
     if @state.subjects?
@@ -140,14 +207,42 @@ module.exports = React.createClass
           meta = @state.subjects[0].getMeta()
 
           <div>
-            <div className="collection-subjects-list">
+          {if @state.selecting
+            <div className="collection-buttons-container">
+              <button
+                type="button"
+                className="select-subjects-button"
+                onClick={@promptCollectionManager}
+                disabled={@state.selected.length < 1}>
+                Add to Collection
+              </button>
+              {if @props.canCollaborate
+                <button
+                  type="button"
+                  className="select-subjects-button"
+                  onClick={@confirmDeleteSubjects}
+                  disabled={@state.selected.length < 1}>
+                  Remove from Collection
+                </button>}
+              <button type="button" className="select-subjects-button" onClick={@toggleSelecting}>Cancel</button>
+            </div>
+          else if @props.user?
+            <div className="collection-buttons-container">
+              <button type="button" className="select-subjects-button" onClick={@toggleSelecting}>Select Subjects</button>
+            </div>
+          }
+            <div>
               {@state.subjects.map (subject) =>
                 <SubjectNode
                   key={subject.id}
                   collection={@props.collection}
                   subject={subject}
                   user={@props.user}
-                  roles={@props.roles}
+                  canCollaborate={@props.canCollaborate}
+                  selecting={@state.selecting}
+                  selected={@selected(subject.id)}
+                  addSelected={@addSelected.bind @, subject.id}
+                  removeSelected={@removeSelected.bind @, subject.id}
                   onDelete={@handleDeleteSubject.bind @, subject}
                 />
               }

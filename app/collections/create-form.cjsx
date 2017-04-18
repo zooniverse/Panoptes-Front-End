@@ -15,6 +15,12 @@ module.exports = React.createClass
     error: null
     collectionNameLength: 0
 
+  getDefaultProps: ->
+    subjectIDs: []
+
+  propTypes:
+    subjectIDs: React.PropTypes.array
+
   onSubmit: (e) ->
     e.preventDefault()
 
@@ -23,7 +29,7 @@ module.exports = React.createClass
 
     links = {}
     links.project = +@props.project if @props.project?
-    links.subjects = [+@props.subject] if @props.subject?
+    links.subjects = @props.subjectIDs if @props.subjectIDs.length > 0
 
     collection = {
       display_name: displayName

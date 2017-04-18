@@ -11,9 +11,10 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     project: null
+    subjectIDs: []
 
   propTypes:
-    subject: React.PropTypes.object
+    subjectIDs: React.PropTypes.array
     project: React.PropTypes.object
 
   addToCollections: ->
@@ -21,7 +22,7 @@ module.exports = React.createClass
     return unless collections.length > 0
 
     promises = for { collection } in collections
-      collection.addLink('subjects', [@props.subject.id])
+      collection.addLink('subjects', @props.subjectIDs)
 
     Promise.all(promises)
       .then =>
@@ -48,5 +49,5 @@ module.exports = React.createClass
       <hr />
 
       <div className="form-help">Or Create a new Collection</div>
-      <CollectionsCreateForm project={@props.project?.id} subject={@props.subject.id} onSubmit={@props.onSuccess} />
+      <CollectionsCreateForm project={@props.project?.id} subjectIDs={@props.subjectIDs} onSubmit={@props.onSuccess} />
     </div>
