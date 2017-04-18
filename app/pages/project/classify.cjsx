@@ -9,8 +9,7 @@ Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 experimentsClient = require '../../lib/experiments-client'
-{Split} = require('seven-ten')
-{VisibilitySplit} = require('seven-ten')
+{ Split } = require('seven-ten')
 
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'

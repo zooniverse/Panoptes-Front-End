@@ -24,7 +24,7 @@ export default class CustomSignInPrompt extends React.Component {
   render() {
     if (!this.state.hidden) {
       return (
-        <div className="project-announcement-banner custom-sign-in-banner">
+        <div className="classifier-announcement-banner custom-sign-in-banner">
           <span>
             <i className="fa fa-exclamation-circle" aria-hidden="true"></i>{' '}
             {this.props.children}

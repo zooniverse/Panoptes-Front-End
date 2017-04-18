@@ -5,6 +5,7 @@ MiniCourse = require '../components/mini-course'
 Tutorial = require '../components/tutorial'
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
 isAdmin = require '../lib/is-admin'
+{ VisibilitySplit } = require 'seven-ten'
 
 ###############################################################################
 # Page Wrapper Component
@@ -49,10 +50,12 @@ module.exports = React.createClass
     userRoles: []
     tutorial: null
     minicourse: null
+    classificationCount: null
 
   componentDidMount: ->
     @checkExpertClassifier()
     @loadClassification @props.classification
+
     Tutorial.find @props.workflow
     .then (tutorial) =>
       {user, preferences} = @props
@@ -86,6 +89,8 @@ module.exports = React.createClass
     Promise.resolve(classification._subjects ? classification.get 'subjects').then ([subject]) =>
       # We'll only handle one subject per classification right now.
       # TODO: Support multi-subject classifications in the future.
+      @loadClassificationsCount(subject);
+
       @setState {subject}
 
   onCompleteAndLoadAnotherSubject: ->
@@ -122,12 +127,37 @@ module.exports = React.createClass
         expertClassifier = isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
         @setState {expertClassifier, userRoles}
 
+  loadClassificationsCount: (subject) ->
+    query = {};
+    # Split 'subject.first-to-classify.visible' is a visibility split on 
+    # a generic pre-classification notification banner on the classify page.
+    # Split 'subject.first-to-classify' is a text split in the classification summary.
+    # Projects need classification summarys visible for this to work.
+    if @props.splits and subject and (@props.splits['subject.first-to-classify.visible'] or @props.splits['subject.first-to-classify'])
+      query =
+        workflow_id: @props.workflow.id,
+        subject_id: subject.id
+
+      apiClient.type('subject_workflow_statuses')
+      .get(query)
+      .then ([sws]) =>
+        classificationCount = if sws?.classifications_count then sws.classifications_count else 0
+        @setState({ classificationCount });
+
   render: ->
     <div>
       {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
         <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
         </CustomSignInPrompt>}
+
+      {if @state.classificationCount is 0 and @props.splits?['subject.first-to-classify.visible']
+        <VisibilitySplit splits={@props.splits} splitKey={'subject.first-to-classify.visible'} elementKey={'div'}>
+          <div className="classifier-announcement-banner classifier-announcement-banner--yellow">
+            <p>You're the first person to see this subject!</p>
+          </div>
+        </VisibilitySplit>}
+
       {if @props.workflow? and @state.subject?
         <Classifier {...@props}
           workflow={@props.workflow}
@@ -140,6 +170,7 @@ module.exports = React.createClass
           guideIcons={@state.guideIcons}
           onComplete={@onComplete}
           onCompleteAndLoadAnotherSubject={@onCompleteAndLoadAnotherSubject}
+          classificationCount={@state.classificationCount}
         />
       else
         <span>Loading classifier...</span>}

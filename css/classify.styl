@@ -28,6 +28,22 @@
     @extends $reset-button
     text-decoration: underline
 
+.classify-page
+  .classifier-announcement-banner
+    @extends $announcement-banner
+    margin: 0 0 1.5em
+
+    &--yellow
+      background: HIGHLIGHT_COLOR
+
+    &.custom-sign-in-banner
+      display: flex
+      justify-content: space-between
+      margin: 0 0 3vh
+
+      p
+        display: inline-block
+
 .classifier
   display: flex
   justify-content: center
