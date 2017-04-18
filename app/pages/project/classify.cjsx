@@ -239,29 +239,13 @@ module.exports = React.createClass
 
     classification = @state.classification
     console?.info 'Completed classification', classification
-    savingClassification = if @state.demoMode
-      Promise.resolve classification
-    else if @props.simulateSaveFailure
-      Promise.reject new Error 'Simulated failure of classification save'
-    else
-      classification.save()
 
     Split.classificationCreated(classification)
     {workflow, subjects} = classification.links
     seenThisSession.add workflow, subjects
-    savingClassification
-      .then (classification) =>
-        if @state.demoMode
-          console?.log 'Demo mode: Did NOT save classification'
-        else
-          console?.log 'Saved classification', classification.id
-          classification.destroy()
-        @saveAllQueuedClassifications()
-      .catch (error) =>
-        console?.warn 'Failed to save classification:', error
-        @queueClassification classification
-
-    return savingClassification
+    @queueClassification classification unless @state.demoMode
+    @saveAllQueuedClassifications()
+    Promise.resolve classification
 
   queueClassification: (classification) ->
     queue = JSON.parse localStorage.getItem FAILED_CLASSIFICATION_QUEUE_NAME
@@ -280,6 +264,7 @@ module.exports = React.createClass
       for classificationData in queue then do (classificationData) =>
         apiClient.type('classifications').create(classificationData).save()
           .then (actualClassification) =>
+            console?.log 'Saved classification', actualClassification.id
             actualClassification.destroy()
             indexInQueue = queue.indexOf classificationData
             queue.splice indexInQueue, 1
@@ -290,6 +275,14 @@ module.exports = React.createClass
               console?.error 'Failed to update classification queue:', error
           .catch (error) =>
             console?.error 'Failed to save a queued classification:', error
+            switch error.status
+              when 422
+                indexInQueue = queue.indexOf classificationData
+                queue.splice indexInQueue, 1
+                try
+                  localStorage.setItem FAILED_CLASSIFICATION_QUEUE_NAME, JSON.stringify queue
+                catch error
+                  console?.error 'Failed to update classification queue:', error
 
   loadAnotherSubject: ->
     # Forget the old classification so a new one will load.
