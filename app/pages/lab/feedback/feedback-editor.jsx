@@ -77,6 +77,11 @@ export default class FeedbackEditor extends React.Component {
 }
 
 FeedbackEditor.propTypes = {
-  task: React.PropTypes.object,
+  task: React.PropTypes.shape({
+    type: React.PropTypes.string,
+    feedback: React.PropTypes.shape({
+      enabled: React.PropTypes.bool,
+    }),
+  }),
   saveFn: React.PropTypes.func,
 };

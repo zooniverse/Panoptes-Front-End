@@ -89,7 +89,7 @@ export default class SingleFeedbackEditor extends React.Component {
     const showIcon = (item.valid) ? null : (<i className="fa fa-exclamation-circle fa-fw" style={{ color: "red"}}></i>);
 
     return (
-      <div key={index}>
+      <div key={`field-${item.id}`}>
         {showIcon}
         {item.id}
         <button onClick={editModalFn}>Edit</button>
@@ -112,6 +112,15 @@ export default class SingleFeedbackEditor extends React.Component {
 }
 
 SingleFeedbackEditor.propTypes = {
-  task: React.PropTypes.object,
+  task: React.PropTypes.shape({
+    feedback: React.PropTypes.shape({
+      types: React.PropTypes.array(React.PropTypes.shape({
+        answerIndex: React.PropTypes.string,
+      })),
+    }),
+    answers: React.PropTypes.arrayOf(React.PropTypes.shape({
+      _key: React.PropTypes.number,
+    })),
+  }),
   saveFeedbackFn: React.PropTypes.func,
 };

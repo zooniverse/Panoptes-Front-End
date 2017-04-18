@@ -109,3 +109,13 @@ export default class SingleEditForm extends React.Component {
       (feedback[key].length > 0));
   }
 }
+
+SingleEditForm.propTypes = {
+  task: React.PropTypes.shape({
+    answers: React.PropTypes.arrayOf(React.PropTypes.shape({
+      option: React.PropTypes.string,
+    })),
+  }),
+  index: React.PropTypes.number,
+  onSubmit: React.PropTypes.func,
+};
