@@ -33,37 +33,58 @@ var config = {
     new DashboardPlugin({ port: 3736 })
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css'],
-    modulesDirectories: ['.', 'node_modules']
+    extensions: ['*', '.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
+    modules: ['.', 'node_modules']
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'babel'
+      use: 'babel-loader'
     }, {
       test: /\.cjsx$/,
       exclude: /node_modules/,
-      loaders: ['babel?cacheDirectory', 'coffee', 'cjsx']
+      use: [{
+        loader: 'babel-loader',
+        options: { cacheDirectory: true }
+      }, {
+        loader: 'coffee-loader'
+      }, {
+        loader: 'cjsx-loader'
+      }]
     }, {
       test: /\.coffee$/,
-      loaders: ['babel?cacheDirectory', 'coffee']
+      use: [{
+        loader: 'babel-loader',
+        options: { cacheDirectory: true }
+      }, {
+        loader: 'coffee-loader'
+      }]
     }, {
-      test: /\.json?$/,
-      loader: 'json'
-    }, {
-      test   : /\.css$/,
-      loaders: ['style', 'css?root=../public']
+      test: /\.css$/,
+      use: [{
+        loader: 'style-loader'
+      }, {
+        loader: 'css-loader',
+        options: { root: '../public' }
+      }]
     }, {
       test: /\.styl$/,
-      loaders: ['style','css?root=../public','stylus']
+      use: [{
+        loader: 'style-loader'
+      }, {
+        loader: 'css-loader',
+        options: { root: '../public' }
+      }, {
+        loader: 'stylus-loader'
+      }]
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
-      loader: 'file-loader'
+      use: 'file-loader'
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/]
-  } ,
+  },
   node: {
     fs: "empty"
   }
