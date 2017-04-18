@@ -12,7 +12,6 @@ export default class Highlighter extends React.Component {
   }
 
   handleChange(toolIndex, e) {
-    debugger;
     if (e.target.checked) {
       const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
       this.props.onChange(newAnnotation);
