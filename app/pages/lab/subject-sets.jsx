@@ -29,7 +29,7 @@ const SubjectSetsPage = (props) => {
         })}
 
         {(props.subjectSets.length === 0 && props.loading === false) && (
-          <p id="no-subject-set">No subject sets are currently associated with this project.</p>
+          <p>No subject sets are currently associated with this project.</p>
         )}
 
         <li className="nav-list-item">

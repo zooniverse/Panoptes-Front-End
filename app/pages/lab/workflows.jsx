@@ -23,13 +23,13 @@ const WorkflowsPage = (props) => {
     <div>
       <header className="form-label">Workflows</header>
 
-      <p>A workflow is the sequence of tasks that you’re asking volunteers to perform.</p> <br />
+      <p>A workflow is the sequence of tasks that you’re asking volunteers to perform.</p>
       <p> An asterisk (*) denotes a default workflow. </p>
 
       <DragReorderable tag="ul" className="nav-list" items={props.workflows} render={renderWorkflow} onChange={props.handleWorkflowReorder} />
 
       {(props.workflows.length === 0 && props.loading === false) && (
-        <p id="no-workflows">No workflows are currently associated with this project.</p>
+        <p>No workflows are currently associated with this project.</p>
       )}
 
       <div className="nav-list-item">
