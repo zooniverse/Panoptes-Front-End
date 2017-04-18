@@ -591,7 +591,7 @@ teamMembers =
     title: counterpart "team.content.saschaIshikawa.title"
     bio: counterpart "team.content.saschaIshikawa.bio"
     image: "/assets/team/sascha.png"
-    location: "california"
+    location: "alumni"
   shaunANoordin:
     name: "Shaun A. Noordin"
     title: counterpart "team.content.shaunANoordin.title"
