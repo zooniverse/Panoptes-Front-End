@@ -30,6 +30,7 @@ export default class Highlighter extends React.Component {
       focusIndex: focusIndex
     });
     this.props.onChange(newAnnotation);
+    selection.collapse(selection.achorNode, focusIndex);
   }
 
   createButtons(option, index) {
