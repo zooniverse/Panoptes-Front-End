@@ -3,6 +3,7 @@ import { Markdown } from 'markdownz';
 import GenericTaskEditor from '../generic-editor';
 import GenericTask from '../generic';
 import LabelRenderer from './label-renderer';
+import HighlighterSummary from './summary';
 
 export default class Highlighter extends React.Component {
   constructor(props) {
@@ -66,6 +67,8 @@ export default class Highlighter extends React.Component {
 Highlighter.Editor = GenericTaskEditor;
 
 Highlighter.InsideSubject = LabelRenderer;
+
+Highlighter.Summary = HighlighterSummary;
 
 Highlighter.getDefaultTask = () => {
   return (
