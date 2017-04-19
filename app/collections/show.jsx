@@ -121,38 +121,36 @@ const CollectionPage = React.createClass({
       <div className="collections-page">
         <div className="collection-header">
           <div>
-            <IndexLink to={baseCollectionLink} className="collection-title">
+            <IndexLink to={baseCollectionLink} className="collection__link collection-title">
               {title}
             </IndexLink>
             <br />
-            <Link to={profileLink} className="collection-owner">
+            <Link to={profileLink} className="collection__link collection-owner">
               BY {this.state.owner.display_name}
             </Link>
             {displayRole}
           </div>
           <nav className="collection-nav">
             {this.state.canCollaborate ?
-              <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
+              <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="collection__link collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
                 <Translate content="collectionPage.settings" />
               </Link> : null}
             {this.state.canCollaborate ?
-                <Link to={`${baseCollectionLink}/collaborators`} activeClassName="active" className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
+                <Link to={`${baseCollectionLink}/collaborators`} activeClassName="active" className="collection__link collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
                   <Translate content="collectionPage.collaborators" />
                 </Link> : null}
-            <Link to={baseCollectionsLink} className="collection-nav-item">
+            <Link to={baseCollectionsLink} className="collection__link collection-nav-item">
               <Translate content={collectionsLinkMessageKey} user={this.state.owner.display_name} />
             </Link>
           </nav>
         </div>
-        <div className="talk">
-          {React.cloneElement(this.props.children, {
-            canCollaborate: this.state.canCollaborate,
-            user: this.props.user,
-            project: this.props.project,
-            collection: this.props.collection,
-            roles: this.props.roles
-          })}
-        </div>
+        {React.cloneElement(this.props.children, {
+          canCollaborate: this.state.canCollaborate,
+          user: this.props.user,
+          project: this.props.project,
+          collection: this.props.collection,
+          roles: this.props.roles
+        })}
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import alert from '../lib/alert';
 import DisplayNameSlugEditor from '../partials/display-name-slug-editor';
+import Thumbnail from '../components/thumbnail';
 
 export default class CollectionSettings extends React.Component {
   constructor(props) {
@@ -94,13 +95,14 @@ export default class CollectionSettings extends React.Component {
 
     return (
       <div className="collection-settings-tab">
+        <h2>Collection Settings</h2>
         {this.state.error &&
           <p>Something went wrong. Please try again</p>}
         <DisplayNameSlugEditor resource={this.props.collection} resourceType="collection" />
 
         <hr />
 
-        <span className="form-label">Visibility</span>
+        <h3 className="form-label">Visibility</h3>
 
         <form>
           <label>
@@ -132,6 +134,13 @@ export default class CollectionSettings extends React.Component {
 
         <hr />
 
+        <h3 className="form-label">Cover Subject</h3>
+
+        <p className="form-help">The cover subject defaults to the first frame of the first subject linked to the collection. A custom cover can be set by owners or collaborators using the button toggle below the subject previews while browsing the collection.</p>
+        <Thumbnail src={this.props.collection.default_subject_src} width={300} />
+
+        <hr />
+
         <div className="form-label">Delete this Collection</div>
         <div className="delete-container">
           <button className="error major-button" type="button" onClick={this.confirmDelete}>Delete</button>
@@ -153,6 +162,7 @@ CollectionSettings.defaultProps = {
 CollectionSettings.propTypes = {
   canCollaborate: React.PropTypes.bool,
   collection: React.PropTypes.shape({
+    default_subject_src: React.PropTypes.string,
     private: React.PropTypes.bool
   })
 };
