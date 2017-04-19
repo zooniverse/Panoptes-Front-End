@@ -1,6 +1,15 @@
 import React from 'react';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
 
 import single from './single-feedback';
+
+counterpart.registerTranslations('en', {
+  feedbackSummary: {
+    title: 'Feedback on your classification',
+  }
+});
+
 
 class FeedbackSummary extends React.Component {
   constructor(props) {
@@ -67,19 +76,23 @@ class FeedbackSummary extends React.Component {
 
     return (
       <section>
-        <h2>Feedback!</h2>
-        <ul>
-          {feedbackArray.map(taskFeedback => (
-            <li key={taskFeedback.question}>
-              <p>{taskFeedback.question}</p>
-              <ul>
-                {taskFeedback.messages.map(message => (
-                  <li key={message}>{message}</li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
+        <strong>
+          <Translate content="feedbackSummary.title" />
+        </strong>
+        <div className="classification-task-summary-with-feedback">
+          <ol>
+            {feedbackArray.map(taskFeedback => (
+              <li key={taskFeedback.question}>
+                <p>{taskFeedback.question}</p>
+                <ol>
+                  {taskFeedback.messages.map(message => (
+                    <li key={message}>{message}</li>
+                  ))}
+                </ol>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
     );
   }
