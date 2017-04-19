@@ -8,16 +8,30 @@ export default class Highlighter extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.createLabels = this.createLabels.bind(this);
+    this.createButtons = this.createButtons.bind(this);
+    this.createLabelAnnotation = this.createLabelAnnotation.bind(this);
   }
 
   handleChange(toolIndex, e) {
-    if (e.target.checked) {
-      const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
-      this.props.onChange(newAnnotation);
-    }
+    let selection = document.getSelection();
+    this.createLabelAnnotation(selection, toolIndex);
   }
-  createLabels(option, index) {
+
+  createLabelAnnotation(selection, toolIndex) {
+    const anchorIndex = selection.anchorOffset;
+    const focusIndex = selection.focusOffset;
+    const task = this.props.workflow.tasks[this.props.annotation.task];
+    const labelInformation = task.highlighterLabels[toolIndex];
+    const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
+    newAnnotation.value.push({
+      labelInformation: labelInformation,
+      anchorIndex: anchorIndex,
+      focusIndex: focusIndex
+    });
+    this.props.onChange(newAnnotation);
+  }
+
+  createButtons(option, index) {
     const checked = index === this.props.annotation._toolIndex;
     let active = '';
     if (checked) {
@@ -25,19 +39,16 @@ export default class Highlighter extends React.Component {
     }
     return (
       <div>
-        <label htmlFor={option.label} >
-          <input id={option.label} type="checkbox" checked={checked} className="drawing-tool-button-input" value={option.label} autoFocus={this.props.autoFocus && index === 0} onChange={this.handleChange.bind(this.props.annotation._toolIndex, index)} />
-          <div className={`minor-button answer-button ${active}`} >
-            <i className="fa fa-i-cursor" aria-hidden="true" style={{ color: `${option.color}` }} />
-            <Markdown className="answer-button-label">{option.label}</Markdown>
-          </div>
-        </label>
+        <button className="minor-button answer-button" value={option.label} onClick={this.handleChange.bind(this.props.annotation._toolIndex, index)} >
+          <i className="fa fa-i-cursor" aria-hidden="true" style={{ color: `${option.color}` }} />
+          <Markdown className="answer-button-label">{option.label}</Markdown>
+        </button>
       </div>
     );
   }
   render() {
     if (this.props.task.highlighterLabels !== null) {
-      const labels = this.props.task.highlighterLabels.map(this.createLabels);
+      const labels = this.props.task.highlighterLabels.map(this.createButtons);
       return (
         <div>
           <GenericTask question={this.props.task.instruction} help={this.props.task.help} answers={labels} required={this.props.task.required} />
