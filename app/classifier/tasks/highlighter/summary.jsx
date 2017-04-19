@@ -8,7 +8,7 @@ export default class HighlighterSummary extends React.Component {
   }
   createSummary(value, index){
     return(
-      <div className="answer">
+      <div key={index} className="answer">
         <p>{value.labelInformation.label} : {value.anchorIndex} to {value.focusIndex}</p>
       </div>
     );
