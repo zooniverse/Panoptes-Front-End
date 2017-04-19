@@ -6,7 +6,6 @@ export default class LabelRenderer extends React.Component {
 
   constructor(props) {
     super(props);
-    this.createLabelAnnotation = this.createLabelAnnotation.bind(this);
     this.createNewContent = this.createNewContent.bind(this);
     this.state = {
       content: ''
@@ -42,22 +41,6 @@ export default class LabelRenderer extends React.Component {
         this.setState({ content });
       });
     }
-  }
-
-  createLabelAnnotation() {
-    const selection = window.getSelection();
-    const anchorIndex = selection.anchorOffset;
-    const focusIndex = selection.focusOffset;
-    const task = this.props.classification._workflow.tasks[this.props.annotation.task];
-    const labelInformation = task.highlighterLabels[this.props.annotation._toolIndex];
-
-    this.props.annotation.value.push({
-      _toolIndex: this.props.annotation._toolIndex,
-      labelInformation: labelInformation,
-      anchorIndex: anchorIndex,
-      focusIndex: focusIndex
-    });
-    this.props.onChange(this.props.annotation);
   }
 
   createNewContent(){
@@ -119,11 +102,11 @@ export default class LabelRenderer extends React.Component {
       whiteSpace: 'pre-wrap'
     };
     return(
-      <div>
+      <div className='label-renderer' >
         <div style={visibleDivStyles} >
           {labeledContent}
         </div>
-        <div style={invisibleDivStyles} onMouseDown={this.createLabelAnnotation} >
+        <div style={invisibleDivStyles} >
           {this.state.content}
         </div>
       </div>
