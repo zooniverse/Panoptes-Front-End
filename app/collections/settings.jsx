@@ -137,7 +137,10 @@ export default class CollectionSettings extends React.Component {
         <h3 className="form-label">Cover Subject</h3>
 
         <p className="form-help">The cover subject defaults to the first frame of the first subject linked to the collection. A custom cover can be set by owners or collaborators using the button toggle below the subject previews while browsing the collection.</p>
-        <Thumbnail src={this.props.collection.default_subject_src} width={300} />
+        <p className="form-help">Note: Setting the subject cover is only supported for image subjects at this time.</p>
+
+        {this.props.collection.default_subject_src &&
+          <Thumbnail src={this.props.collection.default_subject_src} width={300} />}
 
         <hr />
 
