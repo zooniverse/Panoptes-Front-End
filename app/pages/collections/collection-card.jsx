@@ -13,10 +13,12 @@ export default class CollectionCard extends React.Component {
   }
 
   setSubjectPreview(src) {
-    this.collectionCard.style.backgroundImage = `url('https://${this.props.collection.default_subject_src}')`;
-    this.collectionCard.style.backgroundPosition = 'initial';
-    this.collectionCard.style.backgroundRepeat = 'no-repeat';
-    this.collectionCard.style.backgroundSize = 'cover';
+    if (this.props.collection.default_subject_src) {
+      this.collectionCard.style.backgroundImage = `url('https://${this.props.collection.default_subject_src}')`;
+      this.collectionCard.style.backgroundPosition = 'initial';
+      this.collectionCard.style.backgroundRepeat = 'no-repeat';
+      this.collectionCard.style.backgroundSize = 'cover';
+    }
   }
 
   render() {
@@ -60,6 +62,7 @@ export default class CollectionCard extends React.Component {
 
 CollectionCard.propTypes = {
   collection: React.PropTypes.shape({
+    default_subject_src: React.PropTypes.string,
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,
     links: React.PropTypes.object,
