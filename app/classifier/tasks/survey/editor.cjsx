@@ -278,6 +278,15 @@ module.exports = React.createClass
           Require at least one identification
         </AutoSave>
       </label>
+
+      <hr />
+
+      <label>
+        <AutoSave resource={@props.workflow}>
+          <input type="checkbox" name="#{@props.taskPrefix}.alwaysShowThumbnails" checked={@props.task.alwaysShowThumbnails} onChange={handleInputChange.bind @props.workflow} />{' '}
+          Always show thumbnails
+        </AutoSave>
+      </label>
     </div>
 
   handleImportTabs: (tab) ->
