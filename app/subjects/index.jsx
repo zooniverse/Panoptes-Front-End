@@ -26,6 +26,10 @@ export default class SubjectPageContainer extends React.Component {
     }
   }
 
+  onCollectionsPageChange(page) {
+    this.getCollections(this.state.subject, page);
+  }
+
   setSubject() {
     const subjectId = this.props.params.id.toString();
     apiClient.type('subjects').get(subjectId)
@@ -65,10 +69,6 @@ export default class SubjectPageContainer extends React.Component {
       });
   }
 
-  onCollectionsPageChange(page) {
-    this.getCollections(this.state.subject, page);
-  }
-
   render() {
     return (
       <SubjectPage
@@ -82,3 +82,16 @@ export default class SubjectPageContainer extends React.Component {
     );
   }
 }
+
+SubjectPageContainer.propTypes = {
+  params: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }),
+  project: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }),
+  section: React.PropTypes.string,
+  user: React.PropTypes.shape({
+    id: React.PropTypes.string
+  })
+};

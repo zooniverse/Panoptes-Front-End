@@ -59,4 +59,19 @@ const SubjectPage = (props) => {
   );
 };
 
+SubjectPage.defaultProps = {
+  isFavorite: false
+};
+
+SubjectPage.propTypes = {
+  collections: React.PropTypes.arrayOf(React.PropTypes.object),
+  isFavorite: React.PropTypes.bool,
+  project: React.PropTypes.object,
+  section: React.PropTypes.string,
+  subject: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }),
+  user: React.PropTypes.object
+};
+
 export default SubjectPage;
