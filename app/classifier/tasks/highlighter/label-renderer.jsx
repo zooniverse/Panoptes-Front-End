@@ -52,13 +52,13 @@ export default class LabelRenderer extends React.Component {
         for (let a = 0; a < this.props.annotation.value.length; a++) {
           let currentAnnotation = this.props.annotation.value[a];
           let annotationColor = currentAnnotation.labelInformation.color;
-          if (currentAnnotation.anchorIndex === i ) {
+          if (currentAnnotation.start === i ) {
             // 1. add text between last label and current label
             let preContent = this.state.content.slice(lastFocusIndex, i);
             newContent.push(preContent);
             
             // 2. add the highlighted content, push content to be labeled
-            let highlightedContent = this.state.content.slice(i, currentAnnotation.focusIndex);
+            let highlightedContent = this.state.content.slice(i, currentAnnotation.end);
             let labelColor = currentAnnotation.labelInformation.color;
 
             let newLabel = 
@@ -68,7 +68,7 @@ export default class LabelRenderer extends React.Component {
             newContent.push(newLabel);
             
             // 3. re-set last focusIndex with annotation index
-            lastFocusIndex = currentAnnotation.focusIndex;
+            lastFocusIndex = currentAnnotation.end;
           }
         }
         // 4. if last character in the string, add the remaining content
