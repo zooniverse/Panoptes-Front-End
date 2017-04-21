@@ -19,18 +19,20 @@ export default class Highlighter extends React.Component {
   }
 
   createLabelAnnotation(selection, toolIndex) {
-    const anchorIndex = selection.anchorOffset;
-    const focusIndex = selection.focusOffset;
+    // currently we only deal with one selection at a time
+    const range = selection.getRangeAt(0);
+    const start = range.startOffset;
+    const end = range.endOffset;
     const task = this.props.workflow.tasks[this.props.annotation.task];
     const labelInformation = task.highlighterLabels[toolIndex];
     const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
     newAnnotation.value.push({
       labelInformation: labelInformation,
-      anchorIndex: anchorIndex,
-      focusIndex: focusIndex
+      start: start,
+      end: end
     });
     this.props.onChange(newAnnotation);
-    selection.collapse(selection.achorNode, focusIndex);
+    selection.collapseToEnd();
   }
 
   createButtons(option, index) {
