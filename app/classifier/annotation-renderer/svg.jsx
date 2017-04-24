@@ -38,13 +38,13 @@ export default class SVGAnnotator extends React.Component {
 
   // get current transformation matrix
   getScreenCurrentTransformationMatrix() {
-    const svg = this.refs.svgSubjectArea;
+    const svg = this.svgSubjectArea;
     return svg.getScreenCTM();
   }
 
   // find the original matrix for the SVG coordinate system
   getMatrixForWindowCoordsToSVGUserSpaceCoords() {
-    const transformationContainer = this.refs.transformationContainer;
+    const { transformationContainer } = this;
     return transformationContainer.getScreenCTM().inverse();
   }
 
@@ -67,7 +67,7 @@ export default class SVGAnnotator extends React.Component {
   // transforms the event coordinates
   // to points in the SVG coordinate system
   eventCoordsToSVGCoords(x, y) {
-    const svg = this.refs.svgSubjectArea;
+    const svg = this.svgSubjectArea;
     const newPoint = svg.createSVGPoint();
     newPoint.x = x;
     newPoint.y = y;
@@ -138,14 +138,14 @@ export default class SVGAnnotator extends React.Component {
 
     return (
       <svg
-        ref="svgSubjectArea"
+        ref={(element) => { if (element) this.svgSubjectArea = element; }}
         className="subject"
         style={svgStyle}
         viewBox={createdViewBox}
         {...svgProps}
       >
         <g
-          ref="transformationContainer"
+          ref={(element) => { if (element) this.transformationContainer = element; }}
           transform={this.props.transform}
         >
           <rect
