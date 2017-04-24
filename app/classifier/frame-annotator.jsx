@@ -125,31 +125,22 @@ FrameAnnotator.propTypes = {
   annotation: React.PropTypes.shape({
     task: React.PropTypes.string
   }),
-  children: React.PropTypes.object,
+  children: React.PropTypes.node,
   classification: React.PropTypes.shape({
     annotations: React.PropTypes.array,
     loading: React.PropTypes.bool
   }),
-  disabled: React.PropTypes.bool,
   frame: React.PropTypes.number,
-  loading: React.PropTypes.bool,
-  modification: React.PropTypes.object,
   naturalHeight: React.PropTypes.number,
   naturalWidth: React.PropTypes.number,
   onChange: React.PropTypes.func,
-  panByDrag: React.PropTypes.func,
   panEnabled: React.PropTypes.bool,
-  preferences: React.PropTypes.object,
+  preferences: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }),
   subject: React.PropTypes.shape({
     already_seen: React.PropTypes.bool,
     retired: React.PropTypes.bool
-  }),
-  transform: React.PropTypes.string,
-  viewBoxDimensions: React.PropTypes.shape({
-    height: React.PropTypes.number,
-    width: React.PropTypes.number,
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
   }),
   workflow: React.PropTypes.shape({
     tasks: React.PropTypes.object
