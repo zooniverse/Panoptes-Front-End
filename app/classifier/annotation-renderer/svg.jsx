@@ -4,7 +4,7 @@ import tasks from '../tasks';
 import getSubjectLocation from '../../lib/get-subject-location';
 import SVGImage from '../../components/svg-image';
 
-export default class ImageAnnotator extends React.Component {
+export default class SVGAnnotator extends React.Component {
   constructor(props) {
     super(props);
     this.getScreenCurrentTransformationMatrix = this.getScreenCurrentTransformationMatrix.bind(this);
@@ -176,7 +176,7 @@ export default class ImageAnnotator extends React.Component {
   }
 }
 
-ImageAnnotator.propTypes = {
+SVGAnnotator.propTypes = {
   annotation: React.PropTypes.shape({
     task: React.PropTypes.string
   }),
@@ -211,7 +211,7 @@ ImageAnnotator.propTypes = {
   })
 };
 
-ImageAnnotator.defaultProps = {
+SVGAnnotator.defaultProps = {
   user: null,
   project: null,
   subject: null,

@@ -1,8 +1,8 @@
 import React from 'react';
-import ImageAnnotator from './image';
+import SVGAnnotator from './svg';
 
 const VIEWERS = {
-  image: ImageAnnotator
+  image: SVGAnnotator
 };
 
 function AnnotationRenderer(props) {
