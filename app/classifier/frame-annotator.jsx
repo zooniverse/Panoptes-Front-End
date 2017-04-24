@@ -28,12 +28,12 @@ export default class FrameAnnotator extends React.Component {
     }
   }
 
-  handleAnnotationChange(oldAnnotation, currentAnnotation) {
+  handleAnnotationChange(oldAnnotation) {
     if (oldAnnotation) {
       const lastTask = this.props.workflow.tasks[oldAnnotation.task];
       const LastTaskComponent = tasks[lastTask.type];
       if (LastTaskComponent.onLeaveAnnotation) {
-        return LastTaskComponent.onLeaveAnnotation(lastTask, oldAnnotation);
+        LastTaskComponent.onLeaveAnnotation(lastTask, oldAnnotation);
       }
     }
   }
@@ -41,16 +41,14 @@ export default class FrameAnnotator extends React.Component {
   render() {
     let warningBanner;
     let taskDescription;
-    let TaskComponent;
     let BeforeSubject;
     let InsideSubject;
     let AfterSubject;
-    const { type, src } = getSubjectLocation(this.props.subject, this.props.frame);
+    const { type } = getSubjectLocation(this.props.subject, this.props.frame);
 
     if (this.props.annotation) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
-      TaskComponent = tasks[taskDescription.type];
-      ({BeforeSubject, InsideSubject, AfterSubject} = TaskComponent);
+      ({ BeforeSubject, InsideSubject, AfterSubject } = tasks[taskDescription.type]);
     }
 
     if (this.state.alreadySeen) {
@@ -93,6 +91,7 @@ export default class FrameAnnotator extends React.Component {
         if (PersistInsideSubject) {
           return <PersistInsideSubject key={taskName} {...hookProps} />;
         }
+        return null;
       })
       .filter(Boolean);
     subjectChildren = subjectChildren.concat(persistentHooks);

@@ -78,13 +78,11 @@ export default class SVGAnnotator extends React.Component {
 
   render() {
     let taskDescription;
-    let TaskComponent;
     const { type, src } = getSubjectLocation(this.props.subject, this.props.frame);
     const createdViewBox = `${this.props.viewBoxDimensions.x} ${this.props.viewBoxDimensions.y} ${this.props.viewBoxDimensions.width} ${this.props.viewBoxDimensions.height}`;
 
     if (this.props.annotation) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
-      TaskComponent = tasks[taskDescription.type];
     }
 
     const svgStyle = {};
