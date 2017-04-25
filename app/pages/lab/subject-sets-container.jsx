@@ -24,8 +24,10 @@ export default class SubjectSetsContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const newPath = nextProps.location.pathname !== this.props.location.pathname;
     const newPage = nextProps.location.query.page;
-    if (newPage !== this.props.location.query.page) {
+    const pageChange = newPage !== this.props.location.query.page;
+    if (newPath || pageChange) {
       this.getSubjectSets(newPage);
     }
   }
@@ -59,6 +61,9 @@ export default class SubjectSetsContainer extends React.Component {
 
     subjectSet.save()
       .then(() => {
+        this.setState({
+          subjectSetCreationInProgress: false
+        });
         this.context.router.push(`/lab/${this.props.project.id}/subject-sets/${subjectSet.id}`);
       })
       .catch((error) => {

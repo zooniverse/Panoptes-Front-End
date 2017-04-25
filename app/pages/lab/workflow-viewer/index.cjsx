@@ -44,7 +44,7 @@ module.exports = React.createClass
   displayName: 'WorkflowVisPageWrapper'
 
   propTypes:
-    params: React.PropTypes.shape({projectId: React.PropTypes.string, workflowId: React.PropTypes.string})
+    params: React.PropTypes.shape({projectID: React.PropTypes.string, workflowID: React.PropTypes.string})
 
   render: ->
     <PromiseRenderer promise={apiClient.type('workflows').get @props.params.workflowID}>{(workflow) =>

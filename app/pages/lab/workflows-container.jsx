@@ -21,6 +21,12 @@ export default class WorkflowsContainer extends React.Component {
     this.getWorkflowList();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location !== nextProps.location) {
+      this.getWorkflowList();
+    }
+  }
+
   getWorkflowList() {
     getWorkflowsInOrder(this.props.project, { fields: 'display_name' })
     .then((workflows) => {
