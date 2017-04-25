@@ -43,47 +43,33 @@ export default class FrameViewer extends React.Component {
     const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && type === 'image';
 
     if (FrameWrapper) {
-      if (type === 'image') {
-        return (
-          <PanZoom ref={(c) => { this.panZoom = c; }} enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
-            <FrameWrapper
-              frame={this.props.frame}
-              naturalWidth={this.state.frameDimensions.width || 0}
-              naturalHeight={this.state.frameDimensions.height || 0}
-              workflow={this.props.workflow}
-              subject={this.props.subject}
-              classification={this.props.classification}
-              annotation={this.props.annotation}
-              loading={this.state.loading}
-              preferences={this.props.preferences}
-              modification={this.props.modification || {}}
-              onChange={this.props.onChange}
-            >
-              <FileViewer
-                src={src}
-                type={type}
-                format={format}
-                frame={this.props.frame}
-                onLoad={this.handleLoad}
-                onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
-                onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
-              />
-            </FrameWrapper>
-          </PanZoom>
-        );
-      } else {
-        return (
-          <div className="frame-annotator">
+      return (
+        <PanZoom ref={(c) => { this.panZoom = c; }} enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
+          <FrameWrapper
+            frame={this.props.frame}
+            naturalWidth={this.state.frameDimensions.width || 0}
+            naturalHeight={this.state.frameDimensions.height || 0}
+            workflow={this.props.workflow}
+            subject={this.props.subject}
+            classification={this.props.classification}
+            annotation={this.props.annotation}
+            loading={this.state.loading}
+            preferences={this.props.preferences}
+            modification={this.props.modification || {}}
+            onChange={this.props.onChange}
+          >
             <FileViewer
               src={src}
               type={type}
               format={format}
               frame={this.props.frame}
               onLoad={this.handleLoad}
+              onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
+              onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
             />
-          </div>
-        );
-      }
+          </FrameWrapper>
+        </PanZoom>
+      );
     } else {
       return (
         <FileViewer
