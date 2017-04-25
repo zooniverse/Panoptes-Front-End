@@ -3,6 +3,7 @@ import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 
 import single from './single-feedback';
+import DrawingFeedback from './drawing-feedback';
 
 counterpart.registerTranslations('en', {
   feedbackSummary: {
@@ -35,6 +36,14 @@ class FeedbackSummary extends React.Component {
         case 'single':
           allFeedback.push(single(annotation, subject, workflow, activeFeedbackRules[annotation.task]));
           break;
+        case 'drawing':
+          allFeedback.push(<DrawingFeedback
+            annotation={annotation}
+            subject={subject}
+            workflow={workflow}
+            task={task}
+          />);
+          break;
       }
       return allFeedback;
     }, []);
@@ -45,17 +54,17 @@ class FeedbackSummary extends React.Component {
     const { metadata } = subject;
 
     // Get a list of feedback types set on the current subject
-    const subjectFeedbackTypes = Object.keys(metadata)
-      .map(key => (RegExp(/#feedback_(\d*?)_type/).test(key)) ? key : false)
-      .filter(key => metadata[key] !== '')
-      .filter(key => key)
-      .map(field => metadata[field]);
+    const subjectFeedbackTypes = Object.keys(metadata).reduce((types, key) => {
+      if (RegExp(/#feedback_(\d*?)_type/).test(key) && metadata[key] && metadata[key] !== '') {
+        types.push(metadata[key]);
+      }
+      return types;
+    }, []);
 
     if (!subjectFeedbackTypes.length) {
       return false;
     } else {
-
-      // Check each annotation against the subject and workflow to get a list of
+       // Check each annotation against the subject and workflow to get a list of
       // feedback tasks to run against that annotation.
       return classification.annotations.reduce((rules, { task }) => {
         const workflowTask = workflow.tasks[task];
@@ -73,25 +82,15 @@ class FeedbackSummary extends React.Component {
 
   renderFeedbackSummary(activeFeedbackRules) {
     const feedbackArray = this.constructFeedbackArray(activeFeedbackRules);
-
+    console.info('feedbackArray', feedbackArray);
     return (
       <section>
         <strong>
           <Translate content="feedbackSummary.title" />
         </strong>
         <div className="classification-task-summary-with-feedback">
-          <ol>
-            {feedbackArray.map(taskFeedback => (
-              <li key={taskFeedback.question}>
-                <p>{taskFeedback.question}</p>
-                <ol>
-                  {taskFeedback.messages.map(message => (
-                    <li key={message}>{message}</li>
-                  ))}
-                </ol>
-              </li>
-            ))}
-          </ol>
+          insert content
+          {feedbackArray}
         </div>
       </section>
     );

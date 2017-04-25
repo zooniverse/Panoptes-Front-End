@@ -3,33 +3,23 @@ import ModalFormDialog from 'modal-form/dialog';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 
-import SingleEditForm from './single-edit-form'
+import SingleEditForm from './point-edit-form'
 
 counterpart.registerTranslations('en', {
-  singleFeedbackEditor: {
+  PointFeedbackEditor: {
     addType: 'Add a feedback type',
     edit: 'Edit',
     del: 'Delete',
   },
 });
 
-export default class SingleFeedbackEditor extends React.Component {
+export default class PointFeedbackEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.checkForBrokenAnswers = this.checkForBrokenAnswers.bind(this);
     this.deleteFeedbackItem = this.deleteFeedbackItem.bind(this)
     this.openEditModal = this.openEditModal.bind(this)
     this.renderFeedbackItem = this.renderFeedbackItem.bind(this)
     this.saveFeedbackChange = this.saveFeedbackChange.bind(this)
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { task } = this.props;
-    const prevTask = prevProps.task;
-    const { feedback, answers } = task;
-    if (prevTask && feedback.types && feedback.types.length && answers.length !== prevTask.answers.length) {
-      this.checkForBrokenAnswers(task, prevTask);
-    }
   }
 
   render() {
@@ -45,40 +35,11 @@ export default class SingleFeedbackEditor extends React.Component {
           <button className="feedback-section__new-feedback-button standard-button" onClick={this.openEditModal}>
             <i className="fa fa-plus-circle"></i>
             {' '}
-            <Translate content="singleFeedbackEditor.addType" />
+            <Translate content="PointFeedbackEditor.addType" />
           </button>
         </div>
       </div>
     );
-  }
-
-  checkForBrokenAnswers(task, oldTask) {
-    // If an answer is added or deleted, that might break our feedback, as it
-    // works by tracking the index of the correct answer. This goes through the
-    // answers, tries to match any that have moved, and adds a flag where a
-    // required answer has been deleted.
-    const newAnswerKeys = task.answers.map(answer => answer._key)
-    const oldAnswerKeys = oldTask.answers.map(answer => answer._key)
-
-    const checkedFeedback = task.feedback.types.reduce((changeSet, feedbackType, index) => {
-      const answerIndex = parseInt(feedbackType.answerIndex, 10);
-      if (newAnswerKeys[answerIndex] !== oldAnswerKeys[answerIndex]) {
-        const newAnswerIndex = newAnswerKeys.indexOf(oldAnswerKeys[answerIndex]);
-        changeSet[index] = (newAnswerIndex > -1)
-          ? { answerIndex: newAnswerIndex.toString() }
-          : { answerIndex: '', valid: false };
-      }
-      return changeSet;
-    }, {});
-
-    if (Object.keys(checkedFeedback).length) {
-      const fixedFeedback = Object.assign({}, task.feedback);
-      Object.keys(checkedFeedback).forEach(index => {
-        const fixedFeedbackItem = Object.assign({}, fixedFeedback.types[index], checkedFeedback[index]);
-        fixedFeedback.types.splice(index, 1, fixedFeedbackItem);
-      });
-      this.props.saveFeedbackFn(fixedFeedback);
-    }
   }
 
   deleteFeedbackItem(index) {
@@ -109,10 +70,10 @@ export default class SingleFeedbackEditor extends React.Component {
         {showIcon}
         <span className="feedback-section__feedback-item-label">{item.id}</span>
         <button onClick={editModalFn}>
-          <Translate content="singleFeedbackEditor.edit" />
+          <Translate content="PointFeedbackEditor.edit" />
         </button>
         <button onClick={deleteItem}>
-          <Translate content="singleFeedbackEditor.del" />
+          <Translate content="PointFeedbackEditor.del" />
         </button>
       </div>
     );
@@ -131,7 +92,7 @@ export default class SingleFeedbackEditor extends React.Component {
 
 }
 
-SingleFeedbackEditor.propTypes = {
+PointFeedbackEditor.propTypes = {
   task: React.PropTypes.shape({
     feedback: React.PropTypes.shape({
       types: React.PropTypes.array(React.PropTypes.shape({
