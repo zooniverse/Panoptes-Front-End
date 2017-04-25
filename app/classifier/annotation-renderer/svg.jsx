@@ -4,7 +4,7 @@ import tasks from '../tasks';
 import getSubjectLocation from '../../lib/get-subject-location';
 import SVGImage from '../../components/svg-image';
 
-export default class SVGAnnotator extends React.Component {
+export default class SVGRenderer extends React.Component {
   constructor(props) {
     super(props);
     this.getScreenCurrentTransformationMatrix = this.getScreenCurrentTransformationMatrix.bind(this);
@@ -96,7 +96,7 @@ export default class SVGAnnotator extends React.Component {
 
       // Allow touch scrolling on subject for mobile and tablets
       if (taskDescription) {
-        if ((taskDescription.type !== 'drawing') && (taskDescription.type !== 'crop')) {
+        if (tasks[taskDescription.type] && tasks[taskDescription.type].AnnotationRenderer !== SVGRenderer) {
           svgStyle.pointerEvents = 'none';
         }
       }
@@ -133,11 +133,13 @@ export default class SVGAnnotator extends React.Component {
     });
 
     let children = [];
-    const isDrawingTask = taskDescription && (taskDescription.type === 'drawing' || taskDescription.type === 'crop');
+    const isDrawingTask = taskDescription && (tasks[taskDescription.type].AnnotationRenderer === SVGRenderer);
     if (isDrawingTask && InsideSubject && !this.props.panEnabled) {
       children.push(<InsideSubject key="inside" {...hookProps} />);
     }
-    const persistentHooks = ['drawing', 'crop']
+    const persistentHooks = Object
+      .keys(tasks)
+      .filter((key) => { return tasks[key].AnnotationRenderer === SVGRenderer; })
       .map((taskName) => {
         const PersistInsideSubject = tasks[taskName].PersistInsideSubject;
         if (PersistInsideSubject) {
@@ -188,7 +190,7 @@ export default class SVGAnnotator extends React.Component {
   }
 }
 
-SVGAnnotator.propTypes = {
+SVGRenderer.propTypes = {
   annotation: React.PropTypes.shape({
     task: React.PropTypes.string
   }),
@@ -222,7 +224,7 @@ SVGAnnotator.propTypes = {
   })
 };
 
-SVGAnnotator.defaultProps = {
+SVGRenderer.defaultProps = {
   user: null,
   project: null,
   subject: null,

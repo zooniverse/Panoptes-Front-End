@@ -9,6 +9,7 @@ GenericTask = require('../generic.jsx').default
 icons = require './icons'
 drawingTools = require '../../drawing-tools'
 GridButtons = require './grid-buttons'
+SVGRenderer = require('../../annotation-renderer/svg').default
 
 module.exports = React.createClass
   displayName: 'DrawingTask'
@@ -19,6 +20,7 @@ module.exports = React.createClass
     InsideSubject: MarkingInitializer
     PersistInsideSubject: MarkingsRenderer
     PersistAfterTask: HidePreviousMarksToggle
+    AnnotationRenderer: SVGRenderer
 
     getDefaultTask: ->
       type: 'drawing'

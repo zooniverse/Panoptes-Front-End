@@ -1,5 +1,5 @@
 import React from 'react';
-import SVGAnnotator from './svg';
+import SVGRenderer from './svg';
 
 function DefaultRenderer(props) {
   return (
@@ -14,7 +14,7 @@ DefaultRenderer.propTypes = {
 };
 
 const VIEWERS = {
-  image: SVGAnnotator
+  image: SVGRenderer
 };
 
 function AnnotationRenderer(props) {

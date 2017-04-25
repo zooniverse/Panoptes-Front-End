@@ -3,6 +3,7 @@ CropInitializer = require './initializer'
 GenericTask = require('../generic.jsx').default
 GenericEditor = require '../generic-editor'
 Summary = require './summary'
+SVGRenderer = require('../../annotation-renderer/svg').default
 
 module.exports = React.createClass
   displayName: 'CropTask'
@@ -10,6 +11,7 @@ module.exports = React.createClass
   statics:
     Editor: GenericEditor
     Summary: Summary
+    AnnotationRenderer: SVGRenderer
 
     getSVGProps: ({workflow, classification, annotation}) ->
       tasks = require('../index').default
