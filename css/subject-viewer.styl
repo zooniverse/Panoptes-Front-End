@@ -7,6 +7,16 @@
 
   .subject-frame-pips
     .subject-frame-pip
+      display: inline-block
+      overflow: hidden
+      position: relative
+      vertical-align: middle
+
+      input[type=radio]
+        position: absolute
+        opacity: 0.01
+        left: -100px
+
       &.active
         font-weight: 700
 

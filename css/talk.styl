@@ -89,7 +89,7 @@ COPY_GREY_LIGHT = #afaeae
     &:hover
       color: MAIN_HIGHLIGHT
 
-  a.button
+  .button
   button:not(.link-style)
     @extend .standard-button
     @extend .talk-module
@@ -470,8 +470,10 @@ COPY_GREY_LIGHT = #afaeae
       img
         max-width: 100%
     .subject-tools
-      span > button
-        margin-right: 2px
+      span > 
+        button
+        .button
+          margin-right: 2px
 
   .talk-comment-author
     @extend .talk-module
