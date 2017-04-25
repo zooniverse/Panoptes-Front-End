@@ -16,7 +16,6 @@ import interventionMonitor from '../lib/intervention-monitor';
 import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
-import FeedbackContext from './feedback/feedback-context';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -85,12 +84,6 @@ export default class Classifier extends React.Component {
       !!this.context.geordi && this.context.geordi.forget(['subjectID']);
     } catch (err) {
       console.error(err);
-    }
-  }
-
-  getChildContext() {
-    return {
-      feedback: new FeedbackContext()
     }
   }
 
@@ -342,10 +335,6 @@ export default class Classifier extends React.Component {
     );
   }
 }
-
-Classifier.childContextTypes = {
-  feedback: React.PropTypes.object,
-};
 
 Classifier.contextTypes = {
   geordi: React.PropTypes.object,

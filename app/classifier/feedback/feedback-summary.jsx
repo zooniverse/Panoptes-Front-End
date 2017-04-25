@@ -1,7 +1,9 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as feedbackActions from '../../redux/ducks/feedback';
 import single from './single-feedback';
 import DrawingFeedback from './drawing-feedback';
 
@@ -10,7 +12,6 @@ counterpart.registerTranslations('en', {
     title: 'Feedback on your classification',
   }
 });
-
 
 class FeedbackSummary extends React.Component {
   constructor(props) {
@@ -25,6 +26,10 @@ class FeedbackSummary extends React.Component {
     return (Object.keys(activeFeedbackRules).length)
       ? this.renderFeedbackSummary(activeFeedbackRules)
       : null;
+  }
+
+  componentWillUnmount() {
+    this.props.actions.feedback.clearFeedback();
   }
 
   constructFeedbackArray(activeFeedbackRules) {
@@ -95,7 +100,12 @@ class FeedbackSummary extends React.Component {
       </section>
     );
   }
-
 }
 
-export default FeedbackSummary;
+const mapDispatchToProps = (dispatch) => ({
+  actions: {
+    feedback: bindActionCreators(feedbackActions, dispatch),
+  },
+});
+
+export default connect(null, mapDispatchToProps)(FeedbackSummary);

@@ -5,6 +5,11 @@ useScroll = require 'react-router-scroll/lib/useScroll'
 routes = require './router'
 style = require '../css/main.styl'
 
+# Redux
+`import { Provider } from 'react-redux';`
+`import configureStore from './redux/store';`
+store = configureStore()
+
 # Redirect any old `/#/foo`-style URLs to `/foo`.
 if location?.hash.charAt(1) is '/'
   location.replace location.hash.slice 1
@@ -23,7 +28,7 @@ shouldUpdateScroll = (prevRouterProps, routerProps) ->
   else
     true
 
-ReactDOM.render <Router history={browserHistory} render={applyRouterMiddleware(useScroll(shouldUpdateScroll))}>{routes}</Router>,
+ReactDOM.render <Provider store={store}><Router history={browserHistory} render={applyRouterMiddleware(useScroll(shouldUpdateScroll))}>{routes}</Router></Provider>,
   document.getElementById('panoptes-main-container')
 
 # Are we connected to the latest back end?

@@ -1,11 +1,13 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import FeedbackRuleSet from './feedback-ruleset';
+import * as feedbackActions from '../../redux/ducks/feedback';
 
 const isWithinTolerance = (annotationX, annotationY, feedbackX, feedbackY, tolerance) => {
   const distance = Math.sqrt(Math.pow((annotationY - feedbackY), 2) + Math.pow((annotationX - feedbackX), 2));
   return distance < tolerance;
 };
-
 
 class DrawingFeedback extends React.Component {
 
@@ -29,8 +31,7 @@ class DrawingFeedback extends React.Component {
       return checkedRules;
     }, []);
     console.info('checkedRules', checkedRules);
-    this.context.feedback.items = checkedRules;
-
+    this.props.actions.feedback.setFeedback({ classifier: checkedRules });
   }
 
   render() {
@@ -39,8 +40,14 @@ class DrawingFeedback extends React.Component {
   }
 }
 
-DrawingFeedback.contextTypes = {
-  feedback: React.PropTypes.object,
-};
+const mapStateToProps = (state) => ({
+  feedback: state.feedback,
+});
 
-export default DrawingFeedback;
+const mapDispatchToProps = (dispatch) => ({
+  actions: {
+    feedback: bindActionCreators(feedbackActions, dispatch),
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawingFeedback);

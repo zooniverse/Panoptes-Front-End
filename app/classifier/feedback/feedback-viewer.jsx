@@ -1,14 +1,19 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-export default class FeedbackViewer extends React.Component {
+class FeedbackViewer extends React.Component {
   constructor(props) {
     super(props);
     this.renderFeedbackPoints = this.renderFeedbackPoints.bind(this);
     this.renderFeedbackPoint = this.renderFeedbackPoint.bind(this);
   }
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps.feedback.classifier.length !== this.props.feedback.classifier.length;
+  }
+
   render() {
-    const feedback = this.props.feedback.items;
+    const feedback = this.props.feedback.classifier;
     return (feedback.length)
       ? this.renderFeedbackPoints(feedback)
       : null;
@@ -39,3 +44,8 @@ FeedbackViewer.contextTypes = {
   feedback: React.PropTypes.object,
 };
 
+const mapStateToProps = (state) => ({
+  feedback: state.feedback,
+});
+
+export default connect(mapStateToProps)(FeedbackViewer);
