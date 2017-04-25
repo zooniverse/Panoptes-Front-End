@@ -78,11 +78,13 @@ export default class SVGAnnotator extends React.Component {
 
   render() {
     let taskDescription;
+    let InsideSubject;
     const { type, src } = getSubjectLocation(this.props.subject, this.props.frame);
     const createdViewBox = `${this.props.viewBoxDimensions.x} ${this.props.viewBoxDimensions.y} ${this.props.viewBoxDimensions.width} ${this.props.viewBoxDimensions.height}`;
 
-    if (this.props.annotation) {
+    if (this.props.annotation.task) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
+      ({ InsideSubject } = tasks[taskDescription.type]);
     }
 
     const svgStyle = {};
@@ -130,9 +132,21 @@ export default class SVGAnnotator extends React.Component {
       }
     });
 
-    const children = React.Children.map(this.props.children, (child) => {
-      return React.cloneElement(child, hookProps);
-    });
+    let children = [];
+    const isDrawingTask = taskDescription && (taskDescription.type === 'drawing' || taskDescription.type === 'crop');
+    if (isDrawingTask && InsideSubject && !this.props.panEnabled) {
+      children.push(<InsideSubject key="inside" {...hookProps} />);
+    }
+    const persistentHooks = ['drawing', 'crop']
+      .map((taskName) => {
+        const PersistInsideSubject = tasks[taskName].PersistInsideSubject;
+        if (PersistInsideSubject) {
+          return <PersistInsideSubject key={taskName} {...hookProps} />;
+        }
+        return null;
+      })
+      .filter(Boolean);
+    children = children.concat(persistentHooks);
 
     return (
       <svg
@@ -178,7 +192,6 @@ SVGAnnotator.propTypes = {
   annotation: React.PropTypes.shape({
     task: React.PropTypes.string
   }),
-  children: React.PropTypes.node,
   classification: React.PropTypes.shape({
     annotations: React.PropTypes.array,
     loading: React.PropTypes.bool

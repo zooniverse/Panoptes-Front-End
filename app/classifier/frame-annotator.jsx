@@ -31,9 +31,11 @@ export default class FrameAnnotator extends React.Component {
   handleAnnotationChange(oldAnnotation) {
     if (oldAnnotation) {
       const lastTask = this.props.workflow.tasks[oldAnnotation.task];
-      const LastTaskComponent = tasks[lastTask.type];
-      if (LastTaskComponent.onLeaveAnnotation) {
-        LastTaskComponent.onLeaveAnnotation(lastTask, oldAnnotation);
+      if (lastTask) {
+        const LastTaskComponent = tasks[lastTask.type];
+        if (LastTaskComponent.onLeaveAnnotation) {
+          LastTaskComponent.onLeaveAnnotation(lastTask, oldAnnotation);
+        }
       }
     }
   }
@@ -42,13 +44,12 @@ export default class FrameAnnotator extends React.Component {
     let warningBanner;
     let taskDescription;
     let BeforeSubject;
-    let InsideSubject;
     let AfterSubject;
     const { type } = getSubjectLocation(this.props.subject, this.props.frame);
 
-    if (this.props.annotation) {
+    if (this.props.annotation.task) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
-      ({ BeforeSubject, InsideSubject, AfterSubject } = tasks[taskDescription.type]);
+      ({ BeforeSubject, AfterSubject } = tasks[taskDescription.type]);
     }
 
     if (this.state.alreadySeen) {
@@ -80,22 +81,6 @@ export default class FrameAnnotator extends React.Component {
       preferences: this.props.preferences
     };
 
-    let subjectChildren = [];
-    if (!!InsideSubject && !this.props.panEnabled) {
-      subjectChildren.push(<InsideSubject key="inside" {...hookProps} />);
-    }
-    const persistentHooks = Object
-      .keys(tasks)
-      .map((taskName) => {
-        const PersistInsideSubject = tasks[taskName].PersistInsideSubject;
-        if (PersistInsideSubject) {
-          return <PersistInsideSubject key={taskName} {...hookProps} />;
-        }
-        return null;
-      })
-      .filter(Boolean);
-    subjectChildren = subjectChildren.concat(persistentHooks);
-
     return (
       <div className="frame-annotator">
         <div className="subject-area">
@@ -103,9 +88,7 @@ export default class FrameAnnotator extends React.Component {
           {!!BeforeSubject && (
             <BeforeSubject {...hookProps} />)}
 
-          <AnnotationRenderer type={type} {...this.props}>
-            {subjectChildren}
-          </AnnotationRenderer>
+          <AnnotationRenderer type={type} {...this.props} />
 
           {this.props.children}
 
@@ -134,7 +117,6 @@ FrameAnnotator.propTypes = {
   naturalHeight: React.PropTypes.number,
   naturalWidth: React.PropTypes.number,
   onChange: React.PropTypes.func,
-  panEnabled: React.PropTypes.bool,
   preferences: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
@@ -153,7 +135,7 @@ FrameAnnotator.defaultProps = {
   subject: null,
   workflow: null,
   classification: null,
-  annotation: null,
+  annotation: {},
   onLoad: () => {},
   frame: 0,
   onChange: () => {}
