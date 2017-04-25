@@ -117,6 +117,7 @@ FrameAnnotator.propTypes = {
   naturalHeight: React.PropTypes.number,
   naturalWidth: React.PropTypes.number,
   onChange: React.PropTypes.func,
+  panEnabled: React.PropTypes.bool,
   preferences: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
@@ -138,5 +139,6 @@ FrameAnnotator.defaultProps = {
   annotation: {},
   onLoad: () => {},
   frame: 0,
-  onChange: () => {}
+  onChange: () => {},
+  panEnabled: false
 };
