@@ -1,0 +1,28 @@
+@keyframes feedbackIn
+  from
+    opacity: 0
+    transform: translate(0, -15px)
+  to
+    opacity: 1
+    transform: translate(0, 0)
+
+$feedbackIn
+  opacity: 0
+  animation: feedbackIn ease-out 1
+  animation-fill-mode: forwards
+  animation-duration: 0.3s
+
+.feedback-points
+
+  &__point
+    @extends $feedbackIn
+    fill-opacity: 0.2
+    stroke-width: 2px
+
+    &--success
+      fill: green
+      stroke: green
+
+    &--failure
+      fill: red
+      stroke: red

@@ -39,10 +39,6 @@ class FeedbackViewer extends React.Component {
   }
 }
 
-FeedbackViewer.contextTypes = {
-  feedback: React.PropTypes.object,
-};
-
 const mapStateToProps = (state) => ({
   feedback: state.feedback,
 });

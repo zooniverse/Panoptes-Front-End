@@ -337,7 +337,7 @@ export default class Classifier extends React.Component {
 }
 
 Classifier.contextTypes = {
-  geordi: React.PropTypes.object,
+  geordi: React.PropTypes.object
 };
 
 Classifier.propTypes = {
