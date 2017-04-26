@@ -102,7 +102,7 @@ SubjectNode = React.createClass
           </label>}
       </SubjectViewer>
       {if @props.canCollaborate and @props.collection.default_subject_src
-        if src is "https://#{@props.collection.default_subject_src}"
+        if src is @props.collection.default_subject_src
           <div className="collection-subject-viewer__default-label">Collection Cover</div>
         else
           <button

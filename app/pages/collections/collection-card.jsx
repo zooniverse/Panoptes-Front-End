@@ -14,7 +14,7 @@ export default class CollectionCard extends React.Component {
 
   setSubjectPreview(src) {
     if (src) {
-      this.collectionCard.style.backgroundImage = `url('https://${src}')`;
+      this.collectionCard.style.backgroundImage = `url('${src}')`;
       this.collectionCard.style.backgroundPosition = 'initial';
       this.collectionCard.style.backgroundRepeat = 'no-repeat';
       this.collectionCard.style.backgroundSize = 'cover';

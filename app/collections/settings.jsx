@@ -140,7 +140,7 @@ export default class CollectionSettings extends React.Component {
         <p className="form-help">Note: Setting the subject cover is only supported for image subjects at this time.</p>
 
         {this.props.collection.default_subject_src &&
-          <Thumbnail src={this.props.collection.default_subject_src} width={300} />}
+          <Thumbnail className="cover-subject-preview" src={this.props.collection.default_subject_src} width={300} />}
 
         <hr />
 
