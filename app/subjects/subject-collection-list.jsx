@@ -27,9 +27,10 @@ const SubjectCollectionList = (props) => {
         </div>
         <Paginator
           className="talk"
-          page={meta.page}
           onPageChange={props.onCollectionsPageChange}
+          page={meta.page}
           pageCount={meta.page_count}
+          pageKey="collections_page"
         />
       </div>
     );

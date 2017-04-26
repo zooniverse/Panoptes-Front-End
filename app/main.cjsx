@@ -16,8 +16,9 @@ browserHistory.listen ->
 shouldUpdateScroll = (prevRouterProps, routerProps) ->
   pathname = routerProps.location.pathname.split('/')
   isStats = ('stats' in pathname) and ('projects' in pathname)
+  isSubjectTalk = ('talk' in pathname) and ('talk' in pathname)
   hashChange = routerProps.location.hash.length
-  if isStats or hashChange
+  if isStats or hashChange or isSubjectTalk
     false
   else
     true

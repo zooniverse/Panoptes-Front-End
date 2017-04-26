@@ -24,6 +24,10 @@ export default class SubjectPageContainer extends React.Component {
     if (this.props.params && nextProps.params && nextProps.params.id !== this.props.params.id) {
       this.setSubject();
     }
+
+    if (nextProps.location.query.collections_page !== this.props.location.query.collections_page) {
+      this.getCollections(this.state.subject, nextProps.location.query.collections_page);
+    }
   }
 
   onCollectionsPageChange(page) {
@@ -35,7 +39,7 @@ export default class SubjectPageContainer extends React.Component {
     apiClient.type('subjects').get(subjectId)
       .then((subject) => {
         this.setState({ subject });
-        this.getCollections(subject);
+        this.getCollections(subject, this.props.location.query.collections_page);
       });
   }
 
@@ -84,6 +88,11 @@ export default class SubjectPageContainer extends React.Component {
 }
 
 SubjectPageContainer.propTypes = {
+  location: React.PropTypes.shape({
+    query: React.PropTypes.shape({
+      collections_page: React.PropTypes.string
+    })
+  }),
   params: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
