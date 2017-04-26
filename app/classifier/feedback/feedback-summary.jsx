@@ -22,6 +22,7 @@ const feedbackTypes = {
 class FeedbackSummary extends React.Component {
   constructor(props) {
     super(props);
+    this.renderFeedbackSummary = this.renderFeedbackSummary.bind(this);
     this.generateFeedbackItems = this.generateFeedbackItems.bind(this);
   }
 
@@ -34,20 +35,11 @@ class FeedbackSummary extends React.Component {
   }
 
   render() {
-    return (
-      <section>
-        <strong>
-          <Translate content="feedbackSummary.title" />
-        </strong>
-        <div className="classification-task-summary-with-feedback">
-          insert content
-        </div>
-      </section>
-    );
+    return (this.props.feedback.length) ? this.renderFeedbackSummary() : null;
   }
 
   generateFeedbackItems() {
-    const { classification, subject, workflow } = this.props;
+    const { actions, classification, subject, workflow } = this.props;
     const feedbackItems = classification.annotations.reduce((allFeedback, annotation) => {
       const props = {
         annotation,
@@ -57,10 +49,39 @@ class FeedbackSummary extends React.Component {
       allFeedback.push(feedbackTypes[props.task.type](props));
       return allFeedback;
     }, []);
-    this.props.actions.feedback.setFeedback(feedbackItems);
+    actions.feedback.setFeedback(feedbackItems);
   }
 
+  renderFeedbackSummary() {
+    const textFeedback = this.props.feedback.filter(item => item.type === 'single');
+    console.info('textFeedback',textFeedback)
+    return (
+      <section>
+        <strong>
+          <Translate content="feedbackSummary.title" />
+        </strong>
+        <div className="classification-task-summary-with-feedback">
+          {textFeedback.map(item => (
+            <ul key={`feedback-item-${item.task}`}>
+              <li>
+                <p>{item.feedback[0].question}</p>
+                <ul>
+                  {item.feedback.map(feedbackItem => (
+                    <li>{feedbackItem.message}</li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          ))}
+        </div>
+      </section>
+    );
+  }
 }
+
+const mapStateToProps = (state) => ({
+  feedback: state.feedback,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
@@ -68,4 +89,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(null, mapDispatchToProps)(FeedbackSummary);
+export default connect(mapStateToProps, mapDispatchToProps)(FeedbackSummary);

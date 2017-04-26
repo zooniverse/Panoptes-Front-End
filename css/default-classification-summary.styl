@@ -19,26 +19,12 @@
   @extends .classification-task-summary
 
   p
-    margin-bottom: 0.5em
+    margin: 0
+    font-weight: bold
 
-  ol
+  > ul
     padding-left: 0
+    margin: 0
     list-style-type: none
 
-  > ol
-    counter-reset: question-counter
 
-    > li
-      p:before
-        content: counter(question-counter) ". "
-        counter-increment: question-counter
-        color: LIGHT_GREY
-
-      > ol
-        counter-reset: answer-counter
-        margin-left: 2em
-
-        > li:before
-          content: counter(answer-counter, lower-roman) ". "
-          counter-increment: answer-counter
-          color: LIGHT_GREY
