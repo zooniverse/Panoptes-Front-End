@@ -2,19 +2,16 @@
 const CLEAR = 'pfe/feedback/CLEAR';
 const SET = 'pfe/feedback/SET';
 
-const initialState = {
-  classifier: [],
-  summary: []
-};
+const initialState = [];
 
 // Reducer
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case CLEAR:
-      return Object.assign({}, initialState);
+      return [];
 
     case SET:
-      return Object.assign({}, action.feedback);
+      return [].concat(action.feedback);
 
     default:
       return state;

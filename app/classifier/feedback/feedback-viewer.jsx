@@ -9,14 +9,13 @@ class FeedbackViewer extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.feedback.classifier.length !== this.props.feedback.classifier.length;
+    return nextProps.feedback.length !== this.props.feedback.length;
   }
 
   render() {
-    const feedback = this.props.feedback.classifier;
-    return (feedback.length)
-      ? this.renderFeedbackPoints(feedback)
-      : null;
+    const feedback = this.props.feedback.reduce((drawingFeedback, item) =>
+      (item.type === 'drawing') ? drawingFeedback.concat(item.feedback) : drawingFeedback, []);
+    return (feedback.length) ? this.renderFeedbackPoints(feedback) : null;
   }
 
   renderFeedbackPoint(point) {

@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as feedbackActions from '../../redux/ducks/feedback';
-import SingleFeedback from './single-feedback';
-import DrawingFeedback from './drawing-feedback';
-
 import processSingleFeedback from './process-feedback-single';
 import processDrawingFeedback from './process-feedback-drawing';
 
