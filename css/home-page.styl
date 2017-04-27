@@ -291,6 +291,7 @@ $flex-section
     font-size: 1em
     font-weight: 700
     letter-spacing: 0.22em
+    margin-bottom: 1em
     text-transform: uppercase
 
   .main-headline
@@ -403,6 +404,20 @@ $flex-section
 
   .home-promoted
     background-color: BACKGROUND_COLOR
+    padding: 3em 0
+
+    &__cards
+      display: flex
+      justify-content: space-between
+      width: 100%
+
+      .project-card
+        margin: inherit 0
+
+    &__content
+      display: flex
+      flex-direction: column
+      margin: 2em 22em
 
     &:before
       content: ""

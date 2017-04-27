@@ -2,7 +2,7 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import { Link } from 'react-router';
-import ProjectCard from '../home-common/project-card';
+import ProjectCard from '../../partials/project-card';
 
 counterpart.registerTranslations('en', {
   promotedHomePage: {
@@ -18,12 +18,24 @@ counterpart.registerTranslations('en', {
 const HomePagePromoted = ({ promotedProjects }) => {
   return (
     <section className="home-promoted">
-      <Translate className="tertiary-kicker" content="promotedHomePage.discover" />
-      <Translate className="display-body" content="promotedHomePage.participate" />
 
-      {promotedProjects.map((project) => {
-        return <ProjectCard key={project.id} project={project} />;
-      })}
+      <div className="home-promoted__content">
+        <Translate className="tertiary-kicker" content="promotedHomePage.discover" />
+        <Translate className="display-body" content="promotedHomePage.participate" />
+      </div>
+
+      <div className="home-promoted__cards">
+        {promotedProjects.map((project) => {
+          return (
+            <ProjectCard
+              key={project.id}
+              customCSS="home-page-not-logged-in__project-card"
+              imageSrc={project.image}
+              landingPage={true}
+              project={project}
+            />);
+        })}
+      </div>
 
       <Link to="/projects" className="primary-button primary-button--light">See All Projects</Link>
     </section>
