@@ -1,46 +1,20 @@
-import React from 'react';
-
-const cache = {}; 
+import React from 'react'; 
 
 export default class LabelRenderer extends React.Component {
 
   constructor(props) {
     super(props);
     this.createNewContent = this.createNewContent.bind(this);
+    this.onLoad = this.onLoad.bind(this);
     this.state = {
       content: ''
     }
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.src !== this.props.src) {
-      this.loadText(newProps.src);
-    }
-  }
-
-  componentDidMount(){
-    this.loadText(this.props.src);
-  }
-
-  loadText(src) {
-    const cachedContent = cache[src];
-    if (cachedContent) {
-      this.setState({ content: cachedContent });
-    } else {
-      this.setState({ content: 'Loading…' });
-      fetch(src + '?=')
-      .then((response) => {
-        return response.text();
-      })
-      .then((content) => {
-        cache[src] = content;
-        this.setState({ content });
-      })
-      .catch((e) => {
-        const content = e.message;
-        this.setState({ content });
-      });
-    }
+  onLoad(e) {
+    const content = e.data;
+    this.setState({ content });
+    this.props.onLoad(e);
   }
 
   createNewContent(){
@@ -101,19 +75,28 @@ export default class LabelRenderer extends React.Component {
       color: '#efefef',
       whiteSpace: 'pre-wrap'
     };
+    const children = React.Children.map(this.props.children, (child) => {
+      return React.cloneElement(child, {
+        style: invisibleDivStyles,
+        onLoad: this.onLoad
+      });
+    });
     return(
       <div className='label-renderer' >
         <div style={visibleDivStyles} >
           {labeledContent}
         </div>
-        <div style={invisibleDivStyles} >
-          {this.state.content}
-        </div>
+          {children}
       </div>
     );
   }
 }
 
 LabelRenderer.propTypes = {
+  onLoad: React.PropTypes.func,
   src: React.PropTypes.string
 };
+
+LabelRenderer.defaultProps = {
+  onLoad: () => { return true }
+}

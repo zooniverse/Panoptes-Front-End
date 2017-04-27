@@ -42,7 +42,9 @@ class TextViewer extends Component {
       .then((content) => {
         cache[src] = content;
         this.setState({ content });
-        this.element.dispatchEvent(new Event('load'));
+        const e = new Event('load');
+        e.data = content;
+        this.element.dispatchEvent(e);
       })
       .catch((e) => {
         const content = e.message;

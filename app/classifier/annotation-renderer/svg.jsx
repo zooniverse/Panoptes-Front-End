@@ -191,11 +191,11 @@ export default class SVGRenderer extends React.Component {
             )}
 
             {children}
-
             {(showFeedback) && (<SVGFeedbackViewer />)}
           </g>
         </svg>
         {(showFeedback) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
+        {this.props.children}
       </div>
     );
   }
@@ -205,6 +205,7 @@ SVGRenderer.propTypes = {
   annotation: React.PropTypes.shape({
     task: React.PropTypes.string
   }),
+  children: React.PropTypes.node,
   classification: React.PropTypes.shape({
     annotations: React.PropTypes.array,
     loading: React.PropTypes.bool

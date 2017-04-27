@@ -29,7 +29,7 @@ export default class TextRenderer extends React.Component {
     let children = [];
     const isTextTask = taskDescription && (tasks[taskDescription.type].AnnotationRenderer === TextRenderer);
     if (isTextTask && InsideSubject) {
-      children.push(<InsideSubject key="inside" src={src} {...hookProps} />);
+      children.push(<InsideSubject key="inside" src={src} {...hookProps}>{this.props.children}</InsideSubject>);
     }
     const persistentHooks = Object
       .keys(tasks)
@@ -56,6 +56,7 @@ TextRenderer.propTypes = {
   annotation: React.PropTypes.shape({
     task: React.PropTypes.string
   }),
+  children: React.PropTypes.node,
   classification: React.PropTypes.shape({
     annotations: React.PropTypes.array,
     loading: React.PropTypes.bool
