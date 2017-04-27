@@ -26,6 +26,8 @@ function FileViewer(props) {
 
   return (
     <Viewer
+      className={props.className}
+      style={props.style}
       src={props.src}
       type={props.type}
       format={props.format}
@@ -38,12 +40,14 @@ function FileViewer(props) {
 }
 
 FileViewer.propTypes = {
+  className: React.PropTypes.string,
   format: React.PropTypes.string,
   frame: React.PropTypes.number,
   onBlur: React.PropTypes.func,
   onFocus: React.PropTypes.func,
   onLoad: React.PropTypes.func,
   src: React.PropTypes.string,
+  style: React.PropTypes.object,
   type: React.PropTypes.string
 };
 

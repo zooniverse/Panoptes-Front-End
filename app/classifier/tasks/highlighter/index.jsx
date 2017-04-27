@@ -70,7 +70,7 @@ export default class Highlighter extends React.Component {
 
 Highlighter.Editor = GenericTaskEditor;
 
-Highlighter.InsideSubject = LabelRenderer;
+Highlighter.PersistInsideSubject = LabelRenderer;
 
 Highlighter.Summary = HighlighterSummary;
 

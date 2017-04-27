@@ -20,8 +20,7 @@ export default class LabelRenderer extends React.Component {
   createNewContent(){
     let newContent = [];
     let lastFocusIndex = 0;
-    const annotationValueLength = this.props.annotation.value.length;
-    if (annotationValueLength > 0) {
+    if (this.props.annotation.value && this.props.annotation.value.length > 0) {
       for ( let i = 0; i < this.state.content.length; i++){
         for (let a = 0; a < this.props.annotation.value.length; a++) {
           let currentAnnotation = this.props.annotation.value[a];
@@ -59,21 +58,21 @@ export default class LabelRenderer extends React.Component {
 
   render() {
     const labeledContent = this.createNewContent();
-    const invisibleDivStyles = {      
+    const invisibleDivStyles = {
+      background: 'transparent',
       position: 'absolute',
       top: 0,
       left: 0,
       padding: '2%',
       color: 'transparent',
-      whiteSpace: 'pre-wrap'
+      whiteSpace: 'pre-wrap',
+      width: '96%'
     };
-    const visibleDivStyles = {      
-      position: 'absolute',
-      top: 0,
-      left: 0,
+    const visibleDivStyles = {
       padding: '2%',
       color: '#efefef',
-      whiteSpace: 'pre-wrap'
+      whiteSpace: 'pre-wrap',
+      width: '96%'
     };
     const children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
@@ -98,5 +97,8 @@ LabelRenderer.propTypes = {
 };
 
 LabelRenderer.defaultProps = {
+  annotation: {
+    value: []
+  },
   onLoad: () => { return true }
 }

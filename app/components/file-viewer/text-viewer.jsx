@@ -63,7 +63,7 @@ class TextViewer extends Component {
       content = `Unsupported format: ${this.props.format}`;
     }
     return (
-      <div ref={(element) => { this.element = element; }} className={isLoading ? 'text-viewer-loading' : 'text-viewer'} >
+      <div ref={(element) => { this.element = element; }} className={isLoading ? 'text-viewer-loading' : 'text-viewer'} style={this.props.style}>
         { content }
       </div>
     );
@@ -74,7 +74,8 @@ TextViewer.propTypes = {
   src: React.PropTypes.string.isRequired,
   type: React.PropTypes.string,
   format: React.PropTypes.string,
-  onLoad: React.PropTypes.func
+  onLoad: React.PropTypes.func,
+  style: React.PropTypes.object
 };
 
 TextViewer.defaultProps = {

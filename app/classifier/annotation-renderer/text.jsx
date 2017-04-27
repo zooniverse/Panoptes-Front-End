@@ -37,7 +37,7 @@ export default class TextRenderer extends React.Component {
       .map((taskName) => {
         const PersistInsideSubject = tasks[taskName].PersistInsideSubject;
         if (PersistInsideSubject) {
-          return <PersistInsideSubject key={taskName} src={src} {...hookProps} />;
+          return <PersistInsideSubject key={taskName} src={src} {...hookProps}>{this.props.children}</PersistInsideSubject>;
         }
         return null;
       })
