@@ -4,6 +4,7 @@ import GenericTaskEditor from '../generic-editor';
 import GenericTask from '../generic';
 import LabelRenderer from './label-renderer';
 import HighlighterSummary from './summary';
+import TextRenderer from '../../annotation-renderer/text';
 
 export default class Highlighter extends React.Component {
   constructor(props) {
@@ -72,6 +73,8 @@ Highlighter.Editor = GenericTaskEditor;
 Highlighter.InsideSubject = LabelRenderer;
 
 Highlighter.Summary = HighlighterSummary;
+
+Highlighter.AnnotationRenderer = TextRenderer;
 
 Highlighter.getDefaultTask = () => {
   return (
