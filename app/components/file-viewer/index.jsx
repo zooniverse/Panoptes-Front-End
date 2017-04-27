@@ -24,14 +24,13 @@ const VIEWERS = {
 };
 
 function subjectViewerSelector(props) {
-  if(Array.isArray(props.type)){
-    if(props.type.includes('audio')){
+  if (Array.isArray(props.type)) {
+    if (props.type.includes('audio')) {
       return VIEWERS.audio;
     }
     // ... add outher here if neccessary
   }
   return VIEWERS[props.type] || DefaultViewer;
-
 }
 
 function FileViewer(props) {
@@ -39,6 +38,8 @@ function FileViewer(props) {
 
   return (
     <Viewer
+      className={props.className}
+      style={props.style}
       src={props.src}
       type={props.type}
       format={props.format}
@@ -51,6 +52,7 @@ function FileViewer(props) {
 }
 
 FileViewer.propTypes = {
+  className: React.PropTypes.string,
   format: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.string
@@ -63,6 +65,7 @@ FileViewer.propTypes = {
     React.PropTypes.array,
     React.PropTypes.string
   ]),
+  style: React.PropTypes.object,
   type: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.string
