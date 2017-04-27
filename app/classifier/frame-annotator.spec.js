@@ -59,7 +59,7 @@ describe('<FrameAnnotator />', function() {
   describe('<SVGImage />', function() {
     let wrapper;
     before(function() {
-      wrapper = shallow(
+      wrapper = mount(
         <FrameAnnotator
           annotation={annotation}
           classification={classification}
@@ -77,8 +77,9 @@ describe('<FrameAnnotator />', function() {
     });
 
     it('does not render if type is not an image', function() {
-      subject.locations = [{ 'video/mp4': 'video.mp4' }];
-      wrapper.setProps({ subject });
+      const newSubject = Object.assign({}, subject);
+      newSubject.locations = [{ 'video/mp4': 'video.mp4' }];
+      wrapper.setProps({ subject: newSubject });
 
       assert.equal(wrapper.find(SVGImage).length, 0);
     });
@@ -158,18 +159,15 @@ describe('<FrameAnnotator />', function() {
       assert.equal(wrapper.find(TaskComponent.BeforeSubject).length, 1);
     });
 
-    it('renders InsideSubject hook', function() {
-      assert.equal(wrapper.find(TaskComponent.InsideSubject).length, 1);
-    });
-
     it('renders AfterSubject hook', function() {
       assert.equal(wrapper.find(TaskComponent.AfterSubject).length, 1);
     });
-
-    it('renders PersistInsideSubject hook', function() {
-      const drawingAnnotation = { task: 'draw' };
+    
+    it('renders InsideSubject hook', function() {
       TaskComponent = tasks['drawing'];
-      wrapper = shallow(
+      const drawingAnnotation = TaskComponent.getDefaultAnnotation();
+      drawingAnnotation.task = 'draw';
+      wrapper = mount(
         <FrameAnnotator
           annotation={drawingAnnotation}
           classification={classification}
@@ -180,6 +178,11 @@ describe('<FrameAnnotator />', function() {
           viewBoxDimensions={viewBoxDimensions}
           workflow={workflow}
         />);
+
+      assert.equal(wrapper.find(TaskComponent.InsideSubject).length, 1);
+    });
+
+    it('renders PersistInsideSubject hook', function() {
 
       assert.equal(wrapper.find(TaskComponent.PersistInsideSubject).length, 1)
     });
