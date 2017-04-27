@@ -31,13 +31,22 @@ export default class TextRenderer extends React.Component {
     if (isTextTask && InsideSubject) {
       children.push(<InsideSubject key="inside" src={src} {...hookProps}>{this.props.children}</InsideSubject>);
     }
-    const persistentHooks = Object
-      .keys(tasks)
-      .filter((key) => { return tasks[key].AnnotationRenderer === TextRenderer; })
-      .map((taskName) => {
-        const PersistInsideSubject = tasks[taskName].PersistInsideSubject;
+    const persistentHooks = this.props.classification.annotations
+      .map((annotation) => { return this.props.workflow.tasks[annotation.task]; })
+      .filter((task) => { return tasks[task.type].AnnotationRenderer === TextRenderer; })
+      .map((task, i) => {
+        const { PersistInsideSubject } = tasks[task.type];
         if (PersistInsideSubject) {
-          return <PersistInsideSubject key={taskName} src={src} {...hookProps}>{this.props.children}</PersistInsideSubject>;
+          return (
+            <PersistInsideSubject
+              key={task.type}
+              src={src}
+              {...hookProps}
+              annotation={this.props.classification.annotations[i]}
+            >
+              {this.props.children}
+            </PersistInsideSubject>
+          );
         }
         return null;
       })
