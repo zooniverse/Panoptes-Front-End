@@ -3,7 +3,7 @@ import Translate from 'react-translate-component';
 import { Link } from 'react-router';
 import counterpart from 'counterpart';
 import moment from 'moment';
-import ProjectCard from './project-card';
+import ProjectCard from '../../partials/project-card';
 
 counterpart.registerTranslations('en', {
   socialHomePage: {
@@ -54,7 +54,11 @@ const HomePageSocial = ({ blogPosts, newestProject, newestPublication, recentPro
         <div className="home-social__news">
           <Translate className="tertiary-headline" content="socialHomePage.news" />
           <Translate className="tertiary-kicker" content="socialHomePage.newestProject" />
-          <ProjectCard project={newestProject} />
+          <ProjectCard
+            customCSS="home-page-not-logged-in__project-card"
+            landingPage={true}
+            project={newestProject}
+          />
           <hr />
 
           <Translate className="tertiary-kicker" content="socialHomePage.recentProjects" />
@@ -70,6 +74,8 @@ const HomePageSocial = ({ blogPosts, newestProject, newestPublication, recentPro
 
           <Link to="/about/publications" className="primary-button primary-button--light">See All Publications</Link>
         </div>
+
+        <div className="home-social__content--vertical-line"></div>
 
         <div className="home-social__daily">
           <Translate className="tertiary-headline" content="socialHomePage.daily" />
