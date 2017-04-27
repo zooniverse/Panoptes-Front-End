@@ -33,6 +33,9 @@ class TextViewer extends Component {
     const cachedContent = cache[src];
     if (cachedContent) {
       this.setState({ content: cachedContent });
+      const e = new Event('load');
+      e.data = cachedContent;
+      this.element.dispatchEvent(e);
     } else {
       this.setState({ content: 'Loading…' });
       fetch(src + '?=')
