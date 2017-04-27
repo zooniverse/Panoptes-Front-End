@@ -72,7 +72,7 @@ export default class LabelRenderer extends React.Component {
       padding: '2%',
       color: '#efefef',
       whiteSpace: 'pre-wrap',
-      width: '96%'
+      width: '40ch'
     };
     const children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
