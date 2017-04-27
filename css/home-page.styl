@@ -262,20 +262,30 @@ $flex-section
         color: black
 
   &__project-card
-    background-color: white
-    height: 38em
-    margin: 3vh 0
-    width: 26em
+    border-radius: 0
+    box-sizing: border-box
+    height: 30em
+    max-height: 30em
+    max-width: 18em
 
-    &--background
-      height: 50%
-
-    &--content
+    .details
       box-sizing: border-box
-      display: flex
-      flex-direction: column
-      height: 50%
-      padding: 2.5vh 2.5vw
+      height: 40%
+
+      .name, .description
+        cursor: inherit
+        text-align: left
+
+    button[class=primary-button]
+      box-sizing: border-box
+      color: black
+      height: 5em
+      margin: 0
+
+    :hover > &,
+    :focus > &
+      .details
+        height: 40%
 
 .on-home-page
   font-family: 'Karla', sans-serif;
