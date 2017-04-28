@@ -5,7 +5,6 @@ class FeedbackViewer extends React.Component {
   constructor(props) {
     super(props);
     this.renderFeedbackPoints = this.renderFeedbackPoints.bind(this);
-    this.renderFeedbackPoint = this.renderFeedbackPoint.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -18,22 +17,10 @@ class FeedbackViewer extends React.Component {
     return (feedback.length) ? this.renderFeedbackPoints(feedback) : null;
   }
 
-  renderFeedbackPoint(point) {
-    const statusClass = (point.success) ? 'feedback-points__point--success' : 'feedback-points__point--failure';
-    const props = {
-      className: `feedback-points__point ${statusClass}`,
-      cx: point.x,
-      cy: point.y,
-      r: point.tol,
-      key: `feedback-point-${point.x}-${point.y}`,
-    };
-    return (<circle {...props} />);
-  }
-
   renderFeedbackPoints(feedback) {
     return (
       <g className="feedback-points">
-        {feedback.map(this.renderFeedbackPoint)}
+        {feedback.map(point => <FeedbackPoint point={point} />)}
       </g>
     );
   }
@@ -44,3 +31,34 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(FeedbackViewer);
+
+class FeedbackPoint extends React.Component {
+  constructor(props) {
+    super(props);
+    this.createPoint = this.createPoint.bind(this);
+    this.createTooltip = this.createTooltip.bind(this);
+  }
+
+  render() {
+    const point = this.createPoint();
+    this.createTooltip(point);
+    return point;
+  }
+
+  createPoint() {
+    const { point } = this.props;
+    const statusClass = (point.success) ? 'feedback-points__point--success' : 'feedback-points__point--failure';
+    const pointProps = {
+      className: `feedback-points__point ${statusClass}`,
+      cx: point.x,
+      cy: point.y,
+      r: point.tol,
+      key: `feedback-point-${point.x}-${point.y}`,
+    };
+    return <circle {...pointProps} />;
+  }
+
+  createTooltip(point) {
+    console.info('point', point)
+  }
+}

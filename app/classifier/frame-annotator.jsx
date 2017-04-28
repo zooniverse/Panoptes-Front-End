@@ -3,7 +3,19 @@ import tasks from './tasks';
 import seenThisSession from '../lib/seen-this-session';
 import getSubjectLocation from '../lib/get-subject-location';
 import WarningBanner from './warning-banner';
+<<<<<<< HEAD
 import AnnotationRenderer from './annotation-renderer/';
+||||||| merged common ancestors
+import SVGImage from '../components/svg-image';
+import FeedbackViewer from './feedback/feedback-viewer';
+
+=======
+import SVGImage from '../components/svg-image';
+
+import FeedbackViewer from './feedback/feedback-viewer';
+import TooltipLayer from './feedback/tooltip-layer';
+
+>>>>>>> Add tooltips
 
 export default class FrameAnnotator extends React.Component {
   constructor(props) {
@@ -101,6 +113,9 @@ export default class FrameAnnotator extends React.Component {
 
           {!!AfterSubject && (
             <AfterSubject {...hookProps} />)}
+
+          <TooltipLayer screenCTM={screenCTM} />
+
         </div>
       </div>
     );
