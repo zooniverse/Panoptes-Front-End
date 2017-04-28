@@ -162,7 +162,7 @@ describe('<FrameAnnotator />', function() {
     it('renders AfterSubject hook', function() {
       assert.equal(wrapper.find(TaskComponent.AfterSubject).length, 1);
     });
-    
+
     it('renders InsideSubject hook', function() {
       TaskComponent = tasks['drawing'];
       const drawingAnnotation = TaskComponent.getDefaultAnnotation();
@@ -183,8 +183,8 @@ describe('<FrameAnnotator />', function() {
     });
 
     it('renders PersistInsideSubject hook', function() {
-
-      assert.equal(wrapper.find(TaskComponent.PersistInsideSubject).length, 1)
+      // combo tasks each have their own PersistInsideSubject, so this can be greater than 1
+      assert(wrapper.find(TaskComponent.PersistInsideSubject).length >= 1);
     });
   });
 });

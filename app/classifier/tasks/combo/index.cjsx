@@ -93,7 +93,7 @@ ComboTask = React.createClass
                 update: () => props.classification.update()
               fauxChange = (annotation) ->
                   props.onChange Object.assign({}, props.annotation, { value: currentComboAnnotations })
-              if props.workflow.tasks[props.annotation?.task]?.type is 'combo'
+              if props.annotation?.task? && props.workflow.tasks? && props.workflow.tasks[props.annotation.task]?.type is 'combo'
                 idx = allComboTypes.lastIndexOf(taskType)
                 if idx > -1
                   # if the current annotation is for the combo task pass in the `inner` annotations
