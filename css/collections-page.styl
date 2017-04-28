@@ -1,3 +1,18 @@
+$collection-viewer-button
+  background: #f7f7f7
+  border: 2px solid #F2F1F1
+  border-radius: 6px
+  box-sizing: border-box
+  color: COPY
+  font-size: 0.8em
+  margin: 0 2px 0 0
+  padding: 0.2em 0.4em
+
+  &:hover, &:focus
+    color: white
+    background: #69c9fd
+    border-color: MAIN_HIGHLIGHT
+
 .collections-page
   display: flex
   flex: 1 0 auto
@@ -101,25 +116,37 @@
         display: block
         margin: 0 auto
 
-      .subject-video-controls
-        display: initial
+      .subject-viewer
+        .subject-video-controls
+          display: initial
+          z-index: 1
+          
+          button
+            @extends $collection-viewer-button
 
-      .subject-image-frame
-        margin: auto
+        .subject-image-frame
+          margin: auto
+          
+        .subject-frame-pips
+          .subject-frame-pip
+            display: inline-block
+            overflow: hidden
+            position: relative
+            vertical-align: middle
 
-    img
-      max-height: 250px
-      width: 100%
+            input[type=radio]
+              position: absolute
+              opacity: 0.01
+              left: -100px
 
-    .subject-video-controls
-      z-index: 1
+            &.active
+              font-weight: 700
 
-    .subject-link
-      height: 100%
-      left: 0
-      position: absolute
-      top: 0
-      width: 100%
+        .subject-tools
+           span >
+            button
+            .button
+              @extends $collection-viewer-button
 
     .collection-subject-viewer__default-label
       background: TEAL_MID
@@ -144,13 +171,19 @@
     .collection-subject-viewer-delete-button
       background: white
       border: none
+      border-radius: 6px
       border-bottom-left-radius: 50%
+      box-sizing: border-box
+      color: #646464
       cursor: pointer
       display: flex
+      font-size: 0.8em
       height: 1.3em
-      margin-left: -2px
+      margin: 0 0 0 -2px
+      padding: 0.2em 0.4em
       position: absolute
       right: -0.3em
+      text-align: center
       top: -0.3em
       width: 1.3em
       z-index: 1
@@ -185,6 +218,17 @@
         color: white
         font-size: 6em
         text-shadow: 0 0 25px COPY
+
+    img
+      max-height: 250px
+      width: 100%
+
+    .subject-link
+      height: 100%
+      left: 0
+      position: absolute
+      top: 0
+      width: 100%
 
   .collection-settings-tab
     margin: 0 auto

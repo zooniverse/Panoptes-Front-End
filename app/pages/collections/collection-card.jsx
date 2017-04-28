@@ -13,7 +13,8 @@ export default class CollectionCard extends React.Component {
   }
 
   setSubjectPreview(src) {
-    if (src) {
+    const splitSrc = src.split('.');
+    if (src && splitSrc[splitSrc.length - 1] !== 'mp4') {
       this.collectionCard.style.backgroundImage = `url('${src}')`;
       this.collectionCard.style.backgroundPosition = 'initial';
       this.collectionCard.style.backgroundRepeat = 'no-repeat';
