@@ -20,8 +20,9 @@ export default class LabelRenderer extends React.Component {
   createNewContent(){
     let newContent = [];
     let lastFocusIndex = 0;
+    let i = 0;
     if (this.props.annotation.value && this.props.annotation.value.length > 0) {
-      for ( let i = 0; i < this.state.content.length; i++){
+      for ( i = 0; i < this.state.content.length; i++){
         for (let a = 0; a < this.props.annotation.value.length; a++) {
           let currentAnnotation = this.props.annotation.value[a];
           let annotationColor = currentAnnotation.labelInformation.color;
@@ -44,16 +45,13 @@ export default class LabelRenderer extends React.Component {
             lastFocusIndex = currentAnnotation.end;
           }
         }
-        // 4. if last character in the string, add the remaining content
-        if (i === (this.state.content.length - 1)) {
-          let endContent = this.state.content.slice(lastFocusIndex, i);
-          newContent.push(endContent);
-        }
       }
-      return(newContent);
-    } else {
-      return([this.state.content]);
+      // 4. if last character in the string, add the remaining content
+      const endContent = this.state.content.slice(lastFocusIndex, i);
+      newContent.push(endContent);
     }
+
+    return ( newContent.length === 0 ? this.state.content : newContent );
   }
 
   render() {
