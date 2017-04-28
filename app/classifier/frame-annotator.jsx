@@ -81,6 +81,9 @@ export default class FrameAnnotator extends React.Component {
       preferences: this.props.preferences
     };
 
+    const rendererProps = Object.assign({}, this.props);
+    delete rendererProps.children;
+
     return (
       <div className="frame-annotator">
         <div className="subject-area">
@@ -88,7 +91,7 @@ export default class FrameAnnotator extends React.Component {
           {!!BeforeSubject && (
             <BeforeSubject {...hookProps} />)}
 
-          <AnnotationRenderer type={type} {...this.props} />
+          <AnnotationRenderer type={type} {...rendererProps} />
 
           {this.props.children}
 
@@ -117,7 +120,6 @@ FrameAnnotator.propTypes = {
   naturalHeight: React.PropTypes.number,
   naturalWidth: React.PropTypes.number,
   onChange: React.PropTypes.func,
-  panEnabled: React.PropTypes.bool,
   preferences: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
