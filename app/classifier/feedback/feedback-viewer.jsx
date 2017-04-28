@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import FeedbackPoint from './feedback-point';
 
 class FeedbackViewer extends React.Component {
   constructor(props) {
@@ -12,15 +13,15 @@ class FeedbackViewer extends React.Component {
   }
 
   render() {
-    const feedback = this.props.feedback.reduce((drawingFeedback, item) =>
-      (item.type === 'drawing') ? drawingFeedback.concat(item.feedback) : drawingFeedback, []);
+    const feedback = this.props.feedback.reduce((classifierFeedback, item) =>
+      (item.target === 'classifier') ? classifierFeedback.concat(item) : classifierFeedback, []);
     return (feedback.length) ? this.renderFeedbackPoints(feedback) : null;
   }
 
   renderFeedbackPoints(feedback) {
     return (
       <g className="feedback-points">
-        {feedback.map(point => <FeedbackPoint point={point} />)}
+        {feedback.map(point => <FeedbackPoint point={point} key={`feedback-point-${point.x}-${point.y}`} />)}
       </g>
     );
   }
@@ -30,35 +31,12 @@ const mapStateToProps = (state) => ({
   feedback: state.feedback,
 });
 
+FeedbackViewer.propTypes = {
+  feedback: PropTypes.arrayOf(PropTypes.shape({
+    target: PropTypes.string,
+    x: PropTypes.string,
+    y: PropTypes.string,
+  }))
+};
+
 export default connect(mapStateToProps)(FeedbackViewer);
-
-class FeedbackPoint extends React.Component {
-  constructor(props) {
-    super(props);
-    this.createPoint = this.createPoint.bind(this);
-    this.createTooltip = this.createTooltip.bind(this);
-  }
-
-  render() {
-    const point = this.createPoint();
-    this.createTooltip(point);
-    return point;
-  }
-
-  createPoint() {
-    const { point } = this.props;
-    const statusClass = (point.success) ? 'feedback-points__point--success' : 'feedback-points__point--failure';
-    const pointProps = {
-      className: `feedback-points__point ${statusClass}`,
-      cx: point.x,
-      cy: point.y,
-      r: point.tol,
-      key: `feedback-point-${point.x}-${point.y}`,
-    };
-    return <circle {...pointProps} />;
-  }
-
-  createTooltip(point) {
-    console.info('point', point)
-  }
-}

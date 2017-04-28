@@ -7,29 +7,26 @@ const isWithinTolerance = (annotationX, annotationY, feedbackX, feedbackY, toler
 
 const processDrawingFeedback = ({ annotation, subject, task }) => {
   const feedbackRuleSet = new FeedbackRuleSet(subject, task);
+  return feedbackRuleSet.rules.reduce((checkedRules, rule) => {
+    const result = annotation.value.reduce((found, point) => {
+      if (isWithinTolerance(point.x, point.y, parseInt(rule.x, 10), parseInt(rule.y, 10), parseInt(rule.tol, 10))) {
+        found = true;
+      }
+      return found;
+    }, false);
 
-
-  return {
-    task: annotation.task,
-    type: 'drawing',
-    feedback: feedbackRuleSet.rules.reduce((checkedRules, rule) => {
-      const result = annotation.value.reduce((found, point) => {
-        if (isWithinTolerance(point.x, point.y, parseInt(rule.x, 10), parseInt(rule.y, 10), parseInt(rule.tol, 10))) {
-          found = true;
-        }
-        return found;
-      }, false);
-
-      checkedRules.push({
-        x: rule.x,
-        y: rule.y,
-        tol: rule.tol,
-        success: result,
-        message: (result) ? rule.successMessage : rule.failureMessage,
-      });
-      return checkedRules;
-    }, [])
-  };
+    checkedRules.push({
+      task: annotation.task,
+      type: 'drawing',
+      x: rule.x,
+      y: rule.y,
+      tol: rule.tol,
+      success: result,
+      message: (result) ? rule.successMessage : rule.failureMessage,
+      target: 'classifier'
+    });
+    return checkedRules;
+  }, []);
 };
 
 export default processDrawingFeedback;

@@ -4,7 +4,7 @@ import DefaultClassificationSummary from './default-classification-summary';
 import GSGoldStandardSummary from './gs-gold-standard-summary';
 import MetadataBasedFeedback from './metadata-based-feedback';
 import WorldWideTelescope from './world-wide-telescope';
-import FeedbackSummary from './feedback/feedback-summary';
+import FeedbackSummary from './feedback/feedback-summary-container';
 
 /* eslint-disable multiline-ternary, react/forbid-prop-types */
 

@@ -11,8 +11,7 @@ export default class FeedbackRuleSet {
       const defaults = this._getDefaultsForType(activeTypes[key]);
       const subj = this._getMetadataFieldsForType(key);
       const newRule = Object.assign({}, defaults, subj, { _defaults: defaults });
-      ruleset.push(newRule);
-      return ruleset;
+      return ruleset.concat(newRule);
     }, []);
   }
 
@@ -35,7 +34,7 @@ export default class FeedbackRuleSet {
     const { metadata } = this._subject;
     const fieldPrefix = `#${prefix}_`;
     return Object.keys(metadata).reduce((typeFields, key) => {
-      if (key.includes(fieldPrefix)) {
+      if (key.includes(fieldPrefix) && metadata[key]) {
         typeFields[key.substr(fieldPrefix.length)] = metadata[key];
       }
       return typeFields;
