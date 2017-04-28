@@ -52,6 +52,9 @@ export default class TextRenderer extends React.Component {
       })
       .filter(Boolean);
     children = children.concat(persistentHooks);
+    if (children.length === 0) {
+      ({ children } = this.props);
+    }
 
     return (
       <div className="frame-annotator">
