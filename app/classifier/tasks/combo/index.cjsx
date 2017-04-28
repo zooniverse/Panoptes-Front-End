@@ -1,9 +1,11 @@
 React = require 'react'
+SVGRenderer = require('../../annotation-renderer/svg').default
 
 ComboTask = React.createClass
   statics:
     Editor: require './editor'
-    Summary: require('./summary.jsx').default
+    Summary: require('./summary').default
+    AnnotationRenderer: SVGRenderer
 
     getDefaultTask: ->
       type: 'combo'
@@ -78,7 +80,7 @@ ComboTask = React.createClass
           allComboAnnotations.push annotation.value...
           annotation.value.forEach (a) ->
             allComboTypes.push(props.workflow.tasks[a.task].type)
-            
+
 
       <g className="combo-task-persist-inside-subject-container">
         {Object.keys(props.taskTypes).map (taskType) ->
