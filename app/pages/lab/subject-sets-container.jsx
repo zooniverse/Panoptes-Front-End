@@ -23,21 +23,13 @@ export default class SubjectSetsContainer extends React.Component {
     this.getSubjectSets(page);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const newPath = nextProps.location.pathname !== this.props.location.pathname;
-    const newPage = nextProps.location.query.page;
-    const pageChange = newPage !== this.props.location.query.page;
-    if (newPath || pageChange) {
-      this.getSubjectSets(newPage);
-    }
-  }
-
   onPageChange(page) {
     const nextQuery = Object.assign({}, this.props.location.query, { page });
     this.context.router.push({
       pathname: this.props.location.pathname,
       query: nextQuery
     });
+    this.getSubjectSets(page);
   }
 
   getSubjectSets(page = 1) {
@@ -74,6 +66,7 @@ export default class SubjectSetsContainer extends React.Component {
       })
       .then(() => {
         this.props.project.uncacheLink('subject_sets');
+        this.getSubjectSets();
       });
   }
 

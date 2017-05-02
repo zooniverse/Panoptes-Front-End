@@ -21,12 +21,6 @@ export default class WorkflowsContainer extends React.Component {
     this.getWorkflowList();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.location !== nextProps.location) {
-      this.getWorkflowList();
-    }
-  }
-
   getWorkflowList() {
     getWorkflowsInOrder(this.props.project, { fields: 'display_name' })
     .then((workflows) => {
@@ -63,6 +57,7 @@ export default class WorkflowsContainer extends React.Component {
     this.context.router.push(newLocation);
     this.props.project.uncacheLink('workflows');
     this.props.project.uncacheLink('subject_sets'); // An "expert" subject set is automatically created with each workflow.
+    this.getWorkflowList();
   }
 
   render() {
