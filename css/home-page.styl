@@ -404,11 +404,13 @@ $flex-section
 
   .home-promoted
     background-color: BACKGROUND_COLOR
-    padding: 3em 0
+    padding: 2em 0
 
     &__cards
       display: flex
-      justify-content: space-between
+      flex-wrap: wrap
+      justify-content: space-around
+      margin: 1em 0
       width: 100%
 
       .project-card
@@ -417,7 +419,7 @@ $flex-section
     &__content
       display: flex
       flex-direction: column
-      margin: 2em 22em
+      margin: 2em 22vw
 
     &:before
       content: ""
