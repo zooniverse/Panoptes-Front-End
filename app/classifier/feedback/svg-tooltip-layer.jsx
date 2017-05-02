@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Tooltip from './tooltip';
 
-class ToolTipLayer extends React.Component {
+class SVGToolTipLayer extends React.Component {
   constructor(props) {
     super(props);
     this.renderTooltips = this.renderTooltips.bind(this);
@@ -34,7 +34,7 @@ const mapStateToProps = (state) => ({
   feedback: state.feedback,
 });
 
-ToolTipLayer.propTypes = {
+SVGToolTipLayer.propTypes = {
   feedback: PropTypes.arrayOf(PropTypes.shape({
     target: PropTypes.string,
     x: PropTypes.string,
@@ -43,4 +43,4 @@ ToolTipLayer.propTypes = {
   screenCTM: PropTypes.object,
 };
 
-export default connect(mapStateToProps)(ToolTipLayer);
+export default connect(mapStateToProps)(SVGToolTipLayer);

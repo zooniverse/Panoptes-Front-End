@@ -3,6 +3,8 @@ import Draggable from '../../lib/draggable';
 import tasks from '../tasks';
 import getSubjectLocation from '../../lib/get-subject-location';
 import SVGImage from '../../components/svg-image';
+import SVGFeedbackViewer from '../feedback/svg-feedback-viewer';
+import SVGToolTipLayer from '../feedback/svg-tooltip-layer';
 
 export default class SVGRenderer extends React.Component {
   constructor(props) {
@@ -88,6 +90,7 @@ export default class SVGRenderer extends React.Component {
     }
 
     const svgStyle = {};
+    let screenCTM = null;
     if (type === 'image' && !this.props.loading) {
       // Images are rendered again within the SVG itself.
       // When cropped right next to the edge of the image,
@@ -103,6 +106,8 @@ export default class SVGRenderer extends React.Component {
       if (this.props.panEnabled === true) {
         svgStyle.pointerEvents = 'all';
       }
+
+      screenCTM = this.getScreenCurrentTransformationMatrix();
     }
 
     const svgProps = {};
@@ -154,41 +159,46 @@ export default class SVGRenderer extends React.Component {
     children = children.concat(persistentHooks);
 
     return (
-      <svg
-        ref={(element) => { if (element) this.svgSubjectArea = element; }}
-        className="subject"
-        style={svgStyle}
-        viewBox={createdViewBox}
-        {...svgProps}
-      >
-        <g
-          ref={(element) => { if (element) this.transformationContainer = element; }}
-          transform={this.props.transform}
+      <div>
+        <svg
+          ref={(element) => { if (element) this.svgSubjectArea = element; }}
+          className="subject"
+          style={svgStyle}
+          viewBox={createdViewBox}
+          {...svgProps}
         >
-          <rect
-            ref={(rect) => { this.sizeRect = rect; }}
-            width={this.props.naturalWidth}
-            height={this.props.naturalHeight}
-            fill="rgba(0, 0, 0, 0.01)"
-            fillOpacity="0.01"
-            stroke="none"
-          />
-          {type === 'image' && (
-            <Draggable onDrag={this.props.panByDrag} disabled={this.props.disabled}>
-              <SVGImage
-                className={this.props.panEnabled ? 'pan-active' : ''}
-                src={src}
-                width={this.props.naturalWidth}
-                height={this.props.naturalHeight}
-                modification={this.props.modification}
-              />
-            </Draggable>
-          )}
+          <g
+            ref={(element) => { if (element) this.transformationContainer = element; }}
+            transform={this.props.transform}
+          >
+            <rect
+              ref={(rect) => { this.sizeRect = rect; }}
+              width={this.props.naturalWidth}
+              height={this.props.naturalHeight}
+              fill="rgba(0, 0, 0, 0.01)"
+              fillOpacity="0.01"
+              stroke="none"
+            />
+            {type === 'image' && (
+              <Draggable onDrag={this.props.panByDrag} disabled={this.props.disabled}>
+                <SVGImage
+                  className={this.props.panEnabled ? 'pan-active' : ''}
+                  src={src}
+                  width={this.props.naturalWidth}
+                  height={this.props.naturalHeight}
+                  modification={this.props.modification}
+                />
+              </Draggable>
+            )}
 
-          {children}
+            {children}
 
-        </g>
-      </svg>
+            <SVGFeedbackViewer />
+
+          </g>
+        </svg>
+        <SVGToolTipLayer screenCTM={screenCTM} />
+      </div>
     );
   }
 }

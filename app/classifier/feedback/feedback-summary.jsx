@@ -41,7 +41,7 @@ const FeedbackSummary = ({ feedback }) => {
               <p>{item.question}</p>
               <ul>
                 {item.messages.map(message => (
-                  <li>{message}</li>
+                  <li key={message}>{message}</li>
                 ))}
               </ul>
             </li>
