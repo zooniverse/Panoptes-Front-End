@@ -9,9 +9,6 @@ counterpart.registerTranslations('en', {
 });
 
 const FeedbackSummary = ({ feedback }) => {
-
-  console.info('feedback',feedback)
-
   const textFeedback = feedback.reduce((result, item) => {
     if (item.target === 'summary') {
       const questionIndex = result.indexOf(feedbackItem => feedbackItem.question === item.question);
@@ -27,8 +24,6 @@ const FeedbackSummary = ({ feedback }) => {
     return result;
   }, []);
 
-  console.info('textFeedback', textFeedback)
-
   return (
     <section>
       <strong>
@@ -36,13 +31,11 @@ const FeedbackSummary = ({ feedback }) => {
       </strong>
       <div className="classification-task-summary-with-feedback">
         {textFeedback.map(item => (
-          <ul key={`feedback-item-${item.question}`}>
+          <ul key={item.question}>
             <li>
               <p>{item.question}</p>
               <ul>
-                {item.messages.map(message => (
-                  <li key={message}>{message}</li>
-                ))}
+                {item.messages.map(message => <li key={message}>{message}</li>)}
               </ul>
             </li>
           </ul>
@@ -51,5 +44,13 @@ const FeedbackSummary = ({ feedback }) => {
     </section>
   );
 }
+
+FeedbackSummary.propTypes = {
+  feedback: React.PropTypes.arrayOf(React.PropTypes.shape({
+    target: React.PropTypes.string,
+    question: React.PropTypes.string,
+    messages: React.PropTypes.arrayOf(React.PropTypes.string),
+  }))
+};
 
 export default FeedbackSummary;

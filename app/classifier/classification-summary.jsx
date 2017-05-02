@@ -56,10 +56,10 @@ class ClassificationSummary extends React.Component {
 
   render() {
     const tools = this.props.project.experimental_tools || [];
-
+    const summariesHook = [];
 
     if (this.isFeedbackEnabled()) {
-      return (
+      summariesHook.push(
         <FeedbackSummary
           classification={this.props.classification}
           subject={this.props.subject}
@@ -112,12 +112,17 @@ class ClassificationSummary extends React.Component {
 
     if (this.showExoplanetSimFeedback()) {
       return (
-        <p style={{ fontWeight: 'bold' }}>Well done! You've found a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>
+        <p style={{ fontWeight: 'bold' }}>Well done! Youve found a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>
       );
     }
 
+    // const summariesHookContent = summariesHook.map(summary => <summary key={Math.random()} />);
+    console.info('summariesHook', summariesHook);
+
+
     return (
       <div>
+        { summariesHook.length ? summariesHook : null }
         { this.hasExpert ?
           <div className="has-expert-classification">
             Expert classification available.&nbsp;
