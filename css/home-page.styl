@@ -324,8 +324,9 @@ $flex-section
 
   .timestamp-label
     color: #000000
-    font-size: 2vh
+    font-size: 0.85em
     font-weight: 700
+    margin-bottom: 0.4em
     text-transform: uppercase
 
   .class-counter
@@ -443,103 +444,97 @@ $flex-section
       width: 85%
       border-bottom: 1px solid LIGHT_GREY
 
-  .home-social
-    display: flex
-    background-color: BACKGROUND_COLOR
-    padding: 10vh 0
+.home-social
+  display: flex
+  background-color: BACKGROUND_COLOR
+  padding: 4em
 
-    .primary-button, .primary-button--light
-      margin: auto 0 1vh 0
-      padding: 1vh 0.5vw
-      text-align: center
-      width: 125px
+  a
+    text-decoration: none
 
-    a[class=primary-button]
-      color: black
+  .primary-button, .primary-button--light
+    margin: 0.75em 0 1.5em 0
+    text-align: center
 
-    a
-      text-decoration: none
+  .tertiary-headline
+    font-size: 1.5em
+    margin-bottom: 0.5em
+
+    &__headline
+      font-size: 2em
+      margin-bottom: 0.5em
 
     @media (max-width: 900px)
-      padding 2em
+      font-size: 1em
 
-    &__italic-link
+  .secondary-headline
+    margin: 0.25em
+
+  .tertiary-kicker
+    margin-bottom: 1em
+
+  &__italic-link
+    color: TEAL_MID
+    font-style: italic
+
+  &__icons
+    margin-top: 1.5vh
+    overflow: hidden
+    width: 20em
+
+    i
       color: TEAL_MID
-      font-style: italic
+      font-size: 1.25em
+      margin: 0 0.4em
 
-    &__icons
-      margin-top: 1.5vh
-      overflow: hidden
-      width: 20vw
+    span
+      position: relative
 
-      i
-        color: TEAL_MID
-        font-size: 1.25em
-        margin: 0 0.5vw
+    span:before, span:after
+      background: TEAL_LIGHT
+      content: ""
+      height: 1px
+      position: absolute
+      top: 50%
+      width: 10vw
 
-      span
-        position: relative
+    span:before
+      right: 100%
+      margin-right: 10px
 
-      span:before, span:after
-        content: ""
-        position: absolute
-        top: 50%
-        width: 20vw
-        height: 1px
-        background: TEAL_LIGHT
+    span:after
+      left: 100%
+      margin-left: 10px
 
-      span:before
-        right: 100%
-        margin-right: 15px
+  &__content
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    margin: 5em 0
+    text-align: left
 
-      span:after
-        left: 100%
-        margin-left: 15px
+    &--vertical-line
+      border-left: 1px solid #CBCCCB
+      margin: 0 4em
 
-    &__project-card
-      background-color: white
-      height: 38em
-      margin: 3vh 0
-      width: 26em
+  &__news
+    display: flex
+    flex: 2 0 0
+    flex-direction: column
 
-      &--background
-        height: 50%
+  &__daily
+    display: flex
+    flex: 5 0 0
+    flex-direction: column
 
-      &--content
-        box-sizing: border-box
-        display: flex
-        flex-direction: column
-        height: 50%
-        padding: 2.5vh 2.5vw
+    span
+      word-break: break-word
 
-    &__content
-      display: flex
-      flex-direction: row
-      margin: 2vh 0
-      text-align: left
-      width: 100%
+  .project-card
+    margin: 0
 
-      .tertiary-headline
-        margin-bottom: 5vh
-
-      &--vertical-line
-        border-left: 1px solid gray
-        margin: 10vh 5vw 0 0
-
-    &__news
-      display: flex
-      flex: 2 0 0
-      flex-direction: column
-      margin: 8vh 8vw 3vh 5vw
-
-    &__daily
-      display: flex
-      flex: 5 0 0
-      flex-direction: column
-      margin: 8vh 5vw 3vh 0
-
-    &__project-update
-      margin: 2vh 0
+  hr
+    margin: 1.5em 0
 
 .home-page
   background: #f4f4f4

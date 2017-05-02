@@ -21,7 +21,7 @@ const HomePageSocial = ({ blogPosts, newestProject, newestPublication, recentPro
     const link = `/projects/${project.slug}`;
     const timestamp = moment(new Date(project.updated_at)).fromNow();
     return (
-      <div key={project.id} className="home-social__project-update">
+      <div key={project.id}>
         <h6 className="timestamp-label">{timestamp}</h6>
         <h5 className="tertiary-headline">{project.display_name} </h5>
         <span className="regular-body"> has been updated! </span> <br />
@@ -31,10 +31,24 @@ const HomePageSocial = ({ blogPosts, newestProject, newestPublication, recentPro
     );
   };
 
+  const renderBlogPost = (post) => {
+    const timestamp = moment(new Date(post.created_at)).fromNow();
+    return (
+      <div>
+        <h6 className="timestamp-label">{timestamp}</h6>
+        <h5 className="tertiary-headline">{post.title} </h5>
+        <span className="regular-body">{post.excerpt}</span>
+        <br />
+        <a className="home-social__italic-link" href={post.link}> Read More... </a>
+        <hr />
+      </div>
+    );
+  };
+
   return (
     <section className="home-social">
       <h3 className="secondary-kicker">Discover, teach, learn</h3>
-      <Translate className="tertiary-headline" content="socialHomePage.community" />
+      <Translate className="secondary-headline" content="socialHomePage.community" />
 
       <div className="home-social__icons">
         <span>
@@ -52,7 +66,7 @@ const HomePageSocial = ({ blogPosts, newestProject, newestPublication, recentPro
 
       <div className="home-social__content">
         <div className="home-social__news">
-          <Translate className="tertiary-headline" content="socialHomePage.news" />
+          <Translate className="tertiary-headline__headline" content="socialHomePage.news" />
           <Translate className="tertiary-kicker" content="socialHomePage.newestProject" />
           <ProjectCard
             customCSS="home-page-not-logged-in__project-card"
@@ -68,7 +82,7 @@ const HomePageSocial = ({ blogPosts, newestProject, newestPublication, recentPro
 
           <Translate className="tertiary-kicker" content="socialHomePage.recentPublications" />
           <h5 className="timestamp-label">{newestPublication.date}</h5>
-          <p className="regular-body">{newestPublication.citation}</p>
+          <span className="regular-body">{newestPublication.citation}</span>
           <a className="home-social__italic-link" href={newestPublication.href}> Read More... </a>
           <hr />
 
@@ -78,9 +92,11 @@ const HomePageSocial = ({ blogPosts, newestProject, newestPublication, recentPro
         <div className="home-social__content--vertical-line"></div>
 
         <div className="home-social__daily">
-          <Translate className="tertiary-headline" content="socialHomePage.daily" />
-          <hr />
-          <Link to="/about/publications" className="primary-button primary-button--light">See All Posts</Link>
+          <Translate className="tertiary-headline__headline" content="socialHomePage.daily" />
+          {blogPosts.map((post) => {
+            return renderBlogPost(post);
+          })}
+          <a href="http://blog.zooniverse.org" className="primary-button primary-button--light">See All Posts</a>
         </div>
       </div>
     </section>
