@@ -1,28 +1,7 @@
-$collection-viewer-button
-  background: #f7f7f7
-  border: 2px solid #F2F1F1
-  border-radius: 6px
-  box-sizing: border-box
-  color: COPY
-  font-size: 0.8em
-  margin: 0 2px 0 0
-  padding: 0.2em 0.4em
-
-  &:hover, &:focus
-    color: white
-    background: #69c9fd
-    border-color: MAIN_HIGHLIGHT
-
 .collections-page
   display: flex
   flex: 1 0 auto
   flex-direction: column
-
-  *
-    box-sizing: border-box
-
-  a
-    color: TEAL_MID
 
   .collection-header
     display: flex
@@ -36,21 +15,13 @@ $collection-viewer-button
       flex-direction: column
       margin-bottom: 1em
 
-  .collection__link
-    color: inherit
-    text-decoration: none
-
-    &:focus, &:hover, &.active
-      border-bottom: solid thin TEAL_MID
-
-    &.active
-      font-weight: bold
-
   .collection-title
+    @extends $reset-button
     font-size: 1.5em
     font-weight: bold
 
   .collection-owner
+    @extends $reset-button
     text-transform: uppercase
 
   .collection-nav
@@ -63,14 +34,21 @@ $collection-viewer-button
       align-items: flex-start
 
   .collection-nav-item
+    @extends $reset-button
     margin-left: 1.5em
-    text-align: center
     text-transform: uppercase
+    text-align: center
 
     @media (max-width: 900px)
       margin: 0.6em 0
 
+    &.active
+      border-bottom: 1px solid TEAL_MID
+      font-weight: bold
+
   .collections-show
+    margin: 0 auto
+
     .collection-buttons-container
       display: flex
       justify-content: flex-end
@@ -105,85 +83,48 @@ $collection-viewer-button
         opacity: 0.5
 
     .collection-subject-viewer
-      border: 1px solid #cdcdcd
-      display: inline-block
-      margin: 0 1.66em 1.66em 0
-      position: relative
-      text-align: center
       width: 18em
+      border: 1px solid #cdcdcd
+      border-radius: 5px
+      margin: 0 1.66em 1.66em 0
+      text-align: center
+      display: inline-block
+      position: relative
 
       @media (max-width: 900px)
         display: block
         margin: 0 auto
 
-      .subject-viewer
-        .subject-video-controls
-          display: initial
-          z-index: 1
-          
-          button
-            @extends $collection-viewer-button
+      .subject-video-controls
+        display: initial
 
-        .subject-image-frame
-          margin: auto
-          
-        .subject-frame-pips
-          .subject-frame-pip
-            display: inline-block
-            overflow: hidden
-            position: relative
-            vertical-align: middle
+      .subject-image-frame
+        margin: auto
 
-            input[type=radio]
-              position: absolute
-              opacity: 0.01
-              left: -100px
-
-            &.active
-              font-weight: 700
-
-        .subject-tools
-           span >
-            button
-            .button
-              @extends $collection-viewer-button
-
-    .collection-subject-viewer__default-label
-      background: TEAL_MID
-      border-radius: initial
-      border-top: solid thin #cdcdcd
-      color: white
-      font-size: 0.675em
-      margin-top: 5px
-      padding: 0.85em
-      text-transform: uppercase
+    img
       width: 100%
+      max-height: 250px
 
-    .collection-subject-viewer__button--cover
-      @extends $reset-button
-      background: inherit
-      color: #646464
+    .subject-video-controls
+      z-index: 1
 
-      &:hover, &:focus
-        background: TEAL_MID
-        color: white
+    .subject-link
+      height: 100%
+      width: 100%
+      position: absolute
+      top: 0
+      left: 0
 
     .collection-subject-viewer-delete-button
       background: white
       border: none
-      border-radius: 6px
       border-bottom-left-radius: 50%
-      box-sizing: border-box
-      color: #646464
       cursor: pointer
       display: flex
-      font-size: 0.8em
       height: 1.3em
-      margin: 0 0 0 -2px
-      padding: 0.2em 0.4em
+      margin-left: -2px
       position: absolute
       right: -0.3em
-      text-align: center
       top: -0.3em
       width: 1.3em
       z-index: 1
@@ -192,24 +133,24 @@ $collection-viewer-button
         color: red
 
     .collection-subject-viewer-select
-      background: transparent
-      border: none
-      display: flex
-      flex-direction: column
       height: 100%
-      justify-content: center
-      left: 0
+      width: 100%
       position: absolute
       top: 0
-      width: 100%
+      left: 0
+      border: none
+      background: transparent
+      display: flex
+      flex-direction: column
+      justify-content: center
 
       &:hover
         background-color: transparent
         cursor: pointer
 
       input
-        left: -9999px
         position: absolute
+        left: -9999px
 
         &:focus + i
           text-shadow: 0 0 25px COBOLT_BLUE
@@ -219,26 +160,9 @@ $collection-viewer-button
         font-size: 6em
         text-shadow: 0 0 25px COPY
 
-    img
-      max-height: 250px
-      width: 100%
-
-    .subject-link
-      height: 100%
-      left: 0
-      position: absolute
-      top: 0
-      width: 100%
-
   .collection-settings-tab
-    margin: 0 auto
     max-width: 800px
-
-    h2
-      color: #646464
-      
-    .cover-subject-preview
-      border: solid thin #cdcdcd
+    margin: 0 auto
 
   .helpful-tip
     color: #777
@@ -259,10 +183,11 @@ $collection-viewer-button
     height: 40px
 
   .search-button
-    float: right
     height: 40px
+    float: right
 
 .collections-create-form
+
   .collection-name-input
     border: 1px solid #cccccc
     border-color: #d9d9d9 #cccccc #b3b3b3

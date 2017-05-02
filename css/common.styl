@@ -129,65 +129,6 @@ $announcement-banner
   padding: 0 1.5vw
   text-align: center
 
-$owned-card-list
-  display: flex
-  flex-direction: row
-  flex-wrap: wrap
-  justify-content: center
-  max-width: 1200px
-  margin: 0 auto
-  text-align: center
-  // Added styles below to fix Chrome bug: https://code.google.com/p/chromium/issues/detail?id=297782
-  overflow: hidden
-  position: relative
-  font-size: 14px
-  margin-top: 2.33em
-  
-$owned-card
-  background-position: 50% 0
-  background-size: cover
-  border: solid thin #ebebeb
-  display: inline-block
-  margin: 0 0.5em 1em
-  max-height: 325px
-  max-width: 220px
-  overflow: hidden
-  text-align: left
-  text-decoration: none
-
-  svg
-    height: 150px
-
-  .details
-    background: BACKGROUND
-    box-sizing: border-box
-    color: FOREGROUND
-    display: flex
-    flex-direction: column
-    padding: 20px
-    text-align: left
-
-  .name
-    color: #000000
-    font-weight: 400
-    text-align: center
-
-  .type, .owner
-    color: #bababa
-    flex-grow: 1
-    font-size: .8em
-    font-style: italic
-
-  .card-button
-    background: TEAL_MID
-    min-height: 35px
-    padding: 0.6em
-    position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
-    width: 180px
-
-    &:hover
-      background: lighten(TEAL_MID, 20%)
-
 .color-label
   display: inline
   border-radius: 2px

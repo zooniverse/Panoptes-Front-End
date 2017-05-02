@@ -1,0 +1,137 @@
+.collections-card-list,
+.project-card-list
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  justify-content: center
+  max-width: 1200px
+  margin: 0 auto
+  text-align: center
+  // Added styles below to fix Chrome bug: https://code.google.com/p/chromium/issues/detail?id=297782
+  overflow: hidden
+  position: relative
+  font-size: 14px
+  margin-top: 2.33em
+
+.collection-card,
+.project-card
+  background-position: 50% 0
+  background-size: cover
+  display: inline-block
+  margin: 0 0.5em 1em
+  max-height: 325px
+  max-width: 220px
+  overflow: hidden
+  text-align: left
+  text-decoration: none
+
+  svg
+    height: 150px
+
+  .details
+    background: BACKGROUND
+    box-sizing: border-box
+    color: FOREGROUND
+    display: flex
+    flex-direction: column
+    padding: 20px
+    text-align: left
+
+  .name
+    color: #000000
+    font-weight: 400
+    text-align: center
+
+  .type, .owner
+    color: #bababa
+    flex-grow: 1
+    font-size: .8em
+    font-style: italic
+
+  .card-button
+    background: TEAL_MID
+    min-height: 35px
+    padding: 0.6em
+    position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
+    width: 180px
+
+    &:hover
+      background: lighten(TEAL_MID, 20%)
+
+.collection-card
+  background: url('/assets/simple-pattern.png') center center repeat
+  border-radius: 1em
+  position: relative
+
+  .name
+    margin-bottom: 1em
+    height: 2.9em
+    overflow: hidden
+    text-overflow: ellipsis
+    line-height: 1.45em
+    max-height: 2.9em
+
+    .fa-lock
+      margin-left: 0.3em
+
+  .owner
+    margin: 0 auto
+    height: 1.5em
+
+  &__badge
+    background: rgba(black, 0.4)
+    border-radius: 100%
+    color: white
+    font-weight: bold
+    height: 1.5em
+    margin: 0.2em 0.2em 0 0
+    padding: 0 0.5em
+    position: absolute
+    right: 0
+    z-index: 1
+
+.project-card
+  border-radius: 1em
+  height: 270px
+  position: relative
+  text-align: center
+
+  svg
+    height: 215px
+
+  .details
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+    height: 60px
+    justify-content: space-between
+    transition: height 0.5s ease
+
+    .name
+      text-transform: uppercase
+      letter-spacing: 1px
+      font-weight: 700
+      font-size: 11px
+      color: COPY
+
+      span
+        display: inline-block
+        line-height: normal
+        vertical-align: middle
+
+    .description
+      color: COPY
+      font-size: 0.9em
+      height: 150px
+      margin: 0.8em 0
+      overflow: hidden
+      text-align: center
+
+  .card-button
+    display: none
+
+  :hover > &,
+  :focus > &
+    .details
+      height: 175px
