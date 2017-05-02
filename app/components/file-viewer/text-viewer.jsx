@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 
 const SUPPORTED_TYPES = ['text'];
 const SUPPORTED_FORMATS = ['plain'];
@@ -65,8 +66,12 @@ class TextViewer extends Component {
     if (SUPPORTED_FORMATS.indexOf(this.props.format) === -1) {
       content = `Unsupported format: ${this.props.format}`;
     }
+    const className = classnames(this.props.className, {
+      'text-viewer-loading': isLoading,
+      'text-viewer': !isLoading
+    });
     return (
-      <div ref={(element) => { this.element = element; }} className={isLoading ? 'text-viewer-loading' : 'text-viewer'} style={this.props.style}>
+      <div ref={(element) => { this.element = element; }} className={className} style={this.props.style}>
         { content }
       </div>
     );

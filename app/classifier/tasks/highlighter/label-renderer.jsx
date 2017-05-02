@@ -56,31 +56,15 @@ export default class LabelRenderer extends React.Component {
 
   render() {
     const labeledContent = this.createNewContent();
-    const invisibleDivStyles = {
-      background: 'transparent',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      padding: '2%',
-      color: 'transparent',
-      whiteSpace: 'pre-wrap',
-      width: '96%'
-    };
-    const visibleDivStyles = {
-      padding: '2%',
-      color: '#efefef',
-      whiteSpace: 'pre-wrap',
-      width: '40ch'
-    };
     const children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
-        style: invisibleDivStyles,
+        className: 'invisible',
         onLoad: this.onLoad
       });
     });
     return(
       <div className='label-renderer' >
-        <div style={visibleDivStyles} >
+        <div >
           {labeledContent}
         </div>
           {children}
