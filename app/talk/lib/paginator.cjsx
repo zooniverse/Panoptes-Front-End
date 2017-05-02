@@ -42,14 +42,15 @@ module.exports = React.createClass
   onClickNext: ->
     @logClick 'next-page'
     {pageCount} = @props
-    page = @props.page
+    page = @props[@props.pageKey]
     @props.onClickNext?()
+
     nextPage = if page is pageCount then pageCount else page + 1
     @setPage(nextPage)
 
   onClickPrev: ->
     @logClick 'previous-page'
-    page = @props.page
+    page = @props[@props.pageKey]
     @props.onClickPrev?()
 
     prevPage = if page is 1 then page else page - 1
@@ -67,7 +68,7 @@ module.exports = React.createClass
 
   render: ->
     {pageCount} = @props
-    page = @props.page
+    page = @props[@props.pageKey]
 
     <div className="paginator #{ @props.className }">
       {if @props.firstAndLast

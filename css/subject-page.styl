@@ -23,3 +23,25 @@
       .talk-module
         background-color: darken(TALK_BACKGROUND, 10%)
         border-color: darken(TALK_BACKGROUND, 20%)
+
+  .subject-collection-list
+    .subject-collection-list-container
+      display: flex
+      flex-flow: row wrap
+      justify-content: space-between
+
+      .collection-preview
+        @extend .talk-module
+        display: inline-block
+        margin: TALK_PADDING
+
+        .title
+          margin: TALK_PADDING 0
+
+        .subject-previews
+          div
+            display: flex
+            align-items: baseline
+
+          img
+            margin: 0 TALK_PADDING

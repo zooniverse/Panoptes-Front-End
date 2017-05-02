@@ -3,6 +3,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import { Link } from 'react-router';
 import HomePageSection from './generic-section';
 import CollectionCard from '../collections/collection-card';
+import getCollectionCovers from '../../lib/get-collection-covers';
 
 const RecentCollectionsSection = React.createClass({
   propTypes: {
@@ -15,9 +16,10 @@ const RecentCollectionsSection = React.createClass({
 
   getInitialState() {
     return {
-      collections: [],
+      loading: false,
       error: null,
-      loading: false
+      collections: [],
+      images: {}
     };
   },
 
@@ -37,9 +39,10 @@ const RecentCollectionsSection = React.createClass({
 
   fetchCollections(user) {
     this.setState({
+      loading: true,
       error: null,
-      collections: [],
-      loading: true
+      images: {},
+      collections: []
     });
 
     apiClient.type('collections').get({
@@ -50,6 +53,9 @@ const RecentCollectionsSection = React.createClass({
     })
     .then((collections) => {
       this.setState({ collections });
+      getCollectionCovers(collections).then((images) => {
+        this.setState({ images });
+      });
     })
     .catch((error) => {
       this.setState({
@@ -83,14 +89,8 @@ const RecentCollectionsSection = React.createClass({
 
         <div className="collections-card-list">
           {this.state.collections.map((collection) => {
-            return (
-              <CollectionCard
-                key={collection.id}
-                shared={this.shared(collection)}
-                collection={collection}
-                linkTo={`/collections/${collection.slug}`}
-                translationObjectName="collectionsPage"
-              />);
+            const subjectCount = collection.links.subjects ? collection.links.subjects.length : 0;
+            return <CollectionCard key={collection.id} shared={this.shared(collection)} subjectCount={subjectCount} collection={collection} coverSrc={this.state.images[collection.id]} linkTo={`/collections/${collection.slug}`} translationObjectName="collectionsPage" />;
           })}
         </div>
       </HomePageSection>

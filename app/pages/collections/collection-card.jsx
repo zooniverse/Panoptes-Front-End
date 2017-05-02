@@ -1,25 +1,34 @@
 import React from 'react';
+import apiClient from 'panoptes-client/lib/api-client';
 import FlexibleLink from '../../components/flexible-link';
 
 export default class CollectionCard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.setSubjectPreview = this.setSubjectPreview.bind(this);
+    this.refreshImage = this.refreshImage.bind(this);
   }
 
   componentDidMount() {
-    this.setSubjectPreview(this.props.collection.default_subject_src);
+    this.refreshImage(this.props.coverSrc);
   }
 
-  setSubjectPreview(src) {
-    const splitSrc = src.split('.');
-    if (src && splitSrc[splitSrc.length - 1] !== 'mp4') {
-      this.collectionCard.style.backgroundImage = `url('${src}')`;
-      this.collectionCard.style.backgroundPosition = 'initial';
-      this.collectionCard.style.backgroundRepeat = 'no-repeat';
-      this.collectionCard.style.backgroundSize = 'cover';
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.coverSrc !== this.props.coverSrc) {
+      this.refreshImage(nextProps.coverSrc);
     }
+  }
+
+  collectionOwner() {
+    apiClient.type(this.props.collection.links.owner.type).get(this.props.collection.links.owner.id);
+  }
+
+  refreshImage(src) {
+    const source = src.includes('.mp4') ? '/assets/simple-pattern.png' : src;
+    this.collectionCard.style.backgroundImage = `url('${source}')`;
+    this.collectionCard.style.backgroundPosition = 'initial';
+    this.collectionCard.style.backgroundRepeat = 'no-repeat';
+    this.collectionCard.style.backgroundSize = 'cover';
   }
 
   render() {
@@ -41,8 +50,7 @@ export default class CollectionCard extends React.Component {
     return (
       <FlexibleLink {...linkProps}>
         <div className="collection-card" ref={(c) => { this.collectionCard = c; }}>
-          {this.props.collection.links.subjects &&
-            <span className="collection-card__badge">{this.props.collection.links.subjects.length}</span>}
+          <span className="collection-card__badge">{this.props.subjectCount}</span>
           <svg viewBox="0 0 2 1" width="100%" />
           <div className="details">
             <div className="name">
@@ -63,21 +71,23 @@ export default class CollectionCard extends React.Component {
 
 CollectionCard.propTypes = {
   collection: React.PropTypes.shape({
-    default_subject_src: React.PropTypes.string,
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,
     links: React.PropTypes.object,
     private: React.PropTypes.bool,
     slug: React.PropTypes.string
   }).isRequired,
+  coverSrc: React.PropTypes.string,
   linkTo: React.PropTypes.string.isRequired,
+  subjectCount: React.PropTypes.number,
   shared: React.PropTypes.bool,
   translationObjectName: React.PropTypes.string.isRequired
 };
 
 CollectionCard.defaultProps = {
   collection: {},
+  coverSrc: '/assets/simple-pattern.png',
   linkTo: '',
-  shared: false,
+  subjectCount: 0,
   translationObjectName: ''
 };
