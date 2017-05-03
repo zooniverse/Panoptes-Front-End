@@ -43,7 +43,7 @@ const PanZoom = React.createClass({
     // while the user is in pan and zoom mode.
     if (this.props.enabled) {
       addEventListener('keydown', this.frameKeyPan);
-      addEventListener('wheel', this.frameKeyPan);
+      addEventListener('wheel', this.wheelZoom);
     }
   },
 
@@ -61,7 +61,7 @@ const PanZoom = React.createClass({
 
   componentWillUnmount() {
     removeEventListener('keydown', this.frameKeyPan);
-    removeEventListener('wheel', this.frameKeyPan);
+    removeEventListener('wheel', this.wheelZoom);
   },
 
   render() {
@@ -285,14 +285,15 @@ const PanZoom = React.createClass({
         this.setState({ zooming: true });
         this.zoom(1.1);
         break;
-      // zooming by wheel
-      case 1:
-        e.preventDefault();
-        this.setState({ zooming: true });
-        (e.deltaY > 0) ? this.zoom(1.1) : this.zoom(0.9);
-        break;
       // no default
     }
+  },
+
+  wheelZoom(e) {
+    if (!this.state.panEnabled) return;
+    e.preventDefault();
+    this.setState({ zooming: true });
+    (e.deltaY > 0) ? this.zoom(1.1) : this.zoom(0.9);
   },
 
   panHorizontal(direction) {
