@@ -15,6 +15,24 @@ export default class FeedbackRuleSet {
     }, []);
   }
 
+  _getActiveTypes() {
+    // Find the feedback types required in the subject metadata and check for valid active rules in the task definition.
+    const { metadata } = this._subject;
+    const { feedback } = this._task;
+    return Object.keys(metadata).reduce((types, key) => {
+      const match = key.match(/#feedback_(\d*?)_type/);
+      if (match) {
+        const index = match[1];
+        const type = metadata[key];
+        const typeInTaskDefinition = feedback.types.find((feedbackItem) => feedbackItem.id === type);
+        if (typeInTaskDefinition && typeInTaskDefinition.valid) {
+          types[`feedback_${index}`] = metadata[key];
+        }
+      }
+      return types;
+    }, {});
+  }
+
   _getDefaultsForType(type) {
     const typeFromTask = this._task.feedback.types.find((feedbackType) => feedbackType.id === type);
     return Object.keys(typeFromTask).reduce((obj, key) => {
@@ -38,24 +56,6 @@ export default class FeedbackRuleSet {
         typeFields[key.substr(fieldPrefix.length)] = metadata[key];
       }
       return typeFields;
-    }, {});
-  }
-
-  _getActiveTypes() {
-    // Find the feedback types required in the subject metadata and check for active rules in the task definition.
-    const { metadata } = this._subject;
-    const { feedback } = this._task;
-    return Object.keys(metadata).reduce((types, key) => {
-      const match = key.match(/#feedback_(\d*?)_type/);
-      if (match) {
-        const index = match[1];
-        const type = metadata[key];
-        const typeInTaskDefinition = feedback.types.find((feedbackItem) => feedbackItem.id === type);
-        if (typeInTaskDefinition && typeInTaskDefinition.valid) {
-          types[`feedback_${index}`] = metadata[key];
-        }
-      }
-      return types;
     }, {});
   }
 }
