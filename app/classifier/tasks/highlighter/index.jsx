@@ -22,8 +22,9 @@ export default class Highlighter extends React.Component {
   createLabelAnnotation(selection, toolIndex) {
     // currently we only deal with one selection at a time
     const range = selection.getRangeAt(0);
-    const start = range.startOffset;
-    const end = range.endOffset;
+    const offset = this.getOffset(selection);
+    const start = offset + range.startOffset;
+    const end = offset + range.endOffset;
     const task = this.props.workflow.tasks[this.props.annotation.task];
     const labelInformation = task.highlighterLabels[toolIndex];
     const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
@@ -34,6 +35,23 @@ export default class Highlighter extends React.Component {
     });
     this.props.onChange(newAnnotation);
     selection.collapseToEnd();
+  }
+
+  getOffset(selection) {
+    const { anchorNode } = selection;
+    const { parentNode } = anchorNode;
+    let start = 0;
+    let counting = true;
+    parentNode.childNodes.forEach((node) => {
+      // ignore comments (nodeType 8) when calculating offset distance
+      if (counting && node.nodeType !== 8 && node !== anchorNode) {
+        start += node.textContent.length;
+      }
+      if (node === anchorNode) {
+        counting = false;
+      }
+    });
+    return start;
   }
 
   createButtons(option, index) {
