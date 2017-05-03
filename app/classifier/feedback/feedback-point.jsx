@@ -16,7 +16,7 @@ FeedbackPoint.propTypes = {
     x: PropTypes.string,
     y: PropTypes.string,
     tol: PropTypes.string,
-    success: PropTypes.string,
+    success: PropTypes.bool,
   })
 };
 
