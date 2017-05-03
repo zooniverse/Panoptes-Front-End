@@ -4,13 +4,22 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import DisplayNameSlugEditor from '../partials/display-name-slug-editor';
 import CollectionSettings from './settings';
+import Thumbnail from '../components/thumbnail';
 
-const collection = {
+const collectionWithDefaultSubject = {
   id: '1',
+  default_subject_src: 'subject.png',
   display_name: 'A collection',
   private: false,
   slug: 'username/a-collection'
 };
+
+const collectionWithoutDefaultSubject = {
+  id: '1',
+  display_name: 'A collection',
+  private: false,
+  slug: 'username/a-collection'
+}
 
 describe('<CollectionSettings />', function() {
   let wrapper;
@@ -18,7 +27,7 @@ describe('<CollectionSettings />', function() {
   let deleteButton;
   before(function() {
     confirmationSpy = sinon.spy(CollectionSettings.prototype, 'confirmDelete');
-    wrapper = shallow(<CollectionSettings canCollaborate={true} collection={collection} />, { context: { router: {} } });
+    wrapper = shallow(<CollectionSettings canCollaborate={true} collection={collectionWithoutDefaultSubject} />, { context: { router: {} } });
     deleteButton = wrapper.find('button.error');
   });
 
@@ -33,8 +42,16 @@ describe('<CollectionSettings />', function() {
   it('should render the correct default checked attribute for visibility', function() {
     const privateChecked = wrapper.find('input[type="radio"]').first().props().defaultChecked;
     const publicChecked = wrapper.find('input[type="radio"]').last().props().defaultChecked;
-    assert.equal(privateChecked, collection.private);
-    assert.notEqual(publicChecked, collection.private);
+    assert.equal(privateChecked, collectionWithoutDefaultSubject.private);
+    assert.notEqual(publicChecked, collectionWithoutDefaultSubject.private);
+  });
+
+  it('should render the thumbnail correctly depending on presence of default_subject_src', function() {
+    const thumbnailFirstInstance = wrapper.find(Thumbnail);
+    assert.equal(thumbnailFirstInstance.length, 0);
+    wrapper.setProps({ collection: collectionWithDefaultSubject });
+    const thumbnailSecondInstance = wrapper.find(Thumbnail);
+    assert.equal(thumbnailSecondInstance.length, 1);
   });
 
   it('should render permission messaging if there is no user', function() {

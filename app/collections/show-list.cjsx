@@ -11,6 +11,7 @@ Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
 CollectionsManager = require './manager'
+getSubjectLocation = require('../lib/get-subject-location')
 
 VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
 
@@ -63,6 +64,9 @@ SubjectNode = React.createClass
     else
       @props.removeSelected()
 
+  setCollectionCover: () ->
+    @props.collection.addLink('default_subject', @props.subject.id)
+
   render: ->
     logClick = @context.geordi?.makeHandler? 'about-menu'
     subjectSelectClasses = classNames({
@@ -70,30 +74,44 @@ SubjectNode = React.createClass
       "fa fa-check-circle": !!@props.selected,
       "fa fa-circle-o": !@props.selected
     })
+
+    { src } = getSubjectLocation(@props.subject);
+
     <div className="collection-subject-viewer">
       <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project} isFavorite={@state.isFavorite}>
-          {if !@props.selecting
-            <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
-              <span></span>
-            </Link>}
-          {if @props.canCollaborate and !@props.selecting
-            <button
-              type="button"
-              aria-label="Delete"
-              className="collection-subject-viewer-delete-button"
-              onClick={@props.onDelete}>
-              <i className="fa fa-close" />
-            </button>}
-          {if @props.selecting
-            <label className="collection-subject-viewer-select">
-              <input
-                aria-label={if @props.selected then "Selected" else "Not Selected"}
-                type="checkbox"
-                checked={@props.selected}
-                onChange={@toggleSelect}/>
-              <i className={subjectSelectClasses} />
-            </label>}
+        {if !@props.selecting
+          <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
+            <span></span>
+          </Link>}
+        {if @props.canCollaborate and !@props.selecting
+          <button
+            type="button"
+            aria-label="Delete"
+            className="collection-subject-viewer-delete-button"
+            onClick={@props.onDelete}>
+            <i className="fa fa-close" />
+          </button>}
+        {if @props.selecting
+          <label className="collection-subject-viewer-select">
+            <input
+              aria-label={if @props.selected then "Selected" else "Not Selected"}
+              type="checkbox"
+              checked={@props.selected}
+              onChange={@toggleSelect}/>
+            <i className={subjectSelectClasses} />
+          </label>}
       </SubjectViewer>
+      {if @props.canCollaborate and @props.collection.default_subject_src
+        if src is @props.collection.default_subject_src
+          <div className="collection-subject-viewer__default-label">Collection Cover</div>
+        else
+          <button
+            type="button"
+            className="collection-subject-viewer__default-label collection-subject-viewer__button--cover"
+            onClick={@setCollectionCover}
+          >
+            Set as collection cover
+          </button>}
     </div>
 
 module.exports = React.createClass
@@ -249,9 +267,11 @@ module.exports = React.createClass
             </div>
 
             <Paginator
+              className="talk"
               page={meta.page}
               onPageChange={@onPageChange}
-              pageCount={meta.page_count} />
+              pageCount={meta.page_count}
+            />
           </div>}
       </div>
     else if @state.error
