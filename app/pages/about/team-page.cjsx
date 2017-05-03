@@ -52,7 +52,7 @@ counterpart.registerTranslations 'en',
         Arfon served as Director of Citizen Science at the Adler Planetarium and co-lead of the Zooniverse until fall 2013.'''
       beckyRother:
         title: 'Visual Designer'
-        bio: '''Becky joined the Zooniverse team as designer in 2017. With a background in mobile apps and product design and a degree in journalism, she's excited to use her powers for good with the Zooniverse team.''' 
+        bio: '''Becky joined the Zooniverse team as designer in 2017. With a background in mobile apps and product design and a degree in journalism, she's excited to use her powers for good with the Zooniverse team.'''
       beverleyNewing:
         title: 'Web Developer Intern'
         bio: '''Beverley is an English and German literature graduate and worked as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.'''
@@ -122,6 +122,11 @@ counterpart.registerTranslations 'en',
       hughDickinson:
         title: 'Researcher'
         bio: '''Hugh is a postdoc studying the Zooniverse.'''
+      jamesArtz:
+        title: 'Developer'
+        bio: '''James joined the Zooniverse team in 2017. Before discovering his passion for code,
+        he received a Ph.D in Mediterranean Archaeology from SUNY Buffalo, focusing on ancient Greece.
+        In his free time he enjoys wood working and the ancient art of fermentation.'''
       jimODonnell:
         title: 'UX Developer'
         bio: '''Professional cynic but his heart's not in it. Web developer for the Zooniverse,
@@ -216,7 +221,7 @@ counterpart.registerTranslations 'en',
         motorbikes in his spare time.'''
       samanthaBlickhan:
         title: 'IMLS Postdoctoral Fellow'
-        bio: '''Samantha Blickhan is the IMLS Postdoctoral Fellow in the Department of Citizen Science at the Adler Planetarium, working on transcription projects for the Zooniverse. She received her Ph.D. in Musicology from Royal Holloway, University of London, with a thesis on the palaeography of British song notation in the 12th and 13th centuries. Her research interests include music and perception, and their relationships with writing systems, technology and pedagogy.'''   
+        bio: '''Samantha Blickhan is the IMLS Postdoctoral Fellow in the Department of Citizen Science at the Adler Planetarium, working on transcription projects for the Zooniverse. She received her Ph.D. in Musicology from Royal Holloway, University of London, with a thesis on the palaeography of British song notation in the 12th and 13th centuries. Her research interests include music and perception, and their relationships with writing systems, technology and pedagogy.'''
       sandorKruk:
         title: 'Researcher'
         bio: '''Sandor is a graduate student working on his PhD in Astrophysics at Oxford.
@@ -432,6 +437,12 @@ teamMembers =
     bio: counterpart "team.content.hughDickinson.bio"
     image: "/assets/team/hugh.jpg"
     location: "minnesota"
+  jamesArtz:
+    name: "James Artz"
+    title: counterpart "team.content.jamesArtz.title"
+    bio: counterpart "team.content.jamesArtz.bio"
+    image: "/assets/team/james.jpg"
+    location: "chicago"
   jenGupta:
     name: "Jen Gupta"
     twitter: "jen_gupta"
@@ -527,7 +538,7 @@ teamMembers =
     bio: counterpart "team.content.melanieBeck.bio"
     image: "/assets/team/melanie.jpg"
     location: "minnesota"
-  michaelParrish:		
+  michaelParrish:
     name: "Michael Parrish"
     twitter: "michael_parrish"
     title: counterpart "team.content.michaelParrish.title"
