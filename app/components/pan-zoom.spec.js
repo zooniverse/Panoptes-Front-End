@@ -323,19 +323,37 @@ describe('PanZoom', function () {
         assert.equal(wrapper.state('zooming'), true);
       });
 
+    });
+
+    describe('#wheelZoom()', function () {
+      const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+      const zoomedViewBoxDimensions = { width: 50, height: 50, x: 25, y: 25 };
+      let panHorizontalSpy;
+      let panVerticalSpy;
+      let zoomSpy;
+      let wrapper;
+
+      beforeEach(function () {
+        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
+        panHorizontalSpy = sinon.spy(wrapper.instance(), 'panHorizontal');
+        panVerticalSpy = sinon.spy(wrapper.instance(), 'panVertical');
+        zoomSpy = sinon.spy(wrapper.instance(), 'zoom');
+        wrapper.setState({ viewBoxDimensions: zoomedViewBoxDimensions, panEnabled: true });
+      });
+
       it('should call #zoom(1.1) on mousewheel event with deltaY > 0', function () {
-        const mouseEvent = { which: 1, deltaY: 4, preventDefault() { return 'This is a mock'; } };
+        const mouseEvent = { deltaY: 4, preventDefault() { return 'This is a mock'; } };
         wrapper.setState({ zooming: false });
-        wrapper.instance().frameKeyPan(mouseEvent);
+        wrapper.instance().wheelZoom(mouseEvent);
 
         sinon.assert.calledWith(zoomSpy, 1.1);
         assert.equal(wrapper.state('zooming'), true);
       });
 
       it('should call #zoom(0.9) on mousewheel event with deltaY < 0', function () {
-        const mouseEvent = { which: 1, deltaY: -4, preventDefault() { return 'This is a mock'; } };
+        const mouseEvent = { deltaY: -4, preventDefault() { return 'This is a mock'; } };
         wrapper.setState({ zooming: false });
-        wrapper.instance().frameKeyPan(mouseEvent);
+        wrapper.instance().wheelZoom(mouseEvent);
 
         sinon.assert.calledWith(zoomSpy, 0.9);
         assert.equal(wrapper.state('zooming'), true);
