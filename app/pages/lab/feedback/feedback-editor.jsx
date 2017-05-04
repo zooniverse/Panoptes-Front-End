@@ -1,5 +1,4 @@
 import React from 'react';
-import merge from 'lodash.merge';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 
