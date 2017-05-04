@@ -193,11 +193,10 @@ export default class SVGRenderer extends React.Component {
 
             {children}
 
-            <SVGFeedbackViewer />
-
+            {(this.props.project && this.props.project.experimental_tools.includes('general feedback')) && (<SVGFeedbackViewer />)}
           </g>
         </svg>
-        <SVGToolTipLayer screenCTM={screenCTM} />
+        {(this.props.project && this.props.project.experimental_tools.includes('general feedback')) && (<SVGToolTipLayer screenCTM={screenCTM} />)}
       </div>
     );
   }

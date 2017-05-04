@@ -48,10 +48,13 @@ class ClassificationSummary extends React.Component {
   }
 
   isFeedbackEnabled() {
-    const { tasks } = this.props.workflow;
-    return Object.keys(tasks)
-      .map(key => tasks[key].feedback && tasks[key].feedback.enabled)
-      .includes(true);
+    if (this.props.project && this.props.project.experimental_tools.includes('general feedback')) {
+      const { tasks } = this.props.workflow;
+      return Object.keys(tasks)
+        .map(key => tasks[key].feedback && tasks[key].feedback.enabled)
+        .includes(true);
+    }
+    return false;
   }
 
   render() {
@@ -115,10 +118,6 @@ class ClassificationSummary extends React.Component {
         <p style={{ fontWeight: 'bold' }}>Well done! Youve found a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>
       );
     }
-
-    // const summariesHookContent = summariesHook.map(summary => <summary key={Math.random()} />);
-    console.info('summariesHook', summariesHook);
-
 
     return (
       <div>
