@@ -144,6 +144,12 @@ module.exports = React.createClass
         classificationCount = if sws?.classifications_count then sws.classifications_count else 0
         @setState({ classificationCount });
 
+        if classificationCount is 0 and @props.splits?['subject.first-to-classify.visible']
+          @context.geordi.logEvent({
+            type: 'first to classify banner shown'
+            data: { workflowId: @props.workflow.id }
+          })
+
   render: ->
     <div>
       {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
@@ -154,7 +160,7 @@ module.exports = React.createClass
       {if @state.classificationCount is 0 and @props.splits?['subject.first-to-classify.visible']
         <VisibilitySplit splits={@props.splits} splitKey={'subject.first-to-classify.visible'} elementKey={'div'}>
           <div className="classifier-announcement-banner classifier-announcement-banner--yellow">
-            <p>You're the first person to see this subject!</p>
+            <p>You're the first person to classify this subject!</p>
           </div>
         </VisibilitySplit>}
 
