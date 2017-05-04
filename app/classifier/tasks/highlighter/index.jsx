@@ -31,7 +31,8 @@ export default class Highlighter extends React.Component {
     newAnnotation.value.push({
       labelInformation: labelInformation,
       start: start,
-      end: end
+      end: end,
+      text: range.toString()
     });
     this.props.onChange(newAnnotation);
     selection.collapseToEnd();
