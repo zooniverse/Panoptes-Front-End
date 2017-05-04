@@ -6,26 +6,33 @@ import { Link } from 'react-router';
 counterpart.registerTranslations('en', {
   researchHomePage: {
     aboutIntro: `
-      The Zooniverse makes an impact.
+      A vibrant community.
     `,
     about: `
-      Over the past decade, Zooniverse volunteers have helped scientists make pivotal
-      discoveries by participating in over 90 projects from the humanities to science and medicine.
-      Volunteers have discovered new planets, assisted in disaster-relief, and even documented
-      wildlife populations from Chicago to Mozambique. The Zooniverse community grows daily
-      with over 1.5 million registered users answering the call to become citizen-science volunteers.
+      Zooniverse gives people of all ages and backgrounds the chance to paricipate
+      in real research with over 50- active online citizen science projects. Work with
+      1.5 million registered users around the world to contribute to research
+      projects led by hundreds of researchers.
     `,
     classifications: 'Classifications so far',
     labs: 'Zooniverse Labs',
+    listen: `
+      The projects created with the Zooniverse project builder
+      inspire and empower researchers, designers, and artists
+    `,
     meetResearchers: 'Meet the researchers who\'ve created projects for free on the Zooniverse.',
     options: 'Sign in or register to get started',
     real: 'Real researchers, real results',
-    researcherIntro: 'The Zooniverse is collaborative. ',
+    researcherIntro: 'Meet the researchers who’ve created projects for free on the Zooniverse. ',
     researcher: `
-      At the heart of each Zooniverse project is a team of researchers passionate about working with
-      volunteers to better understand their data. Researchers take part in project creation, data analysis,
-      and even communicate directly with volunteers through Zooniverse Talk.
-      `,
+      From classifying animals in the Serengeti to discovering new exoplanets using
+      the Kepler space telescope, researchers of all backgrounds have used the free
+      project builder to create engaging, accessible citizen science projects.
+      Our researchers have used the data from their projects to publish over 100
+      peer-reviewed publications that encourage many fascinating discoveries. Researchers
+      take part in project creation, data analysis, and even communicate directly
+      with volunteers through Zooniverse Talk.
+    `,
     signIn: 'Sign in',
     register: 'Register',
     works: 'The Zooniverse Works'
@@ -41,7 +48,10 @@ const HomePageResearch = ({ count, screenWidth, showDialog }) => {
 
       <div className="home-research__columns">
         <Translate className="display-body" content="researchHomePage.aboutIntro" />
-        <Translate className="regular-body" content="researchHomePage.about" />
+        <Translate className="regular-body" content="researchHomePage.about" /><br />
+        <a className="display-body" rel="noopener noreferrer" target="_blank" href="http://eatyourgreens.github.io/listen-to-zooniverse/">Listen to the Zoonivese</a>
+        <br />
+        <Translate className="regular-body" content="researchHomePage.listen" />
       </div>
 
       <div className="home-research__buttons">
