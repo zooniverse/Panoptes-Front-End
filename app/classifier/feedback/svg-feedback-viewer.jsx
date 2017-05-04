@@ -13,8 +13,7 @@ class FeedbackViewer extends React.Component {
   }
 
   render() {
-    const feedback = this.props.feedback.reduce((classifierFeedback, item) =>
-      (item.target === 'classifier') ? classifierFeedback.concat(item) : classifierFeedback, []);
+    const { feedback } = this.props;
     return (feedback.length) ? this.renderFeedbackPoints(feedback) : null;
   }
 
@@ -28,15 +27,15 @@ class FeedbackViewer extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  feedback: state.feedback,
+  feedback: state.feedback.filter(item => item.target === 'classifier'),
 });
 
 FeedbackViewer.propTypes = {
   feedback: PropTypes.arrayOf(PropTypes.shape({
-    target: PropTypes.string,
     x: PropTypes.string,
     y: PropTypes.string,
   }))
 };
 
 export default connect(mapStateToProps)(FeedbackViewer);
+export { FeedbackViewer };

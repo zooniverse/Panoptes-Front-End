@@ -14,11 +14,9 @@ class SVGToolTipLayer extends React.Component {
 
   renderTooltips() {
     const { feedback, screenCTM } = this.props;
-    const tooltips = feedback.reduce((classifierFeedback, item) =>
-      (item.target === 'classifier') ? classifierFeedback.concat(item) : classifierFeedback, []);
     return (
       <div className="classifier-tooltips">
-        {tooltips.map(item =>
+        {feedback.map(item =>
           <Tooltip
             item={item}
             key={`feedback-point-${item.x}-${item.y}`}
@@ -31,12 +29,11 @@ class SVGToolTipLayer extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  feedback: state.feedback,
+  feedback: state.feedback.filter(item => item.target === 'classifier'),
 });
 
 SVGToolTipLayer.propTypes = {
   feedback: PropTypes.arrayOf(PropTypes.shape({
-    target: PropTypes.string,
     x: PropTypes.string,
     y: PropTypes.string,
   })),
@@ -44,3 +41,4 @@ SVGToolTipLayer.propTypes = {
 };
 
 export default connect(mapStateToProps)(SVGToolTipLayer);
+export { SVGToolTipLayer };
