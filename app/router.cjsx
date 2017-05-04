@@ -17,7 +17,6 @@ React = require 'react'
 `import NotificationsPage from './pages/notifications';`
 `import SubjectPageController from './subjects';`
 `import WorkflowsPage from './pages/lab/workflows';`
-`import SubjectSetsPage from './components/subject-sets';`
 `import WorkflowsContainer from './pages/lab/workflows-container';`
 `import WorkflowsList from './pages/lab/workflows';`
 `import SubjectSetsContainer from './pages/lab/subject-sets-container';`
