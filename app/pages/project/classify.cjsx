@@ -240,7 +240,6 @@ module.exports = React.createClass
     classification = @state.classification
     console?.info 'Completed classification', classification
 
-    Split.classificationCreated(classification)
     {workflow, subjects} = classification.links
     seenThisSession.add workflow, subjects
     @queueClassification classification unless @state.demoMode
@@ -265,6 +264,7 @@ module.exports = React.createClass
         apiClient.type('classifications').create(classificationData).save()
           .then (actualClassification) =>
             console?.log 'Saved classification', actualClassification.id
+            Split.classificationCreated(actualClassification) # Metric log needs classification id
             actualClassification.destroy()
             indexInQueue = queue.indexOf classificationData
             queue.splice indexInQueue, 1
