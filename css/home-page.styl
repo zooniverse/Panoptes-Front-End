@@ -188,8 +188,15 @@ $flex-section
       -moz-column-gap: 2.5em
       -webkit-column-gap: 2.5em
 
-      @media (max-width: 900px)
+      @media (max-width: 800px)
         margin: 2em 5em
+        column-count: 1
+        -moz-column-count: 1
+        -webkit-column-count: 1
+
+      a
+        color: #007482
+        text-decoration: none
 
     &__buttons
       text-align: center
@@ -207,9 +214,9 @@ $flex-section
       width: 100%
 
       img
-        flex: 2 0 auto
-        max-height: 20em
-        width: 90px
+        flex: 1 0 auto
+        height: 20em
+        max-width: 100%
 
     &__content
       display: flex
@@ -263,29 +270,38 @@ $flex-section
 
   &__project-card
     border-radius: 0
-    box-sizing: border-box
-    height: 30em
-    max-height: 30em
+    height: 25em
+    max-height: 25em
     max-width: 18em
 
     .details
-      box-sizing: border-box
-      height: 40%
+      height: 50%
 
       .name, .description
-        cursor: inherit
         text-align: left
 
-    button[class=primary-button]
+      .description
+        display: -webkit-box
+        height: 4.5em
+        margin-top: 0
+        overflow: hidden
+        text-overflow: ellipsis
+        -webkit-line-clamp: 3
+        -webkit-box-orient: vertical
+
+    hr
+      margin: 0.5em 0
+
+    a[class=primary-button]
       box-sizing: border-box
       color: black
-      height: 5em
       margin: 0
+      text-align: center
 
     :hover > &,
     :focus > &
       .details
-        height: 40%
+        height: 50%
 
 .on-home-page
   font-family: 'Karla', sans-serif;
@@ -349,7 +365,7 @@ $flex-section
       align-items: center
 
       img
-        max-height: 34vh
+        max-height: 11.5em
         display: block
         margin: 1vw
         flex: 1 1 auto
