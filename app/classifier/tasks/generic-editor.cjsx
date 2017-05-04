@@ -123,12 +123,12 @@ module.exports = React.createClass
                       <AutoSave resource={@props.workflow} >
                         Color{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          <option value="#ff0000">Red</option>
-                          <option value="#ffff00">Yellow</option>
-                          <option value="#00ff00">Green</option>
+                          <option value="#ff6639">Red</option>
+                          <option value="#ffa539">Yellow</option>
+                          <option value="#38b978">Green</option>
+                          <option value="#43bcfd">Blue</option>
+                          <option value="#5364fd">Violet</option>
                           <option value="#00ffff">Cyan</option>
-                          <option value="#0000ff">Blue</option>
-                          <option value="#ff00ff">Magenta</option>
                           <option value="#000000">Black</option>
                           <option value="#ffffff">White</option>
                         </select>
