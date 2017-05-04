@@ -16,11 +16,12 @@ import interventionMonitor from '../lib/intervention-monitor';
 import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
+import { connect } from 'react-redux';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
 
-export default class Classifier extends React.Component {
+class Classifier extends React.Component {
   constructor(props) {
     super(props);
     this.handleAnnotationChange = this.handleAnnotationChange.bind(this);
@@ -148,6 +149,16 @@ export default class Classifier extends React.Component {
   }
 
   completeClassification() {
+    if (this.props.project.experimental_tools && this.props.project.experimental_tools.includes('general feedback')) {
+      const classificationMetadata = Object.assign({}, this.props.classification.metadata, {
+        feedbackShown: this.props.feedback.length > 0
+      });
+      if (classificationMetadata.feedbackShown) {
+        classificationMetadata.feedback = [].concat(this.props.feedback);
+      }
+      this.props.classification.update({ metadata: classificationMetadata });
+    }
+
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
       this.props.onCompleteAndLoadAnotherSubject();
     } else {
@@ -408,3 +419,9 @@ Classifier.defaultProps = {
   user: null,
   workflow: null
 };
+
+const mapStateToProps = (state) => ({
+  feedback: state.feedback,
+});
+
+export default connect(mapStateToProps)(Classifier);
