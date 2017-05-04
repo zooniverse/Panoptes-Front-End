@@ -12,6 +12,7 @@ export default class Highlighter extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.createButtons = this.createButtons.bind(this);
     this.createLabelAnnotation = this.createLabelAnnotation.bind(this);
+    this.selectableArea = this.selectableArea.bind(this);
   }
 
   handleChange(toolIndex, e) {
@@ -27,15 +28,28 @@ export default class Highlighter extends React.Component {
     const end = offset + range.endOffset;
     const task = this.props.workflow.tasks[this.props.annotation.task];
     const labelInformation = task.highlighterLabels[toolIndex];
-    const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
-    newAnnotation.value.push({
-      labelInformation: labelInformation,
-      start: start,
-      end: end,
-      text: range.toString()
-    });
-    this.props.onChange(newAnnotation);
+    const selectable = this.selectableArea(selection, range, offset, start, end);
+    if (selectable) {
+      const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
+      newAnnotation.value.push({
+        labelInformation: labelInformation,
+        start: start,
+        end: end,
+        text: range.toString()
+      });
+      this.props.onChange(newAnnotation);
+    }
     selection.collapseToEnd();
+  }
+
+  selectableArea(selection, range, offset, start, end){
+    const noAreaSelected = start === end;
+    const subjectSelection = selection.anchorNode.parentElement.parentElement.className === 'label-renderer';
+    if (!noAreaSelected && subjectSelection) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   getOffset(selection) {
