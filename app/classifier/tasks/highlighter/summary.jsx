@@ -9,7 +9,7 @@ export default class HighlighterSummary extends React.Component {
   createSummary(value, index){
     return(
       <div key={index} className="answer">
-        <p>{value.labelInformation.label} : {value.start} to {value.end}</p>
+      <p>{value.labelInformation.label} : {value.text} ({value.start} to {value.end})</p>
       </div>
     );
   }
