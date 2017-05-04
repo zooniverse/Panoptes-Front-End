@@ -1,6 +1,6 @@
 import FeedbackRuleSet from './feedback-ruleset';
 
-const processSingleFeedback = ({ annotation, subject, task }) => {
+const processSingleFeedback = (annotation, subject, task) => {
   const feedbackRuleSet = new FeedbackRuleSet(subject, task);
   const comparisonValue = (annotation && annotation.value !== null) ? annotation.value.toString() : '-1';
   return feedbackRuleSet.rules.reduce((checkedRules, rule) => {

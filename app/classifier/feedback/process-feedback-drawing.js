@@ -5,7 +5,7 @@ const isWithinTolerance = (annotationX, annotationY, feedbackX, feedbackY, toler
   return distance < tolerance;
 };
 
-const processDrawingFeedback = ({ annotation, subject, task }) => {
+const processDrawingFeedback = (annotation, subject, task) => {
   const feedbackRuleSet = new FeedbackRuleSet(subject, task);
   return feedbackRuleSet.rules.reduce((checkedRules, rule) => {
     const result = annotation.value.reduce((found, point) => {

@@ -7,7 +7,7 @@ import * as feedbackActions from '../../redux/ducks/feedback';
 import processSingleFeedback from './process-feedback-single';
 import processDrawingFeedback from './process-feedback-drawing';
 
-const feedbackTypes = {
+const processFeedback = {
   single: processSingleFeedback,
   drawing: processDrawingFeedback
 };
@@ -33,12 +33,8 @@ class FeedbackSummaryContainer extends React.Component {
   generateFeedbackItems() {
     const { actions, classification, subject, workflow } = this.props;
     const feedbackItems = classification.annotations.reduce((allFeedback, annotation) => {
-      const props = {
-        annotation,
-        subject,
-        task: workflow.tasks[annotation.task],
-      };
-      return allFeedback.concat(feedbackTypes[props.task.type](props));
+      const task = workflow.tasks[annotation.task];
+      return allFeedback.concat(processFeedback[task.type](annotation, subject, task));
     }, []);
     actions.feedback.setFeedback(feedbackItems);
   }
