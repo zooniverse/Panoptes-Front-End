@@ -9,7 +9,7 @@ import RecentProjectsSection from './recent-projects';
 import RecentCollectionsSection from './recent-collections';
 import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
-import HomePageSocial from '../home-not-logged-in/social';
+import HomePageSocial from '../home-common/social';
 import NewsSection from './news-pullout';
 import getColorFromString from '../../lib/get-color-from-string';
 import mediaActions from '../lab/actions/media';

@@ -84,7 +84,6 @@ export default class HomePage extends React.Component {
         this.resizeTimeout = NaN;
       });
     }, 100);
-  }
 
   getNewestProject() {
     apiClient.type('projects').get({ page_size: 1, sort: '-launch_date' })

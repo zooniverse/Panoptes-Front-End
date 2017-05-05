@@ -445,9 +445,37 @@ $flex-section
       border-bottom: 1px solid LIGHT_GREY
 
 .home-social
+  box-sizing: border-box
   display: flex
   background-color: BACKGROUND_COLOR
   padding: 4em
+
+  &__column-post
+    background-color: white
+
+    .home-social__blog-post
+      div:first-child
+        width: 100%
+
+  &__row-post
+    .home-social__blog-post
+      display: flex
+      flex-flow: row wrap
+
+      div:first-child
+        width: 16em
+
+  &__blog-post
+    div:first-child
+      background-size: cover
+      background-position: center
+      flex-shrink: 0
+      height: 12em
+      margin: 0.5em 1em 0.5em 0
+
+    div:nth-child(2)
+      flex: 1 1 0
+      min-width: 50%
 
   a
     text-decoration: none
@@ -515,17 +543,24 @@ $flex-section
 
     &--vertical-line
       border-left: 1px solid #CBCCCB
-      margin: 0 4em
+      margin: 0 3em
+
+      @media screen and (max-width: 600px)
+        display: none
 
   &__news
     display: flex
     flex: 2 0 0
     flex-direction: column
+    padding: 0 1em
 
   &__daily
     display: flex
     flex: 5 0 0
     flex-direction: column
+
+    > div
+      padding: 1.5em 2em 0 2em
 
     span
       word-break: break-word
@@ -534,7 +569,7 @@ $flex-section
     margin: 0
 
   hr
-    margin: 1.5em 0
+    margin: 1.5em auto
 
 .home-page
   background: #f4f4f4
