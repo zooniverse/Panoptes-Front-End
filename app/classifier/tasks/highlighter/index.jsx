@@ -100,6 +100,18 @@ export default class Highlighter extends React.Component {
 
 Highlighter.Editor = GenericTaskEditor;
 
+Highlighter.InsideSubject = (props) => {
+  const onClick = (e) => {
+    console.log(e.target)
+  }
+  
+  return(
+    <div onClick={onClick}>
+      {props.children}
+    </div>
+  );
+}
+
 Highlighter.PersistInsideSubject = LabelRenderer;
 
 Highlighter.Summary = HighlighterSummary;
