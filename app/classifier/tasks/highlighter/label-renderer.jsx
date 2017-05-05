@@ -1,4 +1,5 @@
-import React from 'react'; 
+import React from 'react';
+import Selection from './selection';
 
 export default class LabelRenderer extends React.Component {
 
@@ -32,13 +33,7 @@ export default class LabelRenderer extends React.Component {
             newContent.push(preContent);
             
             // 2. add the highlighted content, push content to be labeled
-            let highlightedContent = this.state.content.slice(i, currentAnnotation.end);
-            let labelColor = currentAnnotation.labelInformation.color;
-
-            let newLabel = 
-              <span key={a} style={{background: `${labelColor}`}} >
-                {highlightedContent}
-              </span>;
+            let newLabel = <Selection key={a} annotation={currentAnnotation} />
             newContent.push(newLabel);
             
             // 3. re-set last focusIndex with annotation index
