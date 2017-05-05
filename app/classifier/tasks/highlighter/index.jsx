@@ -101,12 +101,23 @@ export default class Highlighter extends React.Component {
 Highlighter.Editor = GenericTaskEditor;
 
 Highlighter.InsideSubject = (props) => {
-  const onClick = (e) => {
-    console.log(e.target)
+  function onClick(e) {
+    if (e.data && e.data.text) {
+      e.target.focus();
+    }
   }
   
+  function onKeyDown(e) {
+    if (e.data && e.data.text && e.which === 8) {
+      const index = props.annotation.value.indexOf(e.data);
+      props.annotation.value.splice(index, 1);
+      props.classification.update('annotations');
+      e.preventDefault();
+    }
+  }
+
   return(
-    <div onClick={onClick}>
+    <div onClick={onClick} onKeyDown={onKeyDown}>
       {props.children}
     </div>
   );
