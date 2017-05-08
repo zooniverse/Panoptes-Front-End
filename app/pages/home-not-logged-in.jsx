@@ -107,10 +107,6 @@ export default class HomePage extends React.Component {
         </div>
 
         <div className="flex-container">
-          <HomePagePromoted />
-        </div>
-
-        <div className="flex-container">
           <HomePageResearch count={this.state.count} screenWidth={this.state.screenWidth} showDialog={this.showDialog} />
         </div>
 
