@@ -67,14 +67,14 @@ const HomePageResearch = ({ count, screenWidth, showDialog }) => {
       </div>
 
       <div className="home-research__researchers">
-        <img role="presentation" src="/assets/home-researchers1.jpg" />
+        <div><img role="presentation" src="/assets/home-researchers1.jpg" /></div>
 
         {screenWidth > 550 && (
-          <img role="presentation" src="/assets/home-researchers2.jpg" />
+          <div><img role="presentation" src="/assets/home-researchers2.jpg" /></div>
         )}
 
         {screenWidth > 900 && (
-          <img role="presentation" src="/assets/home-researchers3.jpg" />
+          <div><img role="presentation" src="/assets/home-researchers3.jpg" /></div>
         )}
       </div>
 
