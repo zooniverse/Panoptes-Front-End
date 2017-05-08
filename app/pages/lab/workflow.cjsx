@@ -464,9 +464,9 @@ EditWorkflowPage = React.createClass
                 <FeedbackEditor
                   task={@props.workflow.tasks[@state.selectedTaskKey]}
                   saveFn={@handleTaskChange.bind this, @state.selectedTaskKey}
-                />
-                <hr />
-                <br />}
+                />}
+              <hr />
+              <br />
               <AutoSave resource={@props.workflow}>
                 <small>
                   <button type="button" className="minor-button" onClick={@handleTaskDelete.bind this, @state.selectedTaskKey}>Delete this task</button>
