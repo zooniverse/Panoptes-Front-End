@@ -40,6 +40,210 @@ $flex-section
       font-size: 2em
 
 .home-page-not-logged-in
+  .home-intro
+    box-sizing: border-box
+    justify-content: flex-end
+    min-height: 30vw
+    padding: 2em 0
+    text-align: center
+    z-index: 0
+    overflow: hidden
+
+    video
+      display: none
+
+    .home-mobile-video-image
+      display: block
+
+    @media (min-width: 900px)
+      video
+        display: block
+
+      .home-mobile-video-image
+        display: none
+
+    @media (max-width: 900px)
+      min-height: 100vh
+
+    video, .home-mobile-video-image
+      @extends $absolute-fill
+      object-fit: cover
+      width: 100vw
+      z-index: -1
+
+  .home-research
+    padding: 5em 0
+    text-align: left
+
+    button[class=primary-button]
+      color: black
+
+    &__columns
+      margin: 2em 12em
+      column-count: 2
+      -moz-column-count: 2
+      -webkit-column-count: 2
+      column-gap: 2.5em
+      -moz-column-gap: 2.5em
+      -webkit-column-gap: 2.5em
+
+      @media (max-width: 800px)
+        margin: 2em 5em
+        column-count: 1
+        -moz-column-count: 1
+        -webkit-column-count: 1
+
+      a
+        color: #007482
+        text-decoration: none
+
+    &__buttons
+      text-align: center
+
+      .tertiary-kicker
+        font-size: 0.65em
+
+      button
+        margin-top: 1.5em
+
+    &__researchers
+      display: flex
+      flex-flow: row nowrap
+
+      div
+        flex: auto
+        margin: 5em 0
+        width: 100%
+
+        img
+          width: 100%
+          height: auto
+
+    &__content
+      display: flex
+      flex-direction: column
+      padding: 0 15vw
+      text-align: center
+
+      .tertiary-kicker
+        margin-bottom: 1.25em
+
+      div
+        box-sizing: border-box
+        margin: 1.5em 4vw
+
+        a
+          padding: 0.8em 3em
+
+  .home-discover
+    background-color: BACKGROUND_COLOR
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    padding: 3em 0
+    text-align: left
+
+    hr
+      border-color: white
+
+    @media (max-width: 900px)
+      min-height: auto
+
+    img
+      max-height: 50vh
+      width: auto
+
+    &__image
+      flex: 1 0 0
+      text-align: right
+
+    &__content
+      flex: 2 0 0
+      margin: 0 10vw
+
+      a
+        img
+          max-height: 2em
+          margin-right: 1em
+
+      button[class=primary-button]
+        color: black
+
+  &__project-card
+    border-radius: 0
+    height: 25em
+    max-height: 25em
+    max-width: 18em
+
+    .details
+      height: 50%
+
+      .name, .description
+        text-align: left
+
+      .description
+        display: -webkit-box
+        height: 4.5em
+        margin-top: 0
+        overflow: hidden
+        text-overflow: ellipsis
+        -webkit-line-clamp: 3
+        -webkit-box-orient: vertical
+
+    hr
+      margin: 0.5em 0
+
+    a[class=primary-button]
+      box-sizing: border-box
+      color: black
+      margin: 0
+      text-align: center
+
+    :hover > &,
+    :focus > &
+      .details
+        height: 50%
+
+.on-home-page
+  font-family: 'Karla', sans-serif;
+
+  *:focus
+    outline: none
+
+  section
+    @extends $flex-section
+    min-height: 30vw
+    position: relative
+
+    @media (max-width: 900px)
+      min-height: 100vh
+      padding-top: 2em
+      padding-bottom: 2em
+
+  .standard-button
+    border: 2px solid
+    border-radius: 6px
+    border-color: #FFFFFF
+    background: none
+    padding: 0.75em 1.75em
+    transition: background 500ms ease
+    margin: 50px 10px 0 10px
+    font-size: 1.5em
+    font-weight: bold
+    text-decoration: none
+
+    @media (max-width: 900px)
+      margin-top: 20px
+
+    &:visited
+      color: #FFFFFF
+
+    &:hover,
+    &:active,
+    &:focus
+      background: #FFFFFF
+      color: ZOONIVERSE_TEAL
+
   .main-kicker
     color: TEAL_LIGHT
     font-family: 'Oswald', sans-serif
@@ -143,210 +347,9 @@ $flex-section
         background: #cc9200
         border-color: #cc9200
 
-  .home-intro
-    box-sizing: border-box
-    justify-content: flex-end
-    min-height: 30vw // video is 2:1 aspect ratio and 100% width
-    padding: 2em 0
-    text-align: center
-    z-index: 0
-
-    video
-      display: none
-
-    .home-mobile-video-image
-      display: block
-
-    @media (min-width: 900px)
-      video
-        display: block
-
-      .home-mobile-video-image
-        display: none
-
-    @media (max-width: 900px)
-      min-height: 100vh
-
-    video, .home-mobile-video-image
-      @extends $absolute-fill
-      z-index: -1
-      object-fit: cover
-
-  .home-research
-    padding: 5em 0
-    text-align: left
-
-    button[class=primary-button]
-      color: black
-
-    &__columns
-      margin: 2em 12em
-      column-count: 2
-      -moz-column-count: 2
-      -webkit-column-count: 2
-      column-gap: 2.5em
-      -moz-column-gap: 2.5em
-      -webkit-column-gap: 2.5em
-
-      @media (max-width: 800px)
-        margin: 2em 5em
-        column-count: 1
-        -moz-column-count: 1
-        -webkit-column-count: 1
-
-      a
-        color: #007482
-        text-decoration: none
-
-    &__buttons
-      text-align: center
-
-      .tertiary-kicker
-        font-size: 0.65em
-
-      button
-        margin-top: 1.5em
-
-    &__researchers
-      display: flex
-      flex-flow: row nowrap
-      margin: 6em 0
-      width: 100%
-
-      img
-        flex: 1 0 auto
-        height: 20em
-        max-width: 100%
-
-    &__content
-      display: flex
-      flex-direction: column
-      padding: 0 15vw
-      text-align: center
-
-      .tertiary-kicker
-        margin-bottom: 1.25em
-
-      div
-        box-sizing: border-box
-        margin: 1.5em 4vw
-
-        a
-          padding: 0.8em 3em
-
-  .home-discover
-    background-color: BACKGROUND_COLOR
-    display: flex
-    flex-direction: row
-    flex-wrap: wrap
-    padding: 2em 0
-    text-align: left
-
-    hr
-      border-color: white
-
-    @media (max-width: 900px)
-      min-height: auto
-
-    img
-      max-height: 50vh
-      width: auto
-
-    &__image
-      flex: 1 0 0
-      text-align: right
-
-    &__content
-      flex: 2 0 0
-      margin: 0 10vw
-
-      a
-        img
-          max-height: 2em
-          margin-right: 1em
-
-      button[class=primary-button]
-        color: black
-
-  &__project-card
-    border-radius: 0
-    height: 25em
-    max-height: 25em
-    max-width: 18em
-
-    .details
-      height: 50%
-
-      .name, .description
-        text-align: left
-
-      .description
-        display: -webkit-box
-        height: 4.5em
-        margin-top: 0
-        overflow: hidden
-        text-overflow: ellipsis
-        -webkit-line-clamp: 3
-        -webkit-box-orient: vertical
-
-    hr
-      margin: 0.5em 0
-
-    a[class=primary-button]
-      box-sizing: border-box
-      color: black
-      margin: 0
-      text-align: center
-
-    :hover > &,
-    :focus > &
-      .details
-        height: 50%
-
-.on-home-page
-  font-family: 'Karla', sans-serif;
-
-  *:focus
-    outline: none
-
-  section
-    @extends $flex-section
-    position: relative
-    min-height: 40vw
-
-    @media (max-width: 900px)
-      min-height: 100vh
-      padding-top: 2em
-      padding-bottom: 2em
-
-  .standard-button
-    border: 2px solid
-    border-radius: 6px
-    border-color: #FFFFFF
-    background: none
-    padding: 0.75em 1.75em
-    transition: background 500ms ease
-    margin: 50px 10px 0 10px
-    font-size: 1.5em
-    font-weight: bold
-    text-decoration: none
-
-    @media (max-width: 900px)
-      margin-top: 20px
-
-    &:visited
-      color: #FFFFFF
-
-    &:hover,
-    &:active,
-    &:focus
-      background: #FFFFFF
-      color: ZOONIVERSE_TEAL
-
   .home-featured
-    padding: 50px 30px
-    min-height: 40vw
     background: #fff
+    padding: 3em 0
 
     p
       width: 50vw
