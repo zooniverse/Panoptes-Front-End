@@ -69,10 +69,15 @@ module.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.subject is @props.subject
       clearTimeout @signInAttentionTimeout
-      @setState loading: true
+      @setState
+        playing: false
+        loading: true
+        frame: 0
 
   componentDidUpdate: (prevProps) ->
     if @props.subject isnt prevProps.subject
+      # turn off the slideshow player and reset any counters
+      @setPlaying false
       @setState frame: @getInitialFrame()
 
   logSubjClick: (logType) ->
