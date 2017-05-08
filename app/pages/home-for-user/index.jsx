@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
-import Pullout from 'react-pullout';
 import BlurredImage from './blurred-image';
 import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
@@ -10,7 +9,6 @@ import RecentCollectionsSection from './recent-collections';
 import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
 import HomePageSocial from '../home-common/social';
-import NewsSection from './news-pullout';
 import getColorFromString from '../../lib/get-color-from-string';
 import mediaActions from '../lab/actions/media';
 import FeaturedProject from '../home-common/featured-project';
@@ -28,7 +26,6 @@ export default class HomePageForUser extends React.Component {
 
     this.state = {
       backgroundSrc: '',
-      showNews: false,
       totalClassifications: 0,
       ribbonData: [],
       loading: false,
@@ -40,7 +37,6 @@ export default class HomePageForUser extends React.Component {
     };
 
     this.getRibbonData = this.getRibbonData.bind(this);
-    this.toggleNews = this.toggleNews.bind(this);
     this.updateBackground = this.updateBackground.bind(this);
     this.createLinkedResource = this.props.actions.createLinkedResource.bind(this);
     this.uploadMedia = this.props.actions.uploadMedia.bind(this);
@@ -195,12 +191,6 @@ export default class HomePageForUser extends React.Component {
     return `/projects/${project.slug}`;
   }
 
-  toggleNews() {
-    this.setState({
-      showNews: !this.state.showNews
-    });
-  }
-
   renderMenu(openComponent) {
     if ((openComponent) && (screen.width < 700)) {
       return;
@@ -293,18 +283,6 @@ export default class HomePageForUser extends React.Component {
             )}
           </div>
 
-          <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
-            <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
-              <div className="home-page-news-pullout__toggle-label">
-                <i className={this.state.showNews ? 'fa fa-chevron-right' : 'fa fa-chevron-left'} />
-                <br />
-                News
-              </div>
-            </button>
-
-            <NewsSection updatedProjects={this.state.ribbonData} toggleNews={this.toggleNews} showNews={this.state.showNews} />
-
-          </Pullout>
         </div>
 
         <FeaturedProject />
