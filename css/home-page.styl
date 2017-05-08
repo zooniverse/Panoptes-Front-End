@@ -1,6 +1,3 @@
-LIGHT-BLUE-GREEN = #5CBDC1
-WHITE = #FFFFFF
-
 @keyframes fade-in-video
   from
     opacity: 0
@@ -444,172 +441,128 @@ $flex-section
       width: 85%
       border-bottom: 1px solid LIGHT_GREY
 
-.home-social
-  box-sizing: border-box
-  display: flex
-  background-color: BACKGROUND_COLOR
-  padding: 4em
+  .home-social
+    display: flex
+    background-color: BACKGROUND_COLOR
+    padding: 4em
 
-  &__column-post
-    background-color: white
+    &__column-post
+      background-color: white
 
-    .home-social__blog-post
+      .home-social__blog-post
+        div:first-child
+          width: 100%
+
+    &__row-post
+      .home-social__blog-post
+        display: flex
+        flex-flow: row wrap
+
+        div:first-child
+          width: 16em
+
+    &__blog-post
       div:first-child
-        width: 100%
+        background-size: cover
+        background-position: center
+        flex-shrink: 0
+        height: 12em
+        margin: 0.5em 1em 0.5em 0
 
-  &__row-post
-    .home-social__blog-post
-      display: flex
-      flex-flow: row wrap
+      div:nth-child(2)
+        flex: 1 1 0
+        min-width: 50%
 
-      div:first-child
-        width: 16em
+    a
+      text-decoration: none
 
-  &__blog-post
-    div:first-child
-      background-size: cover
-      background-position: center
-      flex-shrink: 0
-      height: 12em
-      margin: 0.5em 1em 0.5em 0
+    .primary-button, .primary-button--light
+      margin: 0.75em 0 1.5em 0
+      text-align: center
 
-    div:nth-child(2)
-      flex: 1 1 0
-      min-width: 50%
-
-  a
-    text-decoration: none
-
-  .primary-button, .primary-button--light
-    margin: 0.75em 0 1.5em 0
-    text-align: center
-
-  .tertiary-headline
-    font-size: 1.5em
-    margin-bottom: 0.5em
-
-    &__headline
-      font-size: 2em
+    .tertiary-headline
+      font-size: 1.5em
       margin-bottom: 0.5em
 
-    @media (max-width: 900px)
-      font-size: 1em
+      &__headline
+        font-size: 2em
+        margin-bottom: 0.5em
 
-  .secondary-headline
-    margin: 0.25em
+      @media (max-width: 900px)
+        font-size: 1em
 
-  .tertiary-kicker
-    margin-bottom: 1em
+    .secondary-headline
+      margin: 0.25em
 
-  &__italic-link
-    color: TEAL_MID
-    font-style: italic
+    .tertiary-kicker
+      margin-bottom: 1em
 
-  &__icons
-    margin-top: 1.5vh
-    overflow: hidden
-    width: 20em
-
-    i
+    &__italic-link
       color: TEAL_MID
-      font-size: 1.25em
-      margin: 0 0.4em
+      font-style: italic
 
-    span
-      position: relative
+    &__icons
+      margin-top: 1.5vh
+      overflow: hidden
+      width: 20em
 
-    span:before, span:after
-      background: TEAL_LIGHT
-      content: ""
-      height: 1px
-      position: absolute
-      top: 50%
-      width: 10vw
+      i
+        color: TEAL_MID
+        font-size: 1.25em
+        margin: 0 0.4em
 
-    span:before
-      right: 100%
-      margin-right: 10px
+      span
+        position: relative
 
-    span:after
-      left: 100%
-      margin-left: 10px
+      span:before, span:after
+        background: TEAL_LIGHT
+        content: ""
+        height: 1px
+        position: absolute
+        top: 50%
+        width: 10vw
 
-  &__content
-    display: flex
-    flex-direction: row
-    flex-wrap: wrap
-    margin: 5em 0
-    text-align: left
+      span:before
+        right: 100%
+        margin-right: 10px
 
-    &--vertical-line
-      border-left: 1px solid #CBCCCB
-      margin: 0 3em
+      span:after
+        left: 100%
+        margin-left: 10px
 
-      @media screen and (max-width: 600px)
-        display: none
+    &__content
+      display: flex
+      flex-flow: row wrap
+      margin: 5em 0
+      text-align: left
 
-  &__news
-    display: flex
-    flex: 2 0 0
-    flex-direction: column
-    padding: 0 1em
+      &--vertical-line
+        border-left: 1px solid #CBCCCB
+        margin: 0 3em
 
-  &__daily
-    display: flex
-    flex: 5 0 0
-    flex-direction: column
+        @media screen and (max-width: 750px)
+          display: none
 
-    > div
-      padding: 1.5em 2em 0 2em
+    &__news
+      display: flex
+      flex: 2 0 0
+      flex-direction: column
+      padding: 0 1em
 
-    span
-      word-break: break-word
+    &__project-update
+      hr
+        margin: 1.5em auto
 
-  .project-card
-    margin: 0
+    &__daily
+      display: flex
+      flex: 5 0 0
+      flex-direction: column
 
-  hr
-    margin: 1.5em auto
+      > div
+        padding: 1.5em 2em 0 2em
 
-.home-page
-  background: #f4f4f4
+      span
+        word-break: break-word
 
-  .hero
-    align-items: center
-    background: url(/assets/zoohome-hero.jpg) top left no-repeat
-    background-size: cover
-    color: #f9f9f9
-    display: flex
-    flex-direction: column
-    min-height: 800px
-    justify-content: center
-    padding: 0 3vw
-    text-align: center
-
-    @media screen and (max-width: 400px)
-      svg
-        margin-top: 15vh
-
-    .hero-title
-      color: inherit
-      font-weight: 300
-      line-height: 40px
-      padding: 1.5em 0 0.5em
-
-    .hero-tagline
-      color: inherit
-      font-size: 1.6em
-      line-height: 22px
-      margin: 0 auto
-      max-width: 600px
-      padding: 1em 0 6.5em
-
-    .hero-button
-      box-sizing: border-box
-      color: #fbfbfb
-      font-size: 1.6em
-      font-weight: 400
-      margin-bottom: 3vh
-
-      &:hover
-        background: lighten(TEAL_MID, 20%)
+    .project-card
+      margin: 0

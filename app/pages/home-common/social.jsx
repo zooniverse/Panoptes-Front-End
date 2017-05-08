@@ -51,7 +51,7 @@ export default class HomePageSocial extends React.Component {
     const link = `/projects/${project.slug}`;
     const timestamp = moment(new Date(project.updated_at)).fromNow();
     return (
-      <div key={project.id}>
+      <div className="home-social__project-update" key={project.id}>
         <h6 className="timestamp-label">{timestamp}</h6>
         <h5 className="tertiary-headline">{project.display_name} </h5>
         <a className="home-social__italic-link" href={link}> View Project </a>
