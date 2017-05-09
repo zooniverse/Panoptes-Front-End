@@ -536,6 +536,7 @@ const Publications = {
     },
     {
       name: "Season Spotter",
+      slug: "kosmala/season-spotter-questions",
       publications: [
         {
           citation: "Volunteer recruitment and retention in online citizen science projects using marketing strategies: lessons from Season Spotter, Crall+ 2017.",

@@ -54,6 +54,8 @@ module.exports = React.createClass
             <button key={navItem} ref={navItem} className="secret-button side-bar-button" style={fontWeight: 700 if @state.currentSort is navItem} onClick={@showPublicationsList.bind(null, navItem)}><Translate content="publications.nav.#{navItem}" /></button>}
         </nav>
       </aside>
+
+
       <section className="publications-content">
         <h2>{if @state.currentSort is 'showAll'
               <Translate content="publications.content.header.showAll" />
