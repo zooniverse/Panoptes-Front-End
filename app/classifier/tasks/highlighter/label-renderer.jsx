@@ -33,7 +33,7 @@ export default class LabelRenderer extends React.Component {
             newContent.push(preContent);
             
             // 2. add the highlighted content, push content to be labeled
-            let newLabel = <Selection key={a} annotation={currentAnnotation} />
+            let newLabel = <Selection key={a} annotation={currentAnnotation} disabled={this.props.disabled} />
             newContent.push(newLabel);
             
             // 3. re-set last focusIndex with annotation index
@@ -69,6 +69,7 @@ export default class LabelRenderer extends React.Component {
 }
 
 LabelRenderer.propTypes = {
+  disabled: React.PropTypes.bool,
   onLoad: React.PropTypes.func,
   src: React.PropTypes.string
 };
@@ -77,5 +78,6 @@ LabelRenderer.defaultProps = {
   annotation: {
     value: []
   },
+  disabled: true,
   onLoad: () => { return true }
 }
