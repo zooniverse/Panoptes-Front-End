@@ -23,17 +23,17 @@ const FEEDBACK = [
 describe('<SVGToolTipLayer />', function() {
   it('should return null if not passed any feedback', function () {
     const wrapper = shallow(<SVGToolTipLayer feedback={[]} />);
-    assert(wrapper.type() === null);
+    assert.strictEqual(wrapper.type(), null);
   });
 
   it('should return the correct element and class', function () {
     const wrapper = shallow(<SVGToolTipLayer feedback={FEEDBACK} />);
-    assert(wrapper.type() === 'div');
-    assert(wrapper.hasClass('classifier-tooltips'))
+    assert.strictEqual(wrapper.type(), 'div');
+    assert(wrapper.hasClass('classifier-tooltips'));
   });
 
   it('should return a Tooltip for each feedback item', function () {
     const wrapper = shallow(<SVGToolTipLayer feedback={FEEDBACK} />);
-    assert(wrapper.find('Tooltip').length === 2)
+    assert.strictEqual(wrapper.find('Tooltip').length, 2);
   });
 });

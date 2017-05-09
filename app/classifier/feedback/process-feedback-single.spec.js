@@ -34,23 +34,23 @@ const TASK = {
 describe('processSingleFeedback', function () {
   it('should return an array of results', function () {
     const result = processSingleFeedback(ANNOTATION, SUBJECT, TASK);
-    assert(result.length === 1);
+    assert.strictEqual(result.length, 1);
   });
 
   it('should return a success result if a rule and annotation match', function () {
     const result = processSingleFeedback(ANNOTATION, SUBJECT, TASK);
-    assert(result[0].success === true);
-    assert(result[0].message === SUCCESS_MESSAGE);
-    assert(result[0].question === QUESTION);
-    assert(result[0].target === 'summary');
+    assert.strictEqual(result[0].success, true);
+    assert.strictEqual(result[0].message, SUCCESS_MESSAGE);
+    assert.strictEqual(result[0].question, QUESTION);
+    assert.strictEqual(result[0].target, 'summary');
   });
 
   it('should return a failure result if a rule and annotation don\'t match', function () {
     const failureAnnotation = Object.assign({}, ANNOTATION, { value: 2 });
     const result = processSingleFeedback(failureAnnotation, SUBJECT, TASK);
-    assert(result[0].success === false);
-    assert(result[0].message === FAILURE_MESSAGE);
-    assert(result[0].question === QUESTION);
-    assert(result[0].target === 'summary');
+    assert.strictEqual(result[0].success, false);
+    assert.strictEqual(result[0].message, FAILURE_MESSAGE);
+    assert.strictEqual(result[0].question, QUESTION);
+    assert.strictEqual(result[0].target, 'summary');
   });
 });

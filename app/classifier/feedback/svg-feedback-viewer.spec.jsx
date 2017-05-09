@@ -23,17 +23,17 @@ const FEEDBACK = [
 describe('<FeedbackViewer />', function() {
   it('should return null if not passed any feedback', function () {
     const wrapper = shallow(<FeedbackViewer feedback={[]} />);
-    assert(wrapper.type() === null);
+    assert.strictEqual(wrapper.type(), null);
   });
 
   it('should return the correct element and class', function () {
     const wrapper = shallow(<FeedbackViewer feedback={FEEDBACK} />);
-    assert(wrapper.type() === 'g');
+    assert.strictEqual(wrapper.type(), 'g');
     assert(wrapper.hasClass('feedback-points'))
   });
 
   it('should return a FeedbackPoint for each feedback item', function () {
     const wrapper = shallow(<FeedbackViewer feedback={FEEDBACK} />);
-    assert(wrapper.find('FeedbackPoint').length === 2)
+    assert.strictEqual(wrapper.find('FeedbackPoint').length, 2)
   });
 });

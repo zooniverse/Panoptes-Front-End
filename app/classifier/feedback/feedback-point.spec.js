@@ -15,16 +15,16 @@ const POINT = {
 };
 
 describe('<FeedbackPoint />', function() {
-  it('should return a circle element', function () {
+  it('should return a <circle /> element', function () {
     const wrapper = shallow(<FeedbackPoint point={POINT} />);
-    assert(wrapper.type() === 'circle');
+    assert.strictEqual(wrapper.type(), 'circle', `Didn't return a <circle /> element`);
   });
 
   it('should have the correct attributes', function () {
     const wrapper = shallow(<FeedbackPoint point={POINT} />);
-    assert(wrapper.prop('cx') === POINT.x);
-    assert(wrapper.prop('cy') === POINT.y);
-    assert(wrapper.prop('r') === POINT.tol);
+    assert.strictEqual(wrapper.prop('cx'), POINT.x, `X prop not correctly set`);
+    assert.strictEqual(wrapper.prop('cy'), POINT.y, `Y prop not correctly set`);
+    assert.strictEqual(wrapper.prop('r'), POINT.tol, `Radius prop not correctly set`);
   });
 
   it('should have the correct element class', function () {
