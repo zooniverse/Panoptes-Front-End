@@ -56,7 +56,8 @@ export default class Highlighter extends React.Component {
     for (const node of parentNode.childNodes) {
       // ignore comments (nodeType 8) when calculating offset distance
       if (node.nodeType !== 8 && node !== anchorNode) {
-        start += node.textContent.length;
+        const text = node.getAttribute ? node.getAttribute('data-selection') : node.textContent;
+        start += text.length;
       }
       if (node === anchorNode) {
         break;
@@ -101,8 +102,11 @@ Highlighter.Editor = GenericTaskEditor;
 
 Highlighter.InsideSubject = (props) => {
   function onClick(e) {
-    if (e.data && e.data.text) {
-      e.target.focus();
+    if (e.data && e.data.text && e.target.className === "survey-identification-remove") {
+      const index = props.annotation.value.indexOf(e.data);
+      props.annotation.value.splice(index, 1);
+      props.classification.update('annotations');
+      e.preventDefault();
     }
   }
   
@@ -115,9 +119,15 @@ Highlighter.InsideSubject = (props) => {
     }
   }
 
+  const children = React.Children.map(props.children, (child) => {
+    return React.cloneElement(child, {
+      disabled: false
+    })
+  });
+
   return(
     <div onClick={onClick} onKeyDown={onKeyDown}>
-      {props.children}
+      {children}
     </div>
   );
 }
