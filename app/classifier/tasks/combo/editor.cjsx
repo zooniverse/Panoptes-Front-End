@@ -57,7 +57,7 @@ ComboTaskEditor = React.createClass
             {Object.keys(@props.workflow.tasks).map (taskKey) =>
               taskDescription = @props.workflow.tasks[taskKey]
               TaskComponent = tasks[taskDescription.type]
-              <option key={taskKey} value={taskKey} disabled={taskDescription.type is 'drawing'}>{TaskComponent.getTaskText taskDescription}</option>}
+              <option key={taskKey} value={taskKey} disabled={taskDescription.type is 'crop'}>{TaskComponent.getTaskText taskDescription}</option>}
           </select>
         </label>
       </p>
