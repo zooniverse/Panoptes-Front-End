@@ -187,6 +187,7 @@ module.exports = React.createClass
           filteredSubjects = nonLoadedSubjects.filter((subject) => !subject.already_seen && !subject.retired)
           subjectsToLoad = if filteredSubjects.length > 0 then filteredSubjects else nonLoadedSubjects
           upcomingSubjects.forWorkflow[workflow.id].push subjectsToLoad...
+          # Remove any duplicate subjects from the upcoming queue
           upcomingSubjects.forWorkflow[workflow.id].filter (subject, i) => 
             upcomingSubjects.forWorkflow[workflow.id].indexOf subject is i
 
