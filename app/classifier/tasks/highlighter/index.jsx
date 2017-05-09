@@ -2,6 +2,7 @@ import React from 'react';
 import { Markdown } from 'markdownz';
 import GenericTaskEditor from '../generic-editor';
 import GenericTask from '../generic';
+import LabelEditor from './label-editor';
 import LabelRenderer from './label-renderer';
 import HighlighterSummary from './summary';
 import TextRenderer from '../../annotation-renderer/text';
@@ -100,37 +101,7 @@ export default class Highlighter extends React.Component {
 
 Highlighter.Editor = GenericTaskEditor;
 
-Highlighter.InsideSubject = (props) => {
-  function onClick(e) {
-    if (e.data && e.data.text && e.target.className === "survey-identification-remove") {
-      const index = props.annotation.value.indexOf(e.data);
-      props.annotation.value.splice(index, 1);
-      props.classification.update('annotations');
-      e.preventDefault();
-    }
-  }
-  
-  function onKeyDown(e) {
-    if (e.data && e.data.text && e.which === 8) {
-      const index = props.annotation.value.indexOf(e.data);
-      props.annotation.value.splice(index, 1);
-      props.classification.update('annotations');
-      e.preventDefault();
-    }
-  }
-
-  const children = React.Children.map(props.children, (child) => {
-    return React.cloneElement(child, {
-      disabled: false
-    })
-  });
-
-  return(
-    <div onClick={onClick} onKeyDown={onKeyDown}>
-      {children}
-    </div>
-  );
-}
+Highlighter.InsideSubject = LabelEditor;
 
 Highlighter.PersistInsideSubject = LabelRenderer;
 
