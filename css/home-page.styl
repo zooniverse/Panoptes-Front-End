@@ -138,8 +138,7 @@ $flex-section
   .home-discover
     background-color: BACKGROUND_COLOR
     display: flex
-    flex-direction: row
-    flex-wrap: wrap
+    flex-flow: row wrap
     padding: 3em 0
     text-align: left
 
@@ -149,17 +148,20 @@ $flex-section
     @media (max-width: 900px)
       min-height: auto
 
-    img
-      max-height: 50vh
-      width: auto
-
     &__image
-      flex: 1 0 0
+      flex: 2 0 0
+      min-width: 20em
       text-align: right
 
+      img
+        height: auto
+        max-width: 35em
+        width: 100%
+
     &__content
-      flex: 2 0 0
-      margin: 0 10vw
+      flex: 3 0 0
+      margin: 0 5vw 5vh 10vw
+      min-width: 50%
 
       a
         img
