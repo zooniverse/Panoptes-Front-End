@@ -1,7 +1,6 @@
 React = require('react')
 `import FlexibleLink from '../components/flexible-link';`
 Translate = require 'react-translate-component'
-{ Link } = require 'react-router'
 
 ProjectCard = React.createClass
   displayName: 'ProjectCard'
@@ -43,7 +42,7 @@ ProjectCard = React.createClass
           {<div className="description">{@props.project.description}</div> if @props.project.description?}
           <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"projectsPage.button"} /></button>
           {if @props.landingPage
-            <button className="primary-button" type="button">View Project</button>}
+            <FlexibleLink to={href} className="primary-button" type="button">View Project</FlexibleLink>}
         </div>
       </div>
     </FlexibleLink>
