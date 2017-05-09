@@ -18,9 +18,8 @@ module.exports = React.createClass
     # console.log 'Old marks were', @state.oldSetOfMarks
     newSetOfMarks = []
     # Automatically select new marks.
-    annotations = nextProps.classification?.annotations ? []
-    annotation = annotations[annotations.length - 1]
-    if annotation?
+    annotation = nextProps.annotation
+    if annotation? && annotation.task?
       taskDescription = @props.workflow?.tasks[annotation.task]
     if taskDescription?.type is 'drawing' and Array.isArray annotation.value
       for mark in annotation.value
@@ -36,7 +35,7 @@ module.exports = React.createClass
   render: ->
     skippedMarks = 0
     <g>
-      {for annotation in @props.classification?.annotations ? []      
+      {for annotation in @props.classification?.annotations ? []
         annotation._key ?= Math.random()
         isPriorAnnotation = annotation isnt @props.annotation
         taskDescription = @props.workflow.tasks[annotation.task]
@@ -53,7 +52,7 @@ module.exports = React.createClass
                 continue
 
               toolDescription = taskDescription.tools[mark.tool]
-              
+
               if parseInt(mark.frame) is parseInt(@props.frame)
                 {details} = toolDescription
               else
