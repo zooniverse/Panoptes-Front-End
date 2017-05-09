@@ -91,14 +91,14 @@ export default class AccountBar extends React.Component {
       <span className="account-bar">
 
         <NotificationsLink isMobile={this.props.isMobile} params={this.props.params} user={this.context.user} linkProps={{
-          className: 'site-nav__link site-nav__icon site-nav__icon--notifications',
+          className: 'site-nav__link',
           activeClassName: 'site-nav__link--active',
           onClick: this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
         }} />
 
         <Link
           to="/inbox"
-          className="site-nav__link site-nav__icon site-nav__icon--inbox"
+          className="site-nav__link site-nav__link--inbox"
           activeClassName="site-nav__link--active"
           aria-label={`
             Inbox ${this.state.unread ? 'with unread messages' : ''}
