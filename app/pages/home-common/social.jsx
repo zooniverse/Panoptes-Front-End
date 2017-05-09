@@ -74,10 +74,12 @@ export default class HomePageSocial extends React.Component {
           <div>
             <span className="regular-body">{post.excerpt}</span>
             <br />
-            <a className="home-social__italic-link" href={post.link}> Read More... </a>
+            <div>
+              <a className="home-social__italic-link" href={post.link}> Read More... </a>
+            </div>
           </div>
         </div>
-        <hr />
+        {!firstPost && (<hr />)}
       </div>
     );
   }
