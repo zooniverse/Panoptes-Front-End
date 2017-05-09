@@ -53,16 +53,15 @@ export default class Highlighter extends React.Component {
     const { anchorNode } = selection;
     const { parentNode } = anchorNode;
     let start = 0;
-    let counting = true;
-    parentNode.childNodes.forEach((node) => {
+    for (const node of parentNode.childNodes) {
       // ignore comments (nodeType 8) when calculating offset distance
-      if (counting && node.nodeType !== 8 && node !== anchorNode) {
+      if (node.nodeType !== 8 && node !== anchorNode) {
         start += node.textContent.length;
       }
       if (node === anchorNode) {
-        counting = false;
+        break;
       }
-    });
+    }
     return start;
   }
 
