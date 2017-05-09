@@ -446,32 +446,24 @@ $flex-section
     background-color: BACKGROUND_COLOR
     padding: 4em
 
-    &__column-post
-      background-color: white
-
-      .home-social__blog-post
-        div:first-child
-          width: 100%
-
-    &__row-post
-      .home-social__blog-post
-        display: flex
-        flex-flow: row wrap
-
-        div:first-child
-          width: 16em
-
     &__blog-post
+      display: flex
+      flex-flow: row wrap
+
       div:first-child
         background-size: cover
         background-position: center
         flex-shrink: 0
         height: 12em
         margin: 0.5em 1em 0.5em 0
+        width: 16em
 
       div:nth-child(2)
         flex: 1 1 0
         min-width: 50%
+
+      &--white
+        background-color: white
 
     a
       text-decoration: none
@@ -546,6 +538,7 @@ $flex-section
       display: flex
       flex: 2 0 0
       flex-direction: column
+      margin-bottom: 2em
       padding: 0 1em
 
     &__project-update

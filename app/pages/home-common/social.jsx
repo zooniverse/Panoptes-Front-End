@@ -63,10 +63,10 @@ export default class HomePageSocial extends React.Component {
   renderBlogPost(post, i) {
     const background = {};
     background.backgroundImage = `url(${post.image})`;
-    const firstPost = i === 0 ? 'home-social__column-post' : 'home-social__row-post';
+    const firstPost = i === 0 ? 'home-social__blog-post--white' : '';
     const timestamp = moment(new Date(post.created_at)).fromNow();
     return (
-      <div key={i} className={`home-social__blog-post ${firstPost}`}>
+      <div key={i} className={firstPost}>
         <h6 className="timestamp-label">{timestamp}</h6>
         <h5 className="tertiary-headline">{post.title} </h5>
         <div className="home-social__blog-post">
