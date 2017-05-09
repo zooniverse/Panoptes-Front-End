@@ -41,6 +41,7 @@ ComboTask = React.createClass
         {props.task.tasks.map (childTaskKey, i) ->
           childTaskDescription = props.workflow.tasks[childTaskKey]
           TaskComponent = props.taskTypes[childTaskDescription.type]
+          # pass only the child annotation down to the various InsideSubject components
           annotation = props.annotation.value[i]
           if TaskComponent.BeforeSubject?
             <TaskComponent.BeforeSubject key={i} {...props} task={childTaskDescription} annotation={annotation} />}
@@ -51,6 +52,7 @@ ComboTask = React.createClass
         {props.task.tasks.map (childTaskKey, i) ->
           childTaskDescription = props.workflow.tasks[childTaskKey]
           TaskComponent = props.taskTypes[childTaskDescription.type]
+          # pass only the child annotation down to the various InsideSubject components
           annotation = props.annotation.value[i]
           if TaskComponent.AfterSubject?
             <TaskComponent.AfterSubject key={i} {...props} task={childTaskDescription} annotation={annotation} />}
@@ -61,17 +63,20 @@ ComboTask = React.createClass
         {props.task.tasks.map (childTaskKey, i) ->
           childTaskDescription = props.workflow.tasks[childTaskKey]
           TaskComponent = props.taskTypes[childTaskDescription.type]
+          # pass only the child annotation down to the various InsideSubject components
           annotation = props.annotation.value[i]
           if TaskComponent.InsideSubject?
             <TaskComponent.InsideSubject key={i} {...props} task={childTaskDescription} annotation={annotation} />}
       </g>
 
     PersistInsideSubject: (props) ->
+      # a list that holds the annotations for the current combo task
       currentComboAnnotations = []
       allTaskTypes = props.classification.annotations.map (annotation) -> props.workflow.tasks[annotation.task].type
       i = allTaskTypes.lastIndexOf('combo')
       if i > -1
         currentComboAnnotations = props.classification.annotations[i].value
+      # a list that holds the annotations for all combo tasks
       allComboAnnotations = []
       allComboTypes = []
       props.classification.annotations.forEach (annotation) ->
@@ -88,15 +93,19 @@ ComboTask = React.createClass
             TaskComponent = props.taskTypes[taskType]
             if TaskComponent.PersistInsideSubject?
               # allComboAnnotations needs to be here so previous combo task annotations don't disappear
+              # This is a hack to make drawing tasks work in a combo task.
               fauxClassification =
                 annotations: allComboAnnotations
                 update: () => props.classification.update()
+              # when a combo annotation changes make sure the combo annotation updated correctly with only the
+              # curreny combo task's annotatons.  This is a hack to make drawing tasks work in a combo task.
               fauxChange = (annotation) ->
                   props.onChange Object.assign({}, props.annotation, { value: currentComboAnnotations })
               if props.annotation?.task? && props.workflow.tasks? && props.workflow.tasks[props.annotation.task]?.type is 'combo'
                 idx = allComboTypes.lastIndexOf(taskType)
                 if idx > -1
                   # if the current annotation is for the combo task pass in the `inner` annotations
+                  # This is a hack to make drawing tasks work in a combo task.
                   fauxAnnotation = allComboAnnotations[idx]
                 else
                   fauxAnnotation = props.annotation
