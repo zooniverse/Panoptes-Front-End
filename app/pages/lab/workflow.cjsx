@@ -624,7 +624,7 @@ EditWorkflowPage = React.createClass
       @props.project.update 'configuration.default_workflow': @props.workflow.id
       @props.project.save()
     else
-      @props.project.update 'configuration.default_workflow': null
+      @props.project.update 'configuration.default_workflow': undefined
       @props.project.save()
 
   handleTutorialToggle: (tutorial, workflowTutorials, e) ->
@@ -662,7 +662,7 @@ EditWorkflowPage = React.createClass
       @setState deletionInProgress: true
 
       if @props.workflow.id is @props.project.configuration?.default_workflow
-        @props.project.update 'configuration.default_workflow': null
+        @props.project.update 'configuration.default_workflow': undefined
         @props.project.save()
 
       @props.workflow.delete().then =>
