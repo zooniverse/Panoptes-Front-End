@@ -62,3 +62,13 @@ export default function MarkingsRenderer(props) {
   </g>
   );
 }
+
+MarkingsRenderer.propTypes = {
+  classification: React.PropTypes.shape({
+    annotations: React.PropTypes.array
+  }),
+  taskTypes: React.PropTypes.arrayOf(React.PropTypes.string),
+  workflow: React.PropTypes.shape({
+    tasks: React.PropTypes.array
+  })
+}
