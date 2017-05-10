@@ -1,5 +1,6 @@
 React = require 'react'
 SVGRenderer = require('../../annotation-renderer/svg').default
+MarkingsRenderer = require('./markings-renderer').default
 
 ComboTask = React.createClass
   statics:
@@ -69,56 +70,7 @@ ComboTask = React.createClass
             <TaskComponent.InsideSubject key={i} {...props} task={childTaskDescription} annotation={annotation} />}
       </g>
 
-    PersistInsideSubject: (props) ->
-      # a list that holds the annotations for the current combo task
-      currentComboAnnotations = []
-      allTaskTypes = props.classification.annotations.map (annotation) -> props.workflow.tasks[annotation.task].type
-      i = allTaskTypes.lastIndexOf('combo')
-      if i > -1
-        currentComboAnnotations = props.classification.annotations[i].value
-      # a list that holds the annotations for all combo tasks
-      allComboAnnotations = []
-      allComboTypes = []
-      props.classification.annotations.forEach (annotation) ->
-        taskDescription = props.workflow.tasks[annotation.task]
-        if taskDescription.type is 'combo'
-          allComboAnnotations.push annotation.value...
-          annotation.value.forEach (a) ->
-            allComboTypes.push(props.workflow.tasks[a.task].type)
-
-
-      <g className="combo-task-persist-inside-subject-container">
-        {Object.keys(props.taskTypes).map (taskType) ->
-          unless taskType is 'combo'
-            TaskComponent = props.taskTypes[taskType]
-            if TaskComponent.PersistInsideSubject?
-              # allComboAnnotations needs to be here so previous combo task annotations don't disappear
-              # This is a hack to make drawing tasks work in a combo task.
-              fauxClassification =
-                annotations: allComboAnnotations
-                update: () => props.classification.update()
-              # when a combo annotation changes make sure the combo annotation updated correctly with only the
-              # curreny combo task's annotatons.  This is a hack to make drawing tasks work in a combo task.
-              fauxChange = (annotation) ->
-                  props.onChange Object.assign({}, props.annotation, { value: currentComboAnnotations })
-              if props.annotation?.task? && props.workflow.tasks? && props.workflow.tasks[props.annotation.task]?.type is 'combo'
-                idx = allComboTypes.lastIndexOf(taskType)
-                if idx > -1
-                  # if the current annotation is for the combo task pass in the `inner` annotations
-                  # This is a hack to make drawing tasks work in a combo task.
-                  fauxAnnotation = allComboAnnotations[idx]
-                else
-                  fauxAnnotation = props.annotation
-              else
-                fauxAnnotation = props.annotation
-              <TaskComponent.PersistInsideSubject
-                key={taskType}
-                {...props}
-                onChange={fauxChange}
-                annotation={fauxAnnotation}
-                classification={fauxClassification}
-              />}
-      </g>
+    PersistInsideSubject: MarkingsRenderer
 
   getDefaultProps: ->
     taskTypes: null
