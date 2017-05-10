@@ -661,6 +661,10 @@ EditWorkflowPage = React.createClass
     if confirmed
       @setState deletionInProgress: true
 
+      if @props.workflow.id is @props.project.configuration?.default_workflow
+        @props.project.update 'configuration.default_workflow': null
+        @props.project.save()
+
       @props.workflow.delete().then =>
         @props.project.uncacheLink 'workflows'
         @context.router.push "/lab/#{@props.project.id}"
