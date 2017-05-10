@@ -33,8 +33,7 @@ export default function MarkingsRenderer(props) {
           const TaskComponent = props.taskTypes[taskType];
           if (TaskComponent.PersistInsideSubject) {
             // when a combo annotation changes make sure the combo annotation updated correctly with only the
-            // curreny combo task's annotatons.  This is a hack to make drawing tasks work in a combo task.
-            
+            // current combo task's annotatons.  This is a hack to make drawing tasks work in a combo task.
             let { annotation } = props;
             if (annotation &&
               annotation.task &&
