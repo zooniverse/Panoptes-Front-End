@@ -95,6 +95,7 @@ class VideoPlayer extends React.Component {
       <div className="subject-video-frame">
         <video
           className="subject"
+          controls={true}
           ref={(element) => { this.player = element; }}
           src={this.props.src}
           type={`${this.props.type}/${this.props.format}`}
@@ -109,34 +110,6 @@ class VideoPlayer extends React.Component {
 
         {this.props.showControls && (
           <span className="subject-video-controls">
-            <span className="subject-frame-play-controls">
-              {(this.state.playing) ?
-                <button
-                  type="button"
-                  className="secret-button"
-                  aria-label="Pause"
-                  onClick={this.playVideo.bind(this, false)}
-                >
-                  <i className="fa fa-pause fa-fw" />
-                </button> :
-                <button
-                  type="button"
-                  className="secret-button"
-                  aria-label="Play"
-                  onClick={this.playVideo.bind(this, true)}
-                >
-                  <i className="fa fa-play fa-fw" />
-                </button>
-                }
-            </span>
-            <input
-              type="range"
-              className="video-scrubber"
-              ref={(element) => { this.scrubber = element; }}
-              min="0"
-              step="any"
-              onChange={this.seekVideo}
-            />
             <span className="video-speed">
             Speed: {this.renderSpeedControls(rates)}
             </span>
