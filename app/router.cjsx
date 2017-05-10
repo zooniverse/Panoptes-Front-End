@@ -42,7 +42,9 @@ module.exports =
       <Route path="publications" component={require './pages/about/publications-page'} />
       <Route path="acknowledgements" component={require './pages/about/acknowledgements'} />
       <Route path="contact" component={require './pages/about/contact-page'} />
+      <Route path="faq" component={require './pages/about/faq-page'} />
     </Route>
+
 
     <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/get-involved/volunteering-page'} />
