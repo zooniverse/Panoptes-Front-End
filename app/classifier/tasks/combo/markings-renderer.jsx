@@ -21,6 +21,9 @@ export default function MarkingsRenderer(props) {
     }
   });
 
+  function onChange(annotation) {
+    props.onChange(Object.assign({}, props.annotation, { value: currentComboAnnotations }));
+  }
 
   return (
     <g className="combo-task-persist-inside-subject-container">
@@ -31,9 +34,7 @@ export default function MarkingsRenderer(props) {
           if (TaskComponent.PersistInsideSubject) {
             // when a combo annotation changes make sure the combo annotation updated correctly with only the
             // curreny combo task's annotatons.  This is a hack to make drawing tasks work in a combo task.
-            function fauxChange(annotation) {
-              props.onChange(Object.assign({}, props.annotation, { value: currentComboAnnotations }));
-            }
+            
             let { annotation } = props;
             if (annotation &&
               annotation.task &&
@@ -51,7 +52,7 @@ export default function MarkingsRenderer(props) {
               <TaskComponent.PersistInsideSubject
                 key={taskType}
                 {...props}
-                onChange={fauxChange}
+                onChange={onChange}
                 annotations={allComboAnnotations}
                 annotation={annotation}
                 tasks={props.workflow.tasks}
