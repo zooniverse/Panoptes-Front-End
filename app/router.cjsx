@@ -42,9 +42,9 @@ module.exports =
       <Route path="publications" component={require './pages/about/publications-page'} />
       <Route path="acknowledgements" component={require './pages/about/acknowledgements'} />
       <Route path="contact" component={require './pages/about/contact-page'} />
+      <Route path="faq" component={require './pages/about/faq-page'} />
     </Route>
 
-    <Route path="faq" component={require './pages/faq'} />
 
     <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/get-involved/volunteering-page'} />
@@ -91,8 +91,6 @@ module.exports =
     <Route path="projects" component={ProjectsPage}>
       <IndexRoute component={FilteredProjectsList} />
     </Route>
-
-    <Route path="faq" component={require './pages/faq'} />
 
     <Route path="projects/:owner/:name" component={require './pages/project'}>
       <IndexRoute component={ProjectHomePage} />

@@ -30,7 +30,11 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'FaqPage'
 
+  componentDidMount: ->
+    document.documentElement.classList.add 'on-secondary-page'
+
+  componentWillUnmount: ->
+    document.documentElement.classList.remove 'on-secondary-page'
+
   render: ->
-    <div className="secondary-page centered-grid">
-      <Markdown>{counterpart "faqPage.content"}</Markdown>
-    </div>
+    <Markdown>{counterpart "faqPage.content"}</Markdown>
