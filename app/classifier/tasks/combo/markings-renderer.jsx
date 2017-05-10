@@ -34,13 +34,17 @@ export default function MarkingsRenderer(props) {
             function fauxChange(annotation) {
               props.onChange(Object.assign({}, props.annotation, { value: currentComboAnnotations }));
             };
-            let fauxAnnotation = props.annotation;
-            if (props.annotation && props.annotation.task && props.workflow.tasks && props.workflow.tasks[props.annotation.task].type === 'combo') {
+            let {annotation} = props;
+            if (annotation &&
+              annotation.task &&
+              props.workflow.tasks &&
+              props.workflow.tasks[annotation.task].type === 'combo'
+            ) {
               const idx = allComboTypes.lastIndexOf(taskType);
               if (idx > -1) {
                 // if the current annotation is for the combo task pass in the `inner` annotations
                 //This is a hack to make drawing tasks work in a combo task.
-                fauxAnnotation = allComboAnnotations[idx];
+                annotation = allComboAnnotations[idx];
               }
             }
             return (
@@ -49,7 +53,7 @@ export default function MarkingsRenderer(props) {
                 {...props}
                 onChange={fauxChange}
                 annotations={allComboAnnotations}
-                annotation={fauxAnnotation}
+                annotation={annotation}
               />
             );
           }
