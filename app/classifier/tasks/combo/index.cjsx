@@ -92,11 +92,6 @@ ComboTask = React.createClass
           unless taskType is 'combo'
             TaskComponent = props.taskTypes[taskType]
             if TaskComponent.PersistInsideSubject?
-              # allComboAnnotations needs to be here so previous combo task annotations don't disappear
-              # This is a hack to make drawing tasks work in a combo task.
-              fauxClassification =
-                annotations: allComboAnnotations
-                update: () => props.classification.update()
               # when a combo annotation changes make sure the combo annotation updated correctly with only the
               # curreny combo task's annotatons.  This is a hack to make drawing tasks work in a combo task.
               fauxChange = (annotation) ->
@@ -115,8 +110,8 @@ ComboTask = React.createClass
                 key={taskType}
                 {...props}
                 onChange={fauxChange}
+                annotations={allComboAnnotations}
                 annotation={fauxAnnotation}
-                classification={fauxClassification}
               />}
       </g>
 

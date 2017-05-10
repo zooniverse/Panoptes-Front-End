@@ -106,12 +106,14 @@ export default class SVGRenderer extends React.Component {
     }
 
     const svgProps = {};
+    const { annotations } = this.props.classification;
 
     const hookProps = {
       taskTypes: tasks,
       workflow: this.props.workflow,
       task: taskDescription,
       classification: this.props.classification,
+      annotations,
       annotation: this.props.annotation,
       frame: this.props.frame,
       scale: this.getScale(),
