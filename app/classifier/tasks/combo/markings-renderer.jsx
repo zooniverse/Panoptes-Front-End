@@ -54,6 +54,7 @@ export default function MarkingsRenderer(props) {
                 onChange={fauxChange}
                 annotations={allComboAnnotations}
                 annotation={annotation}
+                tasks={props.workflow.tasks}
               />
             );
           }

@@ -8,6 +8,7 @@ module.exports = React.createClass
     classification: null
     annotations: []
     annotation: null
+    tasks: {}
     workflow: null
     scale: null
 
@@ -21,7 +22,7 @@ module.exports = React.createClass
     # Automatically select new marks.
     annotation = nextProps.annotation
     if annotation? && annotation.task?
-      taskDescription = @props.workflow?.tasks[annotation.task]
+      taskDescription = @props.tasks[annotation.task]
     if taskDescription?.type is 'drawing' and Array.isArray annotation.value
       for mark in annotation.value
         newSetOfMarks.push mark
@@ -39,7 +40,7 @@ module.exports = React.createClass
       {for annotation in @props.annotations
         annotation._key ?= Math.random()
         isPriorAnnotation = annotation isnt @props.annotation
-        taskDescription = @props.workflow.tasks[annotation.task]
+        taskDescription = @props.tasks[annotation.task]
         if taskDescription.type is 'drawing'
           <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
             {for mark, i in annotation.value when @props.workflow?.configuration.multi_image_clone_markers or parseInt(mark.frame) is parseInt(@props.frame)
