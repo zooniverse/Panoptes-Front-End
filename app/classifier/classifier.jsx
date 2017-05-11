@@ -19,6 +19,8 @@ import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import { connect } from 'react-redux';
 import { isFeedbackActive, isThereFeedback } from './feedback/helpers';
+import ModelCanvas from '../components/model-renderer';
+import ModelScore from '../components/model-score';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -27,6 +29,7 @@ class Classifier extends React.Component {
   constructor(props) {
     super(props);
     this.handleAnnotationChange = this.handleAnnotationChange.bind(this);
+    this.handleModelScoreUpdate = this.handleModelScoreUpdate.bind(this);
     this.handleSubjectImageLoad = this.handleSubjectImageLoad.bind(this);
     this.completeClassification = this.completeClassification.bind(this);
     this.toggleExpertClassification = this.toggleExpertClassification.bind(this);
@@ -147,6 +150,10 @@ class Classifier extends React.Component {
     this.props.classification.update(changes);
   }
 
+  handleModelScoreUpdate(newScore) {
+    this.props.workflow.configuration.metadata.modelScore = newScore;
+  }
+
   handleAnnotationChange(classification, newAnnotation) {
     classification.annotations[classification.annotations.length - 1] = newAnnotation;
     classification.update('annotations');
@@ -154,7 +161,7 @@ class Classifier extends React.Component {
 
   completeClassification() {
     const feedbackActive = isFeedbackActive(this.props.project);
-    
+
     if (feedbackActive) {
       const classificationMetadata = Object.assign({}, this.props.classification.metadata, {
         feedbackShown: this.props.feedback.length > 0
@@ -242,7 +249,15 @@ class Classifier extends React.Component {
           onChange={this.handleAnnotationChange.bind(this, currentClassification)}
           playIterations={this.props.workflow.configuration.playIterations}
         />
-
+        {this.props.workflow.configuration.metadata &&
+          this.props.workflow.configuration.metadata.type === 'modelling' ?
+            <ModelCanvas
+              classification={currentClassification}
+              onRender={this.handleModelScoreUpdate}
+              subject={this.props.subject}
+              workflow={this.props.workflow}
+            /> : ''
+          }
         <div className="task-area">
           {!currentClassification.completed ?
             <Task
@@ -267,7 +282,10 @@ class Classifier extends React.Component {
               toggleExpertClassification={this.toggleExpertClassification}
             />
           }
-
+          {this.props.workflow.configuration.metadata &&
+            this.props.workflow.configuration.metadata.type === 'modelling' ?
+              <ModelScore workflow={this.props.workflow} /> : ''
+          }
           <TaskNav
             annotation={currentAnnotation}
             classification={currentClassification}
