@@ -1,6 +1,6 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-Resizable = require 'react-component-resizable'
+Resizable = require('react-component-resizable').default
 {TaskName, RequireBox, HelpButton} = require './task-helpers'
 AnswerList = require './answers'
 jsPlumbStyle = require './jsplumb-style'
