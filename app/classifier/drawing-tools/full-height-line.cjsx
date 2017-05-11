@@ -4,8 +4,7 @@ Draggable = require '../../lib/draggable'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 
-MINIMUM_LENGTH = 5
-GRAB_STROKE_WIDTH = 6
+GRAB_STROKE_WIDTH = 20
 BUFFER = 16
 DELETE_BUTTON_WIDTH = 8
 
