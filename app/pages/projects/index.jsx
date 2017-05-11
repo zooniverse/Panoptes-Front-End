@@ -20,15 +20,10 @@ class ProjectsPage extends Component {
   constructor(props) {
     super(props);
     this.updateQuery = this.updateQuery.bind(this);
-    this.checkURLForStatusFilter = this.checkURLForStatusFilter.bind(this);
   }
 
   getChildContext() {
     return { updateQuery: this.updateQuery };
-  }
-
-  componentWillMount() {
-    this.checkURLForStatusFilter(this.props);
   }
 
   componentDidMount() {
@@ -38,20 +33,8 @@ class ProjectsPage extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.checkURLForStatusFilter(nextProps);
-  }
-
   componentWillUnmount() {
     document.documentElement.classList.remove('on-secondary-page');
-  }
-
-//  Makes sure the active class is applied also when status param is null
-  checkURLForStatusFilter(props) {
-    const { location } = props;
-    if (!location.query.status) {
-      this.updateQuery({ status: 'live' });
-    }
   }
 
   updateQuery(newParams) {

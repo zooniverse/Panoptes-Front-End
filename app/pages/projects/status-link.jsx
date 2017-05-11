@@ -15,6 +15,7 @@ class StatusLink extends Component {
 
   render() {
     const { children, location, status } = this.props;
+    location.query.status = location.query.status || 'live';
     const isActive = location.query.status === status;
     return (
       <button onClick={this.handleClick} className={isActive ? 'active' : null}>
