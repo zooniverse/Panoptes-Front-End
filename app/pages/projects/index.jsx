@@ -58,7 +58,7 @@ class ProjectsPage extends Component {
         <section className="hero projects-hero">
           <div className="hero-container">
             <Translate content="projectsHome.title" component="h1" />
-            <nav className="hero-nav">
+            <nav className="hero-nav" role="tablist">
               <StatusLink location={location} status="live" updateQuery={this.updateQuery}>
                 <Translate content="projectsHome.nav.active" />
               </StatusLink>
