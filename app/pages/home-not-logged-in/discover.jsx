@@ -23,9 +23,9 @@ const HomePageDiscover = ({ showDialog }) => {
   return (
     <section className="home-discover">
       <div className="home-discover__content">
-        <Translate className="secondary-kicker" content="discoverHomePage.what" />
+        <Translate className="secondary-kicker" component="h2" content="discoverHomePage.what" />
         <br />
-        <Translate className="tertiary-headline" content="discoverHomePage.discover" />
+        <Translate className="tertiary-headline" component="h3" content="discoverHomePage.discover" />
 
         <Translate className="display-body" component="p" content="discoverHomePage.research" />
 
@@ -39,7 +39,7 @@ const HomePageDiscover = ({ showDialog }) => {
 
         <hr />
 
-        <Translate className="tertiary-kicker" content="discoverHomePage.doScience" />
+        <Translate className="tertiary-kicker" component="h3" content="discoverHomePage.doScience" />
 
         <Translate className="regular-body" component="p" content="discoverHomePage.appAnnounce" />
 

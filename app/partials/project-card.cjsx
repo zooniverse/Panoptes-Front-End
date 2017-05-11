@@ -9,7 +9,7 @@ ProjectCard = React.createClass
     project: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
-    customCSS: ''
+    className: ''
     imageSrc: ''
     href: ''
     landingPage: false
@@ -34,24 +34,18 @@ ProjectCard = React.createClass
     else
       '/projects/' + @props.project.slug
 
-    cardBody =
-      <div className="project-card #{this.props.customCSS}" ref="projectCard" style={conditionalStyle}>
+    <FlexibleLink to={href}>
+      <div className="project-card #{this.props.className}" ref="projectCard" style={conditionalStyle}>
         <svg viewBox="0 0 2 1" width="100%"></svg>
-        <div className="details" style={{cursor: "default"}}>
+        <div className="details">
           <div className="name"><span>{@props.project.display_name}</span></div>
           {<hr /> if @props.landingPage}
           {<div className="description">{@props.project.description}</div> if @props.project.description?}
           <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"projectsPage.button"} /></button>
           {if @props.landingPage
-            <Link to={href} className="primary-button" type="button">View Project</Link>}
+            <button className="primary-button" type="button">View Project</button>}
         </div>
       </div>
-
-    if !@props.landingPage
-      <FlexibleLink to={href}>
-        {cardBody}
-      </FlexibleLink>
-    else
-        cardBody
+    </FlexibleLink>
 
 module.exports = ProjectCard

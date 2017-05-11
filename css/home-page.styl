@@ -1,6 +1,12 @@
 LIGHT-BLUE-GREEN = #5CBDC1
 WHITE = #FFFFFF
 
+@keyframes fade-in-video
+  from
+    opacity: 0
+  to
+    opacity: 1
+
 $absolute-fill
   position: absolute
   top: 0
@@ -32,15 +38,9 @@ $flex-section
   .modal-form .site-nav__link
     color: #000000
 
-  h1, h2
-    color: #FFFFFF
-    font-size: 3em
-
-    @media (max-width: 900px)
-      font-size: 2em
-
 .home-page-not-logged-in
   .home-intro
+    background-color: BACKGROUND_COLOR
     box-sizing: border-box
     justify-content: flex-end
     min-height: 30vw
@@ -51,6 +51,7 @@ $flex-section
 
     video
       display: none
+      animation: fade-in-video 1.5s
 
     .home-mobile-video-image
       display: block
@@ -63,6 +64,7 @@ $flex-section
         display: none
 
     @media (max-width: 900px)
+      justify-content: center
       min-height: 100vh
 
     video, .home-mobile-video-image
@@ -78,8 +80,13 @@ $flex-section
     button[class=primary-button]
       color: black
 
+    h2, h3, p
+      display: inline
+      margin: 0
+
     &__columns
       margin: 2em 12em
+      max-width: 75%
       column-count: 2
       -moz-column-count: 2
       -webkit-column-count: 2
@@ -95,6 +102,7 @@ $flex-section
 
       a
         color: #007482
+        display: block
         text-decoration: none
 
     &__buttons
@@ -106,22 +114,25 @@ $flex-section
       button
         margin-top: 1.5em
 
+      h2
+        display: block
+
     &__researchers
       display: flex
-      flex-flow: row nowrap
+      max-height: 100%
+      max-width: 100%
+      overflow: hidden
 
-      div
-        flex: auto
+      img
+        height: auto
         margin: 5em 0
         width: 100%
 
-        img
-          width: 100%
-          height: auto
-
     &__content
+      box-sizing: border-box
       display: flex
       flex-direction: column
+      max-width: 100%
       padding: 0 15vw
       text-align: center
 
@@ -149,7 +160,9 @@ $flex-section
       min-height: auto
 
     &__image
-      flex: 2 0 0
+      flex-grow: 2
+      flex-shrink: 0
+      flex-basis: 0
       min-width: 20em
       text-align: right
 
@@ -159,7 +172,9 @@ $flex-section
         width: 100%
 
     &__content
-      flex: 3 0 0
+      flex-grow: 3
+      flex-shrink: 0
+      flex-basis: 0
       margin: 0 5vw 5vh 10vw
       min-width: 50%
 
@@ -172,7 +187,6 @@ $flex-section
         color: black
 
   &__project-card
-    border-radius: 0
     height: 25em
     max-height: 25em
     max-width: 18em

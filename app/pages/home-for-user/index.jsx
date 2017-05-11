@@ -57,7 +57,7 @@ export default class HomePageForUser extends React.Component {
       this.fetchRibbonData(nextProps.user);
     }
   }
-  
+
   componentDidUpdate(prevProps, prevState) {
     if( this.state.OpenSectionComponent !== prevState.OpenSectionComponent) {
       if (this.openSection) {
@@ -306,12 +306,12 @@ export default class HomePageForUser extends React.Component {
 
           </Pullout>
         </div>
-        
-        <div className="home-page-for-user on-home-page-logged-in">
+
+        <div>
           <FeaturedProject />
         </div>
 
-        <div className="home-page-for-user on-home-page-logged-in">
+        <div>
           <HomePageSocial />
         </div>
 
