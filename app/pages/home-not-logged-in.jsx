@@ -90,8 +90,8 @@ export default class HomePage extends React.Component {
               <source type="video/mp4" src="./assets/home-video.mp4" />
             </video>
 
-            <Translate className="main-kicker" content="notLoggedInHomePage.welcome" />
-            <Translate className="main-headline" content="notLoggedInHomePage.powered" />
+            <Translate className="main-kicker" component="h2" content="notLoggedInHomePage.welcome" />
+            <Translate className="main-headline" component="h3" content="notLoggedInHomePage.powered" />
             <Link to="/projects" className="primary-button">
               <Translate content="notLoggedInHomePage.projects" />
             </Link>

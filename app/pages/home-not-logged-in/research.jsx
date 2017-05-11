@@ -18,7 +18,7 @@ counterpart.registerTranslations('en', {
     labs: 'Zooniverse Labs',
     listen: `
       The projects created with the Zooniverse project builder
-      inspire and empower researchers, designers, and artists
+      inspire and empower researchers, designers, and artists.
     `,
     meetResearchers: 'Meet the researchers who\'ve created projects for free on the Zooniverse.',
     options: 'Sign in or register to get started',
@@ -42,21 +42,19 @@ counterpart.registerTranslations('en', {
 const HomePageResearch = ({ count, screenWidth, showDialog }) => {
   return (
     <section className="home-research">
-      <Translate className="tertiary-kicker" content="researchHomePage.works" />
-      <h1 className="class-counter">{count.toLocaleString()}</h1>
-      <Translate className="main-kicker" content="researchHomePage.classifications" />
+      <Translate className="tertiary-kicker" component="h2" content="researchHomePage.works" />
+      <span className="class-counter">{count.toLocaleString()}</span>
+      <Translate className="main-kicker" component="h3" content="researchHomePage.classifications" />
 
       <div className="home-research__columns">
-        <Translate className="display-body" content="researchHomePage.aboutIntro" />
-        <Translate className="regular-body" content="researchHomePage.about" /><br />
-        <a className="display-body" rel="noopener noreferrer" target="_blank" href="http://eatyourgreens.github.io/listen-to-zooniverse/">Listen to the Zoonivese</a>
-        <br />
-        <Translate className="regular-body" content="researchHomePage.listen" />
+        <Translate className="display-body" component="h2" content="researchHomePage.aboutIntro" />
+        <Translate className="regular-body" component="p" content="researchHomePage.about" />
+        <a className="display-body" rel="noopener noreferrer" target="_blank" href="http://listen.zooniverse.org">Listen to the Zoonivese</a>
+        <Translate className="regular-body" component="p" content="researchHomePage.listen" />
       </div>
 
       <div className="home-research__buttons">
-        <Translate className="tertiary-kicker" content="researchHomePage.options" />
-        <br />
+        <Translate className="tertiary-kicker" component="h2" content="researchHomePage.options" />
         <button type="button" value="sign-in" className="primary-button" onClick={showDialog}>
           <Translate content="researchHomePage.signIn" />
         </button>
@@ -79,11 +77,11 @@ const HomePageResearch = ({ count, screenWidth, showDialog }) => {
       </div>
 
       <div className="home-research__content">
-        <Translate className="tertiary-kicker" content="researchHomePage.real" />
-        <Translate className="tertiary-headline" content="researchHomePage.meetResearchers" />
+        <Translate className="tertiary-kicker" component="h2" content="researchHomePage.real" />
+        <Translate className="tertiary-headline" component="h3" content="researchHomePage.meetResearchers" />
         <div>
-          <Translate className="display-body" content="researchHomePage.researcherIntro" />
-          <Translate className="regular-body" content="researchHomePage.researcher" />
+          <Translate className="display-body" component="h3" content="researchHomePage.researcherIntro" />
+          <Translate className="regular-body" component="p" content="researchHomePage.researcher" />
         </div>
 
         <div>
