@@ -53,6 +53,15 @@ class SliderTask extends React.Component {
     this.props.onChange(newAnnotation);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.annotation.value === null) {
+      const newAnnotation = Object.assign({}, this.props.annotation, { value: this.props.task.defaultValue });
+      this.props.onChange(newAnnotation);
+    } else if (this.props.annotation.value !== this.state.value) {
+      this.setState({ value: this.props.annotation.value });
+    }
+  }
+
   handleChange(e) {
     let value = e.target.value;
     if (parseFloat(value, 10) > parseFloat(this.props.task.max, 10)) {
@@ -78,6 +87,7 @@ class SliderTask extends React.Component {
               <label className="answer">
                 <div>
                   <input
+                    className="standard-input"
                     type="range"
                     autoFocus={this.props.autoFocus}
                     onChange={this.handleChange}
@@ -88,10 +98,10 @@ class SliderTask extends React.Component {
                   />
                 </div>
                 <div className="slider-task-range__label-container">
-                  <div className="slider-task-range__label-container__left-label">
+                  <div className="slider-task-range__label-container__left">
                     {this.props.task.min}
                   </div>
-                  <div className="slider-task-range__label-container__right-label">
+                  <div className="slider-task-range__label-container__right">
                     {this.props.task.max}
                   </div>
                 </div>
@@ -99,6 +109,7 @@ class SliderTask extends React.Component {
             </div>
             <label className="answer slider-task-number">
               <input
+                className="standard-input"
                 type="number"
                 autoFocus={this.props.autoFocus}
                 onChange={this.handleChange}
