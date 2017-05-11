@@ -51,6 +51,7 @@ EditProjectPage = React.createClass
     "/lab/#{@props.project.id}#{postFix}"
 
   render: ->
+    console.log @props.project
     linkParams =
       projectID: @props.project.id
 
@@ -58,7 +59,9 @@ EditProjectPage = React.createClass
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
-
+          <li>
+            <Link to={"/projects/#{@props.project.slug}"} className="standard-button view-project-button" target="_blank" title="Open the current project in a new tab.">View project</Link>
+          </li>
           <li><IndexLink to={@labPath()} activeClassName='active' className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
             Project details
           </IndexLink></li>
