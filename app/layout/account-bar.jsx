@@ -72,7 +72,9 @@ export default class AccountBar extends React.Component {
   }
 
   renderMessages() {
-    const mobile = this.state.unread ? <i className="fa fa-envelope fa-fw" /> : <i className="fa fa-envelope-o fa-fw" />;
+    const mobile = this.state.unread ?
+      <i className="fa fa-envelope fa-fw" aria-label={`${this.state.messageCount} unread messages`} /> :
+      <i className="fa fa-envelope-o fa-fw" aria-label="No new messages" />;
 
     if (this.props.isMobile) {
       return mobile;
