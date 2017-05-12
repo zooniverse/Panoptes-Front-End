@@ -73,6 +73,10 @@ $flex-section
       width: 100vw
       z-index: -1
 
+      @media all and (-ms-high-contrast:none)
+        top: -50%
+        height: 60vw
+
   .home-research
     padding: 5em 0
     text-align: left
@@ -95,7 +99,7 @@ $flex-section
       -webkit-column-gap: 2.5em
 
       @media (max-width: 800px)
-        margin: 2em 5em
+        margin: 2em 1em 2em 0
         column-count: 1
         -moz-column-count: 1
         -webkit-column-count: 1
@@ -139,12 +143,18 @@ $flex-section
       .tertiary-kicker
         margin-bottom: 1.25em
 
+      @media (max-width: 900px)
+        padding: 0 10vw
+        text-align: left
+
       div
-        box-sizing: border-box
-        margin: 1.5em 4vw
+        margin: 1.5em 3em
 
         a
           padding: 0.8em 3em
+
+        @media (max-width: 900px)
+          margin-left: 0
 
   .home-discover
     background-color: BACKGROUND_COLOR
@@ -230,11 +240,6 @@ $flex-section
     @extends $flex-section
     min-height: 30vw
     position: relative
-
-    @media (max-width: 900px)
-      min-height: 100vh
-      padding-top: 2em
-      padding-bottom: 2em
 
   .standard-button
     border: 2px solid
@@ -365,7 +370,7 @@ $flex-section
 
   .home-featured
     background: #fff
-    padding: 3em 0
+    padding: 3em
 
     p
       width: 50vw
