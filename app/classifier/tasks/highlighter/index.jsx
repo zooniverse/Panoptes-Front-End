@@ -44,9 +44,10 @@ export default class Highlighter extends React.Component {
   }
 
   selectableArea(selection, range, offset, start, end){
+    const spansNodes = range.startContainer !== range.endContainer
     const noAreaSelected = start === end;
     const subjectSelection = selection.anchorNode.parentElement.parentElement.className === 'label-renderer';
-    const isSelectable = !noAreaSelected && subjectSelection;
+    const isSelectable = !spansNodes && !noAreaSelected && subjectSelection;
     return isSelectable;
   }
 
