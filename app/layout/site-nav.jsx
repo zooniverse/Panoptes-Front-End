@@ -1,19 +1,19 @@
 import React from 'react';
 import counterpart from 'counterpart';
 import classnames from 'classnames';
-import {routerShape} from 'react-router/lib/PropTypes';
-import PassContext from '../components/pass-context';
+import { routerShape } from 'react-router/lib/PropTypes';
 import { Link, IndexLink } from 'react-router';
 import Translate from 'react-translate-component';
-import AdminOnly from '../components/admin-only';
 import TriggeredModalForm from 'modal-form/triggered';
+import AdminOnly from '../components/admin-only';
+import PassContext from '../components/pass-context';
 import ZooniverseLogo from '../partials/zooniverse-logo';
 import AccountBar from './account-bar';
 import LoginBar from './login-bar';
 import SiteSubnav from './site-subnav';
 
 
-const MAX_MOBILE_WIDTH = 915;
+const MAX_MOBILE_WIDTH = 960;
 const ZOO_LOGO = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
 const HAMBURGER_MENU = <span style={{ display: 'inline-block', transform: 'scale(2.5, 2)' }}>≡</span>;
 
@@ -39,10 +39,6 @@ const SiteNav = React.createClass({
     user: React.PropTypes.object,
     router: routerShape,
     geordi: React.PropTypes.object
-  },
-
-  propTypes: {
-    onToggle: React.PropTypes.func
   },
 
   getInitialState() {
@@ -80,7 +76,7 @@ const SiteNav = React.createClass({
     }, 100);
   },
 
-  renderLinks(isMobile) {
+  renderLinks() {
     return (
       <span
         className={classnames('site-nav__main-links', {
@@ -139,9 +135,9 @@ const SiteNav = React.createClass({
           <Translate content="siteNav.lab" />
         </Link>{' '}
 
-        <AdminOnly whenActive>
+        <AdminOnly whenActive={true}>
           <Link
-            to={"/admin"}
+            to={'/admin'}
             className="site-nav__link"
             activeClassName="site-nav__link--active"
             onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.admin') : null}
@@ -156,6 +152,7 @@ const SiteNav = React.createClass({
               href="http://daily.zooniverse.org/"
               className="site-nav__link"
               activeClassName="site-nav__link--active"
+              rel="noopener noreferrer"
               target="_blank"
               onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.daily', 'globe-menu') : null}
             >
@@ -166,6 +163,7 @@ const SiteNav = React.createClass({
               href="http://blog.zooniverse.org/"
               className="site-nav__link"
               activeClassName="site-nav__link--active"
+              rel="noopener noreferrer"
               target="_blank"
               onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.blog', 'globe-menu') : null}
             >
@@ -180,11 +178,10 @@ const SiteNav = React.createClass({
   renderMobileLinksMenu() {
     return (
       <TriggeredModalForm
-        className="site-nav__modal site-nav__reveal-toggle"
+        className="site-nav__modal"
         trigger={
           <span
             className="site-nav__link"
-            activeClassName="site-nav__link--active"
             title="Site navigation"
             aria-label="Site navigation"
           >
@@ -200,10 +197,6 @@ const SiteNav = React.createClass({
   },
 
   render() {
-    const label = !!this.props.visible ?
-      React.cloneElement(ZOO_LOGO, {title: "Hide navigation menu"}) :
-      HAMBURGER_MENU;
-
     return (
       <nav className="site-nav">
         <IndexLink
@@ -212,24 +205,17 @@ const SiteNav = React.createClass({
           activeClassName="site-nav__link--active"
           onClick={!!this.logClick ? this.logClick.bind(this, 'logo') : null}
         >
-          {!this.state.isMobile && !!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : ZOO_LOGO}
-          </IndexLink>
+          {ZOO_LOGO}
+        </IndexLink>
 
         {!this.state.isMobile && this.renderLinks()}
 
         {!this.context.initialLoadComplete &&
           <span className="site-nav__link">
-            <i className="fa fa-spinner fa-spin fa-fw"></i>
+            <i className="fa fa-spinner fa-spin fa-fw" />
           </span>}
 
         {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar isMobile={this.state.isMobile} params={this.props.params} /> : <LoginBar />)}
-
-        {!!this.props.onToggle && !this.state.isMobile &&
-          <button
-            type="button"
-            className="secret-button site-nav__reveal-toggle"
-            onClick={this.props.onToggle}
-            >{label}</button>}
 
         {this.state.isMobile && this.renderMobileLinksMenu()}
       </nav>

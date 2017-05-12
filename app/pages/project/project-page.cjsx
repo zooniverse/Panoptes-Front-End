@@ -37,8 +37,6 @@ AVATAR_SIZE = 100
 
 ProjectPage = React.createClass
   contextTypes:
-    setAppHeaderVariant: React.PropTypes.func
-    revealSiteHeader: React.PropTypes.func
     geordi: React.PropTypes.object
 
   propTypes:
@@ -66,16 +64,12 @@ ProjectPage = React.createClass
   componentDidMount: ->
     this.resizeBackground()
     addEventListener "resize", this.resizeBackground
-    @context.setAppHeaderVariant 'demoted'
-    unless @props.user?
-      @context.revealSiteHeader()
     document.documentElement.classList.add 'on-project-page'
     @updateSugarSubscription @props.project
     @context.geordi?.remember projectToken: @props.project?.slug
 
   componentWillUnmount: ->
     removeEventListener "resize", this.resizeBackground
-    @context.setAppHeaderVariant null
     document.documentElement.classList.remove 'on-project-page'
     @updateSugarSubscription null
     @context.geordi?.forget ['projectToken']
