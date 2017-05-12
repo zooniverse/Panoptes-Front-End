@@ -54,9 +54,6 @@
   &__modal
     text-align: right
 
-    &.modal-form-trigger
-      margin-right: 1em
-
     &.modal-form-underlay
       background: transparent
       z-index: 1 // TODO: Apply this everywhere.
@@ -69,13 +66,18 @@
       padding: 0.75em 1.5em 0.3em
       text-transform: uppercase
 
-      &:hover
+      &:hover, &:focus
         background: rgba(white, 0.2)
+        outline-color: white
+
+    .secret-button
+      &:hover, &:focus
+        background: rgba(white, 0.2)
+        outline-color: white
 
     &.modal-form
       background-color: TEAL_MID
       border-radius: 0
-      margin-top: 0.5em
 
     &.modal-form-pointer
       background: transparent
