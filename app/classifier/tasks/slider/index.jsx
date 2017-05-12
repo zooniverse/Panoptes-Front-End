@@ -82,7 +82,7 @@ class SliderTask extends React.Component {
           help={this.props.task.help}
           required={this.props.task.required}
         >
-          <div className="standard-input full slider-task-container">
+          <div className="slider-task-container full ">
             <div className="slider-task-range">
               <label className="answer">
                 <div>
