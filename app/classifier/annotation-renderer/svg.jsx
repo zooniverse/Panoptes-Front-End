@@ -155,6 +155,8 @@ export default class SVGRenderer extends React.Component {
       .filter(Boolean);
     children = children.concat(persistentHooks);
 
+    const showFeedback = (this.props.project && this.props.project.experimental_tools && this.props.project.experimental_tools.includes('general feedback'));
+
     return (
       <div>
         <svg
@@ -190,10 +192,10 @@ export default class SVGRenderer extends React.Component {
 
             {children}
 
-            {(this.props.project && this.props.project.experimental_tools.includes('general feedback')) && (<SVGFeedbackViewer />)}
+            {(showFeedback) && (<SVGFeedbackViewer />)}
           </g>
         </svg>
-        {(this.props.project && this.props.project.experimental_tools.includes('general feedback')) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
+        {(showFeedback) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
       </div>
     );
   }
