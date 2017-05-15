@@ -51,8 +51,8 @@ export default class HomePageSocial extends React.Component {
     const link = `/projects/${project.slug}`;
     const timestamp = moment(new Date(project.updated_at)).fromNow();
     return (
-      <div className="home-social__project-update" key={project.id}>
-        <h6 className="timestamp-label">{timestamp}</h6>
+      <div key={project.id}>
+        <h4 className="timestamp-label">{timestamp}</h4>
         <h5 className="tertiary-headline">{project.display_name} </h5>
         <a className="home-social__italic-link" href={link}> View Project </a>
         <hr />
@@ -63,11 +63,12 @@ export default class HomePageSocial extends React.Component {
   renderBlogPost(post, i) {
     const background = {};
     background.backgroundImage = `url(${post.image})`;
+    if (!post.image) { background.display = 'none'; }
     const firstPost = i === 0 ? 'home-social__blog-post--white' : '';
     const timestamp = moment(new Date(post.created_at)).fromNow();
     return (
       <div key={i} className={firstPost}>
-        <h6 className="timestamp-label">{timestamp}</h6>
+        <h4 className="timestamp-label">{timestamp}</h4>
         <h5 className="tertiary-headline">{post.title} </h5>
         <div className="home-social__blog-post">
           <div style={background}></div>
@@ -92,18 +93,18 @@ export default class HomePageSocial extends React.Component {
 
     return (
       <section className="home-social">
-        <h3 className="secondary-kicker">Discover, teach, learn</h3>
+        <h2 className="secondary-kicker">Discover, teach, learn</h2>
         <Translate className="secondary-headline" content="socialHomePage.community" />
 
         <div className="home-social__icons">
           <span>
-            <a href="https://twitter.com/the_zooniverse" target="_blank">
+            <a href="https://twitter.com/the_zooniverse" rel="noopener noreferrer" target="_blank">
               <i className="fa fa-twitter" />
             </a>
-            <a href="https://www.facebook.com/therealzooniverse" target="_blank">
+            <a href="https://www.facebook.com/therealzooniverse" rel="noopener noreferrer" target="_blank">
               <i className="fa fa-facebook" />
             </a>
-            <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank">
+            <a href="https://plus.google.com/+ZooniverseOrgReal" rel="noopener noreferrer" target="_blank">
               <i className="fa fa-google-plus" />{' '}
             </a>
           </span>
@@ -114,7 +115,7 @@ export default class HomePageSocial extends React.Component {
             <Translate className="tertiary-headline__headline" content="socialHomePage.news" />
             <Translate className="tertiary-kicker" content="socialHomePage.newestProject" />
             <ProjectCard
-              customCSS="home-page-not-logged-in__project-card"
+              className="home-page-not-logged-in__project-card"
               landingPage={true}
               project={newestProject}
             />
@@ -126,7 +127,7 @@ export default class HomePageSocial extends React.Component {
             })}
 
             <Translate className="tertiary-kicker" content="socialHomePage.recentPublications" />
-            <h5 className="timestamp-label">{newestPublication.date}</h5>
+            <h3 className="timestamp-label">{newestPublication.date}</h3>
             <span className="regular-body">{newestPublication.citation}</span>
             <a className="home-social__italic-link" href={newestPublication.href}> Read More... </a>
             <hr />

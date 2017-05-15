@@ -3,7 +3,7 @@ import talkClient from 'panoptes-client/lib/talk-client';
 import Publications from './publications';
 
 function getNewestProject() {
-  return apiClient.type('projects').get({ page_size: 1, sort: '-launch_date' })
+  return apiClient.type('projects').get({ cards: true, page_size: 1, sort: '-launch_date', launch_approved: true })
   .then(([newestProject]) => {
     return newestProject;
   });
