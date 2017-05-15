@@ -1,6 +1,7 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
+import Moment from 'moment';
 
 class ExportWorkflowsDialog extends React.Component {
   constructor(props) {
@@ -8,6 +9,7 @@ class ExportWorkflowsDialog extends React.Component {
     this.state = {
       loading: false,
       workflows: [],
+      media: {},
       workflowSelected: false,
     };
 
@@ -30,12 +32,27 @@ class ExportWorkflowsDialog extends React.Component {
       return;
     }
 
+    const self = this;
+
     this.setState({ loading: true });
     // TODO: this API call duplicates information fetched to draw the lab sidebar.
     // when we do the lab refactor, this should be cached somewhere
     getWorkflowsInOrder(project, { fields: 'display_name' })
       .then((workflows) => {
         this.setState({ workflows, loading: false });
+
+        // TODO: load the exports for each workflow
+        workflows.forEach((wf) => {
+          wf.get('classifications_export')
+            .then((media) => {
+              const mediaState = self.state.media;
+              mediaState[wf.id.toString()] = media[0];
+              self.setState({ media: mediaState });
+            })
+            .catch(() => {
+              // this is gonna happen, oh well
+            });
+        });
       });
   }
 
@@ -58,13 +75,20 @@ class ExportWorkflowsDialog extends React.Component {
 
     if (this.state.workflows && this.state.workflows.length > 0) {
       return (
-        <select size="5" ref={(c) => { this.workflowList = c; }} className="multiline-select standard-input" style={{ padding: '0.3vh 0.3vw' }} onChange={this.toggleExport}>
-          {this.state.workflows.map((result) => {
-            return (
-              <option key={result.id} value={result.id}>{result.display_name}</option>
-            );
-          })}
-        </select>
+        <div>
+          <ul>
+            {this.state.workflows.map((result) => {
+              return <ExportWorkflowListItem key={result.id} workflow={result} media={this.state.media} />;
+            })}
+          </ul>
+          <select size="5" ref={(c) => { this.workflowList = c; }} className="multiline-select standard-input" style={{ padding: '0.3vh 0.3vw' }} onChange={this.toggleExport} style={{'display': 'none'}}>
+            {this.state.workflows.map((result) => {
+              return (
+                <option key={result.id} value={result.id}>{result.display_name}</option>
+              );
+            })}
+          </select>
+        </div>
       );
     }
 
@@ -92,5 +116,26 @@ ExportWorkflowsDialog.propTypes = {
   onSuccess: React.PropTypes.func.isRequired,
   onFail: React.PropTypes.func.isRequired,
 };
+
+const ExportWorkflowListItem = ({ workflow, media }) => {
+
+  const myMedia = workflow ? media[workflow.id.toString()] : null;
+
+  return (
+    <li>
+      <input type="radio" name="which-workflow" id={`export-${workflow.id}`} />
+      {workflow.display_name}
+      <ExportWorkflowLink media={myMedia} />
+    </li>
+  );
+};
+
+const ExportWorkflowLink = ({ media }) => {
+  return (
+    media ?
+      <a href={media.src}>{Moment(media.updated_at).fromNow()}</a> :
+      <span>No exports have been requested.</span>
+  );
+}
 
 export default ExportWorkflowsDialog;
