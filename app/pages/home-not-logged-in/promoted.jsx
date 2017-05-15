@@ -3,6 +3,7 @@ import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import { Link } from 'react-router';
 import ProjectCard from '../../partials/project-card';
+import LoadingIndicator from '../../components/loading-indicator';
 
 counterpart.registerTranslations('en', {
   promotedHomePage: {
@@ -24,12 +25,14 @@ const HomePagePromoted = ({ promotedProjects }) => {
         <Translate className="display-body" content="promotedHomePage.participate" />
       </div>
 
+      {!promotedProjects.length && (<LoadingIndicator />)}
+
       <div className="home-promoted__cards">
         {promotedProjects.map((project) => {
           return (
             <ProjectCard
               key={project.id}
-              customCSS="home-page-not-logged-in__project-card"
+              className="home-page-not-logged-in__project-card"
               imageSrc={project.image}
               landingPage={true}
               project={project}

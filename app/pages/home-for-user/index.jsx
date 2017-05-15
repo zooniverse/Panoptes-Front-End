@@ -307,13 +307,9 @@ export default class HomePageForUser extends React.Component {
           </Pullout>
         </div>
 
-        <div>
-          <FeaturedProject />
-        </div>
+        <FeaturedProject />
 
-        <div>
-          <HomePageSocial />
-        </div>
+        <HomePageSocial />
 
       </div>
     );
