@@ -48,8 +48,9 @@ class ClassificationSummary extends React.Component {
   }
 
   isFeedbackEnabled() {
-    if (this.props.project && this.props.project.experimental_tools.includes('general feedback')) {
-      const { tasks } = this.props.workflow;
+    const { project, workflow } = this.props;
+    if (project && project.experimental_tools.includes('general feedback')) {
+      const { tasks } = workflow;
       return Object.keys(tasks)
         .map(key => tasks[key].feedback && tasks[key].feedback.enabled)
         .includes(true);

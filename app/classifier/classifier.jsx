@@ -113,6 +113,8 @@ class Classifier extends React.Component {
   }
 
   loadSubject(subject) {
+    const { project } = this.props;
+
     this.setState({
       expertClassification: null,
       selectedExpertAnnotation: -1,
@@ -120,7 +122,7 @@ class Classifier extends React.Component {
       subjectLoading: true
     });
 
-    if (this.props.project.experimental_tools && this.props.project.experimental_tools.indexOf('expert comparison summary') > -1) {
+    if (project.experimental_tools && project.experimental_tools.indexOf('expert comparison summary') > -1) {
       this.getExpertClassification(this.props.workflow, this.props.subject);
     }
 
