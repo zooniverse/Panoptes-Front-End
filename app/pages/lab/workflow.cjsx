@@ -130,7 +130,8 @@ EditWorkflowPage = React.createClass
                             when 'crop' then <i className="fa fa-crop fa-fw"></i>
                             when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
                             when 'dropdown' then <i className="fa fa-list fa-fw"></i>
-                            when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
+                            when 'combo' then <i className="fa fa-cubes fa-fw"></i>
+                            when 'slider' then <i className="fa fa-sliders fa-fw"></i>}
                           {' '}
                           {tasks[definition.type].getTaskText definition}
                           {if key is @props.workflow.first_task
@@ -196,6 +197,14 @@ EditWorkflowPage = React.createClass
                         <i className="fa fa-cubes fa-2x"></i>
                         <br />
                         <small><strong>Combo</strong></small>
+                      </button>
+                    </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "slider")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
+                        <i className="fa fa-sliders fa-2x"></i>
+                        <br />
+                        <small><strong>Slider</strong></small>
                       </button>
                     </AutoSave>}
                 </TriggeredModalForm>
