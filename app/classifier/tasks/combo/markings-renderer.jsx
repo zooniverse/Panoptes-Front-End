@@ -68,8 +68,8 @@ MarkingsRenderer.propTypes = {
   classification: React.PropTypes.shape({
     annotations: React.PropTypes.array
   }),
-  taskTypes: React.PropTypes.arrayOf(React.PropTypes.string),
+  taskTypes: React.PropTypes.object,
   workflow: React.PropTypes.shape({
-    tasks: React.PropTypes.array
+    tasks: React.PropTypes.object
   })
 };

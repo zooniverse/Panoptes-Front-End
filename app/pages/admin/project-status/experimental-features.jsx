@@ -25,6 +25,7 @@ const experimentalFeatures = [
   'enable subject flags',
   'sim notification',
   'general feedback',
+  'slider',
 ];
 
 class ExperimentalFeatures extends Component {
