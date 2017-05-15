@@ -25,6 +25,7 @@ const WorkflowsPage = (props) => {
 
       <p>A workflow is the sequence of tasks that you’re asking volunteers to perform.</p>
       <p> An asterisk (*) denotes a default workflow. </p>
+      <p> If you have multiple workflows you can rearrange the order in which they are listed on your project's front page by clicking and dragging on the left gray tab next to each workflow title listed below. </p>
 
       <DragReorderable tag="ul" className="nav-list" items={props.workflows} render={renderWorkflow} onChange={props.handleWorkflowReorder} />
 
