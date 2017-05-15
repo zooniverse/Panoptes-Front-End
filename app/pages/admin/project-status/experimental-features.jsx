@@ -24,7 +24,7 @@ const experimentalFeatures = [
   'freehandSegmentShape',
   'enable subject flags',
   'sim notification',
-  'general feedback'
+  'general feedback',
 ];
 
 class ExperimentalFeatures extends Component {
