@@ -46,7 +46,7 @@ FeedbackSummaryContainer.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  feedback: state.feedback,
+  feedback: state.feedback.filter(item => item.target === 'summary'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
