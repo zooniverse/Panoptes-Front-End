@@ -53,6 +53,7 @@ export default class FrameViewer extends React.Component {
             subject={this.props.subject}
             classification={this.props.classification}
             annotation={this.props.annotation}
+            project={this.props.project}
             loading={this.state.loading}
             preferences={this.props.preferences}
             modification={this.props.modification || {}}
