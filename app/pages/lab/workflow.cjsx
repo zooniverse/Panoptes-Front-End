@@ -169,13 +169,6 @@ EditWorkflowPage = React.createClass
                     </button>
                   </AutoSave>{' '}
                   <AutoSave resource={@props.workflow}>
-                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
-                      <i className="fa fa-sliders fa-2x"></i>
-                      <br />
-                      <small><strong>Slider</strong></small>
-                    </button>
-                  </AutoSave>{' '}
-                  <AutoSave resource={@props.workflow}>
                     <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
                       <i className="fa fa-binoculars fa-2x"></i>
                       <br />
@@ -204,6 +197,14 @@ EditWorkflowPage = React.createClass
                         <i className="fa fa-cubes fa-2x"></i>
                         <br />
                         <small><strong>Combo</strong></small>
+                      </button>
+                    </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "slider")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
+                        <i className="fa fa-sliders fa-2x"></i>
+                        <br />
+                        <small><strong>Slider</strong></small>
                       </button>
                     </AutoSave>}
                 </TriggeredModalForm>
