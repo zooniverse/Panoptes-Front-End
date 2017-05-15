@@ -67,7 +67,7 @@ module.exports = React.createClass
               buttonKey="projectDetails.workflowContentsExport"
               exportType="workflow_contents_export"  />
           </div>
-           <div className="row">
+           <div className="row" style={"display":"none"}>
             <DataExportButton
               project={@props.project}
               buttonKey="projectDetails.aggregationExport"
