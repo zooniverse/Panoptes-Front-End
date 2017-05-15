@@ -53,7 +53,7 @@ EditWorkflowPage = React.createClass
 
   handleWorkflowCreation: (workflow) ->
     @hideCreateWorkflow()
-    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
+    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflows/#{workflow.id}"
     @context.router.push newLocation
     @props.project.uncacheLink 'workflows'
     @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
@@ -427,7 +427,7 @@ EditWorkflowPage = React.createClass
           <hr />
 
           <div>
-            <Link to="/lab/#{@props.project.id}/workflow/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
+            <Link to="/lab/#{@props.project.id}/workflows/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
           </div>
 
           <hr />
