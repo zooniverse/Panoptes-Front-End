@@ -237,13 +237,13 @@ SVGRenderer.propTypes = {
 };
 
 SVGRenderer.defaultProps = {
-  user: null,
+  annotation: null,
+  classification: null,
+  frame: 0,
+  onChange: () => {},
+  onLoad: () => {},
   project: null,
   subject: null,
-  workflow: null,
-  classification: null,
-  annotation: null,
-  onLoad: () => {},
-  frame: 0,
-  onChange: () => {}
+  user: null,
+  workflow: null
 };
