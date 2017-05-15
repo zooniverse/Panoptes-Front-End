@@ -13,14 +13,14 @@ class SVGToolTipLayer extends React.Component {
   }
 
   renderTooltips() {
-    const { feedback, screenCTM } = this.props;
+    const { feedback, getScreenCTM } = this.props;
     return (
       <div className="classifier-tooltips">
         {feedback.map(item =>
           <Tooltip
             item={item}
             key={`feedback-point-${item.x}-${item.y}`}
-            screenCTM={screenCTM}
+            screenCTM={getScreenCTM()}
           />
         )}
       </div>

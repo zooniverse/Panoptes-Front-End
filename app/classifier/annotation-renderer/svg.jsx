@@ -90,7 +90,6 @@ export default class SVGRenderer extends React.Component {
     }
 
     const svgStyle = {};
-    let screenCTM = null;
     if (type === 'image' && !this.props.loading) {
       // Images are rendered again within the SVG itself.
       // When cropped right next to the edge of the image,
@@ -106,31 +105,29 @@ export default class SVGRenderer extends React.Component {
       if (this.props.panEnabled === true) {
         svgStyle.pointerEvents = 'all';
       }
-
-      screenCTM = this.getScreenCurrentTransformationMatrix();
     }
 
     const svgProps = {};
     const { annotations } = this.props.classification;
 
     const hookProps = {
-      taskTypes: tasks,
-      workflow: this.props.workflow,
-      tasks: this.props.workflow.tasks,
-      task: taskDescription,
-      classification: this.props.classification,
       annotations,
       annotation: this.props.annotation,
+      classification: this.props.classification,
+      containerRect: this.getSizeRect(),
       frame: this.props.frame,
-      scale: this.getScale(),
+      getEventOffset: this.getEventOffset,
+      getScreenCurrentTransformationMatrix: this.getScreenCurrentTransformationMatrix,
       naturalWidth: this.props.naturalWidth,
       naturalHeight: this.props.naturalHeight,
-      containerRect: this.getSizeRect(),
-      getEventOffset: this.getEventOffset,
+      normalizeDifference: this.normalizeDifference,
       onChange: this.props.onChange,
       preferences: this.props.preferences,
-      normalizeDifference: this.normalizeDifference,
-      getScreenCurrentTransformationMatrix: this.getScreenCurrentTransformationMatrix
+      task: taskDescription,
+      tasks: this.props.workflow.tasks,
+      scale: this.getScale(),
+      taskTypes: tasks,
+      workflow: this.props.workflow
     };
 
     Object.keys(tasks).map((task) => {
@@ -196,7 +193,7 @@ export default class SVGRenderer extends React.Component {
             {(this.props.project && this.props.project.experimental_tools.includes('general feedback')) && (<SVGFeedbackViewer />)}
           </g>
         </svg>
-        {(this.props.project && this.props.project.experimental_tools.includes('general feedback')) && (<SVGToolTipLayer screenCTM={screenCTM} />)}
+        {(this.props.project && this.props.project.experimental_tools.includes('general feedback')) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
       </div>
     );
   }
