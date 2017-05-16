@@ -64,10 +64,10 @@ export default class HomePageSocial extends React.Component {
     const background = {};
     background.backgroundImage = `url(${post.image})`;
     if (!post.image) { background.display = 'none'; }
-    const firstPost = i === 0 ? 'home-social__blog-post--white' : '';
+    const firstPost = i === 0 ? 'home-social__blog-section--white' : 'home-social__blog-section--gray';
     const timestamp = moment(new Date(post.created_at)).fromNow();
     return (
-      <div key={i} className={firstPost}>
+      <div key={i} className={`home-social__blog-section ${firstPost}`}>
         <h4 className="timestamp-label">{timestamp}</h4>
         <h5 className="tertiary-headline">{post.title} </h5>
         <div className="home-social__blog-post">
@@ -80,7 +80,7 @@ export default class HomePageSocial extends React.Component {
             </div>
           </div>
         </div>
-        {!firstPost && (<hr />)}
+        {firstPost === 'home-social__blog-section--gray' && (<hr />)}
       </div>
     );
   }

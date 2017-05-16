@@ -446,31 +446,44 @@ $flex-section
     background-color: BACKGROUND_COLOR
     padding: 4em
 
+    @media (max-width: 700px)
+      padding: 4em 2em
+
     hr
       margin-top: 0
+
+    &__blog-section
+      box-sizing: border-box
+      padding: 1.5em
+
+      &--white
+        background-color: white
+        margin-bottom: 1.5em
+
+      &--gray
+        padding: 0 1.5em
+
+        hr
+          margin: 2em 0
 
     &__blog-post
       display: flex
       flex-flow: row wrap
-      padding-bottom: 2em
+      width: 100%
 
       div:first-child
         background-size: cover
         background-position: center
-        flex-shrink: 0
-        height: 12em
+        height: 14em
         margin: 0.5em 1em 0.5em 0
-        width: 16em
+        width: 18em
 
       div:nth-child(2)
-        flex: 1 1 0
+        flex: 2 0 0
         min-width: 50%
 
         div
           margin-top: 0.5em
-
-      &--white
-        background-color: white
 
     a
       text-decoration: none
@@ -532,11 +545,12 @@ $flex-section
       display: flex
       flex-flow: row wrap
       margin: 5em 0
+      max-width: 100%
       text-align: left
 
       &--vertical-line
         border-left: 1px solid #CBCCCB
-        margin: 0 3em
+        margin-right: 3em
 
         @media screen and (max-width: 750px)
           display: none
@@ -545,19 +559,17 @@ $flex-section
       display: flex
       flex: 2 0 0
       flex-direction: column
-      margin-bottom: 2em
-      padding: 0 1em
+      margin-right: 3em
+      max-width: 100%
 
       hr
         margin: 1.5em 0
 
     &__daily
       display: flex
-      flex: 5 0 0
+      flex: 5 0 30em
       flex-direction: column
-
-      > div
-        padding: 1.5em 2em 0 2em
+      max-width: 100%
 
       span
         word-break: break-word
