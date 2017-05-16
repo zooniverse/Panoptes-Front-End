@@ -177,9 +177,12 @@ GraphSelect.propTypes = {
   handleWorkflowChange: React.PropTypes.func,
 };
 
-export const Eta = (props) => {
-  let output = <div />;
-  if (props.data.length > 1) {
+function calcEta(props) {
+  let eta = undefined;
+  if (props.completeness) {
+    eta = 0;
+  }
+  else if (props.data.length > 1) {
     let value;
     let days;
     if (props.data.length > 15) {
@@ -191,7 +194,15 @@ export const Eta = (props) => {
       days = props.data.length - 1;
     }
     const rate = value.reduce((a, b) => (a + b));
-    const eta = Math.max(0, Math.ceil(days * (props.totalCount - props.currentCount) / rate));
+    eta = Math.max(0, Math.ceil(days * (props.totalCount - props.currentCount) / rate));
+  }
+  return eta
+ }
+
+export const Eta = (props) => {
+  let output = <div />;
+  const eta = calcEta(props);
+  if (eta !== undefined) {
     output = (
       <div>
         <span className="progress-stats-label">ETC*</span> {`${eta} days`}
@@ -205,6 +216,7 @@ Eta.propTypes = {
   currentCount: React.PropTypes.number,
   data: React.PropTypes.array,
   totalCount: React.PropTypes.number,
+  completeness: React.PropTypes.bool,
 };
 
 export class WorkflowProgress extends React.Component {
@@ -271,6 +283,7 @@ export class WorkflowProgress extends React.Component {
             data={this.state.statData}
             currentCount={this.props.workflow.classifications_count}
             totalCount={total}
+            completeness={this.props.workflow.completeness == 1}
           />
         );
       }
