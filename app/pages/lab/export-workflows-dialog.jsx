@@ -142,6 +142,12 @@ const ExportWorkflowListItem = ({ workflow, media, onChange }) => {
   );
 };
 
+ExportWorkflowListItem.propTypes = {
+  workflow: React.PropTypes.shape({ id: React.PropTypes.string, display_name: React.PropTypes.string }).isRequired,
+  media: React.PropTypes.shape({}),
+  onChange: React.PropTypes.func.isRequired
+};
+
 const ExportWorkflowLink = ({ media }) => {
   /* eslint-disable multiline-ternary */
   return (
@@ -151,5 +157,10 @@ const ExportWorkflowLink = ({ media }) => {
   );
   /* eslint-enable */
 }
+
+ExportWorkflowLink.propTypes = {
+  media: React.PropTypes.shape({ src: React.PropTypes.string, updated_at: React.PropTypes.string })
+};
+
 
 export default ExportWorkflowsDialog;
