@@ -12,7 +12,7 @@ DELETE_BUTTON_ANGLE = 45
 BUFFER = 16
 
 module.exports = React.createClass
-  displayName: 'EllipseTool'
+  displayName: 'CircleTool'
 
   statics:
     defaultValues: ({x, y}) ->

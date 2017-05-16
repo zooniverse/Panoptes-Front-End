@@ -57,6 +57,8 @@ module.exports = React.createClass
       'medium'
     else if length <= 20
       'small'
+    else if @props.task.alwaysShowThumbnails
+      'small'
     else
       'none'
 
@@ -196,4 +198,3 @@ module.exports = React.createClass
         e.preventDefault()
       else
         true
-    

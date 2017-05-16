@@ -11,7 +11,7 @@
     "react/prefer-stateless-function": 0,
     "react/no-multi-comp": 0,
     "array-callback-return": "off", 
-    "arrow-body-style": ["warn", "always"],
+    "arrow-body-style": ["warn", "as-needed"],
     "comma-dangle": ["warn", "never"],
     "import/extensions": "off",
     "import/no-unresolved": "off",

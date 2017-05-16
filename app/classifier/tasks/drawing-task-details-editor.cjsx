@@ -2,6 +2,7 @@ React = require 'react'
 AutoSave = require '../../components/auto-save'
 TriggeredModalForm = require 'modal-form/triggered'
 TextTaskEditor = require './text/editor'
+SliderTaskEditor = require('./slider/editor').default
 
 
 module.exports = React.createClass
@@ -29,6 +30,15 @@ module.exports = React.createClass
               {
                 if subtask.type is 'text'
                   <TextTaskEditor 
+                    workflow={@props.workflow}
+                    task={subtask}
+                    taskPrefix="#{@props.toolPath}.details.#{i}"
+                    isSubtask={true}
+                    onChange={@handleSubtaskChange.bind this, i}
+                    onDelete={@handleSubtaskDelete.bind this, i}
+                  />
+                else if subtask.type is 'slider'
+                  <SliderTaskEditor
                     workflow={@props.workflow}
                     task={subtask}
                     taskPrefix="#{@props.toolPath}.details.#{i}"
@@ -66,6 +76,12 @@ module.exports = React.createClass
                 <small><strong>Question</strong></small>
               </button>{' '}
 
+              <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
+                <i className="fa fa-sliders fa-2x"></i>
+                <br />
+                <small><strong>Slider</strong></small>
+              </button>{' '}
+
               <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
                 <i className="fa fa-file-text-o fa-2x"></i>
                 <br />
@@ -85,6 +101,8 @@ module.exports = React.createClass
         TaskChoice = require('./single').default
       when 'text'
         TaskChoice = require './text'
+      when 'slider'
+        TaskChoice = require('./slider').default
     @props.task.tools[@props.toolIndex].details.push TaskChoice.getDefaultTask()
     @props.workflow.update 'tasks'
     @props.workflow.save()

@@ -24,7 +24,7 @@ const DefaultClassificationSummary = (props) => {
       const SummaryComponent = tasks[task.type].Summary; // TODO: There's a lot of duplicated code in these modules.
       body.push(
         <div key={annotation._key} className="classification-task-summary">
-          <SummaryComponent task={task} annotation={annotation} onToggle={props.onToggle} />
+          <SummaryComponent task={task} annotation={annotation} onToggle={props.onToggle} workflow={props.workflow} />
         </div>
       );
     });

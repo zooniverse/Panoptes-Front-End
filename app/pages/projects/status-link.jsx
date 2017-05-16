@@ -15,9 +15,10 @@ class StatusLink extends Component {
 
   render() {
     const { children, location, status } = this.props;
+    location.query.status = location.query.status || 'live';
     const isActive = location.query.status === status;
     return (
-      <button onClick={this.handleClick} className={isActive ? 'active' : null}>
+      <button role="tab" onClick={this.handleClick} aria-selected={isActive ? 'true' : 'false'}>
         {children}
       </button>
     );

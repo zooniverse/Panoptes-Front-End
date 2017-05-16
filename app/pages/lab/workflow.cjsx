@@ -53,7 +53,7 @@ EditWorkflowPage = React.createClass
 
   handleWorkflowCreation: (workflow) ->
     @hideCreateWorkflow()
-    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
+    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflows/#{workflow.id}"
     @context.router.push newLocation
     @props.project.uncacheLink 'workflows'
     @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
@@ -130,7 +130,8 @@ EditWorkflowPage = React.createClass
                             when 'crop' then <i className="fa fa-crop fa-fw"></i>
                             when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
                             when 'dropdown' then <i className="fa fa-list fa-fw"></i>
-                            when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
+                            when 'combo' then <i className="fa fa-cubes fa-fw"></i>
+                            when 'slider' then <i className="fa fa-sliders fa-fw"></i>}
                           {' '}
                           {tasks[definition.type].getTaskText definition}
                           {if key is @props.workflow.first_task
@@ -196,6 +197,14 @@ EditWorkflowPage = React.createClass
                         <i className="fa fa-cubes fa-2x"></i>
                         <br />
                         <small><strong>Combo</strong></small>
+                      </button>
+                    </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "slider")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
+                        <i className="fa fa-sliders fa-2x"></i>
+                        <br />
+                        <small><strong>Slider</strong></small>
                       </button>
                     </AutoSave>}
                 </TriggeredModalForm>
@@ -386,6 +395,9 @@ EditWorkflowPage = React.createClass
             </AutoSave>
             <br />
             <small className="form-help">How many people should classify each subject before it is “done”? Once a subject has reached the retirement limit it will no longer be shown to any volunteers.</small>
+            <br />
+            <br />
+            <small className="form-help">If you'd like more complex retirement rules, please get in touch via the <a href='/about/contact'>Contact Us</a> page.</small>
           </p>
 
           <hr />
@@ -415,7 +427,7 @@ EditWorkflowPage = React.createClass
           <hr />
 
           <div>
-            <Link to="/lab/#{@props.project.id}/workflow/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
+            <Link to="/lab/#{@props.project.id}/workflows/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
           </div>
 
           <hr />
@@ -624,7 +636,7 @@ EditWorkflowPage = React.createClass
       @props.project.update 'configuration.default_workflow': @props.workflow.id
       @props.project.save()
     else
-      @props.project.update 'configuration.default_workflow': null
+      @props.project.update 'configuration.default_workflow': undefined
       @props.project.save()
 
   handleTutorialToggle: (tutorial, workflowTutorials, e) ->
@@ -660,6 +672,10 @@ EditWorkflowPage = React.createClass
 
     if confirmed
       @setState deletionInProgress: true
+
+      if @props.workflow.id is @props.project.configuration?.default_workflow
+        @props.project.update 'configuration.default_workflow': undefined
+        @props.project.save()
 
       @props.workflow.delete().then =>
         @props.project.uncacheLink 'workflows'

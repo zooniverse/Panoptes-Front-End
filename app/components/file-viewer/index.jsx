@@ -3,6 +3,18 @@ import VideoPlayer from './video-player';
 import TextViewer from './text-viewer';
 import ImageViewer from './image-viewer';
 
+function DefaultViewer(props) {
+  return (
+    <p>
+    Unknown file type: {props.type}
+    </p>
+  );
+}
+
+DefaultViewer.propTypes = {
+  type: React.PropTypes.string
+};
+
 const VIEWERS = {
   image: ImageViewer,
   text: TextViewer,
@@ -10,7 +22,8 @@ const VIEWERS = {
 };
 
 function FileViewer(props) {
-  const Viewer = VIEWERS[props.type];
+  const Viewer = VIEWERS[props.type] || DefaultViewer;
+
   return (
     <Viewer
       src={props.src}

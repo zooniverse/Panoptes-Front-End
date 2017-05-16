@@ -187,6 +187,9 @@ module.exports = React.createClass
           filteredSubjects = nonLoadedSubjects.filter((subject) => !subject.already_seen && !subject.retired)
           subjectsToLoad = if filteredSubjects.length > 0 then filteredSubjects else nonLoadedSubjects
           upcomingSubjects.forWorkflow[workflow.id].push subjectsToLoad...
+          # Remove any duplicate subjects from the upcoming queue
+          upcomingSubjects.forWorkflow[workflow.id].filter (subject, i) => 
+            upcomingSubjects.forWorkflow[workflow.id].indexOf subject is i
 
       # If we're filling this list for the first time, we won't have a subject selected, so try again.
       subject ?= fetchSubjects.then ->
@@ -240,7 +243,6 @@ module.exports = React.createClass
     classification = @state.classification
     console?.info 'Completed classification', classification
 
-    Split.classificationCreated(classification)
     {workflow, subjects} = classification.links
     seenThisSession.add workflow, subjects
     @queueClassification classification unless @state.demoMode
@@ -265,6 +267,7 @@ module.exports = React.createClass
         apiClient.type('classifications').create(classificationData).save()
           .then (actualClassification) =>
             console?.log 'Saved classification', actualClassification.id
+            Split.classificationCreated(actualClassification) # Metric log needs classification id
             actualClassification.destroy()
             indexInQueue = queue.indexOf classificationData
             queue.splice indexInQueue, 1

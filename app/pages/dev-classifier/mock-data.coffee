@@ -5,24 +5,33 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
   'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
 
-MISC_DRAWING_DETAILS = [{
-  type: 'single'
-  question: 'Cool?'
-  answers: [
-    {label: 'Yeah'}
-    {label: 'Nah'}
-  ]
-}, {
-  type: 'multiple'
-  question: 'Cool stuff?'
-  answers: [
-    {label: 'Ice'}
-    {label: 'Snow'}
-  ]
-}, {
-  type: 'text'
-  instruction: 'Any additional comments?'
-}]
+MISC_DRAWING_DETAILS = [
+  {
+    type: 'single'
+    question: 'Cool?'
+    answers: [
+      {label: 'Yeah'}
+      {label: 'Nah'}
+    ]
+  }, {
+    type: 'multiple'
+    question: 'Cool stuff?'
+    answers: [
+      {label: 'Ice'}
+      {label: 'Snow'}
+    ]
+  }, {
+    type: 'text'
+    instruction: 'Any additional comments?'
+  }, {
+    type: 'slider'
+    instruction: 'Slide me'
+    min: '0'
+    max: '10'
+    step: '0.5'
+    defaultValue: '3'
+  }
+]
 
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
@@ -51,6 +60,7 @@ workflow = apiClient.type('workflows').create
         {label: 'Draw stuff', next: 'draw'}
         {label: 'Survey the image', next: 'survey'}
         {label: 'Maybe select something', next: 'dropdown'}
+        {label: 'Slide a slider', next: 'slider'}
         {label: 'We’re done here.', next: null}
       ]
       unlinkedTask: 'shortcut'
@@ -65,12 +75,13 @@ workflow = apiClient.type('workflows').create
       type: 'combo'
       loosen_requirements: true
       tasks: [
-        'crop'
+        # 'crop'
         'write'
         'ask'
         'features'
         'draw'
         'survey'
+        'slider'
       ]
       next: 'init'
 
@@ -136,8 +147,8 @@ workflow = apiClient.type('workflows').create
         {type: 'freehandShape', label: 'Freehand Shape', color: 'darkseagreen'}
         {type: 'freehandSegmentLine', label: 'Freehand Segment Line', color: 'gold'}
         {type: 'freehandSegmentShape', label: 'Freehand Segment Shape', color: 'goldenrod'}
-
-
+        {type: 'fullWidthLine', label: 'Full Width Line', color: 'orchid'}
+        {type: 'fullHeightLine', label: 'Full Height Line', color: 'mediumvioletred'}
       ]
       next: 'survey'
 
@@ -449,6 +460,14 @@ workflow = apiClient.type('workflows').create
           }
         }
       ]
+
+    slider:
+      type: 'slider'
+      instruction: 'Slide me'
+      min: '0'
+      max: '10'
+      step: '0.5'
+      defaultValue: '3'
 
 # Bulk up the survey task a bit:
 'abcdefghijlkmnopqrstuvwxyz1234'.split('').forEach (x, i) ->
