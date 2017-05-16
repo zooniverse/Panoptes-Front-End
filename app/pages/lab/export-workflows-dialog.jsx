@@ -11,7 +11,7 @@ class ExportWorkflowsDialog extends React.Component {
       workflows: [],
       media: {},
       selectedWorkflowId: null,
-      workflowSelected: false,
+      workflowSelected: false
     };
 
     this.toggleExport = this.toggleExport.bind(this);
@@ -81,19 +81,12 @@ class ExportWorkflowsDialog extends React.Component {
     if (this.state.workflows && this.state.workflows.length > 0) {
       return (
         <div>
-          <ul>
+          <ul className="workflow-export-list">
             {this.state.workflows.map((result) => {
               const boundHandler = this.setSelectedWorkflowId.bind(this, result.id);
               return <ExportWorkflowListItem key={result.id} workflow={result} media={this.state.media} onChange={boundHandler} />;
             })}
           </ul>
-          <select size="5" ref={(c) => { this.workflowList = c; }} className="multiline-select standard-input" style={{ padding: '0.3vh 0.3vw' }} onChange={this.toggleExport} style={{'display': 'none'}}>
-            {this.state.workflows.map((result) => {
-              return (
-                <option key={result.id} value={result.id}>{result.display_name}</option>
-              );
-            })}
-          </select>
         </div>
       );
     }
@@ -120,11 +113,10 @@ class ExportWorkflowsDialog extends React.Component {
 ExportWorkflowsDialog.propTypes = {
   project: React.PropTypes.shape({ links: React.PropTypes.object }).isRequired,
   onSuccess: React.PropTypes.func.isRequired,
-  onFail: React.PropTypes.func.isRequired,
+  onFail: React.PropTypes.func.isRequired
 };
 
 const ExportWorkflowListItem = ({ workflow, media, onChange }) => {
-
   const myMedia = workflow ? media[workflow.id.toString()] : null;
   const now = new Date();
   const lockoutTime = new Date();
@@ -137,30 +129,34 @@ const ExportWorkflowListItem = ({ workflow, media, onChange }) => {
     <li>
       <input type="radio" title={titleString} name="which-workflow" id={`export-${workflow.id}`} disabled={lockout} onChange={onChange} />
       {workflow.display_name}
-      <ExportWorkflowLink media={myMedia} />
+      <small>
+        <ExportWorkflowLink media={myMedia} />
+      </small>
     </li>
   );
 };
 
 ExportWorkflowListItem.propTypes = {
   workflow: React.PropTypes.shape({ id: React.PropTypes.string, display_name: React.PropTypes.string }).isRequired,
-  media: React.PropTypes.shape({}),
+  media: React.PropTypes.shape({}).isRequired,
   onChange: React.PropTypes.func.isRequired
 };
 
-const ExportWorkflowLink = ({ media }) => {
-  /* eslint-disable multiline-ternary */
-  return (
-    media ?
-      <a href={media.src}>{Moment(media.updated_at).fromNow()}</a> :
-      <span>No exports have been requested.</span>
-  );
-  /* eslint-enable */
-}
+
+/* eslint-disable multiline-ternary, no-confusing-arrow */
+const ExportWorkflowLink = ({ media }) =>
+  media ?
+    <a href={media.src}>{Moment(media.updated_at).fromNow()}</a> :
+    <span>No exports have been requested.</span>;
+/* eslint-enable */
+
 
 ExportWorkflowLink.propTypes = {
   media: React.PropTypes.shape({ src: React.PropTypes.string, updated_at: React.PropTypes.string })
 };
 
+ExportWorkflowLink.defaultProps = {
+  media: null
+};
 
 export default ExportWorkflowsDialog;
