@@ -10,11 +10,9 @@ class ExportWorkflowsDialog extends React.Component {
       loading: false,
       workflows: [],
       media: {},
-      selectedWorkflowId: null,
-      workflowSelected: false
+      selectedWorkflowId: null
     };
 
-    this.toggleExport = this.toggleExport.bind(this);
     this.requestDataExport = this.requestDataExport.bind(this);
     this.updateWorkflowsFromProject = this.updateWorkflowsFromProject.bind(this);
     this.renderWorkflowOptions = this.renderWorkflowOptions.bind(this);
@@ -58,12 +56,6 @@ class ExportWorkflowsDialog extends React.Component {
             });
         });
       });
-  }
-
-  toggleExport() {
-    if (this.workflowList.selectedIndex >= 0) {
-      this.setState({ workflowSelected: true });
-    }
   }
 
   requestDataExport() {
@@ -146,7 +138,7 @@ ExportWorkflowListItem.propTypes = {
 /* eslint-disable multiline-ternary, no-confusing-arrow */
 const ExportWorkflowLink = ({ media }) =>
   media ?
-    <a href={media.src}>{Moment(media.updated_at).fromNow()}</a> :
+    <a title={media.updated_at} href={media.src}>{Moment(media.updated_at).fromNow()}</a> :
     <span>No exports have been requested.</span>;
 /* eslint-enable */
 
