@@ -1,7 +1,7 @@
 import React from 'react';
+import Moment from 'moment';
 import apiClient from 'panoptes-client/lib/api-client';
 import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
-import Moment from 'moment';
 
 class ExportWorkflowsDialog extends React.Component {
   constructor(props) {
@@ -10,6 +10,7 @@ class ExportWorkflowsDialog extends React.Component {
       loading: false,
       workflows: [],
       media: {},
+      selectedWorkflowId: null,
       workflowSelected: false,
     };
 
@@ -17,6 +18,7 @@ class ExportWorkflowsDialog extends React.Component {
     this.requestDataExport = this.requestDataExport.bind(this);
     this.updateWorkflowsFromProject = this.updateWorkflowsFromProject.bind(this);
     this.renderWorkflowOptions = this.renderWorkflowOptions.bind(this);
+    this.setSelectedWorkflowId = this.setSelectedWorkflowId.bind(this);
   }
 
   componentDidMount() {
@@ -27,12 +29,14 @@ class ExportWorkflowsDialog extends React.Component {
     this.updateWorkflowsFromProject(nextProps.project);
   }
 
+  setSelectedWorkflowId(id) {
+    this.setState({ selectedWorkflowId: id });
+  }
+
   updateWorkflowsFromProject(project) {
     if (!project) {
       return;
     }
-
-    const self = this;
 
     this.setState({ loading: true });
     // TODO: this API call duplicates information fetched to draw the lab sidebar.
@@ -45,9 +49,9 @@ class ExportWorkflowsDialog extends React.Component {
         workflows.forEach((wf) => {
           wf.get('classifications_export')
             .then((media) => {
-              const mediaState = self.state.media;
+              const mediaState = this.state.media;
               mediaState[wf.id.toString()] = media[0];
-              self.setState({ media: mediaState });
+              this.setState({ media: mediaState });
             })
             .catch(() => {
               // this is gonna happen, oh well
@@ -63,7 +67,8 @@ class ExportWorkflowsDialog extends React.Component {
   }
 
   requestDataExport() {
-    apiClient.post(`/workflows/${this.workflowList.value}/classifications_export`, { media: { content_type: 'text/csv' } })
+    const url = `/workflows/${this.state.selectedWorkflowId}/classifications_export`;
+    apiClient.post(url, { media: { content_type: 'text/csv' }})
       .then(() => { this.props.onSuccess(); })
       .catch((err) => { this.props.onFail(err); });
   }
@@ -78,7 +83,8 @@ class ExportWorkflowsDialog extends React.Component {
         <div>
           <ul>
             {this.state.workflows.map((result) => {
-              return <ExportWorkflowListItem key={result.id} workflow={result} media={this.state.media} />;
+              const boundHandler = this.setSelectedWorkflowId.bind(this, result.id);
+              return <ExportWorkflowListItem key={result.id} workflow={result} media={this.state.media} onChange={boundHandler} />;
             })}
           </ul>
           <select size="5" ref={(c) => { this.workflowList = c; }} className="multiline-select standard-input" style={{ padding: '0.3vh 0.3vw' }} onChange={this.toggleExport} style={{'display': 'none'}}>
@@ -104,7 +110,7 @@ class ExportWorkflowsDialog extends React.Component {
         {this.renderWorkflowOptions()}
         <div style={{ textAlign: 'right' }}>
           <button className="minor-button" style={{ marginLeft: '1em' }}>Cancel</button>
-          <button className="standard-button" style={{ marginLeft: '1em' }} disabled={!this.state.workflowSelected} onClick={this.requestDataExport}>Export</button>
+          <button className="standard-button" style={{ marginLeft: '1em' }} disabled={!this.state.selectedWorkflowId} onClick={this.requestDataExport}>Export</button>
         </div>
       </div>
     );
@@ -117,13 +123,19 @@ ExportWorkflowsDialog.propTypes = {
   onFail: React.PropTypes.func.isRequired,
 };
 
-const ExportWorkflowListItem = ({ workflow, media }) => {
+const ExportWorkflowListItem = ({ workflow, media, onChange }) => {
 
   const myMedia = workflow ? media[workflow.id.toString()] : null;
+  const now = new Date();
+  const lockoutTime = new Date();
+  lockoutTime.setDate(now.getDate() - 1);
+
+  const lockout = myMedia && (new Date(myMedia.updated_at) > lockoutTime);
+  const titleString = lockout ? 'This item can only be exported every 24 hours' : '';
 
   return (
     <li>
-      <input type="radio" name="which-workflow" id={`export-${workflow.id}`} />
+      <input type="radio" title={titleString} name="which-workflow" id={`export-${workflow.id}`} disabled={lockout} onChange={onChange} />
       {workflow.display_name}
       <ExportWorkflowLink media={myMedia} />
     </li>
@@ -131,11 +143,13 @@ const ExportWorkflowListItem = ({ workflow, media }) => {
 };
 
 const ExportWorkflowLink = ({ media }) => {
+  /* eslint-disable multiline-ternary */
   return (
     media ?
       <a href={media.src}>{Moment(media.updated_at).fromNow()}</a> :
       <span>No exports have been requested.</span>
   );
+  /* eslint-enable */
 }
 
 export default ExportWorkflowsDialog;
