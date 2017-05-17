@@ -90,7 +90,6 @@ EditWorkflowPage = React.createClass
           <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} workflowActiveStatus={not @props.project.live} />
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
-      <p className="form-help">If you have multiple workflows you can rearrange the order in which they are listed on your project's front page by clicking and dragging on the left gray tab next to each workflow title in the left menu bar.</p>
       {if @props.project.live and @props.workflow.active
         <p className="form-help warning"><strong>If the project is live, you cannot edit tasks in an active workflow, but other workflow settings can be changed.</strong></p>}
       <div className="columns-container">
