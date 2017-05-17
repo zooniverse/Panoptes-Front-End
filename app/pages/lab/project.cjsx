@@ -51,7 +51,6 @@ EditProjectPage = React.createClass
     "/lab/#{@props.project.id}#{postFix}"
 
   render: ->
-    console.log @props.project
     linkParams =
       projectID: @props.project.id
 
