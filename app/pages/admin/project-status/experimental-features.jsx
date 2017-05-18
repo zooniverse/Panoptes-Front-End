@@ -24,6 +24,7 @@ const experimentalFeatures = [
   'freehandSegmentShape',
   'enable subject flags',
   'sim notification',
+  'general feedback',
   'slider',
 ];
 

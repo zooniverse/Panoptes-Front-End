@@ -101,6 +101,7 @@ export default class FrameAnnotator extends React.Component {
 
           {!!AfterSubject && (
             <AfterSubject {...hookProps} />)}
+
         </div>
       </div>
     );

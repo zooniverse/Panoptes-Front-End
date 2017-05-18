@@ -3,6 +3,8 @@ import Draggable from '../../lib/draggable';
 import tasks from '../tasks';
 import getSubjectLocation from '../../lib/get-subject-location';
 import SVGImage from '../../components/svg-image';
+import SVGFeedbackViewer from '../feedback/svg-feedback-viewer';
+import SVGToolTipLayer from '../feedback/svg-tooltip-layer';
 
 export default class SVGRenderer extends React.Component {
   constructor(props) {
@@ -109,23 +111,23 @@ export default class SVGRenderer extends React.Component {
     const { annotations } = this.props.classification;
 
     const hookProps = {
-      taskTypes: tasks,
-      workflow: this.props.workflow,
-      tasks: this.props.workflow.tasks,
-      task: taskDescription,
-      classification: this.props.classification,
       annotations,
       annotation: this.props.annotation,
+      classification: this.props.classification,
+      containerRect: this.getSizeRect(),
       frame: this.props.frame,
-      scale: this.getScale(),
+      getEventOffset: this.getEventOffset,
+      getScreenCurrentTransformationMatrix: this.getScreenCurrentTransformationMatrix,
       naturalWidth: this.props.naturalWidth,
       naturalHeight: this.props.naturalHeight,
-      containerRect: this.getSizeRect(),
-      getEventOffset: this.getEventOffset,
+      normalizeDifference: this.normalizeDifference,
       onChange: this.props.onChange,
       preferences: this.props.preferences,
-      normalizeDifference: this.normalizeDifference,
-      getScreenCurrentTransformationMatrix: this.getScreenCurrentTransformationMatrix
+      task: taskDescription,
+      tasks: this.props.workflow.tasks,
+      scale: this.getScale(),
+      taskTypes: tasks,
+      workflow: this.props.workflow
     };
 
     Object.keys(tasks).map((task) => {
@@ -153,42 +155,48 @@ export default class SVGRenderer extends React.Component {
       .filter(Boolean);
     children = children.concat(persistentHooks);
 
+    const showFeedback = (this.props.project && this.props.project.experimental_tools && this.props.project.experimental_tools.includes('general feedback'));
+
     return (
-      <svg
-        ref={(element) => { if (element) this.svgSubjectArea = element; }}
-        className="subject"
-        style={svgStyle}
-        viewBox={createdViewBox}
-        {...svgProps}
-      >
-        <g
-          ref={(element) => { if (element) this.transformationContainer = element; }}
-          transform={this.props.transform}
+      <div>
+        <svg
+          ref={(element) => { if (element) this.svgSubjectArea = element; }}
+          className="subject"
+          style={svgStyle}
+          viewBox={createdViewBox}
+          {...svgProps}
         >
-          <rect
-            ref={(rect) => { this.sizeRect = rect; }}
-            width={this.props.naturalWidth}
-            height={this.props.naturalHeight}
-            fill="rgba(0, 0, 0, 0.01)"
-            fillOpacity="0.01"
-            stroke="none"
-          />
-          {type === 'image' && (
-            <Draggable onDrag={this.props.panByDrag} disabled={this.props.disabled}>
-              <SVGImage
-                className={this.props.panEnabled ? 'pan-active' : ''}
-                src={src}
-                width={this.props.naturalWidth}
-                height={this.props.naturalHeight}
-                modification={this.props.modification}
-              />
-            </Draggable>
-          )}
+          <g
+            ref={(element) => { if (element) this.transformationContainer = element; }}
+            transform={this.props.transform}
+          >
+            <rect
+              ref={(rect) => { this.sizeRect = rect; }}
+              width={this.props.naturalWidth}
+              height={this.props.naturalHeight}
+              fill="rgba(0, 0, 0, 0.01)"
+              fillOpacity="0.01"
+              stroke="none"
+            />
+            {type === 'image' && (
+              <Draggable onDrag={this.props.panByDrag} disabled={this.props.disabled}>
+                <SVGImage
+                  className={this.props.panEnabled ? 'pan-active' : ''}
+                  src={src}
+                  width={this.props.naturalWidth}
+                  height={this.props.naturalHeight}
+                  modification={this.props.modification}
+                />
+              </Draggable>
+            )}
 
-          {children}
+            {children}
 
-        </g>
-      </svg>
+            {(showFeedback) && (<SVGFeedbackViewer />)}
+          </g>
+        </svg>
+        {(showFeedback) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
+      </div>
     );
   }
 }
@@ -228,13 +236,13 @@ SVGRenderer.propTypes = {
 };
 
 SVGRenderer.defaultProps = {
-  user: null,
+  annotation: null,
+  classification: null,
+  frame: 0,
+  onChange: () => {},
+  onLoad: () => {},
   project: null,
   subject: null,
-  workflow: null,
-  classification: null,
-  annotation: null,
-  onLoad: () => {},
-  frame: 0,
-  onChange: () => {}
+  user: null,
+  workflow: null
 };

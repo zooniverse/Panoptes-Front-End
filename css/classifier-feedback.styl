@@ -1,0 +1,66 @@
+@keyframes feedbackPointIn
+  from
+    opacity: 0
+    transform: translateY(10px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+@keyframes feedbackTooltipIn
+  from
+    opacity: 0
+    transform: translate(-50%, -10px)
+  to
+    opacity: 1
+    transform: translate(-50%, 0)
+
+$feedbackPointIn
+  opacity: 0
+  animation: feedbackPointIn ease-out 1
+  animation-fill-mode: forwards
+  animation-duration: 0.2s
+
+$feedbackTooltipIn
+  opacity: 0
+  animation: feedbackTooltipIn ease-out 1
+  animation-fill-mode: forwards
+  animation-duration: 0.2s
+
+.feedback-points
+
+  &__point
+    @extends $feedbackPointIn
+    fill-opacity: 0.2
+    stroke-width: 2px
+
+    &--success
+      fill: green
+      stroke: green
+
+    &--failure
+      fill: red
+      stroke: red
+
+.feedback-tooltip
+  @extends $feedbackTooltipIn
+  color: white
+  position: absolute
+  border-radius: 3px
+  box-shadow: #444 0 1px 3px 0
+
+  svg&__triangle
+    top: auto
+
+  &__content
+    padding: 10px
+
+  &--success
+    background: green
+
+    polygon
+      fill: green
+
+  &--failure
+    background: red
+    polygon
+      fill: red
