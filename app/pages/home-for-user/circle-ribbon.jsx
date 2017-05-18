@@ -1,4 +1,5 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
 
 let instanceCount = 0;
 
@@ -104,8 +105,14 @@ const CircleRibbon = React.createClass({
   },
 
   handleClick(event) {
+    const rightButtonPressed = (!!event.button && event.button > 0);
+    const modifierKey = (event.ctrlKey || event.metaKey);
     const index = event.currentTarget.querySelector('[data-index]').getAttribute('data-index');
     const clickedProject = this.props.data[index];
+    if (!clickedProject.redirect && !rightButtonPressed && !modifierKey) {
+      browserHistory.push(`/projects/${clickedProject.slug}`);
+      event.preventDefault();
+    }
     this.props.onClick(clickedProject.id);
   },
 
