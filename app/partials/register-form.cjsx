@@ -186,7 +186,7 @@ module.exports = React.createClass
     name = @refs.name.value
 
     exists = name.length isnt 0
-    badChars = (char for char in name.split('') when char.match(/[\w\-\'\,\.]/) is null)
+    badChars = (char for char in name.split('') when char.match(/[\w\-\'\.]/) is null)
 
     @setState
       badNameChars: badChars
