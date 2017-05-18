@@ -24,7 +24,7 @@ const HomePageDiscover = ({ showDialog }) => {
     <section className="home-discover">
       <div className="home-discover__content">
         <Translate className="secondary-kicker" component="h2" content="discoverHomePage.what" />
-        <br />
+
         <Translate className="tertiary-headline" component="h3" content="discoverHomePage.discover" />
 
         <Translate className="display-body" component="p" content="discoverHomePage.research" />
