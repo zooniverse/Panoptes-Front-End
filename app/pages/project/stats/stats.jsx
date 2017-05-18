@@ -177,12 +177,12 @@ GraphSelect.propTypes = {
   handleWorkflowChange: React.PropTypes.func,
 };
 
-export const Eta = (eta) => {
+export const Eta = (props) => {
   let output = <div />;
-  if (eta !== undefined) {
+  if (props.numDays !== undefined) {
     output = (
       <div>
-        <span className="progress-stats-label">ETC*</span> {`${eta.numDays} days`}
+        <span className="progress-stats-label">ETC*</span> {`${props.numDays} days`}
       </div>
     );
   }
