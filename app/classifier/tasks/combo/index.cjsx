@@ -81,7 +81,7 @@ ComboTask = React.createClass
           style:
             pointerEvents: 'none'
       else
-        svgProps = null
+        svgProps = {}
       svgProps
 
   getDefaultProps: ->
