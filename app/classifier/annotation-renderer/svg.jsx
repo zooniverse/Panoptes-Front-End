@@ -89,25 +89,6 @@ export default class SVGRenderer extends React.Component {
       ({ InsideSubject } = tasks[taskDescription.type]);
     }
 
-    const svgStyle = {};
-    if (type === 'image' && !this.props.loading) {
-      // Images are rendered again within the SVG itself.
-      // When cropped right next to the edge of the image,
-      // the original tag can show through, so fill the SVG to cover it.
-      svgStyle.background = 'black';
-
-      // Allow touch scrolling on subject for mobile and tablets
-      if (taskDescription) {
-        if (tasks[taskDescription.type] && tasks[taskDescription.type].AnnotationRenderer !== SVGRenderer) {
-          svgStyle.pointerEvents = 'none';
-        }
-      }
-      if (this.props.panEnabled === true) {
-        svgStyle.pointerEvents = 'all';
-      }
-    }
-
-    const svgProps = {};
     const { annotations } = this.props.classification;
 
     const hookProps = {
@@ -130,12 +111,23 @@ export default class SVGRenderer extends React.Component {
       workflow: this.props.workflow
     };
 
+    const svgProps = {
+      style: {
+        background: 'black'
+      }
+    };
+
     Object.keys(tasks).map((task) => {
       const Component = tasks[task];
       if (Component.getSVGProps) {
         Object.assign(svgProps, Component.getSVGProps(hookProps));
       }
     });
+
+    // pan/zoom should override any custom pointer event styles
+    if (this.props.panEnabled === true) {
+      svgProps.style.pointerEvents = 'all';
+    }
 
     let children = [];
     const isDrawingTask = taskDescription && (tasks[taskDescription.type].AnnotationRenderer === SVGRenderer);
@@ -162,7 +154,6 @@ export default class SVGRenderer extends React.Component {
         <svg
           ref={(element) => { if (element) this.svgSubjectArea = element; }}
           className="subject"
-          style={svgStyle}
           viewBox={createdViewBox}
           {...svgProps}
         >
@@ -211,7 +202,6 @@ SVGRenderer.propTypes = {
   }),
   disabled: React.PropTypes.bool,
   frame: React.PropTypes.number,
-  loading: React.PropTypes.bool,
   modification: React.PropTypes.object,
   naturalHeight: React.PropTypes.number,
   naturalWidth: React.PropTypes.number,
