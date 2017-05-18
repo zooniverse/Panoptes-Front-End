@@ -112,6 +112,10 @@ Shortcut.getDefaultTask = (question) => {
   };
 };
 
+Shortcut.getTaskText = (task) => {
+  return task.question;
+};
+
 Shortcut.getDefaultAnnotation = () => {
   return {
     _key: Math.random(),
