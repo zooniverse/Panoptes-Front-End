@@ -16,6 +16,11 @@ React = require 'react'
 `import UserProfilePage from './pages/profile/index';`
 `import NotificationsPage from './pages/notifications';`
 `import SubjectPageController from './subjects';`
+`import WorkflowsPage from './pages/lab/workflows';`
+`import WorkflowsContainer from './pages/lab/workflows-container';`
+`import WorkflowsList from './pages/lab/workflows';`
+`import SubjectSetsContainer from './pages/lab/subject-sets-container';`
+`import SubjectSetsList from './pages/lab/subject-sets';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -190,15 +195,23 @@ module.exports =
       </Route>
       <Route path="collaborators" component={require './pages/lab/collaborators'} />
       <Route path="media" component={EditMediaPage} />
-      <Route path="workflow/:workflowID" component={require './pages/lab/workflow'} />
-      <Route path="workflow/:workflowID/visualize" component={require './pages/lab/workflow-viewer'} />
-      <Route path="workflow/:workflowID/visualise" component={require './pages/lab/workflow-viewer'} />
-      <Route path="subject-set/:subjectSetID" component={require './pages/lab/subject-set'} />
       <Route path="visibility" component={require './pages/lab/visibility'} />
       <Route path="talk" component={require './pages/lab/talk'} />
       <Route path="data-exports" component={require './pages/lab/data-dumps'} />
       <Route path="tutorial" component={require './pages/lab/tutorial'} />
       <Route path="guide" component={require './pages/lab/field-guide'} />
+      <Redirect from="workflow/*" to="workflows/*" />
+      <Route path="workflows" component={WorkflowsContainer}>
+        <IndexRoute component={WorkflowsList} />
+        <Route path=":workflowID" component={require './pages/lab/workflow'} />
+        <Route path=":workflowID/visualize" component={require './pages/lab/workflow-viewer'} />
+        <Route path=":workflowID/visualise" component={require './pages/lab/workflow-viewer'} />
+      </Route>
+      <Redirect from="subject-set/*" to="subject-sets/*" />
+      <Route path="subject-sets" component={SubjectSetsContainer}>
+        <IndexRoute component={SubjectSetsList} />
+        <Route path=":subjectSetID" component={require './pages/lab/subject-set'} />
+      </Route>
       <Route path="mini-course" component={require './pages/lab/mini-course'} />
     </Route>
     <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />

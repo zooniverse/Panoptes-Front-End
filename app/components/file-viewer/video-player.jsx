@@ -1,19 +1,13 @@
 import React from 'react';
 
-const IS_IE = 'ActiveXObject' in window;
-
 class VideoPlayer extends React.Component {
   constructor(props) {
     super(props);
 
     this.player = null;
-    this.scrubber = null;
 
-    this.endVideo = this.endVideo.bind(this);
     this.playVideo = this.playVideo.bind(this);
-    this.seekVideo = this.seekVideo.bind(this);
     this.setPlayRate = this.setPlayRate.bind(this);
-    this.updateScrubber = this.updateScrubber.bind(this);
 
     this.state = {
       playing: false,
@@ -21,21 +15,8 @@ class VideoPlayer extends React.Component {
     };
   }
 
-  componentDidMount() {
-    if (this.scrubber) {
-      this.scrubber.value = 0;
-      if (IS_IE) this.scrubber.addEventListener('change', this.seekVideo);
-    }
-  }
-
   componentDidUpdate() {
     if (this.player) this.player.playbackRate = this.state.playbackRate;
-  }
-
-  componentWillUnmount() {
-    if (this.scrubber && IS_IE) {
-      this.scrubber.removeEventListener('change', this.seekVideo);
-    }
   }
 
   setPlayRate(e) {
@@ -55,19 +36,8 @@ class VideoPlayer extends React.Component {
     }
   }
 
-  seekVideo() {
-    const { player, scrubber } = this;
-    player.currentTime = scrubber.value;
-  }
-
   endVideo() {
     this.setState({ playing: false });
-  }
-
-  updateScrubber() {
-    const { player, scrubber } = this;
-    if (!scrubber.getAttribute('max')) scrubber.setAttribute('max', player.duration);
-    scrubber.value = player.currentTime;
   }
 
   renderSpeedControls(rates) {
@@ -95,6 +65,7 @@ class VideoPlayer extends React.Component {
       <div className="subject-video-frame">
         <video
           className="subject"
+          controls={true}
           ref={(element) => { this.player = element; }}
           src={this.props.src}
           type={`${this.props.type}/${this.props.format}`}
@@ -102,41 +73,12 @@ class VideoPlayer extends React.Component {
           onCanPlay={this.props.onLoad}
           onClick={this.playVideo.bind(this, !this.state.playing)}
           onEnded={this.endVideo}
-          onTimeUpdate={this.updateScrubber}
         >
           Your browser does not support the video format. Please upgrade your browser.
         </video>
 
         {this.props.showControls && (
           <span className="subject-video-controls">
-            <span className="subject-frame-play-controls">
-              {(this.state.playing) ?
-                <button
-                  type="button"
-                  className="secret-button"
-                  aria-label="Pause"
-                  onClick={this.playVideo.bind(this, false)}
-                >
-                  <i className="fa fa-pause fa-fw" />
-                </button> :
-                <button
-                  type="button"
-                  className="secret-button"
-                  aria-label="Play"
-                  onClick={this.playVideo.bind(this, true)}
-                >
-                  <i className="fa fa-play fa-fw" />
-                </button>
-                }
-            </span>
-            <input
-              type="range"
-              className="video-scrubber"
-              ref={(element) => { this.scrubber = element; }}
-              min="0"
-              step="any"
-              onChange={this.seekVideo}
-            />
             <span className="video-speed">
             Speed: {this.renderSpeedControls(rates)}
             </span>

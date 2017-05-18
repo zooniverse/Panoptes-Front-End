@@ -5,12 +5,8 @@ LoadingIndicator = require '../../components/loading-indicator'
 TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../../components/change-listener'
-ModalFormDialog = require 'modal-form/dialog'
-WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
-getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
-DragReorderable = require 'drag-reorderable'
 `import LabStatus from '../../partials/lab-status.jsx';`
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
@@ -32,20 +28,8 @@ EditProjectPage = React.createClass
     workflowActions: workflowActions
 
   getInitialState: ->
-    workflowCreationInProgress: false
-    subjectSetCreationError: null
-    subjectSetCreationInProgress: false
     deletionError: null
     deletionInProgress: false
-
-  handleWorkflowReorder: (newOrder) ->
-    newOrderIDs = newOrder.map (workflow) ->
-      workflow.id
-    @props.project.update({
-      'configuration.workflow_order': newOrderIDs
-    })
-    @forceUpdate()
-    @props.project.save()
 
   labPath: (postFix = '') ->
     "/lab/#{@props.project.id}#{postFix}"
@@ -58,7 +42,9 @@ EditProjectPage = React.createClass
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
-
+          <li>
+            <Link to={"/projects/#{@props.project.slug}"} className="standard-button view-project-button" target="_blank" title="Open the current project in a new tab.">View project</Link>
+          </li>
           <li><IndexLink to={@labPath()} activeClassName='active' className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
             Project details
           </IndexLink></li>
@@ -90,64 +76,12 @@ EditProjectPage = React.createClass
           <li><Link to={@labPath('/data-exports')} activeClassName='active' className="nav-list-item" title="Get your project's data exports">
             Data Exports
           </Link></li>
-
-          <li>
-            <br />
-            <div className="nav-list-header">Workflows</div>
-            <PromiseRenderer promise={getWorkflowsInOrder @props.project, fields: 'display_name'}>{(workflows) =>
-              renderWorkflowListItem = (workflow) =>
-                <Link to={@labPath "/workflow/#{workflow.id}"} className="nav-list-item" activeClassName="active">
-                  {workflow.display_name}
-                  {if workflow.id is @props.project.configuration?.default_workflow
-                    <span title="Default workflow">{' '}*{' '}</span>}
-                </Link>
-
-              renderWorkflowListItemListener = (workflow) =>
-                <li key={workflow.id}>
-                  <ChangeListener target={workflow} eventName="save" handler={renderWorkflowListItem.bind null, workflow} />
-                </li>
-
-              <DragReorderable tag="ul" className="nav-list" items={workflows} render={renderWorkflowListItemListener} onChange={@handleWorkflowReorder} />
-            }</PromiseRenderer>
-
-            <div className="nav-list-item">
-              <button type="button" onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
-                New workflow{' '}
-                <LoadingIndicator off={not @state.workflowCreationInProgress} />
-              </button>
-            </div>
-          </li>
-
-          {if @state.workflowCreationInProgress
-            <ModalFormDialog tag="div">
-              <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowActiveStatus={not @props.project.live} />
-            </ModalFormDialog>}
-
-          <li>
-            <br />
-            <div className="nav-list-header">Subject sets</div>
-            <PromiseRenderer promise={@props.project.get 'subject_sets', sort: 'display_name', page_size: 250}>{(subjectSets) =>
-              <ul className="nav-list">
-                {renderSubjectSetListItem = (subjectSet) ->
-                  subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>
-                  <li key={subjectSet.id}>
-                    <Link to={@labPath("/subject-set/#{subjectSet.id}")} activeClassName="active" className="nav-list-item" title="A subject is an image (or group of images) to be analyzed.">{subjectSetListLabel}</Link>
-                  </li>}
-
-                {for subjectSet in subjectSets
-                  <ChangeListener key={subjectSet.id} target={subjectSet} eventName="save" handler={renderSubjectSetListItem.bind this, subjectSet} />}
-
-                <li className="nav-list-item">
-                  <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress} title="A subject is an image (or group of images) to be analyzed.">
-                    New subject set{' '}
-                    <LoadingIndicator off={not @state.subjectSetCreationInProgress} />
-                  </button>{' '}
-                  {if @state.subjectSetCreationError?
-                    <div className="form-help error">{@state.subjectSetCreationError.message}</div>}
-                </li>
-              </ul>
-            }</PromiseRenderer>
-          </li>
+          <li><Link to={@labPath('/workflows')} activeClassName='active' className="nav-list-item" title="View your project's workflows">
+            Workflows
+          </Link></li>
+          <li><Link to={@labPath('/subject-sets')} activeClassName='active' className="nav-list-item" title="View your project's subject sets">
+            Subject Sets
+          </Link></li>
 
           <li>
             <br />
@@ -184,39 +118,6 @@ EditProjectPage = React.createClass
         } />
       </div>
     </div>
-
-  showCreateWorkflow: ->
-    @setState workflowCreationInProgress: true
-
-  hideCreateWorkflow: ->
-    @setState workflowCreationInProgress: false
-
-  handleWorkflowCreation: (workflow) ->
-    @hideCreateWorkflow()
-    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
-    @context.router.push newLocation
-    @props.project.uncacheLink 'workflows'
-    @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
-
-  createNewSubjectSet: ->
-    subjectSet = apiClient.type('subject_sets').create
-      display_name: DEFAULT_SUBJECT_SET_NAME
-      links:
-        project: @props.project.id
-
-    @setState
-      subjectSetCreationError: null
-      subjectSetCreationInProgress: true
-
-    subjectSet.save()
-      .then =>
-        @context.router.push "/lab/#{@props.project.id}/subject-set/#{subjectSet.id}"
-      .catch (error) =>
-        @setState subjectSetCreationError: error
-      .then =>
-        @props.project.uncacheLink 'subject_sets'
-        if @isMounted()
-          @setState subjectSetCreationInProgress: false
 
   deleteProject: ->
     @setState deletionError: null
