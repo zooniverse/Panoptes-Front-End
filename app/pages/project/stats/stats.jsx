@@ -177,35 +177,12 @@ GraphSelect.propTypes = {
   handleWorkflowChange: React.PropTypes.func,
 };
 
-function calcEta(props) {
-  let eta = undefined;
-  if (props.completeness) {
-    eta = 0;
-  }
-  else if (props.data.length > 1) {
-    let value;
-    let days;
-    if (props.data.length > 15) {
-      // don't count the last bin since the current day is not over yet
-      value = props.data.slice(props.data.length - 15, props.data.length - 1);
-      days = 14;
-    } else {
-      value = props.data.slice(0, props.data.length - 1);
-      days = props.data.length - 1;
-    }
-    const rate = value.reduce((a, b) => (a + b));
-    eta = Math.max(0, Math.ceil(days * (props.totalCount - props.currentCount) / rate));
-  }
-  return eta
- }
-
-export const Eta = (props) => {
+export const Eta = (eta) => {
   let output = <div />;
-  const eta = calcEta(props);
   if (eta !== undefined) {
     output = (
       <div>
-        <span className="progress-stats-label">ETC*</span> {`${eta} days`}
+        <span className="progress-stats-label">ETC*</span> {`${eta.numDays} days`}
       </div>
     );
   }
@@ -213,10 +190,7 @@ export const Eta = (props) => {
 };
 
 Eta.propTypes = {
-  currentCount: React.PropTypes.number,
-  data: React.PropTypes.array,
-  totalCount: React.PropTypes.number,
-  completeness: React.PropTypes.bool,
+  numDays: React.PropTypes.number,
 };
 
 export class WorkflowProgress extends React.Component {
@@ -252,6 +226,31 @@ export class WorkflowProgress extends React.Component {
       });
   }
 
+  calcDaysToCompletion() {
+    let numDays = undefined;
+    const dataLength = this.state.statData.length;
+    const compeletness = this.props.workflow.completeness == 1;
+    if (compeletness) {
+      numDays = 0;
+    }
+    else if (dataLength > 1) {
+      let value;
+      let days;
+      if (dataLength > 15) {
+        // don't count the last bin since the current day is not over yet
+        value = this.state.statData.slice(dataLength - 15, dataLength - 1);
+        days = 14;
+      } else {
+        value = this.state.statData.slice(0, dataLength - 1);
+        days = dataLength - 1;
+      }
+      const rate = value.reduce((a, b) => (a + b));
+      const totalCount = this.props.workflow.subjects_count * this.props.workflow.retirement.options.count;
+      numDays = Math.max(0, Math.ceil(days * (totalCount - this.props.workflow.classifications_count) / rate));
+    }
+    return numDays;
+  }
+
   render() {
     let retirement;
     let eta;
@@ -276,16 +275,8 @@ export class WorkflowProgress extends React.Component {
           {' '}{this.props.workflow.retirement.options.count.toLocaleString()}
         </div>
       );
-      total = this.props.workflow.subjects_count * this.props.workflow.retirement.options.count;
       if (this.state.statData) {
-        eta = (
-          <Eta
-            data={this.state.statData}
-            currentCount={this.props.workflow.classifications_count}
-            totalCount={total}
-            completeness={this.props.workflow.completeness == 1}
-          />
-        );
+        eta = <Eta numDays={this.calcDaysToCompletion()}/>;
       }
       if (this.props.workflow.configuration) {
         if (this.props.workflow.configuration.stats_completeness_type === 'classification') {
