@@ -1,6 +1,5 @@
 import React from 'react';
-import SVGLink from './svg-link';
-
+import { browserHistory } from 'react-router';
 
 let instanceCount = 0;
 
@@ -106,8 +105,14 @@ const CircleRibbon = React.createClass({
   },
 
   handleClick(event) {
+    const rightButtonPressed = (!!event.button && event.button > 0);
+    const modifierKey = (event.ctrlKey || event.metaKey);
     const index = event.currentTarget.querySelector('[data-index]').getAttribute('data-index');
     const clickedProject = this.props.data[index];
+    if (!clickedProject.redirect && !rightButtonPressed && !modifierKey) {
+      browserHistory.push(`/projects/${clickedProject.slug}`);
+      event.preventDefault();
+    }
     this.props.onClick(clickedProject.id);
   },
 
@@ -139,11 +144,16 @@ const CircleRibbon = React.createClass({
     const largeArc = this.calcLargeArc(project.classifications);
 
     return (
-      <SVGLink
+      <a
         key={project.id}
         xlinkHref={this.props.hrefTemplate(project)}
         aria-label={`${project.slug} (${project.classifications} classifications)`}
+        data-index={index}
         onClick={this.handleClick}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+        onFocus={this.handleMouseEnter}
+        onBlur={this.handleMouseLeave}
       >
         <path
           className="circle-ribbon__project-arc"
@@ -151,12 +161,10 @@ const CircleRibbon = React.createClass({
             M ${startPoint.x} ${startPoint.y}
             A ${radius} ${radius} 0 ${largeArc} 1 ${endPoint.x}, ${endPoint.y}
           `}
-          stroke={project.color}
           data-index={index}
-          onMouseEnter={this.handleMouseEnter}
-          onMouseLeave={this.handleMouseLeave}
+          stroke={project.color}
         />
-      </SVGLink>
+      </a>
     );
   },
 
@@ -180,19 +188,15 @@ const CircleRibbon = React.createClass({
               <circle cx="50" cy="50" r={imageSize / 2} />
             </clipPath>
           </defs>
-
-          <SVGLink to={`/users/${this.props.user.login}/stats`} aria-label={`${this.props.user.login} stats`}>
-            <image
-              xlinkHref={avatar}
-              x={this.props.weight + this.props.gap}
-              y={this.props.weight + this.props.gap}
-              width={imageSize}
-              height={imageSize}
-              clipPath={`url('#circle-ribbon-clip-${this.id}')`}
-              className={`url('#circle-ribbon-shadow-${this.id}')`}
-            />
-          </SVGLink>
-
+          <image
+            xlinkHref={avatar}
+            x={this.props.weight + this.props.gap}
+            y={this.props.weight + this.props.gap}
+            width={imageSize}
+            height={imageSize}
+            clipPath={`url('#circle-ribbon-clip-${this.id}')`}
+            className={`url('#circle-ribbon-shadow-${this.id}')`}
+          />
           <g ref="arcGroup" fill="none" stroke="none" transform="translate(50, 50)">
             {this.props.loading && (
               <circle className="circle-ribbon__loading-ring" r={50 - (this.props.weight / 2)} stroke="gray" strokeWidth="0.5" />
