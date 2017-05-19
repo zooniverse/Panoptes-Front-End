@@ -65,8 +65,8 @@ export default class FrameViewer extends React.Component {
               format={format}
               frame={this.props.frame}
               onLoad={this.handleLoad}
-              onFocus={(this.panZoom && zoomEnabled) ? this.panZoom.togglePanOn : () => {}}
-              onBlur={(this.panZoom && zoomEnabled) ? this.panZoom.togglePanOff : () => {}}
+              onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
+              onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
             />
           </FrameWrapper>
         </PanZoom>

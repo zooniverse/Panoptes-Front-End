@@ -89,6 +89,25 @@ export default class SVGRenderer extends React.Component {
       ({ InsideSubject } = tasks[taskDescription.type]);
     }
 
+    const svgStyle = {};
+    if (type === 'image' && !this.props.loading) {
+      // Images are rendered again within the SVG itself.
+      // When cropped right next to the edge of the image,
+      // the original tag can show through, so fill the SVG to cover it.
+      svgStyle.background = 'black';
+
+      // Allow touch scrolling on subject for mobile and tablets
+      if (taskDescription) {
+        if (tasks[taskDescription.type] && tasks[taskDescription.type].AnnotationRenderer !== SVGRenderer) {
+          svgStyle.pointerEvents = 'none';
+        }
+      }
+      if (this.props.panEnabled === true) {
+        svgStyle.pointerEvents = 'all';
+      }
+    }
+
+    const svgProps = {};
     const { annotations } = this.props.classification;
 
     const hookProps = {
@@ -111,28 +130,12 @@ export default class SVGRenderer extends React.Component {
       workflow: this.props.workflow
     };
 
-    const svgProps = {
-      style: {
-        background: 'black'
-      }
-    };
-
     Object.keys(tasks).map((task) => {
       const Component = tasks[task];
       if (Component.getSVGProps) {
-        const { style } = svgProps;
-        const newProps = Component.getSVGProps(hookProps);
-        const newStyle = newProps ? Object.assign(style, newProps.style) : style;
-        svgProps.style = newStyle;
-        delete newProps.style;
-        Object.assign(svgProps, newProps);
+        Object.assign(svgProps, Component.getSVGProps(hookProps));
       }
     });
-
-    // pan/zoom should override any custom pointer event styles
-    if (this.props.panEnabled === true) {
-      svgProps.style.pointerEvents = 'all';
-    }
 
     let children = [];
     const isDrawingTask = taskDescription && (tasks[taskDescription.type].AnnotationRenderer === SVGRenderer);
@@ -159,6 +162,7 @@ export default class SVGRenderer extends React.Component {
         <svg
           ref={(element) => { if (element) this.svgSubjectArea = element; }}
           className="subject"
+          style={svgStyle}
           viewBox={createdViewBox}
           {...svgProps}
         >
@@ -175,7 +179,7 @@ export default class SVGRenderer extends React.Component {
               stroke="none"
             />
             {type === 'image' && (
-              <Draggable onDrag={this.props.panEnabled ? this.props.panByDrag : () => {}}>
+              <Draggable onDrag={this.props.panByDrag} disabled={this.props.disabled}>
                 <SVGImage
                   className={this.props.panEnabled ? 'pan-active' : ''}
                   src={src}
@@ -205,7 +209,9 @@ SVGRenderer.propTypes = {
     annotations: React.PropTypes.array,
     loading: React.PropTypes.bool
   }),
+  disabled: React.PropTypes.bool,
   frame: React.PropTypes.number,
+  loading: React.PropTypes.bool,
   modification: React.PropTypes.object,
   naturalHeight: React.PropTypes.number,
   naturalWidth: React.PropTypes.number,
