@@ -226,7 +226,7 @@ export class WorkflowProgress extends React.Component {
       });
   }
 
-  calcDaysToCompletion() {
+  calcDaysToCompletion(totalCount) {
     let numDays = undefined;
     const dataLength = this.state.statData.length;
     const compeletness = this.props.workflow.completeness == 1;
@@ -245,7 +245,6 @@ export class WorkflowProgress extends React.Component {
         days = dataLength - 1;
       }
       const rate = value.reduce((a, b) => (a + b));
-      const totalCount = this.props.workflow.subjects_count * this.props.workflow.retirement.options.count;
       numDays = Math.max(0, Math.ceil(days * (totalCount - this.props.workflow.classifications_count) / rate));
     }
     return numDays;
@@ -254,10 +253,10 @@ export class WorkflowProgress extends React.Component {
   render() {
     let retirement;
     let eta;
-    let total;
     let retiredDiv;
     let classificationDiv;
     let completeness = this.props.workflow.completeness;
+    const totalCount = this.props.workflow.subjects_count * this.props.workflow.retirement.options.count;
     if (this.props.workflow.retirement.criteria !== 'never_retire') {
       retiredDiv = (
         <div>
@@ -276,12 +275,12 @@ export class WorkflowProgress extends React.Component {
         </div>
       );
       if (this.state.statData) {
-        eta = <Eta numDays={this.calcDaysToCompletion()}/>;
+        eta = <Eta numDays={this.calcDaysToCompletion(totalCount)}/>;
       }
       if (this.props.workflow.configuration) {
         if (this.props.workflow.configuration.stats_completeness_type === 'classification') {
-          completeness = this.props.workflow.classifications_count / total;
-          classificationsString += ` / ${total.toLocaleString()}`;
+          completeness = this.props.workflow.classifications_count / totalCount;
+          classificationsString += ` / ${totalCount.toLocaleString()}`;
           classificationDiv = (
             <div>
               <span className="progress-stats-label">Classifications:</span>
