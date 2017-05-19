@@ -5,6 +5,7 @@ import GSGoldStandardSummary from './gs-gold-standard-summary';
 import MetadataBasedFeedback from './metadata-based-feedback';
 import WorldWideTelescope from './world-wide-telescope';
 import FeedbackSummary from './feedback/feedback-summary-container';
+import isFeedbackActive from './feedback/helpers';
 
 /* eslint-disable multiline-ternary, react/forbid-prop-types */
 
@@ -49,7 +50,7 @@ class ClassificationSummary extends React.Component {
 
   isFeedbackEnabled() {
     const { project, workflow } = this.props;
-    if (project && project.experimental_tools.includes('general feedback')) {
+    if (isFeedbackActive(project) {
       const { tasks } = workflow;
       return Object.keys(tasks)
         .map(key => tasks[key].feedback && tasks[key].feedback.enabled)

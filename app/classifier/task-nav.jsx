@@ -4,7 +4,7 @@ import { getSessionID } from '../lib/session';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
 import GridTool from './drawing-tools/grid';
-import { isThereFeedback } from './feedback/helpers';
+import * from './feedback/helpers';
 
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
 
@@ -166,7 +166,7 @@ class TaskNav extends React.Component {
             >
               Back
             </button>}
-          {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk && !(this.props.project.experimental_tools && this.props.project.experimental_tools.includes('general feedback') && isThereFeedback(this.props.subject, this.props.workflow))) &&
+          {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk && !isFeedbackActive(this.props.project) && isThereFeedback(this.props.subject, this.props.workflow))) &&
             <Link
               onClick={this.completeClassification}
               to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}

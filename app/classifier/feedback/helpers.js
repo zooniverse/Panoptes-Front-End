@@ -1,5 +1,11 @@
 import FeedbackRuleSet from './feedback-ruleset';
 
+const isFeedbackActive = (project) => {
+  return project &&
+    project.experimental_tools && 
+    project.experimental_tools.includes('general feedback');
+};
+
 const isThereFeedback = (subject, workflow) => {
   let result = false;
   for (const task in workflow.tasks) {
@@ -14,4 +20,4 @@ const isThereFeedback = (subject, workflow) => {
   return result;
 };
 
-export { isThereFeedback };
+export { isFeedbackActive, isThereFeedback };

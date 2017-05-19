@@ -17,7 +17,7 @@ import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import { connect } from 'react-redux';
-import { isThereFeedback } from './feedback/helpers';
+import * from './feedback/helpers';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -152,7 +152,7 @@ class Classifier extends React.Component {
   }
 
   completeClassification() {
-    const feedbackActive = this.props.project.experimental_tools && this.props.project.experimental_tools.includes('general feedback');
+    const feedbackActive = isFeedbackActive(this.props.project);
     
     if (feedbackActive) {
       const classificationMetadata = Object.assign({}, this.props.classification.metadata, {
