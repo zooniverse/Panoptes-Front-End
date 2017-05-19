@@ -17,7 +17,7 @@ import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import { connect } from 'react-redux';
-import * from './feedback/helpers';
+import { isFeedbackActive, isThereFeedback } from './feedback/helpers';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
