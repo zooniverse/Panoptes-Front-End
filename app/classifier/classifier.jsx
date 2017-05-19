@@ -17,6 +17,7 @@ import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import { connect } from 'react-redux';
+import { isThereFeedback } from './feedback/helpers';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -151,7 +152,9 @@ class Classifier extends React.Component {
   }
 
   completeClassification() {
-    if (this.props.project.experimental_tools && this.props.project.experimental_tools.includes('general feedback')) {
+    const feedbackActive = this.props.project.experimental_tools && this.props.project.experimental_tools.includes('general feedback');
+    
+    if (feedbackActive) {
       const classificationMetadata = Object.assign({}, this.props.classification.metadata, {
         feedbackShown: this.props.feedback.length > 0
       });
@@ -162,7 +165,9 @@ class Classifier extends React.Component {
     }
 
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
-      this.props.onCompleteAndLoadAnotherSubject();
+      if (!feedbackActive || (feedbackActive && !isThereFeedback(this.props.subject, this.props.workflow))) {
+          this.props.onCompleteAndLoadAnotherSubject();
+        }
     } else {
       this.props.onComplete()
       .then((classification) => {

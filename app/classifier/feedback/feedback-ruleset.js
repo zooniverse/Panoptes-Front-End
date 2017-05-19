@@ -19,18 +19,22 @@ export default class FeedbackRuleSet {
     // Find the feedback types required in the subject metadata and check for valid active rules in the task definition.
     const { metadata } = this._subject;
     const { feedback } = this._task;
-    return Object.keys(metadata).reduce((types, key) => {
-      const match = key.match(/#feedback_(\d*?)_type/);
-      if (match) {
-        const index = match[1];
-        const type = metadata[key];
-        const typeInTaskDefinition = feedback.types.find((feedbackItem) => feedbackItem.id === type);
-        if (typeInTaskDefinition && typeInTaskDefinition.valid) {
-          types[`feedback_${index}`] = metadata[key];
+    if (metadata && feedback) {
+      return Object.keys(metadata).reduce((types, key) => {
+        const match = key.match(/#feedback_(\d*?)_type/);
+        if (match) {
+          const index = match[1];
+          const type = metadata[key];
+          const typeInTaskDefinition = feedback.types.find((feedbackItem) => feedbackItem.id === type);
+          if (typeInTaskDefinition && typeInTaskDefinition.valid) {
+            types[`feedback_${index}`] = metadata[key];
+          }
         }
-      }
-      return types;
-    }, {});
+        return types;
+      }, {});
+    } else {
+      return {};
+    }
   }
 
   _getDefaultsForType(type) {
