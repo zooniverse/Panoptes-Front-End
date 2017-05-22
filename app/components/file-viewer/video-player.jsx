@@ -15,6 +15,10 @@ class VideoPlayer extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.player.controlsList = "nodownload"; // Non-spec option for Chrome browsers to hide the display of a download button
+  }
+
   componentDidUpdate() {
     if (this.player) this.player.playbackRate = this.state.playbackRate;
   }

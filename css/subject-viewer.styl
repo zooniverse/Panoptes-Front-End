@@ -21,7 +21,17 @@
         font-weight: 700
 
   video
+    background-color: black
     width: 100%
+    
+    &::-internal-media-controls-download-button 
+      display: none
+
+    &::-webkit-media-controls-enclosure 
+      overflow: hidden
+
+    &::-webkit-media-controls-panel 
+      width: calc(100% + 30px); /* Adjust as needed */
 
   .subject-video-controls
     display: inline-block
