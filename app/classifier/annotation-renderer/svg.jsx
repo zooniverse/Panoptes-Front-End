@@ -5,6 +5,7 @@ import getSubjectLocation from '../../lib/get-subject-location';
 import SVGImage from '../../components/svg-image';
 import SVGFeedbackViewer from '../feedback/svg-feedback-viewer';
 import SVGToolTipLayer from '../feedback/svg-tooltip-layer';
+import { isFeedbackActive } from '../feedback/helpers';
 
 export default class SVGRenderer extends React.Component {
   constructor(props) {
@@ -155,7 +156,7 @@ export default class SVGRenderer extends React.Component {
       .filter(Boolean);
     children = children.concat(persistentHooks);
 
-    const showFeedback = (this.props.project && this.props.project.experimental_tools && this.props.project.experimental_tools.includes('general feedback'));
+    const showFeedback = isFeedbackActive(this.props.project);
 
     return (
       <div>
