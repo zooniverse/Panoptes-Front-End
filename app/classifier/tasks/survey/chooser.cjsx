@@ -146,11 +146,17 @@ module.exports = React.createClass
           for choiceID, i in sortedFilteredChoices
             choice = @props.task.choices[choiceID]
             chosenAlready = choiceID in selectedChoices
+            tabIndex = -1
+            if i == 0 and @props.focusedChoice.length == 0
+              tabIndex = 0
+            if choiceID is @props.focusedChoice
+              tabIndex = 0
             <button
               autoFocus={choiceID is @props.focusedChoice}
               key={choiceID}
               data-choiceID={choiceID}
               ref={(button) => @choiceButtons.push button}
+              tabIndex={tabIndex}
               type="button"
               className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}"
               onClick={@props.onChoose.bind null, choiceID}
