@@ -55,16 +55,16 @@ class PointEditForm extends React.Component {
   render() {
     const fields = this.getFields()
     return (
-      <div className='single-edit-feedback-modal'>
-        <Translate content='PointEditForm.title' className='form-label' />
+      <div className="single-edit-feedback-modal">
+        <Translate content="PointEditForm.title" className="form-label" />
         {fields.map(this.renderInput)}
 
-        <div className='single-edit-feedback-modal__buttons'>
-          <button onClick={this.handleCancel} className='minor-button'>
-            <Translate content='PointEditForm.cancel' />
+        <div className="single-edit-feedback-modal__buttons">
+          <button onClick={this.handleCancel} className="minor-button">
+            <Translate content="PointEditForm.cancel" />
           </button>
-          <button onClick={this.handleSave} disabled={!this.state.valid} className='major-button'>
-            <Translate content='PointEditForm.save' />
+          <button onClick={this.handleSave} disabled={!this.state.valid} className="major-button">
+            <Translate content="PointEditForm.save" />
           </button>
         </div>
       </div>
@@ -135,7 +135,7 @@ class PointEditForm extends React.Component {
           <div>
             <Translate content={`PointEditForm.fields.${field.id}.title`} />
           </div>
-          <small className='form-help'>
+          <small className="form-help">
             <Translate content={`PointEditForm.fields.${field.id}.help`} />
           </small>
           <input {...inputProps} />

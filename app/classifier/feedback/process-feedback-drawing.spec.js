@@ -8,28 +8,28 @@ import processDrawingFeedback from './process-feedback-drawing';
 const SUCCESS_MESSAGE = 'great success';
 const FAILURE_MESSAGE = 'epic fail';
 const QUESTION = 'Where is it?';
-const RULE = {
+const BASE_RULE = {
   successMessage: SUCCESS_MESSAGE,
   failureMessage: FAILURE_MESSAGE,
   x: 10,
   y: 10,
-  tol: 10,
-  type: 'foo'
+  type: 'foo',
+  dud: false
 };
 
-processDrawingFeedback.__Rewire__('FeedbackRuleSet', class FeedbackRuleSet {
-  constructor() {
-    this.rules = [RULE];
-  }
-});
+const NORMAL_RULE = Object.assign({}, BASE_RULE, { tol: 10 });
+const DUD_RULE = Object.assign({}, BASE_RULE, { dud: true });
 
-const ANNOTATION = {
-  task: 'T0',
+const BASE_ANNOTATION = { task: 'T0' };
+
+const NORMAL_ANNOTATION = Object.assign({}, BASE_ANNOTATION, {
   value: [
     { x: 10, y: 10 },
     { x: 10, y: 50 }
   ]
-};
+});
+
+const DUD_ANNOTATION = Object.assign({}, BASE_ANNOTATION, { value: [] });
 
 const SUBJECT = {
   metadata: { '#feedback_1_type': 'foo' }
@@ -39,32 +39,67 @@ const TASK = {
   question: QUESTION
 };
 
+const mockFeedbackRule = (rule) => {
+  processDrawingFeedback.__Rewire__('FeedbackRuleSet', class FeedbackRuleSet {
+    constructor() {
+      this.rules = [rule];
+    }
+  });
+};
+
 describe('processDrawingFeedback', function () {
+
   it('should return an array of results', function () {
-    const result = processDrawingFeedback(ANNOTATION, SUBJECT, TASK);
+    mockFeedbackRule(NORMAL_RULE);
+    const result = processDrawingFeedback(NORMAL_ANNOTATION, SUBJECT, TASK);
     assert(result.length === 1);
   });
 
   it('should return a success result if at least one annotation value is within rule tolerance', function () {
-    const result = processDrawingFeedback(ANNOTATION, SUBJECT, TASK);
-    assert.strictEqual(result[0].task, ANNOTATION.task);
-    assert.strictEqual(result[0].success, true);
-    assert.strictEqual(result[0].message, SUCCESS_MESSAGE);
-    assert.strictEqual(result[0].x, 10);
-    assert.strictEqual(result[0].y, 10);
-    assert.strictEqual(result[0].tol, 10);
-    assert.strictEqual(result[0].target, 'classifier');
+    mockFeedbackRule(NORMAL_RULE);
+
+    const [result] = processDrawingFeedback(NORMAL_ANNOTATION, SUBJECT, TASK);
+    assert.strictEqual(result.task, NORMAL_ANNOTATION.task);
+    assert.strictEqual(result.success, true);
+    assert.strictEqual(result.message, SUCCESS_MESSAGE);
+    assert.strictEqual(result.x, 10);
+    assert.strictEqual(result.y, 10);
+    assert.strictEqual(result.tol, 10);
+    assert.strictEqual(result.target, 'classifier');
   });
 
   it('should return a failure result if all annotation values are outside rule tolerance', function () {
-    const failureAnnotation = Object.assign({}, ANNOTATION, { value: ANNOTATION.value.slice(1, 1) });
-    const result = processDrawingFeedback(failureAnnotation, SUBJECT, TASK);
-    assert.strictEqual(result[0].task, ANNOTATION.task);
-    assert.strictEqual(result[0].success, false);
-    assert.strictEqual(result[0].message, FAILURE_MESSAGE);
-    assert.strictEqual(result[0].x, 10);
-    assert.strictEqual(result[0].y, 10);
-    assert.strictEqual(result[0].tol, 10);
-    assert.strictEqual(result[0].target, 'classifier');
+    mockFeedbackRule(NORMAL_RULE);
+
+    const failureAnnotation = Object.assign({}, NORMAL_ANNOTATION, { value: NORMAL_ANNOTATION.value.slice(1, 1) });
+    const [result] = processDrawingFeedback(failureAnnotation, SUBJECT, TASK);
+    assert.strictEqual(result.task, NORMAL_ANNOTATION.task);
+    assert.strictEqual(result.success, false);
+    assert.strictEqual(result.message, FAILURE_MESSAGE);
+    assert.strictEqual(result.x, 10);
+    assert.strictEqual(result.y, 10);
+    assert.strictEqual(result.tol, 10);
+    assert.strictEqual(result.target, 'classifier');
+  });
+
+  it('should return a success result if the subject is a dud and there are no annotations', function () {
+    mockFeedbackRule(DUD_RULE);
+
+    const [result] = processDrawingFeedback(DUD_ANNOTATION, SUBJECT, TASK);
+    assert.strictEqual(result.task, DUD_ANNOTATION.task);
+    assert.strictEqual(result.success, true);
+    assert.strictEqual(result.message, SUCCESS_MESSAGE);
+    assert.strictEqual(result.target, 'summary');
+
+  });
+
+  it('should return a failure result if the subject is a dud and there are annotations', function () {
+    mockFeedbackRule(DUD_RULE);
+
+    const [result] = processDrawingFeedback(NORMAL_ANNOTATION, SUBJECT, TASK);
+    assert.strictEqual(result.task, NORMAL_ANNOTATION.task);
+    assert.strictEqual(result.success, false);
+    assert.strictEqual(result.message, FAILURE_MESSAGE);
+    assert.strictEqual(result.target, 'summary');
   });
 });
