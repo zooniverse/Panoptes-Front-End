@@ -75,11 +75,11 @@ ComboTask = React.createClass
     getSVGProps: ({task, taskTypes, workflow})->
       drawingTasks = task?.tasks?.filter (taskKey) =>
         {type} = workflow.tasks[taskKey]
-        taskTypes[type].annotationRenderer is SVGRenderer
-      if drawingTasks?.length is 0
+        taskTypes[type].AnnotationRenderer is SVGRenderer
+      if drawingTasks?.length > 0
         svgProps =
           style:
-            pointerEvents: 'none'
+            pointerEvents: 'all'
       else
         svgProps = {}
       svgProps
