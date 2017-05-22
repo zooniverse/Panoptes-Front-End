@@ -22,9 +22,12 @@ module.exports = React.createClass
     PersistAfterTask: HidePreviousMarksToggle
     AnnotationRenderer: SVGRenderer
 
-    getSvgProps: ->
-      style:
-        pointerEvents: none
+    getSVGProps: ({task})->
+      if task?.type is 'drawing'
+        style:
+          pointerEvents: 'all'
+      else
+        {}
 
     getDefaultTask: ->
       type: 'drawing'

@@ -13,10 +13,14 @@ module.exports = React.createClass
     Summary: Summary
     AnnotationRenderer: SVGRenderer
 
-    getSVGProps: ({workflow, classification, annotation}) ->
+    getSVGProps: ({task, workflow, classification, annotation}) ->
       svgProps = 
-        style:
-          pointerEvents: 'none'
+        if task?.type is 'crop'
+          style:
+            pointerEvents: 'all'
+        else
+          {}
+
       tasks = require('../index').default
       [previousCropAnnotation] = classification.annotations.filter (anAnnotation) =>
         taskDescription = workflow.tasks[anAnnotation.task]

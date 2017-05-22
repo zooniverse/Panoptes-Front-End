@@ -111,9 +111,12 @@ export default class SVGRenderer extends React.Component {
       workflow: this.props.workflow
     };
 
+    // disable subject pointer events by default.
+    // Tasks then need to enable pointer events, when required, in SVGProps.
     const svgProps = {
       style: {
-        background: 'black'
+        background: 'black',
+        pointerEvents: 'none'
       }
     };
 
