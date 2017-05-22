@@ -13,7 +13,14 @@ module.exports = React.createClass
     Summary: Summary
     AnnotationRenderer: SVGRenderer
 
-    getSVGProps: ({workflow, classification, annotation}) ->
+    getSVGProps: ({task, workflow, classification, annotation}) ->
+      svgProps = 
+        if task?.type is 'crop'
+          style:
+            pointerEvents: 'all'
+        else
+          {}
+
       tasks = require('../index').default
       [previousCropAnnotation] = classification.annotations.filter (anAnnotation) =>
         taskDescription = workflow.tasks[anAnnotation.task]
@@ -21,7 +28,8 @@ module.exports = React.createClass
         TaskComponent is this and anAnnotation.value? and anAnnotation isnt annotation
       if previousCropAnnotation?
         {x, y, width, height} = previousCropAnnotation.value
-        viewBox: "#{x} #{y} #{width} #{height}"
+        svgProps.viewBox = "#{x} #{y} #{width} #{height}"
+      svgProps
 
     InsideSubject: CropInitializer
 

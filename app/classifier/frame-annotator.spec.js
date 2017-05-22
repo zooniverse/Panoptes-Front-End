@@ -187,4 +187,52 @@ describe('<FrameAnnotator />', function() {
       assert(wrapper.find(TaskComponent.PersistInsideSubject).length >= 1);
     });
   });
+  
+  describe('SVG style', function() {
+    let wrapper;
+
+    before(function() {
+      const drawingAnnotation = tasks.drawing.getDefaultAnnotation();
+      drawingAnnotation.task = 'draw';
+      wrapper = mount(
+        <FrameAnnotator
+          annotation={drawingAnnotation}
+          classification={classification}
+          loading={false}
+          naturalHeight={naturalHeight}
+          naturalWidth={naturalWidth}
+          subject={subject}
+          viewBoxDimensions={viewBoxDimensions}
+          workflow={workflow}
+        />);
+    });
+
+    it('allows pointer events for drawing tasks', function() {
+      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'all');
+    });
+
+    it('does not allow pointer events for question tasks', function() {
+      const questionAnnotation = tasks.single.getDefaultAnnotation();
+      questionAnnotation.task = 'init';
+      wrapper.setProps({annotation: questionAnnotation});
+      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'none');
+    });
+
+    it('allows pointer events for combo drawing tasks', function() {
+      const comboAnnotation = tasks.combo.getDefaultAnnotation(workflow.tasks.combo, workflow, tasks);
+      comboAnnotation.task = 'combo';
+      wrapper.setProps({annotation: comboAnnotation});
+      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'all');
+    });
+
+    it('does not allow pointer events for other combo tasks', function() {
+      const comboTask = workflow.tasks.combo;
+      comboTask.tasks = ['write', 'ask', 'features'];
+      workflow.tasks.textCombo = comboTask;
+      const comboAnnotation = tasks.combo.getDefaultAnnotation(workflow.tasks.textCombo, workflow, tasks);
+      comboAnnotation.task = 'textCombo';
+      wrapper.setProps({annotation: comboAnnotation});
+      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'none');
+    });
+  });
 });

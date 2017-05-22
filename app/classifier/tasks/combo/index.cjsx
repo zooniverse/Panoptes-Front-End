@@ -72,6 +72,18 @@ ComboTask = React.createClass
 
     PersistInsideSubject: MarkingsRenderer
 
+    getSVGProps: ({task, taskTypes, workflow})->
+      drawingTasks = task?.tasks?.filter (taskKey) =>
+        {type} = workflow.tasks[taskKey]
+        taskTypes[type].AnnotationRenderer is SVGRenderer
+      if drawingTasks?.length > 0
+        svgProps =
+          style:
+            pointerEvents: 'all'
+      else
+        svgProps = {}
+      svgProps
+
   getDefaultProps: ->
     taskTypes: null
     workflow: null
