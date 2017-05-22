@@ -217,5 +217,22 @@ describe('<FrameAnnotator />', function() {
       wrapper.setProps({annotation: questionAnnotation});
       assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'none');
     });
+
+    it('allows pointer events for combo drawing tasks', function() {
+      const comboAnnotation = tasks.combo.getDefaultAnnotation(workflow.tasks.combo, workflow, tasks);
+      comboAnnotation.task = 'combo';
+      wrapper.setProps({annotation: comboAnnotation});
+      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'all');
+    });
+
+    it('does not allow pointer events for other combo tasks', function() {
+      const comboTask = workflow.tasks.combo;
+      comboTask.tasks = ['write', 'ask', 'features'];
+      workflow.tasks.textCombo = comboTask;
+      const comboAnnotation = tasks.combo.getDefaultAnnotation(workflow.tasks.textCombo, workflow, tasks);
+      comboAnnotation.task = 'textCombo';
+      wrapper.setProps({annotation: comboAnnotation});
+      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'none');
+    });
   });
 });
