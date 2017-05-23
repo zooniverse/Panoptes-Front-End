@@ -24,22 +24,11 @@ module.exports = React.createClass
   getInitialState: ->
     avatarError: null
     backgroundError: null
-    showAggregationExportButton: false
-
-  componentDidMount: ->
-    @showAggregationExport @props.project
 
   showWorkflowExport: ->
     Dialog.alert(
       <ExportWorkflowsDialog project={@props.project} />
     )
-
-  showAggregationExport: (project) ->
-    project.get('aggregations_export').then (export) =>
-      if export[0].metadata.state is 'ready'
-        @setState showAggregationExportButton: true
-    .catch (error) =>
-      console.error error
 
   render: ->
     <div className="data-exports">
@@ -78,19 +67,15 @@ module.exports = React.createClass
               buttonKey="projectDetails.workflowContentsExport"
               exportType="workflow_contents_export"  />
           </div>
-          {
-           if @state.showAggregationExportButton
-             <div className="row">
-              <DataExportButton
-                project={@props.project}
-                buttonKey="projectDetails.aggregationExport"
-                contentType="application/x-gzip"
-                exportType="aggregations_export"
-                newFeature=true
-              />
-              <small className="form-help">Text tasks and survey tasks cannot be aggregated at this time.</small>
-            </div>
-          }
+          <div className="row">
+            <DataExportButton
+              project={@props.project}
+              buttonKey="projectDetails.aggregationExport"
+              contentType="application/x-gzip"
+              exportType="aggregations_export"
+              newFeature=true
+            />
+          </div>
           <hr />
 
           Talk Data<br />

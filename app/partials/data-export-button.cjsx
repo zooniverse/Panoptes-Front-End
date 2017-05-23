@@ -14,9 +14,14 @@ module.exports = React.createClass
   getInitialState: ->
     exportRequested: false
     exportError: null
+    showButton: true
 
   exportGet: ->
     @_exportsGet or= @props.project.get(@props.exportType).catch( -> [])
+      .then ([exported]) =>
+        if @props.exportType is 'aggregations_export' and exported.metadata.state isnt 'ready'
+          @setState showButton: false
+        return [exported]
 
   requestDataExport: ->
     @setState exportError: null
@@ -35,33 +40,36 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      { if @props.newFeature
-        <i className="fa fa-cog fa-lg fa-fw"></i> }
-      <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>
-        <Translate content={@props.buttonKey} />
-      </button> {' '}
-      <small className="form-help">
-        CSV format.{' '}
-        <PromiseRenderer promise={@exportGet()}>{([mostRecent]) =>
-          if @recentAndReady(mostRecent)
-            <span>
-              Most recent data available requested{' '}
-              <a href={mostRecent.src}>{moment(mostRecent.updated_at).fromNow()}</a>.
-            </span>
-          else if @pending(mostRecent)
-            <span>
-              Processing your request.
-            </span>
-          else
-            <span>Never previously requested.</span>
-        }</PromiseRenderer>
-        <br />
-      </small>
+      { if @state.showButton
+        <div>
+          { if @props.newFeature
+            <i className="fa fa-cog fa-lg fa-fw"></i> }
+          <button type="button" disabled={@state.exportRequested or @props.exportType is "aggregations_export"} onClick={@requestDataExport}>
+            <Translate content={@props.buttonKey} />
+          </button> {' '}
+          <small className="form-help">
+            CSV format.{' '}
+            <PromiseRenderer promise={@exportGet()}>{([mostRecent]) =>
+              if @recentAndReady(mostRecent)
+                <span>
+                  Most recent data available requested{' '}
+                  <a href={mostRecent.src}>{moment(mostRecent.updated_at).fromNow()}</a>.
+                </span>
+              else if @pending(mostRecent)
+                <span>
+                  Processing your request.
+                </span>
+              else
+                <span>Never previously requested.</span>
+            }</PromiseRenderer>
+            <br />
+          </small>
 
-      {if @state.exportError?
-         <div className="form-help error">{@state.exportError.toString()}</div>
-       else if @state.exportRequested
-         <div className="form-help success">
-           We’ve received your request, check your email for a link to your data soon!
-         </div>}
+          {if @state.exportError?
+             <div className="form-help error">{@state.exportError.toString()}</div>
+           else if @state.exportRequested
+             <div className="form-help success">
+               We’ve received your request, check your email for a link to your data soon!
+             </div>}
+        </div> }
     </div>
