@@ -117,7 +117,8 @@ class TaskNav extends React.Component {
 
     const task = this.props.task ? this.props.task : this.props.workflow.tasks[this.props.workflow.first_task];
 
-    const disableTalk = this.props.classification.metadata.subject_flagged;
+    const disableTalk = this.props.classification.metadata.subject_flagged ||
+    (isFeedbackActive(this.props.project) && isThereFeedback(this.props.subject, this.props.workflow));
     const visibleTasks = Object.keys(this.props.workflow.tasks).filter((key) => { return this.props.workflow.tasks[key].type !== 'shortcut'; });
     const TaskComponent = tasks[task.type];
 
@@ -166,7 +167,7 @@ class TaskNav extends React.Component {
             >
               Back
             </button>}
-          {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk && (!isFeedbackActive(this.props.project) && isThereFeedback(this.props.subject, this.props.workflow))) &&
+          {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk) &&
             <Link
               onClick={this.completeClassification}
               to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
