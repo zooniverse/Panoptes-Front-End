@@ -17,7 +17,6 @@ const experimentalFeatures = [
   'persist annotations',
   'shortcut',
   'metadata based feedback',
-  'export classifications by workflow',
   'freehandLine',
   'freehandShape',
   'freehandSegmentLine',

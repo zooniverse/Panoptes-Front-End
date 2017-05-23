@@ -7,7 +7,7 @@ class WorkflowClassificationExportButton extends React.Component {
     super(props);
     this.state = {
       exportError: null,
-      exportRequested: false,
+      exportRequested: false
     };
 
     this.showWorkflowExport = this.showWorkflowExport.bind(this);
@@ -33,7 +33,6 @@ class WorkflowClassificationExportButton extends React.Component {
   render() {
     return (
       <div>
-        <i className="fa fa-cog fa-lg fa-fw"></i>
         <button onClick={this.showWorkflowExport}>Request new workflow classification export</button>
         <small className="form-help"> CSV format.</small>
         { this.state.exportError ? <div className="form-help error">We had a problem requesting your export data: {this.state.exportError.toString()}</div> : null }
@@ -44,7 +43,7 @@ class WorkflowClassificationExportButton extends React.Component {
 }
 
 WorkflowClassificationExportButton.propTypes = {
-  project: React.PropTypes.shape({ links: React.PropTypes.object }).isRequired,
+  project: React.PropTypes.shape({ links: React.PropTypes.object }).isRequired
 };
 
 export default WorkflowClassificationExportButton;
