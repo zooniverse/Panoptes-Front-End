@@ -175,7 +175,7 @@ export default class AccountBar extends React.Component {
               >
                 <Translate content="accountMenu.favorites" />
               </Link>
-              <hr />
+              <br />
               <button
                 role="menuitem"
                 type="button"
