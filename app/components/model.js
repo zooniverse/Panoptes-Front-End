@@ -367,7 +367,7 @@ function drawSpiral(r) {
       uniform vec2 points[50];
       uniform parentDisk disk;
       uniform int pointCount;
-      uniform float rEff, axRatio, i0;
+      uniform float spread, axRatio, i0;
 
       ${calcBoxyEllipseDistFunc}
       ${sersic2dFunc}
@@ -398,7 +398,7 @@ function drawSpiral(r) {
           }
         }
 
-        float pixel = i0 * exp(-radius*radius* 0.01) *
+        float pixel = i0 * exp(-radius*radius * 0.01/spread) *
           sersic2d(x, y, disk.mu, disk.roll, disk.rEff, disk.axRatio, disk.c, disk.i0, disk.n);
 
         gl_FragColor = vec4(
@@ -409,11 +409,8 @@ function drawSpiral(r) {
         );
       }`,
     uniforms: {
-      rEff: (context, props, batchID) => {
-        return props.rx > props.ry ? props.rx * props.scale : props.ry * props.scale;
-      },
       i0: r.prop('i0'),
-      rEff: r.prop('scale'),
+      spread: r.prop('spread'),
       pointCount: (c, p, b) => p.points.length,
       'disk.mu': (c, p, b) => [p.disk.mux, p.disk.muy],
       'disk.axRatio': (c, p, b) => p.disk.rx > p.disk.ry ?
@@ -466,9 +463,9 @@ class galaxyModel extends baseModel {
       {
         name: 'sersic spiral',
         func: drawSpiral,
-        map: ['points', 'scale', 'i0'],
+        map: ['points', 'spread', 'i0'],
         type: 'component',
-        default: { mux: 100, muy: 100, rx: 5, ry: 5, scale: 5/8, roll: 0, i0: 0.75, n: 2, c: 2, }
+        default: { mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, }
       },
     ];
   }
@@ -551,14 +548,13 @@ class galaxyModel extends baseModel {
         this.model[3].default,
         {
           disk,
-          scale: parseFloat(annotation[3].value[1].value[0].value),
+          spread: parseFloat(annotation[3].value[1].value[0].value),
           i0: parseFloat(annotation[3].value[1].value[1].value),
           points: annotation[3].value[0].value[0].points.map(
             (p) => [p.x, this.size[0] - p.y]
           ),
         }
       );
-      console.log(spiralArm);
       renderFunctions.push([
         this.model[3].func,
         spiralArm
