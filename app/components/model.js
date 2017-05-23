@@ -56,7 +56,7 @@ class baseModel {
   setModel() {
     // function to be overwritten for defining model
     this.model = {};
-    console.error('Was not provided with a model. Cannot render')
+    console.error('Was not provided with a model. Cannot render');
   }
   start() {
     /* This function is called to start the model auto rendering from
@@ -82,7 +82,7 @@ class baseModel {
   parse() {
     /* function to be overwritten when class is extended. Details how to parse a
     zooniverse annotation and create list of (renderfunc, object) pairs
-    which are saved to this.toRender
+    which are returned and saved by update() to this.toRender
     */
     this.toRender = []
   }
@@ -93,7 +93,7 @@ class baseModel {
     javascript?
     */
     // update the render funtions
-    this.parse(annotation)
+    this.toRender = this.parse(annotation)
 
     // if automatic rendering has not started, trigger a frame
     if (!this.started) {
@@ -177,6 +177,7 @@ class differenceModel {
       attributes: { preserveDrawingBuffer: true }
     });
     this.modelData = new Uint8Array(this.size[0] * this.size[1] * 4);
+    this.differenceData = new Uint8Array(this.size[0] * this.size[1] * 4);
     this.baseTexture = null;
     this.modelTexture = null;
     this.started = false;
@@ -238,21 +239,16 @@ class differenceModel {
     return this.regl;
   }
   getScore() {
-    // TODO: wtf is going on here?
-    this.modelRegl.read(this.modelData);
+    this.regl.read(this.differenceData);
     const l = this.size[0] * this.size[1] * 4;
-    let score = 0;
+    let AIC = 0;
     for (let i = 0; i < l; i += 4) {
-      score += Math.pow(
-        (this.modelData[i] - (this.size[0] - 1)/2) / this.size[0] * 2,
-        2.0
-      );
-      score += Math.pow(
-        (this.modelData[i+2] - (this.size[1] - 1)/2) / this.size[1] * 2,
-        2.0
-      );
+      let r = this.differenceData[i] / 255;
+      let b = this.differenceData[i + 2] / 255;
+      AIC += (r - b) * (r - b) / this.size[0] / this.size[1];
+      // get the blue component
     }
-    return score;
+    return 100 * Math.exp(-AIC * 500);
   }
 }
 
@@ -280,16 +276,33 @@ const baseObj = {
   count: 3,
 }
 
+// Templates for webgl functions used in drawSersic and drawSpiral
+const sersic2dFunc = `
+float sersic2d(float x, float y, vec2 mu, float roll, float rEff, float axRatio, float c, float i0, float n) {
+  return i0 * exp(-pow(calcBoxyEllipseDist(x, y, mu, roll, rEff, axRatio, c), 1.0 / n));
+}`;
+const calcBoxyEllipseDistFunc = `
+float calcBoxyEllipseDist(float x, float y, vec2 mu, float roll, float rEff, float axRatio, float c) {
+  float xPrime = x * cos(roll) - y * sin(roll)
+    + mu[0] - mu[0] * cos(roll) + mu[1] * sin(roll);
+  float yPrime = x * sin(roll) + y * cos(roll)
+    + mu[1] - mu[1] * cos(roll) - mu[0] * sin(roll);
+  return 2.0 * pow(
+    pow(axRatio / rEff, c) * pow(abs(xPrime - mu[0]), c) +
+    pow(abs(yPrime - mu[1]), c) / pow(rEff, c), 1.0/c);
+}
+`;
+
 // function to generate oversampled sersic profile
 function oversampleGenerator(n, fname) {
   let s = `float resolution = ${n}.0;\nfloat newDensity = resolution * resolution;
-    float stepSize = 1.0 / resolution / 2.0;\nfloat pixel = 0.0;\n`;
+float stepSize = 1.0 / resolution / 2.0;\nfloat pixel = 0.0;\n`;
   for (let i = (1-n)/2; i <= (n-1)/2; i++) {
     for (let j = (1-n)/2; j <= (n-1.0)/2; j++) {
       s += `pixel += ${fname}(x`
       if (i === 0) { s += `, ` } else { s += ` + ${i}.0 * stepSize, ` }
-      if (j === 0) { s += `y) / newDensity;\n` }
-      else { s += `y + ${j}.0 * stepSize) / newDensity;\n` }
+      if (j === 0) { s += `y, mu, roll, rEff, axRatio, c, i0, n) / newDensity;\n` }
+      else { s += `y + ${j}.0 * stepSize, mu, roll, rEff, axRatio, c, i0, n) / newDensity;\n` }
     }
     s += `\n`;
   }
@@ -297,22 +310,14 @@ function oversampleGenerator(n, fname) {
 }
 
 function drawSersic(r) {
+  // TODO: boxy part of this is wrong
   return r(Object.assign({}, baseObj, {
     frag: `
       precision mediump float;
       uniform vec2 mu;
       uniform float roll, rEff, axRatio, i0, n, c;
-      float sersic2d(float x, float y) {
-        float xPrime = x * cos(roll) - y * sin(roll)
-          + mu[0] - mu[0] * cos(roll) + mu[1] * sin(roll);
-        float yPrime = x * sin(roll) + y * cos(roll)
-          + mu[1] - mu[1] * cos(roll) - mu[0] * sin(roll);
-        float radius = 2.0 * pow(
-          pow(axRatio / rEff, c) * pow(abs(xPrime - mu[0]), c) +
-          pow(abs(yPrime - mu[1]), c) / pow(rEff, c), 1.0/c);
-        float pixel = i0 * exp(-pow(radius, 1.0 / n));
-        return pixel;
-      }
+      ${calcBoxyEllipseDistFunc}
+      ${sersic2dFunc}
       void main () {
         float x = gl_FragCoord.xy[0];
         float y = gl_FragCoord.xy[1];
@@ -327,14 +332,14 @@ function drawSersic(r) {
         );
       }`,
     uniforms: {
-      roll: function(context, props, batchID) {
+      roll: (context, props, batchID) => {
         return Math.PI * (props.rx < props.ry ? (-props.roll) : 90 - props.roll) / 180;
       },
       mu: (c, p, b) => [p.mux, p.muy],
-      rEff: function(context, props, batchID) {
-        return props.rx > props.ry ? props.rx * props.scale : props.ry * props.scale
+      rEff: (context, props, batchID) => {
+        return props.rx > props.ry ? props.rx * props.scale : props.ry * props.scale;
       },
-      axRatio: function(context, props, batchID) {
+      axRatio: (context, props, batchID) => {
         return props.rx > props.ry ? props.rx / props.ry : props.ry / props.rx;
       },
       i0: r.prop('i0'),
@@ -345,12 +350,28 @@ function drawSersic(r) {
 }
 
 function drawSpiral(r) {
+  // TODO: is there any way of dynamically increasing the maximum point count
+  const maxPointCount = 50;
   const spiralArgs = {
     frag: `
       precision mediump float;
-      uniform vec2 mu, points[50];
+      struct parentDisk {
+        vec2 mu;
+        float roll;
+        float rEff;
+        float axRatio;
+        float i0;
+        float c;
+        float n;
+      };
+      uniform vec2 points[50];
+      uniform parentDisk disk;
       uniform int pointCount;
       uniform float rEff, axRatio, i0;
+
+      ${calcBoxyEllipseDistFunc}
+      ${sersic2dFunc}
+
       float getDistance(vec2 y, vec2 p1, vec2 p2) {
         float r = dot(p2 - p1, y - p1) / length(p2 - p1) / length(p2 - p1);
         if (r <= 0.0) {
@@ -365,15 +386,21 @@ function drawSpiral(r) {
       }
       void main () {
         float radius = 10000.0;
+        float x = gl_FragCoord.xy[0];
+        float y = gl_FragCoord.xy[1];
+        vec2 mu = vec2(0.0, 0.0);
         if (pointCount > 1) {
-          for (int i = 1; i < 50; i++) {
+          for (int i = 1; i < ${maxPointCount}; i++) {
             radius = min(getDistance(gl_FragCoord.xy, points[i-1], points[i]), radius);
             if (i >= pointCount - 1) {
               break;
             }
           }
         }
-        float pixel = i0 * exp(-radius*radius* 0.01);
+
+        float pixel = i0 * exp(-radius*radius* 0.01) *
+          sersic2d(x, y, disk.mu, disk.roll, disk.rEff, disk.axRatio, disk.c, disk.i0, disk.n);
+
         gl_FragColor = vec4(
           1,
           0,
@@ -382,17 +409,27 @@ function drawSpiral(r) {
         );
       }`,
     uniforms: {
-      //mu: (c, p, b) => [p.mux, p.muy],
-      axRatio: function(context, props, batchID) {
-        return props.rx > props.ry ? props.rx / props.ry : props.ry / props.rx;
+      rEff: (context, props, batchID) => {
+        return props.rx > props.ry ? props.rx * props.scale : props.ry * props.scale;
       },
       i0: r.prop('i0'),
-      scale: r.prop('scale'),
+      rEff: r.prop('scale'),
       pointCount: (c, p, b) => p.points.length,
+      'disk.mu': (c, p, b) => [p.disk.mux, p.disk.muy],
+      'disk.axRatio': (c, p, b) => p.disk.rx > p.disk.ry ?
+        p.disk.rx / p.disk.ry:
+        p.disk.ry / p.disk.rx,
+      'disk.roll': (c, p, b) => Math.PI * (p.disk.rx < p.disk.ry ? (-p.disk.roll) : 90 - p.disk.roll) / 180,
+      'disk.rEff': (c, p, b) => p.disk.rx > p.disk.ry ?
+        p.disk.rx * p.disk.scale:
+        p.disk.ry * p.disk.scale,
+      'disk.i0': (c, p, b) => p.disk.i0,
+      'disk.n': (c, p, b) => p.disk.n,
+      'disk.c': (c, p, b) => p.disk.c,
     },
   };
   // this is ugly, but it's the easiest (only?) way to pass the drawn polygon to regl
-  const range = [...Array(50).keys()];
+  const range = [...Array(maxPointCount).keys()];
   range.forEach(i => {
     spiralArgs.uniforms[`points[${i}]`] = (c, p, b) =>
       p.points.length > i ?
@@ -438,60 +475,96 @@ class galaxyModel extends baseModel {
   parse(annotation) {
     // TODO: make this explicitly related to the galaxy rendering model.
     // TODO: link spiral arm to disk? Link centres?
+    // we have disk, then bulge then bar
     let renderFunctions = [];
-    // cycle through each task
-    for (let i = 0; i < annotation.length; i++) {
-      // did we get a drawn on component?
-      if (annotation[i].value[0].value.length > 0) {
-        // get position values
-        const parameters = [];
-        if (isVar(annotation[i].value[0].value[0].x)) {
-          // have we got an object centre?
-          parameters.push(annotation[i].value[0].value[0].x);
-          parameters.push(this.size[0] - annotation[i].value[0].value[0].y);
+    const annotationLength = annotation.length;
+    let disk = null;
+    if (annotationLength > 0 && annotation[0].value[0].value.length > 0) {
+      // a disk has been drawn
+      disk = Object.assign(
+        { name: this.model[0].name },
+        this.model[0].default,
+        {
+          mux: parseFloat(annotation[0].value[0].value[0].x),
+          muy: this.size[0] - parseFloat(annotation[0].value[0].value[0].y),
+          rx: parseFloat(annotation[0].value[0].value[0].rx),
+          ry: parseFloat(annotation[0].value[0].value[0].ry),
+          roll: parseFloat(annotation[0].value[0].value[0].angle),
+          scale: parseFloat(annotation[0].value[1].value[0].value),
+          i0: parseFloat(annotation[0].value[1].value[1].value)
         }
-        if (isVar(annotation[i].value[0].value[0].r)) {
-          // radius => circle or triangle
-          parameters.push(parseFloat(annotation[i].value[0].value[0].r))
-        } else if (isVar(annotation[i].value[0].value[0].rx)) {
-          // independent rx and ry => ellipse
-          parameters.push(parseFloat(annotation[i].value[0].value[0].rx))
-          parameters.push(parseFloat(annotation[i].value[0].value[0].ry))
-        } else if (isVar(annotation[i].value[0].value[0].width)) {
-          // width and height => rectangle (no rotation)
-          parameters.push(parseFloat(annotation[i].value[0].value[0].width))
-          parameters.push(parseFloat(annotation[i].value[0].value[0].height))
-        }
-        if (isVar(annotation[i].value[0].value[0].angle)) {
-          // add the angle if it's present
-          parameters.push(parseFloat(annotation[i].value[0].value[0].angle))
-        }
-        if (isVar(annotation[i].value[0].value[0].points)) {
-          // polygon and bezier have points, though bezier is weird sometimes
-          const points = [];
-          annotation[i].value[0].value[0].points.forEach(
-            (p) => points.push([p.x, this.size[0] - p.y])
-          )
-          parameters.push(points);
-        }
-        // get values from the sliders
-        annotation[i].value[1].value.forEach(v => parameters.push(parseFloat(v.value)));
-        const ret = {}
-        parameters.forEach((c, j) => {
-          ret[this.model[i].map[j]] = c;
-        });
-        renderFunctions.push([
-          this.model[i].func,
-          Object.assign(
-            {
-              name: this.model[i].name
-            },
-            this.model[i].default, ret
-          )
-        ]);
-      }
+      );
+      renderFunctions.push([
+        this.model[0].func,
+        disk
+      ]);
     }
-    this.toRender = renderFunctions;
+    if (annotationLength > 1 && annotation[1].value[0].value.length > 0) {
+      // a bulge has been drawn
+      const bulge = Object.assign(
+        { name: this.model[1].name },
+        this.model[1].default,
+          {
+          mux: parseFloat(annotation[1].value[0].value[0].x),
+          muy: this.size[0] - parseFloat(annotation[1].value[0].value[0].y),
+          rx: parseFloat(annotation[1].value[0].value[0].rx),
+          ry: parseFloat(annotation[1].value[0].value[0].ry),
+          roll: parseFloat(annotation[1].value[0].value[0].angle),
+          scale: parseFloat(annotation[1].value[1].value[0].value),
+          i0: parseFloat(annotation[1].value[1].value[1].value),
+          n: parseFloat(annotation[1].value[1].value[2].value)
+        }
+      );
+      renderFunctions.push([
+        this.model[1].func,
+        bulge
+      ]);
+    }
+    if (annotationLength > 2 && annotation[2].value[0].value.length > 0) {
+      // a bar has been drawn
+      const bar = Object.assign(
+        { name: this.model[2].name },
+        this.model[2].default,
+        {
+          mux: parseFloat(annotation[2].value[0].value[0].x),
+          muy: this.size[0] - parseFloat(annotation[2].value[0].value[0].y),
+          rx: parseFloat(annotation[2].value[0].value[0].rx),
+          ry: parseFloat(annotation[2].value[0].value[0].ry),
+          roll: parseFloat(annotation[2].value[0].value[0].angle),
+          scale: parseFloat(annotation[2].value[1].value[0].value),
+          i0: parseFloat(annotation[2].value[1].value[1].value),
+          n: parseFloat(annotation[2].value[1].value[2].value),
+          c: parseFloat(annotation[2].value[1].value[3].value)
+        },
+      );
+      renderFunctions.push([
+        this.model[2].func,
+        bar
+      ]);
+    }
+    // TODO: how to do multiple spiral arms?
+    // TODO: In order to have a spiral, do we actually need a disk?
+    if (disk !== null && annotationLength > 3 && annotation[3].value[0].value.length > 0) {
+      // a spiral arm has been drawn
+      const spiralArm = Object.assign(
+        { name: this.model[3].name },
+        this.model[3].default,
+        {
+          disk,
+          scale: parseFloat(annotation[3].value[1].value[0].value),
+          i0: parseFloat(annotation[3].value[1].value[1].value),
+          points: annotation[3].value[0].value[0].points.map(
+            (p) => [p.x, this.size[0] - p.y]
+          ),
+        }
+      );
+      console.log(spiralArm);
+      renderFunctions.push([
+        this.model[3].func,
+        spiralArm
+      ]);
+    }
+    return renderFunctions;
   }
 }
 const model = galaxyModel;
