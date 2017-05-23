@@ -18,7 +18,7 @@
     color: LIGHT_GREY
     display: inline-block
     font-size: 1em
-    letter-spacing: 0.1em
+    letter-spacing: 0.15em
     margin: 0.5em 1em 0 1em
     padding-bottom: 0.3em
     opacity: 0.7
@@ -59,21 +59,32 @@
       z-index: 1 // TODO: Apply this everywhere.
 
     div .site-nav__link, span .site-nav__link
+      border-bottom: none
+      box-sizing: border-box
       color: white
       font-size: 0.75em
       font-weight: 600
       letter-spacing: 0.1em
-      padding: 0.75em 1.5em 0.3em
+      margin: 0
+      padding: 1em 2.5em
       text-transform: uppercase
+      width: 100%
 
-      &:hover, &:focus
+      &:focus
+        background: rgba(white, 0.4)
+        outline: none
+
+      &:hover
         background: rgba(white, 0.2)
-        outline-color: white
 
     .secret-button
-      &:hover, &:focus
-        background: rgba(white, 0.2)
-        outline-color: white
+      box-sizing: border-box
+      text-align: right
+      width: 100%
+
+      &:focus
+        background: rgba(white, 0.3)
+        outline: none
 
     &.modal-form
       background-color: TEAL_MID
@@ -81,10 +92,6 @@
 
     &.modal-form-pointer
       background: transparent
-
-    hr
-      background-color: #fff
-      opacity: 0.7
 
   .account-bar
   .login-bar
