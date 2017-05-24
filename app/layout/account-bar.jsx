@@ -6,8 +6,8 @@ import auth from 'panoptes-client/lib/auth';
 import talkClient from 'panoptes-client/lib/talk-client';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
-import Avatar from '../partials/avatar';
 import TriggeredModalForm from 'modal-form/triggered';
+import Avatar from '../partials/avatar';
 import PassContext from '../components/pass-context';
 import NotificationsLink from '../talk/lib/notifications-link';
 
@@ -23,20 +23,20 @@ counterpart.registerTranslations('en', {
     settings: 'Settings',
     signOut: 'Sign Out',
     collections: 'Collections',
-    favorites: 'Favorites',
-  },
+    favorites: 'Favorites'
+  }
 });
 
 const AccountBar = React.createClass({
   contextTypes: {
     user: React.PropTypes.object,
     router: routerShape,
-    geordi: React.PropTypes.object,
+    geordi: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-      unread: false,
+      unread: false
     };
   },
 
@@ -60,10 +60,10 @@ const AccountBar = React.createClass({
     talkClient.type('conversations').get({
       user_id: this.context.user.id,
       unread: true,
-      page_size: 1,
+      page_size: 1
     }).then((conversations) => {
       this.setState({
-        unread: conversations.length > 0,
+        unread: conversations.length > 0
       });
     });
   },
@@ -79,7 +79,7 @@ const AccountBar = React.createClass({
 
     const newIndex = {
       [UP]: Math.max(0, focusIndex - 1),
-      [DOWN]: Math.min(focusables.length - 1, focusIndex + 1),
+      [DOWN]: Math.min(focusables.length - 1, focusIndex + 1)
     }[event.which];
 
     if (focusables[newIndex] !== undefined) {
@@ -91,7 +91,7 @@ const AccountBar = React.createClass({
   handleSignOutClick() {
     !!this.logClick && this.logClick('accountMenu.signOut');
     !!this.context.geordi && this.context.geordi.logEvent({
-      type: 'logout',
+      type: 'logout'
     });
 
     auth.signOut();
@@ -120,9 +120,9 @@ const AccountBar = React.createClass({
                 role="menuitem"
                 to={`/users/${this.context.user.login}`}
                 className="site-nav__link"
-                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.profile') : null}
+                onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.profile') : null}
               >
-                <i className="fa fa-user fa-fw"></i>{' '}
+                <i className="fa fa-user fa-fw" />{' '}
                 <Translate content="accountMenu.profile" />
               </Link>
               <br />
@@ -130,9 +130,9 @@ const AccountBar = React.createClass({
                 role="menuitem"
                 to="/"
                 className="site-nav__link"
-                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.home') : null}
+                onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.home') : null}
               >
-                <i className="fa fa-home fa-fw"></i>{' '}
+                <i className="fa fa-home fa-fw" />{' '}
                 <Translate content="accountMenu.home" />
               </Link>
               <br />
@@ -140,9 +140,9 @@ const AccountBar = React.createClass({
                 role="menuitem"
                 to="/settings"
                 className="site-nav__link"
-                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.settings') : null}
+                onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.settings') : null}
               >
-                <i className="fa fa-cogs fa-fw"></i>{' '}
+                <i className="fa fa-cogs fa-fw" />{' '}
                 <Translate content="accountMenu.settings" />
               </Link>
               <br />
@@ -150,9 +150,9 @@ const AccountBar = React.createClass({
                 role="menuitem"
                 to={`/collections/${this.context.user.login}`}
                 className="site-nav__link"
-                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.collections') : null}
+                onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.collections') : null}
               >
-                <i className="fa fa-image fa-fw"></i>{' '}
+                <i className="fa fa-image fa-fw" />{' '}
                 <Translate content="accountMenu.collections" />
               </Link>
               <br />
@@ -160,9 +160,9 @@ const AccountBar = React.createClass({
                 role="menuitem"
                 to={`/favorites/${this.context.user.login}`}
                 className="site-nav__link"
-                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.favorites') : null}
+                onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.favorites') : null}
               >
-                <i className="fa fa-star fa-fw"></i>{' '}
+                <i className="fa fa-star fa-fw" />{' '}
                 <Translate content="accountMenu.favorites" />
               </Link>
               <hr />
@@ -173,7 +173,7 @@ const AccountBar = React.createClass({
                 onClick={this.handleSignOutClick}
               >
                 <span className="site-nav__link">
-                  <i className="fa fa-sign-out fa-fw"></i>{' '}
+                  <i className="fa fa-sign-out fa-fw" />{' '}
                   <Translate content="accountMenu.signOut" />
                 </span>
               </button>
@@ -181,7 +181,7 @@ const AccountBar = React.createClass({
           </PassContext>
         </TriggeredModalForm>
 
-        <span className="site-nav__link-buncher"></span>
+        <span className="site-nav__link-buncher" />
 
         <Link
           to="/inbox"
@@ -190,7 +190,7 @@ const AccountBar = React.createClass({
           aria-label={`
             Inbox ${this.state.unread ? 'with unread messages' : ''}
           `.trim()}
-          onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.inbox', 'top-menu') : null}
+          onClick={this.logClick ? this.logClick.bind(this, 'accountMenu.inbox', 'top-menu') : null}
         >
           <span
             className={`
@@ -208,11 +208,11 @@ const AccountBar = React.createClass({
         <NotificationsLink params={this.props.params} user={this.context.user} linkProps={{
           className: 'site-nav__link site-nav__icon site-nav__icon--notifications',
           activeClassName: 'site-nav__link--active',
-          onClick: !!this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
+          onClick: this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
         }} />
       </span>
     );
-  },
+  }
 });
 
 export default AccountBar;
