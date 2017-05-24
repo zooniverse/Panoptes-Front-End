@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { routerShape } from 'react-router/lib/PropTypes';
 import { Link } from 'react-router';
 import auth from 'panoptes-client/lib/auth';
@@ -67,21 +68,14 @@ const AccountBar = React.createClass({
     });
   },
 
-  handleAccountMenuOpen() {
-    setTimeout(() => { // Wait for the modal's internal state change to happen.
-      if (this.refs.accountMenuButton.state.open) {
-        // React's `autoFocus` apparently doesn't work on <a> tags.
-        const firstFocusable = this.refs.accountMenu.querySelector(FOCUSABLES);
-        if (!!firstFocusable) {
-          firstFocusable.focus();
-        }
-      }
-    });
-  },
-
   navigateMenu(event) {
-    const focusables = this.refs.accountMenu.querySelectorAll(FOCUSABLES);
-    const focusIndex = Array.prototype.indexOf.call(focusables, document.activeElement);
+    const focusables = [ReactDOM.findDOMNode(this.accountMenuButton)];
+    if (this.accountMenu) {
+      for (const item of this.accountMenu.querySelectorAll(FOCUSABLES)) {
+        focusables.push(item);
+      }
+    }
+    const focusIndex = focusables.indexOf(document.activeElement);
 
     const newIndex = {
       [UP]: Math.max(0, focusIndex - 1),
@@ -107,7 +101,7 @@ const AccountBar = React.createClass({
     return (
       <span className="account-bar">
         <TriggeredModalForm
-          ref="accountMenuButton"
+          ref={(button) => { this.accountMenuButton = button; }}
           className="site-nav__modal"
           trigger={
             <span className="site-nav__link">
@@ -117,11 +111,11 @@ const AccountBar = React.createClass({
           }
           triggerProps={{
             className: 'secret-button',
-            onClick: this.handleAccountMenuOpen,
+            onKeyDown: this.navigateMenu
           }}
         >
           <PassContext context={this.context}>
-            <div ref="accountMenu" role="menu" onKeyDown={this.navigateMenu}>
+            <div ref={(menu) => { this.accountMenu = menu; }} role="menu" onKeyDown={this.navigateMenu}>
               <Link
                 role="menuitem"
                 to={`/users/${this.context.user.login}`}
