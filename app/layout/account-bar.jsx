@@ -69,9 +69,10 @@ class AccountBar extends React.Component {
   navigateMenu(event) {
     const focusables = [ReactDOM.findDOMNode(this.accountMenuButton)];
     if (this.accountMenu) {
-      for (const item of this.accountMenu.querySelectorAll(FOCUSABLES)) {
+      const menuItems = this.accountMenu.querySelectorAll(FOCUSABLES);
+      Array.prototype.forEach.call(menuItems, (item) => {
         focusables.push(item);
-      }
+      });
     }
     const focusIndex = focusables.indexOf(document.activeElement);
 
