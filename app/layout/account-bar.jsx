@@ -27,34 +27,32 @@ counterpart.registerTranslations('en', {
   }
 });
 
-const AccountBar = React.createClass({
-  contextTypes: {
-    user: React.PropTypes.object,
-    router: routerShape,
-    geordi: React.PropTypes.object
-  },
-
-  getInitialState() {
-    return {
+class AccountBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.navigateMenu = this.navigateMenu.bind(this);
+    this.handleSignOutClick = this.handleSignOutClick.bind(this);
+    this.lookUpUnread = this.lookUpUnread.bind(this);
+    this.state = {
       unread: false
     };
-  },
+  }
 
   componentDidMount() {
     addEventListener('locationchange', this.lookUpUnread);
     this.lookUpUnread();
-  },
+  }
 
   componentWillReceiveProps(nextProps, nextContext) {
     this.logClick = !!nextContext &&
       !!nextContext.geordi &&
       !!nextContext.geordi.makeHandler &&
       nextContext.geordi.makeHandler('about-menu');
-  },
+  }
 
   componentWillUnmount() {
     removeEventListener('locationchange', this.lookUpUnread);
-  },
+  }
 
   lookUpUnread() {
     talkClient.type('conversations').get({
@@ -66,7 +64,7 @@ const AccountBar = React.createClass({
         unread: conversations.length > 0
       });
     });
-  },
+  }
 
   navigateMenu(event) {
     const focusables = [ReactDOM.findDOMNode(this.accountMenuButton)];
@@ -86,7 +84,7 @@ const AccountBar = React.createClass({
       focusables[newIndex].focus();
       event.preventDefault();
     }
-  },
+  }
 
   handleSignOutClick() {
     !!this.logClick && this.logClick('accountMenu.signOut');
@@ -95,7 +93,7 @@ const AccountBar = React.createClass({
     });
 
     auth.signOut();
-  },
+  }
 
   render() {
     return (
@@ -213,6 +211,16 @@ const AccountBar = React.createClass({
       </span>
     );
   }
-});
+}
+
+AccountBar.contextTypes = {
+  user: React.PropTypes.object,
+  router: routerShape,
+  geordi: React.PropTypes.object
+};
+
+AccountBar.propTypes = {
+  params: React.PropTypes.array
+};
 
 export default AccountBar;
