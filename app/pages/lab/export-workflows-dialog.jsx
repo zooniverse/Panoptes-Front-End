@@ -43,16 +43,19 @@ class ExportWorkflowsDialog extends React.Component {
       .then((workflows) => {
         this.setState({ workflows, loading: false });
 
-        // TODO: load the exports for each workflow
-        workflows.forEach((wf) => {
-          wf.get('classifications_export')
+        workflows.forEach((workflow) => {
+          workflow.get('classifications_export')
             .then((media) => {
               const mediaState = this.state.media;
-              mediaState[wf.id.toString()] = media[0];
+              mediaState[workflow.id] = media[0];
               this.setState({ media: mediaState });
             })
-            .catch(() => {
-              // this is gonna happen, oh well
+            .catch((error) => {
+              if (error.status === 404) {
+                this.props.onFail(error);
+              } else {
+                console.error(error); // eslint-disable-line no-console
+              }
             });
         });
       });
@@ -102,6 +105,12 @@ class ExportWorkflowsDialog extends React.Component {
   }
 }
 
+ExportWorkflowsDialog.defaultProps = {
+  project: {},
+  onSuccess: () => {},
+  onFail: () => {}
+};
+
 ExportWorkflowsDialog.propTypes = {
   project: React.PropTypes.shape({ links: React.PropTypes.object }).isRequired,
   onSuccess: React.PropTypes.func.isRequired,
@@ -118,8 +127,16 @@ const ExportWorkflowListItem = ({ workflow, media, onChange }) => {
   const titleString = lockout ? 'This item can only be exported every 24 hours' : '';
 
   return (
-    <li>
-      <input type="radio" title={titleString} name="which-workflow" id={`export-${workflow.id}`} disabled={lockout} onChange={onChange} />
+    <li className="workflow-export-list__item">
+      <input
+        type="radio"
+        title={titleString}
+        name="which-workflow"
+        id={`export-${workflow.id}`}
+        className="workflow-export-list__input"
+        disabled={lockout}
+        onChange={onChange}
+      />
       {workflow.display_name}
       <small>
         <ExportWorkflowLink media={myMedia} />
@@ -128,23 +145,44 @@ const ExportWorkflowListItem = ({ workflow, media, onChange }) => {
   );
 };
 
-ExportWorkflowListItem.propTypes = {
-  workflow: React.PropTypes.shape({ id: React.PropTypes.string, display_name: React.PropTypes.string }).isRequired,
-  media: React.PropTypes.shape({}).isRequired,
-  onChange: React.PropTypes.func.isRequired
+ExportWorkflowListItem.defaultProps = {
+  workflow: {
+    id: '',
+    display_name: ''
+  },
+  media: {
+    id: ''
+  },
+  onChange: () => {}
 };
 
+ExportWorkflowListItem.propTypes = {
+  workflow: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    display_name: React.PropTypes.string
+  }).isRequired,
+  media: React.PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  onChange: React.PropTypes.func.isRequired
+};
 
 /* eslint-disable multiline-ternary, no-confusing-arrow */
 const ExportWorkflowLink = ({ media }) =>
   media ?
-    <a title={media.updated_at} href={media.src}>{Moment(media.updated_at).fromNow()}</a> :
-    <span>No exports have been requested.</span>;
+    <a
+      title={media.updated_at}
+      href={media.src}
+      className="workflow-export-list__link"
+    >
+      {Moment(media.updated_at).fromNow()}
+    </a> :
+    <span className="workflow-export-list__span">No exports have been requested.</span>;
 /* eslint-enable */
 
-
 ExportWorkflowLink.propTypes = {
-  media: React.PropTypes.shape({ src: React.PropTypes.string, updated_at: React.PropTypes.string })
+  media: React.PropTypes.shape({
+    src: React.PropTypes.string,
+    updated_at: React.PropTypes.string
+  })
 };
 
 ExportWorkflowLink.defaultProps = {
