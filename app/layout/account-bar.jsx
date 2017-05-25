@@ -1,20 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { routerShape } from 'react-router/lib/PropTypes';
 import { Link } from 'react-router';
 import auth from 'panoptes-client/lib/auth';
 import talkClient from 'panoptes-client/lib/talk-client';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
-import TriggeredModalForm from 'modal-form/triggered';
 import Avatar from '../partials/avatar';
 import PassContext from '../components/pass-context';
 import NotificationsLink from '../talk/lib/notifications-link';
-
-const FOCUSABLES = 'a[href], button';
-
-const UP = 38;
-const DOWN = 40;
+import ExpandableMenu from './expandable-menu';
 
 counterpart.registerTranslations('en', {
   accountMenu: {
@@ -30,7 +24,6 @@ counterpart.registerTranslations('en', {
 class AccountBar extends React.Component {
   constructor(props) {
     super(props);
-    this.navigateMenu = this.navigateMenu.bind(this);
     this.handleSignOutClick = this.handleSignOutClick.bind(this);
     this.lookUpUnread = this.lookUpUnread.bind(this);
     this.state = {
@@ -66,27 +59,6 @@ class AccountBar extends React.Component {
     });
   }
 
-  navigateMenu(event) {
-    const focusables = [ReactDOM.findDOMNode(this.accountMenuButton)];
-    if (this.accountMenu) {
-      const menuItems = this.accountMenu.querySelectorAll(FOCUSABLES);
-      Array.prototype.forEach.call(menuItems, (item) => {
-        focusables.push(item);
-      });
-    }
-    const focusIndex = focusables.indexOf(document.activeElement);
-
-    const newIndex = {
-      [UP]: Math.max(0, focusIndex - 1),
-      [DOWN]: Math.min(focusables.length - 1, focusIndex + 1)
-    }[event.which];
-
-    if (focusables[newIndex] !== undefined) {
-      focusables[newIndex].focus();
-      event.preventDefault();
-    }
-  }
-
   handleSignOutClick() {
     !!this.logClick && this.logClick('accountMenu.signOut');
     !!this.context.geordi && this.context.geordi.logEvent({
@@ -99,8 +71,7 @@ class AccountBar extends React.Component {
   render() {
     return (
       <span className="account-bar">
-        <TriggeredModalForm
-          ref={(button) => { this.accountMenuButton = button; }}
+        <ExpandableMenu
           className="site-nav__modal"
           trigger={
             <span className="site-nav__link">
@@ -109,8 +80,7 @@ class AccountBar extends React.Component {
             </span>
           }
           triggerProps={{
-            className: 'secret-button',
-            onKeyDown: this.navigateMenu
+            className: 'secret-button'
           }}
         >
           <PassContext context={this.context}>
@@ -178,7 +148,7 @@ class AccountBar extends React.Component {
               </button>
             </div>
           </PassContext>
-        </TriggeredModalForm>
+        </ExpandableMenu>
 
         <span className="site-nav__link-buncher" />
 

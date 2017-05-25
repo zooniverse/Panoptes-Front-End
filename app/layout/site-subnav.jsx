@@ -1,32 +1,34 @@
 import React from 'react';
-import TriggeredModalForm from 'modal-form/triggered';
+import ExpandableMenu from './expandable-menu';
 
-const SiteSubnav = React.createClass({
-  propTypes: {
-    isMobile: React.PropTypes.bool,
-    children: React.PropTypes.node
-  },
-
-  trigger() {
-    return(
-      <span className="site-nav__link"
-        activeClassName="site-nav__link--active"
-        title="News"
-        aria-label="News">News</span>
-    );
-  },
+class SiteSubnav extends React.Component {
 
   render() {
-    if(this.props.isMobile) {
+    if (this.props.isMobile) {
       return this.props.children;
     } else {
-      return(
-        <TriggeredModalForm className="site-nav__modal" trigger={this.trigger()}>
+      return (
+        <ExpandableMenu
+          className="site-nav__modal"
+          trigger={
+            <span
+              className="site-nav__link"
+              activeClassName="site-nav__link--active"
+            >
+              News
+            </span>
+          }
+        >
           {this.props.children}
-        </TriggeredModalForm>
+        </ExpandableMenu>
       );
     }
   }
-});
+}
+
+SiteSubnav.propTypes = {
+  isMobile: React.PropTypes.bool,
+  children: React.PropTypes.node
+};
 
 export default SiteSubnav;
