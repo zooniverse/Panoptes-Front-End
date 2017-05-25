@@ -13,9 +13,9 @@ filterDupeCoords = (coordsArray) ->
     filtered
   , []
 
-roundCoords = ({x, y}) ->
-  x: round x, 2
-  y: round y, 2
+roundCoords = ({x, y}, precision = 1) ->
+  x: round x, precision
+  y: round y, precision
 
 module.exports =
   createPathFromCoords: createPathFromCoords
