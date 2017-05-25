@@ -1,3 +1,5 @@
+round = require 'lodash/round'
+
 createPathFromCoords = (coordsArray) ->
   [firstCoord, otherCoords...] = coordsArray
   path = "M #{firstCoord.x},#{firstCoord.y} "
@@ -11,6 +13,11 @@ filterDupeCoords = (coordsArray) ->
     filtered
   , []
 
+roundCoords = ({x, y}) ->
+  x: round x, 2
+  y: round y, 2
+
 module.exports =
   createPathFromCoords: createPathFromCoords
   filterDupeCoords: filterDupeCoords
+  roundCoords: roundCoords

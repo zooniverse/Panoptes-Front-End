@@ -17,6 +17,7 @@
     "lodash.merge": "~2.4.1",
     "lodash.pick": "~3.1.0",
     "lodash.uniq": "~3.2.2",
+    "lodash.round": "~4.0.4",
     "markdownz": "~7.2",
     "modal-form": "~2.4",
     "moment": "~2.9.0",
