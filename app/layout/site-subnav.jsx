@@ -3,19 +3,6 @@ import ExpandableMenu from './expandable-menu';
 
 class SiteSubnav extends React.Component {
 
-  trigger() {
-    return (
-      <span
-        className="site-nav__link"
-        activeClassName="site-nav__link--active"
-        title="News"
-        aria-label="News"
-      >
-        News
-      </span>
-    );
-  }
-
   render() {
     if (this.props.isMobile) {
       return this.props.children;
@@ -23,7 +10,14 @@ class SiteSubnav extends React.Component {
       return (
         <ExpandableMenu
           className="site-nav__modal"
-          trigger={this.trigger()}
+          trigger={
+            <span
+              className="site-nav__link"
+              activeClassName="site-nav__link--active"
+            >
+              News
+            </span>
+          }
         >
           {this.props.children}
         </ExpandableMenu>
