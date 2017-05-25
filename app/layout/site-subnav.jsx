@@ -7,20 +7,24 @@ const FOCUSABLES = 'a[href], button';
 const UP = 38;
 const DOWN = 40;
 
-const SiteSubnav = React.createClass({
-  propTypes: {
-    isMobile: React.PropTypes.bool,
-    children: React.PropTypes.node
-  },
+class SiteSubnav extends React.Component {
+  constructor(props) {
+    super(props);
+    this.navigateMenu = this.navigateMenu.bind(this);
+  }
 
   trigger() {
-    return(
-      <span className="site-nav__link"
+    return (
+      <span
+        className="site-nav__link"
         activeClassName="site-nav__link--active"
         title="News"
-        aria-label="News">News</span>
+        aria-label="News"
+      >
+        News
+      </span>
     );
-  },
+  }
 
   navigateMenu(event) {
     const focusables = [ReactDOM.findDOMNode(this.menuButton)];
@@ -41,13 +45,13 @@ const SiteSubnav = React.createClass({
       focusables[newIndex].focus();
       event.preventDefault();
     }
-  },
+  }
 
   render() {
-    if(this.props.isMobile) {
+    if (this.props.isMobile) {
       return this.props.children;
     } else {
-      return(
+      return (
         <TriggeredModalForm
           ref={(button) => { this.menuButton = button; }}
           className="site-nav__modal"
@@ -66,6 +70,11 @@ const SiteSubnav = React.createClass({
       );
     }
   }
-});
+}
+
+SiteSubnav.propTypes = {
+  isMobile: React.PropTypes.bool,
+  children: React.PropTypes.node
+};
 
 export default SiteSubnav;
