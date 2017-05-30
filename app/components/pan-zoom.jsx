@@ -41,9 +41,9 @@ const PanZoom = React.createClass({
   componentDidMount() {
     // these events enable a user to navigate an image using arrows, +, and - keys,
     // while the user is in pan and zoom mode.
-    if (this.props.enabled) {
-      addEventListener('keydown', this.frameKeyPan);
-      addEventListener('wheel', this.wheelZoom);
+    if (this.root && this.props.enabled) {
+      this.root.addEventListener('keydown', this.frameKeyPan);
+      this.root.addEventListener('wheel', this.wheelZoom);
     }
   },
 
@@ -60,8 +60,8 @@ const PanZoom = React.createClass({
   },
 
   componentWillUnmount() {
-    removeEventListener('keydown', this.frameKeyPan);
-    removeEventListener('wheel', this.wheelZoom);
+    this.root.removeEventListener('keydown', this.frameKeyPan);
+    this.root.removeEventListener('wheel', this.wheelZoom);
   },
 
   render() {
@@ -75,7 +75,7 @@ const PanZoom = React.createClass({
       });
     });
     return (
-      <div>
+      <div ref={(element) => { this.root = element; }}>
         {children}
         {this.props.enabled ?
           <div className="pan-zoom-controls" >
