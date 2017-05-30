@@ -118,7 +118,7 @@ ExportWorkflowsDialog.propTypes = {
 };
 
 const ExportWorkflowListItem = ({ workflow, media, onChange }) => {
-  const myMedia = workflow ? media[workflow.id.toString()] : null;
+  const myMedia = workflow ? media[workflow.id] : null;
   const now = new Date();
   const lockoutTime = new Date();
   lockoutTime.setDate(now.getDate() - 1);
