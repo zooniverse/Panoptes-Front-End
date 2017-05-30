@@ -41,9 +41,9 @@ const PanZoom = React.createClass({
   componentDidMount() {
     // these events enable a user to navigate an image using arrows, +, and - keys,
     // while the user is in pan and zoom mode.
-    if (this.props.enabled) {
-      addEventListener('keydown', this.frameKeyPan);
-      addEventListener('wheel', this.wheelZoom);
+    if (this.root && this.props.enabled) {
+      this.root.addEventListener('keydown', this.frameKeyPan);
+      this.root.addEventListener('wheel', this.wheelZoom);
     }
   },
 
@@ -60,8 +60,8 @@ const PanZoom = React.createClass({
   },
 
   componentWillUnmount() {
-    removeEventListener('keydown', this.frameKeyPan);
-    removeEventListener('wheel', this.wheelZoom);
+    this.root.removeEventListener('keydown', this.frameKeyPan);
+    this.root.removeEventListener('wheel', this.wheelZoom);
   },
 
   render() {
@@ -75,7 +75,7 @@ const PanZoom = React.createClass({
       });
     });
     return (
-      <div>
+      <div ref={(element) => { this.root = element; }}>
         {children}
         {this.props.enabled ?
           <div className="pan-zoom-controls" >
@@ -84,13 +84,19 @@ const PanZoom = React.createClass({
                 <button title="annotate" className="fa fa-mouse-pointer" onClick={this.togglePanOff} />
               </div>
               <div className={this.state.panEnabled ? 'active' : ''}>
-                <button title="pan" ref="pan" className="fa fa-arrows" onClick={this.handleFocus.bind(this, 'pan')} onFocus={this.togglePanOn} onBlur={this.togglePanOff} />
+                <button
+                  title="pan"
+                  ref={(element) => { this.pan = element; }}
+                  className="fa fa-arrows"
+                  onClick={this.handleFocus.bind(this, 'pan')}
+                  onFocus={this.togglePanOn} onBlur={this.togglePanOff}
+                />
               </div>
             </div>
             <div>
               <button
                 title="zoom out"
-                ref="zoomOut"
+                ref={(element) => { this.zoomOut = element; }}
                 className={`zoom-out fa fa-minus ${this.cannotZoomOut() ? 'disabled' : ''}`}
                 onMouseDown={this.continuousZoom.bind(this, 1.1)}
                 onMouseUp={this.stopZoom}
@@ -104,7 +110,7 @@ const PanZoom = React.createClass({
             <div>
               <button
                 title="zoom in"
-                ref="zoomIn"
+                ref={(element) => { this.zoomIn = element; }}
                 className="zoom-in fa fa-plus"
                 onMouseDown={this.continuousZoom.bind(this, 0.9)}
                 onMouseUp={this.stopZoom}
@@ -129,7 +135,7 @@ const PanZoom = React.createClass({
   },
 
   handleFocus(ref) {
-    this.refs[ref].focus();
+    this[ref].focus();
     this.togglePanOn();
   },
 
