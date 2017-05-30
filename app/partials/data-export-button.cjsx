@@ -15,19 +15,36 @@ module.exports = React.createClass
     exportRequested: false
     exportError: null
     showButton: true
+    mostRecent: null
+
+  componentDidMount: ->
+    @exportGet()
+    @showDataExportBtn()
+
+  componentWillReceiveProps: ->
+    @exportGet()
+    @showDataExportBtn()
 
   exportGet: ->
-    @_exportsGet or= @props.project.get(@props.exportType).catch( -> [])
+    @props.project.get(@props.exportType)
       .then ([exported]) =>
-        if @props.exportType is 'aggregations_export' and exported.metadata.state isnt 'ready'
-          @setState showButton: false
-        return [exported]
+        @setState mostRecent: exported
+        @showDataExportBtn()
+      .catch (error) =>
+        console.error error
+
+  showDataExportBtn: ->
+    if @props.exportType isnt 'aggregations_export'
+      @setState showButton: true
+    else if @state?.mostRecent?.metadata?.state?
+      @setState showButton: true
+    else
+      @setState showButton: false
 
   requestDataExport: ->
     @setState exportError: null
     apiClient.post @props.project._getURL(@props.exportType), media: content_type: @props.contentType
       .then =>
-        @_exportsGet = null
         @setState exportRequested: true
       .catch (error) =>
         @setState exportError: error
@@ -49,19 +66,17 @@ module.exports = React.createClass
           </button> {' '}
           <small className="form-help">
             CSV format.{' '}
-            <PromiseRenderer promise={@exportGet()}>{([mostRecent]) =>
-              if @recentAndReady(mostRecent)
+            { if @recentAndReady(@state.mostRecent)
                 <span>
                   Most recent data available requested{' '}
-                  <a href={mostRecent.src}>{moment(mostRecent.updated_at).fromNow()}</a>.
+                  <a href={@state.mostRecent.src}>{moment(@state.mostRecent.updated_at).fromNow()}</a>.
                 </span>
-              else if @pending(mostRecent)
+              else if @pending(@state.mostRecent)
                 <span>
                   Processing your request.
                 </span>
               else
-                <span>Never previously requested.</span>
-            }</PromiseRenderer>
+                <span>Never previously requested.</span>}
             <br />
           </small>
 
@@ -73,3 +88,4 @@ module.exports = React.createClass
              </div>}
         </div> }
     </div>
+
