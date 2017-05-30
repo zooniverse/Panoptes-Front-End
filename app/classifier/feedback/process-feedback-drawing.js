@@ -5,27 +5,48 @@ const isWithinTolerance = (annotationX, annotationY, feedbackX, feedbackY, toler
   return distance < tolerance;
 };
 
+const createFeedbackItem = (success, annotation, rule) => {
+  const feedbackItem = {
+    task: annotation.task,
+    type: 'drawing',
+    success,
+    message: (success) ? rule.successMessage : rule.failureMessage
+  };
+
+  if (rule.dud) {
+    feedbackItem.target = 'summary';
+  } else {
+    feedbackItem.x = rule.x;
+    feedbackItem.y = rule.y;
+    feedbackItem.tol = rule.tol;
+    feedbackItem.target = 'classifier';
+  }
+
+  return feedbackItem;
+};
+
+const processNormalRule = (annotation, rule) => {
+  const result = annotation.value.reduce((found, point) => {
+    if (isWithinTolerance(point.x, point.y, parseInt(rule.x, 10), parseInt(rule.y, 10), parseInt(rule.tol, 10))) {
+      found = true;
+    }
+    return found;
+  }, false);
+
+  return createFeedbackItem(result, annotation, rule);
+};
+
+const processDudRule = (annotation, rule) => {
+  const result = (!annotation.value || annotation.value.length === 0);
+  return createFeedbackItem(result, annotation, rule);
+};
+
 const processDrawingFeedback = (annotation, subject, task) => {
   const feedbackRuleSet = new FeedbackRuleSet(subject, task);
   return feedbackRuleSet.rules.reduce((checkedRules, rule) => {
-    const result = annotation.value.reduce((found, point) => {
-      if (isWithinTolerance(point.x, point.y, parseInt(rule.x, 10), parseInt(rule.y, 10), parseInt(rule.tol, 10))) {
-        found = true;
-      }
-      return found;
-    }, false);
-
-    checkedRules.push({
-      task: annotation.task,
-      type: 'drawing',
-      x: rule.x,
-      y: rule.y,
-      tol: rule.tol,
-      success: result,
-      message: (result) ? rule.successMessage : rule.failureMessage,
-      target: 'classifier'
-    });
-    return checkedRules;
+    const ruleFunction = (rule.dud) ? processDudRule : processNormalRule;
+    const ruleResult = ruleFunction(annotation, rule);
+    return checkedRules.concat(ruleResult);
   }, []);
 };
 

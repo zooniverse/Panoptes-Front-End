@@ -13,6 +13,10 @@ counterpart.registerTranslations('en', {
         title: 'ID',
         help: 'A unique field used to identify a feedback type.',
       },
+      dud: {
+        title: 'No markings',
+        help: 'Check this box if there should be no annotations on this feedback type (also known as a dud).'
+      },
       tol: {
         title: 'Default tolerance',
         help: 'The radius around the point that counts as a correct classification. Can be overridden using subject metadata.',
@@ -29,23 +33,7 @@ counterpart.registerTranslations('en', {
   }
 });
 
-const fieldConfig = [
-  {
-    id: 'id'
-  },
-  {
-    id: 'tol',
-    type: 'number',
-  },
-  {
-    id: 'defaultSuccessMessage',
-  },
-  {
-    id: 'defaultFailureMessage',
-  },
-];
-
-export default class PointEditForm extends React.Component {
+class PointEditForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -56,6 +44,7 @@ export default class PointEditForm extends React.Component {
     this.validate = this.validate.bind(this);
     this.state = {
       id: props.feedback.id || '',
+      dud: props.feedback.dud || false,
       tol: props.feedback.tol || '',
       defaultSuccessMessage: props.feedback.defaultSuccessMessage || '',
       defaultFailureMessage: props.feedback.defaultFailureMessage || '',
@@ -64,10 +53,11 @@ export default class PointEditForm extends React.Component {
   }
 
   render() {
+    const fields = this.getFields()
     return (
       <div className="single-edit-feedback-modal">
         <Translate content="PointEditForm.title" className="form-label" />
-        {fieldConfig.map(this.renderInput)}
+        {fields.map(this.renderInput)}
 
         <div className="single-edit-feedback-modal__buttons">
           <button onClick={this.handleCancel} className="minor-button">
@@ -81,16 +71,39 @@ export default class PointEditForm extends React.Component {
     );
   }
 
+  getFields() {
+    const fields = [
+      { id: 'id' },
+      { id: 'dud', type: 'checkbox' },
+      { id: 'defaultSuccessMessage' },
+      { id: 'defaultFailureMessage' }
+    ];
+
+    if (this.state.dud === false) {
+      fields.splice(2, 0, { id: 'tol', type: 'number' });
+    }
+
+    return fields;    
+  }
+
   handleInputChange({ target }) {
-    this.handleUpdateState(target.name, target.value)
+    const args = [target.name, target.value];
+    if (target.type === 'checkbox') {
+      args.splice(1, 1, target.checked);
+    }
+    this.handleUpdateState.apply(this, args);
   }
 
   handleSave() {
-    this.props.onSubmit(this.state, this.props.index);
+    const stateCopy = Object.assign({}, this.state);
+    if (stateCopy.dud && stateCopy.tol) {
+      delete stateCopy.tol;
+    }
+    this.props.onSubmit(stateCopy, this.props.index);
   }
 
   handleSelectChange(option) {
-    this.handleUpdateState('answerIndex', option.value)
+    this.handleUpdateState('answerIndex', option.value);
   };
 
   handleUpdateState(key, value) {
@@ -101,6 +114,21 @@ export default class PointEditForm extends React.Component {
   }
 
   renderInput(field) {
+    const inputProps = {
+      type: field.type || 'text',
+      name: field.id,
+      onChange: this.handleInputChange.bind(this),
+    };
+
+    if (['text', 'number'].includes(inputProps.type)) {
+      inputProps.className = 'standard-input full';
+      inputProps.value = this.state[field.id];
+    }
+
+    if (field.type === 'checkbox') {
+      inputProps.checked = this.state[field.id];
+    }
+
     return (
       <div key={field.id}>
         <label>
@@ -110,22 +138,19 @@ export default class PointEditForm extends React.Component {
           <small className="form-help">
             <Translate content={`PointEditForm.fields.${field.id}.help`} />
           </small>
-          <input
-            type={field.type || "text"}
-            name={field.id}
-            value={this.state[field.id]}
-            onChange={this.handleInputChange}
-            className="standard-input full"
-          />
+          <input {...inputProps} />
         </label>
       </div>
     );
   }
 
-  validate(feedback) {
-    const keys = fieldConfig.map(field => field.id);
-    return keys.every(key => (typeof feedback[key] === 'string') &&
-      (feedback[key].length > 0));
+  validate({ id, defaultSuccessMessage, defaultFailureMessage, dud, tol }) {
+    return [
+      (id.length > 0),
+      (defaultSuccessMessage.length > 0),
+      (defaultFailureMessage.length > 0),
+      (dud || (!dud && tol.length > 0))
+    ].every(validation => validation);
   }
 }
 
@@ -138,3 +163,5 @@ PointEditForm.propTypes = {
   index: React.PropTypes.number,
   onSubmit: React.PropTypes.func,
 };
+
+export default PointEditForm;
