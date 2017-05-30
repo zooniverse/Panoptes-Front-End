@@ -5,6 +5,7 @@ React = require 'react'
 `import FilteredProjectsList from './pages/projects/filtered-projects-list';`
 `import CollectionPageWrapper from './collections/show';`
 `import CollectionSettings from './collections/settings';`
+`import CollectionCollaborators from './collections/collaborators';`
 `import ProjectHomePage from './pages/project/home';`
 `import AboutProject from './pages/project/about/index';`
 `import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
@@ -140,7 +141,7 @@ module.exports =
       <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
         <IndexRoute component={require './collections/show-list'} />
         <Route path="settings" component={CollectionSettings} />
-        <Route path="collaborators" component={require './collections/collaborators'} />
+        <Route path="collaborators" component={CollectionCollaborators} />
         <Route path="talk" component={require './collections/show-list'} />
       </Route>
       <Route path="users/:profile_name" component={UserProfilePage}>
@@ -178,7 +179,7 @@ module.exports =
     <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
       <IndexRoute component={require './collections/show-list'} />
       <Route path="settings" component={CollectionSettings} />
-      <Route path="collaborators" component={require './collections/collaborators'} />
+      <Route path="collaborators" component={CollectionCollaborators} />
       <Route path="talk" component={require './collections/show-list'} />
     </Route>
 
