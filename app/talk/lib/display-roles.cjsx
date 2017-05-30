@@ -1,5 +1,5 @@
 React = require 'react'
-uniq = require 'lodash.uniq'
+uniq = require 'lodash/uniq'
 
 zooniverseTeamRole = (role) ->
   role.section is 'zooniverse' and [ 'admin', 'team' ].indexOf(role.name) isnt -1

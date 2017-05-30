@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
-import uniq from 'lodash.uniq';
+import uniq from 'lodash/uniq';
 import moment from 'moment';
 import LoadingIndicator from '../../../components/loading-indicator';
 
