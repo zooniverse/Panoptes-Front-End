@@ -51,7 +51,7 @@ class ExportWorkflowsDialog extends React.Component {
               this.setState({ media: mediaState });
             })
             .catch((error) => {
-              if (error.status === 404) {
+              if (error.status !== 404) {
                 this.props.onFail(error);
               } else {
                 console.error(error); // eslint-disable-line no-console
