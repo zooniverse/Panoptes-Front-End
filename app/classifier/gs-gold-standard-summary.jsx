@@ -1,4 +1,5 @@
 import React from 'react';
+import { Markdown } from 'markdownz';
 
 /* eslint-disable multiline-ternary, react/forbid-prop-types */
 
@@ -29,7 +30,7 @@ const GSGoldStandardSummary = ({ classification, subject, workflow }) => {
   if (subject.metadata['#Label'] === 'special') {
     return (
       <div>
-        <p>{subject.metadata['#feedback_1_message']}</p>
+        <Markdown>{subject.metadata['#post_classification_feedback']}</Markdown>
       </div>
     );
   }
