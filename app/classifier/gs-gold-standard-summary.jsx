@@ -26,6 +26,14 @@ const GSGoldStandardSummary = ({ classification, subject, workflow }) => {
     </div>);
   }
 
+  if (subject.metadata['#Label'] === 'special') {
+    return (
+      <div>
+        <p>{subject.metadata['#feedback_1_message']}</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <p>You responded {choiceLabels.join(', ')}.</p>
