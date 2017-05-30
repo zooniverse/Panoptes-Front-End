@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import uniq from 'lodash.uniq';
+import uniq from 'lodash/uniq';
 import apiClient from 'panoptes-client/lib/api-client';
 
 // Constants

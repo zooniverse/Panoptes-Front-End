@@ -3,7 +3,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 WorkflowToggle = require '../../components/workflow-toggle'
 SetToggle = require '../../lib/set-toggle'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
-uniq = require 'lodash.uniq'
+uniq = require 'lodash/uniq'
 
 `import ApplyForBetaForm from './apply-for-beta-form';`
 
