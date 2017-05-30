@@ -3,7 +3,7 @@ DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 {svgPathProperties} = require 'svg-path-properties'
-{createPathFromCoords, filterDupeCoords} = require './freehand-helpers'
+{createPathFromCoords, filterDupeCoords, roundCoords} = require './freehand-helpers'
 
 BUFFER = 16
 DELETE_BUTTON_WIDTH = 8
@@ -17,12 +17,12 @@ module.exports = React.createClass
       points: []
       _inProgress: false
 
-    initStart: ({x, y}, mark) ->
-      mark.points.push {x, y}
+    initStart: (coords, mark) ->
+      mark.points.push roundCoords coords
       _inProgress: true
 
-    initMove: ({x, y}, mark) ->
-      mark.points.push {x, y}
+    initMove: (coords, mark) ->
+      mark.points.push roundCoords coords
 
     initRelease: (coords, mark) ->
       mark.points.push mark.points[0]
