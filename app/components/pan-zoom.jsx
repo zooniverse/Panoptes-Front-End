@@ -84,13 +84,19 @@ const PanZoom = React.createClass({
                 <button title="annotate" className="fa fa-mouse-pointer" onClick={this.togglePanOff} />
               </div>
               <div className={this.state.panEnabled ? 'active' : ''}>
-                <button title="pan" ref="pan" className="fa fa-arrows" onClick={this.handleFocus.bind(this, 'pan')} onFocus={this.togglePanOn} onBlur={this.togglePanOff} />
+                <button
+                  title="pan"
+                  ref={(element) => { this.pan = element; }}
+                  className="fa fa-arrows"
+                  onClick={this.handleFocus.bind(this, 'pan')}
+                  onFocus={this.togglePanOn} onBlur={this.togglePanOff}
+                />
               </div>
             </div>
             <div>
               <button
                 title="zoom out"
-                ref="zoomOut"
+                ref={(element) => { this.zoomOut = element; }}
                 className={`zoom-out fa fa-minus ${this.cannotZoomOut() ? 'disabled' : ''}`}
                 onMouseDown={this.continuousZoom.bind(this, 1.1)}
                 onMouseUp={this.stopZoom}
@@ -104,7 +110,7 @@ const PanZoom = React.createClass({
             <div>
               <button
                 title="zoom in"
-                ref="zoomIn"
+                ref={(element) => { this.zoomIn = element; }}
                 className="zoom-in fa fa-plus"
                 onMouseDown={this.continuousZoom.bind(this, 0.9)}
                 onMouseUp={this.stopZoom}
@@ -129,7 +135,7 @@ const PanZoom = React.createClass({
   },
 
   handleFocus(ref) {
-    this.refs[ref].focus();
+    this[ref].focus();
     this.togglePanOn();
   },
 
