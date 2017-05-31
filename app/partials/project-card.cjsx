@@ -1,6 +1,7 @@
 React = require('react')
 `import FlexibleLink from '../components/flexible-link';`
 Translate = require 'react-translate-component'
+{ Link } = require 'react-router'
 
 ProjectCard = React.createClass
   displayName: 'ProjectCard'
@@ -8,8 +9,10 @@ ProjectCard = React.createClass
     project: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
+    customCSS: ''
     imageSrc: ''
     href: ''
+    landingPage: false
 
   render: ->
     conditionalStyle = {}
@@ -31,15 +34,24 @@ ProjectCard = React.createClass
     else
       '/projects/' + @props.project.slug
 
-    <FlexibleLink to={href}>
-      <div className="project-card" ref="projectCard" style={conditionalStyle}>
+    cardBody =
+      <div className="project-card #{this.props.customCSS}" ref="projectCard" style={conditionalStyle}>
         <svg viewBox="0 0 2 1" width="100%"></svg>
-        <div className="details">
+        <div className="details" style={{cursor: "default"}}>
           <div className="name"><span>{@props.project.display_name}</span></div>
+          {<hr /> if @props.landingPage}
           {<div className="description">{@props.project.description}</div> if @props.project.description?}
           <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"projectsPage.button"} /></button>
+          {if @props.landingPage
+            <Link to={href} className="primary-button" type="button">View Project</Link>}
         </div>
       </div>
-    </FlexibleLink>
+
+    if !@props.landingPage
+      <FlexibleLink to={href}>
+        {cardBody}
+      </FlexibleLink>
+    else
+        cardBody
 
 module.exports = ProjectCard

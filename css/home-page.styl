@@ -25,7 +25,7 @@ $flex-section
     top: 0
     left: 0
 
-  .zooniverse-logo, .site-nav__link
+  .site-nav__link
     opacity: 1
     color: #FFFFFF
 
@@ -39,27 +39,188 @@ $flex-section
     @media (max-width: 900px)
       font-size: 2em
 
-    &.lighter
-      font-weight: 400
+.home-page-not-logged-in
+  .home-intro
+    box-sizing: border-box
+    justify-content: flex-end
+    min-height: 30vw
+    padding: 2em 0
+    text-align: center
+    z-index: 0
+    overflow: hidden
+
+    video
+      display: none
+
+    .home-mobile-video-image
+      display: block
+
+    @media (min-width: 900px)
+      video
+        display: block
+
+      .home-mobile-video-image
+        display: none
+
+    @media (max-width: 900px)
+      min-height: 100vh
+
+    video, .home-mobile-video-image
+      @extends $absolute-fill
+      object-fit: cover
+      width: 100vw
+      z-index: -1
+
+  .home-research
+    padding: 5em 0
+    text-align: left
+
+    button[class=primary-button]
+      color: black
+
+    &__columns
+      margin: 2em 12em
+      column-count: 2
+      -moz-column-count: 2
+      -webkit-column-count: 2
+      column-gap: 2.5em
+      -moz-column-gap: 2.5em
+      -webkit-column-gap: 2.5em
+
+      @media (max-width: 800px)
+        margin: 2em 5em
+        column-count: 1
+        -moz-column-count: 1
+        -webkit-column-count: 1
+
+      a
+        color: #007482
+        text-decoration: none
+
+    &__buttons
+      text-align: center
+
+      .tertiary-kicker
+        font-size: 0.65em
+
+      button
+        margin-top: 1.5em
+
+    &__researchers
+      display: flex
+      flex-flow: row nowrap
+
+      div
+        flex: auto
+        margin: 5em 0
+        width: 100%
+
+        img
+          width: 100%
+          height: auto
+
+    &__content
+      display: flex
+      flex-direction: column
+      padding: 0 15vw
+      text-align: center
+
+      .tertiary-kicker
+        margin-bottom: 1.25em
+
+      div
+        box-sizing: border-box
+        margin: 1.5em 4vw
+
+        a
+          padding: 0.8em 3em
+
+  .home-discover
+    background-color: BACKGROUND_COLOR
+    display: flex
+    flex-flow: row wrap
+    padding: 3em 0
+    text-align: left
+
+    hr
+      border-color: white
+
+    @media (max-width: 900px)
+      min-height: auto
+
+    &__image
+      flex: 2 0 0
+      min-width: 20em
+      text-align: right
+
+      img
+        height: auto
+        max-width: 35em
+        width: 100%
+
+    &__content
+      flex: 3 0 0
+      margin: 0 5vw 5vh 10vw
+      min-width: 50%
+
+      a
+        img
+          max-height: 2em
+          margin-right: 1em
+
+      button[class=primary-button]
+        color: black
+
+  &__project-card
+    border-radius: 0
+    height: 25em
+    max-height: 25em
+    max-width: 18em
+
+    .details
+      height: 50%
+
+      .name, .description
+        text-align: left
+
+      .description
+        display: -webkit-box
+        height: 4.5em
+        margin-top: 0
+        overflow: hidden
+        text-overflow: ellipsis
+        -webkit-line-clamp: 3
+        -webkit-box-orient: vertical
+
+    hr
+      margin: 0.5em 0
+
+    a[class=primary-button]
+      box-sizing: border-box
+      color: black
+      margin: 0
+      text-align: center
+
+    :hover > &,
+    :focus > &
+      .details
+        height: 50%
 
 .on-home-page
+  font-family: 'Karla', sans-serif;
+
   *:focus
     outline: none
 
   section
     @extends $flex-section
+    min-height: 30vw
     position: relative
-    min-height: 40vw
 
     @media (max-width: 900px)
       min-height: 100vh
       padding-top: 2em
       padding-bottom: 2em
-
-  .zooniverse-logo
-    position: relative
-    width: 0.82em  // oddly-specific, but it aligns with text
-    top: 0.14em
 
   .standard-button
     border: 2px solid
@@ -85,116 +246,115 @@ $flex-section
       background: #FFFFFF
       color: ZOONIVERSE_TEAL
 
-  .alternate-button
-    border: 2px solid
-    border-radius: 6px
-    border-color: ZOONIVERSE_NAVY
-    background: none
-    padding: 0.75em 1.75em
-    transition: background 500ms ease
-    margin: 50px 10px 0 10px
+  .main-kicker
+    color: TEAL_LIGHT
+    font-family: 'Oswald', sans-serif
     font-size: 1.5em
-    font-weight: bold
-    text-decoration: none
-    color: ZOONIVERSE_NAVY
+    letter-spacing: 0.18em
+    text-transform: uppercase
 
     @media (max-width: 900px)
-      margin-top: 20px
+      font-size: 1em
+
+  .secondary-kicker
+    color: TEAL_MID
+    font-family: 'Oswald', sans-serif
+    font-size: 1em
+    letter-spacing: 0.16em
+    text-transform: uppercase
+
+  .tertiary-kicker
+    color: #5c5c5c
+    font-size: 1em
+    font-weight: 700
+    letter-spacing: 0.22em
+    text-transform: uppercase
+
+  .main-headline
+    color: #ffffff
+    font-size: 3.25em
+    font-weight: 700
+
+    @media (max-width: 900px)
+      font-size: 2em
+
+  .secondary-headline
+    color: #5c5c5c
+    font-size: 2.5em
+    font-weight: 700
+    line-height: 1.25em
+
+    @media (max-width: 900px)
+      font-size: 2em
+
+  .tertiary-headline
+    color: #5c5c5c
+    font-size: 2.25em
+    font-weight: 700
+    line-height: 1.2em
+
+    @media (max-width: 900px)
+      font-size: 2em
+
+  .class-counter
+    color: TEAL_MID
+    font-family: 'Oswald', sans-serif
+    font-size: 8em
+    font-weight: 300
+    letter-spacing: 0.02em
+    line-height: 1.2em
+
+    @media (max-width: 900px)
+      font-size: 4em
+
+  .display-body
+    font-weight: 700
+
+  .regular-body, .display-body
+    font-size: 1em
+
+    a
+      color: #007482
+      text-decoration: none
+
+      &:hover
+        color: TEAL_MID
+
+      &:visited
+        color: #005d69
+
+  .primary-button
+    background: transparent
+    border: 1px solid #cc9200
+    color: white
+    cursor: pointer
+    font-size: 0.8em
+    margin: 0.75em 1em 0.75em 0
+    padding: 0.75em 0.75em
+    text-decoration: none
+    width: 150px
 
     &:hover,
     &:active,
     &:focus
-      background: ZOONIVERSE_NAVY
+      background: #cc9200
       color: #FFFFFF
 
-  .home-link-down
-    position: absolute
-    bottom: 0
-    left: 0
-    width: 100%
-    text-align: center
-    border: none
-    background: none
-    color: #FFFFFF
-    font-size: 5em
+    &--light
+      background: #F0B200
+      border: 1px solid #F0B200
+      color: white
 
-    @media (max-width: 900px)
-      display: none
-
-  .home-intro, .home-promoted
-    h1
-      font-size: 3.5em
-
-  .home-intro
-    background-color: WHITE
-    z-index: 0
-    min-height: 50vw // video is 2:1 aspect ratio and 100% width
-
-    video
-      display: none
-
-    .home-mobile-video-image
-      display: block
-
-    @media (min-width: 900px)
-      video
-        display: block
-
-      .home-mobile-video-image
-        display: none
-
-    @media (max-width: 900px)
-      min-height: 100vh
-
-    video, .home-mobile-video-image
-      @extends $absolute-fill
-      z-index: -1
-      object-fit: cover
-
-    .home-intro-buttons
-      display: flex
-      flex-flow: row wrap
-      justify-content: center
-
-    .intro-button
-      border: 0
-      border-radius: 6px
-      box-shadow: rgba(0, 0, 0, 0.5) 0 1px 2px 0
-      background: rgba(255, 255, 255, 0.9)
-      padding: 0.75em 1.75em
-      transition: background 500ms ease
-      margin: 50px 10px 0 10px
-      font-size: 1.5em
-      font-weight: bold
-      text-decoration: none
-      color: ZOONIVERSE_TEAL
-
-      @media (max-width: 900px)
-        margin-top: 20px
-
-      &:hover,
-      &:active,
-      &:focus
-        background: LIGHT-BLUE-GREEN
-        color: #FFFFFF
+      &:hover
+        background: #cc9200
+        border-color: #cc9200
 
   .home-featured
-    padding: 50px 30px
-    min-height: 40vw
     background: #fff
-
-    h1
-      color: COPY
-      font-size: 1.3em
-      text-transform: uppercase
-
-    h2
-      color: ZOONIVERSE_NAVY
+    padding: 3em 0
 
     p
-      color: FOREGROUND
-      width: 70vw
-      font-size: 2em
+      width: 50vw
 
       a
         font-size: inherit
@@ -210,35 +370,13 @@ $flex-section
       align-items: center
 
       img
-        max-height: 34vh
+        max-height: 11.5em
         display: block
         margin: 1vw
         flex: 1 1 auto
 
         @media (max-width: 900px)
           max-width: 80vw
-
-    .alternate-button
-      margin-top: 20px
-
-  .home-discover
-    padding: 50px 0
-    background-color: BACKGROUND_COLOR
-
-    @media (max-width: 900px)
-      min-height: auto
-
-    h1, p
-      color: ZOONIVERSE_NAVY
-
-    p
-      margin: 20px auto
-      width: 50vw
-      font-size: 2em
-
-      @media (max-width: 900px)
-        width: 90vw
-        font-size: 1.5em
 
   .home-promoted
     padding: 0
