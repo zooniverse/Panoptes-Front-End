@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import statsClient from 'panoptes-client/lib/stats-client';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
+import apiClient from 'panoptes-client/lib/api-client';
 import LoginDialog from '../partials/login-dialog';
 import alert from '../lib/alert';
 import FeaturedProject from './home-common/featured-project';
@@ -24,8 +25,9 @@ export default class HomePage extends React.Component {
     super(props);
     this.resizeTimeout = NaN;
     this.state = {
-      count: 42000000,
-      screenWidth: 0
+      count: 55000000,
+      screenWidth: 0,
+      volunteerCount: 1500000
     };
 
     this.showDialog = this.showDialog.bind(this);
@@ -37,11 +39,20 @@ export default class HomePage extends React.Component {
     addEventListener('resize', this.handleResize);
     this.handleResize();
     this.getClassificationCounts();
+    this.getVolunteerCount();
   }
 
   componentWillUnmount() {
     document.documentElement.classList.remove('on-home-page-not-logged-in');
     removeEventListener('resize', this.handleResize);
+  }
+
+  getVolunteerCount() {
+    apiClient.type('users').get({ page_size: 1 })
+    .then(([user]) => {
+      const meta = user.getMeta();
+      this.setState({ volunteerCount: meta.count });
+    });
   }
 
   getClassificationCounts() {
@@ -73,9 +84,9 @@ export default class HomePage extends React.Component {
 
   showDialog(event) {
     const which = event.currentTarget.value;
-    alert((resolve) => {
-      return <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />;
-    });
+    alert(resolve =>
+      <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />
+    );
   }
 
   render() {
@@ -107,7 +118,12 @@ export default class HomePage extends React.Component {
         </div>
 
         <div className="flex-container">
-          <HomePageResearch count={this.state.count} screenWidth={this.state.screenWidth} showDialog={this.showDialog} />
+          <HomePageResearch
+            count={this.state.count}
+            screenWidth={this.state.screenWidth}
+            showDialog={this.showDialog}
+            volunteerCount={this.state.volunteerCount}
+          />
         </div>
 
         <div className="flex-container">

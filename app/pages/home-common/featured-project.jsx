@@ -11,18 +11,16 @@ Featured Project Component
 import React from 'react';
 import { Link } from 'react-router';
 
-export default class FeaturedProject extends React.Component {
-  render() {
-    return (
-      <section className="home-featured">
-        <h3 className="secondary-kicker">Featured Project</h3>
-        <div className="home-featured-images">
-          <img src="./assets/featured-projects/featured-project-20170531-galaxy-nurseries.jpg" />
-        </div>
-        <h3 className="secondary-headline">Introducing the 100th Zooniverse project - Galaxy Nurseries</h3>
-        <p className="display-body">Help researchers figure out how our universe has changed over time by finding baby galaxies.</p>
-        <Link to="projects/hughdickinson/galaxy-nurseries" className="primary-button primary-button--light">Get involved!</Link>
-      </section>
-    );
-  }
-}
+const FeaturedProject = (() =>
+  <section className="home-featured">
+    <h3 className="secondary-kicker">Featured Project</h3>
+    <div className="home-featured-images">
+      <img role="presentation" src="./assets/featured-projects/featured-project-20170531-galaxy-nurseries.jpg" />
+    </div>
+    <h3 className="secondary-headline">Introducing the 100th Zooniverse project: Galaxy Nurseries</h3>
+    <p className="display-body">Help researchers figure out how our universe has changed over time by finding baby galaxies.</p>
+    <Link to="projects/hughdickinson/galaxy-nurseries" className="primary-button primary-button--light">View Project!</Link>
+  </section>
+);
+
+export default FeaturedProject;
