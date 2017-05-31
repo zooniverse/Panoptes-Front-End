@@ -19,47 +19,45 @@ counterpart.registerTranslations('en', {
   }
 });
 
-const HomePageDiscover = ({ showDialog }) => {
-  return (
-    <section className="home-discover">
-      <div className="home-discover__content">
-        <Translate className="secondary-kicker" component="h2" content="discoverHomePage.what" />
+const HomePageDiscover = (({ showDialog }) =>
+  <section className="home-discover">
+    <div className="home-discover__content">
+      <Translate className="secondary-kicker" component="h2" content="discoverHomePage.what" />
 
-        <Translate className="tertiary-headline" component="h3" content="discoverHomePage.discover" />
+      <Translate className="tertiary-headline" component="h3" content="discoverHomePage.discover" />
 
-        <Translate className="display-body" component="p" content="discoverHomePage.research" />
+      <Translate className="display-body" component="p" content="discoverHomePage.research" />
 
-        <button type="button" value="sign-in" className="primary-button" onClick={showDialog}>
-          <Translate content="discoverHomePage.signIn" />
-        </button>
+      <button type="button" value="sign-in" className="primary-button" onClick={showDialog}>
+        <Translate content="discoverHomePage.signIn" />
+      </button>
 
-        <button type="button" value="register" className="primary-button primary-button--light" onClick={showDialog}>
-          <Translate content="discoverHomePage.register" />
-        </button>
+      <button type="button" value="register" className="primary-button primary-button--light" onClick={showDialog}>
+        <Translate content="discoverHomePage.register" />
+      </button>
 
-        <hr />
+      <hr />
 
-        <Translate className="tertiary-kicker" component="h3" content="discoverHomePage.doScience" />
+      <Translate className="tertiary-kicker" component="h3" content="discoverHomePage.doScience" />
 
-        <Translate className="regular-body" component="p" content="discoverHomePage.appAnnounce" />
+      <Translate className="regular-body" component="p" content="discoverHomePage.appAnnounce" />
 
-        <a href="https://itunes.apple.com/us/app/zooniverse/id1194130243?mt=8">
-          <img role="presentation" src="/assets/home-appStore.png" />
-        </a>
+      <a href="https://itunes.apple.com/us/app/zooniverse/id1194130243?mt=8">
+        <img role="presentation" src="/assets/home-appStore.png" />
+      </a>
 
-        <a href="http://play.google.com/store/apps/details?id=com.zooniversemobile">
-          <img role="presentation" src="/assets/home-googlePlay.png" />
-        </a>
+      <a href="http://play.google.com/store/apps/details?id=com.zooniversemobile">
+        <img role="presentation" src="/assets/home-googlePlay.png" />
+      </a>
 
-      </div>
+    </div>
 
-      <div className="home-discover__image">
-        <img role="presentation" src="/assets/home-computer.png" />
-      </div>
+    <div className="home-discover__image">
+      <img role="presentation" src="/assets/home-computer.png" />
+    </div>
 
-    </section>
-  );
-};
+  </section>
+);
 
 HomePageDiscover.propTypes = {
   showDialog: React.PropTypes.func
