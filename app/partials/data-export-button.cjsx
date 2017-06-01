@@ -14,32 +14,17 @@ module.exports = React.createClass
   getInitialState: ->
     exportRequested: false
     exportError: null
-    showButton: true
     mostRecent: null
 
   componentDidMount: ->
     @exportGet()
-    @showDataExportBtn()
-
-  componentWillReceiveProps: ->
-    @exportGet()
-    @showDataExportBtn()
 
   exportGet: ->
     @props.project.get(@props.exportType)
       .then ([exported]) =>
         @setState mostRecent: exported
-        @showDataExportBtn()
       .catch (error) =>
         console.error error
-
-  showDataExportBtn: ->
-    if @props.exportType isnt 'aggregations_export'
-      @setState showButton: true
-    else if @state?.mostRecent?.metadata?.state?
-      @setState showButton: true
-    else
-      @setState showButton: false
 
   requestDataExport: ->
     @setState exportError: null
@@ -57,7 +42,7 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      { if @state.showButton
+      { if (@props.exportType isnt 'aggregations_export' or @state?.mostRecent?.metadata?.state?)
         <div>
           { if @props.newFeature
             <i className="fa fa-cog fa-lg fa-fw"></i> }
