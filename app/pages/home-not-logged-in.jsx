@@ -27,6 +27,7 @@ export default class HomePage extends React.Component {
     this.resizeTimeout = NaN;
     this.state = {
       count: 55000000,
+      promotedProjects: [],
       screenWidth: 0,
       volunteerCount: 1500000
     };
@@ -132,6 +133,10 @@ export default class HomePage extends React.Component {
 
         <div className="flex-container">
           <HomePageDiscover showDialog={this.showDialog} />
+        </div>
+
+        <div className="flex-container">
+          <HomePagePromoted promotedProjects={this.state.promotedProjects} />
         </div>
 
         <div className="flex-container">
