@@ -82,6 +82,7 @@ class ExportWorkflowsDialog extends React.Component {
               return <ExportWorkflowListItem key={result.id} workflow={result} media={this.state.media} onChange={boundHandler} />;
             })}
           </ul>
+          { this.props.exportError ? <div className="form-help error">We had a problem requesting your export data: {this.props.exportError.toString()}</div> : null }
         </div>
       );
     }

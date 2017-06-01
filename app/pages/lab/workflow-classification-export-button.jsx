@@ -26,7 +26,7 @@ class WorkflowClassificationExportButton extends React.Component {
   showWorkflowExport() {
     this.setState({ exportRequested: false, exportError: null });
     Dialog.alert(
-      <ExportWorkflowsDialog project={this.props.project} onSuccess={this.handleExportSuccess} onFail={this.handleExportFail} />,
+      <ExportWorkflowsDialog project={this.props.project} onSuccess={this.handleExportSuccess} onFail={this.handleExportFail} exportError={this.state.exportError} />,
     );
   }
 
@@ -35,7 +35,6 @@ class WorkflowClassificationExportButton extends React.Component {
       <div>
         <button onClick={this.showWorkflowExport}>Request new workflow classification export</button>
         <small className="form-help"> CSV format.</small>
-        { this.state.exportError ? <div className="form-help error">We had a problem requesting your export data: {this.state.exportError.toString()}</div> : null }
         { this.state.exportRequested ? <div className="form-help success">We’ve received your request, check your email for a link to your data soon!</div> : null }
       </div>
     );
