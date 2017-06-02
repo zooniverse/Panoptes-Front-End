@@ -42,7 +42,7 @@ ProjectCard = React.createClass
           {<div className="description">{@props.project.description}</div> if @props.project.description?}
           <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"projectsPage.button"} /></button>
           {if @props.landingPage
-            <FlexibleLink to={href} className="primary-button" type="button">View Project</FlexibleLink>}
+            <button className="primary-button" type="button">View Project</button>}
         </div>
       </div>
     </FlexibleLink>

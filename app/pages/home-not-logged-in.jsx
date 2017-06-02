@@ -94,16 +94,17 @@ export default class HomePage extends React.Component {
 
   getPromotedProjects() {
     apiClient.type('projects').get({ id: Object.keys(FEATURED_PROJECTS), cards: true })
-    .then((projects) => {
-      Promise.all(projects.map((project) => {
+    .then((promotedProjects) => {
+      promotedProjects.map((project) => {
         const featuredProject = FEATURED_PROJECTS[project.id];
         project.image = featuredProject.image;
         project.title = featuredProject.title;
         return project;
-      }))
-      .then((promotedProjects) => {
-        this.setState({ promotedProjects });
       });
+      this.setState({ promotedProjects });
+    })
+    .catch((error) => {
+      console.warn(error);
     });
   }
 
