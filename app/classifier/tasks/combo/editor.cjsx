@@ -8,6 +8,11 @@ ComboTaskEditor = React.createClass
     task: null
     onChange: ->
 
+  componentWillMount: () ->
+    @props.task.tasks.map (taskKey, i) =>
+      unless @props.workflow.tasks[taskKey]
+        @removeTask(i)
+
   removeTask: (index) ->
     @props.task.tasks.splice index, 1
     @props.onChange @props.task
