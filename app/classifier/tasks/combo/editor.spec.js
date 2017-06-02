@@ -18,10 +18,12 @@ describe('ComboEditor', function () {
 });
 
 describe('deleting a workflow task', () => {
-  const { tasks } = workflow;
+  const workflowCopy = Object.assign({}, workflow);
+  const tasks = Object.assign({}, workflow.tasks);
   delete tasks.ask;
+  workflowCopy.tasks = tasks;
   it('should render and update the combo task', () => {
-    const wrapper = mount(<ComboEditor workflow={workflow} task={task} />);
+    const wrapper = mount(<ComboEditor workflow={workflowCopy} task={task} />);
     const { props } = wrapper.instance();
     assert.equal(props.task.tasks.indexOf('ask'), -1);
   });
