@@ -122,9 +122,8 @@ export default class HomePageSocial extends React.Component {
             <hr />
 
             <Translate className="tertiary-kicker" content="socialHomePage.recentProjects" />
-            {recentProjects.map((project) => {
-              return this.renderUpdatedProject(project);
-            })}
+
+            {recentProjects.map(project => this.renderUpdatedProject(project))}
 
             <Translate className="tertiary-kicker" content="socialHomePage.recentPublications" />
             <h3 className="timestamp-label">{newestPublication.date}</h3>

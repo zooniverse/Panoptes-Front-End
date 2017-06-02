@@ -22,17 +22,13 @@ function getBlogPosts(returnPosts) {
 function getRecentProjects() {
   const query = { launch_approved: true, page_size: 3, sort: '-updated_at' };
   return apiClient.type('projects').get(query)
-  .then((recentProjects) => {
-    return recentProjects;
-  });
+  .then(recentProjects => recentProjects);
 }
 
 function getPublication() {
   const articles = [];
   Object.keys(Publications).forEach((category) => {
-    Publications[category].map((project) => {
-      return articles.push(...project.publications);
-    });
+    Publications[category].map(project => articles.push(...project.publications));
   });
   const newestPublication = articles.sort((a, b) => {
     return new Date(b.date) - new Date(a.date);

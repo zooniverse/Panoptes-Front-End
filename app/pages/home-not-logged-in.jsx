@@ -72,26 +72,6 @@ export default class HomePage extends React.Component {
     });
   }
 
-  handleResize() {
-    if (!isNaN(this.resizeTimeout)) {
-      clearTimeout(this.resizeTimeout);
-    }
-    this.resizeTimeout = setTimeout(() => {
-      this.setState({
-        screenWidth: innerWidth
-      }, () => {
-        this.resizeTimeout = NaN;
-      });
-    }, 100);
-  }
-
-  showDialog(event) {
-    const which = event.currentTarget.value;
-    alert(resolve =>
-      <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />
-    );
-  }
-
   getPromotedProjects() {
     apiClient.type('projects').get({ id: Object.keys(FEATURED_PROJECTS), cards: true })
     .then((promotedProjects) => {
@@ -106,6 +86,26 @@ export default class HomePage extends React.Component {
     .catch((error) => {
       console.warn(error);
     });
+  }
+
+  showDialog(event) {
+    const which = event.currentTarget.value;
+    alert(resolve =>
+      <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />
+    );
+  }
+
+  handleResize() {
+    if (!isNaN(this.resizeTimeout)) {
+      clearTimeout(this.resizeTimeout);
+    }
+    this.resizeTimeout = setTimeout(() => {
+      this.setState({
+        screenWidth: innerWidth
+      }, () => {
+        this.resizeTimeout = NaN;
+      });
+    }, 100);
   }
 
   render() {
@@ -150,12 +150,7 @@ export default class HomePage extends React.Component {
         </div>
 
         <div className="flex-container">
-          <HomePageSocial
-            blogPosts={this.state.blogPosts}
-            newestProject={this.state.newestProject}
-            newestPublication={this.state.newestPublication}
-            recentProjects={this.state.recentProjects}
-          />
+          <HomePageSocial />
         </div>
       </div>
     );
