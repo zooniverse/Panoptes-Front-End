@@ -1,7 +1,6 @@
 React = require('react')
 `import FlexibleLink from '../components/flexible-link';`
 Translate = require 'react-translate-component'
-{ Link } = require 'react-router'
 
 ProjectCard = React.createClass
   displayName: 'ProjectCard'
