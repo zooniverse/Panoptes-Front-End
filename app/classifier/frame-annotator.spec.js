@@ -226,7 +226,7 @@ describe('<FrameAnnotator />', function() {
     });
 
     it('does not allow pointer events for other combo tasks', function() {
-      const comboTask = workflow.tasks.combo;
+      const comboTask = Object.assign({}, workflow.tasks.combo);
       comboTask.tasks = ['write', 'ask', 'features'];
       workflow.tasks.textCombo = comboTask;
       const comboAnnotation = tasks.combo.getDefaultAnnotation(workflow.tasks.textCombo, workflow, tasks);
