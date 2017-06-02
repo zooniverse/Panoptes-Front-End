@@ -1,4 +1,4 @@
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
 import ComboEditor from './editor';
@@ -10,10 +10,23 @@ const task = {
   tasks: ['write', 'ask', 'features', 'draw', 'survey', 'slider']
 };
 
-describe('ComboEditor', function () {
+describe('ComboEditor', () => {
+  const wrapper = mount(<ComboEditor workflow={workflow} task={task} />);
+
   it('should render for a workflow and task', () => {
-    const wrapper = shallow(<ComboEditor workflow={workflow} task={task} />);
     assert.equal(wrapper.instance() instanceof ComboEditor, true);
+  });
+
+  it('should add new tasks to the combo when selected', () => {
+    wrapper.find('select[value="stuck"]').simulate('change', { target: { value: 'dropdown' }});
+    const { props } = wrapper.instance();
+    assert.notEqual(props.task.tasks.indexOf('dropdown'), -1);
+  });
+
+  it('should allow tasks to be deleted from the combo', () => {
+    wrapper.find('ul.drag-reorderable button').first().simulate('click');
+    const { props } = wrapper.instance();
+    assert.equal(props.task.tasks.indexOf('write'), -1);
   });
 });
 
