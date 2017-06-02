@@ -11,6 +11,7 @@ import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
 import HomePageSocial from './home-not-logged-in/social';
 import HomePagePromoted from './home-not-logged-in/promoted';
+import FEATURED_PROJECTS from '../lib/featured-projects';
 
 counterpart.registerTranslations('en', {
   notLoggedInHomePage: {
@@ -26,6 +27,7 @@ export default class HomePage extends React.Component {
     this.resizeTimeout = NaN;
     this.state = {
       count: 55000000,
+      promotedProjects: [],
       screenWidth: 0,
       volunteerCount: 1500000
     };
@@ -40,6 +42,7 @@ export default class HomePage extends React.Component {
     this.handleResize();
     this.getClassificationCounts();
     this.getVolunteerCount();
+    this.getPromotedProjects();
   }
 
   componentWillUnmount() {
@@ -89,6 +92,22 @@ export default class HomePage extends React.Component {
     );
   }
 
+  getPromotedProjects() {
+    apiClient.type('projects').get({ id: Object.keys(FEATURED_PROJECTS), cards: true })
+    .then((promotedProjects) => {
+      promotedProjects.map((project) => {
+        const featuredProject = FEATURED_PROJECTS[project.id];
+        project.image = featuredProject.image;
+        project.title = featuredProject.title;
+        return project;
+      });
+      this.setState({ promotedProjects });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  }
+
   render() {
     return (
       <div className="on-home-page home-page-not-logged-in">
@@ -115,6 +134,10 @@ export default class HomePage extends React.Component {
 
         <div className="flex-container">
           <HomePageDiscover showDialog={this.showDialog} />
+        </div>
+
+        <div className="flex-container">
+          <HomePagePromoted promotedProjects={this.state.promotedProjects} />
         </div>
 
         <div className="flex-container">

@@ -21,7 +21,7 @@ $flex-section
   justify-content: center
   text-align: center
 
-.on-home-page-not-logged-in, .on-home-page-logged-in
+.on-home-page-not-logged-in
   .app-layout__header
     background: rgba(0, 0, 0, 0.5)
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.0))
@@ -201,9 +201,11 @@ $flex-section
         color: black
 
   &__project-card
-    height: 25em
-    max-height: 25em
+    border-radius: 0
+    height: 24em
+    max-height: 24em
     max-width: 18em
+    width: 18em
 
     .details
       height: 50%
@@ -223,7 +225,7 @@ $flex-section
     hr
       margin: 0.5em 0
 
-    a[class=primary-button]
+    button[class=primary-button]
       box-sizing: border-box
       color: black
       margin: 0
@@ -291,6 +293,7 @@ $flex-section
     font-size: 1em
     font-weight: 700
     letter-spacing: 0.22em
+    margin-bottom: 1em
     text-transform: uppercase
 
   .main-headline
@@ -374,9 +377,13 @@ $flex-section
 
   .home-featured
     background: #fff
-    padding: 3em
+    padding: 4em 0
+
+    .secondary-kicker
+      font-size: 1.25em
 
     p
+      font-size: 1em
       width: 50vw
 
       a
@@ -386,131 +393,48 @@ $flex-section
         width: 100%
 
     .home-featured-images
-      margin: 1em 0
       display: flex
-      flex-direction: row
-      justify-content: center
-      align-items: center
+      flex-flow: row nowrap
+      margin: 2em 0
 
-      img
-        max-height: 11.5em
-        display: block
-        margin: 1vw
-        flex: 1 1 auto
+      div
+        flex: auto
+        margin: 0.75em
+        max-height: 12.5em
+        max-width: 20em
+        width: 100%
 
-        @media (max-width: 900px)
-          max-width: 80vw
+        img
+          height: auto
+          width: 100%
 
   .home-promoted
-    padding: 0
+    background-color: BACKGROUND_COLOR
+    padding: 2em 0
 
-    .promoted-projects
+    &__cards
+      display: flex
+      flex-wrap: wrap
+      justify-content: space-between
+      margin: 1em 0
       width: 100%
 
-      .promoted-project
-        @extends $flex-section
-        @extends $absolute-fill
+      .project-card
+        margin: inherit 0
 
-        *
-          opacity: 0
+    &__content
+      display: flex
+      flex-direction: column
+      margin: 2em 22vw
 
-        .description
-          top: 50px
-          transition: top 0ms
-
-        &.current
-          *
-            opacity: 1
-            z-index: 2
-
-          .description
-            top: 10px
-            transition: all 750ms ease-out
-
-          .layer
-            z-index: 1
-
-          .background-image
-            z-index: 0
-
-    .background-image
-      @extends $absolute-fill
-      object-fit: cover
-      transition: opacity 750ms ease-out
-
-    .layer
-      @extends $absolute-fill
-      background: linear-gradient(top, rgba(ZOONIVERSE_TEAL, 0.25), rgba(ZOONIVERSE_TEAL, 0.4))
-
-    .description
-      position: relative
-      margin-top: 10px
-      margin-bottom: 10px
-      font-size: 3em
-      color: #FFFFFF
-
-      @media (max-width: 900px)
-        font-size: 2em
-
-    &:hover
-      .controls
-        opacity: 1
-
-    .controls
-      opacity: 0
-      transition: opacity 500ms ease-in-out
-      color: #FFFFFF
-
-      &.angles
-        position: absolute
-        font-size: 4em
-        border: 3px solid #FFFFFF
-        border-radius: 50%
-        text-align: center
-        width: 25px
-        height: 25px
-        line-height: 25px
-        top: calc(50% - 12.5px) // vertically centered
-        padding: 10px
-        cursor: pointer
-
-        &.fa-angle-left
-          left: 50px
-
-        &.fa-angle-right
-          right: 50px
-
-      &.circles
-        position: absolute
-        bottom: 15%
-        left: 0
-        width: 100%
-        text-align: center
-
-        .fa-circle, .fa-circle-o
-          margin: 0 5px 0 5px
-          cursor: pointer
-
-      @media (max-width: 900px)
-        &.angles
-          display: none
-
-        &.circles
-          opacity: 1
-          font-size: 1.5em
-
-          .fa-circle, .fa-circle-o
-            margin: 0 15px
-
-    .owner
-      position: absolute
-      bottom: 50px
-      left: 2vw
-      margin: 0
-      color: #FFFFFF
-
-      @media (max-width: 900px)
-        display: none
+    &:before
+      content: ""
+      position : absolute
+      text-align: center
+      top: 0
+      height: 1px
+      width: 85%
+      border-bottom: 1px solid LIGHT_GREY
 
   .home-social
     background-color: WHITE
