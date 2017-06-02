@@ -10,7 +10,7 @@ module.exports = React.createClass
 
   render: ->
     <ModalFocus className="dialog-underlay" onEscape={@props.onEscape}>
-      <div aria-role='dialog' className="dialog">
+      <div aria-roledescription='dialog' className="dialog">
         <div className="dialog-controls">
           <div className="wrapper">{@props.controls}</div>
         </div>
@@ -21,4 +21,3 @@ module.exports = React.createClass
         </div>
       </div>
     </ModalFocus>
-

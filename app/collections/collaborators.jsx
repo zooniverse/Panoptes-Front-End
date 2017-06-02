@@ -2,6 +2,7 @@ import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import UserSearch from '../components/user-search';
 import checkIfCollectionOwner from '../lib/check-if-collection-owner';
+import alert from '../lib/alert';
 
 const ID_PREFIX = 'COLLECTION_COLLABORATORS_PAGE_';
 
@@ -56,35 +57,34 @@ export class RoleCreator extends React.Component {
       error: null
     });
 
-    const roleSets = users.map((id) => {
-      const newRoleSet = apiClient.type('collection_roles').create({
+    const roleSets = users.map(id =>
+      apiClient.type('collection_roles').create({
         roles,
         links: {
           collection: this.props.collection.id,
           user: id
         }
-      });
-      return newRoleSet;
-    });
+      })
+    );
 
-    Promise.all(roleSets.map((roleSet) => {
-      roleSet.save();
-    }))
-    .then((...args) => {
-      this.userSearch.clear();
-      Object.keys(checkboxes).map((key) => {
-        checkboxes[key].checked = false;
+    Promise.all((roleSets.map((roleSet) => {
+      return roleSet.save().then(role => role);
+    })))
+      .then((args) => {
+        this.userSearch.clear();
+        Object.keys(checkboxes).map((key) => {
+          checkboxes[key].checked = false;
+        });
+        if (this.props.onAdd) {
+          this.props.onAdd.apply(null, args);
+        }
+      })
+      .catch((error) => {
+        this.setState({ error });
+      })
+      .then(() => {
+        this.setState({ creating: false });
       });
-      if (this.props.onAdd) {
-        this.props.onAdd.apply(null, args);
-      }
-    })
-    .catch((error) => {
-      this.setState({ error });
-    })
-    .then(() => {
-      this.setState({ creating: false });
-    });
   }
 
   render() {
@@ -156,7 +156,7 @@ export class RoleRow extends React.Component {
     super(props);
 
     this.state = {
-      owner: null,
+      owner: {},
       saving: null
     };
 
@@ -177,21 +177,42 @@ export class RoleRow extends React.Component {
   }
 
   toggleRole(role) {
-    let index;
     const currentRoles = this.props.roleSet.roles;
+    const removing = currentRoles.includes(role);
 
-    if (currentRoles.includes(role)) {
-      index = currentRoles.indexOf(role);
-      currentRoles.splice(index, 1);
+    if (removing) {
+      this.confirmDelete(currentRoles, role);
     } else {
       currentRoles.push(role);
-    }
-
-    if (currentRoles.length) {
       this.updateRoles(currentRoles);
-    } else {
-      this.removeRoles();
     }
+  }
+
+  confirmDelete(currentRoles, role) {
+    alert((resolve) => {
+      const handleDelete = () => {
+        const index = currentRoles.indexOf(role);
+        currentRoles.splice(index, 1);
+
+        if (currentRoles.length) {
+          this.updateRoles(currentRoles);
+        } else {
+          this.removeRoles();
+        }
+        resolve();
+      };
+
+      return (
+        <div className="confirm-delete-dialog content-container">
+          <p>Are you sure you want to delete this role?</p>
+          <div>
+            <button className="minor-button" autoFocus={true} onClick={resolve}>No</button>
+            {' '}
+            <button className="major-button" onClick={handleDelete}>Yes</button>
+          </div>
+        </div>
+      );
+    });
   }
 
   updateRoles(newRoles = [], callback = () => {}) {
@@ -220,21 +241,39 @@ export class RoleRow extends React.Component {
       <p>
         {owner && (<strong>{owner.login}</strong>)}
 
-        <button type="button" className="pill-button" onClick={this.removeRoles}>Remove</button>
-        <br />
+        { owner.display_name !== this.props.collectionOwner && (
+          <button type="button" className="pill-button" onClick={this.removeRoles}>Remove</button>
+        )}
 
         <span className="columns-container inline">
-          {POSSIBLE_ROLES.map(role =>
-            <label htmlFor="role" key={role}>
-              <input type="checkbox" name={role} checked={this.props.roleSet.roles.includes(role)} disabled={role === 'owner' || this.state.saving} onChange={this.toggleRole.bind(this, role)} />{' '}
-              {ROLES_INFO[role].label}
-            </label>
-          )}
+          {POSSIBLE_ROLES.map((role) => {
+            const checkedRole = this.props.roleSet.roles.includes(role);
+            const boldRole = checkedRole ? <strong>{ROLES_INFO[role].label}</strong> : ROLES_INFO[role].label;
+            const disableCheck = role === 'owner' || this.state.saving || owner.display_name === this.props.collectionOwner;
+
+            return (
+              <label htmlFor="role" key={role}>
+                <input type="checkbox" name={role} checked={checkedRole} disabled={disableCheck} onChange={this.toggleRole.bind(this, role)} />{' '}
+                {boldRole}
+              </label>
+            );
+          })}
         </span>
       </p>
     );
   }
 }
+
+RoleRow.propTypes = {
+  collectionOwner: React.PropTypes.string,
+  onRemove: React.PropTypes.func,
+  roleSet: React.PropTypes.shape({
+    delete: React.PropTypes.func,
+    get: React.PropTypes.func,
+    roles: React.PropTypes.array,
+    update: React.PropTypes.func
+  })
+};
 
 export class CollectionCollaborators extends React.Component {
   constructor(props) {
@@ -261,7 +300,7 @@ export class CollectionCollaborators extends React.Component {
 
   update(callback = () => {}) {
     const promise = Promise.all([
-      apiClient.type('collection_roles').get({ collection_id: this.props.collection.id, http_cache: false }),
+      apiClient.type('collection_roles').get({ collection_id: this.props.collection.id }),
       this.props.collection.get('owner')
     ]);
 
@@ -275,26 +314,32 @@ export class CollectionCollaborators extends React.Component {
     this.update();
   }
 
-  render() {
+  ownerRoleFirst() {
     const { roleSets } = this.state;
+
+    roleSets.map((set, i) => {
+      if (set.roles.includes('owner')) {
+        const test = roleSets.splice(i, 1);
+        roleSets.unshift(test[0]);
+      }
+    });
+    return roleSets;
+  }
+
+  render() {
     const { owner } = this.state;
+    const roleSets = this.ownerRoleFirst();
 
     if (this.state.hasSettingsRole) {
       return (
         <div className="collection-settings-tab">
           {this.state.error && (<p className="form-help error">{this.state.error.toString()}</p>)}
 
-          {roleSets.length === 1 && (
-            <div className="helpful-tip">None yet, add some with the form below.</div>
-          )}
-
-          {owner && roleSets.length > 1 && (
+          {owner && (
             <div>
-              {roleSets.map((roleSet) => {
-                if (owner.id !== roleSet.links.owner.id) {
-                  return <RoleRow key={roleSet.id} roleSet={roleSet} onRemove={this.handleCollaboratorChange} />;
-                }
-              })}
+              {roleSets.map(roleSet =>
+                <RoleRow collectionOwner={owner.display_name} key={roleSet.id} roleSet={roleSet} onRemove={this.handleCollaboratorChange} />
+              )}
             </div>
           )}
 
