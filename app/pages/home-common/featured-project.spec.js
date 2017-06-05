@@ -23,8 +23,8 @@ describe('FeaturedProject', () => {
     const wrapper = shallow(<FeaturedProject />);
     const { alt, src } = wrapper.find('img').props();
     assert.equal(wrapper.find('img').length, 1);
-    assert.ok(alt.length > 1, 'alt attribute is empty');
-    assert.ok(src.length > 1, 'src attribute is empty');
+    assert.ok(alt.length > 0, 'alt attribute is empty');
+    assert.ok(src.length > 0, 'src attribute is empty');
   });
 
   it('should have a link to the featured project', () => {
