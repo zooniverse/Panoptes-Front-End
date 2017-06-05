@@ -1,5 +1,4 @@
 React = require 'react'
-PromiseRenderer = require '../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 moment = require 'moment'
 Translate = require 'react-translate-component'
