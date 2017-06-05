@@ -18,7 +18,7 @@ function FeaturedProject() {
       <div className="home-featured-images">
         <img
           alt="The direct image (left) and dispersed spectrum (right) of a real galaxy from the WISP survey. The white arrow shows the bright light produced by an emission line."
-          src="./assets/featued-projects/featured-project-20170531-galaxy-nurseries.jpg"
+          src="./assets/featured-projects/featured-project-20170531-galaxy-nurseries.jpg"
         />
       </div>
       <h2>Introducing the 100th Zooniverse project - Galaxy Nurseries</h2>
