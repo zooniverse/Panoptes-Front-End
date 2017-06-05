@@ -26,7 +26,7 @@ class WorkflowClassificationExportButton extends React.Component {
   showWorkflowExport() {
     this.setState({ exportRequested: false, exportError: null });
     Dialog.alert(
-      <ExportWorkflowsDialog project={this.props.project} onSuccess={this.handleExportSuccess} onFail={this.handleExportFail} exportError={this.state.exportError} />,
+      <ExportWorkflowsDialog project={this.props.project} onSuccess={this.handleExportSuccess} onFail={this.handleExportFail} />,
     );
   }
 

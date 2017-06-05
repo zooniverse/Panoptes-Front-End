@@ -10,7 +10,8 @@ class ExportWorkflowsDialog extends React.Component {
       loading: false,
       workflows: [],
       media: {},
-      selectedWorkflowId: null
+      selectedWorkflowId: null,
+      workflowError: {}
     };
 
     this.requestDataExport = this.requestDataExport.bind(this);
@@ -54,7 +55,9 @@ class ExportWorkflowsDialog extends React.Component {
               if (error.status !== 404) {
                 this.props.onFail(error);
               } else {
-                console.error(error); // eslint-disable-line no-console
+                const workflowErrorState = this.state.workflowError;
+                workflowErrorState[workflow.id] = error[0];
+                this.setState({ workflowError: workflowErrorState });
               }
             });
         });
@@ -79,10 +82,9 @@ class ExportWorkflowsDialog extends React.Component {
           <ul className="workflow-export-list">
             {this.state.workflows.map((result) => {
               const boundHandler = this.setSelectedWorkflowId.bind(this, result.id);
-              return <ExportWorkflowListItem key={result.id} workflow={result} media={this.state.media} onChange={boundHandler} />;
+              return <ExportWorkflowListItem key={result.id} workflow={result} media={this.state.media} onChange={boundHandler} workflowError={this.state.workflowError} />;
             })}
           </ul>
-          { this.props.exportError ? <div className="form-help error">We had a problem requesting your export data: {this.props.exportError.toString()}</div> : null }
         </div>
       );
     }
@@ -118,7 +120,7 @@ ExportWorkflowsDialog.propTypes = {
   onFail: React.PropTypes.func.isRequired
 };
 
-const ExportWorkflowListItem = ({ workflow, media, onChange }) => {
+const ExportWorkflowListItem = ({ workflow, media, onChange, workflowError }) => {
   const myMedia = workflow ? media[workflow.id] : null;
   const now = new Date();
   const lockoutTime = new Date();
@@ -127,22 +129,27 @@ const ExportWorkflowListItem = ({ workflow, media, onChange }) => {
   const lockout = myMedia && (new Date(myMedia.updated_at) > lockoutTime);
   const titleString = lockout ? 'This item can only be exported every 24 hours' : '';
 
+  const myWorkflowError = workflowError ? workflowError[workflow.id] : null;
+
   return (
-    <li className="workflow-export-list__item">
-      <input
-        type="radio"
-        title={titleString}
-        name="which-workflow"
-        id={`export-${workflow.id}`}
-        className="workflow-export-list__input"
-        disabled={lockout}
-        onChange={onChange}
-      />
-      {workflow.display_name}
-      <small>
-        <ExportWorkflowLink media={myMedia} />
-      </small>
-    </li>
+    <div>
+      <li className="workflow-export-list__item">
+        <input
+          type="radio"
+          title={titleString}
+          name="which-workflow"
+          id={`export-${workflow.id}`}
+          className="workflow-export-list__input"
+          disabled={lockout}
+          onChange={onChange}
+        />
+        {workflow.display_name}
+        <small>
+          <ExportWorkflowLink media={myMedia} />
+        </small>
+      </li>
+      { myWorkflowError ? <div className="form-help error">We had a problem requesting your export data: {myWorkflowError.toString()}</div> : null }
+    </div>
   );
 };
 
@@ -154,7 +161,10 @@ ExportWorkflowListItem.defaultProps = {
   media: {
     id: ''
   },
-  onChange: () => {}
+  onChange: () => {},
+  workflowError: {
+    id: ''
+  }
 };
 
 ExportWorkflowListItem.propTypes = {
@@ -163,7 +173,8 @@ ExportWorkflowListItem.propTypes = {
     display_name: React.PropTypes.string
   }).isRequired,
   media: React.PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  onChange: React.PropTypes.func.isRequired
+  onChange: React.PropTypes.func.isRequired,
+  workflowError: React.PropTypes.shape({ id: React.PropTypes.string })
 };
 
 /* eslint-disable multiline-ternary, no-confusing-arrow */
