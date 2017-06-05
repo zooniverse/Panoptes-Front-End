@@ -53,6 +53,8 @@ module.exports = React.createClass
       @setState {reply: nextProps.reply}
 
   onSubmitComment: (e) ->
+    return @onFakeSubmit(e) if @isRobot()
+
     if @props.logSubmit is true
       @logPageClick 'add-comment', @props.submit
     e.preventDefault()
@@ -67,6 +69,15 @@ module.exports = React.createClass
         @setFeedback @props.submitFeedback
       .catch (e) =>
         @setState(error: e.message, loading: false)
+
+  isRobot: ->
+    @refs?.honeyCheck?.checked or @refs?.honeyText?.value?.length > 0
+
+  onFakeSubmit: (e) ->
+    e.preventDefault()
+    @hideChildren()
+    @setState subject: null, content: '', error: '', loading: false
+    @setFeedback @props.submitFeedback
 
   onInputChange: (e) ->
     @setState content: e.target.value
@@ -118,7 +129,12 @@ module.exports = React.createClass
               {if @state.showing is 'image-selector' then <span>&nbsp;<i className="fa fa-close" /></span>}
             </button>
 
-          <SingleSubmitButton type="submit" onClick={@onSubmitComment} className='talk-comment-submit-button'>{@props.submit}</SingleSubmitButton>
+            <input type="checkbox" className="honey-input" tabindex="-1" name="agree-to-terms" value="agree-to-terms" ref="honeyCheck"/>
+            <input type="text" className="honey-input" tabindex="-1" name="better-title" ref="honeyText" />
+            <button type="submit" className="honey-input" tabindex="-1" onClick={@onFakeSubmit}>Submit</button>
+            <SingleSubmitButton type="submit" onClick={@onSubmitComment} className='talk-comment-submit-button'>{@props.submit}</SingleSubmitButton>
+            <button type="submit" className="honey-input" tabindex="-1" onClick={@onFakeSubmit}>Submit</button>
+
             {if @props.onCancelClick
               <button
                 type="button"
