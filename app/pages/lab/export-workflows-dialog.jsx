@@ -129,8 +129,6 @@ const ExportWorkflowListItem = ({ workflow, media, onChange, workflowError }) =>
   const lockout = myMedia && (new Date(myMedia.updated_at) > lockoutTime);
   const titleString = lockout ? 'This item can only be exported every 24 hours' : '';
 
-  const myWorkflowError = workflowError ? workflowError[workflow.id] : null;
-
   return (
     <div>
       <li className="workflow-export-list__item">
@@ -145,10 +143,20 @@ const ExportWorkflowListItem = ({ workflow, media, onChange, workflowError }) =>
         />
         {workflow.display_name}
         <small>
-          <ExportWorkflowLink media={myMedia} />
+          {myMedia &&
+            <a
+              title={myMedia.updated_at}
+              href={myMedia.src}
+              className="workflow-export-list__link"
+            >
+              {Moment(media.updated_at).fromNow()}
+            </a>}
+          {!myMedia &&
+            <span className="workflow-export-list__span">No exports have been requested.</span>}
         </small>
+        {workflowError[workflow.id] &&
+          <div className="form-help error">We had a problem requesting your export data: {workflowError[workflow.id]}</div>}
       </li>
-      { myWorkflowError ? <div className="form-help error">We had a problem requesting your export data: {myWorkflowError.toString()}</div> : null }
     </div>
   );
 };
@@ -162,9 +170,7 @@ ExportWorkflowListItem.defaultProps = {
     id: ''
   },
   onChange: () => {},
-  workflowError: {
-    id: ''
-  }
+  workflowError: {}
 };
 
 ExportWorkflowListItem.propTypes = {
@@ -174,31 +180,7 @@ ExportWorkflowListItem.propTypes = {
   }).isRequired,
   media: React.PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   onChange: React.PropTypes.func.isRequired,
-  workflowError: React.PropTypes.shape({ id: React.PropTypes.string })
-};
-
-/* eslint-disable multiline-ternary, no-confusing-arrow */
-const ExportWorkflowLink = ({ media }) =>
-  media ?
-    <a
-      title={media.updated_at}
-      href={media.src}
-      className="workflow-export-list__link"
-    >
-      {Moment(media.updated_at).fromNow()}
-    </a> :
-    <span className="workflow-export-list__span">No exports have been requested.</span>;
-/* eslint-enable */
-
-ExportWorkflowLink.propTypes = {
-  media: React.PropTypes.shape({
-    src: React.PropTypes.string,
-    updated_at: React.PropTypes.string
-  })
-};
-
-ExportWorkflowLink.defaultProps = {
-  media: null
+  workflowError: React.PropTypes.object // eslint-disable-line react/forbid-prop-types
 };
 
 export default ExportWorkflowsDialog;
