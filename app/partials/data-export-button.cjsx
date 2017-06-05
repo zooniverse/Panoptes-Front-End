@@ -23,7 +23,10 @@ module.exports = React.createClass
       .then ([exported]) =>
         @setState mostRecent: exported
       .catch (error) =>
-        @setState exportError: error
+        if error.status isnt 404
+          @setState exportError: error
+        else
+          console.error error
 
   requestDataExport: ->
     @setState exportError: null
