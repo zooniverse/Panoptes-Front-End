@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import { Link } from 'react-router';
+import classNames from 'classnames';
 import counterpart from 'counterpart';
 import moment from 'moment';
 import ProjectCard from '../../partials/project-card';
@@ -33,10 +34,10 @@ export default class HomePageSocial extends React.Component {
   }
 
   getSocial() {
+    this.setState({ newestPublication: getPublication() })
     getNewestProject().then((newestProject) => {
       this.setState({
-        newestProject,
-        newestPublication: getPublication()
+        newestProject
       });
     });
     getRecentProjects().then((recentProjects) => {
@@ -64,10 +65,14 @@ export default class HomePageSocial extends React.Component {
     const background = {};
     background.backgroundImage = `url(${post.image})`;
     if (!post.image) { background.display = 'none'; }
-    const firstPost = i === 0 ? 'home-social__blog-section--white' : 'home-social__blog-section--gray';
+    const classes = classNames({
+      'home-social__blog-section': true,
+      'home-social__blog-section--white': i === 0,
+      'home-social__blog-section--gray': i !== 0
+    });
     const timestamp = moment(new Date(post.created_at)).fromNow();
     return (
-      <div key={i} className={`home-social__blog-section ${firstPost}`}>
+      <div key={i} className={classes}>
         <h4 className="timestamp-label">{timestamp}</h4>
         <h5 className="tertiary-headline">{post.title} </h5>
         <div className="home-social__blog-post">
@@ -80,16 +85,13 @@ export default class HomePageSocial extends React.Component {
             </div>
           </div>
         </div>
-        {firstPost === 'home-social__blog-section--gray' && (<hr />)}
+        {i !== 0 && (<hr />)}
       </div>
     );
   }
 
   render() {
-    const blogPosts = this.state.blogPosts;
-    const newestProject = this.state.newestProject;
-    const newestPublication = this.state.newestPublication;
-    const recentProjects = this.state.recentProjects;
+    const { blogPosts, newestProject, newestPublication, recentProjects } = this.state;
 
     return (
       <section className="home-social">
@@ -98,13 +100,13 @@ export default class HomePageSocial extends React.Component {
 
         <div className="home-social__icons">
           <span>
-            <a href="https://twitter.com/the_zooniverse" rel="noopener noreferrer" target="_blank">
+            <a href="https://twitter.com/the_zooniverse" aria-label="Visit Zooniverse Twitter" rel="noopener noreferrer" target="_blank">
               <i className="fa fa-twitter" />
             </a>
-            <a href="https://www.facebook.com/therealzooniverse" rel="noopener noreferrer" target="_blank">
+            <a href="https://www.facebook.com/therealzooniverse" aria-label="Visit Zooniverse Facebook" rel="noopener noreferrer" target="_blank">
               <i className="fa fa-facebook" />
             </a>
-            <a href="https://plus.google.com/+ZooniverseOrgReal" rel="noopener noreferrer" target="_blank">
+            <a href="https://plus.google.com/+ZooniverseOrgReal" aria-label="Visit Zooniverse Google" rel="noopener noreferrer" target="_blank">
               <i className="fa fa-google-plus" />{' '}
             </a>
           </span>
@@ -112,8 +114,8 @@ export default class HomePageSocial extends React.Component {
 
         <div className="home-social__content">
           <div className="home-social__news">
-            <Translate className="tertiary-headline__headline" content="socialHomePage.news" />
-            <Translate className="tertiary-kicker" content="socialHomePage.newestProject" />
+            <Translate className="tertiary-headline__headline" component="h2" content="socialHomePage.news" />
+            <Translate className="tertiary-kicker" component="h3" content="socialHomePage.newestProject" />
             <ProjectCard
               className="home-page-not-logged-in__project-card"
               landingPage={true}
@@ -121,12 +123,12 @@ export default class HomePageSocial extends React.Component {
             />
             <hr />
 
-            <Translate className="tertiary-kicker" content="socialHomePage.recentProjects" />
+            <Translate className="tertiary-kicker" component="h3" content="socialHomePage.recentProjects" />
 
             {recentProjects.map(project => this.renderUpdatedProject(project))}
 
-            <Translate className="tertiary-kicker" content="socialHomePage.recentPublications" />
-            <h3 className="timestamp-label">{newestPublication.date}</h3>
+            <Translate className="tertiary-kicker" component="h3" content="socialHomePage.recentPublications" />
+            <span className="timestamp-label">{newestPublication.date}</span>
             <span className="regular-body">{newestPublication.citation}</span>
             <a className="home-social__italic-link" href={newestPublication.href}> Read More... </a>
             <hr />
@@ -137,7 +139,7 @@ export default class HomePageSocial extends React.Component {
           <div className="home-social__content--vertical-line"></div>
 
           <div className="home-social__daily">
-            <Translate className="tertiary-headline__headline" content="socialHomePage.daily" />
+            <Translate className="tertiary-headline__headline" component="h2" content="socialHomePage.daily" />
             {blogPosts.map((post, i) => {
               return this.renderBlogPost(post, i);
             })}
