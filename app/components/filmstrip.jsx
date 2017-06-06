@@ -2,9 +2,8 @@ import React from 'react';
 import { DISCIPLINES } from './disciplines';
 
 export default class Filmstrip extends React.Component {
-  constructor(props) {
-    super(props);
-
+  constructor() {
+    super();
     this.scrollLeft = this.scrollLeft.bind(this);
     this.scrollRight = this.scrollRight.bind(this);
   }
@@ -15,11 +14,11 @@ export default class Filmstrip extends React.Component {
   }
 
   scrollLeft() {
-    this.adjustPos(-this.props.increment);
+    this.adjustPosition(-this.props.increment);
   }
 
   scrollRight() {
-    this.adjustPos(this.props.increment);
+    this.adjustPosition(this.props.increment);
   }
 
   mangleFilterName(filterName) {
@@ -32,36 +31,37 @@ export default class Filmstrip extends React.Component {
 
   calculateClasses(filterName) {
     const mangledFilterName = this.mangleFilterName(filterName);
+    const { value } = this.props;
 
     const list = ['filmstrip--disciplines__discipline-card'];
     list.push(`filmstrip--disciplines__discipline-card--discipline-${mangledFilterName}`);
 
-    if (this.props.value === filterName) {
+    if (value === filterName) {
       list.push('filmstrip--disciplines__discipline-card--active');
     }
-    if (!this.props.value && filterName === 'all') {
+    if (!value && filterName === 'all') {
       list.push('filmstrip--disciplines__discipline-card--active');
     }
-    if (this.props.value === '' && filterName === 'all') {
+    if (value === '' && filterName === 'all') {
       list.push('filmstrip--disciplines__discipline-card--active');
     }
 
     return list.join(' ');
   }
 
-  adjustPos(increment) {
-    const oldPos = this.viewport.scrollLeft;
-    let newPos = oldPos + increment;
+  adjustPosition(increment) {
+    const oldPosition = this.viewport.scrollLeft;
+    let newPosition = oldPosition + increment;
 
     if (increment < 0) {
-      newPos = Math.max(newPos, 0);
+      newPosition = Math.max(newPosition, 0);
     }
 
     if (increment > 0) {
-      newPos = Math.min(newPos, this.strip.clientWidth);
+      newPosition = Math.min(newPosition, this.strip.clientWidth);
     }
 
-    increment = (newPos - oldPos) / 10;
+    increment = (newPosition - oldPosition) / 10;
     let i = 0;
 
     const scroll = () => {
@@ -112,7 +112,7 @@ Filmstrip.propTypes = {
   filterCards: React.PropTypes.arrayOf(React.PropTypes.object),
   increment: React.PropTypes.number.isRequired,
   onChange: React.PropTypes.func.isRequired,
-  value: React.PropTypes.string
+  value: React.PropTypes.string.isRequired
 };
 
 Filmstrip.defaultProps = {
