@@ -14,7 +14,7 @@
     "arrow-body-style": ["warn", "as-needed"],
     "comma-dangle": ["warn", "never"],
     "import/extensions": "off",
-    "import/no-unresolved": 1,
+    "import/no-unresolved": "off",
     "indent": ["warn", 2],
     "react/jsx-no-bind": "off",
     "max-len": [1, 120, 2, {
