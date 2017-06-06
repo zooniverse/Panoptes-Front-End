@@ -67,7 +67,7 @@ module.exports = React.createClass
               buttonKey="projectDetails.workflowContentsExport"
               exportType="workflow_contents_export"  />
           </div>
-           <div className="row">
+          <div className="row">
             <DataExportButton
               project={@props.project}
               buttonKey="projectDetails.aggregationExport"
@@ -75,7 +75,6 @@ module.exports = React.createClass
               exportType="aggregations_export"
               newFeature=true
             />
-            <small className="form-help">Text tasks and survey tasks cannot be aggregated at this time.</small>
           </div>
           <hr />
 
