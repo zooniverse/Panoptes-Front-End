@@ -17,11 +17,14 @@
     "import/no-unresolved": 1,
     "indent": ["warn", 2],
     "react/jsx-no-bind": "off",
-    "max-len": 1,
+    "max-len": [1, 120, 2, {
+      "ignoreUrls": true,
+      "ignoreComments": true
+    }],
     "multiline-ternary": ["warn", "never"],
     "no-else-return": 1,
     "no-trailing-spaces": 1,
-    "no-unused-vars": ["warn", "always"],
+    "no-unused-vars": 1,
     "no-useless-constructor": ["warn", "always"],
     "no-useless-return": 1,
     "object-curly-spacing": ["error", "always", { "objectsInObjects": false }]
