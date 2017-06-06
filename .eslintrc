@@ -10,15 +10,23 @@
     "react/prefer-es6-class": 0,
     "react/prefer-stateless-function": 0,
     "react/no-multi-comp": 0,
-    "array-callback-return": "off", 
+    "array-callback-return": "off",
     "arrow-body-style": ["warn", "as-needed"],
     "comma-dangle": ["warn", "never"],
     "import/extensions": "off",
     "import/no-unresolved": "off",
+    "indent": ["warn", 2],
     "react/jsx-no-bind": "off",
-    "max-len": "off",
+    "max-len": [1, 120, 2, {
+      "ignoreUrls": true,
+      "ignoreComments": true
+    }],
     "multiline-ternary": ["warn", "never"],
     "no-else-return": "off",
+    "no-trailing-spaces": 1,
+    "no-unused-vars": 1,
+    "no-useless-constructor": 1,
+    "no-useless-return": 1,
     "object-curly-spacing": ["error", "always", { "objectsInObjects": false }]
   }
 }
