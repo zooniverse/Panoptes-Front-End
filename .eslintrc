@@ -22,7 +22,7 @@
       "ignoreComments": true
     }],
     "multiline-ternary": ["warn", "never"],
-    "no-else-return": 1,
+    "no-else-return": "off",
     "no-trailing-spaces": 1,
     "no-unused-vars": 1,
     "no-useless-constructor": 1,
