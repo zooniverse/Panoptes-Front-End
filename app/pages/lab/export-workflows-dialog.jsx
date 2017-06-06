@@ -53,8 +53,6 @@ class ExportWorkflowsDialog extends React.Component {
             })
             .catch((error) => {
               if (error.status !== 404) {
-                this.props.onFail(error);
-              } else {
                 const workflowErrorState = this.state.workflowError;
                 workflowErrorState[workflow.id] = error[0];
                 this.setState({ workflowError: workflowErrorState });
