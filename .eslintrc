@@ -12,7 +12,7 @@
     "react/no-multi-comp": 0,
     "array-callback-return": "off",
     "arrow-body-style": ["warn", "as-needed"],
-    "comma-dangle": ["warn", "always"],
+    "comma-dangle": ["warn", "never"],
     "import/extensions": "off",
     "import/no-unresolved": 1,
     "indent": ["warn", 2],
@@ -25,7 +25,7 @@
     "no-else-return": 1,
     "no-trailing-spaces": 1,
     "no-unused-vars": 1,
-    "no-useless-constructor": ["warn", "always"],
+    "no-useless-constructor": 1,
     "no-useless-return": 1,
     "object-curly-spacing": ["error", "always", { "objectsInObjects": false }]
   }
