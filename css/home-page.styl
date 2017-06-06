@@ -1,6 +1,3 @@
-LIGHT-BLUE-GREEN = #5CBDC1
-WHITE = #FFFFFF
-
 @keyframes fade-in-video
   from
     opacity: 0
@@ -225,7 +222,7 @@ $flex-section
     hr
       margin: 0.5em 0
 
-    button[class=primary-button]
+    a[class=primary-button], button[class=primary-button]
       box-sizing: border-box
       color: black
       margin: 0
@@ -322,6 +319,13 @@ $flex-section
     @media (max-width: 900px)
       font-size: 2em
 
+  .timestamp-label
+    color: #000000
+    font-size: 0.85em
+    font-weight: 700
+    margin-bottom: 0.4em
+    text-transform: uppercase
+
   .class-counter
     color: TEAL_MID
     font-family: 'Oswald', sans-serif
@@ -334,6 +338,7 @@ $flex-section
       font-size: 4em
 
   .display-body
+    font-size: 1.2em
     font-weight: 700
 
   .regular-body, .display-body
@@ -394,19 +399,19 @@ $flex-section
 
     .home-featured-images
       display: flex
-      flex-flow: row nowrap
+      flex-direction: row
       margin: 2em 0
+      justify-content: center
+      align-items: center
 
-      div
-        flex: auto
-        margin: 0.75em
-        max-height: 12.5em
-        max-width: 20em
+      img
+        display: block
+        flex: 1 1 auto
+        height: auto
         width: 100%
 
-        img
-          height: auto
-          width: 100%
+        @media (max-width: 900px)
+          max-width: 80vw
 
   .home-promoted
     background-color: BACKGROUND_COLOR
@@ -421,6 +426,9 @@ $flex-section
 
       .project-card
         margin: inherit 0
+
+      @media (max-width: 400px)
+        justify-content: center
 
     &__content
       display: flex
@@ -437,101 +445,143 @@ $flex-section
       border-bottom: 1px solid LIGHT_GREY
 
   .home-social
-    background-color: WHITE
-    border-top: 1px solid #333
-    padding: 50px 0
+    display: flex
+    background-color: BACKGROUND_COLOR
+    padding: 4em
 
-    @media (max-width: 900px)
-      padding 2em
+    @media (max-width: 700px)
+      padding: 4em 2em
 
-    h1
-      color: ZOONIVERSE_NAVY
-      margin: 20px auto
+    hr
+      margin-top: 0
 
-    h2, h2 a
-      color: ZOONIVERSE_NAVY
-      margin: 20px auto
-      font-size: 20px
+    &__blog-section
+      box-sizing: border-box
+      padding: 1.5em
+
+      &--white
+        background-color: white
+        margin-bottom: 1.5em
+
+      &--gray
+        padding: 0 1.5em
+
+        hr
+          margin: 2em 0
+
+    &__blog-post
+      display: flex
+      flex-flow: row wrap
+      width: 100%
+
+      div:first-child
+        background-size: cover
+        background-position: center
+        height: 14em
+        margin: 0.5em 1em 0.5em 0
+        width: 18em
+
+      div:nth-child(2)
+        flex: 2 0 0
+        min-width: 50%
+
+        div
+          margin-top: 0.5em
+
+    a
       text-decoration: none
 
-    .home-social-columns
-      width: 100%
-      display: flex
-      flex-direction: row
-      justify-content: space-around
+    .primary-button, .primary-button--light
+      text-align: center
+
+    .tertiary-headline
+      font-size: 1.5em
+      margin-bottom: 0.5em
+
+      &__headline
+        font-size: 2em
+        margin-bottom: 0.5em
 
       @media (max-width: 900px)
-        display: block
+        font-size: 1em
 
-      .home-social-column
-        text-align: left
+    .secondary-headline
+      margin: 0.25em
 
-        ul
-          list-style: none
-          padding: 0
+    .tertiary-kicker
+      margin-bottom: 1em
 
-          li
-            margin: 0 0 2.5em 0
-            max-width: 100vw
+    &__italic-link
+      color: TEAL_MID
+      font-style: italic
 
-            @media (min-width: 900px)
-              max-width: 25vw
+    &__icons
+      margin-top: 1.5vh
+      overflow: hidden
+      width: 20em
 
-            h3
-              font-weight: bolder
-              line-height: 15px
+      i
+        color: TEAL_MID
+        font-size: 1.25em
+        margin: 0 0.4em
 
-            h3, p
-              a
-                color: inherit
-                display: block
-                overflow: hidden
-                text-decoration: none
-                text-overflow: ellipses
+      span
+        position: relative
 
-        .home-social-timestamp
-          margin: 0.5em 0
-          font-size: 1.25em
+      span:before, span:after
+        background: TEAL_LIGHT
+        content: ""
+        height: 1px
+        position: absolute
+        top: 50%
+        width: 10vw
 
-.home-page
-  background: #f4f4f4
+      span:before
+        right: 100%
+        margin-right: 10px
 
-  .hero
-    align-items: center
-    background: url(/assets/zoohome-hero.jpg) top left no-repeat
-    background-size: cover
-    color: #f9f9f9
-    display: flex
-    flex-direction: column
-    min-height: 800px
-    justify-content: center
-    padding: 0 3vw
-    text-align: center
+      span:after
+        left: 100%
+        margin-left: 10px
 
-    @media screen and (max-width: 400px)
-      svg
-        margin-top: 15vh
+    &__content
+      display: flex
+      flex-flow: row wrap
+      margin: 5em 0
+      max-width: 100%
+      text-align: left
 
-    .hero-title
-      color: inherit
-      font-weight: 300
-      line-height: 40px
-      padding: 1.5em 0 0.5em
+      &--vertical-line
+        border-left: 1px solid #CBCCCB
+        margin-right: 3em
 
-    .hero-tagline
-      color: inherit
-      font-size: 1.6em
-      line-height: 22px
-      margin: 0 auto
-      max-width: 600px
-      padding: 1em 0 6.5em
+        @media screen and (max-width: 750px)
+          display: none
 
-    .hero-button
-      box-sizing: border-box
-      color: #fbfbfb
-      font-size: 1.6em
-      font-weight: 400
-      margin-bottom: 3vh
+    &__news
+      display: flex
+      flex: 2 0 0
+      flex-direction: column
+      margin-right: 3em
+      max-width: 100%
 
-      &:hover
-        background: lighten(TEAL_MID, 20%)
+      hr
+        margin: 1.5em 0
+
+    &__daily
+      display: flex
+      flex: 5 0 30em
+      flex-direction: column
+      max-width: 100%
+
+      span
+        word-break: break-word
+
+      .primary-button
+        margin-left: 2.5em
+
+    .project-card
+      margin: 0
+
+      hr
+        margin: 0

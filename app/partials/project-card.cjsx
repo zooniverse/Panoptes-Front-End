@@ -15,6 +15,10 @@ ProjectCard = React.createClass
 
   render: ->
     conditionalStyle = {}
+    detailStyle = {}
+
+    if @props.landingPage
+      detailStyle.cursor = "default"
 
     if !!@props.imageSrc
       conditionalStyle.backgroundImage = "url('#{ @props.imageSrc }')"

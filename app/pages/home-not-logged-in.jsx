@@ -7,9 +7,9 @@ import apiClient from 'panoptes-client/lib/api-client';
 import LoginDialog from '../partials/login-dialog';
 import alert from '../lib/alert';
 import FeaturedProject from './home-common/featured-project';
+import HomePageSocial from './home-common/social';
 import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
-import HomePageSocial from './home-not-logged-in/social';
 import HomePagePromoted from './home-not-logged-in/promoted';
 import FEATURED_PROJECTS from '../lib/featured-projects';
 
@@ -72,26 +72,6 @@ export default class HomePage extends React.Component {
     });
   }
 
-  handleResize() {
-    if (!isNaN(this.resizeTimeout)) {
-      clearTimeout(this.resizeTimeout);
-    }
-    this.resizeTimeout = setTimeout(() => {
-      this.setState({
-        screenWidth: innerWidth
-      }, () => {
-        this.resizeTimeout = NaN;
-      });
-    }, 100);
-  }
-
-  showDialog(event) {
-    const which = event.currentTarget.value;
-    alert(resolve =>
-      <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />
-    );
-  }
-
   getPromotedProjects() {
     apiClient.type('projects').get({ id: Object.keys(FEATURED_PROJECTS), cards: true })
     .then((promotedProjects) => {
@@ -106,6 +86,26 @@ export default class HomePage extends React.Component {
     .catch((error) => {
       console.warn(error);
     });
+  }
+
+  showDialog(event) {
+    const which = event.currentTarget.value;
+    alert(resolve =>
+      <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />
+    );
+  }
+
+  handleResize() {
+    if (!isNaN(this.resizeTimeout)) {
+      clearTimeout(this.resizeTimeout);
+    }
+    this.resizeTimeout = setTimeout(() => {
+      this.setState({
+        screenWidth: innerWidth
+      }, () => {
+        this.resizeTimeout = NaN;
+      });
+    }, 100);
   }
 
   render() {
