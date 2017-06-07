@@ -360,7 +360,6 @@ function drawSpiral(r) {
         float roll;
         float rEff;
         float axRatio;
-        float i0;
         float c;
         float n;
       };
@@ -399,7 +398,7 @@ function drawSpiral(r) {
         }
 
         float pixel = i0 * exp(-radius*radius * 0.01/spread) *
-          sersic2d(x, y, disk.mu, disk.roll, disk.rEff, disk.axRatio, disk.c, disk.i0, disk.n);
+          sersic2d(x, y, disk.mu, disk.roll, disk.rEff, disk.axRatio, disk.c, 1.0, disk.n);
 
         gl_FragColor = vec4(
           1,
@@ -420,7 +419,6 @@ function drawSpiral(r) {
       'disk.rEff': (c, p, b) => p.disk.rx > p.disk.ry ?
         p.disk.rx * p.disk.scale:
         p.disk.ry * p.disk.scale,
-      'disk.i0': (c, p, b) => p.disk.i0,
       'disk.n': (c, p, b) => p.disk.n,
       'disk.c': (c, p, b) => p.disk.c,
     },
@@ -542,23 +540,25 @@ class galaxyModel extends baseModel {
     // TODO: how to do multiple spiral arms?
     // TODO: In order to have a spiral, do we actually need a disk?
     if (disk !== null && annotationLength > 3 && annotation[3].value[0].value.length > 0) {
-      // a spiral arm has been drawn
-      const spiralArm = Object.assign(
-        { name: this.model[3].name },
-        this.model[3].default,
-        {
-          disk,
-          spread: parseFloat(annotation[3].value[1].value[0].value),
-          i0: parseFloat(annotation[3].value[1].value[1].value),
-          points: annotation[3].value[0].value[0].points.map(
-            (p) => [p.x, this.size[0] - p.y]
-          ),
-        }
-      );
-      renderFunctions.push([
-        this.model[3].func,
-        spiralArm
-      ]);
+      // cycle through drawn spiral arms
+      for (let i = 0; i < annotation[3].value[0].value.length; i++) {
+        const spiralArm = Object.assign(
+          { name: this.model[3].name },
+          this.model[3].default,
+          {
+            disk,
+            spread: parseFloat(annotation[3].value[1].value[0].value),
+            i0: parseFloat(annotation[3].value[1].value[1].value),
+            points: annotation[3].value[0].value[i].points.map(
+              (p) => [p.x, this.size[0] - p.y]
+            ),
+          }
+        );
+        renderFunctions.push([
+          this.model[3].func,
+          spiralArm
+        ]);
+      }
     }
     return renderFunctions;
   }
