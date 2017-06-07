@@ -4,13 +4,13 @@ import classnames from 'classnames';
 import { routerShape } from 'react-router/lib/PropTypes';
 import { Link, IndexLink } from 'react-router';
 import Translate from 'react-translate-component';
-import TriggeredModalForm from 'modal-form/triggered';
 import AdminOnly from '../components/admin-only';
 import PassContext from '../components/pass-context';
 import ZooniverseLogo from '../partials/zooniverse-logo';
 import AccountBar from './account-bar';
 import LoginBar from './login-bar';
 import SiteSubnav from './site-subnav';
+import ExpandableMenu from './expandable-menu';
 
 
 const MAX_MOBILE_WIDTH = 1035;
@@ -88,6 +88,7 @@ const SiteNav = React.createClass({
             to="/"
             className="site-nav__link"
             activeClassName="site-nav__link--active"
+            onlyActiveOnIndex={true}
             onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
           >
             <Translate content="siteNav.home" />
@@ -177,7 +178,7 @@ const SiteNav = React.createClass({
 
   renderMobileLinksMenu() {
     return (
-      <TriggeredModalForm
+      <ExpandableMenu
         className="site-nav__modal"
         trigger={
           <span
@@ -192,7 +193,7 @@ const SiteNav = React.createClass({
         <PassContext context={this.context}>
           {this.renderLinks()}
         </PassContext>
-      </TriggeredModalForm>
+      </ExpandableMenu>
     );
   },
 

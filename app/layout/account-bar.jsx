@@ -202,6 +202,6 @@ AccountBar.contextTypes = {
 };
 
 AccountBar.propTypes = {
-  params: React.PropTypes.array,
+  params: React.PropTypes.object,
   isMobile: React.PropTypes.bool
 };
