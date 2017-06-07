@@ -16,7 +16,7 @@ describe('FeaturedProject', () => {
   it('should have an h1 tag containing the text "Featured Project"', () => {
     const wrapper = shallow(<FeaturedProject />);
     const title = wrapper.find('h1');
-    assert.strictEqual(title.contains(<h1>Featured Project</h1>), true);
+    assert.strictEqual(title.text(), 'Featured Project');
   });
 
   it('should have an img tag with src and alt properties', () => {
