@@ -33,7 +33,17 @@ module.exports = React.createClass
   render: ->
     <div className="data-exports">
       <p className="form-label">Project data exports</p>
-      <p className="form-help">Please note that the Zooniverse will process at most 1 of each export within a 24 hour period and some exports may take a long time to process. We will email you when they are ready.</p>
+      <p className="form-help">
+        Please note that the Zooniverse will process at most 1 of each
+        export within a 24 hour period and some exports may take a
+        long time to process. We will email you when they are ready.
+      </p>
+      <p className="form-help">
+        For examples of how to work with the data exports, see our&nbsp
+        <a href="https://github.com/zooniverse/Data-digging">
+          Data Digging code repository
+        </a>.
+      </p>
       <div className="columns-container">
         <div>
           Project Data<br />
