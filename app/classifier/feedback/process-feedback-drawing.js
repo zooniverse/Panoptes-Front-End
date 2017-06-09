@@ -46,7 +46,10 @@ const processDrawingFeedback = (annotation, subject, task) => {
   return feedbackRuleSet.rules.reduce((checkedRules, rule) => {
     const ruleFunction = (rule.dud) ? processDudRule : processNormalRule;
     const ruleResult = ruleFunction(annotation, rule);
-    return checkedRules.concat(ruleResult);
+    if ((ruleResult.success && rule.successEnabled) || (!ruleResult.success && rule.failureEnabled)) {
+      checkedRules.push(ruleResult);
+    }
+    return checkedRules;
   }, []);
 };
 

@@ -115,7 +115,7 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
-    "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js) --reporter nyan --compilers js:babel-core/register,coffee:coffee-script/register,cjsx:coffee-react/register || true",
+    "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name process-feedback-drawing.spec.js) --reporter nyan --compilers js:babel-core/register,coffee:coffee-script/register,cjsx:coffee-react/register || true",
     "test-travis": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js) --compilers js:babel-core/register,coffee:coffee-script/register,cjsx:coffee-react/register"
   }
 }

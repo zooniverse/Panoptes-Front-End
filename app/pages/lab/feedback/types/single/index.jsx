@@ -42,7 +42,7 @@ export default class SingleFeedbackEditor extends React.Component {
       <div className="feedback-section">
         <div>
           {feedbackItems}
-          <button className="feedback-section__new-feedback-button standard-button" onClick={this.openEditModal}>
+          <button className="feedback-section__new-feedback-button standard-button" onClick={this.openEditModal.bind(this, undefined, undefined)}>
             <i className="fa fa-plus-circle"></i>
             {' '}
             <Translate content="singleFeedbackEditor.addType" />
@@ -87,7 +87,7 @@ export default class SingleFeedbackEditor extends React.Component {
     this.props.saveFeedbackFn(newFeedback);
   }
 
-  openEditModal(feedback, index = -1) {
+  openEditModal(feedback = {}, index = -1) {
     ModalFormDialog.alert(<SingleEditForm
       feedback={feedback}
       index={index}
@@ -126,7 +126,7 @@ export default class SingleFeedbackEditor extends React.Component {
       ? newFeedback.types.splice(index, 1, changed)
       : newFeedback.types.push(changed);
 
-    this.props.saveFeedbackFn(newFeedback);
+    return this.props.saveFeedbackFn(newFeedback);
   }
 
 }
