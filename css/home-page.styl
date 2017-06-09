@@ -386,6 +386,9 @@ $flex-section
     .secondary-kicker
       font-size: 1.25em
 
+    .secondary-headline
+      max-width: 100%
+
     p
       font-size: 1em
       width: 50vw
@@ -433,15 +436,17 @@ $flex-section
       display: flex
       flex-direction: column
       margin: 2em 22vw
+      align-items: stretch
 
-    &:before
-      content: ""
-      position : absolute
-      text-align: center
-      top: 0
-      height: 1px
-      width: 85%
-      border-bottom: 1px solid LIGHT_GREY
+      &:before
+        content: ""
+        position : absolute
+        text-align: center
+        top: 0
+        left: 10%
+        height: 1px
+        right: 10%
+        border-bottom: 1px solid LIGHT_GREY
 
   .home-social
     display: flex
@@ -481,7 +486,7 @@ $flex-section
         width: 18em
 
       div:nth-child(2)
-        flex: 2 0 0
+        flex: 2 0 0%
         min-width: 50%
 
         div
@@ -549,27 +554,34 @@ $flex-section
       margin: 5em 0
       max-width: 100%
       text-align: left
+      width: 100%
 
       &--vertical-line
         border-left: 1px solid #CBCCCB
         margin-right: 3em
 
-        @media screen and (max-width: 750px)
+        @media screen and (max-width: 900px)
           display: none
 
     &__news
+      align-items: flex-start
       display: flex
-      flex: 2 0 0
+      flex: 2 0 0%
       flex-direction: column
       margin-right: 3em
       max-width: 100%
+      min-width: 16em
+
+      div, span
+        width: 100%
 
       hr
         margin: 1.5em 0
+        width: 100%
 
     &__daily
       display: flex
-      flex: 5 0 30em
+      flex: 5 0 34em
       flex-direction: column
       max-width: 100%
 

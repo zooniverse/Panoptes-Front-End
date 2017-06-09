@@ -27,16 +27,8 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'ProjectBuilderLandingPage'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-    document.documentElement.classList.add 'on-landing-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-    document.documentElement.classList.remove 'on-landing-page'
-
   render: ->
-    <div className="landing-page">
+    <div className="landing-page on-secondary-page on-landing-page">
       <ZooniverseLogoType />
 
       <h3 className="landing-title">
