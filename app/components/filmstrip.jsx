@@ -42,9 +42,6 @@ export default class Filmstrip extends React.Component {
     if (!value && filterName === 'all') {
       list.push('filmstrip--disciplines__discipline-card--active');
     }
-    if (value === '' && filterName === 'all') {
-      list.push('filmstrip--disciplines__discipline-card--active');
-    }
 
     return list.join(' ');
   }
