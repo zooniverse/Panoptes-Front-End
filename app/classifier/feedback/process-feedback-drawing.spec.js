@@ -38,11 +38,6 @@ const DUD_NOSHOW_RULE = Object.assign({}, NORMAL_NOSHOW_RULE, {
   dud: true,
 });
 
-// const NORMAL_RULE = Object.assign({}, BASE_RULE, { tol: 10 });
-// const DUD_RULE = Object.assign({}, BASE_RULE, { dud: true });
-
-// const BASE_ANNOTATION = { task: 'T0' };
-
 const NORMAL_ANNOTATION = {
   task: 'T0',
   value: [
