@@ -8,8 +8,8 @@ TagSearch = require '../../components/tag-search'
 {MarkdownEditor} = require 'markdownz'
 MarkdownHelp = require '../../partials/markdown-help'
 alert = require('../../lib/alert')
-{DISCIPLINES} = require '../../components/disciplines'
 Select = require 'react-select'
+`import DISCIPLINES from '../../constants/disciplines';`
 `import CharLimit from '../../components/char-limit';`
 `import ExternalLinksEditor from './external-links-editor';`
 `import DisplayNameSlugEditor from '../../partials/display-name-slug-editor';`
