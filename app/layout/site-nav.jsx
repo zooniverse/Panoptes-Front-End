@@ -1,19 +1,19 @@
 import React from 'react';
 import counterpart from 'counterpart';
 import classnames from 'classnames';
-import {routerShape} from 'react-router/lib/PropTypes';
-import PassContext from '../components/pass-context';
+import { routerShape } from 'react-router/lib/PropTypes';
 import { Link, IndexLink } from 'react-router';
 import Translate from 'react-translate-component';
 import AdminOnly from '../components/admin-only';
-import TriggeredModalForm from 'modal-form/triggered';
+import PassContext from '../components/pass-context';
 import ZooniverseLogo from '../partials/zooniverse-logo';
 import AccountBar from './account-bar';
 import LoginBar from './login-bar';
 import SiteSubnav from './site-subnav';
+import ExpandableMenu from './expandable-menu';
 
 
-const MAX_MOBILE_WIDTH = 875;
+const MAX_MOBILE_WIDTH = 1035;
 const ZOO_LOGO = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
 const HAMBURGER_MENU = <span style={{ display: 'inline-block', transform: 'scale(2.5, 2)' }}>≡</span>;
 
@@ -27,8 +27,8 @@ counterpart.registerTranslations('en', {
     daily: 'Daily Zooniverse',
     blog: 'Blog',
     lab: 'Build a project',
-    admin: 'Admin',
-  },
+    admin: 'Admin'
+  }
 });
 
 const SiteNav = React.createClass({
@@ -38,16 +38,12 @@ const SiteNav = React.createClass({
     initialLoadComplete: React.PropTypes.bool,
     user: React.PropTypes.object,
     router: routerShape,
-    geordi: React.PropTypes.object,
-  },
-
-  propTypes: {
-    onToggle: React.PropTypes.func,
+    geordi: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-      isMobile: true,
+      isMobile: true
     };
   },
 
@@ -73,18 +69,18 @@ const SiteNav = React.createClass({
     }
     this.resizeTimeout = setTimeout(() => {
       this.setState({
-        isMobile: innerWidth < MAX_MOBILE_WIDTH,
+        isMobile: innerWidth <= MAX_MOBILE_WIDTH
       }, () => {
         this.resizeTimeout = NaN;
       });
     }, 100);
   },
 
-  renderLinks(isMobile) {
+  renderLinks() {
     return (
       <span
         className={classnames('site-nav__main-links', {
-          'site-nav__main-links--vertical': this.state.isMobile,
+          'site-nav__main-links--vertical': this.state.isMobile
         })}
       >
         {!!this.state.isMobile &&
@@ -92,6 +88,7 @@ const SiteNav = React.createClass({
             to="/"
             className="site-nav__link"
             activeClassName="site-nav__link--active"
+            onlyActiveOnIndex={true}
             onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
           >
             <Translate content="siteNav.home" />
@@ -129,7 +126,7 @@ const SiteNav = React.createClass({
         >
           <Translate content="siteNav.talk" />
         </Link>{' '}
-        
+
         <Link
           to="/lab"
           className="site-nav__link"
@@ -139,9 +136,9 @@ const SiteNav = React.createClass({
           <Translate content="siteNav.lab" />
         </Link>{' '}
 
-        <AdminOnly whenActive>
+        <AdminOnly whenActive={true}>
           <Link
-            to={"/admin"}
+            to={'/admin'}
             className="site-nav__link"
             activeClassName="site-nav__link--active"
             onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.admin') : null}
@@ -156,6 +153,7 @@ const SiteNav = React.createClass({
               href="http://daily.zooniverse.org/"
               className="site-nav__link"
               activeClassName="site-nav__link--active"
+              rel="noopener noreferrer"
               target="_blank"
               onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.daily', 'globe-menu') : null}
             >
@@ -166,6 +164,7 @@ const SiteNav = React.createClass({
               href="http://blog.zooniverse.org/"
               className="site-nav__link"
               activeClassName="site-nav__link--active"
+              rel="noopener noreferrer"
               target="_blank"
               onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.blog', 'globe-menu') : null}
             >
@@ -179,12 +178,11 @@ const SiteNav = React.createClass({
 
   renderMobileLinksMenu() {
     return (
-      <TriggeredModalForm
-        className="site-nav__modal site-nav__reveal-toggle"
+      <ExpandableMenu
+        className="site-nav__modal"
         trigger={
           <span
             className="site-nav__link"
-            activeClassName="site-nav__link--active"
             title="Site navigation"
             aria-label="Site navigation"
           >
@@ -195,15 +193,11 @@ const SiteNav = React.createClass({
         <PassContext context={this.context}>
           {this.renderLinks()}
         </PassContext>
-      </TriggeredModalForm>
+      </ExpandableMenu>
     );
   },
 
   render() {
-    const label = !!this.props.visible ?
-      React.cloneElement(ZOO_LOGO, {title: "Hide navigation menu"}) :
-      HAMBURGER_MENU;
-
     return (
       <nav className="site-nav">
         <IndexLink
@@ -212,29 +206,22 @@ const SiteNav = React.createClass({
           activeClassName="site-nav__link--active"
           onClick={!!this.logClick ? this.logClick.bind(this, 'logo') : null}
         >
-          {!this.state.isMobile && !!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : ZOO_LOGO}
-          </IndexLink>
+          {ZOO_LOGO}
+        </IndexLink>
 
         {!this.state.isMobile && this.renderLinks()}
 
         {!this.context.initialLoadComplete &&
           <span className="site-nav__link">
-            <i className="fa fa-spinner fa-spin fa-fw"></i>
+            <i className="fa fa-spinner fa-spin fa-fw" />
           </span>}
 
-        {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar params={this.props.params} /> : <LoginBar />)}
-
-        {!!this.props.onToggle && !this.state.isMobile &&
-          <button
-            type="button"
-            className="secret-button site-nav__reveal-toggle"
-            onClick={this.props.onToggle}
-            >{label}</button>}
+        {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar isMobile={this.state.isMobile} params={this.props.params} /> : <LoginBar />)}
 
         {this.state.isMobile && this.renderMobileLinksMenu()}
       </nav>
     );
-  },
+  }
 });
 
 export default SiteNav;

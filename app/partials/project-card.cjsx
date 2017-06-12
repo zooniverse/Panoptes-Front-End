@@ -8,11 +8,17 @@ ProjectCard = React.createClass
     project: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
+    className: ''
     imageSrc: ''
     href: ''
+    landingPage: false
 
   render: ->
     conditionalStyle = {}
+    detailStyle = {}
+
+    if @props.landingPage
+      detailStyle.cursor = "default"
 
     if !!@props.imageSrc
       conditionalStyle.backgroundImage = "url('#{ @props.imageSrc }')"
@@ -32,12 +38,15 @@ ProjectCard = React.createClass
       '/projects/' + @props.project.slug
 
     <FlexibleLink to={href}>
-      <div className="project-card" ref="projectCard" style={conditionalStyle}>
+      <div className="project-card #{this.props.className}" ref="projectCard" style={conditionalStyle}>
         <svg viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.project.display_name}</span></div>
+          {<hr /> if @props.landingPage}
           {<div className="description">{@props.project.description}</div> if @props.project.description?}
           <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"projectsPage.button"} /></button>
+          {if @props.landingPage
+            <button className="primary-button" type="button">View Project</button>}
         </div>
       </div>
     </FlexibleLink>

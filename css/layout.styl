@@ -6,10 +6,6 @@
   min-height: 100vh
   position: relative
 
-  &--site-header-demoted
-    background-color: TEAL_DARK
-    color: white
-
   &__admin-indicator
     border: 0.3em solid;
     border-image: repeating-linear-gradient(45deg, #000, #000 1%, #ff0 1%, #ff0 2%) 5;
@@ -25,17 +21,8 @@
   &__header
     background-color: TEAL_MID
     color: white
+    width: 100%
 
-    &--demoted
-      background-color: transparent
-      color: inherit
-      position: absolute
-      right: 0
-      top: 0
-
-    // TODO: Make this a header variant of the layout, "detached" maybe.
-    /.on-home-page &:not(&--demoted),
-    /.on-secondary-page &:not(&--demoted),
     &--detached
       background-color: transparent
       position: absolute
@@ -72,6 +59,6 @@
   &__page-content
     padding: 1em 5vw
 
-  &:not(&--site-header-demoted) &__footer
+  &__footer
     background: #272727
     color: rgba(white, 0.5)

@@ -1,8 +1,8 @@
 .site-nav
   align-items: baseline
+  background: black
   display: flex
-  font-size: 14px
-  justify-content: space-between
+  font-size: 0.75em
   padding: 0.5em 1em
 
   &__main-links
@@ -15,48 +15,34 @@
 
   &__link
     border-bottom: 2px solid transparent
-    color: inherit
+    color: LIGHT_GREY
     display: inline-block
+    font-size: 1em
+    letter-spacing: 0.15em
+    margin: 0.5em 1em 0 1em
+    padding-bottom: 0.3em
     opacity: 0.7
-    padding: 0.5em 1em 0.3em
     text-decoration: inherit
-    white-space: nowrap;
+    text-transform: uppercase
+    white-space: nowrap
 
     &:hover
-      opacity: 1
-      background: rgba(white, 0.2)
+      border-bottom-color: TEAL_MID
       position: relative
       z-index: 1 // This improves hit area on hover when used with a `link-buncher`.
 
     &--active
+      color: TEAL_MID
       opacity: 1
-      border-bottom-color: white
-
-  &__icon
-    padding: 0.5em 0.5em 0.3em 0.5em
 
     &--inbox
-      margin-left: 0.5em
-
-    &--notifications
-      margin-right: 1em
+      margin: 0 1em
 
   &__inbox-link
     position: relative
 
-    &::after
-      background: red
-      border-radius: 50%
-      content: ''
-      height: 0.5em
-      opacity: 0
-      position: absolute
-      right: -0.1em
-      top: 0.2em
-      width: 0.5em
-
-    &--unread::after
-      opacity: 1
+    &--unread
+      color: TEAL_LIGHT
 
   &__link-buncher
     display: inline-block
@@ -66,34 +52,48 @@
     margin: -0.3em 0
 
   &__modal
+    text-align: right
+
     &.modal-form-underlay
       background: transparent
       z-index: 1 // TODO: Apply this everywhere.
 
+    div .site-nav__link, span .site-nav__link
+      border-bottom: none
+      box-sizing: border-box
+      color: white
+      font-size: 0.75em
+      font-weight: 600
+      letter-spacing: 0.1em
+      margin: 0
+      padding: 1em 2.5em
+      text-transform: uppercase
+      width: 100%
+
+      &:focus
+        background: rgba(white, 0.4)
+        outline: none
+
+      &:hover
+        background: rgba(white, 0.2)
+
+    .secret-button
+      box-sizing: border-box
+      text-align: right
+      width: 100%
+
+      &:focus
+        background: rgba(white, 0.3)
+        outline: none
+
     &.modal-form
-      margin-top: 0.2em
+      background-color: TEAL_MID
+      border-radius: 0
 
     &.modal-form-pointer
-      height: 1.5em // TODO: Why's this weird?
-      width: 1.5em // TODO: Why's this weird?
+      background: transparent
 
   .account-bar
   .login-bar
+    margin-left: auto
     z-index: 2
-
-  .site-nav__reveal-toggle
-    position: relative
-    z-index: 2
-
-    // TODO, maybe:
-    // &::after
-    //   border: 0.4em solid
-    //   border-bottom-width: 0
-    //   border-color: currentColor transparent
-    //   content: ''
-    //   height: 0
-    //   left: 50%
-    //   position: absolute
-    //   top: 100%
-    //   transform: translateX(-50%)
-    //   width: 0
