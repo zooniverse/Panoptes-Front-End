@@ -2,7 +2,7 @@ import React from 'react';
 import assert from 'assert';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
-import { CollectionCollaborators, RoleRow } from './collaborators';
+import { CollectionCollaborators, RoleCreator, RoleRow } from './collaborators';
 
 let resolveMock;
 
@@ -15,7 +15,10 @@ const asyncMock = () => {
 const roleSet = {
   id: '1',
   get: asyncMock,
-  roles: ['owner']
+  roles: ['viewer'],
+  links: {
+    owner: { id: '1' }
+  }
 };
 
 const roleSets = [
@@ -23,21 +26,29 @@ const roleSets = [
   {
     id: '2',
     get: asyncMock,
-    roles: ['contributor', 'collaborator']
+    roles: ['contributor', 'collaborator'],
+    links: {
+      owner: { id: '2' }
+    }
   }
 ];
 
 const owner = {
-  display_name: 'testUser'
+  display_name: 'testUser',
+  id: '3'
 };
 
 describe('<CollectionCollaborators />', function() {
   let wrapper;
+  let addUserSpy;
+  let deleteUserSpy;
 
   before(function() {
+    addUserSpy = sinon.spy(RoleCreator.prototype, 'handleSubmit');
+    deleteUserSpy = sinon.spy(RoleRow.prototype, 'confirmDelete');
     const stub = sinon.stub(CollectionCollaborators.prototype, 'componentDidMount');
-    wrapper = mount(<CollectionCollaborators />);
-    wrapper.setState({ hasSettingsRole: true, roleSets, owner });
+    wrapper = mount(<CollectionCollaborators owner={owner}/>);
+    wrapper.setState({ hasSettingsRole: true, roleSets });
     stub.restore();
   });
 
@@ -45,8 +56,8 @@ describe('<CollectionCollaborators />', function() {
     assert.equal(wrapper, wrapper);
   });
 
-  it('shows four settings options', function() {
-    assert.equal(wrapper.find('tbody').children().length, 4);
+  it('shows three settings options', function() {
+    assert.equal(wrapper.find('dl').children().length, 3);
   });
 
   it('will show a button to remove each user', function() {
@@ -55,31 +66,24 @@ describe('<CollectionCollaborators />', function() {
   });
 
   it('will bold the font of an active role', function() {
-    const rowCount = wrapper.find('RoleRow').first();
-    assert.equal(rowCount.find('span').find('strong').text(), 'Owner');
+    const firstRow = wrapper.find('RoleRow').first();
+    assert.equal(firstRow.find('strong').last().text(), 'Viewer');
+  });
+
+  it('will allow three roles to be added to a user', function() {
+    const creationRoleRows = wrapper.find('RoleCreator').find('dt').length;
+    assert.equal(creationRoleRows, 3);
+  });
+
+  it('should call this.handleSubmit() when adding a user', function() {
+    const addUserButton = wrapper.find('RoleCreator').find('button');
+    addUserButton.simulate('click');
+    sinon.assert.calledOnce(addUserSpy);
+  });
+
+  it('will call this.confirmDelete() when removing a user', function() {
+    const removeUserButton = wrapper.find('RoleRow').first().find('button');
+    removeUserButton.simulate('click');
+    sinon.assert.calledOnce(deleteUserSpy);
   });
 });
-
-describe('<RoleRow />', function() {
-  let wrapper;
-
-  before(function() {
-    wrapper = shallow(<RoleRow collectionOwner={'testUser'} roleSet={roleSet} />);
-    wrapper.setState({ owner });
-  });
-
-  it('will disable role options for owner', function() {
-    const viewer = wrapper.find('input').last();
-    assert.equal(viewer.props().disabled, true);
-  });
-
-  it('will not show an option to remove an owner', function() {
-    const removeButton = wrapper.find('button').length;
-    assert.equal(removeButton, 0);
-  });
-
-  it('the correct box should be checked', function() {
-    const ownerBox = wrapper.find('input').first();
-    assert.equal(ownerBox.props().checked, true);
-  });
-})
