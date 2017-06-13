@@ -7,12 +7,9 @@ class AudioPlayer extends React.Component {
     this.player = null;
 
     this.playAudio = this.playAudio.bind(this);
-    // this.setPlayRate = this.setPlayRate.bind(this);
 
     this.state = {
       playing: false
-      //,
-      // playbackRate: 1
     };
   }
 
@@ -21,12 +18,7 @@ class AudioPlayer extends React.Component {
   }
 
   componentDidUpdate() {
-    //if (this.player) this.player.playbackRate = this.state.playbackRate;
   }
-
-  // setPlayRate(e) {
-  //   this.setState({ playbackRate: parseFloat(e.target.value) });
-  // }
 
   playAudio(playing) {
     const { player } = this;
@@ -41,28 +33,9 @@ class AudioPlayer extends React.Component {
     }
   }
 
-  endVideo() {
+  endAudio() {
     this.setState({ playing: false });
   }
-
-  // renderSpeedControls(rates) {
-  //   return rates.map((rate, i) => {
-  //     return (
-  //       <label key={`rate-${i}`} className="secret-button">
-  //         <input
-  //           type="radio"
-  //           name={`playRate${this.props.frame}`}
-  //           value={rate}
-  //           checked={rate === this.state.playbackRate}
-  //           onChange={this.setPlayRate}
-  //         />
-  //         <span>
-  //           {rate}&times;
-  //         </span>
-  //       </label>
-  //     );
-  //   });
-  // }
 
   render() {
     // const rates = [0.25, 0.5, 1];
@@ -82,15 +55,7 @@ class AudioPlayer extends React.Component {
           Your browser does not support the audio format. Please upgrade your browser.
         </audio>
 
-        {this.props.showControls
-        //   && (
-        //   <span className="subject-video-controls">
-        //     <span className="video-speed">
-        //     Speed: {this.renderSpeedControls(rates)}
-        //     </span>
-        //   </span>
-        // )
-      }
+        {this.props.showControls}
         {this.props.children}
       </div>
     );
