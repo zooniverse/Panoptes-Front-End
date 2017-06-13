@@ -1,5 +1,6 @@
 import React from 'react';
 import VideoPlayer from './video-player';
+import AudioPlayer from './audio-player';
 import TextViewer from './text-viewer';
 import ImageViewer from './image-viewer';
 
@@ -18,7 +19,8 @@ DefaultViewer.propTypes = {
 const VIEWERS = {
   image: ImageViewer,
   text: TextViewer,
-  video: VideoPlayer
+  video: VideoPlayer,
+  audio: AudioPlayer
 };
 
 function FileViewer(props) {

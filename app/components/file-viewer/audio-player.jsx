@@ -1,0 +1,115 @@
+import React from 'react';
+
+class AudioPlayer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.player = null;
+
+    this.playAudio = this.playAudio.bind(this);
+    // this.setPlayRate = this.setPlayRate.bind(this);
+
+    this.state = {
+      playing: false
+      //,
+      // playbackRate: 1
+    };
+  }
+
+  componentDidMount() {
+    this.player.controlsList = "nodownload"; // Non-spec option for Chrome browsers to hide the display of a download button
+  }
+
+  componentDidUpdate() {
+    //if (this.player) this.player.playbackRate = this.state.playbackRate;
+  }
+
+  // setPlayRate(e) {
+  //   this.setState({ playbackRate: parseFloat(e.target.value) });
+  // }
+
+  playAudio(playing) {
+    const { player } = this;
+    if (!player) return;
+
+    this.setState({ playing });
+
+    if (playing) {
+      player.play();
+    } else {
+      player.pause();
+    }
+  }
+
+  endVideo() {
+    this.setState({ playing: false });
+  }
+
+  // renderSpeedControls(rates) {
+  //   return rates.map((rate, i) => {
+  //     return (
+  //       <label key={`rate-${i}`} className="secret-button">
+  //         <input
+  //           type="radio"
+  //           name={`playRate${this.props.frame}`}
+  //           value={rate}
+  //           checked={rate === this.state.playbackRate}
+  //           onChange={this.setPlayRate}
+  //         />
+  //         <span>
+  //           {rate}&times;
+  //         </span>
+  //       </label>
+  //     );
+  //   });
+  // }
+
+  render() {
+    // const rates = [0.25, 0.5, 1];
+    return (
+      <div className="subject-audio-frame">
+        <audio
+          className="subject"
+          controls={true}
+          ref={(element) => { this.player = element; }}
+          src={this.props.src}
+          type={`${this.props.type}/${this.props.format}`}
+          preload="auto"
+          onCanPlay={this.props.onLoad}
+          onClick={this.playAudio.bind(this, !this.state.playing)}
+          onEnded={this.endAudio}
+        >
+          Your browser does not support the audio format. Please upgrade your browser.
+        </audio>
+
+        {this.props.showControls
+        //   && (
+        //   <span className="subject-video-controls">
+        //     <span className="video-speed">
+        //     Speed: {this.renderSpeedControls(rates)}
+        //     </span>
+        //   </span>
+        // )
+      }
+        {this.props.children}
+      </div>
+    );
+  }
+
+}
+
+AudioPlayer.propTypes = {
+  children: React.PropTypes.node,
+  format: React.PropTypes.string,
+  frame: React.PropTypes.number,
+  onLoad: React.PropTypes.func,
+  showControls: React.PropTypes.bool,
+  src: React.PropTypes.string,
+  type: React.PropTypes.string
+};
+
+AudioPlayer.defaultProps = {
+  showControls: true
+};
+
+export default AudioPlayer;
