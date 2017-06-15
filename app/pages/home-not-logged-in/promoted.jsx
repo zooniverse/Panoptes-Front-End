@@ -30,9 +30,8 @@ const HomePagePromoted = ({ promotedProjects }) => {
       <div className="home-promoted__cards">
         {promotedProjects.map((project) => {
           return (
-            <div>
+            <div key={project.id}>
               <ProjectCard
-                key={project.id}
                 className="home-page-not-logged-in__project-card"
                 imageSrc={project.image}
                 landingPage={true}
