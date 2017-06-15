@@ -38,9 +38,8 @@ class AudioPlayer extends React.Component {
   }
 
   render() {
-    // const rates = [0.25, 0.5, 1];
     return (
-      <div className="subject-audio-frame">
+      <div className="subject-video-controls">
         <audio
           className="subject"
           controls={true}
@@ -74,7 +73,7 @@ AudioPlayer.propTypes = {
 };
 
 AudioPlayer.defaultProps = {
-  showControls: true
+  showControls: true,
 };
 
 export default AudioPlayer;
