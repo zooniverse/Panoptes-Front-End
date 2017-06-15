@@ -18,8 +18,8 @@ module.exports = React.createClass
     initMove: ({x}) ->
       x: x
 
-    initValid: ({x}, {containerRect}) ->
-      x >= 0 and x <= containerRect.width
+    initValid: ({x}, {naturalWidth}) ->
+      x >= 0 and x <= naturalWidth
 
   render: ->
     {x} = @props.mark
