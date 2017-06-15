@@ -13,9 +13,9 @@ isAdmin = require '../../lib/is-admin'
 
 NOOP = Function.prototype
 
-VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3']
+VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3', '.m4a', '.mpeg']
 INVALID_FILENAME_CHARS = ['/', '\\', ':', ',']
-MAX_FILE_SIZE = 4000 * 1024
+MAX_FILE_SIZE = 1000 * 1024
 
 announceSetChange = ->
   apiClient.type('subject_sets').emit 'add-or-remove'

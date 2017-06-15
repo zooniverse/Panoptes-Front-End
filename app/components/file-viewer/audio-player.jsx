@@ -38,7 +38,6 @@ class AudioPlayer extends React.Component {
   }
 
   render() {
-    // const rates = [0.25, 0.5, 1];
     return (
       <div className="subject-audio-frame">
         <audio
@@ -55,7 +54,6 @@ class AudioPlayer extends React.Component {
           Your browser does not support the audio format. Please upgrade your browser.
         </audio>
 
-        {this.props.showControls}
         {this.props.children}
       </div>
     );
@@ -74,7 +72,6 @@ AudioPlayer.propTypes = {
 };
 
 AudioPlayer.defaultProps = {
-  showControls: true
 };
 
 export default AudioPlayer;
