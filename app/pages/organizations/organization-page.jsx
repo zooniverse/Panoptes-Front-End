@@ -1,11 +1,16 @@
 import React from 'react';
 import ProjectCardList from '../projects/project-card-list';
 import OrganizationMetaData from './organization-metadata';
+import Thumbnail from '../../components/thumbnail';
 
-const OrganizationPage = ({ organization }) => (
+const AVATAR_SIZE = 500;
+
+const OrganizationPage = ({ organization, organizationAvatar }) => (
   <div className="secondary-page all-resources-page">
     <section className="hero projects-hero">
       <div className="hero-container">
+        {organizationAvatar &&
+          <Thumbnail src={organizationAvatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
         <h1>{organization.display_name}</h1>
         <p>{organization.description}</p>
       </div>
@@ -28,7 +33,8 @@ const OrganizationPage = ({ organization }) => (
 );
 
 OrganizationPage.defaultProps = {
-  organization: {}
+  organization: {},
+  organizationAvatar: null
 };
 
 OrganizationPage.propTypes = {
@@ -36,7 +42,10 @@ OrganizationPage.propTypes = {
     projects: React.PropTypes.arrayOf(React.PropTypes.object),
     description: React.PropTypes.string,
     display_name: React.PropTypes.string
-  }).isRequired
+  }).isRequired,
+  organizationAvatar: React.PropTypes.shape({
+    src: React.PropTypes.string
+  })
 };
 
 export default OrganizationPage;

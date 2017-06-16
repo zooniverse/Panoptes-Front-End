@@ -7,7 +7,8 @@ class OrganizationContainer extends React.Component {
 
     this.state = {
       fetching: false,
-      organization: { projects: [] }
+      organization: { projects: [] },
+      organizationAvatar: {}
     };
 
     this.fetchProjects = this.fetchProjects.bind(this);
@@ -26,9 +27,16 @@ class OrganizationContainer extends React.Component {
     if (this.state.fetching) return;
 
     this.setState({ fetching: true });
-    apiClient.type('organizations').get(id).then((organization) => {
+    apiClient.type('organizations').get({ id, include: 'avatar' }).then(([organization]) => {
       organization.projects = []; // eslint-disable-line no-param-reassign
       this.setState({ organization });
+
+      if (organization) {
+        apiClient.type('avatars').get(organization.links.avatar.id).catch((error) => []).then((organizationAvatar) => {
+          this.setState({ organizationAvatar });
+        });
+      };
+
       this.fetchProjects(organization);
     });
   }
@@ -43,7 +51,7 @@ class OrganizationContainer extends React.Component {
 
   render() {
     return React.Children.map(this.props.children, child =>
-      React.cloneElement(child, { organization: this.state.organization })
+      React.cloneElement(child, { organization: this.state.organization, organizationAvatar: this.state.organizationAvatar })
     )[0];
   }
 
