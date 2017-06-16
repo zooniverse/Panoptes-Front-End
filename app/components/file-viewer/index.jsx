@@ -1,7 +1,6 @@
 import React from 'react';
 import VideoPlayer from './video-player';
 import AudioPlayer from './audio-player';
-import AudioPlayerWithTraceImage from './audio-player-with-trace-image'
 import TextViewer from './text-viewer';
 import ImageViewer from './image-viewer';
 
@@ -21,7 +20,7 @@ const VIEWERS = {
   image: ImageViewer,
   text: TextViewer,
   video: VideoPlayer,
-  audio: AudioPlayerWithTraceImage
+  audio: AudioPlayer
 };
 
 function FileViewer(props) {
