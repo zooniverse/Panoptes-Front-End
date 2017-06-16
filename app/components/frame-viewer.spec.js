@@ -15,7 +15,7 @@ const videoSubject = {
 };
 
 const audioSubject = {
-  locations: [{ 'audio/mpeg': 'testaudio.mp3' }]
+  locations: [{ 'audio/mp3': 'testaudio.mp3' }]
 };
 
 const clickProps = {

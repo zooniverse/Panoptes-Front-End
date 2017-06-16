@@ -40,19 +40,19 @@ class AudioPlayer extends React.Component {
   render() {
     return (
       <div className="subject-audio-frame">
-          <audio
-            className="subject"
-            controls={true}
-            ref={(element) => { this.player = element; }}
-            src={this.props.src}
-            type={`${this.props.type}/${this.props.format}`}
-            preload="auto"
-            onCanPlay={this.props.onLoad}
-            onClick={this.playAudio.bind(this, !this.state.playing)}
-            onEnded={this.endAudio}
-          >
-            Your browser does not support the audio format. Please upgrade your browser.
-          </audio>
+        <audio
+          className="subject"
+          controls={true}
+          ref={(element) => { this.player = element; }}
+          src={this.props.src}
+          type={`${this.props.type}/${this.props.format}`}
+          preload="auto"
+          onCanPlay={this.props.onLoad}
+          onClick={this.playAudio.bind(this, !this.state.playing)}
+          onEnded={this.endAudio}
+        >
+          Your browser does not support the audio format. Please upgrade your browser.
+        </audio>
 
         {this.props.children}
       </div>
