@@ -27,7 +27,7 @@ class OrganizationContainer extends React.Component {
     if (this.state.fetching) return;
 
     this.setState({ fetching: true });
-    apiClient.type('organizations').get({ id, include: 'avatar' }).then(([organization]) => {
+    apiClient.type('organizations').get({ id, include: ['avatar'] }).then(([organization]) => {
       organization.projects = []; // eslint-disable-line no-param-reassign
       this.setState({ organization });
 
@@ -42,7 +42,7 @@ class OrganizationContainer extends React.Component {
   }
 
   fetchProjects(organization) {
-    organization.get('projects').then((projects) => {
+    organization.get('projects', { cards: true, include: ['avatar'] }).then((projects) => {
       const org = this.state.organization;
       org.projects = projects;
       this.setState({ organization: org, fetching: false });
