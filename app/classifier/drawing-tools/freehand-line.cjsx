@@ -66,7 +66,7 @@ module.exports = React.createClass
 
       {if @props.selected
         deletePosition = @getDeletePosition points
-        <g>
+        <g pointerEvents="fill">
           <DeleteButton tool={this}
             x={deletePosition.x}
             y={deletePosition.y}
