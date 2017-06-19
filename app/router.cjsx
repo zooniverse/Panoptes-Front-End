@@ -12,6 +12,7 @@ React = require 'react'
 `import UserSettingsList from './pages/admin/user-settings-list';`
 `import ProjectStatusList from './pages/admin/project-status-list';`
 `import ProjectStatus from './pages/admin/project-status';`
+`import GrantsDashboard from './pages/admin/grants-dashboard/grants-dashboard-container';`
 `import EditMediaPage from './pages/lab/media';`
 `import UserProfilePage from './pages/profile/index';`
 `import NotificationsPage from './pages/notifications';`
@@ -231,6 +232,7 @@ module.exports =
       <IndexRoute component={UserSettingsList} />
       <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={ProjectStatus} />
+      <Route path="grant" component={GrantsDashboard} />
     </Route>
 
     <Route path="todo" component={-> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
