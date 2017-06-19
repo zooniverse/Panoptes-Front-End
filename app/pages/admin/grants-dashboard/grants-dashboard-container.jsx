@@ -7,15 +7,34 @@ import ProjectSearch from './project-search';
 class GrantsDashboard extends Component {
   constructor(props) {
     super(props);
+    this.selectProject = this.selectProject.bind(this);
+    this.performProjectChecks = this.performProjectChecks.bind(this);
+    this.state = {
+      project: null,
+    };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.project !== this.state.project) {
+      this.performProjectChecks();
+    }
   }
 
   render() {
     console.info('yea')
     return (
       <section>
-        <ProjectSearch />
+        <ProjectSearch onSelect={this.selectProject} />
       </section>
     );
+  }
+
+  performProjectChecks() {
+    console.log('Project selected', this.state.project);
+  }
+
+  selectProject(project) {
+    this.setState({ project });
   }
 
 }
