@@ -7,6 +7,7 @@ getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
+`import ProgressUpdater from './progress-updater';`
 `import FrameViewer from './frame-viewer';`
 
 NOOP = Function.prototype
@@ -40,6 +41,8 @@ module.exports = React.createClass
 
   signInAttentionTimeout: NaN
 
+  progressUpdater : new ProgressUpdater()
+
   getDefaultProps: ->
     subject: null
     isFavorite: false
@@ -66,7 +69,6 @@ module.exports = React.createClass
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
     isAudioPlusImage: false
-    progressObject: null
 
   getInitialFrame: ->
     {frame, allowFlipbook, subject} = @props
@@ -85,6 +87,9 @@ module.exports = React.createClass
         playing: false
         loading: true
         frame: 0
+
+  componentDidMount: () ->
+    @progressUpdater.setSubjectViewer(this)
 
   componentDidUpdate: (prevProps) ->
     if @props.subject isnt prevProps.subject
@@ -113,7 +118,7 @@ module.exports = React.createClass
       mainDisplay = @renderFrame @state.frame
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
-        @renderFrame index, {key: "frame-#{index}", progressListener: @handleProgressUpdate, progressMarker: @renderProgressMarker, registerProgressObject: @registerProgressObject}
+        @renderFrame index, {key: "frame-#{index}", progressListener: @progressUpdater.handleProgressUpdate.bind(@progressUpdater), progressMarker: @progressUpdater.renderProgressMarker.bind(@progressUpdater), registerProgressObject: @progressUpdater.registerProgressingObject.bind(@progressUpdater)}
     tools = switch type
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
@@ -265,32 +270,6 @@ module.exports = React.createClass
   handleFrameChange: (frame) ->
     @setState {frame}
     @props.onFrameChange frame
-
-  handleProgressUpdate: (event) ->
-    xPosition = 100 * (@state.progressObject.currentTime / @state.progressObject.duration)
-    @setState {progressPosition : "#{xPosition}%"}
-
-  renderProgressMarker: () ->
-    points =
-      x1: @state.progressPosition
-      y1: '0%'
-      x2: @state.progressPosition
-      y2: '100%'
-
-    mainStyle =
-      fill: 'transparent'
-      stroke: 'red'
-      strokeWidth: 4
-
-    return (
-      <g id='progress_marker' {...mainStyle}>
-        <line {...points} />
-      </g>
-    )
-
-  registerProgressObject: (progressObject) ->
-    @state.progressObject = progressObject
-    @setState {progressObject}
 
   showMetadata: ->
     @logSubjClick "metadata"
