@@ -43,12 +43,6 @@ module.exports = React.createClass
     x: if not @outOfBounds(x, scale) then x else startCoords.x + mod
     y: startCoords.y
 
-  handleHover: (e) ->
-    if e.type == 'mouseenter'
-      @setState hover: true
-    else if e.type == 'mouseleave'
-      @setState hover: false
-
   outOfBounds: (deleteBtnX, scale) ->
     deleteBtnX - (DELETE_BUTTON_WIDTH / scale) < 0
 
