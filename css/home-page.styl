@@ -426,19 +426,18 @@ $flex-section
       margin: 1em 0
       width: 100%
 
-      a
-        margin: 0 1em
+      > div
+        margin: 0 0.5em
 
-      div
-        @media (max-width: 1400px)
+        a
+          display: inline-block
+
+        @media (max-width: 1225px)
           display: flex
           flex-basis: 35%
 
           &:nth-child(odd)
             justify-content: flex-end
-
-      .project-card
-        margin: inherit 0
 
       @media (max-width: 400px)
         justify-content: center
