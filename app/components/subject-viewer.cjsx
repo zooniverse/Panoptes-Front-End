@@ -11,14 +11,24 @@ SignInPrompt = require '../partials/sign-in-prompt'
 
 NOOP = Function.prototype
 
-subjectHasMixedLocationTypes = (subject) ->
+subjectTypes = (subject) ->
   allTypes = []
   (subject?.locations ? []).forEach (location) ->
     Object.keys(location).forEach (typeAndFormat) ->
       type = typeAndFormat.split('/')[0]
       unless type in allTypes
         allTypes.push type
+
+subjectHasMixedLocationTypes = (subject) ->
+  allTypes = subjectTypes subject
   allTypes.length > 1
+
+subjectIsLikelyAudioPlusImage = (subject) ->
+  if parseInt(subject?.metadata?.image_with_audio?, 0) > 0
+    true
+  else
+    allTypes = subjectTypes subject
+    allTypes.length == 2 and allTypes.includes('audio') and allTypes.includes('image')
 
 CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 
@@ -55,6 +65,8 @@ module.exports = React.createClass
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
+    isAudioPlusImage: false
+    progressObject: null
 
   getInitialFrame: ->
     {frame, allowFlipbook, subject} = @props
@@ -101,7 +113,7 @@ module.exports = React.createClass
       mainDisplay = @renderFrame @state.frame
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
-        @renderFrame index, {key: "frame-#{index}"}
+        @renderFrame index, {key: "frame-#{index}", progressListener: @handleProgressUpdate, progressMarker: @renderProgressMarker, registerProgressObject: @registerProgressObject}
     tools = switch type
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
@@ -253,6 +265,32 @@ module.exports = React.createClass
   handleFrameChange: (frame) ->
     @setState {frame}
     @props.onFrameChange frame
+
+  handleProgressUpdate: (event) ->
+    xPosition = 100 * (@state.progressObject.currentTime / @state.progressObject.duration)
+    @setState {progressPosition : "#{xPosition}%"}
+
+  renderProgressMarker: () ->
+    points =
+      x1: @state.progressPosition
+      y1: '0%'
+      x2: @state.progressPosition
+      y2: '100%'
+
+    mainStyle =
+      fill: 'transparent'
+      stroke: 'red'
+      strokeWidth: 4
+
+    return (
+      <g id='progress_marker' {...mainStyle}>
+        <line {...points} />
+      </g>
+    )
+
+  registerProgressObject: (progressObject) ->
+    @state.progressObject = progressObject
+    @setState {progressObject}
 
   showMetadata: ->
     @logSubjClick "metadata"

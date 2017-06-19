@@ -42,6 +42,8 @@ export default class FrameViewer extends React.Component {
     const { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
     const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && type === 'image';
 
+    const ProgressMarker = this.props.progressMarker;
+
     if (FrameWrapper) {
       return (
         <PanZoom ref={(c) => { this.panZoom = c; }} enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
@@ -58,6 +60,7 @@ export default class FrameViewer extends React.Component {
             preferences={this.props.preferences}
             modification={this.props.modification || {}}
             onChange={this.props.onChange}
+            progressMarker={ProgressMarker}
           >
             <FileViewer
               src={src}
@@ -67,6 +70,8 @@ export default class FrameViewer extends React.Component {
               onLoad={this.handleLoad}
               onFocus={(this.panZoom && zoomEnabled) ? this.panZoom.togglePanOn : () => {}}
               onBlur={(this.panZoom && zoomEnabled) ? this.panZoom.togglePanOff : () => {}}
+              progressListener={this.props.progressListener}
+              registerProgressObject={this.props.registerProgressObject}
             />
           </FrameWrapper>
         </PanZoom>
@@ -79,6 +84,8 @@ export default class FrameViewer extends React.Component {
           format={format}
           frame={this.props.frame}
           onLoad={this.handleLoad}
+          progressListener={this.props.progressListener}
+          registerProgressObject={this.props.registerProgressObject}
         />
       );
     }
@@ -105,7 +112,9 @@ FrameViewer.propTypes = {
   ),
   workflow: React.PropTypes.shape(
     { configuration: React.PropTypes.object }
-  )
+  ),
+  progressListener: React.PropTypes.func,
+  progressMarker: React.PropTypes.func
 };
 
 FrameViewer.defaultProps = {
@@ -120,5 +129,6 @@ FrameViewer.defaultProps = {
   },
   workflow: {
     configuration: {}
-  }
+  },
+  progressListener: null
 };

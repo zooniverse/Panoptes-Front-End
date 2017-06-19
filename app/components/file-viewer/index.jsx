@@ -35,6 +35,8 @@ function FileViewer(props) {
       onLoad={props.onLoad}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
+      progressListener={props.progressListener}
+      registerProgressObject={props.registerProgressObject}
     />
   );
 }
@@ -46,7 +48,9 @@ FileViewer.propTypes = {
   onFocus: React.PropTypes.func,
   onLoad: React.PropTypes.func,
   src: React.PropTypes.string,
-  type: React.PropTypes.string
+  type: React.PropTypes.string,
+  progressListener: React.PropTypes.func,
+  registerProgressObject: React.PropTypes.func
 };
 
 export default FileViewer;

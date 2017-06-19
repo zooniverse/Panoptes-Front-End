@@ -158,6 +158,8 @@ export default class SVGRenderer extends React.Component {
 
     const showFeedback = isFeedbackActive(this.props.project);
 
+    const ProgressMarker = this.props.progressMarker;
+
     return (
       <div>
         <svg
@@ -189,7 +191,7 @@ export default class SVGRenderer extends React.Component {
                 />
               </Draggable>
             )}
-
+            <ProgressMarker />
             {children}
 
             {(showFeedback) && (<SVGFeedbackViewer />)}
@@ -230,7 +232,8 @@ SVGRenderer.propTypes = {
   }),
   workflow: React.PropTypes.shape({
     tasks: React.PropTypes.object
-  })
+  }),
+  progressMarker: React.PropTypes.func
 };
 
 SVGRenderer.defaultProps = {
@@ -242,5 +245,6 @@ SVGRenderer.defaultProps = {
   project: null,
   subject: null,
   user: null,
-  workflow: null
+  workflow: null,
+  progressMarker: null
 };

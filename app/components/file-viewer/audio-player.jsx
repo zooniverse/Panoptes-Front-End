@@ -11,10 +11,12 @@ class AudioPlayer extends React.Component {
     this.state = {
       playing: false
     };
+
   }
 
   componentDidMount() {
     this.player.controlsList = "nodownload"; // Non-spec option for Chrome browsers to hide the display of a download button
+    this.props.registerProgressObject(this.player);
   }
 
   componentDidUpdate() {
@@ -50,6 +52,7 @@ class AudioPlayer extends React.Component {
           onCanPlay={this.props.onLoad}
           onClick={this.playAudio.bind(this, !this.state.playing)}
           onEnded={this.endAudio}
+          onTimeUpdate={this.props.progressListener}
         >
           Your browser does not support the audio format. Please upgrade your browser.
         </audio>
@@ -68,10 +71,14 @@ AudioPlayer.propTypes = {
   onLoad: React.PropTypes.func,
   showControls: React.PropTypes.bool,
   src: React.PropTypes.string,
-  type: React.PropTypes.string
+  type: React.PropTypes.string,
+  progressListener: React.PropTypes.func,
+  registerProgressObject: React.PropTypes.func
 };
 
 AudioPlayer.defaultProps = {
+  progressListener: null,
+  registerProgressObject: null
 };
 
 export default AudioPlayer;
