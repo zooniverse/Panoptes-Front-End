@@ -52,7 +52,9 @@ module.exports = React.createClass
 
     lineClass = if _inProgress then 'drawing' else 'clickable'
 
-    <DrawingToolRoot tool={this}>
+    # Setting the pointerEvents prop stops the shape from acting like a closed
+    # path for click events
+    <DrawingToolRoot tool={this} pointerEvents="visibleStroke">
       <path d={path}
         strokeWidth={GRAB_STROKE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)}
         strokeOpacity="0"
