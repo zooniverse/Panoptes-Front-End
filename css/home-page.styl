@@ -422,12 +422,22 @@ $flex-section
     &__cards
       display: flex
       flex-wrap: wrap
-      justify-content: space-between
+      justify-content: center
       margin: 1em 0
       width: 100%
 
-      .project-card
-        margin: inherit 0
+      > div
+        margin: 0 0.5em
+
+        a
+          display: inline-block
+
+        @media (max-width: 1225px)
+          display: flex
+          flex-basis: 35%
+
+          &:nth-child(odd)
+            justify-content: flex-end
 
       @media (max-width: 400px)
         justify-content: center
@@ -495,6 +505,9 @@ $flex-section
     a
       text-decoration: none
 
+      &:hover, &:focus
+        color: ZOONIVERSE_TEAL
+
     .primary-button, .primary-button--light
       text-align: center
 
@@ -528,6 +541,9 @@ $flex-section
         color: TEAL_MID
         font-size: 1.25em
         margin: 0 0.4em
+
+        &:hover, &:focus
+          color: ZOONIVERSE_TEAL
 
       span
         position: relative

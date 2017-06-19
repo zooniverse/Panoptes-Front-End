@@ -674,7 +674,7 @@ const Publications = {
       },
       {
         citation: "Which Way Did They Go? Newcomer Movement through the Zooniverse, Jackson+ 2016.",
-        href: "http://dl.acm.org/      citation.cfm?id=2818048.2835197",
+        href: "http://dl.acm.org/citation.cfm?id=2818048.2835197",
         date: "February - March 2016"
       },
       {
@@ -689,7 +689,7 @@ const Publications = {
       },
       {
         citation: "Being Present in Online Communities: Learning in Citizen Science, Mugar+ 2015.",
-        href: "http://dl.acm.org/      citation.cfm?id=2768555",
+        href: "http://dl.acm.org/citation.cfm?id=2768555",
         date: "June 27 - 30 2015"
       },
       {
@@ -704,7 +704,7 @@ const Publications = {
       },
       {
         citation: "Planet hunters and seafloor explorers: legitimate peripheral participation through practice proxies in online citizen science, Mugar+ 2014.",
-        href: "http://dl.acm.org/      citation.cfm?id=2531721",
+        href: "http://dl.acm.org/citation.cfm?id=2531721",
         date: "February 2014"
       },
       {
@@ -729,7 +729,7 @@ const Publications = {
       },
       {
         citation: "Zooniverse: Observing the World’s Largest Citizen Science Platform, Simpson+ 2014.",
-        href: "http://dl.acm.org/      citation.cfm?id=2579215",
+        href: "http://dl.acm.org/citation.cfm?id=2579215",
         date: "2014"
       },
       {

@@ -43,12 +43,6 @@ module.exports = React.createClass
     x: if not @outOfBounds(x, scale) then x else startCoords.x + mod
     y: startCoords.y
 
-  handleHover: (e) ->
-    if e.type == 'mouseenter'
-      @setState hover: true
-    else if e.type == 'mouseleave'
-      @setState hover: false
-
   outOfBounds: (deleteBtnX, scale) ->
     deleteBtnX - (DELETE_BUTTON_WIDTH / scale) < 0
 
@@ -58,7 +52,9 @@ module.exports = React.createClass
 
     lineClass = if _inProgress then 'drawing' else 'clickable'
 
-    <DrawingToolRoot tool={this}>
+    # Setting the pointerEvents prop stops the shape from acting like a closed
+    # path for click events
+    <DrawingToolRoot tool={this} pointerEvents="visibleStroke">
       <path d={path}
         strokeWidth={GRAB_STROKE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)}
         strokeOpacity="0"
@@ -70,7 +66,7 @@ module.exports = React.createClass
 
       {if @props.selected
         deletePosition = @getDeletePosition points
-        <g>
+        <g pointerEvents="fill">
           <DeleteButton tool={this}
             x={deletePosition.x}
             y={deletePosition.y}
