@@ -3,10 +3,10 @@ import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 
 import ProjectSearch from './project-search';
-import * as helpers from './helpers';
+import * as helpers from './helpers/index';
 import RetirementRules from './retirement-rules';
 
-class GrantsDashboard extends Component {
+class Grantbot extends Component {
   constructor(props) {
     super(props);
     this.selectProject = this.selectProject.bind(this);
@@ -25,7 +25,8 @@ class GrantsDashboard extends Component {
 
   render() {
     return (
-      <section class="admin-tab-content">
+      <section style={{ padding: '0 1em' }}>
+        <h2>Grantbot</h2>
         <ProjectSearch onSelect={this.selectProject} />
         
         {(this.state.hasRetirementBeenChanged.length > 0) && 
@@ -69,4 +70,4 @@ function performCheck(check) {
     .catch(error => console.error(error));
 }
 
-export default GrantsDashboard;
+export default Grantbot;

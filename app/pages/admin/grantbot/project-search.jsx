@@ -67,8 +67,8 @@ class ProjectSearch extends React.Component {
         matchProp={'label'}
         onChange={this.onChange}
         name="projects"
-        placeholder="Project slug"
-        searchPromptText="Type to search Projects"
+        placeholder="Start typing a project slug..."
+        searchPromptText="Start typing a project slug..."
         value={this.state.selectedProject}
       />
     );

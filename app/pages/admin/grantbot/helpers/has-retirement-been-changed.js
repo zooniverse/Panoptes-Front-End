@@ -38,6 +38,4 @@ function hasRetirementBeenChanged(project) {
   });
 }
 
-export {
-  hasRetirementBeenChanged,
-};
+export default hasRetirementBeenChanged;
