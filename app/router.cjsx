@@ -12,7 +12,7 @@ React = require 'react'
 `import UserSettingsList from './pages/admin/user-settings-list';`
 `import ProjectStatusList from './pages/admin/project-status-list';`
 `import ProjectStatus from './pages/admin/project-status';`
-`import Grantbot from './pages/admin/grantbot/grantbot-container';`
+`import Grantbot from './pages/admin/grantbot';`
 `import EditMediaPage from './pages/lab/media';`
 `import UserProfilePage from './pages/profile/index';`
 `import NotificationsPage from './pages/notifications';`

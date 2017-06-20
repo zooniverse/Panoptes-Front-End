@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 
-import ProjectSearch from './project-search';
-import * as helpers from './helpers/index';
-import RetirementRules from './retirement-rules';
+import ProjectSearch from './project-search-container';
+import * as helpers from '../helpers/index';
+import RetirementRules from '../components/retirement-rules';
 
 class Grantbot extends Component {
   constructor(props) {
