@@ -4,22 +4,25 @@ class ProgressUpdater {
 
   constructor() {
 
-    this.subjectViewer = null;
-
     this.state = {
       playing: false,
       progressObject: null,
-      progressPosition: '0%'
+      progressPosition: '0%',
+      subjectViewer: null
     };
+
+    this.progressUpdateListener = this.handleProgressUpdate.bind(this);
+    this.progressMarkerRenderer = this.renderProgressMarker.bind(this);
+    this.progressMonitoredObject = this.registerProgressingObject.bind(this);
   }
 
   setSubjectViewer(subjectViewer){
-    this.subjectViewer = subjectViewer;
+    this.state.subjectViewer = subjectViewer;
   }
 
   updateSubjectViewer(){
-    if(this.subjectViewer){
-      this.subjectViewer.forceUpdate();
+    if(this.state.subjectViewer){
+      this.state.subjectViewer.forceUpdate();
     }
   }
 

@@ -89,7 +89,7 @@ module.exports = React.createClass
         frame: 0
 
   componentDidMount: () ->
-    @progressUpdater.setSubjectViewer(this)
+    @progressUpdater.setSubjectViewer(if this.frameWrapper then this.frameWrapper else this)
 
   componentDidUpdate: (prevProps) ->
     if @props.subject isnt prevProps.subject
@@ -118,7 +118,7 @@ module.exports = React.createClass
       mainDisplay = @renderFrame @state.frame
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
-        @renderFrame index, {key: "frame-#{index}", progressListener: @progressUpdater.handleProgressUpdate.bind(@progressUpdater), progressMarker: @progressUpdater.renderProgressMarker.bind(@progressUpdater), registerProgressObject: @progressUpdater.registerProgressingObject.bind(@progressUpdater)}
+        @renderFrame index, {key: "frame-#{index}", progressListener: @progressUpdater.progressUpdateListener, progressMarker: @progressUpdater.progressMarkerRenderer, registerProgressObject: @progressUpdater.progressMonitoredObject}
     tools = switch type
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
