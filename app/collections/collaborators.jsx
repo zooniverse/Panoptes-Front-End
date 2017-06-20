@@ -168,7 +168,9 @@ export class RoleRow extends React.Component {
   }
 
   removeRoles() {
-    this.updateRoles([], this.props.onRemove);
+    this.updateRoles([]).then(() => {
+      this.props.onRemove();
+    });
   }
 
   toggleRole(role) {
@@ -209,7 +211,7 @@ export class RoleRow extends React.Component {
     });
   }
 
-  updateRoles(newRoles = [], callback = () => {}) {
+  updateRoles(newRoles = []) {
     let promise;
     this.setState({ saving: true });
 
@@ -219,8 +221,7 @@ export class RoleRow extends React.Component {
       promise = this.props.roleSet.delete();
     }
 
-    promise.then(() => {
-      callback();
+    return promise.then(() => {
       this.setState({ saving: false });
     })
     .catch((error) => {
