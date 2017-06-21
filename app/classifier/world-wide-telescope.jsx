@@ -1,5 +1,6 @@
 import React from 'react';
 import shortid from 'shortid';
+import getSubjectLocation from '../lib/get-subject-location';
 
 class SimplePoint {
   constructor(x, y) {
@@ -109,7 +110,36 @@ class StarChart {
   }
 
   addAxisLabel(axisLabel) {
-    this.axisLabels.push(axisLabel);
+    const otherUnitValue = 6;
+    if (axisLabel.value === otherUnitValue) {
+      this.removeIrrelevantPoints(axisLabel);
+    } else {
+      this.axisLabels.push(axisLabel);
+    }
+  }
+
+  removeIrrelevantPoints(axisLabel) {
+    let midpointDistance = Infinity;
+    let pointsToRemove;
+    this.axisPoints.forEach((p1) => {
+      this.axisPoints.forEach((p2) => {
+        if (p1 !== p2) {
+          const tempMidpoint = {
+            x: (p1.x + p2.x) / 2,
+            y: (p1.y + p2.y) / 2
+          };
+          const distanceFromLabel = this.calculateDistance(tempMidpoint, axisLabel);
+          if (distanceFromLabel < midpointDistance) {
+            midpointDistance = distanceFromLabel;
+            pointsToRemove = [p1, p2];
+          }
+        }
+      });
+    });
+    pointsToRemove.map((point) => {
+      const index = this.axisPoints.indexOf(point);
+      this.axisPoints.splice(index, 1);
+    });
   }
 
   findAxis(points) {
@@ -412,7 +442,7 @@ export default class WorldWideTelescope extends React.Component {
   }
 
   render() {
-    const subjImage = this.props.subject.locations[0]['image/jpeg'];
+    const subjImage = getSubjectLocation(this.props.subject).src;
     const plates = [];
 
     try {
