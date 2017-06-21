@@ -41,15 +41,16 @@ module.exports = React.createClass
       apiClient.type('users').get(scientists).then (researchers) =>
         @setState({ researchers })
 
-    avatar = @props.project.get('avatar')
+    @updateImage 'avatar'
+    @updateImage 'background'
+
+  updateImage: (type) ->
+    @props.project.get(type)
+      .then (image) =>
+        @setState 
+          "#{type}": image
       .catch (error) =>
         console.log error
-    background = @props.project.get('background')
-      .catch (error) =>
-        console.log error
-    Promise.all([avatar, background])
-      .then ([avatar, background]) =>
-        @setState {avatar, background}
 
   splitTags: (kind) ->
     disciplineTagList = []
@@ -240,6 +241,7 @@ module.exports = React.createClass
         @props.project.refresh() # Update the resource's links.
       .then =>
         @props.project.emit 'change' # Re-render
+        @updateImage type
       .catch (error) =>
         newState = {}
         newState[errorProp] = error
