@@ -77,8 +77,8 @@ AudioPlayer.propTypes = {
 };
 
 AudioPlayer.defaultProps = {
-  progressListener: null,
-  registerProgressObject: null
+  progressListener: () => {},
+  registerProgressObject: () => {}
 };
 
 export default AudioPlayer;

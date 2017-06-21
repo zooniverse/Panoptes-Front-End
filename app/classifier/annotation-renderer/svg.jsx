@@ -143,6 +143,10 @@ export default class SVGRenderer extends React.Component {
     if (isDrawingTask && InsideSubject && !this.props.panEnabled) {
       children.push(<InsideSubject key="inside" {...hookProps} />);
     }
+    if (this.props.progressMarker()){
+      const ProgressMarker = this.props.progressMarker;
+      children.push(<ProgressMarker key="progress-marker" />);
+    }
     const persistentHooks = Object
       .keys(tasks)
       .filter((key) => { return tasks[key].AnnotationRenderer === SVGRenderer; })
@@ -157,8 +161,6 @@ export default class SVGRenderer extends React.Component {
     children = children.concat(persistentHooks);
 
     const showFeedback = isFeedbackActive(this.props.project);
-
-    const ProgressMarker = this.props.progressMarker;
 
     return (
       <div>
@@ -191,7 +193,6 @@ export default class SVGRenderer extends React.Component {
                 />
               </Draggable>
             )}
-            <ProgressMarker />
             {children}
 
             {(showFeedback) && (<SVGFeedbackViewer />)}
@@ -246,5 +247,5 @@ SVGRenderer.defaultProps = {
   subject: null,
   user: null,
   workflow: null,
-  progressMarker: null
+  progressMarker: () => {}
 };
