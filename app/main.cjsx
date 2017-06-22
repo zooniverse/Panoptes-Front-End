@@ -3,6 +3,8 @@ ReactDOM = require 'react-dom'
 { applyRouterMiddleware, Router, browserHistory } = require 'react-router'
 useScroll = require 'react-router-scroll/lib/useScroll'
 routes = require './router'
+
+zooGrommet = require 'zoo-grommet/dist/zoo-grommet.css'
 style = require '../css/main.styl'
 
 # Redux

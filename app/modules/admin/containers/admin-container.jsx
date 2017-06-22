@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Admin from '../components/admin';
 
 class AdminContainer extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class AdminContainer extends Component {
   renderAdmin() {
     return (
       <div className="content-container">
-        <p>Go!</p>
+        <Admin />
       </div>
     );
   }
@@ -45,7 +46,9 @@ class AdminContainer extends Component {
 }
 
 AdminContainer.propTypes = {
-  user: PropTypes.func,
+  user: PropTypes.shape({
+    admin: PropTypes.bool,
+  })
 };
 
 export default AdminContainer; 
