@@ -9,9 +9,6 @@ React = require 'react'
 `import AboutProject from './pages/project/about/index';`
 `import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
 `import AboutProjectTeam from './pages/project/about/team';`
-`import UserSettingsList from './pages/admin/user-settings-list';`
-`import ProjectStatusList from './pages/admin/project-status-list';`
-`import ProjectStatus from './pages/admin/project-status';`
 `import EditMediaPage from './pages/lab/media';`
 `import UserProfilePage from './pages/profile/index';`
 `import NotificationsPage from './pages/notifications';`
@@ -21,6 +18,8 @@ React = require 'react'
 `import WorkflowsList from './pages/lab/workflows';`
 `import SubjectSetsContainer from './pages/lab/subject-sets-container';`
 `import SubjectSetsList from './pages/lab/subject-sets';`
+
+`import adminRoutes from './modules/admin';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -40,6 +39,8 @@ module.exports =
     <IndexRoute component={require './pages/home'} />
     <Route path="home" component={ONE_UP_REDIRECT} />
     <Route path="home-for-user" component={require('./pages/home-for-user').default} />
+
+    {adminRoutes()}
 
     <Route path="about" component={require './pages/about'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/about/about-home'} />
@@ -227,11 +228,7 @@ module.exports =
       <Route path="resources" component={require './pages/lab/best-practices/resources'} />
     </Route>
 
-    <Route path="admin" component={require './pages/admin'}>
-      <IndexRoute component={UserSettingsList} />
-      <Route path="project_status" component={ProjectStatusList} />
-      <Route path="project_status/:owner/:name" component={ProjectStatus} />
-    </Route>
+
 
     <Route path="todo" component={-> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
     <Route path="dev/workflow-tasks-editor" component={require './components/workflow-tasks-editor'} />
