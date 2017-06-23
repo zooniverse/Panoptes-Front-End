@@ -13,7 +13,8 @@ POSSIBLE_ROLES = {
   expert: 'team',
   scientist: 'scientist',
   moderator: 'moderator',
-  tester: 'team'
+  tester: 'team',
+  translator: 'translator'
 }
 
 ROLES_INFO =
