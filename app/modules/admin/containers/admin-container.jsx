@@ -23,7 +23,7 @@ class AdminContainer extends Component {
   renderAdmin() {
     return (
       <div className="content-container">
-        <Admin />
+        <Admin {...this.props} />
       </div>
     );
   }
@@ -31,7 +31,7 @@ class AdminContainer extends Component {
   renderNotAnAdmin() {
     return (
       <div className="content-container">
-        <p>You’re not signed in.</p>
+        <p>You're not an administrator.</p>
       </div>
     );
   }
@@ -39,7 +39,7 @@ class AdminContainer extends Component {
   renderNotSignedIn() {
     return (
       <div className="content-container">
-        <p>You’re not signed in.</p>
+        <p>You're not signed in.</p>
       </div>
     );
   }

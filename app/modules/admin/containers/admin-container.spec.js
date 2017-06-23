@@ -19,19 +19,19 @@ describe('AdminContainer', function () {
   it(`should show a message if you're not signed in`, function () {
     const props = { user: null };
     const wrapper = shallow(<AdminContainer {...props} />);
-
+    assert.strictEqual(wrapper.text(), `You're not signed in.`)
   });
 
   it(`should show a message if you're signed in, but not an admin`, function () {
     const props = { user: { id: '1' } }
     const wrapper = shallow(<AdminContainer {...props} />);
-
+    assert.strictEqual(wrapper.text(), `You're not an administrator.`);
   });
 
   it(`should render the admin page if you're signed in as an admin`, function () {
     const props = { user: { id: '1', admin: true } }
     const wrapper = shallow(<AdminContainer {...props} />);
-
+    assert.strictEqual(wrapper.find('Admin').length, 1);
   });
 
 });

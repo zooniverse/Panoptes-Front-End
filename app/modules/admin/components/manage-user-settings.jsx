@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import Checkbox from 'grommet/components/Checkbox';
+import Heading from 'grommet/components/Heading';
 
-import AutoSave from '../../components/auto-save';
-import handleInputChange from '../../lib/handle-input-change';
-import UserLimitToggle from './user-settings/limit-toggle';
+import AutoSave from '../../../components/auto-save';
+import handleInputChange from '../../../lib/handle-input-change';
+import UserLimitToggle from './limit-toggle';
 
-class UserSettings extends Component {
+class ManageUserSettings extends Component {
   constructor(props) {
     super(props);
     this.boundForceUpdate = this.forceUpdate.bind(this);
@@ -35,27 +37,42 @@ class UserSettings extends Component {
     }
 
     const handleChange = handleInputChange.bind(this.props.editUser);
-
     return (
       <div className="project-status">
-        <h4>Settings for {this.props.editUser.login}</h4>
+        <Heading tag="h3">Settings</Heading>
         <ul>
           <li>
-            <input type="checkbox" name="admin" checked={this.props.editUser.admin} disabled />{' '}
-            Admin
+            <Checkbox 
+              checked={this.props.editUser.admin}
+              name="admin"
+              disabled 
+              label="Admin"
+            />
           </li>
           <li>
-            <input type="checkbox" name="login_prompt" checked={this.props.editUser.login_prompt} disabled />{' '}
-            Login prompt
+            <Checkbox 
+              checked={this.props.editUser.login_prompt}
+              name="login_prompt"
+              disabled 
+              label="Login prompt"
+            />
           </li>
           <li>
-            <input type="checkbox" name="private_profile" checked={this.props.editUser.private_profile} disabled />{' '}
-            Private profile
+            <Checkbox 
+              checked={this.props.editUser.private_profile} 
+              name="private_profile" 
+              disabled 
+              label="Private profile" 
+            />
           </li>
           <li>
             <AutoSave resource={this.props.editUser}>
-              <input type="checkbox" name="upload_whitelist" checked={this.props.editUser.upload_whitelist} onChange={handleChange} />{' '}
-              Whitelist subject uploads
+              <Checkbox 
+                checked={this.props.editUser.upload_whitelist} 
+                name="upload_whitelist" 
+                label="Whitelist subject uploads"
+                onChange={handleChange}
+              />
             </AutoSave>
           </li>
         </ul>
@@ -69,12 +86,12 @@ class UserSettings extends Component {
   }
 }
 
-UserSettings.propTypes = {
+ManageUserSettings.propTypes = {
   editUser: React.PropTypes.object
 };
 
-UserSettings.defaultProps = {
+ManageUserSettings.defaultProps = {
   editUser: null
 };
 
-export default UserSettings;
+export default ManageUserSettings;
