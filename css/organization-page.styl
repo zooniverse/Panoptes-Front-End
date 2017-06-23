@@ -1,29 +1,120 @@
-.organization-metadata-about-container
+.organization-page
+  color: #ffffff
+  display: flex
+  flex: 1 0 auto
+  flex-direction: column
+  position: relative
+  z-index: 1
+  font-family: Karla
+
+// A custom background-image is provided by the project.
+.organization-background
+  background-color: gray
+  background-position: 50% 40%
+  background-size: cover
+  bottom: 0
+  left: 0
+  pointer-events: none
+  position: absolute
+  right: 0
+  top: 0
+  z-index: -1
+
+.organization-home
+  display: flex
+  flex-direction: column
+  flex: 1 0 auto
+  font-size: 14px
+  justify-content: center
+
+  button, a.standard-button
+    background: white
+    border: 2px solid #00979d
+    border-radius: .5em
+    color: #00979d
+    margin-right: 1.5em
+    padding: 0.8em 1.4vw
+
+    &:hover
+      background: #00979d
+      border: 2px solid #00979d
+      color: white
+
+  h4
+    text-transform: uppercase
+
+// hero
+.organization-hero
+  background-size: cover
+  box-sizing: border-box
+  min-height: 200px
+  overflow: auto
+  padding: 80px 3vw 5px 3vw
+
+.organization-hero__nav
+  margin-left: 0
+  margin-top: 2.5em
+  text-align: left
+
+.organization-hero__avatar
+  display: inline-block
+  margin-bottom: 3.125em
+  margin-left: 4em
+  height: 8em
+  width: 8em
+  vertical-align: middle
+
+.organization-hero__text
+  display: inline-block
+  vertical-align: center
+
+.organization-hero__text--name
+  font-size: 2.25em
+  font-weight: 700
+
+.organization-hero__text--description
+  font-weight: 400
+
+// projects
+.organization-projects
+  padding: 1em 0 2.5em 0
+  background-color: #EFF2F5
+
+// details
+.organization-details
   font: 400 16px/1.5 Karla, sans-serif
   display: flex
 
-.organization-project-list
-    padding-top: 1em
-
-.organization-metadata
-  padding: 2em
+.organization-details__stats
+  padding: 2em 4em
   width: 33.3vw
   color: #0c4881
+  background-color: #ffffff
 
-.organization-metadata--name
+.organization-details__stats-title
   text-transform: uppercase;
+  font-size: 0.75em
 
-.organization-about
-  padding: 2em
+.organization-details__stats-value
+  text-decoration: underline
+  font-size: 1.625em
+  padding-top: 1em
+  color: #0C4881
+
+.organization-details__about
+  padding: 2em 4em
   width: 66.6vw
   background-color: #007482
   color: #ffffff
+
+.organization-details__about-title
+  font-size: 0.75em
   text-transform: uppercase
 
-.organization-about--text
+.organization-details__about-text
   padding: 1em 0
 
-.organization-metadata-stat__value
-  font-weight: 700
-  text-decoration: underline
-  padding-top: 1em
+  .markdown
+    p
+      color: #ffffff
+      text-align: left
