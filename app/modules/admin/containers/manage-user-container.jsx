@@ -57,7 +57,10 @@ class ManageUserContainer extends Component {
   render() {
     return (
       <div ref={list => this.list = list}>
-        <Heading tag="h2">Manage User { (this.state.editUser) && <span> &ndash; {this.state.editUser.login}</span> } </Heading>
+        <Heading tag="h2">
+          Manage User 
+          {(this.state.editUser) && <span> &ndash; {this.state.editUser.login}</span>}
+        </Heading>
         <div className="columns-container">
           <div className="column">
             <UserSearch 
