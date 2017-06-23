@@ -16,10 +16,6 @@ counterpart.registerTranslations('en', {
     `,
     classifications: 'Classifications so far by',
     labs: 'Zooniverse Labs',
-    listen: `
-      The projects created with the Zooniverse project builder
-      inspire and empower researchers, designers, and artists.
-    `,
     meetResearchers: 'Meet the researchers who\'ve created projects for free on the Zooniverse',
     options: 'Sign in or register to get started',
     real: 'Real researchers, real results',
@@ -43,7 +39,7 @@ counterpart.registerTranslations('en', {
 const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =>
   <section className="home-research">
     <Translate className="tertiary-kicker" component="h2" content="researchHomePage.works" />
-    <span className="class-counter">{count.toLocaleString()}</span>
+    <span className="class-counter">{count.toString().replace(/.(?=(?:.{3})+$)/g, '$&,')}</span>
     <Translate className="main-kicker" component="h3" content="researchHomePage.classifications" />
     <div>
       <h3 className="main-kicker">{volunteerCount.toLocaleString()}</h3>{' '}
@@ -53,8 +49,6 @@ const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =
     <div className="home-research__columns">
       <Translate className="display-body" component="h2" content="researchHomePage.aboutIntro" />
       <Translate className="regular-body" component="p" content="researchHomePage.about" />
-      <a className="display-body" rel="noopener noreferrer" target="_blank" href="http://listen.zooniverse.org">Listen to the Zoonivese</a>
-      <Translate className="regular-body" component="p" content="researchHomePage.listen" />
     </div>
 
     <div className="home-research__buttons">

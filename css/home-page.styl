@@ -36,7 +36,7 @@ $flex-section
 
 .home-page-not-logged-in
   .home-intro
-    background-color: BACKGROUND_COLOR
+    background-color: ZOONIVERSE_TEAL
     box-sizing: border-box
     justify-content: flex-end
     min-height: 30vw
@@ -197,6 +197,7 @@ $flex-section
         color: black
 
   &__project-card
+    border-color: LIGHT_GREY
     border-radius: 0
     height: 24em
     max-height: 24em
@@ -439,6 +440,10 @@ $flex-section
           &:nth-child(odd)
             justify-content: flex-end
 
+        @media (max-width: 400px)
+          flex-basis: 100%
+          flex-direction: column
+
       @media (max-width: 400px)
         justify-content: center
 
@@ -467,7 +472,7 @@ $flex-section
       padding: 4em 2em
 
     hr
-      margin-top: 0
+      margin: 2em 1.5em
 
     &__blog-section
       box-sizing: border-box
@@ -475,7 +480,6 @@ $flex-section
 
       &--white
         background-color: white
-        margin-bottom: 1.5em
 
       &--gray
         padding: 0 1.5em

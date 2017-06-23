@@ -12,8 +12,8 @@ counterpart.registerTranslations('en', {
     community: 'The Zooniverse Community',
     daily: 'The Daily Zooniverse',
     news: 'News',
-    newestProject: 'Newest Project',
-    recentProjects: 'Recent Project Updates',
+    latestProject: 'Latest Project',
+    recentProjects: 'Project Updates',
     recentPublications: 'Recent Publications'
   }
 });
@@ -73,6 +73,7 @@ export default class HomePageSocial extends React.Component {
     const timestamp = moment(new Date(post.created_at)).fromNow();
     return (
       <div key={i} className={classes}>
+        {i !== 0 && (<hr />)}
         <h4 className="timestamp-label">{timestamp}</h4>
         <h5 className="tertiary-headline">{post.title} </h5>
         <div className="home-social__blog-post">
@@ -85,7 +86,6 @@ export default class HomePageSocial extends React.Component {
             </div>
           </div>
         </div>
-        {i !== 0 && (<hr />)}
       </div>
     );
   }
@@ -115,7 +115,7 @@ export default class HomePageSocial extends React.Component {
         <div className="home-social__content">
           <div className="home-social__news">
             <Translate className="tertiary-headline__headline" component="h2" content="socialHomePage.news" />
-            <Translate className="tertiary-kicker" component="h3" content="socialHomePage.newestProject" />
+            <Translate className="tertiary-kicker" component="h3" content="socialHomePage.latestProject" />
             <ProjectCard
               className="home-page-not-logged-in__project-card"
               landingPage={true}
@@ -143,6 +143,7 @@ export default class HomePageSocial extends React.Component {
             {blogPosts.map((post, i) => {
               return this.renderBlogPost(post, i);
             })}
+            <hr />
             <a href="http://blog.zooniverse.org" className="primary-button primary-button--light">See All Posts</a>
           </div>
         </div>
