@@ -8,7 +8,8 @@ class OrganizationContainer extends React.Component {
     this.state = {
       fetching: false,
       organization: { projects: [] },
-      organizationAvatar: {}
+      organizationAvatar: {},
+      organizationBackground: {}
     };
 
     this.fetchProjects = this.fetchProjects.bind(this);
@@ -27,15 +28,27 @@ class OrganizationContainer extends React.Component {
     if (this.state.fetching) return;
 
     this.setState({ fetching: true });
-    apiClient.type('organizations').get({ id, include: ['avatar'] }).then(([organization]) => {
+    apiClient.type('organizations').get({ id, include: ['avatar', 'background'] }).then(([organization]) => {
       organization.projects = []; // eslint-disable-line no-param-reassign
       this.setState({ organization });
 
       if (organization) {
-        apiClient.type('avatars').get(organization.links.avatar.id).catch((error) => []).then((organizationAvatar) => {
-          this.setState({ organizationAvatar });
-        });
-      };
+        apiClient.type('avatars')
+          .get(organization.links.avatar.id)
+          .catch(error => console.error('error loading avatar', error)) // eslint-disable-line no-console
+          .then((organizationAvatar) => {
+            this.setState({ organizationAvatar });
+          });
+      }
+
+      if (organization) {
+        apiClient.type('backgrounds')
+          .get(organization.links.background.id)
+          .catch(error => console.error('error loading background image', error)) // eslint-disable-line no-console
+          .then((organizationBackground) => {
+            this.setState({ organizationBackground });
+          });
+      }
 
       this.fetchProjects(organization);
     });
@@ -51,14 +64,21 @@ class OrganizationContainer extends React.Component {
 
   render() {
     return React.Children.map(this.props.children, child =>
-      React.cloneElement(child, { organization: this.state.organization, organizationAvatar: this.state.organizationAvatar })
+      React.cloneElement(child, {
+        organization: this.state.organization,
+        organizationAvatar: this.state.organizationAvatar,
+        organizationBackground: this.state.organizationBackground
+      })
     )[0];
   }
 
 }
 
 OrganizationContainer.propTypes = {
-  children: React.PropTypes.node.isRequired
+  children: React.PropTypes.node.isRequired,
+  params: React.PropTypes.shape({
+    organization_id: React.PropTypes.string
+  }).isRequired
 };
 
 export default OrganizationContainer;

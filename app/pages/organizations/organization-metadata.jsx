@@ -2,7 +2,7 @@ import React from 'react';
 
 const OrganizationMetadataStat = ({ value, label }) => (
   <div>
-    <div className="organization-metadata-stat__value">{value}</div>
+    <h2 className="organization-details__stats-value">{value > 0 ? { value } : 0}</h2>
     <div>{label}</div>
   </div>
 );
@@ -28,15 +28,21 @@ export default class OrganizationMetaData extends React.Component {
     const organization = this.props.organization;
 
     return (
-      <div className="organization-metadata">
-        <div className="organization-metadata-title">
-          <h1 className="organization-metadata--name">{organization.display_name}{' '}Statistics</h1>
-          <div>
-            <OrganizationMetadataStat label="Volunteers" value={this.extractStat('classifiers_count').toLocaleString()} />
-            <OrganizationMetadataStat label="Classifications" value={this.extractStat('classifications_count').toLocaleString()} />
-            <OrganizationMetadataStat label="Subjects" value={this.extractStat('subjects_count').toLocaleString()} />
-            <OrganizationMetadataStat label="Completed Subjects" value={this.extractStat('retired_subjects_count').toLocaleString()} />
-          </div>
+      <div>
+        <h6 className="organization-details__stats-title">{organization.display_name}{' '}Statistics</h6>
+        <div>
+          <OrganizationMetadataStat
+            label="Volunteers"
+            value={this.extractStat('classifiers_count').toLocaleString()}
+          />
+          <OrganizationMetadataStat
+            label="Classifications"
+            value={this.extractStat('classifications_count').toLocaleString()}
+          />
+          <OrganizationMetadataStat
+            label="Subjects"
+            value={this.extractStat('subjects_count').toLocaleString()}
+          />
         </div>
       </div>
     );
