@@ -39,7 +39,7 @@ counterpart.registerTranslations('en', {
 const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =>
   <section className="home-research">
     <Translate className="tertiary-kicker" component="h2" content="researchHomePage.works" />
-    <span className="class-counter">{count.toString().replace(/.(?=(?:.{3})+$)/g, '$&,')}</span>
+    <span className="class-counter">{count.toLocaleString()}</span>
     <Translate className="main-kicker" component="h3" content="researchHomePage.classifications" />
     <div>
       <h3 className="main-kicker">{volunteerCount.toLocaleString()}</h3>{' '}
