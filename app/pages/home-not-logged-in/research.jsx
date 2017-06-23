@@ -9,9 +9,9 @@ counterpart.registerTranslations('en', {
       A vibrant community.
     `,
     about: `
-      Zooniverse gives people of all ages and backgrounds the chance to paricipate
-      in real research with over 50- active online citizen science projects. Work with
-      1.5 million registered users around the world to contribute to research
+      Zooniverse gives people of all ages and backgrounds the chance to participate
+      in real research with over 50 active online citizen science projects. Work with
+      1.6 million registered users around the world to contribute to research
       projects led by hundreds of researchers.
     `,
     classifications: 'Classifications so far by',
@@ -20,11 +20,11 @@ counterpart.registerTranslations('en', {
       The projects created with the Zooniverse project builder
       inspire and empower researchers, designers, and artists.
     `,
-    meetResearchers: 'Meet the researchers who\'ve created projects for free on the Zooniverse.',
+    meetResearchers: 'Meet the researchers who\'ve created projects for free on the Zooniverse',
     options: 'Sign in or register to get started',
     real: 'Real researchers, real results',
     registeredUsers: 'registered volunteers',
-    researcherIntro: 'Meet the researchers who’ve created projects for free on the Zooniverse. ',
+    researcherIntro: 'Meet the researchers who’ve created projects for free on the Zooniverse ',
     researcher: `
       From classifying animals in the Serengeti to discovering new exoplanets using
       the Kepler space telescope, researchers of all backgrounds have used the free
