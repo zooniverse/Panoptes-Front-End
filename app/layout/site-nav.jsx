@@ -13,7 +13,7 @@ import SiteSubnav from './site-subnav';
 import ExpandableMenu from './expandable-menu';
 
 
-const MAX_MOBILE_WIDTH = 1035;
+const MAX_MOBILE_WIDTH = 1080;
 const ZOO_LOGO = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
 const HAMBURGER_MENU = <span style={{ display: 'inline-block', transform: 'scale(2.5, 2)' }}>≡</span>;
 
