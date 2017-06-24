@@ -7,8 +7,8 @@ getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
-`import ProgressUpdater from './progress-updater';`
 `import FrameViewer from './frame-viewer';`
+`import getSubjectLocations from '../lib/get-subject-locations';`
 
 NOOP = Function.prototype
 
@@ -19,6 +19,8 @@ subjectTypes = (subject) ->
       type = typeAndFormat.split('/')[0]
       unless type in allTypes
         allTypes.push type
+  # this line seems to be required, but that shouldn't be the case
+  return allTypes
 
 subjectHasMixedLocationTypes = (subject) ->
   allTypes = subjectTypes subject
@@ -40,8 +42,6 @@ module.exports = React.createClass
     geordi: React.PropTypes.object
 
   signInAttentionTimeout: NaN
-
-  progressUpdater : new ProgressUpdater()
 
   getDefaultProps: ->
     subject: null
@@ -68,7 +68,6 @@ module.exports = React.createClass
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
-    isAudioPlusImage: false
 
   getInitialFrame: ->
     {frame, allowFlipbook, subject} = @props
@@ -87,9 +86,6 @@ module.exports = React.createClass
         playing: false
         loading: true
         frame: 0
-
-  componentDidMount: () ->
-    @progressUpdater.setSubjectViewer(if this.frameWrapper then this.frameWrapper else this)
 
   componentDidUpdate: (prevProps) ->
     if @props.subject isnt prevProps.subject
@@ -114,11 +110,14 @@ module.exports = React.createClass
 
     mainDisplay = ''
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
+    subjectLocations = getSubjectLocations @props.subject
     if @state.inFlipbookMode
       mainDisplay = @renderFrame @state.frame
+    else if subjectIsLikelyAudioPlusImage @props.subject
+      mainDisplay = @renderFrame @state.frame, {subjectLocations : subjectLocations, isAudioPlusImage : true}
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
-        @renderFrame index, {key: "frame-#{index}", progressListener: @progressUpdater.progressUpdateListener, progressMarker: @progressUpdater.progressMarkerRenderer, registerProgressObject: @progressUpdater.progressMonitoredObject}
+        @renderFrame index, {key: "frame-#{index}"}
     tools = switch type
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject

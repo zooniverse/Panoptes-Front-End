@@ -1,4 +1,6 @@
 import React from 'react';
+import ImageViewer from './image-viewer';
+import ProgressIndicator from './progress-indicator';
 
 class AudioPlayer extends React.Component {
   constructor(props) {
@@ -9,24 +11,25 @@ class AudioPlayer extends React.Component {
     this.playAudio = this.playAudio.bind(this);
 
     this.state = {
-      playing: false
+      playing: false,
+      progressPosition: 0,
+      trackDuration: 0
     };
 
   }
 
   componentDidMount() {
     this.player.controlsList = "nodownload"; // Non-spec option for Chrome browsers to hide the display of a download button
-    this.props.registerProgressObject(this.player);
   }
 
-  componentDidUpdate() {
-  }
+  componentDidUpdate() {}
 
   playAudio(playing) {
-    const { player } = this;
-    if (!player) return;
+    const {player} = this;
+    if (!player)
+      return;
 
-    this.setState({ playing });
+    this.setState({playing});
 
     if (playing) {
       player.play();
@@ -36,28 +39,83 @@ class AudioPlayer extends React.Component {
   }
 
   endAudio() {
-    this.setState({ playing: false });
+    this.setState({playing: false});
+  }
+
+  imageSrc() {
+    return Array.isArray(this.props.type)
+      ? this.props.src[this.props.type.indexOf('image')]
+      : false;
+  }
+
+  audioSrc() {
+    return Array.isArray(this.props.type)
+      ? this.props.src[this.props.type.indexOf('audio')]
+      : this.props.src;
+  }
+
+  imageTypeString() {
+    return Array.isArray(this.props.type)
+      ? 'image/' + this.props.format[this.props.type.indexOf('image')]
+      : false;
+  }
+
+  audioTypeString() {
+    return Array.isArray(this.props.type)
+      ? 'audio/' + this.props.format[this.props.type.indexOf('audio')]
+      : 'audio/' + this.props.format;
+  }
+
+  imageFormatString() {
+    return Array.isArray(this.props.type)
+      ? this.props.format[this.props.type.indexOf('image')]
+      : false;
+  }
+
+  audioFormatString() {
+    return Array.isArray(this.props.type)
+      ? this.props.format[this.props.type.indexOf('audio')]
+      : this.props.format;
+  }
+
+  updateProgress() {
+    this.setState({progressPosition: this.player.currentTime});
+  }
+
+  onAudioLoad(e) {
+    e.stopPropagation();
+    this.state.trackDuration = this.player.duration;
+  }
+
+  renderProgressMarker() {
+    console.log(this.state.progressPosition, this.state.trackDuration);
+    return (<ProgressIndicator progressPosition={this.state.progressPosition} progressRange={[0, this.state.trackDuration]} naturalWidth={100} naturalHeight={100}/>);
   }
 
   render() {
+    const imageSrc = this.imageSrc();
+    let imageElement = null;
+    if (imageSrc) {
+      imageElement = (
+        <div id='image_element'>
+          <ImageViewer src={imageSrc} type={this.imageTypeString()} format={this.imageFormatString()} frame={this.props.frame} onLoad={this.props.onLoad} onFocus={this.props.onFocus} onBlur={this.props.onBlur}>
+          </ImageViewer>
+          {this.renderProgressMarker()}
+        </div>
+      );
+    }
     return (
-      <div className="subject-audio-frame">
-        <audio
-          className="subject"
-          controls={true}
-          ref={(element) => { this.player = element; }}
-          src={this.props.src}
-          type={`${this.props.type}/${this.props.format}`}
-          preload="auto"
-          onCanPlay={this.props.onLoad}
-          onClick={this.playAudio.bind(this, !this.state.playing)}
-          onEnded={this.endAudio}
-          onTimeUpdate={this.props.progressListener}
-        >
-          Your browser does not support the audio format. Please upgrade your browser.
-        </audio>
+      <div>
+        {imageElement}
+        <div className="subject-audio-frame">
+          <audio className="subject" controls={true} ref={(element) => {
+            this.player = element;
+          }} src={this.audioSrc()} type={this.audioTypeString()} preload="auto" onCanPlay={this.onAudioLoad.bind(this)} onClick={this.playAudio.bind(this, !this.state.playing)} onEnded={this.endAudio} onTimeUpdate={this.updateProgress.bind(this)}>
+            Your browser does not support the audio format. Please upgrade your browser.
+          </audio>
 
-        {this.props.children}
+          {this.props.children}
+        </div>
       </div>
     );
   }
@@ -66,19 +124,14 @@ class AudioPlayer extends React.Component {
 
 AudioPlayer.propTypes = {
   children: React.PropTypes.node,
-  format: React.PropTypes.string,
+  format: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.string]),
   frame: React.PropTypes.number,
   onLoad: React.PropTypes.func,
   showControls: React.PropTypes.bool,
-  src: React.PropTypes.string,
-  type: React.PropTypes.string,
-  progressListener: React.PropTypes.func,
-  registerProgressObject: React.PropTypes.func
+  src: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.string]),
+  type: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.string])
 };
 
-AudioPlayer.defaultProps = {
-  progressListener: () => {},
-  registerProgressObject: () => {}
-};
+AudioPlayer.defaultProps = {};
 
 export default AudioPlayer;

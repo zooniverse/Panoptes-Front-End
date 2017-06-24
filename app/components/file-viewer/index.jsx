@@ -23,8 +23,19 @@ const VIEWERS = {
   audio: AudioPlayer
 };
 
+function subjectViewerSelector(props) {
+  if(Array.isArray(props.type)){
+    if(props.type.includes('audio')){
+      return VIEWERS.audio;
+    }
+    // ... add outher here if neccessary
+  }
+  return VIEWERS[props.type] || DefaultViewer;
+
+}
+
 function FileViewer(props) {
-  const Viewer = VIEWERS[props.type] || DefaultViewer;
+  const Viewer = subjectViewerSelector(props);//VIEWERS[props.type] || DefaultViewer;
 
   return (
     <Viewer
@@ -35,22 +46,27 @@ function FileViewer(props) {
       onLoad={props.onLoad}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
-      progressListener={props.progressListener}
-      registerProgressObject={props.registerProgressObject}
     />
   );
 }
 
 FileViewer.propTypes = {
-  format: React.PropTypes.string,
+  format: React.PropTypes.oneOfType([
+    React.PropTypes.array,
+    React.PropTypes.string
+  ]),
   frame: React.PropTypes.number,
   onBlur: React.PropTypes.func,
   onFocus: React.PropTypes.func,
   onLoad: React.PropTypes.func,
-  src: React.PropTypes.string,
-  type: React.PropTypes.string,
-  progressListener: React.PropTypes.func,
-  registerProgressObject: React.PropTypes.func
+  src: React.PropTypes.oneOfType([
+    React.PropTypes.array,
+    React.PropTypes.string
+  ]),
+  type: React.PropTypes.oneOfType([
+    React.PropTypes.array,
+    React.PropTypes.string
+  ])
 };
 
 export default FileViewer;
