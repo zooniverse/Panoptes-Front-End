@@ -6,420 +6,233 @@ import assert from 'assert';
 import sinon from 'sinon';
 import MobileSection from './mobile-section';
 
-const defaultTask = {
+const DEFAULT_TASK = {
   question: 'What is it',
   type: 'single',
   answers: [
     { label: 'Yes' },
-    { label: 'No' }
-  ]
+    { label: 'No' },
+  ],
 };
 
-const defaultWorkflow = {
+const DEFAULT_WORKFLOW = {
   tasks: {
     T0: {
       answers: [
         { label: 'Yes' },
-        { label: 'No' }
-      ]
-    }
+        { label: 'No' },
+      ],
+    },
   },
   configuration: {}
 };
 
-const defaultProject = {
+const DEFAULT_PROJECT = {
   id: '123213',
   launch_approved: true,
 };
 
-describe('MobileSection', function () {
-  describe('rendering', function () {
-    let wrapper;
+function createElements(task = DEFAULT_TASK, workflow = DEFAULT_WORKFLOW, project = DEFAULT_PROJECT) {
+  const newWrapper = mount(<MobileSection task={task} workflow={workflow} project={project} />);
+  const newCheckbox = newWrapper.find('input');
+  return {
+    wrapper: newWrapper, 
+    checkbox: newCheckbox,
+  };
+}
 
-    before(function () {
-      wrapper = mount(
-        <MobileSection
-          task={defaultTask}
-          workflow={defaultWorkflow}
-          project={defaultProject}
-        />
-      );
+function modifyFixture(original, diff) {
+  return Object.assign({}, original, diff);
+}
+
+describe('<MobileSection />:', function () {
+
+  let wrapper = null;
+  let checkbox = null;
+
+  describe('rendering: ', function () {
+
+    it('should render for valid (single and multiple) task types', function () {
+      ({ wrapper } = createElements());
+      assert.ok(wrapper.children().length > 0);
+      
+      const multipleTask = modifyFixture(DEFAULT_TASK, { type: 'multiple' });
+      ({ wrapper } = createElements(multipleTask));
+      assert.ok(wrapper.children().length > 0);
     });
 
-    it('checkbox exists and is not disabled if mobile is available', function () {
-      const checkbox = wrapper.find('input');
-      assert.strictEqual(checkbox.props().disabled, false);
-    });
+    it('should not render for invalid task types', function () {
+      const drawingTask = modifyFixture(DEFAULT_TASK, { type: 'drawing' });
+      ({ wrapper } = createElements(drawingTask));
+      assert.strictEqual(wrapper.children().length, 0);
+    })
 
-    it('checkbox is not checked', function () {
-      const checkbox = wrapper.find('input');
-      assert.strictEqual(checkbox.props().checked, false);
-    });
-
-    it('should correctly display a mobile label', function () {
-      const textarea = wrapper.find('label').first();
-      assert.strictEqual(textarea.text(), ' Enable on mobile app');
-    });
   });
 
-  describe('renders when mobile app is enabled', function () {
-    let wrapper;
+  describe('checkbox:', function () {
 
-    const mobileEnabledWorkflow = {
-      tasks: {
-        T0: {
-          type: 'single',
-          answers: [
-            { label: 'Yes' },
-            { label: 'No' }
-          ]
-        }
-      },
-      configuration: {
-        swipe_enabled: true
-      }
-    };
-
-    before(function () {
-      wrapper = mount(<MobileSection
-        task={defaultTask}
-        workflow={mobileEnabledWorkflow}
-        project={defaultProject}
-      />);
+    it('should exist', function () {
+      ({ checkbox } = createElements());
+      assert.strictEqual(checkbox.length, 1);
     });
 
-    it('checkbox is checked if mobile is enabled', function () {
-      assert.equal(wrapper.find('input').props().disabled, false);
-    });
-  });
-
-  describe('executes method when checked', function () {
-    let wrapper;
-
-    beforeEach(function () {
-      wrapper = mount(<MobileSection
-        task={defaultTask}
-        workflow={defaultWorkflow}
-        project={defaultProject}
-      />);
+    it('should have a label', function () {
+      ({ wrapper } = createElements());
+      const textContent = wrapper.find('label').first();
+      assert.strictEqual(textContent.text(), ' Enable on mobile app');
     });
 
-    it('should call toggleShortcut with an input toggle', function () {
-      const toggleStub = sinon.stub(wrapper.instance(), 'toggleSwipeEnabled');
-      wrapper.update();
-      wrapper.find('input').simulate('change');
-      sinon.assert.called(toggleStub);
-    });
-  });
+    describe('behaviour for valid projects:', function () {
 
-  describe('only renders for questions (single task type)', function () {
-    let wrapper;
+      it('should be unchecked by default', function () {
+        ({ checkbox } = createElements());
+        assert.strictEqual(checkbox.props().checked, false);
+      });
+      
+      it('should call toggleShortcut when checked', function () {
+        ({ wrapper, checkbox } = createElements());
+        const toggleStub = sinon.stub(wrapper.instance(), 'toggleSwipeEnabled');
+        wrapper.update();
+        checkbox.simulate('change');
+        sinon.assert.called(toggleStub);
+      });
 
-    const singleTypeTask = {
-      question: 'What is it',
-      type: 'single',
-      answers: [
-        { label: 'Yes' },
-        { label: 'No' }
-      ]
-    };
+      it('should be enabled for single tasks', function () {
+        ({ checkbox } = createElements());
+        assert.strictEqual(checkbox.props().disabled, false);
+      });
 
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={singleTypeTask}
-        workflow={defaultWorkflow}
-        project={defaultProject}
-      />);
-    });
-
-    it('does not disable checkbox', function () {
-      assert.equal(wrapper.find('input').props().disabled, false);
-    });
-  });
-
-  describe('only renders for questions (multi task type)', function () {
-    let wrapper;
-
-    const multipleTypeTask = {
-      question: 'What is it',
-      type: 'multiple',
-      answers: [
-        { label: 'Yes' },
-        { label: 'No' }
-      ]
-    };
-
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={multipleTypeTask}
-        workflow={defaultWorkflow}
-        project={defaultProject}
-      />);
-    });
-
-    it('does not disable checkbox', function () {
-      assert.equal(wrapper.find('input').props().disabled, false);
-    });
-  });
-
-  describe('does not render for other task types', function () {
-    let wrapper;
-
-    const otherTypeTask = {
-      question: 'What is it',
-      type: 'blurgh',
-      answers: [
-        { label: 'Yes' },
-        { label: 'No' }
-      ]
-    };
-
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={otherTypeTask}
-        workflow={defaultWorkflow}
-        project={defaultProject}
-      />);
-    });
-
-    it('should not render for other task type', function () {
-      assert.equal(wrapper.html(), null);
-    });
-  });
-
-  describe('it has more than two answers', function () {
-    let wrapper;
-
-    const multiAnswerWorkflow = {
-      tasks: {
-        T0: {
-          type: 'single',
+      it('should be enabled for multiple tasks', function () {
+        const multipleTask = modifyFixture(DEFAULT_TASK, {
+          type: 'multiple',
           answers: [
             { label: 'Yes' },
             { label: 'No' },
-            { label: 'Maybe' }
-          ]
-        }
-      },
-      configuration: {}
-    };
-
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={defaultTask}
-        workflow={multiAnswerWorkflow}
-        project={defaultProject}
-      />);
-    });
-
-    it('checkbox is disabled', function () {
-      assert.equal(wrapper.find('input').props().disabled, false);
-    });
-  });
-
-  describe('with two shortcut answers', function () {
-    let wrapper;
-    const shortcutTask = {
-      question: 'What is it',
-      type: 'single',
-      unlinkedTask: 'T1',
-      answers: [
-        { label: 'Yes' },
-        { label: 'No' }
-      ]
-    };
-    const workflowWithShortCuts = {
-      tasks: {
-        T0: {
-          type: 'single',
-          answers: [
-            { label: 'Yes' },
-            { label: 'No' }
-          ]
-        },
-        T1: {
-          type: 'single',
-          answers: [
-            { label: 'Nothing here' },
-            { label: 'Too many clouds' }
           ],
-          type: 'shortcut'
-        }
-      },
-      configuration: {}
-    };
+        });
+        ({ checkbox } = createElements(multipleTask));
+        assert.strictEqual(checkbox.props().disabled, false);
+      });
+      
+      it('should be enabled for tasks with two shortcut answers', function () {
+        const shortcutTask = modifyFixture(DEFAULT_TASK, { unlinkedTask: 'T1' });
+        const shortcutWorkflow = modifyFixture(DEFAULT_WORKFLOW, {
+          tasks: {
+            T0: {
+              type: 'single',
+              answers: [
+                { label: 'Yes' },
+                { label: 'No' }
+              ]
+            },
+            T1: {
+              type: 'single',
+              answers: [
+                { label: 'Nothing here' },
+                { label: 'Too many clouds' }
+              ],
+              type: 'shortcut'
+            }
+          },
+        });
 
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={shortcutTask}
-        workflow={workflowWithShortCuts}
-        project={defaultProject}
-      />);
+        ({ checkbox } = createElements(shortcutTask, shortcutWorkflow));
+        assert.strictEqual(checkbox.props().disabled, false);
+      });
+
     });
 
-    it('does not disable checkbox', function () {
-      assert.equal(wrapper.find('input').props().disabled, false);
-    });
-  });
+    describe('behaviour for invalid projects:', function () {
 
-  describe('more than two shortcuts', function () {
-    let wrapper;
-    const shortcutTask = {
-      question: 'What is it',
-      type: 'single',
-      unlinkedTask: 'T1',
-      answers: [
-        { label: 'Yes' },
-        { label: 'No' }
-      ]
-    };
-    const tooManyShortcutsWorkflow = {
-      tasks: {
-        T0: {
-          type: 'single',
+      it('should be disabled for tasks with more than two answers', function () {
+        const threeAnswerTask = modifyFixture(DEFAULT_TASK, {
           answers: [
             { label: 'Yes' },
-            { label: 'No' }
-          ]
-        },
-        T1: {
-          type: 'single',
-          answers: [
-            { label: 'Nothing here' },
-            { label: 'Too many clouds' },
-            { label: 'Too much water' }
+            { label: 'No' },
+            { label: 'Maybe' },
           ],
-          type: 'shortcut'
-        }
-      },
-      configuration: {}
-    };
+        });
 
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={shortcutTask}
-        workflow={tooManyShortcutsWorkflow}
-        project={defaultProject}
-      />);
+        ({ checkbox } = createElements(threeAnswerTask));
+        assert.strictEqual(checkbox.props().disabled, true);
+      });
+
+      it('should be disabled for tasks with more than two shortcut answers', function () {
+        const shortcutTask = modifyFixture(DEFAULT_TASK, { unlinkedTask: 'T1' });
+        const tooManyShortcutsWorkflow = modifyFixture(DEFAULT_WORKFLOW, {
+          tasks: {
+            T0: {
+              type: 'single',
+              answers: [
+                { label: 'Yes' },
+                { label: 'No' },
+              ],
+            },
+            T1: {
+              type: 'single',
+              answers: [
+                { label: 'Nothing here' },
+                { label: 'Too many clouds' },
+                { label: 'Too much water' },
+              ],
+              type: 'shortcut',
+            },
+          },
+        });
+
+        ({ checkbox } = createElements(shortcutTask, tooManyShortcutsWorkflow));
+        assert.strictEqual(checkbox.props().disabled, true);
+      });
+
+      it('should be disabled for tasks where the question text is too long', function () {
+        const questionTextTooLongTask = modifyFixture(DEFAULT_TASK, {
+          question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        });
+        ({ checkbox } = createElements(questionTextTooLongTask));
+        assert.strictEqual(checkbox.props().disabled, true);
+      });
+
+      it('should be disabled for workflows using the flipbook', function () {
+        const flipbookWorkflow = modifyFixture(DEFAULT_WORKFLOW, {
+          configuration: {
+            multi_image_mode: 'flipbook',
+          },
+        });
+
+        ({ checkbox } = createElements(DEFAULT_TASK, flipbookWorkflow));
+        assert.strictEqual(checkbox.props().disabled, true);
+      });
+
+      it('should be disabled for workflows using feedback', function () {
+        const feedbackTask = modifyFixture(DEFAULT_TASK, {
+          feedback: {
+            enabled: true,
+          },
+        });
+        ({ checkbox } = createElements(feedbackTask));
+        assert.strictEqual(checkbox.props().disabled, true);
+      });
+
+      it('should be disabled for workflows with no questions or answers', function () {
+        const emptyTask = modifyFixture(DEFAULT_TASK, {
+          question: '',
+          answers: [],
+        });
+
+        const emptyWorkflow = modifyFixture(DEFAULT_WORKFLOW, {
+          tasks: {
+            T0: {
+              answers: [],
+            },
+          },
+        });
+
+        ({ checkbox } = createElements(emptyTask, emptyWorkflow));
+        assert.strictEqual(checkbox.props().disabled, true);
+      });
+
     });
 
-    it('disables checkbox', function () {
-      assert.equal(wrapper.find('input').props().disabled, true);
-    });
   });
 
-  describe('question is too long', function () {
-    let wrapper;
-    const questionTooLongTask = {
-      question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      type: 'single',
-      answers: [
-        { label: 'Yes' },
-        { label: 'No' }
-      ]
-    };
-
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={questionTooLongTask}
-        workflow={defaultWorkflow}
-        project={defaultProject}
-      />);
-    });
-
-    it('disables checkbox', function () {
-      assert.equal(wrapper.find('input').props().disabled, true);
-    });
-  });
-
-  describe('workflow uses flipbook', function () {
-    let wrapper;
-    const flipbookWorkflow = {
-      tasks: {
-        T0: {
-          type: 'single',
-          answers: [
-            { label: 'Yes' },
-            { label: 'No' }
-          ]
-        }
-      },
-      configuration: {
-        multi_image_mode: 'flipbook'
-      }
-    };
-
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={defaultTask}
-        workflow={flipbookWorkflow}
-        project={defaultProject}
-      />);
-    });
-
-    it('disables checkbox', function () {
-      assert.equal(wrapper.find('input').props().disabled, true);
-    });
-  });
-
-  describe('workflow uses feedback', function () {
-    let wrapper;
-    const feedbackWorkflow = {
-      tasks: {
-        T0: {
-          type: 'single',
-          answers: [
-            { label: 'Yes' },
-            { label: 'No' }
-          ]
-        },
-        feedback: {
-          enabled: true
-        }
-      },
-      configuration: {}
-    };
-
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={defaultTask}
-        workflow={feedbackWorkflow}
-        project={defaultProject}
-      />);
-    });
-
-    it('disables checkbox', function () {
-      assert.equal(wrapper.find('input').props().disabled, true);
-    });
-  });
-
-  describe('workflow has no question or answers', function () {
-    let wrapper;
-    const emptyWorkflow = {
-      tasks: {
-        T0: {
-          answers: []
-        }
-      },
-      configuration: {}
-    };
-
-    const emptyTask = {
-      question: '',
-      type: 'single',
-      answers: []
-    };
-
-    before(function () {
-      wrapper = shallow(<MobileSection
-        task={emptyTask}
-        workflow={emptyWorkflow}
-        project={defaultProject}
-      />);
-    });
-
-    it('disables checkbox', function () {
-      assert.equal(wrapper.find('input').props().disabled, true);
-    });
-  });
 });

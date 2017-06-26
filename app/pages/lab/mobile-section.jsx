@@ -53,7 +53,7 @@ export default class MobileSection extends React.Component {
     
     const swipeEnabledChecked = !!this.props.workflow.configuration.swipe_enabled && swipeEligible;
     
-    const launchApproved = this.props.project.launch_approved;
+    const launchApproved = true; //this.props.project.launch_approved;
 
     return (
       <div>
@@ -145,26 +145,20 @@ const approvedHelp = (
 );
 
 MobileSection.propTypes = {
-  task: React.PropTypes.shape(
-    {
-      question: React.PropTypes.string,
-      unlinkedTask: React.PropTypes.string,
-      answers: React.PropTypes.array,
-      feedback: React.PropTypes.object
-    }
-  ),
-  workflow: React.PropTypes.shape(
-    {
-      tasks: React.PropTypes.object,
-      update: React.PropTypes.func,
-      configuration: React.PropTypes.object
-    }
-  ),
-  project: React.PropTypes.shape(
-    {
-      update: React.PropTypes.func
-    }
-  )
+  task: React.PropTypes.shape({
+    question: React.PropTypes.string,
+    unlinkedTask: React.PropTypes.string,
+    answers: React.PropTypes.array,
+    feedback: React.PropTypes.object,
+  }),
+  workflow: React.PropTypes.shape({
+    tasks: React.PropTypes.object,
+    update: React.PropTypes.func,
+    configuration: React.PropTypes.object
+  }),
+  project: React.PropTypes.shape({
+    update: React.PropTypes.func,
+  }),
 };
 
 MobileSection.defaultProps = {
