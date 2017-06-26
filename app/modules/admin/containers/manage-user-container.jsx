@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
+import Heading from 'grommet/components/Heading';
 
-import LoadingIndicator from '../../components/loading-indicator';
-import UserSearch from '../../components/user-search';
-import UserSettings from './user-settings';
-import UserProjects from './user-settings/projects';
+import LoadingIndicator from '../../../components/loading-indicator';
+import UserSearch from '../../../components/user-search';
+import ManageUserSettings from '../components/manage-user-settings';
+import ManageUserProjects from './manage-user-projects-container';
 
-class UserSettingsList extends Component {
+class ManageUserContainer extends Component {
   constructor(props) {
     super(props);
     this.listUsers = this.listUsers.bind(this);
@@ -17,9 +18,9 @@ class UserSettingsList extends Component {
   }
 
   getEditUser(userId) {
-    apiClient.type('users').get(userId).then(
-      editUser => this.setState({ editUser })
-    );
+    apiClient.type('users').get(userId)
+      .then(editUser => this.setState({ editUser }))
+      .catch(error => console.error(error));
   }
 
   listUsers(e) {
@@ -47,8 +48,8 @@ class UserSettingsList extends Component {
 
     return (
       <div>
-        <UserSettings editUser={this.state.editUser} />
-        <UserProjects user={this.state.editUser} />
+        <ManageUserSettings editUser={this.state.editUser} />
+        <ManageUserProjects user={this.state.editUser} />
       </div>
     );
   }
@@ -56,9 +57,16 @@ class UserSettingsList extends Component {
   render() {
     return (
       <div ref={list => this.list = list}>
+        <Heading tag="h2">
+          Manage User 
+          {(this.state.editUser) && <span> &ndash; {this.state.editUser.login}</span>}
+        </Heading>
         <div className="columns-container">
           <div className="column">
-            <UserSearch ref={(component) => { this.userSearch = component; }} multi={false} />
+            <UserSearch 
+              ref={component => { this.userSearch = component; }} 
+              multi={false} 
+            />
           </div>
           <button type="button" onClick={this.listUsers}>
             Find user
@@ -70,4 +78,4 @@ class UserSettingsList extends Component {
   }
 }
 
-export default UserSettingsList;
+export default ManageUserContainer;

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
-import LoadingIndicator from '../../components/loading-indicator';
-import ProjectIcon from '../../components/project-icon';
-import Paginator from '../../talk/lib/paginator';
+import LoadingIndicator from '../../../components/loading-indicator';
+import ProjectIcon from '../../../components/project-icon';
+import Paginator from '../../../talk/lib/paginator';
+
+import Tiles from 'grommet/components/Tiles';
 
 class ProjectStatusList extends Component {
   constructor(props) {
@@ -58,9 +60,9 @@ class ProjectStatusList extends Component {
     return (projects.length === 0)
       ? <div className="project-status-list">No projects found for this filter</div>
       : <div>
-          <div className="project-status-list">
+          <Tiles size="small" fill="true">
             {projects.map(project => this.renderProjectListItem(project))}
-          </div>
+          </Tiles>
           <Paginator page={meta.page} pageCount={meta.page_count} />
         </div>
   }
@@ -68,9 +70,11 @@ class ProjectStatusList extends Component {
   renderProjectListItem(project) {
     const [owner, name] = project.slug.split('/');
     return (
-      <div key={project.id}>
-        <ProjectIcon linkTo={`/admin/project_status/${owner}/${name}`} project={project} />
-      </div>
+      <ProjectIcon 
+        key={project.id} 
+        linkTo={`/admin/project_status/${owner}/${name}`} 
+        project={project} 
+      />
     );
   }
 

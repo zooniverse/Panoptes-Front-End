@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 
-import ProjectIcon from '../../components/project-icon';
-import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
-import WorkflowToggle from '../../components/workflow-toggle';
-import LoadingIndicator from '../../components/loading-indicator';
+import ProjectIcon from '../../../components/project-icon';
+import getWorkflowsInOrder from '../../../lib/get-workflows-in-order';
+import WorkflowToggle from '../../../components/workflow-toggle';
+import LoadingIndicator from '../../../components/loading-indicator';
 
-import VersionList from './project-status/version-list';
-import ExperimentalFeatures from './project-status/experimental-features';
-import Toggle from './project-status/toggle';
-import RedirectToggle from './project-status/redirect-toggle';
+import VersionList from './version-list-container';
+import ExperimentalFeatures from './experimental-features-container';
+import Toggle from './toggle-container';
+import RedirectToggle from '../components/redirect-toggle';
 
 class ProjectStatus extends Component {
   constructor(props) {

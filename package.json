@@ -16,8 +16,8 @@
     "lodash.intersection": "~3.2.0",
     "lodash.merge": "~2.4.1",
     "lodash.pick": "~3.1.0",
-    "lodash.uniq": "~3.2.2",
     "lodash.round": "~4.0.4",
+    "lodash.uniq": "~3.2.2",
     "markdownz": "~7.2",
     "modal-form": "~2.4",
     "moment": "~2.9.0",
@@ -48,6 +48,7 @@
     "svg-path-properties": "~0.1.1",
     "swipe-js-iso": "~2.0.1",
     "visible-element": "~1.0.1",
+    "zoo-grommet": "~0.1.0",
     "zooniverse-geordi-client": "^1.4"
   },
   "devDependencies": {
@@ -119,7 +120,7 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
-    "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js) --reporter nyan --compilers js:babel-core/register,coffee:coffee-script/register,cjsx:coffee-react/register || true",
+    "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app/modules -name *.spec.js) --reporter nyan --compilers js:babel-core/register,coffee:coffee-script/register,cjsx:coffee-react/register || true",
     "test-travis": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js) --compilers js:babel-core/register,coffee:coffee-script/register,cjsx:coffee-react/register"
   }
 }
