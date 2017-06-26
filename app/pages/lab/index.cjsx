@@ -238,7 +238,7 @@ module.exports = React.createClass
         <ProjectList
           title="Your projects"
           page={@props.location.query['owned-page']}
-          roles={['owner', 'workaround']}
+          roles={['owner']}
           withAvatars
           onChangePage={@handlePageChange.bind this, 'owned-page'}
         />
