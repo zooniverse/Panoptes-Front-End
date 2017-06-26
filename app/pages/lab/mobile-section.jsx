@@ -1,6 +1,35 @@
 import React from 'react';
 import AutoSave from '../../components/auto-save';
 
+const disabledStyle = {
+  opacity: 0.5,
+  cursor: 'not-allowed'
+};
+
+const doesntMeet =
+  <i className="fa fa-times" style={{ color: 'red' }} aria-hidden="true" />;
+
+const meets =
+  <i className="fa fa-check" style={{ color: 'green' }} aria-hidden="true" />;
+
+const eligibleText = (
+  <p className="form-help">
+    <small>
+      Check this box if you think your question fits in this way.  If you have a Yes/No question, we recommend Yes is the first option listed so that it appears on the right.
+    </small>
+  </p>
+);
+
+const mobileHelp = 'Mobile app:  Check this box if you would like this workflow available in the mobile app';
+
+const approvedHelp = (
+  <p className="form-help error">
+    <small>
+      Your project must be approved for launch to be enabled on the mobile app.
+    </small>
+  </p>
+);
+
 export default class MobileSection extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +50,8 @@ export default class MobileSection extends React.Component {
       return null;
     }
 
-    const nonShortCutTasks = Object.keys(this.props.workflow.tasks).filter((key) => { return this.props.workflow.tasks[key].type !== 'shortcut'; });
+    const nonShortCutTasks = Object.keys(this.props.workflow.tasks)
+      .filter(key => this.props.workflow.tasks[key].type !== 'shortcut');
     const shortcut = this.props.workflow.tasks[this.props.task.unlinkedTask];
     const config = this.props.workflow.configuration;
 
@@ -33,7 +63,14 @@ export default class MobileSection extends React.Component {
     const isNotFlipbook = config ? config.multi_image_mode !== 'flipbook' : true;
     const doesNotUseFeedback = this.props.task.feedback ? !this.props.task.feedback.enabled : true;
 
-    const swipeEligible = hasTwoAnswers && hasSingleTask && questionNotTooLong && notTooManyShortcuts && isNotFlipbook && doesNotUseFeedback;
+    const swipeEligible = [
+      hasTwoAnswers,
+      hasSingleTask,
+      questionNotTooLong,
+      notTooManyShortcuts,
+      isNotFlipbook,
+      doesNotUseFeedback
+    ].every(requirement => requirement);
 
     const ineligibleText = (
       <small className="form-help">
@@ -50,10 +87,10 @@ export default class MobileSection extends React.Component {
         </ul>
       </small>
     );
-    
+
     const swipeEnabledChecked = !!this.props.workflow.configuration.swipe_enabled && swipeEligible;
-    
-    const launchApproved = true; //this.props.project.launch_approved;
+
+    const launchApproved = this.props.project.launch_approved;
 
     return (
       <div>
@@ -115,41 +152,13 @@ export default class MobileSection extends React.Component {
   }
 }
 
-const disabledStyle = {
-  opacity: 0.5,
-  cursor: 'not-allowed'
-};
-
-const doesntMeet =
-  <i className="fa fa-times" style={{ color: 'red' }} aria-hidden="true" />;
-
-const meets =
-  <i className="fa fa-check" style={{ color: 'green' }} aria-hidden="true" />;
-
-const eligibleText = (
-  <p className="form-help">
-    <small>
-      Check this box if you think your question fits in this way.  If you have a Yes/No question, we recommend Yes is the first option listed so that it appears on the right.
-    </small>
-  </p>
-);
-
-const mobileHelp = 'Mobile app:  Check this box if you would like this workflow available in the mobile app';
-
-const approvedHelp = (
-    <p className="form-help error">
-      <small>
-        Your project must be approved for launch to be enabled on the mobile app.
-      </small>
-    </p>
-);
-
 MobileSection.propTypes = {
   task: React.PropTypes.shape({
-    question: React.PropTypes.string,
-    unlinkedTask: React.PropTypes.string,
     answers: React.PropTypes.array,
     feedback: React.PropTypes.object,
+    question: React.PropTypes.string,
+    type: React.PropTypes.string,
+    unlinkedTask: React.PropTypes.string
   }),
   workflow: React.PropTypes.shape({
     tasks: React.PropTypes.object,
@@ -157,8 +166,9 @@ MobileSection.propTypes = {
     configuration: React.PropTypes.object
   }),
   project: React.PropTypes.shape({
-    update: React.PropTypes.func,
-  }),
+    launch_approved: React.PropTypes.bool,
+    update: React.PropTypes.func
+  })
 };
 
 MobileSection.defaultProps = {
