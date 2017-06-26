@@ -17,6 +17,10 @@ export default class MobileSection extends React.Component {
   }
 
   render() {
+    if (['single', 'multiple'].includes(this.props.task.type) === false) {
+      return null;
+    }
+
     const nonShortCutTasks = Object.keys(this.props.workflow.tasks).filter((key) => { return this.props.workflow.tasks[key].type !== 'shortcut'; });
     const shortcut = this.props.workflow.tasks[this.props.task.unlinkedTask];
     const config = this.props.workflow.configuration;

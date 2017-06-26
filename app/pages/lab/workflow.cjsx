@@ -483,12 +483,11 @@ EditWorkflowPage = createReactClass
               <hr />
               <br />
 
-              {if @props.workflow.tasks[@state.selectedTaskKey].type in ['single', 'multiple']
-                <MobileSection
-                  project={@props.project}
-                  workflow={@props.workflow}
-                  task={@props.workflow.tasks[@state.selectedTaskKey]}
-                />}
+              <MobileSection
+                project={@props.project}
+                workflow={@props.workflow}
+                task={@props.workflow.tasks[@state.selectedTaskKey]}
+              />
 
               <AutoSave resource={@props.workflow}>
                 <small>

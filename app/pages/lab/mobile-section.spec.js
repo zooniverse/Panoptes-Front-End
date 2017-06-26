@@ -28,7 +28,8 @@ const defaultWorkflow = {
 };
 
 const defaultProject = {
-  id: '123213'
+  id: '123213',
+  launch_approved: true,
 };
 
 describe('MobileSection', function () {
@@ -36,24 +37,28 @@ describe('MobileSection', function () {
     let wrapper;
 
     before(function () {
-      wrapper = mount(<MobileSection
-        task={defaultTask}
-        workflow={defaultWorkflow}
-        project={defaultProject}
-      />);
+      wrapper = mount(
+        <MobileSection
+          task={defaultTask}
+          workflow={defaultWorkflow}
+          project={defaultProject}
+        />
+      );
     });
 
     it('checkbox exists and is not disabled if mobile is available', function () {
-      assert.equal(wrapper.find('input').props().disabled, false);
+      const checkbox = wrapper.find('input');
+      assert.strictEqual(checkbox.props().disabled, false);
     });
 
     it('checkbox is not checked', function () {
-      assert.equal(wrapper.find('input').props().checked, false);
+      const checkbox = wrapper.find('input');
+      assert.strictEqual(checkbox.props().checked, false);
     });
 
     it('should correctly display a mobile label', function () {
       const textarea = wrapper.find('label').first();
-      assert.equal(textarea.text(), ' Enable on mobile app');
+      assert.strictEqual(textarea.text(), ' Enable on mobile app');
     });
   });
 
@@ -63,6 +68,7 @@ describe('MobileSection', function () {
     const mobileEnabledWorkflow = {
       tasks: {
         T0: {
+          type: 'single',
           answers: [
             { label: 'Yes' },
             { label: 'No' }
@@ -177,7 +183,7 @@ describe('MobileSection', function () {
     });
 
     it('should not render for other task type', function () {
-      assert.equal(wrapper.find('input').props().disabled, false);
+      assert.equal(wrapper.html(), null);
     });
   });
 
@@ -187,6 +193,7 @@ describe('MobileSection', function () {
     const multiAnswerWorkflow = {
       tasks: {
         T0: {
+          type: 'single',
           answers: [
             { label: 'Yes' },
             { label: 'No' },
@@ -224,12 +231,14 @@ describe('MobileSection', function () {
     const workflowWithShortCuts = {
       tasks: {
         T0: {
+          type: 'single',
           answers: [
             { label: 'Yes' },
             { label: 'No' }
           ]
         },
         T1: {
+          type: 'single',
           answers: [
             { label: 'Nothing here' },
             { label: 'Too many clouds' }
@@ -267,12 +276,14 @@ describe('MobileSection', function () {
     const tooManyShortcutsWorkflow = {
       tasks: {
         T0: {
+          type: 'single',
           answers: [
             { label: 'Yes' },
             { label: 'No' }
           ]
         },
         T1: {
+          type: 'single',
           answers: [
             { label: 'Nothing here' },
             { label: 'Too many clouds' },
@@ -326,6 +337,7 @@ describe('MobileSection', function () {
     const flipbookWorkflow = {
       tasks: {
         T0: {
+          type: 'single',
           answers: [
             { label: 'Yes' },
             { label: 'No' }
@@ -355,6 +367,7 @@ describe('MobileSection', function () {
     const feedbackWorkflow = {
       tasks: {
         T0: {
+          type: 'single',
           answers: [
             { label: 'Yes' },
             { label: 'No' }
@@ -393,7 +406,7 @@ describe('MobileSection', function () {
 
     const emptyTask = {
       question: '',
-      type: '',
+      type: 'single',
       answers: []
     };
 
