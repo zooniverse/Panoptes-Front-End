@@ -13,17 +13,8 @@
     "hash.js": "~1.0.3",
     "he": "~1.1.0",
     "jsplumb": "1.7.9",
-<<<<<<< 462dc5f73a8d100b32b0a08fd4f90d13443a91d1
     "lodash": "~4.17.4",
     "markdownz": "~7.2",
-=======
-    "lodash.intersection": "~3.2.0",
-    "lodash.merge": "~2.4.1",
-    "lodash.pick": "~3.1.0",
-    "lodash.round": "~4.0.4",
-    "lodash.uniq": "~3.2.2",
-    "markdownz": "~7.2.1",
->>>>>>> Bump markdownz version and node version again. Regenerate lock file.
     "modal-form": "~2.4",
     "moment": "~2.9.0",
     "panoptes-client": "~2.7",
