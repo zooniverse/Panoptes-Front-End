@@ -113,7 +113,7 @@ export default class MobileSection extends React.Component {
 
 const disabledStyle = {
   opacity: 0.5,
-  pointerEvents: 'none'
+  cursor: 'not-allowed'
 };
 
 const doesntMeet =
