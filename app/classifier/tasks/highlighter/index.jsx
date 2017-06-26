@@ -46,7 +46,7 @@ export default class Highlighter extends React.Component {
   selectableArea(selection, range, offset, start, end){
     const spansNodes = range.startContainer !== range.endContainer
     const noAreaSelected = start === end;
-    const subjectSelection = selection.anchorNode.parentElement.parentElement.className === 'label-renderer';
+    const subjectSelection = selection.anchorNode.parentNode.parentNode.className === 'label-renderer';
     const isSelectable = !spansNodes && !noAreaSelected && subjectSelection;
     return isSelectable;
   }
@@ -55,8 +55,9 @@ export default class Highlighter extends React.Component {
     const { anchorNode } = selection;
     const { parentNode } = anchorNode;
     let start = 0;
-    for (const node of parentNode.childNodes) {
-      // ignore comments (nodeType 8) when calculating offset distance
+    let nodeArray = parentNode.childNodes;
+    for (var i = 0; i < nodeArray.length; i++) {
+      let node = nodeArray[i];
       if (node.nodeType !== 8 && node !== anchorNode) {
         const text = node.getAttribute ? node.getAttribute('data-selection') : node.textContent;
         start += text.length;
