@@ -41,7 +41,7 @@ const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =
     <Translate className="tertiary-kicker" component="h2" content="researchHomePage.works" />
     <span className="class-counter">{count.toLocaleString()}</span>
     <Translate className="main-kicker" component="h3" content="researchHomePage.classifications" />
-    <div>
+    <div className="home-research__classification-count">
       <h3 className="main-kicker">{volunteerCount.toLocaleString()}</h3>{' '}
       <Translate className="main-kicker" component="h3" content="researchHomePage.registeredUsers" />
     </div>
