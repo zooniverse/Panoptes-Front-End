@@ -1,5 +1,6 @@
 React = require 'react'
-CollectionsManager = require './manager'
+# CollectionsManager = require './collections-manager'
+`import CollectionsManager from './collections-manager';`
 Dialog = require 'modal-form/dialog'
 
 # Shows an icon to logged-in users that pops up a collections manager
