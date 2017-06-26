@@ -483,7 +483,7 @@ EditWorkflowPage = createReactClass
               <hr />
               <br />
 
-              {if (@props.workflow.tasks[@state.selectedTaskKey].type in ['single', 'multiple'] and @props.project.launch_approved)
+              {if @props.workflow.tasks[@state.selectedTaskKey].type in ['single', 'multiple']
                 <MobileSection
                   project={@props.project}
                   workflow={@props.workflow}

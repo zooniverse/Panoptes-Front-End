@@ -7,12 +7,12 @@ export default class MobileSection extends React.Component {
     this.toggleSwipeEnabled = this.toggleSwipeEnabled.bind(this);
   }
 
-  toggleSwipeEnabled(e) {
+  toggleSwipeEnabled({ target }) {
     const changes = {};
-    changes['configuration.swipe_enabled'] = e.target.checked;
+    changes['configuration.swipe_enabled'] = target.checked;
     this.props.workflow.update(changes).save();
-    if (e.target.checked) {
-      this.props.project.update({ mobile_friendly: e.target.checked }).save();
+    if (target.checked) {
+      this.props.project.update({ mobile_friendly: target.checked }).save();
     }
   }
 
@@ -31,17 +31,6 @@ export default class MobileSection extends React.Component {
 
     const swipeEligible = hasTwoAnswers && hasSingleTask && questionNotTooLong && notTooManyShortcuts && isNotFlipbook && doesNotUseFeedback;
 
-    const disabledStyle = {
-      opacity: 0.5,
-      pointerEvents: 'none'
-    };
-
-    const doesntMeet =
-      <i className="fa fa-times" style={{ color: 'red' }} aria-hidden="true" />;
-
-    const meets =
-      <i className="fa fa-check" style={{ color: 'green' }} aria-hidden="true" />;
-
     const ineligibleText = (
       <small className="form-help">
         Sorry, but the mobile app will not currently work for this workflow.
@@ -57,17 +46,11 @@ export default class MobileSection extends React.Component {
         </ul>
       </small>
     );
-
-    const eligibleText = (
-      <small className="form-help">
-        Check this box if you think your question fits in this way.  If you have a Yes/No question, we recommend Yes is the first option listed so that it appears on the right.
-        <br />
-        <br />
-      </small>
-    );
-
-    const mobileHelp = 'Mobile app:  Check this box if you would like this workflow available in the mobile app';
+    
     const swipeEnabledChecked = !!this.props.workflow.configuration.swipe_enabled && swipeEligible;
+    
+    const launchApproved = this.props.project.launch_approved;
+
     return (
       <div>
         <span className="form-label">Mobile App</span>
@@ -78,13 +61,13 @@ export default class MobileSection extends React.Component {
               className="pill-button"
               htmlFor="swipe_enabled"
               title={mobileHelp}
-              style={swipeEligible ? null : disabledStyle}
+              style={(swipeEligible && launchApproved) ? null : disabledStyle}
             >
               <AutoSave resource={this.props.workflow}>
                 <input
                   id="swipe_enabled"
                   type="checkbox"
-                  disabled={!swipeEligible}
+                  disabled={!swipeEligible || !launchApproved}
                   onChange={this.toggleSwipeEnabled}
                   checked={swipeEnabledChecked}
                 />
@@ -96,13 +79,26 @@ export default class MobileSection extends React.Component {
 
             { swipeEligible ? eligibleText : ineligibleText }
 
-            <small className="form-help">
-              If you haven&apos;t yet, be sure to download the Zooniverse Mobile App on Android or iPhone!
-              <br />
-              <a href="https://itunes.apple.com/us/app/zooniverse/id1194130243?mt=8" target="_blank" rel="noopener noreferrer">Zooniverse for iPhone</a>
-              <br />
-              <a href="https://play.google.com/store/apps/details?id=com.zooniversemobile&hl=en" target="_blank" rel="noopener noreferrer">Zooniverse for Android</a>
-            </small>
+            { launchApproved ? null : approvedHelp }
+
+            <p className="form-help">
+              <small>
+                If you haven&apos;t yet, be sure to download the Zooniverse Mobile App on Android or iPhone!
+              </small>
+            </p>
+
+            <ul>
+              <li>
+                <small>
+                  <a href="https://itunes.apple.com/us/app/zooniverse/id1194130243?mt=8" target="_blank" rel="noopener noreferrer">Zooniverse for iPhone</a>
+                </small>
+              </li>
+              <li>
+                <small>
+                  <a href="https://play.google.com/store/apps/details?id=com.zooniversemobile&hl=en" target="_blank" rel="noopener noreferrer">Zooniverse for Android</a>
+                </small>
+              </li>
+            </ul>
 
           </div>
           <div className="workflow-mobile-form-right-panel">
@@ -114,6 +110,35 @@ export default class MobileSection extends React.Component {
     );
   }
 }
+
+const disabledStyle = {
+  opacity: 0.5,
+  pointerEvents: 'none'
+};
+
+const doesntMeet =
+  <i className="fa fa-times" style={{ color: 'red' }} aria-hidden="true" />;
+
+const meets =
+  <i className="fa fa-check" style={{ color: 'green' }} aria-hidden="true" />;
+
+const eligibleText = (
+  <p className="form-help">
+    <small>
+      Check this box if you think your question fits in this way.  If you have a Yes/No question, we recommend Yes is the first option listed so that it appears on the right.
+    </small>
+  </p>
+);
+
+const mobileHelp = 'Mobile app:  Check this box if you would like this workflow available in the mobile app';
+
+const approvedHelp = (
+    <p className="form-help error">
+      <small>
+        Your project must be approved for launch to be enabled on the mobile app.
+      </small>
+    </p>
+);
 
 MobileSection.propTypes = {
   task: React.PropTypes.shape(
