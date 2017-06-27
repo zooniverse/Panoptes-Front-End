@@ -304,7 +304,6 @@ class Plate {
     this.url = url;
     this.imageBounds = this.starChart.bounds();
     const [xRange, yRange] = [this.starChart.xAxis.range, this.starChart.yAxis.range];
-    console.log(starChart);
     this.xyCorners = [
       new SimplePoint(xRange[0].x, yRange[0].y), new SimplePoint(xRange[1].x, yRange[0].y),
       new SimplePoint(xRange[1].x, yRange[1].y), new SimplePoint(xRange[0].x, yRange[1].y)
