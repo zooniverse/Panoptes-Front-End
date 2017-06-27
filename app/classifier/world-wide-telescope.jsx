@@ -1,5 +1,4 @@
 import React from 'react';
-import shortid from 'shortid';
 import getSubjectLocation from '../lib/get-subject-location';
 
 class SimplePoint {
@@ -305,7 +304,7 @@ class Plate {
     this.url = url;
     this.imageBounds = this.starChart.bounds();
     const [xRange, yRange] = [this.starChart.xAxis.range, this.starChart.yAxis.range];
-
+    console.log(starChart);
     this.xyCorners = [
       new SimplePoint(xRange[0].x, yRange[0].y), new SimplePoint(xRange[1].x, yRange[0].y),
       new SimplePoint(xRange[1].x, yRange[1].y), new SimplePoint(xRange[0].x, yRange[1].y)
@@ -388,19 +387,11 @@ class Plate {
     return (this.starChart.xAxis.unit === Axis.RA || this.starChart.xAxis.unit === Axis.RA1950 || this.starChart.xAxis.unit === Axis.GLON) ? 180 : 90;
   }
 
-  computeName() {
-    if (this.subject.metadata.Journal) {
-      return this.subject.metadata.Journal;
-    }
-    return (shortid.generate());
-  }
-
   getWwtUrl() {
     const base = 'http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx';
     const rotation = this.computeRotation();
-    const name = this.computeName();
     const center = this.centerCoords();
-    return `${base}?name=${name}&ra=${center.ra}&dec=${center.dec}&x=${center.x}&y=${center.y}&scale=${this.scale()}&rotation=${rotation}&imageurl=${this.getCropUrl()}`;
+    return `${base}?name=${'Zooniverse'}&ra=${center.ra}&dec=${center.dec}&x=${center.x}&y=${center.y}&scale=${this.scale()}&rotation=${rotation}&imageurl=${this.getCropUrl()}`;
   }
 }
 
@@ -462,12 +453,14 @@ export default class WorldWideTelescope extends React.Component {
 
     return (
       <div>
+        {plates.length && (<p>View Your Classification!</p>)}
         {plates.map((plate, idx) => {
           return (
-            <div key={idx}>
-              <p>View Your Classification in the WorldWide Telescope!</p>
-              <img role="presentation" className="chart-image" src={`${plate.getCropUrl()}`} />
-              <a target="_blank" rel="noopener noreferrer" href={plate.getWwtUrl()} className="telescope-button standard-button">World Wide Telescope</a>
+            <div className="worldwide-telescope" key={idx}>
+              <div>
+                <img role="presentation" className="worldwide-telescope__chart-image" src={`${plate.getCropUrl()}`} />
+              </div>
+              <a target="_blank" rel="noopener noreferrer" href={plate.getWwtUrl()} className="standard-button">World Wide Telescope</a>
             </div>
           );
         })}
