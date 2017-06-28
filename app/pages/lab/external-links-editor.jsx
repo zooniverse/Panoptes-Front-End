@@ -95,6 +95,9 @@ export default class ExternalLinksEditor extends React.Component {
         link._key = Math.random();
       }
     }
+    const filterSocial = tableUrls.filter((url) => {
+      return !url.path;
+    });
 
     return (
       <table className="external-links-table">
@@ -106,11 +109,11 @@ export default class ExternalLinksEditor extends React.Component {
         </thead>
         <DragReorderable
           tag="tbody"
-          items={tableUrls}
+          items={filterSocial}
           render={this.renderRow}
           onChange={this.handleLinkReorder}
         />
-      </table>      
+      </table>
     );
   }
 
