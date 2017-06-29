@@ -1,5 +1,4 @@
 React = require 'react'
-# CollectionsManager = require './collections-manager'
 `import CollectionsManager from './collections-manager';`
 Dialog = require 'modal-form/dialog'
 

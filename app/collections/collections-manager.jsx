@@ -20,7 +20,7 @@ class CollectionsManager extends React.Component {
     if (!(collections.length > 0)) return;
 
     const promises = collections.map(collection =>
-      collection.addLink('subjects', this.props.subjectIDs)
+      collection.collection.addLink('subjects', this.props.subjectIDs)
     );
 
     Promise.all(promises)
