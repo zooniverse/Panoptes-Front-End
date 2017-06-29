@@ -191,9 +191,21 @@ module.exports = React.createClass
 
           <div>
             External links<br />
-            <small className="form-help">Adding an external link will make it appear as a new tab alongside the about, classify, talk, and collect tabs. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link below.</small>
+            <small className="form-help">
+              Adding an external link will make it appear as a new tab alongside
+              the about, classify, talk, and collect tabs. You can rearrange the
+              displayed order by clicking and dragging on the left gray tab next
+              to each link below.
+            </small>
             <ExternalLinksEditor project={@props.project} />
-            <SocialLinksEditor project={@props.project} />
+            <div className="edit-social-links">
+              <h5>Social Links Section</h5>
+              <small className="form-help">
+                Adding a social link will apend a media icon at
+                the end of your project menu bar.
+              </small>
+              <SocialLinksEditor project={@props.project} />
+            </div>
           </div>
         </div>
       </div>

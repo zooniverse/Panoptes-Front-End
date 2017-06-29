@@ -95,7 +95,7 @@ ProjectPage = React.createClass
       @props.project.display_name
 
   render: ->
-    rearrangedLinks = @props.project.urls.sort (a, b) => a.path isnt b.path? 0 : a.path? -1 : 1
+    rearrangedLinks = @props.project.urls.sort (a, b) => a.path? & !b.path? ? 1 : 0
     betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
     onHomePage = @props.routes[2].path is undefined

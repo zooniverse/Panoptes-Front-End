@@ -24,9 +24,9 @@ export default class ExternalLinksEditor extends React.Component {
   }
 
   handleLinkReorder(newLinkOrder) {
-    const changes = {
-      urls: newLinkOrder,
-    };
+    const socialUrls = this.props.project.urls.filter(url => url.path);
+    const urls = newLinkOrder.concat(socialUrls);
+    const changes = { urls };
     this.props.project.update(changes);
     this.props.project.save();
   }
