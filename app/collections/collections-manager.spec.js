@@ -8,12 +8,12 @@ const project = {
   id: '342'
 };
 
-describe.only('<CollectionsManager />', function() {
+describe('<CollectionsManager />', function() {
   let wrapper;
-  const onSuccessSpy = sinon.spy();
-  const addToCollectionsSpy = sinon.spy(CollectionsManager.prototype, 'addToCollections');
+  let addToCollectionsSpy;
   before(function() {
-    wrapper = shallow(<CollectionsManager onSuccess={onSuccessSpy} project={project} />);
+    addToCollectionsSpy = sinon.stub(CollectionsManager.prototype, 'addToCollections');
+    wrapper = shallow(<CollectionsManager project={project} />);
   });
 
   it('should render without crashing', function() {
@@ -28,7 +28,18 @@ describe.only('<CollectionsManager />', function() {
     assert.equal(wrapper.find('CollectionsCreateForm').length, 1);
   });
 
-  it('should not render error messages if there are none', function() {
+  it('should not render error messages if there is not one', function() {
     assert.equal(wrapper.find('.error').length, 0);
+  });
+
+  it('should render error message if there is one', function() {
+    wrapper.setState({ error: 'it broke!' });
+    assert.equal(wrapper.find('.error').length, 1);
+  });
+
+  it('calls addToCollections when the add button is clicked', function() {
+    const addButton = wrapper.find('.search-button');
+    addButton.simulate('click');
+    sinon.assert.calledOnce(addToCollectionsSpy);
   });
 });
