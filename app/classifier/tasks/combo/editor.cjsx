@@ -24,7 +24,6 @@ ComboTaskEditor = React.createClass
   addTask: (e) ->
     taskKey = e.target.value
     @props.task.tasks.push taskKey
-    console.log '>>>', @props.task
     @props.onChange @props.task
 
   setLooseRequirements: (e) ->
