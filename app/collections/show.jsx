@@ -149,7 +149,8 @@ const CollectionPage = React.createClass({
           user: this.props.user,
           project: this.props.project,
           collection: this.props.collection,
-          roles: this.props.roles
+          roles: this.props.roles,
+          owner: this.state.owner
         })}
       </div>
     );

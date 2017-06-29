@@ -120,13 +120,13 @@ $collection-viewer-button
         .subject-video-controls
           display: initial
           z-index: 1
-          
+
           button
             @extends $collection-viewer-button
 
         .subject-image-frame
           margin: auto
-          
+
         .subject-frame-pips
           .subject-frame-pip
             display: inline-block
@@ -234,9 +234,16 @@ $collection-viewer-button
     margin: 0 auto
     max-width: 800px
 
+    ul
+      list-style-type: none
+      padding: 0
+
     h2
       color: #646464
-      
+
+    hr
+      margin: 2.5em 0
+
     .cover-subject-preview
       border: solid thin #cdcdcd
 
@@ -261,6 +268,31 @@ $collection-viewer-button
   .search-button
     float: right
     height: 40px
+
+.collection-role-create
+  opacity: 0.5
+  pointer-events: none
+
+.collection-list
+  div
+    border-bottom: 1px solid LIGHT_GREY
+    display: flex
+    padding: 0.25em 0
+
+    dt
+      align-items: baseline
+      display: flex
+      margin-right: 0.75em
+      min-width: 8em
+
+      input
+        margin-right: 0.75em
+
+    dd
+      margin-left: 0
+
+  div:last-child
+    border-bottom: none
 
 .collections-create-form
   .collection-name-input

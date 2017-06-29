@@ -13,11 +13,7 @@
     "hash.js": "~1.0.3",
     "he": "~1.1.0",
     "jsplumb": "1.7.9",
-    "lodash.intersection": "~3.2.0",
-    "lodash.merge": "~2.4.1",
-    "lodash.pick": "~3.1.0",
-    "lodash.uniq": "~3.2.2",
-    "lodash.round": "~4.0.4",
+    "lodash": "~4.17.4",
     "markdownz": "~7.2",
     "modal-form": "~2.4",
     "moment": "~2.9.0",
@@ -102,8 +98,8 @@
     "webpack-split-by-path": "2.0.0"
   },
   "engines": {
-    "node": "^6.10.2",
-    "npm": "^3.10.10"
+    "node": "^8.1.2",
+    "npm": "^5.0.3"
   },
   "license": "Apache-2.0",
   "repository": "zooniverse/Panoptes-Front-End",

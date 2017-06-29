@@ -36,7 +36,7 @@ $flex-section
 
 .home-page-not-logged-in
   .home-intro
-    background-color: BACKGROUND_COLOR
+    background-color: ZOONIVERSE_TEAL
     box-sizing: border-box
     justify-content: flex-end
     min-height: 30vw
@@ -84,6 +84,9 @@ $flex-section
     h2, h3, p
       display: inline
       margin: 0
+
+    &__classification-count
+      text-align: center
 
     &__columns
       margin: 2em 12em
@@ -197,6 +200,7 @@ $flex-section
         color: black
 
   &__project-card
+    border-color: LIGHT_GREY
     border-radius: 0
     height: 24em
     max-height: 24em
@@ -334,7 +338,7 @@ $flex-section
     line-height: 1.2em
 
     @media (max-width: 900px)
-      font-size: 4em
+      font-size: 3em
 
   .display-body
     font-size: 1.2em
@@ -421,26 +425,23 @@ $flex-section
 
     &__cards
       display: flex
-      flex-wrap: wrap
-      justify-content: center
       margin: 1em 0
-      width: 100%
+
+      @media (max-width: 1225px)
+        display: block
+        column-count: 2
+        -moz-column-count: 2
+        -webkit-column-count: 2
+        column-gap: 0
+        -moz-column-gap: 0
+        -webkit-column-gap: 0
+
+      @media (max-width: 625px)
+        display: flex
+        flex-direction: column
 
       > div
         margin: 0 0.5em
-
-        a
-          display: inline-block
-
-        @media (max-width: 1225px)
-          display: flex
-          flex-basis: 35%
-
-          &:nth-child(odd)
-            justify-content: flex-end
-
-      @media (max-width: 400px)
-        justify-content: center
 
     &__content
       display: flex
@@ -467,7 +468,7 @@ $flex-section
       padding: 4em 2em
 
     hr
-      margin-top: 0
+      margin: 2em 1.5em
 
     &__blog-section
       box-sizing: border-box
@@ -475,7 +476,6 @@ $flex-section
 
       &--white
         background-color: white
-        margin-bottom: 1.5em
 
       &--gray
         padding: 0 1.5em
