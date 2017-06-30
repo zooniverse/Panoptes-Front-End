@@ -82,6 +82,14 @@ export default class SocialLinksEditor extends React.Component {
     }
   }
 
+  handleDisableDrag(event) {
+    event.target.parentElement.parentElement.setAttribute('draggable', false);
+  }
+
+  handleEnableDrag(event) {
+    event.target.parentElement.parentElement.setAttribute('draggable', true);
+  }
+
   indexFinder(toSearch, toFind) { //eslint-disable-line
     return toSearch.findIndex(i => (i.site === toFind));
   }
@@ -99,6 +107,8 @@ export default class SocialLinksEditor extends React.Component {
             name={`urls.${site}.url`}
             value={value}
             onChange={this.handleNewLink.bind(this, site)}
+            onMouseDown={this.handleDisableDrag}
+            onMouseUp={this.handleEnableDrag}
           />
         </AutoSave>
         <td>
