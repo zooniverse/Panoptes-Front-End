@@ -7,7 +7,6 @@ const SOCIAL_ICONS = {
   'reddit.com/': 'reddit',
   'tumblr.com/': 'tumblr',
   'twitter.com/': 'twitter',
-  'vine.com/': 'vine',
   'weibo.com/': 'weibo',
   'wordpress.com/': 'wordpress',
   'youtube.com/': 'youtube'

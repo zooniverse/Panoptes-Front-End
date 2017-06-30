@@ -201,8 +201,10 @@ module.exports = React.createClass
             <div className="edit-social-links">
               <h5>Social Links Section</h5>
               <small className="form-help">
-                Adding a social link will apend a media icon at
-                the end of your project menu bar.
+                Adding a social link will append a media icon at
+                the end of your project menu bar. You can rearrange the
+                displayed order by clicking and dragging on the left gray
+                tab next to each link below.
               </small>
               <SocialLinksEditor project={@props.project} />
             </div>
