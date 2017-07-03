@@ -18,9 +18,6 @@ EditProjectPage = React.createClass
   contextTypes:
     router: React.PropTypes.object.isRequired
 
-  title: ->
-    @props.project.display_name
-
   getDefaultProps: ->
     project: id: '2'
     workflowActions: workflowActions
