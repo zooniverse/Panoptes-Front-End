@@ -176,7 +176,7 @@ ProjectPage = React.createClass
                 iconForLabel = icon
             iconForLabel ?= 'globe'
             label = <i className="fa fa-#{iconForLabel} fa-fw fa-2x"></i>
-          <a key={i} href={url} className="tabbed-content-tab" target="#{@props.project.id}#{url}">{label}</a>}
+          <a key={i} href={url} className="tabbed-content-tab #{if iconForLabel then 'social-icon' else ''}" target="#{@props.project.id}#{url}">{label}</a>}
       </nav>
 
       {if !!@props.project.configuration?.announcement
