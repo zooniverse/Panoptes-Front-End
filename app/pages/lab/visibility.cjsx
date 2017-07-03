@@ -4,6 +4,7 @@ WorkflowToggle = require '../../components/workflow-toggle'
 SetToggle = require '../../lib/set-toggle'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 uniq = require 'lodash/uniq'
+Paginator = require '../../talk/lib/paginator'
 
 `import ApplyForBetaForm from './apply-for-beta-form';`
 
@@ -12,6 +13,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     project: null
+    location: query: page: 1
 
   getInitialState: ->
     error: null
@@ -27,8 +29,16 @@ module.exports = React.createClass
   setterProperty: 'project'
 
   componentDidMount: ->
+    @getWorkflowList @props.location.query.page
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.location.query.page isnt @props.location.query.page
+      @getWorkflowList nextProps.location.query.page
+
+  getWorkflowList: (page = 1) ->
     @setState { loadingWorkflows: true }
-    getWorkflowsInOrder @props.project, fields: 'active,configuration,display_name'
+    # TODO remove page_size once getWorkflowsInOrder does not override default page_size
+    getWorkflowsInOrder(@props.project, { page: page, page_size: 20, fields: 'active,configuration,display_name' })
       .then (workflows) =>
         @setState
           workflows: workflows
@@ -229,6 +239,13 @@ module.exports = React.createClass
             </tbody>
           </table>
         </div>}
+      {@state.workflows.length > 0 && (
+        <Paginator
+          className="talk"
+          page={@state.workflows[0]._meta.workflows.page}
+          pageCount={@state.workflows[0]._meta.workflows.page_count}
+        />
+      )}
       <p className="form-label">Status</p>
       <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
       <p className="form-help">If an active workflow is the default workflow for the project and is made inactive, then it will be removed as the default workflow.</p>
