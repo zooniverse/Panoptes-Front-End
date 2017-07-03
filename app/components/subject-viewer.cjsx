@@ -4,10 +4,10 @@ Dialog = require 'modal-form/dialog'
 {Markdown} = require 'markdownz'
 classnames = require 'classnames'
 getSubjectLocation = require '../lib/get-subject-location'
-CollectionsManagerIcon = require '../collections/manager-icon'
 FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
 `import FrameViewer from './frame-viewer';`
+`import CollectionsManagerIcon from '../collections/manager-icon';`
 
 NOOP = Function.prototype
 
