@@ -2,11 +2,11 @@ React = require 'react'
 {Link, IndexLink} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
-TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../../components/change-listener'
 workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
+`import defineTitle from '../../lib/define-title';`
 `import LabStatus from '../../partials/lab-status.jsx';`
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
@@ -14,8 +14,6 @@ DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
 
 EditProjectPage = React.createClass
   displayName: 'EditProjectPage'
-
-  mixins: [TitleMixin]
 
   contextTypes:
     router: React.PropTypes.object.isRequired
@@ -139,51 +137,81 @@ EditProjectPage = React.createClass
           if @isMounted()
             @setState deletionInProgress: false
 
-module.exports = React.createClass
+EditProjectPageWrapper = React.createClass
   displayName: 'EditProjectPageWrapper'
-  mixins: [TitleMixin]
-  title: 'Edit'
+  receivedUser: false
 
   contextTypes:
     router: React.PropTypes.object.isRequired
 
+  componentWillMount: ->
+    if @userReceived() and !@state.project.id
+      @getProjectAndOwners()
+
   componentWillReceiveProps: (nextProps) ->
+    if @userReceived()
+      @getProjectAndOwners()
     unless nextProps.user
       @context.router.push '/lab'
+
+  title: ->
+    if @state.project.display_name
+      "Edit » #{@state.project.display_name}"
+    else
+      'Edit'
+
+  getInitialState: ->
+    error: null
+    loaded: false
+    owners: []
+    project: {}
 
   getDefaultProps: ->
     params:
       projectID: '0'
 
+  userReceived: ->
+    if @props.user and @receivedUser is false
+      @receivedUser = true
+    @receivedUser
+
+  getProjectAndOwners: ->
+    getProject = apiClient.type('projects').get @props.params.projectID
+
+    getOwners = getProject.then (project) =>
+      project.get('project_roles', user_id: @props.user.id).then (projectRoles) =>
+        owners = for projectRole in projectRoles when 'owner' in projectRole.roles or 'collaborator' in projectRole.roles
+          projectRole.get 'owner'
+        Promise.all owners
+
+    Promise.all [getProject, getOwners]
+      .then ([project, owners]) =>
+        @setState loaded: true, project: project, owners: owners
+      .catch (e) =>
+        @setState error: e
+
   render: ->
     if @props.user?
-      getProject = apiClient.type('projects').get @props.params.projectID
-
-      getOwners = getProject.then (project) =>
-        project.get('project_roles', user_id: @props.user.id).then (projectRoles) =>
-          owners = for projectRole in projectRoles when 'owner' in projectRole.roles or 'collaborator' in projectRole.roles
-            projectRole.get 'owner'
-          Promise.all owners
-
-      getProjectAndOwners = Promise.all [getProject, getOwners]
-
-      <PromiseRenderer promise={getProjectAndOwners} pending={=>
+      if !@state.loaded
         <div className="content-container">
           <p className="form-help">Loading project</p>
         </div>
-      } then={([project, owners]) =>
-        if @props.user in owners or isAdmin()
-          <EditProjectPage {...@props} project={project} />
+      else if @state.error
+        <div className="content-container">
+          <p className="form-help error">{@state.error.toString()}</p>
+        </div>
+      else
+        if @props.user in @state.owners or isAdmin()
+          <EditProjectPage {...@props} project={@state.project} />
         else
           <div className="content-container">
             <p>You don’t have permission to edit this project.</p>
           </div>
-      } catch={(error) =>
-        <div className="content-container">
-          <p className="form-help error">{error.toString()}</p>
-        </div>
-      } />
     else
       <div className="content-container">
         <p>You need to be signed in to use the lab.</p>
       </div>
+
+EditProjectPageWrapperWithTitle = defineTitle EditProjectPageWrapper
+
+module.exports = EditProjectPageWrapperWithTitle

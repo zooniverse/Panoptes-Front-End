@@ -1,10 +1,9 @@
 React = require 'react'
-TitleMixin = require '../../lib/title-mixin'
 List = require './list'
+`import defineTitle from '../../lib/define-title';`
 
 FavoritesList = React.createClass
   displayName: 'FavoritesPage'
-  mixins: [TitleMixin]
   title: 'Favorites'
 
   componentDidMount: ->
@@ -19,4 +18,6 @@ FavoritesList = React.createClass
     props = List.getPropsForList(@props,true)
     <List {...props} baseType="favorites" />
 
-module.exports = FavoritesList
+FavoritesListWithTitle = defineTitle FavoritesList
+
+module.exports = FavoritesListWithTitle

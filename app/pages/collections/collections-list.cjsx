@@ -1,10 +1,9 @@
 React = require 'react'
-TitleMixin = require '../../lib/title-mixin'
 List = require './list'
+`import defineTitle from '../../lib/define-title';`
 
 CollectionsList = React.createClass
   displayName: 'CollectionsPage'
-  mixins: [TitleMixin]
   title: 'Collections'
 
   componentDidMount: ->
@@ -19,4 +18,6 @@ CollectionsList = React.createClass
     props = List.getPropsForList(@props,false)
     <List {...props} baseType="collections" />
 
-module.exports = CollectionsList
+CollectionsListWithTitle = defineTitle CollectionsList
+
+module.exports = CollectionsListWithTitle

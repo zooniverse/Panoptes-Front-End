@@ -1,14 +1,12 @@
 React = require 'react'
-TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 { Split } = require('seven-ten')
 isAdmin = require '../../lib/is-admin'
 ProjectPage = require './project-page'
+`import defineTitle from '../../lib/define-title';`
 
 ProjectPageController = React.createClass
   displayName: 'ProjectPageController'
-
-  mixins: [TitleMixin]
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -333,4 +331,6 @@ ProjectPageController = React.createClass
           </div>}
     </div>
 
-module.exports = ProjectPageController
+ProjectPageWithTitle = defineTitle ProjectPageController
+
+module.exports = ProjectPageWithTitle

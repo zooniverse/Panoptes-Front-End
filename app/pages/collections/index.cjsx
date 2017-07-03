@@ -1,9 +1,9 @@
 counterpart = require 'counterpart'
 React = require 'react'
-TitleMixin = require '../../lib/title-mixin'
 Translate = require 'react-translate-component'
 CollectionsNav = require './nav'
 classNames = require 'classnames'
+`import defineTitle from '../../lib/define-title';`
 
 counterpart.registerTranslations 'en',
   projectcollectionsPage:
@@ -49,8 +49,6 @@ counterpart.registerTranslations 'en',
 
 CollectionsContainer = React.createClass
 
-  mixins: [TitleMixin]
-
   title: ->
     if @props.params.collection_owner? then "#{@props.params.collection_owner}" else "All"
 
@@ -89,4 +87,6 @@ CollectionsContainer = React.createClass
         React.cloneElement @props.children, {project: @props.project, user: @props.user}}
     </div>
 
-module.exports = CollectionsContainer
+CollectionsContainerWithTitle = defineTitle CollectionsContainer
+
+module.exports = CollectionsContainerWithTitle
