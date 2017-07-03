@@ -239,6 +239,9 @@ module.exports = React.createClass
             </tbody>
           </table>
         </div>}
+
+      <br/>
+
       {@state.workflows.length > 0 && (
         <Paginator
           className="talk"
@@ -246,6 +249,9 @@ module.exports = React.createClass
           pageCount={@state.workflows[0]._meta.workflows.page_count}
         />
       )}
+
+      <hr/>
+
       <p className="form-label">Status</p>
       <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
       <p className="form-help">If an active workflow is the default workflow for the project and is made inactive, then it will be removed as the default workflow.</p>
