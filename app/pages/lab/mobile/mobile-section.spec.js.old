@@ -221,6 +221,16 @@ describe('<MobileSection />:', function () {
         ({ checkbox } = createElements(emptyTask, emptyWorkflow));
         assert.strictEqual(checkbox.props().disabled, true);
       });
+
+      it('should uncheck itself if the task changes and is no longer suitable for mobile', function () {
+        ({ checkbox, wrapper } = createElements());
+
+        assert.strictEqual(checkbox.props().checked, true);
+
+
+
+      });
+
     });
   });
 });

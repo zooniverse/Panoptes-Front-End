@@ -37,11 +37,14 @@ export default class MobileSection extends React.Component {
   }
 
   toggleSwipeEnabled({ target }) {
-    const changes = {};
-    changes['configuration.swipe_enabled'] = target.checked;
-    this.props.workflow.update(changes).save();
+    this.props.workflow.update({
+      'configuration.swipe_enabled': target.checked,
+    }).save();
+    
     if (target.checked) {
-      this.props.project.update({ mobile_friendly: target.checked }).save();
+      this.props.project.update({ 
+        mobile_friendly: target.checked
+      }).save();
     }
   }
 

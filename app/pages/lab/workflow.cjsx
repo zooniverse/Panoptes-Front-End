@@ -19,7 +19,7 @@ classnames = require 'classnames'
 ShortcutEditor = require('../../classifier/tasks/shortcut/editor').default
 FeedbackSection = require('../../features/feedback/lab').default
 
-`import MobileSection from './mobile-section';`
+`import MobileSection from './mobile';`
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
