@@ -427,12 +427,6 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          <div>
-            <Link to="/lab/#{@props.project.id}/workflows/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
-          </div>
-
-          <hr />
-
           <div className={disabledIfLive}>
             <small>
               <button type="button" className="minor-button" disabled={@state.deletionInProgress} data-busy={@state.deletionInProgress || null} onClick={@handleDelete}>
