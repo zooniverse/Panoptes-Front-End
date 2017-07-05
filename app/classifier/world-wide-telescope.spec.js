@@ -1,10 +1,11 @@
 import React from 'react';
 import assert from 'assert';
 import WorldWideTelescope from './world-wide-telescope';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 const testSubject = {
-  locations: [{ 'image/jpeg': 'http://www.image.com' }]
+  locations: [{ 'image/jpeg': 'http://www.image.com' }],
+  metadata: {}
 };
 
 const incompleteAnnotations = [
@@ -123,12 +124,12 @@ const testWorkflow = {
 
 describe('WorldWideTelescope render without incomplete annotations', function () {
   it('will render an empty div with no annotations', function() {
-    const page = mount(<WorldWideTelescope subject={testSubject} />);
+    const page = shallow(<WorldWideTelescope subject={testSubject} />);
     assert.equal(page.find('div').children().length, 0)
   });
 
   it('will render an empty div with incomplete annotations', function() {
-    const page = mount(<WorldWideTelescope subject={testSubject} workflow={testWorkflow} annotations={incompleteAnnotations} />);
+    const page = shallow(<WorldWideTelescope subject={testSubject} workflow={testWorkflow} annotations={incompleteAnnotations} />);
     assert.equal(page.find('div').children().length, 0)
   });
 });
@@ -136,8 +137,8 @@ describe('WorldWideTelescope render without incomplete annotations', function ()
 describe('WorldWideTelescope with classification', function() {
   let wrapper;
 
-  beforeEach(function () {
-    wrapper = mount(<WorldWideTelescope subject={testSubject} annotations={testAnnotations} workflow={testWorkflow} />);
+  before(function () {
+    wrapper = shallow(<WorldWideTelescope subject={testSubject} annotations={testAnnotations} workflow={testWorkflow} />);
   });
 
   it('will render a WWT link for each full classification', function() {
