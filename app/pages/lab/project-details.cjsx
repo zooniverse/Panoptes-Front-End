@@ -55,12 +55,11 @@ module.exports = React.createClass
   splitTags: (kind) ->
     disciplineTagList = []
     otherTagList = []
-    for t in @props.project.tags
-      name = t[1]
-      if name in DISCIPLINE_NAMES
-        disciplineTagList.push name
+    for tag in @props.project.tags
+      if tag in DISCIPLINE_NAMES
+        disciplineTagList.push tag
       else
-        otherTagList.push name
+        otherTagList.push tag
     {disciplineTagList, otherTagList}
 
   researcherOptions: ->
