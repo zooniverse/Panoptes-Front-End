@@ -122,7 +122,28 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('workflowHasSingleTask', invalidProps, false);
     });
 
-    // notTooManyShortcuts,
+    it('should check whether the workflow has unlinked tasks with more than two answers', function () {
+      const invalidProps = { 
+        task: {
+          unlinkedTask: 'T1'
+        },
+        workflow: { 
+          tasks: {
+            T1: {
+              answers: [
+                { label: 'Nothing here' },
+                { label: 'Too many clouds' },
+                { label: 'Too much water' }
+              ],
+              type: 'shortcut'
+            }
+          }
+        }
+      };
+
+      testValidationProp('workflowNotTooManyShortcuts');
+      testValidationProp('workflowNotTooManyShortcuts', invalidProps, false);
+    });
 
   });
 

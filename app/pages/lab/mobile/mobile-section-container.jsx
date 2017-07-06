@@ -28,12 +28,18 @@ function workflowHasSingleTask ({ workflow }) {
   return filter(workflow.tasks, ({ type }) => type !== 'shortcut').length === 1;
 }
 
+function workflowNotTooManyShortcuts ({ task, workflow }) {
+  const shortcut = workflow.tasks[task.unlinkedTask];
+  return (shortcut) ? shortcut.answers.length <= 2 : true;
+}
+
 const validatorFns = {
   questionNotTooLong,
   taskFeedbackDisabled,
   taskHasTwoAnswers,
   workflowFlipbookDisabled,
   workflowHasSingleTask,
+  workflowNotTooManyShortcuts
 };
 
 class MobileSectionContainer extends Component {
