@@ -1,24 +1,46 @@
 import React, { Component } from 'react';
 import forOwn from 'lodash/forOwn';
 import isEqual from 'lodash/isEqual';
+import filter from 'lodash/filter'
 import map from 'lodash/map';
 import MobileSection from './mobile-section';
 
 const VALID_QUESTION_LENGTH = 200;
 const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'multiple'];
 
+function questionNotTooLong ({ task }) {
+  return task.question.length < VALID_QUESTION_LENGTH;
+}
+
+function taskFeedbackDisabled ({ task }) {
+  return !task.feedback || !task.feedback.enabled;
+}
+
+function taskHasTwoAnswers ({ task }) {
+  return task.answers.length === 2;
+}
+
+function workflowFlipbookDisabled ({ workflow }) {
+  return (workflow.configuration) ? workflow.configuration.multi_image_mode !== 'flipbook' : true;
+}
+
+function workflowHasSingleTask ({ workflow }) {
+  return filter(workflow.tasks, ({ type }) => type !== 'shortcut').length === 1;
+}
+
 const validatorFns = {
-  questionNotTooLong: ({ task }) => task.question.length < VALID_QUESTION_LENGTH,
-  taskFeedbackDisabled: ({ task }) => !task.feedback || !task.feedback.enabled,
-  taskHasTwoAnswers: ({ task }) => task.answers.length === 2,
-  workflowFlipbookDisabled: ({ workflow }) => (workflow.configuration) ? workflow.configuration.multi_image_mode !== 'flipbook' : true,
+  questionNotTooLong,
+  taskFeedbackDisabled,
+  taskHasTwoAnswers,
+  workflowFlipbookDisabled,
+  workflowHasSingleTask,
 };
 
 class MobileSectionContainer extends Component {
   constructor(props) {
     super(props);
     this.checkShowSection = this.checkShowSection.bind(this);
-    this.getValidations = this.getValidations.bind(this);
+    this.getValidationValues = this.getValidationValues.bind(this);
     this.renderMobileSection = this.renderMobileSection.bind(this);
     this.validate = this.validate.bind(this);
     this.state = {
@@ -47,7 +69,7 @@ class MobileSectionContainer extends Component {
     this.validate();
   }
 
-  getValidations() {
+  getValidationValues() {
     const validations = {};
     forOwn(this.state.validations, (value, key) => {
       validations[key] = {
@@ -65,7 +87,7 @@ class MobileSectionContainer extends Component {
   }
 
   renderMobileSection() {
-    const validations = this.getValidations();
+    const validations = this.getValidationValues();
     return <MobileSection validations={validations} />;
   }
 
@@ -90,9 +112,9 @@ MobileSectionContainer.defaultProps = {
     question: '',
     answers: [],
     feedback: {
-      enabled: false,
+      enabled: false
     }
-  },
+  }
 };
 
 export default MobileSectionContainer;

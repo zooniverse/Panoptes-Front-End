@@ -13,6 +13,7 @@ import React from 'react';
 import assert from 'assert';
 import * as fixtures from './mobile-section-container.fixtures';
 import isArray from 'lodash/isArray';
+import merge from 'lodash/merge';
 
 let component;
 let wrapper;
@@ -47,57 +48,80 @@ describe('<MobileSectionContainer />', function () {
       assert(component.props().validations);
     });
 
-    function testValidationProp(name, invalidProps = false) {
-      let validationToTest;
-      wrapper = mount(<MobileSectionContainer task={fixtures.defaultTask} workflow={fixtures.defaultWorkflow} />);
-      component = wrapper.find('MobileSection').first();
-      validationToTest = component.props().validations[name];
+    function testValidationProp(name, props = {}, expectedResult = true) {
+      let testProps = merge({}, {
+        task: fixtures.defaultTask,
+        workflow: fixtures.defaultWorkflow,
+      }, props);
+
+      let wrapper = mount(<MobileSectionContainer {...testProps} />);
+      let component = wrapper.find('MobileSection').first();
+      let validationToTest = component.props().validations[name];
       
-      assert.strictEqual(validationToTest.value, true, `${name} has a value of true with correct data`);
-
-      if (invalidProps) {
-        wrapper.setProps(invalidProps);
-
-        component = wrapper.find('MobileSection').first();
-        validationToTest = component.props().validations[name];
-        
-        assert.strictEqual(validationToTest.value, false, `${name} has a value of false with incorrect data`);
-      }
+      assert.strictEqual(validationToTest.value, expectedResult);
     }
 
     it('should check whether the task question text is too long', function () {
       const invalidProps = { 
-        task: fixtures.createTask({ question: fixtures.longQuestion }),
-      }
-      testValidationProp('questionNotTooLong', invalidProps);
+        task: { 
+          question: fixtures.longQuestion 
+        },
+      };
+
+      testValidationProp('questionNotTooLong');
+      testValidationProp('questionNotTooLong', invalidProps, false);
     });
 
     it('should check whether the task has two answers', function () {
       const invalidProps = { 
-        task: fixtures.createTask({ answers: fixtures.threeAnswers }),
-      }
-      testValidationProp('taskHasTwoAnswers', invalidProps);
+        task: { 
+          answers: fixtures.threeAnswers 
+        },
+      };
+
+      testValidationProp('taskHasTwoAnswers');
+      testValidationProp('taskHasTwoAnswers', invalidProps, false);
     });
 
     it('should check whether the task uses feedback', function () {
       const invalidProps = { 
-        task: fixtures.createTask({ feedback: { enabled: true } }),
-      }
-      testValidationProp('taskFeedbackDisabled', invalidProps);
+        task: { 
+          feedback: { 
+            enabled: true,
+          },
+        },
+      };
+
+      testValidationProp('taskFeedbackDisabled');
+      testValidationProp('taskFeedbackDisabled', invalidProps, false);
     });
 
     it('should check whether the workflow uses the flipbook', function () {
       const invalidProps = { 
-        workflow: fixtures.createWorkflow({ 
+        workflow: { 
           configuration: { 
-            multi_image_mode: 'flipbook'
-           } 
-        }),
-      }
-      testValidationProp('workflowFlipbookDisabled', invalidProps);
+            multi_image_mode: 'flipbook',
+          },
+        },
+      };
+
+      testValidationProp('workflowFlipbookDisabled');
+      testValidationProp('workflowFlipbookDisabled', invalidProps, false);
     });
 
-    // hasSingleTask
+    it('should check whether the workflow has a single task', function () {
+      const invalidProps = { 
+        workflow: { 
+          tasks: {
+            T1: {},
+          },
+        },
+      };
+
+      testValidationProp('workflowHasSingleTask');
+      testValidationProp('workflowHasSingleTask', invalidProps, false);
+    });
+
     // notTooManyShortcuts,
 
   });
