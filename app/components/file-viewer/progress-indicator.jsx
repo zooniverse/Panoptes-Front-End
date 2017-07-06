@@ -25,13 +25,13 @@ class ProgressIndicator extends React.Component {
       strokeWidth: 2
     };
 
-    console.log(points);
+    // console.log(points);
 
     return (
       <svg>
         <rect
-          width={'100%'}
-          height={'100%'}
+          width={this.props.naturalWidth}
+          height={this.props.naturalHeight}
           fill="rgba(0, 0, 0, 0.01)"
           fillOpacity="0.01"
           stroke="none"

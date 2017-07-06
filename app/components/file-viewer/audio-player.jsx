@@ -88,7 +88,7 @@ class AudioPlayer extends React.Component {
   }
 
   renderProgressMarker() {
-    console.log(this.state.progressPosition, this.state.trackDuration);
+    // console.log(this.state.progressPosition, this.state.trackDuration);
     return (<ProgressIndicator progressPosition={this.state.progressPosition} progressRange={[0, this.state.trackDuration]} naturalWidth={100} naturalHeight={100}/>);
   }
 

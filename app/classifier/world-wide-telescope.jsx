@@ -1,5 +1,5 @@
 import React from 'react';
-import shortid from 'shortid';
+import getSubjectLocation from '../lib/get-subject-location';
 
 class SimplePoint {
   constructor(x, y) {
@@ -51,9 +51,9 @@ class StarChart {
     this.OTHER = 2;
 
     const edges = [[this.x, this.y], [this.x, this.y + this.height], [this.x + this.width, this.y], [this.x + this.width, this.y + this.height]];
-    this.corners = edges.map((pt) => {
-      return new SimplePoint(pt[0], pt[1]);
-    });
+    this.corners = edges.map(pt =>
+      new SimplePoint(pt[0], pt[1])
+    );
   }
 
   bounds() {
@@ -68,9 +68,9 @@ class StarChart {
   }
 
   closestCornerDistance(p) {
-    const distance = this.corners.map((corner) => {
-      return this.calculateDistance(p, corner);
-    });
+    const distance = this.corners.map(corner =>
+      this.calculateDistance(p, corner)
+    );
     return {
       chart: this,
       distance: (Math.min.apply(null, distance))
@@ -84,7 +84,9 @@ class StarChart {
         if (p1 !== p2) {
           this.midpoints.push({
             x: (p1.x + p2.x) / 2,
-            y: (p1.y + p2.y) / 2
+            y: (p1.y + p2.y) / 2,
+            p1,
+            p2
           });
         }
       });
@@ -95,9 +97,9 @@ class StarChart {
     if (!this.midpoints) {
       this.calculateMidpoints();
     }
-    const distances = this.midpoints.map((midpoint) => {
-      return this.calculateDistance(p, midpoint);
-    });
+    const distances = this.midpoints.map(midpoint =>
+      this.calculateDistance(p, midpoint)
+    );
     return {
       chart: this,
       distance: Math.min.apply(null, distances)
@@ -109,7 +111,28 @@ class StarChart {
   }
 
   addAxisLabel(axisLabel) {
-    this.axisLabels.push(axisLabel);
+    const otherUnitValue = 6;
+    if (axisLabel.value === otherUnitValue) {
+      this.removeIrrelevantPoints(axisLabel);
+    } else {
+      this.axisLabels.push(axisLabel);
+    }
+  }
+
+  removeIrrelevantPoints(axisLabel) {
+    let midpointDistance = Infinity;
+    let pointsToRemove = [];
+    this.midpoints.forEach((midpoint) => {
+      const distanceFromLabel = this.calculateDistance(midpoint, axisLabel);
+      if (distanceFromLabel < midpointDistance) {
+        midpointDistance = distanceFromLabel;
+        pointsToRemove = [midpoint.p1, midpoint.p2];
+      }
+    });
+    pointsToRemove.map((point) => {
+      const index = this.axisPoints.indexOf(point);
+      this.axisPoints.splice(index, 1);
+    });
   }
 
   findAxis(points) {
@@ -274,13 +297,13 @@ StarCoord._decConvert = (match, isNeg) => {
 };
 
 class Plate {
-  constructor(starChart, url) {
+  constructor(starChart, url, subject) {
     let makeStarCoord;
     this.starChart = starChart;
+    this.subject = subject;
     this.url = url;
     this.imageBounds = this.starChart.bounds();
     const [xRange, yRange] = [this.starChart.xAxis.range, this.starChart.yAxis.range];
-
     this.xyCorners = [
       new SimplePoint(xRange[0].x, yRange[0].y), new SimplePoint(xRange[1].x, yRange[0].y),
       new SimplePoint(xRange[1].x, yRange[1].y), new SimplePoint(xRange[0].x, yRange[1].y)
@@ -292,13 +315,20 @@ class Plate {
       makeStarCoord = StarCoord.fromGlatGlon;
     }
     const xAxisDec = (this.starChart.xAxis.unit === Axis.DEC || this.starChart.xAxis.unit === Axis.DEC1950 || this.starChart.xAxis.unit === Axis.GLAT);
-    const epoch1950 = (this.starChart.xAxis.unit === Axis.DEC1950 || this.starChart.xAxis.unit === Axis.RA1950);
+    const epoch1950 = this.epochCheck();
     this.fullValues(xRange);
     this.fullValues(yRange);
     this.coordCorners = [
       makeStarCoord(xRange[0].value, yRange[0].value, xAxisDec, epoch1950), makeStarCoord(xRange[1].value, yRange[0].value, xAxisDec, epoch1950),
       makeStarCoord(xRange[1].value, yRange[1].value, xAxisDec, epoch1950), makeStarCoord(xRange[0].value, yRange[1].value, xAxisDec, epoch1950)
     ];
+  }
+
+  epochCheck() {
+    if (this.subject.metadata.Publication_year < '2000') {
+      return true;
+    }
+    return (this.starChart.xAxis.unit === Axis.DEC1950 || this.starChart.xAxis.unit === Axis.RA1950);
   }
 
   fullValues(ranges) {
@@ -349,8 +379,6 @@ class Plate {
 
   getCropUrl() {
     const url = this.url.replace(/^https?\:\/\//i, '');
-    //  TODO: we need to account for the fact that the size of the image might be different than
-    // the size that it is displayed
     return `http://imgproc.zooniverse.org/crop/${this.starChart.width}/${this.starChart.height}/${this.starChart.x}/${this.starChart.y}?u=${url}`;
   }
 
@@ -358,16 +386,11 @@ class Plate {
     return (this.starChart.xAxis.unit === Axis.RA || this.starChart.xAxis.unit === Axis.RA1950 || this.starChart.xAxis.unit === Axis.GLON) ? 180 : 90;
   }
 
-  computeName() {
-    return (shortid.generate());
-  }
-
   getWwtUrl() {
     const base = 'http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx';
     const rotation = this.computeRotation();
-    const name = this.computeName();
     const center = this.centerCoords();
-    return `${base}?name=${name}&ra=${center.ra}&dec=${center.dec}&x=${center.x}&y=${center.y}&scale=${this.scale()}&rotation=${rotation}&imageurl=${this.getCropUrl()}`;
+    return `${base}?name=${'Zooniverse'}&ra=${center.ra}&dec=${center.dec}&x=${center.x}&y=${center.y}&scale=${this.scale()}&rotation=${rotation}&imageurl=${this.getCropUrl()}`;
   }
 }
 
@@ -382,16 +405,16 @@ export default class WorldWideTelescope extends React.Component {
     });
 
     // parse chart rectangles
-    this.charts = telescopeAnnotations[0].value.map((annotation) => {
-      return new StarChart(annotation);
-    });
+    this.charts = telescopeAnnotations[0].value.map(annotation =>
+      new StarChart(annotation)
+    );
 
     // assign axis points to charts
     telescopeAnnotations[1].value.forEach((annotation) => {
       const point = new AxisPoint(annotation);
-      const distances = this.charts.map((chart) => {
-        return chart.closestCornerDistance(point);
-      });
+      const distances = this.charts.map(chart =>
+        chart.closestCornerDistance(point)
+      );
       const closest = distances.sort((a, b) => { return a.distance > b.distance; })[0].chart;
       closest.addAxisPoint(point);
     });
@@ -399,9 +422,9 @@ export default class WorldWideTelescope extends React.Component {
     // assign axis labels to charts
     telescopeAnnotations[2].value.forEach((annotation) => {
       const label = new AxisLabel(annotation);
-      const distances = this.charts.map((chart) => {
-        return chart.closestMidpointDistance(label);
-      });
+      const distances = this.charts.map(chart =>
+        chart.closestMidpointDistance(label)
+      );
       const closest = distances.sort((a, b) => { return a.distance > b.distance; })[0].chart;
       closest.addAxisLabel(label);
     });
@@ -412,7 +435,7 @@ export default class WorldWideTelescope extends React.Component {
   }
 
   render() {
-    const subjImage = this.props.subject.locations[0]['image/jpeg'];
+    const subjImage = getSubjectLocation(this.props.subject).src;
     const plates = [];
 
     try {
@@ -420,7 +443,7 @@ export default class WorldWideTelescope extends React.Component {
 
       this.charts.forEach((chart) => {
         if (chart.valid) {
-          plates.push(new Plate(chart, subjImage));
+          plates.push(new Plate(chart, subjImage, this.props.subject));
         }
       });
     } catch (e) {
@@ -429,12 +452,14 @@ export default class WorldWideTelescope extends React.Component {
 
     return (
       <div>
+        {plates.length && (<p>View Your Classification!</p>)}
         {plates.map((plate, idx) => {
           return (
-            <div key={idx}>
-              <p>View Your Classification in the WorldWide Telescope!</p>
-              <img role="presentation" className="chart-image" src={`${plate.getCropUrl()}`} />
-              <a target="_blank" rel="noopener noreferrer" href={plate.getWwtUrl()} className="telescope-button standard-button">World Wide Telescope</a>
+            <div className="worldwide-telescope" key={idx}>
+              <div>
+                <img role="presentation" className="worldwide-telescope__chart-image" src={`${plate.getCropUrl()}`} />
+              </div>
+              <a target="_blank" rel="noopener noreferrer" href={plate.getWwtUrl()} className="standard-button">World Wide Telescope</a>
             </div>
           );
         })}
@@ -446,7 +471,8 @@ export default class WorldWideTelescope extends React.Component {
 WorldWideTelescope.propTypes = {
   annotations: React.PropTypes.arrayOf(React.PropTypes.object),
   subject: React.PropTypes.shape({
-    locations: React.PropTypes.array
+    locations: React.PropTypes.array,
+    metadata: React.PropTypes.object
   }),
   workflow: React.PropTypes.shape({
     tasks: React.PropTypes.object

@@ -49,6 +49,7 @@ export default class FrameAnnotator extends React.Component {
 
     if (this.props.annotation.task) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
+      // console.log(taskDescription, tasks);
       ({ BeforeSubject, AfterSubject } = tasks[taskDescription.type]);
     }
 

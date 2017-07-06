@@ -1,5 +1,5 @@
 import React from 'react';
-import { DISCIPLINES } from './disciplines';
+import DISCIPLINES from '../constants/disciplines';
 
 export default class Filmstrip extends React.Component {
   constructor() {

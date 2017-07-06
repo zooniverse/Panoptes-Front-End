@@ -10,7 +10,7 @@ LoginDialog = require '../../partials/login-dialog'
 counterpart.registerTranslations 'en',
   labLanding:
     title: "Zooniverse Project Builder"
-    content: "Anyone can build a Zooniverse project. Just upload your data and choose the tasks you want the volunteers to do. To find out more, read our [How to Build a Project documentation](/lab-how-to), or click the button below to get started."
+    content: "Anyone can build a Zooniverse project. Just upload your data and choose the tasks you want the volunteers to do. To find out more, read our [How to Build a Project documentation](/help), or click the button below to get started."
     buttons:
       getStarted: "Get started!"
       signIn: "Sign in"
