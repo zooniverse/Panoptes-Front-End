@@ -110,7 +110,7 @@ ProjectPageController = React.createClass
 
           awaitProjectAvatar = apiClient.type('avatars').get(project.links.avatar.id).catch((error) => [])
 
-          awaitProjectCompleteness = Promise.resolve(project.completeness > 0.99)
+          awaitProjectCompleteness = Promise.resolve(project.completeness is 1.0)
 
           awaitProjectRoles = project.get('project_roles', { page_size: 50 }).catch((error) => console.error(error))
 
