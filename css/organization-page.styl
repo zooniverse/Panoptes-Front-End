@@ -7,7 +7,7 @@
   z-index: 1
   font-family: Karla
 
-// A custom background-image is provided by the project.
+// a custom background-image is provided by the project.
 .organization-background
   background-color: gray
   background-position: 50% 40%
@@ -19,6 +19,15 @@
   right: 0
   top: 0
   z-index: -1
+
+  &::after
+    background: radial-gradient(rgba(black, 0.2), rgba(black, 0.8))
+    content: ""
+    height: 100%
+    left: 0
+    position: absolute
+    top: 0
+    width: 100%
 
 .organization-home
   display: flex
@@ -49,31 +58,31 @@
   box-sizing: border-box
   min-height: 200px
   overflow: auto
-  padding: 80px 3vw 5px 3vw
+  padding: 20vh 3vw 5px 3vw
 
-.organization-hero__nav
-  margin-left: 0
-  margin-top: 2.5em
-  text-align: left
+  &__nav
+    margin-left: 0
+    margin-top: 2.5em
+    text-align: left
 
-.organization-hero__avatar
-  display: inline-block
-  margin-bottom: 3.125em
-  margin-left: 4em
-  height: 8em
-  width: 8em
-  vertical-align: middle
+  &__avatar
+    display: inline-block
+    margin-bottom: 3.125em
+    margin-left: 4em
+    height: 8em
+    width: 8em
+    vertical-align: middle
 
-.organization-hero__text
-  display: inline-block
-  vertical-align: center
+  &__text
+    display: inline-block
+    vertical-align: center
 
-.organization-hero__text--name
-  font-size: 2.25em
-  font-weight: 700
+    &--name
+      font-size: 2.25em
+      font-weight: 700
 
-.organization-hero__text--description
-  font-weight: 400
+    &--description
+      font-weight: 400
 
 // projects
 .organization-projects
@@ -85,36 +94,37 @@
   font: 400 16px/1.5 Karla, sans-serif
   display: flex
 
-.organization-details__stats
-  padding: 2em 4em
-  width: 33.3vw
-  color: #0c4881
-  background-color: #ffffff
+  &__stats
+    padding: 2em 4em
+    width: 33.3vw
+    color: #0c4881
+    background-color: #ffffff
 
-.organization-details__stats-title
-  text-transform: uppercase;
-  font-size: 0.75em
+  &__stats-title
+    text-transform: uppercase;
+    font-size: 0.75em
 
-.organization-details__stats-value
-  text-decoration: underline
-  font-size: 1.625em
-  padding-top: 1em
-  color: #0C4881
+  &__stats-value
+    text-decoration: underline
+    font-size: 1.625em
+    padding-top: 1em
+    color: #0C4881
 
-.organization-details__about
-  padding: 2em 4em
-  width: 66.6vw
-  background-color: #007482
-  color: #ffffff
+  &__about
+    padding: 2em 4em
+    width: 66.6vw
+    background-color: #007482
+    color: #ffffff
 
-.organization-details__about-title
-  font-size: 0.75em
-  text-transform: uppercase
+  &__about-title
+    font-size: 0.75em
+    text-transform: uppercase
 
-.organization-details__about-text
-  padding: 1em 0
+  &__about-text
+    padding: 1em 0
 
-  .markdown
-    p
-      color: #ffffff
-      text-align: left
+    // this doesn't follow BEM conventions, but is necessary because of Markdown component
+    .markdown
+      p
+        color: #ffffff
+        text-align: left

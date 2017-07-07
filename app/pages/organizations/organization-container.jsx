@@ -9,7 +9,7 @@ class OrganizationContainer extends React.Component {
       fetching: false,
       organization: { projects: [] },
       organizationAvatar: {},
-      organizationBackground: {}
+      organizationBackground: {},
     };
 
     this.fetchProjects = this.fetchProjects.bind(this);
@@ -17,18 +17,22 @@ class OrganizationContainer extends React.Component {
   }
 
   componentDidMount() {
-    document.documentElement.classList.add('on-secondary-page');
+    // this.fetchOrganization(this.props.params.organization_id);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.fetchOrganization(nextProps.params.organization_id);
+  //   // if (this.props.params.organization_id !== nextProps.params.organization_id) {
+      this.fetchOrganization(nextProps.params.organization_id);
+  //   // }
   }
 
   fetchOrganization(id) {
-    if (this.state.fetching) return;
+    if (!id) {
+      return;
+    }
 
     this.setState({ fetching: true });
-    apiClient.type('organizations').get({ id, include: ['avatar', 'background'] }).then(([organization]) => {
+    apiClient.type('organizations').get(id.toString(), { include: ['avatar', 'background'] }).then((organization) => {
       organization.projects = []; // eslint-disable-line no-param-reassign
       this.setState({ organization });
 

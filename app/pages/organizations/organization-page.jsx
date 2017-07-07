@@ -12,22 +12,20 @@ const OrganizationPage = ({ organization, organizationAvatar, organizationBackgr
     <div className="organization-background" style={{ backgroundImage: `url(${organizationBackground.src})` }} />
     <div className="organization-home">
       <section className="organization-hero">
-        <div>
-          <nav className="organization-hero__nav tabbed-content-tab">
-            <Link to={`/organizations/${organization.id}`}>
-              {organizationAvatar &&
-                <Thumbnail
-                  src={organizationAvatar.src}
-                  className="avatar organization-hero__avatar"
-                  width={AVATAR_SIZE}
-                  height={AVATAR_SIZE}
-                />}
-            </Link>
-          </nav>
-          <div className="organization-hero__text">
-            <h1 className="organization-hero__text--name">{organization.display_name}</h1>
-            <h3 className="organization-hero__text--description">{organization.description}</h3>
-          </div>
+        <nav className="organization-hero__nav tabbed-content-tab">
+          <Link to={`/organizations/${organization.id}`}>
+            {organizationAvatar &&
+              <Thumbnail
+                src={organizationAvatar.src}
+                className="avatar organization-hero__avatar"
+                width={AVATAR_SIZE}
+                height={AVATAR_SIZE}
+              />}
+          </Link>
+        </nav>
+        <div className="organization-hero__text">
+          <h1 className="organization-hero__text--name">{organization.display_name}</h1>
+          <h3 className="organization-hero__text--description">{organization.description}</h3>
         </div>
       </section>
       <section className="resources-container">
