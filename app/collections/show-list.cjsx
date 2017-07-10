@@ -10,7 +10,6 @@ alert = require '../lib/alert'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
-# CollectionsManager = require './collections-manager'
 `import CollectionsManager from './collections-manager';`
 getSubjectLocation = require('../lib/get-subject-location')
 
