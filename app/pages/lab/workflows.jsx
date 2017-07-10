@@ -42,6 +42,7 @@ const WorkflowsPage = (props) => {
           <ul className="nav-list">
             {props.workflows.map(workflow => renderWorkflow(workflow))}
           </ul>
+          <hr />
           <Paginator
             className="talk"
             page={meta.page}

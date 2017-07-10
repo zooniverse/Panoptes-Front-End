@@ -21,7 +21,8 @@ export default class WorkflowsContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.getWorkflowList();
+    const page = (this.props.location && this.props.location.query) ? this.props.location.query.page : 1;
+    this.getWorkflowList(page);
   }
 
   onPageChange(page) {
@@ -33,8 +34,9 @@ export default class WorkflowsContainer extends React.Component {
     this.getWorkflowList(page);
   }
 
-  getWorkflowList(page = 1) {
+  getWorkflowList(page) {
     if (this.state.reorder) {
+      this.context.router.push({ pathname: this.props.location.pathname, query: null });
       getWorkflowsInOrder(this.props.project, { fields: 'display_name', page_size: this.props.project.links.workflows.length })
       .then((workflows) => {
         this.setState({ workflows, loading: false });
@@ -80,7 +82,7 @@ export default class WorkflowsContainer extends React.Component {
   }
 
   toggleReorder() {
-    this.setState((prevState) => { return { reorder: !prevState.reorder }; });
+    this.setState((prevState) => { return { reorder: !prevState.reorder }; }, this.getWorkflowList);
   }
 
   render() {
@@ -90,6 +92,7 @@ export default class WorkflowsContainer extends React.Component {
       handleWorkflowReorder: this.handleWorkflowReorder,
       showCreateWorkflow: this.showCreateWorkflow,
       labPath: this.labPath,
+      onPageChange: this.onPageChange,
       toggleReorder: this.toggleReorder
     };
 
