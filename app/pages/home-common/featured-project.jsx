@@ -17,7 +17,7 @@ const FeaturedProject = (() =>
     <div className="home-featured-images">
       <img
         alt="Star forming gas cloud in the Milky Way."
-        src="./assets/featured-projects/featured-project-20170711-milky-way.jpg"
+        src="assets/featured-projects/featured-project-20170711-milky-way.jpg"
       />
     </div>
     <h2 className="secondary-headline">Milky Way Project</h2>
