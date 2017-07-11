@@ -15,7 +15,10 @@ const FeaturedProject = (() =>
   <section className="home-featured">
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
-      <img src="./assets/featured-projects/featured-project-20170711-milky-way.jpg" />
+      <img
+        alt="Star forming gas cloud in the Milky Way."
+        src="./assets/featured-projects/featured-project-20170711-milky-way.jpg"
+      />
     </div>
     <h2 className="secondary-headline">Milky Way Project</h2>
     <p className="display-body">We need your help to explore our home galaxy, looking for signs of stars being born.</p>
