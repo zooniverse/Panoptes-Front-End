@@ -28,12 +28,17 @@ describe('<CollectionsManager />', function() {
     assert.equal(wrapper.find('CollectionsCreateForm').length, 1);
   });
 
+  it('should render the loading indicator if it is adding subjects', function() {
+    wrapper.setState({ adding: true });
+    assert.equal(wrapper.find('LoadingIndicator').length, 1);
+  });
+
   it('should not render error messages if there is not one', function() {
     assert.equal(wrapper.find('.error').length, 0);
   });
 
   it('should render error message if there is one', function() {
-    wrapper.setState({ error: 'it broke!' });
+    wrapper.setState({ errors: ['it broke!'] });
     assert.equal(wrapper.find('.error').length, 1);
   });
 
