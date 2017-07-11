@@ -6,7 +6,7 @@ module.exports = React.createClass
   displayName: 'CollectionSearch'
 
   propTypes:
-    multi: React.PropTypes.bool
+    multi: React.PropTypes.bool.isRequired
     onChange: React.PropTypes.func
 
   getDefaultProps: ->

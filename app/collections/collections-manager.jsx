@@ -11,7 +11,7 @@ class CollectionsManager extends React.Component {
       adding: false,
       collections: [],
       errors: [],
-      hasCollectionSelected: true
+      hasCollectionSelected: false
     };
 
     this.addToCollections = this.addToCollections.bind(this);
@@ -22,7 +22,7 @@ class CollectionsManager extends React.Component {
     const collections = this.search.getSelected();
 
     if (collections.length > 0) {
-      this.setState({ hasCollectionSelected: false });
+      this.setState({ hasCollectionSelected: true });
     }
   }
 
@@ -34,7 +34,7 @@ class CollectionsManager extends React.Component {
     const promises = collections.map((searchResult) => {
       const collection = searchResult.collection;
       const subjectsToAdd = this.props.subjectIDs.filter((id) => {
-        if (!collection.links.subjects.includes(id)) return id;
+        return !collection.links.subjects.includes(id);
       });
 
       if (subjectsToAdd.length === 0) {
@@ -63,7 +63,9 @@ class CollectionsManager extends React.Component {
   render() {
     return (
       <div className="collections-manager">
-        <h1>Add Subject to Collection{' '}{this.state.adding && <LoadingIndicator />}</h1>
+        <h2 className="collections-manager__header">
+          Add Subject to Collection{' '}<LoadingIndicator off={!this.state.adding} />
+        </h2>
 
         <div>
           {this.state.errors.length > 0 &&
@@ -79,7 +81,7 @@ class CollectionsManager extends React.Component {
           <button
             type="button"
             className="standard-button search-button"
-            disabled={this.state.hasCollectionSelected}
+            disabled={!this.state.hasCollectionSelected}
             onClick={this.addToCollections}
           >
             Add
