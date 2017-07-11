@@ -15,14 +15,11 @@ const FeaturedProject = (() =>
   <section className="home-featured">
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
-      <img
-        alt="The direct image (left) and dispersed spectrum (right) of a real galaxy from the WISP survey. The white arrow shows the bright light produced by an emission line."
-        src="./assets/featured-projects/featured-project-20170531-galaxy-nurseries.jpg"
-      />
+      <img src="./assets/featured-projects/featured-project-20170711-milky-way.jpg" />
     </div>
-    <h2 className="secondary-headline">Introducing the 100th Zooniverse project: Galaxy Nurseries</h2>
-    <p className="display-body">Help researchers figure out how our universe has changed over time by finding baby galaxies.</p>
-    <Link to="projects/hughdickinson/galaxy-nurseries" className="primary-button primary-button--light">View Project!</Link>
+    <h2 className="secondary-headline">Milky Way Project</h2>
+    <p className="display-body">We need your help to explore our home galaxy, looking for signs of stars being born.</p>
+    <Link to="projects/povich/milky-way-project" className="primary-button primary-button--light">View Project!</Link>
   </section>
 );
 
