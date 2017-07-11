@@ -83,6 +83,7 @@ module.exports = React.createClass
       opacity: 0.7
       pointerEvents: 'none'
 
+
     <div>
       <p className="form-label">Project state and visibility</p>
 
@@ -240,17 +241,16 @@ module.exports = React.createClass
           </table>
         </div>}
 
-      <br/>
+      {if @state.workflows.length > 0
+        meta = @state.workflows[0].getMeta()
 
-      {@state.workflows.length > 0 && (
         <Paginator
-          className="talk"
-          page={@state.workflows[0]._meta.workflows.page}
-          pageCount={@state.workflows[0]._meta.workflows.page_count}
-        />
-      )}
+          className="lab-visibility-paginator"
+          page={meta.page}
+          pageCount={meta.page_count}
+        />}
 
-      <hr/>
+      <hr />
 
       <p className="form-label">Status</p>
       <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
