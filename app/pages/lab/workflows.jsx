@@ -44,7 +44,6 @@ const WorkflowsPage = (props) => {
           </ul>
           <hr />
           <Paginator
-            className="talk"
             page={meta.page}
             onPageChange={props.onPageChange}
             pageCount={meta.page_count}
