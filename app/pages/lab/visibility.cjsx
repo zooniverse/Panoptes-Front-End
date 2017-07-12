@@ -245,7 +245,7 @@ module.exports = React.createClass
         meta = @state.workflows[0].getMeta()
 
         <Paginator
-          className="lab-visibility-paginator"
+          className="paginator"
           page={meta.page}
           pageCount={meta.page_count}
         />}
