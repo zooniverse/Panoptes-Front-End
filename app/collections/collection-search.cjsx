@@ -6,18 +6,20 @@ module.exports = React.createClass
   displayName: 'CollectionSearch'
 
   propTypes:
-    multi: React.PropTypes.bool
-    project: React.PropTypes.object
+    multi: React.PropTypes.bool.isRequired
+    onChange: React.PropTypes.func
 
   getDefaultProps: ->
     multi: false
-    project: null
 
   getInitialState: ->
     collections: []
 
   onChange: (collections) ->
-    @setState {collections}
+    @setState({ collections }, ->
+      if @props.onChange
+        @props.onChange()
+    )
 
   searchCollections: (value) ->
     query =
@@ -28,15 +30,12 @@ module.exports = React.createClass
 
     apiClient.type('collections').get query
       .then (collections) ->
-
-        opts = collections.map (collection) ->
-          {
+        options = collections.map (collection) -> {
             value: collection.id,
             label: collection.display_name,
             collection: collection
           }
-
-        {options: opts}
+        { options }
 
   getSelected: ->
     @state.collections
@@ -52,4 +51,5 @@ module.exports = React.createClass
       searchPromptText="Type to search Collections"
       className="collection-search"
       closeAfterClick={true}
-      loadOptions={@searchCollections} />
+      loadOptions={@searchCollections}
+    />
