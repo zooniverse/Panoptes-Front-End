@@ -1,28 +1,39 @@
 .paginator
+  opacity: 0.97
   text-align: center
 
   > button
-    margin: 5px
+    @extends $reset-button
+    border: solid thin TALK_BORDER
+    border-radius: 6px
+    font-size: 0.8em
+    padding: 0.2em 0.4em
+    margin: 2.5px
 
   .paginator-page-selector
     display: inline-block
     margin: 0 0.25em
 
     > select, > select > option
+      border: 2px solid LIGHT_GREY
+      background: #fff
+      border-radius: TALK_BORDER_RADIUS
       color: black
+      font-size: 0.8em
+      padding: 0.2em
 
-  .paginator-prev
+  .paginator-prev, .paginator-first
     background: none
     color: FOREGROUND
-    &:hover
-      background: ALERT_COLOR
+    &:hover, &:focus
+      background: MAIN_HIGHLIGHT
       color: #fff
-      border-color: darken(ALERT_COLOR, 10%)
+      border-color: darken(TALK_BORDER, 10%)
 
-  .paginator-next
+  .paginator-next, .paginator-last
     background: none
     color: FOREGROUND
-    &:hover
-      background: SUCCESS
+    &:hover, &:focus
+      background: MAIN_HIGHLIGHT
       color: #fff
-      border-color: darken(SUCCESS, 10%)
+      border-color: darken(TALK_BORDER, 10%)

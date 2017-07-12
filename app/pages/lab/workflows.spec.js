@@ -19,7 +19,9 @@ const project = {
 
 describe('WorkflowsPage', function () {
   let wrapper;
-  const newWorkflow = sinon.spy();
+  let reorderWorkflowButton;
+  const showCreateWorkflowSpy = sinon.spy();
+  const toggleReorderSpy = sinon.spy();
 
   before(function () {
     wrapper = shallow(
@@ -27,10 +29,12 @@ describe('WorkflowsPage', function () {
         labPath={(url) => { return url; }}
         handleWorkflowReorder={() => {}}
         project={project}
-        showCreateWorkflow={newWorkflow}
+        showCreateWorkflow={showCreateWorkflowSpy}
+        toggleReorder={toggleReorderSpy}
       />
     );
     wrapper.setProps({ loading: false });
+    reorderWorkflowButton = wrapper.find('[data-button="reorderWorkflow"]');
   });
 
   it('will display a message when no workflows are present', function () {
@@ -40,11 +44,35 @@ describe('WorkflowsPage', function () {
 
   it('will display the correct amount of workflows', function () {
     wrapper.setProps({ workflows });
-    assert.equal(wrapper.find('DragReorderable').render().find('li').length, 2);
+    assert.equal(wrapper.find('.nav-list li').length, 2);
   });
 
   it('should call the workflow create handler', function () {
-    wrapper.find('button').simulate('click');
-    sinon.assert.called(newWorkflow);
+    wrapper.find('[data-button="createWorkflow"]').simulate('click');
+    sinon.assert.calledOnce(showCreateWorkflowSpy);
+  });
+
+  it('should default render the list view', function() {
+    assert.equal(wrapper.find('Paginator').length, 1);
+    assert.equal(reorderWorkflowButton.text(), 'Reorder view');
+  });
+
+  it('should call the toggleReorder handler', function() {
+    reorderWorkflowButton.simulate('click');
+    sinon.assert.calledOnce(toggleReorderSpy);
+  });
+
+  it('should render the reorderable view after toggled', function() {
+    wrapper.setProps({ reorder: true });
+    assert.equal(wrapper.find('DragReorderable').length, 1);
+    assert.equal(wrapper.find('[data-button="reorderWorkflow"]').text(), 'List view');
+  });
+
+  it('should re-render the list view when list view button is clicked', function() {
+    reorderWorkflowButton.simulate('click');
+    sinon.assert.calledTwice(toggleReorderSpy);
+    wrapper.setProps({ reorder: false });
+    assert.equal(wrapper.find('Paginator').length, 1);
+    assert.equal(reorderWorkflowButton.text(), 'Reorder view');
   });
 });

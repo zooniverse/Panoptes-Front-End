@@ -8,7 +8,7 @@ const SubjectSetsPage = (props) => {
 
   return (
     <div>
-      <header className="form-label">Subject sets</header>
+      <h1 className="form-label">Subject sets</h1>
       <p>
         Subject sets are a group of data presented to volunteers in a project.
       </p>
