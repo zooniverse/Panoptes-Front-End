@@ -176,6 +176,10 @@ counterpart.registerTranslations 'en',
         bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota. One of the Zooniverse
         co-founders, she helps with project wrangling (aka management) and strategic planning while trying
         to squeeze a bit of galaxy evolution science in.'''
+      mariamSaeedi:
+        title: 'Web Developer Intern'
+        bio: '''Mariam is the 2017 Web Development Intern at Zooniverse. 
+        She is proficient with HTML and CSS and is currently learning JavaScript and Rails.'''
       markBouslog:
         title: 'Developer'
         bio: '''Mark is a front-end web developer for the Zooniverse team at the Adler Planetarium. Joining in
@@ -511,6 +515,13 @@ teamMembers =
     bio: counterpart "team.content.lucyFortson.bio"
     image: "/assets/team/lucy.jpg"
     location: "minnesota"
+  mariamSaeedi:
+    name: "Mariam Saeedi"
+    twitter: "tweetsmariam"
+    title: counterpart "team.content.mariamSaeedi.title"
+    bio: counterpart "team.content.mariamSaeedi.bio"
+    image: "/assets/team/mariam_s.jpg"
+    location: "oxford"
   markBouslog:
     name: "Mark Bouslog"
     title: counterpart "team.content.markBouslog.title"
