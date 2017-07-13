@@ -66,7 +66,7 @@ module.exports = React.createClass
               <ul key={category} className="publications-list">
                 {for projectListing in projects
                   project = @state.projects[projectListing.slug]
-                  <div key={projectListing.name or project.slug}>
+                  <div key={projectListing.name or projectListing.slug}>
                     <div>
                       <h3 className="project-name">
                         {if project then project.display_name else projectListing.name}
