@@ -4,6 +4,16 @@ const Publications = {
       slug: "zooniverse/galaxy-zoo",
       publications: [
         {
+          citation: "Galaxy Zoo: star-formation versus spiral arm number, Hart+ 2017.",
+          href: "http://adsabs.harvard.edu/abs/2017arXiv170302053H",
+          date: "2017"
+        },
+        {
+          citation: "Galaxy Zoo: The interplay of quenching mechanisms in the group environment, Smethurst+ 2017.",
+          href: "https://arxiv.org/abs/1704.06269",
+          date: "2017"
+        },
+        {
           citation: "Galaxy Zoo: Quantitative Visual Morphological Classifications for 48,000 galaxies from CANDELS, Simmons+ 2016.",
           href: "http://xxx.lanl.gov/pdf/1610.03070v1",
           date: "October 12, 2016"
@@ -274,6 +284,11 @@ const Publications = {
       slug: "zooniverse/solar-stormwatch",
       publications: [
         {
+          citation: "Testing the current paradigm for space weather prediction with heliospheric imagers, Barnard+ 2017.",
+          href: "http://onlinelibrary.wiley.com/doi/10.1002/2017SW001609/full",
+          date: "2017"
+        },
+        {
           citation: "Differences between the CME fronts tracked by an expert, an automated algorithm, and the Solar Stormwatch project, Barnard+ 2015.",
           href: "http://onlinelibrary.wiley.com/doi/10.1002/2015SW001280/full",
           date: "Oct 24, 2015"
@@ -433,7 +448,8 @@ const Publications = {
         citation: "2011 HM102: Discovery of a High-Inclination L5 Neptune Trojan in the Search for a post-Pluto New Horizons Target, Parker+ 2012.",
         href: "http://arxiv.org/abs/1210.4549",
         date: "Jan 16, 2013"
-      }]
+      }
+      ]
     },
     {
       slug: "zooniverse/andromeda-project",
@@ -442,7 +458,8 @@ const Publications = {
         citation: "PHAT Stellar Cluster Survey. II. Andromeda Project Cluster Catalog, Johnson+ 2015.",
         href: "http://arxiv.org/abs/1501.04966",
         date: "Jan 20, 2015"
-      }]
+      }
+      ]
     },
     {
       slug: "zooniverse/space-warps",
@@ -549,7 +566,17 @@ const Publications = {
           date: "August 23, 2016"
         }
       ]
-    }
+    },
+    {
+      slug: "zooniverse/planet-four",
+      publications: [
+        {
+          citation: "Task Workflow Design and its impact on performance and volunteers' subjective preference in Virtual Citizen Science, Sprinks+ 2017.",
+          href: "http://www.sciencedirect.com/science/article/pii/S1071581917300332",
+          date: "2017"
+        }
+      ]
+    },
   ],
   humanities: [
     {
@@ -573,7 +600,8 @@ const Publications = {
         citation: "A Life in the Trenches? The Use of Operation War Diary and Crowdsourcing Methods to Provide an Understanding of the British Army’s Day-to-Day Life on the Western Front, Grayson+ 2016.",
         href: "http://bjmh.org.uk/index.php/bjmh/article/view/96",
         date: "2016"
-      }]
+      }
+      ]
     }
   ],
   nature: [
@@ -621,7 +649,7 @@ const Publications = {
           date: "August 8, 2016"
         }
       ]
-    }
+    },
   ],
   medicine: [
     {
@@ -631,8 +659,10 @@ const Publications = {
       citation: "Crowdsourcing the General Public for Large Scale Molecular Pathology Studies in Cancer, Candido dos Reis+ 2015.",
       href: "http://www.ebiomedicine.com/article/S2352-3964(15)30016-5/pdf",
       date: "May 9, 2015"
-    }]
-  }, ],
+        }
+      ]
+    }, 
+  ],
   physics: [
     {
     slug: "zooniverse/higgs-hunters",
@@ -641,12 +671,34 @@ const Publications = {
       citation: "'That looks weird' - evaluating citizen scientists' ability to detect unusual features in ATLAS images of LHC collisions, Barr+ 2016.",
       href: "https://arxiv.org/pdf/1610.02214v1.pdf",
       date: "October 10, 2016"
-    }]
-  }, ],
+    }
+      ]
+    }, 
+    {
+      slug: "zooniverse/higgs-hunters",
+      publications: [
+        {
+        citation: "'That looks weird' - evaluating citizen scientists' ability to detect unusual features in ATLAS images of LHC collisions, Barr+ 2016.",
+        href: "https://arxiv.org/pdf/1610.02214v1.pdf",
+        date: "October 10, 2016"
+      }
+      ],
+    },
+  ],
   meta: [
     {
     name: "Meta Studies",
     publications: [
+      {
+        citation: "Recruiting Messages Matter: Message Strategies to Attract Citizen Scientists, Lee+ 2017.",
+        href: "http://dl.acm.org/citation.cfm?id=3026335",
+        date: "2017"
+      },
+      {
+        citation: "DIY Zooniverse Citizen Science Project: Engaging The Public With Your Museum’s Collections And Data, Trouille+ 2017.",
+        href: "http://mw17.mwconf.org/paper/diy-your-own-zooniverse-citizen-science-project-engaging-the-public-with-your-museums-collections-and-data/",
+        date: "2017"
+      },  
       {
         citation: "Assessing data quality in citizen science, Kosmala+ 2016.",
         href: "http://biorxiv.org/content/early/2016/09/08/074104",
@@ -777,8 +829,9 @@ const Publications = {
         href: "http://adsabs.harvard.edu/abs/2010AEdRv...9a0103R",
         date: "2010"
       }
-    ]
-  }]
+    ],
+    }  
+  ]
 };
 
 export default Publications;
