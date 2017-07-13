@@ -46,7 +46,7 @@ module.exports = {
     ]),
   ],
   resolve: {
-    extensions: ['.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css'],
+    extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
     modules: ['.', 'node_modules'],
   },
   module: {

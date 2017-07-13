@@ -10,7 +10,7 @@ alert = require '../lib/alert'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
-CollectionsManager = require './manager'
+`import CollectionsManager from './collections-manager';`
 getSubjectLocation = require('../lib/get-subject-location')
 
 VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
