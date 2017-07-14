@@ -16,7 +16,6 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     project: null
-    # location: query: page: 1
 
   getInitialState: ->
     error: null
