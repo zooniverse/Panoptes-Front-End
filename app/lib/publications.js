@@ -281,6 +281,16 @@ const Publications = {
       ]
     },
     {
+      slug: "marckuchner/backyard-worlds-planet-9",
+      publications: [
+        {
+        citation: "The First Brown Dwarf Discovered by the Backyard Worlds: Planet 9 Citizen Science Project, Kuchner+ 2017.",
+        href: "https://arxiv.org/abs/1705.02919",
+        date: "2017"
+        }
+      ]
+    },
+    {
       slug: "zooniverse/solar-stormwatch",
       publications: [
         {
@@ -448,8 +458,7 @@ const Publications = {
         citation: "2011 HM102: Discovery of a High-Inclination L5 Neptune Trojan in the Search for a post-Pluto New Horizons Target, Parker+ 2012.",
         href: "http://arxiv.org/abs/1210.4549",
         date: "Jan 16, 2013"
-      }
-      ]
+      }]
     },
     {
       slug: "zooniverse/andromeda-project",
@@ -458,8 +467,7 @@ const Publications = {
         citation: "PHAT Stellar Cluster Survey. II. Andromeda Project Cluster Catalog, Johnson+ 2015.",
         href: "http://arxiv.org/abs/1501.04966",
         date: "Jan 20, 2015"
-      }
-      ]
+      }]
     },
     {
       slug: "zooniverse/space-warps",
@@ -577,6 +585,16 @@ const Publications = {
         }
       ]
     },
+    {
+      slug: "jukoch/pattern-perception",
+      publications: [
+        {
+        citation: "Citizen science: A new perspective to advance spatial pattern evaluation in hydrology, Koch+ 2017.",
+        href: "http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0178165",
+        date: "2017"
+        }
+      ]
+    },
   ],
   humanities: [
     {
@@ -600,8 +618,7 @@ const Publications = {
         citation: "A Life in the Trenches? The Use of Operation War Diary and Crowdsourcing Methods to Provide an Understanding of the British Army’s Day-to-Day Life on the Western Front, Grayson+ 2016.",
         href: "http://bjmh.org.uk/index.php/bjmh/article/view/96",
         date: "2016"
-      }
-      ]
+      }]
     }
   ],
   nature: [
@@ -650,6 +667,16 @@ const Publications = {
         }
       ]
     },
+    {
+      slug: "zooniverse/notes-from-nature",
+      publications: [
+        {
+        citation: "Workforce-efficient consensus in crowdsourced transcription of biocollections information, Matsunaga+ 2016.",
+        href: "http://www.sciencedirect.com/science/article/pii/S0167739X15002277",
+        date: "2016"
+        }
+      ]
+    }
   ],
   medicine: [
     {
@@ -659,10 +686,8 @@ const Publications = {
       citation: "Crowdsourcing the General Public for Large Scale Molecular Pathology Studies in Cancer, Candido dos Reis+ 2015.",
       href: "http://www.ebiomedicine.com/article/S2352-3964(15)30016-5/pdf",
       date: "May 9, 2015"
-        }
-      ]
-    }, 
-  ],
+    }]
+  }, ],
   physics: [
     {
     slug: "zooniverse/higgs-hunters",
@@ -673,7 +698,7 @@ const Publications = {
       date: "October 10, 2016"
     }
       ]
-    }, 
+    },
     {
       slug: "zooniverse/higgs-hunters",
       publications: [
@@ -698,7 +723,7 @@ const Publications = {
         citation: "DIY Zooniverse Citizen Science Project: Engaging The Public With Your Museum’s Collections And Data, Trouille+ 2017.",
         href: "http://mw17.mwconf.org/paper/diy-your-own-zooniverse-citizen-science-project-engaging-the-public-with-your-museums-collections-and-data/",
         date: "2017"
-      },  
+      },
       {
         citation: "Assessing data quality in citizen science, Kosmala+ 2016.",
         href: "http://biorxiv.org/content/early/2016/09/08/074104",
@@ -829,9 +854,8 @@ const Publications = {
         href: "http://adsabs.harvard.edu/abs/2010AEdRv...9a0103R",
         date: "2010"
       }
-    ],
-    }  
-  ]
+    ]
+  }]
 };
 
 export default Publications;
