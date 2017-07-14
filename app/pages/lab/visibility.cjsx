@@ -41,8 +41,10 @@ module.exports = React.createClass
       pathname: @props.location.pathname
       query: nextQuery
     @getWorkflowList page
+    workflowList = document.getElementById("workflow-list")
+    workflowList?.scrollIntoView()
 
-  getWorkflowList: (page = 1) ->
+  getWorkflowList: (page) ->
     @setState { loadingWorkflows: true }
     # TODO remove page_size once getWorkflowsInOrder does not override default page_size
     getWorkflowsInOrder(@props.project, { page: page, page_size: 20, fields: 'active,configuration,display_name' })
