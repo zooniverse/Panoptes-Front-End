@@ -285,7 +285,7 @@ const Publications = {
       publications: [
         {
         citation: "The First Brown Dwarf Discovered by the Backyard Worlds: Planet 9 Citizen Science Project, Kuchner+ 2017.",
-        href: "https://arxiv.org/abs/1705.02919",
+        href: "http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:1705.02919",
         date: "2017"
         }
       ]
@@ -675,7 +675,17 @@ const Publications = {
         href: "http://www.sciencedirect.com/science/article/pii/S0167739X15002277",
         date: "2016"
         }
-      ]
+      ],
+    },
+    {
+    slug: "zooniverse/penguin-watch",
+    publications: [
+      {
+        citation: "Counting in the Wild, Arteta, C., Lempitsky, V., Zisserman, A. 2016",
+        href: "https://link.springer.com/chapter/10.1007/978-3-319-46478-7_30",
+        date: "2016" 
+      }
+    ]
     }
   ],
   medicine: [
@@ -700,6 +710,31 @@ const Publications = {
       ]
     },
     {
+      slug: "zooniverse/gravity-spy",
+      publications: [
+        {
+        citation: "Deep Multi-view Models for Glitch Classification, Bahaadini, S., N. Rohani, S. Coughlin, M. Zevin, V. Kalogera, & A. Katsaggelos, 2017",
+        href: "https://arxiv.org/pdf/1705.00034.pdf",
+        date: "2017"
+        },
+        {
+        citation: "Gravity Spy: Integrating Advanced LIGO Detector Characterization, Machine Learning, and Citizen Science, Michael Zevin; Scott Coughlin; Sara Bahaadini; Emre Besler; Neda Rohani; Sarah Allen; Miriam Cabero; Kevin Crowston; Aggelos Katsaggelos; Shane Larson; Tae Kyoung Lee; Chris Lintott; Tyson Littenberg; Andrew Lundgren; Carsten Oesterlund; Joshua Smith; Laura Trouille; Vicky Kalogera 2017",
+        href: "https://arxiv.org/abs/1611.04596",
+        date: "2017"
+        },
+        {
+        citation: "Gravity Spy: Humans, machines and the future of citizen science, Kevin Crowston; The Gravity Spy Team 2017.",
+        href: "https://crowston.syr.edu/node/668",
+        date: "2017"
+        },
+        {
+        citation: "Blending Machine and Human Learning Processes, Crowston, Kevin; Østerlund, Carsten; Lee, Tae Kyoung 2017.",
+        href: "http://hdl.handle.net/10125/41159",
+        date: "2017"
+        }
+      ]
+    },
+    {
       slug: "zooniverse/higgs-hunters",
       publications: [
         {
@@ -714,6 +749,11 @@ const Publications = {
     {
     name: "Meta Studies",
     publications: [
+      {
+        citation: "Blending Machine and Human Learning Processes, Crowston, Kevin, Østerlund, Carsten, Lee, Tae Kyoung, 2017",
+        href: "http://scholarspace.manoa.hawaii.edu/handle/10125/41159",
+        date: "2017"
+      },
       {
         citation: "Recruiting Messages Matter: Message Strategies to Attract Citizen Scientists, Lee+ 2017.",
         href: "http://dl.acm.org/citation.cfm?id=3026335",
