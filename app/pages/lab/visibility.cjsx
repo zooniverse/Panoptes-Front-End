@@ -11,9 +11,12 @@ Paginator = require '../../talk/lib/paginator'
 module.exports = React.createClass
   displayName: 'EditProjectVisibility'
 
+  contextTypes:
+    router: React.PropTypes.object.isRequired
+
   getDefaultProps: ->
     project: null
-    location: query: page: 1
+    # location: query: page: 1
 
   getInitialState: ->
     error: null
@@ -29,11 +32,15 @@ module.exports = React.createClass
   setterProperty: 'project'
 
   componentDidMount: ->
-    @getWorkflowList @props.location.query.page
+    page = if @props.location?.query?.page? then @props.location.query.page else 1
+    @getWorkflowList page
 
-  componentWillReceiveProps: (nextProps) ->
-    if nextProps.location.query.page isnt @props.location.query.page
-      @getWorkflowList nextProps.location.query.page
+  onPageChange: (page) ->
+    nextQuery = Object.assign {}, @props.location.query, { page }
+    @context.router.push
+      pathname: @props.location.pathname
+      query: nextQuery
+    @getWorkflowList page
 
   getWorkflowList: (page = 1) ->
     @setState { loadingWorkflows: true }
@@ -149,7 +156,7 @@ module.exports = React.createClass
 
       <hr/>
 
-      <p className="form-label">Workflow Settings</p>
+      <p className="form-label" id="workflow-list">Workflow Settings</p>
       {if @state.loadingWorkflows is true
         <div className="workflow-status-list">Loading workflows...</div>
       else if @state.workflows.length is 0
@@ -247,6 +254,7 @@ module.exports = React.createClass
         <Paginator
           page={meta.page}
           pageCount={meta.page_count}
+          onPageChange={@onPageChange}
         />}
 
       <hr />
