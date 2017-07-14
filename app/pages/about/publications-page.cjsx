@@ -40,10 +40,13 @@ module.exports = React.createClass
     slugs
 
   loadProjects: ->
-    apiClient.type('projects').get(slug: @projectSlugs(), cards: true).then (projects) =>
-      projectMap = { }
-      projectMap[project.slug] = project for project in projects
-      @setState projects: projectMap
+    numProjectsToRequest = @projectSlugs().length
+    apiClient.type('projects')
+      .get(slug: @projectSlugs(), cards: true, page_size: numProjectsToRequest)
+      .then (projects) =>
+        projectMap = { }
+        projectMap[project.slug] = project for project in projects
+        @setState projects: projectMap
 
   render: ->
     sideBarNav = counterpart "publications.nav"
