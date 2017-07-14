@@ -97,17 +97,21 @@ class AudioPlayer extends React.Component {
     let imageElement = null;
     if (imageSrc) {
       imageElement = (
-        <div id='image_element'>
-          <ImageViewer src={imageSrc} type={this.imageTypeString()} format={this.imageFormatString()} frame={this.props.frame} onLoad={this.props.onLoad} onFocus={this.props.onFocus} onBlur={this.props.onBlur}>
-          </ImageViewer>
+        <div>
           {this.renderProgressMarker()}
+          <div className='audio-image-component'>
+            <ImageViewer src={imageSrc} type={this.imageTypeString()} format={this.imageFormatString()} frame={this.props.frame} onLoad={this.props.onLoad} onFocus={this.props.onFocus} onBlur={this.props.onBlur}>
+            </ImageViewer>
+          </div>
         </div>
       );
     }
     return (
       <div>
-        {imageElement}
-        <div className="subject-audio-frame">
+        <div>
+          {imageElement}
+        </div>
+        <div className="audio-player-component">
           <audio className="subject" controls={true} ref={(element) => {
             this.player = element;
           }} src={this.audioSrc()} type={this.audioTypeString()} preload="auto" onCanPlay={this.onAudioLoad.bind(this)} onClick={this.playAudio.bind(this, !this.state.playing)} onEnded={this.endAudio} onTimeUpdate={this.updateProgress.bind(this)}>

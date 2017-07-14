@@ -29,13 +29,6 @@ class ProgressIndicator extends React.Component {
 
     return (
       <svg>
-        <rect
-          width={this.props.naturalWidth}
-          height={this.props.naturalHeight}
-          fill="rgba(0, 0, 0, 0.01)"
-          fillOpacity="0.01"
-          stroke="none"
-        />
         <g id='progress_marker' {...progressMarkerStyle}>
           <line {...points}/>
         </g>
@@ -44,7 +37,7 @@ class ProgressIndicator extends React.Component {
   }
 
   render() {
-    return ( <div>
+    return ( <div className='progress-marker'>
       {this.renderProgressMarker()}
       {this.props.children}
       </div>

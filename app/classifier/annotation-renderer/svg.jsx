@@ -168,7 +168,7 @@ export default class SVGRenderer extends React.Component {
     const showFeedback = isFeedbackActive(this.props.project);
 
     return (
-      <div width={100} height={100}>
+      <div>
         <svg
           ref={(element) => { if (element) this.svgSubjectArea = element; }}
           className="subject"
