@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 apiClient = require 'panoptes-client/lib/api-client'
 WorkflowToggle = require '../../components/workflow-toggle'
 SetToggle = require '../../lib/set-toggle'
@@ -40,8 +41,6 @@ module.exports = React.createClass
       pathname: @props.location.pathname
       query: nextQuery
     @getWorkflowList page
-    workflowList = document.getElementById("workflow-list")
-    workflowList?.scrollIntoView()
 
   getWorkflowList: (page) ->
     @setState { loadingWorkflows: true }
@@ -51,6 +50,8 @@ module.exports = React.createClass
         @setState
           workflows: workflows
           loadingWorkflows: false
+      .then () =>
+        @workflowList?.scrollIntoView()
 
   setRadio: (property, value) ->
     @set property, value
@@ -90,7 +91,6 @@ module.exports = React.createClass
     looksDisabled =
       opacity: 0.7
       pointerEvents: 'none'
-
 
     <div>
       <p className="form-label">Project state and visibility</p>
@@ -157,7 +157,7 @@ module.exports = React.createClass
 
       <hr/>
 
-      <p className="form-label" id="workflow-list">Workflow Settings</p>
+      <p className="form-label" ref={ (node) => @workflowList = node }>Workflow Settings</p>
       {if @state.loadingWorkflows is true
         <div className="workflow-status-list">Loading workflows...</div>
       else if @state.workflows.length is 0
