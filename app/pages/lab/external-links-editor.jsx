@@ -1,7 +1,7 @@
 import React from 'react';
+import DragReorderable from 'drag-reorderable';
 import AutoSave from '../../components/auto-save.coffee';
 import handleInputChange from '../../lib/handle-input-change.coffee';
-import DragReorderable from 'drag-reorderable';
 
 export default class ExternalLinksEditor extends React.Component {
   constructor(props) {
@@ -17,16 +17,16 @@ export default class ExternalLinksEditor extends React.Component {
     const changes = {
       [`urls.${this.props.project.urls.length}`]: {
         label: 'Example',
-        url: 'https://example.com/',
-      },
+        url: 'https://example.com/'
+      }
     };
     this.props.project.update(changes);
   }
 
   handleLinkReorder(newLinkOrder) {
-    const changes = {
-      urls: newLinkOrder,
-    };
+    const socialUrls = this.props.project.urls.filter(url => url.path);
+    const urls = newLinkOrder.concat(socialUrls);
+    const changes = { urls };
     this.props.project.update(changes);
     this.props.project.save();
   }
@@ -37,7 +37,7 @@ export default class ExternalLinksEditor extends React.Component {
     if (indexToRemove > -1) {
       urlList.splice(indexToRemove, 1);
       const changes = {
-        urls: urlList,
+        urls: urlList
       };
       this.props.project.update(changes);
       // Remove link is handeld outside of the AutoSave so save directly
@@ -81,7 +81,7 @@ export default class ExternalLinksEditor extends React.Component {
         </AutoSave>
         <td>
           <button type="button" onClick={this.handleRemoveLink.bind(this, link)}>
-            <i className="fa fa-remove"></i>
+            <i className="fa fa-remove" />
           </button>
         </td>
       </tr>
@@ -89,7 +89,7 @@ export default class ExternalLinksEditor extends React.Component {
   }
 
   renderTable(urls) {
-    const tableUrls = [].concat(urls);
+    const tableUrls = urls.filter(url => !url.path);
     for (const link of tableUrls) {
       if (!link._key) {
         link._key = Math.random();
@@ -110,7 +110,7 @@ export default class ExternalLinksEditor extends React.Component {
           render={this.renderRow}
           onChange={this.handleLinkReorder}
         />
-      </table>      
+      </table>
     );
   }
 
@@ -130,9 +130,13 @@ export default class ExternalLinksEditor extends React.Component {
 }
 
 ExternalLinksEditor.defaultProps = {
-  project: {},
+  project: {}
 };
 
 ExternalLinksEditor.propTypes = {
-  project: React.PropTypes.object.isRequired,
+  project: React.PropTypes.shape({
+    save: React.PropTypes.func,
+    update: React.PropTypes.func,
+    urls: React.PropTypes.array
+  })
 };

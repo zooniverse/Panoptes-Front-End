@@ -12,6 +12,7 @@ Select = require 'react-select'
 `import DISCIPLINES from '../../constants/disciplines';`
 `import CharLimit from '../../components/char-limit';`
 `import ExternalLinksEditor from './external-links-editor';`
+`import SocialLinksEditor from './social-links-editor';`
 `import DisplayNameSlugEditor from '../../partials/display-name-slug-editor';`
 
 MAX_AVATAR_SIZE = 64000
@@ -47,7 +48,7 @@ module.exports = React.createClass
   updateImage: (type) ->
     @props.project.get(type)
       .then (image) =>
-        @setState 
+        @setState
           "#{type}": image
       .catch (error) =>
         console.log error
@@ -189,8 +190,23 @@ module.exports = React.createClass
 
           <div>
             External links<br />
-            <small className="form-help">Adding an external link will make it appear as a new tab alongside the about, classify, talk, and collect tabs. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link below.</small>
+            <small className="form-help">
+              Adding an external link will make it appear as a new tab alongside
+              the about, classify, talk, and collect tabs. You can rearrange the
+              displayed order by clicking and dragging on the left gray tab next
+              to each link below.
+            </small>
             <ExternalLinksEditor project={@props.project} />
+            <div className="edit-social-links">
+              <h5>Social Links Section</h5>
+              <small className="form-help">
+                Adding a social link will append a media icon at
+                the end of your project menu bar. You can rearrange the
+                displayed order by clicking and dragging on the left gray
+                tab next to each link below.
+              </small>
+              <SocialLinksEditor project={@props.project} />
+            </div>
           </div>
         </div>
       </div>
