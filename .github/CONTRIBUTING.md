@@ -23,3 +23,13 @@ Say you have some documentation or code you want to add:
 0. Submit a Pull Request (PR)
 0. Wait for feedback or a merge!
 0. If your PR is open for a while, it may get out of synch with the master branch. In that case, pull the latest master branch and run `git rebase master` – while in your _feature_ branch – to update your feature branch to the latest master. You may need to use `git push --force-with-lease` to update your PR after rebasing.
+
+### PFE Pull Request Workflow
+  - Person A submits PR and requests review from another or multiple people or asks for volunteers on slack.
+  - Person B should set themselves as the Assignee.
+  - When the PR is ready, Person B clicks approve, merge, and delete the branch (if applicable).
+  - If multiple people review a PR, they should sort out amongst themselves who is the Assignee.
+
+Please see [Github's docs](https://help.github.com/articles/reviewing-changes-in-pull-requests) for more info and details on reviewing changes in pull requests.
+
+Also note that when you open a PR, you will see a link to review the repo's **guidelines for contributing**. If you're not familiar with the guidelines, please review them.
