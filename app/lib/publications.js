@@ -4,6 +4,16 @@ const Publications = {
       slug: "zooniverse/galaxy-zoo",
       publications: [
         {
+          citation: "Galaxy Zoo: star-formation versus spiral arm number, Hart+ 2017.",
+          href: "http://adsabs.harvard.edu/abs/2017arXiv170302053H",
+          date: "2017"
+        },
+        {
+          citation: "Galaxy Zoo: The interplay of quenching mechanisms in the group environment, Smethurst+ 2017.",
+          href: "https://arxiv.org/abs/1704.06269",
+          date: "2017"
+        },
+        {
           citation: "Galaxy Zoo: Quantitative Visual Morphological Classifications for 48,000 galaxies from CANDELS, Simmons+ 2016.",
           href: "http://xxx.lanl.gov/pdf/1610.03070v1",
           date: "October 12, 2016"
@@ -271,8 +281,23 @@ const Publications = {
       ]
     },
     {
+      slug: "marckuchner/backyard-worlds-planet-9",
+      publications: [
+        {
+        citation: "The First Brown Dwarf Discovered by the Backyard Worlds: Planet 9 Citizen Science Project, Kuchner+ 2017.",
+        href: "http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:1705.02919",
+        date: "2017"
+        }
+      ]
+    },
+    {
       slug: "zooniverse/solar-stormwatch",
       publications: [
+        {
+          citation: "Testing the current paradigm for space weather prediction with heliospheric imagers, Barnard+ 2017.",
+          href: "http://onlinelibrary.wiley.com/doi/10.1002/2017SW001609/full",
+          date: "2017"
+        },
         {
           citation: "Differences between the CME fronts tracked by an expert, an automated algorithm, and the Solar Stormwatch project, Barnard+ 2015.",
           href: "http://onlinelibrary.wiley.com/doi/10.1002/2015SW001280/full",
@@ -549,7 +574,27 @@ const Publications = {
           date: "August 23, 2016"
         }
       ]
-    }
+    },
+    {
+      slug: "zooniverse/planet-four",
+      publications: [
+        {
+          citation: "Task Workflow Design and its impact on performance and volunteers' subjective preference in Virtual Citizen Science, Sprinks+ 2017.",
+          href: "http://www.sciencedirect.com/science/article/pii/S1071581917300332",
+          date: "2017"
+        }
+      ]
+    },
+    {
+      slug: "jukoch/pattern-perception",
+      publications: [
+        {
+        citation: "Citizen science: A new perspective to advance spatial pattern evaluation in hydrology, Koch+ 2017.",
+        href: "http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0178165",
+        date: "2017"
+        }
+      ]
+    },
   ],
   humanities: [
     {
@@ -621,6 +666,26 @@ const Publications = {
           date: "August 8, 2016"
         }
       ]
+    },
+    {
+      slug: "zooniverse/notes-from-nature",
+      publications: [
+        {
+        citation: "Workforce-efficient consensus in crowdsourced transcription of biocollections information, Matsunaga+ 2016.",
+        href: "http://www.sciencedirect.com/science/article/pii/S0167739X15002277",
+        date: "2016"
+        }
+      ],
+    },
+    {
+    slug: "zooniverse/penguin-watch",
+    publications: [
+      {
+        citation: "Counting in the Wild, Arteta, C., Lempitsky, V., Zisserman, A. 2016",
+        href: "https://link.springer.com/chapter/10.1007/978-3-319-46478-7_30",
+        date: "2016" 
+      }
+    ]
     }
   ],
   medicine: [
@@ -641,12 +706,64 @@ const Publications = {
       citation: "'That looks weird' - evaluating citizen scientists' ability to detect unusual features in ATLAS images of LHC collisions, Barr+ 2016.",
       href: "https://arxiv.org/pdf/1610.02214v1.pdf",
       date: "October 10, 2016"
-    }]
-  }, ],
+    }
+      ]
+    },
+    {
+      slug: "zooniverse/gravity-spy",
+      publications: [
+        {
+        citation: "Deep Multi-view Models for Glitch Classification, Bahaadini, S., N. Rohani, S. Coughlin, M. Zevin, V. Kalogera, & A. Katsaggelos, 2017",
+        href: "https://arxiv.org/pdf/1705.00034.pdf",
+        date: "2017"
+        },
+        {
+        citation: "Gravity Spy: Integrating Advanced LIGO Detector Characterization, Machine Learning, and Citizen Science, Michael Zevin; Scott Coughlin; Sara Bahaadini; Emre Besler; Neda Rohani; Sarah Allen; Miriam Cabero; Kevin Crowston; Aggelos Katsaggelos; Shane Larson; Tae Kyoung Lee; Chris Lintott; Tyson Littenberg; Andrew Lundgren; Carsten Oesterlund; Joshua Smith; Laura Trouille; Vicky Kalogera 2017",
+        href: "https://arxiv.org/abs/1611.04596",
+        date: "2017"
+        },
+        {
+        citation: "Gravity Spy: Humans, machines and the future of citizen science, Kevin Crowston; The Gravity Spy Team 2017.",
+        href: "https://crowston.syr.edu/node/668",
+        date: "2017"
+        },
+        {
+        citation: "Blending Machine and Human Learning Processes, Crowston, Kevin; Østerlund, Carsten; Lee, Tae Kyoung 2017.",
+        href: "http://hdl.handle.net/10125/41159",
+        date: "2017"
+        }
+      ]
+    },
+    {
+      slug: "zooniverse/higgs-hunters",
+      publications: [
+        {
+        citation: "'That looks weird' - evaluating citizen scientists' ability to detect unusual features in ATLAS images of LHC collisions, Barr+ 2016.",
+        href: "https://arxiv.org/pdf/1610.02214v1.pdf",
+        date: "October 10, 2016"
+      }
+      ],
+    },
+  ],
   meta: [
     {
     name: "Meta Studies",
     publications: [
+      {
+        citation: "Blending Machine and Human Learning Processes, Crowston, Kevin, Østerlund, Carsten, Lee, Tae Kyoung, 2017",
+        href: "http://scholarspace.manoa.hawaii.edu/handle/10125/41159",
+        date: "2017"
+      },
+      {
+        citation: "Recruiting Messages Matter: Message Strategies to Attract Citizen Scientists, Lee+ 2017.",
+        href: "http://dl.acm.org/citation.cfm?id=3026335",
+        date: "2017"
+      },
+      {
+        citation: "DIY Zooniverse Citizen Science Project: Engaging The Public With Your Museum’s Collections And Data, Trouille+ 2017.",
+        href: "http://mw17.mwconf.org/paper/diy-your-own-zooniverse-citizen-science-project-engaging-the-public-with-your-museums-collections-and-data/",
+        date: "2017"
+      },
       {
         citation: "Assessing data quality in citizen science, Kosmala+ 2016.",
         href: "http://biorxiv.org/content/early/2016/09/08/074104",
