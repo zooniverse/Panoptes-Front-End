@@ -136,17 +136,12 @@ EditProjectPage = React.createClass
 
 EditProjectPageWrapper = React.createClass
   displayName: 'EditProjectPageWrapper'
-  receivedUser: false
 
   contextTypes:
     router: React.PropTypes.object.isRequired
 
-  componentWillMount: ->
-    if @userReceived() and !@state.project.id
-      @getProjectAndOwners()
-
   componentWillReceiveProps: (nextProps) ->
-    if @userReceived()
+    if @props.user isnt nextProps.user
       @getProjectAndOwners()
     unless nextProps.user
       @context.router.push '/lab'
@@ -166,11 +161,6 @@ EditProjectPageWrapper = React.createClass
   getDefaultProps: ->
     params:
       projectID: '0'
-
-  userReceived: ->
-    if @props.user and @receivedUser is false
-      @receivedUser = true
-    @receivedUser
 
   getProjectAndOwners: ->
     getProject = apiClient.type('projects').get @props.params.projectID
