@@ -1,5 +1,4 @@
 React = require 'react'
-ReactDOM = require 'react-dom'
 apiClient = require 'panoptes-client/lib/api-client'
 WorkflowToggle = require '../../components/workflow-toggle'
 SetToggle = require '../../lib/set-toggle'
