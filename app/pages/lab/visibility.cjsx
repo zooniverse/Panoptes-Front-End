@@ -50,7 +50,8 @@ module.exports = React.createClass
           workflows: workflows
           loadingWorkflows: false
       .then () =>
-        @workflowList?.scrollIntoView()
+        if @props.location?.query?.page?
+          @workflowList?.scrollIntoView()
 
   setRadio: (property, value) ->
     @set property, value
