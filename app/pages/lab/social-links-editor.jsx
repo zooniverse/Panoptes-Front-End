@@ -53,22 +53,10 @@ export default class SocialLinksEditor extends React.Component {
   }
 
   handleLinkReorder(newLinkOrder) {
-    const socialUrls = [];
-    const urls = this.props.project.urls.slice();
-    let index = urls.length - 1;
-    while (index >= 0) {
-      if (urls[index].path) {
-        socialUrls.push(urls.splice(index, 1)[0]);
-      }
-      index -= 1;
-    }
-    newLinkOrder.map((item) => {
-      const urlIndex = this.indexFinder(socialUrls, item);
-      if (urlIndex >= 0) {
-        urls.push(socialUrls[urlIndex]);
-      }
-    });
-    const changes = { urls };
+    const externalUrls = this.props.project.urls.filter(url => !url.path);
+    const socialUrls = this.props.project.urls.filter(url => url.path);
+    const newSocialUrls = socialUrls.sort((a, b) => newLinkOrder.indexOf(a.site) - newLinkOrder.indexOf(b.site));
+    const changes = { urls: externalUrls.concat(newSocialUrls) };
     this.props.project.update(changes).save();
     this.setState({ socialOrder: newLinkOrder });
   }
@@ -90,7 +78,7 @@ export default class SocialLinksEditor extends React.Component {
     event.target.parentElement.parentElement.setAttribute('draggable', true);
   }
 
-  indexFinder(toSearch, toFind) { //eslint-disable-line
+  indexFinder(toSearch, toFind) {
     return toSearch.findIndex(i => (i.site === toFind));
   }
 
