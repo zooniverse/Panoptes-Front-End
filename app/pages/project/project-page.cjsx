@@ -7,6 +7,7 @@ Translate = require 'react-translate-component'
 Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
+Localise = require '../../lib/localise'
 
 counterpart.registerTranslations 'en',
   project:
@@ -109,6 +110,7 @@ ProjectPage = React.createClass
       @props.project.display_name
 
   render: ->
+    console.log 'PROPS: ', @props
     betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
     onHomePage = @props.routes[2].path is undefined
@@ -136,7 +138,7 @@ ProjectPage = React.createClass
 
     <div className="project-page">
       <div className="project-background" style={backgroundStyle}></div>
-
+        <Localise props={@props}/>
       <nav className="project-nav tabbed-content-tabs">
         {if @props.project.redirect
           <a href={@props.project.redirect} className="tabbed-content-tab" target="_blank">
@@ -155,7 +157,6 @@ ProjectPage = React.createClass
           </IndexLink>}
 
         <br className='responsive-break' />
-
         {unless @props.project.redirect
           <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.about'}>
             <Translate content="project.nav.about" />
