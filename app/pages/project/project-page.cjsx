@@ -9,15 +9,25 @@ classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
 Localise = require('../../lib/localise').default
 
-counterpart.registerTranslations 'en',
-  project:
-    loading: 'Loading project'
-    disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
-    nav:
-      about: 'About'
-      classify: 'Classify'
-      talk: 'Talk'
-      collections: 'Collect'
+# counterpart.registerTranslations 'en',
+#   project:
+#     loading: 'Loading project'
+#     disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
+#     nav:
+#       about: 'About'
+#       classify: 'Classify'
+#       talk: 'Talk'
+#       collections: 'Collect'
+
+# counterpart.registerTranslations 'it',
+#   project:
+#     loading: 'Loading project'
+#     disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
+#     nav:
+#       about: 'About'
+#       classify: 'Classifica'
+#       talk: 'Talk'
+#       collections: 'Colleziona'
 
 SOCIAL_ICONS =
   'bitbucket.com/': 'bitbucket'
@@ -110,7 +120,6 @@ ProjectPage = React.createClass
       @props.project.display_name
 
   render: ->
-    console.log 'PROPS: ', @props
     betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
     onHomePage = @props.routes[2].path is undefined
@@ -181,7 +190,7 @@ ProjectPage = React.createClass
         <Link to="#{projectPath}/collections" activeClassName="active" className={collectClasses}>
           <Translate content="project.nav.collections" />
         </Link>
-        <Localise project={@props.project}/>
+        <Localise props={@props}/>
         {@props.project.urls.map ({label, url}, i) =>
           unless !!label
             for pattern, icon of SOCIAL_ICONS

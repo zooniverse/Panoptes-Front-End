@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
 import languages from './languages';
+import { select } from './language-engine';
 
 const propTypes = {
-  project: PropTypes.object.isRequired
+  props: PropTypes.object.isRequired
 };
 
 class Localise extends Component {
@@ -19,10 +20,11 @@ class Localise extends Component {
     this.setState({
       language: option
     });
+    return select(option, this.props.props.user);
   }
 
   render() {
-    const { available_languages } = this.props.project;
+    const { available_languages } = this.props.props.project;
     const filtered_languages = languages.reduce((result, language) => {
       const filtered = available_languages.filter(option => language.value === option);
       if (filtered.length > 0) {
