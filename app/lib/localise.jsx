@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
+import languages from './languages';
 
 const propTypes = {
   project: PropTypes.object.isRequired
@@ -14,28 +15,34 @@ class Localise extends Component {
     };
   }
 
-  handleChange(event) {
+  handleChange(option) {
     this.setState({
-      value: event.target.value,
+      language: option
     });
   }
 
-
   render() {
     const { available_languages } = this.props.project;
-    const options = [
-      { value: 'one', label: 'One' },
-      { value: 'two', label: 'Two' }
-    ];
+    const filtered_languages = languages.reduce((result, language) => {
+      const filtered = available_languages.filter(option => language.value === option);
+      if (filtered.length > 0) {
+        result.push({
+          label: language.label,
+          value: language.value
+        });
+      }
+      return result;
+    }, []);
+
     return (
       <Select
-        className="standard-input"
+        className="search card-search standard-input"
         multi={false}
         name="locales"
-        onChange={this.componentDidMount.handleChange}
-        options={options}
+        onChange={this.handleChange}
+        options={filtered_languages}
         placeholder="Choose a language"
-        value={this.state.value}
+        value={this.state.language}
       />
     );
   }

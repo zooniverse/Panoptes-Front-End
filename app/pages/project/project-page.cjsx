@@ -7,7 +7,7 @@ Translate = require 'react-translate-component'
 Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
-Localise = require '../../lib/localise'
+Localise = require('../../lib/localise').default
 
 counterpart.registerTranslations 'en',
   project:
@@ -138,7 +138,6 @@ ProjectPage = React.createClass
 
     <div className="project-page">
       <div className="project-background" style={backgroundStyle}></div>
-        <Localise props={@props}/>
       <nav className="project-nav tabbed-content-tabs">
         {if @props.project.redirect
           <a href={@props.project.redirect} className="tabbed-content-tab" target="_blank">
@@ -179,10 +178,10 @@ ProjectPage = React.createClass
           <Translate content="project.nav.talk" />
         </Link>
 
-         <Link to="#{projectPath}/collections" activeClassName="active" className={collectClasses}>
+        <Link to="#{projectPath}/collections" activeClassName="active" className={collectClasses}>
           <Translate content="project.nav.collections" />
         </Link>
-
+        <Localise project={@props.project}/>
         {@props.project.urls.map ({label, url}, i) =>
           unless !!label
             for pattern, icon of SOCIAL_ICONS
