@@ -40,6 +40,8 @@ module.exports = React.createClass
       pathname: @props.location.pathname
       query: nextQuery
     @getWorkflowList page
+    .then () =>
+      @workflowList?.scrollIntoView()
 
   getWorkflowList: (page) ->
     @setState { loadingWorkflows: true }
@@ -49,9 +51,6 @@ module.exports = React.createClass
         @setState
           workflows: workflows
           loadingWorkflows: false
-      .then () =>
-        if @props.location?.query?.page?
-          @workflowList?.scrollIntoView()
 
   setRadio: (property, value) ->
     @set property, value
