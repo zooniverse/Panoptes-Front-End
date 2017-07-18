@@ -4,11 +4,15 @@ WorkflowToggle = require '../../components/workflow-toggle'
 SetToggle = require '../../lib/set-toggle'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 uniq = require 'lodash/uniq'
+Paginator = require '../../talk/lib/paginator'
 
 `import ApplyForBetaForm from './apply-for-beta-form';`
 
 module.exports = React.createClass
   displayName: 'EditProjectVisibility'
+
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
     project: null
@@ -27,8 +31,22 @@ module.exports = React.createClass
   setterProperty: 'project'
 
   componentDidMount: ->
+    page = if @props.location?.query?.page? then @props.location.query.page else 1
+    @getWorkflowList page
+
+  onPageChange: (page) ->
+    nextQuery = Object.assign {}, @props.location.query, { page }
+    @context.router.push
+      pathname: @props.location.pathname
+      query: nextQuery
+    @getWorkflowList page
+    .then () =>
+      @workflowList?.scrollIntoView()
+
+  getWorkflowList: (page) ->
     @setState { loadingWorkflows: true }
-    getWorkflowsInOrder @props.project, fields: 'active,configuration,display_name'
+    # TODO remove page_size once getWorkflowsInOrder does not override default page_size
+    getWorkflowsInOrder(@props.project, { page: page, page_size: 20, fields: 'active,configuration,display_name' })
       .then (workflows) =>
         @setState
           workflows: workflows
@@ -138,7 +156,7 @@ module.exports = React.createClass
 
       <hr/>
 
-      <p className="form-label">Workflow Settings</p>
+      <p className="form-label" ref={ (node) => @workflowList = node }>Workflow Settings</p>
       {if @state.loadingWorkflows is true
         <div className="workflow-status-list">Loading workflows...</div>
       else if @state.workflows.length is 0
@@ -229,6 +247,18 @@ module.exports = React.createClass
             </tbody>
           </table>
         </div>}
+
+      {if @state.workflows.length > 0
+        meta = @state.workflows[0].getMeta()
+
+        <Paginator
+          page={meta.page}
+          pageCount={meta.page_count}
+          onPageChange={@onPageChange}
+        />}
+
+      <hr />
+
       <p className="form-label">Status</p>
       <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
       <p className="form-help">If an active workflow is the default workflow for the project and is made inactive, then it will be removed as the default workflow.</p>
