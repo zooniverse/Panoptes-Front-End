@@ -12,7 +12,7 @@ class Localise extends Component {
     super();
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      value: ''
+      language: ''
     };
   }
 
