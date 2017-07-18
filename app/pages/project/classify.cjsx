@@ -1,12 +1,12 @@
 auth = require 'panoptes-client/lib/auth'
 React = require 'react'
 ReactDOM = require 'react-dom'
-TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 `import FinishedBanner from './finished-banner';`
 Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
+`import defineTitle from '../../lib/define-title';`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 experimentsClient = require '../../lib/experiments-client'
 { Split } = require('seven-ten')
@@ -41,10 +41,8 @@ apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 # Store this externally to persist during the session.
 sessionDemoMode = false
 
-module.exports = React.createClass
+ProjectClassifyPage = React.createClass
   displayName: 'ProjectClassifyPage'
-
-  mixins: [TitleMixin]
 
   title: 'Classify'
 
@@ -188,7 +186,7 @@ module.exports = React.createClass
           subjectsToLoad = if filteredSubjects.length > 0 then filteredSubjects else nonLoadedSubjects
           upcomingSubjects.forWorkflow[workflow.id].push subjectsToLoad...
           # Remove any duplicate subjects from the upcoming queue
-          upcomingSubjects.forWorkflow[workflow.id].filter (subject, i) => 
+          upcomingSubjects.forWorkflow[workflow.id].filter (subject, i) =>
             upcomingSubjects.forWorkflow[workflow.id].indexOf subject is i
 
       # If we're filling this list for the first time, we won't have a subject selected, so try again.
@@ -309,3 +307,7 @@ module.exports = React.createClass
 window.currentWorkflowForProject = currentWorkflowForProject
 window.currentClassifications = currentClassifications
 window.upcomingSubjects = upcomingSubjects
+
+ClassifyPageWithTitle = defineTitle ProjectClassifyPage
+
+module.exports = ClassifyPageWithTitle

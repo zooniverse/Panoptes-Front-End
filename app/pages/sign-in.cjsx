@@ -1,8 +1,8 @@
 counterpart = require 'counterpart'
 React = require 'react'
-TitleMixin = require '../lib/title-mixin'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
+`import defineTitle from '../lib/define-title';`
 
 counterpart.registerTranslations 'en',
   signIn:
@@ -15,11 +15,8 @@ counterpart.registerTranslations 'en',
     withTwitter: 'Sign in with Twitter'
     withGoogle: 'Sign in with Google'
 
-module.exports = React.createClass
+SignInPage = React.createClass
   displayName: 'SignInPage'
-
-  mixins: [TitleMixin]
-
   title: 'Sign in/register'
 
   render: ->
@@ -54,3 +51,7 @@ module.exports = React.createClass
         </div>
       </div>
     </div>
+
+SignInPageWithTitle = defineTitle SignInPage
+
+module.exports = SignInPageWithTitle

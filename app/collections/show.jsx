@@ -5,7 +5,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import classNames from 'classnames';
 import counterpart from 'counterpart';
 import Loading from '../components/loading-indicator';
-import TitleMixin from '../lib/title-mixin';
+import defineTitle from '../lib/define-title';
 
 counterpart.registerTranslations('en', {
   collectionPage: {
@@ -158,8 +158,6 @@ const CollectionPage = React.createClass({
 });
 
 const CollectionPageWrapper = React.createClass({
-  mixins: [TitleMixin],
-
   propTypes: {
     children: React.PropTypes.node,
     project: React.PropTypes.object,
@@ -280,4 +278,6 @@ const CollectionPageWrapper = React.createClass({
   }
 });
 
-export default CollectionPageWrapper;
+const CollectionPageWithTitle = defineTitle(CollectionPageWrapper);
+
+export default CollectionPageWithTitle;
