@@ -6,7 +6,7 @@ const FeedbackPoint = ({ point }) => {
     className: `feedback-points__point ${statusClass}`,
     cx: point.x,
     cy: point.y,
-    r: point.tol,
+    r: point.tol
   };
   return <circle {...pointProps} />;
 };
@@ -16,7 +16,7 @@ FeedbackPoint.propTypes = {
     x: PropTypes.string,
     y: PropTypes.string,
     tol: PropTypes.string,
-    success: PropTypes.bool,
+    success: PropTypes.bool
   })
 };
 

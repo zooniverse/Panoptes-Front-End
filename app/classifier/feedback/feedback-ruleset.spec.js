@@ -1,6 +1,10 @@
-// "Passing arrow functions (“lambdas”) to Mocha is discouraged" - https://mochajs.org/#arrow-functions
-/* eslint prefer-arrow-callback: 0, func-names: 0 */
-/* global describe, it, beforeEach, before */
+/* eslint
+  func-names: 0,
+  import/no-extraneous-dependencies: ['error', { 'devDependencies': true }]
+  no-underscore-dangle: 0,
+  prefer-arrow-callback: 0,
+  'react/jsx-boolean-value': ['error', 'always']
+*/
 
 import assert from 'assert';
 import FeedbackRuleSet from './feedback-ruleset';

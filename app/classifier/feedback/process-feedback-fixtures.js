@@ -1,3 +1,12 @@
+/* eslint
+  func-names: 0,
+  import/no-extraneous-dependencies: ['error', { 'devDependencies': true }]
+  max-len: 0,
+  no-underscore-dangle: 0,
+  prefer-arrow-callback: 0,
+  'react/jsx-boolean-value': ['error', 'always']
+*/
+
 const mockFeedbackRule = (processor, rule) => {
   processor.__Rewire__('FeedbackRuleSet', class FeedbackRuleSet {
     constructor() {
@@ -26,5 +35,5 @@ export {
   FAILURE_MESSAGE,
   SUBJECT,
   QUESTION,
-  TASK,
+  TASK
 };

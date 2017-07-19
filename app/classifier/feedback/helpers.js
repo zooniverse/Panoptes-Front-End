@@ -1,10 +1,8 @@
 import FeedbackRuleSet from './feedback-ruleset';
 
-const isFeedbackActive = (project) => {
-  return project &&
-    project.experimental_tools && 
-    project.experimental_tools.includes('general feedback');
-};
+const isFeedbackActive = project => project &&
+  project.experimental_tools &&
+  project.experimental_tools.includes('general feedback');
 
 const isThereFeedback = (subject, workflow) => {
   let result = false;

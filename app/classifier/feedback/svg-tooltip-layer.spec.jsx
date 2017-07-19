@@ -1,6 +1,10 @@
-// "Passing arrow functions (“lambdas”) to Mocha is discouraged" - https://mochajs.org/#arrow-functions
-/* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'] */
-/* global describe, it, beforeEach, before */
+/* eslint
+  func-names: 0,
+  import/no-extraneous-dependencies: ['error', { 'devDependencies': true }]
+  no-underscore-dangle: 0,
+  prefer-arrow-callback: 0,
+  'react/jsx-boolean-value': ['error', 'always']
+*/
 
 import React from 'react';
 import assert from 'assert';
@@ -9,7 +13,7 @@ import { SVGToolTipLayer, __RewireAPI__ as RewireAPI } from './svg-tooltip-layer
 
 class Tooltip extends React.Component {
   render() {
-    <div />
+    return <div />;
   }
 }
 
@@ -20,7 +24,7 @@ const FEEDBACK = [
   { x: '20', y: '20' }
 ];
 
-describe('<SVGToolTipLayer />', function() {
+describe('<SVGToolTipLayer />', function () {
   it('should return null if not passed any feedback', function () {
     const wrapper = shallow(<SVGToolTipLayer feedback={[]} />);
     assert.strictEqual(wrapper.type(), null);
