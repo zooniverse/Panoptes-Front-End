@@ -1,6 +1,10 @@
-// "Passing arrow functions (“lambdas”) to Mocha is discouraged" - https://mochajs.org/#arrow-functions
-/* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'] */
-/* global describe, it, beforeEach, before */
+/* eslint
+  func-names: 0,
+  import/no-extraneous-dependencies: ['error', { 'devDependencies': true }]
+  no-underscore-dangle: 0,
+  prefer-arrow-callback: 0,
+  'react/jsx-boolean-value': ['error', 'always']
+*/
 
 import React from 'react';
 import assert from 'assert';
@@ -9,7 +13,7 @@ import { FeedbackViewer, __RewireAPI__ as RewireAPI } from './svg-feedback-viewe
 
 class FeedbackPoint extends React.Component {
   render() {
-    <circle />
+    return <circle />;
   }
 }
 
@@ -20,7 +24,7 @@ const FEEDBACK = [
   { x: '20', y: '20' }
 ];
 
-describe('<FeedbackViewer />', function() {
+describe('<FeedbackViewer />', function () {
   it('should return null if not passed any feedback', function () {
     const wrapper = shallow(<FeedbackViewer feedback={[]} />);
     assert.strictEqual(wrapper.type(), null);
@@ -29,11 +33,11 @@ describe('<FeedbackViewer />', function() {
   it('should return the correct element and class', function () {
     const wrapper = shallow(<FeedbackViewer feedback={FEEDBACK} />);
     assert.strictEqual(wrapper.type(), 'g');
-    assert(wrapper.hasClass('feedback-points'))
+    assert(wrapper.hasClass('feedback-points'));
   });
 
   it('should return a FeedbackPoint for each feedback item', function () {
     const wrapper = shallow(<FeedbackViewer feedback={FEEDBACK} />);
-    assert.strictEqual(wrapper.find('FeedbackPoint').length, 2)
+    assert.strictEqual(wrapper.find('FeedbackPoint').length, 2);
   });
 });

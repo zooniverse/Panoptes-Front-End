@@ -1,16 +1,20 @@
-// "Passing arrow functions (“lambdas”) to Mocha is discouraged" - https://mochajs.org/#arrow-functions
-/* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'] */
-/* global describe, it */
+/* eslint
+  func-names: 0,
+  import/no-extraneous-dependencies: ['error', { 'devDependencies': true }]
+  max-len: 0,
+  no-underscore-dangle: 0,
+  prefer-arrow-callback: 0,
+  'react/jsx-boolean-value': ['error', 'always']
+*/
 
 import assert from 'assert';
 import processDrawingFeedback from './process-feedback-drawing';
-import { 
+import {
   mockFeedbackRule,
   SUCCESS_MESSAGE,
   FAILURE_MESSAGE,
   SUBJECT,
-  TASK,
-  QUESTION,
+  TASK
 } from './process-feedback-fixtures';
 
 const NORMAL_SHOW_RULE = {
@@ -25,17 +29,17 @@ const NORMAL_SHOW_RULE = {
   dud: false
 };
 
-const NORMAL_NOSHOW_RULE = Object.assign({}, NORMAL_SHOW_RULE, { 
+const NORMAL_NOSHOW_RULE = Object.assign({}, NORMAL_SHOW_RULE, {
   successEnabled: false,
-  failureEnabled: false,
+  failureEnabled: false
 });
 
 const DUD_SHOW_RULE = Object.assign({}, NORMAL_SHOW_RULE, {
-  dud: true,
+  dud: true
 });
 
 const DUD_NOSHOW_RULE = Object.assign({}, NORMAL_NOSHOW_RULE, {
-  dud: true,
+  dud: true
 });
 
 const NORMAL_ANNOTATION = {
@@ -54,10 +58,9 @@ const FAILURE_ANNOTATION = Object.assign({}, NORMAL_ANNOTATION, {
 
 const DUD_ANNOTATION = Object.assign({}, NORMAL_ANNOTATION, { value: [] });
 
-const mockDrawingFeedbackRule = (rule) => mockFeedbackRule(processDrawingFeedback, rule);
+const mockDrawingFeedbackRule = rule => mockFeedbackRule(processDrawingFeedback, rule);
 
 describe('processDrawingFeedback', function () {
-
   it('should return an array of results', function () {
     mockDrawingFeedbackRule(NORMAL_SHOW_RULE);
     const result = processDrawingFeedback(NORMAL_ANNOTATION, SUBJECT, TASK);
@@ -137,5 +140,4 @@ describe('processDrawingFeedback', function () {
     const result = processDrawingFeedback(NORMAL_ANNOTATION, SUBJECT, TASK);
     assert.strictEqual(result.length, 0);
   });
-
 });

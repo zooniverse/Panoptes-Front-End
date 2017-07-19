@@ -1,3 +1,11 @@
+/* eslint
+  func-names: 0,
+  import/no-extraneous-dependencies: ["error", { "devDependencies": true }]
+  no-underscore-dangle: ["error", { "allowAfterThis": true }],
+  prefer-arrow-callback: 0,
+  "react/jsx-boolean-value": ["error", "always"]
+*/
+
 export default class FeedbackRuleSet {
   constructor(subject, task) {
     this._subject = subject;
@@ -25,7 +33,7 @@ export default class FeedbackRuleSet {
         if (match) {
           const index = match[1];
           const type = metadata[key];
-          const typeInTaskDefinition = feedback.types.find((feedbackItem) => feedbackItem.id === type);
+          const typeInTaskDefinition = feedback.types.find(feedbackItem => feedbackItem.id === type);
           if (typeInTaskDefinition && typeInTaskDefinition.valid) {
             types[`feedback_${index}`] = metadata[key];
           }
@@ -38,7 +46,7 @@ export default class FeedbackRuleSet {
   }
 
   _getDefaultsForType(type) {
-    const typeFromTask = this._task.feedback.types.find((feedbackType) => feedbackType.id === type);
+    const typeFromTask = this._task.feedback.types.find(feedbackType => feedbackType.id === type);
     return Object.keys(typeFromTask).reduce((obj, key) => {
       if (!['id', 'valid'].includes(key)) {
         if (key.slice(0, 7) === 'default') {

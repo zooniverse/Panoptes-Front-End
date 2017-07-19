@@ -1,16 +1,21 @@
-// "Passing arrow functions (“lambdas”) to Mocha is discouraged" - https://mochajs.org/#arrow-functions
-/* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'] */
-/* global describe, it */
+/* eslint
+  func-names: 0,
+  import/no-extraneous-dependencies: ['error', { 'devDependencies': true }]
+  max-len: 0,
+  no-underscore-dangle: 0,
+  prefer-arrow-callback: 0,
+  'react/jsx-boolean-value': ['error', 'always']
+*/
 
 import assert from 'assert';
 import processSingleFeedback from './process-feedback-single';
-import { 
+import {
   mockFeedbackRule,
   SUCCESS_MESSAGE,
   FAILURE_MESSAGE,
   TASK,
   QUESTION,
-  SUBJECT,
+  SUBJECT
 } from './process-feedback-fixtures';
 
 const SHOW_RULE = {
@@ -24,12 +29,12 @@ const SHOW_RULE = {
 
 const NOSHOW_RULE = Object.assign({}, SHOW_RULE, {
   successEnabled: false,
-  failureEnabled: false,
+  failureEnabled: false
 });
 
 const ANNOTATION = { task: 'T0', value: 1 };
 
-const mockSingleFeedbackRule = (rule) => mockFeedbackRule(processSingleFeedback, rule);
+const mockSingleFeedbackRule = rule => mockFeedbackRule(processSingleFeedback, rule);
 
 describe('processSingleFeedback', function () {
   it('should return an array of results', function () {
