@@ -12,7 +12,6 @@
     "events": "~1.1.1",
     "hash.js": "~1.0.3",
     "he": "~1.1.0",
-    "jsplumb": "1.7.9",
     "lodash": "~4.17.4",
     "markdownz": "~7.2",
     "modal-form": "~2.4",

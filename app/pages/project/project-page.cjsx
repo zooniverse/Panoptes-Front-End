@@ -7,6 +7,7 @@ Translate = require 'react-translate-component'
 Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
+`import SOCIAL_ICONS from '../../lib/social-icons'`
 
 counterpart.registerTranslations 'en',
   project:
@@ -17,21 +18,6 @@ counterpart.registerTranslations 'en',
       classify: 'Classify'
       talk: 'Talk'
       collections: 'Collect'
-
-SOCIAL_ICONS =
-  'bitbucket.com/': 'bitbucket'
-  'facebook.com/': 'facebook-square'
-  'github.com/': 'github'
-  'pinterest.com/': 'pinterest'
-  'plus.google.com/': 'google-plus'
-  'reddit.com/': 'reddit'
-  'tumblr.com/': 'tumblr'
-  'twitter.com/': 'twitter'
-  'vine.com/': 'vine'
-  'weibo.com/': 'weibo'
-  'wordpress.com/': 'wordpress'
-  'youtu.be/': 'youtube'
-  'youtube.com/': 'youtube'
 
 AVATAR_SIZE = 100
 
@@ -109,6 +95,7 @@ ProjectPage = React.createClass
       @props.project.display_name
 
   render: ->
+    rearrangedLinks = @props.project.urls.sort (a, b) => a.path? & !b.path? ? 1 : 0
     betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
     onHomePage = @props.routes[2].path is undefined
@@ -182,14 +169,14 @@ ProjectPage = React.createClass
           <Translate content="project.nav.collections" />
         </Link>
 
-        {@props.project.urls.map ({label, url}, i) =>
+        {rearrangedLinks.map ({label, url}, i) =>
           unless !!label
             for pattern, icon of SOCIAL_ICONS
               if url.indexOf(pattern) isnt -1
                 iconForLabel = icon
             iconForLabel ?= 'globe'
             label = <i className="fa fa-#{iconForLabel} fa-fw fa-2x"></i>
-          <a key={i} href={url} className="tabbed-content-tab" target="#{@props.project.id}#{url}">{label}</a>}
+          <a key={i} href={url} className="tabbed-content-tab #{if iconForLabel then 'social-icon' else ''}" target="#{@props.project.id}#{url}">{label}</a>}
       </nav>
 
       {if !!@props.project.configuration?.announcement

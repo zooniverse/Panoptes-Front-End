@@ -40,10 +40,13 @@ module.exports = React.createClass
     slugs
 
   loadProjects: ->
-    apiClient.type('projects').get(slug: @projectSlugs(), cards: true).then (projects) =>
-      projectMap = { }
-      projectMap[project.slug] = project for project in projects
-      @setState projects: projectMap
+    numProjectsToRequest = @projectSlugs().length
+    apiClient.type('projects')
+      .get(slug: @projectSlugs(), cards: true, page_size: numProjectsToRequest)
+      .then (projects) =>
+        projectMap = { }
+        projectMap[project.slug] = project for project in projects
+        @setState projects: projectMap
 
   render: ->
     sideBarNav = counterpart "publications.nav"
@@ -66,7 +69,7 @@ module.exports = React.createClass
               <ul key={category} className="publications-list">
                 {for projectListing in projects
                   project = @state.projects[projectListing.slug]
-                  <div key={projectListing.name or project.slug}>
+                  <div key={projectListing.name or projectListing.slug}>
                     <div>
                       <h3 className="project-name">
                         {if project then project.display_name else projectListing.name}
