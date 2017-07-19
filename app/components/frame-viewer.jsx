@@ -22,8 +22,6 @@ export default class FrameViewer extends React.Component {
     const width = e.target.videoWidth || e.target.naturalWidth || 100;
     const height = e.target.videoHeight || e.target.naturalHeight || 100;
 
-    console.log('handleLoad called', width, height, e, e.target);
-
     this.setState({
       loading: false,
       frameDimensions: {

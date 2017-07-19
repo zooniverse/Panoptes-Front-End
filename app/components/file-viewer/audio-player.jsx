@@ -22,13 +22,7 @@ class AudioPlayer extends React.Component {
     this.player.controlsList = "nodownload"; // Non-spec option for Chrome browsers to hide the display of a download button
   }
 
-  componentDidUpdate() {}
-
   playAudio(playing) {
-    const {player} = this;
-    if (!player)
-      return;
-
     this.setState({playing});
 
     if (playing) {
@@ -88,7 +82,6 @@ class AudioPlayer extends React.Component {
   }
 
   renderProgressMarker() {
-    // console.log(this.state.progressPosition, this.state.trackDuration);
     return (<ProgressIndicator progressPosition={this.state.progressPosition} progressRange={[0, this.state.trackDuration]} naturalWidth={100} naturalHeight={100}/>);
   }
 

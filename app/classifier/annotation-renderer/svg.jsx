@@ -19,8 +19,6 @@ export default class SVGRenderer extends React.Component {
   getSizeRect() {
     const clientRect = this.sizeRect && this.sizeRect.getBoundingClientRect();
 
-    console.log('clientRect', clientRect);
-
     if (clientRect) {
       const { width, height } = clientRect;
       let { left, right, top, bottom } = clientRect;
@@ -37,8 +35,6 @@ export default class SVGRenderer extends React.Component {
     const sizeRect = this.getSizeRect();
     const horizontal = sizeRect ? sizeRect.width / this.props.naturalWidth : 0;
     const vertical = sizeRect ? sizeRect.height / this.props.naturalHeight : 0;
-
-    console.log('scale', { horizontal, vertical });
 
     return { horizontal, vertical };
   }
@@ -80,7 +76,6 @@ export default class SVGRenderer extends React.Component {
     newPoint.y = y;
     const matrixForWindowCoordsToSVGUserSpaceCoords = this.getMatrixForWindowCoordsToSVGUserSpaceCoords();
     const pointforSVGSystem = newPoint.matrixTransform(matrixForWindowCoordsToSVGUserSpaceCoords);
-    console.log('pointforSVGSystem', pointforSVGSystem);
     return pointforSVGSystem;
   }
 

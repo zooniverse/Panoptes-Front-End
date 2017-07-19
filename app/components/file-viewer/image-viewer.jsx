@@ -8,7 +8,6 @@ class ImageViewer extends React.Component {
     this.state = {
       loading: true
     };
-    // console.log(props.src);
   }
 
   onLoad(e) {

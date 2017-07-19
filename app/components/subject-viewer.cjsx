@@ -7,6 +7,7 @@ getSubjectLocation = require '../lib/get-subject-location'
 FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
 `import FrameViewer from './frame-viewer';`
+`import CollectionsManagerIcon from '../collections/manager-icon';`
 `import getSubjectLocations from '../lib/get-subject-locations';`
 
 NOOP = Function.prototype

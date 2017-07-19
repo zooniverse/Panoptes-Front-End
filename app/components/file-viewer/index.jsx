@@ -35,7 +35,7 @@ function subjectViewerSelector(props) {
 }
 
 function FileViewer(props) {
-  const Viewer = subjectViewerSelector(props);//VIEWERS[props.type] || DefaultViewer;
+  const Viewer = subjectViewerSelector(props);
 
   return (
     <Viewer
