@@ -26,8 +26,9 @@ shouldUpdateScroll = (prevRouterProps, routerProps) ->
   pathname = routerProps.location.pathname.split('/')
   isStats = ('stats' in pathname) and ('projects' in pathname)
   isSubjectTalk = ('talk' in pathname) and ('talk' in pathname)
+  isLabVisibility = ('lab' in pathname) and ('visibility' in pathname)
   hashChange = routerProps.location.hash.length
-  if isStats or hashChange or isSubjectTalk
+  if isStats or hashChange or isSubjectTalk or isLabVisibility
     false
   else
     true

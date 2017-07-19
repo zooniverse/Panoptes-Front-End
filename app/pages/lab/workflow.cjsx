@@ -93,7 +93,7 @@ EditWorkflowPage = React.createClass
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       {if @props.project.live and @props.workflow.active
-        <p className="form-help warning"><strong>If the project is live, you cannot edit tasks in an active workflow, but other workflow settings can be changed.</strong></p>}
+        <p className="form-help warning"><strong>If the project is live, you cannot edit tasks in an active workflow, but other workflow settings (such as linking subject sets) can be changed.</strong></p>}
       <div className="columns-container">
         <div className="column">
           <div>
@@ -423,12 +423,6 @@ EditWorkflowPage = React.createClass
 
           <div>
             <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>Test this workflow</a>
-          </div>
-
-          <hr />
-
-          <div>
-            <Link to="/lab/#{@props.project.id}/workflows/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
           </div>
 
           <hr />
