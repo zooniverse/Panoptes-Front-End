@@ -8,17 +8,30 @@ FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
 `import FrameViewer from './frame-viewer';`
 `import CollectionsManagerIcon from '../collections/manager-icon';`
+`import getSubjectLocations from '../lib/get-subject-locations';`
 
 NOOP = Function.prototype
 
-subjectHasMixedLocationTypes = (subject) ->
+subjectTypes = (subject) ->
   allTypes = []
   (subject?.locations ? []).forEach (location) ->
     Object.keys(location).forEach (typeAndFormat) ->
       type = typeAndFormat.split('/')[0]
       unless type in allTypes
         allTypes.push type
+  # this line seems to be required, but that shouldn't be the case
+  return allTypes
+
+subjectHasMixedLocationTypes = (subject) ->
+  allTypes = subjectTypes subject
   allTypes.length > 1
+
+subjectIsLikelyAudioPlusImage = (subject) ->
+  if parseInt(subject?.metadata?.image_with_audio?, 0) > 0
+    true
+  else
+    allTypes = subjectTypes subject
+    allTypes.length == 2 and allTypes.includes('audio') and allTypes.includes('image')
 
 CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 
@@ -97,8 +110,11 @@ module.exports = React.createClass
 
     mainDisplay = ''
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
+    subjectLocations = getSubjectLocations @props.subject
     if @state.inFlipbookMode
       mainDisplay = @renderFrame @state.frame
+    else if subjectIsLikelyAudioPlusImage @props.subject
+      mainDisplay = @renderFrame @state.frame, {subjectLocations : subjectLocations, isAudioPlusImage : true}
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
         @renderFrame index, {key: "frame-#{index}"}

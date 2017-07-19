@@ -1,7 +1,9 @@
 import React from 'react';
 import getSubjectLocation from '../lib/get-subject-location';
+import getSubjectLocations from '../lib/get-subject-locations';
 import PanZoom from './pan-zoom';
 import FileViewer from './file-viewer';
+
 
 export default class FrameViewer extends React.Component {
   constructor(props) {
@@ -39,8 +41,21 @@ export default class FrameViewer extends React.Component {
 
   render() {
     const FrameWrapper = this.props.frameWrapper;
-    const { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
-    const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && type === 'image';
+    if(this.props.isAudioPlusImage){
+      const subjectLocations = getSubjectLocations(this.props.subject);
+      var type = Object.keys(subjectLocations);
+      var format = Object.keys(subjectLocations).map((locationKey) => {
+        return subjectLocations[locationKey][0];
+      });
+      var src = Object.keys(subjectLocations).map((locationKey) => {
+        return subjectLocations[locationKey][1];
+      });
+    }else{
+      var { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
+    }
+    const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && (type === 'image' || this.props.isAudioPlusImage);
+
+    const ProgressMarker = this.props.progressMarker;
 
     if (FrameWrapper) {
       return (
@@ -79,6 +94,8 @@ export default class FrameViewer extends React.Component {
           format={format}
           frame={this.props.frame}
           onLoad={this.handleLoad}
+          progressListener={this.props.progressListener}
+          registerProgressObject={this.props.registerProgressObject}
         />
       );
     }
@@ -120,5 +137,5 @@ FrameViewer.defaultProps = {
   },
   workflow: {
     configuration: {}
-  }
+  },
 };

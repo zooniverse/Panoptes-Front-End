@@ -23,14 +23,14 @@
   video
     background-color: black
     width: 100%
-    
-    &::-internal-media-controls-download-button 
+
+    &::-internal-media-controls-download-button
       display: none
 
-    &::-webkit-media-controls-enclosure 
+    &::-webkit-media-controls-enclosure
       overflow: hidden
 
-    &::-webkit-media-controls-panel 
+    &::-webkit-media-controls-panel
       width: calc(100% + 30px); /* Adjust as needed */
 
   .subject-video-controls
@@ -123,3 +123,12 @@
   .subject-tools
     button:not(:last-child)
       margin-right: 0.5em
+
+.progress-marker
+  pointer-events none
+
+.audio-player-component
+  position absolute
+  bottom -70
+  left auto
+  right auto
