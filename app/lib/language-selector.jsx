@@ -6,20 +6,17 @@ import { select } from './language-engine';
 const propTypes = {
   props: PropTypes.object.isRequired
 };
-
-class Localise extends Component {
+const storedLanguage = JSON.parse(localStorage.getItem('preferred-language'));
+const defaultLanguage = { label: 'English', value: 'en' };
+class LanguageSelector extends Component {
   constructor() {
     super();
     this.handleChange = this.handleChange.bind(this);
-    this.state = {
-      language: ''
-    };
+    this.state = storedLanguage || defaultLanguage;
   }
 
   handleChange(option) {
-    this.setState({
-      language: option
-    });
+    this.setState(option);
     return select(option, this.props.props.user);
   }
 
@@ -35,7 +32,6 @@ class Localise extends Component {
       }
       return result;
     }, []);
-
     return (
       <Select
         className="search card-search standard-input"
@@ -44,12 +40,12 @@ class Localise extends Component {
         onChange={this.handleChange}
         options={filtered_languages}
         placeholder="Choose a language"
-        value={this.state.language}
+        value={this.state}
       />
     );
   }
 }
 
-Localise.propTypes = propTypes;
+LanguageSelector.propTypes = propTypes;
 
-export default Localise;
+export default LanguageSelector;

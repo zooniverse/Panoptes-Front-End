@@ -6,7 +6,7 @@ routes = require './router'
 style = require '../css/main.styl'
 
 # Translations
-`import { load } from './lib/language-engine';`;
+`import { load } from './lib/language-engine';`
 load();
 
 # Redux

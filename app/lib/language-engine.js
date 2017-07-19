@@ -1,24 +1,24 @@
 import counterpart from 'counterpart';
 
 const load = (language) => {
-  const storedLanguage = localStorage.getItem('preferred-language');
-  const defaultLanguage = 'en';
-  language = language || storedLanguage || defaultLanguage;
-  const location = `/translations/${language.value}.json`;
+  const defaultLanguage = { label: 'English', value: 'en' };
+  const storedLanguage = JSON.parse(localStorage.getItem('preferred-language'));
+  const preferredLanguage = language || storedLanguage || defaultLanguage;
+  const location = `/translations/${preferredLanguage.value}.json`;
   return fetch(location)
     .then(response => response.json())
     .then((json) => {
-      counterpart.registerTranslations(language.value, json);
-      counterpart.setLocale(language.value);
+      counterpart.registerTranslations(preferredLanguage.value, json);
+      counterpart.setLocale(preferredLanguage.value);
     });
 };
 
 const select = (language, user) => {
   if (user) {
-    user.update({ languages: [language] });
+    user.update({ languages: [language.value] });
     user.save;
   }
-  return load(language).then(localStorage.setItem('preferred-language', language.value));
+  return load(language).then(localStorage.setItem('preferred-language', JSON.stringify(language)));
 };
 
 export { load, select };
