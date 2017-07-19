@@ -1,5 +1,6 @@
 React = require 'react'
 auth = require 'panoptes-client/lib/auth'
+{ Helmet } = require 'react-helmet'
 `import AppStatus from './app-status';`
 IOStatus = require './io-status'
 AppLayout = require('../layout').default
@@ -71,6 +72,7 @@ PanoptesApp = React.createClass
 
   render: ->
     <div className="panoptes-main">
+      <Helmet defaultTitle="Zooniverse" titleTemplate="%s \u2014 Zooniverse" />
       <AppStatus />
       <IOStatus />
       <AppLayout {...@props}>

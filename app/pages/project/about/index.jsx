@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
 import AboutNav from './about-nav';
 import apiClient from 'panoptes-client/lib/api-client';
 
@@ -52,8 +53,8 @@ class AboutProject extends Component {
     this.getTeam();
     return this.props.project.get('pages')
       .then(this.constructPagesData)
-      .then(availablePages => this.setState({ 
-        pages: availablePages, 
+      .then(availablePages => this.setState({
+        pages: availablePages,
         loaded: true,
       }))
       .catch(error => console.error('Error retrieving project pages', error));
@@ -88,6 +89,7 @@ class AboutProject extends Component {
     const { state: { pages, team }, props: { children, project } } = this;
     return (
       <div className="project-about-page">
+        <Helmet title={`${this.props.project.display_name} » About`} />
         <AboutNav pages={pages} projectPath={`/projects/${project.slug}`} />
         {React.cloneElement(children, {project, pages, team})}
       </div>

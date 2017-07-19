@@ -2,7 +2,7 @@ React = require 'react'
 {Link, IndexLink} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
-TitleMixin = require '../../lib/title-mixin'
+{ Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../../components/change-listener'
 workflowActions = require './actions/workflow'
@@ -15,13 +15,11 @@ DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
 EditProjectPage = React.createClass
   displayName: 'EditProjectPage'
 
-  mixins: [TitleMixin]
-
   contextTypes:
     router: React.PropTypes.object.isRequired
 
   title: ->
-    @props.project.display_name
+    "Edit » #{@props.project.display_name}"
 
   getDefaultProps: ->
     project: id: '2'
@@ -39,6 +37,7 @@ EditProjectPage = React.createClass
       projectID: @props.project.id
 
     <div className="columns-container content-container">
+      <Helmet title={@title()} />
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
@@ -141,8 +140,6 @@ EditProjectPage = React.createClass
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
-  mixins: [TitleMixin]
-  title: 'Edit'
 
   contextTypes:
     router: React.PropTypes.object.isRequired

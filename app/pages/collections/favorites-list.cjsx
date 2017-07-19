@@ -1,11 +1,8 @@
 React = require 'react'
-TitleMixin = require '../../lib/title-mixin'
 List = require './list'
 
 FavoritesList = React.createClass
   displayName: 'FavoritesPage'
-  mixins: [TitleMixin]
-  title: 'Favorites'
 
   componentDidMount: ->
     if @props.project? or @props.params?.profile_name?

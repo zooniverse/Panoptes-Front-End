@@ -1,8 +1,9 @@
 React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
-Paginator = require './lib/paginator'
 {Link} = require 'react-router'
+{ Helmet } = require 'react-helmet'
+Paginator = require './lib/paginator'
 Loading = require '../components/loading-indicator'
 InboxForm = require './inbox-form'
 talkConfig = require './config'
@@ -16,7 +17,7 @@ promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 ConversationLink = React.createClass
   displayName: 'ConversationLink'
-  
+
   propTypes:
     user: React.PropTypes.object
     conversation: React.PropTypes.object
@@ -24,7 +25,7 @@ ConversationLink = React.createClass
   getInitialState: ->
     users: []
     messages: []
-  
+
   componentWillMount: ->
     apiClient
       .type 'users'
@@ -66,7 +67,7 @@ module.exports = React.createClass
 
   getInitialState: ->
     conversations: []
-  
+
   componentWillMount: ->
     @setConversations @props.user
 
@@ -103,6 +104,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="talk inbox content-container">
+      <Helmet title="Messages" />
       {unless @props.user?
         <p>Please <button className="link-style" type="button" onClick={promptToSignIn}>sign in</button> to view your inbox</p>
       else
@@ -114,7 +116,7 @@ module.exports = React.createClass
           else
             conversationsMeta = @state.conversations[0].getMeta()
             <div>
-              {@state.conversations.map (conversation) => 
+              {@state.conversations.map (conversation) =>
                 <ConversationLink conversation={conversation} user={@props.user} key={conversation.id} />
               }
               <Paginator

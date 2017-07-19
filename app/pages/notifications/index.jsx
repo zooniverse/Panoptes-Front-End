@@ -2,6 +2,7 @@ import React from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import talkClient from 'panoptes-client/lib/talk-client';
+import { Helmet } from 'react-helmet';
 import Loading from '../../components/loading-indicator.cjsx';
 import NotificationSection from '../notifications/notification-section';
 import CollapsableSection from '../../components/collapsable-section';
@@ -135,6 +136,7 @@ export default class NotificationsPage extends React.Component {
 
     return (
       <div className="talk notifications">
+        <Helmet title="Notifications" />
         <div className="content-container">
           <h3 className={headerStyle}>
             <Translate content="notifications.title" />

@@ -3,6 +3,7 @@ import { Link, IndexLink } from 'react-router';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import classNames from 'classnames';
+import { Helmet } from 'react-helmet';
 import Avatar from '../../partials/avatar';
 
 counterpart.registerTranslations('en', {
@@ -140,6 +141,7 @@ class ProfileUser extends Component {
 
     return (
       <div className={pageClasses}>
+        <Helmet title={`Profile » ${this.props.user.display_name}`} />
         <section className="hero user-profile-hero" style={headerStyle}>
           <div className="overlay" />
           <div className="hero-container">

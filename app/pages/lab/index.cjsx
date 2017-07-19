@@ -2,6 +2,7 @@ React = require 'react'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 ModalFormDialog = require 'modal-form/dialog'
+{ Helmet } = require 'react-helmet'
 projectActions = require './actions/project'
 LandingPage = require './landing-page'
 `import LabStatus from '../../partials/lab-status.jsx';`
@@ -234,6 +235,7 @@ module.exports = React.createClass
   render: ->
     if @props.user?
       <div>
+        <Helmet title="Build a Project" />
         <LabStatus />
         <ProjectList
           title="Your projects"
