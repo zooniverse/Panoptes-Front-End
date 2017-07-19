@@ -281,6 +281,16 @@ const Publications = {
       ]
     },
     {
+      slug: "dwright04/supernova-hunters",
+      publications: [
+        {
+        citation: "A transient search using combined human and machine classifications, Wright+ 2017.",
+        href: "https://arxiv.org/pdf/1707.05223.pdf",
+        date: "2017"
+        }
+      ]
+    },
+    {
       slug: "marckuchner/backyard-worlds-planet-9",
       publications: [
         {
