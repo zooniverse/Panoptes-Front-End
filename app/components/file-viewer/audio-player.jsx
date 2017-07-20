@@ -8,7 +8,10 @@ class AudioPlayer extends React.Component {
 
     this.player = null;
 
+    this.endAudio = this.endAudio.bind(this);
     this.playAudio = this.playAudio.bind(this);
+    this.onAudioLoad = this.onAudioLoad.bind(this);
+    this.updateProgress = this.updateProgress.bind(this);
 
     this.state = {
       playing: false,
@@ -125,9 +128,9 @@ class AudioPlayer extends React.Component {
             src={this.audioSrc()}
             type={this.audioTypeString()}
             preload="auto"
-            onCanPlay={this.onAudioLoad.bind(this)}
+            onCanPlay={this.onAudioLoad}
             onEnded={this.endAudio}
-            onTimeUpdate={this.updateProgress.bind(this)}
+            onTimeUpdate={this.updateProgress}
           >
             Your browser does not support the audio format. Please upgrade your browser.
           </audio>
