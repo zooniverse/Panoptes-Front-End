@@ -142,7 +142,7 @@ function returnCommonFormHOC(FeedbackTypeForm) {
       failureEnabled: PropTypes.bool,
       defaultFailureMessage: PropTypes.string
     }),
-    index: PropTypes.string,
+    index: PropTypes.number,
     onSubmit: PropTypes.func
   };
 
