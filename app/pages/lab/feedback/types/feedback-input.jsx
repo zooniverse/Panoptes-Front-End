@@ -30,10 +30,14 @@ const FeedbackInput = (props) => {
 };
 
 FeedbackInput.propTypes = {
-  field: PropTypes.string,
+  field: PropTypes.shape({
+    id: PropTypes.string,
+    type: PropTypes.string,
+    disabled: PropTypes.bool
+  }),
   title: PropTypes.string,
   help: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onChange: PropTypes.func
 };
 
