@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import counterpart from 'counterpart';
 import CommonFormHOC from '../common-form-hoc';
 import FeedbackInput from '../feedback-input';
 
+/* eslint-disable max-len */
 counterpart.registerTranslations('en', {
   PointEditForm: {
     fields: {
@@ -12,13 +13,14 @@ counterpart.registerTranslations('en', {
       },
       tol: {
         title: 'Default tolerance',
-        help: 'The radius around the point that counts as a correct classification. Can be overridden using subject metadata.',
+        help: 'The radius around the point that counts as a correct classification. Can be overridden using subject metadata.'
       }
     }
   }
 });
+/* eslint-enable max-len */
 
-class PointEditForm extends React.Component {
+class PointEditForm extends Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -31,8 +33,16 @@ class PointEditForm extends React.Component {
         tol: this.props.feedback.tol || ''
       },
       validations: [
-        (form) => (form.dud || (!form.dud && form.tol && form.tol !== ''))
+        form => (form.dud || (!form.dud && form.tol && form.tol !== ''))
       ]
+    });
+  }
+
+  handleInputChange({ target }) {
+    this.props.updateState({
+      form: {
+        [target.name]: (target.type === 'checkbox') ? target.checked : target.value
+      }
     });
   }
 
@@ -44,8 +54,8 @@ class PointEditForm extends React.Component {
 
     return (
       <div>
-        {fields.map(field => 
-          <FeedbackInput 
+        {fields.map(field =>
+          <FeedbackInput
             key={`feedback-input-${field.id}`}
             field={field}
             title={counterpart(`PointEditForm.fields.${field.id}.title`)}
@@ -57,18 +67,17 @@ class PointEditForm extends React.Component {
       </div>
     );
   }
-
-  handleInputChange({ target }) {
-    this.props.updateState({
-      form: {
-        [target.name]: (target.type === 'checkbox') ? target.checked : target.value,
-      }
-    });
-  }
 }
 
 PointEditForm.propTypes = {
-
+  updateState: PropTypes.func,
+  feedback: PropTypes.shape({
+    dud: PropTypes.bool,
+    tol: PropTypes.string
+  }),
+  formState: PropTypes.shape({
+    dud: PropTypes.bool
+  })
 };
 
 export default CommonFormHOC(PointEditForm);
