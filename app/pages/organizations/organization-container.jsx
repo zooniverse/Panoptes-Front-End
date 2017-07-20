@@ -19,33 +19,37 @@ class OrganizationContainer extends React.Component {
 
   componentDidMount() {
     if (this.context.initialLoadComplete) {
-      this.fetchOrganization(this.props.params.id);
+      this.fetchOrganization(this.props.params.name, this.props.params.owner);
     }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
     const noOrgAfterLoad = nextContext.initialLoadComplete && this.state.organization === null;
 
-    if (nextProps.params.id !== this.props.params.id || noOrgAfterLoad) {
+    if (nextProps.params.name !== this.props.params.name ||
+      nextProps.params.owner !== this.props.params.owner ||
+      noOrgAfterLoad) {
       if (!this.state.fetching) {
-        this.fetchOrganization(nextProps.params.id);
+        this.fetchOrganization(nextProps.params.name, nextProps.params.owner);
       }
     }
   }
 
-  fetchOrganization(id) {
-    if (!id) {
+  fetchOrganization(name, owner) {
+    if (!name || !owner) {
       return;
     }
 
+    const slug = `${owner}/${name}`;
+
     this.setState({ fetching: true, error: null });
 
-    apiClient.type('organizations').get(id.toString(), { include: ['avatar', 'background'] })
+    apiClient.type('organizations').get({ slug, include: ['avatar', 'background'] })
       .catch((error) => {
         console.error('error loading organization', error); // eslint-disable-line no-console
         this.setState({ fetching: false, error });
       })
-      .then((organization) => {
+      .then(([organization]) => {
         organization.projects = []; // eslint-disable-line no-param-reassign
         this.setState({ organization });
 
@@ -98,14 +102,14 @@ class OrganizationContainer extends React.Component {
         <div className="content-container">
           <p>
             Loading{' '}
-            <strong>Organization #{this.props.params.id}</strong>...
+            <strong>Organization #{this.props.params.name}</strong>...
           </p>
         </div>);
     } else {
       return (
         <div className="content-container">
           <p>
-            There was an error retrieving organization <strong>#{this.props.params.id}</strong>.
+            There was an error retrieving organization <strong>#{this.props.params.name}</strong>.
           </p>
           {this.state.error &&
             <p>
@@ -124,7 +128,8 @@ OrganizationContainer.contextTypes = {
 OrganizationContainer.propTypes = {
   children: React.PropTypes.node.isRequired,
   params: React.PropTypes.shape({
-    id: React.PropTypes.string
+    name: React.PropTypes.string,
+    owner: React.PropTypes.string
   }).isRequired
 };
 
