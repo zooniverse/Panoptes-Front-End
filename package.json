@@ -118,6 +118,6 @@
     "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js*) --reporter nyan || true",
     "test-travis": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js)",
     "lint": "eslint ./app --ext .jsx,.js",
-    "lint:watch": "esw --watch --color ./app/classifier/feedback --ext .jsx,.js"
+    "lint:watch": "esw --watch --color ./app --ext .jsx,.js"
   }
 }
