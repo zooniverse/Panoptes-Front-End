@@ -1,3 +1,8 @@
+// Allowing object / array propTypes as we're simply passing them to children.
+/* eslint
+  react/forbid-prop-types: 0
+*/
+
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -37,7 +42,9 @@ class FeedbackSummaryContainer extends React.Component {
 }
 
 FeedbackSummaryContainer.propTypes = {
-  actions: PropTypes.object,
+  actions: PropTypes.shape({
+    feedback: PropTypes.func
+  }),
   classification: PropTypes.object,
   feedback: PropTypes.array,
   subject: PropTypes.object,
