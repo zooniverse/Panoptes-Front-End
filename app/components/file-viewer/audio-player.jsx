@@ -81,7 +81,14 @@ class AudioPlayer extends React.Component {
   }
 
   renderProgressMarker() {
-    return (<ProgressIndicator progressPosition={this.state.progressPosition} progressRange={[0, this.state.trackDuration]} naturalWidth={100} naturalHeight={100} />);
+    return (
+      <ProgressIndicator
+        progressPosition={this.state.progressPosition}
+        progressRange={[0, this.state.trackDuration]}
+        naturalWidth={100}
+        naturalHeight={100}
+      />
+    );
   }
 
   render() {
@@ -92,7 +99,15 @@ class AudioPlayer extends React.Component {
         <div>
           {this.renderProgressMarker()}
           <div className="audio-image-component">
-            <ImageViewer src={imageSrc} type={this.imageTypeString()} format={this.imageFormatString()} frame={this.props.frame} onLoad={this.props.onLoad} onFocus={this.props.onFocus} onBlur={this.props.onBlur} />
+            <ImageViewer
+              src={imageSrc}
+              type={this.imageTypeString()}
+              format={this.imageFormatString()}
+              frame={this.props.frame}
+              onLoad={this.props.onLoad}
+              onFocus={this.props.onFocus}
+              onBlur={this.props.onBlur}
+            />
           </div>
         </div>
       );
@@ -104,9 +119,15 @@ class AudioPlayer extends React.Component {
         </div>
         <div className="audio-player-component">
           <audio
-            className="subject" controls={true} ref={(element) => {
-              this.player = element;
-            }} src={this.audioSrc()} type={this.audioTypeString()} preload="auto" onCanPlay={this.onAudioLoad.bind(this)} onEnded={this.endAudio} onTimeUpdate={this.updateProgress.bind(this)}
+            className="subject"
+            controls={true}
+            ref={(element) => { this.player = element; }}
+            src={this.audioSrc()}
+            type={this.audioTypeString()}
+            preload="auto"
+            onCanPlay={this.onAudioLoad.bind(this)}
+            onEnded={this.endAudio}
+            onTimeUpdate={this.updateProgress.bind(this)}
           >
             Your browser does not support the audio format. Please upgrade your browser.
           </audio>
