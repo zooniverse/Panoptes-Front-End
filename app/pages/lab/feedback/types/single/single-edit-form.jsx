@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import CommonFormHOC from '../common-form-hoc';
-
 
 counterpart.registerTranslations('en', {
   singleEditForm: {
@@ -17,7 +16,7 @@ counterpart.registerTranslations('en', {
   }
 });
 
-class SingleEditForm extends React.Component {
+class SingleEditForm extends Component {
   constructor(props) {
     super(props);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -29,8 +28,16 @@ class SingleEditForm extends React.Component {
         answerIndex: this.props.feedback.answerIndex || ''
       },
       validations: [
-        (form) => (form.answerIndex && form.answerIndex !== '')
+        form => (form.answerIndex && form.answerIndex !== '')
       ]
+    });
+  }
+
+  handleSelectChange(option) {
+    this.props.updateState({
+      form: {
+        answerIndex: option.value
+      }
     });
   }
 
@@ -43,16 +50,17 @@ class SingleEditForm extends React.Component {
     if (!this.props.task.required) {
       options.unshift({
         label: counterpart('singleEditForm.fields.answer.noAnswer'),
-        value: '-1',
+        value: '-1'
       });
     }
 
-    const selected = (this.props.formState.answerIndex)
-      ? options.find(option => this.props.formState.answerIndex === option.value).value
-      : '';
+    const selected = (this.props.formState.answerIndex) ? options.find(option =>
+      this.props.formState.answerIndex === option.value).value : '';
+
+    const labelId = 'single-edit-answer-select';
 
     return (
-      <label>
+      <label htmlFor={labelId}>
         <div>
           <Translate content="singleEditForm.fields.answer.title" />
         </div>
@@ -60,6 +68,7 @@ class SingleEditForm extends React.Component {
           <Translate content="singleEditForm.fields.answer.help" />
         </small>
         <Select
+          id={labelId}
           clearable={false}
           searchable={false}
           options={options}
@@ -69,15 +78,22 @@ class SingleEditForm extends React.Component {
       </label>
     );
   }
-
-  handleSelectChange(option) {
-    this.props.updateState({
-      form: {
-        answerIndex: option.value,
-      }
-    })
-  }
 }
 
+SingleEditForm.propTypes = {
+  feedback: PropTypes.shape({
+    answerIndex: PropTypes.string
+  }),
+  formState: PropTypes.shape({
+    answerIndex: PropTypes.string
+  }),
+  task: PropTypes.shape({
+    required: PropTypes.bool,
+    answers: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string
+    }))
+  }),
+  updateState: PropTypes.func
+};
 
 export default CommonFormHOC(SingleEditForm);

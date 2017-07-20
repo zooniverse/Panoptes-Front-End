@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const FeedbackInput = (props) => {
   const { field, title, help, value, onChange } = props;
   const { id, type, disabled } = field;
-  
+
   const propsWrapper = {
     id,
     title,
@@ -25,16 +25,24 @@ const FeedbackInput = (props) => {
     propsWrapper.inputProps.checked = value;
   }
 
-  return (type === 'checkbox')
-    ? <FeedbackInputCheckbox {...propsWrapper} />
-    : <FeedbackInputEverythingElse {...propsWrapper} />;
+  const isCheckbox = type === 'checkbox';
+  return (isCheckbox) ? <FeedbackInputCheckbox {...propsWrapper} /> : <FeedbackInputEverythingElse {...propsWrapper} />;
+};
+
+FeedbackInput.propTypes = {
+  field: PropTypes.string,
+  title: PropTypes.string,
+  help: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func
 };
 
 const FeedbackInputCheckbox = ({ id, title, help, inputProps }) => {
+  const labelId = `feedback-input-${id}`;
   return (
     <div key={id}>
-      <label>
-        <input {...inputProps} />
+      <label htmlFor={labelId}>
+        <input id={labelId} {...inputProps} />
         {title}
       </label>
       <small className="form-help">
@@ -42,20 +50,39 @@ const FeedbackInputCheckbox = ({ id, title, help, inputProps }) => {
       </small>
     </div>
   );
-}
+};
 
 const FeedbackInputEverythingElse = ({ id, title, help, inputProps }) => {
+  const labelId = `feedback-input-${id}`;
   return (
     <div key={id}>
-      <label>
+      <label htmlFor={labelId}>
         {title}
       </label>
       <small className="form-help">
         {help}
       </small>
-      <input {...inputProps} />
+      <input id={labelId} {...inputProps} />
     </div>
   );
-}
+};
+
+const feedbackInputPropTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+  help: PropTypes.string,
+  inputProps: PropTypes.shape({
+    type: PropTypes.string,
+    name: PropTypes.string,
+    disabled: PropTypes.bool,
+    onChange: PropTypes.func,
+    className: PropTypes.string,
+    value: PropTypes.string,
+    checked: PropTypes.bool
+  })
+};
+
+FeedbackInputCheckbox.propTypes = feedbackInputPropTypes;
+FeedbackInputEverythingElse.propTypes = feedbackInputPropTypes;
 
 export default FeedbackInput;
