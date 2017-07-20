@@ -99,6 +99,8 @@ counterpart.registerTranslations 'en',
 
       We use Amazon Web Services so we can quickly and reliably serve our website to an unpredictable number of people. This means that your data will be stored in multiple locations, including the United States of America (USA). Amazon is a participant in the Safe Harbor program developed by the USA Department of Commerce and the European Union (EU). Amazon has certified that it adheres to the Safe Harbor Privacy Principles agreed upon by the USA and the EU.
 
+      Our mailing list server, which contains a copy of subscribed email addresses and no other personal data, is hosted on a virtual private server with Linode in the UK.
+
       **Security measures**
 
       Members of the research teams are made aware of our privacy policy and practices by reviewing this statement upon joining the team. We follow industry best practices to secure user data, and access to the database and logs are limited to members of the research group and system administrative staff.
@@ -119,7 +121,7 @@ counterpart.registerTranslations 'en',
 
       You are unlikely to receive more than two messages per month.
 
-      The Zooniverse email newsletter service is provided by JISCmail, which is operated by the United Kingdom Science and Technology Facilities Council. JISCmail does not sell or otherwise transfer any personal data to commercial companies or other organisations. Please review the full JISCmail privacy policy. You can 'opt out' of the newsletter at any time by visiting the Zooniverse [unsubscribe](https://www.zooniverse.org/unsubscribe) page.
+      You can 'opt out' of the newsletter at any time by visiting the Zooniverse [unsubscribe](https://www.zooniverse.org/unsubscribe) page.
 
       **Further information and requests**
 
