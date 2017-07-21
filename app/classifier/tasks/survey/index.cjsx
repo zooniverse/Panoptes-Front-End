@@ -48,7 +48,8 @@ module.exports = React.createClass
       {if @state.selectedChoiceID is ''
         <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} onRemove={@handleRemove} annotation={@props.annotation} focusedChoice={@state.focusedChoice} />
       else
-        <Choice task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
+        existingAnnotation = _.find(@props.annotation.value, 'choice', @state.selectedChoiceID) || {}
+        <Choice annotation={existingAnnotation} task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
     </div>
 
   handleFilter: (characteristicID, valueID) ->
@@ -75,7 +76,7 @@ module.exports = React.createClass
     @setState filters: {}
 
   clearSelection: ->
-    @setState 
+    @setState
       selectedChoiceID: ''
       focusedChoice: @state.selectedChoiceID
     newAnnotation = Object.assign {}, @props.annotation, _choiceInProgress: false
