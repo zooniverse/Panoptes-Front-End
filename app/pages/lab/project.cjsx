@@ -4,6 +4,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 { Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
+counterpart = require 'counterpart'
 ChangeListener = require '../../components/change-listener'
 workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
@@ -12,6 +13,11 @@ isAdmin = require '../../lib/is-admin'
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
 
+counterpart.registerTranslations 'en',
+  projectLab: {
+    edit: 'Edit'
+  }
+
 EditProjectPage = React.createClass
   displayName: 'EditProjectPage'
 
@@ -19,7 +25,7 @@ EditProjectPage = React.createClass
     router: React.PropTypes.object.isRequired
 
   title: ->
-    "Edit » #{@props.project.display_name}"
+    "#{counterpart 'projectLab.edit'} » #{@props.project.display_name}"
 
   getDefaultProps: ->
     project: id: '2'

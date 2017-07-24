@@ -9,6 +9,7 @@ import CollapsableSection from '../../components/collapsable-section';
 
 counterpart.registerTranslations('en', {
   notifications: {
+    header: 'Notifications',
     title: 'My Notifications',
     signedOut: 'You\'re not signed in.',
     noNotifications: 'You have no notifications.',
@@ -136,7 +137,7 @@ export default class NotificationsPage extends React.Component {
 
     return (
       <div className="talk notifications">
-        <Helmet title="Notifications" />
+        <Helmet title={counterpart("notifications.header")} />
         <div className="content-container">
           <h3 className={headerStyle}>
             <Translate content="notifications.title" />

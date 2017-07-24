@@ -11,6 +11,10 @@ seenThisSession = require '../../lib/seen-this-session'
 experimentsClient = require '../../lib/experiments-client'
 { Split } = require('seven-ten')
 
+counterpart.registerTranslations 'en'
+  classifyPage: {
+    title: 'Classify'
+  }
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -55,7 +59,7 @@ module.exports = React.createClass
     simulateSaveFailure: React.PropTypes.bool
 
   title: ->
-    "#{@props.project.display_name} » Classify"
+    "#{@props.project.display_name} » #{counterpart 'classifyPage.title'}"
 
   getDefaultProps: ->
     loadingSelectedWorkflow: false

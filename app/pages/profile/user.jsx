@@ -7,7 +7,9 @@ import { Helmet } from 'react-helmet';
 import Avatar from '../../partials/avatar';
 
 counterpart.registerTranslations('en', {
+  loading: '(Loading)',
   profile: {
+    title: 'Profile',
     nav: {
       comments: 'Recent comments',
       collections: 'Collections',
@@ -117,6 +119,13 @@ class ProfileUser extends Component {
     );
   }
 
+  title() {
+    if (this.props.user) {
+      return `${counterpart("profile.title")} » ${this.props.user.display_name}`
+    }
+    return counterpart('loading')
+  }
+
   render() {
     let headerStyle = { };
 
@@ -141,7 +150,7 @@ class ProfileUser extends Component {
 
     return (
       <div className={pageClasses}>
-        <Helmet title={`Profile » ${this.props.user.display_name}`} />
+        <Helmet title={this.title()} />
         <section className="hero user-profile-hero" style={headerStyle}>
           <div className="overlay" />
           <div className="hero-container">
@@ -168,7 +177,9 @@ class ProfileUser extends Component {
 
 ProfileUser.propTypes = {
   children: PropTypes.node,
-  user: PropTypes.object,
+  user: PropTypes.shape({
+    display_name: PropTypes.string
+  }),
   project: PropTypes.object,
   profileUser: PropTypes.object.isRequired
 };

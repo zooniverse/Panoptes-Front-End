@@ -3,6 +3,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
 {Link} = require 'react-router'
 { Helmet } = require 'react-helmet'
+counterpart = require 'counterpart'
 Paginator = require './lib/paginator'
 Loading = require '../components/loading-indicator'
 InboxForm = require './inbox-form'
@@ -14,6 +15,10 @@ alert = require '../lib/alert'
 PAGE_SIZE = talkConfig.inboxPageSize
 
 promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
+
+counterpart.registerTranslations 'en',
+  messagesPage:
+    title: 'Messages'
 
 ConversationLink = React.createClass
   displayName: 'ConversationLink'
@@ -104,7 +109,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="talk inbox content-container">
-      <Helmet title="Messages" />
+      <Helmet title={counterpart 'messagesPage.title'} />
       {unless @props.user?
         <p>Please <button className="link-style" type="button" onClick={promptToSignIn}>sign in</button> to view your inbox</p>
       else

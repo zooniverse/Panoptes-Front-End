@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
+import counterpart from 'counterpart';
 import AboutNav from './about-nav';
 import apiClient from 'panoptes-client/lib/api-client';
 
@@ -89,7 +90,7 @@ class AboutProject extends Component {
     const { state: { pages, team }, props: { children, project } } = this;
     return (
       <div className="project-about-page">
-        <Helmet title={`${this.props.project.display_name} » About`} />
+        <Helmet title={`${this.props.project.display_name} » ${counterpart('about.header')}`} />
         <AboutNav pages={pages} projectPath={`/projects/${project.slug}`} />
         {React.cloneElement(children, {project, pages, team})}
       </div>

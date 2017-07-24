@@ -16,7 +16,8 @@ counterpart.registerTranslations('en', {
   },
   collectionsPageWrapper: {
     error: 'There was an error retrieving this collection.'
-  }
+  },
+  loading: '(Loading)'
 });
 
 const CollectionPage = React.createClass({
@@ -203,7 +204,7 @@ const CollectionPageWrapper = React.createClass({
   },
 
   title() {
-    return this.state.collection ? this.state.collection.display_name : '(Loading)';
+    return this.state.collection ? this.state.collection.display_name : counterpart('loading');
   },
 
   fetchCollection() {

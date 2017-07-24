@@ -2,8 +2,12 @@ React = require 'react'
 { Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
 { Split } = require('seven-ten')
+counterpart = require 'counterpart'
 isAdmin = require '../../lib/is-admin'
 ProjectPage = require './project-page'
+
+counterpart.registerTranslations 'en',
+  loading: '(Loading)'
 
 ProjectPageController = React.createClass
   displayName: 'ProjectPageController'
@@ -279,7 +283,7 @@ ProjectPageController = React.createClass
     betaApproved = @state.project?.beta_approved
 
     <div className="project-page-wrapper">
-      <Helmet title="#{@state.project?.display_name ? '(Loading)'}" />
+      <Helmet title="#{@state.project?.display_name ? counterpart 'loading'}" />
       {if betaApproved
         <div className="beta-border"></div>}
 

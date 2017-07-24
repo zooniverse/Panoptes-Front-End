@@ -7,7 +7,7 @@ ChangeListener = require '../../components/change-listener'
 
 counterpart.registerTranslations 'en',
   userSettingsPage:
-    header: "Settings"
+    title: "Settings"
     nav:
       accountInformation: "Account Information"
       customizeProfile: "Customize Profile"
@@ -21,7 +21,7 @@ UserSettingsPage = React.createClass
 
   render: ->
     <section className="user-profile-content">
-      <Helmet title="Settings » #{@props.user.display_name}" />
+      <Helmet title="#{counterpart 'userSettingsPage.title'} » #{@props.user.display_name}" />
       <div className="secondary-page settings-page">
         <h2><Translate content="userSettingsPage.header" /></h2>
         <div className="settings-content">

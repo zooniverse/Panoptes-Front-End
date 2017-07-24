@@ -55,7 +55,7 @@ class ProjectsPage extends Component {
     const { children, location } = this.props;
     return (
       <div className="secondary-page all-resources-page">
-        <Helmet title="Projects" />
+        <Helmet title={counterpart('projectsHome.title')} />
         <section className="hero projects-hero">
           <div className="hero-container">
             <Translate content="projectsHome.title" component="h1" />

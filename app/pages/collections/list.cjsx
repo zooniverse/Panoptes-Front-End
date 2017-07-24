@@ -4,9 +4,15 @@ apiClient = require 'panoptes-client/lib/api-client'
 Translate = require 'react-translate-component'
 { Helmet } = require 'react-helmet'
 {Link} = require 'react-router'
+counterpart = require 'counterpart'
 CollectionsNav = require './nav'
 classNames = require 'classnames'
 Paginator = require '../../talk/lib/paginator'
+
+counterpart.registerTranslations 'en',
+  collectionsList: {
+    all: 'All'
+  }
 
 List = React.createClass
   displayName: 'List'
@@ -81,14 +87,13 @@ List = React.createClass
         @setState {collections}
 
   title: ->
-    console.log @props.params
     capitalizedBase = @props.baseType.charAt(0).toUpperCase() + @props.baseType.slice(1)
     owner =
       if @props.params.collection_owner?
         @props.params.collection_owner
       else if @props.params.name
         @props.params.name
-      else "All"
+      else counterpart "collectionsList.all"
     "#{capitalizedBase} » #{owner}"
 
   shared: (collection) ->

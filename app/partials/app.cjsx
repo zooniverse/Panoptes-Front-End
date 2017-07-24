@@ -1,6 +1,7 @@
 React = require 'react'
 auth = require 'panoptes-client/lib/auth'
 { Helmet } = require 'react-helmet'
+counterpart = require 'counterpart'
 `import AppStatus from './app-status';`
 IOStatus = require './io-status'
 AppLayout = require('../layout').default
@@ -10,6 +11,10 @@ NotificationsCounter = require('../lib/notifications-counter').default
 Pusher = require 'pusher-js'
 apiClient = require 'panoptes-client/lib/api-client'
 pusherEnv = require('../lib/pusher-env').default
+
+counterpart.registerTranslations 'en',
+  mainApp:
+    title: 'Zooniverse'
 
 PanoptesApp = React.createClass
   geordiLogger: null # Maintains project and subject context for the Geordi client
@@ -72,7 +77,7 @@ PanoptesApp = React.createClass
 
   render: ->
     <div className="panoptes-main">
-      <Helmet defaultTitle="Zooniverse" titleTemplate="%s \u2014 Zooniverse" />
+      <Helmet defaultTitle={counterpart 'mainApp.title'} titleTemplate="%s \u2014 #{counterpart 'mainApp.title'}" />
       <AppStatus />
       <IOStatus />
       <AppLayout {...@props}>

@@ -6,6 +6,7 @@ Translate = require 'react-translate-component'
 
 counterpart.registerTranslations 'en',
   about:
+    header: 'About'
     title: 'About Us'
     nav:
       about: 'About'
@@ -32,7 +33,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="secondary-page about-page">
-      <Helmet title="About" />
+      <Helmet title={counterpart "about.header"} />
       <section className="hero">
         <div className="hero-container">
           <Translate content="about.title" component="h1" />

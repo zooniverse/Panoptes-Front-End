@@ -6,6 +6,7 @@ Translate = require 'react-translate-component'
 
 counterpart.registerTranslations 'en',
   signIn:
+    title: 'Sign in/register'
     withZooniverse: 'Sign in with your Zooniverse account'
     whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.'
     signIn: 'Sign in'
@@ -20,7 +21,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="sign-in-page content-container">
-      <Helmet title="Sign in/register" />
+      <Helmet title={counterpart 'signIn.register'} />
       <Translate component="h1" content="signIn.withZooniverse" />
       <Translate component="p" content="signIn.whyHaveAccount" />
 

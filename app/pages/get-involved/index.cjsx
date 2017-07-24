@@ -31,7 +31,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="secondary-page get-involved-page">
-      <Helmet title="Get Involved" />
+      <Helmet title={counterpart "getInvolved.title"} />
       <section className="hero">
         <div className="hero-container">
           <Translate content="getInvolved.title" component="h1" />

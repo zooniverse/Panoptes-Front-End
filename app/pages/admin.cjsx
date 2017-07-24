@@ -17,7 +17,7 @@ AdminPage = React.createClass
 
   render: ->
     <section className="admin-page-content">
-      <Helmet title="Admin" />
+      <Helmet title={counterpart("userAdminPage.header")} />
       <div className="secondary-page admin-page">
         <h2><Translate content="userAdminPage.header" /></h2>
         <div className="admin-content">
