@@ -23,7 +23,7 @@ UserSettingsPage = React.createClass
     <section className="user-profile-content">
       <Helmet title="#{counterpart 'userSettingsPage.title'} » #{@props.user.display_name}" />
       <div className="secondary-page settings-page">
-        <h2><Translate content="userSettingsPage.header" /></h2>
+        <h2><Translate content="userSettingsPage.title" /></h2>
         <div className="settings-content">
           <aside className="secondary-page-side-bar settings-side-bar">
             <nav>

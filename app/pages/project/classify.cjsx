@@ -57,9 +57,6 @@ module.exports = React.createClass
     workflow: React.PropTypes.object
     simulateSaveFailure: React.PropTypes.bool
 
-  title: ->
-    "#{@props.project.display_name} » #{counterpart 'classifyPage.title'}"
-
   getDefaultProps: ->
     loadingSelectedWorkflow: false
     project: null
@@ -209,7 +206,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="classify-page content-container">
-      <Helmet title={@title()} />
+      <Helmet title="#{@props.project.display_name} » #{counterpart 'classifyPage.title'}" />
       {if @props.projectIsComplete
         <FinishedBanner project={@props.project} />}
 

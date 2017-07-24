@@ -203,10 +203,6 @@ const CollectionPageWrapper = React.createClass({
     this.setState({ collection });
   },
 
-  title() {
-    return this.state.collection ? this.state.collection.display_name : counterpart('loading');
-  },
-
   fetchCollection() {
     this.setState({
       loading: true
@@ -273,7 +269,7 @@ const CollectionPageWrapper = React.createClass({
     }
     return (
       <div className={classes}>
-        <Helmet title={this.title()} />
+        <Helmet title={this.state.collection ? this.state.collection.display_name : counterpart('loading')} />
         {output}
       </div>
     );

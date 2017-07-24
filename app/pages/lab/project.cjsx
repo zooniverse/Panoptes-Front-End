@@ -23,9 +23,6 @@ EditProjectPage = React.createClass
   contextTypes:
     router: React.PropTypes.object.isRequired
 
-  title: ->
-    "#{counterpart 'projectLab.edit'} » #{@props.project.display_name}"
-
   getDefaultProps: ->
     project: id: '2'
     workflowActions: workflowActions
@@ -42,7 +39,7 @@ EditProjectPage = React.createClass
       projectID: @props.project.id
 
     <div className="columns-container content-container">
-      <Helmet title={@title()} />
+      <Helmet title="#{counterpart 'projectLab.edit'} » #{@props.project.display_name}" />
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>

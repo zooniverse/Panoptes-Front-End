@@ -18,7 +18,7 @@ promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 counterpart.registerTranslations 'en',
   messagesPage:
-    title: 'Messages'
+    title: 'Inbox'
 
 ConversationLink = React.createClass
   displayName: 'ConversationLink'
