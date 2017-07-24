@@ -11,10 +11,9 @@ seenThisSession = require '../../lib/seen-this-session'
 experimentsClient = require '../../lib/experiments-client'
 { Split } = require('seven-ten')
 
-counterpart.registerTranslations 'en'
-  classifyPage: {
+counterpart.registerTranslations 'en',
+  classifyPage:
     title: 'Classify'
-  }
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 

@@ -8,9 +8,8 @@ projectSection = require '../../talk/lib/project-section'
 TalkFootnote = require '../../talk/footnote'
 
 counterpart.registerTranslations 'en',
-  projectTalk: {
+  projectTalk:
     title: 'Talk'
-  }
 
 module.exports = React.createClass
   displayName: 'ProjectTalkPage'

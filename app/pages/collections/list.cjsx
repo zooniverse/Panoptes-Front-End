@@ -10,9 +10,8 @@ classNames = require 'classnames'
 Paginator = require '../../talk/lib/paginator'
 
 counterpart.registerTranslations 'en',
-  collectionsList: {
+  collectionsList:
     all: 'All'
-  }
 
 List = React.createClass
   displayName: 'List'

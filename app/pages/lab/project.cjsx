@@ -14,9 +14,8 @@ DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
 
 counterpart.registerTranslations 'en',
-  projectLab: {
+  projectLab:
     edit: 'Edit'
-  }
 
 EditProjectPage = React.createClass
   displayName: 'EditProjectPage'
