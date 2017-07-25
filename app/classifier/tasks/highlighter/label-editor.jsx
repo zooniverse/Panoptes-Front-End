@@ -25,12 +25,6 @@ export default function LabelEditor(props) {
     props.children, child => React.cloneElement(child, { disabled: false })
   );
 
-  // const children = React.Children.map(props.children, (child) => {
-  //   return React.cloneElement(child, {
-  //     disabled: false
-  //   });
-  // });
-
   return (
     <div onClick={onClick} onKeyDown={onKeyDown}>
       {children}
