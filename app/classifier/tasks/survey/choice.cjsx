@@ -52,7 +52,7 @@ module.exports = React.createClass
     onCancel: Function.prototype
 
   getInitialState: ->
-    answers: {}
+    answers: @props.annotation?.answers || {}
     focusedAnswer: ''
 
   checkFilledIn: ->
