@@ -86,8 +86,7 @@ module.exports = React.createClass
 
   handleAnnotation: (choice, answers, e) ->
     filters = JSON.parse JSON.stringify @state.filters
-    currentSelection = @state.selectedChoiceID
-    value = @props.annotation.value?.filter (value) -> value.choice isnt currentSelection
+    value = @props.annotation.value?.filter (value) -> value.choice isnt choice
     value.push {choice, answers, filters}
     @clearFilters()
     @clearSelection()
