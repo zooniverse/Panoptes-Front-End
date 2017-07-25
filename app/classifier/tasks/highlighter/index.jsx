@@ -1,3 +1,5 @@
+/* eslint no-underscore-dangle: ["error", { "allow": ["_toolIndex"] }] */
+
 import React from 'react';
 import { Markdown } from 'markdownz';
 import GenericTaskEditor from '../generic-editor';
@@ -8,56 +10,13 @@ import HighlighterSummary from './summary';
 import TextRenderer from '../../annotation-renderer/text';
 
 export default class Highlighter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.createButtons = this.createButtons.bind(this);
-    this.createLabelAnnotation = this.createLabelAnnotation.bind(this);
-    this.selectableArea = this.selectableArea.bind(this);
-  }
-
-  handleChange(toolIndex, e) {
-    let selection = document.getSelection();
-    this.createLabelAnnotation(selection, toolIndex);
-  }
-
-  createLabelAnnotation(selection, toolIndex) {
-    // currently we only deal with one selection at a time
-    const range = selection.getRangeAt(0);
-    const offset = this.getOffset(selection);
-    const start = offset + range.startOffset;
-    const end = offset + range.endOffset;
-    const task = this.props.workflow.tasks[this.props.annotation.task];
-    const labelInformation = task.highlighterLabels[toolIndex];
-    const selectable = this.selectableArea(selection, range, offset, start, end);
-    if (selectable) {
-      const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
-      newAnnotation.value.push({
-        labelInformation: labelInformation,
-        start: start,
-        end: end,
-        text: range.toString()
-      });
-      this.props.onChange(newAnnotation);
-    }
-    selection.collapseToEnd();
-  }
-
-  selectableArea(selection, range, offset, start, end){
-    const spansNodes = range.startContainer !== range.endContainer
-    const noAreaSelected = start === end;
-    const subjectSelection = selection.anchorNode.parentNode.parentNode.className === 'label-renderer';
-    const isSelectable = !spansNodes && !noAreaSelected && subjectSelection;
-    return isSelectable;
-  }
-
-  getOffset(selection) {
+  static getOffset(selection) {
     const { anchorNode } = selection;
     const { parentNode } = anchorNode;
     let start = 0;
-    let nodeArray = parentNode.childNodes;
-    for (var i = 0; i < nodeArray.length; i++) {
-      let node = nodeArray[i];
+    const nodeArray = parentNode.childNodes;
+    for (let i = 0; i < nodeArray.length; i += 1) {
+      const node = nodeArray[i];
       if (node.nodeType !== 8 && node !== anchorNode) {
         const text = node.getAttribute ? node.getAttribute('data-selection') : node.textContent;
         start += text.length;
@@ -68,16 +27,52 @@ export default class Highlighter extends React.Component {
     }
     return start;
   }
-
-  createButtons(option, index) {
-    const checked = index === this.props.annotation._toolIndex;
-    let active = '';
-    if (checked) {
-      active = 'active';
+  static selectableArea(selection, range, offset, start, end) {
+    const spansNodes = range.startContainer !== range.endContainer;
+    const noAreaSelected = start === end;
+    const subjectSelection = selection.anchorNode.parentNode.parentNode.className === 'label-renderer';
+    const isSelectable = !spansNodes && !noAreaSelected && subjectSelection;
+    return isSelectable;
+  }
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.createButtons = this.createButtons.bind(this);
+    this.createLabelAnnotation = this.createLabelAnnotation.bind(this);
+  }
+  createLabelAnnotation(selection, toolIndex) {
+    // currently we only deal with one selection at a time
+    const range = selection.getRangeAt(0);
+    const offset = this.constructor.getOffset(selection);
+    const start = offset + range.startOffset;
+    const end = offset + range.endOffset;
+    const task = this.props.workflow.tasks[this.props.annotation.task];
+    const labelInformation = task.highlighterLabels[toolIndex];
+    const selectable = this.constructor.selectableArea(selection, range, offset, start, end);
+    if (selectable) {
+      const newAnnotation = Object.assign({}, this.props.annotation, { _toolIndex: toolIndex });
+      newAnnotation.value.push({
+        labelInformation,
+        start,
+        end,
+        text: range.toString()
+      });
+      this.props.onChange(newAnnotation);
     }
+    selection.collapseToEnd();
+  }
+  handleChange(toolIndex) {
+    const selection = document.getSelection();
+    this.createLabelAnnotation(selection, toolIndex);
+  }
+  createButtons(option, index) {
     return (
       <div>
-        <button className="minor-button answer-button" value={option.label} onClick={this.handleChange.bind(this.props.annotation._toolIndex, index)} >
+        <button
+          className="minor-button answer-button"
+          value={option.label}
+          onClick={this.handleChange.bind(this.props.annotation._toolIndex, index)}
+        >
           <i className="fa fa-i-cursor" aria-hidden="true" style={{ color: `${option.color}` }} />
           <Markdown className="answer-button-label">{option.label}</Markdown>
         </button>
@@ -89,7 +84,12 @@ export default class Highlighter extends React.Component {
       const labels = this.props.task.highlighterLabels.map(this.createButtons);
       return (
         <div>
-          <GenericTask question={this.props.task.instruction} help={this.props.task.help} answers={labels} required={this.props.task.required} />
+          <GenericTask
+            question={this.props.task.instruction}
+            help={this.props.task.help}
+            answers={labels}
+            required={this.props.task.required}
+          />
         </div>
       );
     } else {
@@ -111,27 +111,16 @@ Highlighter.Summary = HighlighterSummary;
 
 Highlighter.AnnotationRenderer = TextRenderer;
 
-Highlighter.getDefaultTask = () => {
-  return (
-    {
-      type: 'highlighter',
-      instruction: 'Highlight the text',
-      help: '',
-      highlighterLabels: []
-    }
-  );
-};
+Highlighter.getDefaultTask = () => ({
+  type: 'highlighter',
+  instruction: 'Highlight the text',
+  help: '',
+  highlighterLabels: []
+});
 
-Highlighter.getTaskText = (task) => {
-  return (task.instruction);
-};
+Highlighter.getTaskText = task => task.instruction;
 
-Highlighter.getDefaultAnnotation = () => {
-  return ({
-    _toolIndex: 0,
-    value: []
-  });
-};
+Highlighter.getDefaultAnnotation = () => ({ _toolIndex: 0, value: [] });
 
 Highlighter.defaultProps = {
   task: {
@@ -143,6 +132,9 @@ Highlighter.defaultProps = {
 };
 
 Highlighter.propTypes = {
+  workflow: React.PropTypes.shape({
+    tasks: React.PropTypes.object
+  }),
   task: React.PropTypes.shape({
     type: React.PropTypes.string,
     instruction: React.PropTypes.string,
@@ -154,7 +146,14 @@ Highlighter.propTypes = {
   onChange: React.PropTypes.func,
   annotation: React.PropTypes.shape({
     _toolIndex: React.PropTypes.number,
+    task: React.PropTypes.shape({
+      type: React.PropTypes.string,
+      instruction: React.PropTypes.string,
+      help: React.PropTypes.string,
+      tools: React.PropTypes.array,
+      required: React.PropTypes.bool,
+      highlighterLabels: React.PropTypes.array
+    }),
     tools: React.PropTypes.array
-  }),
-  autoFocus: React.PropTypes.bool
+  })
 };
