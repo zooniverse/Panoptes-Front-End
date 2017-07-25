@@ -91,9 +91,9 @@ export default class FrameAnnotator extends React.Component {
           {!!BeforeSubject && (
             <BeforeSubject {...hookProps} />)}
 
-          <AnnotationRenderer type={type} {...rendererProps} />
-
-          {this.props.children}
+          <AnnotationRenderer type={type} {...rendererProps}>
+            {this.props.children}
+          </AnnotationRenderer>
 
           {!!warningBanner && (
             warningBanner

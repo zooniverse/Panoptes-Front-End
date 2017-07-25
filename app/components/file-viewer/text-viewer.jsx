@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 
 const SUPPORTED_TYPES = ['text'];
 const SUPPORTED_FORMATS = ['plain'];
@@ -33,6 +34,9 @@ class TextViewer extends Component {
     const cachedContent = cache[src];
     if (cachedContent) {
       this.setState({ content: cachedContent });
+      const e = new Event('load');
+      e.data = cachedContent;
+      this.element.dispatchEvent(e);
     } else {
       this.setState({ content: 'Loading…' });
       fetch(src + '?=')
@@ -42,7 +46,9 @@ class TextViewer extends Component {
       .then((content) => {
         cache[src] = content;
         this.setState({ content });
-        this.element.dispatchEvent(new Event('load'));
+        const e = new Event('load');
+        e.data = content;
+        this.element.dispatchEvent(e);
       })
       .catch((e) => {
         const content = e.message;
@@ -60,8 +66,12 @@ class TextViewer extends Component {
     if (SUPPORTED_FORMATS.indexOf(this.props.format) === -1) {
       content = `Unsupported format: ${this.props.format}`;
     }
+    const className = classnames(this.props.className, {
+      'text-viewer-loading': isLoading,
+      'text-viewer': !isLoading
+    });
     return (
-      <div ref={(element) => { this.element = element; }} className={isLoading ? 'text-viewer-loading' : 'text-viewer'} >
+      <div ref={(element) => { this.element = element; }} className={className} style={this.props.style}>
         { content }
       </div>
     );
@@ -72,7 +82,8 @@ TextViewer.propTypes = {
   src: React.PropTypes.string.isRequired,
   type: React.PropTypes.string,
   format: React.PropTypes.string,
-  onLoad: React.PropTypes.func
+  onLoad: React.PropTypes.func,
+  style: React.PropTypes.object
 };
 
 TextViewer.defaultProps = {

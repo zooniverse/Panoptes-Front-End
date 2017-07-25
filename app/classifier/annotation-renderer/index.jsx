@@ -1,5 +1,6 @@
 import React from 'react';
 import SVGRenderer from './svg';
+import TextRenderer from './text';
 
 function DefaultRenderer(props) {
   return (
@@ -14,7 +15,8 @@ DefaultRenderer.propTypes = {
 };
 
 const VIEWERS = {
-  image: SVGRenderer
+  image: SVGRenderer,
+  text: TextRenderer
 };
 
 function AnnotationRenderer(props) {

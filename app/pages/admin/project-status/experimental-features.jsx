@@ -25,6 +25,7 @@ const experimentalFeatures = [
   'sim notification',
   'general feedback',
   'slider',
+  'highlighter'
 ];
 
 class ExperimentalFeatures extends Component {
