@@ -86,14 +86,9 @@ module.exports = React.createClass
 
   handleAnnotation: (choice, answers, e) ->
     filters = JSON.parse JSON.stringify @state.filters
-    value = @props.annotation.value?.slice?(0) ? []
-    # @ is undefined within the scope of findIndex
     currentSelection = @state.selectedChoiceID
-    annotationIndex = value.findIndex (value) -> value.choice is currentSelection
-    if value[annotationIndex]
-      value[annotationIndex] = @props.annotation.value[annotationIndex]
-    else
-      value.push {choice, answers, filters}
+    value = @props.annotation.value?.filter (value) -> value.choice isnt currentSelection
+    value.push {choice, answers, filters}
     @clearFilters()
     @clearSelection()
     setTimeout => # Wait for filters and selection to clear.

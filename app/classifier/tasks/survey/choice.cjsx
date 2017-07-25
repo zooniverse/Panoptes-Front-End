@@ -44,7 +44,11 @@ ImageFlipper = React.createClass
 module.exports = React.createClass
   displayName: 'Choice'
 
+  propTypes:
+    annotation: React.PropTypes.object.isRequired
+
   getDefaultProps: ->
+    annotation: { answers: {} }
     task: null
     choiceID: ''
     onSwitch: Function.prototype
