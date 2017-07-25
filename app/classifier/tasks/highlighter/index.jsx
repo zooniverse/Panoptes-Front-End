@@ -112,10 +112,10 @@ Highlighter.Summary = HighlighterSummary;
 Highlighter.AnnotationRenderer = TextRenderer;
 
 Highlighter.getDefaultTask = () => ({
-  type: 'highlighter',
-  instruction: 'Highlight the text',
   help: '',
-  highlighterLabels: []
+  highlighterLabels: [],
+  instruction: 'Highlight the text',
+  type: 'highlighter'
 });
 
 Highlighter.getTaskText = task => task.instruction;
@@ -124,36 +124,36 @@ Highlighter.getDefaultAnnotation = () => ({ _toolIndex: 0, value: [] });
 
 Highlighter.defaultProps = {
   task: {
-    type: 'highlighter',
-    instruction: 'Highlight the text',
     help: '',
-    highlighterLabels: []
+    highlighterLabels: [],
+    type: 'highlighter',
+    instruction: 'Highlight the text'
   }
 };
 
 Highlighter.propTypes = {
-  workflow: React.PropTypes.shape({
-    tasks: React.PropTypes.object
-  }),
-  task: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    instruction: React.PropTypes.string,
-    help: React.PropTypes.string,
-    tools: React.PropTypes.array,
-    required: React.PropTypes.bool,
-    highlighterLabels: React.PropTypes.array
-  }),
-  onChange: React.PropTypes.func,
   annotation: React.PropTypes.shape({
     _toolIndex: React.PropTypes.number,
     task: React.PropTypes.shape({
-      type: React.PropTypes.string,
-      instruction: React.PropTypes.string,
       help: React.PropTypes.string,
-      tools: React.PropTypes.array,
+      highlighterLabels: React.PropTypes.array,
+      instruction: React.PropTypes.string,
       required: React.PropTypes.bool,
-      highlighterLabels: React.PropTypes.array
+      tools: React.PropTypes.array,
+      type: React.PropTypes.string
     }),
     tools: React.PropTypes.array
+  }),
+  onChange: React.PropTypes.func,
+  task: React.PropTypes.shape({
+    help: React.PropTypes.string,
+    highlighterLabels: React.PropTypes.array,
+    instruction: React.PropTypes.string,
+    required: React.PropTypes.bool,
+    tools: React.PropTypes.array,
+    type: React.PropTypes.string
+  }),
+  workflow: React.PropTypes.shape({
+    tasks: React.PropTypes.object
   })
 };
