@@ -41,17 +41,20 @@ export default class FrameViewer extends React.Component {
 
   render() {
     const FrameWrapper = this.props.frameWrapper;
+    let type;
+    let format;
+    let src;
     if(this.props.isAudioPlusImage){
       const subjectLocations = getSubjectLocations(this.props.subject);
-      const type = Object.keys(subjectLocations);
-      const format = Object.keys(subjectLocations).map((locationKey) => {
+      type = Object.keys(subjectLocations);
+      format = Object.keys(subjectLocations).map((locationKey) => {
         return subjectLocations[locationKey][0];
       });
-      const src = Object.keys(subjectLocations).map((locationKey) => {
+      src = Object.keys(subjectLocations).map((locationKey) => {
         return subjectLocations[locationKey][1];
       });
     }else{
-      const { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
+      ({ type, format, src } = getSubjectLocation(this.props.subject, this.props.frame));
     }
     const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && (type === 'image' || this.props.isAudioPlusImage);
     const ProgressMarker = this.props.progressMarker;
