@@ -45,7 +45,12 @@ module.exports = React.createClass
   displayName: 'Choice'
 
   propTypes:
-    annotation: React.PropTypes.object.isRequired
+    annotation: React.PropTypes.shape({
+      answers: React.PropTypes.object,
+      choice: React.PropTypes.string,
+      filters: React.PropTypes.object
+    })
+
 
   getDefaultProps: ->
     annotation: { answers: {} }
@@ -56,7 +61,7 @@ module.exports = React.createClass
     onCancel: Function.prototype
 
   getInitialState: ->
-    answers: @props.annotation?.answers || {}
+    answers: @props.annotation.answers
     focusedAnswer: ''
 
   checkFilledIn: ->

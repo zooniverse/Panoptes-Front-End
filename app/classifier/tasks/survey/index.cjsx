@@ -50,7 +50,7 @@ module.exports = React.createClass
       else
         # @ is undefined within the scope of find
         currentSelection = @state.selectedChoiceID
-        existingAnnotation = @props.annotation.value.find (value) -> value.choice is currentSelection || {}
+        existingAnnotation = @props.annotation.value.find (value) -> value.choice is currentSelection
         <Choice annotation={existingAnnotation} task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
     </div>
 
