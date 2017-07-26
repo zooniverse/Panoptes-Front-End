@@ -1,9 +1,15 @@
 React = require 'react'
 {Link} = require 'react-router'
+{ Helmet } = require 'react-helmet'
+counterpart = require 'counterpart'
 TalkBreadcrumbs = require '../../talk/breadcrumbs'
 TalkSearchInput = require '../../talk/search-input'
 projectSection = require '../../talk/lib/project-section'
 TalkFootnote = require '../../talk/footnote'
+
+counterpart.registerTranslations 'en',
+  projectTalk:
+    title: 'Talk'
 
 module.exports = React.createClass
   displayName: 'ProjectTalkPage'
@@ -22,6 +28,7 @@ module.exports = React.createClass
     [owner, name] = @props.project.slug.split('/')
 
     <div className="project-text-content talk project">
+      <Helmet title="#{@props.project.display_name} » #{counterpart 'projectTalk.title'}" />
       <div className="content-container">
         <h1 className="talk-main-link">
           <Link to="/projects/#{owner}/#{name}/talk" onClick={@logGeordi.bind null, this}>

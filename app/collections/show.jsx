@@ -4,8 +4,8 @@ import Translate from 'react-translate-component';
 import apiClient from 'panoptes-client/lib/api-client';
 import classNames from 'classnames';
 import counterpart from 'counterpart';
+import { Helmet } from 'react-helmet';
 import Loading from '../components/loading-indicator';
-import TitleMixin from '../lib/title-mixin';
 
 counterpart.registerTranslations('en', {
   collectionPage: {
@@ -16,7 +16,8 @@ counterpart.registerTranslations('en', {
   },
   collectionsPageWrapper: {
     error: 'There was an error retrieving this collection.'
-  }
+  },
+  loading: '(Loading)'
 });
 
 const CollectionPage = React.createClass({
@@ -158,8 +159,6 @@ const CollectionPage = React.createClass({
 });
 
 const CollectionPageWrapper = React.createClass({
-  mixins: [TitleMixin],
-
   propTypes: {
     children: React.PropTypes.node,
     project: React.PropTypes.object,
@@ -202,10 +201,6 @@ const CollectionPageWrapper = React.createClass({
   listenToCollection() {
     const collection = this.state.collection;
     this.setState({ collection });
-  },
-
-  title() {
-    return this.state.collection ? this.state.collection.display_name : '(Loading)';
   },
 
   fetchCollection() {
@@ -274,6 +269,7 @@ const CollectionPageWrapper = React.createClass({
     }
     return (
       <div className={classes}>
+        <Helmet title={this.state.collection ? this.state.collection.display_name : counterpart('loading')} />
         {output}
       </div>
     );

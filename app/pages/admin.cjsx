@@ -1,8 +1,9 @@
 React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
-ChangeListener = require '../components/change-listener'
 {IndexLink, Link} = require 'react-router'
+{ Helmet } = require 'react-helmet'
+ChangeListener = require '../components/change-listener'
 
 counterpart.registerTranslations 'en',
   userAdminPage:
@@ -16,6 +17,7 @@ AdminPage = React.createClass
 
   render: ->
     <section className="admin-page-content">
+      <Helmet title={counterpart("userAdminPage.header")} />
       <div className="secondary-page admin-page">
         <h2><Translate content="userAdminPage.header" /></h2>
         <div className="admin-content">

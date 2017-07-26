@@ -3,10 +3,13 @@ import { Link, IndexLink } from 'react-router';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import classNames from 'classnames';
+import { Helmet } from 'react-helmet';
 import Avatar from '../../partials/avatar';
 
 counterpart.registerTranslations('en', {
+  loading: '(Loading)',
   profile: {
+    title: 'Profile',
     nav: {
       comments: 'Recent comments',
       collections: 'Collections',
@@ -140,6 +143,7 @@ class ProfileUser extends Component {
 
     return (
       <div className={pageClasses}>
+        <Helmet title={this.props.user ? `${counterpart("profile.title")} » ${this.props.user.display_name}` : counterpart('loading')} />
         <section className="hero user-profile-hero" style={headerStyle}>
           <div className="overlay" />
           <div className="hero-container">
@@ -166,7 +170,9 @@ class ProfileUser extends Component {
 
 ProfileUser.propTypes = {
   children: PropTypes.node,
-  user: PropTypes.object,
+  user: PropTypes.shape({
+    display_name: PropTypes.string
+  }),
   project: PropTypes.object,
   profileUser: PropTypes.object.isRequired
 };

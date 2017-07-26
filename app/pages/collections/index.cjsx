@@ -1,6 +1,5 @@
 counterpart = require 'counterpart'
 React = require 'react'
-TitleMixin = require '../../lib/title-mixin'
 Translate = require 'react-translate-component'
 CollectionsNav = require './nav'
 classNames = require 'classnames'
@@ -48,11 +47,6 @@ counterpart.registerTranslations 'en',
     projectWide: 'Show all Zooniverse favorites...'
 
 CollectionsContainer = React.createClass
-
-  mixins: [TitleMixin]
-
-  title: ->
-    if @props.params.collection_owner? then "#{@props.params.collection_owner}" else "All"
 
   userForTitle: ->
     if @props.params?.collection_owner?

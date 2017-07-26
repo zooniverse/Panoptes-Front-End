@@ -1,7 +1,7 @@
 auth = require 'panoptes-client/lib/auth'
 React = require 'react'
 ReactDOM = require 'react-dom'
-TitleMixin = require '../../lib/title-mixin'
+{ Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 `import FinishedBanner from './finished-banner';`
@@ -11,6 +11,9 @@ seenThisSession = require '../../lib/seen-this-session'
 experimentsClient = require '../../lib/experiments-client'
 { Split } = require('seven-ten')
 
+counterpart.registerTranslations 'en',
+  classifyPage:
+    title: 'Classify'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -44,9 +47,6 @@ sessionDemoMode = false
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
 
-  mixins: [TitleMixin]
-
-  title: 'Classify'
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -188,7 +188,7 @@ module.exports = React.createClass
           subjectsToLoad = if filteredSubjects.length > 0 then filteredSubjects else nonLoadedSubjects
           upcomingSubjects.forWorkflow[workflow.id].push subjectsToLoad...
           # Remove any duplicate subjects from the upcoming queue
-          upcomingSubjects.forWorkflow[workflow.id].filter (subject, i) => 
+          upcomingSubjects.forWorkflow[workflow.id].filter (subject, i) =>
             upcomingSubjects.forWorkflow[workflow.id].indexOf subject is i
 
       # If we're filling this list for the first time, we won't have a subject selected, so try again.
@@ -206,6 +206,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="classify-page content-container">
+      <Helmet title="#{@props.project.display_name} » #{counterpart 'classifyPage.title'}" />
       {if @props.projectIsComplete
         <FinishedBanner project={@props.project} />}
 

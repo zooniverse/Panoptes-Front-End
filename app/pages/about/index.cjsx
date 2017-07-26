@@ -1,10 +1,12 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
+{ Helmet } = require 'react-helmet'
 {Link, IndexLink} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   about:
+    header: 'About'
     title: 'About Us'
     nav:
       about: 'About'
@@ -31,6 +33,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="secondary-page about-page">
+      <Helmet title={counterpart "about.header"} />
       <section className="hero">
         <div className="hero-container">
           <Translate content="about.title" component="h1" />

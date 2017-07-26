@@ -1,14 +1,16 @@
 React = require 'react'
-TitleMixin = require '../../lib/title-mixin'
+{ Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
 { Split } = require('seven-ten')
+counterpart = require 'counterpart'
 isAdmin = require '../../lib/is-admin'
 ProjectPage = require './project-page'
 
+counterpart.registerTranslations 'en',
+  loading: '(Loading)'
+
 ProjectPageController = React.createClass
   displayName: 'ProjectPageController'
-
-  mixins: [TitleMixin]
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -18,9 +20,6 @@ ProjectPageController = React.createClass
   propTypes:
     params: React.PropTypes.object
     user: React.PropTypes.object
-
-  title: ->
-    @state.project?.display_name ? '(Loading)'
 
   getDefaultProps: ->
     params: {}
@@ -284,7 +283,7 @@ ProjectPageController = React.createClass
     betaApproved = @state.project?.beta_approved
 
     <div className="project-page-wrapper">
-
+      <Helmet title="#{@state.project?.display_name ? counterpart 'loading'}" />
       {if betaApproved
         <div className="beta-border"></div>}
 

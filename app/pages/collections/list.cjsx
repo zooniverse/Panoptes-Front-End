@@ -2,10 +2,16 @@ React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 `import CollectionCard from './collection-card';`
 Translate = require 'react-translate-component'
+{ Helmet } = require 'react-helmet'
 {Link} = require 'react-router'
+counterpart = require 'counterpart'
 CollectionsNav = require './nav'
 classNames = require 'classnames'
 Paginator = require '../../talk/lib/paginator'
+
+counterpart.registerTranslations 'en',
+  collectionsList:
+    all: 'All'
 
 List = React.createClass
   displayName: 'List'
@@ -79,6 +85,16 @@ List = React.createClass
       .then (collections) =>
         @setState {collections}
 
+  title: ->
+    capitalizedBase = @props.baseType.charAt(0).toUpperCase() + @props.baseType.slice(1)
+    owner =
+      if @props.params.collection_owner?
+        @props.params.collection_owner
+      else if @props.params.name
+        @props.params.name
+      else counterpart "collectionsList.all"
+    "#{capitalizedBase} » #{owner}"
+
   shared: (collection) ->
     if (@props.params.collection_owner is @props.user?.login) or (@props.params.profile_name is @props.user?.login)
       @props.user and @props.user?.id isnt collection.links.owner.id
@@ -101,6 +117,7 @@ List = React.createClass
       userCollectionsLink = "/users/#{username}/#{@props.baseType}"
 
     <section className={classes}>
+      <Helmet title={@title()} />
       {if !@props.params.profile_name? and @props.project?
         <CollectionsNav
           translationObjectName="#{@props.translationObjectName}"

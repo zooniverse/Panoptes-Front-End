@@ -2,10 +2,10 @@ React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
+{Markdown} = require 'markdownz'
 ZooniverseLogoType = require '../../partials/zooniverse-logotype'
 alert = require '../../lib/alert'
 LoginDialog = require '../../partials/login-dialog'
-{Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
   labLanding:

@@ -2,8 +2,9 @@ React = require 'react'
 {Link, IndexLink} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
-TitleMixin = require '../../lib/title-mixin'
+{ Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
+counterpart = require 'counterpart'
 ChangeListener = require '../../components/change-listener'
 workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
@@ -12,16 +13,15 @@ isAdmin = require '../../lib/is-admin'
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
 
+counterpart.registerTranslations 'en',
+  projectLab:
+    edit: 'Edit'
+
 EditProjectPage = React.createClass
   displayName: 'EditProjectPage'
 
-  mixins: [TitleMixin]
-
   contextTypes:
     router: React.PropTypes.object.isRequired
-
-  title: ->
-    @props.project.display_name
 
   getDefaultProps: ->
     project: id: '2'
@@ -39,6 +39,7 @@ EditProjectPage = React.createClass
       projectID: @props.project.id
 
     <div className="columns-container content-container">
+      <Helmet title="#{counterpart 'projectLab.edit'} » #{@props.project.display_name}" />
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
@@ -141,8 +142,6 @@ EditProjectPage = React.createClass
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
-  mixins: [TitleMixin]
-  title: 'Edit'
 
   contextTypes:
     router: React.PropTypes.object.isRequired

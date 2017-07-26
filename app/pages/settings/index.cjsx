@@ -1,12 +1,13 @@
 React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
+{ Helmet } = require 'react-helmet'
 ChangeListener = require '../../components/change-listener'
 {Link, IndexLink} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   userSettingsPage:
-    header: "Settings"
+    title: "Settings"
     nav:
       accountInformation: "Account Information"
       customizeProfile: "Customize Profile"
@@ -20,8 +21,9 @@ UserSettingsPage = React.createClass
 
   render: ->
     <section className="user-profile-content">
+      <Helmet title="#{counterpart 'userSettingsPage.title'} » #{@props.user.display_name}" />
       <div className="secondary-page settings-page">
-        <h2><Translate content="userSettingsPage.header" /></h2>
+        <h2><Translate content="userSettingsPage.title" /></h2>
         <div className="settings-content">
           <aside className="secondary-page-side-bar settings-side-bar">
             <nav>

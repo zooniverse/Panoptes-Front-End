@@ -2,6 +2,7 @@ import counterpart from 'counterpart';
 import React, { Component, PropTypes } from 'react';
 import Translate from 'react-translate-component';
 import { browserHistory } from 'react-router';
+import { Helmet } from 'react-helmet';
 
 import StatusLink from './status-link';
 
@@ -11,9 +12,9 @@ counterpart.registerTranslations('en', {
     nav: {
       active: 'Active',
       paused: 'Paused',
-      finished: 'Finished',
-    },
-  },
+      finished: 'Finished'
+    }
+  }
 });
 
 class ProjectsPage extends Component {
@@ -28,7 +29,6 @@ class ProjectsPage extends Component {
 
   componentDidMount() {
     if (document) {
-      document.title = 'Projects \u2014 Zooniverse';
       document.documentElement.classList.add('on-secondary-page');
     }
   }
@@ -55,6 +55,7 @@ class ProjectsPage extends Component {
     const { children, location } = this.props;
     return (
       <div className="secondary-page all-resources-page">
+        <Helmet title={counterpart('projectsHome.title')} />
         <section className="hero projects-hero">
           <div className="hero-container">
             <Translate content="projectsHome.title" component="h1" />
@@ -80,14 +81,14 @@ class ProjectsPage extends Component {
 }
 
 ProjectsPage.childContextTypes = {
-  updateQuery: React.PropTypes.func,
+  updateQuery: React.PropTypes.func
 };
 
 ProjectsPage.propTypes = {
   children: PropTypes.object.isRequired,
   location: React.PropTypes.shape({
-    query: React.PropTypes.object,
-  }),
+    query: React.PropTypes.object
+  })
 };
 
 ProjectsPage.defaultProps = {
@@ -96,9 +97,9 @@ ProjectsPage.defaultProps = {
       discipline: '',
       page: '1',
       sort: '-launch_date',
-      status: 'live',
-    },
-  },
+      status: 'live'
+    }
+  }
 };
 
 export default ProjectsPage;

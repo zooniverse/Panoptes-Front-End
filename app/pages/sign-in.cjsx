@@ -1,11 +1,12 @@
 counterpart = require 'counterpart'
 React = require 'react'
-TitleMixin = require '../lib/title-mixin'
+Helmet = require 'react-helmet'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   signIn:
+    title: 'Sign in/register'
     withZooniverse: 'Sign in with your Zooniverse account'
     whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.'
     signIn: 'Sign in'
@@ -18,12 +19,9 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'SignInPage'
 
-  mixins: [TitleMixin]
-
-  title: 'Sign in/register'
-
   render: ->
     <div className="sign-in-page content-container">
+      <Helmet title={counterpart 'signIn.register'} />
       <Translate component="h1" content="signIn.withZooniverse" />
       <Translate component="p" content="signIn.whyHaveAccount" />
 
