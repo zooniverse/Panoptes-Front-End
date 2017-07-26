@@ -48,10 +48,7 @@ module.exports = React.createClass
       {if @state.selectedChoiceID is ''
         <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} onRemove={@handleRemove} annotation={@props.annotation} focusedChoice={@state.focusedChoice} />
       else
-        # @ is undefined within the scope of find
-        currentSelection = @state.selectedChoiceID
-        existingAnnotationValue = @props.annotation.value.find (value) -> value.choice is currentSelection
-        <Choice annotationValue={existingAnnotationValue} task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
+        <Choice task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
     </div>
 
   handleFilter: (characteristicID, valueID) ->
@@ -78,7 +75,7 @@ module.exports = React.createClass
     @setState filters: {}
 
   clearSelection: ->
-    @setState
+    @setState 
       selectedChoiceID: ''
       focusedChoice: @state.selectedChoiceID
     newAnnotation = Object.assign {}, @props.annotation, _choiceInProgress: false
@@ -86,7 +83,7 @@ module.exports = React.createClass
 
   handleAnnotation: (choice, answers, e) ->
     filters = JSON.parse JSON.stringify @state.filters
-    value = @props.annotation.value?.filter (value) -> value.choice isnt choice
+    value = @props.annotation.value?.slice?(0) ? []
     value.push {choice, answers, filters}
     @clearFilters()
     @clearSelection()
