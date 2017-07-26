@@ -9,7 +9,7 @@ export default class LabelRenderer extends React.Component {
     this.onLoad = this.onLoad.bind(this);
     this.state = {
       content: ''
-    }
+    };
   }
 
   onLoad(e) {
@@ -18,24 +18,21 @@ export default class LabelRenderer extends React.Component {
     this.props.onLoad(e);
   }
 
-  createNewContent(){
-    let newContent = [];
+  createNewContent() {
+    const newContent = [];
     let lastFocusIndex = 0;
     let i = 0;
     if (this.props.annotation.value && this.props.annotation.value.length > 0) {
-      for ( i = 0; i < this.state.content.length; i++){
-        for (let a = 0; a < this.props.annotation.value.length; a++) {
-          let currentAnnotation = this.props.annotation.value[a];
-          let annotationColor = currentAnnotation.labelInformation.color;
-          if (currentAnnotation.start === i ) {
+      for (i = 0; i < this.state.content.length; i += 1) {
+        for (let a = 0; a < this.props.annotation.value.length; a += 1) {
+          const currentAnnotation = this.props.annotation.value[a];
+          if (currentAnnotation.start === i) {
             // 1. add text between last label and current label
-            let preContent = this.state.content.slice(lastFocusIndex, i);
+            const preContent = this.state.content.slice(lastFocusIndex, i);
             newContent.push(preContent);
-            
             // 2. add the highlighted content, push content to be labeled
-            let newLabel = <Selection key={a} annotation={currentAnnotation} disabled={this.props.disabled} />
+            const newLabel = <Selection key={a} annotation={currentAnnotation} disabled={this.props.disabled} />;
             newContent.push(newLabel);
-            
             // 3. re-set last focusIndex with annotation index
             lastFocusIndex = currentAnnotation.end;
           }
@@ -46,32 +43,32 @@ export default class LabelRenderer extends React.Component {
       newContent.push(endContent);
     }
 
-    return ( newContent.length === 0 ? this.state.content : newContent );
+    return (newContent.length === 0 ? this.state.content : newContent);
   }
 
   render() {
     const labeledContent = this.createNewContent();
-    const children = React.Children.map(this.props.children, (child) => {
-      return React.cloneElement(child, {
-        className: 'invisible',
-        onLoad: this.onLoad
-      });
-    });
-    return(
-      <div className='label-renderer' >
+    const children = React.Children.map(
+      this.props.children, child => (React.cloneElement(child, { className: 'invisible', onLoad: this.onLoad }))
+    );
+    return (
+      <div className="label-renderer" >
         <div >
           {labeledContent}
         </div>
-          {children}
+        {children}
       </div>
     );
   }
 }
 
 LabelRenderer.propTypes = {
+  annotation: React.PropTypes.shape({
+    value: React.PropTypes.array
+  }),
+  children: React.PropTypes.element,
   disabled: React.PropTypes.bool,
-  onLoad: React.PropTypes.func,
-  src: React.PropTypes.string
+  onLoad: React.PropTypes.func
 };
 
 LabelRenderer.defaultProps = {
@@ -79,5 +76,5 @@ LabelRenderer.defaultProps = {
     value: []
   },
   disabled: true,
-  onLoad: () => { return true }
-}
+  onLoad: () => true
+};
