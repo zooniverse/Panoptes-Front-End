@@ -33,7 +33,7 @@ class baseModel {
     this.update = this.update.bind(this);
     this.getRegl = this.getRegl.bind(this);
     this.parse = this.parse.bind(this);
-    this.size = [canvas.width, canvas.height];
+    this.size = [canvas.height, canvas.width];
 
     // instantiate the regl instance with the provided canvas
     this.regl = reglBase({
@@ -116,20 +116,25 @@ class baseModel {
 
 function bgRegl(r) {
   return r({
+    // TODO: this should be more model-independent
     frag: `
       precision mediump float;
       uniform sampler2D imageTexture, modelTexture;
       varying vec2 uv;
       vec2 texCoords;
       float pixel;
+      float sinhStretch(float px, float a) {
+        return (exp(px) - exp(-px)) / 2.0;
+      }
       void main () {
         // for some reason the y-axis coords have been mirrored;
         texCoords = vec2(uv[0], 1.0 - uv[1]);
-        pixel = texture2D(imageTexture, texCoords).rgb[0] - texture2D(modelTexture, uv).rgb[0];
+        pixel = sinhStretch(texture2D(imageTexture, texCoords).rgb[0], 0.1) - \
+          texture2D(modelTexture, uv).rgb[0];
         if (pixel < 0.0) {
           // model is too bright
           gl_FragColor = vec4(
-            1.0 + pixel,
+            1.0 + pixel, // nb pixel < 1 so this is making the value smaller
             1.0 + pixel,
             1,
             1
@@ -138,7 +143,7 @@ function bgRegl(r) {
           // model is too weak
           gl_FragColor = vec4(
             1,
-            1.0 - pixel,
+            1.0 - pixel, // this time pixel > 1
             1.0 - pixel,
             1
           );
@@ -239,15 +244,18 @@ class differenceModel {
     return this.regl;
   }
   getScore() {
-    this.regl.read(this.differenceData);
+    // images have been treated by normalisation to [0, 1] then arcsinh stretch
+    // with a = 0.1. Need to calc difference in normal space
+    this.regl.read(this.differenceData); // get the difference array
     const l = this.size[0] * this.size[1] * 4;
     let AIC = 0;
     for (let i = 0; i < l; i += 4) {
+      // normalise to [0, 1]
       let r = this.differenceData[i] / 255;
       let b = this.differenceData[i + 2] / 255;
       AIC += (r - b) * (r - b) / this.size[0] / this.size[1];
-      // get the blue component
     }
+    // arbitrary 0 -> 100% scaling
     return 100 * Math.exp(-AIC * 500);
   }
 }
@@ -366,11 +374,10 @@ function drawSpiral(r) {
       uniform vec2 points[50];
       uniform parentDisk disk;
       uniform int pointCount;
-      uniform float spread, axRatio, i0;
+      uniform float spread, axRatio, i0, falloff;
 
       ${calcBoxyEllipseDistFunc}
       ${sersic2dFunc}
-
       float getDistance(vec2 y, vec2 p1, vec2 p2) {
         float r = dot(p2 - p1, y - p1) / length(p2 - p1) / length(p2 - p1);
         if (r <= 0.0) {
@@ -398,8 +405,7 @@ function drawSpiral(r) {
         }
 
         float pixel = i0 * exp(-radius*radius * 0.01/spread) *
-          sersic2d(x, y, disk.mu, disk.roll, disk.rEff, disk.axRatio, disk.c, 1.0, disk.n);
-
+          exp(-calcBoxyEllipseDist(x, y, disk.mu, disk.roll, disk.rEff, disk.axRatio, disk.c)/falloff);
         gl_FragColor = vec4(
           1,
           0,
@@ -410,6 +416,7 @@ function drawSpiral(r) {
     uniforms: {
       i0: r.prop('i0'),
       spread: r.prop('spread'),
+      falloff: r.prop('falloff'),
       pointCount: (c, p, b) => p.points.length,
       'disk.mu': (c, p, b) => [p.disk.mux, p.disk.muy],
       'disk.axRatio': (c, p, b) => p.disk.rx > p.disk.ry ?
@@ -463,7 +470,7 @@ class galaxyModel extends baseModel {
         func: drawSpiral,
         map: ['points', 'spread', 'i0'],
         type: 'component',
-        default: { mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, }
+        default: { mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, falloff: 1, }
       },
     ];
   }
@@ -547,8 +554,11 @@ class galaxyModel extends baseModel {
           this.model[3].default,
           {
             disk,
-            spread: parseFloat(annotation[3].value[1].value[0].value),
-            i0: parseFloat(annotation[3].value[1].value[1].value),
+            i0: parseFloat(annotation[3].value[0].value[i].details[0].value),
+            spread: parseFloat(annotation[3].value[0].value[i].details[1].value),
+            falloff: parseFloat(annotation[3].value[1].value[0].value),
+            //spread: parseFloat(annotation[3].value[1].value[0].value),
+            //i0: parseFloat(annotation[3].value[1].value[1].value),
             points: annotation[3].value[0].value[i].points.map(
               (p) => [p.x, this.size[0] - p.y]
             ),
