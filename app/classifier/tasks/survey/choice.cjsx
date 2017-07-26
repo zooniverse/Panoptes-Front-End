@@ -45,15 +45,14 @@ module.exports = React.createClass
   displayName: 'Choice'
 
   propTypes:
-    annotation: React.PropTypes.shape({
+    annotationValue: React.PropTypes.shape({
       answers: React.PropTypes.object,
       choice: React.PropTypes.string,
       filters: React.PropTypes.object
     })
 
-
   getDefaultProps: ->
-    annotation: { answers: {} }
+    annotationValue: { answers: {} }
     task: null
     choiceID: ''
     onSwitch: Function.prototype
@@ -61,7 +60,7 @@ module.exports = React.createClass
     onCancel: Function.prototype
 
   getInitialState: ->
-    answers: @props.annotation.answers
+    answers: @props.annotationValue.answers
     focusedAnswer: ''
 
   checkFilledIn: ->
