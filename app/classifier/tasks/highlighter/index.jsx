@@ -34,6 +34,17 @@ export default class Highlighter extends React.Component {
     const isSelectable = !spansNodes && !noAreaSelected && subjectSelection;
     return isSelectable;
   }
+  // in Edge and IE, when highlighting a word at the end of a line
+  // sometimes an extra character is added to the range.endOffset value
+  static extraNewLineCharacter(range) {
+    const content = range.startContainer.textContent;
+    const selectedText = range.toString();
+    let endOffset = range.endOffset;
+    if (content[range.endOffset - 1] !== selectedText[-1] && content[range.endOffset - 1] === '\n') {
+      endOffset = range.endOffset - 1;
+    }
+    return endOffset;
+  }
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -45,7 +56,8 @@ export default class Highlighter extends React.Component {
     const range = selection.getRangeAt(0);
     const offset = this.constructor.getOffset(selection);
     const start = offset + range.startOffset;
-    const end = offset + range.endOffset;
+    const endOffset = this.constructor.extraNewLineCharacter(range);
+    const end = offset + endOffset;
     const task = this.props.workflow.tasks[this.props.annotation.task];
     const labelInformation = task.highlighterLabels[toolIndex];
     const selectable = this.constructor.selectableArea(selection, range, offset, start, end);
