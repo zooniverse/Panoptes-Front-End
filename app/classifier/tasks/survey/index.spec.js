@@ -51,11 +51,14 @@ describe('Survey Task', function(){
   });
   
   it('should reset saved choices when the annotation resets', function(){
-    annotation = { value: [] };
-    wrapper.setState({ selectedChoiceID: 'ar' });
+    wrapper.setState({ selectedChoiceID: '' });
     wrapper.setProps({ annotation });
+    wrapper.update();
+    wrapper.setState({ selectedChoiceID: 'ar' });
+    wrapper.setProps({ annotation: { value: [] } });
     wrapper.update();
     const choice = wrapper.find(Choice);
     assert.equal(choice.props().annotationValue.answers.ho, undefined);
+    assert.equal(choice.node.state.answers.ho, undefined)
   });
 })
