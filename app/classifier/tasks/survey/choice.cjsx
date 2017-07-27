@@ -44,7 +44,15 @@ ImageFlipper = React.createClass
 module.exports = React.createClass
   displayName: 'Choice'
 
+  propTypes:
+    annotationValue: React.PropTypes.shape({
+      answers: React.PropTypes.object,
+      choice: React.PropTypes.string,
+      filters: React.PropTypes.object
+    })
+
   getDefaultProps: ->
+    annotationValue: { answers: {} }
     task: null
     choiceID: ''
     onSwitch: Function.prototype
@@ -52,7 +60,7 @@ module.exports = React.createClass
     onCancel: Function.prototype
 
   getInitialState: ->
-    answers: {}
+    answers: Object.assign {}, @props.annotationValue.answers
     focusedAnswer: ''
 
   checkFilledIn: ->
