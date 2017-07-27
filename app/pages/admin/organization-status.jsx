@@ -11,16 +11,17 @@ class OrganizationStatus extends Component {
   constructor(props) {
     super(props);
     this.forceUpdate = this.forceUpdate.bind(this);
-    this.renderError = this.renderError.bind(this);
+    this.getProjects = this.getProjects.bind(this);
 
     this.state = {
       organization: null,
-      error: null
+      error: null,
+      projects: []
     };
   }
 
   componentDidMount() {
-    this.getOrganization();
+    this.getOrganization().then(() => this.getProjects());
   }
 
   componentWillUnmount() {
@@ -40,10 +41,37 @@ class OrganizationStatus extends Component {
     });
   }
 
-  renderError() {
-    if (this.state.error) {
-      return <div>{this.state.error}</div>;
+  getProjects() {
+    this.state.organization.get('projects', { sort: 'display_name' })
+      .then((projects) => {
+        this.setState({ projects });
+      });
+  }
+
+  renderProjects() {
+    if (this.state.projects.length === 0) {
+      return <div>No projects found</div>;
     }
+
+    return (
+      <ul className="project-status__section-list">
+        {this.state.projects.map(project =>
+          <li key={project.id} className="section-list__item">
+            <span>{`${project.id} - ${project.display_name}`}</span>
+            <ul className="project-status__section-list">
+              <li className="project-status__org-project-list-item">
+                Private: {project.private.toString()}
+              </li>
+              <li className="project-status__org-project-list-item">
+                Live: {project.live.toString()}
+              </li>
+              <li className="project-status__org-project-list-item">
+                Launch Approved: {project.launch_approved.toString()}
+              </li>
+            </ul>
+          </li>
+        )}
+      </ul>);
   }
 
   render() {
@@ -53,7 +81,7 @@ class OrganizationStatus extends Component {
 
     return (
       <div className="project-status">
-        <ProjectIcon project={this.state.organization} />
+        <ProjectIcon project={this.state.organization} linkTo={`/organizations/${this.state.organization.slug}`} />
         <div className="project-status__section">
           <h4>Information</h4>
           <ul>
@@ -65,6 +93,10 @@ class OrganizationStatus extends Component {
             <li>Listed At: {this.state.organization.listed ?
                 moment(this.state.organization.listed_at).calendar() : 'N/A'}
             </li>
+          </ul>
+          <h4>Associated Projects</h4>
+          <ul>
+            {this.renderProjects()}
           </ul>
         </div>
       </div>

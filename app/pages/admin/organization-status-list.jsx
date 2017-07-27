@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 import LoadingIndicator from '../../components/loading-indicator';
 import ProjectIcon from '../../components/project-icon';
@@ -29,8 +28,16 @@ class OrganizationStatusList extends Component {
   }
 
   getOrganizations() {
+    const { query } = this.props.location;
+
+    const organizationsQuery = {
+      include: 'avatar'
+    };
+
+    const mergedQuery = Object.assign({}, organizationsQuery, query);
+
     this.setState({ loading: true, error: null });
-    return apiClient.type('organizations').get({ include: 'avatar' })
+    return apiClient.type('organizations').get(mergedQuery)
       .then((organizations) => { this.setState({ organizations, loading: false }); })
       .catch((error) => { this.setState({ error: `Error requesting organizations:, ${error}`, loading: false }); });
   }
@@ -64,9 +71,6 @@ class OrganizationStatusList extends Component {
   render() {
     return (
       <div className="project-status-page">
-        <nav className="project-status-filters">
-          <Link to="/admin/organization_status">All</Link>
-        </nav>
         {(this.state.error) ? <p>{this.state.error}</p> : null}
         {(this.state.loading) ? <LoadingIndicator /> : this.renderOrganizationList()}
       </div>
