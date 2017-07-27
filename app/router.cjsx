@@ -14,6 +14,8 @@ React = require 'react'
 `import ProjectStatusList from './pages/admin/project-status-list';`
 `import ProjectStatus from './pages/admin/project-status';`
 `import Grantbot from './pages/admin/grantbot';`
+`import OrganizationStatusList from './pages/admin/organization-status-list';`
+`import OrganizationStatus from './pages/admin/organization-status';`
 `import EditMediaPage from './pages/lab/media';`
 `import UserProfilePage from './pages/profile/index';`
 `import NotificationsPage from './pages/notifications';`
@@ -233,6 +235,8 @@ module.exports =
       <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={ProjectStatus} />
       <Route path="grantbot" component={Grantbot} />
+      <Route path="organization_status" component={OrganizationStatusList} />
+      <Route path="organization_status/:owner/:name" component={OrganizationStatus} />
     </Route>
 
     <Route path="todo" component={-> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
