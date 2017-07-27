@@ -45,19 +45,25 @@ describe('Survey Task', function(){
   });
 
   it('should pass existing answers to the Choice component', function(){
+    wrapper.setProps({ annotation });
+    wrapper.update();
     wrapper.setState({ selectedChoiceID: 'ar' });
     const choice = wrapper.find(Choice);
     assert.equal(choice.props().annotationValue, annotation.value[0]);
   });
   
   it('should reset saved choices when the annotation resets', function(){
-    wrapper.setState({ selectedChoiceID: '' });
     wrapper.setProps({ annotation });
     wrapper.update();
     wrapper.setState({ selectedChoiceID: 'ar' });
+    let choice = wrapper.find(Choice);
+    assert.equal(choice.props().annotationValue.answers.ho, "two");
+    assert.equal(choice.node.state.answers.ho, "two")
+    wrapper.setState({ selectedChoiceID: '' });
     wrapper.setProps({ annotation: { value: [] } });
     wrapper.update();
-    const choice = wrapper.find(Choice);
+    wrapper.setState({ selectedChoiceID: 'ar' });
+    choice = wrapper.find(Choice);
     assert.equal(choice.props().annotationValue.answers.ho, undefined);
     assert.equal(choice.node.state.answers.ho, undefined)
   });
