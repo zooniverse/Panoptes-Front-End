@@ -1,5 +1,3 @@
-/* eslint no-underscore-dangle: ["error", { "allow": ["_toolIndex"] }] */
-
 import React from 'react';
 import { Markdown } from 'markdownz';
 import GenericTaskEditor from '../generic-editor';

@@ -24,6 +24,7 @@
     "multiline-ternary": ["warn", "never"],
     "no-else-return": "off",
     "no-trailing-spaces": 1,
+    "no-underscore-dangle": ["error", { "allow": ["_toolIndex"] }],
     "no-unused-vars": 1,
     "no-useless-constructor": 1,
     "no-useless-return": 1,
