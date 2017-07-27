@@ -39,7 +39,7 @@ export default class Highlighter extends React.Component {
   static extraNewLineCharacter(range) {
     const content = range.startContainer.textContent;
     const selectedText = range.toString();
-    let endOffset = range.endOffset;
+    let { endOffset } = range;
     if (content[range.endOffset - 1] !== selectedText[-1] && content[range.endOffset - 1] === '\n') {
       endOffset = range.endOffset - 1;
     }
