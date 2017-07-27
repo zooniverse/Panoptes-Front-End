@@ -1,5 +1,5 @@
 /*
-This file sholuld provide a model to be rendered in model-canvas using regl
+This file should provide a model to be rendered in model-canvas using regl
 Model needs:
  - to be provided with the regl instance created in model-canvas
  - to have a method which accepts an annotation and returns a list of render
@@ -13,6 +13,9 @@ Proposed usage:
   model.start(); // start rendering
   model.update(annotation) // update render functions from new annotation
   model.getTexture(); // get texture2D of model to send to difference calc
+
+  Calling update() on a model will trigger a render if it hasn't been started.
+  This uses less CPU so is preferable.
 
   To render to a difference canvas:
   const diffRenderer = myDiffModel(diffCanvas, baseImage)
@@ -124,7 +127,7 @@ function bgRegl(r) {
       vec2 texCoords;
       float pixel;
       float sinhStretch(float px, float a) {
-        return (exp(px) - exp(-px)) / 2.0;
+        return 0.1 * (exp(2.99822 * px) - exp(2.99822 * -px)) / 2.0;
       }
       void main () {
         // for some reason the y-axis coords have been mirrored;
@@ -189,7 +192,13 @@ class differenceModel {
     this.renderFunction = bgRegl(this.regl);
   }
   setBaseTexture(image) {
-    this.baseTexture = this.regl.texture(image);
+    try {
+      this.baseTexture = this.regl.texture(image);
+    } catch(err) {
+      if (err.name == 'SecurityError') {
+        alert('CORS error encountered, please make sure you are using Google Chrome and try refreshing the page');
+      }
+    }
   }
   setModelRegl(modelRegl) {
     this.modelRegl = modelRegl;
@@ -211,7 +220,7 @@ class differenceModel {
       this.regl.poll();
       this.regl.clear({
         color: [1, 1, 1, 1]
-      })
+      });
       if (this.modelTexture !== null && this.baseTexture !== null) {
         this.renderFunction({
           imageTexture: this.baseTexture,
@@ -574,4 +583,5 @@ class galaxyModel extends baseModel {
   }
 }
 const model = galaxyModel;
+// export the two canvases
 export {model, differenceModel};
