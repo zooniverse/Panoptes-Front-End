@@ -38,7 +38,8 @@ class ProjectStatsPageController extends React.Component {
       'retirement,subjects_count'
     ];
     const query = {
-      fields: fields.join(',')
+      fields: fields.join(','),
+      page_size: project.links.workflows.length
     };
     getWorkflowsInOrder(project, query)
       .then((workflows) => {
