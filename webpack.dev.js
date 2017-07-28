@@ -30,7 +30,7 @@ var config = {
       inject: 'body',
       filename: 'index.html'
     }),
-    new DashboardPlugin({ port: 3736 })
+    new DashboardPlugin({ port: 3736 }) // Change this here and in the package.json start script if needed.
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
