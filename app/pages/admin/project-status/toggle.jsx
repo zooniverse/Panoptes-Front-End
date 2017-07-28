@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import AutoSave from '../../../components/auto-save';
 
 class Toggle extends Component {
   constructor(props) {
@@ -14,7 +13,7 @@ class Toggle extends Component {
   set(property, value) {
     let setting = this.state.setting
     setting[property] = true;
-    this.setState({ error: null, setting});
+    this.setState({ error: null, setting });
 
     let changes = { };
     changes[property] = value;
@@ -30,9 +29,9 @@ class Toggle extends Component {
   render() {
     const setting = this.props.project[this.props.field];
 
-    return(
+    return (
       <span>
-        <label style={ { whiteSpace: 'nowrap' } }>
+        <label style={{ whiteSpace: 'nowrap' }}>
           <input
             type="radio"
             name={this.props.field}

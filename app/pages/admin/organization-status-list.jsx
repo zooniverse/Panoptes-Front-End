@@ -17,7 +17,7 @@ class OrganizationStatusList extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getOrganizations();
   }
 

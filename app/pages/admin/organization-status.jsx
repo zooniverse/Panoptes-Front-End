@@ -5,18 +5,17 @@ import moment from 'moment';
 import ProjectIcon from '../../components/project-icon';
 import LoadingIndicator from '../../components/loading-indicator';
 
-import Toggle from './project-status/toggle';
-
 class OrganizationStatus extends Component {
   constructor(props) {
     super(props);
-    this.forceUpdate = this.forceUpdate.bind(this);
     this.getProjects = this.getProjects.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
 
     this.state = {
       organization: null,
+      projects: [],
       error: null,
-      projects: []
+      updating: false
     };
   }
 
@@ -24,21 +23,16 @@ class OrganizationStatus extends Component {
     this.getOrganization().then(() => this.getProjects());
   }
 
-  componentWillUnmount() {
-    this.state.organization.stopListening('change', this.forceUpdate);
-  }
-
   getOrganization() {
     const { owner, name } = this.props.params;
     const slug = `${owner}/${name}`;
 
-    return apiClient.type('organizations').get({ slug }).then((organizations) => {
-      const organization = organizations[0];
-      // TODO: We ought to improve this ChangeListener replacement
-      organization.listen('change', this.forceUpdate);
-      this.setState({ organization });
-      return organization;
-    });
+    return apiClient.type('organizations').get({ slug })
+      .then((organizations) => {
+        const organization = organizations[0];
+        this.setState({ organization });
+        return organization;
+      });
   }
 
   getProjects() {
@@ -46,6 +40,29 @@ class OrganizationStatus extends Component {
       .then((projects) => {
         this.setState({ projects });
       });
+  }
+
+  handleInputChange(event) {
+    this.setState({ error: null, updating: true });
+
+    const change = {};
+    change[event.target.name] = event.target.checked;
+
+    this.state.organization.update(change).save()
+      .catch(error => this.setState({ error, updating: false }))
+      .then(() => {
+        this.getOrganization()
+          .then(() => {
+            this.getProjects();
+            this.setState({ error: null, updating: false });
+          });
+      });
+  }
+
+  renderError() {
+    if (this.state.error) {
+      return <div>{this.state.error}</div>;
+    }
   }
 
   renderProjects() {
@@ -89,10 +106,24 @@ class OrganizationStatus extends Component {
           </ul>
           <h4>Visibility Settings</h4>
           <ul className="project-status__section-list">
-            <li>Listed: <Toggle project={this.state.organization} field="listed" /></li>
-            <li>Listed At: {this.state.organization.listed ?
+            <li>
+              <label htmlFor="listed-true" style={{ whiteSpace: 'nowrap' }}>
+                Listed:{' '}
+                <input
+                  name="listed"
+                  type="checkbox"
+                  checked={this.state.organization.listed}
+                  disabled={this.state.updating}
+                  onChange={this.handleInputChange}
+                />
+              </label>
+            </li>
+            <li>
+              Listed At:{' '}
+              {this.state.organization.listed ?
                 moment(this.state.organization.listed_at).calendar() : 'N/A'}
             </li>
+            <li>{this.renderError()}</li>
           </ul>
           <h4>Associated Projects</h4>
           <ul>
