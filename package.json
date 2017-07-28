@@ -104,7 +104,7 @@
   "license": "Apache-2.0",
   "repository": "zooniverse/Panoptes-Front-End",
   "scripts": {
-    "start": "export NODE_ENV=development; check-engines && check-dependencies && webpack-dashboard -- babel-node ./dev-server.js",
+    "start": "export NODE_ENV=development; check-engines && check-dependencies && webpack-dashboard -p 3736 -- babel-node ./dev-server.js",
     "_build": "export HEAD_COMMIT=$(git rev-parse --short HEAD); check-engines && check-dependencies && rimraf dist; webpack --config ./webpack.build.js --progress --profile --colors",
     "serve-static": "export NODE_ENV=staging; check-engines && check-dependencies && npm run _build && node ./static-server.js",
     "serve-hot": "export BABEL_ENV=hot-reload; npm start",
