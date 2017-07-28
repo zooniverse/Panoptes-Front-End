@@ -108,13 +108,25 @@ module.exports = React.createClass
           </tr>
           <tr>
             <td>Hyperlink</td>
-            <td>[zooniverse](http://www.zooniverse.org)</td>
-            <td><Markdown>[zooniverse](http://www.zooniverse.org)</Markdown></td>
+            <td>
+              [Google](https://google.com)<br/>
+              or<br/>
+              [Google](//google.com)
+            </td>
+            <td><Markdown>[Google](https://google.com)</Markdown></td>
           </tr>
           <tr>
             <td>Hyperlink<br/>(new tab)</td>
             <td>[zooniverse](+tab+http://www.zooniverse.org)</td>
             <td><Markdown>[zooniverse](+tab+http://www.zooniverse.org)</Markdown></td>
+          </tr>
+          <tr>
+            <td>Zooniverse links</td>
+            <td>
+              Links to Zooniverse pages can omit "https://www.zooniverse.org" from the URL.<br/>
+              [About Us](/about)
+            </td>
+            <td><Markdown>[About Us](/about)</Markdown></td>
           </tr>
           <tr>
             <td>Bulleted List</td>
@@ -236,10 +248,6 @@ module.exports = React.createClass
           <tr>
             <td>Tables</td>
             <td colSpan="2"><a href="http://www.tablesgenerator.com/markdown_tables" target="_blank">use this website to generate markdown tables</a></td>
-          </tr>
-          <tr>
-            <td>URL Shortening</td>
-            <td colSpan="2">URLs can be written as /projects/username/projectname and /projects/username/projectname/pagename, omitting the "https://www.zooniverse.org."</td>
           </tr>
         </tbody>
       </table>
