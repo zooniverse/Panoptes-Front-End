@@ -11,6 +11,7 @@ counterpart.registerTranslations 'en',
     nav:
       createAdmin: "Manage Users"
       projectStatus: "Set Project Status"
+      grantbot: "Grantbot"
 
 AdminPage = React.createClass
   displayName: 'AdminPage'
@@ -34,6 +35,12 @@ AdminPage = React.createClass
                 className="secret-button admin-button"
                 activeClassName="active">
                 <Translate content="userAdminPage.nav.projectStatus" />
+              </Link>
+              <Link to="/admin/grantbot"
+                type="button"
+                className="secret-button admin-button"
+                activeClassName="active">
+                <Translate content="userAdminPage.nav.grantbot" />
               </Link>
             </nav>
           </aside>
