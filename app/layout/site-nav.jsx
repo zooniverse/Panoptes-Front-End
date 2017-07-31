@@ -152,7 +152,6 @@ const SiteNav = React.createClass({
             <a
               href="http://daily.zooniverse.org/"
               className="site-nav__link"
-              activeClassName="site-nav__link--active"
               rel="noopener noreferrer"
               target="_blank"
               onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.daily', 'globe-menu') : null}
@@ -163,7 +162,6 @@ const SiteNav = React.createClass({
             <a
               href="http://blog.zooniverse.org/"
               className="site-nav__link"
-              activeClassName="site-nav__link--active"
               rel="noopener noreferrer"
               target="_blank"
               onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.blog', 'globe-menu') : null}

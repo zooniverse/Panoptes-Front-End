@@ -11,10 +11,7 @@ class SiteSubnav extends React.Component {
         <ExpandableMenu
           className="site-nav__modal"
           trigger={
-            <span
-              className="site-nav__link"
-              activeClassName="site-nav__link--active"
-            >
+            <span className="site-nav__link">
               News
             </span>
           }
