@@ -312,9 +312,15 @@ float calcBoxyEllipseDist(float x, float y, vec2 mu, float roll, float rEff, flo
     + mu[0] - mu[0] * cos(roll) + mu[1] * sin(roll);
   float yPrime = x * sin(roll) + y * cos(roll)
     + mu[1] - mu[1] * cos(roll) - mu[0] * sin(roll);
-  return 2.0 * pow(
-    pow(axRatio / rEff, c) * pow(abs(xPrime - mu[0]), c) +
-    pow(abs(yPrime - mu[1]), c) / pow(rEff, c), 1.0/c);
+  // return a scaled version of the radius (4.0 is arbitrary - chosen so svg tool doesn't
+  // impact badly on shown model component)
+  return 4.0 * pow(
+    (
+      pow(axRatio / rEff, c) * pow(abs(xPrime - mu[0]), c) +
+      pow(abs(yPrime - mu[1]), c) / pow(rEff, c)
+    ),
+    1.0/c
+  );
 }
 `;
 
@@ -376,7 +382,7 @@ function drawSersic(r) {
 
 function drawSpiral(r) {
   // TODO: is there any way of dynamically increasing the maximum point count
-  const maxPointCount = 50;
+  const maxPointCount = 500;
   const spiralArgs = {
     frag: `
       precision mediump float;
@@ -509,8 +515,8 @@ class galaxyModel extends baseModel {
           rx: parseFloat(annotation[0].value[0].value[0].rx),
           ry: parseFloat(annotation[0].value[0].value[0].ry),
           roll: parseFloat(annotation[0].value[0].value[0].angle),
-          scale: parseFloat(annotation[0].value[1].value[0].value),
-          i0: parseFloat(annotation[0].value[1].value[1].value)
+          scale: parseFloat(annotation[0].value[1].value),
+          i0: parseFloat(annotation[0].value[2].value)
         }
       );
       renderFunctions.push([
@@ -529,9 +535,9 @@ class galaxyModel extends baseModel {
           rx: parseFloat(annotation[1].value[0].value[0].rx),
           ry: parseFloat(annotation[1].value[0].value[0].ry),
           roll: parseFloat(annotation[1].value[0].value[0].angle),
-          scale: parseFloat(annotation[1].value[1].value[0].value),
-          i0: parseFloat(annotation[1].value[1].value[1].value),
-          n: parseFloat(annotation[1].value[1].value[2].value)
+          scale: parseFloat(annotation[1].value[1].value),
+          i0: parseFloat(annotation[1].value[2].value),
+          n: parseFloat(annotation[1].value[3].value)
         }
       );
       renderFunctions.push([
@@ -550,10 +556,10 @@ class galaxyModel extends baseModel {
           rx: parseFloat(annotation[2].value[0].value[0].rx),
           ry: parseFloat(annotation[2].value[0].value[0].ry),
           roll: parseFloat(annotation[2].value[0].value[0].angle),
-          scale: parseFloat(annotation[2].value[1].value[0].value),
-          i0: parseFloat(annotation[2].value[1].value[1].value),
-          n: parseFloat(annotation[2].value[1].value[2].value),
-          c: parseFloat(annotation[2].value[1].value[3].value)
+          scale: parseFloat(annotation[2].value[1].value),
+          i0: parseFloat(annotation[2].value[2].value),
+          n: parseFloat(annotation[2].value[3].value),
+          c: parseFloat(annotation[2].value[4].value)
         },
       );
       renderFunctions.push([
@@ -573,7 +579,7 @@ class galaxyModel extends baseModel {
             disk,
             i0: parseFloat(annotation[3].value[0].value[i].details[0].value),
             spread: parseFloat(annotation[3].value[0].value[i].details[1].value),
-            falloff: parseFloat(annotation[3].value[1].value[0].value),
+            falloff: parseFloat(annotation[3].value[1].value),
             //spread: parseFloat(annotation[3].value[1].value[0].value),
             //i0: parseFloat(annotation[3].value[1].value[1].value),
             points: annotation[3].value[0].value[i].points.map(
