@@ -9,7 +9,9 @@ const SOCIAL_ICONS = {
   'twitter.com/': 'twitter',
   'weibo.com/': 'weibo',
   'wordpress.com/': 'wordpress',
-  'youtube.com/': 'youtube'
+  'youtube.com/': 'youtube',
+  'instagram.com/': 'instagram',
+  'medium.com/': 'medium'
 };
 
 export default SOCIAL_ICONS;
