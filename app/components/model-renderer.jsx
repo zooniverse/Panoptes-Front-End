@@ -50,7 +50,7 @@ class ModelRenderer extends React.Component {
         // scoring function is provided in the difference calculator
         this.props.onRender(this.diffModel.getScore());
         const imOutType = Object.keys(this.props.subject.locations[1])[0];
-        this.props.subject.locations[1][imOutType] = this.backgroundCanvas.toDataURL();
+        this.props.subject.locations[1][imOutType] = this.backgroundCanvas.toDataURL(imOutType);
       });
     }
   }

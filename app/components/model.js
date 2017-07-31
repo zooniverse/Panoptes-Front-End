@@ -126,29 +126,37 @@ function bgRegl(r) {
       varying vec2 uv;
       vec2 texCoords;
       float pixel;
-      float sinhStretch(float px, float a) {
+      float sinhStretch(float px) {
         return 0.1 * (exp(2.99822 * px) - exp(2.99822 * -px)) / 2.0;
+      }
+      float asinh(float px) {
+          return log(px + sqrt(1.0+px*px));
+      }
+      float asinhStretch(float px) {
+        return asinh(px / 0.1) / 2.999;
       }
       void main () {
         // for some reason the y-axis coords have been mirrored;
         texCoords = vec2(uv[0], 1.0 - uv[1]);
-        pixel = sinhStretch(texture2D(imageTexture, texCoords).rgb[0], 0.1) - \
+        // calculate the difference between model + image (after
+        // reversing the asinh stretch on the image)
+        pixel = sinhStretch(texture2D(imageTexture, texCoords).rgb[0]) - \
           texture2D(modelTexture, uv).rgb[0];
         if (pixel < 0.0) {
-          // model is too bright
+          // the model is brighter than the image
           gl_FragColor = vec4(
-            1.0 + pixel, // nb pixel < 1 so this is making the value smaller
-            1.0 + pixel,
-            1,
-            1
+            1.0 - asinhStretch(-pixel), // nb pixel < 1 so this is making the value smaller
+            1.0 - asinhStretch(-pixel),
+            1.0,
+            1.0
           );
         } else {
-          // model is too weak
+          // model is weaker than the image
           gl_FragColor = vec4(
-            1,
-            1.0 - pixel, // this time pixel > 1
-            1.0 - pixel,
-            1
+            1.0,
+            1.0 - asinhStretch(pixel), // this time pixel > 1
+            1.0 - asinhStretch(pixel),
+            1.0
           );
         }
       }`,
