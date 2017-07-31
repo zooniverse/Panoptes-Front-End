@@ -34,7 +34,7 @@ describe('SocialLinksEditor', () => {
 
   it('should contain the correct number of rows', () => {
     const rows = wrapper.find('tr');
-    assert.equal(rows.length, 11);
+    assert.equal(rows.length, 13);
   });
 
   it('should rearrange the default social links on load', () => {
