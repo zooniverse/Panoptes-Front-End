@@ -394,7 +394,7 @@ function drawSpiral(r) {
         float c;
         float n;
       };
-      uniform vec2 points[50];
+      uniform vec2 points[${maxPointCount}];
       uniform parentDisk disk;
       uniform int pointCount;
       uniform float spread, axRatio, i0, falloff;
