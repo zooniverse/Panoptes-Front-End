@@ -43,7 +43,7 @@ AdminPage = React.createClass
                 activeClassName="active">
                 <Translate content="userAdminPage.nav.grantbot" />
               </Link>
-              <Link to="/admin/organization_status"
+              <Link to="/admin/organization-status"
                 type="button"
                 className="secret-button admin-button"
                 activeClassName="active">

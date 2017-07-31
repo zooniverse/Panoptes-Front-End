@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 import moment from 'moment';
 
@@ -37,6 +38,7 @@ class OrganizationStatus extends Component {
 
   getProjects() {
     this.state.organization.get('projects', { sort: 'display_name' })
+      .catch(error => console.error('error loading project', error)) // eslint-disable-line no-console
       .then((projects) => {
         this.setState({ projects });
       });
@@ -74,7 +76,7 @@ class OrganizationStatus extends Component {
       <ul className="project-status__section-list">
         {this.state.projects.map(project =>
           <li key={project.id} className="section-list__item">
-            <span>{`${project.id} - ${project.display_name}`}</span>
+            <Link to={`/admin/project_status/${project.slug}`}>{`${project.id} - ${project.display_name}`}</Link>
             <ul className="project-status__section-list">
               <li className="project-status__org-project-list-item">
                 Private: {project.private.toString()}

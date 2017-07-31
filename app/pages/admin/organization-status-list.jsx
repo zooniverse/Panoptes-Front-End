@@ -31,7 +31,7 @@ class OrganizationStatusList extends Component {
     const { query } = this.props.location;
 
     const organizationsQuery = {
-      include: 'avatar'
+      include: ['avatar']
     };
 
     const mergedQuery = Object.assign({}, organizationsQuery, query);
@@ -63,7 +63,7 @@ class OrganizationStatusList extends Component {
     const [owner, name] = organization.slug.split('/');
     return (
       <div key={organization.id}>
-        <ProjectIcon linkTo={`/admin/organization_status/${owner}/${name}`} project={organization} />
+        <ProjectIcon linkTo={`/admin/organization-status/${owner}/${name}`} project={organization} />
       </div>
     );
   }

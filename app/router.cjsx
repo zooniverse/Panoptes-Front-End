@@ -235,8 +235,8 @@ module.exports =
       <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={ProjectStatus} />
       <Route path="grantbot" component={Grantbot} />
-      <Route path="organization_status" component={OrganizationStatusList} />
-      <Route path="organization_status/:owner/:name" component={OrganizationStatus} />
+      <Route path="organization-status" component={OrganizationStatusList} />
+      <Route path="organization-status/:owner/:name" component={OrganizationStatus} />
     </Route>
 
     <Route path="todo" component={-> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
