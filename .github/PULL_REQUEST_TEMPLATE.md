@@ -8,7 +8,6 @@ Describe your changes.
 - [ ] Does it work on mobile?
 - [ ] Can you `rm -rf node_modules/ && npm install` and app works as expected?
 - [ ] Did you deploy a staging branch?
-- [ ] Did you get any type checking errors from [Babel Typecheck](https://github.com/codemix/babel-plugin-typecheck)
 
 
 ## Optional
