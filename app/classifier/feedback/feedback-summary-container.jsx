@@ -1,5 +1,9 @@
+// Allowing object / array propTypes as we're simply passing them to children.
+/* eslint
+  react/forbid-prop-types: 0
+*/
+
 import React, { PropTypes } from 'react';
-import counterpart from 'counterpart';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FeedbackSummary from './feedback-summary';
@@ -23,10 +27,6 @@ class FeedbackSummaryContainer extends React.Component {
     this.props.actions.feedback.clearFeedback();
   }
 
-  render() {
-    return (this.props.feedback.length) ? <FeedbackSummary feedback={this.props.feedback} /> : null;
-  }
-
   generateFeedbackItems() {
     const { actions, classification, subject, workflow } = this.props;
     const feedbackItems = classification.annotations.reduce((allFeedback, annotation) => {
@@ -35,24 +35,30 @@ class FeedbackSummaryContainer extends React.Component {
     }, []);
     actions.feedback.setFeedback(feedbackItems);
   }
+
+  render() {
+    return (this.props.feedback.length) ? <FeedbackSummary feedback={this.props.feedback} /> : null;
+  }
 }
 
 FeedbackSummaryContainer.propTypes = {
-  actions: PropTypes.object,
+  actions: PropTypes.shape({
+    feedback: PropTypes.func
+  }),
   classification: PropTypes.object,
   feedback: PropTypes.array,
   subject: PropTypes.object,
-  workflow: PropTypes.object,
+  workflow: PropTypes.object
 };
 
-const mapStateToProps = (state) => ({
-  feedback: state.feedback.filter(item => item.target === 'summary'),
+const mapStateToProps = state => ({
+  feedback: state.feedback.filter(item => item.target === 'summary')
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   actions: {
-    feedback: bindActionCreators(feedbackActions, dispatch),
-  },
+    feedback: bindActionCreators(feedbackActions, dispatch)
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedbackSummaryContainer);

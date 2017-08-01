@@ -1,3 +1,7 @@
+/* eslint
+  no-restricted-properties: 0
+*/
+
 import FeedbackRuleSet from './feedback-ruleset';
 
 const isWithinTolerance = (annotationX, annotationY, feedbackX, feedbackY, tolerance) => {
@@ -27,10 +31,11 @@ const createFeedbackItem = (success, annotation, rule) => {
 
 const processNormalRule = (annotation, rule) => {
   const result = annotation.value.reduce((found, point) => {
+    let newFound = found;
     if (isWithinTolerance(point.x, point.y, parseInt(rule.x, 10), parseInt(rule.y, 10), parseInt(rule.tol, 10))) {
-      found = true;
+      newFound = true;
     }
-    return found;
+    return newFound;
   }, false);
 
   return createFeedbackItem(result, annotation, rule);
@@ -46,7 +51,10 @@ const processDrawingFeedback = (annotation, subject, task) => {
   return feedbackRuleSet.rules.reduce((checkedRules, rule) => {
     const ruleFunction = (rule.dud) ? processDudRule : processNormalRule;
     const ruleResult = ruleFunction(annotation, rule);
-    return checkedRules.concat(ruleResult);
+    if ((ruleResult.success && rule.successEnabled) || (!ruleResult.success && rule.failureEnabled)) {
+      checkedRules.push(ruleResult);
+    }
+    return checkedRules;
   }, []);
 };
 

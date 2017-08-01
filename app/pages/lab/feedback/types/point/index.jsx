@@ -1,45 +1,25 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import ModalFormDialog from 'modal-form/dialog';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 
-import SingleEditForm from './point-edit-form'
+import SingleEditForm from './point-edit-form';
 
 counterpart.registerTranslations('en', {
   PointFeedbackEditor: {
     addType: 'Add a feedback type',
     edit: 'Edit',
-    del: 'Delete',
-  },
+    del: 'Delete'
+  }
 });
 
-export default class PointFeedbackEditor extends React.Component {
+class PointFeedbackEditor extends Component {
   constructor(props) {
     super(props);
-    this.deleteFeedbackItem = this.deleteFeedbackItem.bind(this)
-    this.openEditModal = this.openEditModal.bind(this)
-    this.renderFeedbackItem = this.renderFeedbackItem.bind(this)
-    this.saveFeedbackChange = this.saveFeedbackChange.bind(this)
-  }
-
-  render() {
-    const { feedback } = this.props.task;
-    const feedbackItems = (feedback.types && feedback.types.length)
-      ? feedback.types.map(this.renderFeedbackItem)
-      : null;
-
-    return (
-      <div className="feedback-section">
-        <div>
-          {feedbackItems}
-          <button className="feedback-section__new-feedback-button standard-button" onClick={this.openEditModal}>
-            <i className="fa fa-plus-circle"></i>
-            {' '}
-            <Translate content="PointFeedbackEditor.addType" />
-          </button>
-        </div>
-      </div>
-    );
+    this.deleteFeedbackItem = this.deleteFeedbackItem.bind(this);
+    this.openEditModal = this.openEditModal.bind(this);
+    this.renderFeedbackItem = this.renderFeedbackItem.bind(this);
+    this.saveFeedbackChange = this.saveFeedbackChange.bind(this);
   }
 
   deleteFeedbackItem(index) {
@@ -55,15 +35,28 @@ export default class PointFeedbackEditor extends React.Component {
       task={this.props.task}
       onSubmit={this.saveFeedbackChange}
     />, {
-      required: true,
+      required: true
     })
     .catch(error => console.error(error));
+  }
+
+  saveFeedbackChange(changed, index) {
+    const newFeedback = Object.assign({}, this.props.task.feedback);
+    newFeedback.types = newFeedback.types || [];
+
+    if (index > -1) {
+      newFeedback.types.splice(index, 1, changed);
+    } else {
+      newFeedback.types.push(changed);
+    }
+
+    this.props.saveFeedbackFn(newFeedback);
   }
 
   renderFeedbackItem(item, index) {
     const editModalFn = this.openEditModal.bind(this, item, index);
     const deleteItem = this.deleteFeedbackItem.bind(this, index);
-    const showIcon = (item.valid) ? null : (<i className="fa fa-exclamation-circle fa-fw"></i>);
+    const showIcon = (item.valid) ? null : (<i className="fa fa-exclamation-circle fa-fw" />);
 
     return (
       <div key={`field-${item.id}`} className="feedback-section__feedback-item">
@@ -79,29 +72,38 @@ export default class PointFeedbackEditor extends React.Component {
     );
   }
 
-  saveFeedbackChange(changed, index) {
-    const newFeedback = Object.assign({}, this.props.task.feedback);
-    newFeedback.types = newFeedback.types || [];
+  render() {
+    const { feedback } = this.props.task;
+    const isThereFeedback = feedback.types && feedback.types.length;
+    const feedbackItems = (isThereFeedback) ? feedback.types.map(this.renderFeedbackItem) : null;
 
-    (index > -1)
-      ? newFeedback.types.splice(index, 1, changed)
-      : newFeedback.types.push(changed);
-
-    this.props.saveFeedbackFn(newFeedback);
+    return (
+      <div className="feedback-section">
+        <div>
+          {feedbackItems}
+          <button className="feedback-section__new-feedback-button standard-button" onClick={this.openEditModal}>
+            <i className="fa fa-plus-circle" />
+            {' '}
+            <Translate content="PointFeedbackEditor.addType" />
+          </button>
+        </div>
+      </div>
+    );
   }
-
 }
 
 PointFeedbackEditor.propTypes = {
-  task: React.PropTypes.shape({
-    feedback: React.PropTypes.shape({
-      types: React.PropTypes.array(React.PropTypes.shape({
-        answerIndex: React.PropTypes.string,
-      })),
+  task: PropTypes.shape({
+    feedback: PropTypes.shape({
+      types: PropTypes.array(PropTypes.shape({
+        answerIndex: PropTypes.string
+      }))
     }),
-    answers: React.PropTypes.arrayOf(React.PropTypes.shape({
-      _key: React.PropTypes.number,
-    })),
+    answers: PropTypes.arrayOf(PropTypes.shape({
+      _key: PropTypes.number
+    }))
   }),
-  saveFeedbackFn: React.PropTypes.func,
+  saveFeedbackFn: PropTypes.func
 };
+
+export default PointFeedbackEditor;
