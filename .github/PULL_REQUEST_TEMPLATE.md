@@ -17,3 +17,4 @@ Describe your changes.
 - [ ] Have you replaced any `ChangeListener` or `PromiseRenderer` components with code that updates component state?
 - [ ] If changes are made to the classifier, does the dev classifier still work?
 - [ ] Have you added in [flow type annotations](https://flowtype.org/docs/type-annotations.html)?
+- [ ] Have you followed the [Springer guidelines for commit messages](https://github.com/springernature/frontend-playbook/blob/master/git/git.md#commit-messages)?
