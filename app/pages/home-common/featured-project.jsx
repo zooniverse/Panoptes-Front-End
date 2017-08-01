@@ -16,13 +16,13 @@ const FeaturedProject = (() =>
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
       <img
-        alt="Star forming gas cloud in the Milky Way."
-        src="/assets/featured-projects/featured-project-20170711-milky-way.jpg"
+        alt="Steller Sea Lion"
+        src="/assets/featured-projects/featured-project-20170801-steller.jpg"
       />
     </div>
-    <h2 className="secondary-headline">Milky Way Project</h2>
-    <p className="display-body">We need your help to explore our home galaxy, looking for signs of stars being born.</p>
-    <Link to="projects/povich/milky-way-project" className="primary-button primary-button--light">View Project!</Link>
+    <h2 className="secondary-headline">Steller Watch</h2>
+    <p className="display-body">Help us find out why the endangered Steller sea lion continues to decline in the Aleutian Islands.</p>
+    <Link to="projects/sweenkl/steller-watch" className="primary-button primary-button--light">View Project!</Link>
   </section>
 );
 
