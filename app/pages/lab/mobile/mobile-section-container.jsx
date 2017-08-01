@@ -8,6 +8,10 @@ import MobileSection from './mobile-section';
 const VALID_QUESTION_LENGTH = 200;
 const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'multiple'];
 
+function launchApprovedProject ({ project }) {
+  return project.launch_approved || false;
+}
+
 function taskQuestionNotTooLong ({ task }) {
   return task.question.length < VALID_QUESTION_LENGTH;
 }
@@ -34,6 +38,7 @@ function workflowNotTooManyShortcuts ({ task, workflow }) {
 }
 
 const validatorFns = {
+  launchApprovedProject,
   taskQuestionNotTooLong,
   taskFeedbackDisabled,
   taskHasTwoAnswers,
@@ -124,7 +129,7 @@ class MobileSectionContainer extends Component {
   }
 
   validate(props) {
-    const validatorArgs = { task: props.task, workflow: props.workflow };
+    const validatorArgs = { task: props.task, workflow: props.workflow, project: props.project };
 
     const validations = reduce(validatorFns, (validationObj, fn, key) => {
       validationObj[key] = fn.call(this, validatorArgs);
