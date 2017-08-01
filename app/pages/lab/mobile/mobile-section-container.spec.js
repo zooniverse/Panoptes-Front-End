@@ -43,7 +43,7 @@ describe('<MobileSectionContainer />', function () {
     afterEach(tearDown);
 
     it('should render without crashing', function () {
-      shallow(<MobileSectionContainer task={fixtures.task()} workflow={fixtures.workflow()} />);
+      shallow(<MobileSectionContainer task={fixtures.task()} workflow={fixtures.workflow()} project={fixtures.project()} />);
     });
 
     it('should render the <MobileSection /> component if the task type is single or multiple', function () {
@@ -52,7 +52,7 @@ describe('<MobileSectionContainer />', function () {
 
     it('should render nothing if the task type isn\'t single or multiple', function () {
       const task = fixtures.task({ type: 'drawing' });
-      wrapper = shallow(<MobileSectionContainer task={task} workflow={fixtures.workflow()} />);
+      wrapper = shallow(<MobileSectionContainer task={task} workflow={fixtures.workflow()} project={fixtures.project()} />);
       assert.strictEqual(wrapper.type(), null);
     });
   });
@@ -63,7 +63,7 @@ describe('<MobileSectionContainer />', function () {
     const { validationFixtures } = fixtures;
 
     it('should be passed to MobileSection', function () {
-      wrapper = shallow(<MobileSectionContainer task={fixtures.task()} workflow={fixtures.workflow()} />);
+      wrapper = shallow(<MobileSectionContainer task={fixtures.task()} workflow={fixtures.workflow()} project={fixtures.project()} />);
       component = wrapper.find('MobileSection').first();
       const { validations } = component.props();
       assert.strictEqual(isPlainObject(validations), true);
@@ -171,7 +171,7 @@ describe('<MobileSectionContainer />', function () {
 
     it('should equal false if the workflow doesn\'t have swipe enabled', function () {
       const workflow = fixtures.workflow({ configuration: { swipe_enabled: false }});
-      wrapper = shallow(<MobileSectionContainer task={fixtures.task()} workflow={workflow} />);
+      wrapper = shallow(<MobileSectionContainer task={fixtures.task()} workflow={workflow} project={fixtures.project()} />);
       component = wrapper.find('MobileSection').first();
       const { checked } = component.props();
       assert.strictEqual(checked, false);

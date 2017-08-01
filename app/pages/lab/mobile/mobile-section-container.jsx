@@ -9,7 +9,7 @@ const VALID_QUESTION_LENGTH = 200;
 const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'multiple'];
 
 function launchApprovedProject ({ project }) {
-  return project.launch_approved || false;
+  return (project.launch_approved) ? project.launch_approved : false;
 }
 
 function taskQuestionNotTooLong ({ task }) {

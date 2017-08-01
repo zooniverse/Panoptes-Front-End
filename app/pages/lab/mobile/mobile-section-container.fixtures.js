@@ -63,6 +63,11 @@ function workflow(extraData = {}) {
 }
 
 const validationFixtures = {
+  launchApprovedProject: {
+    project: {
+      launch_approved: false,
+    }
+  },
   taskQuestionTooLong: {
     task: {
       question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut dui erat. Vivamus est nisl, accumsan non urna at, elementum tempor urna. Sed eget pulvinar eros. Nunc placerat metus bibendum lacus elementum, vitae sagittis mi tincidunt.'
