@@ -5,12 +5,16 @@ import alert from '../../lib/alert';
 export default class GenericTask extends React.Component {
   constructor(props) {
     super(props);
+    this.container = null;
     this.showHelp = this.showHelp.bind(this);
     this.state = {
       helping: false
     };
   }
 
+  componentDidMount() {
+    this.props.autoFocus && this.container.focus && this.container.focus();
+  }
   showHelp() {
     alert(
       (resolve, reject) =>
@@ -56,11 +60,11 @@ export default class GenericTask extends React.Component {
       );
     }
     return (
-      <div className="workflow-task">
+      <div className="workflow-task" tabIndex={-1} ref={(element) => { this.container = element; }}>
         <Markdown className="question">{this.props.question}</Markdown>
         {this.props.children}
         <div className="answers">
-          {React.Children.map(this.props.answers, function (answer) {
+          {React.Children.map(this.props.answers, (answer) => {
             return React.cloneElement(answer, { className: `answer ${answer.props.className}` });
           })}
         </div>
@@ -72,6 +76,7 @@ export default class GenericTask extends React.Component {
 }
 
 GenericTask.propTypes = {
+  autoFocus: React.PropTypes.bool,
   question: React.PropTypes.string,
   help: React.PropTypes.string,
   required: React.PropTypes.oneOfType([
@@ -83,6 +88,7 @@ GenericTask.propTypes = {
 };
 
 GenericTask.defaultProps = {
+  autoFocus: false,
   question: '',
   help: '',
   required: false,
