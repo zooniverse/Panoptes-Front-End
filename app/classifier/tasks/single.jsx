@@ -118,6 +118,7 @@ export default class SingleChoiceTask extends React.Component {
           <div className="answer-button-icon-container">
             <input
               type="radio"
+              autoFocus={i === this.props.annotation.value}
               checked={i === this.props.annotation.value}
               value={i}
               onChange={this.handleChange.bind(this, i)}
@@ -131,6 +132,7 @@ export default class SingleChoiceTask extends React.Component {
     }
     return (
       <GenericTask
+        autoFocus = {this.props.annotation.value === null}
         question={this.props.task.question}
         help={this.props.task.help}
         answers={answers}

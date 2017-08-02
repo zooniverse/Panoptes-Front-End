@@ -139,6 +139,7 @@ export default class MultipleChoiceTask extends React.Component {
     }
     return (
       <GenericTask
+        autoFocus={true}
         question={this.props.task.question}
         help={this.props.task.help}
         answers={answers}
