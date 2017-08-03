@@ -4,7 +4,7 @@ import counterpart from 'counterpart';
 
 counterpart.registerTranslations('en', {
   feedbackSummary: {
-    title: 'Feedback on your classification',
+    title: 'Feedback on your classification'
   }
 });
 
@@ -17,7 +17,7 @@ const FeedbackSummary = ({ feedback }) => {
       } else {
         result.push({
           question: item.question,
-          messages: [item.message],
+          messages: [item.message]
         });
       }
     }
@@ -43,13 +43,13 @@ const FeedbackSummary = ({ feedback }) => {
       </div>
     </section>
   );
-}
+};
 
 FeedbackSummary.propTypes = {
   feedback: React.PropTypes.arrayOf(React.PropTypes.shape({
     target: React.PropTypes.string,
     question: React.PropTypes.string,
-    messages: React.PropTypes.arrayOf(React.PropTypes.string),
+    messages: React.PropTypes.arrayOf(React.PropTypes.string)
   }))
 };
 

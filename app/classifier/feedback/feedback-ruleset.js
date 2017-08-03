@@ -1,3 +1,11 @@
+/* eslint
+  func-names: 0,
+  import/no-extraneous-dependencies: ["error", { "devDependencies": true }]
+  no-underscore-dangle: ["error", { "allowAfterThis": true }],
+  prefer-arrow-callback: 0,
+  "react/jsx-boolean-value": ["error", "always"]
+*/
+
 export default class FeedbackRuleSet {
   constructor(subject, task) {
     this._subject = subject;
@@ -21,16 +29,17 @@ export default class FeedbackRuleSet {
     const { feedback } = this._task;
     if (metadata && feedback) {
       return Object.keys(metadata).reduce((types, key) => {
+        const newTypes = Object.assign({}, types);
         const match = key.match(/#feedback_(\d*?)_type/);
         if (match) {
           const index = match[1];
           const type = metadata[key];
-          const typeInTaskDefinition = feedback.types.find((feedbackItem) => feedbackItem.id === type);
+          const typeInTaskDefinition = feedback.types.find(feedbackItem => feedbackItem.id === type);
           if (typeInTaskDefinition && typeInTaskDefinition.valid) {
-            types[`feedback_${index}`] = metadata[key];
+            newTypes[`feedback_${index}`] = metadata[key];
           }
         }
-        return types;
+        return newTypes;
       }, {});
     } else {
       return {};
@@ -38,17 +47,18 @@ export default class FeedbackRuleSet {
   }
 
   _getDefaultsForType(type) {
-    const typeFromTask = this._task.feedback.types.find((feedbackType) => feedbackType.id === type);
+    const typeFromTask = this._task.feedback.types.find(feedbackType => feedbackType.id === type);
     return Object.keys(typeFromTask).reduce((obj, key) => {
+      const newObj = Object.assign({}, obj);
       if (!['id', 'valid'].includes(key)) {
         if (key.slice(0, 7) === 'default') {
           const renamedKey = key.charAt(7).toLowerCase() + key.slice(8);
-          obj[renamedKey] = typeFromTask[key];
+          newObj[renamedKey] = typeFromTask[key];
         } else {
-          obj[key] = typeFromTask[key];
+          newObj[key] = typeFromTask[key];
         }
       }
-      return obj;
+      return newObj;
     }, {});
   }
 
@@ -56,10 +66,11 @@ export default class FeedbackRuleSet {
     const { metadata } = this._subject;
     const fieldPrefix = `#${prefix}_`;
     return Object.keys(metadata).reduce((typeFields, key) => {
+      const newTypeFields = Object.assign({}, typeFields);
       if (key.includes(fieldPrefix) && metadata[key]) {
-        typeFields[key.substr(fieldPrefix.length)] = metadata[key];
+        newTypeFields[key.substr(fieldPrefix.length)] = metadata[key];
       }
-      return typeFields;
+      return newTypeFields;
     }, {});
   }
 }

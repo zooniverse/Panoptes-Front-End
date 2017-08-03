@@ -23,6 +23,7 @@ React = require 'react'
 `import WorkflowsList from './pages/lab/workflows';`
 `import SubjectSetsContainer from './pages/lab/subject-sets-container';`
 `import SubjectSetsList from './pages/lab/subject-sets';`
+`import UnsubscribeFromEmails from './pages/unsubscribe';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -62,7 +63,7 @@ module.exports =
 
     <Route path="reset-password" component={require './pages/reset-password'} />
 
-    <Route path="unsubscribe" component={require './pages/unsubscribe'} />
+    <Route path="unsubscribe" component={UnsubscribeFromEmails} />
 
     <Route path="accounts" component={require './pages/sign-in'}>
       <Route path="sign-in" component={require './partials/sign-in-form'} />
