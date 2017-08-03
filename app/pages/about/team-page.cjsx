@@ -106,6 +106,10 @@ counterpart.registerTranslations 'en',
         title: 'Communications Lead'
         bio: '''A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
         social media and publishes the Daily Zooniverse blog.'''
+      hannahSewell:
+        title: 'Web Development placement student'
+        bio: '''Hannah is a PhD student in plant genetics from The University of Sheffield.
+        She is visiting Zooniverse on a placement to learn web development for a few months and is definitely not an intern.'''
       helenSpiers:
         title: 'Researcher'
         bio: '''After finishing a PhD studying the molecular basis of human brain development, Helen joined the Zooniverse as a Postdoc in citizen science and medical research.'''
@@ -178,7 +182,7 @@ counterpart.registerTranslations 'en',
         to squeeze a bit of galaxy evolution science in.'''
       mariamSaeedi:
         title: 'Web Developer Intern'
-        bio: '''Mariam is the 2017 Web Development Intern at Zooniverse. 
+        bio: '''Mariam is the 2017 Web Development Intern at Zooniverse.
         She is proficient with HTML and CSS and is currently learning JavaScript and Rails.'''
       markBouslog:
         title: 'Developer'
@@ -416,6 +420,13 @@ teamMembers =
     bio: counterpart "team.content.grantMiller.bio"
     image: "/assets/team/grant.jpg"
     location: "oxford"
+  hannahSewell:
+      name: "Hannah Sewell"
+      twitter: "hannahsewell2"
+      title: counterpart "team.content.hannahSewell.title"
+      bio: counterpart "team.content.hannahSewell.bio"
+      image: "/assets/team/hannah_s.jpg"
+      location: "oxford"
   helenSpiers:
     name: "Helen Spiers"
     twitter: "H_Spiers"
