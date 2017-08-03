@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Auth from 'panoptes-client/lib/auth';
+import auth from 'panoptes-client/lib/auth';
 
 
 class UnsubscribeFromEmails extends Component {
@@ -7,10 +7,6 @@ class UnsubscribeFromEmails extends Component {
     super();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.renderForm = this.renderForm.bind(this);
-    this.renderIconFeedback = this.renderIconFeedback.bind(this);
-    this.renderTextFeedback = this.renderTextFeedback.bind(this);
-    this.renderTokenFlowFeedback = this.renderTokenFlowFeedback.bind(this);
     this.state = {
       emailSuccess: false,
       emailError: false,
@@ -40,7 +36,7 @@ class UnsubscribeFromEmails extends Component {
       emailSuccess: false,
       emailError: false
     });
-    Auth.unsubscribeEmail({ email })
+    auth.unsubscribeEmail({ email })
       .then(() => this.setState({ emailSuccess: true }))
       .catch((error) => {
         this.setState({ emailError: true });
@@ -118,7 +114,7 @@ class UnsubscribeFromEmails extends Component {
     const query = location.query ? location.query : {};
     return (
       <div className="centered-grid">
-        {query && query.processed
+        {query.processed
         ? this.renderTokenFlowFeedback()
         : this.renderForm(defaultValue, disabledButton)}
       </div>
@@ -130,7 +126,7 @@ UnsubscribeFromEmails.propTypes = {
   location: PropTypes.shape({
     query: PropTypes.shape({
       email: PropTypes.string,
-      processed: PropTypes.bool
+      processed: PropTypes.string
     })
   })
 };
