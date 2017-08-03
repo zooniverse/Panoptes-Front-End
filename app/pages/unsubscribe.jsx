@@ -21,7 +21,7 @@ class UnsubscribeFromEmails extends Component {
 
   handleChange(event) {
     const emailIsValid = event.target.checkValidity ? event.target.checkValidity() : true;
-    const emailValue = event.target.value || event.target.defaultValue;
+    const emailValue = event.target.value;
     this.setState({
       emailIsValid,
       emailValue
