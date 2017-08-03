@@ -145,6 +145,9 @@ module.exports = React.createClass
           workflow: workflow.id
           subjects: [subject.id]
 
+      if @props.location.query?.group?
+        classification.update({ 'metadata.user_group': @props.location.query.group })
+
       # If the user hasn't interacted with a classification resource before,
       # we won't know how to resolve its links, so attach these manually.
       classification._workflow = workflow
@@ -210,6 +213,8 @@ module.exports = React.createClass
       {if @props.projectIsComplete
         <FinishedBanner project={@props.project} />}
 
+      {if @props.location.query?.group?
+        <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
       {if @state.classification?
         <Classifier
           {...@props}
