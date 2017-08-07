@@ -25,12 +25,14 @@ export default class GenericTask extends React.Component {
   showHelp() {
     alert(
       (resolve, reject) =>
-        <div className="content-container">
-          <Markdown className="classification-task-help">
-            {this.props.help}
-          </Markdown>
-          <button autoFocus={true} className="standard-button" onClick={reject}>Close</button>
-        </div>
+        (
+          <div className="content-container">
+            <Markdown className="classification-task-help">
+              {this.props.help}
+            </Markdown>
+            <button autoFocus={true} className="standard-button" onClick={reject}>Close</button>
+          </div>
+        )
     );
   }
 
@@ -71,9 +73,10 @@ export default class GenericTask extends React.Component {
         <Markdown className="question">{this.props.question}</Markdown>
         {this.props.children}
         <div className="answers">
-          {React.Children.map(this.props.answers, (answer) => {
-            return React.cloneElement(answer, { className: `answer ${answer.props.className}` });
-          })}
+          {React.Children.map(
+            this.props.answers,
+            answer => React.cloneElement(answer, { className: `answer ${answer.props.className}` })
+          )}
         </div>
         {required}
         {help}
@@ -84,18 +87,19 @@ export default class GenericTask extends React.Component {
 
 GenericTask.propTypes = {
   autoFocus: React.PropTypes.bool,
+  children: React.PropTypes.node,
   question: React.PropTypes.string,
   help: React.PropTypes.string,
   required: React.PropTypes.oneOfType([
     React.PropTypes.number,
     React.PropTypes.bool
   ]),
-  answers: React.PropTypes.arrayOf(React.PropTypes.node),
-  children: React.PropTypes.node
+  answers: React.PropTypes.arrayOf(React.PropTypes.node)
 };
 
 GenericTask.defaultProps = {
   autoFocus: false,
+  children: null,
   question: '',
   help: '',
   required: false,
