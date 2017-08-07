@@ -78,6 +78,9 @@ module.exports = React.createClass
     tutorial: {}
     user: null
 
+  componentWillMount: ->
+    @previousActiveElement = document.activeElement
+
   componentWillUnmount: ->
     @handleUnmount()
 
@@ -104,6 +107,7 @@ module.exports = React.createClass
     @refs.stepThrough.goNext()
 
   handleUnmount: ->
+    @previousActiveElement?.focus()
     now = new Date().toISOString()
     completedThisSession[@props.tutorial.id] = now
 
