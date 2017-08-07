@@ -46,7 +46,7 @@ class FeedbackSummaryContainer extends React.Component {
 
 FeedbackSummaryContainer.propTypes = {
   actions: PropTypes.shape({
-    feedback: PropTypes.func
+    feedback: PropTypes.object
   }),
   classification: PropTypes.object,
   feedback: PropTypes.array,
