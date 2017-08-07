@@ -20,6 +20,9 @@ class FeedbackSummaryContainer extends React.Component {
   constructor(props) {
     super(props);
     this.generateFeedbackItems = this.generateFeedbackItems.bind(this);
+  }
+
+  componentWillMount() {
     this.generateFeedbackItems();
   }
 
