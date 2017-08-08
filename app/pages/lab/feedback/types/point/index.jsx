@@ -50,7 +50,7 @@ class PointFeedbackEditor extends Component {
       newFeedback.types.push(changed);
     }
 
-    this.props.saveFeedbackFn(newFeedback);
+    return this.props.saveFeedbackFn(newFeedback);
   }
 
   renderFeedbackItem(item, index) {
