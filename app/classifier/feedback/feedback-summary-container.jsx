@@ -40,7 +40,7 @@ class FeedbackSummaryContainer extends React.Component {
   }
 
   render() {
-    return (this.props.feedback.length) ? <FeedbackSummary feedback={this.props.feedback} /> : null;
+    return (this.props.feedback.length > 0) ? <FeedbackSummary feedback={this.props.feedback} /> : null;
   }
 }
 
