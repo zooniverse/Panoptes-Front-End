@@ -3,9 +3,8 @@ AutoSave = require '../components/auto-save'
 handleInputChange = require '../lib/handle-input-change'
 apiClient = require 'panoptes-client/lib/api-client'
 PromiseToSetState = require '../lib/promise-to-set-state'
-{MarkdownEditor} = require 'markdownz'
+{MarkdownEditor, MarkdownHelp} = require 'markdownz'
 ChangeListener = require '../components/change-listener'
-MarkdownHelp = require ('../partials/markdown-help')
 alert = require('../lib/alert')
 
 module.exports = React.createClass
