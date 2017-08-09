@@ -13,11 +13,14 @@ export default class GenericTask extends React.Component {
   }
 
   componentDidMount() {
-    this.props.autoFocus && this.container.focus && this.container.focus();
+    if (this.props.autoFocus && this.container.focus) {
+      this.container.focus();
+    }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.answers !== this.props.answers && nextProps.autoFocus && this.container.focus) {
+  componentDidUpdate(prevProps) {
+    // autofocus the container again if the question changes
+    if (this.props.autoFocus && this.props.question !== prevProps.question && this.container.focus) {
       this.container.focus();
     }
   }
