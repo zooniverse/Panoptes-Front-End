@@ -170,7 +170,7 @@ describe('<MobileSectionContainer />', function () {
     });
 
     it('should equal false if the workflow doesn\'t have swipe enabled', function () {
-      const workflow = fixtures.workflow({ configuration: { swipe_enabled: false }});
+      const workflow = fixtures.workflow({ swipe_enabled: false });
       wrapper = shallow(<MobileSectionContainer task={fixtures.task()} workflow={workflow} project={fixtures.project()} />);
       component = wrapper.find('MobileSection').first();
       const { checked } = component.props();
@@ -230,7 +230,7 @@ describe('<MobileSectionContainer />', function () {
         .then(function () {
           wrapper.update();
           const workflow = wrapper.props().workflow;
-          assert.strictEqual(workflow.configuration.swipe_enabled, false);
+          assert.strictEqual(workflow.swipe_enabled, false);
         })
         .then(function () {
           return component.props().toggleChecked();
@@ -238,7 +238,7 @@ describe('<MobileSectionContainer />', function () {
         .then(function () {
           wrapper.update();
           const workflow = wrapper.props().workflow;
-          assert.strictEqual(workflow.configuration.swipe_enabled, true);
+          assert.strictEqual(workflow.swipe_enabled, true);
           done();
         });
     });

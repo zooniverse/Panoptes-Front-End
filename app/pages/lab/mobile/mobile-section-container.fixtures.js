@@ -56,9 +56,7 @@ function workflow(extraData = {}) {
         ]
       }
     },
-    configuration: {
-      swipe_enabled: true
-    }
+    swipe_enabled: true
   }, extraData);
 }
 
