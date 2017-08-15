@@ -24,25 +24,27 @@ class ProjectFilteringInterface extends Component {
       pages: 0,
       projectCount: 0,
       query: {},
+      pageSize: null,
     };
   }
 
   componentDidMount() {
-    const { discipline, page, sort, status } = this.props;
-    this.loadProjects(discipline, page, sort, status);
+    const { discipline, page, sort, status, page_size } = this.props;
+    this.loadProjects(discipline, page, sort, status, page_size);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { discipline, page, sort, status } = nextProps;
+    const { discipline, page, sort, status, page_size } = nextProps;
     if (discipline !== this.props.discipline ||
         page !== this.props.page ||
         sort !== this.props.sort ||
-        status !== this.props.status) {
-      this.loadProjects(discipline, page, sort, status);
+        status !== this.props.status ||
+        page_size !== this.props.page_size) {
+      this.loadProjects(discipline, page, sort, status, page_size);
     }
   }
 
-  loadProjects(discipline, page, sort, status) {
+  loadProjects(discipline, page, sort, status, pageSize) {
     this.setState({
       error: null,
       loading: true,
@@ -55,6 +57,7 @@ class ProjectFilteringInterface extends Component {
       cards: true,
       include: ['avatar'],
       state: status,
+      page_size: pageSize,
     };
     if (!query.tags) {
       delete query.tags;
@@ -68,8 +71,9 @@ class ProjectFilteringInterface extends Component {
             const meta = projects[0].getMeta();
             pages = meta.page_count;
             projectCount = meta.count;
+            pageSize = meta.page_size;
           }
-          this.setState({ projects, pages, projectCount });
+          this.setState({ projects, pages, projectCount, pageSize });
         } else {
           this.setState({ projects: [], pages: 0, projectCount: 0 });
         }
@@ -101,8 +105,8 @@ class ProjectFilteringInterface extends Component {
     let pageStart = null;
     let pageEnd = null;
     if (this.state.projectCount > 0) {
-      pageStart = ((this.props.page - 1) * 20) + 1;
-      pageEnd = Math.min(this.props.page * 20, this.state.projectCount);
+      pageStart = ((this.props.page - 1) * this.state.pageSize) + 1;
+      pageEnd = Math.min(this.props.page * this.state.pageSize, this.state.projectCount);
       showingMessage = 'projects.countMessage';
     } else {
       showingMessage = 'projects.notFoundMessage';
