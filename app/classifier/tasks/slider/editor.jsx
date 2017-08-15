@@ -1,9 +1,8 @@
-import { MarkdownEditor } from 'markdownz';
+import { MarkdownEditor, MarkdownHelp } from 'markdownz';
 import React from 'react';
 import alert from '../../../lib/alert';
 import AutoSave from '../../../components/auto-save';
 import handleInputChange from '../../../lib/handle-input-change';
-import MarkdownHelp from '../../../partials/markdown-help';
 import NextTaskSelector from '../next-task-selector';
 
 const SliderTaskEditor = (props) => {

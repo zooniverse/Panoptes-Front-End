@@ -6,8 +6,7 @@ drawingTools = require '../drawing-tools'
 alert = require '../../lib/alert'
 DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
-{MarkdownEditor} = require 'markdownz'
-MarkdownHelp = require '../../partials/markdown-help'
+{MarkdownEditor, MarkdownHelp} = require 'markdownz'
 
 # `import MinMaxEditor from './drawing/min-max-editor';`
 MinMaxEditor = require('./drawing/min-max-editor').default
@@ -221,7 +220,7 @@ module.exports = React.createClass
                 <small className="form-help">The “Next task” selection describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).</small>
               </div>
             when 'highlighterLabels'
-              <div> 
+              <div>
                 <small className="form-help"> Add labels for the highlighter tool.</small>
               </div>
             when 'tools'
