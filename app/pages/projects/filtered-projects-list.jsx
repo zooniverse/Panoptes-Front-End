@@ -13,8 +13,8 @@ counterpart.registerTranslations('en', {
 
 class FilteredProjectsList extends Component {
   render() {
-    const { discipline, page, sort, status } = this.props.location.query;
-    const filteringProps = { discipline, page, sort, status };
+    const { discipline, page, sort, status, page_size } = this.props.location.query;
+    const filteringProps = { discipline, page, sort, status, page_size };
     return (
       <ProjectFilteringInterface
         onChangeQuery={this.context.updateQuery}
