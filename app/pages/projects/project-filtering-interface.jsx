@@ -104,9 +104,10 @@ class ProjectFilteringInterface extends Component {
     let showingMessage = '';
     let pageStart = null;
     let pageEnd = null;
-    if (this.state.projectCount > 0) {
-      pageStart = ((this.props.page - 1) * this.state.pageSize) + 1;
-      pageEnd = Math.min(this.props.page * this.state.pageSize, this.state.projectCount);
+    const { pageSize, projectCount } = this.state;
+    if (projectCount > 0) {
+      pageStart = ((this.props.page - 1) * pageSize) + 1;
+      pageEnd = Math.min(this.props.page * pageSize, projectCount);
       showingMessage = 'projects.countMessage';
     } else {
       showingMessage = 'projects.notFoundMessage';
@@ -116,7 +117,7 @@ class ProjectFilteringInterface extends Component {
         <Translate
           pageStart={pageStart}
           pageEnd={pageEnd}
-          projectCount={this.state.projectCount}
+          projectCount={projectCount}
           content={showingMessage}
         />
       </p>
