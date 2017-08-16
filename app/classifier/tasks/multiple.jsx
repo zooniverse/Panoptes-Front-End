@@ -127,6 +127,7 @@ export default class MultipleChoiceTask extends React.Component {
           <div className="answer-button-icon-container">
             <input
               type="checkbox"
+              autoFocus={i === this.props.annotation.value[0]}
               checked={this.props.annotation.value.includes(i)}
               onChange={this.handleChange.bind(this, i)}
             />
@@ -139,6 +140,7 @@ export default class MultipleChoiceTask extends React.Component {
     }
     return (
       <GenericTask
+        autoFocus={this.props.annotation.value.length === 0}
         question={this.props.task.question}
         help={this.props.task.help}
         answers={answers}
