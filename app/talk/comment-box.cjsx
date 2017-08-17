@@ -1,13 +1,12 @@
 React = require 'react'
 ToggleChildren = require './mixins/toggle-children'
 Feedback = require './mixins/feedback'
-MarkdownHelp = require '../partials/markdown-help'
 CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
 Loading = require '../components/loading-indicator'
 SingleSubmitButton = require '../components/single-submit-button'
 alert = require '../lib/alert'
-{Markdown, MarkdownEditor} = require 'markdownz'
+{Markdown, MarkdownEditor, MarkdownHelp} = require 'markdownz'
 Suggester = require './suggester'
 
 module.exports = React.createClass

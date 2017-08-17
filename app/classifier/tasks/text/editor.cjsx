@@ -2,8 +2,7 @@ React = require 'react'
 alert = require '../../../lib/alert'
 AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
-{MarkdownEditor} = require 'markdownz'
-MarkdownHelp = require '../../../partials/markdown-help'
+{MarkdownEditor, MarkdownHelp} = require 'markdownz'
 NextTaskSelector = require '../next-task-selector'
 
 module.exports = React.createClass

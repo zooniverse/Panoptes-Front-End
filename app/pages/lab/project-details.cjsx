@@ -5,8 +5,7 @@ ImageSelector = require '../../components/image-selector'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
 TagSearch = require '../../components/tag-search'
-{MarkdownEditor} = require 'markdownz'
-MarkdownHelp = require '../../partials/markdown-help'
+{MarkdownEditor, MarkdownHelp} = require 'markdownz'
 alert = require('../../lib/alert')
 Select = require 'react-select'
 `import DISCIPLINES from '../../constants/disciplines';`
