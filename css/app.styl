@@ -9,6 +9,10 @@ body
   max-width: 1440px
   min-height: 100vh // TODO: iOS's `vh` is buggy, so work around it.
 
+  @media (min-width: 1440px)
+    border-left: 1px solid LIGHT_GREY
+    border-right: 1px solid LIGHT_GREY
+
 .main-content
   display: flex
   flex: 1 0 auto
