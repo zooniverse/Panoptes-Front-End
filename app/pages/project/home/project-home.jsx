@@ -43,7 +43,7 @@ const ProjectHomePage = (props) => {
                     alt=""
                     controls={false}
                     format={location.format}
-                    height={300}
+                    height={240}
                     src={location.src}
                     width={600}
                   />
