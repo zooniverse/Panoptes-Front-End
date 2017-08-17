@@ -1,7 +1,8 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
+{MarkdownEditor, MarkdownHelp} = require 'markdownz'
+alert = require '../../../lib/alert'
 FileButton = require '../../../components/file-button'
-{MarkdownEditor} = require 'markdownz'
 
 ArticleEditor = React.createClass
   statics:
@@ -91,7 +92,7 @@ ArticleEditor = React.createClass
 
       <span className="form-label">Content</span>
       <br />
-      <MarkdownEditor ref="contentInput" value={@state.content} disabled={@props.working} rows="10" cols="100" onChange={@handleContentChange} />
+      <MarkdownEditor ref="contentInput" value={@state.content} disabled={@props.working} rows="10" cols="100" onChange={@handleContentChange} onHelp={-> alert <MarkdownHelp/>} />
       <br />
 
       <p>

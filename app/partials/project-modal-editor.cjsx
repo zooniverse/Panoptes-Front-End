@@ -2,12 +2,13 @@ React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../lib/put-file'
 FileButton = require '../components/file-button'
-{MarkdownEditor} = require 'markdownz'
+{MarkdownEditor, MarkdownHelp} = require 'markdownz'
 debounce = require 'debounce'
 DragReorderable = require 'drag-reorderable'
 classnames = require 'classnames'
 AutoSave = require '../components/auto-save'
 handleInputChange = require '../lib/handle-input-change'
+alert = require '../lib/alert'
 
 ProjectModalStepEditor = React.createClass
   getDefaultProps: ->
@@ -34,7 +35,7 @@ ProjectModalStepEditor = React.createClass
         <FileButton className="standard-button" onSelect={@handleMediaChange}>Select media</FileButton>
       </p>
       <div>
-        <MarkdownEditor className="full" value={@props.step.content} onChange={@handleContentChange} />
+        <MarkdownEditor className="full" value={@props.step.content} onChange={@handleContentChange} onHelp={-> alert <MarkdownHelp/>} />
       </div>
     </div>
 
