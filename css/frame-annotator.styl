@@ -3,13 +3,19 @@
   position: relative; // Contain absolutely-positioned children
   max-width: 100%;
 
-  svg
+  .svg-subject
+    background: #000
     position: absolute
     left: 0
     top: 0
     width: 100%
     height: 100%
     overflow: hidden
+    
+    svg
+      pointer-events: none
+      width: 100%
+      height: 100%
     
   button.disabled
     color: #ADABAB;
