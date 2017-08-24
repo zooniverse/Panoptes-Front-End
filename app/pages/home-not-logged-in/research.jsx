@@ -2,6 +2,7 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import { Link } from 'react-router';
+import Thumbnail from '../../components/thumbnail';
 
 counterpart.registerTranslations('en', {
   researchHomePage: {
@@ -63,14 +64,14 @@ const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =
     </div>
 
     <div className="home-research__researchers">
-      <div><img role="presentation" src="/assets/home-researchers1.jpg" /></div>
+      <div><Thumbnail role="presentation" src="//www.zooniverse.org/assets/home-researchers1.jpg" width={450} /></div>
 
       {screenWidth > 550 && (
-        <div><img role="presentation" src="/assets/home-researchers2.jpg" /></div>
+        <div><Thumbnail img role="presentation" src="//www.zooniverse.org/assets/home-researchers2.jpg" width={450} /></div>
       )}
 
       {screenWidth > 900 && (
-        <div><img role="presentation" src="/assets/home-researchers3.jpg" /></div>
+        <div><Thumbnail role="presentation" src="//www.zooniverse.org/assets/home-researchers3.jpg" width={450} /></div>
       )}
     </div>
 
