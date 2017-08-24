@@ -92,8 +92,30 @@ module.exports = {
         }]
       }),
     }, {
-      test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
-      use: 'file-loader',
+      test: /\.(png|gif|jpe?g)$/i,
+      loaders: [
+        'file-loader',
+        {
+          loader: 'image-webpack-loader',
+          query: {
+            mozjpeg: {
+              progressive: true,
+              quality: 60
+            },
+            gifsicle: {
+              interlaced: false
+            },
+            pngquant: {
+              optimizationLevel: 7,
+              quality: '65-90',
+              speed: 4
+            }
+          }
+        }
+      ]
+    }, {
+      test: /\.(svg|otf|eot|ttf|woff\d?)$/,
+      use: 'file-loader'
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/],
