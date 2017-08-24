@@ -586,16 +586,6 @@ const Publications = {
       ]
     },
     {
-      slug: "zooniverse/planet-four",
-      publications: [
-        {
-          citation: "Task Workflow Design and its impact on performance and volunteers' subjective preference in Virtual Citizen Science, Sprinks+ 2017.",
-          href: "http://www.sciencedirect.com/science/article/pii/S1071581917300332",
-          date: "2017"
-        }
-      ]
-    },
-    {
       slug: "jukoch/pattern-perception",
       publications: [
         {
@@ -759,6 +749,11 @@ const Publications = {
     {
     name: "Meta Studies",
     publications: [
+      {
+        citation: "Task Workflow Design and its impact on performance and volunteers' subjective preference in Virtual Citizen Science, Sprinks+ 2017.",
+        href: "http://www.sciencedirect.com/science/article/pii/S1071581917300332",
+        date: "2017"
+      },
       {
         citation: "Blending Machine and Human Learning Processes, Crowston, Kevin, Østerlund, Carsten, Lee, Tae Kyoung, 2017",
         href: "http://scholarspace.manoa.hawaii.edu/handle/10125/41159",
