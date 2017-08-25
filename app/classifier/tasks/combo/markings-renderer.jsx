@@ -1,4 +1,5 @@
 import React from 'react';
+import SVGRenderer from '../../annotation-renderer/svg';
 
 export default function MarkingsRenderer(props) {
   // a list that holds the annotations for the current combo task
@@ -31,7 +32,7 @@ export default function MarkingsRenderer(props) {
         .filter((taskType) => { return taskType !== 'combo'; })
         .map((taskType) => {
           const TaskComponent = props.taskTypes[taskType];
-          if (TaskComponent.PersistInsideSubject) {
+          if (TaskComponent.AnnotationRenderer === SVGRenderer && TaskComponent.PersistInsideSubject) {
             // when a combo annotation changes make sure the combo annotation updated correctly with only the
             // current combo task's annotatons.  This is a hack to make drawing tasks work in a combo task.
             let { annotation } = props;

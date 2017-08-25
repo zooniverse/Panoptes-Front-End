@@ -115,10 +115,7 @@ export default class SVGRenderer extends React.Component {
     // disable subject pointer events by default.
     // Tasks then need to enable pointer events, when required, in SVGProps.
     const svgProps = {
-      style: {
-        background: 'black',
-        pointerEvents: 'none'
-      }
+      style: {}
     };
 
     Object.keys(tasks).map((task) => {
@@ -164,41 +161,42 @@ export default class SVGRenderer extends React.Component {
 
     return (
       <div>
-        <svg
-          ref={(element) => { if (element) this.svgSubjectArea = element; }}
-          className="subject"
-          viewBox={createdViewBox}
-          {...svgProps}
-        >
-          <g
-            ref={(element) => { if (element) this.transformationContainer = element; }}
-            transform={this.props.transform}
-          >
-            <rect
-              ref={(rect) => { this.sizeRect = rect; }}
-              width={this.props.naturalWidth}
-              height={this.props.naturalHeight}
-              fill="rgba(0, 0, 0, 0.01)"
-              fillOpacity="0.01"
-              stroke="none"
-            />
-            {type === 'image' && (
-              <Draggable onDrag={this.props.panEnabled ? this.props.panByDrag : () => {}}>
-                <SVGImage
-                  className={this.props.panEnabled ? 'pan-active' : ''}
-                  src={src}
-                  width={this.props.naturalWidth}
-                  height={this.props.naturalHeight}
-                  modification={this.props.modification}
-                />
-              </Draggable>
-            )}
-            {children}
-            {(showFeedback) && (<SVGFeedbackViewer />)}
-          </g>
-        </svg>
-        {(showFeedback) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
         {this.props.children}
+        <div className="subject svg-subject">
+          <svg
+            ref={(element) => { if (element) this.svgSubjectArea = element; }}
+            viewBox={createdViewBox}
+            {...svgProps}
+          >
+            <g
+              ref={(element) => { if (element) this.transformationContainer = element; }}
+              transform={this.props.transform}
+            >
+              <rect
+                ref={(rect) => { this.sizeRect = rect; }}
+                width={this.props.naturalWidth}
+                height={this.props.naturalHeight}
+                fill="rgba(0, 0, 0, 0.01)"
+                fillOpacity="0.01"
+                stroke="none"
+              />
+              {type === 'image' && this.props.naturalWidth && (
+                <Draggable onDrag={this.props.panEnabled ? this.props.panByDrag : () => {}}>
+                  <SVGImage
+                    className={this.props.panEnabled ? 'pan-active' : ''}
+                    src={src}
+                    width={this.props.naturalWidth}
+                    height={this.props.naturalHeight}
+                    modification={this.props.modification}
+                  />
+                </Draggable>
+              )}
+              {children}
+              {(showFeedback) && (<SVGFeedbackViewer />)}
+            </g>
+          </svg>
+        </div>
+        {(showFeedback) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
       </div>
     );
   }

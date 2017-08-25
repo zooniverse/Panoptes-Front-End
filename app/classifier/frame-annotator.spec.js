@@ -23,8 +23,8 @@ const viewBoxDimensions = {
   y: 0
 };
 
-const naturalHeight = 0;
-const naturalWidth = 0;
+const naturalHeight = 100;
+const naturalWidth = 100;
 
 describe('<FrameAnnotator />', function() {
   it('should render without crashing', function() {
@@ -207,32 +207,32 @@ describe('<FrameAnnotator />', function() {
         />);
     });
 
-    it('allows pointer events for drawing tasks', function() {
-      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'all');
+    it('overrides pointer event styles for drawing tasks', function() {
+      assert(wrapper.find('svg').prop('style').pointerEvents === 'all');
     });
 
-    it('does not allow pointer events for question tasks', function() {
+    it('does not override pointer event styles for question tasks', function() {
       const questionAnnotation = tasks.single.getDefaultAnnotation();
       questionAnnotation.task = 'init';
       wrapper.setProps({annotation: questionAnnotation});
-      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'none');
+      assert(wrapper.find('svg').prop('style').pointerEvents === undefined);
     });
 
-    it('allows pointer events for combo drawing tasks', function() {
+    it('overrides pointer event styles for combo drawing tasks', function() {
       const comboAnnotation = tasks.combo.getDefaultAnnotation(workflow.tasks.combo, workflow, tasks);
       comboAnnotation.task = 'combo';
       wrapper.setProps({annotation: comboAnnotation});
-      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'all');
+      assert(wrapper.find('svg').prop('style').pointerEvents === 'all');
     });
 
-    it('does not allow pointer events for other combo tasks', function() {
+    it('does not override pointer event styles for other combo tasks', function() {
       const comboTask = Object.assign({}, workflow.tasks.combo);
       comboTask.tasks = ['write', 'ask', 'features'];
       workflow.tasks.textCombo = comboTask;
       const comboAnnotation = tasks.combo.getDefaultAnnotation(workflow.tasks.textCombo, workflow, tasks);
       comboAnnotation.task = 'textCombo';
       wrapper.setProps({annotation: comboAnnotation});
-      assert(wrapper.find('svg.subject').prop('style').pointerEvents === 'none');
+      assert(wrapper.find('svg').prop('style').pointerEvents === undefined);
     });
   });
 });
