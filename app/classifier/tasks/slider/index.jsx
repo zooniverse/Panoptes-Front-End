@@ -58,7 +58,7 @@ class SliderTask extends React.Component {
       const newAnnotation = Object.assign({}, this.props.annotation, { value: this.props.task.defaultValue });
       this.props.onChange(newAnnotation);
     } else if (this.props.annotation.value !== this.state.value) {
-      this.setState({ value: this.props.annotation.value });
+      this.setState({ value: nextProps.annotation.value });
     }
   }
 
@@ -115,7 +115,7 @@ class SliderTask extends React.Component {
                 onChange={this.handleChange}
                 max={this.props.task.max}
                 min={this.props.task.min}
-                step="any"
+                step={this.props.task.step}
                 value={this.state.value}
               />
             </label>

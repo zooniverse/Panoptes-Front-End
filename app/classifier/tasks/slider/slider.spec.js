@@ -86,7 +86,7 @@ describe('SliderTask', function () {
     });
 
     it('should have the correct step value', function () {
-      assert.equal(number.node.step, 'any');
+      assert.equal(number.node.step, task.step);
     });
   });
 
