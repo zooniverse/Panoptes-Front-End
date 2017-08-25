@@ -180,7 +180,7 @@ export default class SVGRenderer extends React.Component {
                 fillOpacity="0.01"
                 stroke="none"
               />
-              {type === 'image' && (
+              {type === 'image' && this.props.naturalWidth && (
                 <Draggable onDrag={this.props.panEnabled ? this.props.panByDrag : () => {}}>
                   <SVGImage
                     className={this.props.panEnabled ? 'pan-active' : ''}
