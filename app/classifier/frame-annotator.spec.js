@@ -23,8 +23,8 @@ const viewBoxDimensions = {
   y: 0
 };
 
-const naturalHeight = 0;
-const naturalWidth = 0;
+const naturalHeight = 100;
+const naturalWidth = 100;
 
 describe('<FrameAnnotator />', function() {
   it('should render without crashing', function() {
