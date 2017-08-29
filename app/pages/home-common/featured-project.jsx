@@ -16,13 +16,13 @@ const FeaturedProject = (() =>
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
       <img
-        alt="Steller Sea Lion"
-        src="/assets/featured-projects/featured-project-20170801-steller.jpg"
+        alt="Steelpan Vibrations"
+        src="/assets/featured-projects/featured-project-20170829-steelpan_vibrations.jpg"
       />
     </div>
-    <h2 className="secondary-headline">Steller Watch</h2>
-    <p className="display-body">Help us find out why the endangered Steller sea lion continues to decline in the Aleutian Islands.</p>
-    <Link to="projects/sweenkl/steller-watch" className="primary-button primary-button--light">View Project!</Link>
+    <h2 className="secondary-headline">Steelpan Vibrations</h2>
+    <p className="display-body">The distinct sound of the Caribbean steelpan is due largely to the interconnections between notes on the pan. We need help classifying vibration patterns so that we can learn more about how this drum works.</p>
+    <Link to="projects/achmorrison/steelpan-vibrations" className="primary-button primary-button--light">View Project!</Link>
   </section>
 );
 
