@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import apiClient from 'panoptes-client/lib/api-client';
 
 import AutoSave from '../../components/auto-save';
 import LoadingIndicator from '../../components/loading-indicator';
 import handleInputChange from '../../lib/handle-input-change';
+import UserProperties from './user-settings/properties';
+import UserProjects from './user-settings/projects';
 import UserLimitToggle from './user-settings/limit-toggle';
 import DeleteUser from './user-settings/delete-user';
 
@@ -11,72 +14,53 @@ class UserSettings extends Component {
   constructor(props) {
     super(props);
     this.boundForceUpdate = this.forceUpdate.bind(this);
+    this.getUser = this.getUser.bind(this);
+
+    this.state = {
+      user: null
+    };
   }
 
   componentDidMount() {
-    if (this.props.editUser != null) {
-      this.props.editUser.listen('change', this.boundForceUpdate);
-    }
+    this.getUser();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.editUser != null) {
-      this.props.editUser.stopListening('change', this.boundForceUpdate);
-    }
-    nextProps.editUser.listen('change', this.boundForceUpdate);
+  getUser() {
+    apiClient.type('users').get(this.props.params.id).then((user) => {
+      user.listen('change', this.boundForceUpdate);
+      this.setState({ user });
+    });
   }
 
   componentWillUnmount() {
-    this.props.editUser.stopListening('change', this.boundForceUpdate);
+    this.state.user.stopListening('change', this.boundForceUpdate);
   }
 
   render() {
-    if (!this.props.editUser) {
+    if (!this.state.user) {
       return (
         <div>No user found</div>
       );
     }
 
-    const handleChange = handleInputChange.bind(this.props.editUser);
+    const handleChange = handleInputChange.bind(this.state.user);
 
     return (
-      <div className="project-status">
-        <h4>Settings for {this.props.editUser.login}</h4>
-        <ul>
-          <li>
-            <input type="checkbox" name="admin" checked={this.props.editUser.admin} disabled />{' '}
-            Admin
-          </li>
-          <li>
-            <input type="checkbox" name="login_prompt" checked={this.props.editUser.login_prompt} disabled />{' '}
-            Login prompt
-          </li>
-          <li>
-            <input type="checkbox" name="private_profile" checked={this.props.editUser.private_profile} disabled />{' '}
-            Private profile
-          </li>
-          <li>
-            <AutoSave resource={this.props.editUser}>
-              <input type="checkbox" name="upload_whitelist" checked={this.props.editUser.upload_whitelist} onChange={handleChange} />{' '}
-              Whitelist subject uploads
-            </AutoSave>
-          </li>
-          <li>
-            <AutoSave resource={this.props.editUser}>
-              <input type="checkbox" name="banned" checked={this.props.editUser.banned} onChange={handleChange} />{' '}
-              Ban user
-            </AutoSave>
-          </li>
-        </ul>
+      <div>
+        <div className="project-status">
+          <h4>Settings for {this.state.user.login}</h4>
 
-        <ul>
-          <li>Uploaded subjects: {this.props.editUser.uploaded_subjects_count}</li>
-          <li><UserLimitToggle editUser={this.props.editUser} /></li>
-        </ul>
+          <UserProperties user={this.state.user} />
 
-        <div>
-            <DeleteUser user={this.props.editUser} />
+          <ul>
+            <li>Uploaded subjects: {this.state.user.uploaded_subjects_count}</li>
+            <li><UserLimitToggle editUser={this.state.user} /></li>
+          </ul>
+
+          <DeleteUser user={this.state.user} />
         </div>
+
+        <UserProjects user={this.state.user} />
       </div>
     );
   }
