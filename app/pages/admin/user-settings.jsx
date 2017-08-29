@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 
 import AutoSave from '../../components/auto-save';
+import LoadingIndicator from '../../components/loading-indicator';
 import handleInputChange from '../../lib/handle-input-change';
 import UserLimitToggle from './user-settings/limit-toggle';
+import DeleteUser from './user-settings/delete-user';
+
 
 class UserSettings extends Component {
   constructor(props) {
@@ -70,6 +73,10 @@ class UserSettings extends Component {
           <li>Uploaded subjects: {this.props.editUser.uploaded_subjects_count}</li>
           <li><UserLimitToggle editUser={this.props.editUser} /></li>
         </ul>
+
+        <div>
+            <DeleteUser user={this.props.editUser} />
+        </div>
       </div>
     );
   }
