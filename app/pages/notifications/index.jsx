@@ -12,7 +12,7 @@ counterpart.registerTranslations('en', {
     header: 'Notifications',
     title: 'My Notifications',
     signedOut: 'You\'re not signed in.',
-    noNotifications: 'You have no notifications.',
+    noNotifications: 'You have no notifications. ',
     participation: 'You can receive notifications by participating in Talk, following discussions, and receiving messages.'
   }
 });
