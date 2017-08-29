@@ -58,6 +58,12 @@ class UserSettings extends Component {
               Whitelist subject uploads
             </AutoSave>
           </li>
+          <li>
+            <AutoSave resource={this.props.editUser}>
+              <input type="checkbox" name="banned" checked={this.props.editUser.banned} onChange={handleChange} />{' '}
+              Ban user
+            </AutoSave>
+          </li>
         </ul>
 
         <ul>
