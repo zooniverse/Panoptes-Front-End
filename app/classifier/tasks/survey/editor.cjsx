@@ -1,6 +1,6 @@
 React = require 'react'
 FileButton = require '../../../components/file-button'
-alert = require '../../../lib/alert'
+alert = require('../../../lib/alert').default
 Details = require '../../../components/details'
 TriggeredModalForm = require 'modal-form/triggered'
 surveyEditorHelp = require './editor-help'

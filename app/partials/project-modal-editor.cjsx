@@ -8,7 +8,7 @@ DragReorderable = require 'drag-reorderable'
 classnames = require 'classnames'
 AutoSave = require '../components/auto-save'
 handleInputChange = require '../lib/handle-input-change'
-alert = require '../lib/alert'
+alert = require('../lib/alert').default
 
 ProjectModalStepEditor = React.createClass
   getDefaultProps: ->

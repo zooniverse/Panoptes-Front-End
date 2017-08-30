@@ -1,7 +1,7 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
-alert = require '../../../lib/alert'
+alert = require('../../../lib/alert').default
 FileButton = require '../../../components/file-button'
 
 ArticleEditor = React.createClass

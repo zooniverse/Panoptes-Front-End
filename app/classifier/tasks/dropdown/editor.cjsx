@@ -1,5 +1,5 @@
 React = require 'react'
-alert = require '../../../lib/alert'
+alert = require('../../../lib/alert').default
 Dialog = require 'modal-form/dialog'
 AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'

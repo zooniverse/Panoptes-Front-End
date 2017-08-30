@@ -5,7 +5,7 @@ NewDiscussionForm = require '../talk/discussion-new-form'
 QuickSubjectCommentForm= require '../talk/quick-subject-comment-form'
 Loading = require '../components/loading-indicator'
 SignInPrompt = require '../partials/sign-in-prompt'
-alert = require '../lib/alert'
+alert = require('../lib/alert').default
 
 module.exports = React.createClass
   displayName: 'SubjectCommentForm'
