@@ -18,7 +18,7 @@ module.exports = (message) ->
   container.classList.add 'dialog-container'
   document.body.appendChild container
 
-  closeButton = <button aria-label='Close' onClick={defer.resolve}>&times;</button>
+  closeButton = <button autoFocus={true} aria-label='Close' onClick={defer.resolve}>&times;</button>
   ReactDOM.render <Dialog className="alert" controls={closeButton} onEscape={defer.resolve}>
     {message}
   </Dialog>, container
