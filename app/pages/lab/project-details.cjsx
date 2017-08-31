@@ -6,7 +6,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
-alert = require('../../lib/alert')
+alert = require('../../lib/alert').default
 Select = require 'react-select'
 `import DISCIPLINES from '../../constants/disciplines';`
 `import CharLimit from '../../components/char-limit';`

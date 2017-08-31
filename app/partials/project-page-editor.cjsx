@@ -5,7 +5,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 PromiseToSetState = require '../lib/promise-to-set-state'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 ChangeListener = require '../components/change-listener'
-alert = require('../lib/alert')
+alert = require('../lib/alert').default
 
 module.exports = React.createClass
   displayName: 'ProjectPageEditor'

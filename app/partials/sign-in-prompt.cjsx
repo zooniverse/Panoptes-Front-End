@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 React = require 'react'
-alert = require '../lib/alert'
+alert = require('../lib/alert').default
 LoginDialog = require './login-dialog'
 
 counterpart.registerTranslations 'en',

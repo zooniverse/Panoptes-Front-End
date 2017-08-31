@@ -15,7 +15,7 @@ SingleSubmitButton = require '../components/single-submit-button'
 merge = require 'lodash/merge'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
-alert = require '../lib/alert'
+alert = require('../lib/alert').default
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
 

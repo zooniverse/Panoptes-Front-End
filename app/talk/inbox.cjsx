@@ -10,7 +10,7 @@ InboxForm = require './inbox-form'
 talkConfig = require './config'
 {timeAgo} = require './lib/time'
 SignInPrompt = require '../partials/sign-in-prompt'
-alert = require '../lib/alert'
+alert = require('../lib/alert').default
 
 PAGE_SIZE = talkConfig.inboxPageSize
 

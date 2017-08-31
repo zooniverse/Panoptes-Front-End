@@ -5,7 +5,7 @@ CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
 Loading = require '../components/loading-indicator'
 SingleSubmitButton = require '../components/single-submit-button'
-alert = require '../lib/alert'
+alert = require('../lib/alert').default
 {Markdown, MarkdownEditor, MarkdownHelp} = require 'markdownz'
 Suggester = require './suggester'
 

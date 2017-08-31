@@ -4,7 +4,7 @@ Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 {Markdown} = require 'markdownz'
 ZooniverseLogoType = require '../../partials/zooniverse-logotype'
-alert = require '../../lib/alert'
+alert = require('../../lib/alert').default
 LoginDialog = require '../../partials/login-dialog'
 
 counterpart.registerTranslations 'en',
