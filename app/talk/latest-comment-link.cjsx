@@ -71,7 +71,7 @@ module.exports = React.createClass
       scrollToLastComment: true, page: @lastPage()
 
     baseLink = "/"
-    if @props.project?
+    if @props.project? and @props.project.slug?
       baseLink += "projects/#{@props.project.slug}/"
 
     <div className="talk-latest-comment-link">
