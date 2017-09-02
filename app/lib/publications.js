@@ -281,12 +281,52 @@ const Publications = {
       ]
     },
     {
+      slug: "mschwamb/planet-four-terrains",
+      publications: [
+        {
+        citation: "Planet Four: Terrains - Discovery of Araneiforms Outside of the South Polar Layered Deposits, Schwamb+ 2017.",
+        href: "http://arxiv.org/abs/1708.07858",
+        date: "2017"
+        }
+      ]
+    },
+    {
       slug: "dwright04/supernova-hunters",
       publications: [
+        {
+        citation: "ePESSTO spectroscopic classification of optical transients, Gutierrez+ 2017.",
+        href: "http://www.astronomerstelegram.org/?read=10331",
+        date: "2017"
+      },
+        {
+        citation: "ePESSTO spectroscopic classification of optical transients, Cartier+ 2017.",
+        href: "http://www.astronomerstelegram.org/?read=10328",
+        date: "2017"
+      },
+        {
+        citation: "ePESSTO spectroscopic classification of optical transients, Cartier+ 2017.",
+        href: "http://www.astronomerstelegram.org/?read=10334",
+        date: "2017"
+      },
         {
         citation: "A transient search using combined human and machine classifications, Wright+ 2017.",
         href: "https://arxiv.org/pdf/1707.05223.pdf",
         date: "2017"
+      },
+        {
+        citation: "PESSTO spectroscopic classification of optical transients, Dimitriadis+ 2016.",
+        href: "http://www.astronomerstelegram.org/?read=9711",
+        date: "2016"
+      },
+        {
+        citation: "PESSTO spectroscopic classification of optical transients, Mattila+ 2016.",
+        href: "http://www.astronomerstelegram.org/?read=9308",
+        date: "2016"
+      },
+        {
+        citation: "PESSTO spectroscopic classification of optical transients, Fraser+ 2016.",
+        href: "http://www.astronomerstelegram.org/?read=9269",
+        date: "2016"
         }
       ]
     },
@@ -683,7 +723,7 @@ const Publications = {
       {
         citation: "Counting in the Wild, Arteta, C., Lempitsky, V., Zisserman, A. 2016",
         href: "https://link.springer.com/chapter/10.1007/978-3-319-46478-7_30",
-        date: "2016" 
+        date: "2016"
       }
     ]
     }
