@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import TalkStatus from './talk-status';
 
+import translations from '../translations';
+
 class ProjectMetadataStat extends React.Component {
   render() {
     return (
@@ -76,7 +78,7 @@ export default class ProjectMetadata extends React.Component {
           <Link to={statsLink}>
             <Translate
               content="project.home.metadata.statistics"
-              with={{ title: project.display_name }}
+              with={{ title: translations.strings.project.title || project.display_name }}
             />
           </Link>
 
