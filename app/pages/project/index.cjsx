@@ -118,6 +118,8 @@ ProjectPageController = React.createClass
           awaitProjectRoles = project.get('project_roles', { page_size: 50 }).catch((error) => console.error(error))
 
           awaitPreferences = @getUserProjectPreferences(project, user)
+          
+          language = @props.location.query.language || 'en'
 
           Promise.all([
             awaitBackground,
@@ -127,7 +129,7 @@ ProjectPageController = React.createClass
             awaitProjectCompleteness,
             awaitProjectRoles,
             awaitPreferences,
-            translations.load('project', project.id, 'es')
+            translations.load('project', project.id, language)
           ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
               @setState({ background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
               @getSelectedWorkflow(project, preferences)
