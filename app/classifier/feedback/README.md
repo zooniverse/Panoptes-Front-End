@@ -2,11 +2,11 @@
 
   Feedback is enabled per-task - there's a checkbox under the answer editing box that toggles it on and off.
 
-  ![Enable feedback toggle](/assets/feedback-toggle.png)
+  ![Enable feedback toggle](/public/assets/feedback-toggle.png)
 
   Once enabled, you can add a feedback type by hitting the button:
 
-  ![Add information for feedback types](/assets/feedback-details.png)
+  ![Add information for feedback types](/public/assets/feedback-details.png)
 
   You can then add information for that feedback type. All fields are required.
 
@@ -36,4 +36,4 @@
 
   The summary is generated at the end of a classification, based on the subject feedback fields, the active rules, and the task:
 
-  ![Feedback summary](/assets/feedback-summary.png)
+  ![Feedback summary](/public/assets/feedback-summary.png)
