@@ -1,4 +1,8 @@
 import apiClient from 'panoptes-client/lib/api-client';
+import counterpart from 'counterpart';
+
+counterpart.setFallbackLocale('en');
+
 
 const translations = {
   strings: {},
@@ -9,6 +13,7 @@ const translations = {
       .get({ translated_type, translated_id, language })
       .then(([translation]) => {
         translations.strings[translated_type] = translation.strings;
+        counterpart.setLocale(language);
       })
       .catch(error => {
         console.log(error.status);
