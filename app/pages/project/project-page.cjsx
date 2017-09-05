@@ -19,6 +19,20 @@ counterpart.registerTranslations 'en',
       talk: 'Talk'
       collections: 'Collect'
 
+counterpart.registerTranslations 'it',
+{
+  project: {
+    disclaimer: "Questo progetto e' stato creato con il Project Builder di Zooniverse, ma non e' ancora un progetto ufficiale. Per questo motivo e' possibile che domande su questo progetto dirette al Team Zooniverse non ricevano una risposta.",
+    loading: "Caricamento progetto",
+    nav: {
+      about: "A proposito",
+      classify: "Classifica",
+      talk: "Forum",
+      collections: "Colleziona"
+    }
+  }
+}
+
 AVATAR_SIZE = 100
 
 ProjectPage = React.createClass
