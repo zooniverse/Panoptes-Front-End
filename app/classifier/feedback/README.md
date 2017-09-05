@@ -2,11 +2,11 @@
 
       Feedback is enabled per-task - there's a checkbox under the answer editing box that toggles it on and off.
 
-      ![screen shot 2017-04-13 at 14 29 36](https://cloud.githubusercontent.com/assets/2725841/25006659/b8d81398-2055-11e7-8cb6-8c660b4173b7.png)
+      ![Enable feedback toggle](https://cloud.githubusercontent.com/assets/2725841/25006659/b8d81398-2055-11e7-8cb6-8c660b4173b7.png)
 
       Once enabled, you can add a feedback type by hitting the button:
 
-      ![screen shot 2017-04-13 at 14 30 40](https://cloud.githubusercontent.com/assets/2725841/25006686/d02e5f20-2055-11e7-8647-83bc343cb1fe.png)
+      ![Add information for feedback types](https://cloud.githubusercontent.com/assets/2725841/25006686/d02e5f20-2055-11e7-8647-83bc343cb1fe.png)
 
       You can then add information for that feedback type. All fields are required.
 
@@ -36,4 +36,4 @@
 
       The summary is generated at the end of a classification, based on the subject feedback fields, the active rules, and the task:
 
-      ![screen shot 2017-04-13 at 14 41 11](https://cloud.githubusercontent.com/assets/2725841/25007130/46a18cda-2057-11e7-8215-3c2ceeb0a2bc.png)
+      ![Feedback summary](https://cloud.githubusercontent.com/assets/2725841/25007130/46a18cda-2057-11e7-8215-3c2ceeb0a2bc.png)
