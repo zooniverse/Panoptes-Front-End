@@ -258,24 +258,21 @@ StarCoord._epochConvert = (ra, dec) => {
 };
 
 StarCoord._transform = (ra, dec) => {
-  const r0 = new Array (
-   Math.cos(ra) * Math.cos(dec),
-   Math.sin(ra) * Math.cos(dec),
-   Math.sin(dec) );
+  const r0 = [ Math.cos(ra) * Math.cos(dec), Math.sin(ra) * Math.cos(dec), Math.sin(dec) ];
 
-  const matrix = new Array (
+  const matrix = [
    0.9999256782, -0.0111820611, -0.0048579477,
    0.0111820610,  0.9999374784, -0.0000271765,
-   0.0048579479, -0.0000271474,  0.9999881997 );
+   0.0048579479, -0.0000271474,  0.9999881997 ];
 
-  const s0 = new Array (
+  const s0 = [
    r0[0]*matrix[0] + r0[1]*matrix[1] + r0[2]*matrix[2],
    r0[0]*matrix[3] + r0[1]*matrix[4] + r0[2]*matrix[5],
-   r0[0]*matrix[6] + r0[1]*matrix[7] + r0[2]*matrix[8] );
+   r0[0]*matrix[6] + r0[1]*matrix[7] + r0[2]*matrix[8] ];
 
   const r = Math.sqrt( s0[0]*s0[0] + s0[1]*s0[1] + s0[2]*s0[2] );
 
-  const result = new Array ( 0.0, 0.0 );
+  const result = [ 0.0, 0.0 ];
   result[1] = Math.asin( s0[2]/r );
   const cosaa = ( (s0[0]/r) / Math.cos(result[1] ) );
   const sinaa = ( (s0[1]/r) / Math.cos(result[1] ) );
