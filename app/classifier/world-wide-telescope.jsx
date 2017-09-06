@@ -210,9 +210,6 @@ class StarCoord {
 }
 
 StarCoord.fromRaDec = (xAxis, yAxis, xAxisDec, epoch1950) => {
-  console.log('AXES');
-  console.log(xAxis);
-  console.log(yAxis);
   let ra;
   let dec;
   if (xAxisDec === true) {
@@ -224,17 +221,9 @@ StarCoord.fromRaDec = (xAxis, yAxis, xAxisDec, epoch1950) => {
   }
   ra = StarCoord._parseDegrees(ra, false);
   dec = StarCoord._parseDegrees(dec, true);
-  console.log('FIRST PASS');
-  console.log(ra);
-  console.log(dec);
   if (epoch1950) {
     [ra, dec] = StarCoord._epochConvert(ra, dec);
-    console.log('CONVERTED');
-    console.log(ra);
-    console.log(dec);
   }
-  console.log('FINAL PASS');
-  console.log(ra, dec);
   return new StarCoord(ra, dec);
 };
 
@@ -259,44 +248,57 @@ StarCoord.fromGlatGlon = (xAxis, yAxis, xAxisGlat, epoch1950) => {
 
 StarCoord._epochConvert = (ra, dec) => {
   const s = StarCoord;
-  const RA2000 = ra + 0.640265 + (0.278369 * Math.sin(s._toDegrees(ra)) * Math.tan(s._toDegrees(dec)));
-  const DEC2000 = dec + (0.278369 * Math.cos(s._toDegrees(ra)));
-  // return [RA2000, DEC2000];
-  const x = Math.cos(ra) * Math.cos(dec);
-  const y = Math.sin(ra) * Math.cos(dec);
-  const z = Math.sin(dec);
+  const pi = 3.1415926536;
+  const newRA = ra / (180 / pi);
+  const newDEC = dec / (180 / pi);
 
-  const x2 = [.999925708 * x - .0111789372 * y - .0048590035 * z];
-  const y2 = [.0111789372 * x + .9999375134 * y - .0000271626 * z];
-  const z2 = [.0048590036 * x - .0000271579 * y + .9999881946 * z];
-  console.log('IM HERE');
-  const ra2 = s._FNatn2(y2, x2);
-  const dec2 = s._FNasin(z2);
-  console.log('LOOK HERE');
-  console.log(ra2);
-  console.log(dec2);
+  const x = Math.cos(newRA) * Math.cos(newDEC);
+  const y = Math.sin(newRA) * Math.cos(newDEC);
+  const z = Math.sin(newDEC);
+
+  const BtoJ = new Array (
+   0.9999256782, -0.0111820611, -0.0048579477,
+   0.0111820610,  0.9999374784, -0.0000271765,
+   0.0048579479, -0.0000271474,  0.9999881997 );
+
+  const correctRD = s._transform(newRA, newDEC, BtoJ);
+  const ra2 = StarCoord._radiansPrintD(correctRD[0]);
+  const dec2 = StarCoord._radiansPrintD(correctRD[1]);
+
   return [ra2, dec2];
 };
 
-StarCoord._FNatn2 = (y, x) => {
-  const pi = 4 * Math.atan(1);
-  const tpi = 2 * pi;
+StarCoord._transform = (ra, dec, matrix) => {
+  const pi = 3.1415926536;
 
-  let a = Math.atan(y / 2);
-  if (x < 0) {
-    a = a + pi;
-  }
+  const r0 = new Array (
+   Math.cos(ra) * Math.cos(dec),
+   Math.sin(ra) * Math.cos(dec),
+   Math.sin(dec) );
 
-  if ((y < 0) && (x > 0)) {
-    a = a + tpi;
-  }
+  const s0 = new Array (
+   r0[0]*matrix[0] + r0[1]*matrix[1] + r0[2]*matrix[2],
+   r0[0]*matrix[3] + r0[1]*matrix[4] + r0[2]*matrix[5],
+   r0[0]*matrix[6] + r0[1]*matrix[7] + r0[2]*matrix[8] );
 
-  return a;
+  const r = Math.sqrt( s0[0]*s0[0] + s0[1]*s0[1] + s0[2]*s0[2] );
+
+  const result = new Array ( 0.0, 0.0 );
+  result[1] = Math.asin( s0[2]/r ); // New dec in range -90.0 -- +90.0
+  // or use sin^2 + cos^2 = 1.0
+  const cosaa = ( (s0[0]/r) / Math.cos(result[1] ) );
+  const sinaa = ( (s0[1]/r) / Math.cos(result[1] ) );
+  result[0] = Math.atan2(sinaa,cosaa);
+  if ( result[0] < 0.0 ) result[0] = result[0] + pi + pi;
+  console.log('HERE IS THE RESULT');
+  console.log(result);
+  return result;
 }
 
-StarCoord._FNasin = (x) => {
-  const c = Math.sqrt(1 - x * x);
-  return Math.atan(x / c);
+StarCoord._radiansPrintD = (rad) => {
+  const pi = 3.1415926536;
+  const toDegrees = 180.0/pi;
+  return rad * toDegrees;
 }
 
 StarCoord._toRadians = (degrees) => {
