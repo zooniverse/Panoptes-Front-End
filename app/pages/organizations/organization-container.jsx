@@ -1,5 +1,6 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
+import isAdmin from '../../lib/is-admin';
 
 class OrganizationContainer extends React.Component {
   constructor(props) {
@@ -33,6 +34,66 @@ class OrganizationContainer extends React.Component {
         this.fetchOrganization(nextProps.params.name, nextProps.params.owner);
       }
     }
+  }
+
+  fetchAllProjects(organization, query) {
+    if (organization.links.projects) {
+      const projectIds = organization.links.projects;
+
+      organization.get('projects', query)
+        .then(projects =>
+          projectIds.map((projectId) => {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+              return project;
+            }
+            return {
+              description: 'Unknown project',
+              display_name: `Project ${projectId}`,
+              id: projectId,
+              links: {
+                owner: {
+                  display_name: 'CHECK WITH OTHER ORG COLLABORATORS'
+                }
+              }
+            };
+          })
+        )
+        .then((allProjects) => {
+          const org = this.state.organization;
+          org.projects = allProjects;
+          this.setState({ organization: org, fetching: false });
+        })
+        .catch((error) => {
+          console.error('error loading projects', error); // eslint-disable-line no-console
+          this.setState({ fetching: false });
+        });
+    }
+  }
+
+  fetchLaunchedProjects(organization, query) {
+    organization.get('projects', query)
+      .catch((error) => {
+        console.error('error loading projects', error); // eslint-disable-line no-console
+        this.setState({ fetching: false });
+      })
+      .then((projects) => {
+        const org = this.state.organization;
+        org.projects = projects;
+        this.setState({ organization: org, fetching: false });
+      });
+  }
+
+  isCollaborator(organization) {
+    organization.get('organization_roles')
+      .then((roles) => {
+        const collaboratorRoles = roles.filter(role =>
+          role.roles.includes('collaborator') || role.roles.includes('owner'));
+        return collaboratorRoles.some(role => role.links.owner.id === this.context.user.id);
+      })
+      .catch((error) => {
+        console.error('error loading collaborators', error); // eslint-disable-line no-console
+      });
   }
 
   fetchOrganization(name, owner) {
@@ -76,16 +137,24 @@ class OrganizationContainer extends React.Component {
   }
 
   fetchProjects(organization) {
-    organization.get('projects', { cards: true, include: ['avatar'] })
-      .catch((error) => {
-        console.error('error loading projects', error); // eslint-disable-line no-console
-        this.setState({ fetching: false });
-      })
-      .then((projects) => {
-        const org = this.state.organization;
-        org.projects = projects;
-        this.setState({ organization: org, fetching: false });
-      });
+    const query = {
+      cards: true,
+      include: ['avatar']
+    };
+
+    if (isAdmin()) {
+      this.fetchAllProjects(organization, query);
+    } else if (this.props.location.query.view === 'collaborator') {
+      const collaboratorStatus = Promise.resolve(this.isCollaborator(organization))
+        .catch(error => console.error('error loading collaborators', error)) // eslint-disable-line no-console
+        .then(status => status);
+      if (collaboratorStatus) {
+        this.fetchAllProjects(organization, query);
+      }
+    } else {
+      query.launch_approved = true;
+      this.fetchLaunchedProjects(organization, query);
+    }
   }
 
   render() {
@@ -122,11 +191,19 @@ class OrganizationContainer extends React.Component {
 }
 
 OrganizationContainer.contextTypes = {
-  initialLoadComplete: React.PropTypes.bool
+  initialLoadComplete: React.PropTypes.bool,
+  user: React.PropTypes.shape({
+    id: React.PropTypes.string
+  })
 };
 
 OrganizationContainer.propTypes = {
   children: React.PropTypes.node.isRequired,
+  location: React.PropTypes.shape({
+    query: React.PropTypes.shape({
+      view: React.PropTypes.string
+    })
+  }),
   params: React.PropTypes.shape({
     name: React.PropTypes.string,
     owner: React.PropTypes.string
