@@ -17,6 +17,19 @@ counterpart.registerTranslations('en', {
   }
 });
 
+counterpart.registerTranslations('it', {
+  project: {
+    home: {
+      talk: {
+        zero: 'Nessuno sta parlando di <strong>%(title)s</strong> in questo momento.',
+        one: '<strong>1</strong> persona sta parlando di <strong>%(title)s</strong> in questo momento.',
+        other: '<strong>%(count)s</strong> persone stanno parlando di <strong>%(title)s</strong> in questo momento.'
+      },
+      joinIn: 'Partecipa'
+    }
+  }
+});
+
 export default class TalkStatus extends React.Component {
 
   constructor() {
