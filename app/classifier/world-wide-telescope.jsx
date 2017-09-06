@@ -210,6 +210,9 @@ class StarCoord {
 }
 
 StarCoord.fromRaDec = (xAxis, yAxis, xAxisDec, epoch1950) => {
+  console.log('AXES');
+  console.log(xAxis);
+  console.log(yAxis);
   let ra;
   let dec;
   if (xAxisDec === true) {
@@ -221,9 +224,17 @@ StarCoord.fromRaDec = (xAxis, yAxis, xAxisDec, epoch1950) => {
   }
   ra = StarCoord._parseDegrees(ra, false);
   dec = StarCoord._parseDegrees(dec, true);
+  console.log('FIRST PASS');
+  console.log(ra);
+  console.log(dec);
   if (epoch1950) {
     [ra, dec] = StarCoord._epochConvert(ra, dec);
+    console.log('CONVERTED');
+    console.log(ra);
+    console.log(dec);
   }
+  console.log('FINAL PASS');
+  console.log(ra, dec);
   return new StarCoord(ra, dec);
 };
 
@@ -250,8 +261,43 @@ StarCoord._epochConvert = (ra, dec) => {
   const s = StarCoord;
   const RA2000 = ra + 0.640265 + (0.278369 * Math.sin(s._toDegrees(ra)) * Math.tan(s._toDegrees(dec)));
   const DEC2000 = dec + (0.278369 * Math.cos(s._toDegrees(ra)));
-  return [RA2000, DEC2000];
+  // return [RA2000, DEC2000];
+  const x = Math.cos(ra) * Math.cos(dec);
+  const y = Math.sin(ra) * Math.cos(dec);
+  const z = Math.sin(dec);
+
+  const x2 = [.999925708 * x - .0111789372 * y - .0048590035 * z];
+  const y2 = [.0111789372 * x + .9999375134 * y - .0000271626 * z];
+  const z2 = [.0048590036 * x - .0000271579 * y + .9999881946 * z];
+  console.log('IM HERE');
+  const ra2 = s._FNatn2(y2, x2);
+  const dec2 = s._FNasin(z2);
+  console.log('LOOK HERE');
+  console.log(ra2);
+  console.log(dec2);
+  return [ra2, dec2];
 };
+
+StarCoord._FNatn2 = (y, x) => {
+  const pi = 4 * Math.atan(1);
+  const tpi = 2 * pi;
+
+  let a = Math.atan(y / 2);
+  if (x < 0) {
+    a = a + pi;
+  }
+
+  if ((y < 0) && (x > 0)) {
+    a = a + tpi;
+  }
+
+  return a;
+}
+
+StarCoord._FNasin = (x) => {
+  const c = Math.sqrt(1 - x * x);
+  return Math.atan(x / c);
+}
 
 StarCoord._toRadians = (degrees) => {
   return (degrees * Math.PI) / 180.0;
@@ -361,7 +407,11 @@ class Plate {
     const deltaRA = ((star2.ra - star1.ra) * Math.cos(averageDec * (Math.PI / 180))) * 3600;
     const deltaDec = (star2.dec - star1.dec) * 3600;
     const angularSep = Math.sqrt(Math.pow(deltaRA, 2) + Math.pow(deltaDec, 2)); // eslint-disable-line
-    const pixelSep = Math.sqrt(Math.pow(xy1.x - xy2.x, 2) + Math.pow(xy1.y - xy2.y, 2)); // eslint-disable-line
+    console.log('ANGULAR SEP');
+    console.log(angularSep);
+    console.log(deltaRA);
+    console.log(deltaDec);
+    const pixelSep = Math.sqrt(Math.pow(xy2.x - xy1.x, 2) + Math.pow(xy2.y - xy1.y, 2)); // eslint-disable-line
     return angularSep / pixelSep;
   }
 
@@ -369,6 +419,8 @@ class Plate {
     const s = this.starChart;
     const upperY = s.height - (s.yAxis.range[0].y - s.corners[0].y);
     const lowerY = s.corners[3].y - s.yAxis.range[1].y;
+    console.log('COOR CENTERS');
+    console.log(this.coordCorners);
     return {
       x: ((s.xAxis.range[0].x - s.corners[0].x) + (s.xAxis.range[1].x - s.corners[0].x)) / 2,
       y: (upperY + lowerY) / 2,
