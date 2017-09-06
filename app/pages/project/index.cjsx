@@ -5,6 +5,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 isAdmin = require '../../lib/is-admin'
 ProjectPage = require './project-page'
+ProjectTranslation = require('./project-translation').default
 translations = require('./translations').default
 
 counterpart.registerTranslations 'en', require('../../locales/en').default
@@ -298,24 +299,28 @@ ProjectPageController = React.createClass
         <div className="beta-border"></div>}
 
       {if @state.project? and @state.owner?
-        <ProjectPage
-          {...@props}
-          background={@state.background}
-          guide={@state.guide}
-          guideIcons={@state.guideIcons}
-          loading={@state.loading}
-          loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
-          onChangePreferences={@handlePreferencesChange}
-          owner={@state.owner}
-          pages={@state.pages}
-          preferences={@state.preferences}
+        <ProjectTranslation
           project={@state.project}
-          projectAvatar={@state.projectAvatar}
-          projectIsComplete={@state.projectIsComplete}
-          projectRoles={@state.projectRoles}
-          splits={@state.splits}
-          workflow={@state.workflow}
-        />
+        >
+          <ProjectPage
+            {...@props}
+            background={@state.background}
+            guide={@state.guide}
+            guideIcons={@state.guideIcons}
+            loading={@state.loading}
+            loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
+            onChangePreferences={@handlePreferencesChange}
+            owner={@state.owner}
+            pages={@state.pages}
+            preferences={@state.preferences}
+            project={@state.project}
+            projectAvatar={@state.projectAvatar}
+            projectIsComplete={@state.projectIsComplete}
+            projectRoles={@state.projectRoles}
+            splits={@state.splits}
+            workflow={@state.workflow}
+          />
+        </ProjectTranslation>
 
       else if @state.loading
         <div className="content-container">

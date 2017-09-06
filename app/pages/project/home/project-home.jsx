@@ -9,8 +9,6 @@ import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
 import TalkStatus from './talk-status';
 
-import translations from '../translations';
-
 const ProjectHomePage = (props) => {
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
   const renderTalkSubjectsPreview = props.talkSubjects.length > 2;
@@ -22,7 +20,9 @@ const ProjectHomePage = (props) => {
           <FinishedBanner project={props.project} />
         </div>)}
 
-      <div className="project-home-page__description">{translations.strings.project.description || props.project.description}</div>
+      <div className="project-home-page__description">
+        {props.project.description}
+      </div>
 
       <ProjectHomeWorkflowButtons
         activeWorkflows={props.activeWorkflows}
@@ -80,13 +80,13 @@ const ProjectHomePage = (props) => {
             <Translate
               content="project.home.about"
               with={{
-                title: translations.strings.project.title || props.project.display_name
+                title: props.project.display_name
               }}
             />
           </h4>
           {props.project.introduction &&
             <Markdown project={props.project}>
-              {translations.strings.project.introduction || props.project.introduction}
+              {props.project.introduction}
             </Markdown>}
         </div>
       </div>

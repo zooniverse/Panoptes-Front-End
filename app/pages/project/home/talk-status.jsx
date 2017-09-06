@@ -3,8 +3,6 @@ import { sugarApiClient } from 'panoptes-client/lib/sugar';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 
-import translations from '../translations';
-
 export default class TalkStatus extends React.Component {
 
   constructor() {
@@ -35,7 +33,7 @@ export default class TalkStatus extends React.Component {
           content="project.home.talk"
           with={{
             count: this.state.activeUsers,
-            title: translations.strings.project.title || this.props.project.display_name
+            title: this.props.project.display_name
           }}
           unsafe={true}
         />
