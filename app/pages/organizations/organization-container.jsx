@@ -9,6 +9,7 @@ class OrganizationContainer extends React.Component {
     this.state = {
       error: null,
       fetching: false,
+      fetchingAvatars: [],
       organization: null,
       organizationAvatar: {},
       organizationBackground: {}
@@ -36,16 +37,28 @@ class OrganizationContainer extends React.Component {
     }
   }
 
-  fetchAllProjects(organization, query) {
+  fetchAllProjects(organization) {
     if (organization.links.projects) {
       const projectIds = organization.links.projects;
 
-      organization.get('projects', query)
+      organization.get('projects', { include: 'avatar' })
         .then(projects =>
           projectIds.map((projectId) => {
             const project = projects.find(p => p.id === projectId);
             if (project) {
-              return project;
+              const projectWithAvatar = project;
+              let fetchingAvatars = this.state.fetchingAvatars;
+              fetchingAvatars.push(project.id);
+              this.setState({ fetchingAvatars });
+              project.get('avatar')
+                .then((avatar) => {
+                  projectWithAvatar.avatar_src = avatar.src.slice(7);
+                  fetchingAvatars = this.state.fetchingAvatars;
+                  const index = fetchingAvatars.indexOf(project.id);
+                  fetchingAvatars.splice(index, 1);
+                  this.setState({ fetchingAvatars });
+                });
+              return projectWithAvatar;
             }
             return {
               description: 'Unknown project',
@@ -71,8 +84,8 @@ class OrganizationContainer extends React.Component {
     }
   }
 
-  fetchLaunchedProjects(organization, query) {
-    organization.get('projects', query)
+  fetchLaunchedProjects(organization) {
+    organization.get('projects', { cards: true, launch_approved: true })
       .catch((error) => {
         console.error('error loading projects', error); // eslint-disable-line no-console
         this.setState({ fetching: false });
@@ -137,23 +150,17 @@ class OrganizationContainer extends React.Component {
   }
 
   fetchProjects(organization) {
-    const query = {
-      cards: true,
-      include: ['avatar']
-    };
-
     if (isAdmin()) {
-      this.fetchAllProjects(organization, query);
+      this.fetchAllProjects(organization);
     } else if (this.props.location.query.view === 'collaborator') {
       const collaboratorStatus = Promise.resolve(this.isCollaborator(organization))
         .catch(error => console.error('error loading collaborators', error)) // eslint-disable-line no-console
         .then(status => status);
       if (collaboratorStatus) {
-        this.fetchAllProjects(organization, query);
+        this.fetchAllProjects(organization);
       }
     } else {
-      query.launch_approved = true;
-      this.fetchLaunchedProjects(organization, query);
+      this.fetchLaunchedProjects(organization);
     }
   }
 

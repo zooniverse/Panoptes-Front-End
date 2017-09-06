@@ -1,8 +1,37 @@
 import React from 'react';
-import ProjectCardList from '../projects/project-card-list';
+import ProjectCard from '../../partials/project-card';
 import Thumbnail from '../../components/thumbnail';
+import WarningBanner from '../../classifier/warning-banner';
 
 const AVATAR_SIZE = 100;
+
+const OrganizationProjectCard = ({ collaboratorView, project }) => {
+  let statusMessage;
+  if (project.launch_approved === true) {
+    statusMessage = 'Launch Approved';
+  } else if (project.launch_approved === false) {
+    statusMessage = 'NOT PUBLICLY VISIBILE';
+  } else {
+    statusMessage = 'UNKNOWN';
+  }
+
+  return (
+    <div className="organization-project">
+      <ProjectCard project={project} />
+      {collaboratorView &&
+        <WarningBanner className="warning-banner" label={statusMessage}>
+          <p>something something ok cool</p>
+        </WarningBanner>}
+    </div>);
+};
+
+OrganizationProjectCard.propTypes = {
+  collaboratorView: React.PropTypes.bool,
+  project: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    display_name: React.PropTypes.string
+  })
+};
 
 class OrganizationPage extends React.Component {
   constructor(props) {
@@ -71,7 +100,14 @@ class OrganizationPage extends React.Component {
           </section>
           <section className="resources-container">
             <div className="organization-projects">
-              <ProjectCardList projects={this.props.organization.projects} />
+              <div className="project-card-list">
+                {this.props.organization.projects.map(project =>
+                  <OrganizationProjectCard
+                    collaboratorView={this.props.collaboratorView}
+                    key={project.id}
+                    project={project}
+                  />)}
+              </div>
             </div>
           </section>
           <section className="organization-details">
@@ -83,12 +119,14 @@ class OrganizationPage extends React.Component {
 }
 
 OrganizationPage.defaultProps = {
+  collaboratorView: false,
   organization: {},
   organizationAvatar: null,
   organizationBackground: null
 };
 
 OrganizationPage.propTypes = {
+  collaboratorView: React.PropTypes.bool,
   organization: React.PropTypes.shape({
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,
