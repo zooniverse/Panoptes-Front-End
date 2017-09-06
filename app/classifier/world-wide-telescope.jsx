@@ -247,34 +247,26 @@ StarCoord.fromGlatGlon = (xAxis, yAxis, xAxisGlat, epoch1950) => {
 };
 
 StarCoord._epochConvert = (ra, dec) => {
-  const s = StarCoord;
-  const pi = 3.1415926536;
-  const newRA = ra / (180 / pi);
-  const newDEC = dec / (180 / pi);
+  const newRA = ra / (180 / Math.PI);
+  const newDEC = dec / (180 / Math.PI);
 
-  const x = Math.cos(newRA) * Math.cos(newDEC);
-  const y = Math.sin(newRA) * Math.cos(newDEC);
-  const z = Math.sin(newDEC);
+  const oldRaDec = StarCoord._transform(newRA, newDEC);
+  const convertedRA = oldRaDec[0] * (180.0 / Math.PI);
+  const convertedDEC = oldRaDec[1] * (180.0 / Math.PI);
 
-  const BtoJ = new Array (
-   0.9999256782, -0.0111820611, -0.0048579477,
-   0.0111820610,  0.9999374784, -0.0000271765,
-   0.0048579479, -0.0000271474,  0.9999881997 );
-
-  const correctRD = s._transform(newRA, newDEC, BtoJ);
-  const ra2 = StarCoord._radiansPrintD(correctRD[0]);
-  const dec2 = StarCoord._radiansPrintD(correctRD[1]);
-
-  return [ra2, dec2];
+  return [convertedRA, convertedDEC];
 };
 
-StarCoord._transform = (ra, dec, matrix) => {
-  const pi = 3.1415926536;
-
+StarCoord._transform = (ra, dec) => {
   const r0 = new Array (
    Math.cos(ra) * Math.cos(dec),
    Math.sin(ra) * Math.cos(dec),
    Math.sin(dec) );
+
+  const matrix = new Array (
+   0.9999256782, -0.0111820611, -0.0048579477,
+   0.0111820610,  0.9999374784, -0.0000271765,
+   0.0048579479, -0.0000271474,  0.9999881997 );
 
   const s0 = new Array (
    r0[0]*matrix[0] + r0[1]*matrix[1] + r0[2]*matrix[2],
@@ -284,21 +276,12 @@ StarCoord._transform = (ra, dec, matrix) => {
   const r = Math.sqrt( s0[0]*s0[0] + s0[1]*s0[1] + s0[2]*s0[2] );
 
   const result = new Array ( 0.0, 0.0 );
-  result[1] = Math.asin( s0[2]/r ); // New dec in range -90.0 -- +90.0
-  // or use sin^2 + cos^2 = 1.0
+  result[1] = Math.asin( s0[2]/r );
   const cosaa = ( (s0[0]/r) / Math.cos(result[1] ) );
   const sinaa = ( (s0[1]/r) / Math.cos(result[1] ) );
   result[0] = Math.atan2(sinaa,cosaa);
-  if ( result[0] < 0.0 ) result[0] = result[0] + pi + pi;
-  console.log('HERE IS THE RESULT');
-  console.log(result);
+  if ( result[0] < 0.0 ) result[0] = result[0] + Math.PI + Math.PI;
   return result;
-}
-
-StarCoord._radiansPrintD = (rad) => {
-  const pi = 3.1415926536;
-  const toDegrees = 180.0/pi;
-  return rad * toDegrees;
 }
 
 StarCoord._toRadians = (degrees) => {
@@ -409,11 +392,7 @@ class Plate {
     const deltaRA = ((star2.ra - star1.ra) * Math.cos(averageDec * (Math.PI / 180))) * 3600;
     const deltaDec = (star2.dec - star1.dec) * 3600;
     const angularSep = Math.sqrt(Math.pow(deltaRA, 2) + Math.pow(deltaDec, 2)); // eslint-disable-line
-    console.log('ANGULAR SEP');
-    console.log(angularSep);
-    console.log(deltaRA);
-    console.log(deltaDec);
-    const pixelSep = Math.sqrt(Math.pow(xy2.x - xy1.x, 2) + Math.pow(xy2.y - xy1.y, 2)); // eslint-disable-line
+    const pixelSep = Math.sqrt(Math.pow(xy1.x - xy2.x, 2) + Math.pow(xy1.y - xy2.y, 2)); // eslint-disable-line
     return angularSep / pixelSep;
   }
 
@@ -421,8 +400,6 @@ class Plate {
     const s = this.starChart;
     const upperY = s.height - (s.yAxis.range[0].y - s.corners[0].y);
     const lowerY = s.corners[3].y - s.yAxis.range[1].y;
-    console.log('COOR CENTERS');
-    console.log(this.coordCorners);
     return {
       x: ((s.xAxis.range[0].x - s.corners[0].x) + (s.xAxis.range[1].x - s.corners[0].x)) / 2,
       y: (upperY + lowerY) / 2,
