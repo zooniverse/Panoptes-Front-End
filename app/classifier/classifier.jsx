@@ -1,6 +1,8 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import { VisibilitySplit } from 'seven-ten';
+import counterpart from 'counterpart';
+import Translate from 'react-translate-component';
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
 import preloadSubject from '../lib/preload-subject';
@@ -21,6 +23,13 @@ import { isFeedbackActive, isThereFeedback } from './feedback/helpers';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
+
+counterpart.registerTranslations('en', {
+  classifier: {
+    tutorialButton: 'Show the project tutorial',
+    miniCourseButton: 'Restart the project mini-course'
+  }
+});
 
 class Classifier extends React.Component {
   constructor(props) {
@@ -296,7 +305,7 @@ class Classifier extends React.Component {
                   user={this.props.user}
                   workflow={this.props.workflow}
                 >
-                  Show the project tutorial
+                  <Translate content="classifier.tutorialButton" />
                 </RestartButton>
               </strong>
             </small>
@@ -315,7 +324,7 @@ class Classifier extends React.Component {
                     user={this.props.user}
                     workflow={this.props.workflow}
                   >
-                    Restart the project mini-course
+                    <Translate content="classifier.miniCourseButton" />
                   </RestartButton>
                 </VisibilitySplit>
               </strong>
