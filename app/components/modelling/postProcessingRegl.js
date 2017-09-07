@@ -3,9 +3,6 @@ const postProcessingRegl = (r) => {
   let c = [0, 0];
   const psfunc = i => (c_, p) => parseFloat(p.metadata.psf[i]);
   const psfObj = {};
-  /* eslint-disable no-console */
-  console.log(r);
-  /* eslint-enable no-console */
   for (let i = 0; i < 121; i += 1) {
     c = [Math.floor(i / 11) - 5, (i % 11) - 5];
     convolution += `texture2D(texture, uv + vec2(${parseFloat(c[0]).toFixed(1)}/texSize[0],`;
@@ -48,25 +45,26 @@ const postProcessingRegl = (r) => {
       frag: `
       precision mediump float;
       uniform sampler2D imageTexture, modelTexture;
+      uniform float renorm;
       varying vec2 uv;
       vec2 texCoords;
       float pixel;
       float sinhStretch(float px) {
-        return 0.1 * (exp(2.99822 * px) - exp(2.99822 * -px)) / 2.0;
+        return 0.05 * (exp(2.99822 * px) - exp(2.99822 * -px));
       }
       float asinh(float px) {
           return log(px + sqrt(1.0+px*px));
       }
       float asinhStretch(float px) {
-        return asinh(px / 0.1) / 2.999;
+        return asinh(px / 0.5) / asinh(0.5);
       }
       void main () {
         // for some reason the y-axis coords have been mirrored;
         texCoords = vec2(uv[0], 1.0 - uv[1]);
         // calculate the difference between model + image (after
         // reversing the asinh stretch on the image)
-        pixel = sinhStretch(texture2D(imageTexture, texCoords).rgb[0]) - \
-          texture2D(modelTexture, uv).rgb[0];
+        pixel = 0.6 * (sinhStretch(texture2D(imageTexture, texCoords).rgb[0]) - renorm) \
+         - texture2D(modelTexture, uv).rgb[0];
         if (pixel < 0.0) {
           // the model is brighter than the image
           gl_FragColor = vec4(
@@ -93,7 +91,8 @@ const postProcessingRegl = (r) => {
       }`,
       uniforms: {
         modelTexture: r.prop('texture'),
-        imageTexture: r.prop('imageTexture')
+        imageTexture: r.prop('imageTexture'),
+        renorm: (c_, p) => parseFloat(p.metadata.renorm)
       },
       depth: { enable: false },
       attributes: { position: [-2, 0, 0, -2, 2, 2] },

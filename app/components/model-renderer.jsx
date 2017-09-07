@@ -16,6 +16,7 @@ class ModelRenderer extends React.Component {
     this.getDifference = this.getDifference.bind(this);
     this.setTexture = this.setTexture.bind(this);
 
+    this.imgUrl = Object.values(this.props.subject.locations[0])[0];
     if (this.props.subject.locations.length < 2) {
       const im0 = this.props.subject.locations[0];
       this.props.subject.locations[1] = Object.assign({}, im0);
@@ -42,12 +43,6 @@ class ModelRenderer extends React.Component {
     }
   }
   componentWillReceiveProps() {
-    // we need two images as subjects - one for the original galaxy and one for
-    // the difference between the galaxy and our model
-    if (this.props.subject.locations.length < 2) {
-      const im0 = this.props.subject.locations[0];
-      this.props.subject.locations[1] = Object.assign({}, im0);
-    }
     // component has updated with new props, set the new render functions
     // check if a model has been assigned
     if (this.model !== null) {
@@ -57,7 +52,25 @@ class ModelRenderer extends React.Component {
   }
 
   // don't want to re-render whenever props update
-  shouldComponentUpdate() { return false; }
+  shouldComponentUpdate() {
+    if (this.imgUrl !== Object.values(this.props.subject.locations[0])[0]) {
+      // we have a new subject. Refresh the model calculator
+      const im0 = this.props.subject.locations[0];
+      if (this.props.subject.locations.length < 2) {
+        this.props.subject.locations[1] = Object.assign({}, im0);
+      }
+      this.model.kill();
+      const metadata = this.props.subject.metadata;
+      const size = (typeof metadata.imageSize) !== 'undefined' ? metadata.imageSize : [512, 512];
+      this.canvas.width = size[0];
+      this.canvas.height = size[1];
+      this.model = new Model(this.canvas, metadata);
+      this.imgUrl = Object.values(im0)[0];
+      return true;
+    } else {
+      return false;
+    }
+  }
   componentWillUnmount() {
     // TODO: stop models rendering when unmounted
     this.model.kill();
@@ -76,17 +89,12 @@ class ModelRenderer extends React.Component {
     }
   }
   setTexture() {
-    if (this.imageLoaded) {
-      this.model.setBaseTexture(this.im);
-      this.model.update(this.props.classification.annotations);
-    } else {
-      this.imageLoaded = true;
-    }
+    this.model.setBaseTexture(this.im);
+    this.model.update(this.props.classification.annotations);
   }
   render() {
-    const size = typeof (this.props.subject.metadata.imageSize) !== 'undefined' ?
-      this.props.subject.metadata.imageSize : [512, 512];
-    const imgUrl = Object.values(this.props.subject.locations[0])[0];
+    const metadata = this.props.subject.metadata;
+    const size = (typeof metadata.imageSize) !== 'undefined' ? metadata.imageSize : [512, 512];
     return (
       <div>
         <canvas
@@ -98,7 +106,7 @@ class ModelRenderer extends React.Component {
         />
         <img
           id="im"
-          src={imgUrl}
+          src={this.imgUrl}
           onLoad={this.setTexture}
           ref={(r) => { this.im = r; }}
           alt="Galaxy"

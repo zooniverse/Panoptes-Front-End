@@ -1,9 +1,10 @@
+/* eslint-disable class-methods-use-this */
 import baseModel from './baseModel';
 import galaxyRegls from './galaxyRegls';
 import postProcessingRegl from './postProcessingRegl';
 
 class galaxyModel extends baseModel {
-  static getModel() {
+  getModel() {
     return [
       {
         name: 'sersic disk',
@@ -134,7 +135,7 @@ class galaxyModel extends baseModel {
     // TODO: add in PSF convolution (post processing regl?)
     return renderFunctions;
   }
-  static getPostProcessingFunc(r) {
+  getPostProcessingFunc(r) {
     return postProcessingRegl(r);
   }
 }

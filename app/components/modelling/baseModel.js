@@ -7,7 +7,6 @@ class baseModel {
     // set the texture of the image we are modelling
     this.setBaseTexture = this.setBaseTexture.bind(this);
     this.parse = this.parse.bind(this); // requires overwrite
-    this.getPostProcessingFunc = this.getPostProcessingFunc.bind(this); // requires overwrite
     this.getScore = this.getScore.bind(this); // (optional)
 
     // save info on the zooniverse subject
@@ -15,7 +14,6 @@ class baseModel {
     this.imageMetadata = Object.assign({}, metadata);
     this.size = [canvas.height, canvas.width];
     this.differenceData = new Uint8Array(this.size[0] * this.size[1] * 4);
-
 
     // instantiate the regl instance with the provided canvas
     this.regl = reglBase({
@@ -25,9 +23,9 @@ class baseModel {
     // create a texture which is used for post-processing and difference calculation
     this.pixels = this.regl.texture();
     const postProcessingArray = this.getPostProcessingFunc(this.regl);
-    // postProcessingArray = postProcessingArray.slice(0, postProcessingArray.length-1)
+    // const postProcessingArray = postProcessingArray2.slice(0, postProcessingArray2.length - 1);
 
-    this.postProcessingFunc = (p) => {
+    this.postProcessingFunc = () => {
       if (this.baseTexture !== null) {
         if (typeof this.imageMetadata.psf === 'undefined') {
           /* eslint-disable prefer-spread */
@@ -63,13 +61,18 @@ class baseModel {
     // this function parses the new annotation and then triggers a render.
     // update the render funtions
     this.toRender = this.parse(annotation);
-
     this.regl.poll();
     this.regl.clear({
       color: [0, 0, 0, 1]
     });
+    this.pixels({
+      copy: true
+    });
     for (let i = 0; i < this.toRender.length; i += 1) {
-      this.toRender[i][0](this.toRender[i][1]);
+      this.toRender[i][0](Object.assign({ texture: this.pixels }, this.toRender[i][1]));
+      this.pixels({
+        copy: true
+      });
     }
     this.pixels({
       copy: true
@@ -93,14 +96,15 @@ class baseModel {
     return { data: this.regl.read(), width: this.size[0], height: this.size[1] };
   }
   // -------------- Functions to be overwritten by child classes --------------
-  static getModel() {
+  /* eslint-disable class-methods-use-this */
+  getModel() {
     // function to be overwritten for defining model
     /* eslint-disable no-console */
     console.warn('Was not provided with a model. Cannot render');
     /* eslint-enable no-console */
     return [];
   }
-  static parse() {
+  parse() {
     /* function to be overwritten when class is extended. Details how to parse a
     zooniverse annotation and create list of (renderfunc, kwargs obj) pairs
     which are returned and saved by update() to this.toRender
@@ -110,10 +114,11 @@ class baseModel {
     /* eslint-enable no-console */
     return [];
   }
-  static getPostProcessingFunc() {
+  getPostProcessingFunc() {
     // function to be overwritten with post processing (this includes difference calculation)
     return null;
   }
+  /* eslint-enable class-methods-use-this */
   getScore() {
     // images have been treated by normalisation to [0, 1] then arcsinh stretch
     // with a = 0.1. Need to calc difference in normal space
