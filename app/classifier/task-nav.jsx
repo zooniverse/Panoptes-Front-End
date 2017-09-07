@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router';
-import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import { getSessionID } from '../lib/session';
 import tasks from './tasks';
@@ -9,17 +8,6 @@ import GridTool from './drawing-tools/grid';
 import { isFeedbackActive, isThereFeedback } from './feedback/helpers';
 
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
-
-counterpart.registerTranslations('en', {
-  classifier: {
-    back: 'Back',
-    backButtonWarning: 'Going back will clear your work for the current task.',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
-    next: 'Next',
-    talk: 'Talk'
-  }
-});
 
 const BackButtonWarning = () => {
   return (

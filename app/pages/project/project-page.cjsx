@@ -1,4 +1,3 @@
-counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 {IndexLink, Link} = require 'react-router'
@@ -8,30 +7,6 @@ Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
 `import SOCIAL_ICONS from '../../lib/social-icons'`
-
-counterpart.registerTranslations 'en',
-  project:
-    loading: 'Loading project'
-    disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
-    nav:
-      about: 'About'
-      classify: 'Classify'
-      talk: 'Talk'
-      collections: 'Collect'
-
-counterpart.registerTranslations 'it',
-{
-  project: {
-    disclaimer: "Questo progetto e' stato creato con il Project Builder di Zooniverse, ma non e' ancora un progetto ufficiale. Per questo motivo e' possibile che domande su questo progetto dirette al Team Zooniverse non ricevano una risposta.",
-    loading: "Caricamento progetto",
-    nav: {
-      about: "A proposito",
-      classify: "Classifica",
-      talk: "Forum",
-      collections: "Colleziona"
-    }
-  }
-}
 
 AVATAR_SIZE = 100
 

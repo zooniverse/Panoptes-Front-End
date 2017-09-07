@@ -1,34 +1,7 @@
 import React from 'react';
 import { sugarApiClient } from 'panoptes-client/lib/sugar';
 import { Link } from 'react-router';
-import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
-
-counterpart.registerTranslations('en', {
-  project: {
-    home: {
-      talk: {
-        zero: 'Noone is talking about <strong>%(title)s</strong> right now.',
-        one: '<strong>1</strong> person is talking about <strong>%(title)s</strong> right now.',
-        other: '<strong>%(count)s</strong> people are talking about <strong>%(title)s</strong> right now.'
-      },
-      joinIn: 'Join in'
-    }
-  }
-});
-
-counterpart.registerTranslations('it', {
-  project: {
-    home: {
-      talk: {
-        zero: 'Nessuno sta parlando di <strong>%(title)s</strong> in questo momento.',
-        one: '<strong>1</strong> persona sta parlando di <strong>%(title)s</strong> in questo momento.',
-        other: '<strong>%(count)s</strong> persone stanno parlando di <strong>%(title)s</strong> in questo momento.'
-      },
-      joinIn: 'Partecipa'
-    }
-  }
-});
 
 export default class TalkStatus extends React.Component {
 

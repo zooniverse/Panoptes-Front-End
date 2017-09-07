@@ -1,22 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
-import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import TalkStatus from './talk-status';
-
-counterpart.registerTranslations('en', {
-  project: {
-    home: {
-      metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
-        volunteers: 'Volunteers',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
-      }
-    }
-  }
-});
 
 class ProjectMetadataStat extends React.Component {
   render() {

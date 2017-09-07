@@ -2,22 +2,12 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
-import counterpart from 'counterpart';
 import getSubjectLocation from '../../../lib/get-subject-location.coffee';
 import Thumbnail from '../../../components/thumbnail';
 import FinishedBanner from '../finished-banner';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
 import TalkStatus from './talk-status';
-
-counterpart.registerTranslations('en', {
-  project: {
-    home: {
-      researcher: 'Words from the researcher',
-      about: 'About %(title)s'
-    }
-  }
-});
 
 const ProjectHomePage = (props) => {
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';

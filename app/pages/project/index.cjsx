@@ -6,8 +6,10 @@ counterpart = require 'counterpart'
 isAdmin = require '../../lib/is-admin'
 ProjectPage = require './project-page'
 
-counterpart.registerTranslations 'en',
-  loading: '(Loading)'
+counterpart.registerTranslations 'en', require('../../locales/en').default
+counterpart.registerTranslations 'it', require('../../locales/it').default
+counterpart.setFallbackLocale 'en'
+
 
 ProjectPageController = React.createClass
   displayName: 'ProjectPageController'
