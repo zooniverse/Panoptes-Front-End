@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
+import counterpart from 'counterpart';
+import Translate from 'react-translate-component';
 import { getSessionID } from '../lib/session';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
@@ -8,8 +10,23 @@ import { isFeedbackActive, isThereFeedback } from './feedback/helpers';
 
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
 
+counterpart.registerTranslations('en', {
+  classifier: {
+    back: 'Back',
+    backButtonWarning: 'Going back will clear your work for the current task.',
+    done: 'Done',
+    doneAndTalk: 'Done & Talk',
+    next: 'Next',
+    talk: 'Talk'
+  }
+});
+
 const BackButtonWarning = () => {
-  return <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
+  return (
+    <p className="back-button-warning" >
+      <Translate content="classifier.backButtonWarning" />
+    </p>
+  );
 };
 
 class TaskNav extends React.Component {
@@ -165,7 +182,7 @@ class TaskNav extends React.Component {
               onMouseLeave={this.warningToggleOff}
               onBlur={this.warningToggleOff}
             >
-              Back
+              <Translate content="classifier.back" />
             </button>}
           {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk && !completed) &&
             <Link
@@ -174,7 +191,7 @@ class TaskNav extends React.Component {
               className="talk standard-button"
               style={waitingForAnswer ? disabledStyle : {}}
             >
-              Done &amp; Talk
+              <Translate content="classifier.doneAndTalk" />
             </Link>}
           {(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut) ?
             <button
@@ -183,7 +200,7 @@ class TaskNav extends React.Component {
               disabled={waitingForAnswer}
               onClick={this.addAnnotationForTask.bind(this, nextTaskKey)}
             >
-              Next
+              <Translate content="classifier.next" />
             </button> : !completed ?
               <button
                 type="button"
@@ -193,7 +210,7 @@ class TaskNav extends React.Component {
               >
                 {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
                 {this.props.classification.gold_standard && <i className="fa fa-star fa-fw" />}
-                {' '}Done
+                {' '}<Translate content="classifier.done" />
               </button> :
               null
           }
@@ -203,7 +220,7 @@ class TaskNav extends React.Component {
               to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
               className="talk standard-button"
             >
-              Talk
+              <Translate content="classifier.talk" />
             </Link>}
           {completed &&
             <button
@@ -211,7 +228,7 @@ class TaskNav extends React.Component {
               className="continue major-button"
               onClick={this.props.nextSubject}
             >
-              Next
+              <Translate content="classifier.next" />
             </button>}
           {this.props.children}
         </nav>
