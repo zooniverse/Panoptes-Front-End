@@ -1,20 +1,36 @@
 import React from 'react';
 import { Link } from 'react-router';
+import counterpart from 'counterpart';
+import Translate from 'react-translate-component';
 import TalkStatus from './talk-status';
+
+counterpart.registerTranslations('en', {
+  project: {
+    home: {
+      metadata: {
+        statistics: '%(title)s Statistics',
+        classifications: 'Classifications',
+        volunteers: 'Volunteers',
+        completedSubjects: 'Completed Subjects',
+        subjects: 'Subjects'
+      }
+    }
+  }
+});
 
 class ProjectMetadataStat extends React.Component {
   render() {
     return (
       <div className="project-metadata-stat">
         <div className="project-metadata-stat__value">{this.props.value}</div>
-        <div className="project-metadata-stat__label">{this.props.label}</div>
+        <div className="project-metadata-stat__label">{this.props.children}</div>
       </div>
     );
   }
 }
 
 ProjectMetadataStat.propTypes = {
-  label: React.PropTypes.string.isRequired,
+  children: React.PropTypes.node.isRequired,
   value: React.PropTypes.string.isRequired,
 };
 
@@ -73,16 +89,27 @@ export default class ProjectMetadata extends React.Component {
       <div className="project-home-page__container">
         <div className="project-metadata">
           <Link to={statsLink}>
-            <span>{project.display_name}{' '}Statistics</span>
+            <Translate
+              content="project.home.metadata.statistics"
+              with={{ title: project.display_name }}
+            />
           </Link>
 
           {this.renderStatus()}
 
           <div className="project-metadata-stats">
-            <ProjectMetadataStat label="Volunteers" value={project.classifiers_count.toLocaleString()} />
-            <ProjectMetadataStat label="Classifications" value={this.state.classificationsCount.toLocaleString()} />
-            <ProjectMetadataStat label="Subjects" value={project.subjects_count.toLocaleString()} />
-            <ProjectMetadataStat label="Completed Subjects" value={project.retired_subjects_count.toLocaleString()} />
+            <ProjectMetadataStat value={project.classifiers_count.toLocaleString()}>
+              <Translate content="project.home.metadata.volunteers" />
+            </ProjectMetadataStat>
+            <ProjectMetadataStat value={this.state.classificationsCount.toLocaleString()}>
+              <Translate content="project.home.metadata.classifications" />
+            </ProjectMetadataStat>
+            <ProjectMetadataStat value={project.subjects_count.toLocaleString()}>
+              <Translate content="project.home.metadata.subjects" />
+            </ProjectMetadataStat>
+            <ProjectMetadataStat value={project.retired_subjects_count.toLocaleString()}>
+              <Translate content="project.home.metadata.completedSubjects" />
+            </ProjectMetadataStat>
           </div>
 
         </div>
