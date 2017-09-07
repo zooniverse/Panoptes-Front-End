@@ -1,27 +1,39 @@
 import React from 'react';
-import ProjectCard from '../../partials/project-card';
+import TriggeredModalForm from 'modal-form/triggered';
 import Thumbnail from '../../components/thumbnail';
-import WarningBanner from '../../classifier/warning-banner';
+import ProjectCard from '../../partials/project-card';
 
 const AVATAR_SIZE = 100;
 
 const OrganizationProjectCard = ({ collaboratorView, project }) => {
+  let statusClass;
+  let statusLabel;
   let statusMessage;
   if (project.launch_approved === true) {
-    statusMessage = 'Launch Approved';
+    statusClass = 'status-banner--success';
+    statusLabel = 'Launch Approved';
+    statusMessage = `This project is launch approved and visible to all volunteers.
+    You are a collaborator on this project.`;
   } else if (project.launch_approved === false) {
-    statusMessage = 'NOT PUBLICLY VISIBILE';
+    statusClass = 'status-banner--warning';
+    statusLabel = 'NOT PUBLICLY VISIBILE';
+    statusMessage = `This project is not launch approved, therefore not visible to the public.
+    You are a collaborator on this project.`;
   } else {
-    statusMessage = 'UNKNOWN';
+    statusClass = 'status-banner--alert';
+    statusLabel = 'UNKNOWN';
+    statusMessage = `You are not a collaborator on this project, therefore the status is unknown.
+    Please contact other organization collaborators to determine who is a collaborator on this project,
+    so they can add you as a collaborator to the project as well.`;
   }
 
   return (
     <div className="organization-project">
       <ProjectCard project={project} />
       {collaboratorView &&
-        <WarningBanner className="warning-banner" label={statusMessage}>
-          <p>something something ok cool</p>
-        </WarningBanner>}
+        <TriggeredModalForm trigger={statusLabel} triggerProps={{ className: `status-banner ${statusClass}` }}>
+          <p>{statusMessage}</p>
+        </TriggeredModalForm>}
     </div>);
 };
 

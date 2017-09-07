@@ -1,6 +1,7 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../lib/is-admin';
+import OrganizationPage from './organization-page';
 
 class OrganizationContainer extends React.Component {
   constructor(props) {
@@ -8,15 +9,13 @@ class OrganizationContainer extends React.Component {
 
     this.state = {
       error: null,
+      collaboratorView: false,
       fetching: false,
       fetchingAvatars: [],
       organization: null,
       organizationAvatar: {},
       organizationBackground: {}
     };
-
-    this.fetchProjects = this.fetchProjects.bind(this);
-    this.fetchOrganization = this.fetchOrganization.bind(this);
   }
 
   componentDidMount() {
@@ -37,6 +36,16 @@ class OrganizationContainer extends React.Component {
     }
   }
 
+  isCollaborator(organization) {
+    organization.get('organization_roles')
+      .then((roles) => {
+        const collaboratorRoles = roles.filter(role =>
+          role.roles.includes('collaborator') || role.roles.includes('owner'));
+        return collaboratorRoles.some(role => role.links.owner.id === this.context.user.id);
+      })
+      .catch(error => console.error('error loading collaborators', error)); // eslint-disable-line no-console
+  }
+
   fetchAllProjects(organization) {
     if (organization.links.projects) {
       const projectIds = organization.links.projects;
@@ -45,30 +54,30 @@ class OrganizationContainer extends React.Component {
         .then(projects =>
           projectIds.map((projectId) => {
             const project = projects.find(p => p.id === projectId);
+
             if (project) {
-              const projectWithAvatar = project;
               let fetchingAvatars = this.state.fetchingAvatars;
               fetchingAvatars.push(project.id);
               this.setState({ fetchingAvatars });
+
               project.get('avatar')
                 .then((avatar) => {
-                  projectWithAvatar.avatar_src = avatar.src.slice(7);
+                  project.avatar_src = avatar.src.slice(7);
+
                   fetchingAvatars = this.state.fetchingAvatars;
                   const index = fetchingAvatars.indexOf(project.id);
                   fetchingAvatars.splice(index, 1);
                   this.setState({ fetchingAvatars });
-                });
-              return projectWithAvatar;
+                })
+                .catch(error => console.error(`error loading project #${project.id} avatar`, error)); // eslint-disable-line no-console
+
+              return project;
             }
             return {
               description: 'Unknown project',
-              display_name: `Project ${projectId}`,
+              display_name: `Project #${projectId}`,
               id: projectId,
-              links: {
-                owner: {
-                  display_name: 'CHECK WITH OTHER ORG COLLABORATORS'
-                }
-              }
+              links: { owner: { display_name: 'CHECK WITH OTHER ORG COLLABORATORS' }}
             };
           })
         )
@@ -86,27 +95,32 @@ class OrganizationContainer extends React.Component {
 
   fetchLaunchedProjects(organization) {
     organization.get('projects', { cards: true, launch_approved: true })
-      .catch((error) => {
-        console.error('error loading projects', error); // eslint-disable-line no-console
-        this.setState({ fetching: false });
-      })
       .then((projects) => {
         const org = this.state.organization;
         org.projects = projects;
         this.setState({ organization: org, fetching: false });
+      })
+      .catch((error) => {
+        console.error('error loading projects', error); // eslint-disable-line no-console
+        this.setState({ fetching: false });
       });
   }
 
-  isCollaborator(organization) {
-    organization.get('organization_roles')
-      .then((roles) => {
-        const collaboratorRoles = roles.filter(role =>
-          role.roles.includes('collaborator') || role.roles.includes('owner'));
-        return collaboratorRoles.some(role => role.links.owner.id === this.context.user.id);
-      })
-      .catch((error) => {
-        console.error('error loading collaborators', error); // eslint-disable-line no-console
-      });
+  fetchProjects(organization) {
+    if (isAdmin()) {
+      this.fetchAllProjects(organization);
+      this.setState({ collaboratorView: true });
+    } else if (this.props.location.query.view === 'collaborator') {
+      const collaboratorStatus = Promise.resolve(this.isCollaborator(organization))
+        .then(status => status)
+        .catch(error => console.error('error loading collaborators', error)); // eslint-disable-line no-console
+      if (collaboratorStatus) {
+        this.fetchAllProjects(organization);
+        this.setState({ collaboratorView: true });
+      }
+    } else {
+      this.fetchLaunchedProjects(organization);
+    }
   }
 
   fetchOrganization(name, owner) {
@@ -119,66 +133,50 @@ class OrganizationContainer extends React.Component {
     this.setState({ fetching: true, error: null });
 
     apiClient.type('organizations').get({ slug, include: ['avatar', 'background'] })
-      .catch((error) => {
-        console.error('error loading organization', error); // eslint-disable-line no-console
-        this.setState({ fetching: false, error });
-      })
       .then(([organization]) => {
         organization.projects = []; // eslint-disable-line no-param-reassign
         this.setState({ organization });
 
         if (organization) {
-          apiClient.type('avatars')
-            .get(organization.links.avatar.id)
-            .catch(error => console.error('error loading avatar', error)) // eslint-disable-line no-console
+          apiClient.type('avatars').get(organization.links.avatar.id)
             .then((organizationAvatar) => {
               this.setState({ organizationAvatar });
-            });
+            })
+            .catch(error => console.error('error loading avatar', error)); // eslint-disable-line no-console
         }
 
         if (organization) {
-          apiClient.type('backgrounds')
-            .get(organization.links.background.id)
-            .catch(error => console.error('error loading background image', error)) // eslint-disable-line no-console
+          apiClient.type('backgrounds').get(organization.links.background.id)
             .then((organizationBackground) => {
               this.setState({ organizationBackground });
-            });
+            })
+            .catch(error => console.error('error loading background image', error)); // eslint-disable-line no-console
         }
 
         this.fetchProjects(organization);
+      })
+      .catch((error) => {
+        console.error('error loading organization', error); // eslint-disable-line no-console
+        this.setState({ fetching: false, error });
       });
-  }
-
-  fetchProjects(organization) {
-    if (isAdmin()) {
-      this.fetchAllProjects(organization);
-    } else if (this.props.location.query.view === 'collaborator') {
-      const collaboratorStatus = Promise.resolve(this.isCollaborator(organization))
-        .catch(error => console.error('error loading collaborators', error)) // eslint-disable-line no-console
-        .then(status => status);
-      if (collaboratorStatus) {
-        this.fetchAllProjects(organization);
-      }
-    } else {
-      this.fetchLaunchedProjects(organization);
-    }
   }
 
   render() {
     if (this.state.organization) {
-      return React.Children.map(this.props.children, child =>
-        React.cloneElement(child, {
-          organization: this.state.organization,
-          organizationAvatar: this.state.organizationAvatar,
-          organizationBackground: this.state.organizationBackground
-        })
-      )[0];
+      return (
+        <OrganizationPage
+          collaboratorView={this.state.collaboratorView}
+          organization={this.state.organization}
+          organizationAvatar={this.state.organizationAvatar}
+          organizationBackground={this.state.organizationBackground}
+        />
+      );
     } else if (this.state.fetching) {
       return (
         <div className="content-container">
           <p>
             Loading{' '}
-            <strong>Organization #{this.props.params.name}</strong>...
+            <strong>Organization {this.props.params.name}</strong>...
           </p>
         </div>);
     } else {
@@ -205,7 +203,6 @@ OrganizationContainer.contextTypes = {
 };
 
 OrganizationContainer.propTypes = {
-  children: React.PropTypes.node.isRequired,
   location: React.PropTypes.shape({
     query: React.PropTypes.shape({
       view: React.PropTypes.string
