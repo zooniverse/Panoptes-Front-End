@@ -247,11 +247,39 @@ StarCoord.fromGlatGlon = (xAxis, yAxis, xAxisGlat, epoch1950) => {
 };
 
 StarCoord._epochConvert = (ra, dec) => {
-  const s = StarCoord;
-  const RA2000 = ra + 0.640265 + (0.278369 * Math.sin(s._toDegrees(ra)) * Math.tan(s._toDegrees(dec)));
-  const DEC2000 = dec + (0.278369 * Math.cos(s._toDegrees(ra)));
-  return [RA2000, DEC2000];
+  const newRA = ra / (180 / Math.PI);
+  const newDEC = dec / (180 / Math.PI);
+
+  const oldRaDec = StarCoord._transform(newRA, newDEC);
+  const convertedRA = oldRaDec[0] * (180.0 / Math.PI);
+  const convertedDEC = oldRaDec[1] * (180.0 / Math.PI);
+
+  return [convertedRA, convertedDEC];
 };
+
+StarCoord._transform = (ra, dec) => {
+  const r0 = [ Math.cos(ra) * Math.cos(dec), Math.sin(ra) * Math.cos(dec), Math.sin(dec) ];
+
+  const matrix = [
+   0.9999256782, -0.0111820611, -0.0048579477,
+   0.0111820610,  0.9999374784, -0.0000271765,
+   0.0048579479, -0.0000271474,  0.9999881997 ];
+
+  const s0 = [
+   r0[0]*matrix[0] + r0[1]*matrix[1] + r0[2]*matrix[2],
+   r0[0]*matrix[3] + r0[1]*matrix[4] + r0[2]*matrix[5],
+   r0[0]*matrix[6] + r0[1]*matrix[7] + r0[2]*matrix[8] ];
+
+  const r = Math.sqrt( s0[0]*s0[0] + s0[1]*s0[1] + s0[2]*s0[2] );
+
+  const result = [ 0.0, 0.0 ];
+  result[1] = Math.asin( s0[2]/r );
+  const cosaa = ( (s0[0]/r) / Math.cos(result[1] ) );
+  const sinaa = ( (s0[1]/r) / Math.cos(result[1] ) );
+  result[0] = Math.atan2(sinaa,cosaa);
+  if ( result[0] < 0.0 ) result[0] = result[0] + Math.PI + Math.PI;
+  return result;
+}
 
 StarCoord._toRadians = (degrees) => {
   return (degrees * Math.PI) / 180.0;
