@@ -1,19 +1,33 @@
 .organization-page
   @extends .project-page
+  background-color: BACKGROUND_COLOR
   font-family: 'Karla', sans-serif
 
 .organization-hero
-  min-height: 200px
-  padding-top: 20vh
+  background-size: cover
+  min-height: 400px
+  position: relative
 
   &__container
     align-items: center
+    background: radial-gradient(rgba(black, .2), rgba(black, .8))
     display: flex
+    flex-wrap: wrap
+    height: 100%
+    position: absolute
+    width: 100%
+
+    @media (max-width: 900px)
+      justify-content: center
+      flex-direction: column
 
   &__avatar
     height: 8em
     margin: 0 3em 0 8em
     width: 8em
+
+    @media (max-width: 900px)
+      margin: 1em
 
   &__title
     font-size: 2.5em
@@ -22,10 +36,6 @@
   &__description
     font-size: 1em
     font-weight: normal
-
-.organization-projects
-  background-color: BACKGROUND_COLOR
-  padding: 1em 0 2.5em
 
 .organization-project
   position: relative
