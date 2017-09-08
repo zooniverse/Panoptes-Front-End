@@ -68,8 +68,8 @@ const postProcessingRegl = (r) => {
         if (pixel < 0.0) {
           // the model is brighter than the image
           gl_FragColor = vec4(
-            1.0 - asinhStretch(-pixel), // nb pixel < 1 so this is making the value smaller
-            1.0 - asinhStretch(-pixel),
+            1.0  - asinhStretch(-pixel), // nb pixel < 1 so this is making the value smaller
+            1.0  - asinhStretch(-pixel),
             1.0,
             1.0
           );

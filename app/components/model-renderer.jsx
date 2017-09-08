@@ -110,7 +110,7 @@ class ModelRenderer extends React.Component {
           onLoad={this.setTexture}
           ref={(r) => { this.im = r; }}
           alt="Galaxy"
-          crossOrigin=""
+          crossOrigin="anonymous"
           hidden={true}
         />
       </div>
