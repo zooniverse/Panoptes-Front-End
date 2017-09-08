@@ -18,7 +18,8 @@ export default {
       about: 'About',
       classify: 'Classify',
       talk: 'Talk',
-      collections: 'Collect'
+      collections: 'Collect',
+      recents: 'Recents'
     },
     home: {
       researcher: 'Words from the researcher',

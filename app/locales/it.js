@@ -18,7 +18,8 @@ export default {
       about: 'A proposito',
       classify: 'Classifica',
       talk: 'Forum',
-      collections: 'Colleziona'
+      collections: 'Colleziona',
+      recents: 'Recents'
     },
     home: {
       researcher: 'Words from the researcher',
