@@ -6,6 +6,7 @@ export default {
     done: 'Done',
     doneAndTalk: 'Done & Talk',
     next: 'Next',
+    recents: 'Your recent classifications',
     talk: 'Talk',
     tutorialButton: 'Show the project tutorial',
     miniCourseButton: 'Restart the project mini-course'

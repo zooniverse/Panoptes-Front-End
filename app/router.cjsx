@@ -33,6 +33,7 @@ React = require 'react'
 `import SignInPage from './pages/sign-in';`
 `import NotFoundPage from './pages/not-found';`
 `import ResetPasswordPage from './pages/reset-password/reset-password';`
+`import Recents from './pages/profile/recents';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -162,6 +163,7 @@ module.exports =
         <Route path="collections" component={require('./pages/collections/collections-list')} />
         <Route path="message" component={require './pages/profile/private-message'} />
       </Route>
+      <Route path="recents" component={Recents} />
     </Route>
 
     <Route path="organizations/:owner/:name" component={(require './pages/organizations/organization-container').default}>
