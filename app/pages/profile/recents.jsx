@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import Thumbnail from '../../components/thumbnail';
+import getSubjectLocation from '../../lib/get-subject-location';
 
 class Recents extends React.Component {
   constructor() {
@@ -32,18 +33,22 @@ class Recents extends React.Component {
           </div>
         </div>
         <ul className="collections-card-list">
-          {this.state.recents.map(recent => (
-            <li key={recent.id} className="collection-card">
-              <Link to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}>
-                <Thumbnail
-                  alt={`Subject ${recent.links.subject}`}
-                  src={recent.locations[0]['image/jpeg']}
-                  height={250}
-                />
-              </Link>
-            </li>
-            )
-          )}
+          {this.state.recents.map((recent) => {
+            const { type, format, src } = getSubjectLocation(recent);
+            return (
+              <li key={recent.id} className="collection-card">
+                <Link to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}>
+                  <Thumbnail
+                    alt={`Subject ${recent.links.subject}`}
+                    src={src}
+                    type={type}
+                    format={format}
+                    height={250}
+                  />
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     );
