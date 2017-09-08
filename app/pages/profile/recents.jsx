@@ -9,6 +9,7 @@ class Recents extends React.Component {
     this.state = {
       recents: []
     };
+    document.documentElement.classList.add('on-secondary-page');
   }
 
   componentDidMount() {
@@ -17,17 +18,33 @@ class Recents extends React.Component {
     .then(recents => this.setState({ recents }));
   }
 
+  componentWillUnmount() {
+    document.documentElement.classList.add('on-secondary-page');
+  }
+
   render() {
     const { project } = this.props;
     return (
-      <div className="secondary-page">
-        <h2><Translate content="classifier.recents" /></h2>
-        {this.state.recents.map(recent => (
-          <Link to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}>
-            <Thumbnail alt={`Subject ${recent.links.subject}`} src={recent.locations[0]['image/jpeg']} width={150} />
-          </Link>
-          )
-        )}
+      <div className="secondary-page has-project-context">
+        <div className="hero collections-hero">
+          <div className="hero-container">
+            <Translate content="classifier.recents" component="h1" />
+          </div>
+        </div>
+        <ul className="collections-card-list">
+          {this.state.recents.map(recent => (
+            <li key={recent.id} className="collection-card">
+              <Link to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}>
+                <Thumbnail
+                  alt={`Subject ${recent.links.subject}`}
+                  src={recent.locations[0]['image/jpeg']}
+                  height={250}
+                />
+              </Link>
+            </li>
+            )
+          )}
+        </ul>
       </div>
     );
   }
