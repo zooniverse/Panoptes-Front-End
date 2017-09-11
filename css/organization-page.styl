@@ -1,0 +1,65 @@
+.organization-page
+  @extends .project-page
+  background-color: BACKGROUND_COLOR
+  font-family: 'Karla', sans-serif
+
+.organization-hero
+  background-size: cover
+  min-height: 400px
+  position: relative
+
+  &__container
+    align-items: center
+    background: radial-gradient(rgba(black, .2), rgba(black, .8))
+    display: flex
+    flex-wrap: wrap
+    height: 100%
+    position: absolute
+    width: 100%
+
+    @media (max-width: 900px)
+      justify-content: center
+      flex-direction: column
+
+  &__avatar
+    height: 8em
+    margin: 0 3em 0 8em
+    width: 8em
+
+    @media (max-width: 900px)
+      margin: 1em
+
+  &__title
+    font-size: 2.5em
+    font-weight: bold
+
+  &__description
+    font-size: 1em
+    font-weight: normal
+
+.organization-project
+  position: relative
+
+  .status-banner
+    @extends $reset-button
+    font-size: .8em
+    font-weight: bold
+    left: .5em
+    letter-spacing: .05em
+    padding: 0 1em
+    position: absolute
+    text-transform: uppercase
+    top: 1.5em
+    transform: rotate(-15deg)
+
+    &--alert
+      background: ALERT_COLOR
+
+    &--success
+      background: SUCCESS
+
+    &--warning
+      background: BURNT_ORANGE
+
+.organization-details
+  background-color: TEAL_MID

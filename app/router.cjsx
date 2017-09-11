@@ -136,12 +136,10 @@ module.exports =
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
       </Route>
-
       <Route path="collections" component={require('./pages/collections/index')}>
          <IndexRoute component={require('./pages/collections/collections-list')} />
          <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
       </Route>
-
       <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
         <IndexRoute component={require './collections/show-list'} />
         <Route path="settings" component={CollectionSettings} />
@@ -154,6 +152,11 @@ module.exports =
         <Route path="collections" component={require('./pages/collections/collections-list')} />
         <Route path="message" component={require './pages/profile/private-message'} />
       </Route>
+    </Route>
+
+    <Route path="organizations/:owner/:name" component={(require './pages/organizations/organization-container').default}>
+      <IndexRoute component={(require './pages/organizations/organization-page').default} />
+      <Route path="home" component={ONE_UP_REDIRECT} />
     </Route>
 
     <Route path="notifications" component={NotificationsPage} />
