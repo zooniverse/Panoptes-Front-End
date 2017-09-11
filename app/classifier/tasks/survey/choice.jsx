@@ -1,6 +1,7 @@
 import React from 'react';
 import TriggeredModalForm from 'modal-form/triggered';
 import { Markdown } from 'markdownz';
+import Translate from 'react-translate-component';
 import Utility from './utility';
 
 const PRELOAD_STYLE = {
@@ -156,7 +157,7 @@ class Choice extends React.Component {
 
           {choice.confusionsOrder.length > 0 &&
             <div className="survey-task-choice-confusions">
-              Often confused with
+              <Translate content="tasks.survey.confused" />
               {' '}
               {choice.confusionsOrder.map((otherChoiceID, i) => {
                 const otherChoice = this.props.task.choices[otherChoiceID];
@@ -180,7 +181,7 @@ class Choice extends React.Component {
                           autoFocus={true && otherChoice.images.length < 2}
                           className="major-button identfiy"
                         >
-                          Dismiss
+                          <Translate content="tasks.survey.dismiss" />
                         </button>
                         {' '}
                         <button
@@ -188,7 +189,7 @@ class Choice extends React.Component {
                           className="standard-button cancel"
                           onClick={this.props.onSwitch.bind(null, otherChoiceID)}
                         >
-                          I think it’s this
+                          <Translate content="tasks.survey.itsThis" />
                         </button>
                       </div>
                     </TriggeredModalForm>
@@ -252,7 +253,7 @@ class Choice extends React.Component {
             className="minor-button"
             onClick={this.props.onCancel}
           >
-            Cancel
+            <Translate content="tasks.survey.cancel" />
           </button>
           {' '}
           <button
@@ -261,7 +262,7 @@ class Choice extends React.Component {
             disabled={!this.checkFilledIn()}
             onClick={this.handleIdentification}
           >
-            <strong>Identify</strong>
+            <strong><Translate content="tasks.survey.identify" /></strong>
           </button>
         </div>
       </div>

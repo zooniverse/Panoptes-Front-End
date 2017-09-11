@@ -36,5 +36,14 @@ export default {
       },
       joinIn: 'Join in'
     }
+  },
+  tasks: {
+    survey: {
+      confused: 'Often confused with',
+      dismiss: 'Dismiss',
+      itsThis: 'I think it’s this',
+      cancel: 'Cancel',
+      identify: 'Identify'
+    }
   }
 };
