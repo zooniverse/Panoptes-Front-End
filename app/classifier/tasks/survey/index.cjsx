@@ -1,7 +1,7 @@
 React = require 'react'
 Editor = require './editor'
 Summary = require './summary'
-Chooser = require './chooser'
+Chooser = require('./chooser').default
 Choice = require('./choice').default
 AnnotationView = require './annotation-view'
 
