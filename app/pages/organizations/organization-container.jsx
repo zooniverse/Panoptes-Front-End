@@ -11,7 +11,7 @@ class OrganizationContainer extends React.Component {
       error: null,
       collaboratorView: false,
       fetching: false,
-      fetchingAvatars: [],
+      fetchingAvatars: false,
       organization: null,
       organizationAvatar: {},
       organizationBackground: {}
@@ -46,81 +46,73 @@ class OrganizationContainer extends React.Component {
       .catch(error => console.error('error loading collaborators', error)); // eslint-disable-line no-console
   }
 
-  fetchAllProjects(organization) {
-    if (organization.links.projects) {
-      const projectIds = organization.links.projects;
+  buildAllProjects(projects) {
+    if (this.state.organization.links.projects) {
+      const projectIds = this.state.organization.links.projects;
 
-      organization.get('projects', { include: 'avatar' })
-        .then(projects =>
-          projectIds.map((projectId) => {
-            const project = projects.find(p => p.id === projectId);
+      return projectIds.map((projectId) => {
+        const project = projects.find(p => p.id === projectId);
 
-            if (project) {
-              let fetchingAvatars = this.state.fetchingAvatars;
-              fetchingAvatars.push(project.id);
-              this.setState({ fetchingAvatars });
+        if (project) {
+          this.setState({ fetchingAvatars: true });
 
-              project.get('avatar')
-                .then((avatar) => {
-                  project.avatar_src = avatar.src.slice(7);
+          project.get('avatar')
+            .then((avatar) => {
+              project.avatar_src = avatar.src.slice(7);
+              this.setState({ fetchingAvatars: false });
+            })
+            .catch((error) => {
+              console.error(`error loading project #${project.id} avatar`, error); // eslint-disable-line no-console
+              this.setState({ fetchingAvatars: false });
+            });
 
-                  fetchingAvatars = this.state.fetchingAvatars;
-                  const index = fetchingAvatars.indexOf(project.id);
-                  fetchingAvatars.splice(index, 1);
-                  this.setState({ fetchingAvatars });
-                })
-                .catch(error => console.error(`error loading project #${project.id} avatar`, error)); // eslint-disable-line no-console
-
-              return project;
-            }
-            return {
-              description: 'Unknown project',
-              display_name: `Project #${projectId}`,
-              id: projectId,
-              links: { owner: { display_name: 'CHECK WITH OTHER ORG COLLABORATORS' }}
-            };
-          })
-        )
-        .then((allProjects) => {
-          const org = this.state.organization;
-          org.projects = allProjects;
-          this.setState({ organization: org, fetching: false });
-        })
-        .catch((error) => {
-          console.error('error loading projects', error); // eslint-disable-line no-console
-          this.setState({ fetching: false });
-        });
-    }
-  }
-
-  fetchLaunchedProjects(organization) {
-    organization.get('projects', { cards: true, launch_approved: true })
-      .then((projects) => {
-        const org = this.state.organization;
-        org.projects = projects;
-        this.setState({ organization: org, fetching: false });
-      })
-      .catch((error) => {
-        console.error('error loading projects', error); // eslint-disable-line no-console
-        this.setState({ fetching: false });
+          return project;
+        }
+        return {
+          description: 'Unknown project',
+          display_name: `Project #${projectId}`,
+          id: projectId,
+          links: { owner: { display_name: 'CHECK WITH OTHER ORG COLLABORATORS' }}
+        };
       });
+    }
+    return projects;
   }
 
   fetchProjects(organization) {
+    const query = {};
     if (isAdmin()) {
-      this.fetchAllProjects(organization);
+      query.include = 'avatar';
       this.setState({ collaboratorView: true });
     } else if (this.props.location.query.view === 'collaborator') {
       const collaboratorStatus = Promise.resolve(this.isCollaborator(organization))
         .then(status => status)
         .catch(error => console.error('error loading collaborators', error)); // eslint-disable-line no-console
       if (collaboratorStatus) {
-        this.fetchAllProjects(organization);
+        query.include = 'avatar';
         this.setState({ collaboratorView: true });
       }
     } else {
-      this.fetchLaunchedProjects(organization);
+      query.cards = true;
+      query.launch_approved = true;
     }
+
+    organization.get('projects', query)
+      .then((projects) => {
+        let allProjects;
+        if (this.state.collaboratorView) {
+          allProjects = this.buildAllProjects(projects);
+        } else {
+          allProjects = projects;
+        }
+        const org = this.state.organization;
+        org.projects = allProjects;
+        this.setState({ organization: org, fetching: false });
+      })
+      .catch((error) => {
+        console.error('error loading projects', error); // eslint-disable-line no-console
+        this.setState({ fetching: false });
+      });
   }
 
   fetchOrganization(name, owner) {
