@@ -85,17 +85,18 @@ class OrganizationPage extends React.Component {
           <div className="organization-page__container">
             <div className="organization-details__content">
               <h4 className="organization-details__heading">About {this.props.organization.display_name}</h4>
-              <div>
-                <Markdown className={aboutContentClass} project={this.props.organization}>
-                  About page test content
-                </Markdown>
-                <button
-                  className="standard-button organization-details__button"
-                  onClick={() => this.toggleReadMore()}
-                >
-                  {this.state.readMore ? 'Read Less' : 'Read More'}
-                </button>
-              </div>
+              {this.props.organization.aboutPage &&
+                <div>
+                  <Markdown className={aboutContentClass} project={this.props.organization}>
+                    {this.props.organization.aboutPage}
+                  </Markdown>
+                  <button
+                    className="standard-button organization-details__button"
+                    onClick={() => this.toggleReadMore()}
+                  >
+                    {this.state.readMore ? 'Read Less' : 'Read More'}
+                  </button>
+                </div>}
             </div>
             <div className="project-home-page__researcher-words">
               <h4 className="organization-details__heading">Links</h4>
@@ -121,6 +122,7 @@ OrganizationPage.defaultProps = {
 
 OrganizationPage.propTypes = {
   organization: React.PropTypes.shape({
+    aboutPage: React.PropTypes.string,
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,

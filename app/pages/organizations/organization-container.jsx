@@ -35,6 +35,19 @@ class OrganizationContainer extends React.Component {
     }
   }
 
+  fetchAboutPage(organization) {
+    organization.get('pages', { url_key: 'about' })
+      .then(([aboutPage]) => {
+        const org = this.state.organization;
+        org.aboutPage = aboutPage.content;
+        this.setState({ organization: org, fetching: false });
+      })
+      .catch((error) => {
+        console.error('error loading about page', error); // eslint-disable-line no-console
+        this.setState({ fetching: false });
+      });
+  }
+
   fetchOrganization(name, owner) {
     if (!name || !owner) {
       return;
@@ -64,6 +77,8 @@ class OrganizationContainer extends React.Component {
             })
             .catch(error => console.error('error loading background image', error)); // eslint-disable-line no-console
         }
+
+        this.fetchAboutPage(organization);
       })
       .catch((error) => {
         console.error('error loading organization', error); // eslint-disable-line no-console
