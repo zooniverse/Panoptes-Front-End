@@ -39,6 +39,10 @@ export default {
   },
   tasks: {
     survey: {
+      clear: 'Clear',
+      clearFilters: 'Clear filters',
+      makeSelection: 'Make a selection',
+      showing: 'Showing %(count)s of %(max)s',
       confused: 'Often confused with',
       dismiss: 'Dismiss',
       itsThis: 'I think it’s this',

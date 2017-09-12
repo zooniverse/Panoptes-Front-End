@@ -1,6 +1,8 @@
 import React from 'react';
 import sortIntoColumns from 'sort-into-columns';
+import Translate from 'react-translate-component';
 import TriggeredModalForm from 'modal-form/triggered';
+import counterpart from 'counterpart';
 
 // key codes
 const BACKSPACE = 8;
@@ -180,17 +182,17 @@ class Chooser extends React.Component {
                     autoFocus={!hasBeenAutoFocused}
                     onClick={this.handleFilter.bind(this, characteristicId, undefined)}
                   >
-                    Clear
+                    <Translate content="tasks.survey.clear" />
                   </button>
                 </div>
                 <div className="survey-task-chooser-characteristic-value-label">
                   {characteristic.valuesOrder.reduce((label, valueId) => {
                     const value = characteristic.values[valueId];
                     if (valueId === this.props.filters[characteristicId]) {
-                      label = value.label;
+                      return value.label;
                     }
                     return label;
-                  }, 'Make a selection')}
+                  }, counterpart('tasks.survey.makeSelection'))}
                 </div>
               </TriggeredModalForm>
             );
@@ -236,7 +238,10 @@ class Chooser extends React.Component {
           })}
         </div>
         <div style={{ textAlign: 'center' }}>
-          Showing {sortedFilteredChoices.length} of {this.props.task.choicesOrder.length}.
+          <Translate
+            content="tasks.survey.showing"
+            with={{ count: sortedFilteredChoices.length, max: this.props.task.choicesOrder.length }}
+          />
           &ensp;
           <button
             type="button"
@@ -244,7 +249,7 @@ class Chooser extends React.Component {
             disabled={Object.keys(this.props.filters).length === 0}
             onClick={this.handleClearFilters}
           >
-            <i className="fa fa-ban" /> Clear filters
+            <i className="fa fa-ban" /> <Translate content="tasks.survey.clearFilters" />
           </button>
         </div>
       </div>
