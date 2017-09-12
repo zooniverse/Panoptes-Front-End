@@ -55,4 +55,13 @@ class Recents extends React.Component {
   }
 }
 
+Recents.propTypes = {
+  project: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }).isRequired,
+  user: React.PropTypes.shape({
+    get: React.PropTypes.func
+  }).isRequired
+};
+
 export default Recents;
