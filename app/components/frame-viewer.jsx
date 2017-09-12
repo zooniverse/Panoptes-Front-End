@@ -60,7 +60,12 @@ export default class FrameViewer extends React.Component {
     const ProgressMarker = this.props.progressMarker;
     if (FrameWrapper) {
       return (
-        <PanZoom ref={(c) => { this.panZoom = c; }} enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
+        <PanZoom
+          ref={(c) => { this.panZoom = c; }}
+          enabled={zoomEnabled}
+          frameDimensions={this.state.frameDimensions}
+          subject={this.props.subject}
+        >
           <FrameWrapper
             frame={this.props.frame}
             naturalWidth={this.state.frameDimensions.width || 0}
