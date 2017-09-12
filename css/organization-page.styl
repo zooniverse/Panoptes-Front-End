@@ -44,6 +44,30 @@
     font-size: 1em
     font-weight: normal
 
+.organization-project
+  position: relative
+
+  .status-banner
+    @extends $reset-button
+    font-size: .8em
+    font-weight: bold
+    left: .5em
+    letter-spacing: .05em
+    padding: 0 1em
+    position: absolute
+    text-transform: uppercase
+    top: 1.5em
+    transform: rotate(-15deg)
+
+    &--alert
+      background: ALERT_COLOR
+
+    &--success
+      background: SUCCESS
+
+    &--warning
+      background: BURNT_ORANGE
+
 .organization-details
 
   &__heading
