@@ -37,18 +37,6 @@ class PanZoom extends React.Component {
     }
   }
 
-  componentWillUpdate(newProps) {
-    if (newProps.frameDimensions === this.props.frameDimensions) return;
-    this.setState({
-      viewBoxDimensions: {
-        width: newProps.frameDimensions.width,
-        height: newProps.frameDimensions.height,
-        x: 0,
-        y: 0
-      }
-    });
-  }
-
   componentWillUnmount() {
     this.root.removeEventListener('keydown', this.frameKeyPan);
     this.root.removeEventListener('wheel', this.wheelZoom);
