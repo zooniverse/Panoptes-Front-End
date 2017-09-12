@@ -5,6 +5,10 @@ useScroll = require 'react-router-scroll/lib/useScroll'
 routes = require './router'
 style = require '../css/main.styl'
 
+# Translations
+`import { load } from './lib/language-engine';`
+load();
+
 # Redux
 `import { Provider } from 'react-redux';`
 `import configureStore from './redux/store';`

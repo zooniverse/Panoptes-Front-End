@@ -7,17 +7,7 @@ Translate = require 'react-translate-component'
 Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
-`import SOCIAL_ICONS from '../../lib/social-icons'`
-
-counterpart.registerTranslations 'en',
-  project:
-    loading: 'Loading project'
-    disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
-    nav:
-      about: 'About'
-      classify: 'Classify'
-      talk: 'Talk'
-      collections: 'Collect'
+`import LanguageSelector from '../../lib/language-selector';`
 
 AVATAR_SIZE = 100
 
@@ -123,7 +113,6 @@ ProjectPage = React.createClass
 
     <div className="project-page">
       <div className="project-background" style={backgroundStyle}></div>
-
       <nav className="project-nav tabbed-content-tabs">
         {if @props.project.redirect
           <a href={@props.project.redirect} className="tabbed-content-tab" target="_blank">
@@ -142,7 +131,6 @@ ProjectPage = React.createClass
           </IndexLink>}
 
         <br className='responsive-break' />
-
         {unless @props.project.redirect
           <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.about'}>
             <Translate content="project.nav.about" />
@@ -165,10 +153,10 @@ ProjectPage = React.createClass
           <Translate content="project.nav.talk" />
         </Link>
 
-         <Link to="#{projectPath}/collections" activeClassName="active" className={collectClasses}>
+        <Link to="#{projectPath}/collections" activeClassName="active" className={collectClasses}>
           <Translate content="project.nav.collections" />
         </Link>
-
+        <LanguageSelector props={@props}/>
         {rearrangedLinks.map ({label, url}, i) =>
           unless !!label
             for pattern, icon of SOCIAL_ICONS
