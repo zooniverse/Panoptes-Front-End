@@ -13,17 +13,17 @@ const OrganizationProjectCard = ({ collaboratorView, project }) => {
   let statusMessage;
   if (project.launch_approved === true) {
     statusClass = 'status-banner--success';
-    statusLabel = 'Launch Approved';
+    statusLabel = 'launch approved';
     statusMessage = `This project is launch approved and visible to all volunteers.
     You are a collaborator on this project.`;
   } else if (project.launch_approved === false) {
     statusClass = 'status-banner--warning';
-    statusLabel = 'NOT PUBLICLY VISIBILE';
+    statusLabel = 'not launch approved';
     statusMessage = `This project is not launch approved, therefore not visible to the public.
     You are a collaborator on this project.`;
   } else {
     statusClass = 'status-banner--alert';
-    statusLabel = 'UNKNOWN';
+    statusLabel = 'unknown';
     statusMessage = `You are not a collaborator on this project, therefore the status is unknown.
     Please contact other organization collaborators to determine who is a collaborator on this project,
     so they can add you as a collaborator to the project as well.`;
