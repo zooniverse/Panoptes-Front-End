@@ -35,6 +35,15 @@ class PanZoom extends React.Component {
       this.root.addEventListener('keydown', this.frameKeyPan);
       this.root.addEventListener('wheel', this.wheelZoom);
     }
+    this.zoomReset();
+  }
+
+  componentDidUpdate(oldProps) {
+    const newSubject = oldProps.subject !== this.props.subject;
+    const imgLoaded = oldProps.frameDimensions.width === 0 && this.props.frameDimensions.width > 0;
+    if (newSubject || imgLoaded) {
+      this.zoomReset();
+    }
   }
 
   componentWillUnmount() {
