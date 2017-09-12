@@ -1,6 +1,7 @@
 import React from 'react';
 import { sugarApiClient } from 'panoptes-client/lib/sugar';
 import { Link } from 'react-router';
+import Translate from 'react-translate-component';
 
 export default class TalkStatus extends React.Component {
 
@@ -26,15 +27,21 @@ export default class TalkStatus extends React.Component {
   }
 
   render() {
-    const peopleAmount = this.state.activeUsers === 1 ? 'person is' : 'people are';
-
     return (
       <div className="project-home-page__talk-stat">
-        <span>
-          <strong>{this.state.activeUsers}</strong> {peopleAmount} talking about <strong>{this.props.project.display_name}
-          </strong> right now.
-        </span>
-        <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in standard-button">Join in</Link>
+        <Translate
+          content="project.home.talk"
+          with={{
+            count: this.state.activeUsers,
+            title: this.props.project.display_name
+          }}
+          unsafe={true}
+        />
+        <div>
+          <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in standard-button">
+            <Translate content="project.home.joinIn" />
+          </Link>
+        </div>
       </div>
     );
   }

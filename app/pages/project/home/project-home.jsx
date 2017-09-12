@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Markdown } from 'markdownz';
+import Translate from 'react-translate-component';
 import getSubjectLocation from '../../../lib/get-subject-location.coffee';
 import Thumbnail from '../../../components/thumbnail';
 import FinishedBanner from '../finished-banner';
@@ -55,12 +56,16 @@ const ProjectHomePage = (props) => {
         </div>
       )}
 
-      <ProjectMetadata project={props.project} activeWorkflows={props.activeWorkflows} showTalkStatus={!renderTalkSubjectsPreview} />
+      <ProjectMetadata
+        project={props.project}
+        activeWorkflows={props.activeWorkflows}
+        showTalkStatus={!renderTalkSubjectsPreview}
+      />
 
       <div className="project-home-page__container">
         {props.project.researcher_quote && (
           <div className="project-home-page__researcher-words">
-            <h4>Words from the researcher</h4>
+            <h4><Translate content="project.home.researcher" /></h4>
 
             <div>
               <img role="presentation" src={avatarSrc} />
@@ -69,9 +74,18 @@ const ProjectHomePage = (props) => {
           </div>)}
 
         <div className="project-home-page__about-text">
-          <h4>About {props.project.display_name}</h4>
+          <h4>
+            <Translate
+              content="project.home.about"
+              with={{
+                title: props.project.display_name
+              }}
+            />
+          </h4>
           {props.project.introduction &&
-            <Markdown project={props.project}>{props.project.introduction}</Markdown>}
+            <Markdown project={props.project}>
+              {props.project.introduction}
+            </Markdown>}
         </div>
       </div>
     </div>

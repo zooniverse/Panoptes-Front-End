@@ -1,6 +1,7 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import { VisibilitySplit } from 'seven-ten';
+import Translate from 'react-translate-component';
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
 import preloadSubject from '../lib/preload-subject';
@@ -296,7 +297,7 @@ class Classifier extends React.Component {
                   user={this.props.user}
                   workflow={this.props.workflow}
                 >
-                  Show the project tutorial
+                  <Translate content="classifier.tutorialButton" />
                 </RestartButton>
               </strong>
             </small>
@@ -315,7 +316,7 @@ class Classifier extends React.Component {
                     user={this.props.user}
                     workflow={this.props.workflow}
                   >
-                    Restart the project mini-course
+                    <Translate content="classifier.miniCourseButton" />
                   </RestartButton>
                 </VisibilitySplit>
               </strong>
