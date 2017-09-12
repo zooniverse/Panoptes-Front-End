@@ -213,7 +213,7 @@ class Choice extends React.Component {
                   {question.answersOrder.map((answerId, i) => {
                     const answer = question.answers[answerId];
                     const isChecked = question.multiple ?
-                      this.state.answers[questionId] && this.state.answers[questionId].indexOf(answerId) > -1 :
+                      !!this.state.answers[questionId] && this.state.answers[questionId].indexOf(answerId) > -1 :
                       this.state.answers[questionId] === answerId;
                     const isFocused = this.state.focusedAnswer === `${questionId}/${answerId}`;
                     return (
