@@ -43,3 +43,60 @@
   &__description
     font-size: 1em
     font-weight: normal
+
+.organization-details
+
+  &__heading
+    text-transform: uppercase
+    font-size: .8em
+    line-height: 2em
+
+  &__content
+    background-color: TEAL_MID
+    flex: 3 1 auto
+    padding: 3em 3em 4em
+    text-align: left
+    width: 600px
+
+    a
+      background: none
+      border: 0
+      color: BACKGROUND_COLOR
+      font-weight: bold
+      margin: 0
+      padding: 0
+
+      &:hover
+        background: none
+        border: 0
+        color: HIGHLIGHT_COLOR
+
+    hr
+      background-color: white
+
+    img
+      max-width: 100%
+
+    p
+      line-height: 1.75
+
+  &__about-content
+    max-height: 300px
+    overflow-y: hidden
+
+    &--expanded
+      max-height: none
+
+  &__button
+    background: TEAL_MID
+    border: white
+    margin-top: 2em
+
+    &:focus,
+    &:hover
+      background: TEAL_LIGHT
+
+  &__link
+    font-size: 1.2em
+    list-style: none
+    margin-bottom: 1.2em

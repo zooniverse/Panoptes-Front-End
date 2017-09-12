@@ -1,4 +1,6 @@
 import React from 'react';
+import classnames from 'classnames';
+import { Markdown } from 'markdownz';
 import Thumbnail from '../../components/thumbnail';
 
 const AVATAR_SIZE = 100;
@@ -6,9 +8,21 @@ const AVATAR_SIZE = 100;
 class OrganizationPage extends React.Component {
   constructor() {
     super();
+
+    this.state = {
+      readMore: false
+    };
+  }
+
+  toggleReadMore() {
+    this.setState({ readMore: !this.state.readMore });
   }
 
   render() {
+    const aboutContentClass = classnames(
+      'organization-details__about-content',
+      { 'organization-details__about-content--expanded': this.state.readMore });
+
     return (
       <div className="organization-page">
         <section
@@ -29,6 +43,70 @@ class OrganizationPage extends React.Component {
             </div>
           </div>
         </section>
+
+        <section className="organization-details">
+          <div className="organization-page__container">
+            <div className="project-home-page__researcher-words">
+              <h4 className="organization-details__heading">Words from the researcher</h4>
+              <div>
+                <img role="presentation" src="/assets/simple-avatar.png" />
+                <span>&quot;{'Sample quote from researcher with call to action!'}&quot;</span>
+              </div>
+            </div>
+            <div className="organization-details__content">
+              <h4 className="organization-details__heading">{this.props.organization.display_name} Introduction</h4>
+              {this.props.organization.introduction &&
+                <Markdown project={this.props.organization}>{this.props.organization.introduction}</Markdown>}
+            </div>
+          </div>
+
+          <div className="organization-page__container">
+            <div className="project-metadata">
+              <span className="organization-details__heading">
+                {this.props.organization.display_name}{' '}Statistics
+              </span>
+              <div className="project-metadata-stats">
+                <div className="project-metadata-stat">
+                  <div className="project-metadata-stat__value">{123}</div>
+                  <div className="project-metadata-stat__label">Volunteers</div>
+                </div>
+                <div className="project-metadata-stat">
+                  <div className="project-metadata-stat__value">{456}</div>
+                  <div className="project-metadata-stat__label">Classifications</div>
+                </div>
+                <div className="project-metadata-stat">
+                  <div className="project-metadata-stat__value">{789}</div>
+                  <div className="project-metadata-stat__label">Subjects</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="organization-page__container">
+            <div className="organization-details__content">
+              <h4 className="organization-details__heading">About {this.props.organization.display_name}</h4>
+              <div>
+                <Markdown className={aboutContentClass} project={this.props.organization}>
+                  About page test content
+                </Markdown>
+                <button
+                  className="standard-button organization-details__button"
+                  onClick={() => this.toggleReadMore()}
+                >
+                  {this.state.readMore ? 'Read Less' : 'Read More'}
+                </button>
+              </div>
+            </div>
+            <div className="project-home-page__researcher-words">
+              <h4 className="organization-details__heading">Links</h4>
+              <ul>
+                <li className="organization-details__link">Blog</li>
+                <li className="organization-details__link"><i className="fa fa-facebook fa-fw" />- @orgFacebook</li>
+                <li className="organization-details__link"><i className="fa fa-twitter fa-fw" />- @orgTwitter</li>
+              </ul>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
@@ -42,7 +120,6 @@ OrganizationPage.defaultProps = {
 };
 
 OrganizationPage.propTypes = {
-  collaboratorView: React.PropTypes.bool,
   organization: React.PropTypes.shape({
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,
