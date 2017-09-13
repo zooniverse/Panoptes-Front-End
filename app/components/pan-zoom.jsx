@@ -346,7 +346,7 @@ class PanZoom extends React.Component {
 }
 
 PanZoom.propTypes = {
-  children: React.PropTypes.node.isRequired,
+  children: React.PropTypes.node,
   enabled: React.PropTypes.bool,
   frameDimensions: React.PropTypes.shape({
     height: React.PropTypes.number,
@@ -354,14 +354,18 @@ PanZoom.propTypes = {
   }),
   subject: React.PropTypes.shape({
     id: React.PropTypes.string
-  }).isRequired
+  })
 };
 
 PanZoom.defaultProps = {
+  children: null,
   enabled: false,
   frameDimensions: {
     height: 0,
     width: 0
+  },
+  subject: {
+    id: ''
   }
 };
 
