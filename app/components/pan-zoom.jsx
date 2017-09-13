@@ -11,7 +11,7 @@ class PanZoom extends React.Component {
     this.togglePanOn = this.togglePanOn.bind(this);
     this.togglePanOff = this.togglePanOff.bind(this);
     this.wheelZoom = this.wheelZoom.bind(this);
-    this.zoomReset = this.zoomReset.bind(this);
+    this.onReset = this.onReset.bind(this);
     this.state = {
       panEnabled: false,
       viewBoxDimensions: {
@@ -125,6 +125,10 @@ class PanZoom extends React.Component {
     e.stopPropagation();
     this.setState({ zooming: false });
     this.continuousZoom(0);
+  }
+
+  onReset() {
+    this.zoomReset();
   }
 
   zoomReset(props) {
@@ -330,7 +334,7 @@ class PanZoom extends React.Component {
               <button
                 title="reset zoom levels"
                 className={`reset fa fa-refresh ${this.cannotResetZoomRotate() ? ' disabled' : ''}`}
-                onClick={this.zoomReset}
+                onClick={this.onReset}
               />
             </div>
           </div>
