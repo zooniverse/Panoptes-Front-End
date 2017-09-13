@@ -40,8 +40,9 @@ class PanZoom extends React.Component {
 
   componentWillUpdate(newProps) {
     const newSubject = newProps.subject !== this.props.subject;
-    const imgLoaded = newProps.frameDimensions.width > 0 && this.props.frameDimensions.width === 0;
-    if (newSubject || imgLoaded) {
+    const widthChanged = newProps.frameDimensions.width !== this.props.frameDimensions.width;
+    const heightChanged = newProps.frameDimensions.height !== this.props.frameDimensions.height;
+    if (newSubject || widthChanged || heightChanged) {
       this.zoomReset(newProps);
     }
   }
