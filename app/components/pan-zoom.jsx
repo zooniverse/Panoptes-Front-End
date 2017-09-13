@@ -128,7 +128,7 @@ class PanZoom extends React.Component {
   }
 
   zoomReset(props) {
-    props = props ? props : this.props;
+    props = props || this.props;
     this.setState({
       viewBoxDimensions: {
         width: props.frameDimensions.width,
@@ -342,12 +342,15 @@ class PanZoom extends React.Component {
 }
 
 PanZoom.propTypes = {
-  children: React.PropTypes.node,
+  children: React.PropTypes.node.isRequired,
   enabled: React.PropTypes.bool,
   frameDimensions: React.PropTypes.shape({
     height: React.PropTypes.number,
     width: React.PropTypes.number
-  })
+  }),
+  subject: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }).isRequired
 };
 
 PanZoom.defaultProps = {
