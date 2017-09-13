@@ -11,7 +11,7 @@ class PanZoom extends React.Component {
     this.togglePanOn = this.togglePanOn.bind(this);
     this.togglePanOff = this.togglePanOff.bind(this);
     this.wheelZoom = this.wheelZoom.bind(this);
-    this.zoomReset = this.zoomReset.bind(this);
+    this.onReset = this.onReset.bind(this);
     this.state = {
       panEnabled: false,
       viewBoxDimensions: {
@@ -38,11 +38,12 @@ class PanZoom extends React.Component {
     this.zoomReset();
   }
 
-  componentDidUpdate(oldProps) {
-    const newSubject = oldProps.subject !== this.props.subject;
-    const imgLoaded = oldProps.frameDimensions.width === 0 && this.props.frameDimensions.width > 0;
-    if (newSubject || imgLoaded) {
-      this.zoomReset();
+  componentWillUpdate(newProps) {
+    const newSubject = newProps.subject !== this.props.subject;
+    const widthChanged = newProps.frameDimensions.width !== this.props.frameDimensions.width;
+    const heightChanged = newProps.frameDimensions.height !== this.props.frameDimensions.height;
+    if (newSubject || widthChanged || heightChanged) {
+      this.zoomReset(newProps);
     }
   }
 
@@ -126,16 +127,21 @@ class PanZoom extends React.Component {
     this.continuousZoom(0);
   }
 
-  zoomReset() {
+  onReset() {
+    this.zoomReset();
+  }
+
+  zoomReset(props) {
+    props = props || this.props;
     this.setState({
       viewBoxDimensions: {
-        width: this.props.frameDimensions.width,
-        height: this.props.frameDimensions.height,
+        width: props.frameDimensions.width,
+        height: props.frameDimensions.height,
         x: 0,
         y: 0
       },
       rotation: 0,
-      transform: `rotate(${0} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
+      transform: `rotate(${0} ${props.frameDimensions.width / 2} ${props.frameDimensions.height / 2})`
     });
   }
 
@@ -328,7 +334,7 @@ class PanZoom extends React.Component {
               <button
                 title="reset zoom levels"
                 className={`reset fa fa-refresh ${this.cannotResetZoomRotate() ? ' disabled' : ''}`}
-                onClick={this.zoomReset}
+                onClick={this.onReset}
               />
             </div>
           </div>
@@ -345,14 +351,21 @@ PanZoom.propTypes = {
   frameDimensions: React.PropTypes.shape({
     height: React.PropTypes.number,
     width: React.PropTypes.number
+  }),
+  subject: React.PropTypes.shape({
+    id: React.PropTypes.string
   })
 };
 
 PanZoom.defaultProps = {
+  children: null,
   enabled: false,
   frameDimensions: {
     height: 0,
     width: 0
+  },
+  subject: {
+    id: ''
   }
 };
 

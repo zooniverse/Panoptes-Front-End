@@ -15,7 +15,7 @@
     "comma-dangle": ["warn", "never"],
     "import/extensions": "off",
     "import/no-unresolved": "off",
-    "indent": ["warn", 2],
+    "indent": ["warn", 2, {"SwitchCase": 1}],
     "react/jsx-no-bind": "off",
     "max-len": [1, 120, 2, {
       "ignoreUrls": true,
