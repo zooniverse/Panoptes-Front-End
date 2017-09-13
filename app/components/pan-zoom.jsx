@@ -38,11 +38,11 @@ class PanZoom extends React.Component {
     this.zoomReset();
   }
 
-  componentDidUpdate(oldProps) {
-    const newSubject = oldProps.subject !== this.props.subject;
-    const imgLoaded = oldProps.frameDimensions.width === 0 && this.props.frameDimensions.width > 0;
+  componentWillUpdate(newProps) {
+    const newSubject = newProps.subject !== this.props.subject;
+    const imgLoaded = newProps.frameDimensions.width > 0 && this.props.frameDimensions.width === 0;
     if (newSubject || imgLoaded) {
-      this.zoomReset();
+      this.zoomReset(newProps);
     }
   }
 
@@ -126,16 +126,17 @@ class PanZoom extends React.Component {
     this.continuousZoom(0);
   }
 
-  zoomReset() {
+  zoomReset(props) {
+    props = props ? props : this.props;
     this.setState({
       viewBoxDimensions: {
-        width: this.props.frameDimensions.width,
-        height: this.props.frameDimensions.height,
+        width: props.frameDimensions.width,
+        height: props.frameDimensions.height,
         x: 0,
         y: 0
       },
       rotation: 0,
-      transform: `rotate(${0} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
+      transform: `rotate(${0} ${props.frameDimensions.width / 2} ${props.frameDimensions.height / 2})`
     });
   }
 
