@@ -16,7 +16,7 @@ const FeaturedProject = (() =>
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
       <img
-        alt="Planetarium Response Network & Rescue Global: Caribbean Storms 2017"
+        alt="Planetary Response Network & Rescue Global: Caribbean Storms 2017"
         src="/assets/featured-projects/featured-project-20170913-irma.jpg"
       />
     </div>
