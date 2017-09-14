@@ -16,13 +16,13 @@ const FeaturedProject = (() =>
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
       <img
-        alt="Steelpan Vibrations"
-        src="/assets/featured-projects/featured-project-20170829-steelpan_vibrations.jpg"
+        alt="Planetary Response Network & Rescue Global: Caribbean Storms 2017"
+        src="/assets/featured-projects/featured-project-20170913-irma.jpg"
       />
     </div>
-    <h2 className="secondary-headline">Steelpan Vibrations</h2>
-    <p className="display-body">The distinct sound of the Caribbean steelpan is due largely to the interconnections between notes on the pan. We need help classifying vibration patterns so that we can learn more about how this drum works.</p>
-    <Link to="projects/achmorrison/steelpan-vibrations" className="primary-button primary-button--light">View Project!</Link>
+    <h2 className="secondary-headline">Caribbean Storms 2017</h2>
+    <p className="display-body">Check back daily to join the relief effort to help the victims of Hurricane Irma.</p>
+    <Link to="projects/vrooje/planetary-response-network-and-rescue-global-caribbean-storms-2017">View Project!</Link>
   </section>
 );
 
