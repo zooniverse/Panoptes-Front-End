@@ -26,30 +26,32 @@ class Recents extends React.Component {
   render() {
     const { project } = this.props;
     return (
-      <div className="secondary-page has-project-context">
+      <div className="collections-page secondary-page has-project-context">
         <div className="hero collections-hero">
           <div className="hero-container">
             <Translate content="classifier.recents" component="h1" />
           </div>
         </div>
-        <ul className="collections-card-list">
-          {this.state.recents.map((recent) => {
-            const { type, format, src } = getSubjectLocation(recent);
-            return (
-              <li key={recent.id} className="collection-card">
-                <Link to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}>
-                  <Thumbnail
-                    alt={`Subject ${recent.links.subject}`}
-                    src={src}
-                    type={type}
-                    format={format}
-                    height={250}
-                  />
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="content-container collection-page-with-project-context">
+          <ul className="collections-show">
+            {this.state.recents.map((recent) => {
+              const { type, format, src } = getSubjectLocation(recent);
+              return (
+                <li key={recent.id} className="collection-subject-viewer">
+                  <Link to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}>
+                    <Thumbnail
+                      alt={`Subject ${recent.links.subject}`}
+                      src={src}
+                      type={type}
+                      format={format}
+                      height={250}
+                    />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     );
   }
