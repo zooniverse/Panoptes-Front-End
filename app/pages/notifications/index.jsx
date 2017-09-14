@@ -12,7 +12,7 @@ counterpart.registerTranslations('en', {
     header: 'Notifications',
     title: 'My Notifications',
     signedOut: 'You\'re not signed in.',
-    noNotifications: 'You have no notifications. ',
+    noNotifications: 'You have no notifications.',
     participation: 'You can receive notifications by participating in Talk, following discussions, and receiving messages.'
   }
 });
@@ -110,7 +110,7 @@ export default class NotificationsPage extends React.Component {
     } else if (this.state.projNotifications.length === 0) {
       notificationView = (
         <div className="centering talk-module notifications-title">
-          <Translate content="notifications.noNotifications" />
+          <Translate content="notifications.noNotifications" />{' '}
           <Translate content="notifications.participation" />
         </div>
       );
