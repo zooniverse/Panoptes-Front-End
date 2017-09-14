@@ -13,7 +13,7 @@ const processSingleFeedback = (annotation, subject, task) => {
         question: task.question,
         success: result,
         message: (result) ? rule.successMessage : rule.failureMessage,
-        target: 'summary'
+        target: 'classifier'
       });
     }
 
