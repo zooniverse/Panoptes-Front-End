@@ -1,6 +1,7 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'], 'react/jsx-filename-extension': 0 */
 /* global describe, it, beforeEach */
 import { mount } from 'enzyme';
+import sinon from 'sinon';
 import React from 'react';
 import assert from 'assert';
 import SliderTask from './index';
@@ -21,9 +22,12 @@ const annotation = {
 
 describe('SliderTask', function () {
   let wrapper;
+  let onChangeSpy;
 
   beforeEach(function () {
-    wrapper = mount(<SliderTask task={task} annotation={annotation} />);
+    onChangeSpy = sinon.spy();
+
+    wrapper = mount(<SliderTask task={task} annotation={annotation} onChange={onChangeSpy} />);
   });
 
   it('should render without crashing', function () {
@@ -60,6 +64,27 @@ describe('SliderTask', function () {
     it('should have the correct step value', function () {
       assert.equal(slider.node.step, task.step);
     });
+
+    it('should call onChange with a value selected within range', function () {
+      slider.simulate('change', { target: { value: 0.3 }});
+      assert(onChangeSpy.calledWith({
+        value: 0.3
+      }));
+    });
+
+    it('should call onChange with the min value if below range', function () {
+      slider.simulate('change', { target: { value: -1 }});
+      assert(onChangeSpy.calledWith({
+        value: 0
+      }));
+    });
+
+    it('should call onChange with the max value if above range', function () {
+      slider.simulate('change', { target: { value: 2 }});
+      assert(onChangeSpy.calledWith({
+        value: 1
+      }));
+    });
   });
 
   describe('the number input', function () {
@@ -87,6 +112,27 @@ describe('SliderTask', function () {
 
     it('should have the correct step value', function () {
       assert.equal(number.node.step, task.step);
+    });
+
+    it('should call onChange with a value selected within range', function () {
+      number.simulate('change', { target: { value: 0.3 }});
+      assert(onChangeSpy.calledWith({
+        value: 0.3
+      }));
+    });
+
+    it('should call onChange with the min value if below range', function () {
+      number.simulate('change', { target: { value: -1 }});
+      assert(onChangeSpy.calledWith({
+        value: 0
+      }));
+    });
+
+    it('should call onChange with the max value if above range', function () {
+      number.simulate('change', { target: { value: 2 }});
+      assert(onChangeSpy.calledWith({
+        value: 1
+      }));
     });
   });
 
