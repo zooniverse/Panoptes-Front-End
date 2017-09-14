@@ -49,7 +49,7 @@ describe('processSingleFeedback', function () {
     assert.strictEqual(result[0].success, true);
     assert.strictEqual(result[0].message, SUCCESS_MESSAGE);
     assert.strictEqual(result[0].question, QUESTION);
-    assert.strictEqual(result[0].target, 'summary');
+    assert.strictEqual(result[0].target, 'classifier');
   });
 
   it('should return nothing if a rule and annotation match, but showing a success message is disabled', function () {
@@ -65,7 +65,7 @@ describe('processSingleFeedback', function () {
     assert.strictEqual(result[0].success, false);
     assert.strictEqual(result[0].message, FAILURE_MESSAGE);
     assert.strictEqual(result[0].question, QUESTION);
-    assert.strictEqual(result[0].target, 'summary');
+    assert.strictEqual(result[0].target, 'classifier');
   });
 
   it('should return nothing if a rule and annotation don\'t match, but showing a failure message is disabled', function () {

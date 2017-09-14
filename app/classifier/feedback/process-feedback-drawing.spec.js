@@ -114,7 +114,7 @@ describe('processDrawingFeedback', function () {
     assert.strictEqual(result[0].task, DUD_ANNOTATION.task);
     assert.strictEqual(result[0].success, true);
     assert.strictEqual(result[0].message, SUCCESS_MESSAGE);
-    assert.strictEqual(result[0].target, 'summary');
+    assert.strictEqual(result[0].target, 'classifier');
   });
 
   it('should return nothing if the subject is a dud and there are no annotations, but showing a success message is disabled', function () {
@@ -131,7 +131,7 @@ describe('processDrawingFeedback', function () {
     assert.strictEqual(result[0].task, NORMAL_ANNOTATION.task);
     assert.strictEqual(result[0].success, false);
     assert.strictEqual(result[0].message, FAILURE_MESSAGE);
-    assert.strictEqual(result[0].target, 'summary');
+    assert.strictEqual(result[0].target, 'classifier');
   });
 
   it('should return nothing if the subject is a dud and there are annotations, but showing a failure message is disabled', function () {
