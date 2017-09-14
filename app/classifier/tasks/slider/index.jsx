@@ -22,7 +22,7 @@ const SliderSummary = (props) => {
       </div>
     </div>
   );
-}
+};
 
 SliderSummary.propTypes = {
   task: React.PropTypes.shape(
@@ -37,94 +37,64 @@ SliderSummary.propTypes = {
   ).isRequired
 };
 
-class SliderTask extends React.Component {
-  constructor(props) {
-    super(props);
-    let value = this.props.task.defaultValue;
-    if (this.props.annotation.value !== null) {
-      value = this.props.annotation.value;
-    }
-    this.state = { value };
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  componentDidMount() {
-    const newAnnotation = Object.assign({}, this.props.annotation, { value: this.props.task.defaultValue });
-    this.props.onChange(newAnnotation);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.annotation.value === null) {
-      const newAnnotation = Object.assign({}, this.props.annotation, { value: this.props.task.defaultValue });
-      this.props.onChange(newAnnotation);
-    } else if (this.props.annotation.value !== this.state.value) {
-      this.setState({ value: nextProps.annotation.value });
-    }
-  }
-
-  handleChange(e) {
+const SliderTask = ({ task, annotation, onChange, autoFocus }) => {
+  function handleChange(e) {
     let value = e.target.value;
-    if (parseFloat(value, 10) > parseFloat(this.props.task.max, 10)) {
-      value = this.props.task.max;
-    } else if (parseFloat(value, 10) < parseFloat(this.props.task.min, 10)) {
-      value = this.props.task.min;
-    }
-    this.setState({ value });
-    const newAnnotation = Object.assign({}, this.props.annotation, { value });
-    this.props.onChange(newAnnotation);
+    value = Math.min(parseFloat(value, 10), parseFloat(task.max, 10));
+    value = Math.max(parseFloat(value, 10), parseFloat(task.min, 10));
+    const newAnnotation = Object.assign({}, annotation, { value });
+    onChange(newAnnotation);
   }
 
-  render() {
-    return (
-      <div>
-        <GenericTask
-          question={this.props.task.instruction}
-          help={this.props.task.help}
-          required={this.props.task.required}
-        >
-          <div className="slider-task-container full ">
-            <div className="slider-task-range">
-              <label className="answer">
-                <div>
-                  <input
-                    className="standard-input"
-                    type="range"
-                    autoFocus={this.props.autoFocus}
-                    onChange={this.handleChange}
-                    max={this.props.task.max}
-                    min={this.props.task.min}
-                    step={this.props.task.step}
-                    value={this.state.value}
-                  />
+  return (
+    <div>
+      <GenericTask
+        question={task.instruction}
+        help={task.help}
+        required={task.required}
+      >
+        <div className="slider-task-container full ">
+          <div className="slider-task-range">
+            <label className="answer">
+              <div>
+                <input
+                  className="standard-input"
+                  type="range"
+                  autoFocus={autoFocus}
+                  onChange={handleChange.bind(this)}
+                  max={task.max}
+                  min={task.min}
+                  step={task.step}
+                  value={annotation.value === null ? task.defaultValue : annotation.value}
+                />
+              </div>
+              <div className="slider-task-range__label-container">
+                <div className="slider-task-range__label-container__left">
+                  {task.min}
                 </div>
-                <div className="slider-task-range__label-container">
-                  <div className="slider-task-range__label-container__left">
-                    {this.props.task.min}
-                  </div>
-                  <div className="slider-task-range__label-container__right">
-                    {this.props.task.max}
-                  </div>
+                <div className="slider-task-range__label-container__right">
+                  {task.max}
                 </div>
-              </label>
-            </div>
-            <label className="answer slider-task-number">
-              <input
-                className="standard-input"
-                type="number"
-                autoFocus={this.props.autoFocus}
-                onChange={this.handleChange}
-                max={this.props.task.max}
-                min={this.props.task.min}
-                step={this.props.task.step}
-                value={this.state.value}
-              />
+              </div>
             </label>
           </div>
-        </GenericTask>
-      </div>
-    );
-  }
-}
+          <label className="answer slider-task-number">
+            <input
+              className="standard-input"
+              type="number"
+              onChange={handleChange.bind(this)}
+              max={task.max}
+              min={task.min}
+              step={task.step}
+              value={annotation.value === null ? task.defaultValue : annotation.value}
+            />
+          </label>
+        </div>
+      </GenericTask>
+    </div>
+  );
+};
+
 SliderTask.displayName = 'SliderTask';
 SliderTask.Editor = SliderTaskEditor;
 SliderTask.Summary = SliderSummary;
@@ -161,9 +131,12 @@ SliderTask.propTypes = {
       defaultValue: React.PropTypes.string
     }
   ),
-  annotation: React.PropTypes.shape(
-    { value: React.PropTypes.string }
-  ),
+  annotation: React.PropTypes.shape({
+    value: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number
+    ])
+  }),
   onChange: React.PropTypes.func,
   autoFocus: React.PropTypes.bool
 };
