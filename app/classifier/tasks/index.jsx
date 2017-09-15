@@ -8,7 +8,7 @@ import SliderTask from './slider/';
 import TextTask from './text/';
 import DropdownTask from './dropdown/';
 import ShortcutTask from './shortcut';
-import Highlighter from './highlighter/'
+import Highlighter from './highlighter/';
 
 const tasks = {
   combo: ComboTask,

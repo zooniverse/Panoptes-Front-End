@@ -5,6 +5,16 @@ import SliderTaskEditor from './editor';
 
 const NOOP = Function.prototype;
 
+const SLIDERTASKDEFAULT = {
+  defaultValue: '0',
+  help: '',
+  instruction: 'Enter an Instruction.',
+  max: '1',
+  min: '0',
+  step: '0.1',
+  type: 'slider'
+};
+
 const SliderSummary = (props) => {
   let answer = 'No answer';
   if (props.annotation.value !== null) {
@@ -32,7 +42,10 @@ SliderSummary.propTypes = {
   ).isRequired,
   annotation: React.PropTypes.shape(
     {
-      value: React.PropTypes.string
+      value: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number
+      ])
     }
   ).isRequired
 };
@@ -51,7 +64,7 @@ const SliderTask = ({ task, annotation, onChange, autoFocus }) => {
       <GenericTask
         question={task.instruction}
         help={task.help}
-        required={task.required}
+        required={false}
       >
         <div className="slider-task-container full ">
           <div className="slider-task-range">
@@ -61,7 +74,7 @@ const SliderTask = ({ task, annotation, onChange, autoFocus }) => {
                   className="standard-input"
                   type="range"
                   autoFocus={autoFocus}
-                  onChange={handleChange.bind(this)}
+                  onChange={handleChange}
                   max={task.max}
                   min={task.min}
                   step={task.step}
@@ -82,7 +95,7 @@ const SliderTask = ({ task, annotation, onChange, autoFocus }) => {
             <input
               className="standard-input"
               type="number"
-              onChange={handleChange.bind(this)}
+              onChange={handleChange}
               max={task.max}
               min={task.min}
               step={task.step}
@@ -99,60 +112,42 @@ SliderTask.displayName = 'SliderTask';
 SliderTask.Editor = SliderTaskEditor;
 SliderTask.Summary = SliderSummary;
 SliderTask.getDefaultTask = () => {
-  return {
-    type: 'slider',
-    instruction: 'Enter an Instruction.',
-    help: '',
-    min: '0',
-    max: '1',
-    step: '0.1',
-    defaultValue: '0'
-  };
+  return SLIDERTASKDEFAULT;
 };
 SliderTask.getTaskText = (task) => {
   return task.instruction;
 };
-SliderTask.getDefaultAnnotation = () => {
-  return { value: null };
+SliderTask.getDefaultAnnotation = (task) => {
+  return { value: task.defaultValue };
 };
 SliderTask.isAnnotationComplete = (task, annotation) => {
-  return (!task.required || annotation.value !== null);
+  return (annotation.value !== null);
 };
+
 SliderTask.propTypes = {
-  task: React.PropTypes.shape(
-    {
-      answers: React.PropTypes.array,
-      help: React.PropTypes.string,
-      instruction: React.PropTypes.string,
-      required: React.PropTypes.bool,
-      max: React.PropTypes.string,
-      min: React.PropTypes.string,
-      step: React.PropTypes.string,
-      defaultValue: React.PropTypes.string
-    }
-  ),
   annotation: React.PropTypes.shape({
     value: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.number
     ])
   }),
+  autoFocus: React.PropTypes.bool,
   onChange: React.PropTypes.func,
-  autoFocus: React.PropTypes.bool
+  task: React.PropTypes.shape({
+    answers: React.PropTypes.array,
+    defaultValue: React.PropTypes.string,
+    help: React.PropTypes.string,
+    instruction: React.PropTypes.string,
+    max: React.PropTypes.string,
+    min: React.PropTypes.string,
+    step: React.PropTypes.string
+  })
 };
 
 SliderTask.defaultProps = {
-  task: {
-    help: '',
-    instruction: '',
-    required: false,
-    max: '1',
-    min: '0',
-    step: '0.1',
-    defaultValue: '0'
-  },
   annotation: { value: null },
-  onChange: NOOP
+  onChange: NOOP,
+  task: SLIDERTASKDEFAULT
 };
 
 export default SliderTask;

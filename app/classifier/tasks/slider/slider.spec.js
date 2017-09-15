@@ -12,12 +12,7 @@ const task = {
   min: '0',
   max: '1',
   step: '0.1',
-  defaultValue: '0',
-  required: true
-};
-
-const annotation = {
-  value: '0.2'
+  defaultValue: '0.5'
 };
 
 describe('SliderTask', function () {
@@ -27,7 +22,7 @@ describe('SliderTask', function () {
   beforeEach(function () {
     onChangeSpy = sinon.spy();
 
-    wrapper = mount(<SliderTask task={task} annotation={annotation} onChange={onChangeSpy} />);
+    wrapper = mount(<SliderTask task={task} onChange={onChangeSpy} />);
   });
 
   it('should render without crashing', function () {
@@ -37,6 +32,10 @@ describe('SliderTask', function () {
     const instruction = wrapper.find('.question');
     assert.equal(instruction.length, 1);
   });
+
+  // it('should have the defaultValue as the initial annotation value', function () {
+  //   const annotation = wrapper.
+  // });
 
   describe('the slider input', function () {
     let slider;
@@ -49,8 +48,8 @@ describe('SliderTask', function () {
       assert.equal(slider.length, 1);
     });
 
-    it('should have the annotation value', function () {
-      assert.equal(slider.node.value, annotation.value);
+    it('should have the default value as the initial slider value', function () {
+      assert.equal(slider.node.value, task.defaultValue);
     });
 
     it('should have the correct max value', function () {
@@ -98,8 +97,8 @@ describe('SliderTask', function () {
       assert.equal(number.length, 1);
     });
 
-    it('should have the annotation value', function () {
-      assert.equal(number.node.value, annotation.value);
+    it('should have the default value as the initial number value', function () {
+      assert.equal(number.node.value, task.defaultValue);
     });
 
     it('should have the correct max value', function () {
@@ -136,41 +135,21 @@ describe('SliderTask', function () {
     });
   });
 
-  describe('when annotation is null', function () {
-    beforeEach(function () {
-      wrapper = mount(<SliderTask task={task} annotation={{ value: null }} />);
-    });
-
-    it('should have the default value for the slider input', function () {
-      const slider = wrapper.find('input[type="range"]');
-      assert.equal(slider.node.value, task.defaultValue);
-    });
-
-    it('should have the default value for the number input', function () {
-      const number = wrapper.find('input[type="number"]');
-      assert.equal(number.node.value, task.defaultValue);
-    });
-  });
-
   describe('static methods', function () {
-    it('should be complete', function () {
-      assert.equal(SliderTask.isAnnotationComplete(task, annotation), true);
+    it('should be complete with valid annotation', function () {
+      assert.equal(SliderTask.isAnnotationComplete(task, { value: '0.7' }), true);
     });
 
     it('should not be complete when the annotation is null', function () {
       assert.equal(SliderTask.isAnnotationComplete(task, { value: null }), false);
     });
 
-    it('should be complete when task is not required', function () {
-      assert.equal(SliderTask.isAnnotationComplete(Object.assign({}, task, { required: false }), { value: null }), true);
-    });
-
     it('should have the correct instruction text', function () {
       assert.equal(SliderTask.getTaskText(task), task.instruction);
     });
 
-    it('should have the correct default annoation', function () {
-      assert.equal(SliderTask.getDefaultAnnotation().value, null);
+    it('should have the correct default annotation', function () {
+      assert.equal(SliderTask.getDefaultAnnotation(task).value, task.defaultValue);
     });
   });
 });
@@ -179,7 +158,7 @@ describe('SliderSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<SliderTask.Summary task={task} annotation={annotation} />);
+    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '0.7' }} />);
   });
 
   it('should render without crashing', function () {
@@ -195,14 +174,8 @@ describe('SliderSummary', function () {
     assert.equal(answers.length, 1);
   });
 
-  it('should return "No answer" when annotation is null', function () {
-    summary = mount(<SliderTask.Summary task={task} annotation={{ value: null }} />);
-    const answers = summary.find('.answer');
-    assert.equal(answers.text(), 'No answer');
-  });
-
-  it('should have the correct answer label when the value if falsy (i.e. 0)', function () {
-    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '' }} />);
+  it('should have the correct answer label when the value is falsy (i.e. 0)', function () {
+    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '0' }} />);
     const answers = summary.find('.answer');
     assert.notEqual(answers.text(), 'No answer');
   });
