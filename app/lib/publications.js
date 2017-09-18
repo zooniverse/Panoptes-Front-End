@@ -344,6 +344,11 @@ const Publications = {
       slug: "zooniverse/solar-stormwatch",
       publications: [
         {
+          citation: "Tracking CMEs using data from the Solar Stormwatch project;observing deﬂections and other properties, Jones+ 2017.",
+          href: "http://onlinelibrary.wiley.com/doi/10.1002/2017SW001640/epdf",
+          date: "2017"
+        },
+        {
           citation: "Testing the current paradigm for space weather prediction with heliospheric imagers, Barnard+ 2017.",
           href: "http://onlinelibrary.wiley.com/doi/10.1002/2017SW001609/full",
           date: "2017"
