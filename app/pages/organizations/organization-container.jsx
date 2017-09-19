@@ -40,9 +40,9 @@ class OrganizationContainer extends React.Component {
       return;
     }
 
-    const slug = `${owner}/${name}`;
-
     this.setState({ fetching: true, error: null });
+
+    const slug = `${owner}/${name}`;
 
     apiClient.type('organizations').get({ slug, include: 'avatar,background,pages,projects' })
       .then(([organization]) => {
@@ -89,26 +89,31 @@ class OrganizationContainer extends React.Component {
           organizationBackground={this.state.organizationBackground}
           organizationPages={this.state.organizationPages}
           organizationProjects={this.state.organizationProjects}
-        />
-      );
+        />);
     } else if (this.state.fetching) {
       return (
         <div className="content-container">
           <p>
-            Loading organization
+            Loading organization{' '}
             <strong>{this.props.params.name}</strong>...
           </p>
         </div>);
-    } else {
+    } else if (this.state.error || this.state.organization === undefined) {
       return (
         <div className="content-container">
           <p>
-            There was an error retrieving organization <strong>{this.props.params.name}</strong>.
+            There was an error retrieving organization{' '}
+            <strong>{this.props.params.name}</strong>.
           </p>
           {this.state.error &&
             <p>
               <code>{this.state.error.toString()}</code>
             </p>}
+        </div>);
+    } else {
+      return (
+        <div className="content-container">
+          <p>Please wait...</p>
         </div>);
     }
   }
