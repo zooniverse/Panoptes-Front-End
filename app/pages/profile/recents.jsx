@@ -20,7 +20,7 @@ class Recents extends React.Component {
   }
 
   componentWillUnmount() {
-    document.documentElement.classList.add('on-secondary-page');
+    document.documentElement.classList.remove('on-secondary-page');
   }
 
   render() {
