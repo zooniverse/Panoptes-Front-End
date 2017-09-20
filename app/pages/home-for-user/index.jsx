@@ -281,8 +281,12 @@ export default class HomePageForUser extends React.Component {
                 onClose={this.deselectSection}
               />
             )}
-          </div>
 
+            <div className="home-page-for-user__down-arrow">
+              <i className="fa fa-arrow-down fa-2x" aria-hidden="true" />
+            </div>
+
+          </div>
         </div>
 
         <FeaturedProject />
