@@ -3,40 +3,46 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 import HomePageRoot from './home';
 
-const loggedInUser = {
-  loggedIn = true
+const user = {
+  display_name: 'test'
 }
 
-const notLoggedInUser = {
-  loggedIn = false
+const location = {
+  hash: '#page'
 }
 
 describe('HomePageRoot', function () {
-  describe('user homepage', function() {
-    let wrapper;
-    beforeEach(function () {
-      wrapper = shallow(<HomePageRoot />)
-    })
+  // describe('user homepage', function() {
+  //   let wrapper;
 
-    it('should render without crashing', function () {
-    });
+  //   beforeEach(function () {
+  //     wrapper = shallow(<HomePageRoot user={user} location={location} />)
+  //   });
 
-    it('should log user into the logged in home page', function() {
+  //   it('renders without crashing', function () {
+  //     shallow(<HomePageRoot shouldRender={true} />);
+  //   });
 
-    })
-  })
+  //   it('renders the homepage for the user', function() {
+  //     shallow(<HomePageLoggedIn shouldRender={true} />);
+  //   });
 
-  describe('user not logged in', function() {
-    let wrapper;
-    beforeEach(function () {
-      wrapper = shallow(<HomePageRoot />)
-    })
+  // })
 
-    it('should render without crashing', function () {
-    });
+  // describe('user not logged in homepage', function() {
+  //   let wrapper;
 
-    it('should log user into the logged in home page', function() {
+  //   beforeEach(function () {
+  //     wrapper = shallow(<HomePageRoot user={null} />)
+  //   })
 
-    })
-  })
-}
+  //   it('renders without crashing', function () {
+  //     shallow(<HomePageRoot shouldRender={true} />);
+  //   });
+
+  //   it('renders homepage for a user who is not logged in', function() {
+  //     shallow(<HomePageNotLoggedIn shouldRender={true} />);
+  //   })
+  // })
+
+});
