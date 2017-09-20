@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import classNames from 'classnames';
 import counterpart from 'counterpart';
 import moment from 'moment';
-import ProjectCard from '../../partials/project-card.cjsx';
+import ProjectCard from '../../partials/project-card';
 import { getPublication, getRecentProjects, getBlogPosts, getNewestProject } from '../../lib/get-social-data';
 
 counterpart.registerTranslations('en', {

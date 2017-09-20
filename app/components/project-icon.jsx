@@ -1,5 +1,5 @@
 import React from 'react';
-import ProjectCard from '../partials/project-card.cjsx';
+import ProjectCard from '../partials/project-card';
 
 const ProjectIcon = (props) => {
   return (
