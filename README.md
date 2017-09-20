@@ -21,7 +21,8 @@ While editing, do your best to follow style and architecture conventions already
 ### Testing
 
 If you write a new component, write a test. Each component should have its own `.spec.js` file. The test runner is [Mocha](https://mochajs.org/) and [Enzyme](http://airbnb.io/enzyme/) is available for testing React components.
-You can run the tests with `npm test`. 
+Mocha throws an error (`Illegal import declaration`) when compiling coffeescript files that contain ES6 import statements with template strings. Convert these imports to `require` statements.
+You can run the tests with `npm test`.
 
 ### It doesn't run
 
