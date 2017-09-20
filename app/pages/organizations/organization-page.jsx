@@ -15,6 +15,10 @@ class OrganizationPage extends React.Component {
     };
   }
 
+  handleViewToggle() {
+    this.props.toggleCollaboratorView();
+  }
+
   toggleReadMore() {
     this.setState({ readMore: !this.state.readMore });
   }
@@ -48,6 +52,11 @@ class OrganizationPage extends React.Component {
         </section>
 
         <section className="resources-container">
+          {this.props.collaborator &&
+            <label className="organization-page__toggle" htmlFor="collaborator view">
+              <input onChange={this.handleViewToggle.bind(this)} type="checkbox" value={this.props.collaboratorView} />
+              <span>Collaborator View</span>
+            </label>}
           <div className="project-card-list">
             {this.props.organizationProjects.map(project =>
               <ProjectCard key={project.id} project={project} />
@@ -125,14 +134,19 @@ class OrganizationPage extends React.Component {
 }
 
 OrganizationPage.defaultProps = {
+  collaborator: false,
+  collaboratorView: false,
   organization: {},
   organizationAvatar: {},
   organizationBackground: {},
   organizationPages: [],
-  organizationProjects: []
+  organizationProjects: [],
+  toggleCollaboratorView: () => {}
 };
 
 OrganizationPage.propTypes = {
+  collaborator: React.PropTypes.bool,
+  collaboratorView: React.PropTypes.bool,
   organization: React.PropTypes.shape({
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,
@@ -155,7 +169,8 @@ OrganizationPage.propTypes = {
       id: React.PropTypes.string,
       display_name: React.PropTypes.string
     })
-  )
+  ),
+  toggleCollaboratorView: React.PropTypes.func
 };
 
 export default OrganizationPage;

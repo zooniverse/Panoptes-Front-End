@@ -1,5 +1,6 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
+import isAdmin from '../../lib/is-admin';
 import OrganizationPage from './organization-page';
 
 class OrganizationContainer extends React.Component {
@@ -7,14 +8,19 @@ class OrganizationContainer extends React.Component {
     super();
 
     this.state = {
+      collaboratorView: false,
       error: null,
       fetching: false,
       organization: null,
       organizationAvatar: {},
       organizationBackground: {},
+      organizationRoles: [],
       organizationPages: [],
-      organizationProjects: []
+      organizationProjects: [],
+      view: false
     };
+
+    this.toggleCollaboratorView = this.toggleCollaboratorView.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +41,43 @@ class OrganizationContainer extends React.Component {
     }
   }
 
+  isCollaborator() {
+    if (!this.context.user) {
+      return false;
+    }
+
+    const collaboratorRoles = this.state.organizationRoles.filter(role =>
+      role.roles.includes('collaborator') || role.roles.includes('owner'));
+    return collaboratorRoles.some(role => role.links.owner.id === this.context.user.id);
+  }
+
+  checkView() {
+    if (this.state.organization && this.state.organization.listed) {
+      return true;
+    } else if (isAdmin()) {
+      return true;
+    } else {
+      return this.isCollaborator();
+    }
+  }
+
+  toggleCollaboratorView() {
+    const newView = !this.state.collaboratorView;
+    this.setState({ collaboratorView: newView });
+    this.fetchProjects(this.state.organization, newView);
+  }
+
+  fetchProjects(organization, collaboratorView = false) {
+    const query = { cards: true };
+    if (!collaboratorView) {
+      query.launch_approved = true;
+    }
+
+    organization.get('projects', query)
+      .then(organizationProjects => this.setState({ organizationProjects }))
+      .catch(error => console.error('error loading projects', error)); // eslint-disable-line no-console
+  }
+
   fetchOrganization(name, owner) {
     if (!name || !owner) {
       return;
@@ -44,7 +87,7 @@ class OrganizationContainer extends React.Component {
 
     const slug = `${owner}/${name}`;
 
-    apiClient.type('organizations').get({ slug, include: 'avatar,background,pages,projects' })
+    apiClient.type('organizations').get({ slug, include: 'avatar,background,organization_roles,pages' })
       .then(([organization]) => {
         this.setState({ organization });
 
@@ -53,19 +96,30 @@ class OrganizationContainer extends React.Component {
             .catch(error => console.error('error loading avatar', error)); // eslint-disable-line no-console
           const awaitBackground = apiClient.type('backgrounds').get(organization.links.background.id)
             .catch(error => console.error('error loading background', error)); // eslint-disable-line no-console
+          const awaitRoles = organization.get('organization_roles')
+            .catch(error => console.error('error loading roles', error)); // eslint-disable-line no-console
           const awaitPages = organization.get('pages')
             .catch(error => console.error('error loading pages', error)); // eslint-disable-line no-console
-          const awaitProjects = organization.get('projects', { cards: true, launch_approved: true })
-            .catch(error => console.error('error loading projects', error)); // eslint-disable-line no-console
 
           Promise.all([
             awaitAvatar,
             awaitBackground,
-            awaitPages,
-            awaitProjects
+            awaitRoles,
+            awaitPages
           ])
-            .then(([organizationAvatar, organizationBackground, organizationPages, organizationProjects]) => {
-              this.setState({ organizationAvatar, organizationBackground, organizationPages, organizationProjects });
+            .then(([
+              organizationAvatar,
+              organizationBackground,
+              organizationRoles,
+              organizationPages
+            ]) => {
+              this.setState({
+                organizationAvatar,
+                organizationBackground,
+                organizationRoles,
+                organizationPages
+              });
+              this.fetchProjects(organization);
             })
             .catch((error) => {
               console.error(error); // eslint-disable-line no-console
@@ -81,14 +135,17 @@ class OrganizationContainer extends React.Component {
   }
 
   render() {
-    if (this.state.organization) {
+    if (this.state.organization && this.checkView()) {
       return (
         <OrganizationPage
+          collaborator={isAdmin() || this.isCollaborator()}
+          collaboratorView={this.state.collaboratorView}
           organization={this.state.organization}
           organizationAvatar={this.state.organizationAvatar}
           organizationBackground={this.state.organizationBackground}
           organizationPages={this.state.organizationPages}
           organizationProjects={this.state.organizationProjects}
+          toggleCollaboratorView={this.toggleCollaboratorView}
         />);
     } else if (this.state.fetching) {
       return (
@@ -98,7 +155,7 @@ class OrganizationContainer extends React.Component {
             <strong>{this.props.params.name}</strong>...
           </p>
         </div>);
-    } else if (this.state.error || this.state.organization === undefined) {
+    } else if (this.state.error) {
       return (
         <div className="content-container">
           <p>
@@ -110,6 +167,12 @@ class OrganizationContainer extends React.Component {
               <code>{this.state.error.toString()}</code>
             </p>}
         </div>);
+    } else if (this.state.organization === undefined || !this.checkView) {
+      return (
+        <div className="content-container">
+          <p>Organization <strong>{this.props.params.name}</strong> not found.</p>
+          <p>If you&apos;re sure the URL is correct, you might not have permission to view this project.</p>
+        </div>);
     } else {
       return (
         <div className="content-container">
@@ -120,7 +183,10 @@ class OrganizationContainer extends React.Component {
 }
 
 OrganizationContainer.contextTypes = {
-  initialLoadComplete: React.PropTypes.bool
+  initialLoadComplete: React.PropTypes.bool,
+  user: React.PropTypes.shape({
+    id: React.PropTypes.string
+  })
 };
 
 OrganizationContainer.propTypes = {
