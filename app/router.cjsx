@@ -26,6 +26,7 @@ React = require 'react'
 `import SubjectSetsContainer from './pages/lab/subject-sets-container';`
 `import SubjectSetsList from './pages/lab/subject-sets';`
 `import UnsubscribeFromEmails from './pages/unsubscribe';`
+`import HomePageRoot from './pages/home';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -42,7 +43,7 @@ ONE_UP_REDIRECT = React.createClass
 
 module.exports =
   <Route path="/" component={require './partials/app'}>
-    <IndexRoute component={require './pages/home'} />
+    <IndexRoute component={HomePageRoot} />
     <Route path="home" component={ONE_UP_REDIRECT} />
     <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
