@@ -161,7 +161,6 @@ export default class SVGRenderer extends React.Component {
 
     return (
       <div>
-        {this.props.children}
         <div className="subject svg-subject">
           <svg
             ref={(element) => { if (element) this.svgSubjectArea = element; }}
@@ -197,6 +196,7 @@ export default class SVGRenderer extends React.Component {
           </svg>
         </div>
         {(showFeedback) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
+        {this.props.children}
       </div>
     );
   }
