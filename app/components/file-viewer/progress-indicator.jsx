@@ -1,13 +1,10 @@
 import React from 'react';
 
 class ProgressIndicator extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   progressAsPercentString() {
     // TODO: Implement correct range handling.
-    return `${ 100 * (this.props.progressPosition / this.props.progressRange[1])}%`
+    return `${100 * (this.props.progressPosition / this.props.progressRange[1])}%`;
   }
 
   renderProgressMarker() {
@@ -29,17 +26,18 @@ class ProgressIndicator extends React.Component {
 
     return (
       <svg>
-        <g id='progress_marker' {...progressMarkerStyle}>
-          <line {...points}/>
+        <g {...progressMarkerStyle}>
+          <line {...points} />
         </g>
       </svg>
-    )
+    );
   }
 
   render() {
-    return ( <div className='progress-marker'>
-      {this.renderProgressMarker()}
-      {this.props.children}
+    return (
+      <div className="progress-marker">
+        {this.renderProgressMarker()}
+        {this.props.children}
       </div>
     );
   }
@@ -49,17 +47,13 @@ class ProgressIndicator extends React.Component {
 ProgressIndicator.propTypes = {
   children: React.PropTypes.node,
   progressPosition: React.PropTypes.number,
-  progressRange: React.PropTypes.array,
-  naturalWidth: React.PropTypes.number,
-  naturalHeight: React.PropTypes.number,
-  frame: React.PropTypes.number
+  progressRange: React.PropTypes.arrayOf(React.PropTypes.number)
 };
 
 ProgressIndicator.defaultProps = {
-  progressPosition : 0,
-  progressRange : [0, 1],
-  naturalWidth : '100%',
-  naturalHeight : '100%'
+  children: null,
+  progressPosition: 0,
+  progressRange: [0, 1]
 };
 
 export default ProgressIndicator;
