@@ -14,16 +14,18 @@ const location = {
 describe('HomePageRoot', () => {
   let wrapper;
 
-  beforeEach(() => {
+  before(() => {
     wrapper = shallow(<HomePageRoot />);
   });
 
   it('renders <HomePageNotLoggedIn /> when there isn\'t a user', () => {
-    assert.equal(wrapper.find('HomePageNotLoggedIn').root.length, 1);
+    assert.equal(wrapper.find('HomePage').length, 1);
+    assert.equal(wrapper.find('HomePageForUser').length, 0);
   });
 
   it('renders <HomePageLoggedIn /> when there is a user', () => {
     wrapper.setProps({ user, location });
-    assert.equal(wrapper.find('HomePageLoggedIn').first().length, 1);
+    assert.equal(wrapper.find('HomePage').length, 0);
+    assert.equal(wrapper.find('HomePageForUser').length, 1);
   });
 });
