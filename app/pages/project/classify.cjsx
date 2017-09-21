@@ -145,8 +145,8 @@ module.exports = React.createClass
           workflow: workflow.id
           subjects: [subject.id]
 
-      if @props.location.query?.group?
-        classification.update({ 'metadata.user_group': @props.location.query.group })
+      # if @validateUserGroup()
+      #   classification.update({ 'metadata.user_group': @props.location.query.group })
 
       # If the user hasn't interacted with a classification resource before,
       # we won't know how to resolve its links, so attach these manually.
@@ -213,8 +213,7 @@ module.exports = React.createClass
       {if @props.projectIsComplete
         <FinishedBanner project={@props.project} />}
 
-      {if @props.location.query?.group?
-        <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
+
       {if @state.classification?
         <Classifier
           {...@props}
@@ -309,6 +308,15 @@ module.exports = React.createClass
             props.preferences.update
               'preferences.selected_workflow': props.preferences.settings.workflow_id
             props.preferences.save()
+
+  validateUserGroup: ->
+    valid = false
+    console.log(@props.location.query.group)
+    if @props.location.query?.group? and @props.user?
+      apiClient.type('user_groups').get(@props.location.query.group).then (group) =>
+        console.log(group, group and group.links.users.includes(@props.user.id))
+        valid = group and group.links.users.includes(@props.user.id)
+    valid
 
 
 # For debugging:
