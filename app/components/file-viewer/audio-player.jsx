@@ -83,43 +83,32 @@ class AudioPlayer extends React.Component {
     this.setState({ playing: false });
   }
 
-  renderProgressMarker() {
-    return (
-      <ProgressIndicator
-        progressPosition={this.state.progressPosition}
-        progressRange={[0, this.state.trackDuration]}
-        naturalWidth={100}
-        naturalHeight={100}
-      />
-    );
-  }
-
   render() {
     const imageSrc = this.imageSrc();
     let imageElement = null;
     if (imageSrc) {
       imageElement = (
-        <div>
-          {this.renderProgressMarker()}
-          <div className="audio-image-component">
-            <ImageViewer
-              src={imageSrc}
-              type={this.imageTypeString()}
-              format={this.imageFormatString()}
-              frame={this.props.frame}
-              onLoad={this.props.onLoad}
-              onFocus={this.props.onFocus}
-              onBlur={this.props.onBlur}
-            />
-          </div>
-        </div>
+        <ProgressIndicator
+          progressPosition={this.state.progressPosition}
+          progressRange={[0, this.state.trackDuration]}
+          naturalWidth={100}
+          naturalHeight={100}
+        >
+          <ImageViewer
+            src={imageSrc}
+            type={this.imageTypeString()}
+            format={this.imageFormatString()}
+            frame={this.props.frame}
+            onLoad={this.props.onLoad}
+            onFocus={this.props.onFocus}
+            onBlur={this.props.onBlur}
+          />
+        </ProgressIndicator>
       );
     }
     return (
       <div>
-        <div>
-          {imageElement}
-        </div>
+        {imageElement}
         <div className="audio-player-component">
           <audio
             className="subject"
