@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import HomePageRoot from './home';
 
 const user = {
-  display_name: 'test'
+  display_name: 'Test User'
 }
 
 const location = {
@@ -12,37 +12,49 @@ const location = {
 }
 
 describe('HomePageRoot', function () {
-  // describe('user homepage', function() {
-  //   let wrapper;
+  describe('renders a homepage', function() {
+    let wrapper;
 
-  //   beforeEach(function () {
-  //     wrapper = shallow(<HomePageRoot user={user} location={location} />)
-  //   });
+    beforeEach(function () {
+      wrapper = shallow(<HomePageRoot user={user} location={location} />)
+    });
 
-  //   it('renders without crashing', function () {
-  //     shallow(<HomePageRoot shouldRender={true} />);
-  //   });
+    it('without crashing', function () {
+      assert.equal(wrapper, wrapper)
+    });
 
-  //   it('renders the homepage for the user', function() {
-  //     shallow(<HomePageLoggedIn shouldRender={true} />);
-  //   });
+    it('with a user prop', function() {
+      const userDisplayName = wrapper.nodes[0].props.user.display_name
+      assert.equal(userDisplayName, 'Test User')
+    });
 
-  // })
+    it('with a location prop', function() {
+      const location = wrapper.nodes[0].props.location.hash
+      assert.equal(location, '#page')
+    })
+  })
 
-  // describe('user not logged in homepage', function() {
-  //   let wrapper;
+  describe('renders a homepage', function() {
+    let wrapper;
 
-  //   beforeEach(function () {
-  //     wrapper = shallow(<HomePageRoot user={null} />)
-  //   })
+    beforeEach(function () {
+      wrapper = shallow(<HomePageRoot />)
+    })
 
-  //   it('renders without crashing', function () {
-  //     shallow(<HomePageRoot shouldRender={true} />);
-  //   });
+    it('without crashing', function () {
+      assert.equal(wrapper, wrapper)
+    });
 
-  //   it('renders homepage for a user who is not logged in', function() {
-  //     shallow(<HomePageNotLoggedIn shouldRender={true} />);
-  //   })
-  // })
+    it('for a not authenticated user', function() {
+      const child = wrapper.children().root.length
+      assert.equal(child, 1)
+    })
+
+    it('without a user prop', function() {
+      const user = wrapper.nodes[0].props.user
+      assert.equal(user, undefined)
+    });
+
+  })
 
 });

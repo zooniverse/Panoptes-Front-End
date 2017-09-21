@@ -1,5 +1,5 @@
 React = require('react')
-FlexibleLink = require '../components/flexible-link'
+FlexibleLink = require('../components/flexible-link').default
 Translate = require 'react-translate-component'
 
 ProjectCard = React.createClass
