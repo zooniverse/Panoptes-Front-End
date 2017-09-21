@@ -282,9 +282,8 @@ export default class HomePageForUser extends React.Component {
               />
             )}
 
-            <div className="home-page-for-user__down-arrow">
-              <i className="fa fa-arrow-down fa-2x" aria-hidden="true" />
-            </div>
+            {!OpenSectionComponent &&
+              <i className="home-page-for-user__down-arrow fa fa-arrow-down" aria-hidden="true" />}
 
           </div>
         </div>
