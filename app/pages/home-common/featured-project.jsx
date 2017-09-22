@@ -18,7 +18,7 @@ const FeaturedProject = (() => (
     <div className="home-featured-images">
       <Thumbnail
         alt="Planetary Response Network & Rescue Global: Caribbean Storms 2017"
-        src="//zooniverse.org/assets/featured-projects/featured-project-20170913-irma.jpg"
+        src="//www.zooniverse.org/assets/featured-projects/featured-project-20170913-irma.jpg"
         width={800}
       />
     </div>
