@@ -16,16 +16,10 @@ const createFeedbackItem = (success, annotation, rule) => {
     success,
     message: (success) ? rule.successMessage : rule.failureMessage
   };
-
-  if (rule.dud) {
-    feedbackItem.target = 'summary';
-  } else {
-    feedbackItem.x = rule.x;
-    feedbackItem.y = rule.y;
-    feedbackItem.tol = rule.tol;
-    feedbackItem.target = 'classifier';
-  }
-
+  feedbackItem.x = rule.x;
+  feedbackItem.y = rule.y;
+  feedbackItem.tol = rule.tol;
+  feedbackItem.target = 'classifier';
   return feedbackItem;
 };
 
