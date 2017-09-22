@@ -318,7 +318,6 @@ module.exports = React.createClass
   validateUserGroup: (props) ->
     if props.location.query?.group? and props.user?
       apiClient.type('user_groups').get(props.location.query.group).then (group) =>
-        console.log(group, group and group.links.users.includes(props.user.id))
         @setState({ validUserGroup: group and group.links.users.includes(props.user.id) })
 
 # For debugging:
