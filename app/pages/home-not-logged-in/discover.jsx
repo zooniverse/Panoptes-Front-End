@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
+import Thumbnail from '../../components/thumbnail';
 
 counterpart.registerTranslations('en', {
   discoverHomePage: {
@@ -53,7 +54,7 @@ const HomePageDiscover = (({ showDialog }) =>
     </div>
 
     <div className="home-discover__image">
-      <img role="presentation" src="/assets/home-computer.png" />
+      <Thumbnail role="presentation" src="//www.zooniverse.org/assets/home-computer.png" width={450} />
     </div>
 
   </section>
