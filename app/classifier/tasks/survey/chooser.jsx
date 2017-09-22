@@ -91,24 +91,24 @@ class Chooser extends React.Component {
     const index = this.choiceButtons.indexOf(document.activeElement);
     let newIndex;
     switch (e.which) {
-    case BACKSPACE:
-      this.props.onRemove(choiceId);
-      e.preventDefault();
-      break;
-    case UP:
-      newIndex = index - 1;
-      if (newIndex === -1) {
-        newIndex = this.choiceButtons.length - 1;
-      }
-      this.choiceButtons[newIndex].focus();
-      e.preventDefault();
-      break;
-    case DOWN:
-      newIndex = (index + 1) % this.choiceButtons.length;
-      this.choiceButtons[newIndex].focus();
-      e.preventDefault();
-      break;
-    default:
+      case BACKSPACE:
+        this.props.onRemove(choiceId);
+        e.preventDefault();
+        break;
+      case UP:
+        newIndex = index - 1;
+        if (newIndex === -1) {
+          newIndex = this.choiceButtons.length - 1;
+        }
+        this.choiceButtons[newIndex].focus();
+        e.preventDefault();
+        break;
+      case DOWN:
+        newIndex = (index + 1) % this.choiceButtons.length;
+        this.choiceButtons[newIndex].focus();
+        e.preventDefault();
+        break;
+      default:
     }
   }
 
