@@ -57,10 +57,10 @@ export class Graph extends React.Component {
     };
 
     this.formatLabel = {
-      hour: (date) => { return moment(date).format('MMM-DD hh:mm A'); },
-      day: (date) => { return moment(date).format('MMM-DD-YYYY'); },
-      week: (date) => { return moment(date).format('MMM-DD-YYYY'); },
-      month: (date) => { return moment(date).format('MMM-DD-YYYY'); },
+      hour: (date) => { return moment.utc(date).format('MMM-DD hh:mm A'); },
+      day: (date) => { return moment.utc(date).format('MMM-DD-YYYY'); },
+      week: (date) => { return moment.utc(date).format('MMM-DD-YYYY'); },
+      month: (date) => { return moment.utc(date).format('MMM-DD-YYYY'); },
     };
 
     const data = this.processData(props.data, props.by);
@@ -186,11 +186,11 @@ export class Graph extends React.Component {
     for (const { label, value } of inputData) {
       if (idx > 0) {
         // fill in bins wint zero as a value
-        const dateDiff = moment(label).diff(moment(previousLabel));
+        const dateDiff = moment.utc(label).diff(moment.utc(previousLabel));
         const difference = Math.floor(moment.duration(dateDiff)[this.formatDiff[binBy]]());
         if (difference > 1) {
           for (let jdx = 1; jdx < difference; jdx += 1) {
-            const shouldBe = moment(previousLabel).add(jdx, `${binBy}s`).format();
+            const shouldBe = moment.utc(previousLabel).add(jdx, `${binBy}s`).format();
             data.labels.push(this.formatLabel[binBy](shouldBe));
             data.series[0].push(0);
           }
