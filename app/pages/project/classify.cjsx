@@ -70,6 +70,7 @@ module.exports = React.createClass
     demoMode: sessionDemoMode
     promptWorkflowAssignmentDialog: false
     rejected: null
+    validUserGroup: false
 
   componentDidMount: () ->
     Split.classifierVisited();
