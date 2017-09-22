@@ -76,6 +76,8 @@ module.exports = React.createClass
     if @props.workflow and not @props.loadingSelectedWorkflow
       @loadAppropriateClassification(@props)
 
+    @validateUserGroup(@props)
+
   componentWillUpdate: (nextProps, nextState) ->
     @context.geordi.remember workflowID: nextProps?.workflow?.id
 
@@ -93,6 +95,9 @@ module.exports = React.createClass
         @loadAppropriateClassification(nextProps)
     if nextProps.loadingSelectedWorkflow is false and nextProps.user isnt null
       @shouldWorkflowAssignmentPrompt(nextProps)
+
+    if nextProps.location.query?.group isnt @props.location.query?.group
+      @validateUserGroup(nextProps)
 
   shouldWorkflowAssignmentPrompt: (nextProps) ->
     # Only for Gravity Spy which is assigning workflows to logged in users
@@ -145,8 +150,8 @@ module.exports = React.createClass
           workflow: workflow.id
           subjects: [subject.id]
 
-      # if @validateUserGroup()
-      #   classification.update({ 'metadata.user_group': @props.location.query.group })
+      if @state.validUserGroup
+        classification.update({ 'metadata.user_group': @props.location.query.group })
 
       # If the user hasn't interacted with a classification resource before,
       # we won't know how to resolve its links, so attach these manually.
@@ -213,7 +218,8 @@ module.exports = React.createClass
       {if @props.projectIsComplete
         <FinishedBanner project={@props.project} />}
 
-
+      {if @state.validUserGroup
+        <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
       {if @state.classification?
         <Classifier
           {...@props}
@@ -309,15 +315,11 @@ module.exports = React.createClass
               'preferences.selected_workflow': props.preferences.settings.workflow_id
             props.preferences.save()
 
-  validateUserGroup: ->
-    valid = false
-    console.log(@props.location.query.group)
-    if @props.location.query?.group? and @props.user?
-      apiClient.type('user_groups').get(@props.location.query.group).then (group) =>
-        console.log(group, group and group.links.users.includes(@props.user.id))
-        valid = group and group.links.users.includes(@props.user.id)
-    valid
-
+  validateUserGroup: (props) ->
+    if props.location.query?.group? and props.user?
+      apiClient.type('user_groups').get(props.location.query.group).then (group) =>
+        console.log(group, group and group.links.users.includes(props.user.id))
+        @setState({ validUserGroup: group and group.links.users.includes(props.user.id) })
 
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
