@@ -6,6 +6,48 @@ import ProjectCard from '../../partials/project-card';
 
 const AVATAR_SIZE = 100;
 
+const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjects, projects }) => {
+  if (fetchingProjects) {
+    return (
+      <div className="organization-page__projects-status">
+        <p>Loading organization projects...</p>
+      </div>);
+  } else if (errorFetchingProjects) {
+    return (
+      <div className="organization-page__projects-status">
+        <p>There was an error loading organization projects.</p>
+        <p>
+          <code>{errorFetchingProjects.toString()}</code>
+        </p>
+      </div>);
+  } else if (!fetchingProjects && !projects.length) {
+    return (
+      <div className="organization-page__projects-status">
+        <p>There are no projects associated with this organization...</p>
+      </div>);
+  } else {
+    return (
+      <div className="project-card-list">
+        {projects.map(project =>
+          <ProjectCard key={project.id} project={project} />
+        )}
+      </div>);
+  }
+};
+
+OrganizationProjectCards.propTypes = {
+  errorFetchingProjects: React.PropTypes.shape({
+    something: React.PropTypes.string
+  }),
+  fetchingProjects: React.PropTypes.bool,
+  projects: React.PropTypes.arrayOf(
+    React.PropTypes.shape({
+      id: React.PropTypes.string,
+      display_name: React.PropTypes.string
+    })
+  )
+};
+
 class OrganizationPage extends React.Component {
   constructor() {
     super();
@@ -57,11 +99,11 @@ class OrganizationPage extends React.Component {
               <input onChange={this.handleViewToggle.bind(this)} type="checkbox" value={this.props.collaboratorView} />
               <span>Collaborator View</span>
             </label>}
-          <div className="project-card-list">
-            {this.props.organizationProjects.map(project =>
-              <ProjectCard key={project.id} project={project} />
-            )}
-          </div>
+          <OrganizationProjectCards
+            errorFetchingProjects={this.props.errorFetchingProjects}
+            fetchingProjects={this.props.fetchingProjects}
+            projects={this.props.organizationProjects}
+          />
         </section>
 
         <section className="organization-details">
@@ -136,6 +178,8 @@ class OrganizationPage extends React.Component {
 OrganizationPage.defaultProps = {
   collaborator: false,
   collaboratorView: false,
+  errorFetchingProjects: {},
+  fetchingProjects: false,
   organization: {},
   organizationAvatar: {},
   organizationBackground: {},
@@ -147,6 +191,10 @@ OrganizationPage.defaultProps = {
 OrganizationPage.propTypes = {
   collaborator: React.PropTypes.bool,
   collaboratorView: React.PropTypes.bool,
+  errorFetchingProjects: React.PropTypes.shape({
+    something: React.PropTypes.string
+  }),
+  fetchingProjects: React.PropTypes.bool,
   organization: React.PropTypes.shape({
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,

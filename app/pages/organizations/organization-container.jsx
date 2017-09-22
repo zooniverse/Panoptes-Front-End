@@ -10,7 +10,9 @@ class OrganizationContainer extends React.Component {
     this.state = {
       collaboratorView: false,
       error: null,
-      fetching: false,
+      errorFetchingProjects: null,
+      fetchingOrganization: false,
+      fetchingProjects: false,
       organization: null,
       organizationAvatar: {},
       organizationBackground: {},
@@ -35,7 +37,7 @@ class OrganizationContainer extends React.Component {
     if (nextProps.params.name !== this.props.params.name ||
       nextProps.params.owner !== this.props.params.owner ||
       noOrgAfterLoad) {
-      if (!this.state.fetching) {
+      if (!this.state.fetchingOrganization) {
         this.fetchOrganization(nextProps.params.name, nextProps.params.owner);
       }
     }
@@ -68,14 +70,18 @@ class OrganizationContainer extends React.Component {
   }
 
   fetchProjects(organization, collaboratorView = false) {
+    this.setState({ errorFetchingProjects: null, fetchingProjects: true });
+
     const query = { cards: true };
     if (!collaboratorView) {
       query.launch_approved = true;
     }
-
     organization.get('projects', query)
-      .then(organizationProjects => this.setState({ organizationProjects }))
-      .catch(error => console.error('error loading projects', error)); // eslint-disable-line no-console
+      .then(organizationProjects => this.setState({ fetchingProjects: false, organizationProjects }))
+      .catch((error) => {
+        console.error('error loading projects', error); // eslint-disable-line no-console
+        this.setState({ errorFetchingProjects: error, fetchingProjects: false });
+      });
   }
 
   fetchOrganization(name, owner) {
@@ -83,7 +89,7 @@ class OrganizationContainer extends React.Component {
       return;
     }
 
-    this.setState({ fetching: true, error: null });
+    this.setState({ fetchingOrganization: true, error: null });
 
     const slug = `${owner}/${name}`;
 
@@ -96,9 +102,9 @@ class OrganizationContainer extends React.Component {
             .catch(error => console.error('error loading avatar', error)); // eslint-disable-line no-console
           const awaitBackground = apiClient.type('backgrounds').get(organization.links.background.id)
             .catch(error => console.error('error loading background', error)); // eslint-disable-line no-console
-          const awaitRoles = organization.get('organization_roles')
+          const awaitRoles = apiClient.type('organization_roles').get(organization.links.organization_roles)
             .catch(error => console.error('error loading roles', error)); // eslint-disable-line no-console
-          const awaitPages = organization.get('pages')
+          const awaitPages = apiClient.type('organization_pages').get(organization.links.pages)
             .catch(error => console.error('error loading pages', error)); // eslint-disable-line no-console
 
           Promise.all([
@@ -127,10 +133,10 @@ class OrganizationContainer extends React.Component {
             });
         }
       })
-      .then(() => this.setState({ fetching: false }))
+      .then(() => this.setState({ fetchingOrganization: false }))
       .catch((error) => {
         console.error('error loading organization', error); // eslint-disable-line no-console
-        this.setState({ fetching: false, error });
+        this.setState({ fetchingOrganization: false, error });
       });
   }
 
@@ -140,6 +146,8 @@ class OrganizationContainer extends React.Component {
         <OrganizationPage
           collaborator={isAdmin() || this.isCollaborator()}
           collaboratorView={this.state.collaboratorView}
+          errorFetchingProjects={this.state.errorFetchingProjects}
+          fetchingProjects={this.state.fetchingProjects}
           organization={this.state.organization}
           organizationAvatar={this.state.organizationAvatar}
           organizationBackground={this.state.organizationBackground}
@@ -147,7 +155,7 @@ class OrganizationContainer extends React.Component {
           organizationProjects={this.state.organizationProjects}
           toggleCollaboratorView={this.toggleCollaboratorView}
         />);
-    } else if (this.state.fetching) {
+    } else if (this.state.fetchingOrganization) {
       return (
         <div className="content-container">
           <p>
