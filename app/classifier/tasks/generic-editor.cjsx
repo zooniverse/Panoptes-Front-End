@@ -121,15 +121,18 @@ module.exports = React.createClass
                     <div className="workflow-choice-setting" >
                       <AutoSave resource={@props.workflow} >
                         Color{' '}
-                        <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          <option value="#ff6639">Red</option>
-                          <option value="#ffa539">Yellow</option>
-                          <option value="#38b978">Green</option>
-                          <option value="#43bcfd">Blue</option>
-                          <option value="#5364fd">Violet</option>
-                          <option value="#00ffff">Cyan</option>
-                          <option value="#000000">Black</option>
-                          <option value="#ffffff">White</option>
+                        <select style={{background: choice.color}} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
+                          <option style={{background: "#ff6639"}} value="#ff6639">Red</option>
+                          <option style={{background: "#ffa539"}} value="#ffa539">Orange</option>
+                          <option style={{background: "#F5D76E"}} value="#F5D76E">Yellow</option>
+                          <option style={{background: "#FC6399"}} value="#FC6399">Pink</option>
+                          <option style={{background: "#C9F227"}} value="#C9F227">Yellow Green</option>
+                          <option style={{background: "#35D056"}} value="#35D056">Green</option>
+                          <option style={{background: "#00FF7F"}} value="#00FF7F">Seafoam</option>
+                          <option style={{background: "#57c4f7"}} value="#57c4f7">Blue</option>
+                          <option style={{background: "#DCC6E0"}} value="#DCC6E0">Light Purple</option>
+                          <option style={{background: "#BAC1ff"}} value="#BAC1ff">Violet</option>
+                          <option style={{background: "#00ffff"}} value="#00ffff">Cyan</option>
                         </select>
                       </AutoSave>
                     </div>
