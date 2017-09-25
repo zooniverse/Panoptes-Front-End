@@ -16,4 +16,8 @@ const isThereFeedback = (subject, workflow) =>
     return newResult;
   }, false);
 
-export { isFeedbackActive, isThereFeedback };
+const renderUniqueFeedback = (annotations, feedback) => {
+  const annotationFrame = annotations.map(item => item.value.map(value => value.frame));
+  return feedback.filter(item => item.frame === annotationFrame);
+};
+export { isFeedbackActive, isThereFeedback, renderUniqueFeedback };

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Tooltip from './tooltip';
+import { renderUniqueFeedback } from '../feedback/helpers';
 
 class SVGToolTipLayer extends React.Component {
   constructor(props) {
@@ -8,8 +9,7 @@ class SVGToolTipLayer extends React.Component {
     this.renderTooltips = this.renderTooltips.bind(this);
   }
 
-  renderTooltips() {
-    const { feedback } = this.props;
+  renderTooltips(feedback) {
     return (
       <div className="classifier-tooltips">
         {feedback.map(item =>
@@ -23,7 +23,9 @@ class SVGToolTipLayer extends React.Component {
   }
 
   render() {
-    return (this.props.feedback.length) ? this.renderTooltips() : null;
+    const { annotations, feedback } = this.props;
+    const uniqueFeedback = renderUniqueFeedback(annotations, feedback);
+    return (this.props.feedback.length) ? this.renderTooltips(uniqueFeedback) : null;
   }
 }
 

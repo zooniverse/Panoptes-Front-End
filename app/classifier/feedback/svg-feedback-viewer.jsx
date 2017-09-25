@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import FeedbackPoint from './feedback-point';
+import { renderUniqueFeedback } from '../feedback/helpers';
 
 function renderFeedbackPoints(feedback) {
   return (
@@ -19,7 +20,8 @@ class FeedbackViewer extends React.Component {
   }
 
   render() {
-    const { feedback } = this.props;
+    const { annotations, feedback } = this.props;
+    const uniqueFeedback = renderUniqueFeedback(annotations, feedback);
     return (feedback.length) ? renderFeedbackPoints(feedback) : null;
   }
 }

@@ -11,6 +11,7 @@ const isWithinTolerance = (annotationX, annotationY, feedbackX, feedbackY, toler
 
 const createFeedbackItem = (success, annotation, rule) => {
   const feedbackItem = {
+    frame: annotation.value.map(item => parseInt(item.frame)),
     task: annotation.task,
     type: 'drawing',
     success,

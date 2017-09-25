@@ -194,10 +194,10 @@ export default class SVGRenderer extends React.Component {
               </Draggable>
             )}
             {children}
-            {(showFeedback) && (<SVGFeedbackViewer />)}
+            {(showFeedback) && (<SVGFeedbackViewer annotations={annotations} />)}
           </g>
         </svg>
-        {(showFeedback) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
+        {(showFeedback) && (<SVGToolTipLayer annotations={annotations} getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
         {this.props.children}
       </div>
     );
