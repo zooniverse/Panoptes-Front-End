@@ -67,7 +67,7 @@ const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =
       <div><Thumbnail role="presentation" src="//www.zooniverse.org/assets/home-researchers1.jpg" width={450} /></div>
 
       {screenWidth > 550 && (
-        <div><Thumbnail img role="presentation" src="//www.zooniverse.org/assets/home-researchers2.jpg" width={450} /></div>
+        <div><Thumbnail role="presentation" src="//www.zooniverse.org/assets/home-researchers2.jpg" width={450} /></div>
       )}
 
       {screenWidth > 900 && (
