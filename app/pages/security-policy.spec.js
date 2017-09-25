@@ -6,7 +6,7 @@ import SecurityPolicy from './security-policy';
 describe('SecurityPolicy', () => {
   let wrapper;
 
-  beforeEach(() => {
+  before(() => {
     wrapper = shallow(<SecurityPolicy />);
   });
 
@@ -16,64 +16,26 @@ describe('SecurityPolicy', () => {
   });
 
   describe('heading', () => {
-    it('renders the page title', () => {
-      const headingElement = wrapper
-        .find('div.content-container').children()
-        .first()
-        .props().component;
-      assert.equal(headingElement, 'h1');
+    it('renders a <Translate /> component', () => {
+      assert.equal(wrapper.find('Translate').length, 1);
     });
 
     it('renders page title content', () => {
-      const headingContent = wrapper
-        .find('div.content-container').children()
-        .first()
-        .props().content;
-      assert.equal(headingContent, 'security.title');
+      assert.equal(wrapper.find('Translate').prop('content'), 'security.title');
     });
   });
 
-  describe('intro section', () => {
+  describe('intro', () => {
     it('renders one markdown element', () => {
-      const markdownElement = wrapper
-        .find('div.content-container').children()
-        .find('div.columns-container').children()
-        .find('div.column')
-        .first();
+      const markdownElement = wrapper.find('Markdown').first();
       assert.equal(markdownElement.length, 1);
-    });
-
-    it('renders the intro section', () => {
-      const section = 'intro';
-      const markdownElement = wrapper
-        .find('div.content-container').children()
-        .find('div.columns-container').children()
-        .find('div.column')
-        .first()
-        .props().children.props.children;
-      assert.ok(markdownElement.match(section));
     });
   });
 
-  describe('details section', () => {
+  describe('details', () => {
     it('renders one markdown element', () => {
-      const markdownElement = wrapper
-        .find('div.content-container').children()
-        .find('div.columns-container').children()
-        .find('div.column')
-        .last();
+      const markdownElement = wrapper.find('Markdown').last();
       assert.equal(markdownElement.length, 1);
-    });
-
-    it('renders the details section', () => {
-      const section = 'details';
-      const markdownElement = wrapper
-        .find('div.content-container').children()
-        .find('div.columns-container').children()
-        .find('div.column')
-        .last()
-        .props().children.props.children;
-      assert.ok(markdownElement.match(section));
     });
   });
 });
