@@ -8,22 +8,22 @@ const PrivacyPolicy = () =>
     <Translate component="h1" content="privacy.title" />
     <div className="columns-container">
       <div className="column">
-        <Markdown>{counterpart('privacy.userAgreementSummary')}</Markdown>
-        <Markdown>{counterpart('privacy.userAgreementContribution')}</Markdown>
-        <Markdown>{counterpart('privacy.userAgreementData')}</Markdown>
-        <Markdown>{counterpart('privacy.userAgreementLegal')}</Markdown>
+        <Markdown>{counterpart('privacy.userAgreement.summary')}</Markdown>
+        <Markdown>{counterpart('privacy.userAgreement.contribution')}</Markdown>
+        <Markdown>{counterpart('privacy.userAgreement.data')}</Markdown>
+        <Markdown>{counterpart('privacy.userAgreement.legal')}</Markdown>
       </div>
       <div className="column">
-        <Markdown>{counterpart('privacy.privacyPolicyIntro')}</Markdown>
-        <Markdown>{counterpart('privacy.privacyPolicyData')}</Markdown>
-        <Markdown>{counterpart('privacy.privacyPolicyInfo')}</Markdown>
-        <Markdown>{counterpart('privacy.privacyPolicyThirdParties')}</Markdown>
-        <Markdown>{counterpart('privacy.privacyPolicyCookies')}</Markdown>
-        <Markdown>{counterpart('privacy.privacyPolicyDataStorage')}</Markdown>
-        <Markdown>{counterpart('privacy.privacyPolicySecurity')}</Markdown>
-        <Markdown>{counterpart('privacy.privacyPolicyDataRemoval')}</Markdown>
-        <Markdown>{counterpart('privacy.privacyPolicyContactUser')}</Markdown>
-        <Markdown>{counterpart('privacy.privacyPolicyFurtherInfo')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.intro')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.data')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.info')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.thirdParties')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.cookies')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.dataStorage')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.security')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.dataRemoval')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.contactUser')}</Markdown>
+        <Markdown>{counterpart('privacy.privacyPolicy.furtherInfo')}</Markdown>
       </div>
     </div>
   </div>);
