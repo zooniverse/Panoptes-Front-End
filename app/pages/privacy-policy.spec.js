@@ -2,7 +2,6 @@ import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
 import PrivacyPolicy from './privacy-policy';
-import englishTranslations from '../locales/en';
 
 describe('PrivacyPolicy', () => {
   let wrapper;
@@ -27,42 +26,16 @@ describe('PrivacyPolicy', () => {
   });
 
   describe('user agreement section', () => {
-    let markdownElements;
-
-    before(() => {
-      markdownElements = wrapper.find('div.column').first().children();
-    });
-
     it('renders four markdown elements', () => {
+      const markdownElements = wrapper.find('div.column').first().children();
       assert.equal(markdownElements.length, 4);
-    });
-
-    it('renders each of its sections', () => {
-      const userAgreementSections = Object.keys(englishTranslations.privacy.userAgreement);
-
-      markdownElements.forEach((element, index) => {
-        assert.ok(element.props().children.match(userAgreementSections[index]));
-      });
     });
   });
 
   describe('privacy policy section', () => {
-    let markdownElements;
-
-    before(() => {
-      markdownElements = wrapper.find('div.column').last().children();
-    });
-
     it('renders ten markdown elements', () => {
+      const markdownElements = wrapper.find('div.column').last().children();
       assert.equal(markdownElements.length, 10);
-    });
-
-    it('renders each of its sections', () => {
-      const privacyPolicySections = Object.keys(englishTranslations.privacy.privacyPolicy);
-
-      markdownElements.forEach((element, index) => {
-        assert.ok(element.props().children.match(privacyPolicySections[index]));
-      });
     });
   });
 });
