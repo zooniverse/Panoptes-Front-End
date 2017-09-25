@@ -339,20 +339,20 @@ export class ProjectStatsPage extends React.Component {
     if (this.props.startDate) {
       start = (
         <div className="project-metadata-stat">
-          <div>{moment(this.props.startDate).format('MMM-DD-YYYY')}</div>
+          <div>{moment.utc(this.props.startDate).format('MMM-DD-YYYY')}</div>
           <div>Launch Date</div>
         </div>
       );
     }
     let classificationFootnoteMarker;
     let classificationFootnote;
-    if (moment(this.props.startDate) <= moment(classificationGap[1])) {
+    if (moment.utc(this.props.startDate) <= moment.utc(classificationGap[1])) {
       classificationFootnoteMarker = <span><sup>&#8224;</sup></span>;
       classificationFootnote = (
         <span className="project-stats-footer">
          {classificationFootnoteMarker}
          Due to an issue with our stats server all data before
-         {' '}{moment(classificationGap[1]).format('MMM-DD-YYYY')} is
+         {' '}{moment.utc(classificationGap[1]).format('MMM-DD-YYYY')} is
          {' '}currently unavailable.  We are currently working to resolve this issue.
          {' '}<b>No</b> classifications were lost in this time.
         </span>
@@ -360,13 +360,13 @@ export class ProjectStatsPage extends React.Component {
     }
     let talkFootnoteMarker;
     let talkFootnote;
-    if (moment(this.props.startDate) <= moment(talkGap[1])) {
+    if (moment.utc(this.props.startDate) <= moment.utc(talkGap[1])) {
       talkFootnoteMarker = <span><sup>&#8225;</sup></span>;
       talkFootnote = (
         <span className="project-stats-footer">
           {talkFootnoteMarker}
           Due to an issue with our stats server all data before
-          {' '}{moment(talkGap[1]).format('MMM-DD-YYYY')} is
+          {' '}{moment.utc(talkGap[1]).format('MMM-DD-YYYY')} is
           {' '}currently unavailable.  We are currently working to resolve this issue.
           {' '}<b>No</b> talk comments were lost in this time.
         </span>
