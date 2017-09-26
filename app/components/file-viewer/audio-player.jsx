@@ -107,7 +107,7 @@ class AudioPlayer extends React.Component {
       );
     }
     return (
-      <div>
+      <div className="subject-audio-frame">
         {imageElement}
         <div className="audio-player-component">
           <audio
@@ -123,8 +123,6 @@ class AudioPlayer extends React.Component {
           >
             Your browser does not support the audio format. Please upgrade your browser.
           </audio>
-
-          {this.props.children}
         </div>
       </div>
     );
@@ -133,7 +131,6 @@ class AudioPlayer extends React.Component {
 }
 
 AudioPlayer.propTypes = {
-  children: React.PropTypes.node,
   format: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.string]),
   frame: React.PropTypes.number,
   onLoad: React.PropTypes.func,
