@@ -11,9 +11,12 @@ class AudioPlayer extends React.Component {
     this.endAudio = this.endAudio.bind(this);
     this.playAudio = this.playAudio.bind(this);
     this.onAudioLoad = this.onAudioLoad.bind(this);
+    this.onImageLoad = this.onImageLoad.bind(this);
     this.updateProgress = this.updateProgress.bind(this);
 
     this.state = {
+      naturalHeight: 0,
+      naturalWidth: 0,
       playing: false,
       progressPosition: 0,
       trackDuration: 0
@@ -27,6 +30,12 @@ class AudioPlayer extends React.Component {
   onAudioLoad(e) {
     e.stopPropagation();
     this.state.trackDuration = this.player.duration;
+  }
+
+  onImageLoad(e) {
+    const { naturalHeight, naturalWidth } = e.target;
+    this.setState({ naturalHeight, naturalWidth });
+    this.props.onLoad(e);
   }
 
   imageSrc() {
@@ -91,15 +100,16 @@ class AudioPlayer extends React.Component {
         <ProgressIndicator
           progressPosition={this.state.progressPosition}
           progressRange={[0, this.state.trackDuration]}
-          naturalWidth={100}
-          naturalHeight={100}
+          naturalWidth={this.state.naturalWidth}
+          naturalHeight={this.state.naturalHeight}
+          src={imageSrc}
         >
           <ImageViewer
             src={imageSrc}
             type={this.imageTypeString()}
             format={this.imageFormatString()}
             frame={this.props.frame}
-            onLoad={this.props.onLoad}
+            onLoad={this.onImageLoad}
             onFocus={this.props.onFocus}
             onBlur={this.props.onBlur}
           />

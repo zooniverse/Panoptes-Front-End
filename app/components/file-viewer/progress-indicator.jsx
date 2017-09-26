@@ -25,7 +25,15 @@ class ProgressIndicator extends React.Component {
     // console.log(points);
 
     return (
-      <svg className="progress-marker">
+      <svg
+        className="progress-marker"
+        viewBox={`0 0 ${this.props.naturalWidth} ${this.props.naturalHeight}`}
+      >
+        <image
+          xlinkHref={this.props.src}
+          width={this.props.naturalWidth}
+          height={this.props.naturalHeight}
+        />
         <g {...progressMarkerStyle}>
           <line {...points} />
         </g>
@@ -46,12 +54,17 @@ class ProgressIndicator extends React.Component {
 
 ProgressIndicator.propTypes = {
   children: React.PropTypes.node,
+  naturalHeight: React.PropTypes.number,
+  naturalWidth: React.PropTypes.number,
   progressPosition: React.PropTypes.number,
-  progressRange: React.PropTypes.arrayOf(React.PropTypes.number)
+  progressRange: React.PropTypes.arrayOf(React.PropTypes.number),
+  src: React.PropTypes.string.isRequired
 };
 
 ProgressIndicator.defaultProps = {
   children: null,
+  naturalHeight: 0,
+  naturalWidth: 0,
   progressPosition: 0,
   progressRange: [0, 1]
 };
