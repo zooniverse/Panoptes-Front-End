@@ -58,11 +58,7 @@ module.exports = React.createClass
     if @state.subjectDefaultBoard
       <QuickSubjectCommentForm {...@props} subject={@props.subject} user={@props.user} />
     else
-      <p>
-        There is no default board for subject comments setup yet, Please{' '}
-        <button className="link-style" onClick={=> @setState(tab: 1)}>start a new discussion</button>{' '}
-        or {@linkToClassifier('return to classifying')}
-      </p>
+      @notSetup() # The project has not initialized default boards. Therefore render the notSetup message.
 
   startDiscussion: ->
     <NewDiscussionForm
@@ -89,7 +85,7 @@ module.exports = React.createClass
               Add a note about this subject
             </div>
 
-            <div className="tabbed-content-tab #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
+            <div className="tabbed-content-tab #{if @state.boards.length < 1 then 'hidden'} #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
               Start a new discussion
             </div>
           </div>
