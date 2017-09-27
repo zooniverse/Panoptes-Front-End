@@ -96,8 +96,8 @@ class OrganizationPage extends React.Component {
         <section className="resources-container">
           {this.props.collaborator &&
             <label className="organization-page__toggle" htmlFor="collaborator view">
-              <input onChange={this.handleViewToggle.bind(this)} type="checkbox" value={this.props.collaboratorView} />
-              <span>Collaborator View</span>
+              <input onChange={this.handleViewToggle.bind(this)} type="checkbox" value={!this.props.collaboratorView} />
+              <span>Volunteer View</span>
             </label>}
           <OrganizationProjectCards
             errorFetchingProjects={this.props.errorFetchingProjects}
@@ -177,7 +177,7 @@ class OrganizationPage extends React.Component {
 
 OrganizationPage.defaultProps = {
   collaborator: false,
-  collaboratorView: false,
+  collaboratorView: true,
   errorFetchingProjects: {},
   fetchingProjects: false,
   organization: {},

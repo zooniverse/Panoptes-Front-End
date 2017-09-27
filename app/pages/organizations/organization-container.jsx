@@ -8,7 +8,7 @@ class OrganizationContainer extends React.Component {
     super();
 
     this.state = {
-      collaboratorView: false,
+      collaboratorView: true,
       error: null,
       errorFetchingProjects: null,
       fetchingOrganization: false,
@@ -18,8 +18,7 @@ class OrganizationContainer extends React.Component {
       organizationBackground: {},
       organizationRoles: [],
       organizationPages: [],
-      organizationProjects: [],
-      view: false
+      organizationProjects: []
     };
 
     this.toggleCollaboratorView = this.toggleCollaboratorView.bind(this);
@@ -36,6 +35,7 @@ class OrganizationContainer extends React.Component {
 
     if (nextProps.params.name !== this.props.params.name ||
       nextProps.params.owner !== this.props.params.owner ||
+      nextContext.user !== this.context.user ||
       noOrgAfterLoad) {
       if (!this.state.fetchingOrganization) {
         this.fetchOrganization(nextProps.params.name, nextProps.params.owner);
@@ -69,12 +69,12 @@ class OrganizationContainer extends React.Component {
     this.fetchProjects(this.state.organization, newView);
   }
 
-  fetchProjects(organization, collaboratorView = false) {
+  fetchProjects(organization, collaboratorView) {
     this.setState({ errorFetchingProjects: null, fetchingProjects: true });
 
-    const query = { cards: true };
-    if (!collaboratorView) {
-      query.launch_approved = true;
+    const query = { cards: true, launch_approved: true };
+    if ((this.isCollaborator() || isAdmin()) && collaboratorView) {
+      delete query.launch_approved;
     }
     organization.get('projects', query)
       .then(organizationProjects => this.setState({ fetchingProjects: false, organizationProjects }))
@@ -125,7 +125,7 @@ class OrganizationContainer extends React.Component {
                 organizationRoles,
                 organizationPages
               });
-              this.fetchProjects(organization);
+              this.fetchProjects(organization, this.state.collaboratorView);
             })
             .catch((error) => {
               console.error(error); // eslint-disable-line no-console
