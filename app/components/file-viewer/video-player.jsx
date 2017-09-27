@@ -88,7 +88,6 @@ class VideoPlayer extends React.Component {
             </span>
           </span>
         )}
-        {this.props.children}
       </div>
     );
   }
@@ -96,7 +95,6 @@ class VideoPlayer extends React.Component {
 }
 
 VideoPlayer.propTypes = {
-  children: React.PropTypes.node,
   format: React.PropTypes.string,
   frame: React.PropTypes.number,
   onLoad: React.PropTypes.func,
