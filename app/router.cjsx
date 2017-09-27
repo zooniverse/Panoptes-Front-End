@@ -28,6 +28,7 @@ React = require 'react'
 `import UnsubscribeFromEmails from './pages/unsubscribe';`
 `import HomePageRoot from './pages/home';`
 `import PrivacyPolicy from './pages/privacy-policy';`
+`import SecurityPolicy from './pages/security-policy';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -74,7 +75,7 @@ module.exports =
       <Route path="register" component={require './partials/register-form'} />
     </Route>
     <Route path="privacy" component={PrivacyPolicy} />
-    <Route path="security" component={require './pages/security'} />
+    <Route path="security" component={SecurityPolicy} />
 
     <Route path="users/:profile_name" component={UserProfilePage}>
       <IndexRoute component={require './pages/profile/feed'} />
