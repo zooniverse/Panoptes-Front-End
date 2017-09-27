@@ -216,9 +216,12 @@ ProjectPageController = React.createClass
       query['active'] = true
     apiClient.type('workflows').get(query)
       .catch (error) =>
-        console.error error
-        # TODO: Handle 404 once json-api-client error handling is fixed.
-        @setState({ error: error, loadingSelectedWorkflow: false })
+        if error.status is 404
+          @clearInactiveWorkflow(selectedWorkflowID)
+            .then(@getSelectedWorkflow(@state.project, @state.preferences))
+        else
+          console.error error
+          @setState({ error: error, loadingSelectedWorkflow: false })
       .then ([workflow]) =>
         if workflow
           @setState({ loadingSelectedWorkflow: false, workflow })
