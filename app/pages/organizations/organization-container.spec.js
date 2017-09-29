@@ -5,6 +5,7 @@ import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
+import Translate from 'react-translate-component';
 import OrganizationContainer from './organization-container';
 
 const params = {
@@ -30,7 +31,7 @@ describe('OrganizationContainer', function () {
   });
 
   it('should initially render please wait message', function () {
-    const message = <p>Please wait...</p>;
+    const message = <Translate content="organization.pleaseWait" />;
 
     const orgPage = wrapper.find('OrganizationPage');
 
@@ -39,7 +40,7 @@ describe('OrganizationContainer', function () {
   });
 
   it('while fetching organization should render loading message', function () {
-    const message = <p>Loading organization{' '}<strong>{params.name}</strong>...</p>;
+    const message = <Translate content="organization.loading" />;
 
     wrapper.setState({ fetchingOrganization: true });
     const orgPage = wrapper.find('OrganizationPage');
@@ -49,7 +50,7 @@ describe('OrganizationContainer', function () {
   });
 
   it('with error should render error message', function () {
-    const message = <p>There was an error retrieving organization{' '}<strong>{params.name}</strong>.</p>;
+    const message = <Translate content="organization.error" />;
 
     wrapper.setState({ error: { message: 'test error message' }});
     const orgPage = wrapper.find('OrganizationPage');
@@ -84,7 +85,7 @@ describe('OrganizationContainer', function () {
     });
 
     it('should render no permission message if organization not listed and user is not collaborator', function () {
-      const message = <p>Organization <strong>{params.name}</strong> not found.</p>;
+      const message = <Translate content="organization.notPermission" />;
       const unlistedOrg = organization;
       unlistedOrg.listed = false;
 

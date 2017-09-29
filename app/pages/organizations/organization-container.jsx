@@ -150,7 +150,7 @@ class OrganizationContainer extends React.Component {
       return (
         <div className="content-container">
           <p>
-            <Translate content="" />
+            <Translate content="organization.loading" />
             <strong>{this.props.params.name}</strong>...
           </p>
         </div>);

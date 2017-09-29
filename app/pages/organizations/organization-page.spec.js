@@ -5,6 +5,7 @@ import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
+import Translate from 'react-translate-component';
 import OrganizationPage, { OrganizationProjectCards } from './organization-page';
 import { organization } from './organization-container.spec';
 
@@ -78,7 +79,7 @@ describe('OrganizationPage', function () {
   });
 
   it('should show loading projects message if fetchingProjects', function () {
-    const message = <p>Loading organization projects...</p>;
+    const message = <Translate content="organization.home.projects.loading" />;
     const wrapper = shallow(
       <OrganizationProjectCards fetchingProjects={true} />);
     const status = wrapper.find('.organization-page__projects-status');
@@ -87,7 +88,7 @@ describe('OrganizationPage', function () {
   });
 
   it('should show projects error message if errorFetchingProjects', function () {
-    const message = <p>There was an error loading organization projects.</p>;
+    const message = <Translate content="organization.home.projects.error" />;
     const wrapper = shallow(
       <OrganizationProjectCards errorFetchingProjects={{ message: 'test error' }} />);
     const status = wrapper.find('.organization-page__projects-status');
@@ -96,7 +97,7 @@ describe('OrganizationPage', function () {
   });
 
   it('should show no projects associated message if fetchingProjects false and no projects', function () {
-    const message = <p>There are no projects associated with this organization.</p>;
+    const message = <Translate content="organization.home.projects.none" />;
     const wrapper = shallow(
       <OrganizationProjectCards
         fetchingProjects={false}
