@@ -1,5 +1,4 @@
 import React from 'react';
-import { sugarApiClient } from 'panoptes-client/lib/sugar';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 
@@ -10,20 +9,18 @@ export default class TalkStatus extends React.Component {
     this.state = {
       activeUsers: 0
     };
+
+    this.talkItems = this.talkItems.bind(this);
   }
 
   componentWillMount() {
-    this.talkItems();
+    let ref = this.context.comms.on("presenceChange", this.talkItems)
+    this.setState({callbackRef: ref})
   }
 
   talkItems() {
-    sugarApiClient.get('/active_users', { channel: `project-${this.props.project.id}` })
-    .then((activeUsers) => {
-      this.setState({ activeUsers: activeUsers.length });
-    })
-    .catch(() => {
-      return null;
-    });
+    let userIds = this.context.comms.getUserIds("project:" + this.props.project.id)
+    this.setState({activeUsers: userIds.length})
   }
 
   render() {
@@ -46,6 +43,10 @@ export default class TalkStatus extends React.Component {
     );
   }
 }
+
+TalkStatus.contextTypes = {
+  comms: React.PropTypes.object,
+};
 
 TalkStatus.defaultProps = {
   project: {}

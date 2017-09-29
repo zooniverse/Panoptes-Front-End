@@ -16,19 +16,24 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+    comms: React.PropTypes.object
 
   logTalkView: ->
     @context.geordi?.logEvent
       type: "talk-view"
 
   componentWillMount: ->
-    sugarClient.subscribeTo @props.section or 'zooniverse'
+    section = @props.section or 'zooniverse'
+    @context.comms.join("lobby:" + section.replace("-", ":"))
+    sugarClient.subscribeTo(section)
     @logTalkView()
 
   componentDidMount: ->
     @context.geordi?.remember projectToken: 'zooTalk'
 
   componentWillUnmount: ->
+    section = @props.section or 'zooniverse'
+    @context.comms.leave("lobby:" + section.replace("-", ":"))
     sugarClient.unsubscribeFrom @props.section or 'zooniverse'
     @context.geordi?.forget ['projectToken']
 

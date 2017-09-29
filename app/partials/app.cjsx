@@ -8,9 +8,8 @@ AppLayout = require('../layout').default
 GeordiLogger = require '../lib/geordi-logger'
 {generateSessionID} = require '../lib/session'
 NotificationsCounter = require('../lib/notifications-counter').default
-Pusher = require 'pusher-js'
 apiClient = require 'panoptes-client/lib/api-client'
-pusherEnv = require('../lib/pusher-env').default
+{CommsClient} = require('../lib/comms-client')
 
 counterpart.registerTranslations 'en',
   mainApp:
@@ -25,7 +24,7 @@ PanoptesApp = React.createClass
     geordi: React.PropTypes.object
     notificationsCounter: React.PropTypes.object
     unreadNotificationsCount: React.PropTypes.number
-    pusher: React.PropTypes.object
+    comms: React.PropTypes.object
 
   getChildContext: ->
     initialLoadComplete: @state.initialLoadComplete
@@ -33,7 +32,7 @@ PanoptesApp = React.createClass
     geordi: @geordiLogger
     notificationsCounter: @props.notificationsCounter
     unreadNotificationsCount: @state.unreadNotificationsCount
-    pusher: @props.pusher
+    comms: @props.comms
 
   getInitialState: ->
     initialLoadComplete: false
@@ -41,7 +40,7 @@ PanoptesApp = React.createClass
 
   getDefaultProps: ->
     notificationsCounter: new NotificationsCounter()
-    pusher: (pusherEnv && new Pusher(pusherEnv, {encrypted: true}))
+    comms: new CommsClient()
 
   componentWillMount: ->
     @geordiLogger = new GeordiLogger
@@ -50,11 +49,15 @@ PanoptesApp = React.createClass
     @props.notificationsCounter.listen (unreadNotificationsCount) =>
       @setState {unreadNotificationsCount}
 
+    window.comms = @props.comms
+    @props.comms.connect()
+
     auth.listen 'change', @handleAuthChange
     @handleAuthChange()
     generateSessionID()
 
   componentWillUnmount: ->
+    @props.comms.disconnect()
     auth.stopListening 'change', @handleAuthChange
 
   componentWillReceiveProps: (nextProps) ->
@@ -66,6 +69,7 @@ PanoptesApp = React.createClass
       @setState
         initialLoadComplete: true
         user: user
+      @props.comms.authenticate(auth)
       @updateNotificationsCount {user}
       @geordiLogger.remember userID: user.id if user?
 
