@@ -3,6 +3,7 @@ AutoSave = require '../../components/auto-save'
 TriggeredModalForm = require 'modal-form/triggered'
 TextTaskEditor = require './text/editor'
 SliderTaskEditor = require('./slider/editor').default
+DropdownEditor = require './dropdown/editor'
 
 
 module.exports = React.createClass
@@ -39,6 +40,15 @@ module.exports = React.createClass
                   />
                 else if subtask.type is 'slider'
                   <SliderTaskEditor
+                    workflow={@props.workflow}
+                    task={subtask}
+                    taskPrefix="#{@props.toolPath}.details.#{i}"
+                    isSubtask={true}
+                    onChange={@handleSubtaskChange.bind this, i}
+                    onDelete={@handleSubtaskDelete.bind this, i}
+                  />
+                else if subtask.type is 'dropdown'
+                  <DropdownEditor
                     workflow={@props.workflow}
                     task={subtask}
                     taskPrefix="#{@props.toolPath}.details.#{i}"
@@ -86,6 +96,12 @@ module.exports = React.createClass
                 <i className="fa fa-file-text-o fa-2x"></i>
                 <br />
                 <small><strong>Text</strong></small>
+              </button>{' '}
+
+              <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'dropdown'} title="Dropdown tasks: the volunteer selects a text label from a list.">
+                <i className="fa fa-list fa-2x"></i>
+                <br />
+                <small><strong>Dropdown</strong></small>
               </button>
           </TriggeredModalForm>
         </p>
@@ -103,6 +119,8 @@ module.exports = React.createClass
         TaskChoice = require './text'
       when 'slider'
         TaskChoice = require('./slider').default
+      when 'dropdown'
+        TaskChoice = require './dropdown'
     @props.task.tools[@props.toolIndex].details.push TaskChoice.getDefaultTask()
     @props.workflow.update 'tasks'
     @props.workflow.save()
