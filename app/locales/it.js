@@ -38,6 +38,8 @@ export default {
     }
   },
   tasks: {
+    less: 'Less',
+    more: 'More',
     survey: {
       clear: 'Clear',
       clearFilters: 'Clear filters',
@@ -47,7 +49,13 @@ export default {
       dismiss: 'Dismiss',
       itsThis: 'I think it’s this',
       cancel: 'Cancel',
-      identify: 'Identify'
+      identify: 'Identify',
+      surveyOf: 'Survey of %(count)',
+      identifications: {
+        zero: 'No identifications',
+        one: '1 identification',
+        other: '%(count) identifications'
+      }
     }
   }
 };

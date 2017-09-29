@@ -1,4 +1,5 @@
 import React from 'react';
+import Translate from 'react-translate-component';
 import Utility from './utility';
 
 class SurveySummary extends React.Component {
@@ -25,14 +26,28 @@ class SurveySummary extends React.Component {
     return (
       <div>
         <div className="question">
-          Survey of {this.props.task.choicesOrder.length}
+          <Translate
+            content="tasks.survey.surveyOf"
+            with={{
+              count: this.props.task.choicesOrder.length
+            }}
+          />
           {this.state.expanded ?
-            <button type="button" className="toggle-more" onClick={this.setState.bind(this, { expanded: false }, null)}>Less</button> :
-            <button type="button" className="toggle-more" onClick={this.setState.bind(this, { expanded: true }, null)}>More</button>}
+            <button type="button" className="toggle-more" onClick={this.setState.bind(this, { expanded: false }, null)}>
+              <Translate content="tasks.less" />
+            </button> :
+            <button type="button" className="toggle-more" onClick={this.setState.bind(this, { expanded: true }, null)}>
+              <Translate content="tasks.more" />
+            </button>}
         </div>
         <div className="answers">
           <div className="answer">
-            {this.props.annotation.value.length} identifications
+            <Translate
+              content="tasks.survey.identifications"
+              with={{
+                count: this.props.annotation.value.length
+              }}
+            />
           </div>
           {this.state.expanded &&
             choiceSummaries.map((choiceSummary, i) => (
