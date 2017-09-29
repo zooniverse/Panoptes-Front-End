@@ -231,6 +231,8 @@ ProjectPageController = React.createClass
       .then ([workflow]) =>
         if workflow
           @setState({ loadingSelectedWorkflow: false, workflow })
+          language = @props.location.query.language || 'en'
+          translations.load('workflow', workflow.id, language)
         else
           console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
           if selectedWorkflowID is @state.project.configuration?.default_workflow
