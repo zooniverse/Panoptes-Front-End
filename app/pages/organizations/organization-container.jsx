@@ -1,5 +1,6 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
+import Translate from 'react-translate-component';
 import isAdmin from '../../lib/is-admin';
 import OrganizationPage from './organization-page';
 
@@ -149,7 +150,7 @@ class OrganizationContainer extends React.Component {
       return (
         <div className="content-container">
           <p>
-            Loading organization{' '}
+            <Translate content="" />
             <strong>{this.props.params.name}</strong>...
           </p>
         </div>);
@@ -157,7 +158,7 @@ class OrganizationContainer extends React.Component {
       return (
         <div className="content-container">
           <p>
-            There was an error retrieving organization{' '}
+            <Translate content="organization.error" />
             <strong>{this.props.params.name}</strong>.
           </p>
           <p>
@@ -167,13 +168,18 @@ class OrganizationContainer extends React.Component {
     } else if (this.state.organization === undefined || (this.state.organization && !this.state.organization.listed)) {
       return (
         <div className="content-container">
-          <p>Organization <strong>{this.props.params.name}</strong> not found.</p>
-          <p>If you&apos;re sure the URL is correct, you might not have permission to view this project.</p>
+          <p>
+            <strong>{this.props.params.name} </strong>
+            <Translate content="organization.notFound" with={{ title: this.props.params.name }} />
+          </p>
+          <p>
+            <Translate content="organization.notPermission" />
+          </p>
         </div>);
     } else {
       return (
         <div className="content-container">
-          <p>Please wait...</p>
+          <p><Translate content="organization.pleaseWait" /></p>
         </div>);
     }
   }

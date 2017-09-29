@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { Markdown } from 'markdownz';
+import Translate from 'react-translate-component';
 import Thumbnail from '../../components/thumbnail';
 import ProjectCard from '../../partials/project-card';
 
@@ -10,12 +11,12 @@ export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjec
   if (fetchingProjects) {
     return (
       <div className="organization-page__projects-status">
-        <p>Loading organization projects...</p>
+        <p><Translate content="organization.home.projects.loading" /></p>
       </div>);
   } else if (errorFetchingProjects) {
     return (
       <div className="organization-page__projects-status">
-        <p>There was an error loading organization projects.</p>
+        <p><Translate content="organization.home.projects.error" /></p>
         <p>
           <code>{errorFetchingProjects.toString()}</code>
         </p>
@@ -23,7 +24,7 @@ export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjec
   } else if (!fetchingProjects && !projects.length) {
     return (
       <div className="organization-page__projects-status">
-        <p>There are no projects associated with this organization.</p>
+        <p><Translate content="organization.home.projects.none" /></p>
       </div>);
   } else {
     return (
@@ -97,7 +98,7 @@ class OrganizationPage extends React.Component {
                 type="checkbox"
                 value={!this.props.collaboratorView}
               />
-              Volunteer View
+              <Translate content="organization.home.viewToggle" />
             </label>}
           <OrganizationProjectCards
             errorFetchingProjects={this.props.errorFetchingProjects}
@@ -108,15 +109,25 @@ class OrganizationPage extends React.Component {
 
         <section className="organization-details">
           <div className="organization-page__container">
-            <div className="project-home-page__researcher-words">
-              <h4 className="organization-details__heading">Words from the researcher</h4>
-              <div>
-                <img role="presentation" src="/assets/simple-avatar.png" />
-                <span>&quot;{'Sample quote from researcher with call to action!'}&quot;</span>
+            <div className="organization-researcher-words">
+              <Translate className="organization-details__heading" content="project.home.researcher" />
+              <div className="organization-researcher-words__container">
+                <img
+                  className="organization-researcher-words__avatar"
+                  role="presentation"
+                  src="/assets/simple-avatar.png"
+                />
+                <span
+                  className="organization-researcher-words__quote"
+                >
+                  &quot;{'Sample quote from researcher with call to action!'}&quot;
+                </span>
               </div>
             </div>
             <div className="organization-details__content">
-              <h4 className="organization-details__heading">{this.props.organization.display_name} Introduction</h4>
+              <h4 className="organization-details__heading">
+                {this.props.organization.display_name} <Translate content="organization.home.introduction" />
+              </h4>
               {this.props.organization.introduction &&
                 <Markdown project={this.props.organization}>{this.props.organization.introduction}</Markdown>}
             </div>
@@ -125,20 +136,26 @@ class OrganizationPage extends React.Component {
           <div className="organization-page__container">
             <div className="project-metadata">
               <span className="organization-details__heading">
-                {this.props.organization.display_name}{' '}Statistics
+                {this.props.organization.display_name}{' '}<Translate content="project.home.metadata.statistics" />
               </span>
               <div className="project-metadata-stats">
                 <div className="project-metadata-stat">
                   <div className="project-metadata-stat__value">{123}</div>
-                  <div className="project-metadata-stat__label">Volunteers</div>
+                  <div className="project-metadata-stat__label">
+                    <Translate content="project.home.metadata.volunteers" />
+                  </div>
                 </div>
                 <div className="project-metadata-stat">
                   <div className="project-metadata-stat__value">{456}</div>
-                  <div className="project-metadata-stat__label">Classifications</div>
+                  <div className="project-metadata-stat__label">
+                    <Translate content="project.home.metadata.classifications" />
+                  </div>
                 </div>
                 <div className="project-metadata-stat">
                   <div className="project-metadata-stat__value">{789}</div>
-                  <div className="project-metadata-stat__label">Subjects</div>
+                  <div className="project-metadata-stat__label">
+                    <Translate content="project.home.metadata.subjects" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -146,7 +163,9 @@ class OrganizationPage extends React.Component {
 
           <div className="organization-page__container">
             <div className="organization-details__content">
-              <h4 className="organization-details__heading">About {this.props.organization.display_name}</h4>
+              <h4 className="organization-details__heading">
+                <Translate content="project.home.about" with={{ title: this.props.organization.display_name }} />
+              </h4>
               {aboutPage &&
                 <div>
                   <Markdown className={aboutContentClass} project={this.props.organization}>
@@ -156,12 +175,14 @@ class OrganizationPage extends React.Component {
                     className="standard-button organization-details__button"
                     onClick={() => this.toggleReadMore()}
                   >
-                    {this.state.readMore ? 'Read Less' : 'Read More'}
+                    {this.state.readMore ?
+                      <Translate content="organization.home.readLess" /> :
+                      <Translate content="organization.home.readMore" />}
                   </button>
                 </div>}
             </div>
-            <div className="project-home-page__researcher-words">
-              <h4 className="organization-details__heading">Links</h4>
+            <div className="organization-researcher-words">
+              <h4 className="organization-details__heading"><Translate content="organization.home.links" /></h4>
               <ul>
                 <li className="organization-details__link">Blog</li>
                 <li className="organization-details__link"><i className="fa fa-facebook fa-fw" />- @orgFacebook</li>
