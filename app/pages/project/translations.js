@@ -5,7 +5,10 @@ counterpart.setFallbackLocale('en');
 
 
 const translations = {
-  strings: {},
+  strings: {
+    project: {},
+    workflow: {}
+  },
   load: (translated_type, translated_id, language) => {
     translations.strings[translated_type] = {};
     return apiClient
