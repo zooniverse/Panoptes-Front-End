@@ -92,13 +92,6 @@
       p
         line-height: 1.75
 
-  &__about-content
-    max-height: 300px
-    overflow-y: hidden
-
-    &--expanded
-      max-height: none
-
   &__button
     background: TEAL_MID
     border: white
@@ -112,3 +105,37 @@
     font-size: 1.2em
     list-style: none
     margin-bottom: 1.2em
+
+  &__about-content
+    max-height: 300px
+    overflow-y: hidden
+
+    &--expanded
+      max-height: none
+
+.organization-researcher-words
+  background-color: white
+  color: ZOONIVERSE_NAVY
+  display: flex
+  flex: 2 0 auto
+  flex-direction: column
+  padding: 3em 4vw
+  position: relative
+  width: 250px
+
+  &__container
+    display: flex
+    margin-top: 1.5em
+
+  &__avatar
+    border-radius: 50%
+    float: left
+    height: 5em
+    margin-right: 1em
+    min-width: 5em
+
+  &__quote
+    font-size: 1.75em
+    font-style: italic
+    overflow: auto
+    word-wrap: break-word
