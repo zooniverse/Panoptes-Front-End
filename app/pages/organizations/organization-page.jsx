@@ -6,7 +6,7 @@ import ProjectCard from '../../partials/project-card';
 
 const AVATAR_SIZE = 100;
 
-const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjects, projects }) => {
+export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjects, projects }) => {
   if (fetchingProjects) {
     return (
       <div className="organization-page__projects-status">
@@ -23,7 +23,7 @@ const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjects, pro
   } else if (!fetchingProjects && !projects.length) {
     return (
       <div className="organization-page__projects-status">
-        <p>There are no projects associated with this organization...</p>
+        <p>There are no projects associated with this organization.</p>
       </div>);
   } else {
     return (
@@ -37,7 +37,7 @@ const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjects, pro
 
 OrganizationProjectCards.propTypes = {
   errorFetchingProjects: React.PropTypes.shape({
-    something: React.PropTypes.string
+    message: React.PropTypes.string
   }),
   fetchingProjects: React.PropTypes.bool,
   projects: React.PropTypes.arrayOf(
@@ -55,10 +55,6 @@ class OrganizationPage extends React.Component {
     this.state = {
       readMore: false
     };
-  }
-
-  handleViewToggle() {
-    this.props.toggleCollaboratorView();
   }
 
   toggleReadMore() {
@@ -96,8 +92,12 @@ class OrganizationPage extends React.Component {
         <section className="resources-container">
           {this.props.collaborator &&
             <label className="organization-page__toggle" htmlFor="collaborator view">
-              <input onChange={this.handleViewToggle.bind(this)} type="checkbox" value={!this.props.collaboratorView} />
-              <span>Volunteer View</span>
+              <input
+                onChange={() => this.props.toggleCollaboratorView()}
+                type="checkbox"
+                value={!this.props.collaboratorView}
+              />
+              Volunteer View
             </label>}
           <OrganizationProjectCards
             errorFetchingProjects={this.props.errorFetchingProjects}
@@ -192,7 +192,7 @@ OrganizationPage.propTypes = {
   collaborator: React.PropTypes.bool,
   collaboratorView: React.PropTypes.bool,
   errorFetchingProjects: React.PropTypes.shape({
-    something: React.PropTypes.string
+    message: React.PropTypes.string
   }),
   fetchingProjects: React.PropTypes.bool,
   organization: React.PropTypes.shape({
