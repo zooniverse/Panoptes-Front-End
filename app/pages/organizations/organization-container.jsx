@@ -53,16 +53,6 @@ class OrganizationContainer extends React.Component {
     return collaboratorRoles.some(role => role.links.owner.id === this.context.user.id);
   }
 
-  checkView() {
-    if (this.state.organization && this.state.organization.listed) {
-      return true;
-    } else if (isAdmin()) {
-      return true;
-    } else {
-      return this.isCollaborator();
-    }
-  }
-
   toggleCollaboratorView() {
     const newView = !this.state.collaboratorView;
     this.setState({ collaboratorView: newView });
@@ -73,7 +63,7 @@ class OrganizationContainer extends React.Component {
     this.setState({ errorFetchingProjects: null, fetchingProjects: true });
 
     const query = { cards: true, launch_approved: true };
-    if ((this.isCollaborator() || isAdmin()) && collaboratorView) {
+    if (collaboratorView) {
       delete query.launch_approved;
     }
     organization.get('projects', query)
@@ -125,7 +115,7 @@ class OrganizationContainer extends React.Component {
                 organizationRoles,
                 organizationPages
               });
-              this.fetchProjects(organization, this.state.collaboratorView);
+              this.fetchProjects(organization, (isAdmin() || this.isCollaborator()));
             })
             .catch((error) => {
               console.error(error); // eslint-disable-line no-console
@@ -141,7 +131,7 @@ class OrganizationContainer extends React.Component {
   }
 
   render() {
-    if (this.state.organization && this.checkView()) {
+    if (this.state.organization && (this.state.organization.listed || isAdmin() || this.isCollaborator())) {
       return (
         <OrganizationPage
           collaborator={isAdmin() || this.isCollaborator()}
@@ -170,12 +160,11 @@ class OrganizationContainer extends React.Component {
             There was an error retrieving organization{' '}
             <strong>{this.props.params.name}</strong>.
           </p>
-          {this.state.error &&
-            <p>
-              <code>{this.state.error.toString()}</code>
-            </p>}
+          <p>
+            <code>{this.state.error.toString()}</code>
+          </p>
         </div>);
-    } else if (this.state.organization === undefined || !this.checkView) {
+    } else if (this.state.organization === undefined || (this.state.organization && !this.state.organization.listed)) {
       return (
         <div className="content-container">
           <p>Organization <strong>{this.props.params.name}</strong> not found.</p>
