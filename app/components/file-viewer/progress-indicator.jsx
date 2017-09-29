@@ -1,13 +1,10 @@
 import React from 'react';
 
 class ProgressIndicator extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   progressAsPercentString() {
     // TODO: Implement correct range handling.
-    return `${ 100 * (this.props.progressPosition / this.props.progressRange[1])}%`
+    return `${100 * (this.props.progressPosition / this.props.progressRange[1])}%`;
   }
 
   renderProgressMarker() {
@@ -28,18 +25,27 @@ class ProgressIndicator extends React.Component {
     // console.log(points);
 
     return (
-      <svg>
-        <g id='progress_marker' {...progressMarkerStyle}>
-          <line {...points}/>
+      <svg
+        className="progress-marker"
+        viewBox={`0 0 ${this.props.naturalWidth} ${this.props.naturalHeight}`}
+      >
+        <image
+          xlinkHref={this.props.src}
+          width={this.props.naturalWidth}
+          height={this.props.naturalHeight}
+        />
+        <g {...progressMarkerStyle}>
+          <line {...points} />
         </g>
       </svg>
-    )
+    );
   }
 
   render() {
-    return ( <div className='progress-marker'>
-      {this.renderProgressMarker()}
-      {this.props.children}
+    return (
+      <div>
+        {this.renderProgressMarker()}
+        {this.props.children}
       </div>
     );
   }
@@ -48,18 +54,19 @@ class ProgressIndicator extends React.Component {
 
 ProgressIndicator.propTypes = {
   children: React.PropTypes.node,
-  progressPosition: React.PropTypes.number,
-  progressRange: React.PropTypes.array,
-  naturalWidth: React.PropTypes.number,
   naturalHeight: React.PropTypes.number,
-  frame: React.PropTypes.number
+  naturalWidth: React.PropTypes.number,
+  progressPosition: React.PropTypes.number,
+  progressRange: React.PropTypes.arrayOf(React.PropTypes.number),
+  src: React.PropTypes.string.isRequired
 };
 
 ProgressIndicator.defaultProps = {
-  progressPosition : 0,
-  progressRange : [0, 1],
-  naturalWidth : '100%',
-  naturalHeight : '100%'
+  children: null,
+  naturalHeight: 0,
+  naturalWidth: 0,
+  progressPosition: 0,
+  progressRange: [0, 1]
 };
 
 export default ProgressIndicator;

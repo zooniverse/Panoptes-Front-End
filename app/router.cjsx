@@ -26,6 +26,9 @@ React = require 'react'
 `import SubjectSetsContainer from './pages/lab/subject-sets-container';`
 `import SubjectSetsList from './pages/lab/subject-sets';`
 `import UnsubscribeFromEmails from './pages/unsubscribe';`
+`import HomePageRoot from './pages/home';`
+`import PrivacyPolicy from './pages/privacy-policy';`
+`import SecurityPolicy from './pages/security-policy';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -42,7 +45,7 @@ ONE_UP_REDIRECT = React.createClass
 
 module.exports =
   <Route path="/" component={require './partials/app'}>
-    <IndexRoute component={require './pages/home'} />
+    <IndexRoute component={HomePageRoot} />
     <Route path="home" component={ONE_UP_REDIRECT} />
     <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
@@ -71,8 +74,8 @@ module.exports =
       <Route path="sign-in" component={require './partials/sign-in-form'} />
       <Route path="register" component={require './partials/register-form'} />
     </Route>
-    <Route path="privacy" component={require './pages/privacy-policy'} />
-    <Route path="security" component={require './pages/security'} />
+    <Route path="privacy" component={PrivacyPolicy} />
+    <Route path="security" component={SecurityPolicy} />
 
     <Route path="users/:profile_name" component={UserProfilePage}>
       <IndexRoute component={require './pages/profile/feed'} />

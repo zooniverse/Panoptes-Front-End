@@ -111,10 +111,10 @@ module.exports = React.createClass
     mainDisplay = ''
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     subjectLocations = getSubjectLocations @props.subject
-    if @state.inFlipbookMode
+    if subjectIsLikelyAudioPlusImage @props.subject
+          mainDisplay = @renderFrame @state.frame, {subjectLocations : subjectLocations, isAudioPlusImage : true}
+    else if @state.inFlipbookMode
       mainDisplay = @renderFrame @state.frame
-    else if subjectIsLikelyAudioPlusImage @props.subject
-      mainDisplay = @renderFrame @state.frame, {subjectLocations : subjectLocations, isAudioPlusImage : true}
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
         @renderFrame index, {key: "frame-#{index}"}
@@ -157,7 +157,7 @@ module.exports = React.createClass
 
       <div className="subject-tools">
         <span>{tools}</span>
-        {if @props.subject?.locations.length >= 2 and @state.inFlipbookMode
+        {if @props.subject?.locations.length >= 2 and not subjectIsLikelyAudioPlusImage(@props.subject) and @state.inFlipbookMode
           <span>
             <span className="subject-frame-pips">
               {for i in [0...@props.subject?.locations.length ? 0]

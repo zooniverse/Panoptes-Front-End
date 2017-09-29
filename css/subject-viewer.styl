@@ -125,10 +125,19 @@
       margin-right: 0.5em
 
 .progress-marker
+  background: transparent
   pointer-events none
+  position: absolute
+  left: 0
+  top: 0
+  width: 100%
+  max-height: 100%
+    
+  image
+    opacity: .2
 
 .audio-player-component
-  position absolute
-  bottom -70
-  left auto
-  right auto
+  width: 100%
+  
+  audio
+    width: 100%
