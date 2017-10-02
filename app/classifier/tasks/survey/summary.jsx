@@ -63,9 +63,15 @@ class SurveySummary extends React.Component {
 }
 
 SurveySummary.propTypes = {
-  annotation: React.PropTypes.object,
+  annotation: React.PropTypes.shape({
+    value: React.PropTypes.array
+  }),
   expanded: React.PropTypes.bool,
-  task: React.PropTypes.object
+  task: React.PropTypes.shape({
+    choices: React.PropTypes.object,
+    choicesOrder: React.PropTypes.array,
+    questions: React.PropTypes.object
+  })
 };
 
 SurveySummary.defaultProps = {
