@@ -67,7 +67,7 @@ describe('OrganizationContainer', function () {
       wrapper.setState({ organization: listedOrg });
       const orgPage = wrapper.find('OrganizationPage');
 
-      assert.ok(orgPage, 'OrganizationPage render');
+      assert.equal(orgPage.length, 1);
     });
 
     it('should render OrganizationPage if organization not listed and user is collaborator', function () {
@@ -79,7 +79,7 @@ describe('OrganizationContainer', function () {
       wrapper.setState({ organization: unlistedOrg });
       const orgPage = wrapper.find('OrganizationPage');
 
-      assert.ok(orgPage, 'OrganizationPage render');
+      assert.equal(orgPage.length, 1);
 
       isCollabSpy.restore();
     });

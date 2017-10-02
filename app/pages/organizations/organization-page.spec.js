@@ -42,8 +42,8 @@ describe('OrganizationPage', function () {
     });
 
     it('should show project view toggle', function () {
-      assert.ok(label.length, 'Label exists');
-      assert.ok(checkbox.length, 'Checkbox exists');
+      assert.equal(label.length, 1);
+      assert.equal(checkbox.length, 1);
     });
 
     it('should initially have project view toggle unchecked', function () {
@@ -75,7 +75,8 @@ describe('OrganizationPage', function () {
 
   it('should render OrganizationProjectCards', function () {
     const wrapper = shallow(<OrganizationPage organization={organization} />);
-    assert.ok(wrapper.find('OrganizationProjectCards'), 'OrganizationProjectCards exists');
+    const cards = wrapper.find('OrganizationProjectCards');
+    assert.equal(cards.length, 1);
   });
 
   it('should show loading projects message if fetchingProjects', function () {
@@ -129,14 +130,14 @@ describe('OrganizationPage', function () {
     });
 
     it('should initially show pages about content collapsed', function () {
-      assert.ok(aboutPage, 'About section collapsed');
+      assert.equal(aboutPage.length, 1);
       assert.equal(aboutPage.contains('test content'), true);
     });
 
     it('should show pages about content expanded after clicking Read More', function () {
       wrapper.find('button.organization-details__button').simulate('click');
       const aboutPageExpanded = wrapper.find('Markdown.organization-details__about-content--expanded');
-      assert.ok(aboutPageExpanded, 'About section expanded');
+      assert.equal(aboutPageExpanded.length, 1);
       assert.equal(aboutPageExpanded.contains('test content'), true);
     });
   });
