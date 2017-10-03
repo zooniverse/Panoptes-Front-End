@@ -1,0 +1,141 @@
+.organization-page
+  background-color: BACKGROUND_COLOR
+  color: white
+  display: flex
+  flex: 1 0 auto
+  flex-direction: column
+  font-family: 'Karla', sans-serif
+
+  &__container
+    display: flex
+    flex-flow: row wrap
+
+  &__projects-status
+    align-items: center
+    color: TEAL_DARK
+    display: flex
+    flex-flow: column
+    margin: 3em
+
+  &__toggle
+    color: TEAL_DARK
+    margin-left: 2em
+
+.organization-hero
+  background-size: cover
+  min-height: 400px
+  position: relative
+
+  &__container
+    align-items: center
+    background: radial-gradient(rgba(black, .2), rgba(black, .7))
+    display: flex
+    flex-wrap: wrap
+    height: 100%
+    position: absolute
+    width: 100%
+
+    @media (max-width: 900px)
+      justify-content: center
+      flex-direction: column
+
+  &__avatar
+    height: 8em
+    margin: 0 3em 0 8em
+    width: 8em
+
+    @media (max-width: 900px)
+      margin: 1em
+
+  &__title
+    font-size: 2.5em
+    font-weight: bold
+
+  &__description
+    font-size: 1em
+    font-weight: normal
+
+.organization-details
+
+  &__heading
+    text-transform: uppercase
+    font-size: .8em
+    line-height: 2em
+
+  &__content
+    background-color: TEAL_MID
+    flex: 3 1 auto
+    padding: 3em 3em 4em
+    text-align: left
+    width: 600px
+
+    .markdown
+      a
+        background: none
+        border: 0
+        color: BACKGROUND_COLOR
+        font-weight: bold
+        margin: 0
+        padding: 0
+
+        &:hover
+          background: none
+          border: 0
+          color: HIGHLIGHT_COLOR
+
+      hr
+        background-color: white
+
+      img
+        max-width: 100%
+
+      p
+        line-height: 1.75
+
+  &__button
+    background: TEAL_MID
+    border: white
+    margin-top: 2em
+
+    &:focus,
+    &:hover
+      background: TEAL_LIGHT
+
+  &__link
+    font-size: 1.2em
+    list-style: none
+    margin-bottom: 1.2em
+
+  &__about-content
+    max-height: 300px
+    overflow-y: hidden
+
+    &--expanded
+      max-height: none
+
+.organization-researcher-words
+  background-color: white
+  color: ZOONIVERSE_NAVY
+  display: flex
+  flex: 2 0 auto
+  flex-direction: column
+  padding: 3em 4vw
+  position: relative
+  width: 250px
+
+  &__container
+    display: flex
+    margin-top: 1.5em
+
+  &__avatar
+    border-radius: 50%
+    float: left
+    height: 5em
+    margin-right: 1em
+    min-width: 5em
+
+  &__quote
+    font-size: 1.75em
+    font-style: italic
+    overflow: auto
+    word-wrap: break-word
