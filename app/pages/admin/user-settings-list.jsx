@@ -28,8 +28,7 @@ class UserSettingsList extends Component {
     const userId = this.userSearch.value().value;
 
     if (userId) {
-      this.getEditUser(userId);
-      this.setState({ userId });
+      this.context.router.push(`/admin/users/${userId}`);
     }
   }
 
@@ -42,11 +41,7 @@ class UserSettingsList extends Component {
       return <LoadingIndicator />;
     }
 
-    if (this.state.editUser === this.props.user) {
-      return <p>Can&apos;t edit your own account</p>;
-    }
 
-    this.context.router.push(`/admin/users/${this.state.editUser.id}`);
   }
 
   render() {

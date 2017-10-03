@@ -17,7 +17,7 @@ class UserSettings extends Component {
     this.getUser = this.getUser.bind(this);
 
     this.state = {
-      user: null
+      editUser: null
     };
   }
 
@@ -26,47 +26,52 @@ class UserSettings extends Component {
   }
 
   getUser() {
-    apiClient.type('users').get(this.props.params.id).then((user) => {
-      user.listen('change', this.boundForceUpdate);
-      this.setState({ user });
+    apiClient.type('users').get(this.props.params.id).then((editUser) => {
+      editUser.listen('change', this.boundForceUpdate);
+      this.setState({ editUser });
     });
   }
 
   componentWillUnmount() {
-    this.state.user.stopListening('change', this.boundForceUpdate);
+    this.state.editUser.stopListening('change', this.boundForceUpdate);
   }
 
   render() {
-    if (!this.state.user) {
+    if (!this.state.editUser) {
       return (
         <div>No user found</div>
       );
     }
 
-    const handleChange = handleInputChange.bind(this.state.user);
+    if (this.state.editUser === this.props.user) {
+      return <p>Can&apos;t edit your own account</p>;
+    }
+
+    const handleChange = handleInputChange.bind(this.state.editUser);
 
     return (
       <div>
         <div className="project-status">
-          <h4>Settings for {this.state.user.login}</h4>
+          <h4>Settings for {this.state.editUser.login}</h4>
 
-          <UserProperties user={this.state.user} />
+          <UserProperties user={this.state.editUser} />
 
           <ul>
-            <li>Uploaded subjects: {this.state.user.uploaded_subjects_count}</li>
-            <li><UserLimitToggle editUser={this.state.user} /></li>
+            <li>Uploaded subjects: {this.state.editUser.uploaded_subjects_count}</li>
+            <li><UserLimitToggle editUser={this.state.editUser} /></li>
           </ul>
 
-          <DeleteUser user={this.state.user} />
+          <DeleteUser user={this.state.editUser} />
         </div>
 
-        <UserProjects user={this.state.user} />
+        <UserProjects user={this.state.editUser} />
       </div>
     );
   }
 }
 
 UserSettings.propTypes = {
+  user: React.PropTypes.object,
   editUser: React.PropTypes.object
 };
 
