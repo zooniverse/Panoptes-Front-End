@@ -97,12 +97,14 @@ module.exports = React.createClass
                 <br />
                 <small><strong>Text</strong></small>
               </button>{' '}
-
-              <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'dropdown'} title="Dropdown tasks: the volunteer selects a text label from a list.">
-                <i className="fa fa-list fa-2x"></i>
-                <br />
-                <small><strong>Dropdown</strong></small>
-              </button>
+              {
+                if 'dropdown' in @props.project.experimental_tools
+                  <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'dropdown'} title="Dropdown tasks: the volunteer selects a text label from a list.">
+                    <i className="fa fa-list fa-2x"></i>
+                    <br />
+                    <small><strong>Dropdown</strong></small>
+                  </button>
+              }
           </TriggeredModalForm>
         </p>
       </div>
