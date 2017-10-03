@@ -81,17 +81,17 @@ module.exports = React.createClass
       @renderTab()
     else
       <div>
-        <div className="tabbed-content">
-          <div className="tabbed-content-tabs">
-            <div className="subject-page-tabs">
-              <button type="button" className="create-discussion-or-comment #{if @state.tab is 0 then 'active' else ''}" onClick={=> @setState({tab: 0})}>
-                Add a note about this subject
-              </button>
+        <div className="tabbed-content-tabs">
+          <div className="tabbed-content-tab #{if @state.tab is 0 then 'active' else ''}" onClick={=> @setState({tab: 0})}>
+            <button className="link-style create-discussion-or-comment">
+              Add a note about this subject
+            </button>
+          </div>
 
-              <button type="button" className="create-discussion-or-comment #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
-                Start a new discussion
-              </button>
-            </div>
+          <div className="tabbed-content-tab #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
+            <button className="link-style create-discussion-or-comment">
+              Start a new discussion
+            </button>
           </div>
         </div>
         {@renderTab()}
