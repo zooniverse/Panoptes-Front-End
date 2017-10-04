@@ -168,6 +168,8 @@ class Classifier extends React.Component {
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
       if (!feedbackActive || (feedbackActive && !isThereFeedback(this.props.subject, this.props.workflow))) {
           this.props.onCompleteAndLoadAnotherSubject();
+        } else {
+          this.props.onComplete();
         }
     } else {
       this.props.onComplete()
