@@ -23,7 +23,7 @@ describe('SignIn', () => {
 
   describe('tabbed content tabs', () => {
     it('renders two links', () => {
-      const linkElements = wrapper.find('nav').children();
+      const linkElements = wrapper.find('Link');
       assert.equal(linkElements.length, 2);
     });
   });
