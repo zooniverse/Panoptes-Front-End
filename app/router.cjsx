@@ -29,6 +29,7 @@ React = require 'react'
 `import HomePageRoot from './pages/home';`
 `import PrivacyPolicy from './pages/privacy-policy';`
 `import SecurityPolicy from './pages/security-policy';`
+`import AdminPage from './pages/admin';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -238,7 +239,7 @@ module.exports =
       <Route path="resources" component={require './pages/lab/best-practices/resources'} />
     </Route>
 
-    <Route path="admin" component={require './pages/admin'}>
+    <Route path="admin" component={AdminPage}>
       <IndexRoute component={UserSettingsList} />
       <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={ProjectStatus} />
