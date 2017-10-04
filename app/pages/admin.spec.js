@@ -30,13 +30,13 @@ describe('AdminPage', () => {
     wrapper.setProps({ user: nonAdminUser });
     assert.equal(wrapper.find('div.content-container').length, 1);
     assert.equal(wrapper.find('section.admin-page-content').length, 0);
-    assert.equal(wrapper.find('div.content-container').children().text(), 'You are not an administrator');
+    assert.equal(wrapper.find('Translate').prop('content'), 'userAdminPage.notAdminMessage');
   });
 
   it('renders a not signed in message for a user that is not signed in', () => {
     wrapper.setProps({ user: null });
     assert.equal(wrapper.find('div.content-container').length, 1);
     assert.equal(wrapper.find('section.admin-page-content').length, 0);
-    assert.equal(wrapper.find('div.content-container').children().text(), 'You are not signed in');
+    assert.equal(wrapper.find('Translate').prop('content'), 'userAdminPage.notSignedInMessage');
   });
 });

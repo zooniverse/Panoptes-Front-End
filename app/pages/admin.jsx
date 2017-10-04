@@ -8,7 +8,7 @@ const AdminPage = ({ user, children }) => {
   if (!user) {
     return (
       <div className="content-container">
-        <p>You are not signed in</p>
+        <Translate component="p" content="userAdminPage.notSignedInMessage" />
       </div>
     );
   }
@@ -18,7 +18,7 @@ const AdminPage = ({ user, children }) => {
       <section className="admin-page-content">
         <Helmet title={counterpart('userAdminPage.header')} />
         <div className="secondary-page admin-page">
-          <h2><Translate content="userAdminPage.header" /></h2>
+          <Translate component="h2" content="userAdminPage.header" />
           <div className="admin-content">
             <aside className="secondary-page-side-bar admin-side-bar">
               <nav>
@@ -63,13 +63,13 @@ const AdminPage = ({ user, children }) => {
         </div>
       </section>
     );
-  } else {
-    return (
-      <div className="content-container">
-        <p>You are not an administrator</p>
-      </div>
-    );
   }
+
+  return (
+    <div className="content-container">
+      <Translate component="p" content="userAdminPage.notAdminMessage" />
+    </div>
+  );
 };
 
 AdminPage.defaultProps = {

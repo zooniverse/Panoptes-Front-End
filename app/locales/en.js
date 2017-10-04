@@ -83,6 +83,8 @@ export default {
       projectStatus: 'Set Project Status',
       grantbot: 'Grantbot',
       organizationStatus: 'Set Organization Status'
-    }
+    },
+    notAdminMessage: 'You are not an administrator',
+    notSignedInMessage: 'You are not signed in'
   }
 };
