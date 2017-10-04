@@ -67,9 +67,9 @@ module.exports = React.createClass
 
     deleteButtonPosition = @getDeletePosition(firstPoint, secondPoint)
 
-    <DrawingToolRoot tool={this}>
+    <DrawingToolRoot tool={this} pointerEvents='painted'>
       <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
-        <polyline points={points} fill={'none' unless @props.mark.closed} />
+        <polyline  points={points} fill={'none' unless @props.mark.closed} />
       </Draggable>
 
       {if @props.selected
@@ -116,7 +116,7 @@ module.exports = React.createClass
       true
 
     @setState
-      mouseX: newCoord.x 
+      mouseX: newCoord.x
       mouseY: newCoord.y
       mouseWithinViewer: mouseWithinViewer
 
