@@ -80,18 +80,20 @@ module.exports = React.createClass
     if @state.boards.length < 1
       @renderTab()
     else
-      <div>
+      <div className="tabbed-content">
         <div className="tabbed-content-tabs">
-          <div className="tabbed-content-tab #{if @state.tab is 0 then 'active' else ''}" onClick={=> @setState({tab: 0})}>
-            <button className="link-style create-discussion-or-comment">
-              Add a note about this subject
-            </button>
-          </div>
+          <div className="subject-page-tabs">
+            <div className="tabbed-content-tab #{if @state.tab is 0 then 'active' else ''}" onClick={=> @setState({tab: 0})}>
+              <button className="link-style">
+                Add a note about this subject
+              </button>
+            </div>
 
-          <div className="tabbed-content-tab #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
-            <button className="link-style create-discussion-or-comment">
-              Start a new discussion
-            </button>
+            <div className="tabbed-content-tab #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
+              <button className="link-style">
+                Start a new discussion
+              </button>
+            </div>
           </div>
         </div>
         {@renderTab()}
