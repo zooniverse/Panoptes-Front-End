@@ -50,11 +50,11 @@ export default {
       itsThis: 'I think it’s this',
       cancel: 'Cancel',
       identify: 'Identify',
-      surveyOf: 'Survey of %(count)',
+      surveyOf: 'Survey of %(count)s',
       identifications: {
         zero: 'No identifications',
         one: '1 identification',
-        other: '%(count) identifications'
+        other: '%(count)s identifications'
       }
     }
   },
