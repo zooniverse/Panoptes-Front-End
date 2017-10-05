@@ -11,16 +11,16 @@ class SurveySummary extends React.Component {
   }
 
   render() {
-    const choiceSummaries = this.props.annotation.value.map((identification) => {
-      const choice = this.props.task.choices[identification.choice];
-      const questionIds = Utility.getQuestionIDs(this.props.task, identification.choice);
+    const { task, annotation } = this.props;
+    const choiceSummaries = annotation.value.map((identification) => {
+      const choice = task.choices[identification.choice];
+      const questionIds = Utility.getQuestionIDs(task, identification.choice);
       const filteredQuestionIds = questionIds.filter(questionId => Object.keys(identification.answers).indexOf(questionId) > -1);
       const allAnswers = filteredQuestionIds.map(questionId =>
         [].concat(identification.answers[questionId])
-        .map(answerId => this.props.task.questions[questionId].answers[answerId].label)
+        .map(answerId => task.questions[questionId].answers[answerId].label)
         .join(', ')
       );
-
       return `${choice.label}: ${allAnswers.join('; ')}`;
     });
     return (
@@ -29,7 +29,7 @@ class SurveySummary extends React.Component {
           <Translate
             content="tasks.survey.surveyOf"
             with={{
-              count: this.props.task.choicesOrder.length
+              count: task.choicesOrder.length
             }}
           />
           {this.state.expanded ?
@@ -45,7 +45,7 @@ class SurveySummary extends React.Component {
             <Translate
               content="tasks.survey.identifications"
               with={{
-                count: this.props.annotation.value.length
+                count: annotation.value.length
               }}
             />
           </div>
