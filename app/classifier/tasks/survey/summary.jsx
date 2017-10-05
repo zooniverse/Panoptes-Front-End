@@ -10,6 +10,10 @@ class SurveySummary extends React.Component {
     };
   }
 
+  setExpanded(expanded) {
+    this.setState({ expanded });
+  }
+
   render() {
     const { task, annotation } = this.props;
     const choiceSummaries = annotation.value.map((identification) => {
@@ -33,10 +37,10 @@ class SurveySummary extends React.Component {
             }}
           />
           {this.state.expanded ?
-            <button type="button" className="toggle-more" onClick={this.setState.bind(this, { expanded: false }, null)}>
+            <button type="button" className="toggle-more" onClick={this.setExpanded.bind(this, false)}>
               <Translate content="tasks.less" />
             </button> :
-            <button type="button" className="toggle-more" onClick={this.setState.bind(this, { expanded: true }, null)}>
+            <button type="button" className="toggle-more" onClick={this.setExpanded.bind(this, true)}>
               <Translate content="tasks.more" />
             </button>}
         </div>
