@@ -73,6 +73,7 @@ module.exports =
     <Route path="unsubscribe" component={UnsubscribeFromEmails} />
 
     <Route path="accounts" component={SignInPage}>
+      <IndexRoute component={require './partials/sign-in-form'} />
       <Route path="sign-in" component={require './partials/sign-in-form'} />
       <Route path="register" component={require './partials/register-form'} />
     </Route>
