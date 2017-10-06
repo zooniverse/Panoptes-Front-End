@@ -31,6 +31,7 @@ React = require 'react'
 `import SecurityPolicy from './pages/security-policy';`
 `import AdminPage from './pages/admin';`
 `import SignInPage from './pages/sign-in';`
+`import NotFoundPage from './pages/not-found';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -128,7 +129,7 @@ module.exports =
       <Route path="talk" component={require './pages/project/talk'}>
         <IndexRoute component={require './talk/init'} />
         <Route path="recents" component={require './talk/recents'} />
-        <Route path="not-found" component={require './pages/not-found'} />
+        <Route path="not-found" component={NotFoundPage} />
         <Route path="search" component={require './talk/search'} />
         <Route path="moderations" component={require './talk/moderations'} />
         <Route path="subjects/:id" component={SubjectPageController} />
@@ -173,7 +174,7 @@ module.exports =
     <Route path="talk" component={require './talk'}>
       <IndexRoute component={require './talk/init'} />
       <Route path="recents" component={require './talk/recents'} />
-      <Route path="not-found" component={require './pages/not-found'} />
+      <Route path="not-found" component={NotFoundPage} />
       <Route path="search" component={require './talk/search'} />
       <Route path="moderations" component={require './talk/moderations'} />
       <Route path=":board" component={require './talk/board'} />
@@ -254,9 +255,9 @@ module.exports =
     <Route path="dev/workflow-tasks-editor" component={require './components/workflow-tasks-editor'} />
     <Route path="dev/classifier" component={
       if process.env.NODE_ENV is 'production'
-        require './pages/not-found'
+        NotFoundPage
       else
         require './pages/dev-classifier'
     } />
-    <Route path="*" component={require './pages/not-found'} />
+    <Route path="*" component={NotFoundPage} />
   </Route>

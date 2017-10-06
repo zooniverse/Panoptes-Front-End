@@ -123,5 +123,8 @@ export default {
     orThirdParty: 'Or sign in with another service',
     withFacebook: 'Sign in with Facebook',
     withGoogle: 'Sign in with Google'
+  },
+  notFoundPage: {
+    message: 'Not found'
   }
 };
