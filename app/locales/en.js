@@ -113,5 +113,15 @@ export default {
     },
     notAdminMessage: 'You are not an administrator',
     notSignedInMessage: 'You are not signed in'
+  },
+  signIn: {
+    title: 'Sign in/register',
+    withZooniverse: 'Sign in with your Zooniverse account',
+    whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.',
+    signIn: 'Sign in',
+    register: 'Register',
+    orThirdParty: 'Or sign in with another service',
+    withFacebook: 'Sign in with Facebook',
+    withGoogle: 'Sign in with Google'
   }
 };
