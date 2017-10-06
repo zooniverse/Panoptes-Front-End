@@ -10,21 +10,17 @@ const translations = {
     workflow: {}
   },
   load: (translated_type, translated_id, language) => {
-    translations.strings[translated_type] = {};
+    counterpart.setLocale(language);
     return apiClient
       .type('translations')
       .get({ translated_type, translated_id, language })
       .then(([translation]) => {
-        translations.strings[translated_type] = translation.strings;
-        counterpart.setLocale(language);
+        if (translation && translation.strings) {
+          translations.strings[translated_type] = translation.strings;
+        }
       })
       .catch(error => {
-        console.log(error.status);
-        switch (error.status) {
-          case 404:
-            translations.strings[translated_type] = {};
-            break;
-        }
+        console.warn(language.toUpperCase(), translated_type, translated_id, 'translation fetch error:', error.message);
       });
   }
 };
