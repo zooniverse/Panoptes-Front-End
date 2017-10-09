@@ -1,7 +1,7 @@
 import { shallow, mount } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
-import Shortcut from './shortcut';
+import Shortcut from './';
 
 const workflow = {
   tasks: {
