@@ -1,5 +1,6 @@
 import React from 'react';
 import { Markdown } from 'markdownz';
+import Translate from 'react-translate-component';
 
 class Summary extends React.Component {
   render() {
@@ -15,7 +16,7 @@ class Summary extends React.Component {
         );
       });
     } else {
-      answer = <div className="answer">No answer</div>;
+      answer = <div className="answer"><Translate content="tasks.shortcut.noAnswer" /></div>;
     }
 
     return (
