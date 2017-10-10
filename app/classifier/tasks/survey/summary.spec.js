@@ -8,38 +8,48 @@ import enLocale from '../../../locales/en';
 
 counterpart.registerTranslations('en', enLocale);
 
-const annotation = { 
+const annotation = {
   value: [{
     "choice": "ar",
     "answers": {
+      "ho": "one",
+      "be": [
+        "mo"
+      ]
+    },
+    "filters": {}
+    }, {
+    "choice": "to",
+    "answers": {
       "ho": "two",
       "be": [
-        "mo",
         "ea"
-      ]
+      ],
+      "in": "n",
+      "bt": "Y"
     },
     "filters": {}
   }]
 };
-const task = workflow.tasks.survey
-const expectedSummary = 'Armadillo: 2; Moving, Eating';
+const task = workflow.tasks.survey;
+const expectedSummary = 'Tortoise: 2; Eating; Nope; HECK YES';
 
 describe('Survey task summary, not expanded', function() {
   const wrapper = mount(<Summary annotation={annotation} task={task} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
 
-  it('should summarise the survey task', function(){
+  it('should summarise the survey task', function() {
     const count = task.choicesOrder.length;
     assert.equal(`Survey of ${count}`, question.text());
   });
 
-  it('should show one answer node', function(){
+  it('should show one answer node', function() {
     assert.equal(answers.length, 1);
   });
 
   it('should summarise the number of identifications', function() {
-    assert.equal(answers.text(), '1 identification');
+    assert.equal(answers.text(), '2 identifications');
   });
 });
 
@@ -48,15 +58,15 @@ describe('Survey task summary, expanded', function() {
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
 
-  it('should summarise the survey task', function(){
+  it('should summarise the survey task', function() {
     const count = task.choicesOrder.length;
     assert.equal(`Survey of ${count}`, question.text());
   });
 
-  it('should show two answer nodes', function(){
-    assert.equal(answers.length, 2);
+  it('should show three answer nodes', function() {
+    assert.equal(answers.length, 3);
   });
-  
+
   it('should summarise the identification and questions', function() {
     assert.equal(answers.last().text(), expectedSummary);
   });
