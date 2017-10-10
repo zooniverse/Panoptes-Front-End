@@ -7,7 +7,9 @@ counterpart.setFallbackLocale('en');
 const translations = {
   strings: {
     project: {},
-    workflow: {}
+    workflow: {
+      tasks: {}
+    }
   },
   load: (translated_type, translated_id, language) => {
     counterpart.setLocale(language);

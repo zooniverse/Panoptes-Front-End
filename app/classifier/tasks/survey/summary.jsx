@@ -1,6 +1,5 @@
 import React from 'react';
 import Translate from 'react-translate-component';
-import Utility from './utility';
 
 class SurveySummary extends React.Component {
   constructor(props) {
@@ -15,17 +14,14 @@ class SurveySummary extends React.Component {
   }
 
   render() {
-    const { task, annotation } = this.props;
+    const { task, annotation, translation } = this.props;
     const choiceSummaries = annotation.value.map((identification) => {
-      const choice = task.choices[identification.choice];
-      const questionIds = Utility.getQuestionIDs(task, identification.choice);
-      const filteredQuestionIds = questionIds.filter(questionId => Object.keys(identification.answers).indexOf(questionId) > -1);
-      const allAnswers = filteredQuestionIds.map(questionId =>
-        [].concat(identification.answers[questionId])
-        .map(answerId => task.questions[questionId].answers[answerId].label)
-        .join(', ')
-      );
-      return `${choice.label}: ${allAnswers.join('; ')}`;
+      const allAnswers = Object.keys(identification.answers).map((questionId) => {
+        const answerKeys = [].concat(identification.answers[questionId]);
+        const answers = answerKeys.map(answerId => translation.questions[questionId].answers[answerId].label);
+        return answers.join(', ');
+      });
+      return `${translation.choices[identification.choice].label}: ${allAnswers.join('; ')}`;
     });
     return (
       <div>
@@ -75,7 +71,12 @@ SurveySummary.propTypes = {
     choices: React.PropTypes.object,
     choicesOrder: React.PropTypes.array,
     questions: React.PropTypes.object
-  })
+  }),
+  translation: React.PropTypes.shape({
+    characteristics: React.PropTypes.object,
+    choices: React.PropTypes.object,
+    questions: React.PropTypes.object
+  }).isRequired
 };
 
 SurveySummary.defaultProps = {
