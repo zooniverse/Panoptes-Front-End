@@ -51,7 +51,7 @@ const task = workflow.tasks.survey;
 const oneExpectedSummary = 'Armadillo: 2; Moving, Eating';
 const twoExpectedSummary = ['Armadillo: 1; Moving', 'Tortoise: 2; Eating; Nope; HECK YES'];
 
-describe('Survey task summary, not expanded', function() {
+describe('Survey task summary, no identifications, not expanded', function() {
   const wrapper = mount(<Summary annotation={noIdentification} task={task} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
@@ -70,7 +70,7 @@ describe('Survey task summary, not expanded', function() {
   });
 });
 
-describe('Survey task summary, expanded', function() {
+describe('Survey task summary, no identifications, expanded', function() {
   const wrapper = mount(<Summary annotation={noIdentification} task={task} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
@@ -89,7 +89,7 @@ describe('Survey task summary, expanded', function() {
   });
 });
 
-describe('Survey task summary, not expanded', function() {
+describe('Survey task summary, one identification, not expanded', function() {
   const wrapper = mount(<Summary annotation={oneIdentification} task={task} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
@@ -108,7 +108,7 @@ describe('Survey task summary, not expanded', function() {
   });
 });
 
-describe('Survey task summary, expanded', function() {
+describe('Survey task summary, one identification, expanded', function() {
   const wrapper = mount(<Summary annotation={oneIdentification} task={task} expanded={true} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
@@ -127,7 +127,7 @@ describe('Survey task summary, expanded', function() {
   });
 });
 
-describe('Survey task summary, not expanded', function() {
+describe('Survey task summary, two identifications, not expanded', function() {
   const wrapper = mount(<Summary annotation={twoIdentifications} task={task} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
@@ -146,7 +146,7 @@ describe('Survey task summary, not expanded', function() {
   });
 });
 
-describe('Survey task summary, expanded', function() {
+describe('Survey task summary, two identifications, expanded', function() {
   const wrapper = mount(<Summary annotation={twoIdentifications} task={task} expanded={true} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
