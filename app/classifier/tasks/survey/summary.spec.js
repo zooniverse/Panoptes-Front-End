@@ -32,7 +32,7 @@ const annotation = {
   }]
 };
 const task = workflow.tasks.survey;
-const expectedSummary = 'Tortoise: 2; Eating; Nope; HECK YES';
+const expectedSummary = ['Armadillo: 1; Moving', 'Tortoise: 2; Eating; Nope; HECK YES'];
 
 describe('Survey task summary, not expanded', function() {
   const wrapper = mount(<Summary annotation={annotation} task={task} />);
@@ -68,6 +68,8 @@ describe('Survey task summary, expanded', function() {
   });
 
   it('should summarise the identification and questions', function() {
-    assert.equal(answers.last().text(), expectedSummary);
+    assert.equal(answers.at(0).text(), '2 identifications');
+    assert.equal(answers.at(1).text(), expectedSummary[0]);
+    assert.equal(answers.at(2).text(), expectedSummary[1]);
   });
-})
+});
