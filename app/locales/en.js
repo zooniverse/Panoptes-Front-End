@@ -59,6 +59,9 @@ export default {
   tasks: {
     less: 'Less',
     more: 'More',
+    shortcut: {
+      noAnswer: "No answer"
+    },
     survey: {
       clear: 'Clear',
       clearFilters: 'Clear filters',

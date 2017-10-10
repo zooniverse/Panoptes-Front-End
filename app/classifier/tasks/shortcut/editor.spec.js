@@ -4,7 +4,7 @@ import { shallow, mount } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
 import sinon from 'sinon';
-import ShortcutEditor from './shortcut-editor';
+import ShortcutEditor from './editor';
 
 const task = {
   question: 'What is it',

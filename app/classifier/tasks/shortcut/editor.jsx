@@ -1,7 +1,7 @@
 import React from 'react';
-import AutoSave from '../../components/auto-save';
-import handleInputChange from '../../lib/handle-input-change';
-import Shortcut from './shortcut';
+import AutoSave from '../../../components/auto-save';
+import handleInputChange from '../../../lib/handle-input-change';
+import Shortcut from './';
 
 export default class ShortcutEditor extends React.Component {
   constructor(props) {
