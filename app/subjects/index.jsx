@@ -36,7 +36,7 @@ export default class SubjectPageContainer extends React.Component {
 
   setSubject() {
     const subjectId = this.props.params.id.toString();
-    apiClient.type('subjects').get(subjectId)
+    apiClient.type('subjects').get(subjectId, { include: 'project' })
       .then((subject) => {
         this.setState({ subject });
         this.getCollections(subject, this.props.location.query.collections_page);

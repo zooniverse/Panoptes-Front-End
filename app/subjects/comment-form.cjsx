@@ -51,18 +51,14 @@ module.exports = React.createClass
       to contribute to subject discussions
     </p>
 
-  notSetup: ->
-    <p>There are no discussion boards setup for this project yet. Check back soon!</p>
+  noDefaultBoardMessage: ->
+    <p>There are no discussion boards setup for this project yet. Please check back soon or {@linkToClassifier('return to classifying')}.</p>
 
   quickComment: ->
     if @state.subjectDefaultBoard
       <QuickSubjectCommentForm {...@props} subject={@props.subject} user={@props.user} />
     else
-      <p>
-        There is no default board for subject comments setup yet, Please{' '}
-        <button className="link-style" onClick={=> @setState(tab: 1)}>start a new discussion</button>{' '}
-        or {@linkToClassifier('return to classifying')}
-      </p>
+      @noDefaultBoardMessage()
 
   startDiscussion: ->
     <NewDiscussionForm
@@ -78,23 +74,27 @@ module.exports = React.createClass
 
   render: ->
     return <Loading /> if @state.loading
-    return @notSetup() unless @state.boards
+    return @noDefaultBoardMessage() unless @state.boards
     return @loginPrompt() unless @props.user
 
-    <div>
+    if @state.boards.length < 1
+      @renderTab()
+    else
       <div className="tabbed-content">
         <div className="tabbed-content-tabs">
           <div className="subject-page-tabs">
             <div className="tabbed-content-tab #{if @state.tab is 0 then 'active' else ''}" onClick={=> @setState({tab: 0})}>
-              Add a note about this subject
+              <button className="link-style">
+                Add a note about this subject
+              </button>
             </div>
 
             <div className="tabbed-content-tab #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
-              Start a new discussion
+              <button className="link-style">
+                Start a new discussion
+              </button>
             </div>
           </div>
         </div>
+        {@renderTab()}
       </div>
-
-      {@renderTab()}
-    </div>
