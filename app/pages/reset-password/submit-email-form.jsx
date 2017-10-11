@@ -12,11 +12,11 @@ const SubmitEmailForm = ({ user, onSubmit, onChange, disabled, inProgress, email
 
   return (
     <form onSubmit={onSubmit}>
-      <Translate
-        component="p"
-        content="resetPassword.enterEmailDialog"
-      />
-      <label>
+      <label htmlFor="enterEmailLabel">
+        <Translate
+          component="p"
+          content="resetPassword.enterEmailLabel"
+        />
         <input
           type="email"
           required={true}
@@ -55,6 +55,26 @@ const SubmitEmailForm = ({ user, onSubmit, onChange, disabled, inProgress, email
         />}
     </form>
   );
-}
+};
+
+SubmitEmailForm.propTypes = {
+  disabled: React.PropTypes.bool,
+  emailError: React.PropTypes.string,
+  emailSuccess: React.PropTypes.bool,
+  inProgress: React.PropTypes.bool,
+  onChange: React.PropTypes.func,
+  onSubmit: React.PropTypes.func,
+  user: React.PropTypes.object // eslint-disable-line react/forbid-prop-types
+};
+
+SubmitEmailForm.defaultProps = {
+  disabled: null,
+  emailError: null,
+  emailSuccess: null,
+  inProgress: false,
+  onChange: () => {},
+  onSubmit: () => {},
+  user: null
+};
 
 export default SubmitEmailForm;

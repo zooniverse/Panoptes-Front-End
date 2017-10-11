@@ -15,7 +15,7 @@ class ResetPasswordPage extends React.Component {
       resetSuccess: false,
       resetError: null,
       emailSuccess: false,
-      emailError: false,
+      emailError: null,
       emailIsValid: false
     };
 

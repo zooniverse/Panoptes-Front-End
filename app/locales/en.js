@@ -135,7 +135,7 @@ export default {
     newPasswordFormDialog: 'Go ahead and enter a new password, then you can get back to doing some research.',
     newPasswordFormLabel: 'New password:',
     newPasswordConfirmationLabel: 'Again, to confirm:',
-    enterEmailDialog: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
+    enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
     emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
     emailError: 'There was an error reseting your password.',
     resetError: 'Something went wrong, please try and reset your password via email again.',

@@ -20,31 +20,18 @@ describe('ResetPasswordPage', () => {
     wrapper = shallow(<ResetPasswordPage />, { context: { router: { push: () => {} }}});
   });
 
-  it('should render without crashing', () => {
+  it('renders without crashing', () => {
     const ResetPasswordPageContainer = wrapper.find('div.centered-grid');
     assert.equal(ResetPasswordPageContainer.length, 1);
   });
 
-  describe('SubmitEmailForm', () => {
-    it('renders without crashing', () => {
-      assert.equal(wrapper.find('SubmitEmailForm').length, 1);
-    });
-
-    it('renders with no user if none is passed in', () => {
-      assert.equal(wrapper.find('SubmitEmailForm').nodes[0].props.user, null)
-    })
-
-    it('renders for a user when a user prop is passed in', () => {
-      wrapper.setProps({ user });
-      assert.equal(wrapper.find('SubmitEmailForm').nodes[0].props.user.display_name, 'Test User')
-    })
+  it('renders SubmitEmailForm for a not logged in user', () => {
+    wrapper.setProps({ user: null });
+    assert.equal(wrapper.find('SubmitEmailForm').length, 1);
   });
 
-  describe('NewPasswordForm', () => {
-    it('renders when given a password reset token', () => {
-      wrapper.setProps({ user, location });
-      assert.equal(wrapper.find('NewPasswordForm').length, 1);
-    });
+  it('renders NewPasswordForm when given a password reset token', () => {
+    wrapper.setProps({ user, location });
+    assert.equal(wrapper.find('NewPasswordForm').length, 1);
   });
-
 });
