@@ -12,7 +12,7 @@ const SubmitEmailForm = ({ user, onSubmit, onChange, disabled, inProgress, email
 
   return (
     <form onSubmit={onSubmit}>
-      <label htmlFor="enterEmailLabel">
+      <label>
         <Translate
           component="p"
           content="resetPassword.enterEmailLabel"

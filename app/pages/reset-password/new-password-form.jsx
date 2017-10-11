@@ -7,7 +7,7 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
       component="p"
       content="resetPassword.newPasswordFormDialog"
     />
-    <label htmlFor="newPasswordFormLabel">
+    <label>
       <Translate
         component="p"
         content="resetPassword.newPasswordFormLabel"
@@ -18,7 +18,7 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         size="20"
       />
     </label>
-    <label htmlFor="newPasswordConfirmationLabel">
+    <label>
       <Translate
         component="p"
         content="resetPassword.newPasswordConfirmationLabel"
