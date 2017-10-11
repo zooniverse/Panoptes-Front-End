@@ -1,69 +1,20 @@
 import React from 'react';
 
-// TODO: credit source
-(function() {
-  /**
-   * Decimal adjustment of a number.
-   *
-   * @param {String}  type  The type of adjustment.
-   * @param {Number}  value The number.
-   * @param {Integer} exp   The exponent (the 10 logarithm of the adjustment base).
-   * @returns {Number} The adjusted value.
-   */
-  function decimalAdjust(type, value, exp) {
-    // If the exp is undefined or zero...
-    if (typeof exp === 'undefined' || +exp === 0) {
-      return Math[type](value);
-    }
-    value = +value;
-    exp = +exp;
-    // If the value is not a number or the exp is not an integer...
-    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
-      return NaN;
-    }
-    // Shift
-    value = value.toString().split('e');
-    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
-    // Shift back
-    value = value.toString().split('e');
-    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
-  }
-
-  // Decimal round
-  if (!Math.round10) {
-    Math.round10 = function(value, exp) {
-      return decimalAdjust('round', value, exp);
-    };
-  }
-  // Decimal floor
-  if (!Math.floor10) {
-    Math.floor10 = function(value, exp) {
-      return decimalAdjust('floor', value, exp);
-    };
-  }
-  // Decimal ceil
-  if (!Math.ceil10) {
-    Math.ceil10 = function(value, exp) {
-      return decimalAdjust('ceil', value, exp);
-    };
-  }
-})();
-
-const isVar = (v) => typeof(v) !== 'undefined';
+const isVar = v => typeof v !== 'undefined';
 
 // grabs the model score (calculated in modelCanvas) and displays it with a
 // progress bar
 const ModelScore = (props) => {
-  if (isVar(props.workflow) && isVar(props.workflow.configuration) &&
-    isVar(props.workflow.configuration.metadata) &&
-    isVar(props.workflow.configuration.metadata.modelScore)) {
+  if (props.workflow && props.workflow.configuration &&
+    props.workflow.configuration.metadata &&
+    props.workflow.configuration.metadata.modelScore) {
     let s = props.workflow.configuration.metadata.modelScore;
     if (s < 80) {
-      s = Math.round10(s, -2);
-    } else if (s < 90) {
-      s = Math.round10(s, -3);
+      s = (s).toFixed(2);
     } else if (s < 95) {
-      s = Math.round10(s, -4);
+      s = (s).toFixed(3);
+    } else {
+      s = (s).toFixed(4);
     }
     return (
       <div className="answer undefined">
@@ -80,14 +31,32 @@ const ModelScore = (props) => {
       </div>
     );
   }
-}
+};
 
+/* eslint-disable react/forbid-prop-types */
 ModelScore.propTypes = {
   workflow: React.PropTypes.object
 };
+/* eslint-enable react/forbid-prop-types */
 
 ModelScore.defaultProps = {
   workflow: {}
-}
+};
 
-export default ModelScore;
+// check if we're on a modelling project, and only render if we are
+const ModelScoreWrapper = (props) => {
+  if (props.workflow.configuration.metadata && props.workflow.configuration.metadata.type === 'modelling') {
+    return <ModelScore {...props} />;
+  } else {
+    return null;
+  }
+};
+
+/* eslint-disable react/forbid-prop-types */
+ModelScoreWrapper.propTypes = {
+  workflow: React.PropTypes.object
+};
+/* eslint-enable react/forbid-prop-types */
+
+
+export default ModelScoreWrapper;

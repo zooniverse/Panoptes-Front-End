@@ -1,4 +1,8 @@
+import { Markdown } from 'markdownz';
+import React from 'react';
 import reglBase from 'regl';
+import alert from '../../lib/alert';
+
 
 class baseModel {
   constructor(canvas, metadata) {
@@ -23,7 +27,6 @@ class baseModel {
     // create a texture which is used for post-processing and difference calculation
     this.pixels = this.regl.texture();
     const postProcessingArray = this.getPostProcessingFunc(this.regl);
-    // const postProcessingArray = postProcessingArray2.slice(0, postProcessingArray2.length - 1);
 
     this.postProcessingFunc = () => {
       if (this.baseTexture !== null) {
@@ -49,12 +52,7 @@ class baseModel {
 
     // call the getModel function, this will be extended for each model and returns
     // a list of component objects TODO: model schema?
-    this.model = this.getModel();
-
-    // bind the model functions to the regl
-    this.model = this.model.map(
-      c => Object.assign(c, { func: c.func(this.regl) })
-    );
+    this.model = this.getModel(this.regl);
     this.toRender = [];
   }
   update(annotation) {
@@ -88,7 +86,17 @@ class baseModel {
     } catch (err) {
       if (err.name === 'SecurityError') {
         // TODO: shouldn't really be using alert here. Does Zooniverse have a modal?
-        alert('CORS error encountered, please make sure you are using Google Chrome and try refreshing the page');
+        alert(
+          (resolve, reject) =>
+            (
+              <div className="content-container">
+                <Markdown className="classification-task-help">
+                  CORS error encountered, please make sure you are using Google Chrome and try refreshing the page
+                </Markdown>
+                <button className="standard-button" onClick={reject}>Close</button>
+              </div>
+            )
+        );
       }
     }
   }
@@ -120,20 +128,20 @@ class baseModel {
   }
   /* eslint-enable class-methods-use-this */
   getScore() {
-    // images have been treated by normalisation to [0, 1] then arcsinh stretch
-    // with a = 0.1. Need to calc difference in normal space
-    // TODO: more model-independent
+    /* this should be overwritten. The default simply calculates the sum of the r-band
+    pixel values, divides by a normalising constant and maps that onto [0, 100] using an
+    exponential
+    */
     this.regl.read(this.differenceData); // get the difference array
     const l = this.size[0] * this.size[1] * 4;
-    let AIC = 0;
+    let v = 0;
     for (let i = 0; i < l; i += 4) {
       // normalise to [0, 1]
       const r = this.differenceData[i] / 255;
-      const b = this.differenceData[i + 2] / 255;
-      AIC += ((r - b) * (r - b)) / this.size[0] / this.size[1];
+      v += r / this.size[0] / this.size[1];
     }
     // arbitrary 0 -> 100% scaling
-    return 100 * Math.exp(-AIC * 500);
+    return 100 * Math.exp(-v * 500);
   }
 }
 export default baseModel;

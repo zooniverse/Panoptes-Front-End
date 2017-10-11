@@ -19,8 +19,12 @@ Proposed usage:
   - calcluate the difference between model and image
 */
 
-// TODO: switch model here depending on project workflow
+// TODO: switch model here depending on project workflow?
 
 import galaxyModel from './galaxyModel';
+import galaxyScore from './galaxyScore';
 
-export default galaxyModel;
+export {
+  galaxyModel as Model,
+  galaxyScore as ModelScore
+};

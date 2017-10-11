@@ -111,6 +111,7 @@ const SliderTask = ({ task, annotation, onChange, autoFocus }) => {
 SliderTask.displayName = 'SliderTask';
 SliderTask.Editor = SliderTaskEditor;
 SliderTask.Summary = SliderSummary;
+<<<<<<< HEAD
 SliderTask.getDefaultTask = () => {
   return SLIDERTASKDEFAULT;
 };
@@ -123,6 +124,22 @@ SliderTask.getDefaultAnnotation = (task) => {
 SliderTask.isAnnotationComplete = (task, annotation) => {
   return (annotation.value !== null);
 };
+=======
+SliderTask.getDefaultTask = () => ({
+  type: 'slider',
+  instruction: 'Enter an Instruction.',
+  help: '',
+  min: '0',
+  max: '1',
+  step: '0.1',
+  defaultValue: '0'
+});
+SliderTask.getTaskText = task => task.instruction;
+
+SliderTask.getDefaultAnnotation = () => ({ value: null });
+
+SliderTask.isAnnotationComplete = (task, annotation) => (!task.required || annotation.value !== null);
+>>>>>>> Made changes in git pull request
 
 SliderTask.propTypes = {
   annotation: React.PropTypes.shape({
