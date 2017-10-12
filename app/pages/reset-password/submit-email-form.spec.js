@@ -32,4 +32,27 @@ describe('SubmitEmailForm', () => {
     wrapper.find('button').simulate('submit');
     assert.equal(submitEmailSpy.calledOnce, true);
   });
+
+  it('conditionally shows and hides an in-progress icon', () => {
+    wrapper.setProps({ inProgress: true });
+    assert.equal(wrapper.find('i').length, 1);
+    wrapper.setProps({ inProgress: false });
+    assert.equal(wrapper.find('i').length, 0);
+  });
+
+  it('conditionally shows and hides an email success icon and message', () => {
+    wrapper.setProps({ emailSuccess: true });
+    assert.equal(wrapper.find('i').length, 1);
+    assert.equal(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailSuccess');
+    wrapper.setProps({ emailSuccess: false });
+    assert.equal(wrapper.find('i').length, 0);
+    assert.notEqual(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailSuccess');
+  });
+
+  it('conditionally shows and hides an email error message', () => {
+    wrapper.setProps({ emailError: 'test error message' });
+    assert.equal(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailError');
+    wrapper.setProps({ emailError: null });
+    assert.notEqual(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailError');
+  });
 });
