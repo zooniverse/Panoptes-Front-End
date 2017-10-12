@@ -1,6 +1,6 @@
 import React from 'react';
 import assert from 'assert';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import SubmitEmailForm from './submit-email-form';
 
@@ -10,9 +10,10 @@ const user = {
 
 describe('SubmitEmailForm', () => {
   let wrapper;
+  const submitEmailSpy = sinon.spy();
 
   before(() => {
-    wrapper = shallow(<SubmitEmailForm />);
+    wrapper = shallow(<SubmitEmailForm onSubmit={submitEmailSpy} />);
   });
 
   it('does not render a submit email form for a logged in user', () => {
@@ -27,32 +28,30 @@ describe('SubmitEmailForm', () => {
   });
 
   it('should call onSubmit when user submits email', () => {
-    const submitEmailSpy = sinon.spy();
-    wrapper = mount(<SubmitEmailForm user={null} onSubmit={submitEmailSpy} />);
-    wrapper.find('button').simulate('submit');
+    wrapper.find('form').simulate('submit');
     assert.equal(submitEmailSpy.calledOnce, true);
   });
 
   it('conditionally shows and hides an in-progress icon', () => {
     wrapper.setProps({ inProgress: true });
-    assert.equal(wrapper.find('i').length, 1);
+    assert.equal(wrapper.find('i.form-help').length, 1);
     wrapper.setProps({ inProgress: false });
-    assert.equal(wrapper.find('i').length, 0);
+    assert.equal(wrapper.find('i.form-help').length, 0);
   });
 
   it('conditionally shows and hides an email success icon and message', () => {
     wrapper.setProps({ emailSuccess: true });
-    assert.equal(wrapper.find('i').length, 1);
+    assert.equal(wrapper.find('i.form-help.success').length, 1);
     assert.equal(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailSuccess');
     wrapper.setProps({ emailSuccess: false });
-    assert.equal(wrapper.find('i').length, 0);
-    assert.notEqual(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailSuccess');
+    assert.equal(wrapper.find('i.form-help.success').length, 0);
+    assert.equal(wrapper.find('Translate').length, 1);
   });
 
   it('conditionally shows and hides an email error message', () => {
     wrapper.setProps({ emailError: 'test error message' });
     assert.equal(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailError');
     wrapper.setProps({ emailError: null });
-    assert.notEqual(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailError');
+    assert.equal(wrapper.find('Translate').length, 1);
   });
 });
