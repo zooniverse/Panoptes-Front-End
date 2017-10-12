@@ -1,7 +1,5 @@
 import React from 'react';
 
-const isVar = v => typeof v !== 'undefined';
-
 // grabs the model score (calculated in modelCanvas) and displays it with a
 // progress bar
 const ModelScore = (props) => {
@@ -10,7 +8,7 @@ const ModelScore = (props) => {
     props.workflow.configuration.metadata.modelScore) {
     let s = props.workflow.configuration.metadata.modelScore;
     if (s < 80) {
-      s = (s).toFixed(2);
+      s = s.toFixed(2);
     } else if (s < 95) {
       s = (s).toFixed(3);
     } else {
