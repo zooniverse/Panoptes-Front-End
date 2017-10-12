@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const FOCUSABLES = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]';
+const FOCUSABLES = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[contenteditable]';
 
 const ESC_KEY = 27;
 const TAB_KEY = 9;
@@ -9,13 +9,8 @@ const TAB_KEY = 9;
 class ModalFocus extends React.Component {
   constructor(props) {
     super(props);
-    this.focusables = [];
     this.previousActiveElement = document.activeElement;
     this.handleKeyDown = this.handleKeyDown.bind(this);
-  }
-
-  componentDidMount() {
-    this.focusables = ReactDOM.findDOMNode(this).querySelectorAll(FOCUSABLES);
   }
 
   componentWillUnmount() {
@@ -24,7 +19,7 @@ class ModalFocus extends React.Component {
 
   handleKeyDown(e) {
     const { shiftKey, target } = e;
-    const { focusables } = this;
+    const focusables = ReactDOM.findDOMNode(this).querySelectorAll(FOCUSABLES);
     switch (e.keyCode) {
       case ESC_KEY:
         this.props.onEscape();
