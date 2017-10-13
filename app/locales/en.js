@@ -131,6 +131,7 @@ export default {
     message: 'Not found'
   },
   resetPassword: {
+    heading: 'Reset Password',
     newPasswordFormDialog: 'Go ahead and enter a new password, then you can get back to doing some research.',
     newPasswordFormLabel: 'New password:',
     newPasswordConfirmationLabel: 'Again, to confirm:',

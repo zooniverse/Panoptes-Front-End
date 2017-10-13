@@ -32,7 +32,7 @@ React = require 'react'
 `import AdminPage from './pages/admin';`
 `import SignInPage from './pages/sign-in';`
 `import NotFoundPage from './pages/not-found';`
-`import ResetPasswordPage from './pages/reset-password';`
+`import ResetPasswordPage from './pages/reset-password/reset-password';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
