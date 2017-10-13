@@ -75,7 +75,7 @@ class ProjectStatus extends Component {
 
   handleToggle(event, workflow) {
     this.setState({ error: null });
-    let checked = event.target.checked;
+    const checked = event.target.checked;
 
     return workflow.update({ 'active': checked }).save()
       .then(() => this.getWorkflows())
