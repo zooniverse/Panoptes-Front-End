@@ -28,8 +28,8 @@ const UserProperties = (props) => {
           </AutoSave>
         </li>
         <li>
-          <AutoSave resource={this.props.user}>
-            <input type="checkbox" name="banned" checked={this.props.user.banned} onChange={handleChange} />{' '}
+          <AutoSave resource={props.user}>
+            <input type="checkbox" name="banned" checked={props.user.banned} onChange={handleChange} />{' '}
             Ban user
           </AutoSave>
         </li>
