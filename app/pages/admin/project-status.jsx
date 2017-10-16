@@ -88,7 +88,7 @@ class ProjectStatus extends Component {
         {this.state.workflows.map((workflow) => {
           return (
             <li key={workflow.id} className="section-list__item">
-              <WorkflowToggle workflow={workflow} project={this.state.project} field="active" />{' | '}
+              <WorkflowToggle workflow={workflow} field="active" />{' | '}
               <label>
                 Level:{' '}
                 <select
