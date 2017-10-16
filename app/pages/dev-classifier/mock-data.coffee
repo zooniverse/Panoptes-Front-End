@@ -560,7 +560,17 @@ project = apiClient.type('projects').create
   experimental_tools: []
 
 preferences = apiClient.type('project_preferences').create
-  preferences: {}
+  preferences: [
+    {
+      activity_count: 'one million'
+      email_communication: false
+      id: 'MOCK_PREFERENCES_ID_FOR_CLASSIFIER'
+    }
+  ]
+
+user = apiClient.type('users').create
+  id: 'MOCK_USER_ID_FOR_CLASSIFIER'
+  login: 'MOCK_USER_LOGIN_FOR_CLASSIFIER'
 
 classification = apiClient.type('classifications').create
   annotations: []
