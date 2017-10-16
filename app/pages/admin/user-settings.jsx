@@ -44,7 +44,7 @@ class UserSettings extends Component {
     }
 
     if (this.state.editUser === this.props.user) {
-      return <p>Can&apos;t edit your own account</p>;
+      return <div>You cannot edit your own account</div>;
     }
 
     const handleChange = handleInputChange.bind(this.state.editUser);

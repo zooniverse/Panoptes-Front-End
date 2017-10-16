@@ -27,7 +27,7 @@ class DeleteUser extends Component {
   handleClick() {
     this.setState({deletionError: null});
 
-    var phrase = prompt("You are about to delete this user and all their projects! This cannot be reversed.\nEnter this user's login to confirm.");
+    var phrase = prompt("You are about to delete this user! This cannot be reversed.\nEnter this user's login to confirm.");
 
     if (phrase === this.props.user.login) {
       this.performDelete();
