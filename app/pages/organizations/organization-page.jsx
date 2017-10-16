@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
 import Thumbnail from '../../components/thumbnail';
+import SocialIcons from '../../lib/social-icons';
 import ProjectCard from '../../partials/project-card';
 
 const AVATAR_SIZE = 100;
@@ -64,6 +65,13 @@ class OrganizationPage extends React.Component {
 
   render() {
     const [aboutPage] = this.props.organizationPages.filter(page => page.url_key === 'about');
+    const urls = this.props.organization.urls;
+    const rearrangedLinks = urls.sort((a, b) => {
+      if (a.path && !b.path) {
+        return 1;
+      }
+      return 0;
+    });
 
     const aboutContentClass = classnames(
       'organization-details__about-content',
@@ -183,10 +191,29 @@ class OrganizationPage extends React.Component {
             </div>
             <div className="organization-researcher-words">
               <h4 className="organization-details__heading"><Translate content="organization.home.links" /></h4>
-              <ul>
-                <li className="organization-details__link">Blog</li>
-                <li className="organization-details__link"><i className="fa fa-facebook fa-fw" />- @orgFacebook</li>
-                <li className="organization-details__link"><i className="fa fa-twitter fa-fw" />- @orgTwitter</li>
+              <ul className="organization-details__links">
+                {rearrangedLinks.length && rearrangedLinks.map((link, i) => {
+                  if (link.path) {
+                    let iconForLabel;
+                    if (Object.keys(SocialIcons).indexOf(link.site) >= 0) {
+                      iconForLabel = SocialIcons[link.site];
+                    } else {
+                      iconForLabel = 'globe';
+                    }
+                    return (
+                      <li key={i}>
+                        <a className=" organization-details__link" href={`${link.url}`}>
+                          <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />
+                        </a>
+                      </li>);
+                  }
+                  return (
+                    <li key={i}>
+                      <a className="organization-details__link" href={link.url}>
+                        {link.label}
+                      </a>
+                    </li>);
+                })}
               </ul>
             </div>
           </div>
@@ -220,7 +247,12 @@ OrganizationPage.propTypes = {
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,
-    introduction: React.PropTypes.string
+    introduction: React.PropTypes.string,
+    urls: React.PropTypes.arrayOf(
+      React.PropTypes.shape({
+        url: React.PropTypes.string
+      })
+    )
   }).isRequired,
   organizationAvatar: React.PropTypes.shape({
     src: React.PropTypes.string
