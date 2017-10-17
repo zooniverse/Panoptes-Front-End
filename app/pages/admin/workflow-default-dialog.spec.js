@@ -4,9 +4,11 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import WorkflowDefaultDialog from './workflow-default-dialog';
 
+const dialogText = 'You are about to make the default workflow inactive, which will remove the default setting from this workflow. The default workflow can be set in the workflows page of the project builder.'; // eslint-disable-line max-len
+
 describe('WorkflowDefaultDialog', () => {
   let wrapper;
-  let onSuccessSpy
+  let onSuccessSpy;
 
   before(() => {
     onSuccessSpy = sinon.spy();
@@ -14,12 +16,12 @@ describe('WorkflowDefaultDialog', () => {
   });
 
   it('renders without crashing', () => {
-    const WorkflowDefaultDialogContainer = wrapper.find('div');
-    assert.equal(WorkflowDefaultDialogContainer.length, 1)
+    const WorkflowDefaultDialogContainer = wrapper.find('div').first();
+    assert.equal(WorkflowDefaultDialogContainer.length, 1);
   });
 
   it('renders dialog text', () => {
-    assert.equal(wrapper.find('Translate').prop('content'), 'workflowDefaultDialog.text');
+    assert.equal(wrapper.find('div').last().text(), dialogText);
   });
 
   it('calls the onSuccess handler', () => {

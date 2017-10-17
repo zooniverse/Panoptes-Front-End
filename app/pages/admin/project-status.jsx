@@ -11,7 +11,7 @@ import VersionList from './project-status/version-list';
 import ExperimentalFeatures from './project-status/experimental-features';
 import Toggle from './project-status/toggle';
 import RedirectToggle from './project-status/redirect-toggle';
-import WorkflowDefaultDialog from '../../components/workflow-default-dialog'
+import WorkflowDefaultDialog from './workflow-default-dialog'
 
 class ProjectStatus extends Component {
   constructor(props) {
@@ -27,13 +27,12 @@ class ProjectStatus extends Component {
       project: null,
       error: null,
       usedWorkflowLevels: [],
-      workflows: [],
-      workflowSetting: {}
+      workflows: []
     };
   }
 
   componentDidMount() {
-    this.getProject().then(() => this.getWorkflows());
+    this.getProjectAndWorkflows();
   }
 
   componentWillUnmount() {
@@ -61,6 +60,10 @@ class ProjectStatus extends Component {
     });
   }
 
+  getProjectAndWorkflows() {
+    this.getProject().then(() => this.getWorkflows());
+  }
+
   getUsedWorkflowLevels(workflows) {
     return workflows
       .map(workflow => workflow.configuration.level)
@@ -81,26 +84,28 @@ class ProjectStatus extends Component {
     const checked = event.target.checked;
     const defaultWorkflowId = this.state.project.configuration.default_workflow;
 
-    const promises = [this.getWorkflows(), this.getProject()];
-
     if (defaultWorkflowId === workflow.id && workflow.active) {
+      const promises = [
+        workflow.update({ active: checked }).save(),
+        this.state.project.update({ 'configuration.default_workflow': undefined }).save()
+      ];
+
       Dialog.alert(
         <WorkflowDefaultDialog closeButton={true} required={true} />
       )
       .then(() => {
         Promise.all(promises)
           .then(() => {
-            if (!this.state.error) {
-              workflow.update({ active: checked }).save();
-              this.state.project.update({ 'configuration.default_workflow': undefined }).save();
-            }
+            this.getProjectAndWorkflows();
           })
           .catch(error => this.setState({ error }));
       })
       .catch(error => this.setState({ error }));
     }
 
-    workflow.update({ active: checked }).save();
+    if (defaultWorkflowId !== workflow.id) {
+      workflow.update({ active: checked }).save();
+    }
   }
 
   renderError() {

@@ -143,8 +143,5 @@ export default {
   },
   workflowToggle: {
     label: 'Active'
-  },
-  workflowDefaultDialog: {
-    text: 'You are about to make the default workflow inactive, which will remove the \'default\' setting from this workflow. The default workflow can be set in the workflows page of the project builder.'
   }
 };

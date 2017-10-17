@@ -1,9 +1,12 @@
 import React from 'react';
-import Translate from 'react-translate-component';
 
 const WorkflowDefaultDialog = ({ onSuccess }) => (
   <div>
-    <Translate content="workflowDefaultDialog.text" />
+    <div>
+      You are about to make the default workflow inactive,
+      which will remove the default setting from this workflow.
+      The default workflow can be set in the workflows page of the project builder.
+    </div>
     <br />
     <button type="submit" onSubmit={onSuccess}>ok</button>
   </div>
