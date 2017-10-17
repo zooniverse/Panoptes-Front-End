@@ -207,6 +207,8 @@ class OrganizationPage extends React.Component {
                         key={i}
                         className="organization-details__link organization-details__link--social"
                         href={`${link.url}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />
                         <span> - @{link.path}</span>
@@ -217,6 +219,8 @@ class OrganizationPage extends React.Component {
                       key={i}
                       className="organization-details__link organization-details__link--external"
                       href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       {link.label}
                     </a>);
