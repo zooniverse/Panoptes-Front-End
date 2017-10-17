@@ -1,4 +1,5 @@
 React = require 'react'
+{Link} = require 'react-router'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
 ImageSelector = require '../../components/image-selector'
@@ -32,6 +33,7 @@ module.exports = React.createClass
     researchers: []
     avatar: null
     background: null
+    organization: null
     error: null
 
   componentWillMount: ->
@@ -40,6 +42,9 @@ module.exports = React.createClass
         role.links.owner.id
       apiClient.type('users').get(scientists).then (researchers) =>
         @setState({ researchers })
+
+    @props.project.get('organization').then (organization) =>
+      @setState({ organization })
 
     @updateImage 'avatar'
     @updateImage 'background'
@@ -110,6 +115,12 @@ module.exports = React.createClass
         </div>
 
         <div className="column">
+          {if @state.organization
+            <div>
+              <p>This project is part of the <Link to={"/organizations/#{@state.organization.slug}"}>{@state.organization.display_name}</Link> organization.</p>
+              <p><button onClick={@handleOrganizationUnlink}>Unlink</button> this project from the organization.</p>
+            </div>}
+
           <DisplayNameSlugEditor resource={@props.project} resourceType="project" />
 
           <p>
@@ -210,6 +221,13 @@ module.exports = React.createClass
         </div>
       </div>
     </div>
+
+  handleOrganizationUnlink: () ->
+    @state.organization.removeLink 'projects', @props.project.id
+      .then =>
+        @props.project.uncacheLink 'organizations'
+        @props.project.refresh()
+        @setState({ organization: null })
 
   handleDisciplineTagChange: (options) ->
     newTags = options.map (option) ->
