@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-WorkflowToggle = require '../../components/workflow-toggle'
 SetToggle = require '../../lib/set-toggle'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 uniq = require 'lodash/uniq'
