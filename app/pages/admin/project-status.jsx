@@ -11,6 +11,9 @@ import ExperimentalFeatures from './project-status/experimental-features';
 import Toggle from './project-status/toggle';
 import RedirectToggle from './project-status/redirect-toggle';
 
+import WorkflowDefaultDialog from '../../components/workflow-default-dialog'
+import Dialog from 'modal-form/dialog';
+
 class ProjectStatus extends Component {
   constructor(props) {
     super(props);
@@ -20,12 +23,14 @@ class ProjectStatus extends Component {
     this.renderError = this.renderError.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
+    this.handleRemoveDefault = this.handleRemoveDefault.bind(this);
 
     this.state = {
       project: null,
       error: null,
       usedWorkflowLevels: [],
-      workflows: []
+      workflows: [],
+      workflowSetting: {}
     };
   }
 
@@ -75,16 +80,45 @@ class ProjectStatus extends Component {
 
   handleToggle(event, workflow) {
     this.setState({ error: null });
-    const checked = event.target.checked;
+    let checked = event.target.checked;
+
+    const defaultWorkflowId = this.state.project.configuration.default_workflow
+
+    if (defaultWorkflowId === workflow.id && workflow.active) {
+      Dialog.alert(
+        <WorkflowDefaultDialog closeButton={true} required/>
+      ).then(() => {
+        this.handleRemoveDefault()
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    }
 
     return workflow.update({ 'active': checked }).save()
       .then(() => this.getWorkflows())
       .catch(error => this.setState({ error }))
   }
 
+  handleRemoveDefault() {
+    return this.state.project.update({ 'configuration.default_workflow': undefined }).save()
+      .then(() => this.getProject())
+      .catch(error => this.setState({ error }))
+  }
+
   renderError() {
     if (this.state.error) {
       return <div>{this.state.error}</div>;
+    }
+  }
+
+  renderDefaultWorkflowAsterisk(workflow) {
+    const defaultWorkflowId = this.state.project.configuration.default_workflow
+
+    if (defaultWorkflowId === workflow.id) {
+      return (
+        ' * '
+      )
     }
   }
 
@@ -98,6 +132,7 @@ class ProjectStatus extends Component {
         {this.state.workflows.map((workflow) => {
           return (
             <li key={workflow.id} className="section-list__item">
+              {this.renderDefaultWorkflowAsterisk(workflow)}
               <WorkflowToggle
                 workflow={workflow}
                 name="active"
@@ -164,6 +199,8 @@ class ProjectStatus extends Component {
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
           <small>The workflow level dropdown is for the workflow assignment experimental feature.</small>
+          <br />
+          <small>An asterisk (*) denotes a default workflow.</small>
           {this.renderError()}
           {this.renderWorkflows()}
         </div>
