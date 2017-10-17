@@ -66,12 +66,15 @@ class OrganizationPage extends React.Component {
   render() {
     const [aboutPage] = this.props.organizationPages.filter(page => page.url_key === 'about');
     const urls = this.props.organization.urls;
-    const rearrangedLinks = urls.sort((a, b) => {
-      if (a.path && !b.path) {
-        return 1;
-      }
-      return 0;
-    });
+    let rearrangedLinks = [];
+    if (this.props.organization.urls) {
+      rearrangedLinks = urls.sort((a, b) => {
+        if (a.path && !b.path) {
+          return 1;
+        }
+        return 0;
+      });
+    }
 
     const aboutContentClass = classnames(
       'organization-details__about-content',
@@ -202,7 +205,7 @@ class OrganizationPage extends React.Component {
                     }
                     return (
                       <li key={i}>
-                        <a className=" organization-details__link" href={`${link.url}`}>
+                        <a className="organization-details__link" href={`${link.url}`}>
                           <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />
                         </a>
                       </li>);

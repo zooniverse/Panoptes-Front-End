@@ -17,7 +17,31 @@ export const organization = {
   id: '9876',
   display_name: 'Test Org',
   description: 'A brief test description',
-  introduction: 'A brief test introduction'
+  introduction: 'A brief test introduction',
+  urls: [
+    {
+      key: 0.123,
+      url: 'https://blog.com/',
+      label: 'Blog'
+    },
+    {
+      key: 0.456,
+      url: 'https://fieldbook.com/',
+      label: 'Field Book'
+    },
+    {
+      url: 'https://github.com/testrepo',
+      path: 'testrepo',
+      site: 'github.com/',
+      label: ''
+    },
+    {
+      url: 'https://facebook.com/testfb',
+      path: 'testfb',
+      site: 'facebook.com/',
+      label: ''
+    }
+  ]
 };
 
 describe('OrganizationContainer', function () {
