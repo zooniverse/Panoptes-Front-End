@@ -65,10 +65,9 @@ class OrganizationPage extends React.Component {
 
   render() {
     const [aboutPage] = this.props.organizationPages.filter(page => page.url_key === 'about');
-    const urls = this.props.organization.urls;
     let rearrangedLinks = [];
     if (this.props.organization.urls) {
-      rearrangedLinks = urls.sort((a, b) => {
+      rearrangedLinks = this.props.organization.urls.sort((a, b) => {
         if (a.path && !b.path) {
           return 1;
         }
@@ -204,12 +203,21 @@ class OrganizationPage extends React.Component {
                       iconForLabel = 'globe';
                     }
                     return (
-                      <a key={i} className="organization-details__link" href={`${link.url}`}>
+                      <a
+                        key={i}
+                        className="organization-details__link organization-details__link--social"
+                        href={`${link.url}`}
+                      >
                         <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />
+                        <span> - @{link.path}</span>
                       </a>);
                   }
                   return (
-                    <a key={i} className="organization-details__link" href={link.url}>
+                    <a
+                      key={i}
+                      className="organization-details__link organization-details__link--external"
+                      href={link.url}
+                    >
                       {link.label}
                     </a>);
                 })}
