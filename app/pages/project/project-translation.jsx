@@ -2,12 +2,11 @@ import React from 'react';
 import translations from './translations';
 
 function ProjectTranslations(props) {
-  let { project } = props;
+  const { description, display_name, introduction, researcher_quote, title } = props.project;
   const projectStrings = translations.strings.project;
-  projectStrings.display_name = projectStrings.title;
-  project = Object.assign(project, projectStrings);
+  const translation = Object.assign({ description, display_name, introduction, researcher_quote, title }, projectStrings);
 
-  return React.cloneElement(props.children, { project });
+  return React.cloneElement(props.children, { translation });
 }
 
 ProjectTranslations.propTypes = {

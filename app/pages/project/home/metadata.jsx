@@ -67,7 +67,7 @@ export default class ProjectMetadata extends React.Component {
   }
 
   render() {
-    const project = this.props.project;
+    const { project, translation } = this.props;
     const statsLink = `/projects/${project.slug}/stats`;
 
     return (
@@ -76,7 +76,7 @@ export default class ProjectMetadata extends React.Component {
           <Link to={statsLink}>
             <Translate
               content="project.home.metadata.statistics"
-              with={{ title: project.display_name }}
+              with={{ title: translation.display_name }}
             />
           </Link>
 
@@ -99,7 +99,10 @@ export default class ProjectMetadata extends React.Component {
 
         </div>
         {this.props.showTalkStatus && (
-          <TalkStatus project={this.props.project} />
+          <TalkStatus
+            project={this.props.project}
+            translation={this.props.translation}
+          />
         )}
       </div>
     );
@@ -119,6 +122,13 @@ ProjectMetadata.propTypes = {
     slug: React.PropTypes.string,
   }),
   showTalkStatus: React.PropTypes.bool,
+  translation: React.PropTypes.shape({
+    description: React.PropTypes.string,
+    display_name: React.PropTypes.string,
+    introduction: React.PropTypes.string,
+    researcher_quote: React.PropTypes.string,
+    title: React.PropTypes.string
+  }).isRequired
 };
 
 ProjectMetadata.defaultProps = {

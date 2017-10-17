@@ -101,6 +101,7 @@ export default class ProjectHomeContainer extends React.Component {
         showWorkflowButtons={this.state.showWorkflowButtons}
         splits={this.props.splits}
         talkSubjects={this.state.talkSubjects}
+        translation={this.props.translation}
       />
     );
   }
@@ -132,5 +133,12 @@ ProjectHomeContainer.propTypes = {
     researcher_quote: React.PropTypes.string
   }).isRequired,
   projectIsComplete: React.PropTypes.bool.isRequired,
-  splits: React.PropTypes.object
+  splits: React.PropTypes.object,
+  translation: React.PropTypes.shape({
+    description: React.PropTypes.string,
+    display_name: React.PropTypes.string,
+    introduction: React.PropTypes.string,
+    researcher_quote: React.PropTypes.string,
+    title: React.PropTypes.string
+  }).isRequired
 };
