@@ -194,8 +194,8 @@ class OrganizationPage extends React.Component {
             </div>
             <div className="organization-researcher-words">
               <h4 className="organization-details__heading"><Translate content="organization.home.links" /></h4>
-              <ul className="organization-details__links">
-                {rearrangedLinks.length && rearrangedLinks.map((link, i) => {
+              <div className="organization-details__links">
+                {!!rearrangedLinks.length && rearrangedLinks.map((link, i) => {
                   if (link.path) {
                     let iconForLabel;
                     if (Object.keys(SocialIcons).indexOf(link.site) >= 0) {
@@ -204,20 +204,16 @@ class OrganizationPage extends React.Component {
                       iconForLabel = 'globe';
                     }
                     return (
-                      <li key={i}>
-                        <a className="organization-details__link" href={`${link.url}`}>
-                          <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />
-                        </a>
-                      </li>);
+                      <a key={i} className="organization-details__link" href={`${link.url}`}>
+                        <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />
+                      </a>);
                   }
                   return (
-                    <li key={i}>
-                      <a className="organization-details__link" href={link.url}>
-                        {link.label}
-                      </a>
-                    </li>);
+                    <a key={i} className="organization-details__link" href={link.url}>
+                      {link.label}
+                    </a>);
                 })}
-              </ul>
+              </div>
             </div>
           </div>
         </section>
