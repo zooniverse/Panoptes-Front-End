@@ -3,7 +3,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
-import MultipleTask from './multiple';
+import MultipleTask from './';
 
 const task = {
   question: 'Is there something here?',
