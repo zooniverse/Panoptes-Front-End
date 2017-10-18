@@ -4,8 +4,8 @@ const WorkflowDefaultDialog = ({ onSuccess }) => (
   <div>
     <div>
       You are about to make the default workflow inactive,
-      which will remove the default setting from this workflow.
-      The default workflow can be set in the workflows page of the project builder.
+      which will remove the default workflow setting from this project.
+      The default workflow can be set in the edit workflows page of the project builder.
     </div>
     <br />
     <button type="submit" onSubmit={onSuccess}>ok</button>

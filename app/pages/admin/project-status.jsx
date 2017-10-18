@@ -86,26 +86,27 @@ class ProjectStatus extends Component {
     const defaultWorkflowId = this.state.project.configuration.default_workflow;
 
     if (defaultWorkflowId === workflow.id && workflow.active) {
-      const promises = [
-        workflow.update({ active: checked }).save(),
-        this.state.project.update({ 'configuration.default_workflow': undefined }).save()
-      ];
-
       Dialog.alert(
         <WorkflowDefaultDialog closeButton={true} required={true} />
       )
       .then(() => {
+        const promises = [
+          workflow.update({ active: checked }).save(),
+          this.state.project.update({ 'configuration.default_workflow': undefined }).save()
+        ];
         Promise.all(promises)
           .then(() => {
             this.getProjectAndWorkflows();
           })
           .catch(error => this.setState({ error }));
       })
-      .catch(error => this.setState({ error }));
+      .catch(error => console.error(error)); // eslint-disable-line no-console
     }
 
     if (defaultWorkflowId !== workflow.id) {
-      workflow.update({ active: checked }).save();
+      workflow.update({ active: checked })
+        .save()
+        .catch(error => this.setState({ error }));
     }
   }
 
