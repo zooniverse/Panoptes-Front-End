@@ -22,6 +22,7 @@ class ProjectStatus extends Component {
     this.renderError = this.renderError.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
+    this.getProjectAndWorkflows = this.getProjectAndWorkflows.bind(this);
 
     this.state = {
       project: null,
