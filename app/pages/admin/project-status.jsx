@@ -91,9 +91,10 @@ class ProjectStatus extends Component {
       workflow.update({ active: false }).save(),
       this.state.project.update({ 'configuration.default_workflow': undefined }).save()
     ];
-    console.log(promises)
+
     Promise.all(promises)
       .then(() => {
+        this.setState({ dialogIsOpen: false });
         this.getProjectAndWorkflows();
       })
       .catch(error => {
@@ -102,7 +103,6 @@ class ProjectStatus extends Component {
           error
         });
       });
-    this.setState({ dialogIsOpen: false });
   }
 
   handleToggle(event, workflow) {
@@ -113,6 +113,7 @@ class ProjectStatus extends Component {
     if (defaultWorkflowId === workflow.id && workflow.active) {
       this.setState({ dialogIsOpen: true });
     }
+
     if (defaultWorkflowId !== workflow.id) {
       workflow.update({ active: isChecked })
         .save()

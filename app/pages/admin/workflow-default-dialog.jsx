@@ -9,8 +9,20 @@ const WorkflowDefaultDialog = ({ onSuccess, onCancel }) => (
         The default workflow can be set in the edit workflows page of the project builder.
       </div>
       <br />
-      <button type="button" onClick={onSuccess}>ok</button>
-      <button type="button" onClick={onCancel}>cancel</button>
+      <button
+        type="button"
+        id="workflowDefaultDialogSuccess"
+        onClick={onSuccess}
+      >
+        ok
+      </button>
+      <button
+        type="button"
+        id="workflowDefaultDialogCancel"
+        onClick={onCancel}
+      >
+        cancel
+      </button>
     </Dialog>
   );
 
