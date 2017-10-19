@@ -58,21 +58,17 @@ class ModelRenderer extends React.Component {
 
   // don't want to re-render whenever props update
   shouldComponentUpdate() {
-    if (this.state.imgUrl !== Object.values(this.props.subject.locations[0])[0]) {
-      // we have a new subject. Refresh the model calculator
-      const im0 = this.props.subject.locations[0];
-      if (this.props.subject.locations.length < 2) {
-        this.props.subject.locations[1] = Object.assign({}, im0);
-      }
-      this.model.kill();
-      const metadata = this.props.subject.metadata;
-      this.model = new Model(this.canvas, metadata);
-      this.setState({ imgUrl: Object.values(im0)[0] });
-
-      return true;
-    } else {
-      return false;
+    return this.state.imgUrl !== Object.values(this.props.subject.locations[0])[0];
+  }
+  componentWillUpdate() {
+    const im0 = this.props.subject.locations[0];
+    if (this.props.subject.locations.length < 2) {
+      this.props.subject.locations[1] = Object.assign({}, im0);
     }
+    this.model.kill();
+    const metadata = this.props.subject.metadata;
+    this.model = new Model(this.canvas, metadata);
+    this.setState({ imgUrl: Object.values(im0)[0] });
   }
   componentDidUpdate() {
     const metadata = this.props.subject.metadata;

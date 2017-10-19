@@ -85,7 +85,6 @@ class baseModel {
       this.baseTexture = this.regl.texture(image);
     } catch (err) {
       if (err.name === 'SecurityError') {
-        // TODO: shouldn't really be using alert here. Does Zooniverse have a modal?
         alert(
           (resolve, reject) =>
             (
