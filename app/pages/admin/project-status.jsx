@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import Dialog from 'modal-form/dialog';
 
 import ProjectIcon from '../../components/project-icon';
 import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
@@ -23,10 +22,13 @@ class ProjectStatus extends Component {
     this.renderWorkflows = this.renderWorkflows.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.getProjectAndWorkflows = this.getProjectAndWorkflows.bind(this);
+    this.handleDialogCancel = this.handleDialogCancel.bind(this);
+    this.handleDialogSuccess = this.handleDialogSuccess.bind(this);
 
     this.state = {
-      project: null,
+      dialogIsOpen: false,
       error: null,
+      project: null,
       usedWorkflowLevels: [],
       workflows: []
     };
@@ -80,31 +82,39 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
+  handleDialogCancel() {
+    this.setState({ dialogIsOpen: false });
+  }
+
+  handleDialogSuccess(workflow) {
+    const promises = [
+      workflow.update({ active: false }).save(),
+      this.state.project.update({ 'configuration.default_workflow': undefined }).save()
+    ];
+    console.log(promises)
+    Promise.all(promises)
+      .then(() => {
+        this.getProjectAndWorkflows();
+      })
+      .catch(error => {
+        this.setState({
+          dialogIsOpen: false,
+          error
+        });
+      });
+    this.setState({ dialogIsOpen: false });
+  }
+
   handleToggle(event, workflow) {
     this.setState({ error: null });
-    const checked = event.target.checked;
+    const isChecked = event.target.checked;
     const defaultWorkflowId = this.state.project.configuration.default_workflow;
 
     if (defaultWorkflowId === workflow.id && workflow.active) {
-      Dialog.alert(
-        <WorkflowDefaultDialog closeButton={true} required={true} />
-      )
-      .then(() => {
-        const promises = [
-          workflow.update({ active: checked }).save(),
-          this.state.project.update({ 'configuration.default_workflow': undefined }).save()
-        ];
-        Promise.all(promises)
-          .then(() => {
-            this.getProjectAndWorkflows();
-          })
-          .catch(error => this.setState({ error }));
-      })
-      .catch(error => console.error(error)); // eslint-disable-line no-console
+      this.setState({ dialogIsOpen: true });
     }
-
     if (defaultWorkflowId !== workflow.id) {
-      workflow.update({ active: checked })
+      workflow.update({ active: isChecked })
         .save()
         .catch(error => this.setState({ error }));
     }
@@ -134,6 +144,11 @@ class ProjectStatus extends Component {
                 checked={workflow.active}
                 handleToggle={(event) => this.handleToggle(event, workflow)}
               />{' | '}
+              {this.state.dialogIsOpen &&
+                <WorkflowDefaultDialog
+                  onCancel={this.handleDialogCancel}
+                  onSuccess={this.handleDialogSuccess.bind(null, workflow)}
+                />}
               <label>
                 Level:{' '}
                 <select
