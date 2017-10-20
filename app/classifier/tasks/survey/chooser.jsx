@@ -126,6 +126,8 @@ class Chooser extends React.Component {
           {task.characteristicsOrder.map((characteristicId, i) => {
             const characteristic = task.characteristics[characteristicId];
             const selectedValue = characteristic.values[filters[characteristicId]];
+            const characteristicStrings = translation.characteristics[characteristicId];
+            const selectedValueStrings = characteristicStrings.values[filters[characteristicId]];
             let hasBeenAutoFocused = false;
             return (
               <TriggeredModalForm
@@ -136,10 +138,7 @@ class Chooser extends React.Component {
                 trigger={
                   <span className="survey-task-chooser-characteristic" data-is-active={!!selectedValue}>
                     <span className="survey-task-chooser-characteristic-label">
-                      {selectedValue ?
-                        translation.characteristics[characteristicId].values[filters[characteristicId]].label :
-                        translation.characteristics[characteristicId].label
-                      }
+                      {selectedValue ? selectedValueStrings.label : characteristicStrings.label}
                     </span>
                   </span>
                   }
@@ -147,10 +146,10 @@ class Chooser extends React.Component {
                 <div className="survey-task-chooser-characteristic-menu-container">
                   {characteristic.valuesOrder.map((valueId) => {
                     const value = characteristic.values[valueId];
-
-                    const disabled = valueId === filters[characteristicId];
-                    const autoFocus = !disabled && !hasBeenAutoFocused;
-                    const selected = valueId === filters[characteristicId];
+                    const valueStrings = characteristicStrings.values[valueId];
+                    const disabled = (valueId === filters[characteristicId]);
+                    const autoFocus = (!disabled && !hasBeenAutoFocused);
+                    const selected = (valueId === filters[characteristicId]);
 
                     if (autoFocus) {
                       hasBeenAutoFocused = true;
@@ -160,7 +159,7 @@ class Chooser extends React.Component {
                       <button
                         key={valueId}
                         type="submit"
-                        title={value.label}
+                        title={valueStrings.label}
                         className="survey-task-chooser-characteristic-value"
                         disabled={disabled}
                         data-selected={selected}
@@ -170,10 +169,10 @@ class Chooser extends React.Component {
                         {value.image ?
                           <img
                             src={task.images[value.image]}
-                            alt={translation.characteristics[characteristicId].values[valueId].label}
+                            alt={valueStrings.label}
                             className="survey-task-chooser-characteristic-value-icon"
                           /> :
-                          translation.characteristics[characteristicId].values[valueId].label
+                          valueStrings.label
                         }
                       </button>
                     );
@@ -191,8 +190,9 @@ class Chooser extends React.Component {
                 </div>
                 <div className="survey-task-chooser-characteristic-value-label">
                   {characteristic.valuesOrder.reduce((label, valueId) => {
+                    const valueStrings = characteristicStrings.values[valueId];
                     if (valueId === filters[characteristicId]) {
-                      return translation.characteristics[characteristicId].values[valueId].label;
+                      return valueStrings.label;
                     }
                     return label;
                   }, counterpart('tasks.survey.makeSelection'))}
