@@ -3,22 +3,19 @@ import Dialog from 'modal-form/dialog';
 
 const WorkflowDefaultDialog = ({ onSuccess, onCancel }) => (
     <Dialog tag="div" closeButton={true} onCancel={onCancel}>
-      <div>
+      <p>
         You are about to make the default workflow inactive,
         which will remove the default workflow setting from this project.
         The default workflow can be set in the edit workflows page of the project builder.
-      </div>
-      <br />
+      </p>
       <button
         type="button"
-        id="workflowDefaultDialogSuccess"
         onClick={onSuccess}
       >
         ok
       </button>
       <button
         type="button"
-        id="workflowDefaultDialogCancel"
         onClick={onCancel}
       >
         cancel

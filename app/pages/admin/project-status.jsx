@@ -10,7 +10,7 @@ import VersionList from './project-status/version-list';
 import ExperimentalFeatures from './project-status/experimental-features';
 import Toggle from './project-status/toggle';
 import RedirectToggle from './project-status/redirect-toggle';
-import WorkflowDefaultDialog from './workflow-default-dialog'
+import WorkflowDefaultDialog from './workflow-default-dialog';
 
 class ProjectStatus extends Component {
   constructor(props) {
@@ -18,7 +18,6 @@ class ProjectStatus extends Component {
     this.onChangeWorkflowLevel = this.onChangeWorkflowLevel.bind(this);
     this.getWorkflows = this.getWorkflows.bind(this);
     this.forceUpdate = this.forceUpdate.bind(this);
-    this.renderError = this.renderError.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.getProjectAndWorkflows = this.getProjectAndWorkflows.bind(this);
@@ -87,22 +86,18 @@ class ProjectStatus extends Component {
   }
 
   handleDialogSuccess(workflow) {
-    const promises = [
-      workflow.update({ active: false }).save(),
-      this.state.project.update({ 'configuration.default_workflow': undefined }).save()
-    ];
-
-    Promise.all(promises)
+    this.state.project.update({ 'configuration.default_workflow': undefined }).save()
+      .then(() => {
+        workflow.update({ active: false }).save()
+          .then(() => {
+            this.getProjectAndWorkflows();
+          })
+          .catch(error => this.setState({ error }));
+      })
       .then(() => {
         this.setState({ dialogIsOpen: false });
-        this.getProjectAndWorkflows();
       })
-      .catch(error => {
-        this.setState({
-          dialogIsOpen: false,
-          error
-        });
-      });
+      .catch(error => this.setState({ error }));
   }
 
   handleToggle(event, workflow) {
@@ -114,16 +109,9 @@ class ProjectStatus extends Component {
       this.setState({ dialogIsOpen: true });
     }
 
-    if (defaultWorkflowId !== workflow.id) {
-      workflow.update({ active: isChecked })
-        .save()
+    if ((defaultWorkflowId !== workflow.id) || (defaultWorkflowId === workflow.id && !workflow.active)) {
+      workflow.update({ active: isChecked }).save()
         .catch(error => this.setState({ error }));
-    }
-  }
-
-  renderError() {
-    if (this.state.error) {
-      return <div>{this.state.error}</div>;
     }
   }
 
@@ -143,7 +131,7 @@ class ProjectStatus extends Component {
                 workflow={workflow}
                 name="active"
                 checked={workflow.active}
-                handleToggle={(event) => this.handleToggle(event, workflow)}
+                handleToggle={event => this.handleToggle(event, workflow)}
               />{' | '}
               {this.state.dialogIsOpen &&
                 <WorkflowDefaultDialog
@@ -212,7 +200,8 @@ class ProjectStatus extends Component {
           <small>The workflow level dropdown is for the workflow assignment experimental feature.</small>
           <br />
           <small>An asterisk (*) denotes a default workflow.</small>
-          {this.renderError()}
+          {this.state.error &&
+            `Error ${this.state.error.status}: ${this.state.error.message}`}
           {this.renderWorkflows()}
         </div>
         <hr />

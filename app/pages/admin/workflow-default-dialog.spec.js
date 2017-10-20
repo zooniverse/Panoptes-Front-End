@@ -21,12 +21,12 @@ describe('WorkflowDefaultDialog', () => {
   });
 
   it('calls the onSuccess handler', () => {
-    wrapper.find('button#workflowDefaultDialogSuccess').simulate('click');
+    wrapper.find('button').first().simulate('click');
     sinon.assert.calledOnce(onSuccessSpy);
   });
 
   it('calls the onCancel handler', () => {
-    wrapper.find('button#workflowDefaultDialogCancel').simulate('click');
+    wrapper.find('button').last().simulate('click');
     sinon.assert.calledOnce(onCancelSpy);
   });
 });
