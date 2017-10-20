@@ -89,7 +89,7 @@ class Task extends React.Component {
           {!!task.unlinkedTask &&
             <TaskTranslations
               taskKey={task.unlinkedTask}
-              task={task}
+              task={workflow.tasks[task.unlinkedTask]}
             >
               <Shortcut
                 task={task}
