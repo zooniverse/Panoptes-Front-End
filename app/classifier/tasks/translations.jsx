@@ -1,10 +1,10 @@
 import React from 'react';
 import merge from 'lodash/merge';
-import translations from '../../pages/project/translations';
+import { connect } from 'react-redux';
 
 function TaskTranslations(props) {
   const { task } = props;
-  const taskStrings = translations.strings.workflow.tasks;
+  const taskStrings = props.translations.strings.workflow.tasks;
   let translation = merge({}, task);
 
   function explodeTranslationKey(translationKey, value) {
@@ -38,4 +38,9 @@ TaskTranslations.propTypes = {
   taskKey: React.PropTypes.string
 };
 
-export default TaskTranslations;
+const mapStateToProps = state => ({
+  translations: state.translations
+});
+
+export default connect(mapStateToProps)(TaskTranslations);
+export { TaskTranslations };

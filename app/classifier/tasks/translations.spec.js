@@ -1,8 +1,7 @@
 import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
-import TaskTranslation from './translations';
-import translations from '../../pages/project/translations';
+import { TaskTranslations } from './translations';
 
 function StubTask() {
   return (
@@ -10,9 +9,15 @@ function StubTask() {
   );
 }
 
-translations.strings.workflow.tasks = {
-  'survey.choices.ar.label': 'Translated Armadillo',
-  'survey.questions.ho.answers.one.label': 'Translated 1'
+const translations = {
+  strings: {
+    workflow: {
+      tasks: {
+        'survey.choices.ar.label': 'Translated Armadillo',
+        'survey.questions.ho.answers.one.label': 'Translated 1'
+      }
+    }
+  }
 };
 
 const task = {
@@ -86,9 +91,9 @@ const expectedTranslation = {
 
 describe('Task translation', function () {
   const wrapper = mount(
-    <TaskTranslation taskKey='survey' task={task} >
+    <TaskTranslations taskKey="survey" task={task} translations={translations}>
       <StubTask task={task} />
-    </TaskTranslation>
+    </TaskTranslations>
   );
   const stubTask = wrapper.find(StubTask);
 

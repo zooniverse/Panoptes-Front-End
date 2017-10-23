@@ -6,7 +6,9 @@ counterpart = require 'counterpart'
 isAdmin = require '../../lib/is-admin'
 ProjectPage = require './project-page'
 ProjectTranslation = require('./project-translation').default
-translations = require('./translations').default
+{ connect } = require 'react-redux';
+{ bindActionCreators } = require 'redux';
+translationActions  = require '../../redux/ducks/translations';
 
 counterpart.registerTranslations 'en', require('../../locales/en').default
 counterpart.registerTranslations 'it', require('../../locales/it').default
@@ -130,7 +132,7 @@ ProjectPageController = React.createClass
             awaitProjectCompleteness,
             awaitProjectRoles,
             awaitPreferences,
-            translations.load('project', project.id, language)
+            this.props.actions.translations.load('project', project.id, language)
           ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
               @setState({ background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
               @getSelectedWorkflow(project, preferences)
@@ -232,7 +234,7 @@ ProjectPageController = React.createClass
         if workflow
           @setState({ loadingSelectedWorkflow: false, workflow })
           language = @props.location.query.language || 'en'
-          translations.load('workflow', workflow.id, language)
+          this.props.actions.translations.load('workflow', workflow.id, language)
         else
           console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
           if selectedWorkflowID is @state.project.configuration?.default_workflow
@@ -350,4 +352,14 @@ ProjectPageController = React.createClass
           </div>}
     </div>
 
-module.exports = ProjectPageController
+mapStateToProps = (state) -> ({
+  translations: state.translatons
+});
+
+mapDispatchToProps = (dispatch) -> ({
+  actions: {
+    translations: bindActionCreators(translationActions, dispatch)
+  }
+});
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(ProjectPageController)

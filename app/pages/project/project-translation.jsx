@@ -1,9 +1,9 @@
 import React from 'react';
-import translations from './translations';
+import { connect } from 'react-redux';
 
 function ProjectTranslations(props) {
   const { description, display_name, introduction, researcher_quote, title } = props.project;
-  const projectStrings = translations.strings.project;
+  const projectStrings = props.translations.strings.project;
   const translation = Object.assign({ description, display_name, introduction, researcher_quote, title }, projectStrings);
 
   return React.cloneElement(props.children, { translation });
@@ -19,4 +19,9 @@ ProjectTranslations.propTypes = {
   }).isRequired
 };
 
-export default ProjectTranslations;
+const mapStateToProps = state => ({
+  translations: state.translations
+});
+
+export default connect(mapStateToProps)(ProjectTranslations);
+
