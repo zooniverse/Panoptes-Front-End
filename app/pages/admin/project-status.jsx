@@ -25,7 +25,6 @@ class ProjectStatus extends Component {
     this.handleDialogSuccess = this.handleDialogSuccess.bind(this);
 
     this.state = {
-      defaultWorkflowId: null,
       dialogIsOpen: false,
       error: null,
       project: null,
@@ -87,7 +86,9 @@ class ProjectStatus extends Component {
   }
 
   handleDialogSuccess() {
-    const defaultWorkflow = this.state.workflows.filter(workflow => workflow.id === this.state.defaultWorkflowId);
+    const defaultWorkflow = this.state.workflows.filter(workflow =>
+      workflow.id === this.state.project.configuration.default_workflow
+    );
     this.state.project.update({ 'configuration.default_workflow': undefined }).save()
       .then(() => {
         defaultWorkflow[0].update({ active: false }).save()
@@ -98,7 +99,6 @@ class ProjectStatus extends Component {
       })
       .then(() => {
         this.setState({
-          defaultWorkflowId: null,
           dialogIsOpen: false
         });
       })
@@ -112,7 +112,6 @@ class ProjectStatus extends Component {
 
     if (defaultWorkflowId === workflow.id && workflow.active) {
       this.setState({
-        defaultWorkflowId,
         dialogIsOpen: true
       });
     }
