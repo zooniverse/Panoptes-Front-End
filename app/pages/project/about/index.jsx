@@ -62,22 +62,20 @@ class AboutProject extends Component {
   }
 
   getTeam() {
-    return this.props.project.get('project_roles')
-      .then(projectRoles => {
-        const userIds = projectRoles.map(role => role.links.owner.id);
-        return apiClient.type('users').get(userIds)
-          .then(users => this.constructTeamData(projectRoles, users))
-          .catch((error) => console.error('Error retrieving project team users', error));
-      })
-      .then(team => this.setState({ team }))
-      .catch(error => console.error('Error retrieving project team data', error));
+    if (this.props.projectRoles.length > 0) {
+      const userIds = this.props.projectRoles.map(role => role.links.owner.id);
+      return apiClient.type('users').get(userIds)
+        .then(users => this.constructTeamData(this.props.projectRoles, users))
+        .catch((error) => console.error('Error retrieving project team users', error));
+    }
   }
 
   constructTeamData(roles, users) {
-    return users.map(user => ({
-      userResource: user,
-      roles: roles.find(role => user.id === role.links.owner.id).roles,
-    }));
+    Promise.resolve(
+      users.map(user => ({
+        userResource: user,
+        roles: roles.find(role => user.id === role.links.owner.id).roles
+      }))).then(team => this.setState({ team }));
   }
 
   render() {
@@ -94,7 +92,7 @@ class AboutProject extends Component {
         <AboutNav pages={pages} projectPath={`/projects/${project.slug}`} />
         {React.cloneElement(children, {project, pages, team})}
       </div>
-    )
+    );
   }
 }
 

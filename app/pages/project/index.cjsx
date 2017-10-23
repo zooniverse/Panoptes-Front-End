@@ -307,6 +307,7 @@ ProjectPageController = React.createClass
           project={@state.project}
           projectAvatar={@state.projectAvatar}
           projectIsComplete={@state.projectIsComplete}
+          projectRoles={@state.projectRoles}
           splits={@state.splits}
           workflow={@state.workflow}
         />
