@@ -207,7 +207,7 @@ class OrganizationPage extends React.Component {
                   return (
                     <a
                       key={link.key || link.path}
-                      className="organization-details__link organization-details__link"
+                      className="organization-details__link"
                       href={`${link.url}`}
                       target={`${this.props.organization.id}${link.url}`}
                       rel="noopener noreferrer"
