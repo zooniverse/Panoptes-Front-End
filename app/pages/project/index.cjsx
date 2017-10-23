@@ -52,6 +52,10 @@ ProjectPageController = React.createClass
 
   _boundForceUpdate: null
 
+  componentWillMount: ->
+    { actions } = @props
+    actions.translations.setLocale(@props.location.query.language) if @props.location.query.language
+
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
     @fetchProjectData @props.params.owner, @props.params.name, @props.user if @context.initialLoadComplete
@@ -121,8 +125,6 @@ ProjectPageController = React.createClass
           awaitProjectRoles = project.get('project_roles', { page_size: 50 }).catch((error) => console.error(error))
 
           awaitPreferences = @getUserProjectPreferences(project, user)
-          
-          language = @props.location.query.language || 'en'
 
           Promise.all([
             awaitBackground,
@@ -132,7 +134,7 @@ ProjectPageController = React.createClass
             awaitProjectCompleteness,
             awaitProjectRoles,
             awaitPreferences,
-            this.props.actions.translations.load('project', project.id, language)
+            this.props.actions.translations.load('project', project.id, this.props.translations.locale)
           ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
               @setState({ background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
               @getSelectedWorkflow(project, preferences)
@@ -217,6 +219,7 @@ ProjectPageController = React.createClass
 
 
   getWorkflow: (selectedWorkflowID, activeFilter = true) ->
+    { actions, translations } = this.props;
     query =
       id: "#{selectedWorkflowID}",
       project_id: @state.project.id
@@ -233,8 +236,7 @@ ProjectPageController = React.createClass
       .then ([workflow]) =>
         if workflow
           @setState({ loadingSelectedWorkflow: false, workflow })
-          language = @props.location.query.language || 'en'
-          this.props.actions.translations.load('workflow', workflow.id, language)
+          actions.translations.load('workflow', workflow.id, translations.locale)
         else
           console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
           if selectedWorkflowID is @state.project.configuration?.default_workflow
@@ -353,7 +355,7 @@ ProjectPageController = React.createClass
     </div>
 
 mapStateToProps = (state) -> ({
-  translations: state.translatons
+  translations: state.translations
 });
 
 mapDispatchToProps = (dispatch) -> ({

@@ -5,9 +5,11 @@ counterpart.setFallbackLocale('en');
 // Actions
 const ERROR = 'pfe/translations/ERROR';
 const LOAD = 'pfe/translations/LOAD';
-const SET = 'pfe/translations/SET';
+const SET_LOCALE = 'pfe/translations/SET_LOCALE';
+const SET_STRINGS = 'pfe/translations/SET_STRINGS';
 
 const initialState = {
+  locale: 'en',
   strings: {
     project: {},
     workflow: {
@@ -19,8 +21,10 @@ const initialState = {
 // Reducer
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case SET:
-      const strings = Object.assign({}, state.strings, action.payload)
+    case SET_LOCALE:
+      return Object.assign({}, state, { locale: action.payload });
+    case SET_STRINGS:
+      const strings = Object.assign({}, state.strings, action.payload);
       return Object.assign({}, state, { strings });
 
     default:
@@ -38,7 +42,7 @@ export function load(translated_type, translated_id, language) {
       .then(([translation]) => {
         if (translation && translation.strings) {
           dispatch({
-            type: SET,
+            type: SET_STRINGS,
             payload: {
               [translated_type]: translation.strings
             }
@@ -50,5 +54,10 @@ export function load(translated_type, translated_id, language) {
         dispatch({ type: ERROR, payload: error });
       });
   };
+}
+
+export function setLocale(locale) {
+  counterpart.setLocale(locale);
+  return { type: SET_LOCALE, payload: locale };
 }
 
