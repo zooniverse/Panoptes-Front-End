@@ -194,35 +194,26 @@ class OrganizationPage extends React.Component {
             <div className="organization-researcher-words">
               <h4 className="organization-details__heading"><Translate content="organization.home.links" /></h4>
               <div className="organization-details__links">
-                {!!rearrangedLinks.length && rearrangedLinks.map((link, i) => {
+                {(rearrangedLinks.length > 0) && rearrangedLinks.map((link, i) => {
+                  let iconForLabel;
+                  let label;
                   if (link.path) {
-                    let iconForLabel;
-                    if (Object.keys(SocialIcons).indexOf(link.site) >= 0) {
-                      iconForLabel = SocialIcons[link.site];
-                    } else {
-                      iconForLabel = 'globe';
-                    }
-                    return (
-                      <a
-                        key={i}
-                        className="organization-details__link organization-details__link--social"
-                        href={`${link.url}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />
-                        <span> - @{link.path}</span>
-                      </a>);
+                    iconForLabel = SocialIcons[link.site] || 'external-link';
+                    label = <span> - @{link.path}</span>;
+                  } else {
+                    iconForLabel = 'external-link';
+                    label = <span> - {link.label}</span>;
                   }
                   return (
                     <a
-                      key={i}
-                      className="organization-details__link organization-details__link--external"
-                      href={link.url}
-                      target="_blank"
+                      key={link.key || link.path}
+                      className="organization-details__link organization-details__link"
+                      href={`${link.url}`}
+                      target={`${this.props.organization.id}${link.url}`}
                       rel="noopener noreferrer"
                     >
-                      {link.label}
+                      <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />
+                      {label}
                     </a>);
                 })}
               </div>
