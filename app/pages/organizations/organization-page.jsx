@@ -212,7 +212,7 @@ class OrganizationPage extends React.Component {
                       target={`${this.props.organization.id}${link.url}`}
                       rel="noopener noreferrer"
                     >
-                      <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />
+                      <i className={`fa fa-${iconForLabel} fa-fw fa-2x organization-details__icon`} />
                       {label}
                     </a>);
                 })}
