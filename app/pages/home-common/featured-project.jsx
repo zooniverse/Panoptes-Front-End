@@ -17,14 +17,14 @@ const FeaturedProject = (() => (
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
       <Thumbnail
-        alt="Planetary Response Network & Rescue Global: Caribbean Storms 2017"
-        src="//www.zooniverse.org/assets/featured-projects/featured-project-20170913-irma.jpg"
+        alt="Seabird Watch"
+        src="/assets/featured-projects/featured-project-20171023-autumnwatch.jpg"
         width={800}
       />
     </div>
-    <h2 className="secondary-headline">Caribbean Storms 2017</h2>
-    <p className="display-body">Check back daily to join the relief effort to help the victims of Hurricane Irma.</p>
-    <Link to="projects/vrooje/planetary-response-network-and-rescue-global-caribbean-storms-2017">View Project!</Link>
+    <h2 className="secondary-headline">Seabird Watch</h2>
+    <p className="display-body">Help researchers understand why some of the world&#39;s seabird colonies are in decline.</p>
+    <Link to="projects/penguintom79/seabirdwatch">View Project!</Link>
   </section>
   )
 );
