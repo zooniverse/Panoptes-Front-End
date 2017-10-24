@@ -1,4 +1,5 @@
 React = require 'react'
+{Link} = require 'react-router'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
 ImageSelector = require '../../components/image-selector'
@@ -32,6 +33,7 @@ module.exports = React.createClass
     researchers: []
     avatar: null
     background: null
+    organization: null
     error: null
 
   componentWillMount: ->
@@ -40,6 +42,13 @@ module.exports = React.createClass
         role.links.owner.id
       apiClient.type('users').get(scientists).then (researchers) =>
         @setState({ researchers })
+
+    if @props.project.links?.organization
+      @props.project.get('organization')
+        .then (organization) =>
+          @setState({ organization })
+        .catch (error) =>
+          console.error error
 
     @updateImage 'avatar'
     @updateImage 'background'
@@ -110,6 +119,15 @@ module.exports = React.createClass
         </div>
 
         <div className="column">
+          {if @props.project.links?.organization
+            <div>
+              {if @state.organization
+                <p>This project is part of the <Link to={"/organizations/#{@state.organization.slug}"}>{@state.organization.display_name}</Link> organization.</p>
+              else
+                <p>This project is linked to <strong>Organization #{@props.project.links.organization}</strong>.</p>}
+              <p>If you are not a collaborator on the organization, please coordinate with this project's other collaborators for additional information regarding the affiliated organization.</p>
+            </div>}
+
           <DisplayNameSlugEditor resource={@props.project} resourceType="project" />
 
           <p>
