@@ -10,6 +10,7 @@ import VersionList from './project-status/version-list';
 import ExperimentalFeatures from './project-status/experimental-features';
 import Toggle from './project-status/toggle';
 import RedirectToggle from './project-status/redirect-toggle';
+import WorkflowDefaultDialog from './workflow-default-dialog';
 
 class ProjectStatus extends Component {
   constructor(props) {
@@ -17,20 +18,23 @@ class ProjectStatus extends Component {
     this.onChangeWorkflowLevel = this.onChangeWorkflowLevel.bind(this);
     this.getWorkflows = this.getWorkflows.bind(this);
     this.forceUpdate = this.forceUpdate.bind(this);
-    this.renderError = this.renderError.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
+    this.getProjectAndWorkflows = this.getProjectAndWorkflows.bind(this);
+    this.handleDialogCancel = this.handleDialogCancel.bind(this);
+    this.handleDialogSuccess = this.handleDialogSuccess.bind(this);
 
     this.state = {
-      project: null,
+      dialogIsOpen: false,
       error: null,
+      project: null,
       usedWorkflowLevels: [],
       workflows: []
     };
   }
 
   componentDidMount() {
-    this.getProject().then(() => this.getWorkflows());
+    this.getProjectAndWorkflows();
   }
 
   componentWillUnmount() {
@@ -58,6 +62,10 @@ class ProjectStatus extends Component {
     });
   }
 
+  getProjectAndWorkflows() {
+    this.getProject().then(() => this.getWorkflows());
+  }
+
   getUsedWorkflowLevels(workflows) {
     return workflows
       .map(workflow => workflow.configuration.level)
@@ -73,18 +81,44 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
-  handleToggle(event, workflow) {
-    this.setState({ error: null });
-    const checked = event.target.checked;
-
-    return workflow.update({ 'active': checked }).save()
-      .then(() => this.getWorkflows())
-      .catch(error => this.setState({ error }))
+  handleDialogCancel() {
+    this.setState({ dialogIsOpen: false });
   }
 
-  renderError() {
-    if (this.state.error) {
-      return <div>{this.state.error}</div>;
+  handleDialogSuccess() {
+    const defaultWorkflow = this.state.workflows.filter(workflow =>
+      workflow.id === this.state.project.configuration.default_workflow
+    );
+    this.state.project.update({ 'configuration.default_workflow': undefined }).save()
+      .then(() => {
+        defaultWorkflow[0].update({ active: false }).save()
+          .then(() => {
+            this.getProjectAndWorkflows();
+          })
+          .catch(error => this.setState({ error }));
+      })
+      .then(() => {
+        this.setState({
+          dialogIsOpen: false
+        });
+      })
+      .catch(error => this.setState({ error }));
+  }
+
+  handleToggle(event, workflow) {
+    this.setState({ error: null });
+    const isChecked = event.target.checked;
+    const defaultWorkflowId = this.state.project.configuration.default_workflow;
+
+    if (defaultWorkflowId === workflow.id && workflow.active) {
+      this.setState({
+        dialogIsOpen: true
+      });
+    }
+
+    if ((defaultWorkflowId !== workflow.id) || (defaultWorkflowId === workflow.id && !workflow.active)) {
+      workflow.update({ active: isChecked }).save()
+        .catch(error => this.setState({ error }));
     }
   }
 
@@ -98,12 +132,18 @@ class ProjectStatus extends Component {
         {this.state.workflows.map((workflow) => {
           return (
             <li key={workflow.id} className="section-list__item">
+              {this.state.project.configuration.default_workflow === workflow.id ? ' * ' : ''}
               <WorkflowToggle
                 workflow={workflow}
                 name="active"
                 checked={workflow.active}
-                handleToggle={(event) => this.handleToggle(event, workflow)}
+                handleToggle={event => this.handleToggle(event, workflow)}
               />{' | '}
+              {this.state.dialogIsOpen &&
+                <WorkflowDefaultDialog
+                  onCancel={this.handleDialogCancel}
+                  onSuccess={this.handleDialogSuccess}
+                />}
               <label>
                 Level:{' '}
                 <select
@@ -164,7 +204,10 @@ class ProjectStatus extends Component {
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
           <small>The workflow level dropdown is for the workflow assignment experimental feature.</small>
-          {this.renderError()}
+          <br />
+          <small>An asterisk (*) denotes a default workflow.</small>
+          {this.state.error &&
+            `Error ${this.state.error.status}: ${this.state.error.message}`}
           {this.renderWorkflows()}
         </div>
         <hr />
