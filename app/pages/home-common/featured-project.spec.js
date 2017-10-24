@@ -2,7 +2,6 @@ import { shallow } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
 import FeaturedProject from './featured-project';
-import Thumbnail from '../../components/thumbnail';
 
 describe('FeaturedProject', () => {
   it('should render without crashing', () => {
@@ -22,8 +21,8 @@ describe('FeaturedProject', () => {
 
   it('should have an img tag with src and alt properties', () => {
     const wrapper = shallow(<FeaturedProject />);
-    const { alt, src } = wrapper.find(Thumbnail).props();
-    assert.equal(wrapper.find(Thumbnail).length, 1);
+    const { alt, src } = wrapper.find('img').props();
+    assert.equal(wrapper.find('img').length, 1);
     assert.ok(alt.length > 0, 'alt attribute is empty');
     assert.ok(src.length > 0, 'src attribute is empty');
   });
