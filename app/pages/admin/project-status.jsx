@@ -132,7 +132,8 @@ class ProjectStatus extends Component {
         {this.state.workflows.map((workflow) => {
           return (
             <li key={workflow.id} className="section-list__item">
-              {this.state.project.configuration.default_workflow === workflow.id ? ' * ' : ''}
+              {this.state.project.configuration &&
+                this.state.project.configuration.default_workflow === workflow.id ? ' * ' : ''}
               <WorkflowToggle
                 workflow={workflow}
                 name="active"
