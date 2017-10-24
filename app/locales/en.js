@@ -49,7 +49,7 @@ export default {
         error: 'There was an error loading organization projects.',
         none: 'There are no projects associated with this organization.'
       },
-      viewToggle: 'Volunteer View',
+      viewToggle: 'View As Volunteer',
       introduction: 'Introduction',
       readMore: 'Read More',
       readLess: 'Read Less',

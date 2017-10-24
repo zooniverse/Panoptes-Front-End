@@ -119,7 +119,6 @@ describe('OrganizationPage', function () {
     assert.equal(cards.length, organizationProjects.length);
   });
 
-
   describe('with pages about content', function () {
     let wrapper;
     let aboutPage;
@@ -140,5 +139,11 @@ describe('OrganizationPage', function () {
       assert.equal(aboutPageExpanded.length, 1);
       assert.equal(aboutPageExpanded.contains('test content'), true);
     });
+  });
+
+  it('should show organization links', function () {
+    const wrapper = shallow(<OrganizationPage organization={organization} />);
+    const links = wrapper.find('.organization-details__link');
+    assert.equal(organization.urls.length, links.length);
   });
 });

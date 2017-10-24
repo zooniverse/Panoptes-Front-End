@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
 import Thumbnail from '../../components/thumbnail';
+import SocialIcons from '../../lib/social-icons';
 import ProjectCard from '../../partials/project-card';
 
 const AVATAR_SIZE = 100;
@@ -64,6 +65,15 @@ class OrganizationPage extends React.Component {
 
   render() {
     const [aboutPage] = this.props.organizationPages.filter(page => page.url_key === 'about');
+    let rearrangedLinks = [];
+    if (this.props.organization.urls) {
+      rearrangedLinks = this.props.organization.urls.sort((a, b) => {
+        if (a.path && !b.path) {
+          return 1;
+        }
+        return 0;
+      });
+    }
 
     const aboutContentClass = classnames(
       'organization-details__about-content',
@@ -183,11 +193,30 @@ class OrganizationPage extends React.Component {
             </div>
             <div className="organization-researcher-words">
               <h4 className="organization-details__heading"><Translate content="organization.home.links" /></h4>
-              <ul>
-                <li className="organization-details__link">Blog</li>
-                <li className="organization-details__link"><i className="fa fa-facebook fa-fw" />- @orgFacebook</li>
-                <li className="organization-details__link"><i className="fa fa-twitter fa-fw" />- @orgTwitter</li>
-              </ul>
+              <div className="organization-details__links">
+                {(rearrangedLinks.length > 0) && rearrangedLinks.map((link, i) => {
+                  let iconForLabel;
+                  let label;
+                  if (link.path) {
+                    iconForLabel = SocialIcons[link.site] || 'external-link';
+                    label = <span> - @{link.path}</span>;
+                  } else {
+                    iconForLabel = 'external-link';
+                    label = <span> - {link.label}</span>;
+                  }
+                  return (
+                    <a
+                      key={link.key || link.path}
+                      className="organization-details__link"
+                      href={`${link.url}`}
+                      target={`${this.props.organization.id}${link.url}`}
+                      rel="noopener noreferrer"
+                    >
+                      <i className={`fa fa-${iconForLabel} fa-fw fa-2x organization-details__icon`} />
+                      {label}
+                    </a>);
+                })}
+              </div>
             </div>
           </div>
         </section>
@@ -220,7 +249,12 @@ OrganizationPage.propTypes = {
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,
-    introduction: React.PropTypes.string
+    introduction: React.PropTypes.string,
+    urls: React.PropTypes.arrayOf(
+      React.PropTypes.shape({
+        url: React.PropTypes.string
+      })
+    )
   }).isRequired,
   organizationAvatar: React.PropTypes.shape({
     src: React.PropTypes.string
