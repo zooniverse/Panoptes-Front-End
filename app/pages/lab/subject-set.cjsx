@@ -205,7 +205,7 @@ EditSubjectSetPage = React.createClass
       else
         <p>
           <UploadDropTarget accept={"text/csv, text/tab-separated-values, image/*#{if isAdmin() then ', video/*, audio/*' else ''}"} multiple onSelect={@handleFileSelection}>
-            <strong>Drag-and-drop or click to upload manifests and subject images here.</strong><br />
+            <strong>Drag-and-drop or click to upload manifests and subject images here (you must select the media files as well as the manifest)</strong><br />
             Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
             Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers in the main classification interface or in the Talk discussion tool.<br />
             Headers that begin with "!" denote fields that <strong>will not</strong> be visible to classifiers in the main classification interface but <strong>will be </strong> visible after classification in the Talk discussion tool.<br />

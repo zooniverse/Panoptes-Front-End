@@ -1,11 +1,11 @@
 import { Markdown } from 'markdownz';
 import React from 'react';
-import GenericTask from './generic';
-import GenericTaskEditor from './generic-editor';
+import GenericTask from '../generic';
+import GenericTaskEditor from '../generic-editor';
 
 const NOOP = Function.prototype;
 
-class MultipleChoiceSummary extends React.Component {
+class Summary extends React.Component {
   constructor(props) {
     super(props);
     this.expand = this.expand.bind(this);
@@ -25,16 +25,14 @@ class MultipleChoiceSummary extends React.Component {
 
   render() {
     let toggleButton = <button type="button" className="toggle-more" onClick={this.expand}>More</button>;
-    let answers = [<div key={0} className="answer">No answer</div>];
-    if (!this.state.expanded && this.props.annotation.value.length > 0) {
-      answers = this.props.annotation.value.map((index) => {
-        return (
-          <div key={index} className="answer">
-            <i className="fa fa-check-square-o fa-fw"></i>
-            <Markdown tag="span" inline={true}>{this.props.task.answers[index].label}</Markdown>
-          </div>
-        );
-      });
+    let answers = <div className="answer">No answer</div>;
+    if (!this.state.expanded && this.props.annotation.value !== null) {
+      answers = (
+        <div className="answer">
+          <i className="fa fa-check-circle-o fa-fw"></i>
+          <Markdown tag="span" inline={true}>{this.props.task.answers[this.props.annotation.value].label}</Markdown>
+        </div>
+      );
     }
     if (this.state.expanded) {
       toggleButton = <button type="button" className="toggle-more" onClick={this.collapse}>Less</button>;
@@ -43,9 +41,9 @@ class MultipleChoiceSummary extends React.Component {
         if (!answer._key) {
           answer._key = Math.random();
         }
-        let icon = <i className="fa fa-square-o fa-fw"></i>;
-        if (this.props.annotation.value.includes(i)) {
-          icon = <i className="fa fa-check-square-o fa-fw"></i>;
+        let icon = <i className="fa fa-circle-o fa-fw"></i>;
+        if (i === this.props.annotation.value) {
+          icon = <i className="fa fa-check-circle-o fa-fw"></i>;
         }
         answers.push(
           <div key={answer._key} className="answer">
@@ -71,7 +69,7 @@ class MultipleChoiceSummary extends React.Component {
   }
 }
 
-MultipleChoiceSummary.propTypes = {
+Summary.propTypes = {
   task: React.PropTypes.shape(
     {
       answers: React.PropTypes.array,
@@ -79,12 +77,12 @@ MultipleChoiceSummary.propTypes = {
     }
   ),
   annotation: React.PropTypes.shape(
-    { value: React.PropTypes.array }
+    { value: React.PropTypes.number }
   ).isRequired,
   expanded: React.PropTypes.bool
 };
 
-MultipleChoiceSummary.defaultProps = {
+Summary.defaultProps = {
   task: {
     answers: [],
     question: ''
@@ -92,24 +90,17 @@ MultipleChoiceSummary.defaultProps = {
   expanded: false
 };
 
-export default class MultipleChoiceTask extends React.Component {
+export default class SingleChoiceTask extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(index, e) {
-    const value = this.props.annotation.value.slice(0);
     if (e.target.checked) {
-      if (!value.includes(index)) {
-        value.push(index);
-      }
-    } else if (value.includes(index)) {
-      const indexInValue = value.indexOf(index);
-      value.splice(indexInValue, 1);
+      const newAnnotation = Object.assign({}, this.props.annotation, { value: index });
+      this.props.onChange(newAnnotation);
     }
-    const newAnnotation = Object.assign({}, this.props.annotation, { value });
-    this.props.onChange(newAnnotation);
   }
 
   render() {
@@ -119,16 +110,17 @@ export default class MultipleChoiceTask extends React.Component {
         answer._key = Math.random();
       }
       let active = '';
-      if (this.props.annotation.value.includes(i)) {
+      if (i === this.props.annotation.value) {
         active = 'active';
       }
       answers.push(
         <label key={answer._key} className={`minor-button answer-button ${active}`}>
           <div className="answer-button-icon-container">
             <input
-              type="checkbox"
-              autoFocus={i === this.props.annotation.value[0]}
-              checked={this.props.annotation.value.includes(i)}
+              type="radio"
+              autoFocus={i === this.props.annotation.value}
+              checked={i === this.props.annotation.value}
+              value={i}
               onChange={this.handleChange.bind(this, i)}
             />
           </div>
@@ -140,7 +132,7 @@ export default class MultipleChoiceTask extends React.Component {
     }
     return (
       <GenericTask
-        autoFocus={this.props.annotation.value.length === 0}
+        autoFocus = {this.props.annotation.value === null}
         question={this.props.task.question}
         help={this.props.task.help}
         answers={answers}
@@ -151,53 +143,48 @@ export default class MultipleChoiceTask extends React.Component {
 }
 
 // Define the static methods and values
-MultipleChoiceTask.Editor = GenericTaskEditor;
-MultipleChoiceTask.Summary = MultipleChoiceSummary;
-MultipleChoiceTask.getDefaultTask = () => {
+SingleChoiceTask.Editor = GenericTaskEditor;
+SingleChoiceTask.Summary = Summary;
+SingleChoiceTask.getDefaultTask = () => {
   return {
-    type: 'multiple',
+    type: 'single',
     question: 'Enter a question.',
     help: '',
     answers: []
   };
 };
-MultipleChoiceTask.getTaskText = (task) => {
+SingleChoiceTask.getTaskText = (task) => {
   return task.question;
 };
-MultipleChoiceTask.getDefaultAnnotation = () => {
-  return { value: [] };
+SingleChoiceTask.getDefaultAnnotation = () => {
+  return { value: null };
 };
-MultipleChoiceTask.isAnnotationComplete = (task, annotation) => {
-  // Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
-  // if task.required is undefined or null this will always return true
-  return annotation.value.length >= (task.required != null ? task.required : 0);
+SingleChoiceTask.isAnnotationComplete = (task, annotation) => {
+  return (!task.required || annotation.value !== null);
 };
 
-MultipleChoiceTask.propTypes = {
+SingleChoiceTask.propTypes = {
   task: React.PropTypes.shape(
     {
       answers: React.PropTypes.array,
       question: React.PropTypes.string,
       help: React.PropTypes.string,
-      required: React.PropTypes.oneOfType([
-        React.PropTypes.number,
-        React.PropTypes.bool
-      ])
+      required: React.PropTypes.bool
     }
   ),
   annotation: React.PropTypes.shape(
-    { value: React.PropTypes.array }
+    { value: React.PropTypes.number }
   ),
   onChange: React.PropTypes.func
 };
 
-MultipleChoiceTask.defaultProps = {
+SingleChoiceTask.defaultProps = {
   task: {
     answers: [],
     question: '',
     help: '',
     required: false
   },
-  annotation: { value: [] },
+  annotation: { value: null },
   onChange: NOOP
 };

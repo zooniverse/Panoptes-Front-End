@@ -140,5 +140,8 @@ export default {
     emailError: 'There was an error reseting your password.',
     resetError: 'Something went wrong, please try and reset your password via email again.',
     loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.'
+  },
+  workflowToggle: {
+    label: 'Active'
   }
 };
