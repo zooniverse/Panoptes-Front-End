@@ -181,7 +181,7 @@ class PanZoom extends React.Component {
   }
 
   frameKeyPan(e) {
-    if (!this.state.panEnabled) return;
+
     const keypress = e.which;
     switch (keypress) {
       // left
