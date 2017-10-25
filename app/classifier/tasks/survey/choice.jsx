@@ -91,7 +91,7 @@ class Choice extends React.Component {
               <Translate content="tasks.survey.confused" />
               {' '}
               {choice.confusionsOrder.map((otherChoiceID, i) => {
-                const otherChoice = this.props.task.choices[otherChoiceID];
+                const otherChoice = this.props.task.choices[otherChoiceID] || {label: '', images: []};
                 return (
                   <span key={otherChoiceID}>
                     <TriggeredModalForm
