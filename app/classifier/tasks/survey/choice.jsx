@@ -91,7 +91,7 @@ class Choice extends React.Component {
               <Translate content="tasks.survey.confused" />
               {' '}
               {choice.confusionsOrder.map((otherChoiceID, i) => {
-                const otherChoice = this.props.task.choices[otherChoiceID];
+                const otherChoice = this.props.task.choices[otherChoiceID] || { label: '', images: [] };
                 return (
                   <span key={otherChoiceID}>
                     <TriggeredModalForm
@@ -136,7 +136,7 @@ class Choice extends React.Component {
 
           {!choice.noQuestions &&
             Utility.getQuestionIDs(this.props.task, this.props.choiceID).map((questionId) => {
-              const question = this.props.task.questions[questionId];
+              const question = this.props.task.questions[questionId] || { answers: {}, answersOrder: [] };
               const inputType = question.multiple ? 'checkbox' : 'radio';
               return (
                 <div key={questionId} className="survey-task-choice-question" data-multiple={question.multiple || null}>
