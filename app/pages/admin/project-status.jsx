@@ -108,7 +108,11 @@ class ProjectStatus extends Component {
   handleToggle(event, workflow) {
     this.setState({ error: null });
     const isChecked = event.target.checked;
-    const defaultWorkflowId = this.state.project.configuration.default_workflow;
+    let defaultWorkflowId;
+
+    if (this.state.project.configuration) {
+      defaultWorkflowId = this.state.project.configuration.default_workflow;
+    }
 
     if (defaultWorkflowId === workflow.id && workflow.active) {
       this.setState({
