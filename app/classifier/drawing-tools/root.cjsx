@@ -25,8 +25,10 @@ module.exports = React.createClass
   getInitialState: ->
     destroying: false
   
+  # In Chrome, refocusing the drawing tool without keeping track of scrollX and scrollY
+  # would scroll volunteers to the top of an image upon drawing tool creation, selection, and deletion.
   componentDidMount: ->
-    @root?.focus()
+    @focusDrawingTool()
 
   render: ->
     toolProps = @props.tool.props
@@ -49,7 +51,7 @@ module.exports = React.createClass
 
     unless toolProps.disabled
       startHandler = (e) =>
-        @root?.focus()
+        @focusDrawingTool()
         toolProps.onSelect(e)
 
     <g className="drawing-tool" {...rootProps} {...@props}>
@@ -91,3 +93,9 @@ module.exports = React.createClass
   handleDetailsFormClose: ->
     # TODO: Check if the details tasks are complete.
     @props.tool.props.onDeselect?()
+  
+  focusDrawingTool: ->
+    x = window.scrollX
+    y = window.scrollY
+    @root?.focus()
+    window.scrollTo(x, y)
