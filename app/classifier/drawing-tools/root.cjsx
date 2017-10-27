@@ -24,9 +24,6 @@ module.exports = React.createClass
 
   getInitialState: ->
     destroying: false
-  
-  componentDidMount: ->
-    @root?.focus()
 
   render: ->
     toolProps = @props.tool.props
@@ -48,12 +45,10 @@ module.exports = React.createClass
         STROKE_WIDTH / scale
 
     unless toolProps.disabled
-      startHandler = (e) =>
-        @root?.focus()
-        toolProps.onSelect(e)
+      startHandler = toolProps.onSelect
 
     <g className="drawing-tool" {...rootProps} {...@props}>
-      <g className="drawing-tool-main" ref={(element) => @root = element} {...mainStyle} onMouseDown={startHandler} onTouchStart={startHandler} tabIndex=-1>
+      <g className="drawing-tool-main" {...mainStyle} onMouseDown={startHandler} onTouchStart={startHandler}>
         {@props.children}
       </g>
 
