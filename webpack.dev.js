@@ -74,7 +74,12 @@ var config = {
         loader: 'style-loader'
       }, {
         loader: 'css-loader',
-        options: { root: '../public' }
+        options: {
+          root: '../public',
+          includePaths: [
+            path.resolve(__dirname, 'node_modules/zooniverse-react-components/lib')
+          ]
+        }
       }, {
         loader: 'stylus-loader'
       }]

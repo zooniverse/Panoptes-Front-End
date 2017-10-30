@@ -1,6 +1,7 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import classNames from 'classnames';
+import { Paginator } from 'zooniverse-react-components';
 import UserSearch from '../components/user-search';
 import checkIfCollectionOwner from '../lib/check-if-collection-owner';
 import alert from '../lib/alert';
@@ -285,50 +286,80 @@ export class CollectionCollaborators extends React.Component {
     .then((hasSettingsRole) => {
       this.setState({ hasSettingsRole });
     });
-    this.update();
+    this.update(this.props.location.query.page || 1);
   }
 
-  update() {
-    apiClient.type('collection_roles').get({ collection_id: this.props.collection.id })
-      .then((roleSets) => {
-        this.setState({ roleSets });
-      });
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.query.page !== nextProps.location.query.page) {
+      this.update(nextProps.location.query.page);
+    }
+  }
+
+  update(_page = 1) {
+    if (_page >= 1) {
+      apiClient.type('collection_roles').get({ collection_id: this.props.collection.id, page: _page })
+        .then((roleSets) => {
+            this.setState({ roleSets });
+        });
+    }
   }
 
   handleCollaboratorChange() {
     this.props.collection.uncacheLink('collection_roles');
-    this.update();
+    this.update(this.props.location.query.page || 1);
   }
 
   render() {
+    let meta;
     const { roleSets } = this.state;
+    if (roleSets.length > 1) {
+      meta = roleSets[0].getMeta();
+      console.log('meta', meta)
+    }
 
     if (this.state.hasSettingsRole) {
       return (
         <div className="collection-settings-tab">
-          {this.state.error && (<p className="form-help error">{this.state.error.toString()}</p>)}
-
-          {roleSets.length === 1 && (
-            <div className="helpful-tip">None yet, add some with the form below.</div>)}
-
-          {this.props.owner && roleSets.length > 1 && (
-            <ul>
-              {roleSets.map((roleSet) => {
-                if (this.props.owner.id !== roleSet.links.owner.id) {
-                  return (
-                    <li key={roleSet.id}>
-                      <RoleRow key={roleSet.id} roleSet={roleSet} onRemove={this.handleCollaboratorChange} />
-                    </li>
-                  );
-                }
-              })}
-            </ul>
-          )}
-
+          <h1>Collaborators {this.props.collection ? `with ${this.props.collection.display_name}` : ''}</h1>
           <hr />
 
-          <div className="form-label">Add a collaborator</div>
+          {this.state.error && (<p className="form-help error">{this.state.error.toString()}</p>)}
+
+          <h2 className="form-label">Add a collaborator</h2>
           <RoleCreator collection={this.props.collection} onAdd={this.handleCollaboratorChange} />
+
+          <hr />
+          {roleSets.length === 0 &&
+            <p className="helpful-tip">No collaborators found.</p>}
+
+          {roleSets.length === 1 && (
+            <p className="helpful-tip">None yet. Add some with the form above.</p>)}
+
+          {this.props.owner && roleSets.length > 1 && (
+            <div>
+              <h2 className="form-label">Current collaborators list</h2>
+              <ul>
+                {roleSets.map((roleSet) => {
+                  if (this.props.owner.id !== roleSet.links.owner.id) {
+                    return (
+                      <li key={roleSet.id}>
+                        <RoleRow key={roleSet.id} roleSet={roleSet} onRemove={this.handleCollaboratorChange} />
+                      </li>
+                    );
+                  }
+                })}
+              </ul>
+
+              <hr />
+
+              <Paginator
+                page={this.props.location.query.page}
+                pageCount={meta.page_count}
+                router={this.context.router}
+                totalItems={meta.count}
+              />
+            </div>
+          )}
         </div>
       );
     } else {
@@ -340,6 +371,10 @@ export class CollectionCollaborators extends React.Component {
     }
   }
 }
+
+CollectionCollaborators.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 CollectionCollaborators.propTypes = {
   collection: React.PropTypes.shape({

@@ -42,17 +42,8 @@ const CollectionPage = React.createClass({
 
   getInitialState() {
     return {
-      canCollaborate: false,
-      owner: null
+      canCollaborate: false
     };
-  },
-
-  componentWillMount() {
-    !!this.props.collection && apiClient.type('users')
-      .get(this.props.collection.links.owner.id)
-      .then((owner) => {
-        this.setState({ owner });
-      });
   },
 
   componentDidMount() {
@@ -77,9 +68,9 @@ const CollectionPage = React.createClass({
     } else {
       canCollaborate = this.props.roles.some((role) => {
         const idMatch = (role.links.owner.id === this.props.user.id);
-        const isOwner = role.roles.includes('owner');
+        const isOwner = this.props.user.id === this.props.owner.id;
         const isCollaborator = role.roles.includes('collaborator');
-        return (isOwner || isCollaborator) && idMatch;
+        return (isOwner || (isCollaborator && idMatch));
       });
     }
 
@@ -87,10 +78,6 @@ const CollectionPage = React.createClass({
   },
 
   render() {
-    if (!this.state.owner) {
-      return null;
-    }
-
     const title = `${this.props.collection.display_name} (${this.props.collection.links.subjects ? this.props.collection.links.subjects.length : null})`;
     const baseType = this.props.collection.favorite ? 'favorites' : 'collections';
     let baseLink = '';
@@ -98,8 +85,8 @@ const CollectionPage = React.createClass({
       baseLink = `/projects/${this.props.project.slug}`;
     }
     const baseCollectionLink = `${baseLink}/collections/${this.props.collection.slug}`;
-    const baseCollectionsLink = `${baseLink}/${baseType}/${this.state.owner.login}`;
-    const profileLink = `${baseLink}/users/${this.state.owner.login}`;
+    const baseCollectionsLink = `${baseLink}/${baseType}/${this.props.owner.login}`;
+    const profileLink = `${baseLink}/users/${this.props.owner.login}`;
     const collectionsLinkMessageKey = `collectionPage.${baseType}Link`;
 
     let userRole = [];
@@ -111,8 +98,8 @@ const CollectionPage = React.createClass({
 
     let displayRole = '';
     if (userRole.length > 0) {
-      if (userRole[0].roles.includes('owner')) {
-        displayRole = ` (you're the ${userRole[0].roles.join(', ')})`;
+      if (this.props.user && this.props.user.id === this.props.owner.id) {
+        displayRole = " you're the owner";
       } else {
         displayRole = ` (you're a ${userRole[0].roles.join(', ')})`;
       }
@@ -127,7 +114,7 @@ const CollectionPage = React.createClass({
             </IndexLink>
             <br />
             <Link to={profileLink} className="collection__link collection-owner">
-              BY {this.state.owner.display_name}
+              BY {this.props.owner.display_name}
             </Link>
             {displayRole}
           </div>
@@ -141,7 +128,7 @@ const CollectionPage = React.createClass({
                   <Translate content="collectionPage.collaborators" />
                 </Link> : null}
             <Link to={baseCollectionsLink} className="collection__link collection-nav-item">
-              <Translate content={collectionsLinkMessageKey} user={this.state.owner.display_name} />
+              <Translate content={collectionsLinkMessageKey} user={this.props.owner.display_name} />
             </Link>
           </nav>
         </div>
@@ -151,7 +138,7 @@ const CollectionPage = React.createClass({
           project: this.props.project,
           collection: this.props.collection,
           roles: this.props.roles,
-          owner: this.state.owner
+          owner: this.props.owner
         })}
       </div>
     );
@@ -178,9 +165,10 @@ const CollectionPageWrapper = React.createClass({
   getInitialState() {
     return {
       collection: null,
-      roles: null,
+      roles: [],
       error: false,
-      loading: false
+      loading: false,
+      owner: null
     };
   },
 
@@ -208,44 +196,61 @@ const CollectionPageWrapper = React.createClass({
       loading: true
     });
 
-    apiClient.type('collections')
-      .get(
-        { slug: `${this.props.params.collection_owner}/${this.props.params.collection_name}` },
-        { include: ['owner'] }
-      )
-      .then(([collection]) => {
-        if (collection) {
-          return [collection];
-        } else {
-          return apiClient.type('collections')
-          .get({
-            id: this.props.params.collection_name,
-            include: ['owner']
-          });
-        }
-      })
-      .then(([collection]) => {
-        collection.listen('change', this.listenToCollection);
-
-        return apiClient.type('collection_roles')
-          .get({
-            collection_id: collection.id
-          })
-          .then((roles) => {
-            this.setState({
-              error: false,
-              loading: false,
-              collection,
-              roles
-            });
-          });
-      })
-      .catch((e) => {
-        this.setState({
-          error: e,
-          loading: false
+    apiClient.type('collections').get({
+      slug: `${this.props.params.collection_owner}/${this.props.params.collection_name}`
+    }).then(([collection]) => {
+      if (collection) {
+        return [collection];
+      } else {
+        // Fallback to use collection id see zooniverse/Panoptes-Front-End#3549
+        return apiClient.type('collections').get({
+          id: this.props.params.collection_name
         });
+      }
+    }).then(([collection]) => {
+      collection.listen('change', this.listenToCollection);
+      this.fetchAllCollectionRoles(collection);
+      this.fetchCollectionOwner(collection)
+        .then((owner) => {
+          this.setState({
+            error: false,
+            loading: false,
+            collection,
+            owner
+          });
+        });
+    }).catch((e) => {
+      console.error(e);
+      this.setState({
+        error: e,
+        loading: false
       });
+    });
+  },
+
+  fetchCollectionOwner(collection) {
+    return apiClient.type('users').get(collection.links.owner.id)
+      .then(owner => owner);
+  },
+
+  fetchAllCollectionRoles(collection, _page = 1) {
+    const fetchAllCollectionRoles = this.fetchAllCollectionRoles;
+    apiClient.type('collection_roles').get({ collection_id: collection.id, page: _page }).then((collectionRoles) => {
+      const meta = collectionRoles[0].getMeta();
+
+      if (meta.page !== meta.page_count) {
+        fetchAllCollectionRoles(collection, meta.page + 1);
+      }
+
+      // Keep this from setting state more than necessary
+      // Further refactoring needs to be done
+      if (this.state.roles.length !== collection.links.collection_roles.length) {
+        this.setState((prevState) => {
+          const roles = prevState.roles.concat(collectionRoles);
+          return { roles };
+        });
+      }
+    });
   },
 
   render() {
@@ -257,7 +262,14 @@ const CollectionPageWrapper = React.createClass({
     let output = null;
     if (this.state.collection) {
       output = (
-        <CollectionPage project={project} user={user} collection={this.state.collection} roles={this.state.roles}>
+        <CollectionPage
+          params={this.props.params}
+          project={project}
+          user={user}
+          collection={this.state.collection}
+          owner={this.state.owner}
+          roles={this.state.roles}
+        >
           {this.props.children}
         </CollectionPage>);
     }
