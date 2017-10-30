@@ -68,13 +68,14 @@ const CollectionPage = React.createClass({
     } else {
       canCollaborate = this.props.roles.some((role) => {
         const idMatch = (role.links.owner.id === this.props.user.id);
-        const isOwner = this.props.user.id === this.props.owner.id;
         const isCollaborator = role.roles.includes('collaborator');
-        return (isOwner || (isCollaborator && idMatch));
+
+        return isCollaborator && idMatch;
       });
     }
+    const isOwner = this.props.user.id === this.props.owner.id;
 
-    this.setState({ canCollaborate });
+    this.setState({ canCollaborate: canCollaborate || isOwner });
   },
 
   render() {
