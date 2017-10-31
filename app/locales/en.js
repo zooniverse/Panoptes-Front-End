@@ -143,5 +143,11 @@ export default {
   },
   workflowToggle: {
     label: 'Active'
+  },
+  collections: {
+    createForm: {
+      private: 'Private',
+      submit: 'Add Collection'
+    }
   }
 };
