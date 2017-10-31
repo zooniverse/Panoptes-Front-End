@@ -40,7 +40,7 @@ class Recents extends React.Component {
                 const { type, format, src } = getSubjectLocation(recent);
                 const fakeSubject = {
                   id: recent.links.subject,
-                  locations: recent.locations
+                  locations: [{ [`${type}/${format}`]: src }]
                 };
                 return (
                   <li key={recent.id} className="collection-subject-viewer">
