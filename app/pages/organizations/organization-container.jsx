@@ -67,6 +67,9 @@ class OrganizationContainer extends React.Component {
     if (collaboratorView) {
       delete query.launch_approved;
     }
+    if (this.props.location.query && this.props.location.query.category) {
+      query.tags = this.props.location.query.category;
+    }
     organization.get('projects', query)
       .then(organizationProjects => this.setState({ fetchingProjects: false, organizationProjects }))
       .catch((error) => {
@@ -131,6 +134,11 @@ class OrganizationContainer extends React.Component {
       });
   }
 
+  updateQuery(category) {
+    // TODO projects/index goes here
+    console.log(category);
+  }
+
   render() {
     if (this.state.organization && (this.state.organization.listed || isAdmin() || this.isCollaborator())) {
       return (
@@ -139,6 +147,7 @@ class OrganizationContainer extends React.Component {
           collaboratorView={this.state.collaboratorView}
           errorFetchingProjects={this.state.errorFetchingProjects}
           fetchingProjects={this.state.fetchingProjects}
+          onChangeQuery={this.updateQuery}
           organization={this.state.organization}
           organizationAvatar={this.state.organizationAvatar}
           organizationBackground={this.state.organizationBackground}
@@ -193,6 +202,11 @@ OrganizationContainer.contextTypes = {
 };
 
 OrganizationContainer.propTypes = {
+  location: React.PropTypes.shape({
+    query: React.PropTypes.shape({
+      category: React.PropTypes.string
+    })
+  }),
   params: React.PropTypes.shape({
     name: React.PropTypes.string,
     owner: React.PropTypes.string
