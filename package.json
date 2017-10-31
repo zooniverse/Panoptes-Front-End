@@ -44,8 +44,7 @@
     "svg-path-properties": "~0.1.1",
     "swipe-js-iso": "~2.0.1",
     "visible-element": "~1.0.1",
-    "zooniverse-geordi-client": "^1.4",
-    "zooniverse-react-components": "github:zooniverse/Zooniverse-React-Components#v0.6.3"
+    "zooniverse-geordi-client": "^1.4"
   },
   "devDependencies": {
     "babel-cli": "~6.24.0",

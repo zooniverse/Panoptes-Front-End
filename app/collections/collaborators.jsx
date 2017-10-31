@@ -1,7 +1,7 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import classNames from 'classnames';
-import { Paginator } from 'zooniverse-react-components';
+import Paginator from '../talk/lib/paginator';
 import UserSearch from '../components/user-search';
 import checkIfCollectionOwner from '../lib/check-if-collection-owner';
 import alert from '../lib/alert';
@@ -314,7 +314,6 @@ export class CollectionCollaborators extends React.Component {
     const { roleSets } = this.state;
     if (roleSets.length > 1) {
       meta = roleSets[0].getMeta();
-      console.log('meta', meta)
     }
 
     if (this.state.hasSettingsRole) {
@@ -353,7 +352,8 @@ export class CollectionCollaborators extends React.Component {
               <hr />
 
               <Paginator
-                page={this.props.location.query.page}
+                className="talk"
+                page={meta.page}
                 pageCount={meta.page_count}
                 router={this.context.router}
                 totalItems={meta.count}
