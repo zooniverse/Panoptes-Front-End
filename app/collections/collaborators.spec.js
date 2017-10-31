@@ -12,9 +12,18 @@ const asyncMock = () => {
   });
 };
 
+const getMetaMock = () => {
+  return {
+    count: 25,
+    page: 1,
+    page_count: 2
+  };
+};
+
 const roleSet = {
   id: '1',
   get: asyncMock,
+  getMeta: getMetaMock,
   roles: ['viewer'],
   links: {
     owner: { id: '1' }
@@ -47,7 +56,7 @@ describe('<CollectionCollaborators />', function() {
     addUserSpy = sinon.spy(RoleCreator.prototype, 'handleSubmit');
     deleteUserSpy = sinon.spy(RoleRow.prototype, 'confirmDelete');
     const stub = sinon.stub(CollectionCollaborators.prototype, 'componentDidMount');
-    wrapper = mount(<CollectionCollaborators owner={owner}/>);
+    wrapper = mount(<CollectionCollaborators owner={owner} />, { context: { router: {} } });
     wrapper.setState({ hasSettingsRole: true, roleSets });
     stub.restore();
   });
