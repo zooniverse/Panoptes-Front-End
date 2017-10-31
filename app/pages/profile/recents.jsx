@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
+import SubjectViewer from '../../components/subject-viewer';
 import Thumbnail from '../../components/thumbnail';
 import getSubjectLocation from '../../lib/get-subject-location';
 
@@ -24,7 +25,7 @@ class Recents extends React.Component {
   }
 
   render() {
-    const { project } = this.props;
+    const { user, project } = this.props;
     return (
       <div className="collections-page secondary-page has-project-context">
         <div className="hero collections-hero">
@@ -37,17 +38,30 @@ class Recents extends React.Component {
             <ul className="collections-show">
               {this.state.recents.map((recent) => {
                 const { type, format, src } = getSubjectLocation(recent);
+                const fakeSubject = {
+                  id: recent.links.subject,
+                  locations: recent.locations
+                };
                 return (
                   <li key={recent.id} className="collection-subject-viewer">
-                    <Link to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}>
-                      <Thumbnail
-                        alt={`Subject ${recent.links.subject}`}
-                        src={src}
-                        type={type}
-                        format={format}
-                        height={250}
-                      />
-                    </Link>
+                    <SubjectViewer
+                      project={project}
+                      subject={fakeSubject}
+                      user={user}
+                    >
+                      <Link
+                        className="subject-link"
+                        to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}
+                      >
+                        <Thumbnail
+                          alt={`Subject ${recent.links.subject}`}
+                          src={src}
+                          type={type}
+                          format={format}
+                          height={250}
+                        />
+                      </Link>
+                    </SubjectViewer>
                   </li>
                 );
               })}
