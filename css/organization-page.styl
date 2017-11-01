@@ -23,7 +23,26 @@
 
   &__categories
     display: flex
-    flex: 1 0 auto    
+    justify-content: center
+
+  &__category-button
+    background: white
+    border: 1px white
+    color: TEAL_MID
+    font-weight: bold
+    margin: .8em
+    min-width: 100px
+
+    &:focus,
+    &:hover
+      background: TEAL_DARK
+      border: 1px TEAL_DARK
+      color: white
+
+    &--active
+      background: TEAL_DARK
+      border: 1px TEAL_DARK
+      color: white 
 
 .organization-hero
   background-size: cover

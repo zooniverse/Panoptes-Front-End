@@ -1,4 +1,5 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 import Translate from 'react-translate-component';
 import isAdmin from '../../lib/is-admin';
@@ -23,6 +24,7 @@ class OrganizationContainer extends React.Component {
     };
 
     this.toggleCollaboratorView = this.toggleCollaboratorView.bind(this);
+    this.updateQuery = this.updateQuery.bind(this);
   }
 
   componentDidMount() {
@@ -42,6 +44,10 @@ class OrganizationContainer extends React.Component {
         this.fetchOrganization(nextProps.params.name, nextProps.params.owner);
       }
     }
+
+    if (this.state.organization && (nextProps.location.query !== this.props.location.query)) {
+      this.fetchProjects(this.state.organization, (isAdmin() || this.isCollaborator()), nextProps.location.query);
+    }
   }
 
   isCollaborator() {
@@ -60,16 +66,32 @@ class OrganizationContainer extends React.Component {
     this.fetchProjects(this.state.organization, newView);
   }
 
-  fetchProjects(organization, collaboratorView) {
-    this.setState({ errorFetchingProjects: null, fetchingProjects: true });
+  updateQuery(newParams) {
+    const query = Object.assign({}, this.props.location.query, newParams);
+    const results = [];
+    Object.keys(query).map((key) => {
+      if (query[key] === '') {
+        results.push(delete query[key]);
+      }
+      return results;
+    });
+    const newLocation = Object.assign({}, this.props.location, { query });
+    // UNSURE OF PURPOSE OF newLocation.search = '';
+    newLocation.search = '';
+    browserHistory.push(newLocation);
+  }
 
+  fetchProjects(organization, collaboratorView, locationQuery) {
+    this.setState({ errorFetchingProjects: null, fetchingProjects: true });
     const query = { cards: true, launch_approved: true };
+
     if (collaboratorView) {
       delete query.launch_approved;
     }
-    if (this.props.location.query && this.props.location.query.category) {
-      query.tags = this.props.location.query.category;
+    if (locationQuery && locationQuery.category) {
+      query.tags = locationQuery.category;
     }
+
     organization.get('projects', query)
       .then(organizationProjects => this.setState({ fetchingProjects: false, organizationProjects }))
       .catch((error) => {
@@ -134,15 +156,11 @@ class OrganizationContainer extends React.Component {
       });
   }
 
-  updateQuery(category) {
-    // TODO projects/index goes here
-    console.log(category);
-  }
-
   render() {
     if (this.state.organization && (this.state.organization.listed || isAdmin() || this.isCollaborator())) {
       return (
         <OrganizationPage
+          category={this.props.location && this.props.location.query && this.props.location.query.category}
           collaborator={isAdmin() || this.isCollaborator()}
           collaboratorView={this.state.collaboratorView}
           errorFetchingProjects={this.state.errorFetchingProjects}

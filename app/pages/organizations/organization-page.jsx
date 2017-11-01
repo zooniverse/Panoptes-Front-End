@@ -64,7 +64,17 @@ class OrganizationPage extends React.Component {
   }
 
   handleCategoryChange(category) {
-    this.props.onChangeQuery(category);
+    this.props.onChangeQuery({ category });
+  }
+
+  calculateClasses(category) {
+    const list = classnames(
+      'standard-button',
+      'organization-page__category-button',
+      { 'organization-page__category-button--active':
+        (category === this.props.category) || (!this.props.category && (category === 'All')) }
+    );
+    return list;
   }
 
   render() {
@@ -116,10 +126,17 @@ class OrganizationPage extends React.Component {
             </label>}
           {this.props.organization.categories &&
             <div className="organization-page__categories">
+              <button
+                key="all"
+                className={this.calculateClasses('All')}
+                onClick={this.handleCategoryChange.bind(this, '')}
+              >
+                All
+              </button>
               {this.props.organization.categories.map(category =>
                 <button
                   key={category}
-                  className="button"
+                  className={this.calculateClasses(category)}
                   onClick={this.handleCategoryChange.bind(this, category)}
                 >
                   {category}
@@ -241,6 +258,7 @@ class OrganizationPage extends React.Component {
 }
 
 OrganizationPage.defaultProps = {
+  category: false,
   collaborator: false,
   collaboratorView: true,
   errorFetchingProjects: {},
@@ -255,6 +273,10 @@ OrganizationPage.defaultProps = {
 };
 
 OrganizationPage.propTypes = {
+  category: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    React.PropTypes.string
+  ]),
   collaborator: React.PropTypes.bool,
   collaboratorView: React.PropTypes.bool,
   errorFetchingProjects: React.PropTypes.shape({
