@@ -13,8 +13,7 @@ POSSIBLE_ROLES = {
   expert: 'team',
   scientist: 'scientist',
   moderator: 'moderator',
-  tester: 'team',
-  translator: 'translator'
+  tester: 'team'
 }
 
 ROLES_INFO =
@@ -48,6 +47,9 @@ CollaboratorCreator = React.createClass
     creating: false
 
   render: ->
+    if @props.project.experimental_tools and @props.project.experimental_tools.indexOf('translator-role') > -1
+      POSSIBLE_ROLES = Object.assign({}, POSSIBLE_ROLES, {translator: 'translator'});
+
     style = if @state.creating
       opacity: 0.5
       pointerEvents: 'none'
