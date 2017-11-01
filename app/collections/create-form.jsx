@@ -18,8 +18,8 @@ class CollectionsCreateForm extends React.Component {
   onSubmit(event) {
     event.preventDefault();
 
-    const displayName = this.refs.name.value;
-    const notPublic = this.refs.private.checked;
+    const displayName = this.name.value;
+    const isPrivate = this.isPrivate.checked;
 
     const links = {};
 
@@ -33,14 +33,14 @@ class CollectionsCreateForm extends React.Component {
 
     const collection = {
       display_name: displayName,
-      private: notPublic,
+      private: isPrivate,
       links
     };
 
     apiClient.type('collections').create(collection).save()
       .then((newCollection) => {
-        this.refs.name.value = '';
-        this.refs.private.value = true;
+        this.name.value = '';
+        this.isPrivate.value = true;
         this.props.onSubmit(newCollection);
       })
       .catch((error) => {
@@ -50,7 +50,7 @@ class CollectionsCreateForm extends React.Component {
 
   handleNameInputChange() {
     this.setState({
-      collectionNameLength: this.refs.name.value.length
+      collectionNameLength: this.name.value.length
     });
   }
 
@@ -64,7 +64,7 @@ class CollectionsCreateForm extends React.Component {
         <label>
           <input
             className="collection-name-input"
-            ref="name"
+            ref={(node) => { this.name = node; }}
             onChange={this.handleNameInputChange}
             placeholder="Collection Name"
           />
@@ -72,7 +72,7 @@ class CollectionsCreateForm extends React.Component {
         <div className="collection-create-form-actions">
           <label>
             <input
-              ref="private"
+              ref={(node) => { this.isPrivate = node; }}
               type="checkbox"
               defaultChecked={false}
             />
