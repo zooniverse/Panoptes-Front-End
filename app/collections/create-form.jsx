@@ -3,8 +3,8 @@ import Translate from 'react-translate-component';
 import apiClient from 'panoptes-client/lib/api-client';
 
 class CollectionsCreateForm extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       collectionNameLength: 0,
@@ -54,12 +54,20 @@ class CollectionsCreateForm extends React.Component {
     });
   }
 
+  renderError() {
+    if (this.state.error.status === 400) {
+      return 'You can\'t name two collections the same thing!';
+    }
+
+    return 'There was a problem creating your collection.';
+  }
+
   render() {
     return (
       <form onSubmit={this.onSubmit} className="collections-create-form">
         <div className="form-help error">
           {this.state.error &&
-              `Error ${this.state.error.status}: ${this.state.error.message}`}
+              this.renderError()}
         </div>
         <label>
           <input
@@ -79,13 +87,9 @@ class CollectionsCreateForm extends React.Component {
             <Translate content="collections.createForm.private" />
           </label>
           <div className="submit-button-container">
-            {this.state.collectionNameLength < 1 ?
-              <button type="submit" disabled={true}>
-                <Translate content="collections.createForm.submit" />
-              </button> :
-              <button type="submit">
-                <Translate content="collections.createForm.submit" />
-              </button>}
+            <button type="submit" disabled={this.state.collectionNameLength < 1}>
+              <Translate content="collections.createForm.submit" />
+            </button>
           </div>
         </div>
       </form>
