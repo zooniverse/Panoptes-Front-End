@@ -105,11 +105,11 @@ CollaboratorCreator = React.createClass
           user: id
 
       newTalkRoleSets = for role in talkRoles
-        talkClient.type('roles').create
-          name: role
-          section: projectSection(@props.project)
-          user_id: id
-
+        if role != 'translator'
+          talkClient.type('roles').create
+            name: role
+            section: projectSection(@props.project)
+            user_id: id
       memo.concat([newRoleSet]).concat(newTalkRoleSets)
     ), [])
 
@@ -213,11 +213,12 @@ module.exports = React.createClass
 
     talkRoleAction = if index is -1
       projectRoleSet.roles.push role
-      talkClient.type('roles').create(
-        user_id: parseInt(projectRoleSet.links.owner.id)
-        section: @talkSection()
-        name: POSSIBLE_ROLES[role]
-      ).save()
+      if role != 'translator'
+        talkClient.type('roles').create(
+          user_id: parseInt(projectRoleSet.links.owner.id)
+          section: @talkSection()
+          name: POSSIBLE_ROLES[role]
+        ).save()
     else
       projectRoleSet.roles.splice index, 1
       filteredRoles = projectRoleSet.talk_roles.filter (talkRole) ->
