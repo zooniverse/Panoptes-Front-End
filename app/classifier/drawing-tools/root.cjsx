@@ -49,9 +49,11 @@ module.exports = React.createClass
       else
         STROKE_WIDTH / scale
 
+    openDetails = toolProps.selected and not toolProps.mark._inProgress and toolProps.details? and toolProps.details.length isnt 0
     unless toolProps.disabled
       startHandler = (e) =>
-        @focusDrawingTool()
+        unless openDetails
+          @focusDrawingTool()
         toolProps.onSelect(e)
 
     <g className="drawing-tool" {...rootProps} {...@props}>
@@ -59,7 +61,7 @@ module.exports = React.createClass
         {@props.children}
       </g>
 
-      {if toolProps.selected and not toolProps.mark._inProgress and toolProps.details? and toolProps.details.length isnt 0
+      {if openDetails
         tasks = require('../tasks').default
 
         detailsAreComplete = toolProps.details.every (detailTask, i) =>
@@ -93,6 +95,7 @@ module.exports = React.createClass
   handleDetailsFormClose: ->
     # TODO: Check if the details tasks are complete.
     @props.tool.props.onDeselect?()
+    @focusDrawingTool()
   
   focusDrawingTool: ->
     x = window.scrollX
