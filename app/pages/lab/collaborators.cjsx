@@ -5,6 +5,7 @@ UserSearch = require '../../components/user-search'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 projectSection = require '../../talk/lib/project-section'
+isAdmin = require '../../lib/is-admin'
 
 ID_PREFIX = 'LAB_COLLABORATORS_PAGE_'
 
@@ -47,6 +48,8 @@ CollaboratorCreator = React.createClass
     creating: false
 
   render: ->
+    @showTranslatorRole()
+
     style = if @state.creating
       opacity: 0.5
       pointerEvents: 'none'
@@ -75,6 +78,10 @@ CollaboratorCreator = React.createClass
         </p>
       </form>
     </div>
+
+  showTranslatorRole: ->
+    if (@props.project.experimental_tools?.indexOf('translator-role') > -1) or isAdmin()
+      POSSIBLE_ROLES = Object.assign({}, POSSIBLE_ROLES, {translator: 'translator'});
 
   handleSubmit: (e) ->
     e.preventDefault()
