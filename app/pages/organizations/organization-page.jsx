@@ -124,7 +124,7 @@ class OrganizationPage extends React.Component {
               />
               <Translate content="organization.home.viewToggle" />
             </label>}
-          {this.props.organization.categories &&
+          {this.props.organization.categories && this.props.organization.categories.length > 0 &&
             <div className="organization-page__categories">
               <button
                 key="all"
