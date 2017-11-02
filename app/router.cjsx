@@ -130,6 +130,7 @@ module.exports =
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" component={require './pages/project/classify'} />
+      <Route path="turk_classify" component={require './pages/project/turk_classify'} />
       <Redirect from="research" to="about/research"/>
       <Redirect from="results" to="about/results"/>
       <Redirect from="faq" to="about/faq"/>
