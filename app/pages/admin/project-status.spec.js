@@ -32,7 +32,7 @@ const workflows = [
   }
 ];
 
-describe.only('ProjectStatus', () => {
+describe('ProjectStatus', () => {
   let wrapper;
   let loadingIndicator;
   let onChangeWorkflowLevelSpy;
@@ -103,11 +103,12 @@ describe.only('ProjectStatus', () => {
     });
 
     it('renders the WorkflowDefaultDialog component when dialogIsOpen state is true', () => {
-      wrapper.setState({ dialogIsOpen: true });
+      wrapper.setState({
+        defaultWorkflowId: '1',
+        dialogIsOpen: true
+      });
       const workflowDefaultDialog = wrapper.find('WorkflowDefaultDialog');
-      // TODO: Refactor ProjectStatus to only render one WorkflowDefaultDialog component
-      assert.equal(workflowDefaultDialog.length, workflows.length);
-      wrapper.setState({ dialogIsOpen: false });
+      assert.equal(workflowDefaultDialog.length, 1);
     });
 
     it('calls #onChangeWorkflowLevel when a user changes a workflow\'s configuration level', () => {
