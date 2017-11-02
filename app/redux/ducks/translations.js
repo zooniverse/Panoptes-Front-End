@@ -1,7 +1,9 @@
 import apiClient from 'panoptes-client/lib/api-client';
 import counterpart from 'counterpart';
 
-counterpart.setFallbackLocale('en');
+const DEFAULT_LOCALE = counterpart.getLocale();
+
+counterpart.setFallbackLocale(DEFAULT_LOCALE);
 // Actions
 const ERROR = 'pfe/translations/ERROR';
 const LOAD = 'pfe/translations/LOAD';
@@ -9,7 +11,7 @@ const SET_LOCALE = 'pfe/translations/SET_LOCALE';
 const SET_STRINGS = 'pfe/translations/SET_STRINGS';
 
 const initialState = {
-  locale: 'en',
+  locale: DEFAULT_LOCALE,
   strings: {
     project: {},
     workflow: {
