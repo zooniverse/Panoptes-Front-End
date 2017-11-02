@@ -76,7 +76,6 @@ class OrganizationContainer extends React.Component {
       return results;
     });
     const newLocation = Object.assign({}, this.props.location, { query });
-    // UNSURE OF PURPOSE OF newLocation.search = '';
     newLocation.search = '';
     browserHistory.push(newLocation);
   }

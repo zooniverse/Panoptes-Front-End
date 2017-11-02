@@ -119,6 +119,20 @@ describe('OrganizationPage', function () {
     assert.equal(cards.length, organizationProjects.length);
   });
 
+  it('should show category buttons if the organization has categories', function () {
+    const wrapper = shallow(<OrganizationPage organization={organization} />);
+    const categories = wrapper.find('.organization-page__category-button');
+    assert.equal(categories.length, organization.categories.length + 1);
+  });
+
+  it('should not show category buttons if the organization does not have categories', function () {
+    const noCategoriesOrg = organization;
+    delete noCategoriesOrg.categories;
+    const wrapper = shallow(<OrganizationPage organization={noCategoriesOrg} />);
+    const categories = wrapper.find('.organization-page__category-button');
+    assert.equal(categories.length, 0);
+  });
+
   describe('with pages about content', function () {
     let wrapper;
     let aboutPage;
