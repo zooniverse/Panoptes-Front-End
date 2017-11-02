@@ -23,10 +23,6 @@ class CollectionsCreateForm extends React.Component {
 
     const links = {};
 
-    if (this.props.project) {
-      links.project = this.props.project.links;
-    }
-
     if (this.props.subjectIDs.length > 0) {
       links.subjects = this.props.subjectIDs;
     }
@@ -99,13 +95,13 @@ class CollectionsCreateForm extends React.Component {
 
 CollectionsCreateForm.defaultProps = {
   onSubmit: () => {},
-  project: '',
+  projectID: '',
   subjectIDs: []
 };
 
 CollectionsCreateForm.propTypes = {
   onSubmit: React.PropTypes.func,
-  project: React.PropTypes.string,
+  projectID: React.PropTypes.string,
   subjectIDs: React.PropTypes.arrayOf(React.PropTypes.string)
 };
 
