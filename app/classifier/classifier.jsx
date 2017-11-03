@@ -119,12 +119,14 @@ class Classifier extends React.Component {
   }
 
   checkForFeedback() {
-    const { project } = this.props;
-    this.props.actions.feedback.updateFeedback({ project });
+    console.info('Checking')
+    // const { project, subject, workflow } = this.props;
+    // this.props.actions.feedback.updateFeedback(project, subject, workflow);
   }
 
   loadSubject(subject) {
-    const { project } = this.props;
+    const { actions, project, subject, workflow } = this.props;
+    actions.feedback.init(project, subject, workflow);
 
     this.setState({
       expertClassification: null,

@@ -2,6 +2,7 @@ import isFeedbackActive from './feedback/is-feedback-active';
 
 // Actions
 const CLEAR = 'pfe/feedback/CLEAR';
+const INIT = 'pfe/feedback/INIT';
 const UPDATE = 'pfe/feedback/UPDATE';
 
 const initialState = {
@@ -14,6 +15,9 @@ export default function reducer(state = initialState, action = {}) {
     case CLEAR:
       return Object.assign({}, initialState);
 
+    case INIT:
+      return Object.assign({}, initialState, action.payload);
+
     case UPDATE:
       return Object.assign({}, state, action.payload);
 
@@ -23,13 +27,9 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 // Action Creators
-export function clearFeedback() {
-  return { type: CLEAR };
-}
-
-export function updateFeedback({ project }) {
+export function init(project, subject, workflow) {
   const payload = {
-    active: isFeedbackActive(project)
+    active: isFeedbackActive(project, subject, workflow)
   };
-  return { type: UPDATE, payload };
+  return { type: INIT, payload };
 }
