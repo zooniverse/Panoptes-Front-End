@@ -3,9 +3,6 @@ import Draggable from '../../lib/draggable';
 import tasks from '../tasks';
 import getSubjectLocation from '../../lib/get-subject-location';
 import SVGImage from '../../components/svg-image';
-import SVGFeedbackViewer from '../feedback/svg-feedback-viewer';
-import SVGToolTipLayer from '../feedback/svg-tooltip-layer';
-import { isFeedbackActive } from '../feedback/helpers';
 
 export default class SVGRenderer extends React.Component {
   constructor(props) {
@@ -157,8 +154,6 @@ export default class SVGRenderer extends React.Component {
       .filter(Boolean);
     children = children.concat(persistentHooks);
 
-    const showFeedback = isFeedbackActive(this.props.project);
-
     return (
       <div>
         <div className="subject svg-subject">
@@ -191,11 +186,9 @@ export default class SVGRenderer extends React.Component {
                 </Draggable>
               )}
               {children}
-              {(showFeedback) && (<SVGFeedbackViewer />)}
             </g>
           </svg>
         </div>
-        {(showFeedback) && (<SVGToolTipLayer getScreenCTM={this.getScreenCurrentTransformationMatrix} />)}
         {this.props.children}
       </div>
     );

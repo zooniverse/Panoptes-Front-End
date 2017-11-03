@@ -1,17 +1,21 @@
+import isFeedbackActive from './feedback/is-feedback-active';
+
 // Actions
 const CLEAR = 'pfe/feedback/CLEAR';
-const SET = 'pfe/feedback/SET';
+const UPDATE = 'pfe/feedback/UPDATE';
 
-const initialState = [];
+const initialState = {
+  active: false
+};
 
 // Reducer
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case CLEAR:
-      return [];
+      return Object.assign({}, initialState);
 
-    case SET:
-      return [].concat(action.feedback);
+    case UPDATE:
+      return Object.assign({}, state, action.payload);
 
     default:
       return state;
@@ -23,6 +27,9 @@ export function clearFeedback() {
   return { type: CLEAR };
 }
 
-export function setFeedback(feedback) {
-  return { type: SET, feedback };
+export function updateFeedback({ project }) {
+  const payload = {
+    active: isFeedbackActive(project)
+  };
+  return { type: UPDATE, payload };
 }

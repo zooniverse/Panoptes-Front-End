@@ -2,6 +2,9 @@ import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import { VisibilitySplit } from 'seven-ten';
 import Translate from 'react-translate-component';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
 import preloadSubject from '../lib/preload-subject';
@@ -17,7 +20,7 @@ import interventionMonitor from '../lib/intervention-monitor';
 import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
-import { connect } from 'react-redux';
+import * as feedbackActions from '../redux/ducks/feedback';
 import { isFeedbackActive, isThereFeedback } from './feedback/helpers';
 
 // For easy debugging
@@ -111,7 +114,13 @@ class Classifier extends React.Component {
 
   updateAnnotations() {
     const { annotations } = this.props.classification;
+    this.checkForFeedback();
     this.setState({ annotations });
+  }
+
+  checkForFeedback() {
+    const { project } = this.props;
+    this.props.actions.feedback.updateFeedback({ project });
   }
 
   loadSubject(subject) {
@@ -153,17 +162,17 @@ class Classifier extends React.Component {
   }
 
   completeClassification() {
-    const feedbackActive = isFeedbackActive(this.props.project);
-    
-    if (feedbackActive) {
-      const classificationMetadata = Object.assign({}, this.props.classification.metadata, {
-        feedbackShown: this.props.feedback.length > 0
-      });
-      if (classificationMetadata.feedbackShown) {
-        classificationMetadata.feedback = [].concat(this.props.feedback);
-      }
-      this.props.classification.update({ metadata: classificationMetadata });
-    }
+    // const feedbackActive = isFeedbackActive(this.props.project);
+    //
+    // if (feedbackActive) {
+    //   const classificationMetadata = Object.assign({}, this.props.classification.metadata, {
+    //     feedbackShown: this.props.feedback.length > 0
+    //   });
+    //   if (classificationMetadata.feedbackShown) {
+    //     classificationMetadata.feedback = [].concat(this.props.feedback);
+    //   }
+    //   this.props.classification.update({ metadata: classificationMetadata });
+    // }
 
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
       if (!feedbackActive || (feedbackActive && !isThereFeedback(this.props.subject, this.props.workflow))) {
@@ -434,4 +443,10 @@ const mapStateToProps = (state) => ({
   feedback: state.feedback,
 });
 
-export default connect(mapStateToProps)(Classifier);
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    feedback: bindActionCreators(feedbackActions, dispatch)
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Classifier);
