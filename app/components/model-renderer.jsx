@@ -23,7 +23,8 @@ class ModelRenderer extends React.Component {
       this.props.subject.locations[1] = Object.assign({}, im0);
     }
     this.state = {
-      imgUrl: Object.values(this.props.subject.locations[0])[0]
+      imgUrl: Object.values(this.props.subject.locations[0])[0],
+      score: null
     };
   }
   componentDidMount() {
@@ -48,15 +49,13 @@ class ModelRenderer extends React.Component {
     this.model = new Model(this.canvas, this.props.subject.metadata);
   }
   componentWillReceiveProps() {
-    // component has updated with new props, set the new render functions
     // check if a model has been assigned
     if (this.model !== null) {
       // if so, update the render function list to the new annotation
       window.requestAnimationFrame(this.getDifference);
     }
   }
-
-  // don't want to re-render whenever props update
+  // don't want to re-render whenever props update, only when subject changes
   shouldComponentUpdate() {
     return this.state.imgUrl !== Object.values(this.props.subject.locations[0])[0];
   }
@@ -79,13 +78,17 @@ class ModelRenderer extends React.Component {
     this.model = null;
   }
   getDifference() {
-    // update the model from the annotation
+    // update the model from the annotation, then wait a frame
     this.model.update(this.props.classification.annotations);
     window.requestAnimationFrame(() => {
       // scoring function is provided in the difference calculator
-      this.props.onRender(this.model.getScore());
       const imOutType = Object.keys(this.props.subject.locations[1])[0];
       this.props.subject.locations[1][imOutType] = this.canvas.toDataURL(imOutType);
+      const score = this.model.getScore();
+      if (score !== this.state.score) {
+        this.props.onRender(score);
+        this.setState({ score });
+      }
     });
   }
   setTexture() {
@@ -120,15 +123,21 @@ class ModelRenderer extends React.Component {
 }
 /* eslint-disable react/forbid-prop-types */
 ModelRenderer.propTypes = {
-  classification: React.PropTypes.object,
-  subject: React.PropTypes.object,
+  classification: React.PropTypes.shape({
+    annotations: React.PropTypes.Array
+  }),
+  subject: React.PropTypes.shape({
+    locations: React.PropTypes.Array,
+    // this is handled by the specific model renderer used, so can vary
+    metadata: React.PropTypes.object
+  }),
   onRender: React.PropTypes.func
 };
 /* eslint-enable react/forbid-prop-types */
 
 // check if we're on a modelling project, and only render if we are
 const ModelRendererWrapper = (props) => {
-  if (props.workflow.configuration.metadata && props.workflow.configuration.metadata.type === 'modelling') {
+  if (props.modellingEnabled) {
     return <ModelRenderer {...props} />;
   } else {
     return null;
@@ -137,7 +146,7 @@ const ModelRendererWrapper = (props) => {
 
 /* eslint-disable react/forbid-prop-types */
 ModelRendererWrapper.propTypes = {
-  workflow: React.PropTypes.object
+  modellingEnabled: React.PropTypes.bool
 };
 /* eslint-enable react/forbid-prop-types */
 

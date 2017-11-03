@@ -39,7 +39,8 @@ class Classifier extends React.Component {
       selectedExpertAnnotation: -1,
       showingExpertClassification: false,
       subjectLoading: false,
-      annotations: []
+      annotations: [],
+      modelScore: null
     };
   }
 
@@ -151,7 +152,7 @@ class Classifier extends React.Component {
   }
 
   handleModelScoreUpdate(newScore) {
-    this.props.workflow.configuration.metadata.modelScore = newScore;
+    this.setState({ modelScore: newScore });
   }
 
   handleAnnotationChange(classification, newAnnotation) {
@@ -230,7 +231,8 @@ class Classifier extends React.Component {
 
     // This is just easy access for debugging.
     window.classification = currentClassification;
-
+    const modellingEnabled = this.props.workflow.configuration.metadata &&
+      this.props.workflow.configuration.metadata.type === 'modelling';
     return (
       <div className={classifierClassNames} >
         <SubjectViewer
@@ -253,7 +255,7 @@ class Classifier extends React.Component {
           classification={currentClassification}
           onRender={this.handleModelScoreUpdate}
           subject={this.props.subject}
-          workflow={this.props.workflow}
+          modellingEnabled={modellingEnabled}
         />
         <div className="task-area">
           {!currentClassification.completed ?
@@ -279,7 +281,10 @@ class Classifier extends React.Component {
               toggleExpertClassification={this.toggleExpertClassification}
             />
           }
-          <ModelScore workflow={this.props.workflow} />
+          <ModelScore
+            score={this.state.modelScore}
+            modellingEnabled={modellingEnabled}
+          />
           <TaskNav
             annotation={currentAnnotation}
             classification={currentClassification}
