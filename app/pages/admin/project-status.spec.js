@@ -36,9 +36,17 @@ describe('ProjectStatus', () => {
   let wrapper;
   let loadingIndicator;
   let onChangeWorkflowLevelSpy;
+  let handleDialogCancelSpy;
+  let handleDialogSuccessSpy;
+  let handleToggleSpy;
+  let event;
+
 
   before(() => {
     onChangeWorkflowLevelSpy = sinon.stub(ProjectStatus.prototype, 'onChangeWorkflowLevel');
+    handleDialogCancelSpy = sinon.stub(ProjectStatus.prototype, 'handleDialogCancel');
+    handleDialogSuccessSpy = sinon.stub(ProjectStatus.prototype, 'handleDialogSuccess');
+    handleToggleSpy = sinon.stub(ProjectStatus.prototype, 'handleToggle');
 
     wrapper = shallow(<ProjectStatus />);
 
@@ -102,18 +110,33 @@ describe('ProjectStatus', () => {
       assert.equal(workflowToggleComponents.length, workflows.length);
     });
 
-    it('renders the WorkflowDefaultDialog component when dialogIsOpen state is true', () => {
-      wrapper.setState({
-        defaultWorkflowId: '1',
-        dialogIsOpen: true
-      });
-      const workflowDefaultDialog = wrapper.find('WorkflowDefaultDialog');
-      assert.equal(workflowDefaultDialog.length, 1);
+    it('calls #handleToggle when a user clicks the active toggle on a workflow', () => {
+      const notDefaultWorkflow = wrapper.find('WorkflowToggle').last();
+      notDefaultWorkflow.simulate('click', event);
+      sinon.assert.calledOnce(handleToggleSpy);
     });
 
     it('calls #onChangeWorkflowLevel when a user changes a workflow\'s configuration level', () => {
       wrapper.find('select').first().simulate('change');
       sinon.assert.calledOnce(onChangeWorkflowLevelSpy);
+    });
+
+    it('renders the WorkflowDefaultDialog component when dialogIsOpen state is true', () => {
+      wrapper.setState({ dialogIsOpen: true });
+      const workflowDefaultDialog = wrapper.find('WorkflowDefaultDialog');
+      assert.equal(workflowDefaultDialog.length, 1);
+    });
+
+    it('calls #handleDialogCancel when a user cancels the WorkflowDefaultDialog modal', () => {
+      const workflowDefaultDialog = wrapper.find('WorkflowDefaultDialog');
+      workflowDefaultDialog.simulate('cancel');
+      sinon.assert.calledOnce(handleDialogCancelSpy);
+    });
+
+    it('calls #handleDialogSuccess when a user clicks ok on the WorkflowDefaultDialog modal', () => {
+      const workflowDefaultDialog = wrapper.find('WorkflowDefaultDialog');
+      workflowDefaultDialog.simulate('success');
+      sinon.assert.calledOnce(handleDialogSuccessSpy);
     });
   });
 });
