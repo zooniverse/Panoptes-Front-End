@@ -123,7 +123,6 @@ SliderTask.getDefaultAnnotation = (task) => {
 SliderTask.isAnnotationComplete = (task, annotation) => {
   return (annotation.value !== null);
 };
-
 SliderTask.propTypes = {
   annotation: React.PropTypes.shape({
     value: React.PropTypes.oneOfType([
