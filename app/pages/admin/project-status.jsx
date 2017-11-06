@@ -25,7 +25,6 @@ class ProjectStatus extends Component {
     this.handleDialogSuccess = this.handleDialogSuccess.bind(this);
 
     this.state = {
-      defaultWorkflowId: null,
       dialogIsOpen: false,
       error: null,
       project: null,
@@ -48,13 +47,9 @@ class ProjectStatus extends Component {
 
     return apiClient.type('projects').get({ slug }).then((projects) => {
       const project = projects[0];
-      const defaultWorkflowId = project.configuration && project.configuration.default_workflow
       // TODO: We ought to improve this ChangeListener replacement
       project.listen('change', this.forceUpdate);
-      this.setState({
-        defaultWorkflowId: defaultWorkflowId,
-        project
-      });
+      this.setState({ project });
       return project;
     });
   }
@@ -113,14 +108,19 @@ class ProjectStatus extends Component {
   handleToggle(event, workflow) {
     this.setState({ error: null });
     const isChecked = event.target.checked;
+    let defaultWorkflowId;
 
-    if (this.state.defaultWorkflowId === workflow.id && workflow.active) {
+    if (this.state.project.configuration) {
+      defaultWorkflowId = this.state.project.configuration.default_workflow;
+    }
+
+    if (defaultWorkflowId === workflow.id && workflow.active) {
       this.setState({
         dialogIsOpen: true
       });
     }
 
-    if ((this.state.defaultWorkflowId !== workflow.id) || (this.state.defaultWorkflowId === workflow.id && !workflow.active)) {
+    if ((defaultWorkflowId !== workflow.id) || (defaultWorkflowId === workflow.id && !workflow.active)) {
       workflow.update({ active: isChecked }).save()
         .catch(error => this.setState({ error }));
     }
@@ -133,6 +133,11 @@ class ProjectStatus extends Component {
 
     return (
       <ul className="project-status__section-list">
+      {this.state.dialogIsOpen &&
+        <WorkflowDefaultDialog
+          onCancel={this.handleDialogCancel}
+          onSuccess={this.handleDialogSuccess}
+        />}
         {this.state.workflows.map((workflow) => {
           return (
             <li key={workflow.id} className="section-list__item">
@@ -144,11 +149,6 @@ class ProjectStatus extends Component {
                 checked={workflow.active}
                 handleToggle={event => this.handleToggle(event, workflow)}
               />{' | '}
-              {this.state.dialogIsOpen && workflow.id === this.state.defaultWorkflowId &&
-                <WorkflowDefaultDialog
-                  onCancel={this.handleDialogCancel}
-                  onSuccess={this.handleDialogSuccess}
-                />}
               <label>
                 Level:{' '}
                 <select
