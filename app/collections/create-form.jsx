@@ -23,6 +23,10 @@ class CollectionsCreateForm extends React.Component {
 
     const links = {};
 
+    if (this.props.projectID) {
+      links.project = this.props.projectID;
+    }
+
     if (this.props.subjectIDs.length > 0) {
       links.subjects = this.props.subjectIDs;
     }
