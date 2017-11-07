@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect, Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 
 import LoadingIndicator from '../../components/loading-indicator';
@@ -27,8 +28,7 @@ class UserSettingsList extends Component {
     const userId = this.userSearch.value().value;
 
     if (userId) {
-      this.getEditUser(userId);
-      this.setState({ userId });
+      this.context.router.push(`/admin/users/${userId}`);
     }
   }
 
@@ -41,16 +41,7 @@ class UserSettingsList extends Component {
       return <LoadingIndicator />;
     }
 
-    if (this.state.editUser === this.props.user) {
-      return <p>Can&apos;t edit your own account</p>;
-    }
 
-    return (
-      <div>
-        <UserSettings editUser={this.state.editUser} />
-        <UserProjects user={this.state.editUser} />
-      </div>
-    );
   }
 
   render() {
@@ -61,7 +52,7 @@ class UserSettingsList extends Component {
             <UserSearch ref={(component) => { this.userSearch = component; }} multi={false} />
           </div>
           <button type="button" onClick={this.listUsers}>
-            Find user
+            Edit user
           </button>
         </div>
         {this.userResults()}
@@ -69,5 +60,9 @@ class UserSettingsList extends Component {
     );
   }
 }
+
+UserSettingsList.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default UserSettingsList;

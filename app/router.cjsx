@@ -11,6 +11,7 @@ React = require 'react'
 `import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
 `import AboutProjectTeam from './pages/project/about/team';`
 `import UserSettingsList from './pages/admin/user-settings-list';`
+`import UserSettings from './pages/admin/user-settings';`
 `import ProjectStatusList from './pages/admin/project-status-list';`
 `import ProjectStatus from './pages/admin/project-status';`
 `import Grantbot from './pages/admin/grantbot';`
@@ -245,6 +246,8 @@ module.exports =
 
     <Route path="admin" component={AdminPage}>
       <IndexRoute component={UserSettingsList} />
+      <Route path="users" component={UserSettingsList} />
+      <Route path="users/:id" component={UserSettings} />
       <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={ProjectStatus} />
       <Route path="grantbot" component={Grantbot} />
