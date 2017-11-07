@@ -24,4 +24,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(ProjectTranslations);
+export { ProjectTranslations };
 

@@ -5,7 +5,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 isAdmin = require '../../lib/is-admin'
 ProjectPage = require './project-page'
-ProjectTranslation = require('./project-translation').default
+ProjectTranslations = require('./project-translations').default
 { connect } = require 'react-redux';
 { bindActionCreators } = require 'redux';
 translationActions  = require '../../redux/ducks/translations';
@@ -305,7 +305,7 @@ ProjectPageController = React.createClass
         <div className="beta-border"></div>}
 
       {if @state.project? and @state.owner?
-        <ProjectTranslation
+        <ProjectTranslations
           project={@state.project}
         >
           <ProjectPage
@@ -326,7 +326,7 @@ ProjectPageController = React.createClass
             splits={@state.splits}
             workflow={@state.workflow}
           />
-        </ProjectTranslation>
+        </ProjectTranslations>
 
       else if @state.loading
         <div className="content-container">
