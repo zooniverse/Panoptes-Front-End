@@ -52,7 +52,14 @@ export function load(translated_type, translated_id, language) {
         }
       })
       .catch(error => {
-        console.warn(language.toUpperCase(), translated_type, translated_id, 'translation fetch error:', error.message);
+        console.warn(
+          translated_type,
+          translated_id,
+          `(${language})`,
+          error.status,
+          'translation fetch error:',
+          error.message
+        );
         dispatch({ type: ERROR, payload: error });
       });
   };
