@@ -117,7 +117,14 @@ ProjectHomeContainer.defaultProps = {
   preferences: {},
   project: {},
   projectIsComplete: false,
-  splits: {}
+  splits: {},
+  translation: {
+    description: '',
+    display_name: '',
+    introduction: '',
+    researcher_quote: '',
+    title: ''
+  }
 };
 
 ProjectHomeContainer.propTypes = {
@@ -140,5 +147,5 @@ ProjectHomeContainer.propTypes = {
     introduction: React.PropTypes.string,
     researcher_quote: React.PropTypes.string,
     title: React.PropTypes.string
-  }).isRequired
+  })
 };
