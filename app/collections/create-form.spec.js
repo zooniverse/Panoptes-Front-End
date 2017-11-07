@@ -6,11 +6,14 @@ import CollectionsCreateForm from './create-form';
 
 describe('<CollectionsCreateForm />', () => {
   let wrapper;
-  let onSubmitSpy;
+  let onSubmitStub;
   let addCollectionButton;
+  let handleNameInputChangeStub;
 
   before(() => {
-    onSubmitSpy = sinon.stub(CollectionsCreateForm.prototype, 'onSubmit');
+    onSubmitStub = sinon.stub(CollectionsCreateForm.prototype, 'onSubmit');
+    handleNameInputChangeStub = sinon.stub(CollectionsCreateForm.prototype, 'handleNameInputChange');
+
     wrapper = shallow(<CollectionsCreateForm />);
   });
 
@@ -29,9 +32,13 @@ describe('<CollectionsCreateForm />', () => {
     assert.equal(addCollectionButton.prop('disabled'), false);
   });
 
-  it('calls onSubmit when the add collection button is clicked', () => {
-    const event = {};
-    wrapper.find('form').simulate('submit', event);
-    sinon.assert.calledOnce(onSubmitSpy);
+  it('calls #onSubmit when the add collection button is clicked', () => {
+    wrapper.find('form').simulate('submit');
+    sinon.assert.calledOnce(onSubmitStub);
+  });
+
+  it('calls #handleNameInputChange when a user changes text in the name input', () => {
+    wrapper.find('input.collection-name-input').simulate('change');
+    sinon.assert.calledOnce(handleNameInputChangeStub);
   });
 });
