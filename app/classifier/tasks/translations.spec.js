@@ -9,6 +9,14 @@ function StubTask() {
   );
 }
 
+const initialTranslations = {
+  strings: {
+    workflow: {
+      tasks: { }
+    }
+  }
+};
+
 const translations = {
   strings: {
     workflow: {
@@ -89,7 +97,7 @@ const expectedTranslation = {
   }
 };
 
-describe('Task translation', function () {
+describe('Task translation with a translation', function () {
   const wrapper = mount(
     <TaskTranslations taskKey="survey" task={task} translations={translations}>
       <StubTask task={task} />
@@ -103,5 +111,22 @@ describe('Task translation', function () {
 
   it('should copy translation strings to the translation object', function () {
     assert.deepEqual(stubTask.prop('translation'), expectedTranslation);
+  });
+});
+
+describe('Task translation without a translation', function () {
+  const wrapper = mount(
+    <TaskTranslations taskKey="survey" task={task} translations={initialTranslations}>
+      <StubTask task={task} />
+    </TaskTranslations>
+  );
+  const stubTask = wrapper.find(StubTask);
+
+  it('should not mutate the original task', function () {
+    assert.deepEqual(stubTask.prop('task'), expectedTask);
+  });
+
+  it('should fall back to using the workflow task strings', function () {
+    assert.deepEqual(stubTask.prop('translation'), expectedTask);
   });
 });
