@@ -19,6 +19,7 @@ class CollectionsCreateForm extends React.Component {
     event.preventDefault();
 
     const displayName = this.name.value;
+    const description = this.description.value;
     const isPrivate = this.isPrivate.checked;
 
     const links = {};
@@ -33,6 +34,7 @@ class CollectionsCreateForm extends React.Component {
 
     const collection = {
       display_name: displayName,
+      description: description,
       private: isPrivate,
       links
     };
@@ -75,6 +77,13 @@ class CollectionsCreateForm extends React.Component {
             ref={(node) => { this.name = node; }}
             onChange={this.handleNameInputChange}
             placeholder="Collection Name"
+          />
+        </label>
+        <label>
+          <textarea
+            className="collection-name-input"
+            ref={(node) => { this.description = node; }}
+            placeholder="Collection Description"
           />
         </label>
         <div className="collection-create-form-actions">
