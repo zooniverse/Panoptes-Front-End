@@ -49,7 +49,9 @@ module.exports = React.createClass
 
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: React.PropTypes.object,
+    initialLoadComplete: React.PropTypes.bool,
+    router: React.PropTypes.object
 
   propTypes:
     loadingSelectedWorkflow: React.PropTypes.bool
@@ -85,7 +87,7 @@ module.exports = React.createClass
   componentWillUnmount: () ->
     @context.geordi?.forget ['workflowID']
 
-  componentWillReceiveProps: (nextProps) ->
+  componentWillReceiveProps: (nextProps, nextContext) ->
     if @props.project isnt nextProps.project
       @loadAppropriateClassification(nextProps)
     unless nextProps.loadingSelectedWorkflow
@@ -97,8 +99,11 @@ module.exports = React.createClass
     if nextProps.loadingSelectedWorkflow is false and nextProps.user isnt null
       @shouldWorkflowAssignmentPrompt(nextProps)
 
-    if nextProps.location.query?.group isnt @props.location.query?.group
+    if nextProps.location.query?.group isnt @props.location.query?.group or nextProps.user isnt @props.user
       @validateUserGroup(nextProps)
+
+    if nextProps.user is null and nextContext.initialLoadComplete
+      @clearUserGroupForClassification(nextProps, nextContext)
 
   shouldWorkflowAssignmentPrompt: (nextProps) ->
     # Only for Gravity Spy which is assigning workflows to logged in users
@@ -320,6 +325,13 @@ module.exports = React.createClass
     if props.location.query?.group? and props.user?
       apiClient.type('user_groups').get(props.location.query.group).then (group) =>
         @setState({ validUserGroup: group and group.links.users.includes(props.user.id) })
+
+  clearUserGroupForClassification: (props, context) ->
+    if (props.location.query?.group)
+      @setState({ validUserGroup: false })
+      newLocation = Object.assign({}, props.location, { query: '' });
+      newLocation.search = '';
+      context.router.push(newLocation);
 
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
