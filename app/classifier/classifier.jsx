@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import { VisibilitySplit } from 'seven-ten';
@@ -34,6 +35,7 @@ class Classifier extends React.Component {
     this.completeClassification = this.completeClassification.bind(this);
     this.toggleExpertClassification = this.toggleExpertClassification.bind(this);
     this.updateAnnotations = this.updateAnnotations.bind(this);
+    this.updateFeedback = this.updateFeedback.bind(this);
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
@@ -114,18 +116,30 @@ class Classifier extends React.Component {
 
   updateAnnotations() {
     const { annotations } = this.props.classification;
-    this.checkForFeedback();
     this.setState({ annotations });
+    if (this.props.feedback.active) {
+      this.updateFeedback(annotations);
+    }
   }
 
-  checkForFeedback() {
-    console.info('Checking')
-    // const { project, subject, workflow } = this.props;
-    // this.props.actions.feedback.updateFeedback(project, subject, workflow);
+  updateFeedback(annotations) {
+    // Check to see if we're still drawing, and update feedback if not.
+    const inProgress = annotations.reduce((isInProgress, annotation) => {
+      if (isInProgress === true) {
+        return true;
+      } else {
+        return annotation.value
+          .map(value => value._inProgress)
+          .includes(true);
+      }
+    }, false);
+    if (!inProgress) {
+      this.props.actions.feedback.update(annotations);
+    }
   }
 
   loadSubject(subject) {
-    const { actions, project, subject, workflow } = this.props;
+    const { actions, project, workflow } = this.props;
     actions.feedback.init(project, subject, workflow);
 
     this.setState({
