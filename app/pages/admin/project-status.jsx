@@ -133,6 +133,11 @@ class ProjectStatus extends Component {
 
     return (
       <ul className="project-status__section-list">
+      {this.state.dialogIsOpen &&
+        <WorkflowDefaultDialog
+          onCancel={this.handleDialogCancel}
+          onSuccess={this.handleDialogSuccess}
+        />}
         {this.state.workflows.map((workflow) => {
           return (
             <li key={workflow.id} className="section-list__item">
@@ -144,11 +149,6 @@ class ProjectStatus extends Component {
                 checked={workflow.active}
                 handleToggle={event => this.handleToggle(event, workflow)}
               />{' | '}
-              {this.state.dialogIsOpen &&
-                <WorkflowDefaultDialog
-                  onCancel={this.handleDialogCancel}
-                  onSuccess={this.handleDialogSuccess}
-                />}
               <label>
                 Level:{' '}
                 <select
