@@ -40,7 +40,7 @@ class CollectionsCreateForm extends React.Component {
     apiClient.type('collections').create(collection).save()
       .then((newCollection) => {
         this.name.value = '';
-        this.isPrivate.value = null;
+        this.isPrivate.value = true;
         this.props.onSubmit(newCollection);
       })
       .catch((error) => {
