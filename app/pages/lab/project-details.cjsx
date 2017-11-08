@@ -213,6 +213,10 @@ module.exports = React.createClass
               displayed order by clicking and dragging on the left gray tab next
               to each link below.
             </small>
+            <br />
+            <small className="form-help">
+              The URL must begin with "<code>https://</code>" or "<code>http://</code>".
+            </small>
             <ExternalLinksEditor project={@props.project} />
             <div className="edit-social-links">
               <h5>Social Links Section</h5>
