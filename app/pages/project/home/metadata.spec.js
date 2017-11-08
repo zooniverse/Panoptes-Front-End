@@ -7,13 +7,9 @@ import ProjectMetadata from './metadata';
 
 describe('ProjectMetadata', function(){
   let project;
-  let pusher;
 
   before(function() {
     project = { classifiers_count: 0, classifications_count: 0, completeness: 0.56, subjects_count: 0, retired_subjects_count: 0 };
-
-    const subscribe = function(channel) { return { bind: function(event, callback) { } }};
-    pusher = { subscribe };
   });
 
   describe('render', function() {
@@ -32,23 +28,23 @@ describe('ProjectMetadata', function(){
     });
   });
 
-  describe('pusher', function() {
-    it('subscribes to pusher', function() {
-      const context = { pusher };
-      pusher.subscribe = sinon.spy(pusher.subscribe);
-      const wrapper = mount(<ProjectMetadata project={project} />, { context });
+  // describe('pusher', function() {
+  //   it('subscribes to pusher', function() {
+  //     const context = { pusher };
+  //     pusher.subscribe = sinon.spy(pusher.subscribe);
+  //     const wrapper = mount(<ProjectMetadata project={project} />, { context });
 
-      wrapper.setContext(context);
-      assert(pusher.subscribe.called, true);
-    });
+  //     wrapper.setContext(context);
+  //     assert(pusher.subscribe.called, true);
+  //   });
 
-    it('unsubscribes to pusher', function() {
-      pusher.unsubscribe = sinon.spy();
-      const context = { pusher };
-      const wrapper = mount(<ProjectMetadata project={project} />, { context });
-      wrapper.setContext(context);
-      wrapper.unmount();
-      assert(pusher.unsubscribe.called, true);
-    });
-  });
+  //   it('unsubscribes to pusher', function() {
+  //     pusher.unsubscribe = sinon.spy();
+  //     const context = { pusher };
+  //     const wrapper = mount(<ProjectMetadata project={project} />, { context });
+  //     wrapper.setContext(context);
+  //     wrapper.unmount();
+  //     assert(pusher.unsubscribe.called, true);
+  //   });
+  // });
 });

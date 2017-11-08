@@ -1,6 +1,7 @@
 Router = {IndexRoute, IndexRedirect, Route, Redirect} = require 'react-router'
 React = require 'react'
 
+`import PanoptesApp from './partials/app';`
 `import ProjectsPage from './pages/projects/index';`
 `import FilteredProjectsList from './pages/projects/filtered-projects-list';`
 `import CollectionPageWrapper from './collections/show';`
@@ -50,7 +51,7 @@ ONE_UP_REDIRECT = React.createClass
     null
 
 module.exports =
-  <Route path="/" component={require './partials/app'}>
+  <Route path="/" component={PanoptesApp}>
     <IndexRoute component={HomePageRoot} />
     <Route path="home" component={ONE_UP_REDIRECT} />
     <Route path="home-for-user" component={require('./pages/home-for-user').default} />

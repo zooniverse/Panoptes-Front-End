@@ -10,6 +10,7 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+    comms: React.PropTypes.object
 
   getInitialState: ->
     userRecords: activeUserCache
@@ -18,26 +19,27 @@ module.exports = React.createClass
     pageCount: 0
     perPage: 10
     page: 1
+    callbackRef: null
 
   componentDidMount: ->
+    ref = @context.comms.on("presenceChange", @update)
+    @setState(callbackRef: ref)
     @update()
 
   componentWillUnmount: ->
-    @resetTimer()
+    if @state.callbackRef
+      @context.comms.off("presenceChange", @state.callbackRef)
 
   update: ->
-    @restartTimer()
-    @getActiveUserIds().then (userIds) =>
-      pageCount = @pageCount userIds
-      page = @boundedPage pageCount
-      onPage = @userIdsOnPage userIds, page
+    userIds = @getActiveUserIds()
 
-      @fetchUncachedUsers(onPage).then(@cacheUsers).then (users) =>
-        activeUsers = (@state.userRecords[id] for id in onPage when @state.userRecords[id]?)
-        @setState userRecords: activeUserCache, users: activeUsers, page: page, pageCount: pageCount, total: userIds.length
-        @restartTimer()
-      .catch =>
-        @restartTimer()
+    pageCount = @pageCount userIds
+    page = @boundedPage pageCount
+    onPage = @userIdsOnPage userIds, page
+
+    @fetchUncachedUsers(onPage).then(@cacheUsers).then (users) =>
+      activeUsers = (@state.userRecords[id] for id in onPage when @state.userRecords[id]?)
+      @setState userRecords: activeUserCache, users: activeUsers, page: page, pageCount: pageCount, total: userIds.length
 
   cacheUsers: (users) ->
     activeUserCache[user.id] = user for user in users
@@ -56,11 +58,8 @@ module.exports = React.createClass
     [].concat(ids).slice offset, offset + @state.perPage
 
   getActiveUserIds: ->
-    sugarApiClient.get '/active_users', channel: @props.section
-    .then (activeUserIds) =>
-      (user.id for user in activeUserIds).reverse()
-    .catch =>
-      @restartTimer()
+    return [] unless @context.comms
+    @context.comms.getUserIds(@props.section.replace("-", ":"))
 
   boundedPage: (pageCount) ->
     if @state.page > pageCount
@@ -76,13 +75,6 @@ module.exports = React.createClass
   onPageChange: (page) ->
     @setState page: page
     @update()
-
-  resetTimer: ->
-    clearTimeout(@updateTimeout) if @updateTimeout
-
-  restartTimer: ->
-    @resetTimer()
-    @updateTimeout = setTimeout @update, 60000
 
   userLink: (user) ->
     baseLink = "/"

@@ -25,24 +25,28 @@ export default class ProjectMetadata extends React.Component {
 
     this.state = {
       classificationsCount: props.project.classifications_count,
+      channel: null
     };
+
+    this.incrementClassificationsCounter = this.incrementClassificationsCounter.bind(this)
   }
 
   componentDidMount() {
-    if (this.context.pusher) {
-      const channel = this.context.pusher.subscribe('panoptes');
-      channel.bind('classification', (data) => {
-        if (data.project_id === this.props.project.id) {
-          this.setState({ classificationsCount: this.state.classificationsCount + 1 });
-        }
-      });
-    }
+    let channel = this.context.comms.join("project:" + this.props.project.id);
+    channel.on("classification", this.incrementClassificationsCounter);
+    this.setState({channel: channel});
   }
 
   componentWillUnmount() {
-    if (this.context.pusher) {
-      this.context.pusher.unsubscribe('panoptes');
+    if (this.state.channel) {
+      this.state.channel.off("classification", this.incrementClassificationsCounter);
+      this.context.comms.leave("project:" + this.props.project.id);
+      this.setState({channel: null});
     }
+  }
+
+  incrementClassificationsCounter() {
+    this.setState({ classificationsCount: this.state.classificationsCount + 1 });
   }
 
   renderStatus() {
@@ -107,7 +111,7 @@ export default class ProjectMetadata extends React.Component {
 }
 
 ProjectMetadata.contextTypes = {
-  pusher: React.PropTypes.object,
+  comms: React.PropTypes.object,
 };
 
 ProjectMetadata.propTypes = {

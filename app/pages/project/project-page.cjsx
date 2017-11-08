@@ -13,6 +13,7 @@ AVATAR_SIZE = 100
 ProjectPage = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
+    comms: React.PropTypes.object
 
   propTypes:
     owner: React.PropTypes.object.isRequired
@@ -69,7 +70,11 @@ ProjectPage = React.createClass
     if @_lastSugarSubscribedID?
       sugarClient.unsubscribeFrom "project-#{@_lastSugarSubscribedID}"
     if project?
+      @context.comms.setCurrentProject(project.id)
       sugarClient.subscribeTo "project-#{project.id}"
+    else
+      @context.comms.setCurrentProject(null)
+
 
   redirectClassifyLink: (redirect) ->
     "#{redirect.replace(/\/?#?\/+$/, "")}/#/classify"
