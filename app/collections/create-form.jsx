@@ -8,10 +8,12 @@ class CollectionsCreateForm extends React.Component {
 
     this.state = {
       collectionNameLength: 0,
+      descriptionLength: 0,
       error: null
     };
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleNameInputChange = this.handleNameInputChange.bind(this);
   }
 
@@ -42,6 +44,7 @@ class CollectionsCreateForm extends React.Component {
     apiClient.type('collections').create(collection).save()
       .then((newCollection) => {
         this.name.value = '';
+        this.description.value = '';
         this.isPrivate.value = true;
         this.props.onSubmit(newCollection);
       })
@@ -54,6 +57,12 @@ class CollectionsCreateForm extends React.Component {
     this.setState({
       collectionNameLength: this.name.value.length
     });
+  }
+
+  handleDescriptionChange() {
+    this.setState({
+      descriptionLength: this.description.value.length
+    })
   }
 
   renderError() {
@@ -82,8 +91,9 @@ class CollectionsCreateForm extends React.Component {
         <label>
           <textarea
             className="collection-name-input"
+            onChange={this.handleDescriptionChange}
             ref={(node) => { this.description = node; }}
-            placeholder="Collection Description"
+            placeholder="Collection Description (less than 300 characters)"
           />
         </label>
         <div className="collection-create-form-actions">
@@ -96,7 +106,10 @@ class CollectionsCreateForm extends React.Component {
             <Translate content="collections.createForm.private" />
           </label>
           <div className="submit-button-container">
-            <button type="submit" disabled={this.state.collectionNameLength < 1}>
+            <button
+              type="submit"
+              disabled={this.state.collectionNameLength < 1 || this.state.descriptionLength > 300}
+            >
               <Translate content="collections.createForm.submit" />
             </button>
           </div>

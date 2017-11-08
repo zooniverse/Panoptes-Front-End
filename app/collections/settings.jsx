@@ -1,5 +1,6 @@
 import React from 'react';
 import alert from '../lib/alert';
+import AutoSave from '../components/auto-save';
 import DisplayNameSlugEditor from '../partials/display-name-slug-editor';
 import Thumbnail from '../components/thumbnail';
 
@@ -9,8 +10,10 @@ export default class CollectionSettings extends React.Component {
 
     this.state = {
       error: null,
+      descriptionLengthError: false,
       isDeleting: false,
       setting: {
+        description: false,
         private: false
       }
     };
@@ -19,6 +22,7 @@ export default class CollectionSettings extends React.Component {
     this.deleteCollection = this.deleteCollection.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.redirect = this.redirect.bind(this);
+    this.handleDescriptionInputChange = this.handleDescriptionInputChange.bind(this);
   }
 
   componentDidMount() {
@@ -84,6 +88,37 @@ export default class CollectionSettings extends React.Component {
       });
   }
 
+  handleDescriptionInputChange() {
+    const property = "description";
+    const setting = this.state.setting;
+    setting[property] = true;
+    this.setState({ error: null, setting });
+
+    const description = this.description.value;
+    const changes = {};
+    changes[property] = description;
+
+    if (description.length > 300) {
+      this.setState({
+        descriptionLengthError: true
+      });
+      return;
+    } else {
+      this.setState({
+        descriptionLengthError: false
+      });
+    }
+
+    this.props.collection.update(changes).save()
+      .catch((error) => {
+        this.setState({ error });
+      })
+      .then(() => {
+        setting[property] = false;
+        this.setState({ setting });
+      })
+  }
+
   render() {
     if (!this.props.canCollaborate) {
       return (
@@ -100,6 +135,25 @@ export default class CollectionSettings extends React.Component {
           <p>Something went wrong. Please try again</p>}
         <DisplayNameSlugEditor resource={this.props.collection} resourceType="collection" />
 
+        <hr />
+
+        <h3 className="form-label">Description</h3>
+        <AutoSave resource={this.props.collection}>
+          <form>
+            <label>
+              <textarea
+                value={this.props.collection.description}
+                onChange={this.handleDescriptionInputChange}
+                ref={(node) => { this.description = node; }}
+                placeholder="Collection Description"
+              />
+            </label>
+          </form>
+        </AutoSave>
+        <small>Describe your collection in more detail - there is, however, a 300 character limit.</small>
+        <br />
+        {this.state.descriptionLengthError &&
+          <span>Description cannot be more than 300 characters.</span>}
         <hr />
 
         <h3 className="form-label">Visibility</h3>
