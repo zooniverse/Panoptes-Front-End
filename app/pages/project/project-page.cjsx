@@ -158,6 +158,12 @@ ProjectPage = React.createClass
           <Translate content="project.nav.collections" />
         </Link>
 
+        {if @props.user
+           <Link to="#{projectPath}/recents" activeClassName="active" className="tabbed-content-tab">
+            <Translate content="project.nav.recents" />
+          </Link>
+        }
+
         {rearrangedLinks.map ({label, url}, i) =>
           unless !!label
             for pattern, icon of SOCIAL_ICONS
