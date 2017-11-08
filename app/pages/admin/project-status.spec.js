@@ -90,8 +90,8 @@ describe('ProjectStatus', () => {
     });
 
     it('renders a no workflows found message when no workflow is in component state', () => {
-      const noWorkflowsMessage = wrapper.find('div[children="No workflows found"]');
-      assert.equal(noWorkflowsMessage.length, 1);
+      const noWorkflowsMessage = wrapper.find('.project-status__section').at(1).children().find('div');
+      assert.equal(noWorkflowsMessage.text(), 'No workflows found');
     });
   });
 
