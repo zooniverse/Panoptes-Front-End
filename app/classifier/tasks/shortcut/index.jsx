@@ -87,7 +87,7 @@ Shortcut.propTypes = {
   ),
   translation: React.PropTypes.shape({
     answers: React.PropTypes.array
-  }).isRequired,
+  }),
   workflow: React.PropTypes.shape(
     { tasks: React.PropTypes.object }
   )
@@ -101,6 +101,9 @@ Shortcut.defaultProps = {
   onChange: () => {},
   task: {
     unlinkedTask: null
+  },
+  translation: {
+    answers: []
   },
   workflow: {
     tasks: {}
