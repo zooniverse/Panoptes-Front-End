@@ -1,4 +1,5 @@
 import isFeedbackActive from './feedback/is-feedback-active';
+import FeedbackRuleSet from './feedback/feedback-ruleset';
 
 // Actions
 const CLEAR = 'pfe/feedback/CLEAR';
@@ -6,7 +7,9 @@ const INIT = 'pfe/feedback/INIT';
 const UPDATE = 'pfe/feedback/UPDATE';
 
 const initialState = {
-  active: false
+  active: false,
+  showModal: false,
+  rules: [],
 };
 
 // Reducer
@@ -32,4 +35,13 @@ export function init(project, subject, workflow) {
     active: isFeedbackActive(project, subject, workflow)
   };
   return { type: INIT, payload };
+}
+
+export function update(subject, task, annotation) {
+  // console.info('update', arguments);
+  const rules = new FeedbackRuleSet(subject, task, annotation);
+  console.log('rules', rules);
+  const payload = {
+  };
+  return { type: UPDATE, payload };
 }
