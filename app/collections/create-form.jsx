@@ -1,6 +1,7 @@
 import React from 'react';
 import Translate from 'react-translate-component';
 import apiClient from 'panoptes-client/lib/api-client';
+import CharLimit from '../components/char-limit';
 
 class CollectionsCreateForm extends React.Component {
   constructor() {
@@ -8,12 +9,12 @@ class CollectionsCreateForm extends React.Component {
 
     this.state = {
       collectionNameLength: 0,
-      descriptionLength: 0,
+      descriptionText: '',
       error: null
     };
 
     this.onSubmit = this.onSubmit.bind(this);
-    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+    this.handleDescriptionInputChange = this.handleDescriptionInputChange.bind(this);
     this.handleNameInputChange = this.handleNameInputChange.bind(this);
   }
 
@@ -36,7 +37,7 @@ class CollectionsCreateForm extends React.Component {
 
     const collection = {
       display_name: displayName,
-      description: description,
+      description,
       private: isPrivate,
       links
     };
@@ -59,10 +60,10 @@ class CollectionsCreateForm extends React.Component {
     });
   }
 
-  handleDescriptionChange() {
+  handleDescriptionInputChange() {
     this.setState({
-      descriptionLength: this.description.value.length
-    })
+      descriptionText: this.description.value
+    });
   }
 
   renderError() {
@@ -91,11 +92,15 @@ class CollectionsCreateForm extends React.Component {
         <label>
           <textarea
             className="collection-name-input"
-            onChange={this.handleDescriptionChange}
+            onChange={this.handleDescriptionInputChange}
             ref={(node) => { this.description = node; }}
             placeholder="Collection Description (less than 300 characters)"
           />
         </label>
+        <CharLimit
+          limit={300}
+          string={this.state.descriptionText ? this.state.descriptionText : ''}
+        />
         <div className="collection-create-form-actions">
           <label>
             <input
@@ -108,7 +113,7 @@ class CollectionsCreateForm extends React.Component {
           <div className="submit-button-container">
             <button
               type="submit"
-              disabled={this.state.collectionNameLength < 1 || this.state.descriptionLength > 300}
+              disabled={this.state.collectionNameLength < 1 || this.state.descriptionText.length > 300}
             >
               <Translate content="collections.createForm.submit" />
             </button>
