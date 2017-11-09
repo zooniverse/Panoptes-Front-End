@@ -26,7 +26,7 @@ const translations = {
 };
 
 const project = {
-  id: 12345,
+  id: '12345',
   title: 'Project title',
   display_name: 'Project display name',
   introduction: 'Project introduction',
@@ -36,7 +36,7 @@ const project = {
 };
 
 const expectedProject = {
-  id: 12345,
+  id: '12345',
   title: 'Project title',
   display_name: 'Project display name',
   introduction: 'Project introduction',
