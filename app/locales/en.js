@@ -6,6 +6,7 @@ export default {
     done: 'Done',
     doneAndTalk: 'Done & Talk',
     next: 'Next',
+    recents: 'Your recent classifications',
     talk: 'Talk',
     tutorialButton: 'Show the project tutorial',
     miniCourseButton: 'Restart the project mini-course'
@@ -17,7 +18,8 @@ export default {
       about: 'About',
       classify: 'Classify',
       talk: 'Talk',
-      collections: 'Collect'
+      collections: 'Collect',
+      recents: 'Recents'
     },
     home: {
       researcher: 'Words from the researcher',
@@ -143,5 +145,11 @@ export default {
   },
   workflowToggle: {
     label: 'Active'
+  },
+  collections: {
+    createForm: {
+      private: 'Private',
+      submit: 'Add Collection'
+    }
   }
 };
