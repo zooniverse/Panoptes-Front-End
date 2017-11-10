@@ -78,9 +78,9 @@ export default class PopularTags extends React.Component {
         {!!this.state.tags.length && (
           <div>
             {this.props.header ? this.props.header : null}
-            <section>
+            <p>
               {this.state.tags.map(tag => tagType(tag))}
-            </section>
+            </p>
           </div>
         )}
       </div>
