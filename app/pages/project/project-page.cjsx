@@ -85,8 +85,9 @@ ProjectPage = React.createClass
       @props.project.display_name
 
   userHasLabAccess: ->
-    userRoles = @props.projectRoles.some ({roles}) =>
-      roles.includes('owner') || roles.includes('collaborator')
+    userRoles = @props.projectRoles.some (role) =>
+      if role.links.owner.id == @props.user.id
+        role.roles.includes('owner') || role.roles.includes('collaborator')
 
   render: ->
     rearrangedLinks = @props.project.urls.sort (a, b) => a.path? & !b.path? ? 1 : 0
