@@ -23,14 +23,6 @@ export default class ProjectNavbar extends Component {
     this.renderRouterIndex = this.renderRouterIndex.bind(this);
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const projectPath = this.props.project ? `/projects/${this.props.project.slug}` : '';
-  //   if (this.props.workflow !== nextProps.workflow) {
-  //     console.log(' componentWillReceiveProps(nextProps)');
-  //     this.checkWorkflow(nextProps.workflow, projectPath);
-  //   }
-  // }
-
   checkWorkflow(projectPath, workflow) {
     console.log('checkWorkflow', workflow, projectPath);
     const opacity = {
