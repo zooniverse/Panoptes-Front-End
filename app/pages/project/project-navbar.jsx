@@ -24,7 +24,6 @@ export default class ProjectNavbar extends Component {
   }
 
   checkWorkflow(projectPath, workflow) {
-    console.log('checkWorkflow', workflow, projectPath);
     const opacity = {
       opacity: 0.5
     };
@@ -119,35 +118,51 @@ export default class ProjectNavbar extends Component {
   renderProjectLinks(urls) {
     const sortedUrls = partition(urls, (url => !url.path));
     const joinedSortedUrls = sortedUrls[0].concat(sortedUrls[1]);
-    joinedSortedUrls.map(link => {
-      let label;
-      let iconForLabel;
-      if (!link.label) {
-        Object.keys(SOCIAL_ICONS).forEach(pattern => {
-          const icon = SOCIAL_ICONS[pattern];
-          if (link.url.indexOf(pattern) !== -1) {
-            iconForLabel = icon;
-          }
-        });
-        if (iconForLabel == null) {
-          iconForLabel = 'globe';
+    return (
+      joinedSortedUrls.map(link => {
+        let label = '';
+        let iconForLabel;
+        if (!link.label) {
+          Object.keys(SOCIAL_ICONS).forEach(root => {
+            const icon = SOCIAL_ICONS[root];
+            if (link.url.indexOf(root) !== -1) {
+              iconForLabel = icon;
+
+              return iconForLabel;
+            }
+          });
+          label = <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />;
+          return (
+            <a
+              key={link.url}
+              href={link.url}
+              className={classnames({
+                'tabbed-content-tab': true,
+                'social-icon': iconForLabel !== null
+              })}
+              target={`${this.props.project.id}${link.url}`}
+            >
+              {label}
+            </a>
+          );
         }
+        (iconForLabel != null) ? iconForLabel : iconForLabel = 'globe';
         label = <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />;
-      }
-      return (
-        <a
-          key={link.url}
-          href={link.url}
-          className={classnames({
-            'tabbed-content-tab': true,
-            'social-icon': iconForLabel !== null
-          })}
-          target={`${this.props.project.id}${link.url}`}
-        >
-          {label}
-        </a>
-      );
-    });
+        return (
+          <a
+            key={link.url}
+            href={link.url}
+            className={classnames({
+              'tabbed-content-tab': true,
+              'social-icon': iconForLabel !== null
+            })}
+            target={`${this.props.project.id}${link.url}`}
+          >
+            {label}
+          </a>
+        );
+      })
+    );
   }
 
   renderRouterIndex(loading, project, projectAvatar, projectPath) {
@@ -185,9 +200,6 @@ export default class ProjectNavbar extends Component {
       'tabbed-content-tab': true,
       'active': activeElement
     });
-    console.log('====================================');
-    console.log('projectPath', projectPath, project);
-    console.log('====================================');
     return (
       <nav className="project-nav tabbed-content-tabs">
         {this.renderRouterIndex(loading, project, projectAvatar, projectPath)}
