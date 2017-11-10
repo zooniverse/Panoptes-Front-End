@@ -19,7 +19,9 @@ export default {
       classify: 'Classify',
       talk: 'Talk',
       collections: 'Collect',
-      recents: 'Recents'
+      recents: 'Recents',
+      lab: 'Lab',
+      adminPage: 'Admin page'
     },
     home: {
       researcher: 'Words from the researcher',
