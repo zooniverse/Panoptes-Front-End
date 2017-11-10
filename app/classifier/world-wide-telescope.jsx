@@ -480,7 +480,7 @@ export default class WorldWideTelescope extends React.Component {
 
     return (
       <div>
-        {plates.length && (<p>View Your Classification!</p>)}
+        {!!plates.length && (<p>View Your Classification!</p>)}
         {plates.map((plate, idx) => {
           return (
             <div className="worldwide-telescope" key={idx}>
