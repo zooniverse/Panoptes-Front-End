@@ -17,7 +17,10 @@ export default {
       about: 'About',
       classify: 'Classify',
       talk: 'Talk',
-      collections: 'Collect'
+      collections: 'Collect',
+      recents: 'Recents',
+      lab: 'Lab',
+      adminPage: 'Admin page'
     },
     home: {
       researcher: 'Words from the researcher',
