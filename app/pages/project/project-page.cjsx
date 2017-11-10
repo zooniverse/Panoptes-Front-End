@@ -7,6 +7,7 @@ Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
 `import SOCIAL_ICONS from '../../lib/social-icons'`
+`import isAdmin from '../../lib/is-admin';`
 
 AVATAR_SIZE = 100
 
@@ -83,10 +84,16 @@ ProjectPage = React.createClass
     else
       @props.project.display_name
 
+  userHasLabAccess: ->
+    userRoles = @props.projectRoles.some ({roles}) =>
+      roles.includes('owner') || roles.includes('collaborator')
+
   render: ->
     rearrangedLinks = @props.project.urls.sort (a, b) => a.path? & !b.path? ? 1 : 0
     betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
+    labPath = "/lab/#{@props.project.id}"
+    adminPath = "/admin/project_status/#{@props.project.slug}"
     onHomePage = @props.routes[2].path is undefined
     avatarClasses = classnames('tabbed-content-tab', {
       'beta-approved': betaApproved
@@ -161,6 +168,18 @@ ProjectPage = React.createClass
         {if @props.user
            <Link to="#{projectPath}/recents" activeClassName="active" className="tabbed-content-tab">
             <Translate content="project.nav.recents" />
+          </Link>
+        }
+
+        {if @props.user && this.userHasLabAccess()
+           <Link to="#{labPath}/" activeClassName="active" className="tabbed-content-tab">
+            <Translate content="project.nav.lab" />
+          </Link>
+        }
+
+        {if isAdmin()
+           <Link to="#{adminPath}/" activeClassName="active" className="tabbed-content-tab">
+            <Translate content="project.nav.adminPage" />
           </Link>
         }
 

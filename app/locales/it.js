@@ -19,7 +19,9 @@ export default {
       classify: 'Classifica',
       talk: 'Forum',
       collections: 'Colleziona',
-      recents: 'Recents'
+      recents: 'Recents',
+      lab: 'Lab',
+      adminPage: 'Admin page'
     },
     home: {
       researcher: 'Words from the researcher',
