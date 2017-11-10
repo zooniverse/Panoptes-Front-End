@@ -188,7 +188,7 @@ class ProjectStatus extends Component {
         <div className="project-status__section">
           <h4>Information</h4>
           <ul>
-            <li>Id: {this.state.project.id}</li>
+            <li>Id: <a href={`/lab/${this.state.project.id}`}>{this.state.project.id}</a></li>
             <li>Classification count: {this.state.project.classifications_count}</li>
             <li>Subjects count: {this.state.project.subjects_count}</li>
             <li>Retired subjects count: {this.state.project.retired_subjects_count}</li>
