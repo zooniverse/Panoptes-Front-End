@@ -84,7 +84,7 @@ const ProjectNavbar = ({
 
   const renderLabTab = () => {
     return (
-      (user && userHasLabAccess) ?
+      (user && userHasLabAccess()) ?
       <Link
         to={`${labPath}/`}
         activeClassName="active"
@@ -109,6 +109,16 @@ const ProjectNavbar = ({
         </Link>
       );
     }
+  };
+
+  const renderRecents = () => {
+    return (
+      user ?
+      <Link to="#{projectPath}/recents" activeClassName="active" className="tabbed-content-tab">
+        <Translate content="project.nav.recents" />
+      </Link> :
+      null
+    );
   };
 
   const renderAvatar = () => {
@@ -140,7 +150,7 @@ const ProjectNavbar = ({
       >
         <Translate content="project.nav.classify" />
       </a> :
-      checkWorkflow(projectPath, workflow)
+      checkWorkflow()
     );
   };
 
@@ -177,7 +187,7 @@ const ProjectNavbar = ({
           label = <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />;
           return (
             <a
-              key={link.url}
+              key={link.label}
               href={link.url}
               className={classnames({
                 'tabbed-content-tab': true,
@@ -227,8 +237,8 @@ const ProjectNavbar = ({
         className={avatarClasses}
         onClick={logClick('project.nav.home')}
       >
-        {renderAvatar(projectAvatar)}
-        {renderProjectName(project, loading)}
+        {renderAvatar()}
+        {renderProjectName()}
       </IndexLink>
     );
   };
@@ -255,6 +265,7 @@ const ProjectNavbar = ({
       >
         <Translate content="project.nav.collections" />
       </Link>
+      {renderRecents()}
       {renderLabTab()}
       {renderAdminTab()}
       {renderProjectLinks(project.urls)}
