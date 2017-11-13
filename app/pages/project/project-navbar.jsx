@@ -171,7 +171,6 @@ const ProjectNavbar = ({
             const icon = SOCIAL_ICONS[root];
             if (link.url.indexOf(root) !== -1) {
               iconForLabel = icon;
-
               return iconForLabel;
             }
           });
@@ -190,7 +189,6 @@ const ProjectNavbar = ({
             </a>
           );
         }
-        (iconForLabel != null) ? iconForLabel : iconForLabel = 'globe';
         label = <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />;
         return (
           <a
@@ -202,7 +200,7 @@ const ProjectNavbar = ({
             })}
             target={`${project.id}${link.url}`}
           >
-            {label}
+            {link.label}
           </a>
         );
       })
