@@ -8,7 +8,6 @@ classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
 `import SOCIAL_ICONS from '../../lib/social-icons'`
 `import ProjectNavbar from './project-navbar'`
-`import isAdmin from '../../lib/is-admin';`
 
 AVATAR_SIZE = 100
 
@@ -77,25 +76,12 @@ ProjectPage = React.createClass
       sugarClient.subscribeTo "project-#{project.id}"
 
   render: ->
-    betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
-    labPath = "/lab/#{@props.project.id}"
-    adminPath = "/admin/project_status/#{@props.project.slug}"
     onHomePage = @props.routes[2].path is undefined
-    avatarClasses = classnames('tabbed-content-tab', {
-      'beta-approved': betaApproved
-    })
 
     pages = [{}, @props.pages...].reduce (map, page) =>
       map[page.url_key] = page
       map
-
-    logClick = @context?.geordi?.makeHandler? 'project-menu'
-
-    collectClasses = classnames {
-      "tabbed-content-tab": true
-      "active": @props.project? and (@props.routes[2].path is "collections" or @props.routes[2].path is "favorites")
-    }
 
     if @props.background?
       backgroundStyle = backgroundImage: "url('#{@props.background.src}')"

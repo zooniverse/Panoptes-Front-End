@@ -5,25 +5,38 @@ import classnames from 'classnames';
 import partition from 'lodash/partition';
 import SOCIAL_ICONS from '../../lib/social-icons';
 import Thumbnail from '../../components/thumbnail';
+import isAdmin from '../../lib/is-admin';
 
 // constants
 const AVATAR_SIZE = 100;
 
-export default class ProjectNavbar extends Component {
-  constructor() {
-    super();
-    this.checkWorkflow = this.checkWorkflow.bind(this);
-    this.logClick = this.logClick.bind(this);
-    this.redirectClassifyLink = this.redirectClassifyLink.bind(this);
-    this.renderAvatar = this.renderAvatar.bind(this);
-    this.renderProjectName = this.renderProjectName.bind(this);
-    this.renderProjectLinks = this.renderProjectLinks.bind(this);
-    this.renderAboutTab = this.renderAboutTab.bind(this);
-    this.renderClassifyTab = this.renderClassifyTab.bind(this);
-    this.renderRouterIndex = this.renderRouterIndex.bind(this);
-  }
+const ProjectNavbar = ({
+  loading,
+  project,
+  projectAvatar,
+  projectRoles,
+  routes,
+  user,
+  workflow
+}, context) => {
+  const { path } = routes[2];
+  const projectPath = `/projects/${project.slug}`;
+  const labPath = `/lab/${project.id}`;
+  const adminPath = `/admin/project_status/${project.slug}`;
+  const activeElement = project && (path === 'collections' || path === 'favorites');
+  const collectClasses = classnames({
+    'tabbed-content-tab': true,
+    'active': activeElement
+  });
 
-  checkWorkflow(projectPath, workflow) {
+  // helpers
+  const logClick = () => {
+    if (context && context.geordi) {
+      return context.geordi.makeHandler('project-menu');
+    }
+  };
+
+  const checkWorkflow = () => {
     const opacity = {
       opacity: 0.5
     };
@@ -33,7 +46,7 @@ export default class ProjectNavbar extends Component {
           to={`${projectPath}/classify`}
           activeClassName="active"
           className="classify tabbed-content-tab"
-          onClick={this.logClick('project.nav.classify')}
+          onClick={logClick('project.nav.classify')}
         >
           <Translate content="project.nav.classify" />
         </Link> :
@@ -45,29 +58,60 @@ export default class ProjectNavbar extends Component {
           <Translate content="project.nav.classify" />
         </span>
     );
-  }
+  };
 
-  logClick() {
-    if (this.context && this.context.geordi) {
-      return context.geordi.makeHandler('project-menu');
-    }
-  }
-  renderAboutTab(project, projectPath) {
+  const renderAdminTab = () => {
+    return (
+      (isAdmin()) ?
+        <Link
+          to={`${adminPath}/`}
+          activeClassName="active"
+          className="tabbed-content-tab"
+        >
+          <Translate content="project.nav.adminPage" />
+        </Link> :
+        null
+    );
+  };
+
+  const userHasLabAccess = () => {
+    projectRoles.some(role => {
+      if (role.links.owner.id === user.id) {
+        return role.roles.includes('owner') || role.roles.includes('collaborator');
+      }
+    });
+  };
+
+  const renderLabTab = () => {
+    return (
+      (user && userHasLabAccess) ?
+      <Link
+        to={`${labPath}/`}
+        activeClassName="active"
+        className="tabbed-content-tab"
+      >
+        <Translate content="project.nav.lab" />
+      </Link> :
+      null
+    );
+  };
+
+  const renderAboutTab = () => {
     if (!project.redirect) {
       return (
         <Link
           to={`${projectPath}/about`}
           activeClassName="active"
           className="tabbed-content-tab"
-          onClick={this.logClick('project.nav.about')}
+          onClick={logClick('project.nav.about')}
         >
           <Translate content="project.nav.about" />
         </Link>
       );
     }
-  }
+  };
 
-  renderAvatar(projectAvatar) {
+  const renderAvatar = () => {
     return (
       projectAvatar ?
       <Thumbnail
@@ -78,29 +122,29 @@ export default class ProjectNavbar extends Component {
       />
       : null
     );
-  }
+  };
 
-  redirectClassifyLink(redirect) {
+  const redirectClassifyLink = (redirect) => {
     return `${redirect.replace(/\/?#?\/+$/, '')}/#/classify`;
-  }
+  };
 
-  renderClassifyTab(projectPath, project, workflow) {
+  const renderClassifyTab = () => {
     return (
       (project.redirect) ?
       <a
-        href={this.redirectClassifyLink(project.redirect)}
+        href={redirectClassifyLink(project.redirect)}
         className="tabbed-content-tab"
         target="_blank"
         rel="noopener noreferrer"
-        onClick={this.logClick('project.nav.classify')}
+        onClick={logClick('project.nav.classify')}
       >
         <Translate content="project.nav.classify" />
       </a> :
-      this.checkWorkflow(projectPath, workflow)
+      checkWorkflow(projectPath, workflow)
     );
-  }
+  };
 
-  renderProjectName(project, loading) {
+  const renderProjectName = () => {
     if (loading) {
       return 'Loading...';
     }
@@ -113,9 +157,9 @@ export default class ProjectNavbar extends Component {
       );
     }
     return project.display_name;
-  }
+  };
 
-  renderProjectLinks(urls) {
+  const renderProjectLinks = (urls) => {
     const sortedUrls = partition(urls, (url => !url.path));
     const joinedSortedUrls = sortedUrls[0].concat(sortedUrls[1]);
     return (
@@ -140,7 +184,7 @@ export default class ProjectNavbar extends Component {
                 'tabbed-content-tab': true,
                 'social-icon': iconForLabel !== null
               })}
-              target={`${this.props.project.id}${link.url}`}
+              target={`${project.id}${link.url}`}
             >
               {label}
             </a>
@@ -156,16 +200,16 @@ export default class ProjectNavbar extends Component {
               'tabbed-content-tab': true,
               'social-icon': iconForLabel !== null
             })}
-            target={`${this.props.project.id}${link.url}`}
+            target={`${project.id}${link.url}`}
           >
             {label}
           </a>
         );
       })
     );
-  }
+  };
 
-  renderRouterIndex(loading, project, projectAvatar, projectPath) {
+  const renderRouterIndex = () => {
     const avatarClasses = classnames('tabbed-content-tab', {
       'beta-approved': project.beta_approved
     });
@@ -183,60 +227,54 @@ export default class ProjectNavbar extends Component {
         to={projectPath}
         activeClassName="active"
         className={avatarClasses}
-        onClick={this.logClick('project.nav.home')}
+        onClick={logClick('project.nav.home')}
       >
-        {this.renderAvatar(projectAvatar)}
-        {this.renderProjectName(project, loading)}
+        {renderAvatar(projectAvatar)}
+        {renderProjectName(project, loading)}
       </IndexLink>
     );
-  }
+  };
 
-  render() {
-    const { loading, projectAvatar, project, routes, workflow } = this.props;
-    const { path } = routes[2] ? routes[2] : '';
-    const projectPath = project ? `/projects/${project.slug}` : '';
-    const activeElement = project && (path === 'collections' || path === 'favorites');
-    const collectClasses = classnames({
-      'tabbed-content-tab': true,
-      'active': activeElement
-    });
-    return (
-      <nav className="project-nav tabbed-content-tabs">
-        {this.renderRouterIndex(loading, project, projectAvatar, projectPath)}
-        <br className="responsive-break" />
-        {this.renderAboutTab(project, projectPath)}
-        {this.renderClassifyTab(projectPath, project, workflow)}
-        <Link
-          to={`${projectPath}/talk`}
-          activeClassName="active"
-          className="tabbed-content-tab"
-          onClick={this.logClick('project.nav.classify')}
-        >
-          <Translate content="project.nav.talk" />
-        </Link>
+  return (
+    <nav className="project-nav tabbed-content-tabs">
+      {renderRouterIndex()}
+      <br className="responsive-break" />
+      {renderAboutTab()}
+      {renderClassifyTab()}
+      <Link
+        to={`${projectPath}/talk`}
+        activeClassName="active"
+        className="tabbed-content-tab"
+        onClick={logClick('project.nav.classify')}
+      >
+        <Translate content="project.nav.talk" />
+      </Link>
 
-        <Link
-          to={`${projectPath}/collections`}
-          activeClassName="active"
-          className={collectClasses}
-        >
-          <Translate content="project.nav.collections" />
-        </Link>
-        {this.renderProjectLinks(project.urls)}
-      </nav>
-    );
-  }
-}
+      <Link
+        to={`${projectPath}/collections`}
+        activeClassName="active"
+        className={collectClasses}
+      >
+        <Translate content="project.nav.collections" />
+      </Link>
+      {renderLabTab()}
+      {renderAdminTab()}
+      {renderProjectLinks(project.urls)}
+    </nav>
+  );
+};
 
 ProjectNavbar.defaultProps = {
   loading: false,
   project: null,
   projectAvatar: null,
+  projectRoles: [],
   routes: [],
+  user: null,
   workflow: null
 };
 
-ProjectNavbar.childContextTypes = {
+ProjectNavbar.contextTypes = {
   geordi: PropTypes.object
 };
 
@@ -250,6 +288,14 @@ ProjectNavbar.propTypes = {
   projectAvatar: PropTypes.shape({
     src: PropTypes.string
   }),
+  projectRoles: PropTypes.array,
+  user: PropTypes.shape({
+    id: PropTypes.string
+  }),
   routes: PropTypes.array,
-  workflow: PropTypes.object
+  workflow: PropTypes.shape({
+    id: PropTypes.string
+  }),
 };
+
+export default ProjectNavbar;
