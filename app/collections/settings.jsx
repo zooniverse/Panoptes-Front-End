@@ -11,10 +11,9 @@ export default class CollectionSettings extends React.Component {
 
     this.state = {
       error: null,
-      descriptionLengthError: false,
+      description: '',
       isDeleting: false,
       setting: {
-        description: false,
         private: false
       }
     };
@@ -89,35 +88,18 @@ export default class CollectionSettings extends React.Component {
       });
   }
 
-  handleDescriptionInputChange() {
-    const property = 'description';
-    const setting = this.state.setting;
-    setting[property] = true;
-    this.setState({ error: null, setting });
-
-    const descriptionText = this.description.value;
+  handleDescriptionInputChange(event) {
+    const property = event.target.name;
+    const description = event.target.value;
+    this.setState({ description })
     const changes = {};
-    changes[property] = descriptionText;
+    changes[property] = description;
 
-    if (descriptionText.length > 300) {
-      this.setState({
-        descriptionLengthError: true
-      });
+    if (description.length > 300) {
       return;
-    } else {
-      this.setState({
-        descriptionLengthError: false
-      });
     }
 
-    this.props.collection.update(changes).save()
-      .catch((error) => {
-        this.setState({ error });
-      })
-      .then(() => {
-        setting[property] = false;
-        this.setState({ setting });
-      });
+    this.props.collection.update(changes)
   }
 
   render() {
@@ -141,26 +123,24 @@ export default class CollectionSettings extends React.Component {
         <h3 className="form-label">Description</h3>
         <AutoSave resource={this.props.collection}>
           <form>
-            <label>
-              <textarea
-                className="standard-input full"
-                value={this.props.collection.description}
-                onChange={this.handleDescriptionInputChange}
-                ref={(node) => { this.description = node; }}
-                placeholder="Collection Description"
-              />
-            </label>
+            <textarea
+              name="description"
+              className="standard-input full"
+              value={this.props.collection.description}
+              onChange={this.handleDescriptionInputChange}
+              placeholder="Collection Description"
+            />
           </form>
         </AutoSave>
         <small>
           Describe your collection in more detail.{' '}
           <CharLimit
             limit={300}
-            string={this.props.collection.description ? this.props.collection.description : ''}
+            string={this.props.collection.description}
           />
         </small>
         <br />
-        {this.state.descriptionLengthError &&
+        {this.state.description.length > 300 &&
           <span className="form-help error">Description cannot be more than 300 characters.</span>}
         <hr />
 

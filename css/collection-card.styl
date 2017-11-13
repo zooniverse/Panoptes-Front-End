@@ -4,7 +4,6 @@
 .collection-card
   @extends $owned-card
   background: url('/assets/simple-pattern.png') center center repeat
-  border-radius: 1em
   position: relative
   height: 270px
 
@@ -37,6 +36,7 @@
       font-style: normal
 
     .description
+      text-overflow: ellipsis
       color: COPY
       font-size: 0.9em
       height: 150px

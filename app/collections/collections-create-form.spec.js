@@ -25,9 +25,6 @@ describe('<CollectionsCreateForm />', () => {
 
   describe('should render a disabled submit button', () => {
     it('when there is no text in the name input', () => {
-      wrapper.setState({
-        collectionNameLength: 0
-      });
       addCollectionButton = wrapper.find('button');
       assert.equal(addCollectionButton.prop('disabled'), true);
     });
@@ -58,19 +55,24 @@ describe('<CollectionsCreateForm />', () => {
     });
 
     it('should call #handleNameInputChange when a user changes text in the name input', () => {
-      wrapper.find('input.collection-name-input').simulate('change');
+      wrapper.find('input.collection-create-form__input--name').simulate('change');
       sinon.assert.calledOnce(handleNameInputChangeStub);
     });
 
     it('should call #handleDescriptionInputChange when a user changes text in the description input', () => {
-      wrapper.find('textarea.collection-name-input').simulate('change');
+      wrapper.find('textarea.collection-create-form__input--description').simulate('change');
       sinon.assert.calledOnce(handleDescriptionInputChangeStub);
     });
   });
 
   describe('should handle errors', () => {
     it('when there is an error', () => {
-      wrapper.setState({ error: ['it broke!'] });
+      wrapper.setState({
+        error: {
+          status: 404,
+          message: 'bad request'
+        }
+      });
       assert.equal(wrapper.find('.error').length, 1);
     });
 

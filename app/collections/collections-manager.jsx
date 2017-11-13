@@ -1,5 +1,5 @@
 import React from 'react';
-import CollectionsCreateForm from './create-form';
+import CollectionsCreateForm from './collections-create-form';
 import CollectionSearch from './collection-search';
 import LoadingIndicator from '../components/loading-indicator';
 

@@ -9,7 +9,7 @@ class CollectionsCreateForm extends React.Component {
 
     this.state = {
       collectionNameLength: 0,
-      descriptionText: '',
+      description: '',
       error: null
     };
 
@@ -46,7 +46,7 @@ class CollectionsCreateForm extends React.Component {
       .then((newCollection) => {
         this.name.value = '';
         this.description.value = '';
-        this.isPrivate.value = true;
+        this.isPrivate.checked = false;
         this.props.onSubmit(newCollection);
       })
       .catch((error) => {
@@ -60,9 +60,9 @@ class CollectionsCreateForm extends React.Component {
     });
   }
 
-  handleDescriptionInputChange() {
+  handleDescriptionInputChange(event) {
     this.setState({
-      descriptionText: this.description.value
+      description: event.target.value
     });
   }
 
@@ -81,25 +81,21 @@ class CollectionsCreateForm extends React.Component {
           {this.state.error &&
               this.renderError()}
         </div>
-        <label>
-          <input
-            className="collection-name-input"
-            ref={(node) => { this.name = node; }}
-            onChange={this.handleNameInputChange}
-            placeholder="Collection Name"
-          />
-        </label>
-        <label>
-          <textarea
-            className="collection-name-input"
-            onChange={this.handleDescriptionInputChange}
-            ref={(node) => { this.description = node; }}
-            placeholder="Collection Description (less than 300 characters)"
-          />
-        </label>
+        <input
+          className="collection-create-form__input--name"
+          ref={(node) => { this.name = node; }}
+          onChange={this.handleNameInputChange}
+          placeholder="Collection Name"
+        />
+        <textarea
+          className="collection-create-form__input--description"
+          onChange={this.handleDescriptionInputChange}
+          ref={(node) => { this.description = node; }}
+          placeholder="Collection Description (less than 300 characters)"
+        />
         <CharLimit
           limit={300}
-          string={this.state.descriptionText ? this.state.descriptionText : ''}
+          string={this.state.description}
         />
         <div className="collection-create-form-actions">
           <label>
@@ -113,7 +109,7 @@ class CollectionsCreateForm extends React.Component {
           <div className="submit-button-container">
             <button
               type="submit"
-              disabled={this.state.collectionNameLength < 1 || this.state.descriptionText.length > 300}
+              disabled={this.state.collectionNameLength < 1 || this.state.description.length > 300}
             >
               <Translate content="collections.createForm.submit" />
             </button>
