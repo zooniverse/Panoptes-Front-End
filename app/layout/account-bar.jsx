@@ -55,9 +55,11 @@ export default class AccountBar extends React.Component {
       unread: true,
       page_size: 1
     }).then((conversations) => {
+      const unread_messages = conversations.length > 0;
+      const unread_count = unread_messages ? conversations[0].getMeta().count : 0;
       this.setState({
-        messageCount: conversations.length,
-        unread: conversations.length > 0
+        messageCount: unread_count,
+        unread: unread_messages
       });
     });
   }
