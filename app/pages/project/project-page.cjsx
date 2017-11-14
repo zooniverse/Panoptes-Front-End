@@ -6,6 +6,7 @@ Translate = require 'react-translate-component'
 Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
+isAdmin = require '../lib/is-admin'
 `import SOCIAL_ICONS from '../../lib/social-icons';`
 
 AVATAR_SIZE = 100
