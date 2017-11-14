@@ -9,14 +9,7 @@
 
   .details
     padding: 1em
-    text-align: left
     height: 80px
-    transition: height 0.5s ease
-    position: absolute
-    bottom: 0
-    left: 0
-    right: 0
-    justify-content: space-between
 
     .name
       margin-bottom: 1em
@@ -36,13 +29,16 @@
       font-style: normal
 
     .description
-      text-overflow: ellipsis
       color: COPY
       font-size: 0.9em
       height: 150px
       margin: 0.6em 0
       overflow: hidden
+      text-overflow: ellipsis
       text-align: left
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
 
   :hover > &,
   :focus > &
