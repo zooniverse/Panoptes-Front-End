@@ -114,7 +114,11 @@ const ProjectNavbar = ({
   const renderRecents = () => {
     return (
       user ?
-      <Link to="#{projectPath}/recents" activeClassName="active" className="tabbed-content-tab">
+      <Link
+        to={`${projectPath}/recents`}
+        activeClassName="active"
+        className="tabbed-content-tab"
+      >
         <Translate content="project.nav.recents" />
       </Link> :
       null
