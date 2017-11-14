@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import Translate from 'react-translate-component';
 import { IndexLink, Link } from 'react-router';
 import classnames from 'classnames';
@@ -16,10 +16,11 @@ const ProjectNavbar = ({
   projectAvatar,
   projectRoles,
   routes,
+  translation,
   user,
   workflow
 }, context) => {
-  const { path } = routes[2];
+  const { path } = routes[2] ? routes[2] : '';
   const projectPath = `/projects/${project.slug}`;
   const labPath = `/lab/${project.id}`;
   const adminPath = `/admin/project_status/${project.slug}`;
@@ -162,15 +163,15 @@ const ProjectNavbar = ({
     if (loading) {
       return 'Loading...';
     }
-    if (project.betaApproved) {
+    if (project.beta_approved) {
       return (
         <div>
           <p>Under Review</p>
-          {project.display_name}
+          {translation.display_name}
         </div>
       );
     }
-    return project.display_name;
+    return translation.display_name;
   };
 
   const renderProjectLinks = (urls) => {
@@ -223,7 +224,8 @@ const ProjectNavbar = ({
 
   const renderRouterIndex = () => {
     const avatarClasses = classnames('tabbed-content-tab', {
-      'beta-approved': project.beta_approved
+      '`beta`-approved': project
+
     });
     return (
       project.redirect ?
@@ -233,7 +235,7 @@ const ProjectNavbar = ({
         target="_blank"
         rel="noopener noreferrer"
       >
-        Visit {project.display_name}
+        Visit {translation.display_name}
       </a> :
       <IndexLink
         to={projectPath}
@@ -249,7 +251,7 @@ const ProjectNavbar = ({
 
   return (
     <nav className="project-nav tabbed-content-tabs">
-      {renderRouterIndex()}
+      <renderRouterIndex />
       <br className="responsive-break" />
       {renderAboutTab()}
       {renderClassifyTab()}
@@ -279,35 +281,42 @@ const ProjectNavbar = ({
 
 ProjectNavbar.defaultProps = {
   loading: false,
-  project: null,
+  project: {
+    id: '',
+    display_name: '',
+    redirect: '',
+    slug: ''
+  },
   projectAvatar: null,
   projectRoles: [],
   routes: [],
+  translation: null,
   user: null,
   workflow: null
 };
 
 ProjectNavbar.contextTypes = {
-  geordi: PropTypes.object
+  geordi: React.PropTypes.object
 };
 
 ProjectNavbar.propTypes = {
-  loading: PropTypes.bool,
-  project: PropTypes.shape({
-    id: PropTypes.string,
-    display_name: PropTypes.string,
-    slug: PropTypes.string
+  loading: React.PropTypes.bool,
+  project: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    display_name: React.PropTypes.string,
+    slug: React.PropTypes.string
   }),
-  projectAvatar: PropTypes.shape({
-    src: PropTypes.string
+  projectAvatar: React.PropTypes.array,
+  projectRoles: React.PropTypes.array,
+  user: React.PropTypes.shape({
+    id: React.PropTypes.string
   }),
-  projectRoles: PropTypes.array,
-  user: PropTypes.shape({
-    id: PropTypes.string
+  routes: React.PropTypes.array,
+  translation: React.PropTypes.shape({
+    display_name: React.PropTypes.string
   }),
-  routes: PropTypes.array,
-  workflow: PropTypes.shape({
-    id: PropTypes.string
+  workflow: React.PropTypes.shape({
+    id: React.PropTypes.string
   }),
 };
 
