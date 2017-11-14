@@ -364,4 +364,4 @@ mapDispatchToProps = (dispatch) -> ({
   }
 });
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(ProjectPageController)
+module.exports = connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ProjectPageController)

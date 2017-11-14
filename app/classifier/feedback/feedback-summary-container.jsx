@@ -64,4 +64,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FeedbackSummaryContainer);
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(FeedbackSummaryContainer);
