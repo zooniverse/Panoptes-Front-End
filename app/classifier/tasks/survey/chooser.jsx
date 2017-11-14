@@ -113,6 +113,7 @@ class Chooser extends React.Component {
   }
 
   render() {
+    const { task, translation, filters } = this.props;
     this.choiceButtons = [];
     const filteredChoices = this.getFilteredChoices();
     const thumbnailSize = this.whatSizeThumbnails(filteredChoices);
@@ -122,9 +123,11 @@ class Chooser extends React.Component {
     return (
       <div className="survey-task-chooser">
         <div className="survey-task-chooser-characteristics">
-          {this.props.task.characteristicsOrder.map((characteristicId, i) => {
-            const characteristic = this.props.task.characteristics[characteristicId];
-            const selectedValue = characteristic.values[this.props.filters[characteristicId]];
+          {task.characteristicsOrder.map((characteristicId, i) => {
+            const characteristic = task.characteristics[characteristicId];
+            const selectedValue = characteristic.values[filters[characteristicId]];
+            const characteristicStrings = translation.characteristics[characteristicId];
+            const selectedValueStrings = characteristicStrings.values[filters[characteristicId]];
             let hasBeenAutoFocused = false;
             return (
               <TriggeredModalForm
@@ -135,7 +138,7 @@ class Chooser extends React.Component {
                 trigger={
                   <span className="survey-task-chooser-characteristic" data-is-active={!!selectedValue}>
                     <span className="survey-task-chooser-characteristic-label">
-                      {selectedValue ? selectedValue.label : characteristic.label}
+                      {selectedValue ? selectedValueStrings.label : characteristicStrings.label}
                     </span>
                   </span>
                   }
@@ -143,10 +146,10 @@ class Chooser extends React.Component {
                 <div className="survey-task-chooser-characteristic-menu-container">
                   {characteristic.valuesOrder.map((valueId) => {
                     const value = characteristic.values[valueId];
-
-                    const disabled = valueId === this.props.filters[characteristicId];
-                    const autoFocus = !disabled && !hasBeenAutoFocused;
-                    const selected = valueId === this.props.filters[characteristicId];
+                    const valueStrings = characteristicStrings.values[valueId];
+                    const disabled = (valueId === filters[characteristicId]);
+                    const autoFocus = (!disabled && !hasBeenAutoFocused);
+                    const selected = (valueId === filters[characteristicId]);
 
                     if (autoFocus) {
                       hasBeenAutoFocused = true;
@@ -156,7 +159,7 @@ class Chooser extends React.Component {
                       <button
                         key={valueId}
                         type="submit"
-                        title={value.label}
+                        title={valueStrings.label}
                         className="survey-task-chooser-characteristic-value"
                         disabled={disabled}
                         data-selected={selected}
@@ -165,11 +168,11 @@ class Chooser extends React.Component {
                       >
                         {value.image ?
                           <img
-                            src={this.props.task.images[value.image]}
-                            alt={value.label}
+                            src={task.images[value.image]}
+                            alt={valueStrings.label}
                             className="survey-task-chooser-characteristic-value-icon"
                           /> :
-                          value.label
+                          valueStrings.label
                         }
                       </button>
                     );
@@ -178,7 +181,7 @@ class Chooser extends React.Component {
                   <button
                     type="submit"
                     className="survey-task-chooser-characteristic-clear-button"
-                    disabled={Object.keys(this.props.filters).indexOf(characteristicId) === -1}
+                    disabled={Object.keys(filters).indexOf(characteristicId) === -1}
                     autoFocus={!hasBeenAutoFocused}
                     onClick={this.handleFilter.bind(this, characteristicId, undefined)}
                   >
@@ -187,9 +190,9 @@ class Chooser extends React.Component {
                 </div>
                 <div className="survey-task-chooser-characteristic-value-label">
                   {characteristic.valuesOrder.reduce((label, valueId) => {
-                    const value = characteristic.values[valueId];
-                    if (valueId === this.props.filters[characteristicId]) {
-                      return value.label;
+                    const valueStrings = characteristicStrings.values[valueId];
+                    if (valueId === filters[characteristicId]) {
+                      return valueStrings.label;
                     }
                     return label;
                   }, counterpart('tasks.survey.makeSelection'))}
@@ -202,7 +205,7 @@ class Chooser extends React.Component {
         <div className="survey-task-chooser-choices" data-thumbnail-size={thumbnailSize} data-columns={columnsCount}>
           {sortedFilteredChoices.length === 0 && <div><em>No matches.</em></div>}
           {sortedFilteredChoices.map((choiceId, i) => {
-            const choice = this.props.task.choices[choiceId];
+            const choice = task.choices[choiceId];
             const chosenAlready = selectedChoices.indexOf(choiceId) > -1;
             let tabIndex = -1;
             if (i === 0 && this.props.focusedChoice.length === 0) {
@@ -231,7 +234,7 @@ class Chooser extends React.Component {
                       style={{ backgroundImage: `url('${this.props.task.images[choice.images[0]]}')` }}
                     />
                   }
-                  <span className="survey-task-chooser-choice-label">{choice.label}</span>
+                  <span className="survey-task-chooser-choice-label">{translation.choices[choiceId].label}</span>
                 </span>
               </button>
             );
@@ -240,13 +243,13 @@ class Chooser extends React.Component {
         <div style={{ textAlign: 'center' }}>
           <Translate
             content="tasks.survey.showing"
-            with={{ count: sortedFilteredChoices.length, max: this.props.task.choicesOrder.length }}
+            with={{ count: sortedFilteredChoices.length, max: task.choicesOrder.length }}
           />
           &ensp;
           <button
             type="button"
             className="survey-task-chooser-characteristic-clear-button"
-            disabled={Object.keys(this.props.filters).length === 0}
+            disabled={Object.keys(filters).length === 0}
             onClick={this.handleClearFilters}
           >
             <i className="fa fa-ban" /> <Translate content="tasks.survey.clearFilters" />
@@ -259,6 +262,7 @@ class Chooser extends React.Component {
 
 Chooser.propTypes = {
   annotation: React.PropTypes.shape({
+    task: React.PropTypes.string,
     value: React.PropTypes.array
   }),
   filters: React.PropTypes.object,
@@ -274,11 +278,19 @@ Chooser.propTypes = {
     choicesOrder: React.PropTypes.array,
     images: React.PropTypes.object,
     questions: React.PropTypes.object
-  })
+  }),
+  translation: React.PropTypes.shape({
+    characteristics: React.PropTypes.object,
+    choices: React.PropTypes.object,
+    questions: React.PropTypes.object
+  }).isRequired
 };
 
 Chooser.defaultProps = {
-  annotation: { value: [] },
+  annotation: {
+    task: '',
+    value: []
+  },
   filters: {},
   focusedChoice: '',
   onChoose: Function.prototype,

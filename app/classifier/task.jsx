@@ -2,6 +2,7 @@ import React from 'react';
 import tasks from './tasks';
 import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
+import TaskTranslations from './tasks/translations';
 
 class Task extends React.Component {
   constructor(props) {
@@ -62,15 +63,20 @@ class Task extends React.Component {
           })}
 
           {!!annotation &&
-            <TaskComponent
-              autoFocus={true}
-              taskTypes={tasks}
-              workflow={workflow}
+            <TaskTranslations
+              taskKey={annotation.task}
               task={task}
-              preferences={this.props.preferences}
-              annotation={annotation}
-              onChange={this.handleAnnotationChange}
-            />
+            >
+              <TaskComponent
+                autoFocus={true}
+                taskTypes={tasks}
+                workflow={workflow}
+                task={task}
+                preferences={this.props.preferences}
+                annotation={annotation}
+                onChange={this.handleAnnotationChange}
+              />
+            </TaskTranslations>
           }
 
           {persistentHooksAfterTask.map((HookComponent, i) => {
@@ -81,12 +87,18 @@ class Task extends React.Component {
           <hr />
 
           {!!task.unlinkedTask &&
-            <Shortcut
-              task={task}
-              workflow={workflow}
-              annotation={annotation}
-              onChange={this.handleAnnotationChange}
-            />}
+            <TaskTranslations
+              taskKey={task.unlinkedTask}
+              task={workflow.tasks[task.unlinkedTask]}
+            >
+              <Shortcut
+                task={task}
+                workflow={workflow}
+                annotation={annotation}
+                onChange={this.handleAnnotationChange}
+              />
+            </TaskTranslations>
+          }
 
           {this.props.children}
 

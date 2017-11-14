@@ -2,52 +2,46 @@ import React from 'react';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
 
-class Summary extends React.Component {
-  render() {
-    let answer;
+function ShortcutSummary(props) {
+  let answer;
 
-    if (this.props.annotation.value != null) {
-      answer = this.props.annotation.value.map(index =>
-        (<div key={index} className="answer">
+  if (props.annotation.value != null) {
+    answer = props.annotation.value.map((index) => {
+      return (
+        <div key={index} className="answer">
           <i className="fa fa-check-circle-o fa-fw" />
-          <Markdown tag="span" inline={true}>{this.props.task.answers[index].label}</Markdown>
-        </div>)
+          <Markdown tag="span" inline={true}>{props.translation.answers[index].label}</Markdown>
+        </div>
       );
-    } else {
-      answer = <div className="answer"><Translate content="tasks.shortcut.noAnswer" /></div>;
-    }
-
-    return (
-      <div>
-        <div className="question">
-          {this.props.task.question}
-        </div>
-        <div className="answers">
-          {answer}
-        </div>
-      </div>
-    );
+    });
+  } else {
+    answer = <div className="answer"><Translate content="tasks.shortcut.noAnswer" /></div>;
   }
+
+  return (
+    <div>
+      <div className="question">
+        {props.translation.question}
+      </div>
+      <div className="answers">
+        {answer}
+      </div>
+    </div>
+  );
 }
 
-Summary.propTypes = {
+ShortcutSummary.propTypes = {
   annotation: React.PropTypes.shape(
-    { value: React.PropTypes.array }
-  ).isRequired,
-  task: React.PropTypes.shape(
     {
-      answers: React.PropTypes.array,
-      question: React.PropTypes.string
+      task: React.PropTypes.string,
+      value: React.PropTypes.array
     }
-  )
+  ).isRequired,
+  translation: React.PropTypes.object.isRequired
 };
 
-Summary.defaultProps = {
-  annotation: { },
-  task: {
-    answers: [],
-    question: ''
-  }
+ShortcutSummary.defaultProps = {
+  annotation: { }
 };
 
-export default Summary;
+export default ShortcutSummary;

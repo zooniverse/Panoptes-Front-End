@@ -6,8 +6,7 @@ Translate = require 'react-translate-component'
 Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
-`import SOCIAL_ICONS from '../../lib/social-icons'`
-`import isAdmin from '../../lib/is-admin';`
+`import SOCIAL_ICONS from '../../lib/social-icons';`
 
 AVATAR_SIZE = 100
 
@@ -126,7 +125,7 @@ ProjectPage = React.createClass
           <a href={@props.project.redirect} className="tabbed-content-tab" target="_blank">
             {if @props.projectAvatar?
               <Thumbnail src={@props.projectAvatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
-            Visit {@props.project.display_name}
+            Visit {@props.translation.display_name}
           </a>
         else
           <IndexLink to="#{projectPath}" activeClassName="active" className={avatarClasses} onClick={logClick?.bind this, 'project.nav.home'}>
@@ -210,6 +209,7 @@ ProjectPage = React.createClass
         projectIsComplete: @props.projectIsComplete
         projectRoles: @props.projectRoles
         splits: @props.splits
+        translation: @props.translation
         user: @props.user
         workflow: @props.workflow}
 

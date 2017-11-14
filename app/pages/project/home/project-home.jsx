@@ -20,7 +20,9 @@ const ProjectHomePage = (props) => {
           <FinishedBanner project={props.project} />
         </div>)}
 
-      <div className="project-home-page__description">{props.project.description}</div>
+      <div className="project-home-page__description">
+        {props.translation.description}
+      </div>
 
       <ProjectHomeWorkflowButtons
         activeWorkflows={props.activeWorkflows}
@@ -52,7 +54,10 @@ const ProjectHomePage = (props) => {
               </div>
             );
           })}
-          <TalkStatus project={props.project} />
+          <TalkStatus
+            project={props.project}
+            translation={props.translation}
+          />
         </div>
       )}
 
@@ -60,6 +65,7 @@ const ProjectHomePage = (props) => {
         project={props.project}
         activeWorkflows={props.activeWorkflows}
         showTalkStatus={!renderTalkSubjectsPreview}
+        translation={props.translation}
       />
 
       <div className="project-home-page__container">
@@ -69,7 +75,7 @@ const ProjectHomePage = (props) => {
 
             <div>
               <img role="presentation" src={avatarSrc} />
-              <span>&quot;{props.project.researcher_quote}&quot;</span>
+              <span>&quot;{props.translation.researcher_quote}&quot;</span>
             </div>
           </div>)}
 
@@ -78,13 +84,13 @@ const ProjectHomePage = (props) => {
             <Translate
               content="project.home.about"
               with={{
-                title: props.project.display_name
+                title: props.translation.display_name
               }}
             />
           </h4>
           {props.project.introduction &&
             <Markdown project={props.project}>
-              {props.project.introduction}
+              {props.translation.introduction}
             </Markdown>}
         </div>
       </div>
@@ -124,7 +130,14 @@ ProjectHomePage.propTypes = {
   researcherAvatar: React.PropTypes.string,
   showWorkflowButtons: React.PropTypes.bool,
   splits: React.PropTypes.object,
-  talkSubjects: React.PropTypes.arrayOf(React.PropTypes.object)
+  talkSubjects: React.PropTypes.arrayOf(React.PropTypes.object),
+  translation: React.PropTypes.shape({
+    description: React.PropTypes.string,
+    display_name: React.PropTypes.string,
+    introduction: React.PropTypes.string,
+    researcher_quote: React.PropTypes.string,
+    title: React.PropTypes.string
+  }).isRequired
 };
 
 export default ProjectHomePage;

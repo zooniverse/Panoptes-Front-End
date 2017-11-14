@@ -7,7 +7,7 @@ import CropTask from './crop/';
 import SliderTask from './slider/';
 import TextTask from './text/';
 import DropdownTask from './dropdown/';
-import ShortcutTask from './shortcut';
+import ShortcutTask from './shortcut/';
 import Highlighter from './highlighter/';
 
 const tasks = {
