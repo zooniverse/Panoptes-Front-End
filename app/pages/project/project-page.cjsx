@@ -3,10 +3,7 @@ Translate = require 'react-translate-component'
 {IndexLink, Link} = require 'react-router'
 {Markdown} = require 'markdownz'
 {sugarClient} = require 'panoptes-client/lib/sugar'
-Thumbnail = require('../../components/thumbnail').default
-classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
-`import SOCIAL_ICONS from '../../lib/social-icons'`
 `import ProjectNavbar from './project-navbar'`
 
 AVATAR_SIZE = 100
@@ -111,6 +108,7 @@ ProjectPage = React.createClass
         projectIsComplete: @props.projectIsComplete
         projectRoles: @props.projectRoles
         splits: @props.splits
+        translation: @props.translation
         user: @props.user
         workflow: @props.workflow}
 

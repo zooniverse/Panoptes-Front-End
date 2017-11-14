@@ -33,11 +33,11 @@ describe('Shortcut', function() {
   let wrapper;
 
   it('should render with default props', function() {
-    wrapper = shallow(<Shortcut />);
+    wrapper = shallow(<Shortcut translation={task} />);
   });
 
   it('should update on annotation change', function() {
-    wrapper = shallow(<Shortcut />);
+    wrapper = shallow(<Shortcut translation={task} />);
     wrapper.setProps({ annotation });
   });
 });
@@ -46,7 +46,7 @@ describe('Shortcut functionality', function () {
   let wrapper;
 
   before(function () {
-    wrapper = mount(<Shortcut task={task} annotation={annotation} workflow={workflow} />);
+    wrapper = mount(<Shortcut translation={task} task={task} annotation={annotation} workflow={workflow} />);
     wrapper.find('input').first().simulate('change', { target: { checked: true }});
     wrapper.update();
   });

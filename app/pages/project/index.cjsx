@@ -5,6 +5,10 @@ apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 isAdmin = require '../../lib/is-admin'
 ProjectPage = require './project-page'
+ProjectTranslations = require('./project-translations').default
+{ connect } = require 'react-redux';
+{ bindActionCreators } = require 'redux';
+translationActions  = require '../../redux/ducks/translations';
 
 counterpart.registerTranslations 'en', require('../../locales/en').default
 counterpart.registerTranslations 'it', require('../../locales/it').default
@@ -47,6 +51,10 @@ ProjectPageController = React.createClass
   _listenedToPreferences: null
 
   _boundForceUpdate: null
+
+  componentWillMount: ->
+    { actions } = @props
+    actions.translations.setLocale(@props.location.query.language) if @props.location.query.language
 
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
@@ -125,7 +133,8 @@ ProjectPageController = React.createClass
             awaitProjectAvatar,
             awaitProjectCompleteness,
             awaitProjectRoles,
-            awaitPreferences
+            awaitPreferences,
+            this.props.actions.translations.load('project', project.id, this.props.translations.locale)
           ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
               @setState({ background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
               @getSelectedWorkflow(project, preferences)
@@ -210,6 +219,7 @@ ProjectPageController = React.createClass
 
 
   getWorkflow: (selectedWorkflowID, activeFilter = true) ->
+    { actions, translations } = this.props;
     query =
       id: "#{selectedWorkflowID}",
       project_id: @state.project.id
@@ -226,6 +236,7 @@ ProjectPageController = React.createClass
       .then ([workflow]) =>
         if workflow
           @setState({ loadingSelectedWorkflow: false, workflow })
+          actions.translations.load('workflow', workflow.id, translations.locale)
         else
           console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
           if selectedWorkflowID is @state.project.configuration?.default_workflow
@@ -294,24 +305,28 @@ ProjectPageController = React.createClass
         <div className="beta-border"></div>}
 
       {if @state.project? and @state.owner?
-        <ProjectPage
-          {...@props}
-          background={@state.background}
-          guide={@state.guide}
-          guideIcons={@state.guideIcons}
-          loading={@state.loading}
-          loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
-          onChangePreferences={@handlePreferencesChange}
-          owner={@state.owner}
-          pages={@state.pages}
-          preferences={@state.preferences}
+        <ProjectTranslations
           project={@state.project}
-          projectAvatar={@state.projectAvatar}
-          projectIsComplete={@state.projectIsComplete}
-          projectRoles={@state.projectRoles}
-          splits={@state.splits}
-          workflow={@state.workflow}
-        />
+        >
+          <ProjectPage
+            {...@props}
+            background={@state.background}
+            guide={@state.guide}
+            guideIcons={@state.guideIcons}
+            loading={@state.loading}
+            loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
+            onChangePreferences={@handlePreferencesChange}
+            owner={@state.owner}
+            pages={@state.pages}
+            preferences={@state.preferences}
+            project={@state.project}
+            projectAvatar={@state.projectAvatar}
+            projectIsComplete={@state.projectIsComplete}
+            projectRoles={@state.projectRoles}
+            splits={@state.splits}
+            workflow={@state.workflow}
+          />
+        </ProjectTranslations>
 
       else if @state.loading
         <div className="content-container">
@@ -339,4 +354,14 @@ ProjectPageController = React.createClass
           </div>}
     </div>
 
-module.exports = ProjectPageController
+mapStateToProps = (state) -> ({
+  translations: state.translations
+});
+
+mapDispatchToProps = (dispatch) -> ({
+  actions: {
+    translations: bindActionCreators(translationActions, dispatch)
+  }
+});
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(ProjectPageController)
