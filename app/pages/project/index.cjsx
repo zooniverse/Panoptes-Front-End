@@ -13,6 +13,7 @@ translationActions  = require '../../redux/ducks/translations';
 counterpart.registerTranslations 'en', require('../../locales/en').default
 counterpart.registerTranslations 'it', require('../../locales/it').default
 counterpart.registerTranslations 'es', require('../../locales/es').default
+counterpart.registerTranslations 'nl', require('../../locales/nl').default
 counterpart.setFallbackLocale 'en'
 
 

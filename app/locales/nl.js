@@ -1,4 +1,36 @@
 export default {
+  counterpart: {
+    names: {
+       days: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
+       abbreviated_days: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
+       months: ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
+       abbreviated_months: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sept', 'okt', 'nov', 'dec'],
+       am: 'a.m.',
+       pm: 'p.m.'
+    },
+    pluralize: require('pluralizers/en'),
+
+    formats: {
+      date: {
+        'default':  '%a, %e %b %Y',
+        long:       '%A, %B %o, %Y',
+        short:      '%b %e'
+      },
+
+      time: {
+        'default':  '%H:%M',
+        long:       '%H:%M:%S %z',
+        short:      '%H:%M'
+      },
+
+      datetime: {
+        'default':  '%a, %e %b %Y %H:%M',
+        long:       '%A, %B %o, %Y %H:%M:%S %z',
+        short:      '%e %b %H:%M'
+      }
+    }
+
+  },
   loading: '(Laden)',
   classifier: {
     back: 'Terug',
