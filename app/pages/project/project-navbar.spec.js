@@ -1,18 +1,19 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { IndexLink, Link } from 'react-router';
+import { project, workflow } from '../dev-classifier/mock-data';
 import ProjectNavbar from './project-navbar';
 
 describe('ProjectNavbar', () => {
-  let wrapper;
-
-  before(() => {
-    wrapper = shallow(<ProjectNavbar />);
-  });
   it('should render without crashing', () => {
-    // const navbarContainer = wrapper.find('<nav');
-    shallow(<ProjectNavbar />);
+    shallow(<ProjectNavbar project={project} workflow={workflow} />);
+  });
+
+  it('should have nav as container', () => {
+    const wrapper = shallow(<ProjectNavbar project={project} workflow={workflow} />);
+    const navElement = wrapper.find('<nav').first();
+    expect(navElement).to.have.length(1);
   });
 });

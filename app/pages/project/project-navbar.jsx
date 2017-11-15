@@ -61,7 +61,7 @@ const ProjectNavbar = ({
     );
   };
 
-  const renderAdminTab = () => {
+  const AdminTab = () => {
     return (
       (isAdmin()) ?
         <Link
@@ -83,7 +83,7 @@ const ProjectNavbar = ({
     });
   };
 
-  const renderLabTab = () => {
+  const LabTab = () => {
     return (
       (user && userHasLabAccess()) ?
       <Link
@@ -97,7 +97,7 @@ const ProjectNavbar = ({
     );
   };
 
-  const renderAboutTab = () => {
+  const AboutTab = () => {
     if (!project.redirect) {
       return (
         <Link
@@ -112,7 +112,7 @@ const ProjectNavbar = ({
     }
   };
 
-  const renderRecents = () => {
+  const RecentsTab = () => {
     return (
       user ?
       <Link
@@ -143,7 +143,7 @@ const ProjectNavbar = ({
     return `${redirect.replace(/\/?#?\/+$/, '')}/#/classify`;
   };
 
-  const renderClassifyTab = () => {
+  const ClassifyTab = () => {
     return (
       (project.redirect) ?
       <a
@@ -222,10 +222,9 @@ const ProjectNavbar = ({
     );
   };
 
-  const renderRouterIndex = () => {
+  const HomeTab = () => {
     const avatarClasses = classnames('tabbed-content-tab', {
       '`beta`-approved': project
-
     });
     return (
       project.redirect ?
@@ -251,10 +250,10 @@ const ProjectNavbar = ({
 
   return (
     <nav className="project-nav tabbed-content-tabs">
-      <renderRouterIndex />
+      <HomeTab />
       <br className="responsive-break" />
-      {renderAboutTab()}
-      {renderClassifyTab()}
+      <AboutTab />
+      <ClassifyTab />
       <Link
         to={`${projectPath}/talk`}
         activeClassName="active"
@@ -271,9 +270,9 @@ const ProjectNavbar = ({
       >
         <Translate content="project.nav.collections" />
       </Link>
-      {renderRecents()}
-      {renderLabTab()}
-      {renderAdminTab()}
+      <RecentsTab />
+      <LabTab />
+      <AdminTab />
       {renderProjectLinks(project.urls)}
     </nav>
   );
