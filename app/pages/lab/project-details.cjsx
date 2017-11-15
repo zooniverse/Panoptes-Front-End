@@ -8,7 +8,7 @@ putFile = require '../../lib/put-file'
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 alert = require('../../lib/alert').default
-Select = require 'react-select'
+Select = require('react-select').default
 `import DISCIPLINES from '../../constants/disciplines';`
 `import CharLimit from '../../components/char-limit';`
 `import ExternalLinksEditor from './external-links-editor';`
