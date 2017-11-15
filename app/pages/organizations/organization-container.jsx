@@ -46,7 +46,7 @@ class OrganizationContainer extends React.Component {
     }
 
     if (this.state.organization && (nextProps.location.query !== this.props.location.query)) {
-      this.fetchProjects(this.state.organization, (isAdmin() || this.isCollaborator()), nextProps.location.query);
+      this.fetchProjects(this.state.organization, this.state.collaboratorView, nextProps.location.query);
     }
   }
 
@@ -80,7 +80,7 @@ class OrganizationContainer extends React.Component {
     browserHistory.push(newLocation);
   }
 
-  fetchProjects(organization, collaboratorView, locationQuery) {
+  fetchProjects(organization, collaboratorView, locationQuery = this.props.location.query) {
     this.setState({ errorFetchingProjects: null, fetchingProjects: true });
     const query = { cards: true, launch_approved: true };
 
