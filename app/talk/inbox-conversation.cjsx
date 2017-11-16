@@ -109,7 +109,7 @@ module.exports = React.createClass
               }
           </div>
           }
-        <SingleSubmitButton className="delete-conversation" onClick={@handleDelete}>Archive this conversation</SingleSubmitButton>
+        <SingleSubmitButton className="delete-conversation" onClick={@handleDelete}>Delete this conversation</SingleSubmitButton>
         <div>{@state.messages.map (message) -> <Message data={message} key={message.id} />}</div>
         <CommentBox
           header={"Send a message..."}
