@@ -1,91 +1,123 @@
 export default {
-  loading: '(Loading)',
+  counterpart: {
+    names: {
+       days: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
+       abbreviated_days: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
+       months: ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
+       abbreviated_months: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sept', 'okt', 'nov', 'dec'],
+       am: 'a.m.',
+       pm: 'p.m.'
+    },
+    pluralize: require('pluralizers/en'),
+
+    formats: {
+      date: {
+        'default':  '%a, %e %b %Y',
+        long:       '%A, %B %o, %Y',
+        short:      '%b %e'
+      },
+
+      time: {
+        'default':  '%H:%M',
+        long:       '%H:%M:%S %z',
+        short:      '%H:%M'
+      },
+
+      datetime: {
+        'default':  '%a, %e %b %Y %H:%M',
+        long:       '%A, %B %o, %Y %H:%M:%S %z',
+        short:      '%e %b %H:%M'
+      }
+    }
+
+  },
+  loading: '(Laden)',
   classifier: {
-    back: 'Back',
-    backButtonWarning: 'Going back will clear your work for the current task.',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
-    next: 'Next',
-    recents: 'Your recent classifications',
-    talk: 'Talk',
-    tutorialButton: 'Show the project tutorial',
-    miniCourseButton: 'Restart the project mini-course'
+    back: 'Terug',
+    backButtonWarning: 'Als je terug gaat verlies je je werk voor de huidige taak.',
+    done: 'Klaar',
+    doneAndTalk: 'Klaar & Praat',
+    next: 'Verder',
+    recents: 'Je recente classificaties',
+    talk: 'Praat',
+    tutorialButton: 'Toon de projecthandleiding',
+    miniCourseButton: 'Herstart de minitour'
   },
   project: {
-    loading: 'Loading project',
-    disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
+    loading: 'Project wordt geladen',
+    disclaimer: 'Dit project is gemaakt met de Zooniverse projectbouwer maar is not niet een officieel Zooniverseproject. Vragen en problemen met betrekking tot dit project die gestuurd worden aan het Zooniverseteam krijgen mogelijk geen reactie.',
     nav: {
-      about: 'About',
-      classify: 'Classify',
-      talk: 'Talk',
-      collections: 'Collect',
-      recents: 'Recents',
+      about: 'Over',
+      classify: 'Classificeer',
+      talk: 'Praat',
+      collections: 'Verzamel',
+      recents: 'Recent',
       lab: 'Lab',
-      adminPage: 'Admin page'
+      adminPage: 'Beheerpagina'
     },
     home: {
-      researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      researcher: 'Woorden van de onderzoeker',
+      about: 'Over %(title)s',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
-        volunteers: 'Volunteers',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
+        statistics: '%(title)s statistieken',
+        classifications: 'Classificeringen',
+        volunteers: 'Vrijwilligers',
+        completedSubjects: 'Voltooide Onderwerpen',
+        subjects: 'Onderwerpen'
       },
       talk: {
-        zero: 'Noone is talking about <strong>%(title)s</strong> right now.',
-        one: '<strong>1</strong> person is talking about <strong>%(title)s</strong> right now.',
-        other: '<strong>%(count)s</strong> people are talking about <strong>%(title)s</strong> right now.'
+        zero: 'Niemand praat over <strong>%(title)s</strong> op dit moment.',
+        one: '<strong>1</strong> persoon praat over <strong>%(title)s</strong> op dit moment.',
+        other: '<strong>%(count)s</strong> mensen praten over <strong>%(title)s</strong> op dit moment.'
       },
-      joinIn: 'Join in'
+      joinIn: 'Doe mee'
     }
   },
   organization: {
-    loading: 'Loading organization',
-    error: 'There was an error retrieving organization',
-    notFound: 'organization not found.',
-    notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...',
+    loading: 'Organisatie wordt geladen',
+    error: 'Er ging iets mis bij het laden van de organisatie',
+    notFound: 'organisatie werd niet gevonden.',
+    notPermission: 'Als je zeker weet dat de URL correct is, heb je wellicht geen toestemming om deze organisatie te zien.',
+    pleaseWait: 'Een ogenblik geduld...',
     home: {
       projects: {
-        loading: 'Loading organization projects...',
-        error: 'There was an error loading organization projects.',
-        none: 'There are no projects associated with this organization.'
+        loading: 'Projecten van deze organisatie worden geladen...',
+        error: 'Er ging iets mis bij het laden van de projecten van deze organisatie.',
+        none: 'Er zijn geen projecten voor deze organisatie.'
       },
-      viewToggle: 'View As Volunteer',
-      introduction: 'Introduction',
-      readMore: 'Read More',
-      readLess: 'Read Less',
+      viewToggle: 'Bekijk als vrijwilliger',
+      introduction: 'Introductie',
+      readMore: 'Lees meer',
+      readLess: 'Lees minder',
       links: 'Links'
     },
   },
   tasks: {
-    less: 'Less',
-    more: 'More',
+    less: 'Minder',
+    more: 'Meer',
     shortcut: {
-      noAnswer: "No answer"
+      noAnswer: "Geen antwoord"
     },
     survey: {
-      clear: 'Clear',
-      clearFilters: 'Clear filters',
-      makeSelection: 'Make a selection',
-      showing: 'Showing %(count)s of %(max)s',
-      confused: 'Often confused with',
-      dismiss: 'Dismiss',
-      itsThis: 'I think it’s this',
-      cancel: 'Cancel',
-      identify: 'Identify',
-      surveyOf: 'Survey of %(count)s',
+      clear: 'Wis',
+      clearFilters: 'Wis filters',
+      makeSelection: 'Maak een keuze',
+      showing: 'Toont %(count)s van %(max)s',
+      confused: 'Vaak verward met',
+      dismiss: 'Sluiten',
+      itsThis: 'Ik denk dat het dit is',
+      cancel: 'Annuleer',
+      identify: 'Identificeer',
+      surveyOf: 'Inspectie van %(count)s',
       identifications: {
-        zero: 'No identifications',
-        one: '1 identification',
-        other: '%(count)s identifications'
+        zero: 'Geen identificaties',
+        one: '1 identificatie',
+        other: '%(count)s identificaties'
       }
     }
   },
   privacy: {
-    title: 'Zooniverse User Agreement and Privacy Policy',
+    title: 'Zooniverse Gebruikersovereenkomst en privacybeleid',
     userAgreement: {
       summary: '## User Agreement\n**Summary**\n\nThe Zooniverse is a suite of citizen science projects operated by the Citizen Science Alliance (CSA), which support scientific research by involving members of the public - you - in the processes of analyzing and discussing data. Data from these projects is used to study online community design and theory, interface design, and other topics. This document describes what will happen to your contributions if you choose to contribute and what data we collect, how we use it and how we protect it.',
       contribution: '**What you agree to if you contribute to the Zooniverse**\n\nProjects involving the public are needed to enable researchers to cope with the otherwise unmanageable flood of data. The web provides a means of reaching a large audience willing to devote their free time to projects that can add to our knowledge of the world and the Universe.\n\nThe major goal for this project is for the analyzed data to be available to the researchers for use, modification and redistribution in order to further scientific research. Therefore, if you contribute to the Zooniverse, you grant the CSA and its collaborators, permission to use your contributions however we like to further this goal, trusting us to do the right thing with your data. However, you give us this permission non-exclusively, meaning that you yourself still own your contribution.\n\nWe ask you to grant us these broad permissions, because they allow us to change the legal details by which we keep the data available; this is important because the legal environment can change and we need to be able to respond without obtaining permission from every single contributor.\n\nFinally, you must not contribute data to the Zooniverse that you do not own. For example, do not copy information from published journal articles. If people do this, it can cause major legal headaches for us.',
@@ -106,52 +138,52 @@ export default {
     }
   },
   security: {
-    title: 'Zooniverse Security',
+    title: 'Zooniverse Beveiligingsbeleid',
     intro: 'The Zooniverse takes very seriously the security of our websites and systems, and protecting our users and their personal information is our highest priority. We take every precaution to ensure that the information you give us stays secure, but it is also important that you take steps to secure your own account, including:\n\n* Do not use the same password on different websites. The password you use for your Zooniverse account should be unique to us.\n* Never give your password to anyone. We will never ask you to send us your password, and you should never enter your Zooniverse password into any website other than ours. Always check your browser\'s address bar to make sure you have a secure connection to _www.zooniverse.org_.\n\nFor general advice and information about staying safe online, please visit:\n\n* [Get Safe Online](https://www.getsafeonline.org)\n* [Stay Safe Online](https://www.staysafeonline.org)\n* [US-CERT - Tips](https://www.us-cert.gov/ncas/tips)',
     details: '## Reporting Security Issues\n\nThe Zooniverse supports [responsible disclosure](https://en.wikipedia.org/wiki/Responsible_disclosure) of vulnerabilities. If you believe you have discovered a security vulnerability in any Zooniverse software, we ask that this first be reported to [security@zooniverse.org](mailto:security@zooniverse.org) to allow time for vulnerabilities to be fixed before details are published.\n\n## Known Vulnerabilities and Incidents\n\nWe believe it is important to be completely transparent about security issues. A complete list of fixed vulnerabilities and past security incidents is given below:\n\n* _(No entries at this time)_\n\nNew vulnerabilities and incidents will be announced via the [Zooniverse blog in the "technical" category](http://blog.zooniverse.org/category/technical/).'
   },
   userAdminPage: {
-    header: 'Admin',
+    header: 'Beheer',
     nav: {
-      createAdmin: 'Manage Users',
-      projectStatus: 'Set Project Status',
+      createAdmin: 'Beheer gebruikers',
+      projectStatus: 'Zet projectstatus',
       grantbot: 'Grantbot',
-      organizationStatus: 'Set Organization Status'
+      organizationStatus: 'Zet organisatiestatus'
     },
-    notAdminMessage: 'You are not an administrator',
-    notSignedInMessage: 'You are not signed in'
+    notAdminMessage: 'Je bent geen beheerder',
+    notSignedInMessage: 'Je bent niet ingelogd'
   },
   signIn: {
-    title: 'Sign in/register',
-    withZooniverse: 'Sign in with your Zooniverse account',
-    whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.',
-    signIn: 'Sign in',
-    register: 'Register',
-    orThirdParty: 'Or sign in with another service',
-    withFacebook: 'Sign in with Facebook',
-    withGoogle: 'Sign in with Google'
+    title: 'Inloggen/registreren',
+    withZooniverse: 'Log in met je Zooniverseaccount',
+    whyHaveAccount: 'Ingelogde vrijwilligers kunnen hun eigen werk bijhouden en worden vermeld in publicaties.',
+    signIn: 'Inloggen',
+    register: 'Registreren',
+    orThirdParty: 'Of log in met een andere dienst',
+    withFacebook: 'Log in met Facebook',
+    withGoogle: 'Log in met Google'
   },
   notFoundPage: {
-    message: 'Not found'
+    message: 'Niet gevonden'
   },
   resetPassword: {
-    heading: 'Reset Password',
-    newPasswordFormDialog: 'Go ahead and enter a new password, then you can get back to doing some research.',
-    newPasswordFormLabel: 'New password:',
-    newPasswordConfirmationLabel: 'Again, to confirm:',
-    enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
-    emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
-    emailError: 'There was an error resetting your password.',
-    resetError: 'Something went wrong, please try and reset your password via email again.',
-    loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.'
+    heading: 'Wachtwoord vergeten',
+    newPasswordFormDialog: 'Voer een nieuw wachtwoord in, dan kun je verder met onderzoek doen.',
+    newPasswordFormLabel: 'Nieuw wachtwoord:',
+    newPasswordConfirmationLabel: 'Herhaal, ter controle:',
+    enterEmailLabel: 'Voer je e-mailadres in en we sturen je een link waarmee je kunt herstellen.',
+    emailSuccess: 'We hebben je zojuist een e-mail met een herstellink gezonden.',
+    emailError: 'Er ging iets mis bij het herstellen van je wachtwoord.',
+    resetError: 'Er ging iets mis, probeer het nogmaals.',
+    loggedInDialog: 'Je bent op dit moment ingelogd. Log uit om je wachtwoord te herstellen.'
   },
   workflowToggle: {
-    label: 'Active'
+    label: 'Actief'
   },
   collections: {
     createForm: {
-      private: 'Private',
-      submit: 'Add Collection'
+      private: 'Privé',
+      submit: 'Maak verzameling'
     }
   }
 };
