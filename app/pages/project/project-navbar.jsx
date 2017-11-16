@@ -10,6 +10,99 @@ import isAdmin from '../../lib/is-admin';
 // constants
 const AVATAR_SIZE = 100;
 
+function HomeTab({ project, projectPath, translation, onClick, children }) {
+  const avatarClasses = classnames('tabbed-content-tab', {
+    '`beta`-approved': project
+  });
+  return (
+    project.redirect ?
+    <a
+      href={project.redirect}
+      className="tabbed-content-tab"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Visit {translation.display_name}
+    </a> :
+    <IndexLink
+      to={projectPath}
+      activeClassName="active"
+      className={avatarClasses}
+      onClick={onClick}
+    >
+      {children}
+    </IndexLink>
+  );
+}
+
+function AboutTab({ project, projectPath, onClick}) {
+  if (!project.redirect) {
+    return (
+      <Link
+        to={`${projectPath}/about`}
+        activeClassName="active"
+        className="tabbed-content-tab"
+        onClick={onClick}
+      >
+        <Translate content="project.nav.about" />
+      </Link>
+    );
+  }
+};
+
+function RecentsTab({ projectPath, user }) {
+  return (
+    user ?
+    <Link
+      to={`${projectPath}/recents`}
+      activeClassName="active"
+      className="tabbed-content-tab"
+    >
+      <Translate content="project.nav.recents" />
+    </Link> :
+    null
+  );
+};
+
+function AdminTab({ project }) {
+  const adminPath = `/admin/project_status/${project.slug}`;
+  return (
+    (isAdmin()) ?
+      <Link
+        to={`${adminPath}/`}
+        activeClassName="active"
+        className="tabbed-content-tab"
+      >
+        <Translate content="project.nav.adminPage" />
+      </Link> :
+      null
+  );
+}
+
+function LabTab({ project, projectRoles, user }) {
+  const labPath = `/lab/${project.id}`;
+
+  function userHasLabAccess() {
+    return projectRoles.some(role => {
+      if (role.links.owner.id === user.id) {
+        return role.roles.includes('owner') || role.roles.includes('collaborator');
+      }
+    });
+  }
+
+  return (
+    (user && userHasLabAccess()) ?
+    <Link
+      to={`${labPath}/`}
+      activeClassName="active"
+      className="tabbed-content-tab"
+    >
+      <Translate content="project.nav.lab" />
+    </Link> :
+    null
+  );
+}
+
 const ProjectNavbar = ({
   loading,
   project,
@@ -22,8 +115,6 @@ const ProjectNavbar = ({
 }, context) => {
   const { path } = routes[2] ? routes[2] : '';
   const projectPath = `/projects/${project.slug}`;
-  const labPath = `/lab/${project.id}`;
-  const adminPath = `/admin/project_status/${project.slug}`;
   const activeElement = project && (path === 'collections' || path === 'favorites');
   const collectClasses = classnames({
     'tabbed-content-tab': true,
@@ -58,71 +149,6 @@ const ProjectNavbar = ({
         >
           <Translate content="project.nav.classify" />
         </span>
-    );
-  };
-
-  const AdminTab = () => {
-    return (
-      (isAdmin()) ?
-        <Link
-          to={`${adminPath}/`}
-          activeClassName="active"
-          className="tabbed-content-tab"
-        >
-          <Translate content="project.nav.adminPage" />
-        </Link> :
-        null
-    );
-  };
-
-  const userHasLabAccess = () => {
-    projectRoles.some(role => {
-      if (role.links.owner.id === user.id) {
-        return role.roles.includes('owner') || role.roles.includes('collaborator');
-      }
-    });
-  };
-
-  const LabTab = () => {
-    return (
-      (user && userHasLabAccess()) ?
-      <Link
-        to={`${labPath}/`}
-        activeClassName="active"
-        className="tabbed-content-tab"
-      >
-        <Translate content="project.nav.lab" />
-      </Link> :
-      null
-    );
-  };
-
-  const AboutTab = () => {
-    if (!project.redirect) {
-      return (
-        <Link
-          to={`${projectPath}/about`}
-          activeClassName="active"
-          className="tabbed-content-tab"
-          onClick={logClick('project.nav.about')}
-        >
-          <Translate content="project.nav.about" />
-        </Link>
-      );
-    }
-  };
-
-  const RecentsTab = () => {
-    return (
-      user ?
-      <Link
-        to={`${projectPath}/recents`}
-        activeClassName="active"
-        className="tabbed-content-tab"
-      >
-        <Translate content="project.nav.recents" />
-      </Link> :
-      null
     );
   };
 
@@ -222,37 +248,23 @@ const ProjectNavbar = ({
     );
   };
 
-  const HomeTab = () => {
-    const avatarClasses = classnames('tabbed-content-tab', {
-      '`beta`-approved': project
-    });
-    return (
-      project.redirect ?
-      <a
-        href={project.redirect}
-        className="tabbed-content-tab"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Visit {translation.display_name}
-      </a> :
-      <IndexLink
-        to={projectPath}
-        activeClassName="active"
-        className={avatarClasses}
+  return (
+    <nav className="project-nav tabbed-content-tabs">
+      <HomeTab
+        project={ project }
+        projectPath={ projectPath }
+        translation={ translation }
         onClick={logClick('project.nav.home')}
       >
         {renderAvatar()}
         {renderProjectName()}
-      </IndexLink>
-    );
-  };
-
-  return (
-    <nav className="project-nav tabbed-content-tabs">
-      <HomeTab />
+      </HomeTab>
       <br className="responsive-break" />
-      <AboutTab />
+      <AboutTab
+        project={project}
+        projectPath={projectPath}
+        onClick={logClick('project.nav.about')}
+      />
       <ClassifyTab />
       <Link
         to={`${projectPath}/talk`}
@@ -270,9 +282,18 @@ const ProjectNavbar = ({
       >
         <Translate content="project.nav.collections" />
       </Link>
-      <RecentsTab />
-      <LabTab />
-      <AdminTab />
+      <RecentsTab
+        projectPath={projectPath}
+        user={user}
+      />
+      <LabTab
+        project={project}
+        projectRoles={projectRoles}
+        user={user}
+      />
+      <AdminTab
+        project={project}
+      />
       {renderProjectLinks(project.urls)}
     </nav>
   );
