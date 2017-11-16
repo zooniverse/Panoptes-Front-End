@@ -192,7 +192,7 @@ const ProjectNavbar = ({
           label = <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />;
           return (
             <a
-              key={link.label}
+              key={link.url}
               href={link.url}
               className={classnames({
                 'tabbed-content-tab': true,
