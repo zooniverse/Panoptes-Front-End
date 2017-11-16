@@ -1,5 +1,4 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 import Translate from 'react-translate-component';
 import isAdmin from '../../lib/is-admin';
@@ -69,15 +68,14 @@ class OrganizationContainer extends React.Component {
   updateQuery(newParams) {
     const query = Object.assign({}, this.props.location.query, newParams);
     const results = [];
-    Object.keys(query).map((key) => {
+    Object.keys(query).forEach((key) => {
       if (query[key] === '') {
         results.push(delete query[key]);
       }
-      return results;
     });
     const newLocation = Object.assign({}, this.props.location, { query });
     newLocation.search = '';
-    browserHistory.push(newLocation);
+    this.context.router.push(newLocation);
   }
 
   fetchProjects(organization, collaboratorView, locationQuery = this.props.location.query) {
@@ -213,6 +211,7 @@ class OrganizationContainer extends React.Component {
 
 OrganizationContainer.contextTypes = {
   initialLoadComplete: React.PropTypes.bool,
+  router: React.PropTypes.object.isRequired,
   user: React.PropTypes.shape({
     id: React.PropTypes.string
   })
