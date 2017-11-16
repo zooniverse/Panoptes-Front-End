@@ -78,7 +78,7 @@ SubjectNode = React.createClass
     { src } = getSubjectLocation(@props.subject);
 
     <div className="collection-subject-viewer">
-      <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project} isFavorite={@state.isFavorite}>
+      <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@props.projectContext} isFavorite={@state.isFavorite}>
         {if !@props.selecting
           <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
             <span></span>
@@ -256,6 +256,7 @@ module.exports = React.createClass
                   collection={@props.collection}
                   subject={subject}
                   user={@props.user}
+                  projectContext={@props.project}
                   canCollaborate={@props.canCollaborate}
                   selecting={@state.selecting}
                   selected={@selected(subject.id)}

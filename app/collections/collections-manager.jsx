@@ -93,6 +93,7 @@ class CollectionsManager extends React.Component {
         <div className="form-help">Or Create a new Collection</div>
         <CollectionsCreateForm
           projectID={this.props.project ? this.props.project.id : ''}
+          projectDisplayName={this.props.project ? this.props.project.display_name : ''}
           subjectIDs={this.props.subjectIDs}
           onSubmit={this.props.onSuccess}
         />
