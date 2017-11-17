@@ -128,7 +128,7 @@ const ProjectNavbar = ({
     }
   };
 
-  const checkWorkflow = () => {
+  const classifyLink = () => {
     const opacity = {
       opacity: 0.5
     };
@@ -181,7 +181,7 @@ const ProjectNavbar = ({
       >
         <Translate content="project.nav.classify" />
       </a> :
-      checkWorkflow()
+      classifyLink()
     );
   };
 
