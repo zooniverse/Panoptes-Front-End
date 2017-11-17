@@ -251,9 +251,9 @@ const ProjectNavbar = ({
   return (
     <nav className="project-nav tabbed-content-tabs">
       <HomeTab
-        project={ project }
-        projectPath={ projectPath }
-        translation={ translation }
+        project={project}
+        projectPath={projectPath}
+        translation={translation}
         onClick={logClick('project.nav.home')}
       >
         {renderAvatar()}
@@ -310,7 +310,10 @@ ProjectNavbar.defaultProps = {
   projectAvatar: null,
   projectRoles: [],
   routes: [],
-  translation: null,
+  translation: {
+    id: '',
+    display_name: ''
+  },
   user: null,
   workflow: null
 };
@@ -337,7 +340,7 @@ ProjectNavbar.propTypes = {
   }),
   workflow: React.PropTypes.shape({
     id: React.PropTypes.string
-  }),
+  })
 };
 
 export default ProjectNavbar;
