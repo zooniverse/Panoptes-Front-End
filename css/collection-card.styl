@@ -4,20 +4,18 @@
 .collection-card
   @extends $owned-card
   background: url('/assets/simple-pattern.png') center center repeat
-  position: relative
-  height: 270px
 
   .details
     padding: 1em
     height: 80px
+    text-align: left
+    text-overflow: ellipsis
 
     .name
       margin-bottom: 1em
       height: 2.9em
-      text-overflow: ellipsis
       line-height: 1.45em
       max-height: 2.9em
-      text-align: left
 
       .fa-lock
         margin-left: 0.3em
@@ -29,13 +27,7 @@
       font-style: normal
 
     .description
-      color: COPY
-      font-size: 0.9em
-      height: 150px
       margin: 0.6em 0
-      overflow: hidden
-      text-overflow: ellipsis
-      text-align: left
       display: -webkit-box;
       -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;

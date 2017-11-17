@@ -10,8 +10,8 @@ export default class CollectionSettings extends React.Component {
     super(props);
 
     this.state = {
-      error: null,
       description: '',
+      error: null,
       isDeleting: false,
       setting: {
         private: false
@@ -89,17 +89,12 @@ export default class CollectionSettings extends React.Component {
   }
 
   handleDescriptionInputChange(event) {
-    const property = event.target.name;
     const description = event.target.value;
     this.setState({ description })
-    const changes = {};
-    changes[property] = description;
 
-    if (description.length > 300) {
-      return;
+    if (description.length <= 300) {
+       this.props.collection.update({ description });
     }
-
-    this.props.collection.update(changes)
   }
 
   render() {

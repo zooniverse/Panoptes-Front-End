@@ -27,8 +27,8 @@ class CollectionsCreateForm extends React.Component {
 
     const links = {};
 
-    if (this.props.projectID) {
-      links.project = this.props.projectID;
+    if (this.props.project) {
+      links.project = this.props.project.id;
     }
 
     if (this.props.subjectIDs.length > 0) {
@@ -77,8 +77,8 @@ class CollectionsCreateForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.onSubmit} className="collections-create-form">
-        {this.props.projectDisplayName ?
-          <span>This collection will be linked to {this.props.projectDisplayName}</span> :
+        {this.props.project ?
+          <span>This collection will be linked to {this.props.project.display_name}</span> :
           <span>This collection will not be linked to a project</span>}
         <div className="form-help error">
           {this.state.error &&
@@ -125,13 +125,16 @@ class CollectionsCreateForm extends React.Component {
 
 CollectionsCreateForm.defaultProps = {
   onSubmit: () => {},
-  projectID: '',
+  project: null,
   subjectIDs: []
 };
 
 CollectionsCreateForm.propTypes = {
   onSubmit: React.PropTypes.func,
-  projectID: React.PropTypes.string,
+  project: React.PropTypes.shape({
+    display_name: React.PropTypes.string,
+    id: React.PropTypes.string
+  }),
   subjectIDs: React.PropTypes.arrayOf(React.PropTypes.string)
 };
 
