@@ -36,18 +36,18 @@ function HomeTab({ project, projectPath, translation, onClick, children }) {
 }
 
 function AboutTab({ project, projectPath, onClick}) {
-  if (!project.redirect) {
-    return (
-      <Link
-        to={`${projectPath}/about`}
-        activeClassName="active"
-        className="tabbed-content-tab"
-        onClick={onClick}
-      >
-        <Translate content="project.nav.about" />
-      </Link>
-    );
-  }
+  return (
+    project.redirect ?
+    null :
+    <Link
+      to={`${projectPath}/about`}
+      activeClassName="active"
+      className="tabbed-content-tab"
+      onClick={onClick}
+    >
+      <Translate content="project.nav.about" />
+    </Link>
+  );
 };
 
 function ClassifyLink({ projectPath, workflow, onClick }) {
