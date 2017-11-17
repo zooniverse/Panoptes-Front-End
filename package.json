@@ -16,7 +16,7 @@
     "lodash": "~4.17.4",
     "markdownz": "~7.3.1",
     "modal-form": "~2.4",
-    "moment": "~2.9.0",
+    "moment": "~2.18.1",
     "panoptes-client": "~2.7",
     "papaparse": "mholt/PapaParse#cada171",
     "pusher-js": "~3.2.1",
