@@ -13,7 +13,14 @@ describe('ProjectNavbar', () => {
 
   it('should have nav as container', () => {
     const wrapper = shallow(<ProjectNavbar project={project} workflow={workflow} />);
-    const navElement = wrapper.find('<nav').first();
-    expect(navElement).to.have.length(1);
+    const navElement = wrapper.find('nav').first();
+    expect(navElement).to.have.lengthOf(1);
+  });
+
+  it('should conditionally render the project avatar', function() {
+    const wrapper = shallow(<ProjectNavbar project={project} workflow={workflow} />);
+    expect(wrapper.find('Thumbnail')).to.have.lengthOf(0);
+    wrapper.setProps({ projectAvatar: { src: '' }});
+    expect(wrapper.find('Thumbnail')).to.have.lengthOf(1);
   });
 });
