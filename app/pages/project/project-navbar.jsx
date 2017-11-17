@@ -329,7 +329,9 @@ ProjectNavbar.propTypes = {
     display_name: React.PropTypes.string,
     slug: React.PropTypes.string
   }),
-  projectAvatar: React.PropTypes.array,
+  projectAvatar: React.PropTypes.shape({
+    src: React.PropTypes.string
+  }),
   projectRoles: React.PropTypes.array,
   user: React.PropTypes.shape({
     id: React.PropTypes.string
