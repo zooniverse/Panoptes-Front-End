@@ -3,16 +3,13 @@ Translate = require 'react-translate-component'
 {IndexLink, Link} = require 'react-router'
 {Markdown} = require 'markdownz'
 {sugarClient} = require 'panoptes-client/lib/sugar'
-Thumbnail = require('../../components/thumbnail').default
-classnames = require 'classnames'
 PotentialFieldGuide = require './potential-field-guide'
-isAdmin = require '../../lib/is-admin'
-`import SOCIAL_ICONS from '../../lib/social-icons';`
+`import ProjectNavbar from './project-navbar'`
 
 AVATAR_SIZE = 100
 
 ProjectPage = React.createClass
-  contextTypes:
+  childContextTypes:
     geordi: React.PropTypes.object
 
   propTypes:
@@ -36,6 +33,9 @@ ProjectPage = React.createClass
     projectAvatar: null
     projectRoles: null
     splits: null
+
+  getChildContext: ->
+    @context.geordi
 
   componentDidMount: ->
     this.resizeBackground()
@@ -72,44 +72,13 @@ ProjectPage = React.createClass
     if project?
       sugarClient.subscribeTo "project-#{project.id}"
 
-  redirectClassifyLink: (redirect) ->
-    "#{redirect.replace(/\/?#?\/+$/, "")}/#/classify"
-
-  renderProjectName: (betaApproved) ->
-    if betaApproved
-      <div>
-        <p>Under Review</p>
-        {@props.project.display_name}
-      </div>
-    else
-      @props.project.display_name
-
-  userHasLabAccess: ->
-    userRoles = @props.projectRoles.some (role) =>
-      if role.links.owner.id == @props.user.id
-        role.roles.includes('owner') || role.roles.includes('collaborator')
-
   render: ->
-    rearrangedLinks = @props.project.urls.sort (a, b) => a.path? & !b.path? ? 1 : 0
-    betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
-    labPath = "/lab/#{@props.project.id}"
-    adminPath = "/admin/project_status/#{@props.project.slug}"
     onHomePage = @props.routes[2].path is undefined
-    avatarClasses = classnames('tabbed-content-tab', {
-      'beta-approved': betaApproved
-    })
 
     pages = [{}, @props.pages...].reduce (map, page) =>
       map[page.url_key] = page
       map
-
-    logClick = @context?.geordi?.makeHandler? 'project-menu'
-
-    collectClasses = classnames {
-      "tabbed-content-tab": true
-      "active": @props.project? and (@props.routes[2].path is "collections" or @props.routes[2].path is "favorites")
-    }
 
     if @props.background?
       backgroundStyle = backgroundImage: "url('#{@props.background.src}')"
@@ -121,78 +90,7 @@ ProjectPage = React.createClass
     <div className="project-page">
       <div className="project-background" style={backgroundStyle}></div>
 
-      <nav className="project-nav tabbed-content-tabs">
-        {if @props.project.redirect
-          <a href={@props.project.redirect} className="tabbed-content-tab" target="_blank">
-            {if @props.projectAvatar?
-              <Thumbnail src={@props.projectAvatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
-            Visit {@props.translation.display_name}
-          </a>
-        else
-          <IndexLink to="#{projectPath}" activeClassName="active" className={avatarClasses} onClick={logClick?.bind this, 'project.nav.home'}>
-            {if @props.projectAvatar?
-              <Thumbnail src={@props.projectAvatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
-            {if @props.loading
-              'Loading...'
-            else
-              @renderProjectName(betaApproved)}
-          </IndexLink>}
-
-        <br className='responsive-break' />
-
-        {unless @props.project.redirect
-          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.about'}>
-            <Translate content="project.nav.about" />
-          </Link>}
-
-        {if @props.project.redirect
-          <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank" onClick={logClick?.bind this, 'project.nav.classify'}>
-            <Translate content="project.nav.classify" />
-          </a>
-        else if @props.workflow is null
-          <span className="classify tabbed-content-tab" title="Loading..." style={opacity: 0.5}>
-            <Translate content="project.nav.classify" />
-          </span>
-        else
-          <Link to="#{projectPath}/classify" activeClassName="active" className="classify tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.classify'}>
-            <Translate content="project.nav.classify" />
-          </Link>}
-
-        <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.talk'}>
-          <Translate content="project.nav.talk" />
-        </Link>
-
-         <Link to="#{projectPath}/collections" activeClassName="active" className={collectClasses}>
-          <Translate content="project.nav.collections" />
-        </Link>
-
-        {if @props.user
-           <Link to="#{projectPath}/recents" activeClassName="active" className="tabbed-content-tab">
-            <Translate content="project.nav.recents" />
-          </Link>
-        }
-
-        {if @props.user && this.userHasLabAccess()
-           <Link to="#{labPath}/" activeClassName="active" className="tabbed-content-tab">
-            <Translate content="project.nav.lab" />
-          </Link>
-        }
-
-        {if isAdmin()
-           <Link to="#{adminPath}/" activeClassName="active" className="tabbed-content-tab">
-            <Translate content="project.nav.adminPage" />
-          </Link>
-        }
-
-        {rearrangedLinks.map ({label, url}, i) =>
-          unless !!label
-            for pattern, icon of SOCIAL_ICONS
-              if url.indexOf(pattern) isnt -1
-                iconForLabel = icon
-            iconForLabel ?= 'globe'
-            label = <i className="fa fa-#{iconForLabel} fa-fw fa-2x"></i>
-          <a key={i} href={url} className="tabbed-content-tab #{if iconForLabel then 'social-icon' else ''}" target="#{@props.project.id}#{url}">{label}</a>}
-      </nav>
+      <ProjectNavbar {...@props} />
 
       {if !!@props.project.configuration?.announcement
         <div className="informational project-announcement-banner">
