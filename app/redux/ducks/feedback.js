@@ -1,23 +1,19 @@
-import isFeedbackActive from './feedback/is-feedback-active';
+import * as helpers from '../../features/feedback/shared/helpers';
 import FeedbackRuleSet from './feedback/feedback-ruleset';
 
 // Actions
-const CLEAR = 'pfe/feedback/CLEAR';
 const INIT = 'pfe/feedback/INIT';
 const UPDATE = 'pfe/feedback/UPDATE';
 
 const initialState = {
   active: false,
-  showModal: false,
-  rules: [],
+  subjectRules: [],
+  workflowRules: []
 };
 
 // Reducer
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case CLEAR:
-      return Object.assign({}, initialState);
-
     case INIT:
       return Object.assign({}, initialState, action.payload);
 
@@ -32,14 +28,18 @@ export default function reducer(state = initialState, action = {}) {
 // Action Creators
 export function init(project, subject, workflow) {
   const payload = {
-    active: isFeedbackActive(project, subject, workflow)
+    active: helpers.isFeedbackActive(project, subject, workflow)
   };
+  if (payload.active) {
+    payload.subjectRules = helpers.metadataToRules(subject.metadata);
+    payload.workflowRules = helpers.getFeedbackFromTasks(workflow.tasks);
+  }
   return { type: INIT, payload };
 }
 
 export function update(subject, task, annotation) {
   // console.info('update', arguments);
-  const rules = new FeedbackRuleSet(subject, task, annotation);
+  const rules = new FeedbackRuleSet(subject, task);
   console.log('rules', rules);
   const payload = {
   };

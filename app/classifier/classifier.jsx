@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import { VisibilitySplit } from 'seven-ten';
@@ -22,7 +21,6 @@ import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import * as feedbackActions from '../redux/ducks/feedback';
-import { isFeedbackActive, isThereFeedback } from './feedback/helpers';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
