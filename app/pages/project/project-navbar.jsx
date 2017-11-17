@@ -50,6 +50,30 @@ function AboutTab({ project, projectPath, onClick}) {
   }
 };
 
+function ClassifyLink({ projectPath, workflow, onClick }) {
+  const opacity = {
+    opacity: 0.5
+  };
+  return (
+    workflow ?
+      <Link
+        to={`${projectPath}/classify`}
+        activeClassName="active"
+        className="classify tabbed-content-tab"
+        onClick={onClick}
+      >
+        <Translate content="project.nav.classify" />
+      </Link> :
+      <span
+        className="classify tabbed-content-tab"
+        title="Loading..."
+        style={opacity}
+      >
+        <Translate content="project.nav.classify" />
+      </span>
+  );
+};
+
 function RecentsTab({ projectPath, user }) {
   return (
     user ?
@@ -128,30 +152,6 @@ const ProjectNavbar = ({
     }
   };
 
-  const classifyLink = () => {
-    const opacity = {
-      opacity: 0.5
-    };
-    return (
-      workflow ?
-        <Link
-          to={`${projectPath}/classify`}
-          activeClassName="active"
-          className="classify tabbed-content-tab"
-          onClick={logClick('project.nav.classify')}
-        >
-          <Translate content="project.nav.classify" />
-        </Link> :
-        <span
-          className="classify tabbed-content-tab"
-          title="Loading..."
-          style={opacity}
-        >
-          <Translate content="project.nav.classify" />
-        </span>
-    );
-  };
-
   const renderAvatar = () => {
     return (
       projectAvatar ?
@@ -181,7 +181,11 @@ const ProjectNavbar = ({
       >
         <Translate content="project.nav.classify" />
       </a> :
-      classifyLink()
+      <ClassifyLink
+        projectPath={projectPath}
+        workflow={workflow}
+        onClick={logClick('project.nav.classify')}
+      />
     );
   };
 
