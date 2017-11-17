@@ -79,7 +79,7 @@ module.exports = React.createClass
     if @props.workflow and not @props.loadingSelectedWorkflow
       @loadAppropriateClassification(@props)
 
-    @validateUserGroup(@props)
+    @validateUserGroup(@props, @context)
 
   componentWillUpdate: (nextProps, nextState) ->
     @context.geordi.remember workflowID: nextProps?.workflow?.id
@@ -97,7 +97,7 @@ module.exports = React.createClass
         @setState { classification: null }
         @loadAppropriateClassification(nextProps)
     if nextProps.loadingSelectedWorkflow is false and nextProps.user isnt null
-      @shouldWorkflowAssignmentPrompt(nextProps)
+      @shouldWorkflowAssignmentPrompt(nextProps, nextContext)
 
     if nextProps.location.query?.group isnt @props.location.query?.group or nextProps.user isnt @props.user
       @validateUserGroup(nextProps)
@@ -321,16 +321,28 @@ module.exports = React.createClass
               'preferences.selected_workflow': props.preferences.settings.workflow_id
             props.preferences.save()
 
-  validateUserGroup: (props) ->
+  validateUserGroup: (props, context) ->
     if props.location.query?.group? and props.user?
       apiClient.type('user_groups').get(props.location.query.group).then (group) =>
-        @setState({ validUserGroup: group and group.links.users.includes(props.user.id) })
+        isUserMemberOfGroup = group.links?.users?.includes(props.user.id)
+        @setState({ validUserGroup: group and isUserMemberOfGroup })
+
+        if not isUserMemberOfGroup or not group
+          console.log('not group')
+          @clearUserGroupForClassification(props, context)
 
   clearUserGroupForClassification: (props, context) ->
     if (props.location.query?.group)
+      query = props.location.query
       @setState({ validUserGroup: false })
-      newLocation = Object.assign({}, props.location, { query: '' });
-      newLocation.search = '';
+
+      Object.keys(query).forEach (key) =>
+        if query[key] is 'group'
+          delete query[key]
+      console.log('clearing query', query)
+
+      newLocation = Object.assign({}, props.location, { query })
+      newLocation.search = ''
       context.router.push(newLocation);
 
 # For debugging:
