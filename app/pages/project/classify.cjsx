@@ -323,13 +323,16 @@ module.exports = React.createClass
 
   validateUserGroup: (props, context) ->
     if props.location.query?.group? and props.user?
-      apiClient.type('user_groups').get(props.location.query.group).then (group) =>
-        isUserMemberOfGroup = group.links?.users?.includes(props.user.id)
-        @setState({ validUserGroup: group and isUserMemberOfGroup })
+      apiClient.type('user_groups').get(props.location.query.group)
+        .then (group) =>
+          isUserMemberOfGroup = group.links?.users?.includes(props.user.id)
+          @setState({ validUserGroup: group and isUserMemberOfGroup })
 
-        if not isUserMemberOfGroup or not group
-          console.log('not group')
-          @clearUserGroupForClassification(props, context)
+          if not isUserMemberOfGroup or not group
+            @clearUserGroupForClassification(props, context)
+        .catch (error) =>
+          if error.status is 404
+            @clearUserGroupForClassification(props, context)
 
   clearUserGroupForClassification: (props, context) ->
     if (props.location.query?.group)
@@ -337,9 +340,8 @@ module.exports = React.createClass
       @setState({ validUserGroup: false })
 
       Object.keys(query).forEach (key) =>
-        if query[key] is 'group'
+        if key is 'group'
           delete query[key]
-      console.log('clearing query', query)
 
       newLocation = Object.assign({}, props.location, { query })
       newLocation.search = ''
