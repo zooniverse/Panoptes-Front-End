@@ -49,7 +49,7 @@ describe('OrganizationContainer', function () {
   let wrapper;
 
   beforeEach(function () {
-    wrapper = shallow(<OrganizationContainer params={params} />);
+    wrapper = shallow(<OrganizationContainer params={params} />, { context: { router: {}}});
   });
 
   it('should render without crashing', function () {
