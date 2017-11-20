@@ -25,10 +25,25 @@ const project = {
   title: 'A test project'
 };
 
+const anotherProject = {
+  display_name: 'Another test project',
+  title: 'Another test project'
+};
+
 const preferences = [
   {
+    email_communication: true,
     get() {
       return Promise.resolve(project);
+    },
+    getMeta() {
+      return {};
+    }
+  },
+  {
+    email_communication: false,
+    get() {
+      return Promise.resolve(anotherProject);
     },
     getMeta() {
       return {};
@@ -47,11 +62,7 @@ const user = {
 };
 
 describe('EmailSettings', () => {
-  let wrapper;
-
-  before(() => {
-    wrapper = shallow(<EmailSettings user={user} />);
-  });
+  const wrapper = shallow(<EmailSettings user={user} />);
 
   beforeEach(() => wrapper.update());
 
@@ -73,5 +84,37 @@ describe('EmailSettings', () => {
   it('shows beta email preference correctly', () => {
     const betaEmail = wrapper.find('input[name="beta_email_communication"]');
     assert.equal(betaEmail.prop('checked'), user.beta_email_communication);
+  });
+
+  describe('project listing', () => {
+    let projects;
+
+    beforeEach(() => {
+      projects = wrapper.update().find('table').last().find('tbody tr');
+    });
+
+    it('lists two projects (plus pagination)', () => {
+      assert.equal(projects.length, 3);
+    });
+
+    it('shows the first project email input correctly', () => {
+      const email = projects.first().find('td').first();
+      assert.equal(email.find('input').prop('checked'), preferences[0].email_communication);
+    });
+
+    it('shows the first project name correctly', () => {
+      const name = projects.first().find('td').last();
+      assert.equal(name.text(), project.display_name);
+    });
+
+    it('shows the second project email input correctly', () => {
+      const email = projects.at(1).find('td').first();
+      assert.equal(email.find('input').prop('checked'), preferences[1].email_communication);
+    });
+
+    it('shows the second project name correctly', () => {
+      const name = projects.at(1).find('td').last();
+      assert.equal(name.text(), anotherProject.display_name);
+    });
   });
 });
