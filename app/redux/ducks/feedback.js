@@ -7,15 +7,17 @@ const UPDATE = 'pfe/feedback/UPDATE';
 
 const initialState = {
   active: false,
-  subjectRules: [],
-  workflowRules: []
+  rules: []
 };
 
 // Reducer
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case INIT:
-      return Object.assign({}, initialState, action.payload);
+      return Object.assign({}, initialState, {
+        active: action.payload.active,
+        rules: action.payload.rules
+      });
 
     case UPDATE:
       return Object.assign({}, state, action.payload);
@@ -31,17 +33,18 @@ export function init(project, subject, workflow) {
     active: helpers.isFeedbackActive(project, subject, workflow)
   };
   if (payload.active) {
-    payload.subjectRules = helpers.metadataToRules(subject.metadata);
-    payload.workflowRules = helpers.getFeedbackFromTasks(workflow.tasks);
+    const subjectRules = helpers.metadataToRules(subject.metadata);
+    const workflowRules = helpers.getFeedbackFromTasks(workflow.tasks);
+    payload.rules = helpers.generateRules(subjectRules, workflowRules);
   }
   return { type: INIT, payload };
 }
 
 export function update(subject, task, annotation) {
   // console.info('update', arguments);
-  const rules = new FeedbackRuleSet(subject, task);
-  console.log('rules', rules);
-  const payload = {
-  };
-  return { type: UPDATE, payload };
+  // const rules = new FeedbackRuleSet(subject, task);
+  // console.log('rules', rules);
+  // const payload = {
+  // };
+  return { type: UPDATE };
 }
