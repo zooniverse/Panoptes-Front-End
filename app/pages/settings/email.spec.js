@@ -1,6 +1,6 @@
 import React from 'react';
 import assert from 'assert';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import talkClient from 'panoptes-client/lib/talk-client';
 import EmailSettings from './email';
 
@@ -9,6 +9,31 @@ const subscriptionPreferences = [
     id: 1,
     category: 'participating_discussions',
     email_digest: 'daily'
+  },
+  {
+    id: 2,
+    category: 'followed_discussions',
+    email_digest: 'daily'
+  },
+  {
+    id: 3,
+    category: 'mentions',
+    email_digest: 'immediate'
+  },
+  {
+    id: 4,
+    category: 'group_mentions',
+    email_digest: 'immediate'
+  },
+  {
+    id: 5,
+    category: 'messages',
+    email_digest: 'never'
+  },
+  {
+    id: 6,
+    category: 'started_discussions',
+    email_digest: 'weekly'
   }
 ];
 
@@ -62,7 +87,7 @@ const user = {
 };
 
 describe('EmailSettings', () => {
-  const wrapper = shallow(<EmailSettings user={user} />);
+  const wrapper = mount(<EmailSettings user={user} />);
 
   beforeEach(() => wrapper.update());
 
@@ -115,6 +140,23 @@ describe('EmailSettings', () => {
     it('shows the second project name correctly', () => {
       const name = projects.at(1).find('td').last();
       assert.equal(name.text(), anotherProject.display_name);
+    });
+  });
+
+  describe('Talk email preferences', () => {
+    let talkPreferences;
+
+    beforeEach(() => {
+      talkPreferences = wrapper.update().find('table').first().find('tbody tr');
+    });
+
+    it('lists Talk preferences correctly', () => {
+      talkPreferences.forEach((preference, i) => {
+        const subscriptionPreference = subscriptionPreferences[i];
+        const selector = `input[name="${subscriptionPreference.category}"][value="${subscriptionPreference.email_digest}"]`;
+        const input = preference.find(selector);
+        assert.equal(input.prop('checked'), true);
+      });
     });
   });
 });
