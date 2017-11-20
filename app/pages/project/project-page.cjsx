@@ -26,6 +26,7 @@ ProjectPage = React.createClass
     guide: null
     guideIcons: null
     loading: false
+    organization: null
     owner: {}
     preferences: null
     pages: null
@@ -85,6 +86,7 @@ ProjectPage = React.createClass
         background: @props.background
         loadingSelectedWorkflow: @props.loadingSelectedWorkflow
         onChangePreferences: @props.onChangePreferences
+        organization: @props.organization
         owner: @props.owner
         pages: @props.pages
         preferences: @props.preferences

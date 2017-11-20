@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
 import getSubjectLocation from '../../../lib/get-subject-location.coffee';
@@ -12,20 +13,35 @@ import ProjectNavbar from '../project-navbar';
 
 const ProjectHomePage = (props) => {
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
+  const descriptionClass = classnames(
+    'project-home-page__description',
+    { 'project-home-page__description--top-padding': !props.organization }
+  );
   const renderTalkSubjectsPreview = props.talkSubjects.length > 2;
   return (
     <div className="project-home-page">
       <div className="project-background" style={{ backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${props.background.src})` }}>
         <ProjectNavbar {...props} />
+
         {props.projectIsComplete &&
           (<div className="call-to-action-container">
             <FinishedBanner project={props.project} />
           </div>)}
+
         {props.project.configuration && props.project.configuration.announcement &&
           (<div className="informational project-announcement-banner">
             <Markdown>{props.project.configuration.announcement}</Markdown>
           </div>)}
-        <div className="project-home-page__description">
+
+        {props.organization &&
+          <Link
+            to={`/organizations/${props.organization.slug}`}
+            className="project-home-page__organization"
+          >
+            <Translate content="project.home.organization" />: {props.organization.display_name}
+          </Link>}
+
+        <div className={descriptionClass}>
           {props.translation.description}
         </div>
 
@@ -40,6 +56,7 @@ const ProjectHomePage = (props) => {
           splits={props.splits}
         />
       </div>
+
       {renderTalkSubjectsPreview && (
         <div className="project-home-page__container">
           {props.talkSubjects.map((subject) => {
@@ -110,6 +127,7 @@ ProjectHomePage.contextTypes = {
 ProjectHomePage.defaultProps = {
   activeWorkflows: [],
   onChangePreferences: () => {},
+  organization: null,
   preferences: {},
   project: {},
   projectIsComplete: false,
@@ -124,6 +142,10 @@ ProjectHomePage.propTypes = {
     src: React.PropTypes.string
   }).isRequired,
   onChangePreferences: React.PropTypes.func.isRequired,
+  organization: React.PropTypes.shape({
+    display_name: React.PropTypes.string,
+    slug: React.PropTypes.string
+  }),
   preferences: React.PropTypes.object,
   project: React.PropTypes.shape({
     configuration: React.PropTypes.object,
