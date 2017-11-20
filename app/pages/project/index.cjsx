@@ -119,7 +119,7 @@ ProjectPageController = React.createClass
 
           awaitPages = project.get('pages').catch((error) => []) # does not appear in project links?
 
-          awaitProjectAvatar = apiClient.type('avatars').get(project.links.avatar.id).catch((error) => [])
+          awaitProjectAvatar = apiClient.type('avatars').get(project.links.avatar.id).catch((error) => null)
 
           awaitProjectCompleteness = Promise.resolve(project.completeness is 1.0)
 
