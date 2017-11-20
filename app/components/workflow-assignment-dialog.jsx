@@ -1,14 +1,14 @@
 import React from 'react';
 import Dialog from 'modal-form/dialog';
 import ReactDOM from 'react-dom';
-import {TextSplit} from 'seven-ten';
+import { TextSplit } from 'seven-ten';
 
 const WorkflowAssignmentDialog = React.createClass({
   statics: {
-    start(props={}) {
+    start(props = {}) {
       return Dialog.alert(<WorkflowAssignmentDialog {...props} />, {
         className: 'workflow-assignment-dialog',
-        closeButton: true,
+        closeButton: true
       });
     },
   },
@@ -22,12 +22,7 @@ const WorkflowAssignmentDialog = React.createClass({
   },
 
   advanceDefault() {
-    return(`
-        Congratulations! Because you're doing so well, you can level up and
-        access more types of glitches, have more options for classifying them,
-        and see glitches that our computer algorithms are even less confident in.
-        If you prefer to stay at this level, you can choose to stay.
-    `);
+    return (this.props.defaultMessage);
   },
 
   render() {
@@ -46,7 +41,8 @@ const WorkflowAssignmentDialog = React.createClass({
               textKey="decline"
               splits={this.props.splits}
               default={"No, thanks"}
-              elementType={"p"}/>
+              elementType={"p"}
+            />
           </button>
         </div>
       </div>
@@ -55,6 +51,7 @@ const WorkflowAssignmentDialog = React.createClass({
 });
 
 WorkflowAssignmentDialog.propTypes = {
+  defaultMessage: React.PropTypes.string,
   splits: React.PropTypes.object
 };
 
