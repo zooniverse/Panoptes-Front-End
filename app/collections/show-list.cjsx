@@ -217,14 +217,12 @@ module.exports = React.createClass
 
   render: ->
     if @state.subjects?
-      <div className="collections-show">
-        {if @state.subjects.length is 0
-          <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
-
-        {if @state.subjects.length > 0
-          meta = @state.subjects[0].getMeta()
-
-          <div>
+      <div>
+        <div className="collection__description-container">
+          {if @props.collection.description
+            <div className="collection-description">
+              {@props.collection.description}
+            </div>}
           {if @state.selecting
             <div className="collection-buttons-container">
               <button
@@ -249,31 +247,42 @@ module.exports = React.createClass
               <button type="button" className="select-subjects-button" onClick={@toggleSelecting}>Select Subjects</button>
             </div>
           }
-            <div>
-              {@state.subjects.map (subject) =>
-                <SubjectNode
-                  key={subject.id}
-                  collection={@props.collection}
-                  subject={subject}
-                  user={@props.user}
-                  projectContext={@props.project}
-                  canCollaborate={@props.canCollaborate}
-                  selecting={@state.selecting}
-                  selected={@selected(subject.id)}
-                  addSelected={@addSelected.bind @, subject.id}
-                  removeSelected={@removeSelected.bind @, subject.id}
-                  onDelete={@handleDeleteSubject.bind @, subject}
-                />
-              }
-            </div>
+        </div>
 
-            <Paginator
-              className="talk"
-              page={meta.page}
-              onPageChange={@onPageChange}
-              pageCount={meta.page_count}
-            />
-          </div>}
+        <div className="collections-show">
+          {if @state.subjects.length is 0
+            <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
+
+          {if @state.subjects.length > 0
+            meta = @state.subjects[0].getMeta()
+
+            <div>
+              <div>
+                {@state.subjects.map (subject) =>
+                  <SubjectNode
+                    key={subject.id}
+                    collection={@props.collection}
+                    subject={subject}
+                    user={@props.user}
+                    projectContext={@props.project}
+                    canCollaborate={@props.canCollaborate}
+                    selecting={@state.selecting}
+                    selected={@selected(subject.id)}
+                    addSelected={@addSelected.bind @, subject.id}
+                    removeSelected={@removeSelected.bind @, subject.id}
+                    onDelete={@handleDeleteSubject.bind @, subject}
+                  />
+                }
+              </div>
+
+              <Paginator
+                className="talk"
+                page={meta.page}
+                onPageChange={@onPageChange}
+                pageCount={meta.page_count}
+              />
+            </div>}
+        </div>
       </div>
     else if @state.error
       <Translate component="p" className="form-help error" content="collectionSubjectListPage.error" />

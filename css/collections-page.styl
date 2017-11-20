@@ -50,6 +50,7 @@ $collection-viewer-button
     font-size: 1.5em
     font-weight: bold
 
+
   .collection-owner
     text-transform: uppercase
 
@@ -70,11 +71,24 @@ $collection-viewer-button
     @media (max-width: 900px)
       margin: 0.6em 0
 
-  .collections-show
+  .collection__description-container
+    display: flex
+    width: 100%
+
+    @media (max-width: 900px)
+      flex-direction: column
+      justify-content: center
+      align-content: center
+
+    .collection-description
+      width: 50%
+      font-size: 0.875em
+
     .collection-buttons-container
-      display: flex
-      justify-content: flex-end
+      width: 50%
+      flex-direction: row-reverse
       margin-bottom: 2em
+      display: flex
 
       @media (max-width: 900px)
         flex-direction: column
@@ -104,6 +118,7 @@ $collection-viewer-button
       &:disabled
         opacity: 0.5
 
+  .collections-show
     .collection-subject-viewer
       border: 1px solid #cdcdcd
       display: inline-block
