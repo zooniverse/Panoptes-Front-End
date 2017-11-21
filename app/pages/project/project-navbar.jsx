@@ -10,28 +10,56 @@ import isAdmin from '../../lib/is-admin';
 // constants
 const AVATAR_SIZE = 100;
 
+function Avatar({ projectAvatar }) {
+  return (
+    projectAvatar ?
+      <Thumbnail
+        src={projectAvatar.src}
+        className="avatar"
+        width={AVATAR_SIZE}
+        height={AVATAR_SIZE}
+      />
+      : null
+  );
+}
+
+function ProjectName({ loading, project, translation }) {
+  if (loading) {
+    return <span>Loading…</span>;
+  }
+  if (project.beta_approved) {
+    return (
+      <div>
+        <p>Under Review</p>
+        {translation.display_name}
+      </div>
+    );
+  }
+  return <span>{translation.display_name}</span>;
+}
+
 function HomeTab({ project, projectPath, translation, onClick, children }) {
   const avatarClasses = classnames('tabbed-content-tab', {
     '`beta`-approved': project
   });
   return (
     project.redirect ?
-    <a
-      href={project.redirect}
-      className="tabbed-content-tab"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Visit {translation.display_name}
-    </a> :
-    <IndexLink
-      to={projectPath}
-      activeClassName="active"
-      className={avatarClasses}
-      onClick={onClick}
-    >
-      {children}
-    </IndexLink>
+      <a
+        href={project.redirect}
+        className="tabbed-content-tab"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Visit {translation.display_name}
+      </a> :
+      <IndexLink
+        to={projectPath}
+        activeClassName="active"
+        className={avatarClasses}
+        onClick={onClick}
+      >
+        {children}
+      </IndexLink>
   );
 }
 
@@ -48,7 +76,7 @@ function AboutTab({ project, projectPath, onClick}) {
       <Translate content="project.nav.about" />
     </Link>
   );
-};
+}
 
 function ClassifyLink({ projectPath, workflow, onClick }) {
   const opacity = {
@@ -72,7 +100,30 @@ function ClassifyLink({ projectPath, workflow, onClick }) {
         <Translate content="project.nav.classify" />
       </span>
   );
-};
+}
+
+function ClassifyTab({ project, projectPath, workflow, onClick }) {
+  function redirectClassifyLink(redirect) {
+    return `${redirect.replace(/\/?#?\/+$/, '')}/#/classify`;
+  }
+  return (
+    (project.redirect) ?
+      <a
+        href={redirectClassifyLink(project.redirect)}
+        className="tabbed-content-tab"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onClick}
+      >
+        <Translate content="project.nav.classify" />
+      </a> :
+      <ClassifyLink
+        projectPath={projectPath}
+        workflow={workflow}
+        onClick={onClick}
+      />
+  );
+}
 
 function RecentsTab({ projectPath, user }) {
   return (
@@ -86,7 +137,7 @@ function RecentsTab({ projectPath, user }) {
     </Link> :
     null
   );
-};
+}
 
 function AdminTab({ project }) {
   const adminPath = `/admin/project_status/${project.slug}`;
@@ -116,14 +167,14 @@ function LabTab({ project, projectRoles, user }) {
 
   return (
     (user && userHasLabAccess()) ?
-    <Link
-      to={`${labPath}/`}
-      activeClassName="active"
-      className="tabbed-content-tab"
-    >
-      <Translate content="project.nav.lab" />
-    </Link> :
-    null
+      <Link
+        to={`${labPath}/`}
+        activeClassName="active"
+        className="tabbed-content-tab"
+      >
+        <Translate content="project.nav.lab" />
+      </Link> :
+      null
   );
 }
 
@@ -142,7 +193,7 @@ const ProjectNavbar = ({
   const activeElement = project && (path === 'collections' || path === 'favorites');
   const collectClasses = classnames({
     'tabbed-content-tab': true,
-    'active': activeElement
+    active: activeElement
   });
 
   // helpers
@@ -150,58 +201,6 @@ const ProjectNavbar = ({
     if (context && context.geordi) {
       return context.geordi.makeHandler('project-menu');
     }
-  };
-
-  const renderAvatar = () => {
-    return (
-      projectAvatar ?
-      <Thumbnail
-        src={projectAvatar.src}
-        className="avatar"
-        width={AVATAR_SIZE}
-        height={AVATAR_SIZE}
-      />
-      : null
-    );
-  };
-
-  const redirectClassifyLink = (redirect) => {
-    return `${redirect.replace(/\/?#?\/+$/, '')}/#/classify`;
-  };
-
-  const ClassifyTab = () => {
-    return (
-      (project.redirect) ?
-      <a
-        href={redirectClassifyLink(project.redirect)}
-        className="tabbed-content-tab"
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={logClick('project.nav.classify')}
-      >
-        <Translate content="project.nav.classify" />
-      </a> :
-      <ClassifyLink
-        projectPath={projectPath}
-        workflow={workflow}
-        onClick={logClick('project.nav.classify')}
-      />
-    );
-  };
-
-  const renderProjectName = () => {
-    if (loading) {
-      return 'Loading...';
-    }
-    if (project.beta_approved) {
-      return (
-        <div>
-          <p>Under Review</p>
-          {translation.display_name}
-        </div>
-      );
-    }
-    return translation.display_name;
   };
 
   const renderProjectLinks = (urls) => {
@@ -260,16 +259,30 @@ const ProjectNavbar = ({
         translation={translation}
         onClick={logClick('project.nav.home')}
       >
-        {renderAvatar()}
-        {renderProjectName()}
+        <Avatar
+          projectAvatar={projectAvatar}
+        />
+        <ProjectName
+          loading={loading}
+          project={project}
+          translation={translation}
+        />
       </HomeTab>
       <br className="responsive-break" />
+
       <AboutTab
         project={project}
         projectPath={projectPath}
         onClick={logClick('project.nav.about')}
       />
-      <ClassifyTab />
+
+      <ClassifyTab
+        project={project}
+        projectPath={projectPath}
+        workflow={workflow}
+        onClick={logClick('project.nav.classify')}
+      />
+
       <Link
         to={`${projectPath}/talk`}
         activeClassName="active"
@@ -286,18 +299,22 @@ const ProjectNavbar = ({
       >
         <Translate content="project.nav.collections" />
       </Link>
+
       <RecentsTab
         projectPath={projectPath}
         user={user}
       />
+
       <LabTab
         project={project}
         projectRoles={projectRoles}
         user={user}
       />
+
       <AdminTab
         project={project}
       />
+
       {renderProjectLinks(project.urls)}
     </nav>
   );
