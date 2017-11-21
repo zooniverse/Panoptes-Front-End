@@ -66,8 +66,9 @@ module.exports = React.createClass
     points = points.join '\n'
 
     deleteButtonPosition = @getDeletePosition(firstPoint, secondPoint)
+    pointerEvents = if @props.disabled then 'none' else 'painted'
 
-    <DrawingToolRoot tool={this} pointerEvents='painted'>
+    <DrawingToolRoot tool={this} pointerEvents={pointerEvents}>
       <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <polyline  points={points} fill={'none' unless @props.mark.closed} />
       </Draggable>
