@@ -182,7 +182,7 @@ module.exports = React.createClass
           {if @props.subject?
             if  @props.user?
               <span>
-                {unless @props.workflow?.configuration?.disable_favorites
+                {if @props.project? and not @props.workflow?.configuration?.disable_favorites
                   <span>
                     <FavoritesButton className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} isFavorite={@props.isFavorite} />{' '}
                   </span>}
