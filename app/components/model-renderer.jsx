@@ -110,11 +110,11 @@ class ModelRenderer extends React.Component {
           hidden={true}
         />
         <img
+          crossOrigin="anonymous"
           src={`${this.state.imgUrl}?_${new Date().getTime()}`}
           onLoad={this.setTexture}
           ref={(r) => { this.im = r; }}
           alt="subject to classify"
-          crossOrigin="anonymous"
           hidden={true}
         />
       </div>
