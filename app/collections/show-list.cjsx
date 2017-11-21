@@ -220,14 +220,14 @@ module.exports = React.createClass
       <div>
         <div className="collection__description-container">
           {if @props.collection.description
-            <div className="collection-description">
+            <div className="collection__description">
               {@props.collection.description}
             </div>}
           {if @state.selecting
-            <div className="collection-buttons-container">
+            <div className="collection__buttons-container">
               <button
                 type="button"
-                className="select-subjects-button"
+                className="collection__select-subjects-button"
                 onClick={@promptCollectionManager}
                 disabled={@state.selected.length < 1}>
                 Add to Collection
@@ -235,16 +235,16 @@ module.exports = React.createClass
               {if @props.canCollaborate
                 <button
                   type="button"
-                  className="select-subjects-button"
+                  className="collection__select-subjects-button"
                   onClick={@confirmDeleteSubjects}
                   disabled={@state.selected.length < 1}>
                   Remove from Collection
                 </button>}
-              <button type="button" className="select-subjects-button" onClick={@toggleSelecting}>Cancel</button>
+              <button type="button" className="collection__select-subjects-button" onClick={@toggleSelecting}>Cancel</button>
             </div>
           else if @props.user?
-            <div className="collection-buttons-container">
-              <button type="button" className="select-subjects-button" onClick={@toggleSelecting}>Select Subjects</button>
+            <div className="collection__buttons-container">
+              <button type="button" className="collection__select-subjects-button" onClick={@toggleSelecting}>Select Subjects</button>
             </div>
           }
         </div>
