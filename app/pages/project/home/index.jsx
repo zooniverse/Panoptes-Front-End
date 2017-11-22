@@ -90,7 +90,6 @@ export default class ProjectHomeContainer extends React.Component {
   }
 
   render() {
-    console.log(this.props.workflow)
     return (
       <ProjectHomePage
         activeWorkflows={this.state.activeWorkflows}
