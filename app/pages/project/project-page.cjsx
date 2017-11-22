@@ -88,9 +88,10 @@ ProjectPage = React.createClass
         backgroundStyle.height = "auto"
 
     <div className="project-page">
-      <div className="project-background" style={backgroundStyle}></div>
-
-      <ProjectNavbar {...@props} />
+      {if !onHomePage
+        <div className="project-background" style={backgroundStyle}></div>}
+      {if !onHomePage
+        <ProjectNavbar {...@props} />}
 
       {if !!@props.project.configuration?.announcement
         <div className="informational project-announcement-banner">
@@ -98,6 +99,7 @@ ProjectPage = React.createClass
         </div>}
 
       {React.cloneElement @props.children,
+        background: @props.background
         loadingSelectedWorkflow: @props.loadingSelectedWorkflow
         onChangePreferences: @props.onChangePreferences
         owner: @props.owner

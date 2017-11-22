@@ -93,9 +93,11 @@ export default class ProjectHomeContainer extends React.Component {
     return (
       <ProjectHomePage
         activeWorkflows={this.state.activeWorkflows}
+        background={this.props.background}
         onChangePreferences={this.props.onChangePreferences}
         preferences={this.props.preferences}
         project={this.props.project}
+        projectAvatar={this.props.projectAvatar}
         projectIsComplete={this.props.projectIsComplete}
         researcherAvatar={this.state.researcherAvatar}
         showWorkflowButtons={this.state.showWorkflowButtons}
