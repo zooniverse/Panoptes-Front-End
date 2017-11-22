@@ -8,32 +8,56 @@ const subscriptionPreferences = [
   {
     id: 1,
     category: 'participating_discussions',
-    email_digest: 'daily'
+    email_digest: 'daily',
+    update(changes) {
+      subscriptionPreferences[0] = Object.assign(subscriptionPreferences[0], changes);
+      return { save: () => null };
+    }
   },
   {
     id: 2,
     category: 'followed_discussions',
-    email_digest: 'daily'
+    email_digest: 'daily',
+    update(changes) {
+      subscriptionPreferences[1] = Object.assign(subscriptionPreferences[1], changes);
+      return { save: () => null };
+    }
   },
   {
     id: 3,
     category: 'mentions',
-    email_digest: 'immediate'
+    email_digest: 'immediate',
+    update(changes) {
+      subscriptionPreferences[2] = Object.assign(subscriptionPreferences[2], changes);
+      return { save: () => null };
+    }
   },
   {
     id: 4,
     category: 'group_mentions',
-    email_digest: 'immediate'
+    email_digest: 'immediate',
+    update(changes) {
+      subscriptionPreferences[3] = Object.assign(subscriptionPreferences[3], changes);
+      return { save: () => null };
+    }
   },
   {
     id: 5,
     category: 'messages',
-    email_digest: 'never'
+    email_digest: 'never',
+    update(changes) {
+      subscriptionPreferences[4] = Object.assign(subscriptionPreferences[4], changes);
+      return { save: () => null };
+    }
   },
   {
     id: 6,
     category: 'started_discussions',
-    email_digest: 'weekly'
+    email_digest: 'weekly',
+    update(changes) {
+      subscriptionPreferences[5] = Object.assign(subscriptionPreferences[5], changes);
+      return { save: () => null };
+    }
   }
 ];
 
@@ -156,6 +180,14 @@ describe('EmailSettings', () => {
         const selector = `input[name="${subscriptionPreference.category}"][value="${subscriptionPreference.email_digest}"]`;
         const input = preference.find(selector);
         assert.equal(input.prop('checked'), true);
+      });
+    });
+
+    subscriptionPreferences.forEach((preference) => {
+      it(`${preference.category} updates correctly when preferences are changed`, () => {
+        const selector = `input[name="${preference.category}"][value="never"]`;
+        wrapper.find(selector).simulate('change');
+        assert.equal(preference.email_digest, 'never');
       });
     });
   });
