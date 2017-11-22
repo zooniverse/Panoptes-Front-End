@@ -15,7 +15,7 @@ const ProjectHomePage = (props) => {
   const renderTalkSubjectsPreview = props.talkSubjects.length > 2;
   return (
     <div className="project-home-page">
-      <div style={{ backgroundImage: `url(${props.background.src})` }}>
+      <div className="project-background" style={{ backgroundImage: `url(${props.background.src})` }}>
         <ProjectNavbar {...props} />
         {props.projectIsComplete &&
           (<div className="call-to-action-container">

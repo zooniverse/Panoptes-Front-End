@@ -4,7 +4,7 @@ Translate = require 'react-translate-component'
 {Markdown} = require 'markdownz'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 PotentialFieldGuide = require './potential-field-guide'
-`import ProjectNavbar from './project-navbar'`
+`import ProjectNavbar from './project-navbar';`
 
 AVATAR_SIZE = 100
 
@@ -38,14 +38,11 @@ ProjectPage = React.createClass
     @context.geordi
 
   componentDidMount: ->
-    this.resizeBackground()
-    addEventListener "resize", this.resizeBackground
     document.documentElement.classList.add 'on-project-page'
     @updateSugarSubscription @props.project
     @context.geordi?.remember projectToken: @props.project?.slug
 
   componentWillUnmount: ->
-    removeEventListener "resize", this.resizeBackground
     document.documentElement.classList.remove 'on-project-page'
     @updateSugarSubscription null
     @context.geordi?.forget ['projectToken']
@@ -54,15 +51,6 @@ ProjectPage = React.createClass
     if nextProps.project isnt @props.project
       @updateSugarSubscription nextProps.project
       @context.geordi?.remember projectToken: nextProps.project?.slug
-
-  resizeBackground: ->
-    finishedBannerHeight = 70
-    projLanding = document.getElementById('projectLandingIntro')
-    if projLanding
-      sectionBottom = projLanding.getBoundingClientRect().bottom;
-      sectionHeight = document.body.scrollTop + sectionBottom
-      if @state.backgroundHeight isnt sectionHeight + finishedBannerHeight
-        @setState backgroundHeight: sectionHeight + finishedBannerHeight
 
   _lastSugarSubscribedID: null
 
@@ -82,14 +70,8 @@ ProjectPage = React.createClass
 
     if @props.background?
       backgroundStyle = backgroundImage: "url('#{@props.background.src}')"
-      if onHomePage
-        backgroundStyle.height = @state.backgroundHeight
-      else
-        backgroundStyle.height = "auto"
 
-    <div className="project-page">
-      {if !onHomePage
-        <div className="project-background" style={backgroundStyle}></div>}
+    <div className="project-page project-background" style={backgroundStyle}>
       {if !onHomePage
         <ProjectNavbar {...@props} />}
 
