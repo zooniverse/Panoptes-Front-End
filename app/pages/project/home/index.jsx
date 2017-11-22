@@ -93,15 +93,18 @@ export default class ProjectHomeContainer extends React.Component {
     return (
       <ProjectHomePage
         activeWorkflows={this.state.activeWorkflows}
+        background={this.props.background}
         onChangePreferences={this.props.onChangePreferences}
         preferences={this.props.preferences}
         project={this.props.project}
+        projectAvatar={this.props.projectAvatar}
         projectIsComplete={this.props.projectIsComplete}
         researcherAvatar={this.state.researcherAvatar}
         showWorkflowButtons={this.state.showWorkflowButtons}
         splits={this.props.splits}
         talkSubjects={this.state.talkSubjects}
         translation={this.props.translation}
+        workflow={this.props.workflow}
       />
     );
   }
@@ -114,8 +117,14 @@ ProjectHomeContainer.contextTypes = {
 
 ProjectHomeContainer.defaultProps = {
   onChangePreferences: () => {},
+  background: {
+    src: ''
+  },
   preferences: {},
   project: {},
+  projectAvatar: {
+    src: ''
+  },
   projectIsComplete: false,
   splits: {},
   translation: {
@@ -128,8 +137,14 @@ ProjectHomeContainer.defaultProps = {
 };
 
 ProjectHomeContainer.propTypes = {
+  background: React.PropTypes.shape({
+    src: React.PropTypes.string
+  }),
   onChangePreferences: React.PropTypes.func.isRequired,
   preferences: React.PropTypes.object,
+  projectAvatar: React.PropTypes.shape({
+    src: React.PropTypes.string
+  }),
   project: React.PropTypes.shape({
     configuration: React.PropTypes.object,
     description: React.PropTypes.string,
@@ -147,5 +162,8 @@ ProjectHomeContainer.propTypes = {
     introduction: React.PropTypes.string,
     researcher_quote: React.PropTypes.string,
     title: React.PropTypes.string
+  }),
+  workflow: React.PropTypes.shape({
+    id: React.PropTypes.string
   })
 };

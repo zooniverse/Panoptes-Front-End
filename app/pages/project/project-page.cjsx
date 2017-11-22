@@ -4,7 +4,7 @@ Translate = require 'react-translate-component'
 {Markdown} = require 'markdownz'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 PotentialFieldGuide = require './potential-field-guide'
-`import ProjectNavbar from './project-navbar'`
+`import ProjectNavbar from './project-navbar';`
 
 AVATAR_SIZE = 100
 
@@ -38,14 +38,11 @@ ProjectPage = React.createClass
     @context.geordi
 
   componentDidMount: ->
-    this.resizeBackground()
-    addEventListener "resize", this.resizeBackground
     document.documentElement.classList.add 'on-project-page'
     @updateSugarSubscription @props.project
     @context.geordi?.remember projectToken: @props.project?.slug
 
   componentWillUnmount: ->
-    removeEventListener "resize", this.resizeBackground
     document.documentElement.classList.remove 'on-project-page'
     @updateSugarSubscription null
     @context.geordi?.forget ['projectToken']
@@ -54,15 +51,6 @@ ProjectPage = React.createClass
     if nextProps.project isnt @props.project
       @updateSugarSubscription nextProps.project
       @context.geordi?.remember projectToken: nextProps.project?.slug
-
-  resizeBackground: ->
-    finishedBannerHeight = 70
-    projLanding = document.getElementById('projectLandingIntro')
-    if projLanding
-      sectionBottom = projLanding.getBoundingClientRect().bottom;
-      sectionHeight = document.body.scrollTop + sectionBottom
-      if @state.backgroundHeight isnt sectionHeight + finishedBannerHeight
-        @setState backgroundHeight: sectionHeight + finishedBannerHeight
 
   _lastSugarSubscribedID: null
 
@@ -81,16 +69,11 @@ ProjectPage = React.createClass
       map
 
     if @props.background?
-      backgroundStyle = backgroundImage: "url('#{@props.background.src}')"
-      if onHomePage
-        backgroundStyle.height = @state.backgroundHeight
-      else
-        backgroundStyle.height = "auto"
+      backgroundStyle = backgroundImage: "radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url('#{@props.background.src}')"
 
-    <div className="project-page">
-      <div className="project-background" style={backgroundStyle}></div>
-
-      <ProjectNavbar {...@props} />
+    <div className="project-page project-background" style={backgroundStyle}>
+      {if !onHomePage
+        <ProjectNavbar {...@props} />}
 
       {if !!@props.project.configuration?.announcement
         <div className="informational project-announcement-banner">
@@ -98,6 +81,7 @@ ProjectPage = React.createClass
         </div>}
 
       {React.cloneElement @props.children,
+        background: @props.background
         loadingSelectedWorkflow: @props.loadingSelectedWorkflow
         onChangePreferences: @props.onChangePreferences
         owner: @props.owner

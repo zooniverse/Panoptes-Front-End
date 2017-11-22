@@ -8,33 +8,34 @@ import FinishedBanner from '../finished-banner';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
 import TalkStatus from './talk-status';
+import ProjectNavbar from '../project-navbar';
 
 const ProjectHomePage = (props) => {
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
   const renderTalkSubjectsPreview = props.talkSubjects.length > 2;
-
   return (
     <div className="project-home-page">
-      {props.projectIsComplete &&
-        (<div className="call-to-action-container">
-          <FinishedBanner project={props.project} />
-        </div>)}
+      <div className="project-background" style={{ backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${props.background.src})` }}>
+        <ProjectNavbar {...props} />
+        {props.projectIsComplete &&
+          (<div className="call-to-action-container">
+            <FinishedBanner project={props.project} />
+          </div>)}
+        <div className="project-home-page__description">
+          {props.translation.description}
+        </div>
 
-      <div className="project-home-page__description">
-        {props.translation.description}
+        <ProjectHomeWorkflowButtons
+          activeWorkflows={props.activeWorkflows}
+          onChangePreferences={props.onChangePreferences}
+          preferences={props.preferences}
+          project={props.project}
+          projectIsComplete={props.projectIsComplete}
+          showWorkflowButtons={props.showWorkflowButtons}
+          workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
+          splits={props.splits}
+        />
       </div>
-
-      <ProjectHomeWorkflowButtons
-        activeWorkflows={props.activeWorkflows}
-        onChangePreferences={props.onChangePreferences}
-        preferences={props.preferences}
-        project={props.project}
-        projectIsComplete={props.projectIsComplete}
-        showWorkflowButtons={props.showWorkflowButtons}
-        workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
-        splits={props.splits}
-      />
-
       {renderTalkSubjectsPreview && (
         <div className="project-home-page__container">
           {props.talkSubjects.map((subject) => {
@@ -115,6 +116,9 @@ ProjectHomePage.defaultProps = {
 
 ProjectHomePage.propTypes = {
   activeWorkflows: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+  background: React.PropTypes.shape({
+    src: React.PropTypes.string
+  }).isRequired,
   onChangePreferences: React.PropTypes.func.isRequired,
   preferences: React.PropTypes.object,
   project: React.PropTypes.shape({
