@@ -90,6 +90,7 @@ export default class ProjectHomeContainer extends React.Component {
   }
 
   render() {
+    console.log(this.props.workflow)
     return (
       <ProjectHomePage
         activeWorkflows={this.state.activeWorkflows}
@@ -117,8 +118,14 @@ ProjectHomeContainer.contextTypes = {
 
 ProjectHomeContainer.defaultProps = {
   onChangePreferences: () => {},
+  background: {
+    src: ''
+  },
   preferences: {},
   project: {},
+  projectAvatar: {
+    src: ''
+  },
   projectIsComplete: false,
   splits: {},
   translation: {
@@ -131,8 +138,14 @@ ProjectHomeContainer.defaultProps = {
 };
 
 ProjectHomeContainer.propTypes = {
+  background: React.PropTypes.shape({
+    src: React.PropTypes.string
+  }),
   onChangePreferences: React.PropTypes.func.isRequired,
   preferences: React.PropTypes.object,
+  projectAvatar: React.PropTypes.shape({
+    src: React.PropTypes.string
+  }),
   project: React.PropTypes.shape({
     configuration: React.PropTypes.object,
     description: React.PropTypes.string,
@@ -150,5 +163,8 @@ ProjectHomeContainer.propTypes = {
     introduction: React.PropTypes.string,
     researcher_quote: React.PropTypes.string,
     title: React.PropTypes.string
+  }),
+  workflow: React.PropTypes.shape({
+    id: React.PropTypes.string
   })
 };
