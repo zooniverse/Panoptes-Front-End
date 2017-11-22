@@ -73,11 +73,12 @@ ProjectPage = React.createClass
 
     <div className="project-page project-background" style={backgroundStyle}>
       {if !onHomePage
-        <ProjectNavbar {...@props} />}
-
-      {if !!@props.project.configuration?.announcement
-        <div className="informational project-announcement-banner">
-          <Markdown>{@props.project.configuration.announcement}</Markdown>
+        <div>
+          <ProjectNavbar {...@props} />
+          {if !!@props.project.configuration?.announcement
+            <div className="informational project-announcement-banner">
+              <Markdown>{@props.project.configuration.announcement}</Markdown>
+            </div>}
         </div>}
 
       {React.cloneElement @props.children,

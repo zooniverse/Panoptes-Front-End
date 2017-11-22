@@ -21,6 +21,10 @@ const ProjectHomePage = (props) => {
           (<div className="call-to-action-container">
             <FinishedBanner project={props.project} />
           </div>)}
+        {props.project.configuration && props.project.configuration.announcement &&
+          (<div className="informational project-announcement-banner">
+            <Markdown>{props.project.configuration.announcement}</Markdown>
+          </div>)}
         <div className="project-home-page__description">
           {props.translation.description}
         </div>
