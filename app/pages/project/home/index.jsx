@@ -104,6 +104,7 @@ export default class ProjectHomeContainer extends React.Component {
         splits={this.props.splits}
         talkSubjects={this.state.talkSubjects}
         translation={this.props.translation}
+        workflow={this.props.workflow}
       />
     );
   }
