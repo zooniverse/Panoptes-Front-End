@@ -1,11 +1,15 @@
 import _ from 'lodash';
 import strategies from '../strategies';
+import metadataToRules from './metadata-to-rules';
+import getFeedbackFromTasks from './get-feedback-from-tasks';
 
 // Create a canonical set of feedback rules for a given combination of workflow
 // rules (all feedback rules available), and subject rules (those feedback
 // rules that pertain to the specific subject, and any modifications / extra
 // options that apply to it)
-function generateRules(subjectRules, workflowRules) {
+function generateRules(subject, workflow) {
+  const subjectRules = metadataToRules(subject.metadata);
+  const workflowRules = getFeedbackFromTasks(workflow.tasks);
   const canonicalRules = {};
 
   _.forEach(workflowRules, (rules, taskId) => {

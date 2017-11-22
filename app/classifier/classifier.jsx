@@ -132,11 +132,8 @@ class Classifier extends React.Component {
       }
     }, false);
     if (!inProgress) {
-      const { subject } = this.props;
       const annotation = annotations[annotations.length - 1];
-      const task = annotation ? this.props.workflow.tasks[annotation.task] : null;
-
-      this.props.actions.feedback.update(subject, task, annotation);
+      this.props.actions.feedback.update(annotation);
     }
   }
 
