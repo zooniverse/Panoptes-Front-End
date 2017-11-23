@@ -2,7 +2,6 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import { IndexLink, Link } from 'react-router';
 import classnames from 'classnames';
-import partition from 'lodash/partition';
 import SOCIAL_ICONS from '../../lib/social-icons';
 import Thumbnail from '../../components/thumbnail';
 import isAdmin from '../../lib/is-admin';
@@ -178,6 +177,62 @@ function LabTab({ project, projectRoles, user }) {
   );
 }
 
+function ExternalLinks({ project }) {
+  if (project.urls) {
+    const externalLinks = project.urls.filter(url => !url.path);
+
+    if (externalLinks && (externalLinks.length > 0)) {
+      return (
+        <span>
+          {externalLinks.map(link =>
+            <a
+              key={link.url}
+              href={link.url}
+              className="tabbed-content-tab"
+              target={`${project.id}${link.url}`}
+            >
+              {link.label}
+              {' '}
+              <i className="fa fa-external-link fa-fw" />
+            </a>
+          )}
+        </span>
+      );
+    }
+    return null;
+  }
+  return null;
+}
+
+function SocialLinks({ project }) {
+  if (project.urls) {
+    const socialLinks = project.urls.filter(url => url.path);
+
+    if (socialLinks && (socialLinks.length > 0)) {
+      return (
+        <span>
+          {socialLinks.map((link) => {
+            let icon = 'external-link';
+            if (Object.keys(SOCIAL_ICONS).indexOf(link.site) !== -1) {
+              icon = SOCIAL_ICONS[link.site];
+            }
+            return (
+              <a
+                key={link.url}
+                href={link.url}
+                className="tabbed-content-tab social-icon"
+                target={`${project.id}${link.url}`}
+              >
+                <i className={`fa fa-${icon} fa-fw fa-2x`} />
+              </a>);
+          })}
+        </span>);
+    }
+    return null;
+  }
+  return null;
+}
+
 const ProjectNavbar = ({
   loading,
   project,
@@ -201,54 +256,6 @@ const ProjectNavbar = ({
     if (context && context.geordi) {
       return context.geordi.makeHandler('project-menu');
     }
-  };
-
-  const renderProjectLinks = (urls) => {
-    const sortedUrls = partition(urls, (url => !url.path));
-    const joinedSortedUrls = sortedUrls[0].concat(sortedUrls[1]);
-    return (
-      joinedSortedUrls.map(link => {
-        let label = '';
-        let iconForLabel;
-        if (!link.label) {
-          Object.keys(SOCIAL_ICONS).forEach(root => {
-            const icon = SOCIAL_ICONS[root];
-            if (link.url.indexOf(root) !== -1) {
-              iconForLabel = icon;
-              return iconForLabel;
-            }
-          });
-          label = <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />;
-          return (
-            <a
-              key={link.url}
-              href={link.url}
-              className={classnames({
-                'tabbed-content-tab': true,
-                'social-icon': iconForLabel !== null
-              })}
-              target={`${project.id}${link.url}`}
-            >
-              {label}
-            </a>
-          );
-        }
-        label = <i className={`fa fa-${iconForLabel} fa-fw fa-2x`} />;
-        return (
-          <a
-            key={link.url}
-            href={link.url}
-            className={classnames({
-              'tabbed-content-tab': true,
-              'social-icon': iconForLabel !== null
-            })}
-            target={`${project.id}${link.url}`}
-          >
-            {link.label}
-          </a>
-        );
-      })
-    );
   };
 
   return (
@@ -314,8 +321,12 @@ const ProjectNavbar = ({
       <AdminTab
         project={project}
       />
-
-      {renderProjectLinks(project.urls)}
+      <ExternalLinks
+        project={project}
+      />
+      <SocialLinks
+        project={project}
+      />
     </nav>
   );
 };
