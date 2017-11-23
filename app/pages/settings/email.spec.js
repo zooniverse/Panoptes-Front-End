@@ -5,60 +5,12 @@ import talkClient from 'panoptes-client/lib/talk-client';
 import EmailSettings from './email';
 
 const subscriptionPreferences = [
-  {
-    id: 1,
-    category: 'participating_discussions',
-    email_digest: 'daily',
-    update(changes) {
-      subscriptionPreferences[0] = Object.assign(subscriptionPreferences[0], changes);
-      return { save: () => null };
-    }
-  },
-  {
-    id: 2,
-    category: 'followed_discussions',
-    email_digest: 'daily',
-    update(changes) {
-      subscriptionPreferences[1] = Object.assign(subscriptionPreferences[1], changes);
-      return { save: () => null };
-    }
-  },
-  {
-    id: 3,
-    category: 'mentions',
-    email_digest: 'immediate',
-    update(changes) {
-      subscriptionPreferences[2] = Object.assign(subscriptionPreferences[2], changes);
-      return { save: () => null };
-    }
-  },
-  {
-    id: 4,
-    category: 'group_mentions',
-    email_digest: 'immediate',
-    update(changes) {
-      subscriptionPreferences[3] = Object.assign(subscriptionPreferences[3], changes);
-      return { save: () => null };
-    }
-  },
-  {
-    id: 5,
-    category: 'messages',
-    email_digest: 'never',
-    update(changes) {
-      subscriptionPreferences[4] = Object.assign(subscriptionPreferences[4], changes);
-      return { save: () => null };
-    }
-  },
-  {
-    id: 6,
-    category: 'started_discussions',
-    email_digest: 'weekly',
-    update(changes) {
-      subscriptionPreferences[5] = Object.assign(subscriptionPreferences[5], changes);
-      return { save: () => null };
-    }
-  }
+  talkClient.type('subscription_preferences').create({ category: 'participating_discussions', email_digest: 'immediately' }),
+  talkClient.type('subscription_preferences').create({ category: 'followed_discussions', email_digest: 'daily' }),
+  talkClient.type('subscription_preferences').create({ category: 'mentions', email_digest: 'immediate' }),
+  talkClient.type('subscription_preferences').create({ category: 'group_mentions', email_digest: 'immediate' }),
+  talkClient.type('subscription_preferences').create({ category: 'messages', email_digest: 'daily' }),
+  talkClient.type('subscription_preferences').create({ category: 'started_discussions', email_digest: 'weekly' })
 ];
 
 talkClient.type = () => {
@@ -168,18 +120,11 @@ describe('EmailSettings', () => {
   });
 
   describe('Talk email preferences', () => {
-    let talkPreferences;
 
-    beforeEach(() => {
-      talkPreferences = wrapper.update().find('table').first().find('tbody tr');
-    });
-
-    it('lists Talk preferences correctly', () => {
-      talkPreferences.forEach((preference, i) => {
-        const subscriptionPreference = subscriptionPreferences[i];
-        const selector = `input[name="${subscriptionPreference.category}"][value="${subscriptionPreference.email_digest}"]`;
-        const input = preference.find(selector);
-        assert.equal(input.prop('checked'), true);
+    subscriptionPreferences.forEach((preference) => {
+      it(`lists ${preference.category} preferences correctly`, () => {
+        const selector = `input[name="${preference.category}"][value="${preference.email_digest}"]`;
+        assert.equal(wrapper.find(selector).prop('checked'), true);
       });
     });
 
