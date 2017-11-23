@@ -5,12 +5,12 @@ import talkClient from 'panoptes-client/lib/talk-client';
 import EmailSettings from './email';
 
 const subscriptionPreferences = [
-  talkClient.type('subscription_preferences').create({ category: 'participating_discussions', email_digest: 'immediately' }),
-  talkClient.type('subscription_preferences').create({ category: 'followed_discussions', email_digest: 'daily' }),
-  talkClient.type('subscription_preferences').create({ category: 'mentions', email_digest: 'immediate' }),
-  talkClient.type('subscription_preferences').create({ category: 'group_mentions', email_digest: 'immediate' }),
-  talkClient.type('subscription_preferences').create({ category: 'messages', email_digest: 'daily' }),
-  talkClient.type('subscription_preferences').create({ category: 'started_discussions', email_digest: 'weekly' })
+  talkClient.type('subscription_preferences').create({ id: 0, category: 'participating_discussions', email_digest: 'immediate' }),
+  talkClient.type('subscription_preferences').create({ id: 1, category: 'followed_discussions', email_digest: 'daily' }),
+  talkClient.type('subscription_preferences').create({ id: 2, category: 'mentions', email_digest: 'immediate' }),
+  talkClient.type('subscription_preferences').create({ id: 3, category: 'group_mentions', email_digest: 'immediate' }),
+  talkClient.type('subscription_preferences').create({ id: 4, category: 'messages', email_digest: 'daily' }),
+  talkClient.type('subscription_preferences').create({ id: 5, category: 'started_discussions', email_digest: 'weekly' })
 ];
 
 talkClient.type = () => {
@@ -121,7 +121,7 @@ describe('EmailSettings', () => {
 
   describe('Talk email preferences', () => {
 
-    subscriptionPreferences.forEach((preference) => {
+    subscriptionPreferences.forEach((preference, i) => {
       it(`lists ${preference.category} preferences correctly`, () => {
         const selector = `input[name="${preference.category}"][value="${preference.email_digest}"]`;
         assert.equal(wrapper.find(selector).prop('checked'), true);
