@@ -35,6 +35,7 @@ React = require 'react'
 `import NotFoundPage from './pages/not-found';`
 `import ResetPasswordPage from './pages/reset-password/reset-password';`
 `import Recents from './pages/profile/recents';`
+`import CustomiseProfile from './pages/settings/profile';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -97,7 +98,7 @@ module.exports =
 
     <Route path="settings" component={require './pages/settings'}>
       <IndexRoute component={require './pages/settings/account'} />
-      <Route path="profile" component={require './pages/settings/profile' } />
+      <Route path="profile" component={CustomiseProfile} />
       <Route path="email" component={require './pages/settings/email' } />
     </Route>
 
