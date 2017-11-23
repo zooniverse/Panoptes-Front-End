@@ -98,7 +98,7 @@ describe('EmailSettings', () => {
 
   it('shows global email preference correctly', () => {
     const projectEmail = wrapper.find('input[name="global_email_communication"]');
-    assert.equal(projectEmail.prop('checked'), user.project_email_communication);
+    assert.equal(projectEmail.prop('checked'), user.global_email_communication);
   });
 
   it('shows project email preference correctly', () => {
