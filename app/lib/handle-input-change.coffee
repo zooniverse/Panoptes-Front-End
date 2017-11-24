@@ -11,7 +11,7 @@ module.exports = (e) ->
 
   value = e.target[valueProperty]
 
-  if e.target.dataset.jsonValue
+  if e.target.dataset?.jsonValue
     value = JSON.parse value
 
   changes = {}
