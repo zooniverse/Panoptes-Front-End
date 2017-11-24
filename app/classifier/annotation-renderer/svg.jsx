@@ -161,7 +161,7 @@ export default class SVGRenderer extends React.Component {
 
     return (
       <div>
-        <div className="subject svg-subject">
+        <div className={`subject svg-subject ${this.props.type}`}>
           <svg
             ref={(element) => { if (element) this.svgSubjectArea = element; }}
             viewBox={createdViewBox}

@@ -15,6 +15,7 @@ DefaultRenderer.propTypes = {
 };
 
 const VIEWERS = {
+  audio: SVGRenderer,
   image: SVGRenderer,
   text: TextRenderer
 };
