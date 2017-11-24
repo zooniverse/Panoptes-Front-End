@@ -14,13 +14,12 @@ const subscriptionPreferences = [
   talkClient.type('subscription_preferences').create({ id: 5, category: 'started_discussions', email_digest: 'weekly' })
 ];
 
-talkClient.type = () => {
-  return {
-    get() {
-      return Promise.resolve(subscriptionPreferences);
-    }
-  };
+const fakeRequest = {
+  get() {
+    return Promise.resolve(subscriptionPreferences);
+  }
 };
+talkClient.type = () => fakeRequest;
 
 const projects = [
   apiClient.type('projects').create({ display_name: 'A test project', title: 'A test project' }),
@@ -106,8 +105,7 @@ describe('EmailSettings', () => {
   });
 
   describe('Talk email preferences', () => {
-
-    subscriptionPreferences.forEach((preference, i) => {
+    subscriptionPreferences.forEach((preference) => {
       it(`lists ${preference.category} preferences correctly`, () => {
         const selector = `input[name="${preference.category}"][value="${preference.email_digest}"]`;
         assert.equal(wrapper.find(selector).prop('checked'), true);
