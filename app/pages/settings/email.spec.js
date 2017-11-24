@@ -21,21 +21,22 @@ talkClient.type = () => {
   };
 };
 
-const project = {
-  display_name: 'A test project',
-  title: 'A test project'
-};
+const projects = [
+  {
+    display_name: 'A test project',
+    title: 'A test project'
+  },
+  {
+    display_name: 'Another test project',
+    title: 'Another test project'
+  }
+];
 
-const anotherProject = {
-  display_name: 'Another test project',
-  title: 'Another test project'
-};
-
-const preferences = [
+const projectPreferences = [
   {
     email_communication: true,
     get() {
-      return Promise.resolve(project);
+      return Promise.resolve(projects[0]);
     },
     getMeta() {
       return {};
@@ -44,7 +45,7 @@ const preferences = [
   {
     email_communication: false,
     get() {
-      return Promise.resolve(anotherProject);
+      return Promise.resolve(projects[1]);
     },
     getMeta() {
       return {};
@@ -58,7 +59,7 @@ const user = {
   global_email_communication: true,
   project_email_communication: true,
   get() {
-    return Promise.resolve(preferences);
+    return Promise.resolve(projectPreferences);
   }
 };
 
@@ -88,34 +89,26 @@ describe('EmailSettings', () => {
   });
 
   describe('project listing', () => {
-    let projects;
+    let projectSettings;
 
     beforeEach(() => {
-      projects = wrapper.update().find('table').last().find('tbody tr');
+      projectSettings = wrapper.update().find('table').last().find('tbody tr');
     });
 
     it('lists two projects (plus pagination)', () => {
-      assert.equal(projects.length, 3);
+      assert.equal(projectSettings.length, 3);
     });
 
-    it('shows the first project email input correctly', () => {
-      const email = projects.first().find('td').first();
-      assert.equal(email.find('input').prop('checked'), preferences[0].email_communication);
-    });
+    projects.forEach((project, i) => {
+      it(`shows project ${i} email input correctly`, () => {
+        const email = projectSettings.at(i).find('td').first();
+        assert.equal(email.find('input').prop('checked'), projectPreferences[i].email_communication);
+      });
 
-    it('shows the first project name correctly', () => {
-      const name = projects.first().find('td').last();
-      assert.equal(name.text(), project.display_name);
-    });
-
-    it('shows the second project email input correctly', () => {
-      const email = projects.at(1).find('td').first();
-      assert.equal(email.find('input').prop('checked'), preferences[1].email_communication);
-    });
-
-    it('shows the second project name correctly', () => {
-      const name = projects.at(1).find('td').last();
-      assert.equal(name.text(), anotherProject.display_name);
+      it(`shows project ${i} name correctly`, () => {
+        const name = projectSettings.at(i).find('td').last();
+        assert.equal(name.text(), project.display_name);
+      });
     });
   });
 
