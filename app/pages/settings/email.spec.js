@@ -1,6 +1,7 @@
 import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
+import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import EmailSettings from './email';
 
@@ -22,35 +23,13 @@ talkClient.type = () => {
 };
 
 const projects = [
-  {
-    display_name: 'A test project',
-    title: 'A test project'
-  },
-  {
-    display_name: 'Another test project',
-    title: 'Another test project'
-  }
+  apiClient.type('projects').create({ display_name: 'A test project', title: 'A test project' }),
+  apiClient.type('projects').create({ display_name: 'Another test project', title: 'Another test project' })
 ];
 
 const projectPreferences = [
-  {
-    email_communication: true,
-    get() {
-      return Promise.resolve(projects[0]);
-    },
-    getMeta() {
-      return {};
-    }
-  },
-  {
-    email_communication: false,
-    get() {
-      return Promise.resolve(projects[1]);
-    },
-    getMeta() {
-      return {};
-    }
-  }
+  apiClient.type('project_preferences').create({ email_communication: true, get() { return Promise.resolve(projects[0]); } }),
+  apiClient.type('project_preferences').create({ email_communication: false, get() { return Promise.resolve(projects[1]); } })
 ];
 
 const user = {
@@ -101,8 +80,22 @@ describe('EmailSettings', () => {
 
     projects.forEach((project, i) => {
       it(`shows project ${i} email input correctly`, () => {
-        const email = projectSettings.at(i).find('td').first();
-        assert.equal(email.find('input').prop('checked'), projectPreferences[i].email_communication);
+        const email = projectSettings.at(i).find('input');
+        assert.equal(email.prop('checked'), projectPreferences[i].email_communication);
+      });
+
+      it(`updates project ${i} email settings on change`, () => {
+        const emailPreference = projectPreferences[i].email_communication;
+        const email = projectSettings.at(i).find('input');
+        const fakeEvent = {
+          target: {
+            type: email.prop('type'),
+            name: email.prop('name'),
+            checked: !email.prop('checked')
+          }
+        };
+        email.simulate('change', fakeEvent);
+        assert.equal(projectPreferences[i].email_communication, !emailPreference);
       });
 
       it(`shows project ${i} name correctly`, () => {
