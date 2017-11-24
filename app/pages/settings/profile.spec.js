@@ -1,5 +1,6 @@
 import React from 'react';
 import assert from 'assert';
+import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import CustomiseProfile from './profile';
 
@@ -22,12 +23,17 @@ const user = {
 
 describe('CustomiseProfile', () => {
   let wrapper;
+  let clearMediaSpy;
 
   before(() => {
     wrapper = shallow(<CustomiseProfile user={user} />);
+    clearMediaSpy = sinon.spy(CustomiseProfile.prototype, 'handleMediaClear');
   });
 
-  beforeEach(() => wrapper.update());
+  beforeEach(() => {
+    wrapper.update();
+    clearMediaSpy.reset();
+  });
 
   it('renders the user avatar', () => {
     const avatar = wrapper.find('ImageSelector[src="//zooniverse.org/images/avatar.jpg"]');
@@ -41,11 +47,13 @@ describe('CustomiseProfile', () => {
 
   it('deletes the avatar when Clear Avatar is pressed', () => {
     wrapper.find('button').first().simulate('click');
-    setTimeout(() => assert.equal(wrapper.update().state().avatar, {}));
+    sinon.assert.calledOnce(clearMediaSpy);
+    sinon.assert.calledWith(clearMediaSpy, 'avatar');
   });
 
   it('deletes the profile header when Clear Header is pressed', () => {
     wrapper.find('button').last().simulate('click');
-    setTimeout(() => assert.equal(wrapper.update().state().profile_header, {}));
+    sinon.assert.calledOnce(clearMediaSpy);
+    sinon.assert.calledWith(clearMediaSpy, 'profile_header');
   });
 });
