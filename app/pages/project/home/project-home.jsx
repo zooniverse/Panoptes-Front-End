@@ -20,7 +20,7 @@ const ProjectHomePage = (props) => {
   const renderTalkSubjectsPreview = props.talkSubjects.length > 2;
   return (
     <div className="project-home-page">
-      <div className="project-background" style={{ backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${props.background.src})` }}>
+      <div className="project-page project-background" style={{ backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${props.background.src})` }}>
         <ProjectNavbar {...props} />
 
         {props.projectIsComplete &&
