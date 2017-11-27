@@ -9,6 +9,7 @@ classnames = require 'classnames'
 AutoSave = require '../components/auto-save'
 handleInputChange = require '../lib/handle-input-change'
 alert = require('../lib/alert').default
+confirm = require('../lib/confirm').default
 
 ProjectModalStepEditor = React.createClass
   getDefaultProps: ->
@@ -205,18 +206,10 @@ ProjectModalEditorController = React.createClass
       @deleteProjectModal()
 
   confirmProjectModalDelete: ->
-    alert (resolve) =>
       message = "Are you sure you want to delete this tutorial? This action is irreversible!"
-      successCallback = () => resolve(@handleProjectModalDelete())
+      successCallback = @handleProjectModalDelete
 
-      <div className="confirm-delete-dialog content-container">
-        <p>{message}</p>
-        <div>
-        <button className="minor-button" autoFocus={true} onClick={resolve}>Cancel</button>
-          {' '}
-        <button className="major-button" onClick={successCallback}>Yes</button>
-        </div>
-      </div>
+      confirm(message, successCallback)
 
   handleStepAdd: ->
     @props.projectModal.steps.push
