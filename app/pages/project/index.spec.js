@@ -39,6 +39,14 @@ const resources = {
           id: '2'
         }
       }
+    },
+    {
+      roles: ['tester'],
+      links: {
+        owner: {
+          id: '3'
+        }
+      }
     }
   ]
 };
@@ -112,6 +120,13 @@ describe('ProjectPageController', () => {
 
   it('should load the specified workflow for a collaborator', () => {
     wrapper.setProps({ user: { id: '2' }}).update();
+    controller.getSelectedWorkflow(project, preferences);
+    sinon.assert.calledOnce(workflowSpy);
+    sinon.assert.calledWith(workflowSpy, '6', false);
+  });
+
+  it('should load the specified workflow for a tester', () => {
+    wrapper.setProps({ user: { id: '3' }}).update();
     controller.getSelectedWorkflow(project, preferences);
     sinon.assert.calledOnce(workflowSpy);
     sinon.assert.calledWith(workflowSpy, '6', false);
