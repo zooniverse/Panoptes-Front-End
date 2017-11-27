@@ -124,14 +124,16 @@ describe('ProjectPageController', () => {
     });
 
     it('should load the specified workflow for a collaborator', () => {
-      wrapper.setProps({ user: { id: '2' }}).update();
+      const user = apiClient.type('users').create({ id: '2' });
+      wrapper.setProps({ user }).update();
       controller.getSelectedWorkflow(project, preferences);
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
     });
 
     it('should load the specified workflow for a tester', () => {
-      wrapper.setProps({ user: { id: '3' }}).update();
+      const user = apiClient.type('users').create({ id: '3' });
+      wrapper.setProps({ user }).update();
       controller.getSelectedWorkflow(project, preferences);
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
