@@ -115,7 +115,7 @@ module.exports =
       <IndexRoute component={FilteredProjectsList} />
     </Route>
 
-    <Route path="projects/:owner/:name" component={require './pages/project'}>
+    <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" component={require './pages/project/classify'} />
