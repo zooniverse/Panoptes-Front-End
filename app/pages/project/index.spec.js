@@ -5,8 +5,15 @@ import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import { ProjectPageController } from './';
 
+const params = {
+  owner: 'test',
+  name: 'test'
+};
+
 const location = {
-  query: {}
+  query: {
+    workflow: '6'
+  }
 };
 
 const context = {
@@ -16,12 +23,30 @@ const context = {
 
 const resources = {
   pages: [],
-  project_roles: []
+  project_roles: [
+    {
+      roles: ['owner'],
+      links: {
+        owner: {
+          id: '1'
+        }
+      }
+    },
+    {
+      roles: ['collaborator'],
+      links: {
+        owner: {
+          id: '2'
+        }
+      }
+    }
+  ]
 };
 
 const project = apiClient.type('projects').create({
   id: '1',
   display_name: 'A test project',
+  experimental_tools: [],
   get(type) {
     return Promise.resolve(resources[type]);
   },
@@ -45,8 +70,14 @@ const projectAvatar = apiClient.type('avatars').create({
   id: project.links.avatar.id
 });
 
+const preferences = {
+  preferences: {
+    selected_workflow_id: '6'
+  }
+};
+
 describe('ProjectPageController', () => {
-  const wrapper = shallow(<ProjectPageController project={project} location={location} />, { context });
+  const wrapper = shallow(<ProjectPageController params={params} project={project} location={location} />, { context });
   const controller = wrapper.instance();
   const workflowSpy = sinon.spy(controller, 'getWorkflow');
 
@@ -58,6 +89,7 @@ describe('ProjectPageController', () => {
       background,
       owner,
       pages: resources.pages,
+      preferences: {},
       projectAvatar,
       projectRoles: resources.project_roles
     });
@@ -69,5 +101,19 @@ describe('ProjectPageController', () => {
     const selectedWorkflowID = workflowSpy.getCall(0).args[0];
     sinon.assert.calledOnce(workflowSpy);
     assert.notEqual(project.links.active_workflows.indexOf(selectedWorkflowID), -1);
+  });
+
+  it('should load the specified workflow for the project owner', () => {
+    wrapper.setProps({ user: owner }).update();
+    controller.getSelectedWorkflow(project, preferences);
+    sinon.assert.calledOnce(workflowSpy);
+    sinon.assert.calledWith(workflowSpy, '6', false);
+  });
+
+  it('should load the specified workflow for a collaborator', () => {
+    wrapper.setProps({ user: { id: '2' }}).update();
+    controller.getSelectedWorkflow(project, preferences);
+    sinon.assert.calledOnce(workflowSpy);
+    sinon.assert.calledWith(workflowSpy, '6', false);
   });
 });
