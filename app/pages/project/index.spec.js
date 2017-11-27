@@ -78,11 +78,14 @@ const projectAvatar = apiClient.type('avatars').create({
   id: project.links.avatar.id
 });
 
-const preferences = {
+const preferences = apiClient.type('project_preferences').create({
   preferences: {
     selected_workflow_id: '6'
+  },
+  links: {
+    project: project.id
   }
-};
+});
 
 describe('ProjectPageController', () => {
   const wrapper = shallow(<ProjectPageController params={params} project={project} location={location} />, { context });
