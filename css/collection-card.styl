@@ -5,16 +5,20 @@
   @extends $owned-card
   background: url('/assets/simple-pattern.png') center center repeat
 
+  svg
+    height: 150px
+
   .details
     padding: 1em
     height: 80px
     text-align: left
 
     .name
-      margin-bottom: 1em
+      font-weight: 400
       height: 2.9em
-      line-height: 1.45em
       max-height: 2.9em
+      line-height: 1.45em
+      margin-bottom: 1em
 
       .fa-lock
         margin-left: 0.3em
@@ -23,15 +27,12 @@
       text-transform: uppercase
       margin: 0
       height: 1.5em
-      font-style: normal
+      color: #bababa
+      flex-grow: 1
+      font-size: .8em
 
     .description
       margin: 0.75em 0
-
-  :hover > &,
-  :focus > &
-    .details
-      height: 175px
 
   &__badge
     background: rgba(black, 0.4)

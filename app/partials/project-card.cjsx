@@ -44,7 +44,6 @@ ProjectCard = React.createClass
           <div className="name"><span>{@props.project.display_name}</span></div>
           {<hr /> if @props.landingPage}
           {<div className="description">{@props.project.description}</div> if @props.project.description?}
-          <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"projectsPage.button"} /></button>
           {if @props.landingPage
             <button className="primary-button" type="button">View Project</button>}
         </div>

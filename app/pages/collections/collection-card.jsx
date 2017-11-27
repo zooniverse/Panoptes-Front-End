@@ -55,7 +55,7 @@ export default class CollectionCard extends React.Component {
               {this.props.collection.private ? <i className="fa fa-lock" /> : null}
             </div>
             <p className="description">
-              <span>{this.props.collection.description}</span>
+              {this.props.collection.description}
             </p>
           </div>
         </div>

@@ -133,6 +133,10 @@ const CollectionPage = React.createClass({
             </Link>
           </nav>
         </div>
+        {this.props.collection.description &&
+          <p className="collection__description">
+            {this.props.collection.description}
+          </p>}
         {React.cloneElement(this.props.children, {
           canCollaborate: this.state.canCollaborate,
           user: this.props.user,

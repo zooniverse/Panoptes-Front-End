@@ -161,7 +161,6 @@ $owned-card
   border: solid thin #ebebeb
   display: inline-block
   margin: 0 0.5em 1em
-  max-height: 325px
   max-width: 220px
   overflow: hidden
   text-align: left
@@ -169,47 +168,31 @@ $owned-card
   height: 270px
   position: relative
 
-  svg
-    height: 150px
-
   .details
     background: BACKGROUND
     box-sizing: border-box
     color: FOREGROUND
     display: flex
     flex-direction: column
-    padding: 20px
     bottom: 0
     left: 0
     right: 0
     position: absolute
     transition: height 0.5s ease
 
+  :hover > &,
+  :focus > &
+    .details
+      height: 175px
+
   .name
     color: #000000
-    font-weight: 400
 
   .description
     color: COPY
     font-size: 0.9em
     height: 150px
     overflow: hidden
-
-  .type, .owner
-    color: #bababa
-    flex-grow: 1
-    font-size: .8em
-    font-style: italic
-
-  .card-button
-    background: TEAL_MID
-    min-height: 35px
-    padding: 0.6em
-    position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
-    width: 180px
-
-    &:hover
-      background: lighten(TEAL_MID, 20%)
 
 .color-label
   display: inline

@@ -77,9 +77,8 @@ class CollectionsCreateForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.onSubmit} className="collections-create-form">
-        {this.props.project ?
-          <span>This collection will be linked to {this.props.project.display_name}</span> :
-          <span>This collection will not be linked to a project</span>}
+        {this.props.project &&
+          <span>This collection will be linked to {this.props.project.display_name}</span>}
         <div className="form-help error">
           {this.state.error &&
               this.renderError()}
@@ -94,7 +93,7 @@ class CollectionsCreateForm extends React.Component {
           className="collection-create-form__input--description"
           onChange={this.handleDescriptionInputChange}
           ref={(node) => { this.description = node; }}
-          placeholder="Collection Description (less than 300 characters)"
+          placeholder="Collection Description (300 characters or less)"
         />
         <CharLimit
           limit={300}
