@@ -4,7 +4,7 @@ Translate = require 'react-translate-component'
 {Markdown} = require 'markdownz'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 PotentialFieldGuide = require './potential-field-guide'
-`import ProjectNavbar from './project-navbar';`
+ProjectNavbar = require('./project-navbar').default
 
 AVATAR_SIZE = 100
 
