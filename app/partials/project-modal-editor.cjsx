@@ -206,12 +206,15 @@ ProjectModalEditorController = React.createClass
 
   confirmProjectModalDelete: ->
     alert (resolve) =>
+      message = "Are you sure you want to delete this tutorial? This action is irreversible!"
+      successCallback = () => resolve(@handleProjectModalDelete())
+
       <div className="confirm-delete-dialog content-container">
-        <p>Are you sure you want to delete this tutorial? This action is irreversible!</p>
+        <p>{message}</p>
         <div>
         <button className="minor-button" autoFocus={true} onClick={resolve}>Cancel</button>
           {' '}
-        <button className="major-button" onClick={() => @handleProjectModalDelete(); resolve();}>Yes</button>
+        <button className="major-button" onClick={successCallback}>Yes</button>
         </div>
       </div>
 
