@@ -111,24 +111,30 @@ describe('ProjectPageController', () => {
     assert.notEqual(project.links.active_workflows.indexOf(selectedWorkflowID), -1);
   });
 
-  it('should load the specified workflow for the project owner', () => {
-    wrapper.setProps({ user: owner }).update();
-    controller.getSelectedWorkflow(project, preferences);
-    sinon.assert.calledOnce(workflowSpy);
-    sinon.assert.calledWith(workflowSpy, '6', false);
-  });
+  describe('with a logged-in user', () => {
+    beforeEach(() => {
+      controller.setupSplits = () => null;
+    });
 
-  it('should load the specified workflow for a collaborator', () => {
-    wrapper.setProps({ user: { id: '2' }}).update();
-    controller.getSelectedWorkflow(project, preferences);
-    sinon.assert.calledOnce(workflowSpy);
-    sinon.assert.calledWith(workflowSpy, '6', false);
-  });
+    it('should load the specified workflow for the project owner', () => {
+      wrapper.setProps({ user: owner }).update();
+      controller.getSelectedWorkflow(project, preferences);
+      sinon.assert.calledOnce(workflowSpy);
+      sinon.assert.calledWith(workflowSpy, '6', false);
+    });
 
-  it('should load the specified workflow for a tester', () => {
-    wrapper.setProps({ user: { id: '3' }}).update();
-    controller.getSelectedWorkflow(project, preferences);
-    sinon.assert.calledOnce(workflowSpy);
-    sinon.assert.calledWith(workflowSpy, '6', false);
+    it('should load the specified workflow for a collaborator', () => {
+      wrapper.setProps({ user: { id: '2' }}).update();
+      controller.getSelectedWorkflow(project, preferences);
+      sinon.assert.calledOnce(workflowSpy);
+      sinon.assert.calledWith(workflowSpy, '6', false);
+    });
+
+    it('should load the specified workflow for a tester', () => {
+      wrapper.setProps({ user: { id: '3' }}).update();
+      controller.getSelectedWorkflow(project, preferences);
+      sinon.assert.calledOnce(workflowSpy);
+      sinon.assert.calledWith(workflowSpy, '6', false);
+    });
   });
 });
