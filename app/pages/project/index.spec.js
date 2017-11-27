@@ -84,6 +84,9 @@ const preferences = apiClient.type('project_preferences').create({
   },
   links: {
     project: project.id
+  },
+  save() {
+    Promise.resolve(preferences)
   }
 });
 
@@ -120,7 +123,8 @@ describe('ProjectPageController', () => {
     });
 
     it('should load the specified workflow for the project owner', () => {
-      wrapper.setProps({ user: owner }).update();
+      wrapper.setProps({ user: owner });
+      wrapper.setState({ preferences });
       controller.getSelectedWorkflow(project, preferences);
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
@@ -128,7 +132,8 @@ describe('ProjectPageController', () => {
 
     it('should load the specified workflow for a collaborator', () => {
       const user = apiClient.type('users').create({ id: '2' });
-      wrapper.setProps({ user }).update();
+      wrapper.setProps({ user });
+      wrapper.setState({ preferences });
       controller.getSelectedWorkflow(project, preferences);
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
@@ -136,7 +141,8 @@ describe('ProjectPageController', () => {
 
     it('should load the specified workflow for a tester', () => {
       const user = apiClient.type('users').create({ id: '3' });
-      wrapper.setProps({ user }).update();
+      wrapper.setProps({ user });
+      wrapper.setState({ preferences });
       controller.getSelectedWorkflow(project, preferences);
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
