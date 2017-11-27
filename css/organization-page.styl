@@ -21,6 +21,30 @@
     color: TEAL_DARK
     margin-left: 2em
 
+  &__categories
+    display: flex
+    justify-content: center
+
+  &__category-button
+    background: white
+    border: 1px #EBEBEB
+    border-radius: 0
+    color: TEAL_MID
+    font-weight: bold
+    margin: .8em .5em
+    width: 150px
+
+    &:focus,
+    &:hover
+      background: TEAL_DARK
+      border: 1px TEAL_DARK
+      color: white
+
+    &--active
+      background: TEAL_DARK
+      border: 1px TEAL_DARK
+      color: white
+
 .organization-hero
   background-size: cover
   min-height: 400px

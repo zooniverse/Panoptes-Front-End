@@ -63,6 +63,20 @@ class OrganizationPage extends React.Component {
     this.setState({ readMore: !this.state.readMore });
   }
 
+  handleCategoryChange(category) {
+    this.props.onChangeQuery({ category });
+  }
+
+  calculateClasses(category) {
+    const list = classnames(
+      'standard-button',
+      'organization-page__category-button',
+      { 'organization-page__category-button--active':
+        (category === this.props.category) || (!this.props.category && (category === 'All')) }
+    );
+    return list;
+  }
+
   render() {
     const [aboutPage] = this.props.organizationPages.filter(page => page.url_key === 'about');
     let rearrangedLinks = [];
@@ -110,6 +124,23 @@ class OrganizationPage extends React.Component {
               />
               <Translate content="organization.home.viewToggle" />
             </label>}
+          {this.props.organization.categories && this.props.organization.categories.length > 0 &&
+            <div className="organization-page__categories">
+              <button
+                className={this.calculateClasses('All')}
+                onClick={this.handleCategoryChange.bind(this, '')}
+              >
+                All
+              </button>
+              {this.props.organization.categories.map(category =>
+                <button
+                  key={category}
+                  className={this.calculateClasses(category)}
+                  onClick={this.handleCategoryChange.bind(this, category)}
+                >
+                  {category}
+                </button>)}
+            </div>}
           <OrganizationProjectCards
             errorFetchingProjects={this.props.errorFetchingProjects}
             fetchingProjects={this.props.fetchingProjects}
@@ -226,10 +257,12 @@ class OrganizationPage extends React.Component {
 }
 
 OrganizationPage.defaultProps = {
+  category: false,
   collaborator: false,
   collaboratorView: true,
   errorFetchingProjects: {},
   fetchingProjects: false,
+  onChangeQuery: () => {},
   organization: {},
   organizationAvatar: {},
   organizationBackground: {},
@@ -239,13 +272,21 @@ OrganizationPage.defaultProps = {
 };
 
 OrganizationPage.propTypes = {
+  category: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    React.PropTypes.string
+  ]),
   collaborator: React.PropTypes.bool,
   collaboratorView: React.PropTypes.bool,
   errorFetchingProjects: React.PropTypes.shape({
     message: React.PropTypes.string
   }),
   fetchingProjects: React.PropTypes.bool,
+  onChangeQuery: React.PropTypes.func,
   organization: React.PropTypes.shape({
+    categories: React.PropTypes.arrayOf(
+      React.PropTypes.string
+    ),
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,
