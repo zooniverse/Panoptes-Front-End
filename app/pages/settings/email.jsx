@@ -71,7 +71,7 @@ class EmailSettingsPage extends React.Component {
       this.setState();
     } else {
       preference.update({
-        email_communication: !!event.target.value
+        email_communication: !!event.target.checked
       })
       .save();
       this.setState();
