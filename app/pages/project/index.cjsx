@@ -121,7 +121,7 @@ ProjectPageController = React.createClass
               .catch((error) => [])
               .then((response) => if response?.display_name then response else null)
           else
-            awaitOrganization = null
+            awaitOrganization = Promise.resolve(null)
 
           awaitOwner = apiClient.type('users').get(project.links.owner.id).catch((error) => console.error(error))
 
