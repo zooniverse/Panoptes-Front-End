@@ -60,20 +60,28 @@ class EmailSettingsPage extends React.Component {
     });
   }
 
-  handleProjectPreferenceChange(preference, event) {
-    preference.update({
+  handleProjectPreferenceChange(index, event) {
+    const { projectPreferences } = this.state;
+    projectPreferences[index].update({
       email_communication: !!event.target.checked
     })
     .save()
-    .then(updatedPref => this.setState(updatedPref));
+    .then((updatedPref) => {
+      projectPreferences[index] = updatedPref;
+      this.setState({ projectPreferences });
+    });
   }
 
-  handleTalkPreferenceChange(preference, event) {
-    preference.update({
+  handleTalkPreferenceChange(index, event) {
+    const { talkPreferences } = this.state;
+    talkPreferences[index].update({
       email_digest: event.target.value
     })
     .save()
-    .then(updatedPref => this.setState(updatedPref));
+    .then((updatedPref) => {
+      talkPreferences[index] = updatedPref;
+      this.setState({ talkPreferences });
+    });
   }
 
   nameOfPreference(preference) {
@@ -99,7 +107,7 @@ class EmailSettingsPage extends React.Component {
                 type="checkbox"
                 name="email_communication"
                 checked={projectPreference.email_communication}
-                onChange={this.handleProjectPreferenceChange.bind(this, projectPreference)}
+                onChange={this.handleProjectPreferenceChange.bind(this, i)}
               />
             </td>
             <td>
@@ -136,15 +144,15 @@ class EmailSettingsPage extends React.Component {
     return (
       (sortedPrefs.length > 0) ?
         <tbody>
-          {sortedPrefs.map((pref) => {
+          {sortedPrefs.map((pref, i) => {
             if (pref.category !== 'system' && pref.category !== 'moderation_reports') {
               return (
                 <tr key={pref.id}>
                   <td>{this.nameOfPreference(pref)}</td>
-                  {this.talkPreferenceOption(pref, 'immediate')}
-                  {this.talkPreferenceOption(pref, 'daily')}
-                  {this.talkPreferenceOption(pref, 'weekly')}
-                  {this.talkPreferenceOption(pref, 'never')}
+                  {this.talkPreferenceOption(pref, i, 'immediate')}
+                  {this.talkPreferenceOption(pref, i, 'daily')}
+                  {this.talkPreferenceOption(pref, i, 'weekly')}
+                  {this.talkPreferenceOption(pref, i, 'never')}
                 </tr>
               );
             }
@@ -154,7 +162,7 @@ class EmailSettingsPage extends React.Component {
     );
   }
 
-  talkPreferenceOption(preference, digest) {
+  talkPreferenceOption(preference, index, digest) {
     return (
       <td className="option">
         <input
@@ -162,7 +170,7 @@ class EmailSettingsPage extends React.Component {
           name={preference.category}
           value={digest}
           checked={preference.email_digest === digest}
-          onChange={this.handleTalkPreferenceChange.bind(this, preference)}
+          onChange={this.handleTalkPreferenceChange.bind(this, index)}
         />
       </td>
     );
