@@ -77,23 +77,15 @@ class EmailSettingsPage extends React.Component {
   }
 
   nameOfPreference(preference) {
-    switch (preference.category) {
-      case 'participating_discussions':
-        return 'When discussions I\'m participating in are updated';
-      case 'followed_discussions':
-        return 'When discussions I\'m following are updated';
-      case 'mentions':
-        return 'When I\'m mentioned';
-      case 'group_mentions':
-        return 'When I\'m mentioned by group (this.admins, this.team, etc)';
-      case 'messages':
-        return 'When I receive a private message';
-      case 'started_discussions':
-        return 'When a discussion is started in a board I\'m following';
-      default:
-        return ' ';
-
-    }
+    const options = {
+      participating_discussions: 'When discussions I\'m participating in are updated',
+      followed_discussions: 'When discussions I\'m following are updated',
+      mentions: 'When I\'m mentioned',
+      group_mentions: 'When I\'m mentioned by group (this.admins, this.team, etc)',
+      messages: 'When I receive a private message',
+      started_discussions: 'When a discussion is started in a board I\'m following'
+    };
+    return options[preference.category];
   }
 
   renderProjectPreferences() {
