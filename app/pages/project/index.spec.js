@@ -11,9 +11,7 @@ const params = {
 };
 
 const location = {
-  query: {
-    workflow: '6'
-  }
+  query: {}
 };
 
 const context = {
@@ -79,14 +77,12 @@ const projectAvatar = apiClient.type('avatars').create({
 });
 
 const preferences = apiClient.type('project_preferences').create({
-  preferences: {
-    selected_workflow_id: '6'
-  },
+  preferences: {},
   links: {
     project: project.id
   },
   save() {
-    Promise.resolve(preferences)
+    Promise.resolve(preferences);
   }
 });
 
@@ -120,6 +116,7 @@ describe('ProjectPageController', () => {
   describe('with a logged-in user', () => {
     beforeEach(() => {
       controller.setupSplits = () => null;
+      location.query.workflow = '6';
     });
 
     it('should load the specified workflow for the project owner', () => {
@@ -146,6 +143,31 @@ describe('ProjectPageController', () => {
       controller.getSelectedWorkflow(project, preferences);
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
+    });
+  });
+
+  describe('with a workflow saved in preferences', () => {
+    beforeEach(() => {
+      location.query = {};
+      preferences.update({ preferences: {}});
+      const user = apiClient.type('users').create({ id: '4' });
+      wrapper.setProps({ user });
+    });
+
+    it('should try to load the stored workflow', () => {
+      preferences.update({ 'preferences.selected_workflow': '4' });
+      wrapper.setState({ preferences });
+      controller.getSelectedWorkflow(project, preferences);
+      sinon.assert.calledOnce(workflowSpy);
+      sinon.assert.calledWith(workflowSpy, '4', true);
+    });
+
+    it('should try to load a stored project workflow', () => {
+      preferences.update({ 'settings.workflow_id': '2' });
+      wrapper.setState({ preferences });
+      controller.getSelectedWorkflow(project, preferences);
+      sinon.assert.calledOnce(workflowSpy);
+      sinon.assert.calledWith(workflowSpy, '2', true);
     });
   });
 });
