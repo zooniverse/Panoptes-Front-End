@@ -7,17 +7,26 @@ import handleInputChange from '../../lib/handle-input-change';
 class EmailSettingsPage extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = {
       page: 1,
       projects: [],
-      projectPreferences: []
+      projectPreferences: [],
+      talkPreferences: []
     };
     this.handlePreferenceChange = this.handlePreferenceChange.bind(this);
     this.nameOfPreference = this.nameOfPreference.bind(this);
     this.sortPreferences = this.sortPreferences.bind(this);
     this.talkPreferenceOption = this.talkPreferenceOption.bind(this);
     this.getProjectForPreferences(props.user);
+  }
+
+  componentDidMount() {
+    talkClient.type('subscription_preferences').get()
+    .then((preferences) => {
+      this.setState({
+        talkPreferences: preferences
+      });
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -38,7 +47,7 @@ class EmailSettingsPage extends React.Component {
           id: projectIDs
         })
         .then((projects) => {
-          return this.setState({
+          this.setState({
             meta: preferences[0].getMeta(),
             projectPreferences: preferences,
             projects
@@ -51,14 +60,8 @@ class EmailSettingsPage extends React.Component {
     });
   }
 
-  handleProjectEmailChange(projectPreference, args) {
-    handleInputChange.apply(projectPreference, args);
-    projectPreference.save();
-    this.setState();
-  }
-
   handlePreferenceChange(preference, event) {
-    return preference.update({
+    preference.update({
       email_digest: event.target.value
     })
     .save();
@@ -95,7 +98,7 @@ class EmailSettingsPage extends React.Component {
     return projectPreferences.map((projectPreference, i) => {
       if (projects[i]) {
         return (
-          <tr key={i}>
+          <tr key={projectPreference.id}>
             <td>
               <input
                 type="checkbox"
@@ -107,37 +110,59 @@ class EmailSettingsPage extends React.Component {
             <td>
               {projects[i].display_name}
             </td>
-            <td colSpan="2">
-              {this.renderPagination()}
-            </td>
           </tr>
         );
       }
     });
   }
 
-  renderTalkPreferences() {
-    return talkClient.type('subscription_preferences').get()
-      .then((preferences) => {
-        const sortedPrefs = this.sortPreferences(preferences);
-        (preferences.length > 0) ?
-          <tbody>
-            {sortedPrefs.map((pref) => {
-              if (pref.category !== 'system' && pref.category !== 'moderation_reports') {
-                return (
-                  <tr key={pref.id}>
-                    <td>{this.nameOfPreference(pref)}</td>
-                    {this.talkPreferenceOption(pref, 'immediate')}
-                    {this.talkPreferenceOption(pref, 'daily')}
-                    {this.talkPreferenceOption(pref, 'weekly')}
-                    {this.talkPreferenceOption(pref, 'never')}
-                  </tr>
-                );
-              }
+  handleProjectEmailChange(projectPreference, args) {
+    handleInputChange.apply(projectPreference, args);
+    projectPreference.save();
+    this.setState();
+  }
+
+  renderPagination() {
+    const { meta, page } = this.state;
+    if (meta) {
+      return (
+        <nav className="pagination">{'Page'}
+          <select
+            value={page}
+            disabled={meta.page_count < 2}
+            onChange={e => this.setState({ page: e.target.value })}
+          >
+            {Array.from(Array(meta.page_count), (p, i) => {
+              return <option key={i} value={i + 1}>{i + 1}</option>;
             })}
-          </tbody> :
-          <tbody />;
-      });
+          </select> {' of '} {meta.page_count || '?'}
+        </nav>
+      );
+    }
+  }
+
+  renderTalkPreferences() {
+    const { talkPreferences } = this.state;
+    const sortedPrefs = this.sortPreferences(talkPreferences);
+    return (
+      (sortedPrefs.length > 0) ?
+        <tbody>
+          {sortedPrefs.map((pref) => {
+            if (pref.category !== 'system' && pref.category !== 'moderation_reports') {
+              return (
+                <tr key={pref.id}>
+                  <td>{this.nameOfPreference(pref)}</td>
+                  {this.talkPreferenceOption(pref, 'immediate')}
+                  {this.talkPreferenceOption(pref, 'daily')}
+                  {this.talkPreferenceOption(pref, 'weekly')}
+                  {this.talkPreferenceOption(pref, 'never')}
+                </tr>
+              );
+            }
+          })}
+        </tbody> :
+        <tbody />
+    );
   }
 
   talkPreferenceOption(preference, digest) {
@@ -152,25 +177,6 @@ class EmailSettingsPage extends React.Component {
         />
       </td>
     );
-  }
-
-  renderPagination() {
-    if (this.state.meta) {
-      return (
-        <nav className="pagination">{'Page'}
-          {(this.state.meta.page_count) ?
-            <select
-              value={this.state.page}
-              disabled={this.state.meta.page_count < 2}
-              onChange={e => this.setState({ page: e.target.value })}
-            >
-              {[this.state.meta.page_count].forEach(p => <option key={p} value={p}>{p}</option>)}
-            </select> :
-            '?'
-          }
-        </nav>
-      );
-    }
   }
 
   sortPreferences(preferences) {
@@ -269,6 +275,11 @@ class EmailSettingsPage extends React.Component {
           </thead>
           <tbody>
             {this.renderProjectPreferences(this.state.projectPreferences)}
+            <tr>
+              <td colSpan="2">
+                {this.renderPagination()}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
