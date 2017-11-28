@@ -24,6 +24,7 @@ export default {
       adminPage: 'Admin page'
     },
     home: {
+      organization: 'Organization',
       researcher: 'Words from the researcher',
       about: 'About %(title)s',
       metadata: {

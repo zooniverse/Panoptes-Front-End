@@ -177,6 +177,21 @@ function LabTab({ project, projectRoles, user }) {
   );
 }
 
+function OrgTab({ organization }) {
+  return (
+    organization ?
+      <Link
+        to={`/organizations/${organization.slug}`}
+        className="tabbed-content-tab"
+      >
+        {organization.display_name}
+        {' '}
+        <i className="fa fa-external-link fa-fw" />
+      </Link> :
+      null
+  );
+}
+
 function ExternalLinks({ project }) {
   if (project.urls) {
     const externalLinks = project.urls.filter(url => !url.path);
@@ -235,6 +250,7 @@ function SocialLinks({ project }) {
 
 const ProjectNavbar = ({
   loading,
+  organization,
   project,
   projectAvatar,
   projectRoles,
@@ -321,6 +337,9 @@ const ProjectNavbar = ({
       <AdminTab
         project={project}
       />
+      <OrgTab
+        organization={organization}
+      />
       <ExternalLinks
         project={project}
       />
@@ -333,6 +352,7 @@ const ProjectNavbar = ({
 
 ProjectNavbar.defaultProps = {
   loading: false,
+  organization: null,
   project: {
     id: '',
     display_name: '',
@@ -356,6 +376,10 @@ ProjectNavbar.contextTypes = {
 
 ProjectNavbar.propTypes = {
   loading: React.PropTypes.bool,
+  organization: React.PropTypes.shape({
+    display_name: React.PropTypes.string,
+    slug: React.PropTypes.string
+  }),
   project: React.PropTypes.shape({
     id: React.PropTypes.string,
     display_name: React.PropTypes.string,
