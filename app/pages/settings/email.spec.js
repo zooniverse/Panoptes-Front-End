@@ -22,13 +22,13 @@ const fakeRequest = {
 talkClient.type = () => fakeRequest;
 
 const projects = [
-  apiClient.type('projects').create({ display_name: 'A test project', title: 'A test project' }),
-  apiClient.type('projects').create({ display_name: 'Another test project', title: 'Another test project' })
+  apiClient.type('projects').create({ id: 'a', display_name: 'A test project', title: 'A test project' }),
+  apiClient.type('projects').create({ id: 'b', display_name: 'Another test project', title: 'Another test project' })
 ];
 
 const projectPreferences = [
-  apiClient.type('project_preferences').create({ email_communication: true, get() { return Promise.resolve(projects[0]); } }),
-  apiClient.type('project_preferences').create({ email_communication: false, get() { return Promise.resolve(projects[1]); } })
+  apiClient.type('project_preferences').create({ email_communication: true, links: { project: 'a' } }),
+  apiClient.type('project_preferences').create({ email_communication: false, links: { project: 'b' } })
 ];
 
 const user = {
@@ -68,9 +68,14 @@ describe('EmailSettings', () => {
 
   describe('project listing', () => {
     let projectSettings;
+    
+    before(() => {
+      wrapper.setState({ meta: {}, projectPreferences, projects });
+      wrapper.update();
+    });
 
     beforeEach(() => {
-      projectSettings = wrapper.update().find('table').last().find('tbody tr');
+      projectSettings = wrapper.find('table').last().find('tbody tr');
     });
 
     it('lists two projects (plus pagination)', () => {
