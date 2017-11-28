@@ -99,12 +99,14 @@ export default class ProjectHomeContainer extends React.Component {
         project={this.props.project}
         projectAvatar={this.props.projectAvatar}
         projectIsComplete={this.props.projectIsComplete}
+        projectRoles={this.props.projectRoles}
         researcherAvatar={this.state.researcherAvatar}
         showWorkflowButtons={this.state.showWorkflowButtons}
         splits={this.props.splits}
         talkSubjects={this.state.talkSubjects}
         translation={this.props.translation}
         workflow={this.props.workflow}
+        user={this.props.user}
       />
     );
   }
@@ -126,6 +128,7 @@ ProjectHomeContainer.defaultProps = {
     src: ''
   },
   projectIsComplete: false,
+  projectRoles: [],
   splits: {},
   translation: {
     description: '',
@@ -133,7 +136,8 @@ ProjectHomeContainer.defaultProps = {
     introduction: '',
     researcher_quote: '',
     title: ''
-  }
+  },
+  user: null
 };
 
 ProjectHomeContainer.propTypes = {
@@ -155,6 +159,7 @@ ProjectHomeContainer.propTypes = {
     researcher_quote: React.PropTypes.string
   }).isRequired,
   projectIsComplete: React.PropTypes.bool.isRequired,
+  projectRoles: React.PropTypes.array,
   splits: React.PropTypes.object,
   translation: React.PropTypes.shape({
     description: React.PropTypes.string,
@@ -165,5 +170,8 @@ ProjectHomeContainer.propTypes = {
   }),
   workflow: React.PropTypes.shape({
     id: React.PropTypes.string
-  })
+  }),
+  user: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }).isRequired
 };
