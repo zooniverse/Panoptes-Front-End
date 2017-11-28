@@ -14,12 +14,14 @@ class OrganizationContainer extends React.Component {
       errorFetchingProjects: null,
       fetchingOrganization: false,
       fetchingProjects: false,
+      fetchingProjectAvatars: false,
       organization: null,
       organizationAvatar: {},
       organizationBackground: {},
       organizationRoles: [],
       organizationPages: [],
-      organizationProjects: []
+      organizationProjects: [],
+      projectAvatars: []
     };
 
     this.toggleCollaboratorView = this.toggleCollaboratorView.bind(this);
@@ -79,8 +81,8 @@ class OrganizationContainer extends React.Component {
   }
 
   fetchProjects(organization, collaboratorView, locationQuery = this.props.location.query) {
-    this.setState({ errorFetchingProjects: null, fetchingProjects: true });
-    const query = { cards: true, launch_approved: true };
+    this.setState({ errorFetchingProjects: null, fetchingProjects: true, fetchingProjectAvatars: true });
+    const query = { launch_approved: true, include: 'avatar' };
 
     if (collaboratorView) {
       delete query.launch_approved;
@@ -90,7 +92,21 @@ class OrganizationContainer extends React.Component {
     }
 
     organization.get('projects', query)
-      .then(organizationProjects => this.setState({ fetchingProjects: false, organizationProjects }))
+      .then((organizationProjects) => {
+        this.setState({ fetchingProjects: false, organizationProjects });
+        const avatarRequests = organizationProjects
+          .filter(project => project.links.avatar.id)
+          .map(project => apiClient.type('avatars').get(project.links.avatar.id)
+            .catch(error => console.error('error loading project avatar', error))); // eslint-disable-line no-console)
+        Promise.all(avatarRequests)
+          .then((projectAvatars) => {
+            this.setState({ fetchingProjectAvatars: false, projectAvatars });
+          })
+          .catch((error) => {
+            console.error('error loading project avatars', error); // eslint-disable-line no-console
+            this.setState({ fetchingProjectAvatars: false });
+          });
+      })
       .catch((error) => {
         console.error('error loading projects', error); // eslint-disable-line no-console
         this.setState({ errorFetchingProjects: error, fetchingProjects: false });
@@ -168,6 +184,7 @@ class OrganizationContainer extends React.Component {
           organizationBackground={this.state.organizationBackground}
           organizationPages={this.state.organizationPages}
           organizationProjects={this.state.organizationProjects}
+          projectAvatars={this.state.projectAvatars}
           toggleCollaboratorView={this.toggleCollaboratorView}
         />);
     } else if (this.state.fetchingOrganization) {
