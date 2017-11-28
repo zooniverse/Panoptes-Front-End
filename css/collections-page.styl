@@ -70,20 +70,28 @@ $collection-viewer-button
     @media (max-width: 900px)
       margin: 0.6em 0
 
+  .collection__description-container
+    display: flex
+
+    @media (max-width: 900px)
+      flex-direction: column
+      flex-wrap: wrap
+      justify-content: center
+      align-content: center
+
   .collection__description
-    width: 50%
+    width: 100%
     font-size: 0.875em
     color: COPY
+    margin: 0
 
   .collection__buttons-container
+    width: 100%
     flex-direction: row-reverse
     margin-bottom: 2em
     display: flex
-    position: relative
-    top: -3.25em
 
     @media (max-width: 900px)
-      top: 0
       flex-direction: column
       justify-content: center
       align-content: center
