@@ -18,21 +18,22 @@ class EmailSettingsPage extends React.Component {
     this.sortPreferences = this.sortPreferences.bind(this);
     this.talkPreferenceOption = this.talkPreferenceOption.bind(this);
     this.getProjectForPreferences(props.user);
-  }
-
-  componentDidMount() {
-    talkClient.type('subscription_preferences').get()
-    .then((preferences) => {
-      this.setState({
-        talkPreferences: preferences
-      });
-    });
+    this.getTalkPreferences();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.state.page === prevState.page) {
       this.getProjectForPreferences();
     }
+  }
+
+  getTalkPreferences() {
+    talkClient.type('subscription_preferences').get()
+    .then((preferences) => {
+      this.setState({
+        talkPreferences: preferences
+      });
+    });
   }
 
   getProjectForPreferences(user) {
@@ -61,34 +62,38 @@ class EmailSettingsPage extends React.Component {
   }
 
   handlePreferenceChange(preference, event) {
-    preference.update({
-      email_digest: event.target.value
-    })
-    .save();
+    if (event.target.type === 'radio') {
+      const newTalkPrefs = Object.assign({}, this.state.talkPreferences);
+      preference.update({
+        email_digest: event.target.value
+      })
+      .save();
+      this.setState();
+    } else {
+      preference.update({
+        email_communication: !!event.target.value
+      })
+      .save();
+      this.setState();
+    }
   }
 
   nameOfPreference(preference) {
     switch (preference.category) {
       case 'participating_discussions':
-        'When discussions I\'m participating in are updated';
-        break;
+        return 'When discussions I\'m participating in are updated';
       case 'followed_discussions':
-        'When discussions I\'m following are updated';
-        break;
+        return 'When discussions I\'m following are updated';
       case 'mentions':
-        'When I\'m mentioned';
-        break;
+        return 'When I\'m mentioned';
       case 'group_mentions':
-        'When I\'m mentioned by group (this.admins, this.team, etc)';
-        break;
+        return 'When I\'m mentioned by group (this.admins, this.team, etc)';
       case 'messages':
-        'When I receive a private message';
-        break;
+        return 'When I receive a private message';
       case 'started_discussions':
-        'When a discussion is started in a board I\'m following';
-        break;
+        return 'When a discussion is started in a board I\'m following';
       default:
-        'nope';
+        return ' ';
 
     }
   }
@@ -104,7 +109,7 @@ class EmailSettingsPage extends React.Component {
                 type="checkbox"
                 name="email_communication"
                 checked={projectPreference.email_communication}
-                onChange={this.handleProjectEmailChange.bind(this, projectPreference)}
+                onChange={this.handlePreferenceChange.bind(this, projectPreference)}
               />
             </td>
             <td>
@@ -114,12 +119,6 @@ class EmailSettingsPage extends React.Component {
         );
       }
     });
-  }
-
-  handleProjectEmailChange(projectPreference, args) {
-    handleInputChange.apply(projectPreference, args);
-    projectPreference.save();
-    this.setState();
   }
 
   renderPagination() {
