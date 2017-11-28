@@ -145,7 +145,9 @@ class Classifier extends React.Component {
   }
 
   updateFeedback(annotations) {
-    // Check to see if we're still drawing, and update feedback if not.
+    // Check to see if we're still drawing, and update feedback if not. We need
+    // to check the entire annotation array, as the user may be editing an
+    // existing annotation.
     const inProgress = annotations.reduce((isInProgress, annotation) => {
       return (isInProgress === true)
         ? true

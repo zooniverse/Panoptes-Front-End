@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Translate from 'react-translate-component';
-
 import counterpart from 'counterpart';
+
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
   FeedbackSection: {
@@ -15,6 +15,7 @@ counterpart.registerTranslations('en', {
   }
 });
 /* eslint-enable max-len */
+
 class FeedbackSection extends Component {
   render() {
     const { deleteRule, editRule, rules } = this.props;
@@ -61,5 +62,13 @@ class FeedbackSection extends Component {
     );
   }
 }
+
+FeedbackSection.propTypes = {
+  deleteRule: PropTypes.func,
+  editRule: PropTypes.func,
+  rules: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string
+  }))
+};
 
 export default FeedbackSection;

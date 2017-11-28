@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import FeedbackModal from '../components/feedback-modal';
 
@@ -24,11 +24,21 @@ class FeedbackModalContainer extends Component {
   }
 
   render() {
-    console.log('container', this.props)
+    const messages = this.getFeedbackMessages();
     return (
-      <FeedbackModal feedback={this.getFeedbackMessages()} />
+      <FeedbackModal messages={messages} />
     );
   }
 }
+
+FeedbackModalContainer.propTypes = {
+  feedback: PropTypes.arrayOf(PropTypes.shape({
+    success: PropTypes.bool,
+    successEnabled: PropTypes.string,
+    successMessage: PropTypes.string,
+    failureEnabled: PropTypes.string,
+    failureMessage: PropTypes.string
+  }))
+};
 
 export default FeedbackModalContainer;

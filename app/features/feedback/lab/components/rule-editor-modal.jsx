@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import _ from 'lodash';
+
 import TextInput from '../../shared/components/text-input';
 import CheckboxInput from '../../shared/components/checkbox-input';
 import SelectInput from '../../shared/components/select-input';
@@ -75,7 +76,7 @@ class RuleEditorModal extends Component {
   }
 
   render() {
-    const { formState, handleCancel, handleInputChange, handleSave, valid } = this.props;
+    const { formState, handleInputChange, handleSave, valid } = this.props;
     const StrategyComponent = getStrategyComponent(formState.strategy);
     return (
       <div className="edit-feedback-modal">
@@ -153,5 +154,19 @@ class RuleEditorModal extends Component {
     );
   }
 }
+
+RuleEditorModal.propTypes = {
+  formState: PropTypes.shape({
+    defaultFailureMessage: PropTypes.string,
+    defaultSuccessMessage: PropTypes.string,
+    failureEnabled: PropTypes.string,
+    id: PropTypes.string,
+    strategy: PropTypes.string,
+    successEnabled: PropTypes.string
+  }),
+  handleInputChange: PropTypes.func,
+  handleSave: PropTypes.func,
+  valid: PropTypes.bool
+};
 
 export default RuleEditorModal;
