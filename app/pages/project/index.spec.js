@@ -170,4 +170,21 @@ describe('ProjectPageController', () => {
       sinon.assert.calledWith(workflowSpy, '2', true);
     });
   });
+
+  describe('without a saved workflow', () => {
+    beforeEach(() => {
+      location.query = {};
+      project.update({ 'configuration.default_workflow': '1' });
+      preferences.update({ settings: {}, preferences: {}});
+      const user = apiClient.type('users').create({ id: '4' });
+      wrapper.setProps({ user });
+    });
+
+    it('should load the project default workflow', () => {
+      wrapper.setState({ project, preferences });
+      controller.getSelectedWorkflow(project, preferences);
+      sinon.assert.calledOnce(workflowSpy);
+      sinon.assert.calledWith(workflowSpy, '1', true);
+    });
+  });
 });
