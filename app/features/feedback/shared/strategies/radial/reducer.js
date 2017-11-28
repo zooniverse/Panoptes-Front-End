@@ -12,6 +12,8 @@ function isAnnotationWithinTolerance(rule, annotation) {
   return distance < tolerance;
 }
 
+// Determines whether there are any annotations falling within tolerance for a
+// rule, and appends all successful annotations if so.
 function radialReducer(rule, annotations) {
   const result = annotations.filter(annotation =>
     isAnnotationWithinTolerance(rule, annotation));

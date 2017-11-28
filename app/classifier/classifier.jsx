@@ -4,6 +4,7 @@ import { VisibilitySplit } from 'seven-ten';
 import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import ModalFormDialog from 'modal-form/dialog';
 
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
@@ -21,6 +22,7 @@ import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import * as feedbackActions from '../redux/ducks/feedback';
+import FeedbackModal from '../features/feedback/classifier';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -28,9 +30,11 @@ window.cachedClassification = CacheClassification;
 class Classifier extends React.Component {
   constructor(props) {
     super(props);
+    this.getActiveTask = this.getActiveTask.bind(this);
     this.handleAnnotationChange = this.handleAnnotationChange.bind(this);
     this.handleSubjectImageLoad = this.handleSubjectImageLoad.bind(this);
     this.completeClassification = this.completeClassification.bind(this);
+    this.checkForFeedback = this.checkForFeedback.bind(this);
     this.toggleExpertClassification = this.toggleExpertClassification.bind(this);
     this.updateAnnotations = this.updateAnnotations.bind(this);
     this.updateFeedback = this.updateFeedback.bind(this);
@@ -76,11 +80,23 @@ class Classifier extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  getActiveTask(state) {
+    const annotation = state.annotations[state.annotations.length - 1];
+    return (annotation) ? this.props.workflow.tasks[annotation.task] : null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.classification !== this.props.classification) {
       prevProps.classification.stopListening('change', this.updateAnnotations);
       this.props.classification.listen('change', this.updateAnnotations);
       this.updateAnnotations();
+    }
+
+    const { getActiveTask, state } = this;
+    if (getActiveTask(prevState) !== getActiveTask(state)) {
+      console.info('task change')
+      const taskId = getActiveTask(prevState).id;
+      this.checkForFeedback(taskId);
     }
   }
 
@@ -112,6 +128,14 @@ class Classifier extends React.Component {
     });
   }
 
+  checkForFeedback(taskId) {
+    const taskFeedback = this.props.feedback.rules[taskId];
+    const modal = (<FeedbackModal
+      feedback={taskFeedback}
+    />);
+    return ModalFormDialog.alert(modal);
+  }
+
   updateAnnotations() {
     const { annotations } = this.props.classification;
     this.setState({ annotations });
@@ -123,17 +147,12 @@ class Classifier extends React.Component {
   updateFeedback(annotations) {
     // Check to see if we're still drawing, and update feedback if not.
     const inProgress = annotations.reduce((isInProgress, annotation) => {
-      if (isInProgress === true) {
-        return true;
-      } else {
-        return annotation.value
-          .map(value => value._inProgress)
-          .includes(true);
-      }
+      return (isInProgress === true)
+        ? true
+        : annotation.value.map(value => value._inProgress).includes(true);
     }, false);
     if (!inProgress) {
-      const annotation = annotations[annotations.length - 1];
-      this.props.actions.feedback.update(annotation);
+      this.props.actions.feedback.update(_.last(annotations));
     }
   }
 
@@ -177,44 +196,31 @@ class Classifier extends React.Component {
   }
 
   completeClassification() {
-    // const feedbackActive = isFeedbackActive(this.props.project);
-    //
-    // if (feedbackActive) {
-    //   const classificationMetadata = Object.assign({}, this.props.classification.metadata, {
-    //     feedbackShown: this.props.feedback.length > 0
-    //   });
-    //   if (classificationMetadata.feedbackShown) {
-    //     classificationMetadata.feedback = [].concat(this.props.feedback);
-    //   }
-    //   this.props.classification.update({ metadata: classificationMetadata });
-    // }
-
-    if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
-      if (!feedbackActive || (feedbackActive && !isThereFeedback(this.props.subject, this.props.workflow))) {
+    const lastTaskId = _.last(this.state.annotations).task;
+    this.checkForFeedback(lastTaskId)
+      .then(() => {
+        if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
           this.props.onCompleteAndLoadAnotherSubject();
         } else {
-          this.props.onComplete();
+          this.props.onComplete()
+            .then((classification) => {
+              // after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
+              const experimentName = experimentsClient.checkForExperiment(this.props.project.slug);
+              if (experimentName && this.props.user) {
+                experimentsClient.postDataToExperimentServer(
+                  interventionMonitor,
+                  this.context.geordi,
+                  experimentName,
+                  this.props.user.id,
+                  classification.metadata.session,
+                  'classification',
+                  classification.id
+                );
+              }
+            },
+            error => console.error(error));
         }
-    } else {
-      this.props.onComplete()
-      .then((classification) => {
-        // after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
-        const experimentName = experimentsClient.checkForExperiment(this.props.project.slug);
-        if (experimentName && this.props.user) {
-          experimentsClient.postDataToExperimentServer(
-            interventionMonitor,
-            this.context.geordi,
-            experimentName,
-            this.props.user.id,
-            classification.metadata.session,
-            'classification',
-            classification.id
-          );
-        }
-      },
-      error => console.error(error)
-    );
-    }
+      });
   }
 
   toggleExpertClassification(value) {
