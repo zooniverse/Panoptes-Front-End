@@ -13,9 +13,8 @@ class EmailSettingsPage extends React.Component {
       projectPreferences: [],
       talkPreferences: []
     };
-    this.handlePreferenceChange = this.handlePreferenceChange.bind(this);
-    this.nameOfPreference = this.nameOfPreference.bind(this);
-    this.sortPreferences = this.sortPreferences.bind(this);
+    this.handleProjectPreferenceChange = this.handleProjectPreferenceChange.bind(this);
+    this.handleTalkPreferenceChange = this.handleTalkPreferenceChange.bind(this);
     this.talkPreferenceOption = this.talkPreferenceOption.bind(this);
     this.getProjectForPreferences(props.user);
     this.getTalkPreferences();
@@ -61,21 +60,20 @@ class EmailSettingsPage extends React.Component {
     });
   }
 
-  handlePreferenceChange(preference, event) {
-    if (event.target.type === 'radio') {
-      const newTalkPrefs = Object.assign({}, this.state.talkPreferences);
-      preference.update({
-        email_digest: event.target.value
-      })
-      .save();
-      this.setState();
-    } else {
-      preference.update({
-        email_communication: !!event.target.checked
-      })
-      .save();
-      this.setState();
-    }
+  handleProjectPreferenceChange(preference, event) {
+    preference.update({
+      email_communication: !!event.target.checked
+    })
+    .save()
+    .then(updatedPref => this.setState(updatedPref));
+  }
+
+  handleTalkPreferenceChange(preference, event) {
+    preference.update({
+      email_digest: event.target.value
+    })
+    .save()
+    .then(updatedPref => this.setState(updatedPref));
   }
 
   nameOfPreference(preference) {
@@ -109,7 +107,7 @@ class EmailSettingsPage extends React.Component {
                 type="checkbox"
                 name="email_communication"
                 checked={projectPreference.email_communication}
-                onChange={this.handlePreferenceChange.bind(this, projectPreference)}
+                onChange={this.handleProjectPreferenceChange.bind(this, projectPreference)}
               />
             </td>
             <td>
@@ -172,7 +170,7 @@ class EmailSettingsPage extends React.Component {
           name={preference.category}
           value={digest}
           checked={preference.email_digest === digest}
-          onChange={this.handlePreferenceChange.bind(this, preference)}
+          onChange={this.handleTalkPreferenceChange.bind(this, preference)}
         />
       </td>
     );
