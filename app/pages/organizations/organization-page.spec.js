@@ -114,6 +114,7 @@ describe('OrganizationPage', function () {
       <OrganizationProjectCards
         fetchingProjects={false}
         projects={organizationProjects}
+        projectAvatars={[]}
       />);
     const cards = wrapper.find('ProjectCard');
     assert.equal(cards.length, organizationProjects.length);
