@@ -27,8 +27,8 @@ const projects = [
 ];
 
 const projectPreferences = [
-  apiClient.type('project_preferences').create({ email_communication: true, links: { project: 'a' } }),
-  apiClient.type('project_preferences').create({ email_communication: false, links: { project: 'b' } })
+  apiClient.type('project_preferences').create({ id: '1', email_communication: true, links: { project: 'a' } }),
+  apiClient.type('project_preferences').create({ id: '2', email_communication: false, links: { project: 'b' } })
 ];
 
 const user = {
