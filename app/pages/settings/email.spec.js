@@ -1,6 +1,7 @@
 import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
+import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import EmailSettings from './email';
@@ -43,8 +44,12 @@ const user = {
 
 describe('EmailSettings', () => {
   const wrapper = mount(<EmailSettings user={user} />);
+  const projectPreferenceSpy = sinon.spy(wrapper.instance(), 'getProjectForPreferences');
 
-  beforeEach(() => wrapper.update());
+  beforeEach(() => {
+    projectPreferenceSpy.reset();
+    wrapper.update();
+  });
 
   it('renders the email address', () => {
     const email = wrapper.find('input[name="email"]');
@@ -123,6 +128,54 @@ describe('EmailSettings', () => {
         wrapper.find(selector).simulate('change');
         assert.equal(preference.email_digest, 'never');
       });
+    });
+  });
+
+  describe('Project pagination', () => {
+    it('defaults to page 1', () => {
+      assert.equal(wrapper.state().page, 1);
+    });
+
+    it('should be disabled with less than one page of projects', () => {
+      const meta = { page_count: 1 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      assert.equal(pageSelector.prop('disabled'), true);
+    });
+
+    it('should be enabled with more than one page of projects', () => {
+      const meta = { page_count: 2 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      assert.equal(pageSelector.prop('disabled'), false);
+    });
+
+    it('should update the page number on change', () => {
+      const meta = { page_count: 2 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      const fakeEvent = {
+        target: {
+          value: '3'
+        }
+      };
+      pageSelector.simulate('change', fakeEvent);
+      assert.equal(wrapper.state().page, '3');
+    });
+
+    it('should update the project list on change', () => {
+      const meta = { page_count: 2 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      const fakeEvent = {
+        target: {
+          value: '5'
+        }
+      };
+      pageSelector.simulate('change', fakeEvent);
+      wrapper.update();
+      assert.equal(wrapper.state().page, '5');
+      sinon.assert.calledOnce(projectPreferenceSpy);
     });
   });
 });
