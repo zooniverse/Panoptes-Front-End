@@ -143,7 +143,6 @@ class Classifier extends React.Component {
           [`metadata.feedback.${taskId}`]: taskFeedback
         });
       });
-      // then save feedback on the classification
     } else {
       return Promise.resolve(false);
     }
