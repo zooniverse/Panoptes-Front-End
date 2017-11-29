@@ -184,6 +184,7 @@ export default {
     project: {
       section: 'Project email preferences',
       header: 'Project'
+    }
   },
   about: {
     home: {
@@ -194,4 +195,4 @@ export default {
       discoveries: '### Volunteers and professionals make real discoveries together\n\nZooniverse projects are constructed with the aim of converting volunteers\' efforts into measurable results. These projects have produced a large number of [published research papers](/about/publications), as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have even made completely unexpected and scientifically significant discoveries.\n\nA significant amount of this research takes place on the Zooniverse discussion boards, where volunteers can work together with each other and with the research teams. These boards are integrated with each project to allow for everything from quick hashtagging to in-depth collaborative analysis. There is also a central Zooniverse board for general chat and discussion about Zooniverse-wide matters.\n\nMany of the most interesting discoveries from Zooniverse projects have come from discussion between volunteers and researchers. We encourage all users to join the conversation on the discussion boards for more in-depth participation.'
     }
   }
-};
+}
