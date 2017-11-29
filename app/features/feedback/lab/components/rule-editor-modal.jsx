@@ -96,7 +96,7 @@ class RuleEditorModal extends Component {
           title={fieldText('successEnabled.title')}
           help={fieldText('successEnabled.help')}
           name="successEnabled"
-          value={formState.successEnabled}
+          checked={formState.successEnabled}
           onChange={handleInputChange.bind(this)}
         />
 
@@ -114,7 +114,7 @@ class RuleEditorModal extends Component {
           title={fieldText('failureEnabled.title')}
           help={fieldText('failureEnabled.help')}
           name="failureEnabled"
-          value={formState.failureEnabled}
+          checked={formState.failureEnabled}
           onChange={handleInputChange.bind(this)}
         />
 
