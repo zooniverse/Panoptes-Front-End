@@ -5,7 +5,7 @@ function dudReducer(rule, annotations) {
   const result = annotations.length === 0;
 
   return _.assign(rule, {
-    success: (result.length > 0)
+    success: result
   });
 }
 

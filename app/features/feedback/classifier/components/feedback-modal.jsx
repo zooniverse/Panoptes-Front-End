@@ -11,11 +11,10 @@ counterpart.registerTranslations('en', {
 });
 /* eslint-enable max-len */
 
-function FeedbackModal({ messages, subjectViewer }) {
+function FeedbackModal({ messages }) {
   return (
     <section>
       <Translate content="FeedbackModal.title" component="h2" />
-      {subjectViewer}
       <ul>
         {messages.map(message =>
           <li key={message}>

@@ -32,7 +32,7 @@ class RuleEditorModalContainer extends Component {
     const { form } = this.state;
     let validations = [].concat(defaultValidations);
 
-    if (form.strategy) {
+    if (form.strategy && strategies[form.strategy].validations) {
       validations = validations.concat(strategies[form.strategy].validations);
     }
 

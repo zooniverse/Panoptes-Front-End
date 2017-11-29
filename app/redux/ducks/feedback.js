@@ -25,7 +25,7 @@ export default function reducer(state = initialState, action = {}) {
       const newState = _.clone(state);
       const { task, value } = action.payload.annotation;
       const activeRules = newState.rules[task];
-      if (activeRules.length) {
+      if (activeRules && activeRules.length) {
         newState.rules[task] = activeRules.map((rule) => {
           // The reducer is passed the entire set of annotations so we don't
           // have to write a separate handler for the `dud` strategy, which

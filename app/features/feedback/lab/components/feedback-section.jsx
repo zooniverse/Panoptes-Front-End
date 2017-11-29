@@ -16,51 +16,48 @@ counterpart.registerTranslations('en', {
 });
 /* eslint-enable max-len */
 
-class FeedbackSection extends Component {
-  render() {
-    const { deleteRule, editRule, rules } = this.props;
-    return (
-      <div className="feedback-section">
-        <Translate
-          content="FeedbackSection.title"
-          className="form-label"
-          component="div"
-        />
-        <Translate
-          content="FeedbackSection.help"
-          className="form-help"
-          component="small"
-        />
+function FeedbackSection({ deleteRule, editRule, rules }) {
+  return (
+    <div className="feedback-section">
+      <Translate
+        content="FeedbackSection.title"
+        className="form-label"
+        component="div"
+      />
+      <Translate
+        content="FeedbackSection.help"
+        className="form-help"
+        component="small"
+      />
 
-        <ul>
-          {rules.map(rule =>
-            <li key={rule.id} className="feedback-section__feedback-item">
-              <span className="feedback-section__feedback-item-label">
-                {rule.id}
-              </span>
-              <Translate
-                component="button"
-                content="FeedbackSection.edit"
-                onClick={editRule.bind(this, rule)}
-              />
-              <Translate
-                component="button"
-                content="FeedbackSection.del"
-                onClick={deleteRule.bind(this, rule.id)}
-              />
-            </li>
-          )}
-        </ul>
+      <ul>
+        {rules.map(rule =>
+          <li key={rule.id} className="feedback-section__feedback-item">
+            <span className="feedback-section__feedback-item-label">
+              {rule.id}
+            </span>
+            <Translate
+              component="button"
+              content="FeedbackSection.edit"
+              onClick={editRule.bind(this, rule)}
+            />
+            <Translate
+              component="button"
+              content="FeedbackSection.del"
+              onClick={deleteRule.bind(this, rule.id)}
+            />
+          </li>
+        )}
+      </ul>
 
-        <Translate
-          content="FeedbackSection.newRule"
-          className="form-help"
-          component="button"
-          onClick={editRule.bind(this, {})}
-        />
-      </div>
-    );
-  }
+      <Translate
+        content="FeedbackSection.newRule"
+        className="form-help"
+        component="button"
+        onClick={editRule.bind(this, {})}
+      />
+    </div>
+  );
 }
 
 FeedbackSection.propTypes = {

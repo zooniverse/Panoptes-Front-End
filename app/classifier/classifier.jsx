@@ -129,14 +129,20 @@ class Classifier extends React.Component {
   }
 
   checkForFeedback(taskId) {
-    const taskFeedback = this.props.feedback.rules[taskId];
-    const modal = (<FeedbackModal
-      feedback={taskFeedback}
-    />);
-    return ModalFormDialog.alert(modal, {
-      required: true
-    });
-    // then save feedback on the classification
+    if (this.props.feedback.active) {
+      const taskFeedback = this.props.feedback.rules[taskId];
+      const modal = (<FeedbackModal feedback={taskFeedback} />);
+      return ModalFormDialog.alert(modal, {
+        required: true
+      }).then(() => {
+        return this.props.classification.update({
+          [`metadata.feedback.${taskId}`]: taskFeedback
+        });
+      });
+      // then save feedback on the classification
+    } else {
+      return Promise.resolve(false);
+    }
   }
 
   updateAnnotations() {
@@ -409,6 +415,9 @@ Classifier.propTypes = {
   classificationCount: React.PropTypes.number,
   demoMode: React.PropTypes.bool,
   expertClassifier: React.PropTypes.bool,
+  feedback: React.PropTypes.shape({
+    active: React.PropTypes.bool
+  }),
   minicourse: React.PropTypes.shape({
     id: React.PropTypes.string,
     steps: React.PropTypes.array

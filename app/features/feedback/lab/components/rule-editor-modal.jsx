@@ -159,10 +159,10 @@ RuleEditorModal.propTypes = {
   formState: PropTypes.shape({
     defaultFailureMessage: PropTypes.string,
     defaultSuccessMessage: PropTypes.string,
-    failureEnabled: PropTypes.string,
+    failureEnabled: PropTypes.bool,
     id: PropTypes.string,
     strategy: PropTypes.string,
-    successEnabled: PropTypes.string
+    successEnabled: PropTypes.bool
   }),
   handleInputChange: PropTypes.func,
   handleSave: PropTypes.func,

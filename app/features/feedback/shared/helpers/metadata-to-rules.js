@@ -5,7 +5,7 @@ function metadataToRules(metadata) {
   const rulesObject = _.reduce(metadata, (result, value, key) => {
     const [prefix, ruleKey, propKey] = key.split('_');
 
-    if (prefix === '#feedback') {
+    if (prefix === '#feedback' && value) {
       _.set(result, `${ruleKey}.${propKey}`, value);
     }
 

@@ -1,5 +1,7 @@
-import Radial from './radial';
+import radial from './radial';
+import dud from './dud';
 
 export default {
-  radial: Radial
+  dud,
+  radial
 };
