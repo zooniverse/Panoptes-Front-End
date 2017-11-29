@@ -1,9 +1,9 @@
-import React from 'react';
-import createUuid from '../../shared/helpers/uuid';
+import React, { PropTypes } from 'react';
 import Select from 'react-select';
+import uuidv4 from 'uuid/v4';
 
 function SelectInput({ help, onChange, multi = false, name, options, placeholder = '', title, value }) {
-  const uuid = createUuid();
+  const uuid = uuidv4();
   return (
     <div>
       <label htmlFor={uuid}>
@@ -11,6 +11,7 @@ function SelectInput({ help, onChange, multi = false, name, options, placeholder
       </label>
       <Select
         id={uuid}
+        multi={multi}
         name={name}
         onChange={onChange}
         options={options}
@@ -23,5 +24,16 @@ function SelectInput({ help, onChange, multi = false, name, options, placeholder
     </div>
   );
 }
+
+SelectInput.propTypes = {
+  help: PropTypes.string,
+  onChange: PropTypes.func,
+  multi: PropTypes.bool,
+  name: PropTypes.string,
+  options: PropTypes.array,
+  placeholder: PropTypes.string,
+  title: PropTypes.string,
+  value: PropTypes.string
+};
 
 export default SelectInput;

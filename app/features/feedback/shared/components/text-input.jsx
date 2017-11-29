@@ -1,8 +1,8 @@
-import React from 'react';
-import createUuid from '../../shared/helpers/uuid';
+import React, { PropTypes } from 'react';
+import uuidv4 from 'uuid/v4';
 
 function TextInput({ title, help, onChange, name, type = 'text', required = false, value }) {
-  const uuid = createUuid();
+  const uuid = uuidv4();
   return (
     <div>
       <label htmlFor={uuid}>
@@ -22,5 +22,15 @@ function TextInput({ title, help, onChange, name, type = 'text', required = fals
     </div>
   );
 }
+
+TextInput.propTypes = {
+  title: PropTypes.string,
+  help: PropTypes.string,
+  onChange: PropTypes.func,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  required: PropTypes.bool,
+  value: PropTypes.string
+};
 
 export default TextInput;
