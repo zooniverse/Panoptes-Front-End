@@ -83,8 +83,8 @@ describe('EmailSettings', () => {
       projectSettings = wrapper.find('table').last().find('tbody tr');
     });
 
-    it('lists two projects (plus pagination)', () => {
-      assert.equal(projectSettings.length, 3);
+    it('lists two projects', () => {
+      assert.equal(projectSettings.length, 2);
     });
 
     projects.forEach((project, i) => {
@@ -156,11 +156,11 @@ describe('EmailSettings', () => {
       const pageSelector = wrapper.find('nav.pagination select');
       const fakeEvent = {
         target: {
-          value: '3'
+          value: 3
         }
       };
       pageSelector.simulate('change', fakeEvent);
-      assert.equal(wrapper.state().page, '3');
+      assert.equal(wrapper.state().page, 3);
     });
 
     it('should update the project list on change', () => {
@@ -169,12 +169,12 @@ describe('EmailSettings', () => {
       const pageSelector = wrapper.find('nav.pagination select');
       const fakeEvent = {
         target: {
-          value: '5'
+          value: 5
         }
       };
       pageSelector.simulate('change', fakeEvent);
       wrapper.update();
-      assert.equal(wrapper.state().page, '5');
+      assert.equal(wrapper.state().page, 5);
       sinon.assert.calledOnce(projectPreferenceSpy);
     });
   });
