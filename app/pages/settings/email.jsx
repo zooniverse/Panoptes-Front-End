@@ -1,27 +1,9 @@
 import React from 'react';
 import Translate from 'react-translate-component';
-import counterpart from 'counterpart';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import AutoSave from '../../components/auto-save';
 import handleInputChange from '../../lib/handle-input-change';
-
-counterpart.registerTranslations('en', {
-  zooPrefs: {
-    general: 'Get general Zooniverse email updates',
-    classify: 'Get email updates from the Projects you classify on',
-    beta: 'Get beta project email updates and become a beta tester'
-  },
-  talkPrefs: {
-    title: 'Send me an email',
-    frequency: {
-      immediate: 'Immediately',
-      day: 'Daily',
-      week: 'Weekly',
-      never: 'Never'
-    }
-  }
-});
 
 class EmailSettingsPage extends React.Component {
   constructor(props) {
@@ -166,7 +148,7 @@ class EmailSettingsPage extends React.Component {
             if (pref.category !== 'system' && pref.category !== 'moderation_reports') {
               return (
                 <tr key={pref.id}>
-                  <td>{this.nameOfPreference(pref)}</td>
+                  <Translate component="td" content={`emailSettings.talk.options.${pref.category}`} />
                   {this.talkPreferenceOption(pref, i, 'immediate')}
                   {this.talkPreferenceOption(pref, i, 'daily')}
                   {this.talkPreferenceOption(pref, i, 'weekly')}
@@ -213,7 +195,7 @@ class EmailSettingsPage extends React.Component {
         <p>
           <AutoSave resource={this.props.user}>
             <span className="form-label">
-              Email address
+              <Translate content="emailSettings.email" />
             </span>
             <br />
             <input
@@ -225,7 +207,11 @@ class EmailSettingsPage extends React.Component {
             />
           </AutoSave>
         </p>
-        <p><strong>Zooniverse email preferences</strong></p>
+        <p>
+          <strong>
+            <Translate content="emailSettings.general.section" />
+          </strong>
+        </p>
         <p>
           <AutoSave resource={this.props.user}>
             <label>
@@ -235,7 +221,7 @@ class EmailSettingsPage extends React.Component {
                 checked={this.props.user.global_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
               />{' '}
-              <Translate content="zooPrefs.general" />
+              <Translate content="emailSettings.general.updates" />
             </label>
           </AutoSave>
           <br />
@@ -247,7 +233,7 @@ class EmailSettingsPage extends React.Component {
                 checked={this.props.user.project_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
               />{' '}
-              <Translate content="zooPrefs.classify" />
+              <Translate content="emailSettings.general.classify" />
             </label>
           </AutoSave>
           <br />
@@ -259,33 +245,41 @@ class EmailSettingsPage extends React.Component {
                 checked={this.props.user.beta_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
               />{' '}
-              <Translate content="zooPrefs.beta" />
+              <Translate content="emailSettings.general.beta" />
             </label>
           </AutoSave>
         </p>
 
-        <p><strong>Talk email preferences</strong></p>
+        <p>
+          <strong>
+            <Translate content="emailSettings.talk.section" />
+          </strong>
+        </p>
         <table className="talk-email-preferences">
           <thead>
             <tr>
-              <Translate component="th" content="talkPrefs.title" />
-              <Translate component="th" content="talkPrefs.frequency.immediate" />
-              <Translate component="th" content="talkPrefs.frequency.day" />
-              <Translate component="th" content="talkPrefs.frequency.week" />
-              <Translate component="th" content="talkPrefs.frequency.never" />
+              <Translate component="th" content="emailSettings.talk.header" />
+              <Translate component="th" content="emailSettings.talk.frequency.immediate" />
+              <Translate component="th" content="emailSettings.talk.frequency.day" />
+              <Translate component="th" content="emailSettings.talk.frequency.week" />
+              <Translate component="th" content="emailSettings.talk.frequency.never" />
             </tr>
           </thead>
           {this.renderTalkPreferences()}
         </table>
 
-        <p><strong>Project email preferences</strong></p>
+        <p>
+          <strong>
+            <Translate content="emailSettings.project.section" />
+          </strong>
+        </p>
         <table>
           <thead>
             <tr>
               <th>
                 <i className="fa fa-envelope-o fa-fw" />
               </th>
-              <th>Project</th>
+              <Translate component="th" content="emailSettings.project.header" />
             </tr>
           </thead>
           <tbody>
