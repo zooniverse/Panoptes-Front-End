@@ -11,6 +11,7 @@ React = require 'react'
 `import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
 `import AboutProjectTeam from './pages/project/about/team';`
 `import UserSettingsList from './pages/admin/user-settings-list';`
+`import UserSettings from './pages/admin/user-settings';`
 `import ProjectStatusList from './pages/admin/project-status-list';`
 `import ProjectStatus from './pages/admin/project-status';`
 `import Grantbot from './pages/admin/grantbot';`
@@ -33,7 +34,9 @@ React = require 'react'
 `import SignInPage from './pages/sign-in';`
 `import NotFoundPage from './pages/not-found';`
 `import ResetPasswordPage from './pages/reset-password/reset-password';`
-
+`import Recents from './pages/profile/recents';`
+`import CustomiseProfile from './pages/settings/profile';`
+`import EmailSettingsPage from './pages/settings/email';`
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
   componentDidMount: ->
@@ -95,8 +98,8 @@ module.exports =
 
     <Route path="settings" component={require './pages/settings'}>
       <IndexRoute component={require './pages/settings/account'} />
-      <Route path="profile" component={require './pages/settings/profile' } />
-      <Route path="email" component={require './pages/settings/email' } />
+      <Route path="profile" component={CustomiseProfile} />
+      <Route path="email" component={EmailSettingsPage} />
     </Route>
 
     <Route path="help" component={require './pages/lab/help'}>
@@ -162,6 +165,7 @@ module.exports =
         <Route path="collections" component={require('./pages/collections/collections-list')} />
         <Route path="message" component={require './pages/profile/private-message'} />
       </Route>
+      <Route path="recents" component={Recents} />
     </Route>
 
     <Route path="organizations/:owner/:name" component={(require './pages/organizations/organization-container').default}>
@@ -245,6 +249,8 @@ module.exports =
 
     <Route path="admin" component={AdminPage}>
       <IndexRoute component={UserSettingsList} />
+      <Route path="users" component={UserSettingsList} />
+      <Route path="users/:id" component={UserSettings} />
       <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={ProjectStatus} />
       <Route path="grantbot" component={Grantbot} />

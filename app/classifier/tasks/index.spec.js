@@ -11,11 +11,11 @@ for (const key in workflow.tasks) {
     let wrapper;
 
     it('should render with default props', function() {
-      wrapper = shallow(<TaskComponent />);
+      wrapper = shallow(<TaskComponent translation={task} />);
     });
 
     it('should update on annotation change', function() {
-      wrapper = shallow(<TaskComponent />);
+      wrapper = shallow(<TaskComponent translation={task} />);
       let annotation = TaskComponent.getDefaultAnnotation(task, workflow, tasks);
       wrapper.setProps({annotation});
     });

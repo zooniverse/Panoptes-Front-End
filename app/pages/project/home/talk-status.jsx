@@ -33,7 +33,7 @@ export default class TalkStatus extends React.Component {
           content="project.home.talk"
           with={{
             count: this.state.activeUsers,
-            title: this.props.project.display_name
+            title: this.props.translation.display_name
           }}
           unsafe={true}
         />
@@ -56,5 +56,12 @@ TalkStatus.propTypes = {
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,
     slug: React.PropTypes.string
+  }).isRequired,
+  translation: React.PropTypes.shape({
+    description: React.PropTypes.string,
+    display_name: React.PropTypes.string,
+    introduction: React.PropTypes.string,
+    researcher_quote: React.PropTypes.string,
+    title: React.PropTypes.string
   }).isRequired
 };

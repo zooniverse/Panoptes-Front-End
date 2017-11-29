@@ -1,7 +1,7 @@
 React = require 'react'
 GenericTask = require('../generic.jsx').default
 DropdownEditor = require './editor'
-Select = require 'react-select'
+Select = require( 'react-select' ).default
 
 Summary = React.createClass
   displayName: 'DropdownSummary'

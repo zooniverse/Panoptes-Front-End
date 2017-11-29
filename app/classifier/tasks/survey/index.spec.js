@@ -11,7 +11,7 @@ describe('Survey Task', function(){
   let wrapper;
 
   beforeEach(function(){
-    wrapper = mount(<SurveyTask task={task} annotation={annotation} />);
+    wrapper = mount(<SurveyTask translation={task} task={task} annotation={annotation} />);
   });
 
   it(`should render a survey task`, function(){
@@ -41,7 +41,7 @@ describe('Survey Task', function(){
     let wrapper;
 
     beforeEach(function(){
-      wrapper = mount(<SurveyTask task={task} annotation={annotation} />);
+      wrapper = mount(<SurveyTask translation={task} task={task} annotation={annotation} />);
     });
 
     it(`should render a valid annotation as a selected choice`, function(){
