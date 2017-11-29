@@ -1,8 +1,27 @@
 import React from 'react';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import AutoSave from '../../components/auto-save';
 import handleInputChange from '../../lib/handle-input-change';
+
+counterpart.registerTranslations('en', {
+  zooPrefs: {
+    general: 'Get general Zooniverse email updates',
+    classify: 'Get email updates from the Projects you classify on',
+    beta: 'Get beta project email updates and become a beta tester'
+  },
+  talkPrefs: {
+    title: 'Send me an email',
+    frequency: {
+      immediate: 'Immediately',
+      day: 'Daily',
+      week: 'Weekly',
+      never: 'Never'
+    }
+  }
+});
 
 class EmailSettingsPage extends React.Component {
   constructor(props) {
@@ -15,7 +34,6 @@ class EmailSettingsPage extends React.Component {
     };
     this.handleProjectPreferenceChange = this.handleProjectPreferenceChange.bind(this);
     this.handleTalkPreferenceChange = this.handleTalkPreferenceChange.bind(this);
-    this.talkPreferenceOption = this.talkPreferenceOption.bind(this);
     this.getProjectForPreferences(props.user);
     this.getTalkPreferences();
   }
@@ -217,7 +235,7 @@ class EmailSettingsPage extends React.Component {
                 checked={this.props.user.global_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
               />{' '}
-              Get general Zooniverse email updates
+              <Translate content="zooPrefs.general" />
             </label>
           </AutoSave>
           <br />
@@ -229,7 +247,7 @@ class EmailSettingsPage extends React.Component {
                 checked={this.props.user.project_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
               />{' '}
-              Get email updates from the Projects you classify on
+              <Translate content="zooPrefs.classify" />
             </label>
           </AutoSave>
           <br />
@@ -241,7 +259,7 @@ class EmailSettingsPage extends React.Component {
                 checked={this.props.user.beta_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
               />{' '}
-              Get beta project email updates and become a beta tester
+              <Translate content="zooPrefs.beta" />
             </label>
           </AutoSave>
         </p>
@@ -250,11 +268,11 @@ class EmailSettingsPage extends React.Component {
         <table className="talk-email-preferences">
           <thead>
             <tr>
-              <th>Send me an email</th>
-              <th>Immediately</th>
-              <th>Daily</th>
-              <th>Weekly</th>
-              <th>Never</th>
+              <Translate component="th" content="talkPrefs.title" />
+              <Translate component="th" content="talkPrefs.frequency.immediate" />
+              <Translate component="th" content="talkPrefs.frequency.day" />
+              <Translate component="th" content="talkPrefs.frequency.week" />
+              <Translate component="th" content="talkPrefs.frequency.never" />
             </tr>
           </thead>
           {this.renderTalkPreferences()}
