@@ -175,7 +175,7 @@ export default {
         participating_discussions: 'When discussions I\'m participating in are updated',
         followed_discussions: 'When discussions I\'m following are updated',
         mentions: 'When I\'m mentioned',
-        group_mentions: 'When I\'m mentioned by group (this.admins, this.team, etc)',
+        group_mentions: 'When I\'m mentioned by group (@admins, @team, etc.)',
         messages: 'When I receive a private message',
         started_discussions: 'When a discussion is started in a board I\'m following'
       }
