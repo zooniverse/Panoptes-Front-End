@@ -121,7 +121,7 @@
     "deploy": "export NODE_ENV=production; npm run _deploy",
     "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js*) --reporter nyan || true",
     "test-travis": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js*)",
-    "lint": "eslint ./app/features/feedback --ext .jsx,.js",
+    "lint": "eslint ./app --ext .jsx,.js",
     "lint:watch": "esw --watch --color ./app --ext .jsx,.js"
   }
 }
