@@ -1,6 +1,7 @@
 import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
+import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import EmailSettings from './email';
@@ -22,13 +23,13 @@ const fakeRequest = {
 talkClient.type = () => fakeRequest;
 
 const projects = [
-  apiClient.type('projects').create({ display_name: 'A test project', title: 'A test project' }),
-  apiClient.type('projects').create({ display_name: 'Another test project', title: 'Another test project' })
+  apiClient.type('projects').create({ id: 'a', display_name: 'A test project', title: 'A test project' }),
+  apiClient.type('projects').create({ id: 'b', display_name: 'Another test project', title: 'Another test project' })
 ];
 
 const projectPreferences = [
-  apiClient.type('project_preferences').create({ email_communication: true, get() { return Promise.resolve(projects[0]); } }),
-  apiClient.type('project_preferences').create({ email_communication: false, get() { return Promise.resolve(projects[1]); } })
+  apiClient.type('project_preferences').create({ id: '1', email_communication: true, links: { project: 'a' } }),
+  apiClient.type('project_preferences').create({ id: '2', email_communication: false, links: { project: 'b' } })
 ];
 
 const user = {
@@ -43,8 +44,12 @@ const user = {
 
 describe('EmailSettings', () => {
   const wrapper = mount(<EmailSettings user={user} />);
+  const projectPreferenceSpy = sinon.spy(wrapper.instance(), 'getProjectForPreferences');
 
-  beforeEach(() => wrapper.update());
+  beforeEach(() => {
+    projectPreferenceSpy.reset();
+    wrapper.update();
+  });
 
   it('renders the email address', () => {
     const email = wrapper.find('input[name="email"]');
@@ -68,13 +73,18 @@ describe('EmailSettings', () => {
 
   describe('project listing', () => {
     let projectSettings;
-
-    beforeEach(() => {
-      projectSettings = wrapper.update().find('table').last().find('tbody tr');
+    
+    before(() => {
+      wrapper.setState({ meta: {}, projectPreferences, projects });
+      wrapper.update();
     });
 
-    it('lists two projects (plus pagination)', () => {
-      assert.equal(projectSettings.length, 3);
+    beforeEach(() => {
+      projectSettings = wrapper.find('table').last().find('tbody tr');
+    });
+
+    it('lists two projects', () => {
+      assert.equal(projectSettings.length, 2);
     });
 
     projects.forEach((project, i) => {
@@ -118,6 +128,54 @@ describe('EmailSettings', () => {
         wrapper.find(selector).simulate('change');
         assert.equal(preference.email_digest, 'never');
       });
+    });
+  });
+
+  describe('Project pagination', () => {
+    it('defaults to page 1', () => {
+      assert.equal(wrapper.state().page, 1);
+    });
+
+    it('should be disabled with less than one page of projects', () => {
+      const meta = { page_count: 1 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      assert.equal(pageSelector.prop('disabled'), true);
+    });
+
+    it('should be enabled with more than one page of projects', () => {
+      const meta = { page_count: 2 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      assert.equal(pageSelector.prop('disabled'), false);
+    });
+
+    it('should update the page number on change', () => {
+      const meta = { page_count: 2 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      const fakeEvent = {
+        target: {
+          value: 3
+        }
+      };
+      pageSelector.simulate('change', fakeEvent);
+      assert.equal(wrapper.state().page, 3);
+    });
+
+    it('should update the project list on change', () => {
+      const meta = { page_count: 2 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      const fakeEvent = {
+        target: {
+          value: 5
+        }
+      };
+      pageSelector.simulate('change', fakeEvent);
+      wrapper.update();
+      assert.equal(wrapper.state().page, 5);
+      sinon.assert.calledOnce(projectPreferenceSpy);
     });
   });
 });
