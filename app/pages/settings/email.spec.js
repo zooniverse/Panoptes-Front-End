@@ -133,7 +133,7 @@ describe('EmailSettings', () => {
 
   describe('Project pagination', () => {
     it('defaults to page 1', () => {
-      assert.equal(wrapper.state().page, '1');
+      assert.equal(wrapper.state().page, 1);
     });
 
     it('should be disabled with less than one page of projects', () => {
@@ -156,11 +156,11 @@ describe('EmailSettings', () => {
       const pageSelector = wrapper.find('nav.pagination select');
       const fakeEvent = {
         target: {
-          value: '3'
+          value: 3
         }
       };
       pageSelector.simulate('change', fakeEvent);
-      assert.equal(wrapper.state().page, '3');
+      assert.equal(wrapper.state().page, 3);
     });
 
     it('should update the project list on change', () => {
@@ -169,12 +169,12 @@ describe('EmailSettings', () => {
       const pageSelector = wrapper.find('nav.pagination select');
       const fakeEvent = {
         target: {
-          value: '5'
+          value: 5
         }
       };
       pageSelector.simulate('change', fakeEvent);
       wrapper.update();
-      assert.equal(wrapper.state().page, '5');
+      assert.equal(wrapper.state().page, 5);
       sinon.assert.calledOnce(projectPreferenceSpy);
     });
   });

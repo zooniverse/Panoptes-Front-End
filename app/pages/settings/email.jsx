@@ -116,7 +116,7 @@ Pagination.propTypes = {
   meta: React.PropTypes.shape({
     page_count: React.PropTypes.number
   }),
-  page: React.PropTypes.string,
+  page: React.PropTypes.number,
   onChange: React.PropTypes.func
 };
 
@@ -124,14 +124,14 @@ Pagination.defaultProps = {
   meta: {
     page_count: 1
   },
-  page: '1'
+  page: 1
 }
 
 class EmailSettingsPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: '1',
+      page: 1,
       projects: [],
       projectPreferences: [],
       talkPreferences: []
@@ -322,7 +322,7 @@ class EmailSettingsPage extends React.Component {
                 <Pagination
                   meta={this.state.meta}
                   page={this.state.page}
-                  onChange={e => this.setState({ page: e.target.value })}
+                  onChange={e => this.setState({ page: parseInt(e.target.value, 10) })}
                 />
               </td>
             </tr>
