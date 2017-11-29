@@ -5,7 +5,7 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 import AboutHome from './about-home';
 
-describe.only('AboutHome', function () {
+describe('AboutHome', function () {
   let wrapper;
 
   before(function () {
