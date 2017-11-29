@@ -125,4 +125,37 @@ describe('EmailSettings', () => {
       });
     });
   });
+
+  describe('Project pagination', () => {
+    it('defaults to page 1', () => {
+      assert.equal(wrapper.state().page, 1);
+    });
+
+    it('should be disabled with less than one page of projects', () => {
+      const meta = { page_count: 1 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      assert.equal(pageSelector.prop('disabled'), true);
+    });
+
+    it('should be enabled with more than one page of projects', () => {
+      const meta = { page_count: 2 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      assert.equal(pageSelector.prop('disabled'), false);
+    });
+
+    it('should update the page number on change', () => {
+      const meta = { page_count: 2 };
+      wrapper.setState({ meta });
+      const pageSelector = wrapper.find('nav.pagination select');
+      const fakeEvent = {
+        target: {
+          value: '3'
+        }
+      };
+      pageSelector.simulate('change', fakeEvent);
+      assert.equal(wrapper.state().page, '3');
+    });
+  });
 });
