@@ -5,10 +5,15 @@ apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 isAdmin = require '../../lib/is-admin'
 ProjectPage = require './project-page'
+ProjectTranslations = require('./project-translations').default
+{ connect } = require 'react-redux';
+{ bindActionCreators } = require 'redux';
+translationActions  = require '../../redux/ducks/translations';
 
 counterpart.registerTranslations 'en', require('../../locales/en').default
 counterpart.registerTranslations 'it', require('../../locales/it').default
 counterpart.registerTranslations 'es', require('../../locales/es').default
+counterpart.registerTranslations 'nl', require('../../locales/nl').default
 counterpart.setFallbackLocale 'en'
 
 
@@ -35,6 +40,7 @@ ProjectPageController = React.createClass
     guideIcons: {}
     loading: false
     loadingSelectedWorkflow: false
+    organization: null
     owner: null
     preferences: null
     project: null
@@ -47,6 +53,10 @@ ProjectPageController = React.createClass
   _listenedToPreferences: null
 
   _boundForceUpdate: null
+
+  componentWillMount: ->
+    { actions } = @props
+    actions.translations.setLocale(@props.location.query.language) if @props.location.query.language
 
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
@@ -106,11 +116,18 @@ ProjectPageController = React.createClass
           # Use apiClient with cached resources from include to get out of cache
           awaitBackground = apiClient.type('backgrounds').get(project.links.background.id).catch((error) => [])
 
+          if project.links?.organization?
+            awaitOrganization = project.get('organization', { listed: true })
+              .catch((error) => [])
+              .then((response) => if response?.display_name then response else null)
+          else
+            awaitOrganization = Promise.resolve(null)
+
           awaitOwner = apiClient.type('users').get(project.links.owner.id).catch((error) => console.error(error))
 
           awaitPages = project.get('pages').catch((error) => []) # does not appear in project links?
 
-          awaitProjectAvatar = apiClient.type('avatars').get(project.links.avatar.id).catch((error) => [])
+          awaitProjectAvatar = apiClient.type('avatars').get(project.links.avatar.id).catch((error) => null)
 
           awaitProjectCompleteness = Promise.resolve(project.completeness is 1.0)
 
@@ -120,14 +137,16 @@ ProjectPageController = React.createClass
 
           Promise.all([
             awaitBackground,
+            awaitOrganization,
             awaitOwner,
             awaitPages,
             awaitProjectAvatar,
             awaitProjectCompleteness,
             awaitProjectRoles,
-            awaitPreferences
-          ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
-              @setState({ background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
+            awaitPreferences,
+            this.props.actions.translations.load('project', project.id, this.props.translations.locale)
+          ]).then(([background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
+              @setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
               @getSelectedWorkflow(project, preferences)
               @loadFieldGuide(project.id)
             ).catch((error) => @setState({ error }); console.error(error); );
@@ -136,6 +155,7 @@ ProjectPageController = React.createClass
           @setState
             background: null
             error: new Error 'NOT_FOUND'
+            organization: null
             owner: null
             pages: null
             preferences: null
@@ -210,6 +230,7 @@ ProjectPageController = React.createClass
 
 
   getWorkflow: (selectedWorkflowID, activeFilter = true) ->
+    { actions, translations } = this.props;
     query =
       id: "#{selectedWorkflowID}",
       project_id: @state.project.id
@@ -226,6 +247,7 @@ ProjectPageController = React.createClass
       .then ([workflow]) =>
         if workflow
           @setState({ loadingSelectedWorkflow: false, workflow })
+          actions.translations.load('workflow', workflow.id, translations.locale)
         else
           console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
           if selectedWorkflowID is @state.project.configuration?.default_workflow
@@ -294,24 +316,29 @@ ProjectPageController = React.createClass
         <div className="beta-border"></div>}
 
       {if @state.project? and @state.owner?
-        <ProjectPage
-          {...@props}
-          background={@state.background}
-          guide={@state.guide}
-          guideIcons={@state.guideIcons}
-          loading={@state.loading}
-          loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
-          onChangePreferences={@handlePreferencesChange}
-          owner={@state.owner}
-          pages={@state.pages}
-          preferences={@state.preferences}
+        <ProjectTranslations
           project={@state.project}
-          projectAvatar={@state.projectAvatar}
-          projectIsComplete={@state.projectIsComplete}
-          projectRoles={@state.projectRoles}
-          splits={@state.splits}
-          workflow={@state.workflow}
-        />
+        >
+          <ProjectPage
+            {...@props}
+            background={@state.background}
+            guide={@state.guide}
+            guideIcons={@state.guideIcons}
+            loading={@state.loading}
+            loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
+            onChangePreferences={@handlePreferencesChange}
+            organization={@state.organization}
+            owner={@state.owner}
+            pages={@state.pages}
+            preferences={@state.preferences}
+            project={@state.project}
+            projectAvatar={@state.projectAvatar}
+            projectIsComplete={@state.projectIsComplete}
+            projectRoles={@state.projectRoles}
+            splits={@state.splits}
+            workflow={@state.workflow}
+          />
+        </ProjectTranslations>
 
       else if @state.loading
         <div className="content-container">
@@ -339,4 +366,14 @@ ProjectPageController = React.createClass
           </div>}
     </div>
 
-module.exports = ProjectPageController
+mapStateToProps = (state) -> ({
+  translations: state.translations
+});
+
+mapDispatchToProps = (dispatch) -> ({
+  actions: {
+    translations: bindActionCreators(translationActions, dispatch)
+  }
+});
+
+module.exports = connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ProjectPageController)

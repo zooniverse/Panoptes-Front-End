@@ -8,7 +8,7 @@ putFile = require '../../lib/put-file'
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 alert = require('../../lib/alert').default
-Select = require 'react-select'
+Select = require('react-select').default
 `import DISCIPLINES from '../../constants/disciplines';`
 `import CharLimit from '../../components/char-limit';`
 `import ExternalLinksEditor from './external-links-editor';`
@@ -212,6 +212,10 @@ module.exports = React.createClass
               the about, classify, talk, and collect tabs. You can rearrange the
               displayed order by clicking and dragging on the left gray tab next
               to each link below.
+            </small>
+            <br />
+            <small className="form-help">
+              The URL must begin with "<code>https://</code>" or "<code>http://</code>".
             </small>
             <ExternalLinksEditor project={@props.project} />
             <div className="edit-social-links">

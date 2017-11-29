@@ -24,8 +24,9 @@ export default class Shortcut extends React.Component {
   }
 
   render() {
-    const options = this.props.workflow.tasks[this.props.task.unlinkedTask] ? this.props.workflow.tasks[this.props.task.unlinkedTask].answers : [];
-    const active = this.props.annotation.shortcut ? this.props.annotation.shortcut.value : [];
+    const { annotation, task, translation, workflow } = this.props;
+    const options = workflow.tasks[task.unlinkedTask] ? workflow.tasks[task.unlinkedTask].answers : [];
+    const active = annotation.shortcut ? annotation.shortcut.value : [];
 
     return (
       <div className="unlinked-shortcut">
@@ -38,7 +39,7 @@ export default class Shortcut extends React.Component {
                 <small>
                   <strong>
                     <input id={`shortcut-${i}`} type="checkbox" checked={active.includes(i)} onChange={this.toggleShortcut.bind(this, i)} />
-                    {' '}{answer.label}
+                    {' '}{translation.answers[i].label}
                   </strong>
                 </small>
               </label>
@@ -84,6 +85,9 @@ Shortcut.propTypes = {
   task: React.PropTypes.shape(
     { unlinkedTask: React.PropTypes.string }
   ),
+  translation: React.PropTypes.shape({
+    answers: React.PropTypes.array
+  }),
   workflow: React.PropTypes.shape(
     { tasks: React.PropTypes.object }
   )
@@ -97,6 +101,9 @@ Shortcut.defaultProps = {
   onChange: () => {},
   task: {
     unlinkedTask: null
+  },
+  translation: {
+    answers: []
   },
   workflow: {
     tasks: {}

@@ -527,14 +527,19 @@ EditWorkflowPage = React.createClass
     <PromiseRenderer promise={projectAndWorkflowTutorials}>{([projectTutorials, workflowTutorials]) =>
       # Backwards compatibility with tutorials with null kind values
       tutorials = projectTutorials.filter((value)-> value if value.kind is 'tutorial' or value.kind is null)
+      workflowTutorial = tutorials.filter((value) -> value if value in workflowTutorials)[0]
       if tutorials.length > 0
         <form className="workflow-link-tutorials-form">
           <span className="form-label">Tutorials</span>
+          <label>
+            <input name="tutorial" type="radio" value="" checked={!workflowTutorial} onChange={@removeTutorial.bind this, workflowTutorial, workflowTutorials} />
+            No tutorial
+          </label>
           {for tutorial in tutorials
-            assignedTutorial = tutorial in workflowTutorials
+            assignedTutorial = tutorial is workflowTutorial
             toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
-              <input type={if tutorials.length is 1 then "checkbox" else "radio"} checked={assignedTutorial} onChange={toggleTutorial} />
+              <input name="tutorial" type="radio" checked={assignedTutorial} value={tutorial.id} onChange={toggleTutorial} />
               Tutorial #{tutorial.id} {" - #{tutorial.display_name}" if tutorial.display_name}
             </label>}
         </form>
@@ -548,14 +553,19 @@ EditWorkflowPage = React.createClass
       apiClient.type('tutorials').get workflow_id: @props.workflow.id, page_size: 100, kind: 'mini-course'
     ]
     <PromiseRenderer promise={projectAndWorkflowTutorials}>{([projectTutorials, workflowTutorials]) =>
+      workflowMiniCourse = projectTutorials.filter((value) -> value if value in workflowTutorials)[0]
       if projectTutorials.length > 0
         <form className="workflow-link-tutorials-form">
           <span className="form-label">Mini-Courses</span>
+          <label>
+            <input name="minicourse" type="radio" value="" checked={!workflowMiniCourse} onChange={@removeTutorial.bind this, workflowMiniCourse, workflowTutorials} />
+            No mini-course
+          </label>
           {for tutorial in projectTutorials
-            assignedTutorial = tutorial in workflowTutorials
+            assignedTutorial = tutorial is workflowMiniCourse
             toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
-              <input type={if projectTutorials.length is 1 then "checkbox" else "radio"} checked={assignedTutorial} onChange={toggleTutorial} />
+              <input name="minicourse" type="radio" checked={assignedTutorial} onChange={toggleTutorial} />
               Mini-Course #{tutorial.id} {" - #{tutorial.display_name}" if tutorial.display_name}
             </label>}
         </form>
@@ -671,6 +681,8 @@ EditWorkflowPage = React.createClass
         else
           @props.workflow.removeLink 'tutorials', tutorial.id
 
+  removeTutorial: (tutorial, workflowTutorials, e) ->
+    @props.workflow.removeLink 'tutorials', tutorial.id
 
   addDemoSubjectSet: ->
     @props.project.uncacheLink 'subject_sets'

@@ -16,4 +16,4 @@ RUN curl -L https://static.zooniverse.org/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
 
 ADD . /src/
 
-RUN npm install --unsafe-perm
+RUN npm install --unsafe-perm 

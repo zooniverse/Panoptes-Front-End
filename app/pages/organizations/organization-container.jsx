@@ -23,6 +23,7 @@ class OrganizationContainer extends React.Component {
     };
 
     this.toggleCollaboratorView = this.toggleCollaboratorView.bind(this);
+    this.updateQuery = this.updateQuery.bind(this);
   }
 
   componentDidMount() {
@@ -42,6 +43,10 @@ class OrganizationContainer extends React.Component {
         this.fetchOrganization(nextProps.params.name, nextProps.params.owner);
       }
     }
+
+    if (this.state.organization && (nextProps.location.query !== this.props.location.query)) {
+      this.fetchProjects(this.state.organization, this.state.collaboratorView, nextProps.location.query);
+    }
   }
 
   isCollaborator() {
@@ -60,13 +65,30 @@ class OrganizationContainer extends React.Component {
     this.fetchProjects(this.state.organization, newView);
   }
 
-  fetchProjects(organization, collaboratorView) {
-    this.setState({ errorFetchingProjects: null, fetchingProjects: true });
+  updateQuery(newParams) {
+    const query = Object.assign({}, this.props.location.query, newParams);
+    const results = [];
+    Object.keys(query).forEach((key) => {
+      if (query[key] === '') {
+        results.push(delete query[key]);
+      }
+    });
+    const newLocation = Object.assign({}, this.props.location, { query });
+    newLocation.search = '';
+    this.context.router.push(newLocation);
+  }
 
+  fetchProjects(organization, collaboratorView, locationQuery = this.props.location.query) {
+    this.setState({ errorFetchingProjects: null, fetchingProjects: true });
     const query = { cards: true, launch_approved: true };
+
     if (collaboratorView) {
       delete query.launch_approved;
     }
+    if (locationQuery && locationQuery.category) {
+      query.tags = locationQuery.category;
+    }
+
     organization.get('projects', query)
       .then(organizationProjects => this.setState({ fetchingProjects: false, organizationProjects }))
       .catch((error) => {
@@ -135,10 +157,12 @@ class OrganizationContainer extends React.Component {
     if (this.state.organization && (this.state.organization.listed || isAdmin() || this.isCollaborator())) {
       return (
         <OrganizationPage
+          category={this.props.location && this.props.location.query && this.props.location.query.category}
           collaborator={isAdmin() || this.isCollaborator()}
           collaboratorView={this.state.collaboratorView}
           errorFetchingProjects={this.state.errorFetchingProjects}
           fetchingProjects={this.state.fetchingProjects}
+          onChangeQuery={this.updateQuery}
           organization={this.state.organization}
           organizationAvatar={this.state.organizationAvatar}
           organizationBackground={this.state.organizationBackground}
@@ -187,12 +211,18 @@ class OrganizationContainer extends React.Component {
 
 OrganizationContainer.contextTypes = {
   initialLoadComplete: React.PropTypes.bool,
+  router: React.PropTypes.object.isRequired,
   user: React.PropTypes.shape({
     id: React.PropTypes.string
   })
 };
 
 OrganizationContainer.propTypes = {
+  location: React.PropTypes.shape({
+    query: React.PropTypes.shape({
+      category: React.PropTypes.string
+    })
+  }),
   params: React.PropTypes.shape({
     name: React.PropTypes.string,
     owner: React.PropTypes.string

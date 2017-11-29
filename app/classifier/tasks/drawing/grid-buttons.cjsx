@@ -1,5 +1,5 @@
 React = require 'react'
-Select = require 'react-select'
+Select = require('react-select').default
 
 module.exports = React.createClass
   displayName: 'GridButtons'

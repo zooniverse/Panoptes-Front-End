@@ -73,18 +73,19 @@ class Choice extends React.Component {
   }
 
   render() {
-    const choice = this.props.task.choices[this.props.choiceID];
+    const { choiceID, task, translation } = this.props;
+    const choice = task.choices[this.props.choiceID];
     let hasFocus = choice.images.length > 1;
     return (
       <div className="survey-task-choice">
         {choice.images.length > 0 &&
           <ImageFlipper
-            images={choice.images.map(filename => this.props.task.images[filename])}
+            images={choice.images.map(filename => task.images[filename])}
           />
         }
         <div className="survey-task-choice-content">
-          <div className="survey-task-choice-label">{choice.label}</div>
-          <div className="survey-task-choice-description">{choice.description}</div>
+          <div className="survey-task-choice-label">{translation.choices[choiceID].label}</div>
+          <div className="survey-task-choice-description">{translation.choices[choiceID].description}</div>
 
           {choice.confusionsOrder.length > 0 &&
             <div className="survey-task-choice-confusions">
@@ -99,13 +100,13 @@ class Choice extends React.Component {
                       triggerProps={{ autoFocus: !hasFocus && i === 0 }}
                       trigger={
                         <span className="survey-task-choice-confusion">
-                          {otherChoice.label}
+                          {this.props.translation.choices[otherChoiceID].label}
                         </span>
                       }
                       style={{ maxWidth: '60ch' }}
                     >
                       <ImageFlipper images={otherChoice.images.map(filename => this.props.task.images[filename])} />
-                      <Markdown content={choice.confusions[otherChoiceID]} />
+                      <Markdown content={this.props.translation.choices[this.props.choiceID].confusions[otherChoiceID]} />
                       <div className="survey-task-choice-confusion-buttons" style={{ textAlign: 'center' }}>
                         <button
                           type="submit"
@@ -135,14 +136,13 @@ class Choice extends React.Component {
           <hr />
 
           {!choice.noQuestions &&
-            Utility.getQuestionIDs(this.props.task, this.props.choiceID).map((questionId) => {
-              const question = this.props.task.questions[questionId] || { answers: {}, answersOrder: [] };
+            Utility.getQuestionIDs(task, choiceID).map((questionId) => {
+              const question = task.questions[questionId] || { answers: {}, answersOrder: [] };
               const inputType = question.multiple ? 'checkbox' : 'radio';
               return (
                 <div key={questionId} className="survey-task-choice-question" data-multiple={question.multiple || null}>
-                  <div className="survey-task-choice-question-label">{question.label}</div>
+                <div className="survey-task-choice-question-label">{translation.questions[questionId].label}</div>
                   {question.answersOrder.map((answerId, i) => {
-                    const answer = question.answers[answerId];
                     const isChecked = question.multiple ?
                       !!this.state.answers[questionId] && this.state.answers[questionId].indexOf(answerId) > -1 :
                       this.state.answers[questionId] === answerId;
@@ -164,7 +164,7 @@ class Choice extends React.Component {
                             onFocus={this.handleFocus.bind(this, questionId, answerId)}
                             onBlur={this.handleFocus.bind(this, null, null)}
                           />
-                          {answer.label}
+                          {translation.questions[questionId].answers[answerId].label}
                         </label>
                         {' '}
                         {hasFocus = true}
@@ -175,7 +175,7 @@ class Choice extends React.Component {
               );
             })
           }
-          {Utility.getQuestionIDs(this.props.task, this.props.choiceID).length > 0 && <hr />}
+          {Utility.getQuestionIDs(task, choiceID).length > 0 && <hr />}
         </div>
         <div style={{ textAlign: 'center' }}>
           <button
@@ -215,10 +215,19 @@ Choice.propTypes = {
     choices: React.PropTypes.object,
     images: React.PropTypes.object,
     questions: React.PropTypes.object
-  })
+  }),
+  translation: React.PropTypes.shape({
+    characteristics: React.PropTypes.object,
+    choices: React.PropTypes.object,
+    questions: React.PropTypes.object
+  }).isRequired
 };
 
 Choice.defaultProps = {
+  annotation: {
+    task: '',
+    value: []
+  },
   annotationValue: { answers: {}},
   task: null,
   choiceID: '',

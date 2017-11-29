@@ -1,6 +1,7 @@
 import React from 'react';
-import tasks from './tasks';
 import { TextSplit } from 'seven-ten';
+import tasks from './tasks';
+import TaskTranslations from './tasks/translations';
 
 const DefaultClassificationSummary = (props) => {
   let firstTimeClassified;
@@ -24,7 +25,17 @@ const DefaultClassificationSummary = (props) => {
       const SummaryComponent = tasks[task.type].Summary; // TODO: There's a lot of duplicated code in these modules.
       body.push(
         <div key={annotation._key} className="classification-task-summary">
-          <SummaryComponent task={task} annotation={annotation} onToggle={props.onToggle} workflow={props.workflow} />
+          <TaskTranslations
+            taskKey={annotation.task}
+            task={task}
+          >
+            <SummaryComponent
+              task={task}
+              annotation={annotation}
+              onToggle={props.onToggle}
+              workflow={props.workflow}
+            />
+          </TaskTranslations>
         </div>
       );
     });

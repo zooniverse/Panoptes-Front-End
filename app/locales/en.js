@@ -6,6 +6,7 @@ export default {
     done: 'Done',
     doneAndTalk: 'Done & Talk',
     next: 'Next',
+    recents: 'Your recent classifications',
     talk: 'Talk',
     tutorialButton: 'Show the project tutorial',
     miniCourseButton: 'Restart the project mini-course'
@@ -17,9 +18,13 @@ export default {
       about: 'About',
       classify: 'Classify',
       talk: 'Talk',
-      collections: 'Collect'
+      collections: 'Collect',
+      recents: 'Recents',
+      lab: 'Lab',
+      adminPage: 'Admin page'
     },
     home: {
+      organization: 'Organization',
       researcher: 'Words from the researcher',
       about: 'About %(title)s',
       metadata: {
@@ -137,11 +142,48 @@ export default {
     newPasswordConfirmationLabel: 'Again, to confirm:',
     enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
     emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
-    emailError: 'There was an error reseting your password.',
+    emailError: 'There was an error resetting your password.',
     resetError: 'Something went wrong, please try and reset your password via email again.',
     loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.'
   },
   workflowToggle: {
     label: 'Active'
+  },
+  collections: {
+    createForm: {
+      private: 'Private',
+      submit: 'Add Collection'
+    }
+  },
+  emailSettings: {
+    email: 'Email address',
+    general: {
+      section: 'Zooniverse email preferences',
+      updates: 'Get general Zooniverse email updates',
+      classify: 'Get email updates from the Projects you classify on',
+      beta: 'Get beta project email updates and become a beta tester'
+    },
+    talk: {
+      section: 'Talk email preferences',
+      header: 'Send me an email',
+      frequency: {
+        immediate: 'Immediately',
+        day: 'Daily',
+        week: 'Weekly',
+        never: 'Never'
+      },
+      options: {
+        participating_discussions: 'When discussions I\'m participating in are updated',
+        followed_discussions: 'When discussions I\'m following are updated',
+        mentions: 'When I\'m mentioned',
+        group_mentions: 'When I\'m mentioned by group (@admins, @team, etc.)',
+        messages: 'When I receive a private message',
+        started_discussions: 'When a discussion is started in a board I\'m following'
+      }
+    },
+    project: {
+      section: 'Project email preferences',
+      header: 'Project'
+    }
   }
 };

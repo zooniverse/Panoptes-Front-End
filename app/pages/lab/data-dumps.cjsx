@@ -8,7 +8,6 @@ Dialog = require 'modal-form/dialog'
 counterpart.registerTranslations 'en',
   projectDetails:
     classificationExport: "Request new classification export"
-    aggregationExport: "Experimental - Request new aggregation export"
     subjectExport: "Request new subject export"
     workflowExport: "Request new workflow export"
     workflowContentsExport: "Request new workflow contents export"
@@ -73,15 +72,6 @@ module.exports = React.createClass
               project={@props.project}
               buttonKey="projectDetails.workflowContentsExport"
               exportType="workflow_contents_export"  />
-          </div>
-          <div className="row">
-            <DataExportButton
-              project={@props.project}
-              buttonKey="projectDetails.aggregationExport"
-              contentType="application/x-gzip"
-              exportType="aggregations_export"
-              newFeature=true
-            />
           </div>
           <hr />
 

@@ -14,9 +14,10 @@ const params = {
 };
 
 export const organization = {
-  id: '9876',
+  categories: ['Plants', 'Bugs', 'Butterflies'],
   display_name: 'Test Org',
   description: 'A brief test description',
+  id: '9876',
   introduction: 'A brief test introduction',
   urls: [
     {
@@ -48,7 +49,7 @@ describe('OrganizationContainer', function () {
   let wrapper;
 
   beforeEach(function () {
-    wrapper = shallow(<OrganizationContainer params={params} />);
+    wrapper = shallow(<OrganizationContainer params={params} />, { context: { router: {}}});
   });
 
   it('should render without crashing', function () {

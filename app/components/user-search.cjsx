@@ -1,5 +1,5 @@
 React = require 'react'
-Select = require 'react-select'
+Select = require('react-select').default
 apiClient = require 'panoptes-client/lib/api-client'
 
 delayBy = (timeout, fn) ->
