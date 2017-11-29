@@ -21,7 +21,7 @@ class EmailSettingsPage extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!(this.state.page === prevState.page)) {
+    if (this.state.page !== prevState.page) {
       this.getProjectForPreferences(prevProps.user);
     }
   }
