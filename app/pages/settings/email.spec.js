@@ -83,8 +83,8 @@ describe('EmailSettings', () => {
       projectSettings = wrapper.find('table').last().find('tbody tr');
     });
 
-    it('lists two projects (plus pagination)', () => {
-      assert.equal(projectSettings.length, 3);
+    it('lists two projects', () => {
+      assert.equal(projectSettings.length, 2);
     });
 
     projects.forEach((project, i) => {
@@ -133,7 +133,7 @@ describe('EmailSettings', () => {
 
   describe('Project pagination', () => {
     it('defaults to page 1', () => {
-      assert.equal(wrapper.state().page, 1);
+      assert.equal(wrapper.state().page, '1');
     });
 
     it('should be disabled with less than one page of projects', () => {
