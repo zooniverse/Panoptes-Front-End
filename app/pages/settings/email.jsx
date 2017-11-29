@@ -70,7 +70,7 @@ function ProjectPreferences({ projects, projectPreferences, onChange }) {
                   type="checkbox"
                   name="email_communication"
                   checked={projectPreference.email_communication}
-                  onChange={(e) => onChange(i, e)}
+                  onChange={e => onChange(i, e)}
                 />
               </td>
               <td>
@@ -124,8 +124,8 @@ Pagination.defaultProps = {
   meta: {
     page_count: 1
   },
-  page: 1
-}
+  page: '1'
+};
 
 class EmailSettingsPage extends React.Component {
   constructor(props) {
@@ -294,7 +294,10 @@ class EmailSettingsPage extends React.Component {
               <Translate component="th" content="emailSettings.talk.frequency.never" />
             </tr>
           </thead>
-          <TalkPreferences talkPreferences={this.state.talkPreferences} onChange={this.handleTalkPreferenceChange} />
+          <TalkPreferences
+            talkPreferences={this.state.talkPreferences}
+            onChange={this.handleTalkPreferenceChange}
+          />
         </table>
 
         <p>
@@ -312,7 +315,7 @@ class EmailSettingsPage extends React.Component {
             </tr>
           </thead>
           <ProjectPreferences
-              projects={this.state.projects}
+            projects={this.state.projects}
             projectPreferences={this.state.projectPreferences}
             onChange={this.handleProjectPreferenceChange}
           />
@@ -339,6 +342,10 @@ EmailSettingsPage.defaultProps = {
 
 EmailSettingsPage.propTypes = {
   user: React.PropTypes.shape({
+    email: React.PropTypes.string,
+    beta_email_communication: React.PropTypes.bool,
+    project_email_communication: React.PropTypes.bool,
+    global_email_communication: React.PropTypes.bool,
     get: React.PropTypes.func
   })
 };
