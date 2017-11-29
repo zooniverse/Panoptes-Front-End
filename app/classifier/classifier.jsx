@@ -403,6 +403,12 @@ Classifier.contextTypes = {
 };
 
 Classifier.propTypes = {
+  actions: React.PropTypes.shape({
+    feedback: React.PropTypes.shape({
+      init: React.PropTypes.func,
+      update: React.PropTypes.func
+    })
+  }),
   classification: React.PropTypes.shape({
     annotations: React.PropTypes.array,
     completed: React.PropTypes.bool,
@@ -416,7 +422,8 @@ Classifier.propTypes = {
   demoMode: React.PropTypes.bool,
   expertClassifier: React.PropTypes.bool,
   feedback: React.PropTypes.shape({
-    active: React.PropTypes.bool
+    active: React.PropTypes.bool,
+    rules: React.PropTypes.object
   }),
   minicourse: React.PropTypes.shape({
     id: React.PropTypes.string,
@@ -474,8 +481,8 @@ Classifier.defaultProps = {
   workflow: null
 };
 
-const mapStateToProps = (state) => ({
-  feedback: state.feedback,
+const mapStateToProps = state => ({
+  feedback: state.feedback
 });
 
 const mapDispatchToProps = dispatch => ({

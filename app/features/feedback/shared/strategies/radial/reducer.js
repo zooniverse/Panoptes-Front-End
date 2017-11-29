@@ -7,7 +7,10 @@ function isAnnotationWithinTolerance(rule, annotation) {
   const feedbackY = rule.y;
   const tolerance = rule.tolerance;
 
-  const distance = Math.sqrt(Math.pow((annotationY - feedbackY), 2) + Math.pow((annotationX - feedbackX), 2));
+  const distance = Math.sqrt(
+    ((annotationY - feedbackY) ** 2) +
+    ((annotationX - feedbackX) ** 2)
+  );
 
   return distance < tolerance;
 }

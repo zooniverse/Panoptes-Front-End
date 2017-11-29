@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import counterpart from 'counterpart';
 import TextInput from '../../components/text-input';
 
@@ -35,5 +35,12 @@ function RadialLabComponent({ formState, handleInputChange }) {
     </div>
   );
 }
+
+RadialLabComponent.propTypes = {
+  formState: PropTypes.shape({
+    defaultTolerance: PropTypes.number
+  }),
+  handleInputChange: PropTypes.func
+};
 
 export default RadialLabComponent;

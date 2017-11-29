@@ -9,7 +9,7 @@ const UPDATE = 'pfe/feedback/UPDATE';
 // Reducer
 const initialState = {
   active: false,
-  rules: []
+  rules: {}
 };
 
 export default function reducer(state = initialState, action = {}) {
