@@ -124,7 +124,7 @@ Pagination.defaultProps = {
   meta: {
     page_count: 1
   },
-  page: '1'
+  page: 1
 };
 
 class EmailSettingsPage extends React.Component {
