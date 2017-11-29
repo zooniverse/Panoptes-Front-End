@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ModalFormDialog from 'modal-form/dialog';
 import _ from 'lodash';
 import FeedbackSection from '../components/feedback-section';
@@ -66,10 +66,10 @@ class FeedbackSectionContainer extends Component {
 }
 
 FeedbackSectionContainer.propTypes = {
-  task: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    feedback: React.PropTypes.shape({
-      enabled: React.PropTypes.bool
+  task: PropTypes.shape({
+    type: PropTypes.string,
+    feedback: PropTypes.shape({
+      enabled: PropTypes.bool
     })
   }),
   saveFn: React.PropTypes.func

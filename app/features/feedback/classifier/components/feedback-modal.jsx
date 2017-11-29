@@ -5,16 +5,17 @@ import counterpart from 'counterpart';
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
   FeedbackModal: {
-    title: 'Feedback'
+    title: 'Feedback',
+    ok: 'OK'
   }
 });
 /* eslint-enable max-len */
 
-function FeedbackModal({ messages }) {
+function FeedbackModal({ messages, subjectViewer }) {
   return (
     <section>
       <Translate content="FeedbackModal.title" component="h2" />
-
+      {subjectViewer}
       <ul>
         {messages.map(message =>
           <li key={message}>
@@ -22,6 +23,11 @@ function FeedbackModal({ messages }) {
           </li>
         )}
       </ul>
+
+      <input
+        type="submit"
+        value={counterpart('FeedbackModal.ok')}
+      />
     </section>
   );
 }

@@ -80,11 +80,6 @@ class Classifier extends React.Component {
     }
   }
 
-  getActiveTask(state) {
-    const annotation = state.annotations[state.annotations.length - 1];
-    return (annotation) ? this.props.workflow.tasks[annotation.task] : null;
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.classification !== this.props.classification) {
       prevProps.classification.stopListening('change', this.updateAnnotations);
@@ -107,6 +102,11 @@ class Classifier extends React.Component {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  getActiveTask(state) {
+    const annotation = _.last(state.annotations);
+    return (annotation) ? this.props.workflow.tasks[annotation.task] : null;
   }
 
   getExpertClassification(workflow, subject) {
@@ -133,7 +133,10 @@ class Classifier extends React.Component {
     const modal = (<FeedbackModal
       feedback={taskFeedback}
     />);
-    return ModalFormDialog.alert(modal);
+    return ModalFormDialog.alert(modal, {
+      required: true
+    });
+    // then save feedback on the classification
   }
 
   updateAnnotations() {

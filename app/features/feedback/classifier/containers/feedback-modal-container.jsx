@@ -34,9 +34,9 @@ class FeedbackModalContainer extends Component {
 FeedbackModalContainer.propTypes = {
   feedback: PropTypes.arrayOf(PropTypes.shape({
     success: PropTypes.bool,
-    successEnabled: PropTypes.string,
+    successEnabled: PropTypes.bool,
     successMessage: PropTypes.string,
-    failureEnabled: PropTypes.string,
+    failureEnabled: PropTypes.bool,
     failureMessage: PropTypes.string
   }))
 };

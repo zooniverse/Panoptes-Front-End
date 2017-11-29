@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import RuleEditorModal from '../components/rule-editor-modal';
 import defaultValidations from '../helpers/default-validations';
@@ -54,5 +54,10 @@ class RuleEditorModalContainer extends Component {
     />);
   }
 }
+
+RuleEditorModalContainer.propTypes = {
+  rule: PropTypes.object,
+  saveRule: PropTypes.func
+};
 
 export default RuleEditorModalContainer;
