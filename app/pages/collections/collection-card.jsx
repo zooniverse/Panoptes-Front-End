@@ -45,15 +45,18 @@ export default class CollectionCard extends React.Component {
             <span className="collection-card__badge">{this.props.collection.links.subjects.length}</span>}
           <svg viewBox="0 0 2 1" width="100%" />
           <div className="details">
-            <div className="name">
-              <span>{this.props.collection.display_name}</span>
-              {this.props.collection.private ? <i className="fa fa-lock" /> : null}
-            </div>
             <div className="owner">
               {this.props.shared ?
                 <span><i className="fa fa-users" />{' '}</span> : null}
               {this.props.collection.links.owner.display_name}
             </div>
+            <div className="name">
+              <span>{this.props.collection.display_name}</span>
+              {this.props.collection.private ? <i className="fa fa-lock" /> : null}
+            </div>
+            <p className="description">
+              {this.props.collection.description}
+            </p>
           </div>
         </div>
       </FlexibleLink>

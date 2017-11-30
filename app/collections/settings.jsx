@@ -1,13 +1,16 @@
 import React from 'react';
 import alert from '../lib/alert';
+import AutoSave from '../components/auto-save';
 import DisplayNameSlugEditor from '../partials/display-name-slug-editor';
 import Thumbnail from '../components/thumbnail';
+import CharLimit from '../components/char-limit';
 
 export default class CollectionSettings extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      description: '',
       error: null,
       isDeleting: false,
       setting: {
@@ -19,6 +22,7 @@ export default class CollectionSettings extends React.Component {
     this.deleteCollection = this.deleteCollection.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.redirect = this.redirect.bind(this);
+    this.handleDescriptionInputChange = this.handleDescriptionInputChange.bind(this);
   }
 
   componentDidMount() {
@@ -84,6 +88,15 @@ export default class CollectionSettings extends React.Component {
       });
   }
 
+  handleDescriptionInputChange(event) {
+    const description = event.target.value;
+    this.setState({ description })
+
+    if (description.length <= 300) {
+       this.props.collection.update({ description });
+    }
+  }
+
   render() {
     if (!this.props.canCollaborate) {
       return (
@@ -100,6 +113,30 @@ export default class CollectionSettings extends React.Component {
           <p>Something went wrong. Please try again</p>}
         <DisplayNameSlugEditor resource={this.props.collection} resourceType="collection" />
 
+        <hr />
+
+        <h3 className="form-label">Description</h3>
+        <AutoSave resource={this.props.collection}>
+          <form>
+            <textarea
+              name="description"
+              className="standard-input full"
+              value={this.props.collection.description}
+              onChange={this.handleDescriptionInputChange}
+              placeholder="Collection Description"
+            />
+          </form>
+        </AutoSave>
+        <small>
+          Describe your collection in more detail.{' '}
+          <CharLimit
+            limit={300}
+            string={this.props.collection.description}
+          />
+        </small>
+        <br />
+        {this.state.description.length > 300 &&
+          <span className="form-help error">Description cannot be more than 300 characters.</span>}
         <hr />
 
         <h3 className="form-label">Visibility</h3>
@@ -130,14 +167,23 @@ export default class CollectionSettings extends React.Component {
           </label>
         </form>
 
-        <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
+        <p className="form-help">
+          Only the assigned <strong>collaborators</strong> can view a private project.
+          Anyone with the URL can access a public project.
+        </p>
 
         <hr />
 
         <h3 className="form-label">Cover Subject</h3>
 
-        <p className="form-help">The cover subject defaults to the first frame of the first subject linked to the collection. A custom cover can be set by owners or collaborators using the button toggle below the subject previews while browsing the collection.</p>
-        <p className="form-help">Note: Setting the subject cover is only supported for image subjects at this time.</p>
+        <p className="form-help">
+          The cover subject defaults to the first frame of the first subject linked to the collection.
+          A custom cover can be set by owners or collaborators using the button toggle
+          below the subject previews while browsing the collection.
+        </p>
+        <p className="form-help">
+          Note: Setting the subject cover is only supported for image subjects at this time.
+        </p>
 
         {this.props.collection.default_subject_src &&
           <Thumbnail className="cover-subject-preview" src={this.props.collection.default_subject_src} width={300} />}
@@ -166,6 +212,7 @@ CollectionSettings.propTypes = {
   canCollaborate: React.PropTypes.bool,
   collection: React.PropTypes.shape({
     default_subject_src: React.PropTypes.string,
+    description: React.PropTypes.string,
     private: React.PropTypes.bool
   })
 };

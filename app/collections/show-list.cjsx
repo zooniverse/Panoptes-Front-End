@@ -78,7 +78,7 @@ SubjectNode = React.createClass
     { src } = getSubjectLocation(@props.subject);
 
     <div className="collection-subject-viewer">
-      <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project} isFavorite={@state.isFavorite}>
+      <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@props.projectContext} isFavorite={@state.isFavorite}>
         {if !@props.selecting
           <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
             <span></span>
@@ -217,19 +217,18 @@ module.exports = React.createClass
 
   render: ->
     if @state.subjects?
-      <div className="collections-show">
-        {if @state.subjects.length is 0
-          <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
+      <div>
+        <div className="collection__description-container">
+          {if @props.collection.description
+            <p className="collection__description">
+              {@props.collection.description}
+            </p>}
 
-        {if @state.subjects.length > 0
-          meta = @state.subjects[0].getMeta()
-
-          <div>
           {if @state.selecting
-            <div className="collection-buttons-container">
+            <div className="collection__buttons-container">
               <button
                 type="button"
-                className="select-subjects-button"
+                className="collection__select-subjects-button"
                 onClick={@promptCollectionManager}
                 disabled={@state.selected.length < 1}>
                 Add to Collection
@@ -237,42 +236,49 @@ module.exports = React.createClass
               {if @props.canCollaborate
                 <button
                   type="button"
-                  className="select-subjects-button"
+                  className="collection__select-subjects-button"
                   onClick={@confirmDeleteSubjects}
                   disabled={@state.selected.length < 1}>
                   Remove from Collection
                 </button>}
-              <button type="button" className="select-subjects-button" onClick={@toggleSelecting}>Cancel</button>
+              <button type="button" className="collection__select-subjects-button" onClick={@toggleSelecting}>Cancel</button>
             </div>
           else if @props.user?
-            <div className="collection-buttons-container">
-              <button type="button" className="select-subjects-button" onClick={@toggleSelecting}>Select Subjects</button>
-            </div>
-          }
-            <div>
-              {@state.subjects.map (subject) =>
-                <SubjectNode
-                  key={subject.id}
-                  collection={@props.collection}
-                  subject={subject}
-                  user={@props.user}
-                  canCollaborate={@props.canCollaborate}
-                  selecting={@state.selecting}
-                  selected={@selected(subject.id)}
-                  addSelected={@addSelected.bind @, subject.id}
-                  removeSelected={@removeSelected.bind @, subject.id}
-                  onDelete={@handleDeleteSubject.bind @, subject}
-                />
-              }
-            </div>
+            <div className="collection__buttons-container">
+              <button type="button" className="collection__select-subjects-button" onClick={@toggleSelecting}>Select Subjects</button>
+            </div>}
+          </div>
 
-            <Paginator
-              className="talk"
-              page={meta.page}
-              onPageChange={@onPageChange}
-              pageCount={meta.page_count}
-            />
-          </div>}
+          <div className="collections-show">
+            {if @state.subjects.length is 0
+              <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
+
+            {if @state.subjects.length > 0
+              meta = @state.subjects[0].getMeta()
+
+              <div>
+                {@state.subjects.map (subject) =>
+                  <SubjectNode
+                    key={subject.id}
+                    collection={@props.collection}
+                    subject={subject}
+                    projectContext={@props.project}
+                    user={@props.user}
+                    canCollaborate={@props.canCollaborate}
+                    selecting={@state.selecting}
+                    selected={@selected(subject.id)}
+                    addSelected={@addSelected.bind @, subject.id}
+                    removeSelected={@removeSelected.bind @, subject.id}
+                    onDelete={@handleDeleteSubject.bind @, subject}
+                  />}
+                <Paginator
+                  className="talk"
+                  page={meta.page}
+                  onPageChange={@onPageChange}
+                  pageCount={meta.page_count}
+                />
+              </div>}
+          </div>
       </div>
     else if @state.error
       <Translate component="p" className="form-help error" content="collectionSubjectListPage.error" />

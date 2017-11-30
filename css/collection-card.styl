@@ -1,26 +1,39 @@
 .collections-card-list
   @extends $owned-card-list
-  
+
 .collection-card
   @extends $owned-card
   background: url('/assets/simple-pattern.png') center center repeat
-  border-radius: 1em
-  position: relative
 
-  .name
-    margin-bottom: 1em
-    height: 2.9em
-    overflow: hidden
-    text-overflow: ellipsis
-    line-height: 1.45em
-    max-height: 2.9em
+  svg
+    height: 150px
 
-    .fa-lock
-      margin-left: 0.3em
+  .details
+    padding: 1em
+    height: 80px
+    text-align: left
 
-  .owner
-    margin: 0 auto
-    height: 1.5em
+    .name
+      font-weight: 400
+      height: 2.9em
+      max-height: 2.9em
+      line-height: 1.45em
+      margin-bottom: 1em
+      color: #000000
+
+      .fa-lock
+        margin-left: 0.3em
+
+    .owner
+      text-transform: uppercase
+      margin: 0
+      height: 1.5em
+      color: #bababa
+      flex-grow: 1
+      font-size: .8em
+
+    .description
+      margin: 0.75em 0
 
   &__badge
     background: rgba(black, 0.4)

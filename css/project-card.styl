@@ -3,24 +3,15 @@
 
 .project-card
   @extends $owned-card
-
-.project-card
   background-color: white
-  height: 270px
-  position: relative
   text-align: center
 
   svg
     height: 215px
 
   .details
-    position: absolute
-    bottom: 0
-    left: 0
-    right: 0
     height: 60px
-    justify-content: space-between
-    transition: height 0.5s ease
+    padding: 20px
 
     .name
       text-transform: uppercase
@@ -35,17 +26,4 @@
         vertical-align: middle
 
     .description
-      color: COPY
-      font-size: 0.9em
-      height: 150px
       margin: 0.8em 0
-      overflow: hidden
-      text-align: center
-
-  .card-button
-    display: none
-
-  :hover > &,
-  :focus > &
-    .details
-      height: 175px

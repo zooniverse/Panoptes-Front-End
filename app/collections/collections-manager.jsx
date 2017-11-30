@@ -1,5 +1,5 @@
 import React from 'react';
-import CollectionsCreateForm from './create-form';
+import CollectionsCreateForm from './collections-create-form';
 import CollectionSearch from './collection-search';
 import LoadingIndicator from '../components/loading-indicator';
 
@@ -92,7 +92,7 @@ class CollectionsManager extends React.Component {
 
         <div className="form-help">Or Create a new Collection</div>
         <CollectionsCreateForm
-          projectID={this.props.project ? this.props.project.id : ''}
+          project={this.props.project}
           subjectIDs={this.props.subjectIDs}
           onSubmit={this.props.onSuccess}
         />
