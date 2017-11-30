@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 function ProjectTranslations(props) {
   const { description, display_name, introduction, researcher_quote, title } = props.project;
   const projectStrings = props.translations.strings.project;
-  const translation = Object.assign({ description, display_name, introduction, researcher_quote, title }, projectStrings);
+  const promotion_message = "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay";
+  const translation = Object.assign({ description, display_name, introduction, promotion_message, researcher_quote, title }, projectStrings);
 
   return React.cloneElement(props.children, { translation });
 }
