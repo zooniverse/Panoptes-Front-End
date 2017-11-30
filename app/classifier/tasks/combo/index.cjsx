@@ -1,6 +1,7 @@
 React = require 'react'
 SVGRenderer = require('../../annotation-renderer/svg').default
 MarkingsRenderer = require('./markings-renderer').default
+TaskTranslations = require('../translations').default
 
 ComboTask = React.createClass
   statics:
@@ -114,7 +115,12 @@ ComboTask = React.createClass
                 <strong>This task might not work as part of a combo at this time.</strong>
               </small>
             </div>}
-          <TaskComponent {...@props} autoFocus={i is 0} task={taskDescription} annotation={annotation} onChange={@handleChange.bind this, i} />
+          <TaskTranslations
+            taskKey={annotation.task}
+            task={taskDescription}
+          >
+            <TaskComponent {...@props} autoFocus={i is 0} task={taskDescription} annotation={annotation} onChange={@handleChange.bind this, i} />
+          </TaskTranslations>
         </div>}
     </div>
 
