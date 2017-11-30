@@ -31,6 +31,7 @@ const project = {
   display_name: 'Project display name',
   introduction: 'Project introduction',
   description: 'A project description',
+  promotion_message: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay",
   researcher_quote: 'Hello world!',
   links: {}
 };
@@ -41,6 +42,7 @@ const expectedProject = {
   display_name: 'Project display name',
   introduction: 'Project introduction',
   description: 'A project description',
+  promotion_message: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay",
   researcher_quote: 'Hello world!',
   links: {}
 };
@@ -50,6 +52,7 @@ const defaultTranslation = {
   display_name: 'Project display name',
   introduction: 'Project introduction',
   description: 'A project description',
+  promotion_message: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay",
   researcher_quote: 'Hello world!'
 };
 
@@ -58,6 +61,7 @@ const projectTranslation = {
   display_name: 'A translated display name',
   introduction: 'A translated introduction',
   description: 'A project description',
+  promotion_message: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay",
   researcher_quote: 'Hello world!'
 };
 
