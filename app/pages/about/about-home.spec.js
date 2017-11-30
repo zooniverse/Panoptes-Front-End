@@ -13,7 +13,6 @@ describe('AboutHome', function () {
   });
 
   it('renders without crashing', function () {
-    assert.equal(wrapper, wrapper);
   });
 
   it('renders five markdown elements', function () {
