@@ -26,6 +26,7 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.questions')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.marking')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.subjectSets')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.furtherHelp')}</Markdown>
   </div>);
 
 export default HowToBuildProject;
