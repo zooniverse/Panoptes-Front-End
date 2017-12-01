@@ -80,9 +80,6 @@ const preferences = apiClient.type('project_preferences').create({
   preferences: {},
   links: {
     project: project.id
-  },
-  save() {
-    Promise.resolve(preferences);
   }
 });
 
