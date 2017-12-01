@@ -68,7 +68,7 @@
     "coffee-script": "~1.10.0",
     "copy-webpack-plugin": "~4.0.1",
     "css-loader": "~0.28.0",
-    "ejs": "~2.3.3",
+    "ejs": "~2.5.7",
     "enzyme": "~2.4.1",
     "eslint": "~3.9.1",
     "eslint-config-airbnb": "~13.0.0",
