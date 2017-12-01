@@ -104,13 +104,14 @@ export default class SingleChoiceTask extends React.Component {
   }
 
   render() {
+    const { annotation, task, translation } = this.props;
     const answers = [];
-    for (const [i, answer] of this.props.task.answers.entries()) {
+    for (const [i, answer] of task.answers.entries()) {
       if (!answer._key) {
         answer._key = Math.random();
       }
       let active = '';
-      if (i === this.props.annotation.value) {
+      if (i === annotation.value) {
         active = 'active';
       }
       answers.push(
@@ -118,25 +119,25 @@ export default class SingleChoiceTask extends React.Component {
           <div className="answer-button-icon-container">
             <input
               type="radio"
-              autoFocus={i === this.props.annotation.value}
-              checked={i === this.props.annotation.value}
+              autoFocus={i === annotation.value}
+              checked={i === annotation.value}
               value={i}
               onChange={this.handleChange.bind(this, i)}
             />
           </div>
           <div className="answer-button-label-container">
-            <Markdown className="answer-button-label">{answer.label}</Markdown>
+            <Markdown className="answer-button-label">{translation.answers[i].label}</Markdown>
           </div>
         </label>
       );
     }
     return (
       <GenericTask
-        autoFocus = {this.props.annotation.value === null}
-        question={this.props.task.question}
-        help={this.props.task.help}
+        autoFocus = {annotation.value === null}
+        question={translation.question}
+        help={translation.help}
         answers={answers}
-        required={this.props.task.required}
+        required={task.required}
       />
     );
   }
@@ -172,6 +173,11 @@ SingleChoiceTask.propTypes = {
       required: React.PropTypes.bool
     }
   ),
+  translation: React.PropTypes.shape({
+    characteristics: React.PropTypes.object,
+    choices: React.PropTypes.object,
+    questions: React.PropTypes.object
+  }).isRequired,
   annotation: React.PropTypes.shape(
     { value: React.PropTypes.number }
   ),
@@ -184,6 +190,11 @@ SingleChoiceTask.defaultProps = {
     question: '',
     help: '',
     required: false
+  },
+  translation: {
+    answers: [],
+    question: '',
+    help: ''
   },
   annotation: { value: null },
   onChange: NOOP

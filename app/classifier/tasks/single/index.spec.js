@@ -22,7 +22,7 @@ describe('SingleChoiceTask', function () {
   let wrapper;
 
   beforeEach(function () {
-    wrapper = mount(<SingleTask task={task} annotation={annotation} />);
+    wrapper = mount(<SingleTask task={task} annotation={annotation} translation={task} />);
   });
 
   it('should render without crashing', function () {

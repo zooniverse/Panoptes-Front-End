@@ -23,7 +23,7 @@ describe('MultipleChoiceTask', function () {
   let wrapper;
 
   beforeEach(function () {
-    wrapper = mount(<MultipleTask task={task} annotation={annotation} />);
+    wrapper = mount(<MultipleTask task={task} annotation={annotation} translation={task} />);
   });
 
   it('should render without crashing', function () {
