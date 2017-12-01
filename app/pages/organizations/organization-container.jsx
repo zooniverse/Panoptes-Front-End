@@ -95,9 +95,13 @@ class OrganizationContainer extends React.Component {
       .then((organizationProjects) => {
         this.setState({ fetchingProjects: false, organizationProjects });
         const avatarRequests = organizationProjects
-          .filter(project => project.links.avatar.id)
+          .filter(project => project.links.avatar && project.links.avatar.id)
           .map(project => apiClient.type('avatars').get(project.links.avatar.id)
-            .catch(error => console.error('error loading project avatar', error))); // eslint-disable-line no-console)
+            .catch((error) => {
+              if (error.status !== 404) {
+                console.error('error loading project avatar', error); // eslint-disable-line no-console
+              }
+            }));
         Promise.all(avatarRequests)
           .then((projectAvatars) => {
             this.setState({ fetchingProjectAvatars: false, projectAvatars });
