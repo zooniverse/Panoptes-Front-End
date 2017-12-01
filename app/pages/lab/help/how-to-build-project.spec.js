@@ -17,6 +17,6 @@ describe('HowToBuildProject', function () {
 
   it('renders all of the text via markdown elements', function () {
     const markdownElements = wrapper.find('div.on-secondary-page').children();
-    assert.equal(markdownElements.length, 23);
+    assert.equal(markdownElements.length, 48);
   });
 });
