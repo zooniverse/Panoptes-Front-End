@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 function TaskTranslations(props) {
   const { task } = props;
-  const taskStrings = props.translations.strings.workflow.tasks;
+  const taskStrings = props.translations.strings.workflow;
   let translation = merge({}, task);
 
   function explodeTranslationKey(translationKey, value) {
@@ -21,8 +21,8 @@ function TaskTranslations(props) {
 
   Object.keys(taskStrings).map((translationKey) => {
     const newTranslation = explodeTranslationKey(translationKey, taskStrings[translationKey]);
-    if (newTranslation[props.taskKey]) {
-      translation = merge(translation, newTranslation[props.taskKey]);
+    if (newTranslation.tasks && newTranslation.tasks[props.taskKey]) {
+      translation = merge(translation, newTranslation.tasks[props.taskKey]);
     }
   });
 
