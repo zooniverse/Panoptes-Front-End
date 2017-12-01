@@ -57,7 +57,7 @@ const project = apiClient.type('projects').create({
     return Promise.resolve(resources[type]);
   },
   links: {
-    active_workflows: [1, 2, 3, 4, 5],
+    active_workflows: ['1', '2', '3', '4', '5'],
     avatar: { id: '1' },
     background: { id: '1' },
     owner: { id: '1' }
