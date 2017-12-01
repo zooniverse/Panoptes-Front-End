@@ -310,25 +310,9 @@ module.exports = React.createClass
 
     @loadAppropriateClassification(@props) if @props.workflow?
 
-  getPromotionMessage: (props) ->
-    # The API needs to add the promotion message as a field in project contents...
-    gravitySpy = '1104'
-    snapshotWiChallenge = '5371'
-    defaultMessage = props.translation.promotion_message;
-    gravitySpyMessage = "Congratulations! Because you're doing so well, you can level up and access more types of glitches, have more options for classifying them, and see glitches that our computer algorithms are even less confident in. If you prefer to stay at this level, you can choose to stay."
-    snapshotWiMessage = "Congratulations! You've unlocked the next level and can now access even more challenging questions about what you see in the trail camera images. If you prefer to stay at this level, you can choose to stay."
-
-    if props.project?.id is gravitySpy
-      defaultMessage = gravitySpyMessage
-    else if props.project?.id is snapshotWiChallenge
-      defaultMessage = snapshotWiMessage
-    else
-      defaultMessage
-
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog
-      defaultMessage = @getPromotionMessage(props)
-      WorkflowAssignmentDialog.start({ splits: props.splits, defaultMessage })
+      WorkflowAssignmentDialog.start({ splits: props.splits, project: props.project })
         .then =>
           @setState { promptWorkflowAssignmentDialog: false }
         .then =>
