@@ -38,6 +38,7 @@ React = require 'react'
 `import CustomiseProfile from './pages/settings/profile';`
 `import EmailSettingsPage from './pages/settings/email';`
 `import AboutHome from './pages/about/about-home';`
+`import Acknowledgements from './pages/about/acknowledgements';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -62,7 +63,7 @@ module.exports =
       <IndexRoute component={AboutHome} />
       <Route path="team" component={require './pages/about/team-page'} />
       <Route path="publications" component={require './pages/about/publications-page'} />
-      <Route path="acknowledgements" component={require './pages/about/acknowledgements'} />
+      <Route path="acknowledgements" component={Acknowledgements} />
       <Route path="contact" component={require './pages/about/contact-page'} />
       <Route path="faq" component={require './pages/about/faq-page'} />
     </Route>
