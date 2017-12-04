@@ -11,19 +11,16 @@ function StubTask() {
 
 const initialTranslations = {
   strings: {
-    workflow: {
-      tasks: { }
-    }
+    workflow: {}
   }
 };
 
 const translations = {
   strings: {
     workflow: {
-      tasks: {
-        'survey.choices.ar.label': 'Translated Armadillo',
-        'survey.questions.ho.answers.one.label': 'Translated 1'
-      }
+      display_name: 'A test workflow',
+      'tasks.survey.choices.ar.label': 'Translated Armadillo',
+      'tasks.survey.questions.ho.answers.one.label': 'Translated 1'
     }
   }
 };
