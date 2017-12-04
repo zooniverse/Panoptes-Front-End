@@ -12,6 +12,6 @@ describe('Acknowledgements', function () {
   it('renders markdown elements', function () {
     const wrapper = shallow(<Acknowledgements />);
     const markdownElements = wrapper.find('Markdown');
-    assert.equal(markdownElements.length, 1);
+    assert.equal(markdownElements.length, 6);
   });
 });
