@@ -93,7 +93,6 @@ class Classifier extends React.Component {
 
     const { getActiveTask, state } = this;
     if (getActiveTask(prevState) !== getActiveTask(state)) {
-      console.info('task change')
       const taskId = getActiveTask(prevState).id;
       this.checkForFeedback(taskId);
     }
@@ -161,10 +160,10 @@ class Classifier extends React.Component {
     // to check the entire annotation array, as the user may be editing an
     // existing annotation.
     const inProgress = annotations.reduce((isInProgress, annotation) => {
-      return (isInProgress === true)
-        ? true
-        : annotation.value.map(value => value._inProgress).includes(true);
+      return isInProgress ||
+        annotation.value.map(value => value._inProgress).includes(true);
     }, false);
+
     if (!inProgress) {
       this.props.actions.feedback.update(_.last(annotations));
     }
