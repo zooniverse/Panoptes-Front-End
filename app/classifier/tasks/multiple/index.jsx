@@ -145,7 +145,7 @@ export default class MultipleChoiceTask extends React.Component {
         question={translation.question}
         help={translation.help}
         answers={answers}
-        required={translation.required}
+        required={task.required}
       />
     );
   }
