@@ -18,13 +18,13 @@ const FeaturedProject = (() => (
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
       <img
-        alt="Seabird Watch"
-        src="/assets/featured-projects/featured-project-20171023-autumnwatch.jpg"
+        alt="Fossil Atmospheres"
+        src="/assets/featured-projects/featured-project-20171204-fossil_atmospheres.jpg"
       />
     </div>
-    <h2 className="secondary-headline">Seabird Watch</h2>
-    <p className="display-body">Help researchers understand why some of the world&#39;s seabird colonies are in decline.</p>
-    <Link to="projects/penguintom79/seabirdwatch">View Project!</Link>
+    <h2 className="secondary-headline">Fossil Atmospheres</h2>
+    <p className="display-body">Help us track climate change over millions of years! Count cells of modern & fossil leaves.</p>
+    <Link to="projects/laurasoul/fossil-atmospheres">View Project!</Link>
   </section>
   )
 );
