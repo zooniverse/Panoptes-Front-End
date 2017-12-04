@@ -282,7 +282,7 @@ ProjectPageController = React.createClass
     currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user?.id)
     roles = currentUserRoleSets[0]?.roles or []
 
-    isAdmin() or 'owner' in roles or 'collaborator' in roles
+    isAdmin() or 'owner' in roles or 'collaborator' in roles or 'tester' in roles
 
   listenToPreferences: (preferences) ->
     @_listenedToPreferences?.stopListening 'change', @_boundForceUpdate
@@ -376,4 +376,7 @@ mapDispatchToProps = (dispatch) -> ({
   }
 });
 
-module.exports = connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ProjectPageController)
+module.exports = {
+    default: connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ProjectPageController)
+    ProjectPageController
+  }
