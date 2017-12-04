@@ -7,10 +7,14 @@ function isAnnotationWithinTolerance(rule, annotation) {
   const feedbackY = rule.y;
   const tolerance = rule.tolerance;
 
+  // Math.pow is a restricted property, but using the exponential operator (**)
+  // breaks the build :(
+  /* eslint-disable no-restricted-properties */
   const distance = Math.sqrt(
-    ((annotationY - feedbackY) ** 2) +
-    ((annotationX - feedbackX) ** 2)
+    Math.pow((annotationY - feedbackY), 2) +
+    Math.pow((annotationX - feedbackX), 2)
   );
+  /* eslint-enable no-restricted-properties */
 
   return distance < tolerance;
 }
