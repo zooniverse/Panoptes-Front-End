@@ -248,7 +248,6 @@ module.exports =
       <Route path="mini-course" component={require './pages/lab/mini-course'} />
     </Route>
     <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
-    <Route path="lab-how-to" component={HowToBuildProject} />
     <Route path="glossary" component={require './pages/lab/help/glossary'} />
 
     <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
