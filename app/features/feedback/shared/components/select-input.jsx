@@ -5,7 +5,7 @@ import uuidv4 from 'uuid/v4';
 function SelectInput({ help, onChange, multi = false, name, options, placeholder = '', title, value }) {
   const uuid = uuidv4();
   return (
-    <div>
+    <fieldset>
       <label htmlFor={uuid}>
         {title}
       </label>
@@ -21,7 +21,7 @@ function SelectInput({ help, onChange, multi = false, name, options, placeholder
       <small className="form-help">
         {help}
       </small>
-    </div>
+    </fieldset>
   );
 }
 

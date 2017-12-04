@@ -5,7 +5,7 @@ import uuidv4 from 'uuid/v4';
 function CheckboxInput({ title, help, onChange, checked, name }) {
   const uuid = uuidv4();
   return (
-    <div>
+    <fieldset>
       <label htmlFor={uuid}>
         <input
           id={uuid}
@@ -19,7 +19,7 @@ function CheckboxInput({ title, help, onChange, checked, name }) {
       <small className="form-help">
         {help}
       </small>
-    </div>
+    </fieldset>
   );
 }
 

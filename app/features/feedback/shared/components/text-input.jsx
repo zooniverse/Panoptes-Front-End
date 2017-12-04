@@ -4,7 +4,7 @@ import uuidv4 from 'uuid/v4';
 function TextInput({ title, help, onChange, name, type = 'text', required = false, value }) {
   const uuid = uuidv4();
   return (
-    <div>
+    <fieldset>
       <label htmlFor={uuid}>
         {title}
       </label>
@@ -19,7 +19,7 @@ function TextInput({ title, help, onChange, name, type = 'text', required = fals
       <small className="form-help">
         {help}
       </small>
-    </div>
+    </fieldset>
   );
 }
 
