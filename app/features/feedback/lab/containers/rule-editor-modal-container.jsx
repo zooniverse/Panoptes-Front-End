@@ -17,8 +17,7 @@ class RuleEditorModalContainer extends Component {
     };
   }
 
-  handleInputChange(event) {
-    const { target } = event;
+  handleInputChange({ target }) {
     const newState = _.assign({}, this.state);
     newState.form[target.name] = (target.type === 'checkbox') ? target.checked : target.value;
     this.setState(newState, this.validateRule);
