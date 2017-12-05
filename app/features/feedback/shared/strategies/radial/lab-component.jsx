@@ -38,7 +38,7 @@ function RadialLabComponent({ formState, handleInputChange }) {
 
 RadialLabComponent.propTypes = {
   formState: PropTypes.shape({
-    defaultTolerance: PropTypes.number
+    defaultTolerance: PropTypes.string
   }),
   handleInputChange: PropTypes.func
 };
