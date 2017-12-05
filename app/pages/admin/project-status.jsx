@@ -188,7 +188,7 @@ class ProjectStatus extends Component {
     if (!this.state.project) {
       return <LoadingIndicator />;
     }
-    console.info(this)
+
     return (
       <div className="project-status">
         <ProjectIcon project={this.state.project} />
