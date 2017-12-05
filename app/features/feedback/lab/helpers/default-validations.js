@@ -6,16 +6,22 @@ function checkId(rule) {
     rule.id.length > 0;
 }
 
-function checkMessages(rule) {
-  const validSuccessMessage = rule.successEnabled &&
-    _.isString(rule.defaultSuccessMessage) &&
-    rule.defaultSuccessMessage.length > 0;
+function checkSuccessMessage(rule) {
+  if (rule.successEnabled) {
+    return _.isString(rule.defaultSuccessMessage) &&
+      rule.defaultSuccessMessage.length > 0;
+  } else {
+    return true;
+  }
+}
 
-  const validFailureMessage = rule.failureEnabled &&
-    _.isString(rule.defaultFailureMessage) &&
-    rule.defaultFailureMessage.length > 0;
-
-  return validSuccessMessage || validFailureMessage || false;
+function checkFailureMessage(rule) {
+  if (rule.failureEnabled) {
+    return _.isString(rule.defaultFailureMessage) &&
+      rule.defaultFailureMessage.length > 0;
+  } else {
+    return true;
+  }
 }
 
 function checkStrategy(rule) {
@@ -28,6 +34,7 @@ function checkStrategy(rule) {
 
 export default [
   checkId,
-  checkMessages,
+  checkSuccessMessage,
+  checkFailureMessage,
   checkStrategy
 ];
