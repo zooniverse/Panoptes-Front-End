@@ -24,14 +24,15 @@ class MultipleChoiceSummary extends React.Component {
   }
 
   render() {
+    const { annotation, task, translation } = this.props;
     let toggleButton = <button type="button" className="toggle-more" onClick={this.expand}>More</button>;
     let answers = [<div key={0} className="answer">No answer</div>];
-    if (!this.state.expanded && this.props.annotation.value.length > 0) {
-      answers = this.props.annotation.value.map((index) => {
+    if (!this.state.expanded && annotation.value.length > 0) {
+      answers = annotation.value.map((index) => {
         return (
           <div key={index} className="answer">
             <i className="fa fa-check-square-o fa-fw"></i>
-            <Markdown tag="span" inline={true}>{this.props.task.answers[index].label}</Markdown>
+            <Markdown tag="span" inline={true}>{translation.answers[index].label}</Markdown>
           </div>
         );
       });
@@ -39,18 +40,18 @@ class MultipleChoiceSummary extends React.Component {
     if (this.state.expanded) {
       toggleButton = <button type="button" className="toggle-more" onClick={this.collapse}>Less</button>;
       answers = [];
-      for (const [i, answer] of this.props.task.answers.entries()) {
+      for (const [i, answer] of task.answers.entries()) {
         if (!answer._key) {
           answer._key = Math.random();
         }
         let icon = <i className="fa fa-square-o fa-fw"></i>;
-        if (this.props.annotation.value.includes(i)) {
+        if (annotation.value.includes(i)) {
           icon = <i className="fa fa-check-square-o fa-fw"></i>;
         }
         answers.push(
           <div key={answer._key} className="answer">
             {icon}
-            <Markdown tag="span" inline={true}>{answer.label}</Markdown>
+            <Markdown tag="span" inline={true}>{translation.answers[i].label}</Markdown>
           </div>
         );
       }
@@ -59,7 +60,7 @@ class MultipleChoiceSummary extends React.Component {
       <div>
         <div className="question">
           <Markdown>
-            {this.props.task.question}
+            {translation.question}
           </Markdown>
           {toggleButton}
         </div>
@@ -78,6 +79,11 @@ MultipleChoiceSummary.propTypes = {
       question: React.PropTypes.string
     }
   ),
+  translation: React.PropTypes.shape({
+    characteristics: React.PropTypes.object,
+    choices: React.PropTypes.object,
+    questions: React.PropTypes.object
+  }).isRequired,
   annotation: React.PropTypes.shape(
     { value: React.PropTypes.array }
   ).isRequired,
@@ -88,6 +94,11 @@ MultipleChoiceSummary.defaultProps = {
   task: {
     answers: [],
     question: ''
+  },
+  translation: {
+    answers: [],
+    question: '',
+    help: ''
   },
   expanded: false
 };

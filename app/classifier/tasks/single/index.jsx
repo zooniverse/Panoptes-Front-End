@@ -24,31 +24,32 @@ class Summary extends React.Component {
   }
 
   render() {
+    const { annotation, task, translation } = this.props;
     let toggleButton = <button type="button" className="toggle-more" onClick={this.expand}>More</button>;
     let answers = <div className="answer">No answer</div>;
-    if (!this.state.expanded && this.props.annotation.value !== null) {
+    if (!this.state.expanded && annotation.value !== null) {
       answers = (
         <div className="answer">
           <i className="fa fa-check-circle-o fa-fw"></i>
-          <Markdown tag="span" inline={true}>{this.props.task.answers[this.props.annotation.value].label}</Markdown>
+          <Markdown tag="span" inline={true}>{translation.answers[annotation.value].label}</Markdown>
         </div>
       );
     }
     if (this.state.expanded) {
       toggleButton = <button type="button" className="toggle-more" onClick={this.collapse}>Less</button>;
       answers = [];
-      for (const [i, answer] of this.props.task.answers.entries()) {
+      for (const [i, answer] of task.answers.entries()) {
         if (!answer._key) {
           answer._key = Math.random();
         }
         let icon = <i className="fa fa-circle-o fa-fw"></i>;
-        if (i === this.props.annotation.value) {
+        if (i === annotation.value) {
           icon = <i className="fa fa-check-circle-o fa-fw"></i>;
         }
         answers.push(
           <div key={answer._key} className="answer">
             {icon}
-            <Markdown tag="span" inline={true}>{answer.label}</Markdown>
+            <Markdown tag="span" inline={true}>{translation.answers[i].label}</Markdown>
           </div>
         );
       }
@@ -76,6 +77,11 @@ Summary.propTypes = {
       question: React.PropTypes.string
     }
   ),
+  translation: React.PropTypes.shape({
+    characteristics: React.PropTypes.object,
+    choices: React.PropTypes.object,
+    questions: React.PropTypes.object
+  }).isRequired,
   annotation: React.PropTypes.shape(
     { value: React.PropTypes.number }
   ).isRequired,
@@ -86,6 +92,11 @@ Summary.defaultProps = {
   task: {
     answers: [],
     question: ''
+  },
+  translation: {
+    answers: [],
+    question: '',
+    help: ''
   },
   expanded: false
 };

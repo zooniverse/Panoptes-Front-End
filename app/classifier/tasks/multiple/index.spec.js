@@ -74,7 +74,7 @@ describe('MultipleChoiceSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<MultipleTask.Summary task={task} annotation={annotation} />);
+    summary = mount(<MultipleTask.Summary task={task} annotation={annotation} translation={task} />);
   });
 
   it('should render without crashing', function () {
