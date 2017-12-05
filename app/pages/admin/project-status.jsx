@@ -23,6 +23,7 @@ class ProjectStatus extends Component {
     this.getProjectAndWorkflows = this.getProjectAndWorkflows.bind(this);
     this.handleDialogCancel = this.handleDialogCancel.bind(this);
     this.handleDialogSuccess = this.handleDialogSuccess.bind(this);
+    this.handleProjectStateChange = this.handleProjectStateChange.bind(this);
 
     this.state = {
       dialogIsOpen: false,
@@ -105,6 +106,12 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
+  handleProjectStateChange({ target }) {
+    this.state.project.update({ state: target.value });
+    this.state.project.save()
+      .catch(error => this.setState({ error }));
+  }
+
   handleToggle(event, workflow) {
     this.setState({ error: null });
     const isChecked = event.target.checked;
@@ -181,10 +188,47 @@ class ProjectStatus extends Component {
     if (!this.state.project) {
       return <LoadingIndicator />;
     }
-
+    console.info(this)
     return (
       <div className="project-status">
         <ProjectIcon project={this.state.project} />
+
+        <div className="project-status__section project-status__section--state">
+          <h4>Project State</h4>
+          <fieldset>
+            <label htmlFor="project-state-active">
+              <input
+                id="project-state-active"
+                type="radio"
+                value=""
+                checked={this.state.project.state === ''}
+                onChange={this.handleProjectStateChange}
+              />
+              Active
+            </label>
+            <label htmlFor="project-state-paused">
+              <input
+                id="project-state-paused"
+                type="radio"
+                value="paused"
+                checked={this.state.project.state === 'paused'}
+                onChange={this.handleProjectStateChange}
+              />
+              Paused
+            </label>
+            <label htmlFor="project-state-finished">
+              <input
+                id="project-state-finished"
+                type="radio"
+                value="finished"
+                checked={this.state.project.state === 'finished'}
+                onChange={this.handleProjectStateChange}
+              />
+              Finished
+            </label>
+          </fieldset>
+        </div>
+
         <div className="project-status__section">
           <h4>Information</h4>
           <ul>
