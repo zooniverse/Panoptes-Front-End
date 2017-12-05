@@ -181,7 +181,7 @@ ProjectModalEditorController = React.createClass
         media={@state.media}
         kind={@props.kind}
         onStepAdd={@handleStepAdd}
-        onStepRemove={@handleStepRemove}
+        onStepRemove={@confirmStepRemove}
         onMediaSelect={@handleStepMediaChange}
         onMediaClear={@handleStepMediaClear}
         onStepChange={@handleStepChange}
@@ -217,6 +217,20 @@ ProjectModalEditorController = React.createClass
       content: ''
     @props.projectModal.update 'steps'
     @props.projectModal.save()
+
+  confirmStepRemove: (index) ->
+      message = "Are you sure you want to delete this step? This action is irreversible!"
+
+      alert((resolve) =>
+          (<div className="confirm-delete-dialog content-container">
+            <p>{message}</p>
+            <div>
+              <button className="minor-button" autoFocus={true} onClick={resolve}>Cancel</button>
+                {' '}
+              <button className="major-button" onClick={() => resolve(@handleStepRemove(index))}>Yes</button>
+            </div>
+          </div>)
+      )
 
   handleStepRemove: (index) ->
     @handleStepMediaClear index
