@@ -199,6 +199,7 @@ class ProjectStatus extends Component {
             <label htmlFor="project-state-active">
               <input
                 id="project-state-active"
+                name="project-state-buttons"
                 type="radio"
                 value=""
                 checked={this.state.project.state === ''}
@@ -209,6 +210,7 @@ class ProjectStatus extends Component {
             <label htmlFor="project-state-paused">
               <input
                 id="project-state-paused"
+                name="project-state-buttons"
                 type="radio"
                 value="paused"
                 checked={this.state.project.state === 'paused'}
@@ -219,6 +221,7 @@ class ProjectStatus extends Component {
             <label htmlFor="project-state-finished">
               <input
                 id="project-state-finished"
+                name="project-state-buttons"
                 type="radio"
                 value="finished"
                 checked={this.state.project.state === 'finished'}
