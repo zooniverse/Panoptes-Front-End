@@ -37,8 +37,14 @@ describe('ProjectHomeWorkflowButtons', function() {
   describe('if workflow assignment is true', function() {
     beforeEach(function () {
       wrapper = mount(
-        <ProjectHomeWorkflowButtons activeWorkflows={testWorkflows} preferences={testUserPreferences} showWorkflowButtons={true} workflowAssignment={true} splits={null} />,
-        { context: { user: { id: 1 } } }
+        <ProjectHomeWorkflowButtons
+          activeWorkflows={testWorkflows}
+          preferences={testUserPreferences}
+          showWorkflowButtons={true}
+          workflowAssignment={true}
+          splits={null}
+          user={{ user: { id: 1 }}}
+        />,
       );
       wrapper.setState({ showWorkflows: true });
     });
