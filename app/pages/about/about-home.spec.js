@@ -6,17 +6,12 @@ import { shallow } from 'enzyme';
 import AboutHome from './about-home';
 
 describe('AboutHome', function () {
-  let wrapper;
-
-  before(function () {
-    wrapper = shallow(<AboutHome />);
-  });
-
   it('renders without crashing', function () {
   });
 
   it('renders five markdown elements', function () {
-    const markdownElements = wrapper.find('div.on-secondary-page').children();
+    const wrapper = shallow(<AboutHome />);
+    const markdownElements = wrapper.find('Markdown');
     assert.equal(markdownElements.length, 5);
   });
 });
