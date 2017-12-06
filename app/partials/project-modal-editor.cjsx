@@ -9,6 +9,7 @@ classnames = require 'classnames'
 AutoSave = require '../components/auto-save'
 handleInputChange = require '../lib/handle-input-change'
 alert = require('../lib/alert').default
+confirm = require('../lib/confirm').default
 
 ProjectModalStepEditor = React.createClass
   getDefaultProps: ->
@@ -180,12 +181,12 @@ ProjectModalEditorController = React.createClass
         media={@state.media}
         kind={@props.kind}
         onStepAdd={@handleStepAdd}
-        onStepRemove={@handleStepRemove}
+        onStepRemove={@confirmStepRemove}
         onMediaSelect={@handleStepMediaChange}
         onMediaClear={@handleStepMediaClear}
         onStepChange={@handleStepChange}
         onStepOrderChange={@handleStepOrderChange}
-        onProjectModalDelete={@handleProjectModalDelete}
+        onProjectModalDelete={@confirmProjectModalDelete}
       />
     </div>
 
@@ -204,12 +205,22 @@ ProjectModalEditorController = React.createClass
     else
       @deleteProjectModal()
 
+  confirmProjectModalDelete: ->
+      message = "Are you sure you want to delete this tutorial? This action is irreversible!"
+      successCallback = @handleProjectModalDelete
+
+      confirm(message, successCallback)
+
   handleStepAdd: ->
     @props.projectModal.steps.push
       media: ''
       content: ''
     @props.projectModal.update 'steps'
     @props.projectModal.save()
+
+  confirmStepRemove: (index) ->
+      message = "Are you sure you want to delete this step? This action is irreversible!"
+      confirm(message, () => @handleStepRemove(index))
 
   handleStepRemove: (index) ->
     @handleStepMediaClear index
