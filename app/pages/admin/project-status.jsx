@@ -202,7 +202,7 @@ class ProjectStatus extends Component {
                 name="project-state-buttons"
                 type="radio"
                 value=""
-                checked={this.state.project.state === 'live'}
+                checked={this.state.project.state === ''}
                 onChange={this.handleProjectStateChange}
               />
               Active
