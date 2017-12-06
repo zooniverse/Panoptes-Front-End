@@ -220,17 +220,7 @@ ProjectModalEditorController = React.createClass
 
   confirmStepRemove: (index) ->
       message = "Are you sure you want to delete this step? This action is irreversible!"
-
-      alert((resolve) =>
-          (<div className="confirm-delete-dialog content-container">
-            <p>{message}</p>
-            <div>
-              <button className="minor-button" autoFocus={true} onClick={resolve}>Cancel</button>
-                {' '}
-              <button className="major-button" onClick={() => resolve(@handleStepRemove(index))}>Yes</button>
-            </div>
-          </div>)
-      )
+      confirm(message, () => @handleStepRemove(index))
 
   handleStepRemove: (index) ->
     @handleStepMediaClear index
