@@ -8,7 +8,7 @@ import PotentialFieldGuide from './potential-field-guide';
 export default class ProjectPage extends React.Component {
   constructor() {
     super();
-    const lastSugarSubscribedID = null;
+    this.lastSugarSubscribedID = null;
   }
 
   getChildContext() {
@@ -18,13 +18,13 @@ export default class ProjectPage extends React.Component {
   componentDidMount() {
     document.documentElement.classList.add('on-project-page');
     this.updateSugarSubscription(this.props.project);
-    (this.context.geordi) ? this.context.geordi.remember({ projectToken: this.props.project.slug }) : null;
+    this.context.geordi && this.context.geordi.remember({ projectToken: this.props.project.slug });
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.project !== this.props.project) {
       this.updateSugarSubscription(nextProps.project);
-      (this.context.geordi) ? this.context.geordi.remember({ projectToken: nextProps.project.slug }) : null;
+      this.context.geordi && this.context.geordi.remember({ projectToken: nextProps.project.slug });
     }
   }
 
@@ -51,7 +51,7 @@ export default class ProjectPage extends React.Component {
       return map;
     }, {});
 
-    const renderAnnouncement = (this.props.project.configuration && !!this.props.project.configuration.announcement) ?
+    const Announcement = (this.props.project.configuration && this.props.project.configuration.announcement) ?
       <div className="informational project-announcement-banner">
         <Markdown>
           {this.props.project.configuration.announcement}
@@ -59,14 +59,14 @@ export default class ProjectPage extends React.Component {
       </div> :
       null;
 
-    const renderNavbar = (!onHomePage) ?
+    const Navbar = (!onHomePage) ?
       <div>
         <ProjectNavbar {...this.props} />
-        {renderAnnouncement}
+        {Announcement}
       </div> :
       null;
 
-    const renderLaunchApproved = (!this.props.project.launch_approved) ?
+    const LaunchApproved = (!this.props.project.launch_approved) ?
       <Translate
         component="p"
         className="project-disclaimer"
@@ -74,7 +74,7 @@ export default class ProjectPage extends React.Component {
       /> :
       null;
 
-    const renderPotentialFieldGuide = (this.props.location.pathname !== projectPath) ?
+    const PotentialFieldGuide = (this.props.location.pathname !== projectPath) ?
       <PotentialFieldGuide
         guide={this.props.guide}
         guideIcons={this.props.guideIcons}
@@ -90,9 +90,9 @@ export default class ProjectPage extends React.Component {
 
     return (
       <div className="project-page project-background" style={backgroundStyle}>
-        {renderNavbar}
-        {renderLaunchApproved}
-        {renderPotentialFieldGuide}
+        {Navbar}
+        {LaunchApproved}
+        {PotentialFieldGuide}
         {React.cloneElement(this.props.children, {
           background: this.props.background,
           loadingSelectedWorkflow: this.props.loadingSelectedWorkflow,
