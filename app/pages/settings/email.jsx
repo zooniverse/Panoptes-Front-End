@@ -173,6 +173,9 @@ class EmailSettingsPage extends React.Component {
             projectPreferences: preferences,
             projects
           });
+        })
+        .catch((error) => {
+          console.warn(error.message);
         });
       }
     })

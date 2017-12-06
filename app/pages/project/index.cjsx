@@ -181,7 +181,8 @@ ProjectPageController = React.createClass
               project: project.id
             },
             preferences: {}
-          }).save()
+          }).save().catch (error) =>
+            console.warn error.message
     else
       Promise.resolve apiClient.type('project_preferences').create
         id: 'GUEST_PREFERENCES_DO_NOT_SAVE'
@@ -193,6 +194,8 @@ ProjectPageController = React.createClass
       .then((preferences) =>
         @listenToPreferences preferences
       )
+      .catch (error) =>
+        console.warn error.message
 
   getSelectedWorkflow: (project, preferences) ->
     @setState({ loadingSelectedWorkflow: true })
@@ -259,6 +262,8 @@ ProjectPageController = React.createClass
               @context.router.push "/projects/#{@state.project.slug}/classify"
             @clearInactiveWorkflow(selectedWorkflowID)
               .then(@getSelectedWorkflow(@state.project, @state.preferences))
+      .catch (error) => 
+        console.warn error.message
 
   clearInactiveWorkflow: (selectedWorkflowID) ->
     preferences = @state.preferences
@@ -267,12 +272,14 @@ ProjectPageController = React.createClass
 
     if selectedWorkflowID is preferences.preferences.selected_workflow
       preferences.update 'preferences.selected_workflow': undefined
-      preferences.save()
+      preferences.save().catch (error) =>
+        console.warn error.message
     else if selectedWorkflowID is preferences.settings?.workflow_id
       preferences.update 'settings.workflow_id': undefined
-      preferences.save()
+      preferences.save().catch (error) =>
+        console.warn error.message
     else
-      Promise.resolve(null)
+      Promise.resolve({})
 
   workflowSelectionErrorHandler: () ->
     throw new Error "No active workflows for project #{@state.project.id}"

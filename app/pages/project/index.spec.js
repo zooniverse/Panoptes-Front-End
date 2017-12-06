@@ -50,7 +50,7 @@ const resources = {
 };
 
 const project = apiClient.type('projects').create({
-  id: '1',
+  id: 'a',
   display_name: 'A test project',
   experimental_tools: [],
   get(type) {
