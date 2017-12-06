@@ -51,7 +51,7 @@ export default class ProjectPage extends React.Component {
       return map;
     }, {});
 
-    const Announcement = (this.props.project.configuration && this.props.project.configuration.announcement) ?
+    const announcement = (this.props.project.configuration && this.props.project.configuration.announcement) ?
       <div className="informational project-announcement-banner">
         <Markdown>
           {this.props.project.configuration.announcement}
@@ -59,14 +59,14 @@ export default class ProjectPage extends React.Component {
       </div> :
       null;
 
-    const Navbar = (!onHomePage) ?
+    const navBar = (!onHomePage) ?
       <div>
         <ProjectNavbar {...this.props} />
-        {Announcement}
+        {announcement}
       </div> :
       null;
 
-    const LaunchApproved = (!this.props.project.launch_approved) ?
+    const launchApproved = (!this.props.project.launch_approved) ?
       <Translate
         component="p"
         className="project-disclaimer"
@@ -74,7 +74,7 @@ export default class ProjectPage extends React.Component {
       /> :
       null;
 
-    const PotentialFieldGuide = (this.props.location.pathname !== projectPath) ?
+    const potentialFieldGuide = (this.props.location.pathname !== projectPath) ?
       <PotentialFieldGuide
         guide={this.props.guide}
         guideIcons={this.props.guideIcons}
@@ -90,9 +90,9 @@ export default class ProjectPage extends React.Component {
 
     return (
       <div className="project-page project-background" style={backgroundStyle}>
-        {Navbar}
-        {LaunchApproved}
-        {PotentialFieldGuide}
+        {navBar}
+        {launchApproved}
+        {potentialFieldGuide}
         {React.cloneElement(this.props.children, {
           background: this.props.background,
           loadingSelectedWorkflow: this.props.loadingSelectedWorkflow,
@@ -116,6 +116,9 @@ export default class ProjectPage extends React.Component {
 }
 
 ProjectPage.defaultProps = {
+  background: {
+    src: ''
+  },
   loading: false,
   organization: null,
   pages: null,
@@ -141,6 +144,9 @@ ProjectPage.childContextTypes = {
 };
 
 ProjectPage.propTypes = {
+  background: React.PropTypes.shape({
+    src: React.PropTypes.string
+  }),
   loading: React.PropTypes.bool,
   pages: React.PropTypes.shape({
     content: React.PropTypes.string
