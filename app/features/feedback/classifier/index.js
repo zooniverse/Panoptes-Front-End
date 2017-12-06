@@ -1,3 +1,3 @@
-import FeedbackModalContainer from './containers/feedback-modal-container';
+import openFeedbackModal from './helpers/open-feedback-modal';
 
-export default FeedbackModalContainer;
+export default openFeedbackModal;

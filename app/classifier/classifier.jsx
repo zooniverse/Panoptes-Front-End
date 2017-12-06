@@ -4,7 +4,6 @@ import { VisibilitySplit } from 'seven-ten';
 import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import ModalFormDialog from 'modal-form/dialog';
 
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
@@ -22,7 +21,7 @@ import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import * as feedbackActions from '../redux/ducks/feedback';
-import FeedbackModal from '../features/feedback/classifier';
+import openFeedbackModal from '../features/feedback/classifier';
 import ModelRenderer from '../components/model-renderer';
 import { ModelScore } from '../components/modelling';
 
@@ -134,14 +133,10 @@ class Classifier extends React.Component {
   checkForFeedback(taskId) {
     if (this.props.feedback.active) {
       const taskFeedback = this.props.feedback.rules[taskId];
-      const modal = (<FeedbackModal feedback={taskFeedback} />);
-      return ModalFormDialog.alert(modal, {
-        required: true
-      }).then(() => {
-        return this.props.classification.update({
+      return openFeedbackModal(taskFeedback)
+        .then(() => this.props.classification.update({
           [`metadata.feedback.${taskId}`]: taskFeedback
-        });
-      });
+        }));
     } else {
       return Promise.resolve(false);
     }

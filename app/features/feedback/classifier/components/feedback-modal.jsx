@@ -12,6 +12,7 @@ counterpart.registerTranslations('en', {
 /* eslint-enable max-len */
 
 function FeedbackModal({ messages }) {
+  console.info('messages', messages);
   return (
     <section>
       <Translate content="FeedbackModal.title" component="h2" />

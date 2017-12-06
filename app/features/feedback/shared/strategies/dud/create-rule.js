@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import ruleChecker from '../../helpers/rule-checker';
 
 function createRule(subjectRule, workflowRule) {
   const rule = {
@@ -18,12 +18,7 @@ function createRule(subjectRule, workflowRule) {
       workflowRule.defaultSuccessMessage;
   }
 
-  if (_.every(rule, property => property)) {
-    return rule;
-  } else {
-    console.error(`Undefined property in rule ${rule.id}, skipping...`);
-    return {};
-  }
+  return ruleChecker(rule);
 }
 
 export default createRule;
