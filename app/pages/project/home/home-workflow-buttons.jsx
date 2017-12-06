@@ -3,11 +3,11 @@ import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import ProjectHomeWorkflowButton from './home-workflow-button';
+import LoadingIndicator from '../../../components/loading-indicator';
 
 counterpart.registerTranslations('en', {
   buttons: {
-    learnMore: 'Learn more',
-    getStarted: 'Get started'
+
   }
 });
 
@@ -16,9 +16,6 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     super(props);
 
     this.shouldWorkflowBeDisabled = this.shouldWorkflowBeDisabled.bind(this);
-    this.renderRedirectLink = this.renderRedirectLink.bind(this);
-    this.renderWorkflowButtons = this.renderWorkflowButtons.bind(this);
-    this.toggleWorkflows = this.toggleWorkflows.bind(this);
   }
 
   shouldWorkflowBeDisabled(workflow) {
@@ -34,83 +31,59 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     return false;
   }
 
-  toggleWorkflows() {
-    this.setState({ showWorkflows: !this.state.showWorkflows });
-  }
-
-  renderRedirectLink() {
-    return (<a href={this.props.project.redirect} className="standard-button">
-      <strong>Visit the project</strong><br />
-      <small>at {this.props.project.redirect}</small>
-    </a>);
-  }
-
-  renderWorkflowButtons() {
-    if (this.props.activeWorkflows.length > 0 && this.props.preferences) {
-      return (
-        <div className="project-home-page__container workflow-choice">
-          <div className="project-home-page__content">
-            {this.props.project.workflow_description && (
-              <h4>{this.props.project.workflow_description}</h4>
-            )}
-            {this.props.activeWorkflows.map((workflow) => {
-              return (
-                <ProjectHomeWorkflowButton
-                  key={workflow.id}
-                  disabled={this.shouldWorkflowBeDisabled(workflow)}
-                  onChangePreferences={this.props.onChangePreferences}
-                  project={this.props.project}
-                  workflow={workflow}
-                  workflowAssignment={this.props.workflowAssignment}
-                />);
-            })
-          }</div>
-        </div>);
-    }
-
-    return (<span>Loading...</span>);
-  }
-
   render() {
     const paddingBottom = this.props.showWorkflowButtons ? { paddingBottom: '3em' } : {};
 
-    let getStarted = (
-      <Link
-        to={`/projects/${this.props.project.slug}/classify`}
-        className="standard-button get-started"
-      >
-        <Translate content="buttons.getStarted" />
-      </Link>
-    );
-
-    const learnMore = (
-      <Link to={`/projects/${this.props.project.slug}/about`} className="standard-button learn-more">
-        <Translate content="buttons.learnMore" />
-      </Link>
-    );
-
-    if (this.props.project.redirect) {
-      return this.renderRedirectLink();
-    }
-
-    if (this.props.showWorkflowButtons) {
-      getStarted = (
-        <button className="standard-button get-started" onClick={this.toggleWorkflows}>
-          <Translate content="buttons.getStarted" />
-        </button>
+    if (this.props.project && this.props.project.redirect) {
+      return (
+        <a href={this.props.project.redirect} className="standard-button">
+          <strong>Visit the project</strong><br />
+          <small>at {this.props.project.redirect}</small>
+        </a>
       );
     }
 
     return (
       <div>
-        <div id="projectLandingIntro" className="project-home-page__centering" style={paddingBottom}>
-          {learnMore}
-          {getStarted}
+        <div className="project-home-page__centering" style={paddingBottom}>
+          <Link to={`/projects/${this.props.project.slug}/about`} className="standard-button learn-more">
+            <Translate content="project.home.learnMore" />
+          </Link>
+          {!this.props.showWorkflowButtons &&
+            <Link
+              to={`/projects/${this.props.project.slug}/classify`}
+              className="standard-button get-started"
+            >
+              <Translate content="project.home.getStarted" />
+            </Link>}
         </div>
 
-        {this.props.showWorkflowButtons && (
-          this.renderWorkflowButtons()
-        )}
+        {this.props.showWorkflowButtons && this.props.activeWorkflows.length > 0 && this.props.preferences &&
+          (<div className="project-home-page__container workflow-choice">
+            <div className="project-home-page__content">
+              <h3>
+                <Translate content="project.home.getStarted" />
+                <i className="fa fa-arrow-down" aria-hidden="true" />
+              </h3>
+              {this.props.project.workflow_description && (
+                <h4>{this.props.project.workflow_description}</h4>
+              )}
+              {this.props.activeWorkflows.map((workflow) => {
+                return (
+                  <ProjectHomeWorkflowButton
+                    key={workflow.id}
+                    disabled={this.shouldWorkflowBeDisabled(workflow)}
+                    onChangePreferences={this.props.onChangePreferences}
+                    project={this.props.project}
+                    workflow={workflow}
+                    workflowAssignment={this.props.workflowAssignment}
+                  />);
+              })
+            }</div>
+          </div>)}
+
+        {this.props.showWorkflowButtons && this.props.activeWorkflows.length === 0 &&
+          <div className="project-home-page__container workflow-choice"><LoadingIndicator /></div>}
       </div>
     );
   }
