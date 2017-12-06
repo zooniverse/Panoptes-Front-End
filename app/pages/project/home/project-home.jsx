@@ -54,6 +54,7 @@ const ProjectHomePage = (props) => {
           showWorkflowButtons={props.showWorkflowButtons}
           workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
           splits={props.splits}
+          user={props.user}
         />
       </div>
 

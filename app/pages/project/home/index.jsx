@@ -20,14 +20,14 @@ export default class ProjectHomeContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.showWorkflowButtons(this.props, this.context);
+    this.showWorkflowButtons(this.props);
     this.fetchResearcherAvatar(this.props);
     this.fetchTalkSubjects(this.props);
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (this.context.user !== nextContext.user) {
-      this.showWorkflowButtons(nextProps, nextContext);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.user !== nextProps.user) {
+      this.showWorkflowButtons(nextProps);
     }
 
     if (this.props.project !== nextProps.project) {
@@ -78,11 +78,11 @@ export default class ProjectHomeContainer extends React.Component {
     }
   }
 
-  showWorkflowButtons(props, context) {
+  showWorkflowButtons(props) {
     const workflowAssignment = this.props.project.experimental_tools.includes('workflow assignment');
 
     if ((props.project.configuration && props.project.configuration.user_chooses_workflow && !workflowAssignment) ||
-      (workflowAssignment && context.user)) {
+      (workflowAssignment && props.user)) {
       this.setState({ showWorkflowButtons: true }, this.fetchAllWorkflows.bind(this, this.props, { active: true, fields: 'active,completeness,configuration,display_name' }));
     } else {
       this.setState({ showWorkflowButtons: false });
@@ -112,11 +112,6 @@ export default class ProjectHomeContainer extends React.Component {
     );
   }
 }
-
-ProjectHomeContainer.contextTypes = {
-  geordi: React.PropTypes.object,
-  user: React.PropTypes.object
-};
 
 ProjectHomeContainer.defaultProps = {
   background: {

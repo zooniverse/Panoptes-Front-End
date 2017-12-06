@@ -14,9 +14,6 @@ counterpart.registerTranslations('en', {
 export default class ProjectHomeWorkflowButtons extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showWorkflows: false
-    };
 
     this.shouldWorkflowBeDisabled = this.shouldWorkflowBeDisabled.bind(this);
     this.renderRedirectLink = this.renderRedirectLink.bind(this);
@@ -24,14 +21,8 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     this.toggleWorkflows = this.toggleWorkflows.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.showWorkflowButtons === true && !this.state.showWorkflows) {
-      this.setState({ showWorkflows: true });
-    }
-  }
-
   shouldWorkflowBeDisabled(workflow) {
-    if (this.context.user && workflow.configuration.level && this.props.preferences && this.props.preferences.settings) {
+    if (this.props.user && workflow.configuration.level && this.props.preferences && this.props.preferences.settings) {
       const currentWorkflowAtLevel = this.props.activeWorkflows.filter((activeWorkflow) => {
         return (activeWorkflow.id === this.props.preferences.settings.workflow_id) ? activeWorkflow : null;
       });
@@ -81,7 +72,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   }
 
   render() {
-    const paddingBottom = this.state.showWorkflows ? { paddingBottom: '3em' } : {};
+    const paddingBottom = this.props.showWorkflowButtons ? { paddingBottom: '3em' } : {};
 
     let getStarted = (
       <Link
@@ -117,18 +108,13 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
           {getStarted}
         </div>
 
-        {this.state.showWorkflows && (
+        {this.props.showWorkflowButtons && (
           this.renderWorkflowButtons()
         )}
       </div>
     );
   }
 }
-
-ProjectHomeWorkflowButtons.contextTypes = {
-  geordi: React.PropTypes.object,
-  user: React.PropTypes.object
-};
 
 ProjectHomeWorkflowButtons.defaultProps = {
   activeWorkflows: [],
@@ -137,6 +123,7 @@ ProjectHomeWorkflowButtons.defaultProps = {
   project: {},
   showWorkflowButtons: false,
   splits: {},
+  user: null,
   workflowAssignment: false
 };
 
@@ -154,5 +141,6 @@ ProjectHomeWorkflowButtons.propTypes = {
   }).isRequired,
   showWorkflowButtons: React.PropTypes.bool.isRequired,
   splits: React.PropTypes.object,
+  user: React.PropTypes.object,
   workflowAssignment: React.PropTypes.bool
 };
