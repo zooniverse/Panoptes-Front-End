@@ -91,8 +91,6 @@ export default class ProjectPage extends React.Component {
     return (
       <div className="project-page project-background" style={backgroundStyle}>
         {navBar}
-        {launchApproved}
-        {potentialFieldGuide}
         {React.cloneElement(this.props.children, {
           background: this.props.background,
           loadingSelectedWorkflow: this.props.loadingSelectedWorkflow,
@@ -110,6 +108,8 @@ export default class ProjectPage extends React.Component {
           user: this.props.user,
           workflow: this.props.workflow
         })}
+        {launchApproved}
+        {potentialFieldGuide}
       </div>
     );
   }
