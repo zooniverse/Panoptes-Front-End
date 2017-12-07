@@ -16,7 +16,6 @@ function validateRuleProperties(rule) {
 }
 
 function ruleChecker(rule) {
-  console.info('rule',rule)
   const ruleErrors = validateRuleProperties(rule);
 
   if (ruleErrors.length === 0) {

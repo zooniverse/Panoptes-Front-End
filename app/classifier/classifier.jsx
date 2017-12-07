@@ -4,6 +4,7 @@ import { VisibilitySplit } from 'seven-ten';
 import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
 
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
@@ -46,7 +47,8 @@ class Classifier extends React.Component {
       showingExpertClassification: false,
       subjectLoading: false,
       annotations: [],
-      modelScore: null
+      modelScore: null,
+      currentTaskId: null
     };
   }
 
@@ -90,10 +92,28 @@ class Classifier extends React.Component {
       this.updateAnnotations();
     }
 
-    const { getActiveTask, state } = this;
-    if (getActiveTask(prevState) !== getActiveTask(state)) {
-      const taskId = getActiveTask(prevState).id;
-      this.checkForFeedback(taskId);
+    // We need to know when the active task changes in order to open the
+    // feedback modal. Unfortunately, since we mutate props, we can't compare
+    // state very easily. So we store the current task in state, check to see
+    // when it changes, update state and use _that_ change to check the
+    // _previous_ task for feedback.
+    //
+    // The second part of this hack is using forceUpdate - there's a re-render
+    // happening simultaneously somewhere, so this ensures the subsequent saved
+    // of the new task id to state only happens once, since it's not in the same
+    // batched update.
+    //
+    // This is a really hacky solution, but fixing this properly would required
+    // an extensive rewrite :( Note also that using setState in
+    // componentDidUpdate is a linting error, and with good reason.
+    const currentTaskId = _.get(_.last(this.state.annotations), 'task', '');
+
+    if (prevState.currentTaskId !== currentTaskId) {
+      this.setState({ currentTaskId }, () => this.forceUpdate());
+    }
+
+    if (prevState.currentTaskId !== this.state.currentTaskId) {
+      this.checkForFeedback(prevState.currentTaskId);
     }
   }
 
@@ -131,35 +151,56 @@ class Classifier extends React.Component {
   }
 
   checkForFeedback(taskId) {
-    if (this.props.feedback.active) {
-      const taskFeedback = this.props.feedback.rules[taskId];
-      return openFeedbackModal(taskFeedback)
-        .then(() => this.props.classification.update({
-          [`metadata.feedback.${taskId}`]: taskFeedback
-        }));
-    } else {
+    const taskFeedback = _.get(this.props.feedback, `rules.${taskId}`, []);
+
+    if (!this.props.feedback.active || !taskFeedback.length) {
       return Promise.resolve(false);
     }
+
+    const subjectViewerProps = {
+      subject: this.props.subject,
+      workflow: this.props.workflow,
+      preferences: this.props.preferences,
+      classification: this.props.classification,
+      frameWrapper: FrameAnnotator,
+      allowFlipbook: workflowAllowsFlipbook(this.props.workflow),
+      allowSeparateFrames: workflowAllowsSeparateFrames(this.props.workflow),
+      playIterations: this.props.workflow.configuration.playIterations
+    };
+
+    return openFeedbackModal({ feedback: taskFeedback, subjectViewerProps, taskId })
+      .then(() => this.props.classification.update({
+        [`metadata.feedback.${taskId}`]: taskFeedback
+      }));
   }
 
   updateAnnotations() {
     const { annotations } = this.props.classification;
     this.setState({ annotations });
     if (this.props.feedback.active) {
-      this.updateFeedback(annotations);
+      this.updateFeedback();
     }
   }
 
-  updateFeedback(annotations) {
+  updateFeedback() {
     // Check to see if we're still drawing, and update feedback if not. We need
     // to check the entire annotation array, as the user may be editing an
     // existing annotation.
-    const inProgress = annotations.reduce((isInProgress, annotation) => {
-      return isInProgress ||
-        annotation.value.map(value => value._inProgress).includes(true);
-    }, false);
+    let isInProgress = false;
+    const { annotations } = this.props.classification;
+    const { workflow } = this.props;
+    const { currentTaskId } = this.state;
 
-    if (!inProgress) {
+    const currentTask = workflow.tasks[currentTaskId] || null;
+
+    if (currentTask && currentTask.type === 'drawing') {
+      isInProgress = annotations.reduce((result, annotation) => {
+        return result ||
+          annotation.value.map(value => value._inProgress).includes(true);
+      }, false);
+    }
+
+    if (!isInProgress) {
       this.props.actions.feedback.update(_.last(annotations));
     }
   }
