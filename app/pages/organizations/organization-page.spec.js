@@ -6,7 +6,7 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import Translate from 'react-translate-component';
-import OrganizationPage, { OrganizationProjectCards } from './organization-page';
+import OrganizationPage, { OrganizationProjectCards, OrganizationMetaData } from './organization-page';
 import { organization } from './organization-container.spec';
 
 const organizationProjects = [1, 2, 3].map(i => ({
@@ -151,6 +151,15 @@ describe('OrganizationPage', function () {
     const wrapper = shallow(<OrganizationPage organization={organization} />);
     const quote = wrapper.find('.organization-researcher-words');
     assert.equal(quote.length, 0);
+
+  it('should render a stats section', function () {
+    const wrapper = shallow(
+      <OrganizationMetaData
+        displayName={organization.display_name}
+        projects={organizationProjects}
+      />);
+    const links = wrapper.find('.project-metadata-stat');
+    assert.equal(links.length, 4);
   });
 
   describe('with pages about content', function () {
@@ -178,6 +187,6 @@ describe('OrganizationPage', function () {
   it('should show organization links', function () {
     const wrapper = shallow(<OrganizationPage organization={organization} />);
     const links = wrapper.find('.organization-details__link');
-    assert.equal(organization.urls.length, links.length);
+    assert.equal(links.length, organization.urls.length);
   });
 });
