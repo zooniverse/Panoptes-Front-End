@@ -8,7 +8,7 @@ import ProjectCard from '../../partials/project-card';
 
 const AVATAR_SIZE = 100;
 
-export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjects, projects }) => {
+export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjects, projects, projectAvatars }) => {
   if (fetchingProjects) {
     return (
       <div className="organization-page__projects-status">
@@ -30,9 +30,14 @@ export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjec
   } else {
     return (
       <div className="project-card-list">
-        {projects.map(project =>
-          <ProjectCard key={project.id} project={project} />
-        )}
+        {projects.map((project) => {
+          let projectAvatar = projectAvatars.find(avatar => avatar.links.linked.id === project.id);
+          if (!projectAvatar) {
+            projectAvatar = { src: '' };
+          }
+          return (
+            <ProjectCard key={project.id} project={project} imageSrc={projectAvatar.src} />);
+        })}
       </div>);
   }
 };
@@ -46,6 +51,12 @@ OrganizationProjectCards.propTypes = {
     React.PropTypes.shape({
       id: React.PropTypes.string,
       display_name: React.PropTypes.string
+    })
+  ),
+  projectAvatars: React.PropTypes.arrayOf(
+    React.PropTypes.shape({
+      id: React.PropTypes.string,
+      src: React.PropTypes.string
     })
   )
 };
@@ -145,6 +156,7 @@ class OrganizationPage extends React.Component {
             errorFetchingProjects={this.props.errorFetchingProjects}
             fetchingProjects={this.props.fetchingProjects}
             projects={this.props.organizationProjects}
+            projectAvatars={this.props.projectAvatars}
           />
         </section>
 
@@ -268,6 +280,7 @@ OrganizationPage.defaultProps = {
   organizationBackground: {},
   organizationPages: [],
   organizationProjects: [],
+  projectAvatars: [],
   toggleCollaboratorView: () => {}
 };
 
@@ -312,6 +325,12 @@ OrganizationPage.propTypes = {
     React.PropTypes.shape({
       id: React.PropTypes.string,
       display_name: React.PropTypes.string
+    })
+  ),
+  projectAvatars: React.PropTypes.arrayOf(
+    React.PropTypes.shape({
+      id: React.PropTypes.string,
+      src: React.PropTypes.string
     })
   ),
   toggleCollaboratorView: React.PropTypes.func
