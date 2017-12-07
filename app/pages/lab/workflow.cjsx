@@ -14,9 +14,8 @@ FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
 classnames = require 'classnames'
-
-`import ShortcutEditor from '../../classifier/tasks/shortcut/editor';`
-`import FeedbackSection from '../../features/feedback/lab';`
+ShortcutEditor = require('../../classifier/tasks/shortcut/editor').default
+FeedbackSection = require('../../features/feedback/lab').default
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
