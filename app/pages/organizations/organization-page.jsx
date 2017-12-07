@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { Markdown } from 'markdownz';
+import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import Thumbnail from '../../components/thumbnail';
 import SocialIcons from '../../lib/social-icons';
@@ -89,7 +90,13 @@ class OrganizationPage extends React.Component {
   }
 
   render() {
+    const avatarSrc = this.props.quoteObject.researcherAvatar || '/assets/simple-avatar.png';
+
     const [aboutPage] = this.props.organizationPages.filter(page => page.url_key === 'about');
+    const aboutContentClass = classnames(
+      'organization-details__about-content',
+      { 'organization-details__about-content--expanded': this.state.readMore });
+
     let rearrangedLinks = [];
     if (this.props.organization.urls) {
       rearrangedLinks = this.props.organization.urls.sort((a, b) => {
@@ -99,10 +106,6 @@ class OrganizationPage extends React.Component {
         return 0;
       });
     }
-
-    const aboutContentClass = classnames(
-      'organization-details__about-content',
-      { 'organization-details__about-content--expanded': this.state.readMore });
 
     return (
       <div className="organization-page">
@@ -162,21 +165,28 @@ class OrganizationPage extends React.Component {
 
         <section className="organization-details">
           <div className="organization-page__container">
-            <div className="organization-researcher-words">
-              <Translate className="organization-details__heading" content="project.home.researcher" />
-              <div className="organization-researcher-words__container">
-                <img
-                  className="organization-researcher-words__avatar"
-                  role="presentation"
-                  src="/assets/simple-avatar.png"
-                />
-                <span
-                  className="organization-researcher-words__quote"
+            {this.props.quoteObject && this.props.quoteObject.quote &&
+              <div className="organization-researcher-words">
+                <Translate className="organization-details__heading" content="organization.home.researcher" />
+                <div className="organization-researcher-words__container">
+                  <img
+                    className="organization-researcher-words__avatar"
+                    role="presentation"
+                    src={avatarSrc}
+                  />
+                  <span
+                    className="organization-researcher-words__quote"
+                  >
+                    &quot;{this.props.quoteObject.quote}&quot;
+                  </span>
+                </div>
+                <Link
+                  className="organization-researcher-words__attribution"
+                  to={this.props.quoteObject.slug}
                 >
-                  &quot;{'Sample quote from researcher with call to action!'}&quot;
-                </span>
-              </div>
-            </div>
+                  - {this.props.quoteObject.display_name}
+                </Link>
+              </div>}
             <div className="organization-details__content">
               <h4 className="organization-details__heading">
                 {this.props.organization.display_name} <Translate content="organization.home.introduction" />
@@ -281,6 +291,7 @@ OrganizationPage.defaultProps = {
   organizationPages: [],
   organizationProjects: [],
   projectAvatars: [],
+  quoteObject: {},
   toggleCollaboratorView: () => {}
 };
 
@@ -333,6 +344,12 @@ OrganizationPage.propTypes = {
       src: React.PropTypes.string
     })
   ),
+  quoteObject: React.PropTypes.shape({
+    display_name: React.PropTypes.string,
+    researcherAvatar: React.PropTypes.string,
+    quote: React.PropTypes.string,
+    slug: React.PropTypes.string
+  }),
   toggleCollaboratorView: React.PropTypes.func
 };
 
