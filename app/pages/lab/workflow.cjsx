@@ -14,9 +14,8 @@ FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
 classnames = require 'classnames'
-
-`import ShortcutEditor from '../../classifier/tasks/shortcut/editor';`
-`import FeedbackEditor from './feedback/feedback-editor';`
+ShortcutEditor = require('../../classifier/tasks/shortcut/editor').default
+FeedbackSection = require('../../features/feedback/lab').default
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -472,7 +471,7 @@ EditWorkflowPage = React.createClass
               <hr />
               <br />
               {if 'general feedback' in @props.project.experimental_tools
-                <FeedbackEditor
+                <FeedbackSection
                   task={@props.workflow.tasks[@state.selectedTaskKey]}
                   saveFn={@handleTaskChange.bind this, @state.selectedTaskKey}
                 />}
