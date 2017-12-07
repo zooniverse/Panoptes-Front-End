@@ -1,15 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
-import counterpart from 'counterpart';
 import ProjectHomeWorkflowButton from './home-workflow-button';
 import LoadingIndicator from '../../../components/loading-indicator';
-
-counterpart.registerTranslations('en', {
-  buttons: {
-
-  }
-});
 
 export default class ProjectHomeWorkflowButtons extends React.Component {
   constructor(props) {
@@ -32,11 +25,9 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   }
 
   render() {
-    const paddingBottom = this.props.showWorkflowButtons ? { paddingBottom: '3em' } : {};
-
     if (this.props.project && this.props.project.redirect) {
       return (
-        <a href={this.props.project.redirect} className="standard-button">
+        <a href={this.props.project.redirect} className="project-home-page__button">
           <strong>Visit the project</strong><br />
           <small>at {this.props.project.redirect}</small>
         </a>
@@ -44,29 +35,16 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     }
 
     return (
-      <div>
-        <div className="project-home-page__centering" style={paddingBottom}>
-          <Link to={`/projects/${this.props.project.slug}/about`} className="standard-button learn-more">
-            <Translate content="project.home.learnMore" />
-          </Link>
-          {!this.props.showWorkflowButtons &&
-            <Link
-              to={`/projects/${this.props.project.slug}/classify`}
-              className="standard-button get-started"
-            >
-              <Translate content="project.home.getStarted" />
-            </Link>}
-        </div>
-
+      <div className="project-home-workflow-buttons">
         {this.props.showWorkflowButtons && this.props.activeWorkflows.length > 0 && this.props.preferences &&
-          (<div className="project-home-page__container workflow-choice">
+          (<div className="project-home-page__container project-home-workflow-buttons__workflow-choice-container">
             <div className="project-home-page__content">
-              <h3>
-                <Translate content="project.home.getStarted" />
+              <h3 className="workflow-choice-container__call-to-action">
+                <Translate content="project.home.getStarted" />{' '}
                 <i className="fa fa-arrow-down" aria-hidden="true" />
               </h3>
               {this.props.project.workflow_description && (
-                <h4>{this.props.project.workflow_description}</h4>
+                <p className="workflow-choice-container__description">{this.props.project.workflow_description}</p>
               )}
               {this.props.activeWorkflows.map((workflow) => {
                 return (

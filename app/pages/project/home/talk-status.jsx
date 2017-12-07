@@ -38,7 +38,7 @@ export default class TalkStatus extends React.Component {
           unsafe={true}
         />
         <div>
-          <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in standard-button">
+          <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in project-home-page__button">
             <Translate content="project.home.joinIn" />
           </Link>
         </div>

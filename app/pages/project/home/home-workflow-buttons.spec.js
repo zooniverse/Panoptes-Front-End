@@ -27,7 +27,7 @@ const testProject = {
   redirect: 'www.testproject.com'
 };
 
-describe.only('ProjectHomeWorkflowButtons', function() {
+describe('ProjectHomeWorkflowButtons', function() {
   let wrapper;
 
   describe('if workflow assignment is true and props.showWorkflowButtons is true', function() {
@@ -69,14 +69,6 @@ describe.only('ProjectHomeWorkflowButtons', function() {
       wrapper = shallow(
         <ProjectHomeWorkflowButtons activeWorkflows={testWorkflows} showWorkflowButtons={false} />
       );
-    });
-
-    it('should render the learn more and get started buttons', function() {
-      assert.equal(wrapper.find('.standard-button').length, 2);
-    });
-
-    it('should use Translate for the button texts"', function() {
-      assert.equal(wrapper.find('Translate').length, 2);
     });
 
     it('should not render the workflow buttons', function() {

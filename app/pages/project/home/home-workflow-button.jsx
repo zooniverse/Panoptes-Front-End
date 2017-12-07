@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import classnames from 'classnames';
-
+import Translate from 'react-translate-component';
 
 export default class ProjectHomeWorkflowButton extends React.Component {
   constructor(props) {
@@ -22,9 +22,8 @@ export default class ProjectHomeWorkflowButton extends React.Component {
     // To disable the anchor tag, use class to set pointer-events: none style.
     // Except IE, which supports a disabled attribute instead.
     const linkClasses = classnames({
-      'call-to-action': true,
-      'standard-button': true,
-      'call-to-action-button--disabled': this.props.disabled
+      'project-home-page__button': true,
+      'project-home-page__button--disabled': this.props.disabled
     });
 
     if (this.props.disabled) {
@@ -47,7 +46,9 @@ export default class ProjectHomeWorkflowButton extends React.Component {
         className={linkClasses}
         onClick={this.handleWorkflowSelection}
       >
-        {(this.props.workflowAssignment && !this.props.disabled) ? `You've unlocked level ${this.props.workflow.display_name}` : this.props.workflow.display_name}
+        {(this.props.workflowAssignment && !this.props.disabled) ?
+          <Translate content="project.home.workflowAssignment" with={{ workflowDisplayName: this.props.workflow.display_name }} /> :
+          this.props.workflow.display_name}
       </Link>
     );
   }

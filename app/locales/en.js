@@ -61,7 +61,8 @@ export default {
       },
       joinIn: 'Join in',
       learnMore: 'Learn more',
-      getStarted: 'Get started'
+      getStarted: 'Get started',
+      workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s'
     }
   },
   organization: {
