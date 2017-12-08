@@ -6,6 +6,9 @@ Tutorial = require '../components/tutorial'
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
 isAdmin = require '../lib/is-admin'
 { VisibilitySplit } = require 'seven-ten'
+{ connect } = require 'react-redux';
+{ bindActionCreators } = require 'redux';
+translationActions  = require '../redux/ducks/translations';
 
 ###############################################################################
 # Page Wrapper Component
@@ -20,7 +23,7 @@ auth.listen ->
 
 PROMPT_MINI_COURSE_EVERY = 5
 
-module.exports = React.createClass
+ClassifierWrapper = React.createClass
   displayName: 'ClassifierWrapper'
 
   contextTypes:
@@ -61,9 +64,11 @@ module.exports = React.createClass
       {user, preferences} = @props
       Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
       @setState {tutorial}
+      this.props.actions.translations.load('tutorial', tutorial.id, this.props.translations.locale) if tutorial?
     MiniCourse.find @props.workflow
     .then (minicourse) =>
       @setState {minicourse}
+      this.props.actions.translations.load('minicourse', minicourse.id, this.props.translations.locale) if minicourse?
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.workflow isnt @props.workflow
@@ -181,3 +186,18 @@ module.exports = React.createClass
       else
         <span>Loading classifier...</span>}
     </div>
+
+mapStateToProps = (state) -> ({
+  translations: state.translations
+});
+
+mapDispatchToProps = (dispatch) -> ({
+  actions: {
+    translations: bindActionCreators(translationActions, dispatch)
+  }
+});
+
+module.exports = {
+    default: connect(mapStateToProps, mapDispatchToProps)(ClassifierWrapper)
+    ClassifierWrapper
+  }
