@@ -4,7 +4,9 @@ MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
 
-`import StepThrough from '../components/step-through';`
+StepThrough = require('../components/step-through').default
+Translations = require('./translations').default
+
 
 completedThisSession = {}
 window?.tutorialsCompletedThisSession = completedThisSession
@@ -25,11 +27,11 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
-    startIfNecessary: (tutorial, user, preferences, geordi) ->
+    startIfNecessary: (tutorial, user, preferences, geordi, store) ->
         if tutorial?
           @checkIfCompleted(tutorial, user, preferences).then (completed) =>
             unless completed
-              @start tutorial, user, preferences, geordi
+              @start tutorial, user, preferences, geordi, store
 
     checkIfCompleted: (tutorial, user, preferences) ->
       if user?
@@ -38,7 +40,7 @@ module.exports = React.createClass
       else
         Promise.resolve completedThisSession[tutorial.id]?
 
-    start: (tutorial, user, preferences, geordi) ->
+    start: (tutorial, user, preferences, geordi, store) ->
       TutorialComponent = this
 
       if tutorial.steps.length isnt 0
@@ -53,12 +55,17 @@ module.exports = React.createClass
             mediaByID
 
         awaitTutorialMedia.then (mediaByID) =>
-          Dialog.alert(<TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />, {
+          tutorialContent = 
+            <Translations original={tutorial} type="tutorial" store={store}>
+              <TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />
+            </Translations>
+          Dialog.alert(tutorialContent, {
             className: 'tutorial-dialog',
             required: true,
             closeButton: true
           })
-            .catch =>
+            .catch (e) =>
+              console.warn e
               null # We don't really care if the user canceled or completed the tutorial.
 
   propTypes:
@@ -68,6 +75,9 @@ module.exports = React.createClass
     tutorial: React.PropTypes.shape
       steps: React.PropTypes.arrayOf React.PropTypes.shape
         media: React.PropTypes.string
+        content: React.PropTypes.string
+    translation: React.PropTypes.shape
+      steps: React.PropTypes.arrayOf React.PropTypes.shape
         content: React.PropTypes.string
     user: React.PropTypes.object
 
@@ -92,7 +102,7 @@ module.exports = React.createClass
       {for step, i in @props.tutorial.steps
         step._key ?= Math.random()
         <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>
-          <Markdown>{step.content}</Markdown>
+          <Markdown>{@props.translation.steps[i].content}</Markdown>
           <hr />
           <p style={textAlign: 'center'}>
             {if i is @props.tutorial.steps.length - 1

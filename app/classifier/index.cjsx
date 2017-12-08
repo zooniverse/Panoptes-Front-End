@@ -28,6 +28,7 @@ ClassifierWrapper = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+    store: React.PropTypes.object
 
   propTypes:
     classification: React.PropTypes.object
@@ -62,7 +63,7 @@ ClassifierWrapper = React.createClass
     Tutorial.find @props.workflow
     .then (tutorial) =>
       {user, preferences} = @props
-      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
+      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi, @context.store
       @setState {tutorial}
       this.props.actions.translations.load('tutorial', tutorial.id, this.props.translations.locale) if tutorial?
     MiniCourse.find @props.workflow
@@ -113,7 +114,7 @@ ClassifierWrapper = React.createClass
     split = @props.splits?['mini-course.visible']
     isntHidden = not split or split?.variant?.value?.auto
     if shouldPrompt and isntHidden
-      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.user, @context.geordi
+      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.user, @context.geordi, @context.store
 
   checkExpertClassifier: (props = @props) ->
     if props.project and props.user and @state.expertClassifier is null
