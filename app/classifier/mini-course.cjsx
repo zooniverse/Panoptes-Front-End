@@ -1,5 +1,6 @@
 React = require 'react'
 Dialog = require 'modal-form/dialog'
+Translate = require 'react-translate-component'
 MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -123,13 +124,13 @@ module.exports = React.createClass
           {if @props.user?
             <label className="action__opt-out">
               <input type="checkbox" onChange={@handleOptOut} checked={@state.optOut} />
-              Do not show mini-course in the future
+              <Translate content="classifier.dontShowMinicourse" />
             </label>}
           <button type="submit" className="standard-button action__button">
             {if @state.optOut
-              <span>Opt out <i className="fa fa-long-arrow-right fa-lg" aria-hidden="true"></i></span>
+              <span><Translate content="classifier.optOut" /> <i className="fa fa-long-arrow-right fa-lg" aria-hidden="true"></i></span>
             else
-              <span>Close</span>}
+              <Translate content="classifier.close" />}
           </button>
         </div>
       </MediaCard>

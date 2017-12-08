@@ -1,5 +1,6 @@
 React = require 'react'
 Dialog = require 'modal-form/dialog'
+Translate = require 'react-translate-component'
 MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -106,9 +107,9 @@ module.exports = React.createClass
           <hr />
           <p style={textAlign: 'center'}>
             {if i is @props.tutorial.steps.length - 1
-              <button type="submit" className="major-button">Let’s go!</button>
+              <button type="submit" className="major-button"><Translate content="classifier.letsGo" /></button>
             else
-              <button type="button" className="standard-button" onClick={@handleNextClick}>Continue</button>}
+              <button type="button" className="standard-button" onClick={@handleNextClick}><Translate content="classifier.continue" /></button>}
           </p>
         </MediaCard>}
     </StepThrough>
