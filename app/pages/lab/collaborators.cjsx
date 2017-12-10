@@ -32,7 +32,7 @@ ROLES_INFO =
     description: 'Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on "Talk".'
   tester:
     label: 'Tester'
-    description: 'Testers can view and classify on your project to give feedback while it’s still private. They cannot access the project builder.'
+    description: 'Testers can view and classify on your project to give feedback while it’s still private. If given the direct url, they can also view and classify on inactive workflows; this is useful for already launched projects that are planning on building a new workflow and woud like volunteer feedback. Testers cannot access the project builder.'
   translator:
     label: 'Translator'
     description: 'Translators will have access to the translation site.'
