@@ -96,7 +96,7 @@ class AboutProject extends Component {
     const { state: { pages, team }, props: { children, project } } = this;
     return (
       <div className="project-about-page">
-        <Helmet title={`${this.props.translation.display_name} » ${counterpart('about.header')}`} />
+        <Helmet title={`${this.props.translation.display_name} » ${counterpart('project.about.header')}`} />
         <AboutNav pages={pages} projectPath={`/projects/${project.slug}`} />
         {React.cloneElement(children, {project, pages, team})}
       </div>

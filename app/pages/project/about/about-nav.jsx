@@ -1,17 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
-import counterpart from 'counterpart';
-
-counterpart.registerTranslations('en', {
-  nav: {
-    research: 'Research',
-    results: 'Results',
-    faq: 'FAQ',
-    education: 'Education',
-    team: 'The Team',
-  }
-});
 
 const AboutNav = ({ pages, projectPath }) => (
   <span>
@@ -20,7 +9,7 @@ const AboutNav = ({ pages, projectPath }) => (
         to={`${projectPath}/about/${page.slug}`} 
         activeClassName="active"
         className="about-tabs">
-        <Translate content={`nav.${page.slug}`} />
+        <Translate content={`project.about.nav.${page.slug}`} />
       </Link>
     )}
   </span>

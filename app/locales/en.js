@@ -24,6 +24,16 @@ export default {
   project: {
     loading: 'Loading project',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
+    about: {
+      header: 'About',
+      nav: {
+        research: 'Research',
+        results: 'Results',
+        faq: 'FAQ',
+        education: 'Education',
+        team: 'The Team',
+      }
+    },
     nav: {
       about: 'About',
       classify: 'Classify',
