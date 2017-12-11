@@ -38,11 +38,12 @@ function NavLink({ isExternalLink, isSocialLink, label, site, url, ...props }) {
     linkProps.rel = 'noopener noreferrer';
     linkProps.href = url;
   } else {
-    linkProps.to = url;
+    linkProps.to = `${url}?facelift=true`;
   }
 
   if (isSocialLink) {
-    const icon = socialIcons[site];
+    const icon = socialIcons[site].icon;
+    linkProps['aria-label'] = socialIcons[site].label;
     iconClasses = `fa ${icon} fa-fw`;
   }
 

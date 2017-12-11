@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 
-const Img = styled.img`
+const styles = () => `
   height: 80px;
   width: 80px;
   border-radius: 100%;
@@ -10,15 +10,32 @@ const Img = styled.img`
   box-shadow: 5px 10px 20px 0 rgba(0,0,0,0.22);
 `;
 
-function Avatar({ projectTitle, src }) {
-  const alt = projectTitle ? `Project icon for ${projectTitle}` : 'Default project icon';
+const Img = styled.img`
+  ${styles()}
+`;
 
-  return <Img alt={alt} src={src} />;
+const DefaultImg = styled.div`
+  ${styles()}
+  background: url("/assets/simple-pattern.png") repeat;
+  background-size: 45px;
+`;
+
+function Avatar({ projectTitle, src }) {
+  const avatar = (<Img
+    alt={`Project icon for ${projectTitle}`}
+    src={src}
+  />);
+
+  const defaultAvatar = (
+    <DefaultImg aria-label="Default project icon" />
+  );
+
+  return (src) ? avatar : defaultAvatar;
 }
 
 Avatar.defaultProps = {
   projectTitle: '',
-  src: 'https://placeimg.com/80/80/animals'
+  src: ''
 };
 
 Avatar.propTypes = {

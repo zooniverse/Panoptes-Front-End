@@ -80,12 +80,14 @@ class ProjectNavbarContainer extends Component {
     const avatarSrc = _.get(this.props.projectAvatar, 'src', undefined);
     const navLinks = this.getNavLinks();
     const projectTitle = _.get(this.props.project, 'title', undefined);
+    const projectLink = `/projects/${this.props.project.slug}`;
 
     return (
       <ProjectNavbar
         avatarSrc={avatarSrc}
         navLinks={navLinks}
         projectTitle={projectTitle}
+        projectLink={projectLink}
       />
     );
   }

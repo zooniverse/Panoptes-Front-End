@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import styled from 'styled-components';
+
 import Avatar from './Avatar';
 import NavLink from './NavLink';
 
@@ -10,6 +12,7 @@ const Nav = styled.nav`
   flex-direction: row;
   justify-content: center;
   min-height: 150px;
+  padding: 0 10px;
 `;
 
 const Container = styled.div`
@@ -17,18 +20,21 @@ const Container = styled.div`
   display: flex;
   justify-content: flex-start;
   max-width: 1200px;
-  padding: 0 10px;
   width: 100%;
 `;
 
 const Title = styled.h1`
-  color: #FFFFFF;
+  color: #fff;
   font-family: Karla;
   font-size: 30px;
   font-weight: bold;
   letter-spacing: -1px;
   line-height: 1.2;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  & a {
+    text-decoration: none;
+    color: #fff;
+  }
 `;
 
 const NavLinks = styled.div`
@@ -38,13 +44,15 @@ const NavLinks = styled.div`
 `;
 
 
-function ProjectNavbar({ avatarSrc, projectTitle, navLinks }) {
+function ProjectNavbar({ avatarSrc, projectLink, projectTitle, navLinks }) {
   return (
     <Nav>
       <Container>
         <Avatar src={avatarSrc} projectTitle={projectTitle} />
         <Title>
-          {projectTitle}
+          <Link to={`${projectLink}?facelift=true`}>
+            {projectTitle}
+          </Link>
         </Title>
         <NavLinks>
           {navLinks.map(link => <NavLink key={link.url} {...link} />)}
@@ -57,6 +65,7 @@ function ProjectNavbar({ avatarSrc, projectTitle, navLinks }) {
 ProjectNavbar.propTypes = {
   avatarSrc: PropTypes.string,
   navLinks: PropTypes.array,
+  projectLink: PropTypes.string,
   projectTitle: PropTypes.string
 };
 
