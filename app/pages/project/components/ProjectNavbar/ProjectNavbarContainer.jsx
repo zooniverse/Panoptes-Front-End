@@ -78,6 +78,7 @@ class ProjectNavbarContainer extends Component {
 
   render() {
     const avatarSrc = _.get(this.props.projectAvatar, 'src', undefined);
+    const backgroundSrc = _.get(this.props.background, 'src', undefined);
     const navLinks = this.getNavLinks();
     const projectTitle = _.get(this.props.project, 'title', undefined);
     const projectLink = `/projects/${this.props.project.slug}`;
@@ -85,6 +86,7 @@ class ProjectNavbarContainer extends Component {
     return (
       <ProjectNavbar
         avatarSrc={avatarSrc}
+        backgroundSrc={backgroundSrc}
         navLinks={navLinks}
         projectTitle={projectTitle}
         projectLink={projectLink}
@@ -94,6 +96,9 @@ class ProjectNavbarContainer extends Component {
 }
 
 ProjectNavbarContainer.propTypes = {
+  background: PropTypes.shape({
+    src: PropTypes.string
+  }),
   organization: PropTypes.shape({
     display_name: PropTypes.string,
     slug: PropTypes.string

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import Avatar from './Avatar';
 import NavLink from './NavLink';
+import Background from './Background';
 
 const Nav = styled.nav`
   background-color: #00979D;
@@ -13,7 +14,9 @@ const Nav = styled.nav`
   justify-content: center;
   min-height: 150px;
   padding: 0 10px;
+  position: relative;
 `;
+
 
 const Container = styled.div`
   align-items: center;
@@ -21,6 +24,7 @@ const Container = styled.div`
   justify-content: flex-start;
   max-width: 1200px;
   width: 100%;
+  z-index: 2;
 `;
 
 const Title = styled.h1`
@@ -44,9 +48,10 @@ const NavLinks = styled.div`
 `;
 
 
-function ProjectNavbar({ avatarSrc, projectLink, projectTitle, navLinks }) {
+function ProjectNavbar({ avatarSrc, backgroundSrc, projectLink, projectTitle, navLinks }) {
   return (
     <Nav>
+      <Background src={backgroundSrc} />
       <Container>
         <Avatar src={avatarSrc} projectTitle={projectTitle} />
         <Title>
@@ -64,7 +69,10 @@ function ProjectNavbar({ avatarSrc, projectLink, projectTitle, navLinks }) {
 
 ProjectNavbar.propTypes = {
   avatarSrc: PropTypes.string,
-  navLinks: PropTypes.array,
+  backgroundSrc: PropTypes.string,
+  navLinks: PropTypes.arrayOf(PropTypes.shape({
+    url: PropTypes.string
+  })),
   projectLink: PropTypes.string,
   projectTitle: PropTypes.string
 };
