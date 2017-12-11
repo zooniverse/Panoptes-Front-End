@@ -90,7 +90,7 @@ class OrganizationContainer extends React.Component {
         const projectAvatar = this.state.projectAvatars.find(avatar => avatar.links.linked.id === project.id);
         if (projectAvatar && projectAvatar.src) {
           this.setState({ quoteObject: {
-            display_name: project.display_name,
+            displayName: project.display_name,
             quote: project.researcher_quote,
             researcherAvatar: projectAvatar.src,
             slug: project.slug
@@ -102,7 +102,7 @@ class OrganizationContainer extends React.Component {
             researcher.get('avatar').then(([avatar]) => {
               if (avatar.src) {
                 this.setState({ quoteObject: {
-                  display_name: project.display_name,
+                  displayName: project.display_name,
                   quote: project.researcher_quote,
                   researcherAvatar: avatar.src,
                   slug: project.slug

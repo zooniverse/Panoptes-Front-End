@@ -19,6 +19,13 @@ const organizationPages = [{
   url_key: 'about'
 }];
 
+const quoteObject = {
+  displayName: 'Project 2',
+  researcherAvatar: 'https://panoptes-uploads.zooniverse.org/staging/user_avatar/test.jpeg',
+  quote: 'Project 2 call to action!',
+  slug: 'owner/project-2'
+};
+
 describe('OrganizationPage', function () {
   it('should render without crashing', function () {
     shallow(<OrganizationPage organization={organization} />);
@@ -132,6 +139,18 @@ describe('OrganizationPage', function () {
     const wrapper = shallow(<OrganizationPage organization={noCategoriesOrg} />);
     const categories = wrapper.find('.organization-page__category-button');
     assert.equal(categories.length, 0);
+  });
+
+  it('should show a project researcher quote if quoteObject prop provided', function () {
+    const wrapper = shallow(<OrganizationPage organization={organization} quoteObject={quoteObject} />);
+    const quote = wrapper.find('.organization-researcher-words');
+    assert.equal(quote.length, 1);
+  });
+
+  it('should not show a project researcher quote if quoteObject prop not provided', function () {
+    const wrapper = shallow(<OrganizationPage organization={organization} />);
+    const quote = wrapper.find('.organization-researcher-words');
+    assert.equal(quote.length, 0);
   });
 
   describe('with pages about content', function () {

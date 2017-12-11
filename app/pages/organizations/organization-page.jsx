@@ -184,7 +184,7 @@ class OrganizationPage extends React.Component {
                   className="organization-researcher-words__attribution"
                   to={this.props.quoteObject.slug}
                 >
-                  - {this.props.quoteObject.display_name}
+                  - {this.props.quoteObject.displayName}
                 </Link>
               </div>}
             <div className="organization-details__content">
@@ -343,7 +343,7 @@ OrganizationPage.propTypes = {
     })
   ),
   quoteObject: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
+    displayName: React.PropTypes.string,
     researcherAvatar: React.PropTypes.string,
     quote: React.PropTypes.string,
     slug: React.PropTypes.string
