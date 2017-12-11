@@ -149,6 +149,7 @@ ProjectPageController = React.createClass
               @setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
               @getSelectedWorkflow(project, preferences)
               @loadFieldGuide(project.id)
+              this.props.actions.translations.loadTranslations('project_page', pages.map((page) => page.id), this.props.translations.locale)
             ).catch((error) => @setState({ error }); console.error(error); );
 
         else

@@ -16,7 +16,8 @@ const initialState = {
     project: {},
     workflow: {},
     tutorial: {},
-    minicourse: {}
+    minicourse: {},
+    project_page: []
   }
 };
 
@@ -49,6 +50,42 @@ export function load(resource_type, translated_id, language) {
             type: SET_STRINGS,
             payload: {
               [resource_type]: translation.strings
+            }
+          });
+        }
+      })
+      .catch(error => {
+        console.warn(
+          translated_type,
+          translated_id,
+          `(${language})`,
+          error.status,
+          'translation fetch error:',
+          error.message
+        );
+        dispatch({ type: ERROR, payload: error });
+      });
+  };
+}
+
+export function loadTranslations(translated_type, translated_id, language) {
+  counterpart.setLocale(language);
+  return (dispatch) => {
+    dispatch({
+      type: LOAD,
+      translated_type,
+      translated_id,
+      language
+    });
+    apiClient
+      .type('translations')
+      .get({ translated_type, translated_id, language })
+      .then((translations) => {
+        if (translations) {
+          dispatch({
+            type: SET_STRINGS,
+            payload: {
+              [translated_type]: translations
             }
           });
         }
