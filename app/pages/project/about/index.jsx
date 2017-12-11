@@ -43,11 +43,11 @@ class AboutProject extends Component {
       const { pages, translations } = this.props;
       const matchingPage = pages.find(page => page.url_key === url_key);
       const pageTranslations = translations ? translations.strings.project_page : [];
-      const [matchingTranslation] = pageTranslations.filter(page => page.translated_id === parseInt(matchingPage.id));
+      const [matchingTranslation] = pageTranslations.filter(page => page.translated_id === parseInt(matchingPage.id, 10));
       const { content } = (matchingTranslation && matchingTranslation.strings) ?
         matchingTranslation.strings :
         matchingPage;
-      if (content && content !== '') {
+      if (content) {
         availablePages.push({
           slug: SLUG_MAP[url_key],
           title: matchingPage.title,
