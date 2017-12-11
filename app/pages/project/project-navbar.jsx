@@ -260,9 +260,6 @@ const ProjectNavbar = ({
   user,
   workflow
 }, context) => {
-  console.info('context',context)
-
-
   const { path } = routes[2] ? routes[2] : '';
   const projectPath = `/projects/${project.slug}`;
   const activeElement = project && (path === 'collections' || path === 'favorites');
