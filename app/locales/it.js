@@ -19,6 +19,16 @@ export default {
   project: {
     disclaimer: "Questo progetto e' stato creato con il Project Builder di Zooniverse, ma non e' ancora un progetto ufficiale. Per questo motivo e' possibile che domande su questo progetto dirette al Team Zooniverse non ricevano una risposta.",
     loading: 'Caricamento progetto',
+    about: {
+      header: 'About',
+      nav: {
+        research: 'Research',
+        results: 'Results',
+        faq: 'FAQ',
+        education: 'Education',
+        team: 'The Team',
+      }
+    },
     nav: {
       about: 'A proposito',
       classify: 'Classifica',

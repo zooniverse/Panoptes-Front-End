@@ -51,6 +51,16 @@ export default {
   project: {
     loading: 'Project wordt geladen',
     disclaimer: 'Dit project is gemaakt met de Zooniverse projectbouwer maar is not niet een officieel Zooniverseproject. Vragen en problemen met betrekking tot dit project die gestuurd worden aan het Zooniverseteam krijgen mogelijk geen reactie.',
+    about: {
+      header: 'About',
+      nav: {
+        research: 'Research',
+        results: 'Results',
+        faq: 'FAQ',
+        education: 'Education',
+        team: 'The Team',
+      }
+    },
     nav: {
       about: 'Over',
       classify: 'Classificeer',
