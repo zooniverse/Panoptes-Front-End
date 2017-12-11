@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import styled from 'styled-components';
 import socialIcons from './socialIcons';
 
-const linkStyles = () => `
+const commonStyles = () => `
   color: white;
   display: block;
   font-family: Karla;
@@ -20,11 +20,11 @@ const linkStyles = () => `
 const StyledInternalLink = styled(Link).attrs({
   activeClassName: 'active'
 })`
-  ${linkStyles()}
+  ${commonStyles()}
 `;
 
 const StyledExternalLink = styled.a`
-  ${linkStyles()}
+  ${commonStyles()}
 `;
 
 function NavLink({ isExternalLink, isSocialLink, label, site, url, ...props }) {
