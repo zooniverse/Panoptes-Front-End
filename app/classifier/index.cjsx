@@ -1,11 +1,14 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 Classifier = require('./classifier').default
-MiniCourse = require '../components/mini-course'
-Tutorial = require '../components/tutorial'
+MiniCourse = require './mini-course'
+Tutorial = require './tutorial'
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
 isAdmin = require '../lib/is-admin'
 { VisibilitySplit } = require 'seven-ten'
+{ connect } = require 'react-redux';
+{ bindActionCreators } = require 'redux';
+translationActions  = require '../redux/ducks/translations';
 
 ###############################################################################
 # Page Wrapper Component
@@ -20,11 +23,12 @@ auth.listen ->
 
 PROMPT_MINI_COURSE_EVERY = 5
 
-module.exports = React.createClass
+ClassifierWrapper = React.createClass
   displayName: 'ClassifierWrapper'
 
   contextTypes:
     geordi: React.PropTypes.object
+    store: React.PropTypes.object
 
   propTypes:
     classification: React.PropTypes.object
@@ -59,11 +63,13 @@ module.exports = React.createClass
     Tutorial.find @props.workflow
     .then (tutorial) =>
       {user, preferences} = @props
-      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
+      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi, @context.store
       @setState {tutorial}
+      this.props.actions.translations.load('tutorial', tutorial.id, this.props.translations.locale) if tutorial?
     MiniCourse.find @props.workflow
     .then (minicourse) =>
       @setState {minicourse}
+      this.props.actions.translations.load('minicourse', minicourse.id, this.props.translations.locale) if minicourse?
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.workflow isnt @props.workflow
@@ -108,7 +114,7 @@ module.exports = React.createClass
     split = @props.splits?['mini-course.visible']
     isntHidden = not split or split?.variant?.value?.auto
     if shouldPrompt and isntHidden
-      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.user, @context.geordi
+      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.user, @context.geordi, @context.store
 
   checkExpertClassifier: (props = @props) ->
     if props.project and props.user and @state.expertClassifier is null
@@ -181,3 +187,18 @@ module.exports = React.createClass
       else
         <span>Loading classifier...</span>}
     </div>
+
+mapStateToProps = (state) -> ({
+  translations: state.translations
+});
+
+mapDispatchToProps = (dispatch) -> ({
+  actions: {
+    translations: bindActionCreators(translationActions, dispatch)
+  }
+});
+
+module.exports = {
+    default: connect(mapStateToProps, mapDispatchToProps)(ClassifierWrapper)
+    ClassifierWrapper
+  }

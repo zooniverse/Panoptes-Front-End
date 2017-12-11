@@ -1,8 +1,10 @@
 React = require 'react'
 Dialog = require 'modal-form/dialog'
+Translate = require 'react-translate-component'
 MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
+Translations = require('./translations').default
 
 minicoursesCompletedThisSession = {}
 window?.minicoursesCompletedThisSession = minicoursesCompletedThisSession
@@ -23,7 +25,7 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
-    start: (minicourse, projectPreferences, user, geordi) ->
+    start: (minicourse, projectPreferences, user, geordi, store) ->
       MiniCourseComponent = this
       if minicourse.steps.length isnt 0
         awaitMiniCourseMedia = minicourse.get 'attached_images'
@@ -37,16 +39,21 @@ module.exports = React.createClass
               mediaByID
 
         awaitMiniCourseMedia.then (mediaByID) =>
-          Dialog.alert(<MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} geordi={geordi} />, {
+          minicourseContent = 
+            <Translations original={minicourse} type="minicourse" store={store}>
+              <MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} geordi={geordi} />
+            </Translations>
+          Dialog.alert(minicourseContent, {
             className: 'mini-course-dialog',
             required: true,
             closeButton: true,
             top: 0.2
           })
-            .catch =>
+            .catch (e) =>
+              console.warn e
               null # We don't really care if the user canceled or completed the tutorial.
 
-    restart: (minicourse, projectPreferences, user, geordi) ->
+    restart: (minicourse, projectPreferences, user, geordi, store) ->
       resetPreferences = {
         "preferences.minicourses.opt_out.id_#{minicourse.id}": false,
         "preferences.minicourses.slide_to_start.id_#{minicourse.id}": 0
@@ -57,13 +64,13 @@ module.exports = React.createClass
         projectPreferences.update resetPreferences
         projectPreferences.save().then =>
           window.prefs = projectPreferences
-          @start minicourse, projectPreferences, user, geordi
+          @start minicourse, projectPreferences, user, geordi, store
 
-    startIfNecessary: (minicourse, preferences, user, geordi) ->
+    startIfNecessary: (minicourse, preferences, user, geordi, store) ->
       if user? && minicourse?
         @checkIfCompletedOrOptedOut(minicourse, preferences, user).then (completed) =>
           unless completed
-            @start minicourse, preferences, user, geordi
+            @start minicourse, preferences, user, geordi, store
 
     checkIfCompletedOrOptedOut: (minicourse, projectPreferences, user) ->
       if user? and projectPreferences.preferences?.minicourses?
@@ -107,22 +114,23 @@ module.exports = React.createClass
       @handleProjectPreferencesOnUnmount()
 
   render: ->
-    step = @props.minicourse.steps[@props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"]]
+    stepIndex = @props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"]
+    step = @props.minicourse.steps[stepIndex]
     <div className="mini-course-dialog__steps">
       <MediaCard className="steps__step" src={@props.media[step.media]?.src}>
-        <Markdown>{step.content}</Markdown>
+        <Markdown>{@props.translation.steps[stepIndex].content}</Markdown>
         <hr />
         <div className="steps__step-actions">
           {if @props.user?
             <label className="action__opt-out">
               <input type="checkbox" onChange={@handleOptOut} checked={@state.optOut} />
-              Do not show mini-course in the future
+              <Translate content="classifier.dontShowMinicourse" />
             </label>}
           <button type="submit" className="standard-button action__button">
             {if @state.optOut
-              <span>Opt out <i className="fa fa-long-arrow-right fa-lg" aria-hidden="true"></i></span>
+              <span><Translate content="classifier.optOut" /> <i className="fa fa-long-arrow-right fa-lg" aria-hidden="true"></i></span>
             else
-              <span>Close</span>}
+              <Translate content="classifier.close" />}
           </button>
         </div>
       </MediaCard>

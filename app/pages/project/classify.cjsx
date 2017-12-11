@@ -5,7 +5,7 @@ ReactDOM = require 'react-dom'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 `import FinishedBanner from './finished-banner';`
-Classifier = require '../../classifier'
+Classifier = require('../../classifier').default
 seenThisSession = require '../../lib/seen-this-session'
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 experimentsClient = require '../../lib/experiments-client'

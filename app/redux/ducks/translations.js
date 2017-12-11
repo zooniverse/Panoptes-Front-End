@@ -14,9 +14,9 @@ const initialState = {
   locale: DEFAULT_LOCALE,
   strings: {
     project: {},
-    workflow: {
-      tasks: {}
-    }
+    workflow: {},
+    tutorial: {},
+    minicourse: {}
   }
 };
 
@@ -35,9 +35,11 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 // Action Creators
-export function load(translated_type, translated_id, language) {
+export function load(resource_type, translated_id, language) {
   counterpart.setLocale(language);
+  const translated_type = resource_type === 'minicourse' ? 'tutorial' : resource_type;
   return (dispatch) => {
+    dispatch({ type: LOAD, payload: { translated_type, translated_id, language } });
     apiClient
       .type('translations')
       .get({ translated_type, translated_id, language })
@@ -46,7 +48,7 @@ export function load(translated_type, translated_id, language) {
           dispatch({
             type: SET_STRINGS,
             payload: {
-              [translated_type]: translation.strings
+              [resource_type]: translation.strings
             }
           });
         }
