@@ -15,11 +15,6 @@ const SLUG_MAP = {
 class AboutProject extends Component {
   constructor(props) {
     super(props);
-    this.renderAbout = this.renderAbout.bind(this);
-    this.getPages = this.getPages.bind(this);
-    this.constructPagesData = this.constructPagesData.bind(this);
-    this.getTeam = this.getTeam.bind(this);
-    this.constructTeamData = this.constructTeamData.bind(this);
     this.state = {
       pages: [],
       team: [],
@@ -31,11 +26,11 @@ class AboutProject extends Component {
     this.getPages();
   }
 
-  constructPagesData(apiResponse) {
+  constructPagesData() {
     const availablePages = [];
 
     for (const url_key in SLUG_MAP) {
-      const matchingPage = apiResponse.find(page => page.url_key === url_key);
+      const matchingPage = this.props.pages.find(page => page.url_key === url_key);
       if (matchingPage && matchingPage.content && matchingPage.content !== '') {
         availablePages.push({
           slug: SLUG_MAP[url_key],
@@ -52,13 +47,10 @@ class AboutProject extends Component {
 
   getPages() {
     this.getTeam();
-    return this.props.project.get('pages')
-      .then(this.constructPagesData)
-      .then(availablePages => this.setState({
-        pages: availablePages,
-        loaded: true,
-      }))
-      .catch(error => console.error('Error retrieving project pages', error));
+    this.setState({
+      pages: this.constructPagesData(),
+      loaded: true
+    });
   }
 
   getTeam() {
