@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 import counterpart from 'counterpart';
-import AboutNav from './about-nav';
+import { connect } from 'react-redux';
 import apiClient from 'panoptes-client/lib/api-client';
+import AboutNav from './about-nav';
 
 const SLUG_MAP = {
   science_case: 'research',
@@ -26,16 +27,31 @@ class AboutProject extends Component {
     this.getPages();
   }
 
+  componentDidUpdate(prevProps) {
+    const prevTranslations = prevProps.translations.strings.project_page;
+    if (prevTranslations !== this.props.translations.strings.project_page) {
+      this.setState({
+        pages: this.constructPagesData()
+      });
+    }
+  }
+
   constructPagesData() {
     const availablePages = [];
 
     for (const url_key in SLUG_MAP) {
-      const matchingPage = this.props.pages.find(page => page.url_key === url_key);
-      if (matchingPage && matchingPage.content && matchingPage.content !== '') {
+      const { pages, translations } = this.props;
+      const matchingPage = pages.find(page => page.url_key === url_key);
+      const pageTranslations = translations ? translations.strings.project_page : [];
+      const [matchingTranslation] = pageTranslations.filter(page => page.translated_id === parseInt(matchingPage.id));
+      const { content } = (matchingTranslation && matchingTranslation.strings) ?
+        matchingTranslation.strings :
+        matchingPage;
+      if (content && content !== '') {
         availablePages.push({
           slug: SLUG_MAP[url_key],
           title: matchingPage.title,
-          content: matchingPage.content,
+          content
         });
       } else if (['science_case', 'team'].includes(url_key)) {
         availablePages.push({ slug: SLUG_MAP[url_key] });
@@ -80,7 +96,7 @@ class AboutProject extends Component {
     const { state: { pages, team }, props: { children, project } } = this;
     return (
       <div className="project-about-page">
-        <Helmet title={`${this.props.project.display_name} » ${counterpart('about.header')}`} />
+        <Helmet title={`${this.props.translation.display_name} » ${counterpart('about.header')}`} />
         <AboutNav pages={pages} projectPath={`/projects/${project.slug}`} />
         {React.cloneElement(children, {project, pages, team})}
       </div>
@@ -88,4 +104,9 @@ class AboutProject extends Component {
   }
 }
 
-export default AboutProject;
+const mapStateToProps = state => ({
+  translations: state.translations
+});
+
+export default connect(mapStateToProps)(AboutProject);
+export { AboutProject };
