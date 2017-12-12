@@ -5,9 +5,9 @@ import { project, workflow } from '../dev-classifier/mock-data';
 import ProjectPage from './project-page';
 
 function Page() {
-  return(
+  return (
     <p>Hello world!</p>
-  )
+  );
 }
 
 describe('ProjectPage', () => {
@@ -26,29 +26,32 @@ describe('ProjectPage', () => {
   });
 
   it('should receive a background, project and workflow props', () => {
-    const wrapper = mount(<ProjectPage background={background} project={project} workflow={workflow} ><Page /></ProjectPage>);
+    const wrapper = mount(
+      <ProjectPage background={background} project={project} workflow={workflow} >
+        <Page />
+      </ProjectPage>
+    );
     expect(wrapper.props().background).to.equal(background);
     expect(wrapper.props().project).to.equal(project);
     expect(wrapper.props().workflow).to.equal(workflow);
   });
-  
+
   describe('with a launch-approved project', () => {
-    const project = { launch_approved: true };
+    project.launch_approved = true;
     const wrapper = shallow(<ProjectPage project={project} ><Page /></ProjectPage>);
     const disclaimer = wrapper.find('Translate[className="project-disclaimer"]');
     it('should not render the Zooniverse disclaimer.', () => {
       expect(disclaimer).to.have.lengthOf(0);
     });
-    
   });
-  
+
   describe('without approval', () => {
-    const project = { launch_approved: false };
+    project.launch_approved = false;
     const wrapper = shallow(<ProjectPage project={project} ><Page /></ProjectPage>);
     const disclaimer = wrapper.find('Translate[className="project-disclaimer"]');
     it('should render the Zooniverse disclaimer.', () => {
       expect(disclaimer).to.have.lengthOf(1);
     });
-    it('should render the disclaimer immediately after its children.')
+    it('should render the disclaimer immediately after its children.');
   });
 });
