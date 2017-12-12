@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import { project, workflow } from '../dev-classifier/mock-data';
-import ProjectPage from './project-navbar';
+import ProjectPage from './project-page';
 
 describe('ProjectPage', () => {
   const background = {
