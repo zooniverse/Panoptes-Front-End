@@ -4,23 +4,29 @@ import { expect } from 'chai';
 import { project, workflow } from '../dev-classifier/mock-data';
 import ProjectPage from './project-page';
 
+function Page() {
+  return(
+    <p>Hello world!</p>
+  )
+}
+
 describe('ProjectPage', () => {
   const background = {
     src: 'the project background image url'
   };
 
   it('should render without crashing', () => {
-    shallow(<ProjectPage />);
+    shallow(<ProjectPage><Page /></ProjectPage>);
   });
 
   it('should render the project nav bar', () => {
-    const wrapper = shallow(<ProjectPage />);
+    const wrapper = shallow(<ProjectPage><Page /></ProjectPage>);
     const navElement = wrapper.find('ProjectNavbar').first();
     expect(navElement).to.have.lengthOf(1);
   });
 
   it('should receive a background, project and workflow props', () => {
-    const wrapper = mount(<ProjectPage background={background} project={project} workflow={workflow} />);
+    const wrapper = mount(<ProjectPage background={background} project={project} workflow={workflow} ><Page /></ProjectPage>);
     expect(wrapper.props().background).to.equal(background);
     expect(wrapper.props().project).to.equal(project);
     expect(wrapper.props().workflow).to.equal(workflow);
