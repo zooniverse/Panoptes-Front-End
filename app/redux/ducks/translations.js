@@ -52,6 +52,13 @@ export function load(resource_type, translated_id, language) {
               [resource_type]: translation.strings
             }
           });
+        } else {
+          dispatch({
+            type: SET_STRINGS,
+            payload: {
+              [resource_type]: {}
+            }
+          });
         }
       })
       .catch(error => {
