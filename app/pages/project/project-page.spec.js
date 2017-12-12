@@ -52,6 +52,9 @@ describe('ProjectPage', () => {
     it('should render the Zooniverse disclaimer.', () => {
       expect(disclaimer).to.have.lengthOf(1);
     });
-    it('should render the disclaimer immediately after its children.');
+    it('should render the disclaimer immediately after its children.', () => {
+      expect(wrapper.childAt(1).name()).to.equal('Page');
+      expect(wrapper.childAt(2)).to.deep.equal(disclaimer);
+    });
   });
 });
