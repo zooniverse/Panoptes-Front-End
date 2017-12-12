@@ -1,6 +1,6 @@
 React = require 'react'
-Classifier = require '../../classifier'
 mockData = require './mock-data'
+{ ClassifierWrapper } = require '../../classifier'
 `import tasks from '../../classifier/tasks';`
 
 ClassificationViewer = React.createClass
@@ -82,7 +82,7 @@ DevClassifierPage = React.createClass
 
   render: ->
     <div className="content-container">
-      <Classifier user={@props.user}  project={@props.project} workflow={@props.classification._workflow} preferences={@props.preferences} classification={@props.classification} onClickNext={@reload} />
+      <ClassifierWrapper user={@props.user}  project={@props.project} workflow={@props.classification._workflow} preferences={@props.preferences} classification={@props.classification} onClickNext={@reload} />
       <hr />
       <ClassificationViewer classification={@props.classification} />
     </div>
