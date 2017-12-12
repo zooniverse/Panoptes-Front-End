@@ -8,6 +8,7 @@ import ProjectNavbar from './ProjectNavbar';
 class ProjectNavbarContainer extends Component {
   constructor(props) {
     super(props);
+    console.info('props',props)
     this.getExternalLinks = this.getExternalLinks.bind(this);
     this.getNavLinks = this.getNavLinks.bind(this);
     this.getOrganizationLink = this.getOrganizationLink.bind(this);
@@ -80,7 +81,7 @@ class ProjectNavbarContainer extends Component {
     const avatarSrc = _.get(this.props.projectAvatar, 'src', undefined);
     const backgroundSrc = _.get(this.props.background, 'src', undefined);
     const navLinks = this.getNavLinks();
-    const projectTitle = _.get(this.props.project, 'title', undefined);
+    const projectTitle = _.get(this.props.translation, 'display_name', undefined);
     const projectLink = `/projects/${this.props.project.slug}`;
 
     return (
@@ -112,6 +113,9 @@ ProjectNavbarContainer.propTypes = {
     urls: PropTypes.array
   }),
   projectRoles: PropTypes.array,
+  translation: PropTypes.shape({
+    display_name: PropTypes.string
+  }),
   user: PropTypes.object,
   workflow: PropTypes.object
 };
