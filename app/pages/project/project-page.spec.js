@@ -25,4 +25,14 @@ describe('ProjectPage', () => {
     expect(wrapper.props().project).to.equal(project);
     expect(wrapper.props().workflow).to.equal(workflow);
   });
+  
+  describe('with a launch-approved project', () => {
+    it('should not render the Zooniverse disclaimer.');
+    
+  });
+  
+  describe('without approval', () => {
+    it('should render the Zooniverse disclaimer.');
+    it('should render the disclaimer immediately after its children.')
+  });
 });
