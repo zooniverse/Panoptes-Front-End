@@ -120,6 +120,7 @@ ProjectPage.defaultProps = {
     src: ''
   },
   loading: false,
+  location: {},
   organization: null,
   pages: [],
   project: {
