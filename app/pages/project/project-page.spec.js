@@ -35,7 +35,7 @@ describe('ProjectPage', () => {
   describe('with a launch-approved project', () => {
     const project = { launch_approved: true };
     const wrapper = shallow(<ProjectPage project={project} ><Page /></ProjectPage>);
-    const disclaimer = wrapper.find('Translate[className="project-disclaimer"]')
+    const disclaimer = wrapper.find('Translate[className="project-disclaimer"]');
     it('should not render the Zooniverse disclaimer.', () => {
       expect(disclaimer).to.have.lengthOf(0);
     });
@@ -43,7 +43,12 @@ describe('ProjectPage', () => {
   });
   
   describe('without approval', () => {
-    it('should render the Zooniverse disclaimer.');
+    const project = { launch_approved: false };
+    const wrapper = shallow(<ProjectPage project={project} ><Page /></ProjectPage>);
+    const disclaimer = wrapper.find('Translate[className="project-disclaimer"]');
+    it('should render the Zooniverse disclaimer.', () => {
+      expect(disclaimer).to.have.lengthOf(1);
+    });
     it('should render the disclaimer immediately after its children.')
   });
 });
