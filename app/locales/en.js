@@ -48,23 +48,24 @@ export default {
     }
   },
   organization: {
-    loading: 'Loading organization',
     error: 'There was an error retrieving organization',
-    notFound: 'organization not found.',
-    notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...',
     home: {
+      introduction: 'Introduction',
+      links: 'Links',
       projects: {
-        loading: 'Loading organization projects...',
         error: 'There was an error loading organization projects.',
+        loading: 'Loading organization projects...',
         none: 'There are no projects associated with this organization.'
       },
-      viewToggle: 'View As Volunteer',
-      introduction: 'Introduction',
-      readMore: 'Read More',
       readLess: 'Read Less',
-      links: 'Links'
+      readMore: 'Read More',
+      researcher: 'Words from a researcher',
+      viewToggle: 'View As Volunteer'
     },
+    loading: 'Loading organization',
+    notFound: 'organization not found.',
+    notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
+    pleaseWait: 'Please wait...'
   },
   tasks: {
     less: 'Less',

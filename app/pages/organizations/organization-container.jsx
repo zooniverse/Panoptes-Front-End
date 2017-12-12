@@ -21,7 +21,8 @@ class OrganizationContainer extends React.Component {
       organizationRoles: [],
       organizationPages: [],
       organizationProjects: [],
-      projectAvatars: []
+      projectAvatars: [],
+      quoteObject: {}
     };
 
     this.toggleCollaboratorView = this.toggleCollaboratorView.bind(this);
@@ -80,6 +81,40 @@ class OrganizationContainer extends React.Component {
     this.context.router.push(newLocation);
   }
 
+  fetchResearcherQuote() {
+    const quotableProjects = this.state.organizationProjects
+      .filter(project => project.researcher_quote);
+    const project = quotableProjects[Math.floor(Math.random() * quotableProjects.length)];
+    if (project.configuration && project.configuration.researcherID) {
+      if (project.configuration.researcherID === project.display_name) {
+        const projectAvatar = this.state.projectAvatars.find(avatar => avatar.links.linked.id === project.id);
+        if (projectAvatar && projectAvatar.src) {
+          this.setState({ quoteObject: {
+            displayName: project.display_name,
+            quote: project.researcher_quote,
+            researcherAvatar: projectAvatar.src,
+            slug: project.slug
+          }});
+        }
+      } else {
+        apiClient.type('users').get(project.configuration.researcherID)
+          .then((researcher) => {
+            researcher.get('avatar').then(([avatar]) => {
+              if (avatar.src) {
+                this.setState({ quoteObject: {
+                  displayName: project.display_name,
+                  quote: project.researcher_quote,
+                  researcherAvatar: avatar.src,
+                  slug: project.slug
+                }});
+              }
+            });
+          })
+          .catch(error => console.error(error)); // eslint-disable-line no-console
+      }
+    }
+  }
+
   fetchProjects(organization, collaboratorView, locationQuery = this.props.location.query) {
     this.setState({ errorFetchingProjects: null, fetchingProjects: true, fetchingProjectAvatars: true });
     const query = { launch_approved: true, include: 'avatar' };
@@ -105,6 +140,7 @@ class OrganizationContainer extends React.Component {
         Promise.all(avatarRequests)
           .then((projectAvatars) => {
             this.setState({ fetchingProjectAvatars: false, projectAvatars });
+            this.fetchResearcherQuote();
           })
           .catch((error) => {
             console.error('error loading project avatars', error); // eslint-disable-line no-console
@@ -189,6 +225,7 @@ class OrganizationContainer extends React.Component {
           organizationPages={this.state.organizationPages}
           organizationProjects={this.state.organizationProjects}
           projectAvatars={this.state.projectAvatars}
+          quoteObject={this.state.quoteObject}
           toggleCollaboratorView={this.toggleCollaboratorView}
         />);
     } else if (this.state.fetchingOrganization) {
