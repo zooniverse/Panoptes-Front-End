@@ -45,7 +45,7 @@ export default class ProjectPage extends React.Component {
 
   render() {
     const projectPath = `/projects/${this.props.project.slug}`;
-    const onHomePage = this.props.routes[2].path === undefined;
+    const onHomePage = this.props.routes[2] && this.props.routes[2].path === undefined;
     const pages = this.props.pages.reduce((map, page) => {
       map[page.url_key] = page;
       return map;
@@ -121,7 +121,7 @@ ProjectPage.defaultProps = {
   },
   loading: false,
   organization: null,
-  pages: null,
+  pages: [],
   project: {
     id: '',
     display_name: '',
@@ -148,9 +148,7 @@ ProjectPage.propTypes = {
     src: React.PropTypes.string
   }),
   loading: React.PropTypes.bool,
-  pages: React.PropTypes.shape({
-    content: React.PropTypes.string
-  }),
+  pages: React.PropTypes.arrayOf(React.PropTypes.object),
   project: React.PropTypes.shape({
     id: React.PropTypes.string,
     display_name: React.PropTypes.string,
