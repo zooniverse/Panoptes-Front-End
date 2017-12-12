@@ -25,15 +25,12 @@ describe('ProjectPage', () => {
     expect(navElement).to.have.lengthOf(1);
   });
 
-  it('should receive a background, project and workflow props', () => {
-    const wrapper = mount(
-      <ProjectPage background={background} project={project} workflow={workflow} >
-        <Page />
-      </ProjectPage>
-    );
-    expect(wrapper.props().background).to.equal(background);
-    expect(wrapper.props().project).to.equal(project);
-    expect(wrapper.props().workflow).to.equal(workflow);
+  it('should pass background, project and workflow props to its children', () => {
+    const wrapper = shallow(<ProjectPage background={background} project={project} workflow={workflow}><Page /></ProjectPage>);
+    const child = wrapper.find('Page');
+    expect(child.props().background).to.equal(background);
+    expect(child.props().project).to.equal(project);
+    expect(child.props().workflow).to.equal(workflow);
   });
 
   describe('with a launch-approved project', () => {
