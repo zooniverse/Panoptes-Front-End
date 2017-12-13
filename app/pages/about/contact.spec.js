@@ -7,6 +7,7 @@ import Contact from './contact';
 
 describe('Contact', function () {
   it('renders without crashing', function () {
+    const wrapper = shallow(<Contact />);
   });
 
   it('renders markdown elements', function () {
