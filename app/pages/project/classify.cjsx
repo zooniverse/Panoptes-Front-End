@@ -312,7 +312,7 @@ module.exports = React.createClass
 
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog
-      WorkflowAssignmentDialog.start({splits: props.splits})
+      WorkflowAssignmentDialog.start({ splits: props.splits, project: props.project })
         .then =>
           @setState { promptWorkflowAssignmentDialog: false }
         .then =>
