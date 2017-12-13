@@ -21,8 +21,14 @@ describe('ProjectPage', () => {
 
   it('should render the project nav bar', () => {
     const wrapper = shallow(<ProjectPage><Page /></ProjectPage>);
-    const navElement = wrapper.find('ProjectNavbar').first();
+    const navElement = wrapper.find('ProjectNavbar');
     expect(navElement).to.have.lengthOf(1);
+  });
+
+  it('should render the project nav bar as its first child', () => {
+    const wrapper = shallow(<ProjectPage><Page /></ProjectPage>);
+    const navBar = wrapper.children().first().children().first();
+    expect(navBar.name()).to.equal('ProjectNavbar');
   });
 
   it('should pass background, project and workflow props to its children', () => {
