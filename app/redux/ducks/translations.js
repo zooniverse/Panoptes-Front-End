@@ -17,6 +17,7 @@ const initialState = {
     workflow: {},
     tutorial: {},
     minicourse: {},
+    field_guide: {},
     project_page: []
   }
 };

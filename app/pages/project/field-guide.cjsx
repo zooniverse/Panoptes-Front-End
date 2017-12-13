@@ -67,7 +67,8 @@ module.exports = React.createClass
     </div>
 
   render: ->
-    {icon, title, content, items} = @props
+    {icon, title, content} = @props
+    { items } = @props.translation
     implicitRootItem = {icon, title, content, items}
 
     if implicitRootItem.items?.length is 1
