@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import { project, workflow } from '../dev-classifier/mock-data';
 import ProjectPage from './project-page';
@@ -53,5 +53,17 @@ describe('ProjectPage', () => {
       expect(wrapper.childAt(1).name()).to.equal('Page');
       expect(wrapper.childAt(2)).to.deep.equal(disclaimer);
     });
+  });
+
+  describe('on the home page', () => {
+    it('should not show the project navigation');
+    it('should not show any project announcements');
+    it('should not show the field guide');
+  });
+
+  describe('on other project pages', () =>{
+    it('should show the project navigation');
+    it('should show any project announcements');
+    it('should show the field guide');
   });
 });
