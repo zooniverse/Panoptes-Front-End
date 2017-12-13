@@ -62,9 +62,18 @@ describe('ProjectPage', () => {
       const mockLocation = {
         pathname: `/projects/${project.slug}`
       };
-      wrapper = shallow(<ProjectPage location={mockLocation} project={project} ><Page /></ProjectPage>);
+      const routes = [];
+      routes[2] = {};
+      wrapper = shallow(
+        <ProjectPage location={mockLocation} routes={routes} project={project} >
+          <Page />
+        </ProjectPage>
+      );
     });
-    it('should not show the project navigation');
+    it('should not show the project navigation', () => {
+      const navbar = wrapper.find('ProjectNavbar');
+      expect(navbar).to.have.lengthOf(0);
+    });
     it('should not show any project announcements');
     it('should not show the field guide', () => {
       const fieldguide = wrapper.find('PotentialFieldGuide');
@@ -79,9 +88,18 @@ describe('ProjectPage', () => {
       const mockLocation = {
         pathname: `/projects/${project.slug}/about`
       };
-      wrapper = shallow(<ProjectPage location={mockLocation} project={project} ><Page /></ProjectPage>);
+      const routes = [];
+      routes[2] = { path: 'about' };
+      wrapper = shallow(
+        <ProjectPage location={mockLocation} routes={routes} project={project} >
+          <Page />
+        </ProjectPage>
+      );
     });
-    it('should show the project navigation');
+    it('should show the project navigation', () => {
+      const navbar = wrapper.find('ProjectNavbar');
+      expect(navbar).to.have.lengthOf(1);
+    });
     it('should show any project announcements');
     it('should show the field guide', () => {
       const fieldguide = wrapper.find('PotentialFieldGuide');
