@@ -59,13 +59,19 @@ describe('ProjectPage', () => {
     let wrapper;
     beforeEach(() => {
       project.slug = 'test/project';
+      project.configuration = {};
+      project.configuration.announcement = 'This is a test announcement';
       const mockLocation = {
         pathname: `/projects/${project.slug}`
       };
       const routes = [];
       routes[2] = {};
       wrapper = shallow(
-        <ProjectPage location={mockLocation} routes={routes} project={project} >
+        <ProjectPage
+          location={mockLocation}
+          routes={routes}
+          project={project}
+        >
           <Page />
         </ProjectPage>
       );
@@ -74,7 +80,10 @@ describe('ProjectPage', () => {
       const navbar = wrapper.find('ProjectNavbar');
       expect(navbar).to.have.lengthOf(0);
     });
-    it('should not show any project announcements');
+    it('should not show any project announcements', () => {
+      const announcement = wrapper.find('div.informational.project-announcement-banner');
+      expect(announcement).to.have.lengthOf(0);
+    });
     it('should not show the field guide', () => {
       const fieldguide = wrapper.find('PotentialFieldGuide');
       expect(fieldguide).to.have.lengthOf(0);
@@ -85,13 +94,19 @@ describe('ProjectPage', () => {
     let wrapper;
     beforeEach(() => {
       project.slug = 'test/project';
+      project.configuration = {};
+      project.configuration.announcement = 'This is a test announcement';
       const mockLocation = {
         pathname: `/projects/${project.slug}/about`
       };
       const routes = [];
       routes[2] = { path: 'about' };
       wrapper = shallow(
-        <ProjectPage location={mockLocation} routes={routes} project={project} >
+        <ProjectPage
+          location={mockLocation}
+          routes={routes}
+          project={project}
+        >
           <Page />
         </ProjectPage>
       );
@@ -100,7 +115,10 @@ describe('ProjectPage', () => {
       const navbar = wrapper.find('ProjectNavbar');
       expect(navbar).to.have.lengthOf(1);
     });
-    it('should show any project announcements');
+    it('should show any project announcements', () => {
+      const announcement = wrapper.find('div.informational.project-announcement-banner');
+      expect(announcement).to.have.lengthOf(1);
+    });
     it('should show the field guide', () => {
       const fieldguide = wrapper.find('PotentialFieldGuide');
       expect(fieldguide).to.have.lengthOf(1);
