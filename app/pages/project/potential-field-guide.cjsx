@@ -2,6 +2,7 @@ React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 Pullout = require 'react-pullout'
 FieldGuide = require './field-guide'
+Translations = require('../../classifier/translations').default
 
 module.exports = React.createClass
   displayName: 'PotentialFieldGuide'
@@ -16,6 +17,7 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+    store: React.PropTypes.object
 
   logClick: (type) ->
     @context?.geordi?.logEvent
@@ -35,7 +37,9 @@ module.exports = React.createClass
         <button type="button" className="field-guide-pullout-toggle" onClick={@toggleFieldGuide}>
           <strong>Field guide</strong>
         </button>
-        <FieldGuide items={@props.guide.items} icons={@props.guideIcons} onClickClose={@toggleFieldGuide} />
+        <Translations original={@props.guide} type="field_guide" store={@context.store}>
+          <FieldGuide items={@props.guide.items} icons={@props.guideIcons} onClickClose={@toggleFieldGuide} />
+        </Translations>
       </Pullout>
     else
       null

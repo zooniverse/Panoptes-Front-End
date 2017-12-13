@@ -307,7 +307,9 @@ ProjectPageController = React.createClass
 
   loadFieldGuide: (projectId) ->
     apiClient.type('field_guides').get(project_id: projectId).then ([guide]) =>
+      { actions, translations } = this.props;
       @setState {guide}
+      actions.translations.load('field_guide', guide.id, translations.locale)
       guide?.get('attached_images', page_size: 100)?.then (images) =>
         guideIcons = {}
         for image in images
