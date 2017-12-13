@@ -4,11 +4,11 @@ apiClient = require 'panoptes-client/lib/api-client'
 { Split } = require('seven-ten')
 counterpart = require 'counterpart'
 isAdmin = require '../../lib/is-admin'
-ProjectPage = require './project-page'
 ProjectTranslations = require('./project-translations').default
 { connect } = require 'react-redux';
 { bindActionCreators } = require 'redux';
 translationActions  = require '../../redux/ducks/translations';
+ProjectPage = require('./project-page').default;
 
 counterpart.registerTranslations 'en', require('../../locales/en').default
 counterpart.registerTranslations 'it', require('../../locales/it').default

@@ -1,8 +1,6 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
-import sinon from 'sinon';
-import { IndexLink, Link } from 'react-router';
 import { project, workflow } from '../dev-classifier/mock-data';
 import ProjectNavbar from './project-navbar';
 
