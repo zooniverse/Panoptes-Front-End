@@ -56,14 +56,36 @@ describe('ProjectPage', () => {
   });
 
   describe('on the home page', () => {
+    let wrapper;
+    beforeEach(() => {
+      project.slug = 'test/project';
+      const mockLocation = {
+        pathname: `/projects/${project.slug}`
+      };
+      wrapper = shallow(<ProjectPage location={mockLocation} project={project} ><Page /></ProjectPage>);
+    });
     it('should not show the project navigation');
     it('should not show any project announcements');
-    it('should not show the field guide');
+    it('should not show the field guide', () => {
+      const fieldguide = wrapper.find('PotentialFieldGuide');
+      expect(fieldguide).to.have.lengthOf(0);
+    });
   });
 
-  describe('on other project pages', () =>{
+  describe('on other project pages', () => {
+    let wrapper;
+    beforeEach(() => {
+      project.slug = 'test/project';
+      const mockLocation = {
+        pathname: `/projects/${project.slug}/about`
+      };
+      wrapper = shallow(<ProjectPage location={mockLocation} project={project} ><Page /></ProjectPage>);
+    });
     it('should show the project navigation');
     it('should show any project announcements');
-    it('should show the field guide');
+    it('should show the field guide', () => {
+      const fieldguide = wrapper.find('PotentialFieldGuide');
+      expect(fieldguide).to.have.lengthOf(1);
+    });
   });
 });
