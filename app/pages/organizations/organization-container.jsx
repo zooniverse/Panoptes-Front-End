@@ -117,10 +117,10 @@ class OrganizationContainer extends React.Component {
 
   fetchProjects(organization, collaboratorView, locationQuery = this.props.location.query) {
     this.setState({ errorFetchingProjects: null, fetchingProjects: true, fetchingProjectAvatars: true });
-    const query = { launch_approved: true, include: 'avatar' };
+    const query = { beta_approved: true, include: 'avatar' };
 
     if (collaboratorView) {
-      delete query.launch_approved;
+      delete query.beta_approved;
     }
     if (locationQuery && locationQuery.category) {
       query.tags = locationQuery.category;
