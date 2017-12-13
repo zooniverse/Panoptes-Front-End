@@ -7,6 +7,7 @@ import Acknowledgements from './acknowledgements';
 
 describe('Acknowledgements', function () {
   it('renders without crashing', function () {
+    const wrapper = shallow(<Acknowledgements />);
   });
 
   it('renders markdown elements', function () {
