@@ -67,6 +67,9 @@ export default {
     home: {
       introduction: 'Introduction',
       links: 'Links',
+      metadata: {
+        projects: 'Projects'
+      },
       projects: {
         error: 'There was an error loading organization projects.',
         loading: 'Loading organization projects...',
@@ -86,7 +89,7 @@ export default {
     less: 'Less',
     more: 'More',
     shortcut: {
-      noAnswer: "No answer"
+      noAnswer: 'No answer'
     },
     survey: {
       clear: 'Clear',
@@ -232,4 +235,4 @@ export default {
       dailyZoo: 'If you want to keep up to date with what\'s going on across the Zooniverse and our latest results, check out the [Daily Zooniverse](http://daily.zooniverse.org/) or the main [Zooniverse blog](http://blog.zooniverse.org/). You can also follow the Zooniverse on [Twitter](http://twitter.com/the_zooniverse), [Facebook](http://facebook.com/therealzooniverse), and [Google+](https://plus.google.com/+ZooniverseOrgReal).'
     }
   }
-}
+};

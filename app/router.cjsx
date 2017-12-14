@@ -172,8 +172,8 @@ module.exports =
       <Route path="recents" component={Recents} />
     </Route>
 
-    <Route path="organizations/:owner/:name" component={(require './pages/organizations/organization-container').default}>
-      <IndexRoute component={(require './pages/organizations/organization-page').default} />
+    <Route path="organizations/:owner/:name" component={(require './pages/organization/organization-container').default}>
+      <IndexRoute component={(require './pages/organization/organization-page').default} />
       <Route path="home" component={ONE_UP_REDIRECT} />
     </Route>
 

@@ -3,64 +3,12 @@ import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
+import OrganizationProjectCards from './organization-project-cards';
+import OrganizationMetadata from './organization-metadata';
 import Thumbnail from '../../components/thumbnail';
 import SocialIcons from '../../lib/social-icons';
-import ProjectCard from '../../partials/project-card';
 
 const AVATAR_SIZE = 100;
-
-export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjects, projects, projectAvatars }) => {
-  if (fetchingProjects) {
-    return (
-      <div className="organization-page__projects-status">
-        <p><Translate content="organization.home.projects.loading" /></p>
-      </div>);
-  } else if (errorFetchingProjects) {
-    return (
-      <div className="organization-page__projects-status">
-        <p><Translate content="organization.home.projects.error" /></p>
-        <p>
-          <code>{errorFetchingProjects.toString()}</code>
-        </p>
-      </div>);
-  } else if (!fetchingProjects && !projects.length) {
-    return (
-      <div className="organization-page__projects-status">
-        <p><Translate content="organization.home.projects.none" /></p>
-      </div>);
-  } else {
-    return (
-      <div className="project-card-list">
-        {projects.map((project) => {
-          let projectAvatar = projectAvatars.find(avatar => avatar.links.linked.id === project.id);
-          if (!projectAvatar) {
-            projectAvatar = { src: '' };
-          }
-          return (
-            <ProjectCard key={project.id} project={project} imageSrc={projectAvatar.src} />);
-        })}
-      </div>);
-  }
-};
-
-OrganizationProjectCards.propTypes = {
-  errorFetchingProjects: React.PropTypes.shape({
-    message: React.PropTypes.string
-  }),
-  fetchingProjects: React.PropTypes.bool,
-  projects: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      id: React.PropTypes.string,
-      display_name: React.PropTypes.string
-    })
-  ),
-  projectAvatars: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      id: React.PropTypes.string,
-      src: React.PropTypes.string
-    })
-  )
-};
 
 class OrganizationPage extends React.Component {
   constructor() {
@@ -196,33 +144,10 @@ class OrganizationPage extends React.Component {
             </div>
           </div>
 
-          <div className="organization-page__container">
-            <div className="project-metadata">
-              <span className="organization-details__heading">
-                {this.props.organization.display_name}{' '}<Translate content="project.home.metadata.statistics" />
-              </span>
-              <div className="project-metadata-stats">
-                <div className="project-metadata-stat">
-                  <div className="project-metadata-stat__value">{123}</div>
-                  <div className="project-metadata-stat__label">
-                    <Translate content="project.home.metadata.volunteers" />
-                  </div>
-                </div>
-                <div className="project-metadata-stat">
-                  <div className="project-metadata-stat__value">{456}</div>
-                  <div className="project-metadata-stat__label">
-                    <Translate content="project.home.metadata.classifications" />
-                  </div>
-                </div>
-                <div className="project-metadata-stat">
-                  <div className="project-metadata-stat__value">{789}</div>
-                  <div className="project-metadata-stat__label">
-                    <Translate content="project.home.metadata.subjects" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <OrganizationMetadata
+            displayName={this.props.organization.display_name}
+            projects={this.props.organizationProjects}
+          />
 
           <div className="organization-page__container">
             <div className="organization-details__content">
