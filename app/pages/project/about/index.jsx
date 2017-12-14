@@ -41,7 +41,7 @@ class AboutProject extends Component {
 
     for (const url_key in SLUG_MAP) {
       const { pages, translations } = this.props;
-      const matchingPage = pages.find(page => page.url_key === url_key);
+      const matchingPage = pages.find(page => page.url_key === url_key) || {};
       const pageTranslations = translations ? translations.strings.project_page : [];
       const [matchingTranslation] = pageTranslations.filter(page => page.translated_id === parseInt(matchingPage.id, 10));
       const { content } = (matchingTranslation && matchingTranslation.strings) ?
