@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import { AboutProject } from './';
 
@@ -17,12 +17,11 @@ describe('AboutProject', () => {
     });
   });
   describe('with a child page', () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <AboutProject>
         <Page />
       </AboutProject>
     );
-    wrapper.setState({ loaded: true });
     const page = wrapper.update().find('Page');
     it('should render', () => {
       expect(wrapper.instance()).to.be.instanceOf(AboutProject);

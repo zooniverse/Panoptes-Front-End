@@ -124,7 +124,9 @@ AboutProject.defaultProps = {
   projectRoles: [],
   translation: {},
   translations: {
-    strings: {}
+    strings: {
+      project_page: []
+    }
   }
 };
 
