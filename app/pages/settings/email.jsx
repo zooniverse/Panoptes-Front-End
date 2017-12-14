@@ -274,18 +274,6 @@ class EmailSettingsPage extends React.Component {
             <label>
               <input
                 type="checkbox"
-                name="project_email_communication"
-                checked={this.props.user.project_email_communication}
-                onChange={handleInputChange.bind(this.props.user)}
-              />{' '}
-              <Translate content="emailSettings.general.classify" />
-            </label>
-          </AutoSave>
-          <br />
-          <AutoSave resource={this.props.user}>
-            <label>
-              <input
-                type="checkbox"
                 name="beta_email_communication"
                 checked={this.props.user.beta_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
@@ -321,15 +309,18 @@ class EmailSettingsPage extends React.Component {
             <Translate content="emailSettings.project.section" />
           </strong>
         </p>
+        <AutoSave resource={this.props.user}>
+          <label>
+            <input
+              type="checkbox"
+              name="project_email_communication"
+              checked={this.props.user.project_email_communication}
+              onChange={handleInputChange.bind(this.props.user)}
+            />{' '}
+            <Translate content="emailSettings.general.classify" />
+          </label>
+        </AutoSave>
         <table>
-          <thead>
-            <tr>
-              <th>
-                <i className="fa fa-envelope-o fa-fw" />
-              </th>
-              <Translate component="th" content="emailSettings.project.header" />
-            </tr>
-          </thead>
           <ProjectPreferences
             projects={this.state.projects}
             projectPreferences={this.state.projectPreferences}
