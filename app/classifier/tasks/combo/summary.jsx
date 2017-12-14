@@ -1,4 +1,5 @@
 import React from 'react';
+import TaskTranslations from '../translations';
 import tasks from '..';
 
 const ComboTaskSummary = (props) => {
@@ -13,7 +14,12 @@ const ComboTaskSummary = (props) => {
       const SummaryComponent = tasks[task.type].Summary;
       body.push(
         <div key={annotation._key} className="classification-task-summary">
-          <SummaryComponent task={task} annotation={annotation} onToggle={props.onToggle} />
+          <TaskTranslations
+            taskKey={annotation.task}
+            task={task}
+          >
+            <SummaryComponent task={task} annotation={annotation} onToggle={props.onToggle} />
+          </TaskTranslations>
         </div>
       );
     });
