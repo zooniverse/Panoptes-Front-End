@@ -1,8 +1,11 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
 import { project, workflow } from '../dev-classifier/mock-data';
 import ProjectPage from './project-page';
+import { sugarClient } from 'panoptes-client/lib/sugar';
+import sinon from 'sinon';
+import assert from 'assert';
 
 function Page() {
   return (
@@ -128,6 +131,39 @@ describe('ProjectPage', () => {
     it('should show the field guide', () => {
       const fieldguide = wrapper.find('PotentialFieldGuide');
       expect(fieldguide).to.have.lengthOf(1);
+    });
+  });
+
+  describe.only('on component mount', () => {
+    let wrapper;
+    beforeEach(() => {
+      project.slug = 'test/project';
+      const mockLocation = {
+        pathname: `/projects/${project.slug}`
+      };
+      const routes = [];
+      routes[2] = {};
+      wrapper = mount(
+        <ProjectPage
+          location={mockLocation}
+          routes={routes}
+          project={project}
+        >
+          <Page />
+        </ProjectPage>
+      );
+    });
+
+    it('subscribes the user to the sugar project channel', () => {
+      const spy = sinon.spy(ProjectPage.prototype, 'updateSugarSubscription');
+      // const spy = sinon.spy(sugarClient.prototype, 'subscribeTo');
+      // expect(sugarClient.prototype.subscribeTo.calledOnce).to.equal(true);
+
+      console.log(project)
+      expect(ProjectPage.prototype.updateSugarSubscription.calledOnce).to.equal(true);
+      // assert(ProjectPage.prototype.updateSugarSubscription.calledWith(project));
+
+      spy.reset();
     });
   });
 });

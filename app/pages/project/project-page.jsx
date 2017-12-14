@@ -39,7 +39,7 @@ export default class ProjectPage extends React.Component {
       sugarClient.unsubscribeFrom(`project-${this.lastSugarSubscribedID}`);
     }
     if (project) {
-      sugarClient.subscribeTo(`project-${this.lastSugarSubscribedID}`);
+      sugarClient.subscribeTo(`project-${project.id}`);
     }
   }
 
