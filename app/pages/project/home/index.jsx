@@ -179,5 +179,5 @@ ProjectHomeContainer.propTypes = {
   }),
   user: React.PropTypes.shape({
     id: React.PropTypes.string
-  }).isRequired
+  })
 };
