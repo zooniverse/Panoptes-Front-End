@@ -133,7 +133,7 @@ describe('ProjectPage', () => {
     });
   });
 
-  describe.only('on component lifecycle', () => {
+  describe('on component lifecycle', () => {
     const sugarClientSubscribeSpy = sinon.spy(sugarClient, 'subscribeTo');
     const sugarClientUnsubscribeSpy = sinon.spy(sugarClient, 'unsubscribeFrom');
     const channel = `project-${project.id}`
