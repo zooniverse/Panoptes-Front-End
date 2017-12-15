@@ -133,36 +133,27 @@ describe('ProjectPage', () => {
     });
   });
 
-  describe.only('on component mount', () => {
+  describe.only('on component lifecycle', () => {
+    // const subscriptionSpy = sinon.spy(ProjectPage.prototype, 'updateSugarSubscription');
+    const sugarClientSubscribeSpy = sinon.spy(sugarClient, 'subscribeTo');
+    const sugarClientUnsubscribeSpy = sinon.spy(sugarClient, 'unsubscribeFrom');
+    const channel = `project-${project.id}`
     let wrapper;
     beforeEach(() => {
-      project.slug = 'test/project';
-      const mockLocation = {
-        pathname: `/projects/${project.slug}`
-      };
-      const routes = [];
-      routes[2] = {};
       wrapper = mount(
-        <ProjectPage
-          location={mockLocation}
-          routes={routes}
-          project={project}
-        >
+        <ProjectPage project={project}>
           <Page />
         </ProjectPage>
       );
     });
 
-    it('subscribes the user to the sugar project channel', () => {
-      const spy = sinon.spy(ProjectPage.prototype, 'updateSugarSubscription');
-      // const spy = sinon.spy(sugarClient.prototype, 'subscribeTo');
-      // expect(sugarClient.prototype.subscribeTo.calledOnce).to.equal(true);
+    it('subscribes the user to the sugar project channel on mount', () => {
+      expect(sugarClientSubscribeSpy.calledWith(channel)).to.equal(true);
+    });
 
-      console.log(project)
-      expect(ProjectPage.prototype.updateSugarSubscription.calledOnce).to.equal(true);
-      // assert(ProjectPage.prototype.updateSugarSubscription.calledWith(project));
-
-      spy.reset();
+    it('unsubscribes the user from the sugar project channel on unmount', () => {
+      wrapper.unmount();
+      expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
     });
   });
 });
