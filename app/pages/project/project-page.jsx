@@ -68,6 +68,7 @@ export default class ProjectPage extends React.Component {
           projectAvatar={this.props.projectAvatar}
           projectRoles={this.props.projectRoles}
           routes={this.props.routes}
+          user={this.props.user}
           translation={this.props.translation}
           workflow={this.props.workflow}
         />
