@@ -31,7 +31,7 @@ export default class ProjectPage extends React.Component {
   componentWillUnmount() {
     document.documentElement.classList.remove('on-project-page');
     this.updateSugarSubscription(null);
-    this.context.geordi.forget(['projectToken']);
+    this.context.geordi && this.context.geordi.forget(['projectToken']);
   }
 
   updateSugarSubscription(project) {
