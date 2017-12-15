@@ -6,7 +6,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import EmailSettings from './email';
 
-const subscriptionPreferences = [
+const talkPreferences = [
   talkClient.type('subscription_preferences').create({ id: 0, category: 'participating_discussions', email_digest: 'immediate' }),
   talkClient.type('subscription_preferences').create({ id: 1, category: 'followed_discussions', email_digest: 'daily' }),
   talkClient.type('subscription_preferences').create({ id: 2, category: 'mentions', email_digest: 'immediate' }),
@@ -14,13 +14,6 @@ const subscriptionPreferences = [
   talkClient.type('subscription_preferences').create({ id: 4, category: 'messages', email_digest: 'daily' }),
   talkClient.type('subscription_preferences').create({ id: 5, category: 'started_discussions', email_digest: 'weekly' })
 ];
-
-const fakeRequest = {
-  get() {
-    return Promise.resolve(subscriptionPreferences);
-  }
-};
-talkClient.type = () => fakeRequest;
 
 const projects = [
   apiClient.type('projects').create({ id: 'a', display_name: 'A test project', title: 'A test project' }),
@@ -75,7 +68,7 @@ describe('EmailSettings', () => {
     let projectSettings;
     
     before(() => {
-      wrapper.setState({ meta: {}, projectPreferences, projects });
+      wrapper.setState({ meta: {}, projectPreferences, projects, talkPreferences });
       wrapper.update();
     });
 
@@ -115,14 +108,14 @@ describe('EmailSettings', () => {
   });
 
   describe('Talk email preferences', () => {
-    subscriptionPreferences.forEach((preference) => {
+    talkPreferences.forEach((preference) => {
       it(`lists ${preference.category} preferences correctly`, () => {
         const selector = `input[name="${preference.category}"][value="${preference.email_digest}"]`;
         assert.equal(wrapper.find(selector).prop('checked'), true);
       });
     });
 
-    subscriptionPreferences.forEach((preference) => {
+    talkPreferences.forEach((preference) => {
       it(`${preference.category} updates correctly when preferences are changed`, () => {
         const selector = `input[name="${preference.category}"][value="never"]`;
         wrapper.find(selector).simulate('change');
