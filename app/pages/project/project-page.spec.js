@@ -136,7 +136,7 @@ describe('ProjectPage', () => {
   describe('on component lifecycle', () => {
     const sugarClientSubscribeSpy = sinon.spy(sugarClient, 'subscribeTo');
     const sugarClientUnsubscribeSpy = sinon.spy(sugarClient, 'unsubscribeFrom');
-    const channel = `project-${project.id}`
+    const channel = `project-${project.id}`;
     let wrapper;
     beforeEach(() => {
       wrapper = mount(
@@ -156,8 +156,8 @@ describe('ProjectPage', () => {
     });
 
     it('unsubscribes old project and subscribes new project on project change', () => {
-      let newProject = {id: '999', title: 'fake project', slug: 'owner/name'}
-      const newChannel = `project-${project.id}`
+      const newProject = {id: '999', title: 'fake project', slug: 'owner/name'};
+      const newChannel = `project-${project.id}`;
       wrapper.setProps({ project: newProject });
       expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.equal(true);
       expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
