@@ -18,6 +18,7 @@ export default class ProjectPage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.project !== this.props.project) {
+      this.removeSugarSubscription(this.props.project);
       this.updateSugarSubscription(nextProps.project);
       this.context.geordi && this.context.geordi.remember({ projectToken: nextProps.project.slug });
     }

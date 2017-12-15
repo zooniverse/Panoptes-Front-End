@@ -154,5 +154,13 @@ describe('ProjectPage', () => {
       wrapper.unmount();
       expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
     });
+
+    it('unsubscribes old project and subscribes new project on project change', () => {
+      let newProject = {id: '999', title: 'fake project', slug: 'owner/name'}
+      const newChannel = `project-${project.id}`
+      wrapper.setProps({ project: newProject });
+      expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.equal(true);
+      expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
+    });
   });
 });
