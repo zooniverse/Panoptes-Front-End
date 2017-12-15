@@ -5,7 +5,6 @@ import { project, workflow } from '../dev-classifier/mock-data';
 import ProjectPage from './project-page';
 import { sugarClient } from 'panoptes-client/lib/sugar';
 import sinon from 'sinon';
-import assert from 'assert';
 
 function Page() {
   return (
