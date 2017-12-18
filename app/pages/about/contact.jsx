@@ -23,7 +23,7 @@ class Contact extends React.Component {
         <Markdown>{counterpart('about.contact.pressInquiries')}</Markdown>
         <Markdown>{counterpart('about.contact.dailyZoo')}</Markdown>
       </div>
-    )
+    );
   }
 }
 
