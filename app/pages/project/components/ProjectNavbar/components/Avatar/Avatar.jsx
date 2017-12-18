@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const commonStyles = `
   border-radius: 100%;
   display: block;
-  box-shadow: 5px 10px 20px 0 rgba(0,0,0,0.22);
+  box-shadow: 0.333333333rem 0.666666667rem 1.333333333rem 0 rgba(0,0,0,0.22);
 `;
 
 const Img = styled.img.attrs({
@@ -20,20 +20,21 @@ const DefaultImg = styled.div.attrs({
   'aria-label': 'Default project icon'
 })`
   ${commonStyles}
-  background: url("/assets/simple-pattern.png") repeat;
-  background-size: 45px;
-  height: ${props => props.size}px;
-  width: ${props => props.size}px;
+  background: url("/assets/simple-pattern.jpg") repeat;
+  background-position: center;
+  background-size: 170%;
+  height: ${props => props.size}rem;
+  width: ${props => props.size}rem;
 `;
 
 function Avatar({ projectTitle, size, src }) {
   const imgProps = { projectTitle, size, src };
-  return (src) ? <Img {...imgProps} /> : <DefaultImg {...size} />;
+  return (src) ? <Img {...imgProps} /> : <DefaultImg size={size} />;
 }
 
 Avatar.defaultProps = {
   projectTitle: '',
-  size: 40,
+  size: 2.666666667,
   src: ''
 };
 

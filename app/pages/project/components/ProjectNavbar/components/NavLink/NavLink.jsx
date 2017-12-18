@@ -2,29 +2,28 @@ import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components';
-import socialIcons from './socialIcons';
+import socialIcons from '../../socialIcons';
 
-const commonStyles = () => `
+const commonStyles = `
   color: white;
   display: block;
   font-family: Karla;
-  font-size: 14px;
+  font-size: 0.933333333rem;
   font-weight: bold;
   letter-spacing: 1px;
-  margin-left: 20px;
   text-decoration: none;
   text-transform: uppercase;
-  text-shadow: 0 2px 2px rgba(0,0,0,0.22);
+  text-shadow: 0 0.133333333rem 0.133333333rem rgba(0,0,0,0.22);
 `;
 
 const StyledInternalLink = styled(Link).attrs({
   activeClassName: 'active'
 })`
-  ${commonStyles()}
+  ${commonStyles}
 `;
 
 const StyledExternalLink = styled.a`
-  ${commonStyles()}
+  ${commonStyles}
 `;
 
 function NavLink({ isExternalLink, isSocialLink, label, site, url, ...props }) {

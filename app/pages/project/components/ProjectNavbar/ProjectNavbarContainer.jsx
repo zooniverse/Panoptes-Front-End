@@ -8,7 +8,6 @@ import ProjectNavbar from './ProjectNavbar';
 class ProjectNavbarContainer extends Component {
   constructor(props) {
     super(props);
-    console.info('props',props)
     this.getExternalLinks = this.getExternalLinks.bind(this);
     this.getNavLinks = this.getNavLinks.bind(this);
     this.getOrganizationLink = this.getOrganizationLink.bind(this);
@@ -21,26 +20,23 @@ class ProjectNavbarContainer extends Component {
 
     const partitionedLinks = _.partition(allExternalLinks, link => (link.site));
 
-    const externalLinks = partitionedLinks[1].map(link =>
-      ({
-        isExternalLink: true,
-        label: link.label,
-        url: link.url
-      })
-    );
+    const external = partitionedLinks[1].map(link => ({
+      isExternalLink: true,
+      label: link.label,
+      url: link.url
+    }));
 
-    const socialLinks = partitionedLinks[0].map(link =>
-      ({
-        isExternalLink: true,
-        isSocialLink: true,
-        label: link.label,
-        site: link.site,
-        url: link.url
-      }));
+    const social = partitionedLinks[0].map(link => ({
+      isExternalLink: true,
+      isSocialLink: true,
+      label: link.label,
+      site: link.site,
+      url: link.url
+    }));
 
     return {
-      external: externalLinks,
-      social: socialLinks
+      external,
+      social
     };
   }
 

@@ -2,35 +2,35 @@ import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 
 const BackgroundOuter = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  overflow: hidden;
+  background-color: #00979D;
   display: flex;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
 `;
 
 const BackgroundInner = styled.div`
+  background-color: #000;
   background-image: url("${props => props.src}");
   background-position: center;
   background-size: cover;
-  filter: blur(5px);
-  transform: scale(1.15);
+  filter: blur(0.333333333rem) brightness(50%);
   flex: 1;
+  transform: scale(1.15);
 `;
 
 function Background({ src }) {
-  if (!src) {
-    return null;
-  } else {
-    return (
-      <BackgroundOuter>
-        <BackgroundInner src={src} />
-      </BackgroundOuter>
-    );
-  }
+  const backgroundInner = (src) ? <BackgroundInner src={src} /> : null;
+
+  return (
+    <BackgroundOuter aria-hidden="true">
+      {backgroundInner}
+    </BackgroundOuter>
+  );
 }
 
 Background.propTypes = {
