@@ -27,7 +27,7 @@ class Faq extends React.Component {
         <Markdown>{counterpart('about.faq.browserSupport')}</Markdown>
         <Markdown>{counterpart('about.faq.furtherHelp')}</Markdown>
       </div>
-    )
+    );
   }
 }
 
