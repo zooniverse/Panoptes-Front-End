@@ -211,6 +211,18 @@ export default {
     }
   },
   about: {
+    index: {
+      header: 'About',
+      title: 'About Us',
+      nav: {
+        about: 'About',
+        publications: 'Publications',
+        ourTeam: 'Our Team',
+        acknowledgements: 'Acknowledgements',
+        contact: 'Contact Us',
+        faq: 'FAQ'
+      }
+    },
     home: {
       title: '## What is the Zooniverse?',
       whatIsZooniverse: 'The Zooniverse is the world’s largest and most popular platform for people-powered research. This research is made possible by volunteers — hundreds of thousands of people around the world who come together to assist professional researchers. Our goal is to enable research that would not be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community, and [many publications](/about/publications).',
