@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import NavLink from '../NavLink';
+import { pxToRem } from '../../styledHelpers';
 
 const MenuWrapper = styled.div`
-  max-width: 20rem;
+  max-width: ${pxToRem(300)};
   overflow: hidden;
   position: absolute;
   top: 100%;
@@ -23,7 +24,7 @@ const Menu = styled.nav`
 
 const StyledNavLink = styled(NavLink)`
   line-height: 3.071428571;
-  padding: 0 2rem;
+  padding: 0 ${pxToRem(30)};
 
   &:hover {
     background-color: #005D69;

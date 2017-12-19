@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
+import { pxToRem } from '../../styledHelpers';
 
-const BackgroundOuter = styled.div`
-  background-color: #00979D;
+const BackgroundWrapper = styled.div.attrs({
+  'aria-hidden': true
+})`
+  background-color: ${props => ((props.hasImgBackground) ? '#000' : '#00979D')};
   display: flex;
   height: 100%;
   left: 0;
@@ -10,26 +13,23 @@ const BackgroundOuter = styled.div`
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: 10;
 `;
 
-const BackgroundInner = styled.div`
-  background-color: #000;
+const ImgBackground = styled.div`
   background-image: url("${props => props.src}");
   background-position: center;
+  background-repeat: no-repeat;
   background-size: cover;
-  filter: blur(0.333333333rem) brightness(50%);
+  filter: blur(${pxToRem(5)}) brightness(50%);
   flex: 1;
   transform: scale(1.15);
 `;
 
-function Background({ src }) {
-  const backgroundInner = (src) ? <BackgroundInner src={src} /> : null;
-
+function Background({ src, ...otherProps }) {
   return (
-    <BackgroundOuter aria-hidden="true">
-      {backgroundInner}
-    </BackgroundOuter>
+    <BackgroundWrapper hasImgBackground={!!src} {...otherProps}>
+      {src && <ImgBackground src={src} />}
+    </BackgroundWrapper>
   );
 }
 

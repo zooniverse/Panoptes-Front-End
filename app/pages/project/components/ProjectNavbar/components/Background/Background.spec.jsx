@@ -17,13 +17,6 @@ describe('Background', function () {
     shallow(<Background src={''} />);
   });
 
-  it('should return null if not passed a src prop', function () {
-    const wrapper = shallow(<Background src={''} />);
-    expect(wrapper.type()).to.equal(null);
-  });
-
-  it('should return an element with a background-image equal to src prop');
-
   it('should be hidden from screen readers', function () {
     const wrapper = shallow(<Background src={MOCK_SRC} />);
     expect(wrapper.prop('aria-hidden')).to.equal('true');

@@ -1,44 +1,37 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
+import { pxToRem } from '../../styledHelpers';
 
-const commonStyles = `
-  border-radius: 100%;
-  display: block;
-  box-shadow: 0.333333333rem 0.666666667rem 1.333333333rem 0 rgba(0,0,0,0.22);
-`;
-
-const Img = styled.img.attrs({
-  alt: props => `Project icon for ${props.projectTitle}`,
+const StyledAvatarImg = styled.img.attrs({
+  alt: props => props.alt,
   src: props => props.src
 })`
-  ${commonStyles}
-  height: ${props => props.size}px;
-  width: ${props => props.size}px;
-`;
-
-const DefaultImg = styled.div.attrs({
-  'aria-label': 'Default project icon'
-})`
-  ${commonStyles}
-  background: url("/assets/simple-pattern.jpg") repeat;
-  background-position: center;
-  background-size: 170%;
+  border-radius: 100%;
+  display: block;
+  box-shadow: ${pxToRem(1.5)} ${pxToRem(10)} ${pxToRem(20)} 0 rgba(0,0,0,0.22);
   height: ${props => props.size}rem;
   width: ${props => props.size}rem;
 `;
 
-function Avatar({ projectTitle, size, src }) {
-  const imgProps = { projectTitle, size, src };
-  return (src) ? <Img {...imgProps} /> : <DefaultImg size={size} />;
+function Avatar(props) {
+  const { projectTitle, ...avatarProps } = props;
+
+  if (projectTitle) {
+    avatarProps.alt = `Project icon for ${projectTitle}`;
+  }
+
+  return <StyledAvatarImg {...avatarProps} />;
 }
 
 Avatar.defaultProps = {
+  alt: 'Project icon',
   projectTitle: '',
   size: 2.666666667,
-  src: ''
+  src: '/assets/default-project-avatar.png'
 };
 
 Avatar.propTypes = {
+  alt: PropTypes.string,
   projectTitle: PropTypes.string,
   size: PropTypes.oneOfType([
     PropTypes.number,

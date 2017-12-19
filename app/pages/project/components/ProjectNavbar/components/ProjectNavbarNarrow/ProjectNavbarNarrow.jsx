@@ -7,6 +7,7 @@ import ProjectTitle from '../ProjectTitle';
 import NarrowMenu from './NarrowMenu';
 import NarrowMenuButton from './NarrowMenuButton';
 import Background from '../Background';
+import { pxToRem } from '../../styledHelpers';
 
 const Header = styled.header`
   display: flex;
@@ -20,7 +21,6 @@ const StyledBackground = styled(Background)`
 `;
 
 const StyledOuterWrapper = styled.div`
-  box-shadow: 0 0.133333333rem 0.266666667rem 0 rgba(0,0,0,0.5);
   display: flex;
   flex: 1;
   flex-direction: row;
@@ -32,7 +32,7 @@ const StyledOuterWrapper = styled.div`
 const StyledInnerWrapper = Wrapper.extend`
   flex-direction: column;
   justify-content: center;
-  padding: 1.333333333rem 0;
+  padding: ${pxToRem(20)} 0;
 `;
 
 class ProjectNavbarNarrow extends Component {

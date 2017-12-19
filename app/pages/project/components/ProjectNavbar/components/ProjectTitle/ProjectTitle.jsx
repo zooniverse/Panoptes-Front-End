@@ -1,20 +1,28 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router';
+import { pxToRem } from '../../styledHelpers';
 
 const H1 = styled.h1`
   color: #fff;
   font-family: Karla;
-  font-size: 2rem;
+  font-size: ${pxToRem(30)};
   font-weight: bold;
-  letter-spacing: -0.066666667rem;
+  letter-spacing: ${pxToRem(-1)};
   line-height: 1.2;
-  text-shadow: 0 0.133333333rem 0.266666667rem rgba(0,0,0,0.5);
+  text-shadow: 0 ${pxToRem(2)} ${pxToRem(3)} rgba(0,0,0,0.5);
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(Link).attrs({
+  activeClassName: 'active'
+})`
   text-decoration: none;
   color: #fff;
+
+  &:hover,
+  &.active {
+    border-bottom: ${pxToRem(2)} solid #007482;
+  }
 `;
 
 function ProjectTitle({ link, title }) {

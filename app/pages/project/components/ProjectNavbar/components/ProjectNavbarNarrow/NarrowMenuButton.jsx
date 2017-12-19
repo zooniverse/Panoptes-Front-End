@@ -1,23 +1,24 @@
 import counterpart from 'counterpart';
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
+import { pxToRem } from '../../styledHelpers';
 
 // This is a totally non-semantic div, but using a button requires using
-// !important to override the global button styles.
+// !important (a lot) to override the global button styles.
 const OpenMenuButton = styled.div`
   background-color: transparent;
   border: 0;
-  border-radius: 30rem;
+  border-radius: ${pxToRem(500)};
   color: #fff;
   cursor: pointer;
   display: block;
-  font-size: 0.933333333rem;
-  letter-spacing: 0.1rem;
+  font-size: ${pxToRem(14)};
+  letter-spacing: ${pxToRem(1.5)};
   line-height: 1.13;
-  margin: 0.666666667rem 0 0;
-  padding: 0.466666667rem 0.4rem 0.333333333rem 1.2rem;
+  margin: ${pxToRem(10)} 0 0;
+  padding: ${pxToRem(7)} ${pxToRem(6)} ${pxToRem(5)} 1.2rem;
   text-transform: uppercase;
-  text-shadow: 0 0.133333333rem 0.133333333rem rgba(0,0,0,0.22);
+  text-shadow: 0 ${pxToRem(2)} ${pxToRem(2)} rgba(0,0,0,0.22);
   transition: background 0.2s ease-out;
 
   &:hover,
@@ -27,10 +28,10 @@ const OpenMenuButton = styled.div`
   }
 
   & i {
-    font-size: 1.333333333rem;
+    font-size: ${pxToRem(20)};
     vertical-align: middle;
     position: relative;
-    top: -0.133333333rem;
+    top: ${pxToRem(-2)};
   }
 `;
 
