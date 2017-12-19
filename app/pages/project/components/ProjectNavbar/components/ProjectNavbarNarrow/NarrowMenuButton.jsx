@@ -1,7 +1,7 @@
 import counterpart from 'counterpart';
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
-import { pxToRem } from '../../styledHelpers';
+import { colors, pxToRem } from '../../styledHelpers';
 
 // This is a totally non-semantic div, but using a button requires using
 // !important (a lot) to override the global button styles.
@@ -9,7 +9,7 @@ const OpenMenuButton = styled.div`
   background-color: transparent;
   border: 0;
   border-radius: ${pxToRem(500)};
-  color: #fff;
+  color: white;
   cursor: pointer;
   display: block;
   font-size: ${pxToRem(14)};
@@ -23,8 +23,8 @@ const OpenMenuButton = styled.div`
 
   &:hover,
   &.open {
-    background-color: #ADDDE0;
-    color: #000;
+    background-color: ${colors.offwhite};
+    color: black;
   }
 
   & i {

@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { pxToRem } from '../../styledHelpers';
 
 const H1 = styled.h1`
-  color: #fff;
+  color: white;
   font-family: Karla;
   font-size: ${pxToRem(30)};
   font-weight: bold;
@@ -17,11 +17,11 @@ const StyledLink = styled(Link).attrs({
   activeClassName: 'active'
 })`
   text-decoration: none;
-  color: #fff;
+  color: white;
 
   &:hover,
   &.active {
-    border-bottom: ${pxToRem(2)} solid #007482;
+    border-bottom: ${pxToRem(2)} solid ${colors.darkteal};
   }
 `;
 

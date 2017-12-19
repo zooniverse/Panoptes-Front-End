@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import NavLink from '../NavLink';
-import { pxToRem } from '../../styledHelpers';
+import { colors, pxToRem } from '../../styledHelpers';
 
 const MenuWrapper = styled.div`
   max-width: ${pxToRem(300)};
@@ -19,7 +19,7 @@ const MenuWrapper = styled.div`
 `;
 
 const Menu = styled.nav`
-  background-color: #00979D;
+  background-color: ${colors.teal};
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -27,7 +27,7 @@ const StyledNavLink = styled(NavLink)`
   padding: 0 ${pxToRem(30)};
 
   &:hover {
-    background-color: #005D69;
+    background-color: ${colors.teal};
   }
 `;
 
