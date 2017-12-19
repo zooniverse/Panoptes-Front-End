@@ -47,9 +47,11 @@ const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =
       <Translate className="main-kicker" component="h3" content="researchHomePage.registeredUsers" />
     </div>
 
-    <div className="home-research__columns">
-      <Translate className="display-body" component="h2" content="researchHomePage.aboutIntro" />
-      <Translate className="regular-body" component="p" content="researchHomePage.about" />
+    <div className="home-research__content">
+      <span>
+        <Translate className="display-body" component="h2" content="researchHomePage.aboutIntro" />
+        <Translate className="regular-body" component="p" content="researchHomePage.about" />
+      </span>
     </div>
 
     <div className="home-research__buttons">
@@ -78,10 +80,10 @@ const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =
     <div className="home-research__content">
       <Translate className="tertiary-kicker" component="h2" content="researchHomePage.real" />
       <Translate className="tertiary-headline" component="h3" content="researchHomePage.meetResearchers" />
-      <div>
+      <span>
         <Translate className="display-body" component="h3" content="researchHomePage.researcherIntro" />
         <Translate className="regular-body" component="p" content="researchHomePage.researcher" />
-      </div>
+      </span>
 
       <div>
         <Link to="/lab" className="primary-button primary-button--light">

@@ -38,9 +38,9 @@ $flex-section
   .home-intro
     background-color: ZOONIVERSE_TEAL
     box-sizing: border-box
-    justify-content: flex-end
+    justify-content: center
     min-height: 30vw
-    padding: 2em 0
+    margin-top: 2em
     text-align: center
     z-index: 0
     overflow: hidden
@@ -88,27 +88,6 @@ $flex-section
     &__classification-count
       text-align: center
 
-    &__columns
-      margin: 2em 12em
-      max-width: 75%
-      column-count: 2
-      -moz-column-count: 2
-      -webkit-column-count: 2
-      column-gap: 2.5em
-      -moz-column-gap: 2.5em
-      -webkit-column-gap: 2.5em
-
-      @media (max-width: 800px)
-        margin: 2em 1em 2em 0
-        column-count: 1
-        -moz-column-count: 1
-        -webkit-column-count: 1
-
-      a
-        color: #007482
-        display: block
-        text-decoration: none
-
     &__buttons
       text-align: center
 
@@ -133,22 +112,23 @@ $flex-section
         width: 100%
 
     &__content
+      align-items: center
       box-sizing: border-box
       display: flex
       flex-direction: column
-      max-width: 100%
-      padding: 0 15vw
+      max-width: 50%
       text-align: center
 
       .tertiary-kicker
         margin-bottom: 1.25em
 
       @media (max-width: 900px)
+        max-width: 75%
         padding: 0 10vw
         text-align: left
 
-      div
-        margin: 1.5em 3em
+      span
+        margin: 1.5em 0
 
         a
           padding: 0.8em 3em
@@ -238,13 +218,18 @@ $flex-section
 
 .on-home-page
   font-family: 'Karla', sans-serif;
+  margin: 0 auto
+  max-width: 1440px
+
+  @media (min-width: 1440px)
+    border-left: 1px solid LIGHT_GREY
+    border-right: 1px solid LIGHT_GREY
 
   *:focus
     outline: none
 
   section
     @extends $flex-section
-    min-height: 30vw
     position: relative
 
   .standard-button
