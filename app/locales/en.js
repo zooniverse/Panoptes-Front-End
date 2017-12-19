@@ -249,18 +249,41 @@ export default {
   },
   getInvolved: {
     callForProjects: {
-      header: '## Call for Biomedical Project Proposals',
-      wouldResearchBenefit: 'Would your research benefit from the involvement of thousands of volunteers? We are currently seeking proposals for biomedical projects to be developed as part of the Zooniverse platform. The Zooniverse is the world’s largest and most successful online platform for crowd-sourced research; we currently have over 1.5 million registered volunteers working in collaboration with professional researchers on more than 50 research projects across a range of disciplines, from physics to biology.',
-      projectBuilder: 'Using our unique [Project Builder](/lab) you can create your own Zooniverse project for free with a set of tried and tested tools, including multiple-choice questions and region marking or drawing tools. If we don’t yet offer the tools you need, please propose your project below; we are particularly interested in developing novel projects that extend the functionality of our platform.',
-      projectSelection: '### Project Selection',
-      expandFunctionality: 'We are looking for biomedical projects that will help us expand the functionality of the Zooniverse and build on the selection of tools available to researchers via our platform. Projects may involve a processing task applied to images, graphs, videos or another data format, data collection, or a combination of the two. Successful projects will be developed and hosted by the Zooniverse team, in close collaboration with the applicants.',
-      examples: 'Examples of our current biomedical projects include [Microscopy Masters](https://www.zooniverse.org/projects/jbrugg/microscopy-masters), where volunteers classify cryo-electron microscopy images to advance understanding of protein and virus structure, and [Worm Watch Lab](https://www.wormwatchlab.org/), which aims to improve understanding of the relationship between genes and behaviour.',
-      selectionCriteriaTitle: '### Selection Criteria:',
-      selectionCriteriaOne: '1. Projects extending the capability of the Zooniverse platform or serving as case studies for crowdsourcing in new areas are encouraged.',
-      selectionCriteriaTwo: '2. Alignment with biomedical research (long-term aim of research is to improve human health outcomes).',
-      selectionCriteriaThree: '3. Merit and usefulness of the data expected to result from the project.',
-      deadline: '### Deadline\nProject proposals are accepted on a rolling basis. Applications will be reviewed at the beginning of each month.',
-      submissionLink: '[SUBMIT A BIOMEDICAL PROPOSAL](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)'
+      audio: {
+        header: '## Call for Zooniverse Audio Transcription Project Proposals',
+        intro: 'Would your research benefit from the involvement of hundreds or even thousands of volunteers? Zooniverse.org is the world’s largest and most successful online platform for crowdsourced research. We currently have over 1.6 million registered volunteers working in collaboration with professional researchers on more than 70 research projects across a range of disciplines, from astronomy to biology, climatology to humanities subjects.',
+        seekingProposals: 'Thanks to a generous grant from the Institute of Museum and Library Services, we are currently seeking proposals for two new custom audio transcription projects in the humanities or from GLAM institutions (Galleries, Libraries, Archives and Museums), to be developed as part of the Zooniverse platform.',
+        projectSelection: '### Project Selection',
+        requirements: 'This call will be limited to research teams with audio recordings of spoken language (not limited to English) which would benefit from transcription into digital text formats and/or classification tasks like metadata tagging. We are particularly keen to work on projects where the resulting data can be incorporated into an existing content management system (CMS) and used for research purposes.',
+        audioCompatibility: 'Audio compatibility is currently not available on our free [Project Builder](https://www.zooniverse.org/lab) tool. One aim of this effort will be to use these projects to help test and expand the functionality of our audio tools.',
+        selectionCriteriaTitle: '### Selection Criteria',
+        selectionCriteriaOne: '1. We are looking for projects that harness crowdsourced audio transcription for the purposes of unlocking data currently trapped in sources that cannot be transcribed through automation, and for which human effort is truly necessary. Therefore, proposals should address any previously-attempted methods of automated speech to text transcription.',
+        selectionCriteriaTwo: '2. The data extracted must have an audience or usefulness, be this to academic researchers, members of the public or both.',
+        selectionCriteriaThree: '3. Audio clips for transcription should feature one speaker at a time (per audio clip), as our current research effort does not include speaker diarization.',
+        selectionCriteriaFour: '4. Project teams need clear plans for how to make the crowdsourced data openly and publicly available, ideally through a CMS or site hosted and maintained by your institution.',
+        selectionCriteriaFive: '5. Audio material must be digitized; we do not have funds to support digitization of audio material.',
+        selectionCriteriaSix: '6. We will not accept projects if the material for transcription has previously been edited or published as text.',
+        furtherNotes: '### Further Notes',
+        imlsGrantInfo: 'The two selected audio transcription projects will be part of an ongoing Zooniverse effort, [Transforming Libraries and Archives through Crowdsourcing](https://www.imls.gov/grants/awarded/lg-71-16-0028-16). We particularly welcome applications from marginalized or underrepresented groups, or which utilize content about or generated by underrepresented groups.',
+        deadline: '### Deadline for Audio Project Proposals:',
+        contact: 'Project proposals are due by 28 February 2018. If you have questions or require any further guidance, please contact Samantha Blickhan, IMLS Postdoctoral Fellow: samantha@zooniverse.org.',
+        submissionLink: '[SUBMIT AN AUDIO TRANSCRIPTION PROPOSAL](https://goo.gl/forms/ALbUaRN17Rlq7AkD3)',
+        break: '***'
+      },
+      bio: {
+        header: '## Call for Biomedical Project Proposals',
+        wouldResearchBenefit: 'Would your research benefit from the involvement of thousands of volunteers? We are currently seeking proposals for biomedical projects to be developed as part of the Zooniverse platform. The Zooniverse is the world’s largest and most successful online platform for crowd-sourced research; we currently have over 1.5 million registered volunteers working in collaboration with professional researchers on more than 50 research projects across a range of disciplines, from physics to biology.',
+        projectBuilder: 'Using our unique [Project Builder](/lab) you can create your own Zooniverse project for free with a set of tried and tested tools, including multiple-choice questions and region marking or drawing tools. If we don’t yet offer the tools you need, please propose your project below; we are particularly interested in developing novel projects that extend the functionality of our platform.',
+        projectSelection: '### Project Selection',
+        expandFunctionality: 'We are looking for biomedical projects that will help us expand the functionality of the Zooniverse and build on the selection of tools available to researchers via our platform. Projects may involve a processing task applied to images, graphs, videos or another data format, data collection, or a combination of the two. Successful projects will be developed and hosted by the Zooniverse team, in close collaboration with the applicants.',
+        examples: 'Examples of our current biomedical projects include [Microscopy Masters](https://www.zooniverse.org/projects/jbrugg/microscopy-masters), where volunteers classify cryo-electron microscopy images to advance understanding of protein and virus structure, and [Worm Watch Lab](https://www.wormwatchlab.org/), which aims to improve understanding of the relationship between genes and behaviour.',
+        selectionCriteriaTitle: '### Selection Criteria:',
+        selectionCriteriaOne: '1. Projects extending the capability of the Zooniverse platform or serving as case studies for crowdsourcing in new areas are encouraged.',
+        selectionCriteriaTwo: '2. Alignment with biomedical research (long-term aim of research is to improve human health outcomes).',
+        selectionCriteriaThree: '3. Merit and usefulness of the data expected to result from the project.',
+        deadline: '### Deadline\nProject proposals are accepted on a rolling basis. Applications will be reviewed at the beginning of each month.',
+        submissionLink: '[SUBMIT A BIOMEDICAL PROPOSAL](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)'
+      },
     }
   }
 };
