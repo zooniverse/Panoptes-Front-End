@@ -138,40 +138,51 @@ describe('ProjectPage', () => {
     const sugarClientUnsubscribeSpy = sinon.spy(sugarClient, 'unsubscribeFrom');
     const channel = `project-${project.id}`;
     let wrapper;
-    beforeEach(() => {
-      wrapper = mount(
-        <ProjectPage project={project}>
-          <Page />
-        </ProjectPage>
-      );
-    });
 
     afterEach(() => {
       sugarClientSubscribeSpy.reset();
       sugarClientUnsubscribeSpy.reset();
     });
 
-    it('subscribes the user to the sugar project channel on mount', () => {
-      expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
-      expect(sugarClientSubscribeSpy.calledWith(channel)).to.equal(true);
+    describe('on mount/unmount', () => {
+      beforeEach(() => {
+        wrapper = mount(
+          <ProjectPage project={project}>
+            <Page />
+          </ProjectPage>
+        );
+      });
+
+      it('subscribes the user to the sugar project channel on mount', () => {
+        expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
+        expect(sugarClientSubscribeSpy.calledWith(channel)).to.equal(true);
+      });
+
+      it('unsubscribes the user from the sugar project channel on unmount', () => {
+        wrapper.unmount();
+        expect(sugarClientUnsubscribeSpy.calledOnce).to.equal(true);
+        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
+      });
     });
 
-    it('unsubscribes the user from the sugar project channel on unmount', () => {
-      wrapper.unmount();
-      expect(sugarClientUnsubscribeSpy.calledOnce).to.equal(true);
-      expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
-    });
+    describe('on project props change', () => {
+      beforeEach(() => {
+        wrapper = shallow(
+          <ProjectPage project={project}>
+            <Page />
+          </ProjectPage>
+        );
+      });
 
-    it('unsubscribes old project and subscribes new project on project change', () => {
-      const newProject = {id: '999', title: 'fake project', slug: 'owner/name'};
-      const newChannel = `project-${newProject.id}`;
-      sugarClientSubscribeSpy.reset();
-      sugarClientUnsubscribeSpy.reset();
-      wrapper.setProps({ project: newProject });
-      expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
-      expect(sugarClientUnsubscribeSpy.calledOnce).to.equal(true);
-      expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.equal(true);
-      expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
+      it('unsubscribes old project and subscribes new project', () => {
+        const newProject = {id: '999', title: 'fake project', slug: 'owner/name'};
+        const newChannel = `project-${newProject.id}`;
+        wrapper.setProps({ project: newProject });
+        expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
+        expect(sugarClientUnsubscribeSpy.calledOnce).to.equal(true);
+        expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.equal(true);
+        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
+      });
     });
   });
 });
