@@ -8,16 +8,11 @@ import NarrowMenu from './NarrowMenu';
 import NarrowMenuButton from './NarrowMenuButton';
 import Background from '../Background';
 import { pxToRem } from '../../styledHelpers';
-
-const Header = styled.header`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  position: relative;
-`;
+import StyledHeader from '../StyledHeader';
 
 const StyledBackground = styled(Background)`
   z-index: 20;
+  box-shadow: 0 ${pxToRem(2)} ${pxToRem(4)} 0 rgba(0,0,0,0.5);
 `;
 
 const StyledOuterWrapper = styled.div`
@@ -53,13 +48,15 @@ class ProjectNavbarNarrow extends Component {
   render() {
     const { avatarSrc, backgroundSrc, projectLink, projectTitle, navLinks } = this.props;
     return (
-      <Header>
+      <StyledHeader>
         <NarrowMenu
           toggleMenuFn={this.handleOpen}
           open={this.state.menuOpen}
           links={navLinks}
         />
+
         <StyledBackground src={backgroundSrc} />
+
         <StyledOuterWrapper>
           <StyledInnerWrapper>
             <Avatar
@@ -77,7 +74,7 @@ class ProjectNavbarNarrow extends Component {
           </StyledInnerWrapper>
         </StyledOuterWrapper>
 
-      </Header>
+      </StyledHeader>
     );
   }
 }

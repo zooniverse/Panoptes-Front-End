@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router';
-import { pxToRem } from '../../styledHelpers';
+import { IndexLink } from 'react-router';
+import { colors, pxToRem } from '../../styledHelpers';
 
 const H1 = styled.h1`
   color: white;
@@ -13,7 +13,7 @@ const H1 = styled.h1`
   text-shadow: 0 ${pxToRem(2)} ${pxToRem(3)} rgba(0,0,0,0.5);
 `;
 
-const StyledLink = styled(Link).attrs({
+const StyledLink = styled(IndexLink).attrs({
   activeClassName: 'active'
 })`
   text-decoration: none;

@@ -1,11 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
-import Wrapper from '../Wrapper';
 import Avatar from '../Avatar';
+import Background from '../Background';
+import NavLink from '../NavLink';
 import ProjectTitle from '../ProjectTitle';
 import StyledHeader from '../StyledHeader';
-import Background from '../Background';
-import { pxToRem } from '../../styledHelpers';
+import Wrapper from '../Wrapper';
+import { colors, pxToRem } from '../../styledHelpers';
+
+const StyledHeaderWide = StyledHeader.extend`
+  box-shadow: 0 ${pxToRem(2)} ${pxToRem(4)} 0 rgba(0,0,0,0.5);
+`;
 
 const StyledAvatar = styled(Avatar)`
   margin-right: ${pxToRem(20)};
@@ -17,28 +22,59 @@ const StyledWrapper = styled(Wrapper)`
   padding: 0 ${pxToRem(10)};
 `;
 
+const Nav = styled.nav`
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  margin-left: ${pxToRem(20)}
+`;
+
+const StyledNavLink = styled(NavLink)`
+  border-bottom: ${pxToRem(2)} solid transparent;
+  margin-top: ${pxToRem(2)};
+
+  &:hover,
+  &.active {
+    border-color: ${colors.darkteal};
+  }
+
+  &:not(:last-of-type) {
+    margin-right: ${pxToRem(10)}
+  }
+`;
+
 class ProjectNavbarWide extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { backgroundSrc, avatarSrc, projectTitle, projectLink } = this.props;
+    const {
+      avatarSrc,
+      backgroundSrc,
+      navLinks,
+      projectTitle,
+      projectLink
+    } = this.props;
+
     return (
-      <StyledHeader>
+      <StyledHeaderWide>
         <Background src={backgroundSrc} />
         <StyledWrapper>
           <StyledAvatar
             src={avatarSrc}
             projectTitle={projectTitle}
-            size={5.333333333}
+            size={80}
           />
           <ProjectTitle
             link={projectLink}
             title={projectTitle}
           />
+          <Nav>
+            {navLinks.map(link => <StyledNavLink key={link.url} {...link} />)}
+          </Nav>
         </StyledWrapper>
-      </StyledHeader>
+      </StyledHeaderWide>
     );
   }
 }

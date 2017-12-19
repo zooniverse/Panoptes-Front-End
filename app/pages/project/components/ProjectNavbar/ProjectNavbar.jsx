@@ -9,12 +9,4 @@ function ProjectNavbar(props) {
   );
 }
 
-ProjectNavbar.propTypes = {
-  backgroundSrc: PropTypes.string
-};
-
-ProjectNavbar.defaultProps = {
-  backgroundSrc: ''
-};
-
 export default ProjectNavbar;

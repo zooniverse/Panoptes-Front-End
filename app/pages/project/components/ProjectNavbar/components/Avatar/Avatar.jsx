@@ -9,8 +9,8 @@ const StyledAvatarImg = styled.img.attrs({
   border-radius: 100%;
   display: block;
   box-shadow: ${pxToRem(1.5)} ${pxToRem(10)} ${pxToRem(20)} 0 rgba(0,0,0,0.22);
-  height: ${props => props.size}rem;
-  width: ${props => props.size}rem;
+  height: ${props => pxToRem(props.size)};
+  width: ${props => pxToRem(props.size)};
 `;
 
 function Avatar(props) {
@@ -26,7 +26,7 @@ function Avatar(props) {
 Avatar.defaultProps = {
   alt: 'Project icon',
   projectTitle: '',
-  size: 2.666666667,
+  size: 40,
   src: '/assets/default-project-avatar.png'
 };
 
