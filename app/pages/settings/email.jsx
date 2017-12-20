@@ -318,6 +318,7 @@ class EmailSettingsPage extends React.Component {
               onChange={handleInputChange.bind(this.props.user)}
             />{' '}
             <Translate content="emailSettings.general.classify" />
+            <Translate component="p" content="emailSettings.general.note" />
             <Translate component="p" content="emailSettings.general.manual" />
           </label>
         </AutoSave>
