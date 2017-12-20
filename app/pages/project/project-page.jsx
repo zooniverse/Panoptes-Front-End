@@ -56,10 +56,10 @@ export default class ProjectPage extends React.Component {
       </div> :
       null;
 
-    const navbarComponent = (this.props.location.query.facelift) ? ProjectNavbarFacelift : ProjectNavbar;
+    const NavbarComponent = (this.props.location.query.facelift) ? ProjectNavbarFacelift : ProjectNavbar;
     const navBar = (!onHomePage) ?
       <div>
-        <navbarComponent
+        <NavbarComponent
           loading={this.props.loading}
           organization={this.props.organization}
           project={this.props.project}
