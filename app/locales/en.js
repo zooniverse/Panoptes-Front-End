@@ -192,7 +192,6 @@ export default {
       section: 'Zooniverse email preferences',
       updates: 'Get general Zooniverse email updates',
       classify: 'Subscribe to email updates when you first classify on a project',
-      note: 'Note: Unticking the box does not unsubscribe you from any of the projects',
       manual: 'Choose a project from the list to receive updates on it',
       beta: 'Get beta project email updates and become a beta tester'
     },

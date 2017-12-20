@@ -318,14 +318,16 @@ class EmailSettingsPage extends React.Component {
               onChange={handleInputChange.bind(this.props.user)}
             />{' '}
             <Translate content="emailSettings.general.classify" />
-            <Translate component="p" content="emailSettings.general.note" />
             <Translate component="p" content="emailSettings.general.manual" />
           </label>
         </AutoSave>
-        <table>
+        <table className="standard-table">
           <thead>
             <tr>
-              <th />
+              <th>
+                <i className="fa fa-envelope-o fa-fw" />
+              </th>
+              <Translate component="th" content="emailSettings.project.header"/>
             </tr>
           </thead>
           <ProjectPreferences
