@@ -37,6 +37,7 @@ React = require 'react'
 `import Recents from './pages/profile/recents';`
 `import CustomiseProfile from './pages/settings/profile';`
 `import EmailSettingsPage from './pages/settings/email';`
+`import AboutPage from './pages/about/index';`
 `import AboutHome from './pages/about/about-home';`
 `import Acknowledgements from './pages/about/acknowledgements';`
 `import Contact from './pages/about/contact';`
@@ -62,7 +63,7 @@ module.exports =
     <Route path="home" component={ONE_UP_REDIRECT} />
     <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
-    <Route path="about" component={require './pages/about'} ignoreScrollBehavior>
+    <Route path="about" component={AboutPage} ignoreScrollBehavior>
       <IndexRoute component={AboutHome} />
       <Route path="team" component={require './pages/about/team-page'} />
       <Route path="publications" component={require './pages/about/publications-page'} />
