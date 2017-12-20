@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
+import React, { PropTypes } from 'react';
 import styled from 'styled-components';
-import socialIcons from '../../socialIcons';
 import { pxToRem } from '../../styledHelpers';
+import socialIcons from '../../socialIcons';
 
 const commonStyles = `
   color: white;

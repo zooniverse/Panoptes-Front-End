@@ -5,7 +5,6 @@ import { userHasLabAccess } from './helpers';
 
 function getProjectLinks({ project, projectRoles, workflow, user }) {
   const { id, redirect, slug } = project;
-  const hasLabAccess = userHasLabAccess({ projectRoles, user })
 
   const links = {
     about: {
@@ -45,7 +44,6 @@ function getProjectLinks({ project, projectRoles, workflow, user }) {
     }
   };
 
-
   // For projects with external front ends
   if (redirect) {
     const newUrl = redirect.replace(/\/?#?\/+$/, '');
@@ -66,7 +64,7 @@ function getProjectLinks({ project, projectRoles, workflow, user }) {
     _.unset(links, 'admin');
   }
 
-  if (!user || !hasLabAccess) {
+  if (!user || !userHasLabAccess({ projectRoles, user })) {
     _.unset(links, 'lab');
   }
 

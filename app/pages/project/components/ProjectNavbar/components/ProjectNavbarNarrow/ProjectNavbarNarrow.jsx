@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
-
-import Wrapper from '../Wrapper';
 import Avatar from '../Avatar';
-import ProjectTitle from '../ProjectTitle';
+import Background from '../Background';
 import NarrowMenu from './NarrowMenu';
 import NarrowMenuButton from './NarrowMenuButton';
-import Background from '../Background';
+import ProjectTitle from '../ProjectTitle';
 import { pxToRem } from '../../styledHelpers';
 import StyledHeader from '../StyledHeader';
+import Wrapper from '../Wrapper';
 
 const StyledBackground = styled(Background)`
   z-index: 20;

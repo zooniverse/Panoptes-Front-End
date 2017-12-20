@@ -2,7 +2,7 @@ import _ from 'lodash';
 import counterpart from 'counterpart';
 import React, { Component, PropTypes } from 'react';
 
-import getProjectLinks from './getProjectLinks';
+import getProjectLinks from './helpers/getProjectLinks';
 import ProjectNavbar from './ProjectNavbar';
 
 class ProjectNavbarContainer extends Component {

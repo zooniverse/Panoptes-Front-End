@@ -36,11 +36,13 @@ function NarrowMenu({ links, open = true, toggleMenuFn }) {
   return (
     <MenuWrapper className={openClass}>
       <Menu>
-        {links.map(link => <StyledNavLink
-          {...link}
-          key={link.url}
-          onClick={toggleMenuFn}
-        />)}
+        {links.map(link => (
+          <StyledNavLink
+            {...link}
+            key={link.url}
+            onClick={toggleMenuFn}
+          />
+        ))}
       </Menu>
     </MenuWrapper>
   );

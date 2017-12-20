@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import Avatar from '../Avatar';
 import Background from '../Background';
@@ -43,40 +43,35 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-class ProjectNavbarWide extends Component {
-  constructor(props) {
-    super(props);
-  }
+function ProjectNavbarWide(props) {
+  const {
+    avatarSrc,
+    backgroundSrc,
+    navLinks,
+    projectTitle,
+    projectLink,
+    ...otherProps
+  } = props;
 
-  render() {
-    const {
-      avatarSrc,
-      backgroundSrc,
-      navLinks,
-      projectTitle,
-      projectLink
-    } = this.props;
-
-    return (
-      <StyledHeaderWide>
-        <Background src={backgroundSrc} />
-        <StyledWrapper>
-          <StyledAvatar
-            src={avatarSrc}
-            projectTitle={projectTitle}
-            size={80}
-          />
-          <ProjectTitle
-            link={projectLink}
-            title={projectTitle}
-          />
-          <Nav>
-            {navLinks.map(link => <StyledNavLink key={link.url} {...link} />)}
-          </Nav>
-        </StyledWrapper>
-      </StyledHeaderWide>
-    );
-  }
+  return (
+    <StyledHeaderWide {...otherProps}>
+      <Background src={backgroundSrc} />
+      <StyledWrapper>
+        <StyledAvatar
+          src={avatarSrc}
+          projectTitle={projectTitle}
+          size={80}
+        />
+        <ProjectTitle
+          link={projectLink}
+          title={projectTitle}
+        />
+        <Nav>
+          {navLinks.map(link => <StyledNavLink key={link.url} {...link} />)}
+        </Nav>
+      </StyledWrapper>
+    </StyledHeaderWide>
+  );
 }
 
 ProjectNavbarWide.propTypes = {

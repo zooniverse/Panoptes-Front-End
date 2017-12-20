@@ -29,9 +29,9 @@ const OpenMenuButton = styled.div`
 
   & i {
     font-size: ${pxToRem(20)};
-    vertical-align: middle;
     position: relative;
     top: ${pxToRem(-2)};
+    vertical-align: middle;
   }
 `;
 
