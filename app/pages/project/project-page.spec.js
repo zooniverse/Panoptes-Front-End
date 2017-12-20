@@ -166,22 +166,25 @@ describe('ProjectPage', () => {
     });
 
     describe('on project props change', () => {
+      const newProject = {id: '999', title: 'fake project', slug: 'owner/name'};
+      const newChannel = `project-${newProject.id}`;
       beforeEach(() => {
         wrapper = shallow(
           <ProjectPage project={project}>
             <Page />
           </ProjectPage>
         );
+        wrapper.setProps({ project: newProject });
       });
 
-      it('unsubscribes old project and subscribes new project', () => {
-        const newProject = {id: '999', title: 'fake project', slug: 'owner/name'};
-        const newChannel = `project-${newProject.id}`;
-        wrapper.setProps({ project: newProject });
-        expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
+      it('unsubscribes old project', () => {
         expect(sugarClientUnsubscribeSpy.calledOnce).to.equal(true);
-        expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.equal(true);
         expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
+      });
+
+      it('subscribes new project', () => {
+        expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
+        expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.equal(true);
       });
     });
   });
