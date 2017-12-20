@@ -6,11 +6,6 @@ import ProjectNavbar from './project-navbar';
 import PotentialFieldGuide from './potential-field-guide';
 
 export default class ProjectPage extends React.Component {
-  constructor() {
-    super();
-    this.lastSugarSubscribedID = null;
-  }
-
   getChildContext() {
     return this.context.geordi;
   }
@@ -23,6 +18,7 @@ export default class ProjectPage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.project !== this.props.project) {
+      this.removeSugarSubscription(this.props.project);
       this.updateSugarSubscription(nextProps.project);
       this.context.geordi && this.context.geordi.remember({ projectToken: nextProps.project.slug });
     }
@@ -30,17 +26,16 @@ export default class ProjectPage extends React.Component {
 
   componentWillUnmount() {
     document.documentElement.classList.remove('on-project-page');
-    this.updateSugarSubscription(null);
+    this.removeSugarSubscription(this.props.project);
     this.context.geordi && this.context.geordi.forget(['projectToken']);
   }
 
   updateSugarSubscription(project) {
-    if (this.lastSugarSubscribedID) {
-      sugarClient.unsubscribeFrom(`project-${this.lastSugarSubscribedID}`);
-    }
-    if (project) {
-      sugarClient.subscribeTo(`project-${this.lastSugarSubscribedID}`);
-    }
+    sugarClient.subscribeTo(`project-${project.id}`);
+  }
+
+  removeSugarSubscription(project) {
+    sugarClient.unsubscribeFrom(`project-${project.id}`);
   }
 
   render() {

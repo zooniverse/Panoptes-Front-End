@@ -1,8 +1,10 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
 import { project, workflow } from '../dev-classifier/mock-data';
 import ProjectPage from './project-page';
+import { sugarClient } from 'panoptes-client/lib/sugar';
+import sinon from 'sinon';
 
 function Page() {
   return (
@@ -128,6 +130,62 @@ describe('ProjectPage', () => {
     it('should show the field guide', () => {
       const fieldguide = wrapper.find('PotentialFieldGuide');
       expect(fieldguide).to.have.lengthOf(1);
+    });
+  });
+
+  describe('on component lifecycle', () => {
+    const sugarClientSubscribeSpy = sinon.spy(sugarClient, 'subscribeTo');
+    const sugarClientUnsubscribeSpy = sinon.spy(sugarClient, 'unsubscribeFrom');
+    const channel = `project-${project.id}`;
+    let wrapper;
+
+    afterEach(() => {
+      sugarClientSubscribeSpy.reset();
+      sugarClientUnsubscribeSpy.reset();
+    });
+
+    describe('on mount/unmount', () => {
+      beforeEach(() => {
+        wrapper = mount(
+          <ProjectPage project={project}>
+            <Page />
+          </ProjectPage>
+        );
+      });
+
+      it('subscribes the user to the sugar project channel on mount', () => {
+        expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
+        expect(sugarClientSubscribeSpy.calledWith(channel)).to.equal(true);
+      });
+
+      it('unsubscribes the user from the sugar project channel on unmount', () => {
+        wrapper.unmount();
+        expect(sugarClientUnsubscribeSpy.calledOnce).to.equal(true);
+        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
+      });
+    });
+
+    describe('on project props change', () => {
+      const newProject = {id: '999', title: 'fake project', slug: 'owner/name'};
+      const newChannel = `project-${newProject.id}`;
+      beforeEach(() => {
+        wrapper = shallow(
+          <ProjectPage project={project}>
+            <Page />
+          </ProjectPage>
+        );
+        wrapper.setProps({ project: newProject });
+      });
+
+      it('unsubscribes old project', () => {
+        expect(sugarClientUnsubscribeSpy.calledOnce).to.equal(true);
+        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
+      });
+
+      it('subscribes new project', () => {
+        expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
+        expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.equal(true);
+      });
     });
   });
 });
