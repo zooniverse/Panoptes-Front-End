@@ -305,7 +305,7 @@ export default {
       educationPages: '- Many Zooniverse projects have their own education pages with additional resources for teachers. Resources may include a video tutorial of how to use the project, other helpful documents and videos about the classification process, and education resources related to the research behind the project.',
       joinConversationTitle: '### Take part in the conversation',
       joinConversationBody: 'Keep up with the latest Zooniverse educational efforts on the [Zooniverse Blog](http://blog.zooniverse.org/) or by following [&#64;zooteach](https://twitter.com/ZooTeach) on Twitter. You can also talk with other Zooniverse educators and peers interested in using people-powered research in all sorts of learning environments on the [Zooniverse Education Talk board](http://zooniverse.org/talk/16).',
-      howEducatorsUseZooniverse: '### How are educators are using Zooniverse?',
+      howEducatorsUseZooniverse: '### How are educators using Zooniverse?',
       inspiration: 'Looking for a little inspiration? Here are some ways educators have used Zooniverse projects and educational resources:',
       floatingForests: '- [Floating Forests: Teaching Young Children About Kelp](http://blog.zooniverse.org/2015/04/29/floating-forests-teaching-young-children-about-kelp/)',
       cosmicCurves: '- [Cosmic Curves: Investigating Gravitational Lensing at the Adler Planetarium](http://blog.zooniverse.org/2014/03/18/cosmic-curves-investigating-gravitational-lensing-at-the-adler-planetarium/)',
