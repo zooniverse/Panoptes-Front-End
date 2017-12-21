@@ -7,7 +7,7 @@ import AboutHome from './about-home';
 
 describe('AboutHome', function () {
   it('renders without crashing', function () {
-    const wrapper = shallow(<AboutHome />);
+    shallow(<AboutHome />);
   });
 
   it('renders five markdown elements', function () {
