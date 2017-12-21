@@ -3,16 +3,16 @@
 import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
-import Acknowledgements from './acknowledgements';
+import Education from './education';
 
-describe('Acknowledgements', function () {
+describe('Education', function () {
   it('renders without crashing', function () {
-    shallow(<Acknowledgements />);
+    shallow(<Education />);
   });
 
   it('renders markdown elements', function () {
-    const wrapper = shallow(<Acknowledgements />);
+    const wrapper = shallow(<Education />);
     const markdownElements = wrapper.find('Markdown');
-    assert.equal(markdownElements.length, 6);
+    assert.equal(markdownElements.length, 13);
   });
 });

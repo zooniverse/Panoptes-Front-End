@@ -7,7 +7,7 @@ import Faq from './faq';
 
 describe('Faq', function () {
   it('renders without crashing', function () {
-    const wrapper = shallow(<Faq />);
+    shallow(<Faq />);
   });
 
   it('renders markdown elements', function () {
