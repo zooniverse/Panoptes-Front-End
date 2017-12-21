@@ -23,7 +23,7 @@ class Education extends React.Component {
         <Markdown>{counterpart('getInvolved.education.educationPages')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.joinConversationTitle')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.joinConversationBody')}</Markdown>
-        <Markdown>{counterpart('getInvolved.education.howToUseTitle')}</Markdown>
+        <Markdown>{counterpart('getInvolved.education.howEducatorsUseZooniverse')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.inspiration')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.floatingForests')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.cosmicCurves')}</Markdown>
