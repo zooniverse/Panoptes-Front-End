@@ -2,7 +2,6 @@ import React from 'react';
 
 import DefaultClassificationSummary from './default-classification-summary';
 import GSGoldStandardSummary from './gs-gold-standard-summary';
-import MetadataBasedFeedback from './metadata-based-feedback';
 import WorldWideTelescope from './world-wide-telescope';
 
 /* eslint-disable multiline-ternary, react/forbid-prop-types */
@@ -55,24 +54,6 @@ class ClassificationSummary extends React.Component {
           classification={this.props.classification}
           subject={this.props.subject}
           workflow={this.props.workflow}
-        />
-      );
-    }
-
-    if (tools.includes('metadata based feedback')) {
-      return (
-        <MetadataBasedFeedback
-          subject={this.props.subject}
-          classification={this.props.classification}
-          dudLabel="DUD"
-          simLabel="SIM"
-          subjectLabel="SUB"
-          metaTypeFieldName="#Type"
-          metaSuccessMessageFieldName="#F_Success"
-          metaFailureMessageFieldName="#F_Fail"
-          metaSimCoordXPattern="#X"
-          metaSimCoordYPattern="#Y"
-          metaSimTolPattern="#Tol"
         />
       );
     }
