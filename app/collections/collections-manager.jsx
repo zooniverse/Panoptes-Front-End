@@ -34,7 +34,10 @@ class CollectionsManager extends React.Component {
     const promises = collections.map((searchResult) => {
       const collection = searchResult.collection;
       const subjectsToAdd = this.props.subjectIDs.filter((id) => {
-        return !collection.links.subjects.includes(id);
+        if (collection.links.subjects) {
+          return !collection.links.subjects.includes(id);
+        }
+        return true;
       });
 
       if (subjectsToAdd.length === 0) {

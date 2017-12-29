@@ -79,7 +79,7 @@ const CollectionPage = React.createClass({
   },
 
   render() {
-    const title = `${this.props.collection.display_name} (${this.props.collection.links.subjects ? this.props.collection.links.subjects.length : null})`;
+    const title = `${this.props.collection.display_name} (${this.props.collection.links.subjects ? this.props.collection.links.subjects.length : 0})`;
     const baseType = this.props.collection.favorite ? 'favorites' : 'collections';
     let baseLink = '';
     if (!!this.props.project) {
@@ -209,6 +209,7 @@ const CollectionPageWrapper = React.createClass({
         });
       }
     }).then(([collection]) => {
+      console.log(collection);
       collection.listen('change', this.listenToCollection);
       this.fetchAllCollectionRoles(collection);
       this.fetchCollectionOwner(collection)
