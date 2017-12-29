@@ -65,6 +65,9 @@ SubjectSetListingTable = React.createClass
 SubjectSetListing = React.createClass
   displayName: 'SubjectSetListing'
 
+  contextTypes:
+    user: React.PropTypes.object
+
   getDefaultProps: ->
     subjectSet: {}
 
@@ -123,7 +126,7 @@ SubjectSetListing = React.createClass
 
   previewSubject: (subject) ->
     alert <div className="content-container subject-preview">
-      <SubjectViewer subject={subject} />
+      <SubjectViewer subject={subject} user={@context.user} />
     </div>
 
   removeSubject: (subject) ->
