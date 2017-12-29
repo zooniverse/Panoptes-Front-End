@@ -209,7 +209,6 @@ const CollectionPageWrapper = React.createClass({
         });
       }
     }).then(([collection]) => {
-      console.log(collection);
       collection.listen('change', this.listenToCollection);
       this.fetchAllCollectionRoles(collection);
       this.fetchCollectionOwner(collection)

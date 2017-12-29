@@ -134,7 +134,6 @@ module.exports = React.createClass
     project: React.PropTypes.object
 
   componentWillMount: ->
-    console.log @props
     @fetchCollectionSubjects pick @props.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
       .then (subjects) =>
         error = null
