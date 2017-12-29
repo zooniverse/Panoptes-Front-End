@@ -3,7 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Dialog = require 'modal-form/dialog'
 Translate = require 'react-translate-component'
-MediaCard = require '../components/media-card'
+`import MediaCard from '../components/media-card'`;
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
 { Provider } = require('react-redux')

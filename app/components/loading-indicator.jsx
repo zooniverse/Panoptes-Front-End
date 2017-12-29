@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const LoadingIndicator = ({ children, off }) => {
   const visibility = off ? 'hidden' : '';
@@ -12,8 +11,8 @@ const LoadingIndicator = ({ children, off }) => {
 };
 
 LoadingIndicator.propTypes = {
-  children: PropTypes.node,
-  off: PropTypes.bool
+  children: React.PropTypes.node,
+  off: React.PropTypes.bool
 };
 
 LoadingIndicator.defaultProps = {
