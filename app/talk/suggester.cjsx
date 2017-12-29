@@ -3,7 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 talkClient = require 'panoptes-client/lib/talk-client'
-Loading = require '../components/loading-indicator'
+`import Loading from '../components/loading-indicator'`;
 getCaretPosition = require './lib/get-caret-position'
 
 module.exports = createReactClass

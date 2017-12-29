@@ -1,7 +1,7 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
-LoadingIndicator = require './loading-indicator'
+`import LoadingIndicator from './loading-indicator'`;
 toBlob = require 'data-uri-to-blob' if window.navigator?
 
 BASE_64_EXPANSION = 3 / 4

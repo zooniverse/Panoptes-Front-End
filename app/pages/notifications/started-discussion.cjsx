@@ -2,7 +2,7 @@ React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
-Loading = require '../../components/loading-indicator'
+`import Loading from '../../components/loading-indicator'`;
 Comment = require './comment'
 
 module.exports = createReactClass
