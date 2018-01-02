@@ -10,7 +10,7 @@ ProjectLinker = require './lib/project-linker'
 {Link} = require 'react-router'
 CreateSubjectDefaultButton = require './lib/create-subject-default-button'
 CreateBoardForm = require './lib/create-board-form'
-`import Loading from '../components/loading-indicator'`;
+`import Loading from '../components/loading-indicator';`
 SingleSubmitButton = require '../components/single-submit-button'
 ZooniverseTeam = require './lib/zoo-team.cjsx'
 alert = require('../lib/alert').default

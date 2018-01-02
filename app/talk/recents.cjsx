@@ -7,7 +7,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
 updateQueryParams = require './lib/update-query-params'
-`import Loading from '../components/loading-indicator'`;
+`import Loading from '../components/loading-indicator';`
 talkConfig = require './config'
 
 module.exports = createReactClass

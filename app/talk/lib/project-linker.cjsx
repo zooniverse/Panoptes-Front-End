@@ -3,7 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 {Link} = require 'react-router'
-`import Loading from '../../components/loading-indicator'`;
+`import Loading from '../../components/loading-indicator';`
 
 module.exports = createReactClass
   displayName: 'ProjectLinker'

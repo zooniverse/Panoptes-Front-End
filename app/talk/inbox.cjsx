@@ -7,7 +7,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 { Helmet } = require 'react-helmet'
 counterpart = require 'counterpart'
 Paginator = require './lib/paginator'
-`import Loading from '../components/loading-indicator'`;
+`import Loading from '../components/loading-indicator';`
 InboxForm = require './inbox-form'
 talkConfig = require './config'
 {timeAgo} = require './lib/time'

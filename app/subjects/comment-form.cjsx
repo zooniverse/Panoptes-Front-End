@@ -5,7 +5,7 @@ createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 NewDiscussionForm = require '../talk/discussion-new-form'
 QuickSubjectCommentForm= require '../talk/quick-subject-comment-form'
-`import Loading from '../components/loading-indicator'`;
+`import Loading from '../components/loading-indicator';`
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require('../lib/alert').default
 

@@ -7,7 +7,7 @@ CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 discussionValidations = require './lib/discussion-validations'
 talkClient = require 'panoptes-client/lib/talk-client'
-`import Loading from '../components/loading-indicator'`;
+`import Loading from '../components/loading-indicator';`
 projectSection = require '../talk/lib/project-section'
 
 module.exports = createReactClass

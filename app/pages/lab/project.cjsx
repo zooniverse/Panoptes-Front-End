@@ -3,7 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link, IndexLink} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
-`import LoadingIndicator from '../../components/loading-indicator'`;
+`import LoadingIndicator from '../../components/loading-indicator';`
 { Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'

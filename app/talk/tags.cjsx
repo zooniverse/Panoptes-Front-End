@@ -9,8 +9,8 @@ getSubjectLocation = require '../lib/get-subject-location'
 resourceCount = require './lib/resource-count'
 ProjectLinker = require './lib/project-linker'
 
-`import Loading from '../components/loading-indicator'`;
 `import ActiveUsers from './active-users';`
+`import Loading from '../components/loading-indicator';`
 `import PopularTags from './popular-tags';`
 `import Thumbnail from '../components/thumbnail';`
 

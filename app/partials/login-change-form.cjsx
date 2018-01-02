@@ -3,7 +3,7 @@ React = require 'react'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 Translate = require 'react-translate-component'
-`import LoadingIndicator from '../components/loading-indicator'`;
+LoadingIndicator = require('../components/loading-indicator').default
 
 counterpart.registerTranslations 'en',
   loginChangeForm:

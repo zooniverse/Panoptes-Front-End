@@ -12,7 +12,7 @@ Paginator = require './lib/paginator'
 Moderation = require './lib/moderation'
 StickyDiscussionList = require './sticky-discussion-list'
 ROLES = require './lib/roles'
-`import Loading from '../components/loading-indicator'`;
+`import Loading from '../components/loading-indicator';`
 SingleSubmitButton = require '../components/single-submit-button'
 merge = require 'lodash/merge'
 talkConfig = require './config'
