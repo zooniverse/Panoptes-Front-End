@@ -2,18 +2,35 @@ import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
+import apiClient from 'panoptes-client/lib/api-client';
 import CollectionsManager from './collections-manager';
 
 const project = {
   id: '342'
 };
 
+const selectedCollection = [{
+  collection: apiClient.type('collections').create({
+    display_name: 'test collection',
+    description: '',
+    private: false,
+    links: { project: '1234' }
+  })
+}];
+
+const subjectIDs = ['1234'];
+
+const searchNode = {
+  getSelected() { return selectedCollection; }
+};
+
 describe('<CollectionsManager />', function() {
   let wrapper;
   let addToCollectionsSpy;
   before(function() {
-    addToCollectionsSpy = sinon.stub(CollectionsManager.prototype, 'addToCollections');
-    wrapper = shallow(<CollectionsManager project={project} />);
+    CollectionsManager.prototype.search = searchNode;
+    addToCollectionsSpy = sinon.spy(CollectionsManager.prototype, 'addToCollections');
+    wrapper = shallow(<CollectionsManager subjectIDs={subjectIDs} project={project} />);
   });
 
   it('should render without crashing', function() {
@@ -46,5 +63,10 @@ describe('<CollectionsManager />', function() {
     const addButton = wrapper.find('.search-button');
     addButton.simulate('click');
     sinon.assert.calledOnce(addToCollectionsSpy);
+  });
+
+  it('can add a subject to an empty collection', function() {
+    const addButton = wrapper.find('.search-button');
+    addButton.simulate('click');
   });
 });
