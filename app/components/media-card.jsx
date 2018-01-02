@@ -3,7 +3,7 @@ import React from 'react';
 const IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'svg'];
 const VIDEO_EXTENSIONS = ['mp4'];
 
-const MediaCard = ({ children, className, src }) => {
+const MediaCard = ({ children, className, src, style }) => {
   const srcExtension = src.split('.').pop().toLowerCase();
   let renderType;
 
@@ -18,7 +18,7 @@ const MediaCard = ({ children, className, src }) => {
   } else console.warn(`Not sure how to render ${src}`);
 
   return (
-    <div className={`media-card ${className}`}>
+    <div className={`media-card ${className}`} style={style} >
       {src && (
         <div className="media-card-header">
           {renderType}
@@ -33,12 +33,14 @@ const MediaCard = ({ children, className, src }) => {
 MediaCard.propTypes = {
   children: React.PropTypes.node,
   className: React.PropTypes.string,
-  src: React.PropTypes.string
+  src: React.PropTypes.string,
+  style: React.PropTypes.object
 };
 
 MediaCard.defaultProps = {
   className: '',
-  src: ''
+  src: '',
+  style: {}
 };
 
 export default MediaCard;
