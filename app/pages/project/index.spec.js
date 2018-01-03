@@ -19,7 +19,7 @@ const context = {
   router: {}
 };
 
-const resources = {
+const RESOURCES = {
   pages: [],
   project_roles: [
     {
@@ -53,7 +53,7 @@ function mockPanoptesResource(type, options) {
   const resource = apiClient.type(type).create(options);
   if (!resource.save.restore) {
     sinon.stub(resource, 'save', () => Promise.resolve(resource));
-    sinon.stub(resource, 'get', resourceType => Promise.resolve(resources[resourceType]));
+    sinon.stub(resource, 'get', resourceType => Promise.resolve(RESOURCES[resourceType]));
     sinon.stub(resource, 'delete');
   }
   return resource;
@@ -150,10 +150,10 @@ describe('ProjectPageController', () => {
       project,
       background,
       owner,
-      pages: resources.pages,
+      pages: RESOURCES.pages,
       preferences: {},
       projectAvatar,
-      projectRoles: resources.project_roles
+      projectRoles: RESOURCES.project_roles
     });
     wrapper.update();
   });
