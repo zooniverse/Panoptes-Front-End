@@ -6,23 +6,113 @@ import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import EmailSettings from './email';
 
+function mockTalkResource(type, options) {
+  const resource = talkClient.type(type).create(options);
+  sinon.stub(resource, 'save', () => Promise.resolve(resource));
+  sinon.stub(resource, 'get');
+  sinon.stub(resource, 'delete');
+  return resource;
+}
+
+function mockPanoptesResource(type, options) {
+  const resource = apiClient.type(type).create(options);
+  sinon.stub(resource, 'save', () => Promise.resolve(resource));
+  sinon.stub(resource, 'get');
+  sinon.stub(resource, 'delete');
+  return resource;
+}
+
 const talkPreferences = [
-  talkClient.type('subscription_preferences').create({ id: 0, category: 'participating_discussions', email_digest: 'immediate' }),
-  talkClient.type('subscription_preferences').create({ id: 1, category: 'followed_discussions', email_digest: 'daily' }),
-  talkClient.type('subscription_preferences').create({ id: 2, category: 'mentions', email_digest: 'immediate' }),
-  talkClient.type('subscription_preferences').create({ id: 3, category: 'group_mentions', email_digest: 'immediate' }),
-  talkClient.type('subscription_preferences').create({ id: 4, category: 'messages', email_digest: 'daily' }),
-  talkClient.type('subscription_preferences').create({ id: 5, category: 'started_discussions', email_digest: 'weekly' })
+  mockTalkResource(
+    'subscription_preferences',
+    {
+      id: 0,
+      category: 'participating_discussions',
+      email_digest: 'immediate'
+    }
+  ),
+  mockTalkResource(
+    'subscription_preferences',
+    {
+      id: 1,
+      category: 'followed_discussions',
+      email_digest: 'daily'
+    }
+  ),
+  mockTalkResource(
+    'subscription_preferences',
+    {
+      id: 2,
+      category: 'mentions',
+      email_digest: 'immediate'
+    }
+  ),
+  mockTalkResource(
+    'subscription_preferences',
+    {
+      id: 3,
+      category: 'group_mentions',
+      email_digest: 'immediate'
+    }
+  ),
+  mockTalkResource(
+    'subscription_preferences',
+    {
+      id: 4,
+      category: 'messages',
+      email_digest: 'daily'
+    }
+  ),
+  mockTalkResource(
+    'subscription_preferences',
+    {
+      id: 5,
+      category: 'started_discussions',
+      email_digest: 'weekly'
+    }
+  )
 ];
 
 const projects = [
-  apiClient.type('projects').create({ id: 'a', display_name: 'A test project', title: 'A test project' }),
-  apiClient.type('projects').create({ id: 'b', display_name: 'Another test project', title: 'Another test project' })
+  mockPanoptesResource(
+    'projects',
+    {
+      id: 'a',
+      display_name: 'A test project',
+      title: 'A test project'
+    }
+  ),
+  mockPanoptesResource(
+    'projects',
+    {
+      id: 'b',
+      display_name: 'Another test project',
+      title: 'Another test project'
+    }
+  )
 ];
 
 const projectPreferences = [
-  apiClient.type('project_preferences').create({ id: '1', email_communication: true, links: { project: 'a' } }),
-  apiClient.type('project_preferences').create({ id: '2', email_communication: false, links: { project: 'b' } })
+  mockPanoptesResource(
+    'project_preferences',
+    {
+      id: '1',
+      email_communication: true,
+      links: {
+        project: 'a'
+      }
+    }
+  ),
+  mockPanoptesResource(
+    'project_preferences',
+    {
+      id: '2',
+      email_communication: false,
+      links: {
+        project: 'b'
+      }
+    }
+  )
 ];
 
 const user = {
@@ -66,7 +156,7 @@ describe('EmailSettings', () => {
 
   describe('project listing', () => {
     let projectSettings;
-    
+
     before(() => {
       wrapper.setState({ meta: {}, projectPreferences, projects, talkPreferences });
       wrapper.update();
