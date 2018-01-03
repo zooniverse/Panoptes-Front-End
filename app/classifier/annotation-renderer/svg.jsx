@@ -156,7 +156,6 @@ export default class SVGRenderer extends React.Component {
       })
       .filter(Boolean);
     children = children.concat(persistentHooks);
-
     return (
       <div>
         <div className={`subject svg-subject ${this.props.type}`}>

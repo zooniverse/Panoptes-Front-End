@@ -12,13 +12,17 @@
     width: 100%
     height: 100%
     overflow: hidden
-    
-    &.audio
+
+    &.audio, &.canvas
       background: transparent
-    
+    &.canvas
+      box-shadow: none
+      -webkit-box-shadow: none
+
     svg
       width: 100%
       height: 100%
-    
+
+
   button.disabled
     color: #ADABAB;

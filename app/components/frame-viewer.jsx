@@ -57,7 +57,11 @@ export default class FrameViewer extends React.Component {
     }else{
       (({ type, format, src } = getSubjectLocation(this.props.subject, this.props.frame)));
     }
-    const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && (type === 'image' || this.props.isAudioPlusImage);
+    const zoomEnabled = (
+      this.props.workflow &&
+      this.props.workflow.configuration.pan_and_zoom &&
+      (type === 'image' || type === 'canvas' || this.props.isAudioPlusImage)
+    );
     const ProgressMarker = this.props.progressMarker;
     if (FrameWrapper) {
       return (
