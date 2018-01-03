@@ -127,13 +127,21 @@ const user = {
 };
 
 describe('EmailSettings', () => {
-  const wrapper = mount(<EmailSettings user={user} />);
-  const projectPreferenceSpy = sinon.spy(wrapper.instance(), 'getProjectForPreferences');
+  let wrapper;
+  let projectPreferenceSpy;
+
+  before(() => {
+    sinon.stub(apiClient, 'request', () => Promise.resolve([]));
+    wrapper = mount(<EmailSettings user={user} />);
+    projectPreferenceSpy = sinon.spy(wrapper.instance(), 'getProjectForPreferences');
+  });
 
   beforeEach(() => {
     projectPreferenceSpy.reset();
     wrapper.update();
   });
+
+  after(() => apiClient.request.restore());
 
   it('renders the email address', () => {
     const email = wrapper.find('input[name="email"]');
