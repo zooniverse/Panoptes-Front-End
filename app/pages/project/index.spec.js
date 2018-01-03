@@ -127,6 +127,7 @@ describe('ProjectPageController', () => {
 
   before(() => {
     sinon.stub(apiClient, 'request', (method, url, payload) => {
+      let response = [];
       if (url === '/workflows') {
         const workflow = mockPanoptesResource(
           'workflows',
@@ -135,10 +136,9 @@ describe('ProjectPageController', () => {
             tasks: []
           }
         );
-        return Promise.resolve([workflow]);
-      } else {
-        return Promise.resolve([]);
+        response = [workflow];
       }
+      return Promise.resolve(response);
     });
   });
 
