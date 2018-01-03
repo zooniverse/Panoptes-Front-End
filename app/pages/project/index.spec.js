@@ -49,44 +49,99 @@ const resources = {
   ]
 };
 
-const project = apiClient.type('projects').create({
-  id: 'a',
-  display_name: 'A test project',
-  experimental_tools: [],
-  get(type) {
-    return Promise.resolve(resources[type]);
-  },
-  links: {
-    active_workflows: ['1', '2', '3', '4', '5'],
-    avatar: { id: '1' },
-    background: { id: '1' },
-    owner: { id: '1' }
+function mockPanoptesResource(type, options) {
+  const resource = apiClient.type(type).create(options);
+  if (!resource.save.restore) {
+    sinon.stub(resource, 'save', () => Promise.resolve(resource));
+    sinon.stub(resource, 'get', resourceType => Promise.resolve(resources[resourceType]));
+    sinon.stub(resource, 'delete');
   }
-});
+  return resource;
+}
 
-const background = apiClient.type('backgrounds').create({
-  id: project.links.background.id
-});
-
-const owner = apiClient.type('users').create({
-  id: project.links.owner.id
-});
-
-const projectAvatar = apiClient.type('avatars').create({
-  id: project.links.avatar.id
-});
-
-const preferences = apiClient.type('project_preferences').create({
-  preferences: {},
-  links: {
-    project: project.id
+const project = mockPanoptesResource('projects',
+  {
+    id: 'a',
+    display_name: 'A test project',
+    experimental_tools: [],
+    links: {
+      active_workflows: ['1', '2', '3', '4', '5'],
+      avatar: { id: '1' },
+      background: { id: '1' },
+      owner: { id: '1' }
+    }
   }
-});
+);
+
+const background = mockPanoptesResource(
+  'backgrounds',
+  {
+    id: project.links.background.id
+  }
+);
+
+const owner = mockPanoptesResource(
+  'users',
+  {
+    id: project.links.owner.id
+  }
+);
+
+const projectAvatar = mockPanoptesResource(
+  'avatars',
+  {
+    id: project.links.avatar.id
+  }
+);
+
+const preferences = mockPanoptesResource(
+  'project_preferences',
+  {
+    preferences: {},
+    links: {
+      project: project.id
+    }
+  }
+);
 
 describe('ProjectPageController', () => {
-  const wrapper = shallow(<ProjectPageController params={params} project={project} location={location} />, { context });
+  const actions = {
+    translations: {
+      load: () => null
+    }
+  };
+  const translations = {
+    locale: 'en'
+  };
+  const wrapper = shallow(
+    <ProjectPageController
+      actions={actions}
+      params={params}
+      project={project}
+      location={location}
+      translations={translations}
+    />,
+    { context }
+  );
   const controller = wrapper.instance();
   const workflowSpy = sinon.spy(controller, 'getWorkflow');
+
+  before(() => {
+    sinon.stub(apiClient, 'request', (method, url, payload) => {
+      if (url === '/workflows') {
+        const workflow = mockPanoptesResource(
+          'workflows',
+          {
+            id: payload.id,
+            tasks: []
+          }
+        );
+        return Promise.resolve([workflow]);
+      } else {
+        return Promise.resolve([]);
+      }
+    });
+  });
 
   beforeEach(() => {
     workflowSpy.reset();
@@ -101,6 +156,10 @@ describe('ProjectPageController', () => {
       projectRoles: resources.project_roles
     });
     wrapper.update();
+  });
+
+  after(() => {
+    apiClient.request.restore();
   });
 
   it('should fetch a random active workflow by default', () => {
@@ -147,14 +206,13 @@ describe('ProjectPageController', () => {
     beforeEach(() => {
       location.query = {};
       preferences.update({ preferences: {}});
-      const user = apiClient.type('users').create({ id: '4' });
+      const user = mockPanoptesResource('users', { id: '4' });
       wrapper.setProps({ user });
     });
 
     it('should try to load the stored workflow', () => {
       preferences.update({ 'preferences.selected_workflow': '4' });
       wrapper.setState({ preferences });
-      controller.getSelectedWorkflow(project, preferences);
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '4', true);
     });
