@@ -65,9 +65,6 @@ SubjectSetListingTable = React.createClass
 SubjectSetListing = React.createClass
   displayName: 'SubjectSetListing'
 
-  contextTypes:
-    user: React.PropTypes.object
-
   getDefaultProps: ->
     subjectSet: {}
 
@@ -126,7 +123,7 @@ SubjectSetListing = React.createClass
 
   previewSubject: (subject) ->
     alert <div className="content-container subject-preview">
-      <SubjectViewer subject={subject} user={@context.user} />
+      <SubjectViewer subject={subject} user={@props.user} />
     </div>
 
   removeSubject: (subject) ->
@@ -199,7 +196,7 @@ EditSubjectSetPage = React.createClass
       <hr />
 
       This set contains {@props.subjectSet.set_member_subjects_count} subjects:<br />
-      <SubjectSetListing subjectSet={@props.subjectSet} page={@state.page} newPage={@newPage} />
+      <SubjectSetListing subjectSet={@props.subjectSet} page={@state.page} newPage={@newPage} user={@props.user} />
 
       <hr />
 
