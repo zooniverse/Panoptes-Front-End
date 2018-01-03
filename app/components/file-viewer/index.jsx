@@ -29,7 +29,7 @@ function subjectViewerSelector(props) {
     if (props.type.includes('audio')) {
       return VIEWERS.audio;
     }
-    // ... add outher here if neccessary
+    // ... add other here if neccessary
   }
   return VIEWERS[props.type] || DefaultViewer;
 }
