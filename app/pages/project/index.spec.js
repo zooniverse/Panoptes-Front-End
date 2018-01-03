@@ -51,11 +51,10 @@ const RESOURCES = {
 
 function mockPanoptesResource(type, options) {
   const resource = apiClient.type(type).create(options);
-  if (!resource.save.restore) {
-    sinon.stub(resource, 'save', () => Promise.resolve(resource));
-    sinon.stub(resource, 'get', resourceType => Promise.resolve(RESOURCES[resourceType]));
-    sinon.stub(resource, 'delete');
-  }
+  apiClient._typesCache = {};
+  sinon.stub(resource, 'save', () => Promise.resolve(resource));
+  sinon.stub(resource, 'get', resourceType => Promise.resolve(RESOURCES[resourceType]));
+  sinon.stub(resource, 'delete');
   return resource;
 }
 
