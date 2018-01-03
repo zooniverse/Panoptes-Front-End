@@ -132,6 +132,7 @@ describe('EmailSettings', () => {
 
   before(() => {
     sinon.stub(apiClient, 'request', () => Promise.resolve([]));
+    sinon.stub(talkClient, 'request', () => Promise.resolve([]));
     wrapper = mount(<EmailSettings user={user} />);
     projectPreferenceSpy = sinon.spy(wrapper.instance(), 'getProjectForPreferences');
   });
@@ -141,7 +142,10 @@ describe('EmailSettings', () => {
     wrapper.update();
   });
 
-  after(() => apiClient.request.restore());
+  after(() => {
+    apiClient.request.restore();
+    talkClient.request.restore();
+  });
 
   it('renders the email address', () => {
     const email = wrapper.find('input[name="email"]');
