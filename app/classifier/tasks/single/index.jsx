@@ -2,93 +2,9 @@ import { Markdown } from 'markdownz';
 import React from 'react';
 import GenericTask from '../generic';
 import GenericTaskEditor from '../generic-editor';
+import SingleChoiceSummary from './summary';
 
 const NOOP = Function.prototype;
-
-class Summary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.expand = this.expand.bind(this);
-    this.collapse = this.collapse.bind(this);
-    this.state = {
-      expanded: this.props.expanded
-    };
-  }
-
-  expand() {
-    this.setState({ expanded: true });
-  }
-
-  collapse() {
-    this.setState({ expanded: false });
-  }
-
-  render() {
-    let toggleButton = <button type="button" className="toggle-more" onClick={this.expand}>More</button>;
-    let answers = <div className="answer">No answer</div>;
-    if (!this.state.expanded && this.props.annotation.value !== null) {
-      answers = (
-        <div className="answer">
-          <i className="fa fa-check-circle-o fa-fw"></i>
-          <Markdown tag="span" inline={true}>{this.props.task.answers[this.props.annotation.value].label}</Markdown>
-        </div>
-      );
-    }
-    if (this.state.expanded) {
-      toggleButton = <button type="button" className="toggle-more" onClick={this.collapse}>Less</button>;
-      answers = [];
-      for (const [i, answer] of this.props.task.answers.entries()) {
-        if (!answer._key) {
-          answer._key = Math.random();
-        }
-        let icon = <i className="fa fa-circle-o fa-fw"></i>;
-        if (i === this.props.annotation.value) {
-          icon = <i className="fa fa-check-circle-o fa-fw"></i>;
-        }
-        answers.push(
-          <div key={answer._key} className="answer">
-            {icon}
-            <Markdown tag="span" inline={true}>{answer.label}</Markdown>
-          </div>
-        );
-      }
-    }
-    return (
-      <div>
-        <div className="question">
-          <Markdown>
-            {this.props.task.question}
-          </Markdown>
-          {toggleButton}
-        </div>
-        <div className="answers">
-          {answers}
-        </div>
-      </div>
-    );
-  }
-}
-
-Summary.propTypes = {
-  task: React.PropTypes.shape(
-    {
-      answers: React.PropTypes.array,
-      question: React.PropTypes.string
-    }
-  ),
-  annotation: React.PropTypes.shape(
-    { value: React.PropTypes.number }
-  ).isRequired,
-  expanded: React.PropTypes.bool
-};
-
-Summary.defaultProps = {
-  task: {
-    answers: [],
-    question: ''
-  },
-  expanded: false
-};
 
 export default class SingleChoiceTask extends React.Component {
   constructor(props) {
@@ -104,13 +20,14 @@ export default class SingleChoiceTask extends React.Component {
   }
 
   render() {
+    const { annotation, task, translation } = this.props;
     const answers = [];
-    for (const [i, answer] of this.props.task.answers.entries()) {
+    for (const [i, answer] of task.answers.entries()) {
       if (!answer._key) {
         answer._key = Math.random();
       }
       let active = '';
-      if (i === this.props.annotation.value) {
+      if (i === annotation.value) {
         active = 'active';
       }
       answers.push(
@@ -118,25 +35,25 @@ export default class SingleChoiceTask extends React.Component {
           <div className="answer-button-icon-container">
             <input
               type="radio"
-              autoFocus={i === this.props.annotation.value}
-              checked={i === this.props.annotation.value}
+              autoFocus={i === annotation.value}
+              checked={i === annotation.value}
               value={i}
               onChange={this.handleChange.bind(this, i)}
             />
           </div>
           <div className="answer-button-label-container">
-            <Markdown className="answer-button-label">{answer.label}</Markdown>
+            <Markdown className="answer-button-label">{translation.answers[i].label}</Markdown>
           </div>
         </label>
       );
     }
     return (
       <GenericTask
-        autoFocus = {this.props.annotation.value === null}
-        question={this.props.task.question}
-        help={this.props.task.help}
+        autoFocus = {annotation.value === null}
+        question={translation.question}
+        help={translation.help}
         answers={answers}
-        required={this.props.task.required}
+        required={task.required}
       />
     );
   }
@@ -144,7 +61,7 @@ export default class SingleChoiceTask extends React.Component {
 
 // Define the static methods and values
 SingleChoiceTask.Editor = GenericTaskEditor;
-SingleChoiceTask.Summary = Summary;
+SingleChoiceTask.Summary = SingleChoiceSummary;
 SingleChoiceTask.getDefaultTask = () => {
   return {
     type: 'single',
@@ -172,6 +89,11 @@ SingleChoiceTask.propTypes = {
       required: React.PropTypes.bool
     }
   ),
+  translation: React.PropTypes.shape({
+    characteristics: React.PropTypes.object,
+    choices: React.PropTypes.object,
+    questions: React.PropTypes.object
+  }).isRequired,
   annotation: React.PropTypes.shape(
     { value: React.PropTypes.number }
   ),
@@ -184,6 +106,11 @@ SingleChoiceTask.defaultProps = {
     question: '',
     help: '',
     required: false
+  },
+  translation: {
+    answers: [],
+    question: '',
+    help: ''
   },
   annotation: { value: null },
   onChange: NOOP

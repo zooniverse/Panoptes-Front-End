@@ -22,7 +22,7 @@ describe('SingleChoiceTask', function () {
   let wrapper;
 
   beforeEach(function () {
-    wrapper = mount(<SingleTask task={task} annotation={annotation} />);
+    wrapper = mount(<SingleTask task={task} annotation={annotation} translation={task} />);
   });
 
   it('should render without crashing', function () {
@@ -77,7 +77,7 @@ describe('SingleChoiceSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<SingleTask.Summary task={task} annotation={annotation} />);
+    summary = mount(<SingleTask.Summary task={task} annotation={annotation} translation={task} />);
   });
 
   it('should render without crashing', function () {
@@ -98,13 +98,13 @@ describe('SingleChoiceSummary', function () {
   });
 
   it('should have the correct answer label when the value if falsy (i.e. 0)', function () {
-    summary = mount(<SingleTask.Summary task={task} annotation={{ value: 0 }} />);
+    summary = mount(<SingleTask.Summary task={task} annotation={{ value: 0 }} translation={task} />);
     const answers = summary.find('.answer');
     assert.notEqual(answers.text(), 'No answer');
   });
 
   it('should return "No answer" when annotation is null', function () {
-    summary = mount(<SingleTask.Summary task={task} annotation={{ value: null }} />);
+    summary = mount(<SingleTask.Summary task={task} annotation={{ value: null }} translation={task} />);
     const answers = summary.find('.answer');
     assert.equal(answers.text(), 'No answer');
   });
