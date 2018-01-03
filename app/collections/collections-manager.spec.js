@@ -27,10 +27,12 @@ const searchNode = {
 describe('<CollectionsManager />', function() {
   let wrapper;
   let addToCollectionsSpy;
+  let addButton;
   before(function() {
     CollectionsManager.prototype.search = searchNode;
     addToCollectionsSpy = sinon.spy(CollectionsManager.prototype, 'addToCollections');
     wrapper = shallow(<CollectionsManager subjectIDs={subjectIDs} project={project} />);
+    addButton = wrapper.find('.search-button');
   });
 
   it('should render without crashing', function() {
@@ -60,13 +62,14 @@ describe('<CollectionsManager />', function() {
   });
 
   it('calls addToCollections when the add button is clicked', function() {
-    const addButton = wrapper.find('.search-button');
     addButton.simulate('click');
     sinon.assert.calledOnce(addToCollectionsSpy);
   });
 
   it('can add a subject to an empty collection', function() {
-    const addButton = wrapper.find('.search-button');
+    const collection = wrapper.instance().search.getSelected()[0].collection;
+    const spyGuy = sinon.spy(collection, 'addLink');
     addButton.simulate('click');
+    sinon.assert.calledWith(spyGuy, 'subjects', ['1234']);
   });
 });
