@@ -3,12 +3,11 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
-import { ProjectPageController } from './';
+import WorkflowSelection from './workflow-selection';
 
-const params = {
-  owner: 'test',
-  name: 'test'
-};
+function StubPage() {
+  return <p>Hello</p>;
+}
 
 const location = {
   query: {}
@@ -19,41 +18,38 @@ const context = {
   router: {}
 };
 
-const RESOURCES = {
-  pages: [],
-  project_roles: [
-    {
-      roles: ['owner'],
-      links: {
-        owner: {
-          id: '1'
-        }
-      }
-    },
-    {
-      roles: ['collaborator'],
-      links: {
-        owner: {
-          id: '2'
-        }
-      }
-    },
-    {
-      roles: ['tester'],
-      links: {
-        owner: {
-          id: '3'
-        }
+const projectRoles = [
+  {
+    roles: ['owner'],
+    links: {
+      owner: {
+        id: '1'
       }
     }
-  ]
-};
+  },
+  {
+    roles: ['collaborator'],
+    links: {
+      owner: {
+        id: '2'
+      }
+    }
+  },
+  {
+    roles: ['tester'],
+    links: {
+      owner: {
+        id: '3'
+      }
+    }
+  }
+];
 
 function mockPanoptesResource(type, options) {
   const resource = apiClient.type(type).create(options);
   apiClient._typesCache = {};
   sinon.stub(resource, 'save', () => Promise.resolve(resource));
-  sinon.stub(resource, 'get', resourceType => Promise.resolve(RESOURCES[resourceType]));
+  sinon.stub(resource, 'get');
   sinon.stub(resource, 'delete');
   return resource;
 }
@@ -65,17 +61,8 @@ const project = mockPanoptesResource('projects',
     experimental_tools: [],
     links: {
       active_workflows: ['1', '2', '3', '4', '5'],
-      avatar: { id: '1' },
-      background: { id: '1' },
       owner: { id: '1' }
     }
-  }
-);
-
-const background = mockPanoptesResource(
-  'backgrounds',
-  {
-    id: project.links.background.id
   }
 );
 
@@ -83,13 +70,6 @@ const owner = mockPanoptesResource(
   'users',
   {
     id: project.links.owner.id
-  }
-);
-
-const projectAvatar = mockPanoptesResource(
-  'avatars',
-  {
-    id: project.links.avatar.id
   }
 );
 
@@ -103,7 +83,7 @@ const preferences = mockPanoptesResource(
   }
 );
 
-describe('ProjectPageController', () => {
+describe('WorkflowSelection', () => {
   const actions = {
     translations: {
       load: () => null
@@ -113,13 +93,16 @@ describe('ProjectPageController', () => {
     locale: 'en'
   };
   const wrapper = shallow(
-    <ProjectPageController
+    <WorkflowSelection
       actions={actions}
-      params={params}
       project={project}
+      preferences={preferences}
+      projectRoles={projectRoles}
       location={location}
       translations={translations}
-    />,
+    >
+      <StubPage />
+    </WorkflowSelection>,
     { context }
   );
   const controller = wrapper.instance();
@@ -144,16 +127,6 @@ describe('ProjectPageController', () => {
 
   beforeEach(() => {
     workflowSpy.reset();
-    wrapper.setState({
-      loading: false,
-      project,
-      background,
-      owner,
-      pages: RESOURCES.pages,
-      preferences: {},
-      projectAvatar,
-      projectRoles: RESOURCES.project_roles
-    });
     wrapper.update();
   });
 
@@ -162,7 +135,7 @@ describe('ProjectPageController', () => {
   });
 
   it('should fetch a random active workflow by default', () => {
-    controller.getSelectedWorkflow(project);
+    controller.getSelectedWorkflow({ project });
     const selectedWorkflowID = workflowSpy.getCall(0).args[0];
     sinon.assert.calledOnce(workflowSpy);
     assert.notEqual(project.links.active_workflows.indexOf(selectedWorkflowID), -1);
@@ -175,9 +148,9 @@ describe('ProjectPageController', () => {
     });
 
     it('should load the specified workflow for the project owner', () => {
-      wrapper.setProps({ user: owner });
-      wrapper.setState({ preferences });
-      controller.getSelectedWorkflow(project, preferences);
+      const user = owner;
+      wrapper.setProps({ user });
+      controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
     });
@@ -185,8 +158,7 @@ describe('ProjectPageController', () => {
     it('should load the specified workflow for a collaborator', () => {
       const user = apiClient.type('users').create({ id: '2' });
       wrapper.setProps({ user });
-      wrapper.setState({ preferences });
-      controller.getSelectedWorkflow(project, preferences);
+      controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
     });
@@ -194,8 +166,7 @@ describe('ProjectPageController', () => {
     it('should load the specified workflow for a tester', () => {
       const user = apiClient.type('users').create({ id: '3' });
       wrapper.setProps({ user });
-      wrapper.setState({ preferences });
-      controller.getSelectedWorkflow(project, preferences);
+      controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
     });
@@ -211,7 +182,7 @@ describe('ProjectPageController', () => {
 
     it('should try to load the stored workflow', () => {
       preferences.update({ 'preferences.selected_workflow': '4' });
-      wrapper.setState({ preferences });
+      wrapper.setProps({ preferences });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '4', true);
     });
@@ -219,7 +190,7 @@ describe('ProjectPageController', () => {
     it('should try to load a stored project workflow', () => {
       preferences.update({ 'settings.workflow_id': '2' });
       wrapper.setState({ preferences });
-      controller.getSelectedWorkflow(project, preferences);
+      controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '2', true);
     });
@@ -236,7 +207,7 @@ describe('ProjectPageController', () => {
 
     it('should load the project default workflow', () => {
       wrapper.setState({ project, preferences });
-      controller.getSelectedWorkflow(project, preferences);
+      controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '1', true);
     });
