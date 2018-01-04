@@ -73,11 +73,6 @@ ProjectPageController = React.createClass
       @fetchProjectData owner, name, nextProps.user unless @state.loading
       @setupSplits nextProps
 
-  componentWillUpdate: (nextProps, nextState) ->
-    if nextState.preferences?.preferences?.selected_workflow? and @state.workflow?
-      if nextState.preferences?.preferences.selected_workflow isnt @state.workflow.id
-        @getSelectedWorkflow(nextState.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
-
   componentWillUnmount: ->
     Split.clear()
 
