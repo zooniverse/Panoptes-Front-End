@@ -1,6 +1,5 @@
 React = require 'react'
 BoardPreview = require './board-preview'
-ActiveUsers = require './active-users'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 HandlePropChanges = require '../lib/handle-prop-changes'
@@ -17,6 +16,7 @@ AddZooTeamForm = require './add-zoo-team-form'
 DragReorderable = require 'drag-reorderable'
 Paginator = require './lib/paginator'
 
+`import ActiveUsers from './active-users';`
 `import PopularTags from './popular-tags';`
 
 module.exports = React.createClass
@@ -67,7 +67,7 @@ module.exports = React.createClass
           .get
             id: author_ids
           .then (users) =>
-            users.map (user) => 
+            users.map (user) =>
               @setState (prevState, props) ->
                 prevState.authors[user.id] = user
 

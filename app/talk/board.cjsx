@@ -16,7 +16,7 @@ merge = require 'lodash/merge'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require('../lib/alert').default
-ActiveUsers = require './active-users'
+`import ActiveUsers from './active-users';`
 ProjectLinker = require './lib/project-linker'
 
 `import PopularTags from './popular-tags';`
@@ -81,7 +81,7 @@ module.exports = React.createClass
           .get
             id: author_ids
           .then (users) =>
-            users.map (user) => 
+            users.map (user) =>
               @setState (prevState, props) ->
                 prevState.authors[user.id] = user
 
