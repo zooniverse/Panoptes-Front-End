@@ -1,0 +1,18 @@
+/* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-filename-extension': [1, { "extensions": [".js", ".jsx"] }] */
+
+import React from 'react';
+import assert from 'assert';
+import { shallow } from 'enzyme';
+import GetInvolved from './index';
+
+describe('GetInvolved', function () {
+  it('renders without crashing', function () {
+    shallow(<GetInvolved />);
+  });
+
+  it('renders Translate elements', function () {
+    const wrapper = shallow(<GetInvolved />);
+    const translateElements = wrapper.find('Translate');
+    assert.equal(translateElements.length, 5);
+  });
+});
