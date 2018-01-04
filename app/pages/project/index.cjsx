@@ -142,7 +142,6 @@ ProjectPageController = React.createClass
             this.props.actions.translations.load('project', project.id, this.props.translations.locale)
           ]).then(([background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
               @setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
-              @getSelectedWorkflow(project, preferences)
               @loadFieldGuide(project.id)
               this.props.actions.translations.loadTranslations('project_page', pages.map((page) => page.id), this.props.translations.locale)
             ).catch((error) => @setState({ error }); console.error(error); );
@@ -209,6 +208,16 @@ ProjectPageController = React.createClass
           guideIcons[image.id] = image
         @setState {guideIcons}
 
+  handlePreferencesChange: (key, value) ->
+    changes = {};
+    changes[key] = value;
+    { preferences } = @state
+    if preferences?
+      preferences.update(changes)
+      @setState { preferences }
+      if this.props.user?
+        preferences.save()
+
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
     betaApproved = @state.project?.beta_approved
@@ -229,7 +238,7 @@ ProjectPageController = React.createClass
             project={@state.project}
             projectRoles={@state.projectRoles}
             translations={@props.translations}
-            user={@props.user}
+            onChangePreferences={@handlePreferencesChange}
           >
             <ProjectPage
               {...@props}

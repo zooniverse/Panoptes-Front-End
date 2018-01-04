@@ -3,13 +3,14 @@ import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../lib/is-admin';
 
 class WorkflowSelection extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       error: null,
       loadingSelectedWorkflow: false,
       workflow: null
     };
+    this.getSelectedWorkflow(props);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -146,14 +147,7 @@ class WorkflowSelection extends React.Component {
   }
 
   handlePreferencesChange(key, value) {
-    const changes = {};
-    changes[key] = value;
-    if (this.props.preferences) {
-      this.props.preferences.update(changes);
-      if (this.props.user) {
-        this.props.preferences.save();
-      }
-    }
+    this.props.onChangePreferences(key, value);
   }
 
   workflowSelectionErrorHandler() {
@@ -177,6 +171,7 @@ WorkflowSelection.defaultProps = {
   location: {
     query: {}
   },
+  onChangePreferences() { return null; },
   preferences: {},
   projectRoles: [],
   translations: {
@@ -197,6 +192,7 @@ WorkflowSelection.propTypes = {
       workflow: React.PropTypes.string
     })
   }),
+  onChangePreferences: React.PropTypes.func,
   preferences: React.PropTypes.shape({
     save: React.PropTypes.func,
     update: React.PropTypes.func
@@ -212,8 +208,7 @@ WorkflowSelection.propTypes = {
   projectRoles: React.PropTypes.arrayOf(React.PropTypes.object),
   translations: React.PropTypes.shape({
     locale: React.PropTypes.string
-  }),
-  user: React.PropTypes.shape({})
+  })
 };
 
 WorkflowSelection.contextTypes = {
