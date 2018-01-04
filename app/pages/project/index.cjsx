@@ -3,12 +3,12 @@ React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 { Split } = require('seven-ten')
 counterpart = require 'counterpart'
-isAdmin = require '../../lib/is-admin'
 ProjectTranslations = require('./project-translations').default
 { connect } = require 'react-redux';
 { bindActionCreators } = require 'redux';
 translationActions  = require '../../redux/ducks/translations';
 ProjectPage = require('./project-page').default;
+WorkflowSelection = require('./workflow-selection').default;
 
 counterpart.registerTranslations 'en', require('../../locales/en').default
 counterpart.registerTranslations 'it', require('../../locales/it').default
@@ -227,25 +227,34 @@ ProjectPageController = React.createClass
         <ProjectTranslations
           project={@state.project}
         >
-          <ProjectPage
-            {...@props}
-            background={@state.background}
-            guide={@state.guide}
-            guideIcons={@state.guideIcons}
-            loading={@state.loading}
-            loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
-            onChangePreferences={@handlePreferencesChange}
-            organization={@state.organization}
-            owner={@state.owner}
-            pages={@state.pages}
+          <WorkflowSelection
+            actions={@props.actions}
+            location={@props.location}
             preferences={@state.preferences}
             project={@state.project}
-            projectAvatar={@state.projectAvatar}
-            projectIsComplete={@state.projectIsComplete}
             projectRoles={@state.projectRoles}
-            splits={@state.splits}
-            workflow={@state.workflow}
-          />
+            translations={@props.translations}
+            user={@props.user}
+          >
+            <ProjectPage
+              {...@props}
+              background={@state.background}
+              guide={@state.guide}
+              guideIcons={@state.guideIcons}
+              loading={@state.loading}
+              loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
+              onChangePreferences={@handlePreferencesChange}
+              organization={@state.organization}
+              owner={@state.owner}
+              pages={@state.pages}
+              preferences={@state.preferences}
+              project={@state.project}
+              projectAvatar={@state.projectAvatar}
+              projectIsComplete={@state.projectIsComplete}
+              projectRoles={@state.projectRoles}
+              splits={@state.splits}
+            />
+          </WorkflowSelection>
         </ProjectTranslations>
 
       else if @state.loading
