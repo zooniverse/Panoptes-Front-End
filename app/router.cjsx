@@ -42,6 +42,7 @@ React = require 'react'
 `import Acknowledgements from './pages/about/acknowledgements';`
 `import Contact from './pages/about/contact';`
 `import Faq from './pages/about/faq';`
+`import GetInvolved from './pages/get-involved/index';`
 `import CallForProjects from './pages/get-involved/call-for-projects';`
 `import Education from './pages/get-involved/education';`
 `import Volunteering from './pages/get-involved/volunteering';`
@@ -75,7 +76,7 @@ module.exports =
     </Route>
 
 
-    <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
+    <Route path="get-involved" component={GetInvolved} ignoreScrollBehavior>
       <IndexRoute component={Volunteering} />
       <Route path="call-for-projects" component={CallForProjects} />
       <Route path="education" component={Education} />
