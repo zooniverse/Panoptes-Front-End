@@ -260,6 +260,16 @@ export default {
     }
   },
   getInvolved: {
+    index: {
+      title: 'Get Involved',
+      nav: {
+        volunteering: 'Volunteering',
+        education: 'Education',
+        callForProjects: 'Call for Projects',
+        collections: 'Collections',
+        favorites: 'Favorites'
+      }
+    },
     callForProjects: {
       audio: {
         header: '## Call for Zooniverse Audio Transcription Project Proposals',
