@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Markdown from 'markdownz';
 import LoadingIndicator from '../loading-indicator';
 import { Model } from '../modelling';
+import alert from '../../lib/alert';
+
 
 // function to check whether webgl is available
 function webGLCompatibilityTest() {
@@ -20,7 +22,6 @@ class CanvasViewer extends React.Component {
     this.state = {
       loading: true
     };
-    // load in the model specified in the workflow
   }
   componentDidMount() {
     // add the canvas and prep for rendering
@@ -45,13 +46,31 @@ class CanvasViewer extends React.Component {
     this.model = new Model(this.canvas, this.props.subject.metadata);
 
     // send off the onLoad event
+    console.log('Loaded');
     requestAnimationFrame(() => this.onLoad({ target: {}}));
   }
-  componentWillReceiveProps(newProps) {
-    // don't normally want to re-render, just update model
-  }
-  shouldComponentUpdate() {
+  shouldComponentUpdate(nextProps, nextState) {
+    // check if a new subject has been provided
+    if (this.state.loading !== nextState.loading || this.props.src !== nextProps.src) {
+      return true;
+    }
+    // Only re-render when annotation has changed
+    // JSON is expensive, so reduce the test as much as possible
+    const newAnnotation = JSON.stringify(
+      nextProps.annotations[nextProps.annotations.length]
+    );
+    const oldAnnotation = JSON.stringify(
+      this.props.annotations[this.props.annotations.length]
+    );
+    if (newAnnotation !== oldAnnotation) {
+      console.log('rendering model');
+    }
+    // don't re-render the canvas
     return false;
+  }
+  componentWillUpdate(nextProps) {
+    console.log('Creating Model');
+    this.model = new Model(this.canvas, nextProps.subject.metadata);
   }
   onLoad(e) {
     const loading = false;
@@ -73,6 +92,7 @@ class CanvasViewer extends React.Component {
           onFocus={this.props.onFocus}
           onBlur={this.props.onBlur}
         />
+        <img alt="" hidden={true} src={this.props.src} />
         <span style={{ position: 'relative', top: '-30px', paddingLeft: '10px' }}>
           SCORE HERE
         </span>
@@ -86,7 +106,7 @@ class CanvasViewer extends React.Component {
 }
 
 CanvasViewer.propTypes = {
-  classification: PropTypes.object,
+  annotations: PropTypes.array,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
   onLoad: PropTypes.func,
