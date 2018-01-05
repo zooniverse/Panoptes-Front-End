@@ -140,7 +140,7 @@ export default class SVGRenderer extends React.Component {
     if (isDrawingTask && InsideSubject && !this.props.panEnabled) {
       children.push(<InsideSubject key="inside" {...hookProps} />);
     }
-    if (this.props.progressMarker()){
+    if (this.props.progressMarker()) {
       const ProgressMarker = this.props.progressMarker;
       children.push(<ProgressMarker key="progress-marker" />);
     }
@@ -156,6 +156,17 @@ export default class SVGRenderer extends React.Component {
       })
       .filter(Boolean);
     children = children.concat(persistentHooks);
+    const childrenWithViewBox = React.Children.map(
+      this.props.children,
+      child => React.cloneElement(
+        child,
+        type === 'canvas' ? {
+          viewBoxDimensions: this.props.viewBoxDimensions,
+          classification: this.props.classification,
+          subject: this.props.subject,
+          workflow: this.props.workflow
+        } : {})
+    );
     return (
       <div>
         <div className={`subject svg-subject ${this.props.type}`}>
@@ -191,7 +202,7 @@ export default class SVGRenderer extends React.Component {
             </g>
           </svg>
         </div>
-        {this.props.children}
+        {childrenWithViewBox}
       </div>
     );
   }

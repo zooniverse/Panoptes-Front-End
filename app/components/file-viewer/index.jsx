@@ -38,24 +38,36 @@ function subjectViewerSelector(props) {
 
 function FileViewer(props) {
   const Viewer = subjectViewerSelector(props);
-
+  const viewerProps = {
+    className: props.className,
+    style: props.style,
+    src: props.src,
+    type: props.type,
+    format: props.format,
+    frame: props.frame,
+    onLoad: props.onLoad,
+    onFocus: props.onFocus,
+    onBlur: props.onBlur
+  };
+  if (props.type === 'canvas') {
+    Object.assign(
+      viewerProps,
+      {
+        classification: props.classification,
+        subject: props.subject,
+        viewBoxDimensions: props.viewBoxDimensions,
+        workflow: props.workflow
+      }
+    );
+  }
   return (
-    <Viewer
-      className={props.className}
-      style={props.style}
-      src={props.src}
-      type={props.type}
-      format={props.format}
-      frame={props.frame}
-      onLoad={props.onLoad}
-      onFocus={props.onFocus}
-      onBlur={props.onBlur}
-    />
+    <Viewer {...viewerProps} />
   );
 }
 
 FileViewer.propTypes = {
   className: PropTypes.string,
+  classification: PropTypes.object,
   format: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.string
@@ -69,10 +81,13 @@ FileViewer.propTypes = {
     PropTypes.string
   ]),
   style: PropTypes.object,
+  subject: PropTypes.object,
   type: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.string
-  ])
+  ]),
+  viewBoxDimensions: PropTypes.object,
+  workflow: PropTypes.object
 };
 
 export default FileViewer;
