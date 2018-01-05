@@ -80,7 +80,13 @@ module.exports = React.createClass
             {for detailTask, i in toolProps.details
               detailTask._key ?= Math.random()
               TaskComponent = tasks[detailTask.type]
-              <TaskTranslations key={detailTask._key} taskKey={"TASK-KEY.tools.TOOL-INDEX.details.#{i}"} task={detailTask} store={@context.store}>
+              taskKey = "#{toolProps.taskKey}.tools.#{toolProps.mark.tool}.details.#{i}"
+              <TaskTranslations
+                key={detailTask._key}
+                taskKey={taskKey}
+                task={detailTask}
+                store={@context.store}
+              >
                 <TaskComponent autoFocus={i is 0} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />
               </TaskTranslations>}
             <hr />
