@@ -59,6 +59,8 @@ TalkPreferences.propTypes = {
 };
 
 function ProjectPreferences({ projects, projectPreferences, onChange }) {
+  const projectNames = [];
+  projects.map(project => projectNames[project.id] = project.display_name);
   return (
     <tbody>
       {projectPreferences.map((projectPreference, i) => {
@@ -74,7 +76,7 @@ function ProjectPreferences({ projects, projectPreferences, onChange }) {
                 />
               </td>
               <td>
-                {projects[i].display_name}
+                {projectNames[projectPreference.links.project]}
               </td>
             </tr>
           );
