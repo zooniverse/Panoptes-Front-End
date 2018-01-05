@@ -7,7 +7,7 @@ class WorkflowSelection extends React.Component {
     super();
     this.state = {
       error: null,
-      loadingSelectedWorkflow: false,
+      loadingSelectedWorkflow: true,
       workflow: null
     };
   }
@@ -158,8 +158,8 @@ class WorkflowSelection extends React.Component {
   }
 
   render() {
-    const { workflow } = this.state;
-    return React.cloneElement(this.props.children, { workflow });
+    const { loadingSelectedWorkflow, workflow } = this.state;
+    return React.cloneElement(this.props.children, { loadingSelectedWorkflow, workflow });
   }
 }
 

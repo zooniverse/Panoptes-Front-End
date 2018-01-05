@@ -246,7 +246,6 @@ ProjectPageController = React.createClass
               guide={@state.guide}
               guideIcons={@state.guideIcons}
               loading={@state.loading}
-              loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
               onChangePreferences={@handlePreferencesChange}
               organization={@state.organization}
               owner={@state.owner}
