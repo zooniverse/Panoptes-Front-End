@@ -1,6 +1,7 @@
 React = require 'react'
 StickyModalForm = require 'modal-form/sticky'
 ModalFocus = require('../../components/modal-focus').default
+TaskTranslations = require('../tasks/translations').default
 
 STROKE_WIDTH = 1.5
 SELECTED_STROKE_WIDTH = 2.5
@@ -14,6 +15,9 @@ SEMI_MODAL_UNDERLAY_STYLE =
 
 module.exports = React.createClass
   displayName: 'DrawingToolRoot'
+
+  contextTypes:
+    store: React.PropTypes.object
 
   statics:
     distance: (x1, y1, x2, y2) ->
@@ -76,7 +80,9 @@ module.exports = React.createClass
             {for detailTask, i in toolProps.details
               detailTask._key ?= Math.random()
               TaskComponent = tasks[detailTask.type]
-              <TaskComponent autoFocus={i is 0} key={detailTask._key} task={detailTask} translation={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />}
+              <TaskTranslations key={detailTask._key} taskKey={"TASK-KEY.tools.TOOL-INDEX.details.#{i}"} task={detailTask} store={@context.store}>
+                <TaskComponent autoFocus={i is 0} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />
+              </TaskTranslations>}
             <hr />
             <p style={textAlign: 'center'}>
               <button autoFocus={toolProps.details[0].type in ['single', 'multiple']} type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
