@@ -149,7 +149,6 @@ describe('WorkflowSelection', () => {
 
     it('should load the specified workflow for the project owner', () => {
       const user = owner;
-      wrapper.setProps({ user });
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
@@ -157,7 +156,6 @@ describe('WorkflowSelection', () => {
 
     it('should load the specified workflow for a collaborator', () => {
       const user = apiClient.type('users').create({ id: '2' });
-      wrapper.setProps({ user });
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
@@ -165,7 +163,6 @@ describe('WorkflowSelection', () => {
 
     it('should load the specified workflow for a tester', () => {
       const user = apiClient.type('users').create({ id: '3' });
-      wrapper.setProps({ user });
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
@@ -182,14 +179,13 @@ describe('WorkflowSelection', () => {
 
     it('should try to load the stored workflow', () => {
       preferences.update({ 'preferences.selected_workflow': '4' });
-      wrapper.setProps({ preferences });
+      controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '4', true);
     });
 
     it('should try to load a stored project workflow', () => {
       preferences.update({ 'settings.workflow_id': '2' });
-      wrapper.setState({ preferences });
       controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '2', true);
@@ -201,13 +197,11 @@ describe('WorkflowSelection', () => {
       location.query = {};
       project.update({ 'configuration.default_workflow': '1' });
       preferences.update({ settings: {}, preferences: {}});
-      const user = apiClient.type('users').create({ id: '4' });
-      wrapper.setProps({ user });
     });
 
     it('should load the project default workflow', () => {
-      wrapper.setState({ project, preferences });
-      controller.getSelectedWorkflow({ project, preferences });
+      const user = apiClient.type('users').create({ id: '4' });
+      controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '1', true);
     });
