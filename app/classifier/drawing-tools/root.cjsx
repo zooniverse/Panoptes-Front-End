@@ -76,7 +76,7 @@ module.exports = React.createClass
             {for detailTask, i in toolProps.details
               detailTask._key ?= Math.random()
               TaskComponent = tasks[detailTask.type]
-              <TaskComponent autoFocus={i is 0} key={detailTask._key} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />}
+              <TaskComponent autoFocus={i is 0} key={detailTask._key} task={detailTask} translation={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />}
             <hr />
             <p style={textAlign: 'center'}>
               <button autoFocus={toolProps.details[0].type in ['single', 'multiple']} type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
