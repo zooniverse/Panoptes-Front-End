@@ -238,6 +238,7 @@ ProjectPageController = React.createClass
             project={@state.project}
             projectRoles={@state.projectRoles}
             translations={@props.translations}
+            user={@props.user}
             onChangePreferences={@handlePreferencesChange}
           >
             <ProjectPage
