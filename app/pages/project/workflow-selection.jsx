@@ -3,16 +3,18 @@ import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../lib/is-admin';
 
 class WorkflowSelection extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       error: null,
       loadingSelectedWorkflow: false,
       workflow: null
     };
-    this.getSelectedWorkflow(props);
   }
 
+  componentDidMount() {
+    this.getSelectedWorkflow(this.props);
+  }
   componentWillUpdate(nextProps, nextState) {
     if (nextProps.preferences &&
       nextProps.preferences.preferences &&
