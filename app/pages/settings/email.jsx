@@ -59,9 +59,16 @@ TalkPreferences.propTypes = {
 };
 
 function ProjectPreferences({ projects, projectPreferences, onChange }) {
+  const projectNames = {};
+  projects.map(project => projectNames[project.id] = project.display_name);
+  const projectIDs = projects.map(proj => proj.id);
+  function filterPrefs() {
+    return projectPreferences.filter(pref => projectIDs.includes(pref.links.project));
+  }
+
   return (
     <tbody>
-      {projectPreferences.map((projectPreference, i) => {
+      {filterPrefs().map((projectPreference, i) => {
         if (projects[i]) {
           return (
             <tr key={projectPreference.id}>
@@ -74,7 +81,7 @@ function ProjectPreferences({ projects, projectPreferences, onChange }) {
                 />
               </td>
               <td>
-                {projects[i].display_name}
+                {projectNames[projectPreference.links.project]}
               </td>
             </tr>
           );
