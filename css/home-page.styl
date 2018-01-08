@@ -172,9 +172,11 @@ $flex-section
       min-width: 50%
 
       a
+        display: inline-block
+        max-height: 2em
+        margin-right: 1em
         img
           max-height: 2em
-          margin-right: 1em
 
       button[class=primary-button]
         color: black
@@ -186,6 +188,7 @@ $flex-section
     max-height: 24em
     max-width: 18em
     width: 18em
+    margin: 0
 
     .details
       height: 50%
@@ -224,9 +227,6 @@ $flex-section
   @media (min-width: 1440px)
     border-left: 1px solid LIGHT_GREY
     border-right: 1px solid LIGHT_GREY
-
-  *:focus
-    outline: none
 
   section
     @extends $flex-section
@@ -427,6 +427,11 @@ $flex-section
 
       > div
         margin: 0 0.5em
+
+        > a
+          margin: 1em
+          margin-top: 0
+          display: inline-block
 
     &__content
       display: flex
