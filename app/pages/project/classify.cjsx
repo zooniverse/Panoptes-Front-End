@@ -157,7 +157,7 @@ module.exports = React.createClass
           subjects: [subject.id]
 
       if @state.validUserGroup
-        classification.update({ 'metadata.user_group': @props.location.query.group })
+        classification.update({ 'metadata.selected_user_group_id': @props.location.query.group })
 
       # If the user hasn't interacted with a classification resource before,
       # we won't know how to resolve its links, so attach these manually.
