@@ -60,7 +60,7 @@ module.exports = React.createClass
               else
                 details = null
 
-              if isFinite(@props.scale.horizontal)
+              if isFinite(@props.scale.horizontal + @props.scale.vertical)
                 { scale } = @props
               else
                 scale =
