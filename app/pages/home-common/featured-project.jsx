@@ -18,13 +18,13 @@ const FeaturedProject = (() => (
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
       <img
-        alt="Fossil Atmospheres"
+        alt="Project Plumage"
         src="/assets/featured-projects/featured-project-20180108-project_plumage.jpg"
       />
     </div>
     <h2 className="secondary-headline">Project Plumage</h2>
     <p className="display-body">Help us explore bird colour with museum specimens!</p>
-    <Link to="projects/ghthomas/project-plumage</Link>
+    <Link to="projects/ghthomas/project-plumage">View Project!</Link>
   </section>
   )
 );
