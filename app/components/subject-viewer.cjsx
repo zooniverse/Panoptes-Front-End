@@ -127,6 +127,7 @@ module.exports = React.createClass
               aria-label="Toggle flipbook mode"
               title="Toggle flipbook mode"
               onClick={@toggleInFlipbookMode}
+              disabled={@state.loading}
             >
               <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
             </button>
@@ -138,6 +139,7 @@ module.exports = React.createClass
                 aria-label="Toggle flipbook mode"
                 title="Toggle flipbook mode"
                 onClick={@toggleInFlipbookMode}
+                disabled={@state.loading}
               >
                 <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
               </button>}
