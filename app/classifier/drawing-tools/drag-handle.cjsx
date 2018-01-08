@@ -9,6 +9,7 @@ module.exports = React.createClass
 
   render: ->
     matrix = @props.getScreenCurrentTransformationMatrix()
+    return null unless matrix?
     className = "drag-handle"
     if @props.className?
       className += " #{@props.className}"
