@@ -64,8 +64,8 @@ module.exports = React.createClass
                 { scale } = @props
               else
                 scale =
-                  horizontal: 0
-                  vertical: 0
+                  horizontal: 0.001
+                  vertical: 0.001
               toolEnv =
                 containerRect: @props.containerRect
                 scale: scale

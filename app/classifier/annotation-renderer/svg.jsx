@@ -30,8 +30,10 @@ export default class SVGRenderer extends React.Component {
 
   getScale() {
     const sizeRect = this.getSizeRect();
-    const horizontal = sizeRect ? sizeRect.width / this.props.naturalWidth : 0;
-    const vertical = sizeRect ? sizeRect.height / this.props.naturalHeight : 0;
+    let horizontal = this.props.naturalWidth ? sizeRect.width / this.props.naturalWidth : 0.001;
+    let vertical = this.props.naturalHeight ? sizeRect.height / this.props.naturalHeight : 0.001;
+    horizontal = Math.max(horizontal, 0.001);
+    vertical = Math.max(vertical, 0.001);
 
     return { horizontal, vertical };
   }
