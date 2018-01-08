@@ -122,13 +122,23 @@ module.exports = React.createClass
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
           if @props.workflow?.configuration.enable_switching_flipbook_and_separate
-            <button className="secret-button" aria-label="Toggle flipbook mode" title="Toggle flipbook mode" onClick={@toggleInFlipbookMode}>
+            <button
+              className="secret-button"
+              aria-label="Toggle flipbook mode"
+              title="Toggle flipbook mode"
+              onClick={@toggleInFlipbookMode}
+            >
               <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
             </button>
         else
           <span className="tools">
             {if @props.workflow?.configuration.enable_switching_flipbook_and_separate
-              <button className="secret-button" aria-label="Toggle flipbook mode" title="Toggle flipbook mode" onClick={@toggleInFlipbookMode}>
+              <button
+                className="secret-button"
+                aria-label="Toggle flipbook mode"
+                title="Toggle flipbook mode"
+                onClick={@toggleInFlipbookMode}
+              >
                 <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
               </button>}
 
