@@ -63,11 +63,9 @@ function ProjectPreferences({ projects, projectPreferences, onChange }) {
   projects.map(project => projectNames[project.id] = project.display_name);
   const projectIDs = projects.map(proj => proj.id);
   function filterPrefs() {
-    const newPrefs = [];
     return projectPreferences.filter(pref => {
       if (projectIDs.includes(pref.links.project)) {
-        newPrefs.push(pref);
-        return newPrefs;
+        return pref;
       }
     });
   }
