@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Markdown from 'markdownz';
 import LoadingIndicator from '../loading-indicator';
-import { Model } from '../modelling';
+import modelSelector from '../modelling';
 import alert from '../../lib/alert';
 
 
@@ -42,12 +42,8 @@ class CanvasViewer extends React.Component {
       /* eslint-enable no-console */
       return;
     }
-    // component has mounted, initialise the regl canvas
-    this.model = new Model(this.canvas, this.props.subject.metadata);
-
-    // send off the onLoad event
-    console.log('Loaded');
-    requestAnimationFrame(() => this.onLoad({ target: {}}));
+    console.log('Component mounted - creating Model');
+    this.createNewModel(this.props);
   }
   shouldComponentUpdate(nextProps, nextState) {
     // check if a new subject has been provided
@@ -56,26 +52,34 @@ class CanvasViewer extends React.Component {
     }
     // Only re-render when annotation has changed
     // JSON is expensive, so reduce the test as much as possible
-    const newAnnotation = JSON.stringify(
-      nextProps.annotations[nextProps.annotations.length]
-    );
-    const oldAnnotation = JSON.stringify(
-      this.props.annotations[this.props.annotations.length]
-    );
+    const newAnnotation = JSON.stringify(nextProps.annotations);
+    const oldAnnotation = JSON.stringify(this.props.annotations);
     if (newAnnotation !== oldAnnotation) {
-      console.log('rendering model');
+      this.model.update(nextProps.annotations, nextProps.viewBoxDimensions);
     }
     // don't re-render the canvas
     return false;
   }
   componentWillUpdate(nextProps) {
-    console.log('Creating Model');
-    this.model = new Model(this.canvas, nextProps.subject.metadata);
+    if (this.props.src !== nextProps.src) {
+      console.log('Component updated - creating Model');
+      this.createNewModel(nextProps);
+    }
   }
   onLoad(e) {
     const loading = false;
     this.setState({ loading });
     this.props.onLoad(e);
+  }
+  createNewModel(props) {
+    return new Promise((resolve) => {
+      const Model = modelSelector(this.props.workflow);
+      this.model = new Model(this.canvas, props.frame, props.subject.metadata);
+      // run initial render
+      resolve();
+    }).then(
+      () => this.onLoad({ target: {}}),
+    );
   }
   // TODO: choose size from subject metadata. Handle Pan and Zoom, actually
   //       render things...

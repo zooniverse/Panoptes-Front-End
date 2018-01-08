@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
-import baseModel from './baseModel';
+import baseModel from '../baseModel';
 import galaxyRegls from './galaxyRegls';
 import postProcessingRegl from './postProcessingRegl';
 

@@ -53,8 +53,7 @@ function FileViewer(props) {
     Object.assign(
       viewerProps,
       {
-        annotations: props.classification.annotations,
-        // : JSON.parse(JSON.stringify(props.classification.annotations)),
+        annotations: JSON.parse(JSON.stringify(props.classification.annotations)),
         subject: props.subject,
         viewBoxDimensions: props.viewBoxDimensions,
         workflow: props.workflow

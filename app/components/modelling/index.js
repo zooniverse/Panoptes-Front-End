@@ -19,12 +19,19 @@ Proposed usage:
   - calcluate the difference between model and image
 */
 
-// TODO: switch model here depending on project workflow?
+// TODO: get rid of score, should be handled in model
 
-import galaxyModel from './galaxyModel';
-import galaxyScore from './galaxyScore';
+import { Model as galaxyBuilderModel } from './galaxy-builder';
+import { Model as devClassifierModel } from './dev-classifier';
 
-export {
-  galaxyModel as Model,
-  galaxyScore as ModelScore
+export default (workflow) => {
+  // TODO: this should be workflow.configuration.modelling.model or something
+  switch (workflow.id) {
+    case 'MOCK_WORKFLOW_FOR_CLASSIFIER':
+      return devClassifierModel;
+    case 'GALAXY_BUILDER':
+      return galaxyBuilderModel;
+    default:
+      return devClassifierModel;
+  }
 };
