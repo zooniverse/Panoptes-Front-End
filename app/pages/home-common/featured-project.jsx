@@ -19,12 +19,12 @@ const FeaturedProject = (() => (
     <div className="home-featured-images">
       <img
         alt="Fossil Atmospheres"
-        src="/assets/featured-projects/featured-project-20171204-fossil_atmospheres.jpg"
+        src="/assets/featured-projects/featured-project-20180108-project_plumage.jpg"
       />
     </div>
-    <h2 className="secondary-headline">Fossil Atmospheres</h2>
-    <p className="display-body">Help us track climate change over millions of years! Count cells of modern & fossil leaves.</p>
-    <Link to="projects/laurasoul/fossil-atmospheres">View Project!</Link>
+    <h2 className="secondary-headline">Project Plumage</h2>
+    <p className="display-body">Help us explore bird colour with museum specimens!</p>
+    <Link to="projects/ghthomas/project-plumage</Link>
   </section>
   )
 );
