@@ -24,8 +24,9 @@ Proposed usage:
 import { Model as galaxyBuilderModel } from './galaxy-builder';
 import { Model as devClassifierModel } from './dev-classifier';
 
+// TODO: this should be workflow.configuration.modelling.model, or even at the
+//       subject-level (different models for each subject).
 export default (workflow) => {
-  // TODO: this should be workflow.configuration.modelling.model or something
   switch (workflow.id) {
     case 'MOCK_WORKFLOW_FOR_CLASSIFIER':
       return devClassifierModel;

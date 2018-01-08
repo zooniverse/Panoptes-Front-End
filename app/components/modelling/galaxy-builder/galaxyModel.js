@@ -4,6 +4,14 @@ import baseModel from '../baseModel';
 import galaxyRegls from './galaxyRegls';
 import postProcessingRegl from './postProcessingRegl';
 
+// function webGLCompatibilityTest() {
+//   try {
+//     return !!window.WebGLRenderingContext && !!document.createElement('canvas').getContext('experimental-webgl');
+//   } catch (e) {
+//     return false;
+//   }
+// }
+
 const hasComp = c => (c.value[0].value.length > 0);
 
 const parseDisk = (comp, state) => {

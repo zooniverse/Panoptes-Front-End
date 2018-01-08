@@ -5,16 +5,6 @@ import LoadingIndicator from '../loading-indicator';
 import modelSelector from '../modelling';
 import alert from '../../lib/alert';
 
-
-// function to check whether webgl is available
-function webGLCompatibilityTest() {
-  try {
-    return !!window.WebGLRenderingContext && !!document.createElement('canvas').getContext('experimental-webgl');
-  } catch (e) {
-    return false;
-  }
-}
-
 class CanvasViewer extends React.Component {
   constructor(props) {
     super(props);
@@ -25,24 +15,6 @@ class CanvasViewer extends React.Component {
   }
   componentDidMount() {
     // add the canvas and prep for rendering
-    if (!webGLCompatibilityTest()) {
-      // TODO: Render an error message to the screen
-      /* eslint-disable no-console */
-      alert(
-        (resolve, reject) =>
-          (
-            <div className="content-container">
-              <Markdown className="classification-task-help">
-                WebGL is required for this project, please try again using an updated browser.
-              </Markdown>
-              <button className="standard-button" onClick={reject}>Close</button>
-            </div>
-          )
-      );
-      /* eslint-enable no-console */
-      return;
-    }
-    console.log('Component mounted - creating Model');
     this.createNewModel(this.props);
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -50,11 +22,11 @@ class CanvasViewer extends React.Component {
     if (this.state.loading !== nextState.loading || this.props.src !== nextProps.src) {
       return true;
     }
-    // Only re-render when annotation has changed
+    // Only re-render when annotation has changed, or we have zoomed/panned
     // JSON is expensive, so reduce the test as much as possible
-    const newAnnotation = JSON.stringify(nextProps.annotations);
-    const oldAnnotation = JSON.stringify(this.props.annotations);
-    if (newAnnotation !== oldAnnotation) {
+    if (JSON.stringify(nextProps.annotations) !== JSON.stringify(this.props.annotations)) {
+      this.model.update(nextProps.annotations, nextProps.viewBoxDimensions);
+    } else if (JSON.stringify(nextProps.viewBoxDimensions) !== JSON.stringify(this.props.viewBoxDimensions)) {
       this.model.update(nextProps.annotations, nextProps.viewBoxDimensions);
     }
     // don't re-render the canvas
@@ -62,7 +34,6 @@ class CanvasViewer extends React.Component {
   }
   componentWillUpdate(nextProps) {
     if (this.props.src !== nextProps.src) {
-      console.log('Component updated - creating Model');
       this.createNewModel(nextProps);
     }
   }
@@ -72,13 +43,24 @@ class CanvasViewer extends React.Component {
     this.props.onLoad(e);
   }
   createNewModel(props) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const Model = modelSelector(this.props.workflow);
       this.model = new Model(this.canvas, props.frame, props.subject.metadata);
-      // run initial render
-      resolve();
+      if (this.model !== false) {
+        resolve();
+      } else {
+        reject();
+      }
     }).then(
       () => this.onLoad({ target: {}}),
+      () => alert((resolve, reject) => (
+        <div className="content-container">
+          <Markdown className="classification-task-help">
+            Could not load model
+          </Markdown>
+          <button className="standard-button" onClick={reject}>Close</button>
+        </div>
+      )),
     );
   }
   // TODO: choose size from subject metadata. Handle Pan and Zoom, actually
