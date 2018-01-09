@@ -92,7 +92,7 @@ class Classifier extends React.Component {
       this.updateAnnotations();
     }
 
-    if (currentAnnotation.task !== prevAnnotation.task) {
+    if (prevAnnotation && currentAnnotation.task !== prevAnnotation.task) {
       this.checkForFeedback(prevAnnotation.task);
     }
   }
