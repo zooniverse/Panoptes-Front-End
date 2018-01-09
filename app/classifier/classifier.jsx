@@ -77,7 +77,7 @@ class Classifier extends React.Component {
     }
 
     if (nextProps.classification !== this.props.classification) {
-      const { annotations } = nextProps.classification;
+      const annotations = nextProps.classification.annotations.slice();
       this.setState({ annotations });
     }
   }
@@ -224,7 +224,7 @@ class Classifier extends React.Component {
   }
 
   handleAnnotationChange(classification, newAnnotation) {
-    const { annotations } = classification;
+    const annotations  = classification.annotations.slice();
     annotations[annotations.length - 1] = newAnnotation;
     classification.update({ annotations });
     this.setState({ annotations });
