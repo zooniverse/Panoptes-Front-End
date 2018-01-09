@@ -46,8 +46,8 @@ class WorkflowSelection extends React.Component {
       }
     } else if (this.props.location.query &&
       this.props.location.query.workflow &&
-      project.experimentalTools &&
-      project.experimentalTools.indexOf('allow workflow query') > -1
+      project.experimental_tools &&
+      project.experimental_tools.indexOf('allow workflow query') > -1
     ) {
       selectedWorkflowID = this.props.location.query.workflow;
       if (preferences && preferences.preferences.selected_workflow !== selectedWorkflowID) {
