@@ -23,6 +23,7 @@ module.exports = React.createClass
 
   render: ->
     matrix = @props.getScreenCurrentTransformationMatrix()
+    return null unless matrix?
     transform = "
       translate(#{@props.x}, #{@props.y})
       rotate(#{@props.rotate})

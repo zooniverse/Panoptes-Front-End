@@ -60,9 +60,15 @@ module.exports = React.createClass
               else
                 details = null
 
+              if isFinite(@props.scale.horizontal + @props.scale.vertical)
+                { scale } = @props
+              else
+                scale =
+                  horizontal: 0.001
+                  vertical: 0.001
               toolEnv =
                 containerRect: @props.containerRect
-                scale: @props.scale
+                scale: scale
                 disabled: isPriorAnnotation
                 selected: mark is @state.selection and not isPriorAnnotation
                 getEventOffset: @props.getEventOffset
