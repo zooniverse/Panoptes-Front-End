@@ -1,5 +1,6 @@
 React = require 'react'
 drawingTools = require '../../drawing-tools'
+strategies = require('../../../features/feedback/shared/strategies').default
 
 module.exports = React.createClass
   displayName: 'MarkingsRenderer'
@@ -43,7 +44,15 @@ module.exports = React.createClass
         taskDescription = @props.tasks[annotation.task]
         if taskDescription.type is 'drawing'
           <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
+
+            {annotation.feedback?.map (item) ->
+              key = Math.random()
+              FeedbackMark = strategies[item.strategy].FeedbackMark
+              <FeedbackMark key={key} rule={item} />
+            }
+
             {for mark, i in annotation.value when @props.workflow?.configuration.multi_image_clone_markers or parseInt(mark.frame) is parseInt(@props.frame)
+
               mark._key ?= Math.random()
 
               if skippedMarks < @props.classification._hideMarksBefore and not @props.classification.completed

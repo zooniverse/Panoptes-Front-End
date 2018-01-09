@@ -1,6 +1,8 @@
+
 import React, { PropTypes } from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
+import SubjectViewer from '../../../../components/subject-viewer';
 
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
@@ -11,14 +13,14 @@ counterpart.registerTranslations('en', {
 });
 /* eslint-enable max-len */
 
-function FeedbackModal({ messages }) {
-  console.info('messages', messages);
+function FeedbackModal({ messages, subjectViewerProps }) {
   return (
-    <section>
+    <section className="feedbackmodal">
       <Translate content="FeedbackModal.title" component="h2" />
+      {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
       <ul>
         {messages.map(message =>
-          <li key={message}>
+          <li key={Math.random()}>
             {message}
           </li>
         )}
@@ -33,7 +35,8 @@ function FeedbackModal({ messages }) {
 }
 
 FeedbackModal.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.string)
+  messages: PropTypes.arrayOf(PropTypes.string),
+  subjectViewerProps: PropTypes.object
 };
 
 export default FeedbackModal;
