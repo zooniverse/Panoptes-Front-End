@@ -87,21 +87,33 @@ class OrganizationPage extends React.Component {
               <Translate content="organization.home.viewToggle" />
             </label>}
           {this.props.organization.categories && this.props.organization.categories.length > 0 &&
-            <div className="organization-page__categories">
-              <button
+            <div className="organization-page__categories" ref={(node) => { this.categories = node; }}>
+              <label
                 className={this.calculateClasses('All')}
-                onClick={this.handleCategoryChange.bind(this, '')}
+                htmlFor="all"
               >
+                <input
+                  className="organization-page__category-button--hidden"
+                  id="all"
+                  onClick={this.handleCategoryChange.bind(this, '')}
+                  type="radio"
+                />
                 All
-              </button>
+              </label>
               {this.props.organization.categories.map(category =>
-                <button
-                  key={category}
+                <label
                   className={this.calculateClasses(category)}
-                  onClick={this.handleCategoryChange.bind(this, category)}
+                  htmlFor={category}
+                  key={category}
                 >
+                  <input
+                    className="organization-page__category-button--hidden"
+                    id={category}
+                    onClick={this.handleCategoryChange.bind(this, category)}
+                    type="radio"
+                  />
                   {category}
-                </button>)}
+                </label>)}
             </div>}
           <OrganizationProjectCards
             errorFetchingProjects={this.props.errorFetchingProjects}
