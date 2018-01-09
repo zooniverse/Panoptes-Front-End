@@ -45,8 +45,7 @@ class Classifier extends React.Component {
       showingExpertClassification: false,
       subjectLoading: false,
       annotations: [],
-      modelScore: null,
-      currentTaskId: null
+      modelScore: null
     };
   }
 
@@ -84,34 +83,17 @@ class Classifier extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
+    const prevAnnotation = prevState.annotations[prevState.annotations.length - 1];
+
     if (prevProps.classification !== this.props.classification) {
       prevProps.classification.stopListening('change', this.updateAnnotations);
       this.props.classification.listen('change', this.updateAnnotations);
       this.updateAnnotations();
     }
 
-    // We need to know when the active task changes in order to open the
-    // feedback modal. Unfortunately, since we mutate props, we can't compare
-    // state very easily. So we store the current task in state, check to see
-    // when it changes, update state and use _that_ change to check the
-    // _previous_ task for feedback.
-    //
-    // The second part of this hack is using forceUpdate - there's a re-render
-    // happening simultaneously somewhere, so this ensures the subsequent saved
-    // of the new task id to state only happens once, since it's not in the same
-    // batched update.
-    //
-    // This is a really hacky solution, but fixing this properly would required
-    // an extensive rewrite :( Note also that using setState in
-    // componentDidUpdate is a linting error, and with good reason.
-    const currentTaskId = _.get(_.last(this.state.annotations), 'task', '');
-
-    if (prevState.currentTaskId !== currentTaskId) {
-      this.setState({ currentTaskId }, () => this.forceUpdate());
-    }
-
-    if (prevState.currentTaskId !== this.state.currentTaskId) {
-      this.checkForFeedback(prevState.currentTaskId);
+    if (currentAnnotation.task !== prevAnnotation.task) {
+      this.checkForFeedback(prevAnnotation.task);
     }
   }
 
@@ -125,7 +107,7 @@ class Classifier extends React.Component {
   }
 
   getActiveTask(state) {
-    const annotation = _.last(state.annotations);
+    const annotation = state.annotations[state.annotations.length - 1];
     return (annotation) ? this.props.workflow.tasks[annotation.task] : null;
   }
 
@@ -173,7 +155,7 @@ class Classifier extends React.Component {
   }
 
   updateAnnotations() {
-    const { annotations } = this.props.classification;
+    const annotations = this.props.classification.annotations.slice();
     this.setState({ annotations });
     if (this.props.feedback.active) {
       this.updateFeedback();
@@ -185,11 +167,11 @@ class Classifier extends React.Component {
     // to check the entire annotation array, as the user may be editing an
     // existing annotation.
     let isInProgress = false;
-    const { annotations } = this.props.classification;
+    const { annotations } = this.state;
     const { workflow } = this.props;
-    const { currentTaskId } = this.state;
+    const currentAnnotation = annotations[annotations.length - 1];
 
-    const currentTask = workflow.tasks[currentTaskId] || null;
+    const currentTask = workflow.tasks[currentAnnotation.task] || null;
 
     if (currentTask && currentTask.type === 'drawing') {
       isInProgress = annotations.reduce((result, annotation) => {
@@ -199,7 +181,7 @@ class Classifier extends React.Component {
     }
 
     if (!isInProgress) {
-      this.props.actions.feedback.update(_.last(annotations));
+      this.props.actions.feedback.update(currentAnnotation);
     }
   }
 
@@ -242,13 +224,15 @@ class Classifier extends React.Component {
   }
 
   handleAnnotationChange(classification, newAnnotation) {
-    classification.annotations[classification.annotations.length - 1] = newAnnotation;
-    classification.update('annotations');
+    const { annotations } = classification;
+    annotations[annotations.length - 1] = newAnnotation;
+    classification.update({ annotations });
+    this.setState({ annotations });
   }
 
   completeClassification() {
-    const lastTaskId = _.last(this.state.annotations).task;
-    this.checkForFeedback(lastTaskId)
+    const currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
+    this.checkForFeedback(currentAnnotation.task)
       .then(() => {
         if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
           this.props.onCompleteAndLoadAnotherSubject();
