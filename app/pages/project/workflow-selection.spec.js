@@ -130,6 +130,11 @@ describe('WorkflowSelection', () => {
     wrapper.update();
   });
 
+  afterEach(() => {
+    project.experimental_tools = [];
+    location.query = {};
+  });
+
   after(() => {
     apiClient.request.restore();
   });
@@ -139,6 +144,14 @@ describe('WorkflowSelection', () => {
     const selectedWorkflowID = workflowSpy.getCall(0).args[0];
     sinon.assert.calledOnce(workflowSpy);
     assert.notEqual(project.links.active_workflows.indexOf(selectedWorkflowID), -1);
+  });
+
+  it('should respect the workflow query param if "allow workflow query" is set', () => {
+    location.query.workflow = '6';
+    project.experimental_tools = ['allow workflow query'];
+    controller.getSelectedWorkflow({ project });
+    sinon.assert.calledOnce(workflowSpy);
+    sinon.assert.calledWith(workflowSpy, '6', true);
   });
 
   describe('with a logged-in user', () => {
