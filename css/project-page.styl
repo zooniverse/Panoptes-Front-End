@@ -119,23 +119,28 @@
   flex: 1 0 auto
   justify-content: center
 
-  button, a.standard-button
+  &__button, a.project-home-page__button
     background: white
     border: 2px solid #00979d
     border-radius: .5em
     color: #00979d
+    display: inline-block
+    font-weight: 700
+    line-height: 1.7em
     margin-right: 1.5em
+    margin-top: 10px
     padding: 0.8em 1.4vw
+    text-decoration: none
 
-    &:hover
+    &:hover, &:focus
       background: #00979d
       border: 2px solid #00979d
       color: white
 
-  h4
+  &__small-header
     text-transform: uppercase
 
-  .call-to-action-container
+  &__finished-banner-container
     align-items: center
     display flex
     flex: 1 0 auto
@@ -163,23 +168,25 @@
     display: flex
     flex-flow: row wrap
 
-  &__centering
+  &__call-to-action
     text-align: center
     padding: 5vh 10vw 15vh 10vw
-
-    .learn-more
-      background: transparent
+    
+    .call-to-action__button
       border: 2px solid white
-      color: white
 
-      &:hover
-        background-color: white
+      &--learn-more
+        background: transparent
+        color: white
+
+        &:hover
+          background-color: white
+          border: 2px solid white
+          color: #00979d
+
+      &--get-started
         border: 2px solid white
-        color: #00979d
-
-    .get-started
-      border: 2px solid white
-      outline: none
+        outline: none
 
   &__organization
     color: white
@@ -210,16 +217,26 @@
     color: #0f7481
     padding: 5vh 10vw
 
-  .call-to-action-button--disabled
-    background: white
-    border: 2px solid #00979d
-    border-radius: .5em
-    color: #00979d
-    cursor: not-allowed
-    margin-right: 1.5em
-    padding: 0.8em 1.4vw
-    pointer-events: none
-    opacity: 0.4
+  .project-home-workflow-buttons
+    &__workflow-choice-container
+      background-color: white
+      box-shadow: 0 3px 3px 0px rgb(239,242,245)
+      position: relative
+      
+      .workflow-choice-container__call-to-action
+        display: block
+
+    .project-home-page__button, a.project-home-page__button
+      &--disabled
+        background: white
+        border: 2px solid #00979d
+        border-radius: .5em
+        color: #00979d
+        cursor: not-allowed
+        margin-right: 1.5em
+        padding: 0.8em 1.4vw
+        pointer-events: none
+        opacity: 0.4
 
   &__researcher-words
     background-color: white
@@ -343,32 +360,6 @@
     border-bottom: 12px solid transparent
     border-right: 25px solid white
     border-top: 12px solid transparent
-
-  .workflow-choice
-    background-color: white
-    box-shadow: 0 3px 3px 0px rgb(239,242,245)
-    position: relative
-    z-index: 1
-
-    h4
-      margin-bottom: 1em
-      text-transform: none
-
-  .workflow-choice:before
-    position: absolute
-    left: 55%
-    bottom: 100%
-    width: 0
-    height: 0
-    content: " "
-    border-bottom: 20px solid white
-    border-left: 10px solid transparent
-    border-right: 10px solid transparent
-
-  .standard-button
-    margin-top: 10px
-    font-weight: 700
-    line-height: 1.7em
 
   .markdown
     line-height: 1.4em

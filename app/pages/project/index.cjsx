@@ -114,7 +114,10 @@ ProjectPageController = React.createClass
 
         if project?
           # Use apiClient with cached resources from include to get out of cache
-          awaitBackground = apiClient.type('backgrounds').get(project.links.background.id).catch((error) => [])
+          awaitBackground = apiClient.type('backgrounds').get(project.links.background.id)
+          .catch((error) =>
+            if error.status is 404 then { src: '' } else console.error(error)
+          )
 
           if project.links?.organization?
             awaitOrganization = project.get('organization', { listed: true })

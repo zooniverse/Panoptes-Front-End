@@ -24,7 +24,7 @@ const ProjectHomePage = (props) => {
         <ProjectNavbar {...props} />
 
         {props.projectIsComplete &&
-          (<div className="call-to-action-container">
+          (<div className="project-home-page__finished-banner-container">
             <FinishedBanner project={props.project} />
           </div>)}
 
@@ -45,6 +45,19 @@ const ProjectHomePage = (props) => {
           {props.translation.description}
         </div>
 
+        <div className="project-home-page__call-to-action">
+          <Link to={`/projects/${props.project.slug}/about`} className="project-home-page__button call-to-action__button call-to-action__button--learn-more">
+            <Translate content="project.home.learnMore" />
+          </Link>
+          {!props.showWorkflowButtons &&
+            <Link
+              to={`/projects/${props.project.slug}/classify`}
+              className="project-home-page__button call-to-action__button call-to-action__button--get-started"
+            >
+              <Translate content="project.home.getStarted" />
+            </Link>}
+        </div>
+
         <ProjectHomeWorkflowButtons
           activeWorkflows={props.activeWorkflows}
           onChangePreferences={props.onChangePreferences}
@@ -54,6 +67,7 @@ const ProjectHomePage = (props) => {
           showWorkflowButtons={props.showWorkflowButtons}
           workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
           splits={props.splits}
+          user={props.user}
         />
       </div>
 
@@ -93,7 +107,7 @@ const ProjectHomePage = (props) => {
       <div className="project-home-page__container">
         {props.project.researcher_quote && (
           <div className="project-home-page__researcher-words">
-            <h4><Translate content="project.home.researcher" /></h4>
+            <h4 className="project-home-page__small-header"><Translate content="project.home.researcher" /></h4>
 
             <div>
               <img role="presentation" src={avatarSrc} />
@@ -102,7 +116,7 @@ const ProjectHomePage = (props) => {
           </div>)}
 
         <div className="project-home-page__about-text">
-          <h4>
+          <h4 className="project-home-page__small-header">
             <Translate
               content="project.home.about"
               with={{
@@ -133,7 +147,8 @@ ProjectHomePage.defaultProps = {
   projectIsComplete: false,
   showWorkflowButtons: false,
   splits: {},
-  talkSubjects: []
+  talkSubjects: [],
+  user: null
 };
 
 ProjectHomePage.propTypes = {
@@ -154,7 +169,8 @@ ProjectHomePage.propTypes = {
     experimental_tools: React.PropTypes.arrayOf(React.PropTypes.string),
     id: React.PropTypes.string,
     introduction: React.PropTypes.string,
-    researcher_quote: React.PropTypes.string
+    researcher_quote: React.PropTypes.string,
+    slug: React.PropTypes.string
   }).isRequired,
   projectIsComplete: React.PropTypes.bool.isRequired,
   researcherAvatar: React.PropTypes.string,
@@ -167,7 +183,8 @@ ProjectHomePage.propTypes = {
     introduction: React.PropTypes.string,
     researcher_quote: React.PropTypes.string,
     title: React.PropTypes.string
-  }).isRequired
+  }).isRequired,
+  user: React.PropTypes.object
 };
 
 export default ProjectHomePage;
