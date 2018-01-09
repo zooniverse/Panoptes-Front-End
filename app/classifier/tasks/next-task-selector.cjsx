@@ -18,7 +18,7 @@ module.exports = React.createClass
     tasks = require('.').default # Work around circular dependency.
 
     <select name={@props.name} value={@props.value} onChange={@props.onChange}>
-      <option value="">(End of classification!)</option>
+      <option value="">(Submit classification and load next subject)</option>
       {for key, definition of @props.workflow.tasks
         unless definition.type is 'shortcut'
           text = tasks[definition.type].getTaskText definition
