@@ -180,7 +180,7 @@ EditSubjectSetPage = React.createClass
       <p className="form-help">
         {@subjectLimitMessage(@props.project.subjects_count, @props.user)} Please <a href='https://www.zooniverse.org/about/contact'> contact us</a> to request changes to your allowance.
       </p>
-      <p className="form-help"><strong>We strongly recommend uploading subjects in batches of 500 - 1,000 at a time. When uploading large numbers of subjects, we recommend using our <a href="https://github.com/zooniverse/panoptes-cli#installation"> Panoptes command line interface </a> or our <a href="http://panoptes-python-client.readthedocs.io/en/v1.0/"> Panoptes Client package for Python </a> rather than the web portal.</strong></p>
+      <p className="form-help"><strong>We strongly recommend uploading subjects in batches of 500 - 1,000 at a time. When uploading large numbers of subjects, we recommend using our <a href="https://github.com/zooniverse/panoptes-cli#installation"> Panoptes command line interface </a> or our <a href="http://panoptes-python-client.readthedocs.io/"> Panoptes Client package for Python </a> rather than the web portal.</strong></p>
 
       <form onSubmit={@handleSubmit}>
         <p>
