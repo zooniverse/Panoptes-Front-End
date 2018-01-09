@@ -483,7 +483,12 @@ $flex-section
         background-position: center
         height: 14em
         margin: 0.5em 1em 0.5em 0
-        width: 18em
+        width: 16em
+
+        @media(max-width: 400px)
+          height: 10em
+          margin: 1em auto
+          width: 12em
 
       div:nth-child(2)
         flex: 2 0 0%
@@ -526,6 +531,9 @@ $flex-section
       margin-top: 1.5vh
       overflow: hidden
       width: 20em
+
+      @media(max-width: 400px)
+        width: 15em
 
       i
         color: TEAL_MID
@@ -577,6 +585,9 @@ $flex-section
       margin-right: 3em
       max-width: 100%
       min-width: 16em
+
+      @media(max-width: 400px)
+        margin-right: 0
 
       div, span
         width: 100%
