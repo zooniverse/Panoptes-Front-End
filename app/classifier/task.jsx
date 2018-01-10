@@ -1,6 +1,5 @@
 import React from 'react';
 import tasks from './tasks';
-import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
 import TaskTranslations from './tasks/translations';
 
@@ -52,10 +51,6 @@ class Task extends React.Component {
 
     return (
       <div className="task-container" style={this.props.subjectLoading ? disabledStyle : null}>
-        <Intervention
-          project={this.props.project}
-          user={this.props.user}
-        />
         <div className="coverable-task-container">
           {persistentHooksBeforeTask.map((HookComponent, i) => {
             const key = i + Math.random();

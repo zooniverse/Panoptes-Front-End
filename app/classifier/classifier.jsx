@@ -17,8 +17,6 @@ import Task from './task';
 import RestartButton from './restart-button';
 import MiniCourse from './mini-course';
 import Tutorial from './tutorial';
-import interventionMonitor from '../lib/intervention-monitor';
-import experimentsClient from '../lib/experiments-client';
 import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import * as feedbackActions from '../redux/ducks/feedback';
@@ -256,22 +254,7 @@ class Classifier extends React.Component {
           this.props.onCompleteAndLoadAnotherSubject();
         } else {
           this.props.onComplete()
-            .then((classification) => {
-              // after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
-              const experimentName = experimentsClient.checkForExperiment(this.props.project.slug);
-              if (experimentName && this.props.user) {
-                experimentsClient.postDataToExperimentServer(
-                  interventionMonitor,
-                  this.context.geordi,
-                  experimentName,
-                  this.props.user.id,
-                  classification.metadata.session,
-                  'classification',
-                  classification.id
-                );
-              }
-            },
-            error => console.error(error));
+            .catch(error => console.error(error));
         }
       });
   }
