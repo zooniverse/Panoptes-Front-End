@@ -217,8 +217,7 @@ class Classifier extends React.Component {
   handleAnnotationChange(classification, newAnnotation) {
     const annotations  = classification.annotations.slice();
     annotations[annotations.length - 1] = newAnnotation;
-    classification.update({ annotations });
-    this.setState({ annotations });
+    this.updateAnnotations(annotations);
   }
 
   completeClassification() {
