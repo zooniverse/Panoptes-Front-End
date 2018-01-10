@@ -95,6 +95,7 @@ class OrganizationPage extends React.Component {
                 <input
                   className="organization-page__category-button--hidden"
                   id="all"
+                  name="category"
                   onClick={this.handleCategoryChange.bind(this, '')}
                   type="radio"
                 />
@@ -109,6 +110,7 @@ class OrganizationPage extends React.Component {
                   <input
                     className="organization-page__category-button--hidden"
                     id={category}
+                    name="category"
                     onClick={this.handleCategoryChange.bind(this, category)}
                     type="radio"
                   />
