@@ -148,8 +148,8 @@ class Classifier extends React.Component {
       }));
   }
 
-  updateAnnotations() {
-    const annotations = this.props.classification.annotations.slice();
+  updateAnnotations(annotations) {
+    annotations = annotations || this.props.classification.annotations.slice();
     this.setState({ annotations });
     if (this.props.feedback.active) {
       this.updateFeedback();
@@ -331,6 +331,7 @@ class Classifier extends React.Component {
             subject={this.props.subject}
             task={currentTask}
             workflow={this.props.workflow}
+            updateAnnotations={this.updateAnnotations}
           >
             {!!this.props.expertClassifier &&
               <ExpertOptions
