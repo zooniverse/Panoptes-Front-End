@@ -30,7 +30,6 @@ window.cachedClassification = CacheClassification;
 class Classifier extends React.Component {
   constructor(props) {
     super(props);
-    this.getActiveTask = this.getActiveTask.bind(this);
     this.handleAnnotationChange = this.handleAnnotationChange.bind(this);
     this.handleModelScoreUpdate = this.handleModelScoreUpdate.bind(this);
     this.handleSubjectImageLoad = this.handleSubjectImageLoad.bind(this);
@@ -104,11 +103,6 @@ class Classifier extends React.Component {
     } catch (err) {
       console.error(err);
     }
-  }
-
-  getActiveTask(state) {
-    const annotation = state.annotations[state.annotations.length - 1];
-    return (annotation) ? this.props.workflow.tasks[annotation.task] : null;
   }
 
   getExpertClassification(workflow, subject) {
