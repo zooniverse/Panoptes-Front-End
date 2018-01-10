@@ -304,6 +304,7 @@ class Classifier extends React.Component {
               task={currentTask}
               annotation={currentAnnotation}
               subjectLoading={this.state.subjectLoading}
+              updateAnnotations={this.updateAnnotations}
             /> :
             <ClassificationSummary
               project={this.props.project}
