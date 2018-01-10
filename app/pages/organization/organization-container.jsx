@@ -48,7 +48,11 @@ class OrganizationContainer extends React.Component {
     }
 
     if (this.state.organization && (nextProps.location.query !== this.props.location.query)) {
-      this.fetchProjects(this.state.organization, this.state.collaboratorView, nextProps.location.query);
+      this.fetchProjects(
+        this.state.organization,
+        ((isAdmin() || this.isCollaborator()) && this.state.collaboratorView),
+        nextProps.location.query
+      );
     }
   }
 
