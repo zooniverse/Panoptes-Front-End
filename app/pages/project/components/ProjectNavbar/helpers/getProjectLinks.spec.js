@@ -102,8 +102,15 @@ describe('getProjectLinks', function() {
     });
 
     describe('who has admin privileges', function() {
-      it('returns the admin link if the user is an admin', function() {
+      before(function() {
         apiClient.params.admin = true; // to get the isAdmin() helper function to return true for this test.
+      });
+
+      after(function() {
+        apiClient.params.admin = false;
+      });
+
+      it('returns the admin link if the user is an admin', function() {
         const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow, user: adminUser });
         expect(Object.keys(navLinks).indexOf('admin') > -1).to.be.true;
       });
