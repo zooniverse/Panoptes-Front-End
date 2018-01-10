@@ -253,3 +253,10 @@ Drawing annotation value are as follows:
 - **bezier:** The same as polygon, but every odd-indexed point is the coordinate of the control point of a quadratic bezier curve.
 
 - **column:** The left-most `x` pixel and the `width` of the column selection.
+
+## Acknowledgements
+
+Thanks to [BrowserStack](https://www.browserstack.com) for supporting open
+source and allowing us to test this project on multiple platforms.
+
+[![BrowserStack logo](https://static.zooniverse.org/browserstack-logo-300x158.png)](https://www.browserstack.com)
