@@ -4,7 +4,6 @@ import { VisibilitySplit } from 'seven-ten';
 import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import _ from 'lodash';
 
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
@@ -125,7 +124,7 @@ class Classifier extends React.Component {
   }
 
   checkForFeedback(taskId) {
-    const taskFeedback = _.get(this.props.feedback, `rules.${taskId}`, []);
+    const taskFeedback = this.props.feedback[`rules.${taskId}`] || [];
 
     if (!this.props.feedback.active || !taskFeedback.length) {
       return Promise.resolve(false);
