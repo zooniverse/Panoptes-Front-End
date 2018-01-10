@@ -8,19 +8,19 @@ import ProjectNavbarWide from './components/ProjectNavbarWide';
 function haveNavLinksChanged(oldProps, newProps) {
   const oldNavLinks = _.map(oldProps.navLinks, 'label');
   const newNavLinks = _.map(newProps.navLinks, 'label');
-  return _.difference(newNavLinks, oldNavLinks).length > 0;
+  return _.difference(newNavLinks, oldNavLinks).length > 0 || oldNavLinks.length !== newNavLinks.length;
 }
 
 function hasTitleChanged(oldProps, newProps) {
   return oldProps.projectTitle !== newProps.projectTitle;
 }
 
-class ProjectNavbar extends Component {
+export class ProjectNavbar extends Component {
   constructor(props) {
     super(props);
     this.setBreakpoint = this.setBreakpoint.bind(this);
     this.state = {
-      breakpoint: false
+      breakpoint: 0
     };
   }
 

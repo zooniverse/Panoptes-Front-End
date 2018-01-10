@@ -1,44 +1,17 @@
 import { expect } from 'chai';
-import apiClient from'panoptes-client/lib/api-client';
+import apiClient from 'panoptes-client/lib/api-client';
 import getProjectLinks from './getProjectLinks';
+import {
+  adminUser,
+  projectOwnerUser,
+  projectCollabUser,
+  projectRoles,
+  projectWithRedirect,
+  projectWithoutRedirect,
+  randomUser,
+  workflow
+} from '../testHelpers';
 
-const projectOwner = {
-  id: '52',
-  links: {
-    owner: { id: '4' }
-  },
-  roles: ['owner']
-};
-
-const projectCollab = {
-  id: '93',
-  links: {
-    owner: { id: '5' }
-  },
-  roles: ['collaborator']
-};
-
-const projectRoles = [projectOwner, projectCollab];
-
-const projectOwnerUser = { id: '4' };
-
-const projectCollabUser = { id: '5' };
-
-const randomUser = { id: '10' };
-
-const adminUser = { id: '36', admin: true };
-
-const projectWithoutRedirect = {
-  id: '2',
-  slug: 'zooniverse/find-the-thing'
-};
-
-const projectWithRedirect = {
-  id: '3',
-  redirect: 'https://www.redirected-project.org'
-};
-
-const workflow = { id: '35' };
 
 describe('getProjectLinks', function() {
   it('uses the project slug in building the navbar links', function() {

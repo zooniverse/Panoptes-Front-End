@@ -1,29 +1,11 @@
 import { expect } from 'chai';
 import userHasLabAccess from './userHasLabAccess';
-
-const projectOwner = {
-  id: '52',
-  links: {
-    owner: { id: '4' }
-  },
-  roles: ['owner']
-};
-
-const projectCollab = {
-  id: '93',
-  links: {
-    owner: { id: '5' }
-  },
-  roles: ['collaborator']
-};
-
-const projectRoles = [projectOwner, projectCollab];
-
-const projectOwnerUser = { id: '4' };
-
-const projectCollabUser = { id: '5' };
-
-const randomUser = { id: '10' };
+import {
+  projectOwnerUser,
+  projectCollabUser,
+  projectRoles,
+  randomUser
+} from '../testHelpers';
 
 describe('userHasLabAccess', function() {
   it('returns false if projectRoles does not have any roles', function() {
