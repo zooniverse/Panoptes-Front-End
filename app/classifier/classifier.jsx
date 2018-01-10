@@ -169,7 +169,7 @@ class Classifier extends React.Component {
     let isInProgress = false;
     const { annotations } = this.state;
     const { workflow } = this.props;
-    const currentAnnotation = annotations[annotations.length - 1];
+    const currentAnnotation = annotations[annotations.length - 1] || {};
 
     const currentTask = workflow.tasks[currentAnnotation.task] || null;
 
