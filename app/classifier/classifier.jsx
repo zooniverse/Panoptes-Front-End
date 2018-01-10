@@ -234,6 +234,7 @@ class Classifier extends React.Component {
           this.props.onComplete()
             .catch(error => console.error(error));
         }
+        this.setState({ annotations: [{}] });
       });
   }
 
