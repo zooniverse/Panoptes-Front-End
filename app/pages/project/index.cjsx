@@ -39,7 +39,6 @@ ProjectPageController = React.createClass
     guide: null
     guideIcons: {}
     loading: false
-    loadingSelectedWorkflow: false
     organization: null
     owner: null
     preferences: null
@@ -48,7 +47,6 @@ ProjectPageController = React.createClass
     projectIsComplete: false
     projectRoles: null
     splits: null
-    workflow: null
 
   _listenedToPreferences: null
 
