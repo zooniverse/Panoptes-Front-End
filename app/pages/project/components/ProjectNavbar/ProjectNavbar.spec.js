@@ -16,7 +16,7 @@ import {
   workflow
 } from './testHelpers';
 
-describe.only('ProjectNavbar', function() {
+describe('ProjectNavbar', function() {
   const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow, user: projectOwnerUser });
   const navLinksWithLabels = buildLinksWithLabels(navLinks);
 
@@ -53,21 +53,25 @@ describe.only('ProjectNavbar', function() {
     });
 
     it('should set the breakpoint on update if the projectTitle changes', function() {
+      // const prevState = wrapper.state('breakpoint');
       wrapper.setProps({ projectTitle: 'A new title' });
       expect(setBreakpointSpy.calledTwice).to.be.true;
+      // expect(prevState).to.not.equal(wrapper.state('breakpoint'));
     });
 
     it('should set the breakpoint on update if the navLinks change', function() {
+      // const prevState = wrapper.state('breakpoint');
       const newNavLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow, user: null });
       const newNavLinksWithLabels = buildLinksWithLabels(newNavLinks);
       wrapper.setProps({ navLinks: newNavLinksWithLabels });
       expect(setBreakpointSpy.calledThrice).to.be.true;
+      // expect(prevState).to.not.equal(wrapper.state('breakpoint'));
     });
   });
 
   describe('rendering children components', function() {
     let wrapper;
-    before(function() {
+    beforeEach(function() {
       wrapper = mount(
         <ProjectNavbar
           navLinks={navLinksWithLabels}
@@ -82,10 +86,10 @@ describe.only('ProjectNavbar', function() {
       expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(0);
     });
 
-    it.only('renders ProjectNavbarNarrow if props.width is less than state.breakpoint', function() {
-      wrapper.setProps({ width: 400 });
-      expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
-      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(1);
-    });
+    // it('renders ProjectNavbarNarrow if props.width is less than state.breakpoint', function() {
+    //   wrapper.setProps({ width: 400 });
+    //   expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
+    //   expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(1);
+    // });
   });
 });
