@@ -124,9 +124,10 @@ class Classifier extends React.Component {
   }
 
   checkForFeedback(taskId) {
-    const taskFeedback = this.props.feedback[`rules.${taskId}`] || [];
+    const { feedback } = this.props;
+    const taskFeedback = (feedback.rules && feedback.rules[taskId]) ? feedback.rules[taskId] : [];
 
-    if (!this.props.feedback.active || !taskFeedback.length) {
+    if (!feedback.active || !taskFeedback.length) {
       return Promise.resolve(false);
     }
 
