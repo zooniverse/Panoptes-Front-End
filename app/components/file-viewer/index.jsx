@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { cloneDeep } from 'lodash';
 import VideoPlayer from './video-player';
 import AudioPlayer from './audio-player';
 import TextViewer from './text-viewer';
@@ -23,7 +24,7 @@ const VIEWERS = {
   text: TextViewer,
   video: VideoPlayer,
   audio: AudioPlayer,
-  canvas: CanvasViewer
+  application: CanvasViewer
 };
 
 function subjectViewerSelector(props) {
@@ -49,14 +50,14 @@ function FileViewer(props) {
     onFocus: props.onFocus,
     onBlur: props.onBlur
   };
-  if (props.type === 'canvas') {
+  if (props.type === 'application') {
     Object.assign(
       viewerProps,
       {
-        annotations: JSON.parse(JSON.stringify(props.classification.annotations)),
+        annotation: cloneDeep(props.annotation),
+        annotations: props.classification.annotations,
         subject: props.subject,
-        viewBoxDimensions: props.viewBoxDimensions,
-        workflow: props.workflow
+        viewBoxDimensions: props.viewBoxDimensions
       }
     );
   }
@@ -66,6 +67,7 @@ function FileViewer(props) {
 }
 
 FileViewer.propTypes = {
+  annotation: PropTypes.object,
   className: PropTypes.string,
   classification: PropTypes.object,
   format: PropTypes.oneOfType([
@@ -86,8 +88,7 @@ FileViewer.propTypes = {
     PropTypes.array,
     PropTypes.string
   ]),
-  viewBoxDimensions: PropTypes.object,
-  workflow: PropTypes.object
+  viewBoxDimensions: PropTypes.object
 };
 
 export default FileViewer;

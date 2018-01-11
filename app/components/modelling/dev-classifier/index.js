@@ -1,5 +1,5 @@
 class Model {
-  constructor(canvas, frame) {
+  constructor(canvas, { frame }) {
     this.ctx = canvas.getContext('2d');
     this.frame = frame;
   }
@@ -13,7 +13,7 @@ class Model {
             const xyCoords = [
               ((drawing.x - vBD.x) * 100 * this.ctx.canvas.width) / vBD.width / 100,
               // TODO: why do I need to +1 to center properly?
-              (((drawing.y - vBD.y) * 100 * this.ctx.canvas.height) / vBD.height / 100) + 11
+              (((drawing.y - vBD.y) * 100 * this.ctx.canvas.height) / vBD.height / 100) + 1
             ];
             const zoomLevel = [100 / vBD.width, 100 / vBD.height];
             switch (drawing.tool) {
@@ -41,5 +41,5 @@ class Model {
 }
 
 export {
-  Model,
+  Model
 };

@@ -146,7 +146,7 @@ export default class SVGRenderer extends React.Component {
     }
     const persistentHooks = Object
       .keys(tasks)
-      .filter((key) => { return tasks[key].AnnotationRenderer === SVGRenderer; })
+      .filter(key => tasks[key].AnnotationRenderer === SVGRenderer)
       .map((taskName) => {
         const PersistInsideSubject = tasks[taskName].PersistInsideSubject;
         if (PersistInsideSubject) {
@@ -156,17 +156,6 @@ export default class SVGRenderer extends React.Component {
       })
       .filter(Boolean);
     children = children.concat(persistentHooks);
-    const childrenWithViewBox = React.Children.map(
-      this.props.children,
-      child => React.cloneElement(
-        child,
-        type === 'canvas' ? {
-          viewBoxDimensions: this.props.viewBoxDimensions,
-          classification: this.props.classification,
-          subject: this.props.subject,
-          workflow: this.props.workflow
-        } : {})
-    );
     return (
       <div>
         <div className={`subject svg-subject ${this.props.type}`}>
@@ -202,7 +191,7 @@ export default class SVGRenderer extends React.Component {
             </g>
           </svg>
         </div>
-        {childrenWithViewBox}
+        {this.props.children}
       </div>
     );
   }

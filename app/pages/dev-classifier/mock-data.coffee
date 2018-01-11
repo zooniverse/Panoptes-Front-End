@@ -490,7 +490,6 @@ workflow = apiClient.type('workflows').create
 
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
-
   # Images originally from lorempixel.com shared under CC BY-SA,
   # but the service is often slow and/or fails to load at all.
   # Noted original source next to each.
@@ -501,7 +500,9 @@ subject = apiClient.type('subjects').create
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-wide.jpeg"} # //lorempixel.com/1900/1000/animals/3
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-tall.jpeg"} # //lorempixel.com/1000/1900/animals/4
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/small.jpeg"} # //lorempixel.com/400/300/animals/4
-      {'canvas': ""} # // blank canvas
+      {'application/json': "#{window.location.origin}/assets/dev-classifier/testData.json"} # // blank canvas
+      {'application/json': "#{window.location.origin}/assets/dev-classifier/testData.json"} # // blank canvas
+
     ]
   else
     [
@@ -510,7 +511,13 @@ subject = apiClient.type('subjects').create
 
   metadata:
     'Capture date': '5 Feb, 2015'
-    'Region': 'Chicago, IL'
+    'Region': 'Chicago, IL',
+    'isModelling': true,
+    'modelling': [
+      { 'frame': 5, 'model': "LINE_PLOT" }
+      { 'frame': 5, 'model': "DEV_CLASSIFIER_DRAWING" }
+    ],
+
 
   expert_classification_data:
     MOCK_WORKFLOW_FOR_CLASSIFIER: apiClient.type('classifications').create
