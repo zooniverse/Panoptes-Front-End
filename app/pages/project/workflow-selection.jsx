@@ -158,8 +158,9 @@ class WorkflowSelection extends React.Component {
   }
 
   render() {
+    const { translation } = this.props;
     const { loadingSelectedWorkflow, workflow } = this.state;
-    return React.cloneElement(this.props.children, { loadingSelectedWorkflow, workflow });
+    return React.cloneElement(this.props.children, { translation, loadingSelectedWorkflow, workflow });
   }
 }
 
@@ -176,6 +177,10 @@ WorkflowSelection.defaultProps = {
   onChangePreferences() { return null; },
   preferences: {},
   projectRoles: [],
+  translation: {
+    id: '',
+    display_name: ''
+  },
   translations: {
     locale: 'en'
   },
@@ -208,6 +213,9 @@ WorkflowSelection.propTypes = {
     uncacheLink: React.PropTypes.func
   }).isRequired,
   projectRoles: React.PropTypes.arrayOf(React.PropTypes.object),
+  translation: React.PropTypes.shape({
+    display_name: React.PropTypes.string
+  }),
   translations: React.PropTypes.shape({
     locale: React.PropTypes.string
   })
