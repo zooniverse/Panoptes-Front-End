@@ -71,7 +71,7 @@ describe('ProjectNavbar', function() {
 
   describe('rendering children components', function() {
     let wrapper;
-    beforeEach(function() {
+    before(function() {
       wrapper = mount(
         <ProjectNavbar
           navLinks={navLinksWithLabels}
