@@ -84,6 +84,7 @@ module.exports = React.createClass
                 preferences: @props.preferences
 
               toolProps =
+                taskKey: annotation.task
                 classification: @props.classification
                 mark: mark
                 details: details
