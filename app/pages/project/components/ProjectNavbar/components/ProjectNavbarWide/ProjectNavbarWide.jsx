@@ -67,7 +67,7 @@ function ProjectNavbarWide(props) {
           title={projectTitle}
         />
         <Nav>
-          {navLinks.map(link => <StyledNavLink key={link.url} {...link} />)}
+          {navLinks.map(link => <StyledNavLink key={link.url || link.to} {...link} />)}
         </Nav>
       </StyledWrapper>
     </StyledHeaderWide>

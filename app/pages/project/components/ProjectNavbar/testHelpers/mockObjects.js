@@ -29,7 +29,12 @@ export const projectWithoutRedirect = {
   slug: 'zooniverse/find-the-thing',
   title: 'Find the Thing',
   urls: [
-    'https://www.facebook.com/find-the-thing'
+    {
+      label: '',
+      path: 'findthething',
+      site: 'facebook.com/',
+      url: 'https://www.facebook.com/find-the-thing'
+    }
   ]
 };
 
@@ -38,7 +43,12 @@ export const projectWithRedirect = {
   redirect: 'https://www.redirected-project.org',
   title: 'Find the Thing',
   urls: [
-    'https://www.facebook.com/find-the-thing'
+    {
+      label: '',
+      path: 'findthething',
+      site: 'facebook.com/',
+      url: 'https://www.facebook.com/find-the-thing'
+    }
   ]
 };
 
