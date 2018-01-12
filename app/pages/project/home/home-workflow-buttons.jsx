@@ -26,12 +26,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
   render() {
     if (this.props.project && this.props.project.redirect) {
-      return (
-        <a href={this.props.project.redirect} className="project-home-page__button">
-          <strong>Visit the project</strong><br />
-          <small>at {this.props.project.redirect}</small>
-        </a>
-      );
+      return null;
     }
 
     return (

@@ -46,16 +46,22 @@ const ProjectHomePage = (props) => {
         </div>
 
         <div className="project-home-page__call-to-action">
-          <Link to={`/projects/${props.project.slug}/about`} className="project-home-page__button call-to-action__button call-to-action__button--learn-more">
-            <Translate content="project.home.learnMore" />
-          </Link>
-          {!props.showWorkflowButtons &&
+          {props.project && !props.project.redirect &&
+            <Link to={`/projects/${props.project.slug}/about`} className="project-home-page__button call-to-action__button call-to-action__button--learn-more">
+              <Translate content="project.home.learnMore" />
+            </Link>}
+          {!props.showWorkflowButtons && props.project && !props.project.redirect &&
             <Link
               to={`/projects/${props.project.slug}/classify`}
               className="project-home-page__button call-to-action__button call-to-action__button--get-started"
             >
               <Translate content="project.home.getStarted" />
             </Link>}
+          {props.project && props.project.redirect &&
+            <a href={props.project.redirect} className="project-home-page__button">
+              <strong><Translate content="project.home.visitLink" /></strong><br />
+              <small>at {props.project.redirect}</small>
+            </a>}
         </div>
 
         <ProjectHomeWorkflowButtons
@@ -169,6 +175,7 @@ ProjectHomePage.propTypes = {
     experimental_tools: React.PropTypes.arrayOf(React.PropTypes.string),
     id: React.PropTypes.string,
     introduction: React.PropTypes.string,
+    redirect: React.PropTypes.string,
     researcher_quote: React.PropTypes.string,
     slug: React.PropTypes.string
   }).isRequired,
