@@ -18,7 +18,8 @@ const contextShape = {
   geordi: React.PropTypes.object,
   notificationsCounter: React.PropTypes.object,
   unreadNotificationsCount: React.PropTypes.number,
-  pusher: React.PropTypes.object
+  pusher: React.PropTypes.object,
+  store: React.PropTypes.object
 };
 
 PassContext.contextTypes = contextShape;
