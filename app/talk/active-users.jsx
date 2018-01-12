@@ -18,16 +18,7 @@ export default class ActiveUsers extends React.Component {
       users: []
     };
 
-    this.boundedPage = this.boundedPage.bind(this);
-    this.fetchUncachedUsers = this.fetchUncachedUsers.bind(this);
-    this.getActiveUserIds = this.getActiveUserIds.bind(this);
     this.onPageChange = this.onPageChange.bind(this);
-    this.resetTimer = this.resetTimer.bind(this);
-    this.restartTimer = this.restartTimer.bind(this);
-    this.pageCount = this.pageCount.bind(this);
-    this.update = this.update.bind(this);
-    this.userIdsOnPage = this.userIdsOnPage.bind(this);
-    this.userLink = this.userLink.bind(this);
   }
 
   componentDidMount() {
