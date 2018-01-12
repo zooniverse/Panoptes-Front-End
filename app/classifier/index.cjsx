@@ -76,7 +76,7 @@ ClassifierWrapper = React.createClass
       Tutorial.find nextProps.workflow
       .then (tutorial) =>
         {user, preferences} = nextProps
-        Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
+        Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi, @context.store
         @setState {tutorial}
       MiniCourse.find nextProps.workflow
       .then (minicourse) =>
