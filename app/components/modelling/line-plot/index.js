@@ -31,9 +31,6 @@ class Model {
   update() {
     return null;
   }
-  getScore() {
-    return Math.floor(Math.random() * 100);
-  }
 }
 
 export {

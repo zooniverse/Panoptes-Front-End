@@ -115,6 +115,7 @@ export default class FrameViewer extends React.Component {
           onLoad={this.handleLoad}
           progressListener={this.props.progressListener}
           registerProgressObject={this.props.registerProgressObject}
+          {...modellingProps}
         />
       );
     }
