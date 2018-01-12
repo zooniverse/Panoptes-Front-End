@@ -347,7 +347,7 @@ class Classifier extends React.Component {
                   className="minor-button"
                   preferences={this.props.preferences}
                   shouldRender={(this.props.tutorial) && (this.props.tutorial.steps.length > 0)}
-                  start={Tutorial.start.bind(Tutorial, this.props.tutorial, this.props.user, this.props.preferences, this.context.geordi, this.context.store)}
+                  start={Tutorial.start.bind(Tutorial, this.props.tutorial, this.props.user, this.props.preferences, this.context.geordi, this.context)}
                   style={{ marginTop: '2em' }}
                   user={this.props.user}
                   workflow={this.props.workflow}
@@ -366,7 +366,7 @@ class Classifier extends React.Component {
                     className="minor-button"
                     preferences={this.props.preferences}
                     shouldRender={(this.props.minicourse) && (this.props.user) && (this.props.minicourse.steps.length > 0)}
-                    start={MiniCourse.restart.bind(MiniCourse, this.props.minicourse, this.props.preferences, this.props.user, this.context.geordi, this.context.store)}
+                    start={MiniCourse.restart.bind(MiniCourse, this.props.minicourse, this.props.preferences, this.props.user, this.context.geordi, this.context)}
                     style={{ marginTop: '2em' }}
                     user={this.props.user}
                     workflow={this.props.workflow}
