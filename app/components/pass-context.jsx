@@ -19,7 +19,8 @@ const contextShape = {
   geordi: PropTypes.object,
   notificationsCounter: PropTypes.object,
   unreadNotificationsCount: PropTypes.number,
-  pusher: PropTypes.object
+  pusher: PropTypes.object,
+  store: PropTypes.object
 };
 
 PassContext.contextTypes = contextShape;
