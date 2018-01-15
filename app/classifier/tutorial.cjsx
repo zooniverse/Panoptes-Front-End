@@ -7,6 +7,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 
 StepThrough = require('../components/step-through').default
 Translations = require('./translations').default
+PassContext = require('../components/pass-context').default
 
 
 completedThisSession = {}
@@ -28,11 +29,11 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
-    startIfNecessary: (tutorial, user, preferences, geordi, store) ->
+    startIfNecessary: (tutorial, user, preferences, geordi, context) ->
         if tutorial?
           @checkIfCompleted(tutorial, user, preferences).then (completed) =>
             unless completed
-              @start tutorial, user, preferences, geordi, store
+              @start tutorial, user, preferences, geordi, context
 
     checkIfCompleted: (tutorial, user, preferences) ->
       if user?
@@ -41,7 +42,7 @@ module.exports = React.createClass
       else
         Promise.resolve completedThisSession[tutorial.id]?
 
-    start: (tutorial, user, preferences, geordi, store) ->
+    start: (tutorial, user, preferences, geordi, context) ->
       TutorialComponent = this
 
       if tutorial.steps.length isnt 0
@@ -57,9 +58,11 @@ module.exports = React.createClass
 
         awaitTutorialMedia.then (mediaByID) =>
           tutorialContent = 
-            <Translations original={tutorial} type="tutorial" store={store}>
-              <TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />
-            </Translations>
+            <PassContext context={context}>
+              <Translations original={tutorial} type="tutorial">
+                <TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />
+              </Translations>
+            </PassContext>
           Dialog.alert(tutorialContent, {
             className: 'tutorial-dialog',
             required: true,

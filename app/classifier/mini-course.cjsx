@@ -5,6 +5,7 @@ MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
 Translations = require('./translations').default
+PassContext = require('../components/pass-context').default
 
 minicoursesCompletedThisSession = {}
 window?.minicoursesCompletedThisSession = minicoursesCompletedThisSession
@@ -25,7 +26,7 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
-    start: (minicourse, projectPreferences, user, geordi, store) ->
+    start: (minicourse, projectPreferences, user, geordi, context) ->
       MiniCourseComponent = this
       if minicourse.steps.length isnt 0
         awaitMiniCourseMedia = minicourse.get 'attached_images'
@@ -40,9 +41,11 @@ module.exports = React.createClass
 
         awaitMiniCourseMedia.then (mediaByID) =>
           minicourseContent = 
-            <Translations original={minicourse} type="minicourse" store={store}>
-              <MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} geordi={geordi} />
-            </Translations>
+            <PassContext context={context}>
+              <Translations original={minicourse} type="minicourse">
+                <MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} geordi={geordi} />
+              </Translations>
+            </PassContext>
           Dialog.alert(minicourseContent, {
             className: 'mini-course-dialog',
             required: true,
@@ -53,7 +56,7 @@ module.exports = React.createClass
               console.warn e
               null # We don't really care if the user canceled or completed the tutorial.
 
-    restart: (minicourse, projectPreferences, user, geordi, store) ->
+    restart: (minicourse, projectPreferences, user, geordi, context) ->
       resetPreferences = {
         "preferences.minicourses.opt_out.id_#{minicourse.id}": false,
         "preferences.minicourses.slide_to_start.id_#{minicourse.id}": 0
@@ -64,13 +67,13 @@ module.exports = React.createClass
         projectPreferences.update resetPreferences
         projectPreferences.save().then =>
           window.prefs = projectPreferences
-          @start minicourse, projectPreferences, user, geordi, store
+          @start minicourse, projectPreferences, user, geordi, context
 
-    startIfNecessary: (minicourse, preferences, user, geordi, store) ->
+    startIfNecessary: (minicourse, preferences, user, geordi, context) ->
       if user? && minicourse?
         @checkIfCompletedOrOptedOut(minicourse, preferences, user).then (completed) =>
           unless completed
-            @start minicourse, preferences, user, geordi, store
+            @start minicourse, preferences, user, geordi, context
 
     checkIfCompletedOrOptedOut: (minicourse, projectPreferences, user) ->
       if user? and projectPreferences.preferences?.minicourses?
