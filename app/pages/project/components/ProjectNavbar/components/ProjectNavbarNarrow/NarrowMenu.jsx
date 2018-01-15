@@ -26,8 +26,8 @@ const StyledNavLink = styled(NavLink)`
   line-height: 3.071428571;
   padding: 0 ${pxToRem(30)};
 
-  &:hover {
-    background-color: ${colors.teal};
+  &:hover, &:focus {
+    background-color: ${colors.darkteal};
   }
 `;
 
