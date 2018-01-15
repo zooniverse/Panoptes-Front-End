@@ -30,16 +30,16 @@ const Nav = styled.nav`
 `;
 
 const StyledNavLink = styled(NavLink)`
-  border-bottom: ${pxToRem(2)} solid transparent;
+  border-bottom: ${pxToRem(3)} solid transparent;
   margin-top: ${pxToRem(2)};
 
   &:hover,
   &.active {
-    border-color: ${colors.darkteal};
+    border-color: white;
   }
 
   &:not(:last-of-type) {
-    margin-right: ${pxToRem(10)}
+    margin-right: ${pxToRem(30)}
   }
 `;
 

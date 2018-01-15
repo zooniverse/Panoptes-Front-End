@@ -21,7 +21,7 @@ const StyledLink = styled(IndexLink).attrs({
 
   &:hover,
   &.active {
-    border-bottom: ${pxToRem(2)} solid ${colors.darkteal};
+    border-bottom: ${pxToRem(3)} solid white;
   }
 `;
 

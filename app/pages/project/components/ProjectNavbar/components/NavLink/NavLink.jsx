@@ -11,7 +11,7 @@ const commonStyles = `
   font-family: Karla;
   font-size: ${pxToRem(15)};
   font-weight: bold;
-  letter-spacing: ${pxToRem(1)};
+  letter-spacing: ${pxToRem(1.5)};
   text-decoration: none;
   text-transform: uppercase;
   text-shadow: 0 ${pxToRem(2)} ${pxToRem(2)} rgba(0,0,0,0.22);
