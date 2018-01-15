@@ -32,7 +32,8 @@ describe('ProjectNavbar', function() {
 
   describe('calculating the breakpoint', function() {
     let wrapper;
-    let setBreakpointSpy = sinon.spy(ProjectNavbar.prototype, 'setBreakpoint');
+    // We can't test the actual function because getRenderedSize doesn't work with jsdom
+    let setBreakpointStub = sinon.stub(ProjectNavbar.prototype, 'setBreakpoint').callsFake(() => {});
     before(function() {
       wrapper = mount(
         <ProjectNavbar
@@ -44,28 +45,24 @@ describe('ProjectNavbar', function() {
     });
 
     it('should set the breakpoint state on mount', function() {
-      expect(setBreakpointSpy.calledOnce).to.be.true;
+      expect(setBreakpointStub.calledOnce).to.be.true;
     });
 
     it('should not set the breakpoint on update if projectTitle or navLinks do not change', function() {
       wrapper.setProps({ width: 768 });
-      expect(setBreakpointSpy.calledOnce).to.be.true;
+      expect(setBreakpointStub.calledOnce).to.be.true;
     });
 
     it('should set the breakpoint on update if the projectTitle changes', function() {
-      // const prevState = wrapper.state('breakpoint');
       wrapper.setProps({ projectTitle: 'A new title' });
-      expect(setBreakpointSpy.calledTwice).to.be.true;
-      // expect(prevState).to.not.equal(wrapper.state('breakpoint'));
+      expect(setBreakpointStub.calledTwice).to.be.true;
     });
 
     it('should set the breakpoint on update if the navLinks change', function() {
-      // const prevState = wrapper.state('breakpoint');
       const newNavLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow, user: null });
       const newNavLinksWithLabels = buildLinksWithLabels(newNavLinks);
       wrapper.setProps({ navLinks: newNavLinksWithLabels });
-      expect(setBreakpointSpy.calledThrice).to.be.true;
-      // expect(prevState).to.not.equal(wrapper.state('breakpoint'));
+      expect(setBreakpointStub.calledThrice).to.be.true;
     });
   });
 
@@ -86,10 +83,11 @@ describe('ProjectNavbar', function() {
       expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(0);
     });
 
-    // it('renders ProjectNavbarNarrow if props.width is less than state.breakpoint', function() {
-    //   wrapper.setProps({ width: 400 });
-    //   expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
-    //   expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(1);
-    // });
+    it('renders ProjectNavbarNarrow if props.width is less than state.breakpoint', function() {
+      wrapper.setProps({ width: 400 });
+      wrapper.setState({ breakpoint: 768 });
+      expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
+      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(1);
+    });
   });
 });
