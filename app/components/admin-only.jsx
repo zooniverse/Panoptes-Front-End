@@ -1,11 +1,12 @@
 import counterpart from 'counterpart';
 import React from 'react';
+import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../lib/is-admin';
 
 class AdminOnly extends React.Component {
   static contextTypes = {
-    user: React.PropTypes.object
+    user: PropTypes.object
   };
 
   static defaultProps = {
