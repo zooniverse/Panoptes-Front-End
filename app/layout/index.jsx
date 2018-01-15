@@ -4,20 +4,18 @@ import AdminOnly from '../components/admin-only';
 import SiteNav from './site-nav';
 import SiteFooter from './site-footer';
 
-const AppLayout = React.createClass({
-  propTypes: {
+class AppLayout extends React.Component {
+  static propTypes = {
     children: React.PropTypes.node
-  },
+  };
 
-  childContextTypes: {
+  static childContextTypes = {
     setAppHeaderVariant: React.PropTypes.func
-  },
+  };
 
-  getInitialState() {
-    return {
-      siteHeaderDetached: false
-    };
-  },
+  state = {
+    siteHeaderDetached: false
+  };
 
   getChildContext() {
     return {
@@ -27,7 +25,7 @@ const AppLayout = React.createClass({
         });
       }
     };
-  },
+  }
 
   render() {
     return (
@@ -57,6 +55,6 @@ const AppLayout = React.createClass({
       </div>
     );
   }
-});
+}
 
 export default AppLayout;

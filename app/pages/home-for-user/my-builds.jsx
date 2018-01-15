@@ -4,41 +4,37 @@ import HomePageSection from './generic-section';
 import { Link } from 'react-router';
 import ProjectCard from '../../partials/project-card';
 
-const MyBuildsSection = React.createClass({
-  propTypes: {
+class MyBuildsSection extends React.Component {
+  static propTypes = {
     onClose: React.PropTypes.func.isRequired,
-  },
+  };
 
-  contextTypes: {
+  static contextTypes = {
     user: React.PropTypes.object.isRequired,
-  },
+  };
 
-  getDefaultProps() {
-    return {
-      onClose: () => {},
-    };
-  },
+  static defaultProps = {
+    onClose: () => {},
+  };
 
-  getInitialState() {
-    return {
-      loading: false,
-      error: null,
-      projects: [],
-      avatars: {},
-    };
-  },
+  state = {
+    loading: false,
+    error: null,
+    projects: [],
+    avatars: {},
+  };
 
   componentDidMount() {
     this.fetchProjects(this.context.user);
-  },
+  }
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextContext.user !== this.context.user) {
       this.fetchProjects(nextContext.user);
     }
-  },
+  }
 
-  fetchProjects() {
+  fetchProjects = () => {
     this.setState({
       loading: true,
       error: null,
@@ -81,7 +77,7 @@ const MyBuildsSection = React.createClass({
         loading: false,
       });
     });
-  },
+  };
 
   render() {
     return (
@@ -109,7 +105,7 @@ const MyBuildsSection = React.createClass({
         </div>
       </HomePageSection>
     );
-  },
-});
+  }
+}
 
 export default MyBuildsSection;

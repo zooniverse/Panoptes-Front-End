@@ -39,29 +39,29 @@ counterpart.registerTranslations('en', {
   },
 });
 
-const AppFooter = React.createClass({
-  contextTypes: {
+class AppFooter extends React.Component {
+  static contextTypes = {
     geordi: React.PropTypes.object,
-  },
+  };
 
-  propTypes: {
+  static propTypes = {
     user: React.PropTypes.shape({
       admin: React.PropTypes.bool,
     }),
-  },
+  };
 
-  logMenuClick(linkName) {
+  logMenuClick = (linkName) => {
     !!this.context.geordi && this.context.geordi.logEvent({
       type: 'footer-menu',
       relatedID: linkName,
     });
-  },
+  };
 
-  loggableLink(aLink, linkSymbolicName) {
+  loggableLink = (aLink, linkSymbolicName) => {
     return React.cloneElement(aLink, {
       onClick: this.logMenuClick.bind(this, linkSymbolicName),
     });
-  },
+  };
 
   render() {
     return (
@@ -205,7 +205,7 @@ const AppFooter = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 export default AppFooter;

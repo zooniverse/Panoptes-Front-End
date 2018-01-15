@@ -1,50 +1,46 @@
 import React from 'react';
 
-const StringTruncator = React.createClass({
-  propTypes: {
+class StringTruncator extends React.Component {
+  static propTypes = {
     tag: React.PropTypes.node,
     className: React.PropTypes.string,
     children: React.PropTypes.string.isRequired,
     splitter: React.PropTypes.instanceOf(RegExp),
     chop: React.PropTypes.number,
     ellipsis: React.PropTypes.element,
-  },
+  };
 
-  getDefaultProps() {
-    return {
-      tag: 'div',
-      className: '',
-      children: '',
-      splitter: /(\W*\s)/,
-      reduceBy: 4,
-      ellipsis: <span>…</span>,
-    };
-  },
+  static defaultProps = {
+    tag: 'div',
+    className: '',
+    children: '',
+    splitter: /(\W*\s)/,
+    reduceBy: 4,
+    ellipsis: <span>…</span>,
+  };
 
-  getInitialState() {
-    return {
-      truncatedString: '',
-    };
-  },
+  state = {
+    truncatedString: '',
+  };
 
   componentDidMount() {
     this.truncate(this.props);
     addEventListener('resize', this.handleResize);
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     this.truncate(nextProps);
-  },
+  }
 
   componentWillUnmount() {
     removeEventListener('resize', this.handleResize);
-  },
+  }
 
-  handleResize() {
+  handleResize = () => {
     this.truncate(this.props);
-  },
+  };
 
-  truncate(props, _lastWord = -1) {
+  truncate = (props, _lastWord = -1) => {
     if (this.container === null) {
       return;
     }
@@ -66,7 +62,7 @@ const StringTruncator = React.createClass({
         this.truncate(props, wordsThatMightFit.length - props.reduceBy);
       }
     });
-  },
+  };
 
   render() {
     let possibleEllipsis;
@@ -87,7 +83,7 @@ const StringTruncator = React.createClass({
     }, this.props, {
       className: ['string-truncator', this.props.className].join(' ').trim(),
     }), this.state.truncatedString, possibleEllipsis);
-  },
-});
+  }
+}
 
 export default StringTruncator;
