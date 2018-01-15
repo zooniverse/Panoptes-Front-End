@@ -51,6 +51,7 @@
     "swipe-js-iso": "~2.0.1",
     "uuid": "~3.1.0",
     "visible-element": "~1.0.1",
+    "whatwg-url": "~6.4.0",
     "zooniverse-geordi-client": "^1.4"
   },
   "devDependencies": {
@@ -91,7 +92,7 @@
     "extract-text-webpack-plugin": "~2.1.0",
     "file-loader": "~0.11.1",
     "html-webpack-plugin": "~2.28.0",
-    "jsdom": "~9.12.0",
+    "jsdom": "~11.5.1",
     "mocha": "~3.1.0",
     "nib": "~1.1.0",
     "publisssh": "~1.1.0",
