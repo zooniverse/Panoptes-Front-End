@@ -140,8 +140,8 @@ describe('ProjectPage', () => {
     let wrapper;
 
     afterEach(() => {
-      sugarClientSubscribeSpy.reset();
-      sugarClientUnsubscribeSpy.reset();
+      sugarClientSubscribeSpy.resetHistory();
+      sugarClientUnsubscribeSpy.resetHistory();
     });
 
     describe('on mount/unmount', () => {

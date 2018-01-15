@@ -138,7 +138,7 @@ describe('EmailSettings', () => {
   });
 
   beforeEach(() => {
-    projectPreferenceSpy.reset();
+    projectPreferenceSpy.resetHistory();
     wrapper.update();
   });
 

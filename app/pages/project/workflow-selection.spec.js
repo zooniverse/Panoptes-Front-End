@@ -126,7 +126,7 @@ describe('WorkflowSelection', () => {
   });
 
   beforeEach(() => {
-    workflowSpy.reset();
+    workflowSpy.resetHistory();
     wrapper.update();
   });
 
