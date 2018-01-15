@@ -14,8 +14,8 @@ SignInPrompt = require '../partials/sign-in-prompt'
 alert = require('../lib/alert').default
 merge = require 'lodash/merge'
 FollowDiscussion = require './follow-discussion'
-ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
+`import ActiveUsers from './active-users';`
 `import DiscussionComment from './discussion-comment';`
 `import PopularTags from './popular-tags';`
 

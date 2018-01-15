@@ -3,8 +3,8 @@ talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
 resourceCount = require './lib/resource-count'
 Loading = require '../components/loading-indicator'
-ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
+`import ActiveUsers from './active-users';`
 `import TalkSearchResult from './search-result'`;
 `import PopularTags from './popular-tags';`
 
