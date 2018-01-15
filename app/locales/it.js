@@ -53,7 +53,11 @@ export default {
         one: '<strong>1</strong> persona sta parlando di <strong>%(title)s</strong> in questo momento.',
         other: '<strong>%(count)s</strong> persone stanno parlando di <strong>%(title)s</strong> in questo momento.'
       },
-      joinIn: 'Partecipa'
+      joinIn: 'Partecipa',
+      learnMore: 'Learn more',
+      getStarted: 'Get started',
+      workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
+      visitLink: 'Visit the project'
     }
   },
   tasks: {

@@ -23,10 +23,6 @@ const testUserPreferences = {
   settings: { workflow_id: '1234' }
 };
 
-const testProject = {
-  redirect: 'www.testproject.com'
-};
-
 describe('ProjectHomeWorkflowButtons', function() {
   let wrapper;
 
@@ -73,22 +69,6 @@ describe('ProjectHomeWorkflowButtons', function() {
 
     it('should not render the workflow buttons', function() {
       assert.equal(wrapper.find('ProjectHomeWorkflowButton').length, 0);
-    });
-  });
-
-  describe('if project has a redirect', function() {
-    before(function() {
-      wrapper = shallow(
-        <ProjectHomeWorkflowButtons project={testProject} />
-      );
-    });
-
-    it('should render a redirect link', function() {
-      assert.equal(wrapper.find('a').length, 1);
-    });
-
-    it('should have href equal to project redirect', function() {
-      assert.equal(wrapper.find('a').prop('href'), testProject.redirect);
     });
   });
 });

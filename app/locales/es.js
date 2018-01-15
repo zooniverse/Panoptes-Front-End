@@ -52,7 +52,11 @@ export default {
         one: '<strong>1</strong> person is talking about <strong>%(title)s</strong> right now.',
         other: '<strong>%(count)s</strong> people are talking about <strong>%(title)s</strong> right now.'
       },
-      joinIn: 'Join in'
+      joinIn: 'Join in',
+      learnMore: 'Learn more',
+      getStarted: 'Get started',
+      workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
+      visitLink: 'Visit the project'
     }
   },
   organization: {

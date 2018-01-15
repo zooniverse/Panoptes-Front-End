@@ -85,7 +85,11 @@ export default {
         one: '<strong>1</strong> persoon praat over <strong>%(title)s</strong> op dit moment.',
         other: '<strong>%(count)s</strong> mensen praten over <strong>%(title)s</strong> op dit moment.'
       },
-      joinIn: 'Doe mee'
+      joinIn: 'Doe mee',
+      learnMore: 'Learn more',
+      getStarted: 'Get started',
+      workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
+      visitLink: 'Visit the project'
     }
   },
   organization: {
