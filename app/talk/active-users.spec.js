@@ -13,7 +13,7 @@ const users = [
 describe('ActiveUsers', function () {
   const wrapper = shallow(<ActiveUsers />);
   const controller = wrapper.instance();
-  const getActiveIdsStub = sinon.stub(controller, 'getActiveUserIds', () => Promise.resolve(activeIds));
+  const getActiveIdsStub = sinon.stub(controller, 'getActiveUserIds').callsFake(() => Promise.resolve(activeIds));
   const fetchUsersSpy = sinon.spy(controller, 'fetchUncachedUsers');
   const pageCountSpy = sinon.spy(controller, 'pageCount');
   const boundedPageSpy = sinon.spy(controller, 'boundedPage');
