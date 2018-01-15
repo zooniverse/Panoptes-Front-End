@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Markdown } from 'markdownz';
 import { Model } from './modelling';
@@ -123,15 +124,15 @@ class ModelRenderer extends React.Component {
 }
 /* eslint-disable react/forbid-prop-types */
 ModelRenderer.propTypes = {
-  classification: React.PropTypes.shape({
-    annotations: React.PropTypes.Array
+  classification: PropTypes.shape({
+    annotations: PropTypes.Array
   }),
-  subject: React.PropTypes.shape({
-    locations: React.PropTypes.Array,
+  subject: PropTypes.shape({
+    locations: PropTypes.Array,
     // this is handled by the specific model renderer used, so can vary
-    metadata: React.PropTypes.object
+    metadata: PropTypes.object
   }),
-  onRender: React.PropTypes.func
+  onRender: PropTypes.func
 };
 /* eslint-enable react/forbid-prop-types */
 
@@ -146,7 +147,7 @@ const ModelRendererWrapper = (props) => {
 
 /* eslint-disable react/forbid-prop-types */
 ModelRendererWrapper.propTypes = {
-  modellingEnabled: React.PropTypes.bool
+  modellingEnabled: PropTypes.bool
 };
 /* eslint-enable react/forbid-prop-types */
 

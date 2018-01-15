@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
@@ -9,13 +10,13 @@ import { isFeedbackActive, isThereFeedback } from './feedback/helpers';
 
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
 
-const BackButtonWarning = () => {
-  return (
-    <p className="back-button-warning" >
-      <Translate content="classifier.backButtonWarning" />
-    </p>
-  );
-};
+const BackButtonWarning = () =>
+   (
+     <p className="back-button-warning" >
+       <Translate content="classifier.backButtonWarning" />
+     </p>
+  )
+;
 
 class TaskNav extends React.Component {
   constructor(props) {
@@ -124,7 +125,7 @@ class TaskNav extends React.Component {
 
     const disableTalk = this.props.classification.metadata.subject_flagged ||
     (isFeedbackActive(this.props.project) && isThereFeedback(this.props.subject, this.props.workflow));
-    const visibleTasks = Object.keys(this.props.workflow.tasks).filter((key) => { return this.props.workflow.tasks[key].type !== 'shortcut'; });
+    const visibleTasks = Object.keys(this.props.workflow.tasks).filter(key => this.props.workflow.tasks[key].type !== 'shortcut');
     const TaskComponent = tasks[task.type];
 
     // Should we disable the "Back" button?
@@ -227,37 +228,37 @@ class TaskNav extends React.Component {
 }
 
 TaskNav.propTypes = {
-  annotation: React.PropTypes.shape({
-    shortcut: React.PropTypes.object,
-    value: React.PropTypes.any
+  annotation: PropTypes.shape({
+    shortcut: PropTypes.object,
+    value: PropTypes.any
   }),
-  children: React.PropTypes.node,
-  classification: React.PropTypes.shape({
-    annotations: React.PropTypes.array,
-    completed: React.PropTypes.bool,
-    gold_standard: React.PropTypes.bool,
-    id: React.PropTypes.string,
-    metadata: React.PropTypes.object
+  children: PropTypes.node,
+  classification: PropTypes.shape({
+    annotations: PropTypes.array,
+    completed: PropTypes.bool,
+    gold_standard: PropTypes.bool,
+    id: PropTypes.string,
+    metadata: PropTypes.object
   }),
-  completeClassification: React.PropTypes.func,
-  disabled: React.PropTypes.bool,
-  nextSubject: React.PropTypes.func,
-  demoMode: React.PropTypes.bool,
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    slug: React.PropTypes.string
+  completeClassification: PropTypes.func,
+  disabled: PropTypes.bool,
+  nextSubject: PropTypes.func,
+  demoMode: PropTypes.bool,
+  project: PropTypes.shape({
+    id: PropTypes.string,
+    slug: PropTypes.string
   }),
-  subject: React.PropTypes.shape({
-    id: React.PropTypes.string
+  subject: PropTypes.shape({
+    id: PropTypes.string
   }),
-  task: React.PropTypes.shape({
-    type: React.PropTypes.string
+  task: PropTypes.shape({
+    type: PropTypes.string
   }),
-  workflow: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    configuration: React.PropTypes.object,
-    first_task: React.PropTypes.string,
-    tasks: React.PropTypes.object
+  workflow: PropTypes.shape({
+    id: PropTypes.string,
+    configuration: PropTypes.object,
+    first_task: PropTypes.string,
+    tasks: PropTypes.object
   })
 };
 

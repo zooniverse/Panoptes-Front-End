@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from '../../lib/draggable';
 import tasks from '../tasks';
@@ -86,7 +87,7 @@ export default class SVGRenderer extends React.Component {
 
     if (this.props.annotation.task) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
-      ({ InsideSubject } = tasks[taskDescription.type]);
+      (({ InsideSubject } = tasks[taskDescription.type]));
     }
 
     const { annotations } = this.props.classification;
@@ -198,37 +199,37 @@ export default class SVGRenderer extends React.Component {
 }
 
 SVGRenderer.propTypes = {
-  annotation: React.PropTypes.shape({
-    task: React.PropTypes.string
+  annotation: PropTypes.shape({
+    task: PropTypes.string
   }),
-  children: React.PropTypes.node,
-  classification: React.PropTypes.shape({
-    annotations: React.PropTypes.array,
-    loading: React.PropTypes.bool
+  children: PropTypes.node,
+  classification: PropTypes.shape({
+    annotations: PropTypes.array,
+    loading: PropTypes.bool
   }),
-  frame: React.PropTypes.number,
-  modification: React.PropTypes.object,
-  naturalHeight: React.PropTypes.number,
-  naturalWidth: React.PropTypes.number,
-  onChange: React.PropTypes.func,
-  panByDrag: React.PropTypes.func,
-  panEnabled: React.PropTypes.bool,
-  preferences: React.PropTypes.object,
-  subject: React.PropTypes.shape({
-    already_seen: React.PropTypes.bool,
-    retired: React.PropTypes.bool
+  frame: PropTypes.number,
+  modification: PropTypes.object,
+  naturalHeight: PropTypes.number,
+  naturalWidth: PropTypes.number,
+  onChange: PropTypes.func,
+  panByDrag: PropTypes.func,
+  panEnabled: PropTypes.bool,
+  preferences: PropTypes.object,
+  subject: PropTypes.shape({
+    already_seen: PropTypes.bool,
+    retired: PropTypes.bool
   }),
-  transform: React.PropTypes.string,
-  viewBoxDimensions: React.PropTypes.shape({
-    height: React.PropTypes.number,
-    width: React.PropTypes.number,
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
+  transform: PropTypes.string,
+  viewBoxDimensions: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number,
+    x: PropTypes.number,
+    y: PropTypes.number
   }),
-  workflow: React.PropTypes.shape({
-    tasks: React.PropTypes.object
+  workflow: PropTypes.shape({
+    tasks: PropTypes.object
   }),
-  progressMarker: React.PropTypes.func
+  progressMarker: PropTypes.func
 };
 
 SVGRenderer.defaultProps = {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import classnames from 'classnames';
@@ -63,17 +64,17 @@ ProjectHomeWorkflowButton.defaultProps = {
 };
 
 ProjectHomeWorkflowButton.propTypes = {
-  disabled: React.PropTypes.bool,
-  onChangePreferences: React.PropTypes.func.isRequired,
-  project: React.PropTypes.shape({
-    slug: React.PropTypes.string
+  disabled: PropTypes.bool,
+  onChangePreferences: PropTypes.func.isRequired,
+  project: PropTypes.shape({
+    slug: PropTypes.string
   }).isRequired,
-  workflow: React.PropTypes.shape({
-    configuration: React.PropTypes.shape({
-      level: React.PropTypes.string
+  workflow: PropTypes.shape({
+    configuration: PropTypes.shape({
+      level: PropTypes.string
     }),
-    display_name: React.PropTypes.string,
-    id: React.PropTypes.string
+    display_name: PropTypes.string,
+    id: PropTypes.string
   }).isRequired,
-  workflowAssignment: React.PropTypes.bool
+  workflowAssignment: PropTypes.bool
 };

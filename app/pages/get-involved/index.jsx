@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
@@ -69,11 +70,11 @@ class GetInvolved extends React.Component {
 }
 
 GetInvolved.contextTypes = {
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };
 
 GetInvolved.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 GetInvolved.defaultProps = {

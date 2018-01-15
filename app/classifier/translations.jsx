@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import merge from 'lodash/merge';
 import { connect } from 'react-redux';
@@ -28,9 +29,9 @@ function Translations(props) {
 }
 
 Translations.propTypes = {
-  children: React.PropTypes.node,
-  original: React.PropTypes.shape({}),
-  type: React.PropTypes.string
+  children: PropTypes.node,
+  original: PropTypes.shape({}),
+  type: PropTypes.string
 };
 
 const mapStateToProps = state => ({

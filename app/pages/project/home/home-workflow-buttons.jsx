@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
@@ -74,19 +75,19 @@ ProjectHomeWorkflowButtons.defaultProps = {
 };
 
 ProjectHomeWorkflowButtons.propTypes = {
-  activeWorkflows: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  onChangePreferences: React.PropTypes.func.isRequired,
-  preferences: React.PropTypes.shape({
-    preferences: React.PropTypes.object,
-    settings: React.PropTypes.objectOf(React.PropTypes.string)
+  activeWorkflows: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onChangePreferences: PropTypes.func.isRequired,
+  preferences: PropTypes.shape({
+    preferences: PropTypes.object,
+    settings: PropTypes.objectOf(PropTypes.string)
   }),
-  project: React.PropTypes.shape({
-    redirect: React.PropTypes.string,
-    slug: React.PropTypes.string,
-    workflow_description: React.PropTypes.string
+  project: PropTypes.shape({
+    redirect: PropTypes.string,
+    slug: PropTypes.string,
+    workflow_description: PropTypes.string
   }).isRequired,
-  showWorkflowButtons: React.PropTypes.bool.isRequired,
-  splits: React.PropTypes.object,
-  user: React.PropTypes.object,
-  workflowAssignment: React.PropTypes.bool
+  showWorkflowButtons: PropTypes.bool.isRequired,
+  splits: PropTypes.object,
+  user: PropTypes.object,
+  workflowAssignment: PropTypes.bool
 };

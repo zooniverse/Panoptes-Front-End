@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import TriggeredModalForm from 'modal-form/triggered';
 import { Markdown } from 'markdownz';
@@ -202,24 +203,24 @@ class Choice extends React.Component {
 }
 
 Choice.propTypes = {
-  annotationValue: React.PropTypes.shape({
-    answers: React.PropTypes.object,
-    choice: React.PropTypes.string,
-    filters: React.PropTypes.object
+  annotationValue: PropTypes.shape({
+    answers: PropTypes.object,
+    choice: PropTypes.string,
+    filters: PropTypes.object
   }),
-  choiceID: React.PropTypes.string,
-  onCancel: React.PropTypes.func,
-  onConfirm: React.PropTypes.func,
-  onSwitch: React.PropTypes.func,
-  task: React.PropTypes.shape({
-    choices: React.PropTypes.object,
-    images: React.PropTypes.object,
-    questions: React.PropTypes.object
+  choiceID: PropTypes.string,
+  onCancel: PropTypes.func,
+  onConfirm: PropTypes.func,
+  onSwitch: PropTypes.func,
+  task: PropTypes.shape({
+    choices: PropTypes.object,
+    images: PropTypes.object,
+    questions: PropTypes.object
   }),
-  translation: React.PropTypes.shape({
-    characteristics: React.PropTypes.object,
-    choices: React.PropTypes.object,
-    questions: React.PropTypes.object
+  translation: PropTypes.shape({
+    characteristics: PropTypes.object,
+    choices: PropTypes.object,
+    questions: PropTypes.object
   }).isRequired
 };
 

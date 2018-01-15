@@ -1,4 +1,5 @@
 import { Markdown } from 'markdownz';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class MultipleChoiceSummary extends React.Component {
@@ -69,21 +70,21 @@ class MultipleChoiceSummary extends React.Component {
 }
 
 MultipleChoiceSummary.propTypes = {
-  task: React.PropTypes.shape(
+  task: PropTypes.shape(
     {
-      answers: React.PropTypes.array,
-      question: React.PropTypes.string
+      answers: PropTypes.array,
+      question: PropTypes.string
     }
   ),
-  translation: React.PropTypes.shape({
-    characteristics: React.PropTypes.object,
-    choices: React.PropTypes.object,
-    questions: React.PropTypes.object
+  translation: PropTypes.shape({
+    characteristics: PropTypes.object,
+    choices: PropTypes.object,
+    questions: PropTypes.object
   }).isRequired,
-  annotation: React.PropTypes.shape(
-    { value: React.PropTypes.array }
+  annotation: PropTypes.shape(
+    { value: PropTypes.array }
   ).isRequired,
-  expanded: React.PropTypes.bool
+  expanded: PropTypes.bool
 };
 
 MultipleChoiceSummary.defaultProps = {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
@@ -298,20 +299,20 @@ export default class HomePageForUser extends React.Component {
 }
 
 HomePageForUser.propTypes = {
-  actions: React.PropTypes.shape({
-    createLinkedResource: React.PropTypes.func,
-    uploadMedia: React.PropTypes.func
+  actions: PropTypes.shape({
+    createLinkedResource: PropTypes.func,
+    uploadMedia: PropTypes.func
   }),
-  user: React.PropTypes.shape({
-    display_name: React.PropTypes.string
+  user: PropTypes.shape({
+    display_name: PropTypes.string
   }),
-  location: React.PropTypes.shape({
-    hash: React.PropTypes.string
+  location: PropTypes.shape({
+    hash: PropTypes.string
   })
 };
 
 HomePageForUser.contextTypes = {
-  setAppHeaderVariant: React.PropTypes.func
+  setAppHeaderVariant: PropTypes.func
 };
 
 HomePageForUser.defaultProps = {

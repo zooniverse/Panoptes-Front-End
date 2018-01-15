@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import createReactClass from 'create-react-class';
 import counterpart from 'counterpart';
@@ -35,10 +36,10 @@ const SiteNav = createReactClass({
   resizeTimeout: NaN,
 
   contextTypes: {
-    initialLoadComplete: React.PropTypes.bool,
-    user: React.PropTypes.object,
+    initialLoadComplete: PropTypes.bool,
+    user: PropTypes.object,
     router: routerShape,
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
   },
 
   getInitialState() {

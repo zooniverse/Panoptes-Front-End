@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 
@@ -58,11 +59,11 @@ export const OrganizationMetadata = ({ displayName, projects }) => {
 };
 
 OrganizationMetadata.propTypes = {
-  displayName: React.PropTypes.string,
-  projects: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      id: React.PropTypes.string,
-      display_name: React.PropTypes.string
+  displayName: PropTypes.string,
+  projects: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      display_name: PropTypes.string
     })
   )
 };

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TriggeredModalForm from 'modal-form/triggered';
@@ -54,10 +55,10 @@ class ExpandableMenu extends React.Component {
 }
 
 ExpandableMenu.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  trigger: React.PropTypes.node,
-  triggerProps: React.PropTypes.object
+  children: PropTypes.node,
+  className: PropTypes.string,
+  trigger: PropTypes.node,
+  triggerProps: PropTypes.object
 };
 
 ExpandableMenu.defaultProps = {

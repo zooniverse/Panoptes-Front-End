@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 
@@ -17,11 +18,11 @@ function BlurredImage(props) {
 }
 
 BlurredImage.propTypes = {
-  className: React.PropTypes.string.isRequired,
-  style: React.PropTypes.object.isRequired,
-  src: React.PropTypes.string.isRequired,
-  position: React.PropTypes.string.isRequired,
-  blur: React.PropTypes.any,
+  className: PropTypes.string.isRequired,
+  style: PropTypes.object.isRequired,
+  src: PropTypes.string.isRequired,
+  position: PropTypes.string.isRequired,
+  blur: PropTypes.any,
 };
 
 BlurredImage.defaultProps = {

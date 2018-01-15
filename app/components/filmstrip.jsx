@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import DISCIPLINES from '../constants/disciplines';
 
@@ -106,10 +107,10 @@ export default class Filmstrip extends React.Component {
 }
 
 Filmstrip.propTypes = {
-  filterCards: React.PropTypes.arrayOf(React.PropTypes.object),
-  increment: React.PropTypes.number.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  value: React.PropTypes.string.isRequired
+  filterCards: PropTypes.arrayOf(PropTypes.object),
+  increment: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired
 };
 
 Filmstrip.defaultProps = {

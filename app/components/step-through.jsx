@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import ReactSwipe from 'react-swipe';
@@ -140,7 +141,7 @@ class StepThrough extends Component {
 }
 
 StepThrough.propTypes = {
-  defaultStep: React.PropTypes.number,
+  defaultStep: PropTypes.number,
 }
 
 StepThrough.defaultProps = {

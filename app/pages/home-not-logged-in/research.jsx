@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
@@ -96,10 +97,10 @@ const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =
 );
 
 HomePageResearch.propTypes = {
-  count: React.PropTypes.number,
-  screenWidth: React.PropTypes.number,
-  showDialog: React.PropTypes.func,
-  volunteerCount: React.PropTypes.number
+  count: PropTypes.number,
+  screenWidth: PropTypes.number,
+  showDialog: PropTypes.func,
+  volunteerCount: PropTypes.number
 };
 
 export default HomePageResearch;

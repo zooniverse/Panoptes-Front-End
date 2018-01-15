@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 
@@ -24,12 +25,12 @@ WorkflowToggle.defaultProps = {
 };
 
 WorkflowToggle.propTypes = {
-  checked: React.PropTypes.bool,
-  handleToggle: React.PropTypes.func,
-  name: React.PropTypes.string,
-  workflow: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
-    id: React.PropTypes.string
+  checked: PropTypes.bool,
+  handleToggle: PropTypes.func,
+  name: PropTypes.string,
+  workflow: PropTypes.shape({
+    display_name: PropTypes.string,
+    id: PropTypes.string
   }).isRequired
 };
 

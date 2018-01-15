@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { TextSplit } from 'seven-ten';
 import tasks from './tasks';
@@ -55,11 +56,11 @@ DefaultClassificationSummary.defaultProps = {
 };
 
 DefaultClassificationSummary.propTypes = {
-  workflow: React.PropTypes.object,
-  classification: React.PropTypes.object,
-  classificationCount: React.PropTypes.number,
-  onToggle: React.PropTypes.func,
-  splits: React.PropTypes.object
+  workflow: PropTypes.object,
+  classification: PropTypes.object,
+  classificationCount: PropTypes.number,
+  onToggle: PropTypes.func,
+  splits: PropTypes.object
 };
 
 export default DefaultClassificationSummary;

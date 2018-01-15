@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Summary from './summary';
 
@@ -75,21 +76,21 @@ Shortcut.getDefaultAnnotation = () => {
 };
 
 Shortcut.propTypes = {
-  annotation: React.PropTypes.shape(
+  annotation: PropTypes.shape(
     {
-      shortcut: React.PropTypes.object,
-      task: React.PropTypes.string
+      shortcut: PropTypes.object,
+      task: PropTypes.string
     }
   ),
-  onChange: React.PropTypes.func,
-  task: React.PropTypes.shape(
-    { unlinkedTask: React.PropTypes.string }
+  onChange: PropTypes.func,
+  task: PropTypes.shape(
+    { unlinkedTask: PropTypes.string }
   ),
-  translation: React.PropTypes.shape({
-    answers: React.PropTypes.array
+  translation: PropTypes.shape({
+    answers: PropTypes.array
   }),
-  workflow: React.PropTypes.shape(
-    { tasks: React.PropTypes.object }
+  workflow: PropTypes.shape(
+    { tasks: PropTypes.object }
   )
 };
 

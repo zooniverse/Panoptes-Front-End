@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ExpandableMenu from './expandable-menu';
 
@@ -24,8 +25,8 @@ class SiteSubnav extends React.Component {
 }
 
 SiteSubnav.propTypes = {
-  isMobile: React.PropTypes.bool,
-  children: React.PropTypes.node
+  isMobile: PropTypes.bool,
+  children: PropTypes.node
 };
 
 export default SiteSubnav;

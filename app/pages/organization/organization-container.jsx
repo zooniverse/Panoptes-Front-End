@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import Translate from 'react-translate-component';
@@ -268,22 +269,22 @@ class OrganizationContainer extends React.Component {
 }
 
 OrganizationContainer.contextTypes = {
-  initialLoadComplete: React.PropTypes.bool,
-  router: React.PropTypes.object.isRequired,
-  user: React.PropTypes.shape({
-    id: React.PropTypes.string
+  initialLoadComplete: PropTypes.bool,
+  router: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string
   })
 };
 
 OrganizationContainer.propTypes = {
-  location: React.PropTypes.shape({
-    query: React.PropTypes.shape({
-      category: React.PropTypes.string
+  location: PropTypes.shape({
+    query: PropTypes.shape({
+      category: PropTypes.string
     })
   }),
-  params: React.PropTypes.shape({
-    name: React.PropTypes.string,
-    owner: React.PropTypes.string
+  params: PropTypes.shape({
+    name: PropTypes.string,
+    owner: PropTypes.string
   }).isRequired
 };
 

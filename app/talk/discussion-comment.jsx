@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import talkClient from 'panoptes-client/lib/talk-client';
@@ -90,14 +91,14 @@ class DiscussionComment extends React.Component {
 }
 
 DiscussionComment.propTypes = {
-  params: React.PropTypes.object,
-  project: React.PropTypes.object,
-  user: React.PropTypes.object,
-  roles: React.PropTypes.array,
-  discussion: React.PropTypes.object,
-  reply: React.PropTypes.object,
-  onSubmitComment: React.PropTypes.func,
-  onClearReply: React.PropTypes.func
+  params: PropTypes.object,
+  project: PropTypes.object,
+  user: PropTypes.object,
+  roles: PropTypes.array,
+  discussion: PropTypes.object,
+  reply: PropTypes.object,
+  onSubmitComment: PropTypes.func,
+  onClearReply: PropTypes.func
 };
 
 export default DiscussionComment;

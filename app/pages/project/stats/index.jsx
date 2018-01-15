@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import qs from 'qs';
 import { ProjectStatsPage } from './stats.jsx';
 import getWorkflowsInOrder from '../../../lib/get-workflows-in-order.coffee';
@@ -113,11 +114,11 @@ class ProjectStatsPageController extends React.Component {
   }
 }
 
-ProjectStatsPageController.contextTypes = { router: React.PropTypes.object };
+ProjectStatsPageController.contextTypes = { router: PropTypes.object };
 
 ProjectStatsPageController.propTypes = {
-  project: React.PropTypes.object,
-  params: React.PropTypes.object
+  project: PropTypes.object,
+  params: PropTypes.object
 };
 
 module.exports = ProjectStatsPageController;

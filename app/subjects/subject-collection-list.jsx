@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Loading from '../components/loading-indicator';
 import CollectionCard from '../pages/collections/collection-card';
@@ -45,10 +46,10 @@ SubjectCollectionList.defaultProps = {
 };
 
 SubjectCollectionList.propTypes = {
-  collections: React.PropTypes.arrayOf(React.PropTypes.object),
-  onCollectionsPageChange: React.PropTypes.func,
-  project: React.PropTypes.shape({
-    slug: React.PropTypes.string
+  collections: PropTypes.arrayOf(PropTypes.object),
+  onCollectionsPageChange: PropTypes.func,
+  project: PropTypes.shape({
+    slug: PropTypes.string
   })
 };
 

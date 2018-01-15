@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default function LabelEditor(props) {
@@ -33,5 +34,5 @@ export default function LabelEditor(props) {
 }
 
 LabelEditor.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };

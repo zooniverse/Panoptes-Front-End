@@ -1,4 +1,5 @@
 import { MarkdownEditor, MarkdownHelp } from 'markdownz';
+import PropTypes from 'prop-types';
 import React from 'react';
 import alert from '../../../lib/alert';
 import AutoSave from '../../../components/auto-save';
@@ -130,18 +131,18 @@ const SliderTaskEditor = (props) => {
 };
 
 SliderTaskEditor.propTypes = {
-  isSubtask: React.PropTypes.bool,
-  workflow: React.PropTypes.object,
-  taskPrefix: React.PropTypes.string,
-  task: React.PropTypes.shape(
+  isSubtask: PropTypes.bool,
+  workflow: PropTypes.object,
+  taskPrefix: PropTypes.string,
+  task: PropTypes.shape(
     {
-      next: React.PropTypes.string,
-      instruction: React.PropTypes.string,
-      help: React.PropTypes.string,
-      min: React.PropTypes.string,
-      max: React.PropTypes.string,
-      defaultValue: React.PropTypes.string,
-      step: React.PropTypes.string
+      next: PropTypes.string,
+      instruction: PropTypes.string,
+      help: PropTypes.string,
+      min: PropTypes.string,
+      max: PropTypes.string,
+      defaultValue: PropTypes.string,
+      step: PropTypes.string
     }
   )
 };

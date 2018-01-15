@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import TriggeredModalForm from 'modal-form/triggered';
 import Thumbnail from '../../../components/thumbnail';
@@ -60,12 +61,12 @@ MediaIcon.defaultProps = {
 };
 
 MediaIcon.propTypes = {
-  height: React.PropTypes.number,
-  onDelete: React.PropTypes.func,
-  resource: React.PropTypes.shape({
-    delete: React.PropTypes.func,
-    id: React.PropTypes.string,
-    metadata: React.PropTypes.object,
-    src: React.PropTypes.string,
+  height: PropTypes.number,
+  onDelete: PropTypes.func,
+  resource: PropTypes.shape({
+    delete: PropTypes.func,
+    id: PropTypes.string,
+    metadata: PropTypes.object,
+    src: PropTypes.string,
   }),
 };

@@ -1,4 +1,5 @@
 import { Markdown } from 'markdownz';
+import PropTypes from 'prop-types';
 import React from 'react';
 import GenericTask from '../generic';
 import SliderTaskEditor from './editor';
@@ -35,16 +36,16 @@ const SliderSummary = (props) => {
 };
 
 SliderSummary.propTypes = {
-  task: React.PropTypes.shape(
+  task: PropTypes.shape(
     {
-      instruction: React.PropTypes.string
+      instruction: PropTypes.string
     }
   ).isRequired,
-  annotation: React.PropTypes.shape(
+  annotation: PropTypes.shape(
     {
-      value: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.number
+      value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
       ])
     }
   ).isRequired
@@ -124,22 +125,22 @@ SliderTask.isAnnotationComplete = (task, annotation) => {
   return (annotation.value !== null);
 };
 SliderTask.propTypes = {
-  annotation: React.PropTypes.shape({
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number
+  annotation: PropTypes.shape({
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
     ])
   }),
-  autoFocus: React.PropTypes.bool,
-  onChange: React.PropTypes.func,
-  task: React.PropTypes.shape({
-    answers: React.PropTypes.array,
-    defaultValue: React.PropTypes.string,
-    help: React.PropTypes.string,
-    instruction: React.PropTypes.string,
-    max: React.PropTypes.string,
-    min: React.PropTypes.string,
-    step: React.PropTypes.string
+  autoFocus: PropTypes.bool,
+  onChange: PropTypes.func,
+  task: PropTypes.shape({
+    answers: PropTypes.array,
+    defaultValue: PropTypes.string,
+    help: PropTypes.string,
+    instruction: PropTypes.string,
+    max: PropTypes.string,
+    min: PropTypes.string,
+    step: PropTypes.string
   })
 };
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
@@ -79,11 +80,11 @@ class TextViewer extends Component {
 }
 
 TextViewer.propTypes = {
-  src: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string,
-  format: React.PropTypes.string,
-  onLoad: React.PropTypes.func,
-  style: React.PropTypes.object
+  src: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  format: PropTypes.string,
+  onLoad: PropTypes.func,
+  style: PropTypes.object
 };
 
 TextViewer.defaultProps = {

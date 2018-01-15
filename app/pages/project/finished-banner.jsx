@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
@@ -101,10 +102,10 @@ FinishedBanner.defaultProps = {
 };
 
 FinishedBanner.propTypes = {
-  dismissFor: React.PropTypes.number,
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    slug: React.PropTypes.string,
+  dismissFor: PropTypes.number,
+  project: PropTypes.shape({
+    id: PropTypes.string,
+    slug: PropTypes.string,
   }),
-  projectIsComplete: React.PropTypes.bool
+  projectIsComplete: PropTypes.bool
 };

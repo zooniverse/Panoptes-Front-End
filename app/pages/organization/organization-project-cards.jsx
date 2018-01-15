@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import ProjectCard from '../../partials/project-card';
@@ -38,20 +39,20 @@ export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjec
 };
 
 OrganizationProjectCards.propTypes = {
-  errorFetchingProjects: React.PropTypes.shape({
-    message: React.PropTypes.string
+  errorFetchingProjects: PropTypes.shape({
+    message: PropTypes.string
   }),
-  fetchingProjects: React.PropTypes.bool,
-  projects: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      id: React.PropTypes.string,
-      display_name: React.PropTypes.string
+  fetchingProjects: PropTypes.bool,
+  projects: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      display_name: PropTypes.string
     })
   ),
-  projectAvatars: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      id: React.PropTypes.string,
-      src: React.PropTypes.string
+  projectAvatars: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      src: PropTypes.string
     })
   )
 };

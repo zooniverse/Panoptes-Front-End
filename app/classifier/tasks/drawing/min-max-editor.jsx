@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import AutoSave from '../../../components/auto-save';
 
 class MinMaxEditor extends React.Component {
   static propTypes = {
-    name: React.PropTypes.string,
-    choice: React.PropTypes.object,
-    workflow: React.PropTypes.object,
+    name: PropTypes.string,
+    choice: PropTypes.object,
+    workflow: PropTypes.object,
   };
 
   state = {

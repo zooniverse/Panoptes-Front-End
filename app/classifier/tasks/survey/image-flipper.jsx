@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const PRELOAD_STYLE = {
@@ -64,7 +65,7 @@ class ImageFlipper extends React.Component {
 }
 
 ImageFlipper.propTypes = {
-  images: React.PropTypes.arrayOf(React.PropTypes.string)
+  images: PropTypes.arrayOf(PropTypes.string)
 };
 
 ImageFlipper.defaultProps = {

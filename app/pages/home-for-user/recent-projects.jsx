@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import HomePageSection from './generic-section';
 import ProjectIcon from '../../components/project-icon';
@@ -60,8 +61,8 @@ class RecentProjectsSection extends React.Component {
 }
 
 RecentProjectsSection.propTypes = {
-  onClose: React.PropTypes.func.isRequired,
-  projects: React.PropTypes.array.isRequired
+  onClose: PropTypes.func.isRequired,
+  projects: PropTypes.array.isRequired
 };
 
 RecentProjectsSection.defaultProps = {

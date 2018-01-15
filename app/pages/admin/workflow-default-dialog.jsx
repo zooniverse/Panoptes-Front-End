@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Dialog from 'modal-form/dialog';
 
@@ -29,8 +30,8 @@ WorkflowDefaultDialog.defaultProps = {
 };
 
 WorkflowDefaultDialog.propTypes = {
-  onCancel: React.PropTypes.func,
-  onSuccess: React.PropTypes.func
+  onCancel: PropTypes.func,
+  onSuccess: PropTypes.func
 };
 
 export default WorkflowDefaultDialog;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import AutoSave from '../../../components/auto-save';
 
@@ -86,7 +87,7 @@ class ExperimentalFeatures extends Component {
 }
 
 ExperimentalFeatures.propTypes = {
-  project: React.PropTypes.object.isRequired
+  project: PropTypes.object.isRequired
 };
 
 ExperimentalFeatures.defaultProps = {

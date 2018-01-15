@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import SVGRenderer from './svg';
 import TextRenderer from './text';
@@ -11,7 +12,7 @@ function DefaultRenderer(props) {
 }
 
 DefaultRenderer.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 const VIEWERS = {
@@ -31,8 +32,8 @@ function AnnotationRenderer(props) {
 }
 
 AnnotationRenderer.propTypes = {
-  children: React.PropTypes.node,
-  type: React.PropTypes.string
+  children: PropTypes.node,
+  type: PropTypes.string
 };
 
 export default AnnotationRenderer;

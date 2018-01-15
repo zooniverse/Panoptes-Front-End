@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import statsClient from 'panoptes-client/lib/stats-client';
 import moment from 'moment';
@@ -165,16 +166,16 @@ GraphSelect.defaultProps = {
 };
 
 GraphSelect.propTypes = {
-  by: React.PropTypes.string,
-  failedWorkflows: React.PropTypes.array,
-  projectId: React.PropTypes.string,
-  workflowId: React.PropTypes.string,
-  range: React.PropTypes.string,
-  type: React.PropTypes.string,
-  workflows: React.PropTypes.array,
-  handleGraphChange: React.PropTypes.func,
-  handleRangeChange: React.PropTypes.func,
-  handleWorkflowChange: React.PropTypes.func,
+  by: PropTypes.string,
+  failedWorkflows: PropTypes.array,
+  projectId: PropTypes.string,
+  workflowId: PropTypes.string,
+  range: PropTypes.string,
+  type: PropTypes.string,
+  workflows: PropTypes.array,
+  handleGraphChange: PropTypes.func,
+  handleRangeChange: PropTypes.func,
+  handleWorkflowChange: PropTypes.func,
 };
 
 export const Eta = (props) => {
@@ -190,7 +191,7 @@ export const Eta = (props) => {
 };
 
 Eta.propTypes = {
-  numDays: React.PropTypes.number,
+  numDays: PropTypes.number,
 };
 
 export class WorkflowProgress extends React.Component {
@@ -308,7 +309,7 @@ export class WorkflowProgress extends React.Component {
 }
 
 WorkflowProgress.propTypes = {
-  workflow: React.PropTypes.object,
+  workflow: PropTypes.object,
 };
 
 export class ProjectStatsPage extends React.Component {
@@ -446,18 +447,18 @@ ProjectStatsPage.defaultProps = {
 };
 
 ProjectStatsPage.propTypes = {
-  classificationRange: React.PropTypes.string,
-  classificationsBy: React.PropTypes.string,
-  commentsBy: React.PropTypes.string,
-  commentRange: React.PropTypes.string,
-  currentClassifications: React.PropTypes.number,
-  failedWorkflows: React.PropTypes.array,
-  projectId: React.PropTypes.string,
-  totalVolunteers: React.PropTypes.number,
-  workflows: React.PropTypes.array,
-  startDate: React.PropTypes.string,
-  handleGraphChange: React.PropTypes.func,
-  handleRangeChange: React.PropTypes.func,
-  handleWorkflowChange: React.PropTypes.func,
-  workflowId: React.PropTypes.string,
+  classificationRange: PropTypes.string,
+  classificationsBy: PropTypes.string,
+  commentsBy: PropTypes.string,
+  commentRange: PropTypes.string,
+  currentClassifications: PropTypes.number,
+  failedWorkflows: PropTypes.array,
+  projectId: PropTypes.string,
+  totalVolunteers: PropTypes.number,
+  workflows: PropTypes.array,
+  startDate: PropTypes.string,
+  handleGraphChange: PropTypes.func,
+  handleRangeChange: PropTypes.func,
+  handleWorkflowChange: PropTypes.func,
+  workflowId: PropTypes.string,
 };

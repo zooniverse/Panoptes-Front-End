@@ -5,14 +5,14 @@ import isAdmin from '../lib/is-admin';
 
 class AdminOnly extends React.Component {
   static contextTypes = {
-    user: React.PropTypes.object,
+    user: React.PropTypes.object
   };
 
   static defaultProps = {
-    whenActive: false,
+    whenActive: false
   };
 
-  refreshing: bool = false;
+  refreshing = (false: boolean);
 
   componentDidMount() {
     apiClient.listen('change', this.handleClientChange);
@@ -44,7 +44,7 @@ class AdminOnly extends React.Component {
     if (!!this.context.user && this.context.user.admin && (!this.props.whenActive || isAdmin())) {
       if (this.refreshing) {
         // Return null during refresh force re-render the child.
-        return null
+        return null;
       } else {
         return this.props.children;
       }

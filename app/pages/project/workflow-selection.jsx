@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../lib/is-admin';
@@ -195,41 +196,41 @@ WorkflowSelection.defaultProps = {
 };
 
 WorkflowSelection.propTypes = {
-  actions: React.PropTypes.shape({
-    translations: React.PropTypes.shape({
-      load: React.PropTypes.func
+  actions: PropTypes.shape({
+    translations: PropTypes.shape({
+      load: PropTypes.func
     })
   }),
-  children: React.PropTypes.node,
-  location: React.PropTypes.shape({
-    query: React.PropTypes.shape({
-      workflow: React.PropTypes.string
+  children: PropTypes.node,
+  location: PropTypes.shape({
+    query: PropTypes.shape({
+      workflow: PropTypes.string
     })
   }),
-  onChangePreferences: React.PropTypes.func,
-  preferences: React.PropTypes.shape({
-    save: React.PropTypes.func,
-    update: React.PropTypes.func
+  onChangePreferences: PropTypes.func,
+  preferences: PropTypes.shape({
+    save: PropTypes.func,
+    update: PropTypes.func
   }),
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    configuration: React.PropTypes.shape({
-      default_workflow: React.PropTypes.string
+  project: PropTypes.shape({
+    id: PropTypes.string,
+    configuration: PropTypes.shape({
+      default_workflow: PropTypes.string
     }),
-    slug: React.PropTypes.string,
-    uncacheLink: React.PropTypes.func
+    slug: PropTypes.string,
+    uncacheLink: PropTypes.func
   }).isRequired,
-  projectRoles: React.PropTypes.arrayOf(React.PropTypes.object),
-  translation: React.PropTypes.shape({
-    display_name: React.PropTypes.string
+  projectRoles: PropTypes.arrayOf(PropTypes.object),
+  translation: PropTypes.shape({
+    display_name: PropTypes.string
   }),
-  translations: React.PropTypes.shape({
-    locale: React.PropTypes.string
+  translations: PropTypes.shape({
+    locale: PropTypes.string
   })
 };
 
 WorkflowSelection.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 export default WorkflowSelection;

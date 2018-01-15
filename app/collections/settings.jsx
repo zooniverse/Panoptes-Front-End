@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import alert from '../lib/alert';
 import AutoSave from '../components/auto-save';
@@ -200,7 +201,7 @@ export default class CollectionSettings extends React.Component {
 }
 
 CollectionSettings.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 CollectionSettings.defaultProps = {
@@ -209,11 +210,10 @@ CollectionSettings.defaultProps = {
 };
 
 CollectionSettings.propTypes = {
-  canCollaborate: React.PropTypes.bool,
-  collection: React.PropTypes.shape({
-    default_subject_src: React.PropTypes.string,
-    description: React.PropTypes.string,
-    private: React.PropTypes.bool
+  canCollaborate: PropTypes.bool,
+  collection: PropTypes.shape({
+    default_subject_src: PropTypes.string,
+    description: PropTypes.string,
+    private: PropTypes.bool
   })
 };
-

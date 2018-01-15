@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default function Selection(props) {
@@ -25,11 +26,11 @@ export default function Selection(props) {
 }
 
 Selection.propTypes = {
-  annotation: React.PropTypes.shape({
-    labelInformation: React.PropTypes.object,
-    text: React.PropTypes.string
+  annotation: PropTypes.shape({
+    labelInformation: PropTypes.object,
+    text: PropTypes.string
   }),
-  disabled: React.PropTypes.bool
+  disabled: PropTypes.bool
 };
 
 Selection.defaultProps = {

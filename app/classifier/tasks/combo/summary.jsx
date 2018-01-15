@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import TaskTranslations from '../translations';
 import tasks from '..';
@@ -32,10 +33,10 @@ const ComboTaskSummary = (props) => {
 };
 
 ComboTaskSummary.propTypes = {
-  annotation: React.PropTypes.shape(
-    { value: React.PropTypes.array }
+  annotation: PropTypes.shape(
+    { value: PropTypes.array }
   ).isRequired,
-  onToggle: React.PropTypes.func
+  onToggle: PropTypes.func
 };
 
 export default ComboTaskSummary;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import TriggeredModalForm from 'modal-form/triggered';
 
@@ -10,8 +11,8 @@ const WarningBanner = (props) => {
 };
 
 WarningBanner.propTypes = {
-  label: React.PropTypes.string.isRequired,
-  children: React.PropTypes.node.isRequired
+  label: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 export default WarningBanner;

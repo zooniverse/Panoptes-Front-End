@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import LoadingIndicator from '../../components/loading-indicator';
@@ -65,16 +66,16 @@ SubjectSetsPage.defaultProps = {
 };
 
 SubjectSetsPage.propTypes = {
-  createNewSubjectSet: React.PropTypes.func,
-  defaultSubjectSetName: React.PropTypes.string,
-  labPath: React.PropTypes.func,
-  loading: React.PropTypes.bool,
-  onPageChange: React.PropTypes.func,
-  subjectSetCreationError: React.PropTypes.shape({
-    message: React.PropTypes.string
+  createNewSubjectSet: PropTypes.func,
+  defaultSubjectSetName: PropTypes.string,
+  labPath: PropTypes.func,
+  loading: PropTypes.bool,
+  onPageChange: PropTypes.func,
+  subjectSetCreationError: PropTypes.shape({
+    message: PropTypes.string
   }),
-  subjectSetCreationInProgress: React.PropTypes.bool,
-  subjectSets: React.PropTypes.arrayOf(React.PropTypes.object)
+  subjectSetCreationInProgress: PropTypes.bool,
+  subjectSets: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default SubjectSetsPage;

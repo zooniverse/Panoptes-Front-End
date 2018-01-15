@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import { VisibilitySplit } from 'seven-ten';
@@ -411,70 +412,70 @@ class Classifier extends React.Component {
 }
 
 Classifier.contextTypes = {
-  geordi: React.PropTypes.object,
-  store: React.PropTypes.object
+  geordi: PropTypes.object,
+  store: PropTypes.object
 };
 
 Classifier.propTypes = {
-  actions: React.PropTypes.shape({
-    feedback: React.PropTypes.shape({
-      init: React.PropTypes.func,
-      update: React.PropTypes.func
+  actions: PropTypes.shape({
+    feedback: PropTypes.shape({
+      init: PropTypes.func,
+      update: PropTypes.func
     })
   }),
-  classification: React.PropTypes.shape({
-    annotations: React.PropTypes.array,
-    completed: React.PropTypes.bool,
-    gold_standard: React.PropTypes.bool,
-    id: React.PropTypes.string,
-    listen: React.PropTypes.func,
-    stopListening: React.PropTypes.func,
-    update: React.PropTypes.func
+  classification: PropTypes.shape({
+    annotations: PropTypes.array,
+    completed: PropTypes.bool,
+    gold_standard: PropTypes.bool,
+    id: PropTypes.string,
+    listen: PropTypes.func,
+    stopListening: PropTypes.func,
+    update: PropTypes.func
   }),
-  classificationCount: React.PropTypes.number,
-  demoMode: React.PropTypes.bool,
-  expertClassifier: React.PropTypes.bool,
-  feedback: React.PropTypes.shape({
-    active: React.PropTypes.bool,
-    rules: React.PropTypes.object
+  classificationCount: PropTypes.number,
+  demoMode: PropTypes.bool,
+  expertClassifier: PropTypes.bool,
+  feedback: PropTypes.shape({
+    active: PropTypes.bool,
+    rules: PropTypes.object
   }),
-  minicourse: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    steps: React.PropTypes.array
+  minicourse: PropTypes.shape({
+    id: PropTypes.string,
+    steps: PropTypes.array
   }),
-  preferences: React.PropTypes.shape({
-    id: React.PropTypes.string
+  preferences: PropTypes.shape({
+    id: PropTypes.string
   }),
-  project: React.PropTypes.shape({
-    experimental_tools: React.PropTypes.array,
-    id: React.PropTypes.string,
-    slug: React.PropTypes.string
+  project: PropTypes.shape({
+    experimental_tools: PropTypes.array,
+    id: PropTypes.string,
+    slug: PropTypes.string
   }),
-  onChangeDemoMode: React.PropTypes.func,
-  onClickNext: React.PropTypes.func,
-  onComplete: React.PropTypes.func,
-  onCompleteAndLoadAnotherSubject: React.PropTypes.func,
-  onLoad: React.PropTypes.func,
-  splits: React.PropTypes.shape({
-    subject: React.PropTypes.object
+  onChangeDemoMode: PropTypes.func,
+  onClickNext: PropTypes.func,
+  onComplete: PropTypes.func,
+  onCompleteAndLoadAnotherSubject: PropTypes.func,
+  onLoad: PropTypes.func,
+  splits: PropTypes.shape({
+    subject: PropTypes.object
   }),
-  subject: React.PropTypes.shape({
-    favorite: React.PropTypes.bool,
-    id: React.PropTypes.string,
-    metadata: React.PropTypes.object
+  subject: PropTypes.shape({
+    favorite: PropTypes.bool,
+    id: PropTypes.string,
+    metadata: PropTypes.object
   }),
-  tutorial: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    steps: React.PropTypes.array
+  tutorial: PropTypes.shape({
+    id: PropTypes.string,
+    steps: PropTypes.array
   }),
-  user: React.PropTypes.shape({
-    id: React.PropTypes.string
+  user: PropTypes.shape({
+    id: PropTypes.string
   }),
-  userRoles: React.PropTypes.array,
-  workflow: React.PropTypes.shape({
-    configuration: React.PropTypes.object,
-    id: React.PropTypes.string,
-    tasks: React.PropTypes.object
+  userRoles: PropTypes.array,
+  workflow: PropTypes.shape({
+    configuration: PropTypes.object,
+    id: PropTypes.string,
+    tasks: PropTypes.object
   })
 };
 

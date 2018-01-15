@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
@@ -74,11 +75,11 @@ class Recents extends React.Component {
 }
 
 Recents.propTypes = {
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string
+  project: PropTypes.shape({
+    id: PropTypes.string
   }).isRequired,
-  user: React.PropTypes.shape({
-    get: React.PropTypes.func
+  user: PropTypes.shape({
+    get: PropTypes.func
   }).isRequired
 };
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Markdown } from 'markdownz';
 
@@ -50,9 +51,9 @@ const GSGoldStandardSummary = ({ classification, subject, workflow }) => {
 };
 
 GSGoldStandardSummary.propTypes = {
-  classification: React.PropTypes.object,
-  subject: React.PropTypes.object,
-  workflow: React.PropTypes.object
+  classification: PropTypes.object,
+  subject: PropTypes.object,
+  workflow: PropTypes.object
 };
 
 export default GSGoldStandardSummary;

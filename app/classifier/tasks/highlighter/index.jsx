@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Markdown } from 'markdownz';
 import GenericTaskEditor from '../generic-editor';
@@ -142,28 +143,28 @@ Highlighter.defaultProps = {
 };
 
 Highlighter.propTypes = {
-  annotation: React.PropTypes.shape({
-    _toolIndex: React.PropTypes.number,
-    task: React.PropTypes.shape({
-      help: React.PropTypes.string,
-      highlighterLabels: React.PropTypes.array,
-      instruction: React.PropTypes.string,
-      required: React.PropTypes.bool,
-      tools: React.PropTypes.array,
-      type: React.PropTypes.string
+  annotation: PropTypes.shape({
+    _toolIndex: PropTypes.number,
+    task: PropTypes.shape({
+      help: PropTypes.string,
+      highlighterLabels: PropTypes.array,
+      instruction: PropTypes.string,
+      required: PropTypes.bool,
+      tools: PropTypes.array,
+      type: PropTypes.string
     }),
-    tools: React.PropTypes.array
+    tools: PropTypes.array
   }),
-  onChange: React.PropTypes.func,
-  task: React.PropTypes.shape({
-    help: React.PropTypes.string,
-    highlighterLabels: React.PropTypes.array,
-    instruction: React.PropTypes.string,
-    required: React.PropTypes.bool,
-    tools: React.PropTypes.array,
-    type: React.PropTypes.string
+  onChange: PropTypes.func,
+  task: PropTypes.shape({
+    help: PropTypes.string,
+    highlighterLabels: PropTypes.array,
+    instruction: PropTypes.string,
+    required: PropTypes.bool,
+    tools: PropTypes.array,
+    type: PropTypes.string
   }),
-  workflow: React.PropTypes.shape({
-    tasks: React.PropTypes.object
+  workflow: PropTypes.shape({
+    tasks: PropTypes.object
   })
 };

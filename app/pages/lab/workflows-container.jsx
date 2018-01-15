@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
 
@@ -107,7 +108,7 @@ export default class WorkflowsContainer extends React.Component {
 }
 
 WorkflowsContainer.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 WorkflowsContainer.defaultProps = {
@@ -117,19 +118,19 @@ WorkflowsContainer.defaultProps = {
 };
 
 WorkflowsContainer.propTypes = {
-  children: React.PropTypes.node,
-  location: React.PropTypes.shape({
-    pathname: React.PropTypes.string,
-    query: React.PropTypes.object
+  children: PropTypes.node,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+    query: PropTypes.object
   }),
-  project: React.PropTypes.shape({
-    get: React.PropTypes.func,
-    id: React.PropTypes.string,
-    links: React.PropTypes.shape({
-      workflows: React.PropTypes.arrayOf(React.PropTypes.string)
+  project: PropTypes.shape({
+    get: PropTypes.func,
+    id: PropTypes.string,
+    links: PropTypes.shape({
+      workflows: PropTypes.arrayOf(PropTypes.string)
     }),
-    save: React.PropTypes.func,
-    uncacheLink: React.PropTypes.func,
-    update: React.PropTypes.func
+    save: PropTypes.func,
+    uncacheLink: PropTypes.func,
+    update: PropTypes.func
   })
 };

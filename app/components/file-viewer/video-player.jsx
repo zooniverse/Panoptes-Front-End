@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class VideoPlayer extends React.Component {
@@ -95,12 +96,12 @@ class VideoPlayer extends React.Component {
 }
 
 VideoPlayer.propTypes = {
-  format: React.PropTypes.string,
-  frame: React.PropTypes.number,
-  onLoad: React.PropTypes.func,
-  showControls: React.PropTypes.bool,
-  src: React.PropTypes.string,
-  type: React.PropTypes.string
+  format: PropTypes.string,
+  frame: PropTypes.number,
+  onLoad: PropTypes.func,
+  showControls: PropTypes.bool,
+  src: PropTypes.string,
+  type: PropTypes.string
 };
 
 VideoPlayer.defaultProps = {

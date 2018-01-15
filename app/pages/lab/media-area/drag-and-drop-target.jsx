@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class DragAndDropTarget extends React.Component {
@@ -64,10 +65,10 @@ DragAndDropTarget.defaultProps = {
 };
 
 DragAndDropTarget.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  onDragEnter: React.PropTypes.func,
-  onDragOver: React.PropTypes.func,
-  onDragLeave: React.PropTypes.func,
-  onDrop: React.PropTypes.func,
+  children: PropTypes.node,
+  className: PropTypes.string,
+  onDragEnter: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDragLeave: PropTypes.func,
+  onDrop: PropTypes.func,
 };

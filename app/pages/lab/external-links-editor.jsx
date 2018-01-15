@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import DragReorderable from 'drag-reorderable';
 import AutoSave from '../../components/auto-save.coffee';
@@ -134,9 +135,9 @@ ExternalLinksEditor.defaultProps = {
 };
 
 ExternalLinksEditor.propTypes = {
-  project: React.PropTypes.shape({
-    save: React.PropTypes.func,
-    update: React.PropTypes.func,
-    urls: React.PropTypes.array
+  project: PropTypes.shape({
+    save: PropTypes.func,
+    update: PropTypes.func,
+    urls: PropTypes.array
   })
 };

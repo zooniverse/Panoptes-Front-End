@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import { IndexLink, Link } from 'react-router';
@@ -371,33 +372,33 @@ ProjectNavbar.defaultProps = {
 };
 
 ProjectNavbar.contextTypes = {
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };
 
 ProjectNavbar.propTypes = {
-  loading: React.PropTypes.bool,
-  organization: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
-    slug: React.PropTypes.string
+  loading: PropTypes.bool,
+  organization: PropTypes.shape({
+    display_name: PropTypes.string,
+    slug: PropTypes.string
   }),
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    display_name: React.PropTypes.string,
-    slug: React.PropTypes.string
+  project: PropTypes.shape({
+    id: PropTypes.string,
+    display_name: PropTypes.string,
+    slug: PropTypes.string
   }),
-  projectAvatar: React.PropTypes.shape({
-    src: React.PropTypes.string
+  projectAvatar: PropTypes.shape({
+    src: PropTypes.string
   }),
-  projectRoles: React.PropTypes.array,
-  user: React.PropTypes.shape({
-    id: React.PropTypes.string
+  projectRoles: PropTypes.array,
+  user: PropTypes.shape({
+    id: PropTypes.string
   }),
-  routes: React.PropTypes.array,
-  translation: React.PropTypes.shape({
-    display_name: React.PropTypes.string
+  routes: PropTypes.array,
+  translation: PropTypes.shape({
+    display_name: PropTypes.string
   }),
-  workflow: React.PropTypes.shape({
-    id: React.PropTypes.string
+  workflow: PropTypes.shape({
+    id: PropTypes.string
   })
 };
 

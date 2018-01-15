@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import SubjectPage from './subject-page';
@@ -89,19 +90,19 @@ export default class SubjectPageContainer extends React.Component {
 }
 
 SubjectPageContainer.propTypes = {
-  location: React.PropTypes.shape({
-    query: React.PropTypes.shape({
-      collections_page: React.PropTypes.string
+  location: PropTypes.shape({
+    query: PropTypes.shape({
+      collections_page: PropTypes.string
     })
   }),
-  params: React.PropTypes.shape({
-    id: React.PropTypes.string
+  params: PropTypes.shape({
+    id: PropTypes.string
   }),
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string
+  project: PropTypes.shape({
+    id: PropTypes.string
   }),
-  section: React.PropTypes.string,
-  user: React.PropTypes.shape({
-    id: React.PropTypes.string
+  section: PropTypes.string,
+  user: PropTypes.shape({
+    id: PropTypes.string
   })
 };

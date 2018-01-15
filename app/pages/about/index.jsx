@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
@@ -83,11 +84,11 @@ class AboutPage extends React.Component {
 }
 
 AboutPage.contextTypes = {
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };
 
 AboutPage.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 AboutPage.defaultProps = {

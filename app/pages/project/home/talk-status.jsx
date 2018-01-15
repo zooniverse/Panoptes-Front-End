@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { sugarApiClient } from 'panoptes-client/lib/sugar';
 import { Link } from 'react-router';
@@ -52,16 +53,16 @@ TalkStatus.defaultProps = {
 };
 
 TalkStatus.propTypes = {
-  project: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
-    id: React.PropTypes.string,
-    slug: React.PropTypes.string
+  project: PropTypes.shape({
+    display_name: PropTypes.string,
+    id: PropTypes.string,
+    slug: PropTypes.string
   }).isRequired,
-  translation: React.PropTypes.shape({
-    description: React.PropTypes.string,
-    display_name: React.PropTypes.string,
-    introduction: React.PropTypes.string,
-    researcher_quote: React.PropTypes.string,
-    title: React.PropTypes.string
+  translation: PropTypes.shape({
+    description: PropTypes.string,
+    display_name: PropTypes.string,
+    introduction: PropTypes.string,
+    researcher_quote: PropTypes.string,
+    title: PropTypes.string
   }).isRequired
 };

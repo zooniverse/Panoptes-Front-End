@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import AutoSave from '../../../components/auto-save';
 import handleInputChange from '../../../lib/handle-input-change';
@@ -115,17 +116,17 @@ export default class ShortcutEditor extends React.Component {
 }
 
 ShortcutEditor.propTypes = {
-  children: React.PropTypes.node,
-  task: React.PropTypes.shape(
+  children: PropTypes.node,
+  task: PropTypes.shape(
     {
-      question: React.PropTypes.string,
-      unlinkedTask: React.PropTypes.string
+      question: PropTypes.string,
+      unlinkedTask: PropTypes.string
     }
   ),
-  workflow: React.PropTypes.shape(
+  workflow: PropTypes.shape(
     {
-      tasks: React.PropTypes.object,
-      update: React.PropTypes.func
+      tasks: PropTypes.object,
+      update: PropTypes.func
     }
   )
 };

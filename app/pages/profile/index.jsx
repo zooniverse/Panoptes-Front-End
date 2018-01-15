@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import LoadingIndicator from '../../components/loading-indicator';
 import ProfileUser from './user';

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import auth from 'panoptes-client/lib/auth';
 import Translate from 'react-translate-component';
 import alert from '../../lib/alert';
@@ -129,7 +130,7 @@ ResetPasswordPage.defaultProps = {
 };
 
 ResetPasswordPage.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 export default ResetPasswordPage;

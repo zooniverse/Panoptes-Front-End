@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import statsClient from 'panoptes-client/lib/stats-client';
@@ -158,5 +159,5 @@ export default class HomePage extends React.Component {
 }
 
 HomePage.contextTypes = {
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };

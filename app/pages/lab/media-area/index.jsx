@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import MediaAreaView from './media-area-view';
@@ -71,30 +72,30 @@ MediaAreaController.defaultProps = {
 };
 
 MediaAreaController.propTypes = {
-  actions: React.PropTypes.shape({
-    fetchMedia: React.PropTypes.func,
-    handleDrop: React.PropTypes.func,
-    handleDelete: React.PropTypes.func,
-    handleFileSelection: React.PropTypes.func,
-    addFiles: React.PropTypes.func,
-    handleFile: React.PropTypes.func,
-    addFile: React.PropTypes.func,
-    createLinkedResource: React.PropTypes.func,
-    uploadMedia: React.PropTypes.func,
-    handleSuccess: React.PropTypes.func,
-    handleError: React.PropTypes.func,
-    removeFromPending: React.PropTypes.func
+  actions: PropTypes.shape({
+    fetchMedia: PropTypes.func,
+    handleDrop: PropTypes.func,
+    handleDelete: PropTypes.func,
+    handleFileSelection: PropTypes.func,
+    addFiles: PropTypes.func,
+    handleFile: PropTypes.func,
+    addFile: PropTypes.func,
+    createLinkedResource: PropTypes.func,
+    uploadMedia: PropTypes.func,
+    handleSuccess: PropTypes.func,
+    handleError: PropTypes.func,
+    removeFromPending: PropTypes.func
   }),
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  link: React.PropTypes.string,
-  metadata: React.PropTypes.object,
-  onAdd: React.PropTypes.func,
-  onDelete: React.PropTypes.func,
-  pageSize: React.PropTypes.number,
-  resource: React.PropTypes.shape({
-    _getURL: React.PropTypes.func,
-    get: React.PropTypes.func
+  children: PropTypes.node,
+  className: PropTypes.string,
+  link: PropTypes.string,
+  metadata: PropTypes.object,
+  onAdd: PropTypes.func,
+  onDelete: PropTypes.func,
+  pageSize: PropTypes.number,
+  resource: PropTypes.shape({
+    _getURL: PropTypes.func,
+    get: PropTypes.func
   }).isRequired,
-  style: React.PropTypes.object
+  style: PropTypes.object
 };

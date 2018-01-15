@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import SubjectViewer from '../components/subject-viewer';
 import ActiveUsers from '../talk/active-users';
@@ -64,14 +65,14 @@ SubjectPage.defaultProps = {
 };
 
 SubjectPage.propTypes = {
-  collections: React.PropTypes.arrayOf(React.PropTypes.object),
-  isFavorite: React.PropTypes.bool,
-  project: React.PropTypes.object,
-  section: React.PropTypes.string,
-  subject: React.PropTypes.shape({
-    id: React.PropTypes.string
+  collections: PropTypes.arrayOf(PropTypes.object),
+  isFavorite: PropTypes.bool,
+  project: PropTypes.object,
+  section: PropTypes.string,
+  subject: PropTypes.shape({
+    id: PropTypes.string
   }),
-  user: React.PropTypes.object
+  user: PropTypes.object
 };
 
 export default SubjectPage;

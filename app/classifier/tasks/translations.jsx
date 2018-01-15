@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import merge from 'lodash/merge';
 import { connect } from 'react-redux';
@@ -30,12 +31,12 @@ function TaskTranslations(props) {
 }
 
 TaskTranslations.propTypes = {
-  children: React.PropTypes.node,
-  task: React.PropTypes.shape({
-    answers: React.PropTypes.array,
-    question: React.PropTypes.string
+  children: PropTypes.node,
+  task: PropTypes.shape({
+    answers: PropTypes.array,
+    question: PropTypes.string
   }),
-  taskKey: React.PropTypes.string
+  taskKey: PropTypes.string
 };
 
 const mapStateToProps = state => ({

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import TriggeredModalForm from 'modal-form/triggered';
 import isAdmin from '../lib/is-admin';
@@ -47,13 +48,13 @@ function ExpertOptions(props) {
 }
 
 ExpertOptions.propTypes = {
-  classification: React.PropTypes.shape({
-    update: React.PropTypes.func,
-    gold_standard: React.PropTypes.bool
+  classification: PropTypes.shape({
+    update: PropTypes.func,
+    gold_standard: PropTypes.bool
   }),
-  demoMode: React.PropTypes.bool,
-  onChangeDemoMode: React.PropTypes.func,
-  userRoles: React.PropTypes.arrayOf(React.PropTypes.string)
+  demoMode: PropTypes.bool,
+  onChangeDemoMode: PropTypes.func,
+  userRoles: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default ExpertOptions;

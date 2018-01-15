@@ -1,4 +1,5 @@
 import { Markdown } from 'markdownz';
+import PropTypes from 'prop-types';
 import React from 'react';
 import GenericTask from '../generic';
 import GenericTaskEditor from '../generic-editor';
@@ -81,23 +82,23 @@ SingleChoiceTask.isAnnotationComplete = (task, annotation) => {
 };
 
 SingleChoiceTask.propTypes = {
-  task: React.PropTypes.shape(
+  task: PropTypes.shape(
     {
-      answers: React.PropTypes.array,
-      question: React.PropTypes.string,
-      help: React.PropTypes.string,
-      required: React.PropTypes.bool
+      answers: PropTypes.array,
+      question: PropTypes.string,
+      help: PropTypes.string,
+      required: PropTypes.bool
     }
   ),
-  translation: React.PropTypes.shape({
-    characteristics: React.PropTypes.object,
-    choices: React.PropTypes.object,
-    questions: React.PropTypes.object
+  translation: PropTypes.shape({
+    characteristics: PropTypes.object,
+    choices: PropTypes.object,
+    questions: PropTypes.object
   }).isRequired,
-  annotation: React.PropTypes.shape(
-    { value: React.PropTypes.number }
+  annotation: PropTypes.shape(
+    { value: PropTypes.number }
   ),
-  onChange: React.PropTypes.func
+  onChange: PropTypes.func
 };
 
 SingleChoiceTask.defaultProps = {

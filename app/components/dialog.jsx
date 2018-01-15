@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ModalFocus from './modal-focus';
 
@@ -50,9 +51,9 @@ class Dialog extends React.Component {
 }
 
 Dialog.propTypes = {
-  children: React.PropTypes.node,
-  controls: React.PropTypes.node,
-  onEscape: React.PropTypes.func
+  children: PropTypes.node,
+  controls: PropTypes.node,
+  onEscape: PropTypes.func
 };
 
 Dialog.defaultProps = {
@@ -62,4 +63,3 @@ Dialog.defaultProps = {
 };
 
 export default Dialog;
-

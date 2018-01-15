@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import HomePageLoggedIn from './home-for-user';
 import HomePageNotLoggedIn from './home-not-logged-in';
@@ -18,11 +19,11 @@ const HomePageRoot = (props) => {
 };
 
 HomePageRoot.propTypes = {
-  user: React.PropTypes.shape({
-    display_name: React.PropTypes.string
+  user: PropTypes.shape({
+    display_name: PropTypes.string
   }),
-  location: React.PropTypes.shape({
-    hash: React.PropTypes.string
+  location: PropTypes.shape({
+    hash: PropTypes.string
   })
 };
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { routerShape } from 'react-router/lib/PropTypes';
 import { Link } from 'react-router';
@@ -198,12 +199,12 @@ export default class AccountBar extends React.Component {
 }
 
 AccountBar.contextTypes = {
-  user: React.PropTypes.object,
+  user: PropTypes.object,
   router: routerShape,
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };
 
 AccountBar.propTypes = {
-  params: React.PropTypes.object,
-  isMobile: React.PropTypes.bool
+  params: PropTypes.object,
+  isMobile: PropTypes.bool
 };

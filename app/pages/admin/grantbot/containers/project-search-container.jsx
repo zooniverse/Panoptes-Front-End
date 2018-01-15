@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Async as SelectAsync } from 'react-select';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -76,7 +77,7 @@ class ProjectSearch extends React.Component {
 }
 
 ProjectSearch.propTypes = {
-  onSelect: React.PropTypes.func,
+  onSelect: PropTypes.func,
 };
 
 export default ProjectSearch;

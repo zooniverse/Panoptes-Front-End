@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import LoadingIndicator from '../loading-indicator';
 
@@ -31,12 +32,12 @@ class ImageViewer extends React.Component {
 }
 
 ImageViewer.propTypes = {
-  onBlur: React.PropTypes.func,
-  onFocus: React.PropTypes.func,
-  onLoad: React.PropTypes.func,
-  overlayStyle: React.PropTypes.object,
-  src: React.PropTypes.string,
-  style: React.PropTypes.object
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
+  onLoad: PropTypes.func,
+  overlayStyle: PropTypes.object,
+  src: PropTypes.string,
+  style: PropTypes.object
 };
 
 export default ImageViewer;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Dialog from 'modal-form/dialog';
 import CollectionsManager from './collections-manager';
@@ -52,12 +53,12 @@ CollectionsManagerIcon.defaultProps = {
 };
 
 CollectionsManagerIcon.propTypes = {
-  className: React.PropTypes.string,
-  project: React.PropTypes.object,
-  subject: React.PropTypes.shape({
-    id: React.PropTypes.string
+  className: PropTypes.string,
+  project: PropTypes.object,
+  subject: PropTypes.shape({
+    id: PropTypes.string
   }),
-  user: React.PropTypes.object
+  user: PropTypes.object
 };
 
 export default CollectionsManagerIcon;

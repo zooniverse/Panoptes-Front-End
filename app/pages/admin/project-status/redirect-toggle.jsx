@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import AutoSave from '../../../components/auto-save';
 import handleInputChange from '../../../lib/handle-input-change';
@@ -53,9 +54,9 @@ class RedirectToggle extends Component {
 }
 
 RedirectToggle.propTypes = {
-  project: React.PropTypes.object.isRequired,
-  invalidUrl: React.PropTypes.string,
-  validUrlRegex: React.PropTypes.object // regex
+  project: PropTypes.object.isRequired,
+  invalidUrl: PropTypes.string,
+  validUrlRegex: PropTypes.object // regex
 };
 
 RedirectToggle.defaultProps = {

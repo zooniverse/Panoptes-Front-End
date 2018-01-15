@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import tasks from './tasks';
 import Shortcut from './tasks/shortcut';
@@ -104,29 +105,29 @@ class Task extends React.Component {
 }
 
 Task.propTypes = {
-  annotation: React.PropTypes.shape({
-    shortcut: React.PropTypes.object,
-    value: React.PropTypes.any
+  annotation: PropTypes.shape({
+    shortcut: PropTypes.object,
+    value: PropTypes.any
   }),
-  children: React.PropTypes.node,
-  classification: React.PropTypes.shape({
-    id: React.PropTypes.string
+  children: PropTypes.node,
+  classification: PropTypes.shape({
+    id: PropTypes.string
   }),
-  preferences: React.PropTypes.shape({
-    id: React.PropTypes.string
+  preferences: PropTypes.shape({
+    id: PropTypes.string
   }),
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string
+  project: PropTypes.shape({
+    id: PropTypes.string
   }),
-  subjectLoading: React.PropTypes.bool,
-  task: React.PropTypes.shape({
-    type: React.PropTypes.string
+  subjectLoading: PropTypes.bool,
+  task: PropTypes.shape({
+    type: PropTypes.string
   }),
-  user: React.PropTypes.shape({
-    id: React.PropTypes.string
+  user: PropTypes.shape({
+    id: PropTypes.string
   }),
-  workflow: React.PropTypes.shape({
-    id: React.PropTypes.string
+  workflow: PropTypes.shape({
+    id: PropTypes.string
   })
 };
 

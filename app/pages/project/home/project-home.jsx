@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import classnames from 'classnames';
@@ -141,7 +142,7 @@ const ProjectHomePage = (props) => {
 };
 
 ProjectHomePage.contextTypes = {
-  user: React.PropTypes.object
+  user: PropTypes.object
 };
 
 ProjectHomePage.defaultProps = {
@@ -158,40 +159,40 @@ ProjectHomePage.defaultProps = {
 };
 
 ProjectHomePage.propTypes = {
-  activeWorkflows: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  background: React.PropTypes.shape({
-    src: React.PropTypes.string
+  activeWorkflows: PropTypes.arrayOf(PropTypes.object).isRequired,
+  background: PropTypes.shape({
+    src: PropTypes.string
   }).isRequired,
-  onChangePreferences: React.PropTypes.func.isRequired,
-  organization: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
-    slug: React.PropTypes.string
+  onChangePreferences: PropTypes.func.isRequired,
+  organization: PropTypes.shape({
+    display_name: PropTypes.string,
+    slug: PropTypes.string
   }),
-  preferences: React.PropTypes.object,
-  project: React.PropTypes.shape({
-    configuration: React.PropTypes.object,
-    description: React.PropTypes.string,
-    display_name: React.PropTypes.string,
-    experimental_tools: React.PropTypes.arrayOf(React.PropTypes.string),
-    id: React.PropTypes.string,
-    introduction: React.PropTypes.string,
-    redirect: React.PropTypes.string,
-    researcher_quote: React.PropTypes.string,
-    slug: React.PropTypes.string
+  preferences: PropTypes.object,
+  project: PropTypes.shape({
+    configuration: PropTypes.object,
+    description: PropTypes.string,
+    display_name: PropTypes.string,
+    experimental_tools: PropTypes.arrayOf(PropTypes.string),
+    id: PropTypes.string,
+    introduction: PropTypes.string,
+    redirect: PropTypes.string,
+    researcher_quote: PropTypes.string,
+    slug: PropTypes.string
   }).isRequired,
-  projectIsComplete: React.PropTypes.bool.isRequired,
-  researcherAvatar: React.PropTypes.string,
-  showWorkflowButtons: React.PropTypes.bool,
-  splits: React.PropTypes.object,
-  talkSubjects: React.PropTypes.arrayOf(React.PropTypes.object),
-  translation: React.PropTypes.shape({
-    description: React.PropTypes.string,
-    display_name: React.PropTypes.string,
-    introduction: React.PropTypes.string,
-    researcher_quote: React.PropTypes.string,
-    title: React.PropTypes.string
+  projectIsComplete: PropTypes.bool.isRequired,
+  researcherAvatar: PropTypes.string,
+  showWorkflowButtons: PropTypes.bool,
+  splits: PropTypes.object,
+  talkSubjects: PropTypes.arrayOf(PropTypes.object),
+  translation: PropTypes.shape({
+    description: PropTypes.string,
+    display_name: PropTypes.string,
+    introduction: PropTypes.string,
+    researcher_quote: PropTypes.string,
+    title: PropTypes.string
   }).isRequired,
-  user: React.PropTypes.object
+  user: PropTypes.object
 };
 
 export default ProjectHomePage;

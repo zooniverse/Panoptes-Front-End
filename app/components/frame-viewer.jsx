@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import getSubjectLocation from '../lib/get-subject-location';
 import getSubjectLocations from '../lib/get-subject-locations';
@@ -54,7 +55,7 @@ export default class FrameViewer extends React.Component {
         return subjectLocations[locationKey][1];
       });
     }else{
-      ({ type, format, src } = getSubjectLocation(this.props.subject, this.props.frame));
+      (({ type, format, src } = getSubjectLocation(this.props.subject, this.props.frame)));
     }
     const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && (type === 'image' || this.props.isAudioPlusImage);
     const ProgressMarker = this.props.progressMarker;
@@ -109,25 +110,25 @@ export default class FrameViewer extends React.Component {
 }
 
 FrameViewer.propTypes = {
-  annotation: React.PropTypes.shape(
-    { id: React.PropTypes.string }
+  annotation: PropTypes.shape(
+    { id: PropTypes.string }
   ),
-  classification: React.PropTypes.shape(
-    { annotations: React.PropTypes.array }
+  classification: PropTypes.shape(
+    { annotations: PropTypes.array }
   ),
-  frame: React.PropTypes.number,
-  frameWrapper: React.PropTypes.func,
-  modification: React.PropTypes.object,
-  onChange: React.PropTypes.func,
-  onLoad: React.PropTypes.func,
-  preferences: React.PropTypes.shape(
-    { id: React.PropTypes.string }
+  frame: PropTypes.number,
+  frameWrapper: PropTypes.func,
+  modification: PropTypes.object,
+  onChange: PropTypes.func,
+  onLoad: PropTypes.func,
+  preferences: PropTypes.shape(
+    { id: PropTypes.string }
   ),
-  subject: React.PropTypes.shape(
-    { id: React.PropTypes.string }
+  subject: PropTypes.shape(
+    { id: PropTypes.string }
   ),
-  workflow: React.PropTypes.shape(
-    { configuration: React.PropTypes.object }
+  workflow: PropTypes.shape(
+    { configuration: PropTypes.object }
   )
 };
 

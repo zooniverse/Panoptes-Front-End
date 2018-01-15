@@ -1,4 +1,5 @@
 import { Markdown } from 'markdownz';
+import PropTypes from 'prop-types';
 import React from 'react';
 import alert from '../../lib/alert';
 
@@ -89,15 +90,15 @@ export default class GenericTask extends React.Component {
 }
 
 GenericTask.propTypes = {
-  autoFocus: React.PropTypes.bool,
-  children: React.PropTypes.node,
-  question: React.PropTypes.string,
-  help: React.PropTypes.string,
-  required: React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.bool
+  autoFocus: PropTypes.bool,
+  children: PropTypes.node,
+  question: PropTypes.string,
+  help: PropTypes.string,
+  required: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.bool
   ]),
-  answers: React.PropTypes.arrayOf(React.PropTypes.node)
+  answers: PropTypes.arrayOf(PropTypes.node)
 };
 
 GenericTask.defaultProps = {

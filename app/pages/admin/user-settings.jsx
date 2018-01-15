@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 
@@ -71,8 +72,8 @@ class UserSettings extends Component {
 }
 
 UserSettings.propTypes = {
-  user: React.PropTypes.object,
-  editUser: React.PropTypes.object
+  user: PropTypes.object,
+  editUser: PropTypes.object
 };
 
 UserSettings.defaultProps = {

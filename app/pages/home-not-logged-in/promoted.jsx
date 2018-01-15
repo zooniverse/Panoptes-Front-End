@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
@@ -47,7 +48,7 @@ const HomePagePromoted = ({ promotedProjects }) => {
 };
 
 HomePagePromoted.propTypes = {
-  promotedProjects: React.PropTypes.arrayOf(React.PropTypes.object)
+  promotedProjects: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default HomePagePromoted;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import SVGRenderer from '../../annotation-renderer/svg';
 
@@ -66,11 +67,11 @@ export default function MarkingsRenderer(props) {
 }
 
 MarkingsRenderer.propTypes = {
-  classification: React.PropTypes.shape({
-    annotations: React.PropTypes.array
+  classification: PropTypes.shape({
+    annotations: PropTypes.array
   }),
-  taskTypes: React.PropTypes.object,
-  workflow: React.PropTypes.shape({
-    tasks: React.PropTypes.object
+  taskTypes: PropTypes.object,
+  workflow: PropTypes.shape({
+    tasks: PropTypes.object
   })
 };

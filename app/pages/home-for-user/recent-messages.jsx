@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
@@ -11,11 +12,11 @@ const LOADER_BULLETS = '• • •';
 
 class RecentCollectionsSection extends React.Component {
   static propTypes = {
-    onClose: React.PropTypes.func,
+    onClose: PropTypes.func,
   };
 
   static contextTypes = {
-    user: React.PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
   };
 
   state = {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Selection from './selection';
 
@@ -63,12 +64,12 @@ export default class LabelRenderer extends React.Component {
 }
 
 LabelRenderer.propTypes = {
-  annotation: React.PropTypes.shape({
-    value: React.PropTypes.array
+  annotation: PropTypes.shape({
+    value: PropTypes.array
   }),
-  children: React.PropTypes.element,
-  disabled: React.PropTypes.bool,
-  onLoad: React.PropTypes.func
+  children: PropTypes.element,
+  disabled: PropTypes.bool,
+  onLoad: PropTypes.func
 };
 
 LabelRenderer.defaultProps = {

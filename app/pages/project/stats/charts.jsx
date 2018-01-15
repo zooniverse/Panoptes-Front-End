@@ -1,6 +1,7 @@
 import React from 'react';
 import ChartistGraph from 'react-chartist';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 import Rcslider from 'rc-slider';
 
 export const Progress = (props) => {
@@ -32,8 +33,8 @@ Progress.defaultProps = {
 };
 
 Progress.propTypes = {
-  progress: React.PropTypes.number,
-  options: React.PropTypes.object,
+  progress: PropTypes.number,
+  options: PropTypes.object,
 };
 
 export class Graph extends React.Component {
@@ -321,13 +322,13 @@ Graph.defaultProps = {
 };
 
 Graph.propTypes = {
-  data: React.PropTypes.array,
-  by: React.PropTypes.string,
-  num: React.PropTypes.number,
-  options: React.PropTypes.object,
-  optionsSmall: React.PropTypes.object,
-  range: React.PropTypes.array,
-  handleRangeChange: React.PropTypes.func,
+  data: PropTypes.array,
+  by: PropTypes.string,
+  num: PropTypes.number,
+  options: PropTypes.object,
+  optionsSmall: PropTypes.object,
+  range: PropTypes.array,
+  handleRangeChange: PropTypes.func,
 };
 
 const DateRange = (props) => {
@@ -343,7 +344,7 @@ const DateRange = (props) => {
 };
 
 DateRange.propTypes = {
-  dateMin: React.PropTypes.string,
-  dateMax: React.PropTypes.string,
-  setDefaultRange: React.PropTypes.func,
+  dateMin: PropTypes.string,
+  dateMax: PropTypes.string,
+  setDefaultRange: PropTypes.func,
 };

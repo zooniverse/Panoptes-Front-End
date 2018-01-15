@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { IndexLink, Link } from 'react-router';
 import Translate from 'react-translate-component';
@@ -22,15 +23,15 @@ counterpart.registerTranslations('en', {
 
 class CollectionPage extends React.Component {
   static propTypes = {
-    user: React.PropTypes.object,
-    collection: React.PropTypes.object.isRequired,
-    project: React.PropTypes.object,
-    children: React.PropTypes.node,
-    roles: React.PropTypes.array
+    user: PropTypes.object,
+    collection: PropTypes.object.isRequired,
+    project: PropTypes.object,
+    children: PropTypes.node,
+    roles: PropTypes.array
   };
 
   static contextTypes = {
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
   };
 
   static defaultProps = {
@@ -143,12 +144,12 @@ class CollectionPage extends React.Component {
 
 class CollectionPageWrapper extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    project: React.PropTypes.object,
-    user: React.PropTypes.object,
-    params: React.PropTypes.shape({
-      collection_owner: React.PropTypes.string,
-      collection_name: React.PropTypes.string
+    children: PropTypes.node,
+    project: PropTypes.object,
+    user: PropTypes.object,
+    params: PropTypes.shape({
+      collection_owner: PropTypes.string,
+      collection_name: PropTypes.string
     })
   };
 

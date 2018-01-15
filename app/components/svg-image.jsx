@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const FILTERS = {
@@ -62,10 +63,10 @@ class SVGImage extends React.Component {
   }
 }
 SVGImage.propTypes = {
-  src: React.PropTypes.string.isRequired,
-  height: React.PropTypes.number.isRequired,
-  width: React.PropTypes.number.isRequired,
-  modification: React.PropTypes.object,
+  src: PropTypes.string.isRequired,
+  height: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
+  modification: PropTypes.object,
 };
 
 SVGImage.defaultProps = {
