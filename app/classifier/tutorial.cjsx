@@ -4,6 +4,7 @@ Translate = require 'react-translate-component'
 MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
+{ Provider } = require('react-redux')
 
 StepThrough = require('../components/step-through').default
 Translations = require('./translations').default
@@ -56,10 +57,12 @@ module.exports = React.createClass
             mediaByID
 
         awaitTutorialMedia.then (mediaByID) =>
-          tutorialContent = 
-            <Translations original={tutorial} type="tutorial" store={store}>
-              <TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />
-            </Translations>
+          tutorialContent =
+            <Provider store={store}>
+              <Translations original={tutorial} type="tutorial">
+                <TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />
+              </Translations>
+            </Provider>
           Dialog.alert(tutorialContent, {
             className: 'tutorial-dialog',
             required: true,
