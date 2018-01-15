@@ -32,7 +32,7 @@ describe('CustomiseProfile', () => {
 
   beforeEach(() => {
     wrapper.update();
-    clearMediaSpy.reset();
+    clearMediaSpy.resetHistory();
   });
 
   it('renders the user avatar', () => {
