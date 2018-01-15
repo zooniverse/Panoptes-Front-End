@@ -51,8 +51,9 @@ class TaskNav extends React.Component {
       }
     }
 
-    classification.annotations.push(annotation);
-    classification.update('annotations');
+    const annotations = classification.annotations.slice();
+    annotations.push(annotation);
+    this.props.updateAnnotations(annotations);
   }
 
   // Done
@@ -97,8 +98,9 @@ class TaskNav extends React.Component {
     const { workflow, classification } = this.props;
     const lastAnnotation = classification.annotations[classification.annotations.length - 1];
 
-    classification.annotations.pop();
-    classification.update('annotations');
+    const annotations = classification.annotations.slice();
+    annotations.pop();
+    this.props.updateAnnotations(annotations);
 
     if (workflow.configuration.persist_annotations) {
       CacheClassification.update(lastAnnotation);
@@ -253,6 +255,7 @@ TaskNav.propTypes = {
   task: React.PropTypes.shape({
     type: React.PropTypes.string
   }),
+  updateAnnotations: React.PropTypes.func,
   workflow: React.PropTypes.shape({
     id: React.PropTypes.string,
     configuration: React.PropTypes.object,
@@ -262,7 +265,8 @@ TaskNav.propTypes = {
 };
 
 TaskNav.defaultProps = {
-  disabled: false
+  disabled: false,
+  updateAnnotations: () => null
 };
 
 export default TaskNav;

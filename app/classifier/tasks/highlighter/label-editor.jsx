@@ -4,7 +4,7 @@ export default function LabelEditor(props) {
   function deleteAnnotation(annotation) {
     const index = props.annotation.value.indexOf(annotation);
     props.annotation.value.splice(index, 1);
-    props.classification.update('annotations');
+    props.onChange(props.annotation);
   }
 
   function onClick(e) {
