@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
@@ -13,7 +14,7 @@ counterpart.registerTranslations 'en',
       theLongHaul: 'In For the Long Haul'
       resources: 'Resources and Examples'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'LabBestPracticesNav'
 
   componentDidMount: ->

@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 
 NOOP = Function.prototype
 
@@ -8,7 +9,7 @@ HIDDEN_INPUT_STYLE =
   position: 'absolute'
   width: 0
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'UploadDropTarget'
 
   getDefaultProps: ->

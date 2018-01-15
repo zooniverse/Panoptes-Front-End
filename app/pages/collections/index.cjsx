@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 Translate = require 'react-translate-component'
 CollectionsNav = require './nav'
 classNames = require 'classnames'
@@ -46,7 +47,7 @@ counterpart.registerTranslations 'en',
     all: 'All Favorites'
     projectWide: 'Show all Zooniverse favorites...'
 
-CollectionsContainer = React.createClass
+CollectionsContainer = createReactClass
 
   userForTitle: ->
     if @props.params?.collection_owner?

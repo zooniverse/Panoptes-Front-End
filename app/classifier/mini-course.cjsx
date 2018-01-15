@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 Dialog = require 'modal-form/dialog'
 Translate = require 'react-translate-component'
 MediaCard = require '../components/media-card'
@@ -12,7 +13,7 @@ window?.minicoursesCompletedThisSession = minicoursesCompletedThisSession
 # Note: We may add logic to handle non-signed-in users.
 # For now, will move forward with the mini-course working only for signed-in users.
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'MiniCourse'
 
   statics:

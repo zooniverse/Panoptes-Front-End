@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
@@ -114,7 +115,7 @@ counterpart.registerTranslations 'en',
 
     '''
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'Glossary'
 
   render: ->

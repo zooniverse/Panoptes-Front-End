@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
@@ -20,7 +21,7 @@ MAX_BACKGROUND_SIZE = 256000
 
 DISCIPLINE_NAMES = (discipline.value for discipline in DISCIPLINES)
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EditProjectDetails'
 
   getDefaultProps: ->

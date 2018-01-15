@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 Editor = require './editor'
 Summary = require('./summary').default
 Chooser = require('./chooser').default
 Choice = require('./choice').default
 AnnotationView = require './annotation-view'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'SurveyTask'
 
   statics:

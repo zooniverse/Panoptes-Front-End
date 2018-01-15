@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 Pullout = require 'react-pullout'
 FieldGuide = require './field-guide'
 Translations = require('../../classifier/translations').default
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'PotentialFieldGuide'
 
   getDefaultProps: ->

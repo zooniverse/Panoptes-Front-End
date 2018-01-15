@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 moment = require 'moment'
 Translate = require 'react-translate-component'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DataExportButton'
 
   getDefaultProps: ->

@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link, IndexLink} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
@@ -17,7 +18,7 @@ counterpart.registerTranslations 'en',
   projectLab:
     edit: 'Edit'
 
-EditProjectPage = React.createClass
+EditProjectPage = createReactClass
   displayName: 'EditProjectPage'
 
   contextTypes:
@@ -140,7 +141,7 @@ EditProjectPage = React.createClass
           if @isMounted()
             @setState deletionInProgress: false
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EditProjectPageWrapper'
 
   contextTypes:

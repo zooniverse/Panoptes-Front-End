@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 
 NOOP = Function.prototype
 
 MAX_TEXT_LENGTH_IN_MENU = 100
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'NextTaskSelector'
 
   getDefaultProps: ->

@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 uniq = require 'lodash/uniq'
 
 zooniverseTeamRole = (role) ->
@@ -16,7 +17,7 @@ roleDisplayName = (role) ->
   else
     role.name
 
-DisplayRoles = React.createClass
+DisplayRoles = createReactClass
   displayName: 'TalkDisplayRoles'
 
   propTypes:

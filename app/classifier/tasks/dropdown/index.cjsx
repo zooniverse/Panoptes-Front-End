@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 GenericTask = require('../generic.jsx').default
 DropdownEditor = require './editor'
 Select = require( 'react-select' ).default
 
-Summary = React.createClass
+Summary = createReactClass
   displayName: 'DropdownSummary'
 
   getDefaultProps: ->
@@ -48,7 +49,7 @@ Summary = React.createClass
       </div>
     </div>
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DropdownTask'
 
   statics:

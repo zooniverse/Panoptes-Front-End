@@ -12,7 +12,7 @@ Requires Node.js. It's recommended you manage your Node installations with **nvm
 
 `npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
 
-For testing with production data, you can add `env=production` to your development url, e.g. `localhost:3735/projects?env=production`. Note that it is removed on every page refresh. 
+For testing with production data, you can add `env=production` to your development url, e.g. `localhost:3735/projects?env=production`. Note that it is removed on every page refresh.
 
 All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
@@ -188,11 +188,11 @@ We're migrating from coffeescript to ES6. This can be done incrementally by writ
 
 - The existential operator does not exist in ES6. Either compare explicitly to `null` or use `!!thing` if it just needs to be truthy.
 
-- Native ES6 classes are preferred since eventually `React.createClass()` will be deprecated, however, if the existing component is relying on mixins, then consider using `React.createClass()`.
+- Native ES6 classes are preferred since `React.createClass()` is deprecated, however, if the existing component is relying on mixins, then consider using `createReactClass()`.
 
 - Mixins are being deprecated and not supported with native classes, so do not use them in new components.
 
-- Use backticks to import ES6 components into coffeescript components: 
+- Use backticks to import ES6 components into coffeescript components:
 
 ```
 `import NewComponent from './new-component'`
@@ -200,7 +200,7 @@ We're migrating from coffeescript to ES6. This can be done incrementally by writ
 
 An ESLint configuration file is setup in the root of the repository for you to use with your text editor to lint both ES6 and use Airbnb's React style guide.
 
-A [guide](https://toddmotto.com/react-create-class-versus-component/) on writing native classes versus using `React.createClass()`
+A [guide](https://reactjs.org/docs/react-without-es6.html) on writing native classes versus using `createReactClass()`
 
 ## Custom projects
 

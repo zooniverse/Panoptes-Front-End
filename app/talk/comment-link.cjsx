@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkConfig = require './config'
 {Link} = require 'react-router'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkCommentLink'
 
   propTypes:

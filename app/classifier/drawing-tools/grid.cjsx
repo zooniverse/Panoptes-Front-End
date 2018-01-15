@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DrawingToolRoot = require './root'
 Draggable = require '../../lib/draggable'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'GridTool'
 
   statics:

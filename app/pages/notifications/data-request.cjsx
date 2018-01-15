@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 moment = require 'moment'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DataRequestNotification'
 
   propTypes:

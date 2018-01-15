@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../lib/put-file'
 FileButton = require '../components/file-button'
@@ -11,7 +12,7 @@ handleInputChange = require '../lib/handle-input-change'
 alert = require('../lib/alert').default
 confirm = require('../lib/confirm').default
 
-ProjectModalStepEditor = React.createClass
+ProjectModalStepEditor = createReactClass
   getDefaultProps: ->
     step: null
     media: null
@@ -46,7 +47,7 @@ ProjectModalStepEditor = React.createClass
   handleContentChange: (e) ->
     @props.onChange 'content', e.target.value, arguments...
 
-ProjectModalEditor = React.createClass
+ProjectModalEditor = createReactClass
   getDefaultProps: ->
     projectModal: null
     media: null
@@ -137,7 +138,7 @@ ProjectModalEditor = React.createClass
       </div>
     </div>
 
-ProjectModalEditorController = React.createClass
+ProjectModalEditorController = createReactClass
   displayName: 'ProjectModalEditorController'
 
   getInitialState: ->
@@ -280,7 +281,7 @@ ProjectModalEditorController = React.createClass
       @_debouncedSaveProjectModal = debounce boundProjectModalSave, @props.delayBeforeSave
     @_debouncedSaveProjectModal arguments...
 
-ProjectModalCreator = React.createClass
+ProjectModalCreator = createReactClass
   getDefaultProps: ->
     project: null
     kind: null
@@ -316,7 +317,7 @@ ProjectModalCreator = React.createClass
       .catch (error) =>
         @setState {error}
 
-ProjectModalEditorFetcher = React.createClass
+ProjectModalEditorFetcher = createReactClass
   getDefaultProps: ->
     project: null
     kind: null

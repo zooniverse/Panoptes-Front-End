@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 Translate = require 'react-translate-component'
 
 counterpart.registerTranslations 'en',
@@ -675,7 +676,7 @@ teamMembers =
     image: "/assets/team/zach.jpg"
     location: "chicago"
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TeamPage'
 
   getInitialState: ->

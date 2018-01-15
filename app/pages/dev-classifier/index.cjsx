@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 mockData = require './mock-data'
 { ClassifierWrapper } = require '../../classifier'
 `import tasks from '../../classifier/tasks';`
 
-ClassificationViewer = React.createClass
+ClassificationViewer = createReactClass
   getDefaultProps: ->
     classification: null
 
@@ -57,7 +58,7 @@ ClassificationViewer = React.createClass
       <pre>{JSON.stringify showing, replacer, 2}</pre>
     </div>
 
-DevClassifierPage = React.createClass
+DevClassifierPage = createReactClass
   getDefaultProps: ->
     classification: mockData.classification
     project: mockData.project

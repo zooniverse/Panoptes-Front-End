@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 CommentBox = require './comment-box'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'PrivateMessageForm'
 
   contextTypes:

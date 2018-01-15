@@ -1,8 +1,9 @@
 React = require('react')
+createReactClass = require 'create-react-class'
 FlexibleLink = require('../components/flexible-link').default
 Translate = require 'react-translate-component'
 
-ProjectCard = React.createClass
+ProjectCard = createReactClass
   displayName: 'ProjectCard'
   propTypes:
     project: React.PropTypes.object.isRequired

@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 auth = require 'panoptes-client/lib/auth'
 { Helmet } = require 'react-helmet'
 counterpart = require 'counterpart'
@@ -16,7 +17,7 @@ counterpart.registerTranslations 'en',
   mainApp:
     title: 'Zooniverse'
 
-PanoptesApp = React.createClass
+PanoptesApp = createReactClass
   geordiLogger: null # Maintains project and subject context for the Geordi client
 
   childContextTypes:

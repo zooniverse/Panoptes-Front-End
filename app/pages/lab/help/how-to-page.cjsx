@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 counterpart = require 'counterpart'
 {Markdown} = require 'markdownz'
 
@@ -246,7 +247,7 @@ counterpart.registerTranslations 'en',
       *Note:* if you have a large subject set it may be cumbersome to manually create a manifest. We suggest using a command-line or other tool to copy-paste a directory list of files into a spreadsheet to help you get started.
     '''
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'HowToBuildAProject'
 
   render: ->

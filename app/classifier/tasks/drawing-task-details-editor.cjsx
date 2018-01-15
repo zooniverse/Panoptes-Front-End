@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 AutoSave = require '../../components/auto-save'
 TriggeredModalForm = require 'modal-form/triggered'
 TextTaskEditor = require './text/editor'
@@ -6,7 +7,7 @@ SliderTaskEditor = require('./slider/editor').default
 DropdownEditor = require './dropdown/editor'
 
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DrawingTaskDetailsEditor'
 
   getDefaultProps: ->

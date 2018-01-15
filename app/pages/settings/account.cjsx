@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
 auth = require 'panoptes-client/lib/auth'
 
 MIN_PASSWORD_LENGTH = 8
 
-ChangePasswordForm = React.createClass
+ChangePasswordForm = createReactClass
   displayName: 'ChangePasswordForm'
 
   getDefaultProps: ->
@@ -88,7 +89,7 @@ ChangePasswordForm = React.createClass
       .then =>
         @setState inProgress: false
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: "AccountInformationPage"
 
   render: ->

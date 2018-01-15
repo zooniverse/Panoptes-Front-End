@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
 NewDiscussionForm = require '../talk/discussion-new-form'
@@ -7,7 +8,7 @@ Loading = require '../components/loading-indicator'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require('../lib/alert').default
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'SubjectCommentForm'
 
   contextTypes:

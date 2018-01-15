@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 {Markdown} = require 'markdownz'
 moment = require 'moment'
 Loading = require '../../components/loading-indicator'
 Avatar = require '../../partials/avatar'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'MessageNotification'
 
   propTypes:

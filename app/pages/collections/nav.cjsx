@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link, IndexLink} = require 'react-router'
 Translate = require 'react-translate-component'
 classNames = require 'classnames'
 
-CollectionsNav = React.createClass
+CollectionsNav = createReactClass
   displayName: 'CollectionsNav'
 
   contextTypes:

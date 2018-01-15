@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 counterpart = require 'counterpart'
 TalkBreadcrumbs = require './breadcrumbs.cjsx'
@@ -11,7 +12,7 @@ counterpart.registerTranslations 'en',
   talkPage:
     title: 'Talk'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'Talk'
 
   contextTypes:

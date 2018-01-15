@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 getSubjectLocation = require '../lib/get-subject-location'
 SingleSubmitButton = require '../components/single-submit-button'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkCommentImageSelector'
 
   getInitialState: ->

@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 talkClient = require 'panoptes-client/lib/talk-client'
 Loading = require '../components/loading-indicator'
 getCaretPosition = require './lib/get-caret-position'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'Suggester'
 
   propTypes:

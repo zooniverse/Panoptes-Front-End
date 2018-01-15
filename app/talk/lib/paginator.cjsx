@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 updateQueryParams = require './update-query-params'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'Paginator'
 
   propTypes:

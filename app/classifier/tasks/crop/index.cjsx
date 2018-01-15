@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 CropInitializer = require './initializer'
 GenericTask = require('../generic.jsx').default
 GenericEditor = require '../generic-editor'
 Summary = require './summary'
 SVGRenderer = require('../../annotation-renderer/svg').default
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'CropTask'
 
   statics:

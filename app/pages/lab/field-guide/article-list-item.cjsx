@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 CroppedImage = require '../../../components/cropped-image'
 
-ArticleListItem = React.createClass
+ArticleListItem = createReactClass
   getDefaultProps: ->
     icon: null
     title: ''

@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 
-module.exports = React.createClass
+module.exports = createReactClass
   XLINK_NS: 'http://www.w3.org/1999/xlink'
 
   getDefaultProps: ->

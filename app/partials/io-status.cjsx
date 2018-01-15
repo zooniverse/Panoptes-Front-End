@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'IOStatus'
 
   getDefaultProps: ->

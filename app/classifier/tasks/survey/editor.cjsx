@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 FileButton = require '../../../components/file-button'
 alert = require('../../../lib/alert').default
 Details = require '../../../components/details'
@@ -12,7 +13,7 @@ MediaArea = require('../../../pages/lab/media-area/').default
 {Markdown} = require 'markdownz'
 Papa = require 'papaparse'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'SurveyTaskEditor'
 
   getDefaultProps: ->

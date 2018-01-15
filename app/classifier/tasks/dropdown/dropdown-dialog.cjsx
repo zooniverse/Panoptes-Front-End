@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DragReorderable = require 'drag-reorderable'
 TriggeredModalForm = require 'modal-form/triggered'
 dropdownEditorHelp = require './editor-help'
@@ -9,7 +10,7 @@ provincesCanada = require './presets/provinces-Canada' # value = two-letter post
 statesMexico = require './presets/states-Mexico' # value = three-letter ISO 3166-2 abbreviation
 # IMPORTANT: before adding preset options, confirm values are not duplicated in existing presets
 
-DropdownDialog = React.createClass
+DropdownDialog = createReactClass
 
   getDefaultProps: ->
     selects: []

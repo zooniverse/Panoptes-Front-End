@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 `import CollectionCard from './collection-card';`
 Translate = require 'react-translate-component'
@@ -13,7 +14,7 @@ counterpart.registerTranslations 'en',
   collectionsList:
     all: 'All'
 
-List = React.createClass
+List = createReactClass
   displayName: 'List'
 
   contextTypes:

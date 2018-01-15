@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 List = require './list'
 
-CollectionsList = React.createClass
+CollectionsList = createReactClass
   displayName: 'CollectionsPage'
 
   componentDidMount: ->

@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 { Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
 { Split } = require('seven-ten')
@@ -17,7 +18,7 @@ counterpart.registerTranslations 'nl', require('../../locales/nl').default
 counterpart.setFallbackLocale 'en'
 
 
-ProjectPageController = React.createClass
+ProjectPageController = createReactClass
   displayName: 'ProjectPageController'
 
   contextTypes:

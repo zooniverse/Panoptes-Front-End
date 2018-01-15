@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 TalkDataExportButton = require '../../talk/data-export-button'
@@ -14,7 +15,7 @@ counterpart.registerTranslations 'en',
     commentsExport: "Request new talk comments export"
     tagsExport: "Request new talk tags export"
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'GetDataExports'
 
   getDefaultProps: ->

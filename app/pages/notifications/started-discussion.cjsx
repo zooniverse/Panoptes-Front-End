@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 Loading = require '../../components/loading-indicator'
 Comment = require './comment'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'StartedDiscussionNotification'
 
   propTypes:

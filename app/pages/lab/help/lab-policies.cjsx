@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
@@ -65,7 +66,7 @@ counterpart.registerTranslations 'en',
       If you have any questions relating to the content of this page, please [get in touch](/about/contact).
     '''
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'LabPoliciesPage'
 
   render: ->

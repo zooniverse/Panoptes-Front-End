@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ProjectPageEditor = require '../../../partials/project-page-editor'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EditProjectResults'
 
   getDefaultProps: ->

@@ -1,5 +1,6 @@
 auth = require 'panoptes-client/lib/auth'
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 { Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -43,7 +44,7 @@ apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 # Store this externally to persist during the session.
 sessionDemoMode = false
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'ProjectClassifyPage'
 
 

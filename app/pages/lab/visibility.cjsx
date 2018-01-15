@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 SetToggle = require '../../lib/set-toggle'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
@@ -7,7 +8,7 @@ Paginator = require '../../talk/lib/paginator'
 
 `import ApplyForBetaForm from './apply-for-beta-form';`
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EditProjectVisibility'
 
   contextTypes:

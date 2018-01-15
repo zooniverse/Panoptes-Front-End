@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 
 NOOP = Function.prototype
 
@@ -23,7 +24,7 @@ separateSubjects = (subjects, files, tooBig) ->
 
   {ready, incomplete, missingFiles, tooBigFiles}
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'ManifestView'
 
   statics:

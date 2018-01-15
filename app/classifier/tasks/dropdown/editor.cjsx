@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 alert = require('../../../lib/alert').default
 Dialog = require 'modal-form/dialog'
 AutoSave = require '../../../components/auto-save'
@@ -9,7 +10,7 @@ NextTaskSelector = require '../next-task-selector'
 DropdownList = require './dropdown-list'
 DropdownDialog = require './dropdown-dialog'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DropdownEditor'
 
   getDefaultProps: ->

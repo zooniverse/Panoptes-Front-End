@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 CreateSubjectDefaultButton = require '../../talk/lib/create-subject-default-button'
 CreateBoardForm = require '../../talk/lib/create-board-form'
 projectSection = require '../../talk/lib/project-section'
 SingleSubmitButton = require '../../components/single-submit-button'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EditProjectTalk'
 
   getDefaultProps: ->

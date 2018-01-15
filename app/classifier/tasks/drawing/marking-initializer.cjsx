@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 Draggable = require '../../../lib/draggable'
 drawingTools = require '../../drawing-tools'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'MarkingInitializer'
 
   contextTypes:

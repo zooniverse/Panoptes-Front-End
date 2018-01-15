@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
@@ -28,7 +29,7 @@ counterpart.registerTranslations 'en',
       __End your project and do right by your volunteers.__ When your project has been completed, thank your volunteers and explain what happens next. We expect researchers to use the results of the project in peer-reviewed research, and to share results with the community. Classification data should also be made open after a proprietary period. More information can be found [here](/help/lab-policies).
     '''
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'LabBestPracticesTheLongHaulPage'
 
   componentDidMount: ->

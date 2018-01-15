@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 SingleSubmitButton = require '../../components/single-submit-button'
 
@@ -6,7 +7,7 @@ DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
 DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
 
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'CreateSubjectDefaultButton'
 
   propTypes:

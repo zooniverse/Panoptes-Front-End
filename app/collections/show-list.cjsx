@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 Translate = require 'react-translate-component'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -20,7 +21,7 @@ counterpart.registerTranslations 'en',
     error: 'There was an error listing this collection.'
     noSubjects: 'No subjects in this collection.'
 
-SubjectNode = React.createClass
+SubjectNode = createReactClass
 
   contextTypes:
     geordi: React.PropTypes.object.isRequired
@@ -114,7 +115,7 @@ SubjectNode = React.createClass
           </button>}
     </div>
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'CollectionShowList'
 
   contextTypes:

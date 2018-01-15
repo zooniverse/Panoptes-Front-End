@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
@@ -11,7 +12,7 @@ counterpart.registerTranslations 'en',
     login: "Login"
     submit: "Set Login"
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: "LoginChangeForm"
 
   getInitialState: ->

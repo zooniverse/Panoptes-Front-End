@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
@@ -24,7 +25,7 @@ counterpart.registerTranslations 'en',
       acknowledgements: 'Acknowledgements'
       glossary: 'Glossary'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'ProjectBuilderLandingPage'
 
   render: ->

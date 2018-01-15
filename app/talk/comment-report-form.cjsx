@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 Feedback = require './mixins/feedback'
 talkClient = require 'panoptes-client/lib/talk-client'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkCommentReportForm'
 
   mixins: [Feedback]

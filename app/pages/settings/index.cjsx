@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 { Helmet } = require 'react-helmet'
@@ -13,7 +14,7 @@ counterpart.registerTranslations 'en',
       customizeProfile: "Customize Profile"
       email: "Email"
 
-UserSettingsPage = React.createClass
+UserSettingsPage = createReactClass
   displayName: 'UserSettingsPage'
 
   getInitialState: ->
@@ -54,7 +55,7 @@ UserSettingsPage = React.createClass
       </div>
     </section>
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'UserSettingsPageWrapper'
 
   render: ->

@@ -2,7 +2,7 @@
   This is for when you want to set state after a promise has resolved.
   It handles pending state and errors automatically.
 
-  React.createClass
+  createReactClass
     mixins: [PromiseToSetState]
 
     componentDidMount: ->

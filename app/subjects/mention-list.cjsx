@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 Comment = require '../talk/comment'
 Loading = require '../components/loading-indicator'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'SubjectMentionList'
 
   componentWillMount: ->

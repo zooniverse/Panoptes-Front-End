@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 alert = require('../../../lib/alert').default
 AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 NextTaskSelector = require '../next-task-selector'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TextTaskEditor'
 
   getDefaultProps: ->

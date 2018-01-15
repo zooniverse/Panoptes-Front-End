@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 HandlePropChanges = require '../lib/handle-prop-changes'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'PromiseRenderer'
 
   mixins: [HandlePropChanges]

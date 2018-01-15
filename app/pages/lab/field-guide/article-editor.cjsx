@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 alert = require('../../../lib/alert').default
 FileButton = require '../../../components/file-button'
 
-ArticleEditor = React.createClass
+ArticleEditor = createReactClass
   statics:
     SHOULD_REMOVE_ICON: {}
 

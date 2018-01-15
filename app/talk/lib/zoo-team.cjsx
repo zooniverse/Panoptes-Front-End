@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 userIsZooniverseAdmin = require './user-is-zooniverse-admin'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'ZooniverseTeam'
 
   propTypes:

@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 Select = require('react-select').default
 apiClient = require 'panoptes-client/lib/api-client'
 
 delayBy = (timeout, fn) ->
   setTimeout fn, timeout
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'UserSearch'
 
   queryTimeout: NaN

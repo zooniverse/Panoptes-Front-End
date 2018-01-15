@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 CommentBox = require './comment-box'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -16,7 +17,7 @@ defaultDiscussionTitle = (subject) ->
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkQuickSubjectCommentForm'
 
   propTypes:

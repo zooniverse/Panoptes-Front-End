@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
@@ -26,7 +27,7 @@ counterpart.registerTranslations 'en',
       __Plan your transition from launch to operating your project.__ After about a week, the launch frenzy will subside and less of your time will be required. However, you will still need to continue to engage with your volunteers and oversee your project. This is discussed further in Part III.
     '''
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'LabBestPracticesLaunchRushPage'
 
   componentDidMount: ->

@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 `import FavoritesButton from '../collections/favorites-button';`
 Dialog = require 'modal-form/dialog'
 {Markdown} = require 'markdownz'
@@ -35,7 +36,7 @@ subjectIsLikelyAudioPlusImage = (subject) ->
 
 CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'SubjectViewer'
 
   contextTypes:

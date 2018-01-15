@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkBoardDisplay'
 
   propTypes:

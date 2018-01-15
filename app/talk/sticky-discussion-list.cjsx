@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'StickyDiscussionList'
 
   placeholder: ->

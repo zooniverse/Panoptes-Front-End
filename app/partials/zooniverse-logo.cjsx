@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 
 nextID = 0
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'ZooniverseLogo'
 
   getDefaultProps: ->

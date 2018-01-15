@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
@@ -42,7 +43,7 @@ counterpart.registerTranslations 'en',
       - [Just for Fun](http://blog.zooniverse.org/category/fun/) &mdash; Various "fun" posts on the Zooniverse blog, many about gamizing.
     '''
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'LabBestPracticesAppendixPage'
 
   componentDidMount: ->

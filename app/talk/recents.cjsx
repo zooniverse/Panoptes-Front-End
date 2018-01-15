@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 Comment = require './comment'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -8,7 +9,7 @@ updateQueryParams = require './lib/update-query-params'
 Loading = require '../components/loading-indicator'
 talkConfig = require './config'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkRecents'
 
   contextTypes:

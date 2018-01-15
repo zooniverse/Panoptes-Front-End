@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ChangeListener = require './change-listener'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'RetirementRulesEditor'
 
   getDefaultProps: ->
