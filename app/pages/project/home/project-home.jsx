@@ -59,8 +59,8 @@ const ProjectHomePage = (props) => {
             </Link>}
           {props.project && props.project.redirect &&
             <a href={props.project.redirect} className="project-home-page__button">
+              <strong><Translate content="project.home.visitLink" /></strong>
               <i className="fa fa-external-link" />
-              <strong><Translate content="project.home.visitLink" /></strong><br />
             </a>}
         </div>
 
