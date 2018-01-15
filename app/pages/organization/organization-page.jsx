@@ -96,7 +96,7 @@ class OrganizationPage extends React.Component {
                   className="organization-page__category-button--hidden"
                   id="all"
                   name="category"
-                  onClick={this.handleCategoryChange.bind(this, '')}
+                  onChange={this.handleCategoryChange.bind(this, '')}
                   type="radio"
                 />
                 All
@@ -111,7 +111,7 @@ class OrganizationPage extends React.Component {
                     className="organization-page__category-button--hidden"
                     id={category}
                     name="category"
-                    onClick={this.handleCategoryChange.bind(this, category)}
+                    onChange={this.handleCategoryChange.bind(this, category)}
                     type="radio"
                   />
                   {category}
