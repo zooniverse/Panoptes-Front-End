@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -9,8 +10,8 @@ module.exports = createReactClass
   displayName: 'PrivateMessageForm'
 
   contextTypes:
-    geordi: React.PropTypes.object
-    router: React.PropTypes.object.isRequired
+    geordi: PropTypes.object
+    router: PropTypes.object.isRequired
 
   logClick: ->
     @context?.geordi?.logEvent

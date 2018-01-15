@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 userIsZooniverseAdmin = require './user-is-zooniverse-admin'
@@ -7,8 +8,8 @@ module.exports = createReactClass
   displayName: 'ZooniverseTeam'
 
   propTypes:
-    section: React.PropTypes.string.isRequired # talk section
-    user: React.PropTypes.object.isRequired
+    section: PropTypes.string.isRequired # talk section
+    user: PropTypes.object.isRequired
 
   getInitialState: ->
     open: false

@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -15,7 +16,7 @@ module.exports = createReactClass
   displayName: 'NotificationsLink'
 
   contextTypes:
-    unreadNotificationsCount: React.PropTypes.number
+    unreadNotificationsCount: PropTypes.number
 
   label: ->
     unread = @context.unreadNotificationsCount

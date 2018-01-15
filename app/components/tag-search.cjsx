@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Select = require('react-select').default
 apiClient = require 'panoptes-client/lib/api-client'
@@ -7,8 +8,8 @@ module.exports = createReactClass
   displayName: 'TagSearch'
 
   propTypes:
-    multi: React.PropTypes.bool
-    value: React.PropTypes.array
+    multi: PropTypes.bool
+    value: PropTypes.array
 
   getDefaultProps: ->
     multi: true

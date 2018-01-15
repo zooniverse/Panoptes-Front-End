@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
@@ -25,8 +26,8 @@ module.exports = createReactClass
   displayName: 'TalkSearch'
 
   contextTypes:
-    geordi: React.PropTypes.object
-    router: React.PropTypes.object.isRequired
+    geordi: PropTypes.object
+    router: PropTypes.object.isRequired
 
   goBack: (linkName) ->
     @context.router.goBack()

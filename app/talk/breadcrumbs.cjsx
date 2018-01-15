@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 {Link} = require 'react-router'
@@ -19,7 +20,7 @@ module.exports = createReactClass
     @updateDiscussion newProps.params.discussion if newProps.params.discussion isnt @props.params.discussion
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   crumbCatch: (e) ->
     if e.message.indexOf('not allowed to show') isnt -1

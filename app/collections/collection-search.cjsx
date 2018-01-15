@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Select = require('react-select').default
 apiClient = require 'panoptes-client/lib/api-client'
@@ -7,8 +8,8 @@ module.exports = createReactClass
   displayName: 'CollectionSearch'
 
   propTypes:
-    multi: React.PropTypes.bool.isRequired
-    onChange: React.PropTypes.func
+    multi: PropTypes.bool.isRequired
+    onChange: PropTypes.func
 
   getDefaultProps: ->
     multi: false

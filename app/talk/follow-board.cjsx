@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 SingleSubmitButton = require '../components/single-submit-button'
@@ -7,8 +8,8 @@ module.exports = createReactClass
   displayName: 'FollowBoard'
 
   propTypes:
-    board: React.PropTypes.object.isRequired
-    user: React.PropTypes.object.isRequired
+    board: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired
 
   getInitialState: ->
     digest: null

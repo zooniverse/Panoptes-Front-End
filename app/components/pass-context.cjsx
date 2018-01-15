@@ -1,25 +1,26 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {routerShape} = require 'react-router/lib/PropTypes'
 
 module.exports = createReactClass
   contextTypes:
-    initialLoadComplete: React.PropTypes.bool
+    initialLoadComplete: PropTypes.bool
     router: routerShape
-    user: React.PropTypes.object
-    geordi: React.PropTypes.object
-    notificationsCounter: React.PropTypes.object
-    unreadNotificationsCount: React.PropTypes.number
-    pusher: React.PropTypes.object
+    user: PropTypes.object
+    geordi: PropTypes.object
+    notificationsCounter: PropTypes.object
+    unreadNotificationsCount: PropTypes.number
+    pusher: PropTypes.object
 
   childContextTypes:
-    initialLoadComplete: React.PropTypes.bool
+    initialLoadComplete: PropTypes.bool
     router: routerShape
-    user: React.PropTypes.object
-    geordi: React.PropTypes.object
-    notificationsCounter: React.PropTypes.object
-    unreadNotificationsCount: React.PropTypes.number
-    pusher: React.PropTypes.object
+    user: PropTypes.object
+    geordi: PropTypes.object
+    notificationsCounter: PropTypes.object
+    unreadNotificationsCount: PropTypes.number
+    pusher: PropTypes.object
 
   getChildContext: ->
     @props.context

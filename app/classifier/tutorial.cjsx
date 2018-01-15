@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Dialog = require 'modal-form/dialog'
 Translate = require 'react-translate-component'
@@ -71,17 +72,17 @@ module.exports = createReactClass
               null # We don't really care if the user canceled or completed the tutorial.
 
   propTypes:
-    geordi: React.PropTypes.object
-    preferences: React.PropTypes.shape
-      preferences: React.PropTypes.object
-    tutorial: React.PropTypes.shape
-      steps: React.PropTypes.arrayOf React.PropTypes.shape
-        media: React.PropTypes.string
-        content: React.PropTypes.string
-    translation: React.PropTypes.shape
-      steps: React.PropTypes.arrayOf React.PropTypes.shape
-        content: React.PropTypes.string
-    user: React.PropTypes.object
+    geordi: PropTypes.object
+    preferences: PropTypes.shape
+      preferences: PropTypes.object
+    tutorial: PropTypes.shape
+      steps: PropTypes.arrayOf PropTypes.shape
+        media: PropTypes.string
+        content: PropTypes.string
+    translation: PropTypes.shape
+      steps: PropTypes.arrayOf PropTypes.shape
+        content: PropTypes.string
+    user: PropTypes.object
 
   getDefaultProps: ->
     geordi: {}

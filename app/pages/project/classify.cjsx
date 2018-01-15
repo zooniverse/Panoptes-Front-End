@@ -1,5 +1,6 @@
 auth = require 'panoptes-client/lib/auth'
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 { Helmet } = require 'react-helmet'
@@ -49,15 +50,15 @@ module.exports = createReactClass
 
 
   contextTypes:
-    geordi: React.PropTypes.object,
-    initialLoadComplete: React.PropTypes.bool,
-    router: React.PropTypes.object
+    geordi: PropTypes.object,
+    initialLoadComplete: PropTypes.bool,
+    router: PropTypes.object
 
   propTypes:
-    loadingSelectedWorkflow: React.PropTypes.bool
-    project: React.PropTypes.object
-    workflow: React.PropTypes.object
-    simulateSaveFailure: React.PropTypes.bool
+    loadingSelectedWorkflow: PropTypes.bool
+    project: PropTypes.object
+    workflow: PropTypes.object
+    simulateSaveFailure: PropTypes.bool
 
   getDefaultProps: ->
     loadingSelectedWorkflow: false

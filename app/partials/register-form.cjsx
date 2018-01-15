@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require 'panoptes-client/lib/auth'
@@ -52,7 +53,7 @@ module.exports = createReactClass
     error: null
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   render: ->
     {badNameChars, nameConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state

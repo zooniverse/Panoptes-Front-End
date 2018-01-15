@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 ToggleChildren = require './mixins/toggle-children'
@@ -25,17 +26,17 @@ module.exports = createReactClass
   mixins: [ToggleChildren, Feedback]
 
   propTypes:
-    data: React.PropTypes.object # Comment resource
-    onUpdateComment: React.PropTypes.func # passed (textContent, subject, commentId) on update submit
-    onDeleteComment: React.PropTypes.func # passed (commentId) on click
-    onLikeComment: React.PropTypes.func # passed (commentId) on like
-    onClickReply: React.PropTypes.func # passed (user, comment) on click
-    active: React.PropTypes.bool  # optional active switch: scroll window to comment and apply styling
-    user: React.PropTypes.object  # Current user
-    index: React.PropTypes.number # The index of the comment in a discussion
-    locked: React.PropTypes.bool  # disable action buttons
-    linked: React.PropTypes.bool
-    hideFocus: React.PropTypes.bool # Control visibility of focus (default: false)
+    data: PropTypes.object # Comment resource
+    onUpdateComment: PropTypes.func # passed (textContent, subject, commentId) on update submit
+    onDeleteComment: PropTypes.func # passed (commentId) on click
+    onLikeComment: PropTypes.func # passed (commentId) on like
+    onClickReply: PropTypes.func # passed (user, comment) on click
+    active: PropTypes.bool  # optional active switch: scroll window to comment and apply styling
+    user: PropTypes.object  # Current user
+    index: PropTypes.number # The index of the comment in a discussion
+    locked: PropTypes.bool  # disable action buttons
+    linked: PropTypes.bool
+    hideFocus: PropTypes.bool # Control visibility of focus (default: false)
 
   getDefaultProps: ->
     active: false
@@ -49,7 +50,7 @@ module.exports = createReactClass
     replies: []
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   logItemClick: (itemClick) ->
     @context.geordi?.logEvent

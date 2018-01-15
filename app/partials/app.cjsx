@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 auth = require 'panoptes-client/lib/auth'
 { Helmet } = require 'react-helmet'
@@ -21,12 +22,12 @@ PanoptesApp = createReactClass
   geordiLogger: null # Maintains project and subject context for the Geordi client
 
   childContextTypes:
-    initialLoadComplete: React.PropTypes.bool
-    user: React.PropTypes.object
-    geordi: React.PropTypes.object
-    notificationsCounter: React.PropTypes.object
-    unreadNotificationsCount: React.PropTypes.number
-    pusher: React.PropTypes.object
+    initialLoadComplete: PropTypes.bool
+    user: PropTypes.object
+    geordi: PropTypes.object
+    notificationsCounter: PropTypes.object
+    unreadNotificationsCount: PropTypes.number
+    pusher: PropTypes.object
 
   getChildContext: ->
     initialLoadComplete: @state.initialLoadComplete

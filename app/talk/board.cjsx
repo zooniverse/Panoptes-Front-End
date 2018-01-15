@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 {Link} = require 'react-router'
@@ -30,8 +31,8 @@ module.exports = createReactClass
   displayName: 'TalkBoard'
 
   contextTypes:
-    geordi: React.PropTypes.object
-    router: React.PropTypes.object.isRequired
+    geordi: PropTypes.object
+    router: PropTypes.object.isRequired
 
   getInitialState: ->
     discussions: []

@@ -1,17 +1,18 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 
 module.exports = createReactClass
   displayName: 'TalkSearchInput'
 
   propTypes:
-    params: React.PropTypes.object
-    query: React.PropTypes.object
-    placeholder: React.PropTypes.string
+    params: PropTypes.object
+    query: PropTypes.object
+    placeholder: PropTypes.string
 
   contextTypes:
-    geordi: React.PropTypes.object
-    router: React.PropTypes.object.isRequired
+    geordi: PropTypes.object
+    router: PropTypes.object.isRequired
 
   logSearch: (value) ->
     @context?.geordi?.logEvent

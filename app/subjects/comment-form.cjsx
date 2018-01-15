@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
@@ -12,7 +13,7 @@ module.exports = createReactClass
   displayName: 'SubjectCommentForm'
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   componentWillMount: ->
     Promise.all([@getBoards(), @getSubjectDefaultBoard()]).then =>

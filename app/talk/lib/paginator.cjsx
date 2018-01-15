@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 updateQueryParams = require './update-query-params'
 
@@ -6,17 +7,17 @@ module.exports = createReactClass
   displayName: 'Paginator'
 
   propTypes:
-    pageCount: React.PropTypes.number
-    page: React.PropTypes.number                  # page number
-    onPageChange: React.PropTypes.func.isRequired # passed (page) on change
-    firstAndLast: React.PropTypes.bool            # optional, add 'first' & 'last' buttons
-    pageSelector: React.PropTypes.bool            # show page selector?
-    itemCount: React.PropTypes.bool               # show number of items out of total
-    pageKey: React.PropTypes.string               # optional name for key param (defaults to 'page')
+    pageCount: PropTypes.number
+    page: PropTypes.number                  # page number
+    onPageChange: PropTypes.func.isRequired # passed (page) on change
+    firstAndLast: PropTypes.bool            # optional, add 'first' & 'last' buttons
+    pageSelector: PropTypes.bool            # show page selector?
+    itemCount: PropTypes.bool               # show number of items out of total
+    pageKey: PropTypes.string               # optional name for key param (defaults to 'page')
 
   contextTypes:
-    geordi: React.PropTypes.object
-    router: React.PropTypes.object.isRequired
+    geordi: PropTypes.object
+    router: PropTypes.object.isRequired
 
   getDefaultProps: ->
     page: 1

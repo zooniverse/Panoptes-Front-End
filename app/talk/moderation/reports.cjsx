@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -8,7 +9,7 @@ module.exports = createReactClass
   displayName: 'ModerationActions'
 
   propTypes:
-    reports: React.PropTypes.array.isRequired
+    reports: PropTypes.array.isRequired
 
   getInitialState: ->
     reports: null

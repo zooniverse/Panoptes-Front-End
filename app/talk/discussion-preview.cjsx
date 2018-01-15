@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
@@ -12,10 +13,10 @@ module.exports = createReactClass
   displayName: 'TalkDiscussionPreview'
 
   propTypes:
-    discussion: React.PropTypes.object
+    discussion: PropTypes.object
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
   
   getDefaultProps: ->
     project: {}

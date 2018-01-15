@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 { Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -22,13 +23,13 @@ ProjectPageController = createReactClass
   displayName: 'ProjectPageController'
 
   contextTypes:
-    geordi: React.PropTypes.object
-    initialLoadComplete: React.PropTypes.bool
-    router: React.PropTypes.object.isRequired
+    geordi: PropTypes.object
+    initialLoadComplete: PropTypes.bool
+    router: PropTypes.object.isRequired
 
   propTypes:
-    params: React.PropTypes.object
-    user: React.PropTypes.object
+    params: PropTypes.object
+    user: PropTypes.object
 
   getDefaultProps: ->
     params: {}

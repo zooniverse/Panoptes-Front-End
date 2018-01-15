@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 {timeAgo} = require './lib/time'
@@ -17,14 +18,14 @@ module.exports = createReactClass
   displayName: 'TalkLatestCommentLink'
 
   propTypes:
-    project: React.PropTypes.object
-    discussion: React.PropTypes.object
-    title: React.PropTypes.bool
-    preview: React.PropTypes.bool
+    project: PropTypes.object
+    discussion: PropTypes.object
+    title: PropTypes.bool
+    preview: PropTypes.bool
 
   contextTypes:
-    geordi: React.PropTypes.object
-    router: React.PropTypes.object.isRequired
+    geordi: PropTypes.object
+    router: PropTypes.object.isRequired
 
   getDefaultProps: ->
     title: false

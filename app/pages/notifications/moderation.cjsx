@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 {Markdown} = require 'markdownz'
@@ -10,10 +11,10 @@ module.exports = createReactClass
   displayName: 'ModerationNotification'
 
   propTypes:
-    data: React.PropTypes.object.isRequired
-    notification: React.PropTypes.object.isRequired
-    project: React.PropTypes.object
-    user: React.PropTypes.object.isRequired
+    data: PropTypes.object.isRequired
+    notification: PropTypes.object.isRequired
+    project: PropTypes.object
+    user: PropTypes.object.isRequired
 
   render: ->
     baseLink = ""

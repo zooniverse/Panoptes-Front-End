@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require '../../talk/lib/paginator'
@@ -8,7 +9,7 @@ module.exports = createReactClass
   displayName: 'UserProfileFeed'
 
   propTypes:
-    user: React.PropTypes.object
+    user: PropTypes.object
 
   getDefaultProps: ->
     location: query: page: 1

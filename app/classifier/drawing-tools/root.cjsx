@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 StickyModalForm = require 'modal-form/sticky'
 ModalFocus = require('../../components/modal-focus').default
@@ -18,7 +19,7 @@ module.exports = createReactClass
   displayName: 'DrawingToolRoot'
 
   contextTypes:
-    store: React.PropTypes.object
+    store: PropTypes.object
 
   statics:
     distance: (x1, y1, x2, y2) ->

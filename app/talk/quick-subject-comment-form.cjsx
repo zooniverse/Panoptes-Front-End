@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 CommentBox = require './comment-box'
 talkClient = require 'panoptes-client/lib/talk-client'
@@ -21,15 +22,15 @@ module.exports = createReactClass
   displayName: 'TalkQuickSubjectCommentForm'
 
   propTypes:
-    params: React.PropTypes.shape({
-      name: React.PropTypes.string.isRequired,
-      owner: React.PropTypes.string.isRequired
+    params: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      owner: PropTypes.string.isRequired
     }).isRequired
-    subject: React.PropTypes.object
-    user: React.PropTypes.object
+    subject: PropTypes.object
+    user: PropTypes.object
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   getInitialState: ->
     commentValidationErrors: []

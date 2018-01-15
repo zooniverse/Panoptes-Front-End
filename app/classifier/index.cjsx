@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 Classifier = require('./classifier').default
@@ -28,17 +29,17 @@ ClassifierWrapper = createReactClass
   displayName: 'ClassifierWrapper'
 
   contextTypes:
-    geordi: React.PropTypes.object
-    store: React.PropTypes.object
+    geordi: PropTypes.object
+    store: PropTypes.object
 
   propTypes:
-    classification: React.PropTypes.object
-    onLoad: React.PropTypes.func
-    onComplete: React.PropTypes.func
-    onCompleteAndLoadAnotherSubject: React.PropTypes.func
-    onClickNext: React.PropTypes.func
-    workflow: React.PropTypes.object
-    user: React.PropTypes.object
+    classification: PropTypes.object
+    onLoad: PropTypes.func
+    onComplete: PropTypes.func
+    onCompleteAndLoadAnotherSubject: PropTypes.func
+    onClickNext: PropTypes.func
+    workflow: PropTypes.object
+    user: PropTypes.object
 
   getDefaultProps: ->
     classification: {}

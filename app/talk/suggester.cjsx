@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 talkClient = require 'panoptes-client/lib/talk-client'
@@ -9,8 +10,8 @@ module.exports = createReactClass
   displayName: 'Suggester'
 
   propTypes:
-    input: React.PropTypes.string.isRequired
-    onSelect: React.PropTypes.func
+    input: PropTypes.string.isRequired
+    onSelect: PropTypes.func
 
   getDefaultProps: ->
     onSelect: ->

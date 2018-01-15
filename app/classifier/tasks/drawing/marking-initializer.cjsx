@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Draggable = require '../../../lib/draggable'
 drawingTools = require '../../drawing-tools'
@@ -7,7 +8,7 @@ module.exports = createReactClass
   displayName: 'MarkingInitializer'
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   getDefaultProps: ->
     annotation: null

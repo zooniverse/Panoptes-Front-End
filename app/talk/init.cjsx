@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 BoardPreview = require './board-preview'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -25,10 +26,10 @@ module.exports = createReactClass
   mixins: [HandlePropChanges]
 
   propTypes:
-    section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
+    section: PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   logTalkClick: (talkItem) ->
     @context.geordi?.logEvent

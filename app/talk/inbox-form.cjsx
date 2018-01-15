@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 UserSearch = require '../components/user-search'
@@ -11,11 +12,11 @@ module.exports = createReactClass
   displayName: 'InboxForm'
 
   propTypes:
-    user: React.PropTypes.object
+    user: PropTypes.object
 
   contextTypes:
-    geordi: React.PropTypes.object
-    router: React.PropTypes.object.isRequired
+    geordi: PropTypes.object
+    router: PropTypes.object.isRequired
 
   getInitialState: ->
     validationErrors: []

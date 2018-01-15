@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 {Link} = require 'react-router'
@@ -10,10 +11,10 @@ module.exports = createReactClass
   displayName: 'CommentNotification'
 
   propTypes:
-    data: React.PropTypes.object.isRequired
-    notification: React.PropTypes.object
-    project: React.PropTypes.object
-    user: React.PropTypes.object.isRequired
+    data: PropTypes.object.isRequired
+    notification: PropTypes.object
+    project: PropTypes.object
+    user: PropTypes.object.isRequired
 
   getDefaultProps: ->
     startedDiscussion: false

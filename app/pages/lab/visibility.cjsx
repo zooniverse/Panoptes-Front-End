@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 SetToggle = require '../../lib/set-toggle'
@@ -12,7 +13,7 @@ module.exports = createReactClass
   displayName: 'EditProjectVisibility'
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   getDefaultProps: ->
     project: null

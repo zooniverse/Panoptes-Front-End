@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 uniq = require 'lodash/uniq'
 
@@ -21,7 +22,7 @@ DisplayRoles = createReactClass
   displayName: 'TalkDisplayRoles'
 
   propTypes:
-    roles: React.PropTypes.array # roles resources
+    roles: PropTypes.array # roles resources
 
   role: (role, i) ->
     zooTeamName = if zooniverseTeamRole(role) then 'zoo-team'

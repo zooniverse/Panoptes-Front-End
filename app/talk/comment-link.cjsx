@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkConfig = require './config'
 {Link} = require 'react-router'
@@ -9,8 +10,8 @@ module.exports = createReactClass
   displayName: 'TalkCommentLink'
 
   propTypes:
-    comment: React.PropTypes.object  # Comment resource
-    pageSize: React.PropTypes.number # Optional: pass this in to override default PAGE_SIZE
+    comment: PropTypes.object  # Comment resource
+    pageSize: PropTypes.number # Optional: pass this in to override default PAGE_SIZE
 
   getDefaultProps: ->
     pageSize: PAGE_SIZE

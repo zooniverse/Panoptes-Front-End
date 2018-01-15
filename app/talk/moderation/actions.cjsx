@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 moment = require 'moment'
@@ -21,10 +22,10 @@ module.exports = createReactClass
   displayName: 'ModerationActions'
 
   propTypes:
-    moderation: React.PropTypes.object.isRequired
-    comment: React.PropTypes.object.isRequired
-    user: React.PropTypes.object.isRequired
-    updateModeration: React.PropTypes.func.isRequired
+    moderation: PropTypes.object.isRequired
+    comment: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired
+    updateModeration: PropTypes.func.isRequired
 
   getInitialState: ->
     actions: null

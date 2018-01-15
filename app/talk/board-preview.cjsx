@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
@@ -8,7 +9,7 @@ module.exports = createReactClass
   displayName: 'TalkBoardDisplay'
 
   propTypes:
-    data: React.PropTypes.object
+    data: PropTypes.object
 
   private: ->
     @props.data.permissions.read isnt 'all'

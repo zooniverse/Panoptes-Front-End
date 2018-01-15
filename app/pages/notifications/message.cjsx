@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 {Markdown} = require 'markdownz'
@@ -10,9 +11,9 @@ module.exports = createReactClass
   displayName: 'MessageNotification'
 
   propTypes:
-    project: React.PropTypes.object
-    user: React.PropTypes.object.isRequired
-    notification: React.PropTypes.object.isRequired
+    project: PropTypes.object
+    user: PropTypes.object.isRequired
+    notification: PropTypes.object.isRequired
 
   render: ->
     notification = @props.notification

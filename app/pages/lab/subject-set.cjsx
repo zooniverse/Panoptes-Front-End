@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
@@ -145,7 +146,7 @@ EditSubjectSetPage = createReactClass
   displayName: 'EditSubjectSetPage'
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   getDefaultProps: ->
     subjectSet: null

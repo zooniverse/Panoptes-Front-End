@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link, IndexLink} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
@@ -22,7 +23,7 @@ EditProjectPage = createReactClass
   displayName: 'EditProjectPage'
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   getDefaultProps: ->
     project: id: '2'
@@ -145,7 +146,7 @@ module.exports = createReactClass
   displayName: 'EditProjectPageWrapper'
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.user

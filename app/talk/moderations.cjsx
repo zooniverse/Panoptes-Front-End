@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 auth = require 'panoptes-client/lib/auth'
@@ -12,7 +13,7 @@ module.exports = createReactClass
   displayName: 'TalkModerations'
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   getInitialState: ->
     moderations: []

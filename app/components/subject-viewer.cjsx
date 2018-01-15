@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 `import FavoritesButton from '../collections/favorites-button';`
 Dialog = require 'modal-form/dialog'
@@ -40,7 +41,7 @@ module.exports = createReactClass
   displayName: 'SubjectViewer'
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   signInAttentionTimeout: NaN
 
