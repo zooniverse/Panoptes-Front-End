@@ -8,7 +8,7 @@ import EmailSettings from './email';
 
 function mockTalkResource(type, options) {
   const resource = talkClient.type(type).create(options);
-  sinon.stub(resource, 'save', () => Promise.resolve(resource));
+  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
   sinon.stub(resource, 'get');
   sinon.stub(resource, 'delete');
   return resource;
@@ -17,7 +17,7 @@ function mockTalkResource(type, options) {
 function mockPanoptesResource(type, options) {
   const resource = apiClient.type(type).create(options);
   apiClient._typesCache = {};
-  sinon.stub(resource, 'save', () => Promise.resolve(resource));
+  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
   sinon.stub(resource, 'get');
   sinon.stub(resource, 'delete');
   return resource;
@@ -131,8 +131,8 @@ describe('EmailSettings', () => {
   let projectPreferenceSpy;
 
   before(() => {
-    sinon.stub(apiClient, 'request', () => Promise.resolve([]));
-    sinon.stub(talkClient, 'request', () => Promise.resolve([]));
+    sinon.stub(apiClient, 'request').callsFake(() => Promise.resolve([]));
+    sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve([]));
     wrapper = mount(<EmailSettings user={user} />);
     projectPreferenceSpy = sinon.spy(wrapper.instance(), 'getProjectForPreferences');
   });
