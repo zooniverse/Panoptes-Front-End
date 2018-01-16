@@ -43,7 +43,7 @@ module.exports = createReactClass
     {x, y} = @props.getEventOffset e
     _start = {x, y}
     @props.annotation.value = {x, y, width: 0, height: 0, _start}
-    @props.classification.update 'annotation'
+    @props.onChange @props.annotation
 
   handleInitDrag: (e) ->
     {x, y} = @props.getEventOffset e
@@ -54,7 +54,7 @@ module.exports = createReactClass
     @props.annotation.value.y = Math.min _start.y, y
     @props.annotation.value.width = Math.abs _start.x - x
     @props.annotation.value.height = Math.abs _start.y - y
-    @props.classification.update 'annotation'
+    @props.onChange @props.annotation
 
   handleBoxDrag: (e, d) ->
     difference = @props.normalizeDifference(e, d)
@@ -62,7 +62,7 @@ module.exports = createReactClass
     maxY = (@props.containerRect.height / @props.scale.vertical) - @props.annotation.value.height
     @props.annotation.value.x = Math.max 0, Math.min maxX, @props.annotation.value.x += difference.x
     @props.annotation.value.y = Math.max 0, Math.min maxY, @props.annotation.value.y += difference.y
-    @props.classification.update 'annotations'
+    @props.onChange @props.annotation
 
   handleStartHandle: (e) ->
     mouse = @props.getEventOffset e
@@ -79,7 +79,7 @@ module.exports = createReactClass
     diff = _start.mouse[coord] - mouse[coord]
     @props.annotation.value[coord] = Math.min _start.mouse[coord] + _start.rect[dimension], mouse[coord]
     @props.annotation.value[dimension] = Math.abs _start.rect[dimension] + diff
-    @props.classification.update 'annotation'
+    @props.onChange @props.annotation
 
   handleDragFar: (coord, e) ->
     dimension = {x: 'width', y: 'height'}[coord]
@@ -90,4 +90,4 @@ module.exports = createReactClass
     diff = _start.mouse[coord] - mouse[coord]
     @props.annotation.value[coord] = Math.min _start.rect[coord], mouse[coord]
     @props.annotation.value[dimension] = Math.abs _start.rect[dimension] - diff
-    @props.classification.update 'annotation'
+    @props.onChange @props.annotation

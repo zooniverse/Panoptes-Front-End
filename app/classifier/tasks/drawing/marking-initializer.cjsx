@@ -65,7 +65,7 @@ module.exports = createReactClass
       for key, value of initValues
         mark[key] = value
 
-    @props.classification.update 'annotations'
+    @props.onChange @props.annotation
 
   handleInitDrag: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
@@ -78,7 +78,7 @@ module.exports = createReactClass
       for key, value of initMoveValues
         mark[key] = value
 
-    @props.classification.update 'annotations'
+    @props.onChange @props.annotation
 
   handleInitRelease: (e) ->
     pref = @props.preferences.preferences
@@ -103,7 +103,7 @@ module.exports = createReactClass
         unless MarkComponent.initValid multiple, @props
           @destroyMark @props.annotation, multiple
 
-    @props.classification.update 'annotations'
+    @props.onChange @props.annotation
 
     if MarkComponent.initValid?
       unless MarkComponent.initValid mark, @props
@@ -114,4 +114,4 @@ module.exports = createReactClass
       @setState selectedMark: null
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
-    @props.classification.update 'annotations'
+    @props.onChange annotation
