@@ -113,7 +113,7 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     annotation.value.push mark
-    @props.onChange annotation
+    @props.classification.update 'annotations'
 
   handleDeselect: ->
     @setState selection: null
@@ -123,11 +123,11 @@ module.exports = React.createClass
       @setState selection: null
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
-    @props.onChange annotation
+    @props.classification.update 'annotations'
     if mark.templateID
       index = []
       for cell in annotation.value
         if cell.templateID is mark.templateID
           index.push(annotation.value.indexOf cell)
       annotation.value.splice index[0], index.length
-      @props.onChange annotation
+      @props.classification.update 'annotations'
