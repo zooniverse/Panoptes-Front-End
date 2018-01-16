@@ -62,6 +62,7 @@ export default class ProjectPage extends React.Component {
     const navBar = (!onHomePage) ?
       <div>
         <NavbarComponent
+          background={this.props.background}
           loading={this.props.loading}
           organization={this.props.organization}
           project={this.props.project}

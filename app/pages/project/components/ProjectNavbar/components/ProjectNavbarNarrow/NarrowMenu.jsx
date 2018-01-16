@@ -29,6 +29,10 @@ const StyledNavLink = styled(NavLink)`
   &:hover, &:focus {
     background-color: ${colors.darkteal};
   }
+
+  &.active {
+    background-color: ${colors.darkteal};
+  }
 `;
 
 function NarrowMenu({ links, open = true, toggleMenuFn }) {
