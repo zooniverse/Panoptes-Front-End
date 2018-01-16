@@ -11,9 +11,8 @@ class Task extends React.Component {
 
   handleAnnotationChange(newAnnotation) {
     const { classification } = this.props;
-    const annotations = classification.annotations.slice();
-    annotations[annotations.length - 1] = newAnnotation;
-    this.props.updateAnnotations(annotations);
+    classification.annotations[classification.annotations.length - 1] = newAnnotation;
+    classification.update('annotations');
   }
 
   render() {
@@ -47,7 +46,7 @@ class Task extends React.Component {
       taskTypes: tasks,
       workflow,
       classification,
-      onChange: () => this.handleAnnotationChange
+      onChange: () => classification.update()
     };
 
     return (
@@ -123,17 +122,12 @@ Task.propTypes = {
   task: React.PropTypes.shape({
     type: React.PropTypes.string
   }),
-  updateAnnotations: React.PropTypes.func,
   user: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
   workflow: React.PropTypes.shape({
     id: React.PropTypes.string
   })
-};
-
-Task.defaultProps = {
-  updateAnnotations: () => null
 };
 
 export default Task;

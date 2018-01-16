@@ -32,4 +32,4 @@ module.exports = React.createClass
 
   handleRemove: (index) ->
     @props.annotation.value.splice index, 1
-    @props.onChange @props.annotation
+    @props.classification.update 'annotations'

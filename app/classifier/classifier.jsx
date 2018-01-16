@@ -48,6 +48,7 @@ class Classifier extends React.Component {
   }
 
   componentWillMount() {
+    this.props.classification.listen('change', this.updateAnnotations);
     this.updateAnnotations();
   }
 
@@ -84,6 +85,8 @@ class Classifier extends React.Component {
     const prevAnnotation = prevState.annotations[prevState.annotations.length - 1];
 
     if (prevProps.classification !== this.props.classification) {
+      prevProps.classification.stopListening('change', this.updateAnnotations);
+      this.props.classification.listen('change', this.updateAnnotations);
       this.updateAnnotations();
     }
 
@@ -93,6 +96,7 @@ class Classifier extends React.Component {
   }
 
   componentWillUnmount() {
+    this.props.classification.stopListening('change', this.updateAnnotations);
     try {
       !!this.context.geordi && this.context.geordi.forget(['subjectID']);
     } catch (err) {
@@ -144,10 +148,9 @@ class Classifier extends React.Component {
       }));
   }
 
-  updateAnnotations(annotations) {
-    annotations = annotations || this.props.classification.annotations.slice();
+  updateAnnotations() {
+    const annotations = this.props.classification.annotations.slice();
     this.setState({ annotations });
-    this.props.classification.update({ annotations });
     if (this.props.feedback.active) {
       this.updateFeedback();
     }
@@ -217,7 +220,8 @@ class Classifier extends React.Component {
   handleAnnotationChange(classification, newAnnotation) {
     const annotations  = classification.annotations.slice();
     annotations[annotations.length - 1] = newAnnotation;
-    this.updateAnnotations(annotations);
+    classification.update({ annotations });
+    this.setState({ annotations });
   }
 
   completeClassification() {
@@ -230,7 +234,6 @@ class Classifier extends React.Component {
           this.props.onComplete()
             .catch(error => console.error(error));
         }
-        this.setState({ annotations: [{}] });
       });
   }
 
@@ -301,7 +304,6 @@ class Classifier extends React.Component {
               task={currentTask}
               annotation={currentAnnotation}
               subjectLoading={this.state.subjectLoading}
-              updateAnnotations={this.updateAnnotations}
             /> :
             <ClassificationSummary
               project={this.props.project}
@@ -329,7 +331,6 @@ class Classifier extends React.Component {
             subject={this.props.subject}
             task={currentTask}
             workflow={this.props.workflow}
-            updateAnnotations={this.updateAnnotations}
           >
             {!!this.props.expertClassifier &&
               <ExpertOptions
