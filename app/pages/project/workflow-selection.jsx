@@ -15,6 +15,7 @@ class WorkflowSelection extends React.Component {
   componentDidMount() {
     this.getSelectedWorkflow(this.props);
   }
+
   componentWillUpdate(nextProps, nextState) {
     if (nextProps.preferences &&
       nextProps.preferences.preferences &&
@@ -26,6 +27,12 @@ class WorkflowSelection extends React.Component {
       ) {
         this.getSelectedWorkflow(nextProps);
       }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.project.id !== this.props.project.id) {
+      this.getSelectedWorkflow(this.props);
     }
   }
 
