@@ -48,15 +48,14 @@ class Task extends React.Component {
       taskTypes: tasks,
       workflow,
       classification,
-      onChange: () => this.handleAnnotationChange
+      onChange: this.handleAnnotationChange
     };
 
     return (
       <div className="task-container" style={this.props.subjectLoading ? disabledStyle : null}>
         <div className="coverable-task-container">
           {persistentHooksBeforeTask.map((HookComponent, i) => {
-            const key = i + Math.random();
-            return (<HookComponent key={key} {...taskHookProps} />);
+            return (<HookComponent key={i} {...taskHookProps} />);
           })}
 
           {!!annotation &&
@@ -77,8 +76,7 @@ class Task extends React.Component {
           }
 
           {persistentHooksAfterTask.map((HookComponent, i) => {
-            const key = i + Math.random();
-            return (<HookComponent key={key} {...taskHookProps} />);
+            return (<HookComponent key={i} {...taskHookProps} />);
           })}
 
           <hr />
