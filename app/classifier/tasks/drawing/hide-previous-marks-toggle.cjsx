@@ -15,7 +15,9 @@ HidePreviousMarksToggle = createReactClass
     @props.classification._hideMarksBefore = count
     checked = count > 0
     @setState { checked }
-    # this is a hack to force the parent to render again with marks hidden
+    @updateParent()
+
+  updateParent: () ->
     annotations = @props.classification.annotations.slice()
     annotation = annotations[annotations.length - 1]
     @props.onChange annotation
