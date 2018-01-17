@@ -6,7 +6,7 @@ import FavoritesButton from './favorites-button';
 
 const subject = { id: '4' };
 
-describe('<Favorites Button />', function() {
+describe('<Favorites Button />', function () {
   let wrapper;
   let toggleFavoriteSpy;
   let button;
@@ -16,6 +16,10 @@ describe('<Favorites Button />', function() {
     wrapper = shallow(<FavoritesButton subject={subject} />);
     button = wrapper.find('button');
     icon = wrapper.find('i');
+  });
+
+  after(() => {
+    toggleFavoriteSpy.restore();
   });
 
   it('should render a button and an icon', function() {

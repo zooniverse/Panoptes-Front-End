@@ -37,10 +37,13 @@ describe('ProjectHomeWorkflowButton', function() {
       />
     );
   });
+  after(() => {
+    handleWorkflowSelectionSpy.restore();
+  });
 
-  it('renders without crashing', function() {});
+  it('renders without crashing', function () {});
 
-  it('renders a Link component', function() {
+  it('renders a Link component', function () {
     assert.equal(wrapper.find('Link').length, 1);
     assert.equal(wrapper.find('span').length, 0);
   });

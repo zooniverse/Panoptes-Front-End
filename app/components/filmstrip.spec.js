@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import { mount } from 'enzyme';
 import Filmstrip from './filmstrip';
 
-describe('if loading an image subject', function() {
+describe('if loading an image subject', function () {
   let wrapper;
   let positionSpy;
   let filterChange;
@@ -13,6 +13,11 @@ describe('if loading an image subject', function() {
     filterChange = sinon.spy(Filmstrip.prototype, 'selectFilter');
     positionSpy = sinon.spy(Filmstrip.prototype, 'scrollRight');
     wrapper = mount(<Filmstrip increment={350} onChange={function (a) { return a; }} value={''} />);
+  });
+
+  after(() => {
+    filterChange.restore();
+    positionSpy.restore();
   });
 
   it('will show all disciplines without a filter value', function () {

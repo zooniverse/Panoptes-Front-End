@@ -24,7 +24,7 @@ const searchNode = {
   getSelected() { return selectedCollection; }
 };
 
-describe('<CollectionsManager />', function() {
+describe('<CollectionsManager />', function () {
   let wrapper;
   let addToCollectionsSpy;
   let addButton;
@@ -33,6 +33,10 @@ describe('<CollectionsManager />', function() {
     addToCollectionsSpy = sinon.spy(CollectionsManager.prototype, 'addToCollections');
     wrapper = shallow(<CollectionsManager subjectIDs={subjectIDs} project={project} />);
     addButton = wrapper.find('.search-button');
+  });
+
+  after(() => {
+    addToCollectionsSpy.restore();
   });
 
   it('should render without crashing', function() {
