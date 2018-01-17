@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -18,15 +19,15 @@ export default class FlexibleLink extends React.Component {
 }
 
 FlexibleLink.contextTypes = {
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };
 
 FlexibleLink.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  geordiHandler: React.PropTypes.string,
-  logText: React.PropTypes.string,
-  to: React.PropTypes.string.isRequired
+  children: PropTypes.node,
+  className: PropTypes.string,
+  geordiHandler: PropTypes.string,
+  logText: PropTypes.string,
+  to: PropTypes.string.isRequired
 };
 
 FlexibleLink.defaultProps = {

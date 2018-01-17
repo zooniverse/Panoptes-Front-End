@@ -1,12 +1,13 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Markdown } from 'markdownz';
 import { browserHistory } from 'react-router';
 
 class WrappedMarkdown extends React.Component {
   static propTypes = {
-    content: React.PropTypes.string,
-    project: React.PropTypes.object,
-    header: React.PropTypes.string,
+    content: PropTypes.string,
+    project: PropTypes.object,
+    header: PropTypes.string,
   };
 
   onClick = (e) => {

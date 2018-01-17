@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -62,7 +63,7 @@ class UserSettingsList extends Component {
 }
 
 UserSettingsList.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 export default UserSettingsList;

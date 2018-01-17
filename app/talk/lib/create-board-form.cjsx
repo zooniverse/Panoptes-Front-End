@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 ROLES = require './roles'
@@ -22,9 +23,9 @@ module.exports = createReactClass
   displayName: 'CreateBoardForm'
 
   propTypes:
-    section: React.PropTypes.string
-    onSubmitBoard: React.PropTypes.func
-    user: React.PropTypes.object
+    section: PropTypes.string
+    onSubmitBoard: PropTypes.func
+    user: PropTypes.object
 
   getInitialState: ->
     error: ''

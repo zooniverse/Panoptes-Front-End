@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 Translate = require 'react-translate-component'
@@ -19,7 +20,7 @@ module.exports = createReactClass
   displayName: 'SignInForm'
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   getInitialState: ->
     busy: false

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import DragAndDropTarget from './drag-and-drop-target';
 import FileButton from '../../../components/file-button';
@@ -105,14 +106,14 @@ MediaAreaView.defaultProps = {
 };
 
 MediaAreaView.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  errors: React.PropTypes.array,
-  media: React.PropTypes.arrayOf(React.PropTypes.object),
-  onDelete: React.PropTypes.func,
-  onDrop: React.PropTypes.func,
-  onSelect: React.PropTypes.func,
-  pendingFiles: React.PropTypes.array,
-  pendingMedia: React.PropTypes.array,
-  style: React.PropTypes.object,
+  children: PropTypes.node,
+  className: PropTypes.string,
+  errors: PropTypes.array,
+  media: PropTypes.arrayOf(PropTypes.object),
+  onDelete: PropTypes.func,
+  onDrop: PropTypes.func,
+  onSelect: PropTypes.func,
+  pendingFiles: PropTypes.array,
+  pendingMedia: PropTypes.array,
+  style: PropTypes.object,
 };

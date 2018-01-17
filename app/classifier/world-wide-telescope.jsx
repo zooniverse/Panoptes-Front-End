@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import getSubjectLocation from '../lib/get-subject-location';
 
@@ -497,13 +498,13 @@ export default class WorldWideTelescope extends React.Component {
 }
 
 WorldWideTelescope.propTypes = {
-  annotations: React.PropTypes.arrayOf(React.PropTypes.object),
-  subject: React.PropTypes.shape({
-    locations: React.PropTypes.array,
-    metadata: React.PropTypes.object
+  annotations: PropTypes.arrayOf(PropTypes.object),
+  subject: PropTypes.shape({
+    locations: PropTypes.array,
+    metadata: PropTypes.object
   }),
-  workflow: React.PropTypes.shape({
-    tasks: React.PropTypes.object
+  workflow: PropTypes.shape({
+    tasks: PropTypes.object
   })
 };
 

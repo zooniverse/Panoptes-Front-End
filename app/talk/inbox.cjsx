@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -25,8 +26,8 @@ ConversationLink = createReactClass
   displayName: 'ConversationLink'
 
   propTypes:
-    user: React.PropTypes.object
-    conversation: React.PropTypes.object
+    user: PropTypes.object
+    conversation: PropTypes.object
 
   getInitialState: ->
     users: []
@@ -66,7 +67,7 @@ module.exports = createReactClass
   displayName: 'TalkInbox'
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   getDefaultProps: ->
     location: query: page: 1

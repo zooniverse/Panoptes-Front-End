@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Dialog from 'modal-form/dialog';
 import ReactDOM from 'react-dom';
@@ -72,10 +73,10 @@ class WorkflowAssignmentDialog extends React.Component {
 }
 
 WorkflowAssignmentDialog.propTypes = {
-  project: React.PropTypes.shape({
-    id: React.PropTypes.id
+  project: PropTypes.shape({
+    id: PropTypes.id
   }),
-  splits: React.PropTypes.object
+  splits: PropTypes.object
 };
 
 export default WorkflowAssignmentDialog;

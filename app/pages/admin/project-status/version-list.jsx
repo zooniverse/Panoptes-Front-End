@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -88,7 +89,7 @@ class VersionList extends Component {
 }
 
 VersionList.propTypes = {
-  project: React.PropTypes.object.isRequired
+  project: PropTypes.object.isRequired
 };
 
 export default VersionList;

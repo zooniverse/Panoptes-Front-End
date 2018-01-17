@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import uuidv4 from 'uuid/v4';
 
 function TextInput({ title, help, onChange, name, type = 'text', required = false, value }) {

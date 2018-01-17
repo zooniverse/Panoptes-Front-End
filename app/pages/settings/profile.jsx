@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import ImageSelector from '../../components/image-selector';
@@ -125,8 +126,8 @@ CustomiseProfile.defaultProps = {
 };
 
 CustomiseProfile.propTypes = {
-  user: React.PropTypes.shape({
-    get: React.PropTypes.func
+  user: PropTypes.shape({
+    get: PropTypes.func
   })
 };
 

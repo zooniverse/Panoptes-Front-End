@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 counterpart = require 'counterpart'
@@ -16,7 +17,7 @@ module.exports = createReactClass
   displayName: 'Talk'
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   logTalkView: ->
     @context.geordi?.logEvent

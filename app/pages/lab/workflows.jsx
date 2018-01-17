@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import DragReorderable from 'drag-reorderable';
@@ -93,25 +94,25 @@ WorkflowsPage.defaultProps = {
 };
 
 WorkflowsPage.propTypes = {
-  hideCreateWorkflow: React.PropTypes.func,
-  handleWorkflowCreation: React.PropTypes.func,
-  handleWorkflowReorder: React.PropTypes.func,
-  labPath: React.PropTypes.func,
-  loading: React.PropTypes.bool,
-  onPageChange: React.PropTypes.func,
-  project: React.PropTypes.shape({
-    configuration: React.PropTypes.object,
-    id: React.PropTypes.string,
-    live: React.PropTypes.bool
+  hideCreateWorkflow: PropTypes.func,
+  handleWorkflowCreation: PropTypes.func,
+  handleWorkflowReorder: PropTypes.func,
+  labPath: PropTypes.func,
+  loading: PropTypes.bool,
+  onPageChange: PropTypes.func,
+  project: PropTypes.shape({
+    configuration: PropTypes.object,
+    id: PropTypes.string,
+    live: PropTypes.bool
   }),
-  reorder: React.PropTypes.bool,
-  showCreateWorkflow: React.PropTypes.func,
-  toggleReorder: React.PropTypes.func,
-  workflows: React.PropTypes.arrayOf(React.PropTypes.object),
-  workflowActions: React.PropTypes.shape({
-    createWorkflowForProject: React.PropTypes.func
+  reorder: PropTypes.bool,
+  showCreateWorkflow: PropTypes.func,
+  toggleReorder: PropTypes.func,
+  workflows: PropTypes.arrayOf(PropTypes.object),
+  workflowActions: PropTypes.shape({
+    createWorkflowForProject: PropTypes.func
   }),
-  workflowCreationInProgress: React.PropTypes.bool
+  workflowCreationInProgress: PropTypes.bool
 };
 
 export default WorkflowsPage;

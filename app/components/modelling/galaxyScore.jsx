@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 // grabs the model score (calculated in modelCanvas) and displays it with a
@@ -20,7 +21,7 @@ const ModelScore = (props) => {
 
 /* eslint-disable react/forbid-prop-types */
 ModelScore.propTypes = {
-  score: React.PropTypes.number
+  score: PropTypes.number
 };
 /* eslint-enable react/forbid-prop-types */
 
@@ -35,7 +36,7 @@ const ModelScoreWrapper = (props) => {
 
 /* eslint-disable react/forbid-prop-types */
 ModelScoreWrapper.propTypes = {
-  modellingEnabled: React.PropTypes.bool
+  modellingEnabled: PropTypes.bool
 };
 /* eslint-enable react/forbid-prop-types */
 

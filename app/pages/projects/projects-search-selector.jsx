@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 import Select from 'react-select';

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const CharLimit = ({ limit, string }) => {
   const remaining = limit - string.length;
@@ -11,12 +12,12 @@ const CharLimit = ({ limit, string }) => {
 
 CharLimit.propTypes = {
   limit: PropTypes.number.isRequired,
-  string: PropTypes.string.isRequired,
+  string: PropTypes.string.isRequired
 };
 
 CharLimit.defaultProps = {
   limit: 0,
-  string: '',
+  string: ''
 };
 
 export default CharLimit;

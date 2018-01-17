@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 
@@ -58,13 +59,13 @@ const SubmitEmailForm = ({ user, onSubmit, onChange, disabled, inProgress, email
 };
 
 SubmitEmailForm.propTypes = {
-  disabled: React.PropTypes.bool,
-  emailError: React.PropTypes.string,
-  emailSuccess: React.PropTypes.bool,
-  inProgress: React.PropTypes.bool,
-  onChange: React.PropTypes.func,
-  onSubmit: React.PropTypes.func,
-  user: React.PropTypes.object // eslint-disable-line react/forbid-prop-types
+  disabled: PropTypes.bool,
+  emailError: PropTypes.string,
+  emailSuccess: PropTypes.bool,
+  inProgress: PropTypes.bool,
+  onChange: PropTypes.func,
+  onSubmit: PropTypes.func,
+  user: PropTypes.object // eslint-disable-line react/forbid-prop-types
 };
 
 SubmitEmailForm.defaultProps = {

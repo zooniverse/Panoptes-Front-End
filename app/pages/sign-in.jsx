@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
@@ -36,7 +37,7 @@ SignInPage.defaultProps = {
 };
 
 SignInPage.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 export default SignInPage;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import AutoSave from '../../../components/auto-save';
@@ -40,7 +41,7 @@ const UserProperties = (props) => {
 }
 
 UserProperties.propTypes = {
-  user: React.PropTypes.object
+  user: PropTypes.object
 }
 
 export default UserProperties;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import DefaultClassificationSummary from './default-classification-summary';
@@ -106,19 +107,19 @@ class ClassificationSummary extends React.Component {
 }
 
 ClassificationSummary.propTypes = {
-  project: React.PropTypes.shape({
-    experimental_tools: React.PropTypes.array
+  project: PropTypes.shape({
+    experimental_tools: PropTypes.array
   }).isRequired,
-  workflow: React.PropTypes.shape({
-    configuration: React.PropTypes.object
+  workflow: PropTypes.shape({
+    configuration: PropTypes.object
   }).isRequired,
-  subject: React.PropTypes.object.isRequired,
-  classification: React.PropTypes.object.isRequired,
-  expertClassification: React.PropTypes.object,
-  splits: React.PropTypes.object,
-  classificationCount: React.PropTypes.number,
-  hasGSGoldStandard: React.PropTypes.bool,
-  toggleExpertClassification: React.PropTypes.func
+  subject: PropTypes.object.isRequired,
+  classification: PropTypes.object.isRequired,
+  expertClassification: PropTypes.object,
+  splits: PropTypes.object,
+  classificationCount: PropTypes.number,
+  hasGSGoldStandard: PropTypes.bool,
+  toggleExpertClassification: PropTypes.func
 };
 
 export default ClassificationSummary;

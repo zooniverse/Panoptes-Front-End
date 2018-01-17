@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import AutoSave from '../../../components/auto-save';
@@ -20,7 +21,7 @@ class LimitToggle extends Component {
 }
 
 LimitToggle.propTypes = {
-  editUser: React.PropTypes.object.isRequired
+  editUser: PropTypes.object.isRequired
 };
 
 LimitToggle.defaultProps = {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { browserHistory } from 'react-router';
 
@@ -9,16 +10,16 @@ function defaultHREFTemplate(project) {
 
 class CircleRibbon extends React.Component {
   static propTypes = {
-    size: React.PropTypes.string,
-    weight: React.PropTypes.number,
-    gap: React.PropTypes.number,
-    loading: React.PropTypes.bool,
-    data: React.PropTypes.array,
-    hrefTemplate: React.PropTypes.func,
-    onClick: React.PropTypes.func,
-    user: React.PropTypes.shape({
-      avatar_src: React.PropTypes.string,
-      login: React.PropTypes.string
+    size: PropTypes.string,
+    weight: PropTypes.number,
+    gap: PropTypes.number,
+    loading: PropTypes.bool,
+    data: PropTypes.array,
+    hrefTemplate: PropTypes.func,
+    onClick: PropTypes.func,
+    user: PropTypes.shape({
+      avatar_src: PropTypes.string,
+      login: PropTypes.string
     }).isRequired
   };
 

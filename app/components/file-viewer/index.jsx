@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import VideoPlayer from './video-player';
 import AudioPlayer from './audio-player';
@@ -13,7 +14,7 @@ function DefaultViewer(props) {
 }
 
 DefaultViewer.propTypes = {
-  type: React.PropTypes.string
+  type: PropTypes.string
 };
 
 const VIEWERS = {
@@ -52,23 +53,23 @@ function FileViewer(props) {
 }
 
 FileViewer.propTypes = {
-  className: React.PropTypes.string,
-  format: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.string
+  className: PropTypes.string,
+  format: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.string
   ]),
-  frame: React.PropTypes.number,
-  onBlur: React.PropTypes.func,
-  onFocus: React.PropTypes.func,
-  onLoad: React.PropTypes.func,
-  src: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.string
+  frame: PropTypes.number,
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
+  onLoad: PropTypes.func,
+  src: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.string
   ]),
-  style: React.PropTypes.object,
-  type: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.string
+  style: PropTypes.object,
+  type: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.string
   ])
 };
 

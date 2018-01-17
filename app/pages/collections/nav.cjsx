@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link, IndexLink} = require 'react-router'
 Translate = require 'react-translate-component'
@@ -8,7 +9,7 @@ CollectionsNav = createReactClass
   displayName: 'CollectionsNav'
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   componentWillReceiveProps: (nextProps, nextContext)->
     @logClick = nextContext?.geordi?.makeHandler? 'collect-menu'

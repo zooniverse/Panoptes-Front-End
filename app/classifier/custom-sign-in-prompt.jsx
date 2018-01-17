@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const PROMPT_CUSTOM_SIGN_IN_EVERY = 5;
@@ -40,11 +41,11 @@ export default class CustomSignInPrompt extends React.Component {
 }
 
 CustomSignInPrompt.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node).isRequired,
-    React.PropTypes.node.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node).isRequired,
+    PropTypes.node.isRequired,
   ]),
-  classificationsThisSession: React.PropTypes.number.isRequired,
+  classificationsThisSession: PropTypes.number.isRequired,
 };
 
 CustomSignInPrompt.defaultProps = {

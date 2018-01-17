@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Translate = require 'react-translate-component'
 SignInForm = require './sign-in-form'
@@ -22,7 +23,7 @@ module.exports = createReactClass
     which: @props.which
 
   childContextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   getChildContext: ->
     geordi: @props.contextRef?.geordi

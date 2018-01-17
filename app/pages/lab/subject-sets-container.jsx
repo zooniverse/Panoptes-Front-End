@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 
@@ -93,7 +94,7 @@ export default class SubjectSetsContainer extends React.Component {
 }
 
 SubjectSetsContainer.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 SubjectSetsContainer.defaultProps = {
@@ -101,14 +102,14 @@ SubjectSetsContainer.defaultProps = {
 };
 
 SubjectSetsContainer.propTypes = {
-  children: React.PropTypes.node,
-  location: React.PropTypes.shape({
-    pathname: React.PropTypes.string,
-    query: React.PropTypes.object
+  children: PropTypes.node,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+    query: PropTypes.object
   }),
-  project: React.PropTypes.shape({
-    get: React.PropTypes.func,
-    id: React.PropTypes.string,
-    uncacheLink: React.PropTypes.func
+  project: PropTypes.shape({
+    get: PropTypes.func,
+    id: PropTypes.string,
+    uncacheLink: PropTypes.func
   })
 };

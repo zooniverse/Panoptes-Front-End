@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
@@ -11,9 +12,9 @@ module.exports = createReactClass
   displayName: 'ModerationComment'
 
   propTypes:
-    moderation: React.PropTypes.object.isRequired
-    user: React.PropTypes.object.isRequired
-    updateModeration: React.PropTypes.func.isRequired
+    moderation: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired
+    updateModeration: PropTypes.func.isRequired
 
   getInitialState: ->
     comment: null

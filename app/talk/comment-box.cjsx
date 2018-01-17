@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ToggleChildren = require './mixins/toggle-children'
 Feedback = require './mixins/feedback'
@@ -15,13 +16,13 @@ module.exports = createReactClass
   mixins: [ToggleChildren, Feedback]
 
   propTypes:
-    submit: React.PropTypes.string
-    user: React.PropTypes.object
-    header: React.PropTypes.string
-    placeholder: React.PropTypes.string
-    submitFeedback: React.PropTypes.string
-    onSubmitComment: React.PropTypes.func # called on submit and passed (e, textarea-content, subject), expected to return something thenable
-    onCancelClick: React.PropTypes.func # adds cancel button and calls callback on click if supplied
+    submit: PropTypes.string
+    user: PropTypes.object
+    header: PropTypes.string
+    placeholder: PropTypes.string
+    submitFeedback: PropTypes.string
+    onSubmitComment: PropTypes.func # called on submit and passed (e, textarea-content, subject), expected to return something thenable
+    onCancelClick: PropTypes.func # adds cancel button and calls callback on click if supplied
 
   getDefaultProps: ->
     submit: "Submit"
@@ -41,7 +42,7 @@ module.exports = createReactClass
     error: ''
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   logPageClick: (clicked, button) ->
     @context?.geordi?.logEvent

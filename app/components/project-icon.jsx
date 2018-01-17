@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ProjectCard from '../partials/project-card';
 
@@ -11,9 +12,9 @@ const ProjectIcon = (props) => {
 };
 
 ProjectIcon.propTypes = {
-  project: React.PropTypes.object,
-  badge: React.PropTypes.number,
-  linkTo: React.PropTypes.string
+  project: PropTypes.object,
+  badge: PropTypes.number,
+  linkTo: PropTypes.string
 };
 
 export default ProjectIcon;

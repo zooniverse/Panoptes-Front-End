@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import { Markdown } from 'markdownz';
@@ -219,61 +220,61 @@ OrganizationPage.defaultProps = {
 };
 
 OrganizationPage.propTypes = {
-  category: React.PropTypes.oneOfType([
-    React.PropTypes.bool,
-    React.PropTypes.string
+  category: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.string
   ]),
-  collaborator: React.PropTypes.bool,
-  collaboratorView: React.PropTypes.bool,
-  errorFetchingProjects: React.PropTypes.shape({
-    message: React.PropTypes.string
+  collaborator: PropTypes.bool,
+  collaboratorView: PropTypes.bool,
+  errorFetchingProjects: PropTypes.shape({
+    message: PropTypes.string
   }),
-  fetchingProjects: React.PropTypes.bool,
-  onChangeQuery: React.PropTypes.func,
-  organization: React.PropTypes.shape({
-    categories: React.PropTypes.arrayOf(
-      React.PropTypes.string
+  fetchingProjects: PropTypes.bool,
+  onChangeQuery: PropTypes.func,
+  organization: PropTypes.shape({
+    categories: PropTypes.arrayOf(
+      PropTypes.string
     ),
-    description: React.PropTypes.string,
-    display_name: React.PropTypes.string,
-    id: React.PropTypes.string,
-    introduction: React.PropTypes.string,
-    urls: React.PropTypes.arrayOf(
-      React.PropTypes.shape({
-        url: React.PropTypes.string
+    description: PropTypes.string,
+    display_name: PropTypes.string,
+    id: PropTypes.string,
+    introduction: PropTypes.string,
+    urls: PropTypes.arrayOf(
+      PropTypes.shape({
+        url: PropTypes.string
       })
     )
   }).isRequired,
-  organizationAvatar: React.PropTypes.shape({
-    src: React.PropTypes.string
+  organizationAvatar: PropTypes.shape({
+    src: PropTypes.string
   }),
-  organizationBackground: React.PropTypes.shape({
-    src: React.PropTypes.string
+  organizationBackground: PropTypes.shape({
+    src: PropTypes.string
   }),
-  organizationPages: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      content: React.PropTypes.string
+  organizationPages: PropTypes.arrayOf(
+    PropTypes.shape({
+      content: PropTypes.string
     })
   ),
-  organizationProjects: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      id: React.PropTypes.string,
-      display_name: React.PropTypes.string
+  organizationProjects: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      display_name: PropTypes.string
     })
   ),
-  projectAvatars: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      id: React.PropTypes.string,
-      src: React.PropTypes.string
+  projectAvatars: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      src: PropTypes.string
     })
   ),
-  quoteObject: React.PropTypes.shape({
-    displayName: React.PropTypes.string,
-    researcherAvatar: React.PropTypes.string,
-    quote: React.PropTypes.string,
-    slug: React.PropTypes.string
+  quoteObject: PropTypes.shape({
+    displayName: PropTypes.string,
+    researcherAvatar: PropTypes.string,
+    quote: PropTypes.string,
+    slug: PropTypes.string
   }),
-  toggleCollaboratorView: React.PropTypes.func
+  toggleCollaboratorView: PropTypes.func
 };
 
 export default OrganizationPage;

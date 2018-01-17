@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -129,12 +130,12 @@ CollectionsCreateForm.defaultProps = {
 };
 
 CollectionsCreateForm.propTypes = {
-  onSubmit: React.PropTypes.func,
-  project: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
-    id: React.PropTypes.string
+  onSubmit: PropTypes.func,
+  project: PropTypes.shape({
+    display_name: PropTypes.string,
+    id: PropTypes.string
   }),
-  subjectIDs: React.PropTypes.arrayOf(React.PropTypes.string)
+  subjectIDs: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default CollectionsCreateForm;

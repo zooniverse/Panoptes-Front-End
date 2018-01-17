@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -20,11 +21,11 @@ function TalkPreferenceOption({ preference, index, digest, onChange }) {
 }
 
 TalkPreferenceOption.propTypes = {
-  digest: React.PropTypes.string.isRequired,
-  index: React.PropTypes.number.isRequired,
-  onChange: React.PropTypes.func,
-  preference: React.PropTypes.shape({
-    email_digest: React.PropTypes.string
+  digest: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  onChange: PropTypes.func,
+  preference: PropTypes.shape({
+    email_digest: PropTypes.string
   }).isRequired
 };
 
@@ -54,8 +55,8 @@ function TalkPreferences(props) {
 }
 
 TalkPreferences.propTypes = {
-  onChange: React.PropTypes.func,
-  talkPreferences: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+  onChange: PropTypes.func,
+  talkPreferences: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 function ProjectPreferences({ projects, projectPreferences, onChange }) {
@@ -94,9 +95,9 @@ function ProjectPreferences({ projects, projectPreferences, onChange }) {
 }
 
 ProjectPreferences.propTypes = {
-  projects: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  projectPreferences: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  onChange: React.PropTypes.func
+  projects: PropTypes.arrayOf(PropTypes.object).isRequired,
+  projectPreferences: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onChange: PropTypes.func
 };
 
 function Pagination({ meta, page, onChange }) {
@@ -120,11 +121,11 @@ function Pagination({ meta, page, onChange }) {
 }
 
 Pagination.propTypes = {
-  meta: React.PropTypes.shape({
-    page_count: React.PropTypes.number
+  meta: PropTypes.shape({
+    page_count: PropTypes.number
   }),
-  page: React.PropTypes.number,
-  onChange: React.PropTypes.func
+  page: PropTypes.number,
+  onChange: PropTypes.func
 };
 
 Pagination.defaultProps = {
@@ -351,12 +352,12 @@ EmailSettingsPage.defaultProps = {
 };
 
 EmailSettingsPage.propTypes = {
-  user: React.PropTypes.shape({
-    email: React.PropTypes.string,
-    beta_email_communication: React.PropTypes.bool,
-    project_email_communication: React.PropTypes.bool,
-    global_email_communication: React.PropTypes.bool,
-    get: React.PropTypes.func
+  user: PropTypes.shape({
+    email: PropTypes.string,
+    beta_email_communication: PropTypes.bool,
+    project_email_communication: PropTypes.bool,
+    global_email_communication: PropTypes.bool,
+    get: PropTypes.func
   })
 };
 

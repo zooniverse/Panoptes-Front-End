@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 class Toggle extends Component {
@@ -62,10 +63,10 @@ class Toggle extends Component {
 }
 
 Toggle.propTypes = {
-  project: React.PropTypes.object.isRequired,
-  field: React.PropTypes.string.isRequired,
-  trueLabel: React.PropTypes.string,
-  falseLabel: React.PropTypes.string
+  project: PropTypes.object.isRequired,
+  field: PropTypes.string.isRequired,
+  trueLabel: PropTypes.string,
+  falseLabel: PropTypes.string
 };
 
 Toggle.defaultProps = {

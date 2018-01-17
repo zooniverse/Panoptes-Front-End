@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-  
+
 function RetirementRules({ data }) {
   return (
     <section>
@@ -16,10 +17,10 @@ function RetirementRules({ data }) {
 }
 
 RetirementRules.propTypes = {
-  data: React.PropTypes.arrayOf(React.PropTypes.shape({
-    id: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    retirementHasBeenChanged: React.PropTypes.bool.isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    retirementHasBeenChanged: PropTypes.bool.isRequired,
   })),
 };
 

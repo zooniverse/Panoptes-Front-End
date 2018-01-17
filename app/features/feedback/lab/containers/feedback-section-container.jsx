@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import ModalFormDialog from 'modal-form/dialog';
 import _ from 'lodash';
 import FeedbackSection from '../components/feedback-section';
@@ -72,7 +73,7 @@ FeedbackSectionContainer.propTypes = {
       enabled: PropTypes.bool
     })
   }),
-  saveFn: React.PropTypes.func
+  saveFn: PropTypes.func
 };
 
 export default FeedbackSectionContainer;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import classnames from 'classnames';
@@ -167,18 +168,18 @@ FavoritesButton.defaultProps = {
 };
 
 FavoritesButton.propTypes = {
-  className: React.PropTypes.string,
-  isFavorite: React.PropTypes.bool,
-  subject: React.PropTypes.shape({ id: React.PropTypes.string }).isRequired,
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    slug: React.PropTypes.string
+  className: PropTypes.string,
+  isFavorite: PropTypes.bool,
+  subject: PropTypes.shape({ id: PropTypes.string }).isRequired,
+  project: PropTypes.shape({
+    id: PropTypes.string,
+    slug: PropTypes.string
   }),
-  user: React.PropTypes.shape({
-    login: React.PropTypes.string
+  user: PropTypes.shape({
+    login: PropTypes.string
   })
 };
 
 FavoritesButton.contextTypes = {
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };

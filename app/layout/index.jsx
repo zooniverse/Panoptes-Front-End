@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import AdminOnly from '../components/admin-only';
@@ -6,11 +7,11 @@ import SiteFooter from './site-footer';
 
 class AppLayout extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node
+    children: PropTypes.node
   };
 
   static childContextTypes = {
-    setAppHeaderVariant: React.PropTypes.func
+    setAppHeaderVariant: PropTypes.func
   };
 
   state = {

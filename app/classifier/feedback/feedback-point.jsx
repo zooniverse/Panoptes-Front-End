@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const FeedbackPoint = ({ point }) => {
   const statusClass = (point.success) ? 'feedback-points__point--success' : 'feedback-points__point--failure';

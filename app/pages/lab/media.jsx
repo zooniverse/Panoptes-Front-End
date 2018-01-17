@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import MediaArea from './media-area';
 
@@ -39,6 +40,6 @@ EditMediaPage.defaultProps = {
 };
 
 EditMediaPage.propTypes = {
-  project: React.PropTypes.object,
-  validSubjectExtensions: React.PropTypes.arrayOf(React.PropTypes.string),
+  project: PropTypes.object,
+  validSubjectExtensions: PropTypes.arrayOf(PropTypes.string),
 };

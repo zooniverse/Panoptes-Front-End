@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import talkClient from 'panoptes-client/lib/talk-client';
 import { Link } from 'react-router';
@@ -89,16 +90,16 @@ export default class PopularTags extends React.Component {
 }
 
 PopularTags.propTypes = {
-  header: React.PropTypes.shape({
-    props: React.PropTypes.object,
-    type: React.PropTypes.string
+  header: PropTypes.shape({
+    props: PropTypes.object,
+    type: PropTypes.string
   }),
-  project: React.PropTypes.shape({
-    slug: React.PropTypes.string
+  project: PropTypes.shape({
+    slug: PropTypes.string
   }),
-  section: React.PropTypes.string.isRequired
+  section: PropTypes.string.isRequired
 };
 
 PopularTags.contextTypes = {
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };

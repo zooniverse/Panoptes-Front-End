@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Moment from 'moment';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -113,9 +114,9 @@ ExportWorkflowsDialog.defaultProps = {
 };
 
 ExportWorkflowsDialog.propTypes = {
-  project: React.PropTypes.shape({ links: React.PropTypes.object }).isRequired,
-  onSuccess: React.PropTypes.func.isRequired,
-  onFail: React.PropTypes.func.isRequired
+  project: PropTypes.shape({ links: PropTypes.object }).isRequired,
+  onSuccess: PropTypes.func.isRequired,
+  onFail: PropTypes.func.isRequired
 };
 
 const ExportWorkflowListItem = ({ workflow, media, onChange, workflowError }) => {
@@ -172,13 +173,13 @@ ExportWorkflowListItem.defaultProps = {
 };
 
 ExportWorkflowListItem.propTypes = {
-  workflow: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    display_name: React.PropTypes.string
+  workflow: PropTypes.shape({
+    id: PropTypes.string,
+    display_name: PropTypes.string
   }).isRequired,
-  media: React.PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  onChange: React.PropTypes.func.isRequired,
-  workflowError: React.PropTypes.object // eslint-disable-line react/forbid-prop-types
+  media: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  onChange: PropTypes.func.isRequired,
+  workflowError: PropTypes.object // eslint-disable-line react/forbid-prop-types
 };
 
 export default ExportWorkflowsDialog;

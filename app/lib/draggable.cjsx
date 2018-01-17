@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 
 module.exports = createReactClass
@@ -7,13 +8,13 @@ module.exports = createReactClass
   _previousEventCoords: null
 
   propTypes:
-    onStart: React.PropTypes.oneOfType [
-      React.PropTypes.func
-      React.PropTypes.bool
+    onStart: PropTypes.oneOfType [
+      PropTypes.func
+      PropTypes.bool
     ]
-    onDrag: React.PropTypes.func
-    onEnd: React.PropTypes.func
-    disabled: React.PropTypes.bool
+    onDrag: PropTypes.func
+    onEnd: PropTypes.func
+    disabled: PropTypes.bool
 
   render: ->
     childProps =

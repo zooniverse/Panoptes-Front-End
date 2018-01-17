@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import FlexibleLink from '../../components/flexible-link';
 
@@ -65,17 +66,17 @@ export default class CollectionCard extends React.Component {
 }
 
 CollectionCard.propTypes = {
-  collection: React.PropTypes.shape({
-    default_subject_src: React.PropTypes.string,
-    display_name: React.PropTypes.string,
-    id: React.PropTypes.string,
-    links: React.PropTypes.object,
-    private: React.PropTypes.bool,
-    slug: React.PropTypes.string
+  collection: PropTypes.shape({
+    default_subject_src: PropTypes.string,
+    display_name: PropTypes.string,
+    id: PropTypes.string,
+    links: PropTypes.object,
+    private: PropTypes.bool,
+    slug: PropTypes.string
   }).isRequired,
-  linkTo: React.PropTypes.string.isRequired,
-  shared: React.PropTypes.bool,
-  translationObjectName: React.PropTypes.string.isRequired
+  linkTo: PropTypes.string.isRequired,
+  shared: PropTypes.bool,
+  translationObjectName: PropTypes.string.isRequired
 };
 
 CollectionCard.defaultProps = {

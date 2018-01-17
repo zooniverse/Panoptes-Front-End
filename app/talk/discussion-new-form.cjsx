@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 CommentBox = require './comment-box'
@@ -13,9 +14,9 @@ module.exports = createReactClass
   displayName: 'DiscussionNewForm'
 
   propTypes:
-    boardId: React.PropTypes.number
-    onCreateDiscussion: React.PropTypes.func
-    subject: React.PropTypes.object # subject response
+    boardId: PropTypes.number
+    onCreateDiscussion: PropTypes.func
+    subject: PropTypes.object # subject response
 
   getInitialState: ->
     discussionValidationErrors: []

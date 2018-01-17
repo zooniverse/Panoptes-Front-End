@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
@@ -15,8 +16,8 @@ class ProjectMetadataStat extends React.Component {
 }
 
 ProjectMetadataStat.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  value: React.PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 export default class ProjectMetadata extends React.Component {
@@ -110,24 +111,24 @@ export default class ProjectMetadata extends React.Component {
 }
 
 ProjectMetadata.contextTypes = {
-  pusher: React.PropTypes.object,
+  pusher: PropTypes.object,
 };
 
 ProjectMetadata.propTypes = {
-  project: React.PropTypes.shape({
-    classifications_count: React.PropTypes.number,
-    completeness: React.PropTypes.number,
-    display_name: React.PropTypes.string,
-    id: React.PropTypes.id,
-    slug: React.PropTypes.string,
+  project: PropTypes.shape({
+    classifications_count: PropTypes.number,
+    completeness: PropTypes.number,
+    display_name: PropTypes.string,
+    id: PropTypes.id,
+    slug: PropTypes.string,
   }),
-  showTalkStatus: React.PropTypes.bool,
-  translation: React.PropTypes.shape({
-    description: React.PropTypes.string,
-    display_name: React.PropTypes.string,
-    introduction: React.PropTypes.string,
-    researcher_quote: React.PropTypes.string,
-    title: React.PropTypes.string
+  showTalkStatus: PropTypes.bool,
+  translation: PropTypes.shape({
+    description: PropTypes.string,
+    display_name: PropTypes.string,
+    introduction: PropTypes.string,
+    researcher_quote: PropTypes.string,
+    title: PropTypes.string
   }).isRequired
 };
 

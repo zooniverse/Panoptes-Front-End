@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
@@ -78,9 +79,9 @@ AdminPage.defaultProps = {
 };
 
 AdminPage.propTypes = {
-  children: React.PropTypes.node,
-  user: React.PropTypes.shape({
-    admin: React.PropTypes.bool
+  children: PropTypes.node,
+  user: PropTypes.shape({
+    admin: PropTypes.bool
   })
 };
 

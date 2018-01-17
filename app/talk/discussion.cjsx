@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 Comment = require './comment'
@@ -26,7 +27,7 @@ module.exports = createReactClass
   displayName: 'TalkDiscussion'
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   getInitialState: ->
     comments: []

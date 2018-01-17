@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 Translate = require 'react-translate-component'
@@ -24,7 +25,7 @@ counterpart.registerTranslations 'en',
 SubjectNode = createReactClass
 
   contextTypes:
-    geordi: React.PropTypes.object.isRequired
+    geordi: PropTypes.object.isRequired
 
   getInitialState: ->
     isFavorite: false
@@ -119,8 +120,8 @@ module.exports = createReactClass
   displayName: 'CollectionShowList'
 
   contextTypes:
-    geordi: React.PropTypes.object.isRequired
-    router: React.PropTypes.object.isRequired
+    geordi: PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   getInitialState: ->
     subjects: null
@@ -132,7 +133,7 @@ module.exports = createReactClass
     project: null
 
   propTypes:
-    project: React.PropTypes.object
+    project: PropTypes.object
 
   componentWillMount: ->
     @fetchCollectionSubjects pick @props.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS

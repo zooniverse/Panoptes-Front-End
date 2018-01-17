@@ -1,4 +1,5 @@
 import counterpart from 'counterpart';
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import alert from '../lib/alert';
@@ -13,7 +14,7 @@ counterpart.registerTranslations('en', {
 
 class LoginBar extends React.Component {
   static contextTypes = {
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
   };
 
   showDialog = (event) => {

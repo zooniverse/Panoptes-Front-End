@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class HighlighterSummary extends React.Component {
@@ -19,8 +20,7 @@ export default class HighlighterSummary extends React.Component {
 }
 
 HighlighterSummary.propTypes = {
-  annotation: React.PropTypes.shape({
-    value: React.PropTypes.array
+  annotation: PropTypes.shape({
+    value: PropTypes.array
   })
 };
-

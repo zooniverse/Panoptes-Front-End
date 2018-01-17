@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 
@@ -63,19 +64,19 @@ class SurveySummary extends React.Component {
 }
 
 SurveySummary.propTypes = {
-  annotation: React.PropTypes.shape({
-    value: React.PropTypes.array
+  annotation: PropTypes.shape({
+    value: PropTypes.array
   }),
-  expanded: React.PropTypes.bool,
-  task: React.PropTypes.shape({
-    choices: React.PropTypes.object,
-    choicesOrder: React.PropTypes.array,
-    questions: React.PropTypes.object
+  expanded: PropTypes.bool,
+  task: PropTypes.shape({
+    choices: PropTypes.object,
+    choicesOrder: PropTypes.array,
+    questions: PropTypes.object
   }),
-  translation: React.PropTypes.shape({
-    characteristics: React.PropTypes.object,
-    choices: React.PropTypes.object,
-    questions: React.PropTypes.object
+  translation: PropTypes.shape({
+    characteristics: PropTypes.object,
+    choices: PropTypes.object,
+    questions: PropTypes.object
   }).isRequired
 };
 

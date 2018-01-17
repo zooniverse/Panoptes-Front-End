@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import HomePageSection from './generic-section';
@@ -6,11 +7,11 @@ import ProjectCard from '../../partials/project-card';
 
 class MyBuildsSection extends React.Component {
   static propTypes = {
-    onClose: React.PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
-    user: React.PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
   };
 
   static defaultProps = {

@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 SingleSubmitButton = require '../../components/single-submit-button'
@@ -11,8 +12,8 @@ module.exports = createReactClass
   displayName: 'CreateSubjectDefaultButton'
 
   propTypes:
-    section: React.PropTypes.string
-    onCreateBoard: React.PropTypes.func # passed (board) on create
+    section: PropTypes.string
+    onCreateBoard: PropTypes.func # passed (board) on create
 
   getInitialState: ->
     defaultBoard: null

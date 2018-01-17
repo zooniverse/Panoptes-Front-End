@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Markdown } from 'markdownz';
 import { Link } from 'react-router';
@@ -72,12 +73,12 @@ TalkSearchResult.defaultProps = {
 };
 
 TalkSearchResult.propTypes = {
-  data: React.PropTypes.shape({
-    board_id: React.PropTypes.string,
-    discussion_comments_count: React.PropTypes.number,
-    discussion_id: React.PropTypes.string,
-    discussion_title: React.PropTypes.string,
-    discussion_users_count: React.PropTypes.number
+  data: PropTypes.shape({
+    board_id: PropTypes.string,
+    discussion_comments_count: PropTypes.number,
+    discussion_id: PropTypes.string,
+    discussion_title: PropTypes.string,
+    discussion_users_count: PropTypes.number
   }),
-  project: React.PropTypes.object
+  project: PropTypes.object
 };

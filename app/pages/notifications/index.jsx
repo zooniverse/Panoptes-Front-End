@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
@@ -151,14 +152,14 @@ export default class NotificationsPage extends React.Component {
 }
 
 NotificationsPage.propTypes = {
-  location: React.PropTypes.shape({
-    query: React.PropTypes.object
+  location: PropTypes.shape({
+    query: PropTypes.object
   }),
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string
+  project: PropTypes.shape({
+    id: PropTypes.string
   }),
-  user: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
-    login: React.PropTypes.string
+  user: PropTypes.shape({
+    display_name: PropTypes.string,
+    login: PropTypes.string
   })
 };

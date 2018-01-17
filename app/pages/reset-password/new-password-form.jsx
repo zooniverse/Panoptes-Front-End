@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 
@@ -55,11 +56,11 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
   );
 
 NewPasswordForm.propTypes = {
-  disabled: React.PropTypes.bool,
-  inProgress: React.PropTypes.bool,
-  onSubmit: React.PropTypes.func,
-  resetError: React.PropTypes.string,
-  resetSuccess: React.PropTypes.bool
+  disabled: PropTypes.bool,
+  inProgress: PropTypes.bool,
+  onSubmit: PropTypes.func,
+  resetError: PropTypes.string,
+  resetSuccess: PropTypes.bool
 };
 
 NewPasswordForm.defaultProps = {

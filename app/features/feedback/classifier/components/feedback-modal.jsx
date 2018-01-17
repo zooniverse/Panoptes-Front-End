@@ -1,5 +1,5 @@
-
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import SubjectViewer from '../../../../components/subject-viewer';

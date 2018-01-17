@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import uniq from 'lodash/uniq';
 import apiClient from 'panoptes-client/lib/api-client';
 

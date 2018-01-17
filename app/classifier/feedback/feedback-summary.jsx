@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
@@ -46,10 +47,10 @@ const FeedbackSummary = ({ feedback }) => {
 };
 
 FeedbackSummary.propTypes = {
-  feedback: React.PropTypes.arrayOf(React.PropTypes.shape({
-    target: React.PropTypes.string,
-    question: React.PropTypes.string,
-    messages: React.PropTypes.arrayOf(React.PropTypes.string)
+  feedback: PropTypes.arrayOf(PropTypes.shape({
+    target: PropTypes.string,
+    question: PropTypes.string,
+    messages: PropTypes.arrayOf(PropTypes.string)
   }))
 };
 

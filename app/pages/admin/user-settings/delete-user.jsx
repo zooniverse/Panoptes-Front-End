@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import LoadingIndicator from '../../../components/loading-indicator';
@@ -50,14 +51,14 @@ class DeleteUser extends Component {
           this.setState({deletionInProgress: false});
         })
   }
-};
+}
 
 DeleteUser.propTypes = {
-  user: React.PropTypes.object
+  user: PropTypes.object
 }
 
 DeleteUser.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 export default DeleteUser;

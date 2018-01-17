@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class ProgressIndicator extends React.Component {
@@ -53,12 +54,12 @@ class ProgressIndicator extends React.Component {
 }
 
 ProgressIndicator.propTypes = {
-  children: React.PropTypes.node,
-  naturalHeight: React.PropTypes.number,
-  naturalWidth: React.PropTypes.number,
-  progressPosition: React.PropTypes.number,
-  progressRange: React.PropTypes.arrayOf(React.PropTypes.number),
-  src: React.PropTypes.string.isRequired
+  children: PropTypes.node,
+  naturalHeight: PropTypes.number,
+  naturalWidth: PropTypes.number,
+  progressPosition: PropTypes.number,
+  progressRange: PropTypes.arrayOf(PropTypes.number),
+  src: PropTypes.string.isRequired
 };
 
 ProgressIndicator.defaultProps = {

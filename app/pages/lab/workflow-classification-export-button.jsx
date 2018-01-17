@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Dialog from 'modal-form/dialog';
 import ExportWorkflowsDialog from './export-workflows-dialog';
@@ -42,7 +43,7 @@ class WorkflowClassificationExportButton extends React.Component {
 }
 
 WorkflowClassificationExportButton.propTypes = {
-  project: React.PropTypes.shape({ links: React.PropTypes.object }).isRequired
+  project: PropTypes.shape({ links: PropTypes.object }).isRequired
 };
 
 export default WorkflowClassificationExportButton;

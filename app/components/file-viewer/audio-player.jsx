@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ImageViewer from './image-viewer';
 import ProgressIndicator from './progress-indicator';
@@ -141,13 +142,13 @@ class AudioPlayer extends React.Component {
 }
 
 AudioPlayer.propTypes = {
-  format: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.string]),
-  frame: React.PropTypes.number,
-  onLoad: React.PropTypes.func,
-  onFocus: React.PropTypes.func,
-  onBlur: React.PropTypes.func,
-  src: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.string]),
-  type: React.PropTypes.oneOfType([React.PropTypes.array, React.PropTypes.string])
+  format: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  frame: PropTypes.number,
+  onLoad: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  src: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  type: PropTypes.oneOfType([PropTypes.array, PropTypes.string])
 };
 
 AudioPlayer.defaultProps = {};

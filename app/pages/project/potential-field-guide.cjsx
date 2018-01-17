@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 Pullout = require 'react-pullout'
@@ -17,8 +18,8 @@ module.exports = createReactClass
     revealed: false
 
   contextTypes:
-    geordi: React.PropTypes.object
-    store: React.PropTypes.object
+    geordi: PropTypes.object
+    store: PropTypes.object
 
   logClick: (type) ->
     @context?.geordi?.logEvent

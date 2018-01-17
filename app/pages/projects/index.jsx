@@ -1,5 +1,6 @@
 import counterpart from 'counterpart';
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Translate from 'react-translate-component';
 import { browserHistory } from 'react-router';
 import { Helmet } from 'react-helmet';
@@ -81,13 +82,13 @@ class ProjectsPage extends Component {
 }
 
 ProjectsPage.childContextTypes = {
-  updateQuery: React.PropTypes.func
+  updateQuery: PropTypes.func
 };
 
 ProjectsPage.propTypes = {
   children: PropTypes.object.isRequired,
-  location: React.PropTypes.shape({
-    query: React.PropTypes.object
+  location: PropTypes.shape({
+    query: PropTypes.object
   })
 };
 

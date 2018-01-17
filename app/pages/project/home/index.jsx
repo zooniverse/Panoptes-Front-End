@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
@@ -138,41 +139,41 @@ ProjectHomeContainer.defaultProps = {
 };
 
 ProjectHomeContainer.propTypes = {
-  background: React.PropTypes.shape({
-    src: React.PropTypes.string
+  background: PropTypes.shape({
+    src: PropTypes.string
   }),
-  onChangePreferences: React.PropTypes.func.isRequired,
-  organization: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
-    slug: React.PropTypes.string
+  onChangePreferences: PropTypes.func.isRequired,
+  organization: PropTypes.shape({
+    display_name: PropTypes.string,
+    slug: PropTypes.string
   }),
-  preferences: React.PropTypes.object,
-  projectAvatar: React.PropTypes.shape({
-    src: React.PropTypes.string
+  preferences: PropTypes.object,
+  projectAvatar: PropTypes.shape({
+    src: PropTypes.string
   }),
-  project: React.PropTypes.shape({
-    configuration: React.PropTypes.object,
-    description: React.PropTypes.string,
-    display_name: React.PropTypes.string,
-    experimental_tools: React.PropTypes.arrayOf(React.PropTypes.string),
-    id: React.PropTypes.string,
-    introduction: React.PropTypes.string,
-    researcher_quote: React.PropTypes.string
+  project: PropTypes.shape({
+    configuration: PropTypes.object,
+    description: PropTypes.string,
+    display_name: PropTypes.string,
+    experimental_tools: PropTypes.arrayOf(PropTypes.string),
+    id: PropTypes.string,
+    introduction: PropTypes.string,
+    researcher_quote: PropTypes.string
   }).isRequired,
-  projectIsComplete: React.PropTypes.bool.isRequired,
-  projectRoles: React.PropTypes.array,
-  splits: React.PropTypes.object,
-  translation: React.PropTypes.shape({
-    description: React.PropTypes.string,
-    display_name: React.PropTypes.string,
-    introduction: React.PropTypes.string,
-    researcher_quote: React.PropTypes.string,
-    title: React.PropTypes.string
+  projectIsComplete: PropTypes.bool.isRequired,
+  projectRoles: PropTypes.array,
+  splits: PropTypes.object,
+  translation: PropTypes.shape({
+    description: PropTypes.string,
+    display_name: PropTypes.string,
+    introduction: PropTypes.string,
+    researcher_quote: PropTypes.string,
+    title: PropTypes.string
   }),
-  workflow: React.PropTypes.shape({
-    id: React.PropTypes.string
+  workflow: PropTypes.shape({
+    id: PropTypes.string
   }),
-  user: React.PropTypes.shape({
-    id: React.PropTypes.string
+  user: PropTypes.shape({
+    id: PropTypes.string
   })
 };

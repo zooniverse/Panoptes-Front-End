@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Feedback = require './mixins/feedback'
 talkClient = require 'panoptes-client/lib/talk-client'
@@ -9,7 +10,7 @@ module.exports = createReactClass
   mixins: [Feedback]
 
   propTypes:
-    comment: React.PropTypes.object
+    comment: PropTypes.object
 
   getInitialState: ->
     error: ''

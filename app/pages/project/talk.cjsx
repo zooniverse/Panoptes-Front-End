@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 { Helmet } = require 'react-helmet'
@@ -16,7 +17,7 @@ module.exports = createReactClass
   displayName: 'ProjectTalkPage'
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   logGeordi: ->
     @context.geordi?.logEvent

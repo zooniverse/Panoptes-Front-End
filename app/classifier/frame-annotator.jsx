@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import tasks from './tasks';
 import seenThisSession from '../lib/seen-this-session';
@@ -49,7 +50,7 @@ export default class FrameAnnotator extends React.Component {
 
     if (this.props.annotation.task) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
-      ({ BeforeSubject, AfterSubject } = tasks[taskDescription.type]);
+      (({ BeforeSubject, AfterSubject } = tasks[taskDescription.type]));
     }
 
     if (this.state.alreadySeen) {
@@ -109,27 +110,27 @@ export default class FrameAnnotator extends React.Component {
 }
 
 FrameAnnotator.propTypes = {
-  annotation: React.PropTypes.shape({
-    task: React.PropTypes.string
+  annotation: PropTypes.shape({
+    task: PropTypes.string
   }),
-  children: React.PropTypes.node,
-  classification: React.PropTypes.shape({
-    annotations: React.PropTypes.array,
-    loading: React.PropTypes.bool
+  children: PropTypes.node,
+  classification: PropTypes.shape({
+    annotations: PropTypes.array,
+    loading: PropTypes.bool
   }),
-  frame: React.PropTypes.number,
-  naturalHeight: React.PropTypes.number,
-  naturalWidth: React.PropTypes.number,
-  onChange: React.PropTypes.func,
-  preferences: React.PropTypes.shape({
-    id: React.PropTypes.string
+  frame: PropTypes.number,
+  naturalHeight: PropTypes.number,
+  naturalWidth: PropTypes.number,
+  onChange: PropTypes.func,
+  preferences: PropTypes.shape({
+    id: PropTypes.string
   }),
-  subject: React.PropTypes.shape({
-    already_seen: React.PropTypes.bool,
-    retired: React.PropTypes.bool
+  subject: PropTypes.shape({
+    already_seen: PropTypes.bool,
+    retired: PropTypes.bool
   }),
-  workflow: React.PropTypes.shape({
-    tasks: React.PropTypes.object
+  workflow: PropTypes.shape({
+    tasks: PropTypes.object
   })
 };
 

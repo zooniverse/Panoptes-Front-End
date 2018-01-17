@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const RestartButton = ({ children, className, start, shouldRender, style }) => {
@@ -13,7 +14,7 @@ const RestartButton = ({ children, className, start, shouldRender, style }) => {
 };
 
 RestartButton.contextTypes = {
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };
 
 RestartButton.defaultProps = {
@@ -25,13 +26,13 @@ RestartButton.defaultProps = {
 };
 
 RestartButton.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  start: React.PropTypes.func,
-  shouldRender: React.PropTypes.bool,
-  style: React.PropTypes.object,
-  user: React.PropTypes.object,
-  workflow: React.PropTypes.object
+  children: PropTypes.node,
+  className: PropTypes.string,
+  start: PropTypes.func,
+  shouldRender: PropTypes.bool,
+  style: PropTypes.object,
+  user: PropTypes.object,
+  workflow: PropTypes.object
 };
 
 export default RestartButton;

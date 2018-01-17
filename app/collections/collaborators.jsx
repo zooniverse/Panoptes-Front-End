@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import classNames from 'classnames';
@@ -140,10 +141,10 @@ RoleCreator.defaultProps = {
 };
 
 RoleCreator.propTypes = {
-  collection: React.PropTypes.shape({
-    id: React.PropTypes.string
+  collection: PropTypes.shape({
+    id: PropTypes.string
   }),
-  onAdd: React.PropTypes.func
+  onAdd: PropTypes.func
 };
 
 export class RoleRow extends React.Component {
@@ -258,12 +259,12 @@ export class RoleRow extends React.Component {
 }
 
 RoleRow.propTypes = {
-  onRemove: React.PropTypes.func,
-  roleSet: React.PropTypes.shape({
-    delete: React.PropTypes.func,
-    get: React.PropTypes.func,
-    roles: React.PropTypes.array,
-    update: React.PropTypes.func
+  onRemove: PropTypes.func,
+  roleSet: PropTypes.shape({
+    delete: PropTypes.func,
+    get: PropTypes.func,
+    roles: PropTypes.array,
+    update: PropTypes.func
   })
 };
 
@@ -373,21 +374,21 @@ export class CollectionCollaborators extends React.Component {
 }
 
 CollectionCollaborators.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 CollectionCollaborators.propTypes = {
-  collection: React.PropTypes.shape({
-    get: React.PropTypes.func,
-    id: React.PropTypes.string,
-    uncacheLink: React.PropTypes.func
+  collection: PropTypes.shape({
+    get: PropTypes.func,
+    id: PropTypes.string,
+    uncacheLink: PropTypes.func
   }),
-  owner: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
-    id: React.PropTypes.string
+  owner: PropTypes.shape({
+    display_name: PropTypes.string,
+    id: PropTypes.string
   }),
-  user: React.PropTypes.shape({
-    id: React.PropTypes.string
+  user: PropTypes.shape({
+    id: PropTypes.string
   })
 };
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
@@ -31,13 +32,13 @@ function ShortcutSummary(props) {
 }
 
 ShortcutSummary.propTypes = {
-  annotation: React.PropTypes.shape(
+  annotation: PropTypes.shape(
     {
-      task: React.PropTypes.string,
-      value: React.PropTypes.array
+      task: PropTypes.string,
+      value: PropTypes.array
     }
   ).isRequired,
-  translation: React.PropTypes.object.isRequired
+  translation: PropTypes.object.isRequired
 };
 
 ShortcutSummary.defaultProps = {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -48,10 +49,10 @@ class ModalFocus extends React.Component {
 }
 
 ModalFocus.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  onEscape: React.PropTypes.func,
-  preserveFocus: React.PropTypes.bool
+  children: PropTypes.node,
+  className: PropTypes.string,
+  onEscape: PropTypes.func,
+  preserveFocus: PropTypes.bool
 };
 
 ModalFocus.defaultProps = {

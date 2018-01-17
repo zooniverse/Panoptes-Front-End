@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
@@ -16,7 +17,7 @@ module.exports = createReactClass
   displayName: 'HowTo'
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object
 
   componentWillReceiveProps: (nextProps, nextContext)->
     @logClick = nextContext?.geordi?.makeHandler? 'about-menu'

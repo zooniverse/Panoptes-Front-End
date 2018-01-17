@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 `import CollectionCard from './collection-card';`
@@ -18,7 +19,7 @@ List = createReactClass
   displayName: 'List'
 
   contextTypes:
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
 
   statics: {
     getPropsForList: (props,favorite)->

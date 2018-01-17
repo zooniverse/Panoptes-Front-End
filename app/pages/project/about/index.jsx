@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 import counterpart from 'counterpart';
@@ -105,15 +106,15 @@ class AboutProject extends Component {
 }
 
 AboutProject.propTypes = {
-  children: React.PropTypes.node,
-  pages: React.PropTypes.arrayOf(React.PropTypes.object),
-  project: React.PropTypes.shape({}),
-  projectRoles: React.PropTypes.arrayOf(React.PropTypes.object),
-  translation: React.PropTypes.shape({
-    display_name: React.PropTypes.string
+  children: PropTypes.node,
+  pages: PropTypes.arrayOf(PropTypes.object),
+  project: PropTypes.shape({}),
+  projectRoles: PropTypes.arrayOf(PropTypes.object),
+  translation: PropTypes.shape({
+    display_name: PropTypes.string
   }),
-  translations: React.PropTypes.shape({
-    strings: React.PropTypes.object
+  translations: PropTypes.shape({
+    strings: PropTypes.object
   })
 };
 

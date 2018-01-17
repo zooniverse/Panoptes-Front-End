@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import CollectionsCreateForm from './collections-create-form';
 import CollectionSearch from './collection-search';
@@ -111,11 +112,11 @@ CollectionsManager.defaultProps = {
 };
 
 CollectionsManager.propTypes = {
-  onSuccess: React.PropTypes.func,
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string
+  onSuccess: PropTypes.func,
+  project: PropTypes.shape({
+    id: PropTypes.string
   }),
-  subjectIDs: React.PropTypes.arrayOf(React.PropTypes.string)
+  subjectIDs: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default CollectionsManager;

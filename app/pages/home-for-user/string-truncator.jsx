@@ -1,13 +1,14 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class StringTruncator extends React.Component {
   static propTypes = {
-    tag: React.PropTypes.node,
-    className: React.PropTypes.string,
-    children: React.PropTypes.string.isRequired,
-    splitter: React.PropTypes.instanceOf(RegExp),
-    chop: React.PropTypes.number,
-    ellipsis: React.PropTypes.element,
+    tag: PropTypes.node,
+    className: PropTypes.string,
+    children: PropTypes.string.isRequired,
+    splitter: PropTypes.instanceOf(RegExp),
+    chop: PropTypes.number,
+    ellipsis: PropTypes.element,
   };
 
   static defaultProps = {

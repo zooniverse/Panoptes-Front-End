@@ -1,4 +1,5 @@
 React = require 'react'
+PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 Select = require('react-select').default
 apiClient = require 'panoptes-client/lib/api-client'
@@ -12,8 +13,8 @@ module.exports = createReactClass
   queryTimeout: NaN
 
   propTypes:
-    multi: React.PropTypes.bool
-    debounce: React.PropTypes.number
+    multi: PropTypes.bool
+    debounce: PropTypes.number
 
   getDefaultProps: ->
     multi: true

@@ -1,13 +1,14 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 
 class HomePageSection extends React.Component {
   static propTypes = {
-    title: React.PropTypes.string,
-    loading: React.PropTypes.bool,
-    error: React.PropTypes.object,
-    onClose: React.PropTypes.func,
-    children: React.PropTypes.node,
+    title: PropTypes.string,
+    loading: PropTypes.bool,
+    error: PropTypes.object,
+    onClose: PropTypes.func,
+    children: PropTypes.node,
   };
 
   render() {

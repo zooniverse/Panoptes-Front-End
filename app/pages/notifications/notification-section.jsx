@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
@@ -287,19 +288,19 @@ export default class NotificationSection extends Component {
 }
 
 NotificationSection.propTypes = {
-  expanded: React.PropTypes.bool,
-  projectID: React.PropTypes.string,
-  section: React.PropTypes.string,
-  slug: React.PropTypes.string,
-  toggleSection: React.PropTypes.func,
-  user: React.PropTypes.shape({
-    display_name: React.PropTypes.string,
-    login: React.PropTypes.string
+  expanded: PropTypes.bool,
+  projectID: PropTypes.string,
+  section: PropTypes.string,
+  slug: PropTypes.string,
+  toggleSection: PropTypes.func,
+  user: PropTypes.shape({
+    display_name: PropTypes.string,
+    login: PropTypes.string
   })
 };
 
 NotificationSection.contextTypes = {
-  notificationsCounter: React.PropTypes.object
+  notificationsCounter: PropTypes.object
 };
 
 NotificationSection.defaultProps = {

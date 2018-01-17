@@ -1,5 +1,6 @@
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
+import PropTypes from 'prop-types';
 import React from 'react';
 import ZooniverseLogotype from '../partials/zooniverse-logotype';
 import AdminOnly from '../components/admin-only';
@@ -41,12 +42,12 @@ counterpart.registerTranslations('en', {
 
 class AppFooter extends React.Component {
   static contextTypes = {
-    geordi: React.PropTypes.object,
+    geordi: PropTypes.object,
   };
 
   static propTypes = {
-    user: React.PropTypes.shape({
-      admin: React.PropTypes.bool,
+    user: PropTypes.shape({
+      admin: PropTypes.bool,
     }),
   };
 

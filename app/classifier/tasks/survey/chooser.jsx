@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import sortIntoColumns from 'sort-into-columns';
 import Translate from 'react-translate-component';
@@ -261,28 +262,28 @@ class Chooser extends React.Component {
 }
 
 Chooser.propTypes = {
-  annotation: React.PropTypes.shape({
-    task: React.PropTypes.string,
-    value: React.PropTypes.array
+  annotation: PropTypes.shape({
+    task: PropTypes.string,
+    value: PropTypes.array
   }),
-  filters: React.PropTypes.object,
-  focusedChoice: React.PropTypes.string,
-  onChoose: React.PropTypes.func,
-  onFilter: React.PropTypes.func,
-  onRemove: React.PropTypes.func,
-  task: React.PropTypes.shape({
-    alwaysShowThumbnails: React.PropTypes.bool,
-    characteristics: React.PropTypes.object,
-    characteristicsOrder: React.PropTypes.array,
-    choices: React.PropTypes.object,
-    choicesOrder: React.PropTypes.array,
-    images: React.PropTypes.object,
-    questions: React.PropTypes.object
+  filters: PropTypes.object,
+  focusedChoice: PropTypes.string,
+  onChoose: PropTypes.func,
+  onFilter: PropTypes.func,
+  onRemove: PropTypes.func,
+  task: PropTypes.shape({
+    alwaysShowThumbnails: PropTypes.bool,
+    characteristics: PropTypes.object,
+    characteristicsOrder: PropTypes.array,
+    choices: PropTypes.object,
+    choicesOrder: PropTypes.array,
+    images: PropTypes.object,
+    questions: PropTypes.object
   }),
-  translation: React.PropTypes.shape({
-    characteristics: React.PropTypes.object,
-    choices: React.PropTypes.object,
-    questions: React.PropTypes.object
+  translation: PropTypes.shape({
+    characteristics: PropTypes.object,
+    choices: PropTypes.object,
+    questions: PropTypes.object
   }).isRequired
 };
 

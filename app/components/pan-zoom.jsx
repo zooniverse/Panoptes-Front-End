@@ -1,4 +1,6 @@
 /* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 class PanZoom extends React.Component {
@@ -346,14 +348,14 @@ class PanZoom extends React.Component {
 }
 
 PanZoom.propTypes = {
-  children: React.PropTypes.node,
-  enabled: React.PropTypes.bool,
-  frameDimensions: React.PropTypes.shape({
-    height: React.PropTypes.number,
-    width: React.PropTypes.number
+  children: PropTypes.node,
+  enabled: PropTypes.bool,
+  frameDimensions: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number
   }),
-  subject: React.PropTypes.shape({
-    id: React.PropTypes.string
+  subject: PropTypes.shape({
+    id: PropTypes.string
   })
 };
 

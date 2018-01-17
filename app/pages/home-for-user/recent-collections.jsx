@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import { Link } from 'react-router';
@@ -6,11 +7,11 @@ import CollectionCard from '../collections/collection-card';
 
 class RecentCollectionsSection extends React.Component {
   static propTypes = {
-    onClose: React.PropTypes.func
+    onClose: PropTypes.func
   };
 
   static contextTypes = {
-    user: React.PropTypes.object.isRequired
+    user: PropTypes.object.isRequired
   };
 
   state = {

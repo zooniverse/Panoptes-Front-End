@@ -1,18 +1,19 @@
 import counterpart from 'counterpart';
 import React from 'react';
+import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../lib/is-admin';
 
 class AdminOnly extends React.Component {
   static contextTypes = {
-    user: React.PropTypes.object,
+    user: PropTypes.object
   };
 
   static defaultProps = {
-    whenActive: false,
+    whenActive: false
   };
 
-  refreshing: bool = false;
+  refreshing = (false: boolean);
 
   componentDidMount() {
     apiClient.listen('change', this.handleClientChange);
@@ -44,7 +45,7 @@ class AdminOnly extends React.Component {
     if (!!this.context.user && this.context.user.admin && (!this.props.whenActive || isAdmin())) {
       if (this.refreshing) {
         // Return null during refresh force re-render the child.
-        return null
+        return null;
       } else {
         return this.props.children;
       }

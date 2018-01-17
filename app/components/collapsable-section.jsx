@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import updateQueryParams from '../talk/lib/update-query-params.coffee';
 
@@ -14,13 +15,13 @@ export default class CollapsableSection extends Component {
   }
 
   render() {
-    const children = React.Children.map(this.props.children, (child) => {
-      return React.cloneElement(child, {
-        toggleSection: this.onSectionToggle,
-        expanded: this.props.expanded,
-        section: this.props.section,
-      });
-    });
+    const children = React.Children.map(this.props.children, child =>
+       React.cloneElement(child, {
+         toggleSection: this.onSectionToggle,
+         expanded: this.props.expanded,
+         section: this.props.section
+       })
+    );
     return (
       <div>
         {children}
@@ -30,16 +31,16 @@ export default class CollapsableSection extends Component {
 }
 
 CollapsableSection.propTypes = {
-  callbackParent: React.PropTypes.func,
-  children: React.PropTypes.node,
-  expanded: React.PropTypes.bool,
-  section: React.PropTypes.string,
+  callbackParent: PropTypes.func,
+  children: PropTypes.node,
+  expanded: PropTypes.bool,
+  section: PropTypes.string
 };
 
 CollapsableSection.contextTypes = {
-  router: React.PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired
 };
 
 CollapsableSection.defaultProps = {
-  expanded: false,
+  expanded: false
 };

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
@@ -61,7 +62,7 @@ const HomePageDiscover = (({ showDialog }) =>
 );
 
 HomePageDiscover.propTypes = {
-  showDialog: React.PropTypes.func
+  showDialog: PropTypes.func
 };
 
 export default HomePageDiscover;
