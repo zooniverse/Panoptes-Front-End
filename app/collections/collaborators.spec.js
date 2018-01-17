@@ -47,15 +47,15 @@ const owner = {
   id: '3'
 };
 
-describe('<CollectionCollaborators />', function() {
+describe('<CollectionCollaborators />', function () {
   let wrapper;
   let addUserSpy;
   let deleteUserSpy;
-  let stub;
+  let componentDidMountStub;
   before(function () {
     addUserSpy = sinon.spy(RoleCreator.prototype, 'handleSubmit');
     deleteUserSpy = sinon.spy(RoleRow.prototype, 'confirmDelete');
-    stub = sinon.stub(CollectionCollaborators.prototype, 'componentDidMount');
+    componentDidMountStub = sinon.stub(CollectionCollaborators.prototype, 'componentDidMount');
     wrapper = mount(<CollectionCollaborators owner={owner} />, { context: { router: {} } });
     wrapper.setState({ hasSettingsRole: true, roleSets });
   });
@@ -63,7 +63,7 @@ describe('<CollectionCollaborators />', function() {
   after(() => {
     addUserSpy.restore();
     deleteUserSpy.restore();
-    stub.restore();
+    componentDidMountStub.restore();
   });
 
   it('should render without crashing', function() {
