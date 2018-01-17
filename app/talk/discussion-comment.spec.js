@@ -1,7 +1,6 @@
 import React from 'react';
 import assert from 'assert';
 import DiscussionComment from './discussion-comment';
-import CommentBox from './comment-box';
 import { shallow } from 'enzyme';
 
 const discussion = {
@@ -24,26 +23,27 @@ describe('DiscussionComment', function() {
         <button
           className="link-style"
           type="button"
-          onClick={wrapper.instance().promptToSignIn} >
-            sign in
+          onClick={wrapper.instance().promptToSignIn}
+        >
+          sign in
         </button>),
         true);
     });
   });
 
   describe('logged in', function() {
-    beforeEach(function(){
+    beforeEach(function() {
       wrapper = shallow(<DiscussionComment discussion={discussion} user={user} />);
     });
 
     it('will show a user avatar', function() {
       assert.equal(wrapper.find('.talk-comment-author').length, 1);
     });
-    it('will show a comment box', function(){
-      assert.equal(wrapper.find(CommentBox).props().user, user);
-    })
+    it('will show a comment box', function() {
+      assert.equal(wrapper.find('Commentbox').props().user, user);
+    });
   });
-  
+
   describe('comment validation', function(){
     it('will not allow empty comments', function(){
       // weirdly, comment validations returns true if validation fails.
