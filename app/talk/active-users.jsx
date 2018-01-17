@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import { sugarApiClient } from 'panoptes-client/lib/sugar';
 import { Link } from 'react-router';
@@ -172,7 +173,7 @@ export default class ActiveUsers extends React.Component {
 }
 
 ActiveUsers.contextTypes = {
-  geordi: React.PropTypes.object
+  geordi: PropTypes.object
 };
 
 ActiveUsers.defaultProps = {
@@ -181,8 +182,8 @@ ActiveUsers.defaultProps = {
 };
 
 ActiveUsers.propTypes = {
-  project: React.PropTypes.shape({
-    slug: React.PropTypes.string
+  project: PropTypes.shape({
+    slug: PropTypes.string
   }),
-  section: React.PropTypes.string
+  section: PropTypes.string
 };
