@@ -24,96 +24,66 @@ function mockPanoptesResource(type, options) {
 }
 
 const talkPreferences = [
-  mockTalkResource(
-    'subscription_preferences',
-    {
-      id: 0,
-      category: 'participating_discussions',
-      email_digest: 'immediate'
-    }
-  ),
-  mockTalkResource(
-    'subscription_preferences',
-    {
-      id: 1,
-      category: 'followed_discussions',
-      email_digest: 'daily'
-    }
-  ),
-  mockTalkResource(
-    'subscription_preferences',
-    {
-      id: 2,
-      category: 'mentions',
-      email_digest: 'immediate'
-    }
-  ),
-  mockTalkResource(
-    'subscription_preferences',
-    {
-      id: 3,
-      category: 'group_mentions',
-      email_digest: 'immediate'
-    }
-  ),
-  mockTalkResource(
-    'subscription_preferences',
-    {
-      id: 4,
-      category: 'messages',
-      email_digest: 'daily'
-    }
-  ),
-  mockTalkResource(
-    'subscription_preferences',
-    {
-      id: 5,
-      category: 'started_discussions',
-      email_digest: 'weekly'
-    }
-  )
+  {
+    id: 0,
+    category: 'participating_discussions',
+    email_digest: 'immediate'
+  },
+  {
+    id: 1,
+    category: 'followed_discussions',
+    email_digest: 'daily'
+  },
+  {
+    id: 2,
+    category: 'mentions',
+    email_digest: 'immediate'
+  },
+  {
+    id: 3,
+    category: 'group_mentions',
+    email_digest: 'immediate'
+  },
+  {
+    id: 4,
+    category: 'messages',
+    email_digest: 'daily'
+  },
+  {
+    id: 5,
+    category: 'started_discussions',
+    email_digest: 'weekly'
+  }
 ];
 
 const projects = [
-  mockPanoptesResource(
-    'projects',
-    {
-      id: 'a',
-      display_name: 'A test project',
-      title: 'A test project'
-    }
-  ),
-  mockPanoptesResource(
-    'projects',
-    {
-      id: 'b',
-      display_name: 'Another test project',
-      title: 'Another test project'
-    }
-  )
+  {
+    id: 'a',
+    display_name: 'A test project',
+    title: 'A test project'
+  },
+  {
+    id: 'b',
+    display_name: 'Another test project',
+    title: 'Another test project'
+  }
 ];
 
 const projectPreferences = [
-  mockPanoptesResource(
-    'project_preferences',
-    {
-      id: '1',
-      email_communication: true,
-      links: {
-        project: 'a'
-      }
+  {
+    id: '1',
+    email_communication: true,
+    links: {
+      project: 'a'
     }
-  ),
-  mockPanoptesResource(
-    'project_preferences',
-    {
-      id: '2',
-      email_communication: false,
-      links: {
-        project: 'b'
-      }
+  },
+  {
+    id: '2',
+    email_communication: false,
+    links: {
+      project: 'b'
     }
-  )
+  }
 ];
 
 const user = {
@@ -122,7 +92,7 @@ const user = {
   global_email_communication: true,
   project_email_communication: true,
   get() {
-    return Promise.resolve(projectPreferences);
+    return Promise.resolve([]);
   }
 };
 
@@ -171,7 +141,15 @@ describe('EmailSettings', () => {
     let projectSettings;
 
     before(() => {
-      wrapper.setState({ meta: {}, projectPreferences, projects, talkPreferences });
+      const mockTalkPreferences = talkPreferences.map(preference => mockTalkResource('subscription_preferences', preference));
+      const mockProjects = projects.map(project => mockPanoptesResource('projects', project));
+      const mockProjectPreferences = projectPreferences.map(preference => mockPanoptesResource('project_preferences', preference));
+      wrapper.setState({
+        meta: {},
+        projectPreferences: mockProjectPreferences,
+        projects: mockProjects,
+        talkPreferences: mockTalkPreferences
+      });
       wrapper.update();
     });
 
@@ -200,7 +178,7 @@ describe('EmailSettings', () => {
           }
         };
         email.simulate('change', fakeEvent);
-        assert.equal(projectPreferences[i].email_communication, !emailPreference);
+        assert.equal(wrapper.state().projectPreferences[i].email_communication, !emailPreference);
       });
 
       it(`shows project ${i} name correctly`, () => {
@@ -218,11 +196,11 @@ describe('EmailSettings', () => {
       });
     });
 
-    talkPreferences.forEach((preference) => {
+    talkPreferences.forEach((preference, i) => {
       it(`${preference.category} updates correctly when preferences are changed`, () => {
         const selector = `input[name="${preference.category}"][value="never"]`;
         wrapper.find(selector).simulate('change');
-        assert.equal(preference.email_digest, 'never');
+        assert.equal(wrapper.state().talkPreferences[i].email_digest, 'never');
       });
     });
   });
