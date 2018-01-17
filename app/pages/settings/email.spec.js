@@ -8,6 +8,7 @@ import EmailSettings from './email';
 
 function mockTalkResource(type, options) {
   const resource = talkClient.type(type).create(options);
+  talkClient._typesCache = {};
   sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
   sinon.stub(resource, 'get');
   sinon.stub(resource, 'delete');

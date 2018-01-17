@@ -47,6 +47,12 @@ describe('ProjectStatus', () => {
     wrapper = shallow(<ProjectStatus />);
   });
 
+  after(() => {
+    onChangeWorkflowLevelStub.restore();
+    handleDialogCancelStub.restore();
+    handleDialogSuccessStub.restore();
+  });
+
   it('renders without crashing', () => {
     assert.equal(wrapper, wrapper);
   });

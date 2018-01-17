@@ -20,6 +20,12 @@ describe('<CollectionsCreateForm />', function () {
     wrapper = shallow(<CollectionsCreateForm />);
   });
 
+  after(() => {
+    handleDescriptionInputChangeStub.restore();
+    handleNameInputChangeStub.restore();
+    onSubmitStub.restore();
+  });
+
   it('should render without crashing', function () {
     assert.equal(wrapper, wrapper);
   });

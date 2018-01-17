@@ -34,6 +34,9 @@ describe('CustomiseProfile', () => {
     wrapper.update();
     clearMediaSpy.resetHistory();
   });
+  after(() => {
+    clearMediaSpy.restore();
+  });
 
   it('renders the user avatar', () => {
     const avatar = wrapper.find('ImageSelector[src="//zooniverse.org/images/avatar.jpg"]');
