@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
 {Link} = require 'react-router'
@@ -20,7 +21,7 @@ counterpart.registerTranslations 'en',
   messagesPage:
     title: 'Inbox'
 
-ConversationLink = React.createClass
+ConversationLink = createReactClass
   displayName: 'ConversationLink'
 
   propTypes:
@@ -61,7 +62,7 @@ ConversationLink = React.createClass
       </Link>
     </div>
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkInbox'
 
   contextTypes:

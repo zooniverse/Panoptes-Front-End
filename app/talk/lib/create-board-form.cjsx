@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 ROLES = require './roles'
 talkClient = require 'panoptes-client/lib/talk-client'
@@ -17,7 +18,7 @@ roleRankText =
     Roles rank from most private to least private in the order: <strong>{ROLES.join(' > ')}</strong>
   </span>
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'CreateBoardForm'
 
   propTypes:

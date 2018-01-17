@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 CommentNotification = require './comment'
 DataRequestNotification = require './data-request'
 MessageNotification = require './message'
 ModerationNotification = require './moderation'
 StartedDiscussionNotification = require './started-discussion'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'Notification'
 
   propTypes:

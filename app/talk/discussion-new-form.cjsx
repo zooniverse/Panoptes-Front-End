@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 CommentBox = require './comment-box'
 {getErrors} = require './lib/validations'
@@ -8,7 +9,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 Loading = require '../components/loading-indicator'
 projectSection = require '../talk/lib/project-section'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DiscussionNewForm'
 
   propTypes:

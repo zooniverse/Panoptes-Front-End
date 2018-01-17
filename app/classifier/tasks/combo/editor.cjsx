@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DragReorderable = require 'drag-reorderable'
 NextTaskSelector = require '../next-task-selector'
 
-ComboTaskEditor = React.createClass
+ComboTaskEditor = createReactClass
   getDefaultProps: ->
     workflow: null
     task: null

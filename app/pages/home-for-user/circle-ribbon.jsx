@@ -7,8 +7,8 @@ function defaultHREFTemplate(project) {
   return `#project=${project.id}`;
 }
 
-const CircleRibbon = React.createClass({
-  propTypes: {
+class CircleRibbon extends React.Component {
+  static propTypes = {
     size: React.PropTypes.string,
     weight: React.PropTypes.number,
     gap: React.PropTypes.number,
@@ -20,48 +20,44 @@ const CircleRibbon = React.createClass({
       avatar_src: React.PropTypes.string,
       login: React.PropTypes.string
     }).isRequired
-  },
+  };
 
-  getDefaultProps() {
-    return {
-      size: '10em',
-      weight: 10,
-      gap: 2,
-      loading: false,
-      data: [],
-      hrefTemplate: defaultHREFTemplate,
-      onClick: () => {},
-      user: { avatar_src: '/assets/simple-avatar.png' }
-    };
-  },
+  static defaultProps = {
+    size: '10em',
+    weight: 10,
+    gap: 2,
+    loading: false,
+    data: [],
+    hrefTemplate: defaultHREFTemplate,
+    onClick: () => {},
+    user: { avatar_src: '/assets/simple-avatar.png' }
+  };
 
-  getInitialState() {
-    return {
-      totalClassifications: 0,
-      hoverIndex: -1,
-    };
-  },
+  state = {
+    totalClassifications: 0,
+    hoverIndex: -1,
+  };
 
   componentDidMount() {
     this.id = instanceCount;
     this.point = this.refs.svg.createSVGPoint();
     instanceCount += 1;
     this.setTotal(this.props.data);
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.data !== nextProps.data) { this.setTotal(nextProps.data); }
-  },
+  }
 
-  setTotal(data) {
+  setTotal = (data) => {
     this.setState({
       totalClassifications: data.reduce((total, project) => {
         return total + project.classifications;
       }, 0),
     });
-  },
+  };
 
-  getPointOnCircle(amount, radius) {
+  getPointOnCircle = (amount, radius) => {
     const degrees = amount * 360;
     const startingFromTop = degrees - 90;
     const radians = startingFromTop * Math.PI / 180;
@@ -69,9 +65,9 @@ const CircleRibbon = React.createClass({
       x: radius * Math.cos(radians),
       y: radius * Math.sin(radians),
     };
-  },
+  };
 
-  getTooltipPoint(project, radius) {
+  getTooltipPoint = (project, radius) => {
     const index = this.props.data.indexOf(project);
 
     const amount = (this.props.data.slice(0, index).reduce((start, otherArc) => {
@@ -90,21 +86,21 @@ const CircleRibbon = React.createClass({
       x: x / offsetWidth,
       y: y / offsetHeight,
     };
-  },
+  };
 
-  handleMouseEnter(event) {
+  handleMouseEnter = (event) => {
     this.setState({
       hoverIndex: event.target.getAttribute('data-index'),
     });
-  },
+  };
 
-  handleMouseLeave() {
+  handleMouseLeave = () => {
     this.setState({
       hoverIndex: -1,
     });
-  },
+  };
 
-  handleClick(event) {
+  handleClick = (event) => {
     const rightButtonPressed = (!!event.button && event.button > 0);
     const modifierKey = (event.ctrlKey || event.metaKey);
     const index = event.currentTarget.querySelector('[data-index]').getAttribute('data-index');
@@ -114,17 +110,17 @@ const CircleRibbon = React.createClass({
       event.preventDefault();
     }
     this.props.onClick(clickedProject.id);
-  },
+  };
 
-  calcLargeArc(classifications) {
+  calcLargeArc = (classifications) => {
     if (classifications / this.state.totalClassifications >= 0.5) {
       return 1;
     } else {
       return 0;
     }
-  },
+  };
 
-  renderArc(project) {
+  renderArc = (project) => {
     const index = this.props.data.indexOf(project);
 
     const startAmount = this.props.data.slice(0, index).reduce((count, otherArc) => {
@@ -166,7 +162,7 @@ const CircleRibbon = React.createClass({
         />
       </a>
     );
-  },
+  };
 
   render() {
     const imageSize = 100 - (this.props.weight * 2) - (this.props.gap * 2);
@@ -231,7 +227,7 @@ const CircleRibbon = React.createClass({
         )}
       </div>
     );
-  },
-});
+  }
+}
 
 export default CircleRibbon;

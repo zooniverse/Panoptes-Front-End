@@ -8,14 +8,14 @@ counterpart.registerTranslations('en', {
   footerAdminMode: 'Admin mode',
 });
 
-const AdminToggle = React.createClass({
+class AdminToggle extends React.Component {
   componentDidMount() {
     apiClient.update({
       'params.admin': !!localStorage.getItem('adminFlag') || undefined,
     });
-  },
+  }
 
-  toggleAdminMode(e) {
+  toggleAdminMode = (e) => {
     apiClient.update({
       'params.admin': e.target.checked || undefined,
     });
@@ -25,7 +25,7 @@ const AdminToggle = React.createClass({
     } else {
       localStorage.removeItem('adminFlag');
     }
-  },
+  };
 
   render() {
     return (
@@ -42,7 +42,7 @@ const AdminToggle = React.createClass({
         <Translate content="footerAdminMode" />
       </label>
     );
-  },
-});
+  }
+}
 
 export default AdminToggle;

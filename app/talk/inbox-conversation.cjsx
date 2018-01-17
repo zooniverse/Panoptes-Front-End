@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
 SingleSubmitButton = require '../components/single-submit-button'
@@ -9,7 +10,7 @@ CommentBox = require './comment-box'
 {timestamp} = require './lib/time'
 
 
-Message = React.createClass
+Message = createReactClass
   displayName: 'Message'
   
   getInitialState: ->
@@ -36,7 +37,7 @@ Message = React.createClass
       <Markdown>{@props.data.body}</Markdown>
     </div>
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'InboxConversation'
   mixins: [HandlePropChanges]
 

@@ -4,17 +4,15 @@ import ReactDOM from 'react-dom';
 import { TextSplit } from 'seven-ten';
 import Translate from 'react-translate-component';
 
-const WorkflowAssignmentDialog = React.createClass({
-  statics: {
-    start(props = {}) {
-      return Dialog.alert(<WorkflowAssignmentDialog {...props} />, {
-        className: 'workflow-assignment-dialog',
-        closeButton: true
-      });
-    },
-  },
+class WorkflowAssignmentDialog extends React.Component {
+  static start(props = {}) {
+    return Dialog.alert(<WorkflowAssignmentDialog {...props} />, {
+      className: 'workflow-assignment-dialog',
+      closeButton: true
+    });
+  }
 
-  getPromotionMessage(props) {
+  getPromotionMessage = (props) => {
     // The API needs to add the promotion message as a field in project contents...
     const gravitySpy = '1104';
     const snapshotWiChallenge = '5371';
@@ -29,19 +27,19 @@ const WorkflowAssignmentDialog = React.createClass({
     }
 
     return promotionMessage;
-  },
+  };
 
-  handlePromotionDecline() {
+  handlePromotionDecline = () => {
     // Hacky way to get the dialog to close.
     // Need to rework Modal Form to allow custom cancel events on child DOM elements
     const closeButton =
       ReactDOM.findDOMNode(this).parentNode.querySelector('.modal-dialog-close-button');
     closeButton.click();
-  },
+  };
 
-  advanceDefault() {
+  advanceDefault = () => {
     return this.getPromotionMessage(this.props);
-  },
+  };
 
   render() {
     return (
@@ -70,8 +68,8 @@ const WorkflowAssignmentDialog = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 WorkflowAssignmentDialog.propTypes = {
   project: React.PropTypes.shape({

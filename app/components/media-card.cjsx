@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 
 IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'svg']
 
 VIDEO_EXTENSIONS = ['mp4']
 
-module.exports = React.createClass
+module.exports = createReactClass
   getDefaultProps: ->
     src: ''
 

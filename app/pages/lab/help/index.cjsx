@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
 
@@ -11,7 +12,7 @@ counterpart.registerTranslations 'en',
       policies: 'Policies'
       glossary: 'Glossary'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'HowTo'
 
   contextTypes:

@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 moment = require 'moment'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -16,7 +17,7 @@ actionTaken =
   watch: 'Watched'
   watched: 'Watched'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'ModerationActions'
 
   propTypes:

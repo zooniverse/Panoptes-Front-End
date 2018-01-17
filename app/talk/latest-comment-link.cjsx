@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 {timeAgo} = require './lib/time'
 DisplayRoles = require './lib/display-roles'
@@ -12,7 +13,7 @@ truncate = (string = '', ending = '', length = 80) ->
   return string if string.trim().length <= length
   string.trim().slice(0, (length - ending.length)) + ending
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkLatestCommentLink'
 
   propTypes:

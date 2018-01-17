@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
@@ -15,7 +16,7 @@ BUFFER = 16
 
 DELETE_BUTTON_WEIGHT = 0.75 # fraction of line lenght to place delete button
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'BezierCurveTool'
 
   statics:

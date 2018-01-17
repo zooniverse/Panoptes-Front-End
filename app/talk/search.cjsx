@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
 resourceCount = require './lib/resource-count'
@@ -20,7 +21,7 @@ filterObjectKeys = (object, validKeys) ->
 
   return newObject
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkSearch'
 
   contextTypes:

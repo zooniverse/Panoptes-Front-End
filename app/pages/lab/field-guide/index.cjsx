@@ -1,5 +1,6 @@
 apiClient = require 'panoptes-client/lib/api-client'
 React = require 'react'
+createReactClass = require 'create-react-class'
 ArticleList = require './article-list'
 Dialog = require 'modal-form/dialog'
 ArticleEditor = require './article-editor'
@@ -13,7 +14,7 @@ unless process.env.NODE_ENV is 'production'
       content: 'Spot this.'
     }]
 
-FieldGuideEditor = React.createClass
+FieldGuideEditor = createReactClass
   getDefaultProps: ->
     project: null
     actions: actions

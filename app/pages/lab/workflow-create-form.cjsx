@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 counterpart = require 'counterpart'
 
-WorkflowCreateForm = React.createClass
+WorkflowCreateForm = createReactClass
   getDefaultProps: ->
     onCancel: ->
     onSubmit: ->

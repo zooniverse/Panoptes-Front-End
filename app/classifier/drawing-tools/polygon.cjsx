@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
@@ -11,7 +12,7 @@ BUFFER = 16
 
 DELETE_BUTTON_WEIGHT = 5 # Weight of the second point.
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'PolygonTool'
 
   statics:

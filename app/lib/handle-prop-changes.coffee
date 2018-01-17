@@ -2,7 +2,7 @@
   React doesn't fire componentWillReceiveProps for a component's initial props.
   Usually I wish it would.
 
-  React.createClass
+  createReactClass
     mixins: [HandlePropChanges]
 
     propChangeHandlers:

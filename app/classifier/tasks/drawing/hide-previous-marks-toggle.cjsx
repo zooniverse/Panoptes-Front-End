@@ -1,6 +1,7 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 
-HidePreviousMarksToggle = React.createClass
+HidePreviousMarksToggle = createReactClass
   getDefaultProps: ->
     taskTypes: null
     workflow: null

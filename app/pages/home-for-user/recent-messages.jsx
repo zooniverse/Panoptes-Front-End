@@ -9,37 +9,35 @@ import StringTruncator from './string-truncator';
 
 const LOADER_BULLETS = '• • •';
 
-const RecentCollectionsSection = React.createClass({
-  propTypes: {
+class RecentCollectionsSection extends React.Component {
+  static propTypes = {
     onClose: React.PropTypes.func,
-  },
+  };
 
-  contextTypes: {
+  static contextTypes = {
     user: React.PropTypes.object.isRequired,
-  },
+  };
 
-  getInitialState() {
-    return {
-      loading: false,
-      error: null,
-      conversations: [],
-      messageAuthors: {},
-      avatars: {},
-      lastMessages: {},
-    };
-  },
+  state = {
+    loading: false,
+    error: null,
+    conversations: [],
+    messageAuthors: {},
+    avatars: {},
+    lastMessages: {},
+  };
 
   componentDidMount() {
     this.fetchConversations(this.context.user);
-  },
+  }
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextContext.user !== this.context.user) {
       this.fetchConversations(nextContext.user);
     }
-  },
+  }
 
-  fetchConversations(user) {
+  fetchConversations = (user) => {
     this.setState({
       loading: true,
       error: null,
@@ -76,9 +74,9 @@ const RecentCollectionsSection = React.createClass({
         loading: false,
       });
     });
-  },
+  };
 
-  fetchConversationPartner(conversation, currentUser) {
+  fetchConversationPartner = (conversation, currentUser) => {
     return apiClient.type('users').get(conversation.links.users) // Talk's user links are broken.
     .catch(() => {
       return [];
@@ -98,9 +96,9 @@ const RecentCollectionsSection = React.createClass({
       });
       return partner;
     });
-  },
+  };
 
-  fetchLastMessage(conversation) {
+  fetchLastMessage = (conversation) => {
     return conversation.get('messages', {
       page_size: 1,
       sort: '-created_at',
@@ -119,9 +117,9 @@ const RecentCollectionsSection = React.createClass({
         return message;
       });
     });
-  },
+  };
 
-  fetchMessageAuthor(message) {
+  fetchMessageAuthor = (message) => {
     return apiClient.type('users').get(message.links.user) // Talk's user links are broken.
     .catch(() => {
       return null;
@@ -146,9 +144,9 @@ const RecentCollectionsSection = React.createClass({
         return author;
       });
     });
-  },
+  };
 
-  renderConversation(conversation, index, allConversations) {
+  renderConversation = (conversation, index, allConversations) => {
     const partner = this.state.conversationPartners[conversation.id];
     const message = this.state.lastMessages[conversation.id];
     const sentLastMessage = !!message && (this.state.messageAuthors[message.id] === this.context.user);
@@ -187,7 +185,7 @@ const RecentCollectionsSection = React.createClass({
         </div>
       </Link>
     );
-  },
+  };
 
   render() {
     return (
@@ -219,7 +217,7 @@ const RecentCollectionsSection = React.createClass({
         </ul>
       </HomePageSection>
     );
-  },
-});
+  }
+}
 
 export default RecentCollectionsSection;

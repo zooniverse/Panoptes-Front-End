@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 Comment = require './comment'
 CommentBox = require './comment-box'
@@ -21,7 +22,7 @@ ProjectLinker = require './lib/project-linker'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkDiscussion'
 
   contextTypes:

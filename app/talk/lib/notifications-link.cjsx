@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
@@ -10,7 +11,7 @@ counterpart.registerTranslations 'en',
   notificationsLink:
     notifications: 'Notifications'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'NotificationsLink'
 
   contextTypes:

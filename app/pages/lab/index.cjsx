@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 ModalFormDialog = require 'modal-form/dialog'
@@ -12,7 +13,7 @@ counterpart.registerTranslations 'en',
   buildAProject:
     title: 'Build a Project'
 
-ProjectLink = React.createClass
+ProjectLink = createReactClass
   getDefaultProps: ->
     project: {}
     avatar: null
@@ -39,7 +40,7 @@ ProjectLink = React.createClass
       </Link>
     </div>
 
-ProjectList = React.createClass
+ProjectList = createReactClass
   getDefaultProps: ->
     title: ''
     page: 1
@@ -149,7 +150,7 @@ ProjectList = React.createClass
         </ul>}
     </div>
 
-ProjectCreationForm = React.createClass
+ProjectCreationForm = createReactClass
   getDefaultProps: ->
     onCancel: ->
     onSubmit: ->
@@ -207,7 +208,7 @@ ProjectCreationForm = React.createClass
       </p>
     </form>
 
-module.exports = React.createClass
+module.exports = createReactClass
   getDefaultProps: ->
     user: null
     loaction:

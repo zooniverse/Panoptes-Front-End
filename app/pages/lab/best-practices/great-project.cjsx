@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
@@ -28,7 +29,7 @@ counterpart.registerTranslations 'en',
       __Make your project visually clean and interesting.__ Choose imagery that fits your project’s aesthetic and that you have permission to use. Make sure that text is readable over your background. Also be sure to do a review to make sure that all of your text is displaying properly.
     '''
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'LabBestPracticesGreatProjectsPage'
 
   componentDidMount: ->

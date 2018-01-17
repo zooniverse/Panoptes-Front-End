@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DrawingToolRoot = require './root'
 Draggable = require '../../lib/draggable'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
@@ -8,7 +9,7 @@ GRAB_STROKE_WIDTH = 20
 BUFFER = 16
 DELETE_BUTTON_WIDTH = 8
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'FullHeightLineTool'
 
   statics:

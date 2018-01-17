@@ -1,5 +1,6 @@
 Router = {IndexRoute, IndexRedirect, Route, Redirect} = require 'react-router'
 React = require 'react'
+createReactClass = require 'create-react-class'
 
 `import ProjectsPage from './pages/projects/index';`
 `import FilteredProjectsList from './pages/projects/filtered-projects-list';`
@@ -48,7 +49,7 @@ React = require 'react'
 `import Volunteering from './pages/get-involved/volunteering';`
 
 # <Redirect from="home" to="/" /> doesn't work.
-ONE_UP_REDIRECT = React.createClass
+ONE_UP_REDIRECT = createReactClass
   componentDidMount: ->
     givenPathSegments = @props.location.pathname.split '/'
     givenPathSegments.pop()

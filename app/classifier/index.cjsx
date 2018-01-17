@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 Classifier = require('./classifier').default
 MiniCourse = require './mini-course'
@@ -23,7 +24,7 @@ auth.listen ->
 
 PROMPT_MINI_COURSE_EVERY = 5
 
-ClassifierWrapper = React.createClass
+ClassifierWrapper = createReactClass
   displayName: 'ClassifierWrapper'
 
   contextTypes:

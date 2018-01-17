@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 
 DEFAULT_AVATAR = '/assets/simple-avatar.png'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'Avatar'
 
   propTypes:

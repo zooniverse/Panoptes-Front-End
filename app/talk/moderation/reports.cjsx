@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'ModerationActions'
 
   propTypes:

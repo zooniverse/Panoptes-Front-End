@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DragReorderable = require 'drag-reorderable'
 
-DropdownList = React.createClass
+DropdownList = createReactClass
 
   getDefaultProps: ->
     selects: []

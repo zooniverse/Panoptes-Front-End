@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 CroppedImage = require '../../components/cropped-image'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'FieldGuide'
 
   getDefaultProps: ->

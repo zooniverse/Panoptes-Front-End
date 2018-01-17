@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 UserSearch = require '../components/user-search'
 {getErrors} = require './lib/validations'
@@ -6,7 +7,7 @@ subjectValidations = require './lib/message-subject-validations'
 messageValidations = require './lib/message-validations'
 CommentBox = require './comment-box'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'InboxForm'
 
   propTypes:

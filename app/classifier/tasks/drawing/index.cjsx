@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 GenericTaskEditor = require '../generic-editor'
 Summary = require './summary'
 MarkingInitializer = require './marking-initializer'
@@ -11,7 +12,7 @@ drawingTools = require '../../drawing-tools'
 GridButtons = require './grid-buttons'
 SVGRenderer = require('../../annotation-renderer/svg').default
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DrawingTask'
 
   statics:

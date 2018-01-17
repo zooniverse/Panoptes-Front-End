@@ -2,14 +2,14 @@ import React from 'react';
 import { Markdown } from 'markdownz';
 import { browserHistory } from 'react-router';
 
-const WrappedMarkdown = React.createClass({
-  propTypes: {
+class WrappedMarkdown extends React.Component {
+  static propTypes = {
     content: React.PropTypes.string,
     project: React.PropTypes.object,
     header: React.PropTypes.string,
-  },
+  };
 
-  onClick(e) {
+  onClick = (e) => {
     const rightButtonPressed = (!!e.button && e.button > 0);
     const modifierKey = (e.ctrlKey || e.metaKey);
     if (e.target.origin === window.location.origin &&
@@ -20,7 +20,7 @@ const WrappedMarkdown = React.createClass({
       browserHistory.push(newURL);
       e.preventDefault();
     }
-  },
+  };
 
   render() {
     return (
@@ -32,7 +32,7 @@ const WrappedMarkdown = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
 export default WrappedMarkdown;

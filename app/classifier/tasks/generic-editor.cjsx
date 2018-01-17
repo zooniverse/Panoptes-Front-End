@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ChangeListener = require '../../components/change-listener'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
@@ -11,7 +12,7 @@ NextTaskSelector = require './next-task-selector'
 # `import MinMaxEditor from './drawing/min-max-editor';`
 MinMaxEditor = require('./drawing/min-max-editor').default
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'GenericTaskEditor'
 
   getDefaultProps: ->

@@ -1,4 +1,5 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
 import counterpart from 'counterpart';
 import classnames from 'classnames';
 import { routerShape } from 'react-router/lib/PropTypes';
@@ -29,7 +30,8 @@ counterpart.registerTranslations('en', {
   }
 });
 
-const SiteNav = React.createClass({
+const SiteNav = createReactClass({
+  displayName: 'SiteNav',
   resizeTimeout: NaN,
 
   contextTypes: {
@@ -219,7 +221,7 @@ const SiteNav = React.createClass({
         {this.state.isMobile && this.renderMobileLinksMenu()}
       </nav>
     );
-  }
+  },
 });
 
 export default SiteNav;

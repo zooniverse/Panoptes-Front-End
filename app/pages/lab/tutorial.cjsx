@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ProjectModalEditor = require '../../partials/project-modal-editor'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EditTutorial'
 
   render: ->

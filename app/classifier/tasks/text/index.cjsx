@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 GenericTask = require('../generic.jsx').default
 TextTaskEditor = require './editor'
 
 NOOP = Function.prototype
 
-Summary = React.createClass
+Summary = createReactClass
   displayName: 'TextSummary'
 
   getDefaultProps: ->
@@ -26,7 +27,7 @@ Summary = React.createClass
       </div>
     </div>
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TextTask'
 
   statics:

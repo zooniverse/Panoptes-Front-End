@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 ToggleChildren = require './mixins/toggle-children'
 commentValidations = require './lib/comment-validations'
@@ -19,7 +20,7 @@ CommentContextIcon = require './lib/comment-context-icon'
 `import WrappedMarkdown from '../components/wrapped-markdown';`
 DEFAULT_AVATAR = '/assets/simple-avatar.png'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkComment'
   mixins: [ToggleChildren, Feedback]
 

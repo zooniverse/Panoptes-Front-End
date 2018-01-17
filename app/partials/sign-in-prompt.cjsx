@@ -1,6 +1,7 @@
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 React = require 'react'
+createReactClass = require 'create-react-class'
 alert = require('../lib/alert').default
 LoginDialog = require './login-dialog'
 
@@ -11,7 +12,7 @@ counterpart.registerTranslations 'en',
     register: 'Register'
     signIn: 'Sign in'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'SignInPrompt'
 
   getDefaultProps: ->

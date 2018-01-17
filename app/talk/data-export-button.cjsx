@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 moment = require 'moment'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DataExportButton'
   
   componentWillMount: ->

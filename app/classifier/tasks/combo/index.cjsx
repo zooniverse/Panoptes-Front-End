@@ -1,9 +1,10 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 SVGRenderer = require('../../annotation-renderer/svg').default
 MarkingsRenderer = require('./markings-renderer').default
 TaskTranslations = require('../translations').default
 
-ComboTask = React.createClass
+ComboTask = createReactClass
   statics:
     Editor: require './editor'
     Summary: require('./summary').default

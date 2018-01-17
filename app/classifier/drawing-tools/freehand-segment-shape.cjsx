@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
@@ -10,7 +11,7 @@ FINISHER_RADIUS = 8
 MINIMUM_LENGTH = 20
 POINT_RADIUS = 4
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'FreehandSegmentShapeTool'
 
   statics:

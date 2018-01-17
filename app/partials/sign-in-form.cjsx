@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 Translate = require 'react-translate-component'
 auth = require 'panoptes-client/lib/auth'
@@ -14,7 +15,7 @@ counterpart.registerTranslations 'en',
     incorrectDetails: 'Username or password incorrect'
     forgotPassword: 'Forget your password?'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'SignInForm'
 
   contextTypes:

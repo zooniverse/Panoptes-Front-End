@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 
 tagsToIgnore = ['a', 'button', 'input', 'label']
 SELECTOR_TO_IGNORE = ([tag, "#{tag} *"].join ',' for tag in tagsToIgnore).join ','
@@ -6,7 +7,7 @@ SELECTOR_TO_IGNORE = ([tag, "#{tag} *"].join ',' for tag in tagsToIgnore).join '
 ENTER_KEY = 13
 SPACE_KEY = 32
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'Details'
 
   getDefaultProps: ->

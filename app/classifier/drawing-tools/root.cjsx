@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 StickyModalForm = require 'modal-form/sticky'
 ModalFocus = require('../../components/modal-focus').default
 TaskTranslations = require('../tasks/translations').default
@@ -13,7 +14,7 @@ SEMI_MODAL_UNDERLAY_STYLE =
   pointerEvents: 'none'
   backgroundColor: 'rgba(0, 0, 0, 0)'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DrawingToolRoot'
 
   contextTypes:

@@ -1,11 +1,12 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 moment = require 'moment'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 {Markdown} = require 'markdownz'
 {Link} = require 'react-router'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'CommentLink'
 
   getDefaultProps: ->

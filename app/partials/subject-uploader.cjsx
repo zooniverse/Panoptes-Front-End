@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../lib/put-file'
 
 NOOP = Function.prototype
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'SubjectUploader'
 
   getDefaultProps: ->

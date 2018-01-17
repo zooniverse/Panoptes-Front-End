@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 PromiseRenderer = require '../../components/promise-renderer'
 UserSearch = require '../../components/user-search'
@@ -37,7 +38,7 @@ ROLES_INFO =
     label: 'Translator'
     description: 'Translators will have access to the translation site.'
 
-CollaboratorCreator = React.createClass
+CollaboratorCreator = createReactClass
   displayName: 'CollaboratorCreator'
 
   getDefaultProps: ->
@@ -135,7 +136,7 @@ CollaboratorCreator = React.createClass
       .then =>
         @setState creating: false
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EditProjectCollaborators'
 
   getDefaultProps: ->

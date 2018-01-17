@@ -4,38 +4,36 @@ import { Link } from 'react-router';
 import HomePageSection from './generic-section';
 import CollectionCard from '../collections/collection-card';
 
-const RecentCollectionsSection = React.createClass({
-  propTypes: {
+class RecentCollectionsSection extends React.Component {
+  static propTypes = {
     onClose: React.PropTypes.func
-  },
+  };
 
-  contextTypes: {
+  static contextTypes = {
     user: React.PropTypes.object.isRequired
-  },
+  };
 
-  getInitialState() {
-    return {
-      collections: [],
-      error: null,
-      loading: false
-    };
-  },
+  state = {
+    collections: [],
+    error: null,
+    loading: false
+  };
 
   componentDidMount() {
     this.fetchCollections(this.context.user);
-  },
+  }
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextContext.user !== this.context.user) {
       this.fetchCollections(nextContext.user);
     }
-  },
+  }
 
-  shared(collection) {
+  shared = (collection) => {
     return this.context.user.id !== collection.links.owner.id;
-  },
+  };
 
-  fetchCollections(user) {
+  fetchCollections = (user) => {
     this.setState({
       error: null,
       collections: [],
@@ -61,7 +59,7 @@ const RecentCollectionsSection = React.createClass({
         loading: false
       });
     });
-  },
+  };
 
   render() {
     return (
@@ -96,6 +94,6 @@ const RecentCollectionsSection = React.createClass({
       </HomePageSection>
     );
   }
-});
+}
 
 export default RecentCollectionsSection;

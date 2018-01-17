@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'AboutEditor'
 
   getDefaultProps: ->

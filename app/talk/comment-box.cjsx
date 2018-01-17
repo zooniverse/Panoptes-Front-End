@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ToggleChildren = require './mixins/toggle-children'
 Feedback = require './mixins/feedback'
 CommentImageSelector = require './comment-image-selector'
@@ -9,7 +10,7 @@ alert = require('../lib/alert').default
 {Markdown, MarkdownEditor, MarkdownHelp} = require 'markdownz'
 Suggester = require './suggester'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'Commentbox'
   mixins: [ToggleChildren, Feedback]
 

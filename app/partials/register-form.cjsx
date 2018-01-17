@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require 'panoptes-client/lib/auth'
 Translate = require 'react-translate-component'
@@ -34,7 +35,7 @@ counterpart.registerTranslations 'en',
     alreadySignedIn: 'Signed in as %(name)s'
     signOut: 'Sign out'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'RegisterForm'
   mixins: [PromiseToSetState]
 

@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 ChangeListener = require './change-listener'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'MultiImageSubjectLayoutEditor'
 
   getDefaultProps: ->

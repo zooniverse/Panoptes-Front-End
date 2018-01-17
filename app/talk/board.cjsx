@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 {Link} = require 'react-router'
 DiscussionPreview = require './discussion-preview'
@@ -25,7 +26,7 @@ promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 PAGE_SIZE = talkConfig.boardPageSize
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkBoard'
 
   contextTypes:

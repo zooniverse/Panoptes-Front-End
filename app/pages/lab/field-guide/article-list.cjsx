@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 ArticleListItem = require './article-list-item'
 DragReorderable = require 'drag-reorderable'
 
-ArticleList = React.createClass
+ArticleList = createReactClass
   getDefaultProps: ->
     articles: []
     icons: {}

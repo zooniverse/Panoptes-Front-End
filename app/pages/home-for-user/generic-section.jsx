@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const HomePageSection = React.createClass({
-  propTypes: {
+class HomePageSection extends React.Component {
+  static propTypes = {
     title: React.PropTypes.string,
     loading: React.PropTypes.bool,
     error: React.PropTypes.object,
     onClose: React.PropTypes.func,
     children: React.PropTypes.node,
-  },
+  };
 
   render() {
     return (
@@ -37,7 +37,7 @@ const HomePageSection = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 export default HomePageSection;

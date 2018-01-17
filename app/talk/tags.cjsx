@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -12,7 +13,7 @@ ProjectLinker = require './lib/project-linker'
 `import PopularTags from './popular-tags';`
 `import Thumbnail from '../components/thumbnail';`
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkTags'
 
   contextTypes:

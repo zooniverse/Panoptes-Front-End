@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkCommentPreview'
 
   propTypes:

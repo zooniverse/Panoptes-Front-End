@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 Draggable = require '../../../lib/draggable'
 DragHandle = require '../../drawing-tools/drag-handle'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'CropInitializer'
 
   render: ->

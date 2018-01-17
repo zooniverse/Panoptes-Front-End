@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 { Helmet } = require 'react-helmet'
 counterpart = require 'counterpart'
@@ -11,7 +12,7 @@ counterpart.registerTranslations 'en',
   projectTalk:
     title: 'Talk'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'ProjectTalkPage'
 
   contextTypes:

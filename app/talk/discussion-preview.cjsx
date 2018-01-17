@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
@@ -7,7 +8,7 @@ getSubjectLocation = require '../lib/get-subject-location'
 # `import Thumbnail from '../components/thumbnail';`
 Thumbnail = require('../components/thumbnail').default
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'TalkDiscussionPreview'
 
   propTypes:

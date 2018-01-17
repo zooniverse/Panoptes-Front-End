@@ -20,48 +20,43 @@ counterpart.registerTranslations('en', {
   loading: '(Loading)'
 });
 
-const CollectionPage = React.createClass({
-
-  propTypes: {
+class CollectionPage extends React.Component {
+  static propTypes = {
     user: React.PropTypes.object,
     collection: React.PropTypes.object.isRequired,
     project: React.PropTypes.object,
     children: React.PropTypes.node,
     roles: React.PropTypes.array
-  },
+  };
 
-  contextTypes: {
+  static contextTypes = {
     geordi: React.PropTypes.object
-  },
+  };
 
-  getDefaultProps() {
-    return {
-      collection: null
-    };
-  },
+  static defaultProps = {
+    collection: null
+  };
 
-  getInitialState() {
-    return {
-      canCollaborate: false
-    };
-  },
+  state = {
+    canCollaborate: false
+  };
 
   componentDidMount() {
     document.documentElement.classList.add('on-collection-page');
     this.canCollaborate();
-  },
+  }
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (!!nextContext.geordi && !!nextContext.geordi.makeHandler) {
       this.logClick = nextContext.geordi.makeHandler('about-menu');
     }
-  },
+  }
 
   componentWillUnmount() {
     document.documentElement.classList.remove('on-collection-page');
-  },
+  }
 
-  canCollaborate() {
+  canCollaborate = () => {
     let canCollaborate;
     if (!this.props.user) {
       canCollaborate = false;
@@ -76,7 +71,7 @@ const CollectionPage = React.createClass({
     const isOwner = this.props.user.id === this.props.owner.id;
 
     this.setState({ canCollaborate: canCollaborate || isOwner });
-  },
+  };
 
   render() {
     const title = `${this.props.collection.display_name} (${this.props.collection.links.subjects ? this.props.collection.links.subjects.length : 0})`;
@@ -144,10 +139,10 @@ const CollectionPage = React.createClass({
       </div>
     );
   }
-});
+}
 
-const CollectionPageWrapper = React.createClass({
-  propTypes: {
+class CollectionPageWrapper extends React.Component {
+  static propTypes = {
     children: React.PropTypes.node,
     project: React.PropTypes.object,
     user: React.PropTypes.object,
@@ -155,44 +150,40 @@ const CollectionPageWrapper = React.createClass({
       collection_owner: React.PropTypes.string,
       collection_name: React.PropTypes.string
     })
-  },
+  };
 
-  getDefaultProps() {
-    return {
-      params: null
-    };
-  },
+  static defaultProps = {
+    params: null
+  };
 
-  getInitialState() {
-    return {
-      collection: null,
-      roles: [],
-      error: false,
-      loading: false,
-      owner: null
-    };
-  },
+  state = {
+    collection: null,
+    roles: [],
+    error: false,
+    loading: false,
+    owner: null
+  };
 
   componentWillMount() {
     this.fetchCollection();
-  },
+  }
 
   componentWillReceiveProps(newProps) {
     if (this.props.user !== newProps.user) {
       this.fetchCollection();
     }
-  },
+  }
 
   componentWillUnmount() {
     this.state.collection.stopListening('change', this.listenToCollection);
-  },
+  }
 
-  listenToCollection() {
+  listenToCollection = () => {
     const collection = this.state.collection;
     this.setState({ collection });
-  },
+  };
 
-  fetchCollection() {
+  fetchCollection = () => {
     this.setState({
       loading: true
     });
@@ -227,14 +218,14 @@ const CollectionPageWrapper = React.createClass({
         loading: false
       });
     });
-  },
+  };
 
-  fetchCollectionOwner(collection) {
+  fetchCollectionOwner = (collection) => {
     return apiClient.type('users').get(collection.links.owner.id)
       .then(owner => owner);
-  },
+  };
 
-  fetchAllCollectionRoles(collection, _page = 1) {
+  fetchAllCollectionRoles = (collection, _page = 1) => {
     const fetchAllCollectionRoles = this.fetchAllCollectionRoles;
     apiClient.type('collection_roles').get({ collection_id: collection.id, page: _page }).then((collectionRoles) => {
       const meta = collectionRoles[0].getMeta();
@@ -252,7 +243,7 @@ const CollectionPageWrapper = React.createClass({
         });
       }
     });
-  },
+  };
 
   render() {
     const classes = classNames({
@@ -287,6 +278,6 @@ const CollectionPageWrapper = React.createClass({
       </div>
     );
   }
-});
+}
 
 export default CollectionPageWrapper;

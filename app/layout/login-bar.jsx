@@ -11,18 +11,18 @@ counterpart.registerTranslations('en', {
   },
 });
 
-const LoginBar = React.createClass({
-  contextTypes: {
+class LoginBar extends React.Component {
+  static contextTypes = {
     geordi: React.PropTypes.object
-  },
+  };
 
-  showDialog(event) {
+  showDialog = (event) => {
     const which = event.currentTarget.value;
     this.context.geordi.logEvent({
       type: which === 'sign-in' ? 'login' : 'register-link',
     });
     alert((resolve) => <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />);
-  },
+  };
 
   render() {
     return (
@@ -42,7 +42,7 @@ const LoginBar = React.createClass({
         </button>
       </span>
     );
-  },
-});
+  }
+}
 
 export default LoginBar;

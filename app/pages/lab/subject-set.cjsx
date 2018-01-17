@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -20,7 +21,7 @@ MAX_FILE_SIZE = 1000 * 1024
 announceSetChange = ->
   apiClient.type('subject_sets').emit 'add-or-remove'
 
-SubjectSetListingRow = React.createClass
+SubjectSetListingRow = createReactClass
   displayName: 'SubjectSetListingRow'
 
   getDefaultProps: ->
@@ -46,7 +47,7 @@ SubjectSetListingRow = React.createClass
     @setState beingDeleted: true
     @props.onRemove @props.subject
 
-SubjectSetListingTable = React.createClass
+SubjectSetListingTable = createReactClass
   displayName: 'SubjectSetListingTable'
 
   getDefaultProps: ->
@@ -62,7 +63,7 @@ SubjectSetListingTable = React.createClass
       </tbody>
     </table>
 
-SubjectSetListing = React.createClass
+SubjectSetListing = createReactClass
   displayName: 'SubjectSetListing'
 
   getDefaultProps: ->
@@ -140,7 +141,7 @@ SubjectSetListing = React.createClass
       @newPage(pageValue)
       announceSetChange()
 
-EditSubjectSetPage = React.createClass
+EditSubjectSetPage = createReactClass
   displayName: 'EditSubjectSetPage'
 
   contextTypes:
@@ -372,7 +373,7 @@ EditSubjectSetPage = React.createClass
           if @isMounted()
             @setState deletionInProgress: false
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EditSubjectSetPageWrapper'
 
   getDefaultProps: ->

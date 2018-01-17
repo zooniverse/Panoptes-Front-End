@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
@@ -8,7 +9,7 @@ DeleteButton = require './delete-button'
 DEFAULT_WIDTH = 25
 MINIMUM_WIDTH = 25
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'RectangleTool'
 
   statics:

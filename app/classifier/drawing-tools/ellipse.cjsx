@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
@@ -12,7 +13,7 @@ GUIDE_DASH = [4, 4]
 DELETE_BUTTON_ANGLE = 45
 BUFFER = 16
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EllipseTool'
 
   statics:

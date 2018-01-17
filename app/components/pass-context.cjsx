@@ -1,7 +1,8 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 {routerShape} = require 'react-router/lib/PropTypes'
 
-module.exports = React.createClass
+module.exports = createReactClass
   contextTypes:
     initialLoadComplete: React.PropTypes.bool
     router: routerShape

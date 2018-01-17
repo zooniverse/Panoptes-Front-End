@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 userIsModerator = require './user-is-moderator'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'Moderation'
 
   propTypes:

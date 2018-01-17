@@ -1,10 +1,11 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 Draggable = require '../../lib/draggable'
 
 RADIUS = 4
 OVERSHOOT = 4
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'DragHandle'
 
   render: ->

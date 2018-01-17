@@ -1,8 +1,9 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 drawingTools = require '../../drawing-tools'
 strategies = require('../../../features/feedback/shared/strategies').default
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'MarkingsRenderer'
 
   getDefaultProps: ->

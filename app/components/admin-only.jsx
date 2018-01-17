@@ -3,35 +3,33 @@ import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../lib/is-admin';
 
-const AdminOnly = React.createClass({
-  refreshing: (false: bool),
-
-  contextTypes: {
+class AdminOnly extends React.Component {
+  static contextTypes = {
     user: React.PropTypes.object,
-  },
+  };
 
-  getDefaultProps() {
-    return {
-      whenActive: false,
-    };
-  },
+  static defaultProps = {
+    whenActive: false,
+  };
+
+  refreshing: bool = false;
 
   componentDidMount() {
     apiClient.listen('change', this.handleClientChange);
-  },
+  }
 
   componentWillUnmount() {
     apiClient.stopListening('change', this.handleClientChange);
-  },
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.refreshing) {
       this.refreshing = false;
       this.forceUpdate();
     }
-  },
+  }
 
-  handleClientChange() {
+  handleClientChange = () => {
     if (!this.refreshing) {
       this.refreshing = true;
       // Debounce just a bit.
@@ -39,7 +37,7 @@ const AdminOnly = React.createClass({
         this.forceUpdate();
       }, 100);
     }
-  },
+  };
 
   render() {
     React.Children.only(this.props.children);
@@ -53,7 +51,7 @@ const AdminOnly = React.createClass({
     } else {
       return null;
     }
-  },
-});
+  }
+}
 
 export default AdminOnly;

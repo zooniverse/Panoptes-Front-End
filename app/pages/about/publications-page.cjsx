@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+createReactClass = require 'create-react-class'
 Translate = require 'react-translate-component'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
@@ -20,7 +21,7 @@ counterpart.registerTranslations 'en',
       header:
         showAll: 'All Publications'
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'PublicationsPage'
 
   getInitialState: ->

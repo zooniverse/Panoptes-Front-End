@@ -1,4 +1,5 @@
 React = require 'react'
+createReactClass = require 'create-react-class'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
@@ -22,7 +23,7 @@ DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
 else
   '1166' # Ghosts
 
-EditWorkflowPage = React.createClass
+EditWorkflowPage = createReactClass
   displayName: 'EditWorkflowPage'
 
   contextTypes:
@@ -724,7 +725,7 @@ EditWorkflowPage = React.createClass
       if @props.workflow.first_task not of @props.workflow.tasks
         @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'EditWorkflowPageWrapper'
 
   getDefaultProps: ->
