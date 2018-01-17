@@ -144,6 +144,11 @@ describe('ProjectPage', () => {
       sugarClientUnsubscribeSpy.resetHistory();
     });
 
+    after(() => {
+      sugarClientSubscribeSpy.restore();
+      sugarClientUnsubscribeSpy.restore();
+    });
+
     describe('on mount/unmount', () => {
       beforeEach(() => {
         wrapper = mount(

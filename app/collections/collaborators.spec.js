@@ -51,13 +51,18 @@ describe('<CollectionCollaborators />', function() {
   let wrapper;
   let addUserSpy;
   let deleteUserSpy;
-
-  before(function() {
+  let stub;
+  before(function () {
     addUserSpy = sinon.spy(RoleCreator.prototype, 'handleSubmit');
     deleteUserSpy = sinon.spy(RoleRow.prototype, 'confirmDelete');
-    const stub = sinon.stub(CollectionCollaborators.prototype, 'componentDidMount');
+    stub = sinon.stub(CollectionCollaborators.prototype, 'componentDidMount');
     wrapper = mount(<CollectionCollaborators owner={owner} />, { context: { router: {} } });
     wrapper.setState({ hasSettingsRole: true, roleSets });
+  });
+
+  after(() => {
+    addUserSpy.restore();
+    deleteUserSpy.restore();
     stub.restore();
   });
 
