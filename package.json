@@ -120,6 +120,7 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
+    "test-and-watch": "NODE_ENV=development BABEL_ENV=test mocha --watch --watch-extensions js,jsx,coffee,cjsx test/setup.js $(find app -name *.spec.js*) --reporter nyan || true",
     "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js*) --reporter nyan || true",
     "test-travis": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js*)",
     "lint": "eslint ./app --ext .jsx,.js",
