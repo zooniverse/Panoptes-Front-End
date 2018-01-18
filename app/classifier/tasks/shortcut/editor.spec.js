@@ -13,6 +13,7 @@ function mockPanoptesResource(type, options) {
   sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
   sinon.stub(resource, 'get');
   sinon.stub(resource, 'delete');
+  sinon.stub(resource, 'update');
   return resource;
 }
 
@@ -20,27 +21,6 @@ const task = {
   question: 'What is it',
   type: 'single',
   unlinkedTask: 'T1'
-};
-
-const workflow = {
-  tasks: {
-    T1: {
-      answers: [
-        { label: 'Nothing Here' },
-        { label: 'Fire' }
-      ],
-      type: 'shortcut'
-    }
-  }
-};
-
-const emptyWorkflow = {
-  tasks: {
-    T0: {
-      answers: [],
-      type: 'single'
-    }
-  }
 };
 
 const emptyTask = {
@@ -53,6 +33,17 @@ describe('ShortcutEditor', function () {
     let wrapper;
 
     before(function () {
+      const workflow = {
+        tasks: {
+          T1: {
+            answers: [
+              { label: 'Nothing Here' },
+              { label: 'Fire' }
+            ],
+            type: 'shortcut'
+          }
+        }
+      };
       wrapper = mount(<ShortcutEditor task={task} workflow={mockPanoptesResource('workflows', workflow)} />);
     });
 
@@ -74,6 +65,14 @@ describe('ShortcutEditor', function () {
     let wrapper;
 
     before(function () {
+      const emptyWorkflow = {
+        tasks: {
+          T0: {
+            answers: [],
+            type: 'single'
+          }
+        }
+      };
       wrapper = shallow(<ShortcutEditor task={emptyTask} workflow={mockPanoptesResource('workflows', emptyWorkflow)} />);
     });
 
@@ -88,30 +87,51 @@ describe('ShortcutEditor', function () {
 
   describe('methods', function () {
     let wrapper;
+    let toggleStub;
+    let addStub;
+    let removeStub;
+    
+    before(function () {
+      toggleStub = sinon.stub(ShortcutEditor.prototype, 'toggleShortcut');
+      addStub = sinon.stub(ShortcutEditor.prototype, 'addAnswer');
+      removeStub = sinon.stub(ShortcutEditor.prototype, 'removeChoice');
+    });
 
     beforeEach(function () {
-      wrapper = mount(<ShortcutEditor task={task} workflow={mockPanoptesResource('workflows', workflow)} />);
+      const workflow = {
+        tasks: {
+          T1: {
+            answers: [
+              { label: 'Nothing Here' },
+              { label: 'Fire' }
+            ],
+            type: 'shortcut'
+          }
+        }
+      };
+      const mockWorkflow = mockPanoptesResource('workflows', workflow);
+      wrapper = mount(<ShortcutEditor task={task} workflow={mockWorkflow} />);
+    });
+
+    after(function () {
+      toggleStub.restore();
+      addStub.restore();
+      removeStub.restore();
     });
 
     it('should call toggleShortcut with an input toggle', function () {
-      const toggleStub = sinon.stub(wrapper.instance(), 'toggleShortcut');
-      wrapper.update();
-      wrapper.find('input').simulate('change');
+      wrapper.find('input').simulate('change', { target: { checked: true } });
       sinon.assert.called(toggleStub);
     });
 
     it('should call remove handler when clicked', function () {
-      const removeStub = sinon.stub(wrapper.instance(), 'removeChoice');
       const removeButton = wrapper.find('button.workflow-choice-remove-button').first();
-      wrapper.update();
       removeButton.simulate('click');
       sinon.assert.called(removeStub);
     });
 
     it('should call add handler when clicked', function () {
-      const addStub = sinon.stub(wrapper.instance(), 'addAnswer');
       const addButton = wrapper.find('button.workflow-choice-add-button').first();
-      wrapper.update();
       addButton.simulate('click');
       sinon.assert.called(addStub);
     });
