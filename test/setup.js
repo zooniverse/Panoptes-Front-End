@@ -1,4 +1,4 @@
-import {jsdom} from 'jsdom'
+import { jsdom } from 'jsdom';
 
 // Set up fake DOM for use by Enzyme's mount() method.
 const exposedProperties = ['window', 'navigator', 'document'];

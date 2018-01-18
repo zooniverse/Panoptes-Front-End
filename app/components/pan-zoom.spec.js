@@ -50,7 +50,7 @@ describe('PanZoom', function () {
       });
 
       it('should focus the button passed as the argument', function () {
-        assert.equal(document.activeElement, zoomInButton.node);
+        assert.equal(document.activeElement, zoomInButton.instance());
       });
     });
 
@@ -63,19 +63,19 @@ describe('PanZoom', function () {
       });
 
       it('returns false if there is room to zoom out', function () {
-        wrapper.setState({ viewBoxDimensions: { width: 50, heigth: 50, x: 25, y: 25 } });
+        wrapper.setState({ viewBoxDimensions: { width: 50, heigth: 50, x: 25, y: 25 }});
 
         assert.equal(wrapper.instance().cannotZoomOut(), false);
       });
 
       it('returns true if there is not room to zoom out', function () {
-        wrapper.setState({ viewBoxDimensions: { width: 100, height: 100, x: 0, y: 0 } });
+        wrapper.setState({ viewBoxDimensions: { width: 100, height: 100, x: 0, y: 0 }});
 
         assert.equal(wrapper.instance().cannotZoomOut(), true);
       });
     });
 
-    describe('#cannotResetZoomRotate', function() {
+    describe('#cannotResetZoomRotate', function () {
       let wrapper;
       const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
 
@@ -97,7 +97,7 @@ describe('PanZoom', function () {
 
       it('returns true if there is not room to zoom out and degrees rotated is 0', function () {
         wrapper.setState({ viewBoxDimensions: { width: 100, height: 100, x: 0, y: 0 }, rotation: 0 });
-        
+
         assert.equal(wrapper.instance().cannotResetZoomRotate(), true);
       });
     });
@@ -176,7 +176,7 @@ describe('PanZoom', function () {
       it('should reset the viewBoxDimensions to the orignal frame dimensions', function () {
         const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
         const wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
-        wrapper.setState({ viewBoxDimensions: { width: 50, heigth: 50, x: 25, y: 25 } });
+        wrapper.setState({ viewBoxDimensions: { width: 50, heigth: 50, x: 25, y: 25 }});
         wrapper.instance().zoomReset();
 
         assert.deepEqual(wrapper.state('viewBoxDimensions'), originalFrameDimensions);
@@ -322,7 +322,6 @@ describe('PanZoom', function () {
         sinon.assert.calledWith(zoomSpy, 1.1);
         assert.equal(wrapper.state('zooming'), true);
       });
-
     });
 
     describe('#wheelZoom()', function () {
@@ -367,7 +366,7 @@ describe('PanZoom', function () {
       beforeEach(function () {
         originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
         wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
-        wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 25, y: 25 } });
+        wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 25, y: 25 }});
       });
 
       it('should change state.viewBoxDimensions.x value by the provided direction', function () {
@@ -403,7 +402,7 @@ describe('PanZoom', function () {
       beforeEach(function () {
         originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
         wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
-        wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 25, y: 25 } });
+        wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 25, y: 25 }});
       });
 
       it('should change state.viewBoxDimensions.y by the provided direction', function () {
@@ -415,7 +414,7 @@ describe('PanZoom', function () {
       });
 
       it('should not set state.viewBoxDimensions.y below the floor value', function () {
-        const floor = - (originalFrameDimensions.height * 0.6);
+        const floor = -(originalFrameDimensions.height * 0.6);
         wrapper.instance().panVertical(-200);
 
         assert.equal(wrapper.state('viewBoxDimensions').y, floor);
@@ -449,7 +448,7 @@ describe('PanZoom', function () {
 
       it('should create a new transformation statement with the updated rotation', function () {
         wrapper.instance().rotateClockwise();
-        let updatedTransformation = `rotate(90 ${wrapper.props().frameDimensions.width / 2} ${wrapper.props().frameDimensions.height / 2})`
+        const updatedTransformation = `rotate(90 ${wrapper.props().frameDimensions.width / 2} ${wrapper.props().frameDimensions.height / 2})`;
 
         assert.equal(wrapper.state('transform'), updatedTransformation);
       });
