@@ -4,7 +4,17 @@ import { shallow, mount } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
 import sinon from 'sinon';
+import apiClient from 'panoptes-client/lib/api-client';
 import ShortcutEditor from './editor';
+
+function mockPanoptesResource(type, options) {
+  const resource = apiClient.type(type).create(options);
+  apiClient._typesCache = {};
+  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
+  sinon.stub(resource, 'get');
+  sinon.stub(resource, 'delete');
+  return resource;
+}
 
 const task = {
   question: 'What is it',
@@ -43,7 +53,7 @@ describe('ShortcutEditor', function () {
     let wrapper;
 
     before(function () {
-      wrapper = mount(<ShortcutEditor task={task} workflow={workflow} />);
+      wrapper = mount(<ShortcutEditor task={task} workflow={mockPanoptesResource('workflows', workflow)} />);
     });
 
     it('should show checked if shortcut is available', function () {
@@ -64,7 +74,7 @@ describe('ShortcutEditor', function () {
     let wrapper;
 
     before(function () {
-      wrapper = shallow(<ShortcutEditor task={emptyTask} workflow={emptyWorkflow} />);
+      wrapper = shallow(<ShortcutEditor task={emptyTask} workflow={mockPanoptesResource('workflows', emptyWorkflow)} />);
     });
 
     it('should not be checked if there are not shortcuts', function () {
@@ -80,7 +90,7 @@ describe('ShortcutEditor', function () {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = mount(<ShortcutEditor task={task} workflow={workflow} />);
+      wrapper = mount(<ShortcutEditor task={task} workflow={mockPanoptesResource('workflows', workflow)} />);
     });
 
     it('should call toggleShortcut with an input toggle', function () {
