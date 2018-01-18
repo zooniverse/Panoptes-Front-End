@@ -31,13 +31,19 @@ const testProject = {
 
 describe('SocialLinksEditor', () => {
   let wrapper;
+  let removeStub;
 
   it('should render without crashing', () => {
     shallow(<SocialLinksEditor project={mockPanoptesResource('projects', testProject)} />);
   });
 
   before(function () {
+    removeStub = sinon.stub(SocialLinksEditor.prototype, 'handleRemoveLink');
     wrapper = mount(<SocialLinksEditor project={mockPanoptesResource('projects', testProject)} />);
+  });
+
+  after(function () {
+    removeStub.restore();
   });
 
   it('should contain the correct number of rows', () => {
@@ -56,9 +62,7 @@ describe('SocialLinksEditor', () => {
   });
 
   it('should call handleRemoveLink() when link is removed', () => {
-    const removeStub = sinon.stub(wrapper.instance(), 'handleRemoveLink');
     const button = wrapper.find('button').first();
-    wrapper.update();
     button.simulate('click');
     sinon.assert.calledOnce(removeStub);
   });
