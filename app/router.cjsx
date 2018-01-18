@@ -117,7 +117,7 @@ module.exports =
     <Route path="help" component={require './pages/lab/help'}>
       <IndexRoute component={HowToBuildProject} />
       <Route path="glossary" component={require './pages/lab/help/glossary'} />
-      <Route path="project-builder-walkthrough" component={require './pages/lab/help/project-builder-walkthrough'} />
+      <Route path="example" component={require './pages/lab/help/example'} />
       <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
       <Route path="best-practices" component={require './pages/lab/best-practices'} />
     </Route>

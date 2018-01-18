@@ -3,9 +3,9 @@ counterpart = require 'counterpart'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
-  projectBuilderWalkthrough:
+  example:
     content: '''
-      # How to Build a Project
+      # Example Project
 
       **So you want to build a project using the Zooniverse Project Builder?**
       This tutorial will help walk you through the process, using Kitteh Zoo as an example.
@@ -247,9 +247,9 @@ counterpart.registerTranslations 'en',
     '''
 
 module.exports = React.createClass
-  displayName: 'projectBuilderWalkthrough'
+  displayName: 'example'
 
   render: ->
     <div className="secondary-page">
-      <Markdown>{counterpart "projectBuilderWalkthrough.content"}</Markdown>
+      <Markdown>{counterpart "example.content"}</Markdown>
     </div>
