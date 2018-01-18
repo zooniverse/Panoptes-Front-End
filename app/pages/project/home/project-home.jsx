@@ -11,18 +11,28 @@ import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
 import TalkStatus from './talk-status';
 import ProjectNavbar from '../project-navbar';
+import ProjectNavbarFacelift from '../components/ProjectNavbar';
 
 const ProjectHomePage = (props) => {
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
+
   const descriptionClass = classnames(
     'project-home-page__description',
     { 'project-home-page__description--top-padding': !props.organization }
   );
+
   const renderTalkSubjectsPreview = props.talkSubjects.length > 2;
+
+  // As this is a functional component, we don't have access to the router via
+  // props, so we just check the URL direct.
+  const params = (new URL(document.location)).searchParams;
+  const facelift = params.get('facelift');
+  const NavbarComponent = (facelift) ? ProjectNavbarFacelift : ProjectNavbar;
+
   return (
     <div className="project-home-page">
       <div className="project-page project-background" style={{ backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${props.background.src})` }}>
-        <ProjectNavbar {...props} />
+        <NavbarComponent {...props} />
 
         {props.projectIsComplete &&
           (<div className="project-home-page__finished-banner-container">
