@@ -2,7 +2,17 @@ import React from 'react';
 import assert from 'assert';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
+import apiClient from 'panoptes-client/lib/api-client';
 import SocialLinksEditor from './social-links-editor';
+
+function mockPanoptesResource(type, options) {
+  const resource = apiClient.type(type).create(options);
+  apiClient._typesCache = {};
+  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
+  sinon.stub(resource, 'get');
+  sinon.stub(resource, 'delete');
+  return resource;
+}
 
 const testProject = {
   urls: [
@@ -16,20 +26,18 @@ const testProject = {
       site: 'facebook.com/',
       path: 'test'
     }
-  ],
-  save: () => {},
-  update: () => {}
+  ]
 };
 
 describe('SocialLinksEditor', () => {
   let wrapper;
 
   it('should render without crashing', () => {
-    shallow(<SocialLinksEditor project={testProject} />);
+    shallow(<SocialLinksEditor project={mockPanoptesResource('projects', testProject)} />);
   });
 
   before(function () {
-    wrapper = mount(<SocialLinksEditor project={testProject} />);
+    wrapper = mount(<SocialLinksEditor project={mockPanoptesResource('projects', testProject)} />);
   });
 
   it('should contain the correct number of rows', () => {
