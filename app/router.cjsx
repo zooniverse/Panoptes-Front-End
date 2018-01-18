@@ -47,6 +47,7 @@ createReactClass = require 'create-react-class'
 `import CallForProjects from './pages/get-involved/call-for-projects';`
 `import Education from './pages/get-involved/education';`
 `import Volunteering from './pages/get-involved/volunteering';`
+`import HowToBuildProject from './pages/lab/help/how-to-build-project';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = createReactClass
@@ -114,7 +115,7 @@ module.exports =
     </Route>
 
     <Route path="help" component={require './pages/lab/help'}>
-      <IndexRoute component={require './pages/lab/help/how-to-page'} />
+      <IndexRoute component={HowToBuildProject} />
       <Route path="glossary" component={require './pages/lab/help/glossary'} />
       <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
       <Route path="best-practices" component={require './pages/lab/best-practices'} />
@@ -246,7 +247,7 @@ module.exports =
       <Route path="mini-course" component={require './pages/lab/mini-course'} />
     </Route>
     <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
-    <Route path="lab-how-to" component={require './pages/lab/help'} />
+    <Route path="lab-how-to" component={HowToBuildProject} />
     <Route path="glossary" component={require './pages/lab/help/glossary'} />
 
     <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
