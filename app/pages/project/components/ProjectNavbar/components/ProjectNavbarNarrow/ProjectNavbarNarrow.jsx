@@ -5,7 +5,7 @@ import Background from '../Background';
 import NarrowMenu from './NarrowMenu';
 import NarrowMenuButton from './NarrowMenuButton';
 import ProjectTitle from '../ProjectTitle';
-import { pxToRem } from '../../styledHelpers';
+import { pxToRem } from '../../../../../../theme';
 import StyledHeader from '../StyledHeader';
 import Wrapper from '../Wrapper';
 

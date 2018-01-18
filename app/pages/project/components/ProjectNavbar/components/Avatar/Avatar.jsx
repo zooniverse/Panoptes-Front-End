@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
-import { pxToRem } from '../../styledHelpers';
+import { pxToRem } from '../../../../../../theme';
 
 const StyledAvatarImg = styled.img.attrs({
   alt: props => props.alt,

@@ -6,7 +6,7 @@ import NavLink from '../NavLink';
 import ProjectTitle from '../ProjectTitle';
 import StyledHeader from '../StyledHeader';
 import Wrapper from '../Wrapper';
-import { colors, pxToRem } from '../../styledHelpers';
+import { pxToRem } from '../../../../../../theme';
 
 const StyledHeaderWide = StyledHeader.extend`
   box-shadow: 0 ${pxToRem(2)} ${pxToRem(4)} 0 rgba(0,0,0,0.5);

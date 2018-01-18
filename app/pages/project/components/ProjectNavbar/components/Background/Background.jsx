@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
-import styled from 'styled-components';
-import { colors, pxToRem } from '../../styledHelpers';
+import styled, { ThemeProvider } from 'styled-components';
+
+import { theme, pxToRem } from '../../../../../../theme';
 
 const BackgroundWrapper = styled.div.attrs({
   'aria-hidden': true
 })`
-  background-color: ${props => ((props.hasBg) ? 'black' : colors.teal)};
+  background-color: ${props => ((props.hasBg) ? 'black' : props.theme.colors.teal.mid)};
   display: flex;
   height: 100%;
   left: 0;
@@ -27,9 +28,11 @@ const ImgBackground = styled.div`
 
 function Background({ src, ...otherProps }) {
   return (
-    <BackgroundWrapper hasBg={!!src} {...otherProps}>
-      {src && <ImgBackground src={src} />}
-    </BackgroundWrapper>
+    <ThemeProvider theme={theme}>
+      <BackgroundWrapper hasBg={!!src} {...otherProps}>
+        {src && <ImgBackground src={src} />}
+      </BackgroundWrapper>
+    </ThemeProvider>
   );
 }
 

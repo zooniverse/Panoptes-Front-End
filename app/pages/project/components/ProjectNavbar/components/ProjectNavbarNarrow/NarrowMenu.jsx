@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import NavLink from '../NavLink';
-import { colors, pxToRem } from '../../styledHelpers';
+
+import { theme, pxToRem } from '../../../../../../theme';
 
 const MenuWrapper = styled.div`
   max-width: ${pxToRem(300)};
@@ -19,7 +20,7 @@ const MenuWrapper = styled.div`
 `;
 
 const Menu = styled.nav`
-  background-color: ${colors.teal};
+  background-color: ${props => props.theme.colors.teal.mid};
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -27,11 +28,11 @@ const StyledNavLink = styled(NavLink)`
   padding: 0 ${pxToRem(30)};
 
   &:hover, &:focus {
-    background-color: ${colors.darkteal};
+    background-color: ${props => props.theme.colors.brand.default};
   }
 
   &.active {
-    background-color: ${colors.darkteal};
+    background-color: ${props => props.theme.colors.brand.default};
   }
 `;
 
@@ -39,15 +40,18 @@ function NarrowMenu({ links, open = true, toggleMenuFn }) {
   const openClass = (open) ? 'open' : '';
   return (
     <MenuWrapper className={openClass}>
-      <Menu>
-        {links.map(link => (
-          <StyledNavLink
-            {...link}
-            key={link.url}
-            onClick={toggleMenuFn}
-          />
-        ))}
-      </Menu>
+      <ThemeProvider theme={theme}>
+        <Menu>
+          {links.map(link => (
+            <StyledNavLink
+              {...link}
+              key={link.url}
+              onClick={toggleMenuFn}
+            />
+          ))}
+        </Menu>
+      </ThemeProvider>
+        
     </MenuWrapper>
   );
 }

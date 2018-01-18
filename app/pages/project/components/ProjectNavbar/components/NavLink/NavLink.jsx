@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Link } from 'react-router';
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
-import { pxToRem } from '../../styledHelpers';
+import { pxToRem } from '../../../../../../theme';
 import socialIcons from '../../socialIcons';
 
 const commonStyles = `

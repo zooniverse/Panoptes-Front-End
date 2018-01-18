@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import { IndexLink } from 'react-router';
-import { colors, pxToRem } from '../../styledHelpers';
+import { pxToRem } from '../../../../../../theme';
 
 const H1 = styled.h1`
   color: white;

@@ -1,7 +1,13 @@
 import colors from './colors';
+import fonts from './fonts';
 import pxToRem from './pxToRem';
 
-export {
+const theme = {
   colors,
+  fonts
+};
+
+export {
+  theme,
   pxToRem
 };
