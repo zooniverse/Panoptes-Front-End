@@ -9,6 +9,8 @@ function Page() {
   );
 }
 
+// TODO: THIS BREAKS EVERYTHING, WHY?
+
 describe('AboutProject', () => {
   describe('with only default props', () => {
     it('should render', () => {

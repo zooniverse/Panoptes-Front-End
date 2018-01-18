@@ -30,7 +30,7 @@ describe('SliderTask', function () {
 
   it('should have an instruction', function () {
     const instruction = wrapper.find('.question');
-    assert.equal(instruction.length, 1);
+    assert.equal(instruction.hostNodes().length, 1);
   });
 
   // it('should have the defaultValue as the initial annotation value', function () {
@@ -49,19 +49,19 @@ describe('SliderTask', function () {
     });
 
     it('should have the default value as the initial slider value', function () {
-      assert.equal(slider.node.value, task.defaultValue);
+      assert.equal(slider.instance().value, task.defaultValue);
     });
 
     it('should have the correct max value', function () {
-      assert.equal(slider.node.max, task.max);
+      assert.equal(slider.instance().max, task.max);
     });
 
     it('should have the correct min value', function () {
-      assert.equal(slider.node.min, task.min);
+      assert.equal(slider.instance().min, task.min);
     });
 
     it('should have the correct step value', function () {
-      assert.equal(slider.node.step, task.step);
+      assert.equal(slider.instance().step, task.step);
     });
 
     it('should call onChange with a value selected within range', function () {
@@ -98,19 +98,19 @@ describe('SliderTask', function () {
     });
 
     it('should have the default value as the initial number value', function () {
-      assert.equal(number.node.value, task.defaultValue);
+      assert.equal(number.instance().value, task.defaultValue);
     });
 
     it('should have the correct max value', function () {
-      assert.equal(number.node.max, task.max);
+      assert.equal(number.instance().max, task.max);
     });
 
     it('should have the correct min value', function () {
-      assert.equal(number.node.min, task.min);
+      assert.equal(number.instance().min, task.min);
     });
 
     it('should have the correct step value', function () {
-      assert.equal(number.node.step, task.step);
+      assert.equal(number.instance().step, task.step);
     });
 
     it('should call onChange with a value selected within range', function () {
