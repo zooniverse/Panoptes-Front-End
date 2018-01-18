@@ -52,7 +52,7 @@ describe('Shortcut functionality', function () {
   });
 
   it('should show an active button with a shortcut', function () {
-    assert.equal(wrapper.find('label').first().hasClass('active'), true);
+    assert.equal(wrapper.find('label[htmlFor="shortcut-1"]').hasClass('active'), true);
   });
 
   it('should remove shortcut when deselected', function () {
