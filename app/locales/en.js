@@ -345,27 +345,27 @@ export default {
   lab: {
     help: {
       howToBuildProject: {
-        title: '# How to create a project with our Project Builder',
+        title: '## How to create a project with our Project Builder',
         overview: {
           quickGuide: '* [A quick guide to building a project](#a-quick-guide-to-building-a-project)',
           navigating: '* [Navigating the project builder](#navigating-the-project-builder)\n  * [Project](#project)\n  * [Workflows](#workflows)\n  * [Subjects](#subjects)',
           inDetail: {
             title: '* [Project building in detail](#project-building-in-detail)',
-            projectDetails: '  * [Project Details](#project-details)',
+            projectDetails: '* [Project Details](#project-details)',
             about: '  * [About](#about)',
-            collaborators: '  * [Collaborators](#collaborators)',
-            tutorial: '  * [Tutorial](#tutorial)',
-            media: '  * [Media](#media)',
-            visibility: '  * [Visibility](#visibility)',
-            workflows: '  * [Workflows](#workflows)',
-            orientation: '  * [Orientation](#orientation)',
-            createTasks: '  * [Create Tasks](#create-tasks)',
-            taskContent: '  * [Task Content](#task-content)',
-            questions: '  * [Questions](#questions)',
-            drawing: '  * [Drawing](#drawing)',
-            transcription: '  * [Transcription](#transcription)',
-            linking: '  * [Linking the Workflow Together](#linking-the-workflow-together)',
-            subjectSets: '  * [Subject Sets](#subject-sets)',
+            collaborators: '* [Collaborators](#collaborators)',
+            fieldGuide: '* [Field Guide](#field-guide)',
+            tutorial: '* [Tutorial](#tutorial)',
+            media: '* [Media](#media)',
+            visibility: '* [Visibility](#visibility)',
+            workflows: '* [Workflows](#workflow-details)',
+            createTasks: '* [Create Tasks](#create-tasks)',
+            taskContent: '* [Task Content](#task-content)',
+            questions: '* [Questions](#questions)',
+            drawing: '* [Drawing](#drawing)',
+            transcription: '* [Transcription](#transcription)',
+            linking: '* [Linking the Workflow Together](#linking-the-workflow-together)',
+            subjectSets: '* [Subject Sets](#subject-sets)',
             furtherHelp: '* [Further Help](#further-help)'
           }
         },
@@ -388,7 +388,8 @@ export default {
           step8: '8. Hit the "Test this workflow" button to see how your project looks.',
           step9: '9. Explore your project to figure out what works and what doesn\'t. Make changes, then refresh your project page to test these out.',
           step10: '10. Guidelines on how to design your project to maximize engagement and data quality are provided on the [Policies page](/help/lab-policies).',
-          step11: '11. When you are happy with your project, set it to “Public” on the “Visibility” tab. Use the “Apply for review” button to submit it to the Zooniverse team for review.'
+          step11: '11. When you are happy with your project, set it to “Public” on the “Visibility” tab. Use the “Apply for review” button to submit it to the Zooniverse team for review.',
+          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         navigatingTheProjectBuilder: {
           title: '## Navigating the Project Builder',
@@ -411,17 +412,19 @@ export default {
           talk: '- **Talk:** Create and manage discussion boards for your project.',
           dataExports: '- **Data Exports:** Access your raw and aggregated classification data, subject data, and comments from Talk.'
         },
-        workflows: {
+        workflow: {
           title: '### Workflows',
-          body: 'A workflow is the sequence of tasks volunteers are asked to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow tab is where you define those tasks and set the order in which volunteers are asked to do them. Your project might have multiple workflows (if you want to set different tasks for different image sets). See the detailed [Workflow](#workflow) section for more information.'
+          body: 'A workflow is the sequence of tasks volunteers are asked to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow tab is where you define those tasks and set the order in which volunteers are asked to do them. Your project might have multiple workflows (if you want to set different tasks for different image sets). See the detailed [Workflow](#workflow-details) section for more information.'
         },
         subjects: {
           title: '### Subjects',
-          body: 'A subject is a unit of data to be analyzed. A single subject can include more than one image[h5] . A “subject set” consists of both the "manifest" (a list of the subjects and their properties), and the images themselves. Subjects can be grouped into different sets if useful for your research. See the [Subject Details](#subject-sets) section for more on subjects.'
+          body: 'A subject is a unit of data to be analyzed. A single subject can include more than one image. A “subject set” consists of both the "manifest" (a list of the subjects and their properties), and the images themselves. Subjects can be grouped into different sets if useful for your research. See the [Subject Details](#subject-sets) section for more on subjects.',
+          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
-        projectBuildingInDetail: '## Project building in detail\nDetailed instructions on how to use the pages described above.',
         projectDetails: {
-          title: '### Project details',
+          title: '## Project building in detail',
+          intro: 'Detailed instructions on how to use the pages described above.',
+          subtitle: '### Project details',
           name: '* **Name**: The project name is the first thing people will see and it will show up in the project URL. Try to keep it short and sweet.',
           avatar: '* **Avatar**: Pick an avatar image for your project. This will represent your project on the Zooniverse home page. It can also be used as your project\'s brand. It\'s best if it\'s recognizable even as a small icon. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50KB, but at minimum 100x100 pixels.',
           background: '* **Background**: This image will be the background for all of your project pages, including your project\'s front page. It should be relatively high resolution and you should be able to read text written across it. To add an image, either drag and drop or click to open your file viewer. For best results, use images of at least 1 megapixel, no larger than 256 KB. Most people\'s screens are not much bigger than 1300 pixels across and 750 pixels high, so if your image is a lot bigger than this you may find it doesn\'t look the way you expect. Feel free to experiment with different sizes on a "typical" desktop, laptop or mobile screen.',
@@ -435,7 +438,8 @@ export default {
           otherTags: '* **Other Tags:** Enter a list of additional tags to describe your project separated by commas to help users find your project.',
           externalLinks: '* **External links:** Adding an external link will make it appear as a new tab alongside the About, Classify, Talk, and Collect tabs. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
           socialLinks: '* **Social links:** Adding a social link will append a media icon at the end of your project menu bar. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
-          checkboxPrivate: '* **Checkbox: Private project:** On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you\'re still editing it. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left-hand side of the Project Builder). Team members you add can see your project even if it\'s private. Once your project is public, anyone with the link can view and classify on it.'
+          checkboxPrivate: '* **Checkbox: Private project:** On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you\'re still editing it. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left-hand side of the Project Builder). Team members you add can see your project even if it\'s private. Once your project is public, anyone with the link can view and classify on it.',
+          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         about: {
           title: '### About',
@@ -455,7 +459,8 @@ export default {
           researcher: '* **Researcher:** Members of the research team will be marked as researchers on “Talk".',
           moderator: '* **Moderator:** Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on “Talk".',
           tester: '* **Tester:** Testers can view and classify on your project to give feedback while it’s still private. They cannot access the project builder.',
-          translator: '* **Translator:** Translators will have access to the project builder as well as the translation site, so they can translate all of your project text into a different language.'
+          translator: '* **Translator:** Translators will have access to the project builder as well as the translation site, so they can translate all of your project text into a different language.',
+          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         fieldGuide: {
           title: '### Field Guide',
@@ -476,7 +481,8 @@ export default {
           intro: 'This page is where you decide whether your project is public and whether it\'s ready to go live.',
           projectState: '* **Project State and Visibility:** Set your project to “Private” or “Public”. Only the assigned collaborators can view a private project. Anyone with the URL can access a public project. Here, you can also choose whether your project is in “Development”, or “Live”. Note: in a live project, active workflows are locked and can no longer be edited.',
           betaStatus: '* **Beta Status:** Here, you will find a checklist of tasks that must be complete for your project to undergo beta review. Projects must complete review in order to launch as full Zooniverse projects and be promoted as such. Once these tasks are complete, click “Apply for review”.',
-          workflowSettings: '* **Workflow Settings:** You will see a list of all workflows created for the project. You can set the workflows to “Active”, choose what metric to measure for completeness statistics, and whether those statistics should be shown on your project’s Stats Page.For more information on the different project stages, see our [Project Builder policies](/help/lab-policies).'
+          workflowSettings: '* **Workflow Settings:** You will see a list of all workflows created for the project. You can set the workflows to “Active”, choose what metric to measure for completeness statistics, and whether those statistics should be shown on your project’s Stats Page.For more information on the different project stages, see our [Project Builder policies](/help/lab-policies).',
+          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         talk: {
           title: '### Talk',
@@ -487,14 +493,15 @@ export default {
           title: '### Data Exports',
           intro: 'In this section you can request data exports for your Project Data (CSV format) and Talk Data (JSON format). Note that the Zooniverse will process at most 1 of each export within a 24-hour period and some exports may take a long time to process. We will email you when they are ready. For examples of how to work with the data exports see our [Data Digging code repository](https://github.com/zooniverse/Data-digging).'
         },
-        workflow: {
-          title: '### Workflows',
+        workflowDetails: {
+          title: '### Workflow Details',
           introduction: 'Note that a workflow with fewer tasks is easier for volunteers to complete. We know from surveys of our volunteers that many people classify in their limited spare time, and sometimes they only have a few minutes. Longer, more complex workflows mean each classification takes longer, so if your workflow is very long you may lose volunteers.',
           workflowTitle: '* **Workflow title:** Give your workflow a short, but descriptive name. If you have multiple workflows and give volunteers the option of choosing which they want to work on, this Workflow title will appear on a button instead of "Get started!"',
           version: '* **Version:** Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by a whole number: 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the version by a decimal, e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data.',
           tasks: '* **Tasks:** There are two main types of tasks: questions and drawing. For question tasks, the volunteer chooses from a list of answers but does not mark or draw on the image. In drawing tasks, the volunteer marks or draws directly on the image using tools that you specify. They can also give sub-classifications for each mark. Note that you can set the first task from the drop-down menu.',
           mainText: '* **Main Text:** Describe the task, or ask the question, in a way that is clear to a non-expert. The wording here is very important, because you will in general get what you ask for. Solicit opinions from team members and testers before you make the project public: it often takes a few tries to reach the combination of simplicity and clarity that will guide your volunteers to give you the inputs you need. You can use markdown in the main text.',
-          helpText: '* **Help Text:** Add text and images for a pop-up help window. This is shown next to the main text of the task in the main classification interface, when the volunteer clicks a button asking for help. You can use markdown in this text, and link to other images to help illustrate your description. The help text can be as long as you need, but you should try to keep it simple and avoid jargon. One thing that is useful in the help text is a concise description of why you are asking for this information.'
+          helpText: '* **Help Text:** Add text and images for a pop-up help window. This is shown next to the main text of the task in the main classification interface, when the volunteer clicks a button asking for help. You can use markdown in this text, and link to other images to help illustrate your description. The help text can be as long as you need, but you should try to keep it simple and avoid jargon. One thing that is useful in the help text is a concise description of why you are asking for this information.',
+          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         createTasks: {
           title: '### Create Tasks',
@@ -523,7 +530,8 @@ export default {
           polygon: '- **polygon:** an arbitrary shape made of point-to-point lines.',
           rectangle: '- **rectangle:** a box of any size and length-width ratio; this tool *cannot* be rotated.',
           triangle: '- **triangle:** an equilateral triangle of any size and vertex distance from the center; this tool *can* be rotated.',
-          gridTable: '- **grid table:** cells which can be made into a table for consecutive annotations.'
+          gridTable: '- **grid table:** cells which can be made into a table for consecutive annotations.',
+          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         transcription: {
           title: '#### Transcription',
@@ -545,7 +553,8 @@ export default {
         },
         furtherHelp: {
           title: '## Further Help',
-          body: 'If you\'d like some further information, check out the [documentation behind building Kitteh Zoo](/help/example), that talks you through building this project in the Project Builder.\n\nIf this doesn\'t help, get in contact with the Zooniverse team via the [contact page](/about/contact).'
+          body: 'If you\'d like some further information, check out the [documentation behind building Kitteh Zoo](/help/example), that talks you through building this project in the Project Builder.\n\nIf this doesn\'t help, get in contact with the Zooniverse team via the [contact page](/about/contact).',
+          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         }
       }
     }

@@ -11,11 +11,11 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.projectDetails')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.about')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.collaborators')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.fieldGuide')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.tutorial')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.media')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.visibility')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.workflows')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.orientation')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.createTasks')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.taskContent')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.overview.inDetail.questions')}</Markdown>
@@ -28,7 +28,9 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.sectionOverview.quickGuide')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.sectionOverview.navigating')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.sectionOverview.inDetail')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.quickGuide.title')}</Markdown>
+    <a href="#a-quick-guide-to-building-a-project" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.quickGuide.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.quickGuide.intro')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.quickGuide.step1')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.quickGuide.step2')}</Markdown>
@@ -41,7 +43,10 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.quickGuide.step9')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.quickGuide.step10')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.quickGuide.step11')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.navigatingTheProjectBuilder.title')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.quickGuide.backToTop')}</Markdown>
+    <a href="#navigating-the-project-builder" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.navigatingTheProjectBuilder.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.navigatingTheProjectBuilder.intro')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.navigatingTheProjectBuilder.project')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.navigatingTheProjectBuilder.workflows')}</Markdown>
@@ -58,12 +63,16 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.project.visibility')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.project.talk')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.project.dataExports')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.workflows.title')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.workflows.body')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.workflow.title')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.workflow.body')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.subjects.title')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.subjects.body')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.projectBuildingInDetail')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.title')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.subjects.backToTop')}</Markdown>
+    <a href="#project-building-in-detail" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.title')}</Markdown>
+    </a>
+    <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.intro')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.subtitle')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.name')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.avatar')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.background')}</Markdown>
@@ -78,14 +87,19 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.externalLinks')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.socialLinks')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.checkboxPrivate')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.about.title')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.projectDetails.backToTop')}</Markdown>
+    <a href="#about" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.about.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.about.intro')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.about.research')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.about.team')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.about.results')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.about.education')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.about.faq')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.collaborators.title')}</Markdown>
+    <a href="#collaborators" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.collaborators.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.collaborators.intro')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.collaborators.owner')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.collaborators.collaborator')}</Markdown>
@@ -94,31 +108,48 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.collaborators.moderator')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.collaborators.tester')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.collaborators.translator')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.fieldGuide.title')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.collaborators.backToTop')}</Markdown>
+    <a href="#field-guide" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.fieldGuide.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.fieldGuide.intro')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.fieldGuide.details')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.tutorial.title')}</Markdown>
+    <a href="#tutorial" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.tutorial.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.tutorial.intro')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.tutorial.details')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.media.title')}</Markdown>
+    <a href="#media" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.media.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.media.intro')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.visibility.title')}</Markdown>
+    <a href="#visibility" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.visibility.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.visibility.intro')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.visibility.projectState')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.visibility.betaStatus')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.visibility.workflowSettings')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.talk.title')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.visibility.backToTop')}</Markdown>
+    <a href="#talk" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.talk.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.talk.intro')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.talk.details')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.dataExports.title')}</Markdown>
+    <a href="#data-exports" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.dataExports.title')}</Markdown>
+    </a>
     <Markdown>{counterpart('lab.help.howToBuildProject.dataExports.intro')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.workflow.title')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.workflow.introduction')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.workflow.workflowTitle')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.workflow.version')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.workflow.tasks')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.workflow.mainText')}</Markdown>
-    <Markdown>{counterpart('lab.help.howToBuildProject.workflow.helpText')}</Markdown>
+    <a href="#workflowDetails" className="secret-button">
+      <Markdown>{counterpart('lab.help.howToBuildProject.workflowDetails.title')}</Markdown>
+    </a>
+    <Markdown>{counterpart('lab.help.howToBuildProject.workflowDetails.introduction')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.workflowDetails.workflowTitle')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.workflowDetails.version')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.workflowDetails.tasks')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.workflowDetails.mainText')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.workflowDetails.helpText')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.workflowDetails.backToTop')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.createTasks.title')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.createTasks.body')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.taskContent.title')}</Markdown>
@@ -140,6 +171,7 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.drawing.rectangle')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.drawing.triangle')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.drawing.gridTable')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.drawing.backToTop')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.transcription.title')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.transcription.intro')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.transcription.keywordTagging')}</Markdown>
@@ -154,6 +186,7 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.subjectSets.details')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.furtherHelp.title')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.furtherHelp.body')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.furtherHelp.backToTop')}</Markdown>
   </div>);
 
 export default HowToBuildProject;
