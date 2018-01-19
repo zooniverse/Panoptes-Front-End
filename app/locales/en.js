@@ -36,13 +36,12 @@ export default {
     },
     nav: {
       about: 'About',
-      adminPage: 'Admin page',
       classify: 'Classify',
+      talk: 'Talk',
       collections: 'Collect',
-      exploreProject: 'Explore Project',
-      lab: 'Lab',
       recents: 'Recents',
-      talk: 'Talk'
+      lab: 'Lab',
+      adminPage: 'Admin page'
     },
     home: {
       organization: 'Organization',
