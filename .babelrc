@@ -4,6 +4,7 @@
     "development": {
       "plugins": [
         ["transform-class-properties"],
+        ["transform-object-rest-spread"],
         ["transform-react-jsx"],
         ["typecheck"]
       ]
@@ -18,18 +19,21 @@
           }]
         }],
         ["transform-class-properties"],
+        ["transform-object-rest-spread"],
         ["transform-react-jsx"]
       ]
     },
     "staging": {
       "plugins": [
         ["transform-class-properties"],
+        ["transform-object-rest-spread"],
         ["transform-react-jsx"]
       ]
     },
     "production": {
       "plugins": [
         ["transform-class-properties"],
+        ["transform-object-rest-spread"],
         ["transform-react-jsx"]
       ]
     },
@@ -37,6 +41,7 @@
       "plugins": [
         ["babel-plugin-rewire"],
         ["transform-class-properties"],
+        ["transform-object-rest-spread"],
         ["transform-react-jsx"],
         ["typecheck"]
       ]

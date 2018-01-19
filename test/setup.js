@@ -1,16 +1,26 @@
-import { jsdom } from 'jsdom';
+import { JSDOM } from 'jsdom';
+import { URL } from 'whatwg-url';
 
 // Set up fake DOM for use by Enzyme's mount() method.
-const exposedProperties = ['window', 'navigator', 'document'];
-global.document = jsdom('');
-global.window = document.defaultView;
-Object.keys(document.defaultView).forEach((property) => {
-  if (typeof global[property] === 'undefined') {
-    exposedProperties.push(property);
-    global[property] = document.defaultView[property];
-  }
-});
+const jsdom = new JSDOM('<!doctype html><html><body></body></html>');
+const { window } = jsdom;
+
+function copyProps(src, target) {
+  const props = Object.getOwnPropertyNames(src)
+    .filter(prop => typeof target[prop] === 'undefined')
+    .map(prop => Object.getOwnPropertyDescriptor(src, prop));
+  Object.defineProperties(target, props);
+}
+
+global.window = window;
+global.document = window.document;
 global.navigator = {
   userAgent: 'node.js'
 };
-global.document.documentElement.dataset = {};
+global.screen = window.screen;
+global.pageXOffset = window.pageXOffset;
+global.pageYOffset = window.pageYOffset;
+global.URL = URL;
+global.HTMLElement = window.HTMLElement; // to get chai's deep equality to work
+
+copyProps(window, global);
