@@ -346,8 +346,35 @@ export default {
     help: {
       howToBuildProject: {
         title: '# How to create a project with our Project Builder',
-        overview: '* [A quick guide to building a project](#a-quick-guide-to-building-a-project)\n* [Navigating the project builder](#navigating-the-project-builder)\n  * [Project](#project)\n  * [Workflows](#workflows)\n  * [Subjects](#subjects)\n* [Project building in detail](#project-building-in-detail)\n  * [Project Details](#project-details)\n  * [About](#about)\n  * [Collaborators](#collaborators)\n  * [Tutorials](#tutorials)\n  * [Media](#media)\n  * [Visibility](#visibility)\n  * [Workflow](#workflow)\n    * [Create Tasks](#create-tasks)\n    * [Wiring Tasks Together](#wiring-tasks-together)\n  * [Task Content](#task-content)\n    * [Questions](#questions)\n    * [Marking](#marking)\n  * [Subject Sets](#subject-sets)\n* [Further Help](#further-help)',
-        sectionOverview: 'There are three sections in this guide\n1.  [A quick guide to building a project](#a-quick-guide-to-building-a-project) provides an overview of all the steps you need to complete to set up your project.\n2.  [Navigating the Project Builder](#navigating-the-project-builder) introduces the navigation bar (nav-bar) used in the project builder.\n3.  [Project building in detail](#project-building-in-detail) provides a more detailed description of how to set up a project.',
+        overview: {
+          quickGuide: '* [A quick guide to building a project](#a-quick-guide-to-building-a-project)',
+          navigating: '* [Navigating the project builder](#navigating-the-project-builder)\n  * [Project](#project)\n  * [Workflows](#workflows)\n  * [Subjects](#subjects)',
+          inDetail: {
+            title: '* [Project building in detail](#project-building-in-detail)',
+            projectDetails: '  * [Project Details](#project-details)',
+            about: '  * [About](#about)',
+            collaborators: '  * [Collaborators](#collaborators)',
+            tutorial: '  * [Tutorial](#tutorial)',
+            media: '  * [Media](#media)',
+            visibility: '  * [Visibility](#visibility)',
+            workflows: '  * [Workflows](#workflows)',
+            orientation: '  * [Orientation](#orientation)',
+            createTasks: '  * [Create Tasks](#create-tasks)',
+            taskContent: '  * [Task Content](#task-content)',
+            questions: '  * [Questions](#questions)',
+            drawing: '  * [Drawing](#drawing)',
+            transcription: '  * [Transcription](#transcription)',
+            linking: '  * [Linking the Workflow Together](#linking-the-workflow-together)',
+            subjectSets: '  * [Subject Sets](#subject-sets)',
+            furtherHelp: '* [Further Help](#further-help)'
+          }
+        },
+        sectionOverview: {
+          title: 'There are three sections in this guide:',
+          quickGuide: '1.  [A quick guide to building a project](#a-quick-guide-to-building-a-project) provides an overview of all the steps you need to complete to set up your project.',
+          navigating: '2.  [Navigating the Project Builder](#navigating-the-project-builder) introduces the navigation bar (nav-bar) used in the project builder.',
+          inDetail: '3.  [Project building in detail](#project-building-in-detail) provides a more detailed description of how to set up a project.'
+        },
         quickGuide: {
           title: '## A quick guide to building a project',
           intro: 'A brief overview of all the steps you need to complete to set up your project.',
@@ -355,18 +382,43 @@ export default {
           step2: '2. Click on "Build a Project" (www.zooniverse.org/lab) and click "Create a New Project".',
           step3: '3. Enter your project details in the pop-up that appears. You’ll then be taken to a “Project Details” page where you can add further basic information.',
           step4: '4. Add more information about your project via the blue tabs on the left-hand side of the project builder page. Guidance for each of these sections is provided on the page itself.',
-          step5: '5. If you have data to upload, add your subjects via the “Subject sets” section of the project builder (detailed instructions are provided [here](#subjects)).',
-          step6: '6. Next, create your workflow. Click on "New workflow" in the navigation bar on the left-hand side of the page. Multiple workflows can be created.',
-          step7: '7. Under "Associated Subject Sets", link your workflow to your subjects. If you have no subjects, select "Add an example subject set".',
+          step5: '5.  If you have data to upload, add your subjects via the “Subject Sets” tab of the Project Builder (detailed instructions are provided [here](#subjects)).',
+          step6: '6. Next, create your workflow. Click on the “Workflow” tab in the navigation bar on the left-hand side of the page. Use the “New workflow” button to create a workflow. Multiple workflows can be created.',
+          step7: '7. Once you’ve created a workflow, the "Associated Subject Sets" section allows you to link your workflow to your subject sets. If you have no subjects, go to the “Subject Sets” tab and upload your data (see step 5 above).',
           step8: '8. Hit the "Test this workflow" button to see how your project looks.',
           step9: '9. Explore your project to figure out what works and what doesn\'t. Make changes, then refresh your project page to test these out.',
           step10: '10. Guidelines on how to design your project to maximize engagement and data quality are provided on the [Policies page](/help/lab-policies).',
-          step11: '11. When you are happy with your project, make your project "Public" on the "Visibility Page" and submit it to the Zooniverse team for review.'
+          step11: '11. When you are happy with your project, set it to “Public” on the “Visibility” tab. Use the “Apply for review” button to submit it to the Zooniverse team for review.'
         },
-        navigatingTheProjectBuilder: '## Navigating the Project Builder\nOn the left-hand side of the project builder you will see three key sections; “Project”, “Workflows” and “Subject sets”.  These are terms you\'ll see a lot, and they have specific meanings in the Zooniverse.\n\n **Project** is pretty self-explanatory; Galaxy Zoo and Penguin Watch are examples of Zooniverse projects that could be built using the project builder.\n\n**Workflows** are sequences of tasks that volunteers are asked to do.\n\n**Subject sets** are collections of data (typically images) that volunteers are asked to perform tasks on.\n\nFor more Zooniverse definitions, check out the [Glossary page](/help/glossary).',
-        project: '### Project\nThis is where you enter descriptive information for your project.\n- **Project Details:** Here you can add information that generates a home page for your project. Start by naming and describing your project, add a logo and background image.\n- **About:** Here you can add all sorts of additional pages, including *Research, Team, Results, Education,* and *FAQ*\n- **Collaborators:** Add people to your team. You can specify their roles so that they have access to the tools they need (such as access to the project before it\'s public).\n- **Tutorial:** This is where you create tutorials to show your users how to contribute to your project.\n- **Media:** Add images you need for your project pages (not the images you want people to classify!)\n- **Visibility:** Set your project\'s "state" - private or public, live or in development, and apply for review by the Zooniverse. You can also activate or deactivate specific workflows on this page.\n- **Talk:** Create and manage discussion boards for your project.\n- **Data Exports:** Access your raw and aggregated classification data, subject data, and comments from Talk.',
-        workflows: '### Workflows\nA workflow is the sequence of tasks volunteers are asked to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow is where you define those tasks and set the order in which volunteers are asked to do them. Your project might have multiple workflows (if you want to set different tasks for different image sets). See the detailed [Workflow](#workflow) section for more information.',
-        subjects: '### Subjects\nA subject is a unit of data to be analyzed. A single subject can include more than one image. A “subject set” consists of both the "manifest" (a list of the subjects and their properties), and the images themselves. Subjects can be grouped into different sets if useful for your research. See the [Subject Details](#subject-sets) section for more on subjects.',
+        navigatingTheProjectBuilder: {
+          title: '## Navigating the Project Builder',
+          intro: 'On the left-hand side of the project builder you will see a number of tabs which can be divided into three key sections; “Project”, “Workflows” and “Subject Sets”. These are terms you\'ll see a lot, and they have specific meanings in the Zooniverse.',
+          project: '**Project** is pretty self-explanatory; Galaxy Zoo and Penguin Watch are examples of Zooniverse projects that could be built using the project builder.',
+          workflows: '**Workflows** are sequences of tasks that volunteers are asked to do.',
+          subjectSets: '**Subject sets** are collections of data (typically images) that volunteers are asked to perform tasks on.',
+          glossaryPage: 'For more Zooniverse definitions, check out the [Glossary page](/help/glossary).'
+        },
+        project: {
+          title: '### Project',
+          intro: 'The tabs listed below are where you enter descriptive information for your project.',
+          details: '- **Project Details:** Here you can add information that generates a home page for your project. Start by naming and describing your project, add a logo and background image.',
+          about: '- **About:** Here you can add all sorts of additional pages, including *Research, Team, Results, Education,* and *FAQ*',
+          collaborators: '- **Collaborators:** Add people to your team. You can specify their roles so that they have access to the tools they need (such as access to the project before it\'s public).',
+          fieldGuide: '- **Field Guide:** A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they\'re seeing.',
+          tutorial: '- **Tutorial:** This is where you create tutorials to show your users how to contribute to your project.',
+          media: '- **Media:** Add images you need for your project pages (not the images you want people to classify!)',
+          visibility: '- **Visibility:** Set your project\'s "state" - private or public, live or in development, and apply for review by the Zooniverse. You can also activate or deactivate specific workflows on this page.',
+          talk: '- **Talk:** Create and manage discussion boards for your project.',
+          dataExports: '- **Data Exports:** Access your raw and aggregated classification data, subject data, and comments from Talk.'
+        },
+        workflows: {
+          title: '### Workflows',
+          body: 'A workflow is the sequence of tasks volunteers are asked to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow tab is where you define those tasks and set the order in which volunteers are asked to do them. Your project might have multiple workflows (if you want to set different tasks for different image sets). See the detailed [Workflow](#workflow) section for more information.'
+        },
+        subjects: {
+          title: '### Subjects',
+          body: 'A subject is a unit of data to be analyzed. A single subject can include more than one image[h5] . A “subject set” consists of both the "manifest" (a list of the subjects and their properties), and the images themselves. Subjects can be grouped into different sets if useful for your research. See the [Subject Details](#subject-sets) section for more on subjects.'
+        },
         projectBuildingInDetail: '## Project building in detail\nDetailed instructions on how to use the pages described above.',
         projectDetails: {
           title: '### Project details',
@@ -374,17 +426,69 @@ export default {
           avatar: '* **Avatar**: Pick an avatar image for your project. This will represent your project on the Zooniverse home page. It can also be used as your project\'s brand. It\'s best if it\'s recognizable even as a small icon. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50KB, but at minimum 100x100 pixels.',
           background: '* **Background**: This image will be the background for all of your project pages, including your project\'s front page. It should be relatively high resolution and you should be able to read text written across it. To add an image, either drag and drop or click to open your file viewer. For best results, use images of at least 1 megapixel, no larger than 256 KB. Most people\'s screens are not much bigger than 1300 pixels across and 750 pixels high, so if your image is a lot bigger than this you may find it doesn\'t look the way you expect. Feel free to experiment with different sizes on a "typical" desktop, laptop or mobile screen.',
           description: '* **Description**: This should be a one-line call to action for your project. This will display on your landing page and, if approved, on the Zooniverse home page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.',
-          introduction: '* **Introduction**: Add a brief introduction to get people interested in your project. This will display on your project\'s front page. Note this field [renders markdown](http://markdownlivepreview.com/), so you can format the text. You can make this longer than the Description, but it\'s still probably best to save much longer text for areas like the Research Case or FAQ tabs.',
-          checkboxVolunteers: '* **Checkbox: Volunteers choose workflow:** A workflow is a set of tasks a volunteer completes to create a classification. Your project might have multiple workflows (if you want to set different tasks for different image sets). Check this to let volunteers select which workflow they want to work on; otherwise, they\'ll be served workflow-subject pairs randomly.',
+          introduction: '* **Introduction**: Add a brief introduction to get people interested in your project. This will display on your project\'s front page. Note this field [renders markdown](http://markdownlivepreview.com/), so you can format the text. You can make this longer than the Description, but it\'s still probably best to save much longer text for areas like the About, Research Case or FAQ tabs.',
+          workflowDescription: '* **Workflow Description:** A workflow is a set of tasks a volunteer completes to create a classification. Your project might have multiple workflows (if you want to set different tasks for different subject image sets). Add text here when you have multiple workflows and want to help your volunteers decide which one they should do.',
+          checkboxVolunteers: '* **Checkbox: Volunteers choose workflow:**  If you have multiple workflows, check this to let volunteers select which workflow they want to work on; otherwise, they\'ll be served randomly.',
+          researcherQuote: '* **Researcher Quote:** This text will appear on the project landing page alongside an avatar of the selected researcher. It’s a way of communicating information to your volunteers, highlighting specific team members, and getting volunteers enthusiastic about participating.',
+          announcementBanner: '* **Announcement Banner:** This text will appear as a banner at the top of all your project’s pages. Only use this when you’ve got a big important announcement to make! Many projects use this to signal the end of a beta review, or other major events in a project’s life cycle.',
+          disciplineTag: '* **Discipline Tag:** Enter or select one or more discipline tags to identify which field(s) of research your project belongs to. These tags will determine the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project.',
+          otherTags: '* **Other Tags:** Enter a list of additional tags to describe your project separated by commas to help users find your project.',
+          externalLinks: '* **External links:** Adding an external link will make it appear as a new tab alongside the About, Classify, Talk, and Collect tabs. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
+          socialLinks: '* **Social links:** Adding a social link will append a media icon at the end of your project menu bar. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
           checkboxPrivate: '* **Checkbox: Private project:** On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you\'re still editing it. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left-hand side of the Project Builder). Team members you add can see your project even if it\'s private. Once your project is public, anyone with the link can view and classify on it.'
         },
-        about: '### About\nThis section contains pages where you can enter further information for Research, Team, Results, Education and FAQ. All of these pages use [Markdown](http://markdownlivepreview.com/) to format text and display images.\n* **Research:** Use this section to explain your research to your audience in as much detail as you\'d like. Explaining your motivation to volunteers is critical for the success of your project – please fill in this page (it will display even if you don’t)!\n* **Results:** Share results from your project with volunteers here. This page will only display if you add content to it.\n* **Education:** If you are a researcher willing to collaborate with educators you can state that here, include educational content, and describe how you\'d like to help educators use your project. This page will only display if you add content to it.\n* **FAQ:** Add details here about your research, how to classify, and what you plan to do with the classifications. This page can evolve as your project does so that your active community members have a resource to point new users to. This page will only display if you add content to it.',
-        collaborators: '### Collaborators\nHere you can add people to your team. You can specify their roles so that they have access to the tools they need (such as access to the project before it\'s public).\n* **Owner:** The owner is the original project creator. There can be only one.\n* **Collaborator:** Collaborators have full access to edit workflows and project content, including deleting some or all of the project.\n* **Expert:** Experts can enter “gold mode” to make authoritative gold standard classifications that will be used to validate data quality.\n* **Researcher:** Members of the research team will be marked as researchers on “Talk".\n* **Moderator:** Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on “Talk".\n* **Tester:** Testers can view and classify on your project to give feedback while it’s still private. They cannot access the project builder.\n* **Translator:** Translators will have access to the project builder as well as the translation site, so they can translate all of your project text into a different language.',
-        tutorials: '### Tutorials\nThis is where you create tutorials to show your users how to use your project. You can upload both an image and text to create each step of the tutorial. You can add as many steps as you want, but keep your tutorial as short as possible so volunteers can start classifying sooner.\n\nIn some cases, you might have several different workflows, and so need several different tutorials. On the Workflows page, you can specify which tutorial shows for the workflow a volunteer is on.',
-        media: '### Media\nYou can upload your own media to your project (such as example images for your help pages) so you can link to it without an external host. To start uploading, drop an image into the box (or click it to bring up your file browser and select a file). Once the image has uploaded, it will appear above the "Add an image" box. You can then copy the markdown text beneath the image into your project, or add another image.',
-        visibility: '### Visibility\nThis page is where you decide whether your project is public and whether it\'s ready to go live. You can also set workflows to "active" vs. "inactive" - you can edit inactive workflows on a live project and link different subject sets to different workflows. For more information on the different project stages, see our [Project Builder policies](/help/lab-policies).',
+        about: {
+          title: '### About',
+          intro: 'This section contains pages where you can enter further information for Research, Team, Results, Education and FAQ. All of these pages use [Markdown](http://markdownlivepreview.com/) to format text and display images.',
+          research: '* **Research:** Use this section to explain your research to your audience in as much detail as you\'d like. Explaining your motivation to volunteers is critical for the success of your project – please fill in this page (it will display even if you don’t)!',
+          team: '* **Team:** Introduce the members of your team, and the roles they play in your project.',
+          results: '* **Results:** Share results from your project with volunteers and the public here. This page will only display if you add content to it.',
+          education: '* **Education:** On this page, you can provide resources for educators and students to use alongside your project, such as course syllabi, pedagogical tools, further reading, and instructions on how the project might be used in an educational context. This page will only display if you add content to it.',
+          faq: '* **FAQ:** Add details here about your research, how to classify, and what you plan to do with the classifications. This page can evolve as your project does so that your active community members have a resource to point new users to. This page will only display if you add content to it.'
+        },
+        collaborators: {
+          title: '### Collaborators',
+          intro: 'Here you can add people to your team. You can specify their roles so that they have access to the tools they need (such as access to the project before it\'s public).',
+          owner: '* **Owner:** The owner is the original project creator. There can be only one.',
+          collaborator: '* **Collaborator:** Collaborators have full access to edit workflows and project content, including deleting some or all of the project.',
+          expert: '* **Expert:** Experts can enter “gold mode” to make authoritative gold standard classifications that will be used to validate data quality.',
+          researcher: '* **Researcher:** Members of the research team will be marked as researchers on “Talk".',
+          moderator: '* **Moderator:** Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on “Talk".',
+          tester: '* **Tester:** Testers can view and classify on your project to give feedback while it’s still private. They cannot access the project builder.',
+          translator: '* **Translator:** Translators will have access to the project builder as well as the translation site, so they can translate all of your project text into a different language.'
+        },
+        fieldGuide: {
+          title: '### Field Guide',
+          intro: 'A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they\'re seeing. It\'s available anywhere in your project, accessible via a tab on the right-hand side of the screen.',
+          details: 'Information can be grouped into different sections, and each section should have a title and an icon. Content for each section is rendered with [Markdown](http://markdownlivepreview.com/), so you can include any media you\'ve uploaded for your project there.'
+        },
+        tutorial: {
+          title: '### Tutorial',
+          intro: 'In this section, you can create a step-by-step tutorial to show your users how to use your project. You can upload images and enter text to create each step of the tutorial. You can add as many steps as you want, but keep your tutorial as short as possible so volunteers can start classifying as soon as possible.',
+          details: 'In some cases, you might have several different workflows, and will therefore need several different tutorials. In the Workflows tab, you can specify which tutorial shows for the workflow a volunteer is on.'
+        },
+        media: {
+          title: '### Media',
+          intro: 'You can upload your own media to your project (such as example images for your Help pages or Tutorial) so you can link to it without an external host. To start uploading, drop an image into the grey box (or click “Select files” to bring up your file browser and select a file). Once the image has uploaded, it will appear above the "Add an image" box. You can then copy the Markdown text beneath the image into your project, or add another image.'
+        },
+        visibility: {
+          title: '### Visibility',
+          intro: 'This page is where you decide whether your project is public and whether it\'s ready to go live.',
+          projectState: '* **Project State and Visibility:** Set your project to “Private” or “Public”. Only the assigned collaborators can view a private project. Anyone with the URL can access a public project. Here, you can also choose whether your project is in “Development”, or “Live”. Note: in a live project, active workflows are locked and can no longer be edited.',
+          betaStatus: '* **Beta Status:** Here, you will find a checklist of tasks that must be complete for your project to undergo beta review. Projects must complete review in order to launch as full Zooniverse projects and be promoted as such. Once these tasks are complete, click “Apply for review”.',
+          workflowSettings: '* **Workflow Settings:** You will see a list of all workflows created for the project. You can set the workflows to “Active”, choose what metric to measure for completeness statistics, and whether those statistics should be shown on your project’s Stats Page.For more information on the different project stages, see our [Project Builder policies](/help/lab-policies).'
+        },
+        talk: {
+          title: '### Talk',
+          intro: '“Talk” is the name for the discussion boards attached to your project. On your Talk, volunteers will be able to discuss your project and subjects with each other, as well as with you and your project’s researchers. **Maintaining a vibrant and active Talk is important for keeping your volunteers engaged with your project.** Conversations on Talk also can lead to additional research discoveries.',
+          details: 'You can use this page to set up the initial Talk boards for your project. We highly recommend first activating the default subject-discussion board, which hosts a single dedicated conversation for each subject. After that, you can add additional boards, where each board will host conversation about a general topic. Example boards might include: “Announcements,” “Project Discussion,” “Questions for the Research Team,” or “Technical Support.”'
+        },
+        dataExports: {
+          title: '### Data Exports',
+          intro: 'In this section you can request data exports for your Project Data (CSV format) and Talk Data (JSON format). Note that the Zooniverse will process at most 1 of each export within a 24-hour period and some exports may take a long time to process. We will email you when they are ready. For examples of how to work with the data exports see our [Data Digging code repository](https://github.com/zooniverse/Data-digging).'
+        },
         workflow: {
-          title: '### Workflow',
+          title: '### Workflows',
           introduction: 'Note that a workflow with fewer tasks is easier for volunteers to complete. We know from surveys of our volunteers that many people classify in their limited spare time, and sometimes they only have a few minutes. Longer, more complex workflows mean each classification takes longer, so if your workflow is very long you may lose volunteers.',
           workflowTitle: '* **Workflow title:** Give your workflow a short, but descriptive name. If you have multiple workflows and give volunteers the option of choosing which they want to work on, this Workflow title will appear on a button instead of "Get started!"',
           version: '* **Version:** Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by a whole number: 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the version by a decimal, e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data.',
@@ -392,13 +496,57 @@ export default {
           mainText: '* **Main Text:** Describe the task, or ask the question, in a way that is clear to a non-expert. The wording here is very important, because you will in general get what you ask for. Solicit opinions from team members and testers before you make the project public: it often takes a few tries to reach the combination of simplicity and clarity that will guide your volunteers to give you the inputs you need. You can use markdown in the main text.',
           helpText: '* **Help Text:** Add text and images for a pop-up help window. This is shown next to the main text of the task in the main classification interface, when the volunteer clicks a button asking for help. You can use markdown in this text, and link to other images to help illustrate your description. The help text can be as long as you need, but you should try to keep it simple and avoid jargon. One thing that is useful in the help text is a concise description of why you are asking for this information.'
         },
-        createTasks: '#### Create Tasks\nCreate tasks with the "Add a task" Button. Delete tasks with the "Delete this task" button on the bottom right hand side. When you create a new workflow, a question task is automatically created. You\'ll need to delete it if you don\'t want to ask your volunteers questions.',
-        wiringTasksTogether:'#### Wiring tasks together\nAfter you\'ve created all your tasks, you need to wire them together. Set your first task using the "First Task" dropdown menu below the "Add a task" button. Then for each task, specify *what comes next*. In question tasks, you can specify different "Next Tasks" for different answers (provided users can only select one answer).\n\n**Subject retirement:** Decide how many people you want to see each photo. You\'ll use the beta test to refine this number. We suggest starting out high, between 10 to 20.\n\n**Multi-Image options:** If you have more than one subject in your subject set (like on [Snapshot Serengeti](https://www.snapshotserengeti.org)), decide how users will see them.',
-        taskContent: '### Task Content\nTasks can be Questions or Markings. Both types have "Main Text" boxes where you can ask your questions or tell users what to draw, as well as provide additional support for answering the question in the "Help Text" box.',
-        questions: '#### Questions:\nChoices: This section contains all your answers. The key features of this section are:\n- **Required:** if you select this, the user has to answer the question before moving on.\n- **Multiple:** if you select this, the user can select more than one answer - use this for "select all that apply" type questions.\n- **Next Task:** The “Next task” selection (which appears below the text box for each answer) describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).',
-        marking: '#### Marking:\nThis section contains all the different things people can mark. We call each separate option a "Tool" and you can specify a label, colour, and tool type for each option. Check out the Aggregation documents to understand how multiple volunteer answers are turned into final shapes for your data analysis.\nTool types are:\n- **point:** X marks the spot.\n- **line:** a straight line at any angle.\n- **polygon:** an arbitrary shape made of point-to-point lines.\n- **rectangle:** a box of any size and length-width ratio; this tool *cannot* be rotated.\n- **circle:** a point and a radius.\n- **ellipse:** an oval of any size and axis ratio; this tool *can* be rotated.',
-        subjectSets: '### Subject Sets\nOn this page, you can add groups of data to be classified.\n\nTo do so, drag and drop items onto the drop zone in the browser and then upload. You can give each set a name so that you can easily distinguish between them.',
-        furtherHelp: '## Further Help\nIf you\'d like some further information, check out the [documentation behind building Kitteh Zoo](/help/example), that talks you through building this project in the Project Builder.\n\nIf this doesn\'t help, get in contact with the Zooniverse team via the [contact page](/about/contact).'
+        createTasks: {
+          title: '### Create Tasks',
+          body: 'Create tasks with the "Add a task" button. Delete tasks with the "Delete this task" button under the “Choices” box.'
+        },
+        taskContent: {
+          title: '### Task Content',
+          body: 'Tasks can be Questions, Drawings or Transcription. All types have "Main Text" boxes where you can ask your questions or tell users what to draw, as well as provide additional support for completing the task in the "Help Text" box.'
+        },
+        questions: {
+          title: '#### Questions',
+          intro: 'Choices: This section contains all your answers. The key features of this section are:',
+          required: '- **Required:** if you select this, the user has to answer the question before moving on.',
+          multiple: '- **Multiple:** if you select this, the user can select more than one answer - use this for "select all that apply" type questions.',
+          nextTask: '- **Next Task:** The “Next task” selection (which appears below the text box for each answer) describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).'
+        },
+        drawing: {
+          title: '#### Drawing',
+          intro: 'This section contains all the different things people can mark. We call each separate option a "Tool" and you can specify a label, colour, and tool type for each option. Check out the Aggregation documents to understand how multiple volunteer answers are turned into final shapes for your data analysis. The tool types are:',
+          bezier: '- **bezier:** an arbitrary shape made of point-to-point curves. The midpoint of each segment drawn can be dragged to adjust the curvature.',
+          circle: '- **circle:** a point and a radius.',
+          column: '- **column:** a box with full height but variable width; this tool *cannot* be rotated.',
+          ellipse: '- **ellipse:** an oval of any size and axis ratio; this tool *can* be rotated.',
+          line: '- **line:** a straight line at any angle.',
+          point: '- **point:** X marks the spot.',
+          polygon: '- **polygon:** an arbitrary shape made of point-to-point lines.',
+          rectangle: '- **rectangle:** a box of any size and length-width ratio; this tool *cannot* be rotated.',
+          triangle: '- **triangle:** an equilateral triangle of any size and vertex distance from the center; this tool *can* be rotated.',
+          gridTable: '- **grid table:** cells which can be made into a table for consecutive annotations.'
+        },
+        transcription: {
+          title: '#### Transcription',
+          intro: 'This section deals with projects which require user-generated text. Tasks can range from adding keywords or extracting metadata to full text transcriptions.',
+          keywordTagging: '- **Keyword tagging** is helpful when teams want to create a list of all of the things volunteers see in a given image, to make that object more discoverable in a database or online collection. In these cases diversity of opinion is helpful. Setting a retirement rate of 5 to 10 people will help capture diverse opinions.',
+          fullTextTranscription: '- **Full text transcription** is more cumbersome and diversity of opinion is less helpful. Teams are usually trying to capture exactly what is on a page, so it will help to set a relatively low retirement rate for each image (i.e. 3 or 5) and be very clear in the tutorial how you would like volunteers to transcribe. Should they preserve spelling and punctuation or modernize it?',
+          aggregatedClassifications: '- Unlike for question and drawing tasks, Zooniverse does not currently offer aggregated classifications for text subjects. We can only report what each user transcribed for each subject. Before embarking on a transcription project be sure you have in-house expertise or access to expertise for combining multiple independent transcriptions into a single reading that you could use for research or to upload into a library or museum catalogue or content management system. Text aggregation is coming in 2018, while drawing and question aggregation is already available (see the section on Data).'
+        },
+        linking: {
+          title: '#### Linking the workflow together',
+          intro: 'Now that all the tasks have been created, we\'ve got to string them together by specifying what happens *next*. Set your first task using the "First Task" drop-down menu below the "Add Task" button. Then, using the “Next task” drop-down under the “Choices” box, specify *what comes next*. In question tasks, you can specify different "Next Tasks" for each available answer (provided users can only select one answer).',
+          multiImageOptions: '**Multi-Image options:** If your tasks require users to see multiple subjects per task (like on [Snapshot Serengeti](https://www.snapshotserengeti.org)), decide how users will see them. The Flipbook option means users have to press a button to switch between subjects, while separate frames mean that each subject will be visible for the duration of the classification task.',
+          subjectRetirement: '**Subject retirement:** Decide how many people you want to complete each task. You can change this number at any point (particularly after beta review). We suggest starting out high, between 10 and 20.'
+        },
+        subjectSets: {
+          title: '### Subject Sets',
+          intro: 'On this page, you can add groups of data to be classified.',
+          details: 'To do so, drag and drop items onto the drop zone in the browser and then upload. You can give each set a name so that you can easily distinguish between them.'
+        },
+        furtherHelp: {
+          title: '## Further Help',
+          body: 'If you\'d like some further information, check out the [documentation behind building Kitteh Zoo](/help/example), that talks you through building this project in the Project Builder.\n\nIf this doesn\'t help, get in contact with the Zooniverse team via the [contact page](/about/contact).'
+        }
       }
     }
   }
