@@ -35,7 +35,7 @@ describe('<CollectionsManager />', function () {
     addButton = wrapper.find('.search-button');
   });
 
-  after(() => {
+  after(function () {
     addToCollectionsSpy.restore();
   });
 

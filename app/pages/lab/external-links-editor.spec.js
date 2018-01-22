@@ -20,12 +20,12 @@ const testProject = {
   ],
 };
 
-describe('ExternalLinksEditor', () => {
-  it('should render without crashing', () => {
+describe('ExternalLinksEditor', function () {
+  it('should render without crashing', function () {
     shallow(<ExternalLinksEditor project={testProject} />);
   });
 
-  it('should contain 3 table rows', () => {
+  it('should contain 3 table rows', function () {
     const wrapper = render(<ExternalLinksEditor project={testProject} />);
     const rows = wrapper.find('tbody > tr');
 
@@ -40,7 +40,7 @@ describe('ExternalLinksEditor', () => {
     }
   });
 
-  it('should not render a table if there are no URLs', () => {
+  it('should not render a table if there are no URLs', function () {
     const wrapper = shallow(<ExternalLinksEditor project={{ urls: [] }} />);
     assert.equal(wrapper.contains('table'), false, `there shouldn't be a table if there are no links`);
   });

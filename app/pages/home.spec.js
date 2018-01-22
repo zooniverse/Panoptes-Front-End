@@ -11,19 +11,19 @@ const location = {
   hash: '#page'
 };
 
-describe('HomePageRoot', () => {
+describe('HomePageRoot', function () {
   let wrapper;
 
-  before(() => {
+  before(function () {
     wrapper = shallow(<HomePageRoot />);
   });
 
-  it('renders <HomePageNotLoggedIn /> when there isn\'t a user', () => {
+  it('renders <HomePageNotLoggedIn /> when there isn\'t a user', function () {
     assert.equal(wrapper.find('HomePage').length, 1);
     assert.equal(wrapper.find('HomePageForUser').length, 0);
   });
 
-  it('renders <HomePageLoggedIn /> when there is a user', () => {
+  it('renders <HomePageLoggedIn /> when there is a user', function () {
     wrapper.setProps({ user, location });
     assert.equal(wrapper.find('HomePage').length, 0);
     assert.equal(wrapper.find('HomePageForUser').length, 1);

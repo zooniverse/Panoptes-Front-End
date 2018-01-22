@@ -18,7 +18,7 @@ describe('<Favorites Button />', function () {
     icon = wrapper.find('i');
   });
 
-  after(() => {
+  after(function () {
     toggleFavoriteSpy.restore();
   });
 

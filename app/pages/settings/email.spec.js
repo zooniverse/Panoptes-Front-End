@@ -97,51 +97,51 @@ const user = {
   }
 };
 
-describe('EmailSettings', () => {
+describe('EmailSettings', function () {
   let wrapper;
   let projectPreferenceSpy;
 
-  before(() => {
+  before(function () {
     sinon.stub(apiClient, 'request').callsFake(() => Promise.resolve([]));
     sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve([]));
     wrapper = mount(<EmailSettings user={user} />);
     projectPreferenceSpy = sinon.spy(wrapper.instance(), 'getProjectForPreferences');
   });
 
-  beforeEach(() => {
+  beforeEach(function () {
     projectPreferenceSpy.resetHistory();
     wrapper.update();
   });
 
-  after(() => {
+  after(function () {
     apiClient.request.restore();
     talkClient.request.restore();
   });
 
-  it('renders the email address', () => {
+  it('renders the email address', function () {
     const email = wrapper.find('input[name="email"]');
     assert.equal(email.prop('value'), user.email);
   });
 
-  it('shows global email preference correctly', () => {
+  it('shows global email preference correctly', function () {
     const projectEmail = wrapper.find('input[name="global_email_communication"]');
     assert.equal(projectEmail.prop('checked'), user.global_email_communication);
   });
 
-  it('shows project email preference correctly', () => {
+  it('shows project email preference correctly', function () {
     const projectEmail = wrapper.find('input[name="project_email_communication"]');
     assert.equal(projectEmail.prop('checked'), user.project_email_communication);
   });
 
-  it('shows beta email preference correctly', () => {
+  it('shows beta email preference correctly', function () {
     const betaEmail = wrapper.find('input[name="beta_email_communication"]');
     assert.equal(betaEmail.prop('checked'), user.beta_email_communication);
   });
 
-  describe('project listing', () => {
+  describe('project listing', function () {
     let projectSettings;
 
-    before(() => {
+    before(function () {
       const mockTalkPreferences = talkPreferences.map(preference => mockTalkResource('subscription_preferences', preference));
       const mockProjects = projects.map(project => mockPanoptesResource('projects', project));
       const mockProjectPreferences = projectPreferences.map(preference => mockPanoptesResource('project_preferences', preference));
@@ -154,21 +154,21 @@ describe('EmailSettings', () => {
       wrapper.update();
     });
 
-    beforeEach(() => {
+    beforeEach(function () {
       projectSettings = wrapper.find('table').last().find('tbody tr');
     });
 
-    it('lists two projects', () => {
+    it('lists two projects', function () {
       assert.equal(projectSettings.length, 2);
     });
 
     projects.forEach((project, i) => {
-      it(`shows project ${i} email input correctly`, () => {
+      it(`shows project ${i} email input correctly`, function () {
         const email = projectSettings.at(i).find('input');
         assert.equal(email.prop('checked'), projectPreferences[i].email_communication);
       });
 
-      it(`updates project ${i} email settings on change`, () => {
+      it(`updates project ${i} email settings on change`, function () {
         const emailPreference = projectPreferences[i].email_communication;
         const email = projectSettings.at(i).find('input');
         const fakeEvent = {
@@ -182,23 +182,23 @@ describe('EmailSettings', () => {
         assert.equal(wrapper.state().projectPreferences[i].email_communication, !emailPreference);
       });
 
-      it(`shows project ${i} name correctly`, () => {
+      it(`shows project ${i} name correctly`, function () {
         const name = projectSettings.at(i).find('td').last();
         assert.equal(name.text(), project.display_name);
       });
     });
   });
 
-  describe('Talk email preferences', () => {
+  describe('Talk email preferences', function () {
     talkPreferences.forEach((preference) => {
-      it(`lists ${preference.category} preferences correctly`, () => {
+      it(`lists ${preference.category} preferences correctly`, function () {
         const selector = `input[name="${preference.category}"][value="${preference.email_digest}"]`;
         assert.equal(wrapper.find(selector).prop('checked'), true);
       });
     });
 
     talkPreferences.forEach((preference, i) => {
-      it(`${preference.category} updates correctly when preferences are changed`, () => {
+      it(`${preference.category} updates correctly when preferences are changed`, function () {
         const selector = `input[name="${preference.category}"][value="never"]`;
         wrapper.find(selector).simulate('change');
         assert.equal(wrapper.state().talkPreferences[i].email_digest, 'never');
@@ -206,26 +206,26 @@ describe('EmailSettings', () => {
     });
   });
 
-  describe('Project pagination', () => {
-    it('defaults to page 1', () => {
+  describe('Project pagination', function () {
+    it('defaults to page 1', function () {
       assert.equal(wrapper.state().page, 1);
     });
 
-    it('should be disabled with less than one page of projects', () => {
+    it('should be disabled with less than one page of projects', function () {
       const meta = { page_count: 1 };
       wrapper.setState({ meta });
       const pageSelector = wrapper.find('nav.pagination select');
       assert.equal(pageSelector.prop('disabled'), true);
     });
 
-    it('should be enabled with more than one page of projects', () => {
+    it('should be enabled with more than one page of projects', function () {
       const meta = { page_count: 2 };
       wrapper.setState({ meta });
       const pageSelector = wrapper.find('nav.pagination select');
       assert.equal(pageSelector.prop('disabled'), false);
     });
 
-    it('should update the page number on change', () => {
+    it('should update the page number on change', function () {
       const meta = { page_count: 2 };
       wrapper.setState({ meta });
       const pageSelector = wrapper.find('nav.pagination select');
@@ -238,7 +238,7 @@ describe('EmailSettings', () => {
       assert.equal(wrapper.state().page, 3);
     });
 
-    it('should update the project list on change', () => {
+    it('should update the project list on change', function () {
       const meta = { page_count: 2 };
       wrapper.setState({ meta });
       const pageSelector = wrapper.find('nav.pagination select');

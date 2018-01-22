@@ -3,37 +3,37 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 import PrivacyPolicy from './privacy-policy';
 
-describe('PrivacyPolicy', () => {
+describe('PrivacyPolicy', function () {
   let wrapper;
 
-  before(() => {
+  before(function () {
     wrapper = shallow(<PrivacyPolicy />);
   });
 
-  it('renders without crashing', () => {
+  it('renders without crashing', function () {
     const privacyPolicyContainer = wrapper.find('div.content-container');
     assert.equal(privacyPolicyContainer.length, 1);
   });
 
-  describe('heading', () => {
-    it('renders a <Translate /> component', () => {
+  describe('heading', function () {
+    it('renders a <Translate /> component', function () {
       assert.equal(wrapper.find('Translate').length, 1);
     });
 
-    it('renders page title content', () => {
+    it('renders page title content', function () {
       assert.equal(wrapper.find('Translate').prop('content'), 'privacy.title');
     });
   });
 
-  describe('user agreement section', () => {
-    it('renders four markdown elements', () => {
+  describe('user agreement section', function () {
+    it('renders four markdown elements', function () {
       const markdownElements = wrapper.find('div.column').first().children();
       assert.equal(markdownElements.length, 4);
     });
   });
 
-  describe('privacy policy section', () => {
-    it('renders ten markdown elements', () => {
+  describe('privacy policy section', function () {
+    it('renders ten markdown elements', function () {
       const markdownElements = wrapper.find('div.column').last().children();
       assert.equal(markdownElements.length, 10);
     });

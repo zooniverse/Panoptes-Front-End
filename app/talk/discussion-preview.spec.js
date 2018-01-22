@@ -16,16 +16,16 @@ const discussion = {
 };
 
 describe('DiscussionPreview', function(){
-  it('should link to /talk without a project', () => {
+  it('should link to /talk without a project', function () {
     const wrapper = shallow(<DiscussionPreview discussion={discussion} />);
     assert.equal(wrapper.find(Link).prop('to'), '/talk/3456/42');
   });
-  it('should link to /talk with an empty project', () => {
+  it('should link to /talk with an empty project', function () {
     const project = {};
     const wrapper = shallow(<DiscussionPreview project={project} discussion={discussion} />);
     assert.equal(wrapper.find(Link).prop('to'), '/talk/3456/42');
   });
-  it('should link to a project slug if present', () => {
+  it('should link to a project slug if present', function () {
     const wrapper = shallow(<DiscussionPreview project={validProject} discussion={discussion} />);
     assert.equal(wrapper.find(Link).prop('to'), '/projects/test/project/talk/3456/42');
   });

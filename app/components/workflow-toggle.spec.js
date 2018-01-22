@@ -9,35 +9,35 @@ const workflow = {
   id: '1'
 };
 
-describe('WorkflowToggle', () => {
+describe('WorkflowToggle', function () {
   let wrapper;
   let handleToggleSpy;
 
-  before(() => {
+  before(function () {
     handleToggleSpy = sinon.spy();
     wrapper = shallow(<WorkflowToggle workflow={workflow} handleToggle={handleToggleSpy} />);
   });
 
-  it('renders without crashing', () => {
+  it('renders without crashing', function () {
     const workflowToggleContainer = wrapper.find('span');
     assert.equal(workflowToggleContainer.length, 1);
   });
 
-  it('renders a checkbox input', () => {
+  it('renders a checkbox input', function () {
     assert.equal(wrapper.find('input[type="checkbox"]').length, 1);
   });
 
-  it('calls the handleToggle handler', () => {
+  it('calls the handleToggle handler', function () {
     wrapper.find('input').simulate('change');
     sinon.assert.calledOnce(handleToggleSpy);
   });
 
-  it('renders workflow prop text correctly', () => {
+  it('renders workflow prop text correctly', function () {
     const spanText = wrapper.find('span').text();
     assert.ok(spanText.match('1 - test workflow'), true);
   });
 
-  it('renders a label for the input via Translate', () => {
+  it('renders a label for the input via Translate', function () {
     assert.equal(wrapper.find('Translate').prop('content'), 'workflowToggle.label');
   });
 });

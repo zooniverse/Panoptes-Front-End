@@ -95,7 +95,7 @@ describe('DropdownTask', function () {
 
       it('should have a question', function () {
         const question = wrapper.find('.question');
-        assert.equal(question.length, 1);
+        assert.equal(question.hostNodes().length, 1);
       });
 
       it('should render all selects', function () {

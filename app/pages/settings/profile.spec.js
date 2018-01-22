@@ -21,40 +21,40 @@ const user = {
   }
 };
 
-describe('CustomiseProfile', () => {
+describe('CustomiseProfile', function () {
   let wrapper;
   let clearMediaSpy;
 
-  before(() => {
+  before(function () {
     wrapper = shallow(<CustomiseProfile user={user} />);
     clearMediaSpy = sinon.spy(CustomiseProfile.prototype, 'handleMediaClear');
   });
 
-  beforeEach(() => {
+  beforeEach(function () {
     wrapper.update();
     clearMediaSpy.resetHistory();
   });
-  after(() => {
+  after(function () {
     clearMediaSpy.restore();
   });
 
-  it('renders the user avatar', () => {
+  it('renders the user avatar', function () {
     const avatar = wrapper.find('ImageSelector[src="//zooniverse.org/images/avatar.jpg"]');
     assert.equal(avatar.length, 1);
   });
 
-  it('renders the user background', () => {
+  it('renders the user background', function () {
     const avatar = wrapper.find('ImageSelector[src="//zooniverse.org/images/header.jpg"]');
     assert.equal(avatar.length, 1);
   });
 
-  it('deletes the avatar when Clear Avatar is pressed', () => {
+  it('deletes the avatar when Clear Avatar is pressed', function () {
     wrapper.find('button').first().simulate('click');
     sinon.assert.calledOnce(clearMediaSpy);
     sinon.assert.calledWith(clearMediaSpy, 'avatar');
   });
 
-  it('deletes the profile header when Clear Header is pressed', () => {
+  it('deletes the profile header when Clear Header is pressed', function () {
     wrapper.find('button').last().simulate('click');
     sinon.assert.calledOnce(clearMediaSpy);
     sinon.assert.calledWith(clearMediaSpy, 'profile_header');

@@ -20,8 +20,8 @@ describe('WarningBanner', function () {
   });
 
   it('should pass label and children to TriggeredModalForm', function () {
-    assert.equal(wrapper.node.props.trigger, 'testing');
-    assert.equal(wrapper.node.props.children.type, 'p');
-    assert.equal(wrapper.node.props.children.props.children, 'Some test text.');
+    assert.equal(wrapper.getElement().props.trigger, 'testing');
+    assert.equal(wrapper.getElement().props.children.type, 'p');
+    assert.equal(wrapper.getElement().props.children.props.children, 'Some test text.');
   });
 });

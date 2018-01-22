@@ -37,7 +37,7 @@ describe('ProjectHomeWorkflowButton', function() {
       />
     );
   });
-  after(() => {
+  after(function () {
     handleWorkflowSelectionSpy.restore();
   });
 

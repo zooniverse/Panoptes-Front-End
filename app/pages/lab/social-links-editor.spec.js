@@ -2,7 +2,17 @@ import React from 'react';
 import assert from 'assert';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
+import apiClient from 'panoptes-client/lib/api-client';
 import SocialLinksEditor from './social-links-editor';
+
+function mockPanoptesResource(type, options) {
+  const resource = apiClient.type(type).create(options);
+  apiClient._typesCache = {};
+  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
+  sinon.stub(resource, 'get');
+  sinon.stub(resource, 'delete');
+  return resource;
+}
 
 const testProject = {
   urls: [
@@ -16,41 +26,43 @@ const testProject = {
       site: 'facebook.com/',
       path: 'test'
     }
-  ],
-  save: () => {},
-  update: () => {}
+  ]
 };
 
-describe('SocialLinksEditor', () => {
+describe('SocialLinksEditor', function () {
   let wrapper;
+  let removeStub;
 
-  it('should render without crashing', () => {
-    shallow(<SocialLinksEditor project={testProject} />);
+  it('should render without crashing', function () {
+    shallow(<SocialLinksEditor project={mockPanoptesResource('projects', testProject)} />);
   });
 
   before(function () {
-    wrapper = mount(<SocialLinksEditor project={testProject} />);
+    removeStub = sinon.stub(SocialLinksEditor.prototype, 'handleRemoveLink');
+    wrapper = mount(<SocialLinksEditor project={mockPanoptesResource('projects', testProject)} />);
   });
 
-  it('should contain the correct number of rows', () => {
+  after(function () {
+    removeStub.restore();
+  });
+
+  it('should contain the correct number of rows', function () {
     const rows = wrapper.find('tr');
     assert.equal(rows.length, 13);
   });
 
-  it('should rearrange the default social links on load', () => {
+  it('should rearrange the default social links on load', function () {
     const rearrangedLinks = wrapper.state().socialOrder;
     assert.equal(rearrangedLinks[0], 'facebook.com/');
   });
 
-  it('should correctly display paths', () => {
+  it('should correctly display paths', function () {
     const input = wrapper.find('input').first();
     assert.equal(input.props().value, 'test');
   });
 
-  it('should call handleRemoveLink() when link is removed', () => {
-    const removeStub = sinon.stub(wrapper.instance(), 'handleRemoveLink');
+  it('should call handleRemoveLink() when link is removed', function () {
     const button = wrapper.find('button').first();
-    wrapper.update();
     button.simulate('click');
     sinon.assert.calledOnce(removeStub);
   });

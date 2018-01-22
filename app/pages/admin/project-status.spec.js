@@ -32,14 +32,14 @@ const workflows = [
   }
 ];
 
-describe('ProjectStatus', () => {
+describe('ProjectStatus', function () {
   let handleDialogCancelStub;
   let handleDialogSuccessStub;
   let loadingIndicator;
   let onChangeWorkflowLevelStub;
   let wrapper;
 
-  before(() => {
+  before(function () {
     onChangeWorkflowLevelStub = sinon.stub(ProjectStatus.prototype, 'onChangeWorkflowLevel');
     handleDialogCancelStub = sinon.stub(ProjectStatus.prototype, 'handleDialogCancel');
     handleDialogSuccessStub = sinon.stub(ProjectStatus.prototype, 'handleDialogSuccess');
@@ -47,98 +47,98 @@ describe('ProjectStatus', () => {
     wrapper = shallow(<ProjectStatus />);
   });
 
-  after(() => {
+  after(function () {
     onChangeWorkflowLevelStub.restore();
     handleDialogCancelStub.restore();
     handleDialogSuccessStub.restore();
   });
 
-  it('renders without crashing', () => {
+  it('renders without crashing', function () {
     assert.equal(wrapper, wrapper);
   });
 
-  describe('when no project is in component state', () => {
-    it('renders Loading Indicator component', () => {
+  describe('when no project is in component state', function () {
+    it('renders Loading Indicator component', function () {
       loadingIndicator = wrapper.find('LoadingIndicator');
       assert.equal(loadingIndicator.length, 1);
     });
   });
 
-  describe('when project is in component state', () => {
-    before(() => {
+  describe('when project is in component state', function () {
+    before(function () {
       wrapper.setState({ project });
     });
 
-    it('does not render the LoadingIndicator component', () => {
+    it('does not render the LoadingIndicator component', function () {
       loadingIndicator = wrapper.find('LoadingIndicator');
       assert.equal(loadingIndicator.length, 0);
     });
 
-    it('renders a ProjectIcon component', () => {
+    it('renders a ProjectIcon component', function () {
       wrapper.setState({ project });
       const projectIconComponent = wrapper.find('ProjectIcon');
       assert.equal(projectIconComponent.length, 1);
     });
 
-    it('renders a RedirectToggle component', () => {
+    it('renders a RedirectToggle component', function () {
       const redirectToggleComponent = wrapper.find('RedirectToggle');
       assert.equal(redirectToggleComponent.length, 1);
     });
 
-    it('renders a ExperimentalFeatures component', () => {
+    it('renders a ExperimentalFeatures component', function () {
       const experimentalFeaturesComponent = wrapper.find('ExperimentalFeatures');
       assert.equal(experimentalFeaturesComponent.length, 1);
     });
 
-    it('renders a VersionList component', () => {
+    it('renders a VersionList component', function () {
       const versionListComponent = wrapper.find('VersionList');
       assert.equal(versionListComponent.length, 1);
     });
 
-    it('renders a no workflows found message when no workflow is in component state', () => {
+    it('renders a no workflows found message when no workflow is in component state', function () {
       const noWorkflowsMessage = wrapper.find('.project-status__section').at(2).children().find('div');
       assert.equal(noWorkflowsMessage.text(), 'No workflows found');
     });
   });
 
-  describe('when workflow is in component state', () => {
-    before(() => {
+  describe('when workflow is in component state', function () {
+    before(function () {
       wrapper.setState({ workflows });
     });
 
-    it('displays an asterisk next to the default workflow, if one is set', () => {
+    it('displays an asterisk next to the default workflow, if one is set', function () {
       const defaultWorkflow = wrapper.find('li.section-list__item').first().text();
       assert.ok(defaultWorkflow.match(' * '), true);
     });
 
-    it('does not display an asterisk next to a workflow that is not the default workflow', () => {
+    it('does not display an asterisk next to a workflow that is not the default workflow', function () {
       const notDefaultWorkflow = wrapper.find('li.section-list__item').last().text();
       assert.ok(notDefaultWorkflow.match(' * '), false);
     });
 
-    it('renders a WorkflowToggle component for each workflow', () => {
+    it('renders a WorkflowToggle component for each workflow', function () {
       const workflowToggleComponents = wrapper.find('WorkflowToggle');
       assert.equal(workflowToggleComponents.length, workflows.length);
     });
 
-    it('calls #onChangeWorkflowLevel when a user changes a workflow\'s configuration level', () => {
+    it('calls #onChangeWorkflowLevel when a user changes a workflow\'s configuration level', function () {
       wrapper.find('select').first().simulate('change');
       sinon.assert.calledOnce(onChangeWorkflowLevelStub);
     });
 
-    it('renders the WorkflowDefaultDialog component when dialogIsOpen state is true', () => {
+    it('renders the WorkflowDefaultDialog component when dialogIsOpen state is true', function () {
       wrapper.setState({ dialogIsOpen: true });
       const workflowDefaultDialog = wrapper.find('WorkflowDefaultDialog');
       assert.equal(workflowDefaultDialog.length, 1);
     });
 
-    it('calls #handleDialogCancel when a user cancels the WorkflowDefaultDialog modal', () => {
+    it('calls #handleDialogCancel when a user cancels the WorkflowDefaultDialog modal', function () {
       const workflowDefaultDialog = wrapper.find('WorkflowDefaultDialog');
       workflowDefaultDialog.simulate('cancel');
       sinon.assert.calledOnce(handleDialogCancelStub);
     });
 
-    it('calls #handleDialogSuccess when a user clicks ok on the WorkflowDefaultDialog modal', () => {
+    it('calls #handleDialogSuccess when a user clicks ok on the WorkflowDefaultDialog modal', function () {
       const workflowDefaultDialog = wrapper.find('WorkflowDefaultDialog');
       workflowDefaultDialog.simulate('success');
       sinon.assert.calledOnce(handleDialogSuccessStub);
