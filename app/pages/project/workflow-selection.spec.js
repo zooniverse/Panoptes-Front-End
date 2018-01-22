@@ -1,6 +1,6 @@
 import React from 'react';
 import assert from 'assert';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import WorkflowSelection from './workflow-selection';
@@ -14,7 +14,6 @@ const location = {
 };
 
 const context = {
-  initialLoadComplete: true,
   router: {}
 };
 
@@ -92,7 +91,7 @@ describe('WorkflowSelection', function () {
   const translations = {
     locale: 'en'
   };
-  const wrapper = shallow(
+  const wrapper = mount(
     <WorkflowSelection
       actions={actions}
       project={project}
