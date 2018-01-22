@@ -2,6 +2,7 @@ React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 StickyModalForm = require 'modal-form/sticky'
+{ Provider } = require('react-redux')
 ModalFocus = require('../../components/modal-focus').default
 TaskTranslations = require('../tasks/translations').default
 
@@ -78,24 +79,25 @@ module.exports = createReactClass
             true
 
         <StickyModalForm ref="detailsForm" style={SEMI_MODAL_FORM_STYLE} underlayStyle={SEMI_MODAL_UNDERLAY_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
-          <ModalFocus onEscape={@handleDetailsFormClose} preserveFocus={false}>
-            {for detailTask, i in toolProps.details
-              detailTask._key ?= Math.random()
-              TaskComponent = tasks[detailTask.type]
-              taskKey = "#{toolProps.taskKey}.tools.#{toolProps.mark.tool}.details.#{i}"
-              <TaskTranslations
-                key={detailTask._key}
-                taskKey={taskKey}
-                task={detailTask}
-                store={@context.store}
-              >
-                <TaskComponent autoFocus={i is 0} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />
-              </TaskTranslations>}
-            <hr />
-            <p style={textAlign: 'center'}>
-              <button autoFocus={toolProps.details[0].type in ['single', 'multiple']} type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
-            </p>
-          </ModalFocus>
+          <Provider store={@context.store}>
+            <ModalFocus onEscape={@handleDetailsFormClose} preserveFocus={false}>
+              {for detailTask, i in toolProps.details
+                detailTask._key ?= Math.random()
+                TaskComponent = tasks[detailTask.type]
+                taskKey = "#{toolProps.taskKey}.tools.#{toolProps.mark.tool}.details.#{i}"
+                <TaskTranslations
+                  key={detailTask._key}
+                  taskKey={taskKey}
+                  task={detailTask}
+                >
+                  <TaskComponent autoFocus={i is 0} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />
+                </TaskTranslations>}
+              <hr />
+              <p style={textAlign: 'center'}>
+                <button autoFocus={toolProps.details[0].type in ['single', 'multiple']} type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
+              </p>
+            </ModalFocus>
+          </Provider>
         </StickyModalForm>}
     </g>
 

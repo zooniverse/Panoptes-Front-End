@@ -3,6 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 Pullout = require 'react-pullout'
+{ Provider } = require('react-redux')
 FieldGuide = require './field-guide'
 Translations = require('../../classifier/translations').default
 
@@ -39,9 +40,11 @@ module.exports = createReactClass
         <button type="button" className="field-guide-pullout-toggle" onClick={@toggleFieldGuide}>
           <strong>Field guide</strong>
         </button>
-        <Translations original={@props.guide} type="field_guide" store={@context.store}>
-          <FieldGuide items={@props.guide.items} icons={@props.guideIcons} onClickClose={@toggleFieldGuide} />
-        </Translations>
+        <Provider store={@context.store}>
+          <Translations original={@props.guide} type="field_guide">
+            <FieldGuide items={@props.guide.items} icons={@props.guideIcons} onClickClose={@toggleFieldGuide} />
+          </Translations>
+        </Provider>
       </Pullout>
     else
       null

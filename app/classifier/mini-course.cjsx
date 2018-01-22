@@ -5,6 +5,7 @@ Translate = require 'react-translate-component'
 MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
+{ Provider } = require('react-redux')
 Translations = require('./translations').default
 
 minicoursesCompletedThisSession = {}
@@ -40,10 +41,12 @@ module.exports = createReactClass
               mediaByID
 
         awaitMiniCourseMedia.then (mediaByID) =>
-          minicourseContent = 
-            <Translations original={minicourse} type="minicourse" store={store}>
-              <MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} geordi={geordi} />
-            </Translations>
+          minicourseContent =
+            <Provider store={store}>
+              <Translations original={minicourse} type="minicourse">
+                <MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} geordi={geordi} />
+              </Translations>
+            </Provider>
           Dialog.alert(minicourseContent, {
             className: 'mini-course-dialog',
             required: true,
