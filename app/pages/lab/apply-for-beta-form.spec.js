@@ -59,7 +59,7 @@ describe('ApplyForBeta component:', function() {
 
   ApplyForBetaForm.__Rewire__('apiClient', {
     type: (type) => ({
-      get: () => {
+      get: function () {
         let result = null;
         const resolver = (value) => new Promise(resolve => resolve(value));
         if (type === 'projects') {

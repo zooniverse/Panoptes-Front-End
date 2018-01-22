@@ -83,7 +83,7 @@ const preferences = mockPanoptesResource(
   }
 );
 
-describe('WorkflowSelection', () => {
+describe('WorkflowSelection', function () {
   const actions = {
     translations: {
       load: () => null
@@ -108,7 +108,7 @@ describe('WorkflowSelection', () => {
   const controller = wrapper.instance();
   const workflowSpy = sinon.spy(controller, 'getWorkflow');
 
-  before(() => {
+  before(function () {
     sinon.stub(apiClient, 'request').callsFake((method, url, payload) => {
       let response = [];
       if (url === '/workflows') {
@@ -125,28 +125,28 @@ describe('WorkflowSelection', () => {
     });
   });
 
-  beforeEach(() => {
+  beforeEach(function () {
     workflowSpy.resetHistory();
     wrapper.update();
   });
 
-  afterEach(() => {
+  afterEach(function () {
     project.experimental_tools = [];
     location.query = {};
   });
 
-  after(() => {
+  after(function () {
     apiClient.request.restore();
   });
 
-  it('should fetch a random active workflow by default', () => {
+  it('should fetch a random active workflow by default', function () {
     controller.getSelectedWorkflow({ project });
     const selectedWorkflowID = workflowSpy.getCall(0).args[0];
     sinon.assert.calledOnce(workflowSpy);
     assert.notEqual(project.links.active_workflows.indexOf(selectedWorkflowID), -1);
   });
 
-  it('should respect the workflow query param if "allow workflow query" is set', () => {
+  it('should respect the workflow query param if "allow workflow query" is set', function () {
     location.query.workflow = '6';
     project.experimental_tools = ['allow workflow query'];
     controller.getSelectedWorkflow({ project });
@@ -154,27 +154,27 @@ describe('WorkflowSelection', () => {
     sinon.assert.calledWith(workflowSpy, '6', true);
   });
 
-  describe('with a logged-in user', () => {
-    beforeEach(() => {
+  describe('with a logged-in user', function () {
+    beforeEach(function () {
       controller.setupSplits = () => null;
       location.query.workflow = '6';
     });
 
-    it('should load the specified workflow for the project owner', () => {
+    it('should load the specified workflow for the project owner', function () {
       const user = owner;
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
     });
 
-    it('should load the specified workflow for a collaborator', () => {
+    it('should load the specified workflow for a collaborator', function () {
       const user = apiClient.type('users').create({ id: '2' });
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '6', false);
     });
 
-    it('should load the specified workflow for a tester', () => {
+    it('should load the specified workflow for a tester', function () {
       const user = apiClient.type('users').create({ id: '3' });
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
@@ -182,22 +182,22 @@ describe('WorkflowSelection', () => {
     });
   });
 
-  describe('with a workflow saved in preferences', () => {
-    beforeEach(() => {
+  describe('with a workflow saved in preferences', function () {
+    beforeEach(function () {
       location.query = {};
       preferences.update({ preferences: {}});
       const user = mockPanoptesResource('users', { id: '4' });
       wrapper.setProps({ user });
     });
 
-    it('should try to load the stored workflow', () => {
+    it('should try to load the stored workflow', function () {
       preferences.update({ 'preferences.selected_workflow': '4' });
       controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '4', true);
     });
 
-    it('should try to load a stored project workflow', () => {
+    it('should try to load a stored project workflow', function () {
       preferences.update({ 'settings.workflow_id': '2' });
       controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowSpy);
@@ -205,14 +205,14 @@ describe('WorkflowSelection', () => {
     });
   });
 
-  describe('without a saved workflow', () => {
-    beforeEach(() => {
+  describe('without a saved workflow', function () {
+    beforeEach(function () {
       location.query = {};
       project.update({ 'configuration.default_workflow': '1' });
       preferences.update({ settings: {}, preferences: {}});
     });
 
-    it('should load the project default workflow', () => {
+    it('should load the project default workflow', function () {
       const user = apiClient.type('users').create({ id: '4' });
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);

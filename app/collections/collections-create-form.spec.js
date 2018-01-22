@@ -20,7 +20,7 @@ describe('<CollectionsCreateForm />', function () {
     wrapper = shallow(<CollectionsCreateForm />);
   });
 
-  after(() => {
+  after(function () {
     handleDescriptionInputChangeStub.restore();
     handleNameInputChangeStub.restore();
     onSubmitStub.restore();

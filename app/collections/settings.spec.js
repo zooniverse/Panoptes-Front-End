@@ -40,7 +40,7 @@ describe('<CollectionSettings />', function () {
     );
     deleteButton = wrapper.find('button.error');
   });
-  after(() => {
+  after(function () {
     confirmationSpy.restore();
     handleDescriptionInputChangeStub.restore();
   });

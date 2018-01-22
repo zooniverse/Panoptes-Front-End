@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import WorkflowsPage from './workflows';
 
-const meta = () => {
+const meta = function () {
   return { meta: { page: 1, page_size: 1 }};
 };
 
@@ -27,7 +27,7 @@ describe('WorkflowsPage', function () {
     wrapper = shallow(
       <WorkflowsPage
         labPath={(url) => { return url; }}
-        handleWorkflowReorder={() => {}}
+        handleWorkflowReorder={function () {}}
         project={project}
         showCreateWorkflow={showCreateWorkflowSpy}
         toggleReorder={toggleReorderSpy}

@@ -4,28 +4,28 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import WorkflowDefaultDialog from './workflow-default-dialog';
 
-describe('WorkflowDefaultDialog', () => {
+describe('WorkflowDefaultDialog', function () {
   let wrapper;
   let onSuccessSpy;
   let onCancelSpy;
 
-  before(() => {
+  before(function () {
     onSuccessSpy = sinon.spy();
     onCancelSpy = sinon.spy();
     wrapper = shallow(<WorkflowDefaultDialog onSuccess={onSuccessSpy} onCancel={onCancelSpy}/>);
   });
 
-  it('renders without crashing', () => {
+  it('renders without crashing', function () {
     const WorkflowDefaultDialogContainer = wrapper.find('div').first();
     assert.equal(WorkflowDefaultDialogContainer.length, 1);
   });
 
-  it('calls the onSuccess handler', () => {
+  it('calls the onSuccess handler', function () {
     wrapper.find('button').first().simulate('click');
     sinon.assert.calledOnce(onSuccessSpy);
   });
 
-  it('calls the onCancel handler', () => {
+  it('calls the onCancel handler', function () {
     wrapper.find('button').last().simulate('click');
     sinon.assert.calledOnce(onCancelSpy);
   });

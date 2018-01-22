@@ -6,13 +6,13 @@ import { CollectionCollaborators, RoleCreator, RoleRow } from './collaborators';
 
 let resolveMock;
 
-const asyncMock = () => {
+const asyncMock = function () {
   return new Promise(function (resolve) {
     resolveMock = resolve;
   });
 };
 
-const getMetaMock = () => {
+const getMetaMock = function () {
   return {
     count: 25,
     page: 1,
@@ -60,7 +60,7 @@ describe('<CollectionCollaborators />', function () {
     wrapper.setState({ hasSettingsRole: true, roleSets });
   });
 
-  after(() => {
+  after(function () {
     addUserSpy.restore();
     deleteUserSpy.restore();
     componentDidMountStub.restore();

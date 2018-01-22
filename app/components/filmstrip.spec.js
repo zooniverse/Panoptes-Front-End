@@ -15,7 +15,7 @@ describe('if loading an image subject', function () {
     wrapper = mount(<Filmstrip increment={350} onChange={function (a) { return a; }} value={''} />);
   });
 
-  after(() => {
+  after(function () {
     filterChange.restore();
     positionSpy.restore();
   });

@@ -27,7 +27,7 @@ describe('ActiveUsers', function () {
     assert.equal(wrapper.find('li').length, 2);
   });
 
-  before(() => {
+  before(function () {
     controller.update();
   });
 

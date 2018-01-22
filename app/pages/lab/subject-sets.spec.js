@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import SubjectSetsPage from './subject-sets';
 
-const meta = () => {
+const meta = function () {
   return { meta: { page: 1, page_size: 1 }};
 };
 
