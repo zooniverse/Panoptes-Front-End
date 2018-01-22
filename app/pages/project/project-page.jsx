@@ -4,6 +4,7 @@ import Translate from 'react-translate-component';
 import { Markdown } from 'markdownz';
 import { sugarClient } from 'panoptes-client/lib/sugar';
 import ProjectNavbar from './project-navbar';
+import ProjectNavbarFacelift from './components/ProjectNavbar';
 import PotentialFieldGuide from './potential-field-guide';
 
 export default class ProjectPage extends React.Component {
@@ -55,9 +56,13 @@ export default class ProjectPage extends React.Component {
       </div> :
       null;
 
+    const NavbarComponent = (this.props.location && this.props.location.query && this.props.location.query.facelift) ?
+      ProjectNavbarFacelift :
+      ProjectNavbar;
     const navBar = (!onHomePage) ?
       <div>
-        <ProjectNavbar
+        <NavbarComponent
+          background={this.props.background}
           loading={this.props.loading}
           organization={this.props.organization}
           project={this.props.project}
