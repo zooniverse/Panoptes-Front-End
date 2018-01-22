@@ -520,7 +520,7 @@ export default {
         },
         drawing: {
           title: '#### Drawing',
-          intro: 'This section contains all the different things people can mark. We call each separate option a "Tool" and you can specify a label, colour, and tool type for each option. Check out the Aggregation documents to understand how multiple volunteer answers are turned into final shapes for your data analysis. The tool types are:',
+          intro: 'This section contains all the different things people can mark. We call each separate option a "Tool" and you can specify a label, colour, and tool type for each option. Check out the [Aggregation documents](https://aggregation-caesar.zooniverse.org/docs) to understand how multiple volunteer answers are turned into final shapes for your data analysis. The tool types are:',
           bezier: '- **bezier:** an arbitrary shape made of point-to-point curves. The midpoint of each segment drawn can be dragged to adjust the curvature.',
           circle: '- **circle:** a point and a radius.',
           column: '- **column:** a box with full height but variable width; this tool *cannot* be rotated.',
@@ -549,7 +549,8 @@ export default {
         subjectSets: {
           title: '### Subject Sets',
           intro: 'On this page, you can add groups of data to be classified.',
-          details: 'To do so, drag and drop items onto the drop zone in the browser and then upload. You can give each set a name so that you can easily distinguish between them.'
+          summary: 'To do so, drag and drop items onto the drop zone in the browser and then upload. You can give each set a name so that you can easily distinguish between them.',
+          details: 'Subject sets can be pretty powerful, and sometimes complex. You can have a single subject set that you add to over time, or have multiple subject sets, say, from different years or places. You can have different subject sets for different workflows, but you don\'t have to. You can even have multiple images in a given subject. For more details and advice on creating and structuring subject sets and associated manifests, check out https://www.zooniverse.org/help/example and scroll down to DETAILS - Subject sets and manifest details, a.k.a. “What is a manifest?”'
         },
         furtherHelp: {
           title: '## Further Help',

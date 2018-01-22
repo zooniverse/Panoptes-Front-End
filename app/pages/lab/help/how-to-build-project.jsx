@@ -183,6 +183,7 @@ const HowToBuildProject = () =>
     <Markdown>{counterpart('lab.help.howToBuildProject.linking.subjectRetirement')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.subjectSets.title')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.subjectSets.intro')}</Markdown>
+    <Markdown>{counterpart('lab.help.howToBuildProject.subjectSets.summary')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.subjectSets.details')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.furtherHelp.title')}</Markdown>
     <Markdown>{counterpart('lab.help.howToBuildProject.furtherHelp.body')}</Markdown>
