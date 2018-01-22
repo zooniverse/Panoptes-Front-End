@@ -218,4 +218,26 @@ describe('WorkflowSelection', function () {
       sinon.assert.calledWith(workflowSpy, '1', true);
     });
   });
+
+  describe('on project change', function () {
+    it('should load a workflow for the new project', function () {
+      const newProject = mockPanoptesResource('projects',
+        {
+          id: 'b',
+          display_name: 'Another test project',
+          experimental_tools: [],
+          configuration: {
+            default_workflow: '10'
+          },
+          links: {
+            active_workflows: ['10'],
+            owner: { id: '1' }
+          }
+        }
+      );
+      wrapper.setProps({ project: newProject });
+      sinon.assert.calledOnce(workflowSpy);
+      sinon.assert.calledWith(workflowSpy, '10', true);
+    });
+  });
 });
