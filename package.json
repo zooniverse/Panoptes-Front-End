@@ -100,6 +100,7 @@
     "react-addons-test-utils": "~15.4",
     "react-test-renderer": "~15.6.1",
     "react-transform-hmr": "~1.0.4",
+    "request": "~2.83.0",
     "rimraf": "~2.5.2",
     "style-loader": "~0.16.1",
     "stylus": "~0.54.5",
