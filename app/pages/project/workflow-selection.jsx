@@ -142,8 +142,8 @@ class WorkflowSelection extends React.Component {
 
   clearInactiveWorkflow(selectedWorkflowID) {
     const { preferences } = this.props;
-    const selectedWorkflow = preferences.preferences.selected_workflow;
-    const projectSetWorkflow = preferences.settings.workflow_id;
+    const selectedWorkflow = preferences.preferences ? preferences.preferences.selected_workflow : undefined;
+    const projectSetWorkflow = preferences.settings ? preferences.settings.workflow_id : undefined;
 
     if (selectedWorkflowID === selectedWorkflow) {
       preferences.update({ 'preferences.selected_workflow': undefined });

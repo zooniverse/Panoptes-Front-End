@@ -1,6 +1,6 @@
 import React from 'react';
 import assert from 'assert';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import WorkflowSelection from './workflow-selection';
@@ -14,7 +14,6 @@ const location = {
 };
 
 const context = {
-  initialLoadComplete: true,
   router: {}
 };
 
@@ -92,7 +91,7 @@ describe('WorkflowSelection', function () {
   const translations = {
     locale: 'en'
   };
-  const wrapper = shallow(
+  const wrapper = mount(
     <WorkflowSelection
       actions={actions}
       project={project}
@@ -217,6 +216,28 @@ describe('WorkflowSelection', function () {
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowSpy);
       sinon.assert.calledWith(workflowSpy, '1', true);
+    });
+  });
+
+  describe('on project change', function () {
+    it('should load a workflow for the new project', function () {
+      const newProject = mockPanoptesResource('projects',
+        {
+          id: 'b',
+          display_name: 'Another test project',
+          experimental_tools: [],
+          configuration: {
+            default_workflow: '10'
+          },
+          links: {
+            active_workflows: ['10'],
+            owner: { id: '1' }
+          }
+        }
+      );
+      wrapper.setProps({ project: newProject });
+      sinon.assert.calledOnce(workflowSpy);
+      sinon.assert.calledWith(workflowSpy, '10', true);
     });
   });
 });
