@@ -2,7 +2,7 @@ React = require 'react'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 DiscussionPreview = require '../talk/discussion-preview'
-`import Loading from '../components/loading-indicator';`
+Loading = require('../components/loading-indicator').default
 
 module.exports = createReactClass
   displayName: 'SubjectDiscussionList'

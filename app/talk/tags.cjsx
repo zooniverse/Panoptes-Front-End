@@ -8,9 +8,9 @@ Paginator = require './lib/paginator'
 getSubjectLocation = require '../lib/get-subject-location'
 resourceCount = require './lib/resource-count'
 ProjectLinker = require './lib/project-linker'
+Loading = require('../components/loading-indicator').default
 
 `import ActiveUsers from './active-users';`
-`import Loading from '../components/loading-indicator';`
 `import PopularTags from './popular-tags';`
 `import Thumbnail from '../components/thumbnail';`
 

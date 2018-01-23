@@ -3,7 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
-`import Loading from '../../components/loading-indicator';`
+Loading = require('../../components/loading-indicator').default
 CommentLink = require '../../pages/profile/comment-link'
 ModerationReports = require './reports'
 ModerationActions = require './actions'

@@ -4,7 +4,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 Comment = require '../talk/comment'
 Paginator = require '../talk/lib/paginator'
-`import Loading from '../components/loading-indicator';`
+Loading = require('../components/loading-indicator').default
 
 module.exports = createReactClass
   displayName: 'SubjectCommentList'
