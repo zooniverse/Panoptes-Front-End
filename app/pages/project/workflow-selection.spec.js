@@ -105,7 +105,7 @@ describe('WorkflowSelection', function () {
     { context }
   );
   const controller = wrapper.instance();
-  const workflowSpy = sinon.spy(controller, 'getWorkflow');
+  const workflowStub = sinon.stub(controller, 'getWorkflow').callsFake(() => {});
 
   before(function () {
     sinon.stub(apiClient, 'request').callsFake((method, url, payload) => {
@@ -125,7 +125,7 @@ describe('WorkflowSelection', function () {
   });
 
   beforeEach(function () {
-    workflowSpy.resetHistory();
+    workflowStub.resetHistory();
     wrapper.update();
   });
 
@@ -140,8 +140,8 @@ describe('WorkflowSelection', function () {
 
   it('should fetch a random active workflow by default', function () {
     controller.getSelectedWorkflow({ project });
-    const selectedWorkflowID = workflowSpy.getCall(0).args[0];
-    sinon.assert.calledOnce(workflowSpy);
+    const selectedWorkflowID = workflowStub.getCall(0).args[0];
+    sinon.assert.calledOnce(workflowStub);
     assert.notEqual(project.links.active_workflows.indexOf(selectedWorkflowID), -1);
   });
 
@@ -149,8 +149,8 @@ describe('WorkflowSelection', function () {
     location.query.workflow = '6';
     project.experimental_tools = ['allow workflow query'];
     controller.getSelectedWorkflow({ project });
-    sinon.assert.calledOnce(workflowSpy);
-    sinon.assert.calledWith(workflowSpy, '6', true);
+    sinon.assert.calledOnce(workflowStub);
+    sinon.assert.calledWith(workflowStub, '6', true);
   });
 
   describe('with a logged-in user', function () {
@@ -162,22 +162,22 @@ describe('WorkflowSelection', function () {
     it('should load the specified workflow for the project owner', function () {
       const user = owner;
       controller.getSelectedWorkflow({ project, preferences, user });
-      sinon.assert.calledOnce(workflowSpy);
-      sinon.assert.calledWith(workflowSpy, '6', false);
+      sinon.assert.calledOnce(workflowStub);
+      sinon.assert.calledWith(workflowStub, '6', false);
     });
 
     it('should load the specified workflow for a collaborator', function () {
       const user = apiClient.type('users').create({ id: '2' });
       controller.getSelectedWorkflow({ project, preferences, user });
-      sinon.assert.calledOnce(workflowSpy);
-      sinon.assert.calledWith(workflowSpy, '6', false);
+      sinon.assert.calledOnce(workflowStub);
+      sinon.assert.calledWith(workflowStub, '6', false);
     });
 
     it('should load the specified workflow for a tester', function () {
       const user = apiClient.type('users').create({ id: '3' });
       controller.getSelectedWorkflow({ project, preferences, user });
-      sinon.assert.calledOnce(workflowSpy);
-      sinon.assert.calledWith(workflowSpy, '6', false);
+      sinon.assert.calledOnce(workflowStub);
+      sinon.assert.calledWith(workflowStub, '6', false);
     });
   });
 
@@ -192,15 +192,15 @@ describe('WorkflowSelection', function () {
     it('should try to load the stored workflow', function () {
       preferences.update({ 'preferences.selected_workflow': '4' });
       controller.getSelectedWorkflow({ project, preferences });
-      sinon.assert.calledOnce(workflowSpy);
-      sinon.assert.calledWith(workflowSpy, '4', true);
+      sinon.assert.calledOnce(workflowStub);
+      sinon.assert.calledWith(workflowStub, '4', true);
     });
 
     it('should try to load a stored project workflow', function () {
       preferences.update({ 'settings.workflow_id': '2' });
       controller.getSelectedWorkflow({ project, preferences });
-      sinon.assert.calledOnce(workflowSpy);
-      sinon.assert.calledWith(workflowSpy, '2', true);
+      sinon.assert.calledOnce(workflowStub);
+      sinon.assert.calledWith(workflowStub, '2', true);
     });
   });
 
@@ -214,8 +214,8 @@ describe('WorkflowSelection', function () {
     it('should load the project default workflow', function () {
       const user = apiClient.type('users').create({ id: '4' });
       controller.getSelectedWorkflow({ project, preferences, user });
-      sinon.assert.calledOnce(workflowSpy);
-      sinon.assert.calledWith(workflowSpy, '1', true);
+      sinon.assert.calledOnce(workflowStub);
+      sinon.assert.calledWith(workflowStub, '1', true);
     });
   });
 
@@ -236,8 +236,8 @@ describe('WorkflowSelection', function () {
         }
       );
       wrapper.setProps({ project: newProject });
-      sinon.assert.calledOnce(workflowSpy);
-      sinon.assert.calledWith(workflowSpy, '10', true);
+      sinon.assert.calledOnce(workflowStub);
+      sinon.assert.calledWith(workflowStub, '10', true);
     });
   });
 });
