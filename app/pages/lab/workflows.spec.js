@@ -44,7 +44,7 @@ describe('WorkflowsPage', function () {
 
   it('will display the correct amount of workflows', function () {
     wrapper.setProps({ workflows });
-    assert.equal(wrapper.find('.nav-list li').length, 2);
+    assert.equal(wrapper.find('Link').length, 2);
   });
 
   it('should call the workflow create handler', function () {
