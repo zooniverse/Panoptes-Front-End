@@ -1,7 +1,7 @@
 import React from 'react';
 
 const LoadingIndicator = ({ children, off }) => {
-  const visibility = off ? 'hidden' : '';
+  const visibility = off ? 'hidden' : 'visible';
   return (
     <span className="loading-indicator" style={{ visibility }}>
       <span className="loading-indicator-icon"></span>{' '}

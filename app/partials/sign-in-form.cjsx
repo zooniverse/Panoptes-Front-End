@@ -63,8 +63,8 @@ module.exports = createReactClass
             </a>
           </div>
 
-        # else if @state.busy
-        #   <LoadingIndicator />
+        else if @state.busy
+          <LoadingIndicator />
 
         else
           <a href="#{window.location.origin}/reset-password" onClick={@props.onSuccess}>
