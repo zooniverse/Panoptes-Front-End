@@ -9,16 +9,21 @@ import Paginator from '../../talk/lib/paginator';
 
 const WorkflowsPage = (props) => {
   const renderWorkflow = ((workflow) => {
-    let progressPercentage = workflow.completeness * 100;
+    const progressPercentage = workflow.completeness * 100;
     return (
-      <li key={workflow.id}>
-        <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)} className="nav-list-item" activeClassName="active">
-          {workflow.display_name}{' -- '}{`${progressPercentage.toFixed(0)} % Complete`}
-          {(props.project.configuration && workflow.id === props.project.configuration.default_workflow) && (
-            <span title="Default workflow">{' '}*{' '}</span>
-          )}
-        </Link>
-      </li>
+      <tr key={workflow.id}>
+        <td>
+          <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)}  activeClassName="active">
+            {workflow.display_name}
+            {(props.project.configuration && workflow.id === props.project.configuration.default_workflow) && (
+              <span title="Default workflow">{' '}*{' '}</span>
+            )}
+          </Link>
+        </td>
+        <td>
+          {`${progressPercentage.toFixed(0)} % Complete`}
+        </td>
+      </tr>
     );
   });
 
@@ -34,7 +39,7 @@ const WorkflowsPage = (props) => {
       <p>A workflow is the sequence of tasks that you’re asking volunteers to perform.</p>
       <p>An asterisk (*) denotes a default workflow.</p>
       <p>If you have multiple workflows you can rearrange the order in which they are listed on your project's front page by clicking the reorder view button and then clicking and dragging on the left gray tab next to each workflow title listed below.</p>
-      <p>NOTE: Please leave at least one active workflow; even if all workflows are 100% complete.</p>
+      <p><em>Note</em>: Please leave at least one active workflow; even if all workflows are 100% complete.</p>
       <p>{reorderButton}</p>
 
       {props.reorder &&
@@ -42,9 +47,17 @@ const WorkflowsPage = (props) => {
 
       {(!props.reorder && props.workflows.length > 0) &&
         <div>
-          <ul className="nav-list">
-            {props.workflows.map(workflow => renderWorkflow(workflow))}
-          </ul>
+          <table className="standard-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Progress</th>
+              </tr>
+            </thead>
+            <tbody>
+              {props.workflows.map(workflow => renderWorkflow(workflow))}
+            </tbody>
+          </table>
           <hr />
           <Paginator
             page={meta.page}
