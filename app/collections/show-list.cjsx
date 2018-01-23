@@ -11,7 +11,7 @@ counterpart = require 'counterpart'
 alert = require('../lib/alert').default
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
-Loading = require '../components/loading-indicator'
+Loading = require('../components/loading-indicator').default
 `import CollectionsManager from './collections-manager';`
 getSubjectLocation = require('../lib/get-subject-location')
 

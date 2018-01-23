@@ -7,7 +7,7 @@ import Notification from './notification.cjsx';
 import Paginator from '../../talk/lib/paginator.cjsx';
 import ZooniverseLogo from '../../partials/zooniverse-logo.cjsx';
 import getNotificationData from '../../lib/get-notification-data';
-import Loading from '../../components/loading-indicator.cjsx';
+import Loading from '../../components/loading-indicator';
 
 export default class NotificationSection extends Component {
   constructor(props) {

@@ -3,7 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
-Loading = require '../../components/loading-indicator'
+Loading = require('../../components/loading-indicator').default
 
 module.exports = createReactClass
   displayName: 'ModerationActions'

@@ -4,10 +4,11 @@ createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
 resourceCount = require './lib/resource-count'
-Loading = require '../components/loading-indicator'
 ProjectLinker = require './lib/project-linker'
+Loading = require('../components/loading-indicator').default
+
 `import ActiveUsers from './active-users';`
-`import TalkSearchResult from './search-result'`;
+`import TalkSearchResult from './search-result';`
 `import PopularTags from './popular-tags';`
 
 TALK_SEARCH_ERROR_MESSAGE = 'There was an error with your search. Please try again.'

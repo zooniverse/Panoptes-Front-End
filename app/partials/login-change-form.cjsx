@@ -3,7 +3,7 @@ React = require 'react'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 Translate = require 'react-translate-component'
-LoadingIndicator = require '../components/loading-indicator'
+LoadingIndicator = require('../components/loading-indicator').default
 
 counterpart.registerTranslations 'en',
   loginChangeForm:
@@ -64,5 +64,3 @@ module.exports = createReactClass
         <Translate content="loginChangeForm.submit" />
       </button>
     </form>
-
-

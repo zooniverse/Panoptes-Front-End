@@ -5,7 +5,7 @@ createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 Translate = require 'react-translate-component'
 auth = require 'panoptes-client/lib/auth'
-LoadingIndicator = require '../components/loading-indicator'
+LoadingIndicator = require('../components/loading-indicator').default
 
 counterpart.registerTranslations 'en',
   signInForm:
