@@ -3,7 +3,9 @@ import React from 'react';
 import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import { Link } from 'react-router';
+import { Helmet } from 'react-helmet';
 import Translate from 'react-translate-component';
+
 import OrganizationProjectCards from './organization-project-cards';
 import OrganizationMetadata from './organization-metadata';
 import Thumbnail from '../../components/thumbnail';
@@ -58,6 +60,7 @@ class OrganizationPage extends React.Component {
 
     return (
       <div className="organization-page">
+        <Helmet title={this.props.organization.display_name} />
         <section
           className="organization-hero"
           style={{ backgroundImage: `url(${this.props.organizationBackground.src})` }}
