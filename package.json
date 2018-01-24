@@ -17,7 +17,7 @@
     "markdownz": "~7.4",
     "modal-form": "~2.4",
     "moment": "~2.18.1",
-    "panoptes-client": "~2.7",
+    "panoptes-client": "~2.8.1",
     "papaparse": "mholt/PapaParse#cada171",
     "prop-types": "~15.6.0",
     "pusher-js": "~3.2.1",
