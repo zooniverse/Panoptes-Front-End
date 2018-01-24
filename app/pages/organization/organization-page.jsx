@@ -65,17 +65,25 @@ class OrganizationPage extends React.Component {
           className="organization-hero"
           style={{ backgroundImage: `url(${this.props.organizationBackground.src})` }}
         >
-          <div className="organization-hero__container">
-            {this.props.organizationAvatar &&
-              <Thumbnail
-                src={this.props.organizationAvatar.src}
-                className="avatar organization-hero__avatar"
-                width={AVATAR_SIZE}
-                height={AVATAR_SIZE}
-              />}
-            <div>
-              <h1 className="organization-hero__title">{this.props.organization.display_name}</h1>
-              <p className="organization-hero__description">{this.props.organization.description}</p>
+          <div className="organization-hero__background-gradient">
+            {this.props.organization.announcement &&
+              <div className="informational project-announcement-banner">
+                <Markdown>
+                  {this.props.organization.announcement}
+                </Markdown>
+              </div>}
+            <div className="organization-hero__container">
+              {this.props.organizationAvatar &&
+                <Thumbnail
+                  src={this.props.organizationAvatar.src}
+                  className="avatar organization-hero__avatar"
+                  width={AVATAR_SIZE}
+                  height={AVATAR_SIZE}
+                />}
+              <div>
+                <h1 className="organization-hero__title">{this.props.organization.display_name}</h1>
+                <p className="organization-hero__description">{this.props.organization.description}</p>
+              </div>
             </div>
           </div>
         </section>
@@ -235,6 +243,7 @@ OrganizationPage.propTypes = {
   fetchingProjects: PropTypes.bool,
   onChangeQuery: PropTypes.func,
   organization: PropTypes.shape({
+    announcement: PropTypes.string,
     categories: PropTypes.arrayOf(
       PropTypes.string
     ),
