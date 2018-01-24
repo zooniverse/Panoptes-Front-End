@@ -5,6 +5,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import AutoSave from '../../components/auto-save';
 import LoadingIndicator from '../../components/loading-indicator';
 import handleInputChange from '../../lib/handle-input-change';
+import UserDetails from './user-settings/details';
 import UserProperties from './user-settings/properties';
 import UserProjects from './user-settings/projects';
 import UserLimitToggle from './user-settings/limit-toggle';
@@ -53,8 +54,10 @@ class UserSettings extends Component {
     return (
       <div>
         <div className="project-status">
-          <h4>Settings for {this.state.editUser.login}</h4>
+          <h4>Details for {this.state.editUser.login}</h4>
+          <UserDetails user={this.state.editUser} />
 
+          <h4>Settings for {this.state.editUser.login}</h4>
           <UserProperties user={this.state.editUser} />
 
           <ul>
