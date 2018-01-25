@@ -77,14 +77,6 @@ export default class ProjectPage extends React.Component {
       </div> :
       null;
 
-    const launchApproved = (!this.props.project.launch_approved) ?
-      <Translate
-        component="p"
-        className="project-disclaimer"
-        content="project.disclaimer"
-      /> :
-      null;
-
     const potentialFieldGuide = (this.props.location.pathname !== projectPath) ?
       <PotentialFieldGuide
         guide={this.props.guide}
@@ -119,7 +111,6 @@ export default class ProjectPage extends React.Component {
           user: this.props.user,
           workflow: this.props.workflow
         })}
-        {launchApproved}
         {potentialFieldGuide}
       </div>
     );

@@ -24,6 +24,8 @@ function Avatar({ projectAvatar }) {
 }
 
 function ProjectName({ loading, project, translation }) {
+  console.log('PROJECT: ', project);
+
   if (loading) {
     return <span>Loading…</span>;
   }
@@ -33,6 +35,14 @@ function ProjectName({ loading, project, translation }) {
         <p>Under Review</p>
         {translation.display_name}
       </div>
+    );
+  }
+  if (project.launch_approved) {
+    return (
+      <span>
+        {translation.display_name}{' '}
+        <img src="/assets/checkmark.png" alt="checkmark for official projects" />
+      </span>
     );
   }
   return <span>{translation.display_name}</span>;

@@ -21,6 +21,14 @@ const ProjectHomePage = (props) => {
     { 'project-home-page__description--top-padding': !props.organization }
   );
 
+  const launchApproved = (!props.project.launch_approved) ?
+    <Translate
+      component="p"
+      className="project-disclaimer"
+      content="project.disclaimer"
+    /> :
+    null;
+
   const renderTalkSubjectsPreview = props.talkSubjects.length > 2;
 
   // As this is a functional component, we don't have access to the router via
@@ -74,7 +82,7 @@ const ProjectHomePage = (props) => {
               <i className="fa fa-external-link" />
             </a>}
         </div>
-
+        {launchApproved}
         <ProjectHomeWorkflowButtons
           activeWorkflows={props.activeWorkflows}
           onChangePreferences={props.onChangePreferences}
