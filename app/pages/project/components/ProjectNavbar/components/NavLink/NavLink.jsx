@@ -49,7 +49,8 @@ function NavLink({ isExternalLink, isSocialLink, label, site, url, ...props }) {
 
   return (
     <LinkComponent {...linkProps}>
-      {label}
+      {!isSocialLink &&
+        label}
       {iconClasses && <i className={iconClasses} />}
     </LinkComponent>
   );
