@@ -67,11 +67,9 @@ class OrganizationPage extends React.Component {
         >
           <div className="organization-hero__background-gradient">
             {this.props.organization.announcement &&
-              <div className="informational project-announcement-banner">
-                <Markdown>
-                  {this.props.organization.announcement}
-                </Markdown>
-              </div>}
+              <Markdown tag="div" className="informational project-announcement-banner">
+                {this.props.organization.announcement}
+              </Markdown>}
             <div className="organization-hero__container">
               {this.props.organizationAvatar &&
                 <Thumbnail
