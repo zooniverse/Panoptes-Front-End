@@ -49,7 +49,11 @@ class OrganizationContainer extends React.Component {
     }
 
     if (this.state.organization && (nextProps.location.query !== this.props.location.query)) {
-      this.fetchProjects(this.state.organization, this.state.collaboratorView, nextProps.location.query);
+      this.fetchProjects(
+        this.state.organization,
+        ((isAdmin() || this.isCollaborator()) && this.state.collaboratorView),
+        nextProps.location.query
+      );
     }
   }
 
@@ -86,7 +90,7 @@ class OrganizationContainer extends React.Component {
     const quotableProjects = this.state.organizationProjects
       .filter(project => project.researcher_quote);
     const project = quotableProjects[Math.floor(Math.random() * quotableProjects.length)];
-    if (project.configuration && project.configuration.researcherID) {
+    if (project && project.configuration && project.configuration.researcherID) {
       if (project.configuration.researcherID === project.display_name) {
         const projectAvatar = this.state.projectAvatars.find(avatar => avatar.links.linked.id === project.id);
         if (projectAvatar && projectAvatar.src) {
