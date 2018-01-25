@@ -6,7 +6,7 @@ import NavLink from '../NavLink';
 
 import { pxToRem, zooTheme } from '../../../../../../theme';
 
-const MenuWrapper = styled.div`
+export const MenuWrapper = styled.div`
   max-width: ${pxToRem(300)};
   overflow: hidden;
   position: absolute;
@@ -21,7 +21,7 @@ const MenuWrapper = styled.div`
   }
 `;
 
-const Menu = styled.nav`
+export const Menu = styled.nav`
   background-color: ${theme('mode', { light: zooTheme.colors.teal.mid })};
 `;
 
@@ -29,7 +29,7 @@ const navLinkBackgroundColor = theme('mode', {
   light: zooTheme.colors.brand.default
 });
 
-const StyledNavLink = styled(NavLink)`
+export const StyledNavLink = styled(NavLink)`
   line-height: 3.071428571;
   padding: 0 ${pxToRem(30)};
 
@@ -42,7 +42,7 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-function NarrowMenu({ links, open = true, toggleMenuFn }) {
+function NarrowMenu({ links, open, toggleMenuFn }) {
   const openClass = (open) ? 'open' : '';
   return (
     <MenuWrapper className={openClass}>
@@ -57,10 +57,17 @@ function NarrowMenu({ links, open = true, toggleMenuFn }) {
           ))}
         </Menu>
       </ThemeProvider>
-        
     </MenuWrapper>
   );
 }
+
+NarrowMenu.defaultProps = {
+  links: [
+    { url: '' }
+  ],
+  open: true,
+  toggleMenuFn: () => {}
+};
 
 NarrowMenu.propTypes = {
   links: PropTypes.arrayOf(PropTypes.shape({
