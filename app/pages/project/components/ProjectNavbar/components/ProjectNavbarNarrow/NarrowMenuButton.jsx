@@ -4,9 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import { pxToRem, zooTheme } from '../../../../../../theme';
 
-// This is a totally non-semantic div, but using a button requires using
-// !important (a lot) to override the global button styles.
-const OpenMenuButton = styled.button`
+export const OpenMenuButton = styled.button`
   background-color: transparent;
   border: 0;
   border-radius: ${pxToRem(500)};
@@ -55,6 +53,7 @@ NarrowMenuButton.propTypes = {
 };
 
 NarrowMenuButton.defaultProps = {
+  onClick: () => {},
   open: false
 };
 

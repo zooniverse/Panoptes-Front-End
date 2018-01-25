@@ -15,11 +15,11 @@ const MOCK_LINKS = [{ url: 'https://www.google.com' }, { url: 'https://www.yahoo
 
 describe('NarrowMenu', function() {
   let wrapper;
-  let toggleMenuFnSpy;
+  const toggleMenuFnSpy = sinon.spy();
   before(function() {
-    toggleMenuFnSpy = sinon.spy();    
     wrapper = shallow(<NarrowMenu toggleMenuFn={toggleMenuFnSpy} />);
   });
+
   it('should render without crashing', function() {});
 
   it('should render a MenuWrapper component', function() {
@@ -28,6 +28,10 @@ describe('NarrowMenu', function() {
 
   it('should render a Menu component', function() {
     expect(wrapper.find(Menu)).to.have.lengthOf(1);
+  });
+
+  it('should wrap the Menu component with the ThemeProvider', function() {
+    expect(wrapper.find('ThemeProvider')).to.have.lengthOf(1);
   });
 
   it('should render a StyledNavLink', function() {
