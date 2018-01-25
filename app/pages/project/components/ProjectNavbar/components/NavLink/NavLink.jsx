@@ -17,13 +17,13 @@ const commonStyles = `
   text-shadow: 0 ${pxToRem(2)} ${pxToRem(2)} rgba(0,0,0,0.22);
 `;
 
-const StyledInternalLink = styled(Link).attrs({
+export const StyledInternalLink = styled(Link).attrs({
   activeClassName: 'active'
 })`
   ${commonStyles}
 `;
 
-const StyledExternalLink = styled.a`
+export const StyledExternalLink = styled.a`
   ${commonStyles}
 `;
 
