@@ -1,8 +1,10 @@
 import React, { PropTypes } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import theme from 'styled-theming';
+
 import NavLink from '../NavLink';
 
-import { theme, pxToRem } from '../../../../../../theme';
+import { pxToRem, zooTheme } from '../../../../../../theme';
 
 const MenuWrapper = styled.div`
   max-width: ${pxToRem(300)};
@@ -20,19 +22,23 @@ const MenuWrapper = styled.div`
 `;
 
 const Menu = styled.nav`
-  background-color: ${props => props.theme.colors.teal.mid};
+  background-color: ${theme('mode', { light: zooTheme.colors.teal.mid })};
 `;
+
+const navLinkBackgroundColor = theme('mode', {
+  light: zooTheme.colors.brand.default
+});
 
 const StyledNavLink = styled(NavLink)`
   line-height: 3.071428571;
   padding: 0 ${pxToRem(30)};
 
   &:hover, &:focus {
-    background-color: ${props => props.theme.colors.brand.default};
+    background-color: ${navLinkBackgroundColor};
   }
 
   &.active {
-    background-color: ${props => props.theme.colors.brand.default};
+    background-color: ${navLinkBackgroundColor};
   }
 `;
 
@@ -40,7 +46,7 @@ function NarrowMenu({ links, open = true, toggleMenuFn }) {
   const openClass = (open) ? 'open' : '';
   return (
     <MenuWrapper className={openClass}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={{ mode: 'light' }}>
         <Menu>
           {links.map(link => (
             <StyledNavLink

@@ -1,7 +1,8 @@
 import counterpart from 'counterpart';
 import React, { PropTypes } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { theme, pxToRem } from '../../../../../../theme';
+import theme from 'styled-theming';
+import { pxToRem, zooTheme } from '../../../../../../theme';
 
 // This is a totally non-semantic div, but using a button requires using
 // !important (a lot) to override the global button styles.
@@ -23,7 +24,7 @@ const OpenMenuButton = styled.button`
 
   &:hover,
   &.open {
-    background-color: ${props => props.theme.colors.teal.light};
+    background-color: ${theme('mode', { light: zooTheme.colors.teal.light })};
     color: black;
   }
 
@@ -39,7 +40,7 @@ function NarrowMenuButton({ onClick, open }) {
   const icon = (open) ? 'fa-angle-up' : 'fa-angle-down';
   const className = (open) ? 'open' : '';
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={{ mode: 'light' }}>
       <OpenMenuButton onClick={onClick} className={className}>
         {counterpart('project.nav.exploreProject')}
         <i className={`fa fa-fw ${icon}`} />

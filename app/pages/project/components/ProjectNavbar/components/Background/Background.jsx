@@ -1,12 +1,17 @@
 import React, { PropTypes } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import theme from 'styled-theming';
+import { pxToRem, zooTheme } from '../../../../../../theme';
 
-import { theme, pxToRem } from '../../../../../../theme';
+// a dark theme variant could be added later
+const backgroundColor = theme('mode', {
+  light: zooTheme.colors.teal.mid
+});
 
-const BackgroundWrapper = styled.div.attrs({
+export const BackgroundWrapper = styled.div.attrs({
   'aria-hidden': true
 })`
-  background-color: ${props => ((props.hasBg) ? 'black' : props.theme.colors.teal.mid)};
+  background-color: ${props => ((props.hasBg) ? 'black' : backgroundColor)};
   display: flex;
   height: 100%;
   left: 0;
@@ -16,7 +21,7 @@ const BackgroundWrapper = styled.div.attrs({
   width: 100%;
 `;
 
-const ImgBackground = styled.div`
+export const ImgBackground = styled.div`
   background-image: url("${props => props.src}");
   background-position: center;
   background-repeat: no-repeat;
@@ -28,7 +33,7 @@ const ImgBackground = styled.div`
 
 function Background({ src, ...otherProps }) {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={{ mode: 'light' }}>
       <BackgroundWrapper hasBg={!!src} {...otherProps}>
         {src && <ImgBackground src={src} />}
       </BackgroundWrapper>
