@@ -8,7 +8,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import sinon from 'sinon';
 import ProjectNavbarWide, { StyledAvatar, StyledWrapper, StyledHeaderWide, StyledNavLink, Nav } from './ProjectNavbarWide';
 
 const MOCK_LINKS = [{ url: 'https://www.google.com' }, { url: 'https://www.yahoo.com' }];
