@@ -44,7 +44,7 @@ describe('WorkflowsPage', function () {
 
   it('will display the correct amount of workflows', function () {
     wrapper.setProps({ workflows });
-    assert.equal(wrapper.find('.nav-list li').length, 2);
+    assert.equal(wrapper.find('Link').length, 2);
   });
 
   it('should call the workflow create handler', function () {
@@ -52,7 +52,7 @@ describe('WorkflowsPage', function () {
     sinon.assert.calledOnce(showCreateWorkflowSpy);
   });
 
-  it('should default render the list view', function() {
+  it('should default render the table view', function() {
     assert.equal(wrapper.find('Paginator').length, 1);
     assert.equal(reorderWorkflowButton.text(), 'Reorder view');
   });
@@ -65,10 +65,10 @@ describe('WorkflowsPage', function () {
   it('should render the reorderable view after toggled', function() {
     wrapper.setProps({ reorder: true });
     assert.equal(wrapper.find('DragReorderable').length, 1);
-    assert.equal(wrapper.find('[data-button="reorderWorkflow"]').text(), 'List view');
+    assert.equal(wrapper.find('[data-button="reorderWorkflow"]').text(), 'Table view');
   });
 
-  it('should re-render the list view when list view button is clicked', function() {
+  it('should re-render the table view when table view button is clicked', function() {
     reorderWorkflowButton.simulate('click');
     sinon.assert.calledTwice(toggleReorderSpy);
     wrapper.setProps({ reorder: false });

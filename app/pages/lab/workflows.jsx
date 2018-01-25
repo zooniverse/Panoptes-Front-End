@@ -8,7 +8,26 @@ import LoadingIndicator from '../../components/loading-indicator';
 import Paginator from '../../talk/lib/paginator';
 
 const WorkflowsPage = (props) => {
-  const renderWorkflow = ((workflow) => {
+  const renderWorkflowTable = ((workflow) => {
+    const progressPercentage = workflow.completeness * 100;
+    return (
+      <tr key={workflow.id}>
+        <td>
+          <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)}  activeClassName="active">
+            {workflow.display_name}
+            {(props.project.configuration && workflow.id === props.project.configuration.default_workflow) && (
+              <span title="Default workflow">{' '}*{' '}</span>
+            )}
+          </Link>
+        </td>
+        <td>
+          {`${progressPercentage.toFixed(0)} % Complete`}
+        </td>
+      </tr>
+    );
+  });
+
+  const renderWorkflowList = ((workflow) => {
     return (
       <li key={workflow.id}>
         <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)} className="nav-list-item" activeClassName="active">
@@ -22,7 +41,7 @@ const WorkflowsPage = (props) => {
   });
 
   const reorderButton = props.reorder ?
-    <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>List view</button> :
+    <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>Table view</button> :
     <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>Reorder view</button>;
   const meta = props.workflows.length ? props.workflows[0].getMeta() : {};
 
@@ -33,16 +52,30 @@ const WorkflowsPage = (props) => {
       <p>A workflow is the sequence of tasks that you’re asking volunteers to perform.</p>
       <p>An asterisk (*) denotes a default workflow.</p>
       <p>If you have multiple workflows you can rearrange the order in which they are listed on your project's front page by clicking the reorder view button and then clicking and dragging on the left gray tab next to each workflow title listed below.</p>
+      <p><em>Note</em>: Please leave at least one active workflow; even if all workflows are 100% complete.</p>
       <p>{reorderButton}</p>
-      
+
       {props.reorder &&
-        <DragReorderable tag="ul" className="nav-list" items={props.workflows} render={renderWorkflow} onChange={props.handleWorkflowReorder} />}
+        <DragReorderable
+          tag="ul" className="nav-list"
+          items={props.workflows}
+          render={renderWorkflowList}
+          onChange={props.handleWorkflowReorder}
+        />}
 
       {(!props.reorder && props.workflows.length > 0) &&
         <div>
-          <ul className="nav-list">
-            {props.workflows.map(workflow => renderWorkflow(workflow))}
-          </ul>
+          <table className="standard-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Progress</th>
+              </tr>
+            </thead>
+            <tbody>
+              {props.workflows.map(workflow => renderWorkflowTable(workflow))}
+            </tbody>
+          </table>
           <hr />
           <Paginator
             page={meta.page}
