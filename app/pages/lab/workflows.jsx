@@ -8,7 +8,7 @@ import LoadingIndicator from '../../components/loading-indicator';
 import Paginator from '../../talk/lib/paginator';
 
 const WorkflowsPage = (props) => {
-  const renderWorkflow = ((workflow) => {
+  const renderWorkflowTable = ((workflow) => {
     const progressPercentage = workflow.completeness * 100;
     return (
       <tr key={workflow.id}>
@@ -27,8 +27,21 @@ const WorkflowsPage = (props) => {
     );
   });
 
+  const renderWorkflowList = ((workflow) => {
+    return (
+      <li key={workflow.id}>
+        <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)} className="nav-list-item" activeClassName="active">
+          {workflow.display_name}
+          {(props.project.configuration && workflow.id === props.project.configuration.default_workflow) && (
+            <span title="Default workflow">{' '}*{' '}</span>
+          )}
+        </Link>
+      </li>
+    );
+  });
+
   const reorderButton = props.reorder ?
-    <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>List view</button> :
+    <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>Table view</button> :
     <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>Reorder view</button>;
   const meta = props.workflows.length ? props.workflows[0].getMeta() : {};
 
@@ -43,7 +56,12 @@ const WorkflowsPage = (props) => {
       <p>{reorderButton}</p>
 
       {props.reorder &&
-        <DragReorderable tag="ul" className="nav-list" items={props.workflows} render={renderWorkflow} onChange={props.handleWorkflowReorder} />}
+        <DragReorderable
+          tag="ul" className="nav-list"
+          items={props.workflows}
+          render={renderWorkflowList}
+          onChange={props.handleWorkflowReorder}
+        />}
 
       {(!props.reorder && props.workflows.length > 0) &&
         <div>
@@ -55,7 +73,7 @@ const WorkflowsPage = (props) => {
               </tr>
             </thead>
             <tbody>
-              {props.workflows.map(workflow => renderWorkflow(workflow))}
+              {props.workflows.map(workflow => renderWorkflowTable(workflow))}
             </tbody>
           </table>
           <hr />
