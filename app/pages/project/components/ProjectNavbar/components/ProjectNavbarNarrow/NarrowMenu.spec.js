@@ -43,12 +43,6 @@ describe('NarrowMenu', function() {
     expect(wrapper.find(StyledNavLink)).to.have.lengthOf(MOCK_LINKS.length);
   });
 
-  it('should use each props.links url as the key for StyledNavLinks', function() {
-    MOCK_LINKS.forEach((link, index) => {
-      expect(wrapper.find(StyledNavLink).at(index).props().key).to.equal(MOCK_LINKS.url);
-    });
-  });
-
   it('should use props.toggleMenuFn on click', function() {
     wrapper.find(StyledNavLink).first().simulate('click');
     expect(toggleMenuFnSpy.calledOnce).to.be.true;

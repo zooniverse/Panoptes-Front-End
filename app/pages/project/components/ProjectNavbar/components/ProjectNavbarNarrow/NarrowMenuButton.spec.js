@@ -12,7 +12,7 @@ import sinon from 'sinon';
 import NarrowMenuButton, { OpenMenuButton } from './NarrowMenuButton';
 import en from '../../../../../../locales/en';
 
-describe.only('NarrowMenuButton', function() {
+describe('NarrowMenuButton', function() {
   let wrapper;
   const onClickSpy = sinon.spy();
   before(function() {

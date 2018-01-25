@@ -10,7 +10,6 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
 import Background, { BackgroundWrapper, ImgBackground } from './Background';
-import { zooTheme } from '../../../../../../theme';
 
 const MOCK_SRC = '../../../../../assets/default-project-background.jpg';
 

@@ -9,12 +9,12 @@ import { pxToRem } from '../../../../../../theme';
 import StyledHeader from '../StyledHeader';
 import Wrapper from '../Wrapper';
 
-const StyledBackground = styled(Background)`
+export const StyledBackground = styled(Background)`
   z-index: 20;
   box-shadow: 0 ${pxToRem(2)} ${pxToRem(4)} 0 rgba(0,0,0,0.5);
 `;
 
-const StyledOuterWrapper = styled.div`
+export const StyledOuterWrapper = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
@@ -23,15 +23,15 @@ const StyledOuterWrapper = styled.div`
   z-index: 30;
 `;
 
-const StyledInnerWrapper = Wrapper.extend`
+export const StyledInnerWrapper = Wrapper.extend`
   flex-direction: column;
   justify-content: center;
   padding: ${pxToRem(20)} 0;
 `;
 
 class ProjectNavbarNarrow extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.handleOpen = this.handleOpen.bind(this);
     this.state = {
       menuOpen: false
@@ -39,8 +39,8 @@ class ProjectNavbarNarrow extends Component {
   }
 
   handleOpen() {
-    this.setState({
-      menuOpen: !this.state.menuOpen
+    this.setState((prevState) => {
+      return { menuOpen: !this.state.menuOpen };
     });
   }
 
@@ -79,6 +79,16 @@ class ProjectNavbarNarrow extends Component {
     );
   }
 }
+
+ProjectNavbarNarrow.defaultProps = {
+  avatarSrc: '',
+  backgroundSrc: '',
+  navLinks: [
+    { url: '' }
+  ],
+  projectLink: '',
+  projectTitle: ''
+};
 
 ProjectNavbarNarrow.propTypes = {
   avatarSrc: PropTypes.string,
