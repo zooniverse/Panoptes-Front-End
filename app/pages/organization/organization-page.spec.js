@@ -74,6 +74,20 @@ describe('OrganizationPage', function () {
     assert.equal(label.length, 0);
   });
 
+  it('should not show announcement if not defined', function () {
+    const wrapper = shallow(<OrganizationPage organization={organization} />);
+    const announcement = wrapper.find('.project-announcement-banner');
+    assert.equal(announcement.length, 0);
+  });
+
+  it('should show announcement if defined', function () {
+    const orgWithAnnouncement = organization;
+    orgWithAnnouncement.announcement = 'test announcement';
+    const wrapper = shallow(<OrganizationPage organization={orgWithAnnouncement} />);
+    const announcement = wrapper.find('.project-announcement-banner');
+    assert.equal(announcement.length, 1);
+  });
+
   it('should render OrganizationProjectCards', function () {
     const wrapper = shallow(<OrganizationPage organization={organization} />);
     const cards = wrapper.find('OrganizationProjectCards');

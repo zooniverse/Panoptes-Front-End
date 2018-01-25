@@ -3,7 +3,9 @@ import React from 'react';
 import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import { Link } from 'react-router';
+import { Helmet } from 'react-helmet';
 import Translate from 'react-translate-component';
+
 import OrganizationProjectCards from './organization-project-cards';
 import OrganizationMetadata from './organization-metadata';
 import Thumbnail from '../../components/thumbnail';
@@ -58,21 +60,28 @@ class OrganizationPage extends React.Component {
 
     return (
       <div className="organization-page">
+        <Helmet title={this.props.organization.display_name} />
         <section
           className="organization-hero"
           style={{ backgroundImage: `url(${this.props.organizationBackground.src})` }}
         >
-          <div className="organization-hero__container">
-            {this.props.organizationAvatar &&
-              <Thumbnail
-                src={this.props.organizationAvatar.src}
-                className="avatar organization-hero__avatar"
-                width={AVATAR_SIZE}
-                height={AVATAR_SIZE}
-              />}
-            <div>
-              <h1 className="organization-hero__title">{this.props.organization.display_name}</h1>
-              <p className="organization-hero__description">{this.props.organization.description}</p>
+          <div className="organization-hero__background-gradient">
+            {this.props.organization.announcement &&
+              <Markdown tag="div" className="informational project-announcement-banner">
+                {this.props.organization.announcement}
+              </Markdown>}
+            <div className="organization-hero__container">
+              {this.props.organizationAvatar &&
+                <Thumbnail
+                  src={this.props.organizationAvatar.src}
+                  className="avatar organization-hero__avatar"
+                  width={AVATAR_SIZE}
+                  height={AVATAR_SIZE}
+                />}
+              <div>
+                <h1 className="organization-hero__title">{this.props.organization.display_name}</h1>
+                <p className="organization-hero__description">{this.props.organization.description}</p>
+              </div>
             </div>
           </div>
         </section>
@@ -246,6 +255,7 @@ OrganizationPage.propTypes = {
   fetchingProjects: PropTypes.bool,
   onChangeQuery: PropTypes.func,
   organization: PropTypes.shape({
+    announcement: PropTypes.string,
     categories: PropTypes.arrayOf(
       PropTypes.string
     ),
