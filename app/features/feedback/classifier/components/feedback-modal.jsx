@@ -3,6 +3,7 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import SubjectViewer from '../../../../components/subject-viewer';
+import ModalFocus from '../../../../components/modal-focus';
 
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
@@ -15,7 +16,7 @@ counterpart.registerTranslations('en', {
 
 function FeedbackModal({ messages, subjectViewerProps }) {
   return (
-    <section className="feedbackmodal">
+    <ModalFocus className="feedbackmodal">
       <Translate content="FeedbackModal.title" component="h2" />
       {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
       <ul>
@@ -26,11 +27,14 @@ function FeedbackModal({ messages, subjectViewerProps }) {
         )}
       </ul>
 
-      <input
+      <button
+        className="standard-button"
         type="submit"
-        value={counterpart('FeedbackModal.ok')}
-      />
-    </section>
+        autoFocus={true}
+      >
+        <Translate content="FeedbackModal.ok" />
+      </button>
+    </ModalFocus>
   );
 }
 
