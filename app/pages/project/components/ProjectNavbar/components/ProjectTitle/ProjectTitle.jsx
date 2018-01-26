@@ -25,7 +25,31 @@ const StyledLink = styled(IndexLink).attrs({
   }
 `;
 
-function ProjectTitle({ link, title }) {
+function ProjectTitle({ launched, link, title, underReview }) {
+  if (underReview) {
+    return (
+      <H1>
+        <StyledLink to={`${link}?facelift=true`}>
+          <div>
+            <p><em>Under Review</em></p>
+            {title}
+          </div>
+        </StyledLink>
+      </H1>
+    );
+  }
+  if (launched) {
+    return (
+      <H1>
+        <StyledLink to={`${link}?facelift=true`}>
+          <span>
+            {title}{' '}
+            <img src="/assets/checkmark.png" alt="checkmark for official projects" />
+          </span>
+        </StyledLink>
+      </H1>
+    );
+  }
   return (
     <H1>
       <StyledLink to={`${link}?facelift=true`}>
@@ -36,8 +60,10 @@ function ProjectTitle({ link, title }) {
 }
 
 ProjectTitle.propTypes = {
+  launched: PropTypes.bool,
   link: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  underReview: PropTypes.bool
 };
 
 export default ProjectTitle;

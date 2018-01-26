@@ -45,7 +45,7 @@ class ProjectNavbarNarrow extends Component {
   }
 
   render() {
-    const { avatarSrc, backgroundSrc, projectLink, projectTitle, navLinks } = this.props;
+    const { avatarSrc, backgroundSrc, launched, projectLink, projectTitle, navLinks, underReview } = this.props;
     return (
       <StyledHeader>
         <NarrowMenu
@@ -63,8 +63,10 @@ class ProjectNavbarNarrow extends Component {
               projectTitle={projectTitle}
             />
             <ProjectTitle
+              launched={launched}
               link={projectLink}
               title={projectTitle}
+              underReview={underReview}
             />
             <NarrowMenuButton
               open={this.state.menuOpen}
@@ -81,11 +83,13 @@ class ProjectNavbarNarrow extends Component {
 ProjectNavbarNarrow.propTypes = {
   avatarSrc: PropTypes.string,
   backgroundSrc: PropTypes.string,
+  launched: PropTypes.bool,
   navLinks: PropTypes.arrayOf(PropTypes.shape({
     url: PropTypes.string
   })),
   projectLink: PropTypes.string,
-  projectTitle: PropTypes.string
+  projectTitle: PropTypes.string,
+  underReview: PropTypes.bool
 };
 
 export default ProjectNavbarNarrow;

@@ -24,8 +24,6 @@ function Avatar({ projectAvatar }) {
 }
 
 function ProjectName({ loading, project, translation }) {
-  console.log('PROJECT: ', project);
-
   if (loading) {
     return <span>Loading…</span>;
   }
