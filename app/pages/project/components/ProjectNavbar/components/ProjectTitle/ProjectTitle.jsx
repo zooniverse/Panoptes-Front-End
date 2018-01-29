@@ -31,7 +31,7 @@ function ProjectTitle({ launched, link, title, underReview }) {
       <StyledLink to={`${link}?facelift=true`}>
         {underReview && <p><em>Under Review</em></p>}
         {title}{' '}
-        {launched && <img src="/assets/checkmark.png" alt="checkmark for official projects" />}
+        {launched && <i className="fa fa-check-circle-o" />}
       </StyledLink>
     </H1>
   );

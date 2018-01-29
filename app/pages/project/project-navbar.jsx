@@ -39,7 +39,7 @@ function ProjectName({ loading, project, translation }) {
     return (
       <span>
         {translation.display_name}{' '}
-        <img src="/assets/checkmark.png" alt="checkmark for official projects" />
+        <i className="fa fa-check-circle-o" />
       </span>
     );
   }
