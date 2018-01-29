@@ -39,7 +39,10 @@ function ProjectName({ loading, project, translation }) {
     return (
       <span>
         {translation.display_name}{' '}
-        <i className="fa fa-check-circle-o" />
+        <span className="fa-stack">
+          <i className="fa fa-circle fa-stack-2x" />
+          <i className="fa fa-check fa-stack-1x checkmark" />
+        </span>
       </span>
     );
   }

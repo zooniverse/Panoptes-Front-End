@@ -25,13 +25,26 @@ const StyledLink = styled(IndexLink).attrs({
   }
 `;
 
+const CheckMarkWrapper = styled.span`
+  font-size: 0.4em;
+`;
+
+const CheckMark = styled.i`
+  color: #00979d;
+`;
+
 function ProjectTitle({ launched, link, title, underReview }) {
   return (
     <H1>
       <StyledLink to={`${link}?facelift=true`}>
         {underReview && <p><em>Under Review</em></p>}
         {title}{' '}
-        {launched && <i className="fa fa-check-circle-o" />}
+        {launched &&
+          <CheckMarkWrapper className="fa-stack">
+            <i className="fa fa-circle fa-stack-2x" />
+            <CheckMark className="fa fa-check fa-stack-1x" />
+          </CheckMarkWrapper>
+          }
       </StyledLink>
     </H1>
   );
