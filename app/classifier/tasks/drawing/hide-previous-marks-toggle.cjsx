@@ -8,18 +8,19 @@ HidePreviousMarksToggle = createReactClass
     classification: null
     onChange: ->
 
-  componentDidMount: ->
-    @_lastKnownAnnotationCount = @props.classification.annotations.length
-
-  componentWillReceiveProps: (nextProps) ->
-    # Automatically un-hide previous marks.
-    if nextProps.classification.annotations.length isnt @_lastKnownAnnotationCount
-      @setPreviousMarks 0
+  getInitialState: ->
+    checked: false
 
   setPreviousMarks: (count) ->
-    @_lastKnownAnnotationCount = @props.classification.annotations.length
     @props.classification._hideMarksBefore = count
-    @props.onChange @props.classification
+    checked = count > 0
+    @setState { checked }
+    @updateParent()
+
+  updateParent: () ->
+    annotations = @props.classification.annotations.slice()
+    annotation = annotations[annotations.length - 1]
+    @props.onChange annotation
 
   render: ->
     annotations = @props.classification.annotations
@@ -29,8 +30,6 @@ HidePreviousMarksToggle = createReactClass
 
     DrawingTaskComponent = require '.' # Circular
 
-    currentlyHidingMarks = @props.classification._hideMarksBefore > 0
-
     marksCount = 0
     annotations.forEach (annotation) =>
       taskDescription = @props.workflow.tasks[annotation.task]
@@ -38,7 +37,7 @@ HidePreviousMarksToggle = createReactClass
       if TaskComponent is DrawingTaskComponent
         marksCount += annotation.value.length
 
-    nextValueToSet = if currentlyHidingMarks
+    nextValueToSet = if @state.checked
       0
     else
       marksCount
@@ -48,8 +47,8 @@ HidePreviousMarksToggle = createReactClass
       color: 'white'
 
     <div>
-      <label style={checkedStyle if currentlyHidingMarks}>
-        <input type="checkbox" checked={currentlyHidingMarks} disabled={marksCount is 0} onChange={@setPreviousMarks.bind this, nextValueToSet} />{' '}
+      <label style={checkedStyle if @state.checked}>
+        <input type="checkbox" checked={@state.checked} disabled={marksCount is 0} onChange={@setPreviousMarks.bind this, nextValueToSet} />{' '}
         Hide previous marks {if marksCount > 0 then '(' + marksCount + ')' }
       </label>
     </div>

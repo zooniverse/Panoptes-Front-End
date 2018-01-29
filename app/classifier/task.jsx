@@ -12,8 +12,9 @@ class Task extends React.Component {
 
   handleAnnotationChange(newAnnotation) {
     const { classification } = this.props;
-    classification.annotations[classification.annotations.length - 1] = newAnnotation;
-    classification.update('annotations');
+    const annotations = classification.annotations.slice();
+    annotations[annotations.length - 1] = newAnnotation;
+    this.props.updateAnnotations(annotations);
   }
 
   render() {
@@ -47,15 +48,14 @@ class Task extends React.Component {
       taskTypes: tasks,
       workflow,
       classification,
-      onChange: () => classification.update()
+      onChange: this.handleAnnotationChange
     };
 
     return (
       <div className="task-container" style={this.props.subjectLoading ? disabledStyle : null}>
         <div className="coverable-task-container">
           {persistentHooksBeforeTask.map((HookComponent, i) => {
-            const key = i + Math.random();
-            return (<HookComponent key={key} {...taskHookProps} />);
+            return (<HookComponent key={i} {...taskHookProps} />);
           })}
 
           {!!annotation &&
@@ -76,8 +76,7 @@ class Task extends React.Component {
           }
 
           {persistentHooksAfterTask.map((HookComponent, i) => {
-            const key = i + Math.random();
-            return (<HookComponent key={key} {...taskHookProps} />);
+            return (<HookComponent key={i} {...taskHookProps} />);
           })}
 
           <hr />
@@ -123,12 +122,17 @@ Task.propTypes = {
   task: PropTypes.shape({
     type: PropTypes.string
   }),
+  updateAnnotations: PropTypes.func,
   user: PropTypes.shape({
     id: PropTypes.string
   }),
   workflow: PropTypes.shape({
     id: PropTypes.string
   })
+};
+
+Task.defaultProps = {
+  updateAnnotations: () => null
 };
 
 export default Task;
