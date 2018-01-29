@@ -74,7 +74,7 @@ describe('ProjectHome', function() {
         background={background}
         translation={translation}
       />);
-    const disclaimer = wrapper.find('Translate[className="project-disclaimer"]');
+    const disclaimer = wrapper.find({ content: 'project.disclaimer' });
     it('should not render the Zooniverse disclaimer.', function () {
       expect(disclaimer).to.have.lengthOf(0);
     });
@@ -88,7 +88,7 @@ describe('ProjectHome', function() {
         background={background}
         translation={translation}
       />);
-    const disclaimer = wrapper.find('Translate[className="project-disclaimer"]');
+    const disclaimer = wrapper.find({ content: 'project.disclaimer' });
     it('should render the Zooniverse disclaimer.', function () {
       expect(disclaimer).to.have.lengthOf(1);
     });
