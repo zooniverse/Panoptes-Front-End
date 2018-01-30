@@ -24,8 +24,8 @@ export const BackgroundWrapper = styled.div.attrs({
 
 // IE 11 doesn't support filter. Not even their own propriety MS filter. :faceplam:
 export const IEContrastLayer = styled.div`
-  background-color: ${zooTheme.colors.teal.mid};
-  filter: alpha(opacity=50);
+  background-color: rgba(0,93,105,0.5);
+  height: 100%;
   position: absolute;
   width: 100%;
 `;
