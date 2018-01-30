@@ -29,9 +29,9 @@ function ProjectName({ loading, project, translation }) {
   }
   if (project.beta_approved) {
     return (
-      <div>
-        <p>Under Review</p>
+      <div className="project-name">
         {translation.display_name}
+        <small className="project-name__under-review">Under Review</small>
       </div>
     );
   }

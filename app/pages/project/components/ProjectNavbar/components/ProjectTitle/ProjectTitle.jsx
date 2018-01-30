@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import theme from 'styled-theming';
 import { IndexLink } from 'react-router';
-import { pxToRem } from '../../../../../../theme';
+import { pxToRem, zooTheme } from '../../../../../../theme';
 
 export const H1 = styled.h1`
   color: white;
+  display: inline-flex;
+  flex-direction: column;
   font-family: Karla;
   font-size: ${pxToRem(30)};
   font-weight: bold;
@@ -17,8 +20,10 @@ export const H1 = styled.h1`
 export const StyledLink = styled(IndexLink).attrs({
   activeClassName: 'active'
 })`
-  text-decoration: none;
+  border-bottom: ${pxToRem(3)} solid transparent;
   color: white;
+  text-decoration: none;
+  white-space: nowrap;
 
   &:hover,
   &:focus {
@@ -26,34 +31,53 @@ export const StyledLink = styled(IndexLink).attrs({
   }
 `;
 
-const CheckMarkWrapper = styled.span`
-  font-size: 0.4em;
+export const StyledCheckMarkWrapper = styled.span`
+  font-size: 0.75rem;
 `;
 
-const CheckMark = styled.i`
-  color: #00979d;
+export const StyledCheckMark = styled.i`
+  color: ${theme('mode', {
+    light: zooTheme.colors.brand.default
+  })};
+  text-shadow: none;
 `;
+
+export const StyledUnderReview = styled.small`
+  align-self: center;
+  color: ${theme('mode', {
+    light: zooTheme.colors.brand.default
+  })};
+  font-size: ${pxToRem(15)};
+  text-transform: uppercase;
+`;
+
 
 function ProjectTitle({ launched, link, title, underReview }) {
   return (
-    <H1>
-      <StyledLink to={`${link}?facelift=true`}>
-        {underReview && <p><em>Under Review</em></p>}
-        {title}{' '}
-        {launched &&
-          <CheckMarkWrapper className="fa-stack">
-            <i className="fa fa-circle fa-stack-2x" />
-            <CheckMark className="fa fa-check fa-stack-1x" />
-          </CheckMarkWrapper>
-          }
-      </StyledLink>
-    </H1>
+    <ThemeProvider theme={{ mode: 'light' }}>
+      <H1>
+        <StyledLink to={`${link}?facelift=true`}>
+          <span>
+            {title}{' '}
+            {launched &&
+              <StyledCheckMarkWrapper className="fa-stack">
+                <i className="fa fa-circle fa-stack-2x" />
+                <StyledCheckMark className="fa fa-check fa-stack-1x" />
+              </StyledCheckMarkWrapper>}
+            </span>
+        </StyledLink>
+        {underReview &&
+          <StyledUnderReview>Under Review</StyledUnderReview>}
+      </H1>
+    </ThemeProvider>
   );
 }
 
 ProjectTitle.defaultProps = {
+  launched: false,
   link: '',
-  title: ''
+  title: '',
+  underReview: false
 };
 
 ProjectTitle.propTypes = {
