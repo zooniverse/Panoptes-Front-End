@@ -596,7 +596,7 @@ teamMembers =
     title: counterpart "team.content.robinSchaaf.title"
     bio: counterpart "team.content.robinSchaaf.bio"
     image: "/assets/team/robin.jpg"
-    location: "chicago"
+    location: "alumni"
   rogerHutchings:
     name: "Roger Hutchings"
     title: counterpart "team.content.rogerHutchings.title"
