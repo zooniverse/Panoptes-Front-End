@@ -223,16 +223,15 @@ class Classifier extends React.Component {
 
   completeClassification() {
     const currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
-    this.checkForFeedback(currentAnnotation.task)
-      .then(() => {
-        if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
-          this.props.onCompleteAndLoadAnotherSubject();
-        } else {
-          this.props.onComplete()
-            .catch(error => console.error(error));
-        }
-        this.setState({ annotations: [{}] });
-      });
+      if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
+        this.props.onCompleteAndLoadAnotherSubject()
+          .then(() => this.checkForFeedback(currentAnnotation.task));
+      } else {
+        this.props.onComplete()
+          .then(() => this.checkForFeedback(currentAnnotation.task))
+          .catch(error => console.error(error));
+      }
+      this.setState({ annotations: [{}] });
   }
 
   toggleExpertClassification(value) {

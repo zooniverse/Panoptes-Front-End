@@ -3,6 +3,7 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import SubjectViewer from '../../../../components/subject-viewer';
+import ModalFocus from '../../../../components/modal-focus';
 
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
@@ -13,25 +14,41 @@ counterpart.registerTranslations('en', {
 });
 /* eslint-enable max-len */
 
-function FeedbackModal({ messages, subjectViewerProps }) {
-  return (
-    <section className="feedbackmodal">
-      <Translate content="FeedbackModal.title" component="h2" />
-      {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
-      <ul>
-        {messages.map(message =>
-          <li key={Math.random()}>
-            {message}
-          </li>
-        )}
-      </ul>
+class FeedbackModal extends React.Component {
+  constructor() {
+    super();
+    this.closeButton = null;
+  }
 
-      <input
-        type="submit"
-        value={counterpart('FeedbackModal.ok')}
-      />
-    </section>
-  );
+  componentDidMount() {
+    const { closeButton } = this;
+    closeButton.focus && closeButton.focus();
+  }
+
+  render() {
+    const { messages, subjectViewerProps } = this.props;
+    return (
+      <ModalFocus className="feedbackmodal">
+        <Translate content="FeedbackModal.title" component="h2" />
+        {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
+        <ul>
+          {messages.map(message =>
+            <li key={Math.random()}>
+              {message}
+            </li>
+          )}
+        </ul>
+
+        <button
+          className="standard-button"
+          type="submit"
+          ref={(button) => { this.closeButton = button; }}
+        >
+          <Translate content="FeedbackModal.ok" />
+        </button>
+      </ModalFocus>
+    );
+  }
 }
 
 FeedbackModal.propTypes = {
