@@ -208,6 +208,10 @@ counterpart.registerTranslations 'en',
       michaelParrish:
         title: 'Rails/Backend Developer'
         bio: '''Software developer at the Zooniverse. He pwns databases daily. Dog, fishing, snakes, and bourbon.'''
+      noahMalmed: 
+        title: 'Mobile App Developer'
+        bio: '''Noah mainly has a background in mobile app development as well as some firmware and backend experience. 
+        Outside of work, Noah enjoys cooking, baking and climbing.'''
       perryRoper:
         title: 'Developer'
         bio: 'Perry was a developer with the Zooniverse, based in Oxford.'
@@ -568,6 +572,12 @@ teamMembers =
     bio: counterpart "team.content.michaelParrish.bio"
     image: "/assets/team/michael.png"
     location: "alumni"
+  noahMalmed: 
+    name: "Noah Malmed"
+    title: counterpart "team.content.noahMalmed.title"
+    bio: counterpart "team.content.noahMalmed.bio"
+    image: "/assets/team/noah.jpg"
+    location: "chicago"
   perryRoper:
     name: "Perry Roper"
     title: counterpart "team.content.perryRoper.title"
