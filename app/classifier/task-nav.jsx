@@ -6,7 +6,6 @@ import { getSessionID } from '../lib/session';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
 import GridTool from './drawing-tools/grid';
-import { isFeedbackActive, isThereFeedback } from './feedback/helpers';
 
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
 
@@ -125,8 +124,7 @@ class TaskNav extends React.Component {
 
     const task = this.props.task ? this.props.task : this.props.workflow.tasks[this.props.workflow.first_task];
 
-    const disableTalk = this.props.classification.metadata.subject_flagged ||
-    (isFeedbackActive(this.props.project) && isThereFeedback(this.props.subject, this.props.workflow));
+    const disableTalk = this.props.classification.metadata.subject_flagged;
     const visibleTasks = Object.keys(this.props.workflow.tasks).filter(key => this.props.workflow.tasks[key].type !== 'shortcut');
     const TaskComponent = tasks[task.type];
 
