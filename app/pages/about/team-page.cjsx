@@ -683,7 +683,7 @@ teamMembers =
     name: "Zach Wolfenbarger"
     title: counterpart "team.content.zachWolfenbarger.title"
     bio: counterpart "team.content.zachWolfenbarger.bio"
-    image: "/assets/team/zach.jpg"
+    image: "/assets/team/zach.JPG"
     location: "chicago"
 
 module.exports = createReactClass
