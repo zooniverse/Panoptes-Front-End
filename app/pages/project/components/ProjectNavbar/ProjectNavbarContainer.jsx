@@ -76,17 +76,21 @@ class ProjectNavbarContainer extends Component {
   render() {
     const avatarSrc = _.get(this.props.projectAvatar, 'src', undefined);
     const backgroundSrc = _.get(this.props.background, 'src', undefined);
+    const launched = this.props.project.launch_approved;
     const navLinks = this.getNavLinks();
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
     const projectLink = `/projects/${this.props.project.slug}`;
+    const underReview = this.props.project.beta_approved;
 
     return (
       <ProjectNavbar
         avatarSrc={avatarSrc}
         backgroundSrc={backgroundSrc}
+        launched={launched}
         navLinks={navLinks}
         projectTitle={projectTitle}
         projectLink={projectLink}
+        underReview={underReview}
       />
     );
   }
@@ -104,6 +108,8 @@ ProjectNavbarContainer.propTypes = {
     src: PropTypes.string
   }),
   project: PropTypes.shape({
+    beta_approved: PropTypes.bool,
+    launch_approved: PropTypes.bool,
     slug: PropTypes.string,
     title: PropTypes.string,
     urls: PropTypes.array

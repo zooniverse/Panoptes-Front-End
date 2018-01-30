@@ -12,8 +12,6 @@ const background = { src: 'background.jpg' };
 
 const organization = { display_name: 'My organization', slug: 'zooniverse/my-organization' };
 
-const preferences = {};
-
 const project = {
   configuration: {},
   description: 'Project description',
@@ -66,6 +64,34 @@ describe('ProjectHome', function() {
 
   it('should render ProjectMetadata', function() {
     expect(wrapper.find('ProjectMetadata')).to.have.lengthOf(1);
+  });
+
+  describe('with a launch-approved project', function () {
+    project.launch_approved = true;
+    wrapper = shallow(
+      <ProjectHome
+        project={project}
+        background={background}
+        translation={translation}
+      />);
+    const disclaimer = wrapper.find({ content: 'project.disclaimer' });
+    it('should not render the Zooniverse disclaimer.', function () {
+      expect(disclaimer).to.have.lengthOf(0);
+    });
+  });
+
+  describe('without approval', function () {
+    project.launch_approved = false;
+    wrapper = shallow(
+      <ProjectHome
+        project={project}
+        background={background}
+        translation={translation}
+      />);
+    const disclaimer = wrapper.find({ content: 'project.disclaimer' });
+    it('should render the Zooniverse disclaimer.', function () {
+      expect(disclaimer).to.have.lengthOf(1);
+    });
   });
 
   describe('when the project is not complete', function() {

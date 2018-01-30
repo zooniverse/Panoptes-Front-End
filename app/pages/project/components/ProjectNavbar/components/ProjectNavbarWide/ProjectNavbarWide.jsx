@@ -44,12 +44,15 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 function ProjectNavbarWide(props) {
+
   const {
     avatarSrc,
     backgroundSrc,
+    launched,
     navLinks,
     projectTitle,
     projectLink,
+    underReview,
     ...otherProps
   } = props;
 
@@ -63,8 +66,10 @@ function ProjectNavbarWide(props) {
           size={80}
         />
         <ProjectTitle
+          launched={launched}
           link={projectLink}
           title={projectTitle}
+          underReview={underReview}
         />
         <Nav>
           {navLinks.map(link => <StyledNavLink key={link.url || link.to} {...link} />)}
@@ -77,11 +82,13 @@ function ProjectNavbarWide(props) {
 ProjectNavbarWide.propTypes = {
   avatarSrc: PropTypes.string,
   backgroundSrc: PropTypes.string,
+  launched: PropTypes.bool,
   navLinks: PropTypes.arrayOf(PropTypes.shape({
     url: PropTypes.string
   })),
   projectLink: PropTypes.string,
-  projectTitle: PropTypes.string
+  projectTitle: PropTypes.string,
+  underReview: PropTypes.bool
 };
 
 export default ProjectNavbarWide;

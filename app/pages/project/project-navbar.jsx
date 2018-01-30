@@ -35,6 +35,17 @@ function ProjectName({ loading, project, translation }) {
       </div>
     );
   }
+  if (project.launch_approved) {
+    return (
+      <span>
+        {translation.display_name}{' '}
+        <span className="fa-stack">
+          <i className="fa fa-circle fa-stack-2x" />
+          <i className="fa fa-check fa-stack-1x checkmark" />
+        </span>
+      </span>
+    );
+  }
   return <span>{translation.display_name}</span>;
 }
 

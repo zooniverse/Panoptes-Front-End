@@ -74,7 +74,12 @@ const ProjectHomePage = (props) => {
               <i className="fa fa-external-link" />
             </a>}
         </div>
-
+        {!props.project.launch_approved &&
+          <Translate
+            component="p"
+            className="project-disclaimer"
+            content="project.disclaimer"
+          />}
         <ProjectHomeWorkflowButtons
           activeWorkflows={props.activeWorkflows}
           onChangePreferences={props.onChangePreferences}

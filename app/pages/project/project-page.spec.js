@@ -41,28 +41,6 @@ describe('ProjectPage', function () {
     expect(child.props().workflow).to.equal(workflow);
   });
 
-  describe('with a launch-approved project', function () {
-    project.launch_approved = true;
-    const wrapper = shallow(<ProjectPage project={project} ><Page /></ProjectPage>);
-    const disclaimer = wrapper.find('Translate[className="project-disclaimer"]');
-    it('should not render the Zooniverse disclaimer.', function () {
-      expect(disclaimer).to.have.lengthOf(0);
-    });
-  });
-
-  describe('without approval', function () {
-    project.launch_approved = false;
-    const wrapper = shallow(<ProjectPage project={project} ><Page /></ProjectPage>);
-    const disclaimer = wrapper.find('Translate[className="project-disclaimer"]');
-    it('should render the Zooniverse disclaimer.', function () {
-      expect(disclaimer).to.have.lengthOf(1);
-    });
-    it('should render the disclaimer immediately after its children.', function () {
-      expect(wrapper.childAt(1).name()).to.equal('Page');
-      expect(wrapper.childAt(2)).to.deep.equal(disclaimer);
-    });
-  });
-
   describe('on the home page', function () {
     let wrapper;
     beforeEach(function () {
