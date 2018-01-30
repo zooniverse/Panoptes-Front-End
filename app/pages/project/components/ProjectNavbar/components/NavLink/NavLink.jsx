@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Link } from 'react-router';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { pxToRem } from '../../../../../../theme';
 import socialIcons from '../../socialIcons';

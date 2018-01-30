@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import getRenderedSize from 'react-rendered-size';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import withSizes from 'react-sizes';
 import ProjectNavbarNarrow from './components/ProjectNavbarNarrow';
 import ProjectNavbarWide from './components/ProjectNavbarWide';

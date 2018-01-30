@@ -1,5 +1,6 @@
 import counterpart from 'counterpart';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import { pxToRem, zooTheme } from '../../../../../../theme';

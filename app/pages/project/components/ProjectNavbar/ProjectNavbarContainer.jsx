@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import counterpart from 'counterpart';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import getProjectLinks from './helpers/getProjectLinks';
 import ProjectNavbar from './ProjectNavbar';
