@@ -15,6 +15,7 @@ const commonStyles = `
   text-decoration: none;
   text-transform: uppercase;
   text-shadow: 0 ${pxToRem(2)} ${pxToRem(2)} rgba(0,0,0,0.22);
+  white-space: nowrap;
 `;
 
 export const StyledInternalLink = styled(Link).attrs({

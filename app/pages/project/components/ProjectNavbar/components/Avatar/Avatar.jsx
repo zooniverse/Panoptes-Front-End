@@ -36,6 +36,7 @@ function Avatar(props) {
   }
 
   if (src) {
+    avatarProps.src = src;
     return <StyledAvatarImg {...avatarProps} />;
   }
 
