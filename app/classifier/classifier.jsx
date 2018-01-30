@@ -225,10 +225,9 @@ class Classifier extends React.Component {
     const currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
       if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
         this.props.onCompleteAndLoadAnotherSubject()
-          .then(() => this.checkForFeedback(currentAnnotation.task));
+          .catch(error => console.error(error));
       } else {
         this.props.onComplete()
-          .then(() => this.checkForFeedback(currentAnnotation.task))
           .catch(error => console.error(error));
       }
       this.setState({ annotations: [{}] });
