@@ -167,8 +167,11 @@ class Classifier extends React.Component {
 
     if (currentTask && currentTask.type === 'drawing') {
       isInProgress = annotations.reduce((result, annotation) => {
-        return result ||
-          annotation.value.map(value => value._inProgress).includes(true);
+        if (annotation.value.map) {
+          return annotation.value.map(value => value._inProgress).includes(true);
+        } else {
+          return result;
+        }
       }, false);
     }
 
