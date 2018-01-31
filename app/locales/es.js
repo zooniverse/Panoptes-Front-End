@@ -35,7 +35,9 @@ export default {
       collections: 'Collect',
       recents: 'Recents',
       lab: 'Lab',
-      adminPage: 'Admin page'
+      adminPage: 'Admin page',
+      underReview: 'Under Review',
+      zooniverseApproved: 'Zooniverse Approved'
     },
     home: {
       researcher: 'Words from the researcher',

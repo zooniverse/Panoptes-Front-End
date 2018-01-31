@@ -11,7 +11,6 @@ import StyledHeader from '../StyledHeader';
 import Wrapper from '../Wrapper';
 
 export const StyledBackground = styled(Background)`
-  z-index: 20;
   box-shadow: 0 ${pxToRem(2)} ${pxToRem(4)} 0 rgba(0,0,0,0.5);
 `;
 
@@ -21,7 +20,6 @@ export const StyledOuterWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   position: relative;
-  z-index: 30;
 `;
 
 export const StyledInnerWrapper = Wrapper.extend`

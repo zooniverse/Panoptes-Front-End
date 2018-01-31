@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import { IndexLink } from 'react-router';
+import counterpart from 'counterpart';
 import { pxToRem, zooTheme } from '../../../../../../theme';
+
+const zooniverseApprovedTranslation = counterpart('project.nav.zooniverseApproved');
 
 export const H1 = styled.h1`
   color: white;
@@ -31,7 +34,11 @@ export const StyledLink = styled(IndexLink).attrs({
   }
 `;
 
-export const StyledCheckMarkWrapper = styled.span`
+export const StyledCheckMarkWrapper = styled.span.attrs({
+  'aria-title': zooniverseApprovedTranslation,
+  role: 'img',
+  title: zooniverseApprovedTranslation
+})`
   font-size: 0.75rem;
   margin-left: 1rem;
 `;
@@ -68,7 +75,7 @@ function ProjectTitle({ launched, link, title, underReview }) {
             </span>
         </StyledLink>
         {underReview &&
-          <StyledUnderReview>Under Review</StyledUnderReview>}
+          <StyledUnderReview>{counterpart('project.nav.underReview')}</StyledUnderReview>}
       </H1>
     </ThemeProvider>
   );
