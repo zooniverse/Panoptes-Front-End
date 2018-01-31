@@ -33,6 +33,7 @@ export const StyledLink = styled(IndexLink).attrs({
 
 export const StyledCheckMarkWrapper = styled.span`
   font-size: 0.75rem;
+  margin-left: 1rem;
 `;
 
 export const StyledCheckMark = styled.i`
@@ -58,7 +59,7 @@ function ProjectTitle({ launched, link, title, underReview }) {
       <H1>
         <StyledLink to={`${link}?facelift=true`}>
           <span>
-            {title}{' '}
+            {title}
             {launched &&
               <StyledCheckMarkWrapper className="fa-stack">
                 <i className="fa fa-circle fa-stack-2x" />
