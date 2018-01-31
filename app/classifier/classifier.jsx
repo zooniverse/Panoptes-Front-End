@@ -167,8 +167,11 @@ class Classifier extends React.Component {
 
     if (currentTask && currentTask.type === 'drawing') {
       isInProgress = annotations.reduce((result, annotation) => {
-        return result ||
-          annotation.value.map(value => value._inProgress).includes(true);
+        if (annotation.value.map) {
+          return annotation.value.map(value => value._inProgress).includes(true);
+        } else {
+          return result;
+        }
       }, false);
     }
 
@@ -225,10 +228,9 @@ class Classifier extends React.Component {
     const currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
       if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
         this.props.onCompleteAndLoadAnotherSubject()
-          .then(() => this.checkForFeedback(currentAnnotation.task));
+          .catch(error => console.error(error));
       } else {
         this.props.onComplete()
-          .then(() => this.checkForFeedback(currentAnnotation.task))
           .catch(error => console.error(error));
       }
       this.setState({ annotations: [{}] });
