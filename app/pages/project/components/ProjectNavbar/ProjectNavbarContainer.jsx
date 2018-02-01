@@ -2,6 +2,8 @@ import _ from 'lodash';
 import counterpart from 'counterpart';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import apiClient from 'panoptes-client/lib/api-client';
+import isAdmin from '../../../../lib/is-admin';
 
 import getProjectLinks from './helpers/getProjectLinks';
 import ProjectNavbar from './ProjectNavbar';
@@ -13,17 +15,26 @@ class ProjectNavbarContainer extends Component {
     this.getNavLinks = this.getNavLinks.bind(this);
     this.getOrganizationLink = this.getOrganizationLink.bind(this);
     this.getProjectLinks = this.getProjectLinks.bind(this);
+    this.handleClientChange = this.handleClientChange.bind(this);
 
-    this.state = { navLinks: [] };
+    this.state = {
+      adminEnabled: false
+    }
   }
 
   componentDidMount() {
-    this.getNavLinks();
+    apiClient.listen('change', this.handleClientChange);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.user !== nextProps.user) {
-      this.getNavLinks();
+  componentWillUnmount() {
+    apiClient.stopListening('change', this.handleClientChange);
+  }
+
+  handleClientChange() {
+    const adminEnabled = isAdmin();
+    if (adminEnabled !== this.state.adminEnabled) {
+      // Trigger a re-render if an admin user toggles the admin mode checkbox
+      this.setState({ adminEnabled });
     }
   }
 
@@ -57,10 +68,7 @@ class ProjectNavbarContainer extends Component {
     const project = this.getProjectLinks();
     const { external, social } = this.getExternalLinks();
     const org = this.getOrganizationLink();
-
-    this.setState({
-      navLinks: [].concat(project, org, external, social)
-    });
+    return [].concat(project, org, external, social);
   }
 
   getOrganizationLink() {
@@ -93,7 +101,7 @@ class ProjectNavbarContainer extends Component {
     const avatarSrc = _.get(this.props.projectAvatar, 'src', undefined);
     const backgroundSrc = _.get(this.props.background, 'src', undefined);
     const launched = this.props.project.launch_approved;
-    const navLinks = this.state.navLinks;
+    const navLinks = this.getNavLinks();
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
     const projectLink = `/projects/${this.props.project.slug}`;
     const underReview = this.props.project.beta_approved;

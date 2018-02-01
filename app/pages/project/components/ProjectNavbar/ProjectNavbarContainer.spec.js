@@ -4,7 +4,6 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import ProjectNavbarContainer from './ProjectNavbarContainer';
 import {
-  adminUser,
   background,
   organization,
   projectAvatar,
@@ -39,38 +38,23 @@ describe('ProjectNavbarContainer', function() {
 
   it('should render without crashing', function() {});
 
+  it('should call getNavLinks on render', function() {
+    expect(getNavLinksSpy.calledOnce).to.be.true;
+  });
+
+  it('should call getProjectLinks on render', function() {
+    expect(getProjectLinksSpy.calledOnce).to.be.true;
+  });
+
+  it('should call getExternalLinks on render', function() {
+    expect(getExternalLinksSpy.calledOnce).to.be.true;
+  });
+
+  it('should call getOrganizationLink on render', function() {
+    expect(getOrganizationLinkSpy.calledOnce).to.be.true;
+  });
+
   it('renders ProjectNavbar', function() {
     expect(wrapper.find('ProjectNavbar')).to.have.lengthOf(1);
-  });
-
-  describe('componentDidMount', function() {
-    it('should call getNavLinks', function () {
-      expect(getNavLinksSpy.calledOnce).to.be.true;
-    });
-
-    it('should call getProjectLinks', function () {
-      expect(getProjectLinksSpy.calledOnce).to.be.true;
-    });
-
-    it('should call getExternalLinks', function () {
-      expect(getExternalLinksSpy.calledOnce).to.be.true;
-    });
-
-    it('should call getOrganizationLink', function () {
-      expect(getOrganizationLinkSpy.calledOnce).to.be.true;
-    });
-  });
-
-  describe('componentWillReceiveProps', function() {
-    let previousNavLinksState;
-    before(function() {
-      previousNavLinksState = wrapper.state('navLinks');
-      wrapper.setProps({ user: adminUser });
-    });
-
-    it('should call getNavLinks', function() {
-      expect(getNavLinksSpy.calledTwice).to.be.true;
-      expect(previousNavLinksState).to.not.equal(wrapper.state('navLinks'));
-    });
   });
 });
