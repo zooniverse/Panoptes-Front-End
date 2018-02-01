@@ -16,7 +16,7 @@ export const H1 = styled.h1`
   font-size: ${pxToRem(30)};
   font-weight: bold;
   letter-spacing: ${pxToRem(-1)};
-  line-height: 1.2;
+  line-height: 0.9;
   text-shadow: 0 ${pxToRem(2)} ${pxToRem(3)} rgba(0,0,0,0.5);
 `;
 
@@ -65,6 +65,8 @@ function ProjectTitle({ launched, link, title, underReview }) {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <H1>
+        {underReview && !launched &&
+          <StyledUnderReview>{counterpart('project.nav.underReview')}</StyledUnderReview>}
         <StyledLink to={`${link}?facelift=true`}>
           <span>
             {title}
@@ -75,8 +77,6 @@ function ProjectTitle({ launched, link, title, underReview }) {
               </StyledCheckMarkWrapper>}
             </span>
         </StyledLink>
-        {underReview && !launched &&
-          <StyledUnderReview>{counterpart('project.nav.underReview')}</StyledUnderReview>}
       </H1>
     </ThemeProvider>
   );
