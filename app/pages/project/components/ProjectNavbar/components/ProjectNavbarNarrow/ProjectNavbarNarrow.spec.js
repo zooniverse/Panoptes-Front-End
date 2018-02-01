@@ -9,7 +9,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { ProjectNavbarNarrow, StyledBackground, StyledOuterWrapper, StyledInnerWrapper } from './ProjectNavbarNarrow';
+import { ProjectNavbarNarrow, StyledBackground, StyledOuterWrapper, StyledInnerWrapper, StyledNarrowMenuButtonWrapper, StyledAvatar } from './ProjectNavbarNarrow';
 
 const MOCK_LINKS = [{ url: 'https://www.google.com' }, { url: 'https://www.yahoo.com' }];
 
@@ -38,20 +38,24 @@ describe('ProjectNavbarNarrow', function() {
     expect(wrapper.find(StyledInnerWrapper)).to.have.lengthOf(1);
   });
 
-  it('should render a NarrowMenu component', function() {
-    expect(wrapper.find('NarrowMenu')).to.have.lengthOf(1);
-  });
-
-  it('should render a Avatar component', function () {
-    expect(wrapper.find('Avatar')).to.have.lengthOf(1);
+  it('should render a StyledAvatar component', function () {
+    expect(wrapper.find(StyledAvatar)).to.have.lengthOf(1);
   });
 
   it('should render a ProjectTitle component', function () {
     expect(wrapper.find('ProjectTitle')).to.have.lengthOf(1);
   });
 
+  it('should render a StyledNarrowMenuButtonWrapper component', function() {
+    expect(wrapper.find(StyledNarrowMenuButtonWrapper)).to.have.lengthOf(1);    
+  })
+
   it('should render a NarrowMenuButton component', function () {
     expect(wrapper.find('NarrowMenuButton')).to.have.lengthOf(1);
+  });
+
+  it('should render a NarrowMenu component', function () {
+    expect(wrapper.find('NarrowMenu')).to.have.lengthOf(1);
   });
 
   describe('when #handleOpen is toggled', function() {

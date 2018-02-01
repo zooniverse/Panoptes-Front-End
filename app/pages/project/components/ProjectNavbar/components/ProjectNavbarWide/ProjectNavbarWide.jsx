@@ -26,7 +26,6 @@ export const StyledWrapper = styled(Wrapper)`
 export const Nav = styled.nav`
   display: flex;
   flex: 1;
-  flex-wrap: wrap;
   justify-content: flex-end;
   margin-left: ${pxToRem(20)}
 `;
