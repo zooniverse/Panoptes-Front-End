@@ -9,7 +9,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import ProjectNavbarNarrow, { StyledBackground, StyledOuterWrapper, StyledInnerWrapper } from './ProjectNavbarNarrow';
+import { ProjectNavbarNarrow, StyledBackground, StyledOuterWrapper, StyledInnerWrapper } from './ProjectNavbarNarrow';
 
 const MOCK_LINKS = [{ url: 'https://www.google.com' }, { url: 'https://www.yahoo.com' }];
 

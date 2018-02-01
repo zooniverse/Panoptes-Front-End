@@ -29,7 +29,7 @@ export const StyledInnerWrapper = Wrapper.extend`
   padding: ${pxToRem(20)} 0;
 `;
 
-class ProjectNavbarNarrow extends Component {
+export class ProjectNavbarNarrow extends Component {
   constructor() {
     super();
     this.handleOpen = this.handleOpen.bind(this);
