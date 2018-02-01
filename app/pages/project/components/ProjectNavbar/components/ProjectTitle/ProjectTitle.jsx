@@ -6,6 +6,7 @@ import { IndexLink } from 'react-router';
 import counterpart from 'counterpart';
 import { pxToRem, zooTheme } from '../../../../../../theme';
 
+// TODO why does this come back as a missing translation?
 const zooniverseApprovedTranslation = counterpart('project.nav.zooniverseApproved');
 
 export const H1 = styled.h1`
@@ -35,9 +36,9 @@ export const StyledLink = styled(IndexLink).attrs({
 `;
 
 export const StyledCheckMarkWrapper = styled.span.attrs({
-  'aria-label': zooniverseApprovedTranslation,
+  'aria-label': "Zooniverse Approved",
   role: 'img',
-  title: zooniverseApprovedTranslation
+  title: "Zooniverse Approved"
 })`
   font-size: 0.75rem;
   margin-left: 1rem;
