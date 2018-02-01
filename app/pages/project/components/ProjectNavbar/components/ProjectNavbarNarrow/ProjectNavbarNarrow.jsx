@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import withSizes from 'react-sizes';
 import Avatar from '../Avatar';
 import Background from '../Background';
 import NarrowMenu from './NarrowMenu';
@@ -44,10 +45,11 @@ class ProjectNavbarNarrow extends Component {
   }
 
   render() {
-    const { avatarSrc, backgroundSrc, launched, projectLink, projectTitle, navLinks, underReview } = this.props;
+    const { avatarSrc, backgroundSrc, height, launched, projectLink, projectTitle, navLinks, underReview } = this.props;
     return (
       <StyledHeader>
         <NarrowMenu
+          height={height}
           toggleMenuFn={this.handleOpen}
           open={this.state.menuOpen}
           links={navLinks}
@@ -92,6 +94,7 @@ ProjectNavbarNarrow.defaultProps = {
 ProjectNavbarNarrow.propTypes = {
   avatarSrc: PropTypes.string,
   backgroundSrc: PropTypes.string,
+  height: PropTypes.number,
   launched: PropTypes.bool,
   navLinks: PropTypes.arrayOf(PropTypes.shape({
     url: PropTypes.string
@@ -101,4 +104,8 @@ ProjectNavbarNarrow.propTypes = {
   underReview: PropTypes.bool
 };
 
-export default ProjectNavbarNarrow;
+const mapSizesToProps = ({ height }) => ({
+  height
+});
+
+export default withSizes(mapSizesToProps)(ProjectNavbarNarrow);

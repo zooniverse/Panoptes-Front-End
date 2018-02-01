@@ -35,7 +35,7 @@ export const StyledLink = styled(IndexLink).attrs({
 `;
 
 export const StyledCheckMarkWrapper = styled.span.attrs({
-  'aria-title': zooniverseApprovedTranslation,
+  'aria-label': zooniverseApprovedTranslation,
   role: 'img',
   title: zooniverseApprovedTranslation
 })`
@@ -51,12 +51,13 @@ export const StyledCheckMark = styled.i`
 `;
 
 export const StyledUnderReview = styled.small`
-  align-self: center;
+  align-self: left;
   color: ${theme('mode', {
-    light: zooTheme.colors.brand.default
+    light: zooTheme.colors.teal.light
   })};
   font-size: ${pxToRem(15)};
   text-transform: uppercase;
+  white-space: nowrap;
 `;
 
 
@@ -74,7 +75,7 @@ function ProjectTitle({ launched, link, title, underReview }) {
               </StyledCheckMarkWrapper>}
             </span>
         </StyledLink>
-        {underReview &&
+        {underReview && !launched &&
           <StyledUnderReview>{counterpart('project.nav.underReview')}</StyledUnderReview>}
       </H1>
     </ThemeProvider>

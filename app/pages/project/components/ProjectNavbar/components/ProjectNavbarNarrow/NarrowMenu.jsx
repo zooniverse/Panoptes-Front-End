@@ -7,7 +7,6 @@ import NavLink from '../NavLink';
 
 import { pxToRem, zooTheme } from '../../../../../../theme';
 
-// why doesn't max-height: 100% on the open class work? It only maxes at half the full height of the menu.
 export const MenuWrapper = styled.div`
   max-width: ${pxToRem(300)};
   overflow: hidden;
@@ -18,7 +17,7 @@ export const MenuWrapper = styled.div`
   width: 100%;
 
   &.open {
-    max-height: 200%;
+    max-height: ${props => props.height}px;
     z-index: 1
   }
 `;
@@ -44,10 +43,10 @@ export const StyledNavLink = styled(NavLink)`
   }
 `;
 
-function NarrowMenu({ links, open, toggleMenuFn }) {
+function NarrowMenu({ height, links, open, toggleMenuFn }) {
   const openClass = (open) ? 'open' : '';
   return (
-    <MenuWrapper className={openClass}>
+    <MenuWrapper className={openClass} height={height}>
       <ThemeProvider theme={{ mode: 'light' }}>
         <Menu>
           {links.map(link => (

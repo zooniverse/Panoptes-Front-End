@@ -20,10 +20,12 @@ export const DefaultProjectAvatarWrapper = StyledAvatarImg.withComponent('div').
   color: ${theme('mode', { light: zooTheme.colors.brand.default })};
 `;
 
+// height: 100% specifically fixes a Firefox positioning issue
 export const StyledZooniverseLogo = styled(ZooniverseLogo).attrs({
   height: props => pxToRem(props.size),
   width: '50%'
 })`
+  height: 100%;
   left: 25%;
   position: absolute;
   z-index: 1;

@@ -13,6 +13,18 @@ class ProjectNavbarContainer extends Component {
     this.getNavLinks = this.getNavLinks.bind(this);
     this.getOrganizationLink = this.getOrganizationLink.bind(this);
     this.getProjectLinks = this.getProjectLinks.bind(this);
+
+    this.state = { navLinks: [] };
+  }
+
+  componentDidMount() {
+    this.getNavLinks();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.user !== nextProps.user) {
+      this.getNavLinks();
+    }
   }
 
   getExternalLinks() {
@@ -45,7 +57,10 @@ class ProjectNavbarContainer extends Component {
     const project = this.getProjectLinks();
     const { external, social } = this.getExternalLinks();
     const org = this.getOrganizationLink();
-    return [].concat(project, org, external, social);
+
+    this.setState({
+      navLinks: [].concat(project, org, external, social)
+    });
   }
 
   getOrganizationLink() {
@@ -78,7 +93,7 @@ class ProjectNavbarContainer extends Component {
     const avatarSrc = _.get(this.props.projectAvatar, 'src', undefined);
     const backgroundSrc = _.get(this.props.background, 'src', undefined);
     const launched = this.props.project.launch_approved;
-    const navLinks = this.getNavLinks();
+    const navLinks = this.state.navLinks;
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
     const projectLink = `/projects/${this.props.project.slug}`;
     const underReview = this.props.project.beta_approved;
