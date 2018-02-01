@@ -68,7 +68,9 @@ export default {
       collections: 'Verzamel',
       recents: 'Recent',
       lab: 'Lab',
-      adminPage: 'Beheerpagina'
+      adminPage: 'Beheerpagina',
+      underReview: 'Under Review',
+      zooniverseApproved: 'Zooniverse Approved'
     },
     home: {
       researcher: 'Woorden van de onderzoeker',

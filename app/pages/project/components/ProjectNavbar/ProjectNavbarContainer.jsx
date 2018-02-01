@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import counterpart from 'counterpart';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import apiClient from 'panoptes-client/lib/api-client';
+import isAdmin from '../../../../lib/is-admin';
 
 import getProjectLinks from './helpers/getProjectLinks';
 import ProjectNavbar from './ProjectNavbar';
@@ -12,6 +15,27 @@ class ProjectNavbarContainer extends Component {
     this.getNavLinks = this.getNavLinks.bind(this);
     this.getOrganizationLink = this.getOrganizationLink.bind(this);
     this.getProjectLinks = this.getProjectLinks.bind(this);
+    this.handleClientChange = this.handleClientChange.bind(this);
+
+    this.state = {
+      adminEnabled: false
+    }
+  }
+
+  componentDidMount() {
+    apiClient.listen('change', this.handleClientChange);
+  }
+
+  componentWillUnmount() {
+    apiClient.stopListening('change', this.handleClientChange);
+  }
+
+  handleClientChange() {
+    const adminEnabled = isAdmin();
+    if (adminEnabled !== this.state.adminEnabled) {
+      // Trigger a re-render if an admin user toggles the admin mode checkbox
+      this.setState({ adminEnabled });
+    }
   }
 
   getExternalLinks() {

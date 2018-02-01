@@ -60,7 +60,7 @@ function getProjectLinks({ project, projectRoles, workflow, user }) {
     _.unset(links, 'recents');
   }
 
-  if (!isAdmin()) {
+  if (!isAdmin() || !user) {
     _.unset(links, 'admin');
   }
 

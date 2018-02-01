@@ -46,6 +46,7 @@
     "sinon": "~4.1.5",
     "sort-into-columns": "~1.0.0",
     "styled-components": "~2.2.4",
+    "styled-theming": "~2.2.0",
     "sugar-client": "~1.0.1",
     "svg-path-properties": "~0.1.1",
     "swipe-js-iso": "~2.0.1",

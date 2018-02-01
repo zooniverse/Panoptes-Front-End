@@ -1,56 +1,74 @@
-import React, { PropTypes } from 'react';
-import styled from 'styled-components';
-import NavLink from '../NavLink';
-import { colors, pxToRem } from '../../styledHelpers';
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled, { ThemeProvider } from 'styled-components';
+import theme from 'styled-theming';
 
-const MenuWrapper = styled.div`
+import NavLink from '../NavLink';
+
+import { pxToRem, zooTheme } from '../../../../../../theme';
+
+export const MenuWrapper = styled.div`
   max-width: ${pxToRem(300)};
   overflow: hidden;
   position: absolute;
+  max-height: 0;
   top: 100%;
-  transform: translateY(-100%);
-  transition: transform 0.3s ease-out;
+  transition: max-height 500ms ease;
   width: 100%;
-  z-index: 10;
 
   &.open {
-    transform: translateY(0);
+    max-height: ${props => props.height}px;
+    z-index: 1
   }
 `;
 
-const Menu = styled.nav`
-  background-color: ${colors.teal};
+export const Menu = styled.nav`
+  background-color: ${theme('mode', { light: zooTheme.colors.teal.mid })};
 `;
 
-const StyledNavLink = styled(NavLink)`
+const navLinkBackgroundColor = theme('mode', {
+  light: zooTheme.colors.brand.default
+});
+
+export const StyledNavLink = styled(NavLink)`
   line-height: 3.071428571;
   padding: 0 ${pxToRem(30)};
 
   &:hover, &:focus {
-    background-color: ${colors.darkteal};
+    background-color: ${navLinkBackgroundColor};
   }
 
   &.active {
-    background-color: ${colors.darkteal};
+    background-color: ${navLinkBackgroundColor};
   }
 `;
 
-function NarrowMenu({ links, open = true, toggleMenuFn }) {
+function NarrowMenu({ height, links, open, toggleMenuFn }) {
   const openClass = (open) ? 'open' : '';
   return (
-    <MenuWrapper className={openClass}>
-      <Menu>
-        {links.map(link => (
-          <StyledNavLink
-            {...link}
-            key={link.url}
-            onClick={toggleMenuFn}
-          />
-        ))}
-      </Menu>
+    <MenuWrapper className={openClass} height={height}>
+      <ThemeProvider theme={{ mode: 'light' }}>
+        <Menu>
+          {links.map(link => (
+            <StyledNavLink
+              {...link}
+              key={link.url}
+              onClick={toggleMenuFn}
+            />
+          ))}
+        </Menu>
+      </ThemeProvider>
     </MenuWrapper>
   );
 }
+
+NarrowMenu.defaultProps = {
+  links: [
+    { url: '' }
+  ],
+  open: true,
+  toggleMenuFn: () => {}
+};
 
 NarrowMenu.propTypes = {
   links: PropTypes.arrayOf(PropTypes.shape({

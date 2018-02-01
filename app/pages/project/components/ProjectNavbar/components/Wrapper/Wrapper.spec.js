@@ -8,12 +8,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import Background from './Background';
+import Wrapper from './Wrapper';
 
-const MOCK_SRC = '../../../../../assets/default-project-background.jpg';
-
-describe('Background', function () {
+describe('Wrapper', function () {
   it('should render without crashing', function () {
-    shallow(<Background src={''} />);
+    shallow(<Wrapper />);
   });
 });

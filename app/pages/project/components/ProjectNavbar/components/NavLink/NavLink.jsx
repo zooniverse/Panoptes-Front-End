@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { Link } from 'react-router';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { pxToRem } from '../../styledHelpers';
+import { pxToRem } from '../../../../../../theme';
 import socialIcons from '../../socialIcons';
 
 const commonStyles = `
@@ -15,15 +16,16 @@ const commonStyles = `
   text-decoration: none;
   text-transform: uppercase;
   text-shadow: 0 ${pxToRem(2)} ${pxToRem(2)} rgba(0,0,0,0.22);
+  white-space: nowrap;
 `;
 
-const StyledInternalLink = styled(Link).attrs({
+export const StyledInternalLink = styled(Link).attrs({
   activeClassName: 'active'
 })`
   ${commonStyles}
 `;
 
-const StyledExternalLink = styled.a`
+export const StyledExternalLink = styled.a`
   ${commonStyles}
 `;
 
@@ -49,7 +51,8 @@ function NavLink({ isExternalLink, isSocialLink, label, site, url, ...props }) {
 
   return (
     <LinkComponent {...linkProps}>
-      {label}
+      {!isSocialLink &&
+        label}
       {iconClasses && <i className={iconClasses} />}
     </LinkComponent>
   );

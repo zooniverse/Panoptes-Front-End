@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Avatar from '../Avatar';
 import Background from '../Background';
@@ -6,30 +7,30 @@ import NavLink from '../NavLink';
 import ProjectTitle from '../ProjectTitle';
 import StyledHeader from '../StyledHeader';
 import Wrapper from '../Wrapper';
-import { colors, pxToRem } from '../../styledHelpers';
+import { pxToRem } from '../../../../../../theme';
 
-const StyledHeaderWide = StyledHeader.extend`
+export const StyledHeaderWide = StyledHeader.extend`
   box-shadow: 0 ${pxToRem(2)} ${pxToRem(4)} 0 rgba(0,0,0,0.5);
 `;
 
-const StyledAvatar = styled(Avatar)`
+export const StyledAvatar = styled(Avatar)`
   margin-right: ${pxToRem(20)};
 `;
 
-const StyledWrapper = styled(Wrapper)`
+export const StyledWrapper = styled(Wrapper)`
   box-sizing: border-box;
   min-height: ${pxToRem(150)};
   padding: 0 ${pxToRem(10)};
 `;
 
-const Nav = styled.nav`
+export const Nav = styled.nav`
   display: flex;
   flex: 1;
   justify-content: flex-end;
   margin-left: ${pxToRem(20)}
 `;
 
-const StyledNavLink = styled(NavLink)`
+export const StyledNavLink = styled(NavLink)`
   border-bottom: ${pxToRem(3)} solid transparent;
   margin-top: ${pxToRem(2)};
 

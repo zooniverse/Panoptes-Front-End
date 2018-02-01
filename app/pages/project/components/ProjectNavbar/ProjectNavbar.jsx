@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import getRenderedSize from 'react-rendered-size';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import withSizes from 'react-sizes';
 import ProjectNavbarNarrow from './components/ProjectNavbarNarrow';
 import ProjectNavbarWide from './components/ProjectNavbarWide';
@@ -52,10 +53,16 @@ export class ProjectNavbar extends Component {
   }
 
   render() {
-    if (this.props.width > this.state.breakpoint) {
+    // 1200 is the max-width for the navbar wrapper
+    const doesNavFit = this.state.breakpoint < 1200;
+    const isWindowWide = this.props.width > this.state.breakpoint;
+    const navbarNarrowProps = { ...this.props, useWideLayoutVariant: !doesNavFit };
+
+    if ((isWindowWide) && (doesNavFit)) {
       return <ProjectNavbarWide {...this.props} />;
     }
-    return <ProjectNavbarNarrow {...this.props} />;
+    
+    return <ProjectNavbarNarrow {...navbarNarrowProps} />;
   }
 }
 

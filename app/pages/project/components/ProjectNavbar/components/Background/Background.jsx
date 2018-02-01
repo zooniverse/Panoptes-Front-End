@@ -1,11 +1,18 @@
-import React, { PropTypes } from 'react';
-import styled from 'styled-components';
-import { colors, pxToRem } from '../../styledHelpers';
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled, { ThemeProvider } from 'styled-components';
+import theme from 'styled-theming';
+import { pxToRem, zooTheme } from '../../../../../../theme';
 
-const BackgroundWrapper = styled.div.attrs({
+// a dark theme variant could be added later
+const backgroundColor = theme('mode', {
+  light: zooTheme.colors.teal.mid
+});
+
+export const BackgroundWrapper = styled.div.attrs({
   'aria-hidden': true
 })`
-  background-color: ${props => ((props.hasBg) ? 'black' : colors.teal)};
+  background-color: ${props => ((props.hasBg) ? 'black' : backgroundColor)};
   display: flex;
   height: 100%;
   left: 0;
@@ -15,21 +22,40 @@ const BackgroundWrapper = styled.div.attrs({
   width: 100%;
 `;
 
-const ImgBackground = styled.div`
+// IE 11 doesn't support filter. Not even their own propriety MS filter. :faceplam:
+export const IEContrastLayer = styled.div`
+  background-color: rgba(0,93,105,0.5);
+  height: 100%;
+  position: absolute;
+  width: 100%;
+`;
+
+export const ImgBackground = styled.div`
   background-image: url("${props => props.src}");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   filter: blur(${pxToRem(5)}) brightness(50%);
   flex: 1;
+  position: relative;
   transform: scale(1.15);
 `;
 
+function isIE11() {
+  return ('ActiveXObject' in window);
+}
+
 function Background({ src, ...otherProps }) {
   return (
-    <BackgroundWrapper hasBg={!!src} {...otherProps}>
-      {src && <ImgBackground src={src} />}
-    </BackgroundWrapper>
+    <ThemeProvider theme={{ mode: 'light' }}>
+      <BackgroundWrapper hasBg={!!src} {...otherProps}>
+        {src &&
+          <ImgBackground src={src}>
+            {isIE11() &&
+              <IEContrastLayer />}
+          </ImgBackground>}
+      </BackgroundWrapper>
+    </ThemeProvider>
   );
 }
 

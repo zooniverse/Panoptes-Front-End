@@ -42,7 +42,9 @@ export default {
       exploreProject: 'Explore Project',
       lab: 'Lab',
       recents: 'Recents',
-      talk: 'Talk'
+      talk: 'Talk',
+      underReview: 'Under Review',
+      zooniverseApproved: 'Zooniverse Approved'
     },
     home: {
       organization: 'Organization',

@@ -29,19 +29,19 @@ function ProjectName({ loading, project, translation }) {
   }
   if (project.beta_approved) {
     return (
-      <div>
-        <p>Under Review</p>
+      <div className="project-name">
         {translation.display_name}
+        <small className="project-name__under-review">Under Review</small>
       </div>
     );
   }
   if (project.launch_approved) {
     return (
       <span>
-        {translation.display_name}{' '}
-        <span className="fa-stack">
+        {translation.display_name}
+        <span className="checkmark-stack fa-stack" aria-label="Zooniverse Approved" title="Zooniverse Approved" role="img">
           <i className="fa fa-circle fa-stack-2x" />
-          <i className="fa fa-check fa-stack-1x checkmark" />
+          <i className="fa fa-check fa-stack-1x checkmark-stack__checkmark" />
         </span>
       </span>
     );
