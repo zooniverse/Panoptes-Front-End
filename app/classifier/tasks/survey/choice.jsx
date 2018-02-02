@@ -54,12 +54,7 @@ class Choice extends React.Component {
         answers[questionId].splice(answers[questionId].indexOf(answerId), 1);
       }
     } else {
-      if (answerId === answers[questionId]) {
-        delete answers[questionId];
-        this.refs[questionId].checked = false;
-      } else {
-        answers[questionId] = answerId;
-      }
+      answers[questionId] = answerId;
     }
     this.setState({ answers });
   }
@@ -181,7 +176,6 @@ class Choice extends React.Component {
                           data-focused={isFocused || null}
                         >
                           <input
-                            ref={questionId}
                             name={questionId}
                             type={inputType}
                             autoFocus={!hasFocus && i === 0}
