@@ -73,6 +73,15 @@ class Choice extends React.Component {
     this.props.onConfirm(this.props.choiceID, this.state.answers);
   }
 
+  handleRadioToggle(questionId, answerId, e) {
+    const { type } = e.target;
+    const { answers } = this.state;
+    if (type === 'radio' && answers[questionId] === answerId) {
+      delete answers[questionId];
+      this.setState({ answers });
+    }
+  }
+
   render() {
     const { choiceID, task, translation } = this.props;
     const choice = task.choices[this.props.choiceID];
@@ -162,6 +171,7 @@ class Choice extends React.Component {
                             autoFocus={!hasFocus && i === 0}
                             checked={isChecked}
                             onChange={this.handleAnswer.bind(this, questionId, answerId)}
+                            onClick={this.handleRadioToggle.bind(this, questionId, answerId)}
                             onFocus={this.handleFocus.bind(this, questionId, answerId)}
                             onBlur={this.handleFocus.bind(this, null, null)}
                           />
