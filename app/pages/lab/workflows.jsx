@@ -6,6 +6,7 @@ import ModalFormDialog from 'modal-form/dialog';
 import WorkflowCreateForm from './workflow-create-form';
 import LoadingIndicator from '../../components/loading-indicator';
 import Paginator from '../../talk/lib/paginator';
+import WorkflowsTable from './workflows-table';
 
 const WorkflowsPage = (props) => {
   const reorderButton = props.reorder ?
@@ -13,36 +14,6 @@ const WorkflowsPage = (props) => {
     <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>Reorder view</button>;
 
   const meta = props.workflows.length ? props.workflows[0].getMeta() : {};
-
-  const renderWorkflowTable = ((workflow) => {
-    const progressPercentage = workflow.completeness * 100;
-    return (
-      <tr key={workflow.id}>
-        <td>
-          <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)}  activeClassName="active">
-            {workflow.display_name}
-            {(props.project.configuration && workflow.id === props.project.configuration.default_workflow) && (
-              <span title="Default workflow">{' '}*{' '}</span>
-            )}
-          </Link>
-        </td>
-        <td>
-          {`${progressPercentage.toFixed(0)} % Complete`}
-        </td>
-        <td>
-          <label htmlFor="active">
-            <input
-              checked={workflow.active}
-              id="active"
-              onChange={e => props.handleWorkflowSettingChange(e, meta.page, workflow)}
-              type="checkbox"
-            />
-            Active
-          </label>
-        </td>
-      </tr>
-    );
-  });
 
   const renderWorkflowList = ((workflow) => {
     return (
@@ -69,7 +40,8 @@ const WorkflowsPage = (props) => {
 
       {props.reorder &&
         <DragReorderable
-          tag="ul" className="nav-list"
+          tag="ul"
+          className="nav-list"
           items={props.workflows}
           render={renderWorkflowList}
           onChange={props.handleWorkflowReorder}
@@ -77,18 +49,7 @@ const WorkflowsPage = (props) => {
 
       {(!props.reorder && props.workflows.length > 0) &&
         <div>
-          <table className="standard-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Progress</th>
-              </tr>
-            </thead>
-            <tbody>
-              {props.workflows.map(workflow => renderWorkflowTable(workflow))}
-            </tbody>
-          </table>
-          <hr />
+          <WorkflowsTable meta={meta} {...props} />
           <Paginator
             page={meta.page}
             onPageChange={props.onPageChange}

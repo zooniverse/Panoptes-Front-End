@@ -1,6 +1,6 @@
 import React from 'react';
 import assert from 'assert';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 import WorkflowsPage from './workflows';
 
@@ -24,7 +24,7 @@ describe('WorkflowsPage', function () {
   const toggleReorderSpy = sinon.spy();
 
   before(function () {
-    wrapper = shallow(
+    wrapper = mount(
       <WorkflowsPage
         labPath={(url) => { return url; }}
         handleWorkflowReorder={function () {}}
