@@ -17,6 +17,7 @@ export default class WorkflowsContainer extends React.Component {
     this.hideCreateWorkflow = this.hideCreateWorkflow.bind(this);
     this.showCreateWorkflow = this.showCreateWorkflow.bind(this);
     this.handleWorkflowReorder = this.handleWorkflowReorder.bind(this);
+    this.handleWorkflowSettingChange = this.handleWorkflowSettingChange.bind(this);
     this.toggleReorder = this.toggleReorder.bind(this);
     this.onPageChange = this.onPageChange.bind(this);
   }
@@ -48,6 +49,20 @@ export default class WorkflowsContainer extends React.Component {
           this.setState({ workflows, loading: false });
         });
     }
+  }
+
+  handleWorkflowSettingChange(e, page, workflow) {
+    const defaultWorkflow = (this.props.configuration) ? this.props.configuration.default_workflow : null;
+    const checked = e.target.checked;
+    workflow.update({ active: checked }).save()
+      .catch(error => console.log(error))
+      .then(() => {
+        if (!workflow.active && workflow.id === defaultWorkflow) {
+          this.props.project.update({ 'configuration.default_workflow': null });
+          this.props.project.save();
+        }
+      })
+      .then(() => this.getWorkflowList(page));
   }
 
   labPath(postFix = '') {
@@ -83,7 +98,9 @@ export default class WorkflowsContainer extends React.Component {
   }
 
   toggleReorder() {
-    this.setState((prevState) => { return { reorder: !prevState.reorder }; }, this.getWorkflowList);
+    this.setState((prevState) => {
+      return { reorder: !prevState.reorder };
+    }, this.getWorkflowList);
   }
 
   render() {
@@ -91,6 +108,7 @@ export default class WorkflowsContainer extends React.Component {
       hideCreateWorkflow: this.hideCreateWorkflow,
       handleWorkflowCreation: this.handleWorkflowCreation,
       handleWorkflowReorder: this.handleWorkflowReorder,
+      handleWorkflowSettingChange: this.handleWorkflowSettingChange,
       showCreateWorkflow: this.showCreateWorkflow,
       labPath: this.labPath,
       onPageChange: this.onPageChange,
@@ -119,6 +137,9 @@ WorkflowsContainer.defaultProps = {
 
 WorkflowsContainer.propTypes = {
   children: PropTypes.node,
+  configuration: PropTypes.shape({
+    default_workflow: PropTypes.string
+  }),
   location: PropTypes.shape({
     pathname: PropTypes.string,
     query: PropTypes.object

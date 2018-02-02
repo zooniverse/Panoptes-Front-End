@@ -8,6 +8,12 @@ import LoadingIndicator from '../../components/loading-indicator';
 import Paginator from '../../talk/lib/paginator';
 
 const WorkflowsPage = (props) => {
+  const reorderButton = props.reorder ?
+    <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>Table view</button> :
+    <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>Reorder view</button>;
+
+  const meta = props.workflows.length ? props.workflows[0].getMeta() : {};
+
   const renderWorkflowTable = ((workflow) => {
     const progressPercentage = workflow.completeness * 100;
     return (
@@ -22,6 +28,17 @@ const WorkflowsPage = (props) => {
         </td>
         <td>
           {`${progressPercentage.toFixed(0)} % Complete`}
+        </td>
+        <td>
+          <label htmlFor="active">
+            <input
+              checked={workflow.active}
+              id="active"
+              onChange={e => props.handleWorkflowSettingChange(e, meta.page, workflow)}
+              type="checkbox"
+            />
+            Active
+          </label>
         </td>
       </tr>
     );
@@ -39,11 +56,6 @@ const WorkflowsPage = (props) => {
       </li>
     );
   });
-
-  const reorderButton = props.reorder ?
-    <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>Table view</button> :
-    <button type="button" data-button="reorderWorkflow" onClick={props.toggleReorder}>Reorder view</button>;
-  const meta = props.workflows.length ? props.workflows[0].getMeta() : {};
 
   return (
     <div>
@@ -130,6 +142,7 @@ WorkflowsPage.propTypes = {
   hideCreateWorkflow: PropTypes.func,
   handleWorkflowCreation: PropTypes.func,
   handleWorkflowReorder: PropTypes.func,
+  handleWorkflowSettingChange: PropTypes.func,
   labPath: PropTypes.func,
   loading: PropTypes.bool,
   onPageChange: PropTypes.func,
