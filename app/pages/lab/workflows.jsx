@@ -103,7 +103,6 @@ WorkflowsPage.propTypes = {
   hideCreateWorkflow: PropTypes.func,
   handleWorkflowCreation: PropTypes.func,
   handleWorkflowReorder: PropTypes.func,
-  handleWorkflowSettingChange: PropTypes.func,
   labPath: PropTypes.func,
   loading: PropTypes.bool,
   onPageChange: PropTypes.func,
