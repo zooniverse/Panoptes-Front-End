@@ -6,6 +6,9 @@ import Translate from 'react-translate-component';
 import ImageFlipper from './image-flipper';
 import Utility from './utility';
 
+const BACKSPACE = 8;
+const SPACE = 32;
+
 
 class Choice extends React.Component {
   constructor(props) {
@@ -71,6 +74,19 @@ class Choice extends React.Component {
 
   handleIdentification() {
     this.props.onConfirm(this.props.choiceID, this.state.answers);
+  }
+
+  handleRadioKeyDown(questionId, answerId, e) {
+    switch (e.which) {
+      case BACKSPACE:
+      case SPACE:
+        if (e.target.checked) {
+          e.preventDefault();
+          this.handleRadioToggle(questionId, answerId, e);
+        }
+        break;
+      default:
+    }
   }
 
   handleRadioToggle(questionId, answerId, e) {
@@ -172,6 +188,7 @@ class Choice extends React.Component {
                             checked={isChecked}
                             onChange={this.handleAnswer.bind(this, questionId, answerId)}
                             onClick={this.handleRadioToggle.bind(this, questionId, answerId)}
+                            onKeyDown={this.handleRadioKeyDown.bind(this, questionId, answerId)}
                             onFocus={this.handleFocus.bind(this, questionId, answerId)}
                             onBlur={this.handleFocus.bind(this, null, null)}
                           />
