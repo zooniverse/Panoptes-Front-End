@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import isEqual from 'lodash/isEqual';
-import filter from 'lodash/filter'
+import filter from 'lodash/filter';
 import every from 'lodash/every';
 import reduce from 'lodash/reduce';
 import MobileSection from './mobile-section';
@@ -8,31 +7,31 @@ import MobileSection from './mobile-section';
 const VALID_QUESTION_LENGTH = 200;
 const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'multiple'];
 
-function launchApprovedProject ({ project }) {
+function launchApprovedProject({ project }) {
   return (project.launch_approved) ? project.launch_approved : false;
 }
 
-function taskQuestionNotTooLong ({ task }) {
-  return task.question.length < VALID_QUESTION_LENGTH;
+function taskQuestionNotTooLong({ task }) {
+  return task.question ? task.question.length < VALID_QUESTION_LENGTH : false;
 }
 
-function taskFeedbackDisabled ({ task }) {
+function taskFeedbackDisabled({ task }) {
   return !task.feedback || !task.feedback.enabled;
 }
 
-function taskHasTwoAnswers ({ task }) {
-  return task.answers.length === 2;
+function taskHasTwoAnswers({ task }) {
+  return task.answers ? task.answers.length === 2 : false;
 }
 
-function workflowFlipbookDisabled ({ workflow }) {
+function workflowFlipbookDisabled({ workflow }) {
   return (workflow.configuration) ? workflow.configuration.multi_image_mode !== 'flipbook' : true;
 }
 
-function workflowHasSingleTask ({ workflow }) {
+function workflowHasSingleTask({ workflow }) {
   return filter(workflow.tasks, ({ type }) => type !== 'shortcut').length === 1;
 }
 
-function workflowNotTooManyShortcuts ({ task, workflow }) {
+function workflowNotTooManyShortcuts({ task, workflow }) {
   const shortcut = workflow.tasks[task.unlinkedTask];
   return (shortcut) ? shortcut.answers.length <= 2 : true;
 }
@@ -86,7 +85,7 @@ class MobileSectionContainer extends Component {
   }
 
   renderMobileSection() {
-    const checked = this.props.workflow.swipe_enabled || false;
+    const checked = this.props.workflow.configuration.swipe_enabled || false;
     return <MobileSection
       checked={checked}
       enabled={this.state.enabled}
@@ -97,9 +96,9 @@ class MobileSectionContainer extends Component {
 
   toggleChecked() {
     const { project, workflow } = this.props;
-    const currentStatus = workflow.swipe_enabled || false;
+    const currentStatus = workflow.configuration.swipe_enabled || false;
     const updateWorkflow = workflow.update({
-      'swipe_enabled': !currentStatus
+      'configuration.swipe_enabled': !currentStatus
     });
 
     return updateWorkflow.save()
@@ -108,7 +107,7 @@ class MobileSectionContainer extends Component {
         return allWorkflows.reduce((hasSwipeWorkflow, thisWorkflow) => {
           return (hasSwipeWorkflow)
             ? hasSwipeWorkflow
-            : (thisWorkflow.swipe_enabled);
+            : (thisWorkflow.configuration && thisWorkflow.configuration.swipe_enabled);
         }, false);
       })
       .then(mobileFriendly => {
@@ -143,7 +142,7 @@ class MobileSectionContainer extends Component {
       validations
     });
 
-    if (!enabled && this.props.workflow.swipe_enabled) {
+    if (!enabled && this.props.workflow.configuration.swipe_enabled) {
       this.toggleChecked();
     }
   }
