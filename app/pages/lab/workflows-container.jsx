@@ -14,7 +14,7 @@ export default class WorkflowsContainer extends React.Component {
     this.handleSetStatsCompletenessType = this.handleSetStatsCompletenessType.bind(this);
     this.handleWorkflowCreation = this.handleWorkflowCreation.bind(this);
     this.handleWorkflowReorder = this.handleWorkflowReorder.bind(this);
-    this.handleWorkflowSettingChange = this.handleWorkflowSettingChange.bind(this);
+    this.handleWorkflowStatusChange = this.handleWorkflowStatusChange.bind(this);
     this.handleWorkflowStatsVisibility = this.handleWorkflowStatsVisibility.bind(this);
     this.hideCreateWorkflow = this.hideCreateWorkflow.bind(this);
     this.labPath = this.labPath.bind(this);
@@ -59,7 +59,7 @@ export default class WorkflowsContainer extends React.Component {
       .then(() => this.getWorkflowList(page));
   }
 
-  handleWorkflowSettingChange(e, page, workflow) {
+  handleWorkflowStatusChange(e, page, workflow) {
     const defaultWorkflow = (this.props.configuration) ? this.props.configuration.default_workflow : null;
     const checked = e.target.checked;
     workflow.update({ active: checked }).save()
@@ -125,7 +125,7 @@ export default class WorkflowsContainer extends React.Component {
       handleWorkflowStatsVisibility: this.handleWorkflowStatsVisibility,
       handleWorkflowCreation: this.handleWorkflowCreation,
       handleWorkflowReorder: this.handleWorkflowReorder,
-      handleWorkflowSettingChange: this.handleWorkflowSettingChange,
+      handleWorkflowStatusChange: this.handleWorkflowStatusChange,
       showCreateWorkflow: this.showCreateWorkflow,
       labPath: this.labPath,
       onPageChange: this.onPageChange,

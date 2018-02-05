@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 
 const WorkflowsTable = ({
   handleSetStatsCompletenessType,
-  handleWorkflowSettingChange,
+  handleWorkflowStatusChange,
   handleWorkflowStatsVisibility,
   labPath,
   meta,
@@ -25,7 +25,7 @@ const WorkflowsTable = ({
       <tbody>
         {workflows.map((workflow) => {
           const progressPercentage = workflow.completeness * 100;
-          const statsCompletenessType = (workflow.configuration.stats_completeness_type) ? workflow.configuration.stats_completeness_type : 'retirement';
+          const statsCompletenessType = (workflow.configuration && workflow.configuration.stats_completeness_type) ? workflow.configuration.stats_completeness_type : 'retirement';
           let statsVisible = workflow.active;
           if (workflow.configuration && workflow.configuration.stats_hidden !== undefined) {
             statsVisible = !workflow.configuration.stats_hidden;
@@ -45,11 +45,11 @@ const WorkflowsTable = ({
                 {`${progressPercentage.toFixed(0)} % Complete`}
               </td>
               <td>
-                <label htmlFor="active">
+                <label>
                   <input
                     checked={workflow.active}
                     id="active"
-                    onChange={e => handleWorkflowSettingChange(e, meta.page, workflow)}
+                    onChange={e => handleWorkflowStatusChange(e, meta.page, workflow)}
                     type="checkbox"
                   />
                   Active
@@ -58,7 +58,6 @@ const WorkflowsTable = ({
               <td>
                 <label>
                   <input
-                    id="stats_completeness"
                     checked={statsCompletenessType === 'classification'}
                     name={`stats_completeness_type.${workflow.id}`}
                     onChange={e => handleSetStatsCompletenessType(e, meta.page, workflow)}
@@ -68,9 +67,8 @@ const WorkflowsTable = ({
                   Classification Count
                 </label>
                 {' '}
-                <label htmlFor="stats_completeness">
+                <label>
                   <input
-                    id="stats_completeness"
                     checked={statsCompletenessType === 'retirement'}
                     name={`stats_completeness_type.${workflow.id}`}
                     onChange={e => handleSetStatsCompletenessType(e, meta.page, workflow)}
@@ -81,9 +79,8 @@ const WorkflowsTable = ({
                 </label>
               </td>
               <td>
-                <label htmlFor="stats_visible">
+                <label>
                   <input
-                    id="stats_visible"
                     checked={statsVisible}
                     name={`stats_visible.${workflow.id}`}
                     onChange={e => handleWorkflowStatsVisibility(e, meta.page, workflow)}
@@ -103,7 +100,7 @@ const WorkflowsTable = ({
 
 WorkflowsTable.propTypes = {
   handleSetStatsCompletenessType: PropTypes.func,
-  handleWorkflowSettingChange: PropTypes.func,
+  handleWorkflowStatusChange: PropTypes.func,
   handleWorkflowStatsVisibility: PropTypes.func,
   labPath: PropTypes.func,
   meta: PropTypes.shape({

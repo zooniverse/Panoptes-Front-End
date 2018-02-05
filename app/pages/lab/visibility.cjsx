@@ -154,29 +154,4 @@ module.exports = createReactClass
         }
 
       </div>
-
-      <hr/>
-
-      <p className="form-label">Status</p>
-      <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
-      <p className="form-help">If an active workflow is the default workflow for the project and is made inactive, then it will be removed as the default workflow.</p>
-      <p className="form-label">Completeness statistic</p>
-      <p className="form-help">Use this option to change how each workflow's completeness is calculated on the public statistics page.</p>
-      <p className="form-help">
-        When using "Classification Count" the completeness will increase after each classification. The
-        {' '}total number of classifications needed to complete the workflow is estimated assuming a constant retirement limit.
-        {' '}If the retirement limit is changed and/or subjects sets are unlinked from a <b>live</b> workflow this estimate will be inaccurate.
-        {' '}To avoid these issues completed subject sets should not be removed, instead completed workflows should be deactivated
-        {' '}and new ones created for new subject sets (note: workflows can be copied using the <i className="fa fa-copy"/> button at the top of a workflow's edit page).
-      </p>
-      <p className="form-help">
-        When using "Retirement Count" the completeness will increase after each image retires (note: this value is re-calculated once an hour).
-        {' '}Since the images are shown to users in a random order, this completeness estimate will be slow to increase until the project is close to being finished.
-        {' '}If your project does not have a constant retirement limit (e.g. it uses a custom retiment rule) and/or subject sets
-        {' '}have been unlinked from a live workflow, this estimate will be the most accurate.
-      </p>
-      <p className="form-label">Statistics Visbiility</p>
-      <p className="form-help">
-        Active workflows are visible on the project's statistics page by default, and inactive projects are hidden by default. If there is a reason to hide an active workflow from the statistics page, such as a workflow being used in an a/b split experiment, or a reason to show an inactive workflow, then toggle the "Show on Stats Page" checkbox.
-      </p>
     </div>
