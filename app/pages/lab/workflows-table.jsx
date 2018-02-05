@@ -25,7 +25,7 @@ const WorkflowsTable = ({
       <tbody>
         {workflows.map((workflow) => {
           const progressPercentage = workflow.completeness * 100;
-          const statsCompletenessType = (workflow.configuration) ? workflow.configuration.stats_completeness_type : 'retirement';
+          const statsCompletenessType = (workflow.configuration.stats_completeness_type) ? workflow.configuration.stats_completeness_type : 'retirement';
           let statsVisible = workflow.active;
           if (workflow.configuration && workflow.configuration.stats_hidden !== undefined) {
             statsVisible = !workflow.configuration.stats_hidden;
@@ -56,7 +56,7 @@ const WorkflowsTable = ({
                 </label>
               </td>
               <td>
-                <label htmlFor="stats_completeness">
+                <label>
                   <input
                     id="stats_completeness"
                     checked={statsCompletenessType === 'classification'}
