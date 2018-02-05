@@ -26,6 +26,7 @@ const annotationValue = {
 
 describe('Choice', function () {
   let wrapper;
+  let answer;
 
   describe('with single answer questions', function () {
     beforeEach(function () {
@@ -36,6 +37,7 @@ describe('Choice', function () {
         annotationValue={annotationValue}
         choiceID='ar'
       />);
+      answer = wrapper.find('input[name="ho"][value="two"]');
     });
     it('should render radio buttons for answers', function () {
       const question = task.questions.ho;
@@ -47,7 +49,6 @@ describe('Choice', function () {
       assert.equal(answer.props().checked, true);
     });
     it('should clear the chosen answer on click', function () {
-      const answer = wrapper.find('input[name="ho"][value="two"]');
       const fakeEvent = {
         target: {
           type: 'radio',
@@ -61,7 +62,6 @@ describe('Choice', function () {
       assert.equal(wrapper.state().answers.ho, undefined);
     });
     it('should clear the chosen answer on space', function () {
-      const answer = wrapper.find('input[name="ho"][value="two"]');
       const fakeEvent = {
         which: 32,
         target: {
@@ -77,7 +77,6 @@ describe('Choice', function () {
       assert.equal(wrapper.state().answers.ho, undefined);
     });
     it('should clear the chosen answer on backspace', function () {
-      const answer = wrapper.find('input[name="ho"][value="two"]');
       const fakeEvent = {
         which: 8,
         target: {
@@ -93,7 +92,6 @@ describe('Choice', function () {
       assert.equal(wrapper.state().answers.ho, undefined);
     });
     it('should not clear the chosen answer on any other key press', function () {
-      const answer = wrapper.find('input[name="ho"][value="two"]');
       const fakeEvent = {
         which: 9,
         target: {
