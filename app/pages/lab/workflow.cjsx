@@ -296,22 +296,21 @@ EditWorkflowPage = createReactClass
 
           <hr />
 
-          {if 'hide classification summaries' in @props.project.experimental_tools
+          <div>
             <div>
-              <div>
-                <AutoSave resource={@props.workflow}>
-                  <span className="form-label">Classification summaries</span><br />
-                  <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
-                  <br />
-                  <label>
-                    <input ref="hideClassificationSummaries" type="checkbox" checked={@props.workflow.configuration.hide_classification_summaries} onChange={@handleSetHideClassificationSummaries} />
-                    Hide classification summaries
-                  </label>
-                </AutoSave>
-              </div>
+              <AutoSave resource={@props.workflow}>
+                <span className="form-label">Classification summaries</span><br />
+                <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
+                <br />
+                <label>
+                  <input ref="hideClassificationSummaries" type="checkbox" checked={@props.workflow.configuration.hide_classification_summaries} onChange={@handleSetHideClassificationSummaries} />
+                  Hide classification summaries
+                </label>
+              </AutoSave>
+            </div>
 
-              <hr />
-            </div>}
+            <hr />
+          </div>
 
           {if 'sim notification' in @props.project.experimental_tools
             <div>

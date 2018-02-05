@@ -7,7 +7,6 @@ const experimentalFeatures = [
   'combo',
   'dropdown',
   'mini-course',
-  'hide classification summaries',
   'worldwide telescope',
   'hide previous marks',
   'grid',
