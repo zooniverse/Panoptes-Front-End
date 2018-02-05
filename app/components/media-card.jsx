@@ -39,6 +39,7 @@ MediaCard.propTypes = {
 };
 
 MediaCard.defaultProps = {
+  children: null,
   className: '',
   src: '',
   style: {}
