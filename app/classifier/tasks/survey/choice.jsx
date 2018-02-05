@@ -177,6 +177,7 @@ class Choice extends React.Component {
                         >
                           <input
                             name={questionId}
+                            value={answerId}
                             type={inputType}
                             autoFocus={!hasFocus && i === 0}
                             checked={isChecked}
