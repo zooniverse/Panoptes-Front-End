@@ -44,17 +44,18 @@ class Choice extends React.Component {
     return answerProvided.every(answer => (answer === true));
   }
 
-  handleAnswer(questionId, answerId, e) {
+  handleAnswer(e) {
+    const { name, value } = e.target;
     const { answers } = this.state;
-    answers[questionId] = answers[questionId] ? answers[questionId] : [];
-    if (this.props.task.questions[questionId].multiple) {
+    answers[name] = answers[name] ? answers[name] : [];
+    if (this.props.task.questions[name].multiple) {
       if (e.target.checked) {
-        answers[questionId].push(answerId);
+        answers[name].push(value);
       } else {
-        answers[questionId].splice(answers[questionId].indexOf(answerId), 1);
+        answers[name].splice(answers[name].indexOf(value), 1);
       }
     } else {
-      answers[questionId] = answerId;
+      answers[name] = value;
     }
     this.setState({ answers });
   }
@@ -71,24 +72,24 @@ class Choice extends React.Component {
     this.props.onConfirm(this.props.choiceID, this.state.answers);
   }
 
-  handleRadioKeyDown(questionId, answerId, e) {
+  handleRadioKeyDown(e) {
     switch (e.which) {
       case BACKSPACE:
       case SPACE:
         if (e.target.checked) {
           e.preventDefault();
-          this.resetSingleAnswerQuestion(questionId, answerId, e);
+          this.resetSingleAnswerQuestion(e);
         }
         break;
       default:
     }
   }
 
-  resetSingleAnswerQuestion(questionId, answerId, e) {
-    const { type } = e.target;
+  resetSingleAnswerQuestion(e) {
+    const { type, name, value } = e.target;
     const { answers } = this.state;
-    if (type === 'radio' && answers[questionId] === answerId) {
-      delete answers[questionId];
+    if (type === 'radio' && answers[name] === value) {
+      delete answers[name];
       this.setState({ answers });
     }
   }
@@ -181,9 +182,9 @@ class Choice extends React.Component {
                             type={inputType}
                             autoFocus={!hasFocus && i === 0}
                             checked={isChecked}
-                            onChange={this.handleAnswer.bind(this, questionId, answerId)}
-                            onClick={this.resetSingleAnswerQuestion.bind(this, questionId, answerId)}
-                            onKeyDown={this.handleRadioKeyDown.bind(this, questionId, answerId)}
+                            onChange={this.handleAnswer.bind(this)}
+                            onClick={this.resetSingleAnswerQuestion.bind(this)}
+                            onKeyDown={this.handleRadioKeyDown.bind(this)}
                             onFocus={this.handleFocus.bind(this, questionId, answerId)}
                             onBlur={this.handleFocus.bind(this, null, null)}
                           />
