@@ -77,14 +77,14 @@ class Choice extends React.Component {
       case SPACE:
         if (e.target.checked) {
           e.preventDefault();
-          this.handleRadioToggle(questionId, answerId, e);
+          this.resetSingleAnswerQuestion(questionId, answerId, e);
         }
         break;
       default:
     }
   }
 
-  handleRadioToggle(questionId, answerId, e) {
+  resetSingleAnswerQuestion(questionId, answerId, e) {
     const { type } = e.target;
     const { answers } = this.state;
     if (type === 'radio' && answers[questionId] === answerId) {
@@ -181,7 +181,7 @@ class Choice extends React.Component {
                             autoFocus={!hasFocus && i === 0}
                             checked={isChecked}
                             onChange={this.handleAnswer.bind(this, questionId, answerId)}
-                            onClick={this.handleRadioToggle.bind(this, questionId, answerId)}
+                            onClick={this.resetSingleAnswerQuestion.bind(this, questionId, answerId)}
                             onKeyDown={this.handleRadioKeyDown.bind(this, questionId, answerId)}
                             onFocus={this.handleFocus.bind(this, questionId, answerId)}
                             onBlur={this.handleFocus.bind(this, null, null)}
