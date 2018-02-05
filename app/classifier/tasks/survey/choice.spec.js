@@ -20,17 +20,31 @@ const annotation = {
   }]
 };
 
+const annotationValue = {
+  answers: Object.assign({}, annotation.value[0].answers)
+};
+
 describe('Choice', function () {
-  
+  let wrapper;
+
   describe('with single answer questions', function () {
     before(function () {
-      let wrapper = shallow(<Choice translation={task} task={task} annotation={annotation} choiceID='ar' />)
+      wrapper = shallow(<Choice
+        translation={task}
+        task={task}
+        annotation={annotation}
+        annotationValue={annotationValue}
+        choiceID='ar'
+      />);
     });
     it('should render radio buttons for answers', function () {
-      
+      const question = task.questions.ho;
+      const answers = wrapper.find('input[name="ho"][type="radio"]');
+      assert.equal(Object.keys(question.answers).length, answers.length);
     });
     it('should render the chosen answer as checked', function () {
-      
+      const answer = wrapper.find('input[name="ho"][value="two"]');
+      assert.equal(answer.props().checked, true);
     });
     it('should clear the chosen answer on click', function () {
       
