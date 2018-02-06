@@ -9,7 +9,7 @@ const dimensionMap = {
 
 class GALogAdapter {
   constructor(gaLayer) {
-    this.gaLayer = gaLayer || (() => null);
+    this.gaLayer = gaLayer;
   }
 
   configure(keys) {

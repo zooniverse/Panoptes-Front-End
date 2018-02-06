@@ -50,7 +50,7 @@ PanoptesApp = createReactClass
 
   componentWillMount: ->
     @geordiLogger = new GeordiLogger
-    @geordiLogger.subscribe(new GeordiLogAdapter(), new GALogAdapter(window.dataLayer))
+    @geordiLogger.subscribe(new GeordiLogAdapter(), new GALogAdapter(window.ga))
 
   componentDidMount: ->
     @props.notificationsCounter.listen (unreadNotificationsCount) =>
