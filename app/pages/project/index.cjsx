@@ -48,6 +48,7 @@ ProjectPageController = createReactClass
     projectAvatar: null
     projectIsComplete: false
     projectRoles: null
+    ready: false
     splits: null
 
   _listenedToPreferences: null
@@ -144,7 +145,8 @@ ProjectPageController = createReactClass
             awaitPreferences,
             this.props.actions.translations.load('project', project.id, this.props.translations.locale)
           ]).then(([background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
-              @setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
+              ready = true
+              @setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences, ready })
               @loadFieldGuide(project.id)
               this.props.actions.translations.loadTranslations('project_page', pages.map((page) => page.id), this.props.translations.locale)
             ).catch((error) => @setState({ error }); console.error(error); );
@@ -231,7 +233,7 @@ ProjectPageController = createReactClass
       {if (!launchApproved && betaApproved)
         <div className="beta-border"></div>}
 
-      {if @state.project? and @state.owner?
+      {if @state.ready
         <ProjectTranslations
           project={@state.project}
         >
