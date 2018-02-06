@@ -27,14 +27,6 @@ function ProjectName({ loading, project, translation }) {
   if (loading) {
     return <span>Loading…</span>;
   }
-  if (project.beta_approved) {
-    return (
-      <div className="project-name">
-        {translation.display_name}
-        <small className="project-name__under-review">Under Review</small>
-      </div>
-    );
-  }
   if (project.launch_approved) {
     return (
       <span>
@@ -44,6 +36,14 @@ function ProjectName({ loading, project, translation }) {
           <i className="fa fa-check fa-stack-1x checkmark-stack__checkmark" />
         </span>
       </span>
+    );
+  }
+  if (project.beta_approved) {
+    return (
+      <div className="project-name">
+        {translation.display_name}
+        <small className="project-name__under-review">Under Review</small>
+      </div>
     );
   }
   return <span>{translation.display_name}</span>;
