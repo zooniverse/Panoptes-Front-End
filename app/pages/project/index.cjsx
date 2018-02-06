@@ -224,10 +224,11 @@ ProjectPageController = createReactClass
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
     betaApproved = @state.project?.beta_approved
+    launchApproved = @state.project?.launch_approved
 
     <div className="project-page-wrapper">
       <Helmet title="#{@state.project?.display_name ? counterpart 'loading'}" />
-      {if betaApproved
+      {if (!launchApproved && betaApproved)
         <div className="beta-border"></div>}
 
       {if @state.project? and @state.owner?
