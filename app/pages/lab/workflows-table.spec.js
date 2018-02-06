@@ -1,6 +1,7 @@
 import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
+import { expect } from 'chai';
 import sinon from 'sinon';
 import WorkflowsTable from './workflows-table';
 
@@ -9,7 +10,7 @@ const meta = function () {
 };
 
 const workflows = [
-  { active: true, id: '1', display_name: 'Rad Workflow', getMeta: meta },
+  { active: false, id: '1', display_name: 'Rad Workflow', getMeta: meta },
   { active: true, id: '2', display_name: 'Cool Workflow', getMeta: meta }
 ];
 
@@ -17,24 +18,52 @@ const project = {
   configuration: {}
 };
 
-describe('WorkflowsPage', function () {
+describe('WorkflowsTable', function () {
   let wrapper;
-
-  const workflowStatusChangeSpy = sinon.spy();
+  const statusChangeSpy = sinon.spy();
+  const statsVisibilityChangeSpy = sinon.spy();
+  const completenessTypeChangeSpy = sinon.spy();
 
   before(function () {
     wrapper = shallow(
       <WorkflowsTable
         labPath={(url) => { return url; }}
         project={project}
-        changeStatus={workflowStatusChangeSpy}
+        handleSetStatsCompletenessType={completenessTypeChangeSpy}
+        handleWorkflowStatsVisibility={statsVisibilityChangeSpy}
+        handleWorkflowStatusChange={statusChangeSpy}
+        meta={meta}
         workflows={workflows}
       />
     );
-    wrapper.setProps({ loading: false });
   });
 
-  it('will display the correct amount of workflows', function () {
-    assert.equal(wrapper.find('Link').length, 2);
+  it('should display the correct amount of workflows', function () {
+    expect(wrapper.find('Link')).to.have.lengthOf(2);
+  });
+
+  it('should call handleWorkflowStatusChange on status checkbox change', function () {
+    const statusCheckbox = wrapper.find('input[id="active"]').at(0);
+    statusCheckbox.simulate('change');
+    expect(statusChangeSpy.calledOnce).to.be.true;
+  });
+
+  it('should call handleSetStatsCompletenessType on completeness-type-classification change', function () {
+    const completenessRadioButton = wrapper.find('input[value="classification"]').at(0);
+    completenessRadioButton.simulate('change');
+    expect(completenessTypeChangeSpy.calledOnce).to.be.true;
+    completenessTypeChangeSpy.reset();
+  });
+
+  it('should call handleSetStatsCompletenessType on completeness-type-retirement change', function () {
+    const completenessRadioButton = wrapper.find('input[value="retirement"]').at(1);
+    completenessRadioButton.simulate('change');
+    expect(completenessTypeChangeSpy.calledOnce).to.be.true;
+  });
+
+  it('should call handleWorkflowStatsVisibility on visibility checkbox change', function () {
+    const statsVisibilityCheckbox = wrapper.find({name: `stats_visible.${workflows[0].id}`}).at(0);
+    statsVisibilityCheckbox.simulate('change');
+    expect(statsVisibilityChangeSpy.calledOnce).to.be.true;
   });
 });
