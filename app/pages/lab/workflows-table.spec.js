@@ -41,26 +41,26 @@ describe('WorkflowsTable', function () {
   });
 
   it('should call handleWorkflowStatusChange on status checkbox change', function () {
-    const statusCheckbox = wrapper.find('input[id="active"]').at(0);
+    const statusCheckbox = wrapper.find(`input[name="status.${workflows[0].id}"]`);
     statusCheckbox.simulate('change');
     expect(statusChangeSpy.calledOnce).to.be.true;
   });
 
   it('should call handleSetStatsCompletenessType on completeness-type-classification change', function () {
-    const completenessRadioButton = wrapper.find('input[value="classification"]').at(0);
+    const completenessRadioButton = wrapper.find(`input[value="classification"][name="stats_completeness_type.${workflows[0].id}"]`);
     completenessRadioButton.simulate('change');
     expect(completenessTypeChangeSpy.calledOnce).to.be.true;
     completenessTypeChangeSpy.resetHistory();
   });
 
   it('should call handleSetStatsCompletenessType on completeness-type-retirement change', function () {
-    const completenessRadioButton = wrapper.find('input[value="retirement"]').at(1);
+    const completenessRadioButton = wrapper.find(`input[value="retirement"][name="stats_completeness_type.${workflows[0].id}"]`);
     completenessRadioButton.simulate('change');
     expect(completenessTypeChangeSpy.calledOnce).to.be.true;
   });
 
   it('should call handleWorkflowStatsVisibility on visibility checkbox change', function () {
-    const statsVisibilityCheckbox = wrapper.find({name: `stats_visible.${workflows[0].id}`}).at(0);
+    const statsVisibilityCheckbox = wrapper.find(`input[name="stats_visible.${workflows[0].id}"]`);
     statsVisibilityCheckbox.simulate('change');
     expect(statsVisibilityChangeSpy.calledOnce).to.be.true;
   });

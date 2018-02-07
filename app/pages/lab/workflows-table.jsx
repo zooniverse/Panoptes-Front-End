@@ -48,9 +48,10 @@ const WorkflowsTable = ({
                 <label>
                   <input
                     checked={workflow.active}
-                    id="active"
+                    name={`status.${workflow.id}`}
                     onChange={e => handleWorkflowStatusChange(e, meta.page, workflow)}
                     type="checkbox"
+                    value={workflow.active}
                   />
                   Active
                 </label>
