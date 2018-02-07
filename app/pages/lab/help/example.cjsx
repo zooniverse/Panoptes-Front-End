@@ -1,12 +1,11 @@
 React = require 'react'
-createReactClass = require 'create-react-class'
 counterpart = require 'counterpart'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
-  howToBuildAProject:
+  example:
     content: '''
-      # How to Build a Project
+      # Example Project
 
       **So you want to build a project using the Zooniverse Project Builder?**
       This tutorial will help walk you through the process, using Kitteh Zoo as an example.
@@ -247,10 +246,10 @@ counterpart.registerTranslations 'en',
       *Note:* if you have a large subject set it may be cumbersome to manually create a manifest. We suggest using a command-line or other tool to copy-paste a directory list of files into a spreadsheet to help you get started.
     '''
 
-module.exports = createReactClass
-  displayName: 'HowToBuildAProject'
+module.exports = React.createClass
+  displayName: 'example'
 
   render: ->
     <div className="secondary-page">
-      <Markdown>{counterpart "howToBuildAProject.content"}</Markdown>
+      <Markdown>{counterpart "example.content"}</Markdown>
     </div>

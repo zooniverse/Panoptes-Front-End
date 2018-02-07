@@ -12,6 +12,7 @@ counterpart.registerTranslations 'en',
       howToBuildAProject: 'How to Build a Project'
       policies: 'Policies'
       glossary: 'Glossary'
+      example: 'Example'
 
 module.exports = createReactClass
   displayName: 'HowTo'
@@ -37,6 +38,7 @@ module.exports = createReactClass
             <IndexLink to="/help" activeClassName="active"><Translate content="help.nav.howToBuildAProject" /></IndexLink>
             <Link to="/help/glossary" activeClassName="active" onClick={@logClick?.bind(this, 'help.nav.glossary')}><Translate content="help.nav.glossary"/></Link>
             <Link to="/help/lab-policies" activeClassName="active" onClick={@logClick?.bind(this, 'help.nav.policies')}><Translate content="help.nav.policies" /></Link>
+            <Link to="/help/example" activeClassName="active" onClick={@logClick?.bind(this, 'help.nav.example')}><Translate content="help.nav.example" /></Link>
           </nav>
         </div>
       </section>
