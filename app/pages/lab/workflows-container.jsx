@@ -60,12 +60,13 @@ export default class WorkflowsContainer extends React.Component {
   }
 
   handleWorkflowStatusChange(e, page, workflow) {
-    const defaultWorkflow = (this.props.configuration) ? this.props.configuration.default_workflow : null;
+    const projectConfiguration = (this.props.configuration && this.props.configuration.default_workflow) ?
+      this.props.configuration.default_workflow : null;
     const checked = e.target.checked;
     workflow.update({ active: checked }).save()
       .catch(error => console.log(error))
       .then(() => {
-        if (!workflow.active && workflow.id === defaultWorkflow) {
+        if (!workflow.active && workflow.id === projectConfiguration) {
           this.props.project.update({ 'configuration.default_workflow': null });
           this.props.project.save();
         }

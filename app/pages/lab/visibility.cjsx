@@ -3,7 +3,6 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 SetToggle = require '../../lib/set-toggle'
-getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 uniq = require 'lodash/uniq'
 Paginator = require '../../talk/lib/paginator'
 
@@ -11,9 +10,6 @@ Paginator = require '../../talk/lib/paginator'
 
 module.exports = createReactClass
   displayName: 'EditProjectVisibility'
-
-  contextTypes:
-    router: PropTypes.object.isRequired
 
   getDefaultProps: ->
     project: null
@@ -31,61 +27,8 @@ module.exports = createReactClass
 
   setterProperty: 'project'
 
-  componentDidMount: ->
-    page = if @props.location?.query?.page? then @props.location.query.page else 1
-    @getWorkflowList page
-
-  onPageChange: (page) ->
-    nextQuery = Object.assign {}, @props.location.query, { page }
-    @context.router.push
-      pathname: @props.location.pathname
-      query: nextQuery
-    @getWorkflowList page
-    .then () =>
-      @workflowList?.scrollIntoView()
-
-  getWorkflowList: (page) ->
-    @setState { loadingWorkflows: true }
-    # TODO remove page_size once getWorkflowsInOrder does not override default page_size
-    getWorkflowsInOrder(@props.project, { page: page, page_size: 20, fields: 'active,configuration,display_name' })
-      .then (workflows) =>
-        @setState
-          workflows: workflows
-          loadingWorkflows: false
-
   setRadio: (property, value) ->
     @set property, value
-
-  toggleCheckbox: (checkbox) ->
-    change = { }
-    change[checkbox] = @refs?[checkbox]?.checked
-    @setState change
-
-  handleWorkflowSettingChange: (workflow, e) ->
-    checked = e.target.checked
-
-    workflow.update({ 'active': checked }).save()
-      .catch((error) =>
-        @setState {error}
-      ).then((workflow) =>
-        if not workflow.active and workflow.id is @props.project.configuration?.default_workflow
-          @props.project.update({ 'configuration.default_workflow': null })
-          @props.project.save()
-      ).then(() => @forceUpdate()) # Dislike. Eventually we should refactor to not have to call this.forceUpdate()
-
-  handleSetStatsCompletenessType: (workflow, e) ->
-    workflow.update({ 'configuration.stats_completeness_type': e.target.value }).save()
-      .catch((error) =>
-        @setState {error}
-      ).then(() => @forceUpdate())
-
-  handleWorkflowStatsVisibility: (workflow, e) ->
-    hidden = !e.target.checked
-
-    workflow.update({ 'configuration.stats_hidden': hidden }).save()
-      .catch((error) =>
-        @setState { error }
-      ).then(() => @forceUpdate())
 
   render: ->
     looksDisabled =

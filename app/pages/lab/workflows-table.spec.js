@@ -5,9 +5,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import WorkflowsTable from './workflows-table';
 
-const meta = function () {
-  return { meta: { page: 1, page_size: 1 }};
-};
+const meta = { page: 1, page_size: 1 };
 
 const workflows = [
   { active: false, id: '1', display_name: 'Rad Workflow', getMeta: meta },
@@ -52,7 +50,7 @@ describe('WorkflowsTable', function () {
     const completenessRadioButton = wrapper.find('input[value="classification"]').at(0);
     completenessRadioButton.simulate('change');
     expect(completenessTypeChangeSpy.calledOnce).to.be.true;
-    completenessTypeChangeSpy.reset();
+    completenessTypeChangeSpy.resetHistory();
   });
 
   it('should call handleSetStatsCompletenessType on completeness-type-retirement change', function () {
