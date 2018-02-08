@@ -83,10 +83,15 @@ describe('ProjectPageController', function () {
       sinon.assert.calledTwice(apiRequestStub);
       sinon.assert.calledWith(apiRequestStub, 'get', '/projects', payload);
     });
-    it('should not fetch project data again on any other prop change.', function () {
-      
+    
+    it('should not fetch project data again while the first request is still loading.', function () {
+      const translations = { locale: 'es' };
+      wrapper.setProps({ translations });
+      sinon.assert.calledOnce(apiRequestStub);
+      sinon.assert.calledWith(apiRequestStub, 'get', '/projects', payload);
     });
   });
+
   describe('without initial load complete', function () {
     let wrapper;
     let apiRequestStub;
@@ -150,7 +155,9 @@ describe('ProjectPageController', function () {
     });
     
     it('should not fetch project data again on any other prop change.', function () {
-      
+      const translations = { locale: 'es' };
+      wrapper.setProps({ translations });
+      sinon.assert.notCalled(apiRequestStub);
     });
   })
 });
