@@ -1,5 +1,6 @@
 React = require 'react'
 PropTypes = require 'prop-types'
+{Link} = require 'react-router'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 SetToggle = require '../../lib/set-toggle'
@@ -97,4 +98,10 @@ module.exports = createReactClass
         }
 
       </div>
+      <hr />
+      <div>
+        <p className="form-label">Temporary notice</p>
+        <p>The workflow settings have moved from the visibility page to the <Link to="/lab/#{@props.project.id}/workflows">workflows page</Link>. For improved discoverability, we have moved these settings so all relevant information and configuration of workflows is in one place.</p>
+      </div>
+
     </div>
