@@ -1,5 +1,6 @@
 React = require 'react'
 PropTypes = require 'prop-types'
+{Link} = require 'react-router'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 SetToggle = require '../../lib/set-toggle'
@@ -97,4 +98,9 @@ module.exports = createReactClass
         }
 
       </div>
+      <hr />
+      <div>
+        <Link to="/lab/#{@props.project.id}/workflows">Workflows Settings has moved.</Link>
+      </div>
+
     </div>
