@@ -15,7 +15,7 @@
     "json-api-client": "~3.2.2",
     "lodash": "~4.17.4",
     "markdownz": "~7.4",
-    "modal-form": "~2.4",
+    "modal-form": "~2.5.1",
     "moment": "~2.18.1",
     "panoptes-client": "~2.8.1",
     "papaparse": "mholt/PapaParse#cada171",
