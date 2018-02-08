@@ -68,9 +68,10 @@ ProjectPageController = createReactClass
     {owner, name} = nextProps.params
     pathChanged = owner isnt @props.params.owner or name isnt @props.params.name
     userChanged = nextContext.initialLoadComplete and nextProps.user isnt @props.user
+    initialLoadCompleted = nextContext.initialLoadComplete is not @context.initialLoadComplete
 
     # Wait until we know if there's a user
-    if pathChanged or userChanged or nextContext.initialLoadComplete and @state.project is null
+    if pathChanged or userChanged or initialLoadCompleted and @state.project is null
       @fetchProjectData owner, name, nextProps.user unless @state.loading
       @setupSplits nextProps
 
