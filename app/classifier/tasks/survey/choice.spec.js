@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import assert from 'assert';
+import sinon from 'sinon';
 import React from 'react';
 import Choice from './choice';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
@@ -105,6 +106,21 @@ describe('Choice', function () {
       assert.equal(wrapper.state().answers.ho, 'two');
       answer.simulate('keyDown', fakeEvent);
       assert.equal(wrapper.state().answers.ho, 'two');
+    });
+    it('should not prevent the default keyDown event for checkboxes', function () {
+      const checkbox = wrapper.find('input[name="be"][value="mo"]');
+      const fakeEvent = {
+        which: 32,
+        target: {
+          type: 'checkbox',
+          name: 'be',
+          value: 'mo',
+          checked: true
+        },
+        preventDefault: sinon.spy()
+      };
+      checkbox.simulate('keyDown', fakeEvent);
+      assert.equal(fakeEvent.preventDefault.notCalled, true);
     });
   })
 });
