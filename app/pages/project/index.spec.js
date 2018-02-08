@@ -86,6 +86,7 @@ describe('ProjectPageController', function () {
     
     it('should not fetch project data again while the first request is still loading.', function () {
       const translations = { locale: 'es' };
+      wrapper.setState({ loading: false });
       wrapper.setProps({ translations });
       sinon.assert.calledOnce(apiRequestStub);
       sinon.assert.calledWith(apiRequestStub, 'get', '/projects', payload);
