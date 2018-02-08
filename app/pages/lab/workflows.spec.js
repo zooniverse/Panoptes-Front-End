@@ -42,17 +42,13 @@ describe('WorkflowsPage', function () {
     assert.equal(wrapper.contains(<p>{message}</p>), true);
   });
 
-  it('will display the correct amount of workflows', function () {
-    wrapper.setProps({ workflows });
-    assert.equal(wrapper.find('Link').length, 2);
-  });
-
   it('should call the workflow create handler', function () {
     wrapper.find('[data-button="createWorkflow"]').simulate('click');
     sinon.assert.calledOnce(showCreateWorkflowSpy);
   });
 
   it('should default render the table view', function() {
+    wrapper.setProps({ workflows });
     assert.equal(wrapper.find('Paginator').length, 1);
     assert.equal(reorderWorkflowButton.text(), 'Reorder view');
   });
