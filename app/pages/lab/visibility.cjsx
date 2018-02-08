@@ -100,7 +100,8 @@ module.exports = createReactClass
       </div>
       <hr />
       <div>
-        <Link to="/lab/#{@props.project.id}/workflows">Workflows Settings has moved.</Link>
+        <p className="form-label">Temporary notice</p>
+        <p>The workflow settings have moved from the visibility page to the <Link to="/lab/#{@props.project.id}/workflows">workflows page</Link>. For improved discoverability, we have moved these settings so all relevant information and configuration of workflows is in one place.</p>
       </div>
 
     </div>
