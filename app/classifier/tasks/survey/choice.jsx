@@ -73,10 +73,12 @@ class Choice extends React.Component {
   }
 
   handleRadioKeyDown(e) {
+    const { type, checked } = e.target;
+    const isRadio = type === 'radio';
     switch (e.which) {
       case BACKSPACE:
       case SPACE:
-        if (e.target.checked) {
+        if (isRadio && checked) {
           e.preventDefault();
           this.resetSingleAnswerQuestion(e);
         }
