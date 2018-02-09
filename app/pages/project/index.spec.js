@@ -24,22 +24,23 @@ describe('ProjectPageController', function () {
   describe('with initial load complete', function () {
     let wrapper;
     let apiRequestStub;
-    const payload = {
-      slug: 'owner/test-project',
-      include: 'avatar,background,owners'
-    };
+    let fetchProjectStub;
     
     before(function () {
       apiRequestStub = sinon.stub(apiClient, 'request').callsFake(function (method, url, payload) {
         return Promise.resolve([]);
       }); 
       sinon.stub(Split, 'load').callsFake(() => Promise.resolve([]));
+      fetchProjectStub = sinon.stub(ProjectPageController, 'fetchProjectData').callsFake(function () {
+        return Promise.resolve([]);
+      });
     });
     
     after(function () {
       apiRequestStub.restore();
       Split.load.restore();
-    })
+      fetchProjectStub.restore();
+    });
     
     beforeEach(function () {
       context.initialLoadComplete = true;
@@ -54,12 +55,12 @@ describe('ProjectPageController', function () {
     });
     
     afterEach(function () {
-      apiRequestStub.resetHistory();
-    })
+      fetchProjectStub.resetHistory();
+    });
     
     it('should fetch project data on mount.', function () {
-      sinon.assert.calledOnce(apiRequestStub);
-      sinon.assert.calledWith(apiRequestStub, 'get', '/projects', payload);
+      sinon.assert.calledOnce(fetchProjectStub);
+      sinon.assert.calledWith(fetchProjectStub, params.owner, params.name);
     });
     
     it('should fetch project data again on project change.', function () {
@@ -70,50 +71,47 @@ describe('ProjectPageController', function () {
           name: 'another-project'
         }
       });
-      const newPayload = {
-        slug: 'someone/another-project',
-        include: 'avatar,background,owners'
-      };
-      sinon.assert.calledTwice(apiRequestStub);
-      sinon.assert.calledWith(apiRequestStub, 'get', '/projects', newPayload);
+      sinon.assert.calledTwice(fetchProjectStub);
+      sinon.assert.calledWith(fetchProjectStub, 'someone', 'another-project');
     });
     
     it('should fetch project data again on user change.', function () {
       const user = { id: '1' };
       wrapper.setState({ loading: false });
       wrapper.setProps({ user });
-      sinon.assert.calledTwice(apiRequestStub);
-      sinon.assert.calledWith(apiRequestStub, 'get', '/projects', payload);
+      sinon.assert.calledTwice(fetchProjectStub);
+      sinon.assert.calledWith(fetchProjectStub, params.owner, params.name, user);
     });
     
     it('should not fetch project data again while the first request is still loading.', function () {
       const translations = { locale: 'es' };
       wrapper.setState({ loading: false });
       wrapper.setProps({ translations });
-      sinon.assert.calledOnce(apiRequestStub);
-      sinon.assert.calledWith(apiRequestStub, 'get', '/projects', payload);
+      sinon.assert.calledOnce(fetchProjectStub);
+      sinon.assert.calledWith(fetchProjectStub, params.owner, params.name);
     });
   });
 
   describe('without initial load complete', function () {
     let wrapper;
     let apiRequestStub;
-    const payload = {
-      slug: 'owner/test-project',
-      include: 'avatar,background,owners'
-    };
+    let fetchProjectStub;
     
     before(function () {
       apiRequestStub = sinon.stub(apiClient, 'request').callsFake(function (method, url, payload) {
         return Promise.resolve([]);
       }); 
       sinon.stub(Split, 'load').callsFake(() => Promise.resolve([]));
+      fetchProjectStub = sinon.stub(ProjectPageController, 'fetchProjectData').callsFake(function () {
+        return Promise.resolve([]);
+      });
     });
     
     after(function () {
       apiRequestStub.restore();
       Split.load.restore();
-    })
+      fetchProjectStub.restore();
+    });
     
     beforeEach(function () {
       context.initialLoadComplete = false;
@@ -128,11 +126,11 @@ describe('ProjectPageController', function () {
     });
     
     afterEach(function () {
-      apiRequestStub.resetHistory();
-    })
+      fetchProjectStub.resetHistory();
+    });
     
     it('should not fetch project data on mount.', function () {
-      sinon.assert.notCalled(apiRequestStub);
+      sinon.assert.notCalled(fetchProjectStub);
     });
     
     it('should fetch project data again on project change.', function () {
@@ -143,25 +141,21 @@ describe('ProjectPageController', function () {
           name: 'another-project'
         }
       });
-      const newPayload = {
-        slug: 'someone/another-project',
-        include: 'avatar,background,owners'
-      };
-      sinon.assert.calledOnce(apiRequestStub);
-      sinon.assert.calledWith(apiRequestStub, 'get', '/projects', newPayload);
+      sinon.assert.calledOnce(fetchProjectStub);
+      sinon.assert.calledWith(fetchProjectStub, 'someone', 'another-project');
     });
     
     it('should not fetch project data again on user change.', function () {
       const user = { id: '1' };
       wrapper.setState({ loading: false });
       wrapper.setProps({ user });
-      sinon.assert.notCalled(apiRequestStub);
+      sinon.assert.notCalled(fetchProjectStub);
     });
     
     it('should not fetch project data again on any other prop change.', function () {
       const translations = { locale: 'es' };
       wrapper.setProps({ translations });
-      sinon.assert.notCalled(apiRequestStub);
+      sinon.assert.notCalled(fetchProjectStub);
     });
-  })
+  });
 });
