@@ -1,4 +1,5 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { mount } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
@@ -42,8 +43,9 @@ describe('ProjectPageController', function () {
     
     beforeEach(function () {
       context.initialLoadComplete = true;
+      const ControllerComponent = createReactClass(ProjectPageController);
       wrapper = mount(
-        <ProjectPageController
+        <ControllerComponent
           location={location}
           params={params}
         />,
@@ -115,8 +117,9 @@ describe('ProjectPageController', function () {
     
     beforeEach(function () {
       context.initialLoadComplete = false;
+      const ControllerComponent = createReactClass(ProjectPageController);
       wrapper = mount(
-        <ProjectPageController
+        <ControllerComponent
           location={location}
           params={params}
         />,
