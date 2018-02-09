@@ -21,26 +21,27 @@ const context = {
 };
 
 describe('ProjectPageController', function () {
+  let wrapper;
+  let apiRequestStub;
+  let fetchProjectStub;
+
+  before(function () {
+    apiRequestStub = sinon.stub(apiClient, 'request').callsFake(function (method, url, payload) {
+      return Promise.resolve([]);
+    }); 
+    sinon.stub(Split, 'load').callsFake(() => Promise.resolve([]));
+    fetchProjectStub = sinon.stub(ProjectPageController, 'fetchProjectData').callsFake(function () {
+      return Promise.resolve([]);
+    });
+  });
+
+  after(function () {
+    apiRequestStub.restore();
+    Split.load.restore();
+    fetchProjectStub.restore();
+  });
+
   describe('with initial load complete', function () {
-    let wrapper;
-    let apiRequestStub;
-    let fetchProjectStub;
-    
-    before(function () {
-      apiRequestStub = sinon.stub(apiClient, 'request').callsFake(function (method, url, payload) {
-        return Promise.resolve([]);
-      }); 
-      sinon.stub(Split, 'load').callsFake(() => Promise.resolve([]));
-      fetchProjectStub = sinon.stub(ProjectPageController, 'fetchProjectData').callsFake(function () {
-        return Promise.resolve([]);
-      });
-    });
-    
-    after(function () {
-      apiRequestStub.restore();
-      Split.load.restore();
-      fetchProjectStub.restore();
-    });
     
     beforeEach(function () {
       context.initialLoadComplete = true;
@@ -93,25 +94,6 @@ describe('ProjectPageController', function () {
   });
 
   describe('without initial load complete', function () {
-    let wrapper;
-    let apiRequestStub;
-    let fetchProjectStub;
-    
-    before(function () {
-      apiRequestStub = sinon.stub(apiClient, 'request').callsFake(function (method, url, payload) {
-        return Promise.resolve([]);
-      }); 
-      sinon.stub(Split, 'load').callsFake(() => Promise.resolve([]));
-      fetchProjectStub = sinon.stub(ProjectPageController, 'fetchProjectData').callsFake(function () {
-        return Promise.resolve([]);
-      });
-    });
-    
-    after(function () {
-      apiRequestStub.restore();
-      Split.load.restore();
-      fetchProjectStub.restore();
-    });
     
     beforeEach(function () {
       context.initialLoadComplete = false;
