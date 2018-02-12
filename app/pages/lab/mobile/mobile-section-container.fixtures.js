@@ -48,6 +48,7 @@ function task(extraData = {}) {
 
 function workflow(extraData = {}) {
   return new MockResource({
+    mobile_friendly: true,
     tasks: {
       T0: {
         answers: [
@@ -65,7 +66,7 @@ function workflow(extraData = {}) {
 const validationFixtures = {
   launchApprovedProject: {
     project: {
-      launch_approved: false,
+      launch_approved: false
     }
   },
   taskQuestionTooLong: {

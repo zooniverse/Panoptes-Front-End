@@ -98,7 +98,8 @@ class MobileSectionContainer extends Component {
     const { project, workflow } = this.props;
     const currentStatus = workflow.configuration.swipe_enabled || false;
     const updateWorkflow = workflow.update({
-      'configuration.swipe_enabled': !currentStatus
+      'configuration.swipe_enabled': !currentStatus,
+      mobile_friendly: !currentStatus
     });
 
     return updateWorkflow.save()
