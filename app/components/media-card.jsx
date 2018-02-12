@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'svg'];
 const VIDEO_EXTENSIONS = ['mp4'];
@@ -31,13 +32,14 @@ const MediaCard = ({ children, className, src, style }) => {
 };
 
 MediaCard.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  src: React.PropTypes.string,
-  style: React.PropTypes.object
+  children: PropTypes.node,
+  className: PropTypes.string,
+  src: PropTypes.string,
+  style: PropTypes.object
 };
 
 MediaCard.defaultProps = {
+  children: null,
   className: '',
   src: '',
   style: {}
