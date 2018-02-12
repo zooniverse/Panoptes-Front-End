@@ -164,9 +164,17 @@ describe('<MobileSectionContainer />', function () {
       assert.ok(isBoolean(component.props().checked));
     });
 
-    it('should equal true if the workflow has swipe enabled', function () {
+    it('should equal true if the workflow has swipe enabled and mobile_friendly true', function () {
       const { checked } = component.props();
       assert.strictEqual(checked, true);
+    });
+
+    it('should equal false if the workflow has mobile_friendly false', function () {
+      const workflow = fixtures.workflow({ mobile_friendly: false });
+      wrapper = shallow(<MobileSectionContainer task={fixtures.task()} workflow={workflow} project={fixtures.project()} />);
+      component = wrapper.find('MobileSection').first();
+      const { checked } = component.props();
+      assert.strictEqual(checked, false);
     });
 
     it('should equal false if the workflow doesn\'t have swipe enabled', function () {
@@ -219,7 +227,7 @@ describe('<MobileSectionContainer />', function () {
   });
 
   describe('resource updating', function () {
-    it('should update the original workflow prop when toggling enabled', function (done) {
+    it('should update the original workflow props when toggling enabled', function (done) {
       let wrapper = mount(<MobileSectionContainer
         project={fixtures.project()}
         task={fixtures.task()}
@@ -232,6 +240,7 @@ describe('<MobileSectionContainer />', function () {
           wrapper.update();
           const workflow = wrapper.props().workflow;
           assert.strictEqual(workflow.configuration.swipe_enabled, false);
+          assert.strictEqual(workflow.mobile_friendly, false);
         })
         .then(function () {
           return component.props().toggleChecked();
@@ -240,6 +249,7 @@ describe('<MobileSectionContainer />', function () {
           wrapper.update();
           const workflow = wrapper.props().workflow;
           assert.strictEqual(workflow.configuration.swipe_enabled, true);
+          assert.strictEqual(workflow.mobile_friendly, true);
           done();
         });
     });
