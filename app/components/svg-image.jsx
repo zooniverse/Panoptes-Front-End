@@ -8,7 +8,7 @@ const FILTERS = {
 const INVERT =
   `<svg style="position: fixed; right: 100%; top: 100%; visibility: hidden;">
     <defs>
-      <filter id="svg-invert-filter">
+      <filter id="svg-invert-filter" color-interpolation-filters="sRGB">
         <feComponentTransfer>
           <feFuncR type="table" tableValues="1 0"/>
           <feFuncG type="table" tableValues="1 0"/>
