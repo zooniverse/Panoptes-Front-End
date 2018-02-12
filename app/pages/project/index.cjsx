@@ -19,7 +19,7 @@ counterpart.registerTranslations 'nl', require('../../locales/nl').default
 counterpart.setFallbackLocale 'en'
 
 
-ProjectPageController = createReactClass
+ProjectPageController = 
   displayName: 'ProjectPageController'
 
   contextTypes:
@@ -304,7 +304,8 @@ mapDispatchToProps = (dispatch) -> ({
   }
 });
 
+ControllerComponent = createReactClass ProjectPageController
 module.exports = {
-    default: connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ProjectPageController)
+    default: connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ControllerComponent)
     ProjectPageController
   }
