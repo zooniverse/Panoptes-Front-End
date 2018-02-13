@@ -85,7 +85,7 @@ class MobileSectionContainer extends Component {
   }
 
   renderMobileSection() {
-    const checked = this.props.workflow.configuration.swipe_enabled || false;
+    const checked = (this.props.workflow.mobile_friendly && this.props.workflow.configuration.swipe_enabled) || false;
     return <MobileSection
       checked={checked}
       enabled={this.state.enabled}
@@ -96,7 +96,7 @@ class MobileSectionContainer extends Component {
 
   toggleChecked() {
     const { project, workflow } = this.props;
-    const currentStatus = workflow.configuration.swipe_enabled || false;
+    const currentStatus = (workflow.mobile_friendly && workflow.configuration.swipe_enabled) || false;
     const updateWorkflow = workflow.update({
       'configuration.swipe_enabled': !currentStatus,
       mobile_friendly: !currentStatus
@@ -108,7 +108,7 @@ class MobileSectionContainer extends Component {
         return allWorkflows.reduce((hasSwipeWorkflow, thisWorkflow) => {
           return (hasSwipeWorkflow)
             ? hasSwipeWorkflow
-            : (thisWorkflow.configuration && thisWorkflow.configuration.swipe_enabled);
+            : (thisWorkflow.mobile_friendly && thisWorkflow.configuration && thisWorkflow.configuration.swipe_enabled);
         }, false);
       })
       .then(mobileFriendly => {
@@ -143,7 +143,7 @@ class MobileSectionContainer extends Component {
       validations
     });
 
-    if (!enabled && this.props.workflow.configuration.swipe_enabled) {
+    if (!enabled && this.props.workflow.mobile_friendly && this.props.workflow.configuration.swipe_enabled) {
       this.toggleChecked();
     }
   }
@@ -159,6 +159,7 @@ MobileSectionContainer.propTypes = {
   }),
   workflow: React.PropTypes.shape({
     configuration: React.PropTypes.object,
+    mobile_friendly: React.PropTypes.bool,
     tasks: React.PropTypes.object,
     update: React.PropTypes.func
   }),
