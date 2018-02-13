@@ -22,6 +22,9 @@ export default class SingleChoiceTask extends React.Component {
 
   render() {
     const { annotation, task, translation } = this.props;
+    if (!task._key) {
+      task._key = Math.random()
+    }
     const answers = [];
     for (const [i, answer] of task.answers.entries()) {
       if (!answer._key) {
@@ -40,6 +43,7 @@ export default class SingleChoiceTask extends React.Component {
               checked={i === annotation.value}
               value={i}
               onChange={this.handleChange.bind(this, i)}
+              name={`${task._key}`}
             />
           </div>
           <div className="answer-button-label-container">
@@ -50,7 +54,7 @@ export default class SingleChoiceTask extends React.Component {
     }
     return (
       <GenericTask
-        autoFocus = {annotation.value === null}
+        autoFocus={annotation.value === null}
         question={translation.question}
         help={translation.help}
         answers={answers}
