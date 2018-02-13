@@ -72,10 +72,10 @@ const projects = [
 
 const projectPreferences = [
   {
-    id: '1',
-    email_communication: true,
+    id: '3',
+    email_communication: false,
     links: {
-      project: 'a'
+      project: 'c'
     }
   },
   {
@@ -83,6 +83,13 @@ const projectPreferences = [
     email_communication: false,
     links: {
       project: 'b'
+    }
+  },
+  {
+    id: '1',
+    email_communication: true,
+    links: {
+      project: 'a'
     }
   }
 ];
