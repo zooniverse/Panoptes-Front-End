@@ -72,10 +72,10 @@ const projects = [
 
 const projectPreferences = [
   {
-    id: '1',
-    email_communication: true,
+    id: '3',
+    email_communication: false,
     links: {
-      project: 'a'
+      project: 'c'
     }
   },
   {
@@ -83,6 +83,13 @@ const projectPreferences = [
     email_communication: false,
     links: {
       project: 'b'
+    }
+  },
+  {
+    id: '1',
+    email_communication: true,
+    links: {
+      project: 'a'
     }
   }
 ];
@@ -164,13 +171,16 @@ describe('EmailSettings', function () {
 
     projects.forEach((project, i) => {
       it(`shows project ${i} email input correctly`, function () {
-        const email = projectSettings.at(i).find('input');
-        assert.equal(email.prop('checked'), projectPreferences[i].email_communication);
+        const projectPreference = projectPreferences.filter(pref => pref.links.project === project.id)[0];
+        const email = projectSettings.find(`input[id="${projectPreference.id}"]`);
+        assert.equal(email.prop('checked'), projectPreference.email_communication);
       });
 
       it(`updates project ${i} email settings on change`, function () {
-        const emailPreference = projectPreferences[i].email_communication;
-        const email = projectSettings.at(i).find('input');
+        const projectPreference = projectPreferences.filter(pref => pref.links.project === project.id)[0];
+        const emailPreference = projectPreference.email_communication;
+        const email = projectSettings.find(`input[id="${projectPreference.id}"]`);
+        const index = projectPreferences.indexOf(projectPreference);
         const fakeEvent = {
           target: {
             type: email.prop('type'),
@@ -179,11 +189,12 @@ describe('EmailSettings', function () {
           }
         };
         email.simulate('change', fakeEvent);
-        assert.equal(wrapper.state().projectPreferences[i].email_communication, !emailPreference);
+        assert.equal(wrapper.state().projectPreferences[index].email_communication, !emailPreference);
       });
 
       it(`shows project ${i} name correctly`, function () {
-        const name = projectSettings.at(i).find('td').last();
+        const projectPreference = projectPreferences.filter(pref => pref.links.project === project.id)[0];
+        const name = projectSettings.find(`label[htmlFor="${projectPreference.id}"]`);
         assert.equal(name.text(), project.display_name);
       });
     });

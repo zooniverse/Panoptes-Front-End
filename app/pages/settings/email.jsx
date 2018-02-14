@@ -60,29 +60,34 @@ TalkPreferences.propTypes = {
 };
 
 function ProjectPreferences({ projects, projectPreferences, onChange }) {
-  const projectNames = {};
-  projects.map(project => projectNames[project.id] = project.display_name);
-  const projectIDs = projects.map(proj => proj.id);
-  function filterPrefs() {
-    return projectPreferences.filter(pref => projectIDs.includes(pref.links.project));
+  let projectsDictionary;
+  if (projects.length > 0) {
+    projectsDictionary = projects.reduce((accum, item) => {
+      const newAccum = accum;
+      newAccum[item.id] = item;
+      return newAccum;
+    }, {});
   }
 
   return (
     <tbody>
-      {filterPrefs().map((projectPreference, i) => {
-        if (projects[i]) {
+      {projectPreferences.map((pref, i) => {
+        if (projectsDictionary[pref.links.project]) {
           return (
-            <tr key={projectPreference.id}>
+            <tr key={pref.id}>
               <td>
                 <input
+                  id={pref.id}
                   type="checkbox"
                   name="email_communication"
-                  checked={projectPreference.email_communication}
+                  checked={pref.email_communication}
                   onChange={e => onChange(i, e)}
                 />
               </td>
               <td>
-                {projectNames[projectPreference.links.project]}
+                <label htmlFor={pref.id}>
+                  {projectsDictionary[pref.links.project].display_name}
+                </label>
               </td>
             </tr>
           );
