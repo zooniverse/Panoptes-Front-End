@@ -26,6 +26,7 @@ class OrganizationContainer extends React.Component {
       quoteObject: {}
     };
 
+    this.fetchAllOrganizationRoles = this.fetchAllOrganizationRoles.bind(this);
     this.toggleCollaboratorView = this.toggleCollaboratorView.bind(this);
     this.updateQuery = this.updateQuery.bind(this);
   }
@@ -166,6 +167,22 @@ class OrganizationContainer extends React.Component {
       });
   }
 
+  fetchAllOrganizationRoles(organization, organizationRoles = [], _page = 1) {
+    const fetchAllOrganizationRoles = this.fetchAllOrganizationRoles;
+    return apiClient.type('organization_roles')
+      .get({ organization_id: organization.id, page: _page })
+      .then((orgRoles) => {
+        const meta = orgRoles[0].getMeta();
+
+        if (meta.page !== meta.page_count) {
+          const newOrgRoles = organizationRoles.concat(orgRoles);
+          fetchAllOrganizationRoles(organization, newOrgRoles, meta.page + 1);
+        }
+        return organizationRoles.concat(orgRoles);
+      })
+      .catch(error => console.error('error loading roles', error)); // eslint-disable-line no-console
+  }
+
   fetchOrganization(name, owner) {
     if (!name || !owner) {
       return;
@@ -184,8 +201,7 @@ class OrganizationContainer extends React.Component {
             .catch(error => console.error('error loading avatar', error)); // eslint-disable-line no-console
           const awaitBackground = apiClient.type('backgrounds').get(organization.links.background.id)
             .catch(error => console.error('error loading background', error)); // eslint-disable-line no-console
-          const awaitRoles = apiClient.type('organization_roles').get(organization.links.organization_roles)
-            .catch(error => console.error('error loading roles', error)); // eslint-disable-line no-console
+          const awaitRoles = this.fetchAllOrganizationRoles(organization);
           const awaitPages = apiClient.type('organization_pages').get(organization.links.pages)
             .catch(error => console.error('error loading pages', error)); // eslint-disable-line no-console
 
