@@ -87,11 +87,11 @@ module.exports = createReactClass
       <div>
         {roleRankText}
         <h4>Can Read:</h4>
-        <span>Users of this status or lower will be able to read content in this board</span>
+        <span>Users of this status or higher will be able to read content in this board</span>
         <div className="roles-read">{@roleNames(@state.admin).map(@roleReadLabel)}</div>
 
         <h4>Can Write:</h4>
-        <span>Users of this status or lower will be able to post content in this board</span>
+        <span>Users of this status or higher will be able to post content in this board</span>
         <div className="roles-write">{@roleNames(@state.admin).map(@roleWriteLabel)}</div>
       </div>
 
