@@ -56,9 +56,6 @@ function workflow(extraData = {}) {
           { label: 'No' }
         ]
       }
-    },
-    configuration: {
-      swipe_enabled: true
     }
   }, extraData);
 }

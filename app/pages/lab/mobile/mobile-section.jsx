@@ -51,10 +51,10 @@ class MobileSection extends Component {
 
              <label
               className="pill-button"
-              htmlFor="swipe_enabled"
+              htmlFor="mobile_friendly"
             >
               <input
-                id="swipe_enabled"
+                id="mobile_friendly"
                 type="checkbox"
                 disabled={!this.props.enabled}
                 onChange={this.props.toggleChecked}

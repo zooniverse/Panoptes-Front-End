@@ -177,14 +177,6 @@ describe('<MobileSectionContainer />', function () {
       assert.strictEqual(checked, false);
     });
 
-    it('should equal false if the workflow doesn\'t have swipe enabled', function () {
-      const workflow = fixtures.workflow({ configuration: { swipe_enabled: false }});
-      wrapper = shallow(<MobileSectionContainer task={fixtures.task()} workflow={workflow} project={fixtures.project()} />);
-      component = wrapper.find('MobileSection').first();
-      const { checked } = component.props();
-      assert.strictEqual(checked, false);
-    });
-
     it('should equal false if the workflow has changed is and no longer valid', function () {
       let { checked } = component.props();
       assert.strictEqual(checked, true);
@@ -239,7 +231,6 @@ describe('<MobileSectionContainer />', function () {
         .then(function () {
           wrapper.update();
           const workflow = wrapper.props().workflow;
-          assert.strictEqual(workflow.configuration.swipe_enabled, false);
           assert.strictEqual(workflow.mobile_friendly, false);
         })
         .then(function () {
@@ -248,7 +239,6 @@ describe('<MobileSectionContainer />', function () {
         .then(function () {
           wrapper.update();
           const workflow = wrapper.props().workflow;
-          assert.strictEqual(workflow.configuration.swipe_enabled, true);
           assert.strictEqual(workflow.mobile_friendly, true);
           done();
         });
