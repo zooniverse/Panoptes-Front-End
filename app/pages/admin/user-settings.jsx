@@ -5,7 +5,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import handleInputChange from '../../lib/handle-input-change';
 import UserDetails from './user-settings/details';
 import UserProperties from './user-settings/properties';
-import UserProjects from './user-settings/projects';
+import UserResources from './user-settings/resources';
 import UserLimitToggle from './user-settings/limit-toggle';
 import DeleteUser from './user-settings/delete-user';
 
@@ -62,8 +62,9 @@ class UserSettings extends Component {
 
           <DeleteUser user={this.state.editUser} />
         </div>
-
-        <UserProjects user={this.state.editUser} />
+        <br />
+        <UserResources type="projects" user={this.state.editUser} />
+        <UserResources type="organizations" user={this.state.editUser} />
       </div>
     );
   }
