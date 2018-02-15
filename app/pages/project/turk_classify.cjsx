@@ -1,11 +1,13 @@
 auth = require 'panoptes-client/lib/auth'
 React = require 'react'
+PropTypes = require 'prop-types'
+createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 { Helmet } = require 'react-helmet'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 `import FinishedBanner from './finished-banner';`
-Classifier = require '../../classifier'
+Classifier = require('../../classifier').default
 seenThisSession = require '../../lib/seen-this-session'
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 { Split } = require('seven-ten')
@@ -44,17 +46,19 @@ apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 # Store this externally to persist during the session.
 sessionDemoMode = false
 
-module.exports = React.createClass
+module.exports = createReactClass
   displayName: 'ProjectTurkClassifyPage'
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: PropTypes.object,
+    initialLoadComplete: PropTypes.bool,
+    router: PropTypes.object
 
   propTypes:
-    loadingSelectedWorkflow: React.PropTypes.bool
-    project: React.PropTypes.object
-    workflow: React.PropTypes.object
-    simulateSaveFailure: React.PropTypes.bool
+    loadingSelectedWorkflow: PropTypes.bool
+    project: PropTypes.object
+    workflow: PropTypes.object
+    simulateSaveFailure: PropTypes.bool
 
   getDefaultProps: ->
     loadingSelectedWorkflow: false
@@ -76,7 +80,7 @@ module.exports = React.createClass
     if @props.workflow and not @props.loadingSelectedWorkflow
       @loadAppropriateClassification(@props)
 
-    @validateUserGroup(@props)
+    @validateUserGroup(@props, @context)
 
   componentWillUpdate: (nextProps, nextState) ->
     @context.geordi.remember workflowID: nextProps?.workflow?.id
@@ -84,7 +88,7 @@ module.exports = React.createClass
   componentWillUnmount: () ->
     @context.geordi?.forget ['workflowID']
 
-  componentWillReceiveProps: (nextProps) ->
+  componentWillReceiveProps: (nextProps, nextContext) ->
     if @props.project isnt nextProps.project
       @loadAppropriateClassification(nextProps)
     unless nextProps.loadingSelectedWorkflow
@@ -94,10 +98,13 @@ module.exports = React.createClass
         @setState { classification: null }
         @loadAppropriateClassification(nextProps)
     if nextProps.loadingSelectedWorkflow is false and nextProps.user isnt null
-      @shouldWorkflowAssignmentPrompt(nextProps)
+      @shouldWorkflowAssignmentPrompt(nextProps, nextContext)
 
-    if nextProps.location.query?.group isnt @props.location.query?.group
+    if nextProps.location.query?.group isnt @props.location.query?.group or nextProps.user isnt @props.user
       @validateUserGroup(nextProps)
+
+    if nextProps.user is null and nextContext.initialLoadComplete
+      @clearUserGroupForClassification(nextProps, nextContext)
 
   shouldWorkflowAssignmentPrompt: (nextProps) ->
     # Only for Gravity Spy which is assigning workflows to logged in users
@@ -151,7 +158,7 @@ module.exports = React.createClass
           subjects: [subject.id]
 
       if @state.validUserGroup
-        classification.update({ 'metadata.user_group': @props.location.query.group })
+        classification.update({ 'metadata.selected_user_group_id': @props.location.query.group })
 
       # If the user hasn't interacted with a classification resource before,
       # we won't know how to resolve its links, so attach these manually.
@@ -250,7 +257,7 @@ module.exports = React.createClass
 
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog
-      WorkflowAssignmentDialog.start({splits: props.splits})
+      WorkflowAssignmentDialog.start({ splits: props.splits, project: props.project })
         .then =>
           @setState { promptWorkflowAssignmentDialog: false }
         .then =>
@@ -259,10 +266,31 @@ module.exports = React.createClass
               'preferences.selected_workflow': props.preferences.settings.workflow_id
             props.preferences.save()
 
-  validateUserGroup: (props) ->
+  validateUserGroup: (props, context) ->
     if props.location.query?.group? and props.user?
-      apiClient.type('user_groups').get(props.location.query.group).then (group) =>
-        @setState({ validUserGroup: group and group.links.users.includes(props.user.id) })
+      apiClient.type('user_groups').get(props.location.query.group)
+        .then (group) =>
+          isUserMemberOfGroup = group.links?.users?.includes(props.user.id)
+          @setState({ validUserGroup: group and isUserMemberOfGroup })
+
+          if not isUserMemberOfGroup or not group
+            @clearUserGroupForClassification(props, context)
+        .catch (error) =>
+          if error.status is 404
+            @clearUserGroupForClassification(props, context)
+
+  clearUserGroupForClassification: (props, context) ->
+    if (props.location.query?.group)
+      query = props.location.query
+      @setState({ validUserGroup: false })
+
+      Object.keys(query).forEach (key) =>
+        if key is 'group'
+          delete query[key]
+
+      newLocation = Object.assign({}, props.location, { query })
+      newLocation.search = ''
+      context.router.push(newLocation);
 
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
