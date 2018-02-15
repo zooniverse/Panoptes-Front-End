@@ -8,7 +8,6 @@ counterpart = require 'counterpart'
 Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
-experimentsClient = require '../../lib/experiments-client'
 { Split } = require('seven-ten')
 queryString = require('query-string')
 
@@ -201,10 +200,7 @@ module.exports = React.createClass
     @goToCallback()
 
   saveClassification: ->
-    if @context.geordi.keys["experiment"]?
-      experimentsClient.logExperimentState @context.geordi, interventionMonitor?.latestFromSugar, "classificationStart"
-    else
-      @context.geordi?.logEvent type: 'classify'
+    @context.geordi?.logEvent type: 'classify'
 
     classification = @state.classification
     console?.info 'Completed classification', classification
