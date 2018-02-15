@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Redirect, Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 
 import LoadingIndicator from '../../components/loading-indicator';
 import UserSearch from '../../components/user-search';
-import UserSettings from './user-settings';
-import UserProjects from './user-settings/projects';
 
 class UserSettingsList extends Component {
   constructor(props) {
@@ -41,8 +38,6 @@ class UserSettingsList extends Component {
     if (!this.state.editUser) {
       return <LoadingIndicator />;
     }
-
-
   }
 
   render() {

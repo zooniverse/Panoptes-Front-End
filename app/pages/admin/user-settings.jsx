@@ -2,15 +2,12 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 
-import AutoSave from '../../components/auto-save';
-import LoadingIndicator from '../../components/loading-indicator';
 import handleInputChange from '../../lib/handle-input-change';
 import UserDetails from './user-settings/details';
 import UserProperties from './user-settings/properties';
 import UserProjects from './user-settings/projects';
 import UserLimitToggle from './user-settings/limit-toggle';
 import DeleteUser from './user-settings/delete-user';
-
 
 class UserSettings extends Component {
   constructor(props) {
@@ -27,15 +24,15 @@ class UserSettings extends Component {
     this.getUser();
   }
 
+  componentWillUnmount() {
+    this.state.editUser.stopListening('change', this.boundForceUpdate);
+  }
+
   getUser() {
     apiClient.type('users').get(this.props.params.id).then((editUser) => {
       editUser.listen('change', this.boundForceUpdate);
       this.setState({ editUser });
     });
-  }
-
-  componentWillUnmount() {
-    this.state.editUser.stopListening('change', this.boundForceUpdate);
   }
 
   render() {
@@ -45,11 +42,9 @@ class UserSettings extends Component {
       );
     }
 
-    if (this.state.editUser === this.props.user) {
+    if (this.state.editUser.id === this.props.user.id) {
       return <div>You cannot edit your own account</div>;
     }
-
-    const handleChange = handleInputChange.bind(this.state.editUser);
 
     return (
       <div>
@@ -75,8 +70,12 @@ class UserSettings extends Component {
 }
 
 UserSettings.propTypes = {
-  user: PropTypes.object,
-  editUser: PropTypes.object
+  params: PropTypes.shape({
+    id: PropTypes.string
+  }),
+  user: PropTypes.shape({
+    id: PropTypes.string
+  })
 };
 
 UserSettings.defaultProps = {
