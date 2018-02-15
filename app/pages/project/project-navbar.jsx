@@ -115,7 +115,7 @@ function ClassifyLink({ projectPath, workflow, onClick }) {
 
 function ClassifyTab({ project, projectPath, workflow, onClick }) {
   function redirectClassifyLink(redirect) {
-    return `${redirect}/classify`;
+    return `${redirect}classify`;
   }
   return (
     (project.redirect) ?
