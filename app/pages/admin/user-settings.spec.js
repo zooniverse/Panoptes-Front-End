@@ -26,6 +26,6 @@ describe('UserSettings', function () {
     assert.equal(wrapper.find('UserProperties').length, 1);
     assert.equal(wrapper.find('LimitToggle').length, 1);
     assert.equal(wrapper.find('DeleteUser').length, 1);
-    assert.equal(wrapper.find('Projects').length, 1);
+    assert.equal(wrapper.find('Resources').length, 2);
   });
 });
