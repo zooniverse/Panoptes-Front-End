@@ -2,15 +2,18 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 import baseModel from '../baseReglModel';
 import galaxyRegls from './galaxyRegls';
-import { convolvePSF, calculateDifference, maskImage } from './postProcessingRegl';
+import { convolvePSF, calculateDifference, maskImage, panZoom } from './postProcessingRegl';
 import { parseDisk, parseBulge, parseBar, parseSpiral } from './parseFunctions';
 
 class GalaxyBuilderModel extends baseModel {
   constructor(canvas, { frame, metadata, src, sizing }) {
     super(canvas, { frame, metadata, src, sizing });
+    this.panZoom = panZoom(this.regl);
+
     this.state.dataHasLoaded = false;
     this.state.shouldCompareToImage = false;
     this.state.annotations = [];
+    this.state.viewBox = sizing;
     console.log(sizing);
     this.canvas.style.width = `${sizing.width}px`;
     this.canvas.style.height = `${sizing.height}px`;
@@ -46,6 +49,7 @@ class GalaxyBuilderModel extends baseModel {
       this.calculateDifference = calculateDifference(this.regl);
     }
     this.state.dataHasLoaded = true;
+    this.calculateModel(this.state.annotations, this.state.viewBox);
   }
   setModel() {
     // return taskName: render method object
@@ -72,14 +76,15 @@ class GalaxyBuilderModel extends baseModel {
       }
     };
   }
-  calculateModel(annotations) {
+  calculateModel(annotations, viewBox) {
     // TODO: store calculated functions in state to be re-called rather than
     //       re-calculated
+    console.log(viewBox);
     this.state.annotations = annotations;
-    console.log('Sizing:', this.state.sizing.width, this.state.sizing.height);
-    console.log('Canvas', this.canvas.width, this.canvas.height);
+    this.state.viewBox = viewBox;
     const s = {
       size: [this.state.sizing.width, this.state.sizing.height],
+      // the canvas is not the same size as is visible
       sizeMultiplier: this.canvas.width / this.state.sizing.width,
       model: this.model
     };
@@ -117,10 +122,22 @@ class GalaxyBuilderModel extends baseModel {
         texture: this.state.pixels
       });
     }
+    this.state.pixels({ copy: true });
     if (this.calculateDifference) {
       this.calculateDifference({
         texture: this.state.pixels,
         imageTexture: this.imageData
+      });
+    }
+    this.state.pixels({ copy: true });
+    if (this.panZoom) {
+      this.panZoom({
+        texture: this.state.pixels,
+        scale: viewBox.width / this.state.sizing.width,
+        offset: [
+          viewBox.x / viewBox.width,
+          viewBox.y / viewBox.height
+        ]
       });
     }
   }

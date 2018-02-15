@@ -29,7 +29,7 @@ class BaseReglModel {
     };
     this.setModel();
   }
-  update(annotations) {
+  update(annotations, newViewBox) {
     // this function parses the new annotation and then triggers a render.
     // update the render funtions
     this.regl.poll();
@@ -40,7 +40,7 @@ class BaseReglModel {
       copy: true
     });
     // Call model-specific model calculation function. Returns [[regl-func, params], ...]
-    this.calculateModel(annotations);
+    this.calculateModel(annotations, newViewBox);
     this.state.pixels({ copy: true });
   }
   kill() {

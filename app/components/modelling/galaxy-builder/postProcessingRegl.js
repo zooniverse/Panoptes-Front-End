@@ -145,11 +145,8 @@ export const panZoom = r => r({
   float pixel;
 
   void main () {
-    // for some reason the y-axis coords have been mirrored;
-    texCoords = vec2(uv[0], 1.0 - uv[1]) * 2.0;
     gl_FragColor = vec4(
-      texture2D(mask, (uv - offset) * scale).rgb * \
-        texture2D(texture, (uv - offset) * scale).rgb,
+      texture2D(texture, (uv + offset) * scale).rgb,
       1.0
     );
   }`,
