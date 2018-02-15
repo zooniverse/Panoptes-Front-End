@@ -1,0 +1,99 @@
+const hasComp = c => (c.value[0].value.length > 0);
+
+export const parseDisk = (comp, state) => {
+  if (!hasComp(comp)) return null;
+  const disk = Object.assign(
+    { name: state.model.disk.name },
+    state.model.disk.default,
+    {
+      mux: state.sizeMultiplier * parseFloat(comp.value[0].value[0].x),
+      muy: state.sizeMultiplier * (state.size[0] - parseFloat(comp.value[0].value[0].y)),
+      rx: state.sizeMultiplier * parseFloat(comp.value[0].value[0].rx),
+      ry: state.sizeMultiplier * parseFloat(comp.value[0].value[0].ry),
+      roll: parseFloat(comp.value[0].value[0].angle),
+      scale: parseFloat(comp.value[1].value),
+      i0: parseFloat(comp.value[2].value)
+    }
+  );
+  return ([
+    state.model.disk.func,
+    disk
+  ]);
+};
+
+export const parseBulge = (comp, state) => {
+  if (!hasComp(comp)) return null;
+  const bulge = Object.assign(
+    { name: state.model.bulge.name },
+    state.model.bulge.default,
+    {
+      mux: state.sizeMultiplier * parseFloat(comp.value[0].value[0].x),
+      muy: state.sizeMultiplier * (state.size[0] - parseFloat(comp.value[0].value[0].y)),
+      rx: state.sizeMultiplier * parseFloat(comp.value[0].value[0].rx),
+      ry: state.sizeMultiplier * parseFloat(comp.value[0].value[0].ry),
+      roll: parseFloat(comp.value[0].value[0].angle),
+      scale: parseFloat(comp.value[1].value),
+      i0: parseFloat(comp.value[2].value),
+      n: parseFloat(comp.value[3].value)
+    }
+  );
+  return ([
+    state.model.bulge.func,
+    bulge
+  ]);
+};
+
+export const parseBar = (comp, state) => {
+  if (!hasComp(comp)) return null;
+  const bar = Object.assign(
+    { name: state.model.bar.name },
+    state.model.bar.default,
+    {
+      name: state.model.bar.name,
+      mux: state.sizeMultiplier * parseFloat(comp.value[0].value[0].x),
+      muy: state.sizeMultiplier * (state.size[0] - parseFloat(comp.value[0].value[0].y)),
+      rx: state.sizeMultiplier * parseFloat(comp.value[0].value[0].rx),
+      ry: state.sizeMultiplier * parseFloat(comp.value[0].value[0].ry),
+      roll: parseFloat(comp.value[0].value[0].angle),
+      scale: parseFloat(comp.value[1].value),
+      i0: parseFloat(comp.value[2].value),
+      n: parseFloat(comp.value[3].value),
+      c: parseFloat(comp.value[4].value)
+    }
+  );
+  return ([
+    state.model.bar.func,
+    bar
+  ]);
+};
+
+export const parseSpiral = (comp, state, currentComps) => {
+  // has a spiral been drawn?
+  if (!hasComp(comp)) return null;
+  // do we have a disk?
+  const disks = currentComps.filter(i => i[1].name === 'disk');
+  if (disks.length === 0) return null;
+  else {
+    const ret = [];
+    for (let i = 0; i < comp.value[0].value.length; i += 1) {
+      const spiralArm = Object.assign(
+        { name: state.model.spiral.name },
+        state.model.spiral.default,
+        {
+          disk: Object.assign({}, disks[0][1]), // base falloff from the 0th disk
+          i0: parseFloat(comp.value[0].value[i].details[0].value),
+          spread: parseFloat(comp.value[0].value[i].details[1].value),
+          falloff: parseFloat(comp.value[1].value),
+          points: comp.value[0].value[i].points.map(
+            p => [p.x, state.size[0] - p.y]
+          )
+        }
+      );
+      ret.push([
+        state.model.spiral.func,
+        spiralArm
+      ]);
+    }
+    return ret;
+  }
+};

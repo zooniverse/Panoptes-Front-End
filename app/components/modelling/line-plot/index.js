@@ -1,15 +1,14 @@
 import { Chart } from 'chart.js';
 
 // Help at http://www.chartjs.org/docs/latest
-class Model {
+class LinePlotModel {
   constructor(canvas, { frame, src }) {
     this.ctx = canvas.getContext('2d');
     console.log('Line Plot', this.ctx, frame, src);
     this.frame = frame;
     fetch(`${src}?=`)
-      .then(response => response.text())
-      .then((content) => {
-        const data = JSON.parse(content);
+      .then(response => response.json())
+      .then((data) => {
         console.log({
           type: 'scatter',
           data
@@ -33,6 +32,4 @@ class Model {
   }
 }
 
-export {
-  Model
-};
+export default LinePlotModel;

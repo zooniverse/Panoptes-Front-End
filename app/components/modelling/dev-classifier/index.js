@@ -1,4 +1,4 @@
-class Model {
+class DevClassifierModel {
   constructor(canvas, { frame }) {
     this.ctx = canvas.getContext('2d');
     this.frame = frame;
@@ -40,6 +40,4 @@ class Model {
   }
 }
 
-export {
-  Model
-};
+export default DevClassifierModel;

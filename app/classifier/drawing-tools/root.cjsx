@@ -112,7 +112,7 @@ module.exports = createReactClass
     # TODO: Check if the details tasks are complete.
     @props.tool.props.onDeselect?()
     @focusDrawingTool()
-  
+
   focusDrawingTool: ->
     x = window.scrollX
     y = window.scrollY

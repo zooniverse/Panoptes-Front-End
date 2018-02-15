@@ -18,16 +18,26 @@ class CanvasViewer extends React.Component {
     this.model = {};
   }
   componentDidMount() {
+    this.canvas.addEventListener('load', this.onLoad);
     // add the canvas and prep for rendering
-    this.createNewModel(this.props);
+    this.createNewModel(this.props)
+      .then(() => (
+        this.model.update(this.props.annotations, this.props.viewBoxDimensions)
+      ));
   }
   componentWillUpdate(nextProps) {
     // if the subject has updated we need to re-initialise the model
     if (this.props.src !== nextProps.src) {
-      this.createNewModel(nextProps);
+      this.createNewModel(nextProps)
+        .then(() => (
+          this.model.update(nextProps.annotations, nextProps.viewBoxDimensions)
+        ));
     }
   }
   componentDidUpdate(oldProps) {
+    // The component has just updated. We now trigger a render!
+    // If we're not loading, we have zoomed/panned or the new annotation is
+    // different from the old one, update (render) the model!
     if (
       !this.state.loading &&
       (
@@ -37,50 +47,59 @@ class CanvasViewer extends React.Component {
       )
     ) {
       this.model.update(this.props.annotations, this.props.viewBoxDimensions);
+      // console.log('>>> canvas-viewer done rendering 🎨 ');
     }
   }
-  onLoad(e) {
+  componentWillUnmount() {
+    this.canvas.removeEventListener('load', this.onLoad);
+  }
+  onLoad() {
     this.setState({
       loading: false,
-      hasScore: this.model.hasScore || false,
-      hasImage: this.model.hasImage || false
+      hasScore: this.model.hasScore || false
     });
-    this.props.onLoad(e);
   }
   createNewModel(props) {
-    this.setState({ loading: true });
+    // console.log('>>> canvas-viewer making model ⏳ ', props.subject.metadata);
+    if (!this.state.loading) this.setState({ loading: true });
     return new Promise((resolve, reject) => {
-      if (props.subject.metadata && props.subject.metadata.modelling) {
-        const Model = modelSelector(props.subject.metadata.modelling.filter(
+      if (props.subject.metadata && props.subject.metadata.models) {
+        const Model = modelSelector(props.subject.metadata.models.filter(
           i => i.frame === this.props.frame
         )[0] || {});
         this.model = new Model(
           this.canvas,
-          { frame: props.frame, metadata: props.subject.metadata, src: props.src }
+          {
+            frame: props.frame,
+            metadata: props.subject.metadata,
+            src: props.src,
+            sizing: props.viewBoxDimensions
+          }
         );
+        // console.log('>>> canvas-viewer made model ✅ ', this.model);
         if (this.model !== false) {
           resolve();
         } else {
           reject();
         }
       }
-    }).then(
-      () => this.onLoad({ target: {}}),
-      () => alert((resolve, reject) => (
-        <div className="content-container">
-          <Markdown className="classification-task-help">
-            Could not load model
-          </Markdown>
-          <button className="standard-button" onClick={reject}>Close</button>
-        </div>
-      )),
-    );
+    }).then(this.onLoad)
+      .catch(
+        () => alert((resolve, reject) => (
+          <div className="content-container">
+            <Markdown className="classification-task-help">
+              Could not load model
+            </Markdown>
+            <button className="standard-button" onClick={reject}>Close</button>
+          </div>
+        )),
+      );
   }
   // TODO: choose size from subject metadata. Handle Pan.
   // TODO: don't always have score, some models wouldn't want one (chart.js)
   //       this.model.hasScore? this.subject.metadata.modelling[0].hasScore?
-  // TODO: does the img need to be there? this.model.hasImage
   render() {
+    console.log('viewBox', this.props.viewBoxDimensions);
     return (
       <div className="subject-canvas-frame" >
         <canvas
@@ -88,13 +107,10 @@ class CanvasViewer extends React.Component {
           width={512}
           height={512}
           ref={(r) => { this.canvas = r; }}
-          style={Object.assign({ width: '100%' }, this.props.style)}
+          style={this.props.style}
           onFocus={this.props.onFocus}
           onBlur={this.props.onBlur}
         />
-        {
-          this.state.hasImage && <img alt="" hidden={true} src={this.props.src} />
-        }
         {
           this.state.hasScore &&
           <span
@@ -114,14 +130,14 @@ class CanvasViewer extends React.Component {
     );
   }
 }
-
+/* eslint-disable react/forbid-prop-types */
 CanvasViewer.propTypes = {
   annotation: PropTypes.object,
   annotations: PropTypes.array,
   frame: PropTypes.number,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
-  onLoad: PropTypes.func,
+  // onLoad: PropTypes.func,
   overlayStyle: PropTypes.object,
   src: PropTypes.string,
   style: PropTypes.object,
@@ -133,9 +149,9 @@ CanvasViewer.propTypes = {
     y: PropTypes.number
   })
 };
-
+/* eslint-enable react/forbid-prop-types */
 CanvasViewer.defaultProps = {
-  viewBoxDimensions: { height: 100, width: 100, x: 0, y: 0 }
+  viewBoxDimensions: { height: 512, width: 512, x: 0, y: 0 }
 };
 
 export default CanvasViewer;

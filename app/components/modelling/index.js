@@ -21,20 +21,21 @@ Proposed usage:
 
 // TODO: get rid of score, should be handled in model
 
-import { Model as galaxyBuilderModel } from './galaxy-builder';
-import { Model as devClassifierModel } from './dev-classifier';
-import { Model as linePlotModel } from './line-plot';
+import GalaxyBuilderModel from './galaxy-builder';
+import DevClassifierModel from './dev-classifier';
+import LinePlotModel from './line-plot';
 // TODO: this should be workflow.configuration.modelling.model, or even at the
 //       subject-level (different models for each subject).
 export default (subjectModellingInfo) => {
   switch (subjectModellingInfo.model) {
     case 'DEV_CLASSIFIER_DRAWING':
-      return devClassifierModel;
-    case 'GALAXY_BUILDER':
-      return galaxyBuilderModel;
+      return DevClassifierModel;
+    case 'GALAXY_BUILDER_MODEL':
+    case 'GALAXY_BUILDER_DIFFERENCE':
+      return GalaxyBuilderModel;
     case 'LINE_PLOT':
-      return linePlotModel;
+      return LinePlotModel;
     default:
-      return devClassifierModel;
+      return DevClassifierModel;
   }
 };

@@ -502,7 +502,6 @@ subject = apiClient.type('subjects').create
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/small.jpeg"} # //lorempixel.com/400/300/animals/4
       {'application/json': "#{window.location.origin}/assets/dev-classifier/testData.json"} # // blank canvas
       {'application/json': "#{window.location.origin}/assets/dev-classifier/testData.json"} # // blank canvas
-
     ]
   else
     [
@@ -513,7 +512,7 @@ subject = apiClient.type('subjects').create
     'Capture date': '5 Feb, 2015'
     'Region': 'Chicago, IL',
     'isModelling': true,
-    'modelling': [
+    'models': [
       { 'frame': 5, 'model': "LINE_PLOT" }
       { 'frame': 5, 'model': "DEV_CLASSIFIER_DRAWING" }
     ],
