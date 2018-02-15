@@ -29,11 +29,13 @@ import LinePlotModel from './line-plot';
 export default (subjectModellingInfo) => {
   switch (subjectModellingInfo.model) {
     case 'DEV_CLASSIFIER_DRAWING':
+      console.log('returning dev classifier drawing');
       return DevClassifierModel;
     case 'GALAXY_BUILDER_MODEL':
     case 'GALAXY_BUILDER_DIFFERENCE':
       return GalaxyBuilderModel;
     case 'LINE_PLOT':
+      console.log('returning line plot');
       return LinePlotModel;
     default:
       return DevClassifierModel;

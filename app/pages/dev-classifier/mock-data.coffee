@@ -514,7 +514,7 @@ subject = apiClient.type('subjects').create
     'isModelling': true,
     'models': [
       { 'frame': 5, 'model': "LINE_PLOT" }
-      { 'frame': 5, 'model': "DEV_CLASSIFIER_DRAWING" }
+      { 'frame': 6, 'model': "DEV_CLASSIFIER_DRAWING" }
     ],
 
 

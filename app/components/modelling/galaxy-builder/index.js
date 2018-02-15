@@ -30,7 +30,6 @@ class GalaxyBuilderModel extends baseModel {
   handleDataLoad(data) {
     this.canvas.height = data.height;
     this.canvas.width = data.width;
-    console.log(Object.keys(data));
     if (data.psf && data.psfWidth && data.psfHeight) {
       this.psf = [];
       this.psfSize = [data.psfWidth, data.psfHeight];
@@ -84,7 +83,6 @@ class GalaxyBuilderModel extends baseModel {
       sizeMultiplier: this.canvas.width / this.state.sizing.width,
       model: this.model
     };
-    console.log(s);
     const ret = [];
     let comp = null;
     for (let i = 0; i < annotations.length; i++) {
@@ -101,7 +99,6 @@ class GalaxyBuilderModel extends baseModel {
         default:
           break;
       }
-      console.log('>>> Calculated component', comp, 'from', annotations[i]);
       if (comp !== null) {
         comp[0](comp[1]);
         this.state.pixels({ copy: true });
@@ -116,13 +113,11 @@ class GalaxyBuilderModel extends baseModel {
       }
     }
     if (this.convolvePSF) {
-      console.log('>>> calculating PSF');
       this.convolvePSF({
         texture: this.state.pixels
       });
     }
     if (this.calculateDifference) {
-      console.log('>>> calculating Difference');
       this.calculateDifference({
         texture: this.state.pixels,
         imageTexture: this.imageData

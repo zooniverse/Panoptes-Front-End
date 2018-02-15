@@ -18,7 +18,6 @@ class CanvasViewer extends React.Component {
     this.model = {};
   }
   componentDidMount() {
-    this.canvas.addEventListener('load', this.onLoad);
     // add the canvas and prep for rendering
     this.createNewModel(this.props)
       .then(() => (
@@ -27,7 +26,7 @@ class CanvasViewer extends React.Component {
   }
   componentWillUpdate(nextProps) {
     // if the subject has updated we need to re-initialise the model
-    if (this.props.src !== nextProps.src) {
+    if (this.props.src !== nextProps.src || this.props.frame !== nextProps.frame) {
       this.createNewModel(nextProps)
         .then(() => (
           this.model.update(nextProps.annotations, nextProps.viewBoxDimensions)
@@ -47,7 +46,6 @@ class CanvasViewer extends React.Component {
       )
     ) {
       this.model.update(this.props.annotations, this.props.viewBoxDimensions);
-      // console.log('>>> canvas-viewer done rendering 🎨 ');
     }
   }
   componentWillUnmount() {
@@ -60,12 +58,11 @@ class CanvasViewer extends React.Component {
     });
   }
   createNewModel(props) {
-    // console.log('>>> canvas-viewer making model ⏳ ', props.subject.metadata);
     if (!this.state.loading) this.setState({ loading: true });
     return new Promise((resolve, reject) => {
       if (props.subject.metadata && props.subject.metadata.models) {
         const Model = modelSelector(props.subject.metadata.models.filter(
-          i => i.frame === this.props.frame
+          i => i.frame === props.frame
         )[0] || {});
         this.model = new Model(
           this.canvas,
@@ -76,7 +73,6 @@ class CanvasViewer extends React.Component {
             sizing: props.viewBoxDimensions
           }
         );
-        // console.log('>>> canvas-viewer made model ✅ ', this.model);
         if (this.model !== false) {
           resolve();
         } else {
@@ -99,7 +95,6 @@ class CanvasViewer extends React.Component {
   // TODO: don't always have score, some models wouldn't want one (chart.js)
   //       this.model.hasScore? this.subject.metadata.modelling[0].hasScore?
   render() {
-    console.log('viewBox', this.props.viewBoxDimensions);
     return (
       <div className="subject-canvas-frame" >
         <canvas
