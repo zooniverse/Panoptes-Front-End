@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import ProjectIcon from '../../components/project-icon';
 import LoadingIndicator from '../../components/loading-indicator';
+import LAB_APP_URL from '../../lib/lab-app-url';
 
 class OrganizationStatus extends Component {
   constructor(props) {
@@ -104,7 +105,11 @@ class OrganizationStatus extends Component {
         <div className="project-status__section">
           <h4>Information</h4>
           <ul>
-            <li>Id: {this.state.organization.id}</li>
+            <li>Id:{' '}
+              <a href={`${LAB_APP_URL}/organizations/${this.state.organization.id}`}>
+                {this.state.organization.id}
+              </a>
+            </li>
           </ul>
           <h4>Visibility Settings</h4>
           <ul className="project-status__section-list">
