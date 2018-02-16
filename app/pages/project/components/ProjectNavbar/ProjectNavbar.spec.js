@@ -41,19 +41,19 @@ describe('ProjectNavbar', function() {
     });
 
     it('should set the breakpoint state on mount', function() {
-      console.log('setBreakpointStub.calledCount', setBreakpointStub.calledCount)
+      console.log('setBreakpointStub.callCount', setBreakpointStub.callCount)
       expect(setBreakpointStub.calledOnce).to.be.true;
     });
 
     it('should not set the breakpoint on update if projectTitle or navLinks do not change', function() {
       wrapper.setProps({ width: 768 });
-      console.log('setBreakpointStub.calledCount', setBreakpointStub.calledCount)      
+      console.log('setBreakpointStub.callCount', setBreakpointStub.callCount)
       expect(setBreakpointStub.calledOnce).to.be.true;
     });
 
     it('should set the breakpoint on update if the projectTitle changes', function() {
       wrapper.setProps({ projectTitle: 'A new title' });
-      console.log('setBreakpointStub.calledCount', setBreakpointStub.calledCount)      
+      console.log('setBreakpointStub.callCount', setBreakpointStub.callCount)
       expect(setBreakpointStub.calledTwice).to.be.true;
     });
 
@@ -61,7 +61,7 @@ describe('ProjectNavbar', function() {
       const newNavLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow, user: null });
       const newNavLinksWithLabels = buildLinksWithLabels(newNavLinks);
       wrapper.setProps({ navLinks: newNavLinksWithLabels });
-      console.log('setBreakpointStub.calledCount', setBreakpointStub.calledCount)      
+      console.log('setBreakpointStub.callCount', setBreakpointStub.callCount)
       expect(setBreakpointStub.calledThrice).to.be.true;
     });
   });
