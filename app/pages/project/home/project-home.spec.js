@@ -54,10 +54,6 @@ describe('ProjectHome', function() {
 
   it('should render without crashing', function() {});
 
-  it('should render ProjectNavbar', function() {
-    expect(wrapper.find('ProjectNavbar')).to.have.lengthOf(1);
-  });
-
   it('should render ProjectHomeWorkflowButtons', function() {
     expect(wrapper.find('ProjectHomeWorkflowButtons')).to.have.lengthOf(1);
   });
@@ -110,25 +106,6 @@ describe('ProjectHome', function() {
 
     it('should render FinishedBanner if props.projectIsComplete is true', function() {
       expect(wrapper.find('FinishedBanner')).to.have.lengthOf(1);
-    });
-  });
-
-  describe('when the project does not have an announcement', function() {
-    it('should not render a Markdown component', function() {
-      expect(wrapper.find('Markdown')).to.have.lengthOf(0);
-    });
-  });
-
-  describe('when the project has an announcement', function() {
-    before(function() {
-      const projectWithAnnouncement = Object.assign({}, project, { configuration: { announcement: 'Big announcement!' }});
-      wrapper.setProps({ project: projectWithAnnouncement });
-    });
-
-    it('should render a Markdown component', function() {
-      const markdown = wrapper.find('Markdown');
-      expect(markdown).to.have.lengthOf(1);
-      expect(markdown.children().text()).to.equal('Big announcement!');
     });
   });
 

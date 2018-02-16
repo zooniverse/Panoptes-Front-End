@@ -1,10 +1,11 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
-import { project, workflow } from '../dev-classifier/mock-data';
-import ProjectPage from './project-page';
-import { sugarClient } from 'panoptes-client/lib/sugar';
 import sinon from 'sinon';
+import { sugarClient } from 'panoptes-client/lib/sugar';
+import { project } from '../dev-classifier/mock-data';
+import ProjectPage from './project-page';
+import ProjectNavbar from './components/ProjectNavbar';
 
 function Page() {
   return (
@@ -13,101 +14,69 @@ function Page() {
 }
 
 describe('ProjectPage', function () {
-  const background = {
-    src: 'the project background image url'
-  };
-
   it('should render without crashing', function () {
     shallow(<ProjectPage><Page /></ProjectPage>);
   });
 
   it('should render the project nav bar', function () {
     const wrapper = shallow(<ProjectPage><Page /></ProjectPage>);
-    const navElement = wrapper.find('ProjectNavbar');
-    expect(navElement).to.have.lengthOf(1);
+    expect(wrapper.find(ProjectNavbar)).to.have.lengthOf(1);
   });
 
-  it('should render the project nav bar as its first child', function () {
-    const wrapper = shallow(<ProjectPage><Page /></ProjectPage>);
-    const navBar = wrapper.children().first().children().first();
-    expect(navBar.name()).to.equal('ProjectNavbar');
-  });
-
-  it('should pass background, project and workflow props to its children', function () {
-    const wrapper = shallow(<ProjectPage background={background} project={project} workflow={workflow}><Page /></ProjectPage>);
-    const child = wrapper.find('Page');
-    expect(child.props().background).to.equal(background);
-    expect(child.props().project).to.equal(project);
-    expect(child.props().workflow).to.equal(workflow);
-  });
-
-  describe('on the home page', function () {
-    let wrapper;
-    beforeEach(function () {
-      project.slug = 'test/project';
-      project.configuration = {};
-      project.configuration.announcement = 'This is a test announcement';
-      const mockLocation = {
-        pathname: `/projects/${project.slug}`
-      };
-      const routes = [];
-      routes[2] = {};
-      wrapper = shallow(
+  describe('conditional rendering of the project announcement', function () {
+    it('should not render a Markdown component if there is not an announcement', function () {
+      const wrapper = shallow(
         <ProjectPage
-          location={mockLocation}
-          routes={routes}
           project={project}
         >
           <Page />
         </ProjectPage>
       );
+      expect(wrapper.find('Markdown')).to.have.lengthOf(0);
     });
-    it('should not show the project navigation', function () {
-      const navbar = wrapper.find('ProjectNavbar');
-      expect(navbar).to.have.lengthOf(0);
-    });
-    it('should not show any project announcements', function () {
-      const announcement = wrapper.find('div.informational.project-announcement-banner');
-      expect(announcement).to.have.lengthOf(0);
-    });
-    it('should not show the field guide', function () {
-      const fieldguide = wrapper.find('PotentialFieldGuide');
-      expect(fieldguide).to.have.lengthOf(0);
+
+    it('should render a Markdown component if there is an announcement', function () {
+      const projectWithAnnouncement = Object.assign({}, project, { configuration: { announcement: 'Big Announcement!' }});
+      const wrapper = shallow(
+        <ProjectPage
+          project={projectWithAnnouncement}
+        >
+          <Page />
+        </ProjectPage>
+      );
+      const markdown = wrapper.find('Markdown');
+      expect(markdown).to.have.lengthOf(1);
+      expect(markdown.children().text()).to.equal('Big Announcement!');
     });
   });
 
-  describe('on other project pages', function () {
-    let wrapper;
-    beforeEach(function () {
+  describe('when the field guide renders', function() {
+    beforeEach(function() {
       project.slug = 'test/project';
-      project.configuration = {};
-      project.configuration.announcement = 'This is a test announcement';
-      const mockLocation = {
-        pathname: `/projects/${project.slug}/about`
-      };
-      const routes = [];
-      routes[2] = { path: 'about' };
-      wrapper = shallow(
+    });
+
+    it('should not display on the project home page', function() {
+      const wrapper = shallow(
         <ProjectPage
-          location={mockLocation}
-          routes={routes}
+          location={{ pathname: `/projects/${project.slug}` }}
           project={project}
         >
           <Page />
         </ProjectPage>
       );
+      expect(wrapper.find('PotentialFieldGuide')).to.have.lengthOf(0);
     });
-    it('should show the project navigation', function () {
-      const navbar = wrapper.find('ProjectNavbar');
-      expect(navbar).to.have.lengthOf(1);
-    });
-    it('should show any project announcements', function () {
-      const announcement = wrapper.find('div.informational.project-announcement-banner');
-      expect(announcement).to.have.lengthOf(1);
-    });
-    it('should show the field guide', function () {
-      const fieldguide = wrapper.find('PotentialFieldGuide');
-      expect(fieldguide).to.have.lengthOf(1);
+
+    it('should display on other project pages', function() {
+      const wrapper = shallow(
+        <ProjectPage
+          location={{ pathname: `/projects/${project.slug}/about` }}
+          project={project}
+        >
+          <Page />
+        </ProjectPage>
+      );
+      expect(wrapper.find('PotentialFieldGuide')).to.have.lengthOf(1);
     });
   });
 
@@ -137,19 +106,19 @@ describe('ProjectPage', function () {
       });
 
       it('subscribes the user to the sugar project channel on mount', function () {
-        expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
-        expect(sugarClientSubscribeSpy.calledWith(channel)).to.equal(true);
+        expect(sugarClientSubscribeSpy.calledOnce).to.be.true;
+        expect(sugarClientSubscribeSpy.calledWith(channel)).to.be.true;
       });
 
       it('unsubscribes the user from the sugar project channel on unmount', function () {
         wrapper.unmount();
-        expect(sugarClientUnsubscribeSpy.calledOnce).to.equal(true);
-        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
+        expect(sugarClientUnsubscribeSpy.calledOnce).to.be.true;
+        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.be.true;
       });
     });
 
     describe('on project props change', function () {
-      const newProject = {id: '999', title: 'fake project', slug: 'owner/name'};
+      const newProject = { id: '999', title: 'fake project', slug: 'owner/name' };
       const newChannel = `project-${newProject.id}`;
       beforeEach(function () {
         wrapper = shallow(
@@ -161,13 +130,13 @@ describe('ProjectPage', function () {
       });
 
       it('unsubscribes old project', function () {
-        expect(sugarClientUnsubscribeSpy.calledOnce).to.equal(true);
-        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.equal(true);
+        expect(sugarClientUnsubscribeSpy.calledOnce).to.be.true;
+        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.true;
       });
 
       it('subscribes new project', function () {
-        expect(sugarClientSubscribeSpy.calledOnce).to.equal(true);
-        expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.equal(true);
+        expect(sugarClientSubscribeSpy.calledOnce).to.be.true;
+        expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.be.true;
       });
     });
   });
