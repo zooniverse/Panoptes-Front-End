@@ -39,22 +39,33 @@ describe('ProjectNavbarContainer', function() {
   it('should render without crashing', function() {});
 
   it('should call getNavLinks on render', function() {
+    console.log('getNavLinksSpy.callCount', getNavLinksSpy.callCount);
     expect(getNavLinksSpy.calledOnce).to.be.true;
   });
 
   it('should call getProjectLinks on render', function() {
+    console.log('getProjectLinksSpy.callCount', getProjectLinksSpy.callCount);
     expect(getProjectLinksSpy.calledOnce).to.be.true;
   });
 
   it('should call getExternalLinks on render', function() {
+    console.log('getExternalLinksSpy.callCount', getExternalLinksSpy.callCount);
     expect(getExternalLinksSpy.calledOnce).to.be.true;
   });
 
   it('should call getOrganizationLink on render', function() {
+    console.log('getOrganizationLinkSpy.callCount', getExternalLinksSpy.callCount);
     expect(getOrganizationLinkSpy.calledOnce).to.be.true;
   });
 
   it('renders ProjectNavbar', function() {
     expect(wrapper.dive().find('ProjectNavbar')).to.have.lengthOf(1);
+  });
+
+  after(function() {
+    getNavLinksSpy.restore();
+    getProjectLinksSpy.restore();
+    getExternalLinksSpy.restore();
+    getOrganizationLinkSpy.restore();
   });
 });
