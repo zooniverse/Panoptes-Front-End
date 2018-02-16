@@ -10,10 +10,9 @@ class GalaxyBuilderModel extends baseModel {
     super(canvas, { frame, metadata, src, sizing });
     this.panZoom = panZoom(this.regl);
 
-    this.state.dataHasLoaded = false;
     this.state.shouldCompareToImage = false;
     this.state.annotations = [];
-    this.state.viewBox = sizing;
+    this.state.imageSize = sizing;
     console.log(sizing);
     this.canvas.style.width = `${sizing.width}px`;
     this.canvas.style.height = `${sizing.height}px`;
@@ -47,9 +46,13 @@ class GalaxyBuilderModel extends baseModel {
       });
       this.state.shouldCompareToImage = true;
       this.calculateDifference = calculateDifference(this.regl);
+      if (data.imageHeight && data.imageWidth) {
+        this.canvas.style.height = `${data.imageHeight}px`;
+        this.canvas.style.width = `${data.imageWidth}px`;
+        this.state.imageSize = { height: data.imageHeight, width: data.imageWidth };
+      }
     }
-    this.state.dataHasLoaded = true;
-    this.calculateModel(this.state.annotations, this.state.viewBox);
+    this.calculateModel(this.state.annotations, this.state.imageSize);
   }
   setModel() {
     // return taskName: render method object
@@ -79,7 +82,6 @@ class GalaxyBuilderModel extends baseModel {
   calculateModel(annotations, viewBox) {
     // TODO: store calculated functions in state to be re-called rather than
     //       re-calculated
-    console.log(viewBox);
     this.state.annotations = annotations;
     this.state.viewBox = viewBox;
     const s = {
@@ -123,7 +125,7 @@ class GalaxyBuilderModel extends baseModel {
       });
     }
     this.state.pixels({ copy: true });
-    if (this.calculateDifference) {
+    if (this.state.shouldCompareToImage) {
       this.calculateDifference({
         texture: this.state.pixels,
         imageTexture: this.imageData
