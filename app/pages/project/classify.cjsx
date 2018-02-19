@@ -9,14 +9,13 @@ counterpart = require 'counterpart'
 `import FinishedBanner from './finished-banner';`
 Classifier = require('../../classifier').default
 seenThisSession = require '../../lib/seen-this-session'
+ClassificationQueue = require('../../lib/classification-queue').default
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 { Split } = require('seven-ten')
 
 counterpart.registerTranslations 'en',
   classifyPage:
     title: 'Classify'
-
-FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
 # Map each project ID to a promise of its last randomly-selected workflow ID.
 # This is to maintain the same random workflow for each project when none is specified by the user.
@@ -38,6 +37,8 @@ emptySubjectQueue = ->
     for subject in queue
       subject.destroy()
     queue.splice 0
+
+classificationQueue = new ClassificationQueue()
 
 auth.listen 'change', emptySubjectQueue
 apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
@@ -260,47 +261,9 @@ module.exports = createReactClass
 
     {workflow, subjects} = classification.links
     seenThisSession.add workflow, subjects
-    @queueClassification classification unless @state.demoMode
-    @saveAllQueuedClassifications()
+    unless @state.demoMode
+      classificationQueue.add(classification)
     Promise.resolve classification
-
-  queueClassification: (classification) ->
-    queue = JSON.parse localStorage.getItem FAILED_CLASSIFICATION_QUEUE_NAME
-    queue ?= []
-    queue.push classification
-    try
-      localStorage.setItem FAILED_CLASSIFICATION_QUEUE_NAME, JSON.stringify queue
-      console?.info 'Queued classifications:', queue.length
-    catch error
-      console?.error 'Failed to queue classification:', error
-
-  saveAllQueuedClassifications: ->
-    queue = JSON.parse localStorage.getItem FAILED_CLASSIFICATION_QUEUE_NAME
-    if queue? and queue.length isnt 0
-      console?.log 'Saving queued classifications:', queue.length
-      for classificationData in queue then do (classificationData) =>
-        apiClient.type('classifications').create(classificationData).save()
-          .then (actualClassification) =>
-            console?.log 'Saved classification', actualClassification.id
-            Split.classificationCreated(actualClassification) # Metric log needs classification id
-            actualClassification.destroy()
-            indexInQueue = queue.indexOf classificationData
-            queue.splice indexInQueue, 1
-            try
-              localStorage.setItem FAILED_CLASSIFICATION_QUEUE_NAME, JSON.stringify queue
-              console?.info 'Saved a queued classification, remaining:', queue.length
-            catch error
-              console?.error 'Failed to update classification queue:', error
-          .catch (error) =>
-            console?.error 'Failed to save a queued classification:', error
-            switch error.status
-              when 422
-                indexInQueue = queue.indexOf classificationData
-                queue.splice indexInQueue, 1
-                try
-                  localStorage.setItem FAILED_CLASSIFICATION_QUEUE_NAME, JSON.stringify queue
-                catch error
-                  console?.error 'Failed to update classification queue:', error
 
   loadAnotherSubject: ->
     # Forget the old classification so a new one will load.
