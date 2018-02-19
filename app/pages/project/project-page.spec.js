@@ -13,6 +13,10 @@ function Page() {
   );
 }
 
+function ProjectHomeContainer() {
+  return (<p>Mocked home page.</p>);
+}
+
 describe('ProjectPage', function () {
   it('should render without crashing', function () {
     shallow(<ProjectPage><Page /></ProjectPage>);
@@ -58,10 +62,9 @@ describe('ProjectPage', function () {
     it('should not display on the project home page', function() {
       const wrapper = shallow(
         <ProjectPage
-          location={{ pathname: `/projects/${project.slug}` }}
           project={project}
         >
-          <Page />
+          <ProjectHomeContainer />
         </ProjectPage>
       );
       expect(wrapper.find('PotentialFieldGuide')).to.have.lengthOf(0);
@@ -70,7 +73,6 @@ describe('ProjectPage', function () {
     it('should display on other project pages', function() {
       const wrapper = shallow(
         <ProjectPage
-          location={{ pathname: `/projects/${project.slug}/about` }}
           project={project}
         >
           <Page />

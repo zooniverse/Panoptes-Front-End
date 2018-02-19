@@ -84,7 +84,7 @@ export default class ProjectPage extends React.Component {
           user: this.props.user,
           workflow: this.props.workflow
         })}
-        {(this.props.location.pathname !== `/projects/${this.props.project.slug}`) &&
+        {React.Children.only(this.props.children).type.name !== 'ProjectHomeContainer' &&
           <PotentialFieldGuide
             guide={this.props.guide}
             guideIcons={this.props.guideIcons}

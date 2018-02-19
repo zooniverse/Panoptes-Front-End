@@ -22,6 +22,11 @@ describe('ProjectNavbarContainer', function() {
   const getProjectLinksSpy = sinon.spy(ProjectNavbarContainer.prototype, 'getProjectLinks');
 
   before(function() {
+    getNavLinksSpy.resetHistory();
+    getProjectLinksSpy.resetHistory();
+    getExternalLinksSpy.resetHistory();
+    getOrganizationLinkSpy.resetHistory();
+
     wrapper = shallow(
       <ProjectNavbarContainer
         background={background}
@@ -60,12 +65,5 @@ describe('ProjectNavbarContainer', function() {
 
   it('renders ProjectNavbar', function() {
     expect(wrapper.dive().find('ProjectNavbar')).to.have.lengthOf(1);
-  });
-
-  after(function() {
-    getNavLinksSpy.restore();
-    getProjectLinksSpy.restore();
-    getExternalLinksSpy.restore();
-    getOrganizationLinkSpy.restore();
   });
 });
