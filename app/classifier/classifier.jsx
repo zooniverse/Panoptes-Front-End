@@ -205,7 +205,6 @@ class Classifier extends React.Component {
 
   // Whenever a subject image is loaded in the annotator, record its size at that time.
   handleSubjectImageLoad(e, frameIndex) {
-    console.log('Handling subject image load', e, frameIndex);
     this.context.geordi.remember({ subjectID: this.props.subject.id });
 
     const { naturalWidth, naturalHeight, clientWidth, clientHeight } = e.target;

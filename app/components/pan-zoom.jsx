@@ -148,6 +148,7 @@ class PanZoom extends React.Component {
   }
 
   togglePanOn() {
+    console.log(this.state.panEnabled);
     if (!this.state.panEnabled) this.setState({ panEnabled: true });
   }
 
@@ -183,7 +184,6 @@ class PanZoom extends React.Component {
   }
 
   frameKeyPan(e) {
-
     const keypress = e.which;
     switch (keypress) {
       // left
