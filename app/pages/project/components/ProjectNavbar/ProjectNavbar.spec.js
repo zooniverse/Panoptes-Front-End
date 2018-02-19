@@ -30,8 +30,9 @@ describe('ProjectNavbar', function() {
     let wrapper;
     // We can't test the actual function because getRenderedSize doesn't work with jsdom
     let setBreakpointStub = sinon.stub(ProjectNavbar.prototype, 'setBreakpoint').callsFake(() => {});
-    setBreakpointStub.resetHistory();
+
     before(function() {
+      setBreakpointStub.resetHistory();
       wrapper = mount(
         <ProjectNavbar
           navLinks={navLinksWithLabels}
