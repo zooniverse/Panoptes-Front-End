@@ -23,8 +23,7 @@ class LinePlotModel {
         );
       })
       .catch((e) => {
-        const content = e.message;
-        console.warn(content);
+        console.warn(e);
       });
   }
   update() {

@@ -40,9 +40,12 @@ class CanvasViewer extends React.Component {
     if (
       !this.state.loading &&
       (
+        // old view box is not the same as new view box
         !Object.keys(this.props.viewBoxDimensions).every(
           k => oldProps.viewBoxDimensions[k] === this.props.viewBoxDimensions[k]
-        ) || !isMatch(oldProps.annotation, this.props.annotation)
+        ) ||
+        // the old annotation is not the same as the new one
+        !isMatch(oldProps.annotation, this.props.annotation)
       )
     ) {
       this.model.update(this.props.annotations, this.props.viewBoxDimensions);
@@ -80,16 +83,17 @@ class CanvasViewer extends React.Component {
         }
       }
     }).then(this.onLoad)
-      .catch(
-        () => alert((resolve, reject) => (
+      .catch((e) => {
+        console.warn(e);
+        return alert((resolve, reject) => (
           <div className="content-container">
             <Markdown className="classification-task-help">
               Could not load model
             </Markdown>
             <button className="standard-button" onClick={reject}>Close</button>
           </div>
-        )),
-      );
+        ));
+      });
   }
   // TODO: choose size from subject metadata. Handle Pan.
   // TODO: don't always have score, some models wouldn't want one (chart.js)
