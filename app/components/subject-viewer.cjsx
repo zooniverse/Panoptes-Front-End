@@ -120,8 +120,8 @@ module.exports = createReactClass
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
         @renderFrame index, {key: "frame-#{index}"}
-    tools = switch type
-      when 'image'
+    tools = switch
+      when type is 'image' || type is 'application'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
           if @props.workflow?.configuration.enable_switching_flipbook_and_separate
             <button
