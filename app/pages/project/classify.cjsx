@@ -312,3 +312,4 @@ module.exports = createReactClass
 window.currentWorkflowForProject = currentWorkflowForProject
 window.currentClassifications = currentClassifications
 window.upcomingSubjects = upcomingSubjects
+window.classificationQueue = classificationQueue

@@ -1,58 +1,29 @@
-import sinon from 'sinon';
-import apiClient from 'panoptes-client/lib/api-client';
+import assert from 'assert';
 import ClassificationQueue from './classification-queue';
-
-class LocalStorageMock {
-    constructor() {
-        this.storage = {};
-    }
-
-    getItem(key) {
-        if (key in this.storage) {
-            return this.storage[key];
-        } else {
-            return null;
-        }
-    }
-
-    setItem(key, value) {
-        this.storage[key] = value.toString();
-    }
-
-    removeItem(key) {
-        delete this.storage[key];
-    }
-
-    get length() {
-        return Object.keys(this.storage).length;
-    }
-
-    key(i) {
-        let keys = Object.keys(this.storage);
-        return keys[i] || null;
-    }
-}
+import FakeLocalStorage from '../../test/fake-local-storage';
+import { FakeApiClient } from '../../test/fake-api-client';
 
 describe('ClassificationQueue', function() {
     it('sends classifications to the backend', function() {
-        // sinon.stub(apiClient, 'type');
-        // sinon.stub(apiClient.type(''))
-        // const resource = apiClient.type(type).create(options);
-        // apiClient._typesCache = {};
-        // sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
-        // sinon.stub(resource, 'get');
-        // sinon.stub(resource, 'delete');
+        let apiClient = new FakeApiClient();
+        let storage = new FakeLocalStorage();
 
-        // let classificationData = {annotations: [], metadata: {}};
-        // let classification = mockPanoptesResource('classification', classificationData);
+        let classificationData = {annotations: [], metadata: {}};
+        let classificationQueue = new ClassificationQueue(storage, apiClient);
+        classificationQueue.add(classificationData);
 
-        // let storage = new LocalStorageMock();
-        // let classificationQueue = new ClassificationQueue(storage);
-        // classificationQueue.add(classificationData);
+        assert.equal(apiClient.saves.length, 1);
+    });
 
-        // sinon.assert.calledOnce(classification.save);
+    it('keeps classifications in localStorage if backend fails', function() {
+        let apiClient = new FakeApiClient({canSave: () => { return false; }});
+        let storage = new FakeLocalStorage();
 
-        fail()
+        let classificationData = {annotations: [], metadata: {}};
+        let classificationQueue = new ClassificationQueue(storage, apiClient);
+        classificationQueue.add(classificationData);
 
+        assert.equal(apiClient.saves.length, 0);
+        assert.equal(classificationQueue.length(), 1);
     });
 });

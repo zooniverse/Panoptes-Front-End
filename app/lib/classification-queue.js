@@ -2,10 +2,13 @@ import apiClient from 'panoptes-client/lib/api-client';
 import { Split } from 'seven-ten';
 
 const FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications';
+const MAX_RECENTS = 10;
 
 class ClassificationQueue {
-    constructor(storage) {
+    constructor(storage, api) {
         this.storage = storage || window.localStorage;
+        this.apiClient = api || apiClient;
+        this.recents = [];
     }
 
     add(classification) {
@@ -23,19 +26,32 @@ class ClassificationQueue {
         this.flushToBackend();
     }
 
+    length() {
+        return this._loadQueue().length
+    }
+
+    addRecent(classification) {
+        if (this.recents.length > MAX_RECENTS) {
+            let droppedClassification = this.recents.pop();
+            droppedClassification.destroy();
+        }
+
+        this.recents.unshift(classification);
+    }
+
     flushToBackend() {
         var queue = this._loadQueue();
 
         if (queue.length > 0) {
             console.log('Saving queued classifications:', queue.length);
             for (let classificationData of queue) {
-                apiClient.type('classifications').create(classificationData)
+                this.apiClient.type('classifications').create(classificationData)
                     .save()
-                    .then(function(actualClassification) {
+                    .then((actualClassification) => {
                         console.log('Saved classification', actualClassification.id);
                         Split.classificationCreated(actualClassification); // Metric log needs classification id
-                        actualClassification.destroy();
-                        indexInQueue = queue.indexOf(classificationData);
+                        this.addRecent(actualClassification);
+                        let indexInQueue = queue.indexOf(classificationData);
                         queue.splice(indexInQueue, 1);
                         try {
                             this._saveQueue(queue);
@@ -45,21 +61,23 @@ class ClassificationQueue {
                             console.error('Failed to update classification queue:', error);
                         }
                     })
-                .catch(function(error) {
-                    console.error('Failed to save a queued classification:', error);
-                    switch(error.status) {
-                    case 422:
-                        indexInQueue = queue.indexOf(classificationData);
-                        queue.splice(indexInQueue, 1);
-                        try {
-                            this._saveQueue(queue);
+                    .catch(function(error) {
+                        console.error('Failed to save a queued classification:', error);
+
+                        switch(error.status) {
+                        case 422:
+                            console.error("Dropping malformed classification permanently", classificationData);
+                            let indexInQueue = queue.indexOf(classificationData);
+                            queue.splice(indexInQueue, 1);
+                            try {
+                                this._saveQueue(queue);
+                            }
+                            catch(error) {
+                                console.error('Failed to update classification queue:', error);
+                            }
+                            break;
                         }
-                        catch(error) {
-                            console.error('Failed to update classification queue:', error);
-                        }
-                        break;
-                    }
-                });
+                    });
             }
         }
     }
