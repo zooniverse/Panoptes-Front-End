@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Markdown from 'markdownz';
 import { isMatch } from 'lodash';
 import LoadingIndicator from '../loading-indicator';
-import modelSelector from '../modelling';
+import modelSelector from '../../features/modelling';
 import alert from '../../lib/alert';
 
 class CanvasViewer extends React.Component {
@@ -107,8 +107,6 @@ class CanvasViewer extends React.Component {
           height={512}
           ref={(r) => { this.canvas = r; }}
           style={this.props.style}
-          onFocus={this.props.onFocus}
-          onBlur={this.props.onBlur}
         />
         {
           this.state.hasScore &&

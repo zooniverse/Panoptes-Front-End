@@ -51,7 +51,6 @@ export const calculateDifference = r => r({
   frag: `
   precision mediump float;
   uniform sampler2D imageTexture, modelTexture;
-  uniform float renorm;
   varying vec2 uv;
   vec2 texCoords;
   float pixel;
@@ -66,7 +65,7 @@ export const calculateDifference = r => r({
     texCoords = vec2(uv[0], 1.0 - uv[1]);
     // calculate the difference between model + image (after
     // reversing the asinh stretch on the image)
-    pixel = texture2D(imageTexture, uv).rgb[0] / 7.0 \
+    pixel = texture2D(imageTexture, uv).rgb[0] \
      - texture2D(modelTexture, uv).rgb[0];
     if (pixel < 0.0) {
       // the model is brighter than the image
@@ -94,8 +93,38 @@ export const calculateDifference = r => r({
   }`,
   uniforms: {
     modelTexture: r.prop('texture'),
-    imageTexture: r.prop('imageTexture'),
-    renorm: (c_, p) => parseFloat(p.metadata.renorm)
+    imageTexture: r.prop('imageTexture')
+  },
+  depth: { enable: false },
+  attributes: { position: [-2, 0, 0, -2, 2, 2] },
+  count: 3
+});
+
+export const scaleModel = r => r({
+  frag: `
+  precision mediump float;
+  uniform sampler2D texture, mask;
+  varying vec2 uv;
+  vec2 texCoords;
+  float pixel;
+  float asinh(float px) {
+      return log(px + sqrt(1.0 + (px * px)));
+  }
+  float asinhStretch(float px) {
+    return asinh(px / 0.5) / asinh(0.5);
+  }
+  void main () {
+    pixel = asinhStretch(texture2D(imageTexture, uv).rgb[0]);
+    gl_FragColor = vec4(pixel, pixel, pixel, 1.0);
+  }`,
+  vert: `
+  precision mediump float; attribute vec2 position; varying vec2 uv;
+  void main () {
+    uv = position;
+    gl_Position = vec4(2.0 * position - 1.0, 0, 1);
+  }`,
+  uniforms: {
+    texture: r.prop('texture')
   },
   depth: { enable: false },
   attributes: { position: [-2, 0, 0, -2, 2, 2] },
@@ -125,9 +154,7 @@ export const maskImage = r => r({
     gl_Position = vec4(2.0 * position - 1.0, 0, 1);
   }`,
   uniforms: {
-    texture: r.prop('texture'),
-    mask: r.prop('mask'),
-    renorm: (c_, p) => parseFloat(p.metadata.renorm)
+    texture: r.prop('texture')
   },
   depth: { enable: false },
   attributes: { position: [-2, 0, 0, -2, 2, 2] },

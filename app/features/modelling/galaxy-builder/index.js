@@ -13,7 +13,6 @@ class GalaxyBuilderModel extends baseModel {
     this.state.shouldCompareToImage = false;
     this.state.annotations = [];
     this.state.imageSize = sizing;
-    console.log(sizing);
     this.canvas.style.width = `${sizing.width}px`;
     this.canvas.style.height = `${sizing.height}px`;
     console.log(this.canvas);
@@ -23,13 +22,13 @@ class GalaxyBuilderModel extends baseModel {
       fetch(`${src}?=`)
         .then(response => response.json())
         .catch((e) => {
-          const content = e.message;
-          console.warn(content);
+          console.warn(e);
         })
         .then(data => this.handleDataLoad(data));
     }
   }
   handleDataLoad(data) {
+    console.log(Object.keys(data));
     this.canvas.height = data.height;
     this.canvas.width = data.width;
     if (data.psf && data.psfWidth && data.psfHeight) {
@@ -115,8 +114,10 @@ class GalaxyBuilderModel extends baseModel {
     for (let i = 0; i < annotations.length; i++) {
       if (annotations[i].task === 'spiral') {
         comp = ret.concat(parseSpiral(annotations[i], s, ret));
-        comp[0](comp[1]);
-        this.state.pixels({ copy: true });
+        if (comp !== null) {
+          comp[0](comp[1]);
+          this.state.pixels({ copy: true });
+        }
       }
     }
     if (this.convolvePSF) {
@@ -130,8 +131,13 @@ class GalaxyBuilderModel extends baseModel {
         texture: this.state.pixels,
         imageTexture: this.imageData
       });
+      this.state.pixels({ copy: true });
+    } else if (this.scaleModel) {
+      this.scaleModel({
+        texture: this.state.pixels
+      });
+      this.state.pixels({ copy: true });
     }
-    this.state.pixels({ copy: true });
     if (this.panZoom) {
       this.panZoom({
         texture: this.state.pixels,

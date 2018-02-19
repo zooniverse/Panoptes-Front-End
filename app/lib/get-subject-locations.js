@@ -3,16 +3,16 @@ const READABLE_FORMATS = {
     'jpeg', 'png', 'svg+xml', 'gif'
   ],
   video: ['mp4', 'mpeg'],
-  audio: ['mp3', 'm4a', 'mpeg']
+  audio: ['mp3', 'm4a', 'mpeg'],
+  application: ['json']
 };
 
 const getSubjectLocations = (subjects) => {
-  var subjectLocations = {};
+  const subjectLocations = {};
   subjects.locations.map((locationData) => {
     for (const mimeType of Object.keys(locationData)) {
-      let src = locationData[mimeType];
-      let [type,
-        format] = mimeType.split('/');
+      const src = locationData[mimeType];
+      let [type, format] = mimeType.split('/');
       if (READABLE_FORMATS.hasOwnProperty(type) && READABLE_FORMATS[type].includes(format)) {
         subjectLocations[type] = [format, src];
       }
