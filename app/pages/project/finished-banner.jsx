@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
-import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
 
 const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
 
@@ -106,6 +105,5 @@ FinishedBanner.propTypes = {
   project: PropTypes.shape({
     id: PropTypes.string,
     slug: PropTypes.string,
-  }),
-  projectIsComplete: PropTypes.bool
+  })
 };
