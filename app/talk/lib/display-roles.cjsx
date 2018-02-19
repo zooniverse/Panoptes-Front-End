@@ -1,7 +1,7 @@
 React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
-uniq = require 'lodash/uniq'
+uniqBy = require 'lodash/uniqBy'
 
 zooniverseTeamRole = (role) ->
   role.section is 'zooniverse' and [ 'admin', 'team' ].indexOf(role.name) isnt -1
@@ -32,7 +32,7 @@ DisplayRoles = createReactClass
 
   render: ->
     <div className="talk-display-roles">
-      {uniq(@props.roles, roleDisplayName).map(@role)}
+      {uniqBy(@props.roles, roleDisplayName).map(@role)}
     </div>
 
 module.exports = DisplayRoles
