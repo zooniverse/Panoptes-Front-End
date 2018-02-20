@@ -81,7 +81,6 @@ class GalaxyBuilderModel extends baseModel {
     };
   }
   calculateModel(annotations, viewBox) {
-    console.log('-------------- MODEL CALCULATION --------------');
     // TODO: store calculated functions in state to be re-called rather than
     //       re-calculated
     this.state.annotations = annotations;
@@ -107,7 +106,6 @@ class GalaxyBuilderModel extends baseModel {
           break;
       }
       if (comp !== null) {
-        console.log(`Rendering ${comp[1].name}`);
         comp[0](Object.assign({ texture: this.state.pixels }, comp[1]));
         this.state.pixels({ copy: true });
         ret.push(comp);
@@ -118,8 +116,6 @@ class GalaxyBuilderModel extends baseModel {
         comp = parseSpiral(annotations[i], s, ret);
         if (comp !== null) {
           comp.forEach(([renderFunc, params]) => {
-            console.log('Rendering spiral arm');
-            console.log(params);
             renderFunc(Object.assign({ texture: this.state.pixels }, params));
             this.state.pixels({ copy: true });
           });
@@ -127,28 +123,24 @@ class GalaxyBuilderModel extends baseModel {
       }
     }
     if (this.convolvePSF) {
-      console.log('Convolving PSF');
       this.convolvePSF({
         texture: this.state.pixels
       });
       this.state.pixels({ copy: true });
     }
     if (this.state.shouldCompareToImage) {
-      console.log('Calculating difference');
       this.calculateDifference({
         texture: this.state.pixels,
         imageTexture: this.imageData
       });
       this.state.pixels({ copy: true });
     } else if (this.scaleModel) {
-      console.log('Scaling model');
       this.scaleModel({
         texture: this.state.pixels
       });
       this.state.pixels({ copy: true });
     }
     if (this.panZoom) {
-      console.log('Pan-Zooming');
       const scale = viewBox.width / this.state.sizing.width;
       const offset = [
         (viewBox.x / this.state.sizing.width),
