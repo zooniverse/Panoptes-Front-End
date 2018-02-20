@@ -93,7 +93,6 @@ class ApplyForBetaForm extends React.Component {
     this.updateValidationsFromProps = this.updateValidationsFromProps.bind(this);
 
     this.state = {
-      links: {},
       validations: {
         projectIsPublic: projectIsPublic(props.project),
         projectIsLive: projectIsLive(props.project),

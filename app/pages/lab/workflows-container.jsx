@@ -66,6 +66,7 @@ export default class WorkflowsContainer extends React.Component {
     workflow.update({ active: checked }).save()
       .catch(error => console.log(error))
       .then(() => {
+        this.props.project.uncache();
         if (!workflow.active && workflow.id === defaultWorkflow) {
           this.props.project.update({ 'configuration.default_workflow': null });
           this.props.project.save();
