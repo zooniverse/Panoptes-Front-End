@@ -175,7 +175,7 @@ module.exports = createReactClass
           <span>
             <span className="subject-frame-pips">
               {for i in [0...@props.subject?.locations.length ? 0]
-                <label key={@props.subject.locations[i]["#{type}/#{format}"]} className="button subject-frame-pip #{if i is @state.frame then 'active' else ''}" >
+                <label key={Object.values(@props.subject.locations[i])[0]} className="button subject-frame-pip #{if i is @state.frame then 'active' else ''}" >
                   <input type="radio" name="frame" value={i} onChange={@handleFrameChange.bind this, i} />{i + 1}
                 </label>}
             </span>
