@@ -19,7 +19,6 @@ function hasTitleChanged(oldProps, newProps) {
 export class ProjectNavbar extends Component {
   constructor(props) {
     super(props);
-    this.setBreakpoint = this.setBreakpoint.bind(this);
     this.state = {
       breakpoint: 0
     };
