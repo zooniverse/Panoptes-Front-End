@@ -1,4 +1,4 @@
-const hasComp = c => (c.value[0].value.length > 0);
+export const hasComp = c => (c.value[0].value.length > 0);
 
 export const parseDisk = (comp, state) => {
   if (!hasComp(comp)) return null;
