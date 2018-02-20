@@ -19,7 +19,7 @@ const INVERT =
   </svg>`;
 
 
-class SVGImage extends React.Component {
+class SVGTransparentRect extends React.Component {
 
   constructor() {
     super();
@@ -35,7 +35,7 @@ class SVGImage extends React.Component {
   }
 
   fixWeirdSize() {
-    const image = this.refs.image;
+    const image = this.rect;
 
     if (this.props.width && image.width === this.props.width) {
       image.setAttribute('width', this.props.width);
@@ -59,18 +59,17 @@ class SVGImage extends React.Component {
   render() {
     const imageProps = Object.assign({}, this.props);
     delete imageProps.modification;
-    return <image ref="image" xlinkHref={this.props.src} style={this.filterFinder()} {...imageProps} />;
+    return <rect ref={(r) => { this.rect = r; }} fill="#000000" fillOpacity="0.0" {...imageProps} />;
   }
 }
-SVGImage.propTypes = {
-  src: PropTypes.string.isRequired,
+SVGTransparentRect.propTypes = {
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   modification: PropTypes.object
 };
 
-SVGImage.defaultProps = {
+SVGTransparentRect.defaultProps = {
   modification: {}
 };
 
-export default SVGImage;
+export default SVGTransparentRect;

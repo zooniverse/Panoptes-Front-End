@@ -173,7 +173,7 @@ export const panZoom = r => r({
 
   void main () {
     gl_FragColor = vec4(
-      texture2D(texture, (uv + offset) * scale).rgb,
+      texture2D(texture, (uv * scale + offset)).rgb,
       1.0
     );
   }`,

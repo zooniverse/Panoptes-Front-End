@@ -12,13 +12,10 @@ class GalaxyBuilderModel extends baseModel {
 
     this.state.shouldCompareToImage = false;
     this.state.annotations = [];
-    this.state.imageSize = sizing;
     this.canvas.style.width = `${sizing.width}px`;
     this.canvas.style.height = `${sizing.height}px`;
-    console.log(this.canvas);
     // first, fire off the fetch event
     if (src) {
-      console.log('>>> Attempting to fetch json');
       fetch(`${src}?=`)
         .then(response => response.json())
         .catch((e) => {
@@ -28,7 +25,6 @@ class GalaxyBuilderModel extends baseModel {
     }
   }
   handleDataLoad(data) {
-    console.log(Object.keys(data));
     this.canvas.height = data.height;
     this.canvas.width = data.width;
     if (data.psf && data.psfWidth && data.psfHeight) {
@@ -48,10 +44,16 @@ class GalaxyBuilderModel extends baseModel {
       if (data.imageHeight && data.imageWidth) {
         this.canvas.style.height = `${data.imageHeight}px`;
         this.canvas.style.width = `${data.imageWidth}px`;
-        this.state.imageSize = { height: data.imageHeight, width: data.imageWidth };
+        this.state.sizing = {
+          sizing: Object.assign(
+            {},
+            this.state.sizing,
+            { height: data.imageHeight, width: data.imageWidth }
+          )
+        };
       }
     }
-    this.calculateModel(this.state.annotations, this.state.imageSize);
+    this.calculateModel(this.state.annotations, this.state.sizing);
   }
   setModel() {
     // return taskName: render method object
@@ -82,7 +84,6 @@ class GalaxyBuilderModel extends baseModel {
     // TODO: store calculated functions in state to be re-called rather than
     //       re-calculated
     this.state.annotations = annotations;
-    this.state.viewBox = viewBox;
     const s = {
       size: [this.state.sizing.width, this.state.sizing.height],
       // the canvas is not the same size as is visible
@@ -139,14 +140,17 @@ class GalaxyBuilderModel extends baseModel {
       this.state.pixels({ copy: true });
     }
     if (this.panZoom) {
-      this.panZoom({
+      const scale = viewBox.width / this.state.sizing.width;
+      const offset = [
+        (viewBox.x / this.state.sizing.width),
+        1 - scale - (viewBox.y / this.state.sizing.height)
+      ];
+      const zoomObj = {
         texture: this.state.pixels,
-        scale: viewBox.width / this.state.sizing.width,
-        offset: [
-          viewBox.x / viewBox.width,
-          viewBox.y / viewBox.height
-        ]
-      });
+        scale,
+        offset
+      };
+      this.panZoom(zoomObj);
     }
   }
   getScore() {
