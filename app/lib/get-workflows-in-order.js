@@ -5,9 +5,30 @@ function getWorkflowsInOrder(project, query) {
     [];
 
   // TODO remove default page_size once pagination solution implemented
-  query.page_size = query.page_size || 100;
+  query.page_size = query.page_size || 20;
 
-  return project.get('workflows', query).then((workflows) => {
+  function getAllWorkflows(query) {
+    let allWorkflows = [];
+    return getWorkflows(query, 1);
+
+    function getWorkflows(query, page) {
+      return project.get('workflows', Object.assign({}, query, { page }))
+        .then((workflows) => {
+          allWorkflows = allWorkflows.concat(workflows);
+          const meta = workflows[0] ? workflows[0].getMeta() : null;
+          if (meta && meta.page !== meta.page_count) {
+            return getWorkflows(query, page + 1);
+          }
+          return Promise.resolve(allWorkflows);
+        })
+        .catch((error) => {
+          console.info(error);
+          return Promise.resolve(allWorkflows);
+        });
+    }
+  }
+
+  return getAllWorkflows(query).then((workflows) => {
     const workflowsByID = {};
     workflows.forEach((workflow) => { workflowsByID[workflow.id] = workflow; });
 
@@ -21,6 +42,10 @@ function getWorkflowsInOrder(project, query) {
     });
 
     return workflowsInOrder;
+  })
+  .catch((error) => {
+    console.info(error);
+    return Promise.resolve([]);
   });
 }
 
