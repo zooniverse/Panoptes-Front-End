@@ -9,10 +9,7 @@ const REQUIRED_PAGES = ['Research', 'FAQ'];
 
 // Static functions
 const projectHasActiveWorkflows = (project) => {
-  if (project.links.active_workflows && project.links.active_workflows.length > 0) {
-    return true;
-  }
-  return false;
+  return project.links.active_workflows && project.links.active_workflows.length > 0;
 };
 
 const projectHasMinimumActiveSubjects = (project) => {
