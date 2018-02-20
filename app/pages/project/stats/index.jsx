@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import qs from 'qs';
 import { ProjectStatsPage } from './stats.jsx';
-import getWorkflowsInOrder from '../../../lib/get-workflows-in-order.coffee';
+import getWorkflowsInOrder from '../../../lib/get-workflows-in-order';
 
 class ProjectStatsPageController extends React.Component {
   constructor(props) {
