@@ -9,7 +9,7 @@ const REQUIRED_PAGES = ['Research', 'FAQ'];
 
 // Static functions
 const projectHasActiveWorkflows = (project) => {
-  if (project.links.active_workflows) {
+  if (project.links.active_workflows && project.links.active_workflows.length > 0) {
     return true;
   }
   return false;
@@ -93,6 +93,7 @@ class ApplyForBetaForm extends React.Component {
     this.updateValidationsFromProps = this.updateValidationsFromProps.bind(this);
 
     this.state = {
+      links: {},
       validations: {
         projectIsPublic: projectIsPublic(props.project),
         projectIsLive: projectIsLive(props.project),
@@ -105,6 +106,7 @@ class ApplyForBetaForm extends React.Component {
       doingAsyncValidation: false
     };
   }
+
 
   componentWillUpdate(nextProps) {
     this.updateValidationsFromProps(nextProps);

@@ -21,8 +21,6 @@ module.exports = createReactClass
       private: false
       beta_requested: false
       launch_requested: false
-    workflows: []
-    loadingWorkflows: false
 
   mixins: [SetToggle]
 
@@ -94,7 +92,7 @@ module.exports = createReactClass
           </div>
           <span>Review status has been applied for. <button type="button" disabled={@state.setting.beta_requested} onClick={@set.bind this, 'beta_requested', false}>Cancel application</button></span>
         else
-          <ApplyForBetaForm project={@props.project} workflows={@state.workflows} applyFn={@set.bind this, 'beta_requested', true} />
+          <ApplyForBetaForm project={@props.project} applyFn={@set.bind this, 'beta_requested', true} />
         }
 
       </div>
