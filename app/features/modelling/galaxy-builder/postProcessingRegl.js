@@ -58,14 +58,14 @@ export const calculateDifference = r => r({
       return log(px + sqrt(1.0+px*px));
   }
   float asinhStretch(float px) {
-    return asinh(px / 0.5) / asinh(0.5);
+    return asinh(px / 0.4) / asinh(0.4);
   }
   void main () {
     // for some reason the y-axis coords have been mirrored;
     texCoords = vec2(uv[0], 1.0 - uv[1]);
     // calculate the difference between model + image (after
     // reversing the asinh stretch on the image)
-    pixel = texture2D(imageTexture, uv).rgb[0] \
+    pixel = 0.8 * texture2D(imageTexture, uv).rgb[0] \
      - texture2D(modelTexture, uv).rgb[0];
     if (pixel < 0.0) {
       // the model is brighter than the image
@@ -101,6 +101,12 @@ export const calculateDifference = r => r({
 });
 
 export const scaleModel = r => r({
+  vert: `
+  precision mediump float; attribute vec2 position; varying vec2 uv;
+  void main () {
+    uv = position;
+    gl_Position = vec4(2.0 * position - 1.0, 0, 1);
+  }`,
   frag: `
   precision mediump float;
   uniform sampler2D texture, mask;
@@ -114,14 +120,8 @@ export const scaleModel = r => r({
     return asinh(px / 0.5) / asinh(0.5);
   }
   void main () {
-    pixel = asinhStretch(texture2D(imageTexture, uv).rgb[0]);
+    pixel = asinhStretch(texture2D(texture, uv).rgb[0]);
     gl_FragColor = vec4(pixel, pixel, pixel, 1.0);
-  }`,
-  vert: `
-  precision mediump float; attribute vec2 position; varying vec2 uv;
-  void main () {
-    uv = position;
-    gl_Position = vec4(2.0 * position - 1.0, 0, 1);
   }`,
   uniforms: {
     texture: r.prop('texture')

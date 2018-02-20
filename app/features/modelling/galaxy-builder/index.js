@@ -1,15 +1,15 @@
 /* eslint-disable class-methods-use-this */
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 import baseModel from '../baseReglModel';
-import galaxyRegls from './galaxyRegls';
-import { convolvePSF, calculateDifference, maskImage, panZoom } from './postProcessingRegl';
+import { drawSersic, drawSpiral } from './galaxyRegls';
+import { convolvePSF, calculateDifference, scaleModel, maskImage, panZoom } from './postProcessingRegl';
 import { parseDisk, parseBulge, parseBar, parseSpiral } from './parseFunctions';
 
 class GalaxyBuilderModel extends baseModel {
   constructor(canvas, { frame, metadata, src, sizing }) {
     super(canvas, { frame, metadata, src, sizing });
     this.panZoom = panZoom(this.regl);
-
+    this.scaleModel = scaleModel(this.regl);
     this.state.shouldCompareToImage = false;
     this.state.annotations = [];
     this.canvas.style.width = `${sizing.width}px`;
@@ -53,34 +53,35 @@ class GalaxyBuilderModel extends baseModel {
         };
       }
     }
-    this.calculateModel(this.state.annotations, this.state.sizing);
+    this.update(this.state.annotations, this.state.sizing);
   }
   setModel() {
     // return taskName: render method object
     this.model = {
       disk: {
         name: 'disk',
-        func: galaxyRegls.drawSersic(this.regl),
+        func: drawSersic(this.regl),
         default: { mux: 0, muy: 0, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
       },
       bulge: {
         name: 'bulge',
-        func: galaxyRegls.drawSersic(this.regl),
+        func: drawSersic(this.regl),
         default: { mux: 100, muy: 100, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
       },
       bar: {
         name: 'bar',
-        func: galaxyRegls.drawSersic(this.regl),
+        func: drawSersic(this.regl),
         default: { mux: 100, muy: 100, rx: 5, ry: 5, scale: 5 / 8, roll: 0, i0: 0.75, n: 2, c: 2 }
       },
       spiral: {
         name: 'spiral',
-        func: galaxyRegls.drawSpiral(this.regl),
+        func: drawSpiral(this.regl),
         default: { mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, falloff: 1 }
       }
     };
   }
   calculateModel(annotations, viewBox) {
+    console.log('-------------- MODEL CALCULATION --------------');
     // TODO: store calculated functions in state to be re-called rather than
     //       re-calculated
     this.state.annotations = annotations;
@@ -91,8 +92,7 @@ class GalaxyBuilderModel extends baseModel {
       model: this.model
     };
     const ret = [];
-    let comp = null;
-    for (let i = 0; i < annotations.length; i++) {
+    for (let i = 0, comp = null; i < annotations.length; i++) {
       switch (annotations[i].task) {
         case 'disk':
           comp = parseDisk(annotations[i], s);
@@ -107,39 +107,48 @@ class GalaxyBuilderModel extends baseModel {
           break;
       }
       if (comp !== null) {
-        comp[0](comp[1]);
+        console.log(`Rendering ${comp[1].name}`);
+        comp[0](Object.assign({ texture: this.state.pixels }, comp[1]));
         this.state.pixels({ copy: true });
         ret.push(comp);
       }
     }
-    for (let i = 0; i < annotations.length; i++) {
+    for (let i = 0, comp = null; i < annotations.length; i++) {
       if (annotations[i].task === 'spiral') {
-        comp = ret.concat(parseSpiral(annotations[i], s, ret));
+        comp = parseSpiral(annotations[i], s, ret);
         if (comp !== null) {
-          comp[0](comp[1]);
-          this.state.pixels({ copy: true });
+          comp.forEach(([renderFunc, params]) => {
+            console.log('Rendering spiral arm');
+            console.log(params);
+            renderFunc(Object.assign({ texture: this.state.pixels }, params));
+            this.state.pixels({ copy: true });
+          });
         }
       }
     }
     if (this.convolvePSF) {
+      console.log('Convolving PSF');
       this.convolvePSF({
         texture: this.state.pixels
       });
+      this.state.pixels({ copy: true });
     }
-    this.state.pixels({ copy: true });
     if (this.state.shouldCompareToImage) {
+      console.log('Calculating difference');
       this.calculateDifference({
         texture: this.state.pixels,
         imageTexture: this.imageData
       });
       this.state.pixels({ copy: true });
     } else if (this.scaleModel) {
+      console.log('Scaling model');
       this.scaleModel({
         texture: this.state.pixels
       });
       this.state.pixels({ copy: true });
     }
     if (this.panZoom) {
+      console.log('Pan-Zooming');
       const scale = viewBox.width / this.state.sizing.width;
       const offset = [
         (viewBox.x / this.state.sizing.width),

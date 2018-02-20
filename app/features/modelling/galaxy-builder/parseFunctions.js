@@ -85,7 +85,7 @@ export const parseSpiral = (comp, state, currentComps) => {
           spread: parseFloat(comp.value[0].value[i].details[1].value),
           falloff: parseFloat(comp.value[1].value),
           points: comp.value[0].value[i].points.map(
-            p => [p.x, state.size[0] - p.y]
+            p => [state.sizeMultiplier * p.x, state.sizeMultiplier * (state.size[0] - p.y)]
           )
         }
       );
