@@ -16,8 +16,8 @@ function getWorkflowsInOrder(project, query) {
         .then((workflows) => {
           allWorkflows = allWorkflows.concat(workflows);
           const meta = workflows[0] ? workflows[0].getMeta() : null;
-          if (meta && meta.page !== meta.page_count) {
-            return getWorkflows(query, page + 1);
+          if (meta && meta.next_page) {
+            return getWorkflows(query, meta.next_page);
           }
         })
         .catch((error) => {
