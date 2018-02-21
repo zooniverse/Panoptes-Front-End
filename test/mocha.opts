@@ -1,1 +1,1 @@
- --compilers js:babel-core/register,coffee:coffee-script/register,cjsx:coffee-react/register
+ --require babel-core/register --require coffee-script/register --require coffee-react/register
