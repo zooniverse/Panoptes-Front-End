@@ -33,7 +33,6 @@ class ProjectStatusList extends Component {
 
     const projectsQuery = {
       include: 'avatar',
-      page_size: 24,
       sort: '-updated_at'
     };
 
