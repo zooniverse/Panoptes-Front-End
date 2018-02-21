@@ -7,7 +7,6 @@ import { pxToRem } from '../../../../../../theme';
 import socialIcons from '../../socialIcons';
 
 const commonStyles = `
-  color: white;
   display: block;
   font-family: Karla;
   font-size: ${pxToRem(15)};
@@ -22,10 +21,18 @@ const commonStyles = `
 export const StyledInternalLink = styled(Link).attrs({
   activeClassName: 'active'
 })`
+  color: white;
   ${commonStyles}
 `;
 
 export const StyledExternalLink = styled.a`
+  color: white;
+  ${commonStyles}
+`;
+
+export const StyledLinkPlaceholder = styled.span`
+  color: lightgrey;
+  cursor: not-allowed;
   ${commonStyles}
 `;
 
@@ -47,6 +54,14 @@ function NavLink({ isExternalLink, isSocialLink, label, site, url, ...props }) {
     const icon = socialIcons[site].icon;
     linkProps['aria-label'] = socialIcons[site].label;
     iconClasses = `fa ${icon} fa-fw`;
+  }
+
+  if (linkProps.disabled) {
+    return (
+      <StyledLinkPlaceholder {...linkProps}>
+        {label}
+      </StyledLinkPlaceholder>
+    );
   }
 
   return (

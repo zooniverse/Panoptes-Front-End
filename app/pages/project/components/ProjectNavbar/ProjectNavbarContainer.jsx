@@ -86,6 +86,7 @@ class ProjectNavbarContainer extends Component {
     const links = getProjectLinks({ project, projectRoles, workflow, user });
 
     return _.map(links, link => ({
+      disabled: link.disabled || false,
       isExternalLink: link.isExternalLink || false,
       label: counterpart(link.translationPath),
       url: link.url

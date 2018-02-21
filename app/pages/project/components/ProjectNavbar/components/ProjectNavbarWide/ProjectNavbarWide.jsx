@@ -27,7 +27,11 @@ export const Nav = styled.nav`
   display: flex;
   flex: 1;
   justify-content: flex-end;
-  margin-left: ${pxToRem(20)}
+  margin-left: ${pxToRem(20)};
+
+  > span {
+    margin-right: ${pxToRem(30)} !important; 
+  }
 `;
 
 export const StyledNavLink = styled(NavLink)`
@@ -40,7 +44,7 @@ export const StyledNavLink = styled(NavLink)`
   }
 
   &:not(:last-of-type) {
-    margin-right: ${pxToRem(30)}
+    margin-right: ${pxToRem(30)};
   }
 `;
 
