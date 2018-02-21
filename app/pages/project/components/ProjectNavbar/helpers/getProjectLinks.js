@@ -46,8 +46,7 @@ function getProjectLinks({ project, projectRoles, workflow, user }) {
 
   // For projects with external front ends
   if (redirect) {
-    const newUrl = redirect.replace(/\/?#?\/+$/, '');
-    links.classify.url = `${newUrl}/#/classify`;
+    links.classify.url = `${redirect}/classify`;
     links.classify.isExternalLink = true;
     _.unset(links, 'about');
   }
