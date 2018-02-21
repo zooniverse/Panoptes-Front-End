@@ -5,6 +5,7 @@ import { Markdown } from 'markdownz';
 import { sugarClient } from 'panoptes-client/lib/sugar';
 import ProjectNavbar from './components/ProjectNavbar';
 import PotentialFieldGuide from './potential-field-guide';
+import ProjectHomeContainer from './home/';
 
 export default class ProjectPage extends React.Component {
   getChildContext() {
@@ -84,7 +85,7 @@ export default class ProjectPage extends React.Component {
           user: this.props.user,
           workflow: this.props.workflow
         })}
-        {React.Children.only(this.props.children).type.name !== 'ProjectHomeContainer' &&
+        {React.Children.only(this.props.children).type !== ProjectHomeContainer &&
           <PotentialFieldGuide
             guide={this.props.guide}
             guideIcons={this.props.guideIcons}

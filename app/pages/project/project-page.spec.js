@@ -6,15 +6,12 @@ import { sugarClient } from 'panoptes-client/lib/sugar';
 import { project } from '../dev-classifier/mock-data';
 import ProjectPage from './project-page';
 import ProjectNavbar from './components/ProjectNavbar';
+import ProjectHomeContainer from './home/';
 
 function Page() {
   return (
     <p>Hello world!</p>
   );
-}
-
-function ProjectHomeContainer() {
-  return (<p>Mocked home page.</p>);
 }
 
 describe('ProjectPage', function () {
