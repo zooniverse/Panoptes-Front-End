@@ -102,19 +102,32 @@ describe('hasComp', function () {
   });
 });
 
-// cycle through parse functions, same tests as they only differ in the required annotation shape
-[['parseDisk', parseDisk], ['parseBulge', parseBulge], ['parseBar', parseBar]].forEach(
-  ([name, f], i) => {
-    describe(name, function () {
-      it('should return null for an annotation without a drawn shape', function () {
-        assert.equal(f(annotationWithoutShape[i], state), null);
-      });
-      it('should return component parameters for an annotation with a drawn shape', function () {
-        assert.ok(f(annotations[i], state));
-      });
-    });
-  }
-);
+describe('parseDisk', function () {
+  it('should return null for an annotation without a drawn shape', function () {
+    assert.equal(parseDisk(annotationWithoutShape[0], state), null);
+  });
+  it('should return component parameters for an annotation with a drawn shape', function () {
+    assert.ok(parseDisk(annotations[0], state));
+  });
+});
+
+describe('parseBulge', function () {
+  it('should return null for an annotation without a drawn shape', function () {
+    assert.equal(parseBulge(annotationWithoutShape[1], state), null);
+  });
+  it('should return component parameters for an annotation with a drawn shape', function () {
+    assert.ok(parseBulge(annotations[1], state));
+  });
+});
+
+describe('parseBar', function () {
+  it('should return null for an annotation without a drawn shape', function () {
+    assert.equal(parseBar(annotationWithoutShape[2], state), null);
+  });
+  it('should return component parameters for an annotation with a drawn shape', function () {
+    assert.ok(parseBar(annotations[2], state));
+  });
+});
 
 describe('parseSpiral', function () {
   const comps = [
