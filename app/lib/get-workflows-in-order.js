@@ -19,12 +19,11 @@ function getWorkflowsInOrder(project, query) {
           if (meta && meta.page !== meta.page_count) {
             return getWorkflows(query, page + 1);
           }
-          return Promise.resolve(allWorkflows);
         })
         .catch((error) => {
           console.info(error);
-          return Promise.resolve(allWorkflows);
-        });
+        })
+        .then(() => Promise.resolve(allWorkflows));
     }
   }
 
