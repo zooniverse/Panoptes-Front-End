@@ -10,6 +10,9 @@ const REQUIRED_PAGES = ['Research', 'FAQ'];
 const createProjectProp = (properties) => {
   return Object.assign({}, {
     id: "1234",
+    links: {
+      active_workflows: [1, 2]
+    },
     private: false,
     live: true,
   }, properties);
@@ -151,7 +154,7 @@ describe('ApplyForBeta component:', function() {
       describe('active workflow checkbox:', function() {
         const setActiveWorkflowStatusWrappers = function() {
           setWrappers('Project has at least one active workflow');
-        }
+        };
 
         beforeEach(testSetup);
 
@@ -166,12 +169,12 @@ describe('ApplyForBeta component:', function() {
         });
 
         it('should be unchecked if the project has no active workflows', function() {
+          project.links.active_workflows = undefined;
           setActiveWorkflowStatusWrappers();
           assertCheckboxChecked(checkbox, false);
         });
 
         it('should be checked if the project has at least one active workflow', function() {
-          workflows[0].active = true;
           setActiveWorkflowStatusWrappers();
           assertCheckboxChecked(checkbox);
         });

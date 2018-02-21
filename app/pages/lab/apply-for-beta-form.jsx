@@ -8,28 +8,14 @@ const MINIMUM_SUBJECT_COUNT = 100;
 const REQUIRED_PAGES = ['Research', 'FAQ'];
 
 // Static functions
-const projectHasActiveWorkflows = (workflows) => {
-  return workflows.some((workflow) => {
-    return workflow.active;
-  });
+const projectHasActiveWorkflows = (project) => {
+  return project.links.active_workflows && project.links.active_workflows.length > 0;
 };
 
-const projectHasMinimumActiveSubjects = (workflows) => {
-  const activeWorkflows = workflows.filter((workflow) => {
-    return workflow.active;
-  });
-  const uniqueSetIDs = activeWorkflows.reduce((sets, workflow) => {
-    return uniq(sets.concat(workflow.links.subject_sets));
-  }, []);
-  // Second parameter is an empty object to prevent request caching.
-  return apiClient.type('subject_sets', {})
-    .get(uniqueSetIDs)
-    .then((sets) => {
-      const subjectCount = sets.reduce((count, set) => {
-        return count + set.set_member_subjects_count;
-      }, 0);
-      return (subjectCount >= MINIMUM_SUBJECT_COUNT) ? true : `The project only has ${subjectCount} of ${MINIMUM_SUBJECT_COUNT} required subjects`;
-    });
+const projectHasMinimumActiveSubjects = (project) => {
+  const subjectCount = project.subjects_count;
+  return (subjectCount >= MINIMUM_SUBJECT_COUNT) ?
+    true : `The project only has ${subjectCount} of ${MINIMUM_SUBJECT_COUNT} required subjects`;
 };
 
 const projectHasRequiredContent = (project) => {
@@ -107,7 +93,7 @@ class ApplyForBetaForm extends React.Component {
       validations: {
         projectIsPublic: projectIsPublic(props.project),
         projectIsLive: projectIsLive(props.project),
-        projectHasActiveWorkflows: projectHasActiveWorkflows(props.workflows),
+        projectHasActiveWorkflows: projectHasActiveWorkflows(props.project),
         labPolicyReviewed: false,
         bestPracticesReviewed: false,
         feedbackReviewed: false
@@ -116,6 +102,7 @@ class ApplyForBetaForm extends React.Component {
       doingAsyncValidation: false
     };
   }
+
 
   componentWillUpdate(nextProps) {
     this.updateValidationsFromProps(nextProps);
@@ -126,7 +113,7 @@ class ApplyForBetaForm extends React.Component {
     // error messages.
     this.setState({ doingAsyncValidation: true });
     return Promise.all([
-      projectHasMinimumActiveSubjects(this.props.workflows),
+      projectHasMinimumActiveSubjects(this.props.project),
       projectHasRequiredContent(this.props.project)
     ])
     .catch((error) => {
@@ -194,6 +181,7 @@ class ApplyForBetaForm extends React.Component {
   }
 
   updateValidationsFromProps(props) {
+
     // We need to do a props comparison, otherwise we get a loop where props
     // update state -> updates state repeatedly.
     //
@@ -206,7 +194,7 @@ class ApplyForBetaForm extends React.Component {
     const newValues = {
       projectIsPublic: projectIsPublic(props.project),
       projectIsLive: projectIsLive(props.project),
-      projectHasActiveWorkflows: projectHasActiveWorkflows(props.workflows)
+      projectHasActiveWorkflows: projectHasActiveWorkflows(props.project)
     };
 
     Object.keys(newValues).forEach((key) => {
@@ -223,7 +211,6 @@ class ApplyForBetaForm extends React.Component {
   render() {
     const applyButtonDisabled = !this.canApplyForReview() ||
       this.state.doingAsyncValidation;
-
     return (
       <div>
 
@@ -264,7 +251,6 @@ class ApplyForBetaForm extends React.Component {
 
 ApplyForBetaForm.defaultProps = {
   project: {},
-  workflows: [],
   applyFn: Function.prototype
 };
 
@@ -274,12 +260,6 @@ ApplyForBetaForm.propTypes = {
     live: PropTypes.bool.isRequired,
     private: PropTypes.bool.isRequired
   }).isRequired,
-  workflows: PropTypes.arrayOf(PropTypes.shape({
-    active: PropTypes.bool.isRequired,
-    links: PropTypes.shape({
-      subject_sets: PropTypes.arrayOf(PropTypes.string).isRequired
-    })
-  })).isRequired,
   applyFn: PropTypes.func.isRequired
 };
 
