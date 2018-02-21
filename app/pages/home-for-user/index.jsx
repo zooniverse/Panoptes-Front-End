@@ -41,6 +41,7 @@ export default class HomePageForUser extends React.Component {
     this.updateBackground = this.updateBackground.bind(this);
     this.createLinkedResource = this.props.actions.createLinkedResource.bind(this);
     this.uploadMedia = this.props.actions.uploadMedia.bind(this);
+    this.deselectSection = this.deselectSection.bind(this);
   }
 
   componentDidMount() {
@@ -58,8 +59,6 @@ export default class HomePageForUser extends React.Component {
     if( this.state.OpenSectionComponent !== prevState.OpenSectionComponent) {
       if (this.openSection) {
         this.openSection.scrollIntoView();
-      } else {
-        ReactDOM.findDOMNode(this).scrollIntoView();
       }
     }
   }
@@ -183,6 +182,10 @@ export default class HomePageForUser extends React.Component {
     });
   }
 
+  deselectSection() {
+    this.node.scrollIntoView();
+  }
+
   findProjectLink(project) {
     return `/projects/${project.slug}`;
   }
@@ -241,7 +244,7 @@ export default class HomePageForUser extends React.Component {
     const {OpenSectionComponent} = this.state;
 
     return (
-      <div className="on-home-page">
+      <div className="on-home-page" ref={(node) => { this.node = node; }}>
         <div className="home-page-for-user">
           <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
 
