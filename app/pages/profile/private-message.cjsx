@@ -10,18 +10,12 @@ module.exports = createReactClass
     block: null
 
   componentDidMount: ->
-    if @props.project? or @props.params?.profile_name?
-      document.documentElement.classList.add 'on-secondary-page'
     userId = @props.profileUser?.id
     @getBlockedUser(userId) if userId
 
   componentWillReceiveProps: (nextProps) ->
     userId = nextProps.profileUser?.id
     @getBlockedUser(userId) if userId and userId isnt @props.profileUser?.id
-
-  componentWillUnmount: ->
-    if @props.project? or @props.params?.profile_name?
-      document.documentElement.classList.remove 'on-secondary-page'
 
   getBlockedUser: (id) ->
     talkClient.type('blocked_users').get(blocked_user_id: id).then ([block]) =>

@@ -37,11 +37,7 @@ List = createReactClass
     collections: null # has to be null initially, rather than [], in order to display the loading message
 
   componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
     @listCollections @props
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.user isnt @props.user

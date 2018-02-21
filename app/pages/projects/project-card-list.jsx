@@ -3,14 +3,6 @@ import React, { Component } from 'react';
 import ProjectCard from '../../partials/project-card';
 
 class ProjectCardList extends Component {
-  componentDidMount() {
-    document.documentElement.classList.add('on-secondary-page');
-  }
-
-  componentWillUnmount() {
-    document.documentElement.classList.remove('on-secondary-page');
-  }
-
   render() {
     return (
       <div className="project-card-list">

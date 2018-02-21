@@ -12,17 +12,12 @@ class Recents extends React.Component {
     this.state = {
       recents: []
     };
-    document.documentElement.classList.add('on-secondary-page');
   }
 
   componentDidMount() {
     const { user } = this.props;
     !!user && user.get('recents', { project_id: this.props.project.id, sort: '-created_at' })
     .then(recents => this.setState({ recents }));
-  }
-
-  componentWillUnmount() {
-    document.documentElement.classList.remove('on-secondary-page');
   }
 
   render() {

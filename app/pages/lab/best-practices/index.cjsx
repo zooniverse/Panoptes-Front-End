@@ -17,12 +17,6 @@ counterpart.registerTranslations 'en',
 module.exports = createReactClass
   displayName: 'LabBestPracticesNav'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   render: ->
     <div className="best-practices-page secondary-page">
       <section className="hero">

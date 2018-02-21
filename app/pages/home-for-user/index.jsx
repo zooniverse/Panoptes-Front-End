@@ -44,7 +44,6 @@ export default class HomePageForUser extends React.Component {
   }
 
   componentDidMount() {
-    this.context.setAppHeaderVariant('detached');
     this.fetchRibbonData(this.props.user);
   }
 
@@ -63,10 +62,6 @@ export default class HomePageForUser extends React.Component {
         ReactDOM.findDOMNode(this).scrollIntoView();
       }
     }
-  }
-
-  componentWillUnmount() {
-    this.context.setAppHeaderVariant(null);
   }
 
   handleHashChange() {
@@ -309,10 +304,6 @@ HomePageForUser.propTypes = {
   location: PropTypes.shape({
     hash: PropTypes.string
   })
-};
-
-HomePageForUser.contextTypes = {
-  setAppHeaderVariant: PropTypes.func
 };
 
 HomePageForUser.defaultProps = {

@@ -38,7 +38,7 @@ export default class HomePage extends React.Component {
   }
 
   componentDidMount() {
-    document.documentElement.classList.add('on-home-page-not-logged-in');
+    // document.documentElement.classList.add('on-home-page-not-logged-in');
     addEventListener('resize', this.handleResize);
     this.handleResize();
     this.getClassificationCounts();
@@ -47,7 +47,7 @@ export default class HomePage extends React.Component {
   }
 
   componentWillUnmount() {
-    document.documentElement.classList.remove('on-home-page-not-logged-in');
+    // document.documentElement.classList.remove('on-home-page-not-logged-in');
     removeEventListener('resize', this.handleResize);
   }
 

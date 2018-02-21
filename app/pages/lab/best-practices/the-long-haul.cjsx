@@ -32,11 +32,5 @@ counterpart.registerTranslations 'en',
 module.exports = createReactClass
   displayName: 'LabBestPracticesTheLongHaulPage'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   render: ->
     <Markdown>{counterpart "bestPracticesTheLongHaulPage.content"}</Markdown>
