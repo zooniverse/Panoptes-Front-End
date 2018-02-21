@@ -11,11 +11,6 @@ import ProjectNavbar from './ProjectNavbar';
 class ProjectNavbarContainer extends Component {
   constructor(props) {
     super(props);
-    this.getExternalLinks = this.getExternalLinks.bind(this);
-    this.getNavLinks = this.getNavLinks.bind(this);
-    this.getOrganizationLink = this.getOrganizationLink.bind(this);
-    this.getProjectLinks = this.getProjectLinks.bind(this);
-    this.handleClientChange = this.handleClientChange.bind(this);
 
     this.state = {
       adminEnabled: false
@@ -23,11 +18,11 @@ class ProjectNavbarContainer extends Component {
   }
 
   componentDidMount() {
-    apiClient.listen('change', this.handleClientChange);
+    apiClient.listen('change', this.handleClientChange.bind(this));
   }
 
   componentWillUnmount() {
-    apiClient.stopListening('change', this.handleClientChange);
+    apiClient.stopListening('change', this.handleClientChange.bind(this));
   }
 
   handleClientChange() {

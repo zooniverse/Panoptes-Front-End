@@ -40,7 +40,7 @@ describe('ProjectTitle', function() {
   });
 
   it('should use the project slug in the StyledLink to prop', function() {
-    expect(wrapper.find(StyledLink).props().to).to.equal(`${link}?facelift=true`);
+    expect(wrapper.find(StyledLink).props().to).to.equal(link);
   });
 
   it('should not render a StyledCheckMarkWrapper component', function() {

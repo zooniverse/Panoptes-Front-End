@@ -68,7 +68,7 @@ function ProjectTitle({ launched, link, title, underReview }) {
       <H1>
         {underReview && !launched &&
           <StyledUnderReview>{counterpart('project.nav.underReview')}</StyledUnderReview>}
-        <StyledLink to={`${link}?facelift=true`}>
+        <StyledLink to={link}>
           <span>
             {title}
             {launched &&

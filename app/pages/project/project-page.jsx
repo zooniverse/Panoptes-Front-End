@@ -3,8 +3,7 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import { Markdown } from 'markdownz';
 import { sugarClient } from 'panoptes-client/lib/sugar';
-import ProjectNavbar from './project-navbar';
-import ProjectNavbarFacelift from './components/ProjectNavbar';
+import ProjectNavbar from './components/ProjectNavbar';
 import PotentialFieldGuide from './potential-field-guide';
 
 export default class ProjectPage extends React.Component {
@@ -41,27 +40,16 @@ export default class ProjectPage extends React.Component {
   }
 
   render() {
-    const projectPath = `/projects/${this.props.project.slug}`;
-    const onHomePage = this.props.routes[2] && this.props.routes[2].path === undefined;
-    const pages = this.props.pages.reduce((map, page) => {
-      map[page.url_key] = page;
-      return map;
-    }, {});
+    let backgroundStyle = {};
+    if (this.props.background) {
+      backgroundStyle = {
+        backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url('${this.props.background.src}')`
+      };
+    }
 
-    const announcement = (this.props.project.configuration && this.props.project.configuration.announcement) ?
-      <div className="informational project-announcement-banner">
-        <Markdown>
-          {this.props.project.configuration.announcement}
-        </Markdown>
-      </div> :
-      null;
-
-    const NavbarComponent = (this.props.location && this.props.location.query && this.props.location.query.facelift) ?
-      ProjectNavbarFacelift :
-      ProjectNavbar;
-    const navBar = (!onHomePage) ?
-      <div>
-        <NavbarComponent
+    return (
+      <div className="project-page project-background" style={backgroundStyle}>
+        <ProjectNavbar
           background={this.props.background}
           loading={this.props.loading}
           organization={this.props.organization}
@@ -73,27 +61,12 @@ export default class ProjectPage extends React.Component {
           translation={this.props.translation}
           workflow={this.props.workflow}
         />
-        {announcement}
-      </div> :
-      null;
-
-    const potentialFieldGuide = (this.props.location.pathname !== projectPath) ?
-      <PotentialFieldGuide
-        guide={this.props.guide}
-        guideIcons={this.props.guideIcons}
-      /> :
-      null;
-
-    let backgroundStyle = {};
-    if (this.props.background) {
-      backgroundStyle = {
-        backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url('${this.props.background.src}')`
-      };
-    }
-
-    return (
-      <div className="project-page project-background" style={backgroundStyle}>
-        {navBar}
+        {(this.props.project.configuration && this.props.project.configuration.announcement) &&
+          <div className="informational project-announcement-banner">
+            <Markdown>
+              {this.props.project.configuration.announcement}
+            </Markdown>
+          </div>}
         {React.cloneElement(this.props.children, {
           background: this.props.background,
           loadingSelectedWorkflow: this.props.loadingSelectedWorkflow,
@@ -111,7 +84,11 @@ export default class ProjectPage extends React.Component {
           user: this.props.user,
           workflow: this.props.workflow
         })}
-        {potentialFieldGuide}
+        {React.Children.only(this.props.children).type.name !== 'ProjectHomeContainer' &&
+          <PotentialFieldGuide
+            guide={this.props.guide}
+            guideIcons={this.props.guideIcons}
+          />}
       </div>
     );
   }
@@ -151,8 +128,12 @@ ProjectPage.propTypes = {
     src: PropTypes.string
   }),
   loading: PropTypes.bool,
+  organization: PropTypes.object,
   pages: PropTypes.arrayOf(PropTypes.object),
   project: PropTypes.shape({
+    configuration: PropTypes.shape({
+      announcement: PropTypes.string
+    }),
     id: PropTypes.string,
     display_name: PropTypes.string,
     slug: PropTypes.string

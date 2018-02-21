@@ -40,7 +40,7 @@ function NavLink({ isExternalLink, isSocialLink, label, site, url, ...props }) {
     linkProps.rel = 'noopener noreferrer';
     linkProps.href = url;
   } else {
-    linkProps.to = `${url}?facelift=true`;
+    linkProps.to = url;
   }
 
   if (isSocialLink) {

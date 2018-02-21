@@ -46,7 +46,7 @@ describe('NavLink', function() {
     });
 
     it('should set props.to using props.url', function() {
-      expect(wrapper.props().to).to.equal(`${firstLink.url}?facelift=true`);
+      expect(wrapper.props().to).to.equal(firstLink.url);
     });
 
     it('should use props.label as the text', function() {

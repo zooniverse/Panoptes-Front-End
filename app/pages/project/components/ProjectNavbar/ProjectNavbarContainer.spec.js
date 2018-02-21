@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import ProjectNavbarContainer from './ProjectNavbarContainer';
@@ -22,6 +22,11 @@ describe('ProjectNavbarContainer', function() {
   const getProjectLinksSpy = sinon.spy(ProjectNavbarContainer.prototype, 'getProjectLinks');
 
   before(function() {
+    getNavLinksSpy.resetHistory();
+    getProjectLinksSpy.resetHistory();
+    getExternalLinksSpy.resetHistory();
+    getOrganizationLinkSpy.resetHistory();
+
     wrapper = shallow(
       <ProjectNavbarContainer
         background={background}
