@@ -39,15 +39,8 @@ export default class ProjectPage extends React.Component {
   }
 
   render() {
-    let backgroundStyle = {};
-    if (this.props.background) {
-      backgroundStyle = {
-        backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url('${this.props.background.src}')`
-      };
-    }
-
     return (
-      <div className="project-page project-background" style={backgroundStyle}>
+      <div className="project-page">
         <ProjectNavbar
           background={this.props.background}
           loading={this.props.loading}

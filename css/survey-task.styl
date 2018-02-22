@@ -36,19 +36,20 @@ $survey-task-pill-button
 
   .modal-form-trigger
     @extends $reset-button
-    border-radius: 25px
+    background-color: #404040
     color: white
     cursor: pointer
     height: 25px
+    margin-right: 1px
     margin-bottom: 10px
     min-width: 60px
     text-transform: capitalize
 
-    &:hover
-      background-color: rgba(164, 164, 164, 0.5)
+    &:hover, &:focus
+      background-color: #666666
 
     &[aria-expanded="true"]
-      background-color: #a4a4a4
+      background-color:#666666
 
 .survey-task-chooser-characteristic
   display: block
@@ -93,8 +94,6 @@ $survey-task-pill-button
 
 .survey-task-chooser-characteristic-value-label
   background-color: #a4a4a4
-  border-bottom-left-radius: 6px
-  border-bottom-right-radius: 6px
   color: white
   font-size: 0.8em
   font-weight: 700
@@ -112,7 +111,6 @@ $survey-task-pill-button
 .survey-task-chooser-choices
   background: rgba(24, 24, 24, 1)
   border: solid 1px rgba(24, 24, 24, 1)
-  border-radius: 8px
   display: flex
   flex-wrap: wrap
   padding: 3px
@@ -246,7 +244,6 @@ $survey-task-pill-button
 
   .modal-form-trigger
     @extends $reset-button
-    background: rgba(232, 232, 232, 1)
     border-radius: 4px
     cursor: pointer
     font-size: 10px
