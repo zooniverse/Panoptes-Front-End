@@ -76,7 +76,7 @@ describe('ProjectNavbar', function() {
       );
     });
 
-    it('renders ProjectNavbarWide if props.width is greather than state.breakpoint', function() {
+    it('renders ProjectNavbarWide if props.width is greater than state.breakpoint', function() {
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(1);
       expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(0);
     });
@@ -84,12 +84,6 @@ describe('ProjectNavbar', function() {
     it('renders ProjectNavbarNarrow if props.width is less than state.breakpoint', function() {
       wrapper.setProps({ width: 400 });
       wrapper.setState({ breakpoint: 768 });
-      expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
-      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(1);
-    });
-
-    it('renders ProjectNavbarNarrow if state.breakpoint is greater than 1200', function() {
-      wrapper.setState({ breakpoint: 1201 });
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
       expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(1);
     });
