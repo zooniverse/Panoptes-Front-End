@@ -25,7 +25,7 @@
     "prop-types": "~15.6.0",
     "pusher-js": "~3.2.1",
     "qs": "~6.0.2",
-    "rc-slider": "~3.3.2",
+    "rc-slider": "~8.6.0",
     "react": "~16.2.0",
     "react-chartist": "~0.13.1",
     "react-component-resizable": "~1.1.0-rc1",
