@@ -52,7 +52,8 @@ export class ProjectNavbarNarrow extends Component {
       projectLink,
       projectTitle,
       navLinks,
-      underReview,
+      redirect,
+      underReview
     } = this.props;
 
     return (
@@ -69,6 +70,7 @@ export class ProjectNavbarNarrow extends Component {
             <ProjectTitle
               launched={launched}
               link={projectLink}
+              redirect={redirect}
               title={projectTitle}
               underReview={underReview}
             />
@@ -97,7 +99,7 @@ ProjectNavbarNarrow.defaultProps = {
     { url: '' }
   ],
   projectLink: '',
-  projectTitle: '',
+  projectTitle: ''
 };
 
 ProjectNavbarNarrow.propTypes = {
@@ -110,7 +112,8 @@ ProjectNavbarNarrow.propTypes = {
   })),
   projectLink: PropTypes.string,
   projectTitle: PropTypes.string,
-  underReview: PropTypes.bool,
+  redirect: PropTypes.string,
+  underReview: PropTypes.bool
 };
 
 const mapSizesToProps = ({ height }) => ({
