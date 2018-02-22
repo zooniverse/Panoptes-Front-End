@@ -35,6 +35,18 @@ export const StyledLink = styled(IndexLink).attrs({
   }
 `;
 
+export const StyledRedirect = styled.a`
+  border-bottom: ${pxToRem(3)} solid transparent;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover,
+  &:focus {
+    border-bottom: ${pxToRem(3)} solid white;
+  }
+`;
+
 export const StyledCheckMarkWrapper = styled.span.attrs({
   'aria-label': "Zooniverse Approved",
   role: 'img',
@@ -62,22 +74,25 @@ export const StyledUnderReview = styled.small`
 `;
 
 
-function ProjectTitle({ launched, link, title, underReview }) {
+function ProjectTitle({ launched, link, redirect, title, underReview }) {
+  const TitleComponent = (redirect) ? StyledRedirect : StyledLink;
+
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <H1>
         {underReview && !launched &&
           <StyledUnderReview>{counterpart('project.nav.underReview')}</StyledUnderReview>}
-        <StyledLink to={link}>
+        <TitleComponent to={link} href={redirect}>
           <span>
             {title}
+            {redirect && <span>{' '}<i className="fa fa-external-link" /></span>}
             {launched &&
               <StyledCheckMarkWrapper className="fa-stack">
                 <i className="fa fa-circle fa-stack-2x" />
                 <StyledCheckMark className="fa fa-check fa-stack-1x" />
               </StyledCheckMarkWrapper>}
-            </span>
-        </StyledLink>
+          </span>
+        </TitleComponent>
       </H1>
     </ThemeProvider>
   );
@@ -86,6 +101,7 @@ function ProjectTitle({ launched, link, title, underReview }) {
 ProjectTitle.defaultProps = {
   launched: false,
   link: '',
+  redirect: '',
   title: '',
   underReview: false
 };
@@ -93,6 +109,7 @@ ProjectTitle.defaultProps = {
 ProjectTitle.propTypes = {
   launched: PropTypes.bool,
   link: PropTypes.string,
+  redirect: PropTypes.string,
   title: PropTypes.string,
   underReview: PropTypes.bool
 };
