@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import filter from 'lodash/filter';
 import every from 'lodash/every';
 import reduce from 'lodash/reduce';
@@ -151,22 +152,22 @@ class MobileSectionContainer extends Component {
 }
 
 MobileSectionContainer.propTypes = {
-  task: React.PropTypes.shape({
-    answers: React.PropTypes.array,
-    feedback: React.PropTypes.object,
-    question: React.PropTypes.string,
-    type: React.PropTypes.string,
-    unlinkedTask: React.PropTypes.string
+  task: PropTypes.shape({
+    answers: PropTypes.array,
+    feedback: PropTypes.object,
+    question: PropTypes.string,
+    type: PropTypes.string,
+    unlinkedTask: PropTypes.string
   }),
-  workflow: React.PropTypes.shape({
-    configuration: React.PropTypes.object,
-    mobile_friendly: React.PropTypes.bool,
-    tasks: React.PropTypes.object,
-    update: React.PropTypes.func
+  workflow: PropTypes.shape({
+    configuration: PropTypes.object,
+    mobile_friendly: PropTypes.bool,
+    tasks: PropTypes.object,
+    update: PropTypes.func
   }),
-  project: React.PropTypes.shape({
-    launch_approved: React.PropTypes.bool,
-    update: React.PropTypes.func
+  project: PropTypes.shape({
+    launch_approved: PropTypes.bool,
+    update: PropTypes.func
   })
 };
 
