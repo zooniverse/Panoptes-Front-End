@@ -24,19 +24,9 @@ export const StyledOuterWrapper = styled.div`
 `;
 
 export const StyledInnerWrapper = Wrapper.extend`
-  flex-direction: ${(props) => { return (props.useWideLayoutVariant) ? 'row' : 'column'; }};
+  flex-direction: column;
   justify-content: center;
   padding: ${pxToRem(20)} 0;
-`;
-
-export const StyledNarrowMenuButtonWrapper = styled.div`
-  display: inline-flex;
-  flex: ${(props) => { return (props.useWideLayoutVariant) ? '1' : 'inherit'; }};
-  justify-content: ${(props) => { return (props.useWideLayoutVariant) ? 'flex-end' : 'inherit'; }};
-`;
-
-export const StyledAvatar = styled(Avatar)`
-  margin-right: ${(props) => { return (props.useWideLayoutVariant) ? pxToRem(20) : '0'; }};
 `;
 
 export class ProjectNavbarNarrow extends Component {
@@ -63,7 +53,6 @@ export class ProjectNavbarNarrow extends Component {
       projectTitle,
       navLinks,
       underReview,
-      useWideLayoutVariant
     } = this.props;
 
     return (
@@ -71,12 +60,11 @@ export class ProjectNavbarNarrow extends Component {
         <StyledBackground src={backgroundSrc} />
 
         <StyledOuterWrapper>
-          <StyledInnerWrapper useWideLayoutVariant={useWideLayoutVariant}>
-            <StyledAvatar
+          <StyledInnerWrapper>
+            <Avatar
               src={avatarSrc}
               projectTitle={projectTitle}
-              size={useWideLayoutVariant ? 80 : 40}
-              useWideLayoutVariant={useWideLayoutVariant}
+              size={40}
             />
             <ProjectTitle
               launched={launched}
@@ -84,20 +72,16 @@ export class ProjectNavbarNarrow extends Component {
               title={projectTitle}
               underReview={underReview}
             />
-            <StyledNarrowMenuButtonWrapper
-              useWideLayoutVariant={useWideLayoutVariant}
-            >
-              <NarrowMenuButton
-                open={this.state.menuOpen}
-                onClick={this.handleOpen}
-              />
-              <NarrowMenu
-                height={height}
-                toggleMenuFn={this.handleOpen}
-                open={this.state.menuOpen}
-                links={navLinks}
-              />
-            </StyledNarrowMenuButtonWrapper>
+            <NarrowMenuButton
+              open={this.state.menuOpen}
+              onClick={this.handleOpen}
+            />
+            <NarrowMenu
+              height={height}
+              toggleMenuFn={this.handleOpen}
+              open={this.state.menuOpen}
+              links={navLinks}
+            />
           </StyledInnerWrapper>
         </StyledOuterWrapper>
 
@@ -114,7 +98,6 @@ ProjectNavbarNarrow.defaultProps = {
   ],
   projectLink: '',
   projectTitle: '',
-  useWideLayoutVariant: false
 };
 
 ProjectNavbarNarrow.propTypes = {
@@ -128,7 +111,6 @@ ProjectNavbarNarrow.propTypes = {
   projectLink: PropTypes.string,
   projectTitle: PropTypes.string,
   underReview: PropTypes.bool,
-  useWideLayoutVariant: PropTypes.bool
 };
 
 const mapSizesToProps = ({ height }) => ({

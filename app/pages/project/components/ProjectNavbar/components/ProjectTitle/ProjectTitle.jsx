@@ -14,7 +14,7 @@ export const H1 = styled.h1`
   display: inline-flex;
   flex-direction: column;
   font-family: Karla;
-  font-size: ${pxToRem(30)};
+  font-size: ${pxToRem(27)};
   font-weight: bold;
   letter-spacing: ${pxToRem(-1)};
   line-height: 0.9;

@@ -52,15 +52,12 @@ export class ProjectNavbar extends Component {
   }
 
   render() {
-    // 1200 is the max-width for the navbar wrapper
-    const doesNavFit = this.state.breakpoint < 1200;
     const isWindowWide = this.props.width > this.state.breakpoint;
-    const navbarNarrowProps = { ...this.props, useWideLayoutVariant: !doesNavFit && isWindowWide };
-    if ((isWindowWide) && (doesNavFit)) {
+    if (isWindowWide) {
       return <ProjectNavbarWide {...this.props} />;
     }
 
-    return <ProjectNavbarNarrow {...navbarNarrowProps} />;
+    return <ProjectNavbarNarrow {...this.props} />;
   }
 }
 
