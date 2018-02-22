@@ -45,6 +45,7 @@ export default class HomePageForUser extends React.Component {
   }
 
   componentDidMount() {
+    this.handleHashChange();
     this.fetchRibbonData(this.props.user);
   }
 
