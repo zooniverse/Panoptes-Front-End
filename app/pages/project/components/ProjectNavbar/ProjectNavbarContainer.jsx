@@ -74,7 +74,7 @@ class ProjectNavbarContainer extends Component {
       link.push({
         isExternalLink: true,
         label: organization.display_name,
-        to: `/organizations/${organization.slug}`
+        url: `/organizations/${organization.slug}`
       });
     }
 
