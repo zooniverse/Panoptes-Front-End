@@ -23,7 +23,7 @@ class HomePageSection extends React.Component {
             }}
           ></i>
           <span className="home-page-section__header-label">{this.props.title}</span>
-          <Link to="#" className="secret-button" title="Close this section" aria-label="Close this section">
+          <Link to="#" className="secret-button" title="Close this section" aria-label="Close this section" onClick={this.props.onClose}>
             <i className="fa fa-times"></i>
           </Link>
         </header>

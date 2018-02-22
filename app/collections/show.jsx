@@ -43,7 +43,6 @@ class CollectionPage extends React.Component {
   };
 
   componentDidMount() {
-    document.documentElement.classList.add('on-collection-page');
     this.canCollaborate();
   }
 
@@ -51,10 +50,6 @@ class CollectionPage extends React.Component {
     if (!!nextContext.geordi && !!nextContext.geordi.makeHandler) {
       this.logClick = nextContext.geordi.makeHandler('about-menu');
     }
-  }
-
-  componentWillUnmount() {
-    document.documentElement.classList.remove('on-collection-page');
   }
 
   canCollaborate = () => {

@@ -6,21 +6,11 @@ import { Helmet } from 'react-helmet';
 import { Link, IndexLink } from 'react-router';
 
 class GetInvolved extends React.Component {
-  componentDidMount() {
-    if (document) {
-      document.documentElement.classList.add('on-secondary-page');
-    }
-  }
-
   componentWillReceiveProps(nextProps, nextContext) {
     this.logClick = !!nextContext &&
       !!nextContext.geordi &&
       !!nextContext.geordi.makeHandler &&
       nextContext.geordi.makeHandler('about-menu');
-  }
-
-  componentWillUnmount() {
-    document.documentElement.classList.remove('on-secondary-page');
   }
 
   render() {

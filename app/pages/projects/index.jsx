@@ -28,16 +28,6 @@ class ProjectsPage extends Component {
     return { updateQuery: this.updateQuery };
   }
 
-  componentDidMount() {
-    if (document) {
-      document.documentElement.classList.add('on-secondary-page');
-    }
-  }
-
-  componentWillUnmount() {
-    document.documentElement.classList.remove('on-secondary-page');
-  }
-
   updateQuery(newParams) {
     const query = Object.assign({}, this.props.location.query, newParams);
     const results = [];

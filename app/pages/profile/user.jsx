@@ -33,7 +33,6 @@ class ProfileUser extends Component {
   }
 
   componentDidMount() {
-    document.documentElement.classList.add('on-secondary-page');
     this.getProfileHeader(this.props.profileUser);
   }
 
@@ -41,10 +40,6 @@ class ProfileUser extends Component {
     if (nextProps.profileUser !== this.props.profileUser) {
       this.getProfileHeader(nextProps.profileUser);
     }
-  }
-
-  componentWillUnmount() {
-    document.documentElement.classList.remove('on-secondary-page');
   }
 
   getProfileHeader() {

@@ -29,7 +29,7 @@ module.exports = createReactClass
   displayName: 'ProjectBuilderLandingPage'
 
   render: ->
-    <div className="landing-page on-secondary-page on-landing-page">
+    <div className="landing-page on-landing-page">
       <ZooniverseLogoType />
 
       <h3 className="landing-title">

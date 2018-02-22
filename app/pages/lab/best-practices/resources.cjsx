@@ -46,11 +46,5 @@ counterpart.registerTranslations 'en',
 module.exports = createReactClass
   displayName: 'LabBestPracticesAppendixPage'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   render: ->
     <Markdown>{counterpart "bestPracticesAppendixPage.content"}</Markdown>

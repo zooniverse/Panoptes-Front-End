@@ -29,10 +29,6 @@ module.exports = createReactClass
 
   componentDidMount: ->
     @loadProjects()
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
 
   projectSlugs: ->
     slugs = []

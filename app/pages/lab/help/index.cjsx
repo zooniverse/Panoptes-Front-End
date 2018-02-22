@@ -23,12 +23,6 @@ module.exports = createReactClass
   componentWillReceiveProps: (nextProps, nextContext)->
     @logClick = nextContext?.geordi?.makeHandler? 'about-menu'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   render: ->
     <div className="secondary-page about-page">
       <section className="hero">

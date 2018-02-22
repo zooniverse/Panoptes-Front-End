@@ -692,12 +692,6 @@ module.exports = createReactClass
   getInitialState: ->
     currentSort: 'showAll'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   sumArray: (object) ->
     array.reduce (x, y) -> x + y
 

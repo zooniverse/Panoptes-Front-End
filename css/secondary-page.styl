@@ -19,85 +19,82 @@
     letter-spacing: 0.1em
     text-transform: uppercase
 
-// Also from main-header.styl:
-.on-secondary-page
-  .secondary-page
-    .hero
-      background-size: cover
-      box-sizing: border-box
-      min-height: 200px
-      overflow: auto
-      background-color: TEAL_MID
-      padding: 80px 3vw 5px 3vw
+.secondary-page.has-project-context
+  background-color: transparent
 
-      .hero-container
-        margin: 0 auto
-        max-width: 960px
-
-        h1
-          color: white
-          font-size: 2.5em
-          line-height: 1.1em
-          font-weight: 400
-          margin-bottom: 1em
-
-        .hero-nav
-          a
-            @extends .main-nav-item
-            font-size: 14px
-            line-height: 3em
-            text-decoration: none
-
-          button
-            @extends .main-nav-item
-            background: none
-            border: 0
-            font: 400 15px/1.5 Open Sans,Gill Sans,Arial,sans-serif
-            font-size: 14px
-            line-height: 1em
-            outline: none
-            cursor: pointer
-            text-decoration: none
-            &:hover
-              background: rgba(255,255,255, 0.2)
-              color: rgba(255,255,255,1)
-            &.active
-            &[aria-selected=true]
-              color: white
-              border-bottom: solid 2px white
-              border-top: 0
-              border-left: 0
-              border-right: 0
-              font-weight: bold
-
-  .secondary-page.has-project-context
+  .hero
+    background-image: none
     background-color: transparent
+    padding-top: 2vw
+    min-height: initial
 
-    .hero
+    .hero-container
+      h1
+        text-align: center
+
+    .overlay
       background-image: none
       background-color: transparent
-      padding-top: 2vw
-      min-height: initial
 
-      .hero-container
-        h1
-          text-align: center
+  .content-container
+    margin: 1em auto
 
-      .overlay
-        background-image: none
-        background-color: transparent
-
-    .content-container
-      margin: 1em auto
-
-    nav.hero-nav
-      a
-        span
-          text-transform:none
+  nav.hero-nav
+    a
+      span
+        text-transform:none
 
 .secondary-page
   font-size: 14px
   line-height: 20px
+
+  .hero
+    background-size: cover
+    box-sizing: border-box
+    min-height: 200px
+    overflow: auto
+    background-color: TEAL_MID
+    padding: 80px 3vw 5px 3vw
+
+    .hero-container
+      margin: 0 auto
+      max-width: 960px
+
+      h1
+        color: white
+        font-size: 2.5em
+        line-height: 1.1em
+        font-weight: 400
+        margin-bottom: 1em
+
+      .hero-nav
+        a
+          @extends .main-nav-item
+          font-size: 14px
+          line-height: 3em
+          text-decoration: none
+
+        button
+          @extends .main-nav-item
+          background: none
+          border: 0
+          font: 400 15px/1.5 Open Sans,Gill Sans,Arial,sans-serif
+          font-size: 14px
+          line-height: 1em
+          outline: none
+          cursor: pointer
+          text-decoration: none
+          &:hover
+            background: rgba(255,255,255, 0.2)
+            color: rgba(255,255,255,1)
+          &.active
+          &[aria-selected=true]
+            color: white
+            border-bottom: solid 2px white
+            border-top: 0
+            border-left: 0
+            border-right: 0
+            font-weight: bold
 
   .secondary-page-side-bar
     flex: 0 1 190px

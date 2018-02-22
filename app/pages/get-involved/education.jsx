@@ -3,16 +3,6 @@ import counterpart from 'counterpart';
 import { Markdown } from 'markdownz';
 
 class Education extends React.Component {
-  componentDidMount() {
-    if (document) {
-      document.documentElement.classList.add('on-secondary-page');
-    }
-  }
-
-  componentWillUnmount() {
-    document.documentElement.classList.remove('on-secondary-page');
-  }
-
   render() {
     return (
       <div>
