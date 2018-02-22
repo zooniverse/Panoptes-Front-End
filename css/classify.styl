@@ -30,6 +30,15 @@
 
 .classify-page
   background-color: PROJECT_BACKGROUND
+  position: relative
+
+  &--dark-theme
+    background-color: PROJECT_BACKGROUND_DARK
+    color: white
+
+    .classify-page__theme-button
+      &:hover, &:focus
+        color: TEAL_LIGHT
 
   .classifier-announcement-banner
     @extends $announcement-banner
@@ -51,6 +60,19 @@
     background-color: SUCCESS
     margin: 1em auto
     max-width: 400px
+
+  &__theme-button-wrapper
+    text-align: center
+
+  &__theme-button
+    @extends $reset-button
+    color: TEAL_MID
+    font-size: 0.9em
+    letter-spacing: 0.2em
+    text-transform: uppercase
+
+    &:hover, &:focus
+      color: TEAL_DARK
 
 .classifier
   display: flex
