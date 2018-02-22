@@ -52,8 +52,8 @@ function getProjectLinks({ project, projectRoles, workflow, user }) {
     _.unset(links, 'about');
   }
 
-  if (!redirect && !workflow) {
-    _.unset(links, 'classify');
+  if (!workflow) {
+    links.classify.disabled = true;
   }
 
   if (!user) {

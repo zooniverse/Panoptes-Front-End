@@ -9,7 +9,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
-import NavLink, { StyledExternalLink, StyledInternalLink } from './NavLink';
+import NavLink from './NavLink';
 import socialIcons from '../../socialIcons';
 import { getProjectLinks } from '../../helpers';
 import {
@@ -28,6 +28,16 @@ const MOCK_SOCIAL_SITE = 'facebook.com/';
 describe('NavLink', function() {
   it('renders without crashing', function() {
     shallow(<NavLink />);
+  });
+
+  describe('when the link is disabled', function() {
+    it('should be the StyledLinkPlaceholder component ', function() {
+      const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow: null, user: null });
+      const navLinksWithLabels = buildLinksWithLabels(navLinks);
+      const classifyLink = navLinksWithLabels[1];
+      const wrapper = shallow(<NavLink url={classifyLink.url} label={classifyLink.label} disabled={classifyLink.disabled} />);
+      expect(wrapper.name()).to.equal('styled.span');
+    });
   });
 
   describe('when the link is internal', function() {
