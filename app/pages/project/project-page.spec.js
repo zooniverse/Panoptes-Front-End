@@ -80,10 +80,15 @@ describe('ProjectPage', function () {
   });
 
   describe('on component lifecycle', function () {
-    const sugarClientSubscribeSpy = sinon.spy(sugarClient, 'subscribeTo');
-    const sugarClientUnsubscribeSpy = sinon.spy(sugarClient, 'unsubscribeFrom');
+    let sugarClientSubscribeSpy;
+    let sugarClientUnsubscribeSpy;
     const channel = `project-${project.id}`;
     let wrapper;
+
+    before(function () {
+      sugarClientSubscribeSpy = sinon.spy(sugarClient, 'subscribeTo');
+      sugarClientUnsubscribeSpy = sinon.spy(sugarClient, 'unsubscribeFrom');
+    });
 
     afterEach(function () {
       sugarClientSubscribeSpy.resetHistory();
