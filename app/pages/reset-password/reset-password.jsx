@@ -64,6 +64,17 @@ class ResetPasswordPage extends React.Component {
     const token = this.props.location.query.reset_password_token;
     const password = event.target[0].value;
     const confirmation = event.target[1].value;
+    const passwordMatch = password === confirmation
+    if (!passwordMatch) {
+      this.setState({
+        inProgress: false,
+        resetError: <Translate
+          component="p"
+          content="resetPassword.passwordsDoNotMatch"
+        />
+      });
+      return;
+    }
 
     auth.resetPassword({ password, confirmation, token })
       .then(() => {
