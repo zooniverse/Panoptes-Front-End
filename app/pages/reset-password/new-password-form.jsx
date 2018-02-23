@@ -17,6 +17,9 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         type="password"
         className="standard-input"
         size="20"
+        required
+        pattern={".{"+minLength+",}"}
+        title={minLength+" characters minimum"}
       />
     </label>
     <label>
@@ -28,6 +31,9 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         type="password"
         className="standard-input"
         size="20"
+        required
+        pattern={".{"+minLength+",}"}
+        title={minLength+" characters minimum"}
       />
     </label>
     <p>
@@ -51,7 +57,6 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         </small>}
     </p>
   </form>
-  );
 );
 
 NewPasswordForm.propTypes = {
