@@ -118,7 +118,7 @@ class ResetPasswordPage extends React.Component {
         {this.props.location.query && this.props.location.query.reset_password_token && !this.state.resetSuccess &&
           <NewPasswordForm
             onSubmit={this.handlePasswordResetSubmit}
-            disabled={this.state.resetError || this.state.resetSuccess}
+            disabled={this.state.resetSuccess}
             inProgress={this.state.inProgress}
             resetSuccess={this.state.resetSuccess}
             resetError={this.state.resetError}
