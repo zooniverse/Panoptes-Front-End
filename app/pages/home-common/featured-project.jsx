@@ -18,7 +18,7 @@ const FeaturedProject = (() => (
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
       <img
-        alt="Scotus Notes"
+        alt="SCOTUS Notes"
         src="/assets/featured-projects/featured-project-20180223-scotus-notes.jpg"
       />
     </div>
