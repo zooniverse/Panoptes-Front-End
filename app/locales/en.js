@@ -174,7 +174,7 @@ export default {
     enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
     emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
     emailError: 'There was an error resetting your password.',
-    resetError: 'Something went wrong, please try and reset your password via email again.',
+    passwordsDoNotMatch: 'The passwords do not match, please try again.',
     loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.'
   },
   workflowToggle: {

@@ -163,6 +163,7 @@ export default {
     emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
     emailError: 'There was an error reseting your password.',
     resetError: 'Something went wrong, please try and reset your password via email again.',
+    passwordsDoNotMatch: 'The passwords do not match, please try again.',
     loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.'
   },
   workflowToggle: {
