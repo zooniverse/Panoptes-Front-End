@@ -100,6 +100,7 @@ class ProjectNavbarContainer extends Component {
     const navLinks = this.getNavLinks();
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
     const projectLink = `/projects/${this.props.project.slug}`;
+    const redirect = this.props.project.redirect ? this.props.project.redirect : '';
     const underReview = this.props.project.beta_approved;
 
     return (
@@ -110,6 +111,7 @@ class ProjectNavbarContainer extends Component {
         navLinks={navLinks}
         projectTitle={projectTitle}
         projectLink={projectLink}
+        redirect={redirect}
         underReview={underReview}
       />
     );
@@ -130,6 +132,7 @@ ProjectNavbarContainer.propTypes = {
   project: PropTypes.shape({
     beta_approved: PropTypes.bool,
     launch_approved: PropTypes.bool,
+    redirect: PropTypes.string,
     slug: PropTypes.string,
     title: PropTypes.string,
     urls: PropTypes.array

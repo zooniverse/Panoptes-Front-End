@@ -57,6 +57,7 @@ function ProjectNavbarWide(props) {
     navLinks,
     projectTitle,
     projectLink,
+    redirect,
     underReview,
     ...otherProps
   } = props;
@@ -73,6 +74,7 @@ function ProjectNavbarWide(props) {
         <ProjectTitle
           launched={launched}
           link={projectLink}
+          redirect={redirect}
           title={projectTitle}
           underReview={underReview}
         />
@@ -93,6 +95,7 @@ ProjectNavbarWide.propTypes = {
   })),
   projectLink: PropTypes.string,
   projectTitle: PropTypes.string,
+  redirect: PropTypes.string,
   underReview: PropTypes.bool
 };
 

@@ -8,9 +8,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import ProjectTitle, { H1, StyledLink, StyledCheckMark, StyledCheckMarkWrapper, StyledUnderReview } from './ProjectTitle';
+import ProjectTitle, { H1, StyledLink, StyledRedirect, StyledCheckMark, StyledCheckMarkWrapper, StyledUnderReview } from './ProjectTitle';
 import {
-  projectWithoutRedirect,
+  projectWithoutRedirect, projectWithRedirect
 } from '../../testHelpers';
 
 describe('ProjectTitle', function() {
@@ -31,7 +31,7 @@ describe('ProjectTitle', function() {
     expect(wrapper.find(H1)).to.have.lengthOf(1);
   });
 
-  it('should render a StyledLink component', function() {
+  it('should render a StyledLink component if project without redirect', function() {
     expect(wrapper.find(StyledLink)).to.have.lengthOf(1);
   });
 
@@ -88,6 +88,20 @@ describe('ProjectTitle', function() {
 
     it('should render a StyledUnderReview component', function() {
       expect(wrapper.find(StyledUnderReview)).to.have.lengthOf(1);
+    });
+  });
+
+  describe('when the project has a redirect', function() {
+    before(function() {
+      wrapper.setProps({ redirect: projectWithRedirect.redirect });
+    });
+
+    it('should use the project redirect in the StyledRedirect href prop', function() {
+      expect(wrapper.find(StyledRedirect).props().href).to.equal(projectWithRedirect.redirect);
+    });
+
+    it('should render the font awesome external link icon', function() {
+      expect(wrapper.find('i.fa-external-link')).to.have.lengthOf(1);
     });
   });
 });
