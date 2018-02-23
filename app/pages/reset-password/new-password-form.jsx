@@ -46,14 +46,13 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         <i className="fa fa-check-circle form-help success" />}
 
       {resetError &&
-        <Translate
-          className="form-help error"
-          component="small"
-          content="resetPassword.resetError"
-        />}
+        <small className="form-help error">
+          {resetError}
+        </small>}
     </p>
   </form>
   );
+);
 
 NewPasswordForm.propTypes = {
   disabled: PropTypes.bool,
