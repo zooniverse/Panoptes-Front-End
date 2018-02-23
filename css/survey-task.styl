@@ -240,13 +240,14 @@ $survey-task-pill-button
 
   .modal-form-trigger
     @extends $reset-button
+    background: #e8e8e8
     border-radius: 0
     cursor: pointer
     font-size: 10px
     margin: 0 3px 0 0
     padding: 0.5em 0.75em
 
-    &:hover
+    &:hover, &:focus
       background: rgba(208, 208, 208, 1)
       color: rgba(107, 107, 107, 1)
 
@@ -295,6 +296,7 @@ $survey-task-pill-button
   border: 1px transparent solid
   cursor: pointer
   font-size: 10px
+  line-height: 30px
   margin: 0 3px 0 0
   padding: 0.5em 0.75em
   white-space: nowrap
