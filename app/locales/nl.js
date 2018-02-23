@@ -189,7 +189,7 @@ export default {
   },
   resetPassword: {
     heading: 'Wachtwoord vergeten',
-    newPasswordFormDialog: 'Voer een nieuw wachtwoord in, dan kun je verder met onderzoek doen.',
+    newPasswordFormDialog: 'Voer bijbehorende wachtwoorden in die ten minste 8 tekens lang zijn, zodat u verder kunt gaan met onderzoek.',
     newPasswordFormLabel: 'Nieuw wachtwoord:',
     newPasswordConfirmationLabel: 'Herhaal, ter controle:',
     enterEmailLabel: 'Voer je e-mailadres in en we sturen je een link waarmee je kunt herstellen.',
