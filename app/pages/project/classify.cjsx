@@ -254,7 +254,7 @@ module.exports = createReactClass
         <span>Loading classification</span>}
       <p className="classify-page__theme-button-wrapper">
         <button className="classify-page__theme-button" type="button" onClick={this.toggleDarkTheme}>
-          Switch to dark theme
+          Switch to {if this.state.darkTheme then 'light' else 'dark'} theme
         </button>
       </p>
     </div>
