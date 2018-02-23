@@ -80,7 +80,6 @@ class ResetPasswordPage extends React.Component {
       .then(() => {
         this.setState({
           resetSuccess: true,
-          inProgress: false
         });
         alert(resolve => <LoginDialog onSuccess={resolve} />);
         this.context.router.push('/projects');
@@ -90,6 +89,10 @@ class ResetPasswordPage extends React.Component {
           resetError: error.message
         });
       })
+      .then(() => {
+        this.setState({
+          inProgress: false
+        });
       });
   }
 
