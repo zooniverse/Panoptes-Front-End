@@ -20,6 +20,7 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         required
         pattern={".{"+minLength+",}"}
         title={minLength+" characters minimum"}
+        autoComplete="new-password"
       />
     </label>
     <label>
@@ -34,6 +35,7 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         required
         pattern={".{"+minLength+",}"}
         title={minLength+" characters minimum"}
+        autoComplete="new-password"
       />
     </label>
     <p>
