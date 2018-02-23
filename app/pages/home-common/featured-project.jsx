@@ -22,7 +22,7 @@ const FeaturedProject = (() => (
         src="/assets/featured-projects/featured-project-20180223-scotus-notes.jpg"
       />
     </div>
-    <h2 className="secondary-headline">Scotus Notes</h2>
+    <h2 className="secondary-headline">SCOTUS Notes</h2>
     <p className="display-body">Behind the scenes at Supreme Court Conference</p>
     <Link to="projects/zooniverse/scotus-notes-behind-the-scenes-at-supreme-court-conference">View Project!</Link>
   </section>
