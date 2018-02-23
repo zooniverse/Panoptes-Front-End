@@ -18,13 +18,13 @@ const FeaturedProject = (() => (
     <h1 className="secondary-kicker">Featured Project</h1>
     <div className="home-featured-images">
       <img
-        alt="Project Plumage"
-        src="/assets/featured-projects/featured-project-20180108-project_plumage.jpg"
+        alt="Scotus Notes"
+        src="/assets/featured-projects/featured-project-20180223-scotus-notes.jpg"
       />
     </div>
-    <h2 className="secondary-headline">Project Plumage</h2>
-    <p className="display-body">Help us explore bird colour with museum specimens!</p>
-    <Link to="projects/ghthomas/project-plumage">View Project!</Link>
+    <h2 className="secondary-headline">Scotus Notes</h2>
+    <p className="display-body">Behind the scenes at Supreme Court Conference</p>
+    <Link to="projects/zooniverse/scotus-notes-behind-the-scenes-at-supreme-court-conference">View Project!</Link>
   </section>
   )
 );
