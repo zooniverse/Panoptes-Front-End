@@ -86,7 +86,10 @@ class ResetPasswordPage extends React.Component {
         this.context.router.push('/projects');
       })
       .catch((error) => {
-        this.setState({ resetError: error });
+        this.setState({
+          resetError: error.message
+        });
+      })
       });
   }
 
