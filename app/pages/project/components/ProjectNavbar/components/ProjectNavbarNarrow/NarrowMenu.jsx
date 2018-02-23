@@ -26,6 +26,15 @@ export const Menu = styled.nav`
   background-color: ${theme('mode', { light: zooTheme.colors.teal.mid })};
 `;
 
+export const List = styled.ul`
+  margin: 0;
+  padding: 0;
+`;
+
+export const ListItem = styled.li`
+  list-style: none;
+`;
+
 const navLinkBackgroundColor = theme('mode', {
   light: zooTheme.colors.brand.default
 });
@@ -49,13 +58,16 @@ function NarrowMenu({ height, links, open, toggleMenuFn }) {
     <MenuWrapper className={openClass} height={height}>
       <ThemeProvider theme={{ mode: 'light' }}>
         <Menu>
-          {links.map(link => (
-            <StyledNavLink
-              {...link}
-              key={link.url}
-              onClick={toggleMenuFn}
-            />
-          ))}
+          <List>
+            {links.map(link => (
+              <ListItem key={link.url}>
+                <StyledNavLink
+                  {...link}
+                  onClick={toggleMenuFn}
+                />
+              </ListItem>
+            ))}
+          </List>
         </Menu>
       </ThemeProvider>
     </MenuWrapper>
