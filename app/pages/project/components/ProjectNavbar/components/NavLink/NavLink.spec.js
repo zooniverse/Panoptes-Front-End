@@ -10,7 +10,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
 import NavLink from './NavLink';
-import { getProjectLinks, socialIcons } from '../../../helpers';
+import { getProjectLinks  } from '../../../helpers';
 import {
   buildLinksWithLabels,
   projectRoles,
@@ -19,10 +19,6 @@ import {
 } from '../../../testHelpers';
 
 const MOCK_EXTERNAL_URL = 'https://www.google.com';
-
-const MOCK_SOCIAL_URL = 'https://www.facebook.com';
-
-const MOCK_SOCIAL_SITE = 'facebook.com/';
 
 describe('NavLink', function() {
   it('renders without crashing', function() {
@@ -74,58 +70,7 @@ describe('NavLink', function() {
     });
 
     it('should be the StyledExternalLink component', function() {
-      expect(wrapper.name()).to.equal('styled.a');
-    });
-
-    it('should add props to open the url in a new tab', function() {
-      expect(wrapper.props().target).to.equal('_blank');
-      expect(wrapper.props().rel).to.equal('noopener noreferrer');
-    });
-
-    it('should use props.url for the href', function () {
-      expect(wrapper.props().href).to.equal(MOCK_EXTERNAL_URL);
-    });
-
-    it('should have the Font Awesome external link icon', function() {
-      expect(wrapper.find('i').hasClass('fa-external-link')).to.be.true;
-    });
-  });
-
-  describe('when the link is social media', function() {
-    let wrapper;
-    before(function() {
-      wrapper = shallow(
-        <NavLink
-          isExternalLink={true}
-          isSocialLink={true}
-          site={MOCK_SOCIAL_SITE}
-          url={MOCK_SOCIAL_URL}
-        />);
-    });
-
-    it('should be the StyledExternalLink component', function() {
-    });
-
-    it('should add props for the aria-label', function() {
-      expect(wrapper.props()['aria-label']).to.equal(socialIcons[MOCK_SOCIAL_SITE].label);
-    });
-
-    it('should add props to open the url in a new tab', function () {
-      expect(wrapper.props().target).to.equal('_blank');
-      expect(wrapper.props().rel).to.equal('noopener noreferrer');
-    });
-
-    it('should use props.url for the href', function () {
-      expect(wrapper.props().href).to.equal(MOCK_SOCIAL_URL);
-    });
-
-    it('should use the correct font awesome icon', function() {
-      expect(wrapper.find('i').hasClass(socialIcons[MOCK_SOCIAL_SITE].icon)).to.be.true;
-    });
-
-    it('should not use prop.label if defined', function() {
-      wrapper.setProps({ label: 'A label' });
-      expect(wrapper.text().includes('A label')).to.be.false;
+      expect(wrapper.name()).to.equal('Styled(ExternalLink)');
     });
   });
 });

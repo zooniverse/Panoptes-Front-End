@@ -16,7 +16,6 @@ import {
 
 describe('ProjectNavbarContainer', function() {
   let wrapper;
-  const getExternalLinksSpy = sinon.spy(ProjectNavbarContainer.prototype, 'getExternalLinks');
   const getNavLinksSpy = sinon.spy(ProjectNavbarContainer.prototype, 'getNavLinks');
   const getOrganizationLinkSpy = sinon.spy(ProjectNavbarContainer.prototype, 'getOrganizationLink');
   const getProjectLinksSpy = sinon.spy(ProjectNavbarContainer.prototype, 'getProjectLinks');
@@ -24,7 +23,6 @@ describe('ProjectNavbarContainer', function() {
   before(function() {
     getNavLinksSpy.resetHistory();
     getProjectLinksSpy.resetHistory();
-    getExternalLinksSpy.resetHistory();
     getOrganizationLinkSpy.resetHistory();
 
     wrapper = shallow(
@@ -49,10 +47,6 @@ describe('ProjectNavbarContainer', function() {
 
   it('should call getProjectLinks on render', function() {
     expect(getProjectLinksSpy.calledOnce).to.be.true;
-  });
-
-  it('should call getExternalLinks on render', function() {
-    expect(getExternalLinksSpy.calledOnce).to.be.true;
   });
 
   it('should call getOrganizationLink on render', function() {
