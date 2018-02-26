@@ -8,7 +8,7 @@ DeleteButton = require './delete-button'
 BUFFER = 16
 DELETE_BUTTON_WIDTH = 8
 FINISHER_RADIUS = 8
-GRAB_STROKE_WIDTH = 6
+GRAB_STROKE_WIDTH = 30
 MINIMUM_LENGTH = 20
 POINT_RADIUS = 4
 
@@ -96,7 +96,7 @@ module.exports = createReactClass
   render: ->
     { _inProgress, _currentlyDrawing, points } = @props.mark
     path = createPathFromCoords points
-    lineClass = if _inProgress then 'drawing' else 'clickable'
+    lineClass = if _inProgress then 'drawing' else 'clickable clickable-line'
 
     <DrawingToolRoot tool={this}>
       <path d={path}
