@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 import Translate from 'react-translate-component';
 import theme from 'styled-theming';
@@ -62,3 +63,12 @@ export default function ExternalLinksBlock({ links }) {
     </ThemeProvider>
   );
 }
+
+ExternalLinksBlock.defaultProps = {
+  links: []
+};
+
+ExternalLinksBlock.propTypes = {
+  links: PropTypes.arrayOf(PropTypes.object)
+};
+
