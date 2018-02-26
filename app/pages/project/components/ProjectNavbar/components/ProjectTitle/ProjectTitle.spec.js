@@ -11,7 +11,7 @@ import { expect } from 'chai';
 import ProjectTitle, { H1, StyledLink, StyledRedirect, StyledCheckMark, StyledCheckMarkWrapper, StyledUnderReview } from './ProjectTitle';
 import {
   projectWithoutRedirect, projectWithRedirect
-} from '../../testHelpers';
+} from '../../../testHelpers';
 
 describe('ProjectTitle', function() {
   let wrapper;

@@ -10,7 +10,7 @@ import FinishedBanner from '../finished-banner';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
 import TalkStatus from './talk-status';
-import ProjectNavbar from '../components/ProjectNavbar';
+import ExternalLinksBlock from '../components/ExternalLinksBlock';
 
 const ProjectHomePage = (props) => {
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
@@ -152,6 +152,7 @@ const ProjectHomePage = (props) => {
               {props.translation.introduction}
             </Markdown>}
         </div>
+        <ExternalLinksBlock project={props.project} />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import Avatar, { StyledAvatarImg, DefaultProjectAvatarWrapper, StyledZooniverseLogo } from './Avatar';
-import { projectAvatar, projectWithoutRedirect } from '../../testHelpers';
+import { projectAvatar, projectWithoutRedirect } from '../../../testHelpers';
 
 describe('Avatar', function() {
   it('should render without crashing', function() {

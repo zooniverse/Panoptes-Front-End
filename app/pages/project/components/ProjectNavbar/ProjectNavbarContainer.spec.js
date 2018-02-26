@@ -12,7 +12,7 @@ import {
   randomUser,
   translation,
   workflow
-} from './testHelpers';
+} from '../testHelpers';
 
 describe('ProjectNavbarContainer', function() {
   let wrapper;

@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { pxToRem } from '../../../../../../theme';
-import socialIcons from '../../socialIcons';
+import ExternalLink from '../../../ExternalLinksBlock/components/ExternalLink';
 
 const commonStyles = `
   display: block;
@@ -25,7 +25,7 @@ export const StyledInternalLink = styled(Link).attrs({
   ${commonStyles}
 `;
 
-export const StyledExternalLink = styled.a`
+export const StyledExternalLink = styled(ExternalLink)`
   color: white;
   ${commonStyles}
 `;
@@ -36,54 +36,49 @@ export const StyledLinkPlaceholder = styled.span`
   ${commonStyles}
 `;
 
-function NavLink({ isExternalLink, isSocialLink, label, site, url, ...props }) {
-  let iconClasses = '';
-  const linkProps = _.clone(props);
-  const LinkComponent = (isExternalLink) ? StyledExternalLink : StyledInternalLink;
+function NavLink({ className, disabled, isExternalLink, label, url }) {
+  const linkProps = {
+    className,
+    disabled
+  };
 
-  if (isExternalLink) {
-    iconClasses = 'fa fa-external-link fa-fw';
-    linkProps.target = '_blank';
-    linkProps.rel = 'noopener noreferrer';
-    linkProps.href = url;
-  } else {
+  const LinkComponent = (disabled) ? StyledLinkPlaceholder : StyledInternalLink;
+
+  if (!disabled) {
     linkProps.to = url;
   }
 
-  if (isSocialLink) {
-    const icon = socialIcons[site].icon;
-    linkProps['aria-label'] = socialIcons[site].label;
-    iconClasses = `fa ${icon} fa-fw`;
-  }
-
-  if (linkProps.disabled) {
+  if (isExternalLink) {
     return (
-      <StyledLinkPlaceholder {...linkProps}>
-        {label}
-      </StyledLinkPlaceholder>
+      <StyledExternalLink
+        className={className}
+        isExternalLink={isExternalLink}
+        label={label}
+        url={url}
+      />
     );
   }
 
   return (
     <LinkComponent {...linkProps}>
-      {!isSocialLink &&
-        label}
-      {iconClasses && <i className={iconClasses} />}
+      {label}
     </LinkComponent>
   );
 }
 
 NavLink.defaultProps = {
+  className: '',
+  disabled: false,
   isExternalLink: false,
-  isSocialLink: false,
   label: '',
   site: '',
   url: ''
 };
 
 NavLink.propTypes = {
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
   isExternalLink: PropTypes.bool,
-  isSocialLink: PropTypes.bool,
   label: PropTypes.string,
   site: PropTypes.string,
   url: PropTypes.string

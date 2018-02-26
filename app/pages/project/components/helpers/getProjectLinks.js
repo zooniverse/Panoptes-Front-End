@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import isAdmin from '../../../../../lib/is-admin';
+import isAdmin from '../../../../lib/is-admin';
 import userHasLabAccess from './userHasLabAccess';
 
 function getProjectLinks({ project, projectRoles, workflow, user }) {

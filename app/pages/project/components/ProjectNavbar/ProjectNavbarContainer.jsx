@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../../../lib/is-admin';
 
-import getProjectLinks from './helpers/getProjectLinks';
+import { getProjectLinks } from '../helpers';
 import ProjectNavbar from './ProjectNavbar';
 
 class ProjectNavbarContainer extends Component {
@@ -25,45 +25,10 @@ class ProjectNavbarContainer extends Component {
     apiClient.stopListening('change', this.handleClientChange.bind(this));
   }
 
-  handleClientChange() {
-    const adminEnabled = isAdmin();
-    if (adminEnabled !== this.state.adminEnabled) {
-      // Trigger a re-render if an admin user toggles the admin mode checkbox
-      this.setState({ adminEnabled });
-    }
-  }
-
-  getExternalLinks() {
-    const allExternalLinks = _.get(this.props.project, 'urls', [])
-      .map(link => ({ ...link, isExternalLink: true }));
-
-    const partitionedLinks = _.partition(allExternalLinks, link => (link.site));
-
-    const external = partitionedLinks[1].map(link => ({
-      isExternalLink: true,
-      label: link.label,
-      url: link.url
-    }));
-
-    const social = partitionedLinks[0].map(link => ({
-      isExternalLink: true,
-      isSocialLink: true,
-      label: link.label,
-      site: link.site,
-      url: link.url
-    }));
-
-    return {
-      external,
-      social
-    };
-  }
-
   getNavLinks() {
     const project = this.getProjectLinks();
-    const { external, social } = this.getExternalLinks();
     const org = this.getOrganizationLink();
-    return [].concat(project, org, external, social);
+    return [].concat(project, org);
   }
 
   getOrganizationLink() {
@@ -72,7 +37,6 @@ class ProjectNavbarContainer extends Component {
 
     if (organization) {
       link.push({
-        isExternalLink: true,
         label: organization.display_name,
         url: `/organizations/${organization.slug}`
       });
@@ -91,6 +55,15 @@ class ProjectNavbarContainer extends Component {
       label: counterpart(link.translationPath),
       url: link.url
     }));
+  }
+
+
+  handleClientChange() {
+    const adminEnabled = isAdmin();
+    if (adminEnabled !== this.state.adminEnabled) {
+      // Trigger a re-render if an admin user toggles the admin mode checkbox
+      this.setState({ adminEnabled });
+    }
   }
 
   render() {
