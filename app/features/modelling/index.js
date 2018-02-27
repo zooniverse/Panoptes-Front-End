@@ -24,6 +24,7 @@ Proposed usage:
 import GalaxyBuilderModel from './galaxy-builder';
 import DevClassifierModel from './dev-classifier';
 import LinePlotModel from './line-plot';
+import TestModel from './test-model';
 // TODO: this should be workflow.configuration.modelling.model, or even at the
 //       subject-level (different models for each subject).
 export default (subjectModellingInfo) => {
@@ -35,6 +36,8 @@ export default (subjectModellingInfo) => {
       return GalaxyBuilderModel;
     case 'LINE_PLOT':
       return LinePlotModel;
+    case 'TEST_MODEL':
+      return TestModel;
     default:
       return DevClassifierModel;
   }
