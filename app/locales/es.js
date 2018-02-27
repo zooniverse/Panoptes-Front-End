@@ -156,9 +156,9 @@ export default {
   },
   resetPassword: {
     heading: 'Reset Password',
-    newPasswordFormDialog: 'Enter matching passwords that are at least 8 characters long so you can get back to doing some research.',
+    newPasswordFormDialog: 'Enter the same password twice so you can get back to doing some research. Passwords need to be at least 8 characters long.',
     newPasswordFormLabel: 'New password:',
-    newPasswordConfirmationLabel: 'Again, to confirm:',
+    newPasswordConfirmationLabel: 'Repeat your password to confirm:',
     enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
     emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
     emailError: 'There was an error reseting your password.',
