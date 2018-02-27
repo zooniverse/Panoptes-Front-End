@@ -17,6 +17,10 @@ module.exports =
     <rect className="shape" x="10" y="30" width="80" height="40" />
   </svg>
 
+  rotateRectangle: <svg viewBox="0 0 100 100">
+    <rect className="shape" x="10" y="30" width="80" height="40" />
+  </svg>
+
   polygon: <svg viewBox="0 0 100 100">
     <polyline className="shape" points="50, 5 90, 90 50, 70 5, 90 50, 5" />
   </svg>
