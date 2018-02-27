@@ -103,6 +103,10 @@ describe('DropdownTask', function () {
         assert.equal(renderedSelects.length, multiSelects.selects.length);
       });
 
+      it('should have an annotation with values equal in length to the number of selects', function () {
+        assert.equal(annotation.value.length, multiSelects.selects.length);
+      });
+
       it('should have an annotation reflecting nothing selected', function () {
         annotation.value.forEach((annotationValue) => {
           const { option, value } = annotationValue;
@@ -159,6 +163,7 @@ describe('DropdownTask', function () {
         assert.equal(countryOption, false);
       });
     });
+
     describe('and first annotation provided (Country),', function () {
       let annotation;
       let wrapper;
@@ -197,6 +202,7 @@ describe('DropdownTask', function () {
         assert.equal(stateOption, false);
       });
     });
+
     describe('and all annotations provided, no custom answers,', function () {
       let annotation;
       let wrapper;
@@ -232,6 +238,7 @@ describe('DropdownTask', function () {
         assert.deepEqual(annotation, expectedAnnotation);
       });
     });
+
     describe('and all annotations provided, including custom answers,', function () {
       let annotation;
       let wrapper;
@@ -264,6 +271,30 @@ describe('DropdownTask', function () {
           { value: null, option: false }
         ] };
         assert.deepEqual(annotation, expectedAnnotation);
+      });
+    });
+
+    describe('and component updated', function () {
+      const annotation1 = { value: [] };
+      const annotation2 = { value: [] };
+      const wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation1} onChange={function (a) { return a; }} />);
+      wrapper.setProps({ task: singleSelect, annotation: annotation2 });
+
+      it('should render all selects', function () {
+        const renderedSelects = wrapper.find(Select);
+        assert.equal(renderedSelects.length, singleSelect.selects.length);
+      });
+
+      it('should have an annotation with values equal in length to the number of selects', function () {
+        assert.equal(annotation2.value.length, singleSelect.selects.length);
+      });
+
+      it('should have an annotation reflecting nothing selected', function () {
+        annotation2.value.forEach((annotationValue) => {
+          const { option, value } = annotationValue;
+          assert.equal(value, null);
+          assert.equal(option, false);
+        });
       });
     });
   });
