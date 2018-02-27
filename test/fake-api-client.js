@@ -11,7 +11,7 @@ export class FakeResource {
             return Promise.resolve(this);
         }
         else {
-            return new Promise((resolve, reject) => { reject(); });
+            return new Promise((resolve, reject) => { reject(new Error("Save failed!")); });
         }
     }
 }

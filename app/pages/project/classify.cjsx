@@ -38,7 +38,10 @@ emptySubjectQueue = ->
       subject.destroy()
     queue.splice 0
 
-classificationQueue = new ClassificationQueue()
+onClassificationSaved = ->
+  Split.classificationCreated(actualClassification); // Metric log needs classification id
+
+classificationQueue = new ClassificationQueue(window.localStorage, apiClient, onClassificationSaved)
 
 auth.listen 'change', emptySubjectQueue
 apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue

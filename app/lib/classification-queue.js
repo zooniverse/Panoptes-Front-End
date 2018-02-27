@@ -5,14 +5,15 @@ const FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications';
 const MAX_RECENTS = 10;
 
 class ClassificationQueue {
-    constructor(storage, api) {
+    constructor(storage, api, onClassificationSaved) {
         this.storage = storage || window.localStorage;
         this.apiClient = api || apiClient;
         this.recents = [];
+        this.onClassificationSaved = onClassificationSaved;
     }
 
     add(classification) {
-        var queue = this._loadQueue();
+        const queue = this._loadQueue();
         queue.push(classification);
 
         try {
@@ -27,7 +28,7 @@ class ClassificationQueue {
     }
 
     length() {
-        return this._loadQueue().length
+        return this._loadQueue().length;
     }
 
     addRecent(classification) {
@@ -40,44 +41,41 @@ class ClassificationQueue {
     }
 
     flushToBackend() {
-        var queue = this._loadQueue();
+        const queue = this._loadQueue();
 
         if (queue.length > 0) {
             console.log('Saving queued classifications:', queue.length);
             for (let classificationData of queue) {
-                this.apiClient.type('classifications').create(classificationData)
-                    .save()
-                    .then((actualClassification) => {
-                        console.log('Saved classification', actualClassification.id);
-                        Split.classificationCreated(actualClassification); // Metric log needs classification id
-                        this.addRecent(actualClassification);
+                this.apiClient.type('classifications').create(classificationData).save().then((actualClassification) => {
+                    console.log('Saved classification', actualClassification.id);
+                    this.onClassificationSaved(actualClassification);
+                    this.addRecent(actualClassification);
+                    let indexInQueue = queue.indexOf(classificationData);
+                    queue.splice(indexInQueue, 1);
+                    try {
+                        this._saveQueue(queue);
+                        console.info('Saved a queued classification, remaining:', queue.length);
+                    }
+                    catch(error) {
+                        console.error('Failed to update classification queue:', error);
+                    }
+                }).catch(function(error) {
+                    console.error('Failed to save a queued classification:', error);
+
+                    switch(error.status) {
+                    case 422:
+                        console.error("Dropping malformed classification permanently", classificationData);
                         let indexInQueue = queue.indexOf(classificationData);
                         queue.splice(indexInQueue, 1);
                         try {
                             this._saveQueue(queue);
-                            console.info('Saved a queued classification, remaining:', queue.length);
                         }
                         catch(error) {
                             console.error('Failed to update classification queue:', error);
                         }
-                    })
-                    .catch(function(error) {
-                        console.error('Failed to save a queued classification:', error);
-
-                        switch(error.status) {
-                        case 422:
-                            console.error("Dropping malformed classification permanently", classificationData);
-                            let indexInQueue = queue.indexOf(classificationData);
-                            queue.splice(indexInQueue, 1);
-                            try {
-                                this._saveQueue(queue);
-                            }
-                            catch(error) {
-                                console.error('Failed to update classification queue:', error);
-                            }
-                            break;
-                        }
-                    });
+                        break;
+                    }
+                });
             }
         }
     }
