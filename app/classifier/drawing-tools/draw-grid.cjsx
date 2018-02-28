@@ -36,6 +36,8 @@ module.exports = createReactClass
   getDefaultProps: ->
     rows: 10
     cols: 10
+    offset_x: 50
+    offset_y: 50
 
   getDeleteButtonPosition: ->
     theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)
@@ -45,8 +47,8 @@ module.exports = createReactClass
   render: ->
     console.log(@props)
 
-    offset_x = 50
-    offset_y = 50
+    offset_x = @props.offset_x
+    offset_y = @props.offset_y
 
     width = (@props.containerRect.width / @props.scale.horizontal-offset_x) / @props.rows 
     height = (@props.containerRect.height / @props.scale.vertical - offset_y) / @props.cols

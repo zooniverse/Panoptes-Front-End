@@ -45,6 +45,26 @@ class GridEditor extends React.Component {
     this.updateWorkflow(tool);
   };
 
+  onChangeXOffset = (e) => {
+    const tool = this.state.tool;
+    if (e.target.value) {
+      tool.x_offset = e.target.value;
+    } else {
+      delete tool.x_offset;
+    }
+    this.updateWorkflow(tool);
+  };
+
+  onChangeYOffset = (e) => {
+    const tool = this.state.tool;
+    if (e.target.value) {
+      tool.y_offset = e.target.value;
+    } else {
+      delete tool.y_offset;
+    }
+    this.updateWorkflow(tool);
+  };
+
   updateWorkflow = (tool) => {
     const changes = {};
     changes[this.props.name] = tool;
@@ -82,6 +102,36 @@ class GridEditor extends React.Component {
             size="5"
             style={{ width: '5ch' }}
             onChange={this.onChangeCols}
+          />
+        </AutoSave>
+
+        <AutoSave resource={this.props.workflow}>
+          X Offset{' '}
+          <input
+            type="number"
+            inputMode="numeric"
+            name={`${this.props.name}.x_offset`}
+            min="0"
+            value={this.state.tool.x_offset}
+            placeholder="0"
+            size="5"
+            style={{ width: '5ch' }}
+            onChange={this.onChangeXOffset}
+          />
+        </AutoSave>
+
+        <AutoSave resource={this.props.workflow}>
+          Y Offset{' '}
+          <input
+            type="number"
+            inputMode="numeric"
+            name={`${this.props.name}.y_offset`}
+            min="0"
+            value={this.state.tool.y_offset}
+            placeholder="0"
+            size="5"
+            style={{ width: '5ch' }}
+            onChange={this.onChangeYOffset}
           />
         </AutoSave>
       </div>
