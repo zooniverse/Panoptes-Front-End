@@ -3,6 +3,8 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 ReactDOM = require 'react-dom'
 {Link} = require 'react-router'
+{ Helmet } = require 'react-helmet'
+counterpart = require 'counterpart'
 DiscussionPreview = require './discussion-preview'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
@@ -203,6 +205,7 @@ module.exports = createReactClass
     {board} = @state
 
     <div className="talk-board">
+      <Helmet title="#{board?.title} » #{counterpart 'projectTalk.title'}" />
       <h1 className="talk-page-header">{board?.title}</h1>
       <p>{board?.description}</p>
       <FollowBoard user={@props.user} board={board} />

@@ -11,6 +11,8 @@ SingleSubmitButton = require '../components/single-submit-button'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {Link} = require 'react-router'
+{ Helmet } = require 'react-helmet'
+counterpart = require 'counterpart'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require('../lib/alert').default
@@ -305,6 +307,7 @@ module.exports = createReactClass
     {discussion} = @state
 
     <div className="talk-discussion">
+      <Helmet title="#{discussion?.title} » #{counterpart 'projectTalk.title'}" />
       {if not @state.editingTitle
         <h1 className="talk-page-header">
           {discussion?.title}
