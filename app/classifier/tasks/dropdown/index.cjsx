@@ -104,7 +104,7 @@ module.exports = createReactClass
   setDefaultValues: ->
     unless @props.annotation.value.length
       value = @props.task.selects.map () -> { option: false, value: null }
-      newAnnotation = Object.assign @props.annotation, {value}
+      newAnnotation = Object.assign {}, @props.annotation, {value}
       @props.onChange newAnnotation
 
   selectedOptions: () ->
@@ -208,5 +208,5 @@ module.exports = createReactClass
 
     @clearRelated(i)
 
-    newAnnotation = Object.assign @props.annotation, {value}
+    newAnnotation = Object.assign {}, @props.annotation, {value}
     @props.onChange newAnnotation
