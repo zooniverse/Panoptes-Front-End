@@ -16,4 +16,4 @@ module.exports =
   rectangle: require './rectangle'
   rotateRectangle: require('./rotate-rectangle').default
   triangle: require './triangle'
-  gridBox: require './draw-grid'
+  pointGrid: require './point-grid'

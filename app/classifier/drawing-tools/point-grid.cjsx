@@ -4,20 +4,14 @@ DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 isInBounds = require '../../lib/is-in-bounds'
 DeleteButton = require './delete-button'
-round = require 'lodash/round'
 
-RADIUS =
-  large: 10
-  small: 2
+DELETE_BUTTON_ANGLE = 45
 SELECTED_RADIUS =
   large: 20
   small: 10
-CROSSHAIR_SPACE = 0.2
-CROSSHAIR_WIDTH = 1
-DELETE_BUTTON_ANGLE = 45
 
 module.exports = createReactClass
-  displayName: 'GridTool'
+  displayName: 'PointGridTool'
 
   statics:
     defaultValues: ({x, y}) ->
