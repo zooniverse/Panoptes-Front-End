@@ -14,5 +14,5 @@ module.exports =
   point: require './point'
   polygon: require './polygon'
   rectangle: require './rectangle'
-  rotateRectangle: require './rotate-rectangle'
+  rotateRectangle: require('./rotate-rectangle.jsx').default
   triangle: require './triangle'
