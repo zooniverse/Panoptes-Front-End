@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 
-import handleInputChange from '../../lib/handle-input-change';
 import UserDetails from './user-settings/details';
 import UserProperties from './user-settings/properties';
 import UserResources from './user-settings/resources';

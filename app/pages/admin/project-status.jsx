@@ -42,6 +42,15 @@ class ProjectStatus extends Component {
     this.state.project.stopListening('change', this.forceUpdate);
   }
 
+  onChangeWorkflowLevel(workflow, event) {
+    this.setState({ error: null });
+    let selected = event.target.value;
+    selected = selected === 'none' ? undefined : selected;
+    return workflow.update({ 'configuration.level': selected }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+
   getProject() {
     const { owner, name } = this.props.params;
     const slug = `${owner}/${name}`;
@@ -71,15 +80,6 @@ class ProjectStatus extends Component {
     return workflows
       .map(workflow => workflow.configuration.level)
       .filter(workflow => workflow);
-  }
-
-  onChangeWorkflowLevel(workflow, event) {
-    this.setState({ error: null });
-    let selected = event.target.value;
-    selected = selected === 'none' ? undefined : selected;
-    return workflow.update({ 'configuration.level': selected }).save()
-      .then(() => this.getWorkflows())
-      .catch(error => this.setState({ error }));
   }
 
   handleDialogCancel() {
@@ -140,11 +140,11 @@ class ProjectStatus extends Component {
 
     return (
       <ul className="project-status__section-list">
-      {this.state.dialogIsOpen &&
-        <WorkflowDefaultDialog
-          onCancel={this.handleDialogCancel}
-          onSuccess={this.handleDialogSuccess}
-        />}
+        {this.state.dialogIsOpen &&
+          <WorkflowDefaultDialog
+            onCancel={this.handleDialogCancel}
+            onSuccess={this.handleDialogSuccess}
+          />}
         {this.state.workflows.map((workflow) => {
           return (
             <li key={workflow.id} className="section-list__item">

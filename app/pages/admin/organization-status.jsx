@@ -127,8 +127,7 @@ class OrganizationStatus extends Component {
             </li>
             <li>
               Listed At:{' '}
-              {this.state.organization.listed ?
-                moment(this.state.organization.listed_at).calendar() : 'N/A'}
+              {this.state.organization.listed ? moment(this.state.organization.listed_at).calendar() : 'N/A'}
             </li>
             <li>{this.renderError()}</li>
           </ul>
