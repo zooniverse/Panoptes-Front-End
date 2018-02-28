@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -140,5 +141,12 @@ class OrganizationStatus extends Component {
     );
   }
 }
+
+OrganizationStatus.propTypes = {
+  params: PropTypes.shape({
+    name: PropTypes.string,
+    owner: PropTypes.string
+  })
+};
 
 export default OrganizationStatus;

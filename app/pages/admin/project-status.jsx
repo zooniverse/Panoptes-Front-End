@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 
@@ -270,5 +271,12 @@ class ProjectStatus extends Component {
     );
   }
 }
+
+ProjectStatus.propTypes = {
+  params: PropTypes.shape({
+    name: PropTypes.string,
+    owner: PropTypes.string
+  })
+};
 
 export default ProjectStatus;
