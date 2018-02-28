@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 
-const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetError }) => (
+const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetError, minLength }) => (
   <form onSubmit={onSubmit}>
     <Translate
       component="p"
@@ -17,6 +17,10 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         type="password"
         className="standard-input"
         size="20"
+        required
+        pattern={".{"+minLength+",}"}
+        title={minLength+" characters minimum"}
+        autoComplete="new-password"
       />
     </label>
     <label>
@@ -28,6 +32,10 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         type="password"
         className="standard-input"
         size="20"
+        required
+        pattern={".{"+minLength+",}"}
+        title={minLength+" characters minimum"}
+        autoComplete="new-password"
       />
     </label>
     <p>
@@ -46,21 +54,20 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         <i className="fa fa-check-circle form-help success" />}
 
       {resetError &&
-        <Translate
-          className="form-help error"
-          component="small"
-          content="resetPassword.resetError"
-        />}
+        <small className="form-help error">
+          {resetError}
+        </small>}
     </p>
   </form>
-  );
+);
 
 NewPasswordForm.propTypes = {
   disabled: PropTypes.bool,
   inProgress: PropTypes.bool,
   onSubmit: PropTypes.func,
   resetError: PropTypes.string,
-  resetSuccess: PropTypes.bool
+  resetSuccess: PropTypes.bool,
+  minLength: PropTypes.number
 };
 
 NewPasswordForm.defaultProps = {
@@ -68,7 +75,8 @@ NewPasswordForm.defaultProps = {
   inProgress: false,
   onSubmit: () => {},
   resetError: null,
-  resetSuccess: null
+  resetSuccess: null,
+  minLength: 8
 };
 
 export default NewPasswordForm;

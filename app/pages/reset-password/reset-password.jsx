@@ -64,18 +64,35 @@ class ResetPasswordPage extends React.Component {
     const token = this.props.location.query.reset_password_token;
     const password = event.target[0].value;
     const confirmation = event.target[1].value;
+    const passwordMatch = password === confirmation
+    if (!passwordMatch) {
+      this.setState({
+        inProgress: false,
+        resetError: <Translate
+          component="p"
+          content="resetPassword.passwordsDoNotMatch"
+        />
+      });
+      return;
+    }
 
     auth.resetPassword({ password, confirmation, token })
       .then(() => {
         this.setState({
           resetSuccess: true,
-          inProgress: false
         });
         alert(resolve => <LoginDialog onSuccess={resolve} />);
         this.context.router.push('/projects');
       })
       .catch((error) => {
-        this.setState({ resetError: error });
+        this.setState({
+          resetError: error.message
+        });
+      })
+      .then(() => {
+        this.setState({
+          inProgress: false
+        });
       });
   }
 
@@ -101,7 +118,7 @@ class ResetPasswordPage extends React.Component {
         {this.props.location.query && this.props.location.query.reset_password_token && !this.state.resetSuccess &&
           <NewPasswordForm
             onSubmit={this.handlePasswordResetSubmit}
-            disabled={this.state.resetError || this.state.resetSuccess}
+            disabled={this.state.resetSuccess}
             inProgress={this.state.inProgress}
             resetSuccess={this.state.resetSuccess}
             resetError={this.state.resetError}

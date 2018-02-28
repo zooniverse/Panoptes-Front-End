@@ -156,13 +156,14 @@ export default {
   },
   resetPassword: {
     heading: 'Reset Password',
-    newPasswordFormDialog: 'Go ahead and enter a new password, then you can get back to doing some research.',
+    newPasswordFormDialog: 'Enter the same password twice so you can get back to doing some research. Passwords need to be at least 8 characters long.',
     newPasswordFormLabel: 'New password:',
-    newPasswordConfirmationLabel: 'Again, to confirm:',
+    newPasswordConfirmationLabel: 'Repeat your password to confirm:',
     enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
     emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
     emailError: 'There was an error reseting your password.',
     resetError: 'Something went wrong, please try and reset your password via email again.',
+    passwordsDoNotMatch: 'The passwords do not match, please try again.',
     loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.'
   },
   workflowToggle: {

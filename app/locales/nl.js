@@ -189,13 +189,13 @@ export default {
   },
   resetPassword: {
     heading: 'Wachtwoord vergeten',
-    newPasswordFormDialog: 'Voer een nieuw wachtwoord in, dan kun je verder met onderzoek doen.',
+    newPasswordFormDialog: 'Voer hetzelfde wachtwoord tweemaal in, zodat je verder kunt met onderzoek doen. Een wachtwoord moet tenminste 8 tekens lang zijn.',
     newPasswordFormLabel: 'Nieuw wachtwoord:',
     newPasswordConfirmationLabel: 'Herhaal, ter controle:',
     enterEmailLabel: 'Voer je e-mailadres in en we sturen je een link waarmee je kunt herstellen.',
     emailSuccess: 'We hebben je zojuist een e-mail met een herstellink gezonden.',
     emailError: 'Er ging iets mis bij het herstellen van je wachtwoord.',
-    resetError: 'Er ging iets mis, probeer het nogmaals.',
+    passwordsDoNotMatch: 'De wachtwoorden komen niet overeen, probeer het opnieuw.',
     loggedInDialog: 'Je bent op dit moment ingelogd. Log uit om je wachtwoord te herstellen.'
   },
   workflowToggle: {
