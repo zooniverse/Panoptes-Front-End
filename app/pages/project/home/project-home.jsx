@@ -138,7 +138,7 @@ const ProjectHomePage = (props) => {
             </div>
           </div>)}
 
-        <div className="project-home-page__about-text">
+        <div className="project-home-page__about-text" style={(props.project.researcher_quote && props.project.urls.length > 0) ? { flexBasis: '33.333%' } : { flexBasis: '66.666%' }}>
           <h4 className="project-home-page__small-header">
             <Translate
               content="project.home.about"
@@ -152,7 +152,9 @@ const ProjectHomePage = (props) => {
               {props.translation.introduction}
             </Markdown>}
         </div>
-        <ExternalLinksBlock project={props.project} />
+        <ExternalLinksBlock resource={props.project}>
+          <Translate className="project-home-page__small-header" component="h4" content="project.home.links" />
+        </ExternalLinksBlock>
       </div>
     </div>
   );
@@ -195,7 +197,8 @@ ProjectHomePage.propTypes = {
     introduction: PropTypes.string,
     redirect: PropTypes.string,
     researcher_quote: PropTypes.string,
-    slug: PropTypes.string
+    slug: PropTypes.string,
+    urls: PropTypes.arrayOf(PropTypes.object)
   }).isRequired,
   projectIsComplete: PropTypes.bool.isRequired,
   researcherAvatar: PropTypes.string,

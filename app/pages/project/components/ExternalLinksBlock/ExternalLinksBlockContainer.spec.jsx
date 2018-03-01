@@ -11,7 +11,7 @@ describe('ExternalLinksBlockContainer', function() {
   before(function() {
     getExternalLinksSpy = sinon.spy(ExternalLinksBlockContainer.prototype, 'getExternalLinks');
     getExternalLinksSpy.resetHistory();
-    wrapper = shallow(<ExternalLinksBlockContainer project={{ id: '1' }} />);
+    wrapper = shallow(<ExternalLinksBlockContainer resource={{ id: '1' }} />);
   });
 
   after(function() {
@@ -27,7 +27,7 @@ describe('ExternalLinksBlockContainer', function() {
   });
 
   it('should render ExternalLinksBlock if the links length is greater than 0', function() {
-    wrapper.setProps({ project: projectWithoutRedirect });
+    wrapper.setProps({ resource: projectWithoutRedirect });
     expect(wrapper.find('ExternalLinksBlock')).to.have.lengthOf(1);
   });
 });

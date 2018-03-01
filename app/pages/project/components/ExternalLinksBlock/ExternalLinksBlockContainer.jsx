@@ -4,7 +4,7 @@ import ExternalLinksBlock from './ExternalLinksBlock';
 
 export default class ExternalLinksBlockContainer extends React.Component {
   getExternalLinks() {
-    const allExternalLinks = _.get(this.props.project, 'urls', [])
+    const allExternalLinks = _.get(this.props.resource, 'urls', [])
       .map(link => ({ ...link, isExternalLink: true }));
 
     const partitionedLinks = _.partition(allExternalLinks, link => (link.site));
@@ -36,7 +36,9 @@ export default class ExternalLinksBlockContainer extends React.Component {
 
     if (links.length > 0) {
       return (
-        <ExternalLinksBlock links={links} />
+        <ExternalLinksBlock links={links} basis={this.props.basis}>
+          {this.props.children}
+        </ExternalLinksBlock>
       );
     }
 

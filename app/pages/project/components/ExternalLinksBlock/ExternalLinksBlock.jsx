@@ -8,19 +8,24 @@ import { zooTheme } from '../../../../theme';
 
 export const StyledExternalLinksBlock = styled.div`
   background-color: white;
+  box-sizing: border-box;
   color: ${theme('mode', {
     light: zooTheme.colors.navy.default
   })};
-  flex: 2 0 auto;
+  flex: ${props => `1 0 ${props.basis}%`};
   padding: 3em 4vw;
 
   ul {
-    padding-left: 1em;
+    padding-left: 0;
   }
 
   > ul li {
     display: block;
     margin-top: 1.5em;
+  }
+
+  > ul li a i {
+    margin: 0 1ch
   }
 `;
 
@@ -37,11 +42,11 @@ export const StyledExternalLink = styled(ExternalLink)`
   }
 `;
 
-export default function ExternalLinksBlock({ links }) {
+export default function ExternalLinksBlock({ basis, children, links }) {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
-      <StyledExternalLinksBlock>
-        <Translate className="project-home-page__small-header" component="h4" content="project.home.links" />
+      <StyledExternalLinksBlock basis={basis}>
+        {children}
         <ul>
           {links.map((link) => {
             const { isExternalLink, isSocialLink, label, path, site, url } = link;
@@ -65,10 +70,12 @@ export default function ExternalLinksBlock({ links }) {
 }
 
 ExternalLinksBlock.defaultProps = {
+  basis: '33.333',
   links: []
 };
 
 ExternalLinksBlock.propTypes = {
+  basis: PropTypes.string,
   links: PropTypes.arrayOf(PropTypes.object)
 };
 
