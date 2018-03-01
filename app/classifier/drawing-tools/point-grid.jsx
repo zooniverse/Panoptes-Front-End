@@ -32,10 +32,18 @@ module.exports = createReactClass({
       return {_inProgress: false}
     },
 
-    initValid(mark, {naturalHeight, naturalWidth}) {
+    initValid(mark, props) {
+      console.log(mark, props, props.task.tools[mark.tool])
+      const naturalWidth = props.naturalWidth
+      const naturalHeight = props.naturalHeight
+      const offset_x = Number.parseInt(props.task.tools[mark.tool].x_offset)
+      const offset_y = Number.parseInt(props.task.tools[mark.tool].y_offset)
+
       const notBeyondWidth = mark.x < naturalWidth;
       const notBeyondHeight = mark.y < naturalHeight;
-      return notBeyondWidth && notBeyondHeight;
+      const beyondOffset = mark.x > offset_x && mark.y > offset_y
+
+      return notBeyondWidth && notBeyondHeight && beyondOffset;
     },
 
     options: ['grid']
