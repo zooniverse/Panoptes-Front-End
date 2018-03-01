@@ -24,13 +24,22 @@ export const StyledWrapper = styled(Wrapper)`
 `;
 
 export const Nav = styled.nav`
-  display: flex;
   flex: 1;
-  justify-content: flex-end;
   margin-left: ${pxToRem(20)};
+`;
 
-  > span {
-    margin-right: ${pxToRem(30)} !important; 
+export const List = styled.ul`
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+`;
+
+export const ListItem = styled.li`
+  list-style: none;
+
+  &:not(:last-of-type) {
+    margin-right: ${pxToRem(30)};
   }
 `;
 
@@ -41,10 +50,6 @@ export const StyledNavLink = styled(NavLink)`
   &:hover,
   &.active {
     border-color: white;
-  }
-
-  &:not(:last-of-type) {
-    margin-right: ${pxToRem(30)};
   }
 `;
 
@@ -79,7 +84,12 @@ function ProjectNavbarWide(props) {
           underReview={underReview}
         />
         <Nav>
-          {navLinks.map(link => <StyledNavLink key={link.url || link.to} {...link} />)}
+          <List>
+            {navLinks.map(link => (
+              <ListItem key={link.url || link.to}>
+                <StyledNavLink {...link} />
+              </ListItem>))}
+          </List>
         </Nav>
       </StyledWrapper>
     </StyledHeaderWide>
