@@ -32,6 +32,7 @@ module.exports = createReactClass
       cols: 10
       offset_x: 50
       offset_y: 50
+      opacity: "0.5"
 
   getDeleteButtonPosition: ->
     theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)
@@ -66,7 +67,7 @@ module.exports = createReactClass
     
     <DrawingToolRoot tool={this} transform="translate(#{x}, #{y})" onClick={@destroyTool}>
       <rect x="0" y="0" width="#{width}" height="#{height}"
-        fill="gray" fillOpacity="0.5" strokeOpacity="0"/>
+        fill="#{@props.color}" fillOpacity="#{@props.opacity / 100}" strokeOpacity="0"/>
 
       {if @props.selected
         <DeleteButton tool={this} {...@getDeleteButtonPosition()}  getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />}

@@ -100,6 +100,7 @@ module.exports = createReactClass
                 toolProps.cols = Number.parseInt(toolDescription.cols)
                 toolProps.offset_x = Number.parseInt(toolDescription.x_offset)
                 toolProps.offset_y = Number.parseInt(toolDescription.y_offset)
+                toolProps.opacity = Number.parseInt(toolDescription.opacity)
 
 
               toolMethods =

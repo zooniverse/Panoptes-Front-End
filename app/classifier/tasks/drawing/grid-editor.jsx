@@ -65,6 +65,16 @@ class GridEditor extends React.Component {
     this.updateWorkflow(tool);
   };
 
+  onChangeOpacity = (e) => {
+    const tool = this.state.tool;
+    if (e.target.value) {
+      tool.opacity = e.target.value;
+    } else {
+      delete tool.opacity;
+    }
+    this.updateWorkflow(tool);
+  };
+
   updateWorkflow = (tool) => {
     const changes = {};
     changes[this.props.name] = tool;
@@ -134,6 +144,22 @@ class GridEditor extends React.Component {
             onChange={this.onChangeYOffset}
           />
         </AutoSave>
+
+        <AutoSave resource={this.props.workflow}>
+          Opacity{' '}
+          <input
+            type="number"
+            inputMode="numeric"
+            name={`${this.props.name}.opacity`}
+            min="0"
+            max="100"
+            value={this.state.tool.opacity}
+            placeholder="0"
+            size="5"
+            style={{ width: '5ch' }}
+            onChange={this.onChangeOpacity}
+          />
+        </AutoSave>/100
       </div>
     );
   }
