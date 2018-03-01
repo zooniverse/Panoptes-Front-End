@@ -25,7 +25,11 @@ module.exports = createReactClass({
     },
 
     initStart({x, y}) {
-      return {x, y};
+      return {x: x, y: y, _inProgress: true};
+    },
+
+    initRelease() {
+      return {_inProgress: false}
     },
 
     initValid(mark, {naturalHeight, naturalWidth}) {
@@ -43,7 +47,7 @@ module.exports = createReactClass({
         cols: 10,
         offset_x: 50,
         offset_y: 50,
-        opacity: "0.5"
+        opacity: 50,
       };
     },
 
@@ -71,10 +75,10 @@ module.exports = createReactClass({
     x = (x*width)+offset_x;
     y = (y*height)+offset_y;
 
-    //x = x+width/2
-    //y = y+height/2
+    let tool_args = {"tool": (this), "transform": `translate(${x}, ${y})`}
+    // tool_args.onClick = (this.destroyTool);
     
-    return React.createElement(DrawingToolRoot, {"tool": (this), "transform": `translate(${x}, ${y})`, "onClick": (this.destroyTool)},
+    return React.createElement(DrawingToolRoot, tool_args,
       React.createElement("rect", {"x": "0", "y": "0", "width": `${width}`, "height": `${height}`,  
         "fill": `${this.props.color}`, "fillOpacity": `${this.props.opacity / 100}`, "strokeOpacity": "0"}),
 
@@ -84,8 +88,10 @@ module.exports = createReactClass({
   },
 
   destroyTool() {
-    return this.setState({destroying: true}, () => {
-      return setTimeout(this.props.onDestroy, 300);
-    });
+    if (this.props.mark._inProgress == false) {
+      return this.setState({destroying: true}, () => {
+        return setTimeout(this.props.onDestroy, 300);
+      });
+    }
   }
 });
