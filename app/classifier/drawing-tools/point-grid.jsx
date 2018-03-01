@@ -67,7 +67,6 @@ module.exports = createReactClass({
 
     x = (Math.floor(x/width));
     y = Math.floor(y/height);
-    console.log(x, y);
 
     x = (x*width)+offset_x;
     y = (y*height)+offset_y;
