@@ -147,11 +147,8 @@ class Classifier extends React.Component {
 
   updateAnnotations(annotations) {
     annotations = annotations || this.props.classification.annotations.slice();
-    this.setState({ annotations });
     this.props.classification.update({ annotations });
-    if (this.props.feedback.active) {
-      this.updateFeedback();
-    }
+    this.setState({ annotations }, this.updateFeedback);
   }
 
   updateFeedback() {
@@ -175,7 +172,7 @@ class Classifier extends React.Component {
       }, false);
     }
 
-    if (!isInProgress) {
+    if (this.props.feedback.active && !isInProgress) {
       this.props.actions.feedback.update(currentAnnotation);
     }
   }
