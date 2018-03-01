@@ -110,7 +110,7 @@ class GridEditor extends React.Component {
           <input
             type="number"
             inputMode="numeric"
-            name={`${this.props.name}.x_offset`}
+            name={`${this.props.name}.x-offset`}
             min="0"
             value={this.state.tool.x_offset}
             placeholder="0"
@@ -125,7 +125,7 @@ class GridEditor extends React.Component {
           <input
             type="number"
             inputMode="numeric"
-            name={`${this.props.name}.y_offset`}
+            name={`${this.props.name}.y-offset`}
             min="0"
             value={this.state.tool.y_offset}
             placeholder="0"

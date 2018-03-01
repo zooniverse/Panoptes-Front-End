@@ -95,6 +95,13 @@ module.exports = createReactClass
                 color: toolDescription.color
                 size: toolDescription.size
 
+              if toolDescription.type == 'pointGrid'
+                toolProps.rows = Number.parseInt(toolDescription.rows)
+                toolProps.cols = Number.parseInt(toolDescription.cols)
+                toolProps.offset_x = Number.parseInt(toolDescription.x_offset)
+                toolProps.offset_y = Number.parseInt(toolDescription.y_offset)
+
+
               toolMethods =
                 onChange: @handleChange.bind this, i
                 onSelect: @handleSelect.bind this, annotation, mark

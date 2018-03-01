@@ -204,9 +204,9 @@ module.exports = createReactClass
 
                     if 'grid' in options
                       <GridEditor
-                        key="grid-options"
+                        key="gridoptions"
                         workflow={@props.workflow}
-                        name="#{@props.taskPrefix}.#{choicesKey}.#{index}.grid-options"
+                        name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
                         choice={choice}
                       />
                     else

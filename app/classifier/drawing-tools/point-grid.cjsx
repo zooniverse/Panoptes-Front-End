@@ -28,10 +28,10 @@ module.exports = createReactClass
     options: ['grid']
 
   getDefaultProps: ->
-    rows: 10
-    cols: 10
-    offset_x: 50
-    offset_y: 50
+      rows: 10
+      cols: 10
+      offset_x: 50
+      offset_y: 50
 
   getDeleteButtonPosition: ->
     theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)
