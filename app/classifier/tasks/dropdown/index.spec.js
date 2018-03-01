@@ -4,6 +4,7 @@
 import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
+import sinon from 'sinon';
 import Select from 'react-select'; // required to properly simulate change
 import DropdownTask from './';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
@@ -83,11 +84,13 @@ describe('DropdownTask', function () {
     describe('and annotation not provided,', function () {
       let annotation;
       let wrapper;
+      let onChangeSpy;
 
       beforeEach(function () {
         annotation = { value: [] };
+        onChangeSpy = sinon.spy();
 
-        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />);
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={onChangeSpy} />);
       });
 
       it('should render without crashing', function () {
@@ -103,8 +106,14 @@ describe('DropdownTask', function () {
         assert.equal(renderedSelects.length, multiSelects.selects.length);
       });
 
-      it('should have an annotation reflecting nothing selected', function () {
-        annotation.value.forEach((annotationValue) => {
+      it('should on mount have an annotation with values equal in length to the number of selects', function () {
+        const newAnnotation = onChangeSpy.firstCall.args[0];
+        assert.equal(newAnnotation.value.length, multiSelects.selects.length);
+      });
+
+      it('should on mount have an annotation reflecting nothing selected', function () {
+        const newAnnotation = onChangeSpy.firstCall.args[0];
+        newAnnotation.value.forEach((annotationValue) => {
           const { option, value } = annotationValue;
           assert.equal(value, null);
           assert.equal(option, false);
@@ -149,16 +158,15 @@ describe('DropdownTask', function () {
       it('should not save custom answer if allowCreate false', function () {
         const countrySelect = wrapper.find('#countryID').find(Select);
         const countrySelectInput = countrySelect.find('input');
+        onChangeSpy.resetHistory();
 
         countrySelectInput.simulate('change', { target: { value: 'test Country' }});
         countrySelectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
 
-        const countryOption = annotation.value[0].option;
-        const countryValue = annotation.value[0].value;
-        assert.equal(countryValue, null);
-        assert.equal(countryOption, false);
+        assert.equal(onChangeSpy.called, false);
       });
     });
+
     describe('and first annotation provided (Country),', function () {
       let annotation;
       let wrapper;
@@ -197,6 +205,7 @@ describe('DropdownTask', function () {
         assert.equal(stateOption, false);
       });
     });
+
     describe('and all annotations provided, no custom answers,', function () {
       let annotation;
       let wrapper;
@@ -232,6 +241,7 @@ describe('DropdownTask', function () {
         assert.deepEqual(annotation, expectedAnnotation);
       });
     });
+
     describe('and all annotations provided, including custom answers,', function () {
       let annotation;
       let wrapper;
@@ -264,6 +274,35 @@ describe('DropdownTask', function () {
           { value: null, option: false }
         ] };
         assert.deepEqual(annotation, expectedAnnotation);
+      });
+    });
+
+    describe('and component updated', function () {
+      const annotation1 = { value: [] };
+      const annotation2 = { value: [] };
+      const onChangeSpy = sinon.spy();
+
+      const wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation1} onChange={onChangeSpy} />);
+      wrapper.setProps({ task: singleSelect, annotation: annotation2 });
+
+      // first call on mount should set first task's default values, second call on update should be to set second task's default values
+      const newAnnotation = onChangeSpy.secondCall.args[0];
+
+      it('should render all selects', function () {
+        const renderedSelects = wrapper.find(Select);
+        assert.equal(renderedSelects.length, singleSelect.selects.length);
+      });
+
+      it('should have an annotation with values equal in length to the number of selects', function () {
+        assert.equal(newAnnotation.value.length, singleSelect.selects.length);
+      });
+
+      it('should have an annotation reflecting nothing selected', function () {
+        newAnnotation.value.forEach((annotationValue) => {
+          const { option, value } = annotationValue;
+          assert.equal(value, null);
+          assert.equal(option, false);
+        });
       });
     });
   });

@@ -90,16 +90,22 @@ module.exports = createReactClass
     @menus = []
 
   componentDidMount: ->
-    annotationValues = @props.annotation.value
-    unless annotationValues.length
-      @props.annotation.value = @props.task.selects.map -> {value: null, option: false}
+    @setDefaultValues()
 
     if @props.autoFocus is true
       @handleFocus()
 
   componentDidUpdate: (prevProps) ->
-    if prevProps.task isnt @props.task and @props.autoFocus is true
-      @handleFocus()
+    if prevProps.task isnt @props.task
+      @setDefaultValues()
+      if @props.autoFocus is true
+        @handleFocus()
+
+  setDefaultValues: ->
+    unless @props.annotation.value.length
+      value = @props.task.selects.map () -> { option: false, value: null }
+      newAnnotation = Object.assign {}, @props.annotation, {value}
+      @props.onChange newAnnotation
 
   selectedOptions: () ->
     # return annotation values mapped to react-select option objects
@@ -202,5 +208,5 @@ module.exports = createReactClass
 
     @clearRelated(i)
 
-    newAnnotation = Object.assign @props.annotation, {value}
+    newAnnotation = Object.assign {}, @props.annotation, {value}
     @props.onChange newAnnotation
