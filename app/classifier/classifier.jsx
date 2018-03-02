@@ -197,6 +197,7 @@ class Classifier extends React.Component {
       if (this.props.subject === subject) { // The subject could have changed while we were loading.
         this.setState({ subjectLoading: false });
         this.props.onLoad();
+        this.updateFeedback();
       }
     });
   }
