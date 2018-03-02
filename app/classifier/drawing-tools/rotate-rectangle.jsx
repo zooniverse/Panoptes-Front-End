@@ -43,43 +43,49 @@ export default class RotateRectangleTool extends React.Component {
 
   handleTopLeftDrag(e, d) {
     const difference = this.props.normalizeDifference(e, d);
+    const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
     this.props.mark.x += difference.x;
     this.props.mark.y += difference.y;
-    this.props.mark.width -= difference.x;
-    this.props.mark.height -= difference.y;
+    this.props.mark.width -= differenceRot.x;
+    this.props.mark.height -= differenceRot.y;
     this.props.onChange(this.props.mark);
   }
 
   handleTopRightDrag(e, d) {
     const difference = this.props.normalizeDifference(e, d);
-    this.props.mark.y += difference.y;
-    this.props.mark.width += difference.x;
-    this.props.mark.height -= difference.y;
+    const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
+    const theta = this.props.mark.angle * (Math.PI / 180);
+    this.props.mark.x -= differenceRot.y * Math.sin(theta);
+    this.props.mark.y += differenceRot.y * Math.cos(theta);
+    this.props.mark.width += differenceRot.x;
+    this.props.mark.height -= differenceRot.y;
     this.props.onChange(this.props.mark);
   }
 
   handleBottomRightDrag(e, d) {
-    const theta = this.props.mark.angle * (Math.PI / 180);
-    console.log(Math.cos(theta), Math.sin(theta));
     const difference = this.props.normalizeDifference(e, d);
-    this.props.mark.width += difference.x;
-    this.props.mark.height += difference.y;
+    const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
+    this.props.mark.width += differenceRot.x;
+    this.props.mark.height += differenceRot.y;
     this.props.onChange(this.props.mark);
   }
 
   handleBottomLeftDrag(e, d) {
     const difference = this.props.normalizeDifference(e, d);
-    this.props.mark.x += difference.x;
-    this.props.mark.width -= difference.x;
-    this.props.mark.height += difference.y;
+    const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
+    const theta = this.props.mark.angle * (Math.PI / 180);
+    this.props.mark.x += differenceRot.x * Math.cos(theta);
+    this.props.mark.y += differenceRot.x * Math.sin(theta);
+    this.props.mark.width -= differenceRot.x;
+    this.props.mark.height += differenceRot.y;
     this.props.onChange(this.props.mark);
   }
 
   handleRotate(e) {
     const { x, y } = this.props.getEventOffset(e);
-    const xCenter = this.props.mark.x + (0.5 * this.props.mark.width);
-    const yCenter = this.props.mark.y + (0.5 * this.props.mark.height);
-    const angle = this.constructor.getAngle(xCenter, yCenter, x, y);
+    const xCenter = this.props.mark.x;
+    const yCenter = this.props.mark.y;
+    const angle = this.constructor.getAngle(x, y, xCenter, yCenter);
     this.props.mark.angle = angle;
     this.props.onChange(this.props.mark);
   }
@@ -100,27 +106,23 @@ export default class RotateRectangleTool extends React.Component {
 
   render() {
     const { x, y, width, height, angle } = this.props.mark;
-    const xCenter = (0.5 * width);
-    const yCenter = (0.5 * height);
-
     const deletePosition = this.getDeletePosition(0, width);
-
     const positionAndRotate = `
       translate(${x} ${y})
-      rotate(${angle} ${xCenter} ${yCenter})
+      rotate(${angle})
     `;
     let guideLine;
     let dragHandles;
     if (this.props.selected) {
       const guideWidth = GUIDE_WIDTH / ((this.props.scale.horizontal + this.props.scale.vertical) / 2);
-      const xRot = width + (3 * (BUFFER / this.props.scale.horizontal));
+      const xRot = -(5 * (BUFFER / this.props.scale.horizontal));
       guideLine = (
         <g>
           <line
-            x1={xCenter}
-            y1={yCenter}
+            x1={0}
+            y1={0}
             x2={xRot}
-            y2={yCenter}
+            y2={0}
             strokeWidth={guideWidth}
             strokeDasharray={GUIDE_DASH}
           />
@@ -169,7 +171,7 @@ export default class RotateRectangleTool extends React.Component {
           />
           <DragHandle
             x={xRot}
-            y={yCenter}
+            y={0}
             scale={this.props.scale}
             onDrag={this.handleRotate}
             onEnd={this.normalizeMark}
@@ -251,7 +253,7 @@ RotateRectangleTool.getAngle = (xCenter, yCenter, x, y) => {
   const deltaY = y - yCenter;
   return Math.atan2(deltaY, deltaX) * (180 / Math.PI);
 };
-RotateRectangleTool.rotateXY = (x, y, angle) => {
+RotateRectangleTool.rotateXY = ({ x, y }, angle) => {
   const theta = angle * (Math.PI / 180);
   const xTheta = (x * Math.cos(theta)) + (y * Math.sin(theta));
   const yTheta = -(x * Math.sin(theta)) + (y * Math.cos(theta));
