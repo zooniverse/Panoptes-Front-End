@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { socialIcons } from '../../../helpers';
 
 export default function ExternalLink({ className, isExternalLink, isSocialLink, label, path, site, url }) {

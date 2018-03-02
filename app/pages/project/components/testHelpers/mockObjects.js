@@ -33,6 +33,7 @@ export const socialMediaUrl = {
 
 export const externalUrl = {
   label: 'My Blog',
+  site: '',
   url: 'https://my-blog.com'
 };
 

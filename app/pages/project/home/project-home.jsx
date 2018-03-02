@@ -138,7 +138,7 @@ const ProjectHomePage = (props) => {
             </div>
           </div>)}
 
-        <div className="project-home-page__about-text" style={(props.project.researcher_quote && props.project.urls.length > 0) ? { flexBasis: '33.333%' } : { flexBasis: '66.666%' }}>
+        <div className="project-home-page__about-text" style={(props.project.researcher_quote && props.project.urls && props.project.urls.length > 0) ? { flexBasis: '33.333%' } : { flexBasis: '66.666%' }}>
           <h4 className="project-home-page__small-header">
             <Translate
               content="project.home.about"

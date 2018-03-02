@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import sinon from 'sinon';
+import Translate from 'react-translate-component';
 import ExternalLinksBlock, { StyledExternalLinksBlock, StyledExternalLink } from './ExternalLinksBlock';
 import { externalLinks } from '../testHelpers';
 
@@ -11,7 +11,9 @@ describe('ExternalLinksBlock', function() {
     wrapper = shallow(
       <ExternalLinksBlock
         links={externalLinks}
-      />
+      >
+        <Translate content="project.home.links" />
+      </ExternalLinksBlock>
     );
   });
 
