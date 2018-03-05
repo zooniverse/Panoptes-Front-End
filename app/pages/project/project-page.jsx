@@ -4,7 +4,7 @@ import Translate from 'react-translate-component';
 import { Markdown } from 'markdownz';
 import { sugarClient } from 'panoptes-client/lib/sugar';
 import ProjectNavbar from './components/ProjectNavbar';
-import PotentialFieldGuide from './potential-field-guide';
+import FieldGuideContainer from './field-guide-container';
 import ProjectHomeContainer from './home/';
 
 export default class ProjectPage extends React.Component {
@@ -84,7 +84,7 @@ export default class ProjectPage extends React.Component {
           workflow: this.props.workflow
         })}
         {React.Children.only(this.props.children).type !== ProjectHomeContainer &&
-          <PotentialFieldGuide
+          <FieldGuideContainer
             guide={this.props.guide}
             guideIcons={this.props.guideIcons}
           />}
