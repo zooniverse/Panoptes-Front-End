@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
-import getSubjectLocation from '../../../lib/get-subject-location.coffee';
+import getSubjectLocations from '../../../lib/get-subject-locations';
 import Thumbnail from '../../../components/thumbnail';
 import FinishedBanner from '../finished-banner';
 import ProjectMetadata from './metadata';
@@ -83,16 +83,23 @@ const ProjectHomePage = (props) => {
       {renderTalkSubjectsPreview && (
         <div className="project-home-page__container">
           {props.talkSubjects.map((subject) => {
-            const location = getSubjectLocation(subject);
+            const locations = getSubjectLocations(subject);
+            let format = '';
+            let src = '';
+            if (locations.image) {
+              [format, src] = locations.image;
+            } else if (locations.video) {
+              [format, src] = locations.video;
+            }
             return (
               <div className="project-home-page__talk-image" key={subject.id}>
                 <Link to={`/projects/${props.project.slug}/talk/subjects/${subject.id}`} >
                   <Thumbnail
                     alt=""
                     controls={false}
-                    format={location.format}
+                    format={format}
                     height={240}
-                    src={location.src}
+                    src={src}
                     width={600}
                   />
                 </Link>
