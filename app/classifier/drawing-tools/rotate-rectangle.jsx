@@ -44,8 +44,8 @@ export default class RotateRectangleTool extends React.Component {
   handleTopLeftDrag(e, d) {
     const difference = this.props.normalizeDifference(e, d);
     const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
-    this.props.mark.x += difference.x;
-    this.props.mark.y += difference.y;
+    this.props.mark.x += 0.5 * differenceRot.x;
+    this.props.mark.y += 0.5 * differenceRot.y;
     this.props.mark.width -= differenceRot.x;
     this.props.mark.height -= differenceRot.y;
     this.props.onChange(this.props.mark);
@@ -54,9 +54,8 @@ export default class RotateRectangleTool extends React.Component {
   handleTopRightDrag(e, d) {
     const difference = this.props.normalizeDifference(e, d);
     const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
-    const theta = this.props.mark.angle * (Math.PI / 180);
-    this.props.mark.x -= differenceRot.y * Math.sin(theta);
-    this.props.mark.y += differenceRot.y * Math.cos(theta);
+    this.props.mark.x -= 0.5 * differenceRot.x;
+    this.props.mark.y += 0.5 * differenceRot.y;
     this.props.mark.width += differenceRot.x;
     this.props.mark.height -= differenceRot.y;
     this.props.onChange(this.props.mark);
@@ -65,6 +64,8 @@ export default class RotateRectangleTool extends React.Component {
   handleBottomRightDrag(e, d) {
     const difference = this.props.normalizeDifference(e, d);
     const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
+    this.props.mark.x -= 0.5 * differenceRot.x;
+    this.props.mark.y -= 0.5 * differenceRot.y;
     this.props.mark.width += differenceRot.x;
     this.props.mark.height += differenceRot.y;
     this.props.onChange(this.props.mark);
@@ -73,9 +74,8 @@ export default class RotateRectangleTool extends React.Component {
   handleBottomLeftDrag(e, d) {
     const difference = this.props.normalizeDifference(e, d);
     const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
-    const theta = this.props.mark.angle * (Math.PI / 180);
-    this.props.mark.x += differenceRot.x * Math.cos(theta);
-    this.props.mark.y += differenceRot.x * Math.sin(theta);
+    this.props.mark.x += 0.5 * differenceRot.x;
+    this.props.mark.y -= 0.5 * differenceRot.y;
     this.props.mark.width -= differenceRot.x;
     this.props.mark.height += differenceRot.y;
     this.props.onChange(this.props.mark);
@@ -83,9 +83,9 @@ export default class RotateRectangleTool extends React.Component {
 
   handleRotate(e) {
     const { x, y } = this.props.getEventOffset(e);
-    const xCenter = this.props.mark.x;
-    const yCenter = this.props.mark.y;
-    const angle = this.constructor.getAngle(x, y, xCenter, yCenter);
+    const xCenter = this.props.mark.x + (this.props.mark.width / 2);
+    const yCenter = this.props.mark.y + (this.props.mark.height / 2);
+    const angle = this.constructor.getAngle(xCenter, yCenter, x, y);
     this.props.mark.angle = angle;
     this.props.onChange(this.props.mark);
   }
@@ -106,23 +106,25 @@ export default class RotateRectangleTool extends React.Component {
 
   render() {
     const { x, y, width, height, angle } = this.props.mark;
+    const xCenter = width / 2;
+    const yCenter = height / 2;
     const deletePosition = this.getDeletePosition(0, width);
     const positionAndRotate = `
       translate(${x} ${y})
-      rotate(${angle})
+      rotate(${angle} ${xCenter} ${yCenter})
     `;
     let guideLine;
     let dragHandles;
     if (this.props.selected) {
       const guideWidth = GUIDE_WIDTH / ((this.props.scale.horizontal + this.props.scale.vertical) / 2);
-      const xRot = -(5 * (BUFFER / this.props.scale.horizontal));
+      const xRot = width + (3 * (BUFFER / this.props.scale.horizontal));
       guideLine = (
         <g>
           <line
-            x1={0}
-            y1={0}
+            x1={xCenter}
+            y1={yCenter}
             x2={xRot}
-            y2={0}
+            y2={yCenter}
             strokeWidth={guideWidth}
             strokeDasharray={GUIDE_DASH}
           />
@@ -171,7 +173,7 @@ export default class RotateRectangleTool extends React.Component {
           />
           <DragHandle
             x={xRot}
-            y={0}
+            y={yCenter}
             scale={this.props.scale}
             onDrag={this.handleRotate}
             onEnd={this.normalizeMark}
