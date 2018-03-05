@@ -4,6 +4,8 @@ import DragReorderable from 'drag-reorderable';
 import AutoSave from '../../components/auto-save.coffee';
 import SOCIAL_ICONS from '../../lib/social-icons';
 
+const ROUTE_BEFORE_DOMAIN = ['wordpress'];
+
 export default class SocialLinksEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -37,6 +39,10 @@ export default class SocialLinksEditor extends React.Component {
   handleNewLink(site, e) {
     let index = this.indexFinder(this.props.project.urls, site);
     if (index < 0) { index = this.props.project.urls.length; }
+    let url = `https://${site}${e.target.value}`;
+    if (ROUTE_BEFORE_DOMAIN.some(el => site.indexOf(el) >= 0)) {
+      url = `https://${e.target.value}.${site}`;
+    }
 
     if (e.target.value) {
       const changes = {
@@ -44,7 +50,7 @@ export default class SocialLinksEditor extends React.Component {
           label: '',
           path: e.target.value,
           site,
-          url: `https://${site}${e.target.value}`
+          url
         }
       };
       this.props.project.update(changes);
@@ -86,10 +92,13 @@ export default class SocialLinksEditor extends React.Component {
   renderRow(site, i) {
     const index = this.indexFinder(this.props.project.urls, site);
     const value = index >= 0 ? this.props.project.urls[index].path : '';
+    const precedeSiteName = ROUTE_BEFORE_DOMAIN.some(el => site.indexOf(el) >= 0);
 
     return (
       <tr key={i}>
-        <td>{site}</td>
+        {!precedeSiteName && (
+          <td>{site}</td>
+        )}
         <AutoSave tag="td" resource={this.props.project}>
           <input
             type="text"
@@ -100,6 +109,9 @@ export default class SocialLinksEditor extends React.Component {
             onMouseUp={this.handleEnableDrag}
           />
         </AutoSave>
+        {precedeSiteName && (
+          <td>.{site}</td>
+        )}
         <td>
           <button type="button" onClick={this.handleRemoveLink.bind(this, site)}>
             <i className="fa fa-remove" />
