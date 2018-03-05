@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -5,6 +6,7 @@ import moment from 'moment';
 
 import ProjectIcon from '../../components/project-icon';
 import LoadingIndicator from '../../components/loading-indicator';
+import LAB_APP_URL from '../../lib/lab-app-url';
 
 class OrganizationStatus extends Component {
   constructor(props) {
@@ -104,7 +106,11 @@ class OrganizationStatus extends Component {
         <div className="project-status__section">
           <h4>Information</h4>
           <ul>
-            <li>Id: {this.state.organization.id}</li>
+            <li>Id:{' '}
+              <a href={`${LAB_APP_URL}/organizations/${this.state.organization.id}`}>
+                {this.state.organization.id}
+              </a>
+            </li>
           </ul>
           <h4>Visibility Settings</h4>
           <ul className="project-status__section-list">
@@ -122,8 +128,7 @@ class OrganizationStatus extends Component {
             </li>
             <li>
               Listed At:{' '}
-              {this.state.organization.listed ?
-                moment(this.state.organization.listed_at).calendar() : 'N/A'}
+              {this.state.organization.listed ? moment(this.state.organization.listed_at).calendar() : 'N/A'}
             </li>
             <li>{this.renderError()}</li>
           </ul>
@@ -136,5 +141,12 @@ class OrganizationStatus extends Component {
     );
   }
 }
+
+OrganizationStatus.propTypes = {
+  params: PropTypes.shape({
+    name: PropTypes.string,
+    owner: PropTypes.string
+  })
+};
 
 export default OrganizationStatus;
