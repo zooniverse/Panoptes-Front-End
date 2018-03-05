@@ -9,8 +9,7 @@ import Translate from 'react-translate-component';
 import OrganizationProjectCards from './organization-project-cards';
 import OrganizationMetadata from './organization-metadata';
 import Thumbnail from '../../components/thumbnail';
-import SocialIcons from '../../lib/social-icons';
-import ExternalLinksBlockContainer from '../project/components/ExternalLinksBlock';
+import ExternalLinksBlockContainer from '../../components/ExternalLinksBlock';
 
 const AVATAR_SIZE = 100;
 

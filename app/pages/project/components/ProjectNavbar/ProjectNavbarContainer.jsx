@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../../../lib/is-admin';
 
-import { getProjectLinks } from '../helpers';
+import { getProjectLinks } from '../../../../lib/nav-helpers';
 import ProjectNavbar from './ProjectNavbar';
 
 class ProjectNavbarContainer extends Component {

@@ -10,7 +10,7 @@ import FinishedBanner from '../finished-banner';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
 import TalkStatus from './talk-status';
-import ExternalLinksBlock from '../components/ExternalLinksBlock';
+import ExternalLinksBlock from '../../../components/ExternalLinksBlock';
 
 const ProjectHomePage = (props) => {
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';

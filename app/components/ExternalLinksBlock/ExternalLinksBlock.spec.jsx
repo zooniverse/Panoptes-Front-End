@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import Translate from 'react-translate-component';
 import ExternalLinksBlock, { StyledExternalLinksBlock, StyledExternalLink } from './ExternalLinksBlock';
-import { externalLinks } from '../testHelpers';
+import { externalLinks } from '../../../test';
 
 describe('ExternalLinksBlock', function() {
   let wrapper;

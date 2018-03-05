@@ -10,13 +10,13 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
 import NavLink from './NavLink';
-import { getProjectLinks  } from '../../../helpers';
+import { getProjectLinks  } from '../../../../../../lib/nav-helpers';
 import {
   buildLinksWithLabels,
   projectRoles,
   projectWithoutRedirect,
   workflow
-} from '../../../testHelpers';
+} from '../../../../../../../test';
 
 const MOCK_EXTERNAL_URL = 'https://www.google.com';
 

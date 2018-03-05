@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import ExternalLinksBlockContainer from './ExternalLinksBlockContainer';
-import { projectWithoutRedirect } from '../testHelpers';
+import { projectWithoutRedirect } from '../../../test';
 
 describe('ExternalLinksBlockContainer', function() {
   let wrapper;

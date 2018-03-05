@@ -10,7 +10,7 @@ import {
   projectWithoutRedirect,
   randomUser,
   workflow
-} from '../testHelpers';
+} from '../../../test';
 
 
 describe('getProjectLinks', function() {

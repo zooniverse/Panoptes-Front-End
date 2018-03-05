@@ -3,14 +3,14 @@ import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { ProjectNavbar } from './ProjectNavbar';
-import { getProjectLinks } from '../helpers';
+import { getProjectLinks } from '../../../../lib/nav-helpers';
 import {
   buildLinksWithLabels,
   projectOwnerUser,
   projectRoles,
   projectWithoutRedirect,
   workflow
-} from '../testHelpers';
+} from '../../../../../test';
 
 describe('ProjectNavbar', function() {
   const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow, user: projectOwnerUser });

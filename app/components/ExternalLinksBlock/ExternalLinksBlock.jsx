@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
-import Translate from 'react-translate-component';
 import theme from 'styled-theming';
 import ExternalLink from './components/ExternalLink';
-import { zooTheme } from '../../../../theme';
+import { zooTheme } from '../../theme';
 
 export const StyledExternalLinksBlock = styled.div`
   background-color: white;

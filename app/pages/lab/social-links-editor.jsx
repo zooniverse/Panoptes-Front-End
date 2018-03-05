@@ -2,14 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DragReorderable from 'drag-reorderable';
 import AutoSave from '../../components/auto-save.coffee';
-import SOCIAL_ICONS from '../../lib/social-icons';
+import { socialIcons } from '../../lib/nav-helpers';
 
 const ROUTE_BEFORE_DOMAIN = ['wordpress'];
 
 export default class SocialLinksEditor extends React.Component {
   constructor(props) {
     super(props);
-    const socialOrder = Object.keys(SOCIAL_ICONS).map(key => key);
+    const socialOrder = Object.keys(socialIcons).map(key => key);
+
     this.state = {
       socialOrder
     };

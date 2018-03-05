@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import ExternalLink from './ExternalLink';
-import { socialIcons } from '../../../helpers';
+import { socialIcons } from '../../../../lib/nav-helpers';
 
 const MOCK_EXTERNAL_URL = 'https://www.google.com';
 

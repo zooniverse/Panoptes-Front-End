@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { socialIcons } from '../../../helpers';
+import { socialIcons } from '../../../../lib/nav-helpers';
 
 export default function ExternalLink({ className, isExternalLink, isSocialLink, label, path, site, url }) {
   let iconClasses;
