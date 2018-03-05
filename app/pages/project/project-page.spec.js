@@ -64,7 +64,7 @@ describe('ProjectPage', function () {
           <ProjectHomeContainer />
         </ProjectPage>
       );
-      expect(wrapper.find('PotentialFieldGuide')).to.have.lengthOf(0);
+      expect(wrapper.find('FieldGuideContainer')).to.have.lengthOf(0);
     });
 
     it('should display on other project pages', function() {
@@ -75,7 +75,7 @@ describe('ProjectPage', function () {
           <Page />
         </ProjectPage>
       );
-      expect(wrapper.find('PotentialFieldGuide')).to.have.lengthOf(1);
+      expect(wrapper.find('FieldGuideContainer')).to.have.lengthOf(1);
     });
   });
 
