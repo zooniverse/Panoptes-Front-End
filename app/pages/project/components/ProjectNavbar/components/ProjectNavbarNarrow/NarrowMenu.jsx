@@ -18,7 +18,7 @@ export const MenuWrapper = styled.div`
 
   &.open {
     max-height: ${props => props.height}px;
-    z-index: 1
+    z-index: 2
   }
 `;
 
