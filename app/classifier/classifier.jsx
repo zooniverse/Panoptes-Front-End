@@ -152,6 +152,9 @@ class Classifier extends React.Component {
   }
 
   updateFeedback() {
+    if (!this.props.feedback.active) {
+      return false;
+    }
     // Check to see if we're still drawing, and update feedback if not. We need
     // to check the entire annotation array, as the user may be editing an
     // existing annotation.
@@ -172,7 +175,7 @@ class Classifier extends React.Component {
       }, false);
     }
 
-    if (this.props.feedback.active && !isInProgress) {
+    if (!isInProgress) {
       this.props.actions.feedback.update(currentAnnotation);
     }
   }
