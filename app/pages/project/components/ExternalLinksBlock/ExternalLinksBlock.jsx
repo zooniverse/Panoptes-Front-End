@@ -13,6 +13,7 @@ export const StyledExternalLinksBlock = styled.div`
     light: zooTheme.colors.navy.default
   })};
   flex: ${props => `1 0 ${props.basis}%`};
+  min-width: 400px;
   padding: 3em 4vw;
 
   ul {

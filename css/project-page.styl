@@ -266,28 +266,32 @@
     display: flex
     flex: 1 0 33.333%
     flex-direction: column
-    width: 250px
+    min-width: 400px
     padding: 3em 4vw
     position: relative
-
-    div
-      display: flex
 
     h4
       margin: 0 0 1em 6em
 
-    img
-      border-radius: 50%
-      float: left
-      height: 5em
-      margin-right: 1em
-      min-width: 5em
+    .researcher-words__wrapper
+      display: flex
+      flex-wrap: wrap
+      justify-content: center
+      margin-top: 1em
 
-    span
-      font-size: 1.75em
-      font-style: italic
-      overflow: auto
-      word-wrap: break-word
+      .researcher-words__avatar
+        border-radius: 50%
+        height: 75px
+        flex: 0 0 75px
+        margin-right: 1em
+        width: 75px
+
+      .researcher-words__quote
+        flex: 1 0 75%
+        font-size: 1.75em
+        font-style: italic
+        margin: 0
+        word-wrap: break-word
 
   @media (min-width: 1000px)
     &__researcher-words:before
@@ -303,6 +307,7 @@
     background-color: #0f7481
     box-sizing: border-box
     flex: 1 0 33.333%
+    min-width: 400px
     padding: 3em 4vw
     text-align: center
 
@@ -398,7 +403,7 @@
   text-shadow: 1px 1px #333
   justify-content: center
   margin: 0
-  padding: 2em 0em
+  padding: 2em 3vw
   text-align: center
 
 .collection-page-with-project-context,

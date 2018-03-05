@@ -130,23 +130,23 @@ const ProjectHomePage = (props) => {
       <div className="project-home-page__container">
         {props.project.researcher_quote && (
           <div className="project-home-page__researcher-words">
-            <h4 className="project-home-page__small-header"><Translate content="project.home.researcher" /></h4>
+            <Translate className="project-home-page__small-header" content="project.home.researcher" tag="h4" />
 
-            <div>
-              <img role="presentation" src={avatarSrc} />
-              <span>&quot;{props.translation.researcher_quote}&quot;</span>
+            <div className="researcher-words__wrapper">
+              <img className="researcher-words__avatar" role="presentation" src={avatarSrc} alt="The researcher" />
+              <p className="researcher-words__quote">&quot;{props.translation.researcher_quote}&quot;</p>
             </div>
           </div>)}
 
         <div className="project-home-page__about-text" style={(props.project.researcher_quote && props.project.urls && props.project.urls.length > 0) ? { flexBasis: '33.333%' } : { flexBasis: '66.666%' }}>
-          <h4 className="project-home-page__small-header">
-            <Translate
-              content="project.home.about"
-              with={{
-                title: props.translation.display_name
-              }}
-            />
-          </h4>
+          <Translate
+            className="project-home-page__small-header"
+            content="project.home.about"
+            tag="h4"
+            with={{
+              title: props.translation.display_name
+            }}
+          />
           {props.project.introduction &&
             <Markdown project={props.project}>
               {props.translation.introduction}
