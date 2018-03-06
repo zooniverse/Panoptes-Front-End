@@ -71,7 +71,7 @@ export default class MediaAreaView extends React.Component {
             <div className="media-icon">
               <FileButton
                 className="media-area-add-button"
-                accept="image/*"
+                accept="image/*,audio/*,video/*"
                 multiple={true}
                 style={addButtonStyle}
                 onSelect={this.props.onSelect}
