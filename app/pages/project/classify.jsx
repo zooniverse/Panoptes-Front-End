@@ -384,7 +384,7 @@ const ProjectClassifyPage = createReactClass({
       WorkflowAssignmentDialog.start({ splits: props.splits, project: props.project }).then(() =>
         this.setState({ promptWorkflowAssignmentDialog: false })
       ).then(() => {
-        if (props.preferences.selected_workflow !== props.preferences.settings.workflow_id) {
+        if (props.preferences.preferences.selected_workflow !== props.preferences.settings.workflow_id) {
           props.preferences.update({ 'preferences.selected_workflow': props.preferences.settings.workflow_id });
           props.preferences.save();
         }
