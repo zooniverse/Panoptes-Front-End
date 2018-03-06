@@ -129,7 +129,7 @@ module.exports =
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
-      <Route path="classify" component={require './pages/project/classify'} />
+      <Route path="classify" component={require('./pages/project/classify').default} />
       <Redirect from="research" to="about/research"/>
       <Redirect from="results" to="about/results"/>
       <Redirect from="faq" to="about/faq"/>
