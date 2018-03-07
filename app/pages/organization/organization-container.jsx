@@ -171,11 +171,11 @@ class OrganizationContainer extends React.Component {
       .get({ organization_id: organization.id, page: _page })
       .then((orgRoles) => {
         const meta = orgRoles[0].getMeta();
-        if (meta.page !== meta.page_count) {
-          const newOrgRoles = organizationRoles.concat(orgRoles);
-          this.fetchAllOrganizationRoles(organization, newOrgRoles, (meta.page + 1));
+        const newOrgRoles = organizationRoles.concat(orgRoles);
+        if (meta.next_page) {
+          this.fetchAllOrganizationRoles(organization, newOrgRoles, meta.next_page);
         }
-        return organizationRoles.concat(orgRoles);
+        return newOrgRoles;
       })
       .catch(error => console.error('error loading roles', error)); // eslint-disable-line no-console
   }
