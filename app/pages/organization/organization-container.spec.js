@@ -144,7 +144,9 @@ describe('OrganizationContainer', function () {
       });
 
       it('should call fetchAllOrganizationRoles until no next_page in API response meta', function () {
+        const secondCallArgs = fetchAllOrganizationRolesSpy.getCall(1).args;
         sinon.assert.calledTwice(fetchAllOrganizationRolesSpy);
+        assert.equal(secondCallArgs[2], 2);
       });
     });
 
