@@ -60,9 +60,10 @@ const mediaActions = {
 
   createLinkedResource(file, location = this.props.resource._getURL(this.props.link)) {
     console.log(`Creating resource for ${file.name}, ${(file.type)}`);
+    const content_type = file.type === 'audio/mp3' ? 'audio/mpeg' : file.type
     const payload = {
       media: {
-        content_type: file.type,
+        content_type,
         metadata: Object.assign({ filename: file.name, size: file.size }, this.props.metadata),
       },
     };
@@ -81,7 +82,8 @@ const mediaActions = {
 
   uploadMedia(file, medium) {
     console.log(`Uploading ${file.name} => ${medium.src}`);
-    return putFile(medium.src, file, { 'Content-Type': file.type })
+    const content_type = file.type === 'audio/mp3' ? 'audio/mpeg' : file.type
+    return putFile(medium.src, file, { 'Content-Type': content_type })
       .then(() => {
         return medium.refresh().then((media) => {
           // Another weird array.
