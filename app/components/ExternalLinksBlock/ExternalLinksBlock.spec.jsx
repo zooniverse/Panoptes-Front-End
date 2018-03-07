@@ -10,10 +10,9 @@ describe('ExternalLinksBlock', function() {
   before(function() {
     wrapper = shallow(
       <ExternalLinksBlock
+        header={<Translate content="project.home.links" />}
         links={externalLinks}
-      >
-        <Translate content="project.home.links" />
-      </ExternalLinksBlock>
+      />
     );
   });
 
