@@ -19,14 +19,24 @@ export const StyledExternalLinksBlock = styled.div`
     padding-left: 0;
   }
 
-  > ul li {
-    display: block;
-    margin-top: 1.5em;
-  }
+    li {
+      display: block;
+      margin-top: 1.5em;
+    }
 
-  > ul li a i {
-    margin: 0 1ch
-  }
+      a i {
+        margin: 0 1ch;
+        text-decoration: none;
+      }
+
+        &:hover, &:focus {
+          text-decoration: none;
+        }
+
+      .link-title:hover, .link-title:focus {
+          text-decoration: underline;
+        }
+
 `;
 
 export const StyledExternalLink = styled(ExternalLink)`
@@ -36,17 +46,13 @@ export const StyledExternalLink = styled(ExternalLink)`
   font-size: 1.2em;
   justify-content: flex-start;
   text-decoration: none;
-
-  &:focus, &:hover {
-    text-decoration: underline;
-  }
 `;
 
-export default function ExternalLinksBlock({ basis, children, links }) {
+export default function ExternalLinksBlock({ basis, header, links }) {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <StyledExternalLinksBlock basis={basis}>
-        {children}
+        {header}
         <ul>
           {links.map((link) => {
             const { isExternalLink, isSocialLink, label, path, site, url } = link;
@@ -71,11 +77,13 @@ export default function ExternalLinksBlock({ basis, children, links }) {
 
 ExternalLinksBlock.defaultProps = {
   basis: '33.333',
+  header: null,
   links: []
 };
 
 ExternalLinksBlock.propTypes = {
   basis: PropTypes.string,
+  header: PropTypes.node,
   links: PropTypes.arrayOf(PropTypes.object)
 };
 

@@ -194,9 +194,10 @@ class OrganizationPage extends React.Component {
                   </button>
                 </div>}
             </div>
-            <ExternalLinksBlockContainer resource={this.props.organization}>
-              <Translate className="organization-details__heading" content="organization.home.links" tag="h4" />
-            </ExternalLinksBlockContainer>
+            <ExternalLinksBlockContainer
+              header={<Translate className="organization-details__heading" content="organization.home.links" component="h4" />}
+              resource={this.props.organization}
+            />
           </div>
         </section>
       </div>

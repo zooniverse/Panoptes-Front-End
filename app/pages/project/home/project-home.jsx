@@ -152,9 +152,10 @@ const ProjectHomePage = (props) => {
               {props.translation.introduction}
             </Markdown>}
         </div>
-        <ExternalLinksBlock resource={props.project}>
-          <Translate className="project-home-page__small-header" component="h4" content="project.home.links" />
-        </ExternalLinksBlock>
+        <ExternalLinksBlock
+          header={<Translate className="project-home-page__small-header" component="h4" content="project.home.links" />}
+          resource={props.project}
+        />
       </div>
     </div>
   );
