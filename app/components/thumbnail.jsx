@@ -58,6 +58,16 @@ export default class Thumbnail extends React.Component {
       );
     }
 
+    if (this.props.format === 'audio') {
+      return (
+        <div>
+          <audio style={style} controls={this.props.controls} onClick={this.playVideo}>
+            <source src={this.props.src} />
+          </audio>
+        </div>
+      );
+    }
+
     return (
       <img alt="" {...this.props} src={src} {...dimensions} style={style} onError={this.handleError} />
     );
