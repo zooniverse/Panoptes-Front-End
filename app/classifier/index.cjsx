@@ -200,7 +200,5 @@ mapDispatchToProps = (dispatch) -> ({
   }
 });
 
-module.exports = {
-    default: connect(mapStateToProps, mapDispatchToProps)(ClassifierWrapper)
-    ClassifierWrapper
-  }
+module.exports = connect(mapStateToProps, mapDispatchToProps)(ClassifierWrapper)
+module.exports.ClassifierWrapper = ClassifierWrapper
