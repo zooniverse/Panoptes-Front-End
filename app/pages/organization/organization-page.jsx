@@ -90,6 +90,7 @@ class OrganizationPage extends React.Component {
           {this.props.collaborator &&
             <label className="organization-page__toggle" htmlFor="collaborator view">
               <input
+                id="collaborator view"
                 onChange={() => this.props.toggleCollaboratorView()}
                 type="checkbox"
                 value={!this.props.collaboratorView}

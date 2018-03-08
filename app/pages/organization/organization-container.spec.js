@@ -3,8 +3,9 @@
 
 import React from 'react';
 import assert from 'assert';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
+import apiClient from 'panoptes-client/lib/api-client';
 import Translate from 'react-translate-component';
 import OrganizationContainer from './organization-container';
 
@@ -13,12 +14,26 @@ const params = {
   owner: 'org-owner'
 };
 
-export const organization = {
+function mockPanoptesResource(type, options) {
+  const resource = apiClient.type(type).create(options);
+  apiClient._typesCache = {};
+  sinon.stub(resource, 'get');
+  return resource;
+}
+
+export const organization = mockPanoptesResource('organizations', {
   categories: ['Plants', 'Bugs', 'Butterflies'],
   display_name: 'Test Org',
   description: 'A brief test description',
   id: '9876',
   introduction: 'A brief test introduction',
+  links: {
+    avatar: { id: '1', type: 'avatars' },
+    background: { id: '1', type: 'backgrounds' },
+    organization_roles: ['1', '2', '3'],
+    pages: ['1'],
+    projects: []
+  },
   urls: [
     {
       key: 0.123,
@@ -43,7 +58,7 @@ export const organization = {
       label: ''
     }
   ]
-};
+});
 
 describe('OrganizationContainer', function () {
   let wrapper;
@@ -93,6 +108,46 @@ describe('OrganizationContainer', function () {
       const orgPage = wrapper.find('OrganizationPage');
 
       assert.equal(orgPage.length, 1);
+    });
+
+    describe('and request for organization roles', function () {
+      wrapper = mount(<OrganizationContainer params={params} location={{}} />, { context: { router: {}}});
+      const container = wrapper.instance();
+      const fetchAllOrganizationRolesSpy = sinon.spy(container, 'fetchAllOrganizationRoles');
+
+      before(function () {
+        sinon.stub(apiClient, 'request').callsFake((method, url, payload) => {
+          let response = [];
+          if (url === '/organization_roles') {
+            const role = {
+              getMeta: () => ({ page: payload.page, next_page: null }),
+              roles: ['collaborator'],
+              links: {
+                owner: {
+                  id: payload.page
+                }
+              }
+            };
+            if (payload.page === 1) {
+              role.getMeta = () => ({ page: 1, next_page: 2 });
+            }
+            response = [role];
+          }
+          return Promise.resolve(response);
+        });
+
+        container.fetchAllOrganizationRoles(organization);
+      });
+
+      after(function () {
+        apiClient.request.restore();
+      });
+
+      it('should call fetchAllOrganizationRoles until no next_page in API response meta', function () {
+        const secondCallArgs = fetchAllOrganizationRolesSpy.getCall(1).args;
+        sinon.assert.calledTwice(fetchAllOrganizationRolesSpy);
+        assert.equal(secondCallArgs[2], 2);
+      });
     });
 
     it('should render OrganizationPage if organization not listed and user is collaborator', function () {
