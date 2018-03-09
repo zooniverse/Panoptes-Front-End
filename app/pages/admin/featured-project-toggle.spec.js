@@ -33,7 +33,7 @@ describe('Featured Project Toggle', function () {
         project={mockPanoptesResource('projects', project)}
       />
     );
-  })
+  });
 
   it('should call handleChange on featuredCheckbox change', function () {
     const featuredCheckbox = wrapper.find('input[name="featured"]');

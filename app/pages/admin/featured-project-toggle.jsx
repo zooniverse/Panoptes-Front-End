@@ -3,18 +3,21 @@ import React, { Component } from 'react';
 import AutoSave from '../../components/auto-save';
 
 class FeaturedProjectToggle extends Component {
-  constructor() {
-    super();
-    this.handleChange = this.handleChange.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      project: props.project
+    };
   }
 
   handleChange(e) {
-    const { project } = this.props;
-    return project.update({ featured: e.target.checked });
+    const { project } = this.state;
+    project.update({ featured: e.target.checked });
+    this.setState(project);
   }
 
   render() {
-    const { project } = this.props;
+    const { project } = this.state;
     return (
       <div>
         <AutoSave resource={project}>
