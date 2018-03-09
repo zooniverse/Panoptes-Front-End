@@ -1,27 +1,38 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 import AutoSave from '../../components/auto-save';
-import handleInputChange from '../../lib/handle-input-change';
 
-const FeaturedProjectToggle = ({ project }) => {
-  const handleChange = handleInputChange.bind(project);
-  return (
-    <div>
-      <AutoSave resource={project}>
-        <h4>Featured project</h4>
-        <label>
-          <input
-            type="checkbox"
-            name="featured"
-            checked={project.featured}
-            onChange={handleChange}
-          />
-          {'Is the project featured?'}
-        </label>
-      </AutoSave>
-    </div>
-  );
-};
+class FeaturedProjectToggle extends Component {
+  constructor() {
+    super();
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    const { project } = this.props;
+    return project.update({ featured: e.target.checked });
+  }
+
+  render() {
+    const { project } = this.props;
+    return (
+      <div>
+        <AutoSave resource={project}>
+          <h4>Featured project</h4>
+          <label className="">
+            <input
+              type="checkbox"
+              name="featured"
+              checked={project.featured}
+              onChange={this.handleChange.bind(this)}
+            />
+            {'Is the project featured?'}
+          </label>
+        </AutoSave>
+      </div>
+    );
+  }
+}
 
 FeaturedProjectToggle.propTypes = {
   project: PropTypes.shape({
