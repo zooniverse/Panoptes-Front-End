@@ -10,6 +10,7 @@ import LoadingIndicator from '../../components/loading-indicator';
 import VersionList from './project-status/version-list';
 import ExperimentalFeatures from './project-status/experimental-features';
 import Toggle from './project-status/toggle';
+import FeaturedProjectToggle from './featured-project-toggle';
 import RedirectToggle from './project-status/redirect-toggle';
 import WorkflowDefaultDialog from './workflow-default-dialog';
 
@@ -253,6 +254,7 @@ class ProjectStatus extends Component {
           </ul>
         </div>
         <RedirectToggle project={this.state.project} />
+        <FeaturedProjectToggle project={this.state.project} />
         <ExperimentalFeatures project={this.state.project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>

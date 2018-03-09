@@ -90,6 +90,11 @@ describe('ProjectStatus', function () {
       assert.equal(experimentalFeaturesComponent.length, 1);
     });
 
+    it('render a FeaturedProjectToggle component', function () {
+      const featuredProjectToggle = wrapper.find('FeaturedProjectToggle');
+      assert.equal(featuredProjectToggle.length, 1);
+    });
+
     it('renders a VersionList component', function () {
       const versionListComponent = wrapper.find('VersionList');
       assert.equal(versionListComponent.length, 1);
