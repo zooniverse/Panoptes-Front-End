@@ -15,6 +15,7 @@ function setup() {
   featuredChangeSpy = sinon.spy();
   wrapper = shallow(
     <FeaturedProjectToggle
+      handleProjectChange={featuredChangeSpy}
       project={project}
     />
   );
