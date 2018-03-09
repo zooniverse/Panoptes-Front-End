@@ -57,7 +57,7 @@ class ProjectStatus extends Component {
 
   getFeaturedProject() {
     return apiClient.type('projects').get({ featured: true })
-      .then((featuredProject) => {
+      .then(([featuredProject]) => {
         this.setState({ featured: featuredProject });
       });
   }
@@ -125,11 +125,10 @@ class ProjectStatus extends Component {
 
   handleFeaturedProjectChange({ target }) {
     const { featured, project } = this.state;
-    const featuredProject = featured[0];
-    if (featuredProject) {
-      featuredProject.update({ featured: false });
-      featuredProject.save()
-        .then(() => this.setState({ featured: featuredProject }))
+    if (featured) {
+      featured.update({ featured: false });
+      featured.save()
+        .then(() => this.setState({ featured }))
         .catch(error => this.setState({ error }));
     }
     project.update({ featured: target.checked });
