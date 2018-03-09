@@ -33,11 +33,11 @@ const upcomingSubjects = { forWorkflow: {}};
 function emptySubjectQueue() {
   console.log('Emptying upcoming subjects queue');
 
-  for (const workflowID in upcomingSubjects.forWorkflow) {
+  Object.keys(upcomingSubjects.forWorkflow).forEach((workflowID) => {
     const queue = upcomingSubjects.forWorkflow[workflowID];
     queue.forEach(subject => subject.destroy());
     queue.splice(0);
-  }
+  });
 }
 
 function onClassificationSaved(actualClassification) {
