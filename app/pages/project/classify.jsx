@@ -2,7 +2,6 @@ import auth from 'panoptes-client/lib/auth';
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import ReactDOM from 'react-dom';
 import { Helmet } from 'react-helmet';
 import apiClient from 'panoptes-client/lib/api-client';
 import counterpart from 'counterpart';
