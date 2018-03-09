@@ -1,7 +1,7 @@
+import PropTypes from 'prop-types';
+
 const React = require('react');
 const DrawingToolRoot = require('./root');
-const deleteIfOutOfBounds = require('./delete-if-out-of-bounds');
-const isInBounds = require('../../lib/is-in-bounds');
 const DeleteButton = require('./delete-button');
 
 const DELETE_BUTTON_ANGLE = 45;
@@ -12,39 +12,29 @@ const SELECTED_RADIUS = {
 
 class PointGridTool extends React.Component {
 
-  static defaultValues({x, y}) {
-    return {x, y};
+  static defaultValues({ x, y }) {
+    return { x, y };
   }
 
-  static initStart({x, y}) {
-    return {x: x, y: y, _inProgress: true};
+  static initStart({ x, y }) {
+    return { x, y, _inProgress: true };
   }
 
   static initRelease() {
-    return {_inProgress: false}
+    return { _inProgress: false };
   }
 
   static initValid(mark, props) {
-    const naturalWidth = props.naturalWidth
-    const naturalHeight = props.naturalHeight
-    const offset_x = Number.parseInt(props.task.tools[mark.tool].x_offset)
-    const offset_y = Number.parseInt(props.task.tools[mark.tool].y_offset)
+    const naturalWidth = props.naturalWidth;
+    const naturalHeight = props.naturalHeight;
+    const offsetX = Number.parseInt(props.task.tools[mark.tool].offsetX, 10);
+    const offsetY = Number.parseInt(props.task.tools[mark.tool].offsetX, 10);
 
     const notBeyondWidth = mark.x < naturalWidth;
     const notBeyondHeight = mark.y < naturalHeight;
-    const beyondOffset = mark.x > offset_x && mark.y > offset_y
+    const beyondOffset = mark.x > offsetX && mark.y > offsetY;
 
     return notBeyondWidth && notBeyondHeight && beyondOffset;
-  }
-
-  static options = ['grid']
-
-  static defaultProps = {
-    rows: 10,
-    cols: 10,
-    offset_x: 50,
-    offset_y: 50,
-    opacity: 50,
   }
 
   getDeleteButtonPosition() {
@@ -56,46 +46,73 @@ class PointGridTool extends React.Component {
   }
 
   render() {
-    const { offset_x } = this.props;
-    const { offset_y } = this.props;
+    const { offsetX } = this.props;
+    const { offsetY } = this.props;
 
-    const width = ((this.props.containerRect.width / this.props.scale.horizontal)-offset_x) / this.props.rows; 
-    const height = ((this.props.containerRect.height / this.props.scale.vertical) - offset_y) / this.props.cols;
+    const width = ((this.props.containerRect.width / this.props.scale.horizontal) - offsetX) / this.props.rows;
+    const height = ((this.props.containerRect.height / this.props.scale.vertical) - offsetY) / this.props.cols;
 
-    let x = (this.props.mark.x-offset_x);
-    let y = (this.props.mark.y-offset_y);
+    let x = (this.props.mark.x - offsetX);
+    let y = (this.props.mark.y - offsetY);
 
-    x = (Math.floor(x/width));
-    y = Math.floor(y/height);
+    x = (Math.floor(x / width));
+    y = Math.floor(y / height);
 
-    x = (x*width)+offset_x;
-    y = (y*height)+offset_y;
-    
+    x = (x * width) + offsetX;
+    y = (y * height) + offsetY;
+
     return (
       <DrawingToolRoot tool={this} transform={`translate(${x}, ${y})`}>
-        <rect x="0" y="0" width={width}
+        <rect
+          x="0" y="0" width={width}
           height={height}
           fill={this.props.color}
           fillOpacity={this.props.opacity / 100}
-          strokeOpacity="0"/>
-    {/*return React.createElement(DrawingToolRoot, tool_args,
-      React.createElement("rect", {"x": "0", "y": "0", "width": `${width}`, "height": `${height}`,  
-        "fill": `${this.props.color}`, "fillOpacity": `${this.props.opacity / 100}`, "strokeOpacity": "0"}),*/}
+          strokeOpacity="0"
+        />
 
         {!!this.props.selected &&
-          <DeleteButton tool={this} {...this.getDeleteButtonPosition()}  getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix} />
+          <DeleteButton
+            tool={this} {...this.getDeleteButtonPosition()}
+            getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix}
+          />
         }
       </DrawingToolRoot>
     );
   }
+}
 
-  destroyTool = (e) => {
-    if (this.props.mark._inProgress == false && this.props.selected == true) {
-      return this.setState({destroying: true}, () => {
-        return setTimeout(this.props.onDestroy, 300);
-      });
-    }
-  }
+PointGridTool.options = ['grid'];
+
+PointGridTool.propTypes = {
+  scale: PropTypes.shape({
+    horizontal: PropTypes.number,
+    vertical: PropTypes.number
+  }),
+  rows: PropTypes.number,
+  cols: PropTypes.number,
+  offsetX: PropTypes.number,
+  offsetY: PropTypes.number,
+  opacity: PropTypes.number,
+  getScreenCurrentTransformationMatrix: PropTypes.func, // ????
+  mark: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number
+  }),
+  containerRect: PropTypes.shape({
+    width: PropTypes.number,
+    height: PropTypes.number
+  }),
+  color: PropTypes.string,
+  selected: PropTypes.bool
 };
 
-module.exports = PointGridTool
+PointGridTool.defaultProps = {
+  rows: 10,
+  cols: 10,
+  offsetX: 50,
+  offsetY: 50,
+  opacity: 50
+};
+
+module.exports = PointGridTool;

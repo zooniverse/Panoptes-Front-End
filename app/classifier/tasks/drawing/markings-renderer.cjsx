@@ -96,11 +96,11 @@ module.exports = createReactClass
                 size: toolDescription.size
 
               if toolDescription.type == 'pointGrid'
-                toolProps.rows = Number.parseInt(toolDescription.rows)
-                toolProps.cols = Number.parseInt(toolDescription.cols)
-                toolProps.offset_x = Number.parseInt(toolDescription.x_offset)
-                toolProps.offset_y = Number.parseInt(toolDescription.y_offset)
-                toolProps.opacity = Number.parseInt(toolDescription.opacity)
+                toolProps.rows = Number.parseInt(toolDescription.rows, 10)
+                toolProps.cols = Number.parseInt(toolDescription.cols, 10)
+                toolProps.offsetX = Number.parseInt(toolDescription.offsetX, 10)
+                toolProps.offsetY = Number.parseInt(toolDescription.offsetY, 10)
+                toolProps.opacity = Number.parseInt(toolDescription.opacity, 10)
 
 
               toolMethods =

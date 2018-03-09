@@ -3,29 +3,31 @@ import React from 'react';
 import AutoSave from '../../../components/auto-save';
 
 class GridEditor extends React.Component {
-  static propTypes = {
-    name: PropTypes.string,
-    choice: PropTypes.object,
-    workflow: PropTypes.object,
-  };
-
-  state = {
-    tool: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      tool: null
+    };
+    this.onChangeXOffset = this.onChangeXOffset.bind(this);
+    this.onChangeYOffset = this.onChangeYOffset.bind(this);
+    this.onChangeRows = this.onChangeRows.bind(this);
+    this.onChangeCols = this.onChangeCols.bind(this);
+    this.onChangeOpacity = this.onChangeOpacity.bind(this);
+  }
 
   componentWillMount() {
     this.setState({
-      tool: this.props.choice,
+      tool: this.props.choice
     });
   }
 
   componentWillReceiveProps(newProps) {
     this.setState({
-      tool: newProps.choice,
+      tool: newProps.choice
     });
   }
 
-  onChangeRows = (e) => {
+  onChangeRows(e) {
     const tool = this.state.tool;
     if (e.target.value) {
       tool.rows = e.target.value;
@@ -33,9 +35,9 @@ class GridEditor extends React.Component {
       delete tool.rows;
     }
     this.updateWorkflow(tool);
-  };
+  }
 
-  onChangeCols = (e) => {
+  onChangeCols(e) {
     const tool = this.state.tool;
     if (e.target.value) {
       tool.cols = e.target.value;
@@ -43,29 +45,29 @@ class GridEditor extends React.Component {
       delete tool.cols;
     }
     this.updateWorkflow(tool);
-  };
+  }
 
-  onChangeXOffset = (e) => {
+  onChangeXOffset(e) {
     const tool = this.state.tool;
     if (e.target.value) {
-      tool.x_offset = e.target.value;
+      tool.offsetX = e.target.value;
     } else {
-      delete tool.x_offset;
+      delete tool.offsetX;
     }
     this.updateWorkflow(tool);
-  };
+  }
 
-  onChangeYOffset = (e) => {
+  onChangeYOffset(e) {
     const tool = this.state.tool;
     if (e.target.value) {
-      tool.y_offset = e.target.value;
+      tool.offsetY = e.target.value;
     } else {
-      delete tool.y_offset;
+      delete tool.offsetY;
     }
     this.updateWorkflow(tool);
-  };
+  }
 
-  onChangeOpacity = (e) => {
+  onChangeOpacity(e) {
     const tool = this.state.tool;
     if (e.target.value) {
       tool.opacity = e.target.value;
@@ -73,14 +75,14 @@ class GridEditor extends React.Component {
       delete tool.opacity;
     }
     this.updateWorkflow(tool);
-  };
+  }
 
-  updateWorkflow = (tool) => {
+  updateWorkflow(tool) {
     const changes = {};
     changes[this.props.name] = tool;
     this.setState({ tool });
     this.props.workflow.update(changes);
-  };
+  }
 
   render() {
     return (
@@ -120,9 +122,9 @@ class GridEditor extends React.Component {
           <input
             type="number"
             inputMode="numeric"
-            name={`${this.props.name}.x-offset`}
+            name={`${this.props.name}.offsetX`}
             min="0"
-            value={this.state.tool.x_offset}
+            value={this.state.tool.offsetX}
             placeholder="0"
             size="5"
             style={{ width: '5ch' }}
@@ -135,9 +137,9 @@ class GridEditor extends React.Component {
           <input
             type="number"
             inputMode="numeric"
-            name={`${this.props.name}.y-offset`}
+            name={`${this.props.name}.offsetY`}
             min="0"
-            value={this.state.tool.y_offset}
+            value={this.state.tool.offsetY}
             placeholder="0"
             size="5"
             style={{ width: '5ch' }}
@@ -164,5 +166,11 @@ class GridEditor extends React.Component {
     );
   }
 }
+
+GridEditor.propTypes = {
+  name: PropTypes.string,
+  choice: PropTypes.object,
+  workflow: PropTypes.object
+};
 
 export default GridEditor;
