@@ -26,7 +26,7 @@ class ProjectStatus extends Component {
     this.handleDialogCancel = this.handleDialogCancel.bind(this);
     this.handleDialogSuccess = this.handleDialogSuccess.bind(this);
     this.handleProjectStateChange = this.handleProjectStateChange.bind(this);
-
+    this.handleFeaturedProjectChange = this.handleFeaturedProjectChange.bind(this);
     this.state = {
       dialogIsOpen: false,
       error: null,
@@ -110,6 +110,12 @@ class ProjectStatus extends Component {
 
   handleProjectStateChange({ target }) {
     this.state.project.update({ state: target.value });
+    this.state.project.save()
+      .catch(error => this.setState({ error }));
+  }
+
+  handleFeaturedProjectChange({ target }) {
+    this.state.project.update({ featured: target.checked });
     this.state.project.save()
       .catch(error => this.setState({ error }));
   }
@@ -254,7 +260,7 @@ class ProjectStatus extends Component {
           </ul>
         </div>
         <RedirectToggle project={this.state.project} />
-        <FeaturedProjectToggle project={this.state.project} />
+        <FeaturedProjectToggle project={this.state.project} handleProjectChange={this.handleFeaturedProjectChange} />
         <ExperimentalFeatures project={this.state.project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
