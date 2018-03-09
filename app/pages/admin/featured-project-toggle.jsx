@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const FeaturedProjectToggle = ({ handleProjectChange, project }) => {
+function FeaturedProjectToggle({ handleProjectChange, project }) {
   return (
     <div>
       <h4>Featured project</h4>
