@@ -22,6 +22,7 @@ class FeaturedProjectToggle extends Component {
 }
 
 FeaturedProjectToggle.propTypes = {
+  handleProjectChange: PropTypes.func,
   project: PropTypes.shape({
     featured: PropTypes.bool
   })
