@@ -10,10 +10,21 @@ class CanvasViewer extends React.Component {
   constructor(props) {
     super(props);
     this.onLoad = this.onLoad.bind(this);
+    this.setScore = this.setScore.bind(this);
+    this.resizeCanvas = this.resizeCanvas.bind(this);
+    this.changeCanvasStyleSize = this.changeCanvasStyleSize.bind(this);
     this.state = {
       loading: true,
-      hasImage: false,
-      hasScore: false
+      hasScore: false,
+      score: null,
+      canvasSize: {
+        width: 512,
+        height: 512
+      },
+      canvasStyle: {
+        width: 'auto',
+        height: 'auto'
+      }
     };
     this.model = {};
   }
@@ -51,29 +62,59 @@ class CanvasViewer extends React.Component {
       this.model.update(this.props.annotations, this.props.viewBoxDimensions);
     }
   }
-  componentWillUnmount() {
-    this.canvas.removeEventListener('load', this.onLoad);
-  }
   onLoad() {
     this.setState({
       loading: false,
       hasScore: this.model.hasScore || false
     });
   }
+  setScore(s) {
+    this.setState({
+      hasScore: true,
+      score: s
+    });
+  }
+  resizeCanvas({ width, height }) {
+    this.setState({
+      canvasSize: Object.assign(
+        this.state.canvasStyle,
+        {
+          width,
+          height
+        }
+      )
+    });
+  }
+  changeCanvasStyleSize({ width, height }) {
+    this.setState({
+      canvasStyle: {
+        width,
+        height
+      }
+    });
+  }
   createNewModel(props) {
     if (!this.state.loading) this.setState({ loading: true });
     return new Promise((resolve, reject) => {
-      if (props.subject.metadata && props.subject.metadata.models) {
-        const Model = modelSelector(props.subject.metadata.models.filter(
+      if (props.subject.metadata && props.subject.metadata['#models']) {
+        const Model = modelSelector(props.subject.metadata['#models'].filter(
           i => i.frame === props.frame
         )[0] || {});
         this.model = new Model(
           this.canvas,
+          // pass metadata for model
           {
             frame: props.frame,
             metadata: props.subject.metadata,
             src: props.src,
             sizing: props.viewBoxDimensions
+          },
+          // pass event handlers
+          {
+            onLoad: this.onLoad,
+            resizeCanvas: this.resizeCanvas,
+            changeCanvasStyleSize: this.changeCanvasStyleSize,
+            setScore: this.setScore
           }
         );
         if (this.model !== false) {
@@ -82,7 +123,7 @@ class CanvasViewer extends React.Component {
           reject();
         }
       }
-    }).then(this.onLoad)
+    })
       .catch((e) => {
         console.warn(e);
         return alert((resolve, reject) => (
@@ -103,18 +144,18 @@ class CanvasViewer extends React.Component {
       <div className="subject-canvas-frame" >
         <canvas
           className="subject pan-active"
-          width={512}
-          height={512}
+          width={this.state.canvasSize.width}
+          height={this.state.canvasSize.height}
           ref={(r) => { this.canvas = r; }}
-          style={this.props.style}
+          style={Object.assign({}, this.props.style, this.state.canvasStyle)}
         />
         {
-          this.state.hasScore &&
+          this.state.hasScore && this.state.score !== null &&
           <span
             ref={(r) => { this.scoreSpan = r; }}
-            style={{ position: 'relative', top: '-30px', paddingLeft: '10px' }}
+            className="canvas-renderer-score"
           >
-            SCORE HERE
+            Score: {this.state.score}
           </span>
         }
         {
@@ -132,9 +173,8 @@ CanvasViewer.propTypes = {
   annotation: PropTypes.object,
   annotations: PropTypes.array,
   frame: PropTypes.number,
-  onBlur: PropTypes.func,
-  onFocus: PropTypes.func,
-  // onLoad: PropTypes.func,
+  // onBlur: PropTypes.func,
+  // onFocus: PropTypes.func,
   overlayStyle: PropTypes.object,
   src: PropTypes.string,
   style: PropTypes.object,

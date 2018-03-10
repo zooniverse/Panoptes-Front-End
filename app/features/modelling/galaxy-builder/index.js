@@ -6,14 +6,13 @@ import { convolvePSF, calculateDifference, scaleModel, maskImage, panZoom } from
 import { parseDisk, parseBulge, parseBar, parseSpiral } from './parseFunctions';
 
 class GalaxyBuilderModel extends baseModel {
-  constructor(canvas, { frame, metadata, src, sizing }) {
+  constructor(canvas, { frame, metadata, src, sizing }, eventHandlers) {
     super(canvas, { frame, metadata, src, sizing });
     this.panZoom = panZoom(this.regl);
     this.scaleModel = scaleModel(this.regl);
+    this.eventHandlers = eventHandlers;
     this.state.shouldCompareToImage = false;
     this.state.annotations = [];
-    this.canvas.style.width = `${sizing.width}px`;
-    this.canvas.style.height = `${sizing.height}px`;
     // first, fire off the fetch event
     if (src) {
       fetch(`${src}?=`)
@@ -25,12 +24,10 @@ class GalaxyBuilderModel extends baseModel {
     }
   }
   handleDataLoad(data) {
-    this.canvas.height = data.height;
-    this.canvas.width = data.width;
+    this.eventHandlers.resizeCanvas({ width: data.width, height: data.height });
     if (data.psf && data.psfWidth && data.psfHeight) {
-      this.psf = [];
-      this.psfSize = [data.psfWidth, data.psfHeight];
       this.psf = data.psf;
+      this.psfSize = [data.psfWidth, data.psfHeight];
       this.convolvePSF = convolvePSF(this.regl, this.psf, this.psfSize);
     }
     if (data.imageData) {
@@ -41,19 +38,30 @@ class GalaxyBuilderModel extends baseModel {
       });
       this.state.shouldCompareToImage = true;
       this.calculateDifference = calculateDifference(this.regl);
-      if (data.imageHeight && data.imageWidth) {
-        this.canvas.style.height = `${data.imageHeight}px`;
-        this.canvas.style.width = `${data.imageWidth}px`;
-        this.state.sizing = {
-          sizing: Object.assign(
-            {},
-            this.state.sizing,
-            { height: data.imageHeight, width: data.imageWidth }
-          )
-        };
-      }
+      this.state.differenceData = new Uint8Array(data.height * data.height * 4);
+    }
+    if (data.imageHeight && data.imageWidth) {
+      this.eventHandlers.changeCanvasStyleSize(
+        { width: `${data.imageHeight}px`, height: `${data.imageWidth}px` }
+      );
+      // this.canvas.style.height = `${data.imageHeight}px`;
+      // this.canvas.style.width = `${data.imageWidth}px`;
+      this.state.sizing = Object.assign(
+        {},
+        this.state.sizing,
+        { height: data.imageHeight, width: data.imageWidth }
+      );
+    }
+    if (data.mask) {
+      this.mask = this.regl.texture({
+        type: 'float',
+        channels: 1,
+        data: data.mask
+      });
+      this.maskImage = maskImage(this.regl);
     }
     this.update(this.state.annotations, this.state.sizing);
+    this.eventHandlers.onLoad();
   }
   setModel() {
     // return taskName: render method object
@@ -92,6 +100,7 @@ class GalaxyBuilderModel extends baseModel {
     };
     const ret = [];
     for (let i = 0, comp = null; i < annotations.length; i++) {
+      comp = null;
       switch (annotations[i].task) {
         case 'disk':
           comp = parseDisk(annotations[i], s);
@@ -134,9 +143,17 @@ class GalaxyBuilderModel extends baseModel {
         imageTexture: this.imageData
       });
       this.state.pixels({ copy: true });
+      this.eventHandlers.setScore(this.getScore());
     } else if (this.scaleModel) {
       this.scaleModel({
         texture: this.state.pixels
+      });
+      this.state.pixels({ copy: true });
+    }
+    if (this.maskImage && this.mask) {
+      this.maskImage({
+        texture: this.state.pixels,
+        mask: this.mask
       });
       this.state.pixels({ copy: true });
     }
@@ -146,29 +163,33 @@ class GalaxyBuilderModel extends baseModel {
         (viewBox.x / this.state.sizing.width),
         1 - scale - (viewBox.y / this.state.sizing.height)
       ];
-      const zoomObj = {
+      this.panZoom({
         texture: this.state.pixels,
         scale,
         offset
-      };
-      this.panZoom(zoomObj);
+      });
     }
   }
   getScore() {
     // images have been treated by normalisation to [0, 1] then arcsinh stretch
     // with a = 0.1. Need to calc difference in normal space
     // TODO: more model-independent
-    this.regl.read(this.differenceData); // get the difference array
-    const l = this.size[0] * this.size[1] * 4;
+    try {
+      this.regl.read(this.state.differenceData); // get the difference array
+    } catch (e) {
+      console.warn(e, this.state.differenceData.length, this.canvas.width);
+      this.state.differenceData = this.regl.read();
+    }
+    const l = this.canvas.width * this.canvas.height * 4;
     let v = 0;
     for (let i = 0; i < l; i += 4) {
       // normalise to [0, 1]
-      const r = this.differenceData[i] / 255;
-      const b = this.differenceData[i + 2] / 255;
-      v += ((r - b) * (r - b)) / this.size[0] / this.size[1];
+      const r = this.state.differenceData[i] / 255;
+      const b = this.state.differenceData[i + 2] / 255;
+      v += ((r - b) * (r - b)) / this.canvas.width / this.canvas.height;
     }
     // arbitrary 0 -> 100% scaling
-    return 100 * Math.exp(-v * 500);
+    return (100 * Math.exp(-v * 500)).toFixed(2);
   }
 }
 

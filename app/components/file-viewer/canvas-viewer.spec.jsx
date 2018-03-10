@@ -3,7 +3,6 @@
 /* global describe, it, beforeEach */
 import React from 'react';
 import assert from 'assert';
-import sinon from 'sinon';
 import { mount } from 'enzyme';
 import CanvasViewer from './canvas-viewer';
 
@@ -14,8 +13,8 @@ const subject = {
     { 'application/json': '' }
   ],
   metadata: {
-    isModelling: true,
-    models: [{ frame: 0, model: 'TEST_MODEL' }]
+    '#isModelling': true,
+    '#models': [{ frame: 0, model: 'TEST_MODEL' }]
   }
 };
 
@@ -46,8 +45,23 @@ describe('CanvasViewer', function () {
   it('should start off loading', function () {
     assert.equal(wrapper.find('.loading-cover').length, 1);
   });
-  it('should finish loading', function () {
-    wrapper.update();
+});
+describe('CanvasViewer with TestModel', function () {
+  let wrapper;
+  before(function (done) {
+    wrapper = mount(<CanvasViewer {...canvasViewerProps} />);
+    // slight delay before running the tests
+    setTimeout(
+      () => { wrapper.update(); done(); },
+      100
+    );
+  });
+  it('should correctly size the canvas', function () {
+    const canvas = wrapper.find('canvas').instance();
+    assert.equal(canvas.width, 100);
+    assert.equal(canvas.height, 100);
+  });
+  it('should tell the canvas when done loading', function () {
     assert.equal(wrapper.find('.loading-cover').length, 0);
   });
 });

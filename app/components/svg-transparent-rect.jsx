@@ -30,6 +30,7 @@ class SVGTransparentRect extends React.Component {
 
   render() {
     const imageProps = Object.assign({}, this.props);
+    delete imageProps.modification;
     return <rect ref={(r) => { this.rect = r; }} fill="#000000" fillOpacity="0.0" {...imageProps} />;
   }
 }

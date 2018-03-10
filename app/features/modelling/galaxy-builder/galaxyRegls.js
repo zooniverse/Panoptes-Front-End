@@ -26,23 +26,31 @@ const baseObj = {
 
 // Templates for webgl functions used in drawSersic and drawSpiral
 const sersic2dFunc = `
-float sersic2d(float x, float y, vec2 mu, float roll, float rEff, float axRatio, float c, float i0, float n) {
-  return i0 * exp(-pow(calcBoxyEllipseDist(x, y, mu, roll, rEff, axRatio, c), 1.0 / n));
-}`;
-const calcBoxyEllipseDistFunc = `
 float calcBoxyEllipseDist(float x, float y, vec2 mu, float roll, float rEff, float axRatio, float c) {
   float xPrime = x * cos(roll) - y * sin(roll)
     + mu[0] - mu[0] * cos(roll) + mu[1] * sin(roll);
   float yPrime = x * sin(roll) + y * cos(roll)
     + mu[1] - mu[1] * cos(roll) - mu[0] * sin(roll);
-  // return a scaled version of the radius (4.0 is arbitrary - chosen so svg tool doesn't
+  // return a scaled version of the radius (multiplier is chosen so svg tool doesn't
   // impact badly on shown model component)
-  return 4.0 * sqrt(
+  float multiplier = 3.0;
+  return multiplier * sqrt(
     pow(axRatio / rEff, c) * pow(abs(xPrime - mu[0]), c) +
     pow(abs(yPrime - mu[1]), c) / pow(rEff, c)
   );
 }
-`;
+
+float b(float n) {
+  // from https://arxiv.org/abs/astro-ph/9911078
+  return 2.0 * n - 1.0/3.0 + 4.0/405.0/n +
+    46.0/25515.0/n/n + 131.0/1148175.0/pow(n, 3.0) -
+    2194697.0/30690717750.0/pow(n, 4.0);
+}
+
+float sersic2d(float x, float y, vec2 mu, float roll, float rEff, float axRatio, float c, float i0, float n) {
+  // from https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S132335800000388X
+  return 0.1 * i0 * exp(b(n) - b(n) * pow(calcBoxyEllipseDist(x, y, mu, roll, rEff, axRatio, c), 1.0 / n));
+}`;
 
 // function to generate oversampled sersic profile
 function oversampleGenerator(n, fname) {
@@ -65,12 +73,11 @@ float stepSize = 1.0 / resolution / 2.0;\nfloat pixel = 0.0;\n`;
 
 export const drawSersic = r => r(Object.assign({}, baseObj, {
   frag: `
-    precision mediump float;
+    precision highp float;
     uniform vec2 mu;
     varying vec2 uv;
     uniform sampler2D texture;
     uniform float roll, rEff, axRatio, i0, n, c;
-    ${calcBoxyEllipseDistFunc}
     ${sersic2dFunc}
     void main () {
       float x = gl_FragCoord.xy[0];
@@ -107,7 +114,7 @@ export const drawSpiral = (r) => {
   const maxPointCount = 200;
   const spiralArgs = {
     frag: `
-      precision mediump float;
+      precision highp float;
       uniform sampler2D texture;
       varying vec2 uv;
       struct parentDisk {
@@ -122,8 +129,6 @@ export const drawSpiral = (r) => {
       uniform parentDisk disk;
       uniform int pointCount;
       uniform float spread, axRatio, i0, falloff;
-
-      ${calcBoxyEllipseDistFunc}
       ${sersic2dFunc}
       float getDistance(vec2 y, vec2 p1, vec2 p2) {
         float r = dot(p2 - p1, y - p1) / length(p2 - p1) / length(p2 - p1);
