@@ -5,7 +5,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 Classifier = require('./classifier').default
 MiniCourse = require './mini-course'
 Tutorial = require './tutorial'
-`import CustomSignInPrompt from './custom-sign-in-prompt';`
+CustomSignInPrompt = require('./custom-sign-in-prompt').default;
 isAdmin = require '../lib/is-admin'
 { VisibilitySplit } = require 'seven-ten'
 { connect } = require 'react-redux';

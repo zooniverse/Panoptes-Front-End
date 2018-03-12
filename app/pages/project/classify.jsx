@@ -70,7 +70,7 @@ class ProjectClassifyPage extends React.Component {
     this.loadingSelectedWorkflow = false;
     this.project = null;
     this.workflow = null;
-    this.simulateSaveFailure = shouldSimulateSaveFailure(location);
+    this.simulateSaveFailure = shouldSimulateSaveFailure(window.location);
 
     this.state = {
       subject: null,
