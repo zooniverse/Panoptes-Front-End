@@ -1,15 +1,22 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import assert from 'assert';
+import { expect } from 'chai';
 import FeaturedProject from './featured-project';
 
 let wrapper;
 const featuredProject = {
-  display_name: 'Test Feature Project'
+  avatar_src: 'project/avatar/url',
+  display_name: 'Test Featured Project',
+  links: {
+    background: {
+      href: 'project/background/url'
+    }
+  }
 };
 
 function setup() {
-  wrapper = shallow(
+  wrapper = mount(
     <FeaturedProject
       project={featuredProject}
     />
@@ -25,26 +32,52 @@ describe('FeaturedProject', function () {
   afterEach(tearDown);
 
   it('should render without crashing', function () {
-    wrapper;
+    expect(wrapper).to.have.lengthOf(1);
   });
 
   it('should have a section as container', function () {
-    assert.strictEqual(wrapper.type(), 'section');
+    expect(wrapper.find('section')).to.have.lengthOf(1);
   });
 
   it('should have an h1 tag containing the text "Featured Project"', function () {
     const title = wrapper.find('h1');
-    assert.strictEqual(title.text(), 'Featured Project');
+    expect(title.text()).to.equal('Featured Project');
   });
 
-  it('should have an img tag with src and alt properties', function () {
-    const { alt, src } = wrapper.find('Thumbnail').props();
-    assert.equal(wrapper.find('Thumbnail').length, 1);
-    assert.ok(alt.length > 0, 'alt attribute is empty');
-    assert.ok(src.length > 0, 'src attribute is empty');
+  it('should render a Thumbnail component', function () {
+    const thumbnail = wrapper.find('Thumbnail');
+    expect(thumbnail).to.have.lengthOf(1);
+  });
+
+  it('should render an image with the project display name as alt message', function () {
+    const thumbnail = wrapper.find('Thumbnail');
+    const { alt } = thumbnail.props();
+    expect(alt).to.equal('Test Featured Project');
+  });
+
+  it('when project avatar is defined, should render an image with the project avatar as src', function () {
+    const thumbnail = wrapper.find('Thumbnail');
+    const { src } = thumbnail.props();
+    expect(src).to.equal('//project/avatar/url');
+  });
+
+  it('when project avatar is not defined, should render an image with the project background as src', function () {
+    wrapper.setProps({
+      project: {
+        display_name: 'Test Featured Project',
+        links: {
+          background: {
+            href: 'project/background/url'
+          }
+        }
+      }
+    });
+    const thumbnail = wrapper.find('Thumbnail');
+    const { src } = thumbnail.props();
+    expect(src).to.equal('project/background/url');
   });
 
   it('should have a link to the featured project', function () {
-    assert.strictEqual(wrapper.find('Link').length, 1);
+    expect(wrapper.find('Link')).to.have.lengthOf(1);
   });
 });

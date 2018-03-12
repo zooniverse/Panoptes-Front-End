@@ -5,7 +5,7 @@ import Thumbnail from '../../components/thumbnail';
 
 function FeaturedProject({ project }) {
   if (project) {
-    const featuredImage = (`//${project.avatar_src}` || (project.links.background && project.links.background.href));
+    const featuredImage = ((project.avatar_src && `//${project.avatar_src}`) || (project.links.background && project.links.background.href));
     return (
       <section className="home-featured">
         <h1 className="secondary-kicker">Featured Project</h1>
