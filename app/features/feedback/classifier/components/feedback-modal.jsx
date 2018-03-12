@@ -55,7 +55,10 @@ class FeedbackModal extends React.Component {
 
 FeedbackModal.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.string),
-  subjectViewerProps: PropTypes.object
+  subjectViewerProps: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool
+  ])
 };
 
 export default FeedbackModal;
