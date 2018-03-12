@@ -13,6 +13,7 @@ import strategies from '../../shared/strategies';
 counterpart.registerTranslations('en', {
   RuleEditorModal: {
     title: 'Edit Feedback',
+    strategy: 'Feedback strategy',
     fields: {
       id: {
         title: 'ID',
@@ -128,6 +129,8 @@ class RuleEditorModal extends Component {
             onChange={handleInputChange.bind(this)}
           />
         )}
+
+        <Translate className="form-label" content="RuleEditorModal.strategy" />
 
         <SelectInput
           name="strategy"
