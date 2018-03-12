@@ -24,9 +24,9 @@ const SECTIONS = {
 export default class HomePageForUser extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       backgroundSrc: '',
+      featuredProject: null,
       totalClassifications: 0,
       ribbonData: [],
       loading: false,
@@ -36,7 +36,6 @@ export default class HomePageForUser extends React.Component {
       openSection: null,
       OpenSectionComponent: null
     };
-
     this.getRibbonData = this.getRibbonData.bind(this);
     this.updateBackground = this.updateBackground.bind(this);
     this.createLinkedResource = this.props.actions.createLinkedResource.bind(this);
@@ -45,8 +44,9 @@ export default class HomePageForUser extends React.Component {
   }
 
   componentDidMount() {
-    this.handleHashChange();
     this.fetchRibbonData(this.props.user);
+    this.getFeaturedProject();
+    this.handleHashChange();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -67,6 +67,14 @@ export default class HomePageForUser extends React.Component {
   handleHashChange() {
     const OpenSectionComponent = SECTIONS[window.location.hash.slice(1)];
     this.setState({ OpenSectionComponent });
+  }
+
+  getFeaturedProject() {
+    const query = { featured: true, launch_approved: true };
+    return apiClient.type('projects').get(query)
+      .then(([featuredProject]) => {
+        this.setState({ featuredProject });
+      });
   }
 
   fetchRibbonData(user) {
@@ -241,9 +249,7 @@ export default class HomePageForUser extends React.Component {
 
   render() {
     if (!this.props.user) return null;
-
-    const {OpenSectionComponent} = this.state;
-
+    const { featuredProject, OpenSectionComponent } = this.state;
     return (
       <div className="on-home-page" ref={(node) => { this.node = node; }}>
         <div className="home-page-for-user">
@@ -288,7 +294,7 @@ export default class HomePageForUser extends React.Component {
           </div>
         </div>
 
-        <FeaturedProject />
+        <FeaturedProject project={featuredProject} />
 
         <HomePageSocial />
 
@@ -312,6 +318,7 @@ HomePageForUser.propTypes = {
 
 HomePageForUser.defaultProps = {
   actions: mediaActions,
+  project: {},
   metadata: {},
   user: {}
 };
