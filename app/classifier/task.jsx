@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import findIndex from 'lodash/findIndex';
 import tasks from './tasks';
 import Shortcut from './tasks/shortcut';
 import TaskTranslations from './tasks/translations';
@@ -13,7 +14,8 @@ class Task extends React.Component {
   handleAnnotationChange(newAnnotation) {
     const { classification } = this.props;
     const annotations = classification.annotations.slice();
-    annotations[annotations.length - 1] = newAnnotation;
+    const index = findIndex(annotations, annotation => annotation.task === newAnnotation.task);
+    annotations[index] = newAnnotation;
     this.props.updateAnnotations(annotations);
   }
 

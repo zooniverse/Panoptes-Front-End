@@ -5,6 +5,7 @@ import { VisibilitySplit } from 'seven-ten';
 import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import findIndex from 'lodash/findIndex';
 
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
@@ -221,7 +222,8 @@ class Classifier extends React.Component {
 
   handleAnnotationChange(classification, newAnnotation) {
     const annotations  = classification.annotations.slice();
-    annotations[annotations.length - 1] = newAnnotation;
+    const index = findIndex(annotations, annotation => annotation.task === newAnnotation.task);
+    annotations[index] = newAnnotation;
     this.updateAnnotations(annotations);
   }
 
