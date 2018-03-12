@@ -30,11 +30,11 @@ FeaturedProject.propTypes = {
     avatar_src: PropTypes.string,
     description: PropTypes.string,
     display_name: PropTypes.string,
-    links: {
-      background: {
+    links: PropTypes.shape({
+      background: PropTypes.shape({
         href: PropTypes.string
-      }
-    },
+      })
+    }),
     slug: PropTypes.string
   })
 };
