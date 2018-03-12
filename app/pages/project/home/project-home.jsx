@@ -22,9 +22,16 @@ const ProjectHomePage = (props) => {
 
   const renderTalkSubjectsPreview = props.talkSubjects.length > 2;
 
+  let backgroundStyle = {};
+  if (props.background) {
+    backgroundStyle = {
+      backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url('${props.background.src}')`
+    };
+  }
+
   return (
     <div className="project-home-page">
-      <div className="project-page project-background" style={{ backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(${props.background.src})` }}>
+      <div className="project-page project-background" style={backgroundStyle}>
 
         {props.projectIsComplete &&
           (<div className="project-home-page__finished-banner-container">

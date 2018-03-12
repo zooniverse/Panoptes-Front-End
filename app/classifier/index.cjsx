@@ -159,7 +159,7 @@ ClassifierWrapper = createReactClass
           })
 
   render: ->
-    <div>
+    <div className="content-container">
       {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and @props.project.id is '1104' and not @props.user # Gravity Spy
         <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>

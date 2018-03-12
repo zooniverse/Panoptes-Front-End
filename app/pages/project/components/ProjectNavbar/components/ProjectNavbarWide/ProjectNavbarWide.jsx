@@ -19,7 +19,9 @@ export const StyledAvatar = styled(Avatar)`
 
 export const StyledWrapper = styled(Wrapper)`
   box-sizing: border-box;
-  min-height: ${pxToRem(150)};
+  height: 20vh;
+  max-height: ${pxToRem(150)};
+  min-height: ${pxToRem(120)};
   padding: 0 ${pxToRem(10)};
 `;
 

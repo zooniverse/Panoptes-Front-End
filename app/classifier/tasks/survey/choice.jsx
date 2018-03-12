@@ -166,37 +166,39 @@ class Choice extends React.Component {
               return (
                 <div key={questionId} className="survey-task-choice-question" data-multiple={question.multiple || null}>
                 <div className="survey-task-choice-question-label">{translation.questions[questionId].label}</div>
-                  {question.answersOrder.map((answerId, i) => {
-                    const isChecked = question.multiple ?
-                      !!this.state.answers[questionId] && this.state.answers[questionId].indexOf(answerId) > -1 :
-                      this.state.answers[questionId] === answerId;
-                    const isFocused = this.state.focusedAnswer === `${questionId}/${answerId}`;
-                    return (
-                      <span key={answerId}>
-                        <label
-                          className="survey-task-choice-answer"
-                          data-checked={isChecked || null}
-                          data-focused={isFocused || null}
-                        >
-                          <input
-                            name={questionId}
-                            value={answerId}
-                            type={inputType}
-                            autoFocus={!hasFocus && i === 0}
-                            checked={isChecked}
-                            onChange={this.handleAnswer.bind(this)}
-                            onClick={this.resetSingleAnswerQuestion.bind(this)}
-                            onKeyDown={this.handleRadioKeyDown.bind(this)}
-                            onFocus={this.handleFocus.bind(this, questionId, answerId)}
-                            onBlur={this.handleFocus.bind(this, null, null)}
-                          />
-                          {translation.questions[questionId].answers[answerId].label}
-                        </label>
-                        {' '}
-                        {hasFocus = true}
-                      </span>
-                    );
-                  })}
+                  <div className="survey-task-choice-answers">
+                    {question.answersOrder.map((answerId, i) => {
+                      const isChecked = question.multiple ?
+                        !!this.state.answers[questionId] && this.state.answers[questionId].indexOf(answerId) > -1 :
+                        this.state.answers[questionId] === answerId;
+                      const isFocused = this.state.focusedAnswer === `${questionId}/${answerId}`;
+                      return (
+                        <span key={answerId}>
+                          <label
+                            className="survey-task-choice-answer"
+                            data-checked={isChecked || null}
+                            data-focused={isFocused || null}
+                          >
+                            <input
+                              name={questionId}
+                              value={answerId}
+                              type={inputType}
+                              autoFocus={!hasFocus && i === 0}
+                              checked={isChecked}
+                              onChange={this.handleAnswer.bind(this)}
+                              onClick={this.resetSingleAnswerQuestion.bind(this)}
+                              onKeyDown={this.handleRadioKeyDown.bind(this)}
+                              onFocus={this.handleFocus.bind(this, questionId, answerId)}
+                              onBlur={this.handleFocus.bind(this, null, null)}
+                            />
+                            {translation.questions[questionId].answers[answerId].label}
+                          </label>
+                          {' '}
+                          {hasFocus = true}
+                        </span>
+                      );
+                    })}
+                  </div>
                 </div>
               );
             })

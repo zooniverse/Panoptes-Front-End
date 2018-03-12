@@ -78,6 +78,7 @@ module.exports = createReactClass
     promptWorkflowAssignmentDialog: false
     rejected: null
     validUserGroup: false
+    darkTheme: false
 
   componentDidMount: () ->
     Split.classifierVisited();
@@ -223,8 +224,13 @@ module.exports = createReactClass
     # console.log 'Chose a subject'
     subject
 
+  toggleDarkTheme: ->
+    this.setState((prevState) => {
+      darkTheme: !prevState.darkTheme
+    })
+
   render: ->
-    <div className="classify-page content-container">
+    <div className="classify-page #{if this.state.darkTheme then 'classify-page--dark-theme' else ''}">
       <Helmet title="#{@props.project.display_name} » #{counterpart 'classifyPage.title'}" />
       {if @props.projectIsComplete
         <FinishedBanner project={@props.project} />}
@@ -246,6 +252,11 @@ module.exports = createReactClass
         <code>Please try again. Something went wrong: {@state.rejected.classification.toString()}</code>
       else
         <span>Loading classification</span>}
+      <p className="classify-page__theme-button-wrapper">
+        <button className="classify-page__theme-button" type="button" onClick={this.toggleDarkTheme}>
+          Switch to {if this.state.darkTheme then 'light' else 'dark'} theme
+        </button>
+      </p>
     </div>
 
   handleDemoModeChange: (newDemoMode) ->

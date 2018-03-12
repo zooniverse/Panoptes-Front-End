@@ -36,19 +36,20 @@ $survey-task-pill-button
 
   .modal-form-trigger
     @extends $reset-button
-    border-radius: 25px
+    background-color: #404040
     color: white
     cursor: pointer
     height: 25px
+    margin-right: 1px
     margin-bottom: 10px
     min-width: 60px
     text-transform: capitalize
 
-    &:hover
-      background-color: rgba(164, 164, 164, 0.5)
+    &:hover, &:focus
+      background-color: #666666
 
     &[aria-expanded="true"]
-      background-color: #a4a4a4
+      background-color:#666666
 
 .survey-task-chooser-characteristic
   display: block
@@ -56,7 +57,7 @@ $survey-task-pill-button
 .survey-task-chooser-characteristic-menu
   .modal-form
     background-color: #dddddd
-    border-radius: 6px
+    border-radius: 0
     padding: 0
 
   .modal-form-pointer
@@ -70,7 +71,6 @@ $survey-task-pill-button
   .survey-task-chooser-characteristic-clear-button
     @extends $reset-button
     background-color: transparent
-    border-radius: 4px
     font-size: 0.8em
     height: 48px
     width: 48px
@@ -78,7 +78,6 @@ $survey-task-pill-button
 .survey-task-chooser-characteristic-value
   @extends $reset-button
   background-color: #c1c1c1
-  border-radius: 4px
   cursor: pointer
   font-size: 0.8em
   height: 48px
@@ -93,8 +92,6 @@ $survey-task-pill-button
 
 .survey-task-chooser-characteristic-value-label
   background-color: #a4a4a4
-  border-bottom-left-radius: 6px
-  border-bottom-right-radius: 6px
   color: white
   font-size: 0.8em
   font-weight: 700
@@ -112,7 +109,6 @@ $survey-task-pill-button
 .survey-task-chooser-choices
   background: rgba(24, 24, 24, 1)
   border: solid 1px rgba(24, 24, 24, 1)
-  border-radius: 8px
   display: flex
   flex-wrap: wrap
   padding: 3px
@@ -154,7 +150,6 @@ $survey-task-pill-button
 .survey-task-chooser-choice-thumbnail
   background-size: cover
   background-position: 50% 50%
-  border-radius: 3px
   display: inline-block
   margin-right: 1ch
   vertical-align: middle
@@ -190,7 +185,6 @@ $survey-task-pill-button
   position: relative
 
 .survey-task-image-flipper-image
-  border-radius: 5px
   display: block
   width: 100%
 
@@ -221,7 +215,6 @@ $survey-task-pill-button
 
 .survey-task-choice
   background:  #f7f7f7
-  border-radius: 8px
   color: #6b6a6a
   display: block
   font-size: 14px
@@ -246,14 +239,14 @@ $survey-task-pill-button
 
   .modal-form-trigger
     @extends $reset-button
-    background: rgba(232, 232, 232, 1)
-    border-radius: 4px
+    background: #e8e8e8
+    border-radius: 0
     cursor: pointer
     font-size: 10px
     margin: 0 3px 0 0
     padding: 0.5em 0.75em
 
-    &:hover
+    &:hover, &:focus
       background: rgba(208, 208, 208, 1)
       color: rgba(107, 107, 107, 1)
 
@@ -263,17 +256,12 @@ $survey-task-pill-button
 
   .dropdown-form
     background: #f7f7f7
-    border-radius: 6px
     color: #6b6a6a
     padding: 1em
-
-    img
-      border-radius: 8px
 
     .survey-task-choice-confusion-buttons
       button
         @extends $reset-button
-        border-radius: 4px
         color: #fff
         font-weight: 700
         padding: 0.8em 0
@@ -297,14 +285,20 @@ $survey-task-pill-button
   font-size: 12px
   margin: 0 0 6px 0
 
+.survey-task-choice-answers
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+
 .survey-task-choice-answer
   background: rgba(232, 232, 232, 1)
   border: 1px transparent solid
-  border-radius: 4px
   cursor: pointer
   font-size: 10px
+  line-height: 30px
   margin: 0 3px 0 0
   padding: 0.5em 0.75em
+  white-space: nowrap
 
   &:hover
     background: rgba(208, 208, 208, 1)

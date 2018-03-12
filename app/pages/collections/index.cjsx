@@ -58,7 +58,6 @@ CollectionsContainer = createReactClass
   render: ->
     classes = classNames {
       "secondary-page":true
-      "all-resources-page": true
       "has-project-context": @props.project?
     }
     attrsForTitle = {

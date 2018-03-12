@@ -29,6 +29,17 @@
     text-decoration: underline
 
 .classify-page
+  background-color: PROJECT_BACKGROUND
+  position: relative
+
+  &--dark-theme
+    background-color: PROJECT_BACKGROUND_DARK
+    color: white
+
+    .classify-page__theme-button
+      &:hover, &:focus
+        color: TEAL_LIGHT
+
   .classifier-announcement-banner
     @extends $announcement-banner
     margin: 0 0 1.5em
@@ -37,6 +48,7 @@
       background: HIGHLIGHT_COLOR
 
     &.custom-sign-in-banner
+      background-color: SECOND_HIGHLIGHT
       display: flex
       justify-content: space-between
       margin: 0 0 3vh
@@ -49,6 +61,19 @@
     background-color: SUCCESS
     margin: 1em auto
     max-width: 400px
+
+  &__theme-button-wrapper
+    text-align: center
+
+  &__theme-button
+    @extends $reset-button
+    color: TEAL_MID
+    font-size: 0.9em
+    letter-spacing: 0.2em
+    text-transform: uppercase
+
+    &:hover, &:focus
+      color: TEAL_DARK
 
 .classifier
   display: flex
@@ -69,7 +94,6 @@
       flex: 1 1 auto
 
   .subject
-    border-radius: 5px
     box-shadow: 0 0 0 1px gray
     max-height: 90vh
     max-width: 100%
@@ -144,9 +168,13 @@
     transform: rotate(-15deg)
 
   > .task-area
-    flex: 0 0 60ch
+    background-color: white
+    border: solid thin #ebebeb
+    color: black
+    flex: 0 0 45ch
     margin-bottom: 1em
     max-width: 100%
+    padding: 2em
 
     @media (min-width: 900px)
       margin-left: 1em
@@ -171,6 +199,7 @@
       flex: 2 0
 
     .continue
+      border-radius: 0
       flex: 3 0
 
     > :not(:first-child)
@@ -178,7 +207,6 @@
 
   .back-button-warning
     background-color: #686868
-    border-radius: .3em
     margin-top: 1em
     padding: .5em
     text-align: center;

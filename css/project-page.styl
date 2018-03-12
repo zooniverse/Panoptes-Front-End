@@ -58,8 +58,9 @@
   z-index: 2
 
 .project-page
-  background: FOREGROUND
-  color: white
+  background: PROJECT_BACKGROUND
+  border-bottom: 5px solid TEAL_DARK
+  color: black
   display: flex
   flex: 1 0 auto
   flex-direction: column
@@ -79,7 +80,7 @@
 
 .project-background
   // A custom background-image is provided by the project.
-  background-color: gray
+  background-color: PROJECT_BACKGROUND
   background-position: 50% 40%
   background-size: cover
 
@@ -118,6 +119,7 @@
 
 .project-announcement-banner
   @extends $announcement-banner
+  margin: 0
 
   &.informational
     background: MAIN_HIGHLIGHT
@@ -220,6 +222,7 @@
       color: TEAL_MID
 
   &__description
+    color: white
     font-size: 2em
     font-weight: 600
     line-height: 1.5em
@@ -297,6 +300,7 @@
 
   &__about-text
     background-color: #0f7481
+    color: white
     flex: 3 1 auto
     padding: 3em 3em 4em 3em
     text-align: center
@@ -399,7 +403,7 @@
 
 .collection-page-with-project-context,
 .project-text-content
-  background-color: #ebebeb
+  background-color: PROJECT_BACKGROUND
   padding: 1.5em 3vw
   color: #000000
   border-radius: 3px
