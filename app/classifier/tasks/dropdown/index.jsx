@@ -223,8 +223,8 @@ export default class DropdownTask extends React.Component {
                   disabled={disabled}
                   noResultsText={options.length ? 'No results found' : null}
                   placeholder={disabled ? 'N/A' : 'Select...'}
-                  promptTextCreator={label => `Press enter for ${label}…`}
-                  shouldKeyDownEventCreateNewOption={({ keyCode }) => keyCode === 13}
+                  promptTextCreator={label => `Press enter or tab for ${label}…`}
+                  shouldKeyDownEventCreateNewOption={({ keyCode }) => keyCode === 9 || keyCode === 13}
                   matchPos="start"
                   matchProp="label"
                   ref={(instance) => {
