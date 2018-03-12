@@ -39,13 +39,15 @@ class FeedbackModal extends React.Component {
           )}
         </ul>
 
-        <button
-          className="standard-button"
-          type="submit"
-          ref={(button) => { this.closeButton = button; }}
-        >
-          <Translate content="FeedbackModal.ok" />
-        </button>
+        <div className="buttons">
+          <button
+            className="standard-button"
+            type="submit"
+            ref={(button) => { this.closeButton = button; }}
+          >
+            <Translate content="FeedbackModal.ok" />
+          </button>
+        </div>
       </ModalFocus>
     );
   }
