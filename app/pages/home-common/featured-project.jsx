@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
+import Thumbnail from '../../components/thumbnail';
 
 function FeaturedProject({ project }) {
   if (project) {
@@ -9,8 +10,9 @@ function FeaturedProject({ project }) {
       <section className="home-featured">
         <h1 className="secondary-kicker">Featured Project</h1>
         <div className="home-featured-images">
-          <img
+          <Thumbnail
             alt={project.display_name}
+            height={400}
             src={featuredImage}
           />
         </div>

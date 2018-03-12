@@ -38,8 +38,8 @@ describe('FeaturedProject', function () {
   });
 
   it('should have an img tag with src and alt properties', function () {
-    const { alt, src } = wrapper.find('img').props();
-    assert.equal(wrapper.find('img').length, 1);
+    const { alt, src } = wrapper.find('Thumbnail').props();
+    assert.equal(wrapper.find('Thumbnail').length, 1);
     assert.ok(alt.length > 0, 'alt attribute is empty');
     assert.ok(src.length > 0, 'src attribute is empty');
   });
