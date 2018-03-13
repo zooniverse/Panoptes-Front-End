@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
-import { getSessionID } from '../lib/session';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
 import GridTool from './drawing-tools/grid';
@@ -74,16 +73,6 @@ class TaskNav extends React.Component {
         }
       });
     }
-
-    classification.update({
-      completed: true,
-      'metadata.session': getSessionID(),
-      'metadata.finished_at': (new Date()).toISOString(),
-      'metadata.viewport': {
-        width: innerWidth,
-        height: innerHeight
-      }
-    });
 
     if (currentAnnotation.shortcut) {
       this.addAnnotationForTask(currentTask.unlinkedTask);

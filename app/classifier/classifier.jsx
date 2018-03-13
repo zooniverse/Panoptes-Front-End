@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import findIndex from 'lodash/findIndex';
 
+import { getSessionID } from '../lib/session';
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
 import preloadSubject from '../lib/preload-subject';
@@ -84,16 +85,9 @@ class Classifier extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
-    const prevAnnotation = prevState.annotations[prevState.annotations.length - 1];
-
+  componentDidUpdate(prevProps) {
     if (prevProps.classification !== this.props.classification) {
       this.updateAnnotations();
-    }
-
-    if (prevAnnotation && currentAnnotation.task !== prevAnnotation.task) {
-      this.checkForFeedback(prevAnnotation.task);
     }
   }
 
@@ -231,7 +225,8 @@ class Classifier extends React.Component {
   }
 
   onNextTask(taskKey) {
-    this.setState({ taskKey });
+    this.checkForFeedback(this.state.taskKey)
+      .then(() => this.setState({ taskKey }));
   }
 
   onPrevTask(taskKey) {
@@ -239,11 +234,30 @@ class Classifier extends React.Component {
   }
 
   completeClassification() {
+    this.props.classification.update({
+      'metadata.session': getSessionID(),
+      'metadata.finished_at': (new Date()).toISOString(),
+      'metadata.viewport': {
+        width: innerWidth,
+        height: innerHeight
+      }
+    });
+
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
-      this.props.onCompleteAndLoadAnotherSubject()
+      this.checkForFeedback(this.state.taskKey)
+        .then(() => {
+          this.props.classification.update({ completed: true });
+          this.setState({ taskKey: null });
+        })
+        .then(this.props.onCompleteAndLoadAnotherSubject)
         .catch(error => console.error(error));
     } else {
-      this.props.onComplete()
+      this.checkForFeedback(this.state.taskKey)
+        .then(() => {
+          this.props.classification.update({ completed: true });
+          this.setState({ taskKey: null });
+        })
+        .then(this.props.onComplete)
         .catch(error => console.error(error));
     }
     this.setState({ annotations: [{}] });
