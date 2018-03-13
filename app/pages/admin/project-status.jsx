@@ -10,6 +10,7 @@ import LoadingIndicator from '../../components/loading-indicator';
 import VersionList from './project-status/version-list';
 import ExperimentalFeatures from './project-status/experimental-features';
 import Toggle from './project-status/toggle';
+import FeaturedProjectToggle from './featured-project-toggle';
 import RedirectToggle from './project-status/redirect-toggle';
 import WorkflowDefaultDialog from './workflow-default-dialog';
 
@@ -25,10 +26,11 @@ class ProjectStatus extends Component {
     this.handleDialogCancel = this.handleDialogCancel.bind(this);
     this.handleDialogSuccess = this.handleDialogSuccess.bind(this);
     this.handleProjectStateChange = this.handleProjectStateChange.bind(this);
-
+    this.handleFeaturedProjectChange = this.handleFeaturedProjectChange.bind(this);
     this.state = {
       dialogIsOpen: false,
       error: null,
+      featured: null,
       project: null,
       usedWorkflowLevels: [],
       workflows: []
@@ -36,6 +38,7 @@ class ProjectStatus extends Component {
   }
 
   componentDidMount() {
+    this.getFeaturedProject();
     this.getProjectAndWorkflows();
   }
 
@@ -50,6 +53,14 @@ class ProjectStatus extends Component {
     return workflow.update({ 'configuration.level': selected }).save()
       .then(() => this.getWorkflows())
       .catch(error => this.setState({ error }));
+  }
+
+  getFeaturedProject() {
+    return apiClient.type('projects')
+      .get({ featured: true, launch_approved: true, cards: true })
+      .then(([featuredProject]) => {
+        this.setState({ featured: featuredProject });
+      });
   }
 
   getProject() {
@@ -110,6 +121,19 @@ class ProjectStatus extends Component {
   handleProjectStateChange({ target }) {
     this.state.project.update({ state: target.value });
     this.state.project.save()
+      .catch(error => this.setState({ error }));
+  }
+
+  handleFeaturedProjectChange({ target }) {
+    const { featured, project } = this.state;
+    if (featured) {
+      featured.update({ featured: false });
+      featured.save()
+        .then(() => this.setState({ featured }))
+        .catch(error => this.setState({ error }));
+    }
+    project.update({ featured: target.checked });
+    project.save()
       .catch(error => this.setState({ error }));
   }
 
@@ -186,13 +210,14 @@ class ProjectStatus extends Component {
   }
 
   render() {
-    if (!this.state.project) {
+    const { error, project } = this.state;
+    if (!project) {
       return <LoadingIndicator />;
     }
 
     return (
       <div className="project-status">
-        <ProjectIcon project={this.state.project} />
+        <ProjectIcon project={project} />
 
         <div className="project-status__section project-status__section--state">
           <h4>Project State</h4>
@@ -203,7 +228,7 @@ class ProjectStatus extends Component {
                 name="project-state-buttons"
                 type="radio"
                 value=""
-                checked={this.state.project.state === ''}
+                checked={project.state === ''}
                 onChange={this.handleProjectStateChange}
               />
               Active
@@ -214,7 +239,7 @@ class ProjectStatus extends Component {
                 name="project-state-buttons"
                 type="radio"
                 value="paused"
-                checked={this.state.project.state === 'paused'}
+                checked={project.state === 'paused'}
                 onChange={this.handleProjectStateChange}
               />
               Paused
@@ -225,7 +250,7 @@ class ProjectStatus extends Component {
                 name="project-state-buttons"
                 type="radio"
                 value="finished"
-                checked={this.state.project.state === 'finished'}
+                checked={project.state === 'finished'}
                 onChange={this.handleProjectStateChange}
               />
               Finished
@@ -236,24 +261,29 @@ class ProjectStatus extends Component {
         <div className="project-status__section">
           <h4>Information</h4>
           <ul>
-            <li>Id: <a href={`/lab/${this.state.project.id}`}>{this.state.project.id}</a></li>
-            <li>Classification count: {this.state.project.classifications_count}</li>
-            <li>Subjects count: {this.state.project.subjects_count}</li>
-            <li>Retired subjects count: {this.state.project.retired_subjects_count}</li>
-            <li>Volunteer count: {this.state.project.classifiers_count}</li>
+            <li>Id: <a href={`/lab/${project.id}`}>{project.id}</a></li>
+            <li>Classification count: {project.classifications_count}</li>
+            <li>Subjects count: {project.subjects_count}</li>
+            <li>Retired subjects count: {project.retired_subjects_count}</li>
+            <li>Volunteer count: {project.classifiers_count}</li>
           </ul>
           <h4>Visibility Settings</h4>
           <ul className="project-status__section-list">
-            <li>Private: <Toggle project={this.state.project} field="private" trueLabel="Private" falseLabel="Public" /></li>
-            <li>Live: <Toggle project={this.state.project} field="live" trueLabel="Live" falseLabel="Development" /></li>
-            <li>Beta Requested: <Toggle project={this.state.project} field="beta_requested" /></li>
-            <li>Beta Approved: <Toggle project={this.state.project} field="beta_approved" /></li>
-            <li>Launch Requested: <Toggle project={this.state.project} field="launch_requested" /></li>
-            <li>Launch Approved: <Toggle project={this.state.project} field="launch_approved" /></li>
+            <li>Private: <Toggle project={project} field="private" trueLabel="Private" falseLabel="Public" /></li>
+            <li>Live: <Toggle project={project} field="live" trueLabel="Live" falseLabel="Development" /></li>
+            <li>Beta Requested: <Toggle project={project} field="beta_requested" /></li>
+            <li>Beta Approved: <Toggle project={project} field="beta_approved" /></li>
+            <li>Launch Requested: <Toggle project={project} field="launch_requested" /></li>
+            <li>Launch Approved: <Toggle project={project} field="launch_approved" /></li>
           </ul>
         </div>
-        <RedirectToggle project={this.state.project} />
-        <ExperimentalFeatures project={this.state.project} />
+        <RedirectToggle project={project} />
+        <FeaturedProjectToggle
+          error={error}
+          project={project}
+          handleProjectChange={this.handleFeaturedProjectChange}
+        />
+        <ExperimentalFeatures project={project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
           <small>The workflow level dropdown is for the workflow assignment experimental feature.</small>
@@ -265,7 +295,7 @@ class ProjectStatus extends Component {
         </div>
         <hr />
         <div className="project-status__section">
-          <VersionList project={this.state.project} />
+          <VersionList project={project} />
         </div>
       </div>
     );

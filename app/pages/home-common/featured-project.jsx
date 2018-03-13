@@ -1,32 +1,42 @@
-/*
-Featured Project Component
-==========================
-* This component highlights specific projects on the home page.
-* NOT to be confused with <HomePagePromoted />
-* Content is hardcoded for the moment; improvements on this are welcome.
-* Originally created to highlight 2017 Mar/Apr Stargazing Live projects.
-* Design: @beckyrother; code: @shaunanoordin; documented/updated: 20171023
-* Compress and resize any static images before uploading and deploying!
-*/
-
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import Thumbnail from '../../components/thumbnail';
 
-const FeaturedProject = (() => (
-  <section className="home-featured">
-    <h1 className="secondary-kicker">Featured Project</h1>
-    <div className="home-featured-images">
-      <img
-        alt="SCOTUS Notes"
-        src="/assets/featured-projects/featured-project-20180223-scotus-notes.jpg"
-      />
-    </div>
-    <h2 className="secondary-headline">SCOTUS Notes</h2>
-    <p className="display-body">Behind the scenes at Supreme Court Conference</p>
-    <Link to="projects/zooniverse/scotus-notes-behind-the-scenes-at-supreme-court-conference">View Project!</Link>
-  </section>
-  )
-);
+function FeaturedProject({ project }) {
+  if (project) {
+    const featuredImage = (project.avatar_src && `https://${project.avatar_src}`);
+    return (
+      <section className="home-featured">
+        <h1 className="secondary-kicker">Featured Project</h1>
+        <div className="home-featured-images">
+          <Thumbnail
+            alt={project.display_name}
+            height={400}
+            src={featuredImage}
+          />
+        </div>
+        <h2 className="secondary-headline">{project.display_name}</h2>
+        <p className="display-body">{project.description}</p>
+        <Link to={`/projects/${project.slug}`}>View Project!</Link>
+      </section>
+    );
+  }
+  return null;
+}
+
+FeaturedProject.propTypes = {
+  project: PropTypes.shape({
+    avatar_src: PropTypes.string,
+    description: PropTypes.string,
+    display_name: PropTypes.string,
+    links: PropTypes.shape({
+      background: PropTypes.shape({
+        href: PropTypes.string
+      })
+    }),
+    slug: PropTypes.string
+  })
+};
 
 export default FeaturedProject;

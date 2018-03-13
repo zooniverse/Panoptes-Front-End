@@ -12,7 +12,6 @@ import HomePageSocial from './home-common/social';
 import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
 import HomePagePromoted from './home-not-logged-in/promoted';
-import FEATURED_PROJECTS from '../lib/featured-projects';
 
 counterpart.registerTranslations('en', {
   notLoggedInHomePage: {
@@ -42,7 +41,6 @@ export default class HomePage extends React.Component {
     this.handleResize();
     this.getClassificationCounts();
     this.getVolunteerCount();
-    this.getPromotedProjects();
   }
 
   componentWillUnmount() {
@@ -68,22 +66,6 @@ export default class HomePage extends React.Component {
         count += statObject.doc_count;
       });
       this.setState({ count }); // number will only appear on production
-    });
-  }
-
-  getPromotedProjects() {
-    apiClient.type('projects').get({ id: Object.keys(FEATURED_PROJECTS), cards: true })
-    .then((promotedProjects) => {
-      promotedProjects.map((project) => {
-        const featuredProject = FEATURED_PROJECTS[project.id];
-        project.image = featuredProject.image;
-        project.title = featuredProject.title;
-        return project;
-      });
-      this.setState({ promotedProjects });
-    })
-    .catch((error) => {
-      console.warn(error);
     });
   }
 
