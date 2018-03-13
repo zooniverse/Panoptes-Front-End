@@ -1,14 +1,14 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import FieldGuideContainer from './field-guide-container';
 
 const guide = {
   items: [{
-    content: "Facts about this animal",
-    icon: "1234",
-    title: "Fun Mammals"
+    content: 'Facts about this animal',
+    icon: '1234',
+    title: 'Fun Mammals'
   }]
 };
 
@@ -72,7 +72,7 @@ describe('FieldGuideContainer', function() {
 
     afterEach(function () {
       toggleFieldGuideSpy.resetHistory();
-    })
+    });
 
     after(function () {
       toggleFieldGuideSpy.restore();

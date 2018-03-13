@@ -62,16 +62,14 @@ FieldGuideContainer.defaultProps = {
   guide: {
     items: []
   },
-  guideIcons: null,
-  project: {}
+  guideIcons: null
 };
 
 FieldGuideContainer.propTypes = {
   guide: PropTypes.shape({
     items: PropTypes.array
   }),
-  guideIcons: PropTypes.object,
-  project: PropTypes.object
+  guideIcons: PropTypes.object
 };
 
 FieldGuideContainer.contextTypes = {
