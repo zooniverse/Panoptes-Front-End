@@ -132,6 +132,7 @@ module.exports = createReactClass
           currentClassifications.forWorkflow[props.workflow.id] = classification
           @setState { classification }
         .catch (error) =>
+          # console.error(error)
           @setState rejected: { classification: error }
 
   createNewClassification: (project, workflow) ->
@@ -186,6 +187,7 @@ module.exports = createReactClass
     if upcomingSubjects.forWorkflow[workflow.id].length is 0
       # console.log 'Fetching subjects', workflow.id
       @maybePromptWorkflowAssignmentDialog(@props)
+      
       subjectQuery =
         workflow_id: workflow.id
       if subjectSet?
@@ -246,6 +248,7 @@ module.exports = createReactClass
           onComplete={@saveClassification}
           onCompleteAndLoadAnotherSubject={@saveClassificationAndLoadAnotherSubject}
           onClickNext={@loadAnotherSubject}
+          requestUserProjectPreferences={@props.requestUserProjectPreferences}
           splits={@props.splits}
         />
       else if @state.rejected?.classification?
@@ -275,6 +278,7 @@ module.exports = createReactClass
 
     {workflow, subjects} = classification.links
     seenThisSession.add workflow, subjects
+
     unless @state.demoMode
       classificationQueue.add(classification)
     Promise.resolve classification
@@ -291,7 +295,7 @@ module.exports = createReactClass
         .then =>
           @setState { promptWorkflowAssignmentDialog: false }
         .then =>
-          if props.preferences.selected_workflow isnt props.preferences.settings.workflow_id
+          if props.preferences.preferences.selected_workflow isnt props.preferences.settings.workflow_id
             props.preferences.update
               'preferences.selected_workflow': props.preferences.settings.workflow_id
             props.preferences.save()
