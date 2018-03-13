@@ -25,7 +25,7 @@ auth.listen ->
 
 PROMPT_MINI_COURSE_EVERY = 5
 
-RELOAD_UPP_EVERY = 10
+RELOAD_UPP_EVERY = 5
 
 ClassifierWrapper = createReactClass
   displayName: 'ClassifierWrapper'
