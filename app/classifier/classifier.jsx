@@ -39,7 +39,8 @@ class Classifier extends React.Component {
     this.toggleExpertClassification = this.toggleExpertClassification.bind(this);
     this.updateAnnotations = this.updateAnnotations.bind(this);
     this.updateFeedback = this.updateFeedback.bind(this);
-    this.onNewTask = this.onNewTask.bind(this);
+    this.onNextTask = this.onNextTask.bind(this);
+    this.onPrevTask = this.onPrevTask.bind(this);
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
@@ -229,7 +230,11 @@ class Classifier extends React.Component {
     this.updateAnnotations(annotations);
   }
 
-  onNewTask(taskKey) {
+  onNextTask(taskKey) {
+    this.setState({ taskKey });
+  }
+
+  onPrevTask(taskKey) {
     this.setState({ taskKey });
   }
 
@@ -341,8 +346,8 @@ class Classifier extends React.Component {
             task={currentTask}
             workflow={this.props.workflow}
             updateAnnotations={this.updateAnnotations}
-            onNextTask={this.onNewTask}
-            onPrevTask={this.onNewTask}
+            onNextTask={this.onNextTask}
+            onPrevTask={this.onPrevTask}
           >
             {!!this.props.expertClassifier &&
               <ExpertOptions
