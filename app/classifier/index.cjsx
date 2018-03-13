@@ -25,6 +25,8 @@ auth.listen ->
 
 PROMPT_MINI_COURSE_EVERY = 5
 
+RELOAD_UPP_EVERY = 5
+
 ClassifierWrapper = createReactClass
   displayName: 'ClassifierWrapper'
 
@@ -104,12 +106,18 @@ ClassifierWrapper = createReactClass
   onCompleteAndLoadAnotherSubject: ->
     classificationsThisSession += 1
     @maybeLaunchMiniCourse()
+    @maybeRequestUserProjectPreferences()
     @props.onCompleteAndLoadAnotherSubject?()
 
   onComplete: ->
     classificationsThisSession += 1
     @maybeLaunchMiniCourse()
+    @maybeRequestUserProjectPreferences()
     @props.onComplete?()
+
+  maybeRequestUserProjectPreferences: ->  
+    if classificationsThisSession % RELOAD_UPP_EVERY is 0
+      @props.requestUserProjectPreferences(@props.project, @props.user)
 
   maybeLaunchMiniCourse: ->
     shouldPrompt = classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0

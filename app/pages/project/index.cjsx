@@ -198,6 +198,19 @@ ProjectPageController =
       .catch (error) =>
         console.warn error.message
 
+  requestUserProjectPreferences: (project, user) ->
+    @listenToPreferences null
+
+    if user?
+      user.get('project_preferences', project_id: project.id)
+        .then ([preferences]) =>
+          @setState { preferences }
+          @listenToPreferences preferences
+        .catch (error) =>
+          console.warn error.message
+    else
+      Promise.resolve()
+
   listenToPreferences: (preferences) ->
     @_listenedToPreferences?.stopListening 'change', @_boundForceUpdate
     preferences?.listen 'change', @_boundForceUpdate
@@ -263,6 +276,7 @@ ProjectPageController =
               projectAvatar={@state.projectAvatar}
               projectIsComplete={@state.projectIsComplete}
               projectRoles={@state.projectRoles}
+              requestUserProjectPreferences={@requestUserProjectPreferences}
               splits={@state.splits}
             />
           </WorkflowSelection>

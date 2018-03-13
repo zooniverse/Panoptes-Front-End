@@ -71,6 +71,7 @@ export default class ProjectPage extends React.Component {
           projectAvatar: this.props.projectAvatar,
           projectIsComplete: this.props.projectIsComplete,
           projectRoles: this.props.projectRoles,
+          requestUserProjectPreferences: this.props.requestUserProjectPreferences,
           splits: this.props.splits,
           translation: this.props.translation,
           user: this.props.user,
