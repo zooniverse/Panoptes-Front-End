@@ -5,6 +5,7 @@ import { VisibilitySplit } from 'seven-ten';
 import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import findIndex from 'lodash/findIndex';
 
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
@@ -221,20 +222,20 @@ class Classifier extends React.Component {
 
   handleAnnotationChange(classification, newAnnotation) {
     const annotations  = classification.annotations.slice();
-    annotations[annotations.length - 1] = newAnnotation;
+    const index = findIndex(annotations, annotation => annotation.task === newAnnotation.task);
+    annotations[index] = newAnnotation;
     this.updateAnnotations(annotations);
   }
 
   completeClassification() {
-    const currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
-      if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
-        this.props.onCompleteAndLoadAnotherSubject()
-          .catch(error => console.error(error));
-      } else {
-        this.props.onComplete()
-          .catch(error => console.error(error));
-      }
-      this.setState({ annotations: [{}] });
+    if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
+      this.props.onCompleteAndLoadAnotherSubject()
+        .catch(error => console.error(error));
+    } else {
+      this.props.onComplete()
+        .catch(error => console.error(error));
+    }
+    this.setState({ annotations: [{}] });
   }
 
   toggleExpertClassification(value) {
