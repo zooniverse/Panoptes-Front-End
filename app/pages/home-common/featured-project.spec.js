@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import assert from 'assert';
 import { expect } from 'chai';
 import FeaturedProject from './featured-project';
 
@@ -58,23 +57,7 @@ describe('FeaturedProject', function () {
   it('when project avatar is defined, should render an image with the project avatar as src', function () {
     const thumbnail = wrapper.find('Thumbnail');
     const { src } = thumbnail.props();
-    expect(src).to.equal('//project/avatar/url');
-  });
-
-  it('when project avatar is not defined, should render an image with the project background as src', function () {
-    wrapper.setProps({
-      project: {
-        display_name: 'Test Featured Project',
-        links: {
-          background: {
-            href: 'project/background/url'
-          }
-        }
-      }
-    });
-    const thumbnail = wrapper.find('Thumbnail');
-    const { src } = thumbnail.props();
-    expect(src).to.equal('project/background/url');
+    expect(src).to.equal('https://project/avatar/url');
   });
 
   it('should have a link to the featured project', function () {
