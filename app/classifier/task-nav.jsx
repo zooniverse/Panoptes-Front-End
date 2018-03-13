@@ -54,6 +54,7 @@ class TaskNav extends React.Component {
     const annotations = classification.annotations.slice();
     annotations.push(annotation);
     this.props.updateAnnotations(annotations);
+    this.props.onNextTask(taskKey);
   }
 
   // Done
@@ -101,6 +102,8 @@ class TaskNav extends React.Component {
     const annotations = classification.annotations.slice();
     annotations.pop();
     this.props.updateAnnotations(annotations);
+    const prevAnnotation = annotations[annotations.length - 1];
+    this.props.onPrevTask(prevAnnotation.task);
 
     if (workflow.configuration.persist_annotations) {
       CacheClassification.update(lastAnnotation);

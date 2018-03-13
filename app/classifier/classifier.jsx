@@ -39,13 +39,15 @@ class Classifier extends React.Component {
     this.toggleExpertClassification = this.toggleExpertClassification.bind(this);
     this.updateAnnotations = this.updateAnnotations.bind(this);
     this.updateFeedback = this.updateFeedback.bind(this);
+    this.onNewTask = this.onNewTask.bind(this);
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
       showingExpertClassification: false,
       subjectLoading: false,
       annotations: [],
-      modelScore: null
+      modelScore: null,
+      taskKey: null
     };
   }
 
@@ -227,6 +229,10 @@ class Classifier extends React.Component {
     this.updateAnnotations(annotations);
   }
 
+  onNewTask(taskKey) {
+    this.setState({ taskKey });
+  }
+
   completeClassification() {
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
       this.props.onCompleteAndLoadAnotherSubject()
@@ -261,8 +267,9 @@ class Classifier extends React.Component {
     } else {
       currentClassification = this.props.classification;
       if (!this.props.classification.completed) {
-        currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
-        currentTask = currentAnnotation ? this.props.workflow.tasks[currentAnnotation.task] : null;
+        currentTask = this.state.taskKey ? this.props.workflow.tasks[this.state.taskKey] : null;
+        const index = findIndex(this.state.annotations, annotation => annotation.task === this.state.taskKey);
+        currentAnnotation = this.state.annotations[index];
       }
     }
 
@@ -334,6 +341,8 @@ class Classifier extends React.Component {
             task={currentTask}
             workflow={this.props.workflow}
             updateAnnotations={this.updateAnnotations}
+            onNextTask={this.onNewTask}
+            onPrevTask={this.onNewTask}
           >
             {!!this.props.expertClassifier &&
               <ExpertOptions
