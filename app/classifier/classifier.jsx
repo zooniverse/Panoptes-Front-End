@@ -242,6 +242,7 @@ class Classifier extends React.Component {
   completeClassification(e) {
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
+    const subjectTalkPath = `/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`;
     // don't swallow cmd-click on links
     if (!isCmdClick) {
       e.preventDefault();
@@ -268,7 +269,7 @@ class Classifier extends React.Component {
         workflowHistory.push('summary');
         this.setState({ workflowHistory });
         if (!isCmdClick && originalElement.href) {
-          browserHistory.push(originalElement.href);
+          browserHistory.push(subjectTalkPath);
         }
       })
       .then(onComplete)
