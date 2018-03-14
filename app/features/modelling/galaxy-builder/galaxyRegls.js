@@ -49,7 +49,7 @@ float b(float n) {
 
 float sersic2d(float x, float y, vec2 mu, float roll, float rEff, float axRatio, float c, float i0, float n) {
   // from https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S132335800000388X
-  return 0.1 * i0 * exp(b(n) - b(n) * pow(calcBoxyEllipseDist(x, y, mu, roll, rEff, axRatio, c), 1.0 / n));
+  return 0.5 * i0 * exp(b(n) - b(n) * pow(calcBoxyEllipseDist(x, y, mu, roll, rEff, axRatio, c), 1.0 / n));
 }`;
 
 // function to generate oversampled sersic profile

@@ -45,16 +45,19 @@ export const parseBulge = (comp, state) => {
 
 export const parseBar = (comp, state) => {
   if (!hasComp(comp)) return null;
+  const drawnComp = comp.value[0].value[0];
   const bar = Object.assign(
     { name: state.model.bar.name },
     state.model.bar.default,
     {
       name: state.model.bar.name,
-      mux: state.sizeMultiplier * parseFloat(comp.value[0].value[0].x),
-      muy: state.sizeMultiplier * (state.size[0] - parseFloat(comp.value[0].value[0].y)),
-      rx: state.sizeMultiplier * parseFloat(comp.value[0].value[0].rx),
-      ry: state.sizeMultiplier * parseFloat(comp.value[0].value[0].ry),
-      roll: parseFloat(comp.value[0].value[0].angle),
+      mux: state.sizeMultiplier * parseFloat(drawnComp.x + (drawnComp.width / 2.0)),
+      muy: state.sizeMultiplier * (state.size[0] - ((
+        drawnComp.y + (drawnComp.height / 2.0)
+      ))),
+      rx: state.sizeMultiplier * parseFloat(drawnComp.width),
+      ry: state.sizeMultiplier * parseFloat(drawnComp.height),
+      roll: parseFloat(-drawnComp.angle),
       scale: parseFloat(comp.value[1].value),
       i0: parseFloat(comp.value[2].value),
       n: parseFloat(comp.value[3].value),
