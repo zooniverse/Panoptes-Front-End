@@ -49,7 +49,7 @@ class Classifier extends React.Component {
       subjectLoading: false,
       annotations: [],
       modelScore: null,
-      taskKey: null
+      workflowHistory: []
     };
   }
 
@@ -225,12 +225,17 @@ class Classifier extends React.Component {
   }
 
   onNextTask(taskKey) {
-    this.checkForFeedback(this.state.taskKey)
-      .then(() => this.setState({ taskKey }));
+    const workflowHistory  = this.state.workflowHistory.slice();
+    const prevTaskKey = workflowHistory[workflowHistory.length - 1];
+    workflowHistory.push(taskKey);
+    this.checkForFeedback(prevTaskKey)
+      .then(() => this.setState({ workflowHistory }));
   }
 
-  onPrevTask(taskKey) {
-    this.setState({ taskKey });
+  onPrevTask() {
+    const workflowHistory  = this.state.workflowHistory.slice();
+    workflowHistory.pop();
+    this.setState({ workflowHistory });
   }
 
   completeClassification() {
@@ -247,10 +252,14 @@ class Classifier extends React.Component {
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
       onComplete = this.props.onCompleteAndLoadAnotherSubject;
     }
-    this.checkForFeedback(this.state.taskKey)
+
+    const workflowHistory = this.state.workflowHistory.slice();
+    const taskKey = workflowHistory[workflowHistory.length - 1];
+    this.checkForFeedback(taskKey)
       .then(() => {
         this.props.classification.update({ completed: true });
-        this.setState({ taskKey: null });
+        workflowHistory.push('summary');
+        this.setState({ workflowHistory });
       })
       .then(onComplete)
       .catch(error => console.error(error));
@@ -280,8 +289,10 @@ class Classifier extends React.Component {
     } else {
       currentClassification = this.props.classification;
       if (!this.props.classification.completed) {
-        currentTask = this.state.taskKey ? this.props.workflow.tasks[this.state.taskKey] : null;
-        const index = findIndex(this.state.annotations, annotation => annotation.task === this.state.taskKey);
+        const { workflowHistory } = this.state;
+        const taskKey = this.state.workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
+        currentTask = this.props.workflow.tasks[taskKey];
+        const index = findIndex(this.state.annotations, annotation => annotation.task === taskKey);
         currentAnnotation = this.state.annotations[index];
       }
     }
