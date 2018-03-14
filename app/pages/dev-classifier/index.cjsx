@@ -28,6 +28,10 @@ ClassificationViewer = createReactClass
     @props.classification._workflow.configuration.persist_annotations = e.target.checked
     @forceUpdate()
 
+  toggleMultiImageCloneMarkers: (e) ->
+    @props.classification._workflow.configuration.multi_image_clone_markers = e.target.checked
+    @forceUpdate()
+
   render: ->
     showing =  if @state.showOnlyLast
       @props.classification.annotations[@props.classification.annotations.length - 1]
@@ -53,6 +57,11 @@ ClassificationViewer = createReactClass
       <label>
         <input type="checkbox" checked={@props.classification._workflow.configuration.persist_annotations} onChange={@togglePersistAnnotations} />{' '}
         Persist Annotations
+      </label>
+      &ensp;
+      <label>
+        <input type="checkbox" checked={@props.classification._workflow.configuration.multi_image_clone_markers} onChange={@toggleMultiImageCloneMarkers} />{' '}
+        Clone markings between frames
       </label>
       <br />
       <pre>{JSON.stringify showing, replacer, 2}</pre>
