@@ -57,7 +57,7 @@ class TaskNav extends React.Component {
   }
 
   // Done
-  completeClassification() {
+  completeClassification(e) {
     const { workflow, classification } = this.props;
     if (workflow.configuration.persist_annotations) {
       CacheClassification.delete();
@@ -80,7 +80,7 @@ class TaskNav extends React.Component {
       newAnnotation.value = currentAnnotation.shortcut.value;
       delete currentAnnotation.shortcut;
     }
-    this.props.completeClassification();
+    this.props.completeClassification(e);
   }
 
   // Back

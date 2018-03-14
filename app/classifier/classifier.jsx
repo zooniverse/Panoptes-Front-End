@@ -6,6 +6,7 @@ import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import findIndex from 'lodash/findIndex';
+import { browserHistory } from 'react-router';
 
 import { getSessionID } from '../lib/session';
 import SubjectViewer from '../components/subject-viewer';
@@ -238,7 +239,9 @@ class Classifier extends React.Component {
     this.setState({ workflowHistory });
   }
 
-  completeClassification() {
+  completeClassification(e) {
+    const originalElement = e.currentTarget;
+    e.preventDefault();
     this.props.classification.update({
       'metadata.session': getSessionID(),
       'metadata.finished_at': (new Date()).toISOString(),
@@ -260,6 +263,9 @@ class Classifier extends React.Component {
         this.props.classification.update({ completed: true });
         workflowHistory.push('summary');
         this.setState({ workflowHistory });
+        if (originalElement.href) {
+          browserHistory.push(originalElement.href);
+        }
       })
       .then(onComplete)
       .catch(error => console.error(error));
@@ -302,7 +308,7 @@ class Classifier extends React.Component {
     const modellingEnabled = this.props.workflow.configuration.metadata &&
       this.props.workflow.configuration.metadata.type === 'modelling';
     return (
-      <div className={classifierClassNames} >
+      <div className={classifierClassNames}>
         <SubjectViewer
           user={this.props.user}
           project={this.props.project}
