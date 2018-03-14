@@ -241,7 +241,11 @@ class Classifier extends React.Component {
 
   completeClassification(e) {
     const originalElement = e.currentTarget;
-    e.preventDefault();
+    const isCmdClick = e.metaKey;
+    // don't swallow cmd-click on links
+    if (!isCmdClick) {
+      e.preventDefault();
+    }
     this.props.classification.update({
       'metadata.session': getSessionID(),
       'metadata.finished_at': (new Date()).toISOString(),
@@ -263,7 +267,7 @@ class Classifier extends React.Component {
         this.props.classification.update({ completed: true });
         workflowHistory.push('summary');
         this.setState({ workflowHistory });
-        if (originalElement.href) {
+        if (!isCmdClick && originalElement.href) {
           browserHistory.push(originalElement.href);
         }
       })
