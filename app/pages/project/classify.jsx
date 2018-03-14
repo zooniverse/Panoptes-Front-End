@@ -313,6 +313,7 @@ class ProjectClassifyPage extends React.Component {
           onComplete={this.saveClassification}
           onCompleteAndLoadAnotherSubject={this.saveClassificationAndLoadAnotherSubject}
           onClickNext={this.loadAnotherSubject}
+          requestUserProjectPreferences={this.props.requestUserProjectPreferences}
           splits={this.props.splits}
         />
       );
