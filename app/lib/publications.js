@@ -281,6 +281,16 @@ const Publications = {
       ]
     },
     {
+      slug: "ianc2/exoplanet-explorers",
+      publications: [
+        {
+        citation: "The K2-138 System: A Near-Resonant Chain of Five Sub-Neptune Planets Discovered by Citizen Scientists, Christiansen+ 2018.",
+        href: "https://arxiv.org/abs/1801.03874",
+        date: "January 11, 2018"
+        }
+      ]
+    },
+    {
       slug: "mschwamb/planet-four-terrains",
       publications: [
         {
@@ -414,6 +424,11 @@ const Publications = {
       slug: "zooniverse/planet-hunters",
       publications: [
         {
+        citation: "Preserving the Margins: Supporting Creativity and Resistance on Digital Participatory Platforms, Mugar 2017.",
+        href: "https://dl.acm.org/citation.cfm?id=3134718",
+        date: "December 6, 2017"
+        },
+        {
           citation: "Planet Hunters X: Searching for Nearby Neighbors of 75 Planet and Eclipsing Binary Candidates from the K2 Kepler extended mission, Schmitt+ 2016.",
           href: "http://arxiv.org/pdf/1603.06945v1.pdf",
           date: "May 2, 2011"
@@ -518,6 +533,21 @@ const Publications = {
     {
       slug: "zooniverse/andromeda-project",
       publications: [
+        {
+        citation: "Panchromatic Hubble Andromeda Treasury XVIII. The High-mass Truncation of the Star Cluster Mass Function, Johnson+ 2017.",
+        href: "https://arxiv.org/abs/1703.10312",
+        date: "March 30, 2017"
+        },
+        {
+        citation: "Panchromatic Hubble Andromeda Treasury XVI. Star Cluster Formation Efficiency and the Clustered Fraction of Young Stars, Johnson+ 2016.",
+        href: "https://arxiv.org/abs/1606.05349",
+        date: "June 16, 2016"
+        },
+        {
+        citation: "The High-mass Stellar Initial Mass Function in M31 Clusters, Weisz+ 2015.",
+        href: "https://arxiv.org/abs/1502.06621",
+        date: "Feb 23, 2015"
+        },
         {
         citation: "PHAT Stellar Cluster Survey. II. Andromeda Project Cluster Catalog, Johnson+ 2015.",
         href: "http://arxiv.org/abs/1501.04966",
@@ -668,10 +698,20 @@ const Publications = {
   ],
   nature: [
     {
+      slug: "zooniverse/floating-forests",
+      publications: [
+        {
+          citation: "Encouraging Work in Citizen Science: Experiments in Goal Setting and Anchoring, Jackson+ 2016.",
+          href: "https://dl.acm.org/citation.cfm?id=2818052.2869129",
+          date: "February 26, 2016"
+        }
+      ]
+    },
+    {
       slug: "zooniverse/bat-detective",
       publications: [
         {
-          citation: "Bat detective—Deep learning tools for bat acoustic signal detection, Mac Aodha O+ 2018.",
+          citation: "Bat detective—Deep learning tools for bat acoustic signal detection, Mac Aodha+ 2018.",
           href: "https://doi.org/10.1371/journal.pcbi.1005995",
           date: "March 8, 2018"
         }
@@ -736,7 +776,7 @@ const Publications = {
     slug: "zooniverse/penguin-watch",
     publications: [
       {
-        citation: "Counting in the Wild, Arteta, C., Lempitsky, V., Zisserman, A. 2016",
+        citation: "Counting in the Wild, Arteta, C., Lempitsky, V., Zisserman, A. 2016.",
         href: "https://link.springer.com/chapter/10.1007/978-3-319-46478-7_30",
         date: "2016"
       }
@@ -768,22 +808,27 @@ const Publications = {
       slug: "zooniverse/gravity-spy",
       publications: [
         {
-        citation: "Deep Multi-view Models for Glitch Classification, Bahaadini, S., N. Rohani, S. Coughlin, M. Zevin, V. Kalogera, & A. Katsaggelos, 2017",
+        citation: "Appealing to different motivations in a message to recruit citizen scientists: results of a field experiment, Lee+ 2018.",
+        href: "https://jcom.sissa.it/archive/17/01/JCOM_1701_2018_A02",
+        date: "February 6, 2018"
+        },
+        {
+        citation: "Deep Multi-view Models for Glitch Classification, Bahaadini+ 2017.",
         href: "https://arxiv.org/pdf/1705.00034.pdf",
         date: "2017"
         },
         {
-        citation: "Gravity Spy: Integrating Advanced LIGO Detector Characterization, Machine Learning, and Citizen Science, Michael Zevin; Scott Coughlin; Sara Bahaadini; Emre Besler; Neda Rohani; Sarah Allen; Miriam Cabero; Kevin Crowston; Aggelos Katsaggelos; Shane Larson; Tae Kyoung Lee; Chris Lintott; Tyson Littenberg; Andrew Lundgren; Carsten Oesterlund; Joshua Smith; Laura Trouille; Vicky Kalogera 2017",
+        citation: "Gravity Spy: Integrating Advanced LIGO Detector Characterization, Machine Learning, and Citizen Science, Zevin+ 2017.",
         href: "https://arxiv.org/abs/1611.04596",
         date: "2017"
         },
         {
-        citation: "Gravity Spy: Humans, machines and the future of citizen science, Kevin Crowston; The Gravity Spy Team 2017.",
+        citation: "Gravity Spy: Humans, machines and the future of citizen science, Crowston+ 2017.",
         href: "https://crowston.syr.edu/node/668",
         date: "2017"
         },
         {
-        citation: "Blending Machine and Human Learning Processes, Crowston, Kevin; Østerlund, Carsten; Lee, Tae Kyoung 2017.",
+        citation: "Blending Machine and Human Learning Processes, Crowston+ 2017.",
         href: "http://hdl.handle.net/10125/41159",
         date: "2017"
         }
@@ -805,12 +850,17 @@ const Publications = {
     name: "Meta Studies",
     publications: [
       {
+      citation: "Comparing experts and novices in Martian surface feature change detection and identification, Wardlaw+ 2018.",
+      href: "https://www.sciencedirect.com/science/article/pii/S030324341730123X?via%3Dihub",
+      date: "February 2018"
+      },
+      {
         citation: "Task Workflow Design and its impact on performance and volunteers' subjective preference in Virtual Citizen Science, Sprinks+ 2017.",
         href: "http://www.sciencedirect.com/science/article/pii/S1071581917300332",
         date: "2017"
       },
       {
-        citation: "Blending Machine and Human Learning Processes, Crowston, Kevin, Østerlund, Carsten, Lee, Tae Kyoung, 2017",
+        citation: "Blending Machine and Human Learning Processes, Crowston, Kevin, Østerlund, Carsten, Lee, Tae Kyoung, 2017.",
         href: "http://scholarspace.manoa.hawaii.edu/handle/10125/41159",
         date: "2017"
       },
