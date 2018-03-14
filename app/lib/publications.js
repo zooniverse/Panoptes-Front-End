@@ -668,11 +668,21 @@ const Publications = {
   ],
   nature: [
     {
+      slug: "zooniverse/bat-detective",
+      publications: [
+        {
+          citation: "Bat detective—Deep learning tools for bat acoustic signal detection, Mac Aodha O+ 2018.",
+          href: "https://doi.org/10.1371/journal.pcbi.1005995",
+          date: "March 8, 2018"
+        }
+      ]
+    },
+    {
       slug: "zooniverse/whale-fm",
       publications: [
         {
           citation: "Classification of large acoustic datasets using machine learning and crowdsourcing: Application to whale calls, Shamir+ 2014.",
-          href: "http://s      citation.aip.org/content/asa/journal/jasa/135/2/10.1121/1.4861348",
+          href: "https://www.ncbi.nlm.nih.gov/pubmed/25234903",
           date: "Dec 17, 2013"
         },
         {
