@@ -21,13 +21,11 @@ const subject = {
 const canvasViewerProps = {
   annotation,
   annotations,
+  subject,
   frame: 0,
-  onBlur: () => null,
-  onFocus: () => null,
   overlayStyle: {},
   src: '',
   style: {},
-  subject,
   viewBoxDimensions: {
     height: 512, width: 512, x: 0, y: 0
   }
@@ -45,23 +43,42 @@ describe('CanvasViewer', function () {
   it('should start off loading', function () {
     assert.equal(wrapper.find('.loading-cover').length, 1);
   });
-});
-describe('CanvasViewer with TestModel', function () {
-  let wrapper;
-  before(function (done) {
-    wrapper = mount(<CanvasViewer {...canvasViewerProps} />);
-    // slight delay before running the tests
-    setTimeout(
-      () => { wrapper.update(); done(); },
-      100
-    );
+  describe('#resizeCanvas({ width, height })', function () {
+    it('should correctly size the canvas', function () {
+      const canvas = wrapper.find('canvas').instance();
+      wrapper.instance().resizeCanvas({ width: 100, height: 100 });
+      wrapper.update();
+      assert.equal(canvas.width, 100);
+      assert.equal(canvas.height, 100);
+    });
   });
-  it('should correctly size the canvas', function () {
-    const canvas = wrapper.find('canvas').instance();
-    assert.equal(canvas.width, 100);
-    assert.equal(canvas.height, 100);
+  describe('#changeCanvasStyleSize({ width, height })', function () {
+    it('should correctly change the canvas style width and height', function () {
+      const canvas = wrapper.find('canvas').instance();
+      wrapper.instance().changeCanvasStyleSize({ width: '300px', height: '300px' });
+      console.log(wrapper.instance().state);
+      wrapper.update();
+      assert.equal(canvas.style.width, '300px');
+      assert.equal(canvas.style.height, '300px');
+    });
   });
-  it('should tell the canvas when done loading', function () {
-    assert.equal(wrapper.find('.loading-cover').length, 0);
+  describe('#onLoad()', function () {
+    it('should remove loading indicator', function () {
+      wrapper.instance().onLoad();
+      wrapper.update();
+      assert.equal(wrapper.find('.loading-cover').length, 0);
+    });
+  });
+  describe('#setScore(setScore)', function () {
+    before(function () {
+      wrapper.instance().setScore(100);
+      wrapper.update();
+    });
+    it('Should trigger the display of a score text', function () {
+      assert.equal(wrapper.find('.canvas-renderer-score').length, 1);
+    });
+    it('should set the score to the correct value', function () {
+      assert.equal(wrapper.instance().state.score, 100);
+    });
   });
 });

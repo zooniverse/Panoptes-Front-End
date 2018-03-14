@@ -136,9 +136,6 @@ class CanvasViewer extends React.Component {
         ));
       });
   }
-  // TODO: choose size from subject metadata. Handle Pan.
-  // TODO: don't always have score, some models wouldn't want one (chart.js)
-  //       this.model.hasScore? this.subject.metadata.modelling[0].hasScore?
   render() {
     return (
       <div className="subject-canvas-frame" >
@@ -173,12 +170,12 @@ CanvasViewer.propTypes = {
   annotation: PropTypes.object,
   annotations: PropTypes.array,
   frame: PropTypes.number,
-  // onBlur: PropTypes.func,
-  // onFocus: PropTypes.func,
   overlayStyle: PropTypes.object,
   src: PropTypes.string,
   style: PropTypes.object,
+  /* eslint-disable react/no-unused-prop-types */
   subject: PropTypes.object,
+  /* eslint-enable react/no-unused-prop-types */
   viewBoxDimensions: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number,
