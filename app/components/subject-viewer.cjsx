@@ -1,16 +1,16 @@
 React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
-`import FavoritesButton from '../collections/favorites-button';`
+FavoritesButton = require('../collections/favorites-button').default
 Dialog = require 'modal-form/dialog'
 {Markdown} = require 'markdownz'
 classnames = require 'classnames'
 getSubjectLocation = require '../lib/get-subject-location'
 FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
-`import FrameViewer from './frame-viewer';`
-`import CollectionsManagerIcon from '../collections/manager-icon';`
-`import getSubjectLocations from '../lib/get-subject-locations';`
+FrameViewer = require('./frame-viewer').default
+CollectionsManagerIcon = require('../collections/manager-icon').default
+getSubjectLocations = require('../lib/get-subject-locations').default
 
 NOOP = Function.prototype
 
