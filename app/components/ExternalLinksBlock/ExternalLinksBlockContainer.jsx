@@ -36,7 +36,7 @@ export default class ExternalLinksBlockContainer extends React.Component {
 
     if (links.length > 0) {
       return (
-        <ExternalLinksBlock header={this.props.header} links={links} basis={this.props.basis} />
+        <ExternalLinksBlock header={this.props.header} links={links} basis={this.props.basis} resource={this.props.resource} />
       );
     }
 

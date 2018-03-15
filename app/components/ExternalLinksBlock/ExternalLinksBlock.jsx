@@ -6,7 +6,9 @@ import ExternalLink from './components/ExternalLink';
 import { zooTheme } from '../../theme';
 
 export const StyledExternalLinksBlock = styled.div`
-  background-color: white;
+  background-color: ${({ isItAProject }) => {
+    return (isItAProject) ? zooTheme.colors.background : 'white';
+  }};
   box-sizing: border-box;
   color: ${theme('mode', {
     light: zooTheme.colors.navy.default
@@ -48,10 +50,14 @@ export const StyledExternalLink = styled(ExternalLink)`
   text-decoration: none;
 `;
 
-export default function ExternalLinksBlock({ basis, header, links }) {
+function isResourceAProject(resource) {
+  return Object.keys(resource).includes('workflow_description');
+}
+
+export default function ExternalLinksBlock({ basis, header, links, resource }) {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
-      <StyledExternalLinksBlock basis={basis}>
+      <StyledExternalLinksBlock basis={basis} isItAProject={isResourceAProject(resource)}>
         {header}
         <ul>
           {links.map((link) => {
@@ -78,12 +84,14 @@ export default function ExternalLinksBlock({ basis, header, links }) {
 ExternalLinksBlock.defaultProps = {
   basis: '33.333',
   header: null,
-  links: []
+  links: [],
+  resource: null
 };
 
 ExternalLinksBlock.propTypes = {
   basis: PropTypes.string,
   header: PropTypes.node,
-  links: PropTypes.arrayOf(PropTypes.object)
+  links: PropTypes.arrayOf(PropTypes.object),
+  resource: PropTypes.object
 };
 

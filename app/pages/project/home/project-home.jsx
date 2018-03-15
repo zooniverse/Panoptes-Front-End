@@ -130,7 +130,7 @@ const ProjectHomePage = (props) => {
       <div className="project-home-page__container">
         {props.project.researcher_quote && (
           <div className="project-home-page__researcher-words">
-            <Translate className="project-home-page__small-header" content="project.home.researcher" tag="h4" />
+            <Translate className="project-home-page__small-header" content="project.home.researcher" component="h4" />
 
             <div className="researcher-words__wrapper">
               <img className="researcher-words__avatar" role="presentation" src={avatarSrc} alt="The researcher" />
@@ -142,7 +142,7 @@ const ProjectHomePage = (props) => {
           <Translate
             className="project-home-page__small-header"
             content="project.home.about"
-            tag="h4"
+            component="h4"
             with={{
               title: props.translation.display_name
             }}
