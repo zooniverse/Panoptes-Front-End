@@ -2,7 +2,7 @@ React = require 'react'
 createReactClass = require 'create-react-class'
 DragReorderable = require 'drag-reorderable'
 TriggeredModalForm = require 'modal-form/triggered'
-dropdownEditorHelp = require './editor-help'
+dropdownEditorHelp = require('./editor-help').default
 months = require './presets/months'
 countries = require './presets/countries' # value = ISO 3166-1 numeric code
 statesUSA = require './presets/states-USA' # value = two-letter postal abbreviation, does not duplicate with Canada
