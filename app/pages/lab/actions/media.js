@@ -1,6 +1,9 @@
 const apiClient = require('panoptes-client/lib/api-client');
 const putFile = require('../../../lib/put-file');
 
+// warn on uploads bigger than 500k
+const MAX_FILE_SIZE = 500 * 1024;
+
 const mediaActions = {
   fetchMedia(props = this.props) {
     this.setState({ media: null });
@@ -40,15 +43,19 @@ const mediaActions = {
   addFile(file) {
     console.log(`Adding media ${file.name}`);
     const pendingFiles = this.state.pendingFiles;
-    pendingFiles.push(file);
-    this.setState({ pendingFiles });
-
-    return this.createLinkedResource(file)
-      .then(this.uploadMedia.bind(this, file))
-      .then(this.handleSuccess)
-      .catch(this.handleError.bind(this, file))
-      .then(this.removeFromPending.bind(this, file))
-      .then(this.fetchMedia);
+    const uploadSize = parseInt(file.size / 1024);
+    const maxSize = parseInt(MAX_FILE_SIZE / 1024);
+    const shouldUpload = (file.size < MAX_FILE_SIZE) || window.confirm(`This file is ${uploadSize}kB. Large files will make your project slow to load for volunteers. We recommend keeping your files smaller than ${maxSize}kB. Continue to upload ${file.name}?`);
+    if (shouldUpload) {
+      pendingFiles.push(file);
+      this.setState({ pendingFiles });
+      return this.createLinkedResource(file)
+        .then(this.uploadMedia.bind(this, file))
+        .then(this.handleSuccess)
+        .catch(this.handleError.bind(this, file))
+        .then(this.removeFromPending.bind(this, file))
+        .then(this.fetchMedia);
+    }
   },
 
   createLinkedResource(file, location = this.props.resource._getURL(this.props.link)) {
@@ -56,7 +63,7 @@ const mediaActions = {
     const payload = {
       media: {
         content_type: file.type,
-        metadata: Object.assign({ filename: file.name }, this.props.metadata),
+        metadata: Object.assign({ filename: file.name, size: file.size }, this.props.metadata),
       },
     };
 
