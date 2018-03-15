@@ -65,9 +65,9 @@ module.exports = createReactClass
 
               toolDescription = taskDescription.tools[mark.tool]
               if parseInt(mark.frame) is parseInt(@props.frame) or (
-                @props.workflow.configuration.multi_image_clone_markers and not
-                @props.workflow.configuration.enable_switching_flipbook_and_separate and
-                @props.multi_image_mode == 'flipbook'
+                @props.workflow.configuration.multi_image_clone_markers and
+                (not @props.workflow.configuration.enable_switching_flipbook_and_separate) and
+                @props.workflow.configuration.multi_image_mode == 'flipbook'
               )
                 {details} = toolDescription
               else
