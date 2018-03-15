@@ -12,6 +12,7 @@ describe('ExternalLinksBlock', function() {
       <ExternalLinksBlock
         header={<Translate content="project.home.links" />}
         links={externalLinks}
+        resource={{ workflow_description: '' }}
       />
     );
   });
