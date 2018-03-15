@@ -25,8 +25,8 @@ export default class EditMediaPage extends React.Component {
       <div className="edit-media-page">
         <div className="content-container">
           <p>
-            <strong>You can add images here to use in your project’s content.</strong><br />
-            Just copy and paste the image’s Markdown code: <code>![title](url)</code>. Images can be any of: {this.renderValidExtensions()} </p>
+            <strong>You can add files here to use in your project’s content.</strong><br />
+            Just copy and paste the file’s Markdown code: <code>![title](url)</code>. Files can be any of: {this.renderValidExtensions()} </p>
           <MediaArea resource={this.props.project} />
         </div>
       </div>
