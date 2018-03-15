@@ -93,6 +93,9 @@
       display: flex
       flex: 1 1 auto
 
+  .task-container
+    padding: 0 2em 0 2em
+
   .subject
     box-shadow: 0 0 0 1px gray
     max-height: 90vh
@@ -174,7 +177,7 @@
     flex: 0 0 45ch
     margin-bottom: 1em
     max-width: 100%
-    padding: 2em
+    padding: 0 0 2em 0
 
     @media (min-width: 900px)
       margin-left: 1em
@@ -191,6 +194,7 @@
   .task-nav
     display: flex
     margin-top: 1em
+    padding: 0 2em 0 2em
 
     .back
       flex: 1 0
@@ -219,13 +223,23 @@
   .classifier > .task-area & .required-task-warning
     display: none
 
+  .question p
+    margin: 1em 0 1.5em
+
   .answer-button
     align-items: baseline
+    background-color: #EEF1F4;
+    box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5)
+    cursor: pointer
     display: flex
-    margin: 0.5em 0
+    margin: 10px 0
     padding: 1ch 2ch
     position: relative
     text-align: left
+
+    &:hover, &.active
+      background-color: #00979D
+      color: white
 
     > :not(:first-child)
       margin-left: 1ch
@@ -239,9 +253,7 @@
         margin-bottom: 0
 
     .answer-button-icon-container
-      align-self: center
-      flex-shrink: 0
-      height: 1.5em
+      display: none
 
     .answer-button-label-container
       align-items: baseline
@@ -251,6 +263,7 @@
 
     .answer-button-label
       flex-grow: 1
+      text-align: center
       img
         vertical-align: middle
         padding-left: 5px

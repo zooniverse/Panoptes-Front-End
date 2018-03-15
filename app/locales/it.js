@@ -11,6 +11,7 @@ export default {
     letsGo: 'Let’s go!',
     next: 'Next',
     optOut: 'Opt out',
+    question: 'Question',    
     recents: 'Your recent classifications',
     talk: 'Talk',
     tutorialButton: 'Show the project tutorial',

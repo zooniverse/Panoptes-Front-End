@@ -12,6 +12,7 @@ export default {
     next: 'Next',
     optOut: 'Opt out',
     recents: 'Your recent classifications',
+    question: 'Question',
     talk: 'Talk',
     tutorialButton: 'Show the project tutorial',
     miniCourseButton: 'Restart the project mini-course',

@@ -26,6 +26,7 @@ import * as feedbackActions from '../redux/ducks/feedback';
 import openFeedbackModal from '../features/feedback/classifier';
 import GridTool from './drawing-tools/grid';
 import tasks from './tasks';
+import TaskTabs from './components/TaskTabs';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -352,6 +353,7 @@ class Classifier extends React.Component {
             playIterations={this.props.workflow.configuration.playIterations}
           />
           <div className="task-area">
+            <TaskTabs />
             {!currentClassification.completed ?
               <Task
                 preferences={this.props.preferences}
@@ -399,43 +401,45 @@ class Classifier extends React.Component {
                   onChangeDemoMode={this.props.onChangeDemoMode}
                 />}
             </TaskNav>
-            <p>
-              <small>
-                <strong>
-                  <RestartButton
-                    className="minor-button"
-                    preferences={this.props.preferences}
-                    shouldRender={(this.props.tutorial) && (this.props.tutorial.steps.length > 0)}
-                    start={Tutorial.start.bind(Tutorial, this.props.tutorial, this.props.user, this.props.preferences, this.context.geordi, this.context.store)}
-                    style={{ marginTop: '2em' }}
-                    user={this.props.user}
-                    workflow={this.props.workflow}
-                  >
-                    <Translate content="classifier.tutorialButton" />
-                  </RestartButton>
-                </strong>
-              </small>
-            </p>
-
-            <p>
-              <small>
-                <strong>
-                  <VisibilitySplit splits={this.props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+            {this.props.tutorial &&
+              <p>
+                <small>
+                  <strong>
                     <RestartButton
                       className="minor-button"
                       preferences={this.props.preferences}
-                      shouldRender={(this.props.minicourse) && (this.props.user) && (this.props.minicourse.steps.length > 0)}
-                      start={MiniCourse.restart.bind(MiniCourse, this.props.minicourse, this.props.preferences, this.props.user, this.context.geordi, this.context.store)}
+                      shouldRender={(this.props.tutorial) && (this.props.tutorial.steps.length > 0)}
+                      start={Tutorial.start.bind(Tutorial, this.props.tutorial, this.props.user, this.props.preferences, this.context.geordi, this.context.store)}
                       style={{ marginTop: '2em' }}
                       user={this.props.user}
                       workflow={this.props.workflow}
                     >
-                      <Translate content="classifier.miniCourseButton" />
+                      <Translate content="classifier.tutorialButton" />
                     </RestartButton>
-                  </VisibilitySplit>
-                </strong>
-              </small>
-            </p>
+                  </strong>
+                </small>
+              </p>}
+
+            {this.props.minicourse &&
+              <p>
+                <small>
+                  <strong>
+                    <VisibilitySplit splits={this.props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+                      <RestartButton
+                        className="minor-button"
+                        preferences={this.props.preferences}
+                        shouldRender={(this.props.minicourse) && (this.props.user) && (this.props.minicourse.steps.length > 0)}
+                        start={MiniCourse.restart.bind(MiniCourse, this.props.minicourse, this.props.preferences, this.props.user, this.context.geordi, this.context.store)}
+                        style={{ marginTop: '2em' }}
+                        user={this.props.user}
+                        workflow={this.props.workflow}
+                      >
+                        <Translate content="classifier.miniCourseButton" />
+                      </RestartButton>
+                    </VisibilitySplit>
+                  </strong>
+                </small>
+              </p>}
 
             {!!this.props.demoMode &&
               <p style={{ textAlign: 'center' }}>

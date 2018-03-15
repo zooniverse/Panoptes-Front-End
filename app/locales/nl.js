@@ -43,6 +43,7 @@ export default {
     letsGo: 'Let’s go!',
     next: 'Verder',
     optOut: 'Opt out',
+    question: 'Question',
     recents: 'Je recente classificaties',
     talk: 'Praat',
     tutorialButton: 'Toon de projecthandleiding',
