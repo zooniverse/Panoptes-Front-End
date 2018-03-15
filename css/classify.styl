@@ -193,7 +193,6 @@
 
   .task-nav
     display: flex
-    margin-top: 1em
     padding: 0 2em 0 2em
 
     .back
@@ -202,9 +201,16 @@
     .talk
       flex: 2 0
 
-    .continue
+    .continue-button
+      background-color: HIGHLIGHT_COLOR
       border-radius: 0
+      color: white
       flex: 3 0
+      font-size: 0.9em
+      text-transform: capitalize
+
+      i
+        margin-left: 1ch
 
     > :not(:first-child)
       margin-left: 0.5em

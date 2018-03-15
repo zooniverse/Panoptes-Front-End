@@ -157,15 +157,16 @@ class TaskNav extends React.Component {
           {(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut) ?
             <button
               type="button"
-              className="continue major-button"
+              className="continue-button"
               disabled={waitingForAnswer}
               onClick={this.addAnnotationForTask.bind(this, nextTaskKey)}
             >
               <Translate content="classifier.next" />
+              <i className="fa fa-long-arrow-right" />              
             </button> : !completed ?
               <button
                 type="button"
-                className="continue major-button"
+                className="continue-button"
                 disabled={waitingForAnswer}
                 onClick={this.completeClassification}
               >
@@ -186,10 +187,11 @@ class TaskNav extends React.Component {
           {completed &&
             <button
               autoFocus={this.props.autoFocus}
-              className="continue major-button"
+              className="continue-button"
               onClick={this.props.nextSubject}
             >
               <Translate content="classifier.next" />
+            <i className="fa fa-long-arrow-right" />
             </button>}
           {this.props.children}
         </nav>

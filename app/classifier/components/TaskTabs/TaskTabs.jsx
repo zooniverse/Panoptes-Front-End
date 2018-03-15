@@ -5,6 +5,7 @@ import Translate from 'react-translate-component';
 import { pxToRem } from '../../../theme';
 
 // TODO: add a TutorialTab
+// TODO: add onClick functionality
 
 const TabsWrapper = styled.div`
   display: flex;

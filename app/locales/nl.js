@@ -46,6 +46,7 @@ export default {
     question: 'Question',
     recents: 'Je recente classificaties',
     talk: 'Praat',
+    taskHelpButton: 'Need some help with this task?',
     tutorialButton: 'Toon de projecthandleiding',
     miniCourseButton: 'Herstart de minitour'
   },

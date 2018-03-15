@@ -2,6 +2,7 @@ import { Markdown } from 'markdownz';
 import PropTypes from 'prop-types';
 import React from 'react';
 import alert from '../../lib/alert';
+import TaskHelpButton from '../components/TaskHelpButton';
 
 export default class GenericTask extends React.Component {
   constructor(props) {
@@ -41,23 +42,6 @@ export default class GenericTask extends React.Component {
   }
 
   render() {
-    let help;
-    if (this.props.help) {
-      help = (
-        <div>
-          <hr />
-          <p>
-            <small>
-              <strong>
-                <button type="button" className="minor-button" onClick={this.showHelp}>
-                  Need some help with this task?
-                </button>
-              </strong>
-            </small>
-          </p>
-        </div>
-      );
-    }
     let required;
     if (this.props.required) {
       required = (
@@ -83,7 +67,8 @@ export default class GenericTask extends React.Component {
           )}
         </div>
         {required}
-        {help}
+        {this.props.help &&
+          <TaskHelpButton onClick={this.showHelp} />}
       </div>
     );
   }

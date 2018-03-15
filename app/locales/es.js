@@ -14,6 +14,7 @@ export default {
     recents: 'Your recent classifications',
     question: 'Question',
     talk: 'Talk',
+    taskHelpButton: 'Need some help with this task?',
     tutorialButton: 'Show the project tutorial',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {

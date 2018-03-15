@@ -11,9 +11,10 @@ export default {
     letsGo: 'Let’s go!',
     next: 'Next',
     optOut: 'Opt out',
-    question: 'Question',    
+    question: 'Question',
     recents: 'Your recent classifications',
     talk: 'Talk',
+    taskHelpButton: 'Need some help with this task?',
     tutorialButton: 'Show the project tutorial',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
