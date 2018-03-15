@@ -71,6 +71,7 @@ class ProjectClassifyPage extends React.Component {
     this.project = null;
     this.workflow = null;
     this.simulateSaveFailure = shouldSimulateSaveFailure(window.location);
+    this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
 
     this.state = {
       subject: null,
@@ -79,7 +80,8 @@ class ProjectClassifyPage extends React.Component {
       demoMode: sessionDemoMode,
       promptWorkflowAssignmentDialog: false,
       rejected: null,
-      validUserGroup: false
+      validUserGroup: false,
+      darkTheme: false
     };
   }
 
@@ -286,9 +288,15 @@ class ProjectClassifyPage extends React.Component {
     return subject;
   };
 
+  toggleDarkTheme() {
+    this.setState((prevState) => {
+      return { darkTheme: !prevState.darkTheme };
+    });
+  }
+
   render() {
     return (
-      <div className="classify-page content-container">
+      <div className={`${(this.state.darkTheme) ? 'classify-page classify-page--dark-theme' : 'classify-page'}`}>
         <Helmet title={`${this.props.project.display_name} » ${counterpart('classifyPage.title')}`} />
 
         {this.props.projectIsComplete &&
@@ -298,6 +306,11 @@ class ProjectClassifyPage extends React.Component {
           <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
 
         {this.renderClassifier()}
+        <p className="classify-page__theme-button-wrapper">
+          <button className="classify-page__theme-button" type="button" onClick={this.toggleDarkTheme}>
+            Switch to {this.state.darkTheme ? 'light' : 'dark'} theme
+          </button>
+        </p>
       </div>
     );
   }
