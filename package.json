@@ -14,7 +14,7 @@
     "he": "~1.1.0",
     "json-api-client": "~3.2.2",
     "lodash": "~4.17.4",
-    "markdownz": "~7.4.2",
+    "markdownz": "~7.5.0",
     "mocha": "~5.0.1",
     "modal-form": "~2.5.1",
     "moment": "~2.21.0",
