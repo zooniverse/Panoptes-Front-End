@@ -27,7 +27,7 @@ export default class MediaIcon extends React.Component {
     const mediaIconStyle = this.state.deleting ? { opacity: 0.5 } : null;
     const { content_type } = this.props.resource;
     const format = content_type.split('/')[0];
-    let mediaElement = <img alt="" src={this.props.resource.src} style={{ maxHeight: '80vh', maxWidth: '60vw' }} />;
+    let mediaElement;
     switch (format) {
       case 'audio':
         mediaElement = <audio controls src={this.props.resource.src} />;
@@ -35,11 +35,8 @@ export default class MediaIcon extends React.Component {
       case 'video':
         mediaElement = <video controls src={this.props.resource.src} style={{ maxHeight: '80vh', maxWidth: '60vw' }} />;
         break;
-    }
-
-    return (
-      <div className="media-icon" style={mediaIconStyle}>
-        <div className="media-icon-thumbnail-container">
+      default:
+        mediaElement = 
           <TriggeredModalForm trigger={
             <Thumbnail
               className="media-icon-thumbnail"
@@ -50,9 +47,15 @@ export default class MediaIcon extends React.Component {
             />
           }>
             <div className="content-container">
-              {mediaElement}
+              <img alt="" src={this.props.resource.src} style={{ maxHeight: '80vh', maxWidth: '60vw' }} />
             </div>
-          </TriggeredModalForm>
+          </TriggeredModalForm>;
+    }
+
+    return (
+      <div className="media-icon" style={mediaIconStyle}>
+        <div className="media-icon-thumbnail-container">
+          {mediaElement}
           <button type="button" className="media-icon-delete-button" disabled={this.state.deleting} onClick={this.handleDelete}>&times;</button>
         </div>
         {this.props.resource.metadata &&
