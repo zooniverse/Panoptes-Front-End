@@ -6,7 +6,9 @@ import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import findIndex from 'lodash/findIndex';
+import { browserHistory } from 'react-router';
 
+import { getSessionID } from '../lib/session';
 import SubjectViewer from '../components/subject-viewer';
 import ClassificationSummary from './classification-summary';
 import preloadSubject from '../lib/preload-subject';
@@ -39,13 +41,16 @@ class Classifier extends React.Component {
     this.toggleExpertClassification = this.toggleExpertClassification.bind(this);
     this.updateAnnotations = this.updateAnnotations.bind(this);
     this.updateFeedback = this.updateFeedback.bind(this);
+    this.onNextTask = this.onNextTask.bind(this);
+    this.onPrevTask = this.onPrevTask.bind(this);
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
       showingExpertClassification: false,
       subjectLoading: false,
       annotations: [],
-      modelScore: null
+      modelScore: null,
+      workflowHistory: []
     };
   }
 
@@ -81,16 +86,9 @@ class Classifier extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
-    const prevAnnotation = prevState.annotations[prevState.annotations.length - 1];
-
+  componentDidUpdate(prevProps) {
     if (prevProps.classification !== this.props.classification) {
       this.updateAnnotations();
-    }
-
-    if (prevAnnotation && currentAnnotation.task !== prevAnnotation.task) {
-      this.checkForFeedback(prevAnnotation.task);
     }
   }
 
@@ -227,14 +225,55 @@ class Classifier extends React.Component {
     this.updateAnnotations(annotations);
   }
 
-  completeClassification() {
-    if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
-      this.props.onCompleteAndLoadAnotherSubject()
-        .catch(error => console.error(error));
-    } else {
-      this.props.onComplete()
-        .catch(error => console.error(error));
+  onNextTask(taskKey) {
+    const workflowHistory  = this.state.workflowHistory.slice();
+    const prevTaskKey = workflowHistory[workflowHistory.length - 1];
+    workflowHistory.push(taskKey);
+    this.checkForFeedback(prevTaskKey)
+      .then(() => this.setState({ workflowHistory }));
+  }
+
+  onPrevTask() {
+    const workflowHistory  = this.state.workflowHistory.slice();
+    workflowHistory.pop();
+    this.setState({ workflowHistory });
+  }
+
+  completeClassification(e) {
+    const originalElement = e.currentTarget;
+    const isCmdClick = e.metaKey;
+    const subjectTalkPath = `/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`;
+    // don't swallow cmd-click on links
+    if (!isCmdClick) {
+      e.preventDefault();
     }
+    this.props.classification.update({
+      'metadata.session': getSessionID(),
+      'metadata.finished_at': (new Date()).toISOString(),
+      'metadata.viewport': {
+        width: innerWidth,
+        height: innerHeight
+      }
+    });
+
+    let onComplete = this.props.onComplete;
+    if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
+      onComplete = this.props.onCompleteAndLoadAnotherSubject;
+    }
+
+    const workflowHistory = this.state.workflowHistory.slice();
+    const taskKey = workflowHistory[workflowHistory.length - 1];
+    this.checkForFeedback(taskKey)
+      .then(() => {
+        this.props.classification.update({ completed: true });
+        workflowHistory.push('summary');
+        this.setState({ workflowHistory });
+        if (!isCmdClick && originalElement.href) {
+          browserHistory.push(subjectTalkPath);
+        }
+      })
+      .then(onComplete)
+      .catch(error => console.error(error));
     this.setState({ annotations: [{}] });
   }
 
@@ -261,8 +300,11 @@ class Classifier extends React.Component {
     } else {
       currentClassification = this.props.classification;
       if (!this.props.classification.completed) {
-        currentAnnotation = this.state.annotations[this.state.annotations.length - 1];
-        currentTask = currentAnnotation ? this.props.workflow.tasks[currentAnnotation.task] : null;
+        const { workflowHistory } = this.state;
+        const taskKey = this.state.workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
+        currentTask = this.props.workflow.tasks[taskKey];
+        const index = findIndex(this.state.annotations, annotation => annotation.task === taskKey);
+        currentAnnotation = this.state.annotations[index];
       }
     }
 
@@ -271,7 +313,7 @@ class Classifier extends React.Component {
     const modellingEnabled = this.props.workflow.configuration.metadata &&
       this.props.workflow.configuration.metadata.type === 'modelling';
     return (
-      <div className={classifierClassNames} >
+      <div className={classifierClassNames}>
         <SubjectViewer
           user={this.props.user}
           project={this.props.project}
@@ -334,6 +376,8 @@ class Classifier extends React.Component {
             task={currentTask}
             workflow={this.props.workflow}
             updateAnnotations={this.updateAnnotations}
+            onNextTask={this.onNextTask}
+            onPrevTask={this.onPrevTask}
           >
             {!!this.props.expertClassifier &&
               <ExpertOptions

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
 import Translate from 'react-translate-component';
-import { getSessionID } from '../lib/session';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
 import GridTool from './drawing-tools/grid';
@@ -54,10 +53,11 @@ class TaskNav extends React.Component {
     const annotations = classification.annotations.slice();
     annotations.push(annotation);
     this.props.updateAnnotations(annotations);
+    this.props.onNextTask(taskKey);
   }
 
   // Done
-  completeClassification() {
+  completeClassification(e) {
     const { workflow, classification } = this.props;
     if (workflow.configuration.persist_annotations) {
       CacheClassification.delete();
@@ -74,23 +74,13 @@ class TaskNav extends React.Component {
       });
     }
 
-    classification.update({
-      completed: true,
-      'metadata.session': getSessionID(),
-      'metadata.finished_at': (new Date()).toISOString(),
-      'metadata.viewport': {
-        width: innerWidth,
-        height: innerHeight
-      }
-    });
-
     if (currentAnnotation.shortcut) {
       this.addAnnotationForTask(currentTask.unlinkedTask);
       const newAnnotation = classification.annotations[classification.annotations.length - 1];
       newAnnotation.value = currentAnnotation.shortcut.value;
       delete currentAnnotation.shortcut;
     }
-    this.props.completeClassification();
+    this.props.completeClassification(e);
   }
 
   // Back
@@ -101,6 +91,7 @@ class TaskNav extends React.Component {
     const annotations = classification.annotations.slice();
     annotations.pop();
     this.props.updateAnnotations(annotations);
+    this.props.onPrevTask();
 
     if (workflow.configuration.persist_annotations) {
       CacheClassification.update(lastAnnotation);
