@@ -3,6 +3,7 @@ import ruleChecker from '../../helpers/rule-checker';
 function createRule(subjectRule, workflowRule) {
   const rule = {
     failureEnabled: workflowRule.failureEnabled,
+    hideSubjectViewer: workflowRule.hideSubjectViewer,
     id: subjectRule.id,
     strategy: workflowRule.strategy,
     successEnabled: workflowRule.successEnabled,

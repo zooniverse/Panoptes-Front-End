@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import counterpart from 'counterpart';
 import TextInput from '../../components/text-input';
+import CheckboxInput from '../../components/checkbox-input';
 
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
@@ -10,6 +11,10 @@ counterpart.registerTranslations('en', {
       defaultTolerance: {
         title: 'Default Tolerance',
         help: 'Can be overriden by subject metadata.'
+      },
+      hideSubjectViewer: {
+        title: 'Hide Subject Viewer',
+        help: 'By default, the Subject Viewer is shown when a user receives feedback. Check this box to hide it.'
       }
     }
   }
@@ -33,13 +38,22 @@ function RadialLabComponent({ formState, handleInputChange }) {
         type="number"
         required={true}
       />
+
+      <CheckboxInput
+        title={fieldText('hideSubjectViewer.title')}
+        help={fieldText('hideSubjectViewer.help')}
+        name="hideSubjectViewer"
+        checked={formState.hideSubjectViewer}
+        onChange={handleInputChange.bind(this)}
+      />
     </div>
   );
 }
 
 RadialLabComponent.propTypes = {
   formState: PropTypes.shape({
-    defaultTolerance: PropTypes.string
+    defaultTolerance: PropTypes.string,
+    hideSubjectViewer: PropTypes.bool
   }),
   handleInputChange: PropTypes.func
 };

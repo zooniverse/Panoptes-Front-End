@@ -10,7 +10,6 @@ class RuleEditorModalContainer extends Component {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
-    this.validateRule = this.validateRule.bind(this);
 
     this.state = {
       form: _.assign({}, props.rule),

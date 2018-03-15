@@ -33,10 +33,18 @@ function getFeedbackMarks(feedback) {
     .value();
 }
 
+// The subject viewer will be hidden if `hideSubjectViewer` is enabled on
+// _any_ feedback rule.
+function getHideSubjectViewer(feedback) {
+  return feedback.reduce((result, item) =>
+    (result || item.hideSubjectViewer) || false, false);
+}
+
 function getSubjectViewerProps(feedback, subjectViewerProps, taskId) {
   const feedbackMarks = getFeedbackMarks(feedback);
+  const hideSubjectViewer = getHideSubjectViewer(feedback);
 
-  if (!feedbackMarks.length) {
+  if (hideSubjectViewer || !feedbackMarks.length) {
     return false;
   }
 
