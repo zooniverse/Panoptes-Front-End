@@ -418,6 +418,10 @@ ProjectClassifyPage.propTypes = {
   workflow: PropTypes.object,
 };
 
+ProjectClassifyPage.defaultProps = {
+  storage: window.localStorage
+}
+
 
 // For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject;

@@ -10,9 +10,10 @@ describe('ProjectClassifyPage', function () {
   let wrapper;
   let project = {};
   let apiUser = {id: 123};
+  let storage = new FakeLocalStorage();
 
   before(function () {
-    wrapper = shallow(<ProjectClassifyPage project={project} />);
+    wrapper = shallow(<ProjectClassifyPage project={project} storage={storage} />);
   });
 
   it('renders when not logged in', function () {

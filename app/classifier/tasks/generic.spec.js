@@ -68,6 +68,6 @@ describe('GenericTask: with help', function () {
   });
 
   it('should show a help button', function () {
-    assert.equal(wrapper.contains(<button type="button" className="minor-button" onClick={wrapper.instance().showHelp}>Need some help with this task?</button>), true);
+    assert.equal(wrapper.find('TaskHelpButton').length, 1);
   });
 });
