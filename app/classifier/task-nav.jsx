@@ -109,7 +109,7 @@ class TaskNav extends React.Component {
           <TaskBackButton
             areAnnotationsPersisted={this.props.workflow.configuration.persist_annotations}
             destroyCurrentAnnotation={this.destroyCurrentAnnotation}
-            showButton={visibleTasks.length > 1 && !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0)}
+            showButton={visibleTasks.length > 1 && !completed && (this.props.classification.annotations.indexOf(this.props.annotation) !== 0)}
           />
           {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk && !completed) &&
             <Link

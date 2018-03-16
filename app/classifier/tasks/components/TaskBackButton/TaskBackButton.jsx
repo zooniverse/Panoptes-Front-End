@@ -8,6 +8,10 @@ import { pxToRem, zooTheme } from '../../../../theme';
 const StyledTaskBackButton = styled.button.attrs({
   type: 'button'
 })`
+  background-color: ${theme('mode', {
+    light: zooTheme.colors.background
+  })};
+  border: none;
   box-sizing: border-box;
   cursor: pointer;
   flex: 1 0;
@@ -24,7 +28,7 @@ const StyledBackButtonToolTip = styled.span`
   position: absolute;
 `;
 
-export default class TaskBackButton extends React.Component {
+class TaskBackButton extends React.Component {
   constructor() {
     super();
 
@@ -79,3 +83,5 @@ TaskBackButton.propTypes = {
   destroyCurrentAnnotation: PropTypes.func,
   showButton: PropTypes.bool
 };
+
+export default TaskBackButton;

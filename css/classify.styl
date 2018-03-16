@@ -206,10 +206,16 @@
       cursor: pointer
       flex: 3 0
       font-size: 0.9em
+      padding: 0.9em
       text-transform: capitalize
 
       i
         margin-left: 1ch
+
+      &:disabled
+        background: darken(HIGHLIGHT_COLOR, 10%)
+        color: #EEF1F4
+        cursor: not-allowed
 
     > :not(:first-child)
       margin-left: 0.5em
@@ -234,6 +240,7 @@
   .answer-button
     align-items: baseline
     background-color: #EEF1F4;
+    border: none;
     box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5)
     cursor: pointer
     display: flex
