@@ -39,7 +39,7 @@ export default class MultipleChoiceTask extends React.Component {
         active = 'active';
       }
       answers.push(
-        <label key={answer._key} className={`minor-button answer-button ${active}`}>
+        <label key={answer._key} className={`answer-button ${active}`}>
           <div className="answer-button-icon-container">
             <input
               type="checkbox"

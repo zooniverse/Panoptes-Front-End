@@ -2,7 +2,7 @@ import { Markdown } from 'markdownz';
 import PropTypes from 'prop-types';
 import React from 'react';
 import alert from '../../lib/alert';
-import TaskHelpButton from '../components/TaskHelpButton';
+import TaskHelpButton from './components/TaskHelpButton';
 
 export default class GenericTask extends React.Component {
   constructor(props) {

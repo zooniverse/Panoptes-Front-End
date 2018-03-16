@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 import Translate from 'react-translate-component';
 import theme from 'styled-theming';
-import { pxToRem, zooTheme } from '../../../theme';
+import { pxToRem, zooTheme } from '../../../../theme';
 
 const StyledTaskHelpButton = styled.button.attrs({
   type: 'button'

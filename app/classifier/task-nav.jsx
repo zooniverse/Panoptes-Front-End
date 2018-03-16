@@ -4,17 +4,8 @@ import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
-
-
+import TaskBackButton from './tasks/components/TaskBackButton';
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
-
-const BackButtonWarning = () =>
-   (
-     <p className="back-button-warning" >
-       <Translate content="classifier.backButtonWarning" />
-     </p>
-  )
-;
 
 class TaskNav extends React.Component {
   constructor(props) {
@@ -22,11 +13,6 @@ class TaskNav extends React.Component {
     this.addAnnotationForTask = this.addAnnotationForTask.bind(this);
     this.completeClassification = this.completeClassification.bind(this);
     this.destroyCurrentAnnotation = this.destroyCurrentAnnotation.bind(this);
-    this.warningToggleOn = this.warningToggleOn.bind(this);
-    this.warningToggleOff = this.warningToggleOff.bind(this);
-    this.state = {
-      BackButtonWarning: false
-    };
   }
 
   componentDidUpdate() {
@@ -79,18 +65,6 @@ class TaskNav extends React.Component {
     }
   }
 
-  warningToggleOn() {
-    if (!this.props.workflow.configuration.persist_annotations) {
-      this.setState({ backButtonWarning: true });
-    }
-  }
-
-  warningToggleOff() {
-    if (!this.props.workflow.configuration.persist_annotations) {
-      this.setState({ backButtonWarning: false });
-    }
-  }
-
   render() {
     const completed = !!this.props.classification.completed;
 
@@ -101,7 +75,7 @@ class TaskNav extends React.Component {
     const TaskComponent = tasks[task.type];
 
     // Should we disable the "Back" button?
-    const onFirstAnnotation = !completed && (this.props.annotations.indexOf(this.props.annotation) === 0);
+    // const onFirstAnnotation = !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
 
     // Should we disable the "Next" or "Done" buttons?
     let waitingForAnswer = this.props.disabled;
@@ -132,19 +106,11 @@ class TaskNav extends React.Component {
     return (
       <div>
         <nav className="task-nav">
-          {(visibleTasks.length > 1) && !completed &&
-            <button
-              type="button"
-              className="back minor-button"
-              disabled={onFirstAnnotation}
-              onClick={this.destroyCurrentAnnotation}
-              onMouseEnter={this.warningToggleOn}
-              onFocus={this.warningToggleOn}
-              onMouseLeave={this.warningToggleOff}
-              onBlur={this.warningToggleOff}
-            >
-              <Translate content="classifier.back" />
-            </button>}
+          <TaskBackButton
+            areAnnotationsPersisted={this.props.workflow.configuration.persist_annotations}
+            destroyCurrentAnnotation={this.destroyCurrentAnnotation}
+            showButton={visibleTasks.length > 1 && !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0)}
+          />
           {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk && !completed) &&
             <Link
               onClick={this.completeClassification}
@@ -195,7 +161,6 @@ class TaskNav extends React.Component {
             </button>}
           {this.props.children}
         </nav>
-        {this.state.backButtonWarning && <BackButtonWarning />}
       </div>
     );
   }
