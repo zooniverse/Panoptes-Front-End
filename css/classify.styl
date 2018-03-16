@@ -201,6 +201,7 @@
 
     .continue-button
       background-color: HIGHLIGHT_COLOR
+      border: none
       border-radius: 0
       color: white
       cursor: pointer
@@ -211,6 +212,9 @@
 
       i
         margin-left: 1ch
+
+      &:hover, &:focus
+        background: lighten(HIGHLIGHT_COLOR, 10%)
 
       &:disabled
         background: darken(HIGHLIGHT_COLOR, 10%)

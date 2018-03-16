@@ -96,7 +96,7 @@ module.exports = createReactClass
       <div>
         <label key={tool._key} >
           <input name="drawing-tool" autoFocus={@props.autoFocus and i is 0} type="radio" className="drawing-tool-button-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
-          <div className="minor-button answer-button #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
+          <div className="answer-button #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
             <div className="answer-button-icon-container">
               <span className="drawing-tool-button-icon" style={color: tool.color}>{icons[tool.type]}</span>
             </div>

@@ -5,6 +5,19 @@ import Translate from 'react-translate-component';
 import theme from 'styled-theming';
 import { pxToRem, zooTheme } from '../../../../theme';
 
+function checkIfMSBrowser() {
+  if ('CSS' in window) {
+    return !CSS.supports('width', 'max-content');
+  }
+
+  return 'ActiveXObject' in window;
+}
+
+const StyledTaskBackButtonWrapper = styled.div`
+  position: relative;
+  flex: 1 0;
+`;
+
 const StyledTaskBackButton = styled.button.attrs({
   type: 'button'
 })`
@@ -14,18 +27,22 @@ const StyledTaskBackButton = styled.button.attrs({
   border: none;
   box-sizing: border-box;
   cursor: pointer;
-  flex: 1 0;
-  position: relative;
+  font-size: 0.9em;    
+  padding: 0.9em;
+  width: 100%;
 `;
 
-const StyledBackButtonToolTip = styled.span`
+const StyledTaskBackButtonToolTip = styled.span`
   background-color: ${theme('mode', {
-    light: zooTheme.colors.teal.dark
+    light: zooTheme.colors.teal.mid
   })};
-  bottom: -100%;
+  bottom: -130%;
   color: white;
+  font-size: 0.9em; 
+  left: 0;   
   padding: 1em;
   position: absolute;
+  width: ${(checkIfMSBrowser()) ? 'intrisinc' : 'max-content'};
 `;
 
 class TaskBackButton extends React.Component {
@@ -40,7 +57,7 @@ class TaskBackButton extends React.Component {
   }
 
   toggleWarning() {
-    if (this.props.areAnnotationsPersisted) {
+    if (this.props.areAnnotationsNotPersisted) {
       this.setState((prevState) => {
         return { showWarning: !prevState.showWarning };
       });
@@ -51,19 +68,22 @@ class TaskBackButton extends React.Component {
     if (this.props.showButton) {
       return (
         <ThemeProvider theme={{ mode: 'light' }}>
-          <StyledTaskBackButton
-            onClick={this.props.destroyCurrentAnnotation}
-            onMouseEnter={this.toggleWarning}
-            onFocus={this.toggleWarning}
-            onMouseLeave={this.toggleWarning}
-            onBlur={this.toggleWarning}
-          >
-            <Translate content="classifier.back" />
+          <StyledTaskBackButtonWrapper>
+              <StyledTaskBackButton
+                onClick={this.props.destroyCurrentAnnotation}
+                onMouseEnter={this.toggleWarning}
+                onFocus={this.toggleWarning}
+                onMouseLeave={this.toggleWarning}
+                onBlur={this.toggleWarning}
+              >
+                <Translate content="classifier.back" />
+              </StyledTaskBackButton>
+
             {this.state.showWarning &&
-              <StyledBackButtonToolTip>
+              <StyledTaskBackButtonToolTip>
                 <Translate content="classifier.backButtonWarning" />
-              </StyledBackButtonToolTip>}
-          </StyledTaskBackButton>
+              </StyledTaskBackButtonToolTip>}
+          </StyledTaskBackButtonWrapper>
         </ThemeProvider>
       );
     }
@@ -73,13 +93,13 @@ class TaskBackButton extends React.Component {
 }
 
 TaskBackButton.defaultProps = {
-  areAnnotationsPersisted: false,
+  areAnnotationsNotPersisted: false,
   destroyCurrentAnnotation: () => {},
   showButton: false
 };
 
 TaskBackButton.propTypes = {
-  areAnnotationsPersisted: PropTypes.bool,
+  areAnnotationsNotPersisted: PropTypes.bool,
   destroyCurrentAnnotation: PropTypes.func,
   showButton: PropTypes.bool
 };
