@@ -56,21 +56,12 @@ apiClient.type('subject_sets').listen('add-or-remove', emptySubjectQueue);
 // Store this externally to persist during the session.
 let sessionDemoMode = false;
 
-function shouldSimulateSaveFailure(location) {
-  let search = null;
-  if (location !== undefined && location !== null) { search = location.search; }
-  if (search === null) { search = ''; }
-
-  return (search.indexOf('simulate-classification-save-failure') !== -1);
-}
-
 class ProjectClassifyPage extends React.Component {
   constructor(props) {
     super(props);
     this.loadingSelectedWorkflow = false;
     this.project = null;
     this.workflow = null;
-    this.simulateSaveFailure = shouldSimulateSaveFailure(window.location);
     this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
 
     this.state = {
@@ -433,8 +424,7 @@ ProjectClassifyPage.contextTypes = {
 ProjectClassifyPage.propTypes = {
   loadingSelectedWorkflow: PropTypes.bool,
   project: PropTypes.object,
-  workflow: PropTypes.object,
-  simulateSaveFailure: PropTypes.bool
+  workflow: PropTypes.object
 };
 
 
