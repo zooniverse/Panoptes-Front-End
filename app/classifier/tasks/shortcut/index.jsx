@@ -36,7 +36,7 @@ export default class Shortcut extends React.Component {
           if (answer._key === undefined) { answer._key = Math.random(); }
           return (
             <p key={answer._key}>
-              <label htmlFor={`shortcut-${i}`} className={`answer minor-button answer-button ${active.includes(i) ? 'active' : ''}`}>
+              <label htmlFor={`shortcut-${i}`} className={`answer answer-button ${active.includes(i) ? 'active' : ''}`}>
                 <small>
                   <strong>
                     <input id={`shortcut-${i}`} type="checkbox" checked={active.includes(i)} onChange={this.toggleShortcut.bind(this, i)} />
