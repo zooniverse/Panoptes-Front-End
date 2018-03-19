@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 import Translate from 'react-translate-component';
 import theme from 'styled-theming';
-import { pxToRem, zooTheme } from '../../../../theme';
+import { zooTheme } from '../../../../theme';
 
 function checkIfMSBrowser() {
   if ('CSS' in window) {
@@ -27,9 +27,15 @@ const StyledTaskBackButton = styled.button.attrs({
   border: none;
   box-sizing: border-box;
   cursor: pointer;
-  font-size: 0.9em;    
+  font-size: 0.9em;
   padding: 0.9em;
   width: 100%;
+
+  &:focus, &:hover {
+    background: ${theme('mode', {
+      light: '#f6f6f6' // TODO: Check in on actual styling for this.
+    })};
+  }
 `;
 
 const StyledTaskBackButtonToolTip = styled.span`

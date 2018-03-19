@@ -22,6 +22,10 @@ const StyledTaskHelpButton = styled.button.attrs({
   text-align: center;
   text-transform: uppercase;
   width: 100%;
+
+  &:focus, &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export default function TaskHelpButton(props) {
