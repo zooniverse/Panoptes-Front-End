@@ -12,7 +12,7 @@ import HomePageSocial from './home-common/social';
 import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
 import HomePagePromoted from './home-not-logged-in/promoted';
-import PROMOTED_PROJECTS from '../lib/projects';
+import PROMOTED_PROJECTS from '../lib/promoted-projects';
 
 counterpart.registerTranslations('en', {
   notLoggedInHomePage: {
