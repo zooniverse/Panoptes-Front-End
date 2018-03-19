@@ -253,7 +253,7 @@
     position: relative
     text-align: left
 
-    &:hover, &.active
+    &:hover, &:focus, &.active
       background-color: #00979D
       color: white
 
@@ -268,8 +268,11 @@
       > :last-child
         margin-bottom: 0
 
+    // Using, visibility: hidden or display: none breaks accessibility. This keeps the buttons keyboard accessibile,
+    // but hides the actual radio or checkbox
     .answer-button-icon-container
-      display: none
+      opacity: 0.01
+      position: absolute
 
     .answer-button-label-container
       align-items: baseline
