@@ -1,3 +1,5 @@
+import locationMatch from './location-match';
+
 const PROMOTED_PROJECTS = {
   production: {
     60: {
@@ -37,6 +39,8 @@ const PROMOTED_PROJECTS = {
   }
 };
 
-const env = process.env.NODE_ENV === 'production' ? 'production' : 'other';
+const envFromBrowser = locationMatch(/\W?env=(\w+)/);
+const envFromShell = process.env.NODE_ENV;
+const env = envFromBrowser || envFromShell === 'production' ? 'production' : 'other';
 
 export default PROMOTED_PROJECTS[env];
