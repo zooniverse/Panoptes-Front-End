@@ -64,6 +64,11 @@ export class ProjectClassifyPage extends React.Component {
     this.loadingSelectedWorkflow = false;
     this.project = null;
     this.workflow = null;
+<<<<<<< 129bbb7230c41066a562174dd0ba787e29a4eb03
+=======
+    this.storage = props.storage || window.localStorage;
+    this.toggleTheme = this.toggleTheme.bind(this);
+>>>>>>> Rework on theme switching works. Add translations
 
     this.state = {
       subject: null,
@@ -73,6 +78,10 @@ export class ProjectClassifyPage extends React.Component {
       promptWorkflowAssignmentDialog: false,
       rejected: null,
       validUserGroup: false,
+<<<<<<< 129bbb7230c41066a562174dd0ba787e29a4eb03
+=======
+      theme: props.storage.getItem('theme') || zooTheme.mode.light
+>>>>>>> Rework on theme switching works. Add translations
     };
   }
 
@@ -279,9 +288,27 @@ export class ProjectClassifyPage extends React.Component {
     return subject;
   };
 
+<<<<<<< 129bbb7230c41066a562174dd0ba787e29a4eb03
   render() {
     return (
       <div className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
+=======
+  whichThemeToAlternate(currentTheme) {
+    return (currentTheme === zooTheme.mode.light) ? counterpart('project.classifyPage.dark') : counterpart('project.classifyPage.light');
+  }
+
+  toggleTheme() {
+    this.setState((prevState) => {
+      const newTheme = (prevState.theme === zooTheme.mode.light) ? zooTheme.mode.dark : zooTheme.mode.light;
+      this.storage.setItem('theme', newTheme);
+      return { theme: newTheme };
+    });
+  }
+
+  render() {
+    return (
+      <div className={`${(this.state.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
+>>>>>>> Rework on theme switching works. Add translations
         <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
 
         {this.props.projectIsComplete &&
@@ -291,7 +318,18 @@ export class ProjectClassifyPage extends React.Component {
           <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
 
         {this.renderClassifier()}
+<<<<<<< 129bbb7230c41066a562174dd0ba787e29a4eb03
         <ProjectThemeButton />
+=======
+        <p className="classify-page__theme-button-wrapper">
+          <button className="classify-page__theme-button" type="button" onClick={this.toggleTheme}>
+            <Translate
+              content="project.classifyPage.themeToggle"
+              with={{ theme: this.whichThemeToAlternate(this.state.theme)}}
+            />
+          </button>
+        </p>
+>>>>>>> Rework on theme switching works. Add translations
       </div>
     );
   }
