@@ -12,7 +12,7 @@ import HomePageSocial from './home-common/social';
 import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
 import HomePagePromoted from './home-not-logged-in/promoted';
-import FEATURED_PROJECTS from '../lib/featured-projects';
+import PROMOTED_PROJECTS from '../lib/projects';
 
 counterpart.registerTranslations('en', {
   notLoggedInHomePage: {
@@ -72,12 +72,12 @@ export default class HomePage extends React.Component {
   }
 
   getPromotedProjects() {
-    apiClient.type('projects').get({ id: Object.keys(FEATURED_PROJECTS), cards: true })
+    apiClient.type('projects').get({ id: Object.keys(PROMOTED_PROJECTS), cards: true })
     .then((promotedProjects) => {
       promotedProjects.map((project) => {
-        const featuredProject = FEATURED_PROJECTS[project.id];
-        project.image = featuredProject.image;
-        project.title = featuredProject.title;
+        const promotedProject = PROMOTED_PROJECTS[project.id];
+        project.image = promotedProject.image;
+        project.title = promotedProject.title;
         return project;
       });
       this.setState({ promotedProjects });

@@ -1,4 +1,4 @@
-const FEATURED_PROJECTS = {
+const PROMOTED_PROJECTS = {
   production: {
     60: {
       image: '/assets/featured-projects/60.jpg',
@@ -39,4 +39,4 @@ const FEATURED_PROJECTS = {
 
 const env = process.env.NODE_ENV === 'production' ? 'production' : 'other';
 
-export default FEATURED_PROJECTS[env];
+export default PROMOTED_PROJECTS[env];
