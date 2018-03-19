@@ -56,6 +56,8 @@ class Classifier extends React.Component {
 
   componentWillMount() {
     this.updateAnnotations();
+    const workflowHistory = this.props.classification.annotations.map(annotation => annotation.task);
+    this.setState({ workflowHistory });
   }
 
   componentDidMount() {
