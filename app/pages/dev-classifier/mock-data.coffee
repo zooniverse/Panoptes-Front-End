@@ -39,6 +39,7 @@ workflow = apiClient.type('workflows').create
   configuration:
     enable_subject_flags: true
     enable_switching_flipbook_and_separate: true
+    multi_image_clone_markers: false
     multi_image_layout: 'grid3'
     invert_subject: true
     persist_annotations: false
