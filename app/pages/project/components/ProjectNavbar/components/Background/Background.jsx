@@ -22,7 +22,7 @@ export const BackgroundWrapper = styled.div.attrs({
   width: 100%;
 `;
 
-// IE 11 doesn't support filter. Not even their own propriety MS filter. :faceplam:
+// IE 11 doesn't support filter. Not even their own propriety MS filter. :faceplam: IE and Edge do not support background-blend
 export const IEContrastLayer = styled.div`
   background-color: rgba(0,93,105,0.5);
   height: 100%;
@@ -31,6 +31,8 @@ export const IEContrastLayer = styled.div`
 `;
 
 export const ImgBackground = styled.div`
+  background-blend-mode: multiply;
+  background-color: rgba(0,93,105,0.3);
   background-image: url("${props => props.src}");
   background-position: center;
   background-repeat: no-repeat;
@@ -41,17 +43,23 @@ export const ImgBackground = styled.div`
   transform: scale(1.15);
 `;
 
-function isIE11() {
-  return ('ActiveXObject' in window);
+function checkIfMSBrowser() {
+  if ('CSS' in window) {
+    return !CSS.supports('background-blend-mode', 'multiply');
+  }
+
+  return 'ActiveXObject' in window;
 }
 
 function Background({ src, ...otherProps }) {
+  const isMSBrowser = checkIfMSBrowser();
+
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <BackgroundWrapper hasBg={!!src} {...otherProps}>
         {src &&
           <ImgBackground src={src}>
-            {isIE11() &&
+            {isMSBrowser &&
               <IEContrastLayer />}
           </ImgBackground>}
       </BackgroundWrapper>
