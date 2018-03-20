@@ -13,12 +13,12 @@ function checkIfMSBrowser() {
   return 'ActiveXObject' in window;
 }
 
-const StyledTaskBackButtonWrapper = styled.div`
+export const StyledTaskBackButtonWrapper = styled.div`
   position: relative;
   flex: 1 0;
 `;
 
-const StyledTaskBackButton = styled.button.attrs({
+export const StyledTaskBackButton = styled.button.attrs({
   type: 'button'
 })`
   background-color: ${theme('mode', {
@@ -38,7 +38,7 @@ const StyledTaskBackButton = styled.button.attrs({
   }
 `;
 
-const StyledTaskBackButtonToolTip = styled.span`
+export const StyledTaskBackButtonToolTip = styled.span`
   background-color: ${theme('mode', {
     light: zooTheme.colors.teal.mid
   })};
