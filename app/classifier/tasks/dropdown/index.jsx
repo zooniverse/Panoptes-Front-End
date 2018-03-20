@@ -4,8 +4,8 @@ import Select from 'react-select';
 import GenericTask from '../generic';
 import DropdownEditor from './editor';
 
-export const DropdownSummary = (props) => {
-  const getOptionsKeys = () => {
+export function DropdownSummary(props) {
+  function getOptionsKeys() {
     const optionsKeys = {};
     props.annotation.value.forEach((answer, i) => {
       const { id, condition } = props.task.selects[i];
@@ -18,16 +18,16 @@ export const DropdownSummary = (props) => {
       }
     });
     return optionsKeys;
-  };
+  }
 
-  const getOptionLabel = (value, i) => {
+  function getOptionLabel(value, i) {
     const select = props.task.selects[i];
     const optionsKeys = getOptionsKeys();
     const optionsKey = select.condition ? optionsKeys[select.condition] : '*';
     const options = select.options[optionsKey];
     const optionSelected = options.filter(option => option.value === value);
     return optionSelected[0].label;
-  };
+  }
 
   return (
     <div className="classification-task-summary">
@@ -46,7 +46,7 @@ export const DropdownSummary = (props) => {
         })}
       </div>
     </div>);
-};
+}
 
 DropdownSummary.propTypes = {
   task: PropTypes.shape({
@@ -121,6 +121,14 @@ export default class DropdownTask extends React.Component {
     const parentIndex = selects.indexOf(parentSelect);
 
     let optionsKey;
+    // optionsKey is a string of option values separated with ';'.
+    // the values are the option.value's for the conditional answers that have been selected which will determine which options are available in a select.
+    // for example, if the selects are Country, Province (condtional to Country) and City (conditional to Province),
+    // given Canada (with option.value of 'Canada-value') and Ontario (with option.value of 'ON') have been selected,
+    // and we call getOptionsKey for City (getOptionsKey(2)), the first call will create an optionsKey of 'ON',
+    // then because Province is conditional to Country it will call itself (getOptionsKey(1, 'ON'),
+    // and on second call build and return an optionsKey of 'Canada-value;ON'.
+    // this optionsKey in the City select (select.options[optionsKey]) will then provide a list cities in Ontario.
 
     if (this.props.annotation.value[parentIndex] && this.props.annotation.value[parentIndex].option) {
       optionsKey = this.props.annotation.value[parentIndex].value;
@@ -137,6 +145,7 @@ export default class DropdownTask extends React.Component {
 
   getOptions(i) {
     const select = this.props.task.selects[i];
+    // the root select's optionsKey is '*' by default and cannot be changed, while any other select's optionsKey is based on conditional answers selected
     const optionsKey = select.condition ? this.getOptionsKey(i) : '*';
     const options = select.options[optionsKey];
     return options || [];
@@ -148,10 +157,12 @@ export default class DropdownTask extends React.Component {
     const [condition] = selects.filter(filterSelect => filterSelect.id === select.condition);
     const conditionIndex = selects.indexOf(condition);
 
+    // return of true will disable select, false will enable select
     if (
-      select.condition &&
-      !select.allowCreate &&
+      select.condition && // will return false (enable select) for root/first select, which should never be disabled
+      !select.allowCreate && // will return false (enable select) if select allows create, a select with allow create should never be disabled, regagrdless of condition
       (!this.props.annotation.value[conditionIndex] || !this.props.annotation.value[conditionIndex].option)
+      // will return true (disable select) if no conditional answer provided or the conditional answer provided is a custom/created answer (thereby making current select's options irrelevant)
     ) {
       return true;
     }
