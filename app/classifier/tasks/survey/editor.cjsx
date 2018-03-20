@@ -12,6 +12,7 @@ NextTaskSelector = require '../next-task-selector'
 MediaArea = require('../../../pages/lab/media-area/').default
 {Markdown} = require 'markdownz'
 Papa = require 'papaparse'
+getAllLinked = require '../../../lib/get-all-linked'
 
 module.exports = createReactClass
   displayName: 'SurveyTaskEditor'
@@ -592,7 +593,7 @@ module.exports = createReactClass
     if e.shiftKey or confirm 'Really delete all the images from this task? This might take a while...'
       @setState resettingFiles: true
       errors = 0
-      massDelete = @props.workflow.get('attached_images', page_size: 200).then (workflowImages) =>
+      massDelete = getAllLinked(@props.workflow, 'attached_images').then (workflowImages) =>
         taskImages = workflowImages.filter (image) =>
           image.metadata.prefix is @props.taskPrefix
         Promise.all taskImages.map (image) =>

@@ -6,11 +6,12 @@ apiClient = require 'panoptes-client/lib/api-client'
 { Split } = require('seven-ten')
 counterpart = require 'counterpart'
 ProjectTranslations = require('./project-translations').default
-{ connect } = require 'react-redux';
-{ bindActionCreators } = require 'redux';
-translationActions  = require '../../redux/ducks/translations';
-ProjectPage = require('./project-page').default;
-WorkflowSelection = require('./workflow-selection').default;
+{ connect } = require 'react-redux'
+{ bindActionCreators } = require 'redux'
+translationActions  = require '../../redux/ducks/translations'
+ProjectPage = require('./project-page').default
+WorkflowSelection = require('./workflow-selection').default
+getAllLinked = require '../../lib/get-all-linked'
 
 counterpart.registerTranslations 'en', require('../../locales/en').default
 counterpart.registerTranslations 'it', require('../../locales/it').default
@@ -19,7 +20,7 @@ counterpart.registerTranslations 'nl', require('../../locales/nl').default
 counterpart.setFallbackLocale 'en'
 
 
-ProjectPageController = 
+ProjectPageController =
   displayName: 'ProjectPageController'
 
   contextTypes:
@@ -131,7 +132,7 @@ ProjectPageController =
 
           awaitProjectCompleteness = Promise.resolve(project.completeness is 1.0)
 
-          awaitProjectRoles = project.get('project_roles', { page_size: 50 }).catch((error) => console.error(error))
+          awaitProjectRoles = getAllLinked(project, 'project_roles').catch((error) => console.error(error))
 
           awaitPreferences = @getUserProjectPreferences(project, user)
 
@@ -221,7 +222,7 @@ ProjectPageController =
       { actions, translations } = this.props;
       @setState {guide}
       actions.translations.load('field_guide', guide?.id, translations.locale)
-      guide?.get('attached_images', page_size: 100)?.then (images) =>
+      getAllLinked(guide, 'attached_images')?.then (images) =>
         guideIcons = {}
         for image in images
           guideIcons[image.id] = image
