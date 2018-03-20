@@ -5,7 +5,7 @@ import { VisibilitySplit } from 'seven-ten';
 import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import findIndex from 'lodash/findIndex';
+import findLastIndex from 'lodash/findLastIndex';
 import { browserHistory } from 'react-router';
 
 import { getSessionID } from '../lib/session';
@@ -222,7 +222,7 @@ class Classifier extends React.Component {
 
   handleAnnotationChange(classification, newAnnotation) {
     const annotations  = classification.annotations.slice();
-    const index = findIndex(annotations, annotation => annotation.task === newAnnotation.task);
+    const index = findLastIndex(annotations, annotation => annotation.task === newAnnotation.task);
     annotations[index] = newAnnotation;
     this.updateAnnotations(annotations);
   }
@@ -305,7 +305,7 @@ class Classifier extends React.Component {
         const { workflowHistory } = this.state;
         const taskKey = this.state.workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
         currentTask = this.props.workflow.tasks[taskKey];
-        const index = findIndex(this.state.annotations, annotation => annotation.task === taskKey);
+        const index = findLastIndex(this.state.annotations, annotation => annotation.task === taskKey);
         currentAnnotation = this.state.annotations[index];
       }
     }
