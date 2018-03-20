@@ -115,4 +115,4 @@ PointGridTool.defaultProps = {
   opacity: 50
 };
 
-module.exports = PointGridTool;
+export default PointGridTool;

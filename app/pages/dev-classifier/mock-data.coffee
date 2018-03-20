@@ -134,7 +134,7 @@ workflow = apiClient.type('workflows').create
       '''
       tools: [
         {type: 'point', label: 'Point', color: 'red', min: 1, max: 2}
-        {type: 'pointGrid', label: 'Point Grid', color: 'red', rows: 10, cols: 10, x_offset: 50, y_offset: 50, opacity: 40}
+        {type: 'pointGrid', label: 'Point Grid', color: 'red', rows: 10, cols: 10, offsetX: 50, offsetY: 50, opacity: 40}
         {type: 'point', label: 'Small Point', color: 'coral', size: 'small'}
         {type: 'line', label: 'Line', color: 'yellow', min: 0}
         {type: 'rectangle', label: 'Rectangle', color: 'lime', max: 2}

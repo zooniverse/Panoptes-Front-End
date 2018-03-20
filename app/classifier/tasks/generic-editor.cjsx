@@ -201,7 +201,6 @@ module.exports = createReactClass
                       </div>
                     else
                       null
-
                     if 'grid' in options
                       <GridEditor
                         key="gridoptions"
