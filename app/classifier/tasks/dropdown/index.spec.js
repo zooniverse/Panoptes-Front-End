@@ -25,7 +25,7 @@ const singleSelect = {
   }]
 };
 
-const multiSelects = workflow.tasks.dropdown;
+const multiSelects = Object.assign({}, workflow.tasks.dropdown);
 
 // multiSelects:
 //   1 - Country (required:true)
@@ -232,14 +232,18 @@ describe('DropdownTask', function () {
       });
       it('should clear related selects (County, City, Team) when conditional select (State) changed', function () {
         wrapper.instance().onChangeSelect(1, multiSelects.selects[1].options['Mypos-value'][2]);
-        const expectedAnnotation = { value: [
+        const expectedAnnotationValue = [
           { value: 'Mypos-value', option: true },
           { value: 'Shire-value', option: true },
           { value: null, option: false },
           { value: null, option: false },
           { value: null, option: false }
-        ] };
-        assert.deepEqual(annotation, expectedAnnotation);
+        ];
+        assert.deepEqual(annotation.value[0], expectedAnnotationValue[0]);
+        assert.deepEqual(annotation.value[1], expectedAnnotationValue[1]);
+        assert.deepEqual(annotation.value[2], expectedAnnotationValue[2]);
+        assert.deepEqual(annotation.value[3], expectedAnnotationValue[3]);
+        assert.deepEqual(annotation.value[4], expectedAnnotationValue[4]);
       });
     });
 
@@ -267,14 +271,18 @@ describe('DropdownTask', function () {
       });
       it('should clear related selects (County, City, Team) when conditional select (State) changed', function () {
         wrapper.instance().onChangeSelect(1, multiSelects.selects[1].options['Canada-value'][1]);
-        const expectedAnnotation = { value: [
+        const expectedAnnotationValue = [
           { value: 'Canada-value', option: true },
           { value: 'ON', option: true },
           { value: null, option: false },
           { value: null, option: false },
           { value: null, option: false }
-        ] };
-        assert.deepEqual(annotation, expectedAnnotation);
+        ];
+        assert.deepEqual(annotation.value[0], expectedAnnotationValue[0]);
+        assert.deepEqual(annotation.value[1], expectedAnnotationValue[1]);
+        assert.deepEqual(annotation.value[2], expectedAnnotationValue[2]);
+        assert.deepEqual(annotation.value[3], expectedAnnotationValue[3]);
+        assert.deepEqual(annotation.value[4], expectedAnnotationValue[4]);
       });
     });
 
