@@ -1,12 +1,11 @@
 function getAllLinked(resource, link, query) {
   if (!resource || !link) {
-    return;
+    return Promise.reject(new Error('getAllLinked: resource and link not specified'));
   }
 
   query = query || {};
 
   let allLinked = [];
-  return getLinkedResource(resource, link, query, 1);
 
   function getLinkedResource(resource, link, query, page) {
     return resource.get(link, Object.assign({}, query, { page }))
@@ -22,6 +21,8 @@ function getAllLinked(resource, link, query) {
       })
       .then(() => Promise.resolve(allLinked));
   }
+
+  return getLinkedResource(resource, link, query, 1);
 }
 
 export default getAllLinked;
