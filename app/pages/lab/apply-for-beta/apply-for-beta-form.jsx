@@ -2,10 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import uniq from 'lodash/uniq';
 import apiClient from 'panoptes-client/lib/api-client';
-
-// Constants
-const MINIMUM_SUBJECT_COUNT = 100;
-const REQUIRED_PAGES = ['Research', 'FAQ'];
+import config from './validation-config';
 
 // Static functions
 const projectHasActiveWorkflows = (project) => {
@@ -14,8 +11,8 @@ const projectHasActiveWorkflows = (project) => {
 
 const projectHasMinimumActiveSubjects = (project) => {
   const subjectCount = project.subjects_count;
-  return (subjectCount >= MINIMUM_SUBJECT_COUNT) ?
-    true : `The project only has ${subjectCount} of ${MINIMUM_SUBJECT_COUNT} required subjects`;
+  return (subjectCount >= config.minimumSubjectCount) ?
+    true : `The project only has ${subjectCount} of ${config.minimumSubjectCount} required subjects`;
 };
 
 const projectHasRequiredContent = (project) => {
@@ -24,7 +21,7 @@ const projectHasRequiredContent = (project) => {
     .get(project.id)
     .get('pages', {})
     .then((projectPages) => {
-      const missingPages = REQUIRED_PAGES.reduce((accumulator, requiredPage) => {
+      const missingPages = config.requiredPages.reduce((accumulator, requiredPage) => {
         const pagePresent = projectPages.find((page) => {
           return requiredPage === page.title;
         });
@@ -228,7 +225,7 @@ class ApplyForBetaForm extends React.Component {
 
         <p className="form-help">To be eligible for beta review, projects also require:</p>
         <ul className="form-help">
-          <li>at least {MINIMUM_SUBJECT_COUNT} subjects in active workflows</li>
+          <li>at least {config.minimumSubjectCount} subjects in active workflows</li>
           <li>content on the Research and FAQ pages in the About page</li>
         </ul>
         <p className="form-help">These will be checked when you click &quot;Apply for review&quot;.</p>
