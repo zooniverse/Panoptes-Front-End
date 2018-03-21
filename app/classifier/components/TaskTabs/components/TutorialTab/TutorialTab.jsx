@@ -15,7 +15,6 @@ export const StyledRestartButton = styled(RestartButton)`
   border: 1px solid ${theme('mode', {
     light: darken(0.05, zooTheme.colors.background)
   })};
-  box-shadow: 0 10px 20px 0 rgba(0,0,0,0.05);
   color: black;
   cursor: pointer;
   display: inline-block;
@@ -25,27 +24,30 @@ export const StyledRestartButton = styled(RestartButton)`
   letter-spacing: ${pxToRem(1)};
   padding: ${pxToRem(16)};
   text-transform: uppercase;
+
+  &:focus, &:hover {
+    background: ${theme('mode', {
+      light: zooTheme.colors.teal.hoverGradient
+    })};
+    color: white;
+  }
 `;
 
 export default function TutorialTab(props, context) {
   const shouldRender = props.tutorial && props.tutorial.steps && (props.tutorial.steps.length > 0);
-  if (shouldRender) {
-    return (
-      <ThemeProvider theme={{ mode: 'light' }}>
-        <StyledRestartButton
-          preferences={props.projectPreferences}
-          shouldRender={shouldRender}
-          start={Tutorial.start.bind(Tutorial, props.tutorial, props.user, props.projectPreferences, context.geordi, context.store)}
-          user={props.user}
-          workflow={props.workflow}
-        >
-          <Translate content="classifier.tutorialButton" />
-        </StyledRestartButton>
-      </ThemeProvider>
-    );
-  }
-
-  return null;
+  return (
+    <ThemeProvider theme={{ mode: 'light' }}>
+      <StyledRestartButton
+        preferences={props.projectPreferences}
+        shouldRender={shouldRender}
+        start={Tutorial.start.bind(Tutorial, props.tutorial, props.user, props.projectPreferences, context.geordi, context.store)}
+        user={props.user}
+        workflow={props.workflow}
+      >
+        <Translate content="classifier.tutorialButton" />
+      </StyledRestartButton>
+    </ThemeProvider>
+  );
 }
 
 TutorialTab.defaultProps = {

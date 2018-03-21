@@ -11,11 +11,16 @@ export default class MultipleChoiceTask extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+
+    this.state = {
+      focus: {}
+    };
   }
 
   handleChange(index, e) {
     const value = this.props.annotation.value.slice(0);
     if (e.target.checked) {
+      this.setState({ focus: {} });
       if (!value.includes(index)) {
         value.push(index);
       }
@@ -25,6 +30,17 @@ export default class MultipleChoiceTask extends React.Component {
     }
     const newAnnotation = Object.assign({}, this.props.annotation, { value });
     this.props.onChange(newAnnotation);
+  }
+
+  // for keyboard accessibility
+  onFocus(answerKey, index) {
+    if (this.props.annotation.value !== index) {
+      this.setState({ focus: { [answerKey]: true } });
+    }
+  }
+
+  onBlur() {
+    this.setState({ focus: {} });
   }
 
   render() {
@@ -39,13 +55,15 @@ export default class MultipleChoiceTask extends React.Component {
         active = 'active';
       }
       answers.push(
-        <label key={answer._key} className={`answer-button ${active}`}>
+        <label key={answer._key} className={`answer-button ${active}`} data-focus={this.state.focus[answer._key] || false}>
           <div className="answer-button-icon-container">
             <input
               type="checkbox"
               autoFocus={i === annotation.value[0]}
               checked={annotation.value.includes(i)}
               onChange={this.handleChange.bind(this, i)}
+              onFocus={this.onFocus.bind(this, answer._key, i)}
+              onBlur={this.onBlur.bind(this)}
             />
           </div>
           <div className="answer-button-label-container">

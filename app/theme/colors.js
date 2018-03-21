@@ -15,7 +15,8 @@ export default {
   },
   highlight: {
     dark: '#CC9200',
-    default: '#F0B200'
+    default: '#F0B200',
+    light: '#F6D885'
   },
   navy: {
     default: '#0C4881',
@@ -28,6 +29,7 @@ export default {
   },
   teal: {
     dark: '#005D69',
+    hoverGradient: 'linear-gradient(#C0E3E5, #8BCED2)',
     light: '#ADDDE0',
     mid: '#00979D'
   }

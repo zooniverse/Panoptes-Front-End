@@ -11,19 +11,35 @@ export default class SingleChoiceTask extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+
+    this.state = {
+      focus: {}
+    };
   }
 
   handleChange(index, e) {
     if (e.target.checked) {
+      this.setState({ focus: {} });
       const newAnnotation = Object.assign({}, this.props.annotation, { value: index });
       this.props.onChange(newAnnotation);
     }
   }
 
+  // for keyboard accessibility
+  onFocus(answerKey, index) {
+    if (this.props.annotation.value !== index) {
+      this.setState({ focus: { [answerKey]: true } });
+    }
+  }
+
+  onBlur() {
+    this.setState({ focus: {} });
+  }
+
   render() {
     const { annotation, task, translation } = this.props;
     if (!task._key) {
-      task._key = Math.random()
+      task._key = Math.random();
     }
     const answers = [];
     for (const [i, answer] of task.answers.entries()) {
@@ -35,7 +51,7 @@ export default class SingleChoiceTask extends React.Component {
         active = 'active';
       }
       answers.push(
-        <label key={answer._key} className={`answer-button ${active}`}>
+        <label key={answer._key} className={`answer-button ${active}`} data-focus={this.state.focus[answer._key] || false}>
           <div className="answer-button-icon-container">
             <input
               type="radio"
@@ -43,6 +59,8 @@ export default class SingleChoiceTask extends React.Component {
               checked={i === annotation.value}
               value={i}
               onChange={this.handleChange.bind(this, i)}
+              onFocus={this.onFocus.bind(this, answer._key, i)}
+              onBlur={this.onBlur.bind(this)}
               name={`${task._key}`}
             />
           </div>

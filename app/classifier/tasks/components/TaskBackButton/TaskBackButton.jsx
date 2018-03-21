@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
 import theme from 'styled-theming';
 import { zooTheme } from '../../../../theme';
 
@@ -39,16 +40,16 @@ export const StyledTaskBackButton = styled.button.attrs({
 `;
 
 export const StyledTaskBackButtonToolTip = styled.span`
-  background-color: ${theme('mode', {
+  bottom: ${(checkIfMSBrowser()) ? '-130%' : '-100%'};
+  box-sizing: border-box;
+  color: ${theme('mode', {
     light: zooTheme.colors.teal.mid
   })};
-  bottom: -130%;
-  color: white;
-  font-size: 0.9em; 
-  left: 0;   
-  padding: 1em;
+  font-size: 0.9em;
+  left: 0;
+  padding: 1em 0;
   position: absolute;
-  width: ${(checkIfMSBrowser()) ? 'intrisinc' : 'max-content'};
+  width: ${(checkIfMSBrowser()) ? '400%' : 'max-content'};
 `;
 
 class TaskBackButton extends React.Component {
@@ -71,20 +72,21 @@ class TaskBackButton extends React.Component {
   }
 
   render() {
+    const backButtonWarning = counterpart('classifier.backButtonWarning');
     if (this.props.showButton) {
       return (
         <ThemeProvider theme={{ mode: 'light' }}>
           <StyledTaskBackButtonWrapper>
-              <StyledTaskBackButton
-                onClick={this.props.destroyCurrentAnnotation}
-                onMouseEnter={this.toggleWarning}
-                onFocus={this.toggleWarning}
-                onMouseLeave={this.toggleWarning}
-                onBlur={this.toggleWarning}
-              >
-                <Translate content="classifier.back" />
-              </StyledTaskBackButton>
-
+            <StyledTaskBackButton
+              aria-label={(this.props.areAnnotationsNotPersisted ? backButtonWarning : '')}
+              onClick={this.props.destroyCurrentAnnotation}
+              onMouseEnter={this.toggleWarning}
+              onFocus={this.toggleWarning}
+              onMouseLeave={this.toggleWarning}
+              onBlur={this.toggleWarning}
+            >
+              <Translate content="classifier.back" />
+            </StyledTaskBackButton>
             {this.state.showWarning &&
               <StyledTaskBackButtonToolTip>
                 <Translate content="classifier.backButtonWarning" />

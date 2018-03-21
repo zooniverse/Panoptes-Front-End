@@ -214,7 +214,7 @@
         margin-left: 1ch
 
       &:hover, &:focus
-        background: lighten(HIGHLIGHT_COLOR, 10%)
+        background: HIGHLIGHT_COLOR_HOVER
 
       &:disabled
         background: darken(HIGHLIGHT_COLOR, 10%)
@@ -237,7 +237,7 @@
 
   .answer-button
     align-items: baseline
-    background-color: #EEF1F4;
+    background-color: BACKGROUND_COLOR
     border: none;
     box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5)
     cursor: pointer
@@ -247,8 +247,12 @@
     position: relative
     text-align: left
 
-    &:hover, &:focus, &.active
-      background-color: #00979D
+    &:hover, &:focus, &[data-focus=true]
+      background: linear-gradient(#C0E3E5, #8BCED2)
+      color: white
+
+    &.active
+      background-color: TEAL_MID
       color: white
 
     > :not(:first-child)
@@ -265,8 +269,9 @@
     // Using, visibility: hidden or display: none breaks accessibility. This keeps the buttons keyboard accessibile,
     // but hides the actual radio or checkbox
     .answer-button-icon-container
-      opacity: 0.01
-      position: absolute
+      input
+        opacity: 0.01
+        position: absolute
 
     .answer-button-label-container
       align-items: baseline
