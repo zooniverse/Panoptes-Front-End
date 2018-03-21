@@ -125,16 +125,14 @@ class ProjectStatus extends Component {
   }
 
   setFeatured(project, value) {
-    project.update({ featured: value.checked });
-    return project.save()
+    return project.update({ featured: value.checked }).save()
       .catch(error => this.setState({ error }));
   }
 
   handleFeaturedProjectChange({ target }) {
     const { featured, project } = this.state;
     if (featured) {
-      featured.update({ featured: false });
-      return featured.save()
+      return featured.update({ featured: false }).save()
         .then(() => this.setState({ featured }))
         .catch(error => this.setState({ error }))
         .then(this.setFeatured(project, target));

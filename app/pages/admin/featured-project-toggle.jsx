@@ -18,7 +18,7 @@ function FeaturedProjectToggle({ error, handleProjectChange, project }) {
       <span style={{ color: 'red' }}>{error ? error.message : null}</span>
     </div>
   );
-};
+}
 
 FeaturedProjectToggle.propTypes = {
   error: PropTypes.shape({
