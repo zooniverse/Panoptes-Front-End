@@ -186,13 +186,12 @@ export default class DropdownTask extends React.Component {
 
   selectedOptions() {
     // return annotation values mapped to react-select option objects
-    const selectedOptions = [];
-    this.props.annotation.value.map((annotation, i) => {
+    const selectedOptions = this.props.annotation.value.map((annotation, i) => {
       if (annotation.option) {
         const [selected] = this.getOptions(i).filter(option => option.value === annotation.value);
-        selectedOptions[i] = selected;
+        return selected;
       } else {
-        selectedOptions[i] = { label: annotation.value, value: annotation.value };
+        return { label: annotation.value, value: annotation.value };
       }
     });
     return selectedOptions;
