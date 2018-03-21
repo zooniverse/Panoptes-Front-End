@@ -75,15 +75,7 @@ class TaskNav extends React.Component {
     const TaskComponent = tasks[task.type];
 
     // Should we disable the "Back" button?
-<<<<<<< f7f454ccfa7d820172c6197fe6ee4784d531232f
     // const onFirstAnnotation = !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
-=======
-<<<<<<< 56bbe77faf1b6239d774cf9ff4c0107d291d2280
-    const onFirstAnnotation = !completed && (this.props.annotations.indexOf(this.props.annotation) === 0);
-=======
-    // const onFirstAnnotation = !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
->>>>>>> Begin back button refactor
->>>>>>> Begin back button refactor
 
     // Should we disable the "Next" or "Done" buttons?
     let waitingForAnswer = this.props.disabled;
