@@ -7,7 +7,7 @@ SetToggle = require '../../lib/set-toggle'
 uniq = require 'lodash/uniq'
 Paginator = require '../../talk/lib/paginator'
 
-`import ApplyForBetaForm from './apply-for-beta-form';`
+ApplyForBetaForm = require('./apply-for-beta').default
 
 module.exports = createReactClass
   displayName: 'EditProjectVisibility'
