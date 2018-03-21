@@ -124,17 +124,23 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
+  setFeatured(project, value) {
+    project.update({ featured: value.checked });
+    return project.save()
+      .catch(error => this.setState({ error }));
+  }
+
   handleFeaturedProjectChange({ target }) {
     const { featured, project } = this.state;
     if (featured) {
       featured.update({ featured: false });
-      featured.save()
+      return featured.save()
         .then(() => this.setState({ featured }))
-        .catch(error => this.setState({ error }));
+        .catch(error => this.setState({ error }))
+        .then(this.setFeatured(project, target));
+    } else {
+      return this.setFeatured(project, target);
     }
-    project.update({ featured: target.checked });
-    project.save()
-      .catch(error => this.setState({ error }));
   }
 
   handleToggle(event, workflow) {
