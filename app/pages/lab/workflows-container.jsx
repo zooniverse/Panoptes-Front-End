@@ -41,7 +41,7 @@ export default class WorkflowsContainer extends React.Component {
   getWorkflowList(page) {
     if (this.state.reorder) {
       this.context.router.push({ pathname: this.props.location.pathname, query: null });
-      getWorkflowsInOrder(this.props.project, { fields: 'display_name', page_size: this.props.project.links.workflows.length })
+      getWorkflowsInOrder(this.props.project, { fields: 'display_name' })
       .then((workflows) => {
         this.setState({ workflows, loading: false });
       });

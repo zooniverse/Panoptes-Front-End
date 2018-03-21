@@ -4,9 +4,6 @@ function getWorkflowsInOrder(project, query) {
     project.configuration.workflow_order :
     [];
 
-  // TODO remove default page_size once pagination solution implemented
-  query.page_size = query.page_size || 20;
-
   function getAllWorkflows(query) {
     let allWorkflows = [];
     return getWorkflows(query, 1);
