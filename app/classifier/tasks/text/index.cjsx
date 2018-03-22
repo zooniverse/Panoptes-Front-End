@@ -66,7 +66,7 @@ module.exports = createReactClass
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.task isnt @props.task
-      @setState textareaHeight: @state.initOffsetHeight, =>
+      @setState { value: '', textareaHeight: @state.initOffsetHeight }, =>
         @updateHeight()
 
   componentDidUpdate: (prevProps) ->
