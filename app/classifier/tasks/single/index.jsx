@@ -26,9 +26,9 @@ export default class SingleChoiceTask extends React.Component {
   }
 
   // for keyboard accessibility
-  onFocus(answerKey, index) {
+  onFocus(index) {
     if (this.props.annotation.value !== index) {
-      this.setState({ focus: { [answerKey]: true } });
+      this.setState({ focus: { [index]: true } });
     }
   }
 
@@ -51,7 +51,7 @@ export default class SingleChoiceTask extends React.Component {
         active = 'active';
       }
       answers.push(
-        <label key={answer._key} className={`answer-button ${active}`} data-focus={this.state.focus[answer._key] || false}>
+        <label key={answer._key} className={`answer-button ${active}`} data-focus={this.state.focus[i] || false}>
           <div className="answer-button-icon-container">
             <input
               type="radio"
@@ -59,7 +59,7 @@ export default class SingleChoiceTask extends React.Component {
               checked={i === annotation.value}
               value={i}
               onChange={this.handleChange.bind(this, i)}
-              onFocus={this.onFocus.bind(this, answer._key, i)}
+              onFocus={this.onFocus.bind(this, i)}
               onBlur={this.onBlur.bind(this)}
               name={`${task._key}`}
             />

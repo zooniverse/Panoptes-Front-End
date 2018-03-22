@@ -6,7 +6,7 @@
 */
 
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { expect } from 'chai';
 import TutorialTab, { StyledRestartButton } from './TutorialTab';
 
@@ -17,31 +17,23 @@ const tutorial = {
 };
 
 describe('TutorialTab', function() {
+  let wrapper;
+  before(function () {
+    wrapper = mount(<TutorialTab tutorial={tutorial} />);
+  });
   it('should render without crashing', function() {
-    expect(shallow(<TutorialTab />)).to.be.ok;
+    expect(wrapper).to.be.ok;
   });
 
-  it('should render null if there is no tutorial', function() {
-    const wrapper = shallow(<TutorialTab />);
-    expect(wrapper.html()).to.be.null;
+  it('should render a ThemeProvider', function() {
+    expect(wrapper.find('ThemeProvider')).to.have.lengthOf(1);
   });
 
-  describe('when TutorialTab renders', function() {
-    let wrapper;
-    before(function() {
-      wrapper = mount(<TutorialTab tutorial={tutorial} />);
-    });
+  it('should render a StyledRestartButton', function() {
+    expect(wrapper.find(StyledRestartButton)).to.have.length(1);
+  });
 
-    it('should render a ThemeProvider', function() {
-      expect(wrapper.find('ThemeProvider')).to.have.lengthOf(1);
-    });
-
-    it('should render a StyledRestartButton', function() {
-      expect(wrapper.find(StyledRestartButton)).to.have.length(1);
-    });
-
-    it('should render a Translate component', function() {
-      expect(wrapper.find('Translate')).to.have.lengthOf(1);
-    });
+  it('should render a Translate component', function() {
+    expect(wrapper.find('Translate')).to.have.lengthOf(1);
   });
 });

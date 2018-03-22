@@ -3,6 +3,8 @@
 import { mount } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
+import { expect } from 'chai';
+import sinon from 'sinon';
 import SingleTask from './';
 
 const task = {
@@ -19,31 +21,178 @@ const annotation = {
 };
 
 describe('SingleChoiceTask', function () {
-  let wrapper;
+  describe('when it renders', function() {
+    let wrapper;
 
-  beforeEach(function () {
-    wrapper = mount(<SingleTask task={task} annotation={annotation} translation={task} />);
+    beforeEach(function () {
+      wrapper = mount(<SingleTask task={task} annotation={annotation} translation={task} />);
+    });
+
+    it('should render without crashing', function () {
+    });
+
+    it('should have a question', function () {
+      const question = wrapper.find('.question');
+      assert.equal(question.hostNodes().length, 1);
+    });
+
+    it('should have answers', function () {
+      const answers = wrapper.find('.answer');
+      assert.equal(answers.length, task.answers.length);
+    });
+
+    it('should have the supplied annotation checked', function () {
+      assert.equal(wrapper.find('input[type="radio"]').find({ checked: true, value: 1 }).length, 1);
+    });
+
+    it('other answers should not be checked', function () {
+      assert.equal(wrapper.find('input[type="radio"]').find({ checked: false, value: 0 }).length, 1);
+    });
   });
 
-  it('should render without crashing', function () {
+  describe('input onChange event handler', function() {
+    let handleChangeSpy;
+    let onChangeSpy;
+    let setStateSpy;
+    let wrapper;
+    before(function () {
+      handleChangeSpy = sinon.spy(SingleTask.prototype, 'handleChange');
+      onChangeSpy = sinon.spy();
+      setStateSpy = sinon.spy(SingleTask.prototype, 'setState');
+    });
+
+    beforeEach(function() {
+      wrapper = mount(
+        <SingleTask
+          task={task}
+          translation={task}
+          onChange={onChangeSpy}
+        />
+      );
+    });
+
+    afterEach(function () {
+      handleChangeSpy.resetHistory();
+      onChangeSpy.resetHistory();
+      setStateSpy.resetHistory();
+    });
+
+    after(function () {
+      handleChangeSpy.restore();
+      setStateSpy.restore();
+    });
+
+    it('should call handleChange with the answer array index', function () {
+      wrapper.find('input').first().simulate('change');
+      expect(handleChangeSpy.calledWith(0)).to.be.true;
+    });
+
+    it('should not set focus state if target value is not checked', function () {
+      wrapper.instance().handleChange(0, { target: {} });
+      expect(setStateSpy.calledOnce).to.be.false;
+    });
+
+    it('should call props.onChange when the onChange event fires and the target is checked', function () {
+      const firstInput = wrapper.find('input').first();
+      firstInput.simulate('change', { target: { checked: true } });
+      expect(onChangeSpy.calledOnce).to.be.true;
+    });
+
+    it('should set focus state to an empty object if target value is checked', function () {
+      wrapper.find('input').first().simulate('change', { target: { checked: true } });
+      expect(setStateSpy.calledOnce).to.be.true;
+      expect(setStateSpy.calledWith({ focus: {} })).to.be.true;
+    });
   });
 
-  it('should have a question', function () {
-    const question = wrapper.find('.question');
-    assert.equal(question.hostNodes().length, 1);
+  describe('input onFocus event handler', function () {
+    let onFocusSpy;
+    let setStateSpy;
+    let wrapper;
+    before(function () {
+      onFocusSpy = sinon.spy(SingleTask.prototype, 'onFocus');
+      setStateSpy = sinon.spy(SingleTask.prototype, 'setState');
+    });
+
+    beforeEach(function() {
+      wrapper = mount(
+        <SingleTask
+          task={task}
+          translation={task}
+        />
+      );
+    });
+
+    afterEach(function () {
+      onFocusSpy.resetHistory();
+      setStateSpy.resetHistory();
+    });
+
+    after(function () {
+      onFocusSpy.restore();
+      setStateSpy.restore();
+    });
+
+    it('should call onFocus on input focus event', function () {
+      wrapper.find('input').first().simulate('focus');
+      expect(onFocusSpy.calledOnce).to.be.true;
+    });
+
+    it('should call onFocus with answer index property', function () {
+      wrapper.find('input').first().simulate('focus');
+      expect(onFocusSpy.calledWith(0)).to.be.true;
+    });
+
+    it('should not call setState in onFocus handler if annotation is the answer index', function () {
+      wrapper.setProps({ annotation });
+      wrapper.find('input').last().simulate('focus');
+      expect(setStateSpy.calledOnce).to.be.false;
+    });
+
+    it('should call setState in onFocus handler if annotation does not include answer index', function () {
+      wrapper.setProps({ annotation });
+      wrapper.find('input').first().simulate('focus');
+      expect(setStateSpy.calledOnce).to.be.true;
+      expect(setStateSpy.calledWith({ focus: { 1: true } }));
+    });
   });
 
-  it('should have answers', function () {
-    const answers = wrapper.find('.answer');
-    assert.equal(answers.length, task.answers.length);
-  });
+  describe('input onBlur event handler', function () {
+    let onBlurSpy;
+    let setStateSpy;
+    let wrapper;
+    before(function () {
+      onBlurSpy = sinon.spy(SingleTask.prototype, 'onBlur');
+      setStateSpy = sinon.spy(SingleTask.prototype, 'setState');
+      wrapper = mount(
+        <SingleTask
+          task={task}
+          annotation={annotation}
+          translation={task}
+        />
+      );
+    });
 
-  it('should have the supplied annotation checked', function () {
-    assert.equal(wrapper.find('input[type="radio"]').find({ checked: true, value: 1 }).length, 1);
-  });
+    afterEach(function () {
+      onBlurSpy.resetHistory();
+      setStateSpy.resetHistory();
+    });
 
-  it('other answers should not be checked', function () {
-    assert.equal(wrapper.find('input[type="radio"]').find({ checked: false, value: 0 }).length, 1);
+    after(function () {
+      onBlurSpy.restore();
+      setStateSpy.restore();
+    });
+
+    it('should call onBlur handler on the blur event', function () {
+      wrapper.find('input').first().simulate('blur');
+      expect(onBlurSpy.calledOnce).to.be.true;
+    });
+
+    it('should call setState for the onBlur handler event', function () {
+      wrapper.find('input').first().simulate('blur');
+      expect(setStateSpy.calledOnce).to.be.true;
+      expect(setStateSpy.calledWith({ focus: {} })).to.be.true;
+    });
   });
 
   describe('static methods', function () {
