@@ -23,7 +23,7 @@ export const StyledTaskBackButton = styled.button.attrs({
   type: 'button'
 })`
   background-color: ${theme('mode', {
-    light: zooTheme.colors.background
+    light: zooTheme.colors.lightTheme.background.default
   })};
   border: none;
   box-sizing: border-box;

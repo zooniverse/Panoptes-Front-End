@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
-import { darken } from 'polished';
+import { darken, lighten } from 'polished';
 import Translate from 'react-translate-component';
 import RestartButton from '../../../../restart-button';
 import Tutorial from '../../../../tutorial';
@@ -10,12 +11,17 @@ import { pxToRem, zooTheme } from '../../../../../theme';
 
 export const StyledRestartButton = styled(RestartButton)`
   background-color: ${theme('mode', {
-    light: zooTheme.colors.background
+    dark: darken(0.04, zooTheme.colors.darkTheme.background.default),
+    light: zooTheme.colors.lightTheme.background.default
   })};
   border: 1px solid ${theme('mode', {
-    light: darken(0.05, zooTheme.colors.background)
+    dark: zooTheme.colors.darkTheme.background.default,
+    light: darken(0.05, zooTheme.colors.lightTheme.background.default)
   })};
-  color: black;
+  color: ${theme('mode', {
+    dark: lighten(0.45, zooTheme.colors.darkTheme.background.default),
+    light: zooTheme.colors.lightTheme.font
+  })};
   cursor: pointer;
   display: inline-block;
   flex: 0 0 50%;
@@ -27,16 +33,20 @@ export const StyledRestartButton = styled(RestartButton)`
 
   &:focus, &:hover {
     background: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.button,
       light: zooTheme.colors.teal.hoverGradient
     })};
-    color: white;
+    color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.font,
+      light: 'white'
+    })};
   }
 `;
 
-export default function TutorialTab(props, context) {
+function TutorialTab(props, context) {
   const shouldRender = props.tutorial && props.tutorial.steps && (props.tutorial.steps.length > 0);
   return (
-    <ThemeProvider theme={{ mode: 'light' }}>
+    <ThemeProvider theme={{ mode: props.theme }}>
       <StyledRestartButton
         preferences={props.projectPreferences}
         shouldRender={shouldRender}
@@ -56,6 +66,7 @@ TutorialTab.defaultProps = {
 
 TutorialTab.propTypes = {
   projectPreferences: PropTypes.object,
+  theme: PropTypes.string,
   tutorial: PropTypes.shape({
     steps: PropTypes.array
   }),
@@ -67,3 +78,10 @@ TutorialTab.contextTypes = {
   geordi: PropTypes.object,
   store: PropTypes.object
 };
+
+const mapStateToProps = state => ({
+  theme: state.userInterface.theme
+});
+
+
+export default connect(mapStateToProps)(TutorialTab);

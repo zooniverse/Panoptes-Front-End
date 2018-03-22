@@ -1,23 +1,32 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { browserHistory } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
+import findLastIndex from 'lodash/findLastIndex';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import findLastIndex from 'lodash/findLastIndex';
-import { browserHistory } from 'react-router';
+import styled, { ThemeProvider } from 'styled-components';
 
 import { getSessionID } from '../lib/session';
-import SubjectViewer from '../components/subject-viewer';
-import ClassificationSummary from './classification-summary';
 import preloadSubject from '../lib/preload-subject';
 import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
-import FrameAnnotator from './frame-annotator';
-import CacheClassification from '../components/cache-classification';
-import Task from './task';
-import TaskNav from './task-nav';
-import ExpertOptions from './expert-options';
 import * as feedbackActions from '../redux/ducks/feedback';
+import * as userInterfaceActions from '../redux/ducks/userInterface';
+import CacheClassification from '../components/cache-classification';
+
+import Task from './task';
+import TaskTabs from './components/TaskTabs';
+import TaskArea from './components/TaskArea';
+import TaskNav from './task-nav';
+import ClassificationSummary from './classification-summary';
+import MinicourseButton from './components/MinicourseButton';
+
+import SubjectViewer from '../components/subject-viewer';
+import FrameAnnotator from './frame-annotator';
+import ModelRenderer from '../components/model-renderer';
+import ExpertOptions from './expert-options';
+
 import openFeedbackModal from '../features/feedback/classifier';
 import GridTool from './drawing-tools/grid';
 import tasks from './tasks';
@@ -329,26 +338,26 @@ class Classifier extends React.Component {
     // This is just easy access for debugging.
     window.classification = currentClassification;
     return (
-      <div>
-        <div className={classifierClassNames}>
-          <SubjectViewer
-            user={this.props.user}
-            project={this.props.project}
-            subject={this.props.subject}
-            isFavorite={this.props.subject.favorite}
-            workflow={this.props.workflow}
-            preferences={this.props.preferences}
-            classification={currentClassification}
-            annotation={currentAnnotation}
-            annotations={this.state.annotations}
-            onLoad={this.handleSubjectImageLoad}
-            frameWrapper={FrameAnnotator}
-            allowFlipbook={workflowAllowsFlipbook(this.props.workflow)}
-            allowSeparateFrames={workflowAllowsSeparateFrames(this.props.workflow)}
-            onChange={this.handleAnnotationChange.bind(this, currentClassification)}
-            playIterations={this.props.workflow.configuration.playIterations}
-          />
-          <div className="task-area">
+      <div className={classifierClassNames}>
+        <SubjectViewer
+          user={this.props.user}
+          project={this.props.project}
+          subject={this.props.subject}
+          isFavorite={this.props.subject.favorite}
+          workflow={this.props.workflow}
+          preferences={this.props.preferences}
+          classification={currentClassification}
+          annotation={currentAnnotation}
+          annotations={this.state.annotations}
+          onLoad={this.handleSubjectImageLoad}
+          frameWrapper={FrameAnnotator}
+          allowFlipbook={workflowAllowsFlipbook(this.props.workflow)}
+          allowSeparateFrames={workflowAllowsSeparateFrames(this.props.workflow)}
+          onChange={this.handleAnnotationChange.bind(this, currentClassification)}
+          playIterations={this.props.workflow.configuration.playIterations}
+        />
+        <ThemeProvider theme={{ mode: this.props.theme }}>
+          <TaskArea>
             <TaskTabs
               projectPreferences={this.props.preferences}
               tutorial={this.props.tutorial}
@@ -437,8 +446,9 @@ class Classifier extends React.Component {
                 </small>
               </p>
             }
-          </div>
-        </div>
+
+          </TaskArea>
+        </ThemeProvider>
         {React.Children.map(
           this.props.children,
           child => React.cloneElement(child, { annotations: this.state.annotations })
@@ -501,6 +511,7 @@ Classifier.propTypes = {
     id: PropTypes.string,
     metadata: PropTypes.object
   }),
+  theme: PropTypes.string,
   tutorial: PropTypes.shape({
     id: PropTypes.string,
     steps: PropTypes.array
@@ -533,12 +544,14 @@ Classifier.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  feedback: state.feedback
+  feedback: state.feedback,
+  theme: state.userInterface.theme
 });
 
 const mapDispatchToProps = dispatch => ({
   actions: {
-    feedback: bindActionCreators(feedbackActions, dispatch)
+    feedback: bindActionCreators(feedbackActions, dispatch),
+    theme: bindActionCreators(userInterfaceActions, dispatch)
   }
 });
 

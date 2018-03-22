@@ -1,5 +1,20 @@
 export default {
-  background: '#EEF2F5',
+  darkTheme: {
+    background: {
+      border: '#2D2D2D',
+      default: '#333333'
+    },
+    button: '#5C5C5C',
+    font: '#E2E5E9'
+  },
+  lightTheme: {
+    background: {
+      border: '#ebebeb',
+      default: '#EEF2F5'
+    },
+    foreground: '#404040',
+    font: '#000000'
+  },
   black: {
     default: '#000',
     light: '#272727'
@@ -8,7 +23,6 @@ export default {
     default: '#007482',
     light: '#16979C'
   },
-  foreground: '#404040',
   grey: {
     light: '#CBCCCB',
     mid: '#646464'
