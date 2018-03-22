@@ -17,19 +17,15 @@ export default class DropdownEditor extends React.Component {
     this.condition = null;
 
     this.state = {
-      editing: null
+      editSelect: null
     };
 
+    this.updateSelects = this.updateSelects.bind(this);
     this.createDropdown = this.createDropdown.bind(this);
-    this.onReorder = this.onReorder.bind(this);
     this.editDropdown = this.editDropdown.bind(this);
     this.handleSave = this.handleSave.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
     this.deleteDropdown = this.deleteDropdown.bind(this);
-  }
-
-  onReorder(newSelects) {
-    this.props.task.selects = newSelects;
-    this.updateTasks();
   }
 
   getRelated(select, related = []) {
@@ -41,31 +37,36 @@ export default class DropdownEditor extends React.Component {
     return related;
   }
 
-  updateTasks() {
-    this.props.workflow.update('tasks');
-    this.props.workflow.save();
+  updateSelects(selects) {
+    const changes = {};
+    changes[`${this.props.taskPrefix}.selects`] = selects;
+    this.props.workflow.update(changes).save();
   }
 
   createDropdown() {
     const conditionIndex = parseInt(this.condition.value, 10);
-    const selects = this.props.task.selects;
-    selects.splice((conditionIndex + 1), 0, {
+    const newSelect = {
       id: Math.random().toString(16).split('.')[1],
       title: 'new dropdown title',
       condition: this.props.task.selects[conditionIndex].id,
       options: {},
       required: false,
       allowCreate: true
-    });
-    this.editDropdown(conditionIndex + 1);
+    };
+    return newSelect;
   }
 
   editDropdown(index) {
-    this.setState({ editing: index });
+    if (index === 'create') {
+      this.setState({ editSelect: this.createDropdown() });
+    } else {
+      this.setState({ editSelect: this.props.task.selects[index] });
+    }
   }
 
-  handleDeletedValues(deletedValues) {
-    this.props.task.selects.forEach((select) => {
+  handleDeletedValues(deletedValues, selects) {
+    const newSelects = selects.map((select) => {
+      const newSelect = select;
       const deleteKeys = [];
       const optionsKeys = Object.keys(select.options);
       optionsKeys.forEach((optionsKey) => {
@@ -77,41 +78,51 @@ export default class DropdownEditor extends React.Component {
         });
       });
       deleteKeys.forEach((deleteKey) => {
-        delete select.options[deleteKey];
+        delete newSelect.options[deleteKey];
       });
+      return newSelect;
     });
+    return newSelects;
   }
 
   handleSave(newData) {
+    let selects = this.props.task.selects;
     const { editSelect, deletedValues } = newData;
 
-    this.props.task.selects[this.state.editing] = editSelect;
-
-    if (deletedValues.length) {
-      this.handleDeletedValues(deletedValues);
+    const [oldSelect] = selects.filter(select => select.id === editSelect.id);
+    const index = selects.indexOf(oldSelect);
+    if (index > -1) {
+      selects.splice(index, 1, editSelect);
+    } else {
+      selects.push(editSelect);
     }
 
-    this.editDropdown(null);
-    this.updateTasks();
+    if (deletedValues.length) {
+      selects = this.handleDeletedValues(deletedValues, selects);
+    }
+
+    this.updateSelects(selects);
+    this.setState({ editSelect: null });
+  }
+
+  handleCancel() {
+    this.setState({ editSelect: null });
   }
 
   deleteDropdown(index) {
-    const select = this.props.task.selects[index];
+    const selects = this.props.task.selects;
+    const select = selects[index];
     const related = this.getRelated(select);
     related.push(select);
-    const filteredSelects = this.props.task.selects.filter(filteredSelect => related.indexOf(filteredSelect) === -1);
-    this.props.task.selects = filteredSelects;
-    this.updateTasks();
+    const filteredSelects = selects.filter(filterSelect => related.indexOf(filterSelect) === -1);
+
+    this.updateSelects(filteredSelects);
   }
 
   render() {
     const handleChange = handleInputChange.bind(this.props.workflow);
 
-    const { selects } = this.props.task;
-    let select = null;
-    if (selects[this.state.editing]) {
-      select = selects[this.state.editing];
-    }
+    const selects = this.props.task.selects;
 
     return (
       <div className="dropdown-editor">
@@ -159,12 +170,12 @@ export default class DropdownEditor extends React.Component {
             <h2 className="form-label">Dropdowns</h2>
             <DropdownList
               selects={selects}
-              onReorder={this.onReorder}
+              onReorder={this.updateSelects}
               editDropdown={this.editDropdown}
               deleteDropdown={this.deleteDropdown}
             />
             <p>
-              <button type="button" className="minor-button" onClick={this.createDropdown}>
+              <button type="button" className="minor-button" onClick={() => this.editDropdown('create')}>
                 <i className="fa fa-plus" />
                 Add a Dropdown
               </button>
@@ -172,7 +183,6 @@ export default class DropdownEditor extends React.Component {
                 <span> Dependent On </span>
                 <select
                   id="condition"
-                  key={this.state.editing}
                   ref={(node) => { this.condition = node; }}
                   defaultValue={`${selects.length - 1}`}
                 >
@@ -186,14 +196,14 @@ export default class DropdownEditor extends React.Component {
             </p>
           </section>
 
-          {(this.state.editing !== null) &&
+          {this.state.editSelect &&
             <Dialog required={true}>
               <DropdownDialog
                 selects={selects}
-                initialSelect={select}
-                related={this.getRelated(select)}
+                initialSelect={this.state.editSelect}
+                related={this.getRelated(this.state.editSelect)}
                 onSave={this.handleSave}
-                onCancel={this.editDropdown.bind(this, null)}
+                onCancel={this.handleCancel}
               />
             </Dialog>}
 
@@ -225,7 +235,9 @@ DropdownEditor.propTypes = {
   }),
   taskPrefix: PropTypes.string,
   workflow: PropTypes.shape({
-    id: PropTypes.string
+    id: PropTypes.string,
+    save: PropTypes.func,
+    update: PropTypes.func
   })
 };
 

@@ -38,7 +38,7 @@ const defaultDropdownTask = {
   ]
 };
 
-// multiSelects:
+// multiSelectsTask:
 //   1 - Country (required:true)
 //   2 - State (condition:Country, required:true, allowCreate:false)
 //   3 - County (condition:State, allowCreate:true)
@@ -74,8 +74,8 @@ describe('DropdownEditor', function () {
     assert.equal(wrapper.find(DropdownList).length, 1);
   });
 
-  it('should display the DropdownDialog component with proper select when state of editing set to select index', function () {
-    wrapper.setState({ editing: 0 });
+  it('should display the DropdownDialog component with proper select when state of editSelect is set', function () {
+    wrapper.setState({ editSelect: defaultDropdownTask.selects[0] });
     const dropdownDialog = wrapper.find(DropdownDialog);
     assert.equal(dropdownDialog.length, 1);
     assert.equal(dropdownDialog.prop('initialSelect'), defaultDropdownTask.selects[0]);
@@ -88,64 +88,64 @@ describe('DropdownEditor', function () {
 
 describe('DropdownEditor: methods', function () {
   let mockWorkflow;
-  let multiSelects;
-  let taskProp;
+  let multiSelectsTask;
   let wrapper;
+  let updateSelectsStub;
 
   beforeEach(function () {
     mockWorkflow = mockPanoptesResource('workflows', {});
-    multiSelects = Object.assign({}, workflow.tasks.dropdown);
-    wrapper = mount(<DropdownEditor task={multiSelects} workflow={mockWorkflow} />);
-    taskProp = wrapper.prop('task');
+    multiSelectsTask = JSON.parse(JSON.stringify(workflow.tasks.dropdown));
+    wrapper = mount(<DropdownEditor task={multiSelectsTask} workflow={mockWorkflow} />);
+    updateSelectsStub = sinon.stub(wrapper.instance(), 'updateSelects');
   });
 
-  it('should save with new data appropriately', function () {
-    // initially should have IL state, Cook county, Chicago city and Bulls team
+  afterEach(function () {
+    updateSelectsStub.resetHistory();
+    updateSelectsStub.restore();
+  });
 
-    assert.equal(taskProp.selects[1].options['USA-value'][1].value, 'IL');
-    assert.equal(taskProp.selects[2].options['USA-value;IL'][0].value, 'Cook-value');
-    assert.equal(taskProp.selects[3].options['USA-value;IL;Cook-value'][0].value, 'Chicago-value');
-    assert.equal(taskProp.selects[4].options['USA-value;IL'][1].value, 'Bulls-value');
+  it('should save with new data', function () {
+    const editSelect = multiSelectsTask.selects[1];
 
-    const editStateSelect = multiSelects.selects[1];
-    editStateSelect.options['USA-value'].splice(1, 1);
-    editStateSelect.options['Canada-value'].push({ value: 'MB', label: 'Manitoba' });
+    // delete USA state option.value 'IL', add Canada state option.value 'MB'
+    editSelect.options['USA-value'].splice(1, 1);
+    editSelect.options['Canada-value'].push({ value: 'MB', label: 'Manitoba' });
     const newData = {
       deletedValues: ['IL'],
-      editSelect: editStateSelect
+      editSelect
     };
 
     wrapper.instance().handleSave(newData);
-    taskProp = wrapper.prop('task');
 
     // deleting the IL option from country-USA should delete noted options
-    assert.notEqual(taskProp.selects[1].options['USA-value'][1].value, 'IL');
-    assert.equal(taskProp.selects[2].options['USA-value;IL'], undefined);
-    assert.equal(taskProp.selects[3].options['USA-value;IL;Cook-value'], undefined);
-    assert.equal(taskProp.selects[4].options['USA-value;IL'], undefined);
+
+    assert.equal(editSelect, multiSelectsTask.selects[1]);
+    sinon.assert.calledOnce(updateSelectsStub);
+    sinon.assert.calledWith(updateSelectsStub, multiSelectsTask.selects);
   });
 
-  it('should delete the associated select and all selects dependent on the associated select after confirmation when the delete icon is clicked', function () {
-    // initially multiSelects has 5 selects
-    assert.equal(taskProp.selects.length, 5);
+  it('should delete the select and all dependent selects', function () {
+    // initially multiSelectsTask has 5 selects
+    assert.equal(multiSelectsTask.selects.length, 5);
 
     wrapper.instance().deleteDropdown(1);
-    taskProp = wrapper.prop('task');
+    multiSelectsTask.selects.splice(1, 4);
 
     // deleting the State select should delete it, City, County and Team, leaving 1 select (Country)
-    assert.equal(taskProp.selects.length, 1);
+
+    assert.equal(multiSelectsTask.selects.length, 1);
+    sinon.assert.calledOnce(updateSelectsStub);
+    sinon.assert.calledWith(updateSelectsStub, multiSelectsTask.selects);
   });
 
-  it('should create a new select dependent on last select (default) when createDropdown called', function () {
-    const editDropdownStub = sinon.stub(wrapper.instance(), 'editDropdown');
-
-    assert.equal(taskProp.selects.length, 5);
-
+  it('should create a new select', function () {
+    const createDropdownSpy = sinon.spy(wrapper.instance(), 'createDropdown');
     wrapper.instance().createDropdown();
 
-    assert.equal(taskProp.selects.length, 6);
-    assert.equal(taskProp.selects[5].condition, 'teamID');
-
-    editDropdownStub.restore();
+    sinon.assert.calledOnce(createDropdownSpy);
+    const newSelect = createDropdownSpy.returnValues[0];
+    assert.equal(newSelect.condition, 'teamID');
+    assert.equal(newSelect.required, false);
+    assert.equal(newSelect.allowCreate, true);
   });
 });
