@@ -58,7 +58,7 @@ module.exports = createReactClass
   getInitialState: ->
     textareaHeight: undefined
     initOffsetHeight: undefined
-    value: ''
+    value: @props.annotation.value
 
   componentDidMount: ->
     @setState initOffsetHeight: @refs.textInput.offsetHeight
@@ -68,6 +68,8 @@ module.exports = createReactClass
     if nextProps.task isnt @props.task
       @setState { value: '', textareaHeight: @state.initOffsetHeight }, =>
         @updateHeight()
+    if nextProps.annotation.value isnt @props.annotation.value
+      @setState value: nextProps.annotation.value
 
   componentDidUpdate: (prevProps) ->
     if prevProps.task isnt @props.task and @props.autoFocus is true
