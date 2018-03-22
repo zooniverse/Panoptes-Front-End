@@ -1,5 +1,6 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
+_ = require 'lodash'
 {Markdown} = require 'markdownz'
 GenericTask = require('../generic.jsx').default
 TextTaskEditor = require './editor'
@@ -60,6 +61,9 @@ module.exports = createReactClass
     initOffsetHeight: undefined
     value: @props.annotation.value
 
+  componentWillMount: ->
+    @debouncedUpdateAnnotation = _.debounce @updateAnnotation, 500
+
   componentDidMount: ->
     @setState initOffsetHeight: @refs.textInput.offsetHeight
     @updateHeight()
@@ -108,7 +112,6 @@ module.exports = createReactClass
           ref="textInput"
           value={@state.value}
           onChange={@handleChange}
-          onBlur={@updateAnnotation}
           rows="1"
           style={height: @state.textareaHeight}
         />
@@ -130,9 +133,9 @@ module.exports = createReactClass
       @updateHeight()
 
     @setState { value }
+    @debouncedUpdateAnnotation()
 
   updateAnnotation: ->
     value = @refs.textInput.value
-
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
