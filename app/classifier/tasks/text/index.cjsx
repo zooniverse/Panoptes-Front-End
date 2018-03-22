@@ -92,8 +92,7 @@ module.exports = createReactClass
       textInBetween = textAreaValue.substring(selectionStart, selectionEnd)
       textAfter = textAreaValue.substring(selectionEnd, textAreaValue.length)
       value = textBefore + startTag + textInBetween + endTag + textAfter
-    newAnnotation = Object.assign @props.annotation, {value}
-    @props.onChange newAnnotation
+    @setState { value }
 
   updateHeight: ->
     @setState textareaHeight: @refs.textInput.scrollHeight + 2
