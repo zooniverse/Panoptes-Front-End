@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import findLastIndex from 'lodash/findLastIndex';
