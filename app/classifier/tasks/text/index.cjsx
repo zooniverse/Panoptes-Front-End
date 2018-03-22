@@ -1,5 +1,6 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
+_ = require 'lodash'
 {Markdown} = require 'markdownz'
 GenericTask = require('../generic.jsx').default
 TextTaskEditor = require './editor'
@@ -58,6 +59,10 @@ module.exports = createReactClass
   getInitialState: ->
     textareaHeight: undefined
     initOffsetHeight: undefined
+    value: @props.annotation.value
+
+  componentWillMount: ->
+    @debouncedUpdateAnnotation = _.debounce @updateAnnotation, 500
 
   componentDidMount: ->
     @setState initOffsetHeight: @refs.textInput.offsetHeight
@@ -65,12 +70,17 @@ module.exports = createReactClass
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.task isnt @props.task
-      @setState textareaHeight: @state.initOffsetHeight, =>
+      @setState { value: '', textareaHeight: @state.initOffsetHeight }, =>
         @updateHeight()
+    if nextProps.annotation.value isnt @props.annotation.value
+      @setState value: nextProps.annotation.value
 
   componentDidUpdate: (prevProps) ->
     if prevProps.task isnt @props.task and @props.autoFocus is true
       @refs.textInput.focus()
+
+  componentWillUnMount: ->
+    @updateAnnotation()
 
   setTagSelection: (e) ->
     textTag = e.target.value
@@ -88,8 +98,7 @@ module.exports = createReactClass
       textInBetween = textAreaValue.substring(selectionStart, selectionEnd)
       textAfter = textAreaValue.substring(selectionEnd, textAreaValue.length)
       value = textBefore + startTag + textInBetween + endTag + textAfter
-    newAnnotation = Object.assign @props.annotation, {value}
-    @props.onChange newAnnotation
+    @setState { value }
 
   updateHeight: ->
     @setState textareaHeight: @refs.textInput.scrollHeight + 2
@@ -101,7 +110,7 @@ module.exports = createReactClass
           autoFocus={@props.autoFocus}
           className="standard-input full"
           ref="textInput"
-          value={@props.annotation.value}
+          value={@state.value}
           onChange={@handleChange}
           rows="1"
           style={height: @state.textareaHeight}
@@ -117,11 +126,16 @@ module.exports = createReactClass
   handleChange: ->
     value = @refs.textInput.value
 
-    if @props.annotation.value?.length > value.length
+    if @state.value?.length > value.length
       @setState textareaHeight: @state.initOffsetHeight, =>
         @updateHeight()
     else
       @updateHeight()
 
+    @setState { value }
+    @debouncedUpdateAnnotation()
+
+  updateAnnotation: ->
+    value = @refs.textInput.value
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
