@@ -111,7 +111,7 @@ export const drawSersic = r => r(Object.assign({}, baseObj, {
 }));
 
 export const drawSpiral = (r) => {
-  const maxPointCount = 200;
+  const maxPointCount = 500;
   const spiralArgs = {
     frag: `
       precision highp float;
@@ -156,7 +156,7 @@ export const drawSpiral = (r) => {
           }
         }
 
-        float pixel = i0 * exp(-radius*radius * 0.01/spread) *
+        float pixel = i0 * exp(-radius*radius * 0.1/spread) *
           exp(-calcBoxyEllipseDist(x, y, disk.mu, disk.roll, disk.rEff, disk.axRatio, disk.c)/falloff);
         gl_FragColor = vec4(
           pixel + texture2D(texture, uv).rgb[0],
