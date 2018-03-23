@@ -4,6 +4,7 @@ import React from 'react';
 import GenericTask from '../generic';
 import GenericTaskEditor from '../generic-editor';
 import MultipleChoiceSummary from './summary';
+import TaskInput from '../components/TaskInput';
 
 const NOOP = Function.prototype;
 
@@ -57,13 +58,13 @@ export default class MultipleChoiceTask extends React.Component {
       answers.push(
         <label key={answer._key} className={`answer-button ${active}`} data-focus={this.state.focus[i] || false}>
           <div className="answer-button-icon-container">
-            <input
-              type="checkbox"
-              autoFocus={i === annotation.value[0]}
-              checked={annotation.value.includes(i)}
+            <TaskInput
+              annotation={annotation}
+              index={i}
               onChange={this.handleChange.bind(this, i)}
               onFocus={this.onFocus.bind(this, i)}
               onBlur={this.onBlur.bind(this)}
+              type="checkbox"
             />
           </div>
           <div className="answer-button-label-container">

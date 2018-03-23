@@ -1,9 +1,10 @@
-import { Markdown } from 'markdownz';
 import PropTypes from 'prop-types';
 import React from 'react';
+
 import GenericTask from '../generic';
 import GenericTaskEditor from '../generic-editor';
 import SingleChoiceSummary from './summary';
+import TaskInputField from '../components/TaskInputField';
 
 const NOOP = Function.prototype;
 
@@ -46,28 +47,21 @@ export default class SingleChoiceTask extends React.Component {
       if (!answer._key) {
         answer._key = Math.random();
       }
-      let active = '';
-      if (i === annotation.value) {
-        active = 'active';
-      }
+
       answers.push(
-        <label key={answer._key} className={`answer-button ${active}`} data-focus={this.state.focus[i] || false}>
-          <div className="answer-button-icon-container">
-            <input
-              type="radio"
-              autoFocus={i === annotation.value}
-              checked={i === annotation.value}
-              value={i}
-              onChange={this.handleChange.bind(this, i)}
-              onFocus={this.onFocus.bind(this, i)}
-              onBlur={this.onBlur.bind(this)}
-              name={`${task._key}`}
-            />
-          </div>
-          <div className="answer-button-label-container">
-            <Markdown className="answer-button-label">{translation.answers[i].label}</Markdown>
-          </div>
-        </label>
+        <TaskInputField
+          annotation={annotation}
+          className={(i === annotation.value) ? 'active' : ''}
+          data-focus={this.state.focus[i] || false}
+          index={i}
+          key={answer._key}
+          label={translation.answers[i].label}
+          name={`${task._key}`}
+          onChange={this.handleChange.bind(this, i)}
+          onFocus={this.onFocus.bind(this, i)}
+          onBlur={this.onBlur.bind(this)}
+          type="radio"
+        />
       );
     }
     return (
