@@ -19,8 +19,24 @@ const translations = {
   strings: {
     workflow: {
       display_name: 'A test workflow',
-      'tasks.survey.choices.ar.label': 'Translated Armadillo',
-      'tasks.survey.questions.ho.answers.one.label': 'Translated 1'
+      tasks: {
+        survey: {
+          choices: {
+            ar: {
+              label: 'Translated Armadillo'
+            }
+          },
+          questions: {
+            ho: {
+              answers: {
+                one: {
+                  label: 'Translated 1'
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 };
