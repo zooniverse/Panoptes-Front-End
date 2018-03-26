@@ -40,7 +40,7 @@ export const StyledProjectThemeButton = styled.button.attrs({
   }
 `;
 
-class ProjectThemeButton extends React.Component {
+export class ProjectThemeButton extends React.Component {
   static defaultProps = {
     actions: { theme: { setTheme: () => {} } },
     theme: 'light'

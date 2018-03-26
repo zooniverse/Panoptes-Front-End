@@ -58,7 +58,7 @@ apiClient.type('subject_sets').listen('add-or-remove', emptySubjectQueue);
 // Store this externally to persist during the session.
 let sessionDemoMode = false;
 
-class ProjectClassifyPage extends React.Component {
+export class ProjectClassifyPage extends React.Component {
   constructor(props) {
     super(props);
     this.loadingSelectedWorkflow = false;

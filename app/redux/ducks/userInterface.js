@@ -2,7 +2,7 @@ import FakeLocalStorage from '../../../test/fake-local-storage';
 import { zooTheme } from '../../theme';
 
 // Fall back when not in browser environment, tests, etc
-const storage = window.localStorage || FakeLocalStorage;
+const storage = window.localStorage || new FakeLocalStorage();
 
 // Actions
 const SET_THEME = 'pfe/userInterface/SET_THEME';
