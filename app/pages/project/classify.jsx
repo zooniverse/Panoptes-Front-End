@@ -64,7 +64,6 @@ export class ProjectClassifyPage extends React.Component {
     this.loadingSelectedWorkflow = false;
     this.project = null;
     this.workflow = null;
-    this.storage = props.storage || window.localStorage;
 
     this.state = {
       subject: null,
