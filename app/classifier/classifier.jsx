@@ -52,9 +52,9 @@ class Classifier extends React.Component {
   }
 
   componentWillMount() {
-    this.updateAnnotations();
-    const workflowHistory = this.props.classification.annotations.map(annotation => annotation.task);
-    this.setState({ workflowHistory });
+    const annotations = this.props.classification.annotations.slice();
+    const workflowHistory = annotations.map(annotation => annotation.task);
+    this.setState({ annotations, workflowHistory });
   }
 
   componentDidMount() {
@@ -144,8 +144,6 @@ class Classifier extends React.Component {
   }
 
   updateAnnotations(annotations) {
-    annotations = annotations || this.props.classification.annotations.slice();
-    this.props.classification.update({ annotations });
     this.setState({ annotations }, this.updateFeedback);
   }
 
@@ -214,7 +212,7 @@ class Classifier extends React.Component {
   }
 
   handleAnnotationChange(classification, newAnnotation) {
-    const annotations  = classification.annotations.slice();
+    const { annotations } = this.state;
     const index = findLastIndex(annotations, annotation => annotation.task === newAnnotation.task);
     annotations[index] = newAnnotation;
     this.updateAnnotations(annotations);
@@ -243,6 +241,7 @@ class Classifier extends React.Component {
       e.preventDefault();
     }
     this.props.classification.update({
+      annotations: this.state.annotations.slice(),
       'metadata.session': getSessionID(),
       'metadata.finished_at': (new Date()).toISOString(),
       'metadata.viewport': {
@@ -269,7 +268,7 @@ class Classifier extends React.Component {
       })
       .then(onComplete)
       .catch(error => console.error(error));
-    this.setState({ annotations: [{}] });
+    this.setState({ annotations: [] });
   }
 
   toggleExpertClassification(value) {
@@ -301,7 +300,9 @@ class Classifier extends React.Component {
         const taskKey = this.state.workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
         currentTask = this.props.workflow.tasks[taskKey];
         const index = findLastIndex(this.state.annotations, annotation => annotation.task === taskKey);
-        currentAnnotation = this.state.annotations[index];
+        if (index > -1) {
+          currentAnnotation = this.state.annotations[index];
+        }
       }
     }
 
@@ -318,6 +319,7 @@ class Classifier extends React.Component {
           preferences={this.props.preferences}
           classification={currentClassification}
           annotation={currentAnnotation}
+          annotations={this.state.annotations}
           onLoad={this.handleSubjectImageLoad}
           frameWrapper={FrameAnnotator}
           allowFlipbook={workflowAllowsFlipbook(this.props.workflow)}
@@ -332,7 +334,7 @@ class Classifier extends React.Component {
               user={this.props.user}
               project={this.props.project}
               workflow={this.props.workflow}
-              classification={currentClassification}
+              annotations={this.state.annotations}
               task={currentTask}
               annotation={currentAnnotation}
               subjectLoading={this.state.subjectLoading}
@@ -352,6 +354,7 @@ class Classifier extends React.Component {
           }
           <TaskNav
             annotation={currentAnnotation}
+            annotations={this.state.annotations}
             classification={currentClassification}
             completeClassification={this.completeClassification}
             disabled={this.state.subjectLoading}

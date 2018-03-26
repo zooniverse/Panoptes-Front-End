@@ -91,12 +91,11 @@ export default class SVGRenderer extends React.Component {
       (({ InsideSubject } = tasks[taskDescription.type]));
     }
 
-    const { annotations } = this.props.classification;
+    const { annotations } = this.props;
 
     const hookProps = {
       annotations,
       annotation: this.props.annotation,
-      classification: this.props.classification,
       containerRect: this.getSizeRect(),
       frame: this.props.frame,
       getEventOffset: this.getEventOffset,
@@ -212,11 +211,8 @@ SVGRenderer.propTypes = {
   annotation: PropTypes.shape({
     task: PropTypes.string
   }),
+  annotations: PropTypes.arrayOf(PropTypes.object),
   children: PropTypes.node,
-  classification: PropTypes.shape({
-    annotations: PropTypes.array,
-    loading: PropTypes.bool
-  }),
   frame: PropTypes.number,
   modification: PropTypes.object,
   naturalHeight: PropTypes.number,
@@ -244,7 +240,7 @@ SVGRenderer.propTypes = {
 
 SVGRenderer.defaultProps = {
   annotation: null,
-  classification: null,
+  annotations: [],
   frame: 0,
   onChange: () => {},
   onLoad: () => {},

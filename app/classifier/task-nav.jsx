@@ -30,15 +30,14 @@ class TaskNav extends React.Component {
   }
 
   componentDidUpdate() {
-    const { workflow, classification } = this.props;
-    classification.annotations = classification.annotations ? classification.annotations : [];
-    if (classification.annotations.length === 0) {
+    const { workflow, annotations } = this.props;
+    if (annotations.length === 0) {
       this.addAnnotationForTask(workflow.first_task);
     }
   }
   // Next (or first question)
   addAnnotationForTask(taskKey) {
-    const { workflow, classification } = this.props;
+    const { workflow } = this.props;
     const taskDescription = workflow.tasks[taskKey];
     let annotation = tasks[taskDescription.type].getDefaultAnnotation(taskDescription, workflow, tasks);
     annotation.task = taskKey;
@@ -50,7 +49,7 @@ class TaskNav extends React.Component {
       }
     }
 
-    const annotations = classification.annotations.slice();
+    const annotations = this.props.annotations.slice();
     annotations.push(annotation);
     this.props.updateAnnotations(annotations);
     this.props.onNextTask(taskKey);
@@ -58,25 +57,25 @@ class TaskNav extends React.Component {
 
   // Done
   completeClassification(e) {
-    const { workflow, classification } = this.props;
+    const { annotations, workflow } = this.props;
     if (workflow.configuration.persist_annotations) {
       CacheClassification.delete();
     }
 
-    const currentAnnotation = classification.annotations[classification.annotations.length - 1];
+    const currentAnnotation = annotations[annotations.length - 1];
     const currentTask = workflow.tasks[currentAnnotation.task];
 
     if (currentTask && currentTask.tools) {
       currentTask.tools.map((tool) => {
         if (tool.type === 'grid') {
-          GridTool.mapCells(classification.annotations);
+          GridTool.mapCells(annotations);
         }
       });
     }
 
     if (currentAnnotation.shortcut) {
       this.addAnnotationForTask(currentTask.unlinkedTask);
-      const newAnnotation = classification.annotations[classification.annotations.length - 1];
+      const newAnnotation = annotations[annotations.length - 1];
       newAnnotation.value = currentAnnotation.shortcut.value;
       delete currentAnnotation.shortcut;
     }
@@ -85,10 +84,10 @@ class TaskNav extends React.Component {
 
   // Back
   destroyCurrentAnnotation() {
-    const { workflow, classification } = this.props;
-    const lastAnnotation = classification.annotations[classification.annotations.length - 1];
+    const { workflow } = this.props;
 
-    const annotations = classification.annotations.slice();
+    const annotations = this.props.annotations.slice();
+    const lastAnnotation = annotations[annotations.length - 1];
     annotations.pop();
     this.props.updateAnnotations(annotations);
     this.props.onPrevTask();
@@ -120,7 +119,7 @@ class TaskNav extends React.Component {
     const TaskComponent = tasks[task.type];
 
     // Should we disable the "Back" button?
-    const onFirstAnnotation = !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
+    const onFirstAnnotation = !completed && (this.props.annotations.indexOf(this.props.annotation) === 0);
 
     // Should we disable the "Next" or "Done" buttons?
     let waitingForAnswer = this.props.disabled;
@@ -223,6 +222,7 @@ TaskNav.propTypes = {
     shortcut: PropTypes.object,
     value: PropTypes.any
   }),
+  annotations: PropTypes.arrayOf(PropTypes.object),
   autoFocus: PropTypes.bool,
   children: PropTypes.node,
   classification: PropTypes.shape({
@@ -256,6 +256,7 @@ TaskNav.propTypes = {
 };
 
 TaskNav.defaultProps = {
+  annotations: [],
   autoFocus: true,
   disabled: false,
   updateAnnotations: () => null

@@ -7,7 +7,6 @@ module.exports = createReactClass
   displayName: 'MarkingsRenderer'
 
   getDefaultProps: ->
-    classification: null
     annotations: []
     annotation: null
     tasks: {}
@@ -55,8 +54,9 @@ module.exports = createReactClass
             {for mark, i in annotation.value when @props.workflow?.configuration.multi_image_clone_markers or parseInt(mark.frame) is parseInt(@props.frame)
 
               mark._key ?= Math.random()
+              currentAnnotation = @props.annotations[@props.annotations.length - 1]
 
-              if skippedMarks < @props.classification._hideMarksBefore and not @props.classification.completed
+              if skippedMarks < currentAnnotation._hideMarksBefore
                 skippedMarks += 1
                 continue
 
@@ -88,8 +88,8 @@ module.exports = createReactClass
                 preferences: @props.preferences
 
               toolProps =
+                annotations: @props.annotations
                 taskKey: annotation.task
-                classification: @props.classification
                 mark: mark
                 details: details
                 color: toolDescription.color

@@ -3,27 +3,28 @@ createReactClass = require 'create-react-class'
 
 HidePreviousMarksToggle = createReactClass
   getDefaultProps: ->
+    annotations: [],
     taskTypes: null
     workflow: null
-    classification: null
     onChange: ->
 
   getInitialState: ->
     checked: false
 
   setPreviousMarks: (count) ->
-    @props.classification._hideMarksBefore = count
+    currentAnnotation = @props.annotations[@props.annotations.length-1]
+    currentAnnotation._hideMarksBefore = count
     checked = count > 0
     @setState { checked }
     @updateParent()
 
   updateParent: () ->
-    annotations = @props.classification.annotations.slice()
+    annotations = @props.annotations.slice()
     annotation = annotations[annotations.length - 1]
     @props.onChange annotation
 
   render: ->
-    annotations = @props.classification.annotations
+    annotations = @props.annotations
     currentAnnotation = annotations[annotations.length-1]
     return null unless @props.workflow.tasks[currentAnnotation.task].enableHidePrevMarks
 

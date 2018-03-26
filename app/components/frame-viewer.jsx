@@ -84,8 +84,8 @@ export default class FrameViewer extends React.Component {
             naturalHeight={this.state.frameDimensions.height || 0}
             workflow={this.props.workflow}
             subject={this.props.subject}
-            classification={this.props.classification}
             annotation={this.props.annotation}
+            annotations={this.props.annotations}
             project={this.props.project}
             loading={this.state.loading}
             preferences={this.props.preferences}
