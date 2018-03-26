@@ -57,7 +57,7 @@ class ProjectStatus extends Component {
 
   getFeaturedProject() {
     return apiClient.type('projects')
-      .get({ featured: true, launch_approved: true, cards: true })
+      .get({ featured: true, launch_approved: true })
       .then(([featuredProject]) => {
         this.setState({ featured: featuredProject });
       });
