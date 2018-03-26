@@ -10,10 +10,30 @@ import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import { pxToRem, zooTheme } from '../../../../theme';
 
+export const StyledProjectThemeButtonWrapper = styled.p`
+  text-align: center;
+`;
+
 export const StyledProjectThemeButton = styled.button.attrs({
   type: 'button'
 })`
-  color: zooTheme.colors.teal.mid;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: ${theme('mode', {
+    light: zooTheme.colors.teal.dark,
+    dark: zooTheme.colors.teal.mid
+  })};
+  display: inline-block;
+  font: inherit;
+  font-size: 0.9em;
+  letter-spacing: 0.2em;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
 
   &:hover, &:focus {
     text-decoration: underline;
@@ -46,14 +66,16 @@ class ProjectThemeButton extends React.Component {
 
   render() {
     return (
-      <p>
-        <StyledProjectThemeButton onClick={this.toggleTheme.bind(this)}>
-          <Translate
-            content="project.classifyPage.themeToggle"
-            with={{ theme: this.whichThemeToAlternate(this.props.theme) }}
-          />
-        </StyledProjectThemeButton>
-      </p>
+      <StyledProjectThemeButtonWrapper>
+        <ThemeProvider theme={{ mode: this.props.theme }}>
+          <StyledProjectThemeButton onClick={this.toggleTheme.bind(this)}>
+            <Translate
+              content="project.classifyPage.themeToggle"
+              with={{ theme: this.whichThemeToAlternate(this.props.theme) }}
+            />
+          </StyledProjectThemeButton>
+        </ThemeProvider>
+      </StyledProjectThemeButtonWrapper>
     );
   }
 }

@@ -8,6 +8,7 @@ import tasks from '../../classifier/tasks';
 import ClassificationViewer from './ClassificationViewer';
 import * as userInterfaceActions from '../../redux/ducks/userInterface';
 import { zooTheme } from '../../theme';
+import ProjectThemeButton from '../project/components/ProjectThemeButton';
 
 export class DevClassifierPage extends React.Component {
   static defaultProps = {
@@ -29,22 +30,25 @@ export class DevClassifierPage extends React.Component {
 
   render() {
     const classname = classNames({
-      'content-container': true,
       'classify-page--dark-theme': this.props.theme === zooTheme.mode.dark
     });
 
     return (
       <div className={classname}>
-        <ClassifierWrapper
-          user={this.props.user}
-          project={this.props.project}
-          workflow={this.props.classification._workflow}
-          preferences={this.props.preferences}
-          classification={this.props.classification}
-          onClickNext={this.reload}
-        />
-        <hr />
-        <ClassificationViewer classification={this.props.classification} />
+        <div className="content-container">
+          <ClassifierWrapper
+            user={this.props.user}
+            project={this.props.project}
+            workflow={this.props.classification._workflow}
+            preferences={this.props.preferences}
+            classification={this.props.classification}
+            onClickNext={this.reload}
+          />
+          
+          <ProjectThemeButton />
+          <hr />
+          <ClassificationViewer classification={this.props.classification} />
+        </div>
       </div>
     );
   }
