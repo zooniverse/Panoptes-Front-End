@@ -70,7 +70,7 @@ export default class HomePageForUser extends React.Component {
   }
 
   getFeaturedProject() {
-    const query = { featured: true, launch_approved: true };
+    const query = { featured: true, launch_approved: true, cards: true };
     return apiClient.type('projects').get(query)
       .then(([featuredProject]) => {
         this.setState({ featuredProject });
