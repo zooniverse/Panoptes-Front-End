@@ -264,7 +264,6 @@ class Classifier extends React.Component {
       })
       .then(onComplete)
       .catch(error => console.error(error));
-    this.setState({ annotations: [] });
   }
 
   toggleExpertClassification(value) {
