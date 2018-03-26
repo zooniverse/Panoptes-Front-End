@@ -92,6 +92,8 @@ class Classifier extends React.Component {
   }
 
   componentWillUnmount() {
+    const annotations = this.state.annotations.slice();
+    this.props.classification.update({ annotations });
     try {
       !!this.context.geordi && this.context.geordi.forget(['subjectID']);
     } catch (err) {
