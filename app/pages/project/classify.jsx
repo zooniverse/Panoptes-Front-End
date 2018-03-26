@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
@@ -14,11 +13,11 @@ import { Split } from 'seven-ten';
 
 import seenThisSession from '../../lib/seen-this-session';
 import ClassificationQueue from '../../lib/classification-queue';
-import * as userInterfaceActions from '../../redux/ducks/userInterface';
 
 import Classifier from '../../classifier';
 import FinishedBanner from './finished-banner';
 import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';
+import ProjectThemeButton from './components/ProjectThemeButton';
 import { zooTheme } from '../../theme';
 
 // Map each project ID to a promise of its last randomly-selected workflow ID.
@@ -281,15 +280,6 @@ class ProjectClassifyPage extends React.Component {
     return subject;
   };
 
-  whichThemeToAlternate(currentTheme) {
-    return (currentTheme === zooTheme.mode.light) ? counterpart('project.classifyPage.dark') : counterpart('project.classifyPage.light');
-  }
-
-  toggleTheme() {
-    const newTheme = (this.props.theme === zooTheme.mode.light) ? zooTheme.mode.dark : zooTheme.mode.light;
-    this.props.actions.theme.setTheme(newTheme)
-  }
-
   render() {
     return (
       <div className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
@@ -302,14 +292,7 @@ class ProjectClassifyPage extends React.Component {
           <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
 
         {this.renderClassifier()}
-        <p className="classify-page__theme-button-wrapper">
-          <button className="classify-page__theme-button" type="button" onClick={this.toggleTheme.bind(this)}>
-            <Translate
-              content="project.classifyPage.themeToggle"
-              with={{ theme: this.whichThemeToAlternate(this.props.theme) }}
-            />
-          </button>
-        </p>
+        <ProjectThemeButton />
       </div>
     );
   }
@@ -447,10 +430,4 @@ const mapStateToProps = state => ({
   theme: state.userInterface.theme
 });
 
-const mapDispatchToProps = dispatch => ({
-  actions: {
-    theme: bindActionCreators(userInterfaceActions, dispatch)
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectClassifyPage);
+export default connect(mapStateToProps)(ProjectClassifyPage);
