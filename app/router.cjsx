@@ -48,6 +48,7 @@ createReactClass = require 'create-react-class'
 `import Education from './pages/get-involved/education';`
 `import Volunteering from './pages/get-involved/volunteering';`
 `import HowToBuildProject from './pages/lab/help/how-to-build-project';`
+`import DevClassifierPage from './pages/dev-classifier';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = createReactClass
@@ -276,7 +277,7 @@ module.exports =
       if process.env.NODE_ENV is 'production'
         NotFoundPage
       else
-        require './pages/dev-classifier'
+        DevClassifierPage
     } />
     <Route path="*" component={NotFoundPage} />
   </Route>

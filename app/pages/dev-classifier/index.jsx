@@ -1,10 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import classNames from 'classnames';
 import mockData from './mock-data';
 import { ClassifierWrapper } from '../../classifier';
 import tasks from '../../classifier/tasks';
 import ClassificationViewer from './ClassificationViewer';
+import * as userInterfaceActions from '../../redux/ducks/userInterface';
+import { zooTheme } from '../../theme';
 
-export default class DevClassifierPage extends React.Component {
+export class DevClassifierPage extends React.Component {
   static defaultProps = {
     classification: mockData.classification,
     preferences: mockData.preferences,
@@ -23,8 +28,13 @@ export default class DevClassifierPage extends React.Component {
   }
 
   render() {
+    const classname = classNames({
+      'content-container': true,
+      'classify-page--dark-theme': this.props.theme === zooTheme.mode.dark
+    });
+
     return (
-      <div className="content-container">
+      <div className={classname}>
         <ClassifierWrapper
           user={this.props.user}
           project={this.props.project}
