@@ -7,7 +7,7 @@ export const parseDisk = (comp, state) => {
     state.model.disk.default,
     {
       mux: state.sizeMultiplier * parseFloat(comp.value[0].value[0].x),
-      muy: state.sizeMultiplier * (state.size[0] - parseFloat(comp.value[0].value[0].y)),
+      muy: state.sizeMultiplier * (state.size[1] - parseFloat(comp.value[0].value[0].y)),
       rx: state.sizeMultiplier * parseFloat(comp.value[0].value[0].rx),
       ry: state.sizeMultiplier * parseFloat(comp.value[0].value[0].ry),
       roll: parseFloat(comp.value[0].value[0].angle),
@@ -28,7 +28,7 @@ export const parseBulge = (comp, state) => {
     state.model.bulge.default,
     {
       mux: state.sizeMultiplier * parseFloat(comp.value[0].value[0].x),
-      muy: state.sizeMultiplier * (state.size[0] - parseFloat(comp.value[0].value[0].y)),
+      muy: state.sizeMultiplier * (state.size[1] - parseFloat(comp.value[0].value[0].y)),
       rx: state.sizeMultiplier * parseFloat(comp.value[0].value[0].rx),
       ry: state.sizeMultiplier * parseFloat(comp.value[0].value[0].ry),
       roll: parseFloat(comp.value[0].value[0].angle),
@@ -52,7 +52,7 @@ export const parseBar = (comp, state) => {
     {
       name: state.model.bar.name,
       mux: state.sizeMultiplier * parseFloat(drawnComp.x + (drawnComp.width / 2.0)),
-      muy: state.sizeMultiplier * (state.size[0] - ((
+      muy: state.sizeMultiplier * (state.size[1] - ((
         drawnComp.y + (drawnComp.height / 2.0)
       ))),
       rx: state.sizeMultiplier * parseFloat(drawnComp.width),
