@@ -4,7 +4,7 @@ import React from 'react';
 import GenericTask from '../generic';
 import GenericTaskEditor from '../generic-editor';
 import MultipleChoiceSummary from './summary';
-import TaskInput from '../components/TaskInput';
+import TaskInputField from '../components/TaskInputField';
 
 const NOOP = Function.prototype;
 
@@ -51,26 +51,20 @@ export default class MultipleChoiceTask extends React.Component {
       if (!answer._key) {
         answer._key = Math.random();
       }
-      let active = '';
-      if (annotation.value.includes(i)) {
-        active = 'active';
-      }
+
       answers.push(
-        <label key={answer._key} className={`answer-button ${active}`} data-focus={this.state.focus[i] || false}>
-          <div className="answer-button-icon-container">
-            <TaskInput
-              annotation={annotation}
-              index={i}
-              onChange={this.handleChange.bind(this, i)}
-              onFocus={this.onFocus.bind(this, i)}
-              onBlur={this.onBlur.bind(this)}
-              type="checkbox"
-            />
-          </div>
-          <div className="answer-button-label-container">
-            <Markdown className="answer-button-label">{translation.answers[i].label}</Markdown>
-          </div>
-        </label>
+        <TaskInputField
+          annotation={annotation}
+          className={annotation.value.includes(i) ? 'active' : ''}
+          data-focus={this.state.focus[i] || false}
+          index={i}
+          key={answer._key}
+          label={translation.answers[i].label}
+          onChange={this.handleChange.bind(this, i)}
+          onFocus={this.onFocus.bind(this, i)}
+          onBlur={this.onBlur.bind(this)}
+          type="checkbox"
+        />
       );
     }
     return (
