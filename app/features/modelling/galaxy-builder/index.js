@@ -42,7 +42,7 @@ class GalaxyBuilderModel extends baseModel {
     }
     if (data.imageHeight && data.imageWidth) {
       this.eventHandlers.changeCanvasStyleSize(
-        { width: `${data.imageHeight}px`, height: `${data.imageWidth}px` }
+        { width: `${data.imageWidth}px`, height: `${data.imageHeight}px` }
       );
       // this.canvas.style.height = `${data.imageHeight}px`;
       // this.canvas.style.width = `${data.imageWidth}px`;
