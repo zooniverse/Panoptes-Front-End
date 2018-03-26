@@ -19,6 +19,7 @@ export default class ClassificationViewer extends React.Component {
   }
 
   static defaultProps = {
+    annotations: [],
     classification: null
   }
 
@@ -58,8 +59,8 @@ export default class ClassificationViewer extends React.Component {
 
   render() {
     const showing = (this.state.showOnlyLast) ?
-      this.props.classification.annotations[this.props.classification.annotations.length - 1] :
-      this.props.classification.annotations
+      this.props.annotations[this.props.annotations.length - 1] :
+      this.props.annotations
 
     const replacer = (this.state.showThrowaways) ?
       null :

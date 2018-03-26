@@ -309,137 +309,143 @@ class Classifier extends React.Component {
     // This is just easy access for debugging.
     window.classification = currentClassification;
     return (
-      <div className={classifierClassNames}>
-        <SubjectViewer
-          user={this.props.user}
-          project={this.props.project}
-          subject={this.props.subject}
-          isFavorite={this.props.subject.favorite}
-          workflow={this.props.workflow}
-          preferences={this.props.preferences}
-          classification={currentClassification}
-          annotation={currentAnnotation}
-          annotations={this.state.annotations}
-          onLoad={this.handleSubjectImageLoad}
-          frameWrapper={FrameAnnotator}
-          allowFlipbook={workflowAllowsFlipbook(this.props.workflow)}
-          allowSeparateFrames={workflowAllowsSeparateFrames(this.props.workflow)}
-          onChange={this.handleAnnotationChange.bind(this, currentClassification)}
-          playIterations={this.props.workflow.configuration.playIterations}
-        />
-        <div className="task-area">
-          {!currentClassification.completed ?
-            <Task
-              preferences={this.props.preferences}
-              user={this.props.user}
-              project={this.props.project}
-              workflow={this.props.workflow}
-              annotations={this.state.annotations}
-              task={currentTask}
-              annotation={currentAnnotation}
-              subjectLoading={this.state.subjectLoading}
-              updateAnnotations={this.updateAnnotations}
-            /> :
-            <ClassificationSummary
-              project={this.props.project}
-              workflow={this.props.workflow}
-              subject={this.props.subject}
-              classification={currentClassification}
-              expertClassification={this.state.expertClassification}
-              splits={this.props.splits}
-              classificationCount={this.props.classificationCount}
-              hasGSGoldStandard={this.subjectIsGravitySpyGoldStandard()}
-              toggleExpertClassification={this.toggleExpertClassification}
-            />
-          }
-          <TaskNav
-            annotation={currentAnnotation}
-            annotations={this.state.annotations}
-            classification={currentClassification}
-            completeClassification={this.completeClassification}
-            disabled={this.state.subjectLoading}
-            nextSubject={this.props.onClickNext}
+      <div>
+        <div className={classifierClassNames}>
+          <SubjectViewer
+            user={this.props.user}
             project={this.props.project}
             subject={this.props.subject}
-            task={currentTask}
+            isFavorite={this.props.subject.favorite}
             workflow={this.props.workflow}
-            updateAnnotations={this.updateAnnotations}
-            onNextTask={this.onNextTask}
-            onPrevTask={this.onPrevTask}
-          >
-            {!!this.props.expertClassifier &&
-              <ExpertOptions
+            preferences={this.props.preferences}
+            classification={currentClassification}
+            annotation={currentAnnotation}
+            annotations={this.state.annotations}
+            onLoad={this.handleSubjectImageLoad}
+            frameWrapper={FrameAnnotator}
+            allowFlipbook={workflowAllowsFlipbook(this.props.workflow)}
+            allowSeparateFrames={workflowAllowsSeparateFrames(this.props.workflow)}
+            onChange={this.handleAnnotationChange.bind(this, currentClassification)}
+            playIterations={this.props.workflow.configuration.playIterations}
+          />
+          <div className="task-area">
+            {!currentClassification.completed ?
+              <Task
+                preferences={this.props.preferences}
+                user={this.props.user}
+                project={this.props.project}
+                workflow={this.props.workflow}
+                annotations={this.state.annotations}
+                task={currentTask}
+                annotation={currentAnnotation}
+                subjectLoading={this.state.subjectLoading}
+                updateAnnotations={this.updateAnnotations}
+              /> :
+              <ClassificationSummary
+                project={this.props.project}
+                workflow={this.props.workflow}
+                subject={this.props.subject}
                 classification={currentClassification}
-                userRoles={this.props.userRoles}
-                demoMode={this.props.demoMode}
-                onChangeDemoMode={this.props.onChangeDemoMode}
-              />}
-          </TaskNav>
-          <p>
-            <small>
-              <strong>
-                <RestartButton
-                  className="minor-button"
-                  preferences={this.props.preferences}
-                  shouldRender={(this.props.tutorial) && (this.props.tutorial.steps.length > 0)}
-                  start={Tutorial.start.bind(Tutorial, this.props.tutorial, this.props.user, this.props.preferences, this.context.geordi, this.context.store)}
-                  style={{ marginTop: '2em' }}
-                  user={this.props.user}
-                  workflow={this.props.workflow}
-                >
-                  <Translate content="classifier.tutorialButton" />
-                </RestartButton>
-              </strong>
-            </small>
-          </p>
-
-          <p>
-            <small>
-              <strong>
-                <VisibilitySplit splits={this.props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+                expertClassification={this.state.expertClassification}
+                splits={this.props.splits}
+                classificationCount={this.props.classificationCount}
+                hasGSGoldStandard={this.subjectIsGravitySpyGoldStandard()}
+                toggleExpertClassification={this.toggleExpertClassification}
+              />
+            }
+            <TaskNav
+              annotation={currentAnnotation}
+              annotations={this.state.annotations}
+              classification={currentClassification}
+              completeClassification={this.completeClassification}
+              disabled={this.state.subjectLoading}
+              nextSubject={this.props.onClickNext}
+              project={this.props.project}
+              subject={this.props.subject}
+              task={currentTask}
+              workflow={this.props.workflow}
+              updateAnnotations={this.updateAnnotations}
+              onNextTask={this.onNextTask}
+              onPrevTask={this.onPrevTask}
+            >
+              {!!this.props.expertClassifier &&
+                <ExpertOptions
+                  classification={currentClassification}
+                  userRoles={this.props.userRoles}
+                  demoMode={this.props.demoMode}
+                  onChangeDemoMode={this.props.onChangeDemoMode}
+                />}
+            </TaskNav>
+            <p>
+              <small>
+                <strong>
                   <RestartButton
                     className="minor-button"
                     preferences={this.props.preferences}
-                    shouldRender={(this.props.minicourse) && (this.props.user) && (this.props.minicourse.steps.length > 0)}
-                    start={MiniCourse.restart.bind(MiniCourse, this.props.minicourse, this.props.preferences, this.props.user, this.context.geordi, this.context.store)}
+                    shouldRender={(this.props.tutorial) && (this.props.tutorial.steps.length > 0)}
+                    start={Tutorial.start.bind(Tutorial, this.props.tutorial, this.props.user, this.props.preferences, this.context.geordi, this.context.store)}
                     style={{ marginTop: '2em' }}
                     user={this.props.user}
                     workflow={this.props.workflow}
                   >
-                    <Translate content="classifier.miniCourseButton" />
+                    <Translate content="classifier.tutorialButton" />
                   </RestartButton>
-                </VisibilitySplit>
-              </strong>
-            </small>
-          </p>
+                </strong>
+              </small>
+            </p>
 
-          {!!this.props.demoMode &&
-            <p style={{ textAlign: 'center' }}>
-              <i className="fa fa-trash" />{' '}
+            <p>
               <small>
-                <strong>Demo mode:</strong>
-                <br />
-                No classifications are being recorded.{' '}
-                <button type="button" className="secret-button" onClick={this.changeDemoMode.bind(this, false)}>
-                  <u>Disable</u>
-                </button>
+                <strong>
+                  <VisibilitySplit splits={this.props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+                    <RestartButton
+                      className="minor-button"
+                      preferences={this.props.preferences}
+                      shouldRender={(this.props.minicourse) && (this.props.user) && (this.props.minicourse.steps.length > 0)}
+                      start={MiniCourse.restart.bind(MiniCourse, this.props.minicourse, this.props.preferences, this.props.user, this.context.geordi, this.context.store)}
+                      style={{ marginTop: '2em' }}
+                      user={this.props.user}
+                      workflow={this.props.workflow}
+                    >
+                      <Translate content="classifier.miniCourseButton" />
+                    </RestartButton>
+                  </VisibilitySplit>
+                </strong>
               </small>
             </p>
-          }
-          {!!currentClassification.gold_standard &&
-            <p style={{ textAlign: 'center' }}>
-              <i className="fa fa-star" />{' '}
-              <small>
-                <strong>Gold standard mode:</strong>
-                <br />
-                Please ensure this classification is completely accurate.{' '}
-                <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
-                  <u>Disable</u>
-                </button>
-              </small>
-            </p>
-          }
+
+            {!!this.props.demoMode &&
+              <p style={{ textAlign: 'center' }}>
+                <i className="fa fa-trash" />{' '}
+                <small>
+                  <strong>Demo mode:</strong>
+                  <br />
+                  No classifications are being recorded.{' '}
+                  <button type="button" className="secret-button" onClick={this.changeDemoMode.bind(this, false)}>
+                    <u>Disable</u>
+                  </button>
+                </small>
+              </p>
+            }
+            {!!currentClassification.gold_standard &&
+              <p style={{ textAlign: 'center' }}>
+                <i className="fa fa-star" />{' '}
+                <small>
+                  <strong>Gold standard mode:</strong>
+                  <br />
+                  Please ensure this classification is completely accurate.{' '}
+                  <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
+                    <u>Disable</u>
+                  </button>
+                </small>
+              </p>
+            }
+          </div>
         </div>
+        {React.Children.map(
+          this.props.children,
+          child => React.cloneElement(child, { annotations: this.state.annotations })
+        )}
       </div>
     );
   }
