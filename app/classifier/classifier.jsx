@@ -85,12 +85,6 @@ class Classifier extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.classification !== this.props.classification) {
-      this.updateAnnotations();
-    }
-  }
-
   componentWillUnmount() {
     const annotations = this.state.annotations.slice();
     this.props.classification.update({ annotations });
