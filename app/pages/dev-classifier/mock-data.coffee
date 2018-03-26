@@ -500,8 +500,6 @@ subject = apiClient.type('subjects').create
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-wide.jpeg"} # //lorempixel.com/1900/1000/animals/3
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-tall.jpeg"} # //lorempixel.com/1000/1900/animals/4
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/small.jpeg"} # //lorempixel.com/400/300/animals/4
-      {'application/json': "#{window.location.origin}/assets/dev-classifier/testData.json"} # // blank canvas
-      {'application/json': "#{window.location.origin}/assets/dev-classifier/testData0.json"} # // blank canvas
     ]
   else
     [
@@ -510,12 +508,7 @@ subject = apiClient.type('subjects').create
 
   metadata:
     'Capture date': '5 Feb, 2015'
-    'Region': 'Chicago, IL',
-    'isModelling': true,
-    'models': [
-      { 'frame': 5, 'model': "LINE_PLOT" }
-      { 'frame': 6, 'model': "DEV_CLASSIFIER_DRAWING" }
-    ],
+    'Region': 'Chicago, IL'
 
 
   expert_classification_data:
