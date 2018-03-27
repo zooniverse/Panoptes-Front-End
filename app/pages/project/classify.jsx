@@ -64,14 +64,6 @@ export class ProjectClassifyPage extends React.Component {
     this.loadingSelectedWorkflow = false;
     this.project = null;
     this.workflow = null;
-<<<<<<< 129bbb7230c41066a562174dd0ba787e29a4eb03
-=======
-    this.storage = props.storage || window.localStorage;
-<<<<<<< ae17d72c4ec927fc81ae0e28c2d4bd8d54a86296
-    this.toggleTheme = this.toggleTheme.bind(this);
->>>>>>> Rework on theme switching works. Add translations
-=======
->>>>>>> Add userInterface duck and move theme state into redux
 
     this.state = {
       subject: null,
@@ -81,13 +73,6 @@ export class ProjectClassifyPage extends React.Component {
       promptWorkflowAssignmentDialog: false,
       rejected: null,
       validUserGroup: false,
-<<<<<<< ae17d72c4ec927fc81ae0e28c2d4bd8d54a86296
-<<<<<<< 129bbb7230c41066a562174dd0ba787e29a4eb03
-=======
-      theme: props.storage.getItem('theme') || zooTheme.mode.light
->>>>>>> Rework on theme switching works. Add translations
-=======
->>>>>>> Add userInterface duck and move theme state into redux
     };
   }
 
@@ -294,28 +279,9 @@ export class ProjectClassifyPage extends React.Component {
     return subject;
   };
 
-<<<<<<< 129bbb7230c41066a562174dd0ba787e29a4eb03
   render() {
     return (
       <div className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
-=======
-  whichThemeToAlternate(currentTheme) {
-    return (currentTheme === zooTheme.mode.light) ? counterpart('project.classifyPage.dark') : counterpart('project.classifyPage.light');
-  }
-
-  toggleTheme() {
-    const newTheme = (this.props.theme === zooTheme.mode.light) ? zooTheme.mode.dark : zooTheme.mode.light;
-    this.props.actions.theme.setTheme(newTheme)
-  }
-
-  render() {
-    return (
-<<<<<<< ae17d72c4ec927fc81ae0e28c2d4bd8d54a86296
-      <div className={`${(this.state.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
->>>>>>> Rework on theme switching works. Add translations
-=======
-      <div className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
->>>>>>> Add userInterface duck and move theme state into redux
         <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
 
         {this.props.projectIsComplete &&
@@ -325,18 +291,7 @@ export class ProjectClassifyPage extends React.Component {
           <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
 
         {this.renderClassifier()}
-<<<<<<< 129bbb7230c41066a562174dd0ba787e29a4eb03
         <ProjectThemeButton />
-=======
-        <p className="classify-page__theme-button-wrapper">
-          <button className="classify-page__theme-button" type="button" onClick={this.toggleTheme.bind(this)}>
-            <Translate
-              content="project.classifyPage.themeToggle"
-              with={{ theme: this.whichThemeToAlternate(this.props.theme)}}
-            />
-          </button>
-        </p>
->>>>>>> Rework on theme switching works. Add translations
       </div>
     );
   }
@@ -474,14 +429,4 @@ const mapStateToProps = state => ({
   theme: state.userInterface.theme
 });
 
-<<<<<<< ae17d72c4ec927fc81ae0e28c2d4bd8d54a86296
 export default connect(mapStateToProps)(ProjectClassifyPage);
-=======
-const mapDispatchToProps = dispatch => ({
-  actions: {
-    theme: bindActionCreators(userInterfaceActions, dispatch)
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectClassifyPage);
->>>>>>> Add userInterface duck and move theme state into redux
