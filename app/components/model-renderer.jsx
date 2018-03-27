@@ -80,7 +80,7 @@ class ModelRenderer extends React.Component {
   }
   getDifference() {
     // update the model from the annotation, then wait a frame
-    this.model.update(this.props.classification.annotations);
+    this.model.update(this.props.annotations);
     window.requestAnimationFrame(() => {
       // scoring function is provided in the difference calculator
       const imOutType = Object.keys(this.props.subject.locations[1])[0];
@@ -95,7 +95,7 @@ class ModelRenderer extends React.Component {
   setTexture() {
     this.model.setBaseTexture(this.im);
     window.requestAnimationFrame(
-      () => this.model.update(this.props.classification.annotations)
+      () => this.model.update(this.props.annotations)
     );
   }
   render() {
@@ -124,9 +124,7 @@ class ModelRenderer extends React.Component {
 }
 /* eslint-disable react/forbid-prop-types */
 ModelRenderer.propTypes = {
-  classification: PropTypes.shape({
-    annotations: PropTypes.Array
-  }),
+  annotations: PropTypes.arrayOf(PropTypes.object),
   subject: PropTypes.shape({
     locations: PropTypes.Array,
     // this is handled by the specific model renderer used, so can vary
