@@ -144,7 +144,6 @@ describe('OrganizationPage', function () {
 
   it('should show organization links', function () {
     const wrapper = shallow(<OrganizationPage organization={organization} />);
-    const links = wrapper.find('.organization-details__link');
-    assert.equal(links.length, organization.urls.length);
+    assert.equal(wrapper.find('ExternalLinksBlockContainer').length, 1);
   });
 });

@@ -18,7 +18,15 @@ const project = {
   display_name: 'Identify Animals',
   experimental_tools: [''],
   id: '123',
-  slug: 'zooniverse/identify-animals'
+  slug: 'zooniverse/identify-animals',
+  urls: [
+    {
+      label: '',
+      path: 'findthething',
+      site: 'facebook.com/',
+      url: 'https://www.facebook.com/find-the-thing'
+    }
+  ]
 };
 
 const talkSubjects = [
@@ -217,7 +225,7 @@ describe('ProjectHome', function() {
     });
   });
 
-  describe('when a project does have a researcher quote', function() {
+  describe('when a project has a researcher quote', function() {
     before(function() {
       const projectWithResearcherQuote = Object.assign({}, project, { researcher_quote: 'Important thoughts!' });
       wrapper.setProps({ project: projectWithResearcherQuote });

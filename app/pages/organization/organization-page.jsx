@@ -9,7 +9,7 @@ import Translate from 'react-translate-component';
 import OrganizationProjectCards from './organization-project-cards';
 import OrganizationMetadata from './organization-metadata';
 import Thumbnail from '../../components/thumbnail';
-import SocialIcons from '../../lib/social-icons';
+import ExternalLinksBlockContainer from '../../components/ExternalLinksBlock';
 
 const AVATAR_SIZE = 100;
 
@@ -194,31 +194,10 @@ class OrganizationPage extends React.Component {
                   </button>
                 </div>}
             </div>
-            <div className="organization-details__links">
-              <h4 className="organization-details__heading"><Translate content="organization.home.links" /></h4>
-              {(rearrangedLinks.length > 0) && rearrangedLinks.map((link, i) => {
-                let iconForLabel;
-                let label;
-                if (link.path) {
-                  iconForLabel = SocialIcons[link.site] || 'external-link';
-                  label = <span> - @{link.path}</span>;
-                } else {
-                  iconForLabel = 'external-link';
-                  label = <span> - {link.label}</span>;
-                }
-                return (
-                  <a
-                    key={link.key || link.path}
-                    className="organization-details__link"
-                    href={`${link.url}`}
-                    target={`${this.props.organization.id}${link.url}`}
-                    rel="noopener noreferrer"
-                  >
-                    <i className={`fa fa-${iconForLabel} fa-fw fa-2x organization-details__icon`} />
-                    {label}
-                  </a>);
-              })}
-            </div>
+            <ExternalLinksBlockContainer
+              header={<Translate className="organization-details__heading" content="organization.home.links" component="h4" />}
+              resource={this.props.organization}
+            />
           </div>
         </section>
       </div>

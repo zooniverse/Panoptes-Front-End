@@ -5,7 +5,7 @@ import {
   projectCollabUser,
   projectRoles,
   randomUser
-} from '../testHelpers';
+} from '../../../test';
 
 describe('userHasLabAccess', function() {
   it('returns false if projectRoles does not have any roles', function() {

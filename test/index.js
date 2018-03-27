@@ -1,6 +1,7 @@
 import {
   adminUser,
   background,
+  externalLinks,
   organization,
   projectAvatar,
   projectOwner,
@@ -21,6 +22,7 @@ export {
   adminUser,
   background,
   buildLinksWithLabels,
+  externalLinks,
   organization,
   projectAvatar,
   projectOwner,

@@ -10,7 +10,7 @@ import FinishedBanner from '../finished-banner';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
 import TalkStatus from './talk-status';
-import ProjectNavbar from '../components/ProjectNavbar';
+import ExternalLinksBlock from '../../../components/ExternalLinksBlock';
 
 const ProjectHomePage = (props) => {
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
@@ -130,28 +130,32 @@ const ProjectHomePage = (props) => {
       <div className="project-home-page__container">
         {props.project.researcher_quote && (
           <div className="project-home-page__researcher-words">
-            <h4 className="project-home-page__small-header"><Translate content="project.home.researcher" /></h4>
+            <Translate className="project-home-page__small-header" content="project.home.researcher" component="h4" />
 
-            <div>
-              <img role="presentation" src={avatarSrc} />
-              <span>&quot;{props.translation.researcher_quote}&quot;</span>
+            <div className="researcher-words__wrapper">
+              <img className="researcher-words__avatar" role="presentation" src={avatarSrc} alt="The researcher" />
+              <p className="researcher-words__quote">&quot;{props.translation.researcher_quote}&quot;</p>
             </div>
           </div>)}
 
-        <div className="project-home-page__about-text">
-          <h4 className="project-home-page__small-header">
-            <Translate
-              content="project.home.about"
-              with={{
-                title: props.translation.display_name
-              }}
-            />
-          </h4>
+        <div className="project-home-page__about-text" style={(props.project.researcher_quote && props.project.urls && props.project.urls.length > 0) ? { flexBasis: '33.333%' } : { flexBasis: '66.666%' }}>
+          <Translate
+            className="project-home-page__small-header"
+            content="project.home.about"
+            component="h4"
+            with={{
+              title: props.translation.display_name
+            }}
+          />
           {props.project.introduction &&
             <Markdown project={props.project}>
               {props.translation.introduction}
             </Markdown>}
         </div>
+        <ExternalLinksBlock
+          header={<Translate className="project-home-page__small-header" component="h4" content="project.home.links" />}
+          resource={props.project}
+        />
       </div>
     </div>
   );
@@ -194,7 +198,8 @@ ProjectHomePage.propTypes = {
     introduction: PropTypes.string,
     redirect: PropTypes.string,
     researcher_quote: PropTypes.string,
-    slug: PropTypes.string
+    slug: PropTypes.string,
+    urls: PropTypes.arrayOf(PropTypes.object)
   }).isRequired,
   projectIsComplete: PropTypes.bool.isRequired,
   researcherAvatar: PropTypes.string,

@@ -97,7 +97,8 @@ export default {
       learnMore: 'Learn more',
       getStarted: 'Get started',
       workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
-      visitLink: 'Visit the project'
+      visitLink: 'Visit the project',
+      links: 'Links'
     }
   },
   organization: {
