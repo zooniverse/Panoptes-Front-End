@@ -7,7 +7,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 projectSection = require '../../talk/lib/project-section'
 isAdmin = require '../../lib/is-admin'
-getAllLinked = require '../../lib/get-all-linked'
+getAllLinked = require('../../lib/get-all-linked').default
 
 ID_PREFIX = 'LAB_COLLABORATORS_PAGE_'
 

@@ -5,7 +5,7 @@ ArticleList = require './article-list'
 Dialog = require 'modal-form/dialog'
 ArticleEditor = require './article-editor'
 actions = require './actions'
-getAllLinked = require '../../../lib/get-all-linked'
+getAllLinked = require('../../../lib/get-all-linked').default
 
 unless process.env.NODE_ENV is 'production'
   DEV_GUIDE = apiClient.type('field_guides').create

@@ -11,7 +11,7 @@ ProjectTranslations = require('./project-translations').default
 translationActions  = require '../../redux/ducks/translations'
 ProjectPage = require('./project-page').default
 WorkflowSelection = require('./workflow-selection').default
-getAllLinked = require '../../lib/get-all-linked'
+getAllLinked = require('../../lib/get-all-linked').default
 
 counterpart.registerTranslations 'en', require('../../locales/en').default
 counterpart.registerTranslations 'it', require('../../locales/it').default

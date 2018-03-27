@@ -12,7 +12,7 @@ NextTaskSelector = require '../next-task-selector'
 MediaArea = require('../../../pages/lab/media-area/').default
 {Markdown} = require 'markdownz'
 Papa = require 'papaparse'
-getAllLinked = require '../../../lib/get-all-linked'
+getAllLinked = require('../../../lib/get-all-linked').default
 
 module.exports = createReactClass
   displayName: 'SurveyTaskEditor'
