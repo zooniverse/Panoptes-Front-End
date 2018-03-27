@@ -9,7 +9,7 @@ import { pxToRem, zooTheme } from '../../../../theme';
 import TaskInput from './components/TaskInput';
 import TaskInputLabel from './components/TaskInputLabel';
 
-const StyledTaskInputField = styled.label`
+export const StyledTaskInputField = styled.label`
   align-items: baseline;
   background-color: ${theme('mode' , {
     light: zooTheme.colors.lightTheme.background
@@ -45,7 +45,7 @@ const StyledTaskInputField = styled.label`
   }
 `;
 
-function TaskInputField(props) {
+export function TaskInputField(props) {
   return (
     <ThemeProvider theme={{ mode: props.theme }}>
       <StyledTaskInputField className={props.className}>

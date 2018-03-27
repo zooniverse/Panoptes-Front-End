@@ -2,6 +2,7 @@
 /* global describe, it, beforeEach */
 import { mount } from 'enzyme';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import MultipleTask from './';
@@ -20,12 +21,24 @@ const annotation = {
   value: [0, 1]
 };
 
+const store = {
+  subscribe: () => { },
+  dispatch: () => { },
+  getState: () => ({ userInterface: { theme: 'light' }})
+};
+
+const mockReduxStore = {
+  context: { store },
+  childContextTypes: { store: PropTypes.object.isRequired }
+};
+
+
 describe('MultipleChoiceTask', function () {
   describe('when it renders', function() {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = mount(<MultipleTask task={task} annotation={annotation} translation={task} />);
+      wrapper = mount(<MultipleTask task={task} annotation={annotation} translation={task} />, mockReduxStore);
     });
 
     it('should render without crashing', function () {
@@ -38,16 +51,7 @@ describe('MultipleChoiceTask', function () {
     });
 
     it('should have answers', function () {
-      const answers = wrapper.find('.answer');
-      expect(answers).to.have.lengthOf(task.answers.length);
-    });
-
-    it('should have the supplied annotation checked', function () {
-      expect(wrapper.find('input[type="checkbox"]').find({ checked: true })).to.have.lengthOf(2);
-    });
-
-    it('other answers should not be checked', function () {
-      expect(wrapper.find('input[type="checkbox"]').find({ checked: false })).to.have.lengthOf(1);
+      expect(wrapper.find('TaskInputField')).to.have.lengthOf(task.answers.length);
     });
   });
 
@@ -65,7 +69,8 @@ describe('MultipleChoiceTask', function () {
           task={task}
           translation={task}
           onChange={onChangeSpy}
-        />
+        />,
+        mockReduxStore
       );
     });
 
@@ -116,7 +121,8 @@ describe('MultipleChoiceTask', function () {
         <MultipleTask
           task={task}
           translation={task}
-        />
+        />,
+        mockReduxStore
       );
     });
 
@@ -166,7 +172,8 @@ describe('MultipleChoiceTask', function () {
           task={task}
           annotation={annotation}
           translation={task}
-        />
+        />,
+        mockReduxStore
       );
     });
 
