@@ -4,12 +4,6 @@ const React = require('react');
 const DrawingToolRoot = require('./root');
 const DeleteButton = require('./delete-button');
 
-const DELETE_BUTTON_ANGLE = 45;
-const SELECTED_RADIUS = {
-  large: 20,
-  small: 10
-};
-
 class PointGridTool extends React.Component {
 
   static defaultValues({ x, y }) {
@@ -37,11 +31,11 @@ class PointGridTool extends React.Component {
     return notBeyondWidth && notBeyondHeight && beyondOffset;
   }
 
-  getDeleteButtonPosition() {
-    const theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180);
+  getDeleteButtonPosition(row, col, width, height) {
+    const y = (row === 0) ? (1.1 * height) : (-0.1 * height);
+    const x = (col + 1 === this.props.cols) ? (-0.1 * width) : (1.1 * width);
     return {
-      x: (SELECTED_RADIUS.large / this.props.scale.horizontal) * Math.cos(theta),
-      y: -1 * (SELECTED_RADIUS.large / this.props.scale.vertical) * Math.sin(theta)
+      x, y
     };
   }
 
@@ -57,6 +51,8 @@ class PointGridTool extends React.Component {
 
     x = (Math.floor(x / width));
     y = Math.floor(y / height);
+    const row = y;
+    const col = x;
 
     x = (x * width) + offsetX;
     y = (y * height) + offsetY;
@@ -68,12 +64,12 @@ class PointGridTool extends React.Component {
           height={height}
           fill={this.props.color}
           fillOpacity={this.props.opacity / 100}
-          strokeOpacity="0"
+          strokeOpacity={(this.props.selected) ? '.8' : '0'}
         />
 
         {!!this.props.selected &&
           <DeleteButton
-            tool={this} {...this.getDeleteButtonPosition()}
+            tool={this} {...this.getDeleteButtonPosition(row, col, width, height)}
             getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix}
           />
         }
