@@ -4,28 +4,9 @@ import merge from 'lodash/merge';
 import { connect } from 'react-redux';
 
 function TaskTranslations(props) {
-  const { task } = props;
-  const taskStrings = props.translations.strings.workflow;
-  let translation = merge({}, task);
-
-  function explodeTranslationKey(translationKey, value) {
-    const translationKeys = translationKey.split('.');
-    const translationObject = {};
-    let temp = translationObject;
-    while (translationKeys.length) {
-      temp[translationKeys[0]] = (translationKeys.length === 1) ? value : {};
-      temp = temp[translationKeys[0]];
-      translationKeys.shift();
-    }
-    return translationObject;
-  }
-
-  Object.keys(taskStrings).map((translationKey) => {
-    const newTranslation = explodeTranslationKey(translationKey, taskStrings[translationKey]);
-    if (newTranslation.tasks && newTranslation.tasks[props.taskKey]) {
-      translation = merge(translation, newTranslation.tasks[props.taskKey]);
-    }
-  });
+  const { task, translations } = props;
+  const taskStrings = translations.strings.workflow.tasks ? translations.strings.workflow.tasks[props.taskKey] : {};
+  const translation = merge({}, task, taskStrings);
 
   return React.cloneElement(props.children, { translation });
 }
