@@ -73,7 +73,7 @@ export default {
       getStarted: 'Get started',
       workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
       visitLink: 'Visit the project',
-      links: 'Links'
+      links: 'External Project Links'
     }
   },
   organization: {
