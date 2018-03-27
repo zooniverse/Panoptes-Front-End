@@ -1,22 +1,24 @@
+import apiClient from 'panoptes-client/lib/api-client';
 import auth from 'panoptes-client/lib/auth';
+
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { Helmet } from 'react-helmet';
-import apiClient from 'panoptes-client/lib/api-client';
+
+import { connect } from 'react-redux';
+
 import counterpart from 'counterpart';
-import FinishedBanner from './finished-banner';
-import Classifier from '../../classifier';
-import seenThisSession from '../../lib/seen-this-session';
-import ClassificationQueue from '../../lib/classification-queue';
-import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';
+import Translate from 'react-translate-component';
 import { Split } from 'seven-ten';
 
-counterpart.registerTranslations('en', {
-  classifyPage: {
-    title: 'Classify'
-  }
-});
+import seenThisSession from '../../lib/seen-this-session';
+import ClassificationQueue from '../../lib/classification-queue';
+
+import Classifier from '../../classifier';
+import FinishedBanner from './finished-banner';
+import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';
+import ProjectThemeButton from './components/ProjectThemeButton';
+import { zooTheme } from '../../theme';
 
 // Map each project ID to a promise of its last randomly-selected workflow ID.
 // This is to maintain the same random workflow for each project when none is specified by the user.
@@ -25,10 +27,10 @@ const currentWorkflowForProject = {};
 // Map a workflow ID to a promise of its current classification resource
 // This is to maintain the same classification for each workflow.
 // In the future user might be able to specify subject sets, which we'll record here similarly.
-const currentClassifications = { forWorkflow: {}};
+const currentClassifications = { forWorkflow: {} };
 
 // Queue up subjects to classify here.
-const upcomingSubjects = { forWorkflow: {}};
+const upcomingSubjects = { forWorkflow: {} };
 
 function emptySubjectQueue() {
   console.log('Emptying upcoming subjects queue');
@@ -56,13 +58,12 @@ apiClient.type('subject_sets').listen('add-or-remove', emptySubjectQueue);
 // Store this externally to persist during the session.
 let sessionDemoMode = false;
 
-class ProjectClassifyPage extends React.Component {
+export class ProjectClassifyPage extends React.Component {
   constructor(props) {
     super(props);
     this.loadingSelectedWorkflow = false;
     this.project = null;
     this.workflow = null;
-    this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
 
     this.state = {
       subject: null,
@@ -72,7 +73,6 @@ class ProjectClassifyPage extends React.Component {
       promptWorkflowAssignmentDialog: false,
       rejected: null,
       validUserGroup: false,
-      darkTheme: false
     };
   }
 
@@ -155,7 +155,7 @@ class ProjectClassifyPage extends React.Component {
         currentClassifications.forWorkflow[props.workflow.id] = classification;
         this.setState({ classification });
       }).catch((error) => {
-        this.setState({ rejected: { classification: error }});
+        this.setState({ rejected: { classification: error } });
       });
     }
   };
@@ -279,16 +279,10 @@ class ProjectClassifyPage extends React.Component {
     return subject;
   };
 
-  toggleDarkTheme() {
-    this.setState((prevState) => {
-      return { darkTheme: !prevState.darkTheme };
-    });
-  }
-
   render() {
     return (
-      <div className={`${(this.state.darkTheme) ? 'classify-page classify-page--dark-theme' : 'classify-page'}`}>
-        <Helmet title={`${this.props.project.display_name} » ${counterpart('classifyPage.title')}`} />
+      <div className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
+        <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
 
         {this.props.projectIsComplete &&
           <FinishedBanner project={this.props.project} />}
@@ -297,11 +291,7 @@ class ProjectClassifyPage extends React.Component {
           <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
 
         {this.renderClassifier()}
-        <p className="classify-page__theme-button-wrapper">
-          <button className="classify-page__theme-button" type="button" onClick={this.toggleDarkTheme}>
-            Switch to {this.state.darkTheme ? 'light' : 'dark'} theme
-          </button>
-        </p>
+        <ProjectThemeButton />
       </div>
     );
   }
@@ -424,7 +414,8 @@ ProjectClassifyPage.contextTypes = {
 ProjectClassifyPage.propTypes = {
   loadingSelectedWorkflow: PropTypes.bool,
   project: PropTypes.object,
-  workflow: PropTypes.object
+  storage: PropTypes.object,
+  workflow: PropTypes.object,
 };
 
 
@@ -434,4 +425,8 @@ window.currentClassifications = currentClassifications;
 window.upcomingSubjects = upcomingSubjects;
 window.classificationQueue = classificationQueue;
 
-export default ProjectClassifyPage;
+const mapStateToProps = state => ({
+  theme: state.userInterface.theme
+});
+
+export default connect(mapStateToProps)(ProjectClassifyPage);

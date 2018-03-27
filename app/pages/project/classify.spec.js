@@ -3,7 +3,7 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 
 import { FakeApiClient } from '../../../test/fake-api-client';
-import ProjectClassifyPage from './classify';
+import { ProjectClassifyPage } from './classify';
 import FinishedBanner from './finished-banner';
 
 describe('ProjectClassifyPage', function () {

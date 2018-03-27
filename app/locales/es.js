@@ -11,9 +11,15 @@ export default {
     letsGo: 'Let’s go!',
     next: 'Next',
     optOut: 'Opt out',
+    recents: 'Your recent classifications',
     talk: 'Talk',
     tutorialButton: 'Show the project tutorial',
-    miniCourseButton: 'Restart the project mini-course'
+    miniCourseButton: 'Restart the project mini-course',
+    workflowAssignmentDialog: {
+      promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
+      acceptButton: 'Try the new workflow',
+      declineButton: 'No, thanks'
+    }
   },
   project: {
     loading: 'Loading project',
@@ -38,6 +44,12 @@ export default {
       adminPage: 'Admin page',
       underReview: 'Under Review',
       zooniverseApproved: 'Zooniverse Approved'
+    },
+    classifyPage: {
+      dark: 'dark',
+      light: 'light',
+      title: 'Classify',
+      themeToggle: 'Switch to %(theme)s theme'
     },
     home: {
       researcher: 'Words from the researcher',

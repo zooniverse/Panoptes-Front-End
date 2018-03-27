@@ -46,6 +46,12 @@ export default {
       underReview: 'Under Review',
       zooniverseApproved: 'Zooniverse Approved'
     },
+    classifyPage: {
+      dark: 'dark',
+      light: 'light',
+      title: 'Classify',
+      themeToggle: 'Switch to %(theme)s theme'
+    },
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',

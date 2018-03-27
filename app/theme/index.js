@@ -4,7 +4,11 @@ import pxToRem from './pxToRem';
 
 const zooTheme = {
   colors,
-  fonts
+  fonts,
+  mode: {
+    dark: 'dark',
+    light: 'light'
+  }
 };
 
 export {
