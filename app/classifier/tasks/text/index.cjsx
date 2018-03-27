@@ -99,6 +99,7 @@ module.exports = createReactClass
       textAfter = textAreaValue.substring(selectionEnd, textAreaValue.length)
       value = textBefore + startTag + textInBetween + endTag + textAfter
     @setState { value }
+    @debouncedUpdateAnnotation()
 
   updateHeight: ->
     @setState textareaHeight: @refs.textInput.scrollHeight + 2
