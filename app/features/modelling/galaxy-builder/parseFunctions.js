@@ -70,33 +70,29 @@ export const parseBar = (comp, state) => {
   ]);
 };
 
-export const parseSpiral = (comp, state, currentComps) => {
+export const parseSpiralArms = (comp, state, currentComps) => {
   // has a spiral been drawn?
-  if (!hasComp(comp)) return null;
+  if (!hasComp(comp)) return [];
   // do we have a disk?
   const disks = currentComps.filter(i => i[1].name === 'disk');
-  if (disks.length === 0) return null;
-  else {
-    const ret = [];
-    for (let i = 0; i < comp.value[0].value.length; i += 1) {
-      const spiralArm = Object.assign(
+  if (disks.length === 0) return [];
+  const ret = comp.value[0].value.map(
+    drawnComponent => [
+      state.model.spiral.func,
+      Object.assign(
         { name: state.model.spiral.name },
         state.model.spiral.default,
         {
           disk: Object.assign({}, disks[0][1]), // base falloff from the 0th disk
-          i0: parseFloat(comp.value[0].value[i].details[0].value),
-          spread: parseFloat(comp.value[0].value[i].details[1].value),
+          i0: parseFloat(drawnComponent.details[0].value),
+          spread: parseFloat(drawnComponent.details[1].value),
           falloff: parseFloat(comp.value[1].value),
-          points: comp.value[0].value[i].points.map(
+          points: drawnComponent.points.map(
             p => [state.sizeMultiplier * p.x, state.sizeMultiplier * (state.size[0] - p.y)]
           )
         }
-      );
-      ret.push([
-        state.model.spiral.func,
-        spiralArm
-      ]);
-    }
-    return ret;
-  }
+      )
+    ]
+  );
+  return ret;
 };

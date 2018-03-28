@@ -1,11 +1,12 @@
 // "Passing arrow functions (“lambdas”) to Mocha is discouraged" - https://mochajs.org/#arrow-functions
-/* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'] */
+/* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'],
+no-param-reassign: 0 */
 /* global describe, it, beforeEach */
 import assert from 'assert';
-import sinon from 'sinon';
+// import sinon from 'sinon';
 import { cloneDeep } from 'lodash';
 
-import { hasComp, parseDisk, parseBulge, parseBar, parseSpiral } from './parseFunctions';
+import { hasComp, parseDisk, parseBulge, parseBar, parseSpiralArms } from './parseFunctions';
 
 const annotations = [
   {
@@ -59,6 +60,10 @@ const annotations = [
   }
 ];
 
+const annotationWithoutShape = cloneDeep(annotations);
+annotationWithoutShape.forEach(
+  (annotation) => { annotation.value[0].value = []; }
+);
 
 const state = {
   size: [512, 512],
@@ -87,11 +92,6 @@ const state = {
     }
   }
 };
-
-const annotationWithoutShape = cloneDeep(annotations);
-for (let i = 0; i < annotationWithoutShape.length; i += 1) {
-  annotationWithoutShape[i].value[0].value = [];
-}
 
 describe('hasComp', function () {
   it('should return false for an annotation without a drawn shape', function () {
@@ -129,19 +129,19 @@ describe('parseBar', function () {
   });
 });
 
-describe('parseSpiral', function () {
+describe('parseSpiralArms', function () {
   const comps = [
     () => null,
     { name: 'disk', mux: 0.8, muy: 408.8, rx: 4, ry: 4, scale: 1, roll: 0, i0: 0.4, n: 1, c: 2 }
   ];
-  it('should return null for an annotation without a drawn shape', function () {
-    assert.equal(parseSpiral(annotationWithoutShape[3], state, []), null);
-    assert.equal(parseSpiral(annotationWithoutShape[3], state, comps), null);
+  it('should return an empty list for an annotation without a drawn shape', function () {
+    assert.equal(parseSpiralArms(annotationWithoutShape[3], state, []).length, 0);
+    assert.equal(parseSpiralArms(annotationWithoutShape[3], state, comps).length, 0);
   });
   it('should return null when not provided with a disk', function () {
-    assert.equal(parseSpiral(annotations[3], state, []), null);
+    assert.equal(parseSpiralArms(annotations[3], state, []).length, 0);
   });
   it('should return component parameters for an annotation with a drawn shape', function () {
-    assert.ok(parseSpiral(annotations[3], state, [comps]));
+    assert.ok(parseSpiralArms(annotations[3], state, [comps]));
   });
 });

@@ -12,8 +12,8 @@ export const convolvePSF = (r, psf, size) => {
   const psfKeys = {};
   let convolution = '';
   let c = [0, 0];
-  for (let i = 0; i < size[0]; i += 1) {
-    for (let j = 0; j < size[1]; j += 1) {
+  for (let i = 0, n = size[0]; i < n; i += 1) {
+    for (let j = 0, m = size[1]; j < m; j += 1) {
       psfKeys[`psf[${(i * size[0]) + j}]`] = psf[i][j];
       // TODO: psf size shouldn't be fixed to 11x11
       c = [i - 5, j - 5];

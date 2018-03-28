@@ -3,7 +3,7 @@
 import baseModel from '../baseReglModel';
 import { drawSersic, drawSpiral } from './galaxyRegls';
 import { convolvePSF, calculateDifference, scaleModel, maskImage, panZoom } from './postProcessingRegl';
-import { parseDisk, parseBulge, parseBar, parseSpiral } from './parseFunctions';
+import { parseDisk, parseBulge, parseBar, parseSpiralArms } from './parseFunctions';
 
 class GalaxyBuilderModel extends baseModel {
   constructor(canvas, { frame, metadata, src, sizing }, eventHandlers) {
@@ -17,10 +17,8 @@ class GalaxyBuilderModel extends baseModel {
     if (src) {
       fetch(`${src}?=`)
         .then(response => response.json())
-        .catch((e) => {
-          console.warn(e);
-        })
-        .then(data => this.handleDataLoad(data));
+        .then(data => this.handleDataLoad(data))
+        .catch(e => console.warn(e));
     }
   }
   handleDataLoad(data) {
@@ -44,8 +42,6 @@ class GalaxyBuilderModel extends baseModel {
       this.eventHandlers.changeCanvasStyleSize(
         { width: `${data.imageWidth}px`, height: `${data.imageHeight}px` }
       );
-      // this.canvas.style.height = `${data.imageHeight}px`;
-      // this.canvas.style.width = `${data.imageWidth}px`;
       this.state.sizing = Object.assign(
         {},
         this.state.sizing,
@@ -98,18 +94,18 @@ class GalaxyBuilderModel extends baseModel {
       sizeMultiplier: this.canvas.width / this.state.sizing.width,
       model: this.model
     };
-    const ret = [];
-    for (let i = 0, comp = null; i < annotations.length; i++) {
-      comp = null;
-      switch (annotations[i].task) {
+    // const ret = [];
+    const ret = annotations.map((annotation) => {
+      let comp = null;
+      switch (annotation.task) {
         case 'disk':
-          comp = parseDisk(annotations[i], s);
+          comp = parseDisk(annotation, s);
           break;
         case 'bulge':
-          comp = parseBulge(annotations[i], s);
+          comp = parseBulge(annotation, s);
           break;
         case 'bar':
-          comp = parseBar(annotations[i], s);
+          comp = parseBar(annotation, s);
           break;
         default:
           break;
@@ -117,20 +113,21 @@ class GalaxyBuilderModel extends baseModel {
       if (comp !== null) {
         comp[0](Object.assign({ texture: this.state.pixels }, comp[1]));
         this.state.pixels({ copy: true });
-        ret.push(comp);
       }
-    }
-    for (let i = 0, comp = null; i < annotations.length; i++) {
-      if (annotations[i].task === 'spiral') {
-        comp = parseSpiral(annotations[i], s, ret);
-        if (comp !== null) {
-          comp.forEach(([renderFunc, params]) => {
-            renderFunc(Object.assign({ texture: this.state.pixels }, params));
+      return comp;
+    })
+      .filter(component => component !== null);
+
+    annotations.filter(annotation => annotation.task === 'spiral')
+      .forEach(
+        annotation => parseSpiralArms(annotation, s, ret).forEach(
+          ([renderFunction, params]) => {
+            renderFunction(Object.assign({ texture: this.state.pixels }, params));
             this.state.pixels({ copy: true });
-          });
-        }
-      }
-    }
+          }
+        )
+      );
+
     if (this.convolvePSF) {
       this.convolvePSF({
         texture: this.state.pixels

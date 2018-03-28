@@ -1,7 +1,4 @@
-import { Markdown } from 'markdownz';
-import React from 'react';
 import reglBase from 'regl';
-import alert from '../../lib/alert';
 
 class BaseReglModel {
   constructor(canvas, { frame, metadata, sizing }) {
@@ -36,9 +33,8 @@ class BaseReglModel {
     this.regl.clear({
       color: [0, 0, 0, 1]
     });
-    this.state.pixels({
-      copy: true
-    });
+    this.state.pixels({ copy: true });
+
     // Call model-specific model calculation function. Returns [[regl-func, params], ...]
     this.calculateModel(annotations, newViewBox);
     this.state.pixels({ copy: true });

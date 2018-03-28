@@ -22,15 +22,12 @@ Proposed usage:
 // TODO: get rid of score, should be handled in model
 
 import GalaxyBuilderModel from './galaxy-builder';
-import DevClassifierModel from './dev-classifier';
 import LinePlotModel from './line-plot';
 import TestModel from './test-model';
 // TODO: this should be workflow.configuration.modelling.model, or even at the
 //       subject-level (different models for each subject).
 export default (subjectModellingInfo) => {
   switch (subjectModellingInfo.model) {
-    case 'DEV_CLASSIFIER_DRAWING':
-      return DevClassifierModel;
     case 'GALAXY_BUILDER_MODEL':
     case 'GALAXY_BUILDER_DIFFERENCE':
       return GalaxyBuilderModel;
@@ -39,6 +36,6 @@ export default (subjectModellingInfo) => {
     case 'TEST_MODEL':
       return TestModel;
     default:
-      return DevClassifierModel;
+      return TestModel;
   }
 };

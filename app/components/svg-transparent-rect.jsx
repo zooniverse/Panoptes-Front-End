@@ -17,21 +17,21 @@ class SVGTransparentRect extends React.Component {
   }
 
   fixWeirdSize() {
-    const image = this.rect;
+    const rect = this.rect;
 
-    if (this.props.width && image.width === this.props.width) {
-      image.setAttribute('width', this.props.width);
+    if (this.props.width && rect.width === this.props.width) {
+      rect.setAttribute('width', this.props.width);
     }
 
-    if (this.props.height && image.height === this.props.height) {
-      image.setAttribute('height', this.props.height);
+    if (this.props.height && rect.height === this.props.height) {
+      rect.setAttribute('height', this.props.height);
     }
   }
 
   render() {
-    const imageProps = Object.assign({}, this.props);
-    delete imageProps.modification;
-    return <rect ref={(r) => { this.rect = r; }} fill="#000000" fillOpacity="0.0" {...imageProps} />;
+    const props = Object.assign({}, this.props);
+    delete props.modification;
+    return <rect ref={(r) => { this.rect = r; }} fill="#000000" fillOpacity="0.0" {...props} />;
   }
 }
 SVGTransparentRect.propTypes = {

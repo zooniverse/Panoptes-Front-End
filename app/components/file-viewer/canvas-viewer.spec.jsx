@@ -56,7 +56,6 @@ describe('CanvasViewer', function () {
     it('should correctly change the canvas style width and height', function () {
       const canvas = wrapper.find('canvas').instance();
       wrapper.instance().changeCanvasStyleSize({ width: '300px', height: '300px' });
-      console.log(wrapper.instance().state);
       wrapper.update();
       assert.equal(canvas.style.width, '300px');
       assert.equal(canvas.style.height, '300px');
@@ -78,7 +77,7 @@ describe('CanvasViewer', function () {
       assert.equal(wrapper.find('.canvas-renderer-score').length, 1);
     });
     it('should set the score to the correct value', function () {
-      assert.equal(wrapper.instance().state.score, 100);
+      assert.equal(wrapper.state('score'), 100);
     });
   });
 });

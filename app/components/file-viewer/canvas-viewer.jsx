@@ -53,7 +53,7 @@ class CanvasViewer extends React.Component {
       (
         // old view box is not the same as new view box
         !Object.keys(this.props.viewBoxDimensions).every(
-          k => oldProps.viewBoxDimensions[k] === this.props.viewBoxDimensions[k]
+          key => oldProps.viewBoxDimensions[key] === this.props.viewBoxDimensions[key]
         ) ||
         // the old annotation is not the same as the new one
         !isMatch(oldProps.annotation, this.props.annotation)
@@ -68,38 +68,34 @@ class CanvasViewer extends React.Component {
       hasScore: this.model.hasScore || false
     });
   }
-  setScore(s) {
+  /* eslint-disable class-methods-use-this */
+  getModelForFrame(metadata, frame) {
+    const model = metadata['#models'].filter(
+      models => models.frame === frame
+    );
+    // check if model is an empty (shouln't be)
+    return modelSelector(model[0] || {});
+  }
+  /* eslint-enable class-methods-use-this */
+  setScore(score) {
     this.setState({
       hasScore: true,
-      score: s
+      score
     });
   }
   resizeCanvas({ width, height }) {
-    this.setState({
-      canvasSize: Object.assign(
-        this.state.canvasStyle,
-        {
-          width,
-          height
-        }
-      )
-    });
+    const canvasSize = { width, height };
+    this.setState({ canvasSize });
   }
   changeCanvasStyleSize({ width, height }) {
-    this.setState({
-      canvasStyle: {
-        width,
-        height
-      }
-    });
+    const canvasStyle = { width, height };
+    this.setState({ canvasStyle });
   }
   createNewModel(props) {
     if (!this.state.loading) this.setState({ loading: true });
     return new Promise((resolve, reject) => {
       if (props.subject.metadata && props.subject.metadata['#models']) {
-        const Model = modelSelector(props.subject.metadata['#models'].filter(
-          i => i.frame === props.frame
-        )[0] || {});
+        const Model = this.getModelForFrame(props.subject.metadata, props.frame);
         this.model = new Model(
           this.canvas,
           // pass metadata for model
@@ -155,12 +151,10 @@ class CanvasViewer extends React.Component {
             Score: {this.state.score}
           </span>
         }
-        {
-          this.state.loading &&
+        {this.state.loading &&
           <div className="loading-cover" style={this.props.overlayStyle} >
             <LoadingIndicator />
-          </div>
-        }
+          </div>}
       </div>
     );
   }
