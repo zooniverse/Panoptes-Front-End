@@ -6,6 +6,7 @@
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 import TutorialTab, { StyledRestartButton } from './TutorialTab';
@@ -16,10 +17,21 @@ const tutorial = {
   ]
 };
 
+const store = {
+  subscribe: () => { },
+  dispatch: () => { },
+  getState: () => ({ userInterface: { theme: 'light' } })
+};
+
+const mockReduxStore = {
+  context: { store },
+  childContextTypes: { store: PropTypes.object.isRequired }
+};
+
 describe('TutorialTab', function() {
   let wrapper;
   before(function () {
-    wrapper = mount(<TutorialTab tutorial={tutorial} />);
+    wrapper = mount(<TutorialTab tutorial={tutorial} />, mockReduxStore);
   });
   it('should render without crashing', function() {
     expect(wrapper).to.be.ok;

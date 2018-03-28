@@ -34,7 +34,7 @@ export const StyledRestartButton = styled(RestartButton)`
   &:focus, &:hover {
     background: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.button,
-      light: zooTheme.colors.teal.hoverGradient
+      light: zooTheme.colors.teal.gradient
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,

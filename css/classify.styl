@@ -203,7 +203,7 @@
         background: HIGHLIGHT_COLOR_HOVER
 
       &:disabled
-        background: darken(HIGHLIGHT_COLOR, 10%)
+        background: lighten(HIGHLIGHT_COLOR, 10%)
         color: #EEF1F4
         cursor: not-allowed
 
@@ -221,28 +221,28 @@
   .question p
     margin: 1em 0 1.5em
 
-  .answer-button
-    align-items: baseline
-    background-color: BACKGROUND_COLOR
-    border: none;
-    box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5)
-    cursor: pointer
-    display: flex
-    margin: 10px 0
-    padding: 1ch 2ch
-    position: relative
-    text-align: left
+  // .answer-button
+  //   align-items: baseline
+  //   background-color: BACKGROUND_COLOR
+  //   border: none;
+  //   box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5)
+  //   cursor: pointer
+  //   display: flex
+  //   margin: 10px 0
+  //   padding: 1ch 2ch
+  //   position: relative
+  //   text-align: left
 
-    &:hover, &:focus, &[data-focus=true]
-      background: linear-gradient(#C0E3E5, #8BCED2)
-      color: white
+  //   &:hover, &:focus, &[data-focus=true]
+  //     background: linear-gradient(#C0E3E5, #8BCED2)
+  //     color: white
 
-    &.active
-      background-color: TEAL_MID
-      color: white
+  //   &.active
+  //     background-color: TEAL_MID
+  //     color: white
 
-    > :not(:first-child)
-      margin-left: 1ch
+  //   > :not(:first-child)
+  //     margin-left: 1ch
 
     // Ignore first and last margins from Markdown.
     // .markdown

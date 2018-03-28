@@ -28,7 +28,7 @@ export const StyledTaskInputField = styled.label`
 
   &:hover, &:focus, &[data-focus=true] {
     background: ${theme('mode', {
-      light: zooTheme.colors.teal.hoverGradient
+      light: zooTheme.colors.teal.gradient
     })};
     color: ${theme('mode', {
       light: 'white'

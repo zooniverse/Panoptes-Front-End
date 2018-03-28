@@ -256,7 +256,7 @@ describe('SingleChoiceSummary', function () {
   it('should have the correct answer label when the value if falsy (i.e. 0)', function () {
     summary = mount(<SingleTask.Summary task={task} annotation={{ value: 0 }} translation={task} />);
     const answers = summary.find('.answer');
-    expect(answers.text()).to.equal('No answer');
+    expect(answers.text()).to.not.equal('No answer');
   });
 
   it('should return "No answer" when annotation is null', function () {

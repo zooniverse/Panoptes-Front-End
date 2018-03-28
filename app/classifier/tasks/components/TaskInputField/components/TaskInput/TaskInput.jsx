@@ -46,7 +46,7 @@ TaskInput.propTypes ={
   annotation: PropTypes.shape({
     _key: PropTypes.number,
     task: PropTypes.string,
-    value: PropTypes.oneOf(PropTypes.arrayOf(PropTypes.number), PropTypes.number)
+    value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.number])
   }),
   index: PropTypes.number,
   name: PropTypes.string,

@@ -1,8 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import theme from 'styled-theming';
-import { pxToRem, zooTheme } from '../../../theme';
+import { zooTheme } from '../../../theme';
 
 const TaskArea = styled.div`
   background-color: ${theme('mode', {

@@ -4,13 +4,22 @@ export default {
       border: '#2D2D2D',
       default: '#333333'
     },
-    button: '#5C5C5C',
+    button: {
+      answer: '#5C5C5C',
+      done: { 
+        default: '#B8E986',
+        hover: '#345446'
+      }
+    },
     font: '#E2E5E9'
   },
   lightTheme: {
     background: {
       border: '#ebebeb',
       default: '#EEF2F5'
+    },
+    button: {
+      done: '#078F52'
     },
     foreground: '#404040',
     font: '#000000'
@@ -43,7 +52,7 @@ export default {
   },
   teal: {
     dark: '#005D69',
-    hoverGradient: 'linear-gradient(#C0E3E5, #8BCED2)',
+    gradient: 'linear-gradient(#C0E3E5, #8BCED2)',
     light: '#ADDDE0',
     mid: '#00979D'
   }

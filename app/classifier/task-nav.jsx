@@ -5,6 +5,7 @@ import Translate from 'react-translate-component';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
 import TaskBackButton from './tasks/components/TaskBackButton';
+import TaskNavButtons from './components/TaskNavButtons';
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
 
 class TaskNav extends React.Component {
@@ -96,12 +97,11 @@ class TaskNav extends React.Component {
       nextTaskKey = '';
     }
 
-    // TODO: Actually disable things that should be.
-    // For now we'll just make them non-mousable.
-    const disabledStyle = {
-      opacity: 0.5,
-      pointerEvents: 'none'
-    };
+    const showDoneAndTalkLink = !nextTaskKey &&
+      this.props.workflow.configuration.hide_classification_summaries &&
+      this.props.project &&
+      !disableTalk &&
+      !completed;
 
     return (
       <div>
@@ -111,54 +111,20 @@ class TaskNav extends React.Component {
             destroyCurrentAnnotation={this.destroyCurrentAnnotation}
             showButton={visibleTasks.length > 1 && !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0)}
           />
-          {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk && !completed) &&
-            <Link
-              onClick={this.completeClassification}
-              to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
-              className="talk standard-button"
-              style={waitingForAnswer ? disabledStyle : {}}
-            >
-              <Translate content="classifier.doneAndTalk" />
-            </Link>}
-          {(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut) ?
-            <button
-              type="button"
-              className="continue-button"
-              disabled={waitingForAnswer}
-              onClick={this.addAnnotationForTask.bind(this, nextTaskKey)}
-            >
-              <Translate content="classifier.next" />
-              <i className="fa fa-long-arrow-right" />
-            </button> : !completed ?
-              <button
-                type="button"
-                className="continue-button"
-                disabled={waitingForAnswer}
-                onClick={this.completeClassification}
-              >
-                {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
-                {this.props.classification.gold_standard && <i className="fa fa-star fa-fw" />}
-                {' '}<Translate content="classifier.done" />
-              </button> :
-              null
-          }
-          {completed &&
-            <Link
-              onClick={this.props.nextSubject}
-              to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
-              className="talk standard-button"
-            >
-              <Translate content="classifier.talk" />
-            </Link>}
-          {completed &&
-            <button
-              autoFocus={this.props.autoFocus}
-              className="continue-button"
-              onClick={this.props.nextSubject}
-            >
-              <Translate content="classifier.next" />
-            <i className="fa fa-long-arrow-right" />
-            </button>}
+          <TaskNavButtons
+            addAnnotationForTask={this.addAnnotationForTask.bind(this, nextTaskKey)}
+            autoFocus={this.props.autoFocus}
+            classification={this.props.classification}
+            completeClassification={this.completeClassification}
+            completed={completed}
+            demoMode={this.props.demoMode}
+            nextSubject={this.props.nextSubject}
+            project={this.props.project}
+            showNextButton={!!(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut)}
+            showDoneAndTalkLink={showDoneAndTalkLink}
+            subject={this.props.subject}
+            waitingForAnswer={waitingForAnswer}
+          />
           {this.props.children}
         </nav>
       </div>

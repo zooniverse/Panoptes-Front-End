@@ -6,15 +6,28 @@
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
-import TaskTabs, { TabsWrapper, QuestionTab } from './TaskTabs';
+import TaskTabs, { TabsWrapper } from './TaskTabs';
 import TutorialTab from './components/TutorialTab';
+import QuestionTab from './components/QuestionTab';
+
+const store = {
+  subscribe: () => { },
+  dispatch: () => { },
+  getState: () => ({ userInterface: { theme: 'light' } })
+};
+
+const mockReduxStore = {
+  context: { store },
+  childContextTypes: { store: PropTypes.object.isRequired }
+};
 
 describe('TaskTabs', function() {
   let wrapper;
   before(function() {
-    wrapper = mount(<TaskTabs />);
+    wrapper = mount(<TaskTabs />, mockReduxStore);
   });
 
   it('should render without crashing', function() {
@@ -27,10 +40,6 @@ describe('TaskTabs', function() {
 
   it('should render a QuestionTab component', function() {
     expect(wrapper.find(QuestionTab)).to.have.lengthOf(1);
-  });
-
-  it('should render a Translate component', function() {
-    expect(wrapper.find('Translate')).to.have.lengthOf(1);
   });
 
   it('should render a TutorialTab', function() {

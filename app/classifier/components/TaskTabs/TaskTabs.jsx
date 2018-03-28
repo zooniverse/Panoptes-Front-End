@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import * as userInterfaceActions from '../../../redux/ducks/userInterface';
 import QuestionTab from './components/QuestionTab';
 import TutorialTab from './components/TutorialTab';
 
