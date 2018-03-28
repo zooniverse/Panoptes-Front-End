@@ -42,30 +42,32 @@ const SubmitEmailForm = ({ user, onSubmit, onChange, disabled, inProgress, email
           <i className="fa fa-check-circle form-help success" />}
       </p>
 
-      {emailSuccess &&
-        <Translate
-          component="p"
-          content="resetPassword.emailSuccess"
-        />}
+      <div id="reset-status">
+        {emailSuccess &&
+          <Translate
+            component="p"
+            content="resetPassword.emailSuccess"
+          />}
 
-      {emailError &&
+        {emailError &&
+          <Translate
+            className="form-help error"
+            component="small"
+            content="resetPassword.emailError"
+          />}
+      </div>
+      <p>
         <Translate
-          className="form-help error"
           component="small"
-          content="resetPassword.emailError"
-        />}
-        <p>
-          <Translate
-            component="small"
-            content="resetPassword.missingEmailsSpamNote"
-          />
-        </p>
-        <p>
-          <Translate
-            component="small"
-            content="resetPassword.missingEmailsAlternateNote"
-          />
-        </p>
+          content="resetPassword.missingEmailsSpamNote"
+        />
+      </p>
+      <p>
+        <Translate
+          component="small"
+          content="resetPassword.missingEmailsAlternateNote"
+        />
+      </p>
     </form>
   );
 };
