@@ -30,7 +30,7 @@ class ProjectStatus extends Component {
     this.state = {
       dialogIsOpen: false,
       error: null,
-      featured: null,
+      featuredProject: null,
       project: null,
       usedWorkflowLevels: [],
       workflows: []
@@ -59,7 +59,7 @@ class ProjectStatus extends Component {
     return apiClient.type('projects')
       .get({ featured: true })
       .then(([featuredProject]) => {
-        this.setState({ featured: featuredProject });
+        this.setState({ featuredProject });
       });
   }
 
@@ -124,20 +124,22 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
-  setFeatured(project, value) {
-    return project.update({ featured: value.checked }).save()
+  saveProject(project) {
+    return project.save()
       .catch(error => this.setState({ error }));
   }
 
   handleFeaturedProjectChange({ target }) {
-    const { featured, project } = this.state;
-    if (featured) {
-      return featured.update({ featured: false }).save()
-        .then(() => this.setState({ featured }))
-        .catch(error => this.setState({ error }))
-        .then(this.setFeatured(project, target));
+    const { featuredProject, project } = this.state;
+    project.update({ featured: target.checked });
+    if (featuredProject) {
+      featuredProject.update({ featured: false });
+      return this.saveProject(featuredProject)
+        .then(() => this.saveProject(project))
+        .then(() => this.setState({ featuredProject: project }))
+        .catch(error => this.setState({ error }));
     } else {
-      return this.setFeatured(project, target);
+      return this.saveProject(project);
     }
   }
 
@@ -214,7 +216,7 @@ class ProjectStatus extends Component {
   }
 
   render() {
-    const { error, project } = this.state;
+    const { error, inProgress, project } = this.state;
     if (!project) {
       return <LoadingIndicator />;
     }
