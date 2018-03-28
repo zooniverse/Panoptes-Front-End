@@ -4,6 +4,7 @@ import Draggable from '../../lib/draggable';
 import tasks from '../tasks';
 import getSubjectLocation from '../../lib/get-subject-location';
 import SVGImage from '../../components/svg-image';
+import SVGTransparentRect from '../../components/svg-transparent-rect';
 
 export default class SVGRenderer extends React.Component {
   constructor(props) {
@@ -140,13 +141,13 @@ export default class SVGRenderer extends React.Component {
     if (isDrawingTask && InsideSubject && !this.props.panEnabled) {
       children.push(<InsideSubject key="inside" {...hookProps} />);
     }
-    if (this.props.progressMarker()){
+    if (this.props.progressMarker()) {
       const ProgressMarker = this.props.progressMarker;
       children.push(<ProgressMarker key="progress-marker" />);
     }
     const persistentHooks = Object
       .keys(tasks)
-      .filter((key) => { return tasks[key].AnnotationRenderer === SVGRenderer; })
+      .filter(key => tasks[key].AnnotationRenderer === SVGRenderer)
       .map((taskName) => {
         const PersistInsideSubject = tasks[taskName].PersistInsideSubject;
         if (PersistInsideSubject) {
@@ -156,7 +157,6 @@ export default class SVGRenderer extends React.Component {
       })
       .filter(Boolean);
     children = children.concat(persistentHooks);
-
     return (
       <div>
         <div className={`subject svg-subject ${this.props.type}`}>
@@ -182,6 +182,16 @@ export default class SVGRenderer extends React.Component {
                   <SVGImage
                     className={this.props.panEnabled ? 'pan-active' : ''}
                     src={src}
+                    width={this.props.naturalWidth}
+                    height={this.props.naturalHeight}
+                    modification={this.props.modification}
+                  />
+                </Draggable>
+              )}
+              {type === 'application' && this.props.naturalWidth && (
+                <Draggable onDrag={this.props.panEnabled ? this.props.panByDrag : () => {}}>
+                  <SVGTransparentRect
+                    className={this.props.panEnabled ? 'pan-active' : ''}
                     width={this.props.naturalWidth}
                     height={this.props.naturalHeight}
                     modification={this.props.modification}

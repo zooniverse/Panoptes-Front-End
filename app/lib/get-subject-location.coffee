@@ -3,6 +3,7 @@ READABLE_FORMATS =
   video: ['mp4']
   audio: ['mp3', 'm4a', 'mpeg']
   text: ['plain']
+  application: ['json']
 
 module.exports = (subject, frame = 0) ->
   for mimeType, src of subject.locations[frame]

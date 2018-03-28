@@ -490,7 +490,6 @@ workflow = apiClient.type('workflows').create
 
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
-
   # Images originally from lorempixel.com shared under CC BY-SA,
   # but the service is often slow and/or fails to load at all.
   # Noted original source next to each.
@@ -510,6 +509,7 @@ subject = apiClient.type('subjects').create
   metadata:
     'Capture date': '5 Feb, 2015'
     'Region': 'Chicago, IL'
+
 
   expert_classification_data:
     MOCK_WORKFLOW_FOR_CLASSIFIER: apiClient.type('classifications').create

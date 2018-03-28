@@ -121,7 +121,7 @@ module.exports = createReactClass
       mainDisplay = @props.subject.locations.map (frame, index) =>
         @renderFrame index, {key: "frame-#{index}"}
     tools = switch type
-      when 'image'
+      when 'image', 'application'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
           if @props.workflow?.configuration.enable_switching_flipbook_and_separate
             <button
@@ -175,7 +175,7 @@ module.exports = createReactClass
           <span>
             <span className="subject-frame-pips">
               {for i in [0...@props.subject?.locations.length ? 0]
-                <label key={@props.subject.locations[i]["#{type}/#{format}"]} className="button subject-frame-pip #{if i is @state.frame then 'active' else ''}" >
+                <label key={Object.values(@props.subject.locations[i])[0]} className="button subject-frame-pip #{if i is @state.frame then 'active' else ''}" >
                   <input type="radio" name="frame" value={i} onChange={@handleFrameChange.bind this, i} />{i + 1}
                 </label>}
             </span>

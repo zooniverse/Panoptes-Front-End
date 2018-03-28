@@ -81,7 +81,15 @@ export default class FrameAnnotator extends React.Component {
       onChange: this.props.onChange,
       preferences: this.props.preferences
     };
-
+    const childrenWithRenderProps = React.Children.map(
+      this.props.children,
+      child => React.cloneElement(
+        child,
+        type === 'application' ? {
+          viewBoxDimensions: this.props.viewBoxDimensions
+        } : {}
+      )
+    );
     const rendererProps = Object.assign({}, this.props);
     delete rendererProps.children;
 
@@ -93,7 +101,7 @@ export default class FrameAnnotator extends React.Component {
             <BeforeSubject {...hookProps} />)}
 
           <AnnotationRenderer type={type} {...rendererProps}>
-            {this.props.children}
+            {childrenWithRenderProps}
           </AnnotationRenderer>
 
           {!!warningBanner && (
@@ -128,6 +136,12 @@ FrameAnnotator.propTypes = {
   subject: PropTypes.shape({
     already_seen: PropTypes.bool,
     retired: PropTypes.bool
+  }),
+  viewBoxDimensions: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number,
+    x: PropTypes.number,
+    y: PropTypes.number
   }),
   workflow: PropTypes.shape({
     tasks: PropTypes.object

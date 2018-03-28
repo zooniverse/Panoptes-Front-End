@@ -19,12 +19,23 @@ Proposed usage:
   - calcluate the difference between model and image
 */
 
-// TODO: switch model here depending on project workflow?
+// TODO: get rid of score, should be handled in model
 
-import galaxyModel from './galaxyModel';
-import galaxyScore from './galaxyScore';
-
-export {
-  galaxyModel as Model,
-  galaxyScore as ModelScore
+import GalaxyBuilderModel from './galaxy-builder';
+import LinePlotModel from './line-plot';
+import TestModel from './test-model';
+// TODO: this should be workflow.configuration.modelling.model, or even at the
+//       subject-level (different models for each subject).
+export default (subjectModellingInfo) => {
+  switch (subjectModellingInfo.model) {
+    case 'GALAXY_BUILDER_MODEL':
+    case 'GALAXY_BUILDER_DIFFERENCE':
+      return GalaxyBuilderModel;
+    case 'LINE_PLOT':
+      return LinePlotModel;
+    case 'TEST_MODEL':
+      return TestModel;
+    default:
+      return TestModel;
+  }
 };

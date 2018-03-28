@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 const FILTERS = {
-  invert: "url('#svg-invert-filter')",
+  invert: "url('#svg-invert-filter')"
 };
 
 const INVERT =
@@ -66,11 +66,11 @@ SVGImage.propTypes = {
   src: PropTypes.string.isRequired,
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
-  modification: PropTypes.object,
+  modification: PropTypes.object
 };
 
 SVGImage.defaultProps = {
-  modification: {},
+  modification: {}
 };
 
 export default SVGImage;

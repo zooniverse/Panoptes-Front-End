@@ -45,19 +45,30 @@ export default class FrameViewer extends React.Component {
     let type;
     let format;
     let src;
-    if(this.props.isAudioPlusImage){
+    if (this.props.isAudioPlusImage) {
       const subjectLocations = getSubjectLocations(this.props.subject);
       type = Object.keys(subjectLocations);
-      format = Object.keys(subjectLocations).map((locationKey) => {
-        return subjectLocations[locationKey][0];
-      });
-      src = Object.keys(subjectLocations).map((locationKey) => {
-        return subjectLocations[locationKey][1];
-      });
-    }else{
-      (({ type, format, src } = getSubjectLocation(this.props.subject, this.props.frame)));
+      format = Object.keys(subjectLocations).map(locationKey =>
+         subjectLocations[locationKey][0]
+      );
+      src = Object.keys(subjectLocations).map(locationKey =>
+         subjectLocations[locationKey][1]
+      );
+    } else {
+      ({ type, format, src } = getSubjectLocation(this.props.subject, this.props.frame));
     }
-    const zoomEnabled = this.props.workflow && this.props.workflow.configuration.pan_and_zoom && (type === 'image' || this.props.isAudioPlusImage);
+    const zoomEnabled = (
+      this.props.workflow &&
+      this.props.workflow.configuration.pan_and_zoom &&
+      (type === 'image' || type === 'application' || this.props.isAudioPlusImage)
+    );
+    const modellingProps = type === 'application' ? { // could be a more specific type check here
+      annotation: this.props.annotation,
+      classification: this.props.classification,
+      subject: this.props.subject,
+      workflow: this.props.workflow
+    } : {};
+
     const ProgressMarker = this.props.progressMarker;
     if (FrameWrapper) {
       return (
@@ -89,6 +100,7 @@ export default class FrameViewer extends React.Component {
               onLoad={this.handleLoad}
               onFocus={(this.panZoom && zoomEnabled) ? this.panZoom.togglePanOn : () => {}}
               onBlur={(this.panZoom && zoomEnabled) ? this.panZoom.togglePanOff : () => {}}
+              {...modellingProps}
             />
           </FrameWrapper>
         </PanZoom>
@@ -103,6 +115,7 @@ export default class FrameViewer extends React.Component {
           onLoad={this.handleLoad}
           progressListener={this.props.progressListener}
           registerProgressObject={this.props.registerProgressObject}
+          {...modellingProps}
         />
       );
     }
@@ -144,5 +157,5 @@ FrameViewer.defaultProps = {
   },
   workflow: {
     configuration: {}
-  },
+  }
 };
