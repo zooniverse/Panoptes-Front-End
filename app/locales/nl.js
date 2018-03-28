@@ -204,8 +204,8 @@ export default {
     emailError: 'Er ging iets mis bij het herstellen van je wachtwoord.',
     passwordsDoNotMatch: 'De wachtwoorden komen niet overeen, probeer het opnieuw.',
     loggedInDialog: 'Je bent op dit moment ingelogd. Log uit om je wachtwoord te herstellen.',
-    missingEmailsSpamNote: 'Please check your spam folder if you have not received the reset email.',
-    missingEmailsAlternateNote: 'If you have still not received an email, please try any other email address you may have signed up with.'
+    missingEmailsSpamNote: 'Als je geen e-mail ontvangen hebt, controleer dan of het wellicht in je spamfolder terecht is gekomen.',
+    missingEmailsAlternateNote: 'Als je nog steeds geen e-mail ontvangen hebt, controleer of je misschien een ander e-mailadres voor je account hebt gebruikt.'
   },
   workflowToggle: {
     label: 'Actief'
