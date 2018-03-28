@@ -11,7 +11,7 @@ function FeaturedProjectToggle({ error, handleProjectChange, project }) {
             disabled={project.featured}
             checked={project.featured}
             name="featured"
-            onChange={handleProjectChange.bind(this)}
+            onChange={handleProjectChange}
             type="checkbox"
           />
           {'Is the project featured?'}
