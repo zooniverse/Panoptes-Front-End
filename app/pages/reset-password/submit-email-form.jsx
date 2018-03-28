@@ -42,20 +42,18 @@ const SubmitEmailForm = ({ user, onSubmit, onChange, disabled, inProgress, email
           <i className="fa fa-check-circle form-help success" />}
       </p>
 
-      <div id="reset-status">
-        {emailSuccess &&
-          <Translate
-            component="p"
-            content="resetPassword.emailSuccess"
-          />}
+      {emailSuccess &&
+        <Translate
+          component="p"
+          content="resetPassword.emailSuccess"
+        />}
 
-        {emailError &&
-          <Translate
-            className="form-help error"
-            component="small"
-            content="resetPassword.emailError"
-          />}
-      </div>
+      {emailError &&
+        <Translate
+          className="form-help error"
+          component="small"
+          content="resetPassword.emailError"
+        />}
       <p>
         <Translate
           component="small"
