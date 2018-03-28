@@ -71,7 +71,7 @@ export default {
       getStarted: 'Get started',
       workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
       visitLink: 'Visit the project',
-      links: 'Links'      
+      links: 'Links'
     }
   },
   organization: {
@@ -177,7 +177,9 @@ export default {
     emailError: 'There was an error reseting your password.',
     resetError: 'Something went wrong, please try and reset your password via email again.',
     passwordsDoNotMatch: 'The passwords do not match, please try again.',
-    loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.'
+    loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.',
+    missingEmailsSpamNote: 'Please check your spam folder if you have not received the reset email.',
+    missingEmailsAlternateNote: 'If you have still not received an email, please try any other email address you may have signed up with.'
   },
   workflowToggle: {
     label: 'Active'
