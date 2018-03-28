@@ -54,6 +54,18 @@ const SubmitEmailForm = ({ user, onSubmit, onChange, disabled, inProgress, email
           component="small"
           content="resetPassword.emailError"
         />}
+      <p>
+        <Translate
+          component="small"
+          content="resetPassword.missingEmailsSpamNote"
+        />
+      </p>
+      <p>
+        <Translate
+          component="small"
+          content="resetPassword.missingEmailsAlternateNote"
+        />
+      </p>
     </form>
   );
 };

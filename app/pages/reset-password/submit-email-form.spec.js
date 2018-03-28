@@ -42,16 +42,14 @@ describe('SubmitEmailForm', function () {
   it('conditionally shows and hides an email success icon and message', function () {
     wrapper.setProps({ emailSuccess: true });
     assert.equal(wrapper.find('i.form-help.success').length, 1);
-    assert.equal(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailSuccess');
+    assert.equal(wrapper.find('Translate[content="resetPassword.emailSuccess"]').length, 1);
     wrapper.setProps({ emailSuccess: false });
     assert.equal(wrapper.find('i.form-help.success').length, 0);
-    assert.equal(wrapper.find('Translate').length, 1);
   });
 
   it('conditionally shows and hides an email error message', function () {
     wrapper.setProps({ emailError: 'test error message' });
-    assert.equal(wrapper.find('Translate').last().prop('content'), 'resetPassword.emailError');
+    assert.equal(wrapper.find('Translate[content="resetPassword.emailError"]').length, 1);
     wrapper.setProps({ emailError: null });
-    assert.equal(wrapper.find('Translate').length, 1);
   });
 });

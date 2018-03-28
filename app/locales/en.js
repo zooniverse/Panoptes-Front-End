@@ -182,7 +182,9 @@ export default {
     emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
     emailError: 'There was an error resetting your password.',
     passwordsDoNotMatch: 'The passwords do not match, please try again.',
-    loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.'
+    loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.',
+    missingEmailsSpamNote: 'Please check your spam folder if you have not received the reset email.',
+    missingEmailsAlternateNote: 'If you have still not received an email, please try any other email address you may have signed up with.'
   },
   workflowToggle: {
     label: 'Active'
