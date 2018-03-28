@@ -40,7 +40,10 @@ export const StyledNextButton = styled.button.attrs({
       dark: zooTheme.colors.highlight.default,
       light: zooTheme.colors.highlight.dark
     })};
-    color: 'white';
+    color: ${theme('mode', {
+      dark: 'white',
+      light: 'white'
+    })};;
   }
 
   &:disabled {
