@@ -124,22 +124,19 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
-  saveProject(project) {
-    return project.save()
-      .catch(error => this.setState({ error }));
-  }
-
   handleFeaturedProjectChange({ target }) {
     const { featuredProject, project } = this.state;
     project.update({ featured: target.checked });
     if (featuredProject) {
-      featuredProject.update({ featured: false });
-      return this.saveProject(featuredProject)
-        .then(() => this.saveProject(project))
-        .then(() => this.setState({ featuredProject: project }))
+      return featuredProject.update({ featured: false }).save()
+        .then(() => project.save())
+        .then(newFeaturedProject => this.setState({
+          featuredProject: newFeaturedProject
+        }))
         .catch(error => this.setState({ error }));
     } else {
-      return this.saveProject(project);
+      return project.save()
+        .catch(error => this.setState({ error }));
     }
   }
 
@@ -216,7 +213,7 @@ class ProjectStatus extends Component {
   }
 
   render() {
-    const { error, inProgress, project } = this.state;
+    const { error, project } = this.state;
     if (!project) {
       return <LoadingIndicator />;
     }
