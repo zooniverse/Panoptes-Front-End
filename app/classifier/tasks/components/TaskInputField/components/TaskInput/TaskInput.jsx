@@ -16,7 +16,7 @@ function shouldInputBeChecked(annotationValue, index, type) {
 
 export const StyledTaskInput = styled.input.attrs({
   autoFocus: props => props.index === props.annotation.value,
-  checked: props => shouldInputBeChecked(props.index, props.annotation.value, props.type),
+  checked: props => shouldInputBeChecked(props.annotation.value, props.index, props.type),
   name: props => props.name,
   type: props => props.type,
   value: props => props.index
@@ -42,17 +42,25 @@ export default function TaskInput(props) {
   );
 }
 
+TaskInput.defaultProps = {
+  name: '',
+  onChange: () => {},
+  onFocus: () => {},
+  onBlur: () => {}
+};
+
 TaskInput.propTypes ={
   annotation: PropTypes.shape({
     _key: PropTypes.number,
     task: PropTypes.string,
-    value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.number])
-  }),
-  index: PropTypes.number,
+    // PropTypes.object for the default value of null
+    value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.number, PropTypes.object])
+  }).isRequired,
+  index: PropTypes.number.isRequired,
   name: PropTypes.string,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
-  type: PropTypes.string
+  type: PropTypes.string.isRequired
 };
 

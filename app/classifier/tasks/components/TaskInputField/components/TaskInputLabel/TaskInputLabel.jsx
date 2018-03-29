@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledTaskInputLabel = styled(Markdown)`
+export const StyledTaskInputLabel = styled(Markdown)`
   align-items: baseline;
   flex-grow: 1;
   flex-wrap: wrap;

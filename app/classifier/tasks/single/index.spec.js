@@ -2,42 +2,21 @@
 /* global describe, it, beforeEach */
 import { mount } from 'enzyme';
 import React from 'react';
-import PropTypes from 'prop-types';
-import assert from 'assert';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import SingleTask from './';
+import { mockReduxStore, radioTypeAnnotation, radioTypeTask } from '../testHelpers';
 
-const task = {
-  question: 'Is there something here?',
-  answers: [
-    { label: 'Yes', value: 'yes' },
-    { label: 'No', value: 'no' }
-  ],
-  required: true
-};
-
-const annotation = {
+const annotation = Object.assign({}, radioTypeAnnotation, {
   value: 1
-};
-
-const store = {
-  subscribe: () => { },
-  dispatch: () => { },
-  getState: () => ({ userInterface: { theme: 'light' } })
-};
-
-const mockReduxStore = {
-  context: { store },
-  childContextTypes: { store: PropTypes.object.isRequired }
-};
+});
 
 describe('SingleChoiceTask', function () {
   describe('when it renders', function() {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = mount(<SingleTask task={task} annotation={annotation} translation={task} />, mockReduxStore);
+      wrapper = mount(<SingleTask task={radioTypeTask} annotation={annotation} translation={radioTypeTask} />, mockReduxStore);
     });
 
     it('should render without crashing', function () {
@@ -50,7 +29,7 @@ describe('SingleChoiceTask', function () {
     });
 
     it('should have answers', function () {
-      expect(wrapper.find('TaskInputField')).to.have.lengthOf(task.answers.length);
+      expect(wrapper.find('TaskInputField')).to.have.lengthOf(radioTypeTask.answers.length);
     });
   });
 
@@ -68,8 +47,8 @@ describe('SingleChoiceTask', function () {
     beforeEach(function() {
       wrapper = mount(
         <SingleTask
-          task={task}
-          translation={task}
+          task={radioTypeTask}
+          translation={radioTypeTask}
           onChange={onChangeSpy}
         />,
         mockReduxStore
@@ -122,8 +101,8 @@ describe('SingleChoiceTask', function () {
     beforeEach(function() {
       wrapper = mount(
         <SingleTask
-          task={task}
-          translation={task}
+          task={radioTypeTask}
+          translation={radioTypeTask}
         />,
         mockReduxStore
       );
@@ -172,9 +151,9 @@ describe('SingleChoiceTask', function () {
       setStateSpy = sinon.spy(SingleTask.prototype, 'setState');
       wrapper = mount(
         <SingleTask
-          task={task}
+          task={radioTypeTask}
           annotation={annotation}
-          translation={task}
+          translation={radioTypeTask}
         />,
         mockReduxStore
       );
@@ -204,23 +183,23 @@ describe('SingleChoiceTask', function () {
 
   describe('static methods', function () {
     it('should be complete', function () {
-      expect(SingleTask.isAnnotationComplete(task, annotation)).to.be.true;
+      expect(SingleTask.isAnnotationComplete(radioTypeTask, annotation)).to.be.true;
     });
 
     it('should be complete when value is 0 (i.e. falsy)', function () {
-      expect(SingleTask.isAnnotationComplete(task, { value: 0 })).to.be.true;
+      expect(SingleTask.isAnnotationComplete(radioTypeTask, { value: 0 })).to.be.true;
     });
 
     it('should not be complete when value is null', function () {
-      expect(SingleTask.isAnnotationComplete(task, { value: null })).to.be.false;
+      expect(SingleTask.isAnnotationComplete(radioTypeTask, { value: null })).to.be.false;
     });
 
     it('should be complete when task is not required', function () {
-      expect(SingleTask.isAnnotationComplete(Object.assign({}, task, { required: false }), { value: null })).to.be.true;
+      expect(SingleTask.isAnnotationComplete(Object.assign({}, radioTypeTask, { required: false }), { value: null })).to.be.true;
     });
 
     it('should have the correct question text', function () {
-      expect(SingleTask.getTaskText(task)).to.equal(task.question);
+      expect(SingleTask.getTaskText(radioTypeTask)).to.equal(radioTypeTask.question);
     });
 
     it('the default annotation should be null', function () {
@@ -233,7 +212,7 @@ describe('SingleChoiceSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<SingleTask.Summary task={task} annotation={annotation} translation={task} />);
+    summary = mount(<SingleTask.Summary task={radioTypeTask} annotation={annotation} translation={radioTypeTask} />);
   });
 
   it('should render without crashing', function () {
@@ -254,13 +233,13 @@ describe('SingleChoiceSummary', function () {
   });
 
   it('should have the correct answer label when the value if falsy (i.e. 0)', function () {
-    summary = mount(<SingleTask.Summary task={task} annotation={{ value: 0 }} translation={task} />);
+    summary = mount(<SingleTask.Summary task={radioTypeTask} annotation={{ value: 0 }} translation={radioTypeTask} />);
     const answers = summary.find('.answer');
     expect(answers.text()).to.not.equal('No answer');
   });
 
   it('should return "No answer" when annotation is null', function () {
-    summary = mount(<SingleTask.Summary task={task} annotation={{ value: null }} translation={task} />);
+    summary = mount(<SingleTask.Summary task={radioTypeTask} annotation={{ value: null }} translation={radioTypeTask} />);
     const answers = summary.find('.answer');
     expect(answers.text()).to.equal('No answer');
   });
@@ -281,7 +260,7 @@ describe('SingleChoiceSummary', function () {
 
     it('should show all answers', function () {
       const answers = summary.find('.answer');
-      expect(answers).to.have.lengthOf(task.answers.length);
+      expect(answers).to.have.lengthOf(radioTypeTask.answers.length);
     });
 
     it('should have one answer selected', function () {
@@ -291,7 +270,7 @@ describe('SingleChoiceSummary', function () {
 
     it('should have the correct number of non-selected answers', function () {
       const unchecks = summary.find('.fa-circle-o');
-      expect(unchecks).to.have.lengthOf(task.answers.length - 1);
+      expect(unchecks).to.have.lengthOf(radioTypeTask.answers.length - 1);
     });
 
     it('button should read "Less"', function () {
