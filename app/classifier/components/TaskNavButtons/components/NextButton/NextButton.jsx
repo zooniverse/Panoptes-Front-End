@@ -59,13 +59,13 @@ export const StyledNextButton = styled.button.attrs({
   }
 `;
 
-export function NextButton({ autoFocus, onClick, classifierTheme, waitingForAnswer }) {
+export function NextButton({ autoFocus, disabled, classifierTheme, onClick }) {
   return (
     <ThemeProvider theme={{ mode: classifierTheme }}>
       <StyledNextButton
         autoFocus={autoFocus}
         type="button"
-        disabled={waitingForAnswer}
+        disabled={disabled}
         onClick={onClick}
       >
         <Translate content="classifier.next" />
@@ -78,15 +78,15 @@ export function NextButton({ autoFocus, onClick, classifierTheme, waitingForAnsw
 NextButton.defaultProps = {
   autoFocus: false,
   classifierTheme: 'light',
-  onClick: () => { },
-  waitingForAnswer: false
+  disabled: false,
+  onClick: () => {}
 };
 
 NextButton.propTypes = {
   autoFocus: PropTypes.bool,
   classifierTheme: PropTypes.string,
-  onClick: PropTypes.func,
-  waitingForAnswer: PropTypes.bool
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func
 };
 
 const mapStateToProps = state => ({

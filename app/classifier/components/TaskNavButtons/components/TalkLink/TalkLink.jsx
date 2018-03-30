@@ -39,20 +39,20 @@ export const StyledDisabledTalkPlaceholder = styled.span`
 
 // TODO: Add Seven-Ten visibility split wrapper
 // because we want to test removing the talk links from the classifier task area
-export default function TalkLink({ disabled, onClick, projectSlug, subjectId }) {
+export default function TalkLink({ disabled, onClick, projectSlug, subjectId, translateContent }) {
   if (disabled) {
     return (
       <StyledDisabledTalkPlaceholder>
-        <Translate content="classifier.talk" />
+        <Translate content={translateContent} />
       </StyledDisabledTalkPlaceholder>
-    )
+    );
   }
   return (
     <StyledTalkLink
       onClick={onClick}
       to={`/projects/${projectSlug}/talk/subjects/${subjectId}`}
     >
-      <Translate content="classifier.talk" />
+      <Translate content={translateContent} />
     </StyledTalkLink>
   );
 }
@@ -61,12 +61,14 @@ TalkLink.defaultProps = {
   disabled: false,
   onClick: () => {},
   projectSlug: '',
-  subjectId: ''
+  subjectId: '',
+  translateContent: 'classifier.talk'
 };
 
 TalkLink.propTypes = {
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
   projectSlug: PropTypes.string.isRequired,
-  subjectId: PropTypes.string.isRequired
+  subjectId: PropTypes.string.isRequired,
+  translateContent: PropTypes.string
 };

@@ -57,7 +57,6 @@ export function DoneButton(props) {
     return (
       <ThemeProvider theme={{ mode: props.theme }}>
         <StyledDoneButton
-          type="button"
           disabled={props.disabled}
           onClick={props.onClick}
         >

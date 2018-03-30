@@ -5,7 +5,7 @@ import Translate from 'react-translate-component';
 import theme from 'styled-theming';
 import { pxToRem, zooTheme } from '../../../theme';
 
-const StyledTaskHelpButton = styled.button.attrs({
+export const StyledTaskHelpButton = styled.button.attrs({
   type: 'button'
 })`
   background-color: transparent;

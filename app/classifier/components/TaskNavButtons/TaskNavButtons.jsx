@@ -34,14 +34,14 @@ export default function TaskNavButtons(props) {
           onClick={props.nextSubject}
           projectSlug={props.project.slug}
           subjectId={props.subject.id}
+          translateContent="classifier.talk"
         />
         <NextButton
           autoFocus={props.autoFocus}
+          disabled={false}
           onClick={props.nextSubject}
-          waitingForAnswer={false}
         />
       </ButtonsWrapper>
-
     );
   }
 
@@ -53,6 +53,7 @@ export default function TaskNavButtons(props) {
           onClick={props.completeClassification}
           projectSlug={props.project.slug}
           subjectId={props.subject.id}
+          translateContent="classifier.doneAndTalk"
         />}
       <DoneButton
         completed={props.completed}
