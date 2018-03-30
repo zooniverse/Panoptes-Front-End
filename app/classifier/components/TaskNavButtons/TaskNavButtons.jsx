@@ -22,7 +22,7 @@ export default function TaskNavButtons(props) {
         {props.showBackButton &&
           <BackButton
             areAnnotationsNotPersisted={props.areAnnotationsNotPersisted}
-            onClick={props.destoryCurrentAnnotation}
+            onClick={props.destroyCurrentAnnotation}
           />}
         <NextButton
           autoFocus={false}
@@ -58,7 +58,7 @@ export default function TaskNavButtons(props) {
       {props.showBackButton &&
         <BackButton
           areAnnotationsNotPersisted={props.areAnnotationsNotPersisted}
-          onClick={props.destoryCurrentAnnotation}
+          onClick={props.destroyCurrentAnnotation}
         />}
       {props.showDoneAndTalkLink &&
         <TalkLink
@@ -86,7 +86,7 @@ TaskNavButtons.defaultProps = {
   completeClassification: () => {},
   completed: false,
   demoMode: false,
-  destoryCurrentAnnotation: () => {},
+  destroyCurrentAnnotation: () => {},
   nextSubject: () => {},
   showBackButton: false,
   showNextButton: false,
@@ -104,7 +104,7 @@ TaskNavButtons.propTypes = {
   completeClassification: PropTypes.func,
   completed: PropTypes.bool,
   demoMode: PropTypes.bool,
-  destoryCurrentAnnotation: PropTypes.func,
+  destroyCurrentAnnotation: PropTypes.func,
   nextSubject: PropTypes.func,
   showBackButton: PropTypes.bool,
   showNextButton: PropTypes.bool,

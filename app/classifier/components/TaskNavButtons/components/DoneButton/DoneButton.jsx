@@ -34,15 +34,20 @@ export const StyledDoneButton = styled.button.attrs({
   &:hover, &:focus {
     background: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.button.done.hover,
-      light: darken(0.10, zooTheme.colors.lightTheme.button.done)
+      light: darken(0.05, zooTheme.colors.lightTheme.button.done)
     })};
     color: 'white';
   }
 
   &:disabled {
     background: ${theme('mode', {
-      dark: lighten(0.10, zooTheme.colors.darkTheme.background.default),
-      light: lighten(0.10, zooTheme.colors.lightTheme.button.done)
+      dark: lighten(0.05, zooTheme.colors.darkTheme.background.default),
+      light: lighten(0.05, zooTheme.colors.lightTheme.button.done)
+    })};
+
+    border: ${theme('mode', {
+      dark: `solid thin ${lighten(0.05, zooTheme.colors.darkTheme.background.default)}`,
+      light: `solid thin ${lighten(0.05, zooTheme.colors.lightTheme.button.done)}`
     })};
     color: ${theme('mode', {
       dark: 'white',
