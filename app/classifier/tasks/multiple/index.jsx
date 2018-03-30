@@ -56,7 +56,7 @@ export default class MultipleChoiceTask extends React.Component {
         <TaskInputField
           annotation={annotation}
           className={annotation.value.includes(i) ? 'active' : ''}
-          data-focus={this.state.focus[i] || false}
+          focus={this.state.focus[i] || false}
           index={i}
           key={answer._key}
           label={translation.answers[i].label}

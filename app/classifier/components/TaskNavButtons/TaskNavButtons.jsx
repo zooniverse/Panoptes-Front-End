@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import NextButton from './components/NextButton';
 import DoneButton from './components/DoneButton';
+import BackButton from './components/BackButton';
 import TalkLink from './components/TalkLink';
 
 export const ButtonsWrapper = styled.span`
@@ -17,11 +18,18 @@ export const ButtonsWrapper = styled.span`
 export default function TaskNavButtons(props) {
   if (props.showNextButton) {
     return (
-      <NextButton
-        autoFocus={false}
-        onClick={props.addAnnotationForTask}
-        waitingForAnswer={props.waitingForAnswer}
-      />
+      <ButtonsWrapper>
+        {props.showBackButton &&
+          <BackButton
+            areAnnotationsNotPersisted={props.areAnnotationsNotPersisted}
+            onClick={props.destoryCurrentAnnotation}
+          />}
+        <NextButton
+          autoFocus={false}
+          onClick={props.addAnnotationForTask}
+          waitingForAnswer={props.waitingForAnswer}
+        />
+      </ButtonsWrapper>
     );
   }
 
@@ -47,6 +55,11 @@ export default function TaskNavButtons(props) {
 
   return (
     <ButtonsWrapper>
+      {props.showBackButton &&
+        <BackButton
+          areAnnotationsNotPersisted={props.areAnnotationsNotPersisted}
+          onClick={props.destoryCurrentAnnotation}
+        />}
       {props.showDoneAndTalkLink &&
         <TalkLink
           disabled={props.waitingForAnswer}
@@ -68,11 +81,14 @@ export default function TaskNavButtons(props) {
 
 TaskNavButtons.defaultProps = {
   addAnnotationForTask: () => {},
+  areAnnotationsNotPersisted: false,
   autoFocus: false,
   completeClassification: () => {},
   completed: false,
   demoMode: false,
+  destoryCurrentAnnotation: () => {},
   nextSubject: () => {},
+  showBackButton: false,
   showNextButton: false,
   showDoneAndTalkLink: false,
   waitingForAnswer: false
@@ -80,6 +96,7 @@ TaskNavButtons.defaultProps = {
 
 TaskNavButtons.propTypes = {
   addAnnotationForTask: PropTypes.func,
+  areAnnotationsNotPersisted: PropTypes.bool,
   autoFocus: PropTypes.bool,
   classification: PropTypes.shape({
     gold_standard: PropTypes.bool
@@ -87,7 +104,9 @@ TaskNavButtons.propTypes = {
   completeClassification: PropTypes.func,
   completed: PropTypes.bool,
   demoMode: PropTypes.bool,
+  destoryCurrentAnnotation: PropTypes.func,
   nextSubject: PropTypes.func,
+  showBackButton: PropTypes.bool,
   showNextButton: PropTypes.bool,
   showDoneAndTalkLink: PropTypes.bool,
   subject: PropTypes.shape({

@@ -19,7 +19,8 @@ export default {
       default: '#EEF2F5'
     },
     button: {
-      done: '#078F52'
+      done: '#078F52',
+      nextHover: '#ea9300'
     },
     foreground: '#404040',
     font: '#000000'

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
-import { darken, lighten } from 'polished';
+import { adjustHue, darken } from 'polished';
 import Translate from 'react-translate-component';
 import { pxToRem, zooTheme } from '../../../../../theme';
 
@@ -38,7 +38,7 @@ export const StyledNextButton = styled.button.attrs({
   &:hover, &:focus {
     background: ${theme('mode', {
       dark: zooTheme.colors.highlight.default,
-      light: zooTheme.colors.highlight.dark
+      light: zooTheme.colors.lightTheme.button.nextHover
     })};
     color: ${theme('mode', {
       dark: 'white',

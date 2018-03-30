@@ -34,28 +34,33 @@ describe('TaskNavButtons', function() {
     expect(wrapper).to.be.ok;
   });
 
-  describe('NextButton', function() {
+  it('should not render a NextButton component if props.showNextButton is false and and props.completed is false', function () {
+    const wrapper = shallow(<TaskNavButtons classification={classification} project={project} subject={subject} />);
+    expect(wrapper.find('NextButton')).to.have.lengthOf(0);
+  });
+
+  describe('when props.showNextButton is true', function() {
     let wrapper;
-    before(function() {
-      wrapper = mount(<TaskNavButtons classification={classification} project={project} subject={subject} />, mockReduxStore);
+    before(function () {
+      wrapper = mount(<TaskNavButtons classification={classification} project={project} subject={subject} showNextButton={true} />, mockReduxStore);
     });
 
-    afterEach(function() {
-      wrapper.setProps({ completed: false, showNextButton: false })
-    })
-
-    it('should not render a NextButton component if props.showNextButton is false and and props.completed is false', function() {
-      expect(wrapper.find('NextButton')).to.have.lengthOf(0);
-    });
-
-    it('should render a NextButton component if props.showNextButton is true', function() {
+    it('should render a NextButton component', function () {
       wrapper.setProps({ showNextButton: true });
       expect(wrapper.find('NextButton')).to.have.lengthOf(1);
     });
 
-    it('should render a NextButton component if props.completed is true and props.showNextButton is false', function () {
-      wrapper.setProps({ completed: true });
-      expect(wrapper.find('NextButton')).to.have.lengthOf(1);
+    it('should render a ButtonsWrapper component', function () {
+      expect(wrapper.find(ButtonsWrapper)).to.have.lengthOf(1);
+    });
+
+    it('should not render a BackButton if props.showBackButton is false', function() {
+      expect(wrapper.find('BackButton')).to.have.lengthOf(0);
+    });
+
+    it('should render a BackButton if props.showBackButton is true', function () {
+      wrapper.setProps({ showBackButton: true });
+      expect(wrapper.find('BackButton')).to.have.lengthOf(1);
     });
   });
 
@@ -63,6 +68,10 @@ describe('TaskNavButtons', function() {
     let wrapper;
     before(function () {
       wrapper = mount(<TaskNavButtons completed={true} classification={classification} project={project} subject={subject} />, mockReduxStore);
+    });
+
+    it('should render a NextButton component if props.completed is true and props.showNextButton is false', function () {
+      expect(wrapper.find('NextButton')).to.have.lengthOf(1);
     });
 
     it('should render a ButtonsWrapper component', function() {
@@ -86,6 +95,11 @@ describe('TaskNavButtons', function() {
 
     it('should render a ButtonsWrapper component', function () {
       expect(wrapper.find(ButtonsWrapper)).to.have.lengthOf(1);
+    });
+
+    it('should render a BackButton if props.showBackButton is true', function () {
+      wrapper.setProps({ showBackButton: true });
+      expect(wrapper.find('BackButton')).to.have.lengthOf(1);
     });
 
     it('should not render a TalkLink component if props.showDoneAndTalkLink is false', function() {

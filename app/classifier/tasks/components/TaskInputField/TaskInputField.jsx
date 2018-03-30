@@ -9,7 +9,9 @@ import { pxToRem, zooTheme } from '../../../../theme';
 import TaskInput from './components/TaskInput';
 import TaskInputLabel from './components/TaskInputLabel';
 
-export const StyledTaskInputField = styled.label`
+export const StyledTaskInputField = styled.label.attrs({
+  'data-focus': props => props.focus
+})`
   align-items: baseline;
   background-color: ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.default,
@@ -31,7 +33,7 @@ export const StyledTaskInputField = styled.label`
   position: relative;
   text-align: left;
 
-  &:hover, &:focus, &[data-focus=true] {
+  &:active, &:hover, &:focus, &[data-focus=true] {
     background: ${theme('mode', {
       dark: zooTheme.colors.teal.dark,
       light: zooTheme.colors.teal.gradient
@@ -65,7 +67,7 @@ export const StyledTaskInputField = styled.label`
 export function TaskInputField(props) {
   return (
     <ThemeProvider theme={{ mode: props.theme }}>
-      <StyledTaskInputField className={props.className}>
+      <StyledTaskInputField className={props.className} focus={props.focus}>
         <TaskInput
           annotation={props.annotation}
           index={props.index}
@@ -81,9 +83,34 @@ export function TaskInputField(props) {
   );
 }
 
+TaskInputField.defaultProps = {
+  className: '',
+  focus: false,
+  label: '',
+  name: '',
+  onBlur: () => {},
+  onChange: () => {},
+  onFocus: () => {},
+  theme: 'light',
+};
+
 TaskInputField.propTypes = {
+  annotation: PropTypes.shape({
+    _key: PropTypes.number,
+    task: PropTypes.string,
+    // PropTypes.object for the default value of null
+    value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.number, PropTypes.object])
+  }).isRequired,
   className: PropTypes.string,
-  theme: PropTypes.string
+  focus: PropTypes.bool,
+  index: PropTypes.number.isRequired,
+  label: PropTypes.string,
+  name: PropTypes.string,
+  onBlur: PropTypes.func,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  theme: PropTypes.string,
+  type: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
