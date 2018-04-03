@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import counterpart from 'counterpart';
 
 import LoadingIndicator from '../../components/loading-indicator';
 
@@ -15,13 +16,13 @@ class DeleteUser extends React.Component {
     return (
       <div>
         <p>
-          <strong>Delete your account</strong>
+          <strong>{counterpart('accountSettings.deleteAccount.header')}</strong>
         </p>
 
-        <p>Deleting your account will remove your email address, username, password, and other personal information from our database. It will not remove your work on any projects you've taken part in or any comments you've left on Talk. Your account will not be recoverable.</p>
+        <p>{counterpart('accountSettings.deleteAccount.info')}</p>
 
         <button type="button" className="minor-button" disabled={this.state.deletionInProgress} onClick={this.handleClick} style={{background: "red", color: "white"}}>
-          I understand and want to delete my account
+          {counterpart('accountSettings.deleteAccount.button')}
           <LoadingIndicator off={!this.state.deletionInProgress} />
         </button>
         {this.state.deletionError && (
@@ -34,28 +35,27 @@ class DeleteUser extends React.Component {
   handleClick() {
     this.setState({deletionError: null});
 
-    var phrase = prompt("You are about to delete this user! This cannot be reversed.\nEnter this user's login to confirm.");
+    var phrase = prompt(counterpart('accountSettings.deleteAccount.confirmMessage'));
 
     if (phrase === this.props.user.login) {
       this.performDelete();
     } else {
-      this.setState({deletionError: {message: "Entered login did not match user. Aborted deletion."}});
+      this.setState({deletionError: {message: counterpart('accountSettings.deleteAccount.confirmError')}});
     }
   }
 
   performDelete() {
     this.setState({deletionInProgress: true});
 
-    this.props.user.delete()
-        .then(() => {
-          this.context.router.push('/admin');
-        })
-        .catch((error) => {
-          this.setState({deletionError: error, deletionInProgress: false});
-        })
-        .then(() => {
-          this.setState({deletionInProgress: false});
-        })
+    this.props.user.delete().then(() => {
+      auth.signOut().then(() => {
+        this.context.router.push('/');
+      });
+    }).catch((error) => {
+        this.setState({deletionError: error, deletionInProgress: false});
+    }).then(() => {
+        this.setState({deletionInProgress: false});
+    })
   }
 }
 
