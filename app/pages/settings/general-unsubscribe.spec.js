@@ -5,24 +5,23 @@ import sinon from 'sinon';
 import GeneralUnsubscribe from './general-unsubscribe';
 
 describe('Unsubscribe from all email lists', function () {
-  const handleSubmitSpy = sinon.spy();
+  const handleSubmitStub = sinon.stub(GeneralUnsubscribe.prototype, 'handleSubmit').callsFake(() => {});
   let wrapper;
 
-  before(function () {
+  beforeEach(function () {
     wrapper = shallow(
       <GeneralUnsubscribe
-        onSubmit={handleSubmitSpy}
+        onSubmit={handleSubmitStub}
       />
     );
   });
 
   it('renders an unsubscribe from all emails form', function () {
-    wrapper.setProps({ user: null });
     expect(wrapper.find('form')).to.have.lengthOf(1);
   });
 
   it('should call handleSubmit on clicking the button', function () {
-    wrapper.find('form').simulate('submit', { preventDefault() {} });
-    expect(handleSubmitSpy.calledOnce).to.be.true;
+    wrapper.find('form').simulate('submit');
+    expect(handleSubmitStub.calledOnce).to.be.true;
   });
 });
