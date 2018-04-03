@@ -5,6 +5,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import AutoSave from '../../components/auto-save';
 import handleInputChange from '../../lib/handle-input-change';
+import GeneralUnsubscribe from './general-unsubscribe';
 
 function TalkPreferenceOption({ preference, index, digest, onChange }) {
   return (
@@ -282,7 +283,7 @@ class EmailSettingsPage extends React.Component {
             </label>
           </AutoSave>
         </p>
-
+        <GeneralUnsubscribe {...this.props} />
         <p>
           <strong>
             <Translate content="emailSettings.talk.section" />
