@@ -45,15 +45,15 @@ describe('BackButton', function() {
 
   describe('onClick event', function() {
     let wrapper;
-    let destroyCurrentAnnotationSpy;
+    let onClickSpy;
     before(function () {
-      destroyCurrentAnnotationSpy = sinon.spy();
-      wrapper = mount(<BackButton showButton={true} destroyCurrentAnnotation={destroyCurrentAnnotationSpy} />);
+      onClickSpy = sinon.spy();
+      wrapper = mount(<BackButton showButton={true} onClick={onClickSpy} />);
     });
 
-    it('should call props.destroyCurrentAnnotation on the onClick event', function() {
+    it('should call props.onClick on the onClick event', function() {
       wrapper.find('button').simulate('click');
-      expect(destroyCurrentAnnotationSpy.calledOnce).to.be.true;
+      expect(onClickSpy.calledOnce).to.be.true;
     });
   });
 

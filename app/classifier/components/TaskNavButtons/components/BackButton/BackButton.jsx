@@ -78,7 +78,7 @@ class BackButton extends React.Component {
         <StyledBackButtonWrapper>
           <StyledBackButton
             aria-label={(this.props.areAnnotationsNotPersisted ? backButtonWarning : '')}
-            onClick={this.props.destroyCurrentAnnotation}
+            onClick={this.props.onClick}
             onMouseEnter={this.toggleWarning}
             onFocus={this.toggleWarning}
             onMouseLeave={this.toggleWarning}
@@ -98,12 +98,12 @@ class BackButton extends React.Component {
 
 BackButton.defaultProps = {
   areAnnotationsNotPersisted: false,
-  destroyCurrentAnnotation: () => {}
+  onClick: () => {}
 };
 
 BackButton.propTypes = {
   areAnnotationsNotPersisted: PropTypes.bool,
-  destroyCurrentAnnotation: PropTypes.func
+  onClick: PropTypes.func
 };
 
 export default BackButton;
