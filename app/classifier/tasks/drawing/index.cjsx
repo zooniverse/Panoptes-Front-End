@@ -11,6 +11,9 @@ icons = require './icons'
 drawingTools = require '../../drawing-tools'
 GridButtons = require './grid-buttons'
 SVGRenderer = require('../../annotation-renderer/svg').default
+TaskInputField = require('../components/TaskInputField').default
+DrawingToolInputIcon = require('./components/DrawingToolInputIcon').default
+DrawingToolInputStatus = require('./components/DrawingToolInputStatus').default
 
 module.exports = createReactClass
   displayName: 'DrawingTask'
@@ -83,6 +86,9 @@ module.exports = createReactClass
       # Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
       @areMarksComplete(task, annotation) and @areThereEnoughMarks(task, annotation) and annotation.value.length >= (task.required ? 0)
 
+  getInitialState: -> 
+    focus: {}
+
   getDefaultProps: ->
     task:
       tools: []
@@ -94,30 +100,21 @@ module.exports = createReactClass
       tool._key ?= Math.random()
       count = (true for mark in @props.annotation.value when mark.tool is i).length
       <div>
-        <label key={tool._key} >
-          <input name="drawing-tool" autoFocus={@props.autoFocus and i is 0} type="radio" className="drawing-tool-button-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
-          <div className="answer-button #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
-            <div className="answer-button-icon-container">
-              <span className="drawing-tool-button-icon" style={color: tool.color}>{icons[tool.type]}</span>
-            </div>
-
-            <div className="answer-button-label-container">
-              <Markdown className="answer-button-label">{tool.label}</Markdown>
-              <div className="answer-button-status">
-                {count + ' '}
-                {if tool.min? or tool.max?
-                  'of '}
-                {if tool.min?
-                  <span style={color: 'red' if count < tool.min}>{tool.min} required</span>}
-                {if tool.min? and tool.max?
-                  ', '}
-                {if tool.max?
-                  <span style={color: 'orange' if count is tool.max}>{tool.max} maximum</span>}
-                {' '}drawn
-              </div>
-            </div>
-          </div>
-        </label>
+        <TaskInputField
+          annotation={@props.annotation}
+          className={if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}
+          focus={@state.focus[i] ? false}
+          index={i}
+          key={tool._key}
+          label={tool.label}
+          labelIcon={<DrawingToolInputIcon tool={tool} />}
+          labelStatus={<DrawingToolInputStatus count={count} tool={tool} />}
+          name="drawing-tool"
+          onChange={@handleChange.bind this, i}
+          onFocus={@onFocus.bind(this, i)}
+          onBlur={@onBlur}
+          type="radio"
+        />
         {if tool.type is 'grid'
           <GridButtons {...@props} />}
       </div>
@@ -131,3 +128,35 @@ module.exports = createReactClass
     if e.target.checked
       newAnnotation = Object.assign {}, @props.annotation, _toolIndex: toolIndex
       @props.onChange newAnnotation
+
+  onFocus: (index, e) ->
+    if @props.annotation.value isnt index
+      @setState({ focus: { "#{index}": true } });
+
+  onBlur: () ->
+    @setState({ focus: {} });
+
+        # <label key={tool._key} >
+        #   <input name="drawing-tool" autoFocus={@props.autoFocus and i is 0} type="radio" className="drawing-tool-button-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
+        #   <div className="answer-button #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
+        #     <div className="answer-button-icon-container">
+        #       <span className="drawing-tool-button-icon" style={color: tool.color}>{icons[tool.type]}</span>
+        #     </div>
+
+        #     <div className="answer-button-label-container">
+        #       <Markdown className="answer-button-label">{tool.label}</Markdown>
+        #       <div className="answer-button-status">
+        #         {count + ' '}
+        #         {if tool.min? or tool.max?
+        #           'of '}
+        #         {if tool.min?
+        #           <span style={color: 'red' if count < tool.min}>{tool.min} required</span>}
+        #         {if tool.min? and tool.max?
+        #           ', '}
+        #         {if tool.max?
+        #           <span style={color: 'orange' if count is tool.max}>{tool.max} maximum</span>}
+        #         {' '}drawn
+        #       </div>
+        #     </div>
+        #   </div>
+        # </label>

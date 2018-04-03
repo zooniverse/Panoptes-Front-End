@@ -3,11 +3,27 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
+function howShouldTheLabelBeAligned(label, labelIcon) {
+  if ((label && label.includes('<img')) || (label && labelIcon)) {
+    return 'left';
+  }
+
+  return 'center';
+}
+
+export const StyledTaskInputLabelWrapper = styled.div`
+  align-items: baseline;
+  display: flex;
+  position: relative;
+  text-align: left;
+  width: 100%;
+`;
+
 export const StyledTaskInputLabel = styled(Markdown)`
   align-items: baseline;
   flex-grow: 1;
   flex-wrap: wrap;
-  text-align: ${(props) => { return (props.label && props.label.includes('<img')) ? 'left' : 'center'; }};
+  text-align: ${props => howShouldTheLabelBeAligned(props.label, props.labelIcon)};
 
   &:first-child {
     margin-top: 0;
@@ -28,13 +44,28 @@ export const StyledTaskInputLabel = styled(Markdown)`
   }
 `;
 
-export default function TaskInputLabel({ label }) {
+export default function TaskInputLabel({ label, labelIcon, labelStatus }) {
   return (
-    <StyledTaskInputLabel>{label}</StyledTaskInputLabel>
+    <StyledTaskInputLabelWrapper>
+      {labelIcon &&
+        labelIcon}
+      <StyledTaskInputLabel label={label} labelIcon={labelIcon}>
+        {label}
+      </StyledTaskInputLabel>
+      {labelStatus &&
+        labelStatus}
+    </StyledTaskInputLabelWrapper>
   );
 }
 
-TaskInputLabel.propTypes = {
-  label: PropTypes.string
+TaskInputLabel.defaultProps = {
+  label: '',
+  labelIcon: null,
+  labelStatus: null
 };
 
+TaskInputLabel.propTypes = {
+  label: PropTypes.string,
+  labelIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),
+  labelStatus: PropTypes.oneOfType([PropTypes.node, PropTypes.object])
+};

@@ -77,7 +77,7 @@ export function TaskInputField(props) {
           onBlur={props.onBlur}
           type={props.type}
         />
-        <TaskInputLabel label={props.label} />
+        <TaskInputLabel label={props.label} labelIcon={props.labelIcon} labelStatus={props.labelStatus} />
       </StyledTaskInputField>
     </ThemeProvider>
   );
@@ -87,6 +87,8 @@ TaskInputField.defaultProps = {
   className: '',
   focus: false,
   label: '',
+  labelIcon: null,
+  labelStatus: null,
   name: '',
   onBlur: () => {},
   onChange: () => {},
@@ -98,13 +100,19 @@ TaskInputField.propTypes = {
   annotation: PropTypes.shape({
     _key: PropTypes.number,
     task: PropTypes.string,
-    // PropTypes.object for the default value of null
-    value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.number, PropTypes.object])
+    value: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.number), // mulitple choice
+      PropTypes.number, // single choice
+      PropTypes.arrayOf(PropTypes.object), // drawing task
+      PropTypes.object // null
+    ])
   }).isRequired,
   className: PropTypes.string,
   focus: PropTypes.bool,
   index: PropTypes.number.isRequired,
   label: PropTypes.string,
+  labelIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),
+  labelStatus: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),  
   name: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
