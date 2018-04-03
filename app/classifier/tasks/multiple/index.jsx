@@ -74,6 +74,7 @@ export default class MultipleChoiceTask extends React.Component {
         help={translation.help}
         answers={answers}
         required={task.required}
+        showRequiredNotice={this.props.showRequiredNotice}
       />
     );
   }
@@ -122,7 +123,8 @@ MultipleChoiceTask.propTypes = {
   annotation: PropTypes.shape(
     { value: PropTypes.array }
   ),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  showRequiredNotice: PropTypes.bool
 };
 
 MultipleChoiceTask.defaultProps = {
@@ -138,5 +140,6 @@ MultipleChoiceTask.defaultProps = {
     help: ''
   },
   annotation: { value: [] },
-  onChange: NOOP
+  onChange: NOOP,
+  showRequiredNotice: false
 };

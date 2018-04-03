@@ -180,43 +180,12 @@
     display: flex
     padding: 0 2em 0 2em
 
-    .talk // Done and Done & Talk buttons
-      color: white
-      cursor: pointer
-      flex: 2 0
-
-    .continue-button
-      background-color: HIGHLIGHT_COLOR
-      border: none
-      border-radius: 0
-      color: white
-      cursor: pointer
-      flex: 3 0
-      font-size: 0.9em
-      padding: 0.9em
-      text-transform: capitalize
-
-      i
-        margin-left: 1ch
-
-      &:hover, &:focus
-        background: HIGHLIGHT_COLOR_HOVER
-
-      &:disabled
-        background: lighten(HIGHLIGHT_COLOR, 10%)
-        color: #EEF1F4
-        cursor: not-allowed
-
     > :not(:first-child)
       margin-left: 0.5em
 
 .workflow-task
   & + .workflow-task
     margin-top: 2em
-
-  // Only show the "required" warning when a task is outside the normal flow.
-  .classifier > .task-area & .required-task-warning
-    display: none
 
   .question p
     margin: 1em 0 1.5em

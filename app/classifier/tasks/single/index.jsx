@@ -71,6 +71,7 @@ export default class SingleChoiceTask extends React.Component {
         help={translation.help}
         answers={answers}
         required={task.required}
+        showRequiredNotice={this.props.showRequiredNotice}
       />
     );
   }
@@ -114,7 +115,8 @@ SingleChoiceTask.propTypes = {
   annotation: PropTypes.shape(
     { value: PropTypes.number }
   ),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  showRequiredNotice: PropTypes.bool
 };
 
 SingleChoiceTask.defaultProps = {
@@ -130,5 +132,6 @@ SingleChoiceTask.defaultProps = {
     help: ''
   },
   annotation: { value: null },
-  onChange: NOOP
+  onChange: NOOP,
+  showRequiredNotice: false
 };

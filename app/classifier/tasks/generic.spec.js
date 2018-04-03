@@ -2,6 +2,7 @@ import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
 import GenericTask from './generic';
+import { mockReduxStore } from './testHelpers';
 
 const task = {
   question: 'Is there something here?',
@@ -19,7 +20,7 @@ function runCommonTests(wrapper) {
 }
 
 describe('GenericTask', function () {
-  const wrapper = mount(<GenericTask question={task.question} answers={task.answers} />);
+  const wrapper = mount(<GenericTask question={task.question} answers={task.answers} />, mockReduxStore);
   const { question, answers } = runCommonTests(wrapper);
 
   it('should have a question and answers', function () {
@@ -37,7 +38,7 @@ describe('GenericTask', function () {
 });
 
 describe('GenericTask: required', function () {
-  const wrapper = mount(<GenericTask question={task.question} answers={task.answers} required={true} />);
+  const wrapper = mount(<GenericTask question={task.question} answers={task.answers} required={true} showRequiredNotice={true} />, mockReduxStore);
   const { question, answers } = runCommonTests(wrapper);
 
   it('should have a question and answers', function () {
@@ -55,7 +56,7 @@ describe('GenericTask: required', function () {
 });
 
 describe('GenericTask: with help', function () {
-  const wrapper = mount(<GenericTask question={task.question} answers={task.answers} help="This is some help text." />);
+  const wrapper = mount(<GenericTask question={task.question} answers={task.answers} help="This is some help text." />, mockReduxStore);
   const { question, answers } = runCommonTests(wrapper);
 
   it('should have a question and answers', function () {

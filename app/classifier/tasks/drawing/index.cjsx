@@ -135,28 +135,3 @@ module.exports = createReactClass
 
   onBlur: () ->
     @setState({ focus: {} });
-
-        # <label key={tool._key} >
-        #   <input name="drawing-tool" autoFocus={@props.autoFocus and i is 0} type="radio" className="drawing-tool-button-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
-        #   <div className="answer-button #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
-        #     <div className="answer-button-icon-container">
-        #       <span className="drawing-tool-button-icon" style={color: tool.color}>{icons[tool.type]}</span>
-        #     </div>
-
-        #     <div className="answer-button-label-container">
-        #       <Markdown className="answer-button-label">{tool.label}</Markdown>
-        #       <div className="answer-button-status">
-        #         {count + ' '}
-        #         {if tool.min? or tool.max?
-        #           'of '}
-        #         {if tool.min?
-        #           <span style={color: 'red' if count < tool.min}>{tool.min} required</span>}
-        #         {if tool.min? and tool.max?
-        #           ', '}
-        #         {if tool.max?
-        #           <span style={color: 'orange' if count is tool.max}>{tool.max} maximum</span>}
-        #         {' '}drawn
-        #       </div>
-        #     </div>
-        #   </div>
-        # </label>
