@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import icons from '../../icons';
 
-export const StyledDrawingToolButtonIcon = styled.span`
+export const StyledDrawingToolInputIcon = styled.span`
   color: ${props => props.color};
   margin-right: 1ch;
 
@@ -20,7 +20,7 @@ export const StyledDrawingToolButtonIcon = styled.span`
 
 export default function DrawingToolInputIcon(props) {
   return (
-    <StyledDrawingToolButtonIcon color={props.tool.color}>{icons[props.tool.type]}</StyledDrawingToolButtonIcon>
+    <StyledDrawingToolInputIcon color={props.tool.color}>{icons[props.tool.type]}</StyledDrawingToolInputIcon>
   );
 }
 

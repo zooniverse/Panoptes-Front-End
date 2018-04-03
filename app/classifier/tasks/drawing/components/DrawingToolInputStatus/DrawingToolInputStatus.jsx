@@ -7,6 +7,7 @@ export const StyledDrawingToolInputStatus = styled.div`
   opacity: 0.7;
 `;
 
+// TODO Add Translations
 export default function DrawingToolInputStatus({ count, tool }) {
   const minStyleColor = (count < tool.min) ? 'red' : '';
   const maxStyleColor = (count === tool.max) ? 'orange' : '';
