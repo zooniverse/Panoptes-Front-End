@@ -110,7 +110,7 @@ module.exports =
     <Route path="inbox/:conversation" component={require './talk/inbox-conversation'} />
 
     <Route path="settings" component={require './pages/settings'}>
-      <IndexRoute component={require './pages/settings/account'} />
+      <IndexRoute component={require('./pages/settings/account').default} />
       <Route path="profile" component={CustomiseProfile} />
       <Route path="email" component={EmailSettingsPage} />
     </Route>
