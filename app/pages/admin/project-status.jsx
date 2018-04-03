@@ -30,7 +30,7 @@ class ProjectStatus extends Component {
     this.state = {
       dialogIsOpen: false,
       error: null,
-      featured: null,
+      featuredProject: null,
       project: null,
       usedWorkflowLevels: [],
       workflows: []
@@ -57,9 +57,9 @@ class ProjectStatus extends Component {
 
   getFeaturedProject() {
     return apiClient.type('projects')
-      .get({ featured: true, launch_approved: true, cards: true })
+      .get({ featured: true })
       .then(([featuredProject]) => {
-        this.setState({ featured: featuredProject });
+        this.setState({ featuredProject });
       });
   }
 
@@ -125,16 +125,19 @@ class ProjectStatus extends Component {
   }
 
   handleFeaturedProjectChange({ target }) {
-    const { featured, project } = this.state;
-    if (featured) {
-      featured.update({ featured: false });
-      featured.save()
-        .then(() => this.setState({ featured }))
+    const { featuredProject, project } = this.state;
+    project.update({ featured: target.checked });
+    if (featuredProject) {
+      return featuredProject.update({ featured: false }).save()
+        .then(() => project.save())
+        .then(newFeaturedProject => this.setState({
+          featuredProject: newFeaturedProject
+        }))
+        .catch(error => this.setState({ error }));
+    } else {
+      return project.save()
         .catch(error => this.setState({ error }));
     }
-    project.update({ featured: target.checked });
-    project.save()
-      .catch(error => this.setState({ error }));
   }
 
   handleToggle(event, workflow) {
