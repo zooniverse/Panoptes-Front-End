@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import styled, { ThemeProvider } from 'styled-components';
 import Translate from 'react-translate-component';
 import theme from 'styled-theming';
@@ -11,6 +13,7 @@ export const StyledTaskHelpButton = styled.button.attrs({
   background-color: transparent;
   border: none;
   color: ${theme('mode', {
+    dark: zooTheme.colors.teal.light,
     light: zooTheme.colors.teal.dark
   })};
   cursor: pointer;
@@ -28,9 +31,9 @@ export const StyledTaskHelpButton = styled.button.attrs({
   }
 `;
 
-export default function TaskHelpButton(props) {
+export function TaskHelpButton(props) {
   return (
-    <ThemeProvider theme={{ mode: 'light' }}>
+    <ThemeProvider theme={{ mode: props.theme }}>
       <StyledTaskHelpButton onClick={props.onClick}>
         <Translate content="classifier.taskHelpButton" />
       </StyledTaskHelpButton>
@@ -39,10 +42,18 @@ export default function TaskHelpButton(props) {
 }
 
 TaskHelpButton.defaultProps = {
-  onClick: () => {}
+  onClick: () => { },
+  theme: 'light'
 };
 
 TaskHelpButton.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  theme: PropTypes.string
 };
+
+const mapStateToProps = state => ({
+  theme: state.userInterface.theme
+});
+
+export default connect(mapStateToProps)(TaskHelpButton);
 

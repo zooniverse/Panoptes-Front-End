@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import styled, { ThemeProvider } from 'styled-components';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
@@ -23,10 +25,18 @@ export const StyledBackButton = styled.button.attrs({
   type: 'button'
 })`
   background-color: ${theme('mode', {
+    dark: zooTheme.colors.darkTheme.background.default,
     light: zooTheme.colors.lightTheme.background.default
   })};
-  border: none;
+  border: ${theme('mode', {
+    dark: `thin solid ${zooTheme.colors.darkTheme.font}`,
+    light: 'none'
+  })};
   box-sizing: border-box;
+  color: ${theme('mode', {
+    dark: zooTheme.colors.darkTheme.font,
+    light: zooTheme.colors.lightTheme.font
+  })};
   cursor: pointer;
   font-size: 0.9em;
   padding: 0.9em;
@@ -34,7 +44,16 @@ export const StyledBackButton = styled.button.attrs({
 
   &:focus, &:hover {
     background: ${theme('mode', {
-      light: '#f6f6f6' // TODO: Check in on actual styling for this.
+      dark: zooTheme.colors.teal.dark,
+      light: zooTheme.colors.teal.gradient
+    })};
+    border: ${theme('mode', {
+      dark: `3px solid ${zooTheme.colors.teal.light}`,
+      light: 'none'
+    })};
+    color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.font,
+      light: 'white'
     })};
   }
 `;
@@ -43,6 +62,7 @@ export const StyledBackButtonToolTip = styled.span`
   bottom: ${(checkIfMSBrowser()) ? '-130%' : '-100%'};
   box-sizing: border-box;
   color: ${theme('mode', {
+    dark: zooTheme.colors.teal.light,
     light: zooTheme.colors.teal.mid
   })};
   font-size: 0.9em;
@@ -52,7 +72,7 @@ export const StyledBackButtonToolTip = styled.span`
   width: ${(checkIfMSBrowser()) ? '400%' : 'max-content'};
 `;
 
-class BackButton extends React.Component {
+export class BackButton extends React.Component {
   constructor() {
     super();
 
@@ -74,7 +94,7 @@ class BackButton extends React.Component {
   render() {
     const backButtonWarning = counterpart('classifier.backButtonWarning');
     return (
-      <ThemeProvider theme={{ mode: 'light' }}>
+      <ThemeProvider theme={{ mode: this.props.theme }}>
         <StyledBackButtonWrapper>
           <StyledBackButton
             aria-label={(this.props.areAnnotationsNotPersisted ? backButtonWarning : '')}
@@ -98,12 +118,18 @@ class BackButton extends React.Component {
 
 BackButton.defaultProps = {
   areAnnotationsNotPersisted: false,
+  theme: 'light',
   onClick: () => {}
 };
 
 BackButton.propTypes = {
   areAnnotationsNotPersisted: PropTypes.bool,
+  theme: PropTypes.string,
   onClick: PropTypes.func
 };
 
-export default BackButton;
+const mapStateToProps = state => ({
+  theme: state.userInterface.theme
+});
+
+export default connect(mapStateToProps)(BackButton);
