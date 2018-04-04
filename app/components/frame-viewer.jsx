@@ -64,7 +64,7 @@ export default class FrameViewer extends React.Component {
     );
     const modellingProps = type === 'application' ? { // could be a more specific type check here
       annotation: this.props.annotation,
-      classification: this.props.classification,
+      annotations: this.props.annotations,
       subject: this.props.subject,
       workflow: this.props.workflow
     } : {};
@@ -126,9 +126,7 @@ FrameViewer.propTypes = {
   annotation: PropTypes.shape(
     { id: PropTypes.string }
   ),
-  classification: PropTypes.shape(
-    { annotations: PropTypes.array }
-  ),
+  annotations: PropTypes.arrayOf(PropTypes.object),
   frame: PropTypes.number,
   frameWrapper: PropTypes.func,
   modification: PropTypes.object,
@@ -146,9 +144,7 @@ FrameViewer.propTypes = {
 };
 
 FrameViewer.defaultProps = {
-  classification: {
-    annotations: []
-  },
+  annotations: [],
   frame: 0,
   onChange: () => {},
   preferences: { },
