@@ -36,7 +36,7 @@ export default class EditMediaPage extends React.Component {
 
 EditMediaPage.defaultProps = {
   project: {},
-  validSubjectExtensions: ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3'],
+  validSubjectExtensions: ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3', '.mp4', '.m4v'],
 };
 
 EditMediaPage.propTypes = {
