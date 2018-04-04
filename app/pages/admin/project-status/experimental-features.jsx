@@ -8,7 +8,6 @@ const experimentalFeatures = [
   'dropdown',
   'mini-course',
   'worldwide telescope',
-  'hide previous marks',
   'grid',
   'workflow assignment',
   'Gravity Spy Gold Standard',
