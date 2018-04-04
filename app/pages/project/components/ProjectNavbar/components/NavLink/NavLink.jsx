@@ -35,10 +35,11 @@ export const StyledLinkPlaceholder = styled.span`
   ${commonStyles}
 `;
 
-function NavLink({ className, disabled, isExternalLink, label, url }) {
+function NavLink({ className, disabled, isExternalLink, label, onClick, url }) {
   const linkProps = {
     className,
-    disabled
+    disabled,
+    onClick
   };
 
   const LinkComponent = (disabled) ? StyledLinkPlaceholder : StyledInternalLink;
@@ -70,7 +71,7 @@ NavLink.defaultProps = {
   disabled: false,
   isExternalLink: false,
   label: '',
-  site: '',
+  onClick: () => true,
   url: ''
 };
 
@@ -79,7 +80,7 @@ NavLink.propTypes = {
   disabled: PropTypes.bool,
   isExternalLink: PropTypes.bool,
   label: PropTypes.string,
-  site: PropTypes.string,
+  onClick: PropTypes.func,
   url: PropTypes.string
 };
 
