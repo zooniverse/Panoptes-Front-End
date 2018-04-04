@@ -11,6 +11,7 @@ NextTaskSelector = require './next-task-selector'
 
 # `import MinMaxEditor from './drawing/min-max-editor';`
 MinMaxEditor = require('./drawing/min-max-editor').default
+GridEditor = require('./drawing/grid-editor').default
 
 module.exports = createReactClass
   displayName: 'GenericTaskEditor'
@@ -198,6 +199,15 @@ module.exports = createReactClass
                           </label>
                         </AutoSave>
                       </div>
+                    else
+                      null
+                    if 'grid' in options
+                      <GridEditor
+                        key="gridoptions"
+                        workflow={@props.workflow}
+                        name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
+                        choice={choice}
+                      />
                     else
                       null
 

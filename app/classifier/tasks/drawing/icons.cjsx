@@ -9,6 +9,16 @@ module.exports =
     <line className="shape" x1="5" y1="50" x2="40" y2="50" />
   </svg>
 
+  pointGrid: <svg viewBox="0 0 100 100">
+    <line className="shape" x1="20" y1="0" x2="20" y2="80" />
+    <line className="shape" x1="40" y1="0" x2="40" y2="80" />
+    <line className="shape" x1="60" y1="0" x2="60" y2="80" />
+
+    <line className="shape" x1="0" y1="20" x2="80" y2="20" />
+    <line className="shape" x1="0" y1="40" x2="80" y2="40" />
+    <line className="shape" x1="0" y1="60" x2="80" y2="60" />
+  </svg>
+
   line: <svg viewBox="0 0 100 100">
     <line className="shape" x1="25" y1="90" x2="75" y2="10" />
   </svg>
