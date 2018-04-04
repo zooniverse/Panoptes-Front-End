@@ -193,7 +193,9 @@ ClassifierWrapper = createReactClass
           onComplete={@onComplete}
           onCompleteAndLoadAnotherSubject={@onCompleteAndLoadAnotherSubject}
           classificationCount={@state.classificationCount}
-        />
+        >
+          {@props.children}
+        </Classifier>
       else
         <span>Loading classifier...</span>}
     </div>

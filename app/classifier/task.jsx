@@ -12,15 +12,14 @@ class Task extends React.Component {
   }
 
   handleAnnotationChange(newAnnotation) {
-    const { classification } = this.props;
-    const annotations = classification.annotations.slice();
+    const annotations = this.props.annotations.slice();
     const index = findLastIndex(annotations, annotation => annotation.task === newAnnotation.task);
     annotations[index] = newAnnotation;
     this.props.updateAnnotations(annotations);
   }
 
   render() {
-    const { annotation, classification, workflow } = this.props;
+    const { annotation, annotations, workflow } = this.props;
     const task = this.props.task ? this.props.task : workflow.tasks[workflow.first_task];
     const TaskComponent = tasks[task.type];
 
@@ -34,7 +33,7 @@ class Task extends React.Component {
     // Run through the existing annotations to build up sets of persistent hooks in the order of the associated annotations. Skip duplicates.
     const persistentHooksBeforeTask = [];
     const persistentHooksAfterTask = [];
-    classification.annotations.map((classificationAnnotation) => {
+    annotations.map((classificationAnnotation) => {
       const taskDescription = workflow.tasks[classificationAnnotation.task];
       const { PersistBeforeTask, PersistAfterTask } = tasks[taskDescription.type];
       if (PersistBeforeTask && !persistentHooksBeforeTask.includes(PersistBeforeTask)) {
@@ -47,9 +46,9 @@ class Task extends React.Component {
 
     // These props will be passed into the hooks. Append as necessary when creating hooks.
     const taskHookProps = {
+      annotations,
       taskTypes: tasks,
       workflow,
-      classification,
       onChange: this.handleAnnotationChange
     };
 
@@ -110,10 +109,8 @@ Task.propTypes = {
     shortcut: PropTypes.object,
     value: PropTypes.any
   }),
+  annotations: PropTypes.arrayOf(PropTypes.object),
   children: PropTypes.node,
-  classification: PropTypes.shape({
-    id: PropTypes.string
-  }),
   preferences: PropTypes.shape({
     id: PropTypes.string
   }),
@@ -134,6 +131,7 @@ Task.propTypes = {
 };
 
 Task.defaultProps = {
+  annotations: [],
   updateAnnotations: () => null
 };
 

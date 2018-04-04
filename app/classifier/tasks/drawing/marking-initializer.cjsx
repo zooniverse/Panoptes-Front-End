@@ -12,6 +12,7 @@ module.exports = createReactClass
 
   getDefaultProps: ->
     annotation: null
+    annotations: []
     workflow: null
     frame: 0
     getEventOffset: null
@@ -117,6 +118,6 @@ module.exports = createReactClass
     @onChange()
   
   onChange: () ->
-    annotations = @props.classification.annotations.slice()
+    annotations = @props.annotations.slice()
     newAnnotation = annotations[annotations.length - 1]
     @props.onChange newAnnotation

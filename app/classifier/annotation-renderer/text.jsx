@@ -20,8 +20,8 @@ export default class TextRenderer extends React.Component {
       taskTypes: tasks,
       workflow: this.props.workflow,
       task: taskDescription,
-      classification: this.props.classification,
       annotation: this.props.annotation,
+      annotations: this.props.annotations,
       frame: this.props.frame,
       onChange: this.props.onChange,
       preferences: this.props.preferences
@@ -29,12 +29,12 @@ export default class TextRenderer extends React.Component {
 
     let children = [];
     const isTextTask = taskDescription && (tasks[taskDescription.type].AnnotationRenderer === TextRenderer);
-    const persistentHooks = this.props.classification.annotations
+    const persistentHooks = this.props.annotations
       .map(annotation => this.props.workflow.tasks[annotation.task])
       .filter(task => tasks[task.type].AnnotationRenderer === TextRenderer)
       .map((task, i) => {
         const { PersistInsideSubject } = tasks[task.type];
-        const filteredAnnotations = this.props.classification.annotations.filter((annotation) => {
+        const filteredAnnotations = this.props.annotations.filter((annotation) => {
           const currentTask = this.props.workflow.tasks[annotation.task];
           return tasks[currentTask.type].AnnotationRenderer === TextRenderer;
         });
@@ -73,11 +73,8 @@ TextRenderer.propTypes = {
   annotation: PropTypes.shape({
     task: PropTypes.string
   }),
+  annotations: PropTypes.arrayOf(PropTypes.object),
   children: PropTypes.node,
-  classification: PropTypes.shape({
-    annotations: PropTypes.array,
-    loading: PropTypes.bool
-  }),
   frame: PropTypes.number,
   onChange: PropTypes.func,
   preferences: PropTypes.object,

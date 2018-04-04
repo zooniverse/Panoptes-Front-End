@@ -135,7 +135,7 @@ module.exports = createReactClass
 
   handleTemplateDrag: (e, d) ->
     difference = @props.normalizeDifference(e, d)
-    mobileTemplate = (i for i in @props.classification.annotations[@props.classification.annotations.length - 1].value when i.templateID is @props.mark.templateID)
+    mobileTemplate = (i for i in @props.annotations[@props.annotations.length - 1].value when i.templateID is @props.mark.templateID)
     for cell in mobileTemplate
       cell.x += difference.x
       cell.y += difference.y

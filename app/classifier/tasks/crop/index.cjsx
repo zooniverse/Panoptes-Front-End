@@ -14,7 +14,7 @@ module.exports = createReactClass
     Summary: Summary
     AnnotationRenderer: SVGRenderer
 
-    getSVGProps: ({task, workflow, classification, annotation}) ->
+    getSVGProps: ({task, workflow, annotation, annotations}) ->
       svgProps = 
         if task?.type is 'crop'
           style:
@@ -23,7 +23,7 @@ module.exports = createReactClass
           {}
 
       tasks = require('../index').default
-      [previousCropAnnotation] = classification.annotations.filter (anAnnotation) =>
+      [previousCropAnnotation] = annotations.filter (anAnnotation) =>
         taskDescription = workflow.tasks[anAnnotation.task]
         TaskComponent = tasks[taskDescription.type]
         TaskComponent is this and anAnnotation.value? and anAnnotation isnt annotation

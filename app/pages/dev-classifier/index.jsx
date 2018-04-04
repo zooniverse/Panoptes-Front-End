@@ -43,11 +43,12 @@ export class DevClassifierPage extends React.Component {
             preferences={this.props.preferences}
             classification={this.props.classification}
             onClickNext={this.reload}
-          />
+          >
           
-          <ProjectThemeButton />
-          <hr />
-          <ClassificationViewer classification={this.props.classification} />
+            <ProjectThemeButton />
+            <hr />
+            <ClassificationViewer classification={this.props.classification} />
+          </ClassifierWrapper>
         </div>
       </div>
     );
