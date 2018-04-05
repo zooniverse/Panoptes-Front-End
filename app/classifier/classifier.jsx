@@ -350,7 +350,12 @@ class Classifier extends React.Component {
             playIterations={this.props.workflow.configuration.playIterations}
           />
           <div className="task-area">
-            <TaskTabs />
+            <TaskTabs
+              projectPreferences={this.props.preferences}
+              tutorial={this.props.tutorial}
+              user={this.props.user}
+              workflow={this.props.workflow}
+            />
             {!currentClassification.completed ?
               <Task
                 preferences={this.props.preferences}
