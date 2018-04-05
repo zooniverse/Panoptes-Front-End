@@ -55,7 +55,7 @@ function FileViewer(props) {
       viewerProps,
       {
         annotation: cloneDeep(props.annotation),
-        annotations: props.classification.annotations,
+        annotations: props.annotations,
         subject: props.subject,
         viewBoxDimensions: props.viewBoxDimensions
       }
@@ -69,7 +69,7 @@ function FileViewer(props) {
 FileViewer.propTypes = {
   annotation: PropTypes.object,
   className: PropTypes.string,
-  classification: PropTypes.object,
+  annotations: PropTypes.arrayOf(PropTypes.object),
   format: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.string
@@ -90,5 +90,9 @@ FileViewer.propTypes = {
   ]),
   viewBoxDimensions: PropTypes.object
 };
+
+FileViewer.defaultProps = {
+  annotations: []
+}
 
 export default FileViewer;
