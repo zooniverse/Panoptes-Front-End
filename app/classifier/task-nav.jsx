@@ -74,10 +74,12 @@ class TaskNav extends React.Component {
     }
 
     if (currentAnnotation.shortcut) {
-      this.addAnnotationForTask(currentTask.unlinkedTask);
-      const newAnnotation = annotations[annotations.length - 1];
-      newAnnotation.value = currentAnnotation.shortcut.value;
+      const unlinkedTask = workflow.tasks[currentTask.unlinkedTask];
+      const unlinkedAnnotation = tasks[unlinkedTask.type].getDefaultAnnotation(unlinkedTask, workflow, tasks);
+      unlinkedAnnotation.task = currentTask.unlinkedTask;
+      unlinkedAnnotation.value = currentAnnotation.shortcut.value.slice();
       delete currentAnnotation.shortcut;
+      annotations.push(unlinkedAnnotation);
     }
     this.props.completeClassification(e);
   }
