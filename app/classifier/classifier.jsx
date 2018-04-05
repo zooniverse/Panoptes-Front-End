@@ -24,14 +24,11 @@ import MinicourseButton from './components/MinicourseButton';
 
 import SubjectViewer from '../components/subject-viewer';
 import FrameAnnotator from './frame-annotator';
-import ModelRenderer from '../components/model-renderer';
 import ExpertOptions from './expert-options';
 
 import openFeedbackModal from '../features/feedback/classifier';
 import GridTool from './drawing-tools/grid';
 import tasks from './tasks';
-import TaskTabs from './components/TaskTabs';
-import MinicourseButton from './components/MinicourseButton';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
