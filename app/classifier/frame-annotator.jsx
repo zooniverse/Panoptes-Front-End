@@ -50,6 +50,7 @@ export default class FrameAnnotator extends React.Component {
 
     if (this.props.annotation.task) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
+      
       (({ BeforeSubject, AfterSubject } = tasks[taskDescription.type]));
     }
 
@@ -108,7 +109,8 @@ export default class FrameAnnotator extends React.Component {
             warningBanner
           )}
 
-          {!!AfterSubject && (
+          {/* Gross hacky bugfix :( */}
+          {!!AfterSubject && this.props.annotation && typeof this.props.annotation.value[0] === 'object' && (
             <AfterSubject {...hookProps} />)}
 
         </div>

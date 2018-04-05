@@ -4,9 +4,9 @@ createReactClass = require 'create-react-class'
 module.exports = createReactClass
   displayName: 'SurveyAnnotationView'
 
-  getDefaultProperties: ->
+  getDefaultProps: ->
     task: null
-    classification: null
+    annotations: null
     annotation: null
 
   render: ->

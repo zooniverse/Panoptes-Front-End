@@ -17,12 +17,15 @@ class SurveySummary extends React.Component {
   render() {
     const { task, annotation, translation } = this.props;
     const choiceSummaries = annotation.value.map((identification) => {
-      const allAnswers = Object.keys(identification.answers).map((questionId) => {
-        const answerKeys = [].concat(identification.answers[questionId]);
-        const answers = answerKeys.map(answerId => translation.questions[questionId].answers[answerId].label);
-        return answers.join(', ');
-      });
-      return `${translation.choices[identification.choice].label}: ${allAnswers.join('; ')}`;
+      // Gross hacky bug fix :()
+      if (typeof identification === 'object') {
+        const allAnswers = Object.keys(identification.answers).map((questionId) => {
+          const answerKeys = [].concat(identification.answers[questionId]);
+          const answers = answerKeys.map(answerId => translation.questions[questionId].answers[answerId].label);
+          return answers.join(', ');
+        });
+        return `${translation.choices[identification.choice].label}: ${allAnswers.join('; ')}`;
+      }
     });
     return (
       <div>
