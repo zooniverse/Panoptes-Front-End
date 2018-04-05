@@ -13,7 +13,8 @@ import WarningBanner from './warning-banner';
 import { classification, workflow, subject, preferences } from '../pages/dev-classifier/mock-data';
 
 const annotation = {
-  task: 'init'
+  task: 'init',
+  value: [{}]
 };
 
 const viewBoxDimensions = {
@@ -140,7 +141,7 @@ describe('<FrameAnnotator />', function() {
 
     before(function() {
       // combo task has BeforeSubject, InsideSubject, and AfterSubject hooks
-      const comboAnnotation = { task: 'combo' };
+      const comboAnnotation = { task: 'combo', value: [{}] };
       TaskComponent = tasks[comboAnnotation.task];
       wrapper = shallow(
         <FrameAnnotator

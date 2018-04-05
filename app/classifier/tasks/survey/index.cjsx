@@ -47,12 +47,30 @@ module.exports = createReactClass
   render: ->
     <div className="survey-task">
       {if @state.selectedChoiceID is ''
-        <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} onRemove={@handleRemove} annotation={@props.annotation} focusedChoice={@state.focusedChoice} translation={@props.translation} />
+        <Chooser
+          task={@props.task}
+          filters={@state.filters}
+          onFilter={@handleFilter}
+          onChoose={@handleChoice}
+          onRemove={@handleRemove}
+          annotation={@props.annotation}
+          focusedChoice={@state.focusedChoice}
+          translation={@props.translation}
+        />
       else
         # @ is undefined within the scope of find
         currentSelection = @state.selectedChoiceID
         existingAnnotationValue = @props.annotation.value.find (value) -> value.choice is currentSelection
-        <Choice annotation={@props.annotation} annotationValue={existingAnnotationValue} task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} translation={@props.translation} />
+        <Choice
+          annotation={@props.annotation}
+          annotationValue={existingAnnotationValue}
+          task={@props.task}
+          choiceID={@state.selectedChoiceID}
+          onSwitch={@handleChoice}
+          onCancel={@clearSelection}
+          onConfirm={@handleAnnotation}
+          translation={@props.translation}
+        />
       }
     </div>
 
