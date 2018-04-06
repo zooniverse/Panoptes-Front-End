@@ -6,7 +6,8 @@ class CroppedImage extends React.Component {
     super();
     this.state = {
       naturalWidth: 0,
-      naturalHeight: 0
+      naturalHeight: 0,
+      src: ''
     };
   }
 
@@ -21,16 +22,20 @@ class CroppedImage extends React.Component {
   }
 
   loadImage(src) {
+    const srcPath = src.split('//')
+      .pop()
+      .replace('static.zooniverse.org/', '');
+    const thumbnail = srcPath ? `https://thumbnails.zooniverse.org/500x500/${srcPath}` : '';
     const img = new Image();
     img.onload = () => {
       const { naturalWidth, naturalHeight } = img;
-      this.setState({ naturalWidth, naturalHeight });
+      this.setState({ naturalWidth, naturalHeight, src: thumbnail });
     };
-    img.src = src;
+    img.src = thumbnail;
   }
 
   render() {
-    const { naturalWidth, naturalHeight } = this.state;
+    const { naturalWidth, naturalHeight, src } = this.state;
     const min = Math.min(naturalWidth, naturalHeight);
 
     let width = min;
@@ -48,13 +53,12 @@ class CroppedImage extends React.Component {
     return (
       <svg
         viewBox={`${x} ${y} ${width} ${height}`}
-        src={this.props.src}
         width={this.props.width}
         height={this.props.height}
         className={this.props.className}
       >
         <image
-          xlinkHref={this.props.src}
+          xlinkHref={src}
           width={naturalWidth}
           height={naturalHeight}
           x="0"
