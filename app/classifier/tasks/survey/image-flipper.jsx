@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Thumbnail from '../../../components/thumbnail';
 
 const PRELOAD_STYLE = {
   height: 0,
@@ -24,7 +25,7 @@ class ImageFlipper extends React.Component {
   renderPreload() {
     return (
       <div style={PRELOAD_STYLE}>
-        {this.props.images.map(image => <img alt="loading…" src={image} key={image} />)}
+        {this.props.images.map(image => <Thumbnail alt="loading…" src={image} key={image} width={500} />)}
       </div>
     );
   }
@@ -33,10 +34,11 @@ class ImageFlipper extends React.Component {
     return (
       <span className="survey-task-image-flipper">
         {this.renderPreload()}
-        <img
+        <Thumbnail
           alt={`Frame ${this.state.frame}`}
           src={this.props.images[this.state.frame]}
           className="survey-task-image-flipper-image"
+          width={500}
         />
         <div className="survey-task-image-flipper-pips">
           {this.props.images.length > 1 &&
