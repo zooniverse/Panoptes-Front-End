@@ -69,7 +69,9 @@ export default class Thumbnail extends React.Component {
     }
 
     return (
-      <img alt="" {...this.props} src={src} {...dimensions} style={style} onError={this.handleError} />
+      <div  style={style}>
+        <img alt="" {...this.props} src={src} {...dimensions} onError={this.handleError} />
+      </div>
     );
   }
 }
