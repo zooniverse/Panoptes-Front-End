@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Thumbnail from './thumbnail';
 
 const IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'svg'];
 const VIDEO_EXTENSIONS = ['mp4'];
@@ -9,7 +10,7 @@ const MediaCard = ({ children, className, src, style }) => {
   let renderType;
 
   if (IMAGE_EXTENSIONS.includes(srcExtension)) {
-    renderType = <img alt="" className="media-card-media" src={src} />;
+    renderType = <Thumbnail alt="" className="media-card-media" width={800} src={src} />;
   } else if (VIDEO_EXTENSIONS.includes(srcExtension)) {
     renderType = (
       <video className="media-card-media" src={src}>
