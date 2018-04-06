@@ -215,6 +215,11 @@ class Chooser extends React.Component {
             if (choiceId === this.props.focusedChoice) {
               tabIndex = 0;
             }
+            const src = this.props.task.images[choice.images[0]];
+            const srcPath = src.split('//')
+              .pop()
+              .replace('static.zooniverse.org/', '');
+            const thumbnail = srcPath ? `https://thumbnails.zooniverse.org/500x500/${srcPath}` : '';
             return (
               <button
                 autoFocus={choiceId === this.props.focusedChoice}
@@ -232,7 +237,7 @@ class Chooser extends React.Component {
                     <span
                       className="survey-task-chooser-choice-thumbnail"
                       role="presentation"
-                      style={{ backgroundImage: `url('${this.props.task.images[choice.images[0]]}')` }}
+                      style={{ backgroundImage: `url('${thumbnail}')` }}
                     />
                   }
                   <span className="survey-task-chooser-choice-label">{translation.choices[choiceId].label}</span>
