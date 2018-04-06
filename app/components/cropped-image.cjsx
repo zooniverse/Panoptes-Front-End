@@ -47,12 +47,13 @@ module.exports = createReactClass
       width={@props.width}
       height={@props.height}
       className={@props.className}
-      >
-      <image ref="image" x="0" y="0" />
+    >
+      <image
+        xlinkHref={@props.src}
+        width={@state.naturalWidth}
+        height={@state.naturalHeight}
+        x="0"
+        y="0"
+      />
     </svg>
-
-  componentDidUpdate: ->
-    image = ReactDOM.findDOMNode @refs.image
-    image.setAttribute 'width', @state.naturalWidth
-    image.setAttribute 'height', @state.naturalHeight
-    image.setAttributeNS @XLINK_NS, 'href', @props.src
+    
