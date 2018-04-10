@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Thumbnail from './thumbnail';
 
 class CroppedImage extends React.Component {
   constructor() {
@@ -22,10 +23,13 @@ class CroppedImage extends React.Component {
   }
 
   loadImage(src) {
-    const srcPath = src.split('//')
-      .pop()
-      .replace('static.zooniverse.org/', '');
-    const thumbnail = srcPath ? `https://thumbnails.zooniverse.org/500x500/${srcPath}` : '';
+    const srcPath = Thumbnail.getThumbnailSrc({
+      origin: 'https://thumbnails.zooniverse.org',
+      width: 500,
+      height: 500,
+      src
+    });
+    const thumbnail = src ? srcPath : '';
     const img = new Image();
     img.onload = () => {
       const { naturalWidth, naturalHeight } = img;
