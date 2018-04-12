@@ -45,7 +45,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
       statusMessage: '',
       text: '',
     };
-    
+
     //Bind functions.
     //--------------------------------
     this.onListenStart = this.onListenStart.bind(this);
@@ -53,6 +53,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
     this.onListenResults = this.onListenResults.bind(this);
     this.onListenError = this.onListenError.bind(this);
     this.listenButton_onClick = this.listenButton_onClick.bind(this);
+    this.onSetResults = this.onSetResults.bind(this);
     //--------------------------------
 
     //Speech Recognition
@@ -61,7 +62,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
     //Chrome uses the webkit prefix, and Chrome 64is the only browser that I've
     //managed to successfully test with.
     this.speechRecognition = null;
-    
+
     try {
       if ("webkitSpeechRecognition" in window) {  //Chrome
         this.speechRecognition = new window.webkitSpeechRecognition();
@@ -74,8 +75,8 @@ class ExperimentalVoiceCommandListener extends React.Component {
       //Note that SpeechRecognition has to be triggered by a user event, e.g.
       //voiceButton.onClick = () => { this.speechRecognition.start() }
       //This will then prompt the user to provide mic permissions.
-      
-      this.speechRecognition.onstart = this.onListenStart;  
+
+      this.speechRecognition.onstart = this.onListenStart;
       this.speechRecognition.onend = this.onListenEnd;
       this.speechRecognition.onresult = this.onListenResults;
       this.speechRecognition.onerror = this.onListenError;
@@ -90,7 +91,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
       return <div>No speech recognition, sorry.</div>;
     }
 
-    
+
     return (
       <div>
         <div>Status: {this.state.status}</div>
@@ -99,21 +100,21 @@ class ExperimentalVoiceCommandListener extends React.Component {
       </div>
     );
   }
-  
+
   //----------------------------------------------------------------
-  
+
   listenButton_onClick() {
     if (!this.speechRecognition) return;
-    
+
     if (this.state.status !== LISTEN_STATUS.LISTENING) {
       this.speechRecognition.start();
     } else {
       this.speechRecognition.stop();
-    }    
+    }
   }
 
   //----------------------------------------------------------------
-  
+
   //onListenStart: update the HTML elements to indicate the current state.
   //Triggers on SpeechRecognition.start()
   onListenStart(e) {
@@ -123,7 +124,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
       text: '',
     });
   }
-  
+
   //onListenEnd: update the HTML elements to indicate the current state.
   //Triggers on SpeechRecognition.stop(), or when SpeechRecognition.onresult()
   //returns a result.
@@ -132,7 +133,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
       status: LISTEN_STATUS.IDLE,
     });
   }
-  
+
   //onListenResults: process all recognised words.
   //Triggers when SpeechRecognition recognises a a series of words. (Usually
   //when it detects a pause, indicating the end of a sentence.) This will
@@ -147,20 +148,34 @@ class ExperimentalVoiceCommandListener extends React.Component {
           }
         }
       }
-      
+
       this.setState({
         text
-      });
+      }, this.onSetResults);
     }
   }
-  
+
+  userSaid(s) {
+    return this.state.text.indexOf(s) > -1;
+  }
+
+  onSetResults() {
+    if (this.userSaid('next') && this.props.onNext) {
+      this.props.onNext();
+    } else if (this.userSaid('back') && this.props.onBack) {
+      this.props.onBack();
+    } else if (this.userSaid('done') && this.props.onDone) {
+      this.props.onDone();
+    }
+  }
+
   onListenError(err) {
     this.setState({
       status: LISTEN_STATUS.ERROR,
       statusMessage: err,
     });
   }
-  
+
   //----------------------------------------------------------------
 
 }
