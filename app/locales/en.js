@@ -231,7 +231,7 @@ export default {
   about: {
     index: {
       header: 'About',
-      title: 'About Us',
+      title: 'About',
       nav: {
         about: 'About',
         publications: 'Publications',
@@ -265,7 +265,7 @@ export default {
       dailyZoo: 'If you want to keep up to date with what\'s going on across the Zooniverse and our latest results, check out the [Daily Zooniverse](http://daily.zooniverse.org/) or the main [Zooniverse blog](http://blog.zooniverse.org/). You can also follow the Zooniverse on [Twitter](http://twitter.com/the_zooniverse), [Facebook](http://facebook.com/therealzooniverse), and [Google+](https://plus.google.com/+ZooniverseOrgReal).'
     },
     faq: {
-      title: '### Frequently Asked Questions',
+      title: '## Frequently Asked Questions',
       whyNeedHelp: '- **Why do researchers need your help? Why can\'t computers do these tasks?**\nHumans are better than computers at many tasks. For most Zooniverse projects, computers just aren’t good enough to do the required task, or they may miss interesting features that a human would spot - this is why we need your help. Some Zooniverse projects are also using human classifications to help train computers to do better at these research tasks in the future. When you participate in a Zooniverse project, you are contributing to real research.',
       amIDoingThisRight: '- **How do I know if I\'m doing this right?**\nFor most of the subjects shown in Zooniverse projects, the researchers don\'t know the correct answer and that\'s why they need your help. Human beings are really good at pattern recognition tasks, so generally your first guess is likely the right one. Don’t worry too much about making an occasional mistake - more than one person will review each image, video or graph in a project. Most Zooniverse projects have a Help button, a Frequently Asked Questions (FAQ) page, and a Field Guide with more information to guide you when classifying.',
       whatHappensToClassifications: '- **What happens to my classification after I submit it?**\nYour classifications are stored in the Zooniverse\'s secure online database. Later on a project\'s research team accesses and combines the multiple volunteer assessments stored for each subject, including your classifications, together. Once you have submitted your response for a given subject image, graph, or video, you can\'t go back and edit it. Further information can be found on the [Zooniverse User Agreement and Privacy Policy page](/privacy).',
@@ -275,7 +275,15 @@ export default {
       howToAcknowledge: '- **I\'m a project owner/research team member, how do I acknowledge the Zooniverse and the Project Builder Platform in my paper, talk abstract, etc.?**\nYou can find more details on how to cite the Zooniverse in research publications using data derived from use of the Zooniverse Project Builder on our [Acknowledgements page](/about/acknowledgements).',
       browserSupport: '- **What browser version does Zooniverse support?**\nWe support major browsers up to the second to last version.',
       furtherHelp: 'Didn\'t find the answer to your question? Ask on [Zooniverse Talk](/talk) or [get in touch](/about/contact).'
-    }
+    },
+    resources: {
+      title: '## Resources',
+      introduction: '### Brand Materials',
+      officialMaterials: 'Download official Zooniverse logos [here](https://github.com/zooniverse/Brand/tree/master/style%20guide/logos). Our official color is teal #00979D RGBA(65, 149, 155, 1.00).',
+      printables: 'Download printable handouts, posters, and other ephemera [here](https://github.com/zooniverse/Brand/tree/master/style%20guide/downloads). If you have specific needs not addressed here, please [let us know](/about/contact).',
+      press: '### Press Information',
+      tips: 'Tips for writing about the Zooniverse in the press',
+      list: '- **Please always include URLs when writing about specific projects. If writing generally about the Zooniverse, please include www.zooniverse.org somewhere in your article.**\nPlease note: we are a platform for people-powered research, not a company or non-profit.**\nIf you have questions about the Zooniverse and would like to speak to a member of our team, please email contact[at]zooniverse.org.'
   },
   getInvolved: {
     index: {
