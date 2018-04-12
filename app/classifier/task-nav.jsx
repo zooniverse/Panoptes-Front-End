@@ -5,6 +5,7 @@ import Translate from 'react-translate-component';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
 import GridTool from './drawing-tools/grid';
+import ExperimentalVoiceCommandListener from './experimental-voice-command-listener';
 
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
 
@@ -214,6 +215,7 @@ class TaskNav extends React.Component {
           {this.props.children}
         </nav>
         {this.state.backButtonWarning && <BackButtonWarning />}
+        <ExperimentalVoiceCommandListener />
       </div>
     );
   }
