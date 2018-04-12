@@ -81,7 +81,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
       this.speechRecognition.onend = this.onListenEnd;
       this.speechRecognition.onresult = this.onListenResults;
       this.speechRecognition.onerror = this.onListenError;
-      
+
       //Allow voice input to continue; prevents small chunking of voice commands.
       this.speechRecognition.continuous = true;
       this.speechRecognition.interimResults = true;
@@ -174,6 +174,9 @@ class ExperimentalVoiceCommandListener extends React.Component {
       this.setState({ interimText: '' });
     } else if (this.userSaid('done') && this.props.onDone) {
       this.props.onDone();
+      this.setState({ interimText: '' });
+    } else if (this.userSaid('enhance') && this.props.onEnhance) {
+      this.props.onEnhance();
       this.setState({ interimText: '' });
     }
   }

@@ -153,11 +153,6 @@ class TaskNav extends React.Component {
 
     return (
       <div>
-        <ExperimentalVoiceCommandListener
-          onNext={()=>{ this.html.nextButton && this.html.nextButton.click() }}
-          onDone={()=>{ this.html.doneButton && this.html.doneButton.click() }}
-          onBack={()=>{ this.html.backButton && this.html.backButton.click() }}
-        />
         <nav className="task-nav">
           {(visibleTasks.length > 1) && !completed &&
             <button

@@ -182,7 +182,14 @@ module.exports = createReactClass
         </span>}
         <span>
           {if @props.workflow?.configuration?.invert_subject
-            <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleModification.bind this, 'invert'}>
+            <button
+              type="button"
+              className="secret-button"
+              aria-label="Invert image"
+              title="Invert image"
+              onClick={@toggleModification.bind this, 'invert'}
+              ref={(invert) => this.invert = invert}
+            >
               <i className="fa fa-adjust "></i>
             </button>}{' '}
           {if @props.workflow?.configuration?.enable_subject_flags

@@ -24,6 +24,7 @@ import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import * as feedbackActions from '../redux/ducks/feedback';
 import openFeedbackModal from '../features/feedback/classifier';
+import ExperimentalVoiceCommandListener from './experimental-voice-command-listener';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -305,6 +306,12 @@ class Classifier extends React.Component {
     window.classification = currentClassification;
     return (
       <div>
+        <ExperimentalVoiceCommandListener
+          onNext={() => { this.taskNav && this.taskNav.html.nextButton && this.taskNav.html.nextButton.click() }}
+          onDone={() => { this.taskNav && this.taskNav.html.doneButton && this.taskNav.html.doneButton.click() }}
+          onBack={() => { this.taskNav && this.taskNav.html.backButton && this.taskNav.html.backButton.click() }}
+          onEnhance={() => { this.subjectViewer && this.subjectViewer.invert && this.subjectViewer.invert.click() }}
+        />
         <div className={classifierClassNames}>
           <SubjectViewer
             user={this.props.user}
@@ -322,6 +329,7 @@ class Classifier extends React.Component {
             allowSeparateFrames={workflowAllowsSeparateFrames(this.props.workflow)}
             onChange={this.handleAnnotationChange.bind(this, currentClassification)}
             playIterations={this.props.workflow.configuration.playIterations}
+            ref={subjectViewer => this.subjectViewer = subjectViewer}
           />
           <div className="task-area">
             {!currentClassification.completed ?
@@ -362,6 +370,7 @@ class Classifier extends React.Component {
               updateAnnotations={this.updateAnnotations}
               onNextTask={this.onNextTask}
               onPrevTask={this.onPrevTask}
+              ref={taskNav => this.taskNav = taskNav}
             >
               {!!this.props.expertClassifier &&
                 <ExpertOptions
