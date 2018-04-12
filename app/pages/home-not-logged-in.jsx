@@ -27,7 +27,7 @@ export default class HomePage extends React.Component {
     super(props);
     this.resizeTimeout = NaN;
     this.state = {
-      count: 55000000,
+      count: 250469827,
       promotedProjects: [],
       screenWidth: 0,
       volunteerCount: 1500000
