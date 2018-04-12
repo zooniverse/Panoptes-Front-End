@@ -38,10 +38,15 @@ counterpart.registerTranslations('en', {
   }
 });
 
+const GZ123_COUNT = 98989226
+const OUROBOROS_COUNT = 142800311
+const OTHERS_COUNT = 8680290
+
+
 const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =>
   <section className="home-research">
     <Translate className="tertiary-kicker" component="h2" content="researchHomePage.works" />
-    <span className="class-counter">{count.toLocaleString()}</span>
+    <span className="class-counter">{(count + GZ123_COUNT + OUROBOROS_COUNT + OTHERS_COUNT).toLocaleString()}</span>
     <Translate className="main-kicker" component="h3" content="researchHomePage.classifications" />
     <div className="home-research__classification-count">
       <h3 className="main-kicker">{volunteerCount.toLocaleString()}</h3>{' '}
