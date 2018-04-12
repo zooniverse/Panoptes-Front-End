@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 function howShouldTheLabelBeAligned(label, labelIcon) {
-  if ((label && label.includes('<img')) || (label && labelIcon)) {
+  if ((label && label.includes('<img')) || ((label && label.includes('<svg')) || (label && labelIcon))) {
     return 'left';
   }
 
@@ -15,7 +15,6 @@ export const StyledTaskInputLabelWrapper = styled.div`
   align-items: baseline;
   display: flex;
   position: relative;
-  text-align: left;
   width: 100%;
 `;
 
@@ -23,7 +22,6 @@ export const StyledTaskInputLabel = styled(Markdown)`
   align-items: baseline;
   flex-grow: 1;
   flex-wrap: wrap;
-  text-align: ${props => howShouldTheLabelBeAligned(props.label, props.labelIcon)};
 
   &:first-child {
     margin-top: 0;
@@ -33,14 +31,18 @@ export const StyledTaskInputLabel = styled(Markdown)`
     margin-bottom: 0;
   }
 
-  > img {
+  p {
+    margin: 0;
+  }
+
+  img, svg {
     padding-left: 5px;
     padding-right: 5px;
     vertical-align: middle;
   }
 
-  > p {
-    margin: 0;
+  .markdown {
+    text-align: ${props => howShouldTheLabelBeAligned(props.label, props.labelIcon)};
   }
 `;
 
