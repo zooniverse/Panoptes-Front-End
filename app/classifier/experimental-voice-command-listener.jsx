@@ -163,8 +163,8 @@ class ExperimentalVoiceCommandListener extends React.Component {
   }
 
   userSaid(s) {
-    const pattern = RegExp('(^|\\s)(' + s + ')($|\\s)', 'ig');
-    
+    const pattern = RegExp('(^|\\s)?(' + s + ')($|\\s$)', 'ig');
+
     return this.state.interimText.match(pattern);
   }
 
