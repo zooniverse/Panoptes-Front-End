@@ -28,6 +28,7 @@ class TaskNav extends React.Component {
     this.state = {
       BackButtonWarning: false
     };
+    this.html = {};
   }
 
   componentDidUpdate() {
@@ -153,9 +154,9 @@ class TaskNav extends React.Component {
     return (
       <div>
         <ExperimentalVoiceCommandListener
-          onNext={nextTaskKey && this.props.annotation && !this.props.annotation.shortcut && !waitingForAnswer ? this.addAnnotationForTask.bind(this, nextTaskKey) : undefined}
-          onDone={!nextTaskKey && this.props.annotation && !waitingForAnswer ? this.completeClassification : undefined}
-          onBack={onFirstAnnotation ? undefined : this.destroyCurrentAnnotation}
+          onNext={()=>{ this.html.nextButton && this.html.nextButton.click() }}
+          onDone={()=>{ this.html.doneButton && this.html.doneButton.click() }}
+          onBack={()=>{ this.html.backButton && this.html.backButton.click() }}
         />
         <nav className="task-nav">
           {(visibleTasks.length > 1) && !completed &&
@@ -168,6 +169,7 @@ class TaskNav extends React.Component {
               onFocus={this.warningToggleOn}
               onMouseLeave={this.warningToggleOff}
               onBlur={this.warningToggleOff}
+              ref={(me)=>{ this.html.backButton = me }}
             >
               <Translate content="classifier.back" />
             </button>}
@@ -186,6 +188,7 @@ class TaskNav extends React.Component {
               className="continue major-button"
               disabled={waitingForAnswer}
               onClick={this.addAnnotationForTask.bind(this, nextTaskKey)}
+              ref={(me)=>{ this.html.nextButton = me }}
             >
               <Translate content="classifier.next" />
             </button> : !completed ?
@@ -194,6 +197,7 @@ class TaskNav extends React.Component {
                 className="continue major-button"
                 disabled={waitingForAnswer}
                 onClick={this.completeClassification}
+                ref={(me)=>{ this.html.doneButton = me }}
               >
                 {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
                 {this.props.classification.gold_standard && <i className="fa fa-star fa-fw" />}
