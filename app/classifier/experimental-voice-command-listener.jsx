@@ -43,7 +43,8 @@ class ExperimentalVoiceCommandListener extends React.Component {
     this.state = {
       status: LISTEN_STATUS.IDLE,
       statusMessage: '',
-      text: '',
+      fullText: '',
+      interimText: ''
     };
 
     //Bind functions.
@@ -80,6 +81,10 @@ class ExperimentalVoiceCommandListener extends React.Component {
       this.speechRecognition.onend = this.onListenEnd;
       this.speechRecognition.onresult = this.onListenResults;
       this.speechRecognition.onerror = this.onListenError;
+      
+      //Allow voice input to continue; prevents small chunking of voice commands.
+      this.speechRecognition.continuous = true;
+      this.speechRecognition.interimResults = true;
     }
     //--------------------------------
   }
@@ -91,11 +96,11 @@ class ExperimentalVoiceCommandListener extends React.Component {
       return <div>No speech recognition, sorry.</div>;
     }
 
-
     return (
       <div>
         <div>Status: {this.state.status}</div>
-        <div>Text: {this.state.text}</div>
+        <div>Full Text: {this.state.fullText}</div>
+        <div>Interim Text: {this.state.interimText}</div>
         <button onClick={this.listenButton_onClick}>LISTEN</button>
       </div>
     );
@@ -140,32 +145,36 @@ class ExperimentalVoiceCommandListener extends React.Component {
   //trigger SpeechRecognition.onend() as well.
   onListenResults(e) {
     if (e && e.results) {
-      let text = "";
+      let fullText = '';
+      let interimText = '';
       for (let i = 0; i < e.results.length; i++) {
         if (e.results[i].isFinal) {
-          for (let j = 0; j < e.results.length; j++) {
-            text += e.results[i][j].transcript + ' ';
-          }
+          fullText += e.results[i][0].transcript + ' ';
+        } else {
+          interimText += e.results[i][0].transcript + ' ';
         }
       }
 
       this.setState({
-        text
+        fullText, interimText
       }, this.onSetResults);
     }
   }
 
   userSaid(s) {
-    return this.state.text.indexOf(s) > -1;
+    return this.state.interimText.indexOf(s) > -1;
   }
 
   onSetResults() {
     if (this.userSaid('next') && this.props.onNext) {
       this.props.onNext();
+      this.setState({ interimText: '' });
     } else if (this.userSaid('back') && this.props.onBack) {
       this.props.onBack();
+      this.setState({ interimText: '' });
     } else if (this.userSaid('done') && this.props.onDone) {
       this.props.onDone();
+      this.setState({ interimText: '' });
     }
   }
 
