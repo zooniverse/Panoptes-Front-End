@@ -44,7 +44,8 @@ class ExperimentalVoiceCommandListener extends React.Component {
       status: LISTEN_STATUS.IDLE,
       statusMessage: '',
       fullText: '',
-      interimText: ''
+      interimText: '',
+      cachedCommand: '',
     };
 
     //Bind functions.
@@ -155,9 +156,11 @@ class ExperimentalVoiceCommandListener extends React.Component {
         }
       }
       console.log('FULL: ', fullText, '\nINTERIM: ', interimText);
-      this.setState({
-        fullText, interimText
-      }, this.onSetResults);
+      if (interimText.replace(' ', '') !== this.state.cachedCommand.replace(' ', '')) {
+        this.setState({
+          fullText, interimText
+        }, this.onSetResults);
+      }
     }
   }
 
@@ -169,37 +172,37 @@ class ExperimentalVoiceCommandListener extends React.Component {
   onSetResults() {
     if (this.userSaid('next') && this.props.onNext) {
       this.props.onNext();
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('back') && this.props.onBack) {
       this.props.onBack();
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('done') && this.props.onDone) {
       this.props.onDone();
-      this.setState({ fullText: '', interimText: '' });
-    } else if (this.userSaid('enhance') && this.props.onEnhance) {
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
+    } else if (this.userSaid('invert the image') && this.props.onEnhance) {
       this.props.onEnhance();
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('1|one')) {
       this.props.onNumber(0);
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('2|two|to|too|tool')) {
       this.props.onNumber(1);
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('3|three|tree')) {
       this.props.onNumber(2);
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('4|four|for')) {
       this.props.onNumber(3);
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('5|five')) {
       this.props.onNumber(4);
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('6|six')) {
       this.props.onNumber(5);
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('7|seven')) {
       this.props.onNumber(6);
-      this.setState({ fullText: '', interimText: '' });
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     }
   }
 
