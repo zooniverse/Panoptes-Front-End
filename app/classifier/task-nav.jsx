@@ -152,6 +152,7 @@ class TaskNav extends React.Component {
 
     return (
       <div>
+        <ExperimentalVoiceCommandListener />
         <nav className="task-nav">
           {(visibleTasks.length > 1) && !completed &&
             <button
@@ -215,7 +216,6 @@ class TaskNav extends React.Component {
           {this.props.children}
         </nav>
         {this.state.backButtonWarning && <BackButtonWarning />}
-        <ExperimentalVoiceCommandListener />
       </div>
     );
   }

@@ -21,18 +21,139 @@ If anything goes wrong, blame Coleman, Darryl, Tim L, and Shaun.
 import PropTypes from 'prop-types';
 import React from 'react';
 
+const LISTEN_STATUS = {
+  IDLE: 'idle',
+  LISTENING: 'listening',
+  FAILED: 'failed',
+};
+
 class ExperimentalVoiceCommandListener extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      status: LISTEN_STATUS.IDLE,
+      statusMessage: '',
+      text: '',
+    };
+    
+    //Bind functions.
+    //--------------------------------
+    this.onListenStart = this.onListenStart.bind(this);
+    this.onListenEnd = this.onListenEnd.bind(this);
+    this.onListenResults = this.onListenResults.bind(this);
+    this.onListenError = this.onListenError.bind(this);
+    this.listenButton_onClick = this.listenButton_onClick.bind(this);
+    //--------------------------------
+
+    //Speech Recognition
+    //--------------------------------
+    //First check: do we have Speech Recognition on this browser?
+    //Chrome uses the webkit prefix, and Chrome 64is the only browser that I've
+    //managed to successfully test with.
+    this.speechRecognition = null;
+    
+    try {
+      if ("webkitSpeechRecognition" in window) {  //Chrome
+        this.speechRecognition = new window.webkitSpeechRecognition();
+      } else if ("SpeechRecognition" in window) {  //Should be the future "standard"
+        this.speechRecognition = new window.SpeechRecognition();
+      }
+    } catch (err) { console.error("SpeechRecognition error: ", err); }
+
+    if (this.speechRecognition) {
+      //Note that SpeechRecognition has to be triggered by a user event, e.g.
+      //voiceButton.onClick = () => { this.speechRecognition.start() }
+      //This will then prompt the user to provide mic permissions.
+      
+      this.speechRecognition.onstart = this.onListenStart;  
+      this.speechRecognition.onend = this.onListenEnd;
+      this.speechRecognition.onresult = this.onListenResults;
+      this.speechRecognition.onerror = this.onListenError;
+    }
+    //--------------------------------
   }
-  
+
+  //----------------------------------------------------------------
+
   render() {
+    if (!this.speechRecognition) {
+      return <div>No speech recognition, sorry.</div>;
+    }
+
+    
     return (
       <div>
-        <button>LISTEN</button>
+        <div>Status: {this.state.status}</div>
+        <div>Text: {this.state.text}</div>
+        <button onClick={this.listenButton_onClick}>LISTEN</button>
       </div>
     );
   }
+  
+  //----------------------------------------------------------------
+  
+  listenButton_onClick() {
+    if (!this.speechRecognition) return;
+    
+    if (this.state.status !== LISTEN_STATUS.LISTENING) {
+      this.speechRecognition.start();
+    } else {
+      this.speechRecognition.stop();
+    }    
+  }
+
+  //----------------------------------------------------------------
+  
+  //onListenStart: update the HTML elements to indicate the current state.
+  //Triggers on SpeechRecognition.start()
+  onListenStart(e) {
+    this.setState({
+      status: LISTEN_STATUS.LISTENING,
+      statusMessage: '',
+      text: '',
+    });
+  }
+  
+  //onListenEnd: update the HTML elements to indicate the current state.
+  //Triggers on SpeechRecognition.stop(), or when SpeechRecognition.onresult()
+  //returns a result.
+  onListenEnd(e) {
+    this.setState({
+      status: LISTEN_STATUS.IDLE,
+    });
+  }
+  
+  //onListenResults: process all recognised words.
+  //Triggers when SpeechRecognition recognises a a series of words. (Usually
+  //when it detects a pause, indicating the end of a sentence.) This will
+  //trigger SpeechRecognition.onend() as well.
+  onListenResults(e) {
+    if (e && e.results) {
+      let text = "";
+      for (let i = 0; i < e.results.length; i++) {
+        if (e.results[i].isFinal) {
+          for (let j = 0; j < e.results.length; j++) {
+            text += e.results[i][j].transcript + ' ';
+          }
+        }
+      }
+      
+      this.setState({
+        text
+      });
+    }
+  }
+  
+  onListenError(err) {
+    this.setState({
+      status: LISTEN_STATUS.ERROR,
+      statusMessage: err,
+    });
+  }
+  
+  //----------------------------------------------------------------
+
 }
 
 export default ExperimentalVoiceCommandListener;
