@@ -284,6 +284,7 @@ export default {
       press: '### Press Information',
       tips: 'Tips for writing about the Zooniverse in the press',
       list: '- **Please always include URLs when writing about specific projects. If writing generally about the Zooniverse, please include www.zooniverse.org somewhere in your article.**\nPlease note: we are a platform for people-powered research, not a company or non-profit.**\nIf you have questions about the Zooniverse and would like to speak to a member of our team, please email contact[at]zooniverse.org.'
+    },
   },
   getInvolved: {
     index: {
