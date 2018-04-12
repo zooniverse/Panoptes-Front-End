@@ -15,6 +15,15 @@ etc.)
 
 If anything goes wrong, blame Coleman, Darryl, Tim L, and Shaun.
 
+Troubleshooting FAQ:
+- If a user can't activate the voice command listener, try checking...
+  - Is the user using a compatible web browser? (e.g. Chrome 64)
+  - Is the user using a compatible device? (AFAIK the web speech API relies on
+    the machine's native speech recognition system.)
+  - Is the user in a crowded room? Noise or multiple voices can confuse the
+    speech recognition system.
+  - Has the user given microphone permissions to the app?
+
 (@shaun.a.noordin 20180412)
  */
 
