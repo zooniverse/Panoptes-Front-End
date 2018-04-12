@@ -178,6 +178,27 @@ class ExperimentalVoiceCommandListener extends React.Component {
     } else if (this.userSaid('enhance') && this.props.onEnhance) {
       this.props.onEnhance();
       this.setState({ interimText: '' });
+    } else if (this.userSaid('one')) {
+      this.props.onNumber(0);
+      this.setState({ interimText: '' });
+    } else if (this.userSaid('two')) {
+      this.props.onNumber(1);
+      this.setState({ interimText: '' });
+    } else if (this.userSaid('three')) {
+      this.props.onNumber(2);
+      this.setState({ interimText: '' });
+    } else if (this.userSaid('four')) {
+      this.props.onNumber(3);
+      this.setState({ interimText: '' });
+    } else if (this.userSaid('five')) {
+      this.props.onNumber(4);
+      this.setState({ interimText: '' });
+    } else if (this.userSaid('six')) {
+      this.props.onNumber(5);
+      this.setState({ interimText: '' });
+    } else if (this.userSaid('seven')) {
+      this.props.onNumber(6);
+      this.setState({ interimText: '' });
     }
   }
 

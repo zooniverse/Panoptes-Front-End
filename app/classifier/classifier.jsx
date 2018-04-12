@@ -307,10 +307,11 @@ class Classifier extends React.Component {
     return (
       <div>
         <ExperimentalVoiceCommandListener
-          onNext={() => { this.taskNav && this.taskNav.html.nextButton && this.taskNav.html.nextButton.click() }}
-          onDone={() => { this.taskNav && this.taskNav.html.doneButton && this.taskNav.html.doneButton.click() }}
-          onBack={() => { this.taskNav && this.taskNav.html.backButton && this.taskNav.html.backButton.click() }}
-          onEnhance={() => { this.subjectViewer && this.subjectViewer.invert && this.subjectViewer.invert.click() }}
+          onNext={() => { this.taskNav && this.taskNav.html.nextButton && this.taskNav.html.nextButton.click(); }}
+          onDone={() => { this.taskNav && this.taskNav.html.doneButton && this.taskNav.html.doneButton.click(); }}
+          onBack={() => { this.taskNav && this.taskNav.html.backButton && this.taskNav.html.backButton.click(); }}
+          onEnhance={() => { this.subjectViewer && this.subjectViewer.invert && this.subjectViewer.invert.click(); }}
+          onNumber={this.taskComponent && this.taskComponent.taskComponent && this.taskComponent.taskComponent.handleChangeVoice}
         />
         <div className={classifierClassNames}>
           <SubjectViewer
@@ -343,6 +344,7 @@ class Classifier extends React.Component {
                 annotation={currentAnnotation}
                 subjectLoading={this.state.subjectLoading}
                 updateAnnotations={this.updateAnnotations}
+                ref={taskComponent => this.taskComponent = taskComponent}
               /> :
               <ClassificationSummary
                 project={this.props.project}

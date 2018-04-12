@@ -72,6 +72,7 @@ class Task extends React.Component {
                 preferences={this.props.preferences}
                 annotation={annotation}
                 onChange={this.handleAnnotationChange}
+                ref={taskComponent => this.taskComponent = taskComponent}
               />
             </TaskTranslations>
           }
