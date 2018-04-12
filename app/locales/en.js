@@ -279,13 +279,16 @@ export default {
     },
     resources: {
       title: '## Resources',
+      filler: 'Useful downloads and guidelines for talking about the Zooniverse.',
       introduction: '### Brand Materials',
-      officialMaterials: 'Download official Zooniverse logos [here](https://github.com/zooniverse/Brand/tree/master/style%20guide/logos). Our official color is teal #00979D RGBA(65, 149, 155, 1.00).',
-      printables: 'Download printable handouts, posters, and other ephemera [here](https://github.com/zooniverse/Brand/tree/master/style%20guide/downloads). If you have specific needs not addressed here, please [let us know](/about/contact).',
+      officialMaterials: '[Download official Zooniverse logos](https://github.com/zooniverse/Brand/tree/master/style%%20guide/logos). Our official color is teal hex `#00979D` or `RGBA(65, 149, 155, 1.00)`.',
+      printables: '[Download printable handouts, posters, and other ephemera](https://github.com/zooniverse/Brand/tree/master/style%%20guide/downloads). If you have specific needs not addressed here, please [let us know](/about/contact).',
       press: '### Press Information',
       tips: 'Tips for writing about the Zooniverse in the press',
-      list: '- **Please always include URLs when writing about specific projects. If writing generally about the Zooniverse, please include www.zooniverse.org somewhere in your article.**\nPlease note: we are a platform for people-powered research, not a company or non-profit.**\nIf you have questions about the Zooniverse and would like to speak to a member of our team, please email contact[at]zooniverse.org.'
-    },
+      listOne: '- Please always include URLs when writing about specific projects. If writing generally about the Zooniverse, please include www.zooniverse.org somewhere in your article.',
+      listTwo: '- Please note: we are a platform for people-powered research, not a company or non-profit.',
+      listThree: '- If you have questions about the Zooniverse and would like to speak to a member of our team, please [contact us](/about/contact).'
+    }
   },
   getInvolved: {
     index: {
