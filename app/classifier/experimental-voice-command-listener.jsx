@@ -179,29 +179,33 @@ class ExperimentalVoiceCommandListener extends React.Component {
     } else if (this.userSaid('done') && this.props.onDone) {
       this.props.onDone();
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
-    } else if (this.userSaid('invert the image') && this.props.onEnhance) {
+    } else if (this.userSaid('enhance') && this.props.onEnhance) {
       this.props.onEnhance();
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
-    } else if (this.userSaid('1|one')) {
-      this.props.onNumber(0);
+    } else if (this.userSaid('1|one') && this.props.inputObject[0]) {
+      this.props.inputObject[0].click()
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
-    } else if (this.userSaid('2|two|to|too|tool')) {
-      this.props.onNumber(1);
+    } else if (this.userSaid('2|two|to|too|tool') && this.props.inputObject[1]) {
+      this.props.inputObject[1].click()
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
-    } else if (this.userSaid('3|three|tree')) {
-      this.props.onNumber(2);
+    } else if (this.userSaid('3|three|tree') && this.props.inputObject[2]) {
+      this.props.inputObject[2].click()
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
-    } else if (this.userSaid('4|four|for')) {
-      this.props.onNumber(3);
+    } else if (this.userSaid('4|four|for') && this.props.inputObject[3]) {
+      this.props.inputObject[3].click()
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
-    } else if (this.userSaid('5|five')) {
-      this.props.onNumber(4);
+    } else if (this.userSaid('5|five') && this.props.inputObject[4]) {
+      this.props.inputObject[4].click()
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
-    } else if (this.userSaid('6|six')) {
-      this.props.onNumber(5);
+    } else if (this.userSaid('6|six') && this.props.inputObject[5]) {
+      this.props.inputObject[5].click()
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
-    } else if (this.userSaid('7|seven')) {
-      this.props.onNumber(6);
+    } else if (this.userSaid('7|seven') && this.props.inputObject[6]) {
+      this.props.inputObject[6].click()
+      this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
+    } else if (this.userSaid('zoom|zoo')) {
+      const msg = new SpeechSynthesisUtterance("Sorry, Chris said you can't do that");
+      window.speechSynthesis.speak(msg);
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     }
   }

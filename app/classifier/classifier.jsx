@@ -311,7 +311,7 @@ class Classifier extends React.Component {
           onDone={() => { this.taskNav && this.taskNav.html.doneButton && this.taskNav.html.doneButton.click(); }}
           onBack={() => { this.taskNav && this.taskNav.html.backButton && this.taskNav.html.backButton.click(); }}
           onEnhance={() => { this.subjectViewer && this.subjectViewer.invert && this.subjectViewer.invert.click(); }}
-          onNumber={this.taskComponent && this.taskComponent.taskComponent && this.taskComponent.taskComponent.handleChangeVoice}
+          inputObject={this.taskComponent && this.taskComponent.taskComponent && this.taskComponent.taskComponent.answerButtons}
         />
         <div className={classifierClassNames}>
           <SubjectViewer

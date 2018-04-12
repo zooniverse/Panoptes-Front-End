@@ -10,8 +10,9 @@ const NOOP = Function.prototype;
 export default class MultipleChoiceTask extends React.Component {
   constructor(props) {
     super(props);
+    this.answerButtons = {};
     this.handleChange = this.handleChange.bind(this);
-    this.handleChangeVoice = this.handleChangeVoice.bind(this);
+    this.refCallBack = this.refCallBack.bind(this);
   }
 
   handleChange(index, e) {
@@ -28,16 +29,13 @@ export default class MultipleChoiceTask extends React.Component {
     this.props.onChange(newAnnotation);
   }
 
-  handleChangeVoice(index) {
-    const value = this.props.annotation.value.slice(0);
-    if (!value.includes(index)) {
-      value.push(index);
-    } else if (value.includes(index)) {
-      const indexInValue = value.indexOf(index);
-      value.splice(indexInValue, 1);
-    }
-    const newAnnotation = Object.assign({}, this.props.annotation, { value });
-    this.props.onChange(newAnnotation);
+
+  refCallBack(i, input) {
+    this.answerButtons[i] = input;
+  }
+
+  componentWillUnmount() {
+    this.props.onUnmount();
   }
 
   render() {
@@ -59,6 +57,7 @@ export default class MultipleChoiceTask extends React.Component {
               autoFocus={i === annotation.value[0]}
               checked={annotation.value.includes(i)}
               onChange={this.handleChange.bind(this, i)}
+              ref={this.refCallBack.bind(this, i)}
             />
           </div>
           <div className="answer-button-label-container">

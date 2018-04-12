@@ -9,6 +9,10 @@ class Task extends React.Component {
   constructor(props) {
     super(props);
     this.handleAnnotationChange = this.handleAnnotationChange.bind(this);
+    this.handleChildUnmount = this.handleChildUnmount.bind(this);
+    this.state = {
+      'child_unmount': 0
+    }
   }
 
   handleAnnotationChange(newAnnotation) {
@@ -16,6 +20,10 @@ class Task extends React.Component {
     const index = findLastIndex(annotations, annotation => annotation.task === newAnnotation.task);
     annotations[index] = newAnnotation;
     this.props.updateAnnotations(annotations);
+  }
+
+  handleChildUnmount() {
+    this.setState({ child_unmount: this.state.child_unmount + 1 });
   }
 
   render() {
@@ -73,6 +81,7 @@ class Task extends React.Component {
                 annotation={annotation}
                 onChange={this.handleAnnotationChange}
                 ref={taskComponent => this.taskComponent = taskComponent}
+                onUnmount={this.handleChildUnmount}
               />
             </TaskTranslations>
           }

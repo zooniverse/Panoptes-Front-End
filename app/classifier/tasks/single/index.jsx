@@ -10,8 +10,9 @@ const NOOP = Function.prototype;
 export default class SingleChoiceTask extends React.Component {
   constructor(props) {
     super(props);
+    this.answerButtons = {};
     this.handleChange = this.handleChange.bind(this);
-    this.handleChangeVoice = this.handleChangeVoice.bind(this);
+    this.refCallBack = this.refCallBack.bind(this);
   }
 
   handleChange(index, e) {
@@ -21,11 +22,12 @@ export default class SingleChoiceTask extends React.Component {
     }
   }
 
-  handleChangeVoice(index) {
-    if (this.props.annotation && this.props.annotation.value !== index) {
-      const newAnnotation = Object.assign({}, this.props.annotation, { value: index });
-      this.props.onChange(newAnnotation);
-    }
+  refCallBack(i, input) {
+    this.answerButtons[i] = input;
+  }
+
+  componentWillUnmount() {
+    this.props.onUnmount();
   }
 
   render() {
@@ -52,6 +54,7 @@ export default class SingleChoiceTask extends React.Component {
               value={i}
               onChange={this.handleChange.bind(this, i)}
               name={`${task._key}`}
+              ref={this.refCallBack.bind(this, i)}
             />
           </div>
           <div className="answer-button-label-container">
