@@ -155,6 +155,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
         }
       }
 
+      console.log('FULL: ', fullText, '\nINTERIM: ', interimText);
       this.setState({
         fullText, interimText
       }, this.onSetResults);
@@ -162,43 +163,45 @@ class ExperimentalVoiceCommandListener extends React.Component {
   }
 
   userSaid(s) {
-    return this.state.interimText.indexOf(s) > -1;
+    const pattern = RegExp('(^|\\s)(' + s + ')($|\\s)', 'ig');
+    
+    return this.state.interimText.match(pattern);
   }
 
   onSetResults() {
     if (this.userSaid('next') && this.props.onNext) {
       this.props.onNext();
-      this.setState({ interimText: '' });
+      this.setState({ fullText: '', interimText: '' });
     } else if (this.userSaid('back') && this.props.onBack) {
       this.props.onBack();
-      this.setState({ interimText: '' });
+      this.setState({ fullText: '', interimText: '' });
     } else if (this.userSaid('done') && this.props.onDone) {
       this.props.onDone();
-      this.setState({ interimText: '' });
+      this.setState({ fullText: '', interimText: '' });
     } else if (this.userSaid('enhance') && this.props.onEnhance) {
       this.props.onEnhance();
-      this.setState({ interimText: '' });
-    } else if (this.userSaid('one')) {
+      this.setState({ fullText: '', interimText: '' });
+    } else if (this.userSaid('1|one')) {
       this.props.onNumber(0);
-      this.setState({ interimText: '' });
-    } else if (this.userSaid('two')) {
+      this.setState({ fullText: '', interimText: '' });
+    } else if (this.userSaid('2|two|to|too|tool')) {
       this.props.onNumber(1);
-      this.setState({ interimText: '' });
-    } else if (this.userSaid('three')) {
+      this.setState({ fullText: '', interimText: '' });
+    } else if (this.userSaid('3|three|tree')) {
       this.props.onNumber(2);
-      this.setState({ interimText: '' });
-    } else if (this.userSaid('four')) {
+      this.setState({ fullText: '', interimText: '' });
+    } else if (this.userSaid('4|four|for')) {
       this.props.onNumber(3);
-      this.setState({ interimText: '' });
-    } else if (this.userSaid('five')) {
+      this.setState({ fullText: '', interimText: '' });
+    } else if (this.userSaid('5|five')) {
       this.props.onNumber(4);
-      this.setState({ interimText: '' });
-    } else if (this.userSaid('six')) {
+      this.setState({ fullText: '', interimText: '' });
+    } else if (this.userSaid('6|six')) {
       this.props.onNumber(5);
-      this.setState({ interimText: '' });
-    } else if (this.userSaid('seven')) {
+      this.setState({ fullText: '', interimText: '' });
+    } else if (this.userSaid('7|seven')) {
       this.props.onNumber(6);
-      this.setState({ interimText: '' });
+      this.setState({ fullText: '', interimText: '' });
     }
   }
 
