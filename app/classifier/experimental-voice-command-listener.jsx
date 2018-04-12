@@ -154,7 +154,6 @@ class ExperimentalVoiceCommandListener extends React.Component {
           interimText += e.results[i][0].transcript + ' ';
         }
       }
-
       console.log('FULL: ', fullText, '\nINTERIM: ', interimText);
       this.setState({
         fullText, interimText
@@ -163,8 +162,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
   }
 
   userSaid(s) {
-    const pattern = RegExp('(^|\\s)(' + s + ')($|\\s)', 'ig');
-    
+    const pattern = RegExp('(^|\\s)?(' + s + ')($|\\s$)', 'ig');
     return this.state.interimText.match(pattern);
   }
 
