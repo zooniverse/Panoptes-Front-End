@@ -152,7 +152,11 @@ class TaskNav extends React.Component {
 
     return (
       <div>
-        <ExperimentalVoiceCommandListener />
+        <ExperimentalVoiceCommandListener
+          onNext={nextTaskKey && this.props.annotation && !this.props.annotation.shortcut && !waitingForAnswer ? this.addAnnotationForTask.bind(this, nextTaskKey) : undefined}
+          onDone={!nextTaskKey && this.props.annotation && !waitingForAnswer ? this.completeClassification : undefined}
+          onBack={onFirstAnnotation ? undefined : this.destroyCurrentAnnotation}
+        />
         <nav className="task-nav">
           {(visibleTasks.length > 1) && !completed &&
             <button
