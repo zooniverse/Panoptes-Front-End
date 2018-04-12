@@ -238,7 +238,8 @@ export default {
         ourTeam: 'Our Team',
         acknowledgements: 'Acknowledgements',
         contact: 'Contact Us',
-        faq: 'FAQ'
+        faq: 'FAQ',
+        resources: 'Resources'
       }
     },
     home: {
