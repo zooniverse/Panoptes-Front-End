@@ -11,6 +11,7 @@ export default class MultipleChoiceTask extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangeVoice = this.handleChangeVoice.bind(this);
   }
 
   handleChange(index, e) {
@@ -19,6 +20,18 @@ export default class MultipleChoiceTask extends React.Component {
       if (!value.includes(index)) {
         value.push(index);
       }
+    } else if (value.includes(index)) {
+      const indexInValue = value.indexOf(index);
+      value.splice(indexInValue, 1);
+    }
+    const newAnnotation = Object.assign({}, this.props.annotation, { value });
+    this.props.onChange(newAnnotation);
+  }
+
+  handleChangeVoice(index) {
+    const value = this.props.annotation.value.slice(0);
+    if (!value.includes(index)) {
+      value.push(index);
     } else if (value.includes(index)) {
       const indexInValue = value.indexOf(index);
       value.splice(indexInValue, 1);
