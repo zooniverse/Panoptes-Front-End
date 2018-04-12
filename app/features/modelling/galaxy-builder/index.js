@@ -8,6 +8,7 @@ import { parseDisk, parseBulge, parseBar, parseSpiralArms } from './parseFunctio
 class GalaxyBuilderModel extends baseModel {
   constructor(canvas, { frame, metadata, src, sizing }, eventHandlers) {
     super(canvas, { frame, metadata, src, sizing });
+    console.log(sizing);
     this.panZoom = panZoom(this.regl);
     this.scaleModel = scaleModel(this.regl);
     this.eventHandlers = eventHandlers;
@@ -22,6 +23,7 @@ class GalaxyBuilderModel extends baseModel {
     }
   }
   handleDataLoad(data) {
+    const oldViewBox = this.state.sizing;
     this.eventHandlers.resizeCanvas({ width: data.width, height: data.height });
     if (data.psf && data.psfWidth && data.psfHeight) {
       this.psf = data.psf;
@@ -56,7 +58,7 @@ class GalaxyBuilderModel extends baseModel {
       });
       this.maskImage = maskImage(this.regl);
     }
-    this.update(this.state.annotations, this.state.sizing);
+    this.update(this.state.annotations, oldViewBox);
     this.eventHandlers.onLoad();
   }
   setModel() {
@@ -127,7 +129,6 @@ class GalaxyBuilderModel extends baseModel {
           }
         )
       );
-
     if (this.convolvePSF) {
       this.convolvePSF({
         texture: this.state.pixels
@@ -140,8 +141,9 @@ class GalaxyBuilderModel extends baseModel {
         imageTexture: this.imageData
       });
       this.state.pixels({ copy: true });
-      this.eventHandlers.setScore(this.getScore());
+      this.eventHandlers.setMessage(`Score: ${this.getScore()}`);
     } else if (this.scaleModel) {
+      this.eventHandlers.setMessage('This is the galaxy you\'ve created');
       this.scaleModel({
         texture: this.state.pixels
       });
@@ -165,6 +167,9 @@ class GalaxyBuilderModel extends baseModel {
         scale,
         offset
       });
+    }
+    if (ret.length === 0) {
+      this.eventHandlers.setMessage('You should draw a component!');
     }
   }
   getScore() {

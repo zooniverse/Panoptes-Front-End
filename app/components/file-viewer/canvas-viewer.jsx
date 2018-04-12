@@ -10,13 +10,13 @@ class CanvasViewer extends React.Component {
   constructor(props) {
     super(props);
     this.onLoad = this.onLoad.bind(this);
-    this.setScore = this.setScore.bind(this);
+    this.setMessage = this.setMessage.bind(this);
     this.resizeCanvas = this.resizeCanvas.bind(this);
     this.changeCanvasStyleSize = this.changeCanvasStyleSize.bind(this);
     this.state = {
       loading: true,
-      hasScore: false,
-      score: null,
+      hasMessage: false,
+      message: null,
       canvasSize: {
         width: 512,
         height: 512
@@ -64,8 +64,7 @@ class CanvasViewer extends React.Component {
   }
   onLoad() {
     this.setState({
-      loading: false,
-      hasScore: this.model.hasScore || false
+      loading: false
     });
   }
   /* eslint-disable class-methods-use-this */
@@ -77,10 +76,10 @@ class CanvasViewer extends React.Component {
     return modelSelector(model[0] || {});
   }
   /* eslint-enable class-methods-use-this */
-  setScore(score) {
+  setMessage(message) {
     this.setState({
-      hasScore: true,
-      score
+      hasMessage: true,
+      message
     });
   }
   resizeCanvas({ width, height }) {
@@ -110,7 +109,7 @@ class CanvasViewer extends React.Component {
             onLoad: this.onLoad,
             resizeCanvas: this.resizeCanvas,
             changeCanvasStyleSize: this.changeCanvasStyleSize,
-            setScore: this.setScore
+            setMessage: this.setMessage
           }
         );
         if (this.model !== false) {
@@ -143,12 +142,12 @@ class CanvasViewer extends React.Component {
           style={Object.assign({}, this.props.style, this.state.canvasStyle)}
         />
         {
-          this.state.hasScore && this.state.score !== null &&
+          this.state.hasMessage && this.state.message !== null &&
           <span
-            ref={(r) => { this.scoreSpan = r; }}
-            className="canvas-renderer-score"
+            ref={(r) => { this.messageSpan = r; }}
+            className="canvas-renderer-message"
           >
-            Score: {this.state.score}
+            {this.state.message}
           </span>
         }
         {this.state.loading &&

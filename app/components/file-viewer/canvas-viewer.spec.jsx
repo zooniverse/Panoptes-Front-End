@@ -68,16 +68,16 @@ describe('CanvasViewer', function () {
       assert.equal(wrapper.find('.loading-cover').length, 0);
     });
   });
-  describe('#setScore(setScore)', function () {
+  describe('#setMessage(message)', function () {
     before(function () {
-      wrapper.instance().setScore(100);
+      wrapper.instance().setMessage('message');
       wrapper.update();
     });
-    it('Should trigger the display of a score text', function () {
-      assert.equal(wrapper.find('.canvas-renderer-score').length, 1);
+    it('Should trigger the display of a message text', function () {
+      assert.equal(wrapper.find('.canvas-renderer-message').length, 1);
     });
-    it('should set the score to the correct value', function () {
-      assert.equal(wrapper.state('score'), 100);
+    it('should set the message to the correct value', function () {
+      assert.equal(wrapper.state('message'), 'message');
     });
   });
 });
