@@ -204,7 +204,7 @@ class ExperimentalVoiceCommandListener extends React.Component {
       this.props.inputObject[6].click()
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     } else if (this.userSaid('zoom|zoo')) {
-      const msg = new SpeechSynthesisUtterance("Sorry, Chris said you can't do that");
+      const msg = new SpeechSynthesisUtterance("I'm sorry, Chris said you can't do that");
       window.speechSynthesis.speak(msg);
       this.setState({ fullText: '', interimText: '', cachedCommand: this.state.interimText });
     }
