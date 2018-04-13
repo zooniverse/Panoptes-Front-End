@@ -46,15 +46,22 @@ export default class ProjectHomeContainer extends React.Component {
   }
 
   fetchTalkSubjects(props) {
-    talkClient.type('comments').get({ section: `project-${props.project.id}`, page_size: 10, sort: '-created_at', focus_type: 'Subject' })
+    talkClient.type('comments').get({ page_size: 50, sort: '-created_at', focus_type: 'Subject' })
       .then((comments) => {
         if (comments.length > 0) {
           const subjectIds = comments.map(x => x.focus_id);
           const uniqueSubjects = subjectIds.filter((el, i, arr) => { return arr.indexOf(el) === i; });
-          uniqueSubjects.splice(3, 7);
-          apiClient.type('subjects').get(uniqueSubjects)
+          // uniqueSubjects.splice(3, 7);
+          apiClient.type('subjects').get({id: uniqueSubjects, page_size: 50})
             .then((subjects) => {
-              this.setState({ talkSubjects: subjects });
+              const talkSubjects = uniqueSubjects.map((subjectID) => {
+                const [ subject ] = subjects.filter(subject => subject.id === subjectID);
+                const [ comment ] = comments.filter(comment => comment.focus_id === subject.id);
+                subject.project_slug = comment.project_slug;
+                return subject;
+              })
+              .filter(Boolean)
+              this.setState({ talkSubjects });
             });
         }
       }).catch(error => console.error(error));

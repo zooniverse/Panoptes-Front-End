@@ -100,7 +100,7 @@ const ProjectHomePage = (props) => {
             }
             return (
               <div className="project-home-page__talk-image" key={subject.id}>
-                <Link to={`/projects/${props.project.slug}/talk/subjects/${subject.id}`} >
+                <Link to={`/projects/${subject.project_slug}/talk/subjects/${subject.id}`} >
                   <Thumbnail
                     alt=""
                     controls={false}
