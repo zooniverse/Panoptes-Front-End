@@ -285,7 +285,7 @@ export default {
       printables: '[Download printable handouts, posters, and other ephemera](https://github.com/zooniverse/Brand/tree/master/style%%20guide/downloads). If you have specific needs not addressed here, please [let us know](/about/contact).',
       press: '### Press Information',
       tips: 'Tips for writing about the Zooniverse in the press',
-      listOne: '- Please always include URLs when writing about specific projects. If writing generally about the Zooniverse, please include www.zooniverse.org somewhere in your article.',
+      listOne: '- Please always include URLs when writing about specific projects. If writing generally about the Zooniverse, please include www.zooniverse.org somewhere in your article. Check out the [Acknowledgements page](/about/acknowledgements) for more details about how to correctly acknowledge the Zooniverse.',
       listTwo: '- Please note: we are a platform for people-powered research, not a company or non-profit.',
       listThree: '- If you have questions about the Zooniverse and would like to speak to a member of our team, please [contact us](/about/contact).'
     }
