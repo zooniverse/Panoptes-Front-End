@@ -227,6 +227,7 @@ module.exports = createReactClass
 
   comment: (data, i) ->
     active = +data.id is +@props.location.query?.comment
+    scrollToLastComment = (i is @state.comments.length - 1) && @state.shouldScrollToBottom
     <Comment
       {...@props}
       project={@props.project}
@@ -244,7 +245,7 @@ module.exports = createReactClass
       onLikeComment={@onLikeComment}
       onUpdateComment={@onUpdateComment}
       onDeleteComment={@onDeleteComment}
-      scrollIntoView = {@state.shouldScrollToBottom || active}
+      scrollIntoView = {scrollToLastComment || active}
     />
 
   onClickDeleteDiscussion: ->
