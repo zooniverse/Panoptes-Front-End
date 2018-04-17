@@ -6,6 +6,7 @@ import findLastIndex from 'lodash/findLastIndex';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled, { ThemeProvider } from 'styled-components';
+import classNames from 'classnames';
 
 import { getSessionID } from '../lib/session';
 import preloadSubject from '../lib/preload-subject';
@@ -311,7 +312,11 @@ class Classifier extends React.Component {
 
   render() {
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
-    const classifierClassNames = largeFormatImage ? 'classifier large-image' : 'classifier';
+    const classifierClassNames = classNames({
+      classifier: true,
+      'large-image': largeFormatImage,
+      [this.props.className]: !!this.props.className
+    });
 
     let currentClassification,
       currentTask,
@@ -477,6 +482,7 @@ Classifier.propTypes = {
     update: PropTypes.func
   }),
   classificationCount: PropTypes.number,
+  className: PropTypes.string,
   demoMode: PropTypes.bool,
   expertClassifier: PropTypes.bool,
   feedback: PropTypes.shape({
