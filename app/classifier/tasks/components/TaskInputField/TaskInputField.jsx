@@ -18,7 +18,7 @@ export const StyledTaskInputField = styled.label.attrs({
     light: zooTheme.colors.lightTheme.background.default
   })};
   border: ${theme('mode', {
-    dark: `thin solid ${zooTheme.colors.darkTheme.font}`,
+    dark: `3px solid ${zooTheme.colors.darkTheme.font}`,
     light: 'none'
   })};
   box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5);
@@ -28,18 +28,33 @@ export const StyledTaskInputField = styled.label.attrs({
   })};
   cursor: pointer;
   display: flex;
-  margin: 10px 0;
+  margin: ${pxToRem(10)} 0;
   padding: 1ch 2ch;
   position: relative;
   text-align: left;
 
-  &:active, &:hover, &:focus, &[data-focus=true] {
+  &:hover, &:focus, &[data-focus=true] {
+    background: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.background.default,
+      light: zooTheme.colors.teal.gradient
+    })};
+    border: ${theme('mode', {
+      dark: `3px solid ${zooTheme.colors.darkTheme.button.answer}`,
+      light: 'none'
+    })};
+    color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.font,
+      light: 'white'
+    })};
+  }
+
+  &:active {
     background: ${theme('mode', {
       dark: zooTheme.colors.teal.dark,
       light: zooTheme.colors.teal.gradient
     })};
     border: ${theme('mode', {
-      dark: `3px solid ${zooTheme.colors.teal.light}`,
+      dark: `3px solid ${zooTheme.colors.teal.dark}`,
       light: 'none'
     })};
     color: ${theme('mode', {
@@ -54,7 +69,7 @@ export const StyledTaskInputField = styled.label.attrs({
       light: zooTheme.colors.teal.mid
     })};
     border: ${theme('mode', {
-      dark: `thin solid ${zooTheme.colors.teal.mid}`,
+      dark: `3px solid ${zooTheme.colors.teal.mid}`,
       light: 'none'
     })};
     color: ${theme('mode', {
