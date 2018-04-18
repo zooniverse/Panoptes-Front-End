@@ -62,9 +62,15 @@ class CanvasViewer extends React.Component {
       this.model.update(this.props.annotations, this.props.viewBoxDimensions);
     }
   }
-  onLoad() {
+  onLoad(sizing) {
     this.setState({
       loading: false
+    });
+    this.props.onLoad({
+      target: {
+        naturalWidth: sizing.width,
+        naturalHeight: sizing.height
+      }
     });
   }
   /* eslint-disable class-methods-use-this */
@@ -174,7 +180,8 @@ CanvasViewer.propTypes = {
     width: PropTypes.number,
     x: PropTypes.number,
     y: PropTypes.number
-  })
+  }),
+  onLoad: PropTypes.func
 };
 /* eslint-enable react/forbid-prop-types */
 CanvasViewer.defaultProps = {
