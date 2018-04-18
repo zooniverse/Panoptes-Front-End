@@ -5,15 +5,22 @@ class HidePreviousMarksToggle extends React.Component {
   constructor() {
     super();
     this.state = {
-      checked: false
+      checked: false,
+      count: 0
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.annotations.length < this.props.annotations.length) {
+      this.setPreviousMarks(this.state.count);
+    }
   }
 
   setPreviousMarks(count) {
     const currentAnnotation = this.props.annotations[this.props.annotations.length - 1];
     currentAnnotation._hideMarksBefore = count;
     const checked = count > 0;
-    this.setState({ checked });
+    this.setState({ checked, count });
     this.updateParent();
   }
 
