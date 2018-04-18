@@ -251,11 +251,16 @@ export default {
     },
     acknowledgements: {
       title: '## Acknowledging the Zooniverse',
+      citation: '### Academic Citation',
       instructions: 'Per the [Zooniverse Project Builder Policies](/lab-policies), all research publications using any data derived from Zooniverse approved projects (those listed on the [Zooniverse Projects page](/projects)) are required to acknowledge the Zooniverse and the Project Builder platform. To do so, please use the following text:',
       supportText: '*This publication uses data generated via the [Zooniverse.org](https://www.zooniverse.org/) platform, development of which is funded by generous support, including a Global Impact Award from Google, and by a grant from the Alfred P. Sloan Foundation.*',
       publicationRequest: 'We ask that all researchers making use of the Zooniverse Project Builder platform in any way also consider including the above acknowledgement in their publications.',
       publicationShareForm: 'We strongly encourage project owners to report published accepted research publications using Zooniverse-produced data to us via [this form](https://docs.google.com/forms/d/e/1FAIpQLSdbAKVT2tGs1WfBqWNrMekFE5lL4ZuMnWlwJuCuNM33QO2ZYg/viewform). You can find a list of publications written using the Zooniverse on our [Publications page](publications).',
-      questions: 'If you have any questions about how to acknowledge the Zooniverse, such as referencing a particular individual or custom code, please [get in touch](contact).'
+      questions: 'If you have any questions about how to acknowledge the Zooniverse, such as referencing a particular individual or custom code, please [get in touch](contact).',
+      press: '### Writing About Zooniverse in the Press',
+      projectURLs: 'When writing about specific Zooniverse projects in the press, please include the project URL (in print as well as digital editions).',
+      ZooURL: 'When writing about the Zooniverse in general, please include the [Zooniverse.org](https://www.zooniverse.org/) URL somewhere in your article.',
+      enquiries: 'If you are interested in interviewing a member of the team, please [get in touch](contact).'
     },
     contact: {
       title: '## Contact & Social Media',
