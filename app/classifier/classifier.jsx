@@ -124,15 +124,16 @@ class Classifier extends React.Component {
       return Promise.resolve(false);
     }
 
+    const annotations = this.state.annotations.slice();
+    const annotation = annotations[annotations.length - 1];
     const subjectViewerProps = {
       subject: this.props.subject,
       workflow: this.props.workflow,
       preferences: this.props.preferences,
-      classification: this.props.classification,
-      frameWrapper: FrameAnnotator,
-      allowFlipbook: workflowAllowsFlipbook(this.props.workflow),
-      allowSeparateFrames: workflowAllowsSeparateFrames(this.props.workflow),
-      playIterations: this.props.workflow.configuration.playIterations
+      annotations: annotations,
+      annotation: annotation,
+      frame: 0,
+      frameWrapper: FrameAnnotator
     };
 
     return openFeedbackModal({ feedback: taskFeedback, subjectViewerProps, taskId })
