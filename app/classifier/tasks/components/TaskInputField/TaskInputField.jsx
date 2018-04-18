@@ -8,6 +8,7 @@ import { pxToRem, zooTheme } from '../../../../theme';
 
 import TaskInput from './components/TaskInput';
 import TaskInputLabel from './components/TaskInputLabel';
+import { doesTheLabelHaveAnImage } from './helpers';
 
 export const StyledTaskInputField = styled.label.attrs({
   'data-focus': props => props.focus
@@ -18,7 +19,7 @@ export const StyledTaskInputField = styled.label.attrs({
     light: zooTheme.colors.lightTheme.background.default
   })};
   border: ${theme('mode', {
-    dark: `3px solid ${zooTheme.colors.darkTheme.font}`,
+    dark: `thin solid ${zooTheme.colors.darkTheme.font}`,
     light: 'none'
   })};
   box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5);
@@ -29,7 +30,7 @@ export const StyledTaskInputField = styled.label.attrs({
   cursor: pointer;
   display: flex;
   margin: ${pxToRem(10)} 0;
-  padding: 1ch 2ch;
+  padding: ${(props) => { return doesTheLabelHaveAnImage(props.label) ? '0' : '1ch 2ch'; }};
   position: relative;
   text-align: left;
 
@@ -39,7 +40,7 @@ export const StyledTaskInputField = styled.label.attrs({
       light: zooTheme.colors.teal.gradient
     })};
     border: ${theme('mode', {
-      dark: `3px solid ${zooTheme.colors.darkTheme.button.answer}`,
+      dark: `thin solid ${zooTheme.colors.darkTheme.button.answer}`,
       light: 'none'
     })};
     color: ${theme('mode', {
@@ -54,7 +55,7 @@ export const StyledTaskInputField = styled.label.attrs({
       light: zooTheme.colors.teal.gradient
     })};
     border: ${theme('mode', {
-      dark: `3px solid ${zooTheme.colors.teal.dark}`,
+      dark: `thin solid ${zooTheme.colors.teal.dark}`,
       light: 'none'
     })};
     color: ${theme('mode', {
@@ -69,7 +70,7 @@ export const StyledTaskInputField = styled.label.attrs({
       light: zooTheme.colors.teal.mid
     })};
     border: ${theme('mode', {
-      dark: `3px solid ${zooTheme.colors.teal.mid}`,
+      dark: `thin solid ${zooTheme.colors.teal.mid}`,
       light: 'none'
     })};
     color: ${theme('mode', {
@@ -82,7 +83,7 @@ export const StyledTaskInputField = styled.label.attrs({
 export function TaskInputField(props) {
   return (
     <ThemeProvider theme={{ mode: props.theme }}>
-      <StyledTaskInputField className={props.className} focus={props.focus}>
+      <StyledTaskInputField className={props.className} focus={props.focus} label={props.label}>
         <TaskInput
           annotation={props.annotation}
           index={props.index}

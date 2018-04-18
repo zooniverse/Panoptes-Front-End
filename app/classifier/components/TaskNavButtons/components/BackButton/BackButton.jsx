@@ -48,7 +48,7 @@ export const StyledBackButton = styled.button.attrs({
       light: zooTheme.colors.teal.gradient
     })};
     border: ${theme('mode', {
-      dark: `3px solid ${zooTheme.colors.teal.light}`,
+      dark: `thin solid ${zooTheme.colors.darkTheme.button.answer}`,
       light: 'none'
     })};
     color: ${theme('mode', {

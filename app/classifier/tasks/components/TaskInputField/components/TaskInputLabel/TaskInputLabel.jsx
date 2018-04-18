@@ -2,9 +2,11 @@ import { Markdown } from 'markdownz';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
+import { doesTheLabelHaveAnImage } from '../../helpers';
+import { pxToRem, zooTheme } from '../../../../../../theme';
 
 function howShouldTheLabelBeAligned(label, labelIcon) {
-  if ((label && label.includes('<img')) || ((label && label.includes('<svg')) || (label && labelIcon))) {
+  if ((label && doesTheLabelHaveAnImage(label)) || (label && labelIcon)) {
     return 'left';
   }
 
@@ -36,9 +38,16 @@ export const StyledTaskInputLabel = styled(Markdown)`
   }
 
   img, svg {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: ${pxToRem(5)};
+    padding-right: ${pxToRem(5)};
     vertical-align: middle;
+  }
+
+  img:first-of-type, svg:first-of-type {
+    background-color: ${zooTheme.colors.teal.mid};
+    height: ${pxToRem(40)};
+    margin-right: 1ch;
+    width: ${pxToRem(40)};
   }
 
   .markdown {
