@@ -46,7 +46,6 @@ export const StyledTaskInputLabel = styled(Markdown)`
   img:first-of-type, svg:first-of-type {
     background-color: ${zooTheme.colors.teal.mid};
     margin-right: 1ch;
-    min-width: ${pxToRem(40)};
     max-width: ${pxToRem(60)};
   }
 
