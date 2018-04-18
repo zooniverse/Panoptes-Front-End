@@ -4,6 +4,7 @@ import sortIntoColumns from 'sort-into-columns';
 import Translate from 'react-translate-component';
 import TriggeredModalForm from 'modal-form/triggered';
 import counterpart from 'counterpart';
+import Thumbnail from '../../../components/thumbnail';
 
 // key codes
 const BACKSPACE = 8;
@@ -215,6 +216,14 @@ class Chooser extends React.Component {
             if (choiceId === this.props.focusedChoice) {
               tabIndex = 0;
             }
+            const src = this.props.task.images[choice.images[0]];
+            const srcPath = Thumbnail.getThumbnailSrc({
+              origin: 'https://thumbnails.zooniverse.org',
+              width: 500,
+              height: 500,
+              src
+            });
+            const thumbnail = src ? srcPath : '';
             return (
               <button
                 autoFocus={choiceId === this.props.focusedChoice}
@@ -232,7 +241,7 @@ class Chooser extends React.Component {
                     <span
                       className="survey-task-chooser-choice-thumbnail"
                       role="presentation"
-                      style={{ backgroundImage: `url('${this.props.task.images[choice.images[0]]}')` }}
+                      style={{ backgroundImage: `url('${thumbnail}')` }}
                     />
                   }
                   <span className="survey-task-chooser-choice-label">{translation.choices[choiceId].label}</span>

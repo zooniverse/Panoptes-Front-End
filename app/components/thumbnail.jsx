@@ -15,12 +15,6 @@ export default class Thumbnail extends React.Component {
     this.handleError = this.handleError.bind(this);
   }
 
-  getThumbnailSrc({ origin, width, height, src }) {
-    let srcPath = src.split('//').pop();
-    srcPath = srcPath.replace('static.zooniverse.org/', '');
-    return (`${origin}/${width}x${height}/${srcPath}`);
-  }
-
   handleError() {
     if (!this.state.failed) {
       this.setState({ failed: true });
@@ -36,7 +30,7 @@ export default class Thumbnail extends React.Component {
   }
 
   render() {
-    const src = this.state.failed ? this.props.src : this.getThumbnailSrc(this.props);
+    const src = this.state.failed ? this.props.src : Thumbnail.getThumbnailSrc(this.props);
 
     const dimensions = {
       width: null,
@@ -69,9 +63,17 @@ export default class Thumbnail extends React.Component {
     }
 
     return (
-      <img alt="" {...this.props} src={src} {...dimensions} style={style} onError={this.handleError} />
+      <div  style={style}>
+        <img alt="" {...this.props} src={src} {...dimensions} onError={this.handleError} />
+      </div>
     );
   }
+}
+
+Thumbnail.getThumbnailSrc = function getThumbnailSrc({ origin, width, height, src }) {
+  let srcPath = src.split('//').pop();
+  srcPath = srcPath.replace('static.zooniverse.org/', '');
+  return (`${origin}/${width}x${height}/${srcPath}`);
 }
 
 Thumbnail.defaultProps = {

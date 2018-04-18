@@ -1,7 +1,7 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 {Markdown} = require 'markdownz'
-CroppedImage = require '../../components/cropped-image'
+CroppedImage = require('../../components/cropped-image').default
 
 module.exports = createReactClass
   displayName: 'FieldGuide'
