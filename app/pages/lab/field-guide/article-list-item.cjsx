@@ -1,6 +1,6 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
-CroppedImage = require '../../../components/cropped-image'
+CroppedImage = require('../../../components/cropped-image').default
 
 ArticleListItem = createReactClass
   getDefaultProps: ->
