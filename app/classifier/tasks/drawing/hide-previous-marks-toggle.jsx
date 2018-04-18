@@ -16,6 +16,13 @@ class HidePreviousMarksToggle extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    const annotations = this.props.annotations.slice();
+    const currentAnnotation = annotations[annotations.length - 1];
+    delete currentAnnotation._hideMarksBefore;
+    this.props.onChange(currentAnnotation);
+  }
+
   setPreviousMarks(count) {
     const currentAnnotation = this.props.annotations[this.props.annotations.length - 1];
     currentAnnotation._hideMarksBefore = count;
