@@ -49,7 +49,7 @@ function getSubjectViewerProps(feedback, subjectViewerProps, taskId) {
   }
 
   const props = _.cloneDeep(subjectViewerProps);
-  const { annotations } = props.classification;
+  const { annotations } = props;
   const targetAnnotation = _.find(annotations, ['task', taskId]);
   targetAnnotation.feedback = feedbackMarks;
   return props;
