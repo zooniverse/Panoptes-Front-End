@@ -8,10 +8,6 @@ import MobileSection from './mobile-section';
 const VALID_QUESTION_LENGTH = 200;
 const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'multiple'];
 
-function launchApprovedProject({ project }) {
-  return (project.launch_approved) ? project.launch_approved : false;
-}
-
 function taskQuestionNotTooLong({ task }) {
   return task.question ? task.question.length < VALID_QUESTION_LENGTH : false;
 }
@@ -38,7 +34,6 @@ function workflowNotTooManyShortcuts({ task, workflow }) {
 }
 
 const validatorFns = {
-  launchApprovedProject,
   taskQuestionNotTooLong,
   taskFeedbackDisabled,
   taskHasTwoAnswers,
@@ -166,7 +161,6 @@ MobileSectionContainer.propTypes = {
     update: PropTypes.func
   }),
   project: PropTypes.shape({
-    launch_approved: PropTypes.bool,
     update: PropTypes.func
   })
 };

@@ -18,7 +18,6 @@ counterpart.registerTranslations('en', {
       workflowNotTooManyShortcuts: 'Has less than three shortcuts',
       workflowFlipbookDisabled: 'Cannot be a flipbook',
       taskFeedbackDisabled: 'Cannot provide feedback',
-      launchApprovedProject: 'Project must be launch approved',
     },
     projectEligible: 'Check this box if you think your question fits in this way.  If you have a Yes/No question, we recommend Yes is the first option listed so that it appears on the right.',
     projectIneligible: 'Sorry, but the mobile app will not currently work for this workflow. The following are the requirements for the swipe workflow.',
