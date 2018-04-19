@@ -29,13 +29,12 @@ class CroppedImage extends React.Component {
       height: 500,
       src
     });
-    const thumbnail = src ? srcPath : '';
     const img = new Image();
     img.onload = () => {
       const { naturalWidth, naturalHeight } = img;
-      this.setState({ naturalWidth, naturalHeight, src: thumbnail });
+      this.setState({ naturalWidth, naturalHeight, src: srcPath });
     };
-    img.src = thumbnail;
+    img.src = srcPath;
   }
 
   render() {
