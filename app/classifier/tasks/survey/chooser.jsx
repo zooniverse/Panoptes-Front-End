@@ -216,14 +216,14 @@ class Chooser extends React.Component {
             if (choiceId === this.props.focusedChoice) {
               tabIndex = 0;
             }
-            const src = this.props.task.images[choice.images[0]] || '';
+            const src = this.props.task.images[choice.images[0]];
             const srcPath = Thumbnail.getThumbnailSrc({
               origin: 'https://thumbnails.zooniverse.org',
               width: 500,
               height: 500,
               src
             });
-            const thumbnail = src ? srcPath : '';
+            const thumbnail = srcPath || '';
             return (
               <button
                 autoFocus={choiceId === this.props.focusedChoice}
