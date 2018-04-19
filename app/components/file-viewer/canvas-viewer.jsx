@@ -62,16 +62,15 @@ class CanvasViewer extends React.Component {
       this.model.update(this.props.annotations, this.props.viewBoxDimensions);
     }
   }
-  onLoad(sizing) {
+  onLoad({ width, height }) {
     this.setState({
       loading: false
-    });
-    this.props.onLoad({
+    }, () => this.props.onLoad({
       target: {
-        naturalWidth: sizing.width,
-        naturalHeight: sizing.height
+        naturalWidth: width,
+        naturalHeight: height
       }
-    });
+    }));
   }
   /* eslint-disable class-methods-use-this */
   getModelForFrame(metadata, frame) {
