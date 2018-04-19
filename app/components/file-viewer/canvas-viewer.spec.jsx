@@ -4,6 +4,7 @@
 import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
+import sinon from 'sinon';
 import CanvasViewer from './canvas-viewer';
 
 const annotation = {};
@@ -28,7 +29,8 @@ const canvasViewerProps = {
   style: {},
   viewBoxDimensions: {
     height: 512, width: 512, x: 0, y: 0
-  }
+  },
+  onLoad: sinon.spy()
 };
 
 describe('CanvasViewer', function () {
@@ -63,21 +65,23 @@ describe('CanvasViewer', function () {
   });
   describe('#onLoad()', function () {
     it('should remove loading indicator', function () {
-      wrapper.instance().onLoad();
+      const canvasViewerInstance = wrapper.instance();
+      canvasViewerInstance.onLoad({ width: 100, height: 100 });
       wrapper.update();
       assert.equal(wrapper.find('.loading-cover').length, 0);
+      sinon.assert.calledOnce(canvasViewerProps.onLoad);
     });
   });
-  describe('#setScore(setScore)', function () {
+  describe('#setMessage(message)', function () {
     before(function () {
-      wrapper.instance().setScore(100);
+      wrapper.instance().setMessage('message');
       wrapper.update();
     });
-    it('Should trigger the display of a score text', function () {
-      assert.equal(wrapper.find('.canvas-renderer-score').length, 1);
+    it('Should trigger the display of a message text', function () {
+      assert.equal(wrapper.find('.canvas-renderer-message').length, 1);
     });
-    it('should set the score to the correct value', function () {
-      assert.equal(wrapper.state('score'), 100);
+    it('should set the message to the correct value', function () {
+      assert.equal(wrapper.state('message'), 'message');
     });
   });
 });

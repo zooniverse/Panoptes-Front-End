@@ -22,6 +22,7 @@ class GalaxyBuilderModel extends baseModel {
     }
   }
   handleDataLoad(data) {
+    const oldViewBox = this.state.sizing;
     this.eventHandlers.resizeCanvas({ width: data.width, height: data.height });
     if (data.psf && data.psfWidth && data.psfHeight) {
       this.psf = data.psf;
@@ -56,8 +57,14 @@ class GalaxyBuilderModel extends baseModel {
       });
       this.maskImage = maskImage(this.regl);
     }
-    this.update(this.state.annotations, this.state.sizing);
-    this.eventHandlers.onLoad();
+    // if frame index is zero, viewBox width will be zero for first page render
+    // (or if we go )
+    if (oldViewBox.width === 0) {
+      this.update(this.state.annotations, this.state.sizing);
+    } else {
+      this.update(this.state.annotations, oldViewBox);
+    }
+    this.eventHandlers.onLoad(this.state.sizing);
   }
   setModel() {
     // return taskName: render method object
@@ -127,25 +134,26 @@ class GalaxyBuilderModel extends baseModel {
           }
         )
       );
-
     if (this.convolvePSF) {
       this.convolvePSF({
         texture: this.state.pixels
       });
       this.state.pixels({ copy: true });
     }
+    let message = '';
     if (this.state.shouldCompareToImage) {
       this.calculateDifference({
         texture: this.state.pixels,
         imageTexture: this.imageData
       });
       this.state.pixels({ copy: true });
-      this.eventHandlers.setScore(this.getScore());
+      message += `Difference Image - Score: ${this.getScore()}`;
     } else if (this.scaleModel) {
       this.scaleModel({
         texture: this.state.pixels
       });
       this.state.pixels({ copy: true });
+      message += 'Your Galaxy';
     }
     if (this.maskImage && this.mask) {
       this.maskImage({
@@ -166,6 +174,10 @@ class GalaxyBuilderModel extends baseModel {
         offset
       });
     }
+    if (ret.length === 0) {
+      message += ' (draw a component!)';
+    }
+    this.eventHandlers.setMessage(message);
   }
   getScore() {
     // images have been treated by normalisation to [0, 1] then arcsinh stretch
@@ -186,7 +198,7 @@ class GalaxyBuilderModel extends baseModel {
       v += ((r - b) * (r - b)) / this.canvas.width / this.canvas.height;
     }
     // arbitrary 0 -> 100% scaling
-    return (100 * Math.exp(-v * 500)).toFixed(2);
+    return (100 * Math.exp(-v * 300)).toFixed(2);
   }
 }
 

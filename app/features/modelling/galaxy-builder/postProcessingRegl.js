@@ -63,7 +63,7 @@ export const calculateDifference = r => r({
   varying vec2 uv;
   vec2 texCoords;
   float pixel;
-  ${asinhStretch(0.4)}
+  ${asinhStretch(0.6)}
   void main () {
     // for some reason the y-axis coords have been mirrored;
     texCoords = vec2(uv[0], 1.0 - uv[1]);
@@ -119,7 +119,7 @@ export const scaleModel = r => r({
   float pixel;
   ${asinhStretch(0.5)}
   void main () {
-    pixel = asinhStretch(texture2D(texture, uv).rgb[0]);
+    pixel = 0.8 * asinhStretch(texture2D(texture, uv).rgb[0]);
     gl_FragColor = vec4(pixel, pixel, pixel, 1.0);
   }`,
   uniforms: {
