@@ -24,6 +24,8 @@ import TaskNav from './task-nav';
 import ExpertOptions from './expert-options';
 import * as feedbackActions from '../redux/ducks/feedback';
 import openFeedbackModal from '../features/feedback/classifier';
+import GridTool from './drawing-tools/grid';
+import tasks from './tasks';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -228,6 +230,31 @@ class Classifier extends React.Component {
     this.setState({ workflowHistory });
   }
 
+  processAnnotations(annotations) {
+    // take care of any task-specific processing of the annotations array before submitting a classification
+    const { workflow } = this.props;
+    const currentAnnotation = annotations[annotations.length - 1];
+    const currentTask = workflow.tasks[currentAnnotation.task];
+
+    if (currentTask && currentTask.tools) {
+      currentTask.tools.map((tool) => {
+        if (tool.type === 'grid') {
+          GridTool.mapCells(annotations);
+        }
+      });
+    }
+
+    if (currentAnnotation.shortcut) {
+      const unlinkedTask = workflow.tasks[currentTask.unlinkedTask];
+      const unlinkedAnnotation = tasks[unlinkedTask.type].getDefaultAnnotation(unlinkedTask, workflow, tasks);
+      unlinkedAnnotation.task = currentTask.unlinkedTask;
+      unlinkedAnnotation.value = currentAnnotation.shortcut.value.slice();
+      delete currentAnnotation.shortcut;
+      annotations.push(unlinkedAnnotation);
+    }
+    return annotations;
+  }
+
   completeClassification(e) {
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
@@ -237,7 +264,7 @@ class Classifier extends React.Component {
       e.preventDefault();
     }
     this.props.classification.update({
-      annotations: this.state.annotations.slice(),
+      annotations: this.processAnnotations(this.state.annotations.slice()),
       'metadata.session': getSessionID(),
       'metadata.finished_at': (new Date()).toISOString(),
       'metadata.viewport': {

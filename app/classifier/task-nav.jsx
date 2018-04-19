@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
-import GridTool from './drawing-tools/grid';
+
 
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
 
@@ -57,29 +57,9 @@ class TaskNav extends React.Component {
 
   // Done
   completeClassification(e) {
-    const { annotations, workflow } = this.props;
+    const { workflow } = this.props;
     if (workflow.configuration.persist_annotations) {
       CacheClassification.delete();
-    }
-
-    const currentAnnotation = annotations[annotations.length - 1];
-    const currentTask = workflow.tasks[currentAnnotation.task];
-
-    if (currentTask && currentTask.tools) {
-      currentTask.tools.map((tool) => {
-        if (tool.type === 'grid') {
-          GridTool.mapCells(annotations);
-        }
-      });
-    }
-
-    if (currentAnnotation.shortcut) {
-      const unlinkedTask = workflow.tasks[currentTask.unlinkedTask];
-      const unlinkedAnnotation = tasks[unlinkedTask.type].getDefaultAnnotation(unlinkedTask, workflow, tasks);
-      unlinkedAnnotation.task = currentTask.unlinkedTask;
-      unlinkedAnnotation.value = currentAnnotation.shortcut.value.slice();
-      delete currentAnnotation.shortcut;
-      annotations.push(unlinkedAnnotation);
     }
     this.props.completeClassification(e);
   }
