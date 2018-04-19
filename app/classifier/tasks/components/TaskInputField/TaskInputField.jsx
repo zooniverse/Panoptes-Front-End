@@ -10,9 +10,7 @@ import TaskInput from './components/TaskInput';
 import TaskInputLabel from './components/TaskInputLabel';
 import { doesTheLabelHaveAnImage } from './helpers';
 
-export const StyledTaskInputField = styled.label.attrs({
-  'data-focus': props => props.focus
-})`
+export const StyledTaskInputField = styled.label`
   align-items: baseline;
   background-color: ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.default,
@@ -78,20 +76,50 @@ export const StyledTaskInputField = styled.label.attrs({
       light: 'white'
     })}
   }
+
+  input {
+    opacity: 0.01;
+    position: absolute;
+  }
 `;
+
+function shouldInputBeChecked(annotation, index, type) {
+  if (type === 'radio') {
+    const toolIndex = annotation._toolIndex || 0;
+    if (toolIndex) {
+      return index === toolIndex;
+    }
+    return index === annotation.value;
+  }
+
+  if (type === 'checkbox') {
+    return (annotation.value && annotation.value.length > 0) ? annotation.value.includes(index) : false;
+  }
+
+  return false;
+}
+
+function shouldInputBeAutoFocused(annotation, index, name, type) {
+  if (type === 'radio' && name === 'drawing-tool') {
+    return index === 0;
+  }
+
+  return index === annotation.value;
+}
 
 export function TaskInputField(props) {
   return (
     <ThemeProvider theme={{ mode: props.theme }}>
-      <StyledTaskInputField className={props.className} focus={props.focus} label={props.label}>
-        <TaskInput
-          annotation={props.annotation}
-          index={props.index}
+      <StyledTaskInputField className={props.className} data-focus={props.focus} label={props.label}>
+        <input
+          autoFocus={shouldInputBeAutoFocused(props.annotation, props.index, props.name, props.type)}
+          checked={shouldInputBeChecked(props.annotation, props.index, props.type)}
           name={props.name}
           onChange={props.onChange}
           onFocus={props.onFocus}
           onBlur={props.onBlur}
           type={props.type}
+          value={props.index}
         />
         <TaskInputLabel label={props.label} labelIcon={props.labelIcon} labelStatus={props.labelStatus} />
       </StyledTaskInputField>

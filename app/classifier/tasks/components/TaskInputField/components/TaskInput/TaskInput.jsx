@@ -2,36 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-function shouldInputBeChecked(annotation, index, type) {
-  if (type === 'radio') {
-    const toolIndex = annotation._toolIndex || 0;
-    if (toolIndex) {
-      return index === toolIndex;
-    }
-    return index === annotation.value;
-  }
 
-  if (type === 'checkbox') {
-    return (annotation.value && annotation.value.length > 0) ? annotation.value.includes(index) : false;
-  }
-
-  return false;
-}
-
-function shouldInputBeFocused(annotation, index, name, type) {
-  if (type === 'radio' && name === 'drawing-tool') {
-    return index === 0;
-  }
-
-  return index === annotation.value;
-}
 
 export const StyledTaskInput = styled.input.attrs({
-  autoFocus: props => shouldInputBeFocused(props.annotation, props.index, props.name, props.type),
-  checked: props => shouldInputBeChecked(props.annotation, props.index, props.type),
   name: props => props.name,
-  type: props => props.type,
-  value: props => props.index
+  type: props => props.type
 })`
   opacity: 0.01;
   position: absolute;
@@ -44,12 +19,13 @@ export default function TaskInput(props) {
   return (
     <StyledTaskInput
       annotation={props.annotation}
-      index={props.index}
+
       name={props.name}
       onChange={props.onChange}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
       type={props.type}
+      value={props.index}
     />
   );
 }

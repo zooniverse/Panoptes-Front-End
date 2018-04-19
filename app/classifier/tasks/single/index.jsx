@@ -11,16 +11,15 @@ const NOOP = Function.prototype;
 export default class SingleChoiceTask extends React.Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
 
     this.state = {
-      focus: {}
+      focus: null
     };
   }
 
   handleChange(index, e) {
     if (e.target.checked) {
-      this.setState({ focus: {} });
+      // this.setState({ focus: {} });
       const newAnnotation = Object.assign({}, this.props.annotation, { value: index });
       this.props.onChange(newAnnotation);
     }
@@ -29,12 +28,12 @@ export default class SingleChoiceTask extends React.Component {
   // for keyboard accessibility
   onFocus(index) {
     if (this.props.annotation.value !== index) {
-      this.setState({ focus: { [index]: true } });
+      this.setState({ focus: index });
     }
   }
 
   onBlur() {
-    this.setState({ focus: {} });
+    if (this.state.focus !== null) this.setState({ focus: null });
   }
 
   render() {
@@ -52,14 +51,14 @@ export default class SingleChoiceTask extends React.Component {
         <TaskInputField
           annotation={annotation}
           className={(i === annotation.value) ? 'active' : ''}
-          focus={this.state.focus[i] || false}
+          focus={this.state.focus === i}
           index={i}
           key={answer._key}
           label={translation.answers[i].label}
           name={`${task._key}`}
+          onBlur={this.onBlur.bind}
           onChange={this.handleChange.bind(this, i)}
           onFocus={this.onFocus.bind(this, i)}
-          onBlur={this.onBlur.bind(this)}
           type="radio"
         />
       );
