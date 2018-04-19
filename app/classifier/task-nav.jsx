@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
-import Translate from 'react-translate-component';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
-import TaskBackButton from './tasks/components/TaskBackButton';
 import TaskNavButtons from './components/TaskNavButtons';
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
 
@@ -75,9 +72,6 @@ class TaskNav extends React.Component {
     const visibleTasks = Object.keys(this.props.workflow.tasks).filter(key => this.props.workflow.tasks[key].type !== 'shortcut');
     const TaskComponent = tasks[task.type];
 
-    // Should we disable the "Back" button?
-    // const onFirstAnnotation = !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
-
     // Should we disable the "Next" or "Done" buttons?
     let waitingForAnswer = this.props.disabled;
     if (TaskComponent && TaskComponent.isAnnotationComplete && this.props.annotation) {
@@ -117,7 +111,7 @@ class TaskNav extends React.Component {
             destroyCurrentAnnotation={this.destroyCurrentAnnotation}
             nextSubject={this.props.nextSubject}
             project={this.props.project}
-            showBackButton={visibleTasks.length > 1 && !completed && (this.props.classification.annotations.indexOf(this.props.annotation) !== 0)}            
+            showBackButton={visibleTasks.length > 1 && !completed && (this.props.classification.annotations.indexOf(this.props.annotation) !== 0)}
             showNextButton={!!(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut)}
             showDoneAndTalkLink={showDoneAndTalkLink}
             subject={this.props.subject}
