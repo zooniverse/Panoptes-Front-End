@@ -69,7 +69,7 @@ describe('CanvasViewer', function () {
       canvasViewerInstance.onLoad({ width: 100, height: 100 });
       wrapper.update();
       assert.equal(wrapper.find('.loading-cover').length, 0);
-      assert.ok(canvasViewerProps.onLoad.called);
+      sinon.assert.calledOnce(canvasViewerProps.onLoad);
     });
   });
   describe('#setMessage(message)', function () {
