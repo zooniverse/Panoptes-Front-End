@@ -149,7 +149,6 @@ class CanvasViewer extends React.Component {
         {
           this.state.hasMessage && this.state.message !== null &&
           <span
-            ref={(r) => { this.messageSpan = r; }}
             className="canvas-renderer-message"
           >
             {this.state.message}
