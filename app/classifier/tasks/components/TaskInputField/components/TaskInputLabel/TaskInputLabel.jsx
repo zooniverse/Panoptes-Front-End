@@ -38,8 +38,7 @@ export const StyledTaskInputLabel = styled(Markdown)`
   }
 
   img, svg {
-    padding-left: ${pxToRem(5)};
-    padding-right: ${pxToRem(5)};
+    padding: ${pxToRem(5)};
     vertical-align: middle;
   }
 

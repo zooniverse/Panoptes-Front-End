@@ -30,7 +30,7 @@ export const StyledBackButton = styled.button.attrs({
   })};
   border: ${theme('mode', {
     dark: `thin solid ${zooTheme.colors.darkTheme.font}`,
-    light: 'none'
+    light: 'thin solid transparent'
   })};
   box-sizing: border-box;
   color: ${theme('mode', {
@@ -44,12 +44,12 @@ export const StyledBackButton = styled.button.attrs({
 
   &:focus, &:hover {
     background: ${theme('mode', {
-      dark: zooTheme.colors.teal.dark,
+      dark: zooTheme.colors.darkTheme.background.default,
       light: zooTheme.colors.teal.gradient
     })};
     border: ${theme('mode', {
       dark: `thin solid ${zooTheme.colors.darkTheme.button.answer}`,
-      light: 'none'
+      light: 'thin solid transparent'
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,

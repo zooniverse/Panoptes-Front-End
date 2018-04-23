@@ -17,7 +17,7 @@ export const StyledTaskInputField = styled.label`
   })};
   border: ${theme('mode', {
     dark: `thin solid ${zooTheme.colors.darkTheme.font}`,
-    light: 'none'
+    light: 'thin solid transparent'
   })};
   box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5);
   color: ${theme('mode', {
@@ -38,7 +38,7 @@ export const StyledTaskInputField = styled.label`
     })};
     border: ${theme('mode', {
       dark: `thin solid ${zooTheme.colors.darkTheme.button.answer}`,
-      light: 'none'
+      light: `thin solid ${zooTheme.colors.teal.gradient}`
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,
@@ -53,7 +53,7 @@ export const StyledTaskInputField = styled.label`
     })};
     border: ${theme('mode', {
       dark: `thin solid ${zooTheme.colors.teal.dark}`,
-      light: 'none'
+      light: `thin solid ${zooTheme.colors.teal.mid}`
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,
@@ -68,12 +68,19 @@ export const StyledTaskInputField = styled.label`
     })};
     border: ${theme('mode', {
       dark: `thin solid ${zooTheme.colors.teal.mid}`,
-      light: 'none'
+      light: `thin solid transparent`
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,
       light: 'white'
     })}
+  }
+
+  &.active:hover, &.active:focus {
+    border: ${theme('mode', {
+      dark: `thin solid ${zooTheme.colors.teal.dark}`,
+      light: `thin solid ${zooTheme.colors.teal.dark}`
+    })};
   }
 
   input {
