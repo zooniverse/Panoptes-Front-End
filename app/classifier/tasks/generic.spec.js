@@ -13,6 +13,8 @@ const annotation = {
   value: 1
 };
 
+// TODO: tests shouldn't be so depending on class names to be able to run.
+// Nothing else is using the answer class anymore except to get these tests working.
 function runCommonTests(wrapper) {
   const question = wrapper.find('.question');
   const answers = wrapper.find('.answer');
