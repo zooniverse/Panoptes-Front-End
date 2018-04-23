@@ -107,24 +107,35 @@ function shouldInputBeAutoFocused(annotation, index, name, type) {
   return index === annotation.value;
 }
 
-export function TaskInputField(props) {
-  return (
-    <ThemeProvider theme={{ mode: props.theme }}>
-      <StyledTaskInputField className={props.className} data-focus={props.focus} label={props.label}>
-        <input
-          autoFocus={shouldInputBeAutoFocused(props.annotation, props.index, props.name, props.type)}
-          checked={shouldInputBeChecked(props.annotation, props.index, props.type)}
-          name={props.name}
-          onChange={props.onChange}
-          onFocus={props.onFocus}
-          onBlur={props.onBlur}
-          type={props.type}
-          value={props.index}
-        />
-        <TaskInputLabel label={props.label} labelIcon={props.labelIcon} labelStatus={props.labelStatus} />
-      </StyledTaskInputField>
-    </ThemeProvider>
-  );
+export class TaskInputField extends React.Component {
+  onFocus() {
+    if (this.props.annotation !== this.props.index) this.field.focus();
+    console.log('calling onFocus', this.field)
+  }
+
+  onBlur() {
+    this.field.blur();
+  }
+
+  render() {
+    return (
+      <ThemeProvider theme={{ mode: this.props.theme }}>
+        <StyledTaskInputField innerRef={(node) => { this.field = node; }} className={this.props.className} label={this.props.label}>
+          <input
+            autoFocus={shouldInputBeAutoFocused(this.props.annotation, this.props.index, this.props.name, this.props.type)}
+            checked={shouldInputBeChecked(this.props.annotation, this.props.index, this.props.type)}
+            name={this.props.name}
+            onBlur={this.onBlur.bind(this)}
+            onChange={this.props.onChange}
+            onFocus={this.onFocus.bind(this)}
+            type={this.props.type}
+            value={this.props.index}
+          />
+          <TaskInputLabel label={this.props.label} labelIcon={this.props.labelIcon} labelStatus={this.props.labelStatus} />
+        </StyledTaskInputField>
+      </ThemeProvider>
+    );
+  }
 }
 
 TaskInputField.defaultProps = {

@@ -86,9 +86,6 @@ module.exports = createReactClass
       # Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
       @areMarksComplete(task, annotation) and @areThereEnoughMarks(task, annotation) and annotation.value.length >= (task.required ? 0)
 
-  getInitialState: -> 
-    focus: {}
-
   getDefaultProps: ->
     task:
       tools: []
@@ -103,7 +100,6 @@ module.exports = createReactClass
         <TaskInputField
           annotation={@props.annotation}
           className={if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}
-          focus={@state.focus[i] ? false}
           index={i}
           key={tool._key}
           label={tool.label}
@@ -111,8 +107,6 @@ module.exports = createReactClass
           labelStatus={<DrawingToolInputStatus count={count} tool={tool} />}
           name="drawing-tool"
           onChange={@handleChange.bind this, i}
-          onFocus={@onFocus.bind(this, i)}
-          onBlur={@onBlur}
           type="radio"
         />
         {if tool.type is 'grid'
@@ -128,10 +122,3 @@ module.exports = createReactClass
     if e.target.checked
       newAnnotation = Object.assign {}, @props.annotation, _toolIndex: toolIndex
       @props.onChange newAnnotation
-
-  onFocus: (index, e) ->
-    if @props.annotation.value isnt index
-      @setState({ focus: { "#{index}": true } });
-
-  onBlur: () ->
-    @setState({ focus: {} });

@@ -9,15 +9,6 @@ import TaskInputField from '../components/TaskInputField';
 const NOOP = Function.prototype;
 
 export default class MultipleChoiceTask extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-
-    this.state = {
-      focus: {}
-    };
-  }
-
   handleChange(index, e) {
     const value = this.props.annotation.value.slice(0);
     if (e.target.checked) {
@@ -33,17 +24,6 @@ export default class MultipleChoiceTask extends React.Component {
     this.props.onChange(newAnnotation);
   }
 
-  // for keyboard accessibility
-  onFocus(index) {
-    if (!this.props.annotation.value.includes(index)) {
-      this.setState({ focus: { [index]: true } });
-    }
-  }
-
-  onBlur() {
-    this.setState({ focus: {} });
-  }
-
   render() {
     const { annotation, task, translation } = this.props;
     const answers = [];
@@ -56,13 +36,10 @@ export default class MultipleChoiceTask extends React.Component {
         <TaskInputField
           annotation={annotation}
           className={annotation.value.includes(i) ? 'active' : ''}
-          focus={this.state.focus[i] || false}
           index={i}
           key={answer._key}
           label={translation.answers[i].label}
           onChange={this.handleChange.bind(this, i)}
-          onFocus={this.onFocus.bind(this, i)}
-          onBlur={this.onBlur.bind(this)}
           type="checkbox"
         />
       );
