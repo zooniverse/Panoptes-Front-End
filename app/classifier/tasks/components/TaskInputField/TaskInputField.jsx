@@ -6,7 +6,6 @@ import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import { pxToRem, zooTheme } from '../../../../theme';
 
-import TaskInput from './components/TaskInput';
 import TaskInputLabel from './components/TaskInputLabel';
 import { doesTheLabelHaveAnImage } from './helpers';
 
@@ -109,7 +108,7 @@ function shouldInputBeAutoFocused(annotation, index, name, type) {
 
 export class TaskInputField extends React.Component {
   onFocus() {
-    if (this.props.annotation && this.props.annotation.value !== this.props.index) {
+    if (this.props.annotation && (this.props.annotation.value !== this.props.index || !this.props.annotation.value.includes(this.props.index))) {
       this.field.dataset.focus = true;
     }
   }

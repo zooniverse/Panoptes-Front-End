@@ -8,7 +8,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
-import TaskInputField, { StyledTaskInputField } from './TaskInputField';
+import sinon from 'sinon';
+import { TaskInputField, StyledTaskInputField } from './TaskInputField';
 import { mockReduxStore, radioTypeAnnotation } from '../../testHelpers';
 
 describe('TaskInputField', function() {
@@ -27,10 +28,6 @@ describe('TaskInputField', function() {
 
   it('should render a StyledTaskInputField', function () {
     expect(wrapper.find(StyledTaskInputField)).to.have.lengthOf(1);
-  });
-
-  it('should render a TaskInput', function() {
-    expect(wrapper.find('TaskInput')).to.have.lengthOf(1);
   });
 
   it('should render a TaskInputLabel', function() {
