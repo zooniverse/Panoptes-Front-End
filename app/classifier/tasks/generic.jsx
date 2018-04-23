@@ -63,7 +63,7 @@ export default class GenericTask extends React.Component {
         <div className="answers">
           {React.Children.map(
             this.props.answers,
-            answer => React.cloneElement(answer, { className: `answer ${answer.props.className}` })
+            answer => React.cloneElement(answer, { className: answer.props.className })
           )}
         </div>
         {required}

@@ -107,13 +107,41 @@ function shouldInputBeAutoFocused(annotation, index, name, type) {
 }
 
 export class TaskInputField extends React.Component {
+  onChange(e) {
+    this.unFocus();
+    this.props.onChange(e);
+  }
+
   onFocus() {
-    if (this.props.annotation && (this.props.annotation.value !== this.props.index || !this.props.annotation.value.includes(this.props.index))) {
-      this.field.dataset.focus = true;
+    const { annotation, type } = this.props;
+    if (annotation) {
+      if (type === 'radio') {
+        this.shouldRadioTypeBeFocused();
+      }
+
+      if (type === 'checkbox') {
+        this.shouldCheckboxTypeBeFocus();
+      }
     }
   }
 
   onBlur() {
+    this.unFocus();
+  }
+
+  shouldRadioTypeBeFocused() {
+    if (this.props.annotation.value !== this.props.index) {
+      this.field.dataset.focus = true;
+    }
+  }
+
+  shouldCheckboxTypeBeFocus() {
+    if (!this.props.annotation.value.includes(this.props.index)) {
+      this.field.dataset.focus = true;
+    }
+  }
+
+  unFocus() {
     this.field.dataset.focus = false;
   }
 
@@ -124,14 +152,14 @@ export class TaskInputField extends React.Component {
           innerRef={(node) => { this.field = node; }}
           className={this.props.className}
           label={this.props.label}
-          data-focus={shouldInputBeAutoFocused(this.props.annotation, this.props.index, this.props.name, this.props.type)}
+          data-focus={false}
         >
           <input
             autoFocus={shouldInputBeAutoFocused(this.props.annotation, this.props.index, this.props.name, this.props.type)}
             checked={shouldInputBeChecked(this.props.annotation, this.props.index, this.props.type)}
             name={this.props.name}
             onBlur={this.onBlur.bind(this)}
-            onChange={this.props.onChange}
+            onChange={this.onChange.bind(this)}
             onFocus={this.onFocus.bind(this)}
             type={this.props.type}
             value={this.props.index}
