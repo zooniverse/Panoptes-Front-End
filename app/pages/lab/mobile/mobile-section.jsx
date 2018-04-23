@@ -7,6 +7,7 @@ counterpart.registerTranslations('en', {
   mobileSection: {
     title: 'Mobile App',
     download: {
+      disclaimer: 'Please note that projects that are not launch approved will only show in the preview section of the app.',
       help: 'If you haven\'t yet, be sure to download the Zooniverse Mobile App on Android or iPhone!',
       iphone: 'Zooniverse for iPhone',
       android: 'Zooniverse for Android'
@@ -70,6 +71,10 @@ class MobileSection extends Component {
             <ul>
               {map(this.props.validations, this.renderValidation)}
             </ul>
+
+            <p className="form-help">
+              <Translate content="mobileSection.download.disclaimer" component="small" />
+            </p>
 
             <p className="form-help">
               <Translate content="mobileSection.download.help" component="small" />
