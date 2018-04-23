@@ -109,18 +109,24 @@ function shouldInputBeAutoFocused(annotation, index, name, type) {
 
 export class TaskInputField extends React.Component {
   onFocus() {
-    if (this.props.annotation !== this.props.index) this.field.focus();
-    console.log('calling onFocus', this.field)
+    if (this.props.annotation && this.props.annotation.value !== this.props.index) {
+      this.field.dataset.focus = true;
+    }
   }
 
   onBlur() {
-    this.field.blur();
+    this.field.dataset.focus = false;
   }
 
   render() {
     return (
       <ThemeProvider theme={{ mode: this.props.theme }}>
-        <StyledTaskInputField innerRef={(node) => { this.field = node; }} className={this.props.className} label={this.props.label}>
+        <StyledTaskInputField
+          innerRef={(node) => { this.field = node; }}
+          className={this.props.className}
+          label={this.props.label}
+          data-focus={shouldInputBeAutoFocused(this.props.annotation, this.props.index, this.props.name, this.props.type)}
+        >
           <input
             autoFocus={shouldInputBeAutoFocused(this.props.annotation, this.props.index, this.props.name, this.props.type)}
             checked={shouldInputBeChecked(this.props.annotation, this.props.index, this.props.type)}
@@ -140,15 +146,12 @@ export class TaskInputField extends React.Component {
 
 TaskInputField.defaultProps = {
   className: '',
-  focus: false,
   label: '',
   labelIcon: null,
   labelStatus: null,
   name: '',
-  onBlur: () => {},
   onChange: () => {},
-  onFocus: () => {},
-  theme: 'light',
+  theme: 'light'
 };
 
 TaskInputField.propTypes = {
@@ -163,15 +166,12 @@ TaskInputField.propTypes = {
     ])
   }).isRequired,
   className: PropTypes.string,
-  focus: PropTypes.bool,
   index: PropTypes.number.isRequired,
   label: PropTypes.string,
   labelIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),
   labelStatus: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),  
   name: PropTypes.string,
-  onBlur: PropTypes.func,
   onChange: PropTypes.func,
-  onFocus: PropTypes.func,
   theme: PropTypes.string,
   type: PropTypes.string.isRequired
 };

@@ -1,4 +1,3 @@
-import { Markdown } from 'markdownz';
 import PropTypes from 'prop-types';
 import React from 'react';
 import GenericTask from '../generic';
