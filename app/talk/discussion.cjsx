@@ -43,6 +43,7 @@ module.exports = createReactClass
     authors: {}
     subjects: {}
     author_roles: {}
+    shouldScrollToBottom: false
 
   getDefaultProps: ->
     location: query: page: 1
@@ -70,7 +71,7 @@ module.exports = createReactClass
       @setComments(nextProps.location.query.page)
 
   componentDidMount: ->
-    @shouldScrollToBottom = true if @props.location.query?.scrollToLastComment
+    @setState { shouldScrollToBottom: true } if @props.location.query?.scrollToLastComment
 
   componentWillMount: ->
     @setDiscussion().then (discussion) =>
@@ -149,9 +150,8 @@ module.exports = createReactClass
               @setState {author_roles}
 
           @setState {comments, commentsMeta}, =>
-            if @shouldScrollToBottom
-              @scrollToBottomOfDiscussion()
-              @shouldScrollToBottom = false
+            if @state.shouldScrollToBottom
+              @setState { shouldScrollToBottom: false }
         else
           {board, owner, name} = @props.params
           if (owner and name)
@@ -163,9 +163,6 @@ module.exports = createReactClass
     @commentsRequest(page).then (comments) =>
       commentsMeta = comments[0]?.getMeta() ? {}
       @setState {commentsMeta}
-
-  scrollToBottomOfDiscussion: ->
-    ReactDOM.findDOMNode(@)?.scrollIntoView(false)
 
   discussionsRequest: (discussion = @props.params.discussion) ->
     talkClient.type('discussions').get({id: discussion, sort_linked_comments: 'created_at'})
@@ -229,6 +226,8 @@ module.exports = createReactClass
     ReactDOM.findDOMNode(@).scrollIntoView(false)
 
   comment: (data, i) ->
+    active = +data.id is +@props.location.query?.comment
+    scrollToLastComment = (i is @state.comments.length - 1) && @state.shouldScrollToBottom
     <Comment
       {...@props}
       project={@props.project}
@@ -238,14 +237,16 @@ module.exports = createReactClass
       author={@state.authors[data.user_id]}
       subject={@state.subjects[data.focus_id]}
       roles={@state.author_roles[data.user_id]}
-      active={+data.id is +@props.location.query?.comment}
+      active={active}
       user={@props.user}
       locked={@state.discussion?.locked}
       project={@props.project}
       onClickReply={@onClickReply}
       onLikeComment={@onLikeComment}
       onUpdateComment={@onUpdateComment}
-      onDeleteComment={@onDeleteComment}/>
+      onDeleteComment={@onDeleteComment}
+      scrollIntoView = {scrollToLastComment || active}
+    />
 
   onClickDeleteDiscussion: ->
     deletePhrase = 'delete'

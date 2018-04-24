@@ -58,7 +58,7 @@ module.exports = createReactClass
     
 
   componentDidMount: ->
-    if @props.active
+    if @props.scrollIntoView
       ReactDOM.findDOMNode(@).scrollIntoView()
 
   onClickReply: (e) ->
