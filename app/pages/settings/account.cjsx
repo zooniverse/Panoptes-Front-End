@@ -29,21 +29,23 @@ ChangePasswordForm = createReactClass
       <table className="standard-table">
         <tbody>
           <tr>
-            <td>Current password</td>
-            <td><input type="password" className="standard-input" size="20" onChange={(e) => @setState old: e.target.value} /></td>
+            <td><label htmlFor="currentPassword">Current password (required)</label></td>
+            <td>
+              <input type="password" id="currentPassword" className="standard-input" size="20" onChange={(e) => @setState old: e.target.value} required />
+            </td>
           </tr>
           <tr>
-            <td>New password</td>
+            <td><label htmlFor="newPassword">New password (required)</label></td>
             <td>
-              <input type="password" className="standard-input" size="20" onChange={(e) => @setState new: e.target.value} />
+              <input type="password" id="newPassword" className="standard-input" size="20" onChange={(e) => @setState new: e.target.value} required />
               {if @state.new.length isnt 0 and @tooShort()
                 <small className="form-help error">That’s too short</small>}
             </td>
           </tr>
           <tr>
-            <td>Confirm new password</td>
+            <td><label htmlFor="confirmPassword">Confirm new password (required)</label></td>
             <td>
-              <input type="password" className="standard-input" size="20" onChange={(e) => @setState confirmation: e.target.value} />
+              <input type="password" id="confirmPassword" className="standard-input" size="20" onChange={(e) => @setState confirmation: e.target.value} required />
               {if @state.confirmation.length >= @state.new.length - 1 and @doesntMatch()
                 <small className="form-help error">These don’t match</small>}
             </td>
@@ -98,17 +100,17 @@ module.exports = createReactClass
         <div className="content-container column">
           <p>
             <AutoSave resource={@props.user}>
-              <span className="form-label">Display name</span>
+              <span className="form-label"><label htmlFor="displayName">Display name (required)</label></span>
               <br />
-              <input type="text" className="standard-input full" name="display_name" value={@props.user.display_name} onChange={handleInputChange.bind @props.user} />
+              <input type="text" id="displayName" className="standard-input full" name="display_name" value={@props.user.display_name} onChange={handleInputChange.bind @props.user} />
             </AutoSave>
             <span className="form-help">How your name will appear to other users in Talk and on your Profile Page</span>
             <br />
 
             <AutoSave resource={@props.user}>
-              <span className="form-label">Real name</span>
+              <label htmlFor="realName"><span className="form-label">Real name (optional)</span></label>
               <br />
-              <input type="text" className="standard-input full" name="credited_name" value={@props.user.credited_name} onChange={handleInputChange.bind @props.user} />
+              <input type="text" id="realName" className="standard-input full" name="credited_name" value={@props.user.credited_name} onChange={handleInputChange.bind @props.user} />
             </AutoSave>
             <span className="form-help">Public; we’ll use this to give acknowledgement in papers, on posters, etc.</span>
           </p>
