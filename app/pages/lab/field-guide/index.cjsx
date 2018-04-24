@@ -5,6 +5,7 @@ ArticleList = require './article-list'
 Dialog = require 'modal-form/dialog'
 ArticleEditor = require './article-editor'
 actions = require './actions'
+getAllLinked = require('../../../lib/get-all-linked').default
 
 unless process.env.NODE_ENV is 'production'
   DEV_GUIDE = apiClient.type('field_guides').create
@@ -51,7 +52,7 @@ FieldGuideEditor = createReactClass
 
   fetchIcons: (guide) ->
     guide.uncacheLink 'attached_images'
-    guide.get 'attached_images', page_size: 50
+    getAllLinked guide, 'attached_images'
       .then (images) =>
         icons = {}
         images.forEach (image) ->

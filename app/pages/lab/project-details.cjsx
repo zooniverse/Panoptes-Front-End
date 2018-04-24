@@ -10,6 +10,7 @@ TagSearch = require '../../components/tag-search'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 alert = require('../../lib/alert').default
 Select = require('react-select').default
+getAllLinked = require('../../lib/get-all-linked').default
 `import DISCIPLINES from '../../constants/disciplines';`
 `import CharLimit from '../../components/char-limit';`
 `import ExternalLinksEditor from './external-links-editor';`
@@ -38,7 +39,7 @@ module.exports = createReactClass
     error: null
 
   componentWillMount: ->
-    @props.project.get('project_roles', page_size: 100).then (roles) =>
+    getAllLinked(@props.project, 'project_roles').then (roles) =>
       scientists = for role in roles when 'scientist' in role.roles or 'owner' in role.roles
         role.links.owner.id
       apiClient.type('users').get(scientists).then (researchers) =>
