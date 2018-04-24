@@ -62,7 +62,7 @@ export const StyledTaskInputField = styled.label`
   }
 
   &.active {
-    background-color: ${theme('mode', {
+    background: ${theme('mode', {
       dark: zooTheme.colors.teal.mid,
       light: zooTheme.colors.teal.mid
     })};
@@ -76,10 +76,14 @@ export const StyledTaskInputField = styled.label`
     })}
   }
 
-  &.active:hover, &.active:focus {
+  &.active:hover, &.active:focus, &.active[data-focus=true] {
+    background: ${theme('mode', {
+      dark: zooTheme.colors.teal.mid,
+      light: zooTheme.colors.teal.mid
+    })};
     border: ${theme('mode', {
-      dark: `thin solid ${zooTheme.colors.teal.dark}`,
-      light: `thin solid ${zooTheme.colors.teal.dark}`
+      dark: `2px solid ${zooTheme.colors.teal.dark}`,
+      light: `2px solid ${zooTheme.colors.teal.dark}`
     })};
   }
 
@@ -120,32 +124,11 @@ export class TaskInputField extends React.Component {
   }
 
   onFocus() {
-    const { annotation, type } = this.props;
-    if (annotation) {
-      if (type === 'radio') {
-        this.shouldRadioTypeBeFocused();
-      }
-
-      if (type === 'checkbox') {
-        this.shouldCheckboxTypeBeFocus();
-      }
-    }
+    this.field.dataset.focus = true;
   }
 
   onBlur() {
     this.unFocus();
-  }
-
-  shouldRadioTypeBeFocused() {
-    if (this.props.annotation.value !== this.props.index) {
-      this.field.dataset.focus = true;
-    }
-  }
-
-  shouldCheckboxTypeBeFocus() {
-    if (!this.props.annotation.value.includes(this.props.index)) {
-      this.field.dataset.focus = true;
-    }
   }
 
   unFocus() {
