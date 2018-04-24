@@ -13,7 +13,7 @@ const getSubjectLocations = (subjects) => {
     for (const mimeType of Object.keys(locationData)) {
       const src = locationData[mimeType];
       let [type, format] = mimeType.split('/');
-      if (READABLE_FORMATS.hasOwnProperty(type) && READABLE_FORMATS[type].includes(format)) {
+      if (!subjectLocations[type] && READABLE_FORMATS.hasOwnProperty(type) && READABLE_FORMATS[type].includes(format)) {
         subjectLocations[type] = [format, src];
       }
     }
