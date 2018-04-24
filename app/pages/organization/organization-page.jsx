@@ -11,8 +11,6 @@ import OrganizationMetadata from './organization-metadata';
 import Thumbnail from '../../components/thumbnail';
 import ExternalLinksBlockContainer from '../../components/ExternalLinksBlock';
 
-const AVATAR_SIZE = 100;
-
 class OrganizationPage extends React.Component {
   constructor() {
     super();
@@ -75,8 +73,6 @@ class OrganizationPage extends React.Component {
                 <Thumbnail
                   src={this.props.organizationAvatar.src}
                   className="avatar organization-hero__avatar"
-                  width={AVATAR_SIZE}
-                  height={AVATAR_SIZE}
                 />}
               <div>
                 <h1 className="organization-hero__title">{this.props.organization.display_name}</h1>
