@@ -14,6 +14,7 @@ MIN_PASSWORD_LENGTH = 8
 counterpart.registerTranslations 'en',
   registerForm:
     required: 'Required'
+    optional: 'Optional'
     looksGood: 'Looks good'
     userName: 'User name'
     whyUserName: 'You’ll use this name to log in. It will be shown publicly.'
@@ -30,8 +31,8 @@ counterpart.registerTranslations 'en',
     whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc'
     agreeToPrivacyPolicy: 'You agree to our %(link)s (required)'
     privacyPolicy: 'privacy policy'
-    okayToEmail: 'It’s okay to send me email every once in a while.'
-    betaTester: 'I’d like to help test new projects, and be emailed when they’re available.'
+    okayToEmail: 'It’s okay to send me email every once in a while. (optional)'
+    betaTester: 'I’d like to help test new projects, and be emailed when they’re available. (optional)'
     register: 'Register'
     alreadySignedIn: 'Signed in as %(name)s'
     signOut: 'Sign out'
@@ -78,6 +79,7 @@ module.exports = createReactClass
               <span className="form-help success">
                 <Translate content="registerForm.looksGood" />
               </span>}
+          <Translate className="form-help info" content="registerForm.required" />
         </span>
         <input type="text" ref="name" className="standard-input full" disabled={@props.user?} autoFocus onChange={@handleNameChange} maxLength="255" />
         <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
@@ -90,6 +92,7 @@ module.exports = createReactClass
           <Translate content="registerForm.password" />
           {if passwordTooShort
             <Translate className="form-help error" content="registerForm.passwordTooShort" />}
+          <Translate className="form-help info" content="registerForm.required" />
         </span>
         <input type="password" ref="password" className="standard-input full" disabled={@props.user?} onChange={@handlePasswordChange} />
       </label>
@@ -104,6 +107,7 @@ module.exports = createReactClass
               <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
             else if not passwordTooShort
               <Translate className="form-help success" content="registerForm.looksGood" />}
+          <Translate className="form-help info" content="registerForm.required" />
         </span>
         <input type="password" ref="confirmedPassword" className="standard-input full" disabled={@state.props?} onChange={@handlePasswordChange} />
       </label>
@@ -136,6 +140,7 @@ module.exports = createReactClass
       <label>
         <span className="columns-container inline spread">
           <Translate content="registerForm.realName" />
+          <Translate className="form-help info" content="registerForm.optional" />
         </span>
         <input type="text" ref="realName" className="standard-input full" disabled={@props.user?} />
         <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
