@@ -215,5 +215,14 @@ export default {
       private: 'Privé',
       submit: 'Maak verzameling'
     }
+  },
+  accountSettings: {
+    deleteAccount: {
+      header: "Verwijder je account",
+      info: "Dit verwijdert je e-mailadres, gebruikersnaam, wachtwoord en overige persoonlijke informatie uit onze database. Werk dat je hebt gedaan voor projecten en berichten die je hebt geplaatst op Talk worden niet verwijdert. Deze actie is niet te herstellen.",
+      button: "Ik begrijp dit en wil mijn account verwijderen",
+      confirmMessage: "Typ je gebruikersnaam in ter bevestiging:",
+      confirmError: "Ingevoerde gebruikersnaam komt niet overeen. Probeer het normaals."
+    }
   }
 };

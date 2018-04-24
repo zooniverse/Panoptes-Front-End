@@ -228,6 +228,15 @@ export default {
       header: 'Project',
     }
   },
+  accountSettings: {
+    deleteAccount: {
+      header: "Delete your account",
+      info: "Deleting your account will remove your email address, username, password, and other personal information from our database. It will not remove your work on any projects you've taken part in or any comments you've left on Talk. Your account will not be recoverable.",
+      button: "I understand and want to delete my account",
+      confirmMessage: "Please type in your current username to confirm",
+      confirmError: "Entered username did not match. Please try again."
+    }
+  },
   about: {
     index: {
       header: 'About',
