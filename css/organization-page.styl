@@ -24,6 +24,7 @@
   &__categories
     display: flex
     justify-content: center
+    flex-wrap: wrap
 
   &__category-button
     background: white
@@ -33,6 +34,9 @@
     font-weight: bold
     margin: .8em .5em
     width: 150px
+
+    @media (max-width: 900px)
+      width: auto
 
     &:focus,
     &:hover
@@ -54,6 +58,9 @@
   min-height: 400px
   position: relative
 
+  @media (max-width: 900px)
+    min-height: 500px
+
   &__background-gradient
     background: radial-gradient(rgba(black, .2), rgba(black, .7))
     display: flex
@@ -66,9 +73,7 @@
     align-items: center
     display: flex
     flex-grow: 1
-    flex-wrap: wrap
     padding-left: 8em
-    width: 100%
 
     @media (max-width: 900px)
       justify-content: center
@@ -77,7 +82,7 @@
 
   &__avatar
     border-radius: 50%
-    vertical-align: -0.3em
+    vertical-align: -.3em
 
   &__wrapper
     margin-left: 3em
@@ -95,6 +100,10 @@
   &__description
     font-size: 1em
     font-weight: normal
+
+    @media (max-width: 900px)
+      margin: .8em
+      text-align: center
 
 .organization-details
 
