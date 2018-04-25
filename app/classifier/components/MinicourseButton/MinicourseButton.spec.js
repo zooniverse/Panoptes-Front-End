@@ -8,7 +8,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
-import MinicourseButton, { StyledRestartButton } from './MinicourseButton';
+import { MinicourseButton, StyledRestartButton } from './MinicourseButton';
 
 describe('MinicourseButton', function() {
   let wrapper;

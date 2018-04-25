@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
-import { darken } from 'polished';
 import Translate from 'react-translate-component';
 import { VisibilitySplit } from 'seven-ten';
 import RestartButton from '../../restart-button';
@@ -16,7 +17,7 @@ export const StyledRestartButton = styled(RestartButton).attrs({
   border: none;
   color: ${
     theme('mode', {
-      dark: zooTheme.colors.teal.light,     
+      dark: zooTheme.colors.teal.light,
       light: zooTheme.colors.teal.dark
     })
   };
@@ -35,11 +36,11 @@ export const StyledRestartButton = styled(RestartButton).attrs({
   }
 `;
 
-export default function MinicourseButton(props, context) {
+export function MinicourseButton(props, context) {
   const shouldRender = props.minicourse && props.user && props.minicourse.steps && (props.minicourse.steps.length > 0);
   return (
     <VisibilitySplit splits={props.splits} splitKey={'mini-course.visible'} elementKey={'div'}>
-      <ThemeProvider theme={{ mode: 'light' }}>
+      <ThemeProvider theme={{ mode: props.theme }}>
         <StyledRestartButton
           preferences={props.projectPreferences}
           shouldRender={shouldRender}
@@ -54,12 +55,17 @@ export default function MinicourseButton(props, context) {
   );
 }
 
+MinicourseButton.defaultProps = {
+  theme: 'light'
+};
+
 MinicourseButton.propTypes = {
   minicourse: PropTypes.shape({
     steps: PropTypes.array
   }),
   projectPreferences: PropTypes.object,
   splits: PropTypes.object,
+  theme: PropTypes.string,
   user: PropTypes.object,
   workflow: PropTypes.object
 };
@@ -68,3 +74,9 @@ MinicourseButton.contextTypes = {
   geordi: PropTypes.object,
   store: PropTypes.object
 };
+
+const mapStateToProps = state => ({
+  theme: state.userInterface.theme
+});
+
+export default connect(mapStateToProps)(MinicourseButton);
