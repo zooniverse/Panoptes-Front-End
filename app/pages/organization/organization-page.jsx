@@ -10,6 +10,7 @@ import OrganizationProjectCards from './organization-project-cards';
 import OrganizationMetadata from './organization-metadata';
 import Thumbnail from '../../components/thumbnail';
 import ExternalLinksBlockContainer from '../../components/ExternalLinksBlock';
+import ZooniverseLogo from '../../partials/zooniverse-logo';
 
 const AVATAR_SIZE = 120;
 
@@ -41,7 +42,7 @@ class OrganizationPage extends React.Component {
   }
 
   render() {
-    const avatarSrc = this.props.quoteObject.researcherAvatar || '/assets/simple-avatar.png';
+    const researcherAvatarSrc = this.props.quoteObject.researcherAvatar || '/assets/simple-avatar.png';
 
     const [aboutPage] = this.props.organizationPages.filter(page => page.url_key === 'about');
     const aboutContentClass = classnames(
@@ -71,14 +72,15 @@ class OrganizationPage extends React.Component {
                 {this.props.organization.announcement}
               </Markdown>}
             <div className="organization-hero__container">
-              {this.props.organizationAvatar &&
+              {this.props.organizationAvatar.src ?
                 <Thumbnail
                   alt={`Organization icon for ${this.props.organization.display_name}`}
                   src={this.props.organizationAvatar.src}
                   className="organization-hero__avatar"
                   width={AVATAR_SIZE}
                   height={AVATAR_SIZE}
-                />}
+                /> : <ZooniverseLogo className="organization-hero__avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />
+              }
               <div className="organization-hero__wrapper">
                 <h1 className="organization-hero__title">{this.props.organization.display_name}</h1>
                 <p className="organization-hero__description">{this.props.organization.description}</p>
@@ -146,7 +148,7 @@ class OrganizationPage extends React.Component {
                   <img
                     className="organization-researcher-words__avatar"
                     role="presentation"
-                    src={avatarSrc}
+                    src={researcherAvatarSrc}
                   />
                   <span
                     className="organization-researcher-words__quote"
