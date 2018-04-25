@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Markdown from 'markdownz';
 import { isMatch } from 'lodash';
 import LoadingIndicator from '../loading-indicator';
 import modelSelector from '../../features/modelling';
@@ -13,10 +12,13 @@ class CanvasViewer extends React.Component {
     this.setMessage = this.setMessage.bind(this);
     this.resizeCanvas = this.resizeCanvas.bind(this);
     this.changeCanvasStyleSize = this.changeCanvasStyleSize.bind(this);
+    this.modelDidError = this.modelDidError.bind(this);
     this.state = {
       loading: true,
+      modelFailedToLoad: false,
+      modelErrorMessage: null,
       hasMessage: false,
-      message: null,
+      modelErrorMessage: null,
       canvasSize: {
         width: 512,
         height: 512
@@ -33,7 +35,11 @@ class CanvasViewer extends React.Component {
     this.createNewModel(this.props)
       .then(() => (
         this.model.update(this.props.annotations, this.props.viewBoxDimensions)
-      ));
+      ))
+      .catch((e) => {
+        console.warn(e);
+        this.setState({ modelFailedToLoad: true });
+      });
   }
   componentWillUpdate(nextProps) {
     // if the subject has updated we need to re-initialise the model
@@ -41,7 +47,11 @@ class CanvasViewer extends React.Component {
       this.createNewModel(nextProps)
         .then(() => (
           this.model.update(nextProps.annotations, nextProps.viewBoxDimensions)
-        ));
+        ))
+        .catch((e) => {
+          console.warn(e);
+          this.setState({ modelFailedToLoad: true });
+        });
     }
   }
   componentDidUpdate(oldProps) {
@@ -87,6 +97,9 @@ class CanvasViewer extends React.Component {
       message
     });
   }
+  modelDidError({ modelErrorMessage }) {
+    this.setState({ modelFailedToLoad: true, modelErrorMessage });
+  }
   resizeCanvas({ width, height }) {
     const canvasSize = { width, height };
     this.setState({ canvasSize });
@@ -114,7 +127,8 @@ class CanvasViewer extends React.Component {
             onLoad: this.onLoad,
             resizeCanvas: this.resizeCanvas,
             changeCanvasStyleSize: this.changeCanvasStyleSize,
-            setMessage: this.setMessage
+            setMessage: this.setMessage,
+            modelDidError: this.modelDidError
           }
         );
         if (this.model !== false) {
@@ -123,20 +137,17 @@ class CanvasViewer extends React.Component {
           reject();
         }
       }
-    })
-      .catch((e) => {
-        console.warn(e);
-        return alert((resolve, reject) => (
-          <div className="content-container">
-            <Markdown className="classification-task-help">
-              Could not load model
-            </Markdown>
-            <button className="standard-button" onClick={reject}>Close</button>
-          </div>
-        ));
-      });
+    });
   }
   render() {
+    if (this.state.modelFailedToLoad) {
+      return (
+        <div>
+          <h3>Whoops!</h3>
+          <p>{this.state.modelErrorMessage || 'Something went wrong and we can\'t show this image'}</p>
+        </div>
+      );
+    }
     return (
       <div className="subject-canvas-frame" >
         <canvas

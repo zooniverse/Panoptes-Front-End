@@ -7,10 +7,9 @@ import { parseDisk, parseBulge, parseBar, parseSpiralArms } from './parseFunctio
 
 class GalaxyBuilderModel extends baseModel {
   constructor(canvas, { frame, metadata, src, sizing }, eventHandlers) {
-    super(canvas, { frame, metadata, src, sizing });
+    super(canvas, { frame, metadata, src, sizing }, eventHandlers);
     this.panZoom = panZoom(this.regl);
     this.scaleModel = scaleModel(this.regl);
-    this.eventHandlers = eventHandlers;
     this.state.shouldCompareToImage = false;
     this.state.annotations = [];
     // first, fire off the fetch event
@@ -22,6 +21,7 @@ class GalaxyBuilderModel extends baseModel {
     }
   }
   handleDataLoad(data) {
+    if (this.state.modelHasErrored) return Promise.resolve();
     const oldViewBox = this.state.sizing;
     this.eventHandlers.resizeCanvas({ width: data.width, height: data.height });
     if (data.psf && data.psfWidth && data.psfHeight) {
@@ -68,28 +68,38 @@ class GalaxyBuilderModel extends baseModel {
   }
   setModel() {
     // return taskName: render method object
-    this.model = {
-      disk: {
-        name: 'disk',
-        func: drawSersic(this.regl),
-        default: { mux: 0, muy: 0, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
-      },
-      bulge: {
-        name: 'bulge',
-        func: drawSersic(this.regl),
-        default: { mux: 100, muy: 100, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
-      },
-      bar: {
-        name: 'bar',
-        func: drawSersic(this.regl),
-        default: { mux: 100, muy: 100, rx: 5, ry: 5, scale: 5 / 8, roll: 0, i0: 0.75, n: 2, c: 2 }
-      },
-      spiral: {
-        name: 'spiral',
-        func: drawSpiral(this.regl),
-        default: { mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, falloff: 1 }
-      }
-    };
+    try {
+      this.model = {
+        disk: {
+          name: 'disk',
+          func: drawSersic(this.regl),
+          default: { mux: 0, muy: 0, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
+        },
+        bulge: {
+          name: 'bulge',
+          func: drawSersic(this.regl),
+          default: { mux: 100, muy: 100, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
+        },
+        bar: {
+          name: 'bar',
+          func: drawSersic(this.regl),
+          default: { mux: 100, muy: 100, rx: 5, ry: 5, scale: 5 / 8, roll: 0, i0: 0.75, n: 2, c: 2 }
+        },
+        spiral: {
+          name: 'spiral',
+          func: drawSpiral(this.regl, this.canvas),
+          default: { mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, falloff: 1 }
+        }
+      };
+    } catch (e) {
+      this.model = {};
+      this.state.modelHasErrored = true;
+      this.eventHandlers.modelDidError({
+        modelErrorMessage: `
+        We’re afraid your browser doesn’t support the WebGL we need to render galaxies.
+        You can comment on photos (the second image) in Talk, but won’t be able to classify.`
+      });
+    }
   }
   calculateModel(annotations, viewBox) {
     // TODO: store calculated functions in state to be re-called rather than

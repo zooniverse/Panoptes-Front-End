@@ -1,7 +1,8 @@
 import reglBase from 'regl';
 
 class BaseReglModel {
-  constructor(canvas, { frame, metadata, sizing }) {
+  constructor(canvas, { frame, metadata, src, sizing }, eventHandlers) {
+    this.eventHandlers = eventHandlers;
     this.update = this.update.bind(this); // function to call on new annotation
     this.getModel = this.getModel.bind(this);
     this.calculateModel = this.calculateModel.bind(this);
@@ -19,6 +20,7 @@ class BaseReglModel {
     this.state = {
       comparisonTexture: null,
       dataHasLoaded: false,
+      modelHasErrored: false,
       metadata,
       sizing,
       frame,
@@ -29,6 +31,7 @@ class BaseReglModel {
   update(annotations, newViewBox) {
     // this function parses the new annotation and then triggers a render.
     // update the render funtions
+    if (this.state.modelHasErrored) return;
     this.regl.poll();
     this.regl.clear({
       color: [0, 0, 0, 1]
@@ -50,7 +53,7 @@ class BaseReglModel {
     }
   }
   getTexture() {
-    return {
+    return this.state.modelHasErrored ? {} : {
       data: this.regl.read(),
       width: this.canvas.width,
       height: this.canvas.height
