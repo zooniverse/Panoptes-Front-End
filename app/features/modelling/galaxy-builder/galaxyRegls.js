@@ -122,8 +122,6 @@ export const drawSpiral = (r, canvas) => {
       600
     );
   }
-  console.log('max spiral number:', maxPointCount);
-  console.log(gl);
   const spiralArgs = {
     frag: `
       precision highp float;
