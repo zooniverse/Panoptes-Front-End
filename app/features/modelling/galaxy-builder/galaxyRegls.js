@@ -116,12 +116,14 @@ export const drawSpiral = (r, canvas) => {
   if (gl) {
     maxPointCount = Math.min(
       Math.max(
-        100,
+        200,
         gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS) - 100
       ),
       600
     );
   }
+  console.log('max spiral number:', maxPointCount);
+  console.log(gl);
   const spiralArgs = {
     frag: `
       precision highp float;

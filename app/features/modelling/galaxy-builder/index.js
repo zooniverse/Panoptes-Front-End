@@ -17,7 +17,15 @@ class GalaxyBuilderModel extends baseModel {
       fetch(`${src}?=`)
         .then(response => response.json())
         .then(data => this.handleDataLoad(data))
-        .catch(e => console.warn(e));
+        .catch((e) => {
+          console.warn(e);
+          this.state.modelHasErrored = true;
+          this.eventHandlers.modelDidError({
+            modelErrorMessage: `
+            We’re afraid your browser doesn’t support the WebGL we need to render galaxies.
+            You can comment on photos (the second image) in Talk, but won’t be able to classify.`
+          });
+        });
     }
   }
   handleDataLoad(data) {
@@ -65,6 +73,7 @@ class GalaxyBuilderModel extends baseModel {
       this.update(this.state.annotations, oldViewBox);
     }
     this.eventHandlers.onLoad(this.state.sizing);
+    return Promise.resolve();
   }
   setModel() {
     // return taskName: render method object
