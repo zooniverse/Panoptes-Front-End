@@ -1,22 +1,13 @@
-import { Markdown } from 'markdownz';
 import PropTypes from 'prop-types';
 import React from 'react';
 import GenericTask from '../generic';
 import GenericTaskEditor from '../generic-editor';
 import MultipleChoiceSummary from './summary';
+import TaskInputField from '../components/TaskInputField';
 
 const NOOP = Function.prototype;
 
 export default class MultipleChoiceTask extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-
-    this.state = {
-      focus: {}
-    };
-  }
-
   handleChange(index, e) {
     const value = this.props.annotation.value.slice(0);
     if (e.target.checked) {
@@ -32,17 +23,6 @@ export default class MultipleChoiceTask extends React.Component {
     this.props.onChange(newAnnotation);
   }
 
-  // for keyboard accessibility
-  onFocus(index) {
-    if (!this.props.annotation.value.includes(index)) {
-      this.setState({ focus: { [index]: true } });
-    }
-  }
-
-  onBlur() {
-    this.setState({ focus: {} });
-  }
-
   render() {
     const { annotation, task, translation } = this.props;
     const answers = [];
@@ -50,26 +30,17 @@ export default class MultipleChoiceTask extends React.Component {
       if (!answer._key) {
         answer._key = Math.random();
       }
-      let active = '';
-      if (annotation.value.includes(i)) {
-        active = 'active';
-      }
+
       answers.push(
-        <label key={answer._key} className={`answer-button ${active}`} data-focus={this.state.focus[i] || false}>
-          <div className="answer-button-icon-container">
-            <input
-              type="checkbox"
-              autoFocus={i === annotation.value[0]}
-              checked={annotation.value.includes(i)}
-              onChange={this.handleChange.bind(this, i)}
-              onFocus={this.onFocus.bind(this, i)}
-              onBlur={this.onBlur.bind(this)}
-            />
-          </div>
-          <div className="answer-button-label-container">
-            <Markdown className="answer-button-label">{translation.answers[i].label}</Markdown>
-          </div>
-        </label>
+        <TaskInputField
+          annotation={annotation}
+          className={annotation.value.includes(i) ? 'active' : ''}
+          index={i}
+          key={answer._key}
+          label={translation.answers[i].label}
+          onChange={this.handleChange.bind(this, i)}
+          type="checkbox"
+        />
       );
     }
     return (
@@ -79,6 +50,7 @@ export default class MultipleChoiceTask extends React.Component {
         help={translation.help}
         answers={answers}
         required={task.required}
+        showRequiredNotice={this.props.showRequiredNotice}
       />
     );
   }
@@ -127,7 +99,8 @@ MultipleChoiceTask.propTypes = {
   annotation: PropTypes.shape(
     { value: PropTypes.array }
   ),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  showRequiredNotice: PropTypes.bool
 };
 
 MultipleChoiceTask.defaultProps = {
@@ -143,5 +116,6 @@ MultipleChoiceTask.defaultProps = {
     help: ''
   },
   annotation: { value: [] },
-  onChange: NOOP
+  onChange: NOOP,
+  showRequiredNotice: false
 };

@@ -43,7 +43,7 @@ export default class GenericTask extends React.Component {
 
   render() {
     let required;
-    if (this.props.required) {
+    if (this.props.required && this.props.showRequiredNotice) {
       required = (
         <div className="required-task-warning">
           <p>
@@ -83,7 +83,8 @@ GenericTask.propTypes = {
     PropTypes.number,
     PropTypes.bool
   ]),
-  answers: PropTypes.arrayOf(PropTypes.node)
+  answers: PropTypes.arrayOf(PropTypes.node),
+  showRequiredNotice: PropTypes.bool
 };
 
 GenericTask.defaultProps = {
@@ -92,5 +93,6 @@ GenericTask.defaultProps = {
   question: '',
   help: '',
   required: false,
-  answers: []
+  answers: [],
+  showRequiredNotice: false
 };

@@ -85,6 +85,12 @@
   > .subject-viewer
     flex: 0 1 auto
 
+  &--dev
+    flex-wrap: wrap;
+
+    .classifier--dev__tools
+      width: 100%
+
   .subject-container
     color: gray
     max-width: 100%
@@ -170,56 +176,15 @@
     top: 0
     transform: rotate(-15deg)
 
-  > .task-area
-    background-color: white
-    border: solid thin #ebebeb
-    color: black
-    flex: 0 0 45ch
-    margin-bottom: 1em
-    max-width: 100%
-    padding: 0 0 2em 0
-
-    @media (min-width: 900px)
-      margin-left: 1em
-
   // for subject images that are not height contained
   // this class name is enabled through a workflow config
   &.large-image
     .subject
       max-height: none
 
-    .task-area
-      flex: 0 0 45ch
-
   .task-nav
     display: flex
     padding: 0 2em 0 2em
-
-    .talk
-      cursor: pointer
-      flex: 2 0
-
-    .continue-button
-      background-color: HIGHLIGHT_COLOR
-      border: none
-      border-radius: 0
-      color: white
-      cursor: pointer
-      flex: 3 0
-      font-size: 0.9em
-      padding: 0.9em
-      text-transform: capitalize
-
-      i
-        margin-left: 1ch
-
-      &:hover, &:focus
-        background: HIGHLIGHT_COLOR_HOVER
-
-      &:disabled
-        background: darken(HIGHLIGHT_COLOR, 10%)
-        color: #EEF1F4
-        cursor: not-allowed
 
     > :not(:first-child)
       margin-left: 0.5em
@@ -228,81 +193,8 @@
   & + .workflow-task
     margin-top: 2em
 
-  // Only show the "required" warning when a task is outside the normal flow.
-  .classifier > .task-area & .required-task-warning
-    display: none
-
   .question p
     margin: 1em 0 1.5em
-
-  .answer-button
-    align-items: baseline
-    background-color: BACKGROUND_COLOR
-    border: none;
-    box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5)
-    cursor: pointer
-    display: flex
-    margin: 10px 0
-    padding: 1ch 2ch
-    position: relative
-    text-align: left
-
-    &:hover, &:focus, &[data-focus=true]
-      background: linear-gradient(#C0E3E5, #8BCED2)
-      color: white
-
-    &.active
-      background-color: TEAL_MID
-      color: white
-
-    > :not(:first-child)
-      margin-left: 1ch
-
-    // Ignore first and last margins from Markdown.
-    .markdown
-      > :first-child
-        margin-top: 0
-
-      > :last-child
-        margin-bottom: 0
-
-    // Using, visibility: hidden or display: none breaks accessibility. This keeps the buttons keyboard accessibile,
-    // but hides the actual radio or checkbox
-    .answer-button-icon-container
-      input
-        opacity: 0.01
-        position: absolute
-
-    .answer-button-label-container
-      align-items: baseline
-      display: flex
-      flex-grow: 1
-      flex-wrap: wrap
-
-    .answer-button-label
-      flex-grow: 1
-      text-align: center
-      img
-        vertical-align: middle
-        padding-left: 5px
-        padding-right: 5px
-
-    .answer-button-status
-      font-size: 0.8em
-      opacity: 0.7
-
-  .drawing-tool-button-icon > svg
-    fill-opacity: 0.1
-    height: 1.5em
-    stroke: currentColor
-    stroke-width: 5
-    width: 1.5em
-
-  .drawing-tool-button-input
-    opacity: 0.01
-    position: absolute
-    &:focus + *:not(.active)
-      background: lighten(#424242, 95%)
 
 .unlinked-shortcut
   p

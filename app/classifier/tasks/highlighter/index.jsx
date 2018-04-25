@@ -100,6 +100,7 @@ export default class Highlighter extends React.Component {
             help={this.props.task.help}
             answers={labels}
             required={this.props.task.required}
+            showRequiredNotice={this.props.showRequiredNotice}
           />
         </div>
       );

@@ -35,21 +35,21 @@ export class DevClassifierPage extends React.Component {
 
     return (
       <div className={classname}>
-        <div className="content-container">
-          <ClassifierWrapper
-            user={this.props.user}
-            project={this.props.project}
-            workflow={this.props.classification._workflow}
-            preferences={this.props.preferences}
-            classification={this.props.classification}
-            onClickNext={this.reload}
-          >
-          
+        <ClassifierWrapper
+          className="classifier--dev"
+          user={this.props.user}
+          project={this.props.project}
+          workflow={this.props.classification._workflow}
+          preferences={this.props.preferences}
+          classification={this.props.classification}
+          onClickNext={this.reload}
+        >
+          <div className="classifier--dev__tools">
             <ProjectThemeButton />
             <hr />
             <ClassificationViewer classification={this.props.classification} />
-          </ClassifierWrapper>
-        </div>
+          </div>
+        </ClassifierWrapper>
       </div>
     );
   }

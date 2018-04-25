@@ -9,62 +9,62 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import TaskBackButton, {
-  StyledTaskBackButton,
-  StyledTaskBackButtonWrapper,
-  StyledTaskBackButtonToolTip
-} from './TaskBackButton';
+import { BackButton,
+  StyledBackButton,
+  StyledBackButtonWrapper,
+  StyledBackButtonToolTip
+} from './BackButton';
 
-describe('TaskBackButton', function() {
-  it('should render without crashing', function() {
-    expect(shallow(<TaskBackButton />)).to.be.ok;
-  });
-
-  describe('when props.showButton is false', function() {
-    it('should render null', function () {
-      const wrapper = shallow(<TaskBackButton showButton={false} />);
-      expect(wrapper.html()).to.be.null;
-    });
-  });
-
-  describe('when props.showButton is true', function() {
+describe('BackButton', function() {
+  describe('rendering', function() {
     let wrapper;
-    let destroyCurrentAnnotationSpy;
     before(function() {
-      destroyCurrentAnnotationSpy = sinon.spy();
-      wrapper = mount(<TaskBackButton showButton={true} destroyCurrentAnnotation={destroyCurrentAnnotationSpy} />);
+      wrapper = mount(<BackButton />);
+    });
+
+    it('should render without crashing', function () {
+      expect(wrapper).to.be.ok;
     });
 
     it('should render a ThemeProvider', function() {
       expect(wrapper.find('ThemeProvider')).to.have.lengthOf(1);
     });
 
-    it('should render a StyledTaskBackButtonWrapper', function() {
-      expect(wrapper.find(StyledTaskBackButtonWrapper)).to.have.lengthOf(1);
+    it('should render a StyledBackButtonWrapper', function() {
+      expect(wrapper.find(StyledBackButtonWrapper)).to.have.lengthOf(1);
     });
 
-    it('should render a StyledTaskBackButton', function() {
-      expect(wrapper.find(StyledTaskBackButton)).to.have.lengthOf(1);
+    it('should render a StyledBackButton', function() {
+      expect(wrapper.find(StyledBackButton)).to.have.lengthOf(1);
     });
 
     it('should render a Translate component', function() {
       expect(wrapper.find('Translate')).to.have.lengthOf(1);
     });
+  });
 
-    it('should call props.destroyCurrentAnnotation on the onClick event', function() {
+  describe('onClick event', function() {
+    let wrapper;
+    let onClickSpy;
+    before(function () {
+      onClickSpy = sinon.spy();
+      wrapper = mount(<BackButton showButton={true} onClick={onClickSpy} />);
+    });
+
+    it('should call props.onClick on the onClick event', function() {
       wrapper.find('button').simulate('click');
-      expect(destroyCurrentAnnotationSpy.calledOnce).to.be.true;
+      expect(onClickSpy.calledOnce).to.be.true;
     });
   });
 
-  describe('StyledTaskBackButtonToolTip behavior', function() {
+  describe('StyledBackButtonToolTip behavior', function() {
     let wrapper;
     let toggleWarningSpy;
     let setStateSpy;
     before(function() {
-      toggleWarningSpy = sinon.spy(TaskBackButton.prototype, 'toggleWarning');
-      setStateSpy = sinon.spy(TaskBackButton.prototype, 'setState');
-      wrapper = mount(<TaskBackButton showButton={true} />);
+      toggleWarningSpy = sinon.spy(BackButton.prototype, 'toggleWarning');
+      setStateSpy = sinon.spy(BackButton.prototype, 'setState');
+      wrapper = mount(<BackButton showButton={true} />);
     });
 
     afterEach(function() {
@@ -78,14 +78,14 @@ describe('TaskBackButton', function() {
       setStateSpy.restore();
     });
 
-    it('should not render a StyledTaskBackButtonToolTip when state.showWarning is false', function () {
-      expect(wrapper.find(StyledTaskBackButtonToolTip)).to.have.lengthOf(0);
+    it('should not render a StyledBackButtonToolTip when state.showWarning is false', function () {
+      expect(wrapper.find(StyledBackButtonToolTip)).to.have.lengthOf(0);
     });
 
-    it('should render a StyledTaskBackButtonToolTip when state.showWarning is true', function() {
+    it('should render a StyledBackButtonToolTip when state.showWarning is true', function() {
       wrapper.setState({ showWarning: true });
-      expect(wrapper.find(StyledTaskBackButtonToolTip)).to.have.lengthOf(1);
-      expect(wrapper.find(StyledTaskBackButtonToolTip).find('Translate')).to.have.lengthOf(1);
+      expect(wrapper.find(StyledBackButtonToolTip)).to.have.lengthOf(1);
+      expect(wrapper.find(StyledBackButtonToolTip).find('Translate')).to.have.lengthOf(1);
     });
 
     it('should should call toggleWarning on the onMouseEnter event', function() {

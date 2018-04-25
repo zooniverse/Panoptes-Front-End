@@ -8,6 +8,7 @@ import sinon from 'sinon';
 import Select from 'react-select'; // required to properly simulate change
 import DropdownTask from './';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
+import { mockReduxStore } from '../testHelpers';
 
 const singleSelect = {
   instruction: 'Is there something here?',
@@ -90,7 +91,7 @@ describe('DropdownTask', function () {
         annotation = { value: [] };
         onChangeSpy = sinon.spy();
 
-        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={onChangeSpy} />);
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={onChangeSpy} />, mockReduxStore);
       });
 
       it('should render without crashing', function () {
@@ -180,7 +181,7 @@ describe('DropdownTask', function () {
           { value: null, option: false }
         ] };
 
-        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />);
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />, mockReduxStore);
       });
 
       it('should make selects conditional on first annotation and allowCreate false now enabled (State now enabled, City still disabled)', function () {
@@ -219,7 +220,7 @@ describe('DropdownTask', function () {
           { value: 'Isotopes-value', option: true }
         ] };
 
-        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />);
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />, mockReduxStore);
       });
 
       it('should have the supplied annotations selected', function () {
@@ -255,7 +256,7 @@ describe('DropdownTask', function () {
           { value: 'Rocket', option: false }
         ] };
 
-        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />);
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />, mockReduxStore);
       });
 
       it('should have the supplied annotations selected', function () {
@@ -282,7 +283,7 @@ describe('DropdownTask', function () {
       const annotation2 = { value: [] };
       const onChangeSpy = sinon.spy();
 
-      const wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation1} onChange={onChangeSpy} />);
+      const wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation1} onChange={onChangeSpy} />, mockReduxStore);
       wrapper.setProps({ task: singleSelect, annotation: annotation2 });
 
       // first call on mount should set first task's default values, second call on update should be to set second task's default values

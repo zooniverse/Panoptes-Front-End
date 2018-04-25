@@ -5,6 +5,18 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
   'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
 
+DRAWING_DETAILS_REQUIRED = [
+  {
+    type: 'single'
+    question: 'Cool?'
+    answers: [
+      {label: 'Yeah'}
+      {label: 'Nah'}
+    ],
+    required: true
+  }
+]
+
 MISC_DRAWING_DETAILS = [
   {
     type: 'single'
@@ -140,7 +152,7 @@ workflow = apiClient.type('workflows').create
         {type: 'rectangle', label: 'Rectangle', color: 'lime', max: 2}
         {type: 'rotateRectangle', label: 'Rotate Rectangle', color: 'red'}
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
-        {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
+        {type: 'circle', label: 'Circle', color: 'blue', details: DRAWING_DETAILS_REQUIRED}
         {type: 'ellipse', label: 'Ellipse '.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
         {type: 'triangle', label: 'Triangle', color: 'salmon'}
         {type: 'bezier', label: 'Bezier', color: 'orange', details: MISC_DRAWING_DETAILS}

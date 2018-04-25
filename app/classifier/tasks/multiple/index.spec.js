@@ -5,27 +5,22 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import MultipleTask from './';
+import { mockReduxStore, checkboxTypeAnnotation, checkboxTypeTask } from '../testHelpers';
 
-const task = {
-  question: 'Is there something here?',
-  answers: [
-    { label: 'Yes', value: 'yes' },
-    { label: 'No', value: 'no' },
-    { label: 'Maybe', value: 'maybe' }
-  ],
-  required: 3
-};
-
-const annotation = {
+const annotation = Object.assign({}, checkboxTypeAnnotation, {
   value: [0, 1]
-};
+});
 
 describe('MultipleChoiceTask', function () {
   describe('when it renders', function() {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = mount(<MultipleTask task={task} annotation={annotation} translation={task} />);
+      wrapper = mount(<MultipleTask
+        task={checkboxTypeTask}
+        annotation={annotation}
+        translation={checkboxTypeTask}
+      />, mockReduxStore);
     });
 
     it('should render without crashing', function () {
@@ -38,16 +33,7 @@ describe('MultipleChoiceTask', function () {
     });
 
     it('should have answers', function () {
-      const answers = wrapper.find('.answer');
-      expect(answers).to.have.lengthOf(task.answers.length);
-    });
-
-    it('should have the supplied annotation checked', function () {
-      expect(wrapper.find('input[type="checkbox"]').find({ checked: true })).to.have.lengthOf(2);
-    });
-
-    it('other answers should not be checked', function () {
-      expect(wrapper.find('input[type="checkbox"]').find({ checked: false })).to.have.lengthOf(1);
+      expect(wrapper.find('TaskInputField')).to.have.lengthOf(checkboxTypeTask.answers.length);
     });
   });
 
@@ -62,10 +48,11 @@ describe('MultipleChoiceTask', function () {
       setStateSpy = sinon.spy(MultipleTask.prototype, 'setState');
       wrapper = mount(
         <MultipleTask
-          task={task}
-          translation={task}
+          task={checkboxTypeTask}
+          translation={checkboxTypeTask}
           onChange={onChangeSpy}
-        />
+        />,
+        mockReduxStore
       );
     });
 
@@ -85,128 +72,28 @@ describe('MultipleChoiceTask', function () {
       expect(onChangeSpy.calledOnce).to.be.true;
     });
 
-    it('should set focus state to an empty object if target value is checked', function () {
-      wrapper.setProps({ annotation });
-      wrapper.find('input').first().simulate('change', { target: { checked: true } });
-      expect(setStateSpy.calledOnce).to.be.true;
-      expect(setStateSpy.calledWith({ focus: {} })).to.be.true;
-    });
-
     it('should call handleChange with the answer array index', function() {
       wrapper.setProps({ annotation });
       wrapper.find('input').first().simulate('change', { target: { checked: true } });
       expect(handleChangeSpy.calledWith(0)).to.be.true;
     });
-
-    it('should not set focus state if target value is not checked', function() {
-      // wrapper.setProps({ annotation: { value: [] }});
-      wrapper.find('input').first().simulate('change', { target: { checked: false } });
-      expect(setStateSpy.calledOnce).to.be.false;
-    });
-  });
-
-  describe('input onFocus event handler', function() {
-    let onFocusSpy;
-    let setStateSpy;
-    let wrapper;
-    before(function() {
-      onFocusSpy = sinon.spy(MultipleTask.prototype, 'onFocus');
-      setStateSpy = sinon.spy(MultipleTask.prototype, 'setState');
-      wrapper = mount(
-        <MultipleTask
-          task={task}
-          translation={task}
-        />
-      );
-    });
-
-    afterEach(function () {
-      onFocusSpy.resetHistory();
-      setStateSpy.resetHistory();
-    });
-
-    after(function () {
-      onFocusSpy.restore();
-      setStateSpy.restore();
-    });
-
-    it('should call onFocus on input focus event', function() {
-      wrapper.find('input').first().simulate('focus');
-      expect(onFocusSpy.calledOnce).to.be.true;
-    });
-
-    it('should call onFocus with answer index property', function() {
-      wrapper.find('input').first().simulate('focus');
-      expect(onFocusSpy.calledWith(0)).to.be.true;
-    });
-
-    it('should not call setState in onFocus handler if annotation includes answer index', function() {
-      wrapper.setProps({ annotation });
-      wrapper.find('input').first().simulate('focus');
-      expect(setStateSpy.calledOnce).to.be.false;
-    });
-
-    it('should call setState in onFocus handler if annotation does not include answer index', function() {
-      wrapper.setProps({ annotation });
-      wrapper.find('input').last().simulate('focus');
-      expect(setStateSpy.calledOnce).to.be.true;
-      expect(setStateSpy.calledWith({ focus: { 2: true }}));
-    });
-  });
-
-  describe('input onBlur event handler', function() {
-    let onBlurSpy;
-    let setStateSpy;
-    let wrapper;
-    before(function () {
-      onBlurSpy = sinon.spy(MultipleTask.prototype, 'onBlur');
-      setStateSpy = sinon.spy(MultipleTask.prototype, 'setState');
-      wrapper = mount(
-        <MultipleTask
-          task={task}
-          annotation={annotation}
-          translation={task}
-        />
-      );
-    });
-
-    afterEach(function () {
-      onBlurSpy.resetHistory();
-      setStateSpy.resetHistory();
-    });
-
-    after(function () {
-      onBlurSpy.restore();
-      setStateSpy.restore();
-    });
-
-    it('should call onBlur handler on the blur event', function() {
-      wrapper.find('input').first().simulate('blur');
-      expect(onBlurSpy.calledOnce).to.be.true;
-    });
-
-    it('should call setState for the onBlur handler event', function() {
-      wrapper.find('input').first().simulate('blur');
-      expect(setStateSpy.calledOnce).to.be.true;
-      expect(setStateSpy.calledWith({ focus: {}})).to.be.true;
-    });
   });
 
   describe('static methods', function () {
     it('should be incomplete', function () {
-      expect(MultipleTask.isAnnotationComplete(task, annotation)).to.be.false
+      expect(MultipleTask.isAnnotationComplete(checkboxTypeTask, annotation)).to.be.false
     });
 
     it('should be complete', function () {
-      expect(MultipleTask.isAnnotationComplete(task, { value: [0, 1, 2] })).to.be.true;
+      expect(MultipleTask.isAnnotationComplete(checkboxTypeTask, { value: [0, 1, 2] })).to.be.true;
     });
 
     it('should be complete when not required', function () {
-      expect(MultipleTask.isAnnotationComplete(Object.assign({}, task, { required: undefined }), { value: [] })).to.be.true;
+      expect(MultipleTask.isAnnotationComplete(Object.assign({}, checkboxTypeTask, { required: undefined }), { value: [] })).to.be.true;
     });
 
     it('should have the correct question text', function () {
-      expect(MultipleTask.getTaskText(task)).to.equal(task.question);
+      expect(MultipleTask.getTaskText(checkboxTypeTask)).to.equal(checkboxTypeTask.question);
     });
 
     it('the default annotation should be an empty array', function () {
@@ -219,7 +106,7 @@ describe('MultipleChoiceSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<MultipleTask.Summary task={task} annotation={annotation} translation={task} />);
+    summary = mount(<MultipleTask.Summary task={checkboxTypeTask} annotation={annotation} translation={checkboxTypeTask} />);
   });
 
   it('should render without crashing', function () {
@@ -240,7 +127,7 @@ describe('MultipleChoiceSummary', function () {
   });
 
   it('should return "No answer" when an empty annotation is provided', function () {
-    summary = mount(<MultipleTask.Summary task={task} annotation={{ value: [] }} />);
+    summary = mount(<MultipleTask.Summary task={checkboxTypeTask} annotation={{ value: [] }} />);
     const answer = summary.find('.answer');
     expect(answer.text()).to.equal('No answer');
   });
@@ -261,7 +148,7 @@ describe('MultipleChoiceSummary', function () {
 
     it('should show all answers', function () {
       const answers = summary.find('.answer');
-      expect(answers).to.have.lengthOf(task.answers.length);
+      expect(answers).to.have.lengthOf(checkboxTypeTask.answers.length);
     });
 
     it('should have correct number of checked answers', function () {
@@ -271,7 +158,7 @@ describe('MultipleChoiceSummary', function () {
 
     it('should have the correct number of un-checked answers', function () {
       const unchecks = summary.find('.fa-square-o');
-      expect(unchecks).to.have.lengthOf(task.answers.length - annotation.value.length);
+      expect(unchecks).to.have.lengthOf(checkboxTypeTask.answers.length - annotation.value.length);
     });
 
     it('button should read "Less"', function () {

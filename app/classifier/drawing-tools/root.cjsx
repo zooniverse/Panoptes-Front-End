@@ -90,7 +90,13 @@ module.exports = createReactClass
                   taskKey={taskKey}
                   task={detailTask}
                 >
-                  <TaskComponent autoFocus={i is 0} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />
+                  <TaskComponent
+                    autoFocus={i is 0}
+                    task={detailTask}
+                    annotation={toolProps.mark.details[i]}
+                    onChange={@handleDetailsChange.bind this, i}
+                    showRequiredNotice={true}
+                  />
                 </TaskTranslations>}
               <hr />
               <p style={textAlign: 'center'}>

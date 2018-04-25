@@ -15,7 +15,7 @@ export default {
     recents: 'Your recent classifications',
     talk: 'Talk',
     taskHelpButton: 'Need some help with this task?',
-    tutorialButton: 'Show the project tutorial',
+    tutorialButton: 'Tutorial',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
