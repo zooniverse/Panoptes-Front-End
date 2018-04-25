@@ -16,9 +16,9 @@ class CanvasViewer extends React.Component {
     this.state = {
       loading: true,
       modelFailedToLoad: false,
-      modelErrorMessage: null,
       hasMessage: false,
       modelErrorMessage: null,
+      message: null,
       canvasSize: {
         width: 512,
         height: 512
