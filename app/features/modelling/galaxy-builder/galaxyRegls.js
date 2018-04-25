@@ -111,7 +111,7 @@ export const drawSersic = r => r(Object.assign({}, baseObj, {
 }));
 
 export const drawSpiral = (r) => {
-  const maxPointCount = 300;
+  const maxPointCount = 240;
   const spiralArgs = {
     frag: `
       precision highp float;
