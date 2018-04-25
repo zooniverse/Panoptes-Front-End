@@ -16,6 +16,7 @@ export const StyledRestartButton = styled(RestartButton).attrs({
   border: none;
   color: ${
     theme('mode', {
+      dark: zooTheme.colors.teal.light,     
       light: zooTheme.colors.teal.dark
     })
   };
