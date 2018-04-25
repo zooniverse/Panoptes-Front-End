@@ -124,7 +124,7 @@ export class TaskInputField extends React.Component {
   }
 
   onFocus() {
-    this.field.dataset.focus = true;
+    if (this.field) this.field.dataset.focus = true;
   }
 
   onBlur() {
