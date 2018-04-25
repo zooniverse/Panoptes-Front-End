@@ -11,7 +11,7 @@ import OrganizationMetadata from './organization-metadata';
 import Thumbnail from '../../components/thumbnail';
 import ExternalLinksBlockContainer from '../../components/ExternalLinksBlock';
 
-const AVATAR_SIZE = 100;
+const AVATAR_SIZE = 120;
 
 class OrganizationPage extends React.Component {
   constructor() {
@@ -73,12 +73,13 @@ class OrganizationPage extends React.Component {
             <div className="organization-hero__container">
               {this.props.organizationAvatar &&
                 <Thumbnail
+                  alt={`Organization icon for ${this.props.organization.display_name}`}
                   src={this.props.organizationAvatar.src}
-                  className="avatar organization-hero__avatar"
+                  className="organization-hero__avatar"
                   width={AVATAR_SIZE}
                   height={AVATAR_SIZE}
                 />}
-              <div>
+              <div className="organization-hero__wrapper">
                 <h1 className="organization-hero__title">{this.props.organization.display_name}</h1>
                 <p className="organization-hero__description">{this.props.organization.description}</p>
               </div>
