@@ -110,8 +110,18 @@ export const drawSersic = r => r(Object.assign({}, baseObj, {
   }
 }));
 
-export const drawSpiral = (r) => {
-  const maxPointCount = 240;
+export const drawSpiral = (r, canvas) => {
+  const gl = canvas.getContext('webgl');
+  let maxPointCount = 240;
+  if (gl) {
+    maxPointCount = Math.min(
+      Math.max(
+        100,
+        gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS) - 100
+      ),
+      600
+    );
+  }
   const spiralArgs = {
     frag: `
       precision highp float;
