@@ -36,6 +36,7 @@
     "react-router": "~3.2.0",
     "react-router-scroll": "~0.4.4",
     "react-select": "1.0.0-rc.10",
+    "react-sizeme": "~2.4.2",
     "react-sizes": "~0.4.3",
     "react-swipe": "~5.1.1",
     "react-translate-component": "~0.14.0",
@@ -131,7 +132,7 @@
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
     "test-and-watch": "NODE_ENV=development BABEL_ENV=test mocha --watch --watch-extensions js,jsx,coffee,cjsx test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
-    "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
+    "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $(find app -name ProjectNavbar.spec.js) --reporter nyan || true",
     "test-travis": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*)",
     "lint": "eslint ./app --ext .jsx,.js",
     "lint:watch": "esw --watch --color ./app --ext .jsx,.js"

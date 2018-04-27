@@ -1,91 +1,60 @@
+/* eslint
+  func-names: 0,
+  import/no-extraneous-dependencies: ["error", { "devDependencies": true }]
+  prefer-arrow-callback: 0,
+  "react/jsx-boolean-value": ["error", "always"]
+*/
+
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { mount, shallow, render } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { ProjectNavbar } from './ProjectNavbar';
-import { getProjectLinks } from '../../../../lib/nav-helpers';
-import {
-  buildLinksWithLabels,
-  projectOwnerUser,
-  projectRoles,
-  projectWithoutRedirect,
-  workflow
-} from '../../../../../test';
+import ProjectNavbar from './ProjectNavbar';
 
-describe('ProjectNavbar', function() {
-  const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow, user: projectOwnerUser });
-  const navLinksWithLabels = buildLinksWithLabels(navLinks);
+describe('ProjectNavbar', function () {
 
-  it('should render without crashing', function() {
-    shallow(
-      <ProjectNavbar
-        navLinks={navLinksWithLabels}
-        projectTitle={projectWithoutRedirect.title}
-        width={1024}
-      />
-    );
+  Object.defineProperty(document.body, 'clientWidth', { value: 100 });
+
+  it('should render without crashing', function () {
+    shallow(<ProjectNavbar />);
   });
 
-  describe('calculating the breakpoint', function() {
-    let wrapper;
-    // We can't test the actual function because getRenderedSize doesn't work with jsdom
-    let setBreakpointStub = sinon.stub(ProjectNavbar.prototype, 'setBreakpoint').callsFake(() => {});
+  describe('child rendering', function () {
+    it('should render ProjectNavbarNarrow by default', function () {
+      const wrapper = shallow(<ProjectNavbar />);
 
-    before(function() {
-      setBreakpointStub.resetHistory();
-      wrapper = mount(
-        <ProjectNavbar
-          navLinks={navLinksWithLabels}
-          projectTitle={projectWithoutRedirect.title}
-          width={1024}
-        />
-      );
-    });
-
-    it('should set the breakpoint state on mount', function() {
-      expect(setBreakpointStub.calledOnce).to.be.true;
-    });
-
-    it('should not set the breakpoint on update if projectTitle or navLinks do not change', function() {
-      wrapper.setProps({ width: 768 });
-      expect(setBreakpointStub.calledOnce).to.be.true;
-    });
-
-    it('should set the breakpoint on update if the projectTitle changes', function() {
-      wrapper.setProps({ projectTitle: 'A new title' });
-      expect(setBreakpointStub.calledTwice).to.be.true;
-    });
-
-    it('should set the breakpoint on update if the navLinks change', function() {
-      const newNavLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow, user: null });
-      const newNavLinksWithLabels = buildLinksWithLabels(newNavLinks);
-      wrapper.setProps({ navLinks: newNavLinksWithLabels });
-      expect(setBreakpointStub.calledThrice).to.be.true;
-    });
-  });
-
-  describe('rendering children components', function() {
-    let wrapper;
-    before(function() {
-      wrapper = mount(
-        <ProjectNavbar
-          navLinks={navLinksWithLabels}
-          projectTitle={projectWithoutRedirect.title}
-          width={1024}
-        />
-      );
-    });
-
-    it('renders ProjectNavbarWide if props.width is greater than state.breakpoint', function() {
-      expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(1);
-      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(0);
-    });
-
-    it('renders ProjectNavbarNarrow if props.width is less than state.breakpoint', function() {
-      wrapper.setProps({ width: 400 });
-      wrapper.setState({ breakpoint: 768 });
+      // Note - we check for `withSizes(ProjectNavbarNarrow)` as it's a
+      // component wrapped in a HOC.
+      expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(1);
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
-      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(1);
+    });
+
+    it('should render ProjectNavbarWide if state.useWide is true', function () {
+      const wrapper = shallow(<ProjectNavbar />);
+      wrapper.setState({ useWide: true });
+      expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(1);
+      expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(0);
+    });
+
+    it('should render ProjectNavbarNarrow if state.useWide is false', function () {
+      const wrapper = shallow(<ProjectNavbar />);
+      wrapper.setState({ useWide: false });
+      expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(1);
+      expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
+    });
+  });
+
+  describe('setBreakpoint behavior', function () {
+    it('should correctly set the state if clientWidth is enough to render ProjectNavbarWide', function () {
+      const wrapper = shallow(<ProjectNavbar />);
+      wrapper.instance().setBreakpoint({ width: 90 });
+      expect(wrapper.state('useWide')).to.equal(true);
+    });
+
+    it('should correctly set the state if clientWidth is too narrow to render ProjectNavbarWide', function () {
+      const wrapper = shallow(<ProjectNavbar />);
+      wrapper.instance().setBreakpoint({ width: 110 });
+      expect(wrapper.state('useWide')).to.equal(false);
     });
   });
 });

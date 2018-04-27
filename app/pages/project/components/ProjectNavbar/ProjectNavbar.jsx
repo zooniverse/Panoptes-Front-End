@@ -1,76 +1,57 @@
 import _ from 'lodash';
-import getRenderedSize from 'react-rendered-size';
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import withSizes from 'react-sizes';
+import sizeMe from 'react-sizeme'
 import ProjectNavbarNarrow from './components/ProjectNavbarNarrow';
-import ProjectNavbarWide from './components/ProjectNavbarWide';
+import ProjectNavbarWide, { SizeAwareProjectNavbarWide } from './components/ProjectNavbarWide';
 
 function haveNavLinksChanged(oldProps, newProps) {
-  const oldNavLinks = _.map(oldProps.navLinks, 'label');
-  const newNavLinks = _.map(newProps.navLinks, 'label');
-  return _.difference(newNavLinks, oldNavLinks).length > 0 || oldNavLinks.length !== newNavLinks.length;
-}
-
-function hasTitleChanged(oldProps, newProps) {
-  return oldProps.projectTitle !== newProps.projectTitle;
+  const oldLinks = _.map(oldProps.navLinks, 'label');
+  const newLinks = _.map(newProps.navLinks, 'label');
+  return _.difference(oldLinks, newLinks).length > 0 ||
+    oldLinks.length !== newLinks.length;
 }
 
 export class ProjectNavbar extends Component {
   constructor(props) {
     super(props);
+    this.setBreakpoint = this.setBreakpoint.bind(this);
     this.state = {
-      breakpoint: 0
+      useWide: false
     };
   }
 
-  componentDidMount() {
-    this.setBreakpoint();
-  }
-
   componentDidUpdate(prevProps) {
-    if (haveNavLinksChanged(prevProps, this.props) ||
-      hasTitleChanged(prevProps, this.props)) {
+    if (haveNavLinksChanged(prevProps, this.props)) {
       this.setBreakpoint();
     }
   }
 
-  setBreakpoint() {
-    const sizes = getRenderedSize(
-      <ProjectNavbarWide
-        {...this.props}
-        style={{
-          position: 'absolute',
-          visibility: 'hidden'
-        }}
-      />
-    );
-
-    this.setState({
-      breakpoint: sizes.width
-    });
+  setBreakpoint(size) {
+    // `size` is undefined when the component is first mounted, as there hasn't
+    // been time for the callback to fire.
+    if (size) {
+      const useWide = size.width < document.body.clientWidth;
+      this.setState({ useWide });
+    }
   }
 
   render() {
-    const isWindowWide = this.props.width > this.state.breakpoint;
-    if (isWindowWide) {
-      return <ProjectNavbarWide {...this.props} />;
-    }
+    const NavBarComponent = (this.state.useWide) ? ProjectNavbarWide : ProjectNavbarNarrow;
 
-    return <ProjectNavbarNarrow {...this.props} />;
+    return (
+      <div>
+        <NavBarComponent {...this.props} />
+        <SizeAwareProjectNavbarWide
+          {...this.props}
+          onSize={this.setBreakpoint}
+          style={{
+            visibility: 'hidden',
+            position: 'absolute'
+          }}
+        />
+      </div>
+    );
   }
 }
 
-ProjectNavbar.propTypes = {
-  navLinks: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string
-  })),
-  projectTitle: PropTypes.string,
-  width: PropTypes.number
-};
-
-const mapSizesToProps = ({ width }) => ({
-  width
-});
-
-export default withSizes(mapSizesToProps)(ProjectNavbar);
+export default ProjectNavbar;
