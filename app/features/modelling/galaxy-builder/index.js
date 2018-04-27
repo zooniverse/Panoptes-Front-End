@@ -107,8 +107,10 @@ class GalaxyBuilderModel extends baseModel {
       this.state.modelHasErrored = true;
       this.eventHandlers.modelDidError({
         modelErrorMessage: `
-        We’re afraid your browser doesn’t support the WebGL we need to render galaxies.
-        You can comment on photos (the second image) in Talk, but won’t be able to classify.`
+        Sorry, this project requires features which are not supported by your
+        device. Please try again on a desktop computer, and let us know in talk
+        if you're still having problems. You can comment on photos (the second
+        image) in Talk, but please do not classify!`
       });
     }
   }
