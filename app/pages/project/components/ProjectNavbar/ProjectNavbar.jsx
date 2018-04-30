@@ -4,8 +4,10 @@ import ProjectNavbarNarrow from './components/ProjectNavbarNarrow';
 import ProjectNavbarWide, { SizeAwareProjectNavbarWide } from './components/ProjectNavbarWide';
 
 function haveNavLinksChanged(oldProps, newProps) {
-  const oldLinks = _.map(oldProps.navLinks, 'label');
-  const newLinks = _.map(newProps.navLinks, 'label');
+  const oldLinks = oldProps.navLinks.map(link => link.label);
+  const newLinks = newProps.navLinks.map(link => link.label);
+
+  // returns an array of values not included in the other using SameValueZero for equality comparison
   return _.difference(oldLinks, newLinks).length > 0 ||
     oldLinks.length !== newLinks.length;
 }
