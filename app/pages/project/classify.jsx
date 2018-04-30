@@ -248,7 +248,12 @@ export class ProjectClassifyPage extends React.Component {
         }
       }).then((subjects) => {
         const nonLoadedSubjects = subjects.filter(newSubject => newSubject !== subjectToLoad);
-        const filteredSubjects = nonLoadedSubjects.filter(nonLoadedSubject => !nonLoadedSubject.already_seen && !nonLoadedSubject.retired);
+        const filteredSubjects = nonLoadedSubjects.filter((nonLoadedSubject) => {
+          const notSeen = !nonLoadedSubject.already_seen &&
+            !nonLoadedSubject.retired &&
+            !seenThisSession.check(workflow, nonLoadedSubject);
+          return notSeen;
+        });
         const subjectsToLoad = (filteredSubjects.length > 0) ? filteredSubjects : nonLoadedSubjects;
 
         upcomingSubjects.forWorkflow[workflow.id].push(...subjectsToLoad);
