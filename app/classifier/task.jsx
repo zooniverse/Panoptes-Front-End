@@ -80,8 +80,6 @@ class Task extends React.Component {
             return (<HookComponent key={i} {...taskHookProps} />);
           })}
 
-          <hr />
-
           {!!task.unlinkedTask &&
             <TaskTranslations
               taskKey={task.unlinkedTask}

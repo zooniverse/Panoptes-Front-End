@@ -1,28 +1,32 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { browserHistory } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
-import { VisibilitySplit } from 'seven-ten';
-import Translate from 'react-translate-component';
+import findLastIndex from 'lodash/findLastIndex';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import findLastIndex from 'lodash/findLastIndex';
-import { browserHistory } from 'react-router';
+import styled, { ThemeProvider } from 'styled-components';
+import classNames from 'classnames';
 
 import { getSessionID } from '../lib/session';
-import SubjectViewer from '../components/subject-viewer';
-import ClassificationSummary from './classification-summary';
 import preloadSubject from '../lib/preload-subject';
 import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
-import FrameAnnotator from './frame-annotator';
-import CacheClassification from '../components/cache-classification';
-import Task from './task';
-import RestartButton from './restart-button';
-import MiniCourse from './mini-course';
-import Tutorial from './tutorial';
-import TaskNav from './task-nav';
-import ExpertOptions from './expert-options';
 import * as feedbackActions from '../redux/ducks/feedback';
+import * as userInterfaceActions from '../redux/ducks/userInterface';
+import CacheClassification from '../components/cache-classification';
+
+import Task from './task';
+import TaskTabs from './components/TaskTabs';
+import TaskArea from './components/TaskArea';
+import TaskNav from './task-nav';
+import ClassificationSummary from './classification-summary';
+import MinicourseButton from './components/MinicourseButton';
+
+import SubjectViewer from '../components/subject-viewer';
+import FrameAnnotator from './frame-annotator';
+import ExpertOptions from './expert-options';
+
 import openFeedbackModal from '../features/feedback/classifier';
 import GridTool from './drawing-tools/grid';
 import tasks from './tasks';
@@ -308,7 +312,11 @@ class Classifier extends React.Component {
 
   render() {
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
-    const classifierClassNames = largeFormatImage ? 'classifier large-image' : 'classifier';
+    const classifierClassNames = classNames({
+      classifier: true,
+      'large-image': largeFormatImage,
+      [this.props.className]: !!this.props.className
+    });
 
     let currentClassification,
       currentTask,
@@ -332,26 +340,32 @@ class Classifier extends React.Component {
     // This is just easy access for debugging.
     window.classification = currentClassification;
     return (
-      <div>
-        <div className={classifierClassNames}>
-          <SubjectViewer
-            user={this.props.user}
-            project={this.props.project}
-            subject={this.props.subject}
-            isFavorite={this.props.subject.favorite}
-            workflow={this.props.workflow}
-            preferences={this.props.preferences}
-            classification={currentClassification}
-            annotation={currentAnnotation}
-            annotations={this.state.annotations}
-            onLoad={this.handleSubjectImageLoad}
-            frameWrapper={FrameAnnotator}
-            allowFlipbook={workflowAllowsFlipbook(this.props.workflow)}
-            allowSeparateFrames={workflowAllowsSeparateFrames(this.props.workflow)}
-            onChange={this.handleAnnotationChange.bind(this, currentClassification)}
-            playIterations={this.props.workflow.configuration.playIterations}
-          />
-          <div className="task-area">
+      <div className={classifierClassNames}>
+        <SubjectViewer
+          user={this.props.user}
+          project={this.props.project}
+          subject={this.props.subject}
+          isFavorite={this.props.subject.favorite}
+          workflow={this.props.workflow}
+          preferences={this.props.preferences}
+          classification={currentClassification}
+          annotation={currentAnnotation}
+          annotations={this.state.annotations}
+          onLoad={this.handleSubjectImageLoad}
+          frameWrapper={FrameAnnotator}
+          allowFlipbook={workflowAllowsFlipbook(this.props.workflow)}
+          allowSeparateFrames={workflowAllowsSeparateFrames(this.props.workflow)}
+          onChange={this.handleAnnotationChange.bind(this, currentClassification)}
+          playIterations={this.props.workflow.configuration.playIterations}
+        />
+        <ThemeProvider theme={{ mode: this.props.theme }}>
+          <TaskArea>
+            <TaskTabs
+              projectPreferences={this.props.preferences}
+              tutorial={this.props.tutorial}
+              user={this.props.user}
+              workflow={this.props.workflow}
+            />
             {!currentClassification.completed ?
               <Task
                 preferences={this.props.preferences}
@@ -399,43 +413,14 @@ class Classifier extends React.Component {
                   onChangeDemoMode={this.props.onChangeDemoMode}
                 />}
             </TaskNav>
-            <p>
-              <small>
-                <strong>
-                  <RestartButton
-                    className="minor-button"
-                    preferences={this.props.preferences}
-                    shouldRender={(this.props.tutorial) && (this.props.tutorial.steps.length > 0)}
-                    start={Tutorial.start.bind(Tutorial, this.props.tutorial, this.props.user, this.props.preferences, this.context.geordi, this.context.store)}
-                    style={{ marginTop: '2em' }}
-                    user={this.props.user}
-                    workflow={this.props.workflow}
-                  >
-                    <Translate content="classifier.tutorialButton" />
-                  </RestartButton>
-                </strong>
-              </small>
-            </p>
 
-            <p>
-              <small>
-                <strong>
-                  <VisibilitySplit splits={this.props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
-                    <RestartButton
-                      className="minor-button"
-                      preferences={this.props.preferences}
-                      shouldRender={(this.props.minicourse) && (this.props.user) && (this.props.minicourse.steps.length > 0)}
-                      start={MiniCourse.restart.bind(MiniCourse, this.props.minicourse, this.props.preferences, this.props.user, this.context.geordi, this.context.store)}
-                      style={{ marginTop: '2em' }}
-                      user={this.props.user}
-                      workflow={this.props.workflow}
-                    >
-                      <Translate content="classifier.miniCourseButton" />
-                    </RestartButton>
-                  </VisibilitySplit>
-                </strong>
-              </small>
-            </p>
+            <MinicourseButton
+              minicourse={this.props.minicourse}
+              projectPreferences={this.props.preferences}
+              splits={this.props.splits}
+              workflow={this.props.workflow}
+              user={this.props.user}
+            />
 
             {!!this.props.demoMode &&
               <p style={{ textAlign: 'center' }}>
@@ -463,8 +448,9 @@ class Classifier extends React.Component {
                 </small>
               </p>
             }
-          </div>
-        </div>
+
+          </TaskArea>
+        </ThemeProvider>
         {React.Children.map(
           this.props.children,
           child => React.cloneElement(child, { annotations: this.state.annotations })
@@ -496,6 +482,7 @@ Classifier.propTypes = {
     update: PropTypes.func
   }),
   classificationCount: PropTypes.number,
+  className: PropTypes.string,
   demoMode: PropTypes.bool,
   expertClassifier: PropTypes.bool,
   feedback: PropTypes.shape({
@@ -527,6 +514,7 @@ Classifier.propTypes = {
     id: PropTypes.string,
     metadata: PropTypes.object
   }),
+  theme: PropTypes.string,
   tutorial: PropTypes.shape({
     id: PropTypes.string,
     steps: PropTypes.array
@@ -559,12 +547,14 @@ Classifier.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  feedback: state.feedback
+  feedback: state.feedback,
+  theme: state.userInterface.theme
 });
 
 const mapDispatchToProps = dispatch => ({
   actions: {
-    feedback: bindActionCreators(feedbackActions, dispatch)
+    feedback: bindActionCreators(feedbackActions, dispatch),
+    theme: bindActionCreators(userInterfaceActions, dispatch)
   }
 });
 

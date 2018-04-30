@@ -38,7 +38,7 @@
 
     .classify-page__theme-button
       &:hover, &:focus
-        color: TEAL_LIGHT
+        text-decoration: underline
 
   .classifier-announcement-banner
     @extends $announcement-banner
@@ -73,7 +73,7 @@
     text-transform: uppercase
 
     &:hover, &:focus
-      color: TEAL_DARK
+      text-decoration: underline
 
 .classifier
   display: flex
@@ -85,6 +85,12 @@
   > .subject-viewer
     flex: 0 1 auto
 
+  &--dev
+    flex-wrap: wrap;
+
+    .classifier--dev__tools
+      width: 100%
+
   .subject-container
     color: gray
     max-width: 100%
@@ -92,6 +98,9 @@
     > *
       display: flex
       flex: 1 1 auto
+
+  .task-container
+    padding: 0 2em 0 2em
 
   .subject
     box-shadow: 0 0 0 1px gray
@@ -167,111 +176,25 @@
     top: 0
     transform: rotate(-15deg)
 
-  > .task-area
-    background-color: white
-    border: solid thin #ebebeb
-    color: black
-    flex: 0 0 45ch
-    margin-bottom: 1em
-    max-width: 100%
-    padding: 2em
-
-    @media (min-width: 900px)
-      margin-left: 1em
-
   // for subject images that are not height contained
   // this class name is enabled through a workflow config
   &.large-image
     .subject
       max-height: none
 
-    .task-area
-      flex: 0 0 45ch
-
   .task-nav
     display: flex
-    margin-top: 1em
-
-    .back
-      flex: 1 0
-
-    .talk
-      flex: 2 0
-
-    .continue
-      border-radius: 0
-      flex: 3 0
+    padding: 0 2em 0 2em
 
     > :not(:first-child)
       margin-left: 0.5em
-
-  .back-button-warning
-    background-color: #686868
-    margin-top: 1em
-    padding: .5em
-    text-align: center;
 
 .workflow-task
   & + .workflow-task
     margin-top: 2em
 
-  // Only show the "required" warning when a task is outside the normal flow.
-  .classifier > .task-area & .required-task-warning
-    display: none
-
-  .answer-button
-    align-items: baseline
-    display: flex
-    margin: 0.5em 0
-    padding: 1ch 2ch
-    position: relative
-    text-align: left
-
-    > :not(:first-child)
-      margin-left: 1ch
-
-    // Ignore first and last margins from Markdown.
-    .markdown
-      > :first-child
-        margin-top: 0
-
-      > :last-child
-        margin-bottom: 0
-
-    .answer-button-icon-container
-      align-self: center
-      flex-shrink: 0
-      height: 1.5em
-
-    .answer-button-label-container
-      align-items: baseline
-      display: flex
-      flex-grow: 1
-      flex-wrap: wrap
-
-    .answer-button-label
-      flex-grow: 1
-      img
-        vertical-align: middle
-        padding-left: 5px
-        padding-right: 5px
-
-    .answer-button-status
-      font-size: 0.8em
-      opacity: 0.7
-
-  .drawing-tool-button-icon > svg
-    fill-opacity: 0.1
-    height: 1.5em
-    stroke: currentColor
-    stroke-width: 5
-    width: 1.5em
-
-  .drawing-tool-button-input
-    opacity: 0.01
-    position: absolute
-    &:focus + *:not(.active)
-      background: lighten(#424242, 95%)
+  .question p
+    margin: 1em 0 1.5em
 
 .unlinked-shortcut
   p

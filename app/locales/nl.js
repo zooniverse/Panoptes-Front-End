@@ -43,9 +43,11 @@ export default {
     letsGo: 'Let’s go!',
     next: 'Verder',
     optOut: 'Opt out',
+    question: 'Question',
     recents: 'Je recente classificaties',
     talk: 'Praat',
-    tutorialButton: 'Toon de projecthandleiding',
+    taskHelpButton: 'Need some help with this task?',
+    tutorialButton: 'Tutorial',
     miniCourseButton: 'Herstart de minitour'
   },
   project: {

@@ -1,16 +1,16 @@
-import { Markdown } from 'markdownz';
 import PropTypes from 'prop-types';
 import React from 'react';
+
 import GenericTask from '../generic';
 import GenericTaskEditor from '../generic-editor';
 import SingleChoiceSummary from './summary';
+import TaskInputField from '../components/TaskInputField';
 
 const NOOP = Function.prototype;
 
 export default class SingleChoiceTask extends React.Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(index, e) {
@@ -23,33 +23,25 @@ export default class SingleChoiceTask extends React.Component {
   render() {
     const { annotation, task, translation } = this.props;
     if (!task._key) {
-      task._key = Math.random()
+      task._key = Math.random();
     }
     const answers = [];
     for (const [i, answer] of task.answers.entries()) {
       if (!answer._key) {
         answer._key = Math.random();
       }
-      let active = '';
-      if (i === annotation.value) {
-        active = 'active';
-      }
+
       answers.push(
-        <label key={answer._key} className={`minor-button answer-button ${active}`}>
-          <div className="answer-button-icon-container">
-            <input
-              type="radio"
-              autoFocus={i === annotation.value}
-              checked={i === annotation.value}
-              value={i}
-              onChange={this.handleChange.bind(this, i)}
-              name={`${task._key}`}
-            />
-          </div>
-          <div className="answer-button-label-container">
-            <Markdown className="answer-button-label">{translation.answers[i].label}</Markdown>
-          </div>
-        </label>
+        <TaskInputField
+          annotation={annotation}
+          className={(i === annotation.value) ? 'active' : ''}
+          index={i}
+          key={answer._key}
+          label={translation.answers[i].label}
+          name={`${task._key}`}
+          onChange={this.handleChange.bind(this, i)}
+          type="radio"
+        />
       );
     }
     return (
@@ -59,6 +51,7 @@ export default class SingleChoiceTask extends React.Component {
         help={translation.help}
         answers={answers}
         required={task.required}
+        showRequiredNotice={this.props.showRequiredNotice}
       />
     );
   }
@@ -102,7 +95,8 @@ SingleChoiceTask.propTypes = {
   annotation: PropTypes.shape(
     { value: PropTypes.number }
   ),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  showRequiredNotice: PropTypes.bool
 };
 
 SingleChoiceTask.defaultProps = {
@@ -118,5 +112,6 @@ SingleChoiceTask.defaultProps = {
     help: ''
   },
   annotation: { value: null },
-  onChange: NOOP
+  onChange: NOOP,
+  showRequiredNotice: false
 };

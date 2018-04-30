@@ -1,20 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
-import Translate from 'react-translate-component';
 import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
-
-
+import TaskNavButtons from './components/TaskNavButtons';
 /* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
-
-const BackButtonWarning = () =>
-   (
-     <p className="back-button-warning" >
-       <Translate content="classifier.backButtonWarning" />
-     </p>
-  )
-;
 
 class TaskNav extends React.Component {
   constructor(props) {
@@ -22,11 +11,6 @@ class TaskNav extends React.Component {
     this.addAnnotationForTask = this.addAnnotationForTask.bind(this);
     this.completeClassification = this.completeClassification.bind(this);
     this.destroyCurrentAnnotation = this.destroyCurrentAnnotation.bind(this);
-    this.warningToggleOn = this.warningToggleOn.bind(this);
-    this.warningToggleOff = this.warningToggleOff.bind(this);
-    this.state = {
-      BackButtonWarning: false
-    };
   }
 
   componentDidUpdate() {
@@ -79,18 +63,6 @@ class TaskNav extends React.Component {
     }
   }
 
-  warningToggleOn() {
-    if (!this.props.workflow.configuration.persist_annotations) {
-      this.setState({ backButtonWarning: true });
-    }
-  }
-
-  warningToggleOff() {
-    if (!this.props.workflow.configuration.persist_annotations) {
-      this.setState({ backButtonWarning: false });
-    }
-  }
-
   render() {
     const completed = !!this.props.classification.completed;
 
@@ -99,9 +71,6 @@ class TaskNav extends React.Component {
     const disableTalk = this.props.classification.metadata.subject_flagged;
     const visibleTasks = Object.keys(this.props.workflow.tasks).filter(key => this.props.workflow.tasks[key].type !== 'shortcut');
     const TaskComponent = tasks[task.type];
-
-    // Should we disable the "Back" button?
-    const onFirstAnnotation = !completed && (this.props.annotations.indexOf(this.props.annotation) === 0);
 
     // Should we disable the "Next" or "Done" buttons?
     let waitingForAnswer = this.props.disabled;
@@ -122,78 +91,34 @@ class TaskNav extends React.Component {
       nextTaskKey = '';
     }
 
-    // TODO: Actually disable things that should be.
-    // For now we'll just make them non-mousable.
-    const disabledStyle = {
-      opacity: 0.5,
-      pointerEvents: 'none'
-    };
+    const showDoneAndTalkLink = !nextTaskKey &&
+      this.props.workflow.configuration.hide_classification_summaries &&
+      this.props.project &&
+      !disableTalk &&
+      !completed;
 
     return (
       <div>
         <nav className="task-nav">
-          {(visibleTasks.length > 1) && !completed &&
-            <button
-              type="button"
-              className="back minor-button"
-              disabled={onFirstAnnotation}
-              onClick={this.destroyCurrentAnnotation}
-              onMouseEnter={this.warningToggleOn}
-              onFocus={this.warningToggleOn}
-              onMouseLeave={this.warningToggleOff}
-              onBlur={this.warningToggleOff}
-            >
-              <Translate content="classifier.back" />
-            </button>}
-          {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk && !completed) &&
-            <Link
-              onClick={this.completeClassification}
-              to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
-              className="talk standard-button"
-              style={waitingForAnswer ? disabledStyle : {}}
-            >
-              <Translate content="classifier.doneAndTalk" />
-            </Link>}
-          {(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut) ?
-            <button
-              type="button"
-              className="continue major-button"
-              disabled={waitingForAnswer}
-              onClick={this.addAnnotationForTask.bind(this, nextTaskKey)}
-            >
-              <Translate content="classifier.next" />
-            </button> : !completed ?
-              <button
-                type="button"
-                className="continue major-button"
-                disabled={waitingForAnswer}
-                onClick={this.completeClassification}
-              >
-                {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
-                {this.props.classification.gold_standard && <i className="fa fa-star fa-fw" />}
-                {' '}<Translate content="classifier.done" />
-              </button> :
-              null
-          }
-          {completed &&
-            <Link
-              onClick={this.props.nextSubject}
-              to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
-              className="talk standard-button"
-            >
-              <Translate content="classifier.talk" />
-            </Link>}
-          {completed &&
-            <button
-              autoFocus={this.props.autoFocus}
-              className="continue major-button"
-              onClick={this.props.nextSubject}
-            >
-              <Translate content="classifier.next" />
-            </button>}
+          <TaskNavButtons
+            addAnnotationForTask={this.addAnnotationForTask.bind(this, nextTaskKey)}
+            areAnnotationsNotPersisted={!this.props.workflow.configuration.persist_annotations}
+            autoFocus={this.props.autoFocus}
+            classification={this.props.classification}
+            completeClassification={this.completeClassification}
+            completed={completed}
+            demoMode={this.props.demoMode}
+            destroyCurrentAnnotation={this.destroyCurrentAnnotation}
+            nextSubject={this.props.nextSubject}
+            project={this.props.project}
+            showBackButton={visibleTasks.length > 1 && !completed && (this.props.classification.annotations.indexOf(this.props.annotation) !== 0)}
+            showNextButton={!!(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut)}
+            showDoneAndTalkLink={showDoneAndTalkLink}
+            subject={this.props.subject}
+            waitingForAnswer={waitingForAnswer}
+          />
           {this.props.children}
         </nav>
-        {this.state.backButtonWarning && <BackButtonWarning />}
       </div>
     );
   }

@@ -2,70 +2,102 @@
 /* global describe, it, beforeEach */
 import { mount } from 'enzyme';
 import React from 'react';
-import assert from 'assert';
+import { expect } from 'chai';
+import sinon from 'sinon';
 import MultipleTask from './';
+import { mockReduxStore, checkboxTypeAnnotation, checkboxTypeTask } from '../testHelpers';
 
-const task = {
-  question: 'Is there something here?',
-  answers: [
-    { label: 'Yes', value: 'yes' },
-    { label: 'No', value: 'no' },
-    { label: 'Maybe', value: 'maybe' }
-  ],
-  required: 3
-};
-
-const annotation = {
+const annotation = Object.assign({}, checkboxTypeAnnotation, {
   value: [0, 1]
-};
+});
 
 describe('MultipleChoiceTask', function () {
-  let wrapper;
+  describe('when it renders', function() {
+    let wrapper;
 
-  beforeEach(function () {
-    wrapper = mount(<MultipleTask task={task} annotation={annotation} translation={task} />);
+    beforeEach(function () {
+      wrapper = mount(<MultipleTask
+        task={checkboxTypeTask}
+        annotation={annotation}
+        translation={checkboxTypeTask}
+      />, mockReduxStore);
+    });
+
+    it('should render without crashing', function () {
+      expect(wrapper).to.be.ok;
+    });
+
+    it('should have a question', function () {
+      const question = wrapper.find('.question');
+      expect(question.hostNodes()).to.have.lengthOf(1);
+    });
+
+    it('should have answers', function () {
+      expect(wrapper.find('TaskInputField')).to.have.lengthOf(checkboxTypeTask.answers.length);
+    });
   });
 
-  it('should render without crashing', function () {
-  });
+  describe('input onChange event handler', function() {
+    let handleChangeSpy;
+    let onChangeSpy;
+    let setStateSpy;
+    let wrapper;
+    before(function() {
+      handleChangeSpy = sinon.spy(MultipleTask.prototype, 'handleChange');
+      onChangeSpy = sinon.spy();
+      setStateSpy = sinon.spy(MultipleTask.prototype, 'setState');
+      wrapper = mount(
+        <MultipleTask
+          task={checkboxTypeTask}
+          translation={checkboxTypeTask}
+          onChange={onChangeSpy}
+        />,
+        mockReduxStore
+      );
+    });
 
-  it('should have a question', function () {
-    const question = wrapper.find('.question');
-    assert.equal(question.hostNodes().length, 1);
-  });
+    afterEach(function() {
+      handleChangeSpy.resetHistory();
+      onChangeSpy.resetHistory();
+      setStateSpy.resetHistory();
+    });
 
-  it('should have answers', function () {
-    const answers = wrapper.find('.answer');
-    assert.equal(answers.length, task.answers.length);
-  });
+    after(function() {
+      handleChangeSpy.restore();
+      setStateSpy.restore();
+    });
 
-  it('should have the supplied annotation checked', function () {
-    assert.equal(wrapper.find('input[type="checkbox"]').find({ checked: true }).length, 2);
-  });
+    it('should call props.onChange when the onChange event fires', function () {
+      wrapper.find('input').first().simulate('change', { target: { checked: true } });
+      expect(onChangeSpy.calledOnce).to.be.true;
+    });
 
-  it('other answers should not be checked', function () {
-    assert.equal(wrapper.find('input[type="checkbox"]').find({ checked: false }).length, 1);
+    it('should call handleChange with the answer array index', function() {
+      wrapper.setProps({ annotation });
+      wrapper.find('input').first().simulate('change', { target: { checked: true } });
+      expect(handleChangeSpy.calledWith(0)).to.be.true;
+    });
   });
 
   describe('static methods', function () {
     it('should be incomplete', function () {
-      assert.equal(MultipleTask.isAnnotationComplete(task, annotation), false);
+      expect(MultipleTask.isAnnotationComplete(checkboxTypeTask, annotation)).to.be.false
     });
 
     it('should be complete', function () {
-      assert.equal(MultipleTask.isAnnotationComplete(task, { value: [0, 1, 2] }), true);
+      expect(MultipleTask.isAnnotationComplete(checkboxTypeTask, { value: [0, 1, 2] })).to.be.true;
     });
 
     it('should be complete when not required', function () {
-      assert.equal(MultipleTask.isAnnotationComplete(Object.assign({}, task, { required: undefined }), { value: [] }), true);
+      expect(MultipleTask.isAnnotationComplete(Object.assign({}, checkboxTypeTask, { required: undefined }), { value: [] })).to.be.true;
     });
 
     it('should have the correct question text', function () {
-      assert.equal(MultipleTask.getTaskText(task), task.question);
+      expect(MultipleTask.getTaskText(checkboxTypeTask)).to.equal(checkboxTypeTask.question);
     });
 
     it('the default annotation should be an empty array', function () {
-      assert.equal(MultipleTask.getDefaultAnnotation().value.length, 0);
+      expect(MultipleTask.getDefaultAnnotation().value).to.have.lengthOf(0);
     });
   });
 });
@@ -74,7 +106,7 @@ describe('MultipleChoiceSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<MultipleTask.Summary task={task} annotation={annotation} translation={task} />);
+    summary = mount(<MultipleTask.Summary task={checkboxTypeTask} annotation={annotation} translation={checkboxTypeTask} />);
   });
 
   it('should render without crashing', function () {
@@ -82,27 +114,27 @@ describe('MultipleChoiceSummary', function () {
 
   it('should have a question', function () {
     const question = summary.find('.question');
-    assert.equal(question.length, 1);
+    expect(question).to.have.lengthOf(1);
   });
 
   it('the default expanded state should be false', function () {
-    assert.equal(summary.state().expanded, false);
+    expect(summary.state().expanded).to.be.false;
   });
 
   it('should have the selected number of answers when collapsed', function () {
     const answers = summary.find('.answer');
-    assert.equal(answers.length, annotation.value.length);
+    expect(answers).to.have.lengthOf(annotation.value.length);
   });
 
   it('should return "No answer" when an empty annotation is provided', function () {
-    summary = mount(<MultipleTask.Summary task={task} annotation={{ value: [] }} />);
+    summary = mount(<MultipleTask.Summary task={checkboxTypeTask} annotation={{ value: [] }} />);
     const answer = summary.find('.answer');
-    assert.equal(answer.text(), 'No answer');
+    expect(answer.text()).to.equal('No answer');
   });
 
   it('button should read "More" when not expanded', function () {
     const button = summary.find('button');
-    assert.equal(button.text(), 'More');
+    expect(button.text()).to.equal('More');
   });
 
   describe('when summary is expanded', function () {
@@ -111,32 +143,32 @@ describe('MultipleChoiceSummary', function () {
     });
 
     it('should set expanded to true in state', function () {
-      assert.equal(summary.state().expanded, true);
+      expect(summary.state().expanded).to.be.true;
     });
 
     it('should show all answers', function () {
       const answers = summary.find('.answer');
-      assert.equal(answers.length, task.answers.length);
+      expect(answers).to.have.lengthOf(checkboxTypeTask.answers.length);
     });
 
     it('should have correct number of checked answers', function () {
       const checks = summary.find('.fa-check-square-o');
-      assert.equal(checks.length, annotation.value.length);
+      expect(checks).to.have.lengthOf(annotation.value.length);
     });
 
     it('should have the correct number of un-checked answers', function () {
       const unchecks = summary.find('.fa-square-o');
-      assert.equal(unchecks.length, task.answers.length - annotation.value.length);
+      expect(unchecks).to.have.lengthOf(checkboxTypeTask.answers.length - annotation.value.length);
     });
 
     it('button should read "Less"', function () {
       const button = summary.find('button');
-      assert.equal(button.text(), 'Less');
+      expect(button.text()).to.equal('Less');
     });
 
     it('clicking the button should set expanded to false in state', function () {
       summary.find('button').simulate('click');
-      assert.equal(summary.state().expanded, false);
+      expect(summary.state().expanded).to.be.false;
     });
   });
 });

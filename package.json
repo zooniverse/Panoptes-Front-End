@@ -20,6 +20,7 @@
     "moment": "~2.21.0",
     "panoptes-client": "~2.8.1",
     "papaparse": "mholt/PapaParse#cada171",
+    "polished": "~1.9.2",
     "prop-types": "~15.6.0",
     "pusher-js": "~3.2.1",
     "qs": "~6.0.2",

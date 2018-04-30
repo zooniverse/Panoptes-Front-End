@@ -203,7 +203,7 @@ class Chooser extends React.Component {
             );
           })}
         </div>
-
+        <hr className="survey-task-chooser__divider" />
         <div className="survey-task-chooser-choices" data-thumbnail-size={thumbnailSize} data-columns={columnsCount}>
           {sortedFilteredChoices.length === 0 && <div><em>No matches.</em></div>}
           {sortedFilteredChoices.map((choiceId, i) => {

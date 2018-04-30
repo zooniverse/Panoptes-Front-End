@@ -205,6 +205,7 @@ export default class DropdownTask extends React.Component {
         question={this.props.task.instruction}
         help={this.props.task.help}
         required={this.props.task.required}
+        showRequiredNotice={this.props.showRequiredNotice}
       >
         <div>
           {selects.map((select, i) => {

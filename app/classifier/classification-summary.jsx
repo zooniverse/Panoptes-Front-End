@@ -91,7 +91,7 @@ class ClassificationSummary extends React.Component {
           </div> : '' }
 
         <div>
-          <strong>
+          <strong className="classification-summary__title">
             { this.state.showExpert ? 'Expert Classification:' : 'Your classification:' }
           </strong>
           <DefaultClassificationSummary

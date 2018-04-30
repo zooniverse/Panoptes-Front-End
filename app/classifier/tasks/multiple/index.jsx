@@ -1,21 +1,17 @@
-import { Markdown } from 'markdownz';
 import PropTypes from 'prop-types';
 import React from 'react';
 import GenericTask from '../generic';
 import GenericTaskEditor from '../generic-editor';
 import MultipleChoiceSummary from './summary';
+import TaskInputField from '../components/TaskInputField';
 
 const NOOP = Function.prototype;
 
 export default class MultipleChoiceTask extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
   handleChange(index, e) {
     const value = this.props.annotation.value.slice(0);
     if (e.target.checked) {
+      this.setState({ focus: {} });
       if (!value.includes(index)) {
         value.push(index);
       }
@@ -34,24 +30,17 @@ export default class MultipleChoiceTask extends React.Component {
       if (!answer._key) {
         answer._key = Math.random();
       }
-      let active = '';
-      if (annotation.value.includes(i)) {
-        active = 'active';
-      }
+
       answers.push(
-        <label key={answer._key} className={`minor-button answer-button ${active}`}>
-          <div className="answer-button-icon-container">
-            <input
-              type="checkbox"
-              autoFocus={i === annotation.value[0]}
-              checked={annotation.value.includes(i)}
-              onChange={this.handleChange.bind(this, i)}
-            />
-          </div>
-          <div className="answer-button-label-container">
-            <Markdown className="answer-button-label">{translation.answers[i].label}</Markdown>
-          </div>
-        </label>
+        <TaskInputField
+          annotation={annotation}
+          className={annotation.value.includes(i) ? 'active' : ''}
+          index={i}
+          key={answer._key}
+          label={translation.answers[i].label}
+          onChange={this.handleChange.bind(this, i)}
+          type="checkbox"
+        />
       );
     }
     return (
@@ -61,6 +50,7 @@ export default class MultipleChoiceTask extends React.Component {
         help={translation.help}
         answers={answers}
         required={task.required}
+        showRequiredNotice={this.props.showRequiredNotice}
       />
     );
   }
@@ -109,7 +99,8 @@ MultipleChoiceTask.propTypes = {
   annotation: PropTypes.shape(
     { value: PropTypes.array }
   ),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  showRequiredNotice: PropTypes.bool
 };
 
 MultipleChoiceTask.defaultProps = {
@@ -125,5 +116,6 @@ MultipleChoiceTask.defaultProps = {
     help: ''
   },
   annotation: { value: [] },
-  onChange: NOOP
+  onChange: NOOP,
+  showRequiredNotice: false
 };
