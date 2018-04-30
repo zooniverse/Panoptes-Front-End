@@ -10,7 +10,7 @@ export const ButtonsWrapper = styled.span`
   display: flex;
   width: 100%;
   
-  > a:first-of-type, div:first-of-type, span:first-of-type {
+  > a:first-of-type, > div:first-of-type, > span:first-of-type {
     margin-right: 1ch;
   }
 `;
