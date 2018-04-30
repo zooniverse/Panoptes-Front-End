@@ -15,7 +15,7 @@ const commonStyles = `
   cursor: pointer;
   display: inline-block;
   flex: 2 0;
-  line-height: inherit;
+  line-height: 2em;
   margin: 0;
   padding: 0.4em 1.4em;
   position: relative;
@@ -34,7 +34,7 @@ export const StyledTalkLink = styled(Link)`
 export const StyledDisabledTalkPlaceholder = styled.span`
   ${commonStyles}
   opacity: 0.5;
-  pointer-events: 'none';
+  pointer-events: none;
 `;
 
 // TODO: Add Seven-Ten visibility split wrapper
