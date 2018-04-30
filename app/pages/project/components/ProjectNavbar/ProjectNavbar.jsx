@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import sizeMe from 'react-sizeme'
 import ProjectNavbarNarrow from './components/ProjectNavbarNarrow';
 import ProjectNavbarWide, { SizeAwareProjectNavbarWide } from './components/ProjectNavbarWide';
 
@@ -11,7 +10,7 @@ function haveNavLinksChanged(oldProps, newProps) {
     oldLinks.length !== newLinks.length;
 }
 
-export class ProjectNavbar extends Component {
+class ProjectNavbar extends Component {
   constructor(props) {
     super(props);
     this.setBreakpoint = this.setBreakpoint.bind(this);

@@ -54,6 +54,6 @@ describe('ProjectNavbarContainer', function() {
   });
 
   it('renders ProjectNavbar', function() {
-    expect(wrapper.dive().find('ProjectNavbar')).to.have.lengthOf(1);
+    expect(wrapper.find('ProjectNavbar')).to.have.lengthOf(1);
   });
 });
