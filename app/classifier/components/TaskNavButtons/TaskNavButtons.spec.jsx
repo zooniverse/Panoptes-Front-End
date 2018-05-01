@@ -62,6 +62,11 @@ describe('TaskNavButtons', function() {
       wrapper.setProps({ showBackButton: true });
       expect(wrapper.find('BackButton')).to.have.lengthOf(1);
     });
+
+    it('should disable the Next button when waiting for a required answer.', function () {
+      wrapper.setProps({ waitingForAnswer: true });
+      expect(wrapper.find('NextButton').prop('disabled')).to.be.true;
+    });
   });
 
   describe('when props.completed is true and props.showNextButton is false', function() {
@@ -109,6 +114,11 @@ describe('TaskNavButtons', function() {
     it('should render a TalkLink component if props.showDoneAndTalkLink is true', function () {
       wrapper.setProps({ showDoneAndTalkLink: true });
       expect(wrapper.find('TalkLink')).to.have.lengthOf(1);
+    });
+
+    it('should disable the Done button when waiting for a required answer.', function () {
+      wrapper.setProps({ waitingForAnswer: true });
+      expect(wrapper.find('DoneButton').prop('disabled')).to.be.true;
     });
   });
 });
