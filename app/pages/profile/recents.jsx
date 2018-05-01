@@ -16,8 +16,10 @@ class Recents extends React.Component {
 
   componentDidMount() {
     const { user } = this.props;
-    !!user && user.get('recents', { project_id: this.props.project.id, sort: '-created_at' })
-    .then(recents => this.setState({ recents }));
+    if (user && user.get) {
+      user.get('recents', { project_id: this.props.project.id, sort: '-created_at' })
+        .then(recents => this.setState({ recents }));
+    }
   }
 
   render() {
