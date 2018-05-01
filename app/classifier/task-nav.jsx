@@ -111,7 +111,7 @@ class TaskNav extends React.Component {
             destroyCurrentAnnotation={this.destroyCurrentAnnotation}
             nextSubject={this.props.nextSubject}
             project={this.props.project}
-            showBackButton={visibleTasks.length > 1 && !completed && (this.props.classification.annotations.indexOf(this.props.annotation) !== 0)}
+            showBackButton={visibleTasks.length > 1 && !completed && (this.props.annotations.indexOf(this.props.annotation) !== 0)}
             showNextButton={!!(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut)}
             showDoneAndTalkLink={showDoneAndTalkLink}
             subject={this.props.subject}

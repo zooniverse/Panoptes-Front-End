@@ -20,7 +20,6 @@ export const StyledTaskHelpButton = styled.button.attrs({
   display: inline-block;
   font-size: ${pxToRem(14)};
   letter-spacing: ${pxToRem(1)};
-  margin-bottom: ${pxToRem(20)};  
   margin-top: ${pxToRem(20)};
   text-align: center;
   text-transform: uppercase;

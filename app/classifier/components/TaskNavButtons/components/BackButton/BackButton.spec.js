@@ -59,22 +59,26 @@ describe('BackButton', function() {
 
   describe('StyledBackButtonToolTip behavior', function() {
     let wrapper;
-    let toggleWarningSpy;
+    let showWarningSpy;
+    let hideWarningSpy;
     let setStateSpy;
     before(function() {
-      toggleWarningSpy = sinon.spy(BackButton.prototype, 'toggleWarning');
+      showWarningSpy = sinon.spy(BackButton.prototype, 'showWarning');
+      hideWarningSpy = sinon.spy(BackButton.prototype, 'hideWarning');
       setStateSpy = sinon.spy(BackButton.prototype, 'setState');
       wrapper = mount(<BackButton showButton={true} />);
     });
 
     afterEach(function() {
       wrapper.setState({ showWarning: false });
-      toggleWarningSpy.resetHistory();
+      showWarningSpy.resetHistory();
+      hideWarningSpy.resetHistory();
       setStateSpy.resetHistory();
     });
 
     after(function() {
-      toggleWarningSpy.restore();
+      showWarningSpy.restore();
+      hideWarningSpy.restore();
       setStateSpy.restore();
     });
 
@@ -88,24 +92,24 @@ describe('BackButton', function() {
       expect(wrapper.find(StyledBackButtonToolTip).find('Translate')).to.have.lengthOf(1);
     });
 
-    it('should should call toggleWarning on the onMouseEnter event', function() {
+    it('should should call showWarning on the onMouseEnter event', function() {
       wrapper.find('button').simulate('mouseenter');
-      expect(toggleWarningSpy.calledOnce).to.be.true;
+      expect(showWarningSpy.calledOnce).to.be.true;
     });
 
-    it('should call toggleWarning on the onFocus event', function() {
+    it('should call showWarning on the onFocus event', function() {
       wrapper.find('button').simulate('focus');
-      expect(toggleWarningSpy.calledOnce).to.be.true;
+      expect(showWarningSpy.calledOnce).to.be.true;
     });
 
-    it('should call toggleWarning on the onMouseLeave event', function() {
+    it('should call hideWarning on the onMouseLeave event', function() {
       wrapper.find('button').simulate('mouseleave');
-      expect(toggleWarningSpy.calledOnce).to.be.true;
+      expect(hideWarningSpy.calledOnce).to.be.true;
     });
 
-    it('should call toggleWarning on the onBlur event', function() {
+    it('should call hideWarning on the onBlur event', function() {
       wrapper.find('button').simulate('blur');
-      expect(toggleWarningSpy.calledOnce).to.be.true;
+      expect(hideWarningSpy.calledOnce).to.be.true;
     });
 
     it('should not call setState if props.areAnnotationsNotPersisted is false', function() {

@@ -80,14 +80,19 @@ export class BackButton extends React.Component {
       showWarning: false
     };
 
-    this.toggleWarning = this.toggleWarning.bind(this);
+    this.showWarning = this.showWarning.bind(this);
+    this.hideWarning = this.hideWarning.bind(this);    
   }
 
-  toggleWarning() {
-    if (this.props.areAnnotationsNotPersisted) {
-      this.setState((prevState) => {
-        return { showWarning: !prevState.showWarning };
-      });
+  showWarning() {
+    if (this.props.areAnnotationsNotPersisted && !this.state.showWarning) {
+      this.setState({ showWarning: true });
+    }
+  }
+
+  hideWarning() {
+    if (this.props.areAnnotationsNotPersisted && this.state.showWarning) {
+      this.setState({ showWarning: false });
     }
   }
 
@@ -99,10 +104,10 @@ export class BackButton extends React.Component {
           <StyledBackButton
             aria-label={(this.props.areAnnotationsNotPersisted ? backButtonWarning : '')}
             onClick={this.props.onClick}
-            onMouseEnter={this.toggleWarning}
-            onFocus={this.toggleWarning}
-            onMouseLeave={this.toggleWarning}
-            onBlur={this.toggleWarning}
+            onMouseEnter={this.showWarning}
+            onFocus={this.showWarning}
+            onMouseLeave={this.hideWarning}
+            onBlur={this.hideWarning}
           >
             <Translate content="classifier.back" />
           </StyledBackButton>
