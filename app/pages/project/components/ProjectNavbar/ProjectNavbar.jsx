@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ProjectNavbarNarrow from './components/ProjectNavbarNarrow';
 import ProjectNavbarWide, { SizeAwareProjectNavbarWide } from './components/ProjectNavbarWide';
 
@@ -17,6 +18,7 @@ class ProjectNavbar extends Component {
     super(props);
     this.setBreakpoint = this.setBreakpoint.bind(this);
     this.state = {
+      loading: true,
       useWide: false
     };
   }
@@ -30,9 +32,11 @@ class ProjectNavbar extends Component {
   setBreakpoint(size) {
     // `size` is undefined when the component is first mounted, as there hasn't
     // been time for the callback to fire.
+    
     if (size) {
       const useWide = size.width < document.body.clientWidth;
-      this.setState({ useWide });
+      const newState = (this.state.loading) ? { useWide, loading: false } : { useWide };
+      this.setState(newState);
     }
   }
 
@@ -40,8 +44,9 @@ class ProjectNavbar extends Component {
     const NavBarComponent = (this.state.useWide) ? ProjectNavbarWide : ProjectNavbarNarrow;
 
     return (
-      <div>
-        <NavBarComponent {...this.props} />
+      <React.Fragment>
+        {!this.state.loading &&
+          <NavBarComponent {...this.props} />}
         <SizeAwareProjectNavbarWide
           {...this.props}
           onSize={this.setBreakpoint}
@@ -50,9 +55,31 @@ class ProjectNavbar extends Component {
             position: 'absolute'
           }}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }
+
+ProjectNavbar.defaultProps = {
+  avatarSrc: '',
+  backgroundSrc: '',
+  launched: false,
+  navLinks: [],
+  projectLink: '',
+  projectTitle: '',
+  redirect: '',
+  underReview: false
+};
+
+ProjectNavbar.propTypes = {
+  avatarSrc: PropTypes.string,
+  backgroundSrc: PropTypes.string,
+  launched: PropTypes.bool,
+  navLinks: PropTypes.arrayOf(PropTypes.object),
+  projectTitle: PropTypes.string,
+  projectLink: PropTypes.string,
+  redirect: PropTypes.string,
+  underReview: PropTypes.bool
+};
 
 export default ProjectNavbar;

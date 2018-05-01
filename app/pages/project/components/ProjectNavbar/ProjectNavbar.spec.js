@@ -6,54 +6,71 @@
 */
 
 import React from 'react';
-import { mount, shallow, render } from 'enzyme';
+import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import ProjectNavbar from './ProjectNavbar';
 
-describe('ProjectNavbar', function () {
-
-  Object.defineProperty(document.body, 'clientWidth', { value: 100 });
+describe.only('ProjectNavbar', function () {
+  before(function() {
+    Object.defineProperty(document.body, 'clientWidth', { value: 100 });
+  });
 
   it('should render without crashing', function () {
-    shallow(<ProjectNavbar />);
+    expect(shallow(<ProjectNavbar />)).to.be.ok;
   });
 
   describe('child rendering', function () {
-    it('should render ProjectNavbarNarrow by default', function () {
-      const wrapper = shallow(<ProjectNavbar />);
+    let wrapper;
+    before(function() {
+      wrapper = shallow(<ProjectNavbar />);
+    });
 
-      // Note - we check for `withSizes(ProjectNavbarNarrow)` as it's a
-      // component wrapped in a HOC.
-      expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(1);
+    it('should not render either navbar variants if SizeAwareProjectNavbarWide component\'s callback hasn\'t fired yet', function() {
+      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(0);
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
     });
 
     it('should render ProjectNavbarWide if state.useWide is true', function () {
-      const wrapper = shallow(<ProjectNavbar />);
-      wrapper.setState({ useWide: true });
+      wrapper.setState({ loading: false, useWide: true });
+      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(0);
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(1);
-      expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(0);
     });
 
     it('should render ProjectNavbarNarrow if state.useWide is false', function () {
-      const wrapper = shallow(<ProjectNavbar />);
       wrapper.setState({ useWide: false });
-      expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(1);
+      console.log(wrapper.childAt(0).name());      
+      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(1);
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
     });
   });
 
   describe('setBreakpoint behavior', function () {
+    let wrapper;
+    let setBreakpointSpy;
+    before(function() {
+      setBreakpointSpy = sinon.spy(ProjectNavbar.prototype, 'setBreakpoint');
+      wrapper = shallow(<ProjectNavbar />);
+      wrapper.setState({ loading: false });
+    });
+
+    afterEach(function () {
+      setBreakpointSpy.resetHistory();
+    });
+
+    after(function() {
+      setBreakpointSpy.restore();
+    });
+
     it('should correctly set the state if clientWidth is enough to render ProjectNavbarWide', function () {
-      const wrapper = shallow(<ProjectNavbar />);
       wrapper.instance().setBreakpoint({ width: 90 });
+      expect(setBreakpointSpy.calledOnce).to.be.true;
       expect(wrapper.state('useWide')).to.equal(true);
     });
 
     it('should correctly set the state if clientWidth is too narrow to render ProjectNavbarWide', function () {
-      const wrapper = shallow(<ProjectNavbar />);
       wrapper.instance().setBreakpoint({ width: 110 });
+      expect(setBreakpointSpy.calledOnce).to.be.true;      
       expect(wrapper.state('useWide')).to.equal(false);
     });
   });
