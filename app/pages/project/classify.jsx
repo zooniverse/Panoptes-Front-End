@@ -8,7 +8,6 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 
 import counterpart from 'counterpart';
-import Translate from 'react-translate-component';
 import { Split } from 'seven-ten';
 
 import seenThisSession from '../../lib/seen-this-session';
@@ -64,7 +63,7 @@ export class ProjectClassifyPage extends React.Component {
     this.loadingSelectedWorkflow = false;
     this.project = null;
     this.workflow = null;
-
+    
     this.state = {
       subject: null,
       classification: null,
@@ -72,7 +71,7 @@ export class ProjectClassifyPage extends React.Component {
       demoMode: sessionDemoMode,
       promptWorkflowAssignmentDialog: false,
       rejected: null,
-      validUserGroup: false,
+      validUserGroup: false
     };
   }
 
@@ -85,7 +84,7 @@ export class ProjectClassifyPage extends React.Component {
     this.validateUserGroup(this.props, this.context);
   }
 
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps) {
     const nextWorkflowID = (isPresent(nextProps) && isPresent(nextProps.workflow)) ? nextProps.workflow : null;
     this.context.geordi.remember({ workflowID: nextWorkflowID });
   }
@@ -129,7 +128,7 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  shouldWorkflowAssignmentPrompt = (nextProps) => {
+  shouldWorkflowAssignmentPrompt(nextProps) {
     // Only for Gravity Spy which is assigning workflows to logged in users
     if (nextProps.project.experimental_tools.indexOf('workflow assignment') > -1) {
       const assignedWorkflowID = nextProps.preferences && nextProps.preferences.settings && nextProps.preferences.settings.workflow_id;
@@ -140,9 +139,9 @@ export class ProjectClassifyPage extends React.Component {
         }
       }
     }
-  };
+  }
 
-  loadAppropriateClassification = (props) => {
+  loadAppropriateClassification(props) {
     // Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
     if (this.state.rejected && this.state.rejected.classification) {
       this.setState({ rejected: null });
@@ -158,9 +157,9 @@ export class ProjectClassifyPage extends React.Component {
         this.setState({ rejected: { classification: error } });
       });
     }
-  };
+  }
 
-  getSubjectSet = (workflow) => {
+  getSubjectSet(workflow) {
     if (workflow.grouped) {
       return workflow.get('subject_sets').then((subjectSets) => {
         const randomIndex = Math.floor(Math.random() * subjectSets.length);
@@ -169,9 +168,9 @@ export class ProjectClassifyPage extends React.Component {
     } else {
       return Promise.resolve();
     }
-  };
+  }
 
-  createNewClassification = (project, workflow) => {
+  createNewClassification(project, workflow) {
     // A subject set is only specified if the workflow is grouped.
     const subjectSetPromise = this.getSubjectSet(workflow);
 
@@ -209,9 +208,9 @@ export class ProjectClassifyPage extends React.Component {
 
       return classification;
     });
-  };
+  }
 
-  getNextSubject = (project, workflow, subjectSet) => {
+  getNextSubject(project, workflow, subjectSet) {
     let subject;
     let subjectToLoad;
 
@@ -249,7 +248,12 @@ export class ProjectClassifyPage extends React.Component {
         }
       }).then((subjects) => {
         const nonLoadedSubjects = subjects.filter(newSubject => newSubject !== subjectToLoad);
-        const filteredSubjects = nonLoadedSubjects.filter(nonLoadedSubject => !nonLoadedSubject.already_seen && !nonLoadedSubject.retired);
+        const filteredSubjects = nonLoadedSubjects.filter((nonLoadedSubject) => {
+          const notSeen = !nonLoadedSubject.already_seen &&
+            !nonLoadedSubject.retired &&
+            !seenThisSession.check(workflow, nonLoadedSubject);
+          return notSeen;
+        });
         const subjectsToLoad = (filteredSubjects.length > 0) ? filteredSubjects : nonLoadedSubjects;
 
         upcomingSubjects.forWorkflow[workflow.id].push(...subjectsToLoad);
@@ -277,7 +281,7 @@ export class ProjectClassifyPage extends React.Component {
 
     // console.log 'Chose a subject'
     return subject;
-  };
+  }
 
   render() {
     return (
@@ -296,17 +300,17 @@ export class ProjectClassifyPage extends React.Component {
     );
   }
 
-  renderClassifier = () => {
+  renderClassifier() {
     if (this.state.classification) {
       return (
         <Classifier
           {...this.props}
           classification={this.state.classification}
           demoMode={this.state.demoMode}
-          onChangeDemoMode={this.handleDemoModeChange}
-          onComplete={this.saveClassification}
-          onCompleteAndLoadAnotherSubject={this.saveClassificationAndLoadAnotherSubject}
-          onClickNext={this.loadAnotherSubject}
+          onChangeDemoMode={this.handleDemoModeChange.bind(this)}
+          onComplete={this.saveClassification.bind(this)}
+          onCompleteAndLoadAnotherSubject={this.saveClassificationAndLoadAnotherSubject.bind(this)}
+          onClickNext={this.loadAnotherSubject.bind(this)}
           requestUserProjectPreferences={this.props.requestUserProjectPreferences}
           splits={this.props.splits}
         />
@@ -320,19 +324,19 @@ export class ProjectClassifyPage extends React.Component {
         <span>Loading classification</span>
       );
     }
-  };
+  }
 
-  handleDemoModeChange = (newDemoMode) => {
+  handleDemoModeChange(newDemoMode) {
     sessionDemoMode = newDemoMode;
     this.setState({ demoMode: sessionDemoMode });
-  };
+  }
 
-  saveClassificationAndLoadAnotherSubject = () => {
+  saveClassificationAndLoadAnotherSubject() {
     this.saveClassification();
     this.loadAnotherSubject();
-  };
+  }
 
-  saveClassification = () => {
+  saveClassification() {
     if (this.context.geordi) {
       this.context.geordi.logEvent({ type: 'classify' });
     }
@@ -348,18 +352,18 @@ export class ProjectClassifyPage extends React.Component {
       classificationQueue.add(classification);
     }
     return Promise.resolve(classification);
-  };
+  }
 
-  loadAnotherSubject = () => {
+  loadAnotherSubject() {
     // Forget the old classification so a new one will load.
     currentClassifications.forWorkflow[this.props.workflow.id] = null;
 
     if (this.props.workflow) {
       this.loadAppropriateClassification(this.props);
     }
-  };
+  }
 
-  maybePromptWorkflowAssignmentDialog = (props) => {
+  maybePromptWorkflowAssignmentDialog(props) {
     if (this.state.promptWorkflowAssignmentDialog) {
       WorkflowAssignmentDialog.start({ splits: props.splits, project: props.project }).then(() =>
         this.setState({ promptWorkflowAssignmentDialog: false })
@@ -370,9 +374,9 @@ export class ProjectClassifyPage extends React.Component {
         }
       });
     }
-  };
+  }
 
-  validateUserGroup = (props, context) => {
+  validateUserGroup(props, context) {
     if (props.location.query && props.location.query.group && props.user) {
       apiClient.type('user_groups').get(props.location.query.group).then((group) => {
         const isUserMemberOfGroup = group.links && group.links.users && group.links.users.includes(props.user.id);
@@ -387,9 +391,9 @@ export class ProjectClassifyPage extends React.Component {
         }
       });
     }
-  };
+  }
 
-  clearUserGroupForClassification = (props, context) => {
+  clearUserGroupForClassification(props, context) {
     if (props.location.query && props.location.query.group) {
       const query = props.location.query;
       this.setState({ validUserGroup: false });
@@ -402,7 +406,7 @@ export class ProjectClassifyPage extends React.Component {
       newLocation.search = '';
       context.router.push(newLocation);
     }
-  };
+  }
 }
 
 ProjectClassifyPage.contextTypes = {
@@ -415,7 +419,7 @@ ProjectClassifyPage.propTypes = {
   loadingSelectedWorkflow: PropTypes.bool,
   project: PropTypes.object,
   storage: PropTypes.object,
-  workflow: PropTypes.object,
+  workflow: PropTypes.object
 };
 
 
