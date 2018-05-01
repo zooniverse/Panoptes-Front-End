@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import SubjectViewer from '../../components/subject-viewer';
 import Thumbnail from '../../components/thumbnail';
-import getSubjectLocation from '../../lib/get-subject-location';
+import getSubjectLocations from '../../lib/get-subject-locations';
 
 class Recents extends React.Component {
   constructor() {
@@ -16,8 +16,10 @@ class Recents extends React.Component {
 
   componentDidMount() {
     const { user } = this.props;
-    !!user && user.get('recents', { project_id: this.props.project.id, sort: '-created_at' })
-    .then(recents => this.setState({ recents }));
+    if (user && user.get) {
+      user.get('recents', { project_id: this.props.project.id, sort: '-created_at' })
+        .then(recents => this.setState({ recents }));
+    }
   }
 
   render() {
@@ -33,7 +35,17 @@ class Recents extends React.Component {
           <div className="content-container collection-page-with-project-context">
             <ul className="collections-show">
               {this.state.recents.map((recent) => {
-                const { type, format, src } = getSubjectLocation(recent);
+                const locations = getSubjectLocations(recent);
+                let type = '';
+                let format = '';
+                let src = '';
+                if (locations.image) {
+                  type = 'image';
+                  [format, src] = locations.image;
+                } else if (locations.video) {
+                  type = 'video';
+                  [format, src] = locations.video;
+                }
                 const fakeSubject = {
                   id: recent.links.subject,
                   locations: [{ [`${type}/${format}`]: src }]
