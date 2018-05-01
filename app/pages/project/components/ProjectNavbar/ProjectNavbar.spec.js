@@ -11,7 +11,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import ProjectNavbar from './ProjectNavbar';
 
-describe.only('ProjectNavbar', function () {
+describe('ProjectNavbar', function () {
   before(function() {
     Object.defineProperty(document.body, 'clientWidth', { value: 100 });
   });
@@ -27,20 +27,19 @@ describe.only('ProjectNavbar', function () {
     });
 
     it('should not render either navbar variants if SizeAwareProjectNavbarWide component\'s callback hasn\'t fired yet', function() {
-      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(0);
+      expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(0);
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
     });
 
     it('should render ProjectNavbarWide if state.useWide is true', function () {
       wrapper.setState({ loading: false, useWide: true });
-      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(0);
+      expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(0);
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(1);
     });
 
     it('should render ProjectNavbarNarrow if state.useWide is false', function () {
       wrapper.setState({ useWide: false });
-      console.log(wrapper.childAt(0).name());      
-      expect(wrapper.find('ProjectNavbarNarrow')).to.have.lengthOf(1);
+      expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(1);
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
     });
   });
