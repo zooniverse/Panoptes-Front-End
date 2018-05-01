@@ -27,7 +27,7 @@ export default function TaskNavButtons(props) {
         <NextButton
           autoFocus={false}
           onClick={props.addAnnotationForTask}
-          waitingForAnswer={props.waitingForAnswer}
+          disabled={props.waitingForAnswer}
         />
       </ButtonsWrapper>
     );
