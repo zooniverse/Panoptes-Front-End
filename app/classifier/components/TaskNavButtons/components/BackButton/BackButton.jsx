@@ -10,7 +10,7 @@ import { zooTheme } from '../../../../../theme';
 
 function checkIfMSBrowser() {
   if ('CSS' in window) {
-    return !CSS.supports('width', 'max-content');
+    return !CSS.supports('width', 'max-content') && !CSS.supports('width', '-moz-max-content');
   }
 
   return 'ActiveXObject' in window;
@@ -58,6 +58,9 @@ export const StyledBackButton = styled.button.attrs({
   }
 `;
 
+// Firefox returns CSS.supports('width', 'max-content') as false
+// even though CanIUse reports it is supported by Firefox
+// Only the vendor prefixed -moz-max-content returns true
 export const StyledBackButtonToolTip = styled.span`
   bottom: ${(checkIfMSBrowser()) ? '-130%' : '-100%'};
   box-sizing: border-box;
@@ -70,6 +73,7 @@ export const StyledBackButtonToolTip = styled.span`
   padding: 1em 0;
   position: absolute;
   width: ${(checkIfMSBrowser()) ? '400%' : 'max-content'};
+  width: -moz-max-content;
 `;
 
 export class BackButton extends React.Component {

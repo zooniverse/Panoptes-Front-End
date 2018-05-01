@@ -9,7 +9,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import TalkLink, { StyledTalkLink, StyledDisabledTalkPlaceholder } from './TalkLink';
+import { TalkLink, StyledTalkLink, StyledDisabledTalkPlaceholder } from './TalkLink';
 
 describe('TalkLink', function() {
   describe('rendering', function() {

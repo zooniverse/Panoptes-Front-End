@@ -8,10 +8,12 @@ import { darken, lighten } from 'polished';
 import Translate from 'react-translate-component';
 import { pxToRem, zooTheme } from '../../../../../theme';
 
+// These hasn't been moved into the zoo theme because the button might go away
+const TALK_LINK_BLUE = '#43bbfd';
+const TALK_LINK_BLUE_HOVER = '#69c9fd';
+
 const commonStyles = `
-  background: #43bbfd;
-  border: 0;
-  color: #fff;
+  box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
   flex: 2 0;
@@ -21,39 +23,78 @@ const commonStyles = `
   position: relative;
   text-align: center;
   text-decoration: none;
+  white-space: nowrap;
 `;
 
 export const StyledTalkLink = styled(Link)`
   ${commonStyles}
+  background: ${theme('mode', {
+    dark: zooTheme.colors.darkTheme.background.default,
+    light: TALK_LINK_BLUE
+  })};
+  border: ${theme('mode', {
+    dark: `thin solid ${TALK_LINK_BLUE}`,
+    light: 'thin solid transparent'
+  })};
+  color: ${theme('mode', {
+    dark: zooTheme.colors.darkTheme.font,
+    light: 'white'
+  })};
 
   &:hover, &:focus {
-    background: #69c9fd;
+    background: ${theme('mode', {
+      dark: TALK_LINK_BLUE_HOVER,
+      light: TALK_LINK_BLUE_HOVER
+    })};
+    border: ${theme('mode', {
+      dark: `thin solid ${TALK_LINK_BLUE}`,
+      light: `thin solid ${TALK_LINK_BLUE_HOVER}`
+    })};
   }
 `;
 
-export const StyledDisabledTalkPlaceholder = styled.span`
+// can't style the cursor and pointer-events: none simulatenously
+export const StyledDisabledTalkPlaceholder = styled.span.attrs({
+  tabIndex: -1
+})`
   ${commonStyles}
+  background: ${theme('mode', {
+    dark: zooTheme.colors.darkTheme.background.default,
+    light: TALK_LINK_BLUE
+  })};
+  border: ${theme('mode', {
+    dark: `thin solid ${TALK_LINK_BLUE}`,
+    light: 'thin solid transparent'
+  })};
+  color: ${theme('mode', {
+    dark: zooTheme.colors.darkTheme.font,
+    light: 'white'
+  })};
   opacity: 0.5;
   pointer-events: none;
 `;
 
 // TODO: Add Seven-Ten visibility split wrapper
 // because we want to test removing the talk links from the classifier task area
-export default function TalkLink({ disabled, onClick, projectSlug, subjectId, translateContent }) {
+export function TalkLink({ disabled, onClick, projectSlug, subjectId, theme, translateContent }) {
   if (disabled) {
     return (
-      <StyledDisabledTalkPlaceholder>
-        <Translate content={translateContent} />
-      </StyledDisabledTalkPlaceholder>
+      <ThemeProvider theme={{ mode: theme }}>
+        <StyledDisabledTalkPlaceholder>
+          <Translate content={translateContent} />
+        </StyledDisabledTalkPlaceholder>
+      </ThemeProvider>
     );
   }
   return (
-    <StyledTalkLink
-      onClick={onClick}
-      to={`/projects/${projectSlug}/talk/subjects/${subjectId}`}
-    >
-      <Translate content={translateContent} />
-    </StyledTalkLink>
+    <ThemeProvider theme={{ mode: theme }}>
+      <StyledTalkLink
+        onClick={onClick}
+        to={`/projects/${projectSlug}/talk/subjects/${subjectId}`}
+      >
+        <Translate content={translateContent} />
+      </StyledTalkLink>
+    </ThemeProvider>
   );
 }
 
@@ -72,3 +113,9 @@ TalkLink.propTypes = {
   subjectId: PropTypes.string.isRequired,
   translateContent: PropTypes.string
 };
+
+const mapStateToProps = state => ({
+  theme: state.userInterface.theme
+});
+
+export default connect(mapStateToProps)(TalkLink);
