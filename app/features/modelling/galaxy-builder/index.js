@@ -9,7 +9,7 @@ class GalaxyBuilderModel extends baseModel {
   constructor(canvas, { frame, metadata, src, sizing }, eventHandlers) {
     const modelErrorMessage = `
     Sorry, this project requires features which are not supported by your
-    device. Please try again on a desktop computer, and let us know in talk
+    device. Please try again on a different computer, and let us know in talk
     if you're still having problems. You can comment on photos (the second
     image) in Talk, but please do not classify!`;
     super(canvas, { frame, metadata, src, sizing }, eventHandlers, modelErrorMessage);
