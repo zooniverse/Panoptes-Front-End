@@ -140,6 +140,7 @@ EditWorkflowPage = createReactClass
                           {tasks[definition.type].getTaskText definition}
                           {if key is @props.workflow.first_task
                             <small> <em>(first)</em></small>}
+                          <small style={{float: 'right'}}>{key}</small>
                         </button>
                       </div>}
               </div>
