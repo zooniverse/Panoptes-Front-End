@@ -7,7 +7,12 @@ import { parseDisk, parseBulge, parseBar, parseSpiralArms } from './parseFunctio
 
 class GalaxyBuilderModel extends baseModel {
   constructor(canvas, { frame, metadata, src, sizing }, eventHandlers) {
-    super(canvas, { frame, metadata, src, sizing }, eventHandlers);
+    const modelErrorMessage = `
+    Sorry, this project requires features which are not supported by your
+    device. Please try again on a desktop computer, and let us know in talk
+    if you're still having problems. You can comment on photos (the second
+    image) in Talk, but please do not classify!`;
+    super(canvas, { frame, metadata, src, sizing }, eventHandlers, modelErrorMessage);
     this.panZoom = panZoom(this.regl);
     this.scaleModel = scaleModel(this.regl);
     this.state.shouldCompareToImage = false;
@@ -21,11 +26,7 @@ class GalaxyBuilderModel extends baseModel {
           console.warn(e);
           this.state.modelHasErrored = true;
           this.eventHandlers.modelDidError({
-            modelErrorMessage: `
-            Sorry, this project requires features which are not supported by your
-            device. Please try again on a desktop computer, and let us know in talk
-            if you're still having problems. You can comment on photos (the second
-            image) in Talk, but please do not classify!`
+            modelErrorMessage: this.modelErrorMessage
           });
         });
     }
@@ -106,11 +107,7 @@ class GalaxyBuilderModel extends baseModel {
       this.model = {};
       this.state.modelHasErrored = true;
       this.eventHandlers.modelDidError({
-        modelErrorMessage: `
-        Sorry, this project requires features which are not supported by your
-        device. Please try again on a desktop computer, and let us know in talk
-        if you're still having problems. You can comment on photos (the second
-        image) in Talk, but please do not classify!`
+        modelErrorMessage: this.modelErrorMessage
       });
     }
   }
