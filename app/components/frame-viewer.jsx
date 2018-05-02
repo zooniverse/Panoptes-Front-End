@@ -69,12 +69,11 @@ export default class FrameViewer extends React.Component {
       workflow: this.props.workflow
     } : {};
 
-    const ProgressMarker = this.props.progressMarker;
     if (FrameWrapper) {
       return (
         <PanZoom
           ref={(c) => { this.panZoom = c; }}
-          enabled={zoomEnabled}
+          enabled={this.props.zoomControls && zoomEnabled}
           frameDimensions={this.state.frameDimensions}
           subject={this.props.subject}
         >
@@ -140,7 +139,8 @@ FrameViewer.propTypes = {
   ),
   workflow: PropTypes.shape(
     { configuration: PropTypes.object }
-  )
+  ),
+  zoomControls: PropTypes.bool
 };
 
 FrameViewer.defaultProps = {
@@ -153,5 +153,6 @@ FrameViewer.defaultProps = {
   },
   workflow: {
     configuration: {}
-  }
+  },
+  zoomControls: true
 };
