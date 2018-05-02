@@ -11,10 +11,10 @@ import { pxToRem, zooTheme } from '../../../../../theme';
 // These hasn't been moved into the zoo theme because the button might go away
 const TALK_LINK_BLUE = '#43bbfd';
 const TALK_LINK_BLUE_HOVER = '#69c9fd';
+const TALK_LINK_BLUE_HOVER_DARK = '#104A79';
 
 const commonStyles = `
   box-sizing: border-box;
-  cursor: pointer;
   display: inline-block;
   flex: 2 0;
   line-height: 2em;
@@ -28,6 +28,8 @@ const commonStyles = `
 
 export const StyledTalkLink = styled(Link)`
   ${commonStyles}
+  cursor: pointer;    
+  
   background: ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.default,
     light: TALK_LINK_BLUE
@@ -43,7 +45,7 @@ export const StyledTalkLink = styled(Link)`
 
   &:hover, &:focus {
     background: ${theme('mode', {
-      dark: TALK_LINK_BLUE_HOVER,
+      dark: TALK_LINK_BLUE_HOVER_DARK,
       light: TALK_LINK_BLUE_HOVER
     })};
     border: ${theme('mode', {
@@ -54,9 +56,7 @@ export const StyledTalkLink = styled(Link)`
 `;
 
 // can't style the cursor and pointer-events: none simulatenously
-export const StyledDisabledTalkPlaceholder = styled.span.attrs({
-  tabIndex: -1
-})`
+export const StyledDisabledTalkPlaceholder = styled.span`
   ${commonStyles}
   background: ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.default,
@@ -70,8 +70,8 @@ export const StyledDisabledTalkPlaceholder = styled.span.attrs({
     dark: zooTheme.colors.darkTheme.font,
     light: 'white'
   })};
+  cursor: not-allowed;
   opacity: 0.5;
-  pointer-events: none;
 `;
 
 // TODO: Add Seven-Ten visibility split wrapper
@@ -86,6 +86,7 @@ export function TalkLink({ disabled, onClick, projectSlug, subjectId, theme, tra
       </ThemeProvider>
     );
   }
+
   return (
     <ThemeProvider theme={{ mode: theme }}>
       <StyledTalkLink
