@@ -137,7 +137,8 @@ class Classifier extends React.Component {
       annotations: annotations,
       annotation: annotation,
       frame: 0,
-      frameWrapper: FrameAnnotator
+      frameWrapper: FrameAnnotator,
+      zoomControls: false
     };
 
     return openFeedbackModal({ feedback: taskFeedback, subjectViewerProps, taskId })
