@@ -69,7 +69,6 @@ export default class FrameViewer extends React.Component {
       workflow: this.props.workflow
     } : {};
 
-    const ProgressMarker = this.props.progressMarker;
     if (FrameWrapper) {
       return (
         <PanZoom
