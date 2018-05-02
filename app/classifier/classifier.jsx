@@ -135,7 +135,7 @@ class Classifier extends React.Component {
       workflow: this.props.workflow,
       preferences: this.props.preferences,
       annotations: annotations,
-      annotation: annotation,
+      annotation: {},
       frame: 0,
       frameWrapper: FrameAnnotator,
       zoomControls: false
