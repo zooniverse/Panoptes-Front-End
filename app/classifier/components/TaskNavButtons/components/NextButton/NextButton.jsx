@@ -12,7 +12,7 @@ export const StyledNextButton = styled.button.attrs({
   disabled: props => props.disabled,
   type: 'button'
 })`
-  background-color: ${theme('mode', { 
+  background: ${theme('mode', { 
     dark: zooTheme.colors.darkTheme.background.default,
     light: zooTheme.colors.highlight.default
   })};
