@@ -48,7 +48,8 @@ export class ProjectNavbarNarrow extends Component {
     const {
       avatarSrc,
       backgroundSrc,
-      height, launched,
+      height,
+      launched,
       projectLink,
       projectTitle,
       navLinks,

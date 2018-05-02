@@ -36,6 +36,7 @@
     "react-router": "~3.2.0",
     "react-router-scroll": "~0.4.4",
     "react-select": "1.0.0-rc.10",
+    "react-sizeme": "~2.4.2",
     "react-sizes": "~0.4.3",
     "react-swipe": "~5.1.1",
     "react-translate-component": "~0.14.0",
