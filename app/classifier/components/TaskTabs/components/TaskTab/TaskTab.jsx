@@ -7,7 +7,7 @@ import { lighten } from 'polished';
 import Translate from 'react-translate-component';
 import { pxToRem, zooTheme } from '../../../../../theme';
 
-export const StyledQuestionTab = styled.button.attrs({
+export const StyledTaskTab = styled.button.attrs({
   type: 'button'
 }) `
   background-color: ${theme('mode', {
@@ -28,17 +28,17 @@ export const StyledQuestionTab = styled.button.attrs({
   text-transform: uppercase;
 `;
 
-function QuestionTab(props) {
+export function TaskTab(props) {
   return (
     <ThemeProvider theme={{ mode: props.theme }}>
-      <StyledQuestionTab>
-        <Translate content="classifier.question" />
-      </StyledQuestionTab>
+      <StyledTaskTab>
+        <Translate content="classifier.taskTabs.taskTab" />
+      </StyledTaskTab>
     </ThemeProvider>
   );
 }
 
-QuestionTab.propTypes = {
+TaskTab.propTypes = {
   theme: PropTypes.string
 };
 
@@ -47,4 +47,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps)(QuestionTab);
+export default connect(mapStateToProps)(TaskTab);

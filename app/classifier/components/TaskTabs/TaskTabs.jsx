@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import QuestionTab from './components/QuestionTab';
+import TaskTab from './components/TaskTab';
 import TutorialTab from './components/TutorialTab';
 
 export const TabsWrapper = styled.div`
@@ -9,11 +9,11 @@ export const TabsWrapper = styled.div`
   flex-direction: row;
 `;
 
-// TODO: make QuestionTab and TutorialTab actual functional tabs according to design
+// TODO: make TaskTab and TutorialTab actual functional tabs according to design
 export default function TaskTabs({ projectPreferences, tutorial, user, workflow }) {
   return (
     <TabsWrapper>
-      <QuestionTab />
+      <TaskTab />
       <TutorialTab
         projectPreferences={projectPreferences}
         tutorial={tutorial}
