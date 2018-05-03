@@ -42,8 +42,8 @@ export const StyledTutorialButton = styled.button.attrs({
       light: darken(0.05, zooTheme.colors.lightTheme.background.default)
     })};
     color: ${theme('mode', {
-      dark: lighten(0.45, zooTheme.colors.darkTheme.background.default),
-      light: zooTheme.colors.lightTheme.font
+      dark: lighten(0.10, zooTheme.colors.darkTheme.background.default),
+      light: zooTheme.colors.lightTheme.button.answerDisabled
     })};
     cursor: not-allowed;
   }
@@ -60,7 +60,7 @@ export const StyledTutorialButton = styled.button.attrs({
   }
 `;
 
-function TutorialTab(props, context) {
+export function TutorialTab(props, context) {
   const disabled = !(props.tutorial && props.tutorial.steps && props.tutorial.steps.length > 0);
   return (
     <ThemeProvider theme={{ mode: props.theme }}>

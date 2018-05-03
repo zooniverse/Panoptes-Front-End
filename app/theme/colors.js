@@ -19,6 +19,7 @@ export default {
       default: '#EEF2F5'
     },
     button: {
+      answerDisabled: '#A6A7A9',
       done: '#078F52',
       nextHover: '#ea9300'
     },
