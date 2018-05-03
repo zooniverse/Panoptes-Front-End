@@ -117,7 +117,8 @@ $survey-task-pill-button
   flex-wrap: wrap
 
   &[data-columns="3"] > *
-    flex-basis: calc(33.33% - 2px)
+    flex-basis: calc(33.33% - 1px)
+    max-width: calc(33.33% - 1px) // temporary fix for an overflowing button text
 
   &[data-columns="2"] > *
     flex-basis: calc(50% - 2px)
