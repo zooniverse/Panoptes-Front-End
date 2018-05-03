@@ -56,6 +56,10 @@ class SVGImage extends React.Component {
     return {};
   }
 
+  getBoundingClientRect() {
+    return this.refs.image?.getBoundingClientRect();
+  }
+
   render() {
     const imageProps = Object.assign({}, this.props);
     delete imageProps.modification;

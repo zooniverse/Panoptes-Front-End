@@ -11,12 +11,14 @@ export default class SVGRenderer extends React.Component {
     super(props);
     this.getScreenCurrentTransformationMatrix = this.getScreenCurrentTransformationMatrix.bind(this);
     this.getEventOffset = this.getEventOffset.bind(this);
+    this.getSizeRect = this.getSizeRect.bind(this);
     this.normalizeDifference = this.normalizeDifference.bind(this);
     this.eventCoordsToSVGCoords = this.eventCoordsToSVGCoords.bind(this);
   }
 
   getSizeRect() {
-    const clientRect = this.sizeRect && this.sizeRect.getBoundingClientRect();
+    const subjectNode = this.subjectImage || this.sizeRect;
+    const clientRect = subjectNode?.getBoundingClientRect();
 
     if (clientRect) {
       const { width, height } = clientRect;
@@ -98,6 +100,7 @@ export default class SVGRenderer extends React.Component {
       annotation: this.props.annotation,
       containerRect: this.getSizeRect(),
       frame: this.props.frame,
+      getContainerRect: this.getSizeRect,
       getEventOffset: this.getEventOffset,
       getScreenCurrentTransformationMatrix: this.getScreenCurrentTransformationMatrix,
       naturalWidth: this.props.naturalWidth,
@@ -181,6 +184,7 @@ export default class SVGRenderer extends React.Component {
               {type === 'image' && this.props.naturalWidth && (
                 <Draggable onDrag={this.props.panEnabled ? this.props.panByDrag : () => {}}>
                   <SVGImage
+                    ref={(node) => { this.subjectImage = node; }}
                     className={this.props.panEnabled ? 'pan-active' : ''}
                     src={src}
                     width={this.props.naturalWidth}
