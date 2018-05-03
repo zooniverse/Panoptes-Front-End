@@ -38,7 +38,7 @@ describe('TaskTabs', function() {
     expect(wrapper.find(TabsWrapper)).to.have.lengthOf(1);
   });
 
-  it('should render a QuestionTab component', function() {
+  it('should render a TaskTab component', function() {
     expect(wrapper.find(TaskTab)).to.have.lengthOf(1);
   });
 
