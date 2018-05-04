@@ -24,6 +24,10 @@ class Chooser extends React.Component {
     }).filter(Boolean);
   }
 
+  handleClearFilters() {
+    this.props.task.characteristicsOrder.map(characteristicId => this.props.onFilter(characteristicId, undefined));
+  }
+
   render() {
     const { annotation, task, translation, filters, focusedChoice, onChoose, onFilter, onRemove } = this.props;
     const filteredChoices = this.getFilteredChoices();
@@ -57,7 +61,7 @@ class Chooser extends React.Component {
             type="button"
             className="survey-task-chooser-characteristic-clear-button"
             disabled={Object.keys(filters).length === 0}
-            onClick={this.handleClearFilters}
+            onClick={this.handleClearFilters.bind(this)}
           >
             <i className="fa fa-ban" /> <Translate content="tasks.survey.clearFilters" />
           </button>
