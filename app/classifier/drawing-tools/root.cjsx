@@ -74,7 +74,7 @@ module.exports = createReactClass
         <DetailsSubTaskForm
           handleDetailsChange={@handleDetailsChange}
           handleDetailsFormClose={@handleDetailsFormClose}
-          ref={(node) => { this.detailsForm = node; }}
+          ref={(node) => @detailsForm = node}
           tasks={tasks}
           toolProps={toolProps}
         />}

@@ -6,7 +6,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import Translate from 'react-translate-component';
 import { pxToRem, zooTheme } from '../../../../theme';
-import ModalFocus from '../../components/modal-focus';
+import ModalFocus from '../../../../components/modal-focus';
 
 const SEMI_MODAL_FORM_STYLE = {
   pointerEvents: 'all'
@@ -19,6 +19,7 @@ const SEMI_MODAL_UNDERLAY_STYLE = {
 
 class DetailsSubTaskForm extends React.Component {
   areDetailsComplete(tasks, toolProps) {
+    console.log(tasks, toolProps)
     return toolProps.details.every((detailTask, i) => {
       const TaskComponent = tasks[detailTask.type];
       if (TaskComponent.isAnnotationComplete) {
@@ -36,7 +37,6 @@ class DetailsSubTaskForm extends React.Component {
 
     return (
       <StickyModalForm
-        ref="detailsForm"
         style={SEMI_MODAL_FORM_STYLE}
         underlayStyle={SEMI_MODAL_UNDERLAY_STYLE}
         onSubmit={handleDetailsFormClose}
@@ -81,5 +81,27 @@ class DetailsSubTaskForm extends React.Component {
     );
   }
 }
+
+DetailsSubTaskForm.defaultProps = {
+  handleDetailsChange: () => {},
+  handleDetailsFormClose: () => {},
+  tasks: {},
+  toolProps: {
+    details: [],
+    taskKey: '',
+    mark: {}
+  }
+};
+
+DetailsSubTaskForm.propTypes = {
+  handleDetailsChange: PropTypes.func,
+  handleDetailsFormClose: PropTypes.func,
+  tasks: PropTypes.object,
+  toolProps: PropTypes.shape({
+    details: PropTypes.array,
+    taskKey: PropTypes.string,
+    mark: PropTypes.object
+  })
+};
 
 export default DetailsSubTaskForm;
