@@ -40,9 +40,6 @@ export default class HomePageSocial extends React.Component {
         newestProject
       });
     });
-    getRecentProjects().then((recentProjects) => {
-      this.setState({ recentProjects });
-    });
     getBlogPosts((blogPosts) => {
       this.setState({ blogPosts });
     });
