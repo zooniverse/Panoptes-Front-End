@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import sortIntoColumns from 'sort-into-columns';
 import Translate from 'react-translate-component';
 import CharacteristicsFilter from './CharacteristicsFilter';
 import Choices from './Choices';
@@ -25,21 +24,9 @@ class Chooser extends React.Component {
     }).filter(Boolean);
   }
 
-  howManyColumns({ length }) {
-    if (length <= 5) {
-      return 1;
-    } else if (length <= 20) {
-      return 2;
-    } else {
-      return 3;
-    }
-  }
-
   render() {
     const { annotation, task, translation, filters, focusedChoice, onChoose, onFilter, onRemove } = this.props;
     const filteredChoices = this.getFilteredChoices();
-    const columnsCount = this.howManyColumns(filteredChoices);
-    const sortedFilteredChoices = sortIntoColumns(filteredChoices, columnsCount);
     return (
       <div className="survey-task-chooser">
         <CharacteristicsFilter
@@ -52,11 +39,9 @@ class Chooser extends React.Component {
         <hr className="survey-task-chooser__divider" />
         <Choices
           annotation={annotation}
-          columnsCount={columnsCount}
           filters={filters}
           filteredChoices={filteredChoices}
           focusedChoice={focusedChoice}
-          sortedFilteredChoices={sortedFilteredChoices}
           task={task}
           translation={translation}
           onChoose={onChoose}
@@ -65,7 +50,7 @@ class Chooser extends React.Component {
         <div style={{ textAlign: 'center' }}>
           <Translate
             content="tasks.survey.showing"
-            with={{ count: sortedFilteredChoices.length, max: task.choicesOrder.length }}
+            with={{ count: filteredChoices.length, max: task.choicesOrder.length }}
           />
           &ensp;
           <button

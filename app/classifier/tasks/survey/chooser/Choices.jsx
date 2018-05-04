@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import sortIntoColumns from 'sort-into-columns';
 import Thumbnail from '../../../../components/thumbnail';
 
 const BACKSPACE = 8;
@@ -31,6 +32,16 @@ class Choices extends React.Component {
         newChoiceButtons[index] = button;
       });
     this.choiceButtons = newChoiceButtons.filter(Boolean);
+  }
+
+  howManyColumns({ length }) {
+    if (length <= 5) {
+      return 1;
+    } else if (length <= 20) {
+      return 2;
+    } else {
+      return 3;
+    }
   }
 
   whatSizeThumbnails({ length }) {
@@ -73,10 +84,12 @@ class Choices extends React.Component {
   }
 
   render() {
-    const { columnsCount, filteredChoices, sortedFilteredChoices, task, translation } = this.props;
+    const { filteredChoices, task, translation } = this.props;
     this.choiceButtons = [];
-    const thumbnailSize = this.whatSizeThumbnails(filteredChoices);
     const selectedChoices = this.props.annotation.value.map(item => item.choice);
+    const columnsCount = this.howManyColumns(filteredChoices);
+    const sortedFilteredChoices = sortIntoColumns(filteredChoices, columnsCount);
+    const thumbnailSize = this.whatSizeThumbnails(sortedFilteredChoices);
     return (
       <div className="survey-task-chooser-choices" data-thumbnail-size={thumbnailSize} data-columns={columnsCount}>
         {sortedFilteredChoices.length === 0 && <div><em>No matches.</em></div>}
@@ -133,12 +146,10 @@ Choices.propTypes = {
     task: PropTypes.string,
     value: PropTypes.array
   }),
-  columnsCount: PropTypes.number,
   filteredChoices: PropTypes.array,
   focusedChoice: PropTypes.string,
   onChoose: PropTypes.func,
   onRemove: PropTypes.func,
-  sortedFilteredChoices: PropTypes.array,
   task: PropTypes.shape({
     alwaysShowThumbnails: PropTypes.bool,
     characteristics: PropTypes.object,
@@ -160,10 +171,8 @@ Choices.defaultProps = {
     task: '',
     value: []
   },
-  columnsCount: 3,
   filteredChoices: [],
   focusedChoice: '',
-  sortedFilteredChoices: [],
   onChoose: Function.prototype,
   onRemove: Function.prototype,
   task: null
