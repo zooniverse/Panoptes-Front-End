@@ -90,6 +90,8 @@ class Choices extends React.Component {
     const columnsCount = this.howManyColumns(filteredChoices);
     const sortedFilteredChoices = sortIntoColumns(filteredChoices, columnsCount);
     const thumbnailSize = this.whatSizeThumbnails(sortedFilteredChoices);
+    const choiceNotPresent = this.props.focusedChoice.length === 0 || 
+      filteredChoices.indexOf(this.props.focusedChoice) === -1;
     return (
       <div className="survey-task-chooser-choices" data-thumbnail-size={thumbnailSize} data-columns={columnsCount}>
         {sortedFilteredChoices.length === 0 && <div><em>No matches.</em></div>}
@@ -97,7 +99,7 @@ class Choices extends React.Component {
           const choice = task.choices[choiceId];
           const chosenAlready = selectedChoices.indexOf(choiceId) > -1;
           let tabIndex = -1;
-          if (i === 0 && this.props.focusedChoice.length === 0) {
+          if (i === 0 && choiceNotPresent) {
             tabIndex = 0;
           }
           if (choiceId === this.props.focusedChoice) {
