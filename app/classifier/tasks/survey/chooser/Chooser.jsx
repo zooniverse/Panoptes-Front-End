@@ -2,9 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import sortIntoColumns from 'sort-into-columns';
 import Translate from 'react-translate-component';
-import TriggeredModalForm from 'modal-form/triggered';
-import counterpart from 'counterpart';
-import Thumbnail from '../../../components/thumbnail';
+import Thumbnail from '../../../../components/thumbnail';
+import CharacteristicsFilter from './CharacteristicsFilter';
 
 // key codes
 const BACKSPACE = 8;
@@ -81,10 +80,6 @@ class Chooser extends React.Component {
     }
   }
 
-  handleFilter(characteristicId, valueId) {
-    this.props.onFilter(characteristicId, valueId);
-  }
-
   handleClearFilters() {
     this.props.task.characteristicsOrder.map(characteristicId => this.props.onFilter(characteristicId, undefined));
   }
@@ -115,7 +110,7 @@ class Chooser extends React.Component {
   }
 
   render() {
-    const { task, translation, filters } = this.props;
+    const { task, translation, filters, onFilter } = this.props;
     this.choiceButtons = [];
     const filteredChoices = this.getFilteredChoices();
     const thumbnailSize = this.whatSizeThumbnails(filteredChoices);
@@ -124,85 +119,13 @@ class Chooser extends React.Component {
     const selectedChoices = this.props.annotation.value.map(item => item.choice);
     return (
       <div className="survey-task-chooser">
-        <div className="survey-task-chooser-characteristics">
-          {task.characteristicsOrder.map((characteristicId, i) => {
-            const characteristic = task.characteristics[characteristicId];
-            const selectedValue = characteristic.values[filters[characteristicId]];
-            const characteristicStrings = translation.characteristics[characteristicId];
-            const selectedValueStrings = characteristicStrings.values[filters[characteristicId]];
-            let hasBeenAutoFocused = false;
-            return (
-              <TriggeredModalForm
-                key={characteristicId}
-                ref={`${characteristicId}-dropdown`}
-                className="survey-task-chooser-characteristic-menu"
-                triggerProps={{ autoFocus: i === 0 && !this.props.focusedChoice }}
-                trigger={
-                  <span className="survey-task-chooser-characteristic" data-is-active={!!selectedValue}>
-                    <span className="survey-task-chooser-characteristic-label">
-                      {selectedValue ? selectedValueStrings.label : characteristicStrings.label}
-                    </span>
-                  </span>
-                  }
-              >
-                <div className="survey-task-chooser-characteristic-menu-container">
-                  {characteristic.valuesOrder.map((valueId) => {
-                    const value = characteristic.values[valueId];
-                    const valueStrings = characteristicStrings.values[valueId];
-                    const disabled = (valueId === filters[characteristicId]);
-                    const autoFocus = (!disabled && !hasBeenAutoFocused);
-                    const selected = (valueId === filters[characteristicId]);
-
-                    if (autoFocus) {
-                      hasBeenAutoFocused = true;
-                    }
-
-                    return (
-                      <button
-                        key={valueId}
-                        type="submit"
-                        title={valueStrings.label}
-                        className="survey-task-chooser-characteristic-value"
-                        disabled={disabled}
-                        data-selected={selected}
-                        autoFocus={autoFocus}
-                        onClick={this.handleFilter.bind(this, characteristicId, valueId)}
-                      >
-                        {value.image ?
-                          <img
-                            src={task.images[value.image]}
-                            alt={valueStrings.label}
-                            className="survey-task-chooser-characteristic-value-icon"
-                          /> :
-                          valueStrings.label
-                        }
-                      </button>
-                    );
-                  })}
-
-                  <button
-                    type="submit"
-                    className="survey-task-chooser-characteristic-clear-button"
-                    disabled={Object.keys(filters).indexOf(characteristicId) === -1}
-                    autoFocus={!hasBeenAutoFocused}
-                    onClick={this.handleFilter.bind(this, characteristicId, undefined)}
-                  >
-                    <Translate content="tasks.survey.clear" />
-                  </button>
-                </div>
-                <div className="survey-task-chooser-characteristic-value-label">
-                  {characteristic.valuesOrder.reduce((label, valueId) => {
-                    const valueStrings = characteristicStrings.values[valueId];
-                    if (valueId === filters[characteristicId]) {
-                      return valueStrings.label;
-                    }
-                    return label;
-                  }, counterpart('tasks.survey.makeSelection'))}
-                </div>
-              </TriggeredModalForm>
-            );
-          })}
-        </div>
+        <CharacteristicsFilter
+          filters={filters}
+          focusedChoice={focusedChoice}
+          task={task}
+          translation={translation}
+          onFilter={onFilter}
+        />
         <hr className="survey-task-chooser__divider" />
         <div className="survey-task-chooser-choices" data-thumbnail-size={thumbnailSize} data-columns={columnsCount}>
           {sortedFilteredChoices.length === 0 && <div><em>No matches.</em></div>}
