@@ -4,6 +4,16 @@ const Publications = {
       slug: "zooniverse/galaxy-zoo",
       publications: [
         {
+          citation: "Galaxy Zoo: secular evolution of barred galaxies from structural decomposition of multiband images, Kruk+ 2018.",
+          href: "https://arxiv.org/abs/1710.00093",
+          date: "February 2018"
+        },
+        {
+          citation: "Galaxy Zoo: finding offset discs and bars in SDSS galaxies, Kruk+ 2017.",
+          href: "http://adsabs.harvard.edu/abs/2017MNRAS.469.3363K",
+          date: "August 2017"
+        },
+        {
           citation: "Galaxy Zoo: star-formation versus spiral arm number, Hart+ 2017.",
           href: "http://adsabs.harvard.edu/abs/2017arXiv170302053H",
           date: "2017"
