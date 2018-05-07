@@ -11,7 +11,7 @@ import { mount } from 'enzyme';
 import { expect } from 'chai';
 import TaskTabs, { TabsWrapper } from './TaskTabs';
 import TutorialTab from './components/TutorialTab';
-import QuestionTab from './components/QuestionTab';
+import TaskTab from './components/TaskTab';
 
 const store = {
   subscribe: () => { },
@@ -38,8 +38,8 @@ describe('TaskTabs', function() {
     expect(wrapper.find(TabsWrapper)).to.have.lengthOf(1);
   });
 
-  it('should render a QuestionTab component', function() {
-    expect(wrapper.find(QuestionTab)).to.have.lengthOf(1);
+  it('should render a TaskTab component', function() {
+    expect(wrapper.find(TaskTab)).to.have.lengthOf(1);
   });
 
   it('should render a TutorialTab', function() {

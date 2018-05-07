@@ -9,7 +9,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
-import TutorialTab, { StyledRestartButton } from './TutorialTab';
+import TutorialTab from './TutorialTab';
 
 const tutorial = {
   steps: [
@@ -41,11 +41,22 @@ describe('TutorialTab', function() {
     expect(wrapper.find('ThemeProvider')).to.have.lengthOf(1);
   });
 
-  it('should render a StyledRestartButton', function() {
-    expect(wrapper.find(StyledRestartButton)).to.have.length(1);
-  });
-
   it('should render a Translate component', function() {
     expect(wrapper.find('Translate')).to.have.lengthOf(1);
+  });
+
+  it('should disable the button if there isn\'t a tutorial', function() {
+    wrapper.setProps({ tutorial: null });
+    expect(wrapper.find('button').props().disabled).to.be.true;
+  });
+
+  it('should disable the button if the tutorial has no steps', function() {
+    wrapper.setProps({ tutorial: { steps: [] }});
+    expect(wrapper.find('button').props().disabled).to.be.true;
+  });
+
+  it('should enable the button if the tutorial has steps', function() {
+    wrapper.setProps({ tutorial });
+    expect(wrapper.find('button').props().disabled).to.be.false;
   });
 });

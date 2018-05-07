@@ -5,11 +5,12 @@ import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import { darken, lighten } from 'polished';
 import Translate from 'react-translate-component';
-import RestartButton from '../../../../restart-button';
 import Tutorial from '../../../../tutorial';
 import { pxToRem, zooTheme } from '../../../../../theme';
 
-export const StyledRestartButton = styled(RestartButton)`
+export const StyledTutorialButton = styled.button.attrs({
+  type: 'button'
+})`
   background-color: ${theme('mode', {
     dark: darken(0.04, zooTheme.colors.darkTheme.background.default),
     light: zooTheme.colors.lightTheme.background.default
@@ -31,7 +32,23 @@ export const StyledRestartButton = styled(RestartButton)`
   padding: ${pxToRem(16)};
   text-transform: uppercase;
 
-  &:focus, &:hover {
+  &:disabled {
+    background-color: ${theme('mode', {
+      dark: darken(0.04, zooTheme.colors.darkTheme.background.default),
+      light: zooTheme.colors.lightTheme.background.default
+    })};
+    border: 1px solid ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.background.default,
+      light: darken(0.05, zooTheme.colors.lightTheme.background.default)
+    })};
+    color: ${theme('mode', {
+      dark: lighten(0.10, zooTheme.colors.darkTheme.background.default),
+      light: zooTheme.colors.lightTheme.button.answerDisabled
+    })};
+    cursor: not-allowed;
+  }
+
+  &:focus:not(&:disabled), &:hover:not(&:disabled) {
     background: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.button,
       light: zooTheme.colors.teal.gradient
@@ -43,19 +60,16 @@ export const StyledRestartButton = styled(RestartButton)`
   }
 `;
 
-function TutorialTab(props, context) {
-  const shouldRender = props.tutorial && props.tutorial.steps && (props.tutorial.steps.length > 0);
+export function TutorialTab(props, context) {
+  const disabled = !(props.tutorial && props.tutorial.steps && props.tutorial.steps.length > 0);
   return (
     <ThemeProvider theme={{ mode: props.theme }}>
-      <StyledRestartButton
-        preferences={props.projectPreferences}
-        shouldRender={shouldRender}
-        start={Tutorial.start.bind(Tutorial, props.tutorial, props.user, props.projectPreferences, context.geordi, context.store)}
-        user={props.user}
-        workflow={props.workflow}
+      <StyledTutorialButton
+        disabled={disabled}
+        onClick={Tutorial.start.bind(Tutorial, props.tutorial, props.user, props.projectPreferences, context.geordi, context.store)}
       >
-        <Translate content="classifier.tutorialButton" />
-      </StyledRestartButton>
+        <Translate content="classifier.taskTabs.tutorialTab" />
+      </StyledTutorialButton>
     </ThemeProvider>
   );
 }

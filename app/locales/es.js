@@ -12,10 +12,12 @@ export default {
     next: 'Next',
     optOut: 'Opt out',
     recents: 'Your recent classifications',
-    question: 'Question',
+    taskTabs: {
+      taskTab: 'Task',
+      tutorialTab: 'Tutorial'
+    },
     talk: 'Talk',
     taskHelpButton: 'Need some help with this task?',
-    tutorialButton: 'Tutorial',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
