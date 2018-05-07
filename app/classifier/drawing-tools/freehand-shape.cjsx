@@ -1,6 +1,6 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
-DrawingToolRoot = require './root'
+DrawingToolRoot = require('./root').default
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 {svgPathProperties} = require 'svg-path-properties'

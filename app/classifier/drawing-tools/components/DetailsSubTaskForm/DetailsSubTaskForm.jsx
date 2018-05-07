@@ -7,6 +7,7 @@ import theme from 'styled-theming';
 import Translate from 'react-translate-component';
 import { pxToRem, zooTheme } from '../../../../theme';
 import ModalFocus from '../../../../components/modal-focus';
+import TaskTranslations from '../../../tasks/translations';
 
 const SEMI_MODAL_FORM_STYLE = {
   pointerEvents: 'all'
@@ -18,8 +19,11 @@ const SEMI_MODAL_UNDERLAY_STYLE = {
 };
 
 class DetailsSubTaskForm extends React.Component {
+  static contextTypes = {
+    store: PropTypes.object
+  }
+
   areDetailsComplete(tasks, toolProps) {
-    console.log(tasks, toolProps)
     return toolProps.details.every((detailTask, i) => {
       const TaskComponent = tasks[detailTask.type];
       if (TaskComponent.isAnnotationComplete) {

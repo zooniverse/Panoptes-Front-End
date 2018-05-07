@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import StickyModalForm from 'modal-form/sticky';
 import { Provider } from 'react-redux';
 import ModalFocus from '../../components/modal-focus';
-import TaskTranslations from '../tasks/translations';
 import tasks from '../tasks';
 import DetailsSubTaskForm from './components/DetailsSubTaskForm';
 
@@ -20,10 +19,6 @@ const SEMI_MODAL_UNDERLAY_STYLE = {
 };
 
 class DrawingToolRoot extends React.Component {
-  static contextTypes = {
-    store: PropTypes.object
-  }
-
   static defaultProps = {
     tool: null
   }
@@ -83,7 +78,7 @@ class DrawingToolRoot extends React.Component {
       strokeWidth: (toolProps.selected) ? (SELECTED_STROKE_WIDTH / scale) : (STROKE_WIDTH / scale)
     };
 
-    const openDetails = toolProps.selected && !toolProps.mark._inProgress && (toolProps.details !== null) && toolProps.details.length !== 0;
+    const openDetails = toolProps.selected && !toolProps.mark._inProgress && (toolProps.details && toolProps.details.length !== 0);
     if (!toolProps.disabled) {
       startHandler = (e) => {
         if (!openDetails) {
@@ -120,4 +115,3 @@ class DrawingToolRoot extends React.Component {
 }
 
 export default DrawingToolRoot;
-
