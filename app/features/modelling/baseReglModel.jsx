@@ -1,8 +1,9 @@
 import reglBase from 'regl';
 
 class BaseReglModel {
-  constructor(canvas, { frame, metadata, src, sizing }, eventHandlers) {
+  constructor(canvas, { frame, metadata, src, sizing }, eventHandlers, errMessage) {
     this.eventHandlers = eventHandlers;
+    this.modelErrorMessage = errMessage;
     this.update = this.update.bind(this); // function to call on new annotation
     this.getModel = this.getModel.bind(this);
     this.calculateModel = this.calculateModel.bind(this);
