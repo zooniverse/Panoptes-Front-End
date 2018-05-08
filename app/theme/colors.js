@@ -5,8 +5,14 @@ export default {
       default: '#333333'
     },
     button: {
-      answer: '#5C5C5C',
-      done: { 
+      answer: {
+        default: '#5C5C5C',
+        gradient: {
+          top: '#004954',
+          bottom: '#002C31'
+        }
+      },
+      done: {
         default: '#B8E986',
         hover: '#345446'
       }
@@ -19,7 +25,13 @@ export default {
       default: '#EEF2F5'
     },
     button: {
-      answerDisabled: '#A6A7A9',
+      answer: {
+        disabled: '#A6A7A9',
+        gradient: {
+          top: '#C0E3E5',
+          bottom: '#8BCED2'
+        }
+      },
       done: '#078F52',
       nextHover: '#ea9300'
     },
@@ -54,7 +66,6 @@ export default {
   },
   teal: {
     dark: '#005D69',
-    gradient: 'linear-gradient(#C0E3E5, #8BCED2)',
     light: '#ADDDE0',
     mid: '#00979D'
   }

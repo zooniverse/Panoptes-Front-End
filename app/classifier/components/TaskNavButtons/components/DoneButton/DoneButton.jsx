@@ -34,7 +34,11 @@ export const StyledDoneButton = styled.button.attrs({
   &:hover, &:focus {
     background: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.button.done.hover,
-      light: darken(0.05, zooTheme.colors.lightTheme.button.done)
+      light: darken(0.15, zooTheme.colors.lightTheme.button.done)
+    })};
+    border: ${theme('mode', {
+      dark: `solid thin ${zooTheme.colors.darkTheme.button.done.default}`,
+      light: `solid thin ${darken(0.15, zooTheme.colors.lightTheme.button.done)}`
     })};
     color: 'white';
   }
@@ -46,14 +50,15 @@ export const StyledDoneButton = styled.button.attrs({
     })};
 
     border: ${theme('mode', {
-      dark: `solid thin ${lighten(0.05, zooTheme.colors.darkTheme.background.default)}`,
+      dark: `solid thin ${zooTheme.colors.darkTheme.button.done.default}`,
       light: `solid thin ${lighten(0.05, zooTheme.colors.lightTheme.button.done)}`
     })};
     color: ${theme('mode', {
-      dark: 'white',
+      dark: zooTheme.colors.darkTheme.font,
       light: '#EEF1F4'
     })};
     cursor: not-allowed;
+    opacity: 0.5;
   }
 `;
 

@@ -32,8 +32,25 @@ export const StyledTutorialButton = styled.button.attrs({
   padding: ${pxToRem(16)};
   text-transform: uppercase;
 
+  &:focus, &:hover {
+    background: ${theme('mode', {
+      dark: `linear-gradient(
+        ${zooTheme.colors.darkTheme.button.answer.gradient.top},
+        ${zooTheme.colors.darkTheme.button.answer.gradient.bottom}
+      )`,
+      light: `linear-gradient(
+        ${zooTheme.colors.lightTheme.button.answer.gradient.top},
+        ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
+      )`
+    })};
+    color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.font,
+      light: 'black'
+    })};
+  }
+
   &:disabled {
-    background-color: ${theme('mode', {
+    background: ${theme('mode', {
       dark: darken(0.04, zooTheme.colors.darkTheme.background.default),
       light: zooTheme.colors.lightTheme.background.default
     })};
@@ -43,20 +60,9 @@ export const StyledTutorialButton = styled.button.attrs({
     })};
     color: ${theme('mode', {
       dark: lighten(0.10, zooTheme.colors.darkTheme.background.default),
-      light: zooTheme.colors.lightTheme.button.answerDisabled
+      light: zooTheme.colors.lightTheme.button.answer.disabled
     })};
     cursor: not-allowed;
-  }
-
-  &:focus:not(&:disabled), &:hover:not(&:disabled) {
-    background: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.button,
-      light: zooTheme.colors.teal.gradient
-    })};
-    color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.font,
-      light: 'white'
-    })};
   }
 `;
 

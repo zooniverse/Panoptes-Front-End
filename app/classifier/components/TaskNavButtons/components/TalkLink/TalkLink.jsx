@@ -46,11 +46,11 @@ export const StyledTalkLink = styled(Link)`
   &:hover, &:focus {
     background: ${theme('mode', {
       dark: TALK_LINK_BLUE_HOVER_DARK,
-      light: TALK_LINK_BLUE_HOVER
+      light: darken(0.25, TALK_LINK_BLUE_HOVER)
     })};
     border: ${theme('mode', {
       dark: `thin solid ${TALK_LINK_BLUE}`,
-      light: `thin solid ${TALK_LINK_BLUE_HOVER}`
+      light: `thin solid ${darken(0.25, TALK_LINK_BLUE_HOVER)}`
     })};
   }
 `;

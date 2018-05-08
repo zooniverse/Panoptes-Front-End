@@ -16,8 +16,8 @@ export const StyledTaskInputField = styled.label`
     light: zooTheme.colors.lightTheme.background.default
   })};
   border: ${theme('mode', {
-    dark: `thin solid ${zooTheme.colors.darkTheme.font}`,
-    light: 'thin solid transparent'
+    dark: `2px solid ${zooTheme.colors.darkTheme.font}`,
+    light: '2px solid transparent'
   })};
   box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5);
   color: ${theme('mode', {
@@ -33,31 +33,53 @@ export const StyledTaskInputField = styled.label`
 
   &:hover, &:focus, &[data-focus=true] {
     background: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.background.default,
-      light: zooTheme.colors.teal.gradient
+      dark: `linear-gradient(
+        ${zooTheme.colors.darkTheme.button.answer.gradient.top},
+        ${zooTheme.colors.darkTheme.button.answer.gradient.bottom}
+      )`,
+      light: `linear-gradient(
+        ${zooTheme.colors.lightTheme.button.answer.gradient.top},
+        ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
+      )`
     })};
-    border: ${theme('mode', {
-      dark: `thin solid ${zooTheme.colors.darkTheme.button.answer}`,
-      light: `thin solid ${zooTheme.colors.teal.gradient}`
+    border-width: 2px;
+    border-style: solid;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.button.answer.gradient.top,
+      light: zooTheme.colors.lightTheme.button.answer.gradient.top
+    })};
+    border-bottom-color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.button.answer.gradient.bottom,
+      light: zooTheme.colors.lightTheme.button.answer.gradient.bottom
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,
-      light: 'white'
+      light: 'black'
     })};
   }
 
   &:active {
     background: ${theme('mode', {
-      dark: zooTheme.colors.teal.dark,
-      light: zooTheme.colors.teal.gradient
+      dark: `linear-gradient(
+        ${zooTheme.colors.darkTheme.button.answer.gradient.top},
+        ${zooTheme.colors.darkTheme.button.answer.gradient.bottom}
+      )`,
+      light: `linear-gradient(
+        ${zooTheme.colors.lightTheme.button.answer.gradient.top},
+        ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
+      )`
     })};
-    border: ${theme('mode', {
-      dark: `thin solid ${zooTheme.colors.teal.dark}`,
-      light: `thin solid ${zooTheme.colors.teal.mid}`
+    border-width: 2px;
+    border-style: solid;
+    border-color: ${theme('mode', {
+      dark: zooTheme.colors.teal.dark,
+      light: zooTheme.colors.teal.mid
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,
-      light: 'white'
+      light: 'black'
     })};
   }
 
@@ -67,8 +89,8 @@ export const StyledTaskInputField = styled.label`
       light: zooTheme.colors.teal.mid
     })};
     border: ${theme('mode', {
-      dark: `thin solid ${zooTheme.colors.teal.mid}`,
-      light: `thin solid transparent`
+      dark: `2px solid ${zooTheme.colors.teal.mid}`,
+      light: `2px solid transparent`
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,
