@@ -55,7 +55,7 @@ export const StyledNextButton = styled.button.attrs({
       light: `solid thin ${zooTheme.colors.highlight.default}`
     })};
     color: ${theme('mode', {
-      dark: zooTheme.colors.highlight.defaults,
+      dark: zooTheme.colors.highlight.default,
       light: 'black'
     })};
     cursor: not-allowed;
