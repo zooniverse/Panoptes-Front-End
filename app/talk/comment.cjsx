@@ -166,15 +166,17 @@ module.exports = createReactClass
     feedback = @renderFeedback()
     activeClass = if @props.active then 'active' else ''
     isDeleted = if @props.data.is_deleted then 'deleted' else ''
-    profile_link = "/users/#{@props.data.user_login}"
+    profile_link = if @props.author?.login then <Link to="/users/#{@props.author?.login}">{@props.data.user_display_name}</Link> else @props.data.user_display_name
+    author_login = if @props.author?.login then "@#{@props.author.login}" else ""
+
     if @props.project?
       profile_link = "/projects/#{@props.project.slug}#{profile_link}"
     <div className="talk-comment #{activeClass} #{isDeleted}">
       <div className="talk-comment-author">
         {<Avatar user={@props.author} /> if @props.author?}
         <div>
-          <Link to={profile_link}>{@props.data.user_display_name}</Link>
-          <div className="user-mention-name">@{@props.data.user_login}</div>
+          {profile_link}
+          <div className="user-mention-name">{author_login}</div>
         </div>
         <DisplayRoles roles={@props.roles} section={@props.data.section} />
       </div>
