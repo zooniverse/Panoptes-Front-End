@@ -19,8 +19,25 @@ const SEMI_MODAL_UNDERLAY_STYLE = {
 };
 
 class DetailsSubTaskForm extends React.Component {
+  constructor() {
+    super();
+    this.handleDetailsChange = this.handleDetailsChange.bind(this);
+    this.handleDetailsFormClose = this.handleDetailsFormClose.bind(this);
+  }
+
   static contextTypes = {
     store: PropTypes.object
+  }
+
+  componentDidUpdate() {
+    // What is this even doing? When this was in the root component, it was always being called for any update
+    // Only thing changing is the transform prop. 
+    // I've passed all of the parent's props to this because I don't know what this was reacting to
+    // In the modal-form code, this method is for repositioning the underlay's width and height
+    // But the opacity is 0, so we can't see it!
+    // The class for the StickyForm is updating the styles for the pointer and form position
+    // but the behavior seems the same if I comment out the following line:
+    if (this.detailsForm) this.detailsForm.reposition();
   }
 
   areDetailsComplete(tasks, toolProps) {
@@ -34,20 +51,33 @@ class DetailsSubTaskForm extends React.Component {
     });
   }
 
+  handleDetailsChange(detailIndex, annotation) {
+    this.props.tool.props.mark.details[detailIndex] = annotation;
+    this.props.tool.props.onChange(this.props.tool.props.mark);
+  }
+
+  handleDetailsFormClose() {
+    // TODO: Check if the details tasks are complete.
+    if (this.props.tool && this.props.tool.props && this.props.tool.props.onDeselect) {
+      this.props.tool.props.onDeselect();
+    }
+    this.props.onFormClose();
+  }
   render() {
-    const { handleDetailsChange, handleDetailsFormClose, tasks, toolProps } = this.props;
+    const { tasks, toolProps } = this.props;
 
     const detailsAreComplete = this.areDetailsComplete(tasks, toolProps);
 
     return (
       <StickyModalForm
+        ref={(node) => { this.detailsForm = node; }}
         style={SEMI_MODAL_FORM_STYLE}
         underlayStyle={SEMI_MODAL_UNDERLAY_STYLE}
-        onSubmit={handleDetailsFormClose}
-        onCancel={handleDetailsFormClose}
+        onSubmit={this.handleDetailsFormClose}
+        onCancel={this.handleDetailsFormClose}
       >
         <Provider store={this.context.store}>
-          <ModalFocus onEscape={handleDetailsFormClose} preserveFocus={false}>
+          <ModalFocus onEscape={this.handleDetailsFormClose} preserveFocus={false}>
             {toolProps.details.map((detailTask, i) => {
               if (!detailTask._key) detailTask._key = Math.random();
               const TaskComponent = tasks[detailTask.type];
@@ -63,7 +93,7 @@ class DetailsSubTaskForm extends React.Component {
                     autoFocus={i === 0}
                     task={detailTask}
                     annotation={toolProps.mark.details[i]}
-                    onChange={handleDetailsChange.bind(this, i)}
+                    onChange={this.handleDetailsChange.bind(this, i)}
                     showRequiredNotice={true}
                   />
                 </TaskTranslations>
@@ -87,8 +117,7 @@ class DetailsSubTaskForm extends React.Component {
 }
 
 DetailsSubTaskForm.defaultProps = {
-  handleDetailsChange: () => {},
-  handleDetailsFormClose: () => {},
+  onFormClose: () => {},
   tasks: {},
   toolProps: {
     details: [],
@@ -98,8 +127,7 @@ DetailsSubTaskForm.defaultProps = {
 };
 
 DetailsSubTaskForm.propTypes = {
-  handleDetailsChange: PropTypes.func,
-  handleDetailsFormClose: PropTypes.func,
+  onFormClose: PropTypes.func,  
   tasks: PropTypes.object,
   toolProps: PropTypes.shape({
     details: PropTypes.array,

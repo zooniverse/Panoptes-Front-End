@@ -35,23 +35,6 @@ class DrawingToolRoot extends React.Component {
     this.focusDrawingTool();
   }
 
-  componentDidUpdate() {
-    if (this.detailsForm) this.detailsForm.reposition();
-  }
-
-  handleDetailsChange(detailIndex, annotation) {
-    this.props.tool.props.mark.details[detailIndex] = annotation;
-    this.props.tool.props.onChange(this.props.tool.props.mark);
-  }
-
-  handleDetailsFormClose() {
-    // TODO: Check if the details tasks are complete.
-    if (this.props.tool && this.props.tool.props && this.props.tool.props.onDeselect) {
-      this.props.tool.props.onDeselect();
-    }
-    this.focusDrawingTool();
-  }
-
   focusDrawingTool() {
     const x = window.scrollX;
     const y = window.scrollY;
@@ -103,11 +86,10 @@ class DrawingToolRoot extends React.Component {
 
         {openDetails &&
           <DetailsSubTaskForm
-            handleDetailsChange={this.handleDetailsChange}
-            handleDetailsFormClose={this.handleDetailsFormClose}
-            ref={(node) =>  {this.detailsForm = node; }}
+            onDetailsFormClose={this.focusDrawingTool}
             tasks={tasks}
             toolProps={toolProps}
+            {...this.props}
           />}
       </g>
     );
