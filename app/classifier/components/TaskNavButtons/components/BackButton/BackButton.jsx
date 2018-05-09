@@ -45,15 +45,18 @@ export const StyledBackButton = styled.button.attrs({
   &:focus, &:hover {
     background: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.background.default,
-      light: zooTheme.colors.teal.gradient
+      light: `linear-gradient(
+        ${zooTheme.colors.lightTheme.button.answer.gradient.top},
+        ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
+      )`
     })};
     border: ${theme('mode', {
-      dark: `thin solid ${zooTheme.colors.darkTheme.button.answer}`,
+      dark: `thin solid ${zooTheme.colors.darkTheme.button.answer.default}`,
       light: 'thin solid transparent'
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,
-      light: 'white'
+      light: 'black'
     })};
   }
 `;
