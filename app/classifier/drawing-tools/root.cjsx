@@ -122,5 +122,6 @@ module.exports = createReactClass
   focusDrawingTool: ->
     x = window.scrollX
     y = window.scrollY
-    @root?.focus()
+    try @root?.focus()
+    catch err then console.info('Edge currently does not support focus on SVG elements:', err)
     window.scrollTo(x, y)
