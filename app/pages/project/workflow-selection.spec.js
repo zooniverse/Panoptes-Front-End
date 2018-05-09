@@ -196,8 +196,22 @@ describe('WorkflowSelection', function () {
       sinon.assert.calledWith(workflowStub, 4, true);
     });
 
+    it('should parse the stored user workflow as an int', function () {
+      preferences.update({ 'preferences.selected_workflow': '4random' });
+      controller.getSelectedWorkflow({ project, preferences });
+      sinon.assert.calledOnce(workflowStub);
+      sinon.assert.calledWith(workflowStub, 4, true);
+    });
+
     it('should try to load a stored project workflow', function () {
       preferences.update({ 'settings.workflow_id': '2' });
+      controller.getSelectedWorkflow({ project, preferences });
+      sinon.assert.calledOnce(workflowStub);
+      sinon.assert.calledWith(workflowStub, 2, true);
+    });
+
+    it('parse the stored project workflow as an int', function () {
+      preferences.update({ 'settings.workflow_id': '2random' });
       controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowStub);
       sinon.assert.calledWith(workflowStub, 2, true);
