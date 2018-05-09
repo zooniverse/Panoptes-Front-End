@@ -23,8 +23,9 @@ class WorkflowSelection extends React.Component {
       nextProps.preferences.preferences.selected_workflow &&
       this.state.workflow
     ) {
+      const userWorkflowID = parseInt(nextProps.preferences.preferences.selected_workflow);
       if (!nextState.loadingSelectedWorkflow &&
-        nextProps.preferences.preferences.selected_workflow !== this.state.workflow.id
+        userWorkflowID !== parseInt(this.state.workflow.id)
       ) {
         this.getSelectedWorkflow(nextProps);
       }
@@ -47,7 +48,7 @@ class WorkflowSelection extends React.Component {
       this.props.location.query.workflow &&
       this.checkUserRoles(project, user)
     ) {
-      selectedWorkflowID = this.props.location.query.workflow;
+      selectedWorkflowID = parseInt(this.props.location.query.workflow);
       activeFilter = false;
       if (preferences && preferences.preferences.selected_workflow !== selectedWorkflowID) {
         this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
@@ -57,7 +58,7 @@ class WorkflowSelection extends React.Component {
       project.experimental_tools &&
       project.experimental_tools.indexOf('allow workflow query') > -1
     ) {
-      selectedWorkflowID = this.props.location.query.workflow;
+      selectedWorkflowID = parseInt(this.props.location.query.workflow);
       if (preferences && preferences.preferences.selected_workflow !== selectedWorkflowID) {
         this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
       }
@@ -71,6 +72,7 @@ class WorkflowSelection extends React.Component {
       selectedWorkflowID = this.selectRandomWorkflow(project);
     }
 
+    selectedWorkflowID = parseInt(selectedWorkflowID);
     this.getWorkflow(selectedWorkflowID, activeFilter);
   }
 
