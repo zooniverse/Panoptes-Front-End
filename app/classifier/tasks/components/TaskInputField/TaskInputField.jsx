@@ -118,6 +118,11 @@ function shouldInputBeAutoFocused(annotation, index, name, type) {
 }
 
 export class TaskInputField extends React.Component {
+  constructor() {
+    super();
+    this.unFocus = this.unFocus.bind(this);
+  }
+
   onChange(e) {
     this.unFocus();
     this.props.onChange(e);
@@ -132,7 +137,7 @@ export class TaskInputField extends React.Component {
   }
 
   unFocus() {
-    this.field.dataset.focus = false;
+    if (this.field) this.field.dataset.focus = false;
   }
 
   render() {
