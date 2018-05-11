@@ -27,6 +27,7 @@ createReactClass = require 'create-react-class'
 `import WorkflowsList from './pages/lab/workflows';`
 `import SubjectSetsContainer from './pages/lab/subject-sets-container';`
 `import SubjectSetsList from './pages/lab/subject-sets';`
+`import TranslationsManager from './pages/lab/translations';`
 `import UnsubscribeFromEmails from './pages/unsubscribe';`
 `import HomePageRoot from './pages/home';`
 `import PrivacyPolicy from './pages/privacy-policy';`
@@ -249,6 +250,7 @@ module.exports =
         <Route path=":subjectSetID" component={require './pages/lab/subject-set'} />
       </Route>
       <Route path="mini-course" component={require './pages/lab/mini-course'} />
+      <Route path="translations" component={TranslationsManager} />
     </Route>
     <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
     <Route path="glossary" component={require './pages/lab/help/glossary'} />
