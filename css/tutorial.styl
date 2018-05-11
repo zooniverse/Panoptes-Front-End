@@ -14,11 +14,14 @@
   max-width: 95vw
   width: 50ch
 
+  .tutorial-step
+    width: 100% !important
+
   > .step-through-content
     // TODO: I'd rather the header media not scroll.
     overflow-y: auto !important // Override swipe library setting.
 
-    div
+    > div
       width: 100% !important
 
   > .step-through-controls
