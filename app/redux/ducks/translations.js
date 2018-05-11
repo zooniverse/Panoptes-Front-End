@@ -23,12 +23,14 @@ function explodeTranslationKey(translationKey, value) {
 // Actions
 const ERROR = 'pfe/translations/ERROR';
 const LOAD = 'pfe/translations/LOAD';
+const SET_LANGUAGES = 'pfe/translations/SET_LANGUAGES';
 const SET_LOCALE = 'pfe/translations/SET_LOCALE';
 const SET_TRANSLATION = 'pfe/translations/SET_TRANSLATION';
 const SET_TRANSLATIONS = 'pfe/translations/SET_TRANSLATIONS';
 
 const initialState = {
   locale: DEFAULT_LOCALE,
+  languages: {},
   strings: {
     project: {},
     workflow: {},
@@ -43,6 +45,9 @@ const initialState = {
 export default function reducer(state = initialState, action = {}) {
   let type, languageStrings, strings, translations;
   switch (action.type) {
+    case SET_LANGUAGES:
+      const languages = Object.assign({}, state.languages, { [action.payload.type]: action.payload.languages });
+      return Object.assign({}, state, { languages });
     case SET_LOCALE:
       return Object.assign({}, state, { locale: action.payload });
     case SET_TRANSLATION:
@@ -72,6 +77,27 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 // Action Creators
+export function listLanguages(translated_type, translated_id) {
+  return (dispatch) => {
+    dispatch({ type: LOAD, payload: { translated_type, translated_id} });
+    apiClient
+      .type('translations')
+      .get({ translated_type, translated_id })
+      .then((translations) => {
+        dispatch({
+          type: SET_LANGUAGES,
+          payload: {
+            type: translated_type,
+            languages: translations.map(translation => translation.language)
+          }
+        });
+      })
+      .catch((error) => {
+        dispatch({ type: ERROR, payload: error });
+      });
+  };
+}
+
 export function load(resource_type, translated_id, language) {
   counterpart.setLocale(language);
   const translated_type = resource_type === 'minicourse' ? 'tutorial' : resource_type;
