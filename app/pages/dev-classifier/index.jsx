@@ -54,10 +54,4 @@ const mapStateToProps = state => ({
   theme: state.userInterface.theme
 });
 
-const mapDispatchToProps = dispatch => ({
-  actions: {
-    theme: bindActionCreators(userInterfaceActions, dispatch)
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DevClassifierPage);
+export default connect(mapStateToProps)(DevClassifierPage);
