@@ -12,7 +12,7 @@
   flex-direction: column
   max-height: 85vh
   max-width: 95vw
-  width: 50ch
+  // width: 50ch
 
   > .step-through-content
     // TODO: I'd rather the header media not scroll.
@@ -22,7 +22,10 @@
     text-align: center
 
   .media-card.tutorial-step
-    max-width: 450px
+    z-index: 1
+
+    > .media-card-header
+      max-width: 400px
 
     > .media-card-content
       @extends .content-container
