@@ -137,3 +137,36 @@
 .view-project-button
   display: block
   margin: 1vw 0
+
+.translations
+  margin: 0
+  list-style-type: none
+  
+  li
+    border-top: 1px solid rgba(gray, 0.2)
+    color: MAIN_HIGHLIGHT
+    display: block
+    padding: 0.5em 0.7em
+
+    &:first-child
+      border-top: 0
+
+    a
+      color: inherit
+      padding: 0.5em 0.7em
+      text-decoration: none
+      
+      span
+        display: inline-block
+        width: 60%
+
+    i
+      font-weight: bold
+
+    a
+      &:hover
+        background: rgba(MAIN_HIGHLIGHT, 0.2)
+
+      &:active
+        background: MAIN_HIGHLIGHT
+        color: white

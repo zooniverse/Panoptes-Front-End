@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router';
+import TranslationTools from './translation-tools';
 import * as translationsActions from '../../../redux/ducks/translations';
-import languageList from '../../../constants/languages';
 
 class TranslationsManager extends React.Component {
   componentDidMount() {
@@ -18,17 +17,15 @@ class TranslationsManager extends React.Component {
     return (
       <div>
         <p>Manage your project translations here.</p>
-        <ul>
-          {languages.project && languages.project.map((languageCode) => {
-            const language = languageList.filter(option => option.value === languageCode)[0] || {};
-            const previewLink = (
-              <li key={languageCode}>
-                <Link to={`/projects/${project.slug}?language=${languageCode}`}>{language.label}</Link>
-              </li>
-            );
-            return language.label ? previewLink : null;
-          }
-          )}
+        <ul className="translations">
+          {languages.project && languages.project.map(languageCode => (
+            <li key={languageCode}>
+              <TranslationTools
+                languageCode={languageCode}
+                project={project}
+              />
+            </li>
+          ))}
         </ul>
       </div>
     );
