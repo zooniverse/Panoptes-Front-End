@@ -104,7 +104,7 @@ module.exports = createReactClass
     isIE = 'ActiveXObject' of window
     if isIE
       tutorialStyle = height: '85vh'
-    <StepThrough ref={(node) => @stepThrough = node} className="tutorial-steps" style={tutorialStyle}>
+    <StepThrough ref={(component) => @stepThrough = component} className="tutorial-steps" style={tutorialStyle}>
       {for step, i in @props.tutorial.steps
         step._key ?= Math.random()
         <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>

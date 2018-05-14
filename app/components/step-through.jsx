@@ -128,7 +128,7 @@ class StepThrough extends Component {
     return (
       <div className={`step-through ${this.props.className}`} style={this.props.style}>
         <ReactSwipe
-          ref={(node) => { this.swiper = node; }}
+          ref={(component) => { this.swiper = component; }}
           className="step-through-content"
           swipeOptions={swipeOptions}
         >
