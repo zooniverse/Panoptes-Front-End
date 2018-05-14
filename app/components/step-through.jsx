@@ -15,13 +15,13 @@ class StepThrough extends Component {
     this.renderControls = this.renderControls.bind(this);
     this.state = {
       render: false,
-      step: props.defaultStep,
+      step: props.defaultStep
     };
   }
 
   componentDidMount() {
     addEventListener('keydown', this.handleKeyDown);
-    this.refs.swiper.swipe.setup();
+    setTimeout(this.swiper.swipe.setup);
   }
 
   componentWillUnmount() {
@@ -29,23 +29,23 @@ class StepThrough extends Component {
   }
 
   goPrevious() {
-    this.refs.swiper.swipe.prev();
+    this.swiper.swipe.prev();
     this.handleScroll();
   }
 
   goNext() {
-    this.refs.swiper.swipe.next();
+    this.swiper.swipe.next();
     this.handleScroll();
   }
 
   goTo(index) {
-    this.refs.swiper.swipe.slide(index);
+    this.swiper.swipe.slide(index);
     this.handleScroll();
   }
 
   handleStep(total, index) {
     this.setState({
-      step: (index % total + total) % total,
+      step: ((index % total) + total) % total
     });
   }
 
@@ -65,7 +65,7 @@ class StepThrough extends Component {
   }
 
   handleScroll() {
-    const reactSwipeNode = ReactDOM.findDOMNode(this.refs.swiper);
+    const reactSwipeNode = ReactDOM.findDOMNode(this.swiper);
     setTimeout(animatedScrollTo(reactSwipeNode, reactSwipeNode.offsetTop, 0), 500);
   }
 
@@ -76,12 +76,12 @@ class StepThrough extends Component {
       const allSteps = Array.from(Array(childrenCount).keys());
       return (
         <div className="step-through-controls" style={{position: 'relative'}}>
-          <button 
-            type="button" 
-            className="step-through-direction step-through-previous" 
-            aria-label="Previous step" 
-            title="Previous" 
-            disabled={this.state.step === 0} 
+          <button
+            type="button"
+            className="step-through-direction step-through-previous"
+            aria-label="Previous step"
+            title="Previous"
+            disabled={this.state.step === 0}
             onClick={this.goPrevious}
           >
             ◀
@@ -90,12 +90,12 @@ class StepThrough extends Component {
           <span className="step-through-pips">
             {allSteps.map(thisStep =>
               <label key={thisStep} className="step-through-pip" title={`Step ${thisStep + 1}`}>
-                <input 
-                  type="radio" 
-                  className="step-through-pip-input" 
+                <input
+                  type="radio"
+                  className="step-through-pip-input"
                   aria-label={`Step ${thisStep + 1} of ${childrenCount}`}
-                  checked={thisStep === this.state.step} 
-                  autoFocus={thisStep === this.state.step} 
+                  checked={thisStep === this.state.step}
+                  autoFocus={thisStep === this.state.step}
                   onChange={this.goTo.bind(this, thisStep)}
                 />
                 <span className="step-through-pip-number">{thisStep + 1}</span>
@@ -103,11 +103,11 @@ class StepThrough extends Component {
             )}
           </span>
 
-          <button 
-            type="button" 
-            className="step-through-direction step-through-next" 
-            aria-label="Next step" title="Next" 
-            disabled={this.state.step === childrenCount - 1} 
+          <button
+            type="button"
+            className="step-through-direction step-through-next"
+            aria-label="Next step" title="Next"
+            disabled={this.state.step === childrenCount - 1}
             onClick={this.goNext}
           >
             ▶
@@ -123,12 +123,12 @@ class StepThrough extends Component {
     const swipeOptions = {
       startSlide: this.state.step,
       continuous: false,
-      callback: this.handleStep.bind(this, childrenCount),
+      callback: this.handleStep.bind(this, childrenCount)
     };
     return (
-      <div className="step-through" className={this.props.className} style={this.props.style}>
-        <ReactSwipe 
-          ref="swiper" 
+      <div className={`step-through ${this.props.className}`} style={this.props.style}>
+        <ReactSwipe
+          ref={(component) => { this.swiper = component; }}
           className="step-through-content"
           swipeOptions={swipeOptions}
         >
@@ -141,11 +141,13 @@ class StepThrough extends Component {
 }
 
 StepThrough.propTypes = {
-  defaultStep: PropTypes.number,
-}
+  className: PropTypes.string,
+  defaultStep: PropTypes.number
+};
 
 StepThrough.defaultProps = {
-  defaultStep: 0,
-}
+  className: '',
+  defaultStep: 0
+};
 
 export default StepThrough;
