@@ -1,3 +1,5 @@
+const enabledTokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/comet-hunters'];
+
 class ZooniverseLogging {
   constructor() {
     this.keys = { projectToken: 'zooHome' };
@@ -25,8 +27,10 @@ class ZooniverseLogging {
   }
 
   logEvent(logEntry) {
-    const newEntry = Object.assign({}, this.keys, logEntry);
-    this.adapters.forEach(adapter => adapter.logEvent(newEntry));
+    if (enabledTokens.includes(this.keys.projectToken)) {
+      const newEntry = Object.assign({}, this.keys, logEntry);
+      this.adapters.forEach(adapter => adapter.logEvent(newEntry));
+    }
   }
 
   subscribe(...newAdapters) {

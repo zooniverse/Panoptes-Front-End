@@ -1,7 +1,5 @@
 import GeordiClient from 'zooniverse-geordi-client';
 
-const enabledTokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/comet-hunters'];
-
 function getEnv() {
   const shellEnv = process.env.NODE_ENV === 'production' ? 'production' : null;
   const reg = /\W?env=(\w+)/;
@@ -41,12 +39,10 @@ class GeordiLogAdapter {
   }
 
   logEvent(logEntry) {
-    if (enabledTokens.includes(logEntry.projectToken)) {
-      if (this.geordiClient.logEvent) {
-        this.geordiClient.logEvent(logEntry);
-      } else {
-        console.warn('No Geordi logger available for event', JSON.stringify(logEntry)); // eslint-disable-line no-console
-      }
+    if (this.geordiClient.logEvent) {
+      this.geordiClient.logEvent(logEntry);
+    } else {
+      console.warn('No Geordi logger available for event', JSON.stringify(logEntry)); // eslint-disable-line no-console
     }
   }
 }
