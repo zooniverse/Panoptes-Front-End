@@ -2,6 +2,7 @@ import React from 'react';
 import mockData from './mock-data';
 import { ClassifierWrapper } from '../../classifier';
 import tasks from '../../classifier/tasks';
+import ProjectThemeButton from '../project/components/ProjectThemeButton';
 
 export default class ClassificationViewer extends React.Component {
   constructor() {
@@ -67,7 +68,9 @@ export default class ClassificationViewer extends React.Component {
       this.ignoreUnderscoredProperties
 
     return (
-      <div>
+      <div className="classifier--dev__tools">
+        <ProjectThemeButton />
+        <hr />
         <label>
           <input
             type="checkbox"

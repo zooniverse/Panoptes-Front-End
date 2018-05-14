@@ -8,7 +8,6 @@ import tasks from '../../classifier/tasks';
 import ClassificationViewer from './ClassificationViewer';
 import * as userInterfaceActions from '../../redux/ducks/userInterface';
 import { zooTheme } from '../../theme';
-import ProjectThemeButton from '../project/components/ProjectThemeButton';
 
 export class DevClassifierPage extends React.Component {
   static defaultProps = {
@@ -44,11 +43,7 @@ export class DevClassifierPage extends React.Component {
           classification={this.props.classification}
           onClickNext={this.reload}
         >
-          <div className="classifier--dev__tools">
-            <ProjectThemeButton />
-            <hr />
-            <ClassificationViewer classification={this.props.classification} />
-          </div>
+          <ClassificationViewer classification={this.props.classification} />
         </ClassifierWrapper>
       </div>
     );
