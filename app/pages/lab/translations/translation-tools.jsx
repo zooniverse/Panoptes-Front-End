@@ -14,7 +14,7 @@ function TranslationTools(props) {
         </span>
         <i className="fa fa-hand-o-right fa-fw" /> Preview
       </Link>
-      <a href={`https://pandora.zooniverse.org/?language=${languageCode}#/project/${project.id}`}>
+      <a href={`https://pandora.zooniverse.org/?#/project/${project.id}?language=${languageCode}`}>
         <i className="fa fa-pencil fa-fw" /> Edit
       </a>
     </span>
