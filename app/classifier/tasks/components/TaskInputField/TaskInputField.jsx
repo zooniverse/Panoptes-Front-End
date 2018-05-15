@@ -98,7 +98,7 @@ export const StyledTaskInputField = styled.label`
     })}
   }
 
-  &.active:hover, &.active:focus, &.active[data-focus=true] {
+  &.active:hover, &.active:focus, &.active[data-focus=true], {
     background: ${theme('mode', {
       dark: zooTheme.colors.teal.mid,
       light: zooTheme.colors.teal.mid
