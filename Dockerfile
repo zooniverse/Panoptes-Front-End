@@ -1,5 +1,8 @@
 FROM zooniverse/panoptes-front-end:deps
 
-ADD . /src/
+ADD package.json /src/
+ADD package-lock.json /src/
 
-RUN npm install --unsafe-perm 
+RUN npm install --unsafe-perm
+
+ADD . /src/
