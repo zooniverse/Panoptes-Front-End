@@ -9,6 +9,8 @@ import styled, { ThemeProvider } from 'styled-components';
 import { StyledTaskInputField } from '../../components/TaskInputField';
 import HighlighterButtonLabel from './HighlighterButtonLabel';
 
+
+// TODO: the focus and hover styles while the component has the active class is not working
 export const StyledHighlighterButton = StyledTaskInputField.extend`
   font-size: inherit;
   width: 100%;

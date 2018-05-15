@@ -49,6 +49,10 @@ export default class Highlighter extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.createButtons = this.createButtons.bind(this);
     this.createLabelAnnotation = this.createLabelAnnotation.bind(this);
+
+    this.state = {
+      selectedToolIndex: 0
+    };
   }
   createLabelAnnotation(selection, toolIndex) {
     // currently we only deal with one selection at a time
@@ -75,13 +79,14 @@ export default class Highlighter extends React.Component {
   handleChange(toolIndex) {
     const selection = document.getSelection();
     this.createLabelAnnotation(selection, toolIndex);
+    this.setState({ selectedToolIndex: toolIndex });
   }
 
   createButtons(option, index) {
     return (
       <HighlighterButton
         autoFocus={index === 0}
-        active={this.props.annotation && this.props.annotation._toolIndex === index}
+        active={this.state.selectedToolIndex === index}
         color={option.color}
         key={index}
         label={option.label}
