@@ -14,11 +14,13 @@ class TranslationsManager extends React.Component {
   render() {
     const { languages } = this.props.translations;
     const { project } = this.props;
+    const languageCodes = languages.project
+      .filter(languageCode => languageCode !== project.primary_language);
     return (
       <div>
         <p>Manage your project translations here.</p>
         <ul className="translations">
-          {languages.project && languages.project.map(languageCode => (
+          {languageCodes.map(languageCode => (
             <li key={languageCode}>
               <TranslationTools
                 languageCode={languageCode}

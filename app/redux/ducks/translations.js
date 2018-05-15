@@ -30,7 +30,9 @@ const SET_TRANSLATIONS = 'pfe/translations/SET_TRANSLATIONS';
 
 const initialState = {
   locale: DEFAULT_LOCALE,
-  languages: {},
+  languages: {
+    project: []
+  },
   strings: {
     project: {},
     workflow: {},
