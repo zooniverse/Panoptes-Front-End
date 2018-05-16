@@ -7,6 +7,7 @@ import config from './webpack.dev.js';
 import DashboardPlugin from 'webpack-dashboard/plugin';
 
 const port = process.env.PORT || 3735;
+const host = process.env.HOST || "localhost";
 
 const app = express();
 const compiler = webpack(config);
@@ -31,7 +32,7 @@ app.use(function(req,res,next){
    res.end();
 })
 
-app.listen(port, 'localhost', function onStart(err) {
+app.listen(port, host, function onStart(err) {
   if (err) {
     console.log(err);
   }
