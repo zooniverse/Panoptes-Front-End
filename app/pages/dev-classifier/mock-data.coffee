@@ -528,7 +528,7 @@ subject = apiClient.type('subjects').create
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-wide.jpeg"} # //lorempixel.com/1900/1000/animals/3
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-tall.jpeg"} # //lorempixel.com/1000/1900/animals/4
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/small.jpeg"} # //lorempixel.com/400/300/animals/4
-      {'text/plain': "#{window.location.origin}/assets/dev-classifier/algernon.txt"}
+      {'text/plain': "https://static.zooniverse.org/preview.zooniverse.org/panoptes-front-end/highlighter-task/assets/dev-classifier/algernon.txt"}
     ]
   else
     [
