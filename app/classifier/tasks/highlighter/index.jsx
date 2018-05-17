@@ -135,28 +135,26 @@ Highlighter.getTaskText = task => task.instruction;
 Highlighter.getDefaultAnnotation = () => ({ _toolIndex: 0, value: [] });
 
 Highlighter.defaultProps = {
+  onChange: () => null,
+  showRequiredNotice: false,
   task: {
     help: '',
     highlighterLabels: [],
     type: 'highlighter',
     instruction: 'Highlight the text'
+  },
+  workflow: {
+    tasks: []
   }
 };
 
 Highlighter.propTypes = {
   annotation: PropTypes.shape({
     _toolIndex: PropTypes.number,
-    task: PropTypes.shape({
-      help: PropTypes.string,
-      highlighterLabels: PropTypes.array,
-      instruction: PropTypes.string,
-      required: PropTypes.bool,
-      tools: PropTypes.array,
-      type: PropTypes.string
-    }),
-    tools: PropTypes.array
-  }),
+    task: PropTypes.string
+  }).isRequired,
   onChange: PropTypes.func,
+  showRequiredNotice: PropTypes.bool,
   task: PropTypes.shape({
     help: PropTypes.string,
     highlighterLabels: PropTypes.array,
@@ -169,3 +167,4 @@ Highlighter.propTypes = {
     tasks: PropTypes.object
   })
 };
+

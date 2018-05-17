@@ -74,6 +74,7 @@ workflow = apiClient.type('workflows').create
         {label: 'Survey the image', next: 'survey'}
         {label: 'Maybe select something', next: 'dropdown'}
         {label: 'Slide a slider', next: 'slider'}
+        {label: 'Annotate text', next:'highlight'}
         {label: 'We’re done here.', next: null}
       ]
       unlinkedTask: 'shortcut'
@@ -484,6 +485,20 @@ workflow = apiClient.type('workflows').create
       step: '0.5'
       defaultValue: '3'
 
+    highlight:
+      type: 'highlighter'
+      instruction: 'Highlight words and phrases with the mouse, then select categories.'
+      highlighterLabels: [
+        {
+          label: 'Name',
+          color: '#ff6639'
+        },
+        {
+          label: 'Place',
+          color: '#57c4f7'
+        }
+      ]
+
 # Bulk up the survey task a bit:
 'abcdefghijlkmnopqrstuvwxyz1234'.split('').forEach (x, i) ->
   xi = x + i
@@ -513,6 +528,7 @@ subject = apiClient.type('subjects').create
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-wide.jpeg"} # //lorempixel.com/1900/1000/animals/3
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-tall.jpeg"} # //lorempixel.com/1000/1900/animals/4
       {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/small.jpeg"} # //lorempixel.com/400/300/animals/4
+      {'text/plain': "https://static.zooniverse.org/preview.zooniverse.org/panoptes-front-end/highlighter-task/assets/dev-classifier/algernon.txt"}
     ]
   else
     [
