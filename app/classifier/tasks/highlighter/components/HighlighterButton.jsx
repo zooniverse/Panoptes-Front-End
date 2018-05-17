@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import styled, { ThemeProvider } from 'styled-components';
-// import theme from 'styled-theming';
-// import { pxToRem, zooTheme } from '../../../../theme';
+import theme from 'styled-theming';
+import { pxToRem, zooTheme } from '../../../../theme';
 
 import { StyledTaskInputField } from '../../components/TaskInputField';
 import HighlighterButtonLabel from './HighlighterButtonLabel';
@@ -21,7 +21,6 @@ export function HighlighterButton(props) {
     <ThemeProvider theme={{ mode: props.theme }}>
       <StyledHighlighterButton
         autoFocus={props.autoFocus}
-        className={(props.active) ? 'active' : ''}
         type="button"
         value={props.value}
         onClick={props.onClick}
