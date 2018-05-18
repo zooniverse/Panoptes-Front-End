@@ -86,16 +86,9 @@ class WorkflowSelection extends React.Component {
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
     const { actions, translations } = this.props;
-    const query = {
-      id: `${selectedWorkflowID}`,
-      project_id: this.props.project.id
-    };
-    if (activeFilter) {
-      query.active = true;
-    }
     apiClient
     .type('workflows')
-    .get(query)
+    .get(`${selectedWorkflowID}`)
     .catch((error) => {
       if (error.status === 404) {
         this.clearInactiveWorkflow(selectedWorkflowID)
@@ -105,10 +98,17 @@ class WorkflowSelection extends React.Component {
         this.setState({ error, loadingSelectedWorkflow: false });
       }
     })
-    .then(([workflow]) => {
-      if (workflow) {
-        this.setState({ loadingSelectedWorkflow: false, workflow });
-        actions.translations.load('workflow', workflow.id, translations.locale);
+    .then((workflow) => {
+      let activeWorkflow;
+      if (activeFilter && workflow && workflow.active) {
+        activeWorkflow = workflow;
+      } else {
+        activeWorkflow = null;
+      }
+
+      if (activeWorkflow) {
+        this.setState({ loadingSelectedWorkflow: false, activeWorkflow });
+        actions.translations.load('workflow', activeWorkflow.id, translations.locale);
       } else {
         console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
         if (this.props.project.configuration &&
