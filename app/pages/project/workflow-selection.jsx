@@ -13,6 +13,10 @@ class WorkflowSelection extends React.Component {
     };
   }
 
+  workflowsMatch(selectedWorkflowID, testWorkflowID) {
+    return parseInt(selectedWorkflowID) === parseInt(testWorkflowID)
+  }
+
   componentDidMount() {
     this.getSelectedWorkflow(this.props);
   }
@@ -25,7 +29,7 @@ class WorkflowSelection extends React.Component {
     ) {
       const userWorkflowID = parseInt(nextProps.preferences.preferences.selected_workflow);
       if (!nextState.loadingSelectedWorkflow &&
-        userWorkflowID !== parseInt(this.state.workflow.id)
+        !this.workflowsMatch(userWorkflowID, this.state.workflow.id)
       ) {
         this.getSelectedWorkflow(nextProps);
       }
@@ -48,9 +52,11 @@ class WorkflowSelection extends React.Component {
       this.props.location.query.workflow &&
       this.checkUserRoles(project, user)
     ) {
-      selectedWorkflowID = parseInt(this.props.location.query.workflow);
+      selectedWorkflowID = this.props.location.query.workflow;
       activeFilter = false;
-      if (preferences && preferences.preferences.selected_workflow !== selectedWorkflowID) {
+      if (preferences &&
+        !this.workflowsMatch(preferences.preferences.selected_workflow, selectedWorkflowID)
+      ) {
         this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
       }
     } else if (this.props.location.query &&
@@ -58,8 +64,10 @@ class WorkflowSelection extends React.Component {
       project.experimental_tools &&
       project.experimental_tools.indexOf('allow workflow query') > -1
     ) {
-      selectedWorkflowID = parseInt(this.props.location.query.workflow);
-      if (preferences && preferences.preferences.selected_workflow !== selectedWorkflowID) {
+      selectedWorkflowID = this.props.location.query.workflow;
+      if (preferences &&
+        !this.workflowsMatch(preferences.preferences.selected_workflow, selectedWorkflowID)
+      ) {
         this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
       }
     } else if (preferences && preferences.preferences.selected_workflow) {
@@ -104,7 +112,7 @@ class WorkflowSelection extends React.Component {
       } else {
         console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
         if (this.props.project.configuration &&
-          selectedWorkflowID === this.props.project.configuration.default_workflow
+          this.workflowsMatch(selectedWorkflowID, this.props.project.configuration.default_workflow)
         ) {
           // If a project still has an inactive workflow set as a default workflow prior to this being fix in the lab.
           // Don't try again and get caught in a loop
@@ -147,10 +155,10 @@ class WorkflowSelection extends React.Component {
     const selectedWorkflow = preferences.preferences ? preferences.preferences.selected_workflow : undefined;
     const projectSetWorkflow = preferences.settings ? preferences.settings.workflow_id : undefined;
 
-    if (selectedWorkflowID === selectedWorkflow) {
+    if (this.workflowsMatch(selectedWorkflowID, selectedWorkflow)) {
       preferences.update({ 'preferences.selected_workflow': undefined });
       return preferences.save().catch(error => console.warn(error.message));
-    } else if (selectedWorkflowID === projectSetWorkflow) {
+    } else if (this.workflowsMatch(selectedWorkflowID, projectSetWorkflow)) {
       preferences.update({ 'settings.workflow_id': undefined });
       return preferences.save().catch(error => console.warn(error.message));
     } else {
