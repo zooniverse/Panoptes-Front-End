@@ -96,7 +96,7 @@ class WorkflowSelection extends React.Component {
         this.setState({ error, loadingSelectedWorkflow: false });
       }
     })
-    .then(([workflow]) => {
+    .then((workflow) => {
       if (workflow) {
         this.setState({ loadingSelectedWorkflow: false, workflow });
         actions.translations.load('workflow', workflow.id, translations.locale);
