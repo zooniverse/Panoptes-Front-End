@@ -99,16 +99,11 @@ class WorkflowSelection extends React.Component {
       }
     })
     .then((workflow) => {
-      let activeWorkflow;
-      if (activeFilter && workflow && workflow.active) {
-        activeWorkflow = workflow;
-      } else {
-        activeWorkflow = null;
-      }
-
-      if (activeWorkflow) {
-        this.setState({ loadingSelectedWorkflow: false, activeWorkflow });
-        actions.translations.load('workflow', activeWorkflow.id, translations.locale);
+      const allowedActiveWorkflow = activeFilter && workflow && workflow.active
+      const ignoreActiveFilter = !activeFilter && workflow
+      if (allowedActiveWorkflow || ignoreActiveFilter) {
+        this.setState({ loadingSelectedWorkflow: false, workflow });
+        actions.translations.load('workflow', workflow.id, translations.locale);
       } else {
         console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
         if (this.props.project.configuration &&
