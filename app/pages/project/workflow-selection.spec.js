@@ -179,6 +179,16 @@ describe('WorkflowSelection', function () {
       sinon.assert.calledOnce(workflowStub);
       sinon.assert.calledWith(workflowStub, 6, false);
     });
+
+    it('should load an active workflow for a general user', function () {
+      const user = apiClient.type('users').create({ id: '4' });
+      controller.getSelectedWorkflow({ project, preferences, user });
+      sinon.assert.calledOnce(workflowStub);
+      const selectedWorkflowID = workflowStub.getCall(0).args[0];
+      const activeFilter = workflowStub.getCall(0).args[1];
+      assert.notEqual(project.links.active_workflows.indexOf(selectedWorkflowID.toString()), -1);
+      assert.equal(activeFilter, true);
+    });
   });
 
   describe('with a workflow saved in preferences', function () {
