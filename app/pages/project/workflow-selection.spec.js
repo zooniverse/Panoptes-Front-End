@@ -221,6 +221,18 @@ describe('WorkflowSelection', function () {
       sinon.assert.calledWith(workflowStub, '4', true);
     });
 
+    it('should clear an invalid workflow string from user preferences', function () {
+      preferences.update({ 'preferences.selected_workflow': '4' });
+      controller.clearInactiveWorkflow('4');
+      assert.equal(preferences.preferences.selected_workflow, undefined);
+    });
+
+    it('should clear an invalid workflow int from user preferences', function () {
+      preferences.update({ 'preferences.selected_workflow': 4 });
+      controller.clearInactiveWorkflow('4');
+      assert.equal(preferences.preferences.selected_workflow, undefined);
+    });
+
     it('should try to load a stored project workflow', function () {
       preferences.update({ 'settings.workflow_id': '2' });
       controller.getSelectedWorkflow({ project, preferences });
@@ -233,6 +245,18 @@ describe('WorkflowSelection', function () {
       controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowStub);
       sinon.assert.calledWith(workflowStub, '2', true);
+    });
+
+    it('should clear an invalid workflow string from project settings', function () {
+      preferences.update({ 'settings.workflow_id': '2' });
+      controller.clearInactiveWorkflow('2');
+      assert.equal(preferences.settings.workflow_id, undefined);
+    });
+
+    it('should clear an invalid workflow int from project settings', function () {
+      preferences.update({ 'settings.workflow_id': 2 });
+      controller.clearInactiveWorkflow('2');
+      assert.equal(preferences.settings.workflow_id, undefined);
     });
   });
 
