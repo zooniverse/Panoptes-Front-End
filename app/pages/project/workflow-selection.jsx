@@ -77,13 +77,9 @@ class WorkflowSelection extends React.Component {
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
     const { actions, translations } = this.props;
-    const query = {};
-    if (activeFilter) {
-      query.active = true;
-    }
     apiClient
     .type('workflows')
-    .get(selectedWorkflowID.toString(), query)
+    .get(selectedWorkflowID.toString(), {}) // the empty query here forces the client to bypass its internal cache
     .catch((error) => {
       if (error.status === 404) {
         this.clearInactiveWorkflow(selectedWorkflowID)
@@ -97,6 +93,16 @@ class WorkflowSelection extends React.Component {
       if (workflow) {
         const isWorkflowForProject = workflow.links.project === this.props.project.id;
         return isWorkflowForProject ? workflow : null;
+      }
+      return null;
+    })
+    .then ((workflow) => {
+      if (workflow) {
+        if (activeFilter) {
+          return workflow.active ? workflow : null;
+        } else {
+          return workflow;
+        }
       }
       return null;
     })
