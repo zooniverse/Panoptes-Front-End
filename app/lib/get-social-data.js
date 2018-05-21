@@ -20,7 +20,7 @@ function getBlogPosts(returnPosts) {
 }
 
 function getRecentProjects() {
-  const query = { launch_approved: true, page_size: 3, sort: '-updated_at' };
+  const query = { launch_approved: true, page_size: 3, sort: '-updated_at', cards: true };
   return apiClient.type('projects').get(query)
   .then(recentProjects => recentProjects);
 }
