@@ -79,7 +79,6 @@ class WorkflowSelection extends React.Component {
   getWorkflow(selectedWorkflowID, activeFilter = true) {
     const { actions, translations } = this.props;
     const query = {
-      id: `${selectedWorkflowID}`,
       project_id: this.props.project.id
     };
     if (activeFilter) {
@@ -87,7 +86,7 @@ class WorkflowSelection extends React.Component {
     }
     apiClient
     .type('workflows')
-    .get(query)
+    .get(`${selectedWorkflowID}`, query)
     .catch((error) => {
       if (error.status === 404) {
         this.clearInactiveWorkflow(selectedWorkflowID)
@@ -97,7 +96,7 @@ class WorkflowSelection extends React.Component {
         this.setState({ error, loadingSelectedWorkflow: false });
       }
     })
-    .then(([workflow]) => {
+    .then((workflow) => {
       if (workflow) {
         this.setState({ loadingSelectedWorkflow: false, workflow });
         actions.translations.load('workflow', workflow.id, translations.locale);
@@ -147,10 +146,10 @@ class WorkflowSelection extends React.Component {
     const selectedWorkflow = preferences.preferences ? preferences.preferences.selected_workflow : undefined;
     const projectSetWorkflow = preferences.settings ? preferences.settings.workflow_id : undefined;
 
-    if (selectedWorkflowID === selectedWorkflow) {
+    if (parseInt(selectedWorkflowID) === parseInt(selectedWorkflow)) {
       preferences.update({ 'preferences.selected_workflow': undefined });
       return preferences.save().catch(error => console.warn(error.message));
-    } else if (selectedWorkflowID === projectSetWorkflow) {
+    } else if (parseInt(selectedWorkflowID) === parseInt(projectSetWorkflow)) {
       preferences.update({ 'settings.workflow_id': undefined });
       return preferences.save().catch(error => console.warn(error.message));
     } else {
