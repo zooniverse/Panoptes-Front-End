@@ -76,36 +76,33 @@ class WorkflowSelection extends React.Component {
   }
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
-    const { actions, translations } = this.props;
-    apiClient
-    .type('workflows')
-    .get(selectedWorkflowID.toString(), {}) // the empty query here forces the client to bypass its internal cache
-    .catch((error) => {
-      if (error.status === 404) {
-        this.clearInactiveWorkflow(selectedWorkflowID)
-        .then(this.getSelectedWorkflow(this.props));
-      } else {
-        console.error(error);
-        this.setState({ error, loadingSelectedWorkflow: false });
-      }
-    })
-    .then((workflow) => {
-      if (workflow) {
-        const isWorkflowForProject = workflow.links.project === this.props.project.id;
-        return isWorkflowForProject ? workflow : null;
-      }
-      return null;
-    })
-    .then ((workflow) => {
-      if (workflow) {
-        if (activeFilter) {
-          return workflow.active ? workflow : null;
-        } else {
-          return workflow;
-        }
-      }
-      return null;
-    })
+    const { actions, project, translations } = this.props;
+    const sanitisedWorkflowID = this.sanitiseID(selectedWorkflowID);
+    let isValidWorkflow = false;
+    if (activeFilter) {
+      isValidWorkflow = project.links.active_workflows.indexOf(sanitisedWorkflowID) > -1;
+    } else {
+      isValidWorkflow = project.links.workflows.indexOf(sanitisedWorkflowID) > -1;
+    }
+    let awaitWorkflow;
+    if (isValidWorkflow) {
+      awaitWorkflow = apiClient
+        .type('workflows')
+        .get(sanitisedWorkflowID, {}) // the empty query here forces the client to bypass its internal cache
+        .catch((error) => {
+          if (error.status === 404) {
+            this.clearInactiveWorkflow(sanitisedWorkflowID)
+            .then(this.getSelectedWorkflow(this.props));
+          } else {
+            console.error(error);
+            this.setState({ error, loadingSelectedWorkflow: false });
+          }
+        });
+    } else {
+      awaitWorkflow = Promise.resolve(null);
+    }
+
+    awaitWorkflow
     .then((workflow) => {
       if (workflow) {
         this.setState({ loadingSelectedWorkflow: false, workflow });
