@@ -77,9 +77,7 @@ class WorkflowSelection extends React.Component {
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
     const { actions, translations } = this.props;
-    const query = {
-      project_id: this.props.project.id
-    };
+    const query = {};
     if (activeFilter) {
       query.active = true;
     }
@@ -94,6 +92,13 @@ class WorkflowSelection extends React.Component {
         console.error(error);
         this.setState({ error, loadingSelectedWorkflow: false });
       }
+    })
+    .then((workflow) => {
+      if (workflow) {
+        const isWorkflowForProject = workflow.links.project === this.props.project.id;
+        return isWorkflowForProject ? workflow : null;
+      }
+      return null;
     })
     .then((workflow) => {
       if (workflow) {
