@@ -153,6 +153,14 @@ describe('WorkflowSelection', function () {
     sinon.assert.calledWith(workflowStub, '6', true);
   });
 
+  it('should sanitise the workflow query param if "allow workflow query" is set', function () {
+    location.query.workflow = '6random78';
+    project.experimental_tools = ['allow workflow query'];
+    controller.getSelectedWorkflow({ project });
+    sinon.assert.calledOnce(workflowStub);
+    sinon.assert.calledWith(workflowStub, '6', true);
+  });
+
   describe('with a logged-in user', function () {
     beforeEach(function () {
       controller.setupSplits = () => null;
