@@ -7,7 +7,6 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { Helmet } from 'react-helmet';
 import apiClient from 'panoptes-client/lib/api-client';
 import { Split } from 'seven-ten';
@@ -27,29 +26,12 @@ counterpart.registerTranslations('nl', require('../../locales/nl').default);
 counterpart.setFallbackLocale('en');
 
 
-const ProjectPageController = {
-  displayName: 'ProjectPageController',
-
-  contextTypes: {
-    geordi: PropTypes.object,
-    initialLoadComplete: PropTypes.bool,
-    router: PropTypes.object.isRequired
-  },
-
-  propTypes: {
-    params: PropTypes.object,
-    user: PropTypes.object
-  },
-
-  getDefaultProps() {
-    return {
-      params: {},
-      user: null
-    };
-  },
-
-  getInitialState() {
-    return {
+class ProjectPageController extends React.Component {
+  constructor() {
+    super();
+    this._listenedToPreferences = null;
+    this._boundForceUpdate = null;
+    this.state = {
       background: null,
       error: null,
       guide: null,
@@ -65,25 +47,21 @@ const ProjectPageController = {
       ready: false,
       splits: null
     };
-  },
-
-  _listenedToPreferences: null,
-
-  _boundForceUpdate: null,
+  }
 
   componentWillMount() {
     const { actions } = this.props;
     if (this.props.location.query.language) { return actions.translations.setLocale(this.props.location.query.language); }
-  },
+  }
 
   componentDidMount() {
     this._boundForceUpdate = this.forceUpdate.bind(this);
     if (this.context.initialLoadComplete) { this.fetchProjectData(this.props.params.owner, this.props.params.name, this.props.user); }
     this.setupSplits();
-  },
+  }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const {owner, name} = nextProps.params;
+    const { owner, name } = nextProps.params;
     const pathChanged = (owner !== this.props.params.owner) || (name !== this.props.params.name);
     const userChanged = nextContext.initialLoadComplete && (nextProps.user !== this.props.user);
     const initialLoadCompleted = nextContext.initialLoadComplete === !this.context.initialLoadComplete;
@@ -93,55 +71,54 @@ const ProjectPageController = {
       if (!this.state.loading) { this.fetchProjectData(owner, name, nextProps.user); }
       this.setupSplits(nextProps);
     }
-  },
+  }
 
   componentWillUnmount() {
     Split.clear();
-  },
+  }
 
   setupSplits(props) {
     if (props == null) { ({ props } = this); }
     const { user } = props;
-    const {owner, name} = props.params;
+    const { owner, name } = props.params;
 
     if (user) {
-      return Split.load(`${owner}/${name}`).then(splits => {
-        this.setState({splits});
+      return Split.load(`${owner}/${name}`)
+      .then(splits => {
+        this.setState({ splits });
         if (!splits) { return; }
-        return (() => {
-          const result = [];
-          for (let split in splits) {
-            if (splits[split].state !== 'active') { continue; }
-            if (this.context.geordi != null) {
-              this.context.geordi.remember({experiment: splits[split].name});
-            }
-            if (this.context.geordi != null) {
-              this.context.geordi.remember({cohort: (splits[split].variant != null ? splits[split].variant.name : undefined)});
-            }
-            break;
+        const result = [];
+        for (let split in splits) {
+          if (splits[split].state !== 'active') { continue; }
+          if (this.context.geordi != null) {
+            this.context.geordi.remember({experiment: splits[split].name});
           }
-          return result;
-        })();
+          if (this.context.geordi != null) {
+            this.context.geordi.remember({ cohort: (splits[split].variant != null ? splits[split].variant.name : undefined) });
+          }
+          break;
+        }
+        return result;
       });
     } else {
       Split.clear();
       this.setState({ splits: null });
-      (this.context.geordi != null ? this.context.geordi.forget(['experiment','cohort']) : undefined);
+      (this.context.geordi != null ? this.context.geordi.forget(['experiment', 'cohort']) : undefined);
     }
-  },
+  }
 
   fetchProjectData(ownerName, projectName, user) {
     this.setState({
       error: null,
       loading: true,
-      preferences: null,
+      preferences: null
     });
 
-    const slug = ownerName + '/' + projectName;
+    const slug = `${ownerName}/${projectName}`;
 
     return apiClient.type('projects').get({ slug, include: 'avatar,background,owners' })
       .then(([project]) => {
-        this.setState({project});
+        this.setState({ project });
 
         if (project != null) {
           // Use apiClient with cached resources from include to get out of cache
@@ -194,16 +171,15 @@ const ProjectPageController = {
             projectRoles,
             preferences
           ]) => {
-              const ready = true;
-              this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences, ready });
-              this.loadFieldGuide(project.id);
-              this.props.actions.translations.loadTranslations('project_page', pages.map(page => page.id), this.props.translations.locale);
-            })
-          .catch(error => {
+            const ready = true;
+            this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences, ready });
+            this.loadFieldGuide(project.id);
+            this.props.actions.translations.loadTranslations('project_page', pages.map(page => page.id), this.props.translations.locale);
+          })
+          .catch((error) => {
             this.setState({ error });
             console.error(error);
           });
-
         } else {
           this.setState({
             background: null,
@@ -220,18 +196,18 @@ const ProjectPageController = {
         }
     })
     .catch(error => {
-      this.setState({error});
+      this.setState({ error });
     })
     .then(() => {
-      this.setState({loading: false});
+      this.setState({ loading: false });
     });
-  },
+  }
 
   getUserProjectPreferences(project, user) {
     this.listenToPreferences(null);
 
     const userPreferences = (user != null) ?
-      user.get('project_preferences', {project_id: project.id})
+      user.get('project_preferences', { project_id: project.id })
         .then(([preferences]) => {
           let newPreferences;
           return preferences != null ?
@@ -243,10 +219,10 @@ const ProjectPageController = {
               preferences: {}
             })
             .save()
-            .catch(error => {
+            .catch((error) => {
               console.warn(error.message);
             }));
-      })
+        })
     :
       Promise.resolve(apiClient.type('project_preferences').create({
         id: 'GUEST_PREFERENCES_DO_NOT_SAVE',
@@ -256,30 +232,31 @@ const ProjectPageController = {
         preferences: {}}));
 
     return userPreferences
-      .then(preferences => {
+      .then((preferences) => {
         this.listenToPreferences(preferences);
-        return preferences
+        return preferences;
       })
-      .catch(error => {
+      .catch((error) => {
         console.warn(error.message);
-    });
-  },
+      });
+  }
 
   requestUserProjectPreferences(project, user) {
     this.listenToPreferences(null);
 
     if (user != null) {
-      return user.get('project_preferences', {project_id: project.id})
+      return user.get('project_preferences', { project_id: project.id })
         .then(([preferences]) => {
           this.setState({ preferences });
           this.listenToPreferences(preferences);
-      }).catch(error => {
+        })
+        .catch((error) => {
           console.warn(error.message);
-      });
+        });
     } else {
       return Promise.resolve();
     }
-  },
+  }
 
   listenToPreferences(preferences) {
     if (this._listenedToPreferences != null) {
@@ -289,22 +266,22 @@ const ProjectPageController = {
       preferences.listen('change', this._boundForceUpdate);
     }
     this._listenedToPreferences = preferences;
-  },
+  }
 
   loadFieldGuide(projectId) {
-    return apiClient.type('field_guides').get({project_id: projectId}).then(([guide]) => {
+    return apiClient.type('field_guides').get({ project_id: projectId })
+    .then(([guide]) => {
       const { actions, translations } = this.props;
-      this.setState({guide});
+      this.setState({ guide });
       actions.translations.load('field_guide', guide != null ? guide.id : undefined, translations.locale);
-      getAllLinked(guide, 'attached_images').then(images => {
+      getAllLinked(guide, 'attached_images')
+      .then((images) => {
         const guideIcons = {};
-        for (let image of Array.from(images)) {
-          guideIcons[image.id] = image;
-        }
-        this.setState({guideIcons});
+        images.map(image => guideIcons[image.id] = image);
+        this.setState({ guideIcons });
+      });
     });
-  });
-  },
+  }
 
   handlePreferencesChange(key, value) {
     const changes = {};
@@ -317,95 +294,109 @@ const ProjectPageController = {
         preferences.save();
       }
     }
-  },
+  }
 
   render() {
-    const slug = this.props.params.owner + '/' + this.props.params.name;
+    const slug = `${this.props.params.owner}/${this.props.params.name}`;
     const betaApproved = this.state.project != null ? this.state.project.beta_approved : undefined;
     const launchApproved = this.state.project != null ? this.state.project.launch_approved : undefined;
 
-    return <div className="project-page-wrapper">
-      <Helmet title={`${(this.state.project != null ? this.state.project.display_name : undefined) != null ? (this.state.project != null ? this.state.project.display_name : undefined) : counterpart('loading')}`} />
-      {(!launchApproved && betaApproved) ?
-        <div className="beta-border"></div> : undefined}
+    return (
+      <div className="project-page-wrapper">
+        <Helmet title={`${(this.state.project != null ? this.state.project.display_name : undefined) != null ? (this.state.project != null ? this.state.project.display_name : undefined) : counterpart('loading')}`} />
+        {(!launchApproved && betaApproved) ?
+          <div className="beta-border"/> : undefined}
 
-      {(() => {
-      if (this.state.ready) {
-        return <ProjectTranslations
-          project={this.state.project}
-        >
-          <WorkflowSelection
-            actions={this.props.actions}
-            location={this.props.location}
-            preferences={this.state.preferences}
+        {!!this.state.ready &&
+          <ProjectTranslations
             project={this.state.project}
-            projectRoles={this.state.projectRoles}
-            translations={this.props.translations}
-            user={this.props.user}
-            onChangePreferences={this.handlePreferencesChange}
           >
-            <ProjectPage
-              {...this.props}
-              background={this.state.background}
-              guide={this.state.guide}
-              guideIcons={this.state.guideIcons}
-              loading={this.state.loading}
-              onChangePreferences={this.handlePreferencesChange}
-              organization={this.state.organization}
-              owner={this.state.owner}
-              pages={this.state.pages}
+            <WorkflowSelection
+              actions={this.props.actions}
+              location={this.props.location}
               preferences={this.state.preferences}
               project={this.state.project}
-              projectAvatar={this.state.projectAvatar}
-              projectIsComplete={this.state.projectIsComplete}
               projectRoles={this.state.projectRoles}
-              requestUserProjectPreferences={this.requestUserProjectPreferences}
-              splits={this.state.splits}
-            />
-          </WorkflowSelection>
-        </ProjectTranslations>;
-
-      } else if (this.state.loading) {
-        return <div className="content-container">
-          <p>
-            Loading{' '}
-            <strong>{slug}</strong>...
-          </p>
-        </div>;
-
-      } else if (this.state.error != null) {
-        if (this.state.error.message === 'NOT_FOUND') {
-          return <div className="content-container">
-            <p>Project <code>{slug}</code> not found.</p>
-            <p>If you are sure the URL is correct, you might not have permission to view this project.</p>
-          </div>;
-        } else {
-          return <div className="content-container">
-            <p>
-              There was an error retrieving project{' '}
-              <strong>{slug}</strong>.
-            </p>
-            <p>
-              <code>{this.state.error.toString()}</code>
-            </p>
-          </div>;
+              translations={this.props.translations}
+              user={this.props.user}
+              onChangePreferences={this.handlePreferencesChange.bind(this)}
+            >
+              <ProjectPage
+                {...this.props}
+                background={this.state.background}
+                guide={this.state.guide}
+                guideIcons={this.state.guideIcons}
+                loading={this.state.loading}
+                onChangePreferences={this.handlePreferencesChange.bind(this)}
+                organization={this.state.organization}
+                owner={this.state.owner}
+                pages={this.state.pages}
+                preferences={this.state.preferences}
+                project={this.state.project}
+                projectAvatar={this.state.projectAvatar}
+                projectIsComplete={this.state.projectIsComplete}
+                projectRoles={this.state.projectRoles}
+                requestUserProjectPreferences={this.requestUserProjectPreferences.bind(this)}
+                splits={this.state.splits}
+              />
+            </WorkflowSelection>
+          </ProjectTranslations>
         }
-      }
-    })()}
-    </div>;
+        {!!this.state.loading &&
+          <div className="content-container">
+            <p>
+              Loading{' '}
+              <strong>{slug}</strong>...
+            </p>
+          </div>
+        }
+        {!!this.state.error &&
+          ((this.state.error.message === 'NOT_FOUND') ?
+            <div className="content-container">
+              <p>Project <code>{slug}</code> not found.</p>
+              <p>If you are sure the URL is correct, you might not have permission to view this project.</p>
+            </div> :
+            <div className="content-container">
+              <p>
+                There was an error retrieving project{' '}
+                <strong>{slug}</strong>.
+              </p>
+              <p>
+                <code>{this.state.error.message}</code>
+              </p>
+            </div>
+          )
+        }
+      </div>
+    );
   }
+}
+
+ProjectPageController.contextTypes = {
+  geordi: PropTypes.object,
+  initialLoadComplete: PropTypes.bool,
+  router: PropTypes.object.isRequired
+};
+
+ProjectPageController.propTypes = {
+  params: PropTypes.object,
+  user: PropTypes.object
+};
+
+ProjectPageController.defaultProps = {
+  params: {},
+  user: null
 };
 
 const mapStateToProps = state => ({
   translations: state.translations
-}) ;
+});
 
 const mapDispatchToProps = dispatch => ({
   actions: {
     translations: bindActionCreators(translationActions, dispatch)
   }
-}) ;
+});
 
-const ControllerComponent = createReactClass(ProjectPageController);
-export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ControllerComponent);
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ProjectPageController);
 export { ProjectPageController };
