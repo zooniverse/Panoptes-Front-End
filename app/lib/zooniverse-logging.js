@@ -37,6 +37,10 @@ class ZooniverseLogging {
     this.adapters = this.adapters.concat(newAdapters);
     this.adapters.forEach(adapter => adapter.configure(this.keys));
   }
+
+  unsubscribe(adapter) {
+    this.adapters = this.adapters.filter(i => i !== adapter);
+  }
 }
 
 export default ZooniverseLogging;
