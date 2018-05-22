@@ -105,11 +105,15 @@ counterpart.registerTranslations 'en',
 
       When you actually build your own project, there won't be an example set of images already loaded for you. Get started uploading a set of subjects for your project by clicking on the "New Subject Set" button on the left hand side of the screen. That will bring you to the _Subject Uploader_.
 
-      It's easiest if you have all of your images in a single folder along with a manifest file, and you will upload both at the same time. The manifest file lists all the images we want to upload and links each  image to additional information, also called metadata, such as date, time, and photographer. There is more information about the manifest in the "Details" section below, but for now you can see an example manifest file in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
+      If every subject you want classified is a single image, _and_ if the image file name contains enough information for you to be able to precisely match the subject with the rest of your data later, then this is pretty easy: you can just drag and drop the images into the Subject Uploader (or click within the "Upload Subjects" box and choose the files in the pop-up menu) and it will automatically detect that it needs to make subjects out of each file.
 
-      Click on the "Upload Subjects" box and navigate to the "Kitteh" folder you downloaded. The easiest thing to do is simply hit _cmd + a_ (on Mac, or _ctrl + a_ on Windows) to select everything in that folder. Note that the subject uploader ignores the excel file and the other folders. Click "open" to select those images and the manifest file for upload. The project uploader now indicates that the "Cat project manifest.csv" has 29 subjects for upload.
+      Much of the time, though, project builders need to keep some data associated with their images in the classification interface. For example, in Kitteh Zoo all the images are Creative Commons licensed and need to have attribution attached when they are displayed. With a simple file called a _manifest_, we can associate the needed information with each image. Below you can find more details about the manifest in the section _DETAILS - Subject sets and manifest details, a.k.a. "What is a manifest?"_ For now we will assume the manifest is created and the files are ready. You can see an example manifest file in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
 
-      Click "Upload" to start the process. It might take a little while, but when everything is uploaded, you'll see a list of all of the subjects. The numbers to the left are unique identifiers for each subject, and the icons to the right let you preview or delete each subject.
+      People often find it easiest to have all of the subject images in a single folder along with a manifest file; you will upload both at the same time. However you organize your files, pay attention to the details and keep records, as it may be important for your data analysis later (e.g. when you download your classifications of subjects and need to know how to correctly link those back to all the rest of your metadata).
+
+      Click on the "Upload Subjects" box and navigate to the "Kitteh" folder you downloaded. The easiest thing to do is simply hit _cmd + a_ (on Mac, or _ctrl + a_ on Windows) to select everything in that folder. Note that the subject uploader ignores the excel file and the other folders. Click "open" to select those images and the manifest file for upload. The project uploader now indicates that the "Cat project manifest.csv" has 30 subjects for upload. (If we had more subjects to upload, we'd do them in batches of no more than 1,000 at a time.)
+
+      Click "Upload" to start the process. When everything is uploaded, you'll see a list of all of the subjects. The numbers to the left are unique identifiers for each subject, and the icons to the right let you preview or delete each subject.
 
       Subject sets can be pretty powerful, and sometimes complex. You can have a single subject set that you add to over time, or have multiple subject sets, say, from different years or places. You can have different subject sets for different workflows, but you don't have to. You can even have multiple images in a given subject. For more details and advice on creating and structuring subject sets and associated manifests, check out the details section below.
 
@@ -120,7 +124,7 @@ counterpart.registerTranslations 'en',
         - **Research Case, FAQ, Results, and Education**: You can add a lot of information in these pages to help volunteers better understand the motivation for your project, the best approaches for classifying, and the outcomes of your project.
         - **Collaborators**: Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project before it's public).
         - **Workflows**: A workflow is the sequence of tasks that you're asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow is where you define those tasks and set out the order in which the volunteers will do them. Your project might have multiple workflows (if you want to set different tasks for different image sets).
-      - **Subjects**: A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the "manifest") defining their properties, and the images themselves. Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it's best to just have all their subjects in 1 set, but not all.
+      - **Subjects**: A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the "manifest") defining their properties, and the images themselves. Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it's best to just have all their subjects in 1 set, but not all: larger projects often find it essential to group subjects into multiple sets.
 
       ### DETAILS - Workflows
 
@@ -128,7 +132,7 @@ counterpart.registerTranslations 'en',
 
       _Workflow Name_: Give your workflow a short, but descriptive name. If you have multiple workflows and give volunteers the option of choosing which they want to work on, this name will appear on a button instead of "Get started!"
 
-      _Version_: Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by a whole number: 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the version by a decimal, e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data.
+      _Version_: Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by the number to the left of the ".": 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the integer to the right of the ".", e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data. _Note:_ the version looks like a decimal number, _but it is not_: it is a string with two numbers separated by a "." character. So, for example, version 2.1 is not the same as version 2.10. 
 
       _Tasks_: There are two main types of tasks: questions and drawing. For question tasks, the volunteer chooses from a list of answers but does not mark or draw on the image. In drawing tasks, the volunteer marks or draws directly on the image using tools that you specify. They can also give sub-classifications for each mark. Note that you can set the first task from the drop-down menu.
 
@@ -138,7 +142,7 @@ counterpart.registerTranslations 'en',
 
       You can use markdown in the main text.
 
-      _Help Text_: Add text and images for a pop-up help window. This is shown next to the main text of the task in the main classification interface, when the volunteer clicks a button asking for help. You can use markdown in this text, and link to other images to help illustrate your description. The help text can be as long as you need, but you should try to keep it simple and avoid jargon. One thing that is useful in the help text is a concise description of why you are asking for this particular information.
+      _Help Text_: Add text and images for a pop-up help window. This is shown next to the main text of the task in the main classification interface, when the volunteer clicks a button asking for help. You can use markdown in this text, and link to other images to help illustrate your description. The help text can be as long as you need, but you should try to keep it simple and avoid jargon. One thing that is useful in the help text is a concise description of why you are asking for this particular information. This help information often overlaps with information in the Field Guide, but it is an opportunity to provide extra detail about each specific task.
 
       ### DETAILS - Project Details:
 
@@ -159,13 +163,13 @@ counterpart.registerTranslations 'en',
 
       ### DETAILS - Additional Content
 
-      _Research Case, FAQ, Results, and Education_: These pages are where you really get to share all the cool things about your project. All of these pages use Markdown (see link above) to format text and display images.
+      _Research, FAQ, Results, and Education_: These pages are where you really get to share all the cool things about your project. All of these pages use Markdown (see link above) to format text and display images.
 
       [![Project additional content editor screenshot](/assets/how-to-lab/how-to-12.jpg)](/assets/how-to-lab/how-to-12.jpg)
 
-      _Research case_: Explain your research to your audience here in as much detail as you'd like. This page displays no matter what, since explaining your motivation to volunteers is critical for the success of your project!
+      _Research_: Explain your research case to your audience here in as much detail as you'd like. This page displays no matter what, since explaining your motivation to volunteers is critical for the success of your project!
 
-      _Results_: Once your project has hit its stride, share the results of your project with your volunteers here. This page will only display if you add content to it.
+      _Results_: Once your project has hit its stride, share the results of your project with your volunteers here. Volunteers really value feedback about how their inputs were used to help the research. This page will only display if you add content to it.
 
       _FAQ_: Add details here about your research, how to classify, and what you plan to do with the classifications. This page can evolve as your project does so that your active community members have a resource to point new users to. This page will only display if you add content to it.
 
@@ -205,7 +209,7 @@ counterpart.registerTranslations 'en',
 
       *The condensed answer:*
 
-      A manifest is a file that tells our software how to combine the images you have into units of data (subjects) to be classified. The manifest also allows you to link your classifications back to the rest of your data. A manifest is formatted as a CSV file with 1 line per subject, with a unique identifier and the names of images to be associated with a subject on each row (with additional information often included in other fields as well). There is an example in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
+      A manifest is a file that tells our software how to combine the images you have into units of data (subjects) to be classified. The manifest also allows you to link your classifications back to the rest of your data. A manifest is formatted as a CSV file with 1 line per subject, with the names of images to be associated with a subject on each row (with additional information often included in other fields as well). There is an example in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
 
       *The full answer:*
 
@@ -213,20 +217,20 @@ counterpart.registerTranslations 'en',
 
       To understand the format, let's start with the first few lines from the Kitteh Zoo manifest:
 
-          subject_id,image_name_1,origin,link,attribution,license,#secret_description
-          1,6672150457_420d61007d_b.jpg,Flickr,https://www.flickr.com/photos/aigle_dore/6672150457,Moyan Brenn,Creative Commons - share adapt attribute,sleepy striped kitteh is unsuspecting of paparazzi
-          2,8300920648_d4a21bba59_z,Flickr,https://www.flickr.com/photos/aigle_dore/8300920648,Moyan Brenn,Creative Commons - share adapt attribute,grandfather kitteh has ear hair. a lot of it
-          3,6713782851_82fc8c73e5_z.jpg,Flickr,https://www.flickr.com/photos/hellie55/6713782851,hehaden,Creative Commons - share adapt attribute,juvenile kittehs practice break-in at the catnip factory
+          image,!origin,link,attribution,license,#secret_description
+          6672150457_420d61007d_b.jpg,Flickr,https://www.flickr.com/photos/aigle_dore/6672150457,Moyan Brenn,Creative Commons - share adapt attribute,sleepy striped kitteh is unsuspecting of paparazzi
+          8300920648_d4a21bba59_z.jpg,Flickr,https://www.flickr.com/photos/aigle_dore/8300920648,Moyan Brenn,Creative Commons - share adapt attribute,grandfather kitteh has ear hair. a lot of it
+          6713782851_82fc8c73e5_z.jpg,Flickr,https://www.flickr.com/photos/hellie55/6713782851,hehaden,Creative Commons - share adapt attribute,juvenile kittehs practice break-in at the catnip factory
 
-      The first line of the file is a header line that specifies the name of each of the manifest fields. In this case, our manifest has 7 fields (or columns), called "subject\_id", "image\_name", "origin", "link", "attribution", "license" and “#secret\_description”. They are separated by commas: this is what's known as a "comma separated values" file, or CSV file.
+      The first line of the file is a header line that specifies the name of each of the manifest fields. In this case, our manifest has 6 fields (or columns), called "image", "!origin", "link", "attribution", "license" and “#secret\_description”. They are separated by commas: this is what's known as a "comma separated values" file, or CSV file.
 
-      After the first line, each row of the file contains information about 1 subject. The first field, corresponding with the "subject\_id" header, is a unique number that identifies the subject. The second field, which aligns with the "image\_name" header, contains the name of the image that's associated with that subject. These 2 fields are critically important: the image name is obviously important, and a unique identifier is important for matching your classifications to the rest of your data.
+      After the first line, each row of the file contains information about 1 subject. The first field, which aligns with the "image" header, contains the name of the image that's associated with that subject. This field is critically important as it tells the project builder which images to make into subjects.
 
-      All the other fields are optional, but in general having more information in the manifest is better. Most projects include additional information in the manifest that helps them match the classifications and subjects to the other data they need for their research. The additional information in the manifest can also be made available to volunteers as they classify or in the Talk discussion tool (some very keen volunteers find this extremely useful). Any fields with names that begin with “#” or “//” will *not* be shown to volunteers, such as the “#secret\_description” field in Kitteh Zoo. These hidden fields will still be returned to you in the classification file, so you can use these to include information helpful to your research without worrying about whether it might affect the classifications themselves. There might be information that could helpful for the volunteers in discussions or further exploration in the Talk discsussion tool, but could bias the classifications if visible to volunteers while classifying. Any fields with names that begin with "!" *will not* be accessible to volunteers in the classification interface, but *will be*  available on Talk after classification. Information in fields that *don’t* begin with a “#”, “//”, or '!' will always be accessible to volunteers in both the classification interface and the Talk discussion tool.
+      All the other fields are optional, but in general having more information in the manifest is better. Most projects include additional information in the manifest that helps them match the classifications and subjects to the other data they need for their research. For example, many projects include a separate ID that they have generated and which can be used later as a unique identifier to match classification data to their own metadata (for other projects, the unique identifier is the filename). The additional information in the manifest can also be made available to volunteers as they classify or in the Talk discussion tool (some very keen volunteers find this extremely useful). Any fields with names that begin with “#” or “//” will *never* be shown to volunteers, such as the “#secret\_description” field in Kitteh Zoo. These hidden fields will still be returned to you in the classification file, so you can use these to include information helpful to your research without worrying about whether it might affect the classifications themselves. There might be information that could helpful for the volunteers in discussions or further exploration in the Talk discsussion tool, but could bias the classifications if visible to volunteers while classifying. Any fields with names that begin with "!" *will not* be accessible to volunteers in the classification interface, but *will be*  available on Talk after classification (such as the “!origin” field above). Information in fields that *don’t* begin with a “#”, “//”, or '!' will always be accessible to volunteers in both the classification interface and the Talk discussion tool.
 
-      For now, let’s assume you’re just including the bare minimum of information, like:
+      For now, let’s assume you’re just including minimal information, like:
 
-          id,image
+          my_own_id,the_image
           1,kitteh_in_box.jpg
           2,kitteh_stalking.jpg
           3,kitteh_losing_balance.jpg
@@ -235,12 +239,12 @@ counterpart.registerTranslations 'en',
 
       Using a manifest CSV file also makes it very easy to create subjects with multiple images:
 
-          id,image1,image2
+          my_own_id,image1,image2
           1,kitteh_in_box.jpg,kitteh_eating_box.jpg
           2,kitteh_stalking.jpg,kitteh_pounced.jpg
           3,kitteh_losing_balance.jpg,kitteh_falling_off_sofa.jpg
 
-      If you upload this manifest plus the 6 images named in it, the Zooniverse software will create 3 subjects with 2 images each. When these subjects come up in the classification interface, volunteers will be able to flash between the images or switch between them manually.
+      If you upload this manifest plus the 6 images named in it, the Zooniverse software will create 3 subjects with 2 images each. When these subjects come up in the classification interface, volunteers will be able to flash between the images or switch between them manually. Later on, when these subjects are classified, the subject\_id assigned by the project builder can be used with a subject export to match each classification back to this information.
 
       You can create a manifest file in a simple text editor (such as TextEdit or Notepad), although this method is prone to errors like missed or extra commas. People often find it easiest to create manifest files using spreadsheet software such as Google Sheets, iWork Numbers or Microsoft Excel. Creating and maintaining a manifest using a spreadsheet makes the manifest easy to read, and you can export it to CSV format when you're ready to upload your subjects. You can also open existing CSV files in spreadsheet software.
 
