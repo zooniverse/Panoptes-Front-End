@@ -23,6 +23,7 @@ counterpart.registerTranslations('en', require('../../locales/en').default);
 counterpart.registerTranslations('it', require('../../locales/it').default);
 counterpart.registerTranslations('es', require('../../locales/es').default);
 counterpart.registerTranslations('nl', require('../../locales/nl').default);
+
 counterpart.setFallbackLocale('en');
 
 
@@ -51,7 +52,9 @@ class ProjectPageController extends React.Component {
 
   componentWillMount() {
     const { actions } = this.props;
-    if (this.props.location.query.language) { return actions.translations.setLocale(this.props.location.query.language); }
+    if (this.props.location.query.language) {
+      actions.translations.setLocale(this.props.location.query.language);
+    }
   }
 
   componentDidMount() {
@@ -91,7 +94,7 @@ class ProjectPageController extends React.Component {
         for (let split in splits) {
           if (splits[split].state !== 'active') { continue; }
           if (this.context.geordi != null) {
-            this.context.geordi.remember({experiment: splits[split].name});
+            this.context.geordi.remember({ experiment: splits[split].name });
           }
           if (this.context.geordi != null) {
             this.context.geordi.remember({ cohort: (splits[split].variant != null ? splits[split].variant.name : undefined) });
@@ -105,6 +108,44 @@ class ProjectPageController extends React.Component {
       this.setState({ splits: null });
       (this.context.geordi != null ? this.context.geordi.forget(['experiment', 'cohort']) : undefined);
     }
+  }
+
+  getUserProjectPreferences(project, user) {
+    this.listenToPreferences(null);
+
+    const userPreferences = (user != null) ?
+      user.get('project_preferences', { project_id: project.id })
+        .then(([preferences]) => {
+          let newPreferences;
+          return preferences != null ?
+            preferences :
+            (newPreferences = apiClient.type('project_preferences').create({
+              links: {
+                project: project.id
+              },
+              preferences: {}
+            })
+            .save()
+            .catch((error) => {
+              console.warn(error.message);
+            }));
+        })
+    :
+      Promise.resolve(apiClient.type('project_preferences').create({
+        id: 'GUEST_PREFERENCES_DO_NOT_SAVE',
+        links: {
+          project: project.id
+        },
+        preferences: {}}));
+
+    return userPreferences
+      .then((preferences) => {
+        this.listenToPreferences(preferences);
+        return preferences;
+      })
+      .catch((error) => {
+        console.warn(error.message);
+      });
   }
 
   fetchProjectData(ownerName, projectName, user) {
@@ -195,50 +236,12 @@ class ProjectPageController extends React.Component {
           });
         }
     })
-    .catch(error => {
+    .catch((error) => {
       this.setState({ error });
     })
     .then(() => {
       this.setState({ loading: false });
     });
-  }
-
-  getUserProjectPreferences(project, user) {
-    this.listenToPreferences(null);
-
-    const userPreferences = (user != null) ?
-      user.get('project_preferences', { project_id: project.id })
-        .then(([preferences]) => {
-          let newPreferences;
-          return preferences != null ?
-            preferences :
-            (newPreferences = apiClient.type('project_preferences').create({
-              links: {
-                project: project.id
-              },
-              preferences: {}
-            })
-            .save()
-            .catch((error) => {
-              console.warn(error.message);
-            }));
-        })
-    :
-      Promise.resolve(apiClient.type('project_preferences').create({
-        id: 'GUEST_PREFERENCES_DO_NOT_SAVE',
-        links: {
-          project: project.id
-        },
-        preferences: {}}));
-
-    return userPreferences
-      .then((preferences) => {
-        this.listenToPreferences(preferences);
-        return preferences;
-      })
-      .catch((error) => {
-        console.warn(error.message);
-      });
   }
 
   requestUserProjectPreferences(project, user) {
@@ -305,7 +308,7 @@ class ProjectPageController extends React.Component {
       <div className="project-page-wrapper">
         <Helmet title={`${(this.state.project != null ? this.state.project.display_name : undefined) != null ? (this.state.project != null ? this.state.project.display_name : undefined) : counterpart('loading')}`} />
         {(!launchApproved && betaApproved) ?
-          <div className="beta-border"/> : undefined}
+          <div className="beta-border" /> : undefined}
 
         {!!this.state.ready &&
           <ProjectTranslations
@@ -379,12 +382,33 @@ ProjectPageController.contextTypes = {
 };
 
 ProjectPageController.propTypes = {
-  params: PropTypes.object,
-  user: PropTypes.object
+  actions: PropTypes.shape({
+    translations: PropTypes.shape({
+      load: PropTypes.func,
+      loadTranslations: PropTypes.func
+    })
+  }).isRequired,
+  location: PropTypes.shape({
+    query: PropTypes.shape({
+      language: PropTypes.string
+    })
+  }),
+  params: PropTypes.shape({
+    name: PropTypes.string,
+    owner: PropTypes.string
+  }).isRequired,
+  translations: PropTypes.shape({
+    locale: PropTypes.string
+  }),
+  user: PropTypes.shape({})
 };
 
 ProjectPageController.defaultProps = {
+  location: {
+    query: {}
+  },
   params: {},
+  translations: {},
   user: null
 };
 
