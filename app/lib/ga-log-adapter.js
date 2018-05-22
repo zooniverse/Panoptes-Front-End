@@ -8,14 +8,45 @@ const dimensionMap = {
 };
 
 class GALogAdapter {
-  constructor(layerName) {
+  constructor(windowObj, layerName) {
+    this.windowObj = windowObj;
     this.layerName = layerName;
     this.gaLayer = null;
+    this.pending = [];
+    this.enqueue = this.enqueue.bind(this);
   }
 
   layer() {
-    this.gaLayer = this.gaLayer || window[this.layerName];
-    return this.gaLayer || (() => null);
+    if (this.gaLayer) {
+      // just send the event if we can
+      return this.gaLayer;
+    }
+
+    if (!this.windowObj[this.layerName]) {
+      // if we still can't find google's analytics object, queue the event up for later
+      return this.enqueue;
+    }
+
+    // if we go there, this is the first time we've seen an analytics object so we need to set it up
+    this.gaLayer = this.windowObj[this.layerName];
+    this.initializeGA();
+
+    return this.gaLayer;
+  }
+
+  initializeGA() {
+    // initialize the google analytics object with the tracking code
+    const tracker = this.gaLayer.getAll()[0];
+    const code = tracker.get('trackingId');
+    this.gaLayer('create', code, 'auto');
+
+    // send any analytics messages we'd been waiting to send
+    this.pending.forEach(params => this.gaLayer.apply(null, params));
+    this.pending = [];
+  }
+
+  enqueue(...args) {
+    this.pending.push(args);
   }
 
   configure(keys) {
@@ -33,9 +64,10 @@ class GALogAdapter {
   onForget(keyList) {
     keyList.forEach((key) => {
       if (Object.keys(dimensionMap).includes(key)) {
-        this.layer()('set', `dimension${dimensionMap[key]}`, null);
         if (key === 'projectToken') {
           this.layer()('set', `dimension${dimensionMap[key]}`, 'zooHome');
+        } else {
+          this.layer()('set', `dimension${dimensionMap[key]}`, null);
         }
       }
     });
