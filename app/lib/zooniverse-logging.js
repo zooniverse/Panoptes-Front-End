@@ -1,4 +1,4 @@
-const enabledTokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/comet-hunters'];
+const enabledTokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/comet-hunters', 'zooniverse/snapshot-wisconsin'];
 
 class ZooniverseLogging {
   constructor() {
