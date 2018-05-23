@@ -78,7 +78,7 @@ class GALogAdapter {
       hitType: 'event',
       eventCategory: 'ZooniverseEvents2.0',
       eventAction: logEntry.type,
-      eventLabel: logEntry.relatedID
+      eventLabel: logEntry.relatedID || logEntry.data
     });
   }
 }
