@@ -81,27 +81,29 @@ class ProjectPageController extends React.Component {
   }
 
   setupSplits(props) {
-    if (props == null) { ({ props } = this); }
+    if (!props) {
+      ({ props } = this);
+    }
     const { user } = props;
     const { owner, name } = props.params;
 
     if (user) {
-      return Split.load(`${owner}/${name}`)
-      .then(splits => {
+      Split.load(`${owner}/${name}`)
+      .then((splits) => {
         this.setState({ splits });
-        if (!splits) { return; }
-        const result = [];
-        for (let split in splits) {
-          if (splits[split].state !== 'active') { continue; }
-          if (this.context.geordi != null) {
-            this.context.geordi.remember({ experiment: splits[split].name });
-          }
-          if (this.context.geordi != null) {
-            this.context.geordi.remember({ cohort: (splits[split].variant != null ? splits[split].variant.name : undefined) });
-          }
-          break;
+        if (!splits) {
+          return;
         }
-        return result;
+        Object.keys(splits).forEach((split) => {
+          // log the first active split and break the loop
+          if (splits[split].state === 'active' && this.context.geordi) {
+            const experiment = splits[split].name;
+            const cohort = splits[split].variant ? splits[split].variant.name : undefined;
+            this.context.geordi.remember({ experiment, cohort });
+            return;
+          }
+        });
+        return;
       });
     } else {
       Split.clear();
