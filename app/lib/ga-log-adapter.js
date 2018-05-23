@@ -22,7 +22,7 @@ class GALogAdapter {
       return this.gaLayer;
     }
 
-    if (!this.windowObj[this.layerName]) {
+    if (!this.layerPresent()) {
       // if we still can't find google's analytics object, queue the event up for later
       return this.enqueue;
     }
@@ -32,6 +32,10 @@ class GALogAdapter {
     this.initializeGA();
 
     return this.gaLayer;
+  }
+
+  layerPresent() {
+    return this.windowObj[this.layerName] && this.windowObj[this.layerName].getAll;
   }
 
   initializeGA() {
