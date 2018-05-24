@@ -148,7 +148,7 @@ const ExportWorkflowListItem = ({ workflow, media, onChange, workflowError }) =>
               href={myMedia.src}
               className="workflow-export-list__link"
             >
-              {Moment(media.updated_at).fromNow()}
+              {Moment(myMedia.updated_at).fromNow()}
             </a>}
           {!myMedia &&
             <span className="workflow-export-list__span">No exports have been requested.</span>}
