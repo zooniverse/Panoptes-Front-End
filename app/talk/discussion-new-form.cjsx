@@ -78,7 +78,7 @@ module.exports = createReactClass
         titleInput.value = ''
         @context?.geordi?.logEvent
           type: 'add-discussion'
-          data: {discussion: discussion.title}
+          data: discussion.title
         @props.onCreateDiscussion?(discussion)
 
   boardRadio: (board, i) ->
