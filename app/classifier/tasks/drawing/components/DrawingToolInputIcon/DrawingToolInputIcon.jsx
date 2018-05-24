@@ -6,7 +6,12 @@ import icons from '../../icons';
 
 export const StyledDrawingToolInputIcon = styled.span`
   color: ${props => props.color};
-  margin-right: 1ch;
+
+  &::after {
+    content: " ";
+    margin-right: 1ch;
+    white-space: pre;
+  }
 
   > svg {
     fill-opacity: 0.1;
