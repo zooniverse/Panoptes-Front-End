@@ -642,7 +642,16 @@ const Publications = {
           date: "July 2016"
         }
       ]
-    }
+    },
+{
+    slug: "skymap/supernova-sighting",
+    publications: [
+      {
+      citation: "Spectroscopic classification of SN 2018bwq as a type Ia supernova a few days before maximum light, Lopez-Sanchez+ 2018.",
+      href: "http://www.astronomerstelegram.org/?read=11667",
+      date: "May 2018"
+    }]
+  }
   ],
   climate: [
     {
