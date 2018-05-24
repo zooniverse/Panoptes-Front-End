@@ -26,7 +26,13 @@ export const StyledOuterWrapper = styled.div`
 `;
 
 export const StyledAvatar = styled(Avatar)`
-  margin-right: ${pxToRem(20)};
+  [lang] & {
+    margin: 0 ${pxToRem(20)} 0 0;
+  }
+  
+  [lang=he] &, [lang=ar] & {
+    margin: 0 0 0 ${pxToRem(20)};
+  }
 `;
 
 export const StyledWrapper = styled(Wrapper)`

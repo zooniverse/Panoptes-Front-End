@@ -6,8 +6,6 @@ import { IndexLink } from 'react-router';
 import counterpart from 'counterpart';
 import { pxToRem, zooTheme } from '../../../../../../theme';
 
-// TODO why does this come back as a missing translation?
-const zooniverseApprovedTranslation = counterpart('project.nav.zooniverseApproved');
 
 export const H1 = styled.h1`
   color: white;
@@ -48,12 +46,17 @@ export const StyledRedirect = styled.a`
 `;
 
 export const StyledCheckMarkWrapper = styled.span.attrs({
-  'aria-label': "Zooniverse Approved",
-  role: 'img',
-  title: "Zooniverse Approved"
+  role: 'img'
 })`
   font-size: 0.75rem;
-  margin-left: 1rem;
+
+  [lang] & {
+    margin: 0 0 0 1rem;
+  }
+
+  [lang=he] &, [lang=ar] & {
+    margin: 0 1rem 0 0;
+  }
 `;
 
 export const StyledCheckMark = styled.i`
@@ -76,6 +79,7 @@ export const StyledUnderReview = styled.small`
 
 function ProjectTitle({ launched, link, redirect, title, underReview }) {
   const TitleComponent = (redirect) ? StyledRedirect : StyledLink;
+  const zooniverseApprovedTranslation = counterpart('project.nav.zooniverseApproved');
 
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
@@ -87,7 +91,11 @@ function ProjectTitle({ launched, link, redirect, title, underReview }) {
             {title}
             {redirect && <span>{' '}<i className="fa fa-external-link" /></span>}
             {launched &&
-              <StyledCheckMarkWrapper className="fa-stack">
+              <StyledCheckMarkWrapper
+                className="fa-stack"
+                aria-label={zooniverseApprovedTranslation}
+                title={zooniverseApprovedTranslation}
+              >
                 <i className="fa fa-circle fa-stack-2x" />
                 <StyledCheckMark className="fa fa-check fa-stack-1x" />
               </StyledCheckMarkWrapper>}
