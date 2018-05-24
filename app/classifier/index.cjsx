@@ -115,8 +115,8 @@ ClassifierWrapper = createReactClass
     @maybeRequestUserProjectPreferences()
     @props.onComplete?()
 
-  maybeRequestUserProjectPreferences: ->  
-    if classificationsThisSession % RELOAD_UPP_EVERY is 0
+  maybeRequestUserProjectPreferences: ->
+    if classificationsThisSession % RELOAD_UPP_EVERY is 0 and @props.project?.experimental_tools.includes('workflow assignment')
       @props.requestUserProjectPreferences(@props.project, @props.user)
 
   maybeLaunchMiniCourse: ->
