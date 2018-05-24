@@ -79,7 +79,7 @@ export default class HomePageSocial extends React.Component {
         <div className="home-social__blog-post">
           <div style={background}></div>
           <div>
-            <span className="regular-body">{post.excerpt}</span>
+            <span className="regular-body">{post.excerpt.replace(/<.+?>/g, '')}</span>
             <br />
             <div>
               <a className="home-social__italic-link" href={post.link}> Read More... </a>
