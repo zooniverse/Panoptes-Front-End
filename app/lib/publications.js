@@ -650,7 +650,13 @@ const Publications = {
       citation: "Spectroscopic classification of SN 2018bwq as a type Ia supernova a few days before maximum light, Lopez-Sanchez+ 2018.",
       href: "http://www.astronomerstelegram.org/?read=11667",
       date: "May 2018"
-    }]
+    },
+    {
+      citation: "Spectroscopic classification of SN 2018bwp as a type Ia supernova a few weeks after peak brightness, Lopez-Sanchez+ 2018.",
+      href: "http://www.astronomerstelegram.org/?read=11671",
+      date: "May 2018"
+    }
+  ]
   }
   ],
   climate: [
