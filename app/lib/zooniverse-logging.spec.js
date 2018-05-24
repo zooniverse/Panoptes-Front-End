@@ -110,9 +110,5 @@ describe('ZooniverseLogging', () => {
       sinon.assert.called(method1);
       sinon.assert.called(method2);
     });
-
-    it('builds handler methods correctly', () => {
-
-    });
   });
 });
