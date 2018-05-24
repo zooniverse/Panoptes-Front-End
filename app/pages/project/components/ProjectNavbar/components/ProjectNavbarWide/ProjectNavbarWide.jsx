@@ -48,15 +48,21 @@ export const List = styled.ul`
 `;
 
 export const ListItem = styled.li`
+  display: inline;
   list-style: none;
 
-  &:not(:last-of-type) {
+  &:not(:last-of-type)::after {
+    content: " ";
+    font-size: 0;
+    line-height: 0;
     margin-right: ${pxToRem(30)};
+    white-space: pre;
   }
 `;
 
 export const StyledNavLink = styled(NavLink)`
   border-bottom: ${pxToRem(3)} solid transparent;
+  display: inline-block;
   margin-top: ${pxToRem(2)};
 
   &:hover,
