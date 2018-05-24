@@ -18,14 +18,13 @@ class WorkflowSelection extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (nextProps.preferences &&
-      nextProps.preferences.preferences &&
-      nextProps.preferences.preferences.selected_workflow &&
+    const { preferences } = nextProps;
+    const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
+    if (userSelectedWorkflow &&
       this.state.workflow
     ) {
-      const userWorkflowID = parseInt(nextProps.preferences.preferences.selected_workflow);
       if (!nextState.loadingSelectedWorkflow &&
-        userWorkflowID !== parseInt(this.state.workflow.id)
+        userSelectedWorkflow !== this.state.workflow.id
       ) {
         this.getSelectedWorkflow(nextProps);
       }
@@ -44,58 +43,66 @@ class WorkflowSelection extends React.Component {
     // if none of those are set, select random workflow
     let selectedWorkflowID;
     let activeFilter = true;
-    if (this.props.location.query &&
-      this.props.location.query.workflow &&
+    const workflowFromURL = this.sanitiseID(this.props.location.query.workflow);
+    const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
+    const projectSetWorkflow = (preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
+    if (workflowFromURL &&
       this.checkUserRoles(project, user)
     ) {
-      selectedWorkflowID = parseInt(this.props.location.query.workflow);
+      selectedWorkflowID = workflowFromURL;
       activeFilter = false;
-      if (preferences && preferences.preferences.selected_workflow !== selectedWorkflowID) {
+      if (userSelectedWorkflow && userSelectedWorkflow !== selectedWorkflowID) {
         this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
       }
-    } else if (this.props.location.query &&
-      this.props.location.query.workflow &&
+    } else if (workflowFromURL &&
       project.experimental_tools &&
       project.experimental_tools.indexOf('allow workflow query') > -1
     ) {
-      selectedWorkflowID = parseInt(this.props.location.query.workflow);
-      if (preferences && preferences.preferences.selected_workflow !== selectedWorkflowID) {
+      selectedWorkflowID = workflowFromURL;
+      if (userSelectedWorkflow && userSelectedWorkflow !== selectedWorkflowID) {
         this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
       }
-    } else if (preferences && preferences.preferences.selected_workflow) {
-      selectedWorkflowID = preferences.preferences.selected_workflow;
-    } else if (preferences && preferences.settings && preferences.settings.workflow_id) {
-      selectedWorkflowID = preferences.settings.workflow_id;
+    } else if (userSelectedWorkflow) {
+      selectedWorkflowID = userSelectedWorkflow;
+    } else if (projectSetWorkflow) {
+      selectedWorkflowID = projectSetWorkflow;
     } else if (project.configuration && project.configuration.default_workflow) {
       selectedWorkflowID = project.configuration.default_workflow;
     } else {
       selectedWorkflowID = this.selectRandomWorkflow(project);
     }
 
-    selectedWorkflowID = parseInt(selectedWorkflowID);
     this.getWorkflow(selectedWorkflowID, activeFilter);
   }
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
-    const { actions, translations } = this.props;
-    const query = {
-      project_id: this.props.project.id
-    };
+    const { actions, project, translations } = this.props;
+    const sanitisedWorkflowID = this.sanitiseID(selectedWorkflowID);
+    let isValidWorkflow = false;
     if (activeFilter) {
-      query.active = true;
+      isValidWorkflow = project.links.active_workflows.indexOf(sanitisedWorkflowID) > -1;
+    } else {
+      isValidWorkflow = project.links.workflows.indexOf(sanitisedWorkflowID) > -1;
     }
-    apiClient
-    .type('workflows')
-    .get(`${selectedWorkflowID}`, query)
-    .catch((error) => {
-      if (error.status === 404) {
-        this.clearInactiveWorkflow(selectedWorkflowID)
-        .then(this.getSelectedWorkflow(this.props));
-      } else {
-        console.error(error);
-        this.setState({ error, loadingSelectedWorkflow: false });
-      }
-    })
+    let awaitWorkflow;
+    if (isValidWorkflow) {
+      awaitWorkflow = apiClient
+        .type('workflows')
+        .get(sanitisedWorkflowID, {}) // the empty query here forces the client to bypass its internal cache
+        .catch((error) => {
+          if (error.status === 404) {
+            this.clearInactiveWorkflow(sanitisedWorkflowID)
+            .then(this.getSelectedWorkflow(this.props));
+          } else {
+            console.error(error);
+            this.setState({ error, loadingSelectedWorkflow: false });
+          }
+        });
+    } else {
+      awaitWorkflow = Promise.resolve(null);
+    }
+
+    awaitWorkflow
     .then((workflow) => {
       if (workflow) {
         this.setState({ loadingSelectedWorkflow: false, workflow });
@@ -143,13 +150,13 @@ class WorkflowSelection extends React.Component {
 
   clearInactiveWorkflow(selectedWorkflowID) {
     const { preferences } = this.props;
-    const selectedWorkflow = preferences.preferences ? preferences.preferences.selected_workflow : undefined;
-    const projectSetWorkflow = preferences.settings ? preferences.settings.workflow_id : undefined;
+    const selectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
+    const projectSetWorkflow = (preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
 
-    if (parseInt(selectedWorkflowID) === parseInt(selectedWorkflow)) {
+    if (selectedWorkflowID === selectedWorkflow) {
       preferences.update({ 'preferences.selected_workflow': undefined });
       return preferences.save().catch(error => console.warn(error.message));
-    } else if (parseInt(selectedWorkflowID) === parseInt(projectSetWorkflow)) {
+    } else if (selectedWorkflowID === projectSetWorkflow) {
       preferences.update({ 'settings.workflow_id': undefined });
       return preferences.save().catch(error => console.warn(error.message));
     } else {
@@ -164,6 +171,11 @@ class WorkflowSelection extends React.Component {
   workflowSelectionErrorHandler() {
     this.props.project.uncacheLink('workflows');
     throw new Error(`No active workflows for project ${this.props.project.id}`);
+  }
+
+  sanitiseID(resourceID) {
+    const sanitisedID = resourceID ? parseInt(resourceID) : undefined;
+    return sanitisedID ? sanitisedID.toString() : undefined;
   }
 
   render() {

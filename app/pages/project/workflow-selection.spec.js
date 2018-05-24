@@ -150,7 +150,15 @@ describe('WorkflowSelection', function () {
     project.experimental_tools = ['allow workflow query'];
     controller.getSelectedWorkflow({ project });
     sinon.assert.calledOnce(workflowStub);
-    sinon.assert.calledWith(workflowStub, 6, true);
+    sinon.assert.calledWith(workflowStub, '6', true);
+  });
+
+  it('should sanitise the workflow query param if "allow workflow query" is set', function () {
+    location.query.workflow = '6random78';
+    project.experimental_tools = ['allow workflow query'];
+    controller.getSelectedWorkflow({ project });
+    sinon.assert.calledOnce(workflowStub);
+    sinon.assert.calledWith(workflowStub, '6', true);
   });
 
   describe('with a logged-in user', function () {
@@ -163,21 +171,21 @@ describe('WorkflowSelection', function () {
       const user = owner;
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowStub);
-      sinon.assert.calledWith(workflowStub, 6, false);
+      sinon.assert.calledWith(workflowStub, '6', false);
     });
 
     it('should load the specified workflow for a collaborator', function () {
       const user = apiClient.type('users').create({ id: '2' });
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowStub);
-      sinon.assert.calledWith(workflowStub, 6, false);
+      sinon.assert.calledWith(workflowStub, '6', false);
     });
 
     it('should load the specified workflow for a tester', function () {
       const user = apiClient.type('users').create({ id: '3' });
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowStub);
-      sinon.assert.calledWith(workflowStub, 6, false);
+      sinon.assert.calledWith(workflowStub, '6', false);
     });
 
     it('should load an active workflow for a general user', function () {
@@ -186,7 +194,7 @@ describe('WorkflowSelection', function () {
       sinon.assert.calledOnce(workflowStub);
       const selectedWorkflowID = workflowStub.getCall(0).args[0];
       const activeFilter = workflowStub.getCall(0).args[1];
-      assert.notEqual(project.links.active_workflows.indexOf(selectedWorkflowID.toString()), -1);
+      assert.notEqual(project.links.active_workflows.indexOf(selectedWorkflowID), -1);
       assert.equal(activeFilter, true);
     });
   });
@@ -203,28 +211,52 @@ describe('WorkflowSelection', function () {
       preferences.update({ 'preferences.selected_workflow': '4' });
       controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowStub);
-      sinon.assert.calledWith(workflowStub, 4, true);
+      sinon.assert.calledWith(workflowStub, '4', true);
     });
 
     it('should parse the stored user workflow as an int', function () {
       preferences.update({ 'preferences.selected_workflow': '4random' });
       controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowStub);
-      sinon.assert.calledWith(workflowStub, 4, true);
+      sinon.assert.calledWith(workflowStub, '4', true);
+    });
+
+    it('should clear an invalid workflow string from user preferences', function () {
+      preferences.update({ 'preferences.selected_workflow': '4' });
+      controller.clearInactiveWorkflow('4');
+      assert.equal(preferences.preferences.selected_workflow, undefined);
+    });
+
+    it('should clear an invalid workflow int from user preferences', function () {
+      preferences.update({ 'preferences.selected_workflow': 4 });
+      controller.clearInactiveWorkflow('4');
+      assert.equal(preferences.preferences.selected_workflow, undefined);
     });
 
     it('should try to load a stored project workflow', function () {
       preferences.update({ 'settings.workflow_id': '2' });
       controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowStub);
-      sinon.assert.calledWith(workflowStub, 2, true);
+      sinon.assert.calledWith(workflowStub, '2', true);
     });
 
     it('parse the stored project workflow as an int', function () {
       preferences.update({ 'settings.workflow_id': '2random' });
       controller.getSelectedWorkflow({ project, preferences });
       sinon.assert.calledOnce(workflowStub);
-      sinon.assert.calledWith(workflowStub, 2, true);
+      sinon.assert.calledWith(workflowStub, '2', true);
+    });
+
+    it('should clear an invalid workflow string from project settings', function () {
+      preferences.update({ 'settings.workflow_id': '2' });
+      controller.clearInactiveWorkflow('2');
+      assert.equal(preferences.settings.workflow_id, undefined);
+    });
+
+    it('should clear an invalid workflow int from project settings', function () {
+      preferences.update({ 'settings.workflow_id': 2 });
+      controller.clearInactiveWorkflow('2');
+      assert.equal(preferences.settings.workflow_id, undefined);
     });
   });
 
@@ -239,7 +271,7 @@ describe('WorkflowSelection', function () {
       const user = apiClient.type('users').create({ id: '4' });
       controller.getSelectedWorkflow({ project, preferences, user });
       sinon.assert.calledOnce(workflowStub);
-      sinon.assert.calledWith(workflowStub, 1, true);
+      sinon.assert.calledWith(workflowStub, '1', true);
     });
   });
 
@@ -261,7 +293,7 @@ describe('WorkflowSelection', function () {
       );
       wrapper.setProps({ project: newProject });
       sinon.assert.calledOnce(workflowStub);
-      sinon.assert.calledWith(workflowStub, 10, true);
+      sinon.assert.calledWith(workflowStub, '10', true);
     });
   });
 });
