@@ -26,11 +26,9 @@ export const StyledOuterWrapper = styled.div`
 `;
 
 export const StyledAvatar = styled(Avatar)`
-  [lang] & {
-    margin: 0 ${pxToRem(20)} 0 0;
-  }
+  margin: 0 ${pxToRem(20)} 0 0;
   
-  [lang=he] &, [lang=ar] & {
+  .rtl & {
     margin: 0 0 0 ${pxToRem(20)};
   }
 `;

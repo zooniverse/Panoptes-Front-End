@@ -49,12 +49,9 @@ export const StyledCheckMarkWrapper = styled.span.attrs({
   role: 'img'
 })`
   font-size: 0.75rem;
+  margin: 0 0 0 1rem;
 
-  [lang] & {
-    margin: 0 0 0 1rem;
-  }
-
-  [lang=he] &, [lang=ar] & {
+  .rtl & {
     margin: 0 1rem 0 0;
   }
 `;
