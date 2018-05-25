@@ -47,7 +47,7 @@ module.exports = createReactClass
   logPageClick: (clicked, button) ->
     @context?.geordi?.logEvent
       type: clicked
-      data: {button: button}
+      data: button
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.reply isnt @props.reply

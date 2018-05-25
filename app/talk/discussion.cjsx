@@ -174,7 +174,7 @@ module.exports = createReactClass
         @setState {discussion: discussion[0]}
         @context?.geordi?.logEvent
           type: "talk-view"
-          data: {discussion: discussion?[0]?.title}
+          data: discussion?[0]?.title
 
         talkClient
           .type 'boards'
