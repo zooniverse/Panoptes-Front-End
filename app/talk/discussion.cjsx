@@ -173,7 +173,7 @@ module.exports = createReactClass
       .then (discussion) =>
         @setState {discussion: discussion[0]}
         @context?.geordi?.logEvent
-          type: "talk-view"
+          type: "view-discussion"
           data: discussion?[0]?.title
 
         talkClient

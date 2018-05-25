@@ -120,7 +120,7 @@ module.exports = createReactClass
       .then (board) =>
         @setState {board}
         @context?.geordi?.logEvent
-          type: "talk-view"
+          type: "view-board"
           data: board?.title
 
   onCreateDiscussion: ->
