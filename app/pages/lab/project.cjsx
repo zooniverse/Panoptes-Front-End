@@ -85,6 +85,13 @@ EditProjectPage = createReactClass
           <li><Link to={@labPath('/subject-sets')} activeClassName='active' className="nav-list-item" title="View your project's subject sets">
             Subject Sets
           </Link></li>
+          {if (@props.project.experimental_tools?.indexOf('translator-role') > -1) or isAdmin()
+            <li>
+              <Link to={@labPath('/translations')} activeClassName='active' className="nav-list-item" title="Preview your project's translations">
+                Translations
+                </Link>
+            </li>
+          }
 
           <li>
             <br />
