@@ -233,7 +233,7 @@ export class Graph extends React.Component {
             options={this.props.optionsSmall}
           />
           <div className="top-slider">
-            <Rcslider
+            <Rcslider.Range
               ref="top-slider"
               min={0}
               max={this.state.data.labels.length - 1}
