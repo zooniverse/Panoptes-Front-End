@@ -14,7 +14,7 @@ class ProjectNavbarContainer extends Component {
 
     this.state = {
       adminEnabled: false
-    }
+    };
   }
 
   componentDidMount() {
