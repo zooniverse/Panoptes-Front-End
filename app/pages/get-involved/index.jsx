@@ -41,13 +41,6 @@ class GetInvolved extends React.Component {
               >
                 <Translate content="getInvolved.index.nav.callForProjects" />
               </Link>
-              <Link
-                to="/collections"
-                activeClassname="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'getInvolved.index.nav.collections-list') : null}
-              >
-                <Translate content="getInvolved.index.nav.collections" />
-              </Link>
             </nav>
           </div>
         </section>
