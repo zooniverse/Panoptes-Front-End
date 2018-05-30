@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import tasks from '../tasks';
 import DetailsSubTaskForm from './components/DetailsSubTaskForm';
 
 const STROKE_WIDTH = 1.5;
@@ -46,6 +45,7 @@ export default class DrawingToolRoot extends React.Component {
   render() {
     let startHandler = () => {};
     const toolProps = this.props.tool.props;
+    const tasks = require('../tasks');
 
     const rootProps = {
       'data-disabled': toolProps.disabled || null,
