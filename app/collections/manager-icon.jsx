@@ -19,8 +19,9 @@ class CollectionsManagerIcon extends React.Component {
     this.setState({ open: true });
   }
 
-  close() {
+  close(e) {
     this.setState({ open: false });
+    e.stopPropagation();
   }
 
   render() {
