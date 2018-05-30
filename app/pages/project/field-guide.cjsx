@@ -1,5 +1,6 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
+classnames = require 'classnames'
 {Markdown} = require 'markdownz'
 CroppedImage = require('../../components/cropped-image').default
 
@@ -83,8 +84,15 @@ module.exports = createReactClass
 
     levelUp = @cutSelection.bind this, selectionTrail.length - 1
     atRoot = @state.selection.length is 0
+    className = classnames({
+        "field-guide": true,
+        rtl: this.props.rtl
+      })
 
-    <div className="field-guide">
+    <div
+      className={className}
+      lang={this.props.locale}
+    >
       <header>
         <button type="button" className="field-guide-header-button" disabled={atRoot} onClick={levelUp}>
           <i className="fa fa-chevron-left fa-fw"></i>
