@@ -108,19 +108,18 @@ class ProjectPageController extends React.Component {
     } else {
       Split.clear();
       this.setState({ splits: null });
-      (this.context.geordi != null ? this.context.geordi.forget(['experiment', 'cohort']) : undefined);
+      this.context.geordi ? this.context.geordi.forget(['experiment', 'cohort']) : undefined;
     }
   }
 
   getUserProjectPreferences(project, user) {
     this.listenToPreferences(null);
 
-    const userPreferences = (user != null) ?
+    const userPreferences = user ?
       user.get('project_preferences', { project_id: project.id })
         .then(([preferences]) => {
           let newPreferences;
-          return preferences != null ?
-            preferences :
+          return preferences ||
             (newPreferences = apiClient.type('project_preferences').create({
               links: {
                 project: project.id
@@ -163,7 +162,7 @@ class ProjectPageController extends React.Component {
       .then(([project]) => {
         this.setState({ project });
 
-        if (project != null) {
+        if (project) {
           // Use apiClient with cached resources from include to get out of cache
           let awaitOrganization;
           const awaitBackground = apiClient.type('backgrounds').get(project.links.background.id)
@@ -171,10 +170,10 @@ class ProjectPageController extends React.Component {
             if (error.status === 404) { return { src: '' }; } else { return console.error(error); }
           });
 
-          if ((project.links != null ? project.links.organization : undefined) != null) {
+          if (project.links && project.links.organization) {
             awaitOrganization = project.get('organization', { listed: true })
               .catch(error => [])
-              .then(response => (response != null ? response.display_name : undefined) ? response : null);
+              .then(response => (response && response.display_name) ? response : null);
           } else {
             awaitOrganization = Promise.resolve(null);
           }
@@ -249,7 +248,7 @@ class ProjectPageController extends React.Component {
   requestUserProjectPreferences(project, user) {
     this.listenToPreferences(null);
 
-    if (user != null) {
+    if (user) {
       return user.get('project_preferences', { project_id: project.id })
         .then(([preferences]) => {
           this.setState({ preferences });
@@ -264,10 +263,10 @@ class ProjectPageController extends React.Component {
   }
 
   listenToPreferences(preferences) {
-    if (this._listenedToPreferences != null) {
+    if (this._listenedToPreferences) {
       this._listenedToPreferences.stopListening('change', this._boundForceUpdate);
     }
-    if (preferences != null) {
+    if (preferences) {
       preferences.listen('change', this._boundForceUpdate);
     }
     this._listenedToPreferences = preferences;
@@ -278,7 +277,8 @@ class ProjectPageController extends React.Component {
     .then(([guide]) => {
       const { actions, translations } = this.props;
       this.setState({ guide });
-      actions.translations.load('field_guide', guide != null ? guide.id : undefined, translations.locale);
+      const guideId = guide ? guide.id : undefined;
+      actions.translations.load('field_guide', guide_id, translations.locale);
       getAllLinked(guide, 'attached_images')
       .then((images) => {
         const guideIcons = {};
@@ -292,10 +292,10 @@ class ProjectPageController extends React.Component {
     const changes = {};
     changes[key] = value;
     const { preferences } = this.state;
-    if (preferences != null) {
+    if (preferences) {
       preferences.update(changes);
       this.setState({ preferences });
-      if (this.props.user != null) {
+      if (this.props.user) {
         preferences.save();
       }
     }
@@ -303,12 +303,14 @@ class ProjectPageController extends React.Component {
 
   render() {
     const slug = `${this.props.params.owner}/${this.props.params.name}`;
-    const betaApproved = this.state.project != null ? this.state.project.beta_approved : undefined;
-    const launchApproved = this.state.project != null ? this.state.project.launch_approved : undefined;
+    const betaApproved = this.state.project ? this.state.project.beta_approved : undefined;
+    const launchApproved = this.state.project ? this.state.project.launch_approved : undefined;
+    const displayName = this.state.project ? this.state.project.display_name : undefined;
+    const title = displayName || counterpart('loading');
 
     return (
       <div className="project-page-wrapper">
-        <Helmet title={`${(this.state.project != null ? this.state.project.display_name : undefined) != null ? (this.state.project != null ? this.state.project.display_name : undefined) : counterpart('loading')}`} />
+        <Helmet title={title} />
         {(!launchApproved && betaApproved) ?
           <div className="beta-border" /> : undefined}
 
