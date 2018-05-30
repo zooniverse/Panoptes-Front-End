@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import StickyModalForm from 'modal-form/sticky';
-import { Provider } from 'react-redux';
 import ModalFocus from '../../components/modal-focus';
 import tasks from '../tasks';
 import DetailsSubTaskForm from './components/DetailsSubTaskForm';
@@ -18,7 +17,7 @@ const SEMI_MODAL_UNDERLAY_STYLE = {
   backgroundColor: 'rgba(0, 0, 0, 0)'
 };
 
-class DrawingToolRoot extends React.Component {
+export default class DrawingToolRoot extends React.Component {
   static defaultProps = {
     tool: null
   }
@@ -99,5 +98,3 @@ class DrawingToolRoot extends React.Component {
     );
   }
 }
-
-export default DrawingToolRoot;
