@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import StickyModalForm from 'modal-form/sticky';
-import ModalFocus from '../../components/modal-focus';
 import tasks from '../tasks';
 import DetailsSubTaskForm from './components/DetailsSubTaskForm';
 
