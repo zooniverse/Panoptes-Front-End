@@ -14,7 +14,6 @@ apiClient = require 'panoptes-client/lib/api-client'
 pusherEnv = require('../lib/pusher-env').default
 
 GeordiLogger = (require '../lib/zooniverse-logging').default
-GeordiLogAdapter = (require '../lib/geordi-log-adapter').default
 GALogAdapter = (require '../lib/ga-log-adapter').default
 
 counterpart.registerTranslations 'en',
@@ -50,7 +49,7 @@ PanoptesApp = createReactClass
 
   componentWillMount: ->
     @geordiLogger = new GeordiLogger
-    @geordiLogger.subscribe(new GeordiLogAdapter(), new GALogAdapter(window, 'ga'))
+    @geordiLogger.subscribe(new GALogAdapter(window, 'ga'))
 
   componentDidMount: ->
     @props.notificationsCounter.listen (unreadNotificationsCount) =>
