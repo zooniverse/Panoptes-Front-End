@@ -1,4 +1,4 @@
-const enabledTokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/comet-hunters'];
+const enabledTokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/comet-hunters', 'zooniverse/snapshot-wisconsin'];
 
 class ZooniverseLogging {
   constructor() {
@@ -36,6 +36,10 @@ class ZooniverseLogging {
   subscribe(...newAdapters) {
     this.adapters = this.adapters.concat(newAdapters);
     this.adapters.forEach(adapter => adapter.configure(this.keys));
+  }
+
+  unsubscribe(adapter) {
+    this.adapters = this.adapters.filter(i => i !== adapter);
   }
 }
 
