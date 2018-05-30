@@ -29,6 +29,7 @@ module.exports = createReactClass
   displayName: 'TalkDiscussion'
 
   contextTypes:
+    geordi: PropTypes.object
     router: PropTypes.object.isRequired
 
   getInitialState: ->
@@ -171,6 +172,9 @@ module.exports = createReactClass
     @discussionsRequest(discussion)
       .then (discussion) =>
         @setState {discussion: discussion[0]}
+        @context?.geordi?.logEvent
+          type: "view-discussion"
+          data: discussion?[0]?.title
 
         talkClient
           .type 'boards'
