@@ -94,21 +94,25 @@ class ProjectPageController extends React.Component {
         if (!splits) {
           return;
         }
-        Object.keys(splits).forEach((split) => {
-          // log the first active split and break the loop
-          if (splits[split].state === 'active' && this.context.geordi) {
-            const experiment = splits[split].name;
-            const cohort = splits[split].variant ? splits[split].variant.name : undefined;
-            this.context.geordi.remember({ experiment, cohort });
-            return;
-          }
-        });
-        return;
+        if (this.context.geordi) {
+          Object.keys(splits).forEach((split) => {
+            let notFound = true;
+            // log the first active split and skip the remaining splits
+            if (notFound && splits[split].state === 'active') {
+              notFound = false;
+              const experiment = splits[split].name;
+              const cohort = splits[split].variant ? splits[split].variant.name : undefined;
+              this.context.geordi.remember({ experiment, cohort });
+            }
+          });
+        }
       });
     } else {
       Split.clear();
       this.setState({ splits: null });
-      this.context.geordi ? this.context.geordi.forget(['experiment', 'cohort']) : undefined;
+      if (this.context.geordi) {
+        this.context.geordi.forget(['experiment', 'cohort']);
+      }
     }
   }
 
