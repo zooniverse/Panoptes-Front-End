@@ -39,8 +39,15 @@ class GeordiLogAdapter {
   }
 
   logEvent(logEntry) {
+    const entry = logEntry;
+    if (logEntry && logEntry.data && (typeof logEntry.data !== 'object')) {
+      const key = logEntry.type || 'data';
+      const value = logEntry.data;
+      entry.data = {};
+      entry.data[key] = value;
+    }
     if (this.geordiClient.logEvent) {
-      this.geordiClient.logEvent(logEntry);
+      this.geordiClient.logEvent(entry);
     } else {
       console.warn('No Geordi logger available for event', JSON.stringify(logEntry)); // eslint-disable-line no-console
     }
