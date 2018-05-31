@@ -25,6 +25,26 @@ class DetailsSubTaskForm extends React.Component {
     this.handleDetailsFormClose = this.handleDetailsFormClose.bind(this);
   }
 
+  static defaultProps = {
+    onFormClose: () => { },
+    tasks: {},
+    toolProps: {
+      details: [],
+      taskKey: '',
+      mark: {}
+    }
+  }
+
+  static propTypes = {
+    onFormClose: PropTypes.func,
+    tasks: PropTypes.object,
+    toolProps: PropTypes.shape({
+      details: PropTypes.array,
+      taskKey: PropTypes.string,
+      mark: PropTypes.object
+    })
+  }
+
   static contextTypes = {
     store: PropTypes.object
   }
@@ -63,6 +83,7 @@ class DetailsSubTaskForm extends React.Component {
     }
     this.props.onFormClose();
   }
+  
   render() {
     const { tasks, toolProps } = this.props;
 
@@ -115,25 +136,5 @@ class DetailsSubTaskForm extends React.Component {
     );
   }
 }
-
-DetailsSubTaskForm.defaultProps = {
-  onFormClose: () => {},
-  tasks: {},
-  toolProps: {
-    details: [],
-    taskKey: '',
-    mark: {}
-  }
-};
-
-DetailsSubTaskForm.propTypes = {
-  onFormClose: PropTypes.func,  
-  tasks: PropTypes.object,
-  toolProps: PropTypes.shape({
-    details: PropTypes.array,
-    taskKey: PropTypes.string,
-    mark: PropTypes.object
-  })
-};
 
 export default DetailsSubTaskForm;
