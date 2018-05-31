@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import DrawingToolRoot from './root';
-const DeleteButton = require('./delete-button');
+import DeleteButton from './delete-button';
 
 class PointGridTool extends React.Component {
 
