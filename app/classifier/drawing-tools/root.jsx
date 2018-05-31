@@ -45,7 +45,7 @@ export default class DrawingToolRoot extends React.Component {
   render() {
     let startHandler = () => {};
     const toolProps = this.props.tool.props;
-    const tasks = require('../tasks');
+    const tasks = require('../tasks').default;
 
     const rootProps = {
       'data-disabled': toolProps.disabled || null,
