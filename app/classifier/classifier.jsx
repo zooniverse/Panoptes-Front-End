@@ -185,10 +185,12 @@ class Classifier extends React.Component {
     actions.feedback.init(project, subject, workflow);
 
     this.setState({
+      annotations: [],
       expertClassification: null,
       selectedExpertAnnotation: -1,
       showingExpertClassification: false,
-      subjectLoading: true
+      subjectLoading: true,
+      workflowHistory: []
     });
 
     if (project.experimental_tools && project.experimental_tools.indexOf('expert comparison summary') > -1) {
