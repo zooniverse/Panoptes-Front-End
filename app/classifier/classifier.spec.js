@@ -18,6 +18,19 @@ const mockReduxStore = {
   childContextTypes: { store: PropTypes.object.isRequired }
 };
 
+const classification = {
+  annotations: [
+    {
+      task: 'T0',
+      value: 'something'
+    },
+    {
+      task: 'T1',
+      value: 1
+    }
+  ]
+};
+
 let wrapper;
 before(function () {
   wrapper = shallow(<Classifier />, mockReduxStore);
@@ -37,9 +50,25 @@ describe('Classifier', function () {
       const state = wrapper.state();
       expect(state.workflowHistory).to.have.lengthOf(0);
     });
-    it('should preserve annotations from an incomplete classification', function () {
-      
-    });
+    describe('with an incomplete classification', function () {
+      let loadSubject;
+      before(function () {
+        loadSubject = sinon.stub(Classifier.prototype, 'loadSubject').callsFake(() => null);
+        wrapper = shallow(<Classifier classification={classification} />, mockReduxStore);
+        wrapper.instance().componentDidMount();
+      });
+      after(function () {
+        loadSubject.restore();
+      });
+      it('should preserve annotations from an incomplete classification', function () {
+        const state = wrapper.state();
+        expect(state.annotations).to.deep.equal(classification.annotations);
+      });
+      it('should rebuild workflow history from an incomplete classification', function () {
+        const state = wrapper.update().state();
+        expect(state.workflowHistory).to.deep.equal(['T0', 'T1']);
+      });
+    })
   });
   describe('on receiving a new classification', function () {
     it('should reset annotations and workflow history', function () {
