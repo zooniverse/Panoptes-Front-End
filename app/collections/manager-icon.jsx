@@ -19,8 +19,9 @@ class CollectionsManagerIcon extends React.Component {
     this.setState({ open: true });
   }
 
-  close() {
+  close(e) {
     this.setState({ open: false });
+    e.stopPropagation();
   }
 
   render() {
@@ -54,11 +55,15 @@ CollectionsManagerIcon.defaultProps = {
 
 CollectionsManagerIcon.propTypes = {
   className: PropTypes.string,
-  project: PropTypes.object,
+  project: PropTypes.shape({
+    id: PropTypes.string
+  }).isRequired,
   subject: PropTypes.shape({
     id: PropTypes.string
-  }),
-  user: PropTypes.object
+  }).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string
+  }).isRequired
 };
 
 export default CollectionsManagerIcon;
