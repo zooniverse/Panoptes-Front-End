@@ -1,12 +1,41 @@
 import React from 'react';
-import assert from 'assert';
+import PropTypes from 'prop-types';
+import { expect } from 'chai';
 import sinon from 'sinon';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
+import { Classifier } from './classifier';
+
+const store = {
+  subscribe: () => { },
+  dispatch: () => { },
+  getState: () => ({
+    userInterface: { theme: 'light' }
+  })
+};
+
+const mockReduxStore = {
+  context: { store },
+  childContextTypes: { store: PropTypes.object.isRequired }
+};
+
+let wrapper;
+before(function () {
+  wrapper = shallow(<Classifier />, mockReduxStore);
+});
 
 describe('Classifier', function () {
+  it('should render with only default props', function () {
+    const instance = wrapper.instance();
+    expect(instance).to.be.instanceOf(Classifier);
+  });
   describe('on mount', function () {
-    it('should initialise annotations and workflow history', function () {
-      
+    it('should initialise annotations', function () {
+      const state = wrapper.state();
+      expect(state.annotations).to.have.lengthOf(0);
+    });
+    it('should initialise workflow history', function () {
+      const state = wrapper.state();
+      expect(state.workflowHistory).to.have.lengthOf(0);
     });
     it('should preserve annotations from an incomplete classification', function () {
       
