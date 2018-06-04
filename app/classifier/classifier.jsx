@@ -539,7 +539,7 @@ Classifier.propTypes = {
 };
 
 Classifier.defaultProps = {
-  classification: null,
+  classification: {},
   classificationCount: 0,
   demoMode: false,
   minicourse: null,
@@ -548,10 +548,13 @@ Classifier.defaultProps = {
   onLoad: Function.prototype,
   onChangeDemoMode: Function.prototype,
   splits: null,
-  subject: null,
+  subject: {},
   tutorial: null,
   user: null,
-  workflow: null
+  workflow: {
+    configuration: {},
+    tasks: {}
+  }
 };
 
 const mapStateToProps = state => ({
@@ -567,3 +570,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Classifier);
+export { Classifier };
