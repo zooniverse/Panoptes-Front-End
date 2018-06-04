@@ -9,6 +9,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
+import sinon from 'sinon';
 import DetailsSubTaskForm from './DetailsSubTaskForm';
 import tasks from '../../../tasks';
 
@@ -18,7 +19,7 @@ const store = {
   getState: () => ({
     translations: {
       languages: {},
-      locale: "en",
+      locale: 'en',
       strings: { workflow: {}}
     },
     userInterface: { theme: 'light' }
@@ -52,6 +53,7 @@ const toolProps = {
     x: 547.92529296875,
     y: 62.75926208496094
   },
+  onChange: sinon.stub().callsFake(() => {}),
   scale: {},
   selected: true,
   size: "large",
@@ -59,24 +61,26 @@ const toolProps = {
 };
 
 describe.only('DetailsSubTaskForm', function() {
-  let wrapper;
-  before(function() {
-    wrapper = shallow(<DetailsSubTaskForm tasks={tasks} toolProps={toolProps} />, mockReduxStore);
-  });
+  describe('render', function() {
+    let wrapper;
+    before(function () {
+      wrapper = shallow(<DetailsSubTaskForm tasks={tasks} toolProps={toolProps} />, mockReduxStore);
+    });
 
-  it('should render without crashing', function() {
-    expect(wrapper).to.be.ok;
-  });
+    it('should render without crashing', function () {
+      expect(wrapper).to.be.ok;
+    });
 
-  it('should render a StickyModalForm component', function() {
-    expect(wrapper.find('StickyModalForm')).to.have.lengthOf(1);
-  });
+    it('should render a StickyModalForm component', function () {
+      expect(wrapper.find('StickyModalForm')).to.have.lengthOf(1);
+    });
 
-  it('should render a Provider component', function() {
-    expect(wrapper.find('Provider')).to.have.lengthOf(1);
-  });
+    it('should render a Provider component', function () {
+      expect(wrapper.find('Provider')).to.have.lengthOf(1);
+    });
 
-  it('should render a ModalFocus component', function() {
-    expect(wrapper.find('ModalFocus')).to.have.lengthOf(1);
+    it('should render a ModalFocus component', function () {
+      expect(wrapper.find('ModalFocus')).to.have.lengthOf(1);
+    });
   });
 });

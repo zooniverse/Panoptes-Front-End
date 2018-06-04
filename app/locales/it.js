@@ -5,6 +5,7 @@ export default {
     backButtonWarning: 'Going back will clear your work for the current task.',
     close: 'Close',
     continue: 'Continue',
+    detailsSubTaskFormSubmitButton: 'OK',    
     done: 'Done',
     doneAndTalk: 'Done & Talk',
     dontShowMinicourse: 'Do not show mini-course in the future',

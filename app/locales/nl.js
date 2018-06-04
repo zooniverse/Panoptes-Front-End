@@ -37,6 +37,7 @@ export default {
     backButtonWarning: 'Als je terug gaat verlies je je werk voor de huidige taak.',
     close: 'Close',
     continue: 'Continue',
+    detailsSubTaskFormSubmitButton: 'OK',    
     done: 'Klaar',
     doneAndTalk: 'Klaar & Praat',
     dontShowMinicourse: 'Do not show mini-course in the future',
