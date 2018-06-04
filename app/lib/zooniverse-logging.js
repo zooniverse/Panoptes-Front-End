@@ -1,4 +1,4 @@
-const enabledTokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/comet-hunters', 'zooniverse/snapshot-wisconsin'];
+const excludedProjects = []
 
 class ZooniverseLogging {
   constructor() {
@@ -27,7 +27,7 @@ class ZooniverseLogging {
   }
 
   logEvent(logEntry) {
-    if (enabledTokens.includes(this.keys.projectToken)) {
+    if (!excludedProjects.includes(this.keys.projectToken)) {
       const newEntry = Object.assign({}, this.keys, logEntry);
       this.adapters.forEach(adapter => adapter.logEvent(newEntry));
     }
