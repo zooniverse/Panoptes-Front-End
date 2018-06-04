@@ -71,11 +71,31 @@ describe('Classifier', function () {
     })
   });
   describe('on receiving a new classification', function () {
-    it('should reset annotations and workflow history', function () {
-      
+    let loadSubject;
+    before(function () {
+      loadSubject = sinon.stub(Classifier.prototype, 'loadSubject').callsFake(() => null);
+      wrapper = shallow(<Classifier />, mockReduxStore);
+    });
+    after(function () {
+      loadSubject.restore();
     });
     it('should preserve annotations from an incomplete classification', function () {
-      
+      const newProps = { classification };
+      wrapper.setProps(newProps);
+      const state = wrapper.state();
+      expect(state.annotations).to.deep.equal(classification.annotations);
+      expect(state.workflowHistory).to.deep.equal(['T0', 'T1']);
+    });
+    it('should reset annotations and workflow history', function () {
+      const newProps = {
+        classification: {
+          annotations: []
+        }
+      }
+      wrapper.setProps(newProps);
+      const state = wrapper.state();
+      expect(state.annotations).to.have.lengthOf(0);
+      expect(state.workflowHistory).to.have.lengthOf(0);
     });
   });
   describe('on receiving a new subject', function () {
