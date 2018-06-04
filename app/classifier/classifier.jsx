@@ -78,7 +78,7 @@ class Classifier extends React.Component {
       this.loadSubject(nextProps.subject);
     }
 
-    if (this.props.subject !== nextProps.subject || (this.context.geordi && !this.context.geordi.keys.subjectID)) {
+    if (this.context.geordi && ((this.props.subject !== nextProps.subject) ||  !this.context.geordi.keys.subjectID)) {
       this.context.geordi.remember({ subjectID: nextProps.subject.id });
     }
 
