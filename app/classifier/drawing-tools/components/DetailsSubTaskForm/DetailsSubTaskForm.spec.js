@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import DetailsSubTaskForm from './DetailsSubTaskForm';
+import { DetailsSubTaskForm } from './DetailsSubTaskForm';
 import tasks from '../../../tasks';
 
 const store = {
@@ -60,7 +60,7 @@ const toolProps = {
   taskKey: "T0"
 };
 
-describe.only('DetailsSubTaskForm', function() {
+describe('DetailsSubTaskForm', function() {
   describe('render', function() {
     let wrapper;
     before(function () {
@@ -69,18 +69,6 @@ describe.only('DetailsSubTaskForm', function() {
 
     it('should render without crashing', function () {
       expect(wrapper).to.be.ok;
-    });
-
-    it('should render a StickyModalForm component', function () {
-      expect(wrapper.find('StickyModalForm')).to.have.lengthOf(1);
-    });
-
-    it('should render a Provider component', function () {
-      expect(wrapper.find('Provider')).to.have.lengthOf(1);
-    });
-
-    it('should render a ModalFocus component', function () {
-      expect(wrapper.find('ModalFocus')).to.have.lengthOf(1);
     });
   });
 });
