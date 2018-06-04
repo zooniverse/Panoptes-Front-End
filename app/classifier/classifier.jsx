@@ -87,7 +87,8 @@ class Classifier extends React.Component {
 
     if (nextProps.classification !== this.props.classification) {
       const annotations = nextProps.classification.annotations.slice();
-      this.setState({ annotations });
+      const workflowHistory = annotations.map(annotation => annotation.task);
+      this.setState({ annotations, workflowHistory });
     }
   }
 
