@@ -281,23 +281,29 @@ class Classifier extends React.Component {
       }
     });
 
+    let annotations = this.state.annotations.slice();
+    let workflowHistory = this.state.workflowHistory.slice();
+    const taskKey = workflowHistory[workflowHistory.length - 1];
     let onComplete = this.props.onComplete;
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
       onComplete = this.props.onCompleteAndLoadAnotherSubject;
+      annotations = [];
+      workflowHistory = [];
+    } else {
+      workflowHistory.push('summary');
     }
 
-    const workflowHistory = this.state.workflowHistory.slice();
-    const taskKey = workflowHistory[workflowHistory.length - 1];
     this.checkForFeedback(taskKey)
       .then(() => {
         this.props.classification.update({ completed: true });
-        workflowHistory.push('summary');
-        this.setState({ workflowHistory });
         if (!isCmdClick && originalElement.href) {
           browserHistory.push(subjectTalkPath);
         }
       })
       .then(onComplete)
+      .then(() => {
+        this.setState({ annotations, workflowHistory });
+      })
       .catch(error => console.error(error));
   }
 
@@ -314,6 +320,8 @@ class Classifier extends React.Component {
   }
 
   render() {
+    const { workflowHistory } = this.state;
+    const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
     const classifierClassNames = classNames({
       classifier: true,
@@ -321,19 +329,17 @@ class Classifier extends React.Component {
       [this.props.className]: !!this.props.className
     });
 
-    let currentClassification,
-      currentTask,
-      currentAnnotation;
+    let currentClassification;
+    let currentTask;
+    let currentAnnotation;
     if (this.state.showingExpertClassification) {
       currentClassification = this.state.expertClassification;
       currentClassification.completed = true;
     } else {
       currentClassification = this.props.classification;
       if (!this.props.classification.completed) {
-        const { workflowHistory } = this.state;
-        const taskKey = this.state.workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
-        currentTask = this.props.workflow.tasks[taskKey];
-        const index = findLastIndex(this.state.annotations, annotation => annotation.task === taskKey);
+        currentTask = this.props.workflow.tasks[currentTaskKey];
+        const index = findLastIndex(this.state.annotations, annotation => annotation.task === currentTaskKey);
         if (index > -1) {
           currentAnnotation = this.state.annotations[index];
         }
@@ -369,7 +375,7 @@ class Classifier extends React.Component {
               user={this.props.user}
               workflow={this.props.workflow}
             />
-            {!currentClassification.completed ?
+            {(currentTaskKey !== 'summary') ?
               <Task
                 preferences={this.props.preferences}
                 user={this.props.user}
@@ -398,6 +404,7 @@ class Classifier extends React.Component {
               annotations={this.state.annotations}
               classification={currentClassification}
               completeClassification={this.completeClassification}
+              completed={currentTaskKey === 'summary'}
               disabled={this.state.subjectLoading}
               nextSubject={this.props.onClickNext}
               project={this.props.project}
