@@ -13,6 +13,9 @@ projectSection = require '../talk/lib/project-section'
 module.exports = createReactClass
   displayName: 'DiscussionNewForm'
 
+  contextTypes:
+    geordi: PropTypes.object
+
   propTypes:
     boardId: PropTypes.number
     onCreateDiscussion: PropTypes.func
@@ -73,6 +76,9 @@ module.exports = createReactClass
       .then (discussion) =>
         @setState loading: false
         titleInput.value = ''
+        @context?.geordi?.logEvent
+          type: 'add-discussion'
+          data: discussion.title
         @props.onCreateDiscussion?(discussion)
 
   boardRadio: (board, i) ->

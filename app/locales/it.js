@@ -5,6 +5,7 @@ export default {
     backButtonWarning: 'Going back will clear your work for the current task.',
     close: 'Close',
     continue: 'Continue',
+    detailsSubTaskFormSubmitButton: 'OK',    
     done: 'Done',
     doneAndTalk: 'Done & Talk',
     dontShowMinicourse: 'Do not show mini-course in the future',
@@ -26,7 +27,7 @@ export default {
     }
   },
   project: {
-    disclaimer: "Questo progetto e' stato creato con il Project Builder di Zooniverse, ma non e' ancora un progetto ufficiale. Per questo motivo e' possibile che domande su questo progetto dirette al Team Zooniverse non ricevano una risposta.",
+    disclaimer: "Questo progetto è stato creato con il Project Builder di Zooniverse, ma non è ancora un progetto ufficiale. Per questo motivo è possibile che domande su questo progetto dirette al Team Zooniverse non ricevano una risposta.",
     loading: 'Caricamento progetto',
     about: {
       header: 'About',
@@ -35,7 +36,7 @@ export default {
         results: 'Results',
         faq: 'FAQ',
         education: 'Education',
-        team: 'The Team',
+        team: 'Il Team',
       }
     },
     nav: {
@@ -50,10 +51,10 @@ export default {
       zooniverseApproved: 'Zooniverse Approved'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
+      dark: 'scuro',
+      light: 'chiaro',
       title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
+      themeToggle: 'Passa a tema %(theme)s'
     },
     home: {
       researcher: 'Words from the researcher',
@@ -61,7 +62,7 @@ export default {
       metadata: {
         statistics: '%(title)s Statistics',
         classifications: 'Classifications',
-        volunteers: 'Volunteers',
+        volunteers: 'Volontari',
         completedSubjects: 'Completed Subjects',
         subjects: 'Subjects'
       },
@@ -72,10 +73,10 @@ export default {
       },
       joinIn: 'Partecipa',
       learnMore: 'Learn more',
-      getStarted: 'Get started',
+      getStarted: 'Inizia ora',
       workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
       visitLink: 'Visit the project',
-      links: 'Links'      
+      links: 'Link'      
     }
   },
   tasks: {
@@ -134,7 +135,7 @@ export default {
       section: 'Preferenze per Zooniverse',
       updates: 'Ricevi aggiornamenti generali su Zooniverse',
       classify: 'Ricevi aggiornamenti sui progetti a cui hai contribuito',
-      beta: 'Diventa beta-tester e ricevi aggiornamenti su progetti beta'
+      beta: 'Diventa beta-tester e ricevi aggiornamenti su progetti in beta'
     },
     talk: {
       section: 'Preferenze per Talk',

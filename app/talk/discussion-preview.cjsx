@@ -15,15 +15,8 @@ module.exports = createReactClass
   propTypes:
     discussion: PropTypes.object
 
-  contextTypes:
-    geordi: PropTypes.object
-  
   getDefaultProps: ->
     project: {}
-
-  logDiscussionClick: ->
-    @context.geordi?.logEvent
-      type: "view-discussion"
 
   discussionLink: ->
     {discussion} = @props
@@ -49,7 +42,7 @@ module.exports = createReactClass
         {if @props.subject?
           subject = getSubjectLocation(@props.subject)
           <div className="subject-preview">
-            <Link to={@discussionLink()} onClick={@logDiscussionClick.bind null, this}>
+            <Link to={@discussionLink()}>
               <Thumbnail src={subject.src} format={subject.format} width={100} height={150} controls={false} />
             </Link>
           </div>
@@ -57,7 +50,7 @@ module.exports = createReactClass
 
         <h1>
           {<i className="fa fa-thumb-tack talk-sticky-pin"></i> if discussion.sticky}
-          <Link to={@discussionLink()} onClick={@logDiscussionClick.bind null, this}>
+          <Link to={@discussionLink()}>
             {discussion.title}
           </Link>
         </h1>

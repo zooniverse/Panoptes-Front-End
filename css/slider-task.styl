@@ -2,20 +2,28 @@
   width: 70%
   display: inline-block
   margin-right: 1em
+
   div
     width: 100%
+
   input
-    width: 100%
-    margin-right: 1em
+    box-sizing: border-box
     display: block
+    font: inherit    
+    margin-right: 1em
+    padding: 0.5em 1vw
+    width: 100%
+
   &__label-container
     width: 300px
     display: flex
     padding-left: 4px
     justify-content: space-between
+
     &__left
       width: 20%
       font-size: 0.8em
+
     &__right
       text-align: right
       width: 20%
@@ -23,8 +31,11 @@
 
 .slider-task-number
   flex: 1
+
   input
-    padding: 1em
+    box-sizing: border-box
+    font: inherit
+    padding: 1ch 2ch
     width: 5em
 
 .slider-task-container

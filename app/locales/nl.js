@@ -37,6 +37,7 @@ export default {
     backButtonWarning: 'Let op! Niet opgeslagen gegevens gaan verloren.',
     close: 'Sluiten',
     continue: 'Doorgaan',
+    detailsSubTaskFormSubmitButton: 'OK',
     done: 'Afronden',
     doneAndTalk: 'Afronden & Bespreken',
     dontShowMinicourse: 'Verberg de uitleg in het vervolg.',

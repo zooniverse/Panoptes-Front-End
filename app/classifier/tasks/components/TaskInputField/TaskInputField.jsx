@@ -90,7 +90,7 @@ export const StyledTaskInputField = styled.label`
     })};
     border: ${theme('mode', {
       dark: `2px solid ${zooTheme.colors.teal.mid}`,
-      light: `2px solid transparent`
+      light: '2px solid transparent'
     })};
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,

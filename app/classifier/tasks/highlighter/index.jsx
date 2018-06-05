@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Markdown } from 'markdownz';
 import GenericTaskEditor from '../generic-editor';
 import GenericTask from '../generic';
 import LabelEditor from './label-editor';
 import LabelRenderer from './label-renderer';
 import HighlighterSummary from './summary';
 import TextRenderer from '../../annotation-renderer/text';
+import HighlighterButton from './components/HighlighterButton';
 
 export default class Highlighter extends React.Component {
   static getOffset(selection) {
@@ -76,18 +76,17 @@ export default class Highlighter extends React.Component {
     const selection = document.getSelection();
     this.createLabelAnnotation(selection, toolIndex);
   }
+
   createButtons(option, index) {
     return (
-      <div>
-        <button
-          className="minor-button answer-button"
-          value={option.label}
-          onClick={this.handleChange.bind(this.props.annotation._toolIndex, index)}
-        >
-          <i className="fa fa-i-cursor" aria-hidden="true" style={{ color: `${option.color}` }} />
-          <Markdown className="answer-button-label">{option.label}</Markdown>
-        </button>
-      </div>
+      <HighlighterButton
+        autoFocus={index === 0}
+        color={option.color}
+        key={index}
+        label={option.label}
+        value={option.label}
+        onClick={this.handleChange.bind(this.props.annotation._toolIndex, index)}
+      />
     );
   }
   render() {
@@ -135,28 +134,26 @@ Highlighter.getTaskText = task => task.instruction;
 Highlighter.getDefaultAnnotation = () => ({ _toolIndex: 0, value: [] });
 
 Highlighter.defaultProps = {
+  onChange: () => null,
+  showRequiredNotice: false,
   task: {
     help: '',
     highlighterLabels: [],
     type: 'highlighter',
     instruction: 'Highlight the text'
+  },
+  workflow: {
+    tasks: []
   }
 };
 
 Highlighter.propTypes = {
   annotation: PropTypes.shape({
     _toolIndex: PropTypes.number,
-    task: PropTypes.shape({
-      help: PropTypes.string,
-      highlighterLabels: PropTypes.array,
-      instruction: PropTypes.string,
-      required: PropTypes.bool,
-      tools: PropTypes.array,
-      type: PropTypes.string
-    }),
-    tools: PropTypes.array
-  }),
+    task: PropTypes.string
+  }).isRequired,
   onChange: PropTypes.func,
+  showRequiredNotice: PropTypes.bool,
   task: PropTypes.shape({
     help: PropTypes.string,
     highlighterLabels: PropTypes.array,
@@ -169,3 +166,4 @@ Highlighter.propTypes = {
     tasks: PropTypes.object
   })
 };
+

@@ -7,10 +7,6 @@ import FieldGuideContainer from './field-guide-container';
 import ProjectHomeContainer from './home/';
 
 export default class ProjectPage extends React.Component {
-  getChildContext() {
-    return this.context.geordi;
-  }
-
   componentDidMount() {
     this.updateSugarSubscription(this.props.project);
     this.context.geordi && this.context.geordi.remember({ projectToken: this.props.project.slug });
@@ -111,7 +107,7 @@ ProjectPage.defaultProps = {
   workflow: null
 };
 
-ProjectPage.childContextTypes = {
+ProjectPage.contextTypes = {
   geordi: PropTypes.object
 };
 

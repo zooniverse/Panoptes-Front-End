@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 
-const React = require('react');
-const DrawingToolRoot = require('./root');
-const DeleteButton = require('./delete-button');
+import React from 'react';
+import DrawingToolRoot from './root';
+import DeleteButton from './delete-button';
 
 class PointGridTool extends React.Component {
 

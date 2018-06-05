@@ -13,10 +13,6 @@ const RestartButton = ({ children, className, start, shouldRender, style }) => {
   }
 };
 
-RestartButton.contextTypes = {
-  geordi: PropTypes.object
-};
-
 RestartButton.defaultProps = {
   className: null,
   shouldRender: true,

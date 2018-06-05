@@ -17,7 +17,7 @@ module.exports = createReactClass
   logSearch: (value) ->
     @context?.geordi?.logEvent
       type: 'search'
-      data: {searchTerm: value}
+      data: value
 
   onSearchSubmit: (e) ->
     e.preventDefault()

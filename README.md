@@ -18,6 +18,18 @@ All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
 While editing, do your best to follow style and architecture conventions already used by the project, unless you have a reason not to. **If in doubt, ask.**
 
+## Development with Docker
+
+To avoid having to install Node.js or any other dependencies, you can also run
+everything with Docker and Docker Compose.
+
+`docker-compose build` will build a local Docker image. Run this whenever you
+change dependencies in `package.json`.
+
+`docker-compose run --service-ports dev npm start` builds and runs the site locally.
+
+`docker-compose run dev npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
+
 ### Testing
 
 If you write a new component, write a test. Each component should have its own `.spec.js` file. The test runner is [Mocha](https://mochajs.org/) and [Enzyme](http://airbnb.io/enzyme/) is available for testing React components.

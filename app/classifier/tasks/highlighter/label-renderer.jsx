@@ -54,7 +54,7 @@ export default class LabelRenderer extends React.Component {
     );
     return (
       <div className="label-renderer" >
-        <div >
+        <div className="text-viewer" >
           {labeledContent}
         </div>
         {children}
