@@ -67,6 +67,7 @@ describe('Classifier', function () {
     const instance = wrapper.instance();
     expect(instance).to.be.instanceOf(Classifier);
   });
+
   describe('on mount', function () {
     it('should initialise annotations', function () {
       const state = wrapper.state();
@@ -76,6 +77,7 @@ describe('Classifier', function () {
       const state = wrapper.state();
       expect(state.workflowHistory).to.have.lengthOf(0);
     });
+
     describe('with an incomplete classification', function () {
       let loadSubject;
       before(function () {
@@ -96,6 +98,7 @@ describe('Classifier', function () {
       });
     })
   });
+
   describe('on receiving a new classification', function () {
     let loadSubject;
     before(function () {
@@ -124,6 +127,7 @@ describe('Classifier', function () {
       expect(state.workflowHistory).to.have.lengthOf(0);
     });
   });
+
   describe('on receiving a new subject', function () {
     let loadSubject;
     before(function () {
@@ -145,6 +149,7 @@ describe('Classifier', function () {
       expect(state.workflowHistory).to.have.lengthOf(0);
     });
   });
+
   describe('on completing a classification', function () {
     let checkForFeedback;
     let fakeEvent;
@@ -170,6 +175,7 @@ describe('Classifier', function () {
       checkForFeedback.restore();
       loadSubject.restore();
     });
+
     describe('with summaries enabled', function () {
       it('should display a classification summary', function (done) {
         wrapper.setProps({ workflow });
@@ -182,6 +188,7 @@ describe('Classifier', function () {
         });
       });
     });
+
     describe('with summaries disabled', function () {
       it('should reset annotations and workflow history', function (done) {
         workflow.configuration.hide_classification_summaries = true;
