@@ -291,7 +291,7 @@ class Classifier extends React.Component {
       workflowHistory.push('summary');
     }
 
-    this.checkForFeedback(taskKey)
+    return this.checkForFeedback(taskKey)
       .then(() => {
         this.props.classification.update({ completed: true });
         if (!isCmdClick && originalElement.href) {
@@ -543,8 +543,10 @@ Classifier.defaultProps = {
   classificationCount: 0,
   demoMode: false,
   minicourse: null,
+  onComplete: () => Promise.resolve(),
+  onCompleteAndLoadAnotherSubject: () => Promise.resolve(),
   preferences: null,
-  project: null,
+  project: {},
   onLoad: Function.prototype,
   onChangeDemoMode: Function.prototype,
   splits: null,
