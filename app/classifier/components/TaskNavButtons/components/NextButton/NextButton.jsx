@@ -9,7 +9,7 @@ import { pxToRem, zooTheme } from '../../../../../theme';
 export const StyledNextButton = styled.button.attrs({
   autoFocus: props => props.autoFocus,
   disabled: props => props.disabled,
-  type: 'button'
+  type: props => props.type
 })`
   background: ${theme('mode', { 
     dark: zooTheme.colors.darkTheme.background.default,

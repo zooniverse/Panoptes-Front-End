@@ -1,28 +1,80 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import StickyModalForm from 'modal-form/sticky';
-import { Provider } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import Translate from 'react-translate-component';
 import { pxToRem, zooTheme } from '../../../../theme';
 import ModalFocus from '../../../../components/modal-focus';
 import TaskTranslations from '../../../tasks/translations';
+import { StyledNextButton } from '../../../components/TaskNavButtons/components/NextButton/NextButton';
 
-const SEMI_MODAL_FORM_STYLE = {
-  pointerEvents: 'all'
-};
+export const StyledStickyModalForm = styled(StickyModalForm)`
+  .modal-form-underlay {
+    pointer-events: none;
+  }
 
-const SEMI_MODAL_UNDERLAY_STYLE = {
-  backgroundColor: 'rgba(0, 0, 0, 0)',
-  pointerEvents: 'none'
-};
+  .modal-form {
+    background: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.background.default,
+      light: 'white'
+    })};
+    border: solid thin ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.background.border,
+      light: zooTheme.colors.lightTheme.background.border
+    })};
+    border-radius: 0;
+    color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.font,
+      light: zooTheme.colors.lightTheme.font
+    })};
+    pointer-events: all;
+  }
 
-class DetailsSubTaskForm extends React.Component {
+  .modal-form-pointer {
+    background: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.background.default,
+      light: 'white'
+    })};
+  }
+
+  .details-sub-task-form__submit-button-wrapper {
+    text-align: center;
+
+    button[type="submit"] {
+      width: 100%;
+    }
+  }
+`
+
+export class DetailsSubTaskForm extends React.Component {
   constructor() {
     super();
     this.handleDetailsChange = this.handleDetailsChange.bind(this);
     this.handleDetailsFormClose = this.handleDetailsFormClose.bind(this);
+  }
+
+  static defaultProps = {
+    onFormClose: () => { },
+    tasks: {},
+    theme: 'light',
+    toolProps: {
+      details: [],
+      taskKey: '',
+      mark: {}
+    }
+  }
+
+  static propTypes = {
+    onFormClose: PropTypes.func,
+    tasks: PropTypes.object,
+    theme: PropTypes.string,
+    toolProps: PropTypes.shape({
+      details: PropTypes.array,
+      taskKey: PropTypes.string,
+      mark: PropTypes.object
+    })
   }
 
   static contextTypes = {
@@ -63,77 +115,62 @@ class DetailsSubTaskForm extends React.Component {
     }
     this.props.onFormClose();
   }
+  
   render() {
-    const { tasks, toolProps } = this.props;
+    const { theme, tasks, toolProps } = this.props;
 
     const detailsAreComplete = this.areDetailsComplete(tasks, toolProps);
 
     return (
-      <StickyModalForm
-        ref={(node) => { this.detailsForm = node; }}
-        style={SEMI_MODAL_FORM_STYLE}
-        underlayStyle={SEMI_MODAL_UNDERLAY_STYLE}
-        onSubmit={this.handleDetailsFormClose}
-        onCancel={this.handleDetailsFormClose}
-      >
-        <Provider store={this.context.store}>
-          <ModalFocus onEscape={this.handleDetailsFormClose} preserveFocus={false}>
-            {toolProps.details.map((detailTask, i) => {
-              if (!detailTask._key) detailTask._key = Math.random();
-              const TaskComponent = tasks[detailTask.type];
-              const taskKey = `${toolProps.taskKey}.tools.${toolProps.mark.tool}.details.${i}`;
-              
-              return (
-                <TaskTranslations
-                  key={detailTask._key}
-                  taskKey={taskKey}
-                  task={detailTask}
-                >
-                  <TaskComponent
-                    autoFocus={i === 0}
+      <ThemeProvider theme={{ mode: theme }}>
+        <StyledStickyModalForm
+          innerRef={(node) => { this.detailsForm = node; }}
+          onSubmit={this.handleDetailsFormClose}
+          onCancel={this.handleDetailsFormClose}
+        >
+          <Provider store={this.context.store}>
+            <ModalFocus onEscape={this.handleDetailsFormClose} preserveFocus={false}>
+              {toolProps.details.map((detailTask, i) => {
+                if (!detailTask._key) detailTask._key = Math.random();
+                const TaskComponent = tasks[detailTask.type];
+                const taskKey = `${toolProps.taskKey}.tools.${toolProps.mark.tool}.details.${i}`;
+                
+                return (
+                  <TaskTranslations
+                    key={detailTask._key}
+                    taskKey={taskKey}
                     task={detailTask}
-                    annotation={toolProps.mark.details[i]}
-                    onChange={this.handleDetailsChange.bind(this, i)}
-                    showRequiredNotice={true}
-                  />
-                </TaskTranslations>
-              )
-            })}
-            <hr />
-            <p style={{ textAlign: 'center' }}>
-              <button
-                autoFocus={toolProps.details[0].type in ['single', 'multiple']}
-                type="submit"
-                className="standard-button"
-                disabled={!detailsAreComplete}>
-                  OK
-              </button>
-            </p>
-          </ModalFocus>
-        </Provider>
-      </StickyModalForm>
+                  >
+                    <TaskComponent
+                      autoFocus={i === 0}
+                      task={detailTask}
+                      annotation={toolProps.mark.details[i]}
+                      onChange={this.handleDetailsChange.bind(this, i)}
+                      showRequiredNotice={true}
+                    />
+                  </TaskTranslations>
+                )
+              })}
+              <hr />
+              <p className="details-sub-task-form__submit-button-wrapper">
+                <StyledNextButton
+                  autoFocus={toolProps.details[0].type in ['single', 'multiple']}
+                  disabled={!detailsAreComplete}
+                  type="submit"
+                >
+                  <Translate content="classifier.detailsSubTaskFormSubmitButton" />
+                </StyledNextButton>
+              </p>
+            </ModalFocus>
+          </Provider>
+        </StyledStickyModalForm>
+      </ThemeProvider>
     );
   }
 }
 
-DetailsSubTaskForm.defaultProps = {
-  onFormClose: () => {},
-  tasks: {},
-  toolProps: {
-    details: [],
-    taskKey: '',
-    mark: {}
-  }
-};
+const mapStateToProps = state => ({
+  theme: state.userInterface.theme
+});
 
-DetailsSubTaskForm.propTypes = {
-  onFormClose: PropTypes.func,  
-  tasks: PropTypes.object,
-  toolProps: PropTypes.shape({
-    details: PropTypes.array,
-    taskKey: PropTypes.string,
-    mark: PropTypes.object
-  })
-};
-
-export default DetailsSubTaskForm;
+export default connect(mapStateToProps)(DetailsSubTaskForm);
