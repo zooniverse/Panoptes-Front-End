@@ -190,26 +190,28 @@ describe('Classifier', function () {
         wrapper.instance().completeClassification(fakeEvent)
         .then(function () {
           wrapper.update();
+          const state = wrapper.state();
           expect(classification.completed).to.equal(true);
+          expect(state.annotations).to.deep.equal(classification.annotations);
           expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(1);
-          done();
-        });
+        })
+        .then(done, done);
       });
     });
 
     describe('with summaries disabled', function () {
-      it('should reset annotations and workflow history', function (done) {
+      it('should not show a summary', function (done) {
         workflow.configuration.hide_classification_summaries = true;
         wrapper.setProps({ workflow });
         wrapper.instance().completeClassification(fakeEvent)
         .then(function () {
           wrapper.update();
           const state = wrapper.state();
-          expect(state.annotations).to.have.lengthOf(0);
-          expect(state.workflowHistory).to.have.lengthOf(0);
+          expect(state.annotations).to.deep.equal(classification.annotations);
           expect(classification.completed).to.equal(true);
-          done();
-        });
+          expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(0);
+        })
+        .then(done, done);
       });
     });
   });

@@ -285,8 +285,6 @@ class Classifier extends React.Component {
     let onComplete = this.props.onComplete;
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
       onComplete = this.props.onCompleteAndLoadAnotherSubject;
-      annotations = [];
-      workflowHistory = [];
     } else {
       workflowHistory.push('summary');
     }
