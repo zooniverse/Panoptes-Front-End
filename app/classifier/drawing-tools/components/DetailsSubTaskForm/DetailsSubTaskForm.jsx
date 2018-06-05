@@ -41,6 +41,10 @@ export const StyledStickyModalForm = styled(StickyModalForm)`
 
   .details-sub-task-form__submit-button-wrapper {
     text-align: center;
+
+    button[type="submit"] {
+      width: 100%;
+    }
   }
 `
 
