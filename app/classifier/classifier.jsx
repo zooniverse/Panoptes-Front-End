@@ -180,15 +180,15 @@ class Classifier extends React.Component {
 
   loadSubject(subject) {
     const { actions, project, workflow } = this.props;
-    actions.feedback.init(project, subject, workflow);
+    if (actions.feedback) {
+      actions.feedback.init(project, subject, workflow);
+    }
 
     this.setState({
-      annotations: [],
       expertClassification: null,
       selectedExpertAnnotation: -1,
       showingExpertClassification: false,
-      subjectLoading: true,
-      workflowHistory: []
+      subjectLoading: true
     });
 
     if (project.experimental_tools && project.experimental_tools.indexOf('expert comparison summary') > -1) {
@@ -539,9 +539,13 @@ Classifier.propTypes = {
 };
 
 Classifier.defaultProps = {
+  actions: {},
   classification: {},
   classificationCount: 0,
   demoMode: false,
+  feedback: {
+    active: false
+  },
   minicourse: null,
   onComplete: () => Promise.resolve(),
   onCompleteAndLoadAnotherSubject: () => Promise.resolve(),
