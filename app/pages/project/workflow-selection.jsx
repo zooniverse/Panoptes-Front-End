@@ -35,6 +35,9 @@ class WorkflowSelection extends React.Component {
     if (prevProps.project.id !== this.props.project.id) {
       this.getSelectedWorkflow(this.props);
     }
+    if (prevProps.translations.locale !== this.props.translations.locale) {
+      this.props.actions.translations.load('workflow', this.state.workflow.id, this.props.translations.locale);
+    }
   }
 
   getSelectedWorkflow({ project, preferences, user }) {
