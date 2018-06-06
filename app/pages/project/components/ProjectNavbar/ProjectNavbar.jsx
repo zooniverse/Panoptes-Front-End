@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import LanguagePicker from '../LanguagePicker';
 import ProjectNavbarNarrow from './components/ProjectNavbarNarrow';
 import ProjectNavbarWide, { SizeAwareProjectNavbarWide } from './components/ProjectNavbarWide';
 
@@ -45,6 +46,7 @@ class ProjectNavbar extends Component {
 
     return (
       <React.Fragment>
+        <LanguagePicker />
         {!this.state.loading &&
           <NavBarComponent {...this.props} />}
         <SizeAwareProjectNavbarWide
