@@ -46,7 +46,18 @@ class ProjectNavbar extends Component {
 
     return (
       <React.Fragment>
-        <LanguagePicker />
+        <LanguagePicker
+          options={[
+            {
+              label: 'English',
+              value: 'en'
+            },
+            {
+              label: 'Nederlands',
+              value: 'nl'
+            }
+          ]}
+        />
         {!this.state.loading &&
           <NavBarComponent {...this.props} />}
         <SizeAwareProjectNavbarWide
