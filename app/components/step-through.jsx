@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import ReactSwipe from 'react-swipe';
 import animatedScrollTo from 'animated-scrollto';
 
-export default class StepThrough extends Component {
+class StepThrough extends Component {
   constructor(props) {
     super(props);
     this.goPrevious = this.goPrevious.bind(this);
@@ -18,56 +19,50 @@ export default class StepThrough extends Component {
     };
   }
 
-  static defaultProps = {
-    className: '',
-    defaultStep: 0
-  }
-
-  static propTypes = {
-    className: PropTypes.string,
-    defaultStep: PropTypes.number
-  }
-
   componentDidMount() {
     addEventListener('keydown', this.handleKeyDown);
+    setTimeout(() => {
+      this.swiper.swipe.setup();
+      this.swiper.swipe.setup();
+    });
   }
 
   componentWillUnmount() {
     removeEventListener('keydown', this.handleKeyDown);
   }
 
-  goPrevious(total) {
-    const previousStep = this.state.step - 1;
-    if (previousStep < 0) this.handleStep(total, previousStep);
+  goPrevious() {
+    this.swiper.swipe.prev();
+    this.handleScroll();
   }
 
-  goNext(total) {
-    const nextStep = this.state.step + 1;
-    if (nextStep > (total - 1)) this.handleStep(total, nextStep);
+  goNext() {
+    this.swiper.swipe.next();
+    this.handleScroll();
   }
 
   goTo(index) {
-    this.handleStep(index)
+    this.swiper.swipe.slide(index);
+    this.handleScroll();
   }
 
   handleStep(total, index) {
     this.setState({
       step: ((index % total) + total) % total
-    }, this.handleScroll);
+    });
   }
 
   handleKeyDown(e) {
-    const total = React.Children.count(this.props.children);
     switch (e.which) {
       // left
       case 37:
         e.preventDefault();
-        this.goPrevious(total);
+        this.goPrevious();
         break;
       // right
       case 39:
         e.preventDefault();
-        this.goNext(total);
+        this.goNext();
         break;
     }
   }
@@ -90,10 +85,10 @@ export default class StepThrough extends Component {
             aria-label="Previous step"
             title="Previous"
             disabled={this.state.step === 0}
-            onClick={this.goPrevious.bind(this, childrenCount)}
+            onClick={this.goPrevious}
           >
             ◀
-      </button>
+          </button>
 
           <span className="step-through-pips">
             {allSteps.map(thisStep =>
@@ -116,10 +111,10 @@ export default class StepThrough extends Component {
             className="step-through-direction step-through-next"
             aria-label="Next step" title="Next"
             disabled={this.state.step === childrenCount - 1}
-            onClick={this.goNext.bind(this, childrenCount)}
+            onClick={this.goNext}
           >
             ▶
-      </button>
+          </button>
 
         </div>
       );
@@ -128,17 +123,34 @@ export default class StepThrough extends Component {
 
   render() {
     const childrenCount = React.Children.count(this.props.children);
-    const tutorialProps = Object.assign({}, this.props, {
-      currentStep: this.state.step,
-      goToNextStep: this.goNext.bind(this, childrenCount),
-      goToPreviousStep: this.goPrevous.bind(this, childrenCount)
-    })
+    const swipeOptions = {
+      startSlide: this.state.step,
+      continuous: false,
+      callback: this.handleStep.bind(this, childrenCount)
+    };
     return (
-      <div ref={(node) => { this.swiper = node; }} className={`step-through ${this.props.className}`} style={this.props.style}>
-        {React.cloneElement(this.props.children, tutorialProps)}
+      <div className={`step-through ${this.props.className}`} style={this.props.style}>
+        <ReactSwipe
+          ref={(component) => { this.swiper = component; }}
+          className="step-through-content"
+          swipeOptions={swipeOptions}
+        >
+          {this.props.children}
+        </ReactSwipe>
         {this.renderControls(childrenCount)}
       </div>
     );
   }
 }
 
+StepThrough.propTypes = {
+  className: PropTypes.string,
+  defaultStep: PropTypes.number
+};
+
+StepThrough.defaultProps = {
+  className: '',
+  defaultStep: 0
+};
+
+export default StepThrough;
