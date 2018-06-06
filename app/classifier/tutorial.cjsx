@@ -59,6 +59,7 @@ module.exports = createReactClass
             mediaByID
 
         awaitTutorialMedia.then (mediaByID) =>
+          console.log(mediaByID)
           tutorialContent =
             <Provider store={store}>
               <Translations original={tutorial} type="tutorial">
@@ -104,23 +105,25 @@ module.exports = createReactClass
     isIE = 'ActiveXObject' of window
     if isIE
       tutorialStyle = height: '85vh'
-    <StepThrough ref={(component) => @stepThrough = component} className="tutorial-steps" style={tutorialStyle}>
-      {for step, i in @props.tutorial.steps
-        step._key ?= Math.random()
-        <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>
-          <Markdown>{@props.translation.steps[i].content}</Markdown>
-          <hr />
-          <p style={textAlign: 'center'}>
-            {if i is @props.tutorial.steps.length - 1
-              <button type="submit" className="major-button"><Translate content="classifier.letsGo" /></button>
-            else
-              <button type="button" className="standard-button" onClick={@handleNextClick}><Translate content="classifier.continue" /></button>}
-          </p>
-        </MediaCard>}
-    </StepThrough>
 
-  handleNextClick: ->
-    @stepThrough.goNext()
+    stepToShow = @props.tutorial.steps[@props.currentStep]
+    console.log(@props.currentStep, stepToShow)
+    <StepThrough className="tutorial-steps">
+      <MediaCard className="tutorial-step" src={@props.media[stepToShow.media]?.src}>
+        <Markdown>{@props.translation.steps[@props.currentStep].content}</Markdown>
+        <hr />
+        <p style={textAlign: 'center'}>
+          {if i is @props.tutorial.steps.length - 1
+            <button type="submit" className="major-button">
+              <Translate content="classifier.letsGo" />
+            </button>
+          else
+            <button type="button" className="standard-button" onClick={@props.goToNextStep}>
+              <Translate content="classifier.continue" />
+            </button>}
+        </p>
+      </MediaCard>
+    </StepThrough>
 
   handleUnmount: ->
     @previousActiveElement?.focus()

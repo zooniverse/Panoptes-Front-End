@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import ReactSwipe from 'react-swipe';
 import animatedScrollTo from 'animated-scrollto';
 
-class StepThrough extends Component {
+export default class StepThrough extends Component {
   constructor(props) {
     super(props);
     this.goPrevious = this.goPrevious.bind(this);
@@ -19,50 +18,56 @@ class StepThrough extends Component {
     };
   }
 
+  static defaultProps = {
+    className: '',
+    defaultStep: 0
+  }
+
+  static propTypes = {
+    className: PropTypes.string,
+    defaultStep: PropTypes.number
+  }
+
   componentDidMount() {
     addEventListener('keydown', this.handleKeyDown);
-    setTimeout(() => {
-      this.swiper.swipe.setup();
-      this.swiper.swipe.setup();
-    });
   }
 
   componentWillUnmount() {
     removeEventListener('keydown', this.handleKeyDown);
   }
 
-  goPrevious() {
-    this.swiper.swipe.prev();
-    this.handleScroll();
+  goPrevious(total) {
+    const previousStep = this.state.step - 1;
+    if (previousStep < 0) this.handleStep(total, previousStep);
   }
 
-  goNext() {
-    this.swiper.swipe.next();
-    this.handleScroll();
+  goNext(total) {
+    const nextStep = this.state.step + 1;
+    if (nextStep > (total - 1)) this.handleStep(total, nextStep);
   }
 
   goTo(index) {
-    this.swiper.swipe.slide(index);
-    this.handleScroll();
+    this.handleStep(index)
   }
 
   handleStep(total, index) {
     this.setState({
       step: ((index % total) + total) % total
-    });
+    }, this.handleScroll);
   }
 
   handleKeyDown(e) {
+    const total = React.Children.count(this.props.children);
     switch (e.which) {
       // left
       case 37:
         e.preventDefault();
-        this.goPrevious();
+        this.goPrevious(total);
         break;
       // right
       case 39:
         e.preventDefault();
-        this.goNext();
+        this.goNext(total);
         break;
     }
   }
@@ -78,18 +83,18 @@ class StepThrough extends Component {
     } else {
       const allSteps = Array.from(Array(childrenCount).keys());
       return (
-        <div className="step-through-controls" style={{position: 'relative'}}>
+        <div className="step-through-controls" style={{ position: 'relative' }}>
           <button
             type="button"
             className="step-through-direction step-through-previous"
             aria-label="Previous step"
             title="Previous"
             disabled={this.state.step === 0}
-            onClick={this.goPrevious}
+            onClick={this.goPrevious.bind(this, childrenCount)}
           >
             ◀
-          </button>
-          
+      </button>
+
           <span className="step-through-pips">
             {allSteps.map(thisStep =>
               <label key={thisStep} className="step-through-pip" title={`Step ${thisStep + 1}`}>
@@ -111,10 +116,10 @@ class StepThrough extends Component {
             className="step-through-direction step-through-next"
             aria-label="Next step" title="Next"
             disabled={this.state.step === childrenCount - 1}
-            onClick={this.goNext}
+            onClick={this.goNext.bind(this, childrenCount)}
           >
             ▶
-          </button>
+      </button>
 
         </div>
       );
@@ -123,34 +128,17 @@ class StepThrough extends Component {
 
   render() {
     const childrenCount = React.Children.count(this.props.children);
-    const swipeOptions = {
-      startSlide: this.state.step,
-      continuous: false,
-      callback: this.handleStep.bind(this, childrenCount)
-    };
+    const tutorialProps = Object.assign({}, this.props, {
+      currentStep: this.state.step,
+      goToNextStep: this.goNext.bind(this, childrenCount),
+      goToPreviousStep: this.goPrevous.bind(this, childrenCount)
+    })
     return (
-      <div className={`step-through ${this.props.className}`} style={this.props.style}>
-        <ReactSwipe
-          ref={(component) => { this.swiper = component; }}
-          className="step-through-content"
-          swipeOptions={swipeOptions}
-        >
-          {this.props.children}
-        </ReactSwipe>
+      <div ref={(node) => { this.swiper = node; }} className={`step-through ${this.props.className}`} style={this.props.style}>
+        {React.cloneElement(this.props.children, tutorialProps)}
         {this.renderControls(childrenCount)}
       </div>
     );
   }
 }
 
-StepThrough.propTypes = {
-  className: PropTypes.string,
-  defaultStep: PropTypes.number
-};
-
-StepThrough.defaultProps = {
-  className: '',
-  defaultStep: 0
-};
-
-export default StepThrough;
