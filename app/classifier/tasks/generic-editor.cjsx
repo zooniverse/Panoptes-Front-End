@@ -156,8 +156,6 @@ module.exports = createReactClass
                             <option key="freehandSegmentLine" value="freehandSegmentLine">freehand segment line</option>}
                           {if @canUse("freehandSegmentShape")
                             <option key="freehandSegmentShape" value="freehandSegmentShape">freehand segment shape</option>}
-                          {if @canUse("anchoredEllipse")
-                            <option key="anchoredEllipse" value="anchoredEllipse">anchored ellipse shape</option>}
                         </select>
                       </AutoSave>
                     </div>
