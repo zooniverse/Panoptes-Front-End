@@ -49,16 +49,7 @@ class ProjectNavbar extends Component {
         {!this.state.loading &&
           <NavBarComponent {...this.props}>
             <LanguagePicker
-              options={[
-                {
-                  label: 'English',
-                  value: 'en'
-                },
-                {
-                  label: 'Nederlands',
-                  value: 'nl'
-                }
-              ]}
+              project={this.props.project}
             />
           </NavBarComponent>
         }

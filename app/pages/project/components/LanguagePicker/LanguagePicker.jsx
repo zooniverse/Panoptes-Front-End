@@ -3,10 +3,15 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as translationsActions from '../../../../redux/ducks/translations';
+import languageMenu from '../../../../constants/languageMenu';
 
 function LanguagePicker(props) {
-  const { actions, options, translations } = props;
+  const { actions, project, translations } = props;
   const { locale } = translations;
+
+  const languages = project.configuration.languages ?
+    project.configuration.languages :
+    Object.keys(languageMenu);
 
   function onChange(e) {
     actions.translations.setLocale(e.target.value);
@@ -20,12 +25,12 @@ function LanguagePicker(props) {
         defaultValue={locale}
         onChange={onChange}
       >
-        {options.map(option => (
+        {languages.map(language => (
           <option
-            key={option.value}
-            value={option.value}
+            key={language}
+            value={language}
           >
-            {option.label}
+            {languageMenu[language]}
           </option>
           )
         )}
@@ -40,10 +45,11 @@ LanguagePicker.propTypes = {
       setLocale: PropTypes.func
     })
   }),
-  options: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string
-  })).isRequired,
+  project: PropTypes.shape({
+    configuration: PropTypes.shape({
+      languages: PropTypes.arrayOf(PropTypes.string)
+    })
+  }).isRequired,
   translations: PropTypes.shape({
     locale: PropTypes.string
   })

@@ -4,16 +4,11 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { LanguagePicker } from './LanguagePicker';
 
-const options=[
-  {
-    label: 'English',
-    value: 'en'
-  },
-  {
-    label: 'Nederlands',
-    value: 'nl'
+const project = {
+  configuration: {
+    languages: ['en', 'nl']
   }
-];
+};
 
 describe('LanguagePicker', function () {
   let wrapper;
@@ -25,7 +20,7 @@ describe('LanguagePicker', function () {
         setLocale: changeSpy
       }
     }
-    wrapper = shallow(<LanguagePicker actions={actions} options={options} />);
+    wrapper = shallow(<LanguagePicker actions={actions} project={project} />);
   });
 
   it('should render with the default props', function () {
