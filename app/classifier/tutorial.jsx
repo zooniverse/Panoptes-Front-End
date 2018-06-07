@@ -144,12 +144,12 @@ export default class Tutorial extends React.Component {
 
   goPrevious(total) {
     const previousStep = this.state.stepIndex - 1;
-    if (previousStep <= 0) this.handleStep(total, previousStep);
+    if (previousStep >= 0) this.handleStep(total, previousStep);
   }
 
   goNext(total, event) {
-    const nextStep = this.state.stepIndex + 1;
     event.preventDefault();
+    const nextStep = this.state.stepIndex + 1;
     if (nextStep <= (total - 1)) this.handleStep(total, nextStep);
   }
 
