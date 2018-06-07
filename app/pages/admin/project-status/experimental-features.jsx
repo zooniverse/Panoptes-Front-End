@@ -19,7 +19,6 @@ const experimentalFeatures = [
   'freehandShape',
   'freehandSegmentLine',
   'freehandSegmentShape',
-  'anchoredEllipse',
   'enable subject flags',
   'sim notification',
   'general feedback',
@@ -94,3 +93,4 @@ ExperimentalFeatures.defaultProps = {
 };
 
 export default ExperimentalFeatures;
+
