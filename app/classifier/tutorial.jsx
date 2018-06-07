@@ -1,15 +1,15 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import Dialog from 'modal-form/dialog';
 import Translate from 'react-translate-component';
-import MediaCard from '../components/media-card';
 import { Markdown } from 'markdownz';
 import { Provider } from 'react-redux';
+import animatedScrollTo from 'animated-scrollto';
+import MediaCard from '../components/media-card';
 
-// import StepThrough from '../components/step-through';
 import Translations from './translations';
-
 
 const completedThisSession = {};
 if (window) window.tutorialsCompletedThisSession = completedThisSession;
@@ -24,10 +24,9 @@ export default class Tutorial extends React.Component {
     this.goTo = this.goTo.bind(this);
     this.handleStep = this.handleStep.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.renderControls = this.renderControls.bind(this);
 
     this.state = {
-      step: props.defaultStep
+      stepIndex: props.defaultStepIndex
     }
   }
 
@@ -68,7 +67,7 @@ export default class Tutorial extends React.Component {
     return Promise.resolve(!!completedThisSession[tutorial.id]);
   }
 
-  static start(tutorial, user, preferences, geordi, store) {
+  static start(tutorial, user, projectPreferences, geordi, store) {
     const TutorialComponent = this;
 
     if (tutorial.steps.length !== 0) {
@@ -89,7 +88,7 @@ export default class Tutorial extends React.Component {
         const tutorialContent = (
           <Provider store={store}>
             <Translations original={tutorial} type="tutorial">
-              <TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />
+              <TutorialComponent tutorial={tutorial} media={mediaByID} projectPreferences={projectPreferences} user={user} geordi={geordi} />
             </Translations>
           </Provider>
         );
@@ -106,7 +105,7 @@ export default class Tutorial extends React.Component {
   }
 
   static propTypes = {
-    defaultStep: PropTypes.number,
+    defaultStepIndex: PropTypes.number,
     geordi: PropTypes.object,
     projectPreferences: PropTypes.shape({
       preferences: PropTypes.object,
@@ -126,7 +125,7 @@ export default class Tutorial extends React.Component {
   }
 
   static defaultProps = {
-    defaultStep: 0,
+    defaultStepIndex: 0,
     geordi: {},
     media: {},
     projectPreferences: null,
@@ -134,26 +133,24 @@ export default class Tutorial extends React.Component {
     user: null
   }
 
-  componentWillUnmount() {
-    this.handleUnmount();
-  }
-
   componentDidMount() {
     addEventListener('keydown', this.handleKeyDown);
   }
 
   componentWillUnmount() {
+    this.handleUnmount();    
     removeEventListener('keydown', this.handleKeyDown);
   }
 
   goPrevious(total) {
-    const previousStep = this.state.step - 1;
-    if (previousStep < 0) this.handleStep(total, previousStep);
+    const previousStep = this.state.stepIndex - 1;
+    if (previousStep <= 0) this.handleStep(total, previousStep);
   }
 
-  goNext(total) {
-    const nextStep = this.state.step + 1;
-    if (nextStep > (total - 1)) this.handleStep(total, nextStep);
+  goNext(total, event) {
+    const nextStep = this.state.stepIndex + 1;
+    event.preventDefault();
+    if (nextStep <= (total - 1)) this.handleStep(total, nextStep);
   }
 
   goTo(total, index) {
@@ -162,7 +159,7 @@ export default class Tutorial extends React.Component {
 
   handleStep(total, index) {
     this.setState({
-      step: ((index % total) + total) % total
+      stepIndex: ((index % total) + total) % total
     }, this.handleScroll);
   }
 
@@ -219,81 +216,72 @@ export default class Tutorial extends React.Component {
     });
   }
 
-  renderControls() {
-    const totalSteps = this.props.tutorial.steps.length;
-    if (totalSteps === 1) {
-      return null;
-    } else {
-      const allSteps = Array.from(Array(totalSteps).keys());
-      return (
-        <div className="step-through-controls" style={{ position: 'relative' }}>
-          <button
-            type="button"
-            className="step-through-direction step-through-previous"
-            aria-label="Previous step"
-            title="Previous"
-            disabled={this.state.step === 0}
-            onClick={this.goPrevious.bind(this, totalSteps)}
-          >
-            ◀
-          </button>
-
-          <span className="step-through-pips">
-            {allSteps.map(thisStep =>
-              <label key={thisStep} className="step-through-pip" title={`Step ${thisStep + 1}`}>
-                <input
-                  type="radio"
-                  className="step-through-pip-input"
-                  aria-label={`Step ${thisStep + 1} of ${totalSteps}`}
-                  checked={thisStep === this.state.step}
-                  autoFocus={thisStep === this.state.step}
-                  onChange={this.goTo.bind(this, totalSteps, thisStep)}
-                />
-                <span className="step-through-pip-number">{thisStep + 1}</span>
-              </label>
-            )}
-          </span>
-
-          <button
-            type="button"
-            className="step-through-direction step-through-next"
-            aria-label="Next step" title="Next"
-            disabled={this.state.step === totalSteps - 1}
-            onClick={this.goNext.bind(this, totalSteps)}
-          >
-            ▶
-          </button>
-
-        </div>
-      );
-    }
-  }
-
   render() {
     let tutorialStyle;
     const isIE = Object.keys(window).includes('ActiveXObject');
     if (isIE) {
       tutorialStyle = { height: '85vh' };
     }
-
-    const currentStep = this.props.tutorial.steps[this.state.step];
+    const totalSteps = this.props.tutorial.steps.length;
+    const allSteps = Array.from(Array(totalSteps).keys());
+    const currentStep = this.props.tutorial.steps[this.state.stepIndex];
     const mediaCardSrc = this.props.media[currentStep.media] ? this.props.media[currentStep.media].src : '';
+
     return (
       <div ref={(component) => { this.div = component; }} className="tutorial-steps" style={tutorialStyle}>
         <MediaCard className="tutorial-step" src={mediaCardSrc} style={{ minWidth: '400px' }}>
-          <Markdown>{this.props.translation.steps[this.state.step].content}</Markdown>
+          <Markdown>{this.props.translation.steps[this.state.stepIndex].content}</Markdown>
           <hr />
           <p style={{ textAlign: 'center' }}>
-            {(currentStep === this.props.tutorial.steps.length - 1) ?
+            {(this.state.stepIndex === this.props.tutorial.steps.length - 1) ?
               <button type="submit" className="major-button">
                 <Translate content="classifier.letsGo" />
               </button> :
-              <button type="button" className="standard-button" onClick={this.goNext}>
+              <button type="button" className="standard-button" onClick={this.goNext.bind(this, totalSteps)}>
                 <Translate content="classifier.continue" />
               </button>}
           </p>
         </MediaCard>
-        {this.renderControls()}
+        {totalSteps > 1 &&
+          <div className="step-through-controls" style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="step-through-direction step-through-previous"
+              aria-label="Previous step"
+              title="Previous"
+              disabled={this.state.stepIndex === 0}
+              onClick={this.goPrevious.bind(this, totalSteps)}
+            >
+              ◀
+          </button>
+
+            <span className="step-through-pips">
+              {allSteps.map(thisStep =>
+                <label key={thisStep} className="step-through-pip" title={`Step ${thisStep + 1}`}>
+                  <input
+                    type="radio"
+                    className="step-through-pip-input"
+                    aria-label={`Step ${thisStep + 1} of ${totalSteps}`}
+                    checked={thisStep === this.state.stepIndex}
+                    autoFocus={thisStep === this.state.stepIndex}
+                    onChange={this.goTo.bind(this, totalSteps, thisStep)}
+                  />
+                  <span className="step-through-pip-number">{thisStep + 1}</span>
+                </label>
+              )}
+            </span>
+
+            <button
+              type="button"
+              className="step-through-direction step-through-next"
+              aria-label="Next step" title="Next"
+              disabled={this.state.stepIndex === totalSteps - 1}
+              onClick={this.goNext.bind(this, totalSteps)}
+            >
+              ▶
+          </button>
+
+          </div>}
       </div>
     );
   }
