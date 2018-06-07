@@ -15,6 +15,7 @@ function LanguagePicker(props) {
   return (
     <label>
       Language
+      {' '}
       <select
         defaultValue={locale}
         onChange={onChange}

@@ -4,7 +4,6 @@ const Wrapper = styled.div`
   align-items: center;
   display: flex;
   margin: 0 3vw;
-  width: 100%;
   z-index: 2;
 `;
 

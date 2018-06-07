@@ -18,9 +18,12 @@ export const StyledBackground = styled(Background)`
 export const StyledOuterWrapper = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   position: relative;
+`;
+export const SettingsMenu = styled.div`
+  text-align: right;
 `;
 
 export const StyledInnerWrapper = Wrapper.extend`
@@ -48,6 +51,7 @@ export class ProjectNavbarNarrow extends Component {
     const {
       avatarSrc,
       backgroundSrc,
+      children,
       height,
       launched,
       projectLink,
@@ -62,6 +66,9 @@ export class ProjectNavbarNarrow extends Component {
         <StyledBackground src={backgroundSrc} />
 
         <StyledOuterWrapper>
+          <SettingsMenu>
+            {children}
+          </SettingsMenu>
           <StyledInnerWrapper>
             <Avatar
               src={avatarSrc}
@@ -96,6 +103,7 @@ export class ProjectNavbarNarrow extends Component {
 ProjectNavbarNarrow.defaultProps = {
   avatarSrc: '',
   backgroundSrc: '',
+  children: null,
   navLinks: [
     { url: '' }
   ],
@@ -106,6 +114,7 @@ ProjectNavbarNarrow.defaultProps = {
 ProjectNavbarNarrow.propTypes = {
   avatarSrc: PropTypes.string,
   backgroundSrc: PropTypes.string,
+  children: PropTypes.node,
   height: PropTypes.number,
   launched: PropTypes.bool,
   navLinks: PropTypes.arrayOf(PropTypes.shape({
