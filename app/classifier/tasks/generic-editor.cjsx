@@ -145,7 +145,7 @@ module.exports = createReactClass
                         Type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
                           {for toolKey of drawingTools
-                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape", "freehandSegmentLine", "freehandSegmentShape"]}
+                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape", "freehandSegmentLine", "freehandSegmentShape", "anchoredEllipse"]}
                           {if @canUse("grid")
                             <option key="grid" value="grid">grid</option>}
                           {if @canUse("freehandLine")
