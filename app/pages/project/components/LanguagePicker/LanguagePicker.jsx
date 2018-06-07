@@ -9,9 +9,11 @@ function LanguagePicker(props) {
   const { actions, project, translations } = props;
   const { locale } = translations;
 
-  const languages = project.configuration.languages ?
-    project.configuration.languages :
-    Object.keys(languageMenu);
+  const languages = project.configuration.languages ? project.configuration.languages : [];
+
+  if (languages.length < 2) {
+    return null;
+  }
 
   function onChange(e) {
     actions.translations.setLocale(e.target.value);
