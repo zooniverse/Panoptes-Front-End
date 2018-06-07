@@ -19,7 +19,7 @@ const experimentalFeatures = [
   'freehandShape',
   'freehandSegmentLine',
   'freehandSegmentShape',
-  'anchoredEllipse'
+  'anchoredEllipse',
   'enable subject flags',
   'sim notification',
   'general feedback',
