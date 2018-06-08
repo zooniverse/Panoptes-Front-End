@@ -52,22 +52,21 @@ class CollectionPage extends React.Component {
     }
   }
 
-  canCollaborate = () => {
-    let canCollaborate;
-    if (!this.props.user) {
-      canCollaborate = false;
-    } else {
-      canCollaborate = this.props.roles.some((role) => {
-        const idMatch = (role.links.owner.id === this.props.user.id);
+  canCollaborate() {
+    const { owner, roles, user } = this.props;
+    let canCollaborate = false;
+    let isOwner = false;
+    if (user && user.id) {
+      canCollaborate = roles.some((role) => {
+        const idMatch = (role.links.owner.id === user.id);
         const isCollaborator = role.roles.includes('collaborator');
-
         return isCollaborator && idMatch;
       });
+      isOwner = user.id === owner.id;
     }
-    const isOwner = this.props.user.id === this.props.owner.id;
 
     this.setState({ canCollaborate: canCollaborate || isOwner });
-  };
+  }
 
   render() {
     const title = `${this.props.collection.display_name} (${this.props.collection.links.subjects ? this.props.collection.links.subjects.length : 0})`;
