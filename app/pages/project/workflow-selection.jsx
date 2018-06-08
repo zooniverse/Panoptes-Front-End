@@ -69,10 +69,11 @@ class WorkflowSelection extends React.Component {
     } else if (project.configuration && project.configuration.default_workflow) {
       selectedWorkflowID = project.configuration.default_workflow;
     } else {
-      selectedWorkflowID = this.selectRandomWorkflow(project);
+      selectedWorkflowID = this.selectRandomActiveWorkflow(project);
     }
 
-    this.getWorkflow(selectedWorkflowID, activeFilter);
+    if (selectedWorkflowID) return this.getWorkflow(selectedWorkflowID, activeFilter);
+    if (process.env.BABEL_ENV !== 'test') console.warn('Cannot select a workflow.')
   }
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
@@ -123,7 +124,7 @@ class WorkflowSelection extends React.Component {
 
           this.clearInactiveWorkflow(selectedWorkflowID)
             .then(() => {
-              if (project.links.workflows) this.getSelectedWorkflow(this.props);
+              this.getSelectedWorkflow(this.props);
             });
         }
       }
@@ -133,7 +134,7 @@ class WorkflowSelection extends React.Component {
     });
   }
 
-  selectRandomWorkflow(project) {
+  selectRandomActiveWorkflow(project) {
     const linkedActiveWorkflows = project.links.active_workflows;
     if (linkedActiveWorkflows && linkedActiveWorkflows.length > 0) {
       const randomIndex = Math.floor(Math.random() * linkedActiveWorkflows.length);

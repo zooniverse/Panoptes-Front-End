@@ -299,15 +299,30 @@ describe('WorkflowSelection', function () {
     });
   });
 
-  describe('when loading a project without workflows', function() {
-    let getSelectedWorkflowSpy;
+  describe('when loading a project without linked active workflows', function() {
+    it('should not attempt to call getWorkflow', function() {
+      const projectWithoutActiveWorkflows = mockPanoptesResource('projects', {
+        id: 'y',
+        display_name: 'A test project',
+        configuration: {},
+        experimental_tools: [],
+        links: {
+          owner: { id: '1' },
+          workflows: ['20']
+        }
+      });
 
-    before(function() {
-      getSelectedWorkflowSpy = sinon.spy(controller, 'getSelectedWorkflow');
+      wrapper.setProps({ project: projectWithoutActiveWorkflows });
 
+      sinon.assert.notCalled(workflowStub)
+    });
+  });
+
+  describe('when loading a project without any linked workflows', function () {
+    it('should not attempt to call getWorkflow', function () {
       const projectWithoutWorkflows = mockPanoptesResource('projects', {
         id: 'z',
-        display_name: 'A test project',
+        display_name: 'I have no workflows project',
         configuration: {},
         experimental_tools: [],
         links: {
@@ -316,18 +331,8 @@ describe('WorkflowSelection', function () {
       });
 
       wrapper.setProps({ project: projectWithoutWorkflows });
-    });
 
-    beforeEach(function() {
-      getSelectedWorkflowSpy.resetHistory(); 
-    })
-
-    after(function() {
-      getSelectedWorkflowSpy.restore();
-    });
-
-    it('should not attempt to select another workflow', function() {
-      sinon.assert.notCalled(getSelectedWorkflowSpy);
+      sinon.assert.notCalled(workflowStub)
     });
   });
 });
