@@ -134,6 +134,7 @@ export default class Tutorial extends React.Component {
   }
 
   componentDidMount() {
+    this.handleFocus();
     addEventListener('keydown', this.handleKeyDown);
   }
 
@@ -148,7 +149,7 @@ export default class Tutorial extends React.Component {
   }
 
   goNext(total, event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
     const nextStep = this.state.stepIndex + 1;
     if (nextStep <= (total - 1)) this.handleStep(total, nextStep);
   }
@@ -160,7 +161,7 @@ export default class Tutorial extends React.Component {
   handleStep(total, index) {
     this.setState({
       stepIndex: ((index % total) + total) % total
-    }, this.handleScroll);
+    }, this.handlePositionAndFocus);
   }
 
   handleKeyDown(e) {
@@ -176,6 +177,18 @@ export default class Tutorial extends React.Component {
         e.preventDefault();
         this.goNext(total);
         break;
+    }
+  }
+
+  handlePositionAndFocus() {
+    this.handleFocus();
+    this.handleScroll();
+  }
+
+  handleFocus() {
+    if (this.div) {
+      const reactNode = ReactDOM.findDOMNode(this.div);
+      reactNode.focus(); // Why isnt this working?
     }
   }
 
@@ -229,19 +242,19 @@ export default class Tutorial extends React.Component {
 
     return (
       <div ref={(component) => { this.div = component; }} className="tutorial-steps" style={tutorialStyle}>
-        <MediaCard className="tutorial-step" src={mediaCardSrc} style={{ minWidth: '400px' }}>
+        <MediaCard className="tutorial-step" src={mediaCardSrc}>
           <Markdown>{this.props.translation.steps[this.state.stepIndex].content}</Markdown>
-          <hr />
-          <p style={{ textAlign: 'center' }}>
-            {(this.state.stepIndex === this.props.tutorial.steps.length - 1) ?
-              <button type="submit" className="major-button">
-                <Translate content="classifier.letsGo" />
-              </button> :
-              <button type="button" className="standard-button" onClick={this.goNext.bind(this, totalSteps)}>
-                <Translate content="classifier.continue" />
-              </button>}
-          </p>
+          <hr />          
         </MediaCard>
+        <p style={{ textAlign: 'center' }}>
+          {(this.state.stepIndex === this.props.tutorial.steps.length - 1) ?
+            <button type="submit" className="major-button">
+              <Translate content="classifier.letsGo" />
+            </button> :
+            <button type="button" className="standard-button" onClick={this.goNext.bind(this, totalSteps)}>
+              <Translate content="classifier.continue" />
+            </button>}
+        </p>
         {totalSteps > 1 &&
           <div className="step-through-controls" style={{ position: 'relative' }}>
             <button
