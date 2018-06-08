@@ -11,9 +11,7 @@ import TaskTranslations from '../../../tasks/translations';
 import { StyledNextButton } from '../../../components/TaskNavButtons/components/NextButton/NextButton';
 
 export const StyledStickyModalForm = styled(StickyModalForm)`
-  .modal-form-underlay {
-    pointer-events: none;
-  }
+  pointer-events: none;
 
   .modal-form {
     background: ${theme('mode', {
