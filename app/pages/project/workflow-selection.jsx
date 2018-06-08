@@ -104,7 +104,7 @@ class WorkflowSelection extends React.Component {
       awaitWorkflow = Promise.resolve(null);
     }
 
-    awaitWorkflow
+    return awaitWorkflow
     .then((workflow) => {
       if (workflow) {
         this.setState({ loadingSelectedWorkflow: false, workflow });
