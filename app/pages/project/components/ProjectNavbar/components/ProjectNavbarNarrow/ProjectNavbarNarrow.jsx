@@ -22,9 +22,6 @@ export const StyledOuterWrapper = styled.div`
   justify-content: center;
   position: relative;
 `;
-export const SettingsMenu = styled.div`
-  text-align: right;
-`;
 
 export const StyledInnerWrapper = Wrapper.extend`
   flex-direction: column;
@@ -66,9 +63,7 @@ export class ProjectNavbarNarrow extends Component {
         <StyledBackground src={backgroundSrc} />
 
         <StyledOuterWrapper>
-          <SettingsMenu>
             {children}
-          </SettingsMenu>
           <StyledInnerWrapper>
             <Avatar
               src={avatarSrc}

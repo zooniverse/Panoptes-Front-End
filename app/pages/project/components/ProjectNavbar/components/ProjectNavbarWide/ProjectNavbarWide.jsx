@@ -25,10 +25,6 @@ export const StyledOuterWrapper = styled.div`
   z-index: 2;
 `;
 
-export const SettingsMenu = styled.div`
-  text-align: right;
-`;
-
 export const StyledAvatar = styled(Avatar)`
   margin-right: ${pxToRem(20)};
 `;
@@ -88,9 +84,7 @@ function ProjectNavbarWide(props) {
     <StyledHeaderWide {...otherProps}>
       <Background src={backgroundSrc} />
       <StyledOuterWrapper>
-        <SettingsMenu>
           {children}
-        </SettingsMenu>
         <StyledWrapper>
           <StyledAvatar
             src={avatarSrc}
