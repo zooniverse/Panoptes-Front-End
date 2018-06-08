@@ -39,7 +39,6 @@
     "react-select": "1.0.0-rc.10",
     "react-sizeme": "~2.4.2",
     "react-sizes": "~0.4.3",
-    "react-swipe": "~5.1.1",
     "react-translate-component": "~0.15.1",
     "redux": "~3.6.0",
     "redux-thunk": "~2.2.0",
