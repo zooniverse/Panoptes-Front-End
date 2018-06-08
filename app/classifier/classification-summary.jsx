@@ -73,6 +73,15 @@ class ClassificationSummary extends React.Component {
       );
     }
 
+    if (this.props.workflow.configuration &&
+        this.props.workflow.configuration.custom_summary) {
+      summariesHook.push(
+        <Markdown className='classification-summary'>
+          {this.props.workflow.configuration.custom_summary}
+        </Markdown>
+      );
+    }
+
     if (this.showExoplanetSimFeedback()) {
       return (
         <p style={{ fontWeight: 'bold' }}>Well done! You've found a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>
@@ -81,7 +90,6 @@ class ClassificationSummary extends React.Component {
 
     return (
       <div>
-        { summariesHook.length ? summariesHook : null }
         { this.hasExpert ?
           <div className="has-expert-classification">
             Expert classification available.&nbsp;
@@ -91,6 +99,7 @@ class ClassificationSummary extends React.Component {
           </div> : '' }
 
         <div>
+          { summariesHook.length ? summariesHook.map(item => item) : null }
           <strong className="classification-summary__title">
             { this.state.showExpert ? 'Expert Classification:' : 'Your classification:' }
           </strong>
