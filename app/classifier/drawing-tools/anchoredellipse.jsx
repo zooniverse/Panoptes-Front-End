@@ -17,13 +17,10 @@ export default class AnchoredEllipseTool extends React.Component {
   constructor(props) {
   }
 
-  getDeletePosition(xIn, width) {
-    const scale = this.props.scale.horizontal;
-    let x = xIn + width + (BUFFER / scale);
-    if ((this.props.containerRect.width / scale) < x + (DELETE_BUTTON_WIDTH / scale)) {
-      x -= (BUFFER / scale) * 2;
-    }
-    return { x };
+  getDeletePosition {
+    const theta = (DELETE_BUTTON_ANGLE - this.props.mark.angle) * (Math.PI / 180)
+    x : (this.props.mark.rx + (BUFFER / this.props.scale.horizontal)) * Math.cos theta
+    y : -1 * (this.props.mark.ry + (BUFFER / this.props.scale.vertical)) * Math.sin theta
   }
 
   handleRadiusHandleDrag(coord, e, d) {
@@ -42,7 +39,7 @@ export default class AnchoredEllipseTool extends React.Component {
     const { x, y, width, height, angle } = this.props.mark;
     const xCenter = width / 2;
     const yCenter = height / 2;
-    const deletePosition = this.getDeletePosition(0, width);
+    const deletePosition = this.getDeletePosition;
     const positionAndRotate = `
       translate(${x} ${y})
       rotate(${angle} ${xCenter} ${yCenter})
