@@ -134,7 +134,6 @@ export default class Tutorial extends React.Component {
   }
 
   componentDidMount() {
-    this.handleFocus();
     addEventListener('keydown', this.handleKeyDown);
   }
 
@@ -161,7 +160,7 @@ export default class Tutorial extends React.Component {
   handleStep(total, index) {
     this.setState({
       stepIndex: ((index % total) + total) % total
-    }, this.handlePositionAndFocus);
+    }, this.handleScroll);
   }
 
   handleKeyDown(e) {
@@ -180,21 +179,8 @@ export default class Tutorial extends React.Component {
     }
   }
 
-  handlePositionAndFocus() {
-    this.handleFocus();
-    this.handleScroll();
-  }
-
-  handleFocus() {
-    if (this.div) {
-      const reactNode = ReactDOM.findDOMNode(this.div);
-      reactNode.focus(); // Why isnt this working?
-    }
-  }
-
   handleScroll() {
-    const reactNode = ReactDOM.findDOMNode(this.div);
-    setTimeout(animatedScrollTo(reactNode, reactNode.offsetTop, 0), 500);
+    setTimeout(animatedScrollTo(this.div, this.div.offsetTop, 0), 500);
   }
 
   handleUnmount() {
