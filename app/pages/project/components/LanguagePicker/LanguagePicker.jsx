@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Translate from 'react-translate-component';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as translationsActions from '../../../../redux/ducks/translations';
@@ -21,7 +22,7 @@ function LanguagePicker(props) {
 
   return (
     <label>
-      Language
+      <Translate content="project.language" />
       {' '}
       <select
         defaultValue={locale}

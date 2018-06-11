@@ -27,6 +27,7 @@ export default {
     }
   },
   project: {
+    language: 'Language',
     disclaimer: "Questo progetto è stato creato con il Project Builder di Zooniverse, ma non è ancora un progetto ufficiale. Per questo motivo è possibile che domande su questo progetto dirette al Team Zooniverse non ricevano una risposta.",
     loading: 'Caricamento progetto',
     about: {
