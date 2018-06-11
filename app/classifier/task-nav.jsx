@@ -64,7 +64,7 @@ class TaskNav extends React.Component {
   }
 
   render() {
-    const completed = !!this.props.classification.completed;
+    const { completed } = this.props;
 
     const task = this.props.task ? this.props.task : this.props.workflow.tasks[this.props.workflow.first_task];
 
@@ -140,6 +140,7 @@ TaskNav.propTypes = {
     metadata: PropTypes.object
   }),
   completeClassification: PropTypes.func,
+  completed: PropTypes.bool,
   disabled: PropTypes.bool,
   nextSubject: PropTypes.func,
   demoMode: PropTypes.bool,
@@ -165,6 +166,7 @@ TaskNav.propTypes = {
 TaskNav.defaultProps = {
   annotations: [],
   autoFocus: true,
+  completed: false,
   disabled: false,
   updateAnnotations: () => null
 };
