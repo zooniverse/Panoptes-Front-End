@@ -1,28 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import DrawingToolRoot from './root';
 import DragHandle from './drag-handle';
 import Draggable from '../../lib/draggable';
 import deleteIfOutOfBounds from './delete-if-out-of-bounds';
 import DeleteButton from './delete-button';
 
-const MINIMUM_SIZE = 5;
+const DEFAULT_SQUASH = 1 / 2;
+const MINIMUM_RADIUS = 5;
 const GUIDE_WIDTH = 1;
 const GUIDE_DASH = [4, 4];
-const DELETE_BUTTON_WIDTH = 8;
+const DELETE_BUTTON_ANGLE = 45;
 const BUFFER = 16;
 
-export default class RotateRectangleTool extends React.Component {
+export default class AnchoredEllipseTool extends React.Component {
   constructor(props) {
-    super(props);
-    this.getDeletePosition = this.getDeletePosition.bind(this);
-    this.handleMainDrag = this.handleMainDrag.bind(this);
-    this.handleTopLeftDrag = this.handleTopLeftDrag.bind(this);
-    this.handleTopRightDrag = this.handleTopRightDrag.bind(this);
-    this.handleBottomLeftDrag = this.handleBottomLeftDrag.bind(this);
-    this.handleBottomRightDrag = this.handleBottomRightDrag.bind(this);
-    this.handleRotate = this.handleRotate.bind(this);
-    this.normalizeMark = this.normalizeMark.bind(this);
   }
 
   getDeletePosition(xIn, width) {
@@ -34,73 +26,15 @@ export default class RotateRectangleTool extends React.Component {
     return { x };
   }
 
-  handleMainDrag(e, d) {
-    const difference = this.props.normalizeDifference(e, d);
-    this.props.mark.x += difference.x;
-    this.props.mark.y += difference.y;
-    this.props.onChange(this.props.mark);
-  }
-
-  handleTopLeftDrag(e, d) {
-    const difference = this.props.normalizeDifference(e, d);
-    const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
-    this.props.mark.x += 0.5 * differenceRot.x;
-    this.props.mark.y += 0.5 * differenceRot.y;
-    this.props.mark.width -= differenceRot.x;
-    this.props.mark.height -= differenceRot.y;
-    this.props.onChange(this.props.mark);
-  }
-
-  handleTopRightDrag(e, d) {
-    const difference = this.props.normalizeDifference(e, d);
-    const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
-    this.props.mark.x -= 0.5 * differenceRot.x;
-    this.props.mark.y += 0.5 * differenceRot.y;
-    this.props.mark.width += differenceRot.x;
-    this.props.mark.height -= differenceRot.y;
-    this.props.onChange(this.props.mark);
-  }
-
-  handleBottomRightDrag(e, d) {
-    const difference = this.props.normalizeDifference(e, d);
-    const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
-    this.props.mark.x -= 0.5 * differenceRot.x;
-    this.props.mark.y -= 0.5 * differenceRot.y;
-    this.props.mark.width += differenceRot.x;
-    this.props.mark.height += differenceRot.y;
-    this.props.onChange(this.props.mark);
-  }
-
-  handleBottomLeftDrag(e, d) {
-    const difference = this.props.normalizeDifference(e, d);
-    const differenceRot = this.constructor.rotateXY(difference, this.props.mark.angle);
-    this.props.mark.x += 0.5 * differenceRot.x;
-    this.props.mark.y -= 0.5 * differenceRot.y;
-    this.props.mark.width -= differenceRot.x;
-    this.props.mark.height += differenceRot.y;
-    this.props.onChange(this.props.mark);
-  }
-
-  handleRotate(e) {
-    const { x, y } = this.props.getEventOffset(e);
-    const xCenter = this.props.mark.x + (this.props.mark.width / 2);
-    const yCenter = this.props.mark.y + (this.props.mark.height / 2);
-    const angle = this.constructor.getAngle(xCenter, yCenter, x, y);
+  handleRadiusHandleDrag(coord, e, d) {
+    {x, y} = this.props.getEventOffset(e);
+    r = this.constructor.GetDistance(this.props.mark.x, this.props.mark.y, x, y)
+    angle = this.constructor.getAngle(this.props.mark.x, this.props.mark.y, x, y)
+    this.props.mark["r#{coord}"] = r
     this.props.mark.angle = angle;
-    this.props.onChange(this.props.mark);
-  }
-
-  normalizeMark() {
-    if (this.props.mark.width < 0) {
-      this.props.mark.x += this.props.mark.width;
-      this.props.mark.width *= -1;
+    if (coord == y){
+      this.props.mark.angle -= angle;
     }
-
-    if (this.props.mark.height < 0) {
-      this.props.mark.y += this.props.mark.height;
-      this.props.mark.height *= -1;
-    }
-
     this.props.onChange(this.props.mark);
   }
 
@@ -214,6 +148,7 @@ RotateRectangleTool.defaultValues = ({ x, y }) => (
     angle: 0
   }
 );
+
 RotateRectangleTool.initStart = ({ x, y }) => {
   RotateRectangleTool.initCoords = { x, y };
   return {
@@ -222,6 +157,7 @@ RotateRectangleTool.initStart = ({ x, y }) => {
     _inProgress: true
   };
 };
+
 RotateRectangleTool.initMove = (cursor, mark) => {
   let width;
   let height;
@@ -248,6 +184,7 @@ RotateRectangleTool.initMove = (cursor, mark) => {
     height
   };
 };
+
 RotateRectangleTool.initRelease = () => ({ _inProgress: false });
 RotateRectangleTool.initValid = mark => mark.width > MINIMUM_SIZE && mark.height > MINIMUM_SIZE;
 RotateRectangleTool.getAngle = (xCenter, yCenter, x, y) => {
@@ -255,12 +192,14 @@ RotateRectangleTool.getAngle = (xCenter, yCenter, x, y) => {
   const deltaY = y - yCenter;
   return Math.atan2(deltaY, deltaX) * (180 / Math.PI);
 };
+
 RotateRectangleTool.rotateXY = ({ x, y }, angle) => {
   const theta = angle * (Math.PI / 180);
   const xTheta = (x * Math.cos(theta)) + (y * Math.sin(theta));
   const yTheta = -(x * Math.sin(theta)) + (y * Math.cos(theta));
   return { x: xTheta, y: yTheta };
 };
+
 RotateRectangleTool.propTypes = {
   scale: PropTypes.shape({
     horizontal: PropTypes.number,
