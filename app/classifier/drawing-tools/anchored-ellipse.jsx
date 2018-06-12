@@ -20,24 +20,20 @@ export default class AnchoredEllipseTool extends React.Component {
     this.getDeletePosition = this.getDeletePosition.bind(this);
   }
   
-  static defaultValues({x, y}) {
+  static defaultValues(values, containerRect, scale) {
+    const x = (containerRect.width / 2) / scale.horizontal;
+    const y = (containerRect.height / 2) / scale.vertical;
     return {
-      x: x,
-      y: y,
-      rx: 0,
-      ry: 0,
+      x,
+      y,
+      rx: 50,
+      ry: 50,
       angle: 0
     };
   }
 
-  // x and y will be automatically placed at 256,156, radius and angle will be initalized
   static initStart() {
     return {
-      x: 256,
-      y: 256,
-      rx:50,
-      ry:50,
-      angle:0,
       _inProgress: true
     };
   }
