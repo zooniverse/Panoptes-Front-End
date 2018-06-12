@@ -1,6 +1,11 @@
 React = require 'react'
 
 module.exports =
+  anchoredEllipse: <svg viewBox="0 0 100 100">
+    <ellipse className="shape" rx="45" ry="25" cx="50" cy="50" transform="rotate(-30, 50, 50)" />
+    <circle className="shape" r="5" cy="50" cx="50"></circle>
+  </svg>
+
   point: <svg viewBox="0 0 100 100">
     <circle className="shape" r="30" cx="50" cy="50" />
     <line className="shape" x1="50" y1="5" x2="50" y2="40" />
