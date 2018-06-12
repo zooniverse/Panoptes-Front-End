@@ -3,6 +3,7 @@ module.exports =
   circle: require './circle'
   column: require './column-rectangle'
   ellipse: require './ellipse'
+  anchoredEllipse: require './anchoredellipse'
   freehandLine: require './freehand-line'
   freehandSegmentLine: require './freehand-segment-line'
   freehandSegmentShape: require './freehand-segment-shape'
