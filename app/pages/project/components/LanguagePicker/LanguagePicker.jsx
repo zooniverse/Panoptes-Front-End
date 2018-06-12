@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import Translate from 'react-translate-component';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as translationsActions from '../../../../redux/ducks/translations';
 import languageMenu from '../../../../constants/languageMenu';
+
+const StyledLabel = styled.label`
+  word-spacing: 1em;
+`;
 
 function LanguagePicker(props) {
   const { actions, project, translations } = props;
@@ -21,7 +26,7 @@ function LanguagePicker(props) {
   }
 
   return (
-    <label>
+    <StyledLabel>
       <Translate content="project.language" />
       {' '}
       <select
@@ -38,7 +43,7 @@ function LanguagePicker(props) {
           )
         )}
       </select>
-    </label>
+    </StyledLabel>
   );
 }
 
