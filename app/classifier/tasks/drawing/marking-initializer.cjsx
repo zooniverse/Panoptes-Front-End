@@ -57,7 +57,7 @@ module.exports = createReactClass
       MarkComponent = drawingTools[toolDescription.type]
 
       if MarkComponent.defaultValues?
-        defaultValues = MarkComponent.defaultValues mouseCoords, @props.containerRect, @props.scale
+        defaultValues = MarkComponent.defaultValues mouseCoords, { naturalWidth: @props.naturalWidth, naturalHeight: @props.naturalHeight }
         for key, value of defaultValues
           mark[key] = value
 

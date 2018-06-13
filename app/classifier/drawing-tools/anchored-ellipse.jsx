@@ -2,11 +2,8 @@
 import React from 'react';
 import DrawingToolRoot from './root';
 import DragHandle from './drag-handle';
-import Draggable from '../../lib/draggable';
-import deleteIfOutOfBounds from './delete-if-out-of-bounds';
 import DeleteButton from './delete-button';
 
-const DEFAULT_SQUASH = 1 / 2;
 const MINIMUM_RADIUS = 5;
 const GUIDE_WIDTH = 1;
 const GUIDE_DASH = [4, 4];
@@ -20,9 +17,11 @@ export default class AnchoredEllipseTool extends React.Component {
     this.getDeletePosition = this.getDeletePosition.bind(this);
   }
   
-  static defaultValues(values, containerRect, scale) {
-    const x = (containerRect.width / 2) / scale.horizontal;
-    const y = (containerRect.height / 2) / scale.vertical;
+  static defaultValues(values, dimensions) {
+    // const x = (containerRect.width / 2) / scale.horizontal;
+    // const y = (containerRect.height / 2) / scale.vertical;
+    const x = dimensions.naturalWidth / 2;
+    const y = dimensions.naturalHeight / 2;
     return {
       x,
       y,
