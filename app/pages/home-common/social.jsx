@@ -6,6 +6,7 @@ import counterpart from 'counterpart';
 import moment from 'moment';
 import ProjectCard from '../../partials/project-card';
 import { getPublication, getRecentProjects, getBlogPosts, getNewestProject } from '../../lib/get-social-data';
+import striptags from 'striptags';
 
 counterpart.registerTranslations('en', {
   socialHomePage: {
@@ -79,7 +80,7 @@ export default class HomePageSocial extends React.Component {
         <div className="home-social__blog-post">
           <div style={background}></div>
           <div>
-            <span className="regular-body">{post.excerpt}</span>
+            <span className="regular-body">{striptags(post.excerpt)}</span>
             <br />
             <div>
               <a className="home-social__italic-link" href={post.link}> Read More... </a>
