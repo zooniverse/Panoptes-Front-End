@@ -145,7 +145,7 @@ module.exports = createReactClass
                         Type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
                           {for toolKey of drawingTools
-                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape", "freehandSegmentLine", "freehandSegmentShape"]}
+                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape", "freehandSegmentLine", "freehandSegmentShape", "anchoredEllipse"]}
                           {if @canUse("grid")
                             <option key="grid" value="grid">grid</option>}
                           {if @canUse("freehandLine")
@@ -156,6 +156,8 @@ module.exports = createReactClass
                             <option key="freehandSegmentLine" value="freehandSegmentLine">freehand segment line</option>}
                           {if @canUse("freehandSegmentShape")
                             <option key="freehandSegmentShape" value="freehandSegmentShape">freehand segment shape</option>}
+                          {if @canUse("anchoredEllipse")
+                            <option key="anchoredEllipse" value="anchoredEllipse">anchored ellipse</option>}
                         </select>
                       </AutoSave>
                     </div>
@@ -250,6 +252,8 @@ module.exports = createReactClass
                 <small className="form-help"><b>triangle:</b> an equilateral triangle of any size and vertex distance from the center; this tool <i>can</i> be rotated.</small><br />
                 {if @canUse("grid")
                   <small className="form-help"><b>grid table</b>: cells which can be made into a table for consecutive annotations.</small>}
+                {if @canUse("anchoredEllipse")
+                  <small className="form-help"><b>anchored ellipse</b>: creates an ellipes in the center of the subject during the first click, and does not allow it to be dragged.</small>}}
               </div>}
         </div>}
 
