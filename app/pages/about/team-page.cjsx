@@ -258,7 +258,7 @@ counterpart.registerTranslations 'en',
         coding experimental apps.'''
       simoneDuca:
         title: 'Developer'
-        bio: '''Simone joined the Zooniverse in 2015 as frontend developer. In a previous life, he received a Phd in logic and philosophy
+        bio: '''Simone joined the Zooniverse in 2015 as a frontend developer. In a previous life, he received a Phd in logic and philosophy
         from Bristol. After moving "Up North", he joined another worthy cause in 2018.'''
       stuartLynn:
         title: 'Developer'
