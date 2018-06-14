@@ -127,7 +127,6 @@ class Classifier extends React.Component {
     }
 
     const annotations = this.state.annotations.slice();
-    const annotation = annotations[annotations.length - 1];
     const subjectViewerProps = {
       subject: this.props.subject,
       workflow: this.props.workflow,
@@ -157,11 +156,12 @@ class Classifier extends React.Component {
     // to check the entire annotation array, as the user may be editing an
     // existing annotation.
     let isInProgress = false;
-    const { annotations } = this.state;
+    const { annotations, workflowHistory } = this.state;
     const { workflow } = this.props;
-    const currentAnnotation = annotations[annotations.length - 1] || {};
-
-    const currentTask = workflow.tasks[currentAnnotation.task] || null;
+    const currentTaskKey = workflowHistory[workflowHistory.length - 1];
+    const index = findLastIndex(annotations, annotation => annotation.task === currentTaskKey);
+    const currentAnnotation = index > -1 ? annotations[index] : {};
+    const currentTask = workflow.tasks[currentTaskKey] || null;
 
     if (currentTask && currentTask.type === 'drawing') {
       isInProgress = annotations.reduce((result, annotation) => {
