@@ -257,9 +257,9 @@ counterpart.registerTranslations 'en',
         his PC playing games or reading comics, he's at his PC studying web design and
         coding experimental apps.'''
       simoneDuca:
-        title: 'Web Developer'
-        bio: '''Simone is a front end web developer at the Zooniverse. He has a Phd in logic and philosophy
-        from Bristol and loves cooking.'''
+        title: 'Developer'
+        bio: '''Simone joined the Zooniverse in 2015 as frontend developer. In a previous life, he received a Phd in logic and philosophy
+        from Bristol. After moving "Up North", he joined another worthy cause in 2018.'''
       stuartLynn:
         title: 'Developer'
         bio: '''Stuart arrived at the Adler as a developer in July 2011, having been one of the founding
@@ -647,7 +647,7 @@ teamMembers =
     title: counterpart "team.content.simoneDuca.title"
     bio: counterpart "team.content.simoneDuca.bio"
     image: "/assets/team/simone.jpg"
-    location: "oxford"
+    location: "alumni"
   stuartLynn:
     name: "Stuart Lynn"
     title: counterpart "team.content.stuartLynn.title"
