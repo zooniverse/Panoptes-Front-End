@@ -215,4 +215,60 @@ describe('Classifier', function () {
       });
     });
   });
+
+  describe('with feedback enabled', function () {
+    let feedbackInitSpy;
+    let feedbackUpdateSpy;
+    let loadSubject;
+
+    before(function () {
+      feedbackInitSpy = sinon.spy();
+      feedbackUpdateSpy = sinon.spy();
+      loadSubject = sinon.stub(Classifier.prototype, 'loadSubject').callsFake(() => null);
+    });
+
+    beforeEach(function () {
+      const feedback = {
+        active: true
+      };
+      const actions = {
+        feedback: {
+          init: feedbackInitSpy,
+          update: feedbackUpdateSpy
+        }
+      };
+      wrapper = shallow(
+        <Classifier
+          classification={classification}
+          feedback={feedback}
+          actions={actions}
+        />
+      );
+      wrapper.instance().componentDidMount();
+    });
+
+    afterEach(function () {
+      feedbackUpdateSpy.resetHistory();
+    });
+
+    it('should update feedback when an annotation is created', function () {
+      const newAnnotation = {task: 'T3', value: 'new task'};
+      const annotations = classification.annotations.slice();
+      annotations.push(newAnnotation);
+      wrapper.instance().updateAnnotations(annotations);
+      wrapper.instance().onNextTask(newAnnotation.task);
+      expect(feedbackUpdateSpy.callCount).to.equal(1);
+      
+    });
+
+    it('should update feedback for the previous annotation when an annotation is created', function () {
+      const newAnnotation = {task: 'T3', value: 'new task'};
+      const annotations = classification.annotations.slice();
+      const prevAnnotation = annotations[annotations.length - 1];
+      annotations.push(newAnnotation);
+      wrapper.instance().updateAnnotations(annotations);
+      wrapper.instance().onNextTask(newAnnotation.task);
+      expect(feedbackUpdateSpy.calledWith(prevAnnotation)).to.equal(true);
+    });
+  });
 });
