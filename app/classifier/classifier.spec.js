@@ -57,6 +57,12 @@ const workflow = mockPanoptesResource('workflow', {
   }
 });
 
+const subject = mockPanoptesResource('subject', {
+  locations: [
+    { 'text/plain': 'a fake URL'}
+  ]
+});
+
 let wrapper;
 before(function () {
   wrapper = shallow(<Classifier />, mockReduxStore);
@@ -79,14 +85,9 @@ describe('Classifier', function () {
     });
 
     describe('with an incomplete classification', function () {
-      let loadSubject;
       before(function () {
-        loadSubject = sinon.stub(Classifier.prototype, 'loadSubject').callsFake(() => null);
-        wrapper = shallow(<Classifier classification={classification} />, mockReduxStore);
+        wrapper = shallow(<Classifier classification={classification} subject={subject} />, mockReduxStore);
         wrapper.instance().componentDidMount();
-      });
-      after(function () {
-        loadSubject.restore();
       });
       it('should preserve annotations from an incomplete classification', function () {
         const state = wrapper.state();
@@ -100,16 +101,11 @@ describe('Classifier', function () {
   });
 
   describe('on receiving a new classification', function () {
-    let loadSubject;
     before(function () {
-      loadSubject = sinon.stub(Classifier.prototype, 'loadSubject').callsFake(() => null);
       wrapper = shallow(<Classifier />, mockReduxStore);
     });
-    after(function () {
-      loadSubject.restore();
-    });
     it('should preserve annotations from an incomplete classification', function () {
-      const newProps = { classification };
+      const newProps = { classification, subject };
       wrapper.setProps(newProps);
       const state = wrapper.state();
       expect(state.annotations).to.deep.equal(classification.annotations);
@@ -129,7 +125,6 @@ describe('Classifier', function () {
   });
 
   describe('on receiving a new subject', function () {
-    let loadSubject;
     before(function () {
       wrapper = shallow(<Classifier />, mockReduxStore);
     });
@@ -145,12 +140,7 @@ describe('Classifier', function () {
       expect(state.workflowHistory).to.have.lengthOf(0);
     });
     it('should preserve any existing annotations', function () {
-      const newProps = {
-        classification: classification,
-        subject: {
-          locations: []
-        }
-      };
+      const newProps = { classification, subject };
       wrapper.setProps(newProps);
       const state = wrapper.state();
       expect(state.annotations).to.deep.equal(classification.annotations);
@@ -161,13 +151,12 @@ describe('Classifier', function () {
   describe('on completing a classification', function () {
     let checkForFeedback;
     let fakeEvent;
-    let loadSubject;
     beforeEach(function () {
-      loadSubject = sinon.stub(Classifier.prototype, 'loadSubject').callsFake(() => null);
       checkForFeedback = sinon.stub(Classifier.prototype, 'checkForFeedback').callsFake(() => Promise.resolve());
       wrapper = shallow(
         <Classifier
           classification={classification}
+          subject={subject}
           onComplete={classification.save}
           onCompleteAndLoadAnotherSubject={classification.save}
         />,
@@ -181,7 +170,6 @@ describe('Classifier', function () {
     });
     afterEach(function () {
       checkForFeedback.restore();
-      loadSubject.restore();
     });
 
     describe('with summaries enabled', function () {
@@ -219,12 +207,10 @@ describe('Classifier', function () {
   describe('with feedback enabled', function () {
     let feedbackInitSpy;
     let feedbackUpdateSpy;
-    let loadSubject;
 
     before(function () {
       feedbackInitSpy = sinon.spy();
       feedbackUpdateSpy = sinon.spy();
-      loadSubject = sinon.stub(Classifier.prototype, 'loadSubject').callsFake(() => null);
     });
 
     beforeEach(function () {
@@ -240,6 +226,7 @@ describe('Classifier', function () {
       wrapper = shallow(
         <Classifier
           classification={classification}
+          subject={subject}
           feedback={feedback}
           actions={actions}
         />
