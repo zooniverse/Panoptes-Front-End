@@ -82,6 +82,7 @@ class ProjectNavbarContainer extends Component {
         backgroundSrc={backgroundSrc}
         launched={launched}
         navLinks={navLinks}
+        project={this.props.project}
         projectTitle={projectTitle}
         projectLink={projectLink}
         redirect={redirect}

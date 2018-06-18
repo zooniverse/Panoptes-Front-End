@@ -13,15 +13,25 @@ export const StyledHeaderWide = StyledHeader.extend`
   box-shadow: 0 ${pxToRem(2)} ${pxToRem(4)} 0 rgba(0,0,0,0.5);
 `;
 
+export const StyledOuterWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  height: 20vh;
+  max-height: ${pxToRem(150)};
+  min-height: ${pxToRem(120)};
+  margin: 0 3vw;
+  z-index: 2;
+`;
+
 export const StyledAvatar = styled(Avatar)`
   margin-right: ${pxToRem(20)};
 `;
 
 export const StyledWrapper = styled(Wrapper)`
   box-sizing: border-box;
-  height: 20vh;
-  max-height: ${pxToRem(150)};
-  min-height: ${pxToRem(120)};
+  margin: 0;
   padding: 0 ${pxToRem(10)};
 `;
 
@@ -60,6 +70,7 @@ function ProjectNavbarWide(props) {
   const {
     avatarSrc,
     backgroundSrc,
+    children,
     launched,
     navLinks,
     projectTitle,
@@ -72,28 +83,31 @@ function ProjectNavbarWide(props) {
   return (
     <StyledHeaderWide {...otherProps}>
       <Background src={backgroundSrc} />
-      <StyledWrapper>
-        <StyledAvatar
-          src={avatarSrc}
-          projectTitle={projectTitle}
-          size={80}
-        />
-        <ProjectTitle
-          launched={launched}
-          link={projectLink}
-          redirect={redirect}
-          title={projectTitle}
-          underReview={underReview}
-        />
-        <Nav>
-          <List>
-            {navLinks.map(link => (
-              <ListItem key={link.url || link.to}>
-                <StyledNavLink {...link} />
-              </ListItem>))}
-          </List>
-        </Nav>
-      </StyledWrapper>
+      <StyledOuterWrapper>
+          {children}
+        <StyledWrapper>
+          <StyledAvatar
+            src={avatarSrc}
+            projectTitle={projectTitle}
+            size={80}
+          />
+          <ProjectTitle
+            launched={launched}
+            link={projectLink}
+            redirect={redirect}
+            title={projectTitle}
+            underReview={underReview}
+          />
+          <Nav>
+            <List>
+              {navLinks.map(link => (
+                <ListItem key={link.url || link.to}>
+                  <StyledNavLink {...link} />
+                </ListItem>))}
+            </List>
+          </Nav>
+        </StyledWrapper>
+      </StyledOuterWrapper>
     </StyledHeaderWide>
   );
 }
@@ -101,6 +115,7 @@ function ProjectNavbarWide(props) {
 ProjectNavbarWide.propTypes = {
   avatarSrc: PropTypes.string,
   backgroundSrc: PropTypes.string,
+  children: PropTypes.node,
   launched: PropTypes.bool,
   navLinks: PropTypes.arrayOf(PropTypes.shape({
     url: PropTypes.string

@@ -75,6 +75,12 @@ ClassifierWrapper = createReactClass
       @setState {minicourse}
       this.props.actions.translations.load('minicourse', minicourse.id, this.props.translations.locale) if minicourse?
 
+  componentDidUpdate: (prevProps) ->
+    { tutorial, minicourse } = @state
+    if prevProps.translations.locale isnt this.props.translations.locale
+      this.props.actions.translations.load('tutorial', tutorial.id, this.props.translations.locale) if tutorial?
+      this.props.actions.translations.load('minicourse', minicourse.id, this.props.translations.locale) if minicourse?
+
   componentWillReceiveProps: (nextProps) ->
     if nextProps.workflow isnt @props.workflow
       Tutorial.find nextProps.workflow

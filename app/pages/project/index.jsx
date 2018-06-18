@@ -74,6 +74,18 @@ class ProjectPageController extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const { actions, translations } = this.props;
+    const { project, guide, pages } = this.state;
+    const { locale } = translations;
+    if (project && (locale !== prevProps.translations.locale)) {
+      actions.translations.load('project', project.id, locale);
+      actions.translations.loadTranslations('project_page', pages.map(page => page.id), locale);
+      if (guide) {
+        actions.translations.load('field_guide', guide.id, locale);
+      }
+    }
+  }
   componentWillUnmount() {
     Split.clear();
   }
@@ -410,6 +422,12 @@ ProjectPageController.propTypes = {
 };
 
 ProjectPageController.defaultProps = {
+  actions: {
+    translations: {
+      load: () => null,
+      loadTranslations: () => null
+    }
+  },
   location: {
     query: {}
   },

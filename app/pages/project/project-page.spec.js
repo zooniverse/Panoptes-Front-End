@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
@@ -8,6 +9,12 @@ import { project } from '../dev-classifier/mock-data';
 import ProjectPage from './project-page';
 import ProjectNavbar from './components/ProjectNavbar';
 import ProjectHomeContainer from './home/';
+
+const store = {
+  subscribe: () => { },
+  dispatch: () => { },
+  getState: () => ({ userInterface: { theme: 'light' } })
+};
 
 function Page() {
   return (
@@ -118,7 +125,10 @@ describe('ProjectPage', function () {
           <ProjectPage project={project}>
             <Page />
           </ProjectPage>,
-          { context: { geordi }}
+          { 
+            context: { geordi, store },
+            childContextTypes: { store: PropTypes.object.isRequired }
+          }
         );
       });
 

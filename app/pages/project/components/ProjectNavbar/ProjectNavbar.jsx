@@ -1,8 +1,14 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import LanguagePicker from '../LanguagePicker';
 import ProjectNavbarNarrow from './components/ProjectNavbarNarrow';
 import ProjectNavbarWide, { SizeAwareProjectNavbarWide } from './components/ProjectNavbarWide';
+
+export const SettingsMenu = styled.div`
+  text-align: right;
+`;
 
 function haveNavLinksChanged(oldProps, newProps) {
   const oldLinks = oldProps.navLinks.map(link => link.label);
@@ -46,7 +52,14 @@ class ProjectNavbar extends Component {
     return (
       <React.Fragment>
         {!this.state.loading &&
-          <NavBarComponent {...this.props} />}
+          <NavBarComponent {...this.props}>
+            <SettingsMenu>
+              <LanguagePicker
+                project={this.props.project}
+              />
+            </SettingsMenu>
+          </NavBarComponent>
+        }
         <SizeAwareProjectNavbarWide
           {...this.props}
           onSize={this.setBreakpoint}
