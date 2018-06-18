@@ -257,5 +257,24 @@ describe('Classifier', function () {
       wrapper.instance().onNextTask(newAnnotation.task);
       expect(feedbackUpdateSpy.calledWith(prevAnnotation)).to.equal(true);
     });
+
+    it('should update feedback for the last annotation when a classification is completed', function (done) {
+      const newAnnotation = {task: 'T3', value: 'new task'};
+      const fakeEvent = {
+        currentTarget: {},
+        preventDefault: () => null
+      }
+      const annotations = classification.annotations.slice();
+      annotations.push(newAnnotation);
+      const workflowHistory = wrapper.state().workflowHistory;
+      workflowHistory.push(newAnnotation.task);
+      wrapper.setState({ annotations, workflowHistory });
+      wrapper.instance().completeClassification(fakeEvent)
+      .then(function () {
+        expect(feedbackUpdateSpy.calledWith(newAnnotation)).to.equal(true);
+      })
+      .then(done, done);
+      
+    });
   });
 });
