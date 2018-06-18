@@ -1,6 +1,6 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
-{Link} = require 'react-router'
+{browserHistory, Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 ModalFormDialog = require 'modal-form/dialog'
 { Helmet } = require 'react-helmet'
@@ -225,7 +225,7 @@ module.exports = createReactClass
     queryUpdate[which] = page
     newQuery = Object.assign {}, @props.location.query, queryUpdate
     newLocation = Object.assign {}, @props.location, query: newQuery
-    @props.history.replace newLocation
+    browserHistory.push newLocation
 
   showProjectCreator: ->
     @setState creationInProgress: true
@@ -236,7 +236,7 @@ module.exports = createReactClass
   handleProjectCreation: (project) ->
     @hideProjectCreator()
     newLocation = Object.assign {}, @props.location, pathname: "/lab/#{project.id}"
-    @props.history.push newLocation
+    browserHistory.push newLocation
 
   render: ->
     if @props.user?
