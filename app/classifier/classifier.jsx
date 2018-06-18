@@ -119,6 +119,8 @@ class Classifier extends React.Component {
   }
 
   checkForFeedback(taskId) {
+    this.updateFeedback(taskId)
+
     const { feedback } = this.props;
     const taskFeedback = (feedback.rules && feedback.rules[taskId]) ? feedback.rules[taskId] : [];
 
@@ -145,37 +147,18 @@ class Classifier extends React.Component {
   }
 
   updateAnnotations(annotations) {
-    this.setState({ annotations }, this.updateFeedback);
+    this.setState({ annotations });
   }
 
-  updateFeedback() {
+  updateFeedback(taskId) {
     if (!this.props.feedback.active) {
       return false;
     }
-    // Check to see if we're still drawing, and update feedback if not. We need
-    // to check the entire annotation array, as the user may be editing an
-    // existing annotation.
-    let isInProgress = false;
-    const { annotations, workflowHistory } = this.state;
-    const { workflow } = this.props;
-    const currentTaskKey = workflowHistory[workflowHistory.length - 1];
-    const index = findLastIndex(annotations, annotation => annotation.task === currentTaskKey);
+
+    const { annotations } = this.state;
+    const index = findLastIndex(annotations, annotation => annotation.task === taskId);
     const currentAnnotation = index > -1 ? annotations[index] : {};
-    const currentTask = workflow.tasks[currentTaskKey] || null;
-
-    if (currentTask && currentTask.type === 'drawing') {
-      isInProgress = annotations.reduce((result, annotation) => {
-        if (annotation.value.map) {
-          return annotation.value.map(value => value._inProgress).includes(true);
-        } else {
-          return result;
-        }
-      }, false);
-    }
-
-    if (!isInProgress) {
-      this.props.actions.feedback.update(currentAnnotation);
-    }
+    this.props.actions.feedback.update(currentAnnotation);
   }
 
   loadSubject(subject) {
@@ -200,7 +183,6 @@ class Classifier extends React.Component {
       if (this.props.subject === subject) { // The subject could have changed while we were loading.
         this.setState({ subjectLoading: false });
         this.props.onLoad();
-        this.updateFeedback();
       }
     });
   }
