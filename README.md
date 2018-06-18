@@ -18,7 +18,7 @@ All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
 While editing, do your best to follow style and architecture conventions already used by the project, unless you have a reason not to. **If in doubt, ask.**
 
-## Development with Docker
+## Development with Docker
 
 To avoid having to install Node.js or any other dependencies, you can also run
 everything with Docker and Docker Compose.
