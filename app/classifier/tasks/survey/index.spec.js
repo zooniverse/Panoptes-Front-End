@@ -45,7 +45,7 @@ describe('Survey Task', function () {
     });
 
     it('should render a valid annotation as a selected choice', function () {
-      const selectedChoice = wrapper.find('[data-choiceID="ar"]');
+      const selectedChoice = wrapper.find('[data-choiceid="ar"]');
       assert.equal(selectedChoice.prop('className'), 'survey-task-chooser-choice-button survey-task-chooser-choice-button-chosen');
     });
 
