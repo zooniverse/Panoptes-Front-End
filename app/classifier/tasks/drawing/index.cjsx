@@ -1,7 +1,7 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 GenericTaskEditor = require '../generic-editor'
-Summary = require './summary'
+Summary = require('./summary').default
 MarkingInitializer = require './marking-initializer'
 MarkingsRenderer = require './markings-renderer'
 HidePreviousMarksToggle = require('./hide-previous-marks-toggle').default
