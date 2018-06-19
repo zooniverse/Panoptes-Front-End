@@ -40,6 +40,9 @@ ClassifierWrapper = createReactClass
     onComplete: PropTypes.func
     onCompleteAndLoadAnotherSubject: PropTypes.func
     onClickNext: PropTypes.func
+    translations: PropTypes.shape({
+        locale: PropTypes.string
+      })
     workflow: PropTypes.object
     user: PropTypes.object
 
@@ -49,6 +52,9 @@ ClassifierWrapper = createReactClass
     onComplete: Function.prototype
     onCompleteAndLoadAnotherSubject: Function.prototype
     onClickNext: Function.prototype
+    translations: {
+      locale: 'en'
+    }
     workflow: null
     user: null
 
