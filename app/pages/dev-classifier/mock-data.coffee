@@ -154,7 +154,7 @@ workflow = apiClient.type('workflows').create
         {type: 'rotateRectangle', label: 'Rotate Rectangle', color: 'red'}
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
         {type: 'circle', label: 'Circle', color: 'blue', details: DRAWING_DETAILS_REQUIRED}
-        {type: 'ellipse', label: 'Ellipse'.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
+        {type: 'ellipse', label: 'Ellipse '.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
         {type: 'anchoredEllipse', label: 'Anchored Ellipse', color: 'darkmagenta'}
         {type: 'triangle', label: 'Triangle', color: 'salmon'}
         {type: 'bezier', label: 'Bezier', color: 'orange', details: MISC_DRAWING_DETAILS}
