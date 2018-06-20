@@ -58,6 +58,7 @@ const workflow = mockPanoptesResource('workflow', {
 });
 
 const subject = mockPanoptesResource('subject', {
+  id: 'a',
   locations: [
     { 'text/plain': 'a fake URL'}
   ]
@@ -207,10 +208,12 @@ describe('Classifier', function () {
   describe('with feedback enabled', function () {
     let feedbackInitSpy;
     let feedbackUpdateSpy;
+    let feedbackCheckSpy;
 
     before(function () {
       feedbackInitSpy = sinon.spy();
       feedbackUpdateSpy = sinon.spy();
+      feedbackCheckSpy = sinon.spy(Classifier.prototype, 'checkForFeedback');
     });
 
     beforeEach(function () {
@@ -236,45 +239,97 @@ describe('Classifier', function () {
 
     afterEach(function () {
       feedbackUpdateSpy.resetHistory();
+      feedbackCheckSpy.resetHistory();
     });
 
-    it('should update feedback when an annotation is created', function () {
-      const newAnnotation = {task: 'T3', value: 'new task'};
-      const annotations = classification.annotations.slice();
-      annotations.push(newAnnotation);
-      wrapper.instance().updateAnnotations(annotations);
-      wrapper.instance().onNextTask(newAnnotation.task);
-      expect(feedbackUpdateSpy.callCount).to.equal(1);
+    after(function () {
+      feedbackCheckSpy.restore();
+    })
+    
+    describe('when the task changes', function () {
+
+      beforeEach(function () {
+        const newAnnotation = {task: 'T3', value: 'new task'};
+        const annotations = classification.annotations.slice();
+        annotations.push(newAnnotation);
+        wrapper.instance().updateAnnotations(annotations);
+        wrapper.instance().onNextTask(newAnnotation.task);
+      });
+
+      it('should check for feedback', function () {
+        expect(feedbackCheckSpy.callCount).to.equal(1);
+      });
+
+      it('should update feedback', function () {
+        expect(feedbackUpdateSpy.callCount).to.equal(1);
+      });
+
+      it('should update feedback for the previous annotation', function () {
+        const prevAnnotation = classification.annotations[1];
+        expect(feedbackUpdateSpy.calledWith(prevAnnotation)).to.equal(true);
+      });
+    });
+    
+    describe('when a classification is complete', function () {
+      let newAnnotation;
+
+      beforeEach(function () {
+        newAnnotation = {task: 'T3', value: 'new task'};
+        const annotations = classification.annotations.slice();
+        annotations.push(newAnnotation);
+        const workflowHistory = wrapper.state().workflowHistory;
+        workflowHistory.push(newAnnotation.task);
+        wrapper.setState({ annotations, workflowHistory });
+      });
+
+      it('should check for feedback', function (done) {
+        const fakeEvent = {
+          currentTarget: {},
+          preventDefault: () => null
+        }
+        wrapper.instance().completeClassification(fakeEvent)
+        .then(function () {
+          expect(feedbackCheckSpy.callCount).to.equal(1);
+        })
+        .then(done, done);
       
-    });
+      });
 
-    it('should update feedback for the previous annotation when an annotation is created', function () {
-      const newAnnotation = {task: 'T3', value: 'new task'};
-      const annotations = classification.annotations.slice();
-      const prevAnnotation = annotations[annotations.length - 1];
-      annotations.push(newAnnotation);
-      wrapper.instance().updateAnnotations(annotations);
-      wrapper.instance().onNextTask(newAnnotation.task);
-      expect(feedbackUpdateSpy.calledWith(prevAnnotation)).to.equal(true);
-    });
+      it('should update feedback for the last annotation', function (done) {
+        const fakeEvent = {
+          currentTarget: {},
+          preventDefault: () => null
+        }
+        wrapper.instance().completeClassification(fakeEvent)
+        .then(function () {
+          expect(feedbackUpdateSpy.calledWith(newAnnotation)).to.equal(true);
+        })
+        .then(done, done);
+      
+      });
+    })
 
-    it('should update feedback for the last annotation when a classification is completed', function (done) {
-      const newAnnotation = {task: 'T3', value: 'new task'};
-      const fakeEvent = {
-        currentTarget: {},
-        preventDefault: () => null
-      }
-      const annotations = classification.annotations.slice();
-      annotations.push(newAnnotation);
-      const workflowHistory = wrapper.state().workflowHistory;
-      workflowHistory.push(newAnnotation.task);
-      wrapper.setState({ annotations, workflowHistory });
-      wrapper.instance().completeClassification(fakeEvent)
-      .then(function () {
-        expect(feedbackUpdateSpy.calledWith(newAnnotation)).to.equal(true);
+    describe('when the first task loads', function () {
+      beforeEach(function () {
+        const newProps = {
+          subject: Object.assign({}, subject, { id: 'b' }),
+          classification: mockPanoptesResource('classifications', { annotations: [] })
+        }
+        wrapper.setProps(newProps);
+        const newAnnotation = {task: 'T0', value: 'default value'};
+        const annotations = classification.annotations.slice();
+        annotations.push(newAnnotation);
+        wrapper.instance().updateAnnotations(annotations);
+        wrapper.instance().onNextTask(newAnnotation.task);
+      });
+
+      it('should not check for feedback', function () {
+        expect(feedbackCheckSpy.callCount).to.equal(0);
+      });
+
+      it('should not update feedback', function () {
+        expect(feedbackUpdateSpy.callCount).to.equal(0);
       })
-      .then(done, done);
-      
     });
   });
 });
