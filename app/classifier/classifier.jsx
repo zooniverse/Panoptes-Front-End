@@ -208,8 +208,12 @@ class Classifier extends React.Component {
     const workflowHistory  = this.state.workflowHistory.slice();
     const prevTaskKey = workflowHistory[workflowHistory.length - 1];
     workflowHistory.push(taskKey);
-    this.checkForFeedback(prevTaskKey)
-      .then(() => this.setState({ workflowHistory }));
+    if (prevTaskKey) {
+      this.checkForFeedback(prevTaskKey)
+        .then(() => this.setState({ workflowHistory }));
+    } else {
+      this.setState({ workflowHistory });
+    }
   }
 
   onPrevTask() {
