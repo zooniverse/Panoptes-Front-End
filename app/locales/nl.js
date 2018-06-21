@@ -95,9 +95,9 @@ export default {
         subjects: 'Onderwerpen'
       },
       talk: {
-        zero: 'Niemand praat over <strong>%(title)s</strong> op dit moment.',
-        one: '<strong>1</strong> persoon praat over <strong>%(title)s</strong> op dit moment.',
-        other: '<strong>%(count)s</strong> mensen praten over <strong>%(title)s</strong> op dit moment.'
+        zero: 'Niemand praat over **%(title)s** op dit moment.',
+        one: '**1** persoon praat over **%(title)s** op dit moment.',
+        other: '**%(count)s** mensen praten over **%(title)s** op dit moment.'
       },
       joinIn: 'Doe mee',
       learnMore: 'Learn more',
