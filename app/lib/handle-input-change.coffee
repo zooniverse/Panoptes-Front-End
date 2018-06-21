@@ -1,3 +1,7 @@
+createDOMPurify = require('dompurify');
+
+DOMPurify = createDOMPurify(window);
+
 module.exports = (e) ->
   # Using this module is a little odd.
   # Ensure that it's called in the context of a JSON-API Model instance.
@@ -15,5 +19,6 @@ module.exports = (e) ->
     value = JSON.parse value
 
   changes = {}
-  changes[e.target.name] = value
+  sanitizedValue = DOMPurify.sanitize(value)
+  changes[e.target.name] = sanitizedValue
   @update changes

@@ -2,6 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import AutoSave from '../components/auto-save';
 import handleInputChange from '../lib/handle-input-change';
+import createDOMPurify from 'dompurify';
+
+const DOMPurify = createDOMPurify(window);
 
 class DisplayNameSlugEditor extends Component {
   constructor(props) {
@@ -35,7 +38,8 @@ class DisplayNameSlugEditor extends Component {
   }
 
   undoNameChange(resource, currentName) {
-    resource.update({ display_name: currentName });
+    const cleanDisplayNameValue = DOMPurify.sanitize(currentName);
+    resource.update({ display_name: cleanDisplayNameValue });
     resource.save();
   }
 
@@ -47,8 +51,9 @@ class DisplayNameSlugEditor extends Component {
   render() {
     const {state, undoNameChange} = this;
     const {resource, resourceType} = this.props;
+
     return (
-      <p>
+      <div>
         <AutoSave resource={resource}>
           <span className="form-label">Name</span>
           <br />
@@ -88,7 +93,7 @@ class DisplayNameSlugEditor extends Component {
             </small>
           : null
         }
-      </p>
+      </div>
     );
   }
 
