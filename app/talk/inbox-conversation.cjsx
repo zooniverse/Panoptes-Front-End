@@ -9,6 +9,8 @@ HandlePropChanges = require '../lib/handle-prop-changes'
 CommentBox = require './comment-box'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
+{ Helmet } = require 'react-helmet'
+counterpart = require 'counterpart'
 
 
 Message = createReactClass
@@ -97,6 +99,7 @@ module.exports = createReactClass
   render: ->
     if @props.user
       <div className="talk inbox-conversation content-container">
+        <Helmet title="#{@state.conversation?.title} » #{counterpart 'messagesPage.title'}" />
         <Link to="/inbox">Back to Inbox</Link>
         <h1>{@state.conversation?.title}</h1>
         {if @state.recipients.length
