@@ -21,7 +21,7 @@
     "mocha": "~5.2.0",
     "modal-form": "~2.6.0",
     "moment": "~2.21.0",
-    "panoptes-client": "github:zooniverse/panoptes-javascript-client#audit",
+    "panoptes-client": "~2.10.0",
     "papaparse": "github:mholt/PapaParse#cada171",
     "polished": "~1.9.2",
     "prop-types": "~15.6.0",
