@@ -23,6 +23,12 @@ export const checkboxTypeAnnotation = {
   value: []
 };
 
+export const textTypeAnnotation = {
+  _key: 1,
+  task: 'T0',
+  value: ''
+};
+
 export const radioTypeTask = {
   question: 'Is there something here?',
   answers: [
@@ -40,4 +46,10 @@ export const checkboxTypeTask = {
     { label: 'Maybe', value: 'maybe' }
   ],
   required: 3
+};
+
+export const textTypeTask = {
+  instruction: 'Enter some text.',
+  required: true,
+  text_tags: ['deletion', 'insertion', 'unclear']
 };

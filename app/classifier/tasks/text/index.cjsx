@@ -53,7 +53,7 @@ module.exports = createReactClass
     task:
       instruction: ''
     annotation:
-      value: null
+      value: ''
     onChange: NOOP
 
   getInitialState: ->

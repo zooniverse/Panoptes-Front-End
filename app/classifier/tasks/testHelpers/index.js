@@ -4,6 +4,8 @@ import {
   mockReduxStore,
   radioTypeAnnotation,
   radioTypeTask,
+  textTypeAnnotation,
+  textTypeTask,
   store
 } from './mockObjects';
 
@@ -13,5 +15,7 @@ export {
   mockReduxStore,
   radioTypeAnnotation,
   radioTypeTask,
+  textTypeAnnotation,
+  textTypeTask,
   store
 };
