@@ -52,7 +52,7 @@ module.exports = {
   module: {
     rules: [{
       test: /\.jsx?$/,
-      exclude: /node_modules\/(?!(markdown-it-anchor)\/).*/,
+      exclude: /node_modules\/(?!(markdown-it-anchor)\/).*/, // markdown-it-anchor is written in ES6 and isn't properly compiled
       use: 'babel-loader',
     }, {
       test: /\.cjsx$/,
