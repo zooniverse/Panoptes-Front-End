@@ -6,11 +6,11 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import TextTask from './';
 import TextSummary from './summary';
-import { mockReduxStore, textTypeAnnotation, textTypeTask } from '../testHelpers';
+import { textTypeAnnotation, textTypeTask } from '../testHelpers';
 
 const annotation = Object.assign({}, textTypeAnnotation, { value: 'testing the text task' });
 
-describe('TextTask', function () {
+describe.only('TextTask', function () {
   describe('when it renders', function () {
     let wrapper;
 
@@ -19,7 +19,7 @@ describe('TextTask', function () {
         task={textTypeTask}
         annotation={annotation}
         translation={textTypeTask}
-      />, mockReduxStore);
+      />);
     });
 
     it('should render without crashing', function () {
@@ -32,23 +32,21 @@ describe('TextTask', function () {
     });
 
     it('should have an answer', function () {
-      const answer = wrapper.find('input').text();
+      const answer = wrapper.find('textarea').text();
       expect(answer).to.equal(annotation.value);
     });
 
-    it.skip('should have appropriate input height', function () {});
+    it.skip('should have appropriate input height with multiline answer', function () {});
   });
 
   describe('input onChange event handler', function () {
     let handleChangeSpy;
-    let updateHeightSpy;
     let onChangeSpy;
     let setStateSpy;
     let wrapper;
 
     before(function () {
       handleChangeSpy = sinon.spy(TextTask.prototype, 'handleChange');
-      updateHeightSpy = sinon.spy(TextTask.prototype, 'updateHeight');
       onChangeSpy = sinon.spy();
       setStateSpy = sinon.spy(TextTask.prototype, 'setState');
     });
@@ -59,21 +57,17 @@ describe('TextTask', function () {
           onChange={onChangeSpy}
           task={textTypeTask}
           translation={textTypeTask}
-        />,
-        mockReduxStore
-      );
+        />);
     });
 
     afterEach(function () {
       handleChangeSpy.resetHistory();
-      updateHeightSpy.resetHistory();
       onChangeSpy.resetHistory();
       setStateSpy.resetHistory();
     });
 
     after(function () {
       handleChangeSpy.restore();
-      updateHeightSpy.restore();
       setStateSpy.restore();
     });
 
@@ -82,18 +76,16 @@ describe('TextTask', function () {
       expect(wrapper.state('value')).to.equal('[deletion][/deletion]');
     });
 
-    it.skip('should wrap text with tags when text highlighted and tag clicked', function () {});
+    // it('should wrap text with tags when text highlighted and tag clicked', function () {});
 
-    it('should call updateHeight', function () {
-      wrapper.find('input').first().simulate('change');
-      wrapper.update();
-      expect(updateHeightSpy.calledOnce).to.be.true;
+    it('should call handleChange when the onChange event fires', function () {
+      wrapper.find('textarea').first().simulate('change', { target: { value: 'text change' }});
+      expect(handleChangeSpy.calledOnce).to.be.true;
     });
 
-    it('should call props.onChange when the onChange event fires', function () {
-      wrapper.find('input').first().simulate('change', { target: { value: '*** change! ***' }});
-      expect(onChangeSpy.calledOnce).to.be.true;
-    });
+    it.skip('should increase textarea size when appropriate', function () {});
+
+    it.skip('should decrease textarea size when appropriate', function () {});
   });
 
   describe('static methods', function () {
