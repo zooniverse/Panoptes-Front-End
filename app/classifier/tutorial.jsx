@@ -192,10 +192,10 @@ export default class Tutorial extends React.Component {
     if (this.props.user) {
       const { projectPreferences } = this.props;
       // Build this manually. Having an index (even as a strings) keys creates an array.
-      if (projectPreferences.preferences === null) {
+      if (!projectPreferences.preferences) {
         projectPreferences.preferences = {};
       }
-      if (projectPreferences.preferences.tutorials_completed_at === null) {
+      if (!projectPreferences.preferences.tutorials_completed_at) {
         projectPreferences.preferences.tutorials_completed_at = {};
       }
       projectPreferences.update({ [`preferences.tutorials_completed_at.${this.props.tutorial.id}`]: now });
