@@ -198,10 +198,22 @@ export default class Tutorial extends React.Component {
       if (!projectPreferences.preferences.tutorials_completed_at) {
         projectPreferences.preferences.tutorials_completed_at = {};
       }
-      projectPreferences.update({ [`preferences.tutorials_completed_at.${this.props.tutorial.id}`]: now });
-      projectPreferences.save();
-
-      this.logToGeordi(now)
+      let { tutorials_completed_at } = projectPreferences.preferences;
+      if (Array.isArray(tutorials_completed_at)) {
+        const new_completed_at = tutorials_completed_at.reduce((accumulator, currentValue, index) => {
+          if (currentValue) {
+            const tutorial_id = index.toString();
+            accumulator[tutorial_id] = currentValue;
+          }
+          return accumulator;
+        }, {});
+        tutorials_completed_at = new_completed_at;
+      }
+      tutorials_completed_at[this.props.tutorial.id] = now;
+      projectPreferences
+        .update({'preferences.tutorials_completed_at': tutorials_completed_at})
+        .save();
+      this.logToGeordi(now);
     }
   }
 
