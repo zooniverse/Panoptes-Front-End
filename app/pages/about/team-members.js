@@ -97,7 +97,7 @@ export const teamMembers = {
   darrylWright: {
     name: "Darryl Wright",
     image: "/assets/team/team-member-avatar.jpg",
-    location: "oxford"  
+    location: "minnesota"  
   },
   grantMiller: {
     name: "Grant Robert MacKinnon Miller",
@@ -135,7 +135,7 @@ export const teamMembers = {
   jamesArtz: {
     name: "James Artz",
     image: "/assets/team/james.jpg",
-    location: "chicago"
+    location: "alumni"
   },
   jenGupta: {
     name: "Jen Gupta",
@@ -158,7 +158,7 @@ export const teamMembers = {
   julieFeldt: {
     name: "Julie Feldt",
     image: "/assets/team/julie.png",
-    location: "chicago"  
+    location: "alumni"  
   },
   karenMasters: {
     name: "Karen Masters",
@@ -199,7 +199,7 @@ export const teamMembers = {
     name: "Mariam Saeedi",
     twitter: "tweetsmariam",
     image: "/assets/team/mariam_s.jpg",
-    location: "oxford" 
+    location: "alumni" 
   },
   markBouslog: {
     name: "Mark Bouslog",
