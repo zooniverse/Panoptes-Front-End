@@ -36,24 +36,17 @@ export default class TeamPage extends React.Component {
     return counts;
   }
 
-  renderNavItem(key, title, count) {
-    return (
-      <button key={key} 
-              ref={key} 
-              style={this.state.currentSort === key ? { fontWeight: 700 } : null } 
-              onClick={() => this.showPeopleList(key)}
-              className={"secret-button side-bar-button " + "nav-" + key}>
-              <span>{title} ({count})</span>
-      </button>
-    );
-  }
-
   renderSideBarNav(sideBarNav) {
     const counts = this.getCounts();
     return (
-      <nav ref="sideBarNav">
+      <nav>
         { Object.keys(sideBarNav).map((navItem) => {
-            return this.renderNavItem(navItem, sideBarNav[navItem], counts[navItem])
+            return (<button key={navItem}
+                      style={this.state.currentSort === navItem ? { fontWeight: 700 } : null }
+                      onClick={() => this.showPeopleList(navItem)}
+                      className={`secret-button side-bar-button nav-${navItem}`}>
+                      <span>{sideBarNav[navItem]} ({counts[navItem]})</span>
+                    </button>);
           })
         }
       </nav>
