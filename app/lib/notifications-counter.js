@@ -7,11 +7,11 @@ class NotificationsCounter {
   }
 
   update(user, owner, name) {
-    if(!user) {
+    if (!user) {
       return Promise.resolve(0);
     }
 
-    if(this.loading) {
+    if (this.loading) {
       return;
     }
 
@@ -27,10 +27,10 @@ class NotificationsCounter {
   }
 
   setSection() {
-    if(this.owner && this.name) {
+    if (this.owner && this.name) {
       const slug = `${this.owner}/${this.name}`;
 
-      if(this.slug !== slug) {
+      if (this.slug !== slug) {
         this.slug = slug;
         return this.getProject(slug).then((projects) => {
           return this.section = `project-${projects[0].id}`;
@@ -45,14 +45,14 @@ class NotificationsCounter {
   }
 
   getProject(slug) {
-    return apiClient.type('projects').get({slug});
+    return apiClient.type('projects').get({ slug });
   }
 
   getNotifications() {
     return talkClient.type('notifications').get({
       delivered: false,
       page_size: 1,
-      section: this.section
+      section
     });
   }
 
@@ -60,14 +60,14 @@ class NotificationsCounter {
     return this.getNotifications().then((notifications) => {
       try {
         this.setUnread(notifications[0].getMeta().count);
-      } catch(e) {
+      } catch (e) {
         this.setUnread(0);
       }
     });
   }
 
   setUnread(count) {
-    if(this.unreadCount !== count) {
+    if (this.unreadCount !== count) {
       this.unreadCount = count;
       this.callbacks.map((callback) => {
         callback(count);
