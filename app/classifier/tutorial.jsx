@@ -14,6 +14,19 @@ import Translations from './translations';
 const completedThisSession = {};
 if (window) window.tutorialsCompletedThisSession = completedThisSession;
 
+function generateObject(accumulator, currentValue, index) {
+  if (currentValue) {
+    const key = index.toString();
+    accumulator[key] = currentValue;
+  }
+  return accumulator;
+}
+
+function arrayToObject(array) {
+  // Reduce a sparse array to a object.
+  return array.reduce(generateObject, {});
+}
+
 export default class Tutorial extends React.Component {
   constructor(props) {
     super(props);
@@ -199,15 +212,15 @@ export default class Tutorial extends React.Component {
         projectPreferences.preferences.tutorials_completed_at = {};
       }
       let { tutorials_completed_at } = projectPreferences.preferences;
+/*
+      PR #4680 introduced a subtle bug where the API incorrectly created  new values of
+      tutorials_completed_at as sparse arrays (see https://github.com/zooniverse/Panoptes-Front-End/issues/4721).
+      Here we convert tutorials_completed_at to an object, if it is an array.
+      We also explicitly pass the whole tutorials_completed_at object back to the API, so that the API client doesn't 
+      try to infer the variable type from the update key.
+*/
       if (Array.isArray(tutorials_completed_at)) {
-        const new_completed_at = tutorials_completed_at.reduce((accumulator, currentValue, index) => {
-          if (currentValue) {
-            const tutorial_id = index.toString();
-            accumulator[tutorial_id] = currentValue;
-          }
-          return accumulator;
-        }, {});
-        tutorials_completed_at = new_completed_at;
+        tutorials_completed_at = arrayToObject(tutorials_completed_at);
       }
       tutorials_completed_at[this.props.tutorial.id] = now;
       projectPreferences
