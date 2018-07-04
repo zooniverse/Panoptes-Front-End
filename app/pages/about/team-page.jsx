@@ -69,7 +69,7 @@ export default class TeamPage extends React.Component {
       <div key={member} className="team-member">
         <img src={teamMembers[member].image} alt={teamMembers[member].name} />
         <div className="team-member-details">
-          <h3>{teamMembers[member].name}, {counterpart(`about.team.content.${member}.title`)} {teamMembers[member].twitter ? <a href={"http://twitter.com/" + teamMembers[member].twitter} target="_blank"><i className="fa fa-twitter"></i></a> : null }</h3>
+          <h3>{teamMembers[member].name}, {counterpart(`about.team.content.${member}.title`)} {teamMembers[member].twitter ? <a rel="noopener noreferrer" href={`http://twitter.com/${teamMembers[member].twitter}`} target="_blank"><i className="fa fa-twitter"></i></a> : null }</h3>
           <p>{counterpart(`about.team.content.${member}.bio`)}</p>
         </div>
       </div>  
