@@ -17,18 +17,18 @@ export default class TeamPage extends React.Component {
   }
 
   getCounts() {
-    var counts = {};
-    Object.keys(teamMembers).map((member) => {
-      if(counts[teamMembers[member].location]) {
+    const counts = {};
+    Object.keys(teamMembers).forEach((member) => {
+      if (counts[teamMembers[member].location]) {
         counts[teamMembers[member].location] += 1;
       }
       else {
         counts[teamMembers[member].location] = 1;   
       }
     });
-    var all = 0;
-    Object.keys(counts).map((key) => {
-      if(key !== "alumni") {
+    let all = 0;
+    Object.keys(counts).forEach((key) => {
+      if (key !== "alumni") {
         all += counts[key];
       }
     });
