@@ -364,7 +364,7 @@ export default {
         }, 
         darrylWright: {
           title: 'Researcher',
-          bio: 'Darryl is doing machine learning research with the Zooniverse, based in Oxford.'
+          bio: 'Darryl is doing machine learning research with the Zooniverse, based in Minnesota.'
         },
         grantMiller: {
           title: 'Communications Lead',
