@@ -7,11 +7,14 @@ class NotificationsCounter {
   }
 
   static getNotifications(section) {
-    return talkClient.type('notifications').get({
+    const query = {
       delivered: false,
-      page_size: 1,
-      section
-    });
+      page_size: 1
+    };
+    if (section) {
+      query.section = section;
+    }
+    return talkClient.type('notifications').get(query);
   }
 
   constructor() {
