@@ -6,9 +6,9 @@ export default {
     close: 'Chiudi',
     continue: 'Continua',
     detailsSubTaskFormSubmitButton: 'OK',
-    done: 'Ho finito',
+    done: 'Completato',
     doneAndTalk: 'Done & Talk',
-    dontShowMinicourse: 'Do not show mini-course in the future',
+    dontShowMinicourse: 'Non mostrare più il mini corso',
     letsGo: 'Inizia!',
     next: 'Avanti',
     optOut: 'Opt out',
@@ -42,7 +42,7 @@ export default {
     },
     nav: {
       about: 'A proposito',
-      adminPage: 'Admin page',
+      adminPage: 'Pagina di amministrazione',
       classify: 'Classifica',
       collections: 'Colleziona',
       exploreProject: 'Esplora il progetto',
@@ -83,27 +83,27 @@ export default {
     }
   },
   organization: {
-    error: 'There was an error retrieving organization',
+    error: 'Si è verificato un errore durante la ricerca dell\'organizzazione',
     home: {
-      introduction: 'Introduction',
-      links: 'Links',
+      introduction: 'Introduzione',
+      links: 'Link',
       metadata: {
-        projects: 'Projects'
+        projects: 'Progetti'
       },
       projects: {
         error: 'There was an error loading organization projects.',
-        loading: 'Loading organization projects...',
-        none: 'There are no projects associated with this organization.'
+        loading: 'Caricamento progetti dell\'organizzazione in corso...',
+        none: 'Non sono presenti progetti associati a questa organizzazione.'
       },
       readLess: 'Read Less',
       readMore: 'Read More',
       researcher: 'Words from a researcher',
       viewToggle: 'View As Volunteer'
     },
-    loading: 'Loading organization',
-    notFound: 'organization not found.',
+    loading: 'Caricamento dell\'organizzazione in corso',
+    notFound: 'organizzazione non trovata.',
     notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...'
+    pleaseWait: 'Attendere prego...'
   },
   tasks: {
     less: 'Di meno',
@@ -240,16 +240,16 @@ export default {
       title: 'About',
       nav: {
         about: 'About',
-        publications: 'Publications',
-        ourTeam: 'Our Team',
-        acknowledgements: 'Acknowledgements',
-        contact: 'Contact Us',
+        publications: 'Pubblicazioni',
+        ourTeam: 'Il team',
+        acknowledgements: 'Ringraziamenti',
+        contact: 'Contattaci',
         faq: 'FAQ',
-        resources: 'Resources'
+        resources: 'Risorse'
       }
     },
     home: {
-      title: '## What is the Zooniverse?',
+      title: '## Cos\'è Zooniverse?',
       whatIsZooniverse: 'The Zooniverse is the world’s largest and most popular platform for people-powered research. This research is made possible by volunteers — hundreds of thousands of people around the world who come together to assist professional researchers. Our goal is to enable research that would not be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community, and [many publications](/about/publications).',
       anyoneCanResearch: '### At the Zooniverse, anyone can be a researcher\n\nYou don’t need any specialised background, training, or expertise to participate in any Zooniverse projects. We make it easy for anyone to contribute to real academic research, on their own computer, at their own convenience.\n\nYou’ll be able to study authentic objects of interest gathered by researchers, like images of faraway galaxies, historical records and diaries, or videos of animals in their natural habitats. By answering simple questions about them, you’ll help contribute to our understanding of our world, our history, our Universe, and more.\n\nWith our wide-ranging and ever-expanding suite of projects, covering many disciplines and topics across the sciences and humanities, there\'s a place for anyone and everyone to explore, learn and have fun in the Zooniverse. To volunteer with us, just go to the [Projects](/projects) page, choose one you like the look of, and get started.',
       accelerateResearch: '### We accelerate important research by working together\n\nThe major challenge of 21st century research is dealing with the flood of information we can now collect about the world around us. Computers can help, but in many fields the human ability for pattern recognition — and our ability to be surprised — makes us superior. With the help of Zooniverse volunteers, researchers can analyze their information more quickly and accurately than would otherwise be possible, saving time and resources, advancing the ability of computers to do the same tasks, and leading to faster progress and understanding of the world, getting to exciting results more quickly.\n\nOur projects combine contributions from many individual volunteers, relying on a version of the ‘wisdom of crowds’ to produce reliable and accurate data. By having many people look at the data we often can also estimate how likely we are to make an error. The product of a Zooniverse projects is often exactly what’s needed to make progress in many fields of research.',
@@ -269,7 +269,7 @@ export default {
       enquiries: 'If you are interested in interviewing a member of the team, please [get in touch](contact).'
     },
     contact: {
-      title: '## Contact & Social Media',
+      title: '## Contatti & Social media',
       discussionBoards: 'Most of the time, the best way to reach the Zooniverse team, or any project teams, especially about any project-specific issues, is through the discussion boards.',
       email: 'If you need to contact the Zooniverse team about a general matter, you can also send an email to the team at [contact@zooniverse.org](mailto:contact@zooniverse.org). Please understand that the Zooniverse team is relatively small and very busy, so unfortunately we cannot reply to all of the emails we receive.',
       collaborating: 'If you are interested in collaborating with the Zooniverse, for instance on a custom-built project, please email [collab@zooniverse.org](mailto:collab@zooniverse.org). (Note that our [Project Builder](/lab) offers an effective way to set up a new project without needing to contact the team!)',
@@ -277,7 +277,7 @@ export default {
       dailyZoo: 'If you want to keep up to date with what\'s going on across the Zooniverse and our latest results, check out the [Daily Zooniverse](http://daily.zooniverse.org/) or the main [Zooniverse blog](http://blog.zooniverse.org/). You can also follow the Zooniverse on [Twitter](http://twitter.com/the_zooniverse), [Facebook](http://facebook.com/therealzooniverse), and [Google+](https://plus.google.com/+ZooniverseOrgReal).'
     },
     faq: {
-      title: '## Frequently Asked Questions',
+      title: '## FAQ',
       whyNeedHelp: '- **Why do researchers need your help? Why can\'t computers do these tasks?**\nHumans are better than computers at many tasks. For most Zooniverse projects, computers just aren’t good enough to do the required task, or they may miss interesting features that a human would spot - this is why we need your help. Some Zooniverse projects are also using human classifications to help train computers to do better at these research tasks in the future. When you participate in a Zooniverse project, you are contributing to real research.',
       amIDoingThisRight: '- **How do I know if I\'m doing this right?**\nFor most of the subjects shown in Zooniverse projects, the researchers don\'t know the correct answer and that\'s why they need your help. Human beings are really good at pattern recognition tasks, so generally your first guess is likely the right one. Don’t worry too much about making an occasional mistake - more than one person will review each image, video or graph in a project. Most Zooniverse projects have a Help button, a Frequently Asked Questions (FAQ) page, and a Field Guide with more information to guide you when classifying.',
       whatHappensToClassifications: '- **What happens to my classification after I submit it?**\nYour classifications are stored in the Zooniverse\'s secure online database. Later on a project\'s research team accesses and combines the multiple volunteer assessments stored for each subject, including your classifications, together. Once you have submitted your response for a given subject image, graph, or video, you can\'t go back and edit it. Further information can be found on the [Zooniverse User Agreement and Privacy Policy page](/privacy).',
@@ -289,7 +289,7 @@ export default {
       furtherHelp: 'Didn\'t find the answer to your question? Ask on [Zooniverse Talk](/talk) or [get in touch](/about/contact).'
     },
     resources: {
-      title: '## Resources',
+      title: '## Risorse',
       filler: 'Useful downloads and guidelines for talking about the Zooniverse.',
       introduction: '### Brand Materials',
       officialMaterials: '[Download official Zooniverse logos](https://github.com/zooniverse/Brand/tree/master/style%%20guide/logos). Our official color is teal hex `#00979D` or `RGBA(65, 149, 155, 1.00)`.',
@@ -382,7 +382,7 @@ export default {
   lab: {
     help: {
       howToBuildProject: {
-        title: '## How to create a project with our Project Builder',
+        title: '## Come realizzare un progetto utilizzando Project Builder',
         overview: {
           quickGuide: '* [A quick guide to building a project](#a-quick-guide-to-building-a-project)',
           navigating: '* [Navigating the project builder](#navigating-the-project-builder)\n  * [Project](#project)\n  * [Workflows](#workflows)\n  * [Subjects](#subjects)',
