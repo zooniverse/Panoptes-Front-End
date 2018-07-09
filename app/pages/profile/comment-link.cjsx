@@ -13,10 +13,10 @@ module.exports = createReactClass
     comment: null
 
   getInitialState: ->
-    project: null
+    projectTitle: ''
     owner: null
-    discussion: null
-    board: null
+    discussionTitle: ''
+    boardTitle: ''
 
   componentDidMount: ->
     @getLinkText(@props.comment)
@@ -28,15 +28,18 @@ module.exports = createReactClass
   getLinkText: (comment) ->
     [rootType, rootID] = comment.section.split('-')
 
-    talkClient.type('discussions').get(comment.discussion_id).then (discussion) =>
-
-      talkClient.type('boards').get(discussion.board_id).then (board) =>
-        @setState({ board, discussion })
-        
+    talkClient.type('discussions').get(comment.discussion_id)
+      .then (discussion) =>
+        @setState { discussionTitle: discussion.title }
+        talkClient.type('boards').get(discussion.board_id)
+      .then (board) =>
+        @setState { boardTitle: board.title }
         if rootType is 'project' and rootID?
-          apiClient.type('projects').get(rootID).then (project) =>
-            @setState
-              boardProject: project
+          apiClient.type('projects').get(rootID)
+        else
+          Promise.resolve {}
+      .then (project) =>
+        @setState { projectTitle: project.display_name }
           
 
   render: ->
@@ -51,20 +54,19 @@ module.exports = createReactClass
         <span className="comment-timestamp" title={moment(@props.comment.created_at).toISOString()}>
           {moment(@props.comment.created_at).fromNow()}
         </span>
-        {if @state.board?.id and @state.discussion?.id
           <span>
             {' '}in{' '}
             <Link to={href}>
-              {if @state.boardProject? and !@props.project?
+              {if @state.projectTitle?.length and !@props.project?
                 <span>
-                  <strong className="comment-project">{@state.boardProject.display_name}</strong>
+                  <strong className="comment-project">{@state.projectTitle}</strong>
                   <span>{' '}➞{' '}</span>
                 </span>}
-              <strong className="comment-board">{@state.board?.title}</strong>
+              <strong className="comment-board">{@state.boardTitle}</strong>
               <span>{' '}➞{' '}</span>
-              <strong className="comment-discussion">{@state.discussion?.title}</strong>
+              <strong className="comment-discussion">{@state.discussionTitle}</strong>
             </Link>
-          </span>}
+          </span>
       </header>
 
       <Markdown className="comment-body" content={@props.comment.body} />
