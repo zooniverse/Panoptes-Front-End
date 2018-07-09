@@ -17,24 +17,16 @@ module.exports = createReactClass
     owner: null
     discussion: null
     board: null
-    href: ''
 
   componentDidMount: ->
-    @getCommentHREF(@props.comment)
+    @getLinkText(@props.comment)
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.comment is @props.comment
-      @getCommentHREF(nextProps.comment)
+      @getLinkText(nextProps.comment)
 
-  getCommentHREF: (comment) ->
+  getLinkText: (comment) ->
     [rootType, rootID] = comment.section.split('-')
-    
-    if comment.project_slug?
-      href = "/projects/#{comment.project_slug}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
-    else
-      href = "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
-    
-    @setState({ href })
 
     talkClient.type('discussions').get(comment.discussion_id).then (discussion) =>
 
@@ -48,6 +40,12 @@ module.exports = createReactClass
           
 
   render: ->
+    { comment } = this.props
+    if comment.project_slug?
+      href = "/projects/#{comment.project_slug}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    else
+      href = "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+      
     <div className="profile-feed-comment-link">
       <header>
         <span className="comment-timestamp" title={moment(@props.comment.created_at).toISOString()}>
@@ -56,7 +54,7 @@ module.exports = createReactClass
         {if @state.board?.id and @state.discussion?.id
           <span>
             {' '}in{' '}
-            <Link to={@state.href}>
+            <Link to={href}>
               {if @state.boardProject? and !@props.project?
                 <span>
                   <strong className="comment-project">{@state.boardProject.display_name}</strong>
