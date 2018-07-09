@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { sugarApiClient } from 'panoptes-client/lib/sugar';
 import { Link } from 'react-router';
+import { Markdown } from 'markdownz';
+import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 
 export default class TalkStatus extends React.Component {
@@ -30,14 +32,15 @@ export default class TalkStatus extends React.Component {
   render() {
     return (
       <div className="project-home-page__talk-stat">
-        <Translate
-          content="project.home.talk"
-          with={{
-            count: this.state.activeUsers,
-            title: this.props.translation.display_name
-          }}
-          unsafe={true}
-        />
+        <Markdown>
+          {counterpart(
+            'project.home.talk',
+            {
+              count: parseInt(this.state.activeUsers, 10),
+              title: this.props.translation.display_name
+            }
+          )}
+        </Markdown>
         <div>
           <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in project-home-page__button">
             <Translate content="project.home.joinIn" />

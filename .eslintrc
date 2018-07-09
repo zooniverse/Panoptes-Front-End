@@ -5,6 +5,7 @@
     "browser": true,
     "mocha": true
   },
+  "parser": "babel-eslint",
   "rules": {
     "react/jsx-boolean-value": ["error","always"],
     "react/prefer-es6-class": 0,

@@ -109,5 +109,6 @@ module.exports = createReactClass
         placeholder={"Add a note about this subject, or mark with a #hashtag"}
         onSubmitComment={@onSubmitComment}
         subject={@props.subject}
-        submit="Add Your comment"/>
+        submit="Add Your comment"
+        logSubmit={true}/>
     </div>

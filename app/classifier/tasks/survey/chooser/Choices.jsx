@@ -27,7 +27,7 @@ class Choices extends React.Component {
     this.choiceButtons
       .filter(Boolean)
       .map((button) => {
-        const choiceID = button.getAttribute('data-choiceID');
+        const choiceID = button.getAttribute('data-choiceid');
         const index = this.props.task.choicesOrder.indexOf(choiceID);
         newChoiceButtons[index] = button;
       });
@@ -117,7 +117,7 @@ class Choices extends React.Component {
             <button
               autoFocus={choiceId === this.props.focusedChoice}
               key={choiceId}
-              data-choiceID={choiceId}
+              data-choiceid={choiceId}
               ref={button => this.choiceButtons.push(button)}
               tabIndex={tabIndex}
               type="button"

@@ -45,7 +45,7 @@ class ExpandableMenu extends React.Component {
       >
         <div
           ref={(menu) => { this.menu = menu; }}
-          onKeyDown={this.navigateMenu}
+          onClick={e => e.stopPropagation()}
         >
           {this.props.children}
         </div>

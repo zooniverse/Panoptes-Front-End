@@ -72,7 +72,6 @@ const SliderTask = ({ task, annotation, onChange, autoFocus }) => {
             <label className="answer">
               <div>
                 <input
-                  className="standard-input"
                   type="range"
                   autoFocus={autoFocus}
                   onChange={handleChange}
@@ -94,7 +93,6 @@ const SliderTask = ({ task, annotation, onChange, autoFocus }) => {
           </div>
           <label className="answer slider-task-number">
             <input
-              className="standard-input"
               type="number"
               onChange={handleChange}
               max={task.max}

@@ -4,7 +4,7 @@ createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 Classifier = require('./classifier').default
 MiniCourse = require './mini-course'
-Tutorial = require './tutorial'
+Tutorial = require('./tutorial').default
 CustomSignInPrompt = require('./custom-sign-in-prompt').default;
 isAdmin = require '../lib/is-admin'
 { VisibilitySplit } = require 'seven-ten'
@@ -40,6 +40,9 @@ ClassifierWrapper = createReactClass
     onComplete: PropTypes.func
     onCompleteAndLoadAnotherSubject: PropTypes.func
     onClickNext: PropTypes.func
+    translations: PropTypes.shape({
+        locale: PropTypes.string
+      })
     workflow: PropTypes.object
     user: PropTypes.object
 
@@ -49,6 +52,9 @@ ClassifierWrapper = createReactClass
     onComplete: Function.prototype
     onCompleteAndLoadAnotherSubject: Function.prototype
     onClickNext: Function.prototype
+    translations: {
+      locale: 'en'
+    }
     workflow: null
     user: null
 
@@ -73,6 +79,12 @@ ClassifierWrapper = createReactClass
     MiniCourse.find @props.workflow
     .then (minicourse) =>
       @setState {minicourse}
+      this.props.actions.translations.load('minicourse', minicourse.id, this.props.translations.locale) if minicourse?
+
+  componentDidUpdate: (prevProps) ->
+    { tutorial, minicourse } = @state
+    if prevProps.translations.locale isnt this.props.translations.locale
+      this.props.actions.translations.load('tutorial', tutorial.id, this.props.translations.locale) if tutorial?
       this.props.actions.translations.load('minicourse', minicourse.id, this.props.translations.locale) if minicourse?
 
   componentWillReceiveProps: (nextProps) ->

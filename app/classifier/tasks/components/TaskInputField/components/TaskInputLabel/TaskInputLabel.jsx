@@ -42,7 +42,7 @@ export const StyledTaskInputLabel = styled(Markdown)`
     vertical-align: middle;
   }
 
-  img:first-of-type, svg:first-of-type {
+  img:only-child, svg:only-child {
     background-color: ${zooTheme.colors.teal.mid};
     margin-right: 1ch;
     max-width: ${pxToRem(60)};

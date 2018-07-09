@@ -1,76 +1,98 @@
 import _ from 'lodash';
-import getRenderedSize from 'react-rendered-size';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import withSizes from 'react-sizes';
+import styled from 'styled-components';
+import LanguagePicker from '../LanguagePicker';
 import ProjectNavbarNarrow from './components/ProjectNavbarNarrow';
-import ProjectNavbarWide from './components/ProjectNavbarWide';
+import ProjectNavbarWide, { SizeAwareProjectNavbarWide } from './components/ProjectNavbarWide';
+
+export const SettingsMenu = styled.div`
+  text-align: right;
+`;
 
 function haveNavLinksChanged(oldProps, newProps) {
-  const oldNavLinks = _.map(oldProps.navLinks, 'label');
-  const newNavLinks = _.map(newProps.navLinks, 'label');
-  return _.difference(newNavLinks, oldNavLinks).length > 0 || oldNavLinks.length !== newNavLinks.length;
+  const oldLinks = oldProps.navLinks.map(link => link.label);
+  const newLinks = newProps.navLinks.map(link => link.label);
+
+  // returns an array of values not included in the other using SameValueZero for equality comparison
+  return _.difference(oldLinks, newLinks).length > 0 ||
+    oldLinks.length !== newLinks.length;
 }
 
-function hasTitleChanged(oldProps, newProps) {
-  return oldProps.projectTitle !== newProps.projectTitle;
-}
-
-export class ProjectNavbar extends Component {
+class ProjectNavbar extends Component {
   constructor(props) {
     super(props);
+    this.setBreakpoint = this.setBreakpoint.bind(this);
     this.state = {
-      breakpoint: 0
+      loading: true,
+      useWide: false
     };
   }
 
-  componentDidMount() {
-    this.setBreakpoint();
-  }
-
   componentDidUpdate(prevProps) {
-    if (haveNavLinksChanged(prevProps, this.props) ||
-      hasTitleChanged(prevProps, this.props)) {
+    if (haveNavLinksChanged(prevProps, this.props)) {
       this.setBreakpoint();
     }
   }
 
-  setBreakpoint() {
-    const sizes = getRenderedSize(
-      <ProjectNavbarWide
-        {...this.props}
-        style={{
-          position: 'absolute',
-          visibility: 'hidden'
-        }}
-      />
-    );
-
-    this.setState({
-      breakpoint: sizes.width
-    });
+  setBreakpoint(size) {
+    // `size` is undefined when the component is first mounted, as there hasn't
+    // been time for the callback to fire.
+    
+    if (size) {
+      const useWide = size.width < document.body.clientWidth;
+      const newState = (this.state.loading) ? { useWide, loading: false } : { useWide };
+      this.setState(newState);
+    }
   }
 
   render() {
-    const isWindowWide = this.props.width > this.state.breakpoint;
-    if (isWindowWide) {
-      return <ProjectNavbarWide {...this.props} />;
-    }
+    const NavBarComponent = (this.state.useWide) ? ProjectNavbarWide : ProjectNavbarNarrow;
 
-    return <ProjectNavbarNarrow {...this.props} />;
+    return (
+      <React.Fragment>
+        {!this.state.loading &&
+          <NavBarComponent {...this.props}>
+            <SettingsMenu>
+              <LanguagePicker
+                project={this.props.project}
+              />
+            </SettingsMenu>
+          </NavBarComponent>
+        }
+        <SizeAwareProjectNavbarWide
+          {...this.props}
+          onSize={this.setBreakpoint}
+          style={{
+            visibility: 'hidden',
+            position: 'absolute'
+          }}
+        />
+      </React.Fragment>
+    );
   }
 }
 
-ProjectNavbar.propTypes = {
-  navLinks: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string
-  })),
-  projectTitle: PropTypes.string,
-  width: PropTypes.number
+ProjectNavbar.defaultProps = {
+  avatarSrc: '',
+  backgroundSrc: '',
+  launched: false,
+  navLinks: [],
+  projectLink: '',
+  projectTitle: '',
+  redirect: '',
+  underReview: false
 };
 
-const mapSizesToProps = ({ width }) => ({
-  width
-});
+ProjectNavbar.propTypes = {
+  avatarSrc: PropTypes.string,
+  backgroundSrc: PropTypes.string,
+  launched: PropTypes.bool,
+  navLinks: PropTypes.arrayOf(PropTypes.object),
+  projectTitle: PropTypes.string,
+  projectLink: PropTypes.string,
+  redirect: PropTypes.string,
+  underReview: PropTypes.bool
+};
 
-export default withSizes(mapSizesToProps)(ProjectNavbar);
+export default ProjectNavbar;

@@ -57,13 +57,10 @@ class Classifier extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const annotations = this.props.classification.annotations.slice();
     const workflowHistory = annotations.map(annotation => annotation.task);
     this.setState({ annotations, workflowHistory });
-  }
-
-  componentDidMount() {
     this.loadSubject(this.props.subject);
   }
 
@@ -81,13 +78,14 @@ class Classifier extends React.Component {
       this.loadSubject(nextProps.subject);
     }
 
-    if (this.props.subject !== nextProps.subject || (!this.context.geordi && !this.context.geordi.keys.subjectID)) {
+    if (this.context.geordi && ((this.props.subject !== nextProps.subject) ||  !this.context.geordi.keys.subjectID)) {
       this.context.geordi.remember({ subjectID: nextProps.subject.id });
     }
 
     if (nextProps.classification !== this.props.classification) {
       const annotations = nextProps.classification.annotations.slice();
-      this.setState({ annotations });
+      const workflowHistory = annotations.map(annotation => annotation.task);
+      this.setState({ annotations, workflowHistory });
     }
   }
 
@@ -121,6 +119,8 @@ class Classifier extends React.Component {
   }
 
   checkForFeedback(taskId) {
+    this.updateFeedback(taskId)
+
     const { feedback } = this.props;
     const taskFeedback = (feedback.rules && feedback.rules[taskId]) ? feedback.rules[taskId] : [];
 
@@ -129,7 +129,6 @@ class Classifier extends React.Component {
     }
 
     const annotations = this.state.annotations.slice();
-    const annotation = annotations[annotations.length - 1];
     const subjectViewerProps = {
       subject: this.props.subject,
       workflow: this.props.workflow,
@@ -148,41 +147,25 @@ class Classifier extends React.Component {
   }
 
   updateAnnotations(annotations) {
-    this.setState({ annotations }, this.updateFeedback);
+    this.setState({ annotations });
   }
 
-  updateFeedback() {
+  updateFeedback(taskId) {
     if (!this.props.feedback.active) {
       return false;
     }
-    // Check to see if we're still drawing, and update feedback if not. We need
-    // to check the entire annotation array, as the user may be editing an
-    // existing annotation.
-    let isInProgress = false;
+
     const { annotations } = this.state;
-    const { workflow } = this.props;
-    const currentAnnotation = annotations[annotations.length - 1] || {};
-
-    const currentTask = workflow.tasks[currentAnnotation.task] || null;
-
-    if (currentTask && currentTask.type === 'drawing') {
-      isInProgress = annotations.reduce((result, annotation) => {
-        if (annotation.value.map) {
-          return annotation.value.map(value => value._inProgress).includes(true);
-        } else {
-          return result;
-        }
-      }, false);
-    }
-
-    if (!isInProgress) {
-      this.props.actions.feedback.update(currentAnnotation);
-    }
+    const index = findLastIndex(annotations, annotation => annotation.task === taskId);
+    const currentAnnotation = index > -1 ? annotations[index] : {};
+    this.props.actions.feedback.update(currentAnnotation);
   }
 
   loadSubject(subject) {
     const { actions, project, workflow } = this.props;
-    actions.feedback.init(project, subject, workflow);
+    if (actions.feedback) {
+      actions.feedback.init(project, subject, workflow);
+    }
 
     this.setState({
       expertClassification: null,
@@ -200,7 +183,6 @@ class Classifier extends React.Component {
       if (this.props.subject === subject) { // The subject could have changed while we were loading.
         this.setState({ subjectLoading: false });
         this.props.onLoad();
-        this.updateFeedback();
       }
     });
   }
@@ -279,23 +261,27 @@ class Classifier extends React.Component {
       }
     });
 
+    let annotations = this.state.annotations.slice();
+    let workflowHistory = this.state.workflowHistory.slice();
+    const taskKey = workflowHistory[workflowHistory.length - 1];
     let onComplete = this.props.onComplete;
     if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
       onComplete = this.props.onCompleteAndLoadAnotherSubject;
+    } else {
+      workflowHistory.push('summary');
     }
 
-    const workflowHistory = this.state.workflowHistory.slice();
-    const taskKey = workflowHistory[workflowHistory.length - 1];
-    this.checkForFeedback(taskKey)
+    return this.checkForFeedback(taskKey)
       .then(() => {
         this.props.classification.update({ completed: true });
-        workflowHistory.push('summary');
-        this.setState({ workflowHistory });
         if (!isCmdClick && originalElement.href) {
           browserHistory.push(subjectTalkPath);
         }
       })
       .then(onComplete)
+      .then(() => {
+        this.setState({ annotations, workflowHistory });
+      })
       .catch(error => console.error(error));
   }
 
@@ -312,6 +298,8 @@ class Classifier extends React.Component {
   }
 
   render() {
+    const { workflowHistory } = this.state;
+    const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
     const classifierClassNames = classNames({
       classifier: true,
@@ -319,19 +307,17 @@ class Classifier extends React.Component {
       [this.props.className]: !!this.props.className
     });
 
-    let currentClassification,
-      currentTask,
-      currentAnnotation;
+    let currentClassification;
+    let currentTask;
+    let currentAnnotation;
     if (this.state.showingExpertClassification) {
       currentClassification = this.state.expertClassification;
       currentClassification.completed = true;
     } else {
       currentClassification = this.props.classification;
       if (!this.props.classification.completed) {
-        const { workflowHistory } = this.state;
-        const taskKey = this.state.workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
-        currentTask = this.props.workflow.tasks[taskKey];
-        const index = findLastIndex(this.state.annotations, annotation => annotation.task === taskKey);
+        currentTask = this.props.workflow.tasks[currentTaskKey];
+        const index = findLastIndex(this.state.annotations, annotation => annotation.task === currentTaskKey);
         if (index > -1) {
           currentAnnotation = this.state.annotations[index];
         }
@@ -367,7 +353,7 @@ class Classifier extends React.Component {
               user={this.props.user}
               workflow={this.props.workflow}
             />
-            {!currentClassification.completed ?
+            {(currentTaskKey !== 'summary') ?
               <Task
                 preferences={this.props.preferences}
                 user={this.props.user}
@@ -396,6 +382,7 @@ class Classifier extends React.Component {
               annotations={this.state.annotations}
               classification={currentClassification}
               completeClassification={this.completeClassification}
+              completed={currentTaskKey === 'summary'}
               disabled={this.state.subjectLoading}
               nextSubject={this.props.onClickNext}
               project={this.props.project}
@@ -532,19 +519,28 @@ Classifier.propTypes = {
 };
 
 Classifier.defaultProps = {
-  classification: null,
+  actions: {},
+  classification: {},
   classificationCount: 0,
   demoMode: false,
+  feedback: {
+    active: false
+  },
   minicourse: null,
+  onComplete: () => Promise.resolve(),
+  onCompleteAndLoadAnotherSubject: () => Promise.resolve(),
   preferences: null,
-  project: null,
+  project: {},
   onLoad: Function.prototype,
   onChangeDemoMode: Function.prototype,
   splits: null,
-  subject: null,
+  subject: {},
   tutorial: null,
   user: null,
-  workflow: null
+  workflow: {
+    configuration: {},
+    tasks: {}
+  }
 };
 
 const mapStateToProps = state => ({
@@ -560,3 +556,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Classifier);
+export { Classifier };

@@ -95,7 +95,13 @@ EditWorkflowPage = createReactClass
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       {if @props.project.live and @props.workflow.active
-        <p className="form-help warning"><strong>If the project is live, you cannot edit tasks in an active workflow, but other workflow settings (such as linking subject sets) can be changed.</strong></p>}
+        <p className="form-help warning">
+          <strong>
+            You cannot edit tasks for an active workflow on a live project, all the task fields below will be inactive.
+            <br />
+            To edit these fields, deactivate your workflow on the <Link to="/lab/#{@props.project.id}/workflows">worfklows page</Link> - do not change your project to development.
+          </strong>
+        </p>}
       <div className="columns-container">
         <div className="column">
           <div>

@@ -900,6 +900,11 @@ const Publications = {
         date: "2017"
       },
       {
+        citation: "Doing good online: the changing relationships between motivations, activity and retention among online volunteers, Cox+ 2017",
+        href: "http://eprints.lse.ac.uk/81320/",
+        date: "2017"
+      },
+      {
         citation: "Assessing data quality in citizen science, Kosmala+ 2016.",
         href: "http://biorxiv.org/content/early/2016/09/08/074104",
         date: "2016"

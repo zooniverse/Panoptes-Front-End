@@ -126,14 +126,15 @@ GRAY = #EFF2F5
     padding: 1em 2em
 
     .project-card-list
-      overflow: hidden
+      overflow: auto
 
       .closed
+        overflow: hidden
         max-height: 0
 
       .open
-        max-height: 10000px
-        transition: max-height 1s ease-in
+        max-height: 1000px
+        transition: max-height .5s ease-out
 
 .home-page-project-stats
   flex-grow: 1

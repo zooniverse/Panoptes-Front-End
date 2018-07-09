@@ -37,6 +37,7 @@ export default {
     backButtonWarning: 'Als je terug gaat verlies je je werk voor de huidige taak.',
     close: 'Close',
     continue: 'Continue',
+    detailsSubTaskFormSubmitButton: 'OK',    
     done: 'Klaar',
     doneAndTalk: 'Klaar & Praat',
     dontShowMinicourse: 'Do not show mini-course in the future',
@@ -53,6 +54,7 @@ export default {
     miniCourseButton: 'Herstart de minitour'
   },
   project: {
+    language: 'Taal',
     loading: 'Project wordt geladen',
     disclaimer: 'Dit project is gemaakt met de Zooniverse projectbouwer maar is not niet een officieel Zooniverseproject. Vragen en problemen met betrekking tot dit project die gestuurd worden aan het Zooniverseteam krijgen mogelijk geen reactie.',
     about: {
@@ -93,9 +95,9 @@ export default {
         subjects: 'Onderwerpen'
       },
       talk: {
-        zero: 'Niemand praat over <strong>%(title)s</strong> op dit moment.',
-        one: '<strong>1</strong> persoon praat over <strong>%(title)s</strong> op dit moment.',
-        other: '<strong>%(count)s</strong> mensen praten over <strong>%(title)s</strong> op dit moment.'
+        zero: 'Niemand praat over **%(title)s** op dit moment.',
+        one: '**1** persoon praat over **%(title)s** op dit moment.',
+        other: '**%(count)s** mensen praten over **%(title)s** op dit moment.'
       },
       joinIn: 'Doe mee',
       learnMore: 'Learn more',
@@ -172,7 +174,7 @@ export default {
   security: {
     title: 'Zooniverse Beveiligingsbeleid',
     intro: 'The Zooniverse takes very seriously the security of our websites and systems, and protecting our users and their personal information is our highest priority. We take every precaution to ensure that the information you give us stays secure, but it is also important that you take steps to secure your own account, including:\n\n* Do not use the same password on different websites. The password you use for your Zooniverse account should be unique to us.\n* Never give your password to anyone. We will never ask you to send us your password, and you should never enter your Zooniverse password into any website other than ours. Always check your browser\'s address bar to make sure you have a secure connection to _www.zooniverse.org_.\n\nFor general advice and information about staying safe online, please visit:\n\n* [Get Safe Online](https://www.getsafeonline.org)\n* [Stay Safe Online](https://www.staysafeonline.org)\n* [US-CERT - Tips](https://www.us-cert.gov/ncas/tips)',
-    details: '## Reporting Security Issues\n\nThe Zooniverse supports [responsible disclosure](https://en.wikipedia.org/wiki/Responsible_disclosure) of vulnerabilities. If you believe you have discovered a security vulnerability in any Zooniverse software, we ask that this first be reported to [security@zooniverse.org](mailto:security@zooniverse.org) to allow time for vulnerabilities to be fixed before details are published.\n\n## Known Vulnerabilities and Incidents\n\nWe believe it is important to be completely transparent about security issues. A complete list of fixed vulnerabilities and past security incidents is given below:\n\n* _(No entries at this time)_\n\nNew vulnerabilities and incidents will be announced via the [Zooniverse blog in the "technical" category](http://blog.zooniverse.org/category/technical/).'
+    details: '## Reporting Security Issues\n\nThe Zooniverse supports [responsible disclosure](https://en.wikipedia.org/wiki/Responsible_disclosure) of vulnerabilities. If you believe you have discovered a security vulnerability in any Zooniverse software, we ask that this first be reported to [security@zooniverse.org](mailto:security@zooniverse.org) to allow time for vulnerabilities to be fixed before details are published.\n\n## Known Vulnerabilities and Incidents\n\nWe believe it is important to be completely transparent about security issues. A complete list of fixed vulnerabilities and past security incidents is given below:\n\n* June 21, 2018: [Cross-site scripting on project home pages](https://blog.zooniverse.org/2018/07/03/fixed-cross-site-scripting-vulnerability-on-project-home-pages/)\n\nNew vulnerabilities and incidents will be announced via the [Zooniverse blog in the "technical" category](http://blog.zooniverse.org/category/technical/).'
   },
   userAdminPage: {
     header: 'Beheer',

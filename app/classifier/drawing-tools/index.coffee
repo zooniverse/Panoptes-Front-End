@@ -1,4 +1,5 @@
 module.exports =
+  anchoredEllipse: require('./anchored-ellipse').default
   bezier: require './poly-curve'
   circle: require './circle'
   column: require './column-rectangle'

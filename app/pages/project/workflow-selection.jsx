@@ -35,6 +35,9 @@ class WorkflowSelection extends React.Component {
     if (prevProps.project.id !== this.props.project.id) {
       this.getSelectedWorkflow(this.props);
     }
+    if (prevProps.translations.locale !== this.props.translations.locale) {
+      this.props.actions.translations.load('workflow', this.state.workflow.id, this.props.translations.locale);
+    }
   }
 
   getSelectedWorkflow({ project, preferences, user }) {
@@ -69,19 +72,21 @@ class WorkflowSelection extends React.Component {
     } else if (project.configuration && project.configuration.default_workflow) {
       selectedWorkflowID = project.configuration.default_workflow;
     } else {
-      selectedWorkflowID = this.selectRandomWorkflow(project);
+      selectedWorkflowID = this.selectRandomActiveWorkflow(project);
     }
 
-    this.getWorkflow(selectedWorkflowID, activeFilter);
+    if (selectedWorkflowID) return this.getWorkflow(selectedWorkflowID, activeFilter);
+    if (process.env.BABEL_ENV !== 'test') console.warn('Cannot select a workflow.')
   }
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
     const { actions, project, translations } = this.props;
     const sanitisedWorkflowID = this.sanitiseID(selectedWorkflowID);
     let isValidWorkflow = false;
-    if (activeFilter) {
+
+    if (activeFilter && project.links.active_workflows) {
       isValidWorkflow = project.links.active_workflows.indexOf(sanitisedWorkflowID) > -1;
-    } else {
+    } else if (project.links.workflows) {
       isValidWorkflow = project.links.workflows.indexOf(sanitisedWorkflowID) > -1;
     }
     let awaitWorkflow;
@@ -102,13 +107,13 @@ class WorkflowSelection extends React.Component {
       awaitWorkflow = Promise.resolve(null);
     }
 
-    awaitWorkflow
+    return awaitWorkflow
     .then((workflow) => {
       if (workflow) {
         this.setState({ loadingSelectedWorkflow: false, workflow });
         actions.translations.load('workflow', workflow.id, translations.locale);
       } else {
-        console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
+        if (process.env.BABEL_ENV !== 'test') console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
         if (this.props.project.configuration &&
           selectedWorkflowID === this.props.project.configuration.default_workflow
         ) {
@@ -119,17 +124,20 @@ class WorkflowSelection extends React.Component {
           if (this.props.location.query && this.props.location.query.workflow) {
             this.context.router.push(`/projects/${this.props.project.slug}/classify`);
           }
+
           this.clearInactiveWorkflow(selectedWorkflowID)
-          .then(this.getSelectedWorkflow(this.props));
+            .then(() => {
+              this.getSelectedWorkflow(this.props);
+            });
         }
       }
     })
     .catch((error) => {
-      console.warn(error.message);
+      console.error(error.message);
     });
   }
 
-  selectRandomWorkflow(project) {
+  selectRandomActiveWorkflow(project) {
     const linkedActiveWorkflows = project.links.active_workflows;
     if (linkedActiveWorkflows && linkedActiveWorkflows.length > 0) {
       const randomIndex = Math.floor(Math.random() * linkedActiveWorkflows.length);
@@ -170,7 +178,7 @@ class WorkflowSelection extends React.Component {
 
   workflowSelectionErrorHandler() {
     this.props.project.uncacheLink('workflows');
-    throw new Error(`No active workflows for project ${this.props.project.id}`);
+    if (process.env.BABEL_ENV !== 'test') console.error(`No active workflows for project ${this.props.project.id}`);
   }
 
   sanitiseID(resourceID) {

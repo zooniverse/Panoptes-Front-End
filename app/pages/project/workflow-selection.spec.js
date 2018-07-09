@@ -60,7 +60,8 @@ const project = mockPanoptesResource('projects',
     experimental_tools: [],
     links: {
       active_workflows: ['1', '2', '3', '4', '5'],
-      owner: { id: '1' }
+      owner: { id: '1' },
+      workflows: ['1', '2', '3', '4', '5']
     }
   }
 );
@@ -287,13 +288,51 @@ describe('WorkflowSelection', function () {
           },
           links: {
             active_workflows: ['10'],
-            owner: { id: '1' }
+            owner: { id: '1' },
+            workflows: ['10']
           }
         }
       );
       wrapper.setProps({ project: newProject });
       sinon.assert.calledOnce(workflowStub);
       sinon.assert.calledWith(workflowStub, '10', true);
+    });
+  });
+
+  describe('when loading a project without linked active workflows', function() {
+    it('should not attempt to call getWorkflow', function() {
+      const projectWithoutActiveWorkflows = mockPanoptesResource('projects', {
+        id: 'y',
+        display_name: 'A test project',
+        configuration: {},
+        experimental_tools: [],
+        links: {
+          owner: { id: '1' },
+          workflows: ['20']
+        }
+      });
+
+      wrapper.setProps({ project: projectWithoutActiveWorkflows });
+
+      sinon.assert.notCalled(workflowStub)
+    });
+  });
+
+  describe('when loading a project without any linked workflows', function () {
+    it('should not attempt to call getWorkflow', function () {
+      const projectWithoutWorkflows = mockPanoptesResource('projects', {
+        id: 'z',
+        display_name: 'I have no workflows project',
+        configuration: {},
+        experimental_tools: [],
+        links: {
+          owner: { id: '1' }
+        }
+      });
+
+      wrapper.setProps({ project: projectWithoutWorkflows });
+
+      sinon.assert.notCalled(workflowStub)
     });
   });
 });

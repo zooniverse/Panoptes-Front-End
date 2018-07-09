@@ -2,17 +2,33 @@ import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 
 class NotificationsCounter {
+  static getProject(slug) {
+    return apiClient.type('projects').get({ slug });
+  }
+
+  static getNotifications(section) {
+    const query = {
+      delivered: false,
+      page_size: 1
+    };
+    if (section) {
+      query.section = section;
+    }
+    return talkClient.type('notifications').get(query);
+  }
+
   constructor() {
     this.callbacks = [];
   }
 
   update(user, owner, name) {
-    if(!user) {
-      return Promise.resolve(0);
+    let unreadCount = 0;
+    if (!user) {
+      return Promise.resolve(unreadCount);
     }
 
-    if(this.loading) {
-      return;
+    if (this.loading) {
+      return Promise.resolve(unreadCount);
     }
 
     this.loading = true;
@@ -20,59 +36,55 @@ class NotificationsCounter {
     this.owner = owner;
     this.name = name;
     this.setSection().then((section) => {
-      this.countUnread().then(() => {
+      this.countUnread(section).then((count) => {
+        unreadCount = count;
         this.loading = false;
+        this.callbacks.map((callback) => {
+          callback(unreadCount);
+        });
       });
     });
+    return Promise.resolve(unreadCount);
   }
 
   setSection() {
-    if(this.owner && this.name) {
+    if (this.owner && this.name) {
       const slug = `${this.owner}/${this.name}`;
 
-      if(this.slug !== slug) {
+      if (this.slug !== slug) {
         this.slug = slug;
-        return this.getProject(slug).then((projects) => {
-          return this.section = `project-${projects[0].id}`;
+        return NotificationsCounter.getProject(slug).then((projects) => {
+          this.section = `project-${projects[0].id}`;
+          return Promise.resolve(this.section);
         });
       } else {
         return Promise.resolve(this.section);
       }
     } else {
-      this.owner = this.name = this.slug = this.section = null;
+      this.owner = null;
+      this.name = null;
+      this.slug = null;
+      this.section = null;
       return Promise.resolve(null);
     }
   }
 
-  getProject(slug) {
-    return apiClient.type('projects').get({slug});
-  }
-
-  getNotifications() {
-    return talkClient.type('notifications').get({
-      delivered: false,
-      page_size: 1,
-      section: this.section
-    });
-  }
-
-  countUnread() {
-    return this.getNotifications().then((notifications) => {
+  countUnread(section) {
+    return NotificationsCounter.getNotifications(section).then((notifications) => {
       try {
-        this.setUnread(notifications[0].getMeta().count);
-      } catch(e) {
-        this.setUnread(0);
+        return this.setUnread(notifications[0].getMeta().count);
+      } catch (e) {
+        return this.setUnread(0);
       }
     });
   }
 
   setUnread(count) {
-    if(this.unreadCount !== count) {
+    if (this.unreadCount !== count) {
       this.unreadCount = count;
-      this.callbacks.map((callback) => {
-        callback(count);
-      });
+      return Promise.resolve(count);
     }
+    return Promise.resolve(this.unreadCount);
   }
 
   listen(fn) {

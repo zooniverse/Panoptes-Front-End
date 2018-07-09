@@ -66,7 +66,15 @@ module.exports = createReactClass
         Live
       </label>
 
-      <p className="form-help">All workflows can be edited during development, and subjects will never retire. In a live project, active workflows are locked and can no longer be edited, and classifications count toward subject retirement.</p>
+      <p className="form-help">
+        All workflows can be edited during development, and subjects will never retire.<br />
+        In a live project, active workflows are locked and can no longer be edited.<br />
+        <small>
+          <strong>
+            Take care changing a project to development as classifications will not count towards your project.
+          </strong>
+        </small>
+      </p>
 
       <div>
         <hr />
