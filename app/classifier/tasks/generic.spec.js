@@ -1,7 +1,7 @@
 import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
-import GenericTask from './generic';
+import { GenericTask } from './generic';
 import { mockReduxStore } from './testHelpers';
 
 const task = {

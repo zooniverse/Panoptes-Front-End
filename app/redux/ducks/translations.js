@@ -3,6 +3,10 @@ import counterpart from 'counterpart';
 import merge from 'lodash/merge';
 
 const DEFAULT_LOCALE = counterpart.getLocale();
+const RTL_LANGUAGES = [
+  'ar',
+  'he'
+];
 
 counterpart.setFallbackLocale(DEFAULT_LOCALE);
 
@@ -33,6 +37,7 @@ const initialState = {
   languages: {
     project: []
   },
+  rtl: false,
   strings: {
     project: {},
     workflow: {},
@@ -51,7 +56,9 @@ export default function reducer(state = initialState, action = {}) {
       const languages = Object.assign({}, state.languages, { [action.payload.type]: action.payload.languages });
       return Object.assign({}, state, { languages });
     case SET_LOCALE:
-      return Object.assign({}, state, { locale: action.payload });
+      const locale = action.payload;
+      const rtl = RTL_LANGUAGES.indexOf(locale) > -1;
+      return Object.assign({}, state, { locale, rtl });
     case SET_TRANSLATION:
       ({ type, languageStrings } = action.payload);
       let translation = {};

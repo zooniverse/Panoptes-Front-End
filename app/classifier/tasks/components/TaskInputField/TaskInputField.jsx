@@ -29,7 +29,6 @@ export const StyledTaskInputField = styled.label`
   margin: ${pxToRem(10)} 0;
   padding: ${(props) => { return doesTheLabelHaveAnImage(props.label) ? '0' : '1ch 2ch'; }};
   position: relative;
-  text-align: left;
 
   &:hover, &:focus, &[data-focus=true] {
     background: ${theme('mode', {

@@ -36,7 +36,7 @@ module.exports = createReactClass
 
   render: ->
     logClick = @context.geordi?.makeHandler? 'breadcrumb'
-    <div className="talk content-container">
+    <div className="talk content-container" lang="en">
       <Helmet title={counterpart 'talkPage.title'} />
       <h1 className="talk-main-link">
         <Link to="/talk" onClick={logClick?.bind(this, '')}>Zooniverse Talk</Link>

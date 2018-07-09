@@ -77,6 +77,11 @@ export const StyledBackButtonToolTip = styled.span`
   position: absolute;
   width: ${(checkIfMSBrowser()) ? '400%' : 'max-content'};
   width: -moz-max-content;
+
+  .rtl & {
+    left: auto;
+    right: 0;
+  }
 `;
 
 export class BackButton extends React.Component {
@@ -88,7 +93,7 @@ export class BackButton extends React.Component {
     };
 
     this.showWarning = this.showWarning.bind(this);
-    this.hideWarning = this.hideWarning.bind(this);    
+    this.hideWarning = this.hideWarning.bind(this);
   }
 
   showWarning() {

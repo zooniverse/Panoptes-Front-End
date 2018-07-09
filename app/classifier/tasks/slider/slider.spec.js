@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import React from 'react';
 import assert from 'assert';
 import SliderTask from './index';
+import { mockReduxStore } from '../testHelpers';
 
 const task = {
   instruction: 'A slider',
@@ -22,7 +23,7 @@ describe('SliderTask', function () {
   beforeEach(function () {
     onChangeSpy = sinon.spy();
 
-    wrapper = mount(<SliderTask task={task} onChange={onChangeSpy} />);
+    wrapper = mount(<SliderTask task={task} onChange={onChangeSpy} />, mockReduxStore);
   });
 
   it('should render without crashing', function () {
@@ -158,7 +159,7 @@ describe('SliderSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '0.7' }} />);
+    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '0.7' }} />, mockReduxStore);
   });
 
   it('should render without crashing', function () {
@@ -175,7 +176,7 @@ describe('SliderSummary', function () {
   });
 
   it('should have the correct answer label when the value is falsy (i.e. 0)', function () {
-    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '0' }} />);
+    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '0' }} />, mockReduxStore);
     const answers = summary.find('.answer');
     assert.notEqual(answers.text(), 'No answer');
   });

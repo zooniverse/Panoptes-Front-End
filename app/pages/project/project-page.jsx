@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import classNames from 'classnames';
 import { Markdown } from 'markdownz';
 import { sugarClient } from 'panoptes-client/lib/sugar';
 import ProjectNavbar from './components/ProjectNavbar';
@@ -34,8 +35,16 @@ export default class ProjectPage extends React.Component {
   }
 
   render() {
+    const containerClassNames = classNames({
+      'project-page': true,
+      'rtl': this.props.translations.rtl
+    });
+
     return (
-      <div className="project-page">
+      <div
+        lang={this.props.translations.locale}
+        className={containerClassNames}
+      >
         <ProjectNavbar
           background={this.props.background}
           loading={this.props.loading}
@@ -103,6 +112,10 @@ ProjectPage.defaultProps = {
     id: '',
     display_name: ''
   },
+  translations: {
+    locale: 'en',
+    rtl: false
+  },
   user: null,
   workflow: null
 };
@@ -136,6 +149,10 @@ ProjectPage.propTypes = {
   routes: PropTypes.array,
   translation: PropTypes.shape({
     display_name: PropTypes.string
+  }),
+  translations: PropTypes.shape({
+    locale: PropTypes.string,
+    rtl: PropTypes.bool
   }),
   workflow: PropTypes.shape({
     id: PropTypes.string

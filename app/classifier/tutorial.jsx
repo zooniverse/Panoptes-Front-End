@@ -7,6 +7,7 @@ import Translate from 'react-translate-component';
 import { Markdown } from 'markdownz';
 import { Provider } from 'react-redux';
 import animatedScrollTo from 'animated-scrollto';
+import classnames from 'classnames';
 import MediaCard from '../components/media-card';
 
 import Translations from './translations';
@@ -246,13 +247,22 @@ export default class Tutorial extends React.Component {
     if (isIE) {
       tutorialStyle = { height: '85vh' };
     }
+    const className = classnames({
+      'tutorial-steps': true,
+      rtl: this.props.rtl
+    })
     const totalSteps = this.props.tutorial.steps.length;
     const allSteps = Array.from(Array(totalSteps).keys());
     const currentStep = this.props.tutorial.steps[this.state.stepIndex];
     const mediaCardSrc = this.props.media[currentStep.media] ? this.props.media[currentStep.media].src : '';
 
     return (
-      <div ref={(component) => { this.div = component; }} className="tutorial-steps" style={tutorialStyle}>
+      <div
+        ref={(component) => { this.div = component; }}
+        className={className}
+        lang={this.props.locale}
+        style={tutorialStyle}
+      >
         <MediaCard className="tutorial-step" src={mediaCardSrc}>
           <Markdown>{this.props.translation.steps[this.state.stepIndex].content}</Markdown>
           <hr />          

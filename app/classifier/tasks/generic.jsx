@@ -1,10 +1,12 @@
 import { Markdown } from 'markdownz';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 import alert from '../../lib/alert';
 import TaskHelpButton from './components/TaskHelpButton';
 
-export default class GenericTask extends React.Component {
+class GenericTask extends React.Component {
   constructor(props) {
     super(props);
     this.container = null;
@@ -28,10 +30,18 @@ export default class GenericTask extends React.Component {
   }
 
   showHelp() {
+    const { translations } = this.props;
+    const className = classNames({
+      'content-container': true,
+      rtl: translations.rtl
+    });
     alert(
       (resolve, reject) =>
         (
-          <div className="content-container">
+          <div
+            className={className}
+            lang={translations.locale}
+          >
             <Markdown className="classification-task-help">
               {this.props.help}
             </Markdown>
@@ -84,7 +94,11 @@ GenericTask.propTypes = {
     PropTypes.bool
   ]),
   answers: PropTypes.arrayOf(PropTypes.node),
-  showRequiredNotice: PropTypes.bool
+  showRequiredNotice: PropTypes.bool,
+  translations: PropTypes.shape({
+    locale: PropTypes.string,
+    rtl: PropTypes.bool
+  })
 };
 
 GenericTask.defaultProps = {
@@ -94,5 +108,16 @@ GenericTask.defaultProps = {
   help: '',
   required: false,
   answers: [],
-  showRequiredNotice: false
+  showRequiredNotice: false,
+  translations: {
+    locale: 'en',
+    rtl: false
+  }
 };
+
+const mapStateToProps = state => ({
+  translations: state.translations
+});
+
+export default connect(mapStateToProps)(GenericTask);
+export { GenericTask };
