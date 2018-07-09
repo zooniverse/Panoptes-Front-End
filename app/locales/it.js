@@ -237,7 +237,7 @@ export default {
   about: {
     index: {
       header: 'About'
-      title: 'About',
+      title: 'About'
       nav: {
         about: 'About',
         publications: 'Pubblicazioni',
