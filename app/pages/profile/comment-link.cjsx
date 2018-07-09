@@ -14,9 +14,6 @@ module.exports = createReactClass
 
   getInitialState: ->
     projectTitle: ''
-    owner: null
-    discussionTitle: ''
-    boardTitle: ''
 
   componentDidMount: ->
     @getLinkText(@props.comment)
@@ -28,16 +25,8 @@ module.exports = createReactClass
   getLinkText: (comment) ->
     [rootType, rootID] = comment.section.split('-')
 
-    talkClient.type('discussions').get(comment.discussion_id)
-      .then (discussion) =>
-        @setState { discussionTitle: discussion.title }
-        talkClient.type('boards').get(discussion.board_id)
-      .then (board) =>
-        @setState { boardTitle: board.title }
-        if rootType is 'project' and rootID?
-          apiClient.type('projects').get(rootID)
-        else
-          Promise.resolve {}
+    if rootType is 'project' and rootID?
+      apiClient.type('projects').get(rootID)
       .then (project) =>
         @setState { projectTitle: project.display_name }
           
@@ -51,8 +40,8 @@ module.exports = createReactClass
       
     <div className="profile-feed-comment-link">
       <header>
-        <span className="comment-timestamp" title={moment(@props.comment.created_at).toISOString()}>
-          {moment(@props.comment.created_at).fromNow()}
+        <span className="comment-timestamp" title={moment(comment.created_at).toISOString()}>
+          {moment(comment.created_at).fromNow()}
         </span>
           <span>
             {' '}in{' '}
@@ -62,9 +51,9 @@ module.exports = createReactClass
                   <strong className="comment-project">{@state.projectTitle}</strong>
                   <span>{' '}➞{' '}</span>
                 </span>}
-              <strong className="comment-board">{@state.boardTitle}</strong>
+              <strong className="comment-board">{comment.board_title}</strong>
               <span>{' '}➞{' '}</span>
-              <strong className="comment-discussion">{@state.discussionTitle}</strong>
+              <strong className="comment-discussion">{comment.discussion_title}</strong>
             </Link>
           </span>
       </header>
