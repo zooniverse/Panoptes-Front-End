@@ -28,26 +28,24 @@ module.exports = createReactClass
 
   getCommentHREF: (comment) ->
     [rootType, rootID] = comment.section.split('-')
+    
+    if comment.project_slug?
+      href = "/projects/#{comment.project_slug}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    else
+      href = "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    
+    @setState({ href })
 
     talkClient.type('discussions').get(comment.discussion_id).then (discussion) =>
-      @setState({discussion})
 
       talkClient.type('boards').get(discussion.board_id).then (board) =>
-        @setState({board})
-        href = if rootID?
-          if rootType is 'project'
-            # TODO: Focus
-            apiClient.type('projects').get(rootID).then (project) =>
-              @setState
-                boardProject: project
-              project.get('owner').then (owner) =>
-                @setState({owner})
-                "/projects/#{project.slug}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
-        else
-          Promise.resolve "/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
-        href.then (href) =>
-          @setState
-            href: href
+        @setState({ board, discussion })
+        
+        if rootType is 'project' and rootID?
+          apiClient.type('projects').get(rootID).then (project) =>
+            @setState
+              boardProject: project
+          
 
   render: ->
     <div className="profile-feed-comment-link">
@@ -59,9 +57,9 @@ module.exports = createReactClass
           <span>
             {' '}in{' '}
             <Link to={@state.href}>
-              {if @state.boardProject? and @state.owner? and !@props.project?
+              {if @state.boardProject? and !@props.project?
                 <span>
-                  <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.boardProject.display_name}">{@state.boardProject.display_name}</strong>
+                  <strong className="comment-project">{@state.boardProject.display_name}</strong>
                   <span>{' '}➞{' '}</span>
                 </span>}
               <strong className="comment-board">{@state.board?.title}</strong>
