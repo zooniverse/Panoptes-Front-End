@@ -13,7 +13,6 @@ const experimentalFeatures = [
   'Gravity Spy Gold Standard',
   'allow workflow query',
   'expert comparison summary',
-  'persist annotations',
   'shortcut',
   'freehandLine',
   'freehandShape',

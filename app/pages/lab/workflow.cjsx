@@ -263,19 +263,18 @@ EditWorkflowPage = createReactClass
 
           <hr />
 
-          {if 'persist annotations' in @props.project.experimental_tools
-            <div>
-              <AutoSave resource={@props.workflow}>
-              <span className="form-label">Set annotation persistence</span><br />
-              <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
-              <br />
-              <label>
-                <input ref="persistAnnotation" type="checkbox" checked={@props.workflow.configuration.persist_annotations} onChange={@handlePersistAnnotationsToggle} />
-                Persist annotations
-              </label>
-              </AutoSave>
-              <hr />
-            </div>}
+          <div>
+            <AutoSave resource={@props.workflow}>
+            <span className="form-label">Set annotation persistence</span><br />
+            <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
+            <br />
+            <label>
+              <input ref="persistAnnotation" type="checkbox" checked={@props.workflow.configuration.persist_annotations} onChange={@handlePersistAnnotationsToggle} />
+              Persist annotations
+            </label>
+            </AutoSave>
+            <hr />
+          </div>
 
           <div className={disabledIfWorkflowInactive}>
             <AutoSave resource={@props.project}>
