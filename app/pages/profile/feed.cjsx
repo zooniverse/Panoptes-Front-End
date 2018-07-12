@@ -3,7 +3,7 @@ PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require '../../talk/lib/paginator'
-CommentLink = require './comment-link'
+CommentLink = require('./comment-link').default
 
 module.exports = createReactClass
   displayName: 'UserProfileFeed'
