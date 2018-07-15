@@ -84,7 +84,7 @@ export default class PublicationsPage extends React.Component {
       Object.keys(Publications).map((category) => {
           if(this.state.currentSort == category || this.state.currentSort == 'showAll') {
             return (
-              <ul key={category} className="publications-list">
+              <div key={category} className="publications-list">
                 {
                   Publications[category].map((projectListing) => {
                     const project = this.state.projects[projectListing.slug]; 
@@ -99,27 +99,30 @@ export default class PublicationsPage extends React.Component {
                           </h3>
                           <span className="publication-count">{` (${projectListing.publications.length})`}</span>
                         </div>
-                        {
-                          projectListing.publications.map((publication) => {
-                            return(
-                              <li key={`publication-${Math.random()}`} className="publication-item">
-                                { this.avatarFor(project) }
-                                <div className="citation">
-                                  <p>
-                                    <cite>{publication.citation}</cite><br />
-                                    { publication.href !== undefined ? <a href={publication.href} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewPublication')}</a> : null }{' '}
-                                    { publication.openAccess ? <a href={publication.openAccess} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewOpenAccess')}</a> : null }
-                                  </p>
-                                </div>
-                              </li>
-                            );
-                          })
-                        }
+                        <ul className="publications">
+                          {
+                            projectListing.publications.map((publication) => {
+                              return(
+                                  <li key={`publication-${Math.random()}`} className="publication-item">
+                                    { this.avatarFor(project) }
+                                    <div className="citation">
+                                      <p>
+                                        <cite>{publication.citation}</cite><br />
+                                        { publication.href !== undefined ? <a href={publication.href} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewPublication')}</a> : null }{' '}
+                                        { publication.openAccess ? <a href={publication.openAccess} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewOpenAccess')}</a> : null }
+                                      </p>
+                                    </div>
+                                  </li>
+                              );
+                            })
+                          }
+                        </ul>
+                       
                       </div>
                     );
                   })
                 }
-              </ul>
+              </div>
             );
           }
           return null;
