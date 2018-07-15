@@ -89,7 +89,7 @@ export default class PublicationsPage extends React.Component {
                   Publications[category].map((projectListing) => {
                     const project = this.state.projects[projectListing.slug]; 
                     return (
-                      <div key={ projectListing.name !== undefined ? projectListing.name :projectListing.slug }>
+                      <div key={ projectListing.name !== undefined ? projectListing.name : projectListing.slug }>
                         <div>
                           <h3 className="project-name">
                             { project !== undefined  
@@ -107,8 +107,8 @@ export default class PublicationsPage extends React.Component {
                                 <div className="citation">
                                   <p>
                                     <cite>{publication.citation}</cite><br />
-                                    { publication.href !== undefined ? <a href={publication.href} target="_blank" >View publication.</a> : null }{' '}
-                                    { publication.openAccess ? <a href={publication.openAccess} target="_blank">View open access version.</a> : null }
+                                    { publication.href !== undefined ? <a href={publication.href} target="_blank" rel="noopener noreferrer" >View publication.</a> : null }{' '}
+                                    { publication.openAccess ? <a href={publication.openAccess} target="_blank" rel="noopener noreferrer" >View open access version.</a> : null }
                                   </p>
                                 </div>
                               </li>
