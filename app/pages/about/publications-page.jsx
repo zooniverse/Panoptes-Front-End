@@ -117,7 +117,6 @@ export default class PublicationsPage extends React.Component {
                             })
                           }
                         </ul>
-                       
                       </div>
                     );
                   })
