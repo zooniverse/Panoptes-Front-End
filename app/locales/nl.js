@@ -238,6 +238,10 @@ export default {
         header: {
           showAll: 'All Publications'
         }
+      },
+      publication: {
+        viewPublication: 'View publication.',
+        viewOpenAccess: 'View open access version.'
       }
     },
     team: {

@@ -107,8 +107,8 @@ export default class PublicationsPage extends React.Component {
                                 <div className="citation">
                                   <p>
                                     <cite>{publication.citation}</cite><br />
-                                    { publication.href !== undefined ? <a href={publication.href} target="_blank" rel="noopener noreferrer" >View publication.</a> : null }{' '}
-                                    { publication.openAccess ? <a href={publication.openAccess} target="_blank" rel="noopener noreferrer" >View open access version.</a> : null }
+                                    { publication.href !== undefined ? <a href={publication.href} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewPublication')}</a> : null }{' '}
+                                    { publication.openAccess ? <a href={publication.openAccess} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewOpenAccess')}</a> : null }
                                   </p>
                                 </div>
                               </li>
