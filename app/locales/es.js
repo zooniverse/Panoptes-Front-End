@@ -191,6 +191,23 @@ export default {
     label: 'Active'
   },
   about: {
+    publications: {
+      nav: {
+        showAll: 'Show All',
+        space: 'Space',
+        physics: 'Physics',
+        climate: 'Climate',
+        humanities: 'Humanities',
+        nature: 'Nature',
+        medicine: 'Medicine',
+        meta: 'Meta',
+      },
+      content: {
+        header: {
+          showAll: 'All Publications'
+        }
+      }
+    },
     team: {
       nav: {
         showAll: 'Show All',

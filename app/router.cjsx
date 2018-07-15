@@ -41,6 +41,7 @@ createReactClass = require 'create-react-class'
 `import EmailSettingsPage from './pages/settings/email';`
 `import AboutPage from './pages/about/index';`
 `import AboutHome from './pages/about/about-home';`
+`import PublicationsPage from './pages/about/publications-page';`
 `import TeamPage from './pages/about/team-page';`
 `import Acknowledgements from './pages/about/acknowledgements';`
 `import Contact from './pages/about/contact';`
@@ -75,7 +76,7 @@ module.exports =
     <Route path="about" component={AboutPage} ignoreScrollBehavior>
       <IndexRoute component={AboutHome} />
       <Route path="team" component={TeamPage} />
-      <Route path="publications" component={require './pages/about/publications-page'} />
+      <Route path="publications" component={PublicationsPage} />
       <Route path="acknowledgements" component={Acknowledgements} />
       <Route path="resources" component={Resources} />
       <Route path="contact" component={Contact} />
