@@ -24,43 +24,21 @@ export default class TextTask extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.setTagSelection = this.setTagSelection.bind(this);
+    this.setValue = this.setValue.bind(this);
     this.updateAnnotation = this.updateAnnotation.bind(this);
   }
 
-  componentWillMount() {
-    this.setState({
-      value: this.props.annotation.value
-    });
-  }
-
   componentDidMount() {
-    this.handleResize();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.task !== this.props.task) {
-      this.setState({
-        rows: 1,
-        value: nextProps.annotation.value
-      });
-    }
-    if (nextProps.annotation.value !== this.props.annotation.value) {
-      this.setState({
-        value: nextProps.annotation.value
-      });
-    }
+    this.setValue();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.task !== this.props.task) {
-      this.handleResize();
-      if (this.props.autoFocus === true) {
-        this.textInput.current.focus();
-      }
-    }
+    if (prevProps.task && this.props.task && (prevProps.task !== this.props.task)) {
+      const value = prevState.value;
+      const newAnnotation = Object.assign(prevProps.annotation, { value });
+      prevProps.onChange(newAnnotation);
 
-    if (prevState.value && this.state.value && (prevState.value > this.state.value)) {
-      this.setInitialRows();
+      this.setValue();
     }
 
     this.handleResize();
@@ -68,10 +46,6 @@ export default class TextTask extends React.Component {
 
   componentWillUnmount() {
     this.updateAnnotation();
-  }
-
-  setInitialRows() {
-    this.setState({ rows: 1 });
   }
 
   setTagSelection(e) {
@@ -97,6 +71,26 @@ export default class TextTask extends React.Component {
     this.debouncedUpdateAnnotation();
   }
 
+  setValue() {
+    this.setState({ rows: 1, value: this.props.annotation.value });
+    this.handleResize();
+    if (this.props.autoFocus) {
+      this.textInput.current.focus();
+    }
+  }
+
+  handleChange() {
+    const value = this.textInput.current.value;
+    if (value < this.state.value) {
+      this.setState({ rows: 1 });
+    }
+
+    this.setState({ value });
+    this.debouncedUpdateAnnotation();
+
+    this.handleResize();
+  }
+
   handleResize() {
     const oldRows = this.textInput.current.rows;
     const newRows = Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT);
@@ -104,13 +98,6 @@ export default class TextTask extends React.Component {
     if (newRows && (newRows !== oldRows)) {
       this.setState({ rows: newRows });
     }
-  }
-
-  handleChange() {
-    this.handleResize();
-    const value = this.textInput.current.value;
-    this.setState({ value });
-    this.debouncedUpdateAnnotation();
   }
 
   updateAnnotation() {
@@ -128,14 +115,13 @@ export default class TextTask extends React.Component {
       >
         <label className="answer" htmlFor="textInput">
           <textarea
-            autoFocus={this.props.autoFocus}
             className="standard-input full"
-            id="textInput"
-            ref={this.textInput}
-            value={this.state.value}
+            onBlur={this.updateAnnotation}
             onChange={this.handleChange}
+            ref={this.textInput}
             rows={this.state.rows}
             style={{ lineHeight: `${LINEHEIGHT}px` }}
+            value={this.state.value}
           />
         </label>
         {this.props.task.text_tags && this.props.task.text_tags.length &&
