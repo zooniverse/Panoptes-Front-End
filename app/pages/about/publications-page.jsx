@@ -93,7 +93,7 @@ export default class PublicationsPage extends React.Component {
                         <div>
                           <h3 className="project-name">
                             { project !== undefined  
-                                ? this.state.projects[projectListing.slug].display_name 
+                                ? project.display_name 
                                 : projectListing.name
                             }
                           </h3>
