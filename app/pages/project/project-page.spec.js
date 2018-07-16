@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { sugarClient } from 'panoptes-client/lib/sugar';
 import GeordiLogger from '../../lib/zooniverse-logging';
 import { project } from '../dev-classifier/mock-data';
 import ProjectPage from './project-page';
@@ -88,9 +87,6 @@ describe('ProjectPage', function () {
   });
 
   describe('on component lifecycle', function () {
-    let sugarClientSubscribeSpy;
-    let sugarClientUnsubscribeSpy;
-    const channel = `project-${project.id}`;
 
     let geordiRememberSpy;
     let geordiForgetSpy;
@@ -99,22 +95,16 @@ describe('ProjectPage', function () {
     let wrapper;
 
     before(function () {
-      sugarClientSubscribeSpy = sinon.spy(sugarClient, 'subscribeTo');
-      sugarClientUnsubscribeSpy = sinon.spy(sugarClient, 'unsubscribeFrom');
       geordiRememberSpy = sinon.spy(geordi, 'remember');
       geordiForgetSpy = sinon.spy(geordi, 'forget');
     });
 
     afterEach(function () {
-      sugarClientSubscribeSpy.resetHistory();
-      sugarClientUnsubscribeSpy.resetHistory();
       geordiRememberSpy.resetHistory();
       geordiForgetSpy.resetHistory();
     });
 
     after(function () {
-      sugarClientSubscribeSpy.restore();
-      sugarClientUnsubscribeSpy.restore();
       geordiRememberSpy.restore();
       geordiForgetSpy.restore();
     });
@@ -130,17 +120,6 @@ describe('ProjectPage', function () {
             childContextTypes: { store: PropTypes.object.isRequired }
           }
         );
-      });
-
-      it('subscribes the user to the sugar project channel on mount', function () {
-        expect(sugarClientSubscribeSpy.calledOnce).to.be.true;
-        expect(sugarClientSubscribeSpy.calledWith(channel)).to.be.true;
-      });
-
-      it('unsubscribes the user from the sugar project channel on unmount', function () {
-        wrapper.unmount();
-        expect(sugarClientUnsubscribeSpy.calledOnce).to.be.true;
-        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.be.true;
       });
 
       it('remembers the project slug in geordi projectToken context', function () {
@@ -166,16 +145,6 @@ describe('ProjectPage', function () {
           { context: { geordi }}
         );
         wrapper.setProps({ project: newProject });
-      });
-
-      it('unsubscribes old project from sugar', function () {
-        expect(sugarClientUnsubscribeSpy.calledOnce).to.be.true;
-        expect(sugarClientUnsubscribeSpy.calledWith(channel)).to.true;
-      });
-
-      it('subscribes new project to sugar', function () {
-        expect(sugarClientSubscribeSpy.calledOnce).to.be.true;
-        expect(sugarClientSubscribeSpy.calledWith(newChannel)).to.be.true;
       });
 
       it('remembers new project slug in geordi projectToken context', function () {
