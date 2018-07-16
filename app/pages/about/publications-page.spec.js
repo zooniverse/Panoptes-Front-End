@@ -5,6 +5,7 @@ import assert from 'assert';
 import PublicationsPage from './publications-page';
 import { shallow } from 'enzyme';
 
+
 describe('PublicationsPage', () => {
 
   it('renders without crashing', function () {
@@ -22,5 +23,12 @@ describe('PublicationsPage', () => {
     wrapper.setState({ projects: {} });
     const publications = wrapper.find('.publications-list');
     assert.notEqual(publications.length, 0);
+  });
+
+  it('renders one publication list when current sort is space', () => {
+    const wrapper = shallow(<PublicationsPage />);
+    wrapper.setState({ projects: {}, currentSort: 'space' });
+    const publications = wrapper.find('.publications-list');
+    assert.equal(publications.length, 1);
   });
 });
