@@ -6,11 +6,11 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import TextTask from './';
 import TextSummary from './summary';
-import { textTypeAnnotation, textTypeTask } from '../testHelpers';
+import { mockReduxStore, textTypeAnnotation, textTypeTask } from '../testHelpers';
 
 const annotation = Object.assign({}, textTypeAnnotation, { value: 'testing the text task' });
 
-describe.only('TextTask', function () {
+describe('TextTask', function () {
   describe('when it renders', function () {
     let wrapper;
 
@@ -19,7 +19,7 @@ describe.only('TextTask', function () {
         task={textTypeTask}
         annotation={annotation}
         translation={textTypeTask}
-      />);
+      />, mockReduxStore);
     });
 
     it('should render without crashing', function () {
@@ -36,7 +36,7 @@ describe.only('TextTask', function () {
       expect(answer).to.equal(annotation.value);
     });
 
-    it.skip('should have appropriate input height with multiline answer', function () {});
+    // it('should have multiple row input height with multiline answer', function () {});
   });
 
   describe('input onChange event handler', function () {
@@ -57,7 +57,7 @@ describe.only('TextTask', function () {
           onChange={onChangeSpy}
           task={textTypeTask}
           translation={textTypeTask}
-        />);
+        />, mockReduxStore);
     });
 
     afterEach(function () {
@@ -83,9 +83,9 @@ describe.only('TextTask', function () {
       expect(handleChangeSpy.calledOnce).to.be.true;
     });
 
-    it.skip('should increase textarea size when appropriate', function () {});
+    // it('should increase textarea row height when answer is multiple lines', function () {});
 
-    it.skip('should decrease textarea size when appropriate', function () {});
+    // it('should decrease textarea row height when answer content is reduced to fewer rows', function () {});
   });
 
   describe('static methods', function () {
