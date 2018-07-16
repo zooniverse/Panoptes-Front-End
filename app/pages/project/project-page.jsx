@@ -2,36 +2,23 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import { Markdown } from 'markdownz';
-import { sugarClient } from 'panoptes-client/lib/sugar';
 import ProjectNavbar from './components/ProjectNavbar';
 import FieldGuideContainer from './field-guide-container';
 import ProjectHomeContainer from './home/';
 
 export default class ProjectPage extends React.Component {
   componentDidMount() {
-    this.updateSugarSubscription(this.props.project);
     this.context.geordi && this.context.geordi.remember({ projectToken: this.props.project.slug });
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.project !== this.props.project) {
-      this.removeSugarSubscription(this.props.project);
-      this.updateSugarSubscription(nextProps.project);
       this.context.geordi && this.context.geordi.remember({ projectToken: nextProps.project.slug });
     }
   }
 
   componentWillUnmount() {
-    this.removeSugarSubscription(this.props.project);
     this.context.geordi && this.context.geordi.forget(['projectToken']);
-  }
-
-  updateSugarSubscription(project) {
-    sugarClient.subscribeTo(`project-${project.id}`);
-  }
-
-  removeSugarSubscription(project) {
-    sugarClient.unsubscribeFrom(`project-${project.id}`);
   }
 
   render() {
