@@ -65,6 +65,7 @@ class Task extends React.Component {
               task={task}
             >
               <TaskComponent
+                key={annotation.task}
                 autoFocus={true}
                 taskTypes={tasks}
                 workflow={workflow}
