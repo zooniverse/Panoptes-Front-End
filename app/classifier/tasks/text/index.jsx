@@ -58,16 +58,22 @@ export default class TextTask extends React.Component {
     const selectionEnd = textArea.selectionEnd;
     const textBefore = textAreaValue.substring(0, selectionStart);
     let textAfter;
+    let textThroughEndTag;
     let value;
     if (selectionStart === selectionEnd) {
       textAfter = textAreaValue.substring(selectionStart, textAreaValue.length);
+      textThroughEndTag = textBefore + startTag + endTag;
       value = textBefore + startTag + endTag + textAfter;
     } else {
       const textInBetween = textAreaValue.substring(selectionStart, selectionEnd);
       textAfter = textAreaValue.substring(selectionEnd, textAreaValue.length);
+      textThroughEndTag = textBefore + startTag + textInBetween + endTag;
       value = textBefore + startTag + textInBetween + endTag + textAfter;
     }
-    this.setState({ value });
+    this.setState({ value }, () => {
+      this.textInput.current.setSelectionRange(textThroughEndTag.length, textThroughEndTag.length);
+      this.textInput.current.focus();
+    });
     this.debouncedUpdateAnnotation();
   }
 
