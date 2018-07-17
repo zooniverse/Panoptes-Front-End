@@ -34,10 +34,6 @@ export default class TextTask extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.task && this.props.task && (prevProps.task !== this.props.task)) {
-      const value = prevState.value;
-      const newAnnotation = Object.assign(prevProps.annotation, { value });
-      prevProps.onChange(newAnnotation);
-
       this.setValue();
     }
 
@@ -88,13 +84,12 @@ export default class TextTask extends React.Component {
   handleChange() {
     const value = this.textInput.current.value;
     if (value < this.state.value) {
-      this.setState({ rows: 1 });
+      this.setState({ rows: 1, value }, () => { this.handleResize(); });
+    } else {
+      this.setState({ value }, () => { this.handleResize(); });
     }
 
-    this.setState({ value });
     this.debouncedUpdateAnnotation();
-
-    this.handleResize();
   }
 
   handleResize() {
