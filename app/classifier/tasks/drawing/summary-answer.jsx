@@ -45,7 +45,7 @@ MarkProperty.propTypes = {
   }).isRequired
 };
 
-export default function SummaryAnswer({ tool, marks }) {
+export default function SummaryAnswer({ expanded, tool, marks }) {
   return (
     <div className="answer">
       <p>
@@ -53,25 +53,29 @@ export default function SummaryAnswer({ tool, marks }) {
         {' '}
         ({marks.length} {getCorrectSingularOrPluralOfDrawingType(tool.type, marks.length)} marked)
       </p>
-      <ol>
-        {marks.map(mark => (
-          <li key={mark._key}>
-            {Object.keys(mark)
-              .filter(property => property[0] !== '_')
-              .map(property => <MarkProperty key={property} tool={tool} mark={mark} property={property} />)}
-          </li>
-        ))}
-      </ol>
+      {expanded &&
+        <ol>
+          {marks.map(mark => (
+            <li key={mark._key}>
+              {Object.keys(mark)
+                .filter(property => property[0] !== '_')
+                .map(property => <MarkProperty key={property} tool={tool} mark={mark} property={property} />)}
+            </li>
+          ))}
+        </ol>
+      }
     </div>
   );
 }
 
 SummaryAnswer.propTypes = {
+  expanded: PropTypes.bool,
   marks: PropTypes.arrayOf(PropTypes.shape({})),
   tool: PropTypes.shape({})
 };
 
 SummaryAnswer.defaultProps = {
+  expanded: false,
   marks: [],
   tool: {}
 };
