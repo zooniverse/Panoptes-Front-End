@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Markdown } from 'markdownz';
 
 import DefaultClassificationSummary from './default-classification-summary';
 import GSGoldStandardSummary from './gs-gold-standard-summary';
