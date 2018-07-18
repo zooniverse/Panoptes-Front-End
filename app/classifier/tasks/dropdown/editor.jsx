@@ -131,14 +131,16 @@ export default class DropdownEditor extends React.Component {
           <section>
             <div>
               <AutoSave resource={this.props.workflow}>
-                <span className="form-label">Main text</span>
-                <br />
-                <textarea
-                  name={`${this.props.taskPrefix}.instruction`}
-                  value={this.props.task.instruction}
-                  className="standard-input full"
-                  onChange={handleChange}
-                />
+                <label>
+                  <span className="form-label">Main text</span>
+                  <br />
+                  <textarea
+                    name={`${this.props.taskPrefix}.instruction`}
+                    value={this.props.task.instruction}
+                    className="standard-input full"
+                    onChange={handleChange}
+                  />
+                </label>
               </AutoSave>
               <small className="form-help">
                 `Describe the task, or ask the question, in a way that is clear to a non-expert.
@@ -179,7 +181,7 @@ export default class DropdownEditor extends React.Component {
                 <i className="fa fa-plus" />
                 Add a Dropdown
               </button>
-              <label htmlFor="condition">
+              <label>
                 <span> Dependent On </span>
                 <select
                   id="condition"
