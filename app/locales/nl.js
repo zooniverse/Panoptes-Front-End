@@ -34,83 +34,83 @@ export default {
   loading: '(Laden)',
   classifier: {
     back: 'Terug',
-    backButtonWarning: 'Als je terug gaat verlies je je werk voor de huidige taak.',
-    close: 'Close',
-    continue: 'Continue',
-    detailsSubTaskFormSubmitButton: 'OK',    
-    done: 'Klaar',
-    doneAndTalk: 'Klaar & Praat',
-    dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: 'Let’s go!',
-    next: 'Verder',
-    optOut: 'Opt out',
+    backButtonWarning: 'Let op! Niet opgeslagen gegevens gaan verloren.',
+    close: 'Sluiten',
+    continue: 'Doorgaan',
+    detailsSubTaskFormSubmitButton: 'OK',
+    done: 'Afronden',
+    doneAndTalk: 'Afronden & Bespreken',
+    dontShowMinicourse: 'Verberg de uitleg in het vervolg.',
+    letsGo: 'Laten we beginnen!',
+    next: 'Volgende',
+    optOut: 'Opt-out',
     taskTabs: {
-      taskTab: 'Task',
-      tutorialTab: 'Tutorial'
+      taskTab: 'Taak',
+      tutorialTab: 'Uitleg'
     },
-    recents: 'Je recente classificaties',
-    talk: 'Praat',
-    taskHelpButton: 'Need some help with this task?',
-    miniCourseButton: 'Herstart de minitour'
+    recents: 'Je recente waarnemingen',
+    talk: 'Overleg',
+    taskHelpButton: 'Hulp nodig met deze taak?',
+    miniCourseButton: 'Herhaal de uitleg'
   },
   project: {
     language: 'Taal',
     loading: 'Project wordt geladen',
-    disclaimer: 'Dit project is gemaakt met de Zooniverse projectbouwer maar is not niet een officieel Zooniverseproject. Vragen en problemen met betrekking tot dit project die gestuurd worden aan het Zooniverseteam krijgen mogelijk geen reactie.',
+    disclaimer: 'Dit project is gemaakt met de Zooniverse projectbouwer maar nog geen officieel Zooniverse project. Vragen over het project die gestuurd worden aan het Zooniverseteam worden mogelijk niet beantwoord.',
     about: {
-      header: 'About',
+      header: 'Over',
       nav: {
-        research: 'Research',
-        results: 'Results',
-        faq: 'FAQ',
-        education: 'Education',
-        team: 'The Team',
+        research: 'Onderzoek',
+        results: 'Resultaten',
+        faq: 'Veelgestelde vragen',
+        education: 'Onderwijs',
+        team: 'Het team',
       }
     },
     nav: {
       about: 'Over',
-      classify: 'Classificeer',
-      talk: 'Praat',
-      collections: 'Verzamel',
-      recents: 'Recent',
+      classify: 'Annoteren',
+      talk: 'Forum',
+      collections: 'Verzamelingen',
+      recents: 'Mijn waarnemingen',
       lab: 'Lab',
-      adminPage: 'Beheerpagina',
-      underReview: 'Under Review',
-      zooniverseApproved: 'Zooniverse Approved'
+      adminPage: 'Administratie',
+      underReview: 'Wacht op controle',
+      zooniverseApproved: 'Goedgekeurd door Zooniverse'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
-      title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
+      dark: 'donker',
+      light: 'licht',
+      title: 'Annoteren',
+      themeToggle: 'Wissel naar %(theme)s thema'
     },
     home: {
-      researcher: 'Woorden van de onderzoeker',
+      researcher: 'Citaat van de onderzoeker',
       about: 'Over %(title)s',
       metadata: {
         statistics: '%(title)s statistieken',
-        classifications: 'Classificeringen',
+        classifications: 'Waarnemingen',
         volunteers: 'Vrijwilligers',
-        completedSubjects: 'Voltooide Onderwerpen',
-        subjects: 'Onderwerpen'
+        completedSubjects: 'Voltooide taken',
+        subjects: 'Taken'
       },
       talk: {
         zero: 'Niemand praat over **%(title)s** op dit moment.',
         one: '**1** persoon praat over **%(title)s** op dit moment.',
         other: '**%(count)s** mensen praten over **%(title)s** op dit moment.'
       },
-      joinIn: 'Doe mee',
-      learnMore: 'Learn more',
-      getStarted: 'Get started',
-      workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
-      visitLink: 'Visit the project',
+      joinIn: 'Doe mee!',
+      learnMore: 'Lees meer',
+      getStarted: 'Beginnen',
+      workflowAssignment: 'Je hebt een nieuw niveau bereikt in %(workflowDisplayName)s',
+      visitLink: 'Bezoek het project',
       links: 'Links'
     }
   },
   organization: {
     loading: 'Organisatie wordt geladen',
     error: 'Er ging iets mis bij het laden van de organisatie',
-    notFound: 'organisatie werd niet gevonden.',
+    notFound: 'Organisatie werd niet gevonden.',
     notPermission: 'Als je zeker weet dat de URL correct is, heb je wellicht geen toestemming om deze organisatie te zien.',
     pleaseWait: 'Een ogenblik geduld...',
     home: {
@@ -133,20 +133,20 @@ export default {
       noAnswer: "Geen antwoord"
     },
     survey: {
-      clear: 'Wis',
+      clear: 'Wissen',
       clearFilters: 'Wis filters',
       makeSelection: 'Maak een keuze',
       showing: 'Toont %(count)s van %(max)s',
-      confused: 'Vaak verward met',
+      confused: 'Word vaak verward met',
       dismiss: 'Sluiten',
-      itsThis: 'Ik denk dat het dit is',
-      cancel: 'Annuleer',
-      identify: 'Identificeer',
-      surveyOf: 'Inspectie van %(count)s',
+      itsThis: 'Volgens mij het deze',
+      cancel: 'Annuleren',
+      identify: 'Selecteren',
+      surveyOf: 'Waarneming van %(count)s',
       identifications: {
-        zero: 'Geen identificaties',
-        one: '1 identificatie',
-        other: '%(count)s identificaties'
+        zero: 'Geen waarnemingen',
+        one: '1 waarneming',
+        other: '%(count)s waarnemingen'
       }
     }
   },
@@ -177,20 +177,20 @@ export default {
     details: '## Reporting Security Issues\n\nThe Zooniverse supports [responsible disclosure](https://en.wikipedia.org/wiki/Responsible_disclosure) of vulnerabilities. If you believe you have discovered a security vulnerability in any Zooniverse software, we ask that this first be reported to [security@zooniverse.org](mailto:security@zooniverse.org) to allow time for vulnerabilities to be fixed before details are published.\n\n## Known Vulnerabilities and Incidents\n\nWe believe it is important to be completely transparent about security issues. A complete list of fixed vulnerabilities and past security incidents is given below:\n\n* June 21, 2018: [Cross-site scripting on project home pages](https://blog.zooniverse.org/2018/07/03/fixed-cross-site-scripting-vulnerability-on-project-home-pages/)\n\nNew vulnerabilities and incidents will be announced via the [Zooniverse blog in the "technical" category](http://blog.zooniverse.org/category/technical/).'
   },
   userAdminPage: {
-    header: 'Beheer',
+    header: 'Administratie',
     nav: {
       createAdmin: 'Beheer gebruikers',
-      projectStatus: 'Zet projectstatus',
+      projectStatus: 'Wijzig projectstatus',
       grantbot: 'Grantbot',
-      organizationStatus: 'Zet organisatiestatus'
+      organizationStatus: 'Wijzig organisatiestatus'
     },
     notAdminMessage: 'Je bent geen beheerder',
     notSignedInMessage: 'Je bent niet ingelogd'
   },
   signIn: {
     title: 'Inloggen/registreren',
-    withZooniverse: 'Log in met je Zooniverseaccount',
-    whyHaveAccount: 'Ingelogde vrijwilligers kunnen hun eigen werk bijhouden en worden vermeld in publicaties.',
+    withZooniverse: 'Log in met je Zooniverse account',
+    whyHaveAccount: 'Ingelogde vrijwilligers kunnen hun eigen waarnemingen bijhouden en worden vermeld in publicaties.',
     signIn: 'Inloggen',
     register: 'Registreren',
     orThirdParty: 'Of log in met een andere dienst',
@@ -202,16 +202,16 @@ export default {
   },
   resetPassword: {
     heading: 'Wachtwoord vergeten',
-    newPasswordFormDialog: 'Voer hetzelfde wachtwoord tweemaal in, zodat je verder kunt met onderzoek doen. Een wachtwoord moet tenminste 8 tekens lang zijn.',
+    newPasswordFormDialog: 'Voer hetzelfde wachtwoord twee keer in om de toegang tot je account te herstellen. Een wachtwoord moet tenminste 8 tekens lang zijn.',
     newPasswordFormLabel: 'Nieuw wachtwoord:',
     newPasswordConfirmationLabel: 'Herhaal, ter controle:',
-    enterEmailLabel: 'Voer je e-mailadres in en we sturen je een link waarmee je kunt herstellen.',
-    emailSuccess: 'We hebben je zojuist een e-mail met een herstellink gezonden.',
+    enterEmailLabel: 'Voer het e-mailadres in waarop je een link wilt ontvangen om je wachtwoord te herstellen.',
+    emailSuccess: 'We hebben je zojuist een e-mail met een herstellink gestuurd.',
     emailError: 'Er ging iets mis bij het herstellen van je wachtwoord.',
-    passwordsDoNotMatch: 'De wachtwoorden komen niet overeen, probeer het opnieuw.',
+    passwordsDoNotMatch: 'De wachtwoorden komen niet overeen, probeer het alstublieft opnieuw.',
     loggedInDialog: 'Je bent op dit moment ingelogd. Log uit om je wachtwoord te herstellen.',
-    missingEmailsSpamNote: 'Als je geen e-mail ontvangen hebt, controleer dan of het wellicht in je spamfolder terecht is gekomen.',
-    missingEmailsAlternateNote: 'Als je nog steeds geen e-mail ontvangen hebt, controleer of je misschien een ander e-mailadres voor je account hebt gebruikt.'
+    missingEmailsSpamNote: 'Als je geen e-mail hebt ontvangen, controleer dan of het bericht wellicht in je spamfolder terecht is gekomen.',
+    missingEmailsAlternateNote: 'Als je nog steeds geen e-mail ontvangen hebt, controleer dan of je misschien een ander e-mailadres voor je Zooniverse account hebt gebruikt.'
   },
   workflowToggle: {
     label: 'Actief'
