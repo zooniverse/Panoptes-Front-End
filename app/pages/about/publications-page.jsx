@@ -20,7 +20,7 @@ export default class PublicationsPage extends React.Component {
   }
 
   showPublicationsList(key) {
-    this.setState({currentSort: key});
+    this.setState({ currentSort: key });
   }
 
   projectSlugs() {
@@ -55,15 +55,16 @@ export default class PublicationsPage extends React.Component {
   renderSideBarNav(sideBarNav) {
     return (
       <nav>
-        { Object.keys(sideBarNav).map((navItem) => {
-            return (<button key={navItem}
-                      style={this.state.currentSort === navItem ? { fontWeight: 700 } : null }
-                      onClick={() => this.showPublicationsList(navItem)}
-                      className={`secret-button side-bar-button`}>
-                      <span>{sideBarNav[navItem]}</span>
-                    </button>);
-          })
-        }
+        {Object.keys(sideBarNav).map(navItem => (
+          <button
+            key={navItem}
+            style={this.state.currentSort === navItem ? { fontWeight: 700 } : null}
+            onClick={() => this.showPublicationsList(navItem)}
+            className={'secret-button side-bar-button'}
+          >
+            <span>{sideBarNav[navItem]}</span>
+          </button>
+        ))}
       </nav>
     );
   }
@@ -72,7 +73,7 @@ export default class PublicationsPage extends React.Component {
     return (
       <h2> 
         { this.state.currentSort === 'showAll' 
-            ? counterpart("about.publications.content.header.showAll") 
+            ? counterpart('about.publications.content.header.showAll') 
             : sideBarNav[this.state.currentSort]
         }
       </h2>
@@ -82,55 +83,51 @@ export default class PublicationsPage extends React.Component {
   renderProjects() {
     return (
       Object.keys(Publications).map((category) => {
-          if(this.state.currentSort == category || this.state.currentSort == 'showAll') {
-            return (
-              <div key={category} className="publications-list">
-                {
-                  Publications[category].map((projectListing) => {
-                    const project = this.state.projects[projectListing.slug]; 
-                    return (
-                      <div key={ projectListing.name !== undefined ? projectListing.name : projectListing.slug }>
-                        <div>
-                          <h3 className="project-name">
-                            { project !== undefined  
-                                ? project.display_name 
-                                : projectListing.name
-                            }
-                          </h3>
-                          <span className="publication-count">{` (${projectListing.publications.length})`}</span>
-                        </div>
-                        <ul className="publications">
-                          {
-                            projectListing.publications.map((publication) => {
-                              return(
-                                  <li key={`publication-${Math.random()}`} className="publication-item">
-                                    { this.avatarFor(project) }
-                                    <div className="citation">
-                                      <p>
-                                        <cite>{publication.citation}</cite><br />
-                                        { publication.href !== undefined ? <a href={publication.href} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewPublication')}</a> : null }{' '}
-                                        { publication.openAccess ? <a href={publication.openAccess} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewOpenAccess')}</a> : null }
-                                      </p>
-                                    </div>
-                                  </li>
-                              );
-                            })
+        if (this.state.currentSort === category || this.state.currentSort === 'showAll') {
+          return (
+            <div key={category} className="publications-list">
+              {
+                Publications[category].map((projectListing) => {
+                  const project = this.state.projects[projectListing.slug]; 
+                  return (
+                    <div key={projectListing.name !== undefined ? projectListing.name : projectListing.slug}>
+                      <div>
+                        <h3 className="project-name">
+                          { project !== undefined  
+                              ? project.display_name 
+                              : projectListing.name
                           }
-                        </ul>
+                        </h3>
+                        <span className="publication-count">{` (${projectListing.publications.length})`}</span>
                       </div>
-                    );
-                  })
-                }
-              </div>
-            );
-          }
-          return null;
-        })
+                      <ul className="publications">
+                        {projectListing.publications.map(publication => (
+                          <li key={`publication-${Math.random()}`} className="publication-item">
+                            {this.avatarFor(project)}
+                            <div className="citation">
+                              <p>
+                                <cite>{publication.citation}</cite><br />
+                                {publication.href !== undefined ? <a href={publication.href} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewPublication')}</a> : null }{' '}
+                                {publication.openAccess ? <a href={publication.openAccess} target="_blank" rel="noopener noreferrer" >{counterpart('about.publications.publication.viewOpenAccess')}</a> : null }
+                              </p>
+                            </div>
+                          </li>
+                        ))}                        
+                      </ul>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          );
+        }
+        return null;
+      })
     );
   }
 
   render() {
-    const sideBarNav = counterpart("about.publications.nav");
+    const sideBarNav = counterpart('about.publications.nav');
     return (
       <div className="publications-page secondary-page-copy">
         <aside className="secondary-page-side-bar">
@@ -149,6 +146,6 @@ export default class PublicationsPage extends React.Component {
 
   avatarFor(project) {
     const src = project !== undefined ? `//${project.avatar_src}` : '/assets/simple-avatar.png';
-    return <img src={src} alt="Project Avatar" />
+    return <img src={src} alt="Project Avatar" />;
   }
 } 
