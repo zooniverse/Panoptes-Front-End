@@ -224,6 +224,9 @@ describe('Classifier', function () {
         feedback: {
           init: feedbackInitSpy,
           update: feedbackUpdateSpy
+        },
+        interventions: {
+          dismiss: sinon.stub()
         }
       };
       wrapper = shallow(

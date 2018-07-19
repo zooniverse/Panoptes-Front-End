@@ -523,7 +523,11 @@ Classifier.propTypes = {
 };
 
 Classifier.defaultProps = {
-  actions: {},
+  actions: {
+    interventions: {
+      dismiss: () => true
+    }
+  },
   classification: {},
   classificationCount: 0,
   demoMode: false,
