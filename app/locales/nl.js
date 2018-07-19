@@ -48,7 +48,7 @@ export default {
       taskTab: 'Taak',
       tutorialTab: 'Uitleg'
     },
-    recents: 'Uw recente waarnemingen',
+    recents: 'Je recente waarnemingen',
     talk: 'Overleg',
     taskHelpButton: 'Hulp nodig met deze taak?',
     miniCourseButton: 'Herhaal de uitleg'
@@ -101,7 +101,7 @@ export default {
       joinIn: 'Doe mee!',
       learnMore: 'Lees meer',
       getStarted: 'Beginnen',
-      workflowAssignment: 'U hebt een nieuw niveau bereikt in %(workflowDisplayName)s',
+      workflowAssignment: 'Je hebt een nieuw niveau bereikt in %(workflowDisplayName)s',
       visitLink: 'Bezoek het project',
       links: 'Links'
     }
@@ -110,7 +110,7 @@ export default {
     loading: 'Organisatie wordt geladen',
     error: 'Er ging iets mis bij het laden van de organisatie',
     notFound: 'Organisatie werd niet gevonden.',
-    notPermission: 'Als je zeker weet dat de URL correct is, heeft u wellicht geen toestemming om deze organisatie te zien.',
+    notPermission: 'Als je zeker weet dat de URL correct is, heb je wellicht geen toestemming om deze organisatie te zien.',
     pleaseWait: 'Een ogenblik geduld...',
     home: {
       projects: {
@@ -183,8 +183,8 @@ export default {
       grantbot: 'Grantbot',
       organizationStatus: 'Wijzig organisatiestatus'
     },
-    notAdminMessage: 'U bent geen beheerder',
-    notSignedInMessage: 'U bent niet ingelogd'
+    notAdminMessage: 'Je bent geen beheerder',
+    notSignedInMessage: 'Je bent niet ingelogd'
   },
   signIn: {
     title: 'Inloggen/registreren',
@@ -201,16 +201,16 @@ export default {
   },
   resetPassword: {
     heading: 'Wachtwoord vergeten',
-    newPasswordFormDialog: 'Voer hetzelfde wachtwoord twee keer in om de toegang tot uw account te herstellen. Een wachtwoord moet tenminste 8 tekens lang zijn.',
+    newPasswordFormDialog: 'Voer hetzelfde wachtwoord twee keer in om de toegang tot je account te herstellen. Een wachtwoord moet tenminste 8 tekens lang zijn.',
     newPasswordFormLabel: 'Nieuw wachtwoord:',
     newPasswordConfirmationLabel: 'Herhaal, ter controle:',
-    enterEmailLabel: 'Voer het e-mailadres in waarop u een link wilt ontvangen om uw wachtwoord te herstellen.',
-    emailSuccess: 'We hebben u zojuist een e-mail met een herstellink gestuurd.',
-    emailError: 'Er ging iets mis bij het herstellen van uw wachtwoord.',
+    enterEmailLabel: 'Voer het e-mailadres in waarop je een link wilt ontvangen om je wachtwoord te herstellen.',
+    emailSuccess: 'We hebben je zojuist een e-mail met een herstellink gestuurd.',
+    emailError: 'Er ging iets mis bij het herstellen van je wachtwoord.',
     passwordsDoNotMatch: 'De wachtwoorden komen niet overeen, probeer het alstublieft opnieuw.',
-    loggedInDialog: 'U bent op dit moment ingelogd. Log uit om je wachtwoord te herstellen.',
-    missingEmailsSpamNote: 'Als u geen e-mail heeft ontvangen, controleer dan of het bericht wellicht in uw spamfolder terecht is gekomen.',
-    missingEmailsAlternateNote: 'Als u nog steeds geen e-mail ontvangen hebt, controleer dan of u misschien een ander e-mailadres voor uw Zooniverse account heeft gebruikt.'
+    loggedInDialog: 'Je bent op dit moment ingelogd. Log uit om je wachtwoord te herstellen.',
+    missingEmailsSpamNote: 'Als je geen e-mail hebt ontvangen, controleer dan of het bericht wellicht in je spamfolder terecht is gekomen.',
+    missingEmailsAlternateNote: 'Als je nog steeds geen e-mail ontvangen hebt, controleer dan of je misschien een ander e-mailadres voor je Zooniverse account hebt gebruikt.'
   },
   workflowToggle: {
     label: 'Actief'
