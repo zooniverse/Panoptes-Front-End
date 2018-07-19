@@ -859,16 +859,6 @@ const Publications = {
         }
       ]
     },
-    {
-      slug: "zooniverse/higgs-hunters",
-      publications: [
-        {
-        citation: "'That looks weird' - evaluating citizen scientists' ability to detect unusual features in ATLAS images of LHC collisions, Barr+ 2016.",
-        href: "https://arxiv.org/pdf/1610.02214v1.pdf",
-        date: "October 10, 2016"
-      }
-      ],
-    },
   ],
   meta: [
     {

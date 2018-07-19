@@ -253,6 +253,27 @@ export default {
       accelerateResearch: '### We accelerate important research by working together\n\nThe major challenge of 21st century research is dealing with the flood of information we can now collect about the world around us. Computers can help, but in many fields the human ability for pattern recognition — and our ability to be surprised — makes us superior. With the help of Zooniverse volunteers, researchers can analyze their information more quickly and accurately than would otherwise be possible, saving time and resources, advancing the ability of computers to do the same tasks, and leading to faster progress and understanding of the world, getting to exciting results more quickly.\n\nOur projects combine contributions from many individual volunteers, relying on a version of the ‘wisdom of crowds’ to produce reliable and accurate data. By having many people look at the data we often can also estimate how likely we are to make an error. The product of a Zooniverse projects is often exactly what’s needed to make progress in many fields of research.',
       discoveries: '### Volunteers and professionals make real discoveries together\n\nZooniverse projects are constructed with the aim of converting volunteers\' efforts into measurable results. These projects have produced a large number of [published research papers](/about/publications), as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have even made completely unexpected and scientifically significant discoveries.\n\nA significant amount of this research takes place on the Zooniverse discussion boards, where volunteers can work together with each other and with the research teams. These boards are integrated with each project to allow for everything from quick hashtagging to in-depth collaborative analysis. There is also a central Zooniverse board for general chat and discussion about Zooniverse-wide matters.\n\nMany of the most interesting discoveries from Zooniverse projects have come from discussion between volunteers and researchers. We encourage all users to join the conversation on the discussion boards for more in-depth participation.'
     },
+    publications: {
+      nav: {
+        showAll: 'Show All',
+        space: 'Space',
+        physics: 'Physics',
+        climate: 'Climate',
+        humanities: 'Humanities',
+        nature: 'Nature',
+        medicine: 'Medicine',
+        meta: 'Meta',
+      },
+      content: {
+        header: {
+          showAll: 'All Publications'
+        }
+      },
+      publication: {
+        viewPublication: 'View publication.',
+        viewOpenAccess: 'View open access version.'
+      }
+    },
     acknowledgements: {
       title: '## Acknowledging the Zooniverse',
       citation: '### Academic Citation',
