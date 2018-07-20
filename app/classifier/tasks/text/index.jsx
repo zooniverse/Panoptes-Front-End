@@ -13,30 +13,28 @@ export default class TextTask extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      rows: 1,
-      value: ''
-    };
-
     this.textInput = React.createRef();
 
     this.debouncedUpdateAnnotation = _.debounce(this.updateAnnotation, 500).bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.setTagSelection = this.setTagSelection.bind(this);
-    this.setValue = this.setValue.bind(this);
     this.updateAnnotation = this.updateAnnotation.bind(this);
   }
 
-  componentDidMount() {
-    this.setValue();
+  state = {
+    rows: 1,
+    value: this.props.annotation.value
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.task && this.props.task && (prevProps.task !== this.props.task)) {
-      this.setValue();
+  componentDidMount() {
+    if (this.props.autoFocus) {
+      this.textInput.current.focus();
     }
+    this.handleResize();
+  }
 
+  componentDidUpdate() {
     this.handleResize();
   }
 
@@ -54,31 +52,23 @@ export default class TextTask extends React.Component {
     const selectionEnd = textArea.selectionEnd;
     const textBefore = textAreaValue.substring(0, selectionStart);
     let textAfter;
-    let textThroughEndTag;
     let value;
+
     if (selectionStart === selectionEnd) {
       textAfter = textAreaValue.substring(selectionStart, textAreaValue.length);
-      textThroughEndTag = textBefore + startTag + endTag;
       value = textBefore + startTag + endTag + textAfter;
     } else {
       const textInBetween = textAreaValue.substring(selectionStart, selectionEnd);
       textAfter = textAreaValue.substring(selectionEnd, textAreaValue.length);
-      textThroughEndTag = textBefore + startTag + textInBetween + endTag;
       value = textBefore + startTag + textInBetween + endTag + textAfter;
     }
+
     this.setState({ value }, () => {
-      this.textInput.current.setSelectionRange(textThroughEndTag.length, textThroughEndTag.length);
+      this.textInput.current.setSelectionRange((value.length - textAfter.length), (value.length - textAfter.length));
       this.textInput.current.focus();
     });
-    this.debouncedUpdateAnnotation();
-  }
 
-  setValue() {
-    this.setState({ rows: 1, value: this.props.annotation.value });
-    this.handleResize();
-    if (this.props.autoFocus) {
-      this.textInput.current.focus();
-    }
+    this.debouncedUpdateAnnotation();
   }
 
   handleChange() {
