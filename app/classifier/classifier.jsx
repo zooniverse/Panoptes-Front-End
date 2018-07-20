@@ -57,6 +57,7 @@ class Classifier extends React.Component {
       annotations: [],
       modelScore: null,
       showIntervention: false,
+      showSummary: false,
       workflowHistory: []
     };
   }
@@ -209,7 +210,7 @@ class Classifier extends React.Component {
   }
 
   onNextSubject() {
-    this.setState({ showIntervention: false });
+    this.setState({ showIntervention: false, showSummary: false });
     this.props.actions.interventions.dismiss();
     this.props.onClickNext();
   }
@@ -275,16 +276,13 @@ class Classifier extends React.Component {
     });
 
     const annotations = this.state.annotations.slice();
-    const workflowHistory = this.state.workflowHistory.slice();
+    let workflowHistory = this.state.workflowHistory.slice();
     const taskKey = workflowHistory[workflowHistory.length - 1];
 
     const showIntervention = (this.props.interventions.notifications.length > 0);
     const showSummary = !this.props.workflow.configuration.hide_classification_summaries ||
       this.subjectIsGravitySpyGoldStandard();
     const showLastStep = showIntervention || showSummary;
-    if (showSummary) {
-      workflowHistory.push('summary');
-    }
 
     const { onComplete, project, subject } = this.props;
     return this.checkForFeedback(taskKey)
@@ -297,7 +295,8 @@ class Classifier extends React.Component {
       })
       .then(onComplete)
       .then(() => {
-        this.setState({ annotations, showIntervention, workflowHistory });
+        workflowHistory = [];
+        this.setState({ annotations, showIntervention, showSummary, workflowHistory });
         return showLastStep ? null : this.onNextSubject();
       })
       .catch(error => console.error(error));
@@ -317,7 +316,7 @@ class Classifier extends React.Component {
 
   render() {
     const { interventions } = this.props;
-    const { showIntervention, workflowHistory } = this.state;
+    const { showIntervention, showSummary, workflowHistory } = this.state;
     const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
     const classifierClassNames = classNames({
@@ -377,7 +376,7 @@ class Classifier extends React.Component {
                 notifications={interventions.notifications}
               />
             }
-            {(currentTaskKey !== 'summary') ?
+            {currentTaskKey &&
               <Task
                 preferences={this.props.preferences}
                 user={this.props.user}
@@ -388,7 +387,9 @@ class Classifier extends React.Component {
                 annotation={currentAnnotation}
                 subjectLoading={this.state.subjectLoading}
                 updateAnnotations={this.updateAnnotations}
-              /> :
+              />
+            }
+            {showSummary &&
               <ClassificationSummary
                 project={this.props.project}
                 workflow={this.props.workflow}
@@ -406,7 +407,7 @@ class Classifier extends React.Component {
               annotations={this.state.annotations}
               classification={currentClassification}
               completeClassification={this.completeClassification}
-              completed={showIntervention || currentTaskKey === 'summary'}
+              completed={showIntervention || showSummary}
               disabled={this.state.subjectLoading}
               nextSubject={this.onNextSubject}
               project={this.props.project}
