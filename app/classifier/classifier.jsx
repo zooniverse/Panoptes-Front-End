@@ -282,7 +282,7 @@ class Classifier extends React.Component {
     const showSummary = !this.props.workflow.configuration.hide_classification_summaries ||
       this.subjectIsGravitySpyGoldStandard();
     const showLastStep = showIntervention || showSummary;
-    const onComplete = showLastStep ? this.props.onComplete : this.props.onCompleteAndLoadAnotherSubject;
+    const { onComplete } = this.props;
     if (showSummary) {
       workflowHistory.push('summary');
     }
@@ -297,6 +297,7 @@ class Classifier extends React.Component {
       .then(onComplete)
       .then(() => {
         this.setState({ annotations, showIntervention, workflowHistory });
+        return showLastStep ? null : this.onNextSubject();
       })
       .catch(error => console.error(error));
   }
@@ -520,7 +521,6 @@ Classifier.propTypes = {
   onChangeDemoMode: PropTypes.func,
   onClickNext: PropTypes.func,
   onComplete: PropTypes.func,
-  onCompleteAndLoadAnotherSubject: PropTypes.func,
   onLoad: PropTypes.func,
   splits: PropTypes.shape({
     subject: PropTypes.object
@@ -563,7 +563,6 @@ Classifier.defaultProps = {
   },
   minicourse: null,
   onComplete: () => Promise.resolve(),
-  onCompleteAndLoadAnotherSubject: () => Promise.resolve(),
   preferences: null,
   project: {},
   onLoad: Function.prototype,

@@ -159,7 +159,6 @@ describe('Classifier', function () {
           classification={classification}
           subject={subject}
           onComplete={classification.save}
-          onCompleteAndLoadAnotherSubject={classification.save}
         />,
         mockReduxStore
       );
