@@ -260,7 +260,6 @@ class Classifier extends React.Component {
   completeClassification(e) {
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
-    const subjectTalkPath = `/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`;
     // don't swallow cmd-click on links
     if (!isCmdClick) {
       e.preventDefault();
@@ -275,22 +274,24 @@ class Classifier extends React.Component {
       }
     });
 
-    const showIntervention = (this.props.interventions.notifications.length > 0);
     const annotations = this.state.annotations.slice();
     const workflowHistory = this.state.workflowHistory.slice();
     const taskKey = workflowHistory[workflowHistory.length - 1];
+
+    const showIntervention = (this.props.interventions.notifications.length > 0);
     const showSummary = !this.props.workflow.configuration.hide_classification_summaries ||
       this.subjectIsGravitySpyGoldStandard();
     const showLastStep = showIntervention || showSummary;
-    const { onComplete } = this.props;
     if (showSummary) {
       workflowHistory.push('summary');
     }
 
+    const { onComplete, project, subject } = this.props;
     return this.checkForFeedback(taskKey)
       .then(() => {
         this.props.classification.update({ completed: true });
         if (!showIntervention && !isCmdClick && originalElement.href) {
+          const subjectTalkPath = `/projects/${project.slug}/talk/subjects/${subject.id}`;
           browserHistory.push(subjectTalkPath);
         }
       })
