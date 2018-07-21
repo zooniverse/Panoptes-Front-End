@@ -58,39 +58,38 @@ export default class ChangePasswordForm extends React.Component {
           <strong>Change your password</strong>
         </p>
         <table className="standard-table">
-        <tbody>
-          <tr>
-            <td><label htmlFor="currentPassword">Current password (required)</label></td>
-            <td>
-              <input type="password" id="currentPassword" className="standard-input" size="20" onChange={(e) => this.setState({ old: e.target.value })} required />
-            </td>
-          </tr>
-          <tr>
-            <td><label htmlFor="newPassword">New password (required)</label></td>
-            <td>
-              <input type="password" id="newPassword" className="standard-input" size="20" onChange={(e) => this.setState({ new: e.target.value })} required />
-              { this.state.new.length > 0 && this.tooShort() ? <small className="form-help error">That’s too short</small> : null}
-            </td>
-          </tr>
-          <tr>
-            <td><label htmlFor="confirmPassword">Confirm new password (required)</label></td>
-            <td>
-              <input type="password" id="confirmPassword" className="standard-input" size="20" onChange={(e) => this.setState({ confirmation: e.target.value })} required />
-              { this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch() ? <small className="form-help error">These don’t match</small> : null }
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <p>
-        <button type="submit" className="standard-button" disabled={!this.state.old || !this.state.new || this.tooShort() || this.doesntMatch() || this.state.inProgress}>Change</button>{' '}
-        { 
-          this.state.inProgress 
-            ? <i className="fa fa-spinner fa-spin form-help"></i> : this.state.success 
-            ? <i className="fa fa-check-circle form-help success"></i> : this.state.error 
-            ? <small className="form-help error">{this.state.error.toString()}</small> : null
-        }        
-      </p>
+          <tbody>
+            <tr>
+              <td><label htmlFor="currentPassword">Current password (required)</label></td>
+              <td>
+                <input type="password" id="currentPassword" className="standard-input" size="20" onChange={(e) => this.setState({ old: e.target.value })} required />
+              </td>
+            </tr>
+            <tr>
+              <td><label htmlFor="newPassword">New password (required)</label></td>
+              <td>
+                <input type="password" id="newPassword" className="standard-input" size="20" onChange={(e) => this.setState({ new: e.target.value })} required />
+                {this.state.new.length > 0 && this.tooShort() ? <small className="form-help error">That’s too short</small> : null}
+              </td>
+            </tr>
+            <tr>
+              <td><label htmlFor="confirmPassword">Confirm new password (required)</label></td>
+              <td>
+                <input type="password" id="confirmPassword" className="standard-input" size="20" onChange={(e) => this.setState({ confirmation: e.target.value })} required />
+                {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch() ? <small className="form-help error">These don’t match</small> : null}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          <button type="submit" className="standard-button" disabled={!this.state.old || !this.state.new || this.tooShort() || this.doesntMatch() || this.state.inProgress}>Change</button>{' '}
+          { 
+            this.state.inProgress 
+              ? <i className="fa fa-spinner fa-spin form-help"></i> : this.state.success 
+              ? <i className="fa fa-check-circle form-help success"></i> : this.state.error 
+              ? <small className="form-help error">{this.state.error.toString()}</small> : null
+          }        
+        </p>
       </form>
     );
   }
