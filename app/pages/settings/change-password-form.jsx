@@ -2,7 +2,7 @@ import React from 'react';
 import auth from 'panoptes-client/lib/auth';
 import counterpart from 'counterpart';
 
-const MIN_PASSWORD_LENGTH = 8
+const MIN_PASSWORD_LENGTH = 8;
 
 export default class ChangePasswordForm extends React.Component {
 
@@ -16,32 +16,32 @@ export default class ChangePasswordForm extends React.Component {
       success: false,
       error: null
     };
-    this.handleSubmit = this.handleSubmit.bind(this);  
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
 
-    const current = this.state.old
-    const replacement = this.state.new
+    const current = this.state.old;
+    const replacement = this.state.new;
 
     this.setState({
       inProgress: true,
       success: false,
       error: null
-    })
-  
-    auth.changePassword({ current, replacement }) 
+    });
+
+    auth.changePassword({ current, replacement })
       .then(() => {
-        this.setState({ success: true })
+        this.setState({ success: true });
         this.refs.form.reset();
       })
       .catch((error) => {
-        this.setState({ error })
+        this.setState({ error });
       })
       .then(() => {
-        this.setState({ inProgress: false })
-      })
+        this.setState({ inProgress: false });
+      });
   }
 
   doesntMatch() {
@@ -49,7 +49,7 @@ export default class ChangePasswordForm extends React.Component {
   }
 
   tooShort() {
-    return this.state.new.length < MIN_PASSWORD_LENGTH
+    return this.state.new.length < MIN_PASSWORD_LENGTH;
   }
 
   render() {
@@ -61,38 +61,77 @@ export default class ChangePasswordForm extends React.Component {
         <table className="standard-table">
           <tbody>
             <tr>
-              <td><label htmlFor="currentPassword">{counterpart('userSettings.account.changePassword.currentPassword')}</label></td>
               <td>
-                <input type="password" id="currentPassword" className="standard-input" size="20" onChange={(e) => this.setState({ old: e.target.value })} required />
+                <label htmlFor="currentPassword">
+                  {counterpart('userSettings.account.changePassword.currentPassword')}
+                </label>
+              </td>
+              <td>
+                <input
+                  type="password"
+                  id="currentPassword"
+                  className="standard-input"
+                  size="20"
+                  onChange={(e) => { this.setState({ old: e.target.value }); }}
+                  required
+                />
               </td>
             </tr>
             <tr>
-              <td><label htmlFor="newPassword">{counterpart('userSettings.account.changePassword.newPassword')}</label></td>
               <td>
-                <input type="password" id="newPassword" className="standard-input" size="20" onChange={(e) => this.setState({ new: e.target.value })} required />
-                {this.state.new.length > 0 && this.tooShort() ? <small className="form-help error">{counterpart('userSettings.account.changePassword.tooShort')}</small> : null}
+                <label htmlFor="newPassword">
+                  {counterpart('userSettings.account.changePassword.newPassword')}
+                </label>
+              </td>
+              <td>
+                <input
+                  type="password"
+                  id="newPassword"
+                  className="standard-input"
+                  size="20"
+                  onChange={(e) => { this.setState({ new: e.target.value }); }}
+                  required
+                />
+                {this.state.new.length > 0 && this.tooShort() 
+                  ? <small className="form-help error">{counterpart('userSettings.account.changePassword.tooShort')}</small>
+                  : null}
               </td>
             </tr>
             <tr>
-              <td><label htmlFor="confirmPassword">{counterpart('userSettings.account.changePassword.confirmNewPassword')}</label></td>
               <td>
-                <input type="password" id="confirmPassword" className="standard-input" size="20" onChange={(e) => this.setState({ confirmation: e.target.value })} required />
-                {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch() 
+                <label htmlFor="confirmPassword">
+                  {counterpart('userSettings.account.changePassword.confirmNewPassword')}
+                </label>
+              </td>
+              <td>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  className="standard-input"
+                  size="20"
+                  onChange={(e) => { this.setState({ confirmation: e.target.value }); }}
+                  required
+                />
+                {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch()
                   ? <small className="form-help error">{counterpart('userSettings.account.changePassword.doesntMatch')}</small> : null}
               </td>
             </tr>
           </tbody>
         </table>
         <p>
-          <button type="submit" className="standard-button" disabled={!this.state.old || !this.state.new || this.tooShort() || this.doesntMatch() || this.state.inProgress}>
+          <button
+            type="submit"
+            className="standard-button"
+            disabled={!this.state.old || !this.state.new || this.tooShort() || this.doesntMatch() || this.state.inProgress}
+          >
             {counterpart('userSettings.account.changePassword.change')}
           </button>{' '}
           { 
-            this.state.inProgress 
-              ? <i className="fa fa-spinner fa-spin form-help"></i> : this.state.success 
-              ? <i className="fa fa-check-circle form-help success"></i> : this.state.error 
+            this.state.inProgress
+              ? <i className="fa fa-spinner fa-spin form-help"></i> : this.state.success
+              ? <i className="fa fa-check-circle form-help success"></i> : this.state.error
               ? <small className="form-help error">{this.state.error.toString()}</small> : null
-          }        
+          }
         </p>
       </form>
     );
