@@ -1,5 +1,6 @@
 import React from 'react';
 import auth from 'panoptes-client/lib/auth';
+import counterpart from 'counterpart';
 
 const MIN_PASSWORD_LENGTH = 8
 
@@ -55,34 +56,37 @@ export default class ChangePasswordForm extends React.Component {
     return (
       <form ref="form" method="POST" onSubmit={this.handleSubmit}>
         <p>
-          <strong>Change your password</strong>
+          <strong>{counterpart('userSettings.account.changePassword.heading')}</strong>
         </p>
         <table className="standard-table">
           <tbody>
             <tr>
-              <td><label htmlFor="currentPassword">Current password (required)</label></td>
+              <td><label htmlFor="currentPassword">{counterpart('userSettings.account.changePassword.currentPassword')}</label></td>
               <td>
                 <input type="password" id="currentPassword" className="standard-input" size="20" onChange={(e) => this.setState({ old: e.target.value })} required />
               </td>
             </tr>
             <tr>
-              <td><label htmlFor="newPassword">New password (required)</label></td>
+              <td><label htmlFor="newPassword">{counterpart('userSettings.account.changePassword.newPassword')}</label></td>
               <td>
                 <input type="password" id="newPassword" className="standard-input" size="20" onChange={(e) => this.setState({ new: e.target.value })} required />
-                {this.state.new.length > 0 && this.tooShort() ? <small className="form-help error">That’s too short</small> : null}
+                {this.state.new.length > 0 && this.tooShort() ? <small className="form-help error">{counterpart('userSettings.account.changePassword.tooShort')}</small> : null}
               </td>
             </tr>
             <tr>
-              <td><label htmlFor="confirmPassword">Confirm new password (required)</label></td>
+              <td><label htmlFor="confirmPassword">{counterpart('userSettings.account.changePassword.confirmNewPassword')}</label></td>
               <td>
                 <input type="password" id="confirmPassword" className="standard-input" size="20" onChange={(e) => this.setState({ confirmation: e.target.value })} required />
-                {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch() ? <small className="form-help error">These don’t match</small> : null}
+                {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch() 
+                  ? <small className="form-help error">{counterpart('userSettings.account.changePassword.doesntMatch')}</small> : null}
               </td>
             </tr>
           </tbody>
         </table>
         <p>
-          <button type="submit" className="standard-button" disabled={!this.state.old || !this.state.new || this.tooShort() || this.doesntMatch() || this.state.inProgress}>Change</button>{' '}
+          <button type="submit" className="standard-button" disabled={!this.state.old || !this.state.new || this.tooShort() || this.doesntMatch() || this.state.inProgress}>
+            {counterpart('userSettings.account.changePassword.change')}
+          </button>{' '}
           { 
             this.state.inProgress 
               ? <i className="fa fa-spinner fa-spin form-help"></i> : this.state.success 
