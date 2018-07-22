@@ -22,5 +22,12 @@ describe('ChangePasswordForm', () => {
     wrappper.setState({ inProgress: true });
     const spinner = wrappper.find('.fa-spinner');
     assert.equal(spinner.length, 1);
-  }); 
+  });
+
+  it('renders too short message', () => {
+    const wrappper =  shallow(<ChangePasswordForm />);
+    wrappper.setState({ new: 'short' });
+    const message = wrappper.find('.error');
+    assert.equal(message.length, 1);
+  });
 });
