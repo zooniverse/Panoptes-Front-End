@@ -30,4 +30,11 @@ describe('ChangePasswordForm', () => {
     const message = wrappper.find('.error');
     assert.equal(message.length, 1);
   });
+
+  it('renders dosent match message', () => {
+    const wrappper =  shallow(<ChangePasswordForm />);
+    wrappper.setState({ new: 'newpassword', confirmation: 'notsamepass' });
+    const message = wrappper.find('.error');
+    assert.equal(message.length, 1);   
+  });
 });
