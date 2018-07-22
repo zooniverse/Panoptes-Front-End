@@ -16,4 +16,11 @@ describe('ChangePasswordForm', () => {
     const error = wrappper.find('.error');
     assert.equal(error.length, 1);
   });
+
+  it('renders loading spinner when loading', () => {
+    const wrappper =  shallow(<ChangePasswordForm />);
+    wrappper.setState({ inProgress: true });
+    const spinner = wrappper.find('.fa-spinner');
+    assert.equal(spinner.length, 1);
+  }); 
 });
