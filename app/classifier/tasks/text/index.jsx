@@ -94,9 +94,11 @@ export default class TextTask extends React.Component {
   }
 
   updateAnnotation() {
-    const value = this.textInput.current.value;
-    const newAnnotation = Object.assign(this.props.annotation, { value });
-    this.props.onChange(newAnnotation);
+    if (this.textInput.current) {
+      const value = this.textInput.current.value;
+      const newAnnotation = Object.assign(this.props.annotation, { value });
+      this.props.onChange(newAnnotation);
+    }
   }
 
   render() {
@@ -117,7 +119,7 @@ export default class TextTask extends React.Component {
             value={this.state.value}
           />
         </label>
-        {this.props.task.text_tags && this.props.task.text_tags.length &&
+        {this.props.task.text_tags && this.props.task.text_tags.length > 0 &&
           <div className="transcription-metadata-tags">
             {this.props.task.text_tags.map((tag, i) => (
               <input
