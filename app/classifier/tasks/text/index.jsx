@@ -64,11 +64,13 @@ export default class TextTask extends React.Component {
     }
 
     this.setState({ value }, () => {
-      this.textInput.current.setSelectionRange((value.length - textAfter.length), (value.length - textAfter.length));
-      this.textInput.current.focus();
+      if (this.textInput.current.focus) {
+        this.textInput.current.setSelectionRange((value.length - textAfter.length), (value.length - textAfter.length));
+        this.textInput.current.focus();
+      }
     });
 
-    this.debouncedUpdateAnnotation();
+    this.updateAnnotation();
   }
 
   handleChange() {

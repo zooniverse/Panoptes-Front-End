@@ -35,8 +35,6 @@ describe('TextTask', function () {
       const answer = wrapper.find('textarea').text();
       expect(answer).to.equal(annotation.value);
     });
-
-    // it('should have multiple row input height with multiline answer', function () {});
   });
 
   describe('input onChange event handler', function () {
@@ -76,16 +74,20 @@ describe('TextTask', function () {
       expect(wrapper.state('value')).to.equal('[deletion][/deletion]');
     });
 
-    // it('should wrap text with tags when text highlighted and tag clicked', function () {});
+    it('should wrap text with tags when text highlighted and tag clicked', function () {
+      wrapper.instance().textInput.current = {
+        value: 'testing the text task tag selection',
+        selectionStart: 12,
+        selectionEnd: 21
+      };
+      wrapper.instance().setTagSelection({ target: { value: 'deletion' }});
+      expect(wrapper.state('value')).to.equal('testing the [deletion]text task[/deletion] tag selection');
+    });
 
     it('should call handleChange when the onChange event fires', function () {
       wrapper.find('textarea').first().simulate('change', { target: { value: 'text change' }});
       expect(handleChangeSpy.calledOnce).to.be.true;
     });
-
-    // it('should increase textarea row height when answer is multiple lines', function () {});
-
-    // it('should decrease textarea row height when answer content is reduced to fewer rows', function () {});
   });
 
   describe('static methods', function () {
