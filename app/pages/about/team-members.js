@@ -9,7 +9,7 @@ export const teamMembers = {
     name: "Alex Bowyer",
     twitter: "alexbfree",
     image: "/assets/team/alex_bowyer.jpg",
-    location: "alumni"  
+    location: "alumni"
   },
   amyBoyer: {
     name: "Amy Boyer",
@@ -25,7 +25,7 @@ export const teamMembers = {
     name: "Ali Swanson",
     twitter: "alicatzoo",
     image: "/assets/team/ali.jpg",
-    location: "alumni"  
+    location: "alumni"
   },
   arfonSmith: {
     name: "Arfon Smith",
@@ -53,24 +53,24 @@ export const teamMembers = {
     name: "Brian Carstensen",
     twitter: "__brian_c__",
     image: "/assets/team/brian.jpg",
-    location: "alumni"  
-  }, 
+    location: "alumni"
+  },
   brookeSimmons: {
     name: "Brooke Simmons",
     twitter: "vrooje",
     image: "/assets/team/brooke.jpg",
-    location: "california"  
+    location: "california"
   },
   camAllen: {
     name: "Campbell Allen",
     image: "/assets/team/cam.jpg",
-    location: "oxford"  
+    location: "oxford"
   },
   chrisLintott: {
     name: "Chris Lintott",
     twitter: "chrislintott",
     image: "/assets/team/chris-l.png",
-    location: "oxford" 
+    location: "oxford"
   },
   chrisSnyder: {
     name: "Chris Snyder",
@@ -81,13 +81,13 @@ export const teamMembers = {
   christopherDoogue: {
     name: "Christopher Doogue",
     image: "/assets/team/chris-d.jpg",
-    location: "alumni"   
+    location: "alumni"
   },
   colemanKrawczyk: {
     name: "Coleman Krawczyk",
     twitter: "ColemanKrawczyk",
     image: "/assets/team/coleman.jpg",
-    location: "portsmouth"  
+    location: "portsmouth"
   },
   darrenMcRoy: {
     name: "Darren McRoy",
@@ -97,25 +97,25 @@ export const teamMembers = {
   darrylWright: {
     name: "Darryl Wright",
     image: "/assets/team/team-member-avatar.jpg",
-    location: "minnesota"  
+    location: "minnesota"
   },
   grantMiller: {
     name: "Grant Robert MacKinnon Miller",
     twitter: "mrniaboc",
     image: "/assets/team/grant.jpg",
-    location: "oxford"  
+    location: "oxford"
   },
   hannahSewell: {
     name: "Hannah Sewell",
     twitter: "hannahsewell2",
     image: "/assets/team/hannah_s.jpg",
-    location: "oxford"  
+    location: "alumni"
   },
   helenSpiers: {
     name: "Helen Spiers",
     twitter: "H_Spiers",
     image: "/assets/team/helenspiers.jpg",
-    location: "oxford"  
+    location: "oxford"
   },
   gregHines: {
     name: "Greg Hines",
@@ -130,7 +130,7 @@ export const teamMembers = {
   hughDickinson: {
     name: "Hugh Dickinson",
     image: "/assets/team/hugh.jpg",
-    location: "minnesota"  
+    location: "minnesota"
   },
   jamesArtz: {
     name: "James Artz",
@@ -153,12 +153,12 @@ export const teamMembers = {
     name: "Jordan Martin",
     twitter: "Jordanwhitneym",
     image: "/assets/team/jordan.jpg",
-    location: "alumni"  
+    location: "alumni"
   },
   julieFeldt: {
     name: "Julie Feldt",
     image: "/assets/team/julie.png",
-    location: "alumni"  
+    location: "alumni"
   },
   karenMasters: {
     name: "Karen Masters",
@@ -170,13 +170,13 @@ export const teamMembers = {
     name: "Kelly Borden",
     twitter: "BordenKelly",
     image: "/assets/team/kelly.jpg",
-    location: "chicago"  
+    location: "chicago"
   },
   kyleWillett: {
     name: "Kyle Willett",
     twitter: "kwwillett",
     image: "/assets/team/kyle.jpg",
-    location: "alumni"  
+    location: "alumni"
   },
   lauraTrouille: {
     name: "Laura Trouille",
@@ -193,13 +193,13 @@ export const teamMembers = {
     name: "Lucy Fortson",
     twitter: "lucyfortson",
     image: "/assets/team/lucy.jpg",
-    location: "minnesota"  
+    location: "minnesota"
   },
   mariamSaeedi: {
     name: "Mariam Saeedi",
     twitter: "tweetsmariam",
     image: "/assets/team/mariam_s.jpg",
-    location: "alumni" 
+    location: "alumni"
   },
   markBouslog: {
     name: "Mark Bouslog",
@@ -210,62 +210,68 @@ export const teamMembers = {
     name: "Marten Veldthuis",
     twitter: "mveldth",
     image: "/assets/team/marten.jpg",
-    location: "oxford"  
+    location: "oxford"
   },
   megSchwamb: {
     name: "Meg Schwamb",
     twitter: "megschwamb",
     image: "/assets/team/meg.jpg",
-    location: "hilo"  
+    location: "hilo"
   },
   melanieBeck: {
     name: "Melanie Beck",
     twitter: "highzgal",
     image: "/assets/team/melanie.jpg",
-    location: "minnesota"  
+    location: "minnesota"
   },
   michaelParrish: {
     name: "Michael Parrish",
     twitter: "michael_parrish",
     image: "/assets/team/michael.png",
-    location: "alumni"  
+    location: "alumni"
   },
   noahMalmed: {
     name: "Noah Malmed",
     image: "/assets/team/noah.jpg",
-    location: "chicago"  
+    location: "chicago"
   },
   perryRoper: {
     name: "Perry Roper",
     image: "/assets/team/perry.jpg",
-    location: "alumni"  
+    location: "alumni"
   },
   rebeccaSmethurst: {
     name: "Rebecca Smethurst",
     twitter: "becky1505",
     image: "/assets/team/becky.jpg",
-    location: "oxford"  
+    location: "oxford"
   },
   robinSchaaf: {
     name: "Robin Schaaf",
     image: "/assets/team/robin.jpg",
-    location: "alumni"  
+    location: "alumni"
   },
   rogerHutchings: {
     name: "Roger Hutchings",
     image: "/assets/team/roger.jpg",
-    location: "oxford"  
-  }, 
+    location: "oxford"
+  },
   robertSimpson: {
     name: "Robert Simpson",
     image: "/assets/team/rob.jpg",
-    location: "alumni"  
+    location: "alumni"
+  },
+  ronaCostello: {
+    name: "Rona Costello",
+    twitter: "ronacostello",
+    image: "/assets/team/rona.png",
+    location: "oxford"
   },
   samanthaBlickhan: {
     name: "Samantha Blickhan",
     twitter: "snblickhan",
     image: "/assets/team/sam.jpg",
-    location: "chicago"  
+    location: "chicago"
   },
   sandorKruk: {
     name: "Sandor Kruk",
@@ -282,22 +288,22 @@ export const teamMembers = {
     name: "Sascha Ishikawa",
     twitter: "sascha_ishikawa",
     image: "/assets/team/sascha.png",
-    location: "alumni"  
+    location: "alumni"
   },
   shaunANoordin: {
     name: "Shaun A. Noordin",
     image: "/assets/team/shaunanoordin.jpg",
-    location: "oxford"  
+    location: "oxford"
   },
   simoneDuca: {
     name: "Simone Duca",
     image: "/assets/team/simone.jpg",
-    location: "alumni"  
+    location: "alumni"
   },
   stuartLynn: {
     name: "Stuart Lynn",
     image: "/assets/team/stuart.png",
-    location: "alumni"  
+    location: "alumni"
   },
   steveRaden: {
     name: "Steve Raden",
@@ -307,24 +313,22 @@ export const teamMembers = {
   veronicaMaidel: {
     name: "Veronica Maidel",
     image: "/assets/team/veronica.jpg",
-    location: "alumni"  
+    location: "alumni"
   },
   victoriaVanHyning: {
     name: "Victoria Van Hyning",
     twitter: "VanHyningV",
     image: "/assets/team/victoria.JPG",
-    location: "oxford"  
+    location: "oxford"
   },
   willGranger: {
     name: "Will Granger",
     image: "/assets/team/will.jpg",
-    location: "chicago"  
+    location: "chicago"
   },
   zachWolfenbarger: {
     name: "Zach Wolfenbarger",
     image: "/assets/team/zach.JPG",
-    location: "chicago"  
+    location: "chicago"
   }
 }
- 
-
