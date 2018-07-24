@@ -276,7 +276,7 @@ export default {
         viewOpenAccess: 'View open access version.'
       }
 
-    },    
+    },
     team: {
       nav: {
         showAll: 'Show All',
@@ -319,11 +319,11 @@ export default {
           title: 'Developer',
           bio: `Amy has been a Zooniverse developer at the Adler since November 2015. She holds a BS and
           MS in computer science and has over a decade of industry experience. An aspiring astronomer as
-          a child, she couldn't be happier to have landed here.`  
+          a child, she couldn't be happier to have landed here.`
         },
         andreaSimenstad: {
           title: 'Developer',
-          bio: `Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.`  
+          bio: `Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.`
         },
         arfonSmith: {
           title: 'Technical Lead',
@@ -332,17 +332,17 @@ export default {
         },
         beckyRother: {
           title: 'Visual Designer',
-          bio: `Becky joined the Zooniverse team as designer in 2017. With a background in mobile apps and product design and a degree in journalism, she's excited to use her powers for good with the Zooniverse team.`  
+          bio: `Becky joined the Zooniverse team as designer in 2017. With a background in mobile apps and product design and a degree in journalism, she's excited to use her powers for good with the Zooniverse team.`
         },
         beverleyNewing: {
           title: 'Web Developer Intern',
-          bio: `Beverley is an English and German literature graduate and worked as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.`  
+          bio: `Beverley is an English and German literature graduate and worked as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.`
         },
         brianCarstensen: {
           title: 'UX Developer',
           bio: `Brian Carstensen moved from Chicago to Oxford and back again. Brian has a degree
           in graphic design from Columbia College in Chicago, and worked in that field for a
-          number of years before finding a niche in web development.`  
+          number of years before finding a niche in web development.`
         },
         brookeSimmons: {
           title: 'Researcher',
@@ -353,7 +353,7 @@ export default {
           title: 'Developer',
           bio: `Responsible for building the Zooniverse's API infrastructure.
           Cam considers himself a music and fine wine connoisseur - others do not.
-          In his spare time he enjoys playing an obscure form of rugby.`  
+          In his spare time he enjoys playing an obscure form of rugby.`
         },
         chrisLintott: {
           title: 'Zooniverse PI',
@@ -364,7 +364,7 @@ export default {
         chrisSnyder: {
           title: 'Project Manager',
           bio: `Chris Snyder began working on the Zooniverse team in fall 2012 as a web developer. In July 2013,
-          he became the technical project manager. He received a degree in computer science from the University of Dayton.`  
+          he became the technical project manager. He received a degree in computer science from the University of Dayton.`
         },
         christopherDoogue: {
           title: 'Project Assistant',
@@ -383,7 +383,7 @@ export default {
           bio: `Darren (DZM) served as a liaison to the Zooniverse community and assisted with strategic
           content for projects. A Northwestern University graduate in journalism, he is also a golf addict,
           amateur author, and hopeless animal lover.`
-        }, 
+        },
         darrylWright: {
           title: 'Researcher',
           bio: 'Darryl is doing machine learning research with the Zooniverse, based in Minnesota.'
@@ -400,21 +400,21 @@ export default {
         },
         helenSpiers: {
           title: 'Researcher',
-          bio: `After finishing a PhD studying the molecular basis of human brain development, Helen joined the Zooniverse as a Postdoc in citizen science and medical research.`  
+          bio: `After finishing a PhD studying the molecular basis of human brain development, Helen joined the Zooniverse as a Postdoc in citizen science and medical research.`
         },
         gregHines: {
           title: 'Data Scientist',
           bio: `Greg used machine learning and statistics to help projects analyse their volunteer
           classifications. He has a PhD in Computer Science from University of Waterloo, Canada.
           Greg loves to eat pancakes with real maple syrup and run ultramarathons.`
-    
+
         },
         heathVanSingel: {
           title: 'Designer',
           bio: `Heath was the UX/UI Designer at the Zooniverse where he worked to craft thoughtful and
           engaging user experiences. Apart from design, Heath also enjoys illustration, a good sci-fi or fantasy
           novel, and exploring his new home in the Pacific Northwest.`
-        }, 
+        },
         hughDickinson: {
           title: 'Researcher',
           bio: `Hugh is a postdoc studying the Zooniverse.`
@@ -423,12 +423,12 @@ export default {
           title: 'Developer',
           bio: `James joined the Zooniverse team in 2017. Before discovering his passion for code,
           he received a Ph.D in Mediterranean Archaeology from SUNY Buffalo, focusing on ancient Greece.
-          In his free time he enjoys wood working and the ancient art of fermentation.`    
+          In his free time he enjoys wood working and the ancient art of fermentation.`
         },
         jimODonnell: {
           title: 'UX Developer',
           bio: `Professional cynic but his heart's not in it. Web developer for the Zooniverse,
-          Web Standards organiser, Amnesty UK activist.`  
+          Web Standards organiser, Amnesty UK activist.`
         },
         jenGupta: {
           title: 'Educator',
@@ -455,13 +455,13 @@ export default {
           involved in as a researcher since 2008. She's particularly interested in the evolution of
           spiral galaxies.`
         },
-        
+
         kellyBorden: {
           title: 'Educator',
           bio: `With a background in museum education, Kelly joined the Zooniverse in 2011 to bring
           an educator's perspective and spread the word amongst teachers and students. She's fond of
           several C's: chocolate, cats, coffee, and more chocolate.`
-        }, 
+        },
         kyleWillett: {
           title: 'Researcher',
           bio: `Kyle is an astronomer who studies galaxies, masers, and black holes (although he's
@@ -513,15 +513,15 @@ export default {
           title: 'Researcher',
           bio: `A PhD student at the University of Minnesota, Melanie works on combining machine learning
           with volunteer votes for classification tasks on the Galaxy Zoo project with the goal of classifying
-          *billions* of galaxies that future telescopes will see.`  
+          *billions* of galaxies that future telescopes will see.`
         },
         michaelParrish: {
           title: 'Rails/Backend Developer',
-          bio: `Software developer at the Zooniverse. He pwns databases daily. Dog, fishing, snakes, and bourbon.`  
+          bio: `Software developer at the Zooniverse. He pwns databases daily. Dog, fishing, snakes, and bourbon.`
         },
         noahMalmed: {
           title: 'Mobile App Developer',
-          bio: `Noah mainly has a background in mobile app development as well as some firmware and backend experience. 
+          bio: `Noah mainly has a background in mobile app development as well as some firmware and backend experience.
           Outside of work, Noah enjoys cooking, baking and climbing.`
         },
         perryRoper: {
@@ -548,6 +548,11 @@ export default {
           title: 'Developer',
           bio: `Roger builds front end interfaces for the Zooniverse, and enjoys coding, music and rebuilding
           motorbikes in his spare time.`
+        },
+        ronaCostello: {
+          title: 'Web Development placement student',
+          bio: `Rona is a PhD student studying plant evolution at Oxford and has joined the Zooniverse to get some web development experience for a few months.
+          Enjoys movies, board games and hanging out under the sea.`
         },
         samanthaBlickhan: {
           title: 'IMLS Postdoctoral Fellow',
