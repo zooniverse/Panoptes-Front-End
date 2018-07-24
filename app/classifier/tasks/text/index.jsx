@@ -15,11 +15,9 @@ export default class TextTask extends React.Component {
 
     this.textInput = React.createRef();
 
-    this.debouncedUpdateAnnotation = _.debounce(this.updateAnnotation, 500).bind(this);
+    this.debouncedUpdateAnnotation = _.debounce(this.updateAnnotation, 500);
     this.handleChange = this.handleChange.bind(this);
-    this.handleResize = this.handleResize.bind(this);
     this.setTagSelection = this.setTagSelection.bind(this);
-    this.updateAnnotation = this.updateAnnotation.bind(this);
   }
 
   state = {
