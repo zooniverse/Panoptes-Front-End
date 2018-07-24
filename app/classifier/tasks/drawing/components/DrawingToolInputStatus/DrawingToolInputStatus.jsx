@@ -35,7 +35,13 @@ DrawingToolInputStatus.defaultProps = {
 DrawingToolInputStatus.propTypes = {
   count: PropTypes.number,
   tool: PropTypes.shape({
-    min: PropTypes.number,
-    max: PropTypes.number
+    min: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
+    ]),
+    max: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
+    ])
   })
 };
