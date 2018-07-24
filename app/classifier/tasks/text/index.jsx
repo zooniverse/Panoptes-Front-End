@@ -106,7 +106,7 @@ export default class TextTask extends React.Component {
         <label className="answer" htmlFor="textInput">
           <textarea
             className="standard-input full"
-            onBlur={this.handleChange}
+            onBlur={this.debouncedUpdateAnnotation.flush}
             onChange={this.handleChange}
             ref={this.textInput}
             rows={this.state.rows}
