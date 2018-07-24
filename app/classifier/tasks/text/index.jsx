@@ -39,7 +39,7 @@ export default class TextTask extends React.Component {
   }
 
   componentWillUnmount() {
-    this.updateAnnotation();
+    this.debouncedUpdateAnnotation.flush();
   }
 
   setTagSelection(e) {
