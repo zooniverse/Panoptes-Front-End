@@ -70,7 +70,7 @@ export default class TextTask extends React.Component {
       }
     });
 
-    this.updateAnnotation();
+    this.updateAnnotation(value);
   }
 
   handleChange() {
@@ -81,7 +81,7 @@ export default class TextTask extends React.Component {
       this.setState({ value }, () => { this.handleResize(); });
     }
 
-    this.debouncedUpdateAnnotation();
+    this.debouncedUpdateAnnotation(value);
   }
 
   handleResize() {
@@ -93,12 +93,9 @@ export default class TextTask extends React.Component {
     }
   }
 
-  updateAnnotation() {
-    if (this.textInput.current) {
-      const value = this.textInput.current.value;
-      const newAnnotation = Object.assign(this.props.annotation, { value });
-      this.props.onChange(newAnnotation);
-    }
+  updateAnnotation(value) {
+    const newAnnotation = Object.assign(this.props.annotation, { value });
+    this.props.onChange(newAnnotation);
   }
 
   render() {
@@ -111,7 +108,7 @@ export default class TextTask extends React.Component {
         <label className="answer" htmlFor="textInput">
           <textarea
             className="standard-input full"
-            onBlur={this.updateAnnotation}
+            onBlur={this.handleChange}
             onChange={this.handleChange}
             ref={this.textInput}
             rows={this.state.rows}
