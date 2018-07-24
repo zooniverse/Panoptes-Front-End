@@ -293,12 +293,14 @@ class ProjectPageController extends React.Component {
       this.setState({ guide });
       const guideId = guide ? guide.id : undefined;
       actions.translations.load('field_guide', guideId, translations.locale);
-      getAllLinked(guide, 'attached_images')
-      .then((images) => {
-        const guideIcons = {};
-        images.map(image => guideIcons[image.id] = image);
-        this.setState({ guideIcons });
-      });
+      if (guide) {
+        getAllLinked(guide, 'attached_images')
+        .then((images) => {
+          const guideIcons = {};
+          images.map(image => guideIcons[image.id] = image);
+          this.setState({ guideIcons });
+        });
+      }
     });
   }
 
