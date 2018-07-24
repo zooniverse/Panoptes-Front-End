@@ -264,7 +264,7 @@ export const teamMembers = {
   ronaCostello: {
     name: "Rona Costello",
     twitter: "ronacostello",
-    image: "/assets/team/rona.png",
+    image: "/assets/team/rona_costello.jpg",
     location: "oxford"
   },
   samanthaBlickhan: {
