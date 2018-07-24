@@ -116,11 +116,11 @@ export default class TextTask extends React.Component {
         </label>
         {this.props.task.text_tags && this.props.task.text_tags.length > 0 &&
           <div className="transcription-metadata-tags">
-            {this.props.task.text_tags.map((tag, i) => (
+            {this.props.task.text_tags.map(tag => (
               <input
                 type="button"
                 className="standard-button text-tag"
-                key={i}
+                key={tag}
                 value={tag}
                 onClick={this.setTagSelection}
               />
@@ -170,6 +170,7 @@ TextTask.defaultProps = {
   annotation: {
     value: ''
   },
+  autoFocus: false,
   onChange: NOOP,
   task: {
     help: '',
