@@ -15,11 +15,9 @@ export default class TextTask extends React.Component {
 
     this.textInput = React.createRef();
 
-    this.debouncedUpdateAnnotation = _.debounce(this.updateAnnotation, 500).bind(this);
+    this.debouncedUpdateAnnotation = _.debounce(this.updateAnnotation, 500);
     this.handleChange = this.handleChange.bind(this);
-    this.handleResize = this.handleResize.bind(this);
     this.setTagSelection = this.setTagSelection.bind(this);
-    this.updateAnnotation = this.updateAnnotation.bind(this);
   }
 
   state = {
@@ -39,7 +37,7 @@ export default class TextTask extends React.Component {
   }
 
   componentWillUnmount() {
-    this.updateAnnotation();
+    this.debouncedUpdateAnnotation.flush();
   }
 
   setTagSelection(e) {
@@ -70,7 +68,7 @@ export default class TextTask extends React.Component {
       }
     });
 
-    this.updateAnnotation();
+    this.updateAnnotation(value);
   }
 
   handleChange() {
@@ -81,7 +79,7 @@ export default class TextTask extends React.Component {
       this.setState({ value }, () => { this.handleResize(); });
     }
 
-    this.debouncedUpdateAnnotation();
+    this.debouncedUpdateAnnotation(value);
   }
 
   handleResize() {
@@ -93,12 +91,9 @@ export default class TextTask extends React.Component {
     }
   }
 
-  updateAnnotation() {
-    if (this.textInput.current) {
-      const value = this.textInput.current.value;
-      const newAnnotation = Object.assign(this.props.annotation, { value });
-      this.props.onChange(newAnnotation);
-    }
+  updateAnnotation(value) {
+    const newAnnotation = Object.assign(this.props.annotation, { value });
+    this.props.onChange(newAnnotation);
   }
 
   render() {
@@ -111,7 +106,7 @@ export default class TextTask extends React.Component {
         <label className="answer" htmlFor="textInput">
           <textarea
             className="standard-input full"
-            onBlur={this.updateAnnotation}
+            onBlur={this.debouncedUpdateAnnotation.flush}
             onChange={this.handleChange}
             ref={this.textInput}
             rows={this.state.rows}
@@ -121,11 +116,11 @@ export default class TextTask extends React.Component {
         </label>
         {this.props.task.text_tags && this.props.task.text_tags.length > 0 &&
           <div className="transcription-metadata-tags">
-            {this.props.task.text_tags.map((tag, i) => (
+            {this.props.task.text_tags.map(tag => (
               <input
                 type="button"
                 className="standard-button text-tag"
-                key={i}
+                key={tag}
                 value={tag}
                 onClick={this.setTagSelection}
               />
@@ -175,6 +170,7 @@ TextTask.defaultProps = {
   annotation: {
     value: ''
   },
+  autoFocus: false,
   onChange: NOOP,
   task: {
     help: '',
