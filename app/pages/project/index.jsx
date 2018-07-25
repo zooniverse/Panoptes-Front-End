@@ -289,11 +289,10 @@ class ProjectPageController extends React.Component {
   loadFieldGuide(projectId) {
     return apiClient.type('field_guides').get({ project_id: projectId })
     .then(([guide]) => {
-      const { actions, translations } = this.props;
       this.setState({ guide });
-      const guideId = guide ? guide.id : undefined;
-      actions.translations.load('field_guide', guideId, translations.locale);
-      if (guide) {
+      if (guide && guide.id) {
+        const { actions, translations } = this.props;
+        actions.translations.load('field_guide', guide.id, translations.locale);
         getAllLinked(guide, 'attached_images')
         .then((images) => {
           const guideIcons = {};
