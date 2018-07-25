@@ -7,6 +7,7 @@ import TextTaskEditor from './editor';
 import TextTaskSummary from './summary';
 
 const LINEHEIGHT = 22.5;
+const MAX_ROWS = 10;
 const NOOP = Function.prototype;
 
 export default class TextTask extends React.Component {
@@ -73,10 +74,10 @@ export default class TextTask extends React.Component {
 
   handleChange() {
     const value = this.textInput.current.value;
-    if (value < this.state.value) {
-      this.setState({ rows: 1, value }, () => { this.handleResize(); });
+    if (value.length < this.state.value.length) {
+      this.setState({ rows: 1, value }, this.handleResize);
     } else {
-      this.setState({ value }, () => { this.handleResize(); });
+      this.setState({ value }, this.handleResize);
     }
 
     this.debouncedUpdateAnnotation(value);
@@ -84,7 +85,8 @@ export default class TextTask extends React.Component {
 
   handleResize() {
     const oldRows = this.textInput.current.rows;
-    const newRows = Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT);
+    let newRows = Math.min(Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT), MAX_ROWS);
+    newRows = Math.max(newRows, 1);
 
     if (newRows && (newRows !== oldRows)) {
       this.setState({ rows: newRows });
@@ -110,7 +112,7 @@ export default class TextTask extends React.Component {
             onChange={this.handleChange}
             ref={this.textInput}
             rows={this.state.rows}
-            style={{ lineHeight: `${LINEHEIGHT}px` }}
+            style={{ lineHeight: `${LINEHEIGHT}px`, overflow: 'hidden' }}
             value={this.state.value}
           />
         </label>
