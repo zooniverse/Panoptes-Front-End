@@ -52,6 +52,18 @@ export default class ChangePasswordForm extends React.Component {
     return this.state.new.length < MIN_PASSWORD_LENGTH;
   }
 
+  renderStatus() {
+    let status = null;
+    if (this.state.inProgress) {
+      status = <i className="fa fa-spinner fa-spin form-help"></i>;
+    } else if (this.state.success) {
+      status = <i className="fa fa-check-circle form-help success"></i>;
+    } else if (this.state.error) {
+      status = <small className="form-help error">{this.state.error.toString()}</small>;
+    }
+    return status;
+  }
+
   render() {
     return (
       <form ref={this.changePasswordForm} method="POST" onSubmit={this.handleSubmit}>
@@ -127,12 +139,7 @@ export default class ChangePasswordForm extends React.Component {
           >
             {counterpart('userSettings.account.changePassword.change')}
           </button>{' '}
-          { 
-            this.state.inProgress
-              ? <i className="fa fa-spinner fa-spin form-help"></i> : this.state.success
-              ? <i className="fa fa-check-circle form-help success"></i> : this.state.error
-              ? <small className="form-help error">{this.state.error.toString()}</small> : null
-          }
+          {this.renderStatus()}
         </p>
       </form>
     );
