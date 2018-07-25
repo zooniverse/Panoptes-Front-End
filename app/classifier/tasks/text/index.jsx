@@ -75,9 +75,9 @@ export default class TextTask extends React.Component {
   handleChange() {
     const value = this.textInput.current.value;
     if (value.length < this.state.value.length) {
-      this.setState({ rows: 1, value }, () => { this.handleResize(); });
+      this.setState({ rows: 1, value }, this.handleResize);
     } else {
-      this.setState({ value }, () => { this.handleResize(); });
+      this.setState({ value }, this.handleResize);
     }
 
     this.debouncedUpdateAnnotation(value);
@@ -85,7 +85,8 @@ export default class TextTask extends React.Component {
 
   handleResize() {
     const oldRows = this.textInput.current.rows;
-    const newRows = Math.max(Math.min(Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT), MAX_ROWS), 1);
+    let newRows = Math.min(Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT), MAX_ROWS);
+    newRows = Math.max(newRows, 1);
 
     if (newRows && (newRows !== oldRows)) {
       this.setState({ rows: newRows });
