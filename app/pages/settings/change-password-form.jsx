@@ -17,11 +17,11 @@ export default class ChangePasswordForm extends React.Component {
       error: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.changePasswordForm = React.createRef();
   }
 
   handleSubmit(e) {
     e.preventDefault();
-
     const current = this.state.old;
     const replacement = this.state.new;
 
@@ -34,7 +34,7 @@ export default class ChangePasswordForm extends React.Component {
     auth.changePassword({ current, replacement })
       .then(() => {
         this.setState({ success: true });
-        this.refs.form.reset();
+        this.changePasswordForm.current.reset();
       })
       .catch((error) => {
         this.setState({ error });
@@ -54,7 +54,7 @@ export default class ChangePasswordForm extends React.Component {
 
   render() {
     return (
-      <form ref="form" method="POST" onSubmit={this.handleSubmit}>
+      <form ref={this.changePasswordForm} method="POST" onSubmit={this.handleSubmit}>
         <p>
           <strong>{counterpart('userSettings.account.changePassword.heading')}</strong>
         </p>
@@ -92,8 +92,8 @@ export default class ChangePasswordForm extends React.Component {
                   onChange={(e) => { this.setState({ new: e.target.value }); }}
                   required
                 />
-                {this.state.new.length > 0 && this.tooShort() 
-                  ? <small className="form-help error">{counterpart('userSettings.account.changePassword.tooShort')}</small>
+                {this.state.new.length > 0 && this.tooShort() ?
+                  <small className="form-help error">{counterpart('userSettings.account.changePassword.tooShort')}</small>
                   : null}
               </td>
             </tr>
@@ -112,8 +112,9 @@ export default class ChangePasswordForm extends React.Component {
                   onChange={(e) => { this.setState({ confirmation: e.target.value }); }}
                   required
                 />
-                {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch()
-                  ? <small className="form-help error">{counterpart('userSettings.account.changePassword.doesntMatch')}</small> : null}
+                {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch() ?
+                  <small className="form-help error">{counterpart('userSettings.account.changePassword.doesntMatch')}</small> 
+                  : null}
               </td>
             </tr>
           </tbody>
