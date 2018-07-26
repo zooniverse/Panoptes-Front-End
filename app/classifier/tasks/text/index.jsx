@@ -7,7 +7,6 @@ import TextTaskEditor from './editor';
 import TextTaskSummary from './summary';
 
 const LINEHEIGHT = 22.5;
-const MAX_ROWS = 10;
 const NOOP = Function.prototype;
 
 export default class TextTask extends React.Component {
@@ -85,8 +84,7 @@ export default class TextTask extends React.Component {
 
   handleResize() {
     const oldRows = this.textInput.current.rows;
-    let newRows = Math.min(Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT), MAX_ROWS);
-    newRows = Math.max(newRows, 1);
+    const newRows = Math.max(Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT), 1);
 
     if (newRows && (newRows !== oldRows)) {
       this.setState({ rows: newRows });
