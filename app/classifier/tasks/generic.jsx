@@ -18,7 +18,7 @@ class GenericTask extends React.Component {
 
   componentDidMount() {
     if (this.props.autoFocus && this.container.focus) {
-      this.container.focus();
+      this.handleMount = setTimeout(() => this.container.focus());
     }
   }
 
@@ -27,6 +27,10 @@ class GenericTask extends React.Component {
     if (this.props.autoFocus && this.props.question !== prevProps.question && this.container.focus) {
       this.container.focus();
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.handleMount);
   }
 
   showHelp() {

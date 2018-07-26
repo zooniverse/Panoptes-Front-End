@@ -26,10 +26,12 @@ export default class TextTask extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.autoFocus) {
-      this.textInput.current.focus();
-    }
-    this.handleResize();
+    this.handleMount = setTimeout(() => {
+      if (this.props.autoFocus) {
+        this.textInput.current.focus();
+      }
+      this.handleResize();
+    });
   }
 
   componentDidUpdate() {
@@ -38,6 +40,7 @@ export default class TextTask extends React.Component {
 
   componentWillUnmount() {
     this.debouncedUpdateAnnotation.flush();
+    clearTimeout(this.handleMount);
   }
 
   setTagSelection(e) {
@@ -83,10 +86,11 @@ export default class TextTask extends React.Component {
   }
 
   handleResize() {
-    const oldRows = this.textInput.current.rows;
-    const newRows = Math.max(Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT), 1);
+    const oldRows = this.state.rows;
+    let newRows = Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT);
+    newRows = Math.max(newRows, 1);
 
-    if (newRows && (newRows !== oldRows)) {
+    if (newRows !== oldRows) {
       this.setState({ rows: newRows });
     }
   }
