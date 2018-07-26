@@ -26,10 +26,12 @@ export default class TextTask extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.autoFocus) {
-      this.textInput.current.focus();
-    }
-    this.handleResize();
+    this.handleMount = setTimeout(() => {
+      if (this.props.autoFocus) {
+        this.textInput.current.focus();
+      }
+      this.handleResize();
+    });
   }
 
   componentDidUpdate() {
@@ -38,6 +40,7 @@ export default class TextTask extends React.Component {
 
   componentWillUnmount() {
     this.debouncedUpdateAnnotation.flush();
+    clearTimeout(this.handleMount);
   }
 
   setTagSelection(e) {
