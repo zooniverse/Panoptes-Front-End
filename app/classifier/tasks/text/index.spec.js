@@ -77,6 +77,7 @@ describe('TextTask', function () {
     it('should wrap text with tags when text highlighted and tag clicked', function () {
       wrapper.instance().textInput.current = {
         value: 'testing the text task tag selection',
+        scrollHeight: 50,
         selectionStart: 12,
         selectionEnd: 21
       };
