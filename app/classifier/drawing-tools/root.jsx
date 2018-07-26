@@ -87,7 +87,7 @@ export default class DrawingToolRoot extends React.Component {
 
         {openDetails &&
           <DetailsSubTaskForm
-            onDetailsFormClose={this.focusDrawingTool}
+            onFormClose={this.focusDrawingTool}
             tasks={tasks}
             toolProps={toolProps}
             {...this.props}
