@@ -119,7 +119,7 @@ module.exports = createReactClass
       when 'single'
         TaskChoice = require('./single').default
       when 'text'
-        TaskChoice = require './text'
+        TaskChoice = require('./text').default
       when 'slider'
         TaskChoice = require('./slider').default
       when 'dropdown'
