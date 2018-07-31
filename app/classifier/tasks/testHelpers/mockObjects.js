@@ -45,7 +45,7 @@ export const checkboxTypeTask = {
     { label: 'No', value: 'no' },
     { label: 'Maybe', value: 'maybe' }
   ],
-  required: 3
+  required: true
 };
 
 export const textTypeTask = {

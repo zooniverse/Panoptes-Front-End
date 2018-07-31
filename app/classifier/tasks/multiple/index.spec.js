@@ -81,7 +81,7 @@ describe('MultipleChoiceTask', function () {
 
   describe('static methods', function () {
     it('should be incomplete', function () {
-      expect(MultipleTask.isAnnotationComplete(checkboxTypeTask, annotation)).to.be.false
+      expect(MultipleTask.isAnnotationComplete(checkboxTypeTask, { value: [] })).to.be.false
     });
 
     it('should be complete', function () {
