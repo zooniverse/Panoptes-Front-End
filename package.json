@@ -19,7 +19,7 @@
     "lodash": "~4.17.10",
     "markdownz": "~7.6.3",
     "mocha": "~5.2.0",
-    "modal-form": "~2.6.0",
+    "modal-form": "~2.6.1",
     "moment": "~2.21.0",
     "panoptes-client": "~2.10.0",
     "papaparse": "github:mholt/PapaParse#cada171",
