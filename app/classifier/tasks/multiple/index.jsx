@@ -74,9 +74,8 @@ MultipleChoiceTask.getDefaultAnnotation = () => {
   return { value: [] };
 };
 MultipleChoiceTask.isAnnotationComplete = (task, annotation) => {
-  // Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
-  // if task.required is undefined or null this will always return true
-  return annotation.value.length >= (task.required != null ? task.required : 0);
+  const minRequiredAnswers = task.required ? 1 : 0;
+  return annotation.value.length >= minRequiredAnswers;
 };
 
 MultipleChoiceTask.propTypes = {
