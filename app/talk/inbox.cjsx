@@ -76,11 +76,11 @@ module.exports = createReactClass
     conversations: []
 
   componentWillMount: ->
-    @setConversations @props.user
+    @setConversations @props.user, @props.location.query.page
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.user is @props.user
-      @setConversations(nextProps.user)
+      @setConversations(nextProps.user, @props.location.query.page)
     unless nextProps.location.query.page is @props.location.query.page
       @setConversations(nextProps.user, nextProps.location.query.page)
 
@@ -89,7 +89,7 @@ module.exports = createReactClass
     conversationsQuery =
       user_id: user.id
       page_size: PAGE_SIZE
-      page: @props.location.query.page
+      page: page
       sort: '-updated_at'
       include: 'users'
 
@@ -128,7 +128,9 @@ module.exports = createReactClass
               }
               <Paginator
                 page={+conversationsMeta.page}
-                pageCount={+conversationsMeta.page_count} />
+                pageCount={+conversationsMeta.page_count}
+                onPageChange={@onPageChange}
+              />
             </div>}
 
           <div>
