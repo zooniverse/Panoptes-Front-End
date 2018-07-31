@@ -36,7 +36,7 @@ ConversationLink = createReactClass
   componentWillMount: ->
     apiClient
       .type 'users'
-      .get @props.conversation.links.users.filter (userId) => userId isnt @props.user.id
+      .get @props.conversation.participant_ids.filter (userId) => userId isnt +@props.user.id
       .then (users) =>
         @setState {users}
 
