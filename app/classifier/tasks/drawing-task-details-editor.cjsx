@@ -123,7 +123,7 @@ module.exports = createReactClass
       when 'slider'
         TaskChoice = require('./slider').default
       when 'dropdown'
-        TaskChoice = require './dropdown'
+        TaskChoice = require('./dropdown').default
     @props.task.tools[@props.toolIndex].details.push TaskChoice.getDefaultTask()
     @props.workflow.update 'tasks'
     @props.workflow.save()
