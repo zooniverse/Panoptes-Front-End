@@ -97,8 +97,12 @@ module.exports = createReactClass
     path = createPathFromCoords points
     fill = if _inProgress then 'none' else @props.color
     lineClass = if _inProgress then 'drawing' else 'clickable'
+    pointerEvents = if @props.disabled then 'none' else 'painted'
 
-    <DrawingToolRoot tool={this}>
+    <DrawingToolRoot
+      tool={this}
+      pointerEvents={pointerEvents}
+    >
       <path d={path}
         fill={fill}
         fillOpacity="0.2"
