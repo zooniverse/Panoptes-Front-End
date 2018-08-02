@@ -15,13 +15,13 @@ var actions = {
   },
 
   deleteGuide: function(guideID) {
-    return guides.get(guideID).then(function(guide) {
+    return guides.get(guideID, {}).then(function(guide) {
       return guide.delete();
     });
   },
 
   replaceItems: function(guideID, items) {
-    return guides.get(guideID).then(function(guide) {
+    return guides.get(guideID, {}).then(function(guide) {
       guide.update({
         _busy: true,
         items: items
@@ -35,7 +35,7 @@ var actions = {
   },
 
   updateItem: function(guideID, itemIndex, changes) {
-    return guides.get(guideID).then(function(guide) {
+    return guides.get(guideID, {}).then(function(guide) {
       Object.assign(guide.items[itemIndex], changes);
       guide.update({
         _busy: true,
@@ -51,7 +51,7 @@ var actions = {
   },
 
   removeItemIcon: function(guideID, itemIndex) {
-    return guides.get(guideID).then(function(guide) {
+    return guides.get(guideID, {}).then(function(guide) {
       guide.update({
         _busy: true
       });
@@ -78,7 +78,7 @@ var actions = {
   },
 
   setItemIcon: function(guideID, itemIndex, iconFile) {
-    return guides.get(guideID).then(function(guide) {
+    return guides.get(guideID, {}).then(function(guide) {
       guide.update({
         _busy: true
       });
@@ -123,7 +123,7 @@ var actions = {
 
   appendItem: function(guideID) {
     var newItem = {};
-    return guides.get(guideID).then(function(guide) {
+    return guides.get(guideID, {}).then(function(guide) {
       guide.items.push(newItem);
       guide.update({
         _busy: true,
@@ -139,7 +139,7 @@ var actions = {
   },
 
   removeItem: function(guideID, itemIndex) {
-    return guides.get(guideID).then(function(guide) {
+    return guides.get(guideID, {}).then(function(guide) {
       guide.items.splice(itemIndex, 1);
       guide.update({
         _busy: true,
