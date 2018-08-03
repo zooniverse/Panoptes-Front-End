@@ -142,12 +142,19 @@ describe('WorldWideTelescope with classification', function() {
   });
 
   it('will render a WWT link for each full classification', function() {
-    const link = wrapper.find('a');
-    assert.equal(link.length, 2);
+    const linkInstances = wrapper.find('.standard-button');
+    assert.equal(linkInstances.length, 2);
   });
 
   it('will render a cropped image for each fully classified chart', function() {
     const image = wrapper.find('img');
     assert.equal(image.length, 2);
+  });
+
+  it('will render text about misaligned images', function() {
+    const content = wrapper.find('.worldwide-telescope__content');
+    content.forEach((node) => {
+      assert.equal(node.childAt(1).type(), 'p');
+    })
   });
 });
