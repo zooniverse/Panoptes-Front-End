@@ -202,8 +202,8 @@ export default class DropdownTask extends React.Component {
 
     return (
       <GenericTask
-        question={this.props.task.instruction}
-        help={this.props.task.help}
+        question={this.props.translation.instruction}
+        help={this.props.translation.help}
         required={this.props.task.required}
         showRequiredNotice={this.props.showRequiredNotice}
       >

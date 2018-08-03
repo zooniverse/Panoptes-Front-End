@@ -95,8 +95,8 @@ export default class Highlighter extends React.Component {
       return (
         <div>
           <GenericTask
-            question={this.props.task.instruction}
-            help={this.props.task.help}
+            question={this.props.translation.instruction}
+            help={this.props.translation.help}
             answers={labels}
             required={this.props.task.required}
             showRequiredNotice={this.props.showRequiredNotice}

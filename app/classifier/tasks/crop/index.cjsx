@@ -57,7 +57,12 @@ module.exports = createReactClass
 
   render: ->
     # The actual value is updated in the Initializer.
-    <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required} showRequiredNotice={@props.showRequiredNotice}>
+    <GenericTask
+      question={@props.translation.instruction}
+      help={@props.translation.help}
+      required={@props.task.required}
+      showRequiredNotice={@props.showRequiredNotice}
+    >
       <p>
         <button type="button" className="minor-button" disabled={not @props.annotation.value?} onClick={@handleClear}>Clear current crop</button>
       </p>

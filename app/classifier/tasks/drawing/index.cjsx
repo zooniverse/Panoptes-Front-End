@@ -113,7 +113,12 @@ module.exports = createReactClass
           <GridButtons {...@props} />}
       </div>
 
-    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} />
+    <GenericTask
+      question={@props.translation.instruction}
+      help={@props.translation.help}
+      answers={tools}
+      required={@props.task.required}
+    />
 
   handleChange: (toolIndex, e) ->
     # This handles changing tools, not any actually drawing.

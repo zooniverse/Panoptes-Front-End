@@ -51,7 +51,7 @@ SliderSummary.propTypes = {
   ).isRequired
 };
 
-const SliderTask = ({ task, annotation, onChange, autoFocus }) => {
+const SliderTask = ({ task, translation, annotation, onChange, autoFocus }) => {
   function handleChange(e) {
     let value = e.target.value;
     value = Math.min(parseFloat(value, 10), parseFloat(task.max, 10));
@@ -63,8 +63,8 @@ const SliderTask = ({ task, annotation, onChange, autoFocus }) => {
   return (
     <div>
       <GenericTask
-        question={task.instruction}
-        help={task.help}
+        question={translation.instruction}
+        help={translation.help}
         required={false}
       >
         <div className="slider-task-container full ">
