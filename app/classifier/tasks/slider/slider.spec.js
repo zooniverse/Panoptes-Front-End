@@ -23,7 +23,7 @@ describe('SliderTask', function () {
   beforeEach(function () {
     onChangeSpy = sinon.spy();
 
-    wrapper = mount(<SliderTask task={task} onChange={onChangeSpy} />, mockReduxStore);
+    wrapper = mount(<SliderTask task={task} translation={task} onChange={onChangeSpy} />, mockReduxStore);
   });
 
   it('should render without crashing', function () {
@@ -159,7 +159,7 @@ describe('SliderSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '0.7' }} />, mockReduxStore);
+    summary = mount(<SliderTask.Summary task={task} translation={task} annotation={{ value: '0.7' }} />, mockReduxStore);
   });
 
   it('should render without crashing', function () {
@@ -176,7 +176,7 @@ describe('SliderSummary', function () {
   });
 
   it('should have the correct answer label when the value is falsy (i.e. 0)', function () {
-    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '0' }} />, mockReduxStore);
+    summary = mount(<SliderTask.Summary task={task} translation={task} annotation={{ value: '0' }} />, mockReduxStore);
     const answers = summary.find('.answer');
     assert.notEqual(answers.text(), 'No answer');
   });

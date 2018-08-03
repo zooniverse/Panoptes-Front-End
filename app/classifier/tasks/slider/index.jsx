@@ -134,18 +134,21 @@ SliderTask.propTypes = {
   task: PropTypes.shape({
     answers: PropTypes.array,
     defaultValue: PropTypes.string,
-    help: PropTypes.string,
-    instruction: PropTypes.string,
     max: PropTypes.string,
     min: PropTypes.string,
     step: PropTypes.string
+  }),
+  translation: PropTypes.shape({
+    help: PropTypes.string,
+    instruction: PropTypes.string
   })
 };
 
 SliderTask.defaultProps = {
   annotation: { value: null },
   onChange: NOOP,
-  task: SLIDERTASKDEFAULT
+  task: SLIDERTASKDEFAULT,
+  translation: SLIDERTASKDEFAULT
 };
 
 export default SliderTask;
