@@ -480,15 +480,18 @@ export default class WorldWideTelescope extends React.Component {
     }
 
     return (
-      <div>
+      <div className="worldwide-telescope">
         {!!plates.length && (<p>View Your Classification!</p>)}
         {plates.map((plate, idx) => {
           return (
-            <div className="worldwide-telescope" key={idx}>
+            <div className="worldwide-telescope__container" key={idx}>
               <div>
                 <img role="presentation" className="worldwide-telescope__chart-image" src={`${plate.getCropUrl()}`} />
               </div>
-              <a target="_blank" rel="noopener noreferrer" href={plate.getWwtUrl()} className="standard-button">World Wide Telescope</a>
+              <div className="worldwide-telescope__content">
+                <a target="_blank" rel="noopener noreferrer" href={plate.getWwtUrl()} className="standard-button">World Wide Telescope</a>
+                <p>If the image appears misaligned within World Wide Telescope’, please click on Talk and label the subject with <a target="_blank" rel="noopener noreferrer" href="https://zooniverse.org/talk/search/?query=misaligned">#misaligned</a>.</p>
+              </div>
             </div>
           );
         })}

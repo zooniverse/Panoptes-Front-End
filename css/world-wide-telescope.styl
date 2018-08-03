@@ -1,10 +1,21 @@
 .worldwide-telescope
-  align-items: center
-  display: flex
+  margin: 0 1em
 
-  > div
-    text-align: center
-    width: 5em
+  &__container
+    display: flex
+
+    div:first-child
+      text-align: center
+      width: 5em
+
+  &__content
+    display: flex
+    flex-direction: column
+    margin: 0 1em
+
+    p
+      font-size: 0.75em
+      font-weight: 300
 
   &__chart-image
     border-radius: .25em
