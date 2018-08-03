@@ -60,11 +60,17 @@ const toolProps = {
   taskKey: "T0"
 };
 
+const translations = {
+  languages: {},
+  locale: 'en',
+  strings: { workflow: {}}
+}
+
 describe('DetailsSubTaskForm', function() {
   describe('render', function() {
     let wrapper;
     before(function () {
-      wrapper = shallow(<DetailsSubTaskForm tasks={tasks} toolProps={toolProps} />, mockReduxStore);
+      wrapper = shallow(<DetailsSubTaskForm tasks={tasks} translations={translations} toolProps={toolProps} />, mockReduxStore);
     });
 
     it('should render without crashing', function () {
