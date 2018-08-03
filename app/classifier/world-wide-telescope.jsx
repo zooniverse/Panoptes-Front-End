@@ -490,7 +490,7 @@ export default class WorldWideTelescope extends React.Component {
               </div>
               <div className="worldwide-telescope__content">
                 <a target="_blank" rel="noopener noreferrer" href={plate.getWwtUrl()} className="standard-button">World Wide Telescope</a>
-                <p>If the image appears misaligned within World Wide Telescope’, please click on Talk and label the subject with <a target="_blank" rel="noopener noreferrer" href="https://zooniverse.org/talk/search/?query=misaligned">#misaligned</a>.</p>
+                <p>If the image appears misaligned within World Wide Telescope, please click on Talk and label the subject with <a target="_blank" rel="noopener noreferrer" href="https://zooniverse.org/talk/search/?query=misaligned">#misaligned</a>.</p>
               </div>
             </div>
           );
