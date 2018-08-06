@@ -1,125 +1,125 @@
 export default {
-  loading: '(Loading)',
+  loading: '(Cargando)',
   classifier: {
-    back: 'Back',
-    backButtonWarning: 'Going back will clear your work for the current task.',
-    close: 'Close',
-    continue: 'Continue',
+    back: 'Atrás',
+    backButtonWarning: 'Al ir atrás se borrará tu trabajo para la tarea actual.',
+    close: 'Cerrar',
+    continue: 'Continuar',
     detailsSubTaskFormSubmitButton: 'OK',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
-    dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: 'Let’s go!',
-    next: 'Next',
-    optOut: 'Opt out',
-    recents: 'Your recent classifications',
+    done: 'Listo',
+    doneAndTalk: 'Listo & Hablemos',
+    dontShowMinicourse: 'No mostrar mini-curso en el futuro',
+    letsGo: '¡Vamos!',
+    next: 'Siguiente',
+    optOut: 'Opción de salida',
+    recents: 'Tus clasificaciones recientes',
     taskTabs: {
-      taskTab: 'Task',
+      taskTab: 'Tarea',
       tutorialTab: 'Tutorial'
     },
-    talk: 'Talk',
-    taskHelpButton: 'Need some help with this task?',
-    miniCourseButton: 'Restart the project mini-course',
+    talk: 'Hablemos',
+    taskHelpButton: '¿Necesitas ayuda con esta tarea?',
+    miniCourseButton: 'Reiniciar el mini-curso del proyecto',
     workflowAssignmentDialog: {
-      promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
-      acceptButton: 'Try the new workflow',
-      declineButton: 'No, thanks'
+      promotionMessage: "¡Felicitaciones! Has desbloqueado la próxima secuencia de trabajo. Si prefieres seguir en la secuencia actual, puedes escoger permanecer.",
+      acceptButton: 'Intenta la nueva secuencia de trabajo',
+      declineButton: 'No, gracias'
     }
   },
   project: {
     language: 'Idioma',
-    loading: 'Loading project',
-    disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
+    loading: 'Cargando proyecto',
+    disclaimer: 'Este proyecto ha sido construido usando Zooniverse Project Builder, pero todavía no es un proyecto oficial de Zooniverse. Preguntas y problemas relacionadas con este proyecto dirigidas al equipo de Zooniverse podrían no recibir respuesta.',
     about: {
-      header: 'About',
+      header: 'Acerca de',
       nav: {
-        research: 'Research',
-        results: 'Results',
-        faq: 'FAQ',
-        education: 'Education',
-        team: 'The Team',
+        research: 'Investigación',
+        results: 'Resultados',
+        faq: 'Preguntas Frecuentes',
+        education: 'Educación',
+        team: 'El Equipo',
       }
     },
     nav: {
-      about: 'About',
-      classify: 'Classify',
-      talk: 'Talk',
-      collections: 'Collect',
-      recents: 'Recents',
-      lab: 'Lab',
-      adminPage: 'Admin page',
-      underReview: 'Under Review',
-      zooniverseApproved: 'Zooniverse Approved'
+      about: 'Acerca de',
+      classify: 'Clasificar',
+      talk: 'Hablemos',
+      collections: 'Colecciones',
+      recents: 'Recientes',
+      lab: 'Laboratorio',
+      adminPage: 'Página del Administrador',
+      underReview: 'Bajo Revisión',
+      zooniverseApproved: 'Aprobado por Zooniverse'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
-      title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
+      dark: 'oscuro',
+      light: 'claro',
+      title: 'Clasificar',
+      themeToggle: 'Cambiar a diseño %(theme)s'
     },
     home: {
-      researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      researcher: 'Palabras del investigador',
+      about: 'Acerca de %(title)s',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
-        volunteers: 'Volunteers',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
+        statistics: 'Estadística de %(title)s',
+        classifications: 'Clasificaciones',
+        volunteers: 'Voluntarios',
+        completedSubjects: 'Casos completados',
+        subjects: 'Casos'
       },
       talk: {
-        zero: 'Noone is talking about **%(title)s** right now.',
-        one: '**1** person is talking about **%(title)s** right now.',
-        other: '**%(count)s** people are talking about **%(title)s** right now.'
+        zero: 'Nadie está hablando de **%(title)s** ahora mismo.',
+        one: '**1** persona está hablando de  **%(title)s** ahora mismo.',
+        other: '**%(count)s** personas están hablando de **%(title)s** ahora mismo.'
       },
-      joinIn: 'Join in',
-      learnMore: 'Learn more',
-      getStarted: 'Get started',
-      workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
-      visitLink: 'Visit the project',
-      links: 'Links'
+      joinIn: 'Participa',
+      learnMore: 'Aprende más',
+      getStarted: 'Comenzar',
+      workflowAssignment: 'Has desbloqueado nivel %(workflowDisplayName)s',
+      visitLink: 'Visita el proyecto',
+      links: 'Enlaces'
     }
   },
   organization: {
-    loading: 'Loading organization',
-    error: 'There was an error retrieving organization',
-    notFound: 'organization not found.',
-    notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...',
+    loading: 'Cargando organización',
+    error: 'Hubo un error al recuperar organización',
+    notFound: 'organización no encontrada.',
+    notPermission: 'Si la dirección es correcta, podrías no tener los permisos para ver esta organización.',
+    pleaseWait: 'Espere por favor...',
     home: {
       projects: {
-        loading: 'Loading organization projects...',
-        error: 'There was an error loading organization projects.',
-        none: 'There are no projects associated with this organization.'
+        loading: 'Cargando proyectos de la organización...',
+        error: 'Hubo un error al cargar los proyectos de la organización.',
+        none: 'No hay proyectos asociados a esta organización.'
       },
-      viewToggle: 'Volunteer View',
-      introduction: 'Introduction',
-      readMore: 'Read More',
-      readLess: 'Read Less',
-      links: 'Links'
+      viewToggle: 'Vista del Voluntario',
+      introduction: 'Introducción',
+      readMore: 'Leer más',
+      readLess: 'Leer menos',
+      links: 'Enlaces'
     },
   },
   tasks: {
-    less: 'Less',
-    more: 'More',
+    less: 'Menos',
+    more: 'Más',
     shortcut: {
-      noAnswer: "No answer"
+      noAnswer: "No hay respuesta"
     },
     survey: {
-      clear: 'Clear',
-      clearFilters: 'Clear filters',
-      makeSelection: 'Make a selection',
-      showing: 'Showing %(count)s of %(max)s',
-      confused: 'Often confused with',
-      dismiss: 'Dismiss',
-      itsThis: 'I think it’s this',
-      cancel: 'Cancel',
-      identify: 'Identify',
-      surveyOf: 'Survey of %(count)s',
+      clear: 'Limpiar',
+      clearFilters: 'Limpiar filtros',
+      makeSelection: 'Haz una selección',
+      showing: 'Mostrando %(count)s de %(max)s',
+      confused: 'A menudo confundido con',
+      dismiss: 'Descartar',
+      itsThis: 'Pienso que es esto',
+      cancel: 'Cancelar',
+      identify: 'Identificar',
+      surveyOf: 'Relevamiento de %(count)s',
       identifications: {
-        zero: 'No identifications',
-        one: '1 identification',
-        other: '%(count)s identifications'
+        zero: 'No hay identificaciones',
+        one: '1 identificación',
+        other: '%(count)s identificaciones'
       }
     }
   },
@@ -161,14 +161,14 @@ export default {
     notSignedInMessage: 'You are not signed in'
   },
   signIn: {
-    title: 'Sign in/register',
-    withZooniverse: 'Sign in with your Zooniverse account',
-    whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.',
-    signIn: 'Sign in',
-    register: 'Register',
-    orThirdParty: 'Or sign in with another service',
-    withFacebook: 'Sign in with Facebook',
-    withGoogle: 'Sign in with Google'
+    title: 'Ingresar',
+    withZooniverse: 'Ingresar con tu cuenta de Zooniverse',
+    whyHaveAccount: 'Voluntarios que han ingresado pueden tener registro de su trabajo y se darán los créditos correspondientes en publicaciones con resultados',
+    signIn: 'Ingresar',
+    register: 'Registrarse',
+    orThirdParty: 'O ingresa con otro servicio',
+    withFacebook: 'Ingresa con Facebook',
+    withGoogle: 'Ingresa con Google'
   },
   notFoundPage: {
     message: 'Not found'
