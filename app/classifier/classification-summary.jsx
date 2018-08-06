@@ -67,6 +67,7 @@ class ClassificationSummary extends React.Component {
         <strong>
           <WorldWideTelescope
             annotations={this.props.classification.annotations}
+            project={this.props.project}
             subject={this.props.subject}
             workflow={this.props.workflow}
           />
