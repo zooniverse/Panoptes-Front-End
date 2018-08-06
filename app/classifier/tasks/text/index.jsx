@@ -103,8 +103,8 @@ export default class TextTask extends React.Component {
   render() {
     return (
       <GenericTask
-        question={this.props.task.instruction}
-        help={this.props.task.help}
+        question={this.props.translation.instruction}
+        help={this.props.translation.help}
         required={this.props.task.required}
       >
         <label className="answer" htmlFor="textInput">

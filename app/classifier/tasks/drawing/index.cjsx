@@ -96,13 +96,14 @@ module.exports = createReactClass
     tools = for tool, i in @props.task.tools
       tool._key ?= Math.random()
       count = (true for mark in @props.annotation.value when mark.tool is i).length
+      translation = @props.translation.tools[i]
       <div>
         <TaskInputField
           annotation={@props.annotation}
           className={if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}
           index={i}
           key={tool._key}
-          label={tool.label}
+          label={translation.label}
           labelIcon={<DrawingToolInputIcon tool={tool} />}
           labelStatus={<DrawingToolInputStatus count={count} tool={tool} />}
           name="drawing-tool"
@@ -113,7 +114,12 @@ module.exports = createReactClass
           <GridButtons {...@props} />}
       </div>
 
-    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} />
+    <GenericTask
+      question={@props.translation.instruction}
+      help={@props.translation.help}
+      answers={tools}
+      required={@props.task.required}
+    />
 
   handleChange: (toolIndex, e) ->
     # This handles changing tools, not any actually drawing.

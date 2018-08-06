@@ -115,7 +115,7 @@ export class DetailsSubTaskForm extends React.Component {
   }
   
   render() {
-    const { theme, tasks, toolProps } = this.props;
+    const { theme, tasks, toolProps, translations } = this.props;
 
     const detailsAreComplete = this.areDetailsComplete(tasks, toolProps);
 
@@ -131,22 +131,19 @@ export class DetailsSubTaskForm extends React.Component {
               {toolProps.details.map((detailTask, i) => {
                 if (!detailTask._key) detailTask._key = Math.random();
                 const TaskComponent = tasks[detailTask.type];
-                const taskKey = `${toolProps.taskKey}.tools.${toolProps.mark.tool}.details.${i}`;
+                const detailTranslation = translations.strings.workflow.tasks ?
+                  translations.strings.workflow.tasks[toolProps.taskKey].tools[toolProps.mark.tool].details[i] :
+                  detailTask;
                 
                 return (
-                  <TaskTranslations
-                    key={detailTask._key}
-                    taskKey={taskKey}
+                  <TaskComponent
+                    autoFocus={i === 0}
                     task={detailTask}
-                  >
-                    <TaskComponent
-                      autoFocus={i === 0}
-                      task={detailTask}
-                      annotation={toolProps.mark.details[i]}
-                      onChange={this.handleDetailsChange.bind(this, i)}
-                      showRequiredNotice={true}
-                    />
-                  </TaskTranslations>
+                    translation={detailTranslation}
+                    annotation={toolProps.mark.details[i]}
+                    onChange={this.handleDetailsChange.bind(this, i)}
+                    showRequiredNotice={true}
+                  />
                 )
               })}
               <hr />
@@ -168,7 +165,8 @@ export class DetailsSubTaskForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  theme: state.userInterface.theme
+  theme: state.userInterface.theme,
+  translations: state.translations
 });
 
 export default connect(mapStateToProps)(DetailsSubTaskForm);

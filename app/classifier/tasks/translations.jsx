@@ -4,8 +4,8 @@ import merge from 'lodash/merge';
 import { connect } from 'react-redux';
 
 function TaskTranslations(props) {
-  const { task, translations } = props;
-  const taskStrings = translations.strings.workflow.tasks ? translations.strings.workflow.tasks[props.taskKey] : {};
+  const { task, taskKey, translations } = props;
+  const taskStrings = translations.strings.workflow.tasks ? translations.strings.workflow.tasks[taskKey] : {};
   const translation = merge({}, task, taskStrings);
 
   return React.cloneElement(props.children, { translation });

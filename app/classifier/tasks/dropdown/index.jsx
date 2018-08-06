@@ -202,8 +202,8 @@ export default class DropdownTask extends React.Component {
 
     return (
       <GenericTask
-        question={this.props.task.instruction}
-        help={this.props.task.help}
+        question={this.props.translation.instruction}
+        help={this.props.translation.help}
         required={this.props.task.required}
         showRequiredNotice={this.props.showRequiredNotice}
       >
@@ -225,7 +225,7 @@ export default class DropdownTask extends React.Component {
 
             return (
               <div id={select.id} key={select.id}>
-                {(select.title !== this.props.task.instruction) &&
+                {(select.title !== this.props.translation.instruction) &&
                   <div>{select.title}</div>}
                 <SelectComponent
                   options={options}
@@ -291,10 +291,12 @@ DropdownTask.propTypes = {
   autoFocus: PropTypes.bool,
   onChange: PropTypes.func,
   task: PropTypes.shape({
-    help: PropTypes.string,
-    instruction: PropTypes.string,
     required: PropTypes.bool,
     selects: PropTypes.array
+  }),
+  translation: PropTypes.shape({
+    help: PropTypes.string,
+    instruction: PropTypes.string
   })
 };
 
