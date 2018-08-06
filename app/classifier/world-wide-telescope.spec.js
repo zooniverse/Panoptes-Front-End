@@ -8,6 +8,10 @@ const testSubject = {
   metadata: {}
 };
 
+const testProject = {
+  slug: "zooniverse/test-project"
+};
+
 const incompleteAnnotations = [
   { task: 'T0',
     type: 'drawing',
@@ -129,7 +133,7 @@ describe('WorldWideTelescope render without incomplete annotations', function ()
   });
 
   it('will render an empty div with incomplete annotations', function() {
-    const page = shallow(<WorldWideTelescope subject={testSubject} workflow={testWorkflow} annotations={incompleteAnnotations} />);
+    const page = shallow(<WorldWideTelescope subject={testSubject} workflow={testWorkflow} project={testProject} annotations={incompleteAnnotations} />);
     assert.equal(page.find('div').children().length, 0)
   });
 });
@@ -138,16 +142,23 @@ describe('WorldWideTelescope with classification', function() {
   let wrapper;
 
   before(function () {
-    wrapper = shallow(<WorldWideTelescope subject={testSubject} annotations={testAnnotations} workflow={testWorkflow} />);
+    wrapper = shallow(<WorldWideTelescope subject={testSubject} annotations={testAnnotations} workflow={testWorkflow} project={testProject} />);
   });
 
   it('will render a WWT link for each full classification', function() {
-    const link = wrapper.find('a');
-    assert.equal(link.length, 2);
+    const linkInstances = wrapper.find('.standard-button');
+    assert.equal(linkInstances.length, 2);
   });
 
   it('will render a cropped image for each fully classified chart', function() {
     const image = wrapper.find('img');
     assert.equal(image.length, 2);
+  });
+
+  it('will render text about misaligned images', function() {
+    const content = wrapper.find('.worldwide-telescope__content');
+    content.forEach((node) => {
+      assert.equal(node.childAt(1).type(), 'p');
+    })
   });
 });
