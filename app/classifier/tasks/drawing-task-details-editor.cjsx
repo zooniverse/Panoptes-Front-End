@@ -4,7 +4,7 @@ AutoSave = require '../../components/auto-save'
 TriggeredModalForm = require 'modal-form/triggered'
 TextTaskEditor = require './text/editor'
 SliderTaskEditor = require('./slider/editor').default
-DropdownEditor = require './dropdown/editor'
+DropdownEditor = require('./dropdown/editor').default
 
 
 module.exports = createReactClass
