@@ -6,8 +6,8 @@ const MIN_PASSWORD_LENGTH = 8;
 
 export default class ChangePasswordForm extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       old: '',
       new: '',
