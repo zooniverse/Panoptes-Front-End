@@ -37,7 +37,7 @@ createReactClass = require 'create-react-class'
 `import NotFoundPage from './pages/not-found';`
 `import ResetPasswordPage from './pages/reset-password/reset-password';`
 `import Recents from './pages/profile/recents';`
-`import AccountInformationPage from './pages/settings/account';`
+`import AccountInformationPage from './pages/settings/AccountInformationPage';`
 `import CustomiseProfile from './pages/settings/profile';`
 `import EmailSettingsPage from './pages/settings/email';`
 `import AboutPage from './pages/about/index';`
