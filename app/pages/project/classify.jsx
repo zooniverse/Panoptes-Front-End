@@ -6,12 +6,15 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import counterpart from 'counterpart';
 import { Split } from 'seven-ten';
 
 import seenThisSession from '../../lib/seen-this-session';
 import ClassificationQueue from '../../lib/classification-queue';
+
+import * as classifierActions from '../../redux/ducks/classify';
 
 import Classifier from '../../classifier';
 import FinishedBanner from './finished-banner';
@@ -28,19 +31,6 @@ const currentWorkflowForProject = {};
 // In the future user might be able to specify subject sets, which we'll record here similarly.
 const currentClassifications = { forWorkflow: {} };
 
-// Queue up subjects to classify here.
-const upcomingSubjects = { forWorkflow: {} };
-
-function emptySubjectQueue() {
-  console.log('Emptying upcoming subjects queue');
-
-  Object.keys(upcomingSubjects.forWorkflow).forEach((workflowID) => {
-    const queue = upcomingSubjects.forWorkflow[workflowID];
-    queue.forEach(subject => subject.destroy());
-    queue.splice(0);
-  });
-}
-
 function onClassificationSaved(actualClassification) {
   Split.classificationCreated(actualClassification); // Metric log needs classification id
 }
@@ -51,8 +41,8 @@ function isPresent(val) {
 
 const classificationQueue = new ClassificationQueue(window.localStorage, apiClient, onClassificationSaved);
 
-auth.listen('change', emptySubjectQueue);
-apiClient.type('subject_sets').listen('add-or-remove', emptySubjectQueue);
+auth.listen('change', classifierActions.emptySubjectQueue);
+apiClient.type('subject_sets').listen('add-or-remove', classifierActions.emptySubjectQueue);
 
 // Store this externally to persist during the session.
 let sessionDemoMode = false;
@@ -211,76 +201,23 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   getNextSubject(project, workflow, subjectSet) {
+    const { actions, upcomingSubjects } = this.props;
     let subject;
     let subjectToLoad;
-
-    // console.log 'Getting next subject for', workflow.id
-    // Make sure a list of subjects exists for this workflow.
+    
     if (!upcomingSubjects.forWorkflow[workflow.id]) {
-      upcomingSubjects.forWorkflow[workflow.id] = [];
-    }
-
-    // Take the next subject in the list, if there are any.
-    if (upcomingSubjects.forWorkflow[workflow.id].length > 0) {
-      subjectToLoad = upcomingSubjects.forWorkflow[workflow.id].shift();
-      subject = Promise.resolve(subjectToLoad);
-    }
-
-    // If there aren't any left (or there weren't any to begin with), refill the list.
-    if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
-      // console.log 'Fetching subjects', workflow.id
+      return actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
+      .then(() => actions.classifier.nextSubject(workflow.id))
+      .then(() => this.props.subject);
+    } else if (upcomingSubjects.forWorkflow[workflow.id].length > 0) {
+      actions.classifier.nextSubject(workflow.id);
+      return Promise.resolve(this.props.subject);
+    } else if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
       this.maybePromptWorkflowAssignmentDialog(this.props);
-
-      const subjectQuery = { workflow_id: workflow.id };
-
-      if (subjectSet) {
-        subjectQuery.subject_set_id = subjectSet.id;
-      }
-
-      const fetchSubjects = apiClient.get('/subjects/queued', subjectQuery).catch((error) => {
-        if (error.message.indexOf('please try again') === -1) {
-          throw error;
-        } else {
-          return new Promise((resolve, reject) => {
-            const fetchSubjectsAgain = (() => apiClient.get('/subjects/queued', subjectQuery).then(resolve).catch(reject));
-            setTimeout(fetchSubjectsAgain, 2000);
-          });
-        }
-      }).then((subjects) => {
-        const nonLoadedSubjects = subjects.filter(newSubject => newSubject !== subjectToLoad);
-        const filteredSubjects = nonLoadedSubjects.filter((nonLoadedSubject) => {
-          const notSeen = !nonLoadedSubject.already_seen &&
-            !nonLoadedSubject.retired &&
-            !seenThisSession.check(workflow, nonLoadedSubject);
-          return notSeen;
-        });
-        const subjectsToLoad = (filteredSubjects.length > 0) ? filteredSubjects : nonLoadedSubjects;
-
-        upcomingSubjects.forWorkflow[workflow.id].push(...subjectsToLoad);
-
-        // Remove any duplicate subjects from the upcoming queue
-        return upcomingSubjects.forWorkflow[workflow.id].filter((upcomingSubject, idx) =>
-          upcomingSubjects.forWorkflow[workflow.id].indexOf(upcomingSubject) === idx
-        );
-      });
-
-      // If we're filling this list for the first time, we won't have a subject selected, so try again.
-      if (!subject) {
-        subject = fetchSubjects.then(() => {
-          if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
-            // TODO: If this fails during a random workflow, pick the next workflow.
-            throw new Error(`No subjects available for workflow ${workflow.id}`);
-          } else {
-            return upcomingSubjects.forWorkflow[workflow.id].shift();
-          }
-        });
-      }
-
-      // TODO: Pre-load images for the next subject.
+      return actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
+      .then(() => actions.classifier.nextSubject(workflow.id))
+      .then(() => this.props.subject);
     }
-
-    // console.log 'Chose a subject'
-    return subject;
   }
 
   render() {
@@ -401,6 +338,51 @@ export class ProjectClassifyPage extends React.Component {
       context.router.push(newLocation);
     }
   }
+
+  renderClassifier() {
+    const { classification, subject } = this.state;
+    if (classification) {
+      return (
+        <Classifier
+          key={this.props.workflow.id}
+          {...this.props}
+          classification={classification}
+          subject={subject}
+          demoMode={this.state.demoMode}
+          onChangeDemoMode={this.handleDemoModeChange.bind(this)}
+          onComplete={this.saveClassification.bind(this)}
+          onClickNext={this.loadAnotherSubject.bind(this)}
+          requestUserProjectPreferences={this.props.requestUserProjectPreferences}
+          splits={this.props.splits}
+        />
+      );
+    } else if (this.state.rejected && this.state.rejected.classification) {
+      return (
+        <code>Please try again. Something went wrong: {this.state.rejected.classification.toString()}</code>
+      );
+    } else {
+      return (
+        <span>Loading classification</span>
+      );
+    }
+  }
+
+  render() {
+    return (
+      <div className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
+        <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
+
+        {this.props.projectIsComplete &&
+          <FinishedBanner project={this.props.project} />}
+
+        {this.state.validUserGroup &&
+          <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
+
+        {this.renderClassifier()}
+        <ProjectThemeButton />
+      </div>
+    );
+  }
 }
 
 ProjectClassifyPage.contextTypes = {
@@ -413,6 +395,9 @@ ProjectClassifyPage.propTypes = {
   loadingSelectedWorkflow: PropTypes.bool,
   project: PropTypes.object,
   storage: PropTypes.object,
+  upComingSubjects: PropTypes.shape({
+    forWorkflow: PropTypes.object
+  }),
   workflow: PropTypes.object
 };
 
@@ -420,11 +405,18 @@ ProjectClassifyPage.propTypes = {
 // For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject;
 window.currentClassifications = currentClassifications;
-window.upcomingSubjects = upcomingSubjects;
 window.classificationQueue = classificationQueue;
 
 const mapStateToProps = state => ({
+  subject: state.classify.subject,
+  upcomingSubjects: state.classify.upcomingSubjects,
   theme: state.userInterface.theme
 });
 
-export default connect(mapStateToProps)(ProjectClassifyPage);
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    classifier: bindActionCreators(classifierActions, dispatch)
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectClassifyPage);
