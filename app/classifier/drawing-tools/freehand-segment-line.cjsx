@@ -97,8 +97,12 @@ module.exports = createReactClass
     { _inProgress, _currentlyDrawing, points } = @props.mark
     path = createPathFromCoords points
     lineClass = if _inProgress then 'drawing' else 'clickable clickable-line'
+    pointerEvents = if @props.disabled then 'none' else 'painted'
 
-    <DrawingToolRoot tool={this}>
+    <DrawingToolRoot
+      tool={this}
+      pointerEvents={pointerEvents}
+    >
       <path d={path}
         fill="none"
         strokeWidth={GRAB_STROKE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)}
