@@ -50,6 +50,7 @@ ClassifierWrapper = createReactClass
     onLoad: Function.prototype
     onComplete: Function.prototype
     onClickNext: Function.prototype
+    subject: null,
     translations: {
       locale: 'en'
     }
@@ -57,7 +58,6 @@ ClassifierWrapper = createReactClass
     user: null
 
   getInitialState: ->
-    subject: null
     expertClassifier: null
     userRoles: []
     tutorial: null
@@ -66,7 +66,7 @@ ClassifierWrapper = createReactClass
 
   componentDidMount: ->
     @checkExpertClassifier()
-    @loadClassification @props.classification
+    @loadClassificationsCount @props.subject
 
     Tutorial.find @props.workflow
     .then (tutorial) =>
@@ -101,17 +101,7 @@ ClassifierWrapper = createReactClass
       @checkExpertClassifier nextProps
 
     unless nextProps.classification is @props.classification
-      @loadClassification nextProps.classification
-
-  loadClassification: (classification) ->
-# TODO: These underscored references are temporary stopgaps.
-
-    Promise.resolve(classification._subjects ? classification.get 'subjects').then ([subject]) =>
-      # We'll only handle one subject per classification right now.
-      # TODO: Support multi-subject classifications in the future.
-      @loadClassificationsCount(subject);
-
-      @setState {subject}
+      @loadClassificationsCount nextProps.subject
 
   onComplete: ->
     classificationsThisSession += 1
@@ -184,10 +174,10 @@ ClassifierWrapper = createReactClass
           </div>
         </VisibilitySplit>}
 
-      {if @props.workflow? and @state.subject?
+      {if @props.workflow? and @props.subject?
         <Classifier {...@props}
           workflow={@props.workflow}
-          subject={@state.subject}
+          subject={@props.subject}
           expertClassifier={@state.expertClassifier}
           userRoles={@state.userRoles}
           tutorial={@state.tutorial}
