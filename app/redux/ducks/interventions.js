@@ -50,6 +50,3 @@ export function injectSubjects() {
   // Get new subjects and add them to the subject queue
 }
 
-sugarClient.on('notification', notify);
-sugarClient.on('subject-queue', injectSubjects);
-
