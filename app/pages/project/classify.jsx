@@ -68,7 +68,7 @@ export class ProjectClassifyPage extends React.Component {
   componentDidMount() {
     Split.classifierVisited();
     if (this.props.workflow && !this.props.loadingSelectedWorkflow) {
-      this.loadAppropriateClassification(this.props);
+      this.loadAppropriateClassification();
     }
 
     this.validateUserGroup(this.props, this.context);
@@ -119,7 +119,15 @@ export class ProjectClassifyPage extends React.Component {
         this.loadAppropriateClassification();
       }
     }
+
+    if (this.props.subject !== prevProps.subject) {
+      const { subject, workflow } = this.props;
+      const classification = this.createNewClassification(subject);
+      currentClassifications.forWorkflow[workflow.id] = classification;
+      this.setState({ classification });
+    }
   }
+
   shouldWorkflowAssignmentPrompt(nextProps) {
     // Only for Gravity Spy which is assigning workflows to logged in users
     if (nextProps.project.experimental_tools.indexOf('workflow assignment') > -1) {
@@ -144,18 +152,10 @@ export class ProjectClassifyPage extends React.Component {
       this.setState({ classification: currentClassifications.forWorkflow[workflow.id] });
     } else {
       // A subject set is only specified if the workflow is grouped.
-      const subjectSetPromise = this.getSubjectSet(workflow);
-
-      const loadSubject = subjectSetPromise.then(subjectSet =>
+      this.getSubjectSet(workflow)
+      .then(subjectSet =>
         this.getNextSubject(subjectSet)
-      );
-
-      loadSubject
-      .then((subject) => {
-        const classification = this.createNewClassification(subject);
-        currentClassifications.forWorkflow[workflow.id] = classification;
-        this.setState({ classification });
-      })
+      )
       .catch((error) => {
         this.setState({ rejected: { classification: error } });
       });
@@ -213,15 +213,12 @@ export class ProjectClassifyPage extends React.Component {
     if (!upcomingSubjects.forWorkflow[workflow.id]) {
       return actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
       .then(() => actions.classifier.nextSubject(workflow.id))
-      .then(() => this.props.subject);
     } else if (upcomingSubjects.forWorkflow[workflow.id].length > 0) {
       actions.classifier.nextSubject(workflow.id);
-      return Promise.resolve(this.props.subject);
     } else if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
       this.maybePromptWorkflowAssignmentDialog(this.props);
       return actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
       .then(() => actions.classifier.nextSubject(workflow.id))
-      .then(() => this.props.subject);
     }
   }
 
@@ -295,7 +292,7 @@ export class ProjectClassifyPage extends React.Component {
     currentClassifications.forWorkflow[this.props.workflow.id] = null;
 
     if (this.props.workflow) {
-      this.loadAppropriateClassification(this.props);
+      this.loadAppropriateClassification();
     }
   }
 
