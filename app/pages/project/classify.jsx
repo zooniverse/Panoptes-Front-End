@@ -86,21 +86,6 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (this.props.project !== nextProps.project) {
-      this.loadAppropriateClassification(nextProps);
-    }
-
-    if (!nextProps.loadingSelectedWorkflow) {
-      if (this.props.workflow !== nextProps.workflow) {
-        // Clear out current classification
-        if (this.props.workflow) {
-          currentClassifications.forWorkflow[this.props.workflow.id] = null;
-        }
-
-        this.setState({ classification: null });
-        this.loadAppropriateClassification(nextProps);
-      }
-    }
 
     if (nextProps.loadingSelectedWorkflow === false && nextProps.user !== null) {
       this.shouldWorkflowAssignmentPrompt(nextProps, nextContext);
@@ -118,6 +103,23 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.project !== prevProps.project) {
+      this.loadAppropriateClassification();
+    }
+
+    if (!this.props.loadingSelectedWorkflow) {
+      if (this.props.workflow !== prevProps.workflow) {
+        // Clear out current classification
+        if (prevProps.workflow) {
+          currentClassifications.forWorkflow[prevProps.workflow.id] = null;
+        }
+
+        this.setState({ classification: null });
+        this.loadAppropriateClassification();
+      }
+    }
+  }
   shouldWorkflowAssignmentPrompt(nextProps) {
     // Only for Gravity Spy which is assigning workflows to logged in users
     if (nextProps.project.experimental_tools.indexOf('workflow assignment') > -1) {
@@ -131,19 +133,30 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  loadAppropriateClassification(props) {
+  loadAppropriateClassification() {
+    const { project, workflow } = this.props;
     // Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
     if (this.state.rejected && this.state.rejected.classification) {
       this.setState({ rejected: null });
     }
 
-    if (currentClassifications.forWorkflow[props.workflow.id]) {
-      this.setState({ classification: currentClassifications.forWorkflow[props.workflow.id] });
+    if (currentClassifications.forWorkflow[workflow.id]) {
+      this.setState({ classification: currentClassifications.forWorkflow[workflow.id] });
     } else {
-      this.createNewClassification(props.project, props.workflow).then((classification) => {
-        currentClassifications.forWorkflow[props.workflow.id] = classification;
+      // A subject set is only specified if the workflow is grouped.
+      const subjectSetPromise = this.getSubjectSet(workflow);
+
+      const loadSubject = subjectSetPromise.then(subjectSet =>
+        this.getNextSubject(subjectSet)
+      );
+
+      loadSubject
+      .then((subject) => {
+        const classification = this.createNewClassification(subject);
+        currentClassifications.forWorkflow[workflow.id] = classification;
         this.setState({ classification });
-      }).catch((error) => {
+      })
+      .catch((error) => {
         this.setState({ rejected: { classification: error } });
       });
     }
@@ -160,48 +173,40 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  createNewClassification(project, workflow) {
-    // A subject set is only specified if the workflow is grouped.
-    const subjectSetPromise = this.getSubjectSet(workflow);
+  createNewClassification(subject) {
+    const { project, workflow } = this.props;
 
-    const loadSubject = subjectSetPromise.then(subjectSet =>
-      this.getNextSubject(project, workflow, subjectSet)
-    );
-
-    return loadSubject.then((subject) => {
-      // console.log 'Creating a new classification'
-      const classification = apiClient.type('classifications').create({
-        annotations: [],
-        metadata: {
-          workflow_version: workflow.version,
-          started_at: (new Date()).toISOString(),
-          user_agent: navigator.userAgent,
-          user_language: counterpart.getLocale(),
-          utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
-          subject_dimensions: (subject.locations.map(() => null))
-        },
-        links: {
-          project: project.id,
-          workflow: workflow.id,
-          subjects: [subject.id]
-        }
-      });
-
-      if (this.state.validUserGroup) {
-        classification.update({ 'metadata.selected_user_group_id': this.props.location.query.group });
+    const classification = apiClient.type('classifications').create({
+      annotations: [],
+      metadata: {
+        workflow_version: workflow.version,
+        started_at: (new Date()).toISOString(),
+        user_agent: navigator.userAgent,
+        user_language: counterpart.getLocale(),
+        utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
+        subject_dimensions: (subject.locations.map(() => null))
+      },
+      links: {
+        project: project.id,
+        workflow: workflow.id,
+        subjects: [subject.id]
       }
-
-      // If the user hasn't interacted with a classification resource before,
-      // we won't know how to resolve its links, so attach these manually.
-      classification._workflow = workflow;
-      classification._subjects = [subject];
-
-      return classification;
     });
+
+    if (this.state.validUserGroup) {
+      classification.update({ 'metadata.selected_user_group_id': this.props.location.query.group });
+    }
+
+    // If the user hasn't interacted with a classification resource before,
+    // we won't know how to resolve its links, so attach these manually.
+    classification._workflow = workflow;
+    classification._subjects = [subject];
+
+    return classification;
   }
 
-  getNextSubject(project, workflow, subjectSet) {
-    const { actions, upcomingSubjects } = this.props;
+  getNextSubject(subjectSet) {
+    const { actions, project, workflow, upcomingSubjects } = this.props;
     let subject;
     let subjectToLoad;
     
