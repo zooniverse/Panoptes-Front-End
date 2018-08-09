@@ -205,8 +205,10 @@ class Classifier extends React.Component {
   handleAnnotationChange(classification, newAnnotation) {
     const { annotations } = this.state;
     const index = findLastIndex(annotations, annotation => annotation.task === newAnnotation.task);
-    annotations[index] = newAnnotation;
-    this.updateAnnotations(annotations);
+    if (index > -1) {
+      annotations[index] = newAnnotation;
+      this.updateAnnotations(annotations);
+    }
   }
 
   onNextSubject() {
