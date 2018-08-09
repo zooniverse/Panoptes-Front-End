@@ -37,6 +37,7 @@ createReactClass = require 'create-react-class'
 `import NotFoundPage from './pages/not-found';`
 `import ResetPasswordPage from './pages/reset-password/reset-password';`
 `import Recents from './pages/profile/recents';`
+`import AccountInformationPage from './pages/settings/AccountInformationPage';`
 `import CustomiseProfile from './pages/settings/profile';`
 `import EmailSettingsPage from './pages/settings/email';`
 `import AboutPage from './pages/about/index';`
@@ -115,7 +116,7 @@ module.exports =
     <Route path="inbox/:conversation" component={require './talk/inbox-conversation'} />
 
     <Route path="settings" component={require './pages/settings'}>
-      <IndexRoute component={require './pages/settings/account'} />
+      <IndexRoute component={AccountInformationPage} />
       <Route path="profile" component={CustomiseProfile} />
       <Route path="email" component={EmailSettingsPage} />
     </Route>
