@@ -295,12 +295,12 @@ class Classifier extends React.Component {
           browserHistory.push(subjectTalkPath);
         }
       })
-      .then(onComplete)
       .then(() => {
         workflowHistory = [];
         this.setState({ annotations, showIntervention, showSummary, workflowHistory });
         return showLastStep ? null : this.onNextSubject();
       })
+      .then(onComplete)
       .catch(error => console.error(error));
   }
 
