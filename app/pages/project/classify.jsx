@@ -48,7 +48,7 @@ export class ProjectClassifyPage extends React.Component {
     this.loadingSelectedWorkflow = false;
     this.project = null;
     this.workflow = null;
-    
+
     this.state = {
       classification: null,
       projectIsComplete: false,
@@ -68,19 +68,7 @@ export class ProjectClassifyPage extends React.Component {
     this.validateUserGroup(this.props, this.context);
   }
 
-  componentWillUpdate(nextProps) {
-    const nextWorkflowID = (isPresent(nextProps) && isPresent(nextProps.workflow)) ? nextProps.workflow : null;
-    this.context.geordi.remember({ workflowID: nextWorkflowID });
-  }
-
-  componentWillUnmount() {
-    if (isPresent(this.context.geordi)) {
-      this.context.geordi.forget(['workflowID']);
-    }
-  }
-
   componentWillReceiveProps(nextProps, nextContext) {
-
     if (nextProps.loadingSelectedWorkflow === false && nextProps.user !== null) {
       this.shouldWorkflowAssignmentPrompt(nextProps, nextContext);
     }
@@ -97,7 +85,12 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentWillUpdate(nextProps) {
+    const nextWorkflowID = (isPresent(nextProps) && isPresent(nextProps.workflow)) ? nextProps.workflow : null;
+    this.context.geordi.remember({ workflowID: nextWorkflowID });
+  }
+
+  componentDidUpdate(prevProps) {
     const { actions, currentClassifications, project, workflow } = this.props;
 
     if (project !== prevProps.project) {
@@ -127,21 +120,41 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  shouldWorkflowAssignmentPrompt(nextProps) {
-    // Only for Gravity Spy which is assigning workflows to logged in users
-    if (nextProps.project.experimental_tools.indexOf('workflow assignment') > -1) {
-      const assignedWorkflowID = nextProps.preferences && nextProps.preferences.settings && nextProps.preferences.settings.workflow_id;
-      const currentWorkflowID = this.props.preferences && this.props.preferences.preferences.selected_workflow;
-      if (assignedWorkflowID && currentWorkflowID && assignedWorkflowID !== currentWorkflowID) {
-        if (this.state.promptWorkflowAssignmentDialog === false) {
-          this.setState({ promptWorkflowAssignmentDialog: true });
-        }
-      }
+  componentWillUnmount() {
+    if (isPresent(this.context.geordi)) {
+      this.context.geordi.forget(['workflowID']);
+    }
+  }
+
+  getSubjectSet(workflow) {
+    if (workflow.grouped) {
+      return workflow.get('subject_sets').then((subjectSets) => {
+        const randomIndex = Math.floor(Math.random() * subjectSets.length);
+        return subjectSets[randomIndex];
+      });
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  getNextSubject(subjectSet) {
+    const { actions, project, workflow, upcomingSubjects } = this.props;
+    let subjectToLoad;
+
+    if (!upcomingSubjects.forWorkflow[workflow.id]) {
+      actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
+      .then(() => actions.classifier.nextSubject(project, workflow));
+    } else if (upcomingSubjects.forWorkflow[workflow.id].length > 0) {
+      actions.classifier.nextSubject(project, workflow);
+    } else if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
+      this.maybePromptWorkflowAssignmentDialog(this.props);
+      actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
+      .then(() => actions.classifier.nextSubject(project, workflow));
     }
   }
 
   loadAppropriateClassification() {
-    const { currentClassifications, project, workflow } = this.props;
+    const { currentClassifications, workflow } = this.props;
     // Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
     if (this.state.rejected && this.state.rejected.classification) {
       this.setState({ rejected: null });
@@ -161,75 +174,16 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  getSubjectSet(workflow) {
-    if (workflow.grouped) {
-      return workflow.get('subject_sets').then((subjectSets) => {
-        const randomIndex = Math.floor(Math.random() * subjectSets.length);
-        return subjectSets[randomIndex];
-      });
-    } else {
-      return Promise.resolve();
-    }
-  }
-
-  getNextSubject(subjectSet) {
-    const { actions, project, workflow, upcomingSubjects } = this.props;
-    let subject;
-    let subjectToLoad;
-    
-    if (!upcomingSubjects.forWorkflow[workflow.id]) {
-      return actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
-      .then(() => actions.classifier.nextSubject(project, workflow));
-    } else if (upcomingSubjects.forWorkflow[workflow.id].length > 0) {
-      actions.classifier.nextSubject(project, workflow);
-    } else if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
-      this.maybePromptWorkflowAssignmentDialog(this.props);
-      return actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
-      .then(() => actions.classifier.nextSubject(project, workflow));
-    }
-  }
-
-  render() {
-    return (
-      <div className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
-        <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
-
-        {this.props.projectIsComplete &&
-          <FinishedBanner project={this.props.project} />}
-
-        {this.state.validUserGroup &&
-          <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
-
-        {this.renderClassifier()}
-        <ProjectThemeButton />
-      </div>
-    );
-  }
-
-  renderClassifier() {
-    const { classification } = this.state;
-    if (classification) {
-      return (
-        <Classifier
-          key={this.props.workflow.id}
-          {...this.props}
-          classification={classification}
-          demoMode={this.state.demoMode}
-          onChangeDemoMode={this.handleDemoModeChange.bind(this)}
-          onComplete={this.saveClassification.bind(this)}
-          onClickNext={this.loadAnotherSubject.bind(this)}
-          requestUserProjectPreferences={this.props.requestUserProjectPreferences}
-          splits={this.props.splits}
-        />
-      );
-    } else if (this.state.rejected && this.state.rejected.classification) {
-      return (
-        <code>Please try again. Something went wrong: {this.state.rejected.classification.toString()}</code>
-      );
-    } else {
-      return (
-        <span>Loading classification</span>
-      );
+  shouldWorkflowAssignmentPrompt(nextProps) {
+    // Only for Gravity Spy which is assigning workflows to logged in users
+    if (nextProps.project.experimental_tools.indexOf('workflow assignment') > -1) {
+      const assignedWorkflowID = nextProps.preferences && nextProps.preferences.settings && nextProps.preferences.settings.workflow_id;
+      const currentWorkflowID = this.props.preferences && this.props.preferences.preferences.selected_workflow;
+      if (assignedWorkflowID && currentWorkflowID && assignedWorkflowID !== currentWorkflowID) {
+        if (this.state.promptWorkflowAssignmentDialog === false) {
+          this.setState({ promptWorkflowAssignmentDialog: true });
+        }
+      }
     }
   }
 
@@ -310,14 +264,13 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   renderClassifier() {
-    const { classification, subject } = this.state;
+    const { classification } = this.state;
     if (classification) {
       return (
         <Classifier
           key={this.props.workflow.id}
           {...this.props}
           classification={classification}
-          subject={subject}
           demoMode={this.state.demoMode}
           onChangeDemoMode={this.handleDemoModeChange.bind(this)}
           onComplete={this.saveClassification.bind(this)}
@@ -362,15 +315,27 @@ ProjectClassifyPage.contextTypes = {
 };
 
 ProjectClassifyPage.propTypes = {
+  actions: PropTypes.shape({}),
   currentClassifications: PropTypes.shape({
     forWorkflow: PropTypes.object
   }),
   loadingSelectedWorkflow: PropTypes.bool,
+  location: PropTypes.shape({
+    query: PropTypes.shape({
+      group: PropTypes.string
+    })
+  }),
+  preferences: PropTypes.shape({
+    preferences: PropTypes.shape({
+      selected_workflow: PropTypes.string
+    })
+  }),
   project: PropTypes.object,
   storage: PropTypes.object,
-  upComingSubjects: PropTypes.shape({
+  upcomingSubjects: PropTypes.shape({
     forWorkflow: PropTypes.object
   }),
+  user: PropTypes.object,
   workflow: PropTypes.object
 };
 
