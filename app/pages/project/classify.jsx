@@ -26,11 +26,6 @@ import { zooTheme } from '../../theme';
 // This is to maintain the same random workflow for each project when none is specified by the user.
 const currentWorkflowForProject = {};
 
-// Map a workflow ID to a promise of its current classification resource
-// This is to maintain the same classification for each workflow.
-// In the future user might be able to specify subject sets, which we'll record here similarly.
-const currentClassifications = { forWorkflow: {} };
-
 function onClassificationSaved(actualClassification) {
   Split.classificationCreated(actualClassification); // Metric log needs classification id
 }
@@ -55,7 +50,6 @@ export class ProjectClassifyPage extends React.Component {
     this.workflow = null;
     
     this.state = {
-      subject: null,
       classification: null,
       projectIsComplete: false,
       demoMode: sessionDemoMode,
@@ -104,15 +98,17 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.project !== prevProps.project) {
+    const { actions, currentClassifications, project, workflow } = this.props;
+
+    if (project !== prevProps.project) {
       this.loadAppropriateClassification();
     }
 
     if (!this.props.loadingSelectedWorkflow) {
-      if (this.props.workflow !== prevProps.workflow) {
+      if (workflow !== prevProps.workflow) {
         // Clear out current classification
         if (prevProps.workflow) {
-          currentClassifications.forWorkflow[prevProps.workflow.id] = null;
+          actions.classifier.resetClassification(prevProps.workflow);
         }
 
         this.setState({ classification: null });
@@ -120,10 +116,13 @@ export class ProjectClassifyPage extends React.Component {
       }
     }
 
-    if (this.props.subject !== prevProps.subject) {
-      const { subject, workflow } = this.props;
-      const classification = this.createNewClassification(subject);
-      currentClassifications.forWorkflow[workflow.id] = classification;
+    if (workflow &&
+      currentClassifications.forWorkflow[workflow.id] !== prevProps.currentClassifications.forWorkflow[workflow.id]
+    ) {
+      const classification = currentClassifications.forWorkflow[workflow.id];
+      if (this.state.validUserGroup) {
+        classification.update({ 'metadata.selected_user_group_id': this.props.location.query.group });
+      }
       this.setState({ classification });
     }
   }
@@ -142,7 +141,7 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   loadAppropriateClassification() {
-    const { project, workflow } = this.props;
+    const { currentClassifications, project, workflow } = this.props;
     // Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
     if (this.state.rejected && this.state.rejected.classification) {
       this.setState({ rejected: null });
@@ -173,38 +172,6 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  createNewClassification(subject) {
-    const { project, workflow } = this.props;
-
-    const classification = apiClient.type('classifications').create({
-      annotations: [],
-      metadata: {
-        workflow_version: workflow.version,
-        started_at: (new Date()).toISOString(),
-        user_agent: navigator.userAgent,
-        user_language: counterpart.getLocale(),
-        utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
-        subject_dimensions: (subject.locations.map(() => null))
-      },
-      links: {
-        project: project.id,
-        workflow: workflow.id,
-        subjects: [subject.id]
-      }
-    });
-
-    if (this.state.validUserGroup) {
-      classification.update({ 'metadata.selected_user_group_id': this.props.location.query.group });
-    }
-
-    // If the user hasn't interacted with a classification resource before,
-    // we won't know how to resolve its links, so attach these manually.
-    classification._workflow = workflow;
-    classification._subjects = [subject];
-
-    return classification;
-  }
-
   getNextSubject(subjectSet) {
     const { actions, project, workflow, upcomingSubjects } = this.props;
     let subject;
@@ -212,13 +179,13 @@ export class ProjectClassifyPage extends React.Component {
     
     if (!upcomingSubjects.forWorkflow[workflow.id]) {
       return actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
-      .then(() => actions.classifier.nextSubject(workflow.id))
+      .then(() => actions.classifier.nextSubject(project, workflow));
     } else if (upcomingSubjects.forWorkflow[workflow.id].length > 0) {
-      actions.classifier.nextSubject(workflow.id);
+      actions.classifier.nextSubject(project, workflow);
     } else if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
       this.maybePromptWorkflowAssignmentDialog(this.props);
       return actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
-      .then(() => actions.classifier.nextSubject(workflow.id))
+      .then(() => actions.classifier.nextSubject(project, workflow));
     }
   }
 
@@ -240,11 +207,13 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   renderClassifier() {
-    if (this.state.classification) {
+    const { classification } = this.state;
+    if (classification) {
       return (
         <Classifier
+          key={this.props.workflow.id}
           {...this.props}
-          classification={this.state.classification}
+          classification={classification}
           demoMode={this.state.demoMode}
           onChangeDemoMode={this.handleDemoModeChange.bind(this)}
           onComplete={this.saveClassification.bind(this)}
@@ -274,7 +243,7 @@ export class ProjectClassifyPage extends React.Component {
       this.context.geordi.logEvent({ type: 'classify' });
     }
 
-    const classification = this.state.classification;
+    const { classification } = this.state;
     console.info('Completed classification', classification);
 
     let workflow = null;
@@ -288,10 +257,9 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   loadAnotherSubject() {
-    // Forget the old classification so a new one will load.
-    currentClassifications.forWorkflow[this.props.workflow.id] = null;
-
-    if (this.props.workflow) {
+    const { actions, workflow } = this.props;
+    if (workflow) {
+      actions.classifier.resetClassification(workflow);
       this.loadAppropriateClassification();
     }
   }
@@ -394,6 +362,9 @@ ProjectClassifyPage.contextTypes = {
 };
 
 ProjectClassifyPage.propTypes = {
+  currentClassifications: PropTypes.shape({
+    forWorkflow: PropTypes.object
+  }),
   loadingSelectedWorkflow: PropTypes.bool,
   project: PropTypes.object,
   storage: PropTypes.object,
@@ -406,10 +377,10 @@ ProjectClassifyPage.propTypes = {
 
 // For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject;
-window.currentClassifications = currentClassifications;
 window.classificationQueue = classificationQueue;
 
 const mapStateToProps = state => ({
+  currentClassifications: state.classify.currentClassifications,
   subject: state.classify.subject,
   upcomingSubjects: state.classify.upcomingSubjects,
   theme: state.userInterface.theme
