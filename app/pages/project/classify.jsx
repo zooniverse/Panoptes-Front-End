@@ -1,5 +1,4 @@
 import apiClient from 'panoptes-client/lib/api-client';
-import auth from 'panoptes-client/lib/auth';
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -35,9 +34,6 @@ function isPresent(val) {
 }
 
 const classificationQueue = new ClassificationQueue(window.localStorage, apiClient, onClassificationSaved);
-
-auth.listen('change', classifierActions.emptySubjectQueue);
-apiClient.type('subject_sets').listen('add-or-remove', classifierActions.emptySubjectQueue);
 
 // Store this externally to persist during the session.
 let sessionDemoMode = false;
