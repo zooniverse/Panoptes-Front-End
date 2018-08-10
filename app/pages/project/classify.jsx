@@ -139,16 +139,15 @@ export class ProjectClassifyPage extends React.Component {
 
   getNextSubject(subjectSet) {
     const { actions, project, workflow, upcomingSubjects } = this.props;
-    let subjectToLoad;
 
     if (!upcomingSubjects.forWorkflow[workflow.id]) {
-      actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
+      actions.classifier.fetchSubjects(subjectSet, workflow)
       .then(() => actions.classifier.nextSubject(project, workflow));
     } else if (upcomingSubjects.forWorkflow[workflow.id].length > 0) {
       actions.classifier.nextSubject(project, workflow);
     } else if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
       this.maybePromptWorkflowAssignmentDialog(this.props);
-      actions.classifier.fetchSubjects(subjectSet, workflow, subjectToLoad)
+      actions.classifier.fetchSubjects(subjectSet, workflow)
       .then(() => actions.classifier.nextSubject(project, workflow));
     }
   }

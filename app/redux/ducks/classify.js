@@ -88,7 +88,7 @@ export function emptySubjectQueue() {
   return { type: RESET_SUBJECTS };
 }
 
-export function fetchSubjects(subjectSet, workflow, subjectToLoad) {
+export function fetchSubjects(subjectSet, workflow) {
   const subjectQuery = { workflow_id: workflow.id };
 
   if (subjectSet) {
@@ -109,14 +109,13 @@ export function fetchSubjects(subjectSet, workflow, subjectToLoad) {
     }
   })
   .then((subjects) => {
-    const nonLoadedSubjects = subjects.filter(newSubject => newSubject !== subjectToLoad);
-    const filteredSubjects = nonLoadedSubjects.filter((nonLoadedSubject) => {
-      const notSeen = !nonLoadedSubject.already_seen &&
-        !nonLoadedSubject.retired &&
-        !seenThisSession.check(workflow, nonLoadedSubject);
+    const filteredSubjects = subjects.filter((subject) => {
+      const notSeen = !subject.already_seen &&
+        !subject.retired &&
+        !seenThisSession.check(workflow, subject);
       return notSeen;
     });
-    const subjectsToLoad = (filteredSubjects.length > 0) ? filteredSubjects : nonLoadedSubjects;
+    const subjectsToLoad = (filteredSubjects.length > 0) ? filteredSubjects : subjects;
     return subjectsToLoad;
   });
 
