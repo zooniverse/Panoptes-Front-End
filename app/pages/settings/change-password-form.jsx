@@ -96,8 +96,8 @@ export default class ChangePasswordForm extends React.Component {
             />
           </label>
           {this.state.new.length > 0 && this.tooShort() ?
-          <small className="form-help error">{counterpart('userSettings.account.changePassword.tooShort')}</small>
-          : null}
+            <small className="form-help error">{counterpart('userSettings.account.changePassword.tooShort')}</small>
+            : null}
         </div>
         <div>
           <label>
@@ -109,10 +109,10 @@ export default class ChangePasswordForm extends React.Component {
               size="30"
               onChange={(e) => { this.setState({ confirmation: e.target.value }); }}
               required
-            />        
+            />
           </label>
           {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch() ?
-            <small className="form-help error">{counterpart('userSettings.account.changePassword.doesntMatch')}</small> 
+            <small className="form-help error">{counterpart('userSettings.account.changePassword.doesntMatch')}</small>
             : null}
         </div>
         <p>
