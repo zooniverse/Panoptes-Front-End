@@ -31,6 +31,7 @@ export class DevClassifierPage extends React.Component {
     const classname = classNames({
       'classify-page--dark-theme': this.props.theme === zooTheme.mode.dark
     });
+    const [subject] = this.props.classification._subjects;
 
     return (
       <div className={classname}>
@@ -41,6 +42,7 @@ export class DevClassifierPage extends React.Component {
           workflow={this.props.classification._workflow}
           preferences={this.props.preferences}
           classification={this.props.classification}
+          subject={subject}
           onClickNext={this.reload}
         >
           <ClassificationViewer classification={this.props.classification} />
