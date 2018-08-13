@@ -160,7 +160,7 @@ export function resetClassification(workflow) {
 export function resumeClassification(classification) {
   const awaitSubject = classification._subjects ?
     Promise.resolve(classification._subjects) :
-    classification.get('subjects');
+    apiClient.type('subjects').get(classification.links.subjects);
   
   return (dispatch) => {
     return awaitSubject.then(([subject]) => {
