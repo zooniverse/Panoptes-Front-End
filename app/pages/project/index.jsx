@@ -28,7 +28,7 @@ counterpart.setFallbackLocale('en');
 class ProjectPageController extends React.Component {
   constructor() {
     super();
-    this._listenedToPreferences = null;
+    this._listenedToProjectPreferences = null;
     this._boundForceUpdate = null;
     this.state = {
       background: null,
@@ -38,7 +38,7 @@ class ProjectPageController extends React.Component {
       loading: false,
       organization: null,
       owner: null,
-      preferences: null,
+      projectPreferences: null,
       project: null,
       projectAvatar: null,
       projectIsComplete: false,
@@ -57,8 +57,9 @@ class ProjectPageController extends React.Component {
 
   componentDidMount() {
     this._boundForceUpdate = this.forceUpdate.bind(this);
-    if (this.context.initialLoadComplete) { this.fetchProjectData(this.props.params.owner, this.props.params.name, this.props.user); }
-    this.setupSplits();
+    if (this.context.initialLoadComplete) { 
+      this.fetchProjectData(this.props.params.owner, this.props.params.name, this.props.user);
+    }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -69,8 +70,9 @@ class ProjectPageController extends React.Component {
 
     // Wait until we know if there's a user
     if (pathChanged || userChanged || (initialLoadCompleted && (this.state.project === null))) {
-      if (!this.state.loading) { this.fetchProjectData(owner, name, nextProps.user); }
-      this.setupSplits(nextProps);
+      if (!this.state.loading) {
+        this.fetchProjectData(owner, name, nextProps.user);
+      }
     }
   }
 
@@ -86,23 +88,17 @@ class ProjectPageController extends React.Component {
       }
     }
   }
+
   componentWillUnmount() {
     Split.clear();
   }
 
-  setupSplits(props) {
-    if (!props) {
-      ({ props } = this);
-    }
-    const { user } = props;
-    const { owner, name } = props.params;
-
+  setupSplits(slug, user) {
     if (user) {
-      Split.load(`${owner}/${name}`)
+      return Split.load(slug)
       .then((splits) => {
-        this.setState({ splits });
         if (!splits) {
-          return;
+          return null;
         }
         if (this.context.geordi) {
           Object.keys(splits).forEach((split) => {
@@ -116,10 +112,11 @@ class ProjectPageController extends React.Component {
             }
           });
         }
+        return splits;
       });
     } else {
       Split.clear();
-      this.setState({ splits: null });
+      return null;
       if (this.context.geordi) {
         this.context.geordi.forget(['experiment', 'cohort']);
       }
@@ -127,13 +124,13 @@ class ProjectPageController extends React.Component {
   }
 
   getUserProjectPreferences(project, user) {
-    this.listenToPreferences(null);
+    this.listenToProjectPreferences(null);
 
     const userPreferences = user ?
       user.get('project_preferences', { project_id: project.id })
-        .then(([preferences]) => {
+        .then(([projectPreferences]) => {
           let newPreferences;
-          return preferences ||
+          return projectPreferences ||
             (newPreferences = apiClient.type('project_preferences').create({
               links: {
                 project: project.id
@@ -154,9 +151,9 @@ class ProjectPageController extends React.Component {
         preferences: {}}));
 
     return userPreferences
-      .then((preferences) => {
-        this.listenToPreferences(preferences);
-        return preferences;
+      .then((projectPreferences) => {
+        this.listenToProjectPreferences(projectPreferences);
+        return projectPreferences;
       })
       .catch((error) => {
         console.warn(error.message);
@@ -167,7 +164,7 @@ class ProjectPageController extends React.Component {
     this.setState({
       error: null,
       loading: true,
-      preferences: null
+      projectPreferences: null
     });
 
     const slug = `${ownerName}/${projectName}`;
@@ -202,7 +199,9 @@ class ProjectPageController extends React.Component {
 
           const awaitProjectRoles = getAllLinked(project, 'project_roles').catch(error => console.error(error));
 
-          const awaitPreferences = this.getUserProjectPreferences(project, user);
+          const awaitProjectPreferences = this.getUserProjectPreferences(project, user);
+
+          const awaitSplits = this.setupSplits(slug, user)
 
           const awaitTranslation = this.props.actions.translations.load('project', project.id, this.props.translations.locale);
 
@@ -214,7 +213,8 @@ class ProjectPageController extends React.Component {
             awaitProjectAvatar,
             awaitProjectCompleteness,
             awaitProjectRoles,
-            awaitPreferences,
+            awaitProjectPreferences,
+            awaitSplits,
             awaitTranslation
           ])
           .then(([
@@ -225,11 +225,13 @@ class ProjectPageController extends React.Component {
             projectAvatar,
             projectIsComplete,
             projectRoles,
-            preferences
+            projectPreferences,
+            splits
           ]) => {
             const ready = true;
-            this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences, ready });
+            this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, ready, splits });
             this.loadFieldGuide(project.id);
+            this.handleSplitWorkflowAssignment(projectPreferences, splits);
             this.props.actions.translations.loadTranslations('project_page', pages.map(page => page.id), this.props.translations.locale);
           })
           .catch((error) => {
@@ -243,7 +245,7 @@ class ProjectPageController extends React.Component {
             organization: null,
             owner: null,
             pages: null,
-            preferences: null,
+            projectPreferences: null,
             projectAvatar: null,
             projectIsComplete: false,
             projectRoles: null,
@@ -260,13 +262,13 @@ class ProjectPageController extends React.Component {
   }
 
   requestUserProjectPreferences(project, user) {
-    this.listenToPreferences(null);
+    this.listenToProjectPreferences(null);
 
     if (user) {
       return user.get('project_preferences', { project_id: project.id })
-        .then(([preferences]) => {
-          this.setState({ preferences });
-          this.listenToPreferences(preferences);
+        .then(([projectPreferences]) => {
+          this.setState({ projectPreferences });
+          this.listenToProjectPreferences(projectPreferences);
         })
         .catch((error) => {
           console.warn(error.message);
@@ -276,14 +278,14 @@ class ProjectPageController extends React.Component {
     }
   }
 
-  listenToPreferences(preferences) {
-    if (this._listenedToPreferences) {
-      this._listenedToPreferences.stopListening('change', this._boundForceUpdate);
+  listenToProjectPreferences(projectPreferences) {
+    if (this._listenedToProjectPreferences) {
+      this._listenedToProjectPreferences.stopListening('change', this._boundForceUpdate);
     }
-    if (preferences) {
-      preferences.listen('change', this._boundForceUpdate);
+    if (projectPreferences) {
+      projectPreferences.listen('change', this._boundForceUpdate);
     }
-    this._listenedToPreferences = preferences;
+    this._listenedToProjectPreferences = projectPreferences;
   }
 
   loadFieldGuide(projectId) {
@@ -303,15 +305,28 @@ class ProjectPageController extends React.Component {
     });
   }
 
-  handlePreferencesChange(key, value) {
+  handleProjectPreferencesChange(key, value) {
     const changes = {};
     changes[key] = value;
-    const { preferences } = this.state;
-    if (preferences) {
-      preferences.update(changes);
-      this.setState({ preferences });
+    const { projectPreferences } = this.state;
+    if (projectPreferences) {
+      projectPreferences.update(changes);
+      this.setState({ projectPreferences });
       if (this.props.user) {
-        preferences.save();
+        projectPreferences.save();
+      }
+    }
+  }
+
+  handleSplitWorkflowAssignment(projectPreferences, splits) {
+    if (splits['workflow.assignment']) {
+      const workflowAssignmentId = splits['workflow.assignment'].variant.value.workflow_id
+
+      if (splits['workflow.assignment'].variant.value.only_new_users) {
+        const newToProject = Object.keys(projectPreferences.preferences).length === 0;
+        if (newToProject) this.handleProjectPreferencesChange('preferences.selected_workflow', workflowAssignmentId);
+      } else {
+        this.handleProjectPreferencesChange('preferences.selected_workflow', workflowAssignmentId);
       }
     }
   }
@@ -336,12 +351,12 @@ class ProjectPageController extends React.Component {
             <WorkflowSelection
               actions={this.props.actions}
               location={this.props.location}
-              preferences={this.state.preferences}
+              preferences={this.state.projectPreferences}
               project={this.state.project}
               projectRoles={this.state.projectRoles}
               translations={this.props.translations}
               user={this.props.user}
-              onChangePreferences={this.handlePreferencesChange.bind(this)}
+              onChangePreferences={this.handleProjectPreferencesChange.bind(this)}
             >
               <ProjectPage
                 {...this.props}
@@ -349,11 +364,11 @@ class ProjectPageController extends React.Component {
                 guide={this.state.guide}
                 guideIcons={this.state.guideIcons}
                 loading={this.state.loading}
-                onChangePreferences={this.handlePreferencesChange.bind(this)}
+                onChangePreferences={this.handleProjectPreferencesChange.bind(this)}
                 organization={this.state.organization}
                 owner={this.state.owner}
                 pages={this.state.pages}
-                preferences={this.state.preferences}
+                preferences={this.state.projectPreferences}
                 project={this.state.project}
                 projectAvatar={this.state.projectAvatar}
                 projectIsComplete={this.state.projectIsComplete}
