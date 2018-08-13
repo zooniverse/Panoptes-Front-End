@@ -47,6 +47,7 @@ export class ProjectClassifyPage extends React.Component {
 
     this.state = {
       classification: null,
+      subject: null,
       projectIsComplete: false,
       demoMode: sessionDemoMode,
       promptWorkflowAssignmentDialog: false,
@@ -87,7 +88,7 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { actions, currentClassifications, project, workflow } = this.props;
+    const { actions, currentClassifications, project, upcomingSubjects, workflow } = this.props;
 
     if (project !== prevProps.project) {
       this.loadAppropriateClassification();
@@ -109,10 +110,11 @@ export class ProjectClassifyPage extends React.Component {
       currentClassifications.forWorkflow[workflow.id] !== prevProps.currentClassifications.forWorkflow[workflow.id]
     ) {
       const classification = currentClassifications.forWorkflow[workflow.id];
+      const subject = upcomingSubjects.forWorkflow[workflow.id][0];
       if (this.state.validUserGroup) {
         classification.update({ 'metadata.selected_user_group_id': this.props.location.query.group });
       }
-      this.setState({ classification });
+      this.setState({ classification, subject });
     }
   }
 
@@ -149,7 +151,7 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   loadAppropriateClassification() {
-    const { actions, currentClassifications, workflow } = this.props;
+    const { actions, currentClassifications, upcomingSubjects, workflow } = this.props;
     // Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
     if (this.state.rejected && this.state.rejected.classification) {
       this.setState({ rejected: null });
@@ -158,7 +160,10 @@ export class ProjectClassifyPage extends React.Component {
     if (currentClassifications.forWorkflow[workflow.id]) {
       const classification = currentClassifications.forWorkflow[workflow.id];
       actions.classifier.resumeClassification(classification)
-      .then(() => this.setState({ classification }));
+      .then(() => {
+        const subject = upcomingSubjects.forWorkflow[workflow.id][0];
+        this.setState({ classification, subject });
+      });
     } else {
       // A subject set is only specified if the workflow is grouped.
       this.getSubjectSet(workflow)
@@ -261,13 +266,14 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   renderClassifier() {
-    const { classification } = this.state;
+    const { classification, subject } = this.state;
     if (classification) {
       return (
         <Classifier
           key={this.props.workflow.id}
           {...this.props}
           classification={classification}
+          subject={subject}
           demoMode={this.state.demoMode}
           onChangeDemoMode={this.handleDemoModeChange.bind(this)}
           onComplete={this.saveClassification.bind(this)}
@@ -343,7 +349,6 @@ window.classificationQueue = classificationQueue;
 
 const mapStateToProps = state => ({
   currentClassifications: state.classify.currentClassifications,
-  subject: state.classify.subject,
   upcomingSubjects: state.classify.upcomingSubjects,
   theme: state.userInterface.theme
 });
