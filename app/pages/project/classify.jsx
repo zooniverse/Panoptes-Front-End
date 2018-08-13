@@ -133,35 +133,37 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  getNextSubject(subjectSet) {
+  createNewClassification(subjectSet) {
     const { actions, project, workflow, upcomingSubjects } = this.props;
 
     if (!upcomingSubjects.forWorkflow[workflow.id]) {
       actions.classifier.fetchSubjects(subjectSet, workflow)
-      .then(() => actions.classifier.nextSubject(project, workflow));
+      .then(() => actions.classifier.createClassification(project, workflow));
     } else if (upcomingSubjects.forWorkflow[workflow.id].length > 0) {
-      actions.classifier.nextSubject(project, workflow);
+      actions.classifier.createClassification(project, workflow);
     } else if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
       this.maybePromptWorkflowAssignmentDialog(this.props);
       actions.classifier.fetchSubjects(subjectSet, workflow)
-      .then(() => actions.classifier.nextSubject(project, workflow));
+      .then(() => actions.classifier.createClassification(project, workflow));
     }
   }
 
   loadAppropriateClassification() {
-    const { currentClassifications, workflow } = this.props;
+    const { actions, currentClassifications, workflow } = this.props;
     // Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
     if (this.state.rejected && this.state.rejected.classification) {
       this.setState({ rejected: null });
     }
 
     if (currentClassifications.forWorkflow[workflow.id]) {
-      this.setState({ classification: currentClassifications.forWorkflow[workflow.id] });
+      const classification = currentClassifications.forWorkflow[workflow.id];
+      actions.classifier.resumeClassification(classification)
+      .then(() => this.setState({ classification }));
     } else {
       // A subject set is only specified if the workflow is grouped.
       this.getSubjectSet(workflow)
       .then(subjectSet =>
-        this.getNextSubject(subjectSet)
+        this.createNewClassification(subjectSet)
       )
       .catch((error) => {
         this.setState({ rejected: { classification: error } });

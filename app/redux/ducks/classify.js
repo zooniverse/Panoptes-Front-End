@@ -2,7 +2,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import counterpart from 'counterpart';
 import seenThisSession from '../../lib/seen-this-session';
 
-function createClassification(project, workflow, subject) {
+function createNewClassification(project, workflow, subject) {
   const classification = apiClient.type('classifications').create({
     annotations: [],
     metadata: {
@@ -41,11 +41,12 @@ const initialState = {
 const ADD_SUBJECTS = 'pfe/classify/ADD_SUBJECTS';
 const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
 const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
+const CREATE_CLASSIFICATION = 'pfe/classify/CREATE_CLASSIFICATION';
 const RESET_CLASSIFICATION = 'pfe/classify/RESET_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
 
 export default function reducer(state = initialState, action = {}) {
-  const { currentClassifications, upcomingSubjects } = state;
+  const { currentClassifications, upcomingSubjects, subject } = state;
   switch (action.type) {
     case ADD_SUBJECTS: {
       const { subjects, workflow_id } = action.payload;
@@ -56,10 +57,14 @@ export default function reducer(state = initialState, action = {}) {
       return Object.assign({}, state, { upcomingSubjects });
     }
     case NEXT_SUBJECT: {
+      const { subject } = action.payload;
+      return Object.assign({}, state, { subject });
+    }
+    case CREATE_CLASSIFICATION: {
       const { project, workflow } = action.payload;
       if (upcomingSubjects.forWorkflow[workflow.id] && upcomingSubjects.forWorkflow[workflow.id].length > 0) {
         const subject = upcomingSubjects.forWorkflow[workflow.id].shift();
-        const classification = createClassification(project, workflow, subject);
+        const classification = createNewClassification(project, workflow, subject);
         const forWorkflow = Object.assign({}, currentClassifications.forWorkflow);
         forWorkflow[workflow.id] = classification;
         return Object.assign({}, state, { upcomingSubjects, subject, currentClassifications: { forWorkflow } });
@@ -132,9 +137,15 @@ export function fetchSubjects(subjectSet, workflow) {
   };
 }
 
-export function nextSubject(project, workflow) {
+export function nextSubject(subject) {
   return {
     type: NEXT_SUBJECT,
+    payload: { subject }
+  };
+}
+export function createClassification(project, workflow) {
+  return {
+    type: CREATE_CLASSIFICATION,
     payload: { project, workflow }
   };
 }
@@ -145,3 +156,19 @@ export function resetClassification(workflow) {
     payload: { workflow }
   };
 }
+
+export function resumeClassification(classification) {
+  const awaitSubject = classification._subjects ?
+    Promise.resolve(classification._subjects) :
+    classification.get('subjects');
+  
+  return (dispatch) => {
+    return awaitSubject.then(([subject]) => {
+      dispatch({
+        type: NEXT_SUBJECT,
+        payload: { subject }
+      })
+    });
+  }
+}
+
