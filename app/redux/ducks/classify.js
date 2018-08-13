@@ -20,11 +20,6 @@ function createNewClassification(project, workflow, subject) {
     }
   });
 
-  // If the user hasn't interacted with a classification resource before,
-  // we won't know how to resolve its links, so attach these manually.
-  classification._workflow = workflow;
-  classification._subjects = [subject];
-
   return classification;
 }
 
@@ -158,11 +153,10 @@ export function resetClassification(workflow) {
 }
 
 export function resumeClassification(classification) {
-  const awaitSubject = classification._subjects ?
-    Promise.resolve(classification._subjects) :
-    apiClient.type('subjects').get(classification.links.subjects);
+  const awaitSubject = apiClient.type('subjects').get(classification.links.subjects);
   
   return (dispatch) => {
+    dispatch({ type: FETCH_SUBJECTS });
     return awaitSubject.then(([subject]) => {
       dispatch({
         type: NEXT_SUBJECT,
