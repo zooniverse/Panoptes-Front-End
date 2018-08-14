@@ -13,9 +13,11 @@ import preloadSubject from '../lib/preload-subject';
 import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
 import * as feedbackActions from '../redux/ducks/feedback';
+import * as interventionActions from '../redux/ducks/interventions';
 import * as userInterfaceActions from '../redux/ducks/userInterface';
 import CacheClassification from '../components/cache-classification';
 
+import Intervention from './components/Intervention';
 import Task from './task';
 import TaskTabs from './components/TaskTabs';
 import TaskArea from './components/TaskArea';
@@ -46,6 +48,7 @@ class Classifier extends React.Component {
     this.updateFeedback = this.updateFeedback.bind(this);
     this.onNextTask = this.onNextTask.bind(this);
     this.onPrevTask = this.onPrevTask.bind(this);
+    this.onNextSubject = this.onNextSubject.bind(this);
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
@@ -53,6 +56,8 @@ class Classifier extends React.Component {
       subjectLoading: false,
       annotations: [],
       modelScore: null,
+      showIntervention: false,
+      showSummary: false,
       workflowHistory: []
     };
   }
@@ -204,6 +209,12 @@ class Classifier extends React.Component {
     this.updateAnnotations(annotations);
   }
 
+  onNextSubject() {
+    this.setState({ showIntervention: false, showSummary: false });
+    this.props.actions.interventions.dismiss();
+    this.props.onClickNext();
+  }
+
   onNextTask(taskKey) {
     const workflowHistory  = this.state.workflowHistory.slice();
     const prevTaskKey = workflowHistory[workflowHistory.length - 1];
@@ -250,7 +261,6 @@ class Classifier extends React.Component {
   completeClassification(e) {
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
-    const subjectTalkPath = `/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`;
     // don't swallow cmd-click on links
     if (!isCmdClick) {
       e.preventDefault();
@@ -265,26 +275,29 @@ class Classifier extends React.Component {
       }
     });
 
-    let annotations = this.state.annotations.slice();
+    const annotations = this.state.annotations.slice();
     let workflowHistory = this.state.workflowHistory.slice();
     const taskKey = workflowHistory[workflowHistory.length - 1];
-    let onComplete = this.props.onComplete;
-    if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
-      onComplete = this.props.onCompleteAndLoadAnotherSubject;
-    } else {
-      workflowHistory.push('summary');
-    }
 
+    const showIntervention = (this.props.interventions.notifications.length > 0);
+    const showSummary = !this.props.workflow.configuration.hide_classification_summaries ||
+      this.subjectIsGravitySpyGoldStandard();
+    const showLastStep = showIntervention || showSummary;
+
+    const { onComplete, project, subject } = this.props;
     return this.checkForFeedback(taskKey)
       .then(() => {
         this.props.classification.update({ completed: true });
-        if (!isCmdClick && originalElement.href) {
+        if (!showIntervention && !isCmdClick && originalElement.href) {
+          const subjectTalkPath = `/projects/${project.slug}/talk/subjects/${subject.id}`;
           browserHistory.push(subjectTalkPath);
         }
       })
       .then(onComplete)
       .then(() => {
-        this.setState({ annotations, workflowHistory });
+        workflowHistory = [];
+        this.setState({ annotations, showIntervention, showSummary, workflowHistory });
+        return showLastStep ? null : this.onNextSubject();
       })
       .catch(error => console.error(error));
   }
@@ -302,7 +315,8 @@ class Classifier extends React.Component {
   }
 
   render() {
-    const { workflowHistory } = this.state;
+    const { interventions } = this.props;
+    const { showIntervention, showSummary, workflowHistory } = this.state;
     const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
     const classifierClassNames = classNames({
@@ -357,7 +371,12 @@ class Classifier extends React.Component {
               user={this.props.user}
               workflow={this.props.workflow}
             />
-            {(currentTaskKey !== 'summary') ?
+            {showIntervention &&
+              <Intervention
+                notifications={interventions.notifications}
+              />
+            }
+            {currentTaskKey &&
               <Task
                 preferences={this.props.preferences}
                 user={this.props.user}
@@ -368,7 +387,9 @@ class Classifier extends React.Component {
                 annotation={currentAnnotation}
                 subjectLoading={this.state.subjectLoading}
                 updateAnnotations={this.updateAnnotations}
-              /> :
+              />
+            }
+            {showSummary &&
               <ClassificationSummary
                 project={this.props.project}
                 workflow={this.props.workflow}
@@ -386,9 +407,9 @@ class Classifier extends React.Component {
               annotations={this.state.annotations}
               classification={currentClassification}
               completeClassification={this.completeClassification}
-              completed={currentTaskKey === 'summary'}
+              completed={showIntervention || showSummary}
               disabled={this.state.subjectLoading}
-              nextSubject={this.props.onClickNext}
+              nextSubject={this.onNextSubject}
               project={this.props.project}
               subject={this.props.subject}
               task={currentTask}
@@ -462,6 +483,9 @@ Classifier.propTypes = {
     feedback: PropTypes.shape({
       init: PropTypes.func,
       update: PropTypes.func
+    }),
+    interventions: PropTypes.shape({
+      dismiss: PropTypes.func
     })
   }),
   classification: PropTypes.shape({
@@ -481,6 +505,9 @@ Classifier.propTypes = {
     active: PropTypes.bool,
     rules: PropTypes.object
   }),
+  interventions: PropTypes.shape({
+    notifications: PropTypes.array
+  }),
   minicourse: PropTypes.shape({
     id: PropTypes.string,
     steps: PropTypes.array
@@ -496,7 +523,6 @@ Classifier.propTypes = {
   onChangeDemoMode: PropTypes.func,
   onClickNext: PropTypes.func,
   onComplete: PropTypes.func,
-  onCompleteAndLoadAnotherSubject: PropTypes.func,
   onLoad: PropTypes.func,
   splits: PropTypes.shape({
     subject: PropTypes.object
@@ -523,16 +549,22 @@ Classifier.propTypes = {
 };
 
 Classifier.defaultProps = {
-  actions: {},
+  actions: {
+    interventions: {
+      dismiss: () => true
+    }
+  },
   classification: {},
   classificationCount: 0,
   demoMode: false,
   feedback: {
     active: false
   },
+  interventions: {
+    notifications: []
+  },
   minicourse: null,
   onComplete: () => Promise.resolve(),
-  onCompleteAndLoadAnotherSubject: () => Promise.resolve(),
   preferences: null,
   project: {},
   onLoad: Function.prototype,
@@ -549,12 +581,14 @@ Classifier.defaultProps = {
 
 const mapStateToProps = state => ({
   feedback: state.feedback,
+  interventions: state.interventions,
   theme: state.userInterface.theme
 });
 
 const mapDispatchToProps = dispatch => ({
   actions: {
     feedback: bindActionCreators(feedbackActions, dispatch),
+    interventions: bindActionCreators(interventionActions, dispatch),
     theme: bindActionCreators(userInterfaceActions, dispatch)
   }
 });

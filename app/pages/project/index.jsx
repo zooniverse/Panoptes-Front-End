@@ -11,6 +11,7 @@ import { Split } from 'seven-ten';
 import counterpart from 'counterpart';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import * as interventionActions from '../../redux/ducks/interventions';
 import * as translationActions from '../../redux/ducks/translations';
 import ProjectPage from './project-page';
 import ProjectTranslations from './project-translations';
@@ -74,7 +75,7 @@ class ProjectPageController extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { actions, translations } = this.props;
     const { project, guide, pages } = this.state;
     const { locale } = translations;
@@ -85,8 +86,20 @@ class ProjectPageController extends React.Component {
         actions.translations.load('field_guide', guide.id, locale);
       }
     }
+    if (project && project !== prevState.project) {
+      actions.interventions.subscribe(`project-${project.id}`);
+      if (prevState.project) {
+        actions.interventions.unsubscribe(`project-${prevState.project.id}`);
+      }
+    }
   }
+
   componentWillUnmount() {
+    const { actions } = this.props;
+    const { project } = this.state;
+    if (project) {
+      actions.interventions.unsubscribe(`project-${this.state.project.id}`);
+    }
     Split.clear();
   }
 
@@ -438,11 +451,13 @@ ProjectPageController.defaultProps = {
 };
 
 const mapStateToProps = state => ({
+  interventions: state.interventions,
   translations: state.translations
 });
 
 const mapDispatchToProps = dispatch => ({
   actions: {
+    interventions: bindActionCreators(interventionActions, dispatch),
     translations: bindActionCreators(translationActions, dispatch)
   }
 });

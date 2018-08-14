@@ -309,7 +309,6 @@ export class ProjectClassifyPage extends React.Component {
           demoMode={this.state.demoMode}
           onChangeDemoMode={this.handleDemoModeChange.bind(this)}
           onComplete={this.saveClassification.bind(this)}
-          onCompleteAndLoadAnotherSubject={this.saveClassificationAndLoadAnotherSubject.bind(this)}
           onClickNext={this.loadAnotherSubject.bind(this)}
           requestUserProjectPreferences={this.props.requestUserProjectPreferences}
           splits={this.props.splits}
@@ -329,11 +328,6 @@ export class ProjectClassifyPage extends React.Component {
   handleDemoModeChange(newDemoMode) {
     sessionDemoMode = newDemoMode;
     this.setState({ demoMode: sessionDemoMode });
-  }
-
-  saveClassificationAndLoadAnotherSubject() {
-    this.saveClassification();
-    this.loadAnotherSubject();
   }
 
   saveClassification() {

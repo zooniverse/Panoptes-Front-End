@@ -1,10 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import assert from 'assert';
+import { expect } from 'chai';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import { Split } from 'seven-ten';
 import { ProjectPageController } from './';
+import { project } from '../dev-classifier/mock-data';
 
 const location = {
   query: {}
@@ -135,6 +136,96 @@ describe('ProjectPageController', function () {
       const translations = { locale: 'es' };
       wrapper.setProps({ translations });
       sinon.assert.notCalled(fetchProjectStub);
+    });
+  });
+
+  describe('on component lifecycle', function () {
+    const channel = `project-${project.id}`;
+    const actions = {
+      interventions: {
+        subscribe: sinon.spy(),
+        unsubscribe: sinon.spy()
+      }
+    };
+
+    let wrapper;
+
+    afterEach(function () {
+      actions.interventions.subscribe.resetHistory();
+      actions.interventions.unsubscribe.resetHistory();
+    });
+
+    describe('on initial project load', function () {
+      beforeEach(function () {
+        context.initialLoadComplete = true;
+        wrapper = mount(
+          <ProjectPageController
+            actions={actions}
+            location={location}
+            params={params}
+          />,
+          { context }
+        );
+        wrapper.setState({ project });
+      });
+
+      it('subscribes the user to the sugar project channel', function () {
+        expect(actions.interventions.subscribe.callCount).to.equal(1);
+        expect(actions.interventions.subscribe.calledWith(channel)).to.be.true;
+      });
+
+      it('does not try to unsubcribe from a previous project channel', function () {
+        expect(actions.interventions.unsubscribe.callCount).to.equal(0);
+      });
+    });
+
+    describe('on project state change', function () {
+      const newProject = { id: '999', title: 'fake project', slug: 'owner/name' };
+      const newChannel = `project-${newProject.id}`;
+      beforeEach(function () {
+        wrapper = mount(
+          <ProjectPageController
+            actions={actions}
+            location={location}
+            params={params}
+          />,
+          { context }
+        );
+        wrapper.setState({ project });
+        actions.interventions.subscribe.resetHistory();
+        wrapper.setState({ project: newProject });
+      });
+
+      it('unsubscribes old project from sugar', function () {
+        expect(actions.interventions.unsubscribe.callCount).to.equal(1);
+        expect(actions.interventions.unsubscribe.calledWith(channel)).to.true;
+      });
+
+      it('subscribes new project to sugar', function () {
+        expect(actions.interventions.subscribe.callCount).to.equal(1);
+        expect(actions.interventions.subscribe.calledWith(newChannel)).to.be.true;
+      });
+    });
+
+    describe('on unmount', function () {
+      beforeEach(function () {
+        context.initialLoadComplete = true;
+        wrapper = mount(
+          <ProjectPageController
+            actions={actions}
+            location={location}
+            params={params}
+          />,
+          { context }
+        );
+        wrapper.setState({ project });
+      });
+
+      it('unsubscribes the user from the sugar project channel', function () {
+        wrapper.unmount();
+        expect(actions.interventions.unsubscribe.callCount).to.equal(1);
+        expect(actions.interventions.unsubscribe.calledWith(channel)).to.be.true;
+      });
     });
   });
 });

@@ -38,7 +38,6 @@ ClassifierWrapper = createReactClass
     classification: PropTypes.object
     onLoad: PropTypes.func
     onComplete: PropTypes.func
-    onCompleteAndLoadAnotherSubject: PropTypes.func
     onClickNext: PropTypes.func
     translations: PropTypes.shape({
         locale: PropTypes.string
@@ -50,7 +49,6 @@ ClassifierWrapper = createReactClass
     classification: {}
     onLoad: Function.prototype
     onComplete: Function.prototype
-    onCompleteAndLoadAnotherSubject: Function.prototype
     onClickNext: Function.prototype
     translations: {
       locale: 'en'
@@ -114,12 +112,6 @@ ClassifierWrapper = createReactClass
       @loadClassificationsCount(subject);
 
       @setState {subject}
-
-  onCompleteAndLoadAnotherSubject: ->
-    classificationsThisSession += 1
-    @maybeLaunchMiniCourse()
-    @maybeRequestUserProjectPreferences()
-    @props.onCompleteAndLoadAnotherSubject?()
 
   onComplete: ->
     classificationsThisSession += 1
@@ -203,7 +195,6 @@ ClassifierWrapper = createReactClass
           guide={@state.guide}
           guideIcons={@state.guideIcons}
           onComplete={@onComplete}
-          onCompleteAndLoadAnotherSubject={@onCompleteAndLoadAnotherSubject}
           classificationCount={@state.classificationCount}
         >
           {@props.children}

@@ -159,7 +159,6 @@ describe('Classifier', function () {
           classification={classification}
           subject={subject}
           onComplete={classification.save}
-          onCompleteAndLoadAnotherSubject={classification.save}
         />,
         mockReduxStore
       );
@@ -224,6 +223,9 @@ describe('Classifier', function () {
         feedback: {
           init: feedbackInitSpy,
           update: feedbackUpdateSpy
+        },
+        interventions: {
+          dismiss: sinon.stub()
         }
       };
       wrapper = shallow(

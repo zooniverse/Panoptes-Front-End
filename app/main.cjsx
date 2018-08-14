@@ -4,11 +4,16 @@ ReactDOM = require 'react-dom'
 useScroll = require 'react-router-scroll/lib/useScroll'
 routes = require './router'
 style = require '../css/main.styl'
+{ sugarClient } = require 'panoptes-client/lib/sugar'
 
 # Redux
 `import { Provider } from 'react-redux';`
 `import configureStore from './redux/store';`
+`import { notify, injectSubjects } from './redux/ducks/interventions';`
 store = configureStore()
+
+sugarClient.on('notification', (message) => store.dispatch(notify(message)));
+sugarClient.on('subject-queue', (message) => store.dispatch(injectSubjects(message)));
 
 # Redirect any old `/#/foo`-style URLs to `/foo`.
 if location?.hash.charAt(1) is '/'
