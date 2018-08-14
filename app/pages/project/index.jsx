@@ -229,10 +229,16 @@ class ProjectPageController extends React.Component {
             splits
           ]) => {
             const ready = true;
-            this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, ready, splits });
+            this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits });
             this.loadFieldGuide(project.id);
-            this.handleSplitWorkflowAssignment(projectPreferences, splits);
             this.props.actions.translations.loadTranslations('project_page', pages.map(page => page.id), this.props.translations.locale);
+            return { projectPreferences, splits };
+          })
+          .then(({ projectPreferences, splits }) => {
+            this.handleSplitWorkflowAssignment(projectPreferences, splits);
+          })
+          .then(() => {
+            this.setState({ ready: true })
           })
           .catch((error) => {
             this.setState({ error });
@@ -319,14 +325,29 @@ class ProjectPageController extends React.Component {
   }
 
   handleSplitWorkflowAssignment(projectPreferences, splits) {
-    if (splits['workflow.assignment']) {
-      const workflowAssignmentId = splits['workflow.assignment'].variant.value.workflow_id
+    if (splits && splits['workflow.assignment']) {
+      const projectSetWorkflow = (splits['workflow.assignment'].variant
+        && splits['workflow.assignment'].variant.value
+        && splits['workflow.assignment'].variant.value.workflow_id)
+          ? splits['workflow.assignment'].variant.value.workflow_id
+          : '';
+
+      const userSelectedWorkflow = (projectPreferences.preferences && projectPreferences.preferences.selected_workflow)
+        ? projectPreferences.preferences.selected_workflow
+        : '';
 
       if (splits['workflow.assignment'].variant.value.only_new_users) {
         const newToProject = Object.keys(projectPreferences.preferences).length === 0;
-        if (newToProject) this.handleProjectPreferencesChange('preferences.selected_workflow', workflowAssignmentId);
+        if (newToProject) this.handleProjectPreferencesChange('settings.workflow_id', projectSetWorkflow);
       } else {
-        this.handleProjectPreferencesChange('preferences.selected_workflow', workflowAssignmentId);
+        this.handleProjectPreferencesChange('settings.workflow_id', projectSetWorkflow);
+
+        if (userSelectedWorkflow && projectSetWorkflow &&
+          userSelectedWorkflow !== projectSetWorkflow) {
+            // if split is not only for new users
+            // clear the user selected workflow if defined
+            this.handleProjectPreferencesChange('preferences.selected_workflow', undefined)
+        }
       }
     }
   }

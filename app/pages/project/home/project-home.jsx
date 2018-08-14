@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
+import { VisibilitySplit } from 'seven-ten';
+
 import getSubjectLocations from '../../../lib/get-subject-locations';
 import Thumbnail from '../../../components/thumbnail';
 import FinishedBanner from '../finished-banner';
@@ -13,6 +15,7 @@ import TalkStatus from './talk-status';
 import ExternalLinksBlock from '../../../components/ExternalLinksBlock';
 
 const ProjectHomePage = (props) => {
+  const projectIsNotRedirected = props.project && !props.project.redirect;
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
 
   const descriptionClass = classnames(
@@ -28,6 +31,13 @@ const ProjectHomePage = (props) => {
       backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url('${props.background.src}')`
     };
   }
+
+  // variant div: true shows the workflow buttons below
+  // and is for users in a split variant group that allows workflow promotion
+  // so here, we show the get started link if div: false
+  // since users who are not being promoted will work on only one workflow.
+  const showGetStartedLink = (!props.showWorkflowButtons && projectIsNotRedirected) ||
+    (projectIsNotRedirected && props.splits && props.splits['workflow.assignment'] && !props.splits['workflow.assignment'].variant.value.div)
 
   return (
     <div className="project-home-page">
@@ -55,7 +65,7 @@ const ProjectHomePage = (props) => {
             <Link to={`/projects/${props.project.slug}/about`} className="project-home-page__button call-to-action__button call-to-action__button--learn-more">
               <Translate content="project.home.learnMore" />
             </Link>}
-          {!props.showWorkflowButtons && props.project && !props.project.redirect &&
+          {showGetStartedLink &&
             <Link
               to={`/projects/${props.project.slug}/classify`}
               className="project-home-page__button call-to-action__button call-to-action__button--get-started"
@@ -74,17 +84,19 @@ const ProjectHomePage = (props) => {
             className="project-disclaimer"
             content="project.disclaimer"
           />}
-        <ProjectHomeWorkflowButtons
-          activeWorkflows={props.activeWorkflows}
-          onChangePreferences={props.onChangePreferences}
-          preferences={props.preferences}
-          project={props.project}
-          projectIsComplete={props.projectIsComplete}
-          showWorkflowButtons={props.showWorkflowButtons}
-          workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
-          splits={props.splits}
-          user={props.user}
-        />
+        <VisibilitySplit splits={props.splits} splitKey='workflow.assignment' elementKey='div'>
+          <ProjectHomeWorkflowButtons
+            activeWorkflows={props.activeWorkflows}
+            onChangePreferences={props.onChangePreferences}
+            preferences={props.preferences}
+            project={props.project}
+            projectIsComplete={props.projectIsComplete}
+            showWorkflowButtons={props.showWorkflowButtons}
+            workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
+            splits={props.splits}
+            user={props.user}
+          />
+        </VisibilitySplit>
       </div>
 
       {renderTalkSubjectsPreview && (

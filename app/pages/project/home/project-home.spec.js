@@ -262,4 +262,93 @@ describe('ProjectHome', function() {
       expect(wrapper.find('.project-home-page__about-text').find('Markdown')).to.have.lengthOf(1);
     });
   });
+
+  describe('when there is a workflow.assignment split test', function() {
+    const splitsMock = { doPromote: {}, doNotPromote: {} }
+    splitsMock.doPromote['workflow.assignment'] = {
+      key: 'workflow.assignment',
+      name: 'Workflow Promotion',
+      state: 'active',
+      type: 'splits',
+      variant: {
+        name: 'Promote',
+        type: 'variants',
+        value: {
+          div: true,
+          only_new_users: false,
+          workflow_id: '2333'
+        }
+      }
+    };
+
+    splitsMock.doNotPromote['workflow.assignment'] = {
+      key: 'workflow.assignment',
+      name: 'Workflow Promotion',
+      state: 'active',
+      type: 'splits',
+      variant: {
+        name: 'Do Not Promote',
+        type: 'variants',
+        value: {
+          div: false,
+          only_new_users: false,
+          workflow_id: '2758'
+        }
+      }
+    }
+
+    const projectWithWorkflowAssignment = Object.assign({}, project, {
+      classifiers_count: 1,
+      classifications_count: 1,
+      completeness: 0.10,
+      experimental_tools: ['workflow assignment'],
+      subjects_count: 1,
+      retired_subjects_count: 0
+    })
+
+    describe('when the split is to promote', function() {
+      before(function () {
+        // Using mount so the VisibilitySplit code will actually run
+        wrapper = mount(
+          <ProjectHome
+            project={projectWithWorkflowAssignment}
+            background={background}
+            splits={splitsMock.doPromote}
+            showWorkflowButtons={true}
+            translation={translation}
+          />
+        );
+      });
+
+      it('should render the ProjectHomeWorkflowButtons', function() {
+        expect(wrapper.find('ProjectHomeWorkflowButtons')).to.have.lengthOf(1);
+      });
+
+      it("should not render a 'Get Started' link to the classify page", function() {
+        expect(wrapper.find({ to: `/projects/${project.slug}/classify` })).to.have.lengthOf(0);
+      });
+    });
+
+    describe('when the split is to not promote', function () {
+      before(function () {
+        wrapper = mount(
+          <ProjectHome
+            project={projectWithWorkflowAssignment}
+            background={background}
+            splits={splitsMock.doNotPromote}
+            showWorkflowButtons={true}
+            translation={translation}
+          />
+        );
+      });
+
+      it('should render the ProjectHomeWorkflowButtons', function () {
+        expect(wrapper.find('ProjectHomeWorkflowButtons')).to.have.lengthOf(0);
+      });
+
+      it("should not render a 'Get Started' link to the classify page", function () {
+        expect(wrapper.find({ to: `/projects/${project.slug}/classify` })).to.have.lengthOf(1);
+      });
+    });
+  });
 });
