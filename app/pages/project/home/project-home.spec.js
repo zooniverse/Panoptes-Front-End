@@ -344,11 +344,11 @@ describe('ProjectHome', function() {
         );
       });
 
-      it('should render the ProjectHomeWorkflowButtons', function () {
+      it('should not render the ProjectHomeWorkflowButtons', function () {
         expect(wrapper.find('ProjectHomeWorkflowButtons')).to.have.lengthOf(0);
       });
 
-      it("should not render a 'Get Started' link to the classify page", function () {
+      it("should render a 'Get Started' link to the classify page", function () {
         expect(wrapper.find({ to: `/projects/${project.slug}/classify` })).to.have.lengthOf(1);
       });
     });
