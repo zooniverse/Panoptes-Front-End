@@ -275,6 +275,7 @@ describe('ProjectHome', function() {
         type: 'variants',
         value: {
           div: true,
+          link: false,
           only_new_users: false,
           workflow_id: '2333'
         }
@@ -291,6 +292,7 @@ describe('ProjectHome', function() {
         type: 'variants',
         value: {
           div: false,
+          link: true,
           only_new_users: false,
           workflow_id: '2758'
         }

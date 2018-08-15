@@ -32,12 +32,7 @@ const ProjectHomePage = (props) => {
     };
   }
 
-  // variant div: true shows the workflow buttons below
-  // and is for users in a split variant group that allows workflow promotion
-  // so here, we show the get started link if div: false
-  // since users who are not being promoted will work on only one workflow.
-  const showGetStartedLink = (!props.showWorkflowButtons && projectIsNotRedirected) ||
-    (projectIsNotRedirected && props.splits && props.splits['workflow.assignment'] && !props.splits['workflow.assignment'].variant.value.div)
+  const showGetStartedLink = (!props.showWorkflowButtons && projectIsNotRedirected) || props.splits['workflow.assignment']
 
   return (
     <div className="project-home-page">
@@ -61,17 +56,19 @@ const ProjectHomePage = (props) => {
         </div>
 
         <div className="project-home-page__call-to-action">
-          {props.project && !props.project.redirect &&
+          {projectIsNotRedirected &&
             <Link to={`/projects/${props.project.slug}/about`} className="project-home-page__button call-to-action__button call-to-action__button--learn-more">
               <Translate content="project.home.learnMore" />
             </Link>}
           {showGetStartedLink &&
-            <Link
-              to={`/projects/${props.project.slug}/classify`}
-              className="project-home-page__button call-to-action__button call-to-action__button--get-started"
-            >
-              <Translate content="project.home.getStarted" />
-            </Link>}
+            <VisibilitySplit splits={props.splits} splitKey='workflow.assignment' elementKey='link'>
+              <Link
+                to={`/projects/${props.project.slug}/classify`}
+                className="project-home-page__button call-to-action__button call-to-action__button--get-started"
+              >
+                <Translate content="project.home.getStarted" />
+              </Link>
+            </VisibilitySplit>}
           {props.project && props.project.redirect &&
             <a href={props.project.redirect} className="project-home-page__button">
               <strong><Translate content="project.home.visitLink" /></strong>

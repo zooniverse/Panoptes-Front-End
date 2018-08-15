@@ -44,7 +44,7 @@ class ProjectPageController extends React.Component {
       projectIsComplete: false,
       projectRoles: null,
       ready: false,
-      splits: null
+      splits: {}
     };
   }
 
@@ -93,33 +93,37 @@ class ProjectPageController extends React.Component {
     Split.clear();
   }
 
-  setupSplits(slug, user) {
+  getSplits(slug, user) {
     if (user) {
       return Split.load(slug)
-      .then((splits) => {
-        if (!splits) {
-          return null;
-        }
-        if (this.context.geordi) {
-          Object.keys(splits).forEach((split) => {
-            let notFound = true;
-            // log the first active split and skip the remaining splits
-            if (notFound && splits[split].state === 'active') {
-              notFound = false;
-              const experiment = splits[split].name;
-              const cohort = splits[split].variant ? splits[split].variant.name : undefined;
-              this.context.geordi.remember({ experiment, cohort });
-            }
-          });
-        }
-        return splits;
-      });
+        .catch((error) => {
+          console.error(error);
+          return {};
+        })
+        .then((splits) => {
+          if (!splits) {
+            return {};
+          }
+          if (splits && this.context.geordi) {
+            Object.keys(splits).forEach((split) => {
+              let notFound = true;
+              // log the first active split and skip the remaining splits
+              if (notFound && splits[split].state === 'active') {
+                notFound = false;
+                const experiment = splits[split].name;
+                const cohort = splits[split].variant ? splits[split].variant.name : undefined;
+                this.context.geordi.remember({ experiment, cohort });
+              }
+            });
+          }
+          return splits;
+        });
     } else {
       Split.clear();
-      return null;
       if (this.context.geordi) {
         this.context.geordi.forget(['experiment', 'cohort']);
       }
+      return Promise.resolve({});
     }
   }
 
@@ -201,7 +205,7 @@ class ProjectPageController extends React.Component {
 
           const awaitProjectPreferences = this.getUserProjectPreferences(project, user);
 
-          const awaitSplits = this.setupSplits(slug, user)
+          const awaitSplits = this.getSplits(slug, user)
 
           const awaitTranslation = this.props.actions.translations.load('project', project.id, this.props.translations.locale);
 
@@ -325,7 +329,7 @@ class ProjectPageController extends React.Component {
   }
 
   handleSplitWorkflowAssignment(projectPreferences, splits) {
-    if (splits && splits['workflow.assignment']) {
+    if (splits['workflow.assignment']) {
       const projectSetWorkflow = (splits['workflow.assignment'].variant
         && splits['workflow.assignment'].variant.value
         && splits['workflow.assignment'].variant.value.workflow_id)
