@@ -22,7 +22,7 @@ export default {
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
-      acceptButton: 'Try the new workflow',
+      acceptButton: 'Take me to the next level!',
       declineButton: 'No, grazie'
     }
   },
