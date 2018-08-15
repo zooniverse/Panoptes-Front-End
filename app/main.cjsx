@@ -12,7 +12,7 @@ style = require '../css/main.styl'
 `import { notify, injectSubjects } from './redux/ducks/interventions';`
 store = configureStore()
 
-sugarClient.on('notification', (message) => store.dispatch(notify(message)));
+sugarClient.on('experiment', (message) => store.dispatch(notify(message)));
 sugarClient.on('subject-queue', (message) => store.dispatch(injectSubjects(message)));
 
 # Redirect any old `/#/foo`-style URLs to `/foo`.
