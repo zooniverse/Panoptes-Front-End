@@ -22,7 +22,7 @@ export default {
     miniCourseButton: 'Reiniciar el mini-curso del proyecto',
     workflowAssignmentDialog: {
       promotionMessage: "¡Felicitaciones! Has desbloqueado la próxima secuencia de trabajo. Si prefieres seguir en la secuencia actual, puedes escoger permanecer.",
-      acceptButton: 'Intenta la nueva secuencia de trabajo',
+      acceptButton: 'Take me to the next level!',
       declineButton: 'No, gracias'
     }
   },

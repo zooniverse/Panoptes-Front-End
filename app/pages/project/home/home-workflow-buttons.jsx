@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import ProjectHomeWorkflowButton from './home-workflow-button';
 import LoadingIndicator from '../../../components/loading-indicator';
 
 export default class ProjectHomeWorkflowButtons extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.shouldWorkflowBeDisabled = this.shouldWorkflowBeDisabled.bind(this);
   }

@@ -51,7 +51,12 @@ export default {
     recents: 'Je recente waarnemingen',
     talk: 'Overleg',
     taskHelpButton: 'Hulp nodig met deze taak?',
-    miniCourseButton: 'Herhaal de uitleg'
+    miniCourseButton: 'Herhaal de uitleg',
+    workflowAssignmentDialog: {
+      promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
+      acceptButton: 'Take me to the next level!',
+      declineButton: 'No, thanks'
+    }
   },
   project: {
     language: 'Taal',

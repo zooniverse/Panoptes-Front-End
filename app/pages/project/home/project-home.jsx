@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
+import { VisibilitySplit } from 'seven-ten';
+
 import getSubjectLocations from '../../../lib/get-subject-locations';
 import Thumbnail from '../../../components/thumbnail';
 import FinishedBanner from '../finished-banner';
@@ -13,6 +15,7 @@ import TalkStatus from './talk-status';
 import ExternalLinksBlock from '../../../components/ExternalLinksBlock';
 
 const ProjectHomePage = (props) => {
+  const projectIsNotRedirected = props.project && !props.project.redirect;
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
 
   const descriptionClass = classnames(
@@ -28,6 +31,8 @@ const ProjectHomePage = (props) => {
       backgroundImage: `radial-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url('${props.background.src}')`
     };
   }
+
+  const showGetStartedLink = (!props.showWorkflowButtons && projectIsNotRedirected) || props.splits['workflow.assignment']
 
   return (
     <div className="project-home-page">
@@ -51,17 +56,19 @@ const ProjectHomePage = (props) => {
         </div>
 
         <div className="project-home-page__call-to-action">
-          {props.project && !props.project.redirect &&
+          {projectIsNotRedirected &&
             <Link to={`/projects/${props.project.slug}/about`} className="project-home-page__button call-to-action__button call-to-action__button--learn-more">
               <Translate content="project.home.learnMore" />
             </Link>}
-          {!props.showWorkflowButtons && props.project && !props.project.redirect &&
-            <Link
-              to={`/projects/${props.project.slug}/classify`}
-              className="project-home-page__button call-to-action__button call-to-action__button--get-started"
-            >
-              <Translate content="project.home.getStarted" />
-            </Link>}
+          {showGetStartedLink &&
+            <VisibilitySplit splits={props.splits} splitKey='workflow.assignment' elementKey='link'>
+              <Link
+                to={`/projects/${props.project.slug}/classify`}
+                className="project-home-page__button call-to-action__button call-to-action__button--get-started"
+              >
+                <Translate content="project.home.getStarted" />
+              </Link>
+            </VisibilitySplit>}
           {props.project && props.project.redirect &&
             <a href={props.project.redirect} className="project-home-page__button">
               <strong><Translate content="project.home.visitLink" /></strong>
@@ -74,17 +81,19 @@ const ProjectHomePage = (props) => {
             className="project-disclaimer"
             content="project.disclaimer"
           />}
-        <ProjectHomeWorkflowButtons
-          activeWorkflows={props.activeWorkflows}
-          onChangePreferences={props.onChangePreferences}
-          preferences={props.preferences}
-          project={props.project}
-          projectIsComplete={props.projectIsComplete}
-          showWorkflowButtons={props.showWorkflowButtons}
-          workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
-          splits={props.splits}
-          user={props.user}
-        />
+        <VisibilitySplit splits={props.splits} splitKey='workflow.assignment' elementKey='div'>
+          <ProjectHomeWorkflowButtons
+            activeWorkflows={props.activeWorkflows}
+            onChangePreferences={props.onChangePreferences}
+            preferences={props.preferences}
+            project={props.project}
+            projectIsComplete={props.projectIsComplete}
+            showWorkflowButtons={props.showWorkflowButtons}
+            workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
+            splits={props.splits}
+            user={props.user}
+          />
+        </VisibilitySplit>
       </div>
 
       {renderTalkSubjectsPreview && (

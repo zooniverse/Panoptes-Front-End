@@ -34,7 +34,7 @@ describe('ProjectHomeWorkflowButtons', function() {
           preferences={testUserPreferences}
           showWorkflowButtons={true}
           workflowAssignment={true}
-          splits={null}
+          splits={{}}
           user={{ user: { id: 1 }}}
         />,
       );
