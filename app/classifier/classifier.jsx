@@ -298,9 +298,11 @@ class Classifier extends React.Component {
       .then(() => {
         workflowHistory = [];
         this.setState({ annotations, showIntervention, showSummary, workflowHistory });
-        return showLastStep ? null : this.onNextSubject();
       })
       .then(onComplete)
+      .then(() => {
+        return showLastStep ? null : this.onNextSubject();
+      })
       .catch(error => console.error(error));
   }
 

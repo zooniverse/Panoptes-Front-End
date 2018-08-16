@@ -46,8 +46,6 @@ export class ProjectClassifyPage extends React.Component {
     this.workflow = null;
 
     this.state = {
-      classification: null,
-      subject: null,
       projectIsComplete: false,
       demoMode: sessionDemoMode,
       promptWorkflowAssignmentDialog: false,
@@ -88,7 +86,7 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { actions, currentClassifications, project, upcomingSubjects, workflow } = this.props;
+    const { actions, classification, project, workflow } = this.props;
 
     if (project !== prevProps.project) {
       this.loadAppropriateClassification();
@@ -96,25 +94,23 @@ export class ProjectClassifyPage extends React.Component {
 
     if (!this.props.loadingSelectedWorkflow) {
       if (workflow !== prevProps.workflow) {
-        // Clear out current classification
         if (prevProps.workflow) {
-          actions.classifier.resetClassification(prevProps.workflow);
+          actions.classifier.resetClassification();
         }
-
-        this.setState({ classification: null });
         this.loadAppropriateClassification();
       }
     }
 
     if (workflow &&
-      currentClassifications.forWorkflow[workflow.id] !== prevProps.currentClassifications.forWorkflow[workflow.id]
+      classification !== prevProps.classification
     ) {
-      const classification = currentClassifications.forWorkflow[workflow.id];
-      const subject = upcomingSubjects.forWorkflow[workflow.id][0];
-      if (this.state.validUserGroup) {
-        classification.update({ 'metadata.selected_user_group_id': this.props.location.query.group });
+      if (classification) {
+        if (this.state.validUserGroup) {
+          classification.update({ 'metadata.selected_user_group_id': this.props.location.query.group });
+        }
+      } else {
+        this.loadAppropriateClassification();
       }
-      this.setState({ classification, subject });
     }
   }
 
@@ -138,12 +134,9 @@ export class ProjectClassifyPage extends React.Component {
   createNewClassification(subjectSet) {
     const { actions, project, workflow, upcomingSubjects } = this.props;
 
-    if (!upcomingSubjects.forWorkflow[workflow.id]) {
-      actions.classifier.fetchSubjects(subjectSet, workflow)
-      .then(() => actions.classifier.createClassification(project, workflow));
-    } else if (upcomingSubjects.forWorkflow[workflow.id].length > 0) {
+    if (upcomingSubjects.length > 0) {
       actions.classifier.createClassification(project, workflow);
-    } else if (upcomingSubjects.forWorkflow[workflow.id].length === 0) {
+    } else {
       this.maybePromptWorkflowAssignmentDialog(this.props);
       actions.classifier.fetchSubjects(subjectSet, workflow)
       .then(() => actions.classifier.createClassification(project, workflow));
@@ -151,27 +144,31 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   loadAppropriateClassification() {
-    const { actions, currentClassifications, upcomingSubjects, workflow } = this.props;
+    const { actions, classification, workflow } = this.props;
     // Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
     if (this.state.rejected && this.state.rejected.classification) {
       this.setState({ rejected: null });
     }
 
-    if (currentClassifications.forWorkflow[workflow.id]) {
-      const classification = currentClassifications.forWorkflow[workflow.id];
-      actions.classifier.resumeClassification(classification)
-      .then(() => {
-        const subject = upcomingSubjects.forWorkflow[workflow.id][0];
-        this.setState({ classification, subject });
+    if (classification && classification.links.workflow === workflow.id) {
+      actions.classifier.resumeClassification(classification);
+    } else if (classification) {
+      actions.classifier.emptySubjectQueue();
+      this.getSubjectSet(workflow)
+      .then(subjectSet => {
+        this.createNewClassification(subjectSet);
+      })
+      .catch((error) => {
+        this.setState({ rejected: { classification: error }});
       });
     } else {
       // A subject set is only specified if the workflow is grouped.
       this.getSubjectSet(workflow)
-      .then(subjectSet =>
-        this.createNewClassification(subjectSet)
-      )
+      .then(subjectSet => {
+        this.createNewClassification(subjectSet);
+      })
       .catch((error) => {
-        this.setState({ rejected: { classification: error } });
+        this.setState({ rejected: { classification: error }});
       });
     }
   }
@@ -199,7 +196,7 @@ export class ProjectClassifyPage extends React.Component {
       this.context.geordi.logEvent({ type: 'classify' });
     }
 
-    const { classification } = this.state;
+    const { classification } = this.props;
     console.info('Completed classification', classification);
 
     let workflow = null;
@@ -213,10 +210,9 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   loadAnotherSubject() {
-    const { actions, workflow } = this.props;
+    const { actions, project, workflow } = this.props;
     if (workflow) {
-      actions.classifier.resetClassification(workflow);
-      this.loadAppropriateClassification();
+      actions.classifier.resetClassification();
     }
   }
 
@@ -266,15 +262,17 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   renderClassifier() {
-    const { classification, subject } = this.state;
+    const { classification, upcomingSubjects, workflow } = this.props;
+    const { demoMode } = this.state;
+    const subject = upcomingSubjects[0];
     if (classification) {
       return (
         <Classifier
-          key={this.props.workflow.id}
+          key={classification.links.workflow}
           {...this.props}
           classification={classification}
           subject={subject}
-          demoMode={this.state.demoMode}
+          demoMode={demoMode}
           onChangeDemoMode={this.handleDemoModeChange.bind(this)}
           onComplete={this.saveClassification.bind(this)}
           onClickNext={this.loadAnotherSubject.bind(this)}
@@ -319,9 +317,7 @@ ProjectClassifyPage.contextTypes = {
 
 ProjectClassifyPage.propTypes = {
   actions: PropTypes.shape({}),
-  currentClassifications: PropTypes.shape({
-    forWorkflow: PropTypes.object
-  }),
+  classification: PropTypes.shape({}),
   loadingSelectedWorkflow: PropTypes.bool,
   location: PropTypes.shape({
     query: PropTypes.shape({
@@ -335,20 +331,22 @@ ProjectClassifyPage.propTypes = {
   }),
   project: PropTypes.object,
   storage: PropTypes.object,
-  upcomingSubjects: PropTypes.shape({
-    forWorkflow: PropTypes.object
-  }),
+  upcomingSubjects: PropTypes.arrayOf(PropTypes.object),
   user: PropTypes.object,
   workflow: PropTypes.object
 };
 
+ProjectClassifyPage.defaultProps = {
+  classification: null,
+  upcomingSubjects: []
+}
 
 // For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject;
 window.classificationQueue = classificationQueue;
 
 const mapStateToProps = state => ({
-  currentClassifications: state.classify.currentClassifications,
+  classification: state.classify.classification,
   upcomingSubjects: state.classify.upcomingSubjects,
   theme: state.userInterface.theme
 });

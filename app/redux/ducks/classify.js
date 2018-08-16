@@ -24,12 +24,8 @@ function createNewClassification(project, workflow, subject) {
 }
 
 const initialState = {
-  currentClassifications: {
-    forWorkflow: {}
-  },
-  upcomingSubjects: {
-    forWorkflow: {}
-  }
+  classification: null,
+  upcomingSubjects: []
 };
 
 const ADD_SUBJECTS = 'pfe/classify/ADD_SUBJECTS';
@@ -40,51 +36,43 @@ const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
 
 export default function reducer(state = initialState, action = {}) {
-  const { currentClassifications, upcomingSubjects } = state;
   switch (action.type) {
     case ADD_SUBJECTS: {
-      const { subjects, workflow_id } = action.payload;
-      if (!upcomingSubjects.forWorkflow[workflow_id]) {
-        upcomingSubjects.forWorkflow[workflow_id] = [];
-      }
-      upcomingSubjects.forWorkflow[workflow_id].push(...subjects);
+      const { subjects } = action.payload;
+      const upcomingSubjects = state.upcomingSubjects.slice();
+      upcomingSubjects.push(...subjects);
       return Object.assign({}, state, { upcomingSubjects });
     }
     case CREATE_CLASSIFICATION: {
       const { project, workflow } = action.payload;
-      if (upcomingSubjects.forWorkflow[workflow.id] && upcomingSubjects.forWorkflow[workflow.id].length > 0) {
-        const subject = upcomingSubjects.forWorkflow[workflow.id][0];
+      if (state.upcomingSubjects.length > 0) {
+        const subject = state.upcomingSubjects[0];
         const classification = createNewClassification(project, workflow, subject);
-        const forWorkflow = Object.assign({}, currentClassifications.forWorkflow);
-        forWorkflow[workflow.id] = classification;
-        return Object.assign({}, state, { currentClassifications: { forWorkflow }});
+        return Object.assign({}, state, { classification });
       }
       return state;
     }
     case RESET_CLASSIFICATION: {
-      const { workflow } = action.payload;
-      currentClassifications.forWorkflow[workflow.id] = null;
-      upcomingSubjects.forWorkflow[workflow.id].shift();
-      return Object.assign({}, state, { currentClassifications, upcomingSubjects });
+      const classification = null;
+      const upcomingSubjects = state.upcomingSubjects.slice();
+      upcomingSubjects.shift();
+      return Object.assign({}, state, { classification, upcomingSubjects });
     }
     case RESUME_CLASSIFICATION: {
-      const { subject, workflowId } = action.payload;
-      const isCurrentSubject = upcomingSubjects.forWorkflow[workflowId] &&
-        subject.id === upcomingSubjects.forWorkflow[workflowId][0].id;
+      const { subject } = action.payload;
+      const isCurrentSubject = state.upcomingSubjects[0] &&
+        subject.id === state.upcomingSubjects[0].id;
       if (!isCurrentSubject) {
-        const forWorkflow = Object.assign({}, upcomingSubjects.forWorkflow);
-        const newQueue = forWorkflow[workflowId].slice().unshift(subject);
-        forWorkflow[workflowId] = newQueue;
-        return Object.assign({}, state, { upcomingSubjects: { forWorkflow }});
+        const upcomingSubjects = state.upcomingSubjects.slice();
+        upcomingSubjects.unshift(subject);
+        return Object.assign({}, state, { upcomingSubjects });
       }
       return state;
     }
     case RESET_SUBJECTS: {
-      Object.keys(upcomingSubjects.forWorkflow).forEach((workflowID) => {
-        const queue = upcomingSubjects.forWorkflow[workflowID];
-        queue.forEach(subject => subject.destroy());
-        queue.splice(0);
-      });
+      const upcomingSubjects = state.upcomingSubjects.slice();
+      upcomingSubjects.forEach(subject => subject.destroy());
+      upcomingSubjects.splice(0);
       return Object.assign({}, state, { upcomingSubjects });
     }
     default:
@@ -128,13 +116,15 @@ export function fetchSubjects(subjectSet, workflow) {
   });
 
   return (dispatch) => {
-    dispatch({ type: FETCH_SUBJECTS });
+    dispatch({
+      type: FETCH_SUBJECTS,
+      payload: subjectQuery
+    });
     return awaitSubjects
     .then(subjects => dispatch({
       type: ADD_SUBJECTS,
       payload: {
-        subjects,
-        workflow_id: workflow.id
+        subjects
       }
     }));
   };
@@ -147,23 +137,24 @@ export function createClassification(project, workflow) {
   };
 }
 
-export function resetClassification(workflow) {
+export function resetClassification() {
   return {
-    type: RESET_CLASSIFICATION,
-    payload: { workflow }
+    type: RESET_CLASSIFICATION
   };
 }
 
 export function resumeClassification(classification) {
   const awaitSubject = apiClient.type('subjects').get(classification.links.subjects);
-  const workflowId = classification.links.workflow;
 
   return (dispatch) => {
-    dispatch({ type: FETCH_SUBJECTS });
+    dispatch({
+      type: FETCH_SUBJECTS,
+      payload: classification.links.subjects
+    });
     return awaitSubject.then(([subject]) => {
       dispatch({
         type: RESUME_CLASSIFICATION,
-        payload: { subject, workflowId }
+        payload: { subject }
       });
     });
   };
