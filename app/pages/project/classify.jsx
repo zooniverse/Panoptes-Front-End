@@ -95,18 +95,23 @@ export class ProjectClassifyPage extends React.Component {
     if (!this.props.loadingSelectedWorkflow) {
       if (workflow !== prevProps.workflow) {
         if (prevProps.workflow) {
+          // The current workflow has changed, so reset the subject queue
           actions.classifier.emptySubjectQueue();
         } else {
+          // initial workflow load is complete so check if we need to
+          // resume a session or create a new classification.
           this.loadAppropriateClassification();
         }
       }
     }
 
     if (classification && classification.links.workflow !== workflow.id) {
+      // the current classification is invalid so reset the subject queue (and classification.)
       actions.classifier.emptySubjectQueue();
     }
 
     if (upcomingSubjects.length !== prevProps.upcomingSubjects.length) {
+      // Refill the subject queue when we're down to the last subject in the current batch.
       if (upcomingSubjects.length < 2) {
         this.refillSubjectQueue();
       }
@@ -116,6 +121,7 @@ export class ProjectClassifyPage extends React.Component {
       classification !== prevProps.classification
     ) {
       if (classification) {
+        // we've just started a new classification.
         if (this.state.validUserGroup) {
           classification.update({ 'metadata.selected_user_group_id': this.props.location.query.group });
         }
@@ -154,16 +160,21 @@ export class ProjectClassifyPage extends React.Component {
 
   loadAppropriateClassification() {
     const { actions, classification, workflow } = this.props;
-    // Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
+    // Check if we're resuming an existing classification
+    // or starting a new classifying session
+    // and act accordingly
     if (this.state.rejected && this.state.rejected.classification) {
       this.setState({ rejected: null });
     }
 
     if (classification && classification.links.workflow === workflow.id) {
+     // Resume an existing workflow session with a valid classification
       actions.classifier.resumeClassification(classification);
     } else if (classification) {
+    // Empty the queue and restart if we've changed workflows since the last classification was created.
       actions.classifier.emptySubjectQueue();
     } else {
+    // There's no existing classification so refill the queue and generate a new classification.
       this.refillSubjectQueue();
     }
   }
@@ -171,7 +182,9 @@ export class ProjectClassifyPage extends React.Component {
   shouldWorkflowAssignmentPrompt(nextProps) {
     // Only for Gravity Spy which is assigning workflows to logged in users
     if (nextProps.project.experimental_tools.indexOf('workflow assignment') > -1) {
-      const assignedWorkflowID = nextProps.preferences && nextProps.preferences.settings && nextProps.preferences.settings.workflow_id;
+      const assignedWorkflowID = nextProps.preferences &&
+        nextProps.preferences.settings &&
+        nextProps.preferences.settings.workflow_id;
       const currentWorkflowID = this.props.preferences && this.props.preferences.preferences.selected_workflow;
       if (assignedWorkflowID && currentWorkflowID && assignedWorkflowID !== currentWorkflowID) {
         if (this.state.promptWorkflowAssignmentDialog === false) {
@@ -288,7 +301,9 @@ export class ProjectClassifyPage extends React.Component {
 
   render() {
     return (
-      <div className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}>
+      <div
+        className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}
+      >
         <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
 
         {this.props.projectIsComplete &&
@@ -334,7 +349,7 @@ ProjectClassifyPage.propTypes = {
 ProjectClassifyPage.defaultProps = {
   classification: null,
   upcomingSubjects: []
-}
+};
 
 // For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject;
