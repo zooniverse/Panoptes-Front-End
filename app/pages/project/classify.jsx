@@ -107,7 +107,7 @@ export class ProjectClassifyPage extends React.Component {
     }
 
     if (upcomingSubjects.length !== prevProps.upcomingSubjects.length) {
-      if (upcomingSubjects.length === 0) {
+      if (upcomingSubjects.length < 2) {
         this.refillSubjectQueue();
       }
     }
