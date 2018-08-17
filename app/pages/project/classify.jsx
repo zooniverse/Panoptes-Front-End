@@ -131,15 +131,19 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  createNewClassification(subjectSet) {
+  createNewClassification() {
     const { actions, project, workflow, upcomingSubjects } = this.props;
 
     if (upcomingSubjects.length > 0) {
       actions.classifier.createClassification(project, workflow);
     } else {
       this.maybePromptWorkflowAssignmentDialog(this.props);
-      actions.classifier.fetchSubjects(subjectSet, workflow)
-      .then(() => actions.classifier.createClassification(project, workflow));
+      this.getSubjectSet(workflow)
+      .then(subjectSet => actions.classifier.fetchSubjects(subjectSet, workflow))
+      .then(() => actions.classifier.createClassification(project, workflow))
+      .catch((error) => {
+        this.setState({ rejected: { classification: error }});
+      });
     }
   }
 
@@ -154,22 +158,9 @@ export class ProjectClassifyPage extends React.Component {
       actions.classifier.resumeClassification(classification);
     } else if (classification) {
       actions.classifier.emptySubjectQueue();
-      this.getSubjectSet(workflow)
-      .then(subjectSet => {
-        this.createNewClassification(subjectSet);
-      })
-      .catch((error) => {
-        this.setState({ rejected: { classification: error }});
-      });
+      this.createNewClassification();
     } else {
-      // A subject set is only specified if the workflow is grouped.
-      this.getSubjectSet(workflow)
-      .then(subjectSet => {
-        this.createNewClassification(subjectSet);
-      })
-      .catch((error) => {
-        this.setState({ rejected: { classification: error }});
-      });
+      this.createNewClassification();
     }
   }
 
