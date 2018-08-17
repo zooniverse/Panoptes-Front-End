@@ -54,7 +54,7 @@ export default function reducer(state = initialState, action = {}) {
     }
     case NEXT_SUBJECT: {
       const { project, workflow } = action.payload;
-      let classification = null;
+      let { classification } = state;
       const upcomingSubjects = state.upcomingSubjects.slice();
       upcomingSubjects.shift();
       const subject = upcomingSubjects[0];

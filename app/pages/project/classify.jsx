@@ -86,7 +86,7 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { actions, classification, project, workflow } = this.props;
+    const { actions, classification, project, upcomingSubjects, workflow } = this.props;
 
     if (project !== prevProps.project) {
       this.loadAppropriateClassification();
@@ -95,9 +95,20 @@ export class ProjectClassifyPage extends React.Component {
     if (!this.props.loadingSelectedWorkflow) {
       if (workflow !== prevProps.workflow) {
         if (prevProps.workflow) {
-          actions.classifier.resetClassification();
+          actions.classifier.emptySubjectQueue();
+        } else {
+          this.loadAppropriateClassification();
         }
-        this.loadAppropriateClassification();
+      }
+    }
+
+    if (classification && classification.links.workflow !== workflow.id) {
+      actions.classifier.emptySubjectQueue();
+    }
+
+    if (upcomingSubjects.length !== prevProps.upcomingSubjects.length) {
+      if (upcomingSubjects.length === 0) {
+        this.refillSubjectQueue();
       }
     }
 
@@ -108,8 +119,6 @@ export class ProjectClassifyPage extends React.Component {
         if (this.state.validUserGroup) {
           classification.update({ 'metadata.selected_user_group_id': this.props.location.query.group });
         }
-      } else {
-        this.loadAppropriateClassification();
       }
     }
   }
@@ -131,20 +140,16 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  createNewClassification() {
-    const { actions, project, workflow, upcomingSubjects } = this.props;
+  refillSubjectQueue() {
+    const { actions, project, workflow } = this.props;
 
-    if (upcomingSubjects.length > 0) {
-      actions.classifier.createClassification(project, workflow);
-    } else {
-      this.maybePromptWorkflowAssignmentDialog(this.props);
-      this.getSubjectSet(workflow)
-      .then(subjectSet => actions.classifier.fetchSubjects(subjectSet, workflow))
-      .then(() => actions.classifier.createClassification(project, workflow))
-      .catch((error) => {
-        this.setState({ rejected: { classification: error }});
-      });
-    }
+    this.maybePromptWorkflowAssignmentDialog(this.props);
+    this.getSubjectSet(workflow)
+    .then(subjectSet => actions.classifier.fetchSubjects(subjectSet, workflow))
+    .then(() => actions.classifier.createClassification(project, workflow))
+    .catch((error) => {
+      this.setState({ rejected: { classification: error }});
+    });
   }
 
   loadAppropriateClassification() {
@@ -158,9 +163,8 @@ export class ProjectClassifyPage extends React.Component {
       actions.classifier.resumeClassification(classification);
     } else if (classification) {
       actions.classifier.emptySubjectQueue();
-      this.createNewClassification();
     } else {
-      this.createNewClassification();
+      this.refillSubjectQueue();
     }
   }
 
@@ -203,7 +207,7 @@ export class ProjectClassifyPage extends React.Component {
   loadAnotherSubject() {
     const { actions, project, workflow } = this.props;
     if (workflow) {
-      actions.classifier.resetClassification();
+      actions.classifier.nextSubject(project, workflow);
     }
   }
 
@@ -256,7 +260,7 @@ export class ProjectClassifyPage extends React.Component {
     const { classification, upcomingSubjects, workflow } = this.props;
     const { demoMode } = this.state;
     const subject = upcomingSubjects[0];
-    if (classification) {
+    if (classification && classification.links.workflow === workflow.id) {
       return (
         <Classifier
           key={classification.links.workflow}
