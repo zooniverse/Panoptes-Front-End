@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import counterpart from 'counterpart';
+import Translate from 'react-translate-component';
 import apiClient from 'panoptes-client/lib/api-client';
 import ImageSelector from '../../components/image-selector';
 import putFile from '../../lib/put-file';
@@ -60,13 +62,17 @@ class CustomiseProfile extends React.Component {
 
   render() {
     const { avatar, avatarError, profile_header, profile_headerError } = this.state;
-    const placeholder = <p className="content-container">Drop an image here (or click to select).</p>;
+    const placeholder = <p className="content-container">{counterpart('userSettings.profile.dropImage')}</p>;
     return (
       <div>
         <div className="content-container">
-          <h3>Change avatar</h3>
+          <h3>{counterpart('userSettings.profile.changeAvatar')}</h3>
           <div>
-            <p className="form-help">Drop an image here (square, less than {Math.floor(MAX_AVATAR_SIZE / 1000)} KB)</p>
+            <Translate
+              content="userSettings.profile.avatarImageHelp"
+              component="p"
+              with={{ size: Math.floor(MAX_AVATAR_SIZE / 1000) }}
+            />
             <div style={{ width: '20vw' }}>
               <ImageSelector
                 maxSize={MAX_AVATAR_SIZE}
@@ -82,7 +88,7 @@ class CustomiseProfile extends React.Component {
                 disabled={avatar === {}}
                 onClick={this.handleMediaClear.bind(this, 'avatar')}
               >
-                Clear avatar
+                {counterpart('userSettings.profile.clearAvatar')}
               </button>
             </div>
           </div>
@@ -92,9 +98,13 @@ class CustomiseProfile extends React.Component {
         </div>
         <hr />
         <div className="content-container">
-          <h3>Change profile header</h3>
+          <h3>{counterpart('userSettings.profile.changeProfileHeader')}</h3>
           <div>
-            <p className="form-help">Drop an image here (any dimensions, less than {Math.floor(MAX_HEADER_SIZE / 1000)} KB)</p>
+            <Translate
+              content="userSettings.profile.profileHeaderImageHelp"
+              component="p"
+              with={{ size: Math.floor(MAX_HEADER_SIZE / 1000) }}
+            />
             <div style={{ width: '40vw' }}>
               <ImageSelector
                 maxSize={MAX_HEADER_SIZE}
@@ -109,7 +119,7 @@ class CustomiseProfile extends React.Component {
                 disabled={profile_header === {}}
                 onClick={this.handleMediaClear.bind(this, 'profile_header')}
               >
-                Clear header
+                {counterpart('userSettings.profile.clearHeader')}
               </button>
             </div>
           </div>
