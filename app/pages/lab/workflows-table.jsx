@@ -36,6 +36,7 @@ const WorkflowsTable = ({
               <td>
                 <Link key={workflow.id} to={labPath(`/workflows/${workflow.id}`)} activeClassName="active">
                   {workflow.display_name}
+                  {' '}(#{workflow.id})
                   {(project.configuration && workflow.id === project.configuration.default_workflow) && (
                     <span title="Default workflow">{' '}*{' '}</span>
                   )}

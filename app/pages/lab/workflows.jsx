@@ -20,6 +20,7 @@ const WorkflowsPage = (props) => {
       <li key={workflow.id}>
         <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)} className="nav-list-item" activeClassName="active">
           {workflow.display_name}
+          {' '}(#{workflow.id})
           {(props.project.configuration && workflow.id === props.project.configuration.default_workflow) && (
             <span title="Default workflow">{' '}*{' '}</span>
           )}
