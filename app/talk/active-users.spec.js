@@ -11,13 +11,12 @@ const users = [
 ];
 
 describe('ActiveUsers', function () {
+  const getActiveIdsStub = sinon.stub(ActiveUsers.prototype, 'getActiveUserIds').callsFake(() => Promise.resolve(activeIds));
+  const fetchUsersSpy = sinon.spy(ActiveUsers.prototype, 'fetchUncachedUsers');
+  const pageCountSpy = sinon.spy(ActiveUsers.prototype, 'pageCount');
+  const boundedPageSpy = sinon.spy(ActiveUsers.prototype, 'boundedPage');
+  const userIdSpy = sinon.spy(ActiveUsers.prototype, 'userIdsOnPage');
   const wrapper = shallow(<ActiveUsers />);
-  const controller = wrapper.instance();
-  const getActiveIdsStub = sinon.stub(controller, 'getActiveUserIds').callsFake(() => Promise.resolve(activeIds));
-  const fetchUsersSpy = sinon.spy(controller, 'fetchUncachedUsers');
-  const pageCountSpy = sinon.spy(controller, 'pageCount');
-  const boundedPageSpy = sinon.spy(controller, 'boundedPage');
-  const userIdSpy = sinon.spy(controller, 'userIdsOnPage');
   wrapper.setState({ users });
 
   it('should render without crashing', function() {
@@ -27,11 +26,7 @@ describe('ActiveUsers', function () {
     assert.equal(wrapper.find('li').length, 2);
   });
 
-  before(function () {
-    controller.update();
-  });
-
-  it('should call all expected functions with update()', function() {
+  it('should call all expected functions on mount', function() {
     sinon.assert.calledOnce(getActiveIdsStub);
     sinon.assert.calledOnce(boundedPageSpy);
     sinon.assert.calledOnce(userIdSpy);
