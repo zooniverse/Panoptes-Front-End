@@ -141,6 +141,7 @@ const ExportWorkflowListItem = ({ workflow, media, onChange, workflowError }) =>
           onChange={onChange}
         />
         {workflow.display_name}
+        {' '}(#{workflow.id})
         <small>
           {myMedia &&
             <a
