@@ -1,5 +1,6 @@
 import React from 'react';
 import assert from 'assert';
+import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import NotificationSection from './notification-section';
 
@@ -26,6 +27,10 @@ const notifications = [
 
 describe('Notification Section', function() {
   let wrapper;
+
+  before(function () {
+    sinon.stub(NotificationSection.prototype, 'getUnreadCount').callsFake(() => null);
+  })
 
   describe('it can display a Zooniverse section', function () {
     beforeEach(function () {
