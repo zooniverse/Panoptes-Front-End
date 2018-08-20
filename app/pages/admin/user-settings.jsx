@@ -79,7 +79,9 @@ UserSettings.propTypes = {
 };
 
 UserSettings.defaultProps = {
-  editUser: null
+  editUser: null,
+  params: {},
+  user: null
 };
 
 export default UserSettings;
