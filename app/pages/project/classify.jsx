@@ -309,7 +309,15 @@ ProjectClassifyPage.contextTypes = {
 };
 
 ProjectClassifyPage.propTypes = {
-  actions: PropTypes.shape({}),
+  actions: PropTypes.shape({
+    classifier: PropTypes.shape({
+      createClassification: PropTypes.func,
+      emptySubjectQueue: PropTypes.func,
+      fetchSubjects: PropTypes.func,
+      nextSubject: PropTypes.func,
+      refillSubjectQueue: PropTypes.func
+    })
+  }),
   classification: PropTypes.shape({}),
   loadingSelectedWorkflow: PropTypes.bool,
   location: PropTypes.shape({
@@ -331,6 +339,9 @@ ProjectClassifyPage.propTypes = {
 
 ProjectClassifyPage.defaultProps = {
   classification: null,
+  location: {
+    query: {}
+  },
   upcomingSubjects: []
 };
 
