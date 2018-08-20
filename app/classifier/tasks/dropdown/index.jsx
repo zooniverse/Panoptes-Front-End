@@ -301,5 +301,9 @@ DropdownTask.propTypes = {
 };
 
 DropdownTask.defaultProps = {
+  annotation: {
+    value: []
+  },
+  onChange: () => true,
   task: { selects: [] }
 };
