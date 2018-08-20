@@ -40,6 +40,8 @@ describe('ProjectStatus', function () {
   let wrapper;
 
   before(function () {
+    sinon.stub(ProjectStatus.prototype, 'getProject').callsFake(() => Promise.resolve(project));
+    sinon.stub(ProjectStatus.prototype, 'getWorkflows').callsFake(() => Promise.resolve(workflows));
     onChangeWorkflowLevelStub = sinon.stub(ProjectStatus.prototype, 'onChangeWorkflowLevel');
     handleDialogCancelStub = sinon.stub(ProjectStatus.prototype, 'handleDialogCancel');
     handleDialogSuccessStub = sinon.stub(ProjectStatus.prototype, 'handleDialogSuccess');
