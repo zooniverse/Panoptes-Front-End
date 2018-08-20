@@ -2,7 +2,7 @@ import React from 'react';
 import counterpart from 'counterpart';
 import AutoSave from '../../components/auto-save';
 import handleInputChange from '../../lib/handle-input-change';
-import ChangePasswordForm from './change-password-form';
+import ChangePasswordForm from './ChangePasswordForm';
 
 export default function AccountInformationPage(props) {
   return (
