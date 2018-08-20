@@ -342,11 +342,13 @@ class ProjectPageController extends React.Component {
 
   handleSplitWorkflowAssignment(projectPreferences, splits) {
     if (splits['workflow.assignment']) {
-      const projectSetWorkflow = (splits['workflow.assignment'].variant
+      const projectWorkflowToSet = (splits['workflow.assignment'].variant
         && splits['workflow.assignment'].variant.value
         && splits['workflow.assignment'].variant.value.workflow_id)
           ? splits['workflow.assignment'].variant.value.workflow_id
           : '';
+
+      const doesNotHaveProjectSetWorkflow = !(projectPreferences.settings && projectPreferences.settings.workflow_id);
 
       const userSelectedWorkflow = (projectPreferences.preferences && projectPreferences.preferences.selected_workflow)
         ? projectPreferences.preferences.selected_workflow
@@ -354,15 +356,17 @@ class ProjectPageController extends React.Component {
 
       if (splits['workflow.assignment'].variant.value.only_new_users) {
         const newToProject = Object.keys(projectPreferences.preferences).length === 0;
-        if (newToProject) this.handleProjectPreferencesChange('settings.workflow_id', projectSetWorkflow);
+        if (newToProject) this.handleProjectPreferencesChange('settings.workflow_id', projectWorkflowToSet);
       } else {
-        this.handleProjectPreferencesChange('settings.workflow_id', projectSetWorkflow);
+        if (doesNotHaveProjectSetWorkflow) {
+          this.handleProjectPreferencesChange('settings.workflow_id', projectWorkflowToSet);
 
-        if (userSelectedWorkflow && projectSetWorkflow &&
-          userSelectedWorkflow !== projectSetWorkflow) {
-            // if split is not only for new users
-            // clear the user selected workflow if defined
-            this.handleProjectPreferencesChange('preferences.selected_workflow', undefined)
+          if (userSelectedWorkflow && projectWorkflowToSet &&
+            userSelectedWorkflow !== projectWorkflowToSet) {
+              // if split is not only for new users
+              // clear the user selected workflow if defined
+              this.handleProjectPreferencesChange('preferences.selected_workflow', undefined)
+          }
         }
       }
     }
