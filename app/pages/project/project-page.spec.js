@@ -144,6 +144,7 @@ describe('ProjectPage', function () {
           </ProjectPage>,
           { context: { geordi }}
         );
+        geordiRememberSpy.resetHistory();
         wrapper.setProps({ project: newProject });
       });
 
