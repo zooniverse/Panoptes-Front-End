@@ -94,7 +94,7 @@ export class ProjectClassifyPage extends React.Component {
 
     if (!this.props.loadingSelectedWorkflow) {
       if (workflow !== prevProps.workflow) {
-        if (prevProps.workflow) {
+        if (classification && classification.links.workflow !== workflow.id) {
           // The current workflow has changed, so reset the subject queue
           actions.classifier.emptySubjectQueue();
         } else {
@@ -103,11 +103,6 @@ export class ProjectClassifyPage extends React.Component {
           this.loadAppropriateClassification();
         }
       }
-    }
-
-    if (classification && classification.links.workflow !== workflow.id) {
-      // the current classification is invalid so reset the subject queue (and classification.)
-      actions.classifier.emptySubjectQueue();
     }
 
     if (upcomingSubjects.length !== prevProps.upcomingSubjects.length) {
@@ -135,23 +130,11 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  getSubjectSet(workflow) {
-    if (workflow.grouped) {
-      return workflow.get('subject_sets').then((subjectSets) => {
-        const randomIndex = Math.floor(Math.random() * subjectSets.length);
-        return subjectSets[randomIndex];
-      });
-    } else {
-      return Promise.resolve();
-    }
-  }
-
   refillSubjectQueue() {
     const { actions, project, workflow } = this.props;
 
     this.maybePromptWorkflowAssignmentDialog(this.props);
-    this.getSubjectSet(workflow)
-    .then(subjectSet => actions.classifier.fetchSubjects(subjectSet, workflow))
+    actions.classifier.fetchSubjects(workflow)
     .then(() => actions.classifier.createClassification(project, workflow))
     .catch((error) => {
       this.setState({ rejected: { classification: error }});

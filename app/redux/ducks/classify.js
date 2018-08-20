@@ -2,6 +2,33 @@ import apiClient from 'panoptes-client/lib/api-client';
 import counterpart from 'counterpart';
 import seenThisSession from '../../lib/seen-this-session';
 
+function awaitSubjects(subjectQuery) {
+  return apiClient.get('/subjects/queued', subjectQuery)
+  .catch((error) => {
+    if (error.message.indexOf('please try again') === -1) {
+      throw error;
+    } else {
+      return new Promise((resolve, reject) => {
+        const fetchSubjectsAgain = (() => apiClient.get('/subjects/queued', subjectQuery)
+        .then(resolve)
+        .catch(reject));
+        setTimeout(fetchSubjectsAgain, 2000);
+      });
+    }
+  });
+}
+
+function awaitSubjectSet(workflow) {
+  if (workflow.grouped) {
+    return workflow.get('subject_sets').then((subjectSets) => {
+      const randomIndex = Math.floor(Math.random() * subjectSets.length);
+      return subjectSets[randomIndex];
+    });
+  } else {
+    return Promise.resolve();
+  }
+}
+
 function createNewClassification(project, workflow, subject) {
   const classification = apiClient.type('classifications').create({
     annotations: [],
@@ -89,50 +116,37 @@ export function emptySubjectQueue() {
   return { type: RESET_SUBJECTS };
 }
 
-export function fetchSubjects(subjectSet, workflow) {
-  const subjectQuery = { workflow_id: workflow.id };
+export function fetchSubjects(workflow) {
+  return dispatch => awaitSubjectSet(workflow)
+    .then((subjectSet) => {
+      const subjectQuery = { workflow_id: workflow.id };
 
-  if (subjectSet) {
-    subjectQuery.subject_set_id = subjectSet.id;
-  }
-
-  const awaitSubjects = apiClient.get('/subjects/queued', subjectQuery)
-  .catch((error) => {
-    if (error.message.indexOf('please try again') === -1) {
-      throw error;
-    } else {
-      return new Promise((resolve, reject) => {
-        const fetchSubjectsAgain = (() => apiClient.get('/subjects/queued', subjectQuery)
-        .then(resolve)
-        .catch(reject));
-        setTimeout(fetchSubjectsAgain, 2000);
+      if (subjectSet) {
+        subjectQuery.subject_set_id = subjectSet.id;
+      }
+      dispatch({
+        type: FETCH_SUBJECTS,
+        payload: subjectQuery
       });
-    }
-  })
-  .then((subjects) => {
-    const filteredSubjects = subjects.filter((subject) => {
-      const notSeen = !subject.already_seen &&
-        !subject.retired &&
-        !seenThisSession.check(workflow, subject);
-      return notSeen;
-    });
-    const subjectsToLoad = (filteredSubjects.length > 0) ? filteredSubjects : subjects;
-    return subjectsToLoad;
-  });
-
-  return (dispatch) => {
-    dispatch({
-      type: FETCH_SUBJECTS,
-      payload: subjectQuery
-    });
-    return awaitSubjects
+      return subjectQuery;
+    })
+    .then(awaitSubjects)
+    .then((subjects) => {
+      const filteredSubjects = subjects.filter((subject) => {
+        const notSeen = !subject.already_seen &&
+          !subject.retired &&
+          !seenThisSession.check(workflow, subject);
+        return notSeen;
+      });
+      const subjectsToLoad = (filteredSubjects.length > 0) ? filteredSubjects : subjects;
+      return subjectsToLoad;
+    })
     .then(subjects => dispatch({
       type: ADD_SUBJECTS,
       payload: {
         subjects
       }
     }));
-  };
 }
 
 export function createClassification(project, workflow) {
