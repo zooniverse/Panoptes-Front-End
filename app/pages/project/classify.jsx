@@ -21,10 +21,6 @@ import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialo
 import ProjectThemeButton from './components/ProjectThemeButton';
 import { zooTheme } from '../../theme';
 
-// Map each project ID to a promise of its last randomly-selected workflow ID.
-// This is to maintain the same random workflow for each project when none is specified by the user.
-const currentWorkflowForProject = {};
-
 function onClassificationSaved(actualClassification) {
   Split.classificationCreated(actualClassification); // Metric log needs classification id
 }
@@ -338,8 +334,6 @@ ProjectClassifyPage.defaultProps = {
   upcomingSubjects: []
 };
 
-// For debugging:
-window.currentWorkflowForProject = currentWorkflowForProject;
 window.classificationQueue = classificationQueue;
 
 const mapStateToProps = state => ({
