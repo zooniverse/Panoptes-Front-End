@@ -127,7 +127,7 @@ module.exports = createReactClass
                 <p>This project is part of the <Link to={"/organizations/#{@state.organization.slug}"}>{@state.organization.display_name}</Link> organization.</p>
               else
                 <p>This project is linked to <strong>Organization #{@props.project.links.organization}</strong>.</p>}
-              <p>If you are not a collaborator on the organization, please coordinate with this project's other collaborators for additional information regarding the affiliated organization.</p>
+              <p>If you are not a collaborator on the organization, please coordinate with this project’s other collaborators for additional information regarding the affiliated organization.</p>
             </div>}
 
           <DisplayNameSlugEditor resource={@props.project} resourceType="project" />
@@ -158,7 +158,7 @@ module.exports = createReactClass
             </AutoSave>
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit={500} string={@props.project.workflow_description ? ''} /></small>
           </p>
-
+          <br />
           <div>
             <AutoSave resource={@props.project}>
               <span className="form-label">Researcher Quote</span>
@@ -173,7 +173,7 @@ module.exports = createReactClass
             </AutoSave>
             <small className="form-help">This text will appear on a project landing page alongside an avatar of the selected researcher. <CharLimit limit={255} string={@props.project.researcher_quote ? ''} /></small>
           </div>
-
+          <br />
           <div>
             <AutoSave resource={@props.project}>
               <span className="form-label">Announcement Banner</span>
@@ -182,31 +182,31 @@ module.exports = createReactClass
             </AutoSave>
             <small className="form-help">This text will appear as a banner at the top of all your project's pages. Only use this when you've got a big important announcement to make!</small>
           </div>
-
+          <br />
           <div>
-            <AutoSave resource={@props.project}>
             <span className="form-label">Discipline Tag</span>
-            <br />
-            <Select
-              ref="disciplineSelect"
-              name="disciplines"
-              placeholder="Add Discipline Tag"
-              className="discipline-tag"
-              value={@state.disciplineTagList}
-              options={DISCIPLINES}
-              multi={true}
-              onChange={@handleDisciplineTagChange} />
-              <small className="form-help">Enter or select one or more discipline tags to identify which field(s) of research your project belongs to. These tags will determine the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project. </small>
-              <br />
-              </AutoSave>
-              <AutoSave resource={@props.project}>
-              <span className="form-label">Other Tags</span>
-              <br />
+            <AutoSave resource={@props.project}>
+              <Select
+                ref="disciplineSelect"
+                name="disciplines"
+                placeholder="Add Discipline Tag"
+                className="discipline-tag"
+                value={@state.disciplineTagList}
+                options={DISCIPLINES}
+                multi={true}
+                onChange={@handleDisciplineTagChange}
+              />
+            </AutoSave>
+            <small className="form-help">Enter or select one or more discipline tags to identify which field(s) of research your project belongs to. These tags will determine the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project.</small>
+          </div>
+          <div>
+            <span className="form-label">Other Tags</span>
+            <AutoSave resource={@props.project}>
               <TagSearch name="tags" multi={true} value={@state.otherTagList} onChange={@handleOtherTagChange} />
             </AutoSave>
             <small className="form-help">Enter a list of additional tags to describe your project separated by commas to help users find your project.</small>
           </div>
-
+          <br />
           <div>
             External links<br />
             <small className="form-help">
@@ -256,12 +256,7 @@ module.exports = createReactClass
     @handleTagChange(allTags)
 
   handleTagChange: (value) ->
-    event =
-      target:
-        value: value
-        name: 'tags'
-        dataset: {}
-    handleInputChange.call @props.project, event
+    @props.project.update({ tags: value })
 
   handleMediaChange: (type, file) ->
     errorProp = "#{type}Error"
