@@ -41,7 +41,6 @@ let sessionDemoMode = false;
 export class ProjectClassifyPage extends React.Component {
   constructor(props) {
     super(props);
-    this.loadingSelectedWorkflow = false;
     this.project = null;
     this.workflow = null;
 
@@ -56,7 +55,7 @@ export class ProjectClassifyPage extends React.Component {
 
   componentDidMount() {
     Split.classifierVisited();
-    if (this.props.workflow && !this.props.loadingSelectedWorkflow) {
+    if (this.props.workflow) {
       this.loadAppropriateClassification();
     }
 
@@ -64,7 +63,7 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.loadingSelectedWorkflow === false && nextProps.user !== null) {
+    if (nextProps.user !== null) {
       this.shouldWorkflowAssignmentPrompt(nextProps, nextContext);
     }
 
@@ -92,16 +91,14 @@ export class ProjectClassifyPage extends React.Component {
       this.loadAppropriateClassification();
     }
 
-    if (!this.props.loadingSelectedWorkflow) {
-      if (workflow !== prevProps.workflow) {
-        if (classification && classification.links.workflow !== workflow.id) {
-          // The current workflow has changed, so reset the subject queue
-          actions.classifier.emptySubjectQueue();
-        } else {
-          // initial workflow load is complete so check if we need to
-          // resume a session or create a new classification.
-          this.loadAppropriateClassification();
-        }
+    if (workflow !== prevProps.workflow) {
+      if (classification && classification.links.workflow !== workflow.id) {
+        // The current workflow has changed, so reset the subject queue
+        actions.classifier.emptySubjectQueue();
+      } else {
+        // initial workflow load is complete so check if we need to
+        // resume a session or create a new classification.
+        this.loadAppropriateClassification();
       }
     }
 

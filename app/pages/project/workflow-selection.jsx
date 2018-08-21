@@ -189,7 +189,11 @@ class WorkflowSelection extends React.Component {
   render() {
     const { translation } = this.props;
     const { loadingSelectedWorkflow, workflow } = this.state;
-    return React.cloneElement(this.props.children, { translation, loadingSelectedWorkflow, workflow });
+    if (loadingSelectedWorkflow) {
+      return <p>Loading workflow.</p>
+    } else {
+      return React.cloneElement(this.props.children, { translation, loadingSelectedWorkflow, workflow });
+    }
   }
 }
 
