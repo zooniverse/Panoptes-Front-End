@@ -3,8 +3,8 @@ import React from 'react';
 import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
 
 export default class WorkflowsContainer extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       loading: true,
       reorder: false,
@@ -60,19 +60,18 @@ export default class WorkflowsContainer extends React.Component {
   }
 
   handleWorkflowStatusChange(e, page, workflow) {
-    const defaultWorkflow = (this.props.projectConfiguration && this.props.projectConfiguration.default_workflow) ?
-      this.props.projectConfiguration.default_workflow : null;
+    const defaultWorkflow = (this.props.project && this.props.project.configuration.default_workflow) ?
+      this.props.project.configuration.default_workflow : null;
     const checked = e.target.checked;
     workflow.update({ active: checked }).save()
-      .catch(error => console.log(error))
-      .then(() => {
+      .then((workflow) => {
         this.props.project.uncache();
         if (!workflow.active && workflow.id === defaultWorkflow) {
-          this.props.project.update({ 'configuration.default_workflow': null });
-          this.props.project.save();
+          this.props.project.update({ 'configuration.default_workflow': null }).save();
         }
       })
-      .then(() => this.getWorkflowList(page));
+      .then(() => this.getWorkflowList(page))
+      .catch (error => console.log(error));
   }
 
   handleWorkflowStatsVisibility(e, page, workflow) {
@@ -148,17 +147,8 @@ WorkflowsContainer.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-WorkflowsContainer.defaultProps = {
-  project: {
-    configuration: {}
-  }
-};
-
 WorkflowsContainer.propTypes = {
   children: PropTypes.node,
-  projectConfiguration: PropTypes.shape({
-    default_workflow: PropTypes.string
-  }),
   location: PropTypes.shape({
     pathname: PropTypes.string,
     query: PropTypes.object
