@@ -67,10 +67,14 @@ const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_SUBJECTS: {
-      const { subjects } = action.payload;
-      const upcomingSubjects = state.upcomingSubjects.slice();
-      upcomingSubjects.push(...subjects);
-      return Object.assign({}, state, { upcomingSubjects });
+      const { subjects, workflowID } = action.payload;
+      const { workflow } = state;
+      if (workflow && workflow.id === workflowID) {
+        const upcomingSubjects = state.upcomingSubjects.slice();
+        upcomingSubjects.push(...subjects);
+        return Object.assign({}, state, { upcomingSubjects });
+      }
+      return state;
     }
     case CREATE_CLASSIFICATION: {
       const { project } = action.payload;
