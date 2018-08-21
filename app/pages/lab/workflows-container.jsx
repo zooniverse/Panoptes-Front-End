@@ -71,7 +71,7 @@ export default class WorkflowsContainer extends React.Component {
         }
       })
       .then(() => this.getWorkflowList(page))
-      .catch (error => console.log(error));
+      .catch(error => console.log(error));
   }
 
   handleWorkflowStatsVisibility(e, page, workflow) {
