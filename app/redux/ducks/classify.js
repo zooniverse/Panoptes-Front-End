@@ -124,6 +124,15 @@ export default function reducer(state = initialState, action = {}) {
       return state;
   }
 }
+export function addSubjects(subjects, workflowID) {
+  return {
+    type: ADD_SUBJECTS,
+    payload: {
+      subjects,
+      workflowID
+    }
+  };
+}
 
 export function emptySubjectQueue() {
   return { type: RESET_SUBJECTS };
@@ -157,7 +166,8 @@ export function fetchSubjects(workflow) {
     .then(subjects => dispatch({
       type: ADD_SUBJECTS,
       payload: {
-        subjects
+        subjects,
+        workflowID: workflow.id
       }
     }));
 }
