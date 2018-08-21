@@ -95,10 +95,6 @@ export class ProjectClassifyPage extends React.Component {
       if (classification && classification.links.workflow !== workflow.id) {
         // The current workflow has changed, so reset the subject queue
         actions.classifier.emptySubjectQueue();
-      } else {
-        // initial workflow load is complete so check if we need to
-        // resume a session or create a new classification.
-        this.loadAppropriateClassification();
       }
     }
 
@@ -349,7 +345,8 @@ window.classificationQueue = classificationQueue;
 const mapStateToProps = state => ({
   classification: state.classify.classification,
   upcomingSubjects: state.classify.upcomingSubjects,
-  theme: state.userInterface.theme
+  theme: state.userInterface.theme,
+  workflow: state.classify.workflow
 });
 
 const mapDispatchToProps = dispatch => ({

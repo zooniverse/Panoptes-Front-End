@@ -52,7 +52,8 @@ function createNewClassification(project, workflow, subject) {
 
 const initialState = {
   classification: null,
-  upcomingSubjects: []
+  upcomingSubjects: [],
+  workflow: null
 };
 
 const ADD_SUBJECTS = 'pfe/classify/ADD_SUBJECTS';
@@ -61,6 +62,7 @@ const CREATE_CLASSIFICATION = 'pfe/classify/CREATE_CLASSIFICATION';
 const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
 const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
+const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -71,7 +73,8 @@ export default function reducer(state = initialState, action = {}) {
       return Object.assign({}, state, { upcomingSubjects });
     }
     case CREATE_CLASSIFICATION: {
-      const { project, workflow } = action.payload;
+      const { project } = action.payload;
+      const { workflow } = state;
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
         const classification = createNewClassification(project, workflow, subject);
@@ -80,15 +83,16 @@ export default function reducer(state = initialState, action = {}) {
       return state;
     }
     case NEXT_SUBJECT: {
-      const { project, workflow } = action.payload;
-      let { classification } = state;
+      const { project } = action.payload;
+      const { workflow } = state;
       const upcomingSubjects = state.upcomingSubjects.slice();
       upcomingSubjects.shift();
       const subject = upcomingSubjects[0];
       if (subject) {
-        classification = createNewClassification(project, workflow, subject);
+        const classification = createNewClassification(project, workflow, subject);
+        return Object.assign({}, state, { classification, upcomingSubjects });
       }
-      return Object.assign({}, state, { classification, upcomingSubjects });
+      return Object.assign({}, state, { upcomingSubjects });
     }
     case RESUME_CLASSIFICATION: {
       const { subject } = action.payload;
@@ -102,10 +106,15 @@ export default function reducer(state = initialState, action = {}) {
       return state;
     }
     case RESET_SUBJECTS: {
+      const classification = null;
       const upcomingSubjects = state.upcomingSubjects.slice();
       upcomingSubjects.forEach(subject => subject.destroy());
       upcomingSubjects.splice(0);
-      return Object.assign({}, initialState);
+      return Object.assign({}, state, { classification, upcomingSubjects });
+    }
+    case SET_WORKFLOW: {
+      const { workflow } = action.payload;
+      return Object.assign({}, state, { workflow });
     }
     default:
       return state;
@@ -149,17 +158,17 @@ export function fetchSubjects(workflow) {
     }));
 }
 
-export function createClassification(project, workflow) {
+export function createClassification(project) {
   return {
     type: CREATE_CLASSIFICATION,
-    payload: { project, workflow }
+    payload: { project }
   };
 }
 
-export function nextSubject(project, workflow) {
+export function nextSubject(project) {
   return {
     type: NEXT_SUBJECT,
-    payload: { project, workflow }
+    payload: { project }
   };
 }
 
@@ -177,6 +186,13 @@ export function resumeClassification(classification) {
         payload: { subject }
       });
     });
+  };
+}
+
+export function setWorkflow(workflow) {
+  return {
+    type: SET_WORKFLOW,
+    payload: { workflow }
   };
 }
 

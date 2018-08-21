@@ -1,15 +1,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../lib/is-admin';
+import * as classifierActions from '../../redux/ducks/classify';
+import * as translationActions from '../../redux/ducks/translations';
 
 class WorkflowSelection extends React.Component {
   constructor() {
     super();
     this.state = {
       error: null,
-      loadingSelectedWorkflow: true,
-      workflow: null
+      loadingSelectedWorkflow: true
     };
   }
 
@@ -21,10 +24,10 @@ class WorkflowSelection extends React.Component {
     const { preferences } = nextProps;
     const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
     if (userSelectedWorkflow &&
-      this.state.workflow
+      this.props.workflow
     ) {
       if (!nextState.loadingSelectedWorkflow &&
-        userSelectedWorkflow !== this.state.workflow.id
+        userSelectedWorkflow !== this.props.workflow.id
       ) {
         this.getSelectedWorkflow(nextProps);
       }
@@ -36,7 +39,7 @@ class WorkflowSelection extends React.Component {
       this.getSelectedWorkflow(this.props);
     }
     if (prevProps.translations.locale !== this.props.translations.locale) {
-      this.props.actions.translations.load('workflow', this.state.workflow.id, this.props.translations.locale);
+      this.props.actions.translations.load('workflow', this.props.workflow.id, this.props.translations.locale);
     }
   }
 
@@ -110,8 +113,9 @@ class WorkflowSelection extends React.Component {
     return awaitWorkflow
     .then((workflow) => {
       if (workflow) {
-        this.setState({ loadingSelectedWorkflow: false, workflow });
+        this.setState({ loadingSelectedWorkflow: false });
         actions.translations.load('workflow', workflow.id, translations.locale);
+        actions.classifier.setWorkflow(workflow);
       } else {
         if (process.env.BABEL_ENV !== 'test') console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
         if (this.props.project.configuration &&
@@ -187,8 +191,8 @@ class WorkflowSelection extends React.Component {
   }
 
   render() {
-    const { translation } = this.props;
-    const { loadingSelectedWorkflow, workflow } = this.state;
+    const { translation, workflow } = this.props;
+    const { loadingSelectedWorkflow } = this.state;
     if (loadingSelectedWorkflow) {
       return <p>Loading workflow.</p>
     } else {
@@ -217,7 +221,8 @@ WorkflowSelection.defaultProps = {
   translations: {
     locale: 'en'
   },
-  user: null
+  user: null,
+  workflow: null
 };
 
 WorkflowSelection.propTypes = {
@@ -251,6 +256,9 @@ WorkflowSelection.propTypes = {
   }),
   translations: PropTypes.shape({
     locale: PropTypes.string
+  }),
+  workflow: PropTypes.shape({
+    id: PropTypes.string
   })
 };
 
@@ -258,4 +266,16 @@ WorkflowSelection.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default WorkflowSelection;
+const mapStateToProps = state => ({
+  workflow: state.classify.workflow
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    classifier: bindActionCreators(classifierActions, dispatch),
+    translations: bindActionCreators(translationActions, dispatch)
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(WorkflowSelection);
+export { WorkflowSelection };
