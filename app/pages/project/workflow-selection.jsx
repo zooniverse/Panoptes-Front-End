@@ -113,9 +113,9 @@ class WorkflowSelection extends React.Component {
     return awaitWorkflow
     .then((workflow) => {
       if (workflow) {
-        this.setState({ loadingSelectedWorkflow: false });
         actions.translations.load('workflow', workflow.id, translations.locale);
         actions.classifier.setWorkflow(workflow);
+        this.setState({ loadingSelectedWorkflow: false });
       } else {
         if (process.env.BABEL_ENV !== 'test') console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
         if (this.props.project.configuration &&
@@ -193,10 +193,10 @@ class WorkflowSelection extends React.Component {
   render() {
     const { translation, workflow } = this.props;
     const { loadingSelectedWorkflow } = this.state;
-    if (loadingSelectedWorkflow) {
-      return <p>Loading workflow.</p>
-    } else {
+    if (workflow && !loadingSelectedWorkflow) {
       return React.cloneElement(this.props.children, { translation, loadingSelectedWorkflow, workflow });
+    } else {
+      return <p>Loading workflow.</p>
     }
   }
 }
