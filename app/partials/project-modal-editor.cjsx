@@ -12,6 +12,9 @@ handleInputChange = require '../lib/handle-input-change'
 alert = require('../lib/alert').default
 confirm = require('../lib/confirm').default
 
+IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'svg']
+VIDEO_EXTENSIONS = ['mp4']
+
 ProjectModalStepEditor = createReactClass
   getDefaultProps: ->
     step: null
@@ -30,8 +33,13 @@ ProjectModalStepEditor = createReactClass
     <div className="project-modal-step-editor">
       <p>
         {if @props.media?
+          srcExtension = @props.media.src.split('.').pop().toLowerCase()
           <span>
-            <img className="project-modal-step-editor-media" src={@props.media.src} />{' '}
+            {if IMAGE_EXTENSIONS.includes(srcExtension)
+                <img className="project-modal-step-editor-media" src={@props.media.src} />}
+            {if VIDEO_EXTENSIONS.includes(srcExtension)
+              <video className="project-modal-step-editor-media" controls src={@props.media.src} />}
+            {' '}
             <button type="button" className="minor-button" onClick={@props.onMediaClear}>Clear</button>
           </span>}{' '}
         <FileButton className="standard-button" onSelect={@handleMediaChange}>Select media</FileButton>
