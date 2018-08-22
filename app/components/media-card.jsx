@@ -13,7 +13,13 @@ const MediaCard = ({ children, className, src, style }) => {
     renderType = <Thumbnail alt="" className="media-card-media" width={800} src={src} />;
   } else if (VIDEO_EXTENSIONS.includes(srcExtension)) {
     renderType = (
-      <video className="media-card-media" src={src}>
+      <video
+        className="media-card-media"
+        autoPlay
+        loop
+        controls
+        src={src}
+      >
         <p>Your browser does not support this video format.</p>
       </video>
     );
