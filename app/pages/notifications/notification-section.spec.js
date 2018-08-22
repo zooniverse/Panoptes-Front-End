@@ -30,7 +30,11 @@ describe('Notification Section', function() {
 
   before(function () {
     sinon.stub(NotificationSection.prototype, 'getUnreadCount').callsFake(() => null);
-  })
+  });
+
+  after(function () {
+    NotificationSection.prototype.getUnreadCount.restore();
+  });
 
   describe('it can display a Zooniverse section', function () {
     beforeEach(function () {

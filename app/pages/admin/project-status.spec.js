@@ -53,6 +53,8 @@ describe('ProjectStatus', function () {
     onChangeWorkflowLevelStub.restore();
     handleDialogCancelStub.restore();
     handleDialogSuccessStub.restore();
+    ProjectStatus.prototype.getProject.restore();
+    ProjectStatus.prototype.getWorkflows.restore();
   });
 
   it('renders without crashing', function () {

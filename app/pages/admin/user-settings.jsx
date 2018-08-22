@@ -79,7 +79,6 @@ UserSettings.propTypes = {
 };
 
 UserSettings.defaultProps = {
-  editUser: null,
   params: {},
   user: null
 };
