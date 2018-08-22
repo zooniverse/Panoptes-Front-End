@@ -57,9 +57,14 @@ describe('Notification Section', function() {
   });
 
   describe('it correctly displays a project', function () {
-    beforeEach(function () {
+    before(function () {
+      sinon.stub(NotificationSection.prototype, 'componentWillMount').callsFake(() => null);
       wrapper = shallow(<NotificationSection />);
       wrapper.setState({ name: 'Testing' });
+    });
+
+    after(function () {
+      NotificationSection.prototype.componentWillMount.restore();
     });
 
     it('should display the correct title', function () {
