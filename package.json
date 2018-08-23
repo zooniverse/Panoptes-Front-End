@@ -57,7 +57,7 @@
     "swipe-js-iso": "~2.0.1",
     "uuid": "~3.1.0",
     "visible-element": "~1.0.1",
-    "whatwg-url": "~6.4.0"
+    "whatwg-url": "~7.0.0"
   },
   "devDependencies": {
     "babel-cli": "~6.26.0",
