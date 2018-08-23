@@ -554,7 +554,9 @@ Classifier.defaultProps = {
       dismiss: () => true
     }
   },
-  classification: {},
+  classification: {
+    annotations: []
+  },
   classificationCount: 0,
   demoMode: false,
   feedback: {
@@ -564,13 +566,16 @@ Classifier.defaultProps = {
     notifications: []
   },
   minicourse: null,
+  onClickNext: () => null,
   onComplete: () => Promise.resolve(),
   preferences: null,
   project: {},
   onLoad: Function.prototype,
   onChangeDemoMode: Function.prototype,
   splits: null,
-  subject: {},
+  subject: {
+    locations: []
+  },
   tutorial: null,
   user: null,
   workflow: {

@@ -151,7 +151,7 @@ Highlighter.propTypes = {
   annotation: PropTypes.shape({
     _toolIndex: PropTypes.number,
     task: PropTypes.string
-  }).isRequired,
+  }),
   onChange: PropTypes.func,
   showRequiredNotice: PropTypes.bool,
   task: PropTypes.shape({
@@ -167,3 +167,14 @@ Highlighter.propTypes = {
   })
 };
 
+Highlighter.defaultProps = {
+  annotation: {
+    value: []
+  },
+  task: {
+    help: '',
+    highlighterLabels: [],
+    instruction: 'Highlight the text',
+    type: 'highlighter'
+  }
+}

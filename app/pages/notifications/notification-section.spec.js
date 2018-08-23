@@ -1,5 +1,6 @@
 import React from 'react';
 import assert from 'assert';
+import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import NotificationSection from './notification-section';
 
@@ -27,6 +28,14 @@ const notifications = [
 describe('Notification Section', function() {
   let wrapper;
 
+  before(function () {
+    sinon.stub(NotificationSection.prototype, 'getUnreadCount').callsFake(() => null);
+  });
+
+  after(function () {
+    NotificationSection.prototype.getUnreadCount.restore();
+  });
+
   describe('it can display a Zooniverse section', function () {
     beforeEach(function () {
       wrapper = shallow(
@@ -48,9 +57,14 @@ describe('Notification Section', function() {
   });
 
   describe('it correctly displays a project', function () {
-    beforeEach(function () {
+    before(function () {
+      sinon.stub(NotificationSection.prototype, 'componentWillMount').callsFake(() => null);
       wrapper = shallow(<NotificationSection />);
       wrapper.setState({ name: 'Testing' });
+    });
+
+    after(function () {
+      NotificationSection.prototype.componentWillMount.restore();
     });
 
     it('should display the correct title', function () {

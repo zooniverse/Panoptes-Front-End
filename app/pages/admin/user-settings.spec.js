@@ -1,12 +1,21 @@
 import React from 'react';
 import assert from 'assert';
+import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import UserSettings from './user-settings';
 
 describe('UserSettings', function () {
   let wrapper;
-  let user = {id: 1, login: "tester"};
-  let editUser = {id: 2, login: 'volunteer'};
+  let user = {id: '1', login: "tester"};
+  let editUser = {id: '2', login: 'volunteer'};
+
+  before(function () {
+    sinon.stub(UserSettings.prototype, 'getUser').callsFake(() => null);
+  });
+
+  after(function () {
+    UserSettings.prototype.getUser.restore();
+  });
 
   it('errors when no user found', function () {
     wrapper = shallow(<UserSettings user={user} />);

@@ -137,6 +137,7 @@ export class DetailsSubTaskForm extends React.Component {
                 
                 return (
                   <TaskComponent
+                    key={detailTask._key}
                     autoFocus={i === 0}
                     task={detailTask}
                     translation={detailTranslation}

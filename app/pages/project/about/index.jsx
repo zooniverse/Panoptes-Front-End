@@ -93,7 +93,7 @@ class AboutProject extends Component {
       <div className="project-about-page">
         <Helmet title={`${this.props.translation.display_name} » ${counterpart('project.about.header')}`} />
         <AboutNav pages={pages} projectPath={`/projects/${project.slug}`} />
-        {React.cloneElement(children, { project, pages, team })}
+        {children ? React.cloneElement(children, { project, pages, team }) : null}
       </div>
     );
   }

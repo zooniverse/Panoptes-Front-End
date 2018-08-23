@@ -87,7 +87,7 @@ export default class TextTask extends React.Component {
 
   handleResize() {
     const oldRows = this.state.rows;
-    let newRows = Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT);
+    let newRows = this.textInput.current ? Math.floor(this.textInput.current.scrollHeight / LINEHEIGHT) : oldRows;
     newRows = Math.max(newRows, 1);
 
     if (newRows !== oldRows) {

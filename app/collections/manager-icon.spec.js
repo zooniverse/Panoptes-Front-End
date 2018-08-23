@@ -11,10 +11,20 @@ const subject = {
   id: '3632'
 };
 
+const user = {
+  id: '1'
+}
+
 describe('<CollectionsManagerIcon />', function() {
   let wrapper;
   before(function() {
-    wrapper = shallow(<CollectionsManagerIcon className="icon" project={project} subject={subject} />);
+    wrapper = shallow(
+      <CollectionsManagerIcon
+        className="icon"
+        project={project}
+        subject={subject}
+        user={user}
+      />);
   });
 
   it('renders without crashing', function() {

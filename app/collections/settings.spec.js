@@ -13,14 +13,16 @@ const collectionWithDefaultSubject = {
   default_subject_src: 'subject.png',
   display_name: 'A collection',
   private: false,
-  slug: 'username/a-collection'
+  slug: 'username/a-collection',
+  listen: sinon.spy()
 };
 
 const collectionWithoutDefaultSubject = {
   id: '1',
   display_name: 'A collection',
   private: false,
-  slug: 'username/a-collection'
+  slug: 'username/a-collection',
+  listen: sinon.spy()
 };
 
 describe('<CollectionSettings />', function () {

@@ -37,11 +37,11 @@ class SVGImage extends React.Component {
   fixWeirdSize() {
     const image = this.refs.image;
 
-    if (this.props.width && image.width === this.props.width) {
+    if (this.props.width && image && image.width === this.props.width) {
       image.setAttribute('width', this.props.width);
     }
 
-    if (this.props.height && image.height === this.props.height) {
+    if (this.props.height && image && image.height === this.props.height) {
       image.setAttribute('height', this.props.height);
     }
   }

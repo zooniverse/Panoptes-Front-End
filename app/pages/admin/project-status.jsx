@@ -312,4 +312,8 @@ ProjectStatus.propTypes = {
   })
 };
 
+ProjectStatus.defaultProps = {
+  params: {}
+};
+
 export default ProjectStatus;

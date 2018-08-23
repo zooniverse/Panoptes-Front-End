@@ -61,7 +61,7 @@ class ClassificationQueue {
           }
         })
         .catch((error) => {
-          console.error('Failed to save a queued classification:', error);
+          if (process.env.BABEL_ENV !== 'test') console.error('Failed to save a queued classification:', error);
 
           if (error.status === 422) {
             console.error('Dropping malformed classification permanently', classificationData);

@@ -10,4 +10,4 @@ module.exports = (subject) ->
           .catch (error) ->
             console.error error
       else
-        console.warn "Not sure how to load subject #{subject.id}'s location of type #{type} (#{src})"
+        console.warn "Not sure how to load subject #{subject.id}'s location of type #{type} (#{src})" unless process.env.BABEL_ENV is 'test' 

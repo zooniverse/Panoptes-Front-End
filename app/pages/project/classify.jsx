@@ -416,6 +416,12 @@ ProjectClassifyPage.propTypes = {
   workflow: PropTypes.object
 };
 
+ProjectClassifyPage.defaultProps = {
+  location: {
+    query: {}
+  }
+};
+
 
 // For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject;
