@@ -50,20 +50,30 @@ class ProjectFilteringInterface extends Component {
       error: null,
       loading: true,
     });
+    const tags = discipline || undefined;
+    sort = sort || this.props.sort;
+    const page_size = sort === 'completeness' && page === '1' ? 38 : pageSize;
+    const launch_approved = apiClient.params.admin ? null : true;
     const query = {
-      tags: discipline || undefined,
+      tags,
       page,
-      sort: sort || this.props.sort,
-      launch_approved: !apiClient.params.admin ? true : null,
+      sort,
+      launch_approved,
       cards: true,
       include: ['avatar'],
       state: status,
-      page_size: pageSize,
+      page_size
     };
     if (!query.tags) {
       delete query.tags;
     }
     apiClient.type('projects').get(query)
+      .then((projects) => {
+        if (query.sort === 'completeness') {
+          return projects.filter(project => !!project.completeness || project.classifications_count > 0);
+        }
+        return projects;
+      })
       .then((projects) => {
         if (projects.length > 0) {
           const hasMeta = (projects[0] !== null && projects[0].getMeta() !== null);
