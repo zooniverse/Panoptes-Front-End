@@ -14,6 +14,7 @@ confirm = require('../lib/confirm').default
 
 IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'svg']
 VIDEO_EXTENSIONS = ['mp4']
+MAX_FILE_SIZE = 1000 * 1024;
 
 ProjectModalStepEditor = createReactClass
   getDefaultProps: ->
@@ -245,26 +246,30 @@ ProjectModalEditorController = createReactClass
 
   handleStepMediaChange: (index, file) ->
     @handleStepMediaClear index
+    uploadSize = parseInt(file.size / 1024)
+    maxSize = parseInt(MAX_FILE_SIZE / 1024)
+    shouldUpload = (file.size < MAX_FILE_SIZE) || window.confirm("This file is #{uploadSize}kB. Large files will make your project slow to load for volunteers. We recommend keeping your files smaller than #{maxSize}kB. Continue to upload #{file.name}?")
+    
+    if shouldUpload
+      payload =
+        media:
+          content_type: file.type
+          metadata:
+            filename: file.name
 
-    payload =
-      media:
-        content_type: file.type
-        metadata:
-          filename: file.name
-
-    apiClient.post @props.projectModal._getURL('attached_images'), payload
-      .then (media) =>
-        media = [].concat(media)[0]
-        putFile media.src, file, {'Content-Type': file.type}
-          .then =>
-            changes = {}
-            changes["steps.#{index}.media"] = media.id
-            @props.projectModal.update changes
-            @props.projectModal.save()
-              .then =>
-                @fetchMediaFor @props.projectModal
-      .catch (error) =>
-        console.error error
+      apiClient.post @props.projectModal._getURL('attached_images'), payload
+        .then (media) =>
+          media = [].concat(media)[0]
+          putFile media.src, file, {'Content-Type': file.type}
+            .then =>
+              changes = {}
+              changes["steps.#{index}.media"] = media.id
+              @props.projectModal.update changes
+              @props.projectModal.save()
+                .then =>
+                  @fetchMediaFor @props.projectModal
+        .catch (error) =>
+          console.error error
 
   handleStepMediaClear: (index) ->
     @state.media[@props.projectModal.steps[index].media]?.delete()
