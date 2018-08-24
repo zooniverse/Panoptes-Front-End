@@ -381,6 +381,7 @@ class Classifier extends React.Component {
             {showIntervention &&
               <Intervention
                 notifications={interventions.notifications}
+                user={user}
               />
             }
             {currentTaskKey &&
