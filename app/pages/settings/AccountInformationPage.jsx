@@ -41,6 +41,21 @@ export default function AccountInformationPage(props) {
               />
             </AutoSave>
             <span className="form-help">{counterpart('userSettings.account.realNameHelp')}</span>
+            <br />
+            <AutoSave resource={props.user}>
+              <label className="form-label">
+                <input
+                  type="checkbox"
+                  className="standard-input"
+                  name="intervention_notifications"
+                  checked={props.user.intervention_notifications}
+                  onChange={handleInputChange.bind(props.user)}
+                />
+                {counterpart('userSettings.account.interventions')}
+              </label>
+            </AutoSave>
+            <br />
+            <span className="form-help">{counterpart('userSettings.account.interventionsHelp')}</span>
           </p>
         </div>
       </div>
