@@ -262,13 +262,14 @@ class Classifier extends React.Component {
   }
 
   completeClassification(e) {
+    const { classification, onComplete, interventions, project, subject, user, workflow } = this.props;
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
     // don't swallow cmd-click on links
     if (!isCmdClick) {
       e.preventDefault();
     }
-    this.props.classification.update({
+    classification.update({
       annotations: this.processAnnotations(this.state.annotations.slice()),
       'metadata.session': getSessionID(),
       'metadata.finished_at': (new Date()).toISOString(),
@@ -282,15 +283,16 @@ class Classifier extends React.Component {
     let workflowHistory = this.state.workflowHistory.slice();
     const taskKey = workflowHistory[workflowHistory.length - 1];
 
-    const showIntervention = (this.props.interventions.notifications.length > 0);
-    const showSummary = !this.props.workflow.configuration.hide_classification_summaries ||
+    const showIntervention = user &&
+      user.intervention_notifications &&
+      (interventions.notifications.length > 0);
+    const showSummary = !workflow.configuration.hide_classification_summaries ||
       this.subjectIsGravitySpyGoldStandard();
     const showLastStep = showIntervention || showSummary;
 
-    const { onComplete, project, subject } = this.props;
     return this.checkForFeedback(taskKey)
       .then(() => {
-        this.props.classification.update({ completed: true });
+        classification.update({ completed: true });
         if (!showIntervention && !isCmdClick && originalElement.href) {
           const subjectTalkPath = `/projects/${project.slug}/talk/subjects/${subject.id}`;
           browserHistory.push(subjectTalkPath);
@@ -320,7 +322,7 @@ class Classifier extends React.Component {
   }
 
   render() {
-    const { interventions } = this.props;
+    const { interventions, user } = this.props;
     const { showIntervention, showSummary, workflowHistory } = this.state;
     const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
