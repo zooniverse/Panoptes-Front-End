@@ -62,11 +62,11 @@ class CustomiseProfile extends React.Component {
 
   render() {
     const { avatar, avatarError, profile_header, profile_headerError } = this.state;
-    const placeholder = <p className="content-container">{counterpart('userSettings.profile.dropImage')}</p>;
+    const placeholder = <Translate className="content-container" content="userSettings.profile.dropImage" component="p" />;
     return (
       <div>
         <div className="content-container">
-          <h3>{counterpart('userSettings.profile.changeAvatar')}</h3>
+          <Translate content="userSettings.profile.changeAvatar" component="h3" />
           <div>
             <Translate
               content="userSettings.profile.avatarImageHelp"
@@ -98,7 +98,7 @@ class CustomiseProfile extends React.Component {
         </div>
         <hr />
         <div className="content-container">
-          <h3>{counterpart('userSettings.profile.changeProfileHeader')}</h3>
+          <Translate content="userSettings.profile.changeProfileHeader" component="h3" />
           <div>
             <Translate
               content="userSettings.profile.profileHeaderImageHelp"
