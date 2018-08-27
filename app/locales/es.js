@@ -573,6 +573,15 @@ export default {
         doesntMatch: 'These don’t match',
         change: 'Change'
       }
+    },
+    profile: {
+      dropImage: 'Drop an image here (or click to select).',
+      changeAvatar: 'Change avatar',
+      avatarImageHelp: 'Drop an image here (square, less than %(size)s KB)',
+      clearAvatar: 'Clear avatar',
+      changeProfileHeader: 'Change profile header',
+      profileHeaderImageHelp: 'Drop an image here (any dimensions, less than %(size)s KB)',
+      clearHeader: 'Clear header'
     }
   }
 };

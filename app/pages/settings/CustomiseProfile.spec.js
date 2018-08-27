@@ -2,7 +2,7 @@ import React from 'react';
 import assert from 'assert';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
-import CustomiseProfile from './profile';
+import CustomiseProfile from './CustomiseProfile';
 
 const resources = {
   avatar: {
