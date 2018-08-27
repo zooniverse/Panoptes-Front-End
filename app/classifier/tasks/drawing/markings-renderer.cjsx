@@ -37,6 +37,7 @@ module.exports = createReactClass
 
   render: ->
     skippedMarks = 0
+    drawingInProgress = false
     <g>
       {for annotation in @props.annotations
         annotation._key ?= Math.random()
@@ -55,6 +56,7 @@ module.exports = createReactClass
 
               mark._key ?= Math.random()
               currentAnnotation = @props.annotations[@props.annotations.length - 1]
+              drawingInProgress = @state.selection?._inProgress and mark isnt @state.selection
 
               if skippedMarks < currentAnnotation._hideMarksBefore
                 skippedMarks += 1
@@ -82,7 +84,7 @@ module.exports = createReactClass
               toolEnv =
                 containerRect: @props.containerRect
                 scale: scale
-                disabled: isPriorAnnotation
+                disabled: isPriorAnnotation || drawingInProgress
                 selected: mark is @state.selection and not isPriorAnnotation
                 getEventOffset: @props.getEventOffset
                 preferences: @props.preferences
