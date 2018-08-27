@@ -13,7 +13,7 @@
     "drag-reorderable": "~0.2.0",
     "engine.io-client": "~3.2.1",
     "events": "~1.1.1",
-    "hash.js": "~1.0.3",
+    "hash.js": "~1.1.5",
     "he": "~1.1.0",
     "history": "~3.0.0",
     "json-api-client": "~4.0.0",
