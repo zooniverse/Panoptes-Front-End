@@ -31,8 +31,8 @@ module.exports = createReactClass
       value: []
 
     isAnnotationComplete: (task, annotation) ->
-      # Booleans compare to numbers as expected: true = 1, false = 0.
-      annotation.value.length >= (task.required ? 0) and not annotation._choiceInProgress
+      minRequiredAnswers = if task.required then 1 else 0
+      annotation.value.length >= minRequiredAnswers and not annotation._choiceInProgress
 
   getDefaultProps: ->
     task: null
