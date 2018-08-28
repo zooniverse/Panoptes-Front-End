@@ -40,7 +40,7 @@
     "react-router-scroll": "~0.4.4",
     "react-select": "1.0.0-rc.10",
     "react-sizeme": "~2.4.2",
-    "react-sizes": "~0.4.3",
+    "react-sizes": "~1.0.4",
     "react-translate-component": "~0.15.1",
     "redux": "~3.6.0",
     "redux-thunk": "~2.2.0",
