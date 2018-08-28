@@ -45,16 +45,21 @@ class Choices extends React.Component {
   }
 
   whatSizeThumbnails({ length }) {
-    if (length <= 5) {
-      return 'large';
-    } else if (length <= 10) {
-      return 'medium';
-    } else if (length <= 20) {
+    if (this.props.task.alwaysShowThumbnails) {
       return 'small';
-    } else if (this.props.task.alwaysShowThumbnails) {
-      return 'small';
-    } else {
+    }
+    if (length > 30) {
       return 'none';
+    }
+    switch (this.howManyColumns({ length })) {
+      case 1:
+        return 'large';
+      case 2:
+        return 'medium';
+      case 3:
+        return 'small';
+      default:
+        return 'none';
     }
   }
 
