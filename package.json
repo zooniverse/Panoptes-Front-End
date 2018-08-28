@@ -24,7 +24,7 @@
     "moment": "~2.21.0",
     "panoptes-client": "~2.10.0",
     "papaparse": "github:mholt/PapaParse#cada171",
-    "polished": "~1.9.2",
+    "polished": "~2.0.3",
     "prop-types": "~15.6.0",
     "pusher-js": "~3.2.1",
     "qs": "~6.0.2",
