@@ -3,7 +3,7 @@ import assert from 'assert';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
-import WorkflowSelection from './workflow-selection';
+import { WorkflowSelection } from './workflow-selection';
 
 function StubPage() {
   return <p>Hello</p>;
