@@ -21,7 +21,7 @@
     "markdownz": "~7.6.3",
     "mocha": "~5.2.0",
     "modal-form": "~2.6.1",
-    "moment": "~2.21.0",
+    "moment": "~2.22.2",
     "panoptes-client": "~2.10.0",
     "papaparse": "github:mholt/PapaParse#cada171",
     "polished": "~2.0.3",
