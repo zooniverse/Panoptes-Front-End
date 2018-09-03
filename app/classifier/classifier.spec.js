@@ -334,4 +334,21 @@ describe('Classifier', function () {
       })
     });
   });
+
+  describe('on unmount', function () {
+    const actions = {
+      classify: {
+        saveAnnotations: sinon.stub().callsFake(() => null)
+      }
+    };
+
+    before(function () {
+      wrapper.setProps({ actions });
+      wrapper.unmount();
+    });
+
+    it('should save any annotations in progress', function () {
+      expect(actions.classify.saveAnnotations.callCount).to.equal(1);
+    });
+  });
 });
