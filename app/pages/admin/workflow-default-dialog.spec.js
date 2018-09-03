@@ -3,6 +3,7 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import WorkflowDefaultDialog from './workflow-default-dialog';
+import Dialog from 'modal-form/dialog';
 
 describe('WorkflowDefaultDialog', function () {
   let wrapper;
@@ -16,7 +17,7 @@ describe('WorkflowDefaultDialog', function () {
   });
 
   it('renders without crashing', function () {
-    const WorkflowDefaultDialogContainer = wrapper.find('div').first();
+    const WorkflowDefaultDialogContainer = wrapper.find(Dialog);
     assert.equal(WorkflowDefaultDialogContainer.length, 1);
   });
 
