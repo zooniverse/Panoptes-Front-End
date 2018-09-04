@@ -56,8 +56,9 @@ const initialState = {
   workflow: null
 };
 
-const ADD_SUBJECTS = 'pfe/classify/ADD_SUBJECTS';
+const APPEND_SUBJECTS = 'pfe/classify/APPEND_SUBJECTS';
 const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
+const PREPEND_SUBJECTS = 'pfe/classify/PREPEND_SUBJECTS';
 const CREATE_CLASSIFICATION = 'pfe/classify/CREATE_CLASSIFICATION';
 const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
 const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
@@ -66,7 +67,7 @@ const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case ADD_SUBJECTS: {
+    case APPEND_SUBJECTS: {
       const { subjects, workflowID } = action.payload;
       const { workflow } = state;
       if (workflow && workflow.id === workflowID) {
@@ -98,6 +99,17 @@ export default function reducer(state = initialState, action = {}) {
       }
       return Object.assign({}, state, { upcomingSubjects });
     }
+    case PREPEND_SUBJECTS: {
+      const { subjects, workflowID } = action.payload;
+      const { workflow } = state;
+      if (workflow && workflow.id === workflowID) {
+        const upcomingSubjects = state.upcomingSubjects.slice();
+        const currentSubject = upcomingSubjects.shift();
+        upcomingSubjects.unshift(currentSubject, ...subjects);
+        return Object.assign({}, state, { upcomingSubjects });
+      }
+      return state;
+    }
     case RESUME_CLASSIFICATION: {
       const { subject } = action.payload;
       const isCurrentSubject = state.upcomingSubjects[0] &&
@@ -124,9 +136,20 @@ export default function reducer(state = initialState, action = {}) {
       return state;
   }
 }
-export function addSubjects(subjects, workflowID) {
+
+export function appendSubjects(subjects, workflowID) {
   return {
-    type: ADD_SUBJECTS,
+    type: APPEND_SUBJECTS,
+    payload: {
+      subjects,
+      workflowID
+    }
+  };
+}
+
+export function prependSubjects(subjects, workflowID) {
+  return {
+    type: PREPEND_SUBJECTS,
     payload: {
       subjects,
       workflowID
@@ -164,7 +187,7 @@ export function fetchSubjects(workflow) {
       return subjectsToLoad;
     })
     .then(subjects => dispatch({
-      type: ADD_SUBJECTS,
+      type: APPEND_SUBJECTS,
       payload: {
         subjects,
         workflowID: workflow.id

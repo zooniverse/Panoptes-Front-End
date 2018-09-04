@@ -1,6 +1,6 @@
 import apiClient from 'panoptes-client/lib/api-client';
 import { sugarClient } from 'panoptes-client/lib/sugar';
-import { addSubjects } from './classify';
+import { prependSubjects } from './classify';
 
 const ADD_NOTIFICATION = 'pfe/interventions/ADD_NOTIFICATION';
 const DISMISS_NOTIFICATION = 'pfe/interventions/DISMISS_NOTIFICATION';
@@ -66,7 +66,7 @@ export function notify(notification) {
         return [];
       })
       .then((subjects) => {
-        dispatch(addSubjects(subjects, workflowID));
+        dispatch(prependSubjects(subjects, workflowID));
       });
     };
   } else {
