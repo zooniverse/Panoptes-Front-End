@@ -105,23 +105,29 @@ describe('Classifier', function () {
     before(function () {
       wrapper = shallow(<Classifier />, mockReduxStore);
     });
-    it('should preserve annotations from an incomplete classification', function () {
-      const newProps = { classification, subject };
-      wrapper.setProps(newProps);
-      const state = wrapper.state();
-      expect(state.annotations).to.deep.equal(classification.annotations);
-      expect(state.workflowHistory).to.deep.equal(['T0', 'T1']);
+
+    describe('with annotations', function () {
+      it('should resume work in progress', function () {
+        const newProps = { classification, subject };
+        wrapper.setProps(newProps);
+        const state = wrapper.state();
+        expect(state.annotations).to.deep.equal(classification.annotations);
+        expect(state.workflowHistory).to.deep.equal(['T0', 'T1']);
+      });
     });
-    it('should reset annotations and workflow history', function () {
-      const newProps = {
-        classification: {
-          annotations: []
+
+    describe('without annotations', function () {
+      it('should reset annotations and workflow history', function () {
+        const newProps = {
+          classification: {
+            annotations: []
+          }
         }
-      }
-      wrapper.setProps(newProps);
-      const state = wrapper.state();
-      expect(state.annotations).to.have.lengthOf(0);
-      expect(state.workflowHistory).to.have.lengthOf(0);
+        wrapper.setProps(newProps);
+        const state = wrapper.state();
+        expect(state.annotations).to.have.lengthOf(0);
+        expect(state.workflowHistory).to.have.lengthOf(0);
+      });
     });
   });
 
