@@ -65,6 +65,10 @@ export function notify(notification) {
         });
         return [];
       })
+      .then(subjects => subjects.map((subject) => {
+        subject.update({ 'metadata.intervention': true });
+        return subject;
+      }))
       .then((subjects) => {
         dispatch(prependSubjects(subjects, workflowID));
       });

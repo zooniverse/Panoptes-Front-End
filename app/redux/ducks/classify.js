@@ -30,6 +30,7 @@ function awaitSubjectSet(workflow) {
 }
 
 function createNewClassification(project, workflow, subject) {
+  const source = subject.metadata.intervention ? 'sugar' : 'api';
   const classification = apiClient.type('classifications').create({
     annotations: [],
     metadata: {
@@ -38,7 +39,8 @@ function createNewClassification(project, workflow, subject) {
       user_agent: navigator.userAgent,
       user_language: counterpart.getLocale(),
       utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
-      subject_dimensions: (subject.locations.map(() => null))
+      subject_dimensions: (subject.locations.map(() => null)),
+      source
     },
     links: {
       project: project.id,
