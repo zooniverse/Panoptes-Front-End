@@ -4,33 +4,34 @@ import filter from 'lodash/filter';
 import every from 'lodash/every';
 import reduce from 'lodash/reduce';
 import MobileSection from './mobile-section';
+import ValidationValue, { convertBooleanToValidation } from './mobile-validations';
 
 const VALID_QUESTION_LENGTH = 200;
 const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'multiple'];
 
 function taskQuestionNotTooLong({ task }) {
-  return task.question ? task.question.length < VALID_QUESTION_LENGTH : false;
+  return convertBooleanToValidation(task.question ? task.question.length < VALID_QUESTION_LENGTH : false);
 }
 
 function taskFeedbackDisabled({ task }) {
-  return !task.feedback || !task.feedback.enabled;
+  return convertBooleanToValidation(!task.feedback || !task.feedback.enabled);
 }
 
 function taskHasTwoAnswers({ task }) {
-  return task.answers ? task.answers.length === 2 : false;
+  return convertBooleanToValidation(task.answers ? task.answers.length === 2 : false);
 }
 
 function workflowFlipbookDisabled({ workflow }) {
-  return (workflow.configuration) ? workflow.configuration.multi_image_mode !== 'flipbook' : true;
+  return convertBooleanToValidation((workflow.configuration) ? workflow.configuration.multi_image_mode !== 'flipbook' : true);
 }
 
 function workflowHasSingleTask({ workflow }) {
-  return filter(workflow.tasks, ({ type }) => type !== 'shortcut').length === 1;
+  return convertBooleanToValidation(filter(workflow.tasks, ({ type }) => type !== 'shortcut').length === 1);
 }
 
 function workflowNotTooManyShortcuts({ task, workflow }) {
   const shortcut = workflow.tasks[task.unlinkedTask];
-  return (shortcut) ? shortcut.answers.length <= 2 : true;
+  return convertBooleanToValidation((shortcut) ? shortcut.answers.length <= 2 : true);
 }
 
 const validatorFns = {
@@ -133,7 +134,7 @@ class MobileSectionContainer extends Component {
       return validationObj;
     }, {});
 
-    const enabled = every(validations, validation => validation);
+    const enabled = every(validations, validation => validation !== ValidationValue.fail);
 
     this.setState({
       enabled,
