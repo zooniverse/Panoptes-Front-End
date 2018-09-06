@@ -81,7 +81,7 @@
     "coffee-react": "~5.0.1",
     "coffeescript": "~2.3.1",
     "copy-webpack-plugin": "~4.5.2",
-    "css-loader": "~0.28.0",
+    "css-loader": "~1.0.0",
     "ejs": "~2.5.7",
     "enzyme": "~3.5.0",
     "enzyme-adapter-react-16": "~1.2.0",
