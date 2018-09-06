@@ -265,6 +265,17 @@ class Classifier extends React.Component {
     const { classification, onComplete, interventions, project, subject, user, workflow } = this.props;
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
+    const annotations = this.state.annotations.slice();
+    let workflowHistory = this.state.workflowHistory.slice();
+    const taskKey = workflowHistory[workflowHistory.length - 1];
+
+    const showIntervention = user &&
+      user.intervention_notifications &&
+      (interventions.notifications.length > 0);
+    const showSummary = !workflow.configuration.hide_classification_summaries ||
+      this.subjectIsGravitySpyGoldStandard();
+    const showLastStep = showIntervention || showSummary;
+
     // don't swallow cmd-click on links
     if (!isCmdClick) {
       e.preventDefault();
@@ -276,19 +287,13 @@ class Classifier extends React.Component {
       'metadata.viewport': {
         width: innerWidth,
         height: innerHeight
+      },
+      'metadata.interventions': {
+        message: showIntervention,
+        opt_in: user && user.intervention_notifications
       }
     });
 
-    const annotations = this.state.annotations.slice();
-    let workflowHistory = this.state.workflowHistory.slice();
-    const taskKey = workflowHistory[workflowHistory.length - 1];
-
-    const showIntervention = user &&
-      user.intervention_notifications &&
-      (interventions.notifications.length > 0);
-    const showSummary = !workflow.configuration.hide_classification_summaries ||
-      this.subjectIsGravitySpyGoldStandard();
-    const showLastStep = showIntervention || showSummary;
 
     return this.checkForFeedback(taskKey)
       .then(() => {
