@@ -9,6 +9,9 @@ module.exports = {
   entry: [
     path.join(__dirname, 'app/main.cjsx'),
   ],
+  optimization: {
+    noEmitOnErrors: true
+  },
   output: {
     publicPath: '/',
     path: path.join(__dirname, '/dist'),
@@ -33,7 +36,6 @@ module.exports = {
       inject: 'body',
       filename: 'index.html',
     }),
-    new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin({
       filename: '[name]-[contenthash].css',
       allChunks: true,
@@ -75,7 +77,7 @@ module.exports = {
     }, {
       test: /\.css$/,
       use: ExtractTextPlugin.extract({
-        fallback: 'style-loader', 
+        fallback: 'style-loader',
         use: {
           loader: 'css-loader',
           options: { root: '../public' }
@@ -84,7 +86,7 @@ module.exports = {
     }, {
       test: /\.styl$/,
       loader: ExtractTextPlugin.extract({
-        fallback: 'style-loader', 
+        fallback: 'style-loader',
         use: [{
           loader: 'css-loader',
           options: { root: '../public' },
