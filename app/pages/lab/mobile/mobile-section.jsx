@@ -123,4 +123,13 @@ class MobileSection extends Component {
   }
 }
 
+MobileSection.propTypes = {
+  validations: PropTypes.shape({
+    workflowQuestionHasOneOrLessImages: PropTypes.func
+  }),
+  enabled: PropTypes.bool,
+  toggleChecked: PropTypes.func,
+  checked: PropTypes.bool
+};
+
 export default MobileSection;
