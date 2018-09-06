@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import map from 'lodash/map';
+import PropTypes from 'prop-types';
+import ValidationValue from './mobile-validations';
 
 counterpart.registerTranslations('en', {
   mobileSection: {
@@ -19,9 +21,11 @@ counterpart.registerTranslations('en', {
       workflowNotTooManyShortcuts: 'Has less than three shortcuts',
       workflowFlipbookDisabled: 'Cannot be a flipbook',
       taskFeedbackDisabled: 'Cannot provide feedback',
+      workflowQuestionHasOneOrLessImages: 'Task question has no more than one image'
     },
     projectEligible: 'Check this box if you think your question fits in this way.  If you have a Yes/No question, we recommend Yes as the first option listed so that it appears on the right.',
     projectIneligible: 'Sorry, but the mobile app will not currently work for this workflow. The following are the requirements for the swipe workflow.',
+    imageWarning: 'It appears that you have more than one image in your task question. While this is allowed for mobile, we will only show the first image.',
     mobileHelp: 'Mobile app:  Check this box if you would like this workflow available in the mobile app',
   }
 });
@@ -31,14 +35,69 @@ const APP_STORE_LINKS = {
   android: 'https://play.google.com/store/apps/details?id=com.zooniversemobile&hl=en'
 };
 
-class MobileSection extends Component {
-  constructor(props) {
-    super(props);
-    this.renderLink = this.renderLink.bind(this);
-    this.renderValidation = this.renderValidation.bind(this);
+const iconFromValidation = (validation) => {
+  switch (validation) {
+    case ValidationValue.pass:
+      return 'fa-check';
+    case ValidationValue.fail:
+      return 'fa-times';
+    case ValidationValue.warning:
+      return 'fa-exclamation-triangle';
+    default:
+      return '';
   }
+};
+
+const iconColorFromValidation = (validation) => {
+  switch (validation) {
+    case ValidationValue.pass:
+      return 'green';
+    case ValidationValue.fail:
+      return 'red';
+    case ValidationValue.warning:
+      return '#FFCC00';
+    default:
+      return '';
+  }
+};
+
+const renderLink = (link, key) => {
+  return (
+    <li key={link}>
+      <small>
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Translate content={`mobileSection.download.${key}`} />
+        </a>
+      </small>
+    </li>
+  );
+};
+
+const renderValidation = (validationValue, validationCheckName) => {
+  const icon = iconFromValidation(validationValue);
+  const color = iconColorFromValidation(validationValue);
+  return (
+    <li key={validationCheckName}>
+      <Translate content={`mobileSection.validations.${validationCheckName}`} component="small" />
+      <i className={`fa ${icon}`} style={{ color }} aria-hidden="true" />
+    </li>
+  );
+};
+
+class MobileSection extends Component {
 
   render() {
+    const warningView = (
+      <p>
+        <i className={'fa fa-exclamation-triangle'} style={{ color: '#FFCC00', paddingRight: 5 }} aria-hidden="true" />
+        <Translate content={'mobileSection.imageWarning'} component="small" />
+      </p>
+    );
+
     const helpTextKey = (this.props.enabled) ? 'projectEligible' : 'projectIneligible';
     return (
       <section>
@@ -49,7 +108,7 @@ class MobileSection extends Component {
 
           <div className="workflow-mobile-form-left-panel">
 
-             <label
+            <label
               className="pill-button"
               htmlFor="mobile_friendly"
             >
@@ -68,8 +127,12 @@ class MobileSection extends Component {
               <Translate content={`mobileSection.${helpTextKey}`} component="small" />
             </p>
 
+            {
+              this.props.validations.workflowQuestionHasOneOrLessImages === ValidationValue.warning ? warningView : null
+            }
+            
             <ul>
-              {map(this.props.validations, this.renderValidation)}
+              {map(this.props.validations, renderValidation)}
             </ul>
 
             <p className="form-help">
@@ -81,7 +144,7 @@ class MobileSection extends Component {
             </p>
 
             <ul>
-              {map(APP_STORE_LINKS, this.renderLink)}
+              {map(APP_STORE_LINKS, renderLink)}
             </ul>
           </div>
 
@@ -92,33 +155,6 @@ class MobileSection extends Component {
         </div>
 
       </section>
-    );
-  }
-
-  renderLink(link, key) {
-    return (
-      <li key={link}>
-        <small>
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Translate content={`mobileSection.download.${key}`} />
-          </a>
-        </small>
-      </li>
-    );
-  }
-
-  renderValidation(value, key) {
-    const icon = (value) ? 'fa-check' : 'fa-times';
-    const color = (value) ? 'green' : 'red';
-    return (
-      <li key={key}>
-        <Translate content={`mobileSection.validations.${key}`} component="small" />
-        <i className={`fa ${icon}`} style={{ color }} aria-hidden="true" />
-      </li>
     );
   }
 }
