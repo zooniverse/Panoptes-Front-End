@@ -25,7 +25,7 @@
     "panoptes-client": "~2.10.0",
     "papaparse": "github:mholt/PapaParse#cada171",
     "polished": "~2.0.3",
-    "prop-types": "~15.6.0",
+    "prop-types": "~15.6.2",
     "pusher-js": "~3.2.1",
     "qs": "~6.5.2",
     "rc-slider": "~8.6.2",
