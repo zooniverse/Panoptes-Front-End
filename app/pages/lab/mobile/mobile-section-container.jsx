@@ -34,13 +34,25 @@ function workflowNotTooManyShortcuts({ task, workflow }) {
   return convertBooleanToValidation((shortcut) ? shortcut.answers.length <= 2 : true);
 }
 
+function workflowQuestionHasOneOrLessImages({ task }) {
+  const markdownQuestion = /!\[[^\]]*](:?\([^)]*\)|\[[^\]]*])/g;
+  let validation = convertBooleanToValidation(false);
+  if (task.question) {
+    const matchArray = task.question.match(markdownQuestion);
+    validation = convertBooleanToValidation(matchArray ? matchArray.length < 2 : true, true);
+  }
+
+  return validation;
+}
+
 const validatorFns = {
   taskQuestionNotTooLong,
   taskFeedbackDisabled,
   taskHasTwoAnswers,
   workflowFlipbookDisabled,
   workflowHasSingleTask,
-  workflowNotTooManyShortcuts
+  workflowNotTooManyShortcuts,
+  workflowQuestionHasOneOrLessImages
 };
 
 class MobileSectionContainer extends Component {
