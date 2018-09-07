@@ -105,9 +105,10 @@ export default function reducer(state = initialState, action = {}) {
       const { subjects, workflowID } = action.payload;
       const { workflow } = state;
       if (workflow && workflow.id === workflowID) {
-        const upcomingSubjects = state.upcomingSubjects.slice();
-        const currentSubject = upcomingSubjects.shift();
-        upcomingSubjects.unshift(currentSubject, ...subjects);
+        const subjectQueue = state.upcomingSubjects.slice();
+        const currentSubject = subjectQueue.shift();
+        subjectQueue.unshift(currentSubject, ...subjects);
+        const upcomingSubjects = subjectQueue.filter(Boolean);
         return Object.assign({}, state, { upcomingSubjects });
       }
       return state;
