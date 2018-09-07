@@ -24,6 +24,9 @@ export default {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
       acceptButton: 'Take me to the next level!',
       declineButton: 'No, thanks'
+    },
+    interventions: {
+      optOut: "Don't show me these messages again."
     }
   },
   project: {

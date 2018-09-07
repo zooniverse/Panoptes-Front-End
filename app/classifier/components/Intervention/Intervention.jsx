@@ -1,22 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import counterpart from 'counterpart';
 
 function Intervention({ notifications, user }) {
   const notification = notifications[notifications.length - 1];
   const { message } = notification.data;
-  function optOut() {
+  const checkbox = React.createRef();
+
+  function onChange() {
+    // Invert the checked value because true means do not send me messages.
     user
-      .update({ intervention_notifications: false })
+      .update({ intervention_notifications: !checkbox.current.checked })
       .save();
   }
   return (
     <div>
       <p>{message}</p>
-      <button
-        onClick={optOut}
-      >
-        Don&apos;t show me these messages again
-      </button>
+      <label>
+        <input
+          ref={checkbox}
+          type="checkbox"
+          onChange={onChange}
+        />
+        {counterpart('classifier.interventions.optOut')}
+      </label>
     </div>
   );
 }
