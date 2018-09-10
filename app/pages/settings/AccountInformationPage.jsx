@@ -41,7 +41,9 @@ export default function AccountInformationPage(props) {
               />
             </AutoSave>
             <span className="form-help">{counterpart('userSettings.account.realNameHelp')}</span>
-            <br />
+          </p>
+          <fieldset>
+            <legend>{counterpart('userSettings.account.interventionsPreferences')}</legend>
             <AutoSave resource={props.user}>
               <label className="form-label">
                 <input
@@ -56,7 +58,7 @@ export default function AccountInformationPage(props) {
             </AutoSave>
             <br />
             <span className="form-help">{counterpart('userSettings.account.interventionsHelp')}</span>
-          </p>
+          </fieldset>
         </div>
       </div>
       <hr />

@@ -980,6 +980,7 @@ export default {
       realNameHelp: 'Public; we’ll use this to give acknowledgement in papers, on posters, etc.',
       interventions: 'Show project intervention notifications.',
       interventionsHelp: 'Allow projects to display messages while you are classifying.',
+      interventionsPreferences: 'Notification preferences',
       changePassword: {
         heading: 'Change your password',
         currentPassword: 'Current password (required)',
