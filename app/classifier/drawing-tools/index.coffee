@@ -4,6 +4,7 @@ module.exports =
   circle: require './circle'
   column: require './column-rectangle'
   ellipse: require './ellipse'
+  fan: require('./components/Fan').default
   freehandLine: require './freehand-line'
   freehandSegmentLine: require './freehand-segment-line'
   freehandSegmentShape: require './freehand-segment-shape'
