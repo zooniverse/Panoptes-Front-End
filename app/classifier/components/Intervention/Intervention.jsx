@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import counterpart from 'counterpart';
+import styled from 'styled-components';
+
+const StyledInterventionMessage = styled.div`
+  padding: 0 2em;
+`;
 
 function Intervention({ notifications, user }) {
   const notification = notifications[notifications.length - 1];
@@ -14,17 +19,18 @@ function Intervention({ notifications, user }) {
       .save();
   }
   return (
-    <div>
+    <StyledInterventionMessage>
       <p>{message}</p>
       <label>
         <input
           ref={checkbox}
+          autoFocus={true}
           type="checkbox"
           onChange={onChange}
         />
         {counterpart('classifier.interventions.optOut')}
       </label>
-    </div>
+    </StyledInterventionMessage>
   );
 }
 
