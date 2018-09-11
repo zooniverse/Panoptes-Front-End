@@ -30,6 +30,7 @@ function awaitSubjectSet(workflow) {
 }
 
 function createNewClassification(project, workflow, subject) {
+  const source = subject.metadata.intervention ? 'sugar' : 'api';
   const classification = apiClient.type('classifications').create({
     annotations: [],
     metadata: {
@@ -38,7 +39,8 @@ function createNewClassification(project, workflow, subject) {
       user_agent: navigator.userAgent,
       user_language: counterpart.getLocale(),
       utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
-      subject_dimensions: (subject.locations.map(() => null))
+      subject_dimensions: (subject.locations.map(() => null)),
+      source
     },
     links: {
       project: project.id,
@@ -56,8 +58,9 @@ const initialState = {
   workflow: null
 };
 
-const ADD_SUBJECTS = 'pfe/classify/ADD_SUBJECTS';
+const APPEND_SUBJECTS = 'pfe/classify/APPEND_SUBJECTS';
 const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
+const PREPEND_SUBJECTS = 'pfe/classify/PREPEND_SUBJECTS';
 const CREATE_CLASSIFICATION = 'pfe/classify/CREATE_CLASSIFICATION';
 const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
 const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
@@ -66,11 +69,15 @@ const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case ADD_SUBJECTS: {
-      const { subjects } = action.payload;
-      const upcomingSubjects = state.upcomingSubjects.slice();
-      upcomingSubjects.push(...subjects);
-      return Object.assign({}, state, { upcomingSubjects });
+    case APPEND_SUBJECTS: {
+      const { subjects, workflowID } = action.payload;
+      const { workflow } = state;
+      if (workflow && workflow.id === workflowID) {
+        const upcomingSubjects = state.upcomingSubjects.slice();
+        upcomingSubjects.push(...subjects);
+        return Object.assign({}, state, { upcomingSubjects });
+      }
+      return state;
     }
     case CREATE_CLASSIFICATION: {
       const { project } = action.payload;
@@ -93,6 +100,18 @@ export default function reducer(state = initialState, action = {}) {
         return Object.assign({}, state, { classification, upcomingSubjects });
       }
       return Object.assign({}, state, { upcomingSubjects });
+    }
+    case PREPEND_SUBJECTS: {
+      const { subjects, workflowID } = action.payload;
+      const { workflow } = state;
+      if (workflow && workflow.id === workflowID) {
+        const subjectQueue = state.upcomingSubjects.slice();
+        const currentSubject = subjectQueue.shift();
+        subjectQueue.unshift(currentSubject, ...subjects);
+        const upcomingSubjects = subjectQueue.filter(Boolean);
+        return Object.assign({}, state, { upcomingSubjects });
+      }
+      return state;
     }
     case RESUME_CLASSIFICATION: {
       const { subject } = action.payload;
@@ -119,6 +138,26 @@ export default function reducer(state = initialState, action = {}) {
     default:
       return state;
   }
+}
+
+export function appendSubjects(subjects, workflowID) {
+  return {
+    type: APPEND_SUBJECTS,
+    payload: {
+      subjects,
+      workflowID
+    }
+  };
+}
+
+export function prependSubjects(subjects, workflowID) {
+  return {
+    type: PREPEND_SUBJECTS,
+    payload: {
+      subjects,
+      workflowID
+    }
+  };
 }
 
 export function emptySubjectQueue() {
@@ -151,9 +190,10 @@ export function fetchSubjects(workflow) {
       return subjectsToLoad;
     })
     .then(subjects => dispatch({
-      type: ADD_SUBJECTS,
+      type: APPEND_SUBJECTS,
       payload: {
-        subjects
+        subjects,
+        workflowID: workflow.id
       }
     }));
 }
