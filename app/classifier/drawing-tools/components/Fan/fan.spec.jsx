@@ -1,6 +1,8 @@
 import React from 'react';
 import sinon from 'sinon';
+import { shallow } from 'enzyme';
 import { expect } from 'chai';
+import DrawingToolRoot from '../../root';
 import Fan from './fan';
 
 describe('Fan Tool', function () {
@@ -51,5 +53,54 @@ describe('Fan Tool', function () {
   it('should finish drawing on initial release', function () {
     const newMark = Fan.initRelease();
     expect(newMark._inProgress).to.be.false;
+  });
+
+  describe('rendered component', function () {
+    let wrapper;
+    const onChange = sinon.stub().callsFake(() => null);
+    const mark = {
+      x: 200,
+      y: 400,
+      radius: 70,
+      rotation: 45,
+      spread: 30
+    };
+
+    before(function () {
+      wrapper = shallow(
+        <Fan
+          mark={mark}
+          getEventOffset={e => e}
+          onChange={onChange}
+          getScreenCurrentTransformationMatrix={() => null}
+          normalizeDifference={() => null}
+          selected={true}
+        />
+      );
+    });
+
+    describe('the rotation drag handle', function () {
+      it('should update rotation angle when dragged', function () {
+        cursors.forEach(function (cursor, i) {
+          wrapper.instance().handleRotate(cursor);
+          expect(onChange.callCount).to.equal(1);
+          const newMark = onChange.getCall(0).args[0];
+          expect(newMark.rotation).to.equal(rotations[i]);
+          onChange.resetHistory();
+        });
+      });
+
+      it('should update radius when dragged', function () {
+        const cursor = {
+          x: 170,
+          y: 360
+        };
+        wrapper.instance().handleRotate(cursor);
+        expect(onChange.callCount).to.equal(1);
+        const newMark = onChange.getCall(0).args[0];
+        expect(newMark.radius).to.equal(50);
+        onChange.resetHistory();
+      });
+    });
   });
 });
