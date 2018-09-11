@@ -91,3 +91,7 @@ module.exports =
     <rect className="shape" x="0" y="0" width="100%" height="100%" strokeDasharray={[10, 10]} />
     <line className="shape" x1="50" y1="0" x2="50" y2="100" />
   </svg>
+
+  fan: <svg viewBox="0 0 100 100">
+    <path d="M 50 95 L 80 33 A 20 20 0 1 0 20 33 Z" />
+  </svg>
