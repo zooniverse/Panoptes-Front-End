@@ -16,7 +16,7 @@ class Fan extends React.Component {
       y,
       radius: 0,
       rotation: 0,
-      spread: 15
+      spread: 30
     };
   }
 
@@ -65,7 +65,7 @@ class Fan extends React.Component {
     const deltaY = y - mark.y;
     const deltaX = x - mark.x;
     const cursorAngle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-    const spread = Math.abs(cursorAngle - mark.rotation);
+    const spread = 2 * Math.abs(cursorAngle - mark.rotation);
     const newMark = Object.assign({}, mark, { spread });
     this.props.onChange(newMark);
   }
@@ -73,7 +73,7 @@ class Fan extends React.Component {
   render() {
     const { disabled, getScreenCurrentTransformationMatrix, mark, selected } = this.props;
     const { x, y, rotation, radius, spread } = mark;
-    const tanSpread = Math.tan(spread * (Math.PI / 180));
+    const tanSpread = Math.tan(spread * (Math.PI / 360));
     const spreadRadius = (radius * tanSpread) / (1 + tanSpread);
     const spreadX = radius - spreadRadius;
     const positionAndRotate = `
