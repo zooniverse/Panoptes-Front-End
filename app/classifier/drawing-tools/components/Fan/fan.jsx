@@ -6,7 +6,6 @@ import DragHandle from '../../drag-handle';
 import DrawingToolRoot from '../../root';
 import deleteIfOutOfBounds from '../../delete-if-out-of-bounds';
 
-const GRAB_STROKE_WIDTH = 6;
 const MINIMUM_SIZE = 10;
 
 class Fan extends React.Component {
@@ -17,7 +16,7 @@ class Fan extends React.Component {
       y,
       radius: 0,
       rotation: 0,
-      spread: 5
+      spread: 15
     };
   }
 
@@ -72,7 +71,7 @@ class Fan extends React.Component {
   }
 
   render() {
-    const { disabled, getScreenCurrentTransformationMatrix, mark, scale, selected } = this.props;
+    const { disabled, getScreenCurrentTransformationMatrix, mark, selected } = this.props;
     const { x, y, rotation, radius, spread } = mark;
     const tanSpread = Math.tan(spread * (Math.PI / 180));
     const spreadRadius = (radius * tanSpread) / (1 + tanSpread);
@@ -93,6 +92,13 @@ class Fan extends React.Component {
       x2: spreadRadius,
       y2: spreadY
     };
+    const fanPath = `
+      M 0 0
+      L ${-spreadRadius} ${spreadY}
+      A ${spreadRadius} ${spreadRadius} 0 1 0 ${spreadRadius} ${spreadY}
+      L 0 0
+      Z
+      `;
     return (
       <DrawingToolRoot
         tool={this}
@@ -113,10 +119,8 @@ class Fan extends React.Component {
           onEnd={deleteIfOutOfBounds.bind(null, this)}
           disabled={disabled}
         >
-          <line
-            {...radiusLine}
-            strokeWidth={GRAB_STROKE_WIDTH / ((scale.horizontal + scale.vertical) / 2)}
-            strokeOpacity="0"
+          <path
+            d={fanPath}
           />
         </Draggable>
         {selected &&
@@ -167,10 +171,6 @@ Fan.propTypes = {
   }).isRequired,
   normalizeDifference: PropTypes.func.isRequired,
   onChange: PropTypes.func,
-  scale: PropTypes.shape({
-    horizontal: PropTypes.number,
-    vertical: PropTypes.number
-  }),
   selected: PropTypes.bool
 };
 
@@ -178,10 +178,6 @@ Fan.defaultProps = {
   disabled: false,
   getEventOffset: () => null,
   onChange: () => true,
-  scale: {
-    horizontal: 0,
-    vertical: 0
-  },
   selected: false
 };
 
