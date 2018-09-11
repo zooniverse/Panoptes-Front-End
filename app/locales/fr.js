@@ -537,7 +537,7 @@ export default {
           bio: `Samantha Blickhan is the IMLS Postdoctoral Fellow in the Department of Citizen Science at the Adler Planetarium, working on transcription projects for the Zooniverse. She received her Ph.D. in Musicology from Royal Holloway, University of London, with a thesis on the palaeography of British song notation in the 12th and 13th centuries. Her research interests include music and perception, and their relationships with writing systems, technology and pedagogy.`
         },
         samuelAroney: {
-          title: 'Web Development placement student'
+          title: 'Web Development placement student',
           bio: `Samuel is a DPhil student studying the swimming behaviour of soil bacteria at Oxford.
           He joined Zooniverse to learn professional coding skills and perhaps build something useful.`
         },
