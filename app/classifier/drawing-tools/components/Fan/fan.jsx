@@ -72,7 +72,7 @@ class Fan extends React.Component {
   }
 
   render() {
-    const { disabled, getScreenCurrentTransformationMatrix, mark, selected } = this.props;
+    const { disabled, getScreenCurrentTransformationMatrix, mark, scale, selected } = this.props;
     const { x, y, rotation, radius, spread } = mark;
     const tanSpread = Math.tan(spread * (Math.PI / 360));
     const spreadRadius = (radius * tanSpread) / (1 + tanSpread);
@@ -135,21 +135,21 @@ class Fan extends React.Component {
             <DragHandle
               x={radius}
               y={0}
-              scale={this.scale}
+              scale={scale}
               onDrag={this.handleRotate.bind(this)}
               getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
             />
             <DragHandle
               x={spreadX}
               y={-spreadRadius}
-              scale={this.scale}
+              scale={scale}
               onDrag={this.handleSpread.bind(this)}
               getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
             />
             <DragHandle
               x={spreadX}
               y={spreadRadius}
-              scale={this.scale}
+              scale={scale}
               onDrag={this.handleSpread.bind(this)}
               getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
             />
@@ -172,6 +172,10 @@ Fan.propTypes = {
   }).isRequired,
   normalizeDifference: PropTypes.func.isRequired,
   onChange: PropTypes.func,
+  scale: PropTypes.shape({
+    horizontal: PropTypes.number,
+    vertical: PropTypes.number
+  }),
   selected: PropTypes.bool
 };
 
@@ -179,6 +183,10 @@ Fan.defaultProps = {
   disabled: false,
   getEventOffset: () => null,
   onChange: () => true,
+  scale: {
+    horizontal: 0,
+    vertical: 0
+  },
   selected: false
 };
 
