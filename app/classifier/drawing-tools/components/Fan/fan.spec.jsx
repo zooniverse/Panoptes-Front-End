@@ -125,6 +125,7 @@ describe('Fan Tool', function () {
           [15, 30, 45, 70, 90].forEach(function (halfSpread) {
             const cursorAngle = rotations[i];
             mark.rotation = cursorAngle - halfSpread;
+            mark.rotation = mark.rotation < -180 ? 360 + mark.rotation : mark.rotation;
             wrapper.setProps({ mark });
             wrapper.instance().handleSpread(cursor);
             expect(onChange.callCount).to.equal(1);
@@ -140,6 +141,7 @@ describe('Fan Tool', function () {
           [-15, -30, -45, -70, -90].forEach(function (halfSpread) {
             const cursorAngle = rotations[i];
             mark.rotation = cursorAngle - halfSpread;
+            mark.rotation = mark.rotation < -180 ? 360 + mark.rotation : mark.rotation;
             wrapper.setProps({ mark });
             wrapper.instance().handleSpread(cursor);
             expect(onChange.callCount).to.equal(1);
@@ -155,6 +157,7 @@ describe('Fan Tool', function () {
           [95, 120, -95, -120].forEach(function (halfSpread) {
             const cursorAngle = rotations[i];
             mark.rotation = cursorAngle - halfSpread;
+            mark.rotation = mark.rotation < -180 ? 360 + mark.rotation : mark.rotation;
             wrapper.setProps({ mark });
             wrapper.instance().handleSpread(cursor);
             expect(onChange.callCount).to.equal(1);
