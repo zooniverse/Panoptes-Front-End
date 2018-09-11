@@ -26,9 +26,9 @@ class Fan extends React.Component {
 
   static initMove(cursor, mark) {
     const radius = DrawingToolRoot.distance(mark.x, mark.y, cursor.x, cursor.y);
+    const deltaX = cursor.x - mark.x;
     const deltaY = cursor.y - mark.y;
-    const deltaX = mark.x - cursor.x;
-    const rotation = Math.atan2(deltaX, deltaY) * (180 / Math.PI);
+    const rotation = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
     return Object.assign({}, mark, { radius, rotation });
   }
 
@@ -52,9 +52,9 @@ class Fan extends React.Component {
     const { mark, getEventOffset } = this.props;
     const { x, y } = getEventOffset(e);
     const radius = DrawingToolRoot.distance(mark.x, mark.y, x, y);
+    const deltaX = x - mark.x;
     const deltaY = y - mark.y;
-    const deltaX = mark.x - x;
-    const rotation = Math.atan2(deltaX, deltaY) * (180 / Math.PI);
+    const rotation = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
     const newMark = Object.assign({}, mark, { radius, rotation });
     this.props.onChange(newMark);
   }
@@ -63,8 +63,8 @@ class Fan extends React.Component {
     const { mark, getEventOffset } = this.props;
     const { x, y } = getEventOffset(e);
     const deltaY = y - mark.y;
-    const deltaX = mark.x - x;
-    const cursorAngle = Math.atan2(deltaX, deltaY) * (180 / Math.PI);
+    const deltaX = x - mark.x;
+    const cursorAngle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
     const spread = Math.abs(cursorAngle - mark.rotation);
     const newMark = Object.assign({}, mark, { spread });
     this.props.onChange(newMark);
@@ -75,7 +75,7 @@ class Fan extends React.Component {
     const { x, y, rotation, radius, spread } = mark;
     const tanSpread = Math.tan(spread * (Math.PI / 180));
     const spreadRadius = (radius * tanSpread) / (1 + tanSpread);
-    const spreadY = radius - spreadRadius;
+    const spreadX = radius - spreadRadius;
     const positionAndRotate = `
       translate(${x} ${y})
       rotate(${rotation})
@@ -83,19 +83,19 @@ class Fan extends React.Component {
     const radiusLine = {
       x1: 0,
       y1: 0,
-      x2: 0,
-      y2: radius
+      x2: radius,
+      y2: 0
     };
     const spreadLine = {
-      x1: -spreadRadius,
-      y1: spreadY,
-      x2: spreadRadius,
-      y2: spreadY
+      x1: spreadX,
+      y1: -spreadRadius,
+      x2: spreadX,
+      y2: spreadRadius
     };
     const fanPath = `
       M 0 0
-      L ${-spreadRadius} ${spreadY}
-      A ${spreadRadius} ${spreadRadius} 0 1 0 ${spreadRadius} ${spreadY}
+      L ${spreadX} ${-spreadRadius}
+      A ${spreadRadius} ${spreadRadius} 0 1 1 ${spreadX} ${spreadRadius}
       L 0 0
       Z
       `;
@@ -127,27 +127,27 @@ class Fan extends React.Component {
           <React.Fragment>
             <DeleteButton
               tool={this}
-              x={0}
-              y={-20}
+              x={-20}
+              y={0}
               getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
             />
             <DragHandle
-              x={0}
-              y={radius}
+              x={radius}
+              y={0}
               scale={this.scale}
               onDrag={this.handleRotate.bind(this)}
               getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
             />
             <DragHandle
-              x={spreadRadius}
-              y={spreadY}
+              x={spreadX}
+              y={-spreadRadius}
               scale={this.scale}
               onDrag={this.handleSpread.bind(this)}
               getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
             />
             <DragHandle
-              x={-spreadRadius}
-              y={spreadY}
+              x={spreadX}
+              y={spreadRadius}
               scale={this.scale}
               onDrag={this.handleSpread.bind(this)}
               getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
