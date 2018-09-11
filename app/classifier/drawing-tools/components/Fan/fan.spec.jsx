@@ -11,6 +11,10 @@ describe('Fan Tool', function () {
   const y = 400;
   const cursors = [
     {
+      x: 300,
+      y: 400
+    },
+    {
       x: 250,
       y: 350
     },
@@ -19,15 +23,27 @@ describe('Fan Tool', function () {
       y: 450
     },
     {
+      x: 200,
+      y: 300
+    },
+    {
+      x: 200,
+      y: 500
+    },
+    {
       x: 150,
       y: 350
     },
     {
       x: 150,
       y: 450
+    },
+    {
+      x: 100,
+      y: 400
     }
   ];
-  const rotations = [-45, 45, -135, 135];
+  const rotations = [0, -45, 45, -90, 90, -135, 135, 180];
   before(function () {
     mark = Fan.initStart({ x, y });
   });
