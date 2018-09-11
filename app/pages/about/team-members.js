@@ -273,6 +273,11 @@ export const teamMembers = {
     image: "/assets/team/sam.jpg",
     location: "chicago"
   },
+  samuelAroney: {
+    name: "Samuel Aroney",
+    image: "/assets/team/samuel.jpg",
+    location: "oxford"
+  },
   sandorKruk: {
     name: "Sandor Kruk",
     twitter: "kruksandor",
