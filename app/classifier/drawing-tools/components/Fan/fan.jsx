@@ -26,9 +26,7 @@ class Fan extends React.Component {
 
   static initMove(cursor, mark) {
     const radius = DrawingToolRoot.distance(mark.x, mark.y, cursor.x, cursor.y);
-    const deltaX = cursor.x - mark.x;
-    const deltaY = cursor.y - mark.y;
-    const rotation = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    const rotation = Fan.getCursorAngle(cursor, mark);
     return Object.assign({}, mark, { radius, rotation });
   }
 
@@ -38,6 +36,13 @@ class Fan extends React.Component {
 
   static initValid(mark) {
     return mark.radius > MINIMUM_SIZE;
+  }
+
+  static getCursorAngle(cursor, mark) {
+    // calculates the angle between a cursor position and the mark position.
+    const deltaX = cursor.x - mark.x;
+    const deltaY = cursor.y - mark.y;
+    return Math.atan2(deltaY, deltaX) * (180 / Math.PI);
   }
 
   handleDrag(e, d) {
@@ -52,9 +57,7 @@ class Fan extends React.Component {
     const { mark, getEventOffset } = this.props;
     const { x, y } = getEventOffset(e);
     const radius = DrawingToolRoot.distance(mark.x, mark.y, x, y);
-    const deltaX = x - mark.x;
-    const deltaY = y - mark.y;
-    const rotation = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    const rotation = Fan.getCursorAngle({ x, y }, mark);
     const newMark = Object.assign({}, mark, { radius, rotation });
     this.props.onChange(newMark);
   }
@@ -62,9 +65,7 @@ class Fan extends React.Component {
   handleSpread(e) {
     const { mark, getEventOffset } = this.props;
     const { x, y } = getEventOffset(e);
-    const deltaY = y - mark.y;
-    const deltaX = x - mark.x;
-    const cursorAngle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    const cursorAngle = Fan.getCursorAngle({ x, y }, mark);
     const spread = 2 * Math.abs(cursorAngle - mark.rotation);
     const newMark = Object.assign({}, mark, { spread });
     this.props.onChange(newMark);
