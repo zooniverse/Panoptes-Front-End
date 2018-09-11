@@ -102,5 +102,52 @@ describe('Fan Tool', function () {
         onChange.resetHistory();
       });
     });
+
+    describe('the spread drag handles', function () {
+      it('should update spread correctly for positive angles', function () {
+        cursors.forEach(function (cursor, i) {
+          [15, 30, 45, 70, 90].forEach(function (halfSpread) {
+            const cursorAngle = rotations[i];
+            mark.rotation = cursorAngle - halfSpread;
+            wrapper.setProps({ mark });
+            wrapper.instance().handleSpread(cursor);
+            expect(onChange.callCount).to.equal(1);
+            const newMark = onChange.getCall(0).args[0];
+            expect(newMark.spread).to.equal(halfSpread * 2);
+            onChange.resetHistory();
+          });
+        });
+      });
+
+      it('should update spread correctly for negative angles', function () {
+        cursors.forEach(function (cursor, i) {
+          [-15, -30, -45, -70, -90].forEach(function (halfSpread) {
+            const cursorAngle = rotations[i];
+            mark.rotation = cursorAngle - halfSpread;
+            wrapper.setProps({ mark });
+            wrapper.instance().handleSpread(cursor);
+            expect(onChange.callCount).to.equal(1);
+            const newMark = onChange.getCall(0).args[0];
+            expect(newMark.spread).to.equal(Math.abs(halfSpread) * 2);
+            onChange.resetHistory();
+          });
+        });
+      });
+
+      it('should not allow spreads greater than 180 degrees', function () {
+        cursors.forEach(function (cursor, i) {
+          [95, 120, -95, -120].forEach(function (halfSpread) {
+            const cursorAngle = rotations[i];
+            mark.rotation = cursorAngle - halfSpread;
+            wrapper.setProps({ mark });
+            wrapper.instance().handleSpread(cursor);
+            expect(onChange.callCount).to.equal(1);
+            const newMark = onChange.getCall(0).args[0];
+            expect(newMark.spread).to.equal(180);
+            onChange.resetHistory();
+          });
+        });
+      })
+    });
   });
 });
