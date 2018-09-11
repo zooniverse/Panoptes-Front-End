@@ -145,7 +145,7 @@ module.exports = createReactClass
                         Type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
                           {for toolKey of drawingTools
-                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape", "freehandSegmentLine", "freehandSegmentShape", "anchoredEllipse"]}
+                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape", "freehandSegmentLine", "freehandSegmentShape", "anchoredEllipse", "fan"]}
                           {if @canUse("grid")
                             <option key="grid" value="grid">grid</option>}
                           {if @canUse("freehandLine")
@@ -158,6 +158,8 @@ module.exports = createReactClass
                             <option key="freehandSegmentShape" value="freehandSegmentShape">freehand segment shape</option>}
                           {if @canUse("anchoredEllipse")
                             <option key="anchoredEllipse" value="anchoredEllipse">anchored ellipse</option>}
+                          {if @canUse("fan")
+                            <option key="fan" value="fan">fan tool</option>}
                         </select>
                       </AutoSave>
                     </div>

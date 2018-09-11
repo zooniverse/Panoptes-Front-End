@@ -6,6 +6,7 @@ const experimentalFeatures = [
   'crop',
   'combo',
   'dropdown',
+  'fan',
   'mini-course',
   'worldwide telescope',
   'grid',
