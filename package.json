@@ -22,7 +22,7 @@
     "mocha": "~5.2.0",
     "modal-form": "~2.6.1",
     "moment": "~2.22.2",
-    "panoptes-client": "~2.10.0",
+    "panoptes-client": "~2.11.2",
     "papaparse": "github:mholt/PapaParse#cada171",
     "polished": "~2.0.3",
     "prop-types": "~15.6.2",
