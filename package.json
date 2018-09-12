@@ -22,6 +22,7 @@
     "mocha": "~5.2.0",
     "modal-form": "~2.6.1",
     "moment": "~2.22.2",
+    "nyc": "~13.0.1",
     "panoptes-client": "~2.11.2",
     "papaparse": "github:mholt/PapaParse#cada171",
     "polished": "~2.0.3",
@@ -131,9 +132,9 @@
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
     "test-and-watch": "NODE_ENV=development BABEL_ENV=test mocha --watch --watch-extensions js,jsx,coffee,cjsx test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
-    "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
+    "test": "NODE_ENV=development BABEL_ENV=test nyc mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
     "test-one": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $1",
-    "test-travis": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*)",
+    "test-travis": "NODE_ENV=development BABEL_ENV=test nyc mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*)",
     "lint": "eslint ./app --ext .jsx,.js",
     "lint:watch": "esw --watch --color ./app --ext .jsx,.js"
   }
