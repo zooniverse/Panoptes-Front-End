@@ -75,7 +75,7 @@ export default {
       joinIn: 'Participa',
       learnMore: 'Aprende más',
       getStarted: 'Comenzar',
-      workflowAssignment: 'Has desbloqueado nivel %(workflowDisplayName)s',
+      workflowAssignment: 'Has desbloqueado %(workflowDisplayName)s',
       visitLink: 'Visita el proyecto',
       links: 'Enlaces'
     }

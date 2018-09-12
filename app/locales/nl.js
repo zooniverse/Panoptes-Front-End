@@ -107,7 +107,7 @@ export default {
       joinIn: 'Doe mee!',
       learnMore: 'Lees meer',
       getStarted: 'Beginnen',
-      workflowAssignment: 'Je hebt een nieuw niveau bereikt in %(workflowDisplayName)s',
+      workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
       visitLink: 'Bezoek het project',
       links: 'Links'
     }
