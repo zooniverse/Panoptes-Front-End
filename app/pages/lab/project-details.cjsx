@@ -185,21 +185,22 @@ module.exports = createReactClass
 
           <div>
             <AutoSave resource={@props.project}>
-            <span className="form-label">Discipline Tag</span>
-            <br />
-            <Select
-              ref="disciplineSelect"
-              name="disciplines"
-              placeholder="Add Discipline Tag"
-              className="discipline-tag"
-              value={@state.disciplineTagList}
-              options={DISCIPLINES}
-              multi={true}
-              onChange={@handleDisciplineTagChange} />
+              <span className="form-label">Discipline Tag</span>
+              <br />
+              <Select
+                ref="disciplineSelect"
+                name="disciplines"
+                placeholder="Add Discipline Tag"
+                className="discipline-tag"
+                value={@state.disciplineTagList}
+                options={DISCIPLINES}
+                multi={true}
+                onChange={@handleDisciplineTagChange}
+              />
               <small className="form-help">Enter or select one or more discipline tags to identify which field(s) of research your project belongs to. These tags will determine the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project. </small>
               <br />
-              </AutoSave>
-              <AutoSave resource={@props.project}>
+            </AutoSave>
+            <AutoSave resource={@props.project}>
               <span className="form-label">Other Tags</span>
               <br />
               <TagSearch name="tags" multi={true} value={@state.otherTagList} onChange={@handleOtherTagChange} />
