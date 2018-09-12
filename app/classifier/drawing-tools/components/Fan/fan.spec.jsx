@@ -52,8 +52,8 @@ describe('Fan Tool', function () {
     expect(mark.y).to.equal(y);
     expect(mark._inProgress).to.be.true;
   });
-  it('should update mark rotation after a cursor move', function () {
-    cursors.forEach(function (cursor, i) {
+  cursors.forEach(function (cursor, i) {
+    it('should update after a cursor move to angle ' + rotations[i], function () {
       const newMark = Fan.initMove(cursor, mark);
       expect(newMark.rotation).to.equal(rotations[i]);
     });
@@ -96,13 +96,17 @@ describe('Fan Tool', function () {
     });
 
     describe('the rotation drag handle', function () {
-      it('should update rotation angle when dragged', function () {
-        cursors.forEach(function (cursor, i) {
+
+      afterEach(function () {
+        onChange.resetHistory();
+      });
+
+      cursors.forEach(function (cursor, i) {
+        it('should update rotation to ' + rotations[i], function () {
           wrapper.instance().handleRotate(cursor);
           expect(onChange.callCount).to.equal(1);
           const newMark = onChange.getCall(0).args[0];
           expect(newMark.rotation).to.equal(rotations[i]);
-          onChange.resetHistory();
         });
       });
 
@@ -115,15 +119,19 @@ describe('Fan Tool', function () {
         expect(onChange.callCount).to.equal(1);
         const newMark = onChange.getCall(0).args[0];
         expect(newMark.radius).to.equal(50);
-        onChange.resetHistory();
       });
     });
 
     describe('the spread drag handles', function () {
-      it('should update spread correctly for positive angles', function () {
-        cursors.forEach(function (cursor, i) {
-          [15, 30, 45, 70, 90].forEach(function (halfSpread) {
-            const cursorAngle = rotations[i];
+        
+      afterEach(function () {
+        onChange.resetHistory();
+      });
+
+      cursors.forEach(function (cursor, i) {
+        const cursorAngle = rotations[i];
+        [15, 30, 45, 70, 90].forEach(function (halfSpread) {
+          it('should update spread correctly for mark rotation ' + (rotations[i] - halfSpread) + ', spread ' + halfSpread, function () {
             mark.rotation = cursorAngle - halfSpread;
             mark.rotation = mark.rotation < -180 ? 360 + mark.rotation : mark.rotation;
             wrapper.setProps({ mark });
@@ -131,23 +139,16 @@ describe('Fan Tool', function () {
             expect(onChange.callCount).to.equal(1);
             const newMark = onChange.getCall(0).args[0];
             expect(newMark.spread).to.equal(halfSpread * 2);
-            onChange.resetHistory();
           });
-        });
-      });
 
-      it('should update spread correctly for negative angles', function () {
-        cursors.forEach(function (cursor, i) {
-          [-15, -30, -45, -70, -90].forEach(function (halfSpread) {
-            const cursorAngle = rotations[i];
-            mark.rotation = cursorAngle - halfSpread;
+          it('should update spread correctly for mark rotation ' + (rotations[i] - halfSpread) + ', spread ' + -halfSpread, function () {
+            mark.rotation = cursorAngle + halfSpread;
             mark.rotation = mark.rotation < -180 ? 360 + mark.rotation : mark.rotation;
             wrapper.setProps({ mark });
             wrapper.instance().handleSpread(cursor);
             expect(onChange.callCount).to.equal(1);
             const newMark = onChange.getCall(0).args[0];
             expect(newMark.spread).to.equal(Math.abs(halfSpread) * 2);
-            onChange.resetHistory();
           });
         });
       });
