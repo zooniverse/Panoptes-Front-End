@@ -166,6 +166,7 @@ workflow = apiClient.type('workflows').create
         {type: 'freehandSegmentShape', label: 'Freehand Segment Shape', color: 'goldenrod'}
         {type: 'fullWidthLine', label: 'Full Width Line', color: 'orchid'}
         {type: 'fullHeightLine', label: 'Full Height Line', color: 'mediumvioletred'}
+        {type: 'fan', label: 'Fan Tool', color: 'mediumvioletred'}
       ]
       next: 'survey'
 
