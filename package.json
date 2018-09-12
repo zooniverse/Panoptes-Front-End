@@ -53,7 +53,7 @@
     "styled-components": "~2.2.4",
     "styled-theming": "~2.2.0",
     "sugar-client": "~1.0.1",
-    "svg-path-properties": "~0.1.1",
+    "svg-path-properties": "~0.4.4",
     "swipe-js-iso": "~2.0.4",
     "uuid": "~3.1.0",
     "visible-element": "~1.0.1",
