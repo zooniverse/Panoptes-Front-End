@@ -106,7 +106,7 @@
     "style-loader": "~0.23.0",
     "stylus": "~0.54.5",
     "stylus-loader": "~3.0.2",
-    "webpack": "~3.12.0",
+    "webpack": "~4.18.0",
     "webpack-dashboard": "~2.0.0",
     "webpack-dev-middleware": "~2.0.6",
     "webpack-hot-middleware": "~2.18.2",
