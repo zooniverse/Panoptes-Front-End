@@ -2,6 +2,8 @@
 
 ![Build Status](https://travis-ci.org/zooniverse/Panoptes-Front-End.svg?branch=master)
 
+[![Coverage Status](https://coveralls.io/repos/github/zooniverse/Panoptes-Front-End/badge.svg)](https://coveralls.io/github/zooniverse/Panoptes-Front-End)
+
 ## Development
 
 Requires Node.js. It's recommended you manage your Node installations with **nvm**.
