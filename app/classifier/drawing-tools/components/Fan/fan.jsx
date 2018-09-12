@@ -43,7 +43,8 @@ class Fan extends React.Component {
     // calculates the angle between a cursor position and the mark position.
     const deltaX = cursor.x - mark.x;
     const deltaY = cursor.y - mark.y;
-    return Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    const theta = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    return theta < 0 ? 360 + theta : theta;
   }
 
   handleDrag(e, d) {
@@ -67,9 +68,7 @@ class Fan extends React.Component {
     const { mark, getEventOffset } = this.props;
     const { x, y } = getEventOffset(e);
     const cursorAngle = Fan.getCursorAngle({ x, y }, mark);
-    let spread = Math.abs(cursorAngle - mark.rotation);
-    spread = spread > 180 ? 360 - spread : spread;
-    spread *= 2;
+    let spread = 2 * Math.abs(cursorAngle - mark.rotation);
     spread = Math.min(spread, MAXIMUM_SPREAD);
     const newMark = Object.assign({}, mark, { spread });
     this.props.onChange(newMark);

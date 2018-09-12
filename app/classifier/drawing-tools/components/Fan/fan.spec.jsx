@@ -16,23 +16,11 @@ describe('Fan Tool', function () {
     },
     {
       x: 250,
-      y: 350
-    },
-    {
-      x: 250,
       y: 450
     },
     {
       x: 200,
-      y: 300
-    },
-    {
-      x: 200,
       y: 500
-    },
-    {
-      x: 150,
-      y: 350
     },
     {
       x: 150,
@@ -41,9 +29,21 @@ describe('Fan Tool', function () {
     {
       x: 100,
       y: 400
+    },
+    {
+      x: 150,
+      y: 350
+    },
+    {
+      x: 200,
+      y: 300
+    },
+    {
+      x: 250,
+      y: 350
     }
   ];
-  const rotations = [0, -45, 45, -90, 90, -135, 135, 180];
+  const rotations = [0, 45, 90, 135, 180, 225, 270, 315];
   before(function () {
     mark = Fan.initStart({ x, y });
   });
@@ -133,7 +133,6 @@ describe('Fan Tool', function () {
         [15, 30, 45, 70, 90].forEach(function (halfSpread) {
           it('should update spread correctly for mark rotation ' + (rotations[i] - halfSpread) + ', spread ' + halfSpread, function () {
             mark.rotation = cursorAngle - halfSpread;
-            mark.rotation = mark.rotation < -180 ? 360 + mark.rotation : mark.rotation;
             wrapper.setProps({ mark });
             wrapper.instance().handleSpread(cursor);
             expect(onChange.callCount).to.equal(1);
@@ -143,7 +142,6 @@ describe('Fan Tool', function () {
 
           it('should update spread correctly for mark rotation ' + (rotations[i] - halfSpread) + ', spread ' + -halfSpread, function () {
             mark.rotation = cursorAngle + halfSpread;
-            mark.rotation = mark.rotation < -180 ? 360 + mark.rotation : mark.rotation;
             wrapper.setProps({ mark });
             wrapper.instance().handleSpread(cursor);
             expect(onChange.callCount).to.equal(1);
@@ -158,7 +156,6 @@ describe('Fan Tool', function () {
           [95, 120, -95, -120].forEach(function (halfSpread) {
             const cursorAngle = rotations[i];
             mark.rotation = cursorAngle - halfSpread;
-            mark.rotation = mark.rotation < -180 ? 360 + mark.rotation : mark.rotation;
             wrapper.setProps({ mark });
             wrapper.instance().handleSpread(cursor);
             expect(onChange.callCount).to.equal(1);
