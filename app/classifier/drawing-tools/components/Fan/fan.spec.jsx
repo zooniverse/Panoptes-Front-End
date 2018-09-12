@@ -2,7 +2,6 @@ import React from 'react';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import DrawingToolRoot from '../../root';
 import Fan from './fan';
 
 describe('Fan Tool', function () {
@@ -164,7 +163,7 @@ describe('Fan Tool', function () {
             onChange.resetHistory();
           });
         });
-      })
+      });
     });
   });
 });
