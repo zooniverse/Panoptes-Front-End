@@ -19,6 +19,7 @@ import isFunction from 'lodash/isFunction';
 
 import MobileSectionContainer from './mobile-section-container';
 import * as fixtures from './mobile-section-container.fixtures';
+import { convertBooleanToValidation } from './mobile-validations';
 
 let component;
 let wrapper;
@@ -84,7 +85,7 @@ describe('<MobileSectionContainer />', function () {
       let component = wrapper.find('MobileSection').first();
       let validationToTest = component.props().validations[name];
 
-      assert.strictEqual(validationToTest, expectedResult);
+      assert.strictEqual(validationToTest, convertBooleanToValidation(expectedResult));
     }
 
     it('should check whether the task question text is too long', function () {
