@@ -21,7 +21,7 @@
     "lodash": "~4.17.11",
     "markdownz": "~7.6.3",
     "mocha": "~5.2.0",
-    "modal-form": "~2.6.1",
+    "modal-form": "~2.7",
     "moment": "~2.22.2",
     "nyc": "~13.0.1",
     "panoptes-client": "~2.11.2",
