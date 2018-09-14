@@ -93,12 +93,17 @@ describe('Classifier actions', function () {
     };
     describe('with only one subject in the queue', function () {
       const state = {
+        classification: { id: '1' },
         workflow: { id: '1' },
         upcomingSubjects: [1]
       };
       it('should empty the queue', function () {
         const newState = reducer(state, action);
         expect(newState.upcomingSubjects).to.be.empty;
+      });
+      it('should clear the old classification', function () {
+        const newState = reducer(state, action);
+        expect(newState.classification).to.be.null;
       });
     });
     describe('with multiple subjects in the queue', function () {
