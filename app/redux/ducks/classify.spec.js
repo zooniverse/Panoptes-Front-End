@@ -233,4 +233,21 @@ describe('Classifier actions', function () {
       expect(newState).to.deep.equal(state);
     });
   });
+  describe('set workflow', function () {
+    const action = {
+      type: 'pfe/classify/SET_WORKFLOW',
+      payload: {
+        workflow: { id: '2' }
+      }
+    };
+    const state = {
+      classification: { id: '1' },
+      workflow: { id: '1' },
+      upcomingSubjects: [1, 2]
+    };
+    it('should store the specified workflow', function () {
+      const newState = reducer(state, action);
+      expect(newState.workflow).to.deep.equal(action.payload.workflow);
+    });
+  });
 });
