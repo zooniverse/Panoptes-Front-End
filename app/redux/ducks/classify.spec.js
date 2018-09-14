@@ -84,4 +84,49 @@ describe('Classifier actions', function () {
       expect(newState.upcomingSubjects).to.deep.equal([1, 2]);
     });
   });
+  describe('next subject', function () {
+    const action = {
+      type: 'pfe/classify/NEXT_SUBJECT',
+      payload: {
+        project: { id: '1' }
+      }
+    };
+    describe('with only one subject in the queue', function () {
+      const state = {
+        workflow: { id: '1' },
+        upcomingSubjects: [1]
+      };
+      it('should empty the queue', function () {
+        const newState = reducer(state, action);
+        expect(newState.upcomingSubjects).to.be.empty;
+      });
+    });
+    describe('with multiple subjects in the queue', function () {
+      const state = {
+        workflow: { id: '1' },
+        upcomingSubjects: [{
+          id: '1',
+          locations: [],
+          metadata: []
+        },
+        {
+          id: '2',
+          locations: [],
+          metadata: []
+        }]
+      };
+      it('should shift the first subject off the queue', function () {
+        const newState = reducer(state, action);
+        expect(newState.upcomingSubjects).to.deep.equal([{
+          id: '2',
+          locations: [],
+          metadata: []
+        }]);
+      });
+      it('should create a classification for the next subject in the queue', function () {
+        const newState = reducer(state, action);
+        expect(newState.classification.links.subjects).to.deep.equal(['2']);
+      })
+    });
+  });
 });
