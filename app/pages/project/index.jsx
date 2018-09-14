@@ -416,6 +416,7 @@ class ProjectPageController extends React.Component {
                 projectRoles={this.state.projectRoles}
                 requestUserProjectPreferences={this.requestUserProjectPreferences.bind(this)}
                 splits={this.state.splits}
+                workflow={this.props.workflow}
               />
             </WorkflowSelection>
           </ProjectTranslations>
@@ -495,7 +496,8 @@ ProjectPageController.defaultProps = {
 
 const mapStateToProps = state => ({
   interventions: state.interventions,
-  translations: state.translations
+  translations: state.translations,
+  workflow: state.classify.workflow
 });
 
 const mapDispatchToProps = dispatch => ({

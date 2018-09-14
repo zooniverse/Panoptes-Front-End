@@ -83,15 +83,8 @@ export class ProjectClassifyPage extends React.Component {
   componentDidUpdate(prevProps) {
     const { actions, classification, project, upcomingSubjects, workflow } = this.props;
 
-    if (project !== prevProps.project) {
-      this.loadAppropriateClassification();
-    }
-
     if (workflow !== prevProps.workflow) {
-      if (classification && classification.links.workflow !== workflow.id) {
-        // The current workflow has changed, so reset the subject queue
-        actions.classifier.emptySubjectQueue();
-      }
+      this.loadAppropriateClassification();
     }
 
     if (upcomingSubjects.length !== prevProps.upcomingSubjects.length) {
@@ -284,7 +277,7 @@ export class ProjectClassifyPage extends React.Component {
         {this.state.validUserGroup &&
           <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
 
-        {this.renderClassifier()}
+        {this.props.workflow ? this.renderClassifier() : <p>Loading workflow</p>}
         <ProjectThemeButton />
       </div>
     );
