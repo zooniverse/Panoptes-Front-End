@@ -199,4 +199,38 @@ describe('Classifier actions', function () {
       expect(newState).to.deep.equal(state);
     });
   });
+  describe('resume classification', function () {
+    const subject1 = {
+      id: '1',
+      locations: [],
+      metadata: [],
+      destroy: function () {}
+    };
+    const subject2 = {
+      id: '2',
+      locations: [],
+      metadata: [],
+      destroy: function () {}
+    };
+    const action = {
+      type: 'pfe/classify/RESUME_CLASSIFICATION',
+      payload: {
+        subject: subject1
+      }
+    };
+    const state = {
+      classification: { id: '1' },
+      workflow: { id: '1' },
+      upcomingSubjects: [subject1, subject2]
+    };
+    it('should do nothing if the classification subject matches the current subject', function () {
+      const newState = reducer(state, action);
+      expect(newState).to.deep.equal(state);
+    });
+    it('should unshift the classification subject onto the queue if it is not the current subject', function () {
+      const testState = Object.assign({}, state, { upcomingSubjects: [subject2] });
+      const newState = reducer(testState, action);
+      expect(newState).to.deep.equal(state);
+    });
+  });
 });
