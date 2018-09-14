@@ -158,4 +158,45 @@ describe('Classifier actions', function () {
       expect(newState.upcomingSubjects).to.be.empty;
     });
   });
+  describe('create classification', function () {
+    const action = {
+      type: 'pfe/classify/CREATE_CLASSIFICATION',
+      payload: {
+        project: { id: '1' }
+      }
+    };
+    const state = {
+      classification: { id: '1' },
+      workflow: { id: '1' },
+      upcomingSubjects: [{
+        id: '1',
+        locations: [],
+        metadata: [],
+        destroy: function () {}
+      },
+      {
+        id: '2',
+        locations: [],
+        metadata: [],
+        destroy: function () {}
+      }]
+    };
+    it('should create a classification for the first subject in the queue', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.links.subjects).to.deep.equal(['1']);
+    });
+    it('should create a classification for the specified project', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.links.project).to.equal('1');
+    });
+    it('should create a classification for the current workflow', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.links.workflow).to.equal('1');
+    });
+    it('should do nothing if the queue is empty', function () {
+      state.upcomingSubjects = [];
+      const newState = reducer(state, action);
+      expect(newState).to.deep.equal(state);
+    });
+  });
 });
