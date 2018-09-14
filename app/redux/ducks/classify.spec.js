@@ -129,4 +129,33 @@ describe('Classifier actions', function () {
       })
     });
   });
+  describe('reset subjects', function () {
+    const action = {
+      type: 'pfe/classify/RESET_SUBJECTS'
+    };
+    const state = {
+      classification: { id: '1' },
+      workflow: { id: '1' },
+      upcomingSubjects: [{
+        id: '1',
+        locations: [],
+        metadata: [],
+        destroy: function () {}
+      },
+      {
+        id: '2',
+        locations: [],
+        metadata: [],
+        destroy: function () {}
+      }]
+    };
+    it('should set the classification to null', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification).to.be.null;
+    });
+    it('should empty the subject queue', function () {
+      const newState = reducer(state, action);
+      expect(newState.upcomingSubjects).to.be.empty;
+    });
+  });
 });
