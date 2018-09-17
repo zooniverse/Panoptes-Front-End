@@ -99,7 +99,10 @@ export default function reducer(state = initialState, action = {}) {
         const classification = createNewClassification(project, workflow, subject);
         return Object.assign({}, state, { classification, upcomingSubjects });
       }
-      return Object.assign({}, state, { upcomingSubjects });
+      return Object.assign({}, state, {
+        classification: null,
+        upcomingSubjects: []
+      });
     }
     case PREPEND_SUBJECTS: {
       const { subjects, workflowID } = action.payload;
