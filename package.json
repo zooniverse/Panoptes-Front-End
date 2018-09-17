@@ -7,6 +7,7 @@
     "chartist": "~0.10.1",
     "classnames": "~2.2.6",
     "counterpart": "~0.18.6",
+    "coveralls": "~3.0.2",
     "data-uri-to-blob": "0.0.4",
     "debounce": "~1.2.0",
     "dompurify": "~1.0.8",
@@ -22,6 +23,7 @@
     "mocha": "~5.2.0",
     "modal-form": "~2.6.1",
     "moment": "~2.22.2",
+    "nyc": "~13.0.1",
     "panoptes-client": "~2.11.2",
     "papaparse": "github:mholt/PapaParse#cada171",
     "polished": "~2.0.3",
@@ -117,8 +119,22 @@
     "npm": ">=5"
   },
   "license": "Apache-2.0",
+  "nyc": {
+    "exclude": [
+      "**/*.spec.js",
+      "**/*.spec.jsx",
+      "dist",
+      "node_modules",
+      "test"
+    ],
+    "extension": [
+      ".cjsx",
+      ".jsx"
+    ]
+  },
   "repository": "zooniverse/Panoptes-Front-End",
   "scripts": {
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "export NODE_ENV=development; check-engines && check-dependencies && webpack-dashboard -p 3736 -- babel-node ./dev-server.js",
     "_build": "export HEAD_COMMIT=$(git rev-parse --short HEAD); check-engines && check-dependencies && rimraf dist; webpack --config ./webpack.build.js --progress --profile --colors",
     "serve-static": "export NODE_ENV=staging; check-engines && check-dependencies && npm run _build && node ./static-server.js",
@@ -131,7 +147,7 @@
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
     "test-and-watch": "NODE_ENV=development BABEL_ENV=test mocha --watch --watch-extensions js,jsx,coffee,cjsx test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
-    "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
+    "test": "NODE_ENV=development BABEL_ENV=test nyc mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
     "test-one": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $1",
     "test-travis": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*)",
     "lint": "eslint ./app --ext .jsx,.js",
