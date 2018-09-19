@@ -31,7 +31,7 @@
     "pusher-js": "~3.2.1",
     "qs": "~6.5.2",
     "rc-slider": "~8.6.2",
-    "react": "~16.4.2",
+    "react": "~16.5.2",
     "react-chartist": "~0.13.1",
     "react-dom": "~16.4.2",
     "react-helmet": "~5.2.0",
