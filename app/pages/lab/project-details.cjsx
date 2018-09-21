@@ -255,13 +255,10 @@ module.exports = createReactClass
     allTags = @state.disciplineTagList.concat newTags
     @handleTagChange(allTags)
 
-  handleTagChange: (value) ->
-    event =
-      target:
-        value: value
-        name: 'tags'
-        dataset: {}
-    handleInputChange.call @props.project, event
+  handleTagChange: (value) ->  
+    changes = 
+      tags: value
+    @props.project.update(changes)
 
   handleMediaChange: (type, file) ->
     errorProp = "#{type}Error"
