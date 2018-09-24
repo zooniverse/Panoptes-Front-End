@@ -131,7 +131,7 @@ class Fan extends React.Component {
           <React.Fragment>
             <DeleteButton
               tool={this}
-              x={-20}
+              x={spreadX}
               y={0}
               getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
             />
