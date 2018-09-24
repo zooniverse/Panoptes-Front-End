@@ -21,7 +21,9 @@ sugarClient.on('subject-queue', (message) => store.dispatch(injectSubjects(messa
 
 # Redirect any old `/#/foo`-style URLs to `/foo`.
 if location?.hash.charAt(1) is '/'
-  location.replace location.hash.slice 1
+  hashPathSuffix = location.hash.slice(1)
+  urlNoHashPaths = new URL(location.pathname + hashPathSuffix, location.origin)
+  location.replace(urlNoHashPaths)
 
 browserHistory.listen ->
   dispatchEvent new CustomEvent 'locationchange'
