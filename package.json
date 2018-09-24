@@ -25,7 +25,7 @@
     "moment": "~2.22.2",
     "nyc": "~13.0.1",
     "panoptes-client": "~2.11.2",
-    "papaparse": "github:mholt/PapaParse#cada171",
+    "papaparse": "^4.6.0",
     "polished": "~2.0.3",
     "prop-types": "~15.6.2",
     "pusher-js": "~3.2.1",
