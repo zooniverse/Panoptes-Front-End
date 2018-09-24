@@ -3,6 +3,7 @@ createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
+sanitizeArrayInput = require '../../lib/sanitize-array-input'
 ImageSelector = require '../../components/image-selector'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
@@ -238,8 +239,9 @@ module.exports = createReactClass
   handleDisciplineTagChange: (options) ->
     newTags = options.map (option) ->
       option.value
-    @setState disciplineTagList: newTags
-    allTags = newTags.concat @state.otherTagList
+    sanitizedTags = sanitizeArrayInput(newTags)
+    @setState disciplineTagList: sanitizedTags
+    allTags = sanitizedTags.concat @state.otherTagList
     @handleTagChange(allTags)
 
   handleResearcherChange: (option) ->
@@ -251,8 +253,9 @@ module.exports = createReactClass
   handleOtherTagChange: (options) ->
     newTags = options.map (option) ->
       option.value
-    @setState otherTagList: newTags
-    allTags = @state.disciplineTagList.concat newTags
+    sanitizedTags = sanitizeArrayInput(newTags)
+    @setState otherTagList: sanitizedTags
+    allTags = @state.disciplineTagList.concat sanitizedTags
     @handleTagChange(allTags)
 
   handleTagChange: (value) ->  
