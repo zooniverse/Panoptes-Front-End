@@ -6,5 +6,3 @@ export default function sanitizeArrayInput(array) {
   const sanitizedArray = array.map(string => DOMPurify.sanitize(string));
   return sanitizedArray.filter(string => string !== '');
 }
-
-// export default sanitizeArrayInput;
