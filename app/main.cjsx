@@ -25,7 +25,7 @@ if location?.hash.charAt(1) is '/'
   locationPath = location.pathname
   if locationPath.slice(-1) is '/'
      locationPath = locationPath.replace(/\/+$/, "");
-  urlNoHashPaths = location.origin + locationPath + location.search + hashPathSuffix
+  urlNoHashPaths = location.origin + locationPath + hashPathSuffix + location.search
   location.replace(urlNoHashPaths)
 
 browserHistory.listen ->
