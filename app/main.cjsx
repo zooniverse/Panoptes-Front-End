@@ -19,7 +19,10 @@ apiClient.type('subject_sets').listen('add-or-remove', () => store.dispatch(empt
 sugarClient.on('experiment', (message) => store.dispatch(notify(message)));
 sugarClient.on('subject-queue', (message) => store.dispatch(injectSubjects(message)));
 
-# Redirect any old `/#/foo`-style URLs to `/foo`.
+# Redirect any old `/#/foo`-style URLs to `/foo`
+# ensuring we preserve the location path, search and hash fragments
+# e.g. http://www.penguinwatch.org/#/classify
+# https://www.zooniverse.org/projects/penguintom79/penguin-watch/classify
 if location?.hash.charAt(1) is '/'
   hashPathSuffix = location.hash.slice(1)
   locationPath = location.pathname
