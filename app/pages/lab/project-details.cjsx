@@ -3,7 +3,6 @@ createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-sanitizeArrayInput = require '../../lib/sanitize-array-input'
 ImageSelector = require '../../components/image-selector'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
@@ -17,6 +16,7 @@ getAllLinked = require('../../lib/get-all-linked').default
 `import ExternalLinksEditor from './external-links-editor';`
 `import SocialLinksEditor from './social-links-editor';`
 `import DisplayNameSlugEditor from '../../partials/display-name-slug-editor';`
+`import sanitizeArrayInput from '../../lib/sanitize-array-input';`
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
