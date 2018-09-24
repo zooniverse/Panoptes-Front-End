@@ -16,6 +16,7 @@ getAllLinked = require('../../lib/get-all-linked').default
 `import ExternalLinksEditor from './external-links-editor';`
 `import SocialLinksEditor from './social-links-editor';`
 `import DisplayNameSlugEditor from '../../partials/display-name-slug-editor';`
+`import sanitizeArrayInput from '../../lib/sanitize-array-input';`
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -239,8 +240,9 @@ module.exports = createReactClass
   handleDisciplineTagChange: (options) ->
     newTags = options.map (option) ->
       option.value
-    @setState disciplineTagList: newTags
-    allTags = newTags.concat @state.otherTagList
+    sanitizedTags = sanitizeArrayInput(newTags)
+    @setState disciplineTagList: sanitizedTags
+    allTags = sanitizedTags.concat @state.otherTagList
     @handleTagChange(allTags)
 
   handleResearcherChange: (option) ->
@@ -252,17 +254,15 @@ module.exports = createReactClass
   handleOtherTagChange: (options) ->
     newTags = options.map (option) ->
       option.value
-    @setState otherTagList: newTags
-    allTags = @state.disciplineTagList.concat newTags
+    sanitizedTags = sanitizeArrayInput(newTags)
+    @setState otherTagList: sanitizedTags
+    allTags = @state.disciplineTagList.concat sanitizedTags
     @handleTagChange(allTags)
 
-  handleTagChange: (value) ->
-    event =
-      target:
-        value: value
-        name: 'tags'
-        dataset: {}
-    handleInputChange.call @props.project, event
+  handleTagChange: (value) ->  
+    changes = 
+      tags: value
+    @props.project.update(changes)
 
   handleMediaChange: (type, file) ->
     errorProp = "#{type}Error"
