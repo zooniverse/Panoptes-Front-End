@@ -148,7 +148,7 @@
     "deploy": "export NODE_ENV=production; npm run _deploy",
     "test-and-watch": "NODE_ENV=development BABEL_ENV=test mocha --watch --watch-extensions js,jsx,coffee,cjsx test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
     "test": "NODE_ENV=development BABEL_ENV=test nyc mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
-    "test-one": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $1",
+    "test-one": "NODE_ENV=development BABEL_ENV=test nyc mocha test/setup.js test/enzyme-configuration.js $1",
     "test-travis": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*)",
     "lint": "eslint ./app --ext .jsx,.js",
     "lint:watch": "esw --watch --color ./app --ext .jsx,.js"
