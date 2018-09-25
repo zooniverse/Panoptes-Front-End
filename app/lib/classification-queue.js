@@ -23,7 +23,7 @@ class ClassificationQueue {
       if (process.env.BABEL_ENV !== 'test') console.error('Failed to queue classification:', error);
     }
 
-    this.flushToBackend();
+    return this.flushToBackend();
   }
 
   length() {
@@ -46,8 +46,8 @@ class ClassificationQueue {
 
     if (pendingClassifications.length > 0) {
       if (process.env.BABEL_ENV !== 'test') console.log('Saving queued classifications:', pendingClassifications.length);
-      pendingClassifications.forEach((classificationData) => {
-        this.apiClient.type('classifications').create(classificationData).save().then((actualClassification) => {
+      return Promise.all(pendingClassifications.map((classificationData) => {
+        return this.apiClient.type('classifications').create(classificationData).save().then((actualClassification) => {
           console.log('Saved classification', actualClassification.id);
           this.onClassificationSaved(actualClassification);
           this.addRecent(actualClassification);
@@ -74,8 +74,9 @@ class ClassificationQueue {
             }
           }
         });
-      });
+      }));
     }
+    return Promise.resolve([]);
   }
 
   _loadQueue() {
