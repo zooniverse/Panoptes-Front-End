@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const SplitByPathPlugin = require('webpack-split-by-path');
 
 module.exports = {
+  mode: 'production',
   entry: [
     path.join(__dirname, 'app/main.cjsx'),
   ],
@@ -17,13 +18,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.HEAD_COMMIT': JSON.stringify(process.env.HEAD_COMMIT),
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: true,
-      stats: true,
-      sourceMap: true
     }),
     new CopyWebpackPlugin([
       { from: 'public', to: '.' },
@@ -33,7 +28,6 @@ module.exports = {
       inject: 'body',
       filename: 'index.html',
     }),
-    new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin({
       filename: '[name]-[contenthash].css',
       allChunks: true,

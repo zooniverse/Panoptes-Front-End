@@ -7,6 +7,10 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 var DashboardPlugin = require('webpack-dashboard/plugin');
 
 var config = {
+  mode: 'development',
+  devServer: {
+    port: 3735
+  },
   devtool: 'eval-source-map',
   entry: [
     path.join(__dirname, 'app/main.cjsx')
@@ -18,7 +22,6 @@ var config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.HEAD_COMMIT': JSON.stringify(process.env.HEAD_COMMIT)
     }),
     new CopyWebpackPlugin([
@@ -87,10 +90,5 @@ var config = {
     fs: "empty"
   }
 };
-
-if (process.env.BABEL_ENV === 'hot-reload') {
-  config.entry.unshift('webpack-hot-middleware/client?reload=true');
-  config.plugins.push(new webpack.HotModuleReplacementPlugin());
-}
 
 module.exports = config;
