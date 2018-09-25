@@ -18,9 +18,9 @@ class ClassificationQueue {
 
     try {
       this._saveQueue(queue);
-      console.info('Queued classifications:', queue.length);
+      if (process.env.BABEL_ENV !== 'test') console.info('Queued classifications:', queue.length);
     } catch (error) {
-      console.error('Failed to queue classification:', error);
+      if (process.env.BABEL_ENV !== 'test') console.error('Failed to queue classification:', error);
     }
 
     this.flushToBackend();
@@ -40,11 +40,13 @@ class ClassificationQueue {
   }
 
   flushToBackend() {
-    const queue = this._loadQueue();
+    const pendingClassifications = this._loadQueue();
+    const failedClassifications = [];
+    this._saveQueue(failedClassifications);
 
-    if (queue.length > 0) {
-      console.log('Saving queued classifications:', queue.length);
-      queue.forEach((classificationData) => {
+    if (pendingClassifications.length > 0) {
+      if (process.env.BABEL_ENV !== 'test') console.log('Saving queued classifications:', pendingClassifications.length);
+      pendingClassifications.forEach((classificationData) => {
         this.apiClient.type('classifications').create(classificationData).save().then((actualClassification) => {
           console.log('Saved classification', actualClassification.id);
           this.onClassificationSaved(actualClassification);
@@ -65,11 +67,8 @@ class ClassificationQueue {
 
           if (error.status === 422) {
             console.error('Dropping malformed classification permanently', classificationData);
-            const indexInQueue = queue.indexOf(classificationData);
-            queue.splice(indexInQueue, 1);
-
             try {
-              this._saveQueue(queue);
+              this.add(classificationData);
             } catch (saveQueueError) {
               console.error('Failed to update classification queue:', saveQueueError);
             }
