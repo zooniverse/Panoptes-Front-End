@@ -1,6 +1,5 @@
 import { JSDOM } from 'jsdom';
 import { URL } from 'whatwg-url';
-import { globalAgent } from 'http';
 
 // Set up fake DOM for use by Enzyme's mount() method.
 const jsdom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'http://localhost' });
