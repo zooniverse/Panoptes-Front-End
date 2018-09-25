@@ -51,16 +51,6 @@ class ClassificationQueue {
           console.log('Saved classification', actualClassification.id);
           this.onClassificationSaved(actualClassification);
           this.addRecent(actualClassification);
-
-          const indexInQueue = queue.indexOf(classificationData);
-          queue.splice(indexInQueue, 1);
-
-          try {
-            this._saveQueue(queue);
-            console.info('Saved a queued classification, remaining:', queue.length);
-          } catch (error) {
-            console.error('Failed to update classification queue:', error);
-          }
         })
         .catch((error) => {
           if (process.env.BABEL_ENV !== 'test') console.error('Failed to save a queued classification:', error);
