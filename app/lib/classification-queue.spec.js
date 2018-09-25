@@ -5,15 +5,20 @@ import FakeLocalStorage from '../../test/fake-local-storage';
 import { FakeApiClient, FakeResource } from '../../test/fake-api-client';
 
 describe('ClassificationQueue', function() {
-  it('sends classifications to the backend', function() {
+  it('sends classifications to the backend', function(done) {
     let apiClient = new FakeApiClient();
     let storage = new FakeLocalStorage();
 
     let classificationData = {annotations: [], metadata: {}};
     let classificationQueue = new ClassificationQueue(storage, apiClient);
-    classificationQueue.add(classificationData);
-
-    expect(apiClient.saves).to.have.lengthOf(1);
+    classificationQueue.add(classificationData)
+    .then(function () {
+      expect(apiClient.saves).to.have.lengthOf(1);
+      expect(classificationQueue.length()).to.equal(0);
+    })
+    .then(function () {
+      done();
+    });
   });
 
   it('keeps classifications in localStorage if backend fails', function(done) {
