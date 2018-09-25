@@ -13,6 +13,11 @@ class ClassificationQueue {
   }
 
   add(classification) {
+    this.store(classification);
+    return this.flushToBackend();
+  }
+
+  store(classification) {
     const queue = this._loadQueue();
     queue.push(classification);
 
@@ -22,8 +27,6 @@ class ClassificationQueue {
     } catch (error) {
       if (process.env.BABEL_ENV !== 'test') console.error('Failed to queue classification:', error);
     }
-
-    return this.flushToBackend();
   }
 
   length() {
@@ -58,7 +61,7 @@ class ClassificationQueue {
           if (error.status === 422) {
             console.error('Dropping malformed classification permanently', classificationData);
             try {
-              this.add(classificationData);
+              this.store(classificationData);
             } catch (saveQueueError) {
               console.error('Failed to update classification queue:', saveQueueError);
             }
