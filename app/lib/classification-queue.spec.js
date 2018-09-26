@@ -4,39 +4,76 @@ import ClassificationQueue from './classification-queue';
 import { FakeApiClient, FakeResource } from '../../test/fake-api-client';
 
 describe('ClassificationQueue', function() {
+  let apiClient
   let classificationQueue;
+  let classificationData = {annotations: [], metadata: {}};
   afterEach(function () {
     classificationQueue._saveQueue([]);
   });
-  it('sends classifications to the backend', function(done) {
-    let apiClient = new FakeApiClient();
+  describe('sends classifications to the backend', function () {
+    beforeEach(function () {
+      apiClient = new FakeApiClient();
+      classificationQueue = new ClassificationQueue(apiClient);
+    });
+    it('saves classifications to the API', function(done) {
+      classificationQueue.add(classificationData)
+      .then(function () {
+        expect(apiClient.saves).to.have.lengthOf(1);
+      })
+      .then(function () {
+        done();
+      })
+      .catch(done);
+    });
+    it('does not store saved classifications', function(done) {
+      classificationQueue.add(classificationData)
+      .then(function () {
+        expect(classificationQueue.length()).to.equal(0);
+      })
+      .then(function () {
+        done();
+      })
+      .catch(done);
+    });
+    it('adds saved classifications to the recents queue', function(done) {
+      classificationQueue.add(classificationData)
+      .then(function () {
+        expect(classificationQueue.recents).to.have.lengthOf(1);
+      })
+      .then(function () {
+        done();
+      })
+      .catch(done);
+    });
+  })
 
-    let classificationData = {annotations: [], metadata: {}};
-    classificationQueue = new ClassificationQueue(apiClient);
-    classificationQueue.add(classificationData)
-    .then(function () {
-      expect(apiClient.saves).to.have.lengthOf(1);
-      expect(classificationQueue.length()).to.equal(0);
-    })
-    .then(function () {
-      done();
-    })
-    .catch(done);
-  });
-
-  it('keeps classifications in localStorage if backend fails', function(done) {
-    let apiClient = new FakeApiClient({canSave: () => { return false; }});
-    let classificationData = {annotations: [], metadata: {}};
-    classificationQueue = new ClassificationQueue(apiClient);
-    classificationQueue.add(classificationData)
-    .catch(function () {
-      expect(apiClient.saves).to.have.lengthOf(0);
-      expect(classificationQueue.length()).to.equal(1);
-    })
-    .then(function () {
-      done();
-    })
-    .catch(done);
+  describe('keeps classifications in localStorage if backend fails', function(done) {
+    beforeEach(function () {
+      let apiClient = new FakeApiClient({canSave: () => { return false; }});
+      let classificationData = {annotations: [], metadata: {}};
+      classificationQueue = new ClassificationQueue(apiClient);
+    });
+    it('should not save failed classifications', function () {
+      classificationQueue.add(classificationData)
+      .then(function () {
+        expect(apiClient.saves).to.have.lengthOf(0);
+      })
+      .then(done, done);
+    });
+    it('should queue failed classifications to retry', function () {
+      classificationQueue.add(classificationData)
+      .then(function () {
+        expect(classificationQueue.length()).to.equal(1);
+      })
+      .then(done, done);
+    });
+    it('should not add failed classifications to recents', function () {
+      classificationQueue.add(classificationData)
+      .then(function () {
+        expect(classificationQueue.recents).to.have.lengthOf(0);
+      })
+      .then(done, done);
+    });
   });
   describe('with a slow network connection', function () {
     let apiClient;
