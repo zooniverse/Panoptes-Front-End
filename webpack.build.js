@@ -2,14 +2,32 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const SplitByPathPlugin = require('webpack-split-by-path');
 
 module.exports = {
-  mode: 'production',
   entry: [
     path.join(__dirname, 'app/main.cjsx'),
   ],
+  mode: 'production',
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'main',
+          test: /\.(css|styl)$/,
+          chunks: 'all',
+          enforce: true
+        },
+        vendor: {
+          name: 'vendor',
+          test: /[\\/]node_modules[\\/]/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
+  },
   output: {
     publicPath: '/',
     path: path.join(__dirname, '/dist'),
@@ -28,16 +46,9 @@ module.exports = {
       inject: 'body',
       filename: 'index.html',
     }),
-    new ExtractTextPlugin({
-      filename: '[name]-[contenthash].css',
-      allChunks: true,
+    new MiniCssExtractPlugin({
+      filename: '[name]-[contenthash].css'
     }),
-    new SplitByPathPlugin([
-      {
-        name: 'vendor',
-        path: path.join(__dirname, 'node_modules'),
-      },
-    ]),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
@@ -68,22 +79,17 @@ module.exports = {
       }],
     }, {
       test: /\.css$/,
-      use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: {
-          loader: 'css-loader'
-        }
-      }),
+      use: [
+        MiniCssExtractPlugin.loader,
+        'css-loader'
+      ],
     }, {
       test: /\.styl$/,
-      loader: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [{
-          loader: 'css-loader'
-        }, {
-          loader: 'stylus-loader'
-        }]
-      }),
+      use: [
+        MiniCssExtractPlugin.loader,
+        'css-loader',
+        'stylus-loader'
+      ],
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
       use: 'file-loader',
