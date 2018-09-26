@@ -1,4 +1,5 @@
 import reducer from './classify';
+import apiClient from 'panoptes-client/lib/api-client';
 import { expect } from 'chai';
 
 describe('Classifier actions', function () {
@@ -253,6 +254,23 @@ describe('Classifier actions', function () {
     it('should store the specified workflow', function () {
       const newState = reducer(state, action);
       expect(newState.workflow).to.deep.equal(action.payload.workflow);
+    });
+  });
+  describe('save annotations', function () {
+    const action = {
+      type: 'pfe/classify/SAVE_ANNOTATIONS',
+      payload: {
+        annotations: [1, 2, 3, 4]
+      }
+    };
+    const state = {
+      classification: apiClient.type('classifications').create({}),
+      workflow: { id: '1' },
+      upcomingSubjects: [1, 2]
+    };
+    it('should add annotations to the classification', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
     });
   });
 });
