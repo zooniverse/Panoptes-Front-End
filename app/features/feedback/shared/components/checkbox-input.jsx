@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import uuidv4 from 'uuid/v4';
 
 
 function CheckboxInput({ title, help, onChange, checked, name }) {
-  const uuid = uuidv4();
   return (
     <fieldset>
-      <label htmlFor={uuid}>
+      <label>
         <input
-          id={uuid}
           type="checkbox"
           name={name}
           onChange={onChange}

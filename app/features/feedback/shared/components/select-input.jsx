@@ -1,17 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
-import uuidv4 from 'uuid/v4';
 
 function SelectInput({ help, onChange, multi = false, name, options, placeholder = '', title, value }) {
-  const uuid = uuidv4();
   return (
     <fieldset>
-      <label htmlFor={uuid}>
+      <label>
         {title}
       </label>
       <Select
-        id={uuid}
         multi={multi}
         name={name}
         onChange={onChange}
