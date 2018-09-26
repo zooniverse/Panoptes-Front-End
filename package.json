@@ -57,7 +57,7 @@
     "sugar-client": "~1.0.1",
     "svg-path-properties": "~0.4.5",
     "swipe-js-iso": "~2.0.4",
-    "uuid": "~3.1.0",
+    "uuid": "~3.3.2",
     "visible-element": "~1.0.1",
     "whatwg-url": "~7.0.0"
   },
