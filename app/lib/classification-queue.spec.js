@@ -4,11 +4,15 @@ import ClassificationQueue from './classification-queue';
 import { FakeApiClient, FakeResource } from '../../test/fake-api-client';
 
 describe('ClassificationQueue', function() {
+  let classificationQueue;
+  afterEach(function () {
+    classificationQueue._saveQueue([]);
+  });
   it('sends classifications to the backend', function(done) {
     let apiClient = new FakeApiClient();
 
     let classificationData = {annotations: [], metadata: {}};
-    let classificationQueue = new ClassificationQueue(apiClient);
+    classificationQueue = new ClassificationQueue(apiClient);
     classificationQueue.add(classificationData)
     .then(function () {
       expect(apiClient.saves).to.have.lengthOf(1);
@@ -21,9 +25,8 @@ describe('ClassificationQueue', function() {
 
   it('keeps classifications in localStorage if backend fails', function(done) {
     let apiClient = new FakeApiClient({canSave: () => { return false; }});
-
     let classificationData = {annotations: [], metadata: {}};
-    let classificationQueue = new ClassificationQueue(apiClient);
+    classificationQueue = new ClassificationQueue(apiClient);
     classificationQueue.add(classificationData)
     .catch(function () {
       expect(apiClient.saves).to.have.lengthOf(0);
@@ -35,7 +38,6 @@ describe('ClassificationQueue', function() {
   });
   describe('with a slow network connection', function () {
     let apiClient;
-    let classificationQueue;
     let saveSpy;
     before(function () {
       saveSpy = sinon.stub(FakeResource.prototype, 'save').callsFake(function() {
