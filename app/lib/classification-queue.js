@@ -5,8 +5,8 @@ const FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications';
 const MAX_RECENTS = 10;
 
 class ClassificationQueue {
-  constructor(storage, api, onClassificationSaved) {
-    this.storage = storage || window.localStorage;
+  constructor(api, onClassificationSaved) {
+    this.storage = window.localStorage;
     this.apiClient = api || apiClient;
     this.recents = [];
     this.onClassificationSaved = onClassificationSaved;

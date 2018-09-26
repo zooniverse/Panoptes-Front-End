@@ -1,16 +1,14 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import ClassificationQueue from './classification-queue';
-import FakeLocalStorage from '../../test/fake-local-storage';
 import { FakeApiClient, FakeResource } from '../../test/fake-api-client';
 
 describe('ClassificationQueue', function() {
   it('sends classifications to the backend', function(done) {
     let apiClient = new FakeApiClient();
-    let storage = new FakeLocalStorage();
 
     let classificationData = {annotations: [], metadata: {}};
-    let classificationQueue = new ClassificationQueue(storage, apiClient);
+    let classificationQueue = new ClassificationQueue(apiClient);
     classificationQueue.add(classificationData)
     .then(function () {
       expect(apiClient.saves).to.have.lengthOf(1);
@@ -23,10 +21,9 @@ describe('ClassificationQueue', function() {
 
   it('keeps classifications in localStorage if backend fails', function(done) {
     let apiClient = new FakeApiClient({canSave: () => { return false; }});
-    let storage = new FakeLocalStorage();
 
     let classificationData = {annotations: [], metadata: {}};
-    let classificationQueue = new ClassificationQueue(storage, apiClient);
+    let classificationQueue = new ClassificationQueue(apiClient);
     classificationQueue.add(classificationData)
     .catch(function () {
       expect(apiClient.saves).to.have.lengthOf(0);
@@ -46,7 +43,7 @@ describe('ClassificationQueue', function() {
         return new Promise(function (resolve, reject) {});
       });
       apiClient = new FakeApiClient();
-      classificationQueue = new ClassificationQueue(window.localStorage, apiClient);
+      classificationQueue = new ClassificationQueue(apiClient);
       classificationQueue.add({annotations: [], metadata: {}});
       classificationQueue.add({annotations: [], metadata: {}});
     });
