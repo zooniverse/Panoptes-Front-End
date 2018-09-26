@@ -9,7 +9,7 @@ class ClassificationQueue {
     this.storage = window.localStorage;
     this.apiClient = api || apiClient;
     this.recents = [];
-    this.onClassificationSaved = onClassificationSaved;
+    this.onClassificationSaved = onClassificationSaved || function () { return true; };
   }
 
   add(classification) {
