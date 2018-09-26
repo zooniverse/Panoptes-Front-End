@@ -26,7 +26,7 @@ export class FakeResourceType {
     return new FakeResource(this, attributes);
   }
 
-  save(attributes) { this.apiClient.save(this.type, attributes)}
+  save(attributes) { return this.apiClient.save(this.type, attributes)}
 }
 
 export class FakeApiClient {
