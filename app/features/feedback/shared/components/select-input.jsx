@@ -7,15 +7,15 @@ function SelectInput({ help, onChange, multi = false, name, options, placeholder
     <fieldset>
       <label>
         {title}
+        <Select
+          multi={multi}
+          name={name}
+          onChange={onChange}
+          options={options}
+          placeholder={placeholder}
+          value={value}
+        />
       </label>
-      <Select
-        multi={multi}
-        name={name}
-        onChange={onChange}
-        options={options}
-        placeholder={placeholder}
-        value={value}
-      />
       <small className="form-help">
         {help}
       </small>

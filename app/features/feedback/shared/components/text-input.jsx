@@ -6,14 +6,14 @@ function TextInput({ title, help, onChange, name, type = 'text', required = fals
     <fieldset>
       <label>
         {title}
+        <input
+          name={name}
+          onChange={onChange}
+          required={required}
+          type={type}
+          value={value}
+        />
       </label>
-      <input
-        name={name}
-        onChange={onChange}
-        required={required}
-        type={type}
-        value={value}
-      />
       <small className="form-help">
         {help}
       </small>
