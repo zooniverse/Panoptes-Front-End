@@ -20,7 +20,8 @@ describe('ClassificationQueue', function() {
     })
     .then(function () {
       done();
-    });
+    })
+    .catch(done);
   });
 
   it('keeps classifications in localStorage if backend fails', function(done) {
@@ -34,7 +35,8 @@ describe('ClassificationQueue', function() {
     })
     .then(function () {
       done();
-    });
+    })
+    .catch(done);
   });
   describe('with a slow network connection', function () {
     let apiClient;
