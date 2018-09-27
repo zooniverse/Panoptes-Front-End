@@ -9,6 +9,13 @@ var DashboardPlugin = require('webpack-dashboard/plugin');
 var config = {
   mode: 'development',
   devServer: {
+    allowedHosts: [
+      '.zooniverse.org'
+    ],
+    https: true,
+    host: process.env.HOST || "localhost",
+    open: true,
+    overlay: true,
     port: 3735
   },
   devtool: 'eval-source-map',
@@ -22,6 +29,7 @@ var config = {
   },
   plugins: [
     new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.HEAD_COMMIT': JSON.stringify(process.env.HEAD_COMMIT)
     }),
     new CopyWebpackPlugin([

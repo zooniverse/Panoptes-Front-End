@@ -35,7 +35,8 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.HEAD_COMMIT': JSON.stringify(process.env.HEAD_COMMIT),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.HEAD_COMMIT': JSON.stringify(process.env.HEAD_COMMIT)
     }),
     new CopyWebpackPlugin([
       { from: 'public', to: '.' },
