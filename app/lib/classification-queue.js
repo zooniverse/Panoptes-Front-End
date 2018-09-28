@@ -47,31 +47,28 @@ class ClassificationQueue {
     const failedClassifications = [];
     this._saveQueue(failedClassifications);
 
-    if (pendingClassifications.length > 0) {
-      if (process.env.BABEL_ENV !== 'test') console.log('Saving queued classifications:', pendingClassifications.length);
-      return Promise.all(pendingClassifications.map((classificationData) => {
-        return this.apiClient.type('classifications').create(classificationData).save()
-        .then((actualClassification) => {
-          console.log('Saved classification', actualClassification.id);
-          this.onClassificationSaved(actualClassification);
-          this.addRecent(actualClassification);
-        })
-        .catch((error) => {
-          if (process.env.BABEL_ENV !== 'test') console.error('Failed to save a queued classification:', error);
+    if (process.env.BABEL_ENV !== 'test') console.log('Saving queued classifications:', pendingClassifications.length);
+    return Promise.all(pendingClassifications.map((classificationData) => {
+      return this.apiClient.type('classifications').create(classificationData).save()
+      .then((actualClassification) => {
+        console.log('Saved classification', actualClassification.id);
+        this.onClassificationSaved(actualClassification);
+        this.addRecent(actualClassification);
+      })
+      .catch((error) => {
+        if (process.env.BABEL_ENV !== 'test') console.error('Failed to save a queued classification:', error);
 
-          if (error.status !== 422) {
-            try {
-              this.store(classificationData);
-            } catch (saveQueueError) {
-              console.error('Failed to update classification queue:', saveQueueError);
-            }
-          } else {
-            console.error('Dropping malformed classification permanently', classificationData);
+        if (error.status !== 422) {
+          try {
+            this.store(classificationData);
+          } catch (saveQueueError) {
+            console.error('Failed to update classification queue:', saveQueueError);
           }
-        });
-      }));
-    }
-    return Promise.resolve([]);
+        } else {
+          console.error('Dropping malformed classification permanently', classificationData);
+        }
+      });
+    }));
   }
 
   _loadQueue() {
