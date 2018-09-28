@@ -1,49 +1,74 @@
 {
-  "presets": ["es2015", "react"],
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
   "env": {
     "development": {
       "plugins": [
-        ["transform-class-properties"],
-        ["transform-object-rest-spread"],
-        ["transform-react-jsx"],
-        ["typecheck"]
-      ]
-    },
-    "hot-reload": {
-      "plugins": [
-        ["react-transform", {
-          "transforms": [{
-            "transform": "react-transform-hmr",
-            "imports": ["react"],
-            "locals": ["module"]
-          }]
-        }],
-        ["transform-class-properties"],
-        ["transform-object-rest-spread"],
-        ["transform-react-jsx"]
+        [
+          "@babel/plugin-proposal-class-properties"
+        ],
+        [
+          "@babel/plugin-proposal-object-rest-spread"
+        ],
+        [
+          "@babel/plugin-transform-react-jsx"
+        ],
+        [
+          "transform-es2015-modules-commonjs"
+        ]
       ]
     },
     "staging": {
       "plugins": [
-        ["transform-class-properties"],
-        ["transform-object-rest-spread"],
-        ["transform-react-jsx"]
+        [
+          "@babel/plugin-proposal-class-properties"
+        ],
+        [
+          "@babel/plugin-proposal-object-rest-spread"
+        ],
+        [
+          "@babel/plugin-transform-react-jsx"
+        ],
+        [
+          "transform-es2015-modules-commonjs"
+        ]
       ]
     },
     "production": {
       "plugins": [
-        ["transform-class-properties"],
-        ["transform-object-rest-spread"],
-        ["transform-react-jsx"]
+        [
+          "@babel/plugin-proposal-class-properties"
+        ],
+        [
+          "@babel/plugin-proposal-object-rest-spread"
+        ],
+        [
+          "@babel/plugin-transform-react-jsx"
+        ],
+        [
+          "transform-es2015-modules-commonjs"
+        ]
       ]
     },
     "test": {
       "plugins": [
-        ["babel-plugin-rewire"],
-        ["transform-class-properties"],
-        ["transform-object-rest-spread"],
-        ["transform-react-jsx"],
-        ["typecheck"]
+        [
+          "babel-plugin-rewire"
+        ],
+        [
+          "@babel/plugin-proposal-class-properties"
+        ],
+        [
+          "@babel/plugin-proposal-object-rest-spread"
+        ],
+        [
+          "@babel/plugin-transform-react-jsx"
+        ],
+        [
+          "transform-es2015-modules-commonjs"
+        ]
       ]
     }
   }

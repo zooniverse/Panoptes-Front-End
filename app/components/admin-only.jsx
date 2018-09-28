@@ -13,7 +13,7 @@ class AdminOnly extends React.Component {
     whenActive: false
   };
 
-  refreshing = (false: boolean);
+  refreshing = false
 
   componentDidMount() {
     apiClient.listen('change', this.handleClientChange);
