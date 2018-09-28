@@ -47,27 +47,27 @@ describe('ClassificationQueue', function() {
     });
   })
 
-  describe('keeps classifications in localStorage if backend fails', function(done) {
+  describe('keeps classifications in localStorage if backend fails', function() {
     beforeEach(function () {
-      let apiClient = new FakeApiClient({canSave: () => { return false; }});
-      let classificationData = {annotations: [], metadata: {}};
+      apiClient = new FakeApiClient({canSave: () => { return false; }});
+      classificationData = {annotations: [], metadata: {}};
       classificationQueue = new ClassificationQueue(apiClient);
     });
-    it('should not save failed classifications', function () {
+    it('should not save failed classifications', function (done) {
       classificationQueue.add(classificationData)
       .then(function () {
         expect(apiClient.saves).to.have.lengthOf(0);
       })
       .then(done, done);
     });
-    it('should queue failed classifications to retry', function () {
+    it('should queue failed classifications to retry', function (done) {
       classificationQueue.add(classificationData)
       .then(function () {
         expect(classificationQueue.length()).to.equal(1);
       })
       .then(done, done);
     });
-    it('should not add failed classifications to recents', function () {
+    it('should not add failed classifications to recents', function (done) {
       classificationQueue.add(classificationData)
       .then(function () {
         expect(classificationQueue.recents).to.have.lengthOf(0);
