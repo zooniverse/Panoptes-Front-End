@@ -68,7 +68,9 @@ class Fan extends React.Component {
     const { mark, getEventOffset } = this.props;
     const { x, y } = getEventOffset(e);
     const cursorAngle = Fan.getCursorAngle({ x, y }, mark);
-    let spread = 2 * Math.abs(cursorAngle - mark.rotation);
+    let spread = Math.abs(cursorAngle - mark.rotation);
+    spread = spread > 180 ? 360 - spread : spread;
+    spread = 2 * spread;
     spread = Math.min(spread, MAXIMUM_SPREAD);
     const newMark = Object.assign({}, mark, { spread });
     this.props.onChange(newMark);

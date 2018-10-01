@@ -164,6 +164,19 @@ describe('Fan Tool', function () {
           });
         });
       });
+      it('should update correctly when the cursor crosses the x-axis', function () {
+        const cursor = {
+          x: 300,
+          y: 400
+        };
+        mark.rotation = 315;
+        wrapper.setProps({ mark });
+        wrapper.instance().handleSpread(cursor);
+        expect(onChange.callCount).to.equal(1);
+        const newMark = onChange.getCall(0).args[0];
+        expect(newMark.spread).to.equal(90);
+        onChange.resetHistory();
+      });
     });
   });
 });
