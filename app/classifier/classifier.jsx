@@ -12,6 +12,7 @@ import { getSessionID } from '../lib/session';
 import preloadSubject from '../lib/preload-subject';
 import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
+import * as classifierActions from '../redux/ducks/classify';
 import * as feedbackActions from '../redux/ducks/feedback';
 import * as interventionActions from '../redux/ducks/interventions';
 import * as userInterfaceActions from '../redux/ducks/userInterface';
@@ -96,7 +97,7 @@ class Classifier extends React.Component {
 
   componentWillUnmount() {
     const annotations = this.state.annotations.slice();
-    this.props.classification.update({ annotations });
+    this.props.actions.classify.saveAnnotations(annotations);
     try {
       !!this.context.geordi && this.context.geordi.forget(['subjectID']);
     } catch (err) {
@@ -596,6 +597,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: {
+    classify: bindActionCreators(classifierActions, dispatch),
     feedback: bindActionCreators(feedbackActions, dispatch),
     interventions: bindActionCreators(interventionActions, dispatch),
     theme: bindActionCreators(userInterfaceActions, dispatch)

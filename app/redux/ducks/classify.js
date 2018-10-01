@@ -65,6 +65,7 @@ const CREATE_CLASSIFICATION = 'pfe/classify/CREATE_CLASSIFICATION';
 const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
 const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
+const SAVE_ANNOTATIONS = 'pfe/classify/SAVE_ANNOTATIONS';
 const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
 
 export default function reducer(state = initialState, action = {}) {
@@ -133,6 +134,11 @@ export default function reducer(state = initialState, action = {}) {
       upcomingSubjects.forEach(subject => subject.destroy());
       upcomingSubjects.splice(0);
       return Object.assign({}, state, { classification, upcomingSubjects });
+    }
+    case SAVE_ANNOTATIONS: {
+      const { annotations } = action.payload;
+      const classification = state.classification.update({ annotations });
+      return Object.assign({}, state, { classification });
     }
     case SET_WORKFLOW: {
       const { workflow } = action.payload;
@@ -229,6 +235,13 @@ export function resumeClassification(classification) {
         payload: { subject }
       });
     });
+  };
+}
+
+export function saveAnnotations(annotations) {
+  return {
+    type: SAVE_ANNOTATIONS,
+    payload: { annotations }
   };
 }
 
