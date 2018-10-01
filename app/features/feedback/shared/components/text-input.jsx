@@ -1,22 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import uuidv4 from 'uuid/v4';
 
 function TextInput({ title, help, onChange, name, type = 'text', required = false, value }) {
-  const uuid = uuidv4();
   return (
     <fieldset>
-      <label htmlFor={uuid}>
+      <label>
         {title}
+        <input
+          name={name}
+          onChange={onChange}
+          required={required}
+          type={type}
+          value={value}
+        />
       </label>
-      <input
-        id={uuid}
-        name={name}
-        onChange={onChange}
-        required={required}
-        type={type}
-        value={value}
-      />
       <small className="form-help">
         {help}
       </small>
