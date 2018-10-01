@@ -12,6 +12,7 @@ var config = {
     allowedHosts: [
       '.zooniverse.org'
     ],
+    historyApiFallback: true,
     https: true,
     host: process.env.HOST || "localhost",
     open: true,
