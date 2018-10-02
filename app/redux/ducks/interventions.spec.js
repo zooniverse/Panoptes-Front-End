@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import { sugarClient } from 'panoptes-client/lib/sugar';
-import reducer, { notify } from './interventions';
+import reducer, { notify, subscribe, unsubscribe, dismiss } from './interventions';
 
 function mockPanoptesResource(type, options) {
   const resource = apiClient.type(type).create(options);
@@ -161,6 +161,32 @@ describe('Intervention actions', function () {
           expect(action).to.deep.equal(expectedAction);
         });
       })
+    });
+    describe('subscribe', function () {
+      it('should create a subscribe action', function () {
+        const expectedAction = {
+          type: 'pfe/interventions/SUBSCRIBE',
+          payload: 'A channel'
+        };
+        expect(subscribe('A channel')).to.deep.equal(expectedAction);
+      });
+    });
+    describe('unsubscribe', function () {
+      it('should create an unsubscribe action', function () {
+        const expectedAction = {
+          type: 'pfe/interventions/UNSUBSCRIBE',
+          payload: 'A channel'
+        };
+        expect(unsubscribe('A channel')).to.deep.equal(expectedAction);
+      });
+    });
+    describe('dismiss', function () {
+      it('should create a dismiss action', function () {
+        const expectedAction = {
+          type: 'pfe/interventions/DISMISS_NOTIFICATION'
+        };
+        expect(dismiss()).to.deep.equal(expectedAction);
+      });
     });
   });
 });
