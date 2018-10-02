@@ -29,7 +29,7 @@ function isPresent(val) {
   return val !== undefined && val !== null;
 }
 
-const classificationQueue = new ClassificationQueue(window.localStorage, apiClient, onClassificationSaved);
+const classificationQueue = new ClassificationQueue(apiClient, onClassificationSaved);
 
 // Store this externally to persist during the session.
 let sessionDemoMode = false;

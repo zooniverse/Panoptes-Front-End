@@ -5,25 +5,28 @@ const FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications';
 const MAX_RECENTS = 10;
 
 class ClassificationQueue {
-  constructor(storage, api, onClassificationSaved) {
-    this.storage = storage || window.localStorage;
+  constructor(api, onClassificationSaved) {
+    this.storage = window.localStorage;
     this.apiClient = api || apiClient;
     this.recents = [];
-    this.onClassificationSaved = onClassificationSaved;
+    this.onClassificationSaved = onClassificationSaved || function () { return true; };
   }
 
   add(classification) {
+    this.store(classification);
+    return this.flushToBackend();
+  }
+
+  store(classification) {
     const queue = this._loadQueue();
     queue.push(classification);
 
     try {
       this._saveQueue(queue);
-      console.info('Queued classifications:', queue.length);
+      if (process.env.BABEL_ENV !== 'test') console.info('Queued classifications:', queue.length);
     } catch (error) {
-      console.error('Failed to queue classification:', error);
+      if (process.env.BABEL_ENV !== 'test') console.error('Failed to queue classification:', error);
     }
-
-    this.flushToBackend();
   }
 
   length() {
@@ -40,43 +43,32 @@ class ClassificationQueue {
   }
 
   flushToBackend() {
-    const queue = this._loadQueue();
+    const pendingClassifications = this._loadQueue();
+    const failedClassifications = [];
+    this._saveQueue(failedClassifications);
 
-    if (queue.length > 0) {
-      console.log('Saving queued classifications:', queue.length);
-      queue.forEach((classificationData) => {
-        this.apiClient.type('classifications').create(classificationData).save().then((actualClassification) => {
-          console.log('Saved classification', actualClassification.id);
-          this.onClassificationSaved(actualClassification);
-          this.addRecent(actualClassification);
+    if (process.env.BABEL_ENV !== 'test') console.log('Saving queued classifications:', pendingClassifications.length);
+    return Promise.all(pendingClassifications.map((classificationData) => {
+      return this.apiClient.type('classifications').create(classificationData).save()
+      .then((actualClassification) => {
+        console.log('Saved classification', actualClassification.id);
+        this.onClassificationSaved(actualClassification);
+        this.addRecent(actualClassification);
+      })
+      .catch((error) => {
+        if (process.env.BABEL_ENV !== 'test') console.error('Failed to save a queued classification:', error);
 
-          const indexInQueue = queue.indexOf(classificationData);
-          queue.splice(indexInQueue, 1);
-
+        if (error.status !== 422) {
           try {
-            this._saveQueue(queue);
-            console.info('Saved a queued classification, remaining:', queue.length);
-          } catch (error) {
-            console.error('Failed to update classification queue:', error);
+            this.store(classificationData);
+          } catch (saveQueueError) {
+            console.error('Failed to update classification queue:', saveQueueError);
           }
-        })
-        .catch((error) => {
-          if (process.env.BABEL_ENV !== 'test') console.error('Failed to save a queued classification:', error);
-
-          if (error.status === 422) {
-            console.error('Dropping malformed classification permanently', classificationData);
-            const indexInQueue = queue.indexOf(classificationData);
-            queue.splice(indexInQueue, 1);
-
-            try {
-              this._saveQueue(queue);
-            } catch (saveQueueError) {
-              console.error('Failed to update classification queue:', saveQueueError);
-            }
-          }
-        });
+        } else {
+          console.error('Dropping malformed classification permanently', classificationData);
+        }
       });
-    }
+    }));
   }
 
   _loadQueue() {
