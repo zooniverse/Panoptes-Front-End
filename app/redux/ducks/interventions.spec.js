@@ -1,7 +1,17 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import apiClient from 'panoptes-client/lib/api-client';
 import { sugarClient } from 'panoptes-client/lib/sugar';
-import reducer from './interventions';
+import reducer, { notify } from './interventions';
+
+function mockPanoptesResource(type, options) {
+  const resource = apiClient.type(type).create(options);
+  apiClient._typesCache = {};
+  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
+  sinon.stub(resource, 'get');
+  sinon.stub(resource, 'delete');
+  return resource;
+}
 
 describe('Intervention actions', function () {
   let subscribeSpy;
@@ -91,6 +101,66 @@ describe('Intervention actions', function () {
     it('should store the error', function () {
       const newState = reducer(state, action);
       expect(newState.error).to.equal(action.payload);
+    });
+  });
+  describe('action creators', function () {
+    describe('notify', function () {
+      describe('with subject IDs', function () {
+        const notification = {
+          data: {
+            message: {
+              type: 'subject_queue',
+              subject_ids: [1, 2],
+              workflow_id: 1
+            }
+          }
+        };
+        const subject = mockPanoptesResource('subjects', { id: 'a', metadata: {} });
+        const fakeType = {
+          get: sinon.stub().resolves([subject])
+        };
+        const fakeDispatch = sinon.stub().callsFake(() => true);
+        before(function () {
+          sinon.stub(apiClient, 'type').callsFake(() => fakeType);
+          notify(notification)(fakeDispatch);
+        });
+        after(function () {
+          apiClient.type.restore();
+        });
+        it('should request new subjects', function () {
+          const { subject_ids } = notification.data.message;
+          expect(fakeType.get.calledWith(subject_ids)).to.be.true;
+        })
+        it('should flag new subjects', function () {
+          expect(subject.metadata.intervention).to.be.true;
+        });
+        it('should dispatch a prependSubjects action', function () {
+          const { subject_ids, workflow_id } = notification.data.message;
+          const expectedAction = {
+            type: 'pfe/classify/PREPEND_SUBJECTS',
+            payload: {
+              subjects: [subject],
+              workflowID: workflow_id
+            }
+          };
+          expect(fakeDispatch.calledWith(expectedAction)).to.be.true;
+        });
+      });
+      describe('default behaviour', function () {
+        const notification = {
+          data: {
+            message: 'a generic message'
+          }
+        };
+        it('should store the notification', function () {
+          const action = notify(notification);
+          const expectedAction = {
+            type: 'pfe/interventions/ADD_NOTIFICATION',
+            payload: notification
+          };
+          expect(action).to.deep.equal(expectedAction);
+        });
+      })
     });
   });
 });
