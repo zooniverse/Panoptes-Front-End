@@ -158,10 +158,19 @@ describe('Classifier', function () {
   describe('on completing a classification', function () {
     let checkForFeedback;
     let fakeEvent;
+    const actions = {
+      classify: {
+        completeClassification: sinon.stub()
+      },
+      interventions: {
+        dismiss: sinon.stub()
+      }
+    };
     beforeEach(function () {
       checkForFeedback = sinon.stub(Classifier.prototype, 'checkForFeedback').callsFake(() => Promise.resolve());
       wrapper = shallow(
         <Classifier
+          actions={actions}
           classification={classification}
           subject={subject}
           onComplete={classification.save}
@@ -178,6 +187,14 @@ describe('Classifier', function () {
       checkForFeedback.restore();
     });
 
+    it('should complete the classification', function (done) {
+      wrapper.setProps({ workflow });
+      wrapper.instance().completeClassification(fakeEvent).then(function () {
+        const { annotations } = wrapper.state();
+        expect(actions.classify.completeClassification.calledWith(annotations)).to.be.true;
+        done();
+      });
+    });
     describe('with summaries enabled', function () {
       it('should display a classification summary', function (done) {
         wrapper.setProps({ workflow });
@@ -185,8 +202,6 @@ describe('Classifier', function () {
         .then(function () {
           wrapper.update();
           const state = wrapper.state();
-          expect(classification.completed).to.equal(true);
-          expect(state.annotations).to.deep.equal(classification.annotations);
           expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(1);
         })
         .then(done, done);
@@ -201,8 +216,6 @@ describe('Classifier', function () {
         .then(function () {
           wrapper.update();
           const state = wrapper.state();
-          expect(state.annotations).to.deep.equal(classification.annotations);
-          expect(classification.completed).to.equal(true);
           expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(0);
         })
         .then(done, done);
@@ -226,6 +239,9 @@ describe('Classifier', function () {
         active: true
       };
       const actions = {
+        classify: {
+          completeClassification: sinon.stub()
+        },
         feedback: {
           init: feedbackInitSpy,
           update: feedbackUpdateSpy

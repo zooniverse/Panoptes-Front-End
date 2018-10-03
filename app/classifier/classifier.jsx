@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import styled, { ThemeProvider } from 'styled-components';
 import classNames from 'classnames';
 
-import { getSessionID } from '../lib/session';
 import preloadSubject from '../lib/preload-subject';
 import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
@@ -31,8 +30,6 @@ import FrameAnnotator from './frame-annotator';
 import ExpertOptions from './expert-options';
 
 import openFeedbackModal from '../features/feedback/classifier';
-import GridTool from './drawing-tools/grid';
-import tasks from './tasks';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -236,33 +233,8 @@ class Classifier extends React.Component {
     this.setState({ workflowHistory });
   }
 
-  processAnnotations(annotations) {
-    // take care of any task-specific processing of the annotations array before submitting a classification
-    const { workflow } = this.props;
-    const currentAnnotation = annotations[annotations.length - 1];
-    const currentTask = workflow.tasks[currentAnnotation.task];
-
-    if (currentTask && currentTask.tools) {
-      currentTask.tools.map((tool) => {
-        if (tool.type === 'grid') {
-          GridTool.mapCells(annotations);
-        }
-      });
-    }
-
-    if (currentAnnotation.shortcut) {
-      const unlinkedTask = workflow.tasks[currentTask.unlinkedTask];
-      const unlinkedAnnotation = tasks[unlinkedTask.type].getDefaultAnnotation(unlinkedTask, workflow, tasks);
-      unlinkedAnnotation.task = currentTask.unlinkedTask;
-      unlinkedAnnotation.value = currentAnnotation.shortcut.value.slice();
-      delete currentAnnotation.shortcut;
-      annotations.push(unlinkedAnnotation);
-    }
-    return annotations;
-  }
-
   completeClassification(e) {
-    const { classification, onComplete, interventions, project, subject, user, workflow } = this.props;
+    const { actions, classification, onComplete, interventions, project, subject, user, workflow } = this.props;
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
     const annotations = this.state.annotations.slice();
@@ -281,9 +253,6 @@ class Classifier extends React.Component {
       e.preventDefault();
     }
     classification.update({
-      annotations: this.processAnnotations(this.state.annotations.slice()),
-      'metadata.session': getSessionID(),
-      'metadata.finished_at': (new Date()).toISOString(),
       'metadata.viewport': {
         width: innerWidth,
         height: innerHeight
@@ -297,7 +266,7 @@ class Classifier extends React.Component {
 
     return this.checkForFeedback(taskKey)
       .then(() => {
-        classification.update({ completed: true });
+        actions.classify.completeClassification(annotations);
         if (!showIntervention && !isCmdClick && originalElement.href) {
           const subjectTalkPath = `/projects/${project.slug}/talk/subjects/${subject.id}`;
           browserHistory.push(subjectTalkPath);

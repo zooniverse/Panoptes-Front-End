@@ -1,6 +1,16 @@
 import reducer from './classify';
 import apiClient from 'panoptes-client/lib/api-client';
 import { expect } from 'chai';
+import sinon from 'sinon';
+
+function mockPanoptesResource(type, options) {
+  const resource = apiClient.type(type).create(options);
+  apiClient._typesCache = {};
+  sinon.stub(resource, 'save').resolves(resource);
+  sinon.stub(resource, 'get');
+  sinon.stub(resource, 'delete');
+  return resource;
+}
 
 describe('Classifier actions', function () {
   describe('append subjects', function () {
@@ -237,6 +247,36 @@ describe('Classifier actions', function () {
       const testState = Object.assign({}, state, { upcomingSubjects: [subject2] });
       const newState = reducer(testState, action);
       expect(newState).to.deep.equal(state);
+    });
+  });
+  describe('complete classification', function () {
+    const action = {
+      type: 'pfe/classify/COMPLETE_CLASSIFICATION',
+      payload: {
+        annotations: [{ task: 'a', value: 'hello' }]
+      }
+    };
+    const state = {
+      classification: mockPanoptesResource('classifications', { id: '1' }),
+      workflow: {
+        id: '1',
+        tasks: {
+          a: {}
+        }
+      },
+      upcomingSubjects: [1, 2]
+    };
+    it('should set the classification completed flag', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.completed).to.be.true;
+    });
+    it('should set the classification finished_at time', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.finished_at).to.be.ok;
+    });
+    it('should record the classification annotations', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
     });
   });
   describe('set workflow', function () {
