@@ -4,7 +4,13 @@ import counterpart from 'counterpart';
 import styled from 'styled-components';
 
 const StyledInterventionMessage = styled.div`
-  padding: 0 2em;
+  border-bottom: solid 1px;
+  margin: 0 2em 1em;
+  padding: 0 0 .7em;
+  
+  label: {
+    font-size: 0.7em;
+  }
 `;
 
 function Intervention({ notifications, user }) {
