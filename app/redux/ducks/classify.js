@@ -1,6 +1,9 @@
 import apiClient from 'panoptes-client/lib/api-client';
 import counterpart from 'counterpart';
+import GridTool from '../../classifier/drawing-tools/grid';
+import { getSessionID } from '../../lib/session';
 import seenThisSession from '../../lib/seen-this-session';
+import tasks from '../../classifier/tasks';
 
 function awaitSubjects(subjectQuery) {
   return apiClient.get('/subjects/queued', subjectQuery)
@@ -52,6 +55,39 @@ function createNewClassification(project, workflow, subject) {
   return classification;
 }
 
+function completeAnnotations(workflow, annotations) {
+  // take care of any task-specific processing of the annotations array before submitting a classification
+  const currentAnnotation = annotations[annotations.length - 1];
+  const currentTask = workflow.tasks[currentAnnotation.task];
+
+  if (currentTask && currentTask.tools) {
+    currentTask.tools.map((tool) => {
+      if (tool.type === 'grid') {
+        GridTool.mapCells(annotations);
+      }
+    });
+  }
+
+  if (currentAnnotation.shortcut) {
+    const unlinkedTask = workflow.tasks[currentTask.unlinkedTask];
+    const unlinkedAnnotation = tasks[unlinkedTask.type].getDefaultAnnotation(unlinkedTask, workflow, tasks);
+    unlinkedAnnotation.task = currentTask.unlinkedTask;
+    unlinkedAnnotation.value = currentAnnotation.shortcut.value.slice();
+    delete currentAnnotation.shortcut;
+    annotations.push(unlinkedAnnotation);
+  }
+  return annotations;
+}
+
+function finishClassification(workflow, classification, annotations) {
+  return classification.update({
+    annotations: completeAnnotations(workflow, annotations),
+    'metadata.session': getSessionID(),
+    'metadata.finished_at': (new Date()).toISOString(),
+    completed: true
+  });
+}
+
 const initialState = {
   classification: null,
   upcomingSubjects: [],
@@ -61,7 +97,9 @@ const initialState = {
 const APPEND_SUBJECTS = 'pfe/classify/APPEND_SUBJECTS';
 const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
 const PREPEND_SUBJECTS = 'pfe/classify/PREPEND_SUBJECTS';
+const COMPLETE_CLASSIFICATION = 'pfe/classify/COMPLETE_CLASSIFICATION';
 const CREATE_CLASSIFICATION = 'pfe/classify/CREATE_CLASSIFICATION';
+const UPDATE_CLASSIFICATION = 'pfe/classify/UPDATE_CLASSIFICATION';
 const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
 const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
@@ -80,6 +118,11 @@ export default function reducer(state = initialState, action = {}) {
       }
       return state;
     }
+    case COMPLETE_CLASSIFICATION: {
+      const { annotations } = action.payload;
+      const classification = finishClassification(state.workflow, state.classification, annotations);
+      return Object.assign({}, state, { classification });
+    }
     case CREATE_CLASSIFICATION: {
       const { project } = action.payload;
       const { workflow } = state;
@@ -89,6 +132,11 @@ export default function reducer(state = initialState, action = {}) {
         return Object.assign({}, state, { classification });
       }
       return state;
+    }
+    case UPDATE_CLASSIFICATION: {
+      const metadata = Object.assign({}, state.classification.metadata, action.payload.metadata);
+      const classification = state.classification.update({ metadata });
+      return Object.assign({}, state, { classification });
     }
     case NEXT_SUBJECT: {
       const { project } = action.payload;
@@ -211,6 +259,20 @@ export function createClassification(project) {
   return {
     type: CREATE_CLASSIFICATION,
     payload: { project }
+  };
+}
+
+export function completeClassification(annotations) {
+  return {
+    type: COMPLETE_CLASSIFICATION,
+    payload: { annotations }
+  };
+}
+
+export function updateClassification(metadata) {
+  return {
+    type: UPDATE_CLASSIFICATION,
+    payload: { metadata }
   };
 }
 

@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import styled, { ThemeProvider } from 'styled-components';
 import classNames from 'classnames';
 
-import { getSessionID } from '../lib/session';
 import preloadSubject from '../lib/preload-subject';
 import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
@@ -31,8 +30,6 @@ import FrameAnnotator from './frame-annotator';
 import ExpertOptions from './expert-options';
 
 import openFeedbackModal from '../features/feedback/classifier';
-import GridTool from './drawing-tools/grid';
-import tasks from './tasks';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -236,61 +233,38 @@ class Classifier extends React.Component {
     this.setState({ workflowHistory });
   }
 
-  processAnnotations(annotations) {
-    // take care of any task-specific processing of the annotations array before submitting a classification
-    const { workflow } = this.props;
-    const currentAnnotation = annotations[annotations.length - 1];
-    const currentTask = workflow.tasks[currentAnnotation.task];
-
-    if (currentTask && currentTask.tools) {
-      currentTask.tools.map((tool) => {
-        if (tool.type === 'grid') {
-          GridTool.mapCells(annotations);
-        }
-      });
-    }
-
-    if (currentAnnotation.shortcut) {
-      const unlinkedTask = workflow.tasks[currentTask.unlinkedTask];
-      const unlinkedAnnotation = tasks[unlinkedTask.type].getDefaultAnnotation(unlinkedTask, workflow, tasks);
-      unlinkedAnnotation.task = currentTask.unlinkedTask;
-      unlinkedAnnotation.value = currentAnnotation.shortcut.value.slice();
-      delete currentAnnotation.shortcut;
-      annotations.push(unlinkedAnnotation);
-    }
-    return annotations;
-  }
-
   completeClassification(e) {
+    const { actions, classification, onComplete, interventions, project, subject, user, workflow } = this.props;
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
-    // don't swallow cmd-click on links
-    if (!isCmdClick) {
-      e.preventDefault();
-    }
-    this.props.classification.update({
-      annotations: this.processAnnotations(this.state.annotations.slice()),
-      'metadata.session': getSessionID(),
-      'metadata.finished_at': (new Date()).toISOString(),
-      'metadata.viewport': {
-        width: innerWidth,
-        height: innerHeight
-      }
-    });
-
     const annotations = this.state.annotations.slice();
     let workflowHistory = this.state.workflowHistory.slice();
     const taskKey = workflowHistory[workflowHistory.length - 1];
 
-    const showIntervention = (this.props.interventions.notifications.length > 0);
-    const showSummary = !this.props.workflow.configuration.hide_classification_summaries ||
+    const showIntervention = user &&
+      user.intervention_notifications &&
+      (interventions.notifications.length > 0);
+    const showSummary = !workflow.configuration.hide_classification_summaries ||
       this.subjectIsGravitySpyGoldStandard();
     const showLastStep = showIntervention || showSummary;
 
-    const { onComplete, project, subject } = this.props;
+    // don't swallow cmd-click on links
+    if (!isCmdClick) {
+      e.preventDefault();
+    }
+    actions.classify.updateClassification({
+      viewport: {
+        width: innerWidth,
+        height: innerHeight
+      },
+      interventions: {
+        message: !!showIntervention,
+        opt_in: !!user && user.intervention_notifications
+      }
+    });
     return this.checkForFeedback(taskKey)
       .then(() => {
-        this.props.classification.update({ completed: true });
+        actions.classify.completeClassification(annotations);
         if (!showIntervention && !isCmdClick && originalElement.href) {
           const subjectTalkPath = `/projects/${project.slug}/talk/subjects/${subject.id}`;
           browserHistory.push(subjectTalkPath);
@@ -320,7 +294,7 @@ class Classifier extends React.Component {
   }
 
   render() {
-    const { interventions } = this.props;
+    const { interventions, user } = this.props;
     const { showIntervention, showSummary, workflowHistory } = this.state;
     const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
@@ -379,6 +353,7 @@ class Classifier extends React.Component {
             {showIntervention &&
               <Intervention
                 notifications={interventions.notifications}
+                user={user}
               />
             }
             {currentTaskKey &&

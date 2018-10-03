@@ -1,6 +1,6 @@
 import reducer from './classify';
-import apiClient from 'panoptes-client/lib/api-client';
 import { expect } from 'chai';
+import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 describe('Classifier actions', function () {
   describe('append subjects', function () {
@@ -239,6 +239,75 @@ describe('Classifier actions', function () {
       expect(newState).to.deep.equal(state);
     });
   });
+  describe('complete classification', function () {
+    const action = {
+      type: 'pfe/classify/COMPLETE_CLASSIFICATION',
+      payload: {
+        annotations: [{ task: 'a', value: 'hello' }]
+      }
+    };
+    const state = {
+      classification: mockPanoptesResource('classifications', { id: '1' }),
+      workflow: {
+        id: '1',
+        tasks: {
+          a: {}
+        }
+      },
+      upcomingSubjects: [1, 2]
+    };
+    it('should set the classification completed flag', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.completed).to.be.true;
+    });
+    it('should set the classification finished_at time', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.finished_at).to.be.ok;
+    });
+    it('should record the classification annotations', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
+    });
+  });
+  describe('update classification', function () {
+    const action = {
+      type: 'pfe/classify/UPDATE_CLASSIFICATION',
+      payload: {
+        metadata: {
+          a: 1,
+          b: 2
+        }
+      }
+    };
+    const state = {
+      classification: mockPanoptesResource('classifications', { 
+        id: '1',
+        metadata: {
+          b: 3,
+          c: 4
+        }
+      }),
+      workflow: {
+        id: '1',
+        tasks: {
+          a: {}
+        }
+      },
+      upcomingSubjects: [1, 2]
+    };
+    it('should add new keys to classification metadata', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.a).to.equal(1);
+    });
+    it('should overwrite classification metadata with changes', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.b).to.equal(2);
+    });
+    it('should preserve unchanged classification metadata', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.c).to.equal(4);
+    });
+  });
   describe('set workflow', function () {
     const action = {
       type: 'pfe/classify/SET_WORKFLOW',
@@ -264,7 +333,7 @@ describe('Classifier actions', function () {
       }
     };
     const state = {
-      classification: apiClient.type('classifications').create({}),
+      classification: mockPanoptesResource('classifications', {}),
       workflow: { id: '1' },
       upcomingSubjects: [1, 2]
     };

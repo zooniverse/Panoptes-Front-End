@@ -3,23 +3,14 @@ import PropTypes from 'prop-types';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
-import apiClient from 'panoptes-client/lib/api-client';
 import { Classifier } from './classifier';
 import FakeLocalStorage from '../../test/fake-local-storage';
+import mockPanoptesResource from '../../test/mock-panoptes-resource';
 
 global.innerWidth = 1000;
 global.innerHeight = 1000;
 global.sessionStorage = new FakeLocalStorage();
 sessionStorage.setItem('session_id', JSON.stringify({ id: 0, ttl: 0 }));
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  return resource;
-}
 
 const store = {
   subscribe: () => { },
@@ -158,10 +149,20 @@ describe('Classifier', function () {
   describe('on completing a classification', function () {
     let checkForFeedback;
     let fakeEvent;
+    const actions = {
+      classify: {
+        completeClassification: sinon.stub(),
+        updateClassification: sinon.stub()
+      },
+      interventions: {
+        dismiss: sinon.stub()
+      }
+    };
     beforeEach(function () {
       checkForFeedback = sinon.stub(Classifier.prototype, 'checkForFeedback').callsFake(() => Promise.resolve());
       wrapper = shallow(
         <Classifier
+          actions={actions}
           classification={classification}
           subject={subject}
           onComplete={classification.save}
@@ -176,8 +177,51 @@ describe('Classifier', function () {
     });
     afterEach(function () {
       checkForFeedback.restore();
+      actions.classify.completeClassification.resetHistory();
+      actions.classify.updateClassification.resetHistory();
     });
 
+    it('should complete the classification', function (done) {
+      wrapper.setProps({ workflow });
+      wrapper.instance().completeClassification(fakeEvent).then(function () {
+        const { annotations } = wrapper.state();
+        expect(actions.classify.completeClassification.calledWith(annotations)).to.be.true;
+      })
+      .then(done, done);
+    });
+    it('should record intervention metdata', function (done) {
+      wrapper.setProps({ workflow });
+      wrapper.instance().completeClassification(fakeEvent)
+      .then(done, done);
+      const changes = actions.classify.updateClassification.getCall(0).args[0];
+      expect(changes.interventions.message).to.be.false;
+      expect(changes.interventions.opt_in).to.be.false;
+    });
+    describe('with an intervention message', function () {
+      const interventions = {
+        notifications: [{
+          data:{
+            message: 'Hello!'
+          }
+        }]
+      };
+      const user = {
+        intervention_notifications: true
+      };
+      it('should record that an intervention was received', function (done) {
+        wrapper.setProps({ workflow, interventions, user });
+        wrapper.instance().completeClassification(fakeEvent)
+        .then(done, done);
+        const changes = actions.classify.updateClassification.getCall(0).args[0];
+        expect(changes.interventions.message).to.be.true;
+      });
+      it('should record whether the user is reading interventions', function () {
+        wrapper.setProps({ workflow, interventions, user });
+        wrapper.instance().completeClassification(fakeEvent);
+        const changes = actions.classify.updateClassification.getCall(0).args[0];
+        expect(changes.interventions.opt_in).to.equal(user.intervention_notifications);
+      });
+    });
     describe('with summaries enabled', function () {
       it('should display a classification summary', function (done) {
         wrapper.setProps({ workflow });
@@ -185,8 +229,6 @@ describe('Classifier', function () {
         .then(function () {
           wrapper.update();
           const state = wrapper.state();
-          expect(classification.completed).to.equal(true);
-          expect(state.annotations).to.deep.equal(classification.annotations);
           expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(1);
         })
         .then(done, done);
@@ -201,8 +243,6 @@ describe('Classifier', function () {
         .then(function () {
           wrapper.update();
           const state = wrapper.state();
-          expect(state.annotations).to.deep.equal(classification.annotations);
-          expect(classification.completed).to.equal(true);
           expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(0);
         })
         .then(done, done);
@@ -226,6 +266,10 @@ describe('Classifier', function () {
         active: true
       };
       const actions = {
+        classify: {
+          completeClassification: sinon.stub(),
+          updateClassification: sinon.stub()
+        },
         feedback: {
           init: feedbackInitSpy,
           update: feedbackUpdateSpy

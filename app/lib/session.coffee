@@ -1,4 +1,5 @@
-stored = sessionStorage?.getItem('session_id')
+storage = window.sessionStorage ? window.localStorage
+stored = JSON.parse storage?.getItem('session_id')
 
 generateSessionID = () ->
   hash = require('hash.js')
@@ -7,17 +8,17 @@ generateSessionID = () ->
   ttl = fiveMinutesFromNow()
   stored = {id, ttl}
   try
-    sessionStorage.setItem('session_id', JSON.stringify(stored))
+    storage.setItem('session_id', JSON.stringify(stored))
   stored
 
 getSessionID = () ->
-  {id, ttl} = JSON.parse(sessionStorage.getItem('session_id')) ? stored
+  {id, ttl} = JSON.parse(storage.getItem('session_id')) ? generateSessionID()
   if ttl < Date.now()
     {id} = generateSessionID()
   else
     ttl = fiveMinutesFromNow()
     try
-      sessionStorage.setItem('session_id', JSON.stringify({id, ttl}))
+      storage.setItem('session_id', JSON.stringify({id, ttl}))
   id
 
 fiveMinutesFromNow = () ->

@@ -24,6 +24,9 @@ export default {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
       acceptButton: 'Take me to the next level!',
       declineButton: 'No, thanks'
+    },
+    interventions: {
+      optOut: "Don't show me these messages again."
     }
   },
   project: {
@@ -975,6 +978,9 @@ export default {
       displayNameHelp: 'How your name will appear to other users in Talk and on your Profile Page',
       realName: 'Real name (optional)',
       realNameHelp: 'Public; we’ll use this to give acknowledgement in papers, on posters, etc.',
+      interventions: 'Show project intervention notifications.',
+      interventionsHelp: 'Allow projects to display messages while you are classifying.',
+      interventionsPreferences: 'Notification preferences',
       changePassword: {
         heading: 'Change your password',
         currentPassword: 'Current password (required)',
