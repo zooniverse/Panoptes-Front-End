@@ -3,23 +3,14 @@ import PropTypes from 'prop-types';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
-import apiClient from 'panoptes-client/lib/api-client';
 import { Classifier } from './classifier';
 import FakeLocalStorage from '../../test/fake-local-storage';
+import mockPanoptesResource from '../../test/mock-panoptes-resource';
 
 global.innerWidth = 1000;
 global.innerHeight = 1000;
 global.sessionStorage = new FakeLocalStorage();
 sessionStorage.setItem('session_id', JSON.stringify({ id: 0, ttl: 0 }));
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  return resource;
-}
 
 const store = {
   subscribe: () => { },

@@ -1,25 +1,15 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'], 'react/jsx-filename-extension': 0 */
 /* global describe, it, beforeEach */
 
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
 import sinon from 'sinon';
-import apiClient from 'panoptes-client/lib/api-client';
 import DropdownEditor from './editor';
 import DropdownDialog from './dropdown-dialog';
 import DropdownList from './dropdown-list';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  sinon.stub(resource, 'update');
-  return resource;
-}
+import mockPanoptesResource from '../../../../test/mock-panoptes-resource';
 
 const defaultDropdownTask = {
   type: 'dropdown',
@@ -95,8 +85,8 @@ describe('DropdownEditor: methods', function () {
   beforeEach(function () {
     mockWorkflow = mockPanoptesResource('workflows', {});
     multiSelectsTask = JSON.parse(JSON.stringify(workflow.tasks.dropdown));
-    wrapper = mount(<DropdownEditor task={multiSelectsTask} workflow={mockWorkflow} />);
-    updateSelectsStub = sinon.stub(wrapper.instance(), 'updateSelects');
+    wrapper = shallow(<DropdownEditor task={multiSelectsTask} workflow={mockWorkflow} />);
+    updateSelectsStub = sinon.stub(wrapper.instance(), 'updateSelects').callsFake(() => null);
   });
 
   afterEach(function () {
@@ -140,6 +130,8 @@ describe('DropdownEditor: methods', function () {
 
   it('should create a new select', function () {
     const createDropdownSpy = sinon.spy(wrapper.instance(), 'createDropdown');
+    // fake a condition ref
+    wrapper.instance().condition = { value: 4 };
     wrapper.instance().createDropdown();
 
     sinon.assert.calledOnce(createDropdownSpy);

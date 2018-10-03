@@ -8,18 +8,12 @@ import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import Translate from 'react-translate-component';
 import OrganizationContainer from './organization-container';
+import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 const params = {
   name: 'org-name',
   owner: 'org-owner'
 };
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'get');
-  return resource;
-}
 
 export const organization = mockPanoptesResource('organizations', {
   categories: ['Plants', 'Bugs', 'Butterflies'],

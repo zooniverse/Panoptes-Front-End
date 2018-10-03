@@ -5,19 +5,11 @@ import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import EmailSettings from './email';
+import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 function mockTalkResource(type, options) {
   const resource = talkClient.type(type).create(options);
   talkClient._typesCache = {};
-  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  return resource;
-}
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
   sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
   sinon.stub(resource, 'get');
   sinon.stub(resource, 'delete');

@@ -1,18 +1,9 @@
 import React from 'react';
-import apiClient from 'panoptes-client/lib/api-client';
 import sinon from 'sinon';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import Tutorial from './tutorial';
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  return resource;
-}
+import mockPanoptesResource from '../../test/mock-panoptes-resource';
 
 describe('Tutorial', function () {
   describe('on unmount', function () {

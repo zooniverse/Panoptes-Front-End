@@ -2,17 +2,8 @@ import React from 'react';
 import assert from 'assert';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
-import apiClient from 'panoptes-client/lib/api-client';
 import SocialLinksEditor from './social-links-editor';
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  return resource;
-}
+import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 const testProject = {
   urls: [

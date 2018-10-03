@@ -3,15 +3,7 @@ import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import { sugarClient } from 'panoptes-client/lib/sugar';
 import reducer, { notify, subscribe, unsubscribe, dismiss } from './interventions';
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'save').resolves(resource);
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  return resource;
-}
+import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 describe('Intervention actions', function () {
   let subscribeSpy;

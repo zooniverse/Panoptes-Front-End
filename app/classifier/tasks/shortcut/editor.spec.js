@@ -4,18 +4,8 @@ import { shallow, mount } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
 import sinon from 'sinon';
-import apiClient from 'panoptes-client/lib/api-client';
 import ShortcutEditor from './editor';
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  sinon.stub(resource, 'update');
-  return resource;
-}
+import mockPanoptesResource from '../../../../test/mock-panoptes-resource';
 
 const task = {
   question: 'What is it',

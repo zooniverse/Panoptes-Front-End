@@ -4,6 +4,7 @@ import { mount } from 'enzyme';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import { WorkflowSelection } from './workflow-selection';
+import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 function StubPage() {
   return <p>Hello</p>;
@@ -43,15 +44,6 @@ const projectRoles = [
     }
   }
 ];
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'save').callsFake(() => Promise.resolve(resource));
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  return resource;
-}
 
 const project = mockPanoptesResource('projects',
   {

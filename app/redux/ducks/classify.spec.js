@@ -1,16 +1,6 @@
 import reducer from './classify';
-import apiClient from 'panoptes-client/lib/api-client';
 import { expect } from 'chai';
-import sinon from 'sinon';
-
-function mockPanoptesResource(type, options) {
-  const resource = apiClient.type(type).create(options);
-  apiClient._typesCache = {};
-  sinon.stub(resource, 'save').resolves(resource);
-  sinon.stub(resource, 'get');
-  sinon.stub(resource, 'delete');
-  return resource;
-}
+import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 describe('Classifier actions', function () {
   describe('append subjects', function () {
@@ -343,7 +333,7 @@ describe('Classifier actions', function () {
       }
     };
     const state = {
-      classification: apiClient.type('classifications').create({}),
+      classification: mockPanoptesResource('classifications', {}),
       workflow: { id: '1' },
       upcomingSubjects: [1, 2]
     };
