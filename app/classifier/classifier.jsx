@@ -258,8 +258,8 @@ class Classifier extends React.Component {
         height: innerHeight
       },
       interventions: {
-        message: showIntervention,
-        opt_in: user && user.intervention_notifications
+        message: !!showIntervention,
+        opt_in: !!user && user.intervention_notifications
       }
     });
     return this.checkForFeedback(taskKey)
