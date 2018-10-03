@@ -279,6 +279,45 @@ describe('Classifier actions', function () {
       expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
     });
   });
+  describe('update classification', function () {
+    const action = {
+      type: 'pfe/classify/UPDATE_CLASSIFICATION',
+      payload: {
+        metadata: {
+          a: 1,
+          b: 2
+        }
+      }
+    };
+    const state = {
+      classification: mockPanoptesResource('classifications', { 
+        id: '1',
+        metadata: {
+          b: 3,
+          c: 4
+        }
+      }),
+      workflow: {
+        id: '1',
+        tasks: {
+          a: {}
+        }
+      },
+      upcomingSubjects: [1, 2]
+    };
+    it('should add new keys to classification metadata', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.a).to.equal(1);
+    });
+    it('should overwrite classification metadata with changes', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.b).to.equal(2);
+    });
+    it('should preserve unchanged classification metadata', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.c).to.equal(4);
+    });
+  });
   describe('set workflow', function () {
     const action = {
       type: 'pfe/classify/SET_WORKFLOW',

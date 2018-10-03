@@ -99,6 +99,7 @@ const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
 const PREPEND_SUBJECTS = 'pfe/classify/PREPEND_SUBJECTS';
 const COMPLETE_CLASSIFICATION = 'pfe/classify/COMPLETE_CLASSIFICATION';
 const CREATE_CLASSIFICATION = 'pfe/classify/CREATE_CLASSIFICATION';
+const UPDATE_CLASSIFICATION = 'pfe/classify/UPDATE_CLASSIFICATION';
 const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
 const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
@@ -131,6 +132,11 @@ export default function reducer(state = initialState, action = {}) {
         return Object.assign({}, state, { classification });
       }
       return state;
+    }
+    case UPDATE_CLASSIFICATION: {
+      const metadata = Object.assign({}, state.classification.metadata, action.payload.metadata);
+      const classification = state.classification.update({ metadata });
+      return Object.assign({}, state, { classification });
     }
     case NEXT_SUBJECT: {
       const { project } = action.payload;
@@ -260,6 +266,13 @@ export function completeClassification(annotations) {
   return {
     type: COMPLETE_CLASSIFICATION,
     payload: { annotations }
+  };
+}
+
+export function updateClassification(metadata) {
+  return {
+    type: UPDATE_CLASSIFICATION,
+    payload: { metadata }
   };
 }
 

@@ -160,7 +160,8 @@ describe('Classifier', function () {
     let fakeEvent;
     const actions = {
       classify: {
-        completeClassification: sinon.stub()
+        completeClassification: sinon.stub(),
+        updateClassification: sinon.stub()
       },
       interventions: {
         dismiss: sinon.stub()
@@ -185,6 +186,8 @@ describe('Classifier', function () {
     });
     afterEach(function () {
       checkForFeedback.restore();
+      actions.classify.completeClassification.resetHistory();
+      actions.classify.updateClassification.resetHistory();
     });
 
     it('should complete the classification', function (done) {
@@ -192,7 +195,40 @@ describe('Classifier', function () {
       wrapper.instance().completeClassification(fakeEvent).then(function () {
         const { annotations } = wrapper.state();
         expect(actions.classify.completeClassification.calledWith(annotations)).to.be.true;
-        done();
+      })
+      .then(done, done);
+    });
+    it('should record intervention metdata', function (done) {
+      wrapper.setProps({ workflow });
+      wrapper.instance().completeClassification(fakeEvent)
+      .then(done, done);
+      const changes = actions.classify.updateClassification.getCall(0).args[0];
+      expect(changes.interventions.message).to.be.false;
+      expect(changes.interventions.opt_in).to.be.false;
+    });
+    describe('with an intervention message', function () {
+      const interventions = {
+        notifications: [{
+          data:{
+            message: 'Hello!'
+          }
+        }]
+      };
+      const user = {
+        intervention_notifications: true
+      };
+      it('should record that an intervention was received', function (done) {
+        wrapper.setProps({ workflow, interventions, user });
+        wrapper.instance().completeClassification(fakeEvent)
+        .then(done, done);
+        const changes = actions.classify.updateClassification.getCall(0).args[0];
+        expect(changes.interventions.message).to.be.true;
+      });
+      it('should record whether the user is reading interventions', function () {
+        wrapper.setProps({ workflow, interventions, user });
+        wrapper.instance().completeClassification(fakeEvent);
+        const changes = actions.classify.updateClassification.getCall(0).args[0];
+        expect(changes.interventions.opt_in).to.equal(user.intervention_notifications);
       });
     });
     describe('with summaries enabled', function () {
@@ -240,7 +276,8 @@ describe('Classifier', function () {
       };
       const actions = {
         classify: {
-          completeClassification: sinon.stub()
+          completeClassification: sinon.stub(),
+          updateClassification: sinon.stub()
         },
         feedback: {
           init: feedbackInitSpy,

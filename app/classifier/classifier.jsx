@@ -252,18 +252,16 @@ class Classifier extends React.Component {
     if (!isCmdClick) {
       e.preventDefault();
     }
-    classification.update({
-      'metadata.viewport': {
+    actions.classify.updateClassification({
+      viewport: {
         width: innerWidth,
         height: innerHeight
       },
-      'metadata.interventions': {
+      interventions: {
         message: showIntervention,
         opt_in: user && user.intervention_notifications
       }
     });
-
-
     return this.checkForFeedback(taskKey)
       .then(() => {
         actions.classify.completeClassification(annotations);
