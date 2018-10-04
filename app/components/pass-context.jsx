@@ -19,7 +19,6 @@ const contextShape = {
   geordi: PropTypes.object,
   notificationsCounter: PropTypes.object,
   unreadNotificationsCount: PropTypes.number,
-  pusher: PropTypes.object,
   store: PropTypes.object
 };
 
@@ -33,4 +32,3 @@ PassContext.propTypes = {
 };
 
 export default PassContext;
-

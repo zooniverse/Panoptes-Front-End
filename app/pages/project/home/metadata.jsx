@@ -17,35 +17,10 @@ class ProjectMetadataStat extends React.Component {
 
 ProjectMetadataStat.propTypes = {
   children: PropTypes.node.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired
 };
 
 export default class ProjectMetadata extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      classificationsCount: props.project.classifications_count,
-    };
-  }
-
-  componentDidMount() {
-    if (this.context.pusher) {
-      const channel = this.context.pusher.subscribe('panoptes');
-      channel.bind('classification', (data) => {
-        if (data.project_id === this.props.project.id) {
-          this.setState({ classificationsCount: this.state.classificationsCount + 1 });
-        }
-      });
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.context.pusher) {
-      this.context.pusher.unsubscribe('panoptes');
-    }
-  }
-
   renderStatus() {
     const percentComplete = this.props.project.completeness;
 
@@ -87,7 +62,7 @@ export default class ProjectMetadata extends React.Component {
             <ProjectMetadataStat value={project.classifiers_count.toLocaleString()}>
               <Translate content="project.home.metadata.volunteers" />
             </ProjectMetadataStat>
-            <ProjectMetadataStat value={this.state.classificationsCount.toLocaleString()}>
+            <ProjectMetadataStat value={project.classifications_count.toLocaleString()}>
               <Translate content="project.home.metadata.classifications" />
             </ProjectMetadataStat>
             <ProjectMetadataStat value={project.subjects_count.toLocaleString()}>
@@ -110,17 +85,13 @@ export default class ProjectMetadata extends React.Component {
   }
 }
 
-ProjectMetadata.contextTypes = {
-  pusher: PropTypes.object,
-};
-
 ProjectMetadata.propTypes = {
   project: PropTypes.shape({
     classifications_count: PropTypes.number,
     completeness: PropTypes.number,
     display_name: PropTypes.string,
-    id: PropTypes.id,
-    slug: PropTypes.string,
+    id: PropTypes.string,
+    slug: PropTypes.string
   }),
   showTalkStatus: PropTypes.bool,
   translation: PropTypes.shape({
@@ -134,5 +105,5 @@ ProjectMetadata.propTypes = {
 
 ProjectMetadata.defaultProps = {
   project: {},
-  showTalkStatus: false,
+  showTalkStatus: false
 };

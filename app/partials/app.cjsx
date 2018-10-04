@@ -9,9 +9,7 @@ IOStatus = require './io-status'
 AppLayout = require('../layout').default
 {generateSessionID} = require '../lib/session'
 NotificationsCounter = require('../lib/notifications-counter').default
-Pusher = require 'pusher-js'
 apiClient = require 'panoptes-client/lib/api-client'
-pusherEnv = require('../lib/pusher-env').default
 
 GeordiLogger = (require '../lib/zooniverse-logging').default
 GALogAdapter = (require '../lib/ga-log-adapter').default
@@ -29,7 +27,6 @@ PanoptesApp = createReactClass
     geordi: PropTypes.object
     notificationsCounter: PropTypes.object
     unreadNotificationsCount: PropTypes.number
-    pusher: PropTypes.object
 
   getChildContext: ->
     initialLoadComplete: @state.initialLoadComplete
@@ -37,7 +34,6 @@ PanoptesApp = createReactClass
     geordi: @geordiLogger
     notificationsCounter: @props.notificationsCounter
     unreadNotificationsCount: @state.unreadNotificationsCount
-    pusher: @props.pusher
 
   getInitialState: ->
     initialLoadComplete: false
@@ -45,7 +41,6 @@ PanoptesApp = createReactClass
 
   getDefaultProps: ->
     notificationsCounter: new NotificationsCounter()
-    pusher: (pusherEnv && new Pusher(pusherEnv, {encrypted: true}))
 
   componentWillMount: ->
     @geordiLogger = new GeordiLogger
