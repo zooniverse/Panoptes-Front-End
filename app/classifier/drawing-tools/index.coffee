@@ -8,7 +8,7 @@ module.exports =
   freehandLine: require './freehand-line'
   freehandSegmentLine: require './freehand-segment-line'
   freehandSegmentShape: require './freehand-segment-shape'
-  freehandShape: require './freehand-shape'
+  freehandShape: require('./freehand-shape').default
   fullWidthLine: require './full-width-line'
   fullHeightLine: require './full-height-line'
   grid: require './grid'

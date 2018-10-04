@@ -1,21 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-import DrawingToolRoot from './root';
-import deleteIfOutOfBounds from './delete-if-out-of-bounds';
-import DeleteButton from './delete-button';
 import { svgPathProperties } from 'svg-path-properties';
+import DrawingToolRoot from './root';
+import DeleteButton from './delete-button';
 import { createPathFromCoords, filterDupeCoords, roundCoords } from './freehand-helpers';
 
 const BUFFER = 16;
 const DELETE_BUTTON_WIDTH = 8;
 const MINIMUM_LENGTH = 5;
 
-export default class FreehandShapeTool extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getDeletePosition = this.getDeletePosition.bind(this);
-    this.outOfBounds = this.outOfBounds.bind(this);
+class FreehandShapeTool extends React.Component {
+  static defaultValues() {
+    return {
+      points: [],
+      _inProgress: false
+    };
+  }
+
+  static initStart(coords, mark) {
+    mark.points.push(roundCoords(coords));
+    return { _inProgress: true };
+  }
+
+  static initMove(coords, mark) {
+    mark.points.push(roundCoords(coords));
+  }
+
+  static initRelease(coords, mark) {
+    mark.points.push(mark.points[0]);
+    mark.points = filterDupeCoords(mark.points);
+    return { _inProgress: false };
+  }
+
+  static initValid(mark) {
+    const path = createPathFromCoords(mark.points);
+    const properties = svgPathProperties(path);
+    return properties.getTotalLength() > MINIMUM_LENGTH;
   }
 
   getDeletePosition([startCoords, ...otherCoords]) {
@@ -65,34 +85,4 @@ export default class FreehandShapeTool extends React.Component {
   }
 }
 
-FreehandShapeTool.defaultValues = () => (
-  {
-    points: [],
-    _inProgress: false
-  }
-);
-
-FreehandShapeTool.initStart = (coords, mark) => {
-  mark.points.push(roundCoords, coords);
-  return {
-    _inProgress: true
-  };
-};
-
-FreehandShapeTool.initMove = (coords, mark) => {
-  mark.points.push(roundCoords, coords);
-};
-
-FreehandShapeTool.initRelease = (coords, mark) => {
-  mark.points.push(mark.points[0]);
-  mark.points = filterDupeCoords(mark.points);
-  return {
-    _inProgress: false
-  };
-};
-
-FreehandShapeTool.initValid = (mark) => {
-  const path = createPathFromCoords(mark.points);
-  const properties = svgPathProperties(path);
-  return properties.getTotalLength() > MINIMUM_LENGTH;
-};
+export default FreehandShapeTool;
