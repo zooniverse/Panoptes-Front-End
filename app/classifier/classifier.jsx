@@ -144,9 +144,11 @@ class Classifier extends React.Component {
     };
 
     return openFeedbackModal({ feedback: taskFeedback, subjectViewerProps, taskId })
-      .then(() => this.props.classification.update({
-        [`metadata.feedback.${taskId}`]: taskFeedback
-      }));
+      .then(() => {
+        const { actions, classification } = this.props;
+        const feedback = Object.assign({}, classification.metadata.feedback, { [taskId]: taskFeedback });
+        actions.classify.updateClassification({ feedback });
+      });
   }
 
   updateAnnotations(annotations) {
