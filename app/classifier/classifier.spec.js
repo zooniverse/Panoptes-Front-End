@@ -152,6 +152,7 @@ describe('Classifier', function () {
     const actions = {
       classify: {
         completeClassification: sinon.stub(),
+        saveAnnotations: sinon.stub().callsFake(annotations => annotations),
         updateClassification: sinon.stub()
       },
       interventions: {
@@ -230,6 +231,17 @@ describe('Classifier', function () {
           wrapper.update();
           const state = wrapper.state();
           expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(1);
+        })
+        .then(done, done);
+      });
+      it('should reset annotations on going to Talk', function (done) {
+        wrapper.setProps({ workflow });
+        wrapper.instance().completeClassification(fakeEvent)
+        .then(function () {
+          wrapper.update();
+          wrapper.unmount();
+          const annotations = actions.classify.saveAnnotations.returnValues[0];
+          expect(annotations).to.have.lengthOf(0);
         })
         .then(done, done);
       });
