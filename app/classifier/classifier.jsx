@@ -93,8 +93,6 @@ class Classifier extends React.Component {
   }
 
   componentWillUnmount() {
-    const annotations = this.state.annotations.slice();
-    this.props.actions.classify.saveAnnotations(annotations);
     try {
       !!this.context.geordi && this.context.geordi.forget(['subjectID']);
     } catch (err) {
@@ -151,6 +149,7 @@ class Classifier extends React.Component {
 
   updateAnnotations(annotations) {
     this.setState({ annotations });
+    this.props.actions.classify.saveAnnotations(annotations);
   }
 
   updateFeedback(taskId) {
