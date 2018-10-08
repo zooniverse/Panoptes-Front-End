@@ -152,6 +152,7 @@ describe('Classifier', function () {
     const actions = {
       classify: {
         completeClassification: sinon.stub(),
+        saveAnnotations: sinon.stub().callsFake(annotations => annotations),
         updateClassification: sinon.stub()
       },
       interventions: {
@@ -233,6 +234,16 @@ describe('Classifier', function () {
         })
         .then(done, done);
       });
+      it('should not update annotations on going to Talk', function (done) {
+        wrapper.setProps({ workflow });
+        wrapper.instance().completeClassification(fakeEvent)
+        .then(function () {
+          wrapper.update();
+          wrapper.unmount();
+          expect(actions.classify.saveAnnotations.callCount).to.equal(0);
+        })
+        .then(done, done);
+      });
     });
 
     describe('with summaries disabled', function () {
@@ -268,6 +279,7 @@ describe('Classifier', function () {
       const actions = {
         classify: {
           completeClassification: sinon.stub(),
+          saveAnnotations: sinon.stub().callsFake(annotations => annotations),
           updateClassification: sinon.stub()
         },
         feedback: {
@@ -385,20 +397,21 @@ describe('Classifier', function () {
     });
   });
 
-  describe('on unmount', function () {
+  describe('on updating annotations', function () {
     const actions = {
       classify: {
-        saveAnnotations: sinon.stub().callsFake(() => null)
+        saveAnnotations: sinon.stub().callsFake(annotations => annotations)
       }
     };
 
     before(function () {
       wrapper.setProps({ actions });
-      wrapper.unmount();
+      wrapper.instance().updateAnnotations([1, 2, 3]);
     });
 
     it('should save any annotations in progress', function () {
-      expect(actions.classify.saveAnnotations.callCount).to.equal(1);
+      const annotations = actions.classify.saveAnnotations.returnValues[0];
+      expect(annotations).to.deep.equal([1, 2, 3]);
     });
   });
 });
