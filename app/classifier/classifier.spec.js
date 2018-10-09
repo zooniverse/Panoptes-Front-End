@@ -397,15 +397,25 @@ describe('Classifier', function () {
         saveAnnotations: sinon.stub().callsFake(annotations => annotations)
       }
     };
+    const mockAnnotations = [{
+      task: 'a',
+      value: 1
+    }, {
+      task: 'b',
+      value: 2
+    }, {
+      task: 'c',
+      value: 3
+    }];
 
     before(function () {
       wrapper.setProps({ actions });
-      wrapper.instance().updateAnnotations([1, 2, 3]);
+      wrapper.instance().updateAnnotations(mockAnnotations);
     });
 
     it('should save any annotations in progress', function () {
       const annotations = actions.classify.saveAnnotations.returnValues[0];
-      expect(annotations).to.deep.equal([1, 2, 3]);
+      expect(annotations).to.deep.equal(mockAnnotations);
     });
   });
 });
