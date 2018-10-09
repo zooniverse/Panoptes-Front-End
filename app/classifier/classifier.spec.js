@@ -4,13 +4,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import { Classifier } from './classifier';
-import FakeLocalStorage from '../../test/fake-local-storage';
 import mockPanoptesResource from '../../test/mock-panoptes-resource';
-
-global.innerWidth = 1000;
-global.innerHeight = 1000;
-global.sessionStorage = new FakeLocalStorage();
-sessionStorage.setItem('session_id', JSON.stringify({ id: 0, ttl: 0 }));
 
 const store = {
   subscribe: () => { },
