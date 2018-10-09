@@ -101,7 +101,7 @@
     "react-test-renderer": "~16.5.2",
     "request": "~2.88.0",
     "rimraf": "~2.6.2",
-    "style-loader": "~0.23.0",
+    "style-loader": "~0.23.1",
     "stylus": "~0.54.5",
     "stylus-loader": "~3.0.2",
     "webpack": "~4.20.1",
