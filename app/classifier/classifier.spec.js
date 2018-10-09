@@ -4,13 +4,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import { Classifier } from './classifier';
-import FakeLocalStorage from '../../test/fake-local-storage';
 import mockPanoptesResource from '../../test/mock-panoptes-resource';
-
-global.innerWidth = 1000;
-global.innerHeight = 1000;
-global.sessionStorage = new FakeLocalStorage();
-sessionStorage.setItem('session_id', JSON.stringify({ id: 0, ttl: 0 }));
 
 const store = {
   subscribe: () => { },
@@ -403,15 +397,25 @@ describe('Classifier', function () {
         saveAnnotations: sinon.stub().callsFake(annotations => annotations)
       }
     };
+    const mockAnnotations = [{
+      task: 'a',
+      value: 1
+    }, {
+      task: 'b',
+      value: 2
+    }, {
+      task: 'c',
+      value: 3
+    }];
 
     before(function () {
       wrapper.setProps({ actions });
-      wrapper.instance().updateAnnotations([1, 2, 3]);
+      wrapper.instance().updateAnnotations(mockAnnotations);
     });
 
     it('should save any annotations in progress', function () {
       const annotations = actions.classify.saveAnnotations.returnValues[0];
-      expect(annotations).to.deep.equal([1, 2, 3]);
+      expect(annotations).to.deep.equal(mockAnnotations);
     });
   });
 });
