@@ -294,7 +294,7 @@ module.exports = createReactClass
       <hr />
       <table className="standard-table">
         <tbody>
-          {for key, value of @props.subject?.metadata when key.charAt(0) not in @props.metadataFilters and key[...2] isnt '//'
+          {for key, value of @props.subject?.metadata when key.trim().charAt(0) not in @props.metadataFilters and key[...2] isnt '//'
             if (value.startsWith and value.startsWith('http'))
               value = "[#{value}](+tab+#{value})"
             <tr key={key}>
