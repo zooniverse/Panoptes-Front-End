@@ -44,14 +44,11 @@ export class DevClassifierPage extends React.Component {
   }
 
   reload() {
+    const { actions, project } = this.props;
     const workflow = mockData.classification._workflow;
-    const firstTask = workflow.tasks[workflow.first_task];
-    const FirstTaskComponent = tasks[firstTask.type];
-    const firstAnnotation = Object.assign({}, { task: workflow.first_task }, FirstTaskComponent.getDefaultAnnotation());
-    mockData.classification.update({
-      annotations: [firstAnnotation],
-      completed: false
-    });
+    const subjects = mockData.classification._subjects
+    actions.classify.appendSubjects(subjects, workflow.id);
+    actions.classify.nextSubject(project);
   }
 
   render() {
@@ -81,7 +78,7 @@ export class DevClassifierPage extends React.Component {
             preferences={this.props.preferences}
             classification={classification}
             subject={subject}
-            onClickNext={this.reload}
+            onClickNext={this.reload.bind(this)}
           >
             <ClassificationViewer
               classification={classification}
