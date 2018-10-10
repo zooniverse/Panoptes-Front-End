@@ -16,6 +16,16 @@ export class DevClassifierPage extends React.Component {
     project: mockData.project
   }
 
+  state = {
+    error: null,
+    info: null
+  }
+
+  componentDidCatch(error, info) {
+    console.log(error, info)
+    this.setState({ error, info });
+  }
+
   reload() {
     const workflow = this.props.classification._workflow;
     const firstTask = workflow.tasks[workflow.first_task];
@@ -28,6 +38,7 @@ export class DevClassifierPage extends React.Component {
   }
 
   render() {
+    const { error, info } = this.state;
     const classname = classNames({
       'classify-page--dark-theme': this.props.theme === zooTheme.mode.dark
     });
@@ -35,18 +46,25 @@ export class DevClassifierPage extends React.Component {
 
     return (
       <div className={classname}>
-        <ClassifierWrapper
-          className="classifier--dev"
-          user={this.props.user}
-          project={this.props.project}
-          workflow={this.props.classification._workflow}
-          preferences={this.props.preferences}
-          classification={this.props.classification}
-          subject={subject}
-          onClickNext={this.reload}
-        >
-          <ClassificationViewer classification={this.props.classification} />
-        </ClassifierWrapper>
+        {!!error ?
+          <p>
+            {error.message}
+            <hr/>
+            <pre>{info.componentStack}</pre>
+          </p> :
+          <ClassifierWrapper
+            className="classifier--dev"
+            user={this.props.user}
+            project={this.props.project}
+            workflow={this.props.classification._workflow}
+            preferences={this.props.preferences}
+            classification={this.props.classification}
+            subject={subject}
+            onClickNext={this.reload}
+          >
+            <ClassificationViewer classification={this.props.classification} />
+          </ClassifierWrapper>
+        }
       </div>
     );
   }
