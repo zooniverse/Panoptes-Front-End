@@ -62,17 +62,18 @@ export class DevClassifierPage extends React.Component {
     });
     const [subject] = mockData.classification._subjects;
 
-    return (
-      <div className={classname}>
-        {!!error &&
-          <div>
-            {error.message}
-            <hr/>
-            <pre>{info.componentStack}</pre>
-          </div>
-        }
-        {!error &&
-        !!classification &&
+    if (error) {
+      return (
+        <div className={classname}>
+          {error.message}
+          <hr/>
+          <pre>{info.componentStack}</pre>
+        </div>
+      );
+    }
+    if (classification) {
+      return (
+        <div className={classname}>
           <ClassifierWrapper
             className="classifier--dev"
             user={this.props.user}
@@ -88,7 +89,12 @@ export class DevClassifierPage extends React.Component {
               workflow={workflow}
             />
           </ClassifierWrapper>
-        }
+        </div>
+      );
+    }
+    return (
+      <div className={classname}>
+        Loading…
       </div>
     );
   }
