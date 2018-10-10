@@ -14,8 +14,14 @@ const store = {
   })
 };
 
+const geordi = {
+  keys: {},
+  forget: sinon.stub(),
+  remember: sinon.stub()
+};
+
 const mockReduxStore = {
-  context: { store },
+  context: { geordi, store },
   childContextTypes: { store: PropTypes.object.isRequired }
 };
 
@@ -29,7 +35,10 @@ const classification = mockPanoptesResource('classification', {
       task: 'T1',
       value: 1
     }
-  ]
+  ],
+  metadata: {
+    subject_dimensions: []
+  }
 });
 
 const workflow = mockPanoptesResource('workflow', {
@@ -137,6 +146,45 @@ describe('Classifier', function () {
       const state = wrapper.state();
       expect(state.annotations).to.deep.equal(classification.annotations);
       expect(state.workflowHistory).to.deep.equal(['T0', 'T1']);
+    });
+  });
+
+  describe('on subject image load', function () {
+    const actions = {
+      classify: {
+        updateClassification: sinon.stub().callsFake(changes => changes)
+      }
+    };
+    const fakeEvent = {
+      target: {
+        clientWidth: 500,
+        clientHeight: 250,
+        naturalWidth: 1000,
+        naturalHeight: 500
+      },
+      preventDefault: () => null
+    };
+    beforeEach(function () {
+      wrapper = shallow(
+        <Classifier
+          actions={actions}
+          classification={classification}
+          subject={subject}
+          onComplete={classification.save}
+        />,
+        mockReduxStore
+      );
+      wrapper.instance().handleSubjectImageLoad(fakeEvent, 0);
+    });
+    afterEach(function () {
+      actions.classify.updateClassification.resetHistory();
+    });
+    it('should update the classification with the image dimensions', function () {
+      const expectedChanges = {
+        subject_dimensions: [fakeEvent.target]
+      };
+      const actualChanges = actions.classify.updateClassification.returnValues[0];
+      expect(actualChanges).to.deep.equal(expectedChanges);
     });
   });
 

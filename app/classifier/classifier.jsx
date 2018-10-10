@@ -142,9 +142,11 @@ class Classifier extends React.Component {
     };
 
     return openFeedbackModal({ feedback: taskFeedback, subjectViewerProps, taskId })
-      .then(() => this.props.classification.update({
-        [`metadata.feedback.${taskId}`]: taskFeedback
-      }));
+      .then(() => {
+        const { actions, classification } = this.props;
+        const feedback = Object.assign({}, classification.metadata.feedback, { [taskId]: taskFeedback });
+        actions.classify.updateClassification({ feedback });
+      });
   }
 
   updateAnnotations(annotations) {
@@ -191,12 +193,13 @@ class Classifier extends React.Component {
 
   // Whenever a subject image is loaded in the annotator, record its size at that time.
   handleSubjectImageLoad(e, frameIndex) {
+    const { actions, classification } = this.props;
     this.context.geordi.remember({ subjectID: this.props.subject.id });
 
     const { naturalWidth, naturalHeight, clientWidth, clientHeight } = e.target;
-    const changes = {};
-    changes[`metadata.subject_dimensions.${frameIndex}`] = { naturalWidth, naturalHeight, clientWidth, clientHeight };
-    this.props.classification.update(changes);
+    const subject_dimensions = classification.metadata.subject_dimensions.slice();
+    subject_dimensions[frameIndex] = { naturalWidth, naturalHeight, clientWidth, clientHeight };
+    actions.classify.updateClassification({ subject_dimensions });
   }
 
   handleAnnotationChange(classification, newAnnotation) {
