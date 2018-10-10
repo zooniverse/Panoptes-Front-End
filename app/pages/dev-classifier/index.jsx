@@ -29,11 +29,11 @@ export class DevClassifierPage extends React.Component {
     actions.classify.createClassification(project);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     const { actions, project, user } = this.props;
     const workflow = mockData.classification._workflow;
     const subjects = mockData.classification._subjects;
-    if (user !== prevProps.user) {
+    if (!this.props.classification) {
       actions.classify.appendSubjects(subjects, workflow.id);
       actions.classify.createClassification(project);
     }
