@@ -21,7 +21,8 @@ export default class ClassificationViewer extends React.Component {
 
   static defaultProps = {
     annotations: [],
-    classification: null
+    classification: null,
+    workflow: {}
   }
 
   componentDidMount() {
@@ -41,12 +42,12 @@ export default class ClassificationViewer extends React.Component {
   }
 
   togglePersistAnnotations(e) {
-    this.props.classification._workflow.configuration.persist_annotations = e.target.checked;
+    this.props.workflow.configuration.persist_annotations = e.target.checked;
     this.forceUpdate();
   }
 
   toggleMultiImageCloneMarkers(e) {
-    this.props.classification._workflow.configuration.multi_image_clone_markers = e.target.checked;
+    this.props.workflow.configuration.multi_image_clone_markers = e.target.checked;
     this.forceUpdate();
   }
 
@@ -92,7 +93,7 @@ export default class ClassificationViewer extends React.Component {
         <label>
           <input
             type="checkbox"
-            checked={this.props.classification._workflow.configuration.persist_annotations}
+            checked={this.props.workflow.configuration.persist_annotations}
             onChange={this.togglePersistAnnotations}
           />{' '}
           Persist Annotations
@@ -101,7 +102,7 @@ export default class ClassificationViewer extends React.Component {
         <label>
           <input
             type="checkbox"
-            checked={this.props.classification._workflow.configuration.multi_image_clone_markers}
+            checked={this.props.workflow.configuration.multi_image_clone_markers}
             onChange={this.toggleMultiImageCloneMarkers}
           />{' '}
           Clone markings between frames
