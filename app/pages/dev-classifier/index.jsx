@@ -4,9 +4,7 @@ import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import mockData from './mock-data';
 import { ClassifierWrapper } from '../../classifier';
-import tasks from '../../classifier/tasks';
 import ClassificationViewer from './ClassificationViewer';
-import * as userInterfaceActions from '../../redux/ducks/userInterface';
 import * as classifierActions from '../../redux/ducks/classify';
 import { zooTheme } from '../../theme';
 
@@ -22,15 +20,10 @@ export class DevClassifierPage extends React.Component {
     info: null
   }
 
-  componentDidCatch(error, info) {
-    console.log(error, info);
-    this.setState({ error, info });
-  }
-
   componentDidMount() {
-    const { actions, project, user } = this.props;
+    const { actions, project } = this.props;
     const workflow = mockData.classification._workflow;
-    const subjects = mockData.classification._subjects
+    const subjects = mockData.classification._subjects;
     actions.classify.setWorkflow(workflow);
     actions.classify.appendSubjects(subjects, workflow.id);
     actions.classify.createClassification(project);
@@ -39,17 +32,22 @@ export class DevClassifierPage extends React.Component {
   componentDidUpdate(prevProps) {
     const { actions, project, user } = this.props;
     const workflow = mockData.classification._workflow;
-    const subjects = mockData.classification._subjects
+    const subjects = mockData.classification._subjects;
     if (user !== prevProps.user) {
       actions.classify.appendSubjects(subjects, workflow.id);
       actions.classify.createClassification(project);
     }
   }
 
+  componentDidCatch(error, info) {
+    console.log(error, info);
+    this.setState({ error, info });
+  }
+
   reload() {
     const { actions, project } = this.props;
     const workflow = mockData.classification._workflow;
-    const subjects = mockData.classification._subjects
+    const subjects = mockData.classification._subjects;
     actions.classify.appendSubjects(subjects, workflow.id);
     actions.classify.nextSubject(project);
   }
@@ -66,7 +64,7 @@ export class DevClassifierPage extends React.Component {
       return (
         <div className={classname}>
           {error.message}
-          <hr/>
+          <hr />
           <pre>{info.componentStack}</pre>
         </div>
       );
