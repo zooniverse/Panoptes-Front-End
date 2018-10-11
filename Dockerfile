@@ -1,4 +1,8 @@
-FROM zooniverse/panoptes-front-end:deps
+FROM node:8.12-alpine
+
+WORKDIR /src
+
+RUN apk add --no-cache git
 
 ADD package.json /src/
 ADD package-lock.json /src/
