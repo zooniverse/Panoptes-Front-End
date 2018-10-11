@@ -12,14 +12,14 @@ describe('Feedback > Single Answer Question > Reducer', function () {
   })
 
   it('should handle a correct answer', function () {
-    const rule = { answer: '1' }
-    const result = reducer(rule, 1)
+    const rule = { answer: '0' }
+    const result = reducer(rule, 0)
     expect(result.success).to.be.true
   })
 
   it('should handle an incorrect answer', function () {
-    const rule = { answer: '0' }
-    const result = reducer(rule, 1)
+    const rule = { answer: '1' }
+    const result = reducer(rule, 2)
     expect(result.success).to.be.false
   })
 
