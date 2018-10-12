@@ -402,7 +402,6 @@ class Classifier extends React.Component {
             >
               {!!this.props.expertClassifier &&
                 <ExpertOptions
-                  classification={currentClassification}
                   userRoles={this.props.userRoles}
                   demoMode={this.props.demoMode}
                   onChangeDemoMode={this.props.onChangeDemoMode}
