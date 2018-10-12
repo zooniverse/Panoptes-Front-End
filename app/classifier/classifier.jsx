@@ -296,7 +296,7 @@ class Classifier extends React.Component {
   }
 
   render() {
-    const { interventions, user } = this.props;
+    const { actions, interventions, user } = this.props;
     const { showIntervention, showSummary, workflowHistory } = this.state;
     const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
@@ -436,7 +436,7 @@ class Classifier extends React.Component {
                   <strong>Gold standard mode:</strong>
                   <br />
                   Please ensure this classification is completely accurate.{' '}
-                  <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
+                  <button type="button" className="secret-button" onClick={() => actions.classify.toggleGoldStandard(undefined)}>
                     <u>Disable</u>
                   </button>
                 </small>
