@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DrawingToolRoot from './root';
 import DeleteButton from './delete-button';
 import { createPathFromCoords, filterDupeCoords, roundCoords } from './freehand-helpers';
@@ -209,5 +210,36 @@ class FreehandSegmentShapeTool extends React.Component {
     );
   }
 }
+
+FreehandSegmentShapeTool.propTypes = {
+  color: PropTypes.string.isRequired,
+  containerRect: PropTypes.shape({
+    bottom: PropTypes.number,
+    height: PropTypes.number,
+    left: PropTypes.number,
+    right: PropTypes.number,
+    top: PropTypes.number,
+    width: PropTypes.number
+  }).isRequired,
+  disabled: PropTypes.bool,
+  getEventOffset: PropTypes.func.isRequired,
+  getScreenCurrentTransformationMatrix: PropTypes.func.isRequired,
+  mark: PropTypes.shape({
+    points: PropTypes.arrayOf(PropTypes.object)
+  }),
+  onChange: PropTypes.func.isRequired,
+  scale: PropTypes.shape({
+    horizontal: PropTypes.number,
+    vertical: PropTypes.number
+  }),
+  selected: PropTypes.bool
+};
+
+FreehandSegmentShapeTool.defaultProps = {
+  disabled: false,
+  mark: null,
+  scale: null,
+  selected: true
+};
 
 export default FreehandSegmentShapeTool;

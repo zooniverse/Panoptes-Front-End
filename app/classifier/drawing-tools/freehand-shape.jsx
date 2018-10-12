@@ -54,7 +54,12 @@ class FreehandShapeTool extends React.Component {
   }
 
   render() {
-    const { color, getScreenCurrentTransformationMatrix, mark, selected } = this.props;
+    const {
+      color,
+      getScreenCurrentTransformationMatrix,
+      mark,
+      selected
+    } = this.props;
     const { _inProgress, points } = mark;
     const path = createPathFromCoords(points);
     const fill = _inProgress ? 'none' : color;
@@ -84,5 +89,24 @@ class FreehandShapeTool extends React.Component {
     );
   }
 }
+
+FreehandShapeTool.propTypes = {
+  color: PropTypes.string.isRequired,
+  getScreenCurrentTransformationMatrix: PropTypes.func.isRequired,
+  mark: PropTypes.shape({
+    points: PropTypes.arrayOf(PropTypes.object)
+  }),
+  scale: PropTypes.shape({
+    horizontal: PropTypes.number,
+    vertical: PropTypes.number
+  }),
+  selected: PropTypes.bool
+};
+
+FreehandShapeTool.defaultProps = {
+  mark: null,
+  scale: null,
+  selected: true
+};
 
 export default FreehandShapeTool;
