@@ -52,6 +52,11 @@ class FreehandSegmentShapeTool extends React.Component {
 
   constructor() {
     super();
+
+    this.handleFinishClick = this.handleFinishClick.bind(this);
+    this.handleFinishHover = this.handleFinishHover.bind(this);
+    this.handleFinishMove = this.handleFinishMove.bind(this);
+
     this.state = {
       mouseX: null,
       mouseY: null
