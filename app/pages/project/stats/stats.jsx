@@ -279,7 +279,7 @@ export class WorkflowProgress extends React.Component {
         eta = <Eta numDays={this.calcDaysToCompletion(totalCount)}/>;
       }
       if (this.props.workflow.configuration) {
-        if (this.props.workflow.configuration.stats_completeness_type === 'classification') {
+        if (this.props.workflow.configuration.stats_completeness_type === 'classification' && completeness !== 1) {
           completeness = this.props.workflow.classifications_count / totalCount;
           classificationsString += ` / ${totalCount.toLocaleString()}`;
           classificationDiv = (
