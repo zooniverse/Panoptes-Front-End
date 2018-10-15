@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import TriggeredModalForm from 'modal-form/triggered';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import isAdmin from '../lib/is-admin';
+import { toggleGoldStandard } from '../redux/ducks/classify';
 
 function ExpertOptions(props) {
   function handleGoldStandardChange(e) {
-    props.classification.update({ gold_standard: e.target.checked || undefined });
+    props.actions.toggleGoldStandard(e.target.checked || undefined);
   }
 
   function handleDemoModeChange(e) {
@@ -19,7 +22,12 @@ function ExpertOptions(props) {
       {(props.userRoles.includes('owner') || props.userRoles.includes('expert')) &&
         <p>
           <label>
-            <input type="checkbox" checked={!!props.classification.gold_standard} onChange={handleGoldStandardChange} />{' '}
+            <input
+              type="checkbox"
+              checked={!!props.classification.gold_standard}
+              onChange={handleGoldStandardChange}
+            />
+            {' '}
             Gold standard mode
           </label>{' '}
           <TriggeredModalForm
@@ -57,4 +65,15 @@ ExpertOptions.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string)
 };
 
-export default ExpertOptions;
+const mapStateToProps = state => ({
+  classification: state.classify.classification
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    toggleGoldStandard: bindActionCreators(toggleGoldStandard, dispatch)
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExpertOptions);
+export { ExpertOptions };

@@ -354,4 +354,43 @@ describe('Classifier actions', function () {
       expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
     });
   });
+  describe('toggle gold standard', function () {
+    it('should set gold standard classifications', function () {
+      const action = {
+        type: 'pfe/classify/TOGGLE_GOLD_STANDARD',
+        payload: {
+          goldStandard: true
+        }
+      };
+      const state = {
+        classification: mockPanoptesResource('classifications', {})
+      };
+      const newState = reducer(state, action);
+      expect(newState.classification.gold_standard).to.be.true;
+    });
+    it('should unset gold standard classifications', function () {
+      const action = {
+        type: 'pfe/classify/TOGGLE_GOLD_STANDARD',
+        payload: {
+          goldStandard: false
+        }
+      };
+      const state = {
+        classification: mockPanoptesResource('classifications', {})
+      };
+      const newState = reducer(state, action);
+      expect(newState.classification.gold_standard).to.be.false;
+    });
+    it('should unset gold standard classifications if undefined', function () {
+      const action = {
+        type: 'pfe/classify/TOGGLE_GOLD_STANDARD',
+        payload: {}
+      };
+      const state = {
+        classification: mockPanoptesResource('classifications', {})
+      };
+      const newState = reducer(state, action);
+      expect(newState.classification.gold_standard).to.be.undefined;
+    });
+  });
 });

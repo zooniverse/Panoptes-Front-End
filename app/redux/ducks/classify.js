@@ -105,6 +105,7 @@ const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
 const SAVE_ANNOTATIONS = 'pfe/classify/SAVE_ANNOTATIONS';
 const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
+const TOGGLE_GOLD_STANDARD = 'pfe/classify/TOGGLE_GOLD_STANDARD';
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -191,6 +192,12 @@ export default function reducer(state = initialState, action = {}) {
     case SET_WORKFLOW: {
       const { workflow } = action.payload;
       return Object.assign({}, state, { workflow });
+    }
+    case TOGGLE_GOLD_STANDARD: {
+      const { goldStandard } = action.payload;
+      const { classification } = state;
+      classification.update({ gold_standard: goldStandard });
+      return Object.assign({}, state, { classification });
     }
     default:
       return state;
@@ -314,6 +321,13 @@ export function setWorkflow(workflow) {
   return {
     type: SET_WORKFLOW,
     payload: { workflow }
+  };
+}
+
+export function toggleGoldStandard(goldStandard) {
+  return {
+    type: TOGGLE_GOLD_STANDARD,
+    payload: { goldStandard }
   };
 }
 
