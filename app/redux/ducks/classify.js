@@ -166,15 +166,15 @@ export default function reducer(state = initialState, action = {}) {
       return state;
     }
     case RESUME_CLASSIFICATION: {
-      const { subject } = action.payload;
+      const { classification, subject } = action.payload;
       const isCurrentSubject = state.upcomingSubjects[0] &&
         subject.id === state.upcomingSubjects[0].id;
       if (!isCurrentSubject) {
         const upcomingSubjects = state.upcomingSubjects.slice();
         upcomingSubjects.unshift(subject);
-        return Object.assign({}, state, { upcomingSubjects });
+        return Object.assign({}, state, { classification, upcomingSubjects });
       }
-      return state;
+      return Object.assign({}, state, { classification });
     }
     case RESET_SUBJECTS: {
       const classification = null;
@@ -294,7 +294,10 @@ export function resumeClassification(classification) {
     return awaitSubject.then(([subject]) => {
       dispatch({
         type: RESUME_CLASSIFICATION,
-        payload: { subject }
+        payload: {
+          classification,
+          subject
+        }
       });
     });
   };

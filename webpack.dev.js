@@ -19,7 +19,7 @@ var config = {
     overlay: true,
     port: 3735
   },
-  devtool: 'eval-source-map',
+  devtool: 'cheap-module-source-map',
   entry: [
     path.join(__dirname, 'app/main.cjsx')
   ],

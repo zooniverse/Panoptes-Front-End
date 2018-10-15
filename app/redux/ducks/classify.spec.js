@@ -227,6 +227,7 @@ describe('Classifier actions', function () {
     const action = {
       type: 'pfe/classify/RESUME_CLASSIFICATION',
       payload: {
+        classification: { id: '1' },
         subject: subject1
       }
     };
@@ -241,6 +242,11 @@ describe('Classifier actions', function () {
     });
     it('should unshift the classification subject onto the queue if it is not the current subject', function () {
       const testState = Object.assign({}, state, { upcomingSubjects: [subject2] });
+      const newState = reducer(testState, action);
+      expect(newState).to.deep.equal(state);
+    });
+    it('should replace the current classification with the new classification', function () {
+      const testState = Object.assign({}, state, { classification: { id: '2' } });
       const newState = reducer(testState, action);
       expect(newState).to.deep.equal(state);
     });
