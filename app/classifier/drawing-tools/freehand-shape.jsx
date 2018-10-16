@@ -19,11 +19,18 @@ class FreehandShapeTool extends React.Component {
 
   static initStart(coords, mark) {
     mark.points.push(roundCoords(coords));
-    return { _inProgress: true };
+    return {
+      points: mark.points,
+      _inProgress: true
+    };
   }
 
   static initMove(coords, mark) {
     mark.points.push(roundCoords(coords));
+    return {
+      points: mark.points,
+      _inProgress: true
+    };
   }
 
   static initRelease(coords, mark) {
@@ -105,7 +112,10 @@ FreehandShapeTool.propTypes = {
 
 FreehandShapeTool.defaultProps = {
   mark: null,
-  scale: null,
+  scale: {
+    horizontal: 0,
+    vertical: 0
+  },
   selected: true
 };
 
