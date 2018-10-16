@@ -11,7 +11,7 @@ import HighlighterButtonLabel from './HighlighterButtonLabel';
 
 
 // TODO: the focus and hover styles while the component has the active class is not working
-export const StyledHighlighterButton = StyledTaskInputField.extend`
+export const StyledHighlighterButton = styled(StyledTaskInputField)`
   font-size: inherit;
   width: 100%;
 `.withComponent('button');
