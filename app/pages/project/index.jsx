@@ -248,10 +248,10 @@ class ProjectPageController extends React.Component {
             this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits });
             this.loadFieldGuide(project.id);
             this.props.actions.translations.loadTranslations('project_page', pages.map(page => page.id), this.props.translations.locale);
-            return { projectPreferences, splits };
+            return { project, projectPreferences, splits };
           })
-          .then(({ projectPreferences, splits }) => {
-            this.handleSplitWorkflowAssignment(projectPreferences, splits);
+          .then(({ project, projectPreferences, splits }) => {
+            if (project.experimental_tools.includes('workflow assignment')) this.handleSplitWorkflowAssignment(projectPreferences, splits);
           })
           .then(() => {
             this.setState({ ready: true })
