@@ -22,21 +22,20 @@ class FreehandSegmentShapeTool extends React.Component {
 
   static initStart(coords, mark) {
     mark.points.push(roundCoords(coords));
-    return {
-      _inProgress: true,
-      _currentlyDrawing: true
-    };
+    mark._inProgress = true;
+    mark._currentlyDrawing = true;
+    return mark;
   }
 
   static initMove(coords, mark) {
     mark.points.push(roundCoords(coords));
+    return mark;
   }
 
   static initRelease(coords, mark) {
-    return {
-      _currentlyDrawing: false,
-      points: filterDupeCoords(mark.points)
-    };
+    mark._currentlyDrawing = false;
+    mark.points = filterDupeCoords(mark.points)
+    return mark;
   }
 
   static isComplete(mark) {
@@ -48,6 +47,7 @@ class FreehandSegmentShapeTool extends React.Component {
     mark._inProgress = false;
     mark._currentlyDrawing = false;
     mark.auto_closed = true;
+    return mark;
   }
 
   constructor() {
