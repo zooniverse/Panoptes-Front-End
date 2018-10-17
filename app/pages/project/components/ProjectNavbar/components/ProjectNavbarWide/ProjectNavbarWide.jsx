@@ -9,7 +9,7 @@ import StyledHeader from '../StyledHeader';
 import Wrapper from '../Wrapper';
 import { pxToRem } from '../../../../../../theme';
 
-export const StyledHeaderWide = StyledHeader.extend`
+export const StyledHeaderWide = styled(StyledHeader)`
   box-shadow: 0 ${pxToRem(2)} ${pxToRem(4)} 0 rgba(0,0,0,0.5);
 `;
 

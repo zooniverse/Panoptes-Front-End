@@ -122,7 +122,7 @@ export class DetailsSubTaskForm extends React.Component {
     return (
       <ThemeProvider theme={{ mode: theme }}>
         <StyledStickyModalForm
-          innerRef={(node) => { this.detailsForm = node; }}
+          ref={(node) => { this.detailsForm = node; }}
           onSubmit={this.handleDetailsFormClose}
           onCancel={this.handleDetailsFormClose}
         >

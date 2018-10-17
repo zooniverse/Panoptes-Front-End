@@ -26,7 +26,7 @@ describe('Background', function () {
     });
 
     it('should set BackgroundWrapper\'s prop.hasBg to false', function() {
-      expect(wrapper.dive().props().hasBg).to.be.false;
+      expect(wrapper.children().props().hasBg).to.be.false;
     });
 
     it('should not render ImgBackground', function() {
@@ -40,7 +40,7 @@ describe('Background', function () {
     });
 
     it('should set BackgroundWrapper\'s prop.hasBg to true', function () {
-      expect(wrapper.dive().props().hasBg).to.be.true;
+      expect(wrapper.children().props().hasBg).to.be.true;
     });
 
     it('should not render ImgBackground', function () {

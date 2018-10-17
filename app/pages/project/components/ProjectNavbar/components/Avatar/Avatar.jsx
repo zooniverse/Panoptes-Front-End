@@ -15,7 +15,7 @@ export const StyledAvatarImg = styled.img`
   width: ${props => pxToRem(props.size)};
 `;
 
-export const DefaultProjectAvatarWrapper = StyledAvatarImg.withComponent('div').extend`
+export const DefaultProjectAvatarWrapper = styled(StyledAvatarImg.withComponent('div'))`
   background-color: ${theme('mode', { light: zooTheme.colors.teal.mid })};
   color: ${theme('mode', { light: zooTheme.colors.brand.default })};
 `;

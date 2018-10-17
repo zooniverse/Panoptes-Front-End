@@ -23,7 +23,7 @@ export const StyledOuterWrapper = styled.div`
   position: relative;
 `;
 
-export const StyledInnerWrapper = Wrapper.extend`
+export const StyledInnerWrapper = styled(Wrapper)`
   flex-direction: column;
   justify-content: center;
   padding: ${pxToRem(20)} 0;
