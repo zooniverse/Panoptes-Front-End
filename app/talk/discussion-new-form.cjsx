@@ -39,6 +39,7 @@ module.exports = createReactClass
           .get
             section: projectSection(project)
             subject_default: false
+            page_size: 50
           .then (boards) =>
             @setState {boards}
 
