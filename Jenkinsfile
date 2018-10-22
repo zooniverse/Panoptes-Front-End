@@ -18,11 +18,18 @@ node {
   }
 
   stage('Deploy current branch') {
-    newImage.inside {
+    def deploy_cmd = 'stage-with-jenkins'
+
+    if (BRANCH_NAME == 'master') {
+      deploy_cmd = 'deploy'
+    }
+
+    newImage.inside("-e DEPLOY_CMD=${deploy_cmd}") {
       sh """
         cd /src
-        npm run --silent stage-with-jenkins
+        npm run "$DEPLOY_CMD"
       """
     }
+
   }
 }
