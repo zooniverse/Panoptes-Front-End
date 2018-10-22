@@ -135,6 +135,7 @@
     "_publish": "publisssh ./dist \"zooniverse-static/$PATH_ROOT/$SUBDIR\"",
     "_log-staging-url": "echo \"Staged at https://$SUBDIR.pfe-preview.zooniverse.org/\"",
     "_stage": "export PATH_ROOT=preview.zooniverse.org/panoptes-front-end; npm run _build && npm run _publish && npm run _log-staging-url",
+    "stage-with-jenkins": "export NODE_ENV=staging; export SUBDIR=$(echo $BRANCH_NAME | awk '{print tolower($0)}'); npm run _stage",
     "stage": "export NODE_ENV=staging; export SUBDIR=$(git symbolic-ref --short HEAD | awk '{print tolower($0)}'); npm run _stage",
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
