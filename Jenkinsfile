@@ -17,19 +17,25 @@ node {
     }
   }
 
+  // always stage branches (including master) to preview bucket path
   stage('Deploy current branch') {
-    def deploy_cmd = 'stage-with-jenkins'
-
-    if (BRANCH_NAME == 'master') {
-      deploy_cmd = 'deploy'
-    }
-
-    newImage.inside("-e DEPLOY_CMD=${deploy_cmd}") {
+    newImage.inside {
       sh """
         cd /src
-        npm run --silent "$DEPLOY_CMD"
+        npm run --silent stage-with-jenkins
       """
     }
+  }
 
+  // deploy master branch changes to www.zooniverse.org
+  stage('Deploy production') {
+    if (BRANCH_NAME == 'master') {
+      newImage.inside {
+        sh """
+          cd /src
+          npm run --silent deploy
+        """
+      }
+    }
   }
 }
