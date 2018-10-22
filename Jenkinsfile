@@ -27,7 +27,7 @@ node {
     newImage.inside("-e DEPLOY_CMD=${deploy_cmd}") {
       sh """
         cd /src
-        npm run "$DEPLOY_CMD"
+        npm run --silent "$DEPLOY_CMD"
       """
     }
 
