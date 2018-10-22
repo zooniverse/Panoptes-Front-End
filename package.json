@@ -23,7 +23,7 @@
     "nyc": "~13.1.0",
     "panoptes-client": "~2.11.2",
     "papaparse": "^4.6.1",
-    "polished": "~2.2.0",
+    "polished": "~2.3.0",
     "prop-types": "~15.6.2",
     "qs": "~6.5.2",
     "rc-slider": "~8.6.3",
