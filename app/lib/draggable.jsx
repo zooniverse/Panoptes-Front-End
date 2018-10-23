@@ -35,8 +35,8 @@ export default function Draggable(props) {
     // Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
     document.body.classList.add('dragging');
 
-    addEventListener(moveEvent, handleDrag);
-    addEventListener(endEvent, handleEnd);
+    document.body.addEventListener(moveEvent, handleDrag);
+    document.body.addEventListener(endEvent, handleEnd);
 
     // If there's no `onStart`, `onDrag` will be called on start.
     const startHandler = props.onStart || handleDrag;
@@ -72,8 +72,8 @@ export default function Draggable(props) {
 
     e = (e.touches && e.touches[0]) ? e.touches[0] : e;
 
-    removeEventListener(moveEvent, handleDrag);
-    removeEventListener(endEvent, handleEnd);
+    document.body.removeEventListener(moveEvent, handleDrag);
+    document.body.removeEventListener(endEvent, handleEnd);
 
     props.onEnd(e);
     _previousEventCoords = {};
