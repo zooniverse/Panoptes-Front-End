@@ -32,7 +32,7 @@ function awaitSubjectSet(workflow) {
   }
 }
 
-function createNewClassification(project, workflow, subject) {
+function createNewClassification(project, workflow, subject, goldStandardMode) {
   const source = subject.metadata.intervention ? 'sugar' : 'api';
   const classification = apiClient.type('classifications').create({
     annotations: [],
@@ -51,6 +51,10 @@ function createNewClassification(project, workflow, subject) {
       subjects: [subject.id]
     }
   });
+
+  if (goldStandardMode) {
+    classification.gold_standard = true;
+  }
 
   return classification;
 }
@@ -90,6 +94,7 @@ function finishClassification(workflow, classification, annotations) {
 
 const initialState = {
   classification: null,
+  goldStandardMode: false,
   upcomingSubjects: [],
   workflow: null
 };
@@ -125,11 +130,12 @@ export default function reducer(state = initialState, action = {}) {
       return Object.assign({}, state, { classification });
     }
     case CREATE_CLASSIFICATION: {
+      const { goldStandardMode } = state;
       const { project } = action.payload;
       const { workflow } = state;
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
-        const classification = createNewClassification(project, workflow, subject);
+        const classification = createNewClassification(project, workflow, subject, goldStandardMode);
         return Object.assign({}, state, { classification });
       }
       return state;
@@ -140,13 +146,14 @@ export default function reducer(state = initialState, action = {}) {
       return Object.assign({}, state, { classification });
     }
     case NEXT_SUBJECT: {
+      const { goldStandardMode } = state;
       const { project } = action.payload;
       const { workflow } = state;
       const upcomingSubjects = state.upcomingSubjects.slice();
       upcomingSubjects.shift();
       const subject = upcomingSubjects[0];
       if (subject) {
-        const classification = createNewClassification(project, workflow, subject);
+        const classification = createNewClassification(project, workflow, subject, goldStandardMode);
         return Object.assign({}, state, { classification, upcomingSubjects });
       }
       return Object.assign({}, state, {
@@ -197,7 +204,7 @@ export default function reducer(state = initialState, action = {}) {
       const { goldStandard } = action.payload;
       const { classification } = state;
       classification.update({ gold_standard: goldStandard });
-      return Object.assign({}, state, { classification });
+      return Object.assign({}, state, { classification, goldStandardMode: goldStandard });
     }
     default:
       return state;
@@ -330,4 +337,3 @@ export function toggleGoldStandard(goldStandard) {
     payload: { goldStandard }
   };
 }
-
