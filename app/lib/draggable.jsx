@@ -2,20 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class Draggable extends React.Component {
-  constructor() {
-    super();
-    this._previousEventCoords = {};
-  }
+export default function Draggable(props) {
+  let _previousEventCoords = {};
 
-  _rememberCoords(e) {
-    this._previousEventCoords = {
+  function _rememberCoords(e) {
+    _previousEventCoords = {
       x: e.pageX,
       y: e.pageY
     };
   }
 
-  handleStart(e) {
+  function handleStart(e) {
     e.preventDefault();
 
     let moveEvent;
@@ -33,32 +30,32 @@ export default class Draggable extends React.Component {
     }
 
     e = (e.touches && e.touches[0]) ? e.touches[0] : e;
-    this._rememberCoords(e);
+    _rememberCoords(e);
 
     // Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
     document.body.classList.add('dragging');
 
-    addEventListener(moveEvent, this.handleDrag.bind(this));
-    addEventListener(endEvent, this.handleEnd.bind(this));
+    addEventListener(moveEvent, handleDrag);
+    addEventListener(endEvent, handleEnd);
 
     // If there's no `onStart`, `onDrag` will be called on start.
-    const startHandler = this.props.onStart || this.handleDrag;
+    const startHandler = props.onStart || handleDrag;
     if (startHandler) { // You can set it to `false` if you don't want anything to fire.
       startHandler(e);
     }
   }
 
-  handleDrag(e) {
+  function handleDrag(e) {
     e = (e.touches && e.touches[0]) ? e.touches[0] : e;
     const d = {
-      x: e.pageX - this._previousEventCoords.x,
-      y: e.pageY - this._previousEventCoords.y
+      x: e.pageX - _previousEventCoords.x,
+      y: e.pageY - _previousEventCoords.y
     };
-    this.props.onDrag(e, d);
-    this._rememberCoords(e);
+    props.onDrag(e, d);
+    _rememberCoords(e);
   }
 
-  handleEnd(e) {
+  function handleEnd(e) {
     let moveEvent;
     let endEvent;
 
@@ -75,28 +72,26 @@ export default class Draggable extends React.Component {
 
     e = (e.touches && e.touches[0]) ? e.touches[0] : e;
 
-    removeEventListener(moveEvent, this.handleDrag.bind(this));
-    removeEventListener(endEvent, this.handleEnd.bind(this));
+    removeEventListener(moveEvent, handleDrag);
+    removeEventListener(endEvent, handleEnd);
 
-    this.props.onEnd(e);
-    this._previousEventCoords = null;
+    props.onEnd(e);
+    _previousEventCoords = {};
     document.body.classList.remove('dragging');
   }
 
-  render() {
-    const { children, disabled } = this.props;
-    const className = classnames({
-      [children.props.className]: true,
-      draggable: true
-    });
-    const childProps = {
-      className,
-      'data-disabled': disabled,
-      onMouseDown: disabled ? undefined : this.handleStart.bind(this),
-      onTouchStart: disabled ? undefined : this.handleStart.bind(this)
-    };
-    return React.cloneElement(children, childProps);
-  }
+  const { children, disabled } = props;
+  const className = classnames({
+    [children.props.className]: true,
+    draggable: true
+  });
+  const childProps = {
+    className,
+    'data-disabled': disabled ? true : undefined,
+    onMouseDown: disabled ? undefined : handleStart,
+    onTouchStart: disabled ? undefined : handleStart
+  };
+  return React.cloneElement(children, childProps);
 }
 
 Draggable.propTypes = {
