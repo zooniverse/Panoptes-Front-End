@@ -2,7 +2,8 @@ export default {
   darkTheme: {
     background: {
       border: '#2D2D2D',
-      default: '#333333'
+      default: '#333333',
+      goldStandard: 'blue'
     },
     button: {
       answer: {
@@ -22,7 +23,8 @@ export default {
   lightTheme: {
     background: {
       border: '#ebebeb',
-      default: '#EEF2F5'
+      default: '#EEF2F5',
+      goldStandard: 'red'
     },
     button: {
       answer: {

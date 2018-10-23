@@ -1,12 +1,25 @@
 import styled from 'styled-components';
 import theme from 'styled-theming';
+import PropTypes from 'prop-types';
 import { zooTheme } from '../../../theme';
 
+const backgroundColor = theme.variants('mode', 'variant', {
+  default: {
+    light: 'white',
+    dark: zooTheme.colors.darkTheme.background.default
+  },
+  goldStandardMode: {
+    light: zooTheme.colors.lightTheme.background.goldStandard,
+    dark: zooTheme.colors.darkTheme.background.goldStandard
+  }
+});
+
 const TaskArea = styled.div`
-  background-color: ${theme('mode', {
+  ${'' /* background-color: ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.default,
     light: 'white'
-  })};
+  })}; */}
+  background-color: ${backgroundColor};
   border: solid thin ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.border,
     light: zooTheme.colors.lightTheme.background.border
@@ -24,5 +37,13 @@ const TaskArea = styled.div`
     margin-left: 1em;
   }
 `;
+
+TaskArea.propTypes = {
+  variant: PropTypes.oneOf(['default', 'goldStandardMode'])
+};
+
+TaskArea.defaultProps = {
+  variant: 'default'
+};
 
 export default TaskArea;
