@@ -1,6 +1,6 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
-Draggable = require '../../lib/draggable'
+Draggable = require('../../lib/draggable').default
 
 RADIUS = 4
 OVERSHOOT = 4
