@@ -3,7 +3,7 @@ export default {
     background: {
       border: '#2D2D2D',
       default: '#333333',
-      goldStandard: 'blue'
+      goldStandard: 'linear-gradient(0deg, rgba(240,178,0,1) 0%, rgba(240,178,0,0) 25%)'
     },
     button: {
       answer: {
@@ -24,7 +24,7 @@ export default {
     background: {
       border: '#ebebeb',
       default: '#EEF2F5',
-      goldStandard: 'red'
+      goldStandard: 'linear-gradient(0deg, rgba(240,178,0,1) 0%, rgba(240,178,0,0) 25%)'
     },
     button: {
       answer: {

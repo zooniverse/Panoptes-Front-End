@@ -299,6 +299,7 @@ class Classifier extends React.Component {
     const { actions, goldStandardMode, interventions, user } = this.props;
     const { showIntervention, showSummary, workflowHistory } = this.state;
     const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
+    const taskAreaVariant = goldStandardMode ? 'goldStandardMode' : 'default';
     const largeFormatImage = this.props.workflow.configuration.image_layout && this.props.workflow.configuration.image_layout.includes('no-max-height');
     const classifierClassNames = classNames({
       classifier: true,
@@ -345,7 +346,7 @@ class Classifier extends React.Component {
           playIterations={this.props.workflow.configuration.playIterations}
         />
         <ThemeProvider theme={{ mode: this.props.theme }}>
-          <TaskArea variant={goldStandardMode ? 'goldStandardMode' : 'default'}>
+          <TaskArea variant={taskAreaVariant}>
             <TaskTabs
               projectPreferences={this.props.preferences}
               tutorial={this.props.tutorial}
