@@ -4,6 +4,8 @@ import classnames from 'classnames';
 
 export default function Draggable(props) {
   let _previousEventCoords = {};
+  let moveEvent;
+  let endEvent;
 
   function _rememberCoords(e) {
     _previousEventCoords = {
@@ -14,9 +16,6 @@ export default function Draggable(props) {
 
   function handleStart(e) {
     e.preventDefault();
-
-    let moveEvent;
-    let endEvent;
 
     switch (e.type) {
       case 'mousedown':
@@ -56,20 +55,6 @@ export default function Draggable(props) {
   }
 
   function handleEnd(e) {
-    let moveEvent;
-    let endEvent;
-
-    switch (e.type) {
-      case 'mouseup':
-        [moveEvent, endEvent] = ['mousemove', 'mouseup'];
-        break;
-      case 'touchstart':
-        [moveEvent, endEvent] = ['touchmove', 'touchend'];
-        break;
-      default:
-        [moveEvent, endEvent] = ['pointermove', 'pointerend'];
-    }
-
     e = (e.touches && e.touches[0]) ? e.touches[0] : e;
 
     document.body.removeEventListener(moveEvent, handleDrag);
