@@ -34,12 +34,15 @@ export default class DrawingToolRoot extends React.Component {
   focusDrawingTool() {
     const x = window.scrollX;
     const y = window.scrollY;
+    const { root } = this;
     try {
-      if (this.root) this.root.focus();
+      if (root && root.focus) {
+        root.focus();
+        window.scrollTo(x, y);
+      }
     } catch (error) {
       console.info('Edge currently does not support focus on SVG elements:', error);
     }
-    window.scrollTo(x, y);
   }
 
   render() {
