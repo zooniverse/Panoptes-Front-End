@@ -34,7 +34,7 @@ change dependencies in `package.json`.
 
 ### What to do if it doesn't run
 
-Try `rm -rf ./node_modules && npm install` to freshen up your dependencies. And read the warnings, they should should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies. If you use `docker-compose` to build and test the site, you shouldn't run into any problems with the Node version, but `docker-compose build` will build a new image with a fresh `npm install`.
+Try `rm -rf ./node_modules && npm install` to freshen up your dependencies. And read the warnings, they should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies. If you use `docker-compose` to build and test the site, you shouldn't run into any problems with the Node version, but `docker-compose build` will build a new image with a fresh `npm install`.
 
 ## Testing
 
