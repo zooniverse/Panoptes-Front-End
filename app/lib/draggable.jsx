@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-const Draggable = React.memo(function Draggable(props) {
+function Draggable(props) {
   let _previousEventCoords = {};
   let moveEvent;
   let endEvent;
@@ -77,7 +77,7 @@ const Draggable = React.memo(function Draggable(props) {
     onTouchStart: disabled ? undefined : handleStart
   };
   return React.cloneElement(children, childProps);
-});
+}
 
 Draggable.propTypes = {
   onStart: PropTypes.oneOfType([
@@ -96,4 +96,6 @@ Draggable.defaultProps = {
   disabled: false
 };
 
-export default Draggable;
+export default React.memo(Draggable);
+export { Draggable };
+
