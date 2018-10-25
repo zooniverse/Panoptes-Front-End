@@ -7,8 +7,8 @@ module.exports =
   fan: require('./components/Fan').default
   freehandLine: require './freehand-line'
   freehandSegmentLine: require './freehand-segment-line'
-  freehandSegmentShape: require './freehand-segment-shape'
-  freehandShape: require './freehand-shape'
+  freehandSegmentShape: require('./freehand-segment-shape').default
+  freehandShape: require('./freehand-shape').default
   fullWidthLine: require './full-width-line'
   fullHeightLine: require './full-height-line'
   grid: require './grid'
