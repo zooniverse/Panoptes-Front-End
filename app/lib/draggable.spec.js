@@ -154,5 +154,22 @@ describe('Draggable', function () {
         expect(onEnd.callCount).to.equal(1);
       });
     });
+    describe('when disabled', function () {
+      before(function () {
+        document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
+          if (eventType === 'mousemove') handleDrag = handler;
+          if (eventType === 'mouseup') handleEnd = handler;
+        });
+        wrapper.setProps({ disabled: true });
+      });
+      it('should not respond to mousedown', function () {
+        wrapper.find('p').simulate('mousedown');
+        expect(document.body.addEventListener.callCount).to.equal(0);
+      });
+      it('should not respond to touchstart', function () {
+        wrapper.find('p').simulate('touchstart');
+        expect(document.body.addEventListener.callCount).to.equal(0);
+      });
+    })
   });
 });
