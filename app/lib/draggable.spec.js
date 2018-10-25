@@ -8,9 +8,19 @@ describe('Draggable', function () {
   let wrapper;
   let handleDrag;
   let handleEnd;
+  let onStart;
+  let onDrag;
+  let onEnd;
   before(function () {
+    onStart = sinon.stub();
+    onDrag = sinon.stub().callsFake((e, d) => d);
+    onEnd = sinon.stub();
     wrapper = shallow(
-      <Draggable>
+      <Draggable
+        onStart={onStart}
+        onDrag={onDrag}
+        onEnd={onEnd}
+      >
         <p>Hello</p>
       </Draggable>
     );
@@ -24,9 +34,16 @@ describe('Draggable', function () {
       document.body.removeEventListener = sinon.stub();
       const fakeEvent = {
         type: 'mousedown',
-        preventDefault: () => null
+        preventDefault: () => null,
+        pageX: 50,
+        pageY: 30
       };
       wrapper.find('p').simulate('mousedown', fakeEvent);
+    });
+    after(function () {
+      onStart.resetHistory();
+      onDrag.resetHistory();
+      onEnd.resetHistory();
     });
     it('should add two event listeners', function () {
       expect(document.body.addEventListener.callCount).to.equal(2);
@@ -37,6 +54,27 @@ describe('Draggable', function () {
     it('should add a listener for mouseup', function () {
       expect(document.body.addEventListener.calledWith('mouseup')).to.be.true;
     });
+    it('should call the onStart callback', function () {
+      expect(onStart.callCount).to.equal(1);
+    });
+    describe('on drag', function () {
+      before(function () {
+        const fakeEvent = {
+          pageX: 100,
+          pageY: 100
+        };
+        handleDrag(fakeEvent);
+      });
+      it('should call the onDrag callback', function () {
+        expect(onDrag.callCount).to.equal(1);
+      });
+      it('should pass the change in x', function () {
+        expect(onDrag.returnValues[0].x).to.equal(50);
+      });
+      it('should pass the change in y', function () {
+        expect(onDrag.returnValues[0].y).to.equal(70);
+      });
+    });
     describe('on drag end', function () {
       before(function () {
         handleEnd({});
@@ -46,6 +84,9 @@ describe('Draggable', function () {
       });
       it('should remove the mouseup listener', function () {
         expect(document.body.removeEventListener.calledWith('mouseup')).to.be.true;
+      });
+      it('should call the onEnd callback', function () {
+        expect(onEnd.callCount).to.equal(1);
       });
     });
   });
@@ -58,9 +99,16 @@ describe('Draggable', function () {
       document.body.removeEventListener = sinon.stub();
       const fakeEvent = {
         type: 'touchstart',
-        preventDefault: () => null
+        preventDefault: () => null,
+        pageX: 50,
+        pageY: 30
       };
       wrapper.find('p').simulate('touchstart', fakeEvent);
+    });
+    after(function () {
+      onStart.resetHistory();
+      onDrag.resetHistory();
+      onEnd.resetHistory();
     });
     it('should add two event listeners', function () {
       expect(document.body.addEventListener.callCount).to.equal(2);
@@ -70,6 +118,27 @@ describe('Draggable', function () {
     });
     it('should add a listener for touchend', function () {
       expect(document.body.addEventListener.calledWith('touchend')).to.be.true;
+    });
+    it('should call the onStart callback', function () {
+      expect(onStart.callCount).to.equal(1);
+    });
+    describe('on drag', function () {
+      before(function () {
+        const fakeEvent = {
+          pageX: 100,
+          pageY: 100
+        };
+        handleDrag(fakeEvent);
+      });
+      it('should call the onDrag callback', function () {
+        expect(onDrag.callCount).to.equal(1);
+      });
+      it('should pass the change in x', function () {
+        expect(onDrag.returnValues[0].x).to.equal(50);
+      });
+      it('should pass the change in y', function () {
+        expect(onDrag.returnValues[0].y).to.equal(70);
+      });
     });
     describe('on drag end', function () {
       before(function () {
@@ -81,6 +150,9 @@ describe('Draggable', function () {
       it('should remove the touchend listener', function () {
         expect(document.body.removeEventListener.calledWith('touchend')).to.be.true;
       });
+      it('should call the onEnd callback', function () {
+        expect(onEnd.callCount).to.equal(1);
+      });
     });
-  })
+  });
 });
