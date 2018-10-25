@@ -301,9 +301,19 @@ const Publications = {
       ]
     },
     {
-      slug: "mschwamb/planet-four-terrains",
+      slug: "zooniverse/planet-four",
       publications: [
         {
+          citation: "Planet Four: Probing Springtime Winds on Mars by Mapping the Southern Polar CO2 Jet Deposits, Aye+ 2018",
+          href: "https://arxiv.org/abs/1803.10341",
+          date: "Aug 2018"
+        }
+      ]
+    },
+    {
+      slug: "mschwamb/planet-four-terrains",
+      publications: [
+                {
         citation: "Planet Four: Terrains - Discovery of Araneiforms Outside of the South Polar Layered Deposits, Schwamb+ 2017.",
         href: "http://arxiv.org/abs/1708.07858",
         date: "2017"
@@ -433,11 +443,6 @@ const Publications = {
     {
       slug: "zooniverse/planet-hunters",
       publications: [
-        {
-        citation: "Preserving the Margins: Supporting Creativity and Resistance on Digital Participatory Platforms, Mugar 2017.",
-        href: "https://dl.acm.org/citation.cfm?id=3134718",
-        date: "December 6, 2017"
-        },
         {
           citation: "Planet Hunters X: Searching for Nearby Neighbors of 75 Planet and Eclipsing Binary Candidates from the K2 Kepler extended mission, Schmitt+ 2016.",
           href: "http://arxiv.org/pdf/1603.06945v1.pdf",
@@ -805,6 +810,16 @@ const Publications = {
         href: "https://link.springer.com/chapter/10.1007/978-3-319-46478-7_30",
         date: "2016"
       }
+    ],
+  },
+      {
+      slug: "zooniverse/chimp-and-see",
+      publications: [
+        {
+          citation: "Nocturnal activity in wild chimpanzees (Pan troglodytes): Evidence for flexible sleeping patterns and insights into human evolution, Tagg+. 2018.",
+          href: "https://onlinelibrary.wiley.com/doi/abs/10.1002/ajpa.23478",
+          date: "July 2018"
+        }
     ]
     }
   ],
@@ -817,7 +832,18 @@ const Publications = {
       href: "http://www.ebiomedicine.com/article/S2352-3964(15)30016-5/pdf",
       date: "May 9, 2015"
     }]
-  }, ],
+  },
+  {
+  slug: "jbrugg/microscopy-masters",
+  publications: [
+    {
+      citation: "Exploring applications of crowdsourcing to cryo-EM, Bruggemann+. 2018.",
+      href: "https://www.sciencedirect.com/science/article/pii/S1047847718300601",
+      date: "July 2018"
+    }
+]
+}
+],
   physics: [
     {
     slug: "zooniverse/higgs-hunters",
@@ -868,6 +894,11 @@ const Publications = {
       citation: "Comparing experts and novices in Martian surface feature change detection and identification, Wardlaw+ 2018.",
       href: "https://www.sciencedirect.com/science/article/pii/S030324341730123X?via%3Dihub",
       date: "February 2018"
+      },
+      {
+      citation: "Preserving the Margins: Supporting Creativity and Resistance on Digital Participatory Platforms, Mugar 2017.",
+      href: "https://dl.acm.org/citation.cfm?id=3134718",
+      date: "December 6, 2017"
       },
       {
         citation: "Task Workflow Design and its impact on performance and volunteers' subjective preference in Virtual Citizen Science, Sprinks+ 2017.",
