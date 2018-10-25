@@ -20,7 +20,7 @@ All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
 While editing, do your best to follow style and architecture conventions already used by the project, unless you have a reason not to. **If in doubt, ask.**
 
-#### Development with Docker
+### Development with Docker
 
 To avoid having to install Node.js or any other dependencies, you can also run
 everything with Docker and Docker Compose.
@@ -32,7 +32,7 @@ change dependencies in `package.json`.
 
 `docker-compose run dev npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
 
-#### What to do if it doesn't run
+### What to do if it doesn't run
 
 Try `rm -rf ./node_modules && npm install` to freshen up your dependencies. And read the warnings, they should should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies. If you use `docker-compose` to build and test the site, you shouldn't run into any problems with the Node version, but `docker-compose build` will build a new image with a fresh `npm install`.
 
