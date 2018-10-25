@@ -25,7 +25,7 @@ function Draggable(props) {
         [moveEvent, endEvent] = ['touchmove', 'touchend'];
         break;
       default:
-        [moveEvent, endEvent] = ['pointermove', 'pointerend'];
+        [moveEvent, endEvent] = ['pointermove', 'pointerup'];
     }
 
     e = (e.touches && e.touches[0]) ? e.touches[0] : e;
@@ -74,7 +74,8 @@ function Draggable(props) {
     className,
     'data-disabled': disabled ? true : undefined,
     onMouseDown: disabled ? undefined : handleStart,
-    onTouchStart: disabled ? undefined : handleStart
+    onTouchStart: disabled ? undefined : handleStart,
+    onPointerDown: disabled ? undefined : handleStart
   };
   return React.cloneElement(children, childProps);
 }

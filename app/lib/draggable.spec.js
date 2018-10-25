@@ -154,22 +154,91 @@ describe('Draggable', function () {
         expect(onEnd.callCount).to.equal(1);
       });
     });
-    describe('when disabled', function () {
+  });
+  describe('on pointerdown', function () {
+    before(function () {
+      document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
+        if (eventType === 'pointermove') handleDrag = handler;
+        if (eventType === 'pointerup') handleEnd = handler;
+      });
+      document.body.removeEventListener = sinon.stub();
+      const fakeEvent = {
+        type: 'pointerdown',
+        preventDefault: () => null,
+        pageX: 50,
+        pageY: 30
+      };
+      wrapper.find('p').simulate('pointerdown', fakeEvent);
+    });
+    after(function () {
+      onStart.resetHistory();
+      onDrag.resetHistory();
+      onEnd.resetHistory();
+    });
+    it('should add two event listeners', function () {
+      expect(document.body.addEventListener.callCount).to.equal(2);
+    });
+    it('should add a listener for pointermove', function () {
+      expect(document.body.addEventListener.calledWith('pointermove')).to.be.true;
+    });
+    it('should add a listener for pointerup', function () {
+      expect(document.body.addEventListener.calledWith('pointerup')).to.be.true;
+    });
+    it('should call the onStart callback', function () {
+      expect(onStart.callCount).to.equal(1);
+    });
+    describe('on drag', function () {
       before(function () {
-        document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
-          if (eventType === 'mousemove') handleDrag = handler;
-          if (eventType === 'mouseup') handleEnd = handler;
-        });
-        wrapper.setProps({ disabled: true });
+        const fakeEvent = {
+          pageX: 100,
+          pageY: 100
+        };
+        handleDrag(fakeEvent);
       });
-      it('should not respond to mousedown', function () {
-        wrapper.find('p').simulate('mousedown');
-        expect(document.body.addEventListener.callCount).to.equal(0);
+      it('should call the onDrag callback', function () {
+        expect(onDrag.callCount).to.equal(1);
       });
-      it('should not respond to touchstart', function () {
-        wrapper.find('p').simulate('touchstart');
-        expect(document.body.addEventListener.callCount).to.equal(0);
+      it('should pass the change in x', function () {
+        expect(onDrag.returnValues[0].x).to.equal(50);
       });
-    })
+      it('should pass the change in y', function () {
+        expect(onDrag.returnValues[0].y).to.equal(70);
+      });
+    });
+    describe('on drag end', function () {
+      before(function () {
+        handleEnd({});
+      });
+      it('should remove the pointermove listener', function () {
+        expect(document.body.removeEventListener.calledWith('pointermove')).to.be.true;
+      });
+      it('should remove the pointerup listener', function () {
+        expect(document.body.removeEventListener.calledWith('pointerup')).to.be.true;
+      });
+      it('should call the onEnd callback', function () {
+        expect(onEnd.callCount).to.equal(1);
+      });
+    });
+  });
+  describe('when disabled', function () {
+    before(function () {
+      document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
+        if (eventType === 'mousemove') handleDrag = handler;
+        if (eventType === 'mouseup') handleEnd = handler;
+      });
+      wrapper.setProps({ disabled: true });
+    });
+    it('should not respond to mousedown', function () {
+      wrapper.find('p').simulate('mousedown');
+      expect(document.body.addEventListener.callCount).to.equal(0);
+    });
+    it('should not respond to touchstart', function () {
+      wrapper.find('p').simulate('touchstart');
+      expect(document.body.addEventListener.callCount).to.equal(0);
+    });
+    it('should not respond to pointerdown', function () {
+      wrapper.find('p').simulate('pointerdown');
+      expect(document.body.addEventListener.callCount).to.equal(0);
+    });
   });
 });
