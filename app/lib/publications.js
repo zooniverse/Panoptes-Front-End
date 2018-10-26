@@ -4,6 +4,11 @@ const Publications = {
       slug: "zooniverse/galaxy-zoo",
       publications: [
         {
+          citation: "Coordinating Advanced Crowd Work: Extending Citizen Science, Crowston+ 2018.",
+          href: "https://crowston.syr.edu/sites/crowston.syr.edu/files/Quench%20to%20distribute.pdf",
+          date: "2018"
+        },
+        {
           citation: "Galaxy Zoo: secular evolution of barred galaxies from structural decomposition of multiband images, Kruk+ 2018.",
           href: "https://arxiv.org/abs/1710.00093",
           date: "February 2018"
@@ -367,6 +372,11 @@ const Publications = {
         citation: "The First Brown Dwarf Discovered by the Backyard Worlds: Planet 9 Citizen Science Project, Kuchner+ 2017.",
         href: "http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:1705.02919",
         date: "2017"
+      },
+        {
+        citation: "WiseView: Visualizing motion and variability of faint WISE sources, Caselden+ 2018.",
+        href: "http://ascl.net/1806.004",
+        date: "2018"
         }
       ]
     },
@@ -621,6 +631,26 @@ const Publications = {
           citation: "Radio Galaxy Zoo: host galaxies and radio morphologies derived from visual inspection, Banfield+ 2015.",
           href: "http://arXiv.org/abs/1507.07272",
           date: "July 27, 2015"
+        },
+        {
+          citation: "Radio Galaxy Zoo: Cosmological Alignment of Radio Sources, Contigiani+ 2017.",
+          href: "https://arxiv.org/abs/1708.00301",
+          date: "2017"
+        },
+        {
+          citation: "Radio Galaxy Zoo: A Search for Hybrid Morphology Radio Galaxies, Kapinska+ 2017.",
+          href: "https://arxiv.org/abs/1711.09611",
+          date: "2017"
+        },
+        {
+          citation: "Radio Galaxy Zoo: Compact and extended radio source classification with deep learning, Lukic+ 2018.",
+          href: "https://arxiv.org/abs/1801.04861",
+          date: "2018"
+        },
+        {
+          citation: "Radio Galaxy Zoo: Machine learning for radio source host galaxy cross-identification, Alger+ 2018.",
+          href: "https://arxiv.org/abs/1805.05540",
+          date: "2018"
         }
       ]
     },
@@ -645,6 +675,11 @@ const Publications = {
           citation: "Disk Detective: Discovery of New Circumstellar Disk Candidates through Citizen Science, Kuchner+ 2016.",
           href: "https://arxiv.org/abs/1607.05713",
           date: "July 2016"
+        },
+        {
+          citation: "Follow-up Imaging of Disk Candidates from the Disk Detective Citizen Science Project: New Discoveries and False-Positives in WISE Circumstellar Disk Surveys, Silverberg+ 2018.",
+          href: "https://arxiv.org/abs/1809.09663",
+          date: "2018"
         }
       ]
     },
@@ -727,6 +762,16 @@ const Publications = {
     }
   ],
   nature: [
+    {
+      slug: "vykanton/identify-new-zealand-animals",
+      publications: [
+        {
+          citation: "Monitoring the mammalian fauna of urban areas using remote cameras and citizen science, Anton+ 2018.",
+          href: "https://academic.oup.com/jue/article/4/1/juy002/4947839",
+          date: "2018"
+        }
+      ]
+    },
     {
       slug: "zooniverse/floating-forests",
       publications: [
@@ -842,6 +887,16 @@ const Publications = {
       date: "July 2018"
     }
 ]
+},
+{
+slug: "zooniverse/reverse-the-odds",
+publications: [
+  {
+    citation: "Harnessing citizen science through mobile phone technology to screen for immunohistochemical biomarkers in bladder cancer, Smittenaar+. 2018.",
+    href: "https://www.nature.com/articles/s41416-018-0156-0",
+    date: "2018"
+  }
+]
 }
 ],
   physics: [
@@ -882,6 +937,21 @@ const Publications = {
         citation: "Blending Machine and Human Learning Processes, Crowston+ 2017.",
         href: "http://hdl.handle.net/10125/41159",
         date: "2017"
+        },
+        {
+        citation: "Machine learning for Gravity Spy: Glitch classification and dataset, Bahaadini+ 2018.",
+        href: "https://www.sciencedirect.com/science/article/pii/S0020025518301634",
+        date: "2018"
+        },
+        {
+        citation: "Folksonomies to Support Coordination and Coordination of Folksonomies, Jackson+ 2018.",
+        href: "https://link.springer.com/article/10.1007%2Fs10606-018-9327-z",
+        date: "2018"
+        },
+        {
+        citation: "Did they login? Patterns of Anonymous Contributions in Online Communities, Jackson+ 2018.",
+        href: "https://crowston.syr.edu/sites/crowston.syr.edu/files/anonymous-contributions-cameraready.pdf",
+        date: "2018"
         }
       ]
     },
@@ -890,6 +960,11 @@ const Publications = {
     {
     name: "Meta Studies",
     publications: [
+      {
+      citation: "Optimizing Interventions via Offline Policy Evaluation: Studies in Citizen Science, Segal+ 2018.",
+      href: "http://erichorvitz.com/optimizing-interventions-offline.pdf",
+      date: "2018"
+      },
       {
       citation: "Comparing experts and novices in Martian surface feature change detection and identification, Wardlaw+ 2018.",
       href: "https://www.sciencedirect.com/science/article/pii/S030324341730123X?via%3Dihub",
