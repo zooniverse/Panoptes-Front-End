@@ -28,8 +28,8 @@ function Draggable(props) {
         [moveEvent, endEvent] = ['pointermove', 'pointerup'];
     }
 
-    e = (e.touches && e.touches[0]) ? e.touches[0] : e;
-    _rememberCoords(e);
+    const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
+    _rememberCoords(eventCoords);
 
     // Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
     document.body.classList.add('dragging');
@@ -40,27 +40,27 @@ function Draggable(props) {
     // If there's no `onStart`, `onDrag` will be called on start.
     const startHandler = props.onStart || handleDrag;
     if (startHandler) { // You can set it to `false` if you don't want anything to fire.
-      startHandler(e);
+      startHandler(eventCoords);
     }
   }
 
   function handleDrag(e) {
-    e = (e.touches && e.touches[0]) ? e.touches[0] : e;
+    const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
     const d = {
-      x: e.pageX - _previousEventCoords.x,
-      y: e.pageY - _previousEventCoords.y
+      x: eventCoords.pageX - _previousEventCoords.x,
+      y: eventCoords.pageY - _previousEventCoords.y
     };
-    props.onDrag(e, d);
-    _rememberCoords(e);
+    props.onDrag(eventCoords, d);
+    _rememberCoords(eventCoords);
   }
 
   function handleEnd(e) {
-    e = (e.touches && e.touches[0]) ? e.touches[0] : e;
+    const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
 
     document.body.removeEventListener(moveEvent, handleDrag);
     document.body.removeEventListener(endEvent, handleEnd);
 
-    props.onEnd(e);
+    props.onEnd(eventCoords);
     _previousEventCoords = {};
     document.body.classList.remove('dragging');
   }
