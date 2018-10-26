@@ -26,15 +26,16 @@ describe('Draggable', function () {
     );
   });
   describe('on mousedown', function () {
+    let fakeEvent;
     before(function () {
       document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
         if (eventType === 'mousemove') handleDrag = handler;
         if (eventType === 'mouseup') handleEnd = handler;
       });
       document.body.removeEventListener = sinon.stub();
-      const fakeEvent = {
+      fakeEvent = {
         type: 'mousedown',
-        preventDefault: () => null,
+        preventDefault: sinon.stub(),
         pageX: 50,
         pageY: 30
       };
@@ -44,6 +45,9 @@ describe('Draggable', function () {
       onStart.resetHistory();
       onDrag.resetHistory();
       onEnd.resetHistory();
+    });
+    it('should cancel the default event', function () {
+      expect(fakeEvent.preventDefault.callCount).to.equal(1);
     });
     it('should add two event listeners', function () {
       expect(document.body.addEventListener.callCount).to.equal(2);
@@ -91,15 +95,16 @@ describe('Draggable', function () {
     });
   });
   describe('on touchstart', function () {
+    let fakeEvent;
     before(function () {
       document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
         if (eventType === 'touchmove') handleDrag = handler;
         if (eventType === 'touchend') handleEnd = handler;
       });
       document.body.removeEventListener = sinon.stub();
-      const fakeEvent = {
+      fakeEvent = {
         type: 'touchstart',
-        preventDefault: () => null,
+        preventDefault: sinon.stub(),
         pageX: 50,
         pageY: 30
       };
@@ -109,6 +114,9 @@ describe('Draggable', function () {
       onStart.resetHistory();
       onDrag.resetHistory();
       onEnd.resetHistory();
+    });
+    it('should cancel the default event', function () {
+      expect(fakeEvent.preventDefault.callCount).to.equal(1);
     });
     it('should add two event listeners', function () {
       expect(document.body.addEventListener.callCount).to.equal(2);
@@ -156,15 +164,16 @@ describe('Draggable', function () {
     });
   });
   describe('on pointerdown', function () {
+    let fakeEvent;
     before(function () {
       document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
         if (eventType === 'pointermove') handleDrag = handler;
         if (eventType === 'pointerup') handleEnd = handler;
       });
       document.body.removeEventListener = sinon.stub();
-      const fakeEvent = {
+      fakeEvent = {
         type: 'pointerdown',
-        preventDefault: () => null,
+        preventDefault: sinon.stub(),
         pageX: 50,
         pageY: 30
       };
@@ -174,6 +183,9 @@ describe('Draggable', function () {
       onStart.resetHistory();
       onDrag.resetHistory();
       onEnd.resetHistory();
+    });
+    it('should cancel the default event', function () {
+      expect(fakeEvent.preventDefault.callCount).to.equal(1);
     });
     it('should add two event listeners', function () {
       expect(document.body.addEventListener.callCount).to.equal(2);
