@@ -82,6 +82,7 @@ export default class DrawingToolRoot extends React.Component {
           {...mainStyle}
           ref={(element) => { this.root = element; }}
           onMouseDown={startHandler}
+          onPointerDown={startHandler}
           onTouchStart={startHandler}
           tabIndex="-1"
         >
