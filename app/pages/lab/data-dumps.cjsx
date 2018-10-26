@@ -42,6 +42,9 @@ module.exports = createReactClass
         For examples of how to work with the data exports, see our&nbsp
         <a href="https://github.com/zooniverse/Data-digging">
           Data Digging code repository
+        </a> or use our&nbsp
+        <a href="https://github.com/zooniverse/aggregation-for-caesar">
+          Panoptes Aggregation python package
         </a>.
       </p>
       <div className="columns-container">
