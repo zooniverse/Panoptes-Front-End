@@ -1,7 +1,7 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 DrawingToolRoot = require('./root').default
-Draggable = require '../../lib/draggable'
+Draggable = require('../../lib/draggable').default
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 

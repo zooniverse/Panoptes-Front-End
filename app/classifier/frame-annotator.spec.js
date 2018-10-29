@@ -8,7 +8,6 @@ import sinon from 'sinon';
 import { shallow, mount } from 'enzyme';
 import FrameAnnotator from './frame-annotator';
 import tasks from './tasks';
-import SVGImage from '../components/svg-image';
 import WarningBanner from './warning-banner';
 import { classification, workflow, subject, preferences } from '../pages/dev-classifier/mock-data';
 
@@ -56,10 +55,10 @@ describe('<FrameAnnotator />', function() {
     assert.equal(wrapper.find('span').length, 1);
   });
 
-  describe('<SVGImage />', function() {
+  describe('<AnnotationRenderer />', function() {
     let wrapper;
     before(function() {
-      wrapper = mount(
+      wrapper = shallow(
         <FrameAnnotator
           annotation={annotation}
           classification={classification}
@@ -72,16 +71,18 @@ describe('<FrameAnnotator />', function() {
         />);
     });
 
-    it('renders if subject type is an image', function() {
-      assert.equal(wrapper.find(SVGImage).length, 1);
+    it('renders with correct subject type for images', function() {
+      const { type } = wrapper.find('AnnotationRenderer').props();
+      assert.equal(type, 'image');
     });
 
-    it('does not render if type is not an image', function() {
+    it('renders with correct subject type for video', function() {
       const newSubject = Object.assign({}, subject);
       newSubject.locations = [{ 'video/mp4': 'video.mp4' }];
       wrapper.setProps({ subject: newSubject });
 
-      assert.equal(wrapper.find(SVGImage).length, 0);
+      const { type } = wrapper.find('AnnotationRenderer').props();
+      assert.equal(type, 'video');
     });
   });
 
@@ -161,78 +162,6 @@ describe('<FrameAnnotator />', function() {
 
     it('renders AfterSubject hook', function() {
       assert.equal(wrapper.find(TaskComponent.AfterSubject).length, 1);
-    });
-
-    it('renders InsideSubject hook', function() {
-      TaskComponent = tasks['drawing'];
-      const drawingAnnotation = TaskComponent.getDefaultAnnotation();
-      drawingAnnotation.task = 'draw';
-      wrapper = mount(
-        <FrameAnnotator
-          annotation={drawingAnnotation}
-          classification={classification}
-          loading={false}
-          naturalHeight={naturalHeight}
-          naturalWidth={naturalWidth}
-          subject={subject}
-          viewBoxDimensions={viewBoxDimensions}
-          workflow={workflow}
-        />);
-
-      assert.equal(wrapper.find(TaskComponent.InsideSubject).length, 1);
-    });
-
-    it('renders PersistInsideSubject hook', function() {
-      // combo tasks each have their own PersistInsideSubject, so this can be greater than 1
-      assert(wrapper.find(TaskComponent.PersistInsideSubject).length >= 1);
-    });
-  });
-  
-  describe('SVG style', function() {
-    let wrapper;
-
-    before(function() {
-      const drawingAnnotation = tasks.drawing.getDefaultAnnotation();
-      drawingAnnotation.task = 'draw';
-      wrapper = mount(
-        <FrameAnnotator
-          annotation={drawingAnnotation}
-          classification={classification}
-          loading={false}
-          naturalHeight={naturalHeight}
-          naturalWidth={naturalWidth}
-          subject={subject}
-          viewBoxDimensions={viewBoxDimensions}
-          workflow={workflow}
-        />);
-    });
-
-    it('overrides pointer event styles for drawing tasks', function() {
-      assert(wrapper.find('svg').prop('style').pointerEvents === 'all');
-    });
-
-    it('does not override pointer event styles for question tasks', function() {
-      const questionAnnotation = tasks.single.getDefaultAnnotation();
-      questionAnnotation.task = 'init';
-      wrapper.setProps({annotation: questionAnnotation});
-      assert(wrapper.find('svg').prop('style').pointerEvents === undefined);
-    });
-
-    it('overrides pointer event styles for combo drawing tasks', function() {
-      const comboAnnotation = tasks.combo.getDefaultAnnotation(workflow.tasks.combo, workflow, tasks);
-      comboAnnotation.task = 'combo';
-      wrapper.setProps({annotation: comboAnnotation});
-      assert(wrapper.find('svg').prop('style').pointerEvents === 'all');
-    });
-
-    it('does not override pointer event styles for other combo tasks', function() {
-      const comboTask = Object.assign({}, workflow.tasks.combo);
-      comboTask.tasks = ['write', 'ask', 'features'];
-      workflow.tasks.textCombo = comboTask;
-      const comboAnnotation = tasks.combo.getDefaultAnnotation(workflow.tasks.textCombo, workflow, tasks);
-      comboAnnotation.task = 'textCombo';
-      wrapper.setProps({annotation: comboAnnotation});
-      assert(wrapper.find('svg').prop('style').pointerEvents === undefined);
     });
   });
 });
