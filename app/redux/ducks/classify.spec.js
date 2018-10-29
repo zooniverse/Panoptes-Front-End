@@ -292,7 +292,7 @@ describe('Classifier actions', function () {
       }
     };
     const state = {
-      classification: mockPanoptesResource('classifications', { 
+      classification: mockPanoptesResource('classifications', {
         id: '1',
         metadata: {
           b: 3,
@@ -355,7 +355,7 @@ describe('Classifier actions', function () {
     });
   });
   describe('toggle gold standard', function () {
-    it('should set gold standard classifications', function () {
+    it('should set gold standard classifications and mode', function () {
       const action = {
         type: 'pfe/classify/TOGGLE_GOLD_STANDARD',
         payload: {
@@ -367,8 +367,9 @@ describe('Classifier actions', function () {
       };
       const newState = reducer(state, action);
       expect(newState.classification.gold_standard).to.be.true;
+      expect(newState.goldStandardMode).to.be.true;
     });
-    it('should unset gold standard classifications', function () {
+    it('should unset gold standard classifications and mode', function () {
       const action = {
         type: 'pfe/classify/TOGGLE_GOLD_STANDARD',
         payload: {
@@ -380,6 +381,7 @@ describe('Classifier actions', function () {
       };
       const newState = reducer(state, action);
       expect(newState.classification.gold_standard).to.be.false;
+      expect(newState.goldStandardMode).to.be.false;
     });
     it('should unset gold standard classifications if undefined', function () {
       const action = {

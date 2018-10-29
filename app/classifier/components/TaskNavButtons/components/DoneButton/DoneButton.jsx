@@ -5,7 +5,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import { darken, lighten } from 'polished';
 import Translate from 'react-translate-component';
-import { pxToRem, zooTheme } from '../../../../../theme';
+import { zooTheme } from '../../../../../theme';
 
 export const StyledDoneButton = styled.button.attrs({
   disabled: props => props.disabled,
