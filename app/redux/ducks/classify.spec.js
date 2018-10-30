@@ -276,11 +276,16 @@ describe('Classifier actions', function () {
       upcomingSubjects: [1, 2]
     };
     const subject = {
-        id: '2',
-        locations: [],
-        metadata: [],
-        destroy: function () {}
-      }
+      id: '2',
+      locations: [],
+      metadata: [],
+      destroy: function () {}
+    };
+    it('should mark the workflow subject as seen', function () {
+      expect(seenThisSession.check(state.workflow, subject)).to.be.false;
+      const newState = reducer(state, action);
+      expect(seenThisSession.check(newState.workflow, subject)).to.be.true;
+    });
     it('should set the classification completed flag', function () {
       const newState = reducer(state, action);
       expect(newState.classification.completed).to.be.true;
@@ -292,10 +297,6 @@ describe('Classifier actions', function () {
     it('should record the classification annotations', function () {
       const newState = reducer(state, action);
       expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
-    });
-    it('should mark the workflow subject as seen', function () {
-      const newState = reducer(state, action);
-      expect(seenThisSession.check(newState.workflow, subject)).to.be.true;
     });
   });
   describe('update classification', function () {
