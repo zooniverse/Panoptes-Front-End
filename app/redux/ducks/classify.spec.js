@@ -2,6 +2,7 @@ import reducer from './classify';
 import { expect } from 'chai';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 import FakeLocalStorage from '../../../test/fake-local-storage';
+import seenThisSession from '../../lib/seen-this-session';
 
 global.innerWidth = 1000;
 global.innerHeight = 1000;
@@ -262,18 +263,24 @@ describe('Classifier actions', function () {
       classification: mockPanoptesResource('classifications', {
         id: '1',
         links: {
-          subjects: ['1'],
-          workflow: '1'
+          subjects: ['2'],
+          workflow: '3'
         }
       }),
       workflow: {
-        id: '1',
+        id: '3',
         tasks: {
           a: {}
         }
       },
       upcomingSubjects: [1, 2]
     };
+    const subject = {
+        id: '2',
+        locations: [],
+        metadata: [],
+        destroy: function () {}
+      }
     it('should set the classification completed flag', function () {
       const newState = reducer(state, action);
       expect(newState.classification.completed).to.be.true;
@@ -285,6 +292,10 @@ describe('Classifier actions', function () {
     it('should record the classification annotations', function () {
       const newState = reducer(state, action);
       expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
+    });
+    it('should mark the workflow subject as seen', function () {
+      const newState = reducer(state, action);
+      expect(seenThisSession.check(newState.workflow, subject)).to.be.true;
     });
   });
   describe('update classification', function () {
