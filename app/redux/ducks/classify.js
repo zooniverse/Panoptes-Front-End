@@ -127,6 +127,8 @@ export default function reducer(state = initialState, action = {}) {
     case COMPLETE_CLASSIFICATION: {
       const { annotations } = action.payload;
       const classification = finishClassification(state.workflow, state.classification, annotations);
+      const { workflow, subjects } = classification.links;
+      seenThisSession.add(workflow, subjects);
       return Object.assign({}, state, { classification });
     }
     case CREATE_CLASSIFICATION: {

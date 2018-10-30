@@ -259,7 +259,13 @@ describe('Classifier actions', function () {
       }
     };
     const state = {
-      classification: mockPanoptesResource('classifications', { id: '1' }),
+      classification: mockPanoptesResource('classifications', {
+        id: '1',
+        links: {
+          subjects: ['1'],
+          workflow: '1'
+        }
+      }),
       workflow: {
         id: '1',
         tasks: {
