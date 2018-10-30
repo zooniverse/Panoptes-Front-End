@@ -223,7 +223,7 @@ class ProjectStatus extends Component {
                     type="checkbox"
                     name="configuration.image_layout"
                     value="no-max-height"
-                    checked={
+                    defaultChecked={
                       workflow.configuration.image_layout &&
                       workflow.configuration.image_layout.indexOf('no-max-height') > -1
                     }
