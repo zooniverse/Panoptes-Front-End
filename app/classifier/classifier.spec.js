@@ -6,6 +6,9 @@ import { shallow } from 'enzyme';
 import { Classifier } from './classifier';
 import mockPanoptesResource from '../../test/mock-panoptes-resource';
 
+global.innerWidth = 1000;
+global.innerHeight = 1000;
+
 const store = {
   subscribe: () => { },
   dispatch: () => { },
@@ -38,6 +41,10 @@ const classification = mockPanoptesResource('classification', {
   ],
   metadata: {
     subject_dimensions: []
+  },
+  links: {
+    workflow: 'test',
+    subjects: ['a']
   }
 });
 

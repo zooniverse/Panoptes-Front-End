@@ -10,7 +10,6 @@ import { bindActionCreators } from 'redux';
 import counterpart from 'counterpart';
 import { Split } from 'seven-ten';
 
-import seenThisSession from '../../lib/seen-this-session';
 import ClassificationQueue from '../../lib/classification-queue';
 
 import * as classifierActions from '../../redux/ducks/classify';
@@ -172,10 +171,6 @@ export class ProjectClassifyPage extends React.Component {
     const { classification } = this.props;
     console.info('Completed classification', classification);
 
-    let workflow = null;
-    let subjects = null;
-    ({ workflow, subjects } = classification.links);
-    seenThisSession.add(workflow, subjects);
     if (!this.state.demoMode) {
       classificationQueue.add(classification);
     }
