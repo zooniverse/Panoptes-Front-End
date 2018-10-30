@@ -161,6 +161,17 @@ class ProjectStatus extends Component {
     }
   }
 
+  toggleWorkflowImageHeight(workflow, e) {
+    const noMaxHeight = e.target.checked;
+    const { image_layout } = workflow.configuration;
+    const newLayout = image_layout && image_layout.slice ? image_layout.slice() : []
+    const index = newLayout.indexOf('no-max-height');
+    newLayout.splice(index, 1);
+    if (noMaxHeight) {
+      newLayout.push('no-max-height');
+    }
+    workflow.update({ 'configuration.image_layout': newLayout }).save();
+  }
   renderWorkflows() {
     if (this.state.workflows.length === 0) {
       return <div>No workflows found</div>;
@@ -205,6 +216,22 @@ class ProjectStatus extends Component {
                   })}
                 </select>
               </label>
+              <fieldset>
+                <legend>Subject image layout</legend>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="configuration.image_layout"
+                    value="no-max-height"
+                    defaultChecked={
+                      workflow.configuration.image_layout &&
+                      workflow.configuration.image_layout.indexOf('no-max-height') > -1
+                    }
+                    onChange={event => this.toggleWorkflowImageHeight(workflow, event)}
+                  />
+                  no max height
+                </label>
+              </fieldset>
             </li>
           );
         })}
