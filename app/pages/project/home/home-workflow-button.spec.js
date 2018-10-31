@@ -3,6 +3,7 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import ProjectHomeWorkflowButton from './home-workflow-button';
+import mockPanoptesResource from '../../../../test/mock-panoptes-resource';
 
 const testWorkflowWithLevel = {
   id: '2342',
@@ -20,17 +21,17 @@ const testProject = {
   slug: 'zooniverse/project'
 };
 
+const preferences = mockPanoptesResource('project-preferences', {});
+
 describe('ProjectHomeWorkflowButton', function() {
   let wrapper;
   let handleWorkflowSelectionSpy;
-  let onChangePreferencesSpy;
   before(function() {
     handleWorkflowSelectionSpy = sinon.spy(ProjectHomeWorkflowButton.prototype, 'handleWorkflowSelection');
-    onChangePreferencesSpy = sinon.spy();
     wrapper = shallow(
       <ProjectHomeWorkflowButton
         disabled={false}
-        onChangePreferences={onChangePreferencesSpy}
+        preferences={preferences}
         project={testProject}
         workflow={testWorkflowWithoutLevel}
         workflowAssignment={false}
@@ -55,7 +56,7 @@ describe('ProjectHomeWorkflowButton', function() {
   it('calls handleWorkflowSelection onClick', function() {
     wrapper.find('Link').simulate('click');
     assert.equal(handleWorkflowSelectionSpy.calledOnce, true);
-    assert.equal(onChangePreferencesSpy.calledOnce, true);
+    assert.equal(preferences.update.calledOnce, true);
   });
 
   it('uses the project slug in the Link href', function() {
@@ -67,7 +68,7 @@ describe('ProjectHomeWorkflowButton', function() {
       wrapper = shallow(
         <ProjectHomeWorkflowButton
           disabled={true}
-          onChangePreferences={onChangePreferencesSpy}
+          preferences={preferences}
           project={testProject}
           workflow={testWorkflowWithoutLevel}
           workflowAssignment={false}
@@ -90,7 +91,7 @@ describe('ProjectHomeWorkflowButton', function() {
       wrapper = shallow(
         <ProjectHomeWorkflowButton
           disabled={false}
-          onChangePreferences={onChangePreferencesSpy}
+          preferences={preferences}
           project={testProject}
           workflow={testWorkflowWithoutLevel}
           workflowAssignment={true}

@@ -46,7 +46,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
                   <ProjectHomeWorkflowButton
                     key={workflow.id}
                     disabled={this.shouldWorkflowBeDisabled(workflow)}
-                    onChangePreferences={this.props.onChangePreferences}
+                    preferences={this.props.preferences}
                     project={this.props.project}
                     workflow={workflow}
                     workflowAssignment={this.props.workflowAssignment}
@@ -64,7 +64,6 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
 ProjectHomeWorkflowButtons.defaultProps = {
   activeWorkflows: [],
-  onChangePreferences: () => {},
   preferences: {},
   project: {},
   showWorkflowButtons: false,
@@ -75,7 +74,6 @@ ProjectHomeWorkflowButtons.defaultProps = {
 
 ProjectHomeWorkflowButtons.propTypes = {
   activeWorkflows: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onChangePreferences: PropTypes.func.isRequired,
   preferences: PropTypes.shape({
     preferences: PropTypes.object,
     settings: PropTypes.objectOf(PropTypes.string)

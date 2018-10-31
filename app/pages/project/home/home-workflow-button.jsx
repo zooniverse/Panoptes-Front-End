@@ -15,7 +15,7 @@ export default class ProjectHomeWorkflowButton extends React.Component {
     if (this.props.disabled) {
       e.preventDefault();
     } else {
-      this.props.onChangePreferences('preferences.selected_workflow', this.props.workflow.id);
+      this.props.preferences.update({ 'preferences.selected_workflow': this.props.workflow.id });
     }
   }
 
@@ -57,7 +57,7 @@ export default class ProjectHomeWorkflowButton extends React.Component {
 
 ProjectHomeWorkflowButton.defaultProps = {
   disabled: false,
-  onChangePreferences: () => {},
+  preferences: {},
   project: {},
   workflow: {},
   workflowAssignment: false
@@ -65,7 +65,9 @@ ProjectHomeWorkflowButton.defaultProps = {
 
 ProjectHomeWorkflowButton.propTypes = {
   disabled: PropTypes.bool,
-  onChangePreferences: PropTypes.func.isRequired,
+  preferences: PropTypes.shape({
+    update: PropTypes.func
+  }),
   project: PropTypes.shape({
     slug: PropTypes.string
   }).isRequired,
