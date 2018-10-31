@@ -7,7 +7,7 @@ import MobileSection from './mobile-section';
 import ValidationValue, { convertBooleanToValidation } from './mobile-validations';
 
 const VALID_QUESTION_LENGTH = 200;
-const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'multiple'];
+const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'drawing', 'multiple'];
 
 function taskQuestionNotTooLong({ task }) {
   return convertBooleanToValidation(task.question ? task.question.length < VALID_QUESTION_LENGTH : false);
@@ -45,14 +45,47 @@ function workflowQuestionHasOneOrLessImages({ task }) {
   return validation;
 }
 
+function drawingToolTypeIsValid({ task }) {
+  let validationBool = false;
+  if (task.tools[0]) {
+    validationBool = task.tools[0].type === 'rectangle';
+  }
+  return convertBooleanToValidation(validationBool);
+}
+
+function drawingTaskHasOneTool({ task }) {
+  return convertBooleanToValidation(task.tools.length === 1);
+}
+
+function drawingTaskHasNoSubtasks({ task }) {
+  const toolHasSubtasks = task.tools.reduce((hasSubtasks, tool) => {
+    return hasSubtasks || tool.details.length > 0;
+  }, false);
+
+  return convertBooleanToValidation(!toolHasSubtasks);
+}
+
 const validatorFns = {
-  taskQuestionNotTooLong,
-  taskFeedbackDisabled,
-  taskHasTwoAnswers,
-  workflowFlipbookDisabled,
-  workflowHasSingleTask,
-  workflowNotTooManyShortcuts,
-  workflowQuestionHasOneOrLessImages
+  single: {
+    taskQuestionNotTooLong,
+    taskFeedbackDisabled,
+    taskHasTwoAnswers,
+    workflowFlipbookDisabled,
+    workflowHasSingleTask,
+    workflowNotTooManyShortcuts,
+    workflowQuestionHasOneOrLessImages
+  },
+  drawing: {
+    taskFeedbackDisabled,
+    workflowFlipbookDisabled,
+    workflowHasSingleTask,
+    drawingToolTypeIsValid,
+    drawingTaskHasOneTool,
+    drawingTaskHasNoSubtasks
+  },
+  multiple: {
+    workflowHasSingleTask
+  }
 };
 
 class MobileSectionContainer extends Component {
@@ -66,7 +99,7 @@ class MobileSectionContainer extends Component {
     this.state = {
       enabled: false,
       showSection: false,
-      validations: reduce(validatorFns, (valObj, fn, key) => {
+      validations: reduce(validatorFns[props.task.type], (valObj, fn, key) => {
         valObj[key] = false;
         return valObj;
       }, {})
@@ -140,8 +173,7 @@ class MobileSectionContainer extends Component {
 
   validate(props) {
     const validatorArgs = { task: props.task, workflow: props.workflow, project: props.project };
-
-    const validations = reduce(validatorFns, (validationObj, fn, key) => {
+    const validations = reduce(validatorFns[props.task.type], (validationObj, fn, key) => {
       validationObj[key] = fn.call(this, validatorArgs);
       return validationObj;
     }, {});
