@@ -397,7 +397,6 @@ class ProjectPageController extends React.Component {
               projectRoles={this.state.projectRoles}
               translations={this.props.translations}
               user={this.props.user}
-              onChangePreferences={this.handleProjectPreferencesChange.bind(this)}
             >
               <ProjectPage
                 {...this.props}
@@ -405,7 +404,6 @@ class ProjectPageController extends React.Component {
                 guide={this.state.guide}
                 guideIcons={this.state.guideIcons}
                 loading={this.state.loading}
-                onChangePreferences={this.handleProjectPreferencesChange.bind(this)}
                 organization={this.state.organization}
                 owner={this.state.owner}
                 pages={this.state.pages}

@@ -84,7 +84,6 @@ const ProjectHomePage = (props) => {
         <VisibilitySplit splits={props.splits} splitKey='workflow.assignment' elementKey='div'>
           <ProjectHomeWorkflowButtons
             activeWorkflows={props.activeWorkflows}
-            onChangePreferences={props.onChangePreferences}
             preferences={props.preferences}
             project={props.project}
             projectIsComplete={props.projectIsComplete}
@@ -176,7 +175,6 @@ ProjectHomePage.contextTypes = {
 
 ProjectHomePage.defaultProps = {
   activeWorkflows: [],
-  onChangePreferences: () => {},
   organization: null,
   preferences: {},
   project: {},
@@ -192,7 +190,6 @@ ProjectHomePage.propTypes = {
   background: PropTypes.shape({
     src: PropTypes.string
   }).isRequired,
-  onChangePreferences: PropTypes.func.isRequired,
   organization: PropTypes.shape({
     display_name: PropTypes.string,
     slug: PropTypes.string

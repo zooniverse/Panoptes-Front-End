@@ -177,7 +177,7 @@ class WorkflowSelection extends React.Component {
   }
 
   handlePreferencesChange(key, value) {
-    this.props.onChangePreferences(key, value);
+    this.props.preferences.update({ [key]: value });
   }
 
   workflowSelectionErrorHandler() {
@@ -207,7 +207,6 @@ WorkflowSelection.defaultProps = {
   location: {
     query: {}
   },
-  onChangePreferences() { return null; },
   preferences: {},
   projectRoles: [],
   translation: {
@@ -233,7 +232,6 @@ WorkflowSelection.propTypes = {
       workflow: PropTypes.string
     })
   }),
-  onChangePreferences: PropTypes.func,
   preferences: PropTypes.shape({
     save: PropTypes.func,
     update: PropTypes.func
