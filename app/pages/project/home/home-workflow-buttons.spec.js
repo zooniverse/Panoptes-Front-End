@@ -2,6 +2,7 @@ import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
+import ProjectHomeWorkflowButton from './home-workflow-button';
 
 
 const testWorkflows = [
@@ -41,13 +42,13 @@ describe('ProjectHomeWorkflowButtons', function() {
     });
 
     it('should render active workflow button options that have a level', function() {
-      assert.equal(wrapper.find('ProjectHomeWorkflowButton').length, 3);
+      assert.equal(wrapper.find(ProjectHomeWorkflowButton).length, 3);
     });
 
     it('should disable the button levels that user has not reached', function() {
-      assert.equal(wrapper.find('ProjectHomeWorkflowButton').first().props().disabled, false);
-      assert.equal(wrapper.find('ProjectHomeWorkflowButton').at(1).props().disabled, false);
-      assert.equal(wrapper.find('ProjectHomeWorkflowButton').last().props().disabled, true);
+      assert.equal(wrapper.find(ProjectHomeWorkflowButton).first().props().disabled, false);
+      assert.equal(wrapper.find(ProjectHomeWorkflowButton).at(1).props().disabled, false);
+      assert.equal(wrapper.find(ProjectHomeWorkflowButton).last().props().disabled, true);
     });
   });
 
@@ -56,7 +57,7 @@ describe('ProjectHomeWorkflowButtons', function() {
       wrapper = shallow(
         <ProjectHomeWorkflowButtons activeWorkflows={testWorkflows} showWorkflowButtons={true} />
       );
-      assert.equal(wrapper.find('ProjectHomeWorkflowButton').length, 3);
+      assert.equal(wrapper.find(ProjectHomeWorkflowButton).length, 3);
     });
   });
 
@@ -68,7 +69,7 @@ describe('ProjectHomeWorkflowButtons', function() {
     });
 
     it('should not render the workflow buttons', function() {
-      assert.equal(wrapper.find('ProjectHomeWorkflowButton').length, 0);
+      assert.equal(wrapper.find(ProjectHomeWorkflowButton).length, 0);
     });
   });
 });

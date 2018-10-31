@@ -2,7 +2,8 @@ import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
-import ProjectHomeWorkflowButton from './home-workflow-button';
+import apiClient from 'panoptes-client/lib/api-client';
+import { ProjectHomeWorkflowButton } from './home-workflow-button';
 import mockPanoptesResource from '../../../../test/mock-panoptes-resource';
 
 const testWorkflowWithLevel = {
@@ -23,23 +24,43 @@ const testProject = {
 
 const preferences = mockPanoptesResource('project-preferences', {});
 
+const actions = {
+  classifier: {
+    setWorkflow: sinon.stub()
+  }
+};
+
+const user = mockPanoptesResource('user', {});
+
 describe('ProjectHomeWorkflowButton', function() {
   let wrapper;
   let handleWorkflowSelectionSpy;
   before(function() {
     handleWorkflowSelectionSpy = sinon.spy(ProjectHomeWorkflowButton.prototype, 'handleWorkflowSelection');
+    sinon.stub(apiClient, 'type').callsFake(() => {
+      return {
+        get: () => Promise.resolve(testWorkflowWithoutLevel)
+      }
+    });
     wrapper = shallow(
       <ProjectHomeWorkflowButton
+        actions={actions}
         disabled={false}
         preferences={preferences}
         project={testProject}
+        user={user}
         workflow={testWorkflowWithoutLevel}
         workflowAssignment={false}
       />
     );
   });
+  afterEach(function () {
+    actions.classifier.setWorkflow.resetHistory();
+    preferences.update.resetHistory();
+  });
   after(function () {
     handleWorkflowSelectionSpy.restore();
+    apiClient.type.restore();
   });
 
   it('renders without crashing', function () {});
@@ -56,9 +77,29 @@ describe('ProjectHomeWorkflowButton', function() {
   it('calls handleWorkflowSelection onClick', function() {
     wrapper.find('Link').simulate('click');
     assert.equal(handleWorkflowSelectionSpy.calledOnce, true);
-    assert.equal(preferences.update.calledOnce, true);
   });
 
+  it('should update user preferences on workflow selection', function (done) {
+    wrapper.instance().handleWorkflowSelection()
+    .then(function () {
+      assert.equal(preferences.update.calledOnce, true);
+    })
+    .then(done, done);
+  });
+  it('should clear the current workflow', function (done) {
+    wrapper.instance().handleWorkflowSelection()
+    .then(function () {
+      assert.equal(actions.classifier.setWorkflow.firstCall.calledWith(null), true);
+    })
+    .then(done, done);
+  });
+  it('should select a new workflow', function (done) {
+    wrapper.instance().handleWorkflowSelection()
+    .then(function () {
+      assert.equal(actions.classifier.setWorkflow.secondCall.calledWith(testWorkflowWithoutLevel), true);
+    })
+    .then(done, done);
+  });
   it('uses the project slug in the Link href', function() {
     assert.equal(wrapper.find('Link').props().to.includes(testProject.slug), true);
   });

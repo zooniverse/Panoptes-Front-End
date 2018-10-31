@@ -177,7 +177,9 @@ class WorkflowSelection extends React.Component {
   }
 
   handlePreferencesChange(key, value) {
-    this.props.preferences.update({ [key]: value });
+    if (this.props.user) {
+      this.props.preferences.update({ [key]: value }).save();
+    }
   }
 
   workflowSelectionErrorHandler() {

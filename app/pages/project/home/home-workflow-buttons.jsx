@@ -31,7 +31,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
     return (
       <div className="project-home-workflow-buttons">
-        {this.props.showWorkflowButtons && this.props.activeWorkflows.length > 0 && this.props.preferences &&
+        {this.props.showWorkflowButtons && this.props.activeWorkflows.length > 0 &&
           (<div className="project-home-page__container project-home-workflow-buttons__workflow-choice-container">
             <div className="project-home-page__content">
               <h3 className="workflow-choice-container__call-to-action">
@@ -48,6 +48,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
                     disabled={this.shouldWorkflowBeDisabled(workflow)}
                     preferences={this.props.preferences}
                     project={this.props.project}
+                    user={this.props.user}
                     workflow={workflow}
                     workflowAssignment={this.props.workflowAssignment}
                   />);
