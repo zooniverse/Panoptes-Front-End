@@ -51,8 +51,7 @@
     "sugar-client": "~1.0.1",
     "svg-path-properties": "~0.4.5",
     "swipe-js-iso": "~2.0.4",
-    "visible-element": "~1.0.1",
-    "whatwg-url": "~7.0.0"
+    "visible-element": "~1.0.1"
   },
   "devDependencies": {
     "@babel/cli": "~7.1.2",
@@ -106,7 +105,8 @@
     "webpack": "~4.20.1",
     "webpack-cli": "~3.1.2",
     "webpack-dashboard": "~2.0.0",
-    "webpack-dev-server": "~3.1.10"
+    "webpack-dev-server": "~3.1.10",
+    "whatwg-url": "~7.0.0"
   },
   "engines": {
     "node": "^8.1.2",
