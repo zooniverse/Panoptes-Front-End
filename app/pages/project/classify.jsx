@@ -185,13 +185,20 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   maybePromptWorkflowAssignmentDialog(props) {
+    const { actions, preferences, project, splits } = props;
     if (this.state.promptWorkflowAssignmentDialog) {
-      WorkflowAssignmentDialog.start({ splits: props.splits, project: props.project }).then(() =>
+      WorkflowAssignmentDialog.start({ splits, project }).then(() =>
         this.setState({ promptWorkflowAssignmentDialog: false })
       ).then(() => {
-        if (props.preferences.preferences.selected_workflow !== props.preferences.settings.workflow_id) {
-          props.preferences.update({ 'preferences.selected_workflow': props.preferences.settings.workflow_id });
-          props.preferences.save();
+        if (preferences.preferences.selected_workflow !== preferences.settings.workflow_id) {
+          preferences.update({ 'preferences.selected_workflow': preferences.settings.workflow_id });
+          preferences.save();
+          apiClient
+            .type('workflows')
+            .get(preferences.settings.workflow_id, {})
+            .then((newWorkflow) => {
+              actions.classifier.setWorkflow(newWorkflow);
+            });
         }
       });
     }
