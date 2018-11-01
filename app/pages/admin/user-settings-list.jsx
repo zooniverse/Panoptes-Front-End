@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 
 import LoadingIndicator from '../../components/loading-indicator';
-import UserSearch from '../../components/user-search';
+import UserSearchAdmin from '../../components/user-search-admin';
 
 class UserSettingsList extends Component {
   constructor(props) {
@@ -45,7 +45,12 @@ class UserSettingsList extends Component {
       <div ref={list => this.list = list}>
         <div className="columns-container">
           <div className="column">
-            <UserSearch ref={(component) => { this.userSearch = component; }} multi={false} />
+            <UserSearchAdmin
+              ref={(component) => { this.userSearch = component; }}
+              multi={false}
+              isAdminUser={this.props.user.admin}
+              debounce={300}
+            />
           </div>
           <button type="button" onClick={this.listUsers}>
             Edit user
