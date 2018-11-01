@@ -82,7 +82,7 @@ module.exports = createReactClass
     @onChange()
 
   handleInitRelease: (e) ->
-    pref = @props.preferences.preferences
+    pref = @props.preferences?.preferences ? {}
     taskDescription = @props.workflow.tasks[@props.annotation.task]
     mark = @props.annotation.value[@props.annotation.value.length - 1]
     MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
