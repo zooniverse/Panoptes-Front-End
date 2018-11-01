@@ -1,6 +1,11 @@
 #!groovy
 
 node {
+  options {
+    quietPeriod(120)
+    disableConcurrentBuilds()
+  }
+
   checkout scm
 
   def dockerRepoName = 'zooniverse/panoptes-front-end'
