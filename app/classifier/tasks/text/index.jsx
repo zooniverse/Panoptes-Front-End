@@ -9,7 +9,7 @@ import TextTaskSummary from './summary';
 const LINEHEIGHT = 22.5;
 const NOOP = Function.prototype;
 
-export default class TextTask extends React.Component {
+export default class TextTask extends React.PureComponent {
   constructor(props) {
     super(props);
 
