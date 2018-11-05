@@ -1,12 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import sinon from 'sinon';
 import drawingTools from '../drawing-tools';
 
 const x = 200;
 const y = 400;
-const event = (e) => e;
 const cursors = [
   {
     x: 300,
@@ -22,91 +20,96 @@ const cursors = [
   }
 ];
 
+const props = {
+  color: 'red',
+  containerRect: {
+    height: 100,
+    width: 100
+  },
+  naturalHeight: 100,
+  naturalWidth: 100,
+  preferences: {
+    preferences: {}
+  },
+  scale: {
+    horizontal: 1,
+    vertical: 1
+  },
+  task: {
+    tools: [{ offsetX: 50, offsetY: 50 }]
+  }
+};
+
 for (const property in drawingTools) {
   let wrapper;
   const TaskComponent = drawingTools[property];
-  const props = {
-    color: 'red',
-    containerRect: {
-      height: 100,
-      width: 100
-    },
-    getEventOffset: sinon.stub().callsFake((e) => e),
-    getScreenCurrentTransformationMatrix: () => null,
-    naturalHeight: 100,
-    naturalWidth: 100,
-    onChange: sinon.stub().callsFake(() => null),
-    preferences: {
-      preferences: {}
-    },
-    scale: {
-      horizontal: 1,
-      vertical: 1
-    },
-    task: {
-      tools: [{ offsetX: 50, offsetY: 50 }]
-    }
-  };
 
   describe(`Task  ${property}`, function() {
-    let defaultValues;
+    let mark;
 
     before(function () {
-      defaultValues = TaskComponent.defaultValues({ x, y }, props);
-      defaultValues.tool = 0
+      mark = TaskComponent.defaultValues({ x, y }, props);
+      mark.tool = 0;
     });
 
-    it('should return an object with initStart', function() {
-      // let mark = TaskComponent.defaultValues();
+    it('should make changes with initStart', function() {
+      const initialMark = Object.assign({}, mark);
       if (TaskComponent.initStart) {
-        TaskComponent.initStart({ x, y }, defaultValues);
+        TaskComponent.initStart(cursors[0], mark);
+        expect(initialMark).to.not.equal(mark);
       }
     });
 
-    it ('should run initMove', function() {
+    it ('should make changes with initMove', function() {
+      const initialMark = Object.assign({}, mark);
       if (TaskComponent.initMove) {
-        TaskComponent.initMove(cursors[1], defaultValues, event);
+        TaskComponent.initMove(cursors[1], mark);
+        expect(initialMark).to.not.equal(mark);
       }
     });
 
     it ('should run initRelease', function() {
+      const initialMark = Object.assign({}, mark);
       if (TaskComponent.initRelease) {
-        TaskComponent.initRelease(cursors[2], defaultValues, event);
+        TaskComponent.initRelease(cursors[2], mark);
+        expect(initialMark).to.not.equal(mark);
       }
     });
 
-    it ('should run initValid', function() {
+    it ('should return a boolean with initValid', function() {
       if (TaskComponent.initValid) {
-        TaskComponent.initValid(defaultValues, props);
+        const isValid = TaskComponent.initValid(mark, props);
+        expect(isValid).to.be.a('boolean');
       }
     });
 
     it ('should run getDistance', function() {
       if (TaskComponent.getDistance) {
-        TaskComponent.getDistance(cursors[0].x, cursors[0].y, cursors[1].x, cursors[1].y);
+        const distance = TaskComponent.getDistance(cursors[0].x, cursors[0].y, cursors[1].x, cursors[1].y);
+        expect(Math.round(distance)).to.equal(71);
       }
     });
 
-    it ('should run getAngle', function() {
+    it ('should correctly calculate getAngle', function() {
       if (TaskComponent.getAngle) {
-        TaskComponent.getAngle(cursors[0].x, cursors[0].y, cursors[1].x, cursors[1].y);
+        const angle = TaskComponent.getAngle(cursors[0].x, cursors[0].y, cursors[1].x, cursors[1].y);
+        expect(Math.abs(angle)).to.equal(135);
       }
     });
 
-    it ('should run isComplete', function() {
-      if (TaskComponent.isComplete) {
-        TaskComponent.isComplete(defaultValues);
-      }
-    });
-
-    it ('should run forceComplete', function() {
+    it ('should successfuly check for completed mark', function() {
       if (TaskComponent.forceComplete) {
-        TaskComponent.forceComplete(defaultValues);
+        TaskComponent.forceComplete(mark);
+      }
+
+      if (TaskComponent.isComplete) {
+        const isComplete = TaskComponent.isComplete(mark);
+        expect(isComplete).to.equal(true);
       }
     });
   });
 
-  describe('rendered component', function() {
+  describe('rendered component', function () {
     const mark = TaskComponent.defaultValues({ x, y }, props);
 
     if (TaskComponent.initStart) {
