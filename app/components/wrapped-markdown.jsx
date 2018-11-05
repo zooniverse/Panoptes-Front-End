@@ -13,10 +13,12 @@ class WrappedMarkdown extends React.Component {
   onClick = (e) => {
     const rightButtonPressed = (!!e.button && e.button > 0);
     const modifierKey = (e.ctrlKey || e.metaKey);
+    const hasNamedTarget = e.target.target;
     if (e.target.origin === window.location.origin &&
       e.target.pathname !== window.location.pathname &&
       !rightButtonPressed &&
-      !modifierKey) {
+      !modifierKey &&
+      !hasNamedTarget) {
       const newURL = e.target.pathname + e.target.search + e.target.hash;
       browserHistory.push(newURL);
       e.preventDefault();
