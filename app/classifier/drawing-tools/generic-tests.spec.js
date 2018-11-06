@@ -40,11 +40,11 @@ const props = {
   }
 };
 
-for (const property in drawingTools) {
+for (const toolType in drawingTools) {
   let wrapper;
-  const TaskComponent = drawingTools[property];
+  const TaskComponent = drawingTools[toolType];
 
-  describe(`Task  ${property}`, function() {
+  describe(`Task  ${toolType}`, function() {
     let mark;
 
     before(function () {
@@ -55,8 +55,9 @@ for (const property in drawingTools) {
     it('should make changes with initStart', function() {
       const initialMark = Object.assign({}, mark);
       if (TaskComponent.initStart) {
-        TaskComponent.initStart(cursors[0], mark);
+        const initStartResult = TaskComponent.initStart(cursors[0], mark);
         expect(initialMark).to.not.equal(mark);
+        expect(initStartResult).to.be.an('object');
       }
     });
 
@@ -71,8 +72,9 @@ for (const property in drawingTools) {
     it ('should run initRelease', function() {
       const initialMark = Object.assign({}, mark);
       if (TaskComponent.initRelease) {
-        TaskComponent.initRelease(cursors[2], mark);
+        const initReleaseResult = TaskComponent.initRelease(cursors[2], mark);
         expect(initialMark).to.not.equal(mark);
+        expect(initReleaseResult).to.be.an('object');
       }
     });
 
@@ -104,7 +106,7 @@ for (const property in drawingTools) {
 
       if (TaskComponent.isComplete) {
         const isComplete = TaskComponent.isComplete(mark);
-        expect(isComplete).to.equal(true);
+        expect(isComplete).to.be.true;
       }
     });
   });
@@ -124,6 +126,7 @@ for (const property in drawingTools) {
 
     it('should render correctly', function () {
       expect(wrapper).to.be.ok;
+      expect(wrapper.instance()).to.be.an.instanceof(TaskComponent);
     });
   });
 }
