@@ -140,7 +140,6 @@ class ProjectPageController extends React.Component {
   }
 
   getUserProjectPreferences(project, user) {
-    this.listenToProjectPreferences(null);
 
     const userPreferences = user ?
       user.get('project_preferences', { project_id: project.id })
@@ -159,18 +158,9 @@ class ProjectPageController extends React.Component {
             }));
         })
     :
-      Promise.resolve(apiClient.type('project_preferences').create({
-        id: 'GUEST_PREFERENCES_DO_NOT_SAVE',
-        links: {
-          project: project.id
-        },
-        preferences: {}}));
+      Promise.resolve(null);
 
     return userPreferences
-      .then((projectPreferences) => {
-        this.listenToProjectPreferences(projectPreferences);
-        return projectPreferences;
-      })
       .catch((error) => {
         console.warn(error.message);
       });
@@ -284,13 +274,11 @@ class ProjectPageController extends React.Component {
   }
 
   requestUserProjectPreferences(project, user) {
-    this.listenToProjectPreferences(null);
 
     if (user) {
       return user.get('project_preferences', { project_id: project.id })
         .then(([projectPreferences]) => {
           this.setState({ projectPreferences });
-          this.listenToProjectPreferences(projectPreferences);
         })
         .catch((error) => {
           console.warn(error.message);
@@ -298,16 +286,6 @@ class ProjectPageController extends React.Component {
     } else {
       return Promise.resolve();
     }
-  }
-
-  listenToProjectPreferences(projectPreferences) {
-    if (this._listenedToProjectPreferences) {
-      this._listenedToProjectPreferences.stopListening('change', this._boundForceUpdate);
-    }
-    if (projectPreferences) {
-      projectPreferences.listen('change', this._boundForceUpdate);
-    }
-    this._listenedToProjectPreferences = projectPreferences;
   }
 
   loadFieldGuide(projectId) {
@@ -397,7 +375,6 @@ class ProjectPageController extends React.Component {
               projectRoles={this.state.projectRoles}
               translations={this.props.translations}
               user={this.props.user}
-              onChangePreferences={this.handleProjectPreferencesChange.bind(this)}
             >
               <ProjectPage
                 {...this.props}
@@ -405,7 +382,6 @@ class ProjectPageController extends React.Component {
                 guide={this.state.guide}
                 guideIcons={this.state.guideIcons}
                 loading={this.state.loading}
-                onChangePreferences={this.handleProjectPreferencesChange.bind(this)}
                 organization={this.state.organization}
                 owner={this.state.owner}
                 pages={this.state.pages}

@@ -3,8 +3,12 @@ import React from 'react';
 import { Link } from 'react-router';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
+import apiClient from 'panoptes-client/lib/api-client';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as classifierActions from '../../../redux/ducks/classify';
 
-export default class ProjectHomeWorkflowButton extends React.Component {
+class ProjectHomeWorkflowButton extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,10 +16,20 @@ export default class ProjectHomeWorkflowButton extends React.Component {
   }
 
   handleWorkflowSelection(e) {
-    if (this.props.disabled) {
+    const { actions, disabled, preferences, user, workflow } = this.props;
+    if (disabled) {
       e.preventDefault();
     } else {
-      this.props.onChangePreferences('preferences.selected_workflow', this.props.workflow.id);
+      actions.classifier.setWorkflow(null);
+      return apiClient
+        .type('workflows')
+        .get(workflow.id, {})
+        .then((newWorkflow) => {
+          if (user) {
+            preferences.update({ 'preferences.selected_workflow': newWorkflow.id }).save();
+          }
+          actions.classifier.setWorkflow(newWorkflow);
+        });
     }
   }
 
@@ -57,15 +71,22 @@ export default class ProjectHomeWorkflowButton extends React.Component {
 
 ProjectHomeWorkflowButton.defaultProps = {
   disabled: false,
-  onChangePreferences: () => {},
+  preferences: {},
   project: {},
   workflow: {},
   workflowAssignment: false
 };
 
 ProjectHomeWorkflowButton.propTypes = {
+  actions: PropTypes.shape({
+    classifier: PropTypes.shape({
+      setWorkflow: PropTypes.func
+    })
+  }),
   disabled: PropTypes.bool,
-  onChangePreferences: PropTypes.func.isRequired,
+  preferences: PropTypes.shape({
+    update: PropTypes.func
+  }),
   project: PropTypes.shape({
     slug: PropTypes.string
   }).isRequired,
@@ -78,3 +99,15 @@ ProjectHomeWorkflowButton.propTypes = {
   }).isRequired,
   workflowAssignment: PropTypes.bool
 };
+
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    classifier: bindActionCreators(classifierActions, dispatch)
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectHomeWorkflowButton);
+export { ProjectHomeWorkflowButton };
+
