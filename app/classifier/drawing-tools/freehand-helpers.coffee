@@ -2,6 +2,7 @@ round = require 'lodash/round'
 
 createPathFromCoords = (coordsArray) ->
   [firstCoord, otherCoords...] = coordsArray
+  return '' unless firstCoord?
   path = "M #{firstCoord.x},#{firstCoord.y} "
   path += "L #{x},#{y} " for {x, y} in otherCoords
   path

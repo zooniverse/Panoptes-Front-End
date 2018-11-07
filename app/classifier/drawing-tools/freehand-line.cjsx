@@ -22,11 +22,15 @@ module.exports = createReactClass
       _inProgress: false
 
     initStart: (coords, mark) ->
-      mark.points.push roundCoords coords
-      _inProgress: true
+      points = mark.points.slice()
+      points.push roundCoords coords
+      _inProgress = true
+      { _inProgress, points }
 
     initMove: (coords, mark) ->
-      mark.points.push roundCoords coords
+      points = mark.points.slice()
+      points.push roundCoords coords
+      { points }
 
     initRelease: (coords, mark) ->
       points: filterDupeCoords mark.points
@@ -35,7 +39,7 @@ module.exports = createReactClass
     initValid: (mark) ->
       path = createPathFromCoords mark.points
       properties = svgPathProperties path
-      properties.getTotalLength() > MINIMUM_LENGTH
+      properties?.getTotalLength() > MINIMUM_LENGTH
 
   getDeletePosition: ([startCoords, otherCoords...]) ->
     scale = (@props.scale.horizontal + @props.scale.vertical) / 2
