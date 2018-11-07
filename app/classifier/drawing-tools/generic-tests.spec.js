@@ -64,8 +64,9 @@ for (const toolType in drawingTools) {
     it ('should make changes with initMove', function() {
       const initialMark = Object.assign({}, mark);
       if (TaskComponent.initMove) {
-        TaskComponent.initMove(cursors[1], mark);
+        const markChanges = TaskComponent.initMove(cursors[1], mark);
         expect(initialMark).to.not.equal(mark);
+        expect(markChanges).to.be.an('object');
       }
     });
 
@@ -115,7 +116,7 @@ for (const toolType in drawingTools) {
     const mark = TaskComponent.defaultValues({ x, y }, props);
 
     if (TaskComponent.initStart) {
-      TaskComponent.initStart({ x, y }, mark);
+      Object.assign(mark, TaskComponent.initStart({ x, y }, mark));
     }
 
     before(function () {
