@@ -116,7 +116,7 @@ for (const toolType in drawingTools) {
     const mark = TaskComponent.defaultValues({ x, y }, props);
 
     if (TaskComponent.initStart) {
-      TaskComponent.initStart({ x, y }, mark);
+      Object.assign(mark, TaskComponent.initStart({ x, y }, mark));
     }
 
     before(function () {
