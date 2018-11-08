@@ -10,7 +10,7 @@
     "debounce": "~1.2.0",
     "dompurify": "~1.0.8",
     "drag-reorderable": "~0.2.0",
-    "engine.io-client": "~3.2.1",
+    "engine.io-client": "~3.3.0",
     "hash.js": "~1.1.5",
     "history": "~3.3.0",
     "json-api-client": "~4.0.0",
