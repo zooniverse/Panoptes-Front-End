@@ -4,7 +4,7 @@ Editor = require './editor'
 Summary = require('./summary').default
 Chooser = require('./chooser').default
 Choice = require('./choice').default
-AnnotationView = require './annotation-view'
+AnnotationView = require('./annotation-view').default
 
 module.exports = createReactClass
   displayName: 'SurveyTask'
