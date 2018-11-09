@@ -1,23 +1,30 @@
 import { shallow } from 'enzyme';
 import React from 'react';
-import assert from 'assert';
-import tasks from './';
-import { workflow } from '../../pages/dev-classifier/mock-data';
+import { expect } from 'chai';
+import taskComponents from './';
 
-for (const key in workflow.tasks) {
-  const task = workflow.tasks[key];
-  const TaskComponent = tasks[task.type];
-  describe('Task ' + task.type, function() {
+const tasks = Object.keys(taskComponents);
+
+tasks.forEach(function (taskType) {
+  const TaskComponent = taskComponents[taskType];
+  const task = TaskComponent.getDefaultTask();
+  const workflow = {};
+  const annotation = TaskComponent.getDefaultAnnotation(task, workflow, taskComponents);
+  describe(`Task ${taskType}`, function () {
     let wrapper;
 
-    it('should render with default props', function() {
+    before(function () {
       wrapper = shallow(<TaskComponent translation={task} />);
     });
 
-    it('should update on annotation change', function() {
-      wrapper = shallow(<TaskComponent translation={task} />);
-      let annotation = TaskComponent.getDefaultAnnotation(task, workflow, tasks);
-      wrapper.setProps({annotation});
+    it('should render with default props', function () {
+      expect(wrapper).to.be.ok;
+    });
+
+    it('should render with an annotation', function () {
+      wrapper.setProps({ annotation });
+      expect(wrapper).to.be.ok;
     });
   });
-}
+});
+
