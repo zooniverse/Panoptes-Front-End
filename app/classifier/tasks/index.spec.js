@@ -25,6 +25,15 @@ tasks.forEach(function (taskType) {
       wrapper.setProps({ annotation });
       expect(wrapper).to.be.ok;
     });
+
+    describe('annotations', function () {
+      it('should be objects', function () {
+        expect(annotation).to.be.an('object');
+      });
+      it('should have a value', function () {
+        expect(annotation).to.have.property('value');
+      });
+    });
   });
 });
 
