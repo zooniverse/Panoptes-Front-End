@@ -98,13 +98,13 @@ EditProjectPage = createReactClass
             <div className="nav-list-header">Need some help?</div>
             <ul className="nav-list">
               <li>
-                <Link className="nav-list-item" to="/help">Read a tutorial</Link>
+                <a className="nav-list-item" href="https://zooniverse.github.io/help">Read a tutorial</a>
               </li>
               <li>
                 <Link to="/talk/18" className="nav-list-item">Ask for help on talk</Link>
               </li>
               <li>
-                <Link to="/help/glossary" className="nav-list-item">Glossary</Link>
+                <a href="https://zooniverse.github.io/help/getting-started/glossary" className="nav-list-item">Glossary</a>
               </li>
             </ul>
           </li>

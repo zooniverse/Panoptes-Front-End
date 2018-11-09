@@ -253,11 +253,11 @@ module.exports = createReactClass
         <div className="content-container">
           <p style={textAlign: 'center'}>
             <button type="button" className="major-button" onClick={@showProjectCreator}>Create a new project</button>{' '}
-            <Link to="/help" className="standard-button">How-to</Link>{' '}
-            <Link to="/help/glossary" className="standard-button">Glossary</Link>{' '}
-            <Link to="/help/lab-policies" className="standard-button">Policies</Link>{' '}
-            <Link to="lab-best-practices/introduction" className="standard-button">Best Practices</Link>{' '}
-            <Link to="/talk/18" className="standard-button">Project Builder Talk</Link>{' '}
+            <a href="https://zooniverse.github.io/help/getting-started" className="standard-button">How-to</a>{' '}
+            <a href="https://zooniverse.github.io/help/getting-started/glossary" className="standard-button">Glossary</a>{' '}
+            <a href="https://zooniverse.github.io/help/getting-started/policies" className="standard-button">Policies</a>{' '}
+            <a href="https://zooniverse.github.io/help/best-practices" className="standard-button">Best Practices</a>{' '}
+            <a href="/talk/18" className="standard-button">Project Builder Talk</a>{' '}
           </p>
         </div>
         {if @state.creationInProgress

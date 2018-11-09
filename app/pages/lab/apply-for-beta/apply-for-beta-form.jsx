@@ -222,7 +222,7 @@ class ApplyForBetaForm extends React.Component {
 
         {this.createCheckbox('labPolicyReviewed', <span>I have reviewed the <a href="/lab-policies" target="_blank" rel="noopener noreferrer">policies</a></span>)}
 
-        {this.createCheckbox('bestPracticesReviewed', <span>I have reviewed the <a href="/lab-best-practices" target="_blank" rel="noopener noreferrer">best practices</a></span>)}
+        {this.createCheckbox('bestPracticesReviewed', <span>I have reviewed the <a href="https://zooniverse.github.io/help/best-practices" target="_blank" rel="noopener noreferrer">best practices</a></span>)}
 
         {this.createCheckbox('feedbackReviewed', <span>I have reviewed the sample <a href="https://docs.google.com/a/zooniverse.org/forms/d/1o7yTqpytWWhSOqQhJYiKaeHIaax7xYVUyTOaG3V0xA4/viewform" target="_blank" rel="noopener noreferrer">project review feedback form</a></span>)}
 
