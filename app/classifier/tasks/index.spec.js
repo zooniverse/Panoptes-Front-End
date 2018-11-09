@@ -26,6 +26,12 @@ tasks.forEach(function (taskType) {
       expect(wrapper).to.be.ok;
     });
 
+    describe('task description', function () {
+      it('should be an object', function () {
+        expect(task).to.be.an('object');
+      });
+    });
+
     describe('annotations', function () {
       it('should be objects', function () {
         expect(annotation).to.be.an('object');
