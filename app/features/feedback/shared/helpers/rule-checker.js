@@ -5,7 +5,9 @@ import _ from 'lodash';
 // functions.
 function validateRuleProperties(rule) {
   return _.reduce(rule, (errors, value, key) => {
-    if (_.isBoolean(value)) {
+    if (_.isFinite(value)) {
+      return errors;
+    } else if (_.isBoolean(value)) {
       return errors;
     } else if (_.isUndefined(value) || _.isEmpty(value)) {
       return errors.concat([key]);
