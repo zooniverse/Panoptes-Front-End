@@ -1,4 +1,4 @@
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import React from 'react';
@@ -15,7 +15,7 @@ const annotation = {
   value: [annotationValue]
 };
 
-const onChange = sinon.spy();
+const onChange = sinon.stub().callsFake(annotations => annotations);
 
 const task = {
   choices: {
@@ -37,7 +37,7 @@ const task = {
   questionsOrder: ['bat', 'rat']
 };
 
-describe('AnnotationView render', function() {
+describe('AnnotationView', function() {
   const wrapper = shallow(
     <AnnotationView
       annotation={annotation}
@@ -46,35 +46,36 @@ describe('AnnotationView render', function() {
     />
   );
 
-  beforeEach(function () {
-    onChange.resetHistory();
-    wrapper.update();
+  describe('AnnotationView render', function() {
+    it('should render without crashing', function() {
+      expect(wrapper).to.be.ok;
+    });
+
+    it('should render the correct annotation', function() {
+      const view = wrapper.find('.survey-identification-proxy');
+      const viewText = view.first().text();
+      expect(view.length).to.equal(1);
+      expect(viewText).to.contain(annotationValue.choice);
+    });
+
+    it('should render a delete button', function() {
+      const deleteButton = wrapper.find('.survey-identification-remove');
+      expect(deleteButton.length).to.equal(1);
+    });
   });
 
-  it('should render without crashing', function() {
-    expect(wrapper).to.be.ok;
-  })
+  describe('The delete button', function() {
+    it('should call the onChange callback', function() {
+      const deleteButton = wrapper.find('.survey-identification-remove');
+      deleteButton.simulate('click');
+      expect(onChange.calledOnce).to.be.true;
+    });
 
-  it('should render the correct annotation', function() {
-    const view = wrapper.find('.survey-identification-proxy');
-    const viewText = view.first().text();
-    expect(view.length).to.equal(1);
-    expect(viewText).to.contain(annotationValue.choice);
-  });
-
-  it('should render a delete button', function() {
-    const deleteButton = wrapper.find('.survey-identification-remove');
-    expect(deleteButton.length).to.equal(1);
-  });
-
-  it('should successfully delete itself onClick', function() {
-    const emptyAnnotations = { value: [] };
-    const deleteButton = wrapper.find('.survey-identification-remove');
-    deleteButton.simulate('click');
-
-    expect(onChange.calledWith(emptyAnnotations)).to.be.true;
-    wrapper.setProps({ annotation: emptyAnnotations });
-    const view = wrapper.find('.survey-identification-proxy');
-    expect(view.length).to.equal(0);
+    it('should delete the selected annotation onClick', function() {
+      const returnValues = onChange.returnValues[0];
+      wrapper.setProps({ annotation: returnValues });
+      const view = wrapper.find('.survey-identification-proxy');
+      expect(view.length).to.equal(0);
+    });
   });
 });
