@@ -27,12 +27,19 @@ const preferences = mockPanoptesResource('project-preferences', {});
 const actions = {
   classifier: {
     setWorkflow: sinon.stub()
+  },
+  translations: {
+    load: sinon.stub()
   }
+};
+
+const translations = {
+  locale: 'en'
 };
 
 const user = mockPanoptesResource('user', {});
 
-describe('ProjectHomeWorkflowButton', function() {
+describe('ProjectHomeWorkflowButton', function () {
   let wrapper;
   let handleWorkflowSelectionSpy;
   before(function() {
@@ -48,6 +55,7 @@ describe('ProjectHomeWorkflowButton', function() {
         disabled={false}
         preferences={preferences}
         project={testProject}
+        translations={translations}
         user={user}
         workflow={testWorkflowWithoutLevel}
         workflowAssignment={false}
@@ -97,6 +105,13 @@ describe('ProjectHomeWorkflowButton', function() {
     wrapper.instance().handleWorkflowSelection()
     .then(function () {
       assert.equal(actions.classifier.setWorkflow.secondCall.calledWith(testWorkflowWithoutLevel), true);
+    })
+    .then(done, done);
+  });
+  it('should load workflow translations', function (done) {
+    wrapper.instance().handleWorkflowSelection()
+    .then(function () {
+      assert.equal(actions.translations.load.calledWith('workflow', testWorkflowWithoutLevel.id, translations.locale), true);
     })
     .then(done, done);
   });

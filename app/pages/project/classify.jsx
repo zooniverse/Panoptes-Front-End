@@ -13,6 +13,7 @@ import { Split } from 'seven-ten';
 import ClassificationQueue from '../../lib/classification-queue';
 
 import * as classifierActions from '../../redux/ducks/classify';
+import * as translationActions from '../../redux/ducks/translations';
 
 import Classifier from '../../classifier';
 import FinishedBanner from './finished-banner';
@@ -185,7 +186,7 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   maybePromptWorkflowAssignmentDialog(props) {
-    const { actions, preferences, project, splits } = props;
+    const { actions, preferences, project, splits, translations } = props;
     if (this.state.promptWorkflowAssignmentDialog) {
       WorkflowAssignmentDialog.start({ splits, project }).then(() =>
         this.setState({ promptWorkflowAssignmentDialog: false })
@@ -197,6 +198,7 @@ export class ProjectClassifyPage extends React.Component {
             .type('workflows')
             .get(preferences.settings.workflow_id, {})
             .then((newWorkflow) => {
+              actions.translations.load('workflow', newWorkflow.id, translations.locale);
               actions.classifier.setWorkflow(newWorkflow);
             });
         }
@@ -300,6 +302,9 @@ ProjectClassifyPage.propTypes = {
       fetchSubjects: PropTypes.func,
       nextSubject: PropTypes.func,
       refillSubjectQueue: PropTypes.func
+    }),
+    translations: PropTypes.shape({
+      load: PropTypes.func
     })
   }),
   classification: PropTypes.shape({}),
@@ -316,6 +321,9 @@ ProjectClassifyPage.propTypes = {
   }),
   project: PropTypes.object,
   storage: PropTypes.object,
+  translations: PropTypes.shape({
+    locale: PropTypes.string
+  }),
   upcomingSubjects: PropTypes.arrayOf(PropTypes.object),
   user: PropTypes.object,
   workflow: PropTypes.object
@@ -333,6 +341,7 @@ window.classificationQueue = classificationQueue;
 
 const mapStateToProps = state => ({
   classification: state.classify.classification,
+  translations: state.translations,
   upcomingSubjects: state.classify.upcomingSubjects,
   theme: state.userInterface.theme,
   workflow: state.classify.workflow
@@ -340,7 +349,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: {
-    classifier: bindActionCreators(classifierActions, dispatch)
+    classifier: bindActionCreators(classifierActions, dispatch),
+    translations: bindActionCreators(translationActions, dispatch)
   }
 });
 
