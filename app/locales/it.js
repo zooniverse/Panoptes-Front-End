@@ -279,7 +279,7 @@ export default {
     acknowledgements: {
       title: '## Acknowledging the Zooniverse',
       citation: '### Academic Citation',
-      instructions: 'Per the [Zooniverse Project Builder Policies](/lab-policies), all research publications using any data derived from Zooniverse approved projects (those listed on the [Zooniverse Projects page](/projects)) are required to acknowledge the Zooniverse and the Project Builder platform. To do so, please use the following text:',
+      instructions: 'Per the [Zooniverse Project Builder Policies](https://help.zooniverse.org/getting-started/lab-policies), all research publications using any data derived from Zooniverse approved projects (those listed on the [Zooniverse Projects page](/projects)) are required to acknowledge the Zooniverse and the Project Builder platform. To do so, please use the following text:',
       supportText: '*This publication uses data generated via the [Zooniverse.org](https://www.zooniverse.org/) platform, development of which is funded by generous support, including a Global Impact Award from Google, and by a grant from the Alfred P. Sloan Foundation.*',
       publicationRequest: 'We ask that all researchers making use of the Zooniverse Project Builder platform in any way also consider including the above acknowledgement in their publications.',
       publicationShareForm: 'We strongly encourage project owners to report published accepted research publications using Zooniverse-produced data to us via [this form](https://docs.google.com/forms/d/e/1FAIpQLSdbAKVT2tGs1WfBqWNrMekFE5lL4ZuMnWlwJuCuNM33QO2ZYg/viewform). You can find a list of publications written using the Zooniverse on our [Publications page](publications).',
@@ -445,7 +445,7 @@ export default {
           step7: '7. Once you’ve created a workflow, the "Associated Subject Sets" section allows you to link your workflow to your subject sets. If you have no subjects, go to the “Subject Sets” tab and upload your data (see step 5 above).',
           step8: '8. Hit the "Test this workflow" button to see how your project looks.',
           step9: '9. Explore your project to figure out what works and what doesn\'t. Make changes, then refresh your project page to test these out.',
-          step10: '10. Guidelines on how to design your project to maximize engagement and data quality are provided on the [Policies page](/help/lab-policies).',
+          step10: '10. Guidelines on how to design your project to maximize engagement and data quality are provided on the [Policies page](https://help.zooniverse.org/getting-started/lab-policies).',
           step11: '11. When you are happy with your project, set it to “Public” on the “Visibility” tab. Use the “Apply for review” button to submit it to the Zooniverse team for review.',
           backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
@@ -455,7 +455,7 @@ export default {
           project: '**Project** is pretty self-explanatory; Galaxy Zoo and Penguin Watch are examples of Zooniverse projects that could be built using the project builder.',
           workflows: '**Workflows** are sequences of tasks that volunteers are asked to do.',
           subjectSets: '**Subject sets** are collections of data (typically images) that volunteers are asked to perform tasks on.',
-          glossaryPage: 'For more Zooniverse definitions, check out the [Glossary page](/help/glossary).'
+          glossaryPage: 'For more Zooniverse definitions, check out the [Glossary page](https://help.zooniverse.org/getting-started/glossary).'
         },
         project: {
           title: '### Project',
@@ -539,7 +539,7 @@ export default {
           intro: 'This page is where you decide whether your project is public and whether it\'s ready to go live.',
           projectState: '* **Project State and Visibility:** Set your project to “Private” or “Public”. Only the assigned collaborators can view a private project. Anyone with the URL can access a public project. Here, you can also choose whether your project is in “Development”, or “Live”. Note: in a live project, active workflows are locked and can no longer be edited.',
           betaStatus: '* **Beta Status:** Here, you will find a checklist of tasks that must be complete for your project to undergo beta review. Projects must complete review in order to launch as full Zooniverse projects and be promoted as such. Once these tasks are complete, click “Apply for review”.',
-          workflowSettings: '* **Workflow Settings:** You will see a list of all workflows created for the project. You can set the workflows to “Active”, choose what metric to measure for completeness statistics, and whether those statistics should be shown on your project’s Stats Page.For more information on the different project stages, see our [Project Builder policies](/help/lab-policies).',
+          workflowSettings: '* **Workflow Settings:** You will see a list of all workflows created for the project. You can set the workflows to “Active”, choose what metric to measure for completeness statistics, and whether those statistics should be shown on your project’s Stats Page.For more information on the different project stages, see our [Project Builder policies](https://help.zooniverse.org/getting-started/lab-policies).',
           backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         talk: {
@@ -608,11 +608,11 @@ export default {
           title: '### Subject Sets',
           intro: 'On this page, you can add groups of data to be classified.',
           summary: 'To do so, drag and drop items onto the drop zone in the browser and then upload. You can give each set a name so that you can easily distinguish between them.',
-          details: 'Subject sets can be pretty powerful, and sometimes complex. You can have a single subject set that you add to over time, or have multiple subject sets, say, from different years or places. You can have different subject sets for different workflows, but you don\'t have to. You can even have multiple images in a given subject. For more details and advice on creating and structuring subject sets and associated manifests, check out https://www.zooniverse.org/help/example and scroll down to DETAILS - Subject sets and manifest details, a.k.a. “What is a manifest?”'
+          details: 'Subject sets can be pretty powerful, and sometimes complex. You can have a single subject set that you add to over time, or have multiple subject sets, say, from different years or places. You can have different subject sets for different workflows, but you don\'t have to. You can even have multiple images in a given subject. For more details and advice on creating and structuring subject sets and associated manifests, check out https://www.zooniverse.orghttps://help.zooniverse.org/getting-started/example and scroll down to DETAILS - Subject sets and manifest details, a.k.a. “What is a manifest?”'
         },
         furtherHelp: {
           title: '## Further Help',
-          body: 'If you\'d like some further information, check out the [documentation behind building Kitteh Zoo](/help/example), that talks you through building this project in the Project Builder.\n\nIf this doesn\'t help, get in contact with the Zooniverse team via the [contact page](/about/contact).',
+          body: 'If you\'d like some further information, check out the [documentation behind building Kitteh Zoo](https://help.zooniverse.org/getting-started/example), that talks you through building this project in the Project Builder.\n\nIf this doesn\'t help, get in contact with the Zooniverse team via the [contact page](/about/contact).',
           backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         }
       }

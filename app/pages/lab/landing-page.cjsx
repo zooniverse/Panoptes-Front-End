@@ -53,12 +53,12 @@ module.exports = createReactClass
 
         <div className="landing-links">
           <p className="heading"><Translate content="labLanding.links.heading" /></p>
-          <Link to="/help"><Translate content="labLanding.links.buildHelp" /></Link>
-          <Link to="/help/lab-policies"><Translate content="labLanding.links.policies"></Translate></Link>
-          <Link to="/lab-best-practices/introduction"><Translate content="labLanding.links.bestPractices" /></Link>
+          <a href="https://help.zooniverse.org"><Translate content="labLanding.links.buildHelp" /></a>
+          <a href="https://help.zooniverse.org/getting-started/lab-policies"><Translate content="labLanding.links.policies"></Translate></a>
+          <a href="https://help.zooniverse.org/best-practices"><Translate content="labLanding.links.bestPractices" /></a>
           <Link to="/about/acknowledgements"><Translate content="labLanding.links.acknowledgements" /></Link>
           <Link to="/talk/18"><Translate content="labLanding.links.buildTalk" /></Link>
-          <Link to="/help/glossary"><Translate content="labLanding.links.glossary" /></Link>
+          <a href="https://help.zooniverse.org/getting-started/glossary"><Translate content="labLanding.links.glossary" /></a>
         </div>
       </div>
     </div>

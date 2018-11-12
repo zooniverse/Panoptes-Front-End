@@ -51,7 +51,6 @@ createReactClass = require 'create-react-class'
 `import CallForProjects from './pages/get-involved/call-for-projects';`
 `import Education from './pages/get-involved/education';`
 `import Volunteering from './pages/get-involved/volunteering';`
-`import HowToBuildProject from './pages/lab/help/how-to-build-project';`
 `import DevClassifierPage from './pages/dev-classifier';`
 `import Resources from './pages/about/resources-page';`
 
@@ -119,14 +118,6 @@ module.exports =
       <IndexRoute component={AccountInformationPage} />
       <Route path="profile" component={CustomiseProfile} />
       <Route path="email" component={EmailSettingsPage} />
-    </Route>
-
-    <Route path="help" component={require './pages/lab/help'}>
-      <IndexRoute component={HowToBuildProject} />
-      <Route path="glossary" component={require './pages/lab/help/glossary'} />
-      <Route path="example" component={require './pages/lab/help/example'} />
-      <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
-      <Route path="best-practices" component={require './pages/lab/best-practices'} />
     </Route>
 
     <Route path="projects" component={ProjectsPage}>
@@ -254,17 +245,6 @@ module.exports =
       </Route>
       <Route path="mini-course" component={require './pages/lab/mini-course'} />
       <Route path="translations" component={TranslationsManager} />
-    </Route>
-    <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
-    <Route path="glossary" component={require './pages/lab/help/glossary'} />
-
-    <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
-      <IndexRedirect to="introduction" />
-      <Route path="introduction" component={require './pages/lab/best-practices/introduction'} />
-      <Route path="great-project" component={require './pages/lab/best-practices/great-project'} />
-      <Route path="launch-rush" component={require './pages/lab/best-practices/launch-rush'} />
-      <Route path="the-long-haul" component={require './pages/lab/best-practices/the-long-haul'} />
-      <Route path="resources" component={require './pages/lab/best-practices/resources'} />
     </Route>
 
     <Route path="admin" component={AdminPage}>
