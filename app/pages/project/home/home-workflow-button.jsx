@@ -7,6 +7,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as classifierActions from '../../../redux/ducks/classify';
+import * as translationActions from '../../../redux/ducks/translations';
 
 class ProjectHomeWorkflowButton extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class ProjectHomeWorkflowButton extends React.Component {
   }
 
   handleWorkflowSelection(e) {
-    const { actions, disabled, preferences, user, workflow } = this.props;
+    const { actions, disabled, preferences, user, translations, workflow } = this.props;
     if (disabled) {
       e.preventDefault();
     } else {
@@ -28,6 +29,7 @@ class ProjectHomeWorkflowButton extends React.Component {
           if (user) {
             preferences.update({ 'preferences.selected_workflow': newWorkflow.id }).save();
           }
+          actions.translations.load('workflow', newWorkflow.id, translations.locale);
           actions.classifier.setWorkflow(newWorkflow);
         });
     }
@@ -70,6 +72,14 @@ class ProjectHomeWorkflowButton extends React.Component {
 }
 
 ProjectHomeWorkflowButton.defaultProps = {
+  actions: {
+    classifier: {
+      setWorkflow: () => null
+    },
+    translations: {
+      load: () => null
+    }
+  },
   disabled: false,
   preferences: {},
   project: {},
@@ -81,6 +91,9 @@ ProjectHomeWorkflowButton.propTypes = {
   actions: PropTypes.shape({
     classifier: PropTypes.shape({
       setWorkflow: PropTypes.func
+    }),
+    translations: PropTypes.shape({
+      load: PropTypes.func
     })
   }),
   disabled: PropTypes.bool,
@@ -90,6 +103,9 @@ ProjectHomeWorkflowButton.propTypes = {
   project: PropTypes.shape({
     slug: PropTypes.string
   }).isRequired,
+  translations: PropTypes.shape({
+    locale: PropTypes.string
+  }),
   workflow: PropTypes.shape({
     configuration: PropTypes.shape({
       level: PropTypes.string
@@ -100,11 +116,14 @@ ProjectHomeWorkflowButton.propTypes = {
   workflowAssignment: PropTypes.bool
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  translations: state.translations
+});
 
 const mapDispatchToProps = dispatch => ({
   actions: {
-    classifier: bindActionCreators(classifierActions, dispatch)
+    classifier: bindActionCreators(classifierActions, dispatch),
+    translations: bindActionCreators(translationActions, dispatch)
   }
 });
 
