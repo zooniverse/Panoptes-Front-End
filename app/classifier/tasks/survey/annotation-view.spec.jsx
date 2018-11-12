@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import React from 'react';
@@ -38,14 +38,18 @@ const task = {
 };
 
 describe('AnnotationView render', function() {
-  //const handleRemoveStub = sinon.stub(AnnotationView.prototype, 'handleRemove');
-  const wrapper = mount(
+  const wrapper = shallow(
     <AnnotationView
       annotation={annotation}
       onChange={onChange}
       task={task}
     />
   );
+
+  beforeEach(function () {
+    onChange.resetHistory();
+    wrapper.update();
+  });
 
   it('should render without crashing', function() {
     expect(wrapper).to.be.ok;
@@ -64,8 +68,13 @@ describe('AnnotationView render', function() {
   });
 
   it('should successfully delete itself onClick', function() {
+    const emptyAnnotations = { value: [] };
     const deleteButton = wrapper.find('.survey-identification-remove');
     deleteButton.simulate('click');
-    expect(onChange.calledOnce).to.be.true;
+
+    expect(onChange.calledWith(emptyAnnotations)).to.be.true;
+    wrapper.setProps({ annotation: emptyAnnotations });
+    const view = wrapper.find('.survey-identification-proxy');
+    expect(view.length).to.equal(0);
   });
 });

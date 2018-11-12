@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-class AnnotationView extends React.Component {
-  handleRemove(index) {
-    const { annotation, onChange } = this.props;
+function AnnotationView(props) {
+  function handleRemove(index) {
+    const { annotation, onChange } = props;
     annotation.value.splice(index, 1);
     onChange(annotation);
   }
 
-  answerByQuestion(identification) {
-    const { task } = this.props;
+  function answerByQuestion(identification) {
+    const { task } = props;
     return task.questionsOrder.map((questionID) => {
       const answerKeys = Object.keys(identification.answers);
 
@@ -22,36 +22,34 @@ class AnnotationView extends React.Component {
     });
   }
 
-  render() {
-    const { annotation, task } = this.props;
-    if (!annotation.value) return null;
+  const { annotation, task } = props;
+  if (!annotation.value) return null;
 
-    return (
-      <div>
-        {annotation.value.map((identification, i) => {
-          identification._key = `IDENTIFICATION_KEY_${i}`;
-          const answersList = this.answerByQuestion(identification).filter(Boolean).join('; ');
+  return (
+    <div>
+      {annotation.value.map((identification, i) => {
+        identification._key = `IDENTIFICATION_KEY_${i}`;
+        const answersList = answerByQuestion(identification).filter(Boolean).join('; ');
 
-          return (
-            <span key={identification._key}>
-              <span className="survey-identification-proxy" title={answersList}>
-                {task.choices[identification.choice].label}
-                {' '}
-                <button
-                  className="survey-identification-remove"
-                  onClick={this.handleRemove.bind(this, i)}
-                  title="Remove"
-                  type="button"
-                >
-                  &times;
-                </button>
-              </span>
+        return (
+          <span key={identification._key}>
+            <span className="survey-identification-proxy" title={answersList}>
+              {task.choices[identification.choice].label}
+              {' '}
+              <button
+                className="survey-identification-remove"
+                onClick={handleRemove.bind(this, i)}
+                title="Remove"
+                type="button"
+              >
+                &times;
+              </button>
             </span>
-          );
-        })}
-      </div>
-    );
-  }
+          </span>
+        );
+      })}
+    </div>
+  );
 }
 
 AnnotationView.propTypes = {
