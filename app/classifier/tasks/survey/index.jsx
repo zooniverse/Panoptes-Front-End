@@ -56,6 +56,7 @@ export default class SurveyTask extends React.Component {
   }
 
   handleFilter(characteristicID, valueID) {
+    console.log("JAJJJJJJJJ");
     const { filters } = this.state;
 
     setTimeout(() => {
@@ -64,6 +65,8 @@ export default class SurveyTask extends React.Component {
       } else {
         delete filters[characteristicID];
       }
+      console.log("FILTZ");
+      console.log(filters);
       this.setState({ filters });
     });
   }
@@ -72,7 +75,7 @@ export default class SurveyTask extends React.Component {
     const { annotation, onChange } = this.props;
     const newAnnotation = Object.assign({}, annotation, { _choiceInProgress: true });
 
-    this.setState({ selectedChoiceID });
+    //this.setState({ selectedChoiceID });
     onChange(newAnnotation);
   }
 
@@ -129,7 +132,8 @@ export default class SurveyTask extends React.Component {
       selectedChoiceID
     } = this.state;
 
-    const existingAnnotationValue = annotation.value.find(value => value.choice === selectedChoiceID);
+    const existingAnnotationValue = annotation.value
+      && annotation.value.find(value => value.choice === selectedChoiceID);
 
     return (
       <div className="survey-task">
@@ -162,14 +166,19 @@ export default class SurveyTask extends React.Component {
 }
 
 SurveyTask.propTypes = {
-  annotation: PropTypes.shape({}),
+  annotation: PropTypes.shape({
+    value: PropTypes.array
+  }),
   onChange: PropTypes.func.isRequired,
-  task: PropTypes.shape({}),
+  task: PropTypes.shape({
+    choicesOrder: PropTypes.array,
+    required: PropTypes.bool
+  }),
   translation: PropTypes.shape({})
 };
 
 SurveyTask.defaultProps = {
-  annotation: null,
+  annotation: {},
   task: null,
   translation: null
 };
