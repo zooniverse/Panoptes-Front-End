@@ -18,9 +18,9 @@ function getWorkflowFeedback(workflow) {
 }
 
 function isFeedbackActive(project, subject, workflow) {
-  return getProjectFeedback(project) &&
+  return Boolean(getProjectFeedback(project) &&
     getSubjectFeedback(subject) &&
-    getWorkflowFeedback(workflow);
+    getWorkflowFeedback(workflow));
 }
 
 export default isFeedbackActive;
