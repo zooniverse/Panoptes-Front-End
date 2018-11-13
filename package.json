@@ -46,7 +46,7 @@
     "sinon": "~7.1.1",
     "sort-into-columns": "~1.0.0",
     "striptags": "~3.1.1",
-    "styled-components": "~4.0.3",
+    "styled-components": "~4.1.1",
     "styled-theming": "~2.2.0",
     "sugar-client": "~1.0.1",
     "svg-path-properties": "~0.4.5",
