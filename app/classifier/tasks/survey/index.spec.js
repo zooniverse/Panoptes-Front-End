@@ -4,13 +4,24 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import SurveyTask from './';
 import Choice from './choice';
-import Chooser from './chooser';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
 
 describe('Survey Task', function () {
-  const annotation = { value: [] };
+  const selection = {
+    choice: 'ar',
+    answers: {
+      ho: 'two',
+      be: [
+        'ea'
+      ]
+    },
+    filters: {}
+  };
+  const annotation = {
+    value: [selection]
+  };
   const task = workflow.tasks.survey;
-  const onChangeSpy = sinon.spy();
+  const onChangeSpy = sinon.stub().callsFake(newAnnotation => newAnnotation);
   let wrapper;
 
   beforeEach(function () {
@@ -28,18 +39,6 @@ describe('Survey Task', function () {
   });
 
   describe('with an existing annotation', function () {
-    const annotation = {
-      value: [{
-        choice: 'ar',
-        answers: {
-          ho: 'two',
-          be: [
-            'ea'
-          ]
-        },
-        filters: {}
-      }]
-    };
     const task = workflow.tasks.survey;
     let wrapper;
 
@@ -78,40 +77,10 @@ describe('Survey Task', function () {
       expect(choice.props().annotationValue.answers.ho, undefined).to.be.equal;
       expect(choice.instance().state.answers.ho, undefined).to.be.equal;
     });
-
-    it('should call handleAnnotation', function() {
-      wrapper.setState({ selectedChoiceID: 'ar' });
-      let choice = wrapper.find(Choice);
-      choice.props().onConfirm();
-      expect(onChangeSpy.calledOnce).to.be.true;
-    });
-
-    it('should call handleRemove', function() {
-      let chooser = wrapper.find(Chooser);
-      console.log(chooser.props().onRemove());
-      // expect(onChangeSpy.calledOnce).to.be.true;
-    });
-
-    it('should call handleChoice', function() {
-      wrapper.instance().handleChoice();
-      // expect(onChangeSpy.calledOnce).to.be.true;
-    });
-
-    // describe('handleFilter', function () {
-    //   it('should add the correct filter', function() {
-    //     console.log("HERE");
-    //     wrapper.instance().handleFilter('aa', 'bb');
-    //     console.log(wrapper.state());
-    //   });
-    //
-    //   it('should remove filters', function() {
-    //     wrapper.instance().handleFilter('aa', undefined);
-    //     console.log(wrapper.state());
-    //   })
-    // });
   });
 
   describe('functions', function() {
+    let clock;
     let wrapper = shallow(
       <SurveyTask
         annotation={annotation}
@@ -121,22 +90,49 @@ describe('Survey Task', function () {
       />
     );
 
+    before(function () {
+      const date = new Date();
+      clock = sinon.useFakeTimers(date.getTime());
+    });
+
+    it('should correctly call handleAnnotation', function() {
+      wrapper.instance().handleAnnotation(selection.choice, selection.answers);
+      expect(onChangeSpy.calledOnce).to.be.true;
+      clock.tick();
+      const returnValues = onChangeSpy.returnValues[0];
+      expect(returnValues, annotation).to.be.equal;
+    });
+
+    it('should correctly remove an annotation on handleRemove', function() {
+      const currentLength = wrapper.instance().props.annotation.value.length;
+      wrapper.instance().handleRemove('ar');
+      const newLength = wrapper.instance().props.annotation.value.length;
+      expect(currentLength, newLength).to.not.equal;
+      expect(newLength).to.equal(0);
+    });
+
+    it('should call handleChoice', function() {
+      wrapper.instance().handleChoice('aa');
+      expect(wrapper.instance().state.selectedChoiceID, 'aa').to.be.equal;
+    });
+
     describe('handleFilter', function () {
       it('should add the correct filter', function() {
-        //const clearTimeoutSpy = sinon.spy(clock, 'setTimeout');
-        // const setStateSpy = sinon.spy(SurveyTask.prototype, 'setState');
+        const expectedFilter = { aa: 'bb' };
         wrapper.instance().handleFilter('aa', 'bb');
-        const clock = sinon.useFakeTimers();
-        clock.tick(2000);
-        wrapper.update();
-        // expect(setStateSpy.calledOnce).to.equal(true);
-        console.log(wrapper.state());
+        clock.tick();
+        expect(wrapper.state().filters, expectedFilter).to.be.equal;
       });
-      //
-      // it('should remove filters', function() {
-      //   wrapper.instance().handleFilter('aa', undefined);
-      //   console.log(wrapper.state());
-      // })
+
+      it('should remove the correct filter', function () {
+        wrapper.instance().handleFilter('aa', undefined);
+        clock.tick();
+        expect(wrapper.state().filters, {}).to.be.equal;
+      });
+    });
+
+    after(function () {
+      clock.restore();
     });
   });
 
