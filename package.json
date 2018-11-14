@@ -20,7 +20,7 @@
     "modal-form": "~2.7",
     "moment": "~2.22.2",
     "panoptes-client": "~2.12.0",
-    "papaparse": "^4.6.1",
+    "papaparse": "^4.6.2",
     "polished": "~2.3.0",
     "prop-types": "~15.6.2",
     "qs": "~6.5.2",
