@@ -1,4 +1,4 @@
-import ruleChecker from '../../helpers/rule-checker';
+import ruleChecker from '../../../helpers/rule-checker';
 
 function createRule(subjectRule, workflowRule) {
   const rule = {
@@ -9,7 +9,7 @@ function createRule(subjectRule, workflowRule) {
     successEnabled: workflowRule.successEnabled || false,
     tolerance: subjectRule.tolerance || workflowRule.defaultTolerance,
     x: subjectRule.x,
-    y: subjectRule.y
+    width: subjectRule.width
   };
 
   if (rule.failureEnabled) {

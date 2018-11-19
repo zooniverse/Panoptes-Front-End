@@ -6,7 +6,7 @@ import CheckboxInput from '../../components/checkbox-input';
 
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
-  RadialStrategyOptions: {
+  StrategyOptions: {
     fields: {
       defaultTolerance: {
         title: 'Default Tolerance',
@@ -23,10 +23,10 @@ counterpart.registerTranslations('en', {
 
 // Provide a shortcut for input translation text
 function fieldText(selector) {
-  return counterpart(`RadialStrategyOptions.fields.${selector}`);
+  return counterpart(`StrategyOptions.fields.${selector}`);
 }
 
-function RadialLabComponent({ formState, handleInputChange }) {
+function LabComponent({ formState, handleInputChange }) {
   return (
     <div>
       <TextInput
@@ -50,7 +50,7 @@ function RadialLabComponent({ formState, handleInputChange }) {
   );
 }
 
-RadialLabComponent.propTypes = {
+LabComponent.propTypes = {
   formState: PropTypes.shape({
     defaultTolerance: PropTypes.string,
     hideSubjectViewer: PropTypes.bool
@@ -58,4 +58,4 @@ RadialLabComponent.propTypes = {
   handleInputChange: PropTypes.func
 };
 
-export default RadialLabComponent;
+export default LabComponent;

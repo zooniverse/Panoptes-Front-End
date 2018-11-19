@@ -1,15 +1,15 @@
 import createRule from './create-rule';
 import FeedbackMark from './feedback-mark';
-import LabComponent from './lab-component';
+import LabComponent from '../lab-component';
 import reducer from './reducer';
-import validations from './validations';
+import validations from '../validations';
 
 export default {
   createRule,
   FeedbackMark,
-  id: 'radial',
+  id: 'column',
   labComponent: LabComponent,
   reducer,
-  title: 'Radial',
+  title: 'Column',
   validations
 };
