@@ -16,6 +16,7 @@ import ExternalLinksBlock from '../../../components/ExternalLinksBlock';
 
 const ProjectHomePage = (props) => {
   const projectIsNotRedirected = props.project && !props.project.redirect;
+  const canClassify = props.project.links.active_workflows && props.project.links.active_workflows.length > 0;
   const avatarSrc = props.researcherAvatar || '/assets/simple-avatar.png';
 
   const descriptionClass = classnames(
@@ -60,7 +61,7 @@ const ProjectHomePage = (props) => {
             <Link to={`/projects/${props.project.slug}/about`} className="project-home-page__button call-to-action__button call-to-action__button--learn-more">
               <Translate content="project.home.learnMore" />
             </Link>}
-          {showGetStartedLink &&
+          {canClassify && showGetStartedLink &&
             <VisibilitySplit splits={props.splits} splitKey='workflow.assignment' elementKey='link'>
               <Link
                 to={`/projects/${props.project.slug}/classify`}
