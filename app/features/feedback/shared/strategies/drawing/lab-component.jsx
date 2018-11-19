@@ -54,8 +54,8 @@ LabComponent.propTypes = {
   formState: PropTypes.shape({
     defaultTolerance: PropTypes.string,
     hideSubjectViewer: PropTypes.bool
-  }),
-  handleInputChange: PropTypes.func
+  }).isRequired,
+  handleInputChange: PropTypes.func.isRequired
 };
 
 export default LabComponent;
