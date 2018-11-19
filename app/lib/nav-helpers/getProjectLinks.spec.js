@@ -113,7 +113,9 @@ describe('getProjectLinks', function() {
 
   describe('a project without a workflow', function() {
     it('should return the classify link with disabled: true', function() {
-      const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, user: null });
+      const project = Object.assign({}, projectWithoutRedirect);
+      project.links.active_workflows = [];
+      const navLinks = getProjectLinks({ project, projectRoles, user: null });
       expect(navLinks.classify.disabled).to.be.true;
     });
   });

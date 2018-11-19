@@ -30,7 +30,7 @@ describe('NavLink', function() {
       const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, user: null });
       const navLinksWithLabels = buildLinksWithLabels(navLinks);
       const classifyLink = navLinksWithLabels[1];
-      const wrapper = shallow(<NavLink url={classifyLink.url} label={classifyLink.label} disabled={classifyLink.disabled} />);
+      const wrapper = shallow(<NavLink url={classifyLink.url} label={classifyLink.label} disabled={true} />);
       expect(wrapper.name()).to.equal('styled.span');
     });
   });
