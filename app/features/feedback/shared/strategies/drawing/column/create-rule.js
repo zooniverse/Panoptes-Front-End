@@ -21,7 +21,7 @@ function createRule(subjectRule, workflowRule) {
     rule.successMessage = subjectRule.successMessage ||
       workflowRule.defaultSuccessMessage;
   }
-
+  
   return ruleChecker(rule);
 }
 

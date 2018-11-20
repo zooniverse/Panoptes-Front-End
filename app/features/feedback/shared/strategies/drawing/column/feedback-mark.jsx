@@ -35,7 +35,7 @@ FeedbackMark.propTypes = {
     x: PropTypes.string,
     width: PropTypes.string,
     tolerance: PropTypes.string
-  })
+  }).isRequired
 };
 
 export default FeedbackMark;

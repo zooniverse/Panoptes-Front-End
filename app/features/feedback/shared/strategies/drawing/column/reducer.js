@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 function isAnnotationWithinTolerance(rule, annotation) {
   const annotationX = annotation.x;
   const annotationWidth = annotation.width;
@@ -16,10 +14,9 @@ function isAnnotationWithinTolerance(rule, annotation) {
 // Determines whether there are any annotations falling within tolerance for a
 // rule, and appends all successful annotations if so.
 function columnReducer(rule, annotations = []) {
-  const result = annotations.filter(annotation =>
-    isAnnotationWithinTolerance(rule, annotation));
+  const result = annotations.filter(annotation => isAnnotationWithinTolerance(rule, annotation));
 
-  return _.assign(rule, {
+  return Object.assign(rule, {
     success: (result.length > 0),
     successfulClassifications: result
   });
