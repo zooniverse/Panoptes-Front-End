@@ -90,7 +90,7 @@
     "file-loader": "~2.0.0",
     "html-webpack-plugin": "~3.2.0",
     "jsdom": "~13.0.0",
-    "marked": "~0.5.1",
+    "marked": "~0.5.2",
     "mini-css-extract-plugin": "~0.4.4",
     "nib": "~1.1.0",
     "nyc": "~13.1.0",
