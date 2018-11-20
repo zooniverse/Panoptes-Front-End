@@ -20,6 +20,11 @@ describe('Survey Task', function () {
   const annotation = {
     value: [selection]
   };
+  const incompleteAnnotation = {
+    _choiceInProgress: true,
+    value: []
+  };
+
   const task = workflow.tasks.survey;
   const onChangeSpy = sinon.stub().callsFake(newAnnotation => newAnnotation);
   let wrapper;
@@ -95,7 +100,7 @@ describe('Survey Task', function () {
       clock = sinon.useFakeTimers(date.getTime());
     });
 
-    it('should correctly call handleAnnotation', function() {
+    it('handleAnnotation should call onChange with an annotation', function() {
       wrapper.instance().handleAnnotation(selection.choice, selection.answers);
       expect(onChangeSpy.calledOnce).to.be.true;
       clock.tick();
@@ -111,7 +116,7 @@ describe('Survey Task', function () {
       expect(newLength).to.equal(0);
     });
 
-    it('should call handleChoice', function() {
+    it('handleChoice should set the selected choice', function() {
       wrapper.instance().handleChoice('aa');
       expect(wrapper.instance().state.selectedChoiceID, 'aa').to.be.equal;
     });
@@ -137,26 +142,40 @@ describe('Survey Task', function () {
   });
 
   describe('static methods', function () {
-    it('should correctly return isAnnotationComplete', function() {
+    it('isAnnotationComplete should return true if annotation is completed', function() {
       const isComplete = SurveyTask.isAnnotationComplete(task, annotation);
       expect(isComplete).to.be.a('boolean');
       expect(isComplete).to.be.true;
     });
 
-    it('should correctly return a default annotation', function() {
-      const defaultAnnotation = SurveyTask.getDefaultAnnotation();
-      expect(defaultAnnotation).to.be.an('object');
-      expect(defaultAnnotation.value.length, 0).to.be.equal;
+    it('isAnnotationComplete should return false if annotation is incomplete', function() {
+      const isComplete = SurveyTask.isAnnotationComplete(task, incompleteAnnotation);
+      expect(isComplete).to.be.a('boolean');
+      expect(isComplete).to.be.false;
     });
 
-    it('should return the correct value from getTaskText', function() {
+    it('default annotation should be an object', function() {
+      const defaultAnnotation = SurveyTask.getDefaultAnnotation();
+      expect(defaultAnnotation).to.be.an('object');
+      expect(defaultAnnotation).to.have.property('value').to.be.an('array');
+    });
+
+    it('getTaskText should return a string', function() {
       const taskText = SurveyTask.getTaskText(task);
       expect(taskText).to.be.a('string');
     });
 
-    it('should correctly return a default task', function() {
+    it('default task should be an object', function() {
       const defaultTask = SurveyTask.getDefaultTask(task);
       expect(defaultTask).to.be.an('object');
+      expect(defaultTask).to.have.property('type').to.be.a('string');
+      expect(defaultTask).to.have.property('characteristicsOrder').to.be.an('array');
+      expect(defaultTask).to.have.property('characteristics').to.be.an('object');
+      expect(defaultTask).to.have.property('choicesOrder').to.be.an('array');
+      expect(defaultTask).to.have.property('choices').to.be.an('object');
+      expect(defaultTask).to.have.property('questionsOrder').to.be.an('array');
+      expect(defaultTask).to.have.property('questions').to.be.an('object');
+      expect(defaultTask).to.have.property('images').to.be.an('object');
     });
   });
 });

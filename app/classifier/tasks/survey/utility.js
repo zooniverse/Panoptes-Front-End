@@ -8,5 +8,4 @@ function getQuestionIDs(task, choiceID) {
   return task.questionsMap[choiceID];
 }
 
-export default getQuestionIDs;
 export { getQuestionIDs };
