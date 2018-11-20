@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 function isAnnotationWithinTolerance(rule, annotation) {
   const annotationX = annotation.x;
   const annotationY = annotation.y;
@@ -11,8 +9,8 @@ function isAnnotationWithinTolerance(rule, annotation) {
   // breaks the build :(
   /* eslint-disable no-restricted-properties */
   const distance = Math.sqrt(
-    Math.pow((annotationY - feedbackY), 2) +
-    Math.pow((annotationX - feedbackX), 2)
+    Math.pow((annotationY - feedbackY), 2)
+    + Math.pow((annotationX - feedbackX), 2)
   );
   /* eslint-enable no-restricted-properties */
 
@@ -22,10 +20,9 @@ function isAnnotationWithinTolerance(rule, annotation) {
 // Determines whether there are any annotations falling within tolerance for a
 // rule, and appends all successful annotations if so.
 function radialReducer(rule, annotations = []) {
-  const result = annotations.filter(annotation =>
-    isAnnotationWithinTolerance(rule, annotation));
+  const result = annotations.filter(annotation => isAnnotationWithinTolerance(rule, annotation));
 
-  return _.assign(rule, {
+  return Object.assign(rule, {
     success: (result.length > 0),
     successfulClassifications: result
   });

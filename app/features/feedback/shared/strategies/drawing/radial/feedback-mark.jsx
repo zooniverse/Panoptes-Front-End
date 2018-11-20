@@ -21,7 +21,7 @@ FeedbackMark.propTypes = {
     x: PropTypes.string,
     y: PropTypes.string,
     tolerance: PropTypes.string
-  })
+  }).isRequired
 };
 
 export default FeedbackMark;
