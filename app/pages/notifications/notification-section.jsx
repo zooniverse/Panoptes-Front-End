@@ -31,11 +31,11 @@ export default class NotificationSection extends Component {
         name: 'Zooniverse'
       });
     } else {
-      apiClient.type('projects').get({ id: this.props.projectID, cards: true })
+      apiClient.type('projects').get(this.props.projectID)
       .catch((error) => {
         this.setState({ error });
       })
-      .then(([project]) => {
+      .then((project) => {
         this.setState({
           name: project.display_name,
           avatar: project.avatar_src
