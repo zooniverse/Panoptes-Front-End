@@ -88,10 +88,12 @@ module.exports = createReactClass
       </button>
 
       {if @props.pageSelector
+        firstPage = Math.max 1, page - 5
+        lastPage = Math.min pageCount, firstPage + 9
         <div className="paginator-page-selector">
           Page&nbsp;
           <select value={page} onChange={@onSelectPage} ref="pageSelect">
-            {[1..pageCount].map(@pageOption)}
+            {[firstPage..lastPage].map(@pageOption)}
           </select> of {pageCount}
         </div>
         }
