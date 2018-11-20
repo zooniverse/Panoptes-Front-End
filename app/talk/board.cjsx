@@ -49,16 +49,17 @@ module.exports = createReactClass
   getDefaultProps: ->
     location: query: page: 1
 
-  componentWillReceiveProps: (nextProps) ->
-    unless nextProps.location.query.page is @props.location.query.page
-      @setDiscussions(nextProps.location.query.page ? 1)
-
   componentDidMount: ->
     @setDiscussions(@props.location.query.page ? 1)
     @setBoard()
 
   componentDidUpdate: (prevProps, prevState) ->
-    if @state.discussions.length isnt prevState.discussions.length
+    pageChanged = this.props.location.query.page isnt prevProps.location.query.page
+    discussionsChanged = @state.discussions.length isnt prevState.discussions.length
+    discussionPageChanged = @state.discussions[0]?.getMeta().page isnt prevState.discussions[0]?.getMeta().page
+    if pageChanged
+      @setDiscussions(@props.location.query.page ? 1)
+    if discussionsChanged or discussionPageChanged
       subject_ids = []
       author_ids = []
       @state.discussions.forEach (discussion) ->
