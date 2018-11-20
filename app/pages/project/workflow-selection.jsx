@@ -20,21 +20,14 @@ class WorkflowSelection extends React.Component {
     this.getSelectedWorkflow(this.props);
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    const { preferences } = nextProps;
+  componentDidUpdate(prevProps, prevState) {
+    const { preferences, workflow } = this.props;
     const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
-    if (userSelectedWorkflow &&
-      this.props.workflow
-    ) {
-      if (!nextState.loadingSelectedWorkflow &&
-        userSelectedWorkflow !== this.props.workflow.id
-      ) {
-        this.getSelectedWorkflow(nextProps);
+    if (userSelectedWorkflow && workflow) {
+      if (!this.state.loadingSelectedWorkflow && userSelectedWorkflow !== workflow.id) {
+        this.getSelectedWorkflow(this.props);
       }
     }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
     if (prevProps.project.id !== this.props.project.id) {
       this.getSelectedWorkflow(this.props);
     }

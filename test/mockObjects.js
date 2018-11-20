@@ -41,14 +41,20 @@ export const projectWithoutRedirect = {
   id: '2',
   slug: 'zooniverse/find-the-thing',
   title: 'Find the Thing',
-  urls: [socialMediaUrl, externalUrl]
+  urls: [socialMediaUrl, externalUrl],
+  links: {
+    active_workflows: ['35']
+  }
 };
 
 export const projectWithRedirect = {
   id: '3',
   redirect: 'https://www.redirected-project.org',
   title: 'Find the Thing',
-  urls: [socialMediaUrl, externalUrl]
+  urls: [socialMediaUrl, externalUrl],
+  links: {
+    active_workflows: ['35']
+  }
 };
 
 export const workflow = { id: '35' };

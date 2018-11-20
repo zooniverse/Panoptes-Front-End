@@ -19,6 +19,7 @@ import Classifier from '../../classifier';
 import FinishedBanner from './finished-banner';
 import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';
 import ProjectThemeButton from './components/ProjectThemeButton';
+import WorkflowSelection from './workflow-selection';
 import { zooTheme } from '../../theme';
 
 function onClassificationSaved(actualClassification) {
@@ -270,20 +271,30 @@ export class ProjectClassifyPage extends React.Component {
 
   render() {
     return (
-      <div
-        className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}
+      <WorkflowSelection
+        actions={this.props.actions}
+        location={this.props.location}
+        preferences={this.props.preferences}
+        project={this.props.project}
+        projectRoles={this.props.projectRoles}
+        translations={this.props.translations}
+        user={this.props.user}
       >
-        <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
+        <div
+          className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}
+        >
+          <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
 
-        {this.props.projectIsComplete &&
-          <FinishedBanner project={this.props.project} />}
+          {this.props.projectIsComplete &&
+            <FinishedBanner project={this.props.project} />}
 
-        {this.state.validUserGroup &&
-          <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
+          {this.state.validUserGroup &&
+            <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
 
-        {this.props.workflow ? this.renderClassifier() : <p>Loading workflow</p>}
-        <ProjectThemeButton />
-      </div>
+          {this.props.workflow ? this.renderClassifier() : <p>Loading workflow</p>}
+          <ProjectThemeButton />
+        </div>
+      </WorkflowSelection>
     );
   }
 }

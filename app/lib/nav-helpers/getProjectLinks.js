@@ -3,7 +3,7 @@ import _ from 'lodash';
 import isAdmin from '../is-admin';
 import userHasLabAccess from './userHasLabAccess';
 
-function getProjectLinks({ project, projectRoles, workflow, user }) {
+function getProjectLinks({ project, projectRoles, user }) {
   const { id, redirect, slug } = project;
 
   const links = {
@@ -44,6 +44,8 @@ function getProjectLinks({ project, projectRoles, workflow, user }) {
     }
   };
 
+  const canClassify = project.links.active_workflows && project.links.active_workflows.length > 0;
+
   // For projects with external front ends
   if (redirect) {
     const redirectUrl = `${redirect.replace(/\/+$/, '')}/classify`;
@@ -52,7 +54,7 @@ function getProjectLinks({ project, projectRoles, workflow, user }) {
     _.unset(links, 'about');
   }
 
-  if (!workflow) {
+  if (!canClassify) {
     links.classify.disabled = true;
   }
 

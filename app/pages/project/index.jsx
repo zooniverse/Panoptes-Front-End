@@ -15,7 +15,6 @@ import * as interventionActions from '../../redux/ducks/interventions';
 import * as translationActions from '../../redux/ducks/translations';
 import ProjectPage from './project-page';
 import ProjectTranslations from './project-translations';
-import WorkflowSelection from './workflow-selection';
 import getAllLinked from '../../lib/get-all-linked';
 
 counterpart.registerTranslations('en', require('../../locales/en').default);
@@ -367,34 +366,24 @@ class ProjectPageController extends React.Component {
           <ProjectTranslations
             project={this.state.project}
           >
-            <WorkflowSelection
-              actions={this.props.actions}
-              location={this.props.location}
+            <ProjectPage
+              {...this.props}
+              background={this.state.background}
+              guide={this.state.guide}
+              guideIcons={this.state.guideIcons}
+              loading={this.state.loading}
+              organization={this.state.organization}
+              owner={this.state.owner}
+              pages={this.state.pages}
               preferences={this.state.projectPreferences}
               project={this.state.project}
+              projectAvatar={this.state.projectAvatar}
+              projectIsComplete={this.state.projectIsComplete}
               projectRoles={this.state.projectRoles}
-              translations={this.props.translations}
-              user={this.props.user}
-            >
-              <ProjectPage
-                {...this.props}
-                background={this.state.background}
-                guide={this.state.guide}
-                guideIcons={this.state.guideIcons}
-                loading={this.state.loading}
-                organization={this.state.organization}
-                owner={this.state.owner}
-                pages={this.state.pages}
-                preferences={this.state.projectPreferences}
-                project={this.state.project}
-                projectAvatar={this.state.projectAvatar}
-                projectIsComplete={this.state.projectIsComplete}
-                projectRoles={this.state.projectRoles}
-                requestUserProjectPreferences={this.requestUserProjectPreferences.bind(this)}
-                splits={this.state.splits}
-                workflow={this.props.workflow}
-              />
-            </WorkflowSelection>
+              requestUserProjectPreferences={this.requestUserProjectPreferences.bind(this)}
+              splits={this.state.splits}
+              workflow={this.props.workflow}
+            />
           </ProjectTranslations>
         }
         {!!this.state.loading &&
