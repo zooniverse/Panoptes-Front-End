@@ -82,7 +82,7 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { actions, classification, project, upcomingSubjects, workflow } = this.props;
+    const { classification, upcomingSubjects, workflow } = this.props;
 
     if (workflow !== prevProps.workflow) {
       this.loadAppropriateClassification();
@@ -271,30 +271,20 @@ export class ProjectClassifyPage extends React.Component {
 
   render() {
     return (
-      <WorkflowSelection
-        actions={this.props.actions}
-        location={this.props.location}
-        preferences={this.props.preferences}
-        project={this.props.project}
-        projectRoles={this.props.projectRoles}
-        translations={this.props.translations}
-        user={this.props.user}
+      <div
+        className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}
       >
-        <div
-          className={`${(this.props.theme === zooTheme.mode.light) ? 'classify-page' : 'classify-page classify-page--dark-theme'}`}
-        >
-          <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
+        <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
 
-          {this.props.projectIsComplete &&
-            <FinishedBanner project={this.props.project} />}
+        {this.props.projectIsComplete &&
+          <FinishedBanner project={this.props.project} />}
 
-          {this.state.validUserGroup &&
-            <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
+        {this.state.validUserGroup &&
+          <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
 
-          {this.props.workflow ? this.renderClassifier() : <p>Loading workflow</p>}
-          <ProjectThemeButton />
-        </div>
-      </WorkflowSelection>
+        {this.props.workflow ? this.renderClassifier() : <p>Loading workflow</p>}
+        <ProjectThemeButton />
+      </div>
     );
   }
 }
@@ -365,4 +355,21 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectClassifyPage);
+const ConnectedClassifyPage = connect(mapStateToProps, mapDispatchToProps)(ProjectClassifyPage);
+
+function ConnectedClassifyPageWithWorkflow(props) {
+  return (
+    <WorkflowSelection
+      actions={props.actions}
+      location={props.location}
+      preferences={props.preferences}
+      project={props.project}
+      projectRoles={props.projectRoles}
+      translations={props.translations}
+      user={props.user}
+    >
+      <ConnectedClassifyPage {...props} />
+    </WorkflowSelection>
+  );
+}
+export default ConnectedClassifyPageWithWorkflow;
