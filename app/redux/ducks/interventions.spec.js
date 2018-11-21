@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import { sugarClient } from 'panoptes-client/lib/sugar';
-import reducer, { notify, subscribe, unsubscribe, dismiss } from './interventions';
+import reducer, { intervention, subscribe, unsubscribe, dismiss } from './interventions';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 describe('Intervention actions', function () {
@@ -97,14 +97,100 @@ describe('Intervention actions', function () {
   });
   describe('action creators', function () {
     describe('notify', function () {
-      describe('with subject IDs', function () {
-        const notification = {
+      describe('unknown experiment behaviour', function () {
+        const message = {
           data: {
-            message: {
-              type: 'subject_queue',
-              subject_ids: [1, 2],
-              workflow_id: 1
-            }
+            payload: 'do something unkown'
+          }
+        };
+        it('should dispatch the unknown experiment handler', function () {
+          const action = intervention(message);
+          const expectedAction = {
+            type: 'pfe/interventions/UNKNOWN_EXPERIMENT'
+          };
+          expect(action).to.deep.equal(expectedAction);
+        });
+      });
+
+      describe('missing data in payload', function () {
+        const message = {
+          type: 'experiment',
+          payload: {
+            message: 'can i haz your money?'
+          }
+        };
+        it('should dispatch the missing data handler', function () {
+          const action = intervention(message);
+          const expectedAction = {
+            type: 'pfe/interventions/MISSING_DATA'
+          };
+          expect(action).to.deep.equal(expectedAction);
+        });
+      });
+
+      describe('non intervention message', function () {
+        const message = {
+          type: 'experiment',
+          data: {
+            event: "unknown",
+            event_type: "message",
+            message: 'You are doing great'
+          }
+        };
+        it('should dispatch the unknown event handler', function () {
+          const action = intervention(message);
+          const expectedAction = {
+            type: 'pfe/interventions/UNKNOWN_EVENT'
+          };
+          expect(action).to.deep.equal(expectedAction);
+        });
+      });
+
+      describe('unknown intervention type', function () {
+        const message = {
+          type: 'experiment',
+          data: {
+            event: 'intervention',
+            event_type: "unknown",
+            message: 'can i send you pics?'
+          }
+        };
+        it('should dispatch the unknown type handler', function () {
+          const action = intervention(message);
+          const expectedAction = {
+            type: 'pfe/interventions/UNKNOWN_TYPE'
+          };
+          expect(action).to.deep.equal(expectedAction);
+        });
+      });
+
+      describe('with a message event', function () {
+        const message = {
+          type: 'experiment',
+          data: {
+            event: "intervention",
+            event_type: "message",
+            message: 'a generic message'
+          }
+        };
+        it('should store the notification', function () {
+          const action = intervention(message);
+          const expectedAction = {
+            type: 'pfe/interventions/ADD_NOTIFICATION',
+            payload: message
+          };
+          expect(action).to.deep.equal(expectedAction);
+        });
+      });
+
+      describe('with subject IDs', function () {
+        const message = {
+          type: 'experiment',
+          data: {
+            event: "intervention",
+            event_type: "subject_queue",
+            subject_ids: [1, 2],
+            workflow_id: 1
           }
         };
         const subject = mockPanoptesResource('subjects', { id: 'a', metadata: {} });
@@ -114,20 +200,20 @@ describe('Intervention actions', function () {
         const fakeDispatch = sinon.stub().callsFake(() => true);
         before(function () {
           sinon.stub(apiClient, 'type').callsFake(() => fakeType);
-          notify(notification)(fakeDispatch);
+          intervention(message)(fakeDispatch);
         });
         after(function () {
           apiClient.type.restore();
         });
         it('should request new subjects', function () {
-          const { subject_ids } = notification.data.message;
+          const { subject_ids } = message.data;
           expect(fakeType.get.calledWith(subject_ids)).to.be.true;
         })
         it('should flag new subjects', function () {
           expect(subject.metadata.intervention).to.be.true;
         });
         it('should dispatch a prependSubjects action', function () {
-          const { subject_ids, workflow_id } = notification.data.message;
+          const { subject_ids, workflow_id } = message.data;
           const expectedAction = {
             type: 'pfe/classify/PREPEND_SUBJECTS',
             payload: {
@@ -138,21 +224,6 @@ describe('Intervention actions', function () {
           expect(fakeDispatch.calledWith(expectedAction)).to.be.true;
         });
       });
-      describe('default behaviour', function () {
-        const notification = {
-          data: {
-            message: 'a generic message'
-          }
-        };
-        it('should store the notification', function () {
-          const action = notify(notification);
-          const expectedAction = {
-            type: 'pfe/interventions/ADD_NOTIFICATION',
-            payload: notification
-          };
-          expect(action).to.deep.equal(expectedAction);
-        });
-      })
     });
     describe('subscribe', function () {
       it('should create a subscribe action', function () {

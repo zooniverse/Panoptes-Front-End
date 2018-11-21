@@ -8,6 +8,10 @@ const ERROR = 'pfe/interventions/ERROR';
 const FETCH_SUBJECTS = 'pfe/interventions/FETCH_SUBJECTS';
 const SUBSCRIBE = 'pfe/interventions/SUBSCRIBE';
 const UNSUBSCRIBE = 'pfe/interventions/UNSUBSCRIBE';
+const UNKNOWN_EXPERIMENT = 'pfe/interventions/UNKNOWN_EXPERIMENT'
+const MISSING_DATA = 'pfe/interventions/MISSING_DATA'
+const UNKNOWN_EVENT = 'pfe/interventions/UNKNOWN_EVENT'
+const UNKNOWN_TYPE = 'pfe/interventions/UNKNOWN_TYPE'
 
 const initialState = {
   error: null,
@@ -34,6 +38,9 @@ export default function reducer(state = initialState, action = {}) {
       sugarClient.unsubscribeFrom(action.payload);
       return state;
     default:
+      if (process.env.BABEL_ENV !== 'test') {
+        console.log(`Uknown intervention action: ${action.payload}`);
+      }
       return state;
   }
 }
@@ -46,12 +53,44 @@ export function unsubscribe(channel) {
   return { type: UNSUBSCRIBE, payload: channel };
 }
 
-export function notify(notification) {
-  const { message } = notification.data;
-  const { type } = message;
-  if (type === 'subject_queue') {
-    const subjectIDs = message.subject_ids;
-    const workflowID = message.workflow_id;
+export function intervention(message) {
+  // only process experiment events from sugar
+  // we could add checking for the logged in user channel (id)
+  // as well if we don't trust sugar
+  // Example payload data from sugar
+  // {
+  //  channel: "user:27"
+  //    data: {
+  //      event: "intervention",
+  //      event_type: "message",
+  //      message: "You are a star! All of your contributions really help.",
+  //      project_id: "908",
+  //      type: "experiment",
+  //      user_id: "27",
+  //    }
+  //  type: "experiment"
+  // }
+
+  var { type = 'unknown' } = message;
+  if (type !== "experiment") {
+    return { type: UNKNOWN_EXPERIMENT };
+  };
+
+  var { data = 'missing' } = message;
+  if (data === 'missing') {
+    return { type: MISSING_DATA };
+  };
+
+  var { event = 'unknown' } = data;
+  if (event !== 'intervention') {
+    return { type: UNKNOWN_EVENT };
+  };
+
+  const { event_type } = data;
+
+  if (event_type === 'subject_queue') {
+    const subjectIDs = data.subject_ids;
+    const workflowID = data.workflow_id;
     return (dispatch) => {
       dispatch({
         type: FETCH_SUBJECTS,
@@ -73,16 +112,16 @@ export function notify(notification) {
         dispatch(prependSubjects(subjects, workflowID));
       });
     };
+  } else if (event_type === 'message') {
+    return {
+      type: ADD_NOTIFICATION,
+      payload: message
+    };
   } else {
-    return { type: ADD_NOTIFICATION, payload: notification };
+    return { type: UNKNOWN_TYPE };
   }
 }
 
 export function dismiss() {
   return { type: DISMISS_NOTIFICATION };
 }
-
-export function injectSubjects() {
-  // Get new subjects and add them to the subject queue
-}
-
