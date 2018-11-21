@@ -4,7 +4,7 @@ import TriggeredModalForm from 'modal-form/triggered';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
 import ImageFlipper from './image-flipper';
-import Utility from './utility';
+import { getQuestionIDs } from './utility';
 
 const BACKSPACE = 8;
 const SPACE = 32;
@@ -22,13 +22,13 @@ class Choice extends React.Component {
 
   checkFilledIn() {
     // if there are no questions, don't make them fill one in
-    if (Utility.getQuestionIDs(this.props.task, this.props.choiceID).length === 0) {
+    if (getQuestionIDs(this.props.task, this.props.choiceID).length === 0) {
       return true;
     }
 
     // if there are questions, it's fine as long as they've filled required ones in
     const answerProvided = [];
-    Utility.getQuestionIDs(this.props.task, this.props.choiceID).map((questionId) => {
+    getQuestionIDs(this.props.task, this.props.choiceID).map((questionId) => {
       const question = this.props.task.questions[questionId];
       if (question.required) {
         const answer = this.state.answers[questionId];
@@ -160,7 +160,7 @@ class Choice extends React.Component {
           <hr />
 
           {!choice.noQuestions &&
-            Utility.getQuestionIDs(task, choiceID).map((questionId) => {
+            getQuestionIDs(task, choiceID).map((questionId) => {
               const question = task.questions[questionId] || { answers: {}, answersOrder: [] };
               const inputType = question.multiple ? 'checkbox' : 'radio';
               return (
@@ -203,7 +203,7 @@ class Choice extends React.Component {
               );
             })
           }
-          {Utility.getQuestionIDs(task, choiceID).length > 0 && <hr />}
+          {getQuestionIDs(task, choiceID).length > 0 && <hr />}
         </div>
         <div style={{ textAlign: 'center' }}>
           <button

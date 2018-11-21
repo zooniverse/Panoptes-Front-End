@@ -1,8 +1,11 @@
-React = require 'react'
+import React from 'react';
 
-module.exports =
-  choices: <div className="content-container">
-    <p>User-identifiable <strong>choices</strong>, with these headers:</p>
+export default {
+  choices:
+  <div className="content-container">
+    <p>
+      User-identifiable <strong>choices</strong>, with these headers:
+    </p>
 
     <table className="standard-table">
       <tbody>
@@ -32,14 +35,16 @@ module.exports =
         </tr>
       </tbody>
     </table>
-  </div>
-
-  images: <div className="content-container">
+  </div>,
+  images:
+  <div className="content-container">
     Pick some <strong>images</strong>. Make sure they have the exact same names as the ones in your other files.
-  </div>
-
-  characteristics: <div className="content-container">
-    <p><strong>Characteristics</strong> of those choices that the user can filter through. Note that the values in Name have to match the values in choices.csv exactly. Format like this:</p>
+  </div>,
+  characteristics:
+  <div className="content-container">
+    <p>
+      <strong>Characteristics</strong> of those choices that the user can filter through. Note that the values in Name have to match the values in choices.csv exactly. Format like this:
+    </p>
 
     <table className="standard-table">
       <tbody>
@@ -70,10 +75,12 @@ module.exports =
         </tr>
       </tbody>
     </table>
-  </div>
-
-  confusions: <div className="content-container">
-    <p>Commonly <strong>confused pairs</strong> of choices:</p>
+  </div>,
+  confusions:
+  <div className="content-container">
+    <p>
+      Commonly <strong>confused pairs</strong> of choices:
+    </p>
 
     <table className="standard-table">
       <tbody>
@@ -94,10 +101,12 @@ module.exports =
         </tr>
       </tbody>
     </table>
-  </div>
-
-  questions: <div className="content-container">
-    <p><strong>Questions</strong> to ask about each identification:</p>
+  </div>,
+  questions:
+  <div className="content-container">
+    <p>
+      <strong>Questions</strong> to ask about each identification:
+    </p>
 
     <table className="standard-table">
       <tbody>
@@ -122,9 +131,10 @@ module.exports =
           <td>Y</td>
           <td>N</td>
           <td>Yes; No; Maybe</td>
-          <td> </td>
+          <td />
           <td>Dolphin</td>
         </tr>
       </tbody>
     </table>
   </div>
+};
