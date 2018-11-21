@@ -110,10 +110,8 @@ export default class SurveyTask extends React.Component {
     value.push({ choice, answers, filters: parsedFilters });
     this.clearFilters();
     this.clearSelection();
-    setTimeout(() => {
-      const newAnnotation = Object.assign({}, annotation, { value });
-      onChange(newAnnotation);
-    });
+    const newAnnotation = Object.assign({}, annotation, { value, _choiceInProgress: false });
+    onChange(newAnnotation);
   }
 
   render() {

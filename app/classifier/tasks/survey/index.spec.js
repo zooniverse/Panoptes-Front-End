@@ -116,8 +116,7 @@ describe('Survey Task', function () {
 
       it('should call onChange with an annotation', function() {
         wrapper.instance().handleAnnotation(selection.choice, selection.answers);
-        clock.tick();
-        expect(onChangeSpy.callCount).to.equal(2);
+        expect(onChangeSpy.callCount).to.equal(1);
         const returnValues = onChangeSpy.returnValues[0];
         expect(returnValues, annotation).to.be.equal;
       });
@@ -125,7 +124,6 @@ describe('Survey Task', function () {
       it('should complete an incomplete annotation', function () {
         wrapper.setProps({ annotation: incompleteAnnotation });
         wrapper.instance().handleAnnotation(selection.choice, selection.answers);
-        clock.tick();
         const newAnnotation = onChangeSpy.returnValues[0];
         expect(newAnnotation._choiceInProgress).to.be.false;
       })
