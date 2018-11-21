@@ -115,7 +115,7 @@ export function intervention(message) {
 
   switch(event_type) {
     case 'message':
-      return { type: ADD_NOTIFICATION, payload: message };
+      return { type: ADD_NOTIFICATION, payload: data };
       break;
     case 'subject_queue':
       return prependSubjectQueue(data);

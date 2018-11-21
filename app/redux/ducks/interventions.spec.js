@@ -173,11 +173,11 @@ describe('Intervention actions', function () {
             message: 'a generic message'
           }
         };
-        it('should store the notification', function () {
+        it('should store the message data', function () {
           const action = intervention(message);
           const expectedAction = {
             type: 'pfe/interventions/ADD_NOTIFICATION',
-            payload: message
+            payload: message.data
           };
           expect(action).to.deep.equal(expectedAction);
         });
