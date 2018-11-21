@@ -30,7 +30,6 @@ describe('ProjectClassifyPage', function () {
       <ProjectClassifyPage
         actions={actions}
         classification={null}
-        loadingSelectedWorkflow={false}
         project={project}
         upcomingSubjects={[]}
         workflow={workflow}
@@ -134,7 +133,6 @@ describe('ProjectClassifyPage', function () {
         <ProjectClassifyPage
           actions={actions}
           classification={classification}
-          loadingSelectedWorkflow={false}
           project={project}
           upcomingSubjects={[]}
           workflow={newWorkflow}
@@ -169,7 +167,6 @@ describe('ProjectClassifyPage', function () {
         <ProjectClassifyPage
           actions={actions}
           classification={classification}
-          loadingSelectedWorkflow={false}
           project={project}
           upcomingSubjects={[]}
           workflow={workflow}

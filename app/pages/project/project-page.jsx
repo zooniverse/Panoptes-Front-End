@@ -51,7 +51,6 @@ export default class ProjectPage extends React.Component {
           </div>}
         {React.cloneElement(this.props.children, {
           background: this.props.background,
-          loadingSelectedWorkflow: this.props.loadingSelectedWorkflow,
           onChangePreferences: this.props.onChangePreferences,
           organization: this.props.organization,
           owner: this.props.owner,

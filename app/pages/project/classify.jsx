@@ -309,7 +309,6 @@ ProjectClassifyPage.propTypes = {
     })
   }),
   classification: PropTypes.shape({}),
-  loadingSelectedWorkflow: PropTypes.bool,
   location: PropTypes.shape({
     query: PropTypes.shape({
       group: PropTypes.string
