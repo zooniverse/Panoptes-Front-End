@@ -21,7 +21,7 @@ class WorkflowSelection extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { preferences, workflow } = this.props;
+    const { locale, preferences, workflow } = this.props;
     const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
     if (userSelectedWorkflow && workflow) {
       if (!this.state.loadingSelectedWorkflow && userSelectedWorkflow !== workflow.id) {
@@ -31,8 +31,8 @@ class WorkflowSelection extends React.Component {
     if (prevProps.project.id !== this.props.project.id) {
       this.getSelectedWorkflow(this.props);
     }
-    if (prevProps.translations.locale !== this.props.translations.locale) {
-      this.props.actions.translations.load('workflow', this.props.workflow.id, this.props.translations.locale);
+    if (workflow && prevProps.locale !== locale) {
+      this.props.actions.translations.load('workflow', workflow.id, locale);
     }
   }
 
@@ -72,11 +72,11 @@ class WorkflowSelection extends React.Component {
     }
 
     if (selectedWorkflowID) return this.getWorkflow(selectedWorkflowID, activeFilter);
-    if (process.env.BABEL_ENV !== 'test') console.warn('Cannot select a workflow.')
+    if (process.env.BABEL_ENV !== 'test') console.warn('Cannot select a workflow.');
   }
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
-    const { actions, project, translations } = this.props;
+    const { actions, locale, project } = this.props;
     const sanitisedWorkflowID = this.sanitiseID(selectedWorkflowID);
     let isValidWorkflow = false;
 
@@ -106,7 +106,7 @@ class WorkflowSelection extends React.Component {
     return awaitWorkflow
     .then((workflow) => {
       if (workflow) {
-        actions.translations.load('workflow', workflow.id, translations.locale);
+        actions.translations.load('workflow', workflow.id, locale);
         actions.classifier.setWorkflow(workflow);
         this.setState({ loadingSelectedWorkflow: false });
       } else {
@@ -186,9 +186,8 @@ class WorkflowSelection extends React.Component {
   }
 
   render() {
-    const { translation, workflow } = this.props;
     const { loadingSelectedWorkflow } = this.state;
-    return React.cloneElement(this.props.children, { translation, loadingSelectedWorkflow });
+    return loadingSelectedWorkflow ? <p>Loading workflow</p> : this.props.children;
   }
 }
 
@@ -199,18 +198,12 @@ WorkflowSelection.defaultProps = {
     }
   },
   children: null,
+  locale: 'en',
   location: {
     query: {}
   },
   preferences: {},
   projectRoles: [],
-  translation: {
-    id: '',
-    display_name: ''
-  },
-  translations: {
-    locale: 'en'
-  },
   user: null,
   workflow: null
 };
@@ -227,6 +220,7 @@ WorkflowSelection.propTypes = {
       workflow: PropTypes.string
     })
   }),
+  locale: PropTypes.string,
   preferences: PropTypes.shape({
     save: PropTypes.func,
     update: PropTypes.func
@@ -240,12 +234,6 @@ WorkflowSelection.propTypes = {
     uncacheLink: PropTypes.func
   }).isRequired,
   projectRoles: PropTypes.arrayOf(PropTypes.object),
-  translation: PropTypes.shape({
-    display_name: PropTypes.string
-  }),
-  translations: PropTypes.shape({
-    locale: PropTypes.string
-  }),
   workflow: PropTypes.shape({
     id: PropTypes.string
   })
@@ -256,6 +244,7 @@ WorkflowSelection.contextTypes = {
 };
 
 const mapStateToProps = state => ({
+  locale: state.translations.locale,
   workflow: state.classify.workflow
 });
 
