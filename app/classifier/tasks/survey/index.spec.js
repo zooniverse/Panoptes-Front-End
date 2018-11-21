@@ -33,6 +33,10 @@ describe('Survey Task', function () {
     wrapper = mount(<SurveyTask translation={task} task={task} annotation={annotation} />);
   });
 
+  afterEach(function () {
+    onChangeSpy.resetHistory();
+  });
+
   it('should render a survey task', function () {
     expect(wrapper.prop('task'), task).to.be.equal;
   });
@@ -57,6 +61,11 @@ describe('Survey Task', function () {
         />
       );
     });
+
+    afterEach(function () {
+      onChangeSpy.resetHistory();
+    });
+    
 
     it('should render a valid annotation as a selected choice', function () {
       const selectedChoice = wrapper.find('[data-choiceid="ar"]');
@@ -100,13 +109,27 @@ describe('Survey Task', function () {
       clock = sinon.useFakeTimers(date.getTime());
     });
 
-    it('handleAnnotation should call onChange with an annotation', function() {
-      wrapper.instance().handleAnnotation(selection.choice, selection.answers);
-      expect(onChangeSpy.calledOnce).to.be.true;
-      clock.tick();
-      const returnValues = onChangeSpy.returnValues[0];
-      expect(returnValues, annotation).to.be.equal;
-    });
+    describe('handleAnnotation', function () {
+      afterEach(function () {
+        onChangeSpy.resetHistory();
+      });
+
+      it('should call onChange with an annotation', function() {
+        wrapper.instance().handleAnnotation(selection.choice, selection.answers);
+        clock.tick();
+        expect(onChangeSpy.callCount).to.equal(2);
+        const returnValues = onChangeSpy.returnValues[0];
+        expect(returnValues, annotation).to.be.equal;
+      });
+
+      it('should complete an incomplete annotation', function () {
+        wrapper.setProps({ annotation: incompleteAnnotation });
+        wrapper.instance().handleAnnotation(selection.choice, selection.answers);
+        clock.tick();
+        const newAnnotation = onChangeSpy.returnValues[0];
+        expect(newAnnotation._choiceInProgress).to.be.false;
+      })
+    })
 
     it('should correctly remove an annotation on handleRemove', function() {
       const currentLength = wrapper.instance().props.annotation.value.length;
