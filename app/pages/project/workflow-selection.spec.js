@@ -78,11 +78,8 @@ const preferences = mockPanoptesResource(
 describe('WorkflowSelection', function () {
   const actions = {
     translations: {
-      load: () => null
+      load: sinon.stub()
     }
-  };
-  const translations = {
-    locale: 'en'
   };
   const wrapper = mount(
     <WorkflowSelection
@@ -90,8 +87,8 @@ describe('WorkflowSelection', function () {
       project={project}
       preferences={preferences}
       projectRoles={projectRoles}
+      locale='en'
       location={location}
-      translations={translations}
     >
       <StubPage />
     </WorkflowSelection>,
@@ -119,6 +116,7 @@ describe('WorkflowSelection', function () {
 
   beforeEach(function () {
     workflowStub.resetHistory();
+    actions.translations.load.resetHistory();
     wrapper.update();
   });
 
@@ -325,6 +323,14 @@ describe('WorkflowSelection', function () {
       wrapper.setProps({ project: projectWithoutWorkflows });
 
       sinon.assert.notCalled(workflowStub)
+    });
+  });
+
+  describe('on language change', function () {
+    it('should load new translation strings', function () {
+      const workflow = mockPanoptesResource('workflows', { id: '1', tasks: {} });
+      wrapper.setProps({ locale: 'it', workflow });
+      sinon.assert.calledWith(actions.translations.load, 'workflow', '1', 'it');
     });
   });
 });

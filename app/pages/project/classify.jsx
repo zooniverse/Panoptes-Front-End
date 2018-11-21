@@ -364,7 +364,6 @@ function ConnectedClassifyPageWithWorkflow(props) {
       preferences={props.preferences}
       project={props.project}
       projectRoles={props.projectRoles}
-      translations={props.translations}
       user={props.user}
     >
       <ConnectedClassifyPage {...props} />
