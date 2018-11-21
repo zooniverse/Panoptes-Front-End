@@ -96,7 +96,7 @@ describe('Intervention actions', function () {
     });
   });
   describe('action creators', function () {
-    describe('notify', function () {
+    describe('intervention', function () {
       describe('unknown experiment behaviour', function () {
         const message = {
           data: {
@@ -164,7 +164,7 @@ describe('Intervention actions', function () {
         });
       });
 
-      describe('with a message event', function () {
+      describe('with an intervention message event', function () {
         const message = {
           type: 'experiment',
           data: {
@@ -183,7 +183,7 @@ describe('Intervention actions', function () {
         });
       });
 
-      describe('with subject IDs', function () {
+      describe('with an intervention subject queue event', function () {
         const message = {
           type: 'experiment',
           data: {
