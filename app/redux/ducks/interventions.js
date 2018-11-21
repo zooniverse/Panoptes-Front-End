@@ -78,9 +78,6 @@ function prependSubjectQueue(data) {
 };
 
 export function intervention(message) {
-  // only process experiment events from sugar
-  // we could add checking for the logged in user channel (id)
-  // as well if we don't trust sugar
   // Example payload data from sugar
   // {
   //  channel: "user:27"
@@ -95,6 +92,7 @@ export function intervention(message) {
   //  type: "experiment"
   // }
 
+  // Only process known intervention experiment events from sugar.
   var { type = 'unknown' } = message;
   if (type !== "experiment") {
     return { type: UNKNOWN_EXPERIMENT };
@@ -109,6 +107,9 @@ export function intervention(message) {
   if (event !== 'intervention') {
     return { type: UNKNOWN_EVENT };
   };
+
+  // If required, this is where checks for correct user
+  // and other sugar channel payload checking can be added
 
   const { event_type } = data;
 
