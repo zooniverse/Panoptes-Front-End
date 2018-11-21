@@ -38,9 +38,6 @@ export default function reducer(state = initialState, action = {}) {
       sugarClient.unsubscribeFrom(action.payload);
       return state;
     default:
-      if (process.env.BABEL_ENV !== 'test') {
-        console.log(`Uknown intervention action: ${action.payload}`);
-      }
       return state;
   }
 }
