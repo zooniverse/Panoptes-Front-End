@@ -116,7 +116,7 @@ describe('Survey Task', function () {
 
       it('should call onChange with an annotation', function() {
         wrapper.instance().handleAnnotation(selection.choice, selection.answers);
-        expect(onChangeSpy.callCount).to.equal(1);
+        expect(onChangeSpy.callCount).to.equal(2);
         const returnValues = onChangeSpy.returnValues[0];
         expect(returnValues, annotation).to.be.equal;
       });
