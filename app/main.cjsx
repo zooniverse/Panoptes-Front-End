@@ -17,7 +17,6 @@ store = configureStore()
 auth.listen('change', () => store.dispatch(emptySubjectQueue()));
 apiClient.type('subject_sets').listen('add-or-remove', () => store.dispatch(emptySubjectQueue()));
 sugarClient.on('experiment', (message) => store.dispatch(notify(message)));
-sugarClient.on('subject-queue', (message) => store.dispatch(injectSubjects(message)));
 
 # Redirect any old `/#/foo`-style URLs to `/foo`
 # ensuring we preserve the location path, search and hash fragments
