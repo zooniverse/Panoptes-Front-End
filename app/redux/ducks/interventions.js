@@ -50,6 +50,33 @@ export function unsubscribe(channel) {
   return { type: UNSUBSCRIBE, payload: channel };
 }
 
+
+function prependSubjectQueue(data) {
+  const subjectIDs = data.subject_ids;
+  const workflowID = data.workflow_id;
+  return (dispatch) => {
+    dispatch({
+      type: FETCH_SUBJECTS,
+      payload: subjectIDs
+    });
+    apiClient.type('subjects').get(subjectIDs)
+    .catch((error) => {
+      dispatch({
+        type: ERROR,
+        payload: error
+      });
+      return [];
+    })
+    .then(subjects => subjects.map((subject) => {
+      subject.update({ 'metadata.intervention': true });
+      return subject;
+    }))
+    .then((subjects) => {
+      dispatch(prependSubjects(subjects, workflowID));
+    });
+  };
+};
+
 export function intervention(message) {
   // only process experiment events from sugar
   // we could add checking for the logged in user channel (id)
@@ -85,37 +112,15 @@ export function intervention(message) {
 
   const { event_type } = data;
 
-  if (event_type === 'subject_queue') {
-    const subjectIDs = data.subject_ids;
-    const workflowID = data.workflow_id;
-    return (dispatch) => {
-      dispatch({
-        type: FETCH_SUBJECTS,
-        payload: subjectIDs
-      });
-      apiClient.type('subjects').get(subjectIDs)
-      .catch((error) => {
-        dispatch({
-          type: ERROR,
-          payload: error
-        });
-        return [];
-      })
-      .then(subjects => subjects.map((subject) => {
-        subject.update({ 'metadata.intervention': true });
-        return subject;
-      }))
-      .then((subjects) => {
-        dispatch(prependSubjects(subjects, workflowID));
-      });
-    };
-  } else if (event_type === 'message') {
-    return {
-      type: ADD_NOTIFICATION,
-      payload: message
-    };
-  } else {
-    return { type: UNKNOWN_TYPE };
+  switch(event_type) {
+    case 'message':
+      return { type: ADD_NOTIFICATION, payload: message };
+      break;
+    case 'subject_queue':
+      return prependSubjectQueue(data);
+      break;
+    default:
+      return { type: UNKNOWN_TYPE };
   }
 }
 
