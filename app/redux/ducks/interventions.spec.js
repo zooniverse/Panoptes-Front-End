@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import { sugarClient } from 'panoptes-client/lib/sugar';
-import reducer, { intervention, subscribe, unsubscribe, dismiss } from './interventions';
+import reducer, { processIntervention, subscribe, unsubscribe, dismiss } from './interventions';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 describe('Intervention actions', function () {
@@ -95,8 +95,8 @@ describe('Intervention actions', function () {
       expect(newState.error).to.equal(action.payload);
     });
   });
-  describe('action creators', function () {
-    describe('intervention', function () {
+  describe.only('action creators', function () {
+    describe('processIntervention', function () {
       describe('unknown experiment behaviour', function () {
         const message = {
           data: {
@@ -104,7 +104,7 @@ describe('Intervention actions', function () {
           }
         };
         it('should dispatch the unknown experiment handler', function () {
-          const action = intervention(message);
+          const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/interventions/UNKNOWN_EXPERIMENT'
           };
@@ -120,7 +120,7 @@ describe('Intervention actions', function () {
           }
         };
         it('should dispatch the missing data handler', function () {
-          const action = intervention(message);
+          const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/interventions/MISSING_DATA'
           };
@@ -138,7 +138,7 @@ describe('Intervention actions', function () {
           }
         };
         it('should dispatch the unknown event handler', function () {
-          const action = intervention(message);
+          const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/interventions/UNKNOWN_EVENT'
           };
@@ -156,7 +156,7 @@ describe('Intervention actions', function () {
           }
         };
         it('should dispatch the unknown type handler', function () {
-          const action = intervention(message);
+          const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/interventions/UNKNOWN_TYPE'
           };
@@ -174,7 +174,7 @@ describe('Intervention actions', function () {
           }
         };
         it('should store the message data', function () {
-          const action = intervention(message);
+          const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/interventions/ADD_NOTIFICATION',
             payload: message.data
@@ -200,7 +200,7 @@ describe('Intervention actions', function () {
         const fakeDispatch = sinon.stub().callsFake(() => true);
         before(function () {
           sinon.stub(apiClient, 'type').callsFake(() => fakeType);
-          intervention(message)(fakeDispatch);
+          processIntervention(message)(fakeDispatch);
         });
         after(function () {
           apiClient.type.restore();

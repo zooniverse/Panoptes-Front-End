@@ -77,7 +77,7 @@ function prependSubjectQueue(data) {
   };
 };
 
-export function intervention(message) {
+export function processIntervention(message) {
   // Example payload data from sugar
   // {
   //  channel: "user:27"
