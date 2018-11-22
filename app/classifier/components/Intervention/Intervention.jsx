@@ -15,7 +15,7 @@ const StyledInterventionMessage = styled.div`
 
 function Intervention({ notifications, user }) {
   const notification = notifications[notifications.length - 1];
-  const { message } = notification.data;
+  const { message } = notification;
   const checkbox = React.createRef();
 
   function onChange() {
