@@ -11,13 +11,12 @@ style = require '../css/main.styl'
 # Redux
 `import { Provider } from 'react-redux';`
 `import configureStore from './redux/store';`
-`import { notify, injectSubjects } from './redux/ducks/interventions';`
+`import { processIntervention } from './redux/ducks/interventions';`
 `import { emptySubjectQueue } from './redux/ducks/classify';`
 store = configureStore()
 auth.listen('change', () => store.dispatch(emptySubjectQueue()));
 apiClient.type('subject_sets').listen('add-or-remove', () => store.dispatch(emptySubjectQueue()));
-sugarClient.on('experiment', (message) => store.dispatch(notify(message)));
-sugarClient.on('subject-queue', (message) => store.dispatch(injectSubjects(message)));
+sugarClient.on('experiment', (message) => store.dispatch(processIntervention(message)));
 
 # Redirect any old `/#/foo`-style URLs to `/foo`
 # ensuring we preserve the location path, search and hash fragments

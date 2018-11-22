@@ -6,12 +6,8 @@ import Intervention from './Intervention';
 
 describe('Intervention', function () {
   let wrapper;
-  const notifications = [{
-    data: {
-      message: 'Hello!'
-    }
-  }];
-  const { message } = notifications[0].data;
+  const notifications = [{ message: 'Hello!' }];
+  const { message } = notifications[0];
   const user = {
     id: 'a',
     update: sinon.stub().callsFake(() => {

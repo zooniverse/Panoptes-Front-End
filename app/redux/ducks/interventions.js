@@ -46,43 +46,81 @@ export function unsubscribe(channel) {
   return { type: UNSUBSCRIBE, payload: channel };
 }
 
-export function notify(notification) {
-  const { message } = notification.data;
-  const { type } = message;
-  if (type === 'subject_queue') {
-    const subjectIDs = message.subject_ids;
-    const workflowID = message.workflow_id;
-    return (dispatch) => {
-      dispatch({
-        type: FETCH_SUBJECTS,
-        payload: subjectIDs
-      });
-      apiClient.type('subjects').get(subjectIDs)
-      .catch((error) => {
-        dispatch({
-          type: ERROR,
-          payload: error
-        });
-        return [];
-      })
-      .then(subjects => subjects.map((subject) => {
-        subject.update({ 'metadata.intervention': true });
-        return subject;
-      }))
-      .then((subjects) => {
-        dispatch(prependSubjects(subjects, workflowID));
-      });
-    };
-  } else {
-    return { type: ADD_NOTIFICATION, payload: notification };
+function reportError(message) {
+  return { type: ERROR, payload: message };
+}
+
+function prependSubjectQueue(data) {
+  const subjectIDs = data.subject_ids;
+  const workflowID = data.workflow_id;
+  return (dispatch) => {
+    dispatch({
+      type: FETCH_SUBJECTS,
+      payload: subjectIDs
+    });
+    apiClient.type('subjects').get(subjectIDs)
+    .catch((error) => {
+      dispatch(reportError(error));
+      return [];
+    })
+    .then(subjects => subjects.map((subject) => {
+      subject.update({ 'metadata.intervention': true });
+      return subject;
+    }))
+    .then((subjects) => {
+      dispatch(prependSubjects(subjects, workflowID));
+    });
+  };
+};
+
+export function processIntervention(message) {
+  // Example message data from sugar
+  // {
+  //  channel: "user:27"
+  //    data: {
+  //      event: "intervention",
+  //      event_type: "message",
+  //      message: "You are a star! All of your contributions really help.",
+  //      project_id: "908",
+  //      type: "experiment",
+  //      user_id: "27",
+  //    }
+  //  type: "experiment"
+  // }
+
+  // Only process known intervention experiment events from sugar.
+  var { type = 'unknown' } = message;
+  if (type !== "experiment") {
+    return reportError("Unexpected message on user experiment channel");
+  };
+
+  var { data = 'missing' } = message;
+  if (data === 'missing') {
+    return reportError("Missing data object in message");
+  };
+
+  var { event = 'unknown' } = data;
+  if (event !== 'intervention') {
+    return reportError("Unknown intervention event message")
+  };
+
+  // If required, this is where checks for correct user
+  // and other sugar channel payload checking can be added
+
+  const { event_type } = data;
+
+  switch(event_type) {
+    case 'message':
+      return { type: ADD_NOTIFICATION, payload: data };
+      break;
+    case 'subject_queue':
+      return prependSubjectQueue(data);
+      break;
+    default:
+      return reportError("Unknown intervention event type, expected 'message' or 'subject_queue'")
   }
 }
 
 export function dismiss() {
   return { type: DISMISS_NOTIFICATION };
 }
-
-export function injectSubjects() {
-  // Get new subjects and add them to the subject queue
-}
-
