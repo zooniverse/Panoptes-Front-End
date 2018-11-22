@@ -95,18 +95,19 @@ describe('Intervention actions', function () {
       expect(newState.error).to.equal(action.payload);
     });
   });
-  describe.only('action creators', function () {
+  describe('action creators', function () {
     describe('processIntervention', function () {
-      describe('unknown experiment behaviour', function () {
+      describe('unknown experiment data format', function () {
         const message = {
           data: {
-            payload: 'do something unkown'
+            payload: 'do something unknown'
           }
         };
-        it('should dispatch the unknown experiment handler', function () {
+        it('should dispatch the error action with useful message', function () {
           const action = processIntervention(message);
           const expectedAction = {
-            type: 'pfe/interventions/UNKNOWN_EXPERIMENT'
+            type: 'pfe/interventions/ERROR',
+            payload: 'Unexpected message on user experiment channel'
           };
           expect(action).to.deep.equal(expectedAction);
         });
@@ -119,10 +120,11 @@ describe('Intervention actions', function () {
             message: 'can i haz your money?'
           }
         };
-        it('should dispatch the missing data handler', function () {
+        it('should dispatch the error action with useful message', function () {
           const action = processIntervention(message);
           const expectedAction = {
-            type: 'pfe/interventions/MISSING_DATA'
+            type: 'pfe/interventions/ERROR',
+            payload: 'Missing data object in message'
           };
           expect(action).to.deep.equal(expectedAction);
         });
@@ -132,15 +134,16 @@ describe('Intervention actions', function () {
         const message = {
           type: 'experiment',
           data: {
-            event: "unknown",
-            event_type: "message",
+            event: 'unknown',
+            event_type: 'message',
             message: 'You are doing great'
           }
         };
-        it('should dispatch the unknown event handler', function () {
+        it('should dispatch the error action with useful message', function () {
           const action = processIntervention(message);
           const expectedAction = {
-            type: 'pfe/interventions/UNKNOWN_EVENT'
+            type: 'pfe/interventions/ERROR',
+            payload: 'Unknown intervention event message'
           };
           expect(action).to.deep.equal(expectedAction);
         });
@@ -151,14 +154,15 @@ describe('Intervention actions', function () {
           type: 'experiment',
           data: {
             event: 'intervention',
-            event_type: "unknown",
+            event_type: 'unknown',
             message: 'can i send you pics?'
           }
         };
-        it('should dispatch the unknown type handler', function () {
+        it('should dispatch the error action with useful message', function () {
           const action = processIntervention(message);
           const expectedAction = {
-            type: 'pfe/interventions/UNKNOWN_TYPE'
+            type: 'pfe/interventions/ERROR',
+            payload: "Unknown intervention event type, expected 'message' or 'subject_queue'"
           };
           expect(action).to.deep.equal(expectedAction);
         });
@@ -168,8 +172,8 @@ describe('Intervention actions', function () {
         const message = {
           type: 'experiment',
           data: {
-            event: "intervention",
-            event_type: "message",
+            event: 'intervention',
+            event_type: 'message',
             message: 'a generic message'
           }
         };
@@ -187,8 +191,8 @@ describe('Intervention actions', function () {
         const message = {
           type: 'experiment',
           data: {
-            event: "intervention",
-            event_type: "subject_queue",
+            event: 'intervention',
+            event_type: 'subject_queue',
             subject_ids: [1, 2],
             workflow_id: 1
           }

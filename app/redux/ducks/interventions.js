@@ -8,9 +8,6 @@ const ERROR = 'pfe/interventions/ERROR';
 const FETCH_SUBJECTS = 'pfe/interventions/FETCH_SUBJECTS';
 const SUBSCRIBE = 'pfe/interventions/SUBSCRIBE';
 const UNSUBSCRIBE = 'pfe/interventions/UNSUBSCRIBE';
-const UNKNOWN_EXPERIMENT = 'pfe/interventions/UNKNOWN_EXPERIMENT'
-const MISSING_DATA = 'pfe/interventions/MISSING_DATA'
-const UNKNOWN_EVENT = 'pfe/interventions/UNKNOWN_EVENT'
 const UNKNOWN_TYPE = 'pfe/interventions/UNKNOWN_TYPE'
 
 const initialState = {
@@ -50,6 +47,9 @@ export function unsubscribe(channel) {
   return { type: UNSUBSCRIBE, payload: channel };
 }
 
+function reportError(message) {
+  return { type: ERROR, payload: message };
+}
 
 function prependSubjectQueue(data) {
   const subjectIDs = data.subject_ids;
@@ -61,10 +61,7 @@ function prependSubjectQueue(data) {
     });
     apiClient.type('subjects').get(subjectIDs)
     .catch((error) => {
-      dispatch({
-        type: ERROR,
-        payload: error
-      });
+      dispatch(reportError(error));
       return [];
     })
     .then(subjects => subjects.map((subject) => {
@@ -95,17 +92,17 @@ export function processIntervention(message) {
   // Only process known intervention experiment events from sugar.
   var { type = 'unknown' } = message;
   if (type !== "experiment") {
-    return { type: UNKNOWN_EXPERIMENT };
+    return reportError("Unexpected message on user experiment channel");
   };
 
   var { data = 'missing' } = message;
   if (data === 'missing') {
-    return { type: MISSING_DATA };
+    return reportError("Missing data object in message");
   };
 
   var { event = 'unknown' } = data;
   if (event !== 'intervention') {
-    return { type: UNKNOWN_EVENT };
+    return reportError("Unknown intervention event message")
   };
 
   // If required, this is where checks for correct user
@@ -121,7 +118,7 @@ export function processIntervention(message) {
       return prependSubjectQueue(data);
       break;
     default:
-      return { type: UNKNOWN_TYPE };
+      return reportError("Unknown intervention event type, expected 'message' or 'subject_queue'")
   }
 }
 
