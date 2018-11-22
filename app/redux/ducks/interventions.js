@@ -8,7 +8,6 @@ const ERROR = 'pfe/interventions/ERROR';
 const FETCH_SUBJECTS = 'pfe/interventions/FETCH_SUBJECTS';
 const SUBSCRIBE = 'pfe/interventions/SUBSCRIBE';
 const UNSUBSCRIBE = 'pfe/interventions/UNSUBSCRIBE';
-const UNKNOWN_TYPE = 'pfe/interventions/UNKNOWN_TYPE'
 
 const initialState = {
   error: null,
