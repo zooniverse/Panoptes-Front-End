@@ -78,7 +78,7 @@ function prependSubjectQueue(data) {
 };
 
 export function processIntervention(message) {
-  // Example payload data from sugar
+  // Example message data from sugar
   // {
   //  channel: "user:27"
   //    data: {
