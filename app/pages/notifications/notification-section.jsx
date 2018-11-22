@@ -31,15 +31,25 @@ export default class NotificationSection extends Component {
         name: 'Zooniverse'
       });
     } else {
-      apiClient.type('projects').get(this.props.projectID)
+      apiClient.type('projects').get(this.props.projectID, { include: 'avatar' })
       .catch((error) => {
         this.setState({ error });
       })
       .then((project) => {
-        this.setState({
-          name: project.display_name,
-          avatar: project.avatar_src
-        });
+        if (project.links.avatar) {
+          apiClient.type('avatars').get(project.links.avatar.id)
+          .then((avatar) => {
+            this.setState({
+              name: project.display_name,
+              avatar: avatar.src
+            });
+          });
+        } else {
+          this.setState({
+            name: project.display_name
+          });
+        }
+        
       });
     }
   }
@@ -153,7 +163,7 @@ export default class NotificationSection extends Component {
   }
 
   avatarFor() {
-    const src = this.state.avatar ? `//${this.state.avatar}` : '/assets/simple-avatar.jpg';
+    const src = this.state.avatar || '/assets/simple-avatar.jpg';
     let avatar;
 
     if (this.state.unread > 0) return this.unreadCircle();
