@@ -42,6 +42,11 @@ export default class NotificationSection extends Component {
             this.setState({
               name: project.display_name,
               avatar: avatar.src
+            })
+            .catch(() => {
+              this.setState({
+                name: project.display_name
+              });
             });
           });
         } else {
