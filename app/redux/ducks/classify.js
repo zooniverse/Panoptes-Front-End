@@ -95,10 +95,12 @@ function finishClassification(workflow, classification, annotations) {
 const initialState = {
   classification: null,
   goldStandardMode: false,
+  intervention: null,
   upcomingSubjects: [],
   workflow: null
 };
 
+const ADD_INTERVENTION = 'pfe/classify/ADD_INTERVENTION';
 const APPEND_SUBJECTS = 'pfe/classify/APPEND_SUBJECTS';
 const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
 const PREPEND_SUBJECTS = 'pfe/classify/PREPEND_SUBJECTS';
@@ -114,6 +116,10 @@ const TOGGLE_GOLD_STANDARD = 'pfe/classify/TOGGLE_GOLD_STANDARD';
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case ADD_INTERVENTION: {
+      const intervention = action.payload;
+      return Object.assign({}, state, { intervention });
+    }
     case APPEND_SUBJECTS: {
       const { subjects, workflowID } = action.payload;
       const { workflow } = state;
@@ -138,7 +144,8 @@ export default function reducer(state = initialState, action = {}) {
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
         const classification = createNewClassification(project, workflow, subject, goldStandardMode);
-        return Object.assign({}, state, { classification });
+        const intervention = null;
+        return Object.assign({}, state, { classification, intervention });
       }
       return state;
     }
@@ -156,10 +163,12 @@ export default function reducer(state = initialState, action = {}) {
       const subject = upcomingSubjects[0];
       if (subject) {
         const classification = createNewClassification(project, workflow, subject, goldStandardMode);
-        return Object.assign({}, state, { classification, upcomingSubjects });
+        const intervention = null;
+        return Object.assign({}, state, { classification, intervention, upcomingSubjects });
       }
       return Object.assign({}, state, {
         classification: null,
+        intervention: null,
         upcomingSubjects: []
       });
     }
@@ -211,6 +220,13 @@ export default function reducer(state = initialState, action = {}) {
     default:
       return state;
   }
+}
+
+export function addIntervention(data) {
+  return {
+    type: ADD_INTERVENTION,
+    payload: data
+  };
 }
 
 export function appendSubjects(subjects, workflowID) {

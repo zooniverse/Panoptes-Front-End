@@ -1,28 +1,18 @@
 import apiClient from 'panoptes-client/lib/api-client';
 import { sugarClient } from 'panoptes-client/lib/sugar';
-import { prependSubjects } from './classify';
+import { addIntervention, prependSubjects } from './classify';
 
-const ADD_NOTIFICATION = 'pfe/interventions/ADD_NOTIFICATION';
-const DISMISS_NOTIFICATION = 'pfe/interventions/DISMISS_NOTIFICATION';
 const ERROR = 'pfe/interventions/ERROR';
 const FETCH_SUBJECTS = 'pfe/interventions/FETCH_SUBJECTS';
 const SUBSCRIBE = 'pfe/interventions/SUBSCRIBE';
 const UNSUBSCRIBE = 'pfe/interventions/UNSUBSCRIBE';
 
 const initialState = {
-  error: null,
-  notifications: []
+  error: null
 };
 
 export default function reducer(state = initialState, action = {}) {
-  const { notifications } = state;
   switch (action.type) {
-    case ADD_NOTIFICATION:
-      notifications.push(action.payload);
-      return Object.assign({}, state, { notifications });
-    case DISMISS_NOTIFICATION:
-      notifications.pop();
-      return Object.assign({}, state, { notifications });
     case ERROR: {
       const error = action.payload;
       return Object.assign({}, state, { error });
@@ -71,7 +61,7 @@ function prependSubjectQueue(data) {
       dispatch(prependSubjects(subjects, workflowID));
     });
   };
-};
+}
 
 export function processIntervention(message) {
   // Example message data from sugar
@@ -111,7 +101,7 @@ export function processIntervention(message) {
 
   switch(event_type) {
     case 'message':
-      return { type: ADD_NOTIFICATION, payload: data };
+      return addIntervention(data);
       break;
     case 'subject_queue':
       return prependSubjectQueue(data);
@@ -121,6 +111,3 @@ export function processIntervention(message) {
   }
 }
 
-export function dismiss() {
-  return { type: DISMISS_NOTIFICATION };
-}

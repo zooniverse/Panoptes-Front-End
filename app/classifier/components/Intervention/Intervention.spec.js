@@ -6,8 +6,8 @@ import Intervention from './Intervention';
 
 describe('Intervention', function () {
   let wrapper;
-  const notifications = [{ message: 'Hello!' }];
-  const { message } = notifications[0];
+  const intervention = { message: 'Hello!' };
+  const { message } = intervention;
   const user = {
     id: 'a',
     update: sinon.stub().callsFake(() => {
@@ -17,7 +17,7 @@ describe('Intervention', function () {
   before(function () {
     wrapper = mount(
       <Intervention
-        notifications={notifications}
+        intervention={intervention}
         user={user}
       />);
   });

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import { sugarClient } from 'panoptes-client/lib/sugar';
-import reducer, { processIntervention, subscribe, unsubscribe, dismiss } from './interventions';
+import reducer, { processIntervention, subscribe, unsubscribe } from './interventions';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 describe('Intervention actions', function () {
@@ -16,37 +16,9 @@ describe('Intervention actions', function () {
     subscribeSpy.restore();
     unsubscribeSpy.restore();
   });
-  describe('add notification', function () {
-    const state = {
-      error: null,
-      notifications: []
-    };
-    const action = {
-      type: 'pfe/interventions/ADD_NOTIFICATION',
-      payload: 'Hello'
-    };
-    it('should store a notification', function () {
-      const newState = reducer(state, action);
-      expect(newState.notifications).to.deep.equal(['Hello']);
-    });
-  });
-  describe('dismiss notification', function () {
-    const state = {
-      error: null,
-      notifications: ['Goodbye','Hello']
-    };
-    const action = {
-      type: 'pfe/interventions/DISMISS_NOTIFICATION'
-    };
-    it('should remove the most recent notification', function () {
-      const newState = reducer(state, action);
-      expect(newState.notifications).to.deep.equal(['Goodbye']);
-    });
-  });
   describe('subscribe', function () {
     const state = {
-      error: null,
-      notifications: []
+      error: null
     };
     const action = {
       type: 'pfe/interventions/SUBSCRIBE',
@@ -64,8 +36,7 @@ describe('Intervention actions', function () {
   });
   describe('unsubscribe', function () {
     const state = {
-      error: null,
-      notifications: []
+      error: null
     };
     const action = {
       type: 'pfe/interventions/UNSUBSCRIBE',
@@ -83,8 +54,7 @@ describe('Intervention actions', function () {
   });
   describe('on error', function () {
     const state = {
-      error: null,
-      notifications: ['Goodbye','Hello']
+      error: null
     };
     const action = {
       type: 'pfe/interventions/ERROR',
@@ -180,7 +150,7 @@ describe('Intervention actions', function () {
         it('should store the message data', function () {
           const action = processIntervention(message);
           const expectedAction = {
-            type: 'pfe/interventions/ADD_NOTIFICATION',
+            type: 'pfe/classify/ADD_INTERVENTION',
             payload: message.data
           };
           expect(action).to.deep.equal(expectedAction);
@@ -245,14 +215,6 @@ describe('Intervention actions', function () {
           payload: 'A channel'
         };
         expect(unsubscribe('A channel')).to.deep.equal(expectedAction);
-      });
-    });
-    describe('dismiss', function () {
-      it('should create a dismiss action', function () {
-        const expectedAction = {
-          type: 'pfe/interventions/DISMISS_NOTIFICATION'
-        };
-        expect(dismiss()).to.deep.equal(expectedAction);
       });
     });
   });

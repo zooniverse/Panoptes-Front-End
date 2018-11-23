@@ -213,7 +213,6 @@ class Classifier extends React.Component {
 
   onNextSubject() {
     this.setState({ showIntervention: false, showSummary: false });
-    this.props.actions.interventions.dismiss();
     this.props.onClickNext();
   }
 
@@ -236,7 +235,7 @@ class Classifier extends React.Component {
   }
 
   completeClassification(e) {
-    const { actions, classification, onComplete, interventions, project, subject, user, workflow } = this.props;
+    const { actions, classification, onComplete, intervention, project, subject, user, workflow } = this.props;
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
     const annotations = this.state.annotations.slice();
@@ -245,7 +244,7 @@ class Classifier extends React.Component {
 
     const showIntervention = user &&
       user.intervention_notifications &&
-      (interventions.notifications.length > 0);
+      intervention;
     const showSummary = !workflow.configuration.hide_classification_summaries ||
       this.subjectIsGravitySpyGoldStandard();
     const showLastStep = showIntervention || showSummary;
@@ -296,7 +295,7 @@ class Classifier extends React.Component {
   }
 
   render() {
-    const { actions, goldStandardMode, interventions, user } = this.props;
+    const { actions, goldStandardMode, intervention, user } = this.props;
     const { showIntervention, showSummary, workflowHistory } = this.state;
     const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const taskAreaVariant = goldStandardMode ? 'goldStandardMode' : 'default';
@@ -355,7 +354,7 @@ class Classifier extends React.Component {
             />
             {showIntervention &&
               <Intervention
-                notifications={interventions.notifications}
+                intervention={intervention}
                 user={user}
               />
             }
@@ -488,8 +487,8 @@ Classifier.propTypes = {
     rules: PropTypes.object
   }),
   goldStandardMode: PropTypes.bool,
-  interventions: PropTypes.shape({
-    notifications: PropTypes.array
+  intervention: PropTypes.shape({
+    message: PropTypes.string
   }),
   minicourse: PropTypes.shape({
     id: PropTypes.string,
@@ -546,9 +545,7 @@ Classifier.defaultProps = {
     active: false
   },
   goldStandardMode: false,
-  interventions: {
-    notifications: []
-  },
+  intervention: null,
   minicourse: null,
   onClickNext: () => null,
   onComplete: () => Promise.resolve(),
@@ -571,7 +568,7 @@ Classifier.defaultProps = {
 const mapStateToProps = state => ({
   feedback: state.feedback,
   goldStandardMode: state.classify.goldStandardMode,
-  interventions: state.interventions,
+  intervention: state.classify.intervention,
   theme: state.userInterface.theme
 });
 
