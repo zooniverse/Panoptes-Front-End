@@ -118,7 +118,11 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_INTERVENTION: {
       const intervention = action.payload;
-      return Object.assign({}, state, { intervention });
+      const { classification } = state;
+      if (classification && classification.links.project === intervention.project_id) {
+        return Object.assign({}, state, { intervention });
+      }
+      return state;
     }
     case APPEND_SUBJECTS: {
       const { subjects, workflowID } = action.payload;

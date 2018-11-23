@@ -11,18 +11,32 @@ sessionStorage.setItem('session_id', JSON.stringify({ id: 0, ttl: 0 }));
 
 describe('Classifier actions', function () {
   describe('add intervention', function () {
-    const state = {
-      intervention: null
-    };
     const action = {
       type: 'pfe/classify/ADD_INTERVENTION',
       payload: {
-        message: 'Hi there!'
+        message: 'Hi there!',
+        project_id: '1'
       }
     };
-    it('should store the intervention', function () {
-      const newState = reducer(state, action);
-      expect(newState.intervention).to.deep.equal(action.payload);
+    describe('with a valid project', function () {
+      const state = {
+        classification: { id: '1', links: { project: '1' } },
+        intervention: null
+      };
+      it('should store the intervention', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.deep.equal(action.payload);
+      });
+    });
+    describe('with an invalid project', function () {
+      const state = {
+        classification: { id: '1', links: { project: '2' } },
+        intervention: null
+      };
+      it('should ignore the intervention', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.be.null;
+      });
     });
   });
   describe('append subjects', function () {
