@@ -32,9 +32,9 @@ function FeedbackMark({ rule }) {
 
 FeedbackMark.propTypes = {
   rule: PropTypes.shape({
-    x: PropTypes.string,
-    width: PropTypes.string,
-    tolerance: PropTypes.string
+    x: PropTypes.string.isRequired,
+    width: PropTypes.string.isRequired,
+    tolerance: PropTypes.string.isRequired
   }).isRequired
 };
 
