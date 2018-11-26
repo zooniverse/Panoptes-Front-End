@@ -1,10 +1,11 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'], 'react/jsx-filename-extension': 0 */
 /* global describe, it, beforeEach */
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import MultipleTask from './';
+import GenericTask from '../generic';
 import { mockReduxStore, checkboxTypeAnnotation, checkboxTypeTask } from '../testHelpers';
 
 const annotation = Object.assign({}, checkboxTypeAnnotation, {
@@ -16,7 +17,7 @@ describe('MultipleChoiceTask', function () {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = mount(<MultipleTask
+      wrapper = shallow(<MultipleTask
         task={checkboxTypeTask}
         annotation={annotation}
         translation={checkboxTypeTask}
@@ -28,12 +29,12 @@ describe('MultipleChoiceTask', function () {
     });
 
     it('should have a question', function () {
-      const question = wrapper.find('.question');
-      expect(question.hostNodes()).to.have.lengthOf(1);
+      const question = wrapper.find(GenericTask).prop('question');
+      expect(question).to.equal(checkboxTypeTask.question);
     });
 
     it('should have answers', function () {
-      expect(wrapper.find('TaskInputField')).to.have.lengthOf(checkboxTypeTask.answers.length);
+      expect(wrapper.find(GenericTask).prop('answers')).to.have.lengthOf(checkboxTypeTask.answers.length);
     });
   });
 
@@ -46,7 +47,7 @@ describe('MultipleChoiceTask', function () {
       handleChangeSpy = sinon.spy(MultipleTask.prototype, 'handleChange');
       onChangeSpy = sinon.spy();
       setStateSpy = sinon.spy(MultipleTask.prototype, 'setState');
-      wrapper = mount(
+      wrapper = shallow(
         <MultipleTask
           task={checkboxTypeTask}
           translation={checkboxTypeTask}
@@ -67,14 +68,16 @@ describe('MultipleChoiceTask', function () {
       setStateSpy.restore();
     });
 
-    it('should call props.onChange when the onChange event fires', function () {
-      wrapper.find('input').first().simulate('change', { target: { checked: true } });
+    it('should call props.onChange when an answer changes', function () {
+      const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
+      firstAnswer.props.onChange({ target: { checked: true } });
       expect(onChangeSpy.calledOnce).to.be.true;
     });
 
     it('should call handleChange with the answer array index', function() {
       wrapper.setProps({ annotation });
-      wrapper.find('input').first().simulate('change', { target: { checked: true } });
+      const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
+      firstAnswer.props.onChange({ target: { checked: true } });
       expect(handleChangeSpy.calledWith(0)).to.be.true;
     });
   });
@@ -106,7 +109,7 @@ describe('MultipleChoiceSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<MultipleTask.Summary task={checkboxTypeTask} annotation={annotation} translation={checkboxTypeTask} />);
+    summary = shallow(<MultipleTask.Summary task={checkboxTypeTask} annotation={annotation} translation={checkboxTypeTask} />);
   });
 
   it('should render without crashing', function () {
@@ -127,7 +130,7 @@ describe('MultipleChoiceSummary', function () {
   });
 
   it('should return "No answer" when an empty annotation is provided', function () {
-    summary = mount(<MultipleTask.Summary task={checkboxTypeTask} annotation={{ value: [] }} />);
+    summary = shallow(<MultipleTask.Summary task={checkboxTypeTask} annotation={{ value: [] }} />);
     const answer = summary.find('.answer');
     expect(answer.text()).to.equal('No answer');
   });
