@@ -10,6 +10,35 @@ global.sessionStorage = new FakeLocalStorage();
 sessionStorage.setItem('session_id', JSON.stringify({ id: 0, ttl: 0 }));
 
 describe('Classifier actions', function () {
+  describe('add intervention', function () {
+    const action = {
+      type: 'pfe/classify/ADD_INTERVENTION',
+      payload: {
+        message: 'Hi there!',
+        project_id: '1'
+      }
+    };
+    describe('with a valid project', function () {
+      const state = {
+        classification: { id: '1', links: { project: '1' } },
+        intervention: null
+      };
+      it('should store the intervention', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.deep.equal(action.payload);
+      });
+    });
+    describe('with an invalid project', function () {
+      const state = {
+        classification: { id: '1', links: { project: '2' } },
+        intervention: null
+      };
+      it('should ignore the intervention', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.be.null;
+      });
+    });
+  });
   describe('append subjects', function () {
     const action = {
       type: 'pfe/classify/APPEND_SUBJECTS',
@@ -113,6 +142,10 @@ describe('Classifier actions', function () {
         const newState = reducer(state, action);
         expect(newState.classification).to.be.null;
       });
+      it('should clear any stored interventions', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.be.null;
+      });
     });
     describe('with multiple subjects in the queue', function () {
       const state = {
@@ -139,7 +172,11 @@ describe('Classifier actions', function () {
       it('should create a classification for the next subject in the queue', function () {
         const newState = reducer(state, action);
         expect(newState.classification.links.subjects).to.deep.equal(['2']);
-      })
+      });
+      it('should clear any stored interventions', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.be.null;
+      });
     });
   });
   describe('reset subjects', function () {
@@ -205,6 +242,10 @@ describe('Classifier actions', function () {
     it('should create a classification for the current workflow', function () {
       const newState = reducer(state, action);
       expect(newState.classification.links.workflow).to.equal('1');
+    });
+    it('should clear any stored interventions', function () {
+      const newState = reducer(state, action);
+      expect(newState.intervention).to.be.null;
     });
     it('should do nothing if the queue is empty', function () {
       state.upcomingSubjects = [];

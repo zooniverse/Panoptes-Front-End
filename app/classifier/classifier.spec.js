@@ -248,25 +248,21 @@ describe('Classifier', function () {
       expect(changes.interventions.opt_in).to.be.false;
     });
     describe('with an intervention message', function () {
-      const interventions = {
-        notifications: [{
-          data:{
-            message: 'Hello!'
-          }
-        }]
+      const intervention = {
+        message: 'Hello!'
       };
       const user = {
         intervention_notifications: true
       };
       it('should record that an intervention was received', function (done) {
-        wrapper.setProps({ workflow, interventions, user });
+        wrapper.setProps({ workflow, intervention, user });
         wrapper.instance().completeClassification(fakeEvent)
         .then(done, done);
         const changes = actions.classify.updateClassification.getCall(0).args[0];
         expect(changes.interventions.message).to.be.true;
       });
       it('should record whether the user is reading interventions', function () {
-        wrapper.setProps({ workflow, interventions, user });
+        wrapper.setProps({ workflow, intervention, user });
         wrapper.instance().completeClassification(fakeEvent);
         const changes = actions.classify.updateClassification.getCall(0).args[0];
         expect(changes.interventions.opt_in).to.equal(user.intervention_notifications);
