@@ -124,7 +124,9 @@ export class TaskInputField extends React.Component {
   render() {
     return (
       <ThemeProvider theme={{ mode: this.props.theme }}>
-        <StyledTaskInputField>
+        <StyledTaskInputField
+          className={this.props.className}
+        >
           <input
             autoFocus={shouldInputBeAutoFocused(this.props.annotation, this.props.index, this.props.name, this.props.type)}
             checked={shouldInputBeChecked(this.props.annotation, this.props.index, this.props.type)}
@@ -133,11 +135,7 @@ export class TaskInputField extends React.Component {
             type={this.props.type}
             value={this.props.index}
           />
-          <StyledTaskLabel
-            ref={(node) => { this.field = node; }}
-            className={this.props.className}
-            label={this.props.label}
-          >
+          <StyledTaskLabel>
             <TaskInputLabel label={this.props.label} labelIcon={this.props.labelIcon} labelStatus={this.props.labelStatus} />
           </StyledTaskLabel>
         </StyledTaskInputField>
