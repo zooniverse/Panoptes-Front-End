@@ -116,32 +116,26 @@ function shouldInputBeAutoFocused(annotation, index, name, type) {
   return index === annotation.value;
 }
 
-export class TaskInputField extends React.Component {
-  onChange(e) {
-    this.props.onChange(e);
-  }
-
-  render() {
-    return (
-      <ThemeProvider theme={{ mode: this.props.theme }}>
-        <StyledTaskInputField
-          className={this.props.className}
-        >
-          <input
-            autoFocus={shouldInputBeAutoFocused(this.props.annotation, this.props.index, this.props.name, this.props.type)}
-            checked={shouldInputBeChecked(this.props.annotation, this.props.index, this.props.type)}
-            name={this.props.name}
-            onChange={this.onChange.bind(this)}
-            type={this.props.type}
-            value={this.props.index}
-          />
-          <StyledTaskLabel>
-            <TaskInputLabel label={this.props.label} labelIcon={this.props.labelIcon} labelStatus={this.props.labelStatus} />
-          </StyledTaskLabel>
-        </StyledTaskInputField>
-      </ThemeProvider>
-    );
-  }
+export function TaskInputField(props) {
+  return (
+    <ThemeProvider theme={{ mode: props.theme }}>
+      <StyledTaskInputField
+        className={props.className}
+      >
+        <input
+          autoFocus={shouldInputBeAutoFocused(props.annotation, props.index, props.name, props.type)}
+          checked={shouldInputBeChecked(props.annotation, props.index, props.type)}
+          name={props.name}
+          onChange={props.onChange}
+          type={props.type}
+          value={props.index}
+        />
+        <StyledTaskLabel>
+          <TaskInputLabel label={props.label} labelIcon={props.labelIcon} labelStatus={props.labelStatus} />
+        </StyledTaskLabel>
+      </StyledTaskInputField>
+    </ThemeProvider>
+  );
 }
 
 TaskInputField.defaultProps = {
@@ -180,4 +174,4 @@ const mapStateToProps = state => ({
   theme: state.userInterface.theme
 });
 
-export default connect(mapStateToProps)(TaskInputField);
+export default connect(mapStateToProps)(React.memo(TaskInputField));

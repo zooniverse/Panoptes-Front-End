@@ -43,30 +43,18 @@ describe('TaskInputField', function() {
 
 
   describe('onChange method', function() {
-    let onChangeSpy;
     let onChangePropsSpy;
     let wrapper;
     before(function() {
-      onChangeSpy = sinon.spy(TaskInputField.prototype, 'onChange');
       onChangePropsSpy = sinon.spy();
       wrapper = mount(<TaskInputField annotation={radioTypeAnnotation} onChange={onChangePropsSpy} index={0} type="radio" />, mockReduxStore);
     });
 
     afterEach(function() {
-      onChangeSpy.resetHistory();
       onChangePropsSpy.resetHistory();
     });
 
-    after(function() {
-      onChangeSpy.restore();
-    });
-
     it('should call onChange when the on change event is fired', function() {
-      wrapper.find('input').simulate('change');
-      expect(onChangeSpy.calledOnce).to.be.true;
-    });
-
-    it('should call props.onChange in the onChange method', function() {
       wrapper.find('input').simulate('change');
       expect(onChangePropsSpy.calledOnce).to.be.true;
     });
