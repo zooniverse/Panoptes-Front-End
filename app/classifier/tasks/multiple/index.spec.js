@@ -71,14 +71,14 @@ describe('MultipleChoiceTask', function () {
     it('should call props.onChange when an answer changes', function () {
       const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
       firstAnswer.props.onChange({ target: { checked: true } });
-      expect(onChangeSpy.calledOnce).to.be.true;
+      expect(onChangeSpy).to.have.been.calledOnce;
     });
 
     it('should call handleChange with the answer array index', function() {
       wrapper.setProps({ annotation });
       const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
       firstAnswer.props.onChange({ target: { checked: true } });
-      expect(handleChangeSpy.calledWith(0)).to.be.true;
+      expect(handleChangeSpy).to.have.been.calledWith(0);
     });
   });
 

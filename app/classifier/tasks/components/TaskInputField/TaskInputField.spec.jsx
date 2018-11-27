@@ -12,8 +12,8 @@ import sinon from 'sinon';
 import { TaskInputField, StyledTaskInputField } from './TaskInputField';
 import { mockReduxStore, radioTypeAnnotation } from '../../testHelpers';
 
-describe('TaskInputField', function() {
-  describe('render', function() {
+describe('TaskInputField', function () {
+  describe('render', function () {
     let wrapper;
     before(function () {
       wrapper = mount(<TaskInputField annotation={radioTypeAnnotation} index={0} type="radio" />, mockReduxStore);
@@ -39,24 +39,24 @@ describe('TaskInputField', function() {
       wrapper.setProps({ className: 'active' });
       expect(wrapper.props().className).to.include('active');
     });
-  })
+  });
 
 
-  describe('onChange method', function() {
+  describe('onChange method', function () {
     let onChangePropsSpy;
     let wrapper;
-    before(function() {
+    before(function () {
       onChangePropsSpy = sinon.spy();
       wrapper = mount(<TaskInputField annotation={radioTypeAnnotation} onChange={onChangePropsSpy} index={0} type="radio" />, mockReduxStore);
     });
 
-    afterEach(function() {
+    afterEach(function () {
       onChangePropsSpy.resetHistory();
     });
 
-    it('should call onChange when the on change event is fired', function() {
+    it('should call onChange when the on change event is fired', function () {
       wrapper.find('input').simulate('change');
-      expect(onChangePropsSpy.calledOnce).to.be.true;
+      expect(onChangePropsSpy).to.have.been.calledOnce;
     });
   });
 });

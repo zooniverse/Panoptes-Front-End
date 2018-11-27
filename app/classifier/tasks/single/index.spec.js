@@ -70,13 +70,13 @@ describe('SingleChoiceTask', function () {
     it('should call handleChange with the answer array index', function () {
       const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
       firstAnswer.props.onChange({ target: { checked: true } });
-      expect(handleChangeSpy.calledWith(0)).to.be.true;
+      expect(handleChangeSpy).to.have.been.calledWith(0);
     });
 
     it('should call props.onChange when an answer changes and the target is checked', function () {
       const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
       firstAnswer.props.onChange({ target: { checked: true } });
-      expect(onChangeSpy.calledOnce).to.be.true;
+      expect(onChangeSpy).to.have.been.calledOnce;
     });
   });
 
