@@ -30,11 +30,12 @@ export default class MultipleChoiceTask extends React.Component {
       if (!answer._key) {
         answer._key = Math.random();
       }
-      const checked = (annotation.value && annotation.value.length > 0) ? annotation.value.includes(i) : false
+      const checked = (annotation.value && annotation.value.length > 0) ? annotation.value.includes(i) : false;
 
       answers.push(
         <TaskInputField
           annotation={annotation}
+          autoFocus={checked}
           checked={checked}
           className={checked ? 'active' : ''}
           index={i}

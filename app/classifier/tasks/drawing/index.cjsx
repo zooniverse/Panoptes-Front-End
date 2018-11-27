@@ -97,10 +97,11 @@ module.exports = createReactClass
       tool._key ?= Math.random()
       count = (true for mark in @props.annotation.value when mark.tool is i).length
       translation = @props.translation.tools[i]
-      checked = i is (@props.annotation._toolIndex ? 0)
+      checked = i is (@props.annotation._toolIndex ? 0) 
       <div>
         <TaskInputField
           annotation={@props.annotation}
+          autoFocus={checked}
           checked = {checked}
           className={if checked then 'active' else ''}
           index={i}

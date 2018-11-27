@@ -92,14 +92,6 @@ export const StyledTaskInputField = styled.label`
   }
 `;
 
-function shouldInputBeAutoFocused(annotation, index, name, type) {
-  if (type === 'radio' && name === 'drawing-tool') {
-    return index === 0;
-  }
-
-  return index === annotation.value;
-}
-
 export function TaskInputField(props) {
   return (
     <ThemeProvider theme={{ mode: props.theme }}>
@@ -107,7 +99,7 @@ export function TaskInputField(props) {
         className={props.className}
       >
         <input
-          autoFocus={shouldInputBeAutoFocused(props.annotation, props.index, props.name, props.type)}
+          autoFocus={props.autoFocus}
           defaultChecked={props.checked}
           name={props.name}
           onChange={props.onChange}
@@ -123,6 +115,7 @@ export function TaskInputField(props) {
 }
 
 TaskInputField.defaultProps = {
+  autoFocus: false,
   checked: false,
   className: '',
   label: '',
@@ -144,6 +137,7 @@ TaskInputField.propTypes = {
       PropTypes.object // null
     ])
   }).isRequired,
+  autoFocus: PropTypes.bool,
   checked: PropTypes.bool,
   className: PropTypes.string,
   index: PropTypes.number.isRequired,
