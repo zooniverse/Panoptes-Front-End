@@ -9,7 +9,7 @@ import { pxToRem, zooTheme } from '../../../../theme';
 import TaskInputLabel from './components/TaskInputLabel';
 import { doesTheLabelHaveAnImage } from './helpers';
 
-const StyledTaskLabel = styled.span`
+export const StyledTaskLabel = styled.span`
   align-items: baseline;
   background-color: ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.default,
@@ -28,16 +28,45 @@ const StyledTaskLabel = styled.span`
   display: flex;
   margin: ${pxToRem(10)} 0;
   padding: ${(props) => { return doesTheLabelHaveAnImage(props.label) ? '0' : '1ch 2ch'; }};
-  position: relative;
+  
+  &:hover {
+    background: ${theme('mode', {
+      dark: `linear-gradient(
+        ${zooTheme.colors.darkTheme.button.answer.gradient.top},
+        ${zooTheme.colors.darkTheme.button.answer.gradient.bottom}
+      )`,
+      light: `linear-gradient(
+        ${zooTheme.colors.lightTheme.button.answer.gradient.top},
+        ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
+      )`
+    })};
+    border-width: 2px;
+    border-style: solid;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.button.answer.gradient.top,
+      light: zooTheme.colors.lightTheme.button.answer.gradient.top
+    })};
+    border-bottom-color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.button.answer.gradient.bottom,
+      light: zooTheme.colors.lightTheme.button.answer.gradient.bottom
+    })};
+    color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.font,
+      light: 'black'
+    })};
+  }
 `;
 
 export const StyledTaskInputField = styled.label`
+  position: relative;
+
   input {
     opacity: 0.01;
     position: absolute;
   }
 
-  ${StyledTaskLabel}:hover,
   input:focus + ${StyledTaskLabel} {
     background: ${theme('mode', {
       dark: `linear-gradient(
