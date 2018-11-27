@@ -92,22 +92,6 @@ export const StyledTaskInputField = styled.label`
   }
 `;
 
-function shouldInputBeChecked(annotation, index, type) {
-  if (type === 'radio') {
-    const toolIndex = annotation._toolIndex || 0;
-    if (toolIndex) {
-      return index === toolIndex;
-    }
-    return index === annotation.value;
-  }
-
-  if (type === 'checkbox') {
-    return (annotation.value && annotation.value.length > 0) ? annotation.value.includes(index) : false;
-  }
-
-  return false;
-}
-
 function shouldInputBeAutoFocused(annotation, index, name, type) {
   if (type === 'radio' && name === 'drawing-tool') {
     return index === 0;
@@ -124,7 +108,7 @@ export function TaskInputField(props) {
       >
         <input
           autoFocus={shouldInputBeAutoFocused(props.annotation, props.index, props.name, props.type)}
-          checked={shouldInputBeChecked(props.annotation, props.index, props.type)}
+          defaultChecked={props.checked}
           name={props.name}
           onChange={props.onChange}
           type={props.type}
@@ -139,6 +123,7 @@ export function TaskInputField(props) {
 }
 
 TaskInputField.defaultProps = {
+  checked: false,
   className: '',
   label: '',
   labelIcon: null,
@@ -159,6 +144,7 @@ TaskInputField.propTypes = {
       PropTypes.object // null
     ])
   }).isRequired,
+  checked: PropTypes.bool,
   className: PropTypes.string,
   index: PropTypes.number.isRequired,
   label: PropTypes.string,
