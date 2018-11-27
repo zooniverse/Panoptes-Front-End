@@ -9,6 +9,21 @@ import { pxToRem, zooTheme } from '../../../../theme';
 import TaskInputLabel from './components/TaskInputLabel';
 import { doesTheLabelHaveAnImage } from './helpers';
 
+const hoverStyles = {
+  gradientTop: theme('mode', {
+    dark: zooTheme.colors.darkTheme.button.answer.gradient.top,
+    light: zooTheme.colors.lightTheme.button.answer.gradient.top
+  }),
+  gradientBottom: theme('mode', {
+    dark: zooTheme.colors.darkTheme.button.answer.gradient.bottom,
+    light: zooTheme.colors.lightTheme.button.answer.gradient.bottom
+  }),
+  color: theme('mode', {
+    dark: zooTheme.colors.darkTheme.font,
+    light: 'black'
+  })
+};
+
 export const StyledTaskLabel = styled.span`
   align-items: baseline;
   background-color: ${theme('mode', {
@@ -30,32 +45,14 @@ export const StyledTaskLabel = styled.span`
   padding: ${(props) => { return doesTheLabelHaveAnImage(props.label) ? '0' : '1ch 2ch'; }};
   
   &:hover {
-    background: ${theme('mode', {
-      dark: `linear-gradient(
-        ${zooTheme.colors.darkTheme.button.answer.gradient.top},
-        ${zooTheme.colors.darkTheme.button.answer.gradient.bottom}
-      )`,
-      light: `linear-gradient(
-        ${zooTheme.colors.lightTheme.button.answer.gradient.top},
-        ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
-      )`
-    })};
+    background: linear-gradient(${hoverStyles.gradientTop}, ${hoverStyles.gradientBottom});
     border-width: 2px;
     border-style: solid;
     border-left-color: transparent;
     border-right-color: transparent;
-    border-top-color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.button.answer.gradient.top,
-      light: zooTheme.colors.lightTheme.button.answer.gradient.top
-    })};
-    border-bottom-color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.button.answer.gradient.bottom,
-      light: zooTheme.colors.lightTheme.button.answer.gradient.bottom
-    })};
-    color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.font,
-      light: 'black'
-    })};
+    border-top-color: ${hoverStyles.gradientTop};
+    border-bottom-color: ${hoverStyles.gradientBottom};
+    color: ${hoverStyles.color};
   }
 `;
 
@@ -68,55 +65,25 @@ export const StyledTaskInputField = styled.label`
   }
 
   input:focus + ${StyledTaskLabel} {
-    background: ${theme('mode', {
-      dark: `linear-gradient(
-        ${zooTheme.colors.darkTheme.button.answer.gradient.top},
-        ${zooTheme.colors.darkTheme.button.answer.gradient.bottom}
-      )`,
-      light: `linear-gradient(
-        ${zooTheme.colors.lightTheme.button.answer.gradient.top},
-        ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
-      )`
-    })};
+    background: linear-gradient(${hoverStyles.gradientTop}, ${hoverStyles.gradientBottom});
     border-width: 2px;
     border-style: solid;
     border-left-color: transparent;
     border-right-color: transparent;
-    border-top-color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.button.answer.gradient.top,
-      light: zooTheme.colors.lightTheme.button.answer.gradient.top
-    })};
-    border-bottom-color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.button.answer.gradient.bottom,
-      light: zooTheme.colors.lightTheme.button.answer.gradient.bottom
-    })};
-    color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.font,
-      light: 'black'
-    })};
+    border-top-color: ${hoverStyles.gradientTop};
+    border-bottom-color: ${hoverStyles.gradientBottom};
+    color: ${hoverStyles.color};
   }
 
   input:active + ${StyledTaskLabel} {
-    background: ${theme('mode', {
-      dark: `linear-gradient(
-        ${zooTheme.colors.darkTheme.button.answer.gradient.top},
-        ${zooTheme.colors.darkTheme.button.answer.gradient.bottom}
-      )`,
-      light: `linear-gradient(
-        ${zooTheme.colors.lightTheme.button.answer.gradient.top},
-        ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
-      )`
-    })};
+    background: linear-gradient(${hoverStyles.gradientTop}, ${hoverStyles.gradientBottom});
     border-width: 2px;
     border-style: solid;
     border-color: ${theme('mode', {
       dark: zooTheme.colors.teal.dark,
       light: zooTheme.colors.teal.mid
     })};
-    color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.font,
-      light: 'black'
-    })};
+    color: ${hoverStyles.color};
   }
 
   input:checked + ${StyledTaskLabel} {
