@@ -235,7 +235,7 @@ describe('Classifier', function () {
       wrapper.setProps({ workflow });
       wrapper.instance().completeClassification(fakeEvent).then(function () {
         const { annotations } = wrapper.state();
-        expect(actions.classify.completeClassification.calledWith(annotations)).to.be.true;
+        expect(actions.classify.completeClassification).to.have.been.calledWith(annotations);
       })
       .then(done, done);
     });
@@ -375,7 +375,7 @@ describe('Classifier', function () {
 
       it('should update feedback for the previous annotation', function () {
         const prevAnnotation = classification.annotations[1];
-        expect(feedbackUpdateSpy.calledWith(prevAnnotation)).to.equal(true);
+        expect(feedbackUpdateSpy).to.have.been.calledWith(prevAnnotation);
       });
     });
     
@@ -411,7 +411,7 @@ describe('Classifier', function () {
         }
         wrapper.instance().completeClassification(fakeEvent)
         .then(function () {
-          expect(feedbackUpdateSpy.calledWith(newAnnotation)).to.equal(true);
+          expect(feedbackUpdateSpy).to.have.been.calledWith(newAnnotation);
         })
         .then(done, done);
       

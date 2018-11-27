@@ -132,7 +132,7 @@ describe('WorkflowSelection', function () {
   it('should fetch a random active workflow by default', function () {
     controller.getSelectedWorkflow({ project });
     const selectedWorkflowID = workflowStub.getCall(0).args[0];
-    expect(workflowStub.calledOnce).to.be.true;
+    expect(workflowStub).to.have.been.calledOnce;
     expect(project.links.active_workflows).to.include(selectedWorkflowID.toString());
   });
 
@@ -140,16 +140,16 @@ describe('WorkflowSelection', function () {
     location.query.workflow = '6';
     project.experimental_tools = ['allow workflow query'];
     controller.getSelectedWorkflow({ project });
-    expect(workflowStub.calledOnce).to.be.true;
-    expect(workflowStub.calledWith('6', true)).to.be.true;
+    expect(workflowStub).to.have.been.calledOnce;
+    expect(workflowStub).to.have.been.calledWith('6', true);
   });
 
   it('should sanitise the workflow query param if "allow workflow query" is set', function () {
     location.query.workflow = '6random78';
     project.experimental_tools = ['allow workflow query'];
     controller.getSelectedWorkflow({ project });
-    expect(workflowStub.calledOnce).to.be.true;
-    expect(workflowStub.calledWith('6', true)).to.be.true;
+    expect(workflowStub).to.have.been.calledOnce;
+    expect(workflowStub).to.have.been.calledWith('6', true);
   });
 
   describe('with a logged-in user', function () {
@@ -161,28 +161,28 @@ describe('WorkflowSelection', function () {
     it('should load the specified workflow for the project owner', function () {
       const user = owner;
       controller.getSelectedWorkflow({ project, preferences, user });
-      expect(workflowStub.calledOnce).to.be.true;
-      expect(workflowStub.calledWith('6', false)).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
+      expect(workflowStub).to.have.been.calledWith('6', false);
     });
 
     it('should load the specified workflow for a collaborator', function () {
       const user = apiClient.type('users').create({ id: '2' });
       controller.getSelectedWorkflow({ project, preferences, user });
-      expect(workflowStub.calledOnce).to.be.true;
-      expect(workflowStub.calledWith('6', false)).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
+      expect(workflowStub).to.have.been.calledWith('6', false);
     });
 
     it('should load the specified workflow for a tester', function () {
       const user = apiClient.type('users').create({ id: '3' });
       controller.getSelectedWorkflow({ project, preferences, user });
-      expect(workflowStub.calledOnce).to.be.true;
-      expect(workflowStub.calledWith('6', false)).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
+      expect(workflowStub).to.have.been.calledWith('6', false);
     });
 
     it('should load an active workflow for a general user', function () {
       const user = apiClient.type('users').create({ id: '4' });
       controller.getSelectedWorkflow({ project, preferences, user });
-      expect(workflowStub.calledOnce).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
       const selectedWorkflowID = workflowStub.getCall(0).args[0];
       const activeFilter = workflowStub.getCall(0).args[1];
       expect(project.links.active_workflows).to.include(selectedWorkflowID);
@@ -201,15 +201,15 @@ describe('WorkflowSelection', function () {
     it('should try to load the stored workflow', function () {
       preferences.update({ 'preferences.selected_workflow': '4' });
       controller.getSelectedWorkflow({ project, preferences });
-      expect(workflowStub.calledOnce).to.be.true;
-      expect(workflowStub.calledWith('4', true)).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
+      expect(workflowStub).to.have.been.calledWith('4', true);
     });
 
     it('should parse the stored user workflow as an int', function () {
       preferences.update({ 'preferences.selected_workflow': '4random' });
       controller.getSelectedWorkflow({ project, preferences });
-      expect(workflowStub.calledOnce).to.be.true;
-      expect(workflowStub.calledWith('4', true)).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
+      expect(workflowStub).to.have.been.calledWith('4', true);
     });
 
     it('should clear an invalid workflow string from user preferences', function () {
@@ -227,15 +227,15 @@ describe('WorkflowSelection', function () {
     it('should try to load a stored project workflow', function () {
       preferences.update({ 'settings.workflow_id': '2' });
       controller.getSelectedWorkflow({ project, preferences });
-      expect(workflowStub.calledOnce).to.be.true;
-      expect(workflowStub.calledWith('2', true)).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
+      expect(workflowStub).to.have.been.calledWith('2', true);
     });
 
     it('parse the stored project workflow as an int', function () {
       preferences.update({ 'settings.workflow_id': '2random' });
       controller.getSelectedWorkflow({ project, preferences });
-      expect(workflowStub.calledOnce).to.be.true;
-      expect(workflowStub.calledWith('2', true)).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
+      expect(workflowStub).to.have.been.calledWith('2', true);
     });
 
     it('should clear an invalid workflow string from project settings', function () {
@@ -261,8 +261,8 @@ describe('WorkflowSelection', function () {
     it('should load the project default workflow', function () {
       const user = apiClient.type('users').create({ id: '4' });
       controller.getSelectedWorkflow({ project, preferences, user });
-      expect(workflowStub.calledOnce).to.be.true;
-      expect(workflowStub.calledWith('1', true)).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
+      expect(workflowStub).to.have.been.calledWith('1', true);
     });
   });
 
@@ -284,8 +284,8 @@ describe('WorkflowSelection', function () {
         }
       );
       wrapper.setProps({ project: newProject });
-      expect(workflowStub.calledOnce).to.be.true;
-      expect(workflowStub.calledWith('10', true)).to.be.true;
+      expect(workflowStub).to.have.been.calledOnce;
+      expect(workflowStub).to.have.been.calledWith('10', true);
     });
   });
 
@@ -304,7 +304,7 @@ describe('WorkflowSelection', function () {
 
       wrapper.setProps({ project: projectWithoutActiveWorkflows });
 
-      sinon.assert.notCalled(workflowStub)
+      expect(workflowStub).to.have.not.been.called;
     });
   });
 
@@ -330,7 +330,7 @@ describe('WorkflowSelection', function () {
     it('should load new translation strings', function () {
       const workflow = mockPanoptesResource('workflows', { id: '1', tasks: {} });
       wrapper.setProps({ locale: 'it', workflow });
-      expect(actions.translations.load.calledWith('workflow', '1', 'it')).to.be.true;
+      expect(actions.translations.load).to.have.been.calledWith('workflow', '1', 'it');
     });
   });
 });
