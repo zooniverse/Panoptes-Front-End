@@ -30,11 +30,14 @@ export default class SingleChoiceTask extends React.Component {
       if (!answer._key) {
         answer._key = Math.random();
       }
+      const checked = i === annotation.value;
 
       answers.push(
         <TaskInputField
           annotation={annotation}
-          className={(i === annotation.value) ? 'active' : ''}
+          autoFocus={checked}
+          checked={checked}
+          className={checked ? 'active' : ''}
           index={i}
           key={answer._key}
           label={translation.answers[i].label}

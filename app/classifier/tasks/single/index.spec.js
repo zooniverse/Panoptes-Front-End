@@ -1,10 +1,11 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'], 'react/jsx-filename-extension': 0 */
 /* global describe, it, beforeEach */
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import SingleTask from './';
+import GenericTask from '../generic';
 import { mockReduxStore, radioTypeAnnotation, radioTypeTask } from '../testHelpers';
 
 const annotation = Object.assign({}, radioTypeAnnotation, {
@@ -16,7 +17,7 @@ describe('SingleChoiceTask', function () {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = mount(<SingleTask task={radioTypeTask} annotation={annotation} translation={radioTypeTask} />, mockReduxStore);
+      wrapper = shallow(<SingleTask task={radioTypeTask} annotation={annotation} translation={radioTypeTask} />, mockReduxStore);
     });
 
     it('should render without crashing', function () {
@@ -24,12 +25,12 @@ describe('SingleChoiceTask', function () {
     });
 
     it('should have a question', function () {
-      const question = wrapper.find('.question');
-      expect(question.hostNodes()).to.have.lengthOf(1);
+      const question = wrapper.find(GenericTask).prop('question');
+      expect(question).to.equal(radioTypeTask.question);
     });
 
     it('should have answers', function () {
-      expect(wrapper.find('TaskInputField')).to.have.lengthOf(radioTypeTask.answers.length);
+      expect(wrapper.find(GenericTask).prop('answers')).to.have.lengthOf(radioTypeTask.answers.length);
     });
   });
 
@@ -45,7 +46,7 @@ describe('SingleChoiceTask', function () {
     });
 
     beforeEach(function() {
-      wrapper = mount(
+      wrapper = shallow(
         <SingleTask
           task={radioTypeTask}
           translation={radioTypeTask}
@@ -67,14 +68,15 @@ describe('SingleChoiceTask', function () {
     });
 
     it('should call handleChange with the answer array index', function () {
-      wrapper.find('input').first().simulate('change');
-      expect(handleChangeSpy.calledWith(0)).to.be.true;
+      const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
+      firstAnswer.props.onChange({ target: { checked: true } });
+      expect(handleChangeSpy).to.have.been.calledWith(0);
     });
 
-    it('should call props.onChange when the onChange event fires and the target is checked', function () {
-      const firstInput = wrapper.find('input').first();
-      firstInput.simulate('change', { target: { checked: true } });
-      expect(onChangeSpy.calledOnce).to.be.true;
+    it('should call props.onChange when an answer changes and the target is checked', function () {
+      const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
+      firstAnswer.props.onChange({ target: { checked: true } });
+      expect(onChangeSpy).to.have.been.calledOnce;
     });
   });
 
@@ -109,7 +111,7 @@ describe('SingleChoiceSummary', function () {
   let summary;
 
   beforeEach(function () {
-    summary = mount(<SingleTask.Summary task={radioTypeTask} annotation={annotation} translation={radioTypeTask} />);
+    summary = shallow(<SingleTask.Summary task={radioTypeTask} annotation={annotation} translation={radioTypeTask} />);
   });
 
   it('should render without crashing', function () {
@@ -130,13 +132,13 @@ describe('SingleChoiceSummary', function () {
   });
 
   it('should have the correct answer label when the value if falsy (i.e. 0)', function () {
-    summary = mount(<SingleTask.Summary task={radioTypeTask} annotation={{ value: 0 }} translation={radioTypeTask} />);
+    summary = shallow(<SingleTask.Summary task={radioTypeTask} annotation={{ value: 0 }} translation={radioTypeTask} />);
     const answers = summary.find('.answer');
     expect(answers.text()).to.not.equal('No answer');
   });
 
   it('should return "No answer" when annotation is null', function () {
-    summary = mount(<SingleTask.Summary task={radioTypeTask} annotation={{ value: null }} translation={radioTypeTask} />);
+    summary = shallow(<SingleTask.Summary task={radioTypeTask} annotation={{ value: null }} translation={radioTypeTask} />);
     const answers = summary.find('.answer');
     expect(answers.text()).to.equal('No answer');
   });

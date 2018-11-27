@@ -1,2 +1,2 @@
 
-export { default, StyledTaskInputField } from './TaskInputField';
+export { default, StyledTaskInputField, StyledTaskLabel } from './TaskInputField';
