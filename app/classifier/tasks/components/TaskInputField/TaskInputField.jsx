@@ -63,7 +63,7 @@ export const StyledTaskLabel = styled.span`
   cursor: pointer;
   display: flex;
   margin: ${pxToRem(10)} 0;
-  padding: ${(props) => { return doesTheLabelHaveAnImage(props.label) ? '0' : '1ch 2ch'; }};
+  padding: ${props => (doesTheLabelHaveAnImage(props.label) ? '0' : '1ch 2ch')};
   
   &:hover {
     background: linear-gradient(${HOVER.gradientTop}, ${HOVER.gradientBottom});
@@ -157,23 +157,13 @@ TaskInputField.defaultProps = {
 };
 
 TaskInputField.propTypes = {
-  annotation: PropTypes.shape({
-    _key: PropTypes.number,
-    task: PropTypes.string,
-    value: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.number), // mulitple choice
-      PropTypes.number, // single choice
-      PropTypes.arrayOf(PropTypes.object), // drawing task
-      PropTypes.object // null
-    ])
-  }).isRequired,
   autoFocus: PropTypes.bool,
   checked: PropTypes.bool,
   className: PropTypes.string,
   index: PropTypes.number.isRequired,
   label: PropTypes.string,
   labelIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),
-  labelStatus: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),  
+  labelStatus: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),
   name: PropTypes.string,
   onChange: PropTypes.func,
   theme: PropTypes.string,
