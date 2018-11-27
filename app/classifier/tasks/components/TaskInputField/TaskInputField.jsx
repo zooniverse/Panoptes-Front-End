@@ -96,8 +96,7 @@ export const StyledTaskInputField = styled.label`
     })};
   }
 
-  input:active + ${StyledTaskLabel},
-  input:checked + ${StyledTaskLabel} {
+  input:active + ${StyledTaskLabel} {
     background: ${theme('mode', {
       dark: `linear-gradient(
         ${zooTheme.colors.darkTheme.button.answer.gradient.top},
@@ -117,6 +116,29 @@ export const StyledTaskInputField = styled.label`
     color: ${theme('mode', {
       dark: zooTheme.colors.darkTheme.font,
       light: 'black'
+    })};
+  }
+
+  input:checked + ${StyledTaskLabel} {
+    background: ${theme('mode', {
+      dark: zooTheme.colors.teal.mid,
+      light: zooTheme.colors.teal.mid
+    })};
+    border: ${theme('mode', {
+      dark: `2px solid ${zooTheme.colors.teal.mid}`,
+      light: '2px solid transparent'
+    })};
+    color: ${theme('mode', {
+      dark: zooTheme.colors.darkTheme.font,
+      light: 'white'
+    })}
+  }
+
+  input:focus:checked + ${StyledTaskLabel},
+  input:checked + ${StyledTaskLabel}:hover {
+    border: ${theme('mode', {
+      dark: `2px solid ${zooTheme.colors.teal.dark}`,
+      light: `2px solid ${zooTheme.colors.teal.dark}`
     })};
   }
 `;
