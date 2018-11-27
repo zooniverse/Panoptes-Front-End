@@ -9,7 +9,22 @@ import { pxToRem, zooTheme } from '../../../../theme';
 import TaskInputLabel from './components/TaskInputLabel';
 import { doesTheLabelHaveAnImage } from './helpers';
 
-const hoverStyles = {
+const DEFAULT = {
+  backgroundColor: theme('mode', {
+    dark: zooTheme.colors.darkTheme.background.default,
+    light: zooTheme.colors.lightTheme.background.default
+  }),
+  border: theme('mode', {
+    dark: `2px solid ${zooTheme.colors.darkTheme.font}`,
+    light: '2px solid transparent'
+  }),
+  color: theme('mode', {
+    dark: zooTheme.colors.darkTheme.font,
+    light: zooTheme.colors.lightTheme.font
+  })
+};
+
+const HOVER = {
   gradientTop: theme('mode', {
     dark: zooTheme.colors.darkTheme.button.answer.gradient.top,
     light: zooTheme.colors.lightTheme.button.answer.gradient.top
@@ -24,35 +39,41 @@ const hoverStyles = {
   })
 };
 
+const CHECKED = {
+  background: theme('mode', {
+    dark: zooTheme.colors.teal.mid,
+    light: zooTheme.colors.teal.mid
+  }),
+  border: theme('mode', {
+    dark: `2px solid ${zooTheme.colors.teal.mid}`,
+    light: '2px solid transparent'
+  }),
+  color: theme('mode', {
+    dark: zooTheme.colors.darkTheme.font,
+    light: 'white'
+  })
+};
+
 export const StyledTaskLabel = styled.span`
   align-items: baseline;
-  background-color: ${theme('mode', {
-    dark: zooTheme.colors.darkTheme.background.default,
-    light: zooTheme.colors.lightTheme.background.default
-  })};
-  border: ${theme('mode', {
-    dark: `2px solid ${zooTheme.colors.darkTheme.font}`,
-    light: '2px solid transparent'
-  })};
+  background-color: ${DEFAULT.backgroundColor};
+  border: ${DEFAULT.border};
   box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.5);
-  color: ${theme('mode', {
-    dark: zooTheme.colors.darkTheme.font,
-    light: zooTheme.colors.lightTheme.font
-  })};
+  color: ${DEFAULT.color};
   cursor: pointer;
   display: flex;
   margin: ${pxToRem(10)} 0;
   padding: ${(props) => { return doesTheLabelHaveAnImage(props.label) ? '0' : '1ch 2ch'; }};
   
   &:hover {
-    background: linear-gradient(${hoverStyles.gradientTop}, ${hoverStyles.gradientBottom});
+    background: linear-gradient(${HOVER.gradientTop}, ${HOVER.gradientBottom});
     border-width: 2px;
     border-style: solid;
     border-left-color: transparent;
     border-right-color: transparent;
-    border-top-color: ${hoverStyles.gradientTop};
-    border-bottom-color: ${hoverStyles.gradientBottom};
-    color: ${hoverStyles.color};
+    border-top-color: ${HOVER.gradientTop};
+    border-bottom-color: ${HOVER.gradientBottom};
+    color: ${HOVER.color};
   }
 `;
 
@@ -65,40 +86,31 @@ export const StyledTaskInputField = styled.label`
   }
 
   input:focus + ${StyledTaskLabel} {
-    background: linear-gradient(${hoverStyles.gradientTop}, ${hoverStyles.gradientBottom});
+    background: linear-gradient(${HOVER.gradientTop}, ${HOVER.gradientBottom});
     border-width: 2px;
     border-style: solid;
     border-left-color: transparent;
     border-right-color: transparent;
-    border-top-color: ${hoverStyles.gradientTop};
-    border-bottom-color: ${hoverStyles.gradientBottom};
-    color: ${hoverStyles.color};
+    border-top-color: ${HOVER.gradientTop};
+    border-bottom-color: ${HOVER.gradientBottom};
+    color: ${HOVER.color};
   }
 
   input:active + ${StyledTaskLabel} {
-    background: linear-gradient(${hoverStyles.gradientTop}, ${hoverStyles.gradientBottom});
+    background: linear-gradient(${HOVER.gradientTop}, ${HOVER.gradientBottom});
     border-width: 2px;
     border-style: solid;
     border-color: ${theme('mode', {
       dark: zooTheme.colors.teal.dark,
       light: zooTheme.colors.teal.mid
     })};
-    color: ${hoverStyles.color};
+    color: ${HOVER.color};
   }
 
   input:checked + ${StyledTaskLabel} {
-    background: ${theme('mode', {
-      dark: zooTheme.colors.teal.mid,
-      light: zooTheme.colors.teal.mid
-    })};
-    border: ${theme('mode', {
-      dark: `2px solid ${zooTheme.colors.teal.mid}`,
-      light: '2px solid transparent'
-    })};
-    color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.font,
-      light: 'white'
-    })}
+    background: ${CHECKED.background};
+    border: ${CHECKED.border};
+    color: ${CHECKED.color}
   }
 
   input:focus:checked + ${StyledTaskLabel},
