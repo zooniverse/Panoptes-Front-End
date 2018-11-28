@@ -255,7 +255,7 @@ module.exports = createReactClass
             <button type="button" className="major-button" onClick={@showProjectCreator}>Create a new project</button>{' '}
             <a href="https://help.zooniverse.org/getting-started" className="standard-button">How-to</a>{' '}
             <a href="https://help.zooniverse.org/getting-started/glossary" className="standard-button">Glossary</a>{' '}
-            <a href="https://help.zooniverse.org/getting-started/policies" className="standard-button">Policies</a>{' '}
+            <a href="https://help.zooniverse.org/getting-started/lab-policies" className="standard-button">Policies</a>{' '}
             <a href="https://help.zooniverse.org/best-practices" className="standard-button">Best Practices</a>{' '}
             <a href="/talk/18" className="standard-button">Project Builder Talk</a>{' '}
           </p>

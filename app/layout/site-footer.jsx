@@ -101,7 +101,7 @@ class AppFooter extends React.Component {
                 </a>, 'footer.discover.howToGuide')}
               </li>
               <li>
-                {this.loggableLink(<a href="https://help.zooniverse.org/getting-started/policies">
+                {this.loggableLink(<a href="https://help.zooniverse.org/getting-started/lab-policies">
                   <Translate content="footer.discover.projectBuilderPolicies" />
                 </a>, 'footer.discover.projectBuilderPolicies')}
               </li>
