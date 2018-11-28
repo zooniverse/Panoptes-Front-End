@@ -28,6 +28,7 @@ export default class HomePage extends React.Component {
     this.resizeTimeout = NaN;
     this.state = {
       count: 0,
+      featuredProject: null,
       promotedProjects: [],
       screenWidth: 0,
       volunteerCount: 1500000
@@ -41,12 +42,21 @@ export default class HomePage extends React.Component {
     addEventListener('resize', this.handleResize);
     this.handleResize();
     this.getClassificationCounts();
+    this.getFeaturedProject();
     this.getVolunteerCount();
     this.getPromotedProjects();
   }
 
   componentWillUnmount() {
     removeEventListener('resize', this.handleResize);
+  }
+
+  getFeaturedProject() {
+    const query = { featured: true, launch_approved: true, cards: true };
+    return apiClient.type('projects').get(query)
+      .then(([featuredProject]) => {
+        this.setState({ featuredProject });
+      });
   }
 
   getVolunteerCount() {
@@ -128,7 +138,7 @@ export default class HomePage extends React.Component {
         </div>
 
         <div className="flex-container">
-          <FeaturedProject />
+          <FeaturedProject project={this.state.featuredProject} />
         </div>
 
         <div className="flex-container">
