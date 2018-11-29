@@ -34,7 +34,6 @@ export default class MultipleChoiceTask extends React.Component {
 
       answers.push(
         <TaskInputField
-          annotation={annotation}
           autoFocus={checked}
           checked={checked}
           className={checked ? 'active' : ''}
