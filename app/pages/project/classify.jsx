@@ -195,11 +195,11 @@ export class ProjectClassifyPage extends React.Component {
         if (preferences.preferences.selected_workflow !== preferences.settings.workflow_id) {
           preferences.update({ 'preferences.selected_workflow': preferences.settings.workflow_id });
           preferences.save();
+          actions.translations.load('workflow', preferences.settings.workflow_id, translations.locale);
           apiClient
             .type('workflows')
             .get(preferences.settings.workflow_id, {})
             .then((newWorkflow) => {
-              actions.translations.load('workflow', newWorkflow.id, translations.locale);
               actions.classifier.setWorkflow(newWorkflow);
             });
         }

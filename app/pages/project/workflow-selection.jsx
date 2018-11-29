@@ -12,12 +12,17 @@ class WorkflowSelection extends React.Component {
     super();
     this.state = {
       error: null,
-      loadingSelectedWorkflow: true
+      loadingSelectedWorkflow: false
     };
   }
 
   componentDidMount() {
-    this.getSelectedWorkflow(this.props);
+    const { project, workflow } = this.props;
+    const linkedActiveWorkflows = project.links.active_workflows || [];
+    const workflowExistsForProject = workflow && linkedActiveWorkflows.indexOf(workflow.id) > -1;
+    if (!workflowExistsForProject) {
+      this.getSelectedWorkflow(this.props);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -87,6 +92,7 @@ class WorkflowSelection extends React.Component {
     }
     let awaitWorkflow;
     if (isValidWorkflow) {
+      actions.translations.load('workflow', sanitisedWorkflowID, locale);
       awaitWorkflow = apiClient
         .type('workflows')
         .get(sanitisedWorkflowID, {}) // the empty query here forces the client to bypass its internal cache
@@ -106,7 +112,6 @@ class WorkflowSelection extends React.Component {
     return awaitWorkflow
     .then((workflow) => {
       if (workflow) {
-        actions.translations.load('workflow', workflow.id, locale);
         actions.classifier.setWorkflow(workflow);
         this.setState({ loadingSelectedWorkflow: false });
       } else {

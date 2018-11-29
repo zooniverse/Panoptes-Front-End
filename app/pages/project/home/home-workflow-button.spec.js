@@ -39,6 +39,10 @@ const translations = {
 
 const user = mockPanoptesResource('user', {});
 
+const fakeEvent = {
+  preventDefault: sinon.stub()
+};
+
 describe('ProjectHomeWorkflowButton', function () {
   let wrapper;
   let handleWorkflowSelectionSpy;
@@ -83,33 +87,33 @@ describe('ProjectHomeWorkflowButton', function () {
   });
 
   it('calls handleWorkflowSelection onClick', function() {
-    wrapper.find('Link').simulate('click');
+    wrapper.find('Link').simulate('click', fakeEvent);
     assert.equal(handleWorkflowSelectionSpy.calledOnce, true);
   });
 
   it('should update user preferences on workflow selection', function (done) {
-    wrapper.instance().handleWorkflowSelection()
+    wrapper.instance().handleWorkflowSelection(fakeEvent)
     .then(function () {
       assert.equal(preferences.update.calledOnce, true);
     })
     .then(done, done);
   });
   it('should clear the current workflow', function (done) {
-    wrapper.instance().handleWorkflowSelection()
+    wrapper.instance().handleWorkflowSelection(fakeEvent)
     .then(function () {
       assert.equal(actions.classifier.setWorkflow.firstCall.calledWith(null), true);
     })
     .then(done, done);
   });
   it('should select a new workflow', function (done) {
-    wrapper.instance().handleWorkflowSelection()
+    wrapper.instance().handleWorkflowSelection(fakeEvent)
     .then(function () {
       assert.equal(actions.classifier.setWorkflow.secondCall.calledWith(testWorkflowWithoutLevel), true);
     })
     .then(done, done);
   });
   it('should load workflow translations', function (done) {
-    wrapper.instance().handleWorkflowSelection()
+    wrapper.instance().handleWorkflowSelection(fakeEvent)
     .then(function () {
       assert.equal(actions.translations.load.calledWith('workflow', testWorkflowWithoutLevel.id, translations.locale), true);
     })
