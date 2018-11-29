@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -17,22 +17,20 @@ class ProjectHomeWorkflowButton extends React.Component {
   }
 
   handleWorkflowSelection(e) {
-    const { actions, disabled, preferences, user, translations, workflow } = this.props;
-    if (disabled) {
-      e.preventDefault();
-    } else {
-      actions.classifier.setWorkflow(null);
-      return apiClient
-        .type('workflows')
-        .get(workflow.id, {})
-        .then((newWorkflow) => {
-          if (user) {
-            preferences.update({ 'preferences.selected_workflow': newWorkflow.id }).save();
-          }
-          actions.translations.load('workflow', newWorkflow.id, translations.locale);
-          actions.classifier.setWorkflow(newWorkflow);
-        });
+    const { actions, preferences, user, translations, workflow } = this.props;
+    e.preventDefault();
+    actions.classifier.setWorkflow(null);
+    if (user) {
+      preferences.update({ 'preferences.selected_workflow': workflow.id }).save();
     }
+    actions.translations.load('workflow', workflow.id, translations.locale);
+    return apiClient
+      .type('workflows')
+      .get(workflow.id, {})
+      .then((newWorkflow) => {
+        actions.classifier.setWorkflow(newWorkflow);
+        browserHistory.push(`/projects/${this.props.project.slug}/classify`)
+      });
   }
 
   render() {
