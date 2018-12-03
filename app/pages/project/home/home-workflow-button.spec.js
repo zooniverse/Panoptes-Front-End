@@ -91,19 +91,13 @@ describe('ProjectHomeWorkflowButton', function () {
     assert.equal(handleWorkflowSelectionSpy.calledOnce, true);
   });
 
-  it('should update user preferences on workflow selection', function (done) {
+  it('should update user preferences before loadiing a workflow', function () {
     wrapper.instance().handleWorkflowSelection(fakeEvent)
-    .then(function () {
-      assert.equal(preferences.update.calledOnce, true);
-    })
-    .then(done, done);
+    assert.equal(preferences.update.calledOnce, true);
   });
-  it('should clear the current workflow', function (done) {
+  it('should clear the current workflow before loading a workflow', function () {
     wrapper.instance().handleWorkflowSelection(fakeEvent)
-    .then(function () {
-      assert.equal(actions.classifier.setWorkflow.firstCall.calledWith(null), true);
-    })
-    .then(done, done);
+    assert.equal(actions.classifier.setWorkflow.firstCall.calledWith(null), true);
   });
   it('should select a new workflow', function (done) {
     wrapper.instance().handleWorkflowSelection(fakeEvent)
@@ -112,12 +106,9 @@ describe('ProjectHomeWorkflowButton', function () {
     })
     .then(done, done);
   });
-  it('should load workflow translations', function (done) {
+  it('should load workflow translations before loading the workflow', function () {
     wrapper.instance().handleWorkflowSelection(fakeEvent)
-    .then(function () {
-      assert.equal(actions.translations.load.calledWith('workflow', testWorkflowWithoutLevel.id, translations.locale), true);
-    })
-    .then(done, done);
+    assert.equal(actions.translations.load.calledWith('workflow', testWorkflowWithoutLevel.id, translations.locale), true);
   });
   it('uses the project slug in the Link href', function() {
     assert.equal(wrapper.find('Link').props().to.includes(testProject.slug), true);
