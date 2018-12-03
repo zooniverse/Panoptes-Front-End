@@ -75,7 +75,9 @@ describe('ProjectHomeWorkflowButton', function () {
     apiClient.type.restore();
   });
 
-  it('renders without crashing', function () {});
+  it('renders with default props', function () {
+    expect(shallow(<ProjectHomeWorkflowButton />)).to.be.ok;
+  });
 
   it('renders a Link component', function () {
     expect(wrapper.find('Link')).to.have.lengthOf(1);
