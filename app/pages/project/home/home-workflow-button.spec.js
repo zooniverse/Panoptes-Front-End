@@ -85,30 +85,41 @@ describe('ProjectHomeWorkflowButton', function () {
   it('renders the workflow display name as the Link text', function() {
     expect(wrapper.render().text()).to.equal(testWorkflowWithoutLevel.display_name);
   });
-
-  it('calls handleWorkflowSelection onClick', function() {
-    wrapper.find('Link').simulate('click', fakeEvent);
-    expect(handleWorkflowSelectionSpy).to.have.been.calledOnce;
-  });
-
-  it('should update user preferences before loadiing a workflow', function () {
-    wrapper.instance().handleWorkflowSelection(fakeEvent)
-    expect(preferences.update).to.have.been.calledOnce;
-  });
-  it('should clear the current workflow before loading a workflow', function () {
-    wrapper.instance().handleWorkflowSelection(fakeEvent)
-    expect(actions.classifier.setWorkflow.firstCall).to.have.been.calledWith(null);
-  });
-  it('should select a new workflow', function (done) {
-    wrapper.instance().handleWorkflowSelection(fakeEvent)
-    .then(function () {
-      expect(actions.classifier.setWorkflow.secondCall).to.have.been.calledWith(testWorkflowWithoutLevel);
-    })
-    .then(done, done);
-  });
-  it('should load workflow translations before loading the workflow', function () {
-    wrapper.instance().handleWorkflowSelection(fakeEvent)
-    expect(actions.translations.load).to.have.been.calledWith('workflow', testWorkflowWithoutLevel.id, translations.locale);
+  
+  describe('on click', function () {
+    it('calls handleWorkflowSelection onClick', function() {
+      wrapper.find('Link').simulate('click', fakeEvent);
+      expect(handleWorkflowSelectionSpy).to.have.been.calledOnce;
+    });
+    it('should select a new workflow', function (done) {
+      wrapper.instance().handleWorkflowSelection(fakeEvent)
+      .then(function () {
+        expect(actions.classifier.setWorkflow.secondCall).to.have.been.calledWith(testWorkflowWithoutLevel);
+      })
+      .then(done, done);
+    });
+    describe('workflow selection', function () {
+      beforeEach(function () {
+        wrapper.instance().handleWorkflowSelection(fakeEvent);
+      });
+      afterEach(function () {
+        actions.classifier.setWorkflow.resetHistory();
+        actions.translations.load.resetHistory();
+        fakeEvent.preventDefault.resetHistory();
+      })
+      it('should update user preferences before loadiing a workflow', function () {
+        expect(preferences.update).to.have.been.calledOnce;
+      });
+      it('should clear the current workflow before loading a workflow', function () {
+        expect(actions.classifier.setWorkflow.firstCall).to.have.been.calledWith(null);
+      });
+      it('should prevent the default click action on links', function () {
+        expect(fakeEvent.preventDefault).to.have.been.calledOnce;
+      });
+      it('should load workflow translations before loading the workflow', function () {
+        expect(actions.translations.load).to.have.been.calledWith('workflow', testWorkflowWithoutLevel.id, translations.locale);
+      });
+    });
   });
   it('uses the project slug in the Link href', function() {
     expect(wrapper.find('Link').props().to).to.have.string(testProject.slug);
