@@ -1,5 +1,5 @@
 import React from 'react';
-import assert from 'assert';
+import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -75,52 +75,56 @@ describe('ProjectHomeWorkflowButton', function () {
     apiClient.type.restore();
   });
 
-  it('renders without crashing', function () {});
+  it('renders with default props', function () {
+    expect(shallow(<ProjectHomeWorkflowButton />)).to.be.ok;
+  });
 
   it('renders a Link component', function () {
-    assert.equal(wrapper.find('Link').length, 1);
-    assert.equal(wrapper.find('span').length, 0);
+    expect(wrapper.find('Link')).to.have.lengthOf(1);
+    expect(wrapper.find('span')).to.have.lengthOf(0);
   });
 
   it('renders the workflow display name as the Link text', function() {
-    assert.equal(wrapper.render().text(), testWorkflowWithoutLevel.display_name);
+    expect(wrapper.render().text()).to.equal(testWorkflowWithoutLevel.display_name);
   });
-
-  it('calls handleWorkflowSelection onClick', function() {
-    wrapper.find('Link').simulate('click', fakeEvent);
-    assert.equal(handleWorkflowSelectionSpy.calledOnce, true);
-  });
-
-  it('should update user preferences on workflow selection', function (done) {
-    wrapper.instance().handleWorkflowSelection(fakeEvent)
-    .then(function () {
-      assert.equal(preferences.update.calledOnce, true);
-    })
-    .then(done, done);
-  });
-  it('should clear the current workflow', function (done) {
-    wrapper.instance().handleWorkflowSelection(fakeEvent)
-    .then(function () {
-      assert.equal(actions.classifier.setWorkflow.firstCall.calledWith(null), true);
-    })
-    .then(done, done);
-  });
-  it('should select a new workflow', function (done) {
-    wrapper.instance().handleWorkflowSelection(fakeEvent)
-    .then(function () {
-      assert.equal(actions.classifier.setWorkflow.secondCall.calledWith(testWorkflowWithoutLevel), true);
-    })
-    .then(done, done);
-  });
-  it('should load workflow translations', function (done) {
-    wrapper.instance().handleWorkflowSelection(fakeEvent)
-    .then(function () {
-      assert.equal(actions.translations.load.calledWith('workflow', testWorkflowWithoutLevel.id, translations.locale), true);
-    })
-    .then(done, done);
+  
+  describe('on click', function () {
+    it('calls handleWorkflowSelection onClick', function() {
+      wrapper.find('Link').simulate('click', fakeEvent);
+      expect(handleWorkflowSelectionSpy).to.have.been.calledOnce;
+    });
+    it('should select a new workflow', function (done) {
+      wrapper.instance().handleWorkflowSelection(fakeEvent)
+      .then(function () {
+        expect(actions.classifier.setWorkflow.secondCall).to.have.been.calledWith(testWorkflowWithoutLevel);
+      })
+      .then(done, done);
+    });
+    describe('workflow selection', function () {
+      beforeEach(function () {
+        wrapper.instance().handleWorkflowSelection(fakeEvent);
+      });
+      afterEach(function () {
+        actions.classifier.setWorkflow.resetHistory();
+        actions.translations.load.resetHistory();
+        fakeEvent.preventDefault.resetHistory();
+      })
+      it('should update user preferences before loadiing a workflow', function () {
+        expect(preferences.update).to.have.been.calledOnce;
+      });
+      it('should clear the current workflow before loading a workflow', function () {
+        expect(actions.classifier.setWorkflow.firstCall).to.have.been.calledWith(null);
+      });
+      it('should prevent the default click action on links', function () {
+        expect(fakeEvent.preventDefault).to.have.been.calledOnce;
+      });
+      it('should load workflow translations before loading the workflow', function () {
+        expect(actions.translations.load).to.have.been.calledWith('workflow', testWorkflowWithoutLevel.id, translations.locale);
+      });
+    });
   });
   it('uses the project slug in the Link href', function() {
-    assert.equal(wrapper.find('Link').props().to.includes(testProject.slug), true);
+    expect(wrapper.find('Link').props().to).to.have.string(testProject.slug);
   });
 
   describe('when props.disabled is true', function() {
@@ -137,12 +141,12 @@ describe('ProjectHomeWorkflowButton', function () {
     });
 
     it('renders a span instead of a Link component', function() {
-      assert.equal(wrapper.find('span').length, 1);
-      assert.equal(wrapper.find('Link').length, 0);
+      expect(wrapper.find('span')).to.have.lengthOf(1);
+      expect(wrapper.find('Link')).to.have.lengthOf(0);
     });
 
     it('applies the call-to-action-button--disabled class', function() {
-      assert.equal(wrapper.hasClass('project-home-page__button--disabled'), true);
+      expect(wrapper.hasClass('project-home-page__button--disabled')).to.be.true;
     });
   });
 
@@ -160,16 +164,16 @@ describe('ProjectHomeWorkflowButton', function () {
     });
 
     it('renders null when the workflow does not have a level set in its configuration', function() {
-      assert.equal(wrapper.isEmptyRender(), true);
+      expect(wrapper.isEmptyRender()).to.be.true;
     });
 
     it('renders a Link when the workflow has a level set in its configuration', function() {
       wrapper.setProps({ workflow: testWorkflowWithLevel });
-      assert.equal(wrapper.find('Link').length, 1);
+      expect(wrapper.find('Link')).to.have.lengthOf(1);
     });
 
     it('renders a Translate component for the Link text', function() {
-      assert.equal(wrapper.find('Translate').length, 1);
+      expect(wrapper.find('Translate')).to.have.lengthOf(1);
     });
   });
 });
