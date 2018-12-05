@@ -39,6 +39,7 @@ export class ProjectClassifyPage extends React.Component {
   constructor(props) {
     super(props);
     this.project = null;
+    this.translations = null;
     this.workflow = null;
 
     this.state = {
@@ -53,9 +54,9 @@ export class ProjectClassifyPage extends React.Component {
   componentDidMount() {
     Split.classifierVisited();
     if (this.props.workflow) {
-      this.loadAppropriateClassification();
       const { actions, translations } = this.props;
       actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+      this.loadAppropriateClassification();
     }
 
     this.validateUserGroup(this.props, this.context);
@@ -86,13 +87,9 @@ export class ProjectClassifyPage extends React.Component {
   componentDidUpdate(prevProps) {
     const { actions, classification, upcomingSubjects, workflow, translations } = this.props;
 
-    if (translations !== prevProps.translations) {
-      actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
-    }
-
     if (workflow !== prevProps.workflow) {
-      this.loadAppropriateClassification();
       actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+      this.loadAppropriateClassification();
     }
 
     if (upcomingSubjects.length !== prevProps.upcomingSubjects.length) {
@@ -309,7 +306,8 @@ ProjectClassifyPage.propTypes = {
       emptySubjectQueue: PropTypes.func,
       fetchSubjects: PropTypes.func,
       nextSubject: PropTypes.func,
-      refillSubjectQueue: PropTypes.func
+      refillSubjectQueue: PropTypes.func,
+      setWorkflowTranslationId: PropTypes.func
     }),
     translations: PropTypes.shape({
       load: PropTypes.func
