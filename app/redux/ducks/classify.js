@@ -4,6 +4,7 @@ import GridTool from '../../classifier/drawing-tools/grid';
 import { getSessionID } from '../../lib/session';
 import seenThisSession from '../../lib/seen-this-session';
 import tasks from '../../classifier/tasks';
+import * as translations from './translations';
 
 function awaitSubjects(subjectQuery) {
   return apiClient.get('/subjects/queued', subjectQuery)
@@ -30,6 +31,11 @@ function awaitSubjectSet(workflow) {
   } else {
     return Promise.resolve();
   }
+}
+
+function awaitWorkflow(workflowId) {
+  // pass an empty query object to bypass the API client's internal cache.
+  return apiClient.type('workflows').get(workflowId, {});
 }
 
 function createNewClassification(project, workflow, subject, goldStandardMode) {
@@ -111,6 +117,7 @@ const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
 const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
 const SAVE_ANNOTATIONS = 'pfe/classify/SAVE_ANNOTATIONS';
+const FETCH_WORKFLOW = 'pfe/classify/FETCH_WORKFLOW';
 const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
 const TOGGLE_GOLD_STANDARD = 'pfe/classify/TOGGLE_GOLD_STANDARD';
 
@@ -343,6 +350,34 @@ export function saveAnnotations(annotations) {
   return {
     type: SAVE_ANNOTATIONS,
     payload: { annotations }
+  };
+}
+
+export function loadWorkflow(workflowId, locale, preferences) {
+  return (dispatch) => {
+    if (preferences) {
+      preferences.update({ 'preferences.selected_workflow': workflowId });
+    }
+    dispatch(setWorkflow(null));
+    dispatch(emptySubjectQueue());
+    dispatch(translations.load('workflow', workflowId, locale));
+    dispatch({
+      type: FETCH_WORKFLOW,
+      payload: {
+        workflowId,
+        locale
+      }
+    });
+    return awaitWorkflow(workflowId)
+    .then(function (workflow) {
+      if (preferences) {
+        preferences.save();
+      }
+      return dispatch(setWorkflow(workflow));
+    })
+    .catch(function () {
+      return dispatch(setWorkflow(null));
+    });
   };
 }
 

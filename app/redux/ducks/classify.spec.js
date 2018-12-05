@@ -1,5 +1,7 @@
-import reducer from './classify';
+import reducer, { loadWorkflow } from './classify';
 import { expect } from 'chai';
+import sinon from 'sinon';
+import apiClient from 'panoptes-client/lib/api-client';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 import FakeLocalStorage from '../../../test/fake-local-storage';
 import seenThisSession from '../../lib/seen-this-session';
@@ -452,6 +454,98 @@ describe('Classifier actions', function () {
       };
       const newState = reducer(state, action);
       expect(newState.classification.gold_standard).to.be.undefined;
+    });
+  });
+
+  describe('load workflow', function () {
+    let awaitWorkflow;
+    let state = {
+      classification: null,
+      goldStandardMode: false,
+      intervention: null,
+      upcomingSubjects: [],
+      workflow: { id: 'b' }
+    };
+    const fakeDispatch = sinon.stub().callsFake(function (action) {
+      if(typeof action === 'function') {
+        action = action(fakeDispatch);
+      }
+      state = reducer(state, action);
+      return action;
+    });
+    const fakePreferences = {
+      update: sinon.stub().callsFake(changes => changes),
+      save: sinon.stub()
+    };
+    const fakeWorkflow = {
+      id: 'a'
+    };
+
+    before(function () {
+      sinon.stub(apiClient, 'type').callsFake(function (type) {
+        if (type === 'workflows') {
+          return {
+            get: sinon.stub().callsFake(() => Promise.resolve(fakeWorkflow))
+          };
+        }
+        if (type === 'translations') {
+          const fakeTranslation = {
+            strings: {}
+          };
+          return {
+            get: sinon.stub().callsFake(() => Promise.resolve([fakeTranslation]))
+          };
+        }
+      });
+    });
+
+    after(function () {
+      apiClient.type.restore();
+    });
+
+    beforeEach(function () {
+      awaitWorkflow = loadWorkflow('a', 'en', fakePreferences)(fakeDispatch);
+    });
+
+    afterEach(function () {
+      fakeDispatch.resetHistory();
+      fakePreferences.update.resetHistory();
+      fakePreferences.save.resetHistory();
+    });
+
+    it('should clear the existing workflow', function () {
+      expect(state.workflow).to.be.null;
+    });
+
+    it('should update user preferences', function () {
+      expect(fakePreferences.update).to.have.been.calledWith({ 'preferences.selected_workflow': 'a' });
+    });
+
+    it('should load the workflow translation', function () {
+      const loadTranslations = fakeDispatch.returnValues[2];
+      const expectedAction = {
+        type: 'pfe/translations/LOAD',
+        translated_type: 'workflow',
+        translated_id: 'a',
+        language: 'en'
+      };
+      expect(loadTranslations).to.deep.equal(expectedAction);
+    });
+
+    it('should save user preferences', function (done) {
+      awaitWorkflow
+      .then(function () {
+        expect(fakePreferences.save).to.have.been.calledOnce;
+      })
+      .then(done, done);
+    });
+
+    it('should load a workflow', function (done) {
+      awaitWorkflow
+      .then(function () {
+        expect(state.workflow).to.deep.equal(fakeWorkflow);
+      })
+      .then(done, done);
     });
   });
 });
