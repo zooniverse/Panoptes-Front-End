@@ -396,6 +396,22 @@ describe('Classifier actions', function () {
       expect(newState.workflow).to.deep.equal(action.payload.workflow);
     });
   });
+  describe('set workflow translation id', function () {
+    const action = {
+      type: 'pfe/classify/SET_WORKFLOW_TRANSLATION_ID',
+      payload: '3'
+    };
+    const state = {
+      classification: { id: '1' },
+      workflow: { id: '2' },
+      workflowTranslationId: '3',
+      upcomingSubjects: [1, 2]
+    };
+    it('should store the specified workflow translation id', function () {
+      const newState = reducer(state, action);
+      expect(newState.workflowTranslationId).to.deep.equal(action.payload.workflowTranslationId);
+    });
+  });  
   describe('save annotations', function () {
     const action = {
       type: 'pfe/classify/SAVE_ANNOTATIONS',

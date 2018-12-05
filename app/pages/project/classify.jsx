@@ -55,7 +55,9 @@ export class ProjectClassifyPage extends React.Component {
     Split.classifierVisited();
     if (this.props.workflow) {
       const { actions, translations } = this.props;
-      actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+      if (translations && translations.strings && translations.strings.workflow && translations.strings.workflow.id) {
+        actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+      }
       this.loadAppropriateClassification();
     }
 
@@ -88,7 +90,9 @@ export class ProjectClassifyPage extends React.Component {
     const { actions, classification, upcomingSubjects, workflow, translations } = this.props;
 
     if (workflow !== prevProps.workflow) {
-      actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+      if (translations && translations.strings && translations.strings.workflow && translations.strings.workflow.id) {
+        actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+      }
       this.loadAppropriateClassification();
     }
 
