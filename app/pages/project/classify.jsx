@@ -54,6 +54,8 @@ export class ProjectClassifyPage extends React.Component {
     Split.classifierVisited();
     if (this.props.workflow) {
       this.loadAppropriateClassification();
+      const { actions, translations } = this.props;
+      actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
     }
 
     this.validateUserGroup(this.props, this.context);
@@ -82,10 +84,15 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { classification, upcomingSubjects, workflow } = this.props;
+    const { actions, classification, upcomingSubjects, workflow, translations } = this.props;
+
+    if (translations !== prevProps.translations) {
+      actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+    }
 
     if (workflow !== prevProps.workflow) {
       this.loadAppropriateClassification();
+      actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
     }
 
     if (upcomingSubjects.length !== prevProps.upcomingSubjects.length) {
@@ -322,7 +329,12 @@ ProjectClassifyPage.propTypes = {
   project: PropTypes.object,
   storage: PropTypes.object,
   translations: PropTypes.shape({
-    locale: PropTypes.string
+    locale: PropTypes.string,
+    strings: PropTypes.shape({
+      workflow: PropTypes.shape({ 
+        id: PropTypes.string
+      })
+    })
   }),
   upcomingSubjects: PropTypes.arrayOf(PropTypes.object),
   user: PropTypes.object,
