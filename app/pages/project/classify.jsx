@@ -195,15 +195,7 @@ export class ProjectClassifyPage extends React.Component {
         this.setState({ promptWorkflowAssignmentDialog: false })
       ).then(() => {
         if (preferences.preferences.selected_workflow !== preferences.settings.workflow_id) {
-          preferences.update({ 'preferences.selected_workflow': preferences.settings.workflow_id });
-          preferences.save();
-          actions.translations.load('workflow', preferences.settings.workflow_id, translations.locale);
-          apiClient
-            .type('workflows')
-            .get(preferences.settings.workflow_id, {})
-            .then((newWorkflow) => {
-              actions.classifier.setWorkflow(newWorkflow);
-            });
+          actions.classifier.loadWorkflow(preferences.settings.workflow_id, translations.locale, preferences);
         }
       });
     }

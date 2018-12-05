@@ -3,7 +3,6 @@ import React from 'react';
 import { browserHistory, Link } from 'react-router';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
-import apiClient from 'panoptes-client/lib/api-client';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as classifierActions from '../../../redux/ducks/classify';
@@ -16,21 +15,17 @@ class ProjectHomeWorkflowButton extends React.Component {
     this.handleWorkflowSelection = this.handleWorkflowSelection.bind(this);
   }
 
-  handleWorkflowSelection(e) {
-    const { actions, preferences, user, translations, workflow } = this.props;
-    e.preventDefault();
-    actions.classifier.setWorkflow(null);
-    if (user) {
-      preferences.update({ 'preferences.selected_workflow': workflow.id }).save();
+  componentDidUpdate() {
+    const { classifierWorkflow, project, workflow } = this.props;
+    if (classifierWorkflow && classifierWorkflow.id === workflow.id) {
+      browserHistory.push(`/projects/${project.slug}/classify`);
     }
-    actions.translations.load('workflow', workflow.id, translations.locale);
-    return apiClient
-      .type('workflows')
-      .get(workflow.id, {})
-      .then((newWorkflow) => {
-        actions.classifier.setWorkflow(newWorkflow);
-        browserHistory.push(`/projects/${this.props.project.slug}/classify`)
-      });
+  }
+
+  handleWorkflowSelection(e) {
+    const { actions, preferences, translations, workflow } = this.props;
+    e.preventDefault();
+    actions.classifier.loadWorkflow(workflow.id, translations.locale, preferences);
   }
 
   render() {
@@ -115,6 +110,7 @@ ProjectHomeWorkflowButton.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  classifierWorkflow: state.classify.workflow,
   translations: state.translations
 });
 
