@@ -50,7 +50,7 @@ const initialState = {
 
 // Reducer
 export default function reducer(state = initialState, action = {}) {
-  let type, languageStrings, strings, translations;
+  let type, id, languageStrings, strings, translations;
   switch (action.type) {
     case SET_LANGUAGES:
       const languages = Object.assign({}, state.languages, { [action.payload.type]: action.payload.languages });
@@ -60,8 +60,8 @@ export default function reducer(state = initialState, action = {}) {
       const rtl = RTL_LANGUAGES.indexOf(locale) > -1;
       return Object.assign({}, state, { locale, rtl });
     case SET_TRANSLATION:
-      ({ type, languageStrings } = action.payload);
-      let translation = {};
+      ({ type, id, languageStrings } = action.payload);
+      let translation = { id: id };
       Object.keys(languageStrings).map((translationKey) => {
         const newTranslation = explodeTranslationKey(translationKey, languageStrings[translationKey]);
         translation = merge(translation, newTranslation);
@@ -121,6 +121,7 @@ export function load(resource_type, translated_id, language) {
             type: SET_TRANSLATION,
             payload: {
               type: resource_type,
+              id: translation.id,
               languageStrings: translation.strings
             }
           });
@@ -129,6 +130,7 @@ export function load(resource_type, translated_id, language) {
             type: SET_TRANSLATION,
             payload: {
               type: resource_type,
+              id: '',
               languageStrings: {}
             }
           });
@@ -189,4 +191,3 @@ export function setLocale(locale) {
   counterpart.setLocale(locale);
   return { type: SET_LOCALE, payload: locale };
 }
-
