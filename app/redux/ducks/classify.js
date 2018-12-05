@@ -37,6 +37,7 @@ function createNewClassification(project, workflow, subject, goldStandardMode, w
   const classification = apiClient.type('classifications').create({
     annotations: [],
     metadata: {
+      workflow_translation_id: workflowTranslationId,
       workflow_version: workflow.version,
       started_at: (new Date()).toISOString(),
       user_agent: navigator.userAgent,
@@ -48,8 +49,7 @@ function createNewClassification(project, workflow, subject, goldStandardMode, w
     links: {
       project: project.id,
       workflow: workflow.id,
-      subjects: [subject.id],
-      translation: workflowTranslationId
+      subjects: [subject.id]
     }
   });
 
