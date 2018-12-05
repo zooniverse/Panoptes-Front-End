@@ -376,6 +376,9 @@ export function loadWorkflow(workflowId, locale, preferences) {
       return dispatch(setWorkflow(workflow));
     })
     .catch(function () {
+      if (preferences) {
+        preferences.update({ 'preferences.selected_workflow': undefined });
+      }
       return dispatch(setWorkflow(null));
     });
   };
