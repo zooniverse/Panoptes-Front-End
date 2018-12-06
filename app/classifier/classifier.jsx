@@ -145,7 +145,7 @@ class Classifier extends React.Component {
       .then(() => {
         const { actions, classification } = this.props;
         const feedback = Object.assign({}, classification.metadata.feedback, { [taskId]: taskFeedback });
-        actions.classify.updateClassification({ feedback });
+        actions.classify.updateMetadata({ feedback });
       });
   }
 
@@ -199,7 +199,7 @@ class Classifier extends React.Component {
     const { naturalWidth, naturalHeight, clientWidth, clientHeight } = e.target;
     const subject_dimensions = classification.metadata.subject_dimensions.slice();
     subject_dimensions[frameIndex] = { naturalWidth, naturalHeight, clientWidth, clientHeight };
-    actions.classify.updateClassification({ subject_dimensions });
+    actions.classify.updateMetadata({ subject_dimensions });
   }
 
   handleAnnotationChange(classification, newAnnotation) {
@@ -253,7 +253,7 @@ class Classifier extends React.Component {
     if (!isCmdClick) {
       e.preventDefault();
     }
-    actions.classify.updateClassification({
+    actions.classify.updateMetadata({
       viewport: {
         width: innerWidth,
         height: innerHeight
@@ -463,6 +463,9 @@ Classifier.contextTypes = {
 
 Classifier.propTypes = {
   actions: PropTypes.shape({
+    classify: PropTypes.shape({
+      updateMetadata: PropTypes.func
+    }),
     feedback: PropTypes.shape({
       init: PropTypes.func,
       update: PropTypes.func
