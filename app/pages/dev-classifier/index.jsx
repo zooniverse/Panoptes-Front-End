@@ -45,11 +45,11 @@ export class DevClassifierPage extends React.Component {
   }
 
   reload() {
-    const { actions, project } = this.props;
+    const { actions, project, translations } = this.props;
     const workflow = mockData.classification._workflow;
     const subjects = mockData.classification._subjects;
     actions.classify.appendSubjects(subjects, workflow.id);
-    actions.classify.nextSubject(project);
+    actions.classify.nextSubject(project, translations.strings.workflow.id);
   }
 
   render() {

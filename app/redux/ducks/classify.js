@@ -313,10 +313,10 @@ export function updateMetadata(metadata) {
   };
 }
 
-export function nextSubject(project) {
+export function nextSubject(project, workflowTranslationId) {
   return {
     type: NEXT_SUBJECT,
-    payload: { project }
+    payload: { project, workflowTranslationId }
   };
 }
 

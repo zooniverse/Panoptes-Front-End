@@ -182,9 +182,9 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   loadAnotherSubject() {
-    const { actions, project, workflow } = this.props;
+    const { actions, project, translations, workflow } = this.props;
     if (workflow) {
-      actions.classifier.nextSubject(project, workflow);
+      actions.classifier.nextSubject(project, translations.strings.workflow.id);
     }
   }
 
