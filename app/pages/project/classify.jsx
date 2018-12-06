@@ -39,7 +39,6 @@ export class ProjectClassifyPage extends React.Component {
   constructor(props) {
     super(props);
     this.project = null;
-    this.translations = null;
     this.workflow = null;
 
     this.state = {
@@ -53,11 +52,11 @@ export class ProjectClassifyPage extends React.Component {
 
   componentDidMount() {
     Split.classifierVisited();
-    if (this.props.workflow) {
-      const { actions, translations } = this.props;
-      if (translations && translations.strings && translations.strings.workflow && translations.strings.workflow.id) {
-        actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
-      }
+
+    const { actions, translations, workflow } = this.props;
+    actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+
+    if (workflow) {
       this.loadAppropriateClassification();
     }
 
@@ -87,12 +86,13 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { actions, classification, upcomingSubjects, workflow, translations } = this.props;
+    const { actions, classification, translations, upcomingSubjects, workflow } = this.props;
+
+    if (translations !== prevProps.translations) {
+      actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+    }
 
     if (workflow !== prevProps.workflow) {
-      if (translations && translations.strings && translations.strings.workflow && translations.strings.workflow.id) {
-        actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
-      }
       this.loadAppropriateClassification();
     }
 
@@ -348,6 +348,7 @@ ProjectClassifyPage.defaultProps = {
   location: {
     query: {}
   },
+  translations: { strings: { workflow: { id: null }}},
   upcomingSubjects: []
 };
 

@@ -404,7 +404,7 @@ describe('Classifier actions', function () {
     const state = {
       classification: { id: '1' },
       workflow: { id: '2' },
-      workflowTranslationId: '3',
+      workflowTranslationId: '4',
       upcomingSubjects: [1, 2]
     };
     it('should store the specified workflow translation id', function () {

@@ -11,7 +11,8 @@ const actions = {
     createClassification: sinon.spy(),
     emptySubjectQueue: sinon.spy(),
     fetchSubjects: sinon.stub().callsFake(() => Promise.resolve()),
-    resumeClassification: sinon.spy()
+    resumeClassification: sinon.spy(),
+    setWorkflowTranslationId: sinon.spy()
   }
 };
 

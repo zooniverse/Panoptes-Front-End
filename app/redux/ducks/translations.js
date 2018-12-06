@@ -40,7 +40,7 @@ const initialState = {
   rtl: false,
   strings: {
     project: {},
-    workflow: {},
+    workflow: { id: null },
     tutorial: {},
     minicourse: {},
     field_guide: {},
@@ -130,7 +130,7 @@ export function load(resource_type, translated_id, language) {
             type: SET_TRANSLATION,
             payload: {
               type: resource_type,
-              id: '',
+              id: null,
               languageStrings: {}
             }
           });

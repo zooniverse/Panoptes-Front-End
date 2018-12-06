@@ -97,7 +97,7 @@ const initialState = {
   classification: null,
   goldStandardMode: false,
   intervention: null,
-  workflowTranslationId: '',
+  workflowTranslationId: null,
   upcomingSubjects: [],
   workflow: null
 };
