@@ -37,7 +37,7 @@ function createNewClassification(project, workflow, subject, goldStandardMode, w
   const classification = apiClient.type('classifications').create({
     annotations: [],
     metadata: {
-      workflow_translation_id: workflowTranslationId,
+      workflow_translation_ids: [workflowTranslationId],
       workflow_version: workflow.version,
       started_at: (new Date()).toISOString(),
       user_agent: navigator.userAgent,
@@ -97,7 +97,6 @@ const initialState = {
   classification: null,
   goldStandardMode: false,
   intervention: null,
-  workflowTranslationId: null,
   upcomingSubjects: [],
   workflow: null
 };
@@ -114,7 +113,6 @@ const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
 const SAVE_ANNOTATIONS = 'pfe/classify/SAVE_ANNOTATIONS';
 const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
-const SET_WORKFLOW_TRANSLATION_ID = 'pfe/classify/SET_WORKFLOW_TRANSLATION_ID';
 const TOGGLE_GOLD_STANDARD = 'pfe/classify/TOGGLE_GOLD_STANDARD';
 
 export default function reducer(state = initialState, action = {}) {
@@ -146,9 +144,8 @@ export default function reducer(state = initialState, action = {}) {
     }
     case CREATE_CLASSIFICATION: {
       const { goldStandardMode } = state;
-      const { project } = action.payload;
+      const { project, workflowTranslationId } = action.payload;
       const { workflow } = state;
-      const { workflowTranslationId } = state;
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
         const classification = createNewClassification(project, workflow, subject, goldStandardMode, workflowTranslationId);
@@ -164,9 +161,8 @@ export default function reducer(state = initialState, action = {}) {
     }
     case NEXT_SUBJECT: {
       const { goldStandardMode } = state;
-      const { project } = action.payload;
+      const { project, workflowTranslationId } = action.payload;
       const { workflow } = state;
-      const { workflowTranslationId } = state;
       const upcomingSubjects = state.upcomingSubjects.slice();
       upcomingSubjects.shift();
       const subject = upcomingSubjects[0];
@@ -219,10 +215,6 @@ export default function reducer(state = initialState, action = {}) {
     case SET_WORKFLOW: {
       const { workflow } = action.payload;
       return Object.assign({}, state, { workflow });
-    }
-    case SET_WORKFLOW_TRANSLATION_ID: {
-      const { workflowTranslationId } = action.payload;
-      return Object.assign({}, state, { workflowTranslationId });
     }
     case TOGGLE_GOLD_STANDARD: {
       const { goldStandard } = action.payload;
@@ -300,10 +292,10 @@ export function fetchSubjects(workflow) {
     }));
 }
 
-export function createClassification(project) {
+export function createClassification(project, workflowTranslationId) {
   return {
     type: CREATE_CLASSIFICATION,
-    payload: { project }
+    payload: { project, workflowTranslationId }
   };
 }
 
@@ -359,13 +351,6 @@ export function setWorkflow(workflow) {
   return {
     type: SET_WORKFLOW,
     payload: { workflow }
-  };
-}
-
-export function setWorkflowTranslationId(workflowTranslationId) {
-  return {
-    type: SET_WORKFLOW_TRANSLATION_ID,
-    payload: { workflowTranslationId }
   };
 }
 

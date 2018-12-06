@@ -52,9 +52,7 @@ export class ProjectClassifyPage extends React.Component {
 
   componentDidMount() {
     Split.classifierVisited();
-
-    const { actions, translations, workflow } = this.props;
-    actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
+    const { workflow } = this.props;
 
     if (workflow) {
       this.loadAppropriateClassification();
@@ -86,11 +84,7 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { actions, classification, translations, upcomingSubjects, workflow } = this.props;
-
-    if (translations !== prevProps.translations) {
-      actions.classifier.setWorkflowTranslationId(translations.strings.workflow.id);
-    }
+    const { classification, upcomingSubjects, workflow } = this.props;
 
     if (workflow !== prevProps.workflow) {
       this.loadAppropriateClassification();
@@ -122,11 +116,11 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   refillSubjectQueue() {
-    const { actions, project, workflow } = this.props;
+    const { actions, project, translations, workflow } = this.props;
 
     this.maybePromptWorkflowAssignmentDialog(this.props);
     actions.classifier.fetchSubjects(workflow)
-    .then(() => actions.classifier.createClassification(project, workflow))
+    .then(() => actions.classifier.createClassification(project, translations.strings.workflow.id))
     .catch((error) => {
       this.setState({ rejected: { classification: error }});
     });
@@ -310,8 +304,7 @@ ProjectClassifyPage.propTypes = {
       emptySubjectQueue: PropTypes.func,
       fetchSubjects: PropTypes.func,
       nextSubject: PropTypes.func,
-      refillSubjectQueue: PropTypes.func,
-      setWorkflowTranslationId: PropTypes.func
+      refillSubjectQueue: PropTypes.func
     }),
     translations: PropTypes.shape({
       load: PropTypes.func
