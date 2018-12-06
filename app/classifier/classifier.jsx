@@ -582,7 +582,9 @@ Classifier.defaultProps = {
   translations: {
     locale: 'en',
     strings: {
-      workflow: {}
+      workflow: {
+        id: null
+      }
     }
   },
   workflow: {
