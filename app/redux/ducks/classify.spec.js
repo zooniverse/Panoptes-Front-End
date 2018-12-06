@@ -212,7 +212,8 @@ describe('Classifier actions', function () {
     const action = {
       type: 'pfe/classify/CREATE_CLASSIFICATION',
       payload: {
-        project: { id: '1' }
+        project: { id: '1' },
+        workflowTranslationId: '3'
       }
     };
     const state = {
@@ -242,6 +243,10 @@ describe('Classifier actions', function () {
     it('should create a classification for the current workflow', function () {
       const newState = reducer(state, action);
       expect(newState.classification.links.workflow).to.equal('1');
+    });
+    it('should save workflow translation id to metadata', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.workflow_translation_ids[0]).to.equal('3');
     });
     it('should clear any stored interventions', function () {
       const newState = reducer(state, action);
@@ -340,9 +345,9 @@ describe('Classifier actions', function () {
       expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
     });
   });
-  describe('update classification', function () {
+  describe('update classification metadata', function () {
     const action = {
-      type: 'pfe/classify/UPDATE_CLASSIFICATION',
+      type: 'pfe/classify/UPDATE_METADATA',
       payload: {
         metadata: {
           a: 1,
