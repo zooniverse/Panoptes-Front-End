@@ -235,7 +235,7 @@ class Classifier extends React.Component {
   }
 
   completeClassification(e) {
-    const { actions, classification, onComplete, intervention, project, subject, user, workflow } = this.props;
+    const { actions, classification, onComplete, intervention, project, subject, translations, user, workflow } = this.props;
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
     const annotations = this.state.annotations.slice();
@@ -261,7 +261,9 @@ class Classifier extends React.Component {
       interventions: {
         message: !!showIntervention,
         opt_in: !!user && user.intervention_notifications
-      }
+      },
+      user_language: translations.locale,
+      workflow_translation_id: translations.strings.workflow.id
     });
     return this.checkForFeedback(taskKey)
       .then(() => {
@@ -523,6 +525,14 @@ Classifier.propTypes = {
     id: PropTypes.string
   }),
   userRoles: PropTypes.array,
+  translations: PropTypes.shape({
+    id: PropTypes.string,
+    strings: PropTypes.shape({
+      workflow: PropTypes.shape({
+        id: PropTypes.string
+      })
+    })
+  }),
   workflow: PropTypes.shape({
     configuration: PropTypes.object,
     id: PropTypes.string,
@@ -559,6 +569,12 @@ Classifier.defaultProps = {
   },
   tutorial: null,
   user: null,
+  translations: {
+    locale: 'en',
+    strings: {
+      workflow: {}
+    }
+  },
   workflow: {
     configuration: {},
     tasks: {}
@@ -569,7 +585,8 @@ const mapStateToProps = state => ({
   feedback: state.feedback,
   goldStandardMode: state.classify.goldStandardMode,
   intervention: state.classify.intervention,
-  theme: state.userInterface.theme
+  theme: state.userInterface.theme,
+  translations: state.translations
 });
 
 const mapDispatchToProps = dispatch => ({
