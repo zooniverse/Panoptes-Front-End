@@ -81,6 +81,14 @@ class Classifier extends React.Component {
       this.loadSubject(nextProps.subject);
     }
 
+    if (nextProps.translations.strings.workflow.id !== this.props.translations.strings.workflow.id) {
+      const workflowTranslationIds = this.props.classification.metadata.workflow_translation_ids;
+      if (workflowTranslationIds.indexOf(nextProps.translations.strings.workflow.id) === -1) {
+        workflowTranslationIds.push(nextProps.translations.strings.workflow.id);
+        this.props.actions.classify.updateMetadata({ workflow_translation_ids: workflowTranslationIds });
+      }
+    }
+
     if (this.context.geordi && ((this.props.subject !== nextProps.subject) ||  !this.context.geordi.keys.subjectID)) {
       this.context.geordi.remember({ subjectID: nextProps.subject.id });
     }
@@ -262,8 +270,7 @@ class Classifier extends React.Component {
         message: !!showIntervention,
         opt_in: !!user && user.intervention_notifications
       },
-      user_language: translations.locale,
-      workflow_translation_id: translations.strings.workflow.id
+      user_language: translations.locale
     });
     return this.checkForFeedback(taskKey)
       .then(() => {
