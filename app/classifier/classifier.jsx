@@ -145,7 +145,7 @@ class Classifier extends React.Component {
       .then(() => {
         const { actions, classification } = this.props;
         const feedback = Object.assign({}, classification.metadata.feedback, { [taskId]: taskFeedback });
-        actions.classify.updateClassification({ feedback });
+        actions.classify.updateMetadata({ feedback });
       });
   }
 
@@ -199,7 +199,7 @@ class Classifier extends React.Component {
     const { naturalWidth, naturalHeight, clientWidth, clientHeight } = e.target;
     const subject_dimensions = classification.metadata.subject_dimensions.slice();
     subject_dimensions[frameIndex] = { naturalWidth, naturalHeight, clientWidth, clientHeight };
-    actions.classify.updateClassification({ subject_dimensions });
+    actions.classify.updateMetadata({ subject_dimensions });
   }
 
   handleAnnotationChange(classification, newAnnotation) {
@@ -235,7 +235,7 @@ class Classifier extends React.Component {
   }
 
   completeClassification(e) {
-    const { actions, classification, onComplete, intervention, project, subject, user, workflow } = this.props;
+    const { actions, classification, onComplete, intervention, project, subject, translations, user, workflow } = this.props;
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
     const annotations = this.state.annotations.slice();
@@ -253,7 +253,7 @@ class Classifier extends React.Component {
     if (!isCmdClick) {
       e.preventDefault();
     }
-    actions.classify.updateClassification({
+    actions.classify.updateMetadata({
       viewport: {
         width: innerWidth,
         height: innerHeight
@@ -261,7 +261,9 @@ class Classifier extends React.Component {
       interventions: {
         message: !!showIntervention,
         opt_in: !!user && user.intervention_notifications
-      }
+      },
+      workflow_translation_id: translations.strings.workflow.id,
+      user_language: translations.locale
     });
     return this.checkForFeedback(taskKey)
       .then(() => {
@@ -461,6 +463,9 @@ Classifier.contextTypes = {
 
 Classifier.propTypes = {
   actions: PropTypes.shape({
+    classify: PropTypes.shape({
+      updateMetadata: PropTypes.func
+    }),
     feedback: PropTypes.shape({
       init: PropTypes.func,
       update: PropTypes.func
@@ -523,6 +528,14 @@ Classifier.propTypes = {
     id: PropTypes.string
   }),
   userRoles: PropTypes.array,
+  translations: PropTypes.shape({
+    id: PropTypes.string,
+    strings: PropTypes.shape({
+      workflow: PropTypes.shape({
+        id: PropTypes.string
+      })
+    })
+  }),
   workflow: PropTypes.shape({
     configuration: PropTypes.object,
     id: PropTypes.string,
@@ -559,6 +572,14 @@ Classifier.defaultProps = {
   },
   tutorial: null,
   user: null,
+  translations: {
+    locale: 'en',
+    strings: {
+      workflow: {
+        id: null
+      }
+    }
+  },
   workflow: {
     configuration: {},
     tasks: {}
@@ -569,7 +590,8 @@ const mapStateToProps = state => ({
   feedback: state.feedback,
   goldStandardMode: state.classify.goldStandardMode,
   intervention: state.classify.intervention,
-  theme: state.userInterface.theme
+  theme: state.userInterface.theme,
+  translations: state.translations
 });
 
 const mapDispatchToProps = dispatch => ({

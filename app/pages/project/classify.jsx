@@ -52,7 +52,9 @@ export class ProjectClassifyPage extends React.Component {
 
   componentDidMount() {
     Split.classifierVisited();
-    if (this.props.workflow) {
+    const { workflow } = this.props;
+
+    if (workflow) {
       this.loadAppropriateClassification();
     }
 
@@ -118,7 +120,7 @@ export class ProjectClassifyPage extends React.Component {
 
     this.maybePromptWorkflowAssignmentDialog(this.props);
     actions.classifier.fetchSubjects(workflow)
-    .then(() => actions.classifier.createClassification(project, workflow))
+    .then(() => actions.classifier.createClassification(project))
     .catch((error) => {
       this.setState({ rejected: { classification: error }});
     });
@@ -182,7 +184,7 @@ export class ProjectClassifyPage extends React.Component {
   loadAnotherSubject() {
     const { actions, project, workflow } = this.props;
     if (workflow) {
-      actions.classifier.nextSubject(project, workflow);
+      actions.classifier.nextSubject(project);
     }
   }
 

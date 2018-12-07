@@ -159,7 +159,7 @@ describe('Classifier', function () {
   describe('on subject image load', function () {
     const actions = {
       classify: {
-        updateClassification: sinon.stub().callsFake(changes => changes)
+        updateMetadata: sinon.stub().callsFake(changes => changes)
       }
     };
     const fakeEvent = {
@@ -184,13 +184,13 @@ describe('Classifier', function () {
       wrapper.instance().handleSubjectImageLoad(fakeEvent, 0);
     });
     afterEach(function () {
-      actions.classify.updateClassification.resetHistory();
+      actions.classify.updateMetadata.resetHistory();
     });
     it('should update the classification with the image dimensions', function () {
       const expectedChanges = {
         subject_dimensions: [fakeEvent.target]
       };
-      const actualChanges = actions.classify.updateClassification.returnValues[0];
+      const actualChanges = actions.classify.updateMetadata.returnValues[0];
       expect(actualChanges).to.deep.equal(expectedChanges);
     });
   });
@@ -202,10 +202,18 @@ describe('Classifier', function () {
       classify: {
         completeClassification: sinon.stub(),
         saveAnnotations: sinon.stub().callsFake(annotations => annotations),
-        updateClassification: sinon.stub()
+        updateMetadata: sinon.stub()
       },
       interventions: {
         dismiss: sinon.stub()
+      }
+    };
+    const translations = {
+      locale: 'it',
+      strings: {
+        workflow: {
+          id: '3'
+        }
       }
     };
     beforeEach(function () {
@@ -216,6 +224,7 @@ describe('Classifier', function () {
           classification={classification}
           subject={subject}
           onComplete={classification.save}
+          translations={translations}
         />,
         mockReduxStore
       );
@@ -228,7 +237,7 @@ describe('Classifier', function () {
     afterEach(function () {
       checkForFeedback.restore();
       actions.classify.completeClassification.resetHistory();
-      actions.classify.updateClassification.resetHistory();
+      actions.classify.updateMetadata.resetHistory();
     });
 
     it('should complete the classification', function (done) {
@@ -239,14 +248,22 @@ describe('Classifier', function () {
       })
       .then(done, done);
     });
-    it('should record intervention metdata', function (done) {
+    it('should record intervention metadata', function (done) {
       wrapper.setProps({ workflow });
       wrapper.instance().completeClassification(fakeEvent)
       .then(done, done);
-      const changes = actions.classify.updateClassification.getCall(0).args[0];
+      const changes = actions.classify.updateMetadata.getCall(0).args[0];
       expect(changes.interventions.message).to.be.false;
       expect(changes.interventions.opt_in).to.be.false;
     });
+    it('should record translation metadata', function (done) {
+      wrapper.setProps({ workflow });
+      wrapper.instance().completeClassification(fakeEvent)
+      .then(done, done);
+      const changes = actions.classify.updateMetadata.getCall(0).args[0];
+      expect(changes.workflow_translation_id).to.equal('3');
+      expect(changes.user_language).to.equal('it');
+    })
     describe('with an intervention message', function () {
       const intervention = {
         message: 'Hello!'
@@ -258,13 +275,13 @@ describe('Classifier', function () {
         wrapper.setProps({ workflow, intervention, user });
         wrapper.instance().completeClassification(fakeEvent)
         .then(done, done);
-        const changes = actions.classify.updateClassification.getCall(0).args[0];
+        const changes = actions.classify.updateMetadata.getCall(0).args[0];
         expect(changes.interventions.message).to.be.true;
       });
       it('should record whether the user is reading interventions', function () {
         wrapper.setProps({ workflow, intervention, user });
         wrapper.instance().completeClassification(fakeEvent);
-        const changes = actions.classify.updateClassification.getCall(0).args[0];
+        const changes = actions.classify.updateMetadata.getCall(0).args[0];
         expect(changes.interventions.opt_in).to.equal(user.intervention_notifications);
       });
     });
@@ -325,7 +342,7 @@ describe('Classifier', function () {
         classify: {
           completeClassification: sinon.stub(),
           saveAnnotations: sinon.stub().callsFake(annotations => annotations),
-          updateClassification: sinon.stub()
+          updateMetadata: sinon.stub()
         },
         feedback: {
           init: feedbackInitSpy,

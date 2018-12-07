@@ -340,9 +340,9 @@ describe('Classifier actions', function () {
       expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
     });
   });
-  describe('update classification', function () {
+  describe('update classification metadata', function () {
     const action = {
-      type: 'pfe/classify/UPDATE_CLASSIFICATION',
+      type: 'pfe/classify/UPDATE_METADATA',
       payload: {
         metadata: {
           a: 1,
