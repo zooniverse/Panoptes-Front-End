@@ -208,6 +208,14 @@ describe('Classifier', function () {
         dismiss: sinon.stub()
       }
     };
+    const translations = {
+      locale: 'it',
+      strings: {
+        workflow: {
+          id: '3'
+        }
+      }
+    };
     beforeEach(function () {
       checkForFeedback = sinon.stub(Classifier.prototype, 'checkForFeedback').callsFake(() => Promise.resolve());
       wrapper = shallow(
@@ -216,6 +224,7 @@ describe('Classifier', function () {
           classification={classification}
           subject={subject}
           onComplete={classification.save}
+          translations={translations}
         />,
         mockReduxStore
       );
@@ -239,7 +248,7 @@ describe('Classifier', function () {
       })
       .then(done, done);
     });
-    it('should record intervention metdata', function (done) {
+    it('should record intervention metadata', function (done) {
       wrapper.setProps({ workflow });
       wrapper.instance().completeClassification(fakeEvent)
       .then(done, done);
@@ -247,6 +256,14 @@ describe('Classifier', function () {
       expect(changes.interventions.message).to.be.false;
       expect(changes.interventions.opt_in).to.be.false;
     });
+    it('should record translation metadata', function (done) {
+      wrapper.setProps({ workflow });
+      wrapper.instance().completeClassification(fakeEvent)
+      .then(done, done);
+      const changes = actions.classify.updateMetadata.getCall(0).args[0];
+      expect(changes.workflow_translation_id).to.equal('3');
+      expect(changes.user_language).to.equal('it');
+    })
     describe('with an intervention message', function () {
       const intervention = {
         message: 'Hello!'
