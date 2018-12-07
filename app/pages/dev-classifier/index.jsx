@@ -21,21 +21,21 @@ export class DevClassifierPage extends React.Component {
   }
 
   componentDidMount() {
-    const { actions, project, translations } = this.props;
+    const { actions, project } = this.props;
     const workflow = mockData.classification._workflow;
     const subjects = mockData.classification._subjects;
     actions.classify.setWorkflow(workflow);
     actions.classify.appendSubjects(subjects, workflow.id);
-    actions.classify.createClassification(project, translations.strings.workflow.id);
+    actions.classify.createClassification(project);
   }
 
   componentDidUpdate() {
-    const { actions, project, translations, user } = this.props;
+    const { actions, project, user } = this.props;
     const workflow = mockData.classification._workflow;
     const subjects = mockData.classification._subjects;
     if (!this.props.classification) {
       actions.classify.appendSubjects(subjects, workflow.id);
-      actions.classify.createClassification(project, translations.strings.workflow.id);
+      actions.classify.createClassification(project);
     }
   }
 
@@ -45,11 +45,11 @@ export class DevClassifierPage extends React.Component {
   }
 
   reload() {
-    const { actions, project, translations } = this.props;
+    const { actions, project } = this.props;
     const workflow = mockData.classification._workflow;
     const subjects = mockData.classification._subjects;
     actions.classify.appendSubjects(subjects, workflow.id);
-    actions.classify.nextSubject(project, translations.strings.workflow.id);
+    actions.classify.nextSubject(project);
   }
 
   render() {
@@ -101,7 +101,6 @@ export class DevClassifierPage extends React.Component {
 const mapStateToProps = state => ({
   classification: state.classify.classification,
   theme: state.userInterface.theme,
-  translations: state.translations,
   workflow: state.classify.workflow
 });
 

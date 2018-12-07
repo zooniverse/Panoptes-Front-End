@@ -116,11 +116,11 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   refillSubjectQueue() {
-    const { actions, project, translations, workflow } = this.props;
+    const { actions, project, workflow } = this.props;
 
     this.maybePromptWorkflowAssignmentDialog(this.props);
     actions.classifier.fetchSubjects(workflow)
-    .then(() => actions.classifier.createClassification(project, translations.strings.workflow.id))
+    .then(() => actions.classifier.createClassification(project))
     .catch((error) => {
       this.setState({ rejected: { classification: error }});
     });
@@ -182,9 +182,9 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   loadAnotherSubject() {
-    const { actions, project, translations, workflow } = this.props;
+    const { actions, project, workflow } = this.props;
     if (workflow) {
-      actions.classifier.nextSubject(project, translations.strings.workflow.id);
+      actions.classifier.nextSubject(project);
     }
   }
 
@@ -324,12 +324,7 @@ ProjectClassifyPage.propTypes = {
   project: PropTypes.object,
   storage: PropTypes.object,
   translations: PropTypes.shape({
-    locale: PropTypes.string,
-    strings: PropTypes.shape({
-      workflow: PropTypes.shape({ 
-        id: PropTypes.string
-      })
-    })
+    locale: PropTypes.string
   }),
   upcomingSubjects: PropTypes.arrayOf(PropTypes.object),
   user: PropTypes.object,
@@ -341,7 +336,6 @@ ProjectClassifyPage.defaultProps = {
   location: {
     query: {}
   },
-  translations: { strings: { workflow: { id: null }}},
   upcomingSubjects: []
 };
 
