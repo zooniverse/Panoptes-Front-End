@@ -44,7 +44,7 @@ const initialState = {
     tutorial: {},
     minicourse: {},
     field_guide: {},
-    project_page: []
+    project_page: {}
   }
 };
 
@@ -69,18 +69,20 @@ export default function reducer(state = initialState, action = {}) {
       strings = Object.assign({}, state.strings, { [translated_type]: { [translated_id]: translation } });
       return Object.assign({}, state, { strings });
     }
-    case SET_TRANSLATIONS:
-      ({ type, translations } = action.payload);
+    case SET_TRANSLATIONS: {
+      const { translated_type, translations } = action.payload;
+      const resourceTranslations = {};
       translations.forEach((translation, i) => {
         Object.keys(translation.strings).map((translationKey) => {
           const newTranslation = explodeTranslationKey(translationKey, translation.strings[translationKey]);
           translation.strings = merge(translation.strings, newTranslation);
-          translations[i] = translation;
+          resourceTranslations[translation.translated_id] = translation;
         });
       });
       
-      strings = Object.assign({}, state.strings, { [type]: translations });
+      strings = Object.assign({}, state.strings, { [translated_type]: resourceTranslations });
       return Object.assign({}, state, { strings });
+    }
     default:
       return state;
   }
@@ -165,7 +167,7 @@ export function loadTranslations(translated_type, translated_id, language) {
           dispatch({
             type: SET_TRANSLATIONS,
             payload: {
-              type: translated_type,
+              translated_type,
               translations
             }
           });
