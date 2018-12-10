@@ -253,6 +253,7 @@ class Classifier extends React.Component {
     if (!isCmdClick) {
       e.preventDefault();
     }
+    const workflowTranslation = translations.strings.workflow[workflow.id];
     actions.classify.updateMetadata({
       viewport: {
         width: innerWidth,
@@ -262,7 +263,7 @@ class Classifier extends React.Component {
         message: !!showIntervention,
         opt_in: !!user && user.intervention_notifications
       },
-      workflow_translation_id: translations.strings.workflow.id,
+      workflow_translation_id: workflowTranslation ? workflowTranslation.id : null,
       user_language: translations.locale
     });
     return this.checkForFeedback(taskKey)

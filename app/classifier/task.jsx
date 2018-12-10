@@ -65,6 +65,7 @@ class Task extends React.Component {
             <TaskTranslations
               taskKey={annotation.task}
               task={task}
+              workflowID={workflow.id}
             >
               <TaskComponent
                 key={annotation.task}
@@ -87,6 +88,7 @@ class Task extends React.Component {
             <TaskTranslations
               taskKey={task.unlinkedTask}
               task={workflow.tasks[task.unlinkedTask]}
+              workflowID={workflow.id}
             >
               <Shortcut
                 task={task}

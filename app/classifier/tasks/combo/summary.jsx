@@ -18,6 +18,7 @@ const ComboTaskSummary = (props) => {
           <TaskTranslations
             taskKey={annotation.task}
             task={task}
+            workflowID={props.workflow.id}
           >
             <SummaryComponent task={task} annotation={annotation} onToggle={props.onToggle} />
           </TaskTranslations>

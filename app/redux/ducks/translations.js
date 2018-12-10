@@ -40,7 +40,7 @@ const initialState = {
   rtl: false,
   strings: {
     project: {},
-    workflow: { id: null },
+    workflow: {},
     tutorial: {},
     minicourse: {},
     field_guide: {},
@@ -50,7 +50,7 @@ const initialState = {
 
 // Reducer
 export default function reducer(state = initialState, action = {}) {
-  let type, id, languageStrings, strings, translations;
+  let type, strings, translations;
   switch (action.type) {
     case SET_LANGUAGES:
       const languages = Object.assign({}, state.languages, { [action.payload.type]: action.payload.languages });
@@ -59,15 +59,16 @@ export default function reducer(state = initialState, action = {}) {
       const locale = action.payload;
       const rtl = RTL_LANGUAGES.indexOf(locale) > -1;
       return Object.assign({}, state, { locale, rtl });
-    case SET_TRANSLATION:
-      ({ type, id, languageStrings } = action.payload);
-      let translation = { id: id };
-      Object.keys(languageStrings).map((translationKey) => {
-        const newTranslation = explodeTranslationKey(translationKey, languageStrings[translationKey]);
-        translation = merge(translation, newTranslation);
+    case SET_TRANSLATION: {
+      const { translated_type, translation } = action.payload;
+      const { translated_id } = translation;
+      Object.keys(translation.strings).map((translationKey) => {
+        const newTranslation = explodeTranslationKey(translationKey, translation.strings[translationKey]);
+        translation.strings = merge(translation.strings, newTranslation);
       });
-      strings = Object.assign({}, state.strings, { [type]: translation });
+      strings = Object.assign({}, state.strings, { [translated_type]: { [translated_id]: translation } });
       return Object.assign({}, state, { strings });
+    }
     case SET_TRANSLATIONS:
       ({ type, translations } = action.payload);
       translations.forEach((translation, i) => {
@@ -120,18 +121,15 @@ export function load(resource_type, translated_id, language) {
           dispatch({
             type: SET_TRANSLATION,
             payload: {
-              type: resource_type,
-              id: translation.id,
-              languageStrings: translation.strings
+              translated_type,
+              translation
             }
           });
         } else {
           dispatch({
             type: SET_TRANSLATION,
             payload: {
-              type: resource_type,
-              id: null,
-              languageStrings: {}
+              translation: {}
             }
           });
         }

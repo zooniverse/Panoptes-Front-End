@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 function ProjectTranslations(props) {
   const { description, display_name, introduction, researcher_quote, title } = props.project;
-  const projectStrings = props.translations.strings.project;
+  const projectTranslation = props.translations.strings.project[props.project.id] || {};
+  const projectStrings = projectTranslation.strings || {};
   const translation = Object.assign({ description, display_name, introduction, researcher_quote, title }, projectStrings);
 
   return React.cloneElement(props.children, { translation });

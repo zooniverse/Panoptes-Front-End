@@ -18,9 +18,15 @@ const initialTranslations = {
 const translations = {
   strings: {
     project: {
-      title: 'A translated title',
-      display_name: 'A translated display name',
-      introduction: 'A translated introduction'
+      '12345': {
+        translated_type: 'Project',
+        translated_id: '12345',
+        strings: {
+          title: 'A translated title',
+          display_name: 'A translated display name',
+          introduction: 'A translated introduction'
+        }
+      }
     }
   }
 };
