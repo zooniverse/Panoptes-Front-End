@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 import * as interventionActions from '../../redux/ducks/interventions';
 import * as translationActions from '../../redux/ducks/translations';
 import ProjectPage from './project-page';
-import ProjectTranslations from './project-translations';
+import Translations from '../../classifier/translations';
 import getAllLinked from '../../lib/get-all-linked';
 
 counterpart.registerTranslations('en', require('../../locales/en').default);
@@ -363,8 +363,9 @@ class ProjectPageController extends React.Component {
           <div className="beta-border" /> : undefined}
 
         {!!this.state.ready &&
-          <ProjectTranslations
-            project={this.state.project}
+          <Translations
+            original={this.state.project}
+            type="project"
           >
             <ProjectPage
               {...this.props}
@@ -384,7 +385,7 @@ class ProjectPageController extends React.Component {
               splits={this.state.splits}
               workflow={this.props.workflow}
             />
-          </ProjectTranslations>
+          </Translations>
         }
         {!!this.state.loading &&
           <div className="content-container">
