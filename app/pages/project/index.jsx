@@ -82,7 +82,7 @@ class ProjectPageController extends React.Component {
     const { locale } = translations;
     if (project && (locale !== prevProps.translations.locale)) {
       actions.translations.load('project', project.id, locale);
-      actions.translations.loadTranslations('project_page', pages.map(page => page.id), locale);
+      actions.translations.load('project_page', pages.map(page => page.id), locale);
       if (guide) {
         actions.translations.load('field_guide', guide.id, locale);
       }
@@ -236,7 +236,7 @@ class ProjectPageController extends React.Component {
             const ready = true;
             this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits });
             this.loadFieldGuide(project.id);
-            this.props.actions.translations.loadTranslations('project_page', pages.map(page => page.id), this.props.translations.locale);
+            this.props.actions.translations.load('project_page', pages.map(page => page.id), this.props.translations.locale);
             return { project, projectPreferences, splits };
           })
           .then(({ project, projectPreferences, splits }) => {
@@ -425,8 +425,7 @@ ProjectPageController.contextTypes = {
 ProjectPageController.propTypes = {
   actions: PropTypes.shape({
     translations: PropTypes.shape({
-      load: PropTypes.func,
-      loadTranslations: PropTypes.func
+      load: PropTypes.func
     })
   }).isRequired,
   location: PropTypes.shape({
@@ -447,8 +446,7 @@ ProjectPageController.propTypes = {
 ProjectPageController.defaultProps = {
   actions: {
     translations: {
-      load: () => null,
-      loadTranslations: () => null
+      load: () => null
     }
   },
   location: {
