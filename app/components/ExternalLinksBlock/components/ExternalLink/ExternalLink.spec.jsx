@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
 import ExternalLink from './ExternalLink';
 import { socialIcons } from '../../../../lib/nav-helpers';
@@ -25,23 +25,20 @@ describe('ExternalLink', function() {
   });
 
   describe('when the link is external', function() {
-    let wrapper;
+    let wrapper, markdownLink, markdownHtml;
     before(function() {
-      wrapper = shallow(
+      wrapper = mount(
         <ExternalLink
           isExternalLink={true}
           url={MOCK_EXTERNAL_URL}
         />
       );
+      markdownLink = wrapper.find('span.link-title');
+      markdownHtml = markdownLink.props().dangerouslySetInnerHTML.__html;
     });
 
-    it('should add props to open the url in a new tab', function () {
-      expect(wrapper.props().target).to.equal('_blank');
-      expect(wrapper.props().rel).to.equal('noopener noreferrer');
-    });
-
-    it('should use props.url for the href', function () {
-      expect(wrapper.props().href).to.equal(MOCK_EXTERNAL_URL);
+    it('should render the markdown hyperlink correctly', function () {
+      expect(markdownHtml).to.equal('<a href="https://www.google.com" target="_blank" ref="noopener nofollow"></a>')
     });
 
     it('should have the Font Awesome external link icon', function () {
@@ -50,9 +47,9 @@ describe('ExternalLink', function() {
   });
 
   describe('when the link is to social media', function () {
-    let wrapper;
+    let wrapper, markdownLink, markdownHtml;
     before(function() {
-      wrapper = shallow(
+      wrapper = mount(
         <ExternalLink
           isExternalLink={true}
           isSocialLink={true}
@@ -60,21 +57,14 @@ describe('ExternalLink', function() {
           site={MOCK_SOCIAL_SITE}
           url={MOCK_SOCIAL_URL}
         />);
+      markdownLink = wrapper.find('span.link-title');
+      markdownHtml = markdownLink.props().dangerouslySetInnerHTML.__html;
     });
 
-    it('should add props for the aria-label', function () {
-      expect(wrapper.props()['aria-label']).to.equal(socialIcons[MOCK_SOCIAL_SITE].ariaLabel);
+    it('should render the markdown hyperlink correctly', function () {
+      expect(markdownHtml).to.equal('<a href="https://www.facebook.com/my-profile" target="_blank" ref="noopener nofollow">my-profile</a>')
     });
-
-    it('should add props to open the url in a new tab', function () {
-      expect(wrapper.props().target).to.equal('_blank');
-      expect(wrapper.props().rel).to.equal('noopener noreferrer');
-    });
-
-    it('should use props.url for the href', function () {
-      expect(wrapper.props().href).to.equal(MOCK_SOCIAL_URL);
-    });
-
+    
     it('should use the correct font awesome icon', function () {
       expect(wrapper.find('i').hasClass(socialIcons[MOCK_SOCIAL_SITE].icon)).to.be.true;
     });
