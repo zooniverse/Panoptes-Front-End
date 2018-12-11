@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { socialIcons } from '../../../../lib/nav-helpers';
+import { Markdown } from 'markdownz';
 
 export default function ExternalLink({ className, isExternalLink, isSocialLink, label, path, site, url }) {
   let iconClasses;
@@ -8,8 +9,6 @@ export default function ExternalLink({ className, isExternalLink, isSocialLink, 
   const linkProps = {
     className,
     href: url,
-    rel: 'noopener noreferrer',
-    target: '_blank'
   };
 
   if (isExternalLink) {
@@ -18,17 +17,18 @@ export default function ExternalLink({ className, isExternalLink, isSocialLink, 
 
   if (isSocialLink) {
     const icon = socialIcons[site].icon;
-    linkProps['aria-label'] = socialIcons[site].ariaLabel;
     iconClasses = `fa ${icon} fa-fw`;
     linkLabel = path;
   }
 
   if (isExternalLink || isSocialLink) {
     return (
-      <a {...linkProps}>
-        <span className="link-title">{linkLabel}</span>
+      <div className={linkProps.className}>
+        <Markdown tag="span" className="link-title" inline={true}>
+          {`[${linkLabel}](+tab+${linkProps.href})`}
+        </Markdown>
         {iconClasses && <i className={iconClasses} />}
-      </a>
+      </div>
     );
   }
 
