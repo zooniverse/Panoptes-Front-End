@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 import * as interventionActions from '../../redux/ducks/interventions';
 import * as translationActions from '../../redux/ducks/translations';
 import ProjectPage from './project-page';
-import ProjectTranslations from './project-translations';
+import Translations from '../../classifier/translations';
 import getAllLinked from '../../lib/get-all-linked';
 
 counterpart.registerTranslations('en', require('../../locales/en').default);
@@ -82,7 +82,7 @@ class ProjectPageController extends React.Component {
     const { locale } = translations;
     if (project && (locale !== prevProps.translations.locale)) {
       actions.translations.load('project', project.id, locale);
-      actions.translations.loadTranslations('project_page', pages.map(page => page.id), locale);
+      actions.translations.load('project_page', pages.map(page => page.id), locale);
       if (guide) {
         actions.translations.load('field_guide', guide.id, locale);
       }
@@ -236,7 +236,7 @@ class ProjectPageController extends React.Component {
             const ready = true;
             this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits });
             this.loadFieldGuide(project.id);
-            this.props.actions.translations.loadTranslations('project_page', pages.map(page => page.id), this.props.translations.locale);
+            this.props.actions.translations.load('project_page', pages.map(page => page.id), this.props.translations.locale);
             return { project, projectPreferences, splits };
           })
           .then(({ project, projectPreferences, splits }) => {
@@ -363,8 +363,9 @@ class ProjectPageController extends React.Component {
           <div className="beta-border" /> : undefined}
 
         {!!this.state.ready &&
-          <ProjectTranslations
-            project={this.state.project}
+          <Translations
+            original={this.state.project}
+            type="project"
           >
             <ProjectPage
               {...this.props}
@@ -384,7 +385,7 @@ class ProjectPageController extends React.Component {
               splits={this.state.splits}
               workflow={this.props.workflow}
             />
-          </ProjectTranslations>
+          </Translations>
         }
         {!!this.state.loading &&
           <div className="content-container">
@@ -425,8 +426,7 @@ ProjectPageController.contextTypes = {
 ProjectPageController.propTypes = {
   actions: PropTypes.shape({
     translations: PropTypes.shape({
-      load: PropTypes.func,
-      loadTranslations: PropTypes.func
+      load: PropTypes.func
     })
   }).isRequired,
   location: PropTypes.shape({
@@ -447,8 +447,7 @@ ProjectPageController.propTypes = {
 ProjectPageController.defaultProps = {
   actions: {
     translations: {
-      load: () => null,
-      loadTranslations: () => null
+      load: () => null
     }
   },
   location: {

@@ -49,6 +49,7 @@ const classification = mockPanoptesResource('classification', {
 });
 
 const workflow = mockPanoptesResource('workflow', {
+  id: '3',
   configuration: {
     hide_classification_summaries: false
   },
@@ -212,7 +213,12 @@ describe('Classifier', function () {
       locale: 'it',
       strings: {
         workflow: {
-          id: '3'
+          '3' : {
+            id: '123',
+            translated_type: 'Workflow',
+            translated_id: '3',
+            strings: {}
+          }
         }
       }
     };
@@ -261,7 +267,8 @@ describe('Classifier', function () {
       wrapper.instance().completeClassification(fakeEvent)
       .then(done, done);
       const changes = actions.classify.updateMetadata.getCall(0).args[0];
-      expect(changes.workflow_translation_id).to.equal('3');
+      const { translations } = wrapper.instance().props;
+      expect(changes.workflow_translation_id).to.equal(translations.strings.workflow[workflow.id].id);
       expect(changes.user_language).to.equal('it');
     })
     describe('with an intervention message', function () {

@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 function Translations(props) {
   const { original, translations, type } = props;
   const { locale, rtl } = translations;
-  const languageStrings = translations.strings[type];
+  const resourceTranslation = translations.strings[type][original.id];
+  const languageStrings = resourceTranslation ? resourceTranslation.strings : {};
   const translation = merge({}, original, languageStrings);
 
   return React.cloneElement(props.children, { locale, rtl, translation });
