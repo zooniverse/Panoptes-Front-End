@@ -522,7 +522,7 @@ describe('Classifier actions', function () {
     });
 
     it('should load the workflow translation', function () {
-      const loadTranslations = fakeDispatch.returnValues[2];
+      const loadTranslations = fakeDispatch.returnValues[3];
       const expectedAction = {
         type: 'pfe/translations/LOAD',
         translated_type: 'workflow',

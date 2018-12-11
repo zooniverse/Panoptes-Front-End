@@ -360,7 +360,6 @@ export function loadWorkflow(workflowId, locale, preferences) {
     }
     dispatch(setWorkflow(null));
     dispatch(emptySubjectQueue());
-    dispatch(translations.load('workflow', workflowId, locale));
     dispatch({
       type: FETCH_WORKFLOW,
       payload: {
@@ -368,14 +367,15 @@ export function loadWorkflow(workflowId, locale, preferences) {
         locale
       }
     });
-    return awaitWorkflow(workflowId)
-    .then(function (workflow) {
+    const awaitTranslation = dispatch(translations.load('workflow', workflowId, locale));
+    return Promise.all([awaitWorkflow(workflowId), awaitTranslation])
+    .then(([workflow]) => {
       if (preferences) {
         preferences.save();
       }
       return dispatch(setWorkflow(workflow));
     })
-    .catch(function () {
+    .catch(() => {
       if (preferences) {
         preferences.update({ 'preferences.selected_workflow': undefined });
       }
