@@ -64,6 +64,7 @@ export default class ExternalLinksEditor extends React.Component {
           <input
             type="text"
             name={`urls.${idx}.label`}
+            required
             value={link.label}
             onChange={handleInputChange.bind(this.props.project)}
             onMouseDown={this.handleDisableDrag}
@@ -72,8 +73,10 @@ export default class ExternalLinksEditor extends React.Component {
         </AutoSave>
         <AutoSave tag="td" resource={this.props.project}>
           <input
-            type="text"
+            type="url"
             name={`urls.${idx}.url`}
+            pattern="https?://.+"
+            required
             value={link.url}
             onChange={handleInputChange.bind(this.props.project)}
             onMouseDown={this.handleDisableDrag}
