@@ -25,10 +25,10 @@ export default function ExternalLink({ className, isExternalLink, isSocialLink, 
 
   if (isExternalLink || isSocialLink) {
     return (
-      <a {...linkProps}>
+      <span>
         <span className="link-title">{linkLabel}</span>
         {iconClasses && <i className={iconClasses} />}
-      </a>
+      </span>
     );
   }
 
