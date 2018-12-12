@@ -47,30 +47,37 @@ describe('ExternalLink', function() {
   });
 
   describe('when the link is to social media', function () {
-    let wrapper, markdownLink, markdownHtml;
-    before(function() {
-      wrapper = mount(
-        <ExternalLink
-          isExternalLink={true}
-          isSocialLink={true}
-          path={MOCK_SOCIAL_PATH}
-          site={MOCK_SOCIAL_SITE}
-          url={MOCK_SOCIAL_URL}
-        />);
-      markdownLink = wrapper.find('span.link-title');
-      markdownHtml = markdownLink.props().dangerouslySetInnerHTML.__html;
-    });
+      let wrapper;
+      before(function() {
+        wrapper = shallow(
+          <ExternalLink
+            isExternalLink={false}
+            isSocialLink={true}
+            path={MOCK_SOCIAL_PATH}
+            site={MOCK_SOCIAL_SITE}
+            url={MOCK_SOCIAL_URL}
+          />);
+      });
 
-    it('should render the markdown hyperlink correctly', function () {
-      expect(markdownHtml).to.equal('<a href="https://www.facebook.com/my-profile" target="_blank" ref="noopener nofollow">my-profile</a>')
-    });
-    
-    it('should use the correct font awesome icon', function () {
-      expect(wrapper.find('i').hasClass(socialIcons[MOCK_SOCIAL_SITE].icon)).to.be.true;
-    });
+      it('should add props for the aria-label', function () {
+        expect(wrapper.props()['aria-label']).to.equal(socialIcons[MOCK_SOCIAL_SITE].ariaLabel);
+      });
 
-    it('should use prop.path as the label', function () {
-      expect(wrapper.text().includes(MOCK_SOCIAL_PATH)).to.be.true;
+      it('should add props to open the url in a new tab', function () {
+        expect(wrapper.props().target).to.equal('_blank');
+        expect(wrapper.props().rel).to.equal('noopener noreferrer');
+      });
+
+      it('should use props.url for the href', function () {
+        expect(wrapper.props().href).to.equal(MOCK_SOCIAL_URL);
+      });
+
+      it('should use the correct font awesome icon', function () {
+        expect(wrapper.find('i').hasClass(socialIcons[MOCK_SOCIAL_SITE].icon)).to.be.true;
+      });
+
+      it('should use prop.path as the label', function () {
+        expect(wrapper.text().includes(MOCK_SOCIAL_PATH)).to.be.true;
+      });
     });
-  });
 });
