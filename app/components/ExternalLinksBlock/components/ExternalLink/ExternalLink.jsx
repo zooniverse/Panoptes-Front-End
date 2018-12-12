@@ -30,7 +30,7 @@ export default function ExternalLink({ className, isExternalLink, isSocialLink, 
     iconClasses = `fa ${icon} fa-fw`;
     linkLabel = path;
     linkProps['aria-label'] = socialIcons[site].ariaLabel;
-    if (site === 'wordpress') {
+    if (site === 'wordpress.com/') {
       linkProps.href = `https://${path}.${site}`;
     } else {
       linkProps.href = `https://${site}${path}`;
