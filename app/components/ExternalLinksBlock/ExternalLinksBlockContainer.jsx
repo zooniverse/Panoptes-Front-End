@@ -22,7 +22,7 @@ export default class ExternalLinksBlockContainer extends React.Component {
       .filter(link => link);
 
     const social = partitionedLinks[0].map(link => ({
-      isExternalLink: true,
+      isExternalLink: false,
       isSocialLink: true,
       label: link.label,
       path: link.path,
