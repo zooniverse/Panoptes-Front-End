@@ -84,5 +84,10 @@ describe('ExternalLink', function() {
         wrapper.setProps({ site: 'wordpress.com/' })
         expect(wrapper.props().href).equal(`https://${MOCK_SOCIAL_PATH}.wordpress.com/`)
       });
+
+      it('should not render if the site does not match allowed social media sites', function () {
+        wrapper.setProps({ site: 'myh4x0rsite.com/' })
+        expect(wrapper.html()).to.be.null
+      })
     });
 });
