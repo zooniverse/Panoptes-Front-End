@@ -6,7 +6,7 @@ import { socialIcons } from '../../../../lib/nav-helpers';
 
 const MOCK_EXTERNAL_URL = 'https://www.google.com';
 
-const MOCK_SOCIAL_URL = 'https://www.facebook.com/my-profile';
+const MOCK_SOCIAL_URL = 'https://facebook.com/my-profile';
 
 const MOCK_SOCIAL_PATH = 'my-profile';
 
