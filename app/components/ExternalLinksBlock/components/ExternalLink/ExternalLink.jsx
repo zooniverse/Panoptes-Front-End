@@ -30,12 +30,15 @@ export default function ExternalLink({ className, isExternalLink, isSocialLink, 
     iconClasses = `fa ${icon} fa-fw`;
     linkLabel = path;
     linkProps['aria-label'] = socialIcons[site].ariaLabel;
-    return (
-      <a {...linkProps}>
-        <span className="link-title">{linkLabel}</span>
-        {iconClasses && <i className={iconClasses} />}
-      </a>
-    );
+    const isValidLink = !!icon && linkProps.href.substring(0, 8) === 'https://';
+    if (isValidLink) {
+      return (
+        <a {...linkProps}>
+          <span className="link-title">{linkLabel}</span>
+          {iconClasses && <i className={iconClasses} />}
+        </a>
+      );
+    }
   }
 
   return null;
