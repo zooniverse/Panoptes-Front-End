@@ -71,7 +71,6 @@ ClassifierWrapper = createReactClass
     Tutorial.find @props.workflow
     .then (tutorial) =>
       {user, preferences} = @props
-      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi, @context.store
       @setState {tutorial}
       this.props.actions.translations.load('tutorial', tutorial.id, this.props.translations.locale) if tutorial?
     MiniCourse.find @props.workflow
@@ -79,7 +78,7 @@ ClassifierWrapper = createReactClass
       @setState {minicourse}
       this.props.actions.translations.load('minicourse', minicourse.id, this.props.translations.locale) if minicourse?
 
-  componentDidUpdate: (prevProps) ->
+  componentDidUpdate: (prevProps, prevState) ->
     { tutorial, minicourse } = @state
     if prevProps.translations.locale isnt this.props.translations.locale
       this.props.actions.translations.load('tutorial', tutorial.id, this.props.translations.locale) if tutorial?
@@ -89,13 +88,15 @@ ClassifierWrapper = createReactClass
       Tutorial.find @props.workflow
       .then (tutorial) =>
         {user, preferences} = @props
-        Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi, @context.store
         @setState {tutorial}
         this.props.actions.translations.load('tutorial', tutorial.id, this.props.translations.locale) if tutorial?
       MiniCourse.find @props.workflow
       .then (minicourse) =>
         @setState {minicourse}
         this.props.actions.translations.load('minicourse', minicourse.id, this.props.translations.locale) if minicourse?
+    
+    if tutorial isnt prevState.tutorial
+      Tutorial.startIfNecessary tutorial, @props.user, @props.preferences, @context.geordi, @context.store
 
     if @props.user isnt prevProps.user
       @setState expertClassifier: null
