@@ -25,11 +25,16 @@ export default function ExternalLink({ className, isExternalLink, isSocialLink, 
     );
   }
 
-  if (isSocialLink) {
+  if (isSocialLink && !!socialIcons[site]) {
     const icon = socialIcons[site].icon;
     iconClasses = `fa ${icon} fa-fw`;
     linkLabel = path;
     linkProps['aria-label'] = socialIcons[site].ariaLabel;
+    if (socialIcons[site].pathBeforeSite) {
+      linkProps.href = `https://${path}.${site}`;
+    } else {
+      linkProps.href = `https://${site}${path}`;
+    }
     const isValidLink = !!icon && linkProps.href.substring(0, 8) === 'https://';
     if (isValidLink) {
       return (

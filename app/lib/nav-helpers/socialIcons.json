@@ -2,66 +2,79 @@
   "bitbucket.com/": {
     "icon": "fa-bitbucket",
     "ariaLabel": "Link to BitBucket repository",
-    "label": "BitBucket"
+    "label": "BitBucket",
+    "pathBeforeSite": false
   },
   "facebook.com/": {
     "icon": "fa-facebook-square",
     "ariaLabel": "Link to Facebook Page",
-    "label": "Facebook"
+    "label": "Facebook",
+    "pathBeforeSite": false
   },
   "github.com/": {
     "icon": "fa-github",
     "ariaLabel": "Link to GitHub repository",
-    "label": "GitHub"
+    "label": "GitHub",
+    "pathBeforeSite": false
   },
   "pinterest.com/": {
     "icon": "fa-pinterest",
     "ariaLabel": "Link to Pinterest page",
-    "label": "Pinterest"
+    "label": "Pinterest",
+    "pathBeforeSite": false
   },
   "plus.google.com/": {
     "icon": "fa-google-plus",
     "ariaLabel": "Link to Google+ page",
-    "label": "Google+"
+    "label": "Google+",
+    "pathBeforeSite": false
   },
   "reddit.com/": {
     "icon": "fa-reddit",
     "ariaLabel": "Link to Reddit",
-    "label": "Reddit"
+    "label": "Reddit",
+    "pathBeforeSite": false
   },
   "tumblr.com/": {
     "icon": "fa-tumblr",
     "ariaLabel": "Link to Tumblr",
-    "label": "Tumblr"
+    "label": "Tumblr",
+    "pathBeforeSite": false
   },
   "twitter.com/": {
     "icon": "fa-twitter",
     "ariaLabel": "Link to Twitter profile",
-    "label": "Twitter"
+    "label": "Twitter",
+    "pathBeforeSite": false
   },
   "weibo.com/": {
     "icon": "fa-weibo",
     "ariaLabel": "Link to Weibo page",
-    "label": "Weibo"
+    "label": "Weibo",
+    "pathBeforeSite": false
   },
   "wordpress.com/": {
     "icon": "fa-wordpress",
     "ariaLabel": "Link to WordPress site",
-    "label": "Wordpress"
+    "label": "Wordpress",
+    "pathBeforeSite": true
   },
   "youtube.com/": {
     "icon": "fa-youtube",
     "ariaLabel": "Link to YouTube video",
-    "label": "YouTube"
+    "label": "YouTube",
+    "pathBeforeSite": false
   },
   "instagram.com/": {
     "icon": "fa-instagram",
     "ariaLabel": "Link to Instagram profile",
-    "label": "Instagram"
+    "label": "Instagram",
+    "pathBeforeSite": false
   },
   "medium.com/": {
     "icon": "fa-medium",
     "ariaLabel": "Link to Medium article",
-    "label": "Medium"
+    "label": "Medium",
+    "pathBeforeSite": false
   }
 }

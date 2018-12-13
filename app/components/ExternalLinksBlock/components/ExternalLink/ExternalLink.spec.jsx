@@ -6,7 +6,7 @@ import { socialIcons } from '../../../../lib/nav-helpers';
 
 const MOCK_EXTERNAL_URL = 'https://www.google.com';
 
-const MOCK_SOCIAL_URL = 'https://www.facebook.com/my-profile';
+const MOCK_SOCIAL_URL = 'https://facebook.com/my-profile';
 
 const MOCK_SOCIAL_PATH = 'my-profile';
 
@@ -79,5 +79,15 @@ describe('ExternalLink', function() {
       it('should use prop.path as the label', function () {
         expect(wrapper.text().includes(MOCK_SOCIAL_PATH)).to.be.true;
       });
+
+      it('should structure the url with the user submitted path string as the subdomain for wordpress links', function () {
+        wrapper.setProps({ site: 'wordpress.com/' })
+        expect(wrapper.props().href).equal(`https://${MOCK_SOCIAL_PATH}.wordpress.com/`)
+      });
+
+      it('should not render if the site does not match allowed social media sites', function () {
+        wrapper.setProps({ site: 'myh4x0rsite.com/' })
+        expect(wrapper.html()).to.be.null
+      })
     });
 });
