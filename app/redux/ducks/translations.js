@@ -80,12 +80,16 @@ export default function reducer(state = initialState, action = {}) {
 // Action Creators
 export function listLanguages(translated_type, translated_id) {
   return (dispatch) => {
-    dispatch({ type: LOAD, payload: { translated_type, translated_id} });
-    apiClient
+    dispatch({
+      type: LOAD,
+      translated_type,
+      translated_id
+    });
+    return apiClient
       .type('translations')
       .get({ translated_type, translated_id })
       .then((translations) => {
-        dispatch({
+        return dispatch({
           type: SET_LANGUAGES,
           payload: {
             type: translated_type,
@@ -94,7 +98,7 @@ export function listLanguages(translated_type, translated_id) {
         });
       })
       .catch((error) => {
-        dispatch({ type: ERROR, payload: error });
+        return dispatch({ type: ERROR, payload: error });
       });
   };
 }
