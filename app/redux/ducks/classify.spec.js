@@ -459,19 +459,32 @@ describe('Classifier actions', function () {
 
   describe('load workflow', function () {
     let awaitWorkflow;
-    let state = {
+    let state;
+    let storeState;
+    let initialState = {
       classification: null,
       goldStandardMode: false,
       intervention: null,
-      upcomingSubjects: [],
+      upcomingSubjects: [{
+        id: '1',
+        locations: [],
+        metadata: [],
+        destroy: function () {}
+      },
+      {
+        id: '2',
+        locations: [],
+        metadata: [],
+        destroy: function () {}
+      }],
       workflow: { id: 'b' }
     };
     const fakeDispatch = sinon.stub().callsFake(function (action) {
       if(typeof action === 'function') {
         action = action(fakeDispatch);
       }
-      state = reducer(state, action);
-      return action;
+      storeState = reducer(storeState, action);
+      return storeState;
     });
     const fakePreferences = {
       update: sinon.stub().callsFake(changes => changes),
@@ -504,6 +517,8 @@ describe('Classifier actions', function () {
     });
 
     beforeEach(function () {
+      state = Object.assign({}, initialState);
+      storeState = initialState;
       awaitWorkflow = loadWorkflow('a', 'en', fakePreferences)(fakeDispatch);
     });
 
@@ -514,7 +529,11 @@ describe('Classifier actions', function () {
     });
 
     it('should clear the existing workflow', function () {
-      expect(state.workflow).to.be.null;
+      expect(storeState.workflow).to.be.null;
+    });
+
+    it('should clear the subjectQueue', function () {
+      expect(storeState.upcomingSubjects).to.deep.equal([]);
     });
 
     it('should update user preferences', function () {
@@ -522,14 +541,13 @@ describe('Classifier actions', function () {
     });
 
     it('should load the workflow translation', function () {
-      const loadTranslations = fakeDispatch.returnValues[3];
       const expectedAction = {
         type: 'pfe/translations/LOAD',
         translated_type: 'workflow',
         translated_id: 'a',
         language: 'en'
       };
-      expect(loadTranslations).to.deep.equal(expectedAction);
+      expect(fakeDispatch).to.have.been.calledWith(expectedAction);
     });
 
     it('should save user preferences', function (done) {
@@ -543,7 +561,15 @@ describe('Classifier actions', function () {
     it('should load a workflow', function (done) {
       awaitWorkflow
       .then(function () {
-        expect(state.workflow).to.deep.equal(fakeWorkflow);
+        expect(storeState.workflow).to.deep.equal(fakeWorkflow);
+      })
+      .then(done, done);
+    });
+
+    it('should not mutate initial state', function (done) {
+      awaitWorkflow
+      .then(function () {
+        expect(state).to.deep.equal(initialState);
       })
       .then(done, done);
     });
