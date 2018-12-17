@@ -2,12 +2,14 @@ import React from 'react';
 import assert from 'assert';
 import { shallow, render } from 'enzyme';
 
-import DataExports from './data-exports';
+import DataExports, { Warning } from './data-exports';
 import WorkflowClassificationExportButton from "./workflow-classification-export-button";
 import DataExportButton from  "../../partials/data-export-button";
 import TalkDataExportButton from  "../../talk/data-export-button";
 
-const testProject = {}
+const testProject = {
+  id: '1'
+}
 
 describe('DataExports', function () {
   let wrapper;
@@ -64,6 +66,25 @@ describe('DataExports', function () {
     const buttonToTest = findByExportType(talkDataExportButtons, 'tags');
     assert.equal(buttonToTest.length, 1);
     assert.equal(buttonToTest.prop('project'), testProject);
+  });
+
+  it('should show a warning if required', function () {
+    const noWarnings = wrapper.find(Warning);
+    assert.equal(noWarnings.length, 0);
+
+    const warnings = [
+      {
+        projects: ['1'],
+        message: 'foobar'
+      }
+    ]
+
+    const wrapperWithWarning = shallow(
+      <DataExports warnings={warnings} project={testProject} />
+    );
+    const oneWarning = wrapperWithWarning.find(Warning);
+    assert.equal(oneWarning.length, 1);
+    assert.equal(oneWarning.prop('text'), warnings[0].message);
   });
 });
 
