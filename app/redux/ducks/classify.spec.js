@@ -528,12 +528,15 @@ describe('Classifier actions', function () {
       fakePreferences.save.resetHistory();
     });
 
-    it('should clear the existing workflow', function () {
-      expect(storeState.workflow).to.be.null;
-    });
-
-    it('should clear the subjectQueue', function () {
-      expect(storeState.upcomingSubjects).to.deep.equal([]);
+    it('should reset the classify store', function () {
+      const expectedState = {
+        classification: null,
+        goldStandardMode: false,
+        intervention: null,
+        upcomingSubjects: [],
+        workflow: null
+      };
+      expect(storeState).to.deep.equal(expectedState);
     });
 
     it('should update user preferences', function () {
