@@ -25,8 +25,12 @@ export const StyledInternalLink = styled(Link).attrs({
 `;
 
 export const StyledExternalLink = styled(ExternalLink)`
-  color: white;
   ${commonStyles}
+
+  a {
+    color: white;
+    text-decoration: none;
+  }
 `;
 
 export const StyledLinkPlaceholder = styled.span`
