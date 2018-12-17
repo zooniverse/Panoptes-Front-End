@@ -368,8 +368,7 @@ export function loadWorkflow(workflowId, locale, preferences) {
     if (preferences) {
       preferences.update({ 'preferences.selected_workflow': workflowId });
     }
-    dispatch(setWorkflow(null));
-    dispatch(emptySubjectQueue());
+    dispatch(reset());
     dispatch({
       type: FETCH_WORKFLOW,
       payload: {
