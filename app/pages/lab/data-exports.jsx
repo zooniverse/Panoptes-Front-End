@@ -1,36 +1,24 @@
-React = require 'react'
-createReactClass = require 'create-react-class'
-counterpart = require 'counterpart'
-DataExportButton = require '../../partials/data-export-button'
-TalkDataExportButton = require '../../talk/data-export-button'
-`import WorkflowClassificationExportButton from './workflow-classification-export-button';`
-Dialog = require 'modal-form/dialog'
+import counterpart from "counterpart";
+import PropTypes from "prop-types";
+import React from "react";
 
-counterpart.registerTranslations 'en',
-  projectDetails:
-    classificationExport: "Request new classification export"
-    subjectExport: "Request new subject export"
-    workflowExport: "Request new workflow export"
-    workflowContentsExport: "Request new workflow contents export"
-    commentsExport: "Request new talk comments export"
-    tagsExport: "Request new talk tags export"
+import WorkflowClassificationExportButton from "./workflow-classification-export-button";
+import DataExportButton from  "../../partials/data-export-button";
+import TalkDataExportButton from  "../../talk/data-export-button";
 
-module.exports = createReactClass
-  displayName: 'GetDataExports'
+counterpart.registerTranslations("en", {
+  projectDetails: {
+    classificationExport: "Request new classification export",
+    subjectExport: "Request new subject export",
+    workflowExport: "Request new workflow export",
+    workflowContentsExport: "Request new workflow contents export",
+    commentsExport: "Request new talk comments export",
+    tagsExport: "Request new talk tags export",
+  }
+});
 
-  getDefaultProps: ->
-    project: {}
-
-  getInitialState: ->
-    avatarError: null
-    backgroundError: null
-
-  showWorkflowExport: ->
-    Dialog.alert(
-      <ExportWorkflowsDialog project={@props.project} />
-    )
-
-  render: ->
+export default function DataExports (props) {
+  return (
     <div className="data-exports">
       <p className="form-label">Project data exports</p>
       <p className="form-help">
@@ -52,28 +40,28 @@ module.exports = createReactClass
           Project Data<br />
           <div className="row">
             <DataExportButton
-              project={@props.project}
+              project={props.project}
               buttonKey="projectDetails.classificationExport"
               exportType="classifications_export"  />
           </div>
           <div className="row">
-            <WorkflowClassificationExportButton project={@props.project} />
+            <WorkflowClassificationExportButton project={props.project} />
           </div>
           <div className="row">
             <DataExportButton
-              project={@props.project}
+              project={props.project}
               buttonKey="projectDetails.subjectExport"
               exportType="subjects_export"  />
           </div>
           <div className="row">
             <DataExportButton
-              project={@props.project}
+              project={props.project}
               buttonKey="projectDetails.workflowExport"
               exportType="workflows_export"  />
           </div>
           <div className="row">
             <DataExportButton
-              project={@props.project}
+              project={props.project}
               buttonKey="projectDetails.workflowContentsExport"
               exportType="workflow_contents_export"  />
           </div>
@@ -82,16 +70,22 @@ module.exports = createReactClass
           Talk Data<br />
           <div className="row">
             <TalkDataExportButton
-              project={@props.project}
+              project={props.project}
               exportType="comments"
               label="Request new Talk comments export" />
           </div>
           <div className="row">
             <TalkDataExportButton
-              project={@props.project}
+              project={props.project}
               exportType="tags"
               label="Request new Talk tags export" />
           </div>
         </div>
       </div>
     </div>
+  )
+}
+
+DataExports.propTypes = {
+  project: PropTypes.object
+}

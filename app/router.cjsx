@@ -53,6 +53,7 @@ createReactClass = require 'create-react-class'
 `import Volunteering from './pages/get-involved/volunteering';`
 `import DevClassifierPage from './pages/dev-classifier';`
 `import Resources from './pages/about/resources-page';`
+`import DataExports from './pages/lab/data-exports';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = createReactClass
@@ -230,7 +231,7 @@ module.exports =
       <Route path="media" component={EditMediaPage} />
       <Route path="visibility" component={require './pages/lab/visibility'} />
       <Route path="talk" component={require './pages/lab/talk'} />
-      <Route path="data-exports" component={require './pages/lab/data-dumps'} />
+      <Route path="data-exports" component={DataExports} />
       <Route path="tutorial" component={require './pages/lab/tutorial'} />
       <Route path="guide" component={require './pages/lab/field-guide'} />
       <Redirect from="workflow/*" to="workflows/*" />
