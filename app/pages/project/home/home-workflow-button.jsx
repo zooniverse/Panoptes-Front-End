@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { browserHistory, Link } from 'react-router';
+import { browserHistory } from 'react-router';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
@@ -24,25 +24,16 @@ class ProjectHomeWorkflowButton extends React.Component {
 
   handleWorkflowSelection(e) {
     const { actions, preferences, translations, workflow } = this.props;
-    e.preventDefault();
     actions.classifier.loadWorkflow(workflow.id, translations.locale, preferences);
   }
 
   render() {
     // To disable the anchor tag, use class to set pointer-events: none style.
     // Except IE, which supports a disabled attribute instead.
-    const linkClasses = classnames({
+    const buttonClasses = classnames({
       'project-home-page__button': true,
       'project-home-page__button--disabled': this.props.disabled
     });
-
-    if (this.props.disabled) {
-      return (
-        <span className={linkClasses}>
-          {this.props.workflow.display_name}
-        </span>
-      );
-    }
 
     if (this.props.workflowAssignment &&
         this.props.workflow.configuration &&
@@ -51,15 +42,16 @@ class ProjectHomeWorkflowButton extends React.Component {
     }
 
     return (
-      <Link
-        to={`/projects/${this.props.project.slug}/classify`}
-        className={linkClasses}
+      <button
+        disabled={this.props.disabled}
+        type="button"
+        className={buttonClasses}
         onClick={this.handleWorkflowSelection}
       >
         {(this.props.workflowAssignment && !this.props.disabled) ?
           <Translate content="project.home.workflowAssignment" with={{ workflowDisplayName: this.props.workflow.display_name }} /> :
           this.props.workflow.display_name}
-      </Link>
+      </button>
     );
   }
 }

@@ -80,18 +80,17 @@ describe('ProjectHomeWorkflowButton', function () {
     expect(shallow(<ProjectHomeWorkflowButton />)).to.be.ok;
   });
 
-  it('renders a Link component', function () {
-    expect(wrapper.find('Link')).to.have.lengthOf(1);
-    expect(wrapper.find('span')).to.have.lengthOf(0);
+  it('renders an active button', function () {
+    expect(wrapper.find('button').prop('disabled')).to.be.false;
   });
 
-  it('renders the workflow display name as the Link text', function() {
+  it('renders the workflow display name as the button label', function() {
     expect(wrapper.render().text()).to.equal(testWorkflowWithoutLevel.display_name);
   });
   
   describe('on click', function () {
     before(function () {
-      wrapper.find('Link').simulate('click', fakeEvent);
+      wrapper.find('button').simulate('click', fakeEvent);
     });
     after(function () {
       fakeEvent.preventDefault.resetHistory();
@@ -102,14 +101,6 @@ describe('ProjectHomeWorkflowButton', function () {
     it('should load a new workflow', function () {
       expect(actions.classifier.loadWorkflow).to.have.been.calledWith(testWorkflowWithoutLevel.id, translations.locale, preferences);
     });
-    describe('workflow selection', function () {
-      it('should prevent the default click action on links', function () {
-        expect(fakeEvent.preventDefault).to.have.been.calledOnce;
-      });
-    });
-  });
-  it('uses the project slug in the Link href', function() {
-    expect(wrapper.find('Link').props().to).to.have.string(testProject.slug);
   });
 
   describe('when props.disabled is true', function() {
@@ -125,9 +116,8 @@ describe('ProjectHomeWorkflowButton', function () {
       );
     });
 
-    it('renders a span instead of a Link component', function() {
-      expect(wrapper.find('span')).to.have.lengthOf(1);
-      expect(wrapper.find('Link')).to.have.lengthOf(0);
+    it('renders a disabled button', function() {
+      expect(wrapper.find('button').prop('disabled')).to.be.true;
     });
 
     it('applies the call-to-action-button--disabled class', function() {
@@ -152,9 +142,9 @@ describe('ProjectHomeWorkflowButton', function () {
       expect(wrapper.isEmptyRender()).to.be.true;
     });
 
-    it('renders a Link when the workflow has a level set in its configuration', function() {
+    it('renders a button when the workflow has a level set in its configuration', function() {
       wrapper.setProps({ workflow: testWorkflowWithLevel });
-      expect(wrapper.find('Link')).to.have.lengthOf(1);
+      expect(wrapper.find('button')).to.have.lengthOf(1);
     });
 
     it('renders a Translate component for the Link text', function() {
