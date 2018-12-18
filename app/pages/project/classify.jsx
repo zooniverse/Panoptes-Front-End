@@ -119,11 +119,13 @@ export class ProjectClassifyPage extends React.Component {
     const { actions, project, workflow } = this.props;
 
     this.maybePromptWorkflowAssignmentDialog(this.props);
-    actions.classifier.fetchSubjects(workflow)
-    .then(() => actions.classifier.createClassification(project))
-    .catch((error) => {
-      this.setState({ rejected: { classification: error }});
-    });
+    if (workflow) {
+      actions.classifier.fetchSubjects(workflow)
+      .then(() => actions.classifier.createClassification(project))
+      .catch((error) => {
+        this.setState({ rejected: { classification: error }});
+      });
+    }
   }
 
   loadAppropriateClassification() {
