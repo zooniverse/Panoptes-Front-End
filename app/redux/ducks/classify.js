@@ -379,16 +379,25 @@ export function loadWorkflow(workflowId, locale, preferences) {
     const awaitTranslation = dispatch(translations.load('workflow', workflowId, locale));
     return Promise.all([awaitWorkflow(workflowId), awaitTranslation])
     .then(([workflow]) => {
+      return dispatch(setWorkflow(workflow));
+    })
+    .catch((error) => {
+      if (error.status && error.status === 404) {
+        // Clear all stored preferences if this workflow doesn't exist for this user.
+        if (preferences) {
+          preferences.update({ 'preferences.selected_workflow': undefined });
+          if (preferences.settings && preferences.settings.workflow_id === workflowId) {
+            preferences.update({ 'settings.workflow_id' : undefined });
+          }
+        }
+      }
+      return dispatch(setWorkflow(null));
+    })
+    .then((action) => {
       if (preferences) {
         preferences.save();
       }
-      return dispatch(setWorkflow(workflow));
-    })
-    .catch(() => {
-      if (preferences) {
-        preferences.update({ 'preferences.selected_workflow': undefined });
-      }
-      return dispatch(setWorkflow(null));
+      return action;
     });
   };
 }
