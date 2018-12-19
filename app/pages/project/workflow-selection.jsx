@@ -91,9 +91,10 @@ class WorkflowSelection extends React.Component {
       isValidWorkflow = project.links.workflows.indexOf(sanitisedWorkflowID) > -1;
     }
     let awaitWorkflow;
+    let awaitTranslation;
     if (isValidWorkflow) {
       actions.classifier.reset();
-      actions.translations.load('workflow', sanitisedWorkflowID, locale);
+      awaitTranslation = actions.translations.load('workflow', sanitisedWorkflowID, locale);
       awaitWorkflow = apiClient
         .type('workflows')
         .get(sanitisedWorkflowID, {}) // the empty query here forces the client to bypass its internal cache
@@ -108,10 +109,11 @@ class WorkflowSelection extends React.Component {
         });
     } else {
       awaitWorkflow = Promise.resolve(null);
+      awaitTranslation = Promise.resolve(null);
     }
 
-    return awaitWorkflow
-    .then((workflow) => {
+    return Promise.all([awaitWorkflow, awaitTranslation])
+    .then(([workflow]) => {
       if (workflow) {
         actions.classifier.setWorkflow(workflow);
         this.setState({ loadingSelectedWorkflow: false });
