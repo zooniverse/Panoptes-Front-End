@@ -43,7 +43,7 @@ module.exports = createReactClass
         awaitMiniCourseMedia.then (mediaByID) =>
           minicourseContent =
             <Provider store={store}>
-              <Translations original={minicourse} type="minicourse">
+              <Translations original={minicourse} type="tutorial">
                 <MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} geordi={geordi} />
               </Translations>
             </Provider>
