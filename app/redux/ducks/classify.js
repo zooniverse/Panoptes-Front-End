@@ -379,6 +379,10 @@ export function loadWorkflow(workflowId, locale, preferences) {
     const awaitTranslation = dispatch(translations.load('workflow', workflowId, locale));
     return Promise.all([awaitWorkflow(workflowId), awaitTranslation])
     .then(([workflow]) => {
+      if (!workflow) {
+        const error = new Error(`workflow ${workflowId}: empty response from Panoptes.`);
+        throw error;
+      }
       return dispatch(setWorkflow(workflow));
     })
     .catch((error) => {
@@ -387,7 +391,7 @@ export function loadWorkflow(workflowId, locale, preferences) {
         if (preferences) {
           preferences.update({ 'preferences.selected_workflow': undefined });
           if (preferences.settings && preferences.settings.workflow_id === workflowId) {
-            preferences.update({ 'settings.workflow_id' : undefined });
+            preferences.update({ 'settings.workflow_id': undefined });
           }
         }
       }
@@ -405,7 +409,7 @@ export function loadWorkflow(workflowId, locale, preferences) {
 export function reset() {
   return {
     type: RESET
-  }
+  };
 }
 
 export function setWorkflow(workflow) {
