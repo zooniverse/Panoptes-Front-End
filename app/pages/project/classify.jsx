@@ -149,14 +149,21 @@ export class ProjectClassifyPage extends React.Component {
 
   shouldWorkflowAssignmentPrompt(nextProps) {
     // Only for Gravity Spy which is assigning workflows to logged in users
+    const { preferences, project, workflow } = this.props;
     if (nextProps.project.experimental_tools.indexOf('workflow assignment') > -1) {
       const assignedWorkflowID = nextProps.preferences &&
         nextProps.preferences.settings &&
         nextProps.preferences.settings.workflow_id;
-      const currentWorkflowID = this.props.preferences && this.props.preferences.preferences.selected_workflow;
+      const currentWorkflowID = workflow && workflow.id;
       if (assignedWorkflowID && currentWorkflowID && assignedWorkflowID !== currentWorkflowID) {
-        if (this.state.promptWorkflowAssignmentDialog === false) {
-          this.setState({ promptWorkflowAssignmentDialog: true });
+        const isActiveWorkflow = project.links.active_workflows &&
+          project.links.active_workflows.indexOf(assignedWorkflowID) > -1;
+        if (isActiveWorkflow) {
+          if (this.state.promptWorkflowAssignmentDialog === false) {
+            this.setState({ promptWorkflowAssignmentDialog: true });
+          }
+        } else {
+          preferences.update({ 'settings.workflow_id': undefined }).save();
         }
       }
     }
