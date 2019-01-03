@@ -576,5 +576,164 @@ describe('Classifier actions', function () {
       })
       .then(done, done);
     });
+
+    describe('on error', function () {
+      describe('404 API errors', function () {
+        before(function () {
+          apiClient.type.restore();
+          const fakeError = {
+            status: 404
+          };
+          sinon.stub(apiClient, 'type').callsFake(function (type) {
+            if (type === 'workflows') {
+              return {
+                get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+              };
+            }
+            if (type === 'translations') {
+              const fakeTranslation = {
+                strings: {}
+              };
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve([fakeTranslation]))
+              };
+            }
+          });
+        });
+
+        it('should clear the workflow ID from user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(fakePreferences.update).to.have.been.calledWith({ 'preferences.selected_workflow': undefined });
+          })
+          .then(done, done);
+        });
+
+        it('should set the stored workflow to null', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(storeState.workflow).to.be.null;
+          })
+          .then(done, done);
+        });
+      });
+
+      describe('500 API errors', function () {
+        before(function () {
+          apiClient.type.restore();
+          const fakeError = {
+            status: 500
+          };
+          sinon.stub(apiClient, 'type').callsFake(function (type) {
+            if (type === 'workflows') {
+              return {
+                get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+              };
+            }
+            if (type === 'translations') {
+              const fakeTranslation = {
+                strings: {}
+              };
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve([fakeTranslation]))
+              };
+            }
+          });
+        });
+
+        it('should not clear the workflow ID from user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(fakePreferences.update).to.not.have.been.calledWith({ 'preferences.selected_workflow': undefined });
+          })
+          .then(done, done);
+        });
+
+        it('should set the stored workflow to null', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(storeState.workflow).to.be.null;
+          })
+          .then(done, done);
+        });
+      });
+
+      describe('200 responses with an undefined workflow', function () {
+        before(function () {
+          apiClient.type.restore();
+          sinon.stub(apiClient, 'type').callsFake(function (type) {
+            if (type === 'workflows') {
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve(undefined))
+              };
+            }
+            if (type === 'translations') {
+              const fakeTranslation = {
+                strings: {}
+              };
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve([fakeTranslation]))
+              };
+            }
+          });
+        });
+
+        it('should not clear the workflow ID from user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(fakePreferences.update).to.not.have.been.calledWith({ 'preferences.selected_workflow': undefined });
+          })
+          .then(done, done);
+        });
+
+        it('should set the stored workflow to null', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(storeState.workflow).to.be.null;
+          })
+          .then(done, done);
+        });
+      });
+
+      describe('translations API errors', function () {
+        before(function () {
+          apiClient.type.restore();
+          const fakeError = {
+            status: 500
+          };
+          sinon.stub(apiClient, 'type').callsFake(function (type) {
+            if (type === 'workflows') {
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve(fakeWorkflow))
+              };
+            }
+            if (type === 'translations') {
+              const fakeTranslation = {
+                strings: {}
+              };
+              return {
+                get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+              };
+            }
+          });
+        });
+
+        it('should not clear the workflow ID from user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(fakePreferences.update).to.not.have.been.calledWith({ 'preferences.selected_workflow': undefined });
+          })
+          .then(done, done);
+        });
+
+        it('should load a workflow', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(storeState.workflow).to.deep.equal(fakeWorkflow);
+          })
+          .then(done, done);
+        });
+      });
+    });
   });
 });
