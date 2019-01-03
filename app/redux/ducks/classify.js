@@ -35,7 +35,14 @@ function awaitSubjectSet(workflow) {
 
 function awaitWorkflow(workflowId) {
   // pass an empty query object to bypass the API client's internal cache.
-  return apiClient.type('workflows').get(workflowId, {});
+  return apiClient.type('workflows').get(workflowId, {})
+    .then((workflow) => {
+      if (!workflow) {
+        const error = new Error(`workflow ${workflowId}: empty response from Panoptes.`);
+        throw error;
+      }
+      return workflow;
+    });
 }
 
 function createNewClassification(project, workflow, subject, goldStandardMode) {
@@ -378,13 +385,7 @@ export function loadWorkflow(workflowId, locale, preferences) {
     });
     const awaitTranslation = dispatch(translations.load('workflow', workflowId, locale));
     return Promise.all([awaitWorkflow(workflowId), awaitTranslation])
-    .then(([workflow]) => {
-      if (!workflow) {
-        const error = new Error(`workflow ${workflowId}: empty response from Panoptes.`);
-        throw error;
-      }
-      return dispatch(setWorkflow(workflow));
-    })
+    .then(([workflow]) => setWorkflow(workflow))
     .catch((error) => {
       if (error.status && error.status === 404) {
         // Clear all stored preferences if this workflow doesn't exist for this user.
@@ -395,13 +396,13 @@ export function loadWorkflow(workflowId, locale, preferences) {
           }
         }
       }
-      return dispatch(setWorkflow(null));
+      return setWorkflow(null);
     })
     .then((action) => {
       if (preferences) {
         preferences.save();
       }
-      return action;
+      return dispatch(action);
     });
   };
 }
