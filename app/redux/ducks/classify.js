@@ -4,6 +4,7 @@ import GridTool from '../../classifier/drawing-tools/grid';
 import { getSessionID } from '../../lib/session';
 import seenThisSession from '../../lib/seen-this-session';
 import tasks from '../../classifier/tasks';
+import * as translations from './translations';
 
 function awaitSubjects(subjectQuery) {
   return apiClient.get('/subjects/queued', subjectQuery)
@@ -30,6 +31,18 @@ function awaitSubjectSet(workflow) {
   } else {
     return Promise.resolve();
   }
+}
+
+function awaitWorkflow(workflowId) {
+  // pass an empty query object to bypass the API client's internal cache.
+  return apiClient.type('workflows').get(workflowId, {})
+    .then((workflow) => {
+      if (!workflow) {
+        const error = new Error(`workflow ${workflowId}: empty response from Panoptes.`);
+        throw error;
+      }
+      return workflow;
+    });
 }
 
 function createNewClassification(project, workflow, subject, goldStandardMode) {
@@ -83,6 +96,11 @@ function completeAnnotations(workflow, annotations) {
   return annotations;
 }
 
+function destroySubjects(subjects) {
+  subjects.forEach(subject => subject.destroy());
+  subjects.splice(0);
+}
+
 function finishClassification(workflow, classification, annotations) {
   return classification.update({
     annotations: completeAnnotations(workflow, annotations),
@@ -111,6 +129,8 @@ const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
 const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
 const SAVE_ANNOTATIONS = 'pfe/classify/SAVE_ANNOTATIONS';
+const FETCH_WORKFLOW = 'pfe/classify/FETCH_WORKFLOW';
+const RESET = 'pfe/classify/RESET';
 const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
 const TOGGLE_GOLD_STANDARD = 'pfe/classify/TOGGLE_GOLD_STANDARD';
 
@@ -199,11 +219,15 @@ export default function reducer(state = initialState, action = {}) {
       }
       return Object.assign({}, state, { classification });
     }
+    case RESET: {
+      const upcomingSubjects = state.upcomingSubjects.slice();
+      destroySubjects(upcomingSubjects);
+      return Object.assign({}, initialState);
+    }
     case RESET_SUBJECTS: {
       const classification = null;
       const upcomingSubjects = state.upcomingSubjects.slice();
-      upcomingSubjects.forEach(subject => subject.destroy());
-      upcomingSubjects.splice(0);
+      destroySubjects(upcomingSubjects);
       return Object.assign({}, state, { classification, upcomingSubjects });
     }
     case SAVE_ANNOTATIONS: {
@@ -343,6 +367,49 @@ export function saveAnnotations(annotations) {
   return {
     type: SAVE_ANNOTATIONS,
     payload: { annotations }
+  };
+}
+
+export function loadWorkflow(workflowId, locale, preferences) {
+  return (dispatch) => {
+    if (preferences) {
+      preferences.update({ 'preferences.selected_workflow': workflowId });
+    }
+    dispatch(reset());
+    dispatch({
+      type: FETCH_WORKFLOW,
+      payload: {
+        workflowId,
+        locale
+      }
+    });
+    const awaitTranslation = dispatch(translations.load('workflow', workflowId, locale));
+    return Promise.all([awaitWorkflow(workflowId), awaitTranslation])
+    .then(([workflow]) => setWorkflow(workflow))
+    .catch((error) => {
+      if (error.status && error.status === 404) {
+        // Clear all stored preferences if this workflow doesn't exist for this user.
+        if (preferences) {
+          preferences.update({ 'preferences.selected_workflow': undefined });
+          if (preferences.settings && preferences.settings.workflow_id === workflowId) {
+            preferences.update({ 'settings.workflow_id': undefined });
+          }
+        }
+      }
+      return setWorkflow(null);
+    })
+    .then((action) => {
+      if (preferences) {
+        preferences.save();
+      }
+      return dispatch(action);
+    });
+  };
+}
+
+export function reset() {
+  return {
+    type: RESET
   };
 }
 

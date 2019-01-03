@@ -77,6 +77,9 @@ const preferences = mockPanoptesResource(
 
 describe('WorkflowSelection', function () {
   const actions = {
+    classifier: {
+      reset: sinon.spy()
+    },
     translations: {
       load: sinon.stub()
     }
