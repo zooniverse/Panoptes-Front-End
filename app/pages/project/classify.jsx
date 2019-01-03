@@ -62,10 +62,6 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.user !== null) {
-      this.shouldWorkflowAssignmentPrompt(nextProps, nextContext);
-    }
-
     const currentGroup = this.props.location.query && this.props.location.query.group;
     const nextGroup = nextProps.location.query && nextProps.location.query.group;
 
@@ -84,7 +80,11 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { classification, upcomingSubjects, workflow } = this.props;
+    const { classification, upcomingSubjects, user, workflow } = this.props;
+
+    if (user !== null) {
+      this.shouldWorkflowAssignmentPrompt();
+    }
 
     if (workflow !== prevProps.workflow) {
       this.loadAppropriateClassification();
@@ -149,16 +149,23 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  shouldWorkflowAssignmentPrompt(nextProps) {
+  shouldWorkflowAssignmentPrompt() {
     // Only for Gravity Spy which is assigning workflows to logged in users
-    if (nextProps.project.experimental_tools.indexOf('workflow assignment') > -1) {
-      const assignedWorkflowID = nextProps.preferences &&
-        nextProps.preferences.settings &&
-        nextProps.preferences.settings.workflow_id;
-      const currentWorkflowID = this.props.preferences && this.props.preferences.preferences.selected_workflow;
+    const { preferences, project, workflow } = this.props;
+    if (project.experimental_tools.indexOf('workflow assignment') > -1) {
+      const assignedWorkflowID = preferences &&
+        preferences.settings &&
+        preferences.settings.workflow_id;
+      const currentWorkflowID = workflow && workflow.id;
       if (assignedWorkflowID && currentWorkflowID && assignedWorkflowID !== currentWorkflowID) {
-        if (this.state.promptWorkflowAssignmentDialog === false) {
-          this.setState({ promptWorkflowAssignmentDialog: true });
+        const isActiveWorkflow = project.links.active_workflows &&
+          project.links.active_workflows.indexOf(assignedWorkflowID) > -1;
+        if (isActiveWorkflow) {
+          if (this.state.promptWorkflowAssignmentDialog === false) {
+            this.setState({ promptWorkflowAssignmentDialog: true });
+          }
+        } else {
+          preferences.update({ 'settings.workflow_id': undefined }).save();
         }
       }
     }
