@@ -350,10 +350,6 @@ describe('WorkflowSelection', function () {
       wrapper.setProps({ project, preferences });
     });
 
-    beforeEach(function () {
-      awaitWorkflow = controller.getWorkflow('1')
-    });
-
     afterEach(function () {
       controller.getSelectedWorkflow.resetHistory();
       controller.clearInactiveWorkflow.resetHistory();
@@ -364,13 +360,119 @@ describe('WorkflowSelection', function () {
       controller.clearInactiveWorkflow.restore();
     });
 
-    describe('when the workflow exists and is active', function () {
+    describe('with a valid workflow ID', function () {
+      beforeEach(function () {
+        awaitWorkflow = controller.getWorkflow('1')
+      });
+
+      describe('when the workflow exists and is active', function () {
+        const fakeWorkflow = mockPanoptesResource(
+          'workflows',
+          {
+            id: '1'
+          }
+        );
+        before(function () {
+          sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
+            return {
+              get: sinon.stub().callsFake(() => Promise.resolve(fakeWorkflow))
+            };
+          });
+        });
+
+        after(function () {
+          apiClient.type.restore();
+        });
+
+        it('should not clear user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(controller.clearInactiveWorkflow).to.have.not.been.called;
+          })
+          .then(done, done);
+        });
+
+        it('should store the workflow', function () {
+          expect(actions.classifier.setWorkflow).to.have.been.calledWith(fakeWorkflow);
+        });
+      });
+
+      describe('on 404 errors', function () {
+        before(function () {
+          sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
+            const fakeError = {
+              status: 404
+            };
+            return {
+              get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+            };
+          });
+        });
+
+        after(function () {
+          apiClient.type.restore();
+        });
+
+        it('should clear user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(controller.clearInactiveWorkflow).to.have.been.calledOnce;
+            expect(controller.clearInactiveWorkflow).to.have.been.calledWith('1');
+          })
+          .then(done, done);
+        });
+
+        it('should try to load another workflow', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(controller.getSelectedWorkflow).to.have.been.calledOnce;
+          })
+          .then(done, done);
+        });
+      });
+
+      describe('on 500 errors', function () {
+        before(function () {
+          sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
+            const fakeError = {
+              status: 500
+            };
+            return {
+              get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+            };
+          });
+        });
+
+        after(function () {
+          apiClient.type.restore();
+        });
+
+        it('should not clear user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(controller.clearInactiveWorkflow).to.have.not.been.called;
+          })
+          .then(done, done);
+        });
+
+        it('should not try to load another workflow', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(controller.getSelectedWorkflow).to.have.not.been.called;
+          })
+          .then(done, done);
+        });
+      });
+    });
+
+    describe('with an invalid workflow ID', function () {
       const fakeWorkflow = mockPanoptesResource(
         'workflows',
         {
-          id: '1'
+          id: '10'
         }
       );
+
       before(function () {
         sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
           return {
@@ -379,44 +481,23 @@ describe('WorkflowSelection', function () {
         });
       });
 
-      after(function () {
-        apiClient.type.restore();
-      });
-
-      it('should not clear user preferences', function (done) {
-        awaitWorkflow
-        .then(function () {
-          expect(controller.clearInactiveWorkflow).to.have.not.been.called;
-        })
-        .then(done, done);
-      });
-
-      it('should store the workflow', function () {
-        expect(actions.classifier.setWorkflow).to.have.been.calledWith(fakeWorkflow);
-      });
-    });
-
-    describe('on 404 errors', function () {
-      before(function () {
-        sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
-          const fakeError = {
-            status: 404
-          };
-          return {
-            get: sinon.stub().callsFake(() => Promise.reject(fakeError))
-          };
-        });
+      beforeEach(function () {
+        awaitWorkflow = controller.getWorkflow('10');
       });
 
       after(function () {
         apiClient.type.restore();
+      });
+
+      it('should not load a workflow', function () {
+        expect(apiClient.type).to.have.not.been.called;
       });
 
       it('should clear user preferences', function (done) {
         awaitWorkflow
         .then(function () {
           expect(controller.clearInactiveWorkflow).to.have.been.calledOnce;
-          expect(controller.clearInactiveWorkflow).to.have.been.calledWith('1');
+          expect(controller.clearInactiveWorkflow).to.have.been.calledWith('10');
         })
         .then(done, done);
       });
@@ -425,39 +506,6 @@ describe('WorkflowSelection', function () {
         awaitWorkflow
         .then(function () {
           expect(controller.getSelectedWorkflow).to.have.been.calledOnce;
-        })
-        .then(done, done);
-      });
-    });
-
-    describe('on 500 errors', function () {
-      before(function () {
-        sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
-          const fakeError = {
-            status: 500
-          };
-          return {
-            get: sinon.stub().callsFake(() => Promise.reject(fakeError))
-          };
-        });
-      });
-
-      after(function () {
-        apiClient.type.restore();
-      });
-
-      it('should not clear user preferences', function (done) {
-        awaitWorkflow
-        .then(function () {
-          expect(controller.clearInactiveWorkflow).to.have.not.been.called;
-        })
-        .then(done, done);
-      });
-
-      it('should not try to load another workflow', function (done) {
-        awaitWorkflow
-        .then(function () {
-          expect(controller.getSelectedWorkflow).to.have.not.been.called;
         })
         .then(done, done);
       });
