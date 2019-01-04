@@ -95,7 +95,7 @@
     "nyc": "~13.1.0",
     "publisssh": "~1.1.0",
     "request": "~2.88.0",
-    "rimraf": "~2.6.2",
+    "rimraf": "~2.6.3",
     "sinon": "~7.2.2",
     "sinon-chai": "~3.3.0",
     "style-loader": "~0.23.1",
