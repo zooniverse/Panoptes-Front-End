@@ -12,9 +12,9 @@ style = require '../css/main.styl'
 `import { Provider } from 'react-redux';`
 `import configureStore from './redux/store';`
 `import { processIntervention } from './redux/ducks/interventions';`
-`import { emptySubjectQueue } from './redux/ducks/classify';`
+`import { reset } from './redux/ducks/classify';`
 store = configureStore()
-auth.listen('change', () => store.dispatch(emptySubjectQueue()));
+auth.listen('change', () => store.dispatch(reset()));
 apiClient.type('subject_sets').listen('add-or-remove', () => store.dispatch(emptySubjectQueue()));
 sugarClient.on('experiment', (message) => store.dispatch(processIntervention(message)));
 
