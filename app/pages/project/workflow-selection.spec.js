@@ -420,6 +420,14 @@ describe('WorkflowSelection', function () {
         })
         .then(done, done);
       });
+
+      it('should try to load another workflow', function (done) {
+        awaitWorkflow
+        .then(function () {
+          expect(controller.getSelectedWorkflow).to.have.been.calledOnce;
+        })
+        .then(done, done);
+      });
     });
 
     describe('on 500 errors', function () {
@@ -442,6 +450,14 @@ describe('WorkflowSelection', function () {
         awaitWorkflow
         .then(function () {
           expect(controller.clearInactiveWorkflow).to.have.not.been.called;
+        })
+        .then(done, done);
+      });
+
+      it('should not try to load another workflow', function (done) {
+        awaitWorkflow
+        .then(function () {
+          expect(controller.getSelectedWorkflow).to.have.not.been.called;
         })
         .then(done, done);
       });
