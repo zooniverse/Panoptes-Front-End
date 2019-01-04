@@ -76,31 +76,37 @@ const preferences = mockPanoptesResource(
 );
 
 describe('WorkflowSelection', function () {
+  let wrapper;
+  let controller;
+  let workflowStub;
   const actions = {
     classifier: {
       reset: sinon.spy()
     },
     translations: {
-      load: sinon.stub()
+      load: sinon.stub().callsFake(() => Promise.resolve([]))
     }
   };
-  const wrapper = mount(
-    <WorkflowSelection
-      actions={actions}
-      project={project}
-      preferences={preferences}
-      projectRoles={projectRoles}
-      locale='en'
-      location={location}
-    >
-      <StubPage />
-    </WorkflowSelection>,
-    { context }
-  );
-  const controller = wrapper.instance();
+
+  before(function () {
+    workflowStub = sinon.stub(WorkflowSelection.prototype, 'getWorkflow').callsFake(() => {});
+    wrapper = mount(
+        <WorkflowSelection
+          actions={actions}
+          project={project}
+          preferences={preferences}
+          projectRoles={projectRoles}
+          locale='en'
+          location={location}
+        >
+          <StubPage />
+        </WorkflowSelection>,
+        { context }
+      );
+    controller = wrapper.instance();
+  });
 
   describe('selecting a workflow ID', function () {
-    const workflowStub = sinon.stub(controller, 'getWorkflow').callsFake(() => {});
 
     before(function () {
       sinon.stub(apiClient, 'request').callsFake((method, url, payload) => {
@@ -132,6 +138,7 @@ describe('WorkflowSelection', function () {
 
     after(function () {
       apiClient.request.restore();
+      workflowStub.restore();
     });
 
     it('should fetch a random active workflow by default', function () {
@@ -332,7 +339,91 @@ describe('WorkflowSelection', function () {
     });
   });
 
+  describe('loading a workflow', function () {
+    let awaitWorkflow;
+    before(function () {
+      project.update({ configuration: {} });
+      preferences.update({ settings: {}, preferences: {}});
+      sinon.stub(controller, 'getSelectedWorkflow').callsFake(() => {});
+      sinon.stub(controller, 'clearInactiveWorkflow').callsFake(() => Promise.resolve({}));
+      wrapper.setProps({ project, preferences });
+    });
+
+    beforeEach(function () {
+      awaitWorkflow = controller.getWorkflow('1')
+    });
+
+    afterEach(function () {
+      controller.getSelectedWorkflow.resetHistory();
+      controller.clearInactiveWorkflow.resetHistory();
+    });
+
+    after(function () {
+      controller.getSelectedWorkflow.restore();
+      controller.clearInactiveWorkflow.restore();
+    });
+
+    describe('on 404 errors', function () {
+      before(function () {
+        sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
+          const fakeError = {
+            status: 404
+          };
+          return {
+            get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+          };
+        });
+      });
+
+      after(function () {
+        apiClient.type.restore();
+      });
+
+      it('should clear user preferences', function (done) {
+        awaitWorkflow
+        .then(function () {
+          expect(controller.clearInactiveWorkflow).to.have.been.calledOnce;
+          expect(controller.clearInactiveWorkflow).to.have.been.calledWith('1');
+        })
+        .then(done, done);
+      });
+    });
+
+    describe('on 500 errors', function () {
+      before(function () {
+        sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
+          const fakeError = {
+            status: 500
+          };
+          return {
+            get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+          };
+        });
+      });
+
+      after(function () {
+        apiClient.type.restore();
+      });
+
+      it('should not clear user preferences', function (done) {
+        awaitWorkflow
+        .then(function () {
+          expect(controller.clearInactiveWorkflow).to.have.not.been.called;
+        })
+        .then(done, done);
+      });
+    });
+  });
+
   describe('on language change', function () {
+    before(function () {
+      sinon.stub(controller, 'getWorkflow').callsFake(() => {});
+    })
+
+    after(function () {
+      controller.getWorkflow.restore();
+    });
+
     it('should load new translation strings', function () {
       const workflow = mockPanoptesResource('workflows', { id: '1', tasks: {} });
       wrapper.setProps({ locale: 'it', workflow });
