@@ -81,7 +81,8 @@ describe('WorkflowSelection', function () {
   let workflowStub;
   const actions = {
     classifier: {
-      reset: sinon.spy()
+      reset: sinon.spy(),
+      setWorkflow: sinon.spy()
     },
     translations: {
       load: sinon.stub().callsFake(() => Promise.resolve([]))
@@ -361,6 +362,38 @@ describe('WorkflowSelection', function () {
     after(function () {
       controller.getSelectedWorkflow.restore();
       controller.clearInactiveWorkflow.restore();
+    });
+
+    describe('when the workflow exists and is active', function () {
+      const fakeWorkflow = mockPanoptesResource(
+        'workflows',
+        {
+          id: '1'
+        }
+      );
+      before(function () {
+        sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
+          return {
+            get: sinon.stub().callsFake(() => Promise.resolve(fakeWorkflow))
+          };
+        });
+      });
+
+      after(function () {
+        apiClient.type.restore();
+      });
+
+      it('should not clear user preferences', function (done) {
+        awaitWorkflow
+        .then(function () {
+          expect(controller.clearInactiveWorkflow).to.have.not.been.called;
+        })
+        .then(done, done);
+      });
+
+      it('should store the workflow', function () {
+        expect(actions.classifier.setWorkflow).to.have.been.calledWith(fakeWorkflow);
+      });
     });
 
     describe('on 404 errors', function () {
