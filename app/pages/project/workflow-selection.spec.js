@@ -463,6 +463,37 @@ describe('WorkflowSelection', function () {
           .then(done, done);
         });
       });
+
+      describe('on application JS errors', function () {
+        before(function () {
+          sinon.stub(apiClient, 'type').callsFake((method, url, payload) => {
+            const fakeError = new Error('simulated client error.');
+            return {
+              get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+            };
+          });
+        });
+
+        after(function () {
+          apiClient.type.restore();
+        });
+
+        it('should not clear user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(controller.clearInactiveWorkflow).to.have.not.been.called;
+          })
+          .then(done, done);
+        });
+
+        it('should not try to load another workflow', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(controller.getSelectedWorkflow).to.have.not.been.called;
+          })
+          .then(done, done);
+        });
+      });
     });
 
     describe('with an invalid workflow ID', function () {
