@@ -12,6 +12,6 @@ export const projectsWithWarnings = [
       '4212', // Spiral Graph
       '5856', // Southern Weather Discovery
     ],
-    "message": "Your project may have been affected by a bug which could compromise some of your data. To read more, visit [the Zooniverse blog](#)"
+    "message": "Your project may have been affected by a bug which could compromise some of your data. The bug was effective between November 6-12, and 20-29, 2018. Your data export will reflect `translation_bug: true` if your data was potentially impacted. To read more, visit [the Zooniverse blog](https://blog.zooniverse.org/2018/12/19/zooniverse-workflow-bug/)."
   }
 ]
