@@ -540,6 +540,42 @@ describe('WorkflowSelection', function () {
         })
         .then(done, done);
       });
+
+      describe('when the project default workflow is invalid', function () {
+        before(function () {
+          project.update({ 'configuration.default_workflow': '10' });
+          sinon.stub(project, 'uncacheLink');
+        });
+
+        after(function () {
+          project.update({ configuration: {} });
+          project.uncacheLink.restore();
+        });
+
+        it('should not clear user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(controller.clearInactiveWorkflow).to.have.not.been.called;
+          })
+          .then(done, done);
+        });
+
+        it('should not try to load another workflow', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(controller.getSelectedWorkflow).to.have.not.been.called;
+          })
+          .then(done, done);
+        });
+
+        it('should uncache project workflow links', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(project.uncacheLink).to.have.been.calledWith('workflows');
+          })
+          .then(done, done);
+        });
+      })
     });
   });
 
