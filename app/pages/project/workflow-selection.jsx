@@ -99,7 +99,8 @@ class WorkflowSelection extends React.Component {
         .type('workflows')
         .get(sanitisedWorkflowID, {}) // the empty query here forces the client to bypass its internal cache
         .catch((error) => {
-          if (error.status === 404) {
+          const errorType = error.status && parseInt(error.status / 100, 10);
+          if (errorType === 4) {
             this.clearInactiveWorkflow(sanitisedWorkflowID)
             .then(this.getSelectedWorkflow(this.props));
           } else {

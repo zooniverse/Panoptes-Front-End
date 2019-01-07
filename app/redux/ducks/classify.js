@@ -387,7 +387,8 @@ export function loadWorkflow(workflowId, locale, preferences) {
     return Promise.all([awaitWorkflow(workflowId), awaitTranslation])
     .then(([workflow]) => setWorkflow(workflow))
     .catch((error) => {
-      if (error.status && error.status === 404) {
+      const errorType = error.status && parseInt(error.status / 100, 10);
+      if (errorType === 4) {
         // Clear all stored preferences if this workflow doesn't exist for this user.
         if (preferences) {
           preferences.update({ 'preferences.selected_workflow': undefined });
