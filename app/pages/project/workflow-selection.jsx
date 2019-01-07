@@ -99,43 +99,42 @@ class WorkflowSelection extends React.Component {
         .type('workflows')
         .get(sanitisedWorkflowID, {}) // the empty query here forces the client to bypass its internal cache
         .catch((error) => {
-          if (error.status === 404) {
+          const errorType = error.status && parseInt(error.status / 100, 10);
+          if (errorType === 4) {
             this.clearInactiveWorkflow(sanitisedWorkflowID)
             .then(this.getSelectedWorkflow(this.props));
           } else {
-            console.error(error);
+            console.error(error.message);
             this.setState({ error, loadingSelectedWorkflow: false });
           }
+          return null;
         });
     } else {
       awaitWorkflow = Promise.resolve(null);
       awaitTranslation = Promise.resolve(null);
+      if (process.env.BABEL_ENV !== 'test') console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
+      if (this.props.project.configuration &&
+        selectedWorkflowID === this.props.project.configuration.default_workflow
+      ) {
+        // If a project still has an inactive workflow set as a default workflow prior to this being fix in the lab.
+        // Don't try again and get caught in a loop
+        this.workflowSelectionErrorHandler();
+      } else {
+        if (this.props.location.query && this.props.location.query.workflow) {
+          this.context.router.push(`/projects/${this.props.project.slug}/classify`);
+        }
+
+        this.clearInactiveWorkflow(selectedWorkflowID)
+          .then(() => {
+            this.getSelectedWorkflow(this.props);
+          });
+      }
     }
 
     return Promise.all([awaitWorkflow, awaitTranslation])
     .then(([workflow]) => {
-      if (workflow) {
-        actions.classifier.setWorkflow(workflow);
-        this.setState({ loadingSelectedWorkflow: false });
-      } else {
-        if (process.env.BABEL_ENV !== 'test') console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
-        if (this.props.project.configuration &&
-          selectedWorkflowID === this.props.project.configuration.default_workflow
-        ) {
-          // If a project still has an inactive workflow set as a default workflow prior to this being fix in the lab.
-          // Don't try again and get caught in a loop
-          this.workflowSelectionErrorHandler();
-        } else {
-          if (this.props.location.query && this.props.location.query.workflow) {
-            this.context.router.push(`/projects/${this.props.project.slug}/classify`);
-          }
-
-          this.clearInactiveWorkflow(selectedWorkflowID)
-            .then(() => {
-              this.getSelectedWorkflow(this.props);
-            });
-        }
-      }
+      actions.classifier.setWorkflow(workflow);
+      this.setState({ loadingSelectedWorkflow: false });
     })
     .catch((error) => {
       console.error(error.message);
