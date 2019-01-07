@@ -15,7 +15,9 @@ const location = {
 };
 
 const context = {
-  router: {}
+  router: {
+    push: sinon.stub()
+  }
 };
 
 const projectRoles = [
@@ -50,6 +52,7 @@ const project = mockPanoptesResource('projects',
     id: 'a',
     display_name: 'A test project',
     experimental_tools: [],
+    slug: 'test/test-project',
     links: {
       active_workflows: ['1', '2', '3', '4', '5'],
       owner: { id: '1' },
@@ -539,6 +542,29 @@ describe('WorkflowSelection', function () {
           expect(controller.getSelectedWorkflow).to.have.been.calledOnce;
         })
         .then(done, done);
+      });
+
+      describe('when a workflow query param is present', function () {
+        before(function () {
+          const location = {
+            query: {
+              workflow: '5'
+            }
+          };
+          wrapper.setProps({ location });
+        });
+
+        after(function () {
+          wrapper.setProps({ location : {} });
+        });
+
+        it('should redirect to the classify page', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(context.router.push).to.have.been.calledWith(`/projects/${project.slug}/classify`);
+          })
+          .then(done, done);
+        });
       });
 
       describe('when the project default workflow is invalid', function () {
