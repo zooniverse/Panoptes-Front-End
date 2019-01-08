@@ -84,7 +84,6 @@ describe('WorkflowSelection', function () {
   let workflowStub;
   const actions = {
     classifier: {
-      reset: sinon.spy(),
       setWorkflow: sinon.spy()
     },
     translations: {

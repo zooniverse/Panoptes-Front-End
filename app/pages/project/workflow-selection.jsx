@@ -93,7 +93,6 @@ class WorkflowSelection extends React.Component {
     let awaitWorkflow;
     let awaitTranslation;
     if (isValidWorkflow) {
-      actions.classifier.reset();
       awaitTranslation = actions.translations.load('workflow', sanitisedWorkflowID, locale);
       awaitWorkflow = apiClient
         .type('workflows')
