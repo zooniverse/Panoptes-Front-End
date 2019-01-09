@@ -360,8 +360,10 @@ const mapDispatchToProps = dispatch => ({
 const ConnectedClassifyPage = connect(mapStateToProps, mapDispatchToProps)(ProjectClassifyPage);
 
 function ConnectedClassifyPageWithWorkflow(props) {
+  const workflowKey = props.workflow ? props.workflow.id : 'no-workflow';
   return (
     <WorkflowSelection
+      key={workflowKey}
       actions={props.actions}
       location={props.location}
       preferences={props.preferences}

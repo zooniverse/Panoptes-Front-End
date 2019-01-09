@@ -26,7 +26,9 @@ class WorkflowSelection extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { locale, preferences, workflow } = this.props;
+    const { actions, locale, preferences, user, workflow } = this.props;
+    const prevUser = prevProps.user && prevProps.user.login;
+    const currentUser = user && user.login;
     const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
     if (userSelectedWorkflow && workflow) {
       if (!this.state.loadingSelectedWorkflow && userSelectedWorkflow !== workflow.id) {
@@ -37,7 +39,10 @@ class WorkflowSelection extends React.Component {
       this.getSelectedWorkflow(this.props);
     }
     if (workflow && prevProps.locale !== locale) {
-      this.props.actions.translations.load('workflow', workflow.id, locale);
+      actions.translations.load('workflow', workflow.id, locale);
+    }
+    if (currentUser !== prevUser) {
+      actions.classifier.reset();
     }
   }
 
@@ -48,8 +53,8 @@ class WorkflowSelection extends React.Component {
     let selectedWorkflowID;
     let activeFilter = true;
     const workflowFromURL = this.sanitiseID(this.props.location.query.workflow);
-    const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
-    const projectSetWorkflow = (preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
+    const userSelectedWorkflow = (user && preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
+    const projectSetWorkflow = (user && preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
     if (workflowFromURL &&
       this.checkUserRoles(project, user)
     ) {
@@ -93,7 +98,6 @@ class WorkflowSelection extends React.Component {
     let awaitWorkflow;
     let awaitTranslation;
     if (isValidWorkflow) {
-      actions.classifier.reset();
       awaitTranslation = actions.translations.load('workflow', sanitisedWorkflowID, locale);
       awaitWorkflow = apiClient
         .type('workflows')

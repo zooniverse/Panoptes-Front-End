@@ -237,7 +237,7 @@ export default function reducer(state = initialState, action = {}) {
     }
     case SET_WORKFLOW: {
       const { workflow } = action.payload;
-      return Object.assign({}, state, { workflow });
+      return Object.assign({}, initialState, { workflow });
     }
     case TOGGLE_GOLD_STANDARD: {
       const { goldStandard } = action.payload;
@@ -375,7 +375,6 @@ export function loadWorkflow(workflowId, locale, preferences) {
     if (preferences) {
       preferences.update({ 'preferences.selected_workflow': workflowId });
     }
-    dispatch(reset());
     dispatch({
       type: FETCH_WORKFLOW,
       payload: {

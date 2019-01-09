@@ -528,17 +528,6 @@ describe('Classifier actions', function () {
       fakePreferences.save.resetHistory();
     });
 
-    it('should reset the classify store', function () {
-      const expectedState = {
-        classification: null,
-        goldStandardMode: false,
-        intervention: null,
-        upcomingSubjects: [],
-        workflow: null
-      };
-      expect(storeState).to.deep.equal(expectedState);
-    });
-
     it('should update user preferences', function () {
       expect(fakePreferences.update).to.have.been.calledWith({ 'preferences.selected_workflow': 'a' });
     });
@@ -551,6 +540,20 @@ describe('Classifier actions', function () {
         language: 'en'
       };
       expect(fakeDispatch).to.have.been.calledWith(expectedAction);
+    });
+
+    it('should reset the classify store', function (done) {
+      const expectedState = {
+        classification: null,
+        goldStandardMode: false,
+        intervention: null,
+        upcomingSubjects: [],
+        workflow: fakeWorkflow
+      };
+      awaitWorkflow.then(function () {
+        expect(storeState).to.deep.equal(expectedState);
+      })
+      .then(done, done);
     });
 
     it('should save user preferences', function (done) {
