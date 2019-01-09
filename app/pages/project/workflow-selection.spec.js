@@ -167,6 +167,37 @@ describe('WorkflowSelection', function () {
       expect(workflowStub).to.have.been.calledWith('6', true);
     });
 
+    describe('without a logged-in user', function () {
+      before(function () {
+        project.update({ 'configuration.default_workflow': '1' });
+      });
+
+      afterEach(function () {
+        preferences.update({
+          settings: {},
+          preferences: {}
+        });
+      });
+
+      after(function () {
+        project.update({ 'configuration.default_workflow': undefined });
+      });
+
+      it('should ignore project-assigned workflows', function () {
+        preferences.update({ 'settings.workflow_id': '4' });
+        controller.getSelectedWorkflow({ project, preferences });
+        expect(workflowStub).to.have.been.calledOnce;
+        expect(workflowStub).to.have.been.calledWith('1', true);
+      });
+
+      it('should ignore user-selected workflows', function () {
+        preferences.update({ 'preferences.selected_workflow': '5' });
+        controller.getSelectedWorkflow({ project, preferences });
+        expect(workflowStub).to.have.been.calledOnce;
+        expect(workflowStub).to.have.been.calledWith('1', true);
+      });
+    });
+
     describe('with a logged-in user', function () {
       beforeEach(function () {
         controller.setupSplits = () => null;
@@ -206,23 +237,24 @@ describe('WorkflowSelection', function () {
     });
 
     describe('with a workflow saved in preferences', function () {
+      const user = mockPanoptesResource('users', { id: '4' });
+
       beforeEach(function () {
         location.query = {};
         preferences.update({ preferences: {}});
-        const user = mockPanoptesResource('users', { id: '4' });
         wrapper.setProps({ user });
       });
 
       it('should try to load the stored workflow', function () {
         preferences.update({ 'preferences.selected_workflow': '4' });
-        controller.getSelectedWorkflow({ project, preferences });
+        controller.getSelectedWorkflow({ project, preferences, user });
         expect(workflowStub).to.have.been.calledOnce;
         expect(workflowStub).to.have.been.calledWith('4', true);
       });
 
       it('should parse the stored user workflow as an int', function () {
         preferences.update({ 'preferences.selected_workflow': '4random' });
-        controller.getSelectedWorkflow({ project, preferences });
+        controller.getSelectedWorkflow({ project, preferences, user });
         expect(workflowStub).to.have.been.calledOnce;
         expect(workflowStub).to.have.been.calledWith('4', true);
       });
@@ -241,14 +273,14 @@ describe('WorkflowSelection', function () {
 
       it('should try to load a stored project workflow', function () {
         preferences.update({ 'settings.workflow_id': '2' });
-        controller.getSelectedWorkflow({ project, preferences });
+        controller.getSelectedWorkflow({ project, preferences, user });
         expect(workflowStub).to.have.been.calledOnce;
         expect(workflowStub).to.have.been.calledWith('2', true);
       });
 
       it('parse the stored project workflow as an int', function () {
         preferences.update({ 'settings.workflow_id': '2random' });
-        controller.getSelectedWorkflow({ project, preferences });
+        controller.getSelectedWorkflow({ project, preferences, user });
         expect(workflowStub).to.have.been.calledOnce;
         expect(workflowStub).to.have.been.calledWith('2', true);
       });

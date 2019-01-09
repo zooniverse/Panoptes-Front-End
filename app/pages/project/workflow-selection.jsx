@@ -48,8 +48,8 @@ class WorkflowSelection extends React.Component {
     let selectedWorkflowID;
     let activeFilter = true;
     const workflowFromURL = this.sanitiseID(this.props.location.query.workflow);
-    const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
-    const projectSetWorkflow = (preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
+    const userSelectedWorkflow = (user && preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
+    const projectSetWorkflow = (user && preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
     if (workflowFromURL &&
       this.checkUserRoles(project, user)
     ) {
