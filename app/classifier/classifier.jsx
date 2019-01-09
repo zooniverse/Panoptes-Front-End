@@ -253,6 +253,7 @@ class Classifier extends React.Component {
     if (!isCmdClick) {
       e.preventDefault();
     }
+    const { already_seen, finished_workflow, retired, selection_state, user_has_finished_workflow } = subject;
     const workflowTranslation = translations.strings.workflow[workflow.id];
     actions.classify.updateMetadata({
       viewport: {
@@ -262,6 +263,13 @@ class Classifier extends React.Component {
       interventions: {
         message: !!showIntervention,
         opt_in: !!user && user.intervention_notifications
+      },
+      subject_selection_state: {
+        already_seen,
+        finished_workflow,
+        retired,
+        selection_state,
+        user_has_finished_workflow
       },
       workflow_translation_id: workflowTranslation ? workflowTranslation.id : null,
       user_language: translations.locale
