@@ -84,6 +84,7 @@ describe('WorkflowSelection', function () {
   let workflowStub;
   const actions = {
     classifier: {
+      reset: sinon.spy(),
       setWorkflow: sinon.spy()
     },
     translations: {
@@ -243,6 +244,10 @@ describe('WorkflowSelection', function () {
         location.query = {};
         preferences.update({ preferences: {}});
         wrapper.setProps({ user });
+      });
+
+      afterEach(function () {
+        actions.classifier.reset.resetHistory();
       });
 
       it('should try to load the stored workflow', function () {
@@ -649,6 +654,24 @@ describe('WorkflowSelection', function () {
       const workflow = mockPanoptesResource('workflows', { id: '1', tasks: {} });
       wrapper.setProps({ locale: 'it', workflow });
       expect(actions.translations.load).to.have.been.calledWith('workflow', '1', 'it');
+    });
+  });
+
+  describe('on user change', function () {
+    before(function () {
+      const user = mockPanoptesResource('users', { id: 2, login: 'test-person' });
+      sinon.stub(controller, 'getWorkflow').callsFake(() => {});
+      wrapper.setProps({ user });
+    })
+
+    after(function () {
+      controller.getWorkflow.restore();
+      wrapper.setProps({ user: undefined });
+      actions.classifier.reset.resetHistory();
+    });
+
+    it('should reset the classifier', function () {
+      expect(actions.classifier.reset).to.have.been.calledOnce;
     });
   });
 });
