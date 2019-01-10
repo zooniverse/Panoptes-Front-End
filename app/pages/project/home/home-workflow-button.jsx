@@ -15,16 +15,23 @@ class ProjectHomeWorkflowButton extends React.Component {
     this.handleWorkflowSelection = this.handleWorkflowSelection.bind(this);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { classifierWorkflow, project, workflow } = this.props;
-    if (classifierWorkflow && classifierWorkflow.id === workflow.id) {
+    const classifierWorkflowID = classifierWorkflow && classifierWorkflow.id;
+    const prevClassifierWorkflowID = prevProps.classifierWorkflow && prevProps.classifierWorkflow.id;
+    const classifierWorkflowChanged = classifierWorkflowID !== prevClassifierWorkflowID;
+    if (classifierWorkflowChanged && classifierWorkflowID === workflow.id) {
       browserHistory.push(`/projects/${project.slug}/classify`);
     }
   }
 
   handleWorkflowSelection(e) {
-    const { actions, preferences, translations, workflow } = this.props;
-    actions.classifier.loadWorkflow(workflow.id, translations.locale, preferences);
+    const { actions, classifierWorkflow, project, preferences, translations, workflow } = this.props;
+    if (classifierWorkflow && classifierWorkflow.id === workflow.id) {
+      browserHistory.push(`/projects/${project.slug}/classify`);
+    } else {
+      actions.classifier.loadWorkflow(workflow.id, translations.locale, preferences);
+    }
   }
 
   render() {
