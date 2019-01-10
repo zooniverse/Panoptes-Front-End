@@ -59,17 +59,11 @@ class WorkflowSelection extends React.Component {
     ) {
       selectedWorkflowID = workflowFromURL;
       activeFilter = false;
-      if (userSelectedWorkflow && userSelectedWorkflow !== selectedWorkflowID) {
-        this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
-      }
     } else if (workflowFromURL &&
       project.experimental_tools &&
       project.experimental_tools.indexOf('allow workflow query') > -1
     ) {
       selectedWorkflowID = workflowFromURL;
-      if (userSelectedWorkflow && userSelectedWorkflow !== selectedWorkflowID) {
-        this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
-      }
     } else if (userSelectedWorkflow) {
       selectedWorkflowID = userSelectedWorkflow;
     } else if (projectSetWorkflow) {
@@ -87,13 +81,9 @@ class WorkflowSelection extends React.Component {
   getWorkflow(selectedWorkflowID, activeFilter = true) {
     const { actions, locale, preferences, project } = this.props;
     const sanitisedWorkflowID = this.sanitiseID(selectedWorkflowID);
-    let isValidWorkflow = false;
+    const validWorkflows = activeFilter ? project.links.active_workflows : project.links.workflows;
+    const isValidWorkflow = validWorkflows.indexOf ? validWorkflows.indexOf(sanitisedWorkflowID) > -1 : false;
 
-    if (activeFilter && project.links.active_workflows) {
-      isValidWorkflow = project.links.active_workflows.indexOf(sanitisedWorkflowID) > -1;
-    } else if (project.links.workflows) {
-      isValidWorkflow = project.links.workflows.indexOf(sanitisedWorkflowID) > -1;
-    }
     if (isValidWorkflow) {
       return actions.classifier.loadWorkflow(sanitisedWorkflowID, locale, preferences);
     } else {
@@ -151,12 +141,6 @@ class WorkflowSelection extends React.Component {
       return preferences.save().catch(error => console.warn(error.message));
     } else {
       return Promise.resolve({});
-    }
-  }
-
-  handlePreferencesChange(key, value) {
-    if (this.props.user) {
-      this.props.preferences.update({ [key]: value }).save();
     }
   }
 
