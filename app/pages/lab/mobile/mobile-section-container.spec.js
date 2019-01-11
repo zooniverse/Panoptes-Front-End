@@ -51,8 +51,8 @@ describe('<MobileSectionContainer />', function () {
       assert.strictEqual(component.length, 1);
     });
 
-    it('should render nothing if the task type isn\'t single or multiple', function () {
-      const task = fixtures.task({ type: 'drawing' });
+    it('should render nothing if the task type isn\'t single or multiple or drawing', function () {
+      const task = fixtures.task({ type: 'survey' });
       wrapper = shallow(<MobileSectionContainer task={task} workflow={fixtures.workflow()} project={fixtures.project()} />);
       assert.strictEqual(wrapper.type(), null);
     });
