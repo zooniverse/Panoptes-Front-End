@@ -4,6 +4,7 @@ import GridTool from '../../classifier/drawing-tools/grid';
 import { getSessionID } from '../../lib/session';
 import seenThisSession from '../../lib/seen-this-session';
 import tasks from '../../classifier/tasks';
+import * as translations from './translations';
 
 function awaitSubjects(subjectQuery) {
   return apiClient.get('/subjects/queued', subjectQuery)
@@ -32,7 +33,19 @@ function awaitSubjectSet(workflow) {
   }
 }
 
-function createNewClassification(project, workflow, subject) {
+function awaitWorkflow(workflowId) {
+  // pass an empty query object to bypass the API client's internal cache.
+  return apiClient.type('workflows').get(workflowId, {})
+    .then((workflow) => {
+      if (!workflow) {
+        const error = new Error(`workflow ${workflowId}: empty response from Panoptes.`);
+        throw error;
+      }
+      return workflow;
+    });
+}
+
+function createNewClassification(project, workflow, subject, goldStandardMode) {
   const source = subject.metadata.intervention ? 'sugar' : 'api';
   const classification = apiClient.type('classifications').create({
     annotations: [],
@@ -51,6 +64,10 @@ function createNewClassification(project, workflow, subject) {
       subjects: [subject.id]
     }
   });
+
+  if (goldStandardMode) {
+    classification.gold_standard = true;
+  }
 
   return classification;
 }
@@ -79,6 +96,11 @@ function completeAnnotations(workflow, annotations) {
   return annotations;
 }
 
+function destroySubjects(subjects) {
+  subjects.forEach(subject => subject.destroy());
+  subjects.splice(0);
+}
+
 function finishClassification(workflow, classification, annotations) {
   return classification.update({
     annotations: completeAnnotations(workflow, annotations),
@@ -90,25 +112,38 @@ function finishClassification(workflow, classification, annotations) {
 
 const initialState = {
   classification: null,
+  goldStandardMode: false,
+  intervention: null,
   upcomingSubjects: [],
   workflow: null
 };
 
+const ADD_INTERVENTION = 'pfe/classify/ADD_INTERVENTION';
 const APPEND_SUBJECTS = 'pfe/classify/APPEND_SUBJECTS';
 const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
 const PREPEND_SUBJECTS = 'pfe/classify/PREPEND_SUBJECTS';
 const COMPLETE_CLASSIFICATION = 'pfe/classify/COMPLETE_CLASSIFICATION';
 const CREATE_CLASSIFICATION = 'pfe/classify/CREATE_CLASSIFICATION';
-const UPDATE_CLASSIFICATION = 'pfe/classify/UPDATE_CLASSIFICATION';
+const UPDATE_METADATA = 'pfe/classify/UPDATE_METADATA';
 const NEXT_SUBJECT = 'pfe/classify/NEXT_SUBJECT';
 const RESUME_CLASSIFICATION = 'pfe/classify/RESUME_CLASSIFICATION';
 const RESET_SUBJECTS = 'pfe/classify/RESET_SUBJECTS';
 const SAVE_ANNOTATIONS = 'pfe/classify/SAVE_ANNOTATIONS';
+const FETCH_WORKFLOW = 'pfe/classify/FETCH_WORKFLOW';
+const RESET = 'pfe/classify/RESET';
 const SET_WORKFLOW = 'pfe/classify/SET_WORKFLOW';
 const TOGGLE_GOLD_STANDARD = 'pfe/classify/TOGGLE_GOLD_STANDARD';
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case ADD_INTERVENTION: {
+      const intervention = action.payload;
+      const { classification } = state;
+      if (classification && classification.links.project === intervention.project_id) {
+        return Object.assign({}, state, { intervention });
+      }
+      return state;
+    }
     case APPEND_SUBJECTS: {
       const { subjects, workflowID } = action.payload;
       const { workflow } = state;
@@ -122,35 +157,42 @@ export default function reducer(state = initialState, action = {}) {
     case COMPLETE_CLASSIFICATION: {
       const { annotations } = action.payload;
       const classification = finishClassification(state.workflow, state.classification, annotations);
+      const { workflow, subjects } = classification.links;
+      seenThisSession.add(workflow, subjects);
       return Object.assign({}, state, { classification });
     }
     case CREATE_CLASSIFICATION: {
+      const { goldStandardMode } = state;
       const { project } = action.payload;
       const { workflow } = state;
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
-        const classification = createNewClassification(project, workflow, subject);
-        return Object.assign({}, state, { classification });
+        const classification = createNewClassification(project, workflow, subject, goldStandardMode);
+        const intervention = null;
+        return Object.assign({}, state, { classification, intervention });
       }
       return state;
     }
-    case UPDATE_CLASSIFICATION: {
+    case UPDATE_METADATA: {
       const metadata = Object.assign({}, state.classification.metadata, action.payload.metadata);
       const classification = state.classification.update({ metadata });
       return Object.assign({}, state, { classification });
     }
     case NEXT_SUBJECT: {
+      const { goldStandardMode } = state;
       const { project } = action.payload;
       const { workflow } = state;
       const upcomingSubjects = state.upcomingSubjects.slice();
       upcomingSubjects.shift();
       const subject = upcomingSubjects[0];
       if (subject) {
-        const classification = createNewClassification(project, workflow, subject);
-        return Object.assign({}, state, { classification, upcomingSubjects });
+        const classification = createNewClassification(project, workflow, subject, goldStandardMode);
+        const intervention = null;
+        return Object.assign({}, state, { classification, intervention, upcomingSubjects });
       }
       return Object.assign({}, state, {
         classification: null,
+        intervention: null,
         upcomingSubjects: []
       });
     }
@@ -177,11 +219,15 @@ export default function reducer(state = initialState, action = {}) {
       }
       return Object.assign({}, state, { classification });
     }
+    case RESET: {
+      const upcomingSubjects = state.upcomingSubjects.slice();
+      destroySubjects(upcomingSubjects);
+      return Object.assign({}, initialState);
+    }
     case RESET_SUBJECTS: {
       const classification = null;
       const upcomingSubjects = state.upcomingSubjects.slice();
-      upcomingSubjects.forEach(subject => subject.destroy());
-      upcomingSubjects.splice(0);
+      destroySubjects(upcomingSubjects);
       return Object.assign({}, state, { classification, upcomingSubjects });
     }
     case SAVE_ANNOTATIONS: {
@@ -191,17 +237,24 @@ export default function reducer(state = initialState, action = {}) {
     }
     case SET_WORKFLOW: {
       const { workflow } = action.payload;
-      return Object.assign({}, state, { workflow });
+      return Object.assign({}, initialState, { workflow });
     }
     case TOGGLE_GOLD_STANDARD: {
       const { goldStandard } = action.payload;
       const { classification } = state;
       classification.update({ gold_standard: goldStandard });
-      return Object.assign({}, state, { classification });
+      return Object.assign({}, state, { classification, goldStandardMode: goldStandard });
     }
     default:
       return state;
   }
+}
+
+export function addIntervention(data) {
+  return {
+    type: ADD_INTERVENTION,
+    payload: data
+  };
 }
 
 export function appendSubjects(subjects, workflowID) {
@@ -276,9 +329,9 @@ export function completeClassification(annotations) {
   };
 }
 
-export function updateClassification(metadata) {
+export function updateMetadata(metadata) {
   return {
-    type: UPDATE_CLASSIFICATION,
+    type: UPDATE_METADATA,
     payload: { metadata }
   };
 }
@@ -317,6 +370,49 @@ export function saveAnnotations(annotations) {
   };
 }
 
+export function loadWorkflow(workflowId, locale, preferences) {
+  return (dispatch) => {
+    if (preferences) {
+      preferences.update({ 'preferences.selected_workflow': workflowId });
+    }
+    dispatch({
+      type: FETCH_WORKFLOW,
+      payload: {
+        workflowId,
+        locale
+      }
+    });
+    const awaitTranslation = dispatch(translations.load('workflow', workflowId, locale));
+    return Promise.all([awaitWorkflow(workflowId), awaitTranslation])
+    .then(([workflow]) => setWorkflow(workflow))
+    .catch((error) => {
+      const errorType = error.status && parseInt(error.status / 100, 10);
+      if (errorType === 4) {
+        // Clear all stored preferences if this workflow doesn't exist for this user.
+        if (preferences) {
+          preferences.update({ 'preferences.selected_workflow': undefined });
+          if (preferences.settings && preferences.settings.workflow_id === workflowId) {
+            preferences.update({ 'settings.workflow_id': undefined });
+          }
+        }
+      }
+      return setWorkflow(null);
+    })
+    .then((action) => {
+      if (preferences) {
+        preferences.save();
+      }
+      return dispatch(action);
+    });
+  };
+}
+
+export function reset() {
+  return {
+    type: RESET
+  };
+}
+
 export function setWorkflow(workflow) {
   return {
     type: SET_WORKFLOW,
@@ -330,4 +426,3 @@ export function toggleGoldStandard(goldStandard) {
     payload: { goldStandard }
   };
 }
-

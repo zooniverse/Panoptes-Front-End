@@ -10,15 +10,16 @@ import { bindActionCreators } from 'redux';
 import counterpart from 'counterpart';
 import { Split } from 'seven-ten';
 
-import seenThisSession from '../../lib/seen-this-session';
 import ClassificationQueue from '../../lib/classification-queue';
 
 import * as classifierActions from '../../redux/ducks/classify';
+import * as translationActions from '../../redux/ducks/translations';
 
 import Classifier from '../../classifier';
 import FinishedBanner from './finished-banner';
 import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';
 import ProjectThemeButton from './components/ProjectThemeButton';
+import WorkflowSelection from './workflow-selection';
 import { zooTheme } from '../../theme';
 
 function onClassificationSaved(actualClassification) {
@@ -51,7 +52,9 @@ export class ProjectClassifyPage extends React.Component {
 
   componentDidMount() {
     Split.classifierVisited();
-    if (this.props.workflow) {
+    const { workflow } = this.props;
+
+    if (workflow) {
       this.loadAppropriateClassification();
     }
 
@@ -59,10 +62,6 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.user !== null) {
-      this.shouldWorkflowAssignmentPrompt(nextProps, nextContext);
-    }
-
     const currentGroup = this.props.location.query && this.props.location.query.group;
     const nextGroup = nextProps.location.query && nextProps.location.query.group;
 
@@ -81,7 +80,11 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { actions, classification, project, upcomingSubjects, workflow } = this.props;
+    const { classification, upcomingSubjects, user, workflow } = this.props;
+
+    if (user !== null) {
+      this.shouldWorkflowAssignmentPrompt();
+    }
 
     if (workflow !== prevProps.workflow) {
       this.loadAppropriateClassification();
@@ -116,11 +119,13 @@ export class ProjectClassifyPage extends React.Component {
     const { actions, project, workflow } = this.props;
 
     this.maybePromptWorkflowAssignmentDialog(this.props);
-    actions.classifier.fetchSubjects(workflow)
-    .then(() => actions.classifier.createClassification(project, workflow))
-    .catch((error) => {
-      this.setState({ rejected: { classification: error }});
-    });
+    if (workflow) {
+      actions.classifier.fetchSubjects(workflow)
+      .then(() => actions.classifier.createClassification(project))
+      .catch((error) => {
+        this.setState({ rejected: { classification: error }});
+      });
+    }
   }
 
   loadAppropriateClassification() {
@@ -144,16 +149,23 @@ export class ProjectClassifyPage extends React.Component {
     }
   }
 
-  shouldWorkflowAssignmentPrompt(nextProps) {
+  shouldWorkflowAssignmentPrompt() {
     // Only for Gravity Spy which is assigning workflows to logged in users
-    if (nextProps.project.experimental_tools.indexOf('workflow assignment') > -1) {
-      const assignedWorkflowID = nextProps.preferences &&
-        nextProps.preferences.settings &&
-        nextProps.preferences.settings.workflow_id;
-      const currentWorkflowID = this.props.preferences && this.props.preferences.preferences.selected_workflow;
+    const { preferences, project, workflow } = this.props;
+    if (project.experimental_tools.indexOf('workflow assignment') > -1) {
+      const assignedWorkflowID = preferences &&
+        preferences.settings &&
+        preferences.settings.workflow_id;
+      const currentWorkflowID = workflow && workflow.id;
       if (assignedWorkflowID && currentWorkflowID && assignedWorkflowID !== currentWorkflowID) {
-        if (this.state.promptWorkflowAssignmentDialog === false) {
-          this.setState({ promptWorkflowAssignmentDialog: true });
+        const isActiveWorkflow = project.links.active_workflows &&
+          project.links.active_workflows.indexOf(assignedWorkflowID) > -1;
+        if (isActiveWorkflow) {
+          if (this.state.promptWorkflowAssignmentDialog === false) {
+            this.setState({ promptWorkflowAssignmentDialog: true });
+          }
+        } else {
+          preferences.update({ 'settings.workflow_id': undefined }).save();
         }
       }
     }
@@ -172,10 +184,6 @@ export class ProjectClassifyPage extends React.Component {
     const { classification } = this.props;
     console.info('Completed classification', classification);
 
-    let workflow = null;
-    let subjects = null;
-    ({ workflow, subjects } = classification.links);
-    seenThisSession.add(workflow, subjects);
     if (!this.state.demoMode) {
       classificationQueue.add(classification);
     }
@@ -185,18 +193,18 @@ export class ProjectClassifyPage extends React.Component {
   loadAnotherSubject() {
     const { actions, project, workflow } = this.props;
     if (workflow) {
-      actions.classifier.nextSubject(project, workflow);
+      actions.classifier.nextSubject(project);
     }
   }
 
   maybePromptWorkflowAssignmentDialog(props) {
+    const { actions, preferences, project, splits, translations } = props;
     if (this.state.promptWorkflowAssignmentDialog) {
-      WorkflowAssignmentDialog.start({ splits: props.splits, project: props.project }).then(() =>
+      WorkflowAssignmentDialog.start({ splits, project }).then(() =>
         this.setState({ promptWorkflowAssignmentDialog: false })
       ).then(() => {
-        if (props.preferences.preferences.selected_workflow !== props.preferences.settings.workflow_id) {
-          props.preferences.update({ 'preferences.selected_workflow': props.preferences.settings.workflow_id });
-          props.preferences.save();
+        if (preferences.preferences.selected_workflow !== preferences.settings.workflow_id) {
+          actions.classifier.loadWorkflow(preferences.settings.workflow_id, translations.locale, preferences);
         }
       });
     }
@@ -298,10 +306,12 @@ ProjectClassifyPage.propTypes = {
       fetchSubjects: PropTypes.func,
       nextSubject: PropTypes.func,
       refillSubjectQueue: PropTypes.func
+    }),
+    translations: PropTypes.shape({
+      load: PropTypes.func
     })
   }),
   classification: PropTypes.shape({}),
-  loadingSelectedWorkflow: PropTypes.bool,
   location: PropTypes.shape({
     query: PropTypes.shape({
       group: PropTypes.string
@@ -314,6 +324,9 @@ ProjectClassifyPage.propTypes = {
   }),
   project: PropTypes.object,
   storage: PropTypes.object,
+  translations: PropTypes.shape({
+    locale: PropTypes.string
+  }),
   upcomingSubjects: PropTypes.arrayOf(PropTypes.object),
   user: PropTypes.object,
   workflow: PropTypes.object
@@ -331,6 +344,7 @@ window.classificationQueue = classificationQueue;
 
 const mapStateToProps = state => ({
   classification: state.classify.classification,
+  translations: state.translations,
   upcomingSubjects: state.classify.upcomingSubjects,
   theme: state.userInterface.theme,
   workflow: state.classify.workflow
@@ -338,8 +352,27 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: {
-    classifier: bindActionCreators(classifierActions, dispatch)
+    classifier: bindActionCreators(classifierActions, dispatch),
+    translations: bindActionCreators(translationActions, dispatch)
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectClassifyPage);
+const ConnectedClassifyPage = connect(mapStateToProps, mapDispatchToProps)(ProjectClassifyPage);
+
+function ConnectedClassifyPageWithWorkflow(props) {
+  const workflowKey = props.workflow ? props.workflow.id : 'no-workflow';
+  return (
+    <WorkflowSelection
+      key={workflowKey}
+      actions={props.actions}
+      location={props.location}
+      preferences={props.preferences}
+      project={props.project}
+      projectRoles={props.projectRoles}
+      user={props.user}
+    >
+      <ConnectedClassifyPage {...props} />
+    </WorkflowSelection>
+  );
+}
+export default ConnectedClassifyPageWithWorkflow;

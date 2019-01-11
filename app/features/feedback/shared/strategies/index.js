@@ -1,9 +1,11 @@
+import column from './drawing/column';
+import radial from './drawing/radial';
 import dud from './dud';
 import singleAnswerQuestion from './single-answer-question';
-import radial from './radial';
 
 export default {
+  column,
   dud,
-  singleAnswerQuestion,
-  radial
+  radial,
+  singleAnswerQuestion
 };

@@ -29,6 +29,7 @@ const DefaultClassificationSummary = (props) => {
           <TaskTranslations
             taskKey={annotation.task}
             task={task}
+            workflowID={props.workflow.id}
           >
             <SummaryComponent
               task={task}

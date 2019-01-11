@@ -9,14 +9,20 @@ export default class ExternalLinksBlockContainer extends React.Component {
 
     const partitionedLinks = _.partition(allExternalLinks, link => (link.site));
 
-    const external = partitionedLinks[1].map(link => ({
-      isExternalLink: true,
-      label: link.label,
-      url: link.url
-    }));
+    const external = partitionedLinks[1]
+      .map(link => {
+        if (isURL(link.url)) {
+          return {
+            isExternalLink: true,
+            label: link.label,
+            url: link.url
+          }
+        }
+      })
+      .filter(link => link);
 
     const social = partitionedLinks[0].map(link => ({
-      isExternalLink: true,
+      isExternalLink: false,
       isSocialLink: true,
       label: link.label,
       path: link.path,
@@ -42,4 +48,8 @@ export default class ExternalLinksBlockContainer extends React.Component {
 
     return null;
   }
+}
+
+function isURL(str) {
+  return str.substring(0, 4) === 'http';
 }

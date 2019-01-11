@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DragReorderable from 'drag-reorderable';
 import AutoSave from '../../components/auto-save.coffee';
-import handleInputChange from '../../lib/handle-input-change.coffee';
 
 export default class ExternalLinksEditor extends React.Component {
   constructor(props) {
@@ -10,6 +9,7 @@ export default class ExternalLinksEditor extends React.Component {
     this.handleAddLink = this.handleAddLink.bind(this);
     this.handleLinkReorder = this.handleLinkReorder.bind(this);
     this.handleRemoveLink = this.handleRemoveLink.bind(this);
+    this.handleLinkChange = this.handleLinkChange.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.renderTable = this.renderTable.bind(this);
   }
@@ -47,6 +47,17 @@ export default class ExternalLinksEditor extends React.Component {
     }
   }
 
+  handleLinkChange(event) {
+    const { project } = this.props;
+    const { name, type, value } = event.target;
+    let sanitisedValue = value;
+    if (type === 'url' && value.length > 4) {
+      const isURL = value.substring(0, 4) === 'http';
+      sanitisedValue = isURL ? value : '';
+    }
+    project.update({ [name]: sanitisedValue });
+  }
+
   handleDisableDrag(event) {
     event.target.parentElement.parentElement.setAttribute('draggable', false);
   }
@@ -64,18 +75,21 @@ export default class ExternalLinksEditor extends React.Component {
           <input
             type="text"
             name={`urls.${idx}.label`}
+            required
             value={link.label}
-            onChange={handleInputChange.bind(this.props.project)}
+            onChange={this.handleLinkChange}
             onMouseDown={this.handleDisableDrag}
             onMouseUp={this.handleEnableDrag}
           />
         </AutoSave>
         <AutoSave tag="td" resource={this.props.project}>
           <input
-            type="text"
+            type="url"
             name={`urls.${idx}.url`}
+            pattern="https?://.+"
+            required
             value={link.url}
-            onChange={handleInputChange.bind(this.props.project)}
+            onChange={this.handleLinkChange}
             onMouseDown={this.handleDisableDrag}
             onMouseUp={this.handleEnableDrag}
           />

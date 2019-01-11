@@ -42,7 +42,6 @@ export default class ProjectPage extends React.Component {
           routes={this.props.routes}
           user={this.props.user}
           translation={this.props.translation}
-          workflow={this.props.workflow}
         />
         {(this.props.project.configuration && this.props.project.configuration.announcement) &&
           <div className="informational project-announcement-banner">
@@ -52,7 +51,6 @@ export default class ProjectPage extends React.Component {
           </div>}
         {React.cloneElement(this.props.children, {
           background: this.props.background,
-          loadingSelectedWorkflow: this.props.loadingSelectedWorkflow,
           onChangePreferences: this.props.onChangePreferences,
           organization: this.props.organization,
           owner: this.props.owner,

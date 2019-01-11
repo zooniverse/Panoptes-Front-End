@@ -52,6 +52,12 @@ describe('ClassificationQueue', function() {
       apiClient = new FakeApiClient({canSave: () => { return false; }});
       classificationData = {annotations: [], metadata: {}};
       classificationQueue = new ClassificationQueue(apiClient);
+      sinon.stub(global, 'setTimeout').callsFake(() => 100);
+      sinon.stub(global, 'clearTimeout');
+    });
+    afterEach(function () {
+      global.setTimeout.restore();
+      global.clearTimeout.restore();
     });
     it('should not save failed classifications', function (done) {
       classificationQueue.add(classificationData)
@@ -73,6 +79,22 @@ describe('ClassificationQueue', function() {
         expect(classificationQueue.recents).to.have.lengthOf(0);
       })
       .then(done, done);
+    });
+    it('should set a timer to retry failed classifications', function (done) {
+      sinon.stub(classificationQueue.flushToBackend, 'bind').callsFake(() => classificationQueue.flushToBackend);
+      classificationQueue.add(classificationData)
+      .then(function () {
+        expect(global.setTimeout.calledWith(classificationQueue.flushToBackend)).to.be.true;
+        expect(classificationQueue.flushTimeout).to.equal(100);
+        classificationQueue.flushToBackend.bind.restore();
+      })
+      .then(done, done);
+    });
+    it('should cancel any existing timer before flushing the queue', function () {
+      classificationQueue.flushTimeout = 100;
+      classificationQueue.add(classificationData);
+      expect(global.clearTimeout.calledWith(100)).to.be.true;
+      expect(classificationQueue.flushTimeout).to.be.null;
     });
   });
   describe('with a slow network connection', function () {

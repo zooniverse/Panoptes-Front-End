@@ -3,12 +3,14 @@ import apiClient from 'panoptes-client/lib/api-client';
 
 const FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications';
 const MAX_RECENTS = 10;
+const RETRY_INTERVAL = 5 * 60 * 1000;
 
 class ClassificationQueue {
   constructor(api, onClassificationSaved) {
     this.storage = window.localStorage;
     this.apiClient = api || apiClient;
     this.recents = [];
+    this.flushTimeout = null;
     this.onClassificationSaved = onClassificationSaved || function () { return true; };
   }
 
@@ -46,6 +48,10 @@ class ClassificationQueue {
     const pendingClassifications = this._loadQueue();
     const failedClassifications = [];
     this._saveQueue(failedClassifications);
+    if (this.flushTimeout) {
+      clearTimeout(this.flushTimeout);
+      this.flushTimeout = null;
+    }
 
     if (process.env.BABEL_ENV !== 'test') console.log('Saving queued classifications:', pendingClassifications.length);
     return Promise.all(pendingClassifications.map((classificationData) => {
@@ -61,6 +67,9 @@ class ClassificationQueue {
         if (error.status !== 422) {
           try {
             this.store(classificationData);
+            if (!this.flushTimeout) {
+              this.flushTimeout = setTimeout(this.flushToBackend.bind(this), RETRY_INTERVAL);
+            }
           } catch (saveQueueError) {
             console.error('Failed to update classification queue:', saveQueueError);
           }

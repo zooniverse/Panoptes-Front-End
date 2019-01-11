@@ -12,34 +12,37 @@ class WorkflowSelection extends React.Component {
     super();
     this.state = {
       error: null,
-      loadingSelectedWorkflow: true
+      loadingSelectedWorkflow: false
     };
   }
 
   componentDidMount() {
-    this.getSelectedWorkflow(this.props);
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    const { preferences } = nextProps;
-    const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
-    if (userSelectedWorkflow &&
-      this.props.workflow
-    ) {
-      if (!nextState.loadingSelectedWorkflow &&
-        userSelectedWorkflow !== this.props.workflow.id
-      ) {
-        this.getSelectedWorkflow(nextProps);
-      }
+    const { project, workflow } = this.props;
+    const linkedActiveWorkflows = project.links.active_workflows || [];
+    const workflowExistsForProject = workflow && linkedActiveWorkflows.indexOf(workflow.id) > -1;
+    if (!workflowExistsForProject) {
+      this.getSelectedWorkflow(this.props);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { actions, locale, preferences, user, workflow } = this.props;
+    const prevUser = prevProps.user && prevProps.user.login;
+    const currentUser = user && user.login;
+    const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
+    if (userSelectedWorkflow && workflow) {
+      if (!this.state.loadingSelectedWorkflow && userSelectedWorkflow !== workflow.id) {
+        this.getSelectedWorkflow(this.props);
+      }
+    }
     if (prevProps.project.id !== this.props.project.id) {
       this.getSelectedWorkflow(this.props);
     }
-    if (prevProps.translations.locale !== this.props.translations.locale) {
-      this.props.actions.translations.load('workflow', this.props.workflow.id, this.props.translations.locale);
+    if (workflow && prevProps.locale !== locale) {
+      actions.translations.load('workflow', workflow.id, locale);
+    }
+    if (currentUser !== prevUser) {
+      actions.classifier.reset();
     }
   }
 
@@ -50,8 +53,8 @@ class WorkflowSelection extends React.Component {
     let selectedWorkflowID;
     let activeFilter = true;
     const workflowFromURL = this.sanitiseID(this.props.location.query.workflow);
-    const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
-    const projectSetWorkflow = (preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
+    const userSelectedWorkflow = (user && preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
+    const projectSetWorkflow = (user && preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
     if (workflowFromURL &&
       this.checkUserRoles(project, user)
     ) {
@@ -79,11 +82,11 @@ class WorkflowSelection extends React.Component {
     }
 
     if (selectedWorkflowID) return this.getWorkflow(selectedWorkflowID, activeFilter);
-    if (process.env.BABEL_ENV !== 'test') console.warn('Cannot select a workflow.')
+    if (process.env.BABEL_ENV !== 'test') console.warn('Cannot select a workflow.');
   }
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
-    const { actions, project, translations } = this.props;
+    const { actions, locale, project } = this.props;
     const sanitisedWorkflowID = this.sanitiseID(selectedWorkflowID);
     let isValidWorkflow = false;
 
@@ -93,48 +96,49 @@ class WorkflowSelection extends React.Component {
       isValidWorkflow = project.links.workflows.indexOf(sanitisedWorkflowID) > -1;
     }
     let awaitWorkflow;
+    let awaitTranslation;
     if (isValidWorkflow) {
+      awaitTranslation = actions.translations.load('workflow', sanitisedWorkflowID, locale);
       awaitWorkflow = apiClient
         .type('workflows')
         .get(sanitisedWorkflowID, {}) // the empty query here forces the client to bypass its internal cache
         .catch((error) => {
-          if (error.status === 404) {
+          const errorType = error.status && parseInt(error.status / 100, 10);
+          if (errorType === 4) {
             this.clearInactiveWorkflow(sanitisedWorkflowID)
             .then(this.getSelectedWorkflow(this.props));
           } else {
-            console.error(error);
+            console.error(error.message);
             this.setState({ error, loadingSelectedWorkflow: false });
           }
+          return null;
         });
     } else {
       awaitWorkflow = Promise.resolve(null);
+      awaitTranslation = Promise.resolve(null);
+      if (process.env.BABEL_ENV !== 'test') console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
+      if (this.props.project.configuration &&
+        selectedWorkflowID === this.props.project.configuration.default_workflow
+      ) {
+        // If a project still has an inactive workflow set as a default workflow prior to this being fix in the lab.
+        // Don't try again and get caught in a loop
+        this.workflowSelectionErrorHandler();
+      } else {
+        if (this.props.location.query && this.props.location.query.workflow) {
+          this.context.router.push(`/projects/${this.props.project.slug}/classify`);
+        }
+
+        this.clearInactiveWorkflow(selectedWorkflowID)
+          .then(() => {
+            this.getSelectedWorkflow(this.props);
+          });
+      }
     }
 
-    return awaitWorkflow
-    .then((workflow) => {
-      if (workflow) {
-        actions.translations.load('workflow', workflow.id, translations.locale);
-        actions.classifier.setWorkflow(workflow);
-        this.setState({ loadingSelectedWorkflow: false });
-      } else {
-        if (process.env.BABEL_ENV !== 'test') console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
-        if (this.props.project.configuration &&
-          selectedWorkflowID === this.props.project.configuration.default_workflow
-        ) {
-          // If a project still has an inactive workflow set as a default workflow prior to this being fix in the lab.
-          // Don't try again and get caught in a loop
-          this.workflowSelectionErrorHandler();
-        } else {
-          if (this.props.location.query && this.props.location.query.workflow) {
-            this.context.router.push(`/projects/${this.props.project.slug}/classify`);
-          }
-
-          this.clearInactiveWorkflow(selectedWorkflowID)
-            .then(() => {
-              this.getSelectedWorkflow(this.props);
-            });
-        }
-      }
+    return Promise.all([awaitWorkflow, awaitTranslation])
+    .then(([workflow]) => {
+      actions.classifier.setWorkflow(workflow);
+      this.setState({ loadingSelectedWorkflow: false });
     })
     .catch((error) => {
       console.error(error.message);
@@ -177,7 +181,9 @@ class WorkflowSelection extends React.Component {
   }
 
   handlePreferencesChange(key, value) {
-    this.props.onChangePreferences(key, value);
+    if (this.props.user) {
+      this.props.preferences.update({ [key]: value }).save();
+    }
   }
 
   workflowSelectionErrorHandler() {
@@ -191,9 +197,8 @@ class WorkflowSelection extends React.Component {
   }
 
   render() {
-    const { translation, workflow } = this.props;
     const { loadingSelectedWorkflow } = this.state;
-    return React.cloneElement(this.props.children, { translation, loadingSelectedWorkflow });
+    return loadingSelectedWorkflow ? <p>Loading workflow</p> : this.props.children;
   }
 }
 
@@ -204,19 +209,12 @@ WorkflowSelection.defaultProps = {
     }
   },
   children: null,
+  locale: 'en',
   location: {
     query: {}
   },
-  onChangePreferences() { return null; },
   preferences: {},
   projectRoles: [],
-  translation: {
-    id: '',
-    display_name: ''
-  },
-  translations: {
-    locale: 'en'
-  },
   user: null,
   workflow: null
 };
@@ -233,7 +231,7 @@ WorkflowSelection.propTypes = {
       workflow: PropTypes.string
     })
   }),
-  onChangePreferences: PropTypes.func,
+  locale: PropTypes.string,
   preferences: PropTypes.shape({
     save: PropTypes.func,
     update: PropTypes.func
@@ -247,12 +245,6 @@ WorkflowSelection.propTypes = {
     uncacheLink: PropTypes.func
   }).isRequired,
   projectRoles: PropTypes.arrayOf(PropTypes.object),
-  translation: PropTypes.shape({
-    display_name: PropTypes.string
-  }),
-  translations: PropTypes.shape({
-    locale: PropTypes.string
-  }),
   workflow: PropTypes.shape({
     id: PropTypes.string
   })
@@ -263,6 +255,7 @@ WorkflowSelection.contextTypes = {
 };
 
 const mapStateToProps = state => ({
+  locale: state.translations.locale,
   workflow: state.classify.workflow
 });
 

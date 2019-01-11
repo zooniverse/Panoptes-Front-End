@@ -92,15 +92,18 @@ module.exports = createReactClass
     annotation: null
     onChange: Function.prototype
 
-  render: ->
-    tools = for tool, i in @props.task.tools
+  tools: ->
+    @props.task.tools.map (tool, i) =>
       tool._key ?= Math.random()
-      count = (true for mark in @props.annotation.value when mark.tool is i).length
+      marksByType = @props.annotation.value.filter (mark) -> mark.tool is i
+      count = marksByType.length
       translation = @props.translation.tools[i]
+      checked = i is (@props.annotation._toolIndex ? 0)
       <div>
         <TaskInputField
-          annotation={@props.annotation}
-          className={if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}
+          autoFocus={checked}
+          checked={checked}
+          className={if checked then 'active' else ''}
           index={i}
           key={tool._key}
           label={translation.label}
@@ -114,10 +117,11 @@ module.exports = createReactClass
           <GridButtons {...@props} />}
       </div>
 
+  render: ->
     <GenericTask
       question={@props.translation.instruction}
       help={@props.translation.help}
-      answers={tools}
+      answers={@tools()}
       required={@props.task.required}
     />
 

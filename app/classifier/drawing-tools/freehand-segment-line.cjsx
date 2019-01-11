@@ -24,12 +24,16 @@ module.exports = createReactClass
       _currentlyDrawing: false
 
     initStart: (coords, mark) ->
-      mark.points.push roundCoords coords
-      _inProgress: true
-      _currentlyDrawing: true
+      points = mark.points.slice()
+      points.push roundCoords coords
+      _inProgress = true
+      _currentlyDrawing = true
+      { _inProgress, _currentlyDrawing, points }
 
     initMove: (coords, mark) ->
-      mark.points.push roundCoords coords
+      points = mark.points.slice()
+      points.push roundCoords coords
+      { points }
 
     initRelease: (coords, mark) ->
       _currentlyDrawing: false

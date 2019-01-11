@@ -39,12 +39,14 @@ describe('TextTask', function () {
 
   describe('input onChange event handler', function () {
     let handleChangeSpy;
+    let handleResizeSpy;
     let onChangeSpy;
     let setStateSpy;
     let wrapper;
 
     before(function () {
       handleChangeSpy = sinon.spy(TextTask.prototype, 'handleChange');
+      handleResizeSpy = sinon.spy(TextTask.prototype, 'handleResize');
       onChangeSpy = sinon.spy();
       setStateSpy = sinon.spy(TextTask.prototype, 'setState');
     });
@@ -60,12 +62,14 @@ describe('TextTask', function () {
 
     afterEach(function () {
       handleChangeSpy.resetHistory();
+      handleResizeSpy.resetHistory();
       onChangeSpy.resetHistory();
       setStateSpy.resetHistory();
     });
 
     after(function () {
       handleChangeSpy.restore();
+      handleResizeSpy.restore();
       setStateSpy.restore();
     });
 
@@ -88,6 +92,16 @@ describe('TextTask', function () {
     it('should call handleChange when the onChange event fires', function () {
       wrapper.find('textarea').first().simulate('change', { target: { value: 'text change' }});
       expect(handleChangeSpy.calledOnce).to.be.true;
+    });
+    it('should call handleResize after an onChange event', function () {
+      wrapper.instance().textInput.current.value = 'text change';
+      wrapper.find('textarea').first().simulate('change', { target: { value: 'text change' }});
+      expect(handleResizeSpy.calledOnce).to.be.true;
+    });
+    it('should not call handleResize if state doesn\'t change', function () {
+      wrapper.instance().textInput.current.value = 'testing the [deletion]text task[/deletion] tag selection';
+      wrapper.find('textarea').first().simulate('change', { target: { value: 'testing the [deletion]text task[/deletion] tag selection' }});
+      expect(handleResizeSpy.called).to.be.false;
     });
   });
 

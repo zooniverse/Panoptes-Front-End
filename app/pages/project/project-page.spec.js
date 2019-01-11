@@ -4,7 +4,7 @@ import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import GeordiLogger from '../../lib/zooniverse-logging';
-import { project } from '../dev-classifier/mock-data';
+import { projectWithoutRedirect } from '../../../test/mockObjects';
 import ProjectPage from './project-page';
 import ProjectNavbar from './components/ProjectNavbar';
 import ProjectHomeContainer from './home/';
@@ -22,6 +22,8 @@ function Page() {
 }
 
 describe('ProjectPage', function () {
+  const project = projectWithoutRedirect;
+
   it('should render without crashing', function () {
     shallow(<ProjectPage><Page /></ProjectPage>);
   });

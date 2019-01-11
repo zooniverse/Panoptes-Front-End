@@ -1,7 +1,7 @@
 React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
-Draggable = require '../../../lib/draggable'
+Draggable = require('../../../lib/draggable').default
 drawingTools = require '../../drawing-tools'
 
 module.exports = createReactClass
@@ -82,7 +82,7 @@ module.exports = createReactClass
     @onChange()
 
   handleInitRelease: (e) ->
-    pref = @props.preferences.preferences
+    pref = @props.preferences?.preferences ? {}
     taskDescription = @props.workflow.tasks[@props.annotation.task]
     mark = @props.annotation.value[@props.annotation.value.length - 1]
     MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]

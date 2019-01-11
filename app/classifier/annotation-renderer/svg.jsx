@@ -125,7 +125,7 @@ export default class SVGRenderer extends React.Component {
         const newProps = Component.getSVGProps(hookProps);
         const newStyle = newProps ? Object.assign(style, newProps.style) : style;
         svgProps.style = newStyle;
-        delete newProps.style;
+        if (newProps) delete newProps.style;
         Object.assign(svgProps, newProps);
       }
     });

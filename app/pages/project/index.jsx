@@ -14,8 +14,7 @@ import { bindActionCreators } from 'redux';
 import * as interventionActions from '../../redux/ducks/interventions';
 import * as translationActions from '../../redux/ducks/translations';
 import ProjectPage from './project-page';
-import ProjectTranslations from './project-translations';
-import WorkflowSelection from './workflow-selection';
+import Translations from '../../classifier/translations';
 import getAllLinked from '../../lib/get-all-linked';
 
 counterpart.registerTranslations('en', require('../../locales/en').default);
@@ -83,7 +82,7 @@ class ProjectPageController extends React.Component {
     const { locale } = translations;
     if (project && (locale !== prevProps.translations.locale)) {
       actions.translations.load('project', project.id, locale);
-      actions.translations.loadTranslations('project_page', pages.map(page => page.id), locale);
+      actions.translations.load('project_page', pages.map(page => page.id), locale);
       if (guide) {
         actions.translations.load('field_guide', guide.id, locale);
       }
@@ -140,7 +139,6 @@ class ProjectPageController extends React.Component {
   }
 
   getUserProjectPreferences(project, user) {
-    this.listenToProjectPreferences(null);
 
     const userPreferences = user ?
       user.get('project_preferences', { project_id: project.id })
@@ -159,18 +157,9 @@ class ProjectPageController extends React.Component {
             }));
         })
     :
-      Promise.resolve(apiClient.type('project_preferences').create({
-        id: 'GUEST_PREFERENCES_DO_NOT_SAVE',
-        links: {
-          project: project.id
-        },
-        preferences: {}}));
+      Promise.resolve(null);
 
     return userPreferences
-      .then((projectPreferences) => {
-        this.listenToProjectPreferences(projectPreferences);
-        return projectPreferences;
-      })
       .catch((error) => {
         console.warn(error.message);
       });
@@ -247,7 +236,7 @@ class ProjectPageController extends React.Component {
             const ready = true;
             this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits });
             this.loadFieldGuide(project.id);
-            this.props.actions.translations.loadTranslations('project_page', pages.map(page => page.id), this.props.translations.locale);
+            this.props.actions.translations.load('project_page', pages.map(page => page.id), this.props.translations.locale);
             return { project, projectPreferences, splits };
           })
           .then(({ project, projectPreferences, splits }) => {
@@ -284,13 +273,11 @@ class ProjectPageController extends React.Component {
   }
 
   requestUserProjectPreferences(project, user) {
-    this.listenToProjectPreferences(null);
 
     if (user) {
       return user.get('project_preferences', { project_id: project.id })
         .then(([projectPreferences]) => {
           this.setState({ projectPreferences });
-          this.listenToProjectPreferences(projectPreferences);
         })
         .catch((error) => {
           console.warn(error.message);
@@ -298,16 +285,6 @@ class ProjectPageController extends React.Component {
     } else {
       return Promise.resolve();
     }
-  }
-
-  listenToProjectPreferences(projectPreferences) {
-    if (this._listenedToProjectPreferences) {
-      this._listenedToProjectPreferences.stopListening('change', this._boundForceUpdate);
-    }
-    if (projectPreferences) {
-      projectPreferences.listen('change', this._boundForceUpdate);
-    }
-    this._listenedToProjectPreferences = projectPreferences;
   }
 
   loadFieldGuide(projectId) {
@@ -386,40 +363,29 @@ class ProjectPageController extends React.Component {
           <div className="beta-border" /> : undefined}
 
         {!!this.state.ready &&
-          <ProjectTranslations
-            project={this.state.project}
+          <Translations
+            original={this.state.project}
+            type="project"
           >
-            <WorkflowSelection
-              actions={this.props.actions}
-              location={this.props.location}
+            <ProjectPage
+              {...this.props}
+              background={this.state.background}
+              guide={this.state.guide}
+              guideIcons={this.state.guideIcons}
+              loading={this.state.loading}
+              organization={this.state.organization}
+              owner={this.state.owner}
+              pages={this.state.pages}
               preferences={this.state.projectPreferences}
               project={this.state.project}
+              projectAvatar={this.state.projectAvatar}
+              projectIsComplete={this.state.projectIsComplete}
               projectRoles={this.state.projectRoles}
-              translations={this.props.translations}
-              user={this.props.user}
-              onChangePreferences={this.handleProjectPreferencesChange.bind(this)}
-            >
-              <ProjectPage
-                {...this.props}
-                background={this.state.background}
-                guide={this.state.guide}
-                guideIcons={this.state.guideIcons}
-                loading={this.state.loading}
-                onChangePreferences={this.handleProjectPreferencesChange.bind(this)}
-                organization={this.state.organization}
-                owner={this.state.owner}
-                pages={this.state.pages}
-                preferences={this.state.projectPreferences}
-                project={this.state.project}
-                projectAvatar={this.state.projectAvatar}
-                projectIsComplete={this.state.projectIsComplete}
-                projectRoles={this.state.projectRoles}
-                requestUserProjectPreferences={this.requestUserProjectPreferences.bind(this)}
-                splits={this.state.splits}
-                workflow={this.props.workflow}
-              />
-            </WorkflowSelection>
-          </ProjectTranslations>
+              requestUserProjectPreferences={this.requestUserProjectPreferences.bind(this)}
+              splits={this.state.splits}
+              workflow={this.props.workflow}
+            />
+          </Translations>
         }
         {!!this.state.loading &&
           <div className="content-container">
@@ -460,8 +426,7 @@ ProjectPageController.contextTypes = {
 ProjectPageController.propTypes = {
   actions: PropTypes.shape({
     translations: PropTypes.shape({
-      load: PropTypes.func,
-      loadTranslations: PropTypes.func
+      load: PropTypes.func
     })
   }).isRequired,
   location: PropTypes.shape({
@@ -482,8 +447,7 @@ ProjectPageController.propTypes = {
 ProjectPageController.defaultProps = {
   actions: {
     translations: {
-      load: () => null,
-      loadTranslations: () => null
+      load: () => null
     }
   },
   location: {

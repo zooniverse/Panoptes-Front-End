@@ -27,10 +27,10 @@ describe('NavLink', function() {
 
   describe('when the link is disabled', function() {
     it('should be the StyledLinkPlaceholder component ', function() {
-      const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow: null, user: null });
+      const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, user: null });
       const navLinksWithLabels = buildLinksWithLabels(navLinks);
       const classifyLink = navLinksWithLabels[1];
-      const wrapper = shallow(<NavLink url={classifyLink.url} label={classifyLink.label} disabled={classifyLink.disabled} />);
+      const wrapper = shallow(<NavLink url={classifyLink.url} label={classifyLink.label} disabled={true} />);
       expect(wrapper.name()).to.equal('styled.span');
     });
   });
@@ -39,7 +39,7 @@ describe('NavLink', function() {
     let wrapper;
     let firstLink;
     before(function() {
-      const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, workflow, user: null });
+      const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, user: null });
       const navLinksWithLabels = buildLinksWithLabels(navLinks);
       firstLink = navLinksWithLabels[0];
       wrapper = shallow(<NavLink url={firstLink.url} label={firstLink.label} />);

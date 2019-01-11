@@ -1,39 +1,39 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
 import classnames from 'classnames';
 import Translate from 'react-translate-component';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as classifierActions from '../../../redux/ducks/classify';
+import * as translationActions from '../../../redux/ducks/translations';
 
-export default class ProjectHomeWorkflowButton extends React.Component {
+class ProjectHomeWorkflowButton extends React.Component {
   constructor(props) {
     super(props);
 
     this.handleWorkflowSelection = this.handleWorkflowSelection.bind(this);
   }
 
-  handleWorkflowSelection(e) {
-    if (this.props.disabled) {
-      e.preventDefault();
-    } else {
-      this.props.onChangePreferences('preferences.selected_workflow', this.props.workflow.id);
+  componentDidUpdate() {
+    const { classifierWorkflow, project, workflow } = this.props;
+    if (classifierWorkflow && classifierWorkflow.id === workflow.id) {
+      browserHistory.push(`/projects/${project.slug}/classify`);
     }
+  }
+
+  handleWorkflowSelection(e) {
+    const { actions, preferences, translations, workflow } = this.props;
+    actions.classifier.loadWorkflow(workflow.id, translations.locale, preferences);
   }
 
   render() {
     // To disable the anchor tag, use class to set pointer-events: none style.
     // Except IE, which supports a disabled attribute instead.
-    const linkClasses = classnames({
+    const buttonClasses = classnames({
       'project-home-page__button': true,
       'project-home-page__button--disabled': this.props.disabled
     });
-
-    if (this.props.disabled) {
-      return (
-        <span className={linkClasses}>
-          {this.props.workflow.display_name}
-        </span>
-      );
-    }
 
     if (this.props.workflowAssignment &&
         this.props.workflow.configuration &&
@@ -42,33 +42,55 @@ export default class ProjectHomeWorkflowButton extends React.Component {
     }
 
     return (
-      <Link
-        to={`/projects/${this.props.project.slug}/classify`}
-        className={linkClasses}
+      <button
+        disabled={this.props.disabled}
+        type="button"
+        className={buttonClasses}
         onClick={this.handleWorkflowSelection}
       >
         {(this.props.workflowAssignment && !this.props.disabled) ?
           <Translate content="project.home.workflowAssignment" with={{ workflowDisplayName: this.props.workflow.display_name }} /> :
           this.props.workflow.display_name}
-      </Link>
+      </button>
     );
   }
 }
 
 ProjectHomeWorkflowButton.defaultProps = {
+  actions: {
+    classifier: {
+      setWorkflow: () => null
+    },
+    translations: {
+      load: () => null
+    }
+  },
   disabled: false,
-  onChangePreferences: () => {},
+  preferences: {},
   project: {},
   workflow: {},
   workflowAssignment: false
 };
 
 ProjectHomeWorkflowButton.propTypes = {
+  actions: PropTypes.shape({
+    classifier: PropTypes.shape({
+      setWorkflow: PropTypes.func
+    }),
+    translations: PropTypes.shape({
+      load: PropTypes.func
+    })
+  }),
   disabled: PropTypes.bool,
-  onChangePreferences: PropTypes.func.isRequired,
+  preferences: PropTypes.shape({
+    update: PropTypes.func
+  }),
   project: PropTypes.shape({
     slug: PropTypes.string
   }).isRequired,
+  translations: PropTypes.shape({
+    locale: PropTypes.string
+  }),
   workflow: PropTypes.shape({
     configuration: PropTypes.shape({
       level: PropTypes.string
@@ -78,3 +100,19 @@ ProjectHomeWorkflowButton.propTypes = {
   }).isRequired,
   workflowAssignment: PropTypes.bool
 };
+
+const mapStateToProps = state => ({
+  classifierWorkflow: state.classify.workflow,
+  translations: state.translations
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    classifier: bindActionCreators(classifierActions, dispatch),
+    translations: bindActionCreators(translationActions, dispatch)
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectHomeWorkflowButton);
+export { ProjectHomeWorkflowButton };
+

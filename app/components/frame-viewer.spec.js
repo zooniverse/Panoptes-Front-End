@@ -27,14 +27,14 @@ describe('FrameViewer', function () {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = mount(<FrameViewer frameWrapper={FrameAnnotator} subject={subject} />);
+      wrapper = shallow(<FrameViewer frameWrapper={FrameAnnotator} subject={subject} />);
     });
 
     it('should render without crashing', function () {
     });
 
     it('should load an image subject correctly', function () {
-      assert.equal(wrapper.find('img').length, 1);
+      assert.equal(wrapper.find('FileViewer').props().type, 'image');
     });
 
     it('should setState correctly in handleLoad', function () {

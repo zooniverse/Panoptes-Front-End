@@ -9,7 +9,7 @@ import TextTaskSummary from './summary';
 const LINEHEIGHT = 22.5;
 const NOOP = Function.prototype;
 
-export default class TextTask extends React.Component {
+export default class TextTask extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -77,9 +77,9 @@ export default class TextTask extends React.Component {
   handleChange() {
     const value = this.textInput.current.value;
     if (value.length < this.state.value.length) {
-      this.setState({ rows: 1, value }, this.handleResize);
+      this.setState({ rows: 1, value });
     } else {
-      this.setState({ value }, this.handleResize);
+      this.setState({ value });
     }
 
     this.debouncedUpdateAnnotation(value);

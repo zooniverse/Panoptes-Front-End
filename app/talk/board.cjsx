@@ -42,7 +42,6 @@ module.exports = createReactClass
     author_roles: {}
     subjects: {}
     board: {}
-    discussionsMeta: {}
     newDiscussionOpen: false
     loading: true
     moderationOpen: false
@@ -50,13 +49,62 @@ module.exports = createReactClass
   getDefaultProps: ->
     location: query: page: 1
 
-  componentWillReceiveProps: (nextProps) ->
-    unless nextProps.location.query.page is @props.location.query.page
-      @setDiscussions(nextProps.location.query.page ? 1)
-
-  componentWillMount: ->
+  componentDidMount: ->
     @setDiscussions(@props.location.query.page ? 1)
     @setBoard()
+
+  componentDidUpdate: (prevProps, prevState) ->
+    pageChanged = this.props.location.query.page isnt prevProps.location.query.page
+    discussionsChanged = @state.discussions.length isnt prevState.discussions.length
+    discussionPageChanged = @state.discussions[0]?.getMeta().page isnt prevState.discussions[0]?.getMeta().page
+    if pageChanged
+      @setDiscussions(@props.location.query.page ? 1)
+    if discussionsChanged or discussionPageChanged
+      subject_ids = []
+      author_ids = []
+      @state.discussions.forEach (discussion) ->
+        subject_ids.push discussion.focus_id if discussion.focus_id and discussion.focus_type is 'Subject'
+        author_ids.push discussion.latest_comment.user_id if discussion.latest_comment?
+      author_ids = author_ids.filter (id, i) -> author_ids.indexOf(id) is i
+      subject_ids = subject_ids.filter (id, i) -> subject_ids.indexOf(id) is i
+
+      awaitUsers = apiClient
+        .type 'users'
+        .get
+          id: author_ids
+        .then (users) =>
+          authors = users.reduce (authors, user) ->
+            authors[user.id] = user
+            authors
+          , {}
+
+      awaitRoles = talkClient
+        .type 'roles'
+        .get
+          user_id: author_ids
+          section: ['zooniverse', @props.section]
+          is_shown: true
+          page_size: 100
+        .then (roles) =>
+          author_roles = roles.reduce (author_roles, role) ->
+            author_roles[role.user_id] ?= []
+            author_roles[role.user_id].push role
+            author_roles
+          , {}
+
+      awaitSubjects = apiClient
+        .type 'subjects'
+        .get
+          id: subject_ids
+        .then (discussion_subjects) =>
+          subjects = discussion_subjects.reduce (subjects, subject) ->
+            subjects[subject.id] = subject
+            subjects
+          , {}
+
+      Promise.all([awaitUsers, awaitRoles, awaitSubjects])
+      .then ([authors, author_roles, subjects]) =>
+        @setState { authors, author_roles, subjects }
 
   logNewDiscuss: ->
     @context.geordi?.logEvent
@@ -70,46 +118,7 @@ module.exports = createReactClass
   setDiscussions: (page = @props.location.query.page) ->
     @discussionsRequest(page)
       .then (discussions) =>
-        subject_ids = []
-        author_ids = []
-        discussionsMeta = discussions[0]?.getMeta()
-        @setState {discussions, discussionsMeta, loading: false}
-        discussions.map (discussion) ->
-          subject_ids.push discussion.focus_id if discussion.focus_id and discussion.focus_type is 'Subject'
-          author_ids.push discussion.latest_comment.user_id if discussion.latest_comment?
-        author_ids = author_ids.filter (id, i) -> author_ids.indexOf(id) is i
-        subject_ids = subject_ids.filter (id, i) -> subject_ids.indexOf(id) is i
-
-        apiClient
-          .type 'users'
-          .get
-            id: author_ids
-          .then (users) =>
-            users.map (user) =>
-              @setState (prevState, props) ->
-                prevState.authors[user.id] = user
-
-        talkClient
-          .type 'roles'
-          .get
-            user_id: author_ids
-            section: ['zooniverse', @props.section]
-            is_shown: true
-            page_size: 100
-          .then (roles) =>
-            roles.map (role) =>
-              @setState (prevState, props) ->
-                prevState.author_roles[role.user_id] ?= []
-                prevState.author_roles[role.user_id].push role
-
-        apiClient
-          .type 'subjects'
-          .get
-            id: subject_ids
-          .then (discussion_subjects) =>
-            discussion_subjects.map (subject) =>
-              @setState (prevState, props) ->
-                prevState.subjects[subject.id] = subject
+        @setState {discussions, loading: false}
 
   boardRequest: ->
     id = @props.params.board.toString()
@@ -203,6 +212,7 @@ module.exports = createReactClass
 
   render: ->
     {board} = @state
+    discussionsMeta = @state.discussions[0]?.getMeta()
 
     <div className="talk-board">
       <Helmet title="#{board?.title} » #{counterpart 'projectTalk.title'}" />
@@ -313,5 +323,5 @@ module.exports = createReactClass
         </div>
       </div>
 
-      <Paginator page={+@state.discussionsMeta?.page} pageCount={@state.discussionsMeta?.page_count} />
+      <Paginator page={discussionsMeta?.page} pageCount={discussionsMeta?.page_count} />
     </div>

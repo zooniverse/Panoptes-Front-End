@@ -6,20 +6,21 @@ import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import { pxToRem, zooTheme } from '../../../../theme';
 
-import { StyledTaskInputField } from '../../components/TaskInputField';
+import { StyledTaskLabel } from '../../components/TaskInputField';
 import HighlighterButtonLabel from './HighlighterButtonLabel';
 
 
 // TODO: the focus and hover styles while the component has the active class is not working
-export const StyledHighlighterButton = styled(StyledTaskInputField)`
+export const StyledHighlighterButton = styled(StyledTaskLabel)`
   font-size: inherit;
   width: 100%;
-`.withComponent('button');
+`;
 
 export function HighlighterButton(props) {
   return (
     <ThemeProvider theme={{ mode: props.theme }}>
       <StyledHighlighterButton
+        as="button"
         autoFocus={props.autoFocus}
         type="button"
         value={props.value}

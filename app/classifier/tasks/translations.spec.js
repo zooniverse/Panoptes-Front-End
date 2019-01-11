@@ -18,19 +18,25 @@ const initialTranslations = {
 const translations = {
   strings: {
     workflow: {
-      display_name: 'A test workflow',
-      tasks: {
-        survey: {
-          choices: {
-            ar: {
-              label: 'Translated Armadillo'
-            }
-          },
-          questions: {
-            ho: {
-              answers: {
-                one: {
-                  label: 'Translated 1'
+      '1': {
+        translated_type: 'Workflow',
+        translated_id: '1',
+        strings: {
+          display_name: 'A test workflow',
+          tasks: {
+            survey: {
+              choices: {
+                ar: {
+                  label: 'Translated Armadillo'
+                }
+              },
+              questions: {
+                ho: {
+                  answers: {
+                    one: {
+                      label: 'Translated 1'
+                    }
+                  }
                 }
               }
             }
@@ -112,7 +118,7 @@ const expectedTranslation = {
 
 describe('Task translation with a translation', function () {
   const wrapper = mount(
-    <TaskTranslations taskKey="survey" task={task} translations={translations}>
+    <TaskTranslations taskKey="survey" task={task} translations={translations} workflowID="1">
       <StubTask task={task} />
     </TaskTranslations>
   );
@@ -129,7 +135,7 @@ describe('Task translation with a translation', function () {
 
 describe('Task translation without a translation', function () {
   const wrapper = mount(
-    <TaskTranslations taskKey="survey" task={task} translations={initialTranslations}>
+    <TaskTranslations taskKey="survey" task={task} translations={initialTranslations} workflowID="1">
       <StubTask task={task} />
     </TaskTranslations>
   );

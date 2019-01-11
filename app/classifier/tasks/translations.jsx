@@ -4,8 +4,9 @@ import merge from 'lodash/merge';
 import { connect } from 'react-redux';
 
 function TaskTranslations(props) {
-  const { task, taskKey, translations } = props;
-  const taskStrings = translations.strings.workflow.tasks ? translations.strings.workflow.tasks[taskKey] : {};
+  const { task, taskKey, translations, workflowID } = props;
+  const workflowTranslation = translations.strings.workflow[workflowID] || {};
+  const taskStrings = workflowTranslation.strings ? workflowTranslation.strings.tasks[taskKey] : {};
   const translation = merge({}, task, taskStrings);
 
   return React.cloneElement(props.children, { translation });
@@ -17,7 +18,8 @@ TaskTranslations.propTypes = {
     answers: PropTypes.array,
     question: PropTypes.string
   }),
-  taskKey: PropTypes.string
+  taskKey: PropTypes.string,
+  workflowID: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({

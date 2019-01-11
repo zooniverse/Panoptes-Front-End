@@ -4,8 +4,6 @@ import DragReorderable from 'drag-reorderable';
 import AutoSave from '../../components/auto-save.coffee';
 import { socialIcons } from '../../lib/nav-helpers';
 
-const ROUTE_BEFORE_DOMAIN = ['wordpress'];
-
 export default class SocialLinksEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -41,7 +39,7 @@ export default class SocialLinksEditor extends React.Component {
     let index = this.indexFinder(this.props.project.urls, site);
     if (index < 0) { index = this.props.project.urls.length; }
     let url = `https://${site}${e.target.value}`;
-    if (ROUTE_BEFORE_DOMAIN.some(el => site.indexOf(el) >= 0)) {
+    if (socialIcons[site].pathBeforeSite) {
       url = `https://${e.target.value}.${site}`;
     }
 
@@ -93,7 +91,7 @@ export default class SocialLinksEditor extends React.Component {
   renderRow(site, i) {
     const index = this.indexFinder(this.props.project.urls, site);
     const value = index >= 0 ? this.props.project.urls[index].path : '';
-    const precedeSiteName = ROUTE_BEFORE_DOMAIN.some(el => site.indexOf(el) >= 0);
+    const precedeSiteName = socialIcons[site].pathBeforeSite;
 
     return (
       <tr key={i}>

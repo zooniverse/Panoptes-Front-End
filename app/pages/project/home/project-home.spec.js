@@ -26,7 +26,10 @@ const project = {
       site: 'facebook.com/',
       url: 'https://www.facebook.com/find-the-thing'
     }
-  ]
+  ],
+  links: {
+    active_workflows: ['1']
+  }
 };
 
 const talkSubjects = [

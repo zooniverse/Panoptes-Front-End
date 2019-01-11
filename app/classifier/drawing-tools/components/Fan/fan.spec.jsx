@@ -122,7 +122,7 @@ describe('Fan Tool', function () {
     });
 
     describe('the spread drag handles', function () {
-        
+
       afterEach(function () {
         onChange.resetHistory();
       });

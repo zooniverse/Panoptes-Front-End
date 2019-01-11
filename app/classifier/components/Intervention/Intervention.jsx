@@ -13,9 +13,8 @@ const StyledInterventionMessage = styled.div`
   }
 `;
 
-function Intervention({ notifications, user }) {
-  const notification = notifications[notifications.length - 1];
-  const { message } = notification.data;
+function Intervention({ intervention, user }) {
+  const { message } = intervention;
   const checkbox = React.createRef();
 
   function onChange() {
@@ -41,11 +40,9 @@ function Intervention({ notifications, user }) {
 }
 
 Intervention.propTypes = {
-  notifications: PropTypes.arrayOf(PropTypes.shape({
-    data: PropTypes.shape({
+  intervention: PropTypes.shape({
       message: PropTypes.string
-    })
-  })).isRequired,
+    }).isRequired,
   user: PropTypes.shape({
     intervention_notifications: PropTypes.bool
   }).isRequired

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Markdown } from 'markdownz';
 import { socialIcons } from '../../../../lib/nav-helpers';
 
 export default function ExternalLink({ className, isExternalLink, isSocialLink, label, path, site, url }) {
@@ -14,22 +15,35 @@ export default function ExternalLink({ className, isExternalLink, isSocialLink, 
 
   if (isExternalLink) {
     iconClasses = 'fa fa-external-link fa-fw';
+    return (
+      <div className={linkProps.className}>
+        <Markdown tag="span" className="link-title" inline={true}>
+          {`[${linkLabel}](+tab+${linkProps.href})`}
+        </Markdown>
+        {iconClasses && <i className={iconClasses} />}
+      </div>
+    );
   }
 
-  if (isSocialLink) {
+  if (isSocialLink && !!socialIcons[site]) {
     const icon = socialIcons[site].icon;
-    linkProps['aria-label'] = socialIcons[site].ariaLabel;
     iconClasses = `fa ${icon} fa-fw`;
     linkLabel = path;
-  }
-
-  if (isExternalLink || isSocialLink) {
-    return (
-      <a {...linkProps}>
-        <span className="link-title">{linkLabel}</span>
-        {iconClasses && <i className={iconClasses} />}
-      </a>
-    );
+    linkProps['aria-label'] = socialIcons[site].ariaLabel;
+    if (socialIcons[site].pathBeforeSite) {
+      linkProps.href = `https://${path}.${site}`;
+    } else {
+      linkProps.href = `https://${site}${path}`;
+    }
+    const isValidLink = !!icon && linkProps.href.substring(0, 8) === 'https://';
+    if (isValidLink) {
+      return (
+        <a {...linkProps}>
+          <span className="link-title">{linkLabel}</span>
+          {iconClasses && <i className={iconClasses} />}
+        </a>
+      );
+    }
   }
 
   return null;

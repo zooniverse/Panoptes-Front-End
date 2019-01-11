@@ -1,8 +1,10 @@
 import React from 'react';
-import assert from 'assert';
+import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
-import ProjectHomeWorkflowButton from './home-workflow-button';
+import apiClient from 'panoptes-client/lib/api-client';
+import { ProjectHomeWorkflowButton } from './home-workflow-button';
+import mockPanoptesResource from '../../../../test/mock-panoptes-resource';
 
 const testWorkflowWithLevel = {
   id: '2342',
@@ -20,46 +22,85 @@ const testProject = {
   slug: 'zooniverse/project'
 };
 
-describe('ProjectHomeWorkflowButton', function() {
+const preferences = mockPanoptesResource('project-preferences', {});
+
+const actions = {
+  classifier: {
+    loadWorkflow: sinon.stub(),
+    setWorkflow: sinon.stub()
+  },
+  translations: {
+    load: sinon.stub()
+  }
+};
+
+const translations = {
+  locale: 'en'
+};
+
+const user = mockPanoptesResource('user', {});
+
+const fakeEvent = {
+  preventDefault: sinon.stub()
+};
+
+describe('ProjectHomeWorkflowButton', function () {
   let wrapper;
   let handleWorkflowSelectionSpy;
-  let onChangePreferencesSpy;
   before(function() {
     handleWorkflowSelectionSpy = sinon.spy(ProjectHomeWorkflowButton.prototype, 'handleWorkflowSelection');
-    onChangePreferencesSpy = sinon.spy();
+    sinon.stub(apiClient, 'type').callsFake(() => {
+      return {
+        get: () => Promise.resolve(testWorkflowWithoutLevel)
+      }
+    });
     wrapper = shallow(
       <ProjectHomeWorkflowButton
+        actions={actions}
         disabled={false}
-        onChangePreferences={onChangePreferencesSpy}
+        preferences={preferences}
         project={testProject}
+        translations={translations}
+        user={user}
         workflow={testWorkflowWithoutLevel}
         workflowAssignment={false}
       />
     );
   });
+  afterEach(function () {
+    actions.classifier.setWorkflow.resetHistory();
+    preferences.update.resetHistory();
+  });
   after(function () {
     handleWorkflowSelectionSpy.restore();
+    apiClient.type.restore();
   });
 
-  it('renders without crashing', function () {});
-
-  it('renders a Link component', function () {
-    assert.equal(wrapper.find('Link').length, 1);
-    assert.equal(wrapper.find('span').length, 0);
+  it('renders with default props', function () {
+    expect(shallow(<ProjectHomeWorkflowButton />)).to.be.ok;
   });
 
-  it('renders the workflow display name as the Link text', function() {
-    assert.equal(wrapper.render().text(), testWorkflowWithoutLevel.display_name);
+  it('renders an active button', function () {
+    expect(wrapper.find('button').prop('disabled')).to.be.false;
   });
 
-  it('calls handleWorkflowSelection onClick', function() {
-    wrapper.find('Link').simulate('click');
-    assert.equal(handleWorkflowSelectionSpy.calledOnce, true);
-    assert.equal(onChangePreferencesSpy.calledOnce, true);
+  it('renders the workflow display name as the button label', function() {
+    expect(wrapper.render().text()).to.equal(testWorkflowWithoutLevel.display_name);
   });
-
-  it('uses the project slug in the Link href', function() {
-    assert.equal(wrapper.find('Link').props().to.includes(testProject.slug), true);
+  
+  describe('on click', function () {
+    before(function () {
+      wrapper.find('button').simulate('click', fakeEvent);
+    });
+    after(function () {
+      fakeEvent.preventDefault.resetHistory();
+    });
+    it('calls handleWorkflowSelection onClick', function() {
+      expect(handleWorkflowSelectionSpy).to.have.been.calledOnce;
+    });
+    it('should load a new workflow', function () {
+      expect(actions.classifier.loadWorkflow).to.have.been.calledWith(testWorkflowWithoutLevel.id, translations.locale, preferences);
+    });
   });
 
   describe('when props.disabled is true', function() {
@@ -67,7 +108,7 @@ describe('ProjectHomeWorkflowButton', function() {
       wrapper = shallow(
         <ProjectHomeWorkflowButton
           disabled={true}
-          onChangePreferences={onChangePreferencesSpy}
+          preferences={preferences}
           project={testProject}
           workflow={testWorkflowWithoutLevel}
           workflowAssignment={false}
@@ -75,13 +116,12 @@ describe('ProjectHomeWorkflowButton', function() {
       );
     });
 
-    it('renders a span instead of a Link component', function() {
-      assert.equal(wrapper.find('span').length, 1);
-      assert.equal(wrapper.find('Link').length, 0);
+    it('renders a disabled button', function() {
+      expect(wrapper.find('button').prop('disabled')).to.be.true;
     });
 
     it('applies the call-to-action-button--disabled class', function() {
-      assert.equal(wrapper.hasClass('project-home-page__button--disabled'), true);
+      expect(wrapper.hasClass('project-home-page__button--disabled')).to.be.true;
     });
   });
 
@@ -90,7 +130,7 @@ describe('ProjectHomeWorkflowButton', function() {
       wrapper = shallow(
         <ProjectHomeWorkflowButton
           disabled={false}
-          onChangePreferences={onChangePreferencesSpy}
+          preferences={preferences}
           project={testProject}
           workflow={testWorkflowWithoutLevel}
           workflowAssignment={true}
@@ -99,16 +139,16 @@ describe('ProjectHomeWorkflowButton', function() {
     });
 
     it('renders null when the workflow does not have a level set in its configuration', function() {
-      assert.equal(wrapper.isEmptyRender(), true);
+      expect(wrapper.isEmptyRender()).to.be.true;
     });
 
-    it('renders a Link when the workflow has a level set in its configuration', function() {
+    it('renders a button when the workflow has a level set in its configuration', function() {
       wrapper.setProps({ workflow: testWorkflowWithLevel });
-      assert.equal(wrapper.find('Link').length, 1);
+      expect(wrapper.find('button')).to.have.lengthOf(1);
     });
 
     it('renders a Translate component for the Link text', function() {
-      assert.equal(wrapper.find('Translate').length, 1);
+      expect(wrapper.find('Translate')).to.have.lengthOf(1);
     });
   });
 });

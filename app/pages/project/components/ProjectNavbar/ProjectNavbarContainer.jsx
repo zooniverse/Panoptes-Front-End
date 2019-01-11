@@ -46,8 +46,8 @@ class ProjectNavbarContainer extends Component {
   }
 
   getProjectLinks() {
-    const { project, projectRoles, user, workflow } = this.props;
-    const links = getProjectLinks({ project, projectRoles, workflow, user });
+    const { project, projectRoles, user } = this.props;
+    const links = getProjectLinks({ project, projectRoles, user });
 
     return _.map(links, link => ({
       disabled: link.disabled || false,
@@ -115,8 +115,7 @@ ProjectNavbarContainer.propTypes = {
   translation: PropTypes.shape({
     display_name: PropTypes.string
   }),
-  user: PropTypes.object,
-  workflow: PropTypes.object
+  user: PropTypes.object
 };
 
 export default ProjectNavbarContainer;

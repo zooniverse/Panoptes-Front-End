@@ -1,7 +1,10 @@
-import reducer from './classify';
+import reducer, { loadWorkflow } from './classify';
 import { expect } from 'chai';
+import sinon from 'sinon';
+import apiClient from 'panoptes-client/lib/api-client';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 import FakeLocalStorage from '../../../test/fake-local-storage';
+import seenThisSession from '../../lib/seen-this-session';
 
 global.innerWidth = 1000;
 global.innerHeight = 1000;
@@ -9,6 +12,35 @@ global.sessionStorage = new FakeLocalStorage();
 sessionStorage.setItem('session_id', JSON.stringify({ id: 0, ttl: 0 }));
 
 describe('Classifier actions', function () {
+  describe('add intervention', function () {
+    const action = {
+      type: 'pfe/classify/ADD_INTERVENTION',
+      payload: {
+        message: 'Hi there!',
+        project_id: '1'
+      }
+    };
+    describe('with a valid project', function () {
+      const state = {
+        classification: { id: '1', links: { project: '1' } },
+        intervention: null
+      };
+      it('should store the intervention', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.deep.equal(action.payload);
+      });
+    });
+    describe('with an invalid project', function () {
+      const state = {
+        classification: { id: '1', links: { project: '2' } },
+        intervention: null
+      };
+      it('should ignore the intervention', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.be.null;
+      });
+    });
+  });
   describe('append subjects', function () {
     const action = {
       type: 'pfe/classify/APPEND_SUBJECTS',
@@ -112,6 +144,10 @@ describe('Classifier actions', function () {
         const newState = reducer(state, action);
         expect(newState.classification).to.be.null;
       });
+      it('should clear any stored interventions', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.be.null;
+      });
     });
     describe('with multiple subjects in the queue', function () {
       const state = {
@@ -138,7 +174,11 @@ describe('Classifier actions', function () {
       it('should create a classification for the next subject in the queue', function () {
         const newState = reducer(state, action);
         expect(newState.classification.links.subjects).to.deep.equal(['2']);
-      })
+      });
+      it('should clear any stored interventions', function () {
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.be.null;
+      });
     });
   });
   describe('reset subjects', function () {
@@ -205,6 +245,10 @@ describe('Classifier actions', function () {
       const newState = reducer(state, action);
       expect(newState.classification.links.workflow).to.equal('1');
     });
+    it('should clear any stored interventions', function () {
+      const newState = reducer(state, action);
+      expect(newState.intervention).to.be.null;
+    });
     it('should do nothing if the queue is empty', function () {
       state.upcomingSubjects = [];
       const newState = reducer(state, action);
@@ -259,15 +303,32 @@ describe('Classifier actions', function () {
       }
     };
     const state = {
-      classification: mockPanoptesResource('classifications', { id: '1' }),
-      workflow: {
+      classification: mockPanoptesResource('classifications', {
         id: '1',
+        links: {
+          subjects: ['2'],
+          workflow: '3'
+        }
+      }),
+      workflow: {
+        id: '3',
         tasks: {
           a: {}
         }
       },
       upcomingSubjects: [1, 2]
     };
+    const subject = {
+      id: '2',
+      locations: [],
+      metadata: [],
+      destroy: function () {}
+    };
+    it('should mark the workflow subject as seen', function () {
+      expect(seenThisSession.check(state.workflow, subject)).to.be.false;
+      const newState = reducer(state, action);
+      expect(seenThisSession.check(newState.workflow, subject)).to.be.true;
+    });
     it('should set the classification completed flag', function () {
       const newState = reducer(state, action);
       expect(newState.classification.completed).to.be.true;
@@ -281,9 +342,9 @@ describe('Classifier actions', function () {
       expect(newState.classification.annotations).to.deep.equal(action.payload.annotations);
     });
   });
-  describe('update classification', function () {
+  describe('update classification metadata', function () {
     const action = {
-      type: 'pfe/classify/UPDATE_CLASSIFICATION',
+      type: 'pfe/classify/UPDATE_METADATA',
       payload: {
         metadata: {
           a: 1,
@@ -292,7 +353,7 @@ describe('Classifier actions', function () {
       }
     };
     const state = {
-      classification: mockPanoptesResource('classifications', { 
+      classification: mockPanoptesResource('classifications', {
         id: '1',
         metadata: {
           b: 3,
@@ -355,7 +416,7 @@ describe('Classifier actions', function () {
     });
   });
   describe('toggle gold standard', function () {
-    it('should set gold standard classifications', function () {
+    it('should set gold standard classifications and mode', function () {
       const action = {
         type: 'pfe/classify/TOGGLE_GOLD_STANDARD',
         payload: {
@@ -367,8 +428,9 @@ describe('Classifier actions', function () {
       };
       const newState = reducer(state, action);
       expect(newState.classification.gold_standard).to.be.true;
+      expect(newState.goldStandardMode).to.be.true;
     });
-    it('should unset gold standard classifications', function () {
+    it('should unset gold standard classifications and mode', function () {
       const action = {
         type: 'pfe/classify/TOGGLE_GOLD_STANDARD',
         payload: {
@@ -380,6 +442,7 @@ describe('Classifier actions', function () {
       };
       const newState = reducer(state, action);
       expect(newState.classification.gold_standard).to.be.false;
+      expect(newState.goldStandardMode).to.be.false;
     });
     it('should unset gold standard classifications if undefined', function () {
       const action = {
@@ -391,6 +454,289 @@ describe('Classifier actions', function () {
       };
       const newState = reducer(state, action);
       expect(newState.classification.gold_standard).to.be.undefined;
+    });
+  });
+
+  describe('load workflow', function () {
+    let awaitWorkflow;
+    let state;
+    let storeState;
+    let initialState = {
+      classification: null,
+      goldStandardMode: false,
+      intervention: null,
+      upcomingSubjects: [{
+        id: '1',
+        locations: [],
+        metadata: [],
+        destroy: function () {}
+      },
+      {
+        id: '2',
+        locations: [],
+        metadata: [],
+        destroy: function () {}
+      }],
+      workflow: { id: 'b' }
+    };
+    const fakeDispatch = sinon.stub().callsFake(function (action) {
+      if(typeof action === 'function') {
+        action = action(fakeDispatch);
+      }
+      storeState = reducer(storeState, action);
+      return storeState;
+    });
+    const fakePreferences = {
+      update: sinon.stub().callsFake(changes => changes),
+      save: sinon.stub()
+    };
+    const fakeWorkflow = {
+      id: 'a'
+    };
+
+    before(function () {
+      sinon.stub(apiClient, 'type').callsFake(function (type) {
+        if (type === 'workflows') {
+          return {
+            get: sinon.stub().callsFake(() => Promise.resolve(fakeWorkflow))
+          };
+        }
+        if (type === 'translations') {
+          const fakeTranslation = {
+            strings: {}
+          };
+          return {
+            get: sinon.stub().callsFake(() => Promise.resolve([fakeTranslation]))
+          };
+        }
+      });
+    });
+
+    after(function () {
+      apiClient.type.restore();
+    });
+
+    beforeEach(function () {
+      state = Object.assign({}, initialState);
+      storeState = initialState;
+      awaitWorkflow = loadWorkflow('a', 'en', fakePreferences)(fakeDispatch);
+    });
+
+    afterEach(function () {
+      fakeDispatch.resetHistory();
+      fakePreferences.update.resetHistory();
+      fakePreferences.save.resetHistory();
+    });
+
+    it('should update user preferences', function () {
+      expect(fakePreferences.update).to.have.been.calledWith({ 'preferences.selected_workflow': 'a' });
+    });
+
+    it('should load the workflow translation', function () {
+      const expectedAction = {
+        type: 'pfe/translations/LOAD',
+        translated_type: 'workflow',
+        translated_id: 'a',
+        language: 'en'
+      };
+      expect(fakeDispatch).to.have.been.calledWith(expectedAction);
+    });
+
+    it('should reset the classify store', function (done) {
+      const expectedState = {
+        classification: null,
+        goldStandardMode: false,
+        intervention: null,
+        upcomingSubjects: [],
+        workflow: fakeWorkflow
+      };
+      awaitWorkflow.then(function () {
+        expect(storeState).to.deep.equal(expectedState);
+      })
+      .then(done, done);
+    });
+
+    it('should save user preferences', function (done) {
+      awaitWorkflow
+      .then(function () {
+        expect(fakePreferences.save).to.have.been.calledOnce;
+      })
+      .then(done, done);
+    });
+
+    it('should load a workflow', function (done) {
+      awaitWorkflow
+      .then(function () {
+        expect(storeState.workflow).to.deep.equal(fakeWorkflow);
+      })
+      .then(done, done);
+    });
+
+    it('should not mutate initial state', function (done) {
+      awaitWorkflow
+      .then(function () {
+        expect(state).to.deep.equal(initialState);
+      })
+      .then(done, done);
+    });
+
+    describe('on error', function () {
+      describe('404 API errors', function () {
+        before(function () {
+          apiClient.type.restore();
+          const fakeError = {
+            status: 404
+          };
+          sinon.stub(apiClient, 'type').callsFake(function (type) {
+            if (type === 'workflows') {
+              return {
+                get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+              };
+            }
+            if (type === 'translations') {
+              const fakeTranslation = {
+                strings: {}
+              };
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve([fakeTranslation]))
+              };
+            }
+          });
+        });
+
+        it('should clear the workflow ID from user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(fakePreferences.update).to.have.been.calledWith({ 'preferences.selected_workflow': undefined });
+          })
+          .then(done, done);
+        });
+
+        it('should set the stored workflow to null', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(storeState.workflow).to.be.null;
+          })
+          .then(done, done);
+        });
+      });
+
+      describe('500 API errors', function () {
+        before(function () {
+          apiClient.type.restore();
+          const fakeError = {
+            status: 500
+          };
+          sinon.stub(apiClient, 'type').callsFake(function (type) {
+            if (type === 'workflows') {
+              return {
+                get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+              };
+            }
+            if (type === 'translations') {
+              const fakeTranslation = {
+                strings: {}
+              };
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve([fakeTranslation]))
+              };
+            }
+          });
+        });
+
+        it('should not clear the workflow ID from user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(fakePreferences.update).to.not.have.been.calledWith({ 'preferences.selected_workflow': undefined });
+          })
+          .then(done, done);
+        });
+
+        it('should set the stored workflow to null', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(storeState.workflow).to.be.null;
+          })
+          .then(done, done);
+        });
+      });
+
+      describe('200 responses with an undefined workflow', function () {
+        before(function () {
+          apiClient.type.restore();
+          sinon.stub(apiClient, 'type').callsFake(function (type) {
+            if (type === 'workflows') {
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve(undefined))
+              };
+            }
+            if (type === 'translations') {
+              const fakeTranslation = {
+                strings: {}
+              };
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve([fakeTranslation]))
+              };
+            }
+          });
+        });
+
+        it('should not clear the workflow ID from user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(fakePreferences.update).to.not.have.been.calledWith({ 'preferences.selected_workflow': undefined });
+          })
+          .then(done, done);
+        });
+
+        it('should set the stored workflow to null', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(storeState.workflow).to.be.null;
+          })
+          .then(done, done);
+        });
+      });
+
+      describe('translations API errors', function () {
+        before(function () {
+          apiClient.type.restore();
+          const fakeError = {
+            status: 500
+          };
+          sinon.stub(apiClient, 'type').callsFake(function (type) {
+            if (type === 'workflows') {
+              return {
+                get: sinon.stub().callsFake(() => Promise.resolve(fakeWorkflow))
+              };
+            }
+            if (type === 'translations') {
+              const fakeTranslation = {
+                strings: {}
+              };
+              return {
+                get: sinon.stub().callsFake(() => Promise.reject(fakeError))
+              };
+            }
+          });
+        });
+
+        it('should not clear the workflow ID from user preferences', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(fakePreferences.update).to.not.have.been.calledWith({ 'preferences.selected_workflow': undefined });
+          })
+          .then(done, done);
+        });
+
+        it('should load a workflow', function (done) {
+          awaitWorkflow
+          .then(function () {
+            expect(storeState.workflow).to.deep.equal(fakeWorkflow);
+          })
+          .then(done, done);
+        });
+      });
     });
   });
 });

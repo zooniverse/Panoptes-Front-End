@@ -26,19 +26,18 @@ export const StyledExternalLinksBlock = styled.div`
       margin-top: 1.5em;
     }
 
-      a i {
-        margin: 0 1ch;
+      a {
         text-decoration: none;
       }
 
-        &:hover, &:focus {
-          text-decoration: none;
-        }
+      a:hover, a:focus {
+        text-decoration: underline;
+      }
 
-      .link-title:hover, .link-title:focus {
-          text-decoration: underline;
-        }
-
+      i {
+        margin: 0 1ch;
+        text-decoration: none;
+      }
 `;
 
 export const StyledExternalLink = styled(ExternalLink)`
