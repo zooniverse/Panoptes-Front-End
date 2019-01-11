@@ -23,7 +23,7 @@ counterpart.registerTranslations('en', {
       taskFeedbackDisabled: 'Cannot provide feedback',
       workflowQuestionHasOneOrLessImages: 'Task question has no more than one image',
       drawingToolTypeIsValid: 'Drawing tool must be a rectangle tool',
-      drawingTaskHasOneTool: 'Drawing task must have 1 tool',
+      drawingTaskHasOneTool: 'Drawing task must have only 1 tool',
       drawingTaskHasNoSubtasks: 'Drawing tool must not have any subtasks'
     },
     projectEligible: 'Check this box if you think your question fits in this way.  If you have a Yes/No question, we recommend Yes as the first option listed so that it appears on the right.',
