@@ -192,13 +192,6 @@ const validationFixtures = {
   }
 };
 
-/*
-function drawingTaskHasOneTool({ task }) {
-  return convertBooleanToValidation(task.tools.length === 1);
-}
-*/
-
-
 export {
   MockResource,
   project,
