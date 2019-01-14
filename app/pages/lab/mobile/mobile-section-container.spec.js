@@ -117,6 +117,21 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('workflowNotTooManyShortcuts');
       testValidationProp('workflowNotTooManyShortcuts', validationFixtures.workflowTooManyShortcuts, false);
     });
+
+    it('should check whether workflow has correct drawing task type', function () {
+      testValidationProp('drawingToolTypeIsValid', validationFixtures.workflowHasValidDrawingTask, true);
+      testValidationProp('drawingToolTypeIsValid', validationFixtures.workflowHasInvalidDrawingTask, false);
+    });
+
+    it('should check whether workflow has only one tool', function () {
+      testValidationProp('drawingTaskHasOneTool', validationFixtures.drawingTaskHasOneTool, true);
+      testValidationProp('drawingTaskHasOneTool', validationFixtures.drawingTaskHasTwoTools, false);
+    });
+
+    it('should check whether workflow has no subtasks', function () {
+      testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasNoSubtasks, true);
+      testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasSubtasks, false);
+    });
   });
 
   describe('enabled prop', function () {
