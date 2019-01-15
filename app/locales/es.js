@@ -22,14 +22,14 @@ export default {
     miniCourseButton: 'Reiniciar el mini-curso del proyecto',
     workflowAssignmentDialog: {
       promotionMessage: "¡Felicitaciones! Has desbloqueado la próxima secuencia de trabajo. Si prefieres seguir en la secuencia actual, puedes escoger permanecer.",
-      acceptButton: 'Take me to the next level!',
+      acceptButton: '¡Ir al siguiente nivel!',
       declineButton: 'No, gracias'
     }
   },
   project: {
     language: 'Idioma',
     loading: 'Cargando proyecto',
-    disclaimer: 'Este proyecto ha sido construido usando Zooniverse Project Builder, pero todavía no es un proyecto oficial de Zooniverse. Preguntas y problemas relacionadas con este proyecto dirigidas al equipo de Zooniverse podrían no recibir respuesta.',
+    disclaimer: 'Este proyecto ha sido construido usando Zooniverse Project Builder, pero todavía no es un proyecto oficial de Zooniverse. Las preguntas y asuntos relacionados con este proyecto dirigidos al equipo de Zooniverse podrían no recibir respuesta.',
     about: {
       header: 'Acerca de',
       nav: {
@@ -64,15 +64,15 @@ export default {
         statistics: 'Estadística de %(title)s',
         classifications: 'Clasificaciones',
         volunteers: 'Voluntarios',
-        completedSubjects: 'Casos completados',
-        subjects: 'Casos'
+        completedSubjects: 'Sujetos completados',
+        subjects: 'Sujetos'
       },
       talk: {
-        zero: 'Nadie está hablando de **%(title)s** ahora mismo.',
-        one: '**1** persona está hablando de  **%(title)s** ahora mismo.',
-        other: '**%(count)s** personas están hablando de **%(title)s** ahora mismo.'
+        zero: 'Nadie está hablando de **%(title)s** ahora.',
+        one: '**1** persona está hablando de  **%(title)s** ahora.',
+        other: '**%(count)s** personas están hablando de **%(title)s** ahora.'
       },
-      joinIn: 'Participa',
+      joinIn: 'Unirse',
       learnMore: 'Aprende más',
       getStarted: 'Comenzar',
       workflowAssignment: 'Has desbloqueado %(workflowDisplayName)s',
@@ -82,7 +82,7 @@ export default {
   },
   organization: {
     loading: 'Cargando organización',
-    error: 'Hubo un error al recuperar organización',
+    error: 'Hubo un error al recuperar la organización',
     notFound: 'organización no encontrada.',
     notPermission: 'Si la dirección es correcta, podrías no tener los permisos para ver esta organización.',
     pleaseWait: 'Espere por favor...',
@@ -92,7 +92,7 @@ export default {
         error: 'Hubo un error al cargar los proyectos de la organización.',
         none: 'No hay proyectos asociados a esta organización.'
       },
-      viewToggle: 'Vista del Voluntario',
+      viewToggle: 'Ver como Voluntario',
       introduction: 'Introducción',
       readMore: 'Leer más',
       readLess: 'Leer menos',
@@ -103,21 +103,21 @@ export default {
     less: 'Menos',
     more: 'Más',
     shortcut: {
-      noAnswer: "No hay respuesta"
+      noAnswer: "Sin respuesta"
     },
     survey: {
-      clear: 'Limpiar',
-      clearFilters: 'Limpiar filtros',
+      clear: 'Borrar',
+      clearFilters: 'Borrar filtros',
       makeSelection: 'Haz una selección',
       showing: 'Mostrando %(count)s de %(max)s',
-      confused: 'A menudo confundido con',
+      confused: 'Frecuentemente confundido con',
       dismiss: 'Descartar',
       itsThis: 'Pienso que es esto',
       cancel: 'Cancelar',
       identify: 'Identificar',
-      surveyOf: 'Relevamiento de %(count)s',
+      surveyOf: 'Estudio de %(count)s',
       identifications: {
-        zero: 'No hay identificaciones',
+        zero: 'Ninguna identificación',
         one: '1 identificación',
         other: '%(count)s identificaciones'
       }
