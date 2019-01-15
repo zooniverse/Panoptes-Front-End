@@ -500,16 +500,16 @@ describe('WorkflowSelection', function () {
     });
   });
 
-  describe('on user change', function () {
+  describe('on preferences change', function () {
     before(function () {
-      const user = mockPanoptesResource('users', { id: 2, login: 'test-person' });
+      const preferences = mockPanoptesResource('preferences', { id: 2, preferences: {} });
       sinon.stub(controller, 'getWorkflow').callsFake(() => {});
-      wrapper.setProps({ user });
+      wrapper.setProps({ preferences });
     })
 
     after(function () {
       controller.getWorkflow.restore();
-      wrapper.setProps({ user: undefined });
+      wrapper.setProps({ preferences: undefined });
       actions.classifier.reset.resetHistory();
     });
 

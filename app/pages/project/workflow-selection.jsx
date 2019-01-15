@@ -24,24 +24,17 @@ class WorkflowSelection extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { actions, locale, preferences, user, workflow } = this.props;
-    const prevUser = prevProps.user && prevProps.user.login;
-    const currentUser = user && user.login;
-    const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
-    if (userSelectedWorkflow && workflow) {
-      const prevWorkflowID = prevProps.workflow && prevProps.workflow.id;
-      const workflowChanged = workflow.id !== prevWorkflowID;
-      if (workflowChanged && userSelectedWorkflow !== workflow.id) {
-        this.getSelectedWorkflow(this.props);
-      }
-    }
+    const { actions, locale, preferences, workflow } = this.props;
+    const prevPrefs = prevProps.preferences && prevProps.preferences.id;
+    const currentPrefs = preferences && preferences.id;
+    
     if (prevProps.project.id !== this.props.project.id) {
       this.getSelectedWorkflow(this.props);
     }
     if (workflow && prevProps.locale !== locale) {
       actions.translations.load('workflow', workflow.id, locale);
     }
-    if (currentUser !== prevUser) {
+    if (currentPrefs !== prevPrefs) {
       actions.classifier.reset();
     }
   }
