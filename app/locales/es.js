@@ -2,7 +2,7 @@ export default {
   loading: '(Cargando)',
   classifier: {
     back: 'Atrás',
-    backButtonWarning: 'Al ir atrás se borrará tu trabajo para la tarea actual.',
+    backButtonWarning: 'Al regresar se borrará tu trabajo para la tarea actual.',
     close: 'Cerrar',
     continue: 'Continuar',
     detailsSubTaskFormSubmitButton: 'OK',
