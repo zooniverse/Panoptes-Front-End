@@ -149,7 +149,7 @@ class WorkflowSelection extends React.Component {
 
   render() {
     const { children, workflow } = this.props;
-    return workflow ? children: <p>Loading workflow</p>;
+    return workflow ? children : <p>Loading workflow</p>;
   }
 }
 
