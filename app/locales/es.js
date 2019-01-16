@@ -174,18 +174,18 @@ export default {
     message: 'No encontrado'
   },
   resetPassword: {
-    heading: 'Reset Password',
-    newPasswordFormDialog: 'Enter the same password twice so you can get back to doing some research. Passwords need to be at least 8 characters long.',
-    newPasswordFormLabel: 'New password:',
-    newPasswordConfirmationLabel: 'Repeat your password to confirm:',
-    enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
-    emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
-    emailError: 'There was an error reseting your password.',
-    resetError: 'Something went wrong, please try and reset your password via email again.',
-    passwordsDoNotMatch: 'The passwords do not match, please try again.',
-    loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.',
-    missingEmailsSpamNote: 'Please check your spam folder if you have not received the reset email.',
-    missingEmailsAlternateNote: 'If you have still not received an email, please try any other email address you may have signed up with.'
+    heading: 'Restablecer la contraseña',
+    newPasswordFormDialog: 'Introduza la misma contraseña dos veces, así podrá regresar a hacer investigación. Las contraseñas necesitan tener al menos 8 caracteres.',
+    newPasswordFormLabel: 'Contraseña nueva:',
+    newPasswordConfirmationLabel: 'Repita la contraseña para confirmar:',    
+    enterEmailLabel: 'Por favor, introduzca su dirección de correo electrónico aquí y le enviaremos un enlace que puede utilizar para restablecerla.', 
+    emailSuccess: 'Le hemos enviado un correo electrónico con un enlace para restablecer su contraseña.',
+    emailError: 'Hubo un error al restablecer su contraseña.',
+    resetError: 'Algo falló, por favor intente restablecer su contraseña vía correo electrónico nuevamente.',
+    passwordsDoNotMatch: 'Las contraseñas son diferentes, por favor intente de nuevo.',
+    loggedInDialog: 'Usted tiene una sesión activa actualmente. Por favor salga de su sesión si quiere restablecer su contraseña.',    
+    missingEmailsSpamNote: 'Por favor, revise su carpeta de spam si no ha recibido el correo electrónico para restablecer la contraseña.',
+    missingEmailsAlternateNote: 'Si aún no ha recibido el correo electrónico, por favor intente con alguna otra dirección que pudo haber usado para registrarse.'    
   },
   workflowToggle: {
     label: 'Active'
