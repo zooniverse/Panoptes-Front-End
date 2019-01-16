@@ -58,6 +58,7 @@ module.exports = createReactClass
     linkToFullImage: false
     frameWrapper: null
     allowFlipbook: true
+    allowInvert: false
     allowSeparateFrames: false
     metadataPrefixes: ['#', '!']
     metadataFilters: ['#', '!']
@@ -181,7 +182,7 @@ module.exports = createReactClass
             </span>
         </span>}
         <span>
-          {if @props.workflow?.configuration?.invert_subject
+          {if @props.workflow?.configuration?.invert_subject or @props.allowInvert
             <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleModification.bind this, 'invert'}>
               <i className="fa fa-adjust "></i>
             </button>}{' '}

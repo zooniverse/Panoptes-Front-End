@@ -219,6 +219,7 @@ module.exports = createReactClass
                   user={@props.user}
                   project={@props.project}
                   linkToFullImage={true}
+                  allowInvert={true}
                   metadataFilters={['#']} />
               </div>
             }
