@@ -148,8 +148,9 @@ class WorkflowSelection extends React.Component {
   }
 
   render() {
-    const { children, workflow } = this.props;
-    return workflow ? children : <p>Loading workflow</p>;
+    const { children, project, workflow } = this.props;
+    const validWorkflowForProject = workflow && workflow.links.project === project.id;
+    return validWorkflowForProject ? children : <p>Loading workflow</p>;
   }
 }
 

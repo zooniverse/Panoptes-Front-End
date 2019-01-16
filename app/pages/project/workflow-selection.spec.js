@@ -494,7 +494,7 @@ describe('WorkflowSelection', function () {
     });
 
     it('should load new translation strings', function () {
-      const workflow = mockPanoptesResource('workflows', { id: '1', tasks: {} });
+      const workflow = mockPanoptesResource('workflows', { id: '1', tasks: {}, links: { project: 'a' } });
       wrapper.setProps({ locale: 'it', workflow });
       expect(actions.translations.load).to.have.been.calledWith('workflow', '1', 'it');
     });
