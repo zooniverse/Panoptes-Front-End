@@ -161,17 +161,17 @@ export default {
     notSignedInMessage: 'Usted no ha iniciado una sesión'
   },
   signIn: {
-    title: 'Ingresar',
-    withZooniverse: 'Ingresar con tu cuenta de Zooniverse',
-    whyHaveAccount: 'Voluntarios que han ingresado pueden tener registro de su trabajo y se darán los créditos correspondientes en publicaciones con resultados',
-    signIn: 'Ingresar',
+    title: 'Iniciar sesión / registrarse',
+    withZooniverse: 'Iniciar sesión con su cuenta de Zooniverse',
+    whyHaveAccount: 'Los voluntarios con sesión iniciada pueden llevar un registro de su trabajo y recibirán crédito por cualquier publicación resultante.',   
+    signIn: 'Iniciar sesión',
     register: 'Registrarse',
-    orThirdParty: 'O ingresa con otro servicio',
-    withFacebook: 'Ingresa con Facebook',
-    withGoogle: 'Ingresa con Google'
+    orThirdParty: 'O iniciar sesión con otro servicio',
+    withFacebook: 'Iniciar sesión con Facebook',
+    withGoogle: 'Iniciar sesión con Google'
   },
   notFoundPage: {
-    message: 'Not found'
+    message: 'No encontrado'
   },
   resetPassword: {
     heading: 'Reset Password',
