@@ -152,13 +152,13 @@ export default {
   userAdminPage: {
     header: 'Admin',
     nav: {
-      createAdmin: 'Manage Users',
-      projectStatus: 'Set Project Status',
+      createAdmin: 'Administrar usuarios',
+      projectStatus: 'Establecer el estado del proyecto',
       grantbot: 'Grantbot',
-      organizationStatus: 'Set Organization Status'
+      organizationStatus: 'Establecer el estado de la organización'
     },
-    notAdminMessage: 'You are not an administrator',
-    notSignedInMessage: 'You are not signed in'
+    notAdminMessage: 'Usted no es un administrador',
+    notSignedInMessage: 'Usted no ha iniciado una sesión'
   },
   signIn: {
     title: 'Ingresar',
