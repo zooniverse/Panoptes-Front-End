@@ -232,7 +232,7 @@ export default function reducer(state = initialState, action = {}) {
     }
     case SAVE_ANNOTATIONS: {
       const { annotations } = action.payload;
-      const classification = state.classification.update({ annotations });
+      const classification = state.classification && state.classification.update({ annotations });
       return Object.assign({}, state, { classification });
     }
     case SET_WORKFLOW: {

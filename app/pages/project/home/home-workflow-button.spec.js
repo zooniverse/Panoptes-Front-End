@@ -1,6 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
+import { browserHistory } from 'react-router';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import { ProjectHomeWorkflowButton } from './home-workflow-button';
@@ -98,8 +99,36 @@ describe('ProjectHomeWorkflowButton', function () {
     it('calls handleWorkflowSelection onClick', function() {
       expect(handleWorkflowSelectionSpy).to.have.been.calledOnce;
     });
-    it('should load a new workflow', function () {
-      expect(actions.classifier.loadWorkflow).to.have.been.calledWith(testWorkflowWithoutLevel.id, translations.locale, preferences);
+
+    describe('for a new workflow', function () {
+      after(function () {
+        actions.classifier.loadWorkflow.resetHistory();
+      });
+
+      it('should load the workflow', function () {
+        expect(actions.classifier.loadWorkflow).to.have.been.calledWith(testWorkflowWithoutLevel.id, translations.locale, preferences);
+      });
+    });
+
+    describe('for the current workflow', function () {
+      before(function () {
+        sinon.stub(browserHistory, 'push');
+        wrapper.setProps({ classifierWorkflow: testWorkflowWithoutLevel });
+      });
+
+      after(function () {
+        browserHistory.push.restore();
+        wrapper.setProps({ classifierWorkflow: undefined });
+      });
+
+      it('should not load the workflow', function () {
+        expect(actions.classifier.loadWorkflow).to.have.not.been.called;
+      });
+
+      it('should load the classify page', function () {
+        expect(browserHistory.push).to.have.been.calledOnce;
+        expect(browserHistory.push).to.have.been.calledWith(`/projects/${testProject.slug}/classify`);
+      });
     });
   });
 

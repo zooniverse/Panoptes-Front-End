@@ -81,8 +81,9 @@ export class ProjectClassifyPage extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { classification, upcomingSubjects, user, workflow } = this.props;
+    const { promptWorkflowAssignmentDialog } = this.state;
 
-    if (user !== null) {
+    if (!promptWorkflowAssignmentDialog && user !== null) {
       this.shouldWorkflowAssignmentPrompt();
     }
 

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../lib/is-admin';
 import * as classifierActions from '../../redux/ducks/classify';
 import * as translationActions from '../../redux/ducks/translations';
@@ -11,8 +10,7 @@ class WorkflowSelection extends React.Component {
   constructor() {
     super();
     this.state = {
-      error: null,
-      loadingSelectedWorkflow: false
+      error: null
     };
   }
 
@@ -26,28 +24,22 @@ class WorkflowSelection extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { actions, locale, preferences, user, workflow } = this.props;
-    const prevUser = prevProps.user && prevProps.user.login;
-    const currentUser = user && user.login;
-    const userSelectedWorkflow = (preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
-    if (userSelectedWorkflow && workflow) {
-      if (!this.state.loadingSelectedWorkflow && userSelectedWorkflow !== workflow.id) {
-        this.getSelectedWorkflow(this.props);
-      }
-    }
+    const { actions, locale, preferences, workflow } = this.props;
+    const prevPrefs = prevProps.preferences && prevProps.preferences.id;
+    const currentPrefs = preferences && preferences.id;
+    
     if (prevProps.project.id !== this.props.project.id) {
       this.getSelectedWorkflow(this.props);
     }
     if (workflow && prevProps.locale !== locale) {
       actions.translations.load('workflow', workflow.id, locale);
     }
-    if (currentUser !== prevUser) {
+    if (currentPrefs !== prevPrefs) {
       actions.classifier.reset();
     }
   }
 
   getSelectedWorkflow({ project, preferences, user }) {
-    this.setState({ loadingSelectedWorkflow: true });
     // preference workflow query by admin/owner/collab, then workflow query if in project settings, then user selected workflow, then project owner set workflow, then default workflow
     // if none of those are set, select random workflow
     let selectedWorkflowID;
@@ -60,17 +52,11 @@ class WorkflowSelection extends React.Component {
     ) {
       selectedWorkflowID = workflowFromURL;
       activeFilter = false;
-      if (userSelectedWorkflow && userSelectedWorkflow !== selectedWorkflowID) {
-        this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
-      }
     } else if (workflowFromURL &&
       project.experimental_tools &&
       project.experimental_tools.indexOf('allow workflow query') > -1
     ) {
       selectedWorkflowID = workflowFromURL;
-      if (userSelectedWorkflow && userSelectedWorkflow !== selectedWorkflowID) {
-        this.handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID);
-      }
     } else if (userSelectedWorkflow) {
       selectedWorkflowID = userSelectedWorkflow;
     } else if (projectSetWorkflow) {
@@ -86,36 +72,14 @@ class WorkflowSelection extends React.Component {
   }
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
-    const { actions, locale, project } = this.props;
+    const { actions, locale, preferences, project } = this.props;
     const sanitisedWorkflowID = this.sanitiseID(selectedWorkflowID);
-    let isValidWorkflow = false;
+    const validWorkflows = activeFilter ? project.links.active_workflows : project.links.workflows;
+    const isValidWorkflow = validWorkflows.indexOf ? validWorkflows.indexOf(sanitisedWorkflowID) > -1 : false;
 
-    if (activeFilter && project.links.active_workflows) {
-      isValidWorkflow = project.links.active_workflows.indexOf(sanitisedWorkflowID) > -1;
-    } else if (project.links.workflows) {
-      isValidWorkflow = project.links.workflows.indexOf(sanitisedWorkflowID) > -1;
-    }
-    let awaitWorkflow;
-    let awaitTranslation;
     if (isValidWorkflow) {
-      awaitTranslation = actions.translations.load('workflow', sanitisedWorkflowID, locale);
-      awaitWorkflow = apiClient
-        .type('workflows')
-        .get(sanitisedWorkflowID, {}) // the empty query here forces the client to bypass its internal cache
-        .catch((error) => {
-          const errorType = error.status && parseInt(error.status / 100, 10);
-          if (errorType === 4) {
-            this.clearInactiveWorkflow(sanitisedWorkflowID)
-            .then(this.getSelectedWorkflow(this.props));
-          } else {
-            console.error(error.message);
-            this.setState({ error, loadingSelectedWorkflow: false });
-          }
-          return null;
-        });
+      return actions.classifier.loadWorkflow(sanitisedWorkflowID, locale, preferences);
     } else {
-      awaitWorkflow = Promise.resolve(null);
-      awaitTranslation = Promise.resolve(null);
       if (process.env.BABEL_ENV !== 'test') console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
       if (this.props.project.configuration &&
         selectedWorkflowID === this.props.project.configuration.default_workflow
@@ -133,16 +97,9 @@ class WorkflowSelection extends React.Component {
             this.getSelectedWorkflow(this.props);
           });
       }
+      actions.classifier.setWorkflow(null);
+      return Promise.resolve();
     }
-
-    return Promise.all([awaitWorkflow, awaitTranslation])
-    .then(([workflow]) => {
-      actions.classifier.setWorkflow(workflow);
-      this.setState({ loadingSelectedWorkflow: false });
-    })
-    .catch((error) => {
-      console.error(error.message);
-    });
   }
 
   selectRandomActiveWorkflow(project) {
@@ -180,12 +137,6 @@ class WorkflowSelection extends React.Component {
     }
   }
 
-  handlePreferencesChange(key, value) {
-    if (this.props.user) {
-      this.props.preferences.update({ [key]: value }).save();
-    }
-  }
-
   workflowSelectionErrorHandler() {
     this.props.project.uncacheLink('workflows');
     if (process.env.BABEL_ENV !== 'test') console.error(`No active workflows for project ${this.props.project.id}`);
@@ -197,8 +148,9 @@ class WorkflowSelection extends React.Component {
   }
 
   render() {
-    const { loadingSelectedWorkflow } = this.state;
-    return loadingSelectedWorkflow ? <p>Loading workflow</p> : this.props.children;
+    const { children, project, workflow } = this.props;
+    const validWorkflowForProject = workflow && workflow.links.project === project.id;
+    return validWorkflowForProject ? children : <p>Loading workflow</p>;
   }
 }
 
