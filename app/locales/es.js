@@ -2,7 +2,7 @@ export default {
   loading: '(Cargando)',
   classifier: {
     back: 'Atrás',
-    backButtonWarning: 'Al regresar se borrará tu trabajo para la tarea actual.',
+    backButtonWarning: 'Al regresar se borrará su trabajo para la tarea actual.',
     close: 'Cerrar',
     continue: 'Continuar',
     detailsSubTaskFormSubmitButton: 'OK',
@@ -28,7 +28,7 @@ export default {
   },
   project: {
     language: 'Idioma',
-    loading: 'Cargando proyecto',
+    loading: 'Cargando el proyecto',
     disclaimer: 'Este proyecto ha sido construido usando Zooniverse Project Builder, pero todavía no es un proyecto oficial de Zooniverse. Las preguntas y asuntos relacionados con este proyecto dirigidos al equipo de Zooniverse podrían no recibir respuesta.',
     about: {
       header: 'Acerca de',
