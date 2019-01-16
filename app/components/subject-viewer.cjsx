@@ -49,7 +49,6 @@ module.exports = createReactClass
     subject: null
     isFavorite: false
     user: null
-    playFrameDuration: 667
     playIterations: 3
     onFrameChange: NOOP
     onLoad: NOOP
@@ -66,6 +65,7 @@ module.exports = createReactClass
   getInitialState: ->
     loading: true
     playing: false
+    playFrameDuration: 667
     frame: @getInitialFrame()
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
@@ -158,6 +158,7 @@ module.exports = createReactClass
                   <button aria-label="Play" title="Play" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, true}>
                     <i className="fa fa-play fa-lg fa-fw"></i>
                   </button>}
+                <input type="range" id="frame-duration" name="frame-duration" min="-2000" max="-100" value={@state.playFrameDuration * -1} step="50" onChange={@handleFrameDurationChange} />
               </span>}
           </span>
 
@@ -274,13 +275,16 @@ module.exports = createReactClass
       if @state.playing is on and (counter < flips or infiniteLoop is on)
         counter++
         @handleFrameChange (@state.frame + 1) %% totalFrames
-        setTimeout flip, @props.playFrameDuration
+        setTimeout flip, @state.playFrameDuration
         if counter is flips and infiniteLoop is off
           @setPlaying false
       else @setPlaying false
 
     if playing is on
       setTimeout flip, 0
+
+  handleFrameDurationChange: (event) ->
+    @setState playFrameDuration: event.target.value * -1
 
   handleFrameChange: (frame) ->
     @setState {frame}
