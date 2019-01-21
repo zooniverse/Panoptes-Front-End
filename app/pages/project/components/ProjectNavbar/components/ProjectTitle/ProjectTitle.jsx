@@ -9,8 +9,9 @@ import { pxToRem, zooTheme } from '../../../../../../theme';
 
 export const H1 = styled.h1`
   color: white;
-  display: inline-flex;
-  flex-direction: column;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   font-family: Karla;
   font-size: ${pxToRem(27)};
   font-weight: bold;
@@ -87,17 +88,18 @@ function ProjectTitle({ launched, link, redirect, title, underReview }) {
           <span>
             {title}
             {redirect && <span>{' '}<i className="fa fa-external-link" /></span>}
-            {launched &&
-              <StyledCheckMarkWrapper
-                className="fa-stack"
-                aria-label={zooniverseApprovedTranslation}
-                title={zooniverseApprovedTranslation}
-              >
-                <i className="fa fa-circle fa-stack-2x" />
-                <StyledCheckMark className="fa fa-check fa-stack-1x" />
-              </StyledCheckMarkWrapper>}
           </span>
         </TitleComponent>
+        {launched &&
+          <StyledCheckMarkWrapper
+            className="fa-stack"
+            aria-label={zooniverseApprovedTranslation}
+            title={zooniverseApprovedTranslation}
+          >
+            <i className="fa fa-circle fa-stack-2x" />
+            <StyledCheckMark className="fa fa-check fa-stack-1x" />
+          </StyledCheckMarkWrapper>
+        }
       </H1>
     </ThemeProvider>
   );
