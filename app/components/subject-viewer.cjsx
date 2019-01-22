@@ -149,7 +149,7 @@ module.exports = createReactClass
             {if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
               null
             else
-              <span className="subject-frame-play-controls">
+              <span>
                 {if @state.playing
                   <button aria-label="Pause" title="Pause" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, false}>
                     <i className="fa fa-pause fa-lg fa-fw"></i>
@@ -158,7 +158,24 @@ module.exports = createReactClass
                   <button aria-label="Play" title="Play" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, true}>
                     <i className="fa fa-play fa-lg fa-fw"></i>
                   </button>}
-                <input type="range" id="frame-duration" name="frame-duration" min="-2000" max="-100" value={@state.playFrameDuration * -1} step="50" onChange={@handleFrameDurationChange} />
+                <div className="subject-frame-duration">
+                  <i className="fa fa-angle-right fa-lg fa-fw subject-frame-duration--slower"></i>
+                  <input
+                    aria-valuemin="-2000"
+                    aria-valuemax="-100"
+                    aria-valuenow={@state.playFrameDuration * -1}
+                    className="subject-frame-duration--range"
+                    id="frame-duration"
+                    min="-2000"
+                    max="-100"
+                    name="frame-duration"
+                    onChange={@handleFrameDurationChange}
+                    step="50"
+                    type="range"
+                    value={@state.playFrameDuration * -1}
+                  />
+                  <i className="fa fa-angle-double-right fa-lg fa-fw subject-frame-duration--faster"></i>
+                </div>
               </span>}
           </span>
 
