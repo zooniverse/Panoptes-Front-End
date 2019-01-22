@@ -15,6 +15,7 @@ upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 talkClient = require 'panoptes-client/lib/talk-client'
 Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
+`import SVGRenderer from '../components/svg-renderer';` 
 SingleSubmitButton = require '../components/single-submit-button'
 DisplayRoles = require './lib/display-roles'
 CommentContextIcon = require './lib/comment-context-icon'
@@ -136,7 +137,7 @@ module.exports = createReactClass
         <Link to="#{baseLink}users/#{comment.user_login}">{comment.user_display_name}</Link>
         {if comment.reply_id
           <span>
-            {' '}in reply to <Link to="#{baseLink}users/#{comment.reply_user_login}">{comment.reply_user_display_name}</Link>'s{' '}
+            {' '}in reply to <Link to="#{baseLink}users/#{comment.reply_user_login}">{comment.reply_user_display_name}</Link>&apos;s{' '}
             <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, comment)}>
               comment
             </button>
@@ -197,7 +198,7 @@ module.exports = createReactClass
               </div>
               }
 
-            In reply to <Link to={profile_link}>{@props.data.reply_user_display_name}</Link>'s{' '}
+            In reply to <Link to={profile_link}>{@props.data.reply_user_display_name}</Link>&apos;s{' '}
 
             <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, @props.data)}>comment</button>
           </div>
@@ -215,12 +216,14 @@ module.exports = createReactClass
               <div className="polaroid-image">
                 {@commentSubjectTitle(@props.data, @props.subject)}
                 <SubjectViewer
+                  allowInvert={true}
+                  frameWrapper={SVGRenderer}
+                  linkToFullImage={true}
+                  metadataFilters={['#']}
+                  project={@props.project}
                   subject={@props.subject}
                   user={@props.user}
-                  project={@props.project}
-                  linkToFullImage={true}
-                  allowInvert={true}
-                  metadataFilters={['#']} />
+                />
               </div>
             }
 
