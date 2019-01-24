@@ -353,7 +353,7 @@ module.exports = createReactClass
       reader.readAsText file
 
   parseFileContent: (content, inputType) ->
-    {errors, data} = Papa?.parse content.trim(), header: true
+    {errors, data} = Papa?.parse content.trim(), header: true, delimiter: ','
 
     cleanRows = for row in data
       clean = {}
