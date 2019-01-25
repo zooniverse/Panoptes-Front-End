@@ -51,15 +51,23 @@ class ProjectsPage extends Component {
           <div className="hero-container">
             <Translate content="projectsHome.title" component="h1" />
             <nav className="hero-nav" role="tablist">
-              <StatusLink location={location} status="live" updateQuery={this.updateQuery}>
-                <Translate content="projectsHome.nav.active" />
-              </StatusLink>
-              <StatusLink location={location} status="paused" updateQuery={this.updateQuery}>
-                <Translate content="projectsHome.nav.paused" />
-              </StatusLink>
-              <StatusLink location={location} status="finished" updateQuery={this.updateQuery}>
-                <Translate content="projectsHome.nav.finished" />
-              </StatusLink>
+              <ul>
+                <li>
+                  <StatusLink location={location} status="live" updateQuery={this.updateQuery}>
+                    <Translate content="projectsHome.nav.active" />
+                  </StatusLink>
+                </li>
+                <li>
+                  <StatusLink location={location} status="paused" updateQuery={this.updateQuery}>
+                    <Translate content="projectsHome.nav.paused" />
+                  </StatusLink>
+                </li>
+                <li>
+                  <StatusLink location={location} status="finished" updateQuery={this.updateQuery}>
+                    <Translate content="projectsHome.nav.finished" />
+                  </StatusLink>
+                </li>
+              </ul>
             </nav>
           </div>
         </section>

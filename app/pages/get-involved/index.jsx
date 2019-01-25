@@ -21,33 +21,43 @@ class GetInvolved extends React.Component {
           <div className="hero-container">
             <Translate content="getInvolved.index.title" component="h1" />
             <nav className="hero-nav">
-              <IndexLink
-                to="/get-involved"
-                activeClassName="active"
-              >
-                <Translate content="getInvolved.index.nav.volunteering" />
-              </IndexLink>
-              <Link
-                to="/get-involved/education"
-                activeClassName="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'getInvolved.index.nav.education') : null}
-              >
-                <Translate content="getInvolved.index.nav.education" />
-              </Link>
-              <Link
-                to="/get-involved/call-for-projects"
-                activeClassName="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'getInvolved.index.nav.callForProjects') : null}
-              >
-                <Translate content="getInvolved.index.nav.callForProjects" />
-              </Link>
-              <Link
-                to="/collections"
-                activeClassname="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'getInvolved.index.nav.collections-list') : null}
-              >
-                <Translate content="getInvolved.index.nav.collections" />
-              </Link>
+              <ul>
+                <li>
+                  <IndexLink
+                    to="/get-involved"
+                    activeClassName="active"
+                  >
+                    <Translate content="getInvolved.index.nav.volunteering" />
+                  </IndexLink>
+                </li>
+                <li>
+                  <Link
+                    to="/get-involved/education"
+                    activeClassName="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'getInvolved.index.nav.education') : null}
+                  >
+                    <Translate content="getInvolved.index.nav.education" />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/get-involved/call-for-projects"
+                    activeClassName="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'getInvolved.index.nav.callForProjects') : null}
+                  >
+                    <Translate content="getInvolved.index.nav.callForProjects" />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/collections"
+                    activeClassname="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'getInvolved.index.nav.collections-list') : null}
+                  >
+                    <Translate content="getInvolved.index.nav.collections" />
+                  </Link>
+                </li>
+              </ul>
             </nav>
           </div>
         </section>

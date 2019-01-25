@@ -94,24 +94,27 @@ class ProfileUser extends Component {
     const classes = classNames({ 'about-tabs': !!this.props.project });
 
     return (
-      <span>
-        <IndexLink to={`${baseLink}users/${this.props.profileUser.login}`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'comments')}>
-          <Translate content="profile.nav.comments" />
-        </IndexLink>
-        {' '}
-        <Link to={`${baseLink}users/${this.props.profileUser.login}/collections`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'collections')}>
-          <Translate content="profile.nav.collections" />
-        </Link>
-        {' '}
-        <Link to={`${baseLink}users/${this.props.profileUser.login}/favorites`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'favorites')}>
-          <Translate content="profile.nav.favorites" />
-        </Link>
-        {' '}
+      <ul>
+        <li>
+          <IndexLink to={`${baseLink}users/${this.props.profileUser.login}`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'comments')}>
+            <Translate content="profile.nav.comments" />
+          </IndexLink>
+        </li>
+        <li>
+          <Link to={`${baseLink}users/${this.props.profileUser.login}/collections`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'collections')}>
+            <Translate content="profile.nav.collections" />
+          </Link>
+        </li>
+        <li>
+          <Link to={`${baseLink}users/${this.props.profileUser.login}/favorites`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'favorites')}>
+            <Translate content="profile.nav.favorites" />
+          </Link>
+        </li>
 
-        <span>
+        <li>
           {this.renderUserLink()}
-        </span>
-      </span>
+        </li>
+      </ul>
     );
   }
 
