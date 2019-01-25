@@ -1,7 +1,7 @@
 export const teamMembers = {
   adamMcMaster: {
     name: "Adam McMaster",
-    twitter: "astopy",
+    twitter: "astroadammc",
     image: "/assets/team/adam.jpg",
     location: "oxford"
   },
