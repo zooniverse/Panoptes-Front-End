@@ -295,10 +295,11 @@ module.exports = createReactClass
       <table className="standard-table">
         <tbody>
           {for key, value of @props.subject?.metadata when key.trim().charAt(0) not in @props.metadataFilters and key[...2] isnt '//'
-            if value.trim
-              value = value.trim()
-            if (value.startsWith and value.startsWith('http'))
-              value = "[#{value}](+tab+#{value})"
+            if value
+              if value.trim
+                value = value.trim()
+              if (value.startsWith and value.startsWith('http'))
+                value = "[#{value}](+tab+#{value})"
             <tr key={key}>
               <th>{key.replace(///^(#{@props.metadataPrefixes.join('|')})///, '')}</th>
               <Markdown tag="td" content={value} inline />
