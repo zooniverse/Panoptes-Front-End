@@ -104,6 +104,13 @@ class ProjectPageController extends React.Component {
     Split.clear();
   }
 
+  componentDidCatch(error, info) {
+    console.log(error, info);
+    const loading = false;
+    const ready = false;
+    this.setState({ error, info, loading, ready });
+  }
+
   getSplits(slug, user) {
     if (user) {
       return Split.load(slug)
@@ -408,6 +415,7 @@ class ProjectPageController extends React.Component {
               </p>
               <p>
                 <code>{this.state.error.message}</code>
+                {!!this.state.info && <pre>{this.state.info.componentStack}</pre>}
               </p>
             </div>
           )
