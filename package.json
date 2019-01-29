@@ -26,7 +26,7 @@
     "qs": "~6.6.0",
     "rc-slider": "~8.6.4",
     "react": "~16.7.0",
-    "react-chartist": "~0.13.1",
+    "react-chartist": "~0.13.2",
     "react-dom": "~16.7.0",
     "react-helmet": "~5.2.0",
     "react-interpolate-component": "~0.12.0",
