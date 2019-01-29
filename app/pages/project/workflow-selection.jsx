@@ -165,7 +165,7 @@ WorkflowSelection.defaultProps = {
   location: {
     query: {}
   },
-  preferences: {},
+  preferences: null,
   projectRoles: [],
   user: null,
   workflow: null
