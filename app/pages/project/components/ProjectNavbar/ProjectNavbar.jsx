@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -10,15 +9,6 @@ export const SettingsMenu = styled.div`
   text-align: right;
 `;
 
-function haveNavLinksChanged(oldProps, newProps) {
-  const oldLinks = oldProps.navLinks.map(link => link.label);
-  const newLinks = newProps.navLinks.map(link => link.label);
-
-  // returns an array of values not included in the other using SameValueZero for equality comparison
-  return _.difference(oldLinks, newLinks).length > 0 ||
-    oldLinks.length !== newLinks.length;
-}
-
 class ProjectNavbar extends Component {
   constructor(props) {
     super(props);
@@ -27,12 +17,6 @@ class ProjectNavbar extends Component {
       loading: true,
       useWide: false
     };
-  }
-
-  componentDidUpdate(prevProps) {
-    if (haveNavLinksChanged(prevProps, this.props)) {
-      this.setBreakpoint();
-    }
   }
 
   setBreakpoint(size) {
