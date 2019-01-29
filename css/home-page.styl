@@ -35,7 +35,7 @@ $flex-section
     .home-mobile-video-image
       display: block
 
-    @media (min-width: 900px)
+    @media (min-width: 901px)
       video
         display: block
 
@@ -43,8 +43,10 @@ $flex-section
         display: none
 
     @media (max-width: 900px)
-      justify-content: center
       min-height: 100vh
+
+    @media (max-width: 768px)
+      padding: 2em
 
     video, .home-mobile-video-image
       @extends $absolute-fill
@@ -110,6 +112,10 @@ $flex-section
         padding: 0 10vw
         text-align: left
 
+      @media (max-width: 768px)
+        max-width: 100%
+        padding: 0 2em
+
       span
         margin: 1.5em 0
 
@@ -153,6 +159,9 @@ $flex-section
       flex-basis: 0
       margin: 0 5vw 5vh 10vw
       min-width: 50%
+
+      @media (max-width: 900px)
+        margin: 0 2em 1em
 
       a
         display: inline-block
@@ -207,7 +216,7 @@ $flex-section
   margin: 0 auto
   max-width: 1440px
 
-  @media (min-width: 1440px)
+  @media (min-width: 1441px)
     border-left: 1px solid LIGHT_GREY
     border-right: 1px solid LIGHT_GREY
 
@@ -353,7 +362,7 @@ $flex-section
 
   .home-featured
     background: #fff
-    padding: 4em 0
+    padding: 4em 2em
 
     .secondary-kicker
       font-size: 1.25em
@@ -422,6 +431,9 @@ $flex-section
       margin: 2em 22vw
       align-items: stretch
 
+      @media (max-width: 768px)
+        margin: 2em
+
       &:before
         content: ""
         position : absolute
@@ -437,7 +449,7 @@ $flex-section
     background-color: BACKGROUND_COLOR
     padding: 4em
 
-    @media (max-width: 700px)
+    @media (max-width: 768px)
       padding: 4em 2em
 
     hr
@@ -567,6 +579,7 @@ $flex-section
       flex-direction: column
       margin-right: 3em
       max-width: 100%
+      padding-bottom: 5em
       min-width: 16em
 
       @media(max-width: 400px)
