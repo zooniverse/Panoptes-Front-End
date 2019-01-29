@@ -139,22 +139,20 @@ class ProjectPageController extends React.Component {
   }
 
   getUserProjectPreferences(project, user) {
-
     const userPreferences = user ?
       user.get('project_preferences', { project_id: project.id })
         .then(([projectPreferences]) => {
-          let newPreferences;
-          return projectPreferences ||
-            (newPreferences = apiClient.type('project_preferences').create({
+          if (projectPreferences) {
+            return projectPreferences;
+          } else {
+            return apiClient.type('project_preferences').create({
               links: {
                 project: project.id
               },
               preferences: {}
             })
-            .save()
-            .catch((error) => {
-              console.warn(error.message);
-            }));
+            .save();
+          }
         })
     :
       Promise.resolve(null);
@@ -162,6 +160,7 @@ class ProjectPageController extends React.Component {
     return userPreferences
       .catch((error) => {
         console.warn(error.message);
+        return null;
       });
   }
 
