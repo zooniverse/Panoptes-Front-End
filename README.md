@@ -42,7 +42,7 @@ If you write a new component, write a test. Each component should have its own `
 Mocha throws an error (`Illegal import declaration`) when compiling coffeescript files that contain ES6 import statements with template strings. Convert these imports to `require` statements.
 You can run the tests with `npm test`.
 
-## Deployment 
+## Deployment
 
 See https://github.com/zooniverse/how-to-zooniverse/blob/master/Devops/how-PFE-deploys.md for details on how PFE deploys.
 
@@ -274,3 +274,5 @@ Thanks to [BrowserStack](https://www.browserstack.com) for supporting open
 source and allowing us to test this project on multiple platforms.
 
 [![BrowserStack logo](https://static.zooniverse.org/browserstack-logo-300x158.png)](https://www.browserstack.com)
+
+[![pullreminders](https://pullreminders.com/badge.svg)](https://pullreminders.com?ref=badge)
