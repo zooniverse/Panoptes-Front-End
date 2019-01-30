@@ -28,7 +28,7 @@ Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage yo
 
 - `npm start` builds and runs the site locally.
 
-- `npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
+- `npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>. Note that you'll need write permissions to the Zooniverse S3 bucket.
 
 ### Development
 
