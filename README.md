@@ -14,11 +14,11 @@ everything with Docker and Docker Compose.
 - `docker-compose build` will build a local Docker image and run `npm install`. Run this whenever you
 change dependencies in `package.json`.
 
-- `docker-compose run --service-ports dev npm start` builds and runs the site locally on port 3735.
+- `docker-compose run --rm --service-ports dev npm start` builds and runs the site locally on port 3735.
 
-- `docker-compose run dev npm test` runs the tests.
+- `docker-compose run --rm dev npm test` runs the tests.
 
-- `docker-compose run dev npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
+- `docker-compose run --rm dev npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
 
 ### With Node.js
 
