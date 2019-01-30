@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router';
 import TranslationTools from './translation-tools';
 import * as translationsActions from '../../../redux/ducks/translations';
 import languageMenu from '../../../constants/languageMenu';
@@ -40,10 +41,12 @@ class TranslationsManager extends React.Component {
     const { languages } = this.props.translations;
     const { project } = this.props;
     const projectLanguages = this.state.languages;
-    const languageCodes = languages.project
+    const translationLanguages = languages.project
       .filter(languageCode => languageCode !== project.primary_language);
     const languageMenuCodes = Object.keys(languageMenu)
-      .filter(language => languageCodes.indexOf(language) > -1);
+      .filter(language => translationLanguages.indexOf(language) > -1);
+    languageMenuCodes.unshift(project.primary_language);
+    const hasTranslations = translationLanguages.length > 0;
     return (
       <div>
         <h1>Translations</h1>
@@ -58,32 +61,41 @@ class TranslationsManager extends React.Component {
             <th>Code</th>
             <th>Live?</th>
           </tr>
-          {languageMenuCodes.map(language => (
-            <tr key={language}>
-              <td>{languageMenu[language]}</td>
-              <td>{language}</td>
-              <td>
-                <input
-                  type="checkbox"
-                  value={language}
-                  checked={projectLanguages.indexOf(language) > -1}
-                  onChange={this.handleMenuChange.bind(this)}
-                />
-              </td>
-            </tr>
-          ))}
+          {languageMenuCodes.map((language) => {
+            const disabled = language === project.primary_language;
+            const checked = projectLanguages.indexOf(language) > -1;
+            return (
+              <tr key={language}>
+                <td>{languageMenu[language]}</td>
+                <td>{language}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    value={language}
+                    checked={checked}
+                    disabled={disabled}
+                    onChange={this.handleMenuChange.bind(this)}
+                  />
+                </td>
+              </tr>
+            );
+          })}
         </table>
         <h2>Project translations</h2>
-        <ul className="translations">
-          {languageCodes.map(languageCode => (
-            <li key={languageCode}>
-              <TranslationTools
-                languageCode={languageCode}
-                project={project}
-              />
-            </li>
-          ))}
-        </ul>
+        {hasTranslations ?
+          <ul className="translations">
+            {translationLanguages.map(languageCode => (
+              <li key={languageCode}>
+                <TranslationTools
+                  languageCode={languageCode}
+                  project={project}
+                />
+              </li>
+            ))}
+          </ul>
+        :
+          <p>Add some translators to your project from the <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link> and invite them to add translations at <a href={`https://pandora.zooniverse.org/#/project/${project.id}`}>https://pandora.zooniverse.org/#/project/{project.id}</a></p>
+        }
       </div>
     );
   }
