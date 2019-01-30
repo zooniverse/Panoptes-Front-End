@@ -4,33 +4,43 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/zooniverse/Panoptes-Front-End/badge.svg)](https://coveralls.io/github/zooniverse/Panoptes-Front-End)
 
-## Development
+## Getting started
 
-Requires Node.js. It's recommended you manage your Node installations with **nvm**.
+### With Docker
 
-`npm install` installs dependencies.
+To avoid having to install Node.js or any other dependencies, you can run
+everything with Docker and Docker Compose.
 
-`npm start` builds and runs the site locally.
+- `docker-compose build` will build a local Docker image and run `npm install`. Run this whenever you
+change dependencies in `package.json`.
 
-`npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
+- `docker-compose run --rm --service-ports dev npm start` builds and runs the site locally on port 3735.
+
+- `docker-compose run --rm dev npm test` runs the tests.
+
+- `docker-compose run --rm dev npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
+
+### With Node.js
+
+Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage your Node installations with **nvm**.
+
+- `npm install` installs dependencies.
+
+- `npm start` builds and runs the site locally.
+
+- `npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>. Note that you'll need write permissions to the Zooniverse S3 bucket.
+
+### Development
+
+New GitHub PRs from within the Zooniverse organisation will be staged by Jenkins as part of the CI process. Once CI finishes, your changes should be staged at https://pr-{PR-Number}.pfe-preview.zooniverse.org. Jenkins sometimes times out before finishing the build. If a PR build fails, use the link to Jenkins (from your PR) to log in and try restarting the build.
 
 For testing with production data, you can add `env=production` to your development url, e.g. `localhost:3735/projects?env=production`. Note that it is removed on every page refresh.
 
 All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
-While editing, do your best to follow style and architecture conventions already used by the project, unless you have a reason not to. **If in doubt, ask.**
+We lint our JavaScript code against a modified version of the [AirBnB style guide](https://github.com/airbnb/javascript). Please lint your changes with eslint, using the .eslintrc file at the root of this repo. If you have any questions, do feel free to ask us on GitHub.
 
-### Development with Docker
-
-To avoid having to install Node.js or any other dependencies, you can also run
-everything with Docker and Docker Compose.
-
-`docker-compose build` will build a local Docker image and run `npm install`. Run this whenever you
-change dependencies in `package.json`.
-
-`docker-compose run --service-ports dev npm start` builds and runs the site locally on port 3735.
-
-`docker-compose run dev npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
+While editing, do your best to follow style and architecture conventions already used by the project. The codebase is large, and styles have evolved during its development. Take a look at [zooniverse/front-end-monorepo](https://github.com/zooniverse/front-end-monorepo) to get an idea of our conventions for organising components.
 
 ### What to do if it doesn't run
 
