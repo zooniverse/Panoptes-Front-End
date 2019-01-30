@@ -32,11 +32,15 @@ Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage yo
 
 ### Development
 
+New GitHub PRs from within the Zooniverse organisation will be staged by Jenkins as part of the CI process. Once CI finishes, your changes should be staged at https://pr-{PR-Number}.pfe-preview.zooniverse.org. Jenkins sometimes times out before finishing the build. If a PR build fails, use the link to Jenkins (from your PR) to log in and try restarting the build.
+
 For testing with production data, you can add `env=production` to your development url, e.g. `localhost:3735/projects?env=production`. Note that it is removed on every page refresh.
 
 All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
-While editing, do your best to follow style and architecture conventions already used by the project, unless you have a reason not to. **If in doubt, ask.**
+We lint our JavaScript code against a modified version of the [AirBnB style guide](https://github.com/airbnb/javascript). Please lint your changes with eslint, using the .eslintrc file at the root of this repo. If you have any questions, do feel free to ask us on GitHub.
+
+While editing, do your best to follow style and architecture conventions already used by the project. The codebase is large, and styles have evolved during its development. Take a look at [zooniverse/front-end-monorepo](https://github.com/zooniverse/front-end-monorepo) to get an idea of our conventions for organising components.
 
 ### What to do if it doesn't run
 
