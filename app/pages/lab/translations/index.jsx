@@ -128,6 +128,14 @@ TranslationsManager.propTypes = {
 };
 
 TranslationsManager.defaultProps = {
+  actions: {
+    translations: {
+      listLanguages: () => null
+    }
+  },
+  project: {
+    configuration: {}
+  },
   translations: {
     languages: {
       project: []
