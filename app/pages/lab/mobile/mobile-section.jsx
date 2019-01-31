@@ -19,6 +19,7 @@ counterpart.registerTranslations('en', {
       taskHasTwoAnswers: 'Has two available answers (e.g. Yes/No)',
       taskQuestionNotTooLong: 'Question has less than 200 characters',
       workflowNotTooManyShortcuts: 'Has less than three shortcuts',
+      workflowDoesNotContainShortcuts: 'Has no shortcuts',
       workflowFlipbookDisabled: 'Cannot be a flipbook',
       taskFeedbackDisabled: 'Cannot provide feedback',
       workflowQuestionHasOneOrLessImages: 'Task question has no more than one image',

@@ -29,9 +29,11 @@ function workflowHasSingleTask({ workflow }) {
   return convertBooleanToValidation(filter(workflow.tasks, ({ type }) => type !== 'shortcut').length === 1);
 }
 
-function workflowNotTooManyShortcuts({ task, workflow }) {
-  const shortcut = workflow.tasks[task.unlinkedTask];
-  return convertBooleanToValidation((shortcut) ? shortcut.answers.length <= 2 : true);
+function workflowHasNoMoreThanXShortcuts(shortcutsLimit) {
+  return ({ task, workflow }) => {
+    const shortcut = workflow.tasks[task.unlinkedTask];
+    return convertBooleanToValidation((shortcut) ? shortcut.answers.length <= shortcutsLimit : true);
+  };
 }
 
 function workflowQuestionHasOneOrLessImages({ task }) {
@@ -72,7 +74,7 @@ const validatorFns = {
     taskHasTwoAnswers,
     workflowFlipbookDisabled,
     workflowHasSingleTask,
-    workflowNotTooManyShortcuts,
+    workflowNotTooManyShortcuts: workflowHasNoMoreThanXShortcuts(2),
     workflowQuestionHasOneOrLessImages
   },
   drawing: {
@@ -81,7 +83,8 @@ const validatorFns = {
     workflowHasSingleTask,
     drawingToolTypeIsValid,
     drawingTaskHasOneTool,
-    drawingTaskHasNoSubtasks
+    drawingTaskHasNoSubtasks,
+    workflowDoesNotContainShortcuts: workflowHasNoMoreThanXShortcuts(0)
   }
 };
 
