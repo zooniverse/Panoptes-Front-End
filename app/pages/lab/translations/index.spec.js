@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import mockPanoptesResource from '../../../../test/mock-panoptes-resource';
 import { TranslationsManager } from './';
+import TranslationTools from './translation-tools';
 
 describe('TranslationsManager', function () {
   let wrapper;
@@ -86,6 +87,7 @@ describe('TranslationsManager', function () {
     describe('all translation languages', function () {
       const languageMenu = wrapper.find('table');
       const languageInputs = languageMenu.find('input[type="checkbox"]');
+      const translationTools = wrapper.find(TranslationTools);
 
       it('should be listed', function () {
         expect(languageInputs).to.have.lengthOf(3);
@@ -98,12 +100,17 @@ describe('TranslationsManager', function () {
           const language = input.props.value;
           const checked = input.props.checked;
           const disabled = input.props.disabled;
+          const tools = translationTools.find({ languageCode: language });
           it(`${language} should not be checked`, function () {
             expect(checked).to.be.false;
           });
 
           it(`${language} should not be disabled`, function () {
             expect(disabled).to.be.false;
+          });
+
+          it(`${language} should have translation tools`, function () {
+            expect(tools).to.have.lengthOf(1);
           });
         });
       });
