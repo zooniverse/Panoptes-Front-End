@@ -50,6 +50,12 @@ class TranslationsManager extends React.Component {
     return (
       <div>
         <h1>Translations</h1>
+        {!hasTranslations &&
+          <React.Fragment>
+            <h2>Add translations to your project</h2>
+            <p>Add some translators to your project from the <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link> and invite them to add translations at <a href={`https://pandora.zooniverse.org/#/project/${project.id}`}>https://pandora.zooniverse.org/#/project/{project.id}</a></p>
+          </React.Fragment>
+        }
         <h2>Project language menu</h2>
         <p>
           Tick languages here to add a language menu to your project,
@@ -81,20 +87,20 @@ class TranslationsManager extends React.Component {
             );
           })}
         </table>
-        <h2>Project translations</h2>
-        {hasTranslations ?
-          <ul className="translations">
-            {translationLanguages.map(languageCode => (
-              <li key={languageCode}>
-                <TranslationTools
-                  languageCode={languageCode}
-                  project={project}
-                />
-              </li>
-            ))}
-          </ul>
-        :
-          <p>Add some translators to your project from the <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link> and invite them to add translations at <a href={`https://pandora.zooniverse.org/#/project/${project.id}`}>https://pandora.zooniverse.org/#/project/{project.id}</a></p>
+        {!!hasTranslations &&
+          <React.Fragment>
+            <h2>Project translations</h2>
+            <ul className="translations">
+              {translationLanguages.map(languageCode => (
+                <li key={languageCode}>
+                  <TranslationTools
+                    languageCode={languageCode}
+                    project={project}
+                  />
+                </li>
+              ))}
+            </ul>
+          </React.Fragment>
         }
       </div>
     );
