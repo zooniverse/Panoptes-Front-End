@@ -7,7 +7,7 @@ import MobileSection from './mobile-section';
 import ValidationValue, { convertBooleanToValidation } from './mobile-validations';
 
 const VALID_QUESTION_LENGTH = 200;
-const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'drawing', 'multiple'];
+const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'drawing'];
 
 function taskQuestionNotTooLong({ task }) {
   return convertBooleanToValidation(task.question ? task.question.length < VALID_QUESTION_LENGTH : false);
@@ -82,9 +82,6 @@ const validatorFns = {
     drawingToolTypeIsValid,
     drawingTaskHasOneTool,
     drawingTaskHasNoSubtasks
-  },
-  multiple: {
-    workflowHasSingleTask
   }
 };
 
