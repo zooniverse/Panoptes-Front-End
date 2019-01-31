@@ -91,14 +91,12 @@ const validatorFns = {
 class MobileSectionContainer extends Component {
   constructor(props) {
     super(props);
-    this.checkShowSection = this.checkShowSection.bind(this);
     this.renderMobileSection = this.renderMobileSection.bind(this);
     this.toggleChecked = this.toggleChecked.bind(this);
     this.toggleMobileFriendlyStatus = this.toggleMobileFriendlyStatus.bind(this);
     this.validate = this.validate.bind(this);
     this.state = {
       enabled: false,
-      showSection: false,
       validations: reduce(validatorFns[props.task.type], (valObj, fn, key) => {
         valObj[key] = false;
         return valObj;
@@ -106,22 +104,17 @@ class MobileSectionContainer extends Component {
     };
   }
 
-  checkShowSection() {
-    const isValidTaskType = VALID_TASK_TYPES_FOR_MOBILE.includes(this.props.task.type);
-    this.setState({ showSection: isValidTaskType });
-  }
-
   componentWillReceiveProps(nextProps) {
     this.validate(nextProps);
   }
 
   componentWillMount() {
-    this.checkShowSection();
     this.validate(this.props);
   }
 
   render() {
-    return (this.state.showSection)
+    const isValidTaskType = VALID_TASK_TYPES_FOR_MOBILE.includes(this.props.task.type);
+    return (isValidTaskType)
       ? this.renderMobileSection()
       : null;
   }
