@@ -117,6 +117,78 @@ const validationFixtures = {
     task: {
       unlinkedTask: 'T1'
     }
+  },
+  workflowHasValidDrawingTask: {
+    task: {
+      type: 'drawing',
+      tools: [
+        {
+          type: 'rectangle',
+          details: []
+        }
+      ]
+    }
+  },
+  workflowHasInvalidDrawingTask: {
+    task: {
+      type: 'drawing',
+      tools: [
+        {
+          type: 'point',
+          details: []
+        }
+      ]
+    }
+  },
+  drawingTaskHasOneTool: {
+    task: {
+      type: 'drawing',
+      tools: [
+        {
+          type: 'drawing',
+          details: []
+        }
+      ]
+    }
+  },
+  drawingTaskHasTwoTools: {
+    task: {
+      type: 'drawing',
+      tools: [
+        {
+          type: 'drawing',
+          details: []
+        },
+        {
+          type: 'point',
+          details: []
+        }
+      ]
+    }
+  },
+  drawingTaskHasNoSubtasks: {
+    task: {
+      type: 'drawing',
+      tools: [
+        {
+          type: 'drawing',
+          details: []
+        }
+      ]
+    }
+  },
+  drawingTaskHasSubtasks: {
+    task: {
+      type: 'drawing',
+      tools: [
+        {
+          type: 'drawing',
+          details: [{
+            hasSubtasks: 'test'
+          }]
+        }
+      ]
+    }
   }
 };
 

@@ -51,8 +51,8 @@ describe('<MobileSectionContainer />', function () {
       assert.strictEqual(component.length, 1);
     });
 
-    it('should render nothing if the task type isn\'t single or multiple', function () {
-      const task = fixtures.task({ type: 'drawing' });
+    it('should render nothing if the task type isn\'t single or multiple or drawing', function () {
+      const task = fixtures.task({ type: 'survey' });
       wrapper = shallow(<MobileSectionContainer task={task} workflow={fixtures.workflow()} project={fixtures.project()} />);
       assert.strictEqual(wrapper.type(), null);
     });
@@ -116,6 +116,21 @@ describe('<MobileSectionContainer />', function () {
     it('should check whether the workflow has unlinked tasks with more than two answers', function () {
       testValidationProp('workflowNotTooManyShortcuts');
       testValidationProp('workflowNotTooManyShortcuts', validationFixtures.workflowTooManyShortcuts, false);
+    });
+
+    it('should check whether workflow has correct drawing task type', function () {
+      testValidationProp('drawingToolTypeIsValid', validationFixtures.workflowHasValidDrawingTask, true);
+      testValidationProp('drawingToolTypeIsValid', validationFixtures.workflowHasInvalidDrawingTask, false);
+    });
+
+    it('should check whether workflow has only one tool', function () {
+      testValidationProp('drawingTaskHasOneTool', validationFixtures.drawingTaskHasOneTool, true);
+      testValidationProp('drawingTaskHasOneTool', validationFixtures.drawingTaskHasTwoTools, false);
+    });
+
+    it('should check whether workflow has no subtasks', function () {
+      testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasNoSubtasks, true);
+      testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasSubtasks, false);
     });
   });
 

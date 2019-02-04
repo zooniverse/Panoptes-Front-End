@@ -7,7 +7,7 @@ import MobileSection from './mobile-section';
 import ValidationValue, { convertBooleanToValidation } from './mobile-validations';
 
 const VALID_QUESTION_LENGTH = 200;
-const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'multiple'];
+const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'drawing'];
 
 function taskQuestionNotTooLong({ task }) {
   return convertBooleanToValidation(task.question ? task.question.length < VALID_QUESTION_LENGTH : false);
@@ -29,9 +29,11 @@ function workflowHasSingleTask({ workflow }) {
   return convertBooleanToValidation(filter(workflow.tasks, ({ type }) => type !== 'shortcut').length === 1);
 }
 
-function workflowNotTooManyShortcuts({ task, workflow }) {
-  const shortcut = workflow.tasks[task.unlinkedTask];
-  return convertBooleanToValidation((shortcut) ? shortcut.answers.length <= 2 : true);
+function workflowHasNoMoreThanXShortcuts(shortcutsLimit) {
+  return ({ task, workflow }) => {
+    const shortcut = workflow.tasks[task.unlinkedTask];
+    return convertBooleanToValidation((shortcut) ? shortcut.answers.length <= shortcutsLimit : true);
+  };
 }
 
 function workflowQuestionHasOneOrLessImages({ task }) {
@@ -45,37 +47,61 @@ function workflowQuestionHasOneOrLessImages({ task }) {
   return validation;
 }
 
+function drawingToolTypeIsValid({ task }) {
+  let validationBool = false;
+  if (task.tools[0]) {
+    validationBool = task.tools[0].type === 'rectangle';
+  }
+  return convertBooleanToValidation(validationBool);
+}
+
+function drawingTaskHasOneTool({ task }) {
+  return convertBooleanToValidation(task.tools.length === 1);
+}
+
+function drawingTaskHasNoSubtasks({ task }) {
+  const toolHasSubtasks = task.tools.reduce((hasSubtasks, tool) => {
+    return hasSubtasks || tool.details.length > 0;
+  }, false);
+
+  return convertBooleanToValidation(!toolHasSubtasks);
+}
+
 const validatorFns = {
-  taskQuestionNotTooLong,
-  taskFeedbackDisabled,
-  taskHasTwoAnswers,
-  workflowFlipbookDisabled,
-  workflowHasSingleTask,
-  workflowNotTooManyShortcuts,
-  workflowQuestionHasOneOrLessImages
+  single: {
+    taskQuestionNotTooLong,
+    taskFeedbackDisabled,
+    taskHasTwoAnswers,
+    workflowFlipbookDisabled,
+    workflowHasSingleTask,
+    workflowNotTooManyShortcuts: workflowHasNoMoreThanXShortcuts(2),
+    workflowQuestionHasOneOrLessImages
+  },
+  drawing: {
+    taskFeedbackDisabled,
+    workflowFlipbookDisabled,
+    workflowHasSingleTask,
+    drawingToolTypeIsValid,
+    drawingTaskHasOneTool,
+    drawingTaskHasNoSubtasks,
+    workflowDoesNotContainShortcuts: workflowHasNoMoreThanXShortcuts(0)
+  }
 };
 
 class MobileSectionContainer extends Component {
   constructor(props) {
     super(props);
-    this.checkShowSection = this.checkShowSection.bind(this);
     this.renderMobileSection = this.renderMobileSection.bind(this);
     this.toggleChecked = this.toggleChecked.bind(this);
     this.toggleMobileFriendlyStatus = this.toggleMobileFriendlyStatus.bind(this);
     this.validate = this.validate.bind(this);
     this.state = {
       enabled: false,
-      showSection: false,
-      validations: reduce(validatorFns, (valObj, fn, key) => {
+      validations: reduce(validatorFns[props.task.type], (valObj, fn, key) => {
         valObj[key] = false;
         return valObj;
       }, {})
     };
-  }
-
-  checkShowSection() {
-    const isValidTaskType = VALID_TASK_TYPES_FOR_MOBILE.includes(this.props.task.type);
-    this.setState({ showSection: isValidTaskType });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -83,12 +109,12 @@ class MobileSectionContainer extends Component {
   }
 
   componentWillMount() {
-    this.checkShowSection();
     this.validate(this.props);
   }
 
   render() {
-    return (this.state.showSection)
+    const isValidTaskType = VALID_TASK_TYPES_FOR_MOBILE.includes(this.props.task.type);
+    return (isValidTaskType)
       ? this.renderMobileSection()
       : null;
   }
@@ -140,8 +166,7 @@ class MobileSectionContainer extends Component {
 
   validate(props) {
     const validatorArgs = { task: props.task, workflow: props.workflow, project: props.project };
-
-    const validations = reduce(validatorFns, (validationObj, fn, key) => {
+    const validations = reduce(validatorFns[props.task.type], (validationObj, fn, key) => {
       validationObj[key] = fn.call(this, validatorArgs);
       return validationObj;
     }, {});
