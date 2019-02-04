@@ -28,4 +28,10 @@ TranslationTools.propTypes = {
   }).isRequired
 };
 
+TranslationTools.defaultProps = {
+  project: {
+    slug: ''
+  }
+};
+
 export default TranslationTools;
