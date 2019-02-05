@@ -80,9 +80,15 @@ class TaskNav extends React.Component {
 
     // Each answer of a single-answer task can have its own `next` key to override the task's.
     let nextTaskKey = '';
-    if (TaskComponent === tasks.single && this.props.annotation) {
-      const currentAnswer = task.answers[this.props.annotation.value];
-      nextTaskKey = currentAnswer ? currentAnswer.next : '';
+    if (TaskComponent === tasks.single) {
+      waitingForAnswer = true;
+      const currentAnswer = this.props.annotation ? task.answers[this.props.annotation.value] : null;
+      if (currentAnswer) {
+        nextTaskKey = currentAnswer.next;
+        waitingForAnswer = false;
+      } else {
+        nextTaskKey = '';
+      }
     } else {
       nextTaskKey = task.next;
     }
