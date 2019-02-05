@@ -50,13 +50,6 @@ describe('DataExports', function () {
 
   });
 
-  it('should show a workflow contents export button', function () {
-    const buttonToTest = findByExportType(dataExportButtons, 'workflow_contents_export');
-    assert.equal(buttonToTest.length, 1);
-    assert.equal(buttonToTest.prop('project'), testProject);
-
-  });
-
   it('should show a Talk comments export button', function () {
     const buttonToTest = findByExportType(talkDataExportButtons, 'comments'); assert.equal(buttonToTest.length, 1);
     assert.equal(buttonToTest.prop('project'), testProject);

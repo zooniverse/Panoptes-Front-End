@@ -13,7 +13,6 @@ counterpart.registerTranslations('en', {
     classificationExport: 'Request new classification export',
     subjectExport: 'Request new subject export',
     workflowExport: 'Request new workflow export',
-    workflowContentsExport: 'Request new workflow contents export',
     commentsExport: 'Request new talk comments export',
     tagsExport: 'Request new talk tags export',
   }
@@ -69,13 +68,6 @@ export default function DataExports (props) {
               project={props.project}
               buttonKey="projectDetails.workflowExport"
               exportType="workflows_export"
-            />
-          </div>
-          <div className="row">
-            <DataExportButton
-              project={props.project}
-              buttonKey="projectDetails.workflowContentsExport"
-              exportType="workflow_contents_export"
             />
           </div>
           <hr />
