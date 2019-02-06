@@ -20,6 +20,7 @@ import FinishedBanner from './finished-banner';
 import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';
 import ProjectThemeButton from './components/ProjectThemeButton';
 import WorkflowSelection from './workflow-selection';
+import ClassroomWorkflowSelection from './workflow-selection-classroom';
 import { zooTheme } from '../../theme';
 
 function onClassificationSaved(actualClassification) {
@@ -362,8 +363,10 @@ const ConnectedClassifyPage = connect(mapStateToProps, mapDispatchToProps)(Proje
 
 function ConnectedClassifyPageWithWorkflow(props) {
   const workflowKey = props.workflow ? props.workflow.id : 'no-workflow';
+  const isClassroom = true; // TODO: add a conditional check for classrooms here.
+  const WorkflowStrategy = isClassroom ? ClassroomWorkflowSelection : WorkflowSelection;
   return (
-    <WorkflowSelection
+    <WorkflowStrategy
       key={workflowKey}
       actions={props.actions}
       location={props.location}
@@ -373,7 +376,7 @@ function ConnectedClassifyPageWithWorkflow(props) {
       user={props.user}
     >
       <ConnectedClassifyPage {...props} />
-    </WorkflowSelection>
+    </WorkflowStrategy>
   );
 }
 export default ConnectedClassifyPageWithWorkflow;
