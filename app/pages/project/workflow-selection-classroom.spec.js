@@ -11,7 +11,8 @@ function StubPage(props) {
 
 const location = {
   query: {
-    workflow: '1234'
+    workflow: '1234',
+    classroom: '1'
   }
 };
 
@@ -52,7 +53,7 @@ const project = mockPanoptesResource('projects',
   {
     id: 'a',
     display_name: 'A test project',
-    experimental_tools: [],
+    experimental_tools: ['wildcam classroom'],
     slug: 'test/test-project',
     links: {
       active_workflows: ['1', '2', '3', '4', '5'],
