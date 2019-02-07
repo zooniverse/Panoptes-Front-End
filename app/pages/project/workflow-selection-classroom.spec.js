@@ -1,6 +1,6 @@
 import React from 'react';
 import { expect } from 'chai';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import { ClassroomWorkflowSelection } from './workflow-selection-classroom';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
@@ -97,28 +97,12 @@ describe('ClassroomWorkflowSelection', function () {
 
   before(function () {
     workflowStub = sinon.stub(ClassroomWorkflowSelection.prototype, 'getWorkflow').callsFake(() => {});
-    wrapper = mount(
-        <ClassroomWorkflowSelection
-          actions={actions}
-          project={project}
-          preferences={preferences}
-          projectRoles={projectRoles}
-          locale='en'
-          location={location}
-        >
-          <StubPage />
-        </ClassroomWorkflowSelection>,
-        { context }
-      );
-    controller = wrapper.instance();
   });
 
   describe('selecting a workflow ID', function () {
 
     beforeEach(function () {
-      workflowStub.resetHistory();
-      actions.translations.load.resetHistory();
-      wrapper.update();
+      actions.classifier.loadWorkflow.resetHistory();
     });
 
     afterEach(function () {
@@ -132,26 +116,77 @@ describe('ClassroomWorkflowSelection', function () {
 
     it('should always load the workflow specified in the URL', function () {
       location.query.workflow = '1234';
-      controller.getSelectedWorkflow({ location });
-      expect(workflowStub).to.have.been.calledOnce;
-      expect(workflowStub).to.have.been.calledWith(location.query.workflow, false);
+      wrapper = shallow(
+        <ClassroomWorkflowSelection
+          actions={actions}
+          project={project}
+          preferences={preferences}
+          projectRoles={projectRoles}
+          locale='en'
+          location={location}
+        >
+          <StubPage />
+        </ClassroomWorkflowSelection>,
+        { context }
+      );
+      expect(actions.classifier.loadWorkflow).to.have.been.calledOnce;
+      expect(actions.classifier.loadWorkflow).to.have.been.calledWith(location.query.workflow, 'en', preferences);
     });
 
     it('should sanitise the workflow query param', function () {
-      location.query.workflow = '1234rty'
-      controller.getSelectedWorkflow({ location });
-      expect(workflowStub).to.have.been.calledOnce;
-      expect(workflowStub).to.have.been.calledWith('1234', false);
+      location.query.workflow = '12345rty'
+      wrapper = shallow(
+        <ClassroomWorkflowSelection
+          actions={actions}
+          project={project}
+          preferences={preferences}
+          projectRoles={projectRoles}
+          locale='en'
+          location={location}
+        >
+          <StubPage />
+        </ClassroomWorkflowSelection>,
+        { context }
+      );
+      expect(actions.classifier.loadWorkflow).to.have.been.calledOnce;
+      expect(actions.classifier.loadWorkflow).to.have.been.calledWith('12345', 'en', preferences);
     });
 
     it('should not load a workflow without a workflow query parameter', function () {
       location.query = {}
-      controller.getSelectedWorkflow({ location });
-      expect(workflowStub).to.have.not.been.called;
+      wrapper = shallow(
+        <ClassroomWorkflowSelection
+          actions={actions}
+          project={project}
+          preferences={preferences}
+          projectRoles={projectRoles}
+          locale='en'
+          location={location}
+        >
+          <StubPage />
+        </ClassroomWorkflowSelection>,
+        { context }
+      );
+      expect(actions.classifier.loadWorkflow).to.have.not.been.called;
     });
   });
 
   describe('with a valid workflow loaded', function () {
+    before(function () {
+      wrapper = shallow(
+        <ClassroomWorkflowSelection
+          actions={actions}
+          project={project}
+          preferences={preferences}
+          projectRoles={projectRoles}
+          locale='en'
+          location={location}
+        >
+          <StubPage />
+        </ClassroomWorkflowSelection>,
+        { context }
+      );
+    })
     it('should render the child component', function () {
       const workflow = mockPanoptesResource('workflows',
         {
