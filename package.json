@@ -25,7 +25,7 @@
     "prop-types": "~15.6.2",
     "qs": "~6.6.0",
     "rc-slider": "~8.6.5",
-    "react": "~16.7.0",
+    "react": "~16.8.1",
     "react-chartist": "~0.13.3",
     "react-dom": "~16.7.0",
     "react-helmet": "~5.2.0",
