@@ -45,7 +45,8 @@ export default function DataExports (props) {
       </div>
       <div className="columns-container">
         <div>
-          Project Data<br />
+          <h4>Project Data</h4>
+
           <div className="row">
             <DataExportButton
               project={props.project}
@@ -77,7 +78,7 @@ export default function DataExports (props) {
           </div>
           <hr />
 
-          Talk Data<br />
+          <h4>Talk Data</h4>
           <div className="row">
             <TalkDataExportButton
               project={props.project}
