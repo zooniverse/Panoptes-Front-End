@@ -70,6 +70,11 @@ export default function DataExports (props) {
               exportType="workflows_export"
             />
           </div>
+          <div className="row">
+            <p>
+              <strong>Looking for workflow contents exports?</strong> The workflow contents exports have been merged into the normal workflow export. The "strings" column is now available directly in the workflows export, and the "version" column from the workflow contents export is called "minor_version" in the workflows export. This means you no longer need to look up rows from two files in order to know what the actual setup of the workflow was for the version number specified by a classificatio.
+            </p>
+          </div>
           <hr />
 
           Talk Data<br />
