@@ -21,54 +21,70 @@ class AboutPage extends React.Component {
           <div className="hero-container">
             <Translate content="about.index.title" component="h1" />
             <nav className="hero-nav">
-              <IndexLink
-                to="/about"
-                activeClassName="active"
-              >
-                <Translate content="about.index.nav.about" />
-              </IndexLink>
-              <Link
-                to="/about/publications"
-                activeClassName="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.publications') : null}
-              >
-                <Translate content="about.index.nav.publications" />
-              </Link>
-              <Link
-                to="/about/team"
-                activeClassName="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.team') : null}
-              >
-                <Translate content="about.index.nav.ourTeam" />
-              </Link>
-              <Link
-                to="/about/acknowledgements"
-                activeClassName="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.acknowledgements') : null}
-              >
-                <Translate content="about.index.nav.acknowledgements" />
-              </Link>
-              <Link
-                to="/about/resources"
-                activeClassName="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.resources') : null}
-              >
-                <Translate content="about.index.nav.resources" />
-              </Link>
-              <Link
-                to="/about/contact"
-                activeClassName="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.contact') : null}
-              >
-                <Translate content="about.index.nav.contact" />
-              </Link>
-              <Link
-                to="/about/faq"
-                activeClassName="active"
-                onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.faq') : null}
-              >
-                <Translate content="about.index.nav.faq" />
-              </Link>
+              <ul>
+                <li>
+                  <IndexLink
+                    to="/about"
+                    activeClassName="active"
+                  >
+                    <Translate content="about.index.nav.about" />
+                  </IndexLink>
+                </li>
+                <li>
+                  <Link
+                    to="/about/publications"
+                    activeClassName="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.publications') : null}
+                  >
+                    <Translate content="about.index.nav.publications" />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/about/team"
+                    activeClassName="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.team') : null}
+                  >
+                    <Translate content="about.index.nav.ourTeam" />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/about/acknowledgements"
+                    activeClassName="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.acknowledgements') : null}
+                  >
+                    <Translate content="about.index.nav.acknowledgements" />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/about/resources"
+                    activeClassName="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.resources') : null}
+                  >
+                    <Translate content="about.index.nav.resources" />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/about/contact"
+                    activeClassName="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.contact') : null}
+                  >
+                    <Translate content="about.index.nav.contact" />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/about/faq"
+                    activeClassName="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.faq') : null}
+                  >
+                    <Translate content="about.index.nav.faq" />
+                  </Link>
+                </li>
+              </ul>
             </nav>
           </div>
         </section>
