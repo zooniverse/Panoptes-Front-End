@@ -2,7 +2,7 @@ const READABLE_FORMATS = {
   image: [
     'jpeg', 'png', 'svg+xml', 'gif'
   ],
-  video: ['mp4', 'mpeg'],
+  video: ['mp4', 'mpeg', 'x-m4v'],
   audio: ['mp3', 'm4a', 'mpeg'],
   application: ['json']
 };
