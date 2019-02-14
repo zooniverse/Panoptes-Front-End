@@ -7,6 +7,7 @@ import { projectsWithWarnings } from './data-exports-warnings'
 import WorkflowClassificationExportButton from './workflow-classification-export-button';
 import DataExportButton from  '../../partials/data-export-button';
 import TalkDataExportButton from  '../../talk/data-export-button';
+import DataExportDownloadLink from '../../partials/data-export-download-link';
 
 counterpart.registerTranslations('en', {
   projectDetails: {
@@ -73,7 +74,12 @@ export default function DataExports (props) {
           </div>
           <div className="row">
             <p>
-              <strong>Looking for workflow contents exports?</strong> The workflow contents exports have been merged into the normal workflow export. The "strings" column is now available directly in the workflows export, and the "version" column from the workflow contents export is called "minor_version" in the workflows export. This means you no longer need to look up rows from two files in order to know what the actual setup of the workflow was for the version number specified by a classificatio.
+              <strong>Workflow contents export: </strong>
+              <DataExportDownloadLink 
+                project={props.project} 
+                exportType="workflow_contents_export" />
+              {' '}
+              This export can no longer be generated. We've generated one just prior to disabling the generation. The workflow contents exports have been merged into the normal workflow export. The "strings" column is now available directly in the workflows export, and the "version" column from the workflow contents export is called "minor_version" in the workflows export. This means you no longer need to look up rows from two files in order to know what the actual setup of the workflow was for the version number specified by a classification.
             </p>
           </div>
           <hr />
