@@ -14,12 +14,13 @@ export default class DataExportDownloadLink extends React.Component {
             error: null
         }
 
+        this.getExport = this.getExport.bind(this);
         this.recentAndReady = this.recentAndReady.bind(this);
         this.pending = this.pending.bind(this);
     }
 
     recentAndReady(exported) {
-        return (exported.metadata.state === 'ready' || !exported.metadata.state);
+        return exported && (exported.metadata.state === 'ready' || !exported.metadata.state);
     }
 
     pending(exported) {
@@ -27,8 +28,11 @@ export default class DataExportDownloadLink extends React.Component {
     }
 
     componentDidMount() {
-        this.props.project.get(this.props.exportType).then((response) => {
-            console.log(response);
+        this.getExport();
+    }
+
+    getExport() {
+        return this.props.project.get(this.props.exportType).then((response) => {
             if (response.errors) {
                 this.setState({requested: true, error: response.errors});
             } else {
