@@ -27,6 +27,15 @@
     margin: 1em auto
 
   nav.hero-nav
+    ul
+      display: flex
+      flex-wrap: wrap
+      margin: 0
+      padding: 0
+      list-style-type: none
+    li
+      margin: 0
+      padding: 0
     a
       span
         text-transform:none
@@ -70,8 +79,7 @@
           font-size: 14px
           line-height: 3em
           text-decoration: none
-          &:focus
-          &:hover
+          &:focus, &:hover
             background: rgba(255,255,255, 0.2)
             color: rgba(255,255,255,1)
             outline: none
