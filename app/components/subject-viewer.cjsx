@@ -58,6 +58,7 @@ module.exports = createReactClass
     linkToFullImage: false
     frameWrapper: null
     allowFlipbook: true
+    allowInvert: false
     allowSeparateFrames: false
     metadataPrefixes: ['#', '!']
     metadataFilters: ['#', '!']
@@ -69,6 +70,7 @@ module.exports = createReactClass
     frame: @getInitialFrame()
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
+    invert: false
     promptingToSignIn: false
 
   getInitialFrame: ->
@@ -103,6 +105,7 @@ module.exports = createReactClass
     rootClasses = classnames('subject-viewer', {
       'default-root-style': @props.defaultStyle
       'subject-viewer--flipbook': @state.inFlipbookMode
+      'subject-viewer--invert': @state.invert
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
     })
 
@@ -181,8 +184,8 @@ module.exports = createReactClass
             </span>
         </span>}
         <span>
-          {if @props.workflow?.configuration?.invert_subject
-            <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleModification.bind this, 'invert'}>
+          {if @props.workflow?.configuration?.invert_subject or @props.allowInvert
+            <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleInvert.bind this, @state.invert}>
               <i className="fa fa-adjust "></i>
             </button>}{' '}
           {if @props.workflow?.configuration?.enable_subject_flags
@@ -229,7 +232,7 @@ module.exports = createReactClass
     @signInAttentionTimeout = setTimeout (=> @setState loading: false), 3000
 
   renderFrame: (frame, props = {}) ->
-    <FrameViewer {...@props} {...props} frame={frame} modification={@state?.modification} onLoad={@handleFrameLoad} />
+    <FrameViewer {...@props} {...props} frame={frame} onLoad={@handleFrameLoad} />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
@@ -250,15 +253,8 @@ module.exports = createReactClass
   toggleInFlipbookMode: () ->
     @setInFlipbookMode not @state.inFlipbookMode
 
-  toggleModification: (type) ->
-    mods = @state?.modification
-    if !mods
-      mods = {}
-    if mods[type] is undefined
-      mods[type] = true
-    else
-      mods[type] = not mods[type]
-    @setState modification: mods
+  toggleInvert: (invert) ->
+    @setState invert: !invert
 
   setInFlipbookMode: (inFlipbookMode) ->
     @setState {inFlipbookMode}
