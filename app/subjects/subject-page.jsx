@@ -22,6 +22,7 @@ const SubjectPage = (props) => {
                 subject={props.subject}
                 user={props.user}
                 project={props.project}
+                allowInvert={true}
                 linkToFullImage={true}
                 metadataFilters={['#']}
                 isFavorite={props.isFavorite}
