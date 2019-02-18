@@ -3,6 +3,7 @@ createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
 moment = require 'moment'
 Translate = require 'react-translate-component'
+DataExportDownloadLink = require('./data-export-download-link').default
 
 module.exports = createReactClass
   displayName: 'DataExportButton'
@@ -14,18 +15,6 @@ module.exports = createReactClass
   getInitialState: ->
     exportRequested: false
     exportError: null
-    mostRecent: null
-
-  componentDidMount: ->
-    @exportGet()
-
-  exportGet: ->
-    @props.project.get(@props.exportType)
-      .then ([exported]) =>
-        @setState mostRecent: exported
-      .catch (error) =>
-        if error.status isnt 404
-          @setState exportError: error
 
   requestDataExport: ->
     @setState exportError: null
@@ -51,17 +40,7 @@ module.exports = createReactClass
         </button> {' '}
         <small className="form-help">
           CSV format.{' '}
-          { if @recentAndReady(@state.mostRecent)
-              <span>
-                Most recent data available requested{' '}
-                <a href={@state.mostRecent.src}>{moment(@state.mostRecent.updated_at).fromNow()}</a>.
-              </span>
-            else if @pending(@state.mostRecent)
-              <span>
-                Processing your request.
-              </span>
-            else
-              <span>Never previously requested.</span>}
+          <DataExportDownloadLink project={@props.project} exportType={@props.exportType} />
           <br />
         </small>
 
