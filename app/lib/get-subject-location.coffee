@@ -1,6 +1,6 @@
 READABLE_FORMATS =
   image: ['jpeg', 'png', 'svg+xml', 'gif']
-  video: ['mp4']
+  video: ['mp4', 'mpeg', 'x-m4v']
   audio: ['mp3', 'm4a', 'mpeg']
   text: ['plain']
   application: ['json']

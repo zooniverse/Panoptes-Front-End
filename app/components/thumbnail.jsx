@@ -42,21 +42,21 @@ export default class Thumbnail extends React.Component {
       maxHeight: this.props.height
     };
 
-    if (this.props.format === 'mp4') {
+    if (this.props.type === 'video') {
       return (
         <div>
           <video style={style} controls={this.props.controls} onClick={this.playVideo}>
-            <source src={this.props.src} type="video/mp4" />
+            <source src={this.props.src} type={`video/${this.props.format}`} />
           </video>
         </div>
       );
     }
 
-    if (this.props.format === 'audio') {
+    if (this.props.type === 'audio') {
       return (
         <div>
           <audio style={style} controls={this.props.controls} onClick={this.playVideo}>
-            <source src={this.props.src} />
+            <source src={this.props.src} type={`audio/${this.props.format}`} />
           </audio>
         </div>
       );
@@ -82,10 +82,11 @@ Thumbnail.getThumbnailSrc = function getThumbnailSrc({ origin, width, height, sr
 
 Thumbnail.defaultProps = {
   controls: true,
-  format: 'image',
+  format: '',
   height: MAX_THUMBNAIL_DIMENSION,
   origin: 'https://thumbnails.zooniverse.org',
   src: '',
+  type: 'image',
   width: MAX_THUMBNAIL_DIMENSION
 };
 
@@ -95,5 +96,6 @@ Thumbnail.propTypes = {
   height: PropTypes.number,
   origin: PropTypes.string,
   src: PropTypes.string,
+  type: PropTypes.string,
   width: PropTypes.number
 };

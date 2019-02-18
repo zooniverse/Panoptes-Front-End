@@ -43,7 +43,14 @@ module.exports = createReactClass
           subject = getSubjectLocation(@props.subject)
           <div className="subject-preview">
             <Link to={@discussionLink()}>
-              <Thumbnail src={subject.src} format={subject.format} width={100} height={150} controls={false} />
+              <Thumbnail
+                src={subject.src}
+                type={subject.type}
+                format={subject.format}
+                width={100}
+                height={150}
+                controls={false}
+              />
             </Link>
           </div>
         }

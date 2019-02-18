@@ -55,7 +55,14 @@ export default class TalkSearchResult extends React.Component {
       <div className="talk-search-result talk-module">
         {this.state.subject && (
           <CommentLink comment={comment} project={this.props.project}>
-            <Thumbnail src={this.state.subject.src} format={this.state.subject.format} width={100} height={150} controls={false} />
+            <Thumbnail
+              src={this.state.subject.src}
+              type={this.state.subject.type}
+              format={this.state.subject.format}
+              width={100}
+              height={150}
+              controls={false}
+            />
           </CommentLink>
         )}
         <CommentContextIcon comment={comment} />

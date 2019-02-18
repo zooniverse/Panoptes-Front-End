@@ -102,9 +102,12 @@ const ProjectHomePage = (props) => {
             const locations = getSubjectLocations(subject);
             let format = '';
             let src = '';
+            let type = '';
             if (locations.image) {
+              type = 'image';
               [format, src] = locations.image;
             } else if (locations.video) {
+              type = 'video';
               [format, src] = locations.video;
             }
             return (
@@ -113,6 +116,7 @@ const ProjectHomePage = (props) => {
                   <Thumbnail
                     alt=""
                     controls={false}
+                    type={type}
                     format={format}
                     height={240}
                     src={src}
