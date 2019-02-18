@@ -47,6 +47,7 @@ function awaitWorkflow(workflowId) {
 
 function createNewClassification(project, workflow, subject, goldStandardMode) {
   const source = subject.metadata.intervention ? 'sugar' : 'api';
+  subject.update({ 'metadata.intervention': undefined });
   const classification = apiClient.type('classifications').create({
     annotations: [],
     metadata: {
