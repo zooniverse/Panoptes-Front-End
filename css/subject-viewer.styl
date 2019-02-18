@@ -107,6 +107,16 @@
           background-color: #bbc0c0
           color: #575959
 
+  &.subject-viewer--invert
+    // Classifier
+    svg
+      filter: invert(100%)
+    // Talk
+    .subject-container
+      .subject-image-frame:only-child
+        img, video
+          filter: invert(100%)
+
   // Multi-image layouts
   &:not(.subject-viewer--flipbook)
     .subject-container
@@ -118,10 +128,6 @@
     &.subject-viewer--layout-grid3
       .subject-container > *
         width: 33%
-
-  &.subject-viewer--invert
-    .subject
-      filter: invert(100%)
 
 .subject
   .subject-tools
