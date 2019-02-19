@@ -442,17 +442,20 @@ EditWorkflowPage = createReactClass
             </div>}
 
           <div className={if @isThereNotADefinedTask() then 'disabled-section' else ''}>
-            <a
-              disabled={@isThereNotADefinedTask()}
-              href={@workflowLink()}
-              className="standard-button"
-              target="from-lab"
-              onClick={@handleViewClick}
-            >
-              Test this workflow
-            </a>
+            {if not @isThereNotADefinedTask()
+              <a
+                href={@workflowLink()}
+                className="standard-button"
+                target="from-lab"
+                onClick={@handleViewClick}
+              >
+                Test this workflow
+              </a>}
             {if @isThereNotADefinedTask()
-              <p>You need to add a task and content to be able to test this workflow.</p>}
+              <div>
+                <span className="standard-button">Test this workflow</span>
+                <p>You need to add a task and content to be able to test this workflow.</p>
+              </div>}
           </div>
 
           <hr />
