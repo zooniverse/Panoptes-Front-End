@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import counterpart from 'counterpart';
 import styled from 'styled-components';
+import { Markdown } from 'markdownz';
 
 const StyledInterventionMessage = styled.div`
   border-bottom: solid 1px;
@@ -25,7 +26,7 @@ function Intervention({ intervention, user }) {
   }
   return (
     <StyledInterventionMessage>
-      <p>{message}</p>
+      <Markdown>{message}</Markdown>
       <label>
         <input
           ref={checkbox}
