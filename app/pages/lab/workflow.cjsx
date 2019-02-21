@@ -70,6 +70,10 @@ EditWorkflowPage = createReactClass
     changes["tasks.#{taskKey}"] = taskDescription
     @props.workflow.update(changes).save()
 
+  isThereNotADefinedTask: () ->
+    workflowTasks = Object.keys(@props.workflow.tasks)
+    workflowTasks.length is 0
+
   render: ->
     window.editingWorkflow = @props.workflow
 
@@ -437,8 +441,21 @@ EditWorkflowPage = createReactClass
 
             </div>}
 
-          <div>
-            <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>Test this workflow</a>
+          <div className={if @isThereNotADefinedTask() then 'disabled-section' else ''}>
+            {if not @isThereNotADefinedTask()
+              <a
+                href={@workflowLink()}
+                className="standard-button"
+                target="from-lab"
+                onClick={@handleViewClick}
+              >
+                Test this workflow
+              </a>}
+            {if @isThereNotADefinedTask()
+              <div>
+                <span className="standard-button">Test this workflow</span>
+                <p>You need to add a task and content to be able to test this workflow.</p>
+              </div>}
           </div>
 
           <hr />
