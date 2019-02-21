@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import Intervention from './Intervention';
+import { Markdown } from 'markdownz';
 
 describe('Intervention', function () {
   let wrapper;
@@ -24,8 +25,9 @@ describe('Intervention', function () {
   it('should render', function () {
     expect(wrapper).to.be.ok;
   });
-  it('should show a notification message', function () {
-    expect(wrapper.contains(<p>{message}</p>)).to.be.true;
+  it('should show a notification message', () => {
+    const newlineMsg = intervention.message + "\n"
+    expect(wrapper.find(Markdown).text()).to.equal(newlineMsg);
   });
   describe('opt-out checkbox', function () {
     let optOut;
