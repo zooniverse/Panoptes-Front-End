@@ -159,7 +159,9 @@ module.exports = createReactClass
                     <i className="fa fa-play fa-lg fa-fw"></i>
                   </button>}
                 <div className="subject-frame-duration">
-                  <i className="fa fa-angle-right fa-lg fa-fw subject-frame-duration--slower"></i>
+                  <button aria-label="Slower" title="Slower" type="button" className="secret-button" onClick={@setFrameDuration.bind this, -0.25}>
+                    <i className="fa fa-angle-right fa-lg fa-fw subject-frame-duration--slower"></i>
+                  </button>
                   <input
                     arial-label="Playback Speed Rate Adjustment"
                     className="subject-frame-duration--range"
@@ -172,7 +174,9 @@ module.exports = createReactClass
                     type="range"
                     value={@state.playFrameDurationRate}
                   />
-                  <i className="fa fa-angle-double-right fa-lg fa-fw subject-frame-duration--faster"></i>
+                  <button aria-label="Faster" title="Faster" type="button" className="secret-button" onClick={@setFrameDuration.bind this, 0.25}>
+                    <i className="fa fa-angle-double-right fa-lg fa-fw subject-frame-duration--faster"></i>
+                  </button>
                 </div>
               </span>}
           </span>
@@ -300,6 +304,10 @@ module.exports = createReactClass
 
   handleFrameDurationChange: (event) ->
     @setState playFrameDurationRate: event.target.value
+
+  setFrameDuration: (step) ->
+    if 0.25 <= (@state.playFrameDurationRate + step) <= 10
+      @setState playFrameDurationRate: @state.playFrameDurationRate + step
 
   handleFrameChange: (frame) ->
     @setState {frame}
