@@ -65,7 +65,7 @@ module.exports = createReactClass
   getInitialState: ->
     loading: true
     playing: false
-    playFrameDuration: 667
+    playFrameDurationRate: 2
     frame: @getInitialFrame()
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
@@ -161,18 +161,16 @@ module.exports = createReactClass
                 <div className="subject-frame-duration">
                   <i className="fa fa-angle-right fa-lg fa-fw subject-frame-duration--slower"></i>
                   <input
-                    aria-valuemin="-2000"
-                    aria-valuemax="-100"
-                    aria-valuenow={@state.playFrameDuration * -1}
+                    arial-label="Playback Speed Rate Adjustment"
                     className="subject-frame-duration--range"
                     id="frame-duration"
-                    min="-2000"
-                    max="-100"
+                    min="0.25"
+                    max="10"
                     name="frame-duration"
                     onChange={@handleFrameDurationChange}
-                    step="50"
+                    step="0.25"
                     type="range"
-                    value={@state.playFrameDuration * -1}
+                    value={@state.playFrameDurationRate}
                   />
                   <i className="fa fa-angle-double-right fa-lg fa-fw subject-frame-duration--faster"></i>
                 </div>
@@ -292,7 +290,7 @@ module.exports = createReactClass
       if @state.playing is on and (counter < flips or infiniteLoop is on)
         counter++
         @handleFrameChange (@state.frame + 1) %% totalFrames
-        setTimeout flip, @state.playFrameDuration
+        setTimeout flip, (1000 / @state.playFrameDurationRate)
         if counter is flips and infiniteLoop is off
           @setPlaying false
       else @setPlaying false
@@ -301,7 +299,7 @@ module.exports = createReactClass
       setTimeout flip, 0
 
   handleFrameDurationChange: (event) ->
-    @setState playFrameDuration: event.target.value * -1
+    @setState playFrameDurationRate: event.target.value
 
   handleFrameChange: (frame) ->
     @setState {frame}
