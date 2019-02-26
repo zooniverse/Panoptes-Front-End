@@ -1,6 +1,6 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
-Draggable = require '../../../lib/draggable'
+Draggable = require('../../../lib/draggable').default
 DragHandle = require '../../drawing-tools/drag-handle'
 
 module.exports = createReactClass
