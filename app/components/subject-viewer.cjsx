@@ -59,6 +59,7 @@ module.exports = createReactClass
     frameWrapper: null
     allowFlipbook: true
     allowSeparateFrames: false
+    talkInvert: false
     metadataPrefixes: ['#', '!']
     metadataFilters: ['#', '!']
     workflow: null
@@ -69,6 +70,7 @@ module.exports = createReactClass
     frame: @getInitialFrame()
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
+    invert: false
     promptingToSignIn: false
 
   getInitialFrame: ->
@@ -103,6 +105,7 @@ module.exports = createReactClass
     rootClasses = classnames('subject-viewer', {
       'default-root-style': @props.defaultStyle
       'subject-viewer--flipbook': @state.inFlipbookMode
+      'subject-viewer--invert': @state.invert
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
     })
 
@@ -181,8 +184,12 @@ module.exports = createReactClass
             </span>
         </span>}
         <span>
-          {if @props.workflow?.configuration?.invert_subject
+          {if @props.workflow?.configuration?.invert_subject && not @props.talkInvert
             <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleModification.bind this, 'invert'}>
+              <i className="fa fa-adjust "></i>
+            </button>}{' '}
+          {if @props.talkInvert
+            <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleInvert.bind this, @state.invert}>
               <i className="fa fa-adjust "></i>
             </button>}{' '}
           {if @props.workflow?.configuration?.enable_subject_flags
@@ -259,6 +266,9 @@ module.exports = createReactClass
     else
       mods[type] = not mods[type]
     @setState modification: mods
+
+  toggleInvert: (invert) ->
+    @setState invert: !invert
 
   setInFlipbookMode: (inFlipbookMode) ->
     @setState {inFlipbookMode}

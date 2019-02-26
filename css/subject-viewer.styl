@@ -107,6 +107,13 @@
           background-color: #bbc0c0
           color: #575959
 
+  &.subject-viewer--invert
+    // Talk
+    .subject-container
+      .subject-image-frame:only-child
+        img, video
+          filter: invert(100%)
+
   // Multi-image layouts
   &:not(.subject-viewer--flipbook)
     .subject-container
