@@ -65,9 +65,10 @@ module.exports = createReactClass
   getInitialState: ->
     loading: true
     playing: false
-    playFrameDurationRate: 2
     frame: @getInitialFrame()
     frameDimensions: {}
+    frameDurationRate: 2
+    frameDurationIntervalId: null
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
 
@@ -164,6 +165,8 @@ module.exports = createReactClass
                     className="secret-button"
                     onKeyDown={@keyDownFrameDuration.bind this, -0.25}
                     onMouseDown={@mouseDownFrameDuration.bind this, -0.25}
+                    onMouseUp={@clearFrameDurationInterval}
+                    onMouseOut={@clearFrameDurationInterval}
                     title="Slower"
                     type="button"
                   >
@@ -179,13 +182,15 @@ module.exports = createReactClass
                     onChange={@handleFrameDurationChange}
                     step="0.25"
                     type="range"
-                    value={@state.playFrameDurationRate}
+                    value={@state.frameDurationRate}
                   />
                   <button
                     aria-label="Faster"
                     className="secret-button"
                     onKeyDown={@keyDownFrameDuration.bind this, 0.25}
                     onMouseDown={@mouseDownFrameDuration.bind this, 0.25}
+                    onMouseUp={@clearFrameDurationInterval}
+                    onMouseOut={@clearFrameDurationInterval}
                     title="Faster"
                     type="button"
                   >
@@ -308,7 +313,7 @@ module.exports = createReactClass
       if @state.playing is on and (counter < flips or infiniteLoop is on)
         counter++
         @handleFrameChange (@state.frame + 1) %% totalFrames
-        setTimeout flip, (1000 / @state.playFrameDurationRate)
+        setTimeout flip, (1000 / @state.frameDurationRate)
         if counter is flips and infiniteLoop is off
           @setPlaying false
       else @setPlaying false
@@ -317,16 +322,23 @@ module.exports = createReactClass
       setTimeout flip, 0
 
   handleFrameDurationChange: (event) ->
-    @setState playFrameDurationRate: parseFloat(event.target.value)
+    @setState frameDurationRate: parseFloat(event.target.value)
 
   keyDownFrameDuration: (step, event) ->
     if event.which is 13 or event.which is 32
-      if 0.25 <= (@state.playFrameDurationRate + step) <= 10
-        @setState playFrameDurationRate: @state.playFrameDurationRate + step
+      @changeFrameDuration(step)
 
   mouseDownFrameDuration: (step) ->
-    if 0.25 <= (@state.playFrameDurationRate + step) <= 10
-      @setState playFrameDurationRate: @state.playFrameDurationRate + step
+    @clearFrameDurationInterval()
+    @setState frameDurationIntervalId: setInterval (=> @changeFrameDuration step), 100
+
+  changeFrameDuration: (step) ->
+    if 0.25 <= (@state.frameDurationRate + step) <= 10
+      @setState frameDurationRate: @state.frameDurationRate + step
+
+  clearFrameDurationInterval: () ->
+    if @state.frameDurationIntervalId
+      clearTimeout @state.frameDurationIntervalId
 
   handleFrameChange: (frame) ->
     @setState {frame}
