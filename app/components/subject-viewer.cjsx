@@ -159,22 +159,36 @@ module.exports = createReactClass
                     <i className="fa fa-play fa-lg fa-fw"></i>
                   </button>}
                 <div className="subject-frame-duration">
-                  <button aria-label="Slower" title="Slower" type="button" className="secret-button" onClick={@setFrameDuration.bind this, -0.25}>
+                  <button
+                    aria-label="Slower"
+                    className="secret-button"
+                    onKeyDown={@keyDownFrameDuration.bind this, -0.25}
+                    onMouseDown={@mouseDownFrameDuration.bind this, -0.25}
+                    title="Slower"
+                    type="button"
+                  >
                     <i className="fa fa-angle-right fa-lg fa-fw subject-frame-duration--slower"></i>
                   </button>
                   <input
-                    arial-label="Playback Speed Rate Adjustment"
+                    aria-label="Playback Speed Rate Adjustment"
                     className="subject-frame-duration--range"
                     id="frame-duration"
-                    min="0.25"
                     max="10"
+                    min="0.25"
                     name="frame-duration"
                     onChange={@handleFrameDurationChange}
                     step="0.25"
                     type="range"
                     value={@state.playFrameDurationRate}
                   />
-                  <button aria-label="Faster" title="Faster" type="button" className="secret-button" onClick={@setFrameDuration.bind this, 0.25}>
+                  <button
+                    aria-label="Faster"
+                    className="secret-button"
+                    onKeyDown={@keyDownFrameDuration.bind this, 0.25}
+                    onMouseDown={@mouseDownFrameDuration.bind this, 0.25}
+                    title="Faster"
+                    type="button"
+                  >
                     <i className="fa fa-angle-double-right fa-lg fa-fw subject-frame-duration--faster"></i>
                   </button>
                 </div>
@@ -303,9 +317,14 @@ module.exports = createReactClass
       setTimeout flip, 0
 
   handleFrameDurationChange: (event) ->
-    @setState playFrameDurationRate: event.target.value
+    @setState playFrameDurationRate: parseFloat(event.target.value)
 
-  setFrameDuration: (step) ->
+  keyDownFrameDuration: (step, event) ->
+    if event.which is 13 or event.which is 32
+      if 0.25 <= (@state.playFrameDurationRate + step) <= 10
+        @setState playFrameDurationRate: @state.playFrameDurationRate + step
+
+  mouseDownFrameDuration: (step) ->
     if 0.25 <= (@state.playFrameDurationRate + step) <= 10
       @setState playFrameDurationRate: @state.playFrameDurationRate + step
 
