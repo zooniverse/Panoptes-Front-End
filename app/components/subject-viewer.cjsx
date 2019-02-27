@@ -49,7 +49,6 @@ module.exports = createReactClass
     subject: null
     isFavorite: false
     user: null
-    playFrameDuration: 667
     playIterations: 3
     onFrameChange: NOOP
     onLoad: NOOP
@@ -68,6 +67,8 @@ module.exports = createReactClass
     playing: false
     frame: @getInitialFrame()
     frameDimensions: {}
+    frameDurationRate: 2
+    frameDurationIntervalId: null
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
 
@@ -149,7 +150,7 @@ module.exports = createReactClass
             {if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
               null
             else
-              <span className="subject-frame-play-controls">
+              <span>
                 {if @state.playing
                   <button aria-label="Pause" title="Pause" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, false}>
                     <i className="fa fa-pause fa-lg fa-fw"></i>
@@ -158,6 +159,44 @@ module.exports = createReactClass
                   <button aria-label="Play" title="Play" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, true}>
                     <i className="fa fa-play fa-lg fa-fw"></i>
                   </button>}
+                <div className="subject-frame-duration">
+                  <button
+                    aria-label="Slower"
+                    className="secret-button"
+                    onKeyDown={@keyDownFrameDuration.bind this, -0.25}
+                    onMouseDown={@mouseDownFrameDuration.bind this, -0.25}
+                    onMouseUp={@clearFrameDurationInterval}
+                    onMouseOut={@clearFrameDurationInterval}
+                    title="Slower"
+                    type="button"
+                  >
+                    <i className="fa fa-angle-right fa-lg fa-fw subject-frame-duration--slower"></i>
+                  </button>
+                  <input
+                    aria-label="Playback Speed Rate Adjustment"
+                    className="subject-frame-duration--range"
+                    id="frame-duration"
+                    max="10"
+                    min="0.25"
+                    name="frame-duration"
+                    onChange={@handleFrameDurationChange}
+                    step="0.25"
+                    type="range"
+                    value={@state.frameDurationRate}
+                  />
+                  <button
+                    aria-label="Faster"
+                    className="secret-button"
+                    onKeyDown={@keyDownFrameDuration.bind this, 0.25}
+                    onMouseDown={@mouseDownFrameDuration.bind this, 0.25}
+                    onMouseUp={@clearFrameDurationInterval}
+                    onMouseOut={@clearFrameDurationInterval}
+                    title="Faster"
+                    type="button"
+                  >
+                    <i className="fa fa-angle-double-right fa-lg fa-fw subject-frame-duration--faster"></i>
+                  </button>
+                </div>
               </span>}
           </span>
 
@@ -274,13 +313,32 @@ module.exports = createReactClass
       if @state.playing is on and (counter < flips or infiniteLoop is on)
         counter++
         @handleFrameChange (@state.frame + 1) %% totalFrames
-        setTimeout flip, @props.playFrameDuration
+        setTimeout flip, (1000 / @state.frameDurationRate)
         if counter is flips and infiniteLoop is off
           @setPlaying false
       else @setPlaying false
 
     if playing is on
       setTimeout flip, 0
+
+  handleFrameDurationChange: (event) ->
+    @setState frameDurationRate: parseFloat(event.target.value)
+
+  keyDownFrameDuration: (step, event) ->
+    if event.which is 13 or event.which is 32
+      @changeFrameDuration(step)
+
+  mouseDownFrameDuration: (step) ->
+    @clearFrameDurationInterval()
+    @setState frameDurationIntervalId: setInterval (=> @changeFrameDuration step), 100
+
+  changeFrameDuration: (step) ->
+    if 0.25 <= (@state.frameDurationRate + step) <= 10
+      @setState frameDurationRate: @state.frameDurationRate + step
+
+  clearFrameDurationInterval: () ->
+    if @state.frameDurationIntervalId
+      clearTimeout @state.frameDurationIntervalId
 
   handleFrameChange: (frame) ->
     @setState {frame}
