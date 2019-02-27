@@ -184,12 +184,8 @@ module.exports = createReactClass
             </span>
         </span>}
         <span>
-          {if @props.workflow?.configuration?.invert_subject && not @props.talkInvert
+          {if @props.workflow?.configuration?.invert_subject or @props.talkInvert
             <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleModification.bind this, 'invert'}>
-              <i className="fa fa-adjust "></i>
-            </button>}{' '}
-          {if @props.talkInvert
-            <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleInvert.bind this, @state.invert}>
               <i className="fa fa-adjust "></i>
             </button>}{' '}
           {if @props.workflow?.configuration?.enable_subject_flags
@@ -258,6 +254,9 @@ module.exports = createReactClass
     @setInFlipbookMode not @state.inFlipbookMode
 
   toggleModification: (type) ->
+    if type is 'invert'
+      @setState (prevState) -> { invert: !prevState.invert }
+
     mods = @state?.modification
     if !mods
       mods = {}
@@ -266,9 +265,6 @@ module.exports = createReactClass
     else
       mods[type] = not mods[type]
     @setState modification: mods
-
-  toggleInvert: (invert) ->
-    @setState invert: !invert
 
   setInFlipbookMode: (inFlipbookMode) ->
     @setState {inFlipbookMode}
