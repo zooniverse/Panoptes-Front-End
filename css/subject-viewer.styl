@@ -111,7 +111,10 @@
     // Talk
     .subject-container
       .subject-image-frame:only-child
-        img, video
+        img
+          filter: invert(100%)
+      .subject-video-frame:only-child
+        video
           filter: invert(100%)
 
   // Multi-image layouts
