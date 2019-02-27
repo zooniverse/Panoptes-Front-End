@@ -130,6 +130,8 @@ export default class PublicationsPage extends React.Component {
     const sideBarNav = counterpart('about.publications.nav');
     return (
       <div className="publications-page secondary-page-copy">
+        <p>To submit a new publication or update an existing one, please use <a href="https://docs.google.com/forms/d/e/1FAIpQLSdbAKVT2tGs1WfBqWNrMekFE5lL4ZuMnWlwJuCuNM33QO2ZYg/viewform" target="_blank" rel="noopener noreferrer" > this form</a>. We aim to post links to published papers that can be accessed by the public. Articles accepted for publication but not yet published are also fine.
+        </p>
         <aside className="secondary-page-side-bar">
           { this.renderSideBarNav(sideBarNav) }
         </aside>
