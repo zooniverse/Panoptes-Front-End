@@ -136,8 +136,8 @@ export default class PublicationsPage extends React.Component {
           { this.renderSideBarNav(sideBarNav) }
         </aside>
         <section className="publications-content">
-          <Markdown>{submitNewPublication}</Markdown>
           { this.renderHeading(sideBarNav) }
+          <Markdown>{submitNewPublication}</Markdown>
           { this.state.projects != null 
               ? this.renderProjects()
               : <Loading />
