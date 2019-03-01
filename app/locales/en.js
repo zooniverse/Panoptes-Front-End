@@ -279,7 +279,6 @@ export default {
         viewPublication: 'View publication.',
         viewOpenAccess: 'View open access version.'
       }
-
     },
     team: {
       nav: {
