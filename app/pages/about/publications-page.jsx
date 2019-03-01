@@ -3,6 +3,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import Publications from '../../lib/publications';
 import counterpart from 'counterpart';
 import Loading from '../../components/loading-indicator';
+import { Markdown } from 'markdownz';
 
 export default class PublicationsPage extends React.Component {
 
@@ -128,12 +129,14 @@ export default class PublicationsPage extends React.Component {
 
   render() {
     const sideBarNav = counterpart('about.publications.nav');
+    const submitNewPublication = counterpart('about.publications.content.submitNewPublication')
     return (
       <div className="publications-page secondary-page-copy">
         <aside className="secondary-page-side-bar">
           { this.renderSideBarNav(sideBarNav) }
         </aside>
         <section className="publications-content">
+          <Markdown>{submitNewPublication}</Markdown>
           { this.renderHeading(sideBarNav) }
           { this.state.projects != null 
               ? this.renderProjects()
