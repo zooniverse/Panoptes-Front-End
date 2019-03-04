@@ -24,6 +24,7 @@ const SubjectPage = (props) => {
                 project={props.project}
                 linkToFullImage={true}
                 metadataFilters={['#']}
+                talkInvert={true}
                 isFavorite={props.isFavorite}
               />
 
