@@ -1,5 +1,6 @@
 export default {
   en: 'English',
+  ar: 'العربية',
   cs: 'Čeština',
   de: 'Deutsch',
   es: 'Español',
