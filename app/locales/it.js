@@ -272,7 +272,8 @@ export default {
       content: {
         header: {
           showAll: 'Tutte le pubblicazioni'
-        }
+        },
+        submitNewPublication: 'To submit a new publication or update an existing one, please use [this form](https://docs.google.com/forms/d/e/1FAIpQLSdbAKVT2tGs1WfBqWNrMekFE5lL4ZuMnWlwJuCuNM33QO2ZYg/viewform). We aim to post links to published papers that can be accessed by the public. Articles accepted for publication but not yet published are also fine.'
       },
       publication: {
         viewPublication: 'Leggi pubblicazioni.',
