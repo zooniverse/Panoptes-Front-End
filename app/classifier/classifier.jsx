@@ -133,11 +133,14 @@ class Classifier extends React.Component {
     const subjectViewerProps = {
       subject: this.props.subject,
       workflow: this.props.workflow,
+      project: this.props.project,
+      user: this.props.user,
       preferences: this.props.preferences,
       annotations: annotations,
       annotation: {},
       frame: 0,
       frameWrapper: FrameAnnotator,
+      showCollect: false,
       zoomControls: false
     };
 

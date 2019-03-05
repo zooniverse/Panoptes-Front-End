@@ -58,6 +58,7 @@ module.exports = createReactClass
     frameWrapper: null
     allowFlipbook: true
     allowSeparateFrames: false
+    showCollect: true
     talkInvert: false
     metadataPrefixes: ['#', '!']
     metadataFilters: ['#', '!']
@@ -238,13 +239,14 @@ module.exports = createReactClass
               </button>{' '}
             </span>}
           {if @props.subject?
-            if  @props.user?
+            if @props.user?
               <span>
                 {if @props.project? and not @props.workflow?.configuration?.disable_favorites
                   <span>
                     <FavoritesButton className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} isFavorite={@props.isFavorite} />{' '}
                   </span>}
-                <CollectionsManagerIcon className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />
+                {if @props.showCollect
+                  <CollectionsManagerIcon className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />}
               </span>
             else
               <span>
