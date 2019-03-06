@@ -46,7 +46,9 @@ function awaitWorkflow(workflowId) {
 }
 
 function createNewClassification(project, workflow, subject, goldStandardMode) {
+  // Record whether this subject was received from Sugar or from the Panoptes API.
   const source = subject.metadata.intervention ? 'sugar' : 'api';
+  // Delete the metadata key because we don't want volunteers to see it.
   subject.update({ 'metadata.intervention': undefined });
   const classification = apiClient.type('classifications').create({
     annotations: [],
