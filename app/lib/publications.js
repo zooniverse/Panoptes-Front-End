@@ -302,6 +302,16 @@ const Publications = {
         citation: "The K2-138 System: A Near-Resonant Chain of Five Sub-Neptune Planets Discovered by Citizen Scientists, Christiansen+ 2018.",
         href: "https://arxiv.org/abs/1801.03874",
         date: "January 11, 2018"
+        },
+        {
+         citation: "K2-288Bb: A small Temperate Planet in a Low-mass Binary System Discovered by Citizen Scientists"
+         href: "https://arxiv.org/abs/1902.02789"
+         date: "February 2019"
+        },
+        {
+          citation: "Catalog of New K2 Exoplanet Candidates from Citizen Scientists"
+          href: "https://ui.adsabs.harvard.edu/#abs/2019RNAAS...3b..43Z/abstract"
+          date: "February  2019"
         }
       ]
     },
