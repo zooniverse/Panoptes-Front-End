@@ -302,6 +302,16 @@ const Publications = {
         citation: "The K2-138 System: A Near-Resonant Chain of Five Sub-Neptune Planets Discovered by Citizen Scientists, Christiansen+ 2018.",
         href: "https://arxiv.org/abs/1801.03874",
         date: "January 11, 2018"
+        },
+        {
+         citation: "K2-288Bb: A small Temperate Planet in a Low-mass Binary System Discovered by Citizen Scientists",
+         href: "https://arxiv.org/abs/1902.02789",
+         date: "February 2019"
+        },
+        {
+          citation: "Catalog of New K2 Exoplanet Candidates from Citizen Scientists",
+          href: "https://ui.adsabs.harvard.edu/#abs/2019RNAAS...3b..43Z/abstract",
+          date: "February  2019"
         }
       ]
     },
@@ -513,6 +523,16 @@ const Publications = {
           citation: "Planet Hunters: Assessing the Kepler Inventory of Short-period Planets, Schwamb+ 2012.",
           href: "http://adsabs.harvard.edu/abs/2012ApJ...754..129S",
           date: "Aug 2012"
+        },
+        {
+          citation: "WASP-47: A Hot Jupiter System with Two Additional Planets Discovered by K2, Becker et al. 2015",
+          href: "https://arxiv.org/abs/1508.02411",
+          date: "Feb 2015"
+        },
+        {
+           citation: "Likely transiting exocomets detected by Kepler, Rappaport et al., 2017",
+           href: "http://arxiv.org/abs/1708.06069",
+           date: "June 2017"
         }
       ]
     },
