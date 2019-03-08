@@ -1,6 +1,5 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import Publications from '../../lib/publications';
 import counterpart from 'counterpart';
 import Loading from '../../components/loading-indicator';
 import { Markdown } from 'markdownz';
@@ -26,8 +25,8 @@ export default class PublicationsPage extends React.Component {
 
   projectSlugs() {
     const slugs = [];
-    Object.keys(Publications).forEach((category) => {
-      Publications[category].forEach((project) => {
+    Object.keys(this.props.publications).forEach((category) => {
+      this.props.publications[category].forEach((project) => {
         slugs.push(project.slug);
       });
     });
@@ -72,9 +71,9 @@ export default class PublicationsPage extends React.Component {
 
   renderHeading(sideBarNav) {
     return (
-      <h2> 
-        { this.state.currentSort === 'showAll' 
-            ? counterpart('about.publications.content.header.showAll') 
+      <h2>
+        { this.state.currentSort === 'showAll'
+            ? counterpart('about.publications.content.header.showAll')
             : sideBarNav[this.state.currentSort]
         }
       </h2>
@@ -83,19 +82,19 @@ export default class PublicationsPage extends React.Component {
 
   renderProjects() {
     return (
-      Object.keys(Publications).map((category) => {
+      Object.keys(this.props.publications).map((category) => {
         if (this.state.currentSort === category || this.state.currentSort === 'showAll') {
           return (
             <div key={category} className="publications-list">
               {
-                Publications[category].map((projectListing) => {
-                  const project = this.state.projects[projectListing.slug]; 
+                this.props.publications[category].map((projectListing) => {
+                  const project = this.state.projects[projectListing.slug];
                   return (
                     <div key={projectListing.name !== undefined ? projectListing.name : projectListing.slug}>
                       <div>
                         <h3 className="project-name">
-                          { project !== undefined  
-                              ? project.display_name 
+                          { project !== undefined
+                              ? project.display_name
                               : projectListing.name
                           }
                         </h3>
@@ -113,7 +112,7 @@ export default class PublicationsPage extends React.Component {
                               </p>
                             </div>
                           </li>
-                        ))}                        
+                        ))}
                       </ul>
                     </div>
                   );
@@ -138,7 +137,7 @@ export default class PublicationsPage extends React.Component {
         <section className="publications-content">
           { this.renderHeading(sideBarNav) }
           <Markdown>{submitNewPublication}</Markdown>
-          { this.state.projects != null 
+          { this.state.projects != null
               ? this.renderProjects()
               : <Loading />
           }
@@ -151,4 +150,4 @@ export default class PublicationsPage extends React.Component {
     const src = project !== undefined ? `//${project.avatar_src}` : '/assets/simple-avatar.png';
     return <img src={src} alt="Project Avatar" />;
   }
-} 
+}
