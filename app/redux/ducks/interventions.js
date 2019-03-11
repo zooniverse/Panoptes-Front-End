@@ -54,6 +54,8 @@ function prependSubjectQueue(data) {
       return [];
     })
     .then(subjects => subjects.map((subject) => {
+      /* record that this subject was added by an intervention, rather than
+      queued from the API. */
       subject.update({ 'metadata.intervention': true });
       return subject;
     }))

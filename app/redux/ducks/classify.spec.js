@@ -11,6 +11,16 @@ global.innerHeight = 1000;
 global.sessionStorage = new FakeLocalStorage();
 sessionStorage.setItem('session_id', JSON.stringify({ id: 0, ttl: 0 }));
 
+function mockSubject(id) {
+  return mockPanoptesResource('subjects', {
+    id,
+    locations: [],
+    metadata: {
+      intervention: true
+    },
+  });
+}
+
 describe('Classifier actions', function () {
   describe('add intervention', function () {
     const action = {
@@ -42,10 +52,16 @@ describe('Classifier actions', function () {
     });
   });
   describe('append subjects', function () {
+    const subjects = [
+        mockSubject('3'),
+        mockSubject('4'),
+        mockSubject('1'),
+        mockSubject('2')
+      ]
     const action = {
       type: 'pfe/classify/APPEND_SUBJECTS',
       payload: {
-        subjects: [1, 2],
+        subjects: [subjects[2], subjects[3]],
         workflowID: '1'
       }
     };
@@ -68,10 +84,10 @@ describe('Classifier actions', function () {
     it('should append subjects if the workflow ID does match', function () {
       const state = {
         workflow: { id: '1'},
-        upcomingSubjects: [3, 4]
+        upcomingSubjects: [subjects[0], subjects[1]]
       };
       const newState = reducer(state, action);
-      expect(newState.upcomingSubjects).to.deep.equal([3, 4, 1, 2]);
+      expect(newState.upcomingSubjects).to.deep.equal(subjects);
     });
     it('should add subjects to an empty queue', function () {
       const state = {
@@ -79,14 +95,20 @@ describe('Classifier actions', function () {
         upcomingSubjects: []
       };
       const newState = reducer(state, action);
-      expect(newState.upcomingSubjects).to.deep.equal([1, 2]);
+      expect(newState.upcomingSubjects).to.deep.equal(action.payload.subjects);
     });
   });
   describe('prepend subjects', function () {
+    const subjects = [
+      mockSubject('3'),
+      mockSubject('1'),
+      mockSubject('2'),
+      mockSubject('4')
+    ]
     const action = {
       type: 'pfe/classify/PREPEND_SUBJECTS',
       payload: {
-        subjects: [1, 2],
+        subjects: [subjects[1], subjects[2]],
         workflowID: '1'
       }
     };
@@ -109,10 +131,10 @@ describe('Classifier actions', function () {
     it('should prepend subjects if the workflow ID does match', function () {
       const state = {
         workflow: { id: '1'},
-        upcomingSubjects: [3, 4]
+        upcomingSubjects: [subjects[0], subjects[3]]
       };
       const newState = reducer(state, action);
-      expect(newState.upcomingSubjects).to.deep.equal([3, 1, 2, 4]);
+      expect(newState.upcomingSubjects).to.deep.equal(subjects);
     });
     it('should add subjects to an empty queue', function () {
       const state = {
@@ -120,10 +142,11 @@ describe('Classifier actions', function () {
         upcomingSubjects: []
       };
       const newState = reducer(state, action);
-      expect(newState.upcomingSubjects).to.deep.equal([1, 2]);
+      expect(newState.upcomingSubjects).to.deep.equal(action.payload.subjects);
     });
   });
   describe('next subject', function () {
+    const subjects = [mockSubject('1'), mockSubject('2')]
     const action = {
       type: 'pfe/classify/NEXT_SUBJECT',
       payload: {
@@ -134,7 +157,7 @@ describe('Classifier actions', function () {
       const state = {
         classification: { id: '1' },
         workflow: { id: '1' },
-        upcomingSubjects: [1]
+        upcomingSubjects: [subjects[0]]
       };
       it('should empty the queue', function () {
         const newState = reducer(state, action);
@@ -152,24 +175,11 @@ describe('Classifier actions', function () {
     describe('with multiple subjects in the queue', function () {
       const state = {
         workflow: { id: '1' },
-        upcomingSubjects: [{
-          id: '1',
-          locations: [],
-          metadata: []
-        },
-        {
-          id: '2',
-          locations: [],
-          metadata: []
-        }]
+        upcomingSubjects: subjects
       };
       it('should shift the first subject off the queue', function () {
         const newState = reducer(state, action);
-        expect(newState.upcomingSubjects).to.deep.equal([{
-          id: '2',
-          locations: [],
-          metadata: []
-        }]);
+        expect(newState.upcomingSubjects).to.deep.equal([subjects[1]]);
       });
       it('should create a classification for the next subject in the queue', function () {
         const newState = reducer(state, action);
@@ -188,18 +198,7 @@ describe('Classifier actions', function () {
     const state = {
       classification: { id: '1' },
       workflow: { id: '1' },
-      upcomingSubjects: [{
-        id: '1',
-        locations: [],
-        metadata: [],
-        destroy: function () {}
-      },
-      {
-        id: '2',
-        locations: [],
-        metadata: [],
-        destroy: function () {}
-      }]
+      upcomingSubjects: [mockSubject('1'), mockSubject('2')]
     };
     it('should set the classification to null', function () {
       const newState = reducer(state, action);
@@ -220,19 +219,13 @@ describe('Classifier actions', function () {
     const state = {
       classification: { id: '1' },
       workflow: { id: '1' },
-      upcomingSubjects: [{
-        id: '1',
-        locations: [],
-        metadata: [],
-        destroy: function () {}
-      },
-      {
-        id: '2',
-        locations: [],
-        metadata: [],
-        destroy: function () {}
-      }]
+      upcomingSubjects: []
     };
+
+    beforeEach(function () {
+      state.upcomingSubjects = [mockSubject('1'), mockSubject('2')];
+    });
+
     it('should create a classification for the first subject in the queue', function () {
       const newState = reducer(state, action);
       expect(newState.classification.links.subjects).to.deep.equal(['1']);
@@ -249,6 +242,15 @@ describe('Classifier actions', function () {
       const newState = reducer(state, action);
       expect(newState.intervention).to.be.null;
     });
+    it('should clear the subject intervention flag', function () {
+      const newState = reducer(state, action);
+      const currentSubject = newState.upcomingSubjects[0]
+      expect(currentSubject.metadata.intervention).to.be.undefined;
+    });
+    it('should record the subject source as metadata.source', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.source).to.equal('sugar');
+    });
     it('should do nothing if the queue is empty', function () {
       state.upcomingSubjects = [];
       const newState = reducer(state, action);
@@ -256,18 +258,8 @@ describe('Classifier actions', function () {
     });
   });
   describe('resume classification', function () {
-    const subject1 = {
-      id: '1',
-      locations: [],
-      metadata: [],
-      destroy: function () {}
-    };
-    const subject2 = {
-      id: '2',
-      locations: [],
-      metadata: [],
-      destroy: function () {}
-    };
+    const subject1 = mockSubject('1');
+    const subject2 = mockSubject('2');
     const action = {
       type: 'pfe/classify/RESUME_CLASSIFICATION',
       payload: {
@@ -316,14 +308,9 @@ describe('Classifier actions', function () {
           a: {}
         }
       },
-      upcomingSubjects: [1, 2]
+      upcomingSubjects: [mockSubject('1'), mockSubject('2')]
     };
-    const subject = {
-      id: '2',
-      locations: [],
-      metadata: [],
-      destroy: function () {}
-    };
+    const subject = mockSubject('2');
     it('should mark the workflow subject as seen', function () {
       expect(seenThisSession.check(state.workflow, subject)).to.be.false;
       const newState = reducer(state, action);
@@ -366,7 +353,7 @@ describe('Classifier actions', function () {
           a: {}
         }
       },
-      upcomingSubjects: [1, 2]
+      upcomingSubjects: [mockSubject('1'), mockSubject('2')]
     };
     it('should add new keys to classification metadata', function () {
       const newState = reducer(state, action);
@@ -391,7 +378,7 @@ describe('Classifier actions', function () {
     const state = {
       classification: { id: '1' },
       workflow: { id: '1' },
-      upcomingSubjects: [1, 2]
+      upcomingSubjects: [mockSubject('1'), mockSubject('1')]
     };
     it('should store the specified workflow', function () {
       const newState = reducer(state, action);
@@ -408,7 +395,7 @@ describe('Classifier actions', function () {
     const state = {
       classification: mockPanoptesResource('classifications', {}),
       workflow: { id: '1' },
-      upcomingSubjects: [1, 2]
+      upcomingSubjects: [mockSubject('1'), mockSubject('2')]
     };
     it('should add annotations to the classification', function () {
       const newState = reducer(state, action);
@@ -465,18 +452,7 @@ describe('Classifier actions', function () {
       classification: null,
       goldStandardMode: false,
       intervention: null,
-      upcomingSubjects: [{
-        id: '1',
-        locations: [],
-        metadata: [],
-        destroy: function () {}
-      },
-      {
-        id: '2',
-        locations: [],
-        metadata: [],
-        destroy: function () {}
-      }],
+      upcomingSubjects: [mockSubject('1'), mockSubject('2')],
       workflow: { id: 'b' }
     };
     const fakeDispatch = sinon.stub().callsFake(function (action) {
