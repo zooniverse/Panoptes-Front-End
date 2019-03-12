@@ -245,12 +245,7 @@ class ProjectStatus extends Component {
       return <LoadingIndicator />;
     }
 
-    let projectState;
-    if (project.state === '') {
-      projectState = 'live';
-    } else {
-      projectState = project.state;
-    }
+    const projectState = project.state || 'live';
 
     return (
       <div className="project-status">
