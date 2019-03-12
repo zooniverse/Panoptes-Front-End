@@ -2,7 +2,7 @@ export default {
   loading: '(Cargando)',
   classifier: {
     back: 'Atrás',
-    backButtonWarning: 'Al ir atrás se borrará tu trabajo para la tarea actual.',
+    backButtonWarning: 'Al regresar se borrará su trabajo para la tarea actual.',
     close: 'Cerrar',
     continue: 'Continuar',
     detailsSubTaskFormSubmitButton: 'OK',
@@ -22,14 +22,14 @@ export default {
     miniCourseButton: 'Reiniciar el mini-curso del proyecto',
     workflowAssignmentDialog: {
       promotionMessage: "¡Felicitaciones! Has desbloqueado la próxima secuencia de trabajo. Si prefieres seguir en la secuencia actual, puedes escoger permanecer.",
-      acceptButton: 'Take me to the next level!',
+      acceptButton: '¡Ir al siguiente nivel!',
       declineButton: 'No, gracias'
     }
   },
   project: {
     language: 'Idioma',
-    loading: 'Cargando proyecto',
-    disclaimer: 'Este proyecto ha sido construido usando Zooniverse Project Builder, pero todavía no es un proyecto oficial de Zooniverse. Preguntas y problemas relacionadas con este proyecto dirigidas al equipo de Zooniverse podrían no recibir respuesta.',
+    loading: 'Cargando el proyecto',
+    disclaimer: 'Este proyecto ha sido construido usando Zooniverse Project Builder, pero todavía no es un proyecto oficial de Zooniverse. Las preguntas y asuntos relacionados con este proyecto dirigidos al equipo de Zooniverse podrían no recibir respuesta.',
     about: {
       header: 'Acerca de',
       nav: {
@@ -64,15 +64,15 @@ export default {
         statistics: 'Estadística de %(title)s',
         classifications: 'Clasificaciones',
         volunteers: 'Voluntarios',
-        completedSubjects: 'Casos completados',
-        subjects: 'Casos'
+        completedSubjects: 'Sujetos completados',
+        subjects: 'Sujetos'
       },
       talk: {
-        zero: 'Nadie está hablando de **%(title)s** ahora mismo.',
-        one: '**1** persona está hablando de  **%(title)s** ahora mismo.',
-        other: '**%(count)s** personas están hablando de **%(title)s** ahora mismo.'
+        zero: 'Nadie está hablando de **%(title)s** ahora.',
+        one: '**1** persona está hablando de  **%(title)s** ahora.',
+        other: '**%(count)s** personas están hablando de **%(title)s** ahora.'
       },
-      joinIn: 'Participa',
+      joinIn: 'Unirse',
       learnMore: 'Aprende más',
       getStarted: 'Comenzar',
       workflowAssignment: 'Has desbloqueado %(workflowDisplayName)s',
@@ -82,7 +82,7 @@ export default {
   },
   organization: {
     loading: 'Cargando organización',
-    error: 'Hubo un error al recuperar organización',
+    error: 'Hubo un error al recuperar la organización',
     notFound: 'organización no encontrada.',
     notPermission: 'Si la dirección es correcta, podrías no tener los permisos para ver esta organización.',
     pleaseWait: 'Espere por favor...',
@@ -92,7 +92,7 @@ export default {
         error: 'Hubo un error al cargar los proyectos de la organización.',
         none: 'No hay proyectos asociados a esta organización.'
       },
-      viewToggle: 'Vista del Voluntario',
+      viewToggle: 'Ver como Voluntario',
       introduction: 'Introducción',
       readMore: 'Leer más',
       readLess: 'Leer menos',
@@ -103,89 +103,89 @@ export default {
     less: 'Menos',
     more: 'Más',
     shortcut: {
-      noAnswer: "No hay respuesta"
+      noAnswer: "Sin respuesta"
     },
     survey: {
-      clear: 'Limpiar',
-      clearFilters: 'Limpiar filtros',
+      clear: 'Borrar',
+      clearFilters: 'Borrar filtros',
       makeSelection: 'Haz una selección',
       showing: 'Mostrando %(count)s de %(max)s',
-      confused: 'A menudo confundido con',
+      confused: 'Frecuentemente confundido con',
       dismiss: 'Descartar',
       itsThis: 'Pienso que es esto',
       cancel: 'Cancelar',
       identify: 'Identificar',
-      surveyOf: 'Relevamiento de %(count)s',
+      surveyOf: 'Estudio de %(count)s',
       identifications: {
-        zero: 'No hay identificaciones',
+        zero: 'Ninguna identificación',
         one: '1 identificación',
         other: '%(count)s identificaciones'
       }
     }
   },
   privacy: {
-    title: 'Zooniverse User Agreement and Privacy Policy',
+    title: 'Términos de uso y política de privacidad de Zooniverse',
     userAgreement: {
-      summary: '## User Agreement\n**Summary**\n\nThe Zooniverse is a suite of citizen science projects operated by the Citizen Science Alliance (CSA), which support scientific research by involving members of the public - you - in the processes of analyzing and discussing data. Data from these projects is used to study online community design and theory, interface design, and other topics. This document describes what will happen to your contributions if you choose to contribute and what data we collect, how we use it and how we protect it.',
-      contribution: '**What you agree to if you contribute to the Zooniverse**\n\nProjects involving the public are needed to enable researchers to cope with the otherwise unmanageable flood of data. The web provides a means of reaching a large audience willing to devote their free time to projects that can add to our knowledge of the world and the Universe.\n\nThe major goal for this project is for the analyzed data to be available to the researchers for use, modification and redistribution in order to further scientific research. Therefore, if you contribute to the Zooniverse, you grant the CSA and its collaborators, permission to use your contributions however we like to further this goal, trusting us to do the right thing with your data. However, you give us this permission non-exclusively, meaning that you yourself still own your contribution.\n\nWe ask you to grant us these broad permissions, because they allow us to change the legal details by which we keep the data available; this is important because the legal environment can change and we need to be able to respond without obtaining permission from every single contributor.\n\nFinally, you must not contribute data to the Zooniverse that you do not own. For example, do not copy information from published journal articles. If people do this, it can cause major legal headaches for us.',
-      data: '**What you may do with Zooniverse data**\n\nYou retain ownership of any contribution you make to the Zooniverse, and any recorded interaction with the dataset associated with the Zooniverse. You may use, distribute or modify your individual contribution in any way you like. However, you do not possess ownership of the dataset itself. This license does not apply to data about you, covered in the Privacy Policy.',
-      legal: '**Legal details**\n\nBy submitting your contribution to the Zooniverse, you agree to grant the CSA a perpetual, royalty-free, non-exclusive, sub-licensable license to: use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, and exercise all copyright and publicity rights with respect to your contribution worldwide and/or to incorporate your contribution in other works in any media now known or later developed for the full term of any rights that may exist in your contribution.\n\nIf you do not want to grant to the CSA the rights set out above, you cannot interact with the Zooniverse.\n\nBy interacting with the Zooniverse, you:\n\n* Warrant that your contribution contains only data that you have the right to make available to the CSA for all the purposes specified above, is not defamatory, and does not infringe any law; and\n\n* Indemnify the CSA against all legal fees, damages and other expenses that may be incurred by the CSA as a result of your breach of the above warranty; and\n\n* Waive any moral rights in your contribution for the purposes specified above.\n\nThis license does not apply to data about you, covered in the Privacy Policy.'
+      summary: '## Acuerdo del Usuario\n**Resumen**\n\nZooniverse es una suite de proyectos de ciencia ciudadana operada por la Citizen Science Alliance (CSA), que apoya la investigación científica involucrando a miembros del público (usted) en los procesos de análisis y discusión de datos. Los datos de estos proyectos se utilizan para estudiar diseño y teoría de comunidades virtuales, diseño de interfaces y otros temas. Este documento describe lo que sucederá con sus contribuciones si usted decide contribuir y qué datos recopilamos, cómo los usamos y cómo los protegemos.',
+      contribution: '**Lo que usted acepta si colabora con Zooniverse**\n\nLos proyectos que involucran al público son necesarios para que los investigadores puedan trabajar con cantidades de datos que de otra manera serían inmanejables. La red proporciona un medio para alcanzar a una gran audiencia dispuesta a dedicar su tiempo libre a proyectos que pueden contribuir a nuestro conocimiento del mundo y el universo.\n\nLa meta principal de este proyecto es que los datos analizados estén disponibles para que los investigadores los utilicen, modifiquen y redistribuyan para posteriores investigaciones científicas. Por lo tanto, si usted colabora con Zooniverse, le otorga permiso a la CSA y a sus colaboradores para utilizar sus contribuciones en cualquier forma para avanzar en esta meta, confiando en que haremos lo correcto con sus datos. Sin embargo, usted otorga este permiso de forma no exclusiva, lo que significa que usted sigue siendo dueño de su contribución.\n\nLe pedimos que nos otorgue estos permisos porque esto nos permite cambiar los detalles legales que rigen la forma en que aseguramos que los datos sigan siendo disponibles. Esto es importante debido a que el ambiente legal puede cambiar y necesitamos ser capaces de responder a estos cambios sin obtener permiso de cada uno de los contribuyentes.\n\nPor último, usted no debe entregar datos a Zooniverse que no sean de su propiedad. Por ejemplo, no copie información de artículos publicados en revistas especializadas. Si las personas hacen esto, nos pueden causar fuertes dolores de cabeza legales.',
+      data: '**Lo que usted puede hacer con los datos de Zooniverse**\n\nUsted mantiene la propiedad de cualquier contribución que haga para Zooniverse y de cualquier interacción registrada con el conjunto de datos asociados a Zooniverse. Usted puede utilizar, redistribuir o modificar su contribución individual en la forma que desee. Sin embargo, usted no tiene la propiedad del conjunto de datos en sí. Esta licencia no aplica a los datos acerca de usted que se cubren en la política de privacidad.',
+      legal: '**Detalles legales**\n\nAl enviar su contribución a Zooniverse, usted acepta otorgar a la CSA una licencia perpetua, libre de regalías, no exclusiva, sublicenciable para: utilizar, reproducir, modificar, adaptar, publicar, traducir, crear trabajos derivados de, distribuir y ejercer todos los derechos de autor y publicidad con respecto a su contribución en cualquier parte del mundo y/o incorporar su contribución a otros trabajos en cualquier medio conocido actualmente o creado posteriormente durante el periodo completo de cualquier derecho que pudiera existir en su contribución.\n\nSi usted no desea otorgar a la CSA los derechos expuestos anteriormente, no puede interactuar con Zooniverse.\n\nAl interactuar con Zooniverse, usted:\n\n* Garantiza que su contribución contiene únicamente datos sobre los que tiene derechos para poner a disponibilidad de la CSA para todos los propósitos especificados anteriormente, y no es difamatoria ni infringe ley alguna; e\n\n* Indemniza a la CSA contra cualquier honorario legal, daño u otros gastos en que pudiera incurrir la CSA como resultado de su incumplimiento de la garantía anterior; y\n\n* Renuncia a cualquier derecho moral de su contribución para los fines especificados anteriormente.\n\nEsta licencia no aplica a los datos acerca de usted que se cubren en la política de privacidad.'
     },
     privacyPolicy: {
-      intro: '## Privacy Policy\n\nIn addition to the contributions you make towards the scientific goals of the Zooniverse, we collect additional data about you to support and improve the operation of the project. We also conduct experiments on the design of the website that we evaluate based on your reactions and behavior. This Privacy Policy describes what data we collect, how we use it and how we protect it.\n\nWe respect the privacy of every individual who participates in the Zooniverse. We operate in accordance with the United Kingdom Data Protection Act 1998 and the Freedom of Information Act 2000, as well as with United States regulations regarding protection of human subjects in research.',
-      data: '**Data we collect**\n\n_Identifying information_: If you register with the Zooniverse, we ask you to create a username and supply your e-mail address. Your e-mail address is not visible to other users, but others will see your username in various contexts. Notably, your username is associated with any classifications or other contributions you make, e.g., on Talk pages. You may optionally provide your real name to be included when we publically thank participants, e.g., in presentations, publications or discoveries.\n\n_Usage information_: We also monitor how people use our website, and aggregate general statistics about users and traffic patterns as well as data about how users respond to various site features. This includes, among other things, recording:\n\n* When you log in.\n\n* Pages you request.\n\n* Classifications you make.\n\n* Other contributions, such as posts on Talk pages.\n\nIf you register and log in, the logs associate these activities with your username. Otherwise, they are associated with your IP address. In order to collect this data, we may use software that collects statistics from IP data. This software can determine what times of day people access our site, which country they access the websites from, how long they visit for, what browser they are using, etc.',
-      info: '**What we do with the information we gather**\n\nUsage information is collected to help us improve our website in particular for the following reasons:\n\n* Internal record keeping.\n\n* We may periodically send email promoting new research-related projects or other information relating to our research. Information about these contacts is given below. We will not use your contact information for commercial purposes.\n\n* We may use the information to customize the website.\n\n* We may use the information to conduct experiments regarding the use of various site features.',
-      thirdParties: '**What is shared with third parties**\n\nWe will never release e-mail addresses to third parties without your express permission. We will also never share data we collect about you unless (a) it cannot be associated with you or your username, and (b) it is necessary to accomplish our research goals. Specifically, we may share your anonymized data with research study participants, other researchers, or in scholarly work describing our research. For example, we might use one of your classifications as an illustration in a paper, show some of your classifications to another user to see if they agree or disagree, or publish statistics about user interaction.\n\nContributions you make to the Talk pages are widely available to others. Aside from the above, information is held as confidentially as is practical within our secured database.',
-      cookies: '**How we use cookies**\n\nIn some areas of our site, a cookie may be placed on your computer. A cookie is a small file that resides on your computer\'s hard drive that allows us to improve the quality of your visit to our websites by responding to you as an individual.\n\nWe use traffic log cookies to identify which pages are being used and improve our website. We only use this information for statistical analysis purposes, they are not shared with other sites and are not used for advertisements.\n\nYou can choose to accept or decline cookies. Most web browsers automatically accept cookies, but you can usually modify your browser setting to decline cookies if you prefer. However, if you choose to decline cookies from the Zooniverse then functionality, including your ability to log-in and participate, will be impaired.\n\nAcceptance of cookies is implied if you continue to access our website without adjusting your browser settings.',
-      dataStorage: '**Where we store your data**\n\nWe use Amazon Web Services so we can quickly and reliably serve our website to an unpredictable number of people. This means that your data will be stored in multiple locations, including the United States of America (USA). Amazon is a participant in the Safe Harbor program developed by the USA Department of Commerce and the European Union (EU). Amazon has certified that it adheres to the Safe Harbor Privacy Principles agreed upon by the USA and the EU.\n\nOur mailing list server, which contains a copy of subscribed email addresses and no other personal data, is hosted on a virtual private server with Linode in the UK.',
-      security: '**Security measures**\n\nMembers of the research teams are made aware of our privacy policy and practices by reviewing this statement upon joining the team. We follow industry best practices to secure user data, and access to the database and logs are limited to members of the research group and system administrative staff.',
-      dataRemoval: '**Removing your data**\n\nDue to the way in which we archive data, it is generally not possible to completely remove your personal data from our systems. However, if you have specific concerns, please contact us and we will see what we can do.',
-      contactUser: '**When we will contact you**\n\nIf you do not register, we will never contact you. If you do register, we will contact you by e-mail in the following circumstances:\n\n* Occasionally, we will send e-mail messages to you highlighting a particular aspect of our research, announcing new features, explaining changes to the system, or inviting you to special events.\n\n* We may also use your information to contact you for the purpose of research into our site\'s operation. We may contact you by email. We may ask for additional information at that time. Providing additional information is entirely optional and will in no way affect your service in the site.\n\n* We may contact you with a newsletter about the progress of the project.\n\nYou are unlikely to receive more than two messages per month.\n\nYou can \'opt out\' of the newsletter at any time by visiting the Zooniverse [unsubscribe](https://www.zooniverse.org/unsubscribe) page.',
-      furtherInfo: '**Further information and requests**\n\nThe Data Controller is the Department of Physics, University of Oxford. For a copy of the information we hold on you please contact the project team at the address below:\n\nProfessor Chris Lintott\nOxford Astrophysics\nDenys Wilkinson Building\nKeble Road\nOxford, OX1 3RH\nUnited Kingdom'
+      intro: '## Política de privacidad\n\nAdemás de las contribuciones que usted haga para los objetivos científicos de Zooniverse, nosotros recopilamos datos adicionales acerca de usted para apoyar y mejorar la operación del proyecto. También llevamos a cabo experimentos sobre el diseño del sitio web que evaluamos con base en sus reacciones y comportamiento. Esta política de privacidad describe los datos que recopilamos, cómo los usamos y cómo los protegemos.\n\nNosotros respetamos la privacidad de todo individuo que participa en Zooniverse. Nosotros operamos de acuerdo con la ley de protección de datos del Reino Unido de 1998 (United Kingdom Data Protection Act 1998) y la ley de libertad de información de 2000 (Freedom of Information Act 2000), así como con la regulación de Estados Unidos con respecto a la protección de sujetos humanos de investigación.',
+      data: '**Los datos que recopilamos**\n\n_Identificando información_: Si usted se registra en Zooniverse, le pedimos que cree un nombre de usuario y proporcione una dirección de correo electrónico. Su dirección de correo electrónico no es visible para otros usuarios, pero otros verán su nombre de usuario en varios contextos. En particular, su nombre de usuario se asocia a cualquier clasificación u otra contribución que usted realice, por ejemplo, en las páginas para Hablar (o Hablemos). De forma opcional, usted puede proporcionar su nombre real para incluirlo cuando agradezcamos públicamente a los participantes, por ejemplo, en presentaciones, publicaciones o descubrimientos.\n\n_Uso de la información_: También monitoreamos cómo las personas utilizan nuestro sitio web y agregamos estadísticas generales acerca de los usuarios y patrones de tráfico, así como datos sobre cómo los usuarios responden a varias características del sitio. Esto incluye, entre otras cosas, el registro de:\n\n* Cuándo inicia una sesión.\n\n* Las páginas que visita.\n\n* Las clasificaciones que realiza.\n\n* Otras contribuciones como publicaciones en páginas para Hablar.\n\nSi usted se registra e inicia una sesión, el sitio vincula estas actividades con su nombre de usuario. Si no se registra, su actividad será vinculada con su dirección IP. Para recopilar estos datos, podríamos utilizar software que recopila estadísticas de datos IP. Este software puede determinar en qué horas del día las personas acceden a nuestro sitio, de qué país acceden a los sitios web, cuánto duran sus visitas, qué navegador utilizan, etc.',      
+      info: '**Lo que hacemos con la información que recolectamos**\n\nLa información de uso se recopila para ayudarnos a mejorar nuestro sitio web, en particular por las razones siguientes:\n\n* Mantenimiento del registro interno\n\n* Periódicamente podemos enviar correos electrónicos que promuevan nuevos proyectos de investigación u otra información referente a nuestras actividades. La información sobre estos contactos se proporciona más adelante. No utilizaremos su información de contacto para propósitos comerciales.\n\n* Podemos utilizar la información para adaptar el sitio web.\n\n* Podemos utilizar la información para llevar a cabo experimentos con respecto al uso de varias características del sitio.',      
+      thirdParties: '**Lo que se comparte con terceros**\n\nNunca divulgaremos direcciones electrónicas a terceros sin su permiso expreso. Tampoco compartiremos los datos que recopilemos acerca de usted a menos que (a) no se pueda asociar a usted o a su nombre de usuario; y (b) sea necesario para lograr nuestros objetivos de investigación. Específicamente, nosotros podríamos compartir sus datos anonimizados con participantes de estudios de investigación, otros investigadores o en trabajos académicos que describan nuestra investigación. Por ejemplo, podríamos utilizar alguna de sus clasificaciones como ilustración para un documento, mostrar algunas de sus clasificaciones a otro usuario para ver si está de acuerdo o en desacuerdo, o publicar estadísticas acerca de la interacción entre usuarios.\n\nLas contribuciones que usted haga en las páginas para Hablar (o Hablemos) están ampliamente disponibles para otros. Aparte de esto, la información se mantiene de la forma más confidencial posible dentro de nuestra base de datos segura.',      
+      cookies: '**Cómo utilizamos las cookies**\n\nSe podría colocar una cookie en su computadora al visitar algunas partes de nuestro sitio. Una cookie es un archivo pequeño que reside en el disco duro de su computadora y nos permite mejorar la calidad de sus visitas futuras a nuestros sitios web.\n\nNosotros utilizamos cookies de registro para identificar qué páginas se están utilizando y mejorar nuestro sitio web. Nosotros utilizamos esta información únicamente con fines de análisis estadísticos, no se comparten con otros sitios ni se utilizan para enviar anuncios comerciales.\n\nUsted puede elegir aceptar o rechazar las cookies. La mayoría de los navegadores aceptan las cookies de forma automática, pero normalmente usted puede modificar la configuración de su navegador para rechazar las cookies, si lo prefiere. No obstante, si usted elige rechazar las cookies de Zooniverse, la funcionalidad, incluida su capacidad para iniciar sesión y participar, se verá afectada.\n\nLa aceptación de las cookies está implícita si usted continúa accediendo a nuestro sitio web sin ajustar la configuración de su navegador.',      
+      dataStorage: '**Dónde almacenamos sus datos**\n\nNosotros utilizamos Amazon Web Services con el fin de poner nuestro sitio a disposición de una cantidad impredecible de usuarios de forma rápida y confiable. Esto significa que sus datos se guardarán en ubicaciones múltiples, incluidos los Estados Unidos de América (EUA). Amazon es un participante del programa Safe Harbor, creado por el Departamento de Comercio de EUA y la Unión Europea (UE). Amazon ha certificado que se adhiere a los principios de privacidad de Safe Harbor acordados por EUA y la UE.\n\nNuestro servidor de listas de correos, que contiene una copia de las direcciones de correo electrónico suscritas y ningún otro dato personal, está alojado en un servidor virtual privado con Linode, en el Reino Unido.',      
+      security: '**Medidas de seguridad**\n\nLos investigadores leen esta declaración al momento de unirse a nuestro equipo, para asegurarnos de que conozcan nuestras políticas de privacidad y seguridad de datos. Nosotros seguimos las mejores prácticas del sector para asegurar los datos de los usuarios. El acceso a la base de datos y entradas publicadas se limita a los miembros de nuestro grupo de investigadores y personal administrativo.',      
+      dataRemoval: '**Eliminación de sus datos**\n\nDebido a la manera en que archivamos los datos, generalmente no es posible eliminar por completo sus datos personales de nuestros sistemas. Sin embargo, si usted tiene alguna preocupación específica, por favor contáctenos y veremos qué podemos hacer.',      
+      contactUser: '**Cuándo lo contactaremos**\n\nSi usted no se registra, nosotros nunca lo contactaremos. Si usted se registra, lo contactaremos por correo electrónico en las siguientes circunstancias:\n\n* Ocasionalmente le enviaremos mensajes de correo electrónico en los que se resalte algún aspecto particular de nuestra investigación, se anuncien características nuevas de nuestro sitio, se expliquen cambios en el sistema o se le invite a eventos especiales.\n\n* También podemos contactarlo con fines de investigación sobre la operación de nuestro sitio. Podemos contactarlo por correo electrónico y pedirle información adicional en ese momento. El que usted nos proporcione información adicional es completamente opcional y de ninguna manera afectará su acceso o uso de nuestro sitio.\n\n* Podemos contactarlo con algún boletín acerca del progreso de un proyecto.\n\nEs poco probable que usted reciba más de dos mensajes nuestros por mes.\n\nUsted puede dejar de recibir nuestro boletín en cualquier momento visitando la página [unsuscribe](https://www.zooniverse.org/unsubscribe) de Zooniverse.',      
+      furtherInfo: '**Mayor información y solicitudes**\n\nEl controlador de datos es el Departamento de Física de la Universidad de Oxford. Para obtener una copia de la información que tenemos sobre usted, por favor contacte al equipo del proyecto en la siguiente dirección:\n\nProfessor Chris Lintott\nOxford Astrophysics\nDenys Wilkinson Building\nKeble Road\nOxford, OX1 3RH\nUnited Kingdom'      
     }
   },
   security: {
-    title: 'Zooniverse Security',
-    intro: 'The Zooniverse takes very seriously the security of our websites and systems, and protecting our users and their personal information is our highest priority. We take every precaution to ensure that the information you give us stays secure, but it is also important that you take steps to secure your own account, including:\n\n* Do not use the same password on different websites. The password you use for your Zooniverse account should be unique to us.\n* Never give your password to anyone. We will never ask you to send us your password, and you should never enter your Zooniverse password into any website other than ours. Always check your browser\'s address bar to make sure you have a secure connection to _www.zooniverse.org_.\n\nFor general advice and information about staying safe online, please visit:\n\n* [Get Safe Online](https://www.getsafeonline.org)\n* [Stay Safe Online](https://www.staysafeonline.org)\n* [US-CERT - Tips](https://www.us-cert.gov/ncas/tips)',
-    details: '## Reporting Security Issues\n\nThe Zooniverse supports [responsible disclosure](https://en.wikipedia.org/wiki/Responsible_disclosure) of vulnerabilities. If you believe you have discovered a security vulnerability in any Zooniverse software, we ask that this first be reported to [security@zooniverse.org](mailto:security@zooniverse.org) to allow time for vulnerabilities to be fixed before details are published.\n\n## Known Vulnerabilities and Incidents\n\nWe believe it is important to be completely transparent about security issues. A complete list of fixed vulnerabilities and past security incidents is given below:\n\n* December 11, 2018: [Cross-Site Scripting Vulnerability on Project Page\'s External Links](https://blog.zooniverse.org/2018/12/20/fixed-cross-site-scripting-vulnerability-on-project-pages-external-links/)\n\n* June 21, 2018: [Cross-site scripting on project home pages](https://blog.zooniverse.org/2018/07/03/fixed-cross-site-scripting-vulnerability-on-project-home-pages/)\n\nNew vulnerabilities and incidents will be announced via the [Zooniverse blog in the "technical" category](http://blog.zooniverse.org/category/technical/).'
+    title: 'Seguridad en Zooniverse',
+    intro: 'Zooniverse toma con mucha seriedad la seguridad de nuestros sitios web y sistemas, y la protección de nuestros usuarios y de su información personal es nuestra prioridad. Tomamos todas las precauciones para asegurar que la información que usted nos proporcione permanezca segura, pero también es importante para asegurar su propia cuenta que usted siga pasos como los siguientes:\n\n* No utilizar la misma contraseña en sitios web diferentes. La contraseña que utilice para su cuenta de Zooniverse debería ser única.\n* Nunca dé su contraseña a nadie. Nosotros nunca le pediremos que nos envíe su contraseña y usted nunca debe ingresar su contraseña de Zooniverse en otro sitio web que no sea el nuestro. Siempre verifique la barra de direcciones de su navegador para asegurarse de tener una conexión segura con _www.zooniverse.org_.\n\nPara obtener información y consejos generales acerca de la seguridad en línea, por favor visite:\n\n* [Get Safe Online](https://www.getsafeonline.org)\n* [Stay Safe Online](https://www.staysafeonline.org)\n* [US-CERT - Tips](https://www.us-cert.gov/ncas/tips)',    
+    details: '## Para reportar problemas de seguridad\n\nZooniverse apoya la revelación responsable [responsible disclosure](https://en.wikipedia.org/wiki/Responsible_disclosure) de vulnerabilidades. Si usted cree haber descubierto una vulnerabilidad en la seguridad en cualquier software de Zooniverse, le pedimos que primero la reporte en [security@zooniverse.org](mailto:security@zooniverse.org) para permitir que se reparen las vulnerabilidades antes de revelarlas públicamente.\n\n ## Vulnerabilidades e incidentes conocidos.\n\nNosotros creemos que es importante ser completamente transparentes acerca de los temas de seguridad. Se presenta a continuación una lista completa de vulnerabilidades reparadas e incidentes de seguridad pasados:\n\n* June 21, 2018: [Cross-site scripting on project home pages](https://blog.zooniverse.org/2018/07/03/fixed-cross-site-scripting-vulnerability-on-project-home-pages/)\n\nLas vulnerabilidades e incidentes nuevos serán anunciados vía el [blog de Zooniverse en la categoría "técnica"] (http://blog.zooniverse.org/category/technical/).'    
   },
   userAdminPage: {
     header: 'Admin',
     nav: {
-      createAdmin: 'Manage Users',
-      projectStatus: 'Set Project Status',
+      createAdmin: 'Administrar usuarios',
+      projectStatus: 'Establecer el estado del proyecto',
       grantbot: 'Grantbot',
-      organizationStatus: 'Set Organization Status'
+      organizationStatus: 'Establecer el estado de la organización'
     },
-    notAdminMessage: 'You are not an administrator',
-    notSignedInMessage: 'You are not signed in'
+    notAdminMessage: 'Usted no es un administrador',
+    notSignedInMessage: 'Usted no ha iniciado una sesión'
   },
   signIn: {
-    title: 'Ingresar',
-    withZooniverse: 'Ingresar con tu cuenta de Zooniverse',
-    whyHaveAccount: 'Voluntarios que han ingresado pueden tener registro de su trabajo y se darán los créditos correspondientes en publicaciones con resultados',
-    signIn: 'Ingresar',
+    title: 'Iniciar sesión / registrarse',
+    withZooniverse: 'Iniciar sesión con su cuenta de Zooniverse',
+    whyHaveAccount: 'Los voluntarios con sesión iniciada pueden llevar un registro de su trabajo y recibirán crédito por cualquier publicación resultante.',   
+    signIn: 'Iniciar sesión',
     register: 'Registrarse',
-    orThirdParty: 'O ingresa con otro servicio',
-    withFacebook: 'Ingresa con Facebook',
-    withGoogle: 'Ingresa con Google'
+    orThirdParty: 'O iniciar sesión con otro servicio',
+    withFacebook: 'Iniciar sesión con Facebook',
+    withGoogle: 'Iniciar sesión con Google'
   },
   notFoundPage: {
-    message: 'Not found'
+    message: 'No encontrado'
   },
   resetPassword: {
-    heading: 'Reset Password',
-    newPasswordFormDialog: 'Enter the same password twice so you can get back to doing some research. Passwords need to be at least 8 characters long.',
-    newPasswordFormLabel: 'New password:',
-    newPasswordConfirmationLabel: 'Repeat your password to confirm:',
-    enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
-    emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
-    emailError: 'There was an error reseting your password.',
-    resetError: 'Something went wrong, please try and reset your password via email again.',
-    passwordsDoNotMatch: 'The passwords do not match, please try again.',
-    loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.',
-    missingEmailsSpamNote: 'Please check your spam folder if you have not received the reset email.',
-    missingEmailsAlternateNote: 'If you have still not received an email, please try any other email address you may have signed up with.'
+    heading: 'Restablecer la contraseña',
+    newPasswordFormDialog: 'Introduza la misma contraseña dos veces, así podrá regresar a hacer investigación. Las contraseñas necesitan tener al menos 8 caracteres.',
+    newPasswordFormLabel: 'Contraseña nueva:',
+    newPasswordConfirmationLabel: 'Repita la contraseña para confirmar:',    
+    enterEmailLabel: 'Por favor, introduzca su dirección de correo electrónico aquí y le enviaremos un enlace que puede utilizar para restablecerla.', 
+    emailSuccess: 'Le hemos enviado un correo electrónico con un enlace para restablecer su contraseña.',
+    emailError: 'Hubo un error al restablecer su contraseña.',
+    resetError: 'Algo falló, por favor intente restablecer su contraseña vía correo electrónico nuevamente.',
+    passwordsDoNotMatch: 'Las contraseñas son diferentes, por favor intente de nuevo.',
+    loggedInDialog: 'Usted tiene una sesión activa actualmente. Por favor salga de su sesión si quiere restablecer su contraseña.',    
+    missingEmailsSpamNote: 'Por favor, revise su carpeta de spam si no ha recibido el correo electrónico para restablecer la contraseña.',
+    missingEmailsAlternateNote: 'Si aún no ha recibido el correo electrónico, por favor intente con alguna otra dirección que pudo haber usado para registrarse.'    
   },
   workflowToggle: {
     label: 'Active'
