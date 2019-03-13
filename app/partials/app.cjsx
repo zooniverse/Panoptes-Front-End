@@ -53,12 +53,12 @@ PanoptesApp = createReactClass
     auth.listen 'change', @handleAuthChange
     @handleAuthChange()
     generateSessionID()
+  
+  componentDidUpdate: ->
+    @updateNotificationsCount()
 
   componentWillUnmount: ->
     auth.stopListening 'change', @handleAuthChange
-
-  componentWillReceiveProps: (nextProps) ->
-    @updateNotificationsCount params: nextProps.params
 
   handleAuthChange: ->
     @geordiLogger.forget ['userID']
@@ -66,14 +66,12 @@ PanoptesApp = createReactClass
       @setState
         initialLoadComplete: true
         user: user
-      @updateNotificationsCount {user}
+      @updateNotificationsCount user
       @geordiLogger.remember userID: user.id if user?
 
-  updateNotificationsCount: ({user, params}) ->
+  updateNotificationsCount: (user) ->
     user or= @state.user
-    params or= @props.params
-    {owner, name} = params
-    @props.notificationsCounter.update(user, owner, name)
+    @props.notificationsCounter.update(user)
 
   render: ->
     <div className="panoptes-main">
