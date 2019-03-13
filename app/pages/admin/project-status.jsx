@@ -245,6 +245,8 @@ class ProjectStatus extends Component {
       return <LoadingIndicator />;
     }
 
+    const projectState = project.state || 'live';
+
     return (
       <div className="project-status">
         <ProjectIcon project={project} />
@@ -258,7 +260,7 @@ class ProjectStatus extends Component {
                 name="project-state-buttons"
                 type="radio"
                 value=""
-                checked={project.state === ''}
+                checked={projectState === 'live'}
                 onChange={this.handleProjectStateChange}
               />
               Active
@@ -269,7 +271,7 @@ class ProjectStatus extends Component {
                 name="project-state-buttons"
                 type="radio"
                 value="paused"
-                checked={project.state === 'paused'}
+                checked={projectState === 'paused'}
                 onChange={this.handleProjectStateChange}
               />
               Paused
@@ -280,7 +282,7 @@ class ProjectStatus extends Component {
                 name="project-state-buttons"
                 type="radio"
                 value="finished"
-                checked={project.state === 'finished'}
+                checked={projectState === 'finished'}
                 onChange={this.handleProjectStateChange}
               />
               Finished
