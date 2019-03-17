@@ -22,8 +22,8 @@ module.exports = createReactClass
       <option value="">(Submit classification and load next subject)</option>
       {for key, definition of @props.workflow.tasks
         unless definition.type is 'shortcut'
-          text = tasks[definition.type].getTaskText definition
-          if text.length > MAX_TEXT_LENGTH_IN_MENU
+          text = tasks[definition.type]?.getTaskText definition
+          if text and text.length > MAX_TEXT_LENGTH_IN_MENU
             text = text[0...MAX_TEXT_LENGTH_IN_MENU] + '...'
           <option key={key}, value={key}>{text}</option>}
     </select>

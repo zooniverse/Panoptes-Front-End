@@ -130,10 +130,15 @@ EditWorkflowPage = createReactClass
                   for key, definition of @props.workflow.tasks
                     unless definition.type is 'shortcut'
                       classNames = ['secret-button', 'nav-list-item']
+                      taskDefinition = tasks[definition.type]?.getTaskText definition
                       if key is @state.selectedTaskKey
                         classNames.push 'active'
                       <div key={key}>
-                        <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
+                        <button
+                          type="button"
+                          className={classNames.join ' '}
+                          onClick={@setState.bind this, selectedTaskKey: key, null}
+                        >
                           {switch definition.type
                             when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
                             when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
@@ -147,7 +152,7 @@ EditWorkflowPage = createReactClass
                             when 'slider' then <i className="fa fa-sliders fa-fw"></i>
                             when 'highlighter' then <i className="fa fa-i-cursor"></i>}
                           {' '}
-                          {tasks[definition.type].getTaskText definition}
+                          {taskDefinition || 'Task edtior is unavailable'}
                           {if key is @props.workflow.first_task
                             <small> <em>(first)</em></small>}
                           <small style={{float: 'right'}}>{key}</small>
@@ -241,7 +246,7 @@ EditWorkflowPage = createReactClass
                   else
                     for taskKey, definition of @props.workflow.tasks
                       unless definition.type is 'shortcut'
-                        <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
+                        <option key={taskKey} value={taskKey}>{tasks[definition.type]?.getTaskText definition}</option>}
                 </select>
               </AutoSave>
             </div>
@@ -473,7 +478,7 @@ EditWorkflowPage = createReactClass
 
         <div className={taskEditorClasses}>
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
-            TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
+            TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type]?.Editor
             <div>
               {if 'shortcut' in @props.project.experimental_tools
                 <ShortcutEditor workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} >
@@ -485,14 +490,16 @@ EditWorkflowPage = createReactClass
                     onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
                   />
                 </ShortcutEditor>
-              else
+              else if TaskEditorComponent
                 <TaskEditorComponent
                   workflow={@props.workflow}
                   task={@props.workflow.tasks[@state.selectedTaskKey]}
                   taskPrefix="tasks.#{@state.selectedTaskKey}"
                   project={@props.project}
                   onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
-                />}
+                />
+              else 
+                <div>Editor is not available.</div>}
               <hr />
               <br />
 
