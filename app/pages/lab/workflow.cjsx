@@ -152,7 +152,7 @@ EditWorkflowPage = createReactClass
                             when 'slider' then <i className="fa fa-sliders fa-fw"></i>
                             when 'highlighter' then <i className="fa fa-i-cursor"></i>}
                           {' '}
-                          {taskDefinition || 'Task edtior is unavailable'}
+                          {taskDefinition || 'Task editor is unavailable'}
                           {if key is @props.workflow.first_task
                             <small> <em>(first)</em></small>}
                           <small style={{float: 'right'}}>{key}</small>
