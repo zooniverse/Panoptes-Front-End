@@ -301,6 +301,18 @@ export function fetchSubjects(workflow) {
     .then(awaitSubjects)
     .then((subjects) => {
       const filteredSubjects = subjects.filter((subject) => {
+        let workflowCompletionMessage = null;
+        if (subject.finished_workflow) {
+          workflowCompletionMessage = 'This workflow is complete';
+        }
+        if (subject.user_has_finished_workflow) {
+          workflowCompletionMessage = 'You have completed this workflow';
+        }
+        if (workflowCompletionMessage) {
+          const workflowError = new Error(workflowCompletionMessage);
+          workflowError.type = 'Workflow complete';
+          throw workflowError;
+        }
         const notSeen = !subject.already_seen &&
           !subject.retired &&
           !seenThisSession.check(workflow, subject);
@@ -315,7 +327,15 @@ export function fetchSubjects(workflow) {
         subjects,
         workflowID: workflow.id
       }
-    }));
+    }))
+    .catch((error) => {
+      if (error.type && error.type === 'Workflow complete') {
+        console.error(error);
+        dispatch(reset());
+      } else {
+        throw error;
+      }
+    });
 }
 
 export function createClassification(project) {
