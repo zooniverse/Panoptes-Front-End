@@ -327,15 +327,7 @@ export function fetchSubjects(workflow) {
         subjects,
         workflowID: workflow.id
       }
-    }))
-    .catch((error) => {
-      if (error.type && error.type === 'Workflow complete') {
-        console.error(error);
-        dispatch(reset());
-      } else {
-        throw error;
-      }
-    });
+    }));
 }
 
 export function createClassification(project) {
