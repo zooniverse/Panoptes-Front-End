@@ -54,8 +54,9 @@ PanoptesApp = createReactClass
     @handleAuthChange()
     generateSessionID()
   
-  componentDidUpdate: ->
-    @updateNotificationsCount()
+  componentDidUpdate: (prevProps) ->
+    if prevProps.params isnt @props.params 
+      @updateNotificationsCount()
 
   componentWillUnmount: ->
     auth.stopListening 'change', @handleAuthChange
