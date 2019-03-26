@@ -71,13 +71,6 @@ export default class NotificationSection extends Component {
     }
   }
 
-  componentWillUnmount() {
-    if (this.props.user) {
-      this.markAsRead('first');
-      this.markAsRead('last');
-    }
-  }
-
   getNotifications(page) {
     this.setState({ loading: true });
     let firstMeta;
@@ -145,26 +138,6 @@ export default class NotificationSection extends Component {
         if (count === 0) this.context.notificationsCounter.setUnread(0);
       });
     });
-  }
-
-  markAsRead(position) {
-    const ids = this.state[`${position}Meta`].notificationIds;
-    const unread = [];
-
-    if (ids !== undefined) {
-      ids.forEach((id) => {
-        if (!this.state.notificationsMap[id].delivered) unread.push(id);
-      });
-
-      if (unread.length === 0) return unread;
-
-      this.state.notificationData.forEach((data) => {
-        if (unread.indexOf(data.notification.id) > -1) {
-          data.notification.update({ delivered: true }).save();
-        }
-      });
-    }
-    return null;
   }
 
   avatarFor() {
@@ -287,7 +260,6 @@ export default class NotificationSection extends Component {
               firstAndLast={false}
               itemCount
               nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
-              onClickNext={this.markAsRead.bind(this, 'current')}
               page={+this.state.currentMeta.page}
               pageCount={this.state.lastMeta.page_count}
               pageSelector={false}
