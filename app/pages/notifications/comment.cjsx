@@ -32,7 +32,11 @@ module.exports = createReactClass
         {if notification.delivered is false and !@props.startedDiscussion
           <i title="Unread" className="fa fa-star fa-lg" />}
 
-        <Link to={notification.url} className="message-link">
+        <Link
+          className="message-link"
+          onClick={() => notification.update({ delivered: true }).save()}
+          to={notification.url}
+        >
           {comment.discussion_title}
         </Link>
 

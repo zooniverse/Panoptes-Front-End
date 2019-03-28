@@ -32,30 +32,29 @@ export default class NotificationSection extends Component {
       });
     } else {
       apiClient.type('projects').get(this.props.projectID, { include: 'avatar' })
-      .catch((error) => {
-        this.setState({ error });
-      })
-      .then((project) => {
-        if (project.links.avatar) {
-          apiClient.type('avatars').get(project.links.avatar.id)
-          .then((avatar) => {
-            this.setState({
-              name: project.display_name,
-              avatar: avatar.src
-            })
-            .catch(() => {
-              this.setState({
-                name: project.display_name
+        .catch((error) => {
+          this.setState({ error });
+        })
+        .then((project) => {
+          if (project.links.avatar) {
+            apiClient.type('avatars').get(project.links.avatar.id)
+              .catch(() => {
+                this.setState({
+                  name: project.display_name
+                });
+              })
+              .then((avatar) => {
+                this.setState({
+                  name: project.display_name,
+                  avatar: avatar.src
+                });
               });
+          } else {
+            this.setState({
+              name: project.display_name
             });
-          });
-        } else {
-          this.setState({
-            name: project.display_name
-          });
-        }
-        
-      });
+          }
+        });
     }
   }
 

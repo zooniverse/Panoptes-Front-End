@@ -14,6 +14,7 @@ module.exports = createReactClass
 
   stopPropagation: (e) ->
     e.stopPropagation()
+    notification.update({ delivered: true }).save()
 
   render: ->
     notification = @props.notification
