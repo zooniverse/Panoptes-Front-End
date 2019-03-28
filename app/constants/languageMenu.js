@@ -10,7 +10,7 @@ export default {
   it: 'Italiano',
   nl: 'Nederlands',
   pl: 'Polski',
-  po: 'Português',
+  pt: 'Português',
   ru: 'русский',
   uk: 'українська мова',
   'zh-cn': '简体中文',
