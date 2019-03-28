@@ -14,6 +14,7 @@ module.exports = createReactClass
 
   stopPropagation: (e) ->
     e.stopPropagation()
+    @props.markAsRead(notification)
 
   render: ->
     notification = @props.notification

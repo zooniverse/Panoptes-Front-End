@@ -24,7 +24,11 @@ module.exports = createReactClass
       <div className="conversation-message talk-module">
         {if notification.delivered is false
           <i title="Unread" className="fa fa-star fa-lg" />}
-        <Link to="/inbox/#{notification.source.conversation_id}" className="message-link">
+        <Link
+          className="message-link" 
+          onClick={() => @props.markAsRead(notification)}
+          to="/inbox/#{notification.source.conversation_id}" 
+        >
           {notification.message}{' '}
           in {@props.data.conversation.title}
         </Link>
@@ -35,7 +39,11 @@ module.exports = createReactClass
           <Link className="user-profile-link" to="#{baseLink}users/#{@props.data.messageUser.login}">
             <Avatar user={@props.data.messageUser} />{' '}{@props.data.messageUser.display_name}
           </Link>{' '}
-          <Link to={"/inbox/#{notification.source.conversation_id}"} className="time-ago">
+          <Link
+            className="time-ago"
+            onClick={() => @props.markAsRead(notification)}
+            to={"/inbox/#{notification.source.conversation_id}"}
+          >
             {moment(@props.data.message.created_at).fromNow()}
           </Link>
         </div>

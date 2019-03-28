@@ -28,7 +28,12 @@ module.exports = createReactClass
         {if notification.delivered is false
           <i title="Unread" className="fa fa-star fa-lg" />}
         <div className="title">
-          <Link to={path}>{notification.message}</Link>
+          <Link
+            onClick={() => @props.markAsRead(notification)}
+            to={path}
+          >
+            {notification.message}
+          </Link>
         </div>
 
         <Markdown>{@props.data.comment.body}</Markdown>
@@ -55,7 +60,10 @@ module.exports = createReactClass
 
           {' '}
 
-          <Link to={path}>
+          <Link
+            onClick={() => @props.markAsRead(notification)}
+            to={path}
+          >
             {notification.message}{' '}
             {moment(notification.created_at).fromNow()}
           </Link>

@@ -32,30 +32,29 @@ export default class NotificationSection extends Component {
       });
     } else {
       apiClient.type('projects').get(this.props.projectID, { include: 'avatar' })
-      .catch((error) => {
-        this.setState({ error });
-      })
-      .then((project) => {
-        if (project.links.avatar) {
-          apiClient.type('avatars').get(project.links.avatar.id)
-          .then((avatar) => {
-            this.setState({
-              name: project.display_name,
-              avatar: avatar.src
-            })
-            .catch(() => {
-              this.setState({
-                name: project.display_name
+        .catch((error) => {
+          this.setState({ error });
+        })
+        .then((project) => {
+          if (project.links.avatar) {
+            apiClient.type('avatars').get(project.links.avatar.id)
+              .then((avatar) => {
+                this.setState({
+                  name: project.display_name,
+                  avatar: avatar.src
+                });
+              })
+              .catch(() => {
+                this.setState({
+                  name: project.display_name
+                });
               });
+          } else {
+            this.setState({
+              name: project.display_name
             });
-          });
-        } else {
-          this.setState({
-            name: project.display_name
-          });
-        }
-        
-      });
+          }
+        });
     }
   }
 
@@ -138,6 +137,19 @@ export default class NotificationSection extends Component {
         if (count === 0) this.context.notificationsCounter.setUnread(0);
       });
     });
+  }
+
+  markAsRead(readNotification) {
+    const { notificationsCounter } = this.context;
+    const { user } = this.props;
+    const { notifications } = this.state;
+    const relatedNotifications = notifications.filter(
+      notification => notification.source_id === readNotification.source_id
+    );
+    relatedNotifications.push(readNotification);
+    const readRequests = relatedNotifications
+      .map(relatedNotification => relatedNotification.update({ delivered: true }).save());
+    Promise.all(readRequests).then(() => notificationsCounter.update(user));
   }
 
   avatarFor() {
@@ -245,6 +257,7 @@ export default class NotificationSection extends Component {
                 <Notification
                   data={item.data}
                   key={item.notification.id}
+                  markAsRead={this.markAsRead}
                   notification={item.notification}
                   user={this.props.user}
                 />);

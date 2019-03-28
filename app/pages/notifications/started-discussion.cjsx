@@ -28,7 +28,10 @@ module.exports = createReactClass
             <i title="Unread" className="fa fa-star fa-lg" />}
 
           <div className="title">
-            <Link to={"#{slug}/talk/#{@props.data.discussion.board_id}/#{@props.data.discussion.id}"}>
+            <Link
+              onClick={() => @props.markAsRead(notification)}
+              to={"#{slug}/talk/#{@props.data.discussion.board_id}/#{@props.data.discussion.id}"}
+            >
               {@props.notification.message}
             </Link>
           </div>
