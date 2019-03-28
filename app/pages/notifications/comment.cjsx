@@ -34,7 +34,7 @@ module.exports = createReactClass
 
         <Link
           className="message-link"
-          onClick={() => notification.update({ delivered: true }).save()}
+          onClick={() => @props.markAsRead(notification)}
           to={notification.url}
         >
           {comment.discussion_title}

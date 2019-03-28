@@ -26,7 +26,7 @@ module.exports = createReactClass
           <i title="Unread" className="fa fa-star fa-lg" />}
         <Link
           className="message-link" 
-          onClick={() => notification.update({ delivered: true }).save()}
+          onClick={() => @props.markAsRead(notification)}
           to="/inbox/#{notification.source.conversation_id}" 
         >
           {notification.message}{' '}
@@ -41,7 +41,7 @@ module.exports = createReactClass
           </Link>{' '}
           <Link
             className="time-ago"
-            onClick={() => notification.update({ delivered: true }).save()}
+            onClick={() => @props.markAsRead(notification)}
             to={"/inbox/#{notification.source.conversation_id}"}
           >
             {moment(@props.data.message.created_at).fromNow()}

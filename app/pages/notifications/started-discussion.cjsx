@@ -29,7 +29,7 @@ module.exports = createReactClass
 
           <div className="title">
             <Link
-              onClick={() => notification.update({ delivered: true }).save()}
+              onClick={() => @props.markAsRead(notification)}
               to={"#{slug}/talk/#{@props.data.discussion.board_id}/#{@props.data.discussion.id}"}
             >
               {@props.notification.message}

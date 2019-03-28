@@ -29,7 +29,7 @@ module.exports = createReactClass
           <i title="Unread" className="fa fa-star fa-lg" />}
         <div className="title">
           <Link
-            onClick={() => notification.update({ delivered: true }).save()}
+            onClick={() => @props.markAsRead(notification)}
             to={path}
           >
             {notification.message}
@@ -61,7 +61,7 @@ module.exports = createReactClass
           {' '}
 
           <Link
-            onClick={() => notification.update({ delivered: true }).save()}
+            onClick={() => @props.markAsRead(notification)}
             to={path}
           >
             {notification.message}{' '}
