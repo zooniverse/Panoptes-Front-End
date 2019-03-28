@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
-import FrameViewer from '../../../../components/frame-viewer';
+import SubjectViewer from '../../../../components/subject-viewer';
 import ModalFocus from '../../../../components/modal-focus';
 
 /* eslint-disable max-len */
@@ -28,9 +28,9 @@ class FeedbackModal extends React.Component {
   render() {
     const { messages, subjectViewerProps } = this.props;
     return (
-      <ModalFocus className="feedbackmodal">
+      <ModalFocus className="classifier feedbackmodal">
         <Translate content="FeedbackModal.title" component="h2" />
-        {subjectViewerProps && (<FrameViewer {...subjectViewerProps} />)}
+        {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
         <ul>
           {messages.map(message =>
             <li key={Math.random()}>
