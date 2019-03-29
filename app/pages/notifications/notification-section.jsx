@@ -23,6 +23,7 @@ export default class NotificationSection extends Component {
       page: 1
     };
     this.markAllRead = this.markAllRead.bind(this);
+    this.markAsRead = this.markAsRead.bind(this);
   }
 
   componentWillMount() {
@@ -143,13 +144,22 @@ export default class NotificationSection extends Component {
     const { notificationsCounter } = this.context;
     const { user } = this.props;
     const { notifications } = this.state;
-    const relatedNotifications = notifications.filter(
-      notification => notification.source_id === readNotification.source_id
-    );
-    relatedNotifications.push(readNotification);
-    const readRequests = relatedNotifications
-      .map(relatedNotification => relatedNotification.update({ delivered: true }).save());
-    Promise.all(readRequests).then(() => notificationsCounter.update(user));
+    const relatedNotifications = notifications.filter(notification => (
+      notification.delivered === false
+        && (notification.id === readNotification.id
+          || notification.source.discussion_id === readNotification.source.discussion_id)
+    ));
+    const notificationPromises = relatedNotifications
+      .map((relatedNotification) => {
+        return relatedNotification
+          .update({ delivered: true })
+          .save()
+          .catch((error) => {
+            console.warn(error);
+            return {};
+          });
+      });
+    Promise.all(notificationPromises).then(() => notificationsCounter.update(user));
   }
 
   avatarFor() {
