@@ -33,7 +33,7 @@ counterpart.registerTranslations 'en',
     privacyPolicy: 'privacy policy'
     okayToEmail: 'It’s okay to send me email every once in a while. (optional)'
     betaTester: 'I’d like to help test new projects, and be emailed when they’re available. (optional)'
-    underAge: 'If you are under 16 years old, tick this box.'
+    underAge: 'If you are under 16 years old, tick this box and complete the form with your parent/guardian.'
     notRealName: 'Don’t use your real name.'
     guardianEmail: 'Parent/Guardian’s email address'
     underAgeConsent: '
@@ -68,14 +68,11 @@ module.exports = createReactClass
   contextTypes:
     geordi: PropTypes.object
 
-  updateAge: ->
-    @setState underAge: !@state.underAge
-
   render: ->
     {badNameChars, nameConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
     <form method="POST" onSubmit={@handleSubmit}>
-      <label>
+      <label className="form-separator">
         <input type="checkbox" ref="underAge" checked={@state.underAge} disabled={@props.user?} onChange={@updateAge} />
         <Translate component="span" content="registerForm.underAge" />
       </label>
@@ -219,6 +216,9 @@ module.exports = createReactClass
         </button>
       </div>
     </form>
+
+  updateAge: ->
+    @setState underAge: !@state.underAge
 
   handleNameChange: ->
     name = @refs.name.value
