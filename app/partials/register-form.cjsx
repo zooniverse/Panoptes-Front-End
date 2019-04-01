@@ -17,7 +17,7 @@ counterpart.registerTranslations 'en',
     optional: 'Optional'
     looksGood: 'Looks good'
     userName: 'User name'
-    whyUserName: 'You’ll use this name to log in. It will be shown publicly.'
+    whyUserName: 'You’ll use this name to log in. It will be shown publicly. '
     badChars: "Only letters, numbers, '.', '_', and '-'."
     nameConflict: 'That username is taken'
     forgotPassword: 'Forget your password?'
@@ -33,6 +33,17 @@ counterpart.registerTranslations 'en',
     privacyPolicy: 'privacy policy'
     okayToEmail: 'It’s okay to send me email every once in a while. (optional)'
     betaTester: 'I’d like to help test new projects, and be emailed when they’re available. (optional)'
+    underAge: 'If you are under 16 years old, tick this box.'
+    notRealName: 'Don’t use your real name.'
+    guardianEmail: 'Parent/Guardian’s email address'
+    underAgeConsent: '
+      I confirm I am the parent/guardian and give permission for my child to register by providing my email address as the main contact address.
+      Both I and my child understand and agree to the %(link)s (required)
+    '
+    underAgeEmail: '
+      If you agree, we will periodically send email promoting new research-related projects or other information
+      relating to our research. We will not use your contact information for commercial purposes. (optional)
+    '
     register: 'Register'
     alreadySignedIn: 'Signed in as %(name)s'
     signOut: 'Sign out'
@@ -52,14 +63,23 @@ module.exports = createReactClass
     emailConflict: null
     agreedToPrivacyPolicy: null
     error: null
+    underAge: false
 
   contextTypes:
     geordi: PropTypes.object
+
+  updateAge: ->
+    @setState underAge: !@state.underAge
 
   render: ->
     {badNameChars, nameConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
     <form method="POST" onSubmit={@handleSubmit}>
+      <label>
+        <input type="checkbox" ref="underAge" checked={@state.underAge} disabled={@props.user?} onChange={@updateAge} />
+        <Translate component="span" content="registerForm.underAge" />
+      </label>
+
       <label>
         <span className="columns-container inline spread">
           <Translate content="registerForm.userName" />
@@ -83,6 +103,8 @@ module.exports = createReactClass
         </span>
         <input type="text" ref="name" className="standard-input full" disabled={@props.user?} autoFocus onChange={@handleNameChange} maxLength="255" />
         <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
+        {if @state.underAge
+          <Translate component="span" className="form-help info" content="registerForm.notRealName" />}
       </label>
 
       <br />
@@ -116,7 +138,10 @@ module.exports = createReactClass
 
       <label>
         <span className="columns-container inline spread">
-          <Translate content="registerForm.email" />
+          {if @state.underAge
+            <Translate content="registerForm.guardianEmail" />
+          else
+            <Translate content="registerForm.email" />}
           {if 'emailConflict' of @state.pending
             <LoadingIndicator />
           else if emailConflict?
@@ -152,7 +177,10 @@ module.exports = createReactClass
       <label>
         <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@props.user?} onChange={@handlePrivacyPolicyChange} />
         {privacyPolicyLink = <a target="_blank" href="#{window.location.origin}/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
-        <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
+        {if @state.underAge
+          <Translate component="span" content="registerForm.underAgeConsent" link={privacyPolicyLink} />
+        else
+          <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />}
       </label>
 
       <br />
@@ -160,7 +188,10 @@ module.exports = createReactClass
 
       <label>
         <input type="checkbox" ref="okayToEmail" defaultChecked={true} disabled={@props.user?} onChange={@forceUpdate.bind this, null} />
-        <Translate component="span" content="registerForm.okayToEmail" />
+        {if @state.underAge
+          <Translate component="span" content="registerForm.underAgeEmail" />
+        else
+          <Translate component="span" content="registerForm.okayToEmail" />}
       </label><br />
 
       <label>
