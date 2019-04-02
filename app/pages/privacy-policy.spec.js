@@ -17,11 +17,11 @@ describe('PrivacyPolicy', function () {
 
   describe('heading', function () {
     it('renders a <Translate /> component', function () {
-      assert.equal(wrapper.find('Translate').length, 1);
+      assert.equal(wrapper.find('Translate').first().prop('component'), 'h1');
     });
 
     it('renders page title content', function () {
-      assert.equal(wrapper.find('Translate').prop('content'), 'privacy.title');
+      assert.equal(wrapper.find('Translate').first().prop('content'), 'privacy.title');
     });
   });
 
