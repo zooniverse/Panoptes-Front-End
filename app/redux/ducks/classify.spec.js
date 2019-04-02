@@ -513,7 +513,8 @@ describe('Classifier actions', function () {
         type: 'pfe/translations/LOAD',
         translated_type: 'workflow',
         translated_id: 'a',
-        language: 'en'
+        language: 'en',
+        preview: false
       };
       expect(fakeDispatch).to.have.been.calledWith(expectedAction);
     });

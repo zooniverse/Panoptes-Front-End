@@ -103,18 +103,27 @@ export function listLanguages(translated_type, translated_id) {
   };
 }
 
-export function load(translated_type, translated_id, language) {
+export function load(translated_type, translated_id, language, preview = false) {
   counterpart.setLocale(language);
   return (dispatch) => {
     dispatch({
       type: LOAD,
       translated_type,
       translated_id,
-      language
+      language,
+      preview
     });
+    const query = {
+      translated_type,
+      translated_id,
+      language
+    };
+    if (!preview) {
+      query.published = true;
+    }
     return apiClient
       .type('translations')
-      .get({ translated_type, translated_id, language })
+      .get(query)
       .then((translations) => {
         if (translations) {
           return dispatch({

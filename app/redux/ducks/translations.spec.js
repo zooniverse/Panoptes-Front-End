@@ -83,7 +83,8 @@ describe('translations actions', function () {
         type: 'pfe/translations/LOAD',
         translated_type: 'workflow',
         translated_id: '123',
-        language: 'es'
+        language: 'es',
+        preview: false
       };
       expect(fakeDispatch.firstCall).to.have.been.calledWith(load);
     });
