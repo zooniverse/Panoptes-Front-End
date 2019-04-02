@@ -93,4 +93,77 @@ describe('Notification Section', function() {
       assert.equal(wrapper.find('.fa-chevron-up').length, 1);
     });
   });
+
+  describe('will update notifications as read', function () {
+    const newNotifications = [
+      {
+        id: '123',
+        delivered: false,
+        source: {
+          discussion_id: '456'
+        },
+        source_type: 'Comment',
+        update: sinon.stub().returnsThis(),
+        save: sinon.stub().resolves({})
+      },
+      {
+        id: '124',
+        delivered: false,
+        source: {
+          discussion_id: '456'
+        },
+        source_type: 'Comment',
+        update: sinon.stub().returnsThis(),
+        save: sinon.stub().rejects()
+      },
+      {
+        id: '125',
+        delivered: false,
+        source_type: 'Moderation',
+        source: {},
+        update: sinon.stub().returnsThis(),
+        save: sinon.stub().resolves({})
+      },
+      {
+        id: '126',
+        delivered: false,
+        source: {
+          discussion_id: '789'
+        },
+        source_type: 'Comment',
+        update: sinon.stub().returnsThis(),
+        save: sinon.stub().resolves({})
+      }
+    ];
+    const notificationsCounter = {
+      update: sinon.stub()
+    };
+    wrapper = shallow(
+      <NotificationSection expanded={true} />,
+      { context: { notificationsCounter }, disableLifeCycleMethods: true }
+    );
+    wrapper.setState({ notifications: newNotifications });
+    wrapper.instance().markAsRead(newNotifications[0]);
+
+    it('should update read notification as read (delivered)', function () {
+      assert.equal(newNotifications[0].update.calledWith({ delivered: true }), true);
+      assert.equal(newNotifications[0].save.called, true);
+    });
+
+    it('should update related notifications as read (delivered)', function () {
+      assert.equal(newNotifications[1].update.calledWith({ delivered: true }), true);
+      assert.equal(newNotifications[1].save.called, true);
+    });
+
+    it('should not update unrelated notifications', function () {
+      assert.equal(newNotifications[2].update.called, false);
+      assert.equal(newNotifications[2].save.called, false);
+      assert.equal(newNotifications[3].update.called, false);
+      assert.equal(newNotifications[3].save.called, false);
+    });
+
+    it('should update the notifications counter', function () {
+      assert.equal(notificationsCounter.update.called, true);
+    });
+  });
 });
