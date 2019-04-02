@@ -115,7 +115,7 @@ export class DetailsSubTaskForm extends React.Component {
   }
   
   render() {
-    const { theme, tasks, toolProps, translations } = this.props;
+    const { theme, tasks, toolProps, translations, workflow } = this.props;
 
     const detailsAreComplete = this.areDetailsComplete(tasks, toolProps);
 
@@ -131,8 +131,9 @@ export class DetailsSubTaskForm extends React.Component {
               {toolProps.details.map((detailTask, i) => {
                 if (!detailTask._key) detailTask._key = Math.random();
                 const TaskComponent = tasks[detailTask.type];
-                const detailTranslation = translations.strings.workflow.tasks ?
-                  translations.strings.workflow.tasks[toolProps.taskKey].tools[toolProps.mark.tool].details[i] :
+                const workflowTranslation = translations.strings.workflow[workflow.id]
+                const detailTranslation = workflowTranslation ?
+                  workflowTranslation.strings.tasks[toolProps.taskKey].tools[toolProps.mark.tool].details[i] :
                   detailTask;
                 
                 return (
@@ -167,7 +168,8 @@ export class DetailsSubTaskForm extends React.Component {
 
 const mapStateToProps = state => ({
   theme: state.userInterface.theme,
-  translations: state.translations
+  translations: state.translations,
+  workflow: state.classify.workflow
 });
 
 export default connect(mapStateToProps)(DetailsSubTaskForm);
