@@ -58,22 +58,19 @@ class TranslationsManager extends React.Component {
         }
         <h2>Project language menu</h2>
         <p>
-          Tick languages here to add a language menu to your project,
-          and make those translations available to your volunteers.
+          Tick languages here to publish those translations, and make them available to your volunteers.
         </p>
         <table>
           <tr>
             <th>Language</th>
-            <th>Code</th>
-            <th>Live?</th>
+            <th>Published?</th>
           </tr>
           {languageMenuCodes.map((language) => {
             const disabled = language === project.primary_language;
             const checked = projectLanguages.indexOf(language) > -1;
             return (
               <tr key={language}>
-                <td>{languageMenu[language]}</td>
-                <td>{language}</td>
+                <td>{languageMenu[language]} ({language})</td>
                 <td>
                   <input
                     type="checkbox"
