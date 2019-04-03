@@ -17,6 +17,11 @@ const store = {
   subscribe: () => { },
   dispatch: () => { },
   getState: () => ({
+    classify: {
+      workflow: {
+        id: 'a'
+      }
+    },
     translations: {
       languages: {},
       locale: 'en',
@@ -70,7 +75,12 @@ describe('DetailsSubTaskForm', function() {
   describe('render', function() {
     let wrapper;
     before(function () {
-      wrapper = shallow(<DetailsSubTaskForm tasks={tasks} translations={translations} toolProps={toolProps} />, mockReduxStore);
+      wrapper = shallow(<DetailsSubTaskForm
+        tasks={tasks}
+        translations={translations}
+        toolProps={toolProps}
+        workflow={{ id: 'a' }}
+      />, mockReduxStore);
     });
 
     it('should render without crashing', function () {
