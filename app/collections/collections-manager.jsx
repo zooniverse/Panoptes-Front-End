@@ -21,10 +21,7 @@ class CollectionsManager extends React.Component {
 
   onChange() {
     const collections = this.search.getSelected();
-
-    if (collections.length > 0) {
-      this.setState({ hasCollectionSelected: true });
-    }
+    this.setState({ hasCollectionSelected: collections.length > 0 });
   }
 
   addToCollections() {
@@ -65,6 +62,7 @@ class CollectionsManager extends React.Component {
   }
 
   render() {
+    const { autoFocus } = this.props;
     return (
       <div className="collections-manager">
         <h2 className="collections-manager__header">
@@ -79,6 +77,7 @@ class CollectionsManager extends React.Component {
             </ul>}
           <CollectionSearch
             ref={(node) => { this.search = node; }}
+            autoFocus={autoFocus}
             onChange={this.onChange}
             multi={true}
           />
@@ -106,12 +105,14 @@ class CollectionsManager extends React.Component {
 }
 
 CollectionsManager.defaultProps = {
+  autoFocus: false,
   onSuccess: () => {},
   project: null,
   subjectIDs: []
 };
 
 CollectionsManager.propTypes = {
+  autoFocus: PropTypes.bool,
   onSuccess: PropTypes.func,
   project: PropTypes.shape({
     id: PropTypes.string
