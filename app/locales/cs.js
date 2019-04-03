@@ -1,134 +1,134 @@
 export default {
-  loading: '(Loading)',
+  loading: '(načítá se)',
   classifier: {
-    back: 'Back',
-    backButtonWarning: 'Going back will clear your work for the current task.',
-    close: 'Close',
-    continue: 'Continue',
+    back: 'Zpět',
+    backButtonWarning: 'Krokem zpět ztratíte započatou práci na tomto úkolu.',
+    close: 'Zavřít',
+    continue: 'Pokračovat',
     detailsSubTaskFormSubmitButton: 'OK',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
+    done: 'Dokončit',
+    doneAndTalk: 'Dokončit & Komentovat',
     dontShowMinicourse: 'Do not show mini-course in the future',
     letsGo: 'Let’s go!',
-    next: 'Next',
-    optOut: 'Opt out',
+    next: 'Další',
+    optOut: 'Zrušit účast',
     taskTabs: {
-      taskTab: 'Task',
-      tutorialTab: 'Tutorial'
+      taskTab: 'Úkol',
+      tutorialTab: 'Tutorial/Návod'
     },
-    recents: 'Your recent classifications',
-    talk: 'Talk',
-    taskHelpButton: 'Need some help with this task?',
+    recents: 'Tvé nedávné klasifikace',
+    talk: 'Diskuze',
+    taskHelpButton: 'Potřebuješ pomoct s tímto úkolem?',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
-      promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
-      acceptButton: 'Take me to the next level!',
-      declineButton: 'No, thanks'
+      promotionMessage: "Gratulujeme! Otevřela se ti další úroveň s úkoly. Pokud si přeješ zůstat v té současné, můžeš.",
+      acceptButton: 'Jít do další úrovně!',
+      declineButton: 'Ne, děkuji'
     },
     interventions: {
-      optOut: "Don't show me these messages again."
+      optOut: "Tyto zprávy již nezobrazovat."
     }
   },
   project: {
-    language: 'Language',
-    loading: 'Loading project',
-    disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
+    language: 'Jazyk',
+    loading: 'Projekt se načítá',
+    disclaimer: 'Tento projekt byl vybudován za pomoci aplikace Zooniverse Project Builder ale zatím není oficiálním projektem Zooniverse. Dotazy a připomínky týkající se tohoto projektu směřované na tým Zooniverse se nemusí dočkat odezvy.',
     about: {
-      header: 'About',
+      header: 'O projektu',
       nav: {
-        research: 'Research',
-        results: 'Results',
-        faq: 'FAQ',
-        education: 'Education',
-        team: 'The Team',
+        research: 'Výzkum',
+        results: 'Výsledky',
+        faq: 'FAQ - Často kladené dotazy',
+        education: 'Výuka',
+        team: 'Tým',
       }
     },
     nav: {
-      about: 'About',
+      about: 'O projektu',
       adminPage: 'Admin page',
-      classify: 'Classify',
-      collections: 'Collect',
-      exploreProject: 'Explore Project',
+      classify: 'Klasifikovat',
+      collections: 'Alba',
+      exploreProject: 'Prozkoumat Projekt',
       lab: 'Lab',
-      recents: 'Recents',
-      talk: 'Talk',
-      underReview: 'Under Review',
-      zooniverseApproved: 'Zooniverse Approved'
+      recents: 'Nedávno zobrazené',
+      talk: 'Diskuze',
+      underReview: 'Probíhá revize',
+      zooniverseApproved: 'Schváleno Zooniverse'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
-      title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
+      dark: 'tmavého',
+      light: 'světlého',
+      title: 'klasifikovat',
+      themeToggle: 'Přepnout do %(theme)s prostředí'
     },
     home: {
-      organization: 'Organization',
-      researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      organization: 'Organizace',
+      researcher: 'Slova vědců',
+      about: 'O %(title)s',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
-        volunteers: 'Volunteers',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
+        statistics: '%(title)s statistiky',
+        classifications: 'Klasifikace',
+        volunteers: 'Dobrovolníci',
+        completedSubjects: 'Dokončené předměty',
+        subjects: 'předměty'
       },
       talk: {
-        zero: 'No one is talking about **%(title)s** right now.',
-        one: '**1** person is talking about **%(title)s** right now.',
-        other: '**%(count)s** people are talking about **%(title)s** right now.'
+        zero: 'Momentálně o **%(title)s** nikdo nemluví.',
+        one: '**1** člověk mluví o **%(title)s** právě teď.',
+        other: '**%(count)s** lidí mluví o **%(title)s** právě teď.'
       },
-      joinIn: 'Join in',
-      learnMore: 'Learn more',
-      getStarted: 'Get started',
-      workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
-      visitLink: 'Visit the project',
-      links: 'External Project Links'
+      joinIn: 'Zapojit se',
+      learnMore: 'Dozvědět se více',
+      getStarted: 'Začít',
+      workflowAssignment: 'Otevřel se ti %(workflowDisplayName)s',
+      visitLink: 'Navštivte projekt',
+      links: 'Externí odkazy k projektu'
     }
   },
   organization: {
-    error: 'There was an error retrieving organization',
+    error: 'Došlo k chybě během načítání organizace',
     home: {
-      introduction: 'Introduction',
-      links: 'Links',
+      introduction: 'Představení',
+      links: 'Odkazy',
       metadata: {
-        projects: 'Projects'
+        projects: 'Projekty'
       },
       projects: {
-        error: 'There was an error loading organization projects.',
-        loading: 'Loading organization projects...',
-        none: 'There are no projects associated with this organization.'
+        error: 'Došlo k chybě během načítání projektů dané organizace.',
+        loading: 'Načítání projektů organizace...',
+        none: 'Nejsou zde žádné projekty související s touto organizací.'
       },
-      readLess: 'Read Less',
-      readMore: 'Read More',
-      researcher: 'Words from a researcher',
-      viewToggle: 'View As Volunteer'
+      readLess: 'Zobrazit méně',
+      readMore: 'Zobrazit více',
+      researcher: 'Slova vědců',
+      viewToggle: 'Zobrazit jako dobrovolník'
     },
-    loading: 'Loading organization',
-    notFound: 'organization not found.',
-    notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...'
+    loading: 'Načítání organizace',
+    notFound: 'organizace nenalezena.',
+    notPermission: 'Pokud jste si jisti, že URL je sprváná, pravděpodobně nemáte povolení zobrazit tuto organizaci.',
+    pleaseWait: 'Čekejte prosím...'
   },
   tasks: {
-    less: 'Less',
-    more: 'More',
+    less: 'Méně',
+    more: 'Více',
     shortcut: {
-      noAnswer: 'No answer'
+      noAnswer: 'Bez odpovědi'
     },
     survey: {
-      clear: 'Clear',
-      clearFilters: 'Clear filters',
-      makeSelection: 'Make a selection',
-      showing: 'Showing %(count)s of %(max)s',
-      confused: 'Often confused with',
-      dismiss: 'Dismiss',
-      itsThis: 'I think it’s this',
-      cancel: 'Cancel',
-      identify: 'Identify',
-      surveyOf: 'Survey of %(count)s',
+      clear: 'Zrušit',
+      clearFilters: 'Zrušit filtry',
+      makeSelection: 'Vyberte',
+      showing: 'Zobrazuje %(count)s z %(max)s',
+      confused: 'Někdy zaměněno za',
+      dismiss: 'Zamítnout možnost',
+      itsThis: 'Myslím, že to je ono',
+      cancel: 'Zrušit',
+      identify: 'Identifikovat',
+      surveyOf: 'Výzkum z %(count)s',
       identifications: {
-        zero: 'No identifications',
-        one: '1 identification',
-        other: '%(count)s identifications'
+        zero: 'Žádná identifikace',
+        one: '1 identifikace',
+        other: '%(count)s identifikací'
       }
     }
   },
@@ -170,89 +170,89 @@ export default {
     notSignedInMessage: 'You are not signed in'
   },
   signIn: {
-    title: 'Sign in/register',
-    withZooniverse: 'Sign in with your Zooniverse account',
-    whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.',
-    signIn: 'Sign in',
-    register: 'Register',
-    orThirdParty: 'Or sign in with another service',
-    withFacebook: 'Sign in with Facebook',
-    withGoogle: 'Sign in with Google'
+    title: 'Přihlásit se/Zaregistrovat se',
+    withZooniverse: 'Přihlásit se pomocí svého Zooniverse účtu',
+    whyHaveAccount: 'Přihlášení dobrovolníci mohou sledovat vlastní pokrok a ve výsledné publikaci budou uvedeni v kreditech.',
+    signIn: 'Přihlásit se',
+    register: 'Zaregistrovat se',
+    orThirdParty: 'Nebo se přihlásit pod jinou službou',
+    withFacebook: 'Přihlásit se pomocí Facebooku',
+    withGoogle: 'Přihlásit se pomocí Googlu'
   },
   notFoundPage: {
-    message: 'Not found'
+    message: 'Nenalezeno'
   },
   resetPassword: {
-    heading: 'Reset Password',
-    newPasswordFormDialog: 'Enter the same password twice so you can get back to doing some research. Passwords need to be at least 8 characters long.',
-    newPasswordFormLabel: 'New password:',
-    newPasswordConfirmationLabel: 'Repeat your password to confirm:',
-    enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
-    emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
-    emailError: 'There was an error resetting your password.',
-    passwordsDoNotMatch: 'The passwords do not match, please try again.',
-    loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.',
-    missingEmailsSpamNote: 'Please check your spam folder if you have not received the reset email.',
-    missingEmailsAlternateNote: 'If you have still not received an email, please try any other email address you may have signed up with.'
+    heading: 'Resetovat heslo',
+    newPasswordFormDialog: 'Vložte stejné heslo dvakrát po sobě, a můžete se vrátit k práci na projektu. Heslo musí obsahovat nejméně 8 znaků.',
+    newPasswordFormLabel: 'Nové heslo:',
+    newPasswordConfirmationLabel: 'Potvrďte své nové heslo:',
+    enterEmailLabel: 'Prosím zadejte svou emailovou adresu a my Vám zašleme odkaz pro resetování hesla.',
+    emailSuccess: 'Právě jsme na Vaši emailovou adresu zaslali odkaz na zresetování hesla.',
+    emailError: 'Došlo k chybě při resetování Vašeho hesla.',
+    passwordsDoNotMatch: 'Heslo neodpovídá, zkuste jej prosím zadat znovu.',
+    loggedInDialog: 'Momentálně jste přihlášeni. Prosím, odhlaste se, pokud chcete zresetovat své heslo.',
+    missingEmailsSpamNote: 'Zkontrolujte prosím složku s nevyžádanou poštou/spam, pokud jste neobdrželi email o resetování Vašeho hesla.',
+    missingEmailsAlternateNote: 'Pokud jste zprávu stále neobdrželi, prosím, zkuste zadat jinou emailovou adresu, pod níž jste se mohli zaregistrovat.'
   },
   workflowToggle: {
-    label: 'Active'
+    label: 'Aktivní'
   },
   collections: {
     createForm: {
-      private: 'Private',
-      submit: 'Add Collection'
+      private: 'Soukromé',
+      submit: 'Přidat album'
     }
   },
   emailSettings: {
-    email: 'Email address',
+    email: 'Emailová adresa',
     general: {
-      section: 'Zooniverse email preferences',
-      updates: 'Get general Zooniverse email updates',
-      classify: 'Get email updates when you first classify on a project',
-      note: 'Note: Unticking the box will not unsubscribe you from any of the projects',
-      manual: 'Manage projects individually',
-      beta: 'Get beta project email updates and become a beta tester'
+      section: 'Emailové předvolby pro Zooniverse',
+      updates: 'Dostávat Zooniverse aktualizace emailem',
+      classify: 'Dostávat emailové aktualizace po první klasifikaci v projektu.',
+      note: 'Poznámka: Odstraněním značky z rámečku se neodhlásíte z žádného projektu.',
+      manual: 'Spravovat projekty individuálně',
+      beta: 'Dostávat aktualizace o beta projektech a stát se beta testerem.'
     },
     talk: {
-      section: 'Talk email preferences',
-      header: 'Send me an email',
+      section: 'Emailové předvolby pro Diskuze',
+      header: 'Pošlete mi email',
       frequency: {
-        immediate: 'Immediately',
-        day: 'Daily',
-        week: 'Weekly',
-        never: 'Never'
+        immediate: 'Ihned',
+        day: 'Denně',
+        week: 'Týdenně',
+        never: 'Nikdy'
       },
       options: {
-        participating_discussions: 'When discussions I\'m participating in are updated',
-        followed_discussions: 'When discussions I\'m following are updated',
-        mentions: 'When I\'m mentioned',
-        group_mentions: 'When I\'m mentioned by group (@admins, @team, etc.)',
-        messages: 'When I receive a private message',
-        started_discussions: 'When a discussion is started in a board I\'m following'
+        participating_discussions: 'Jsou-li aktualizované diskuze, jichž se účastním',
+        followed_discussions: 'Jsou-li aktualizované diskuze, které sleduji',
+        mentions: 'Zmíní-li mě někdo v diskuzi',
+        group_mentions: 'Jsem-li zmíněn v rámci skupiny (@admins, @team, atp.)',
+        messages: 'Obdržím-li soukromou zprávu',
+        started_discussions: 'Je-li započata diskize na nástěnce, kterou sleduji.'
       }
     },
     project: {
-      section: 'Project email preferences',
-      header: 'Project',
+      section: 'Emailové předvolby k projektům',
+      header: 'Projekt',
     }
   },
   about: {
     index: {
-      header: 'About',
-      title: 'About',
+      header: 'O projektu',
+      title: 'O projektu',
       nav: {
-        about: 'About',
-        publications: 'Publications',
-        ourTeam: 'Our Team',
+        about: 'O projektu',
+        publications: 'Publikace',
+        ourTeam: 'Náš tým',
         acknowledgements: 'Acknowledgements',
-        contact: 'Contact Us',
+        contact: 'Kontaktujte nás',
         faq: 'FAQ',
-        resources: 'Resources'
+        resources: 'Zdroje'
       }
     },
     home: {
-      title: '## What is the Zooniverse?',
+      title: '## Co je Zooniverse?',
       whatIsZooniverse: 'The Zooniverse is the world’s largest and most popular platform for people-powered research. This research is made possible by volunteers — hundreds of thousands of people around the world who come together to assist professional researchers. Our goal is to enable research that would not be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community, and [many publications](/about/publications).',
       anyoneCanResearch: '### At the Zooniverse, anyone can be a researcher\n\nYou don’t need any specialised background, training, or expertise to participate in any Zooniverse projects. We make it easy for anyone to contribute to real academic research, on their own computer, at their own convenience.\n\nYou’ll be able to study authentic objects of interest gathered by researchers, like images of faraway galaxies, historical records and diaries, or videos of animals in their natural habitats. By answering simple questions about them, you’ll help contribute to our understanding of our world, our history, our Universe, and more.\n\nWith our wide-ranging and ever-expanding suite of projects, covering many disciplines and topics across the sciences and humanities, there\'s a place for anyone and everyone to explore, learn and have fun in the Zooniverse. To volunteer with us, just go to the [Projects](/projects) page, choose one you like the look of, and get started.',
       accelerateResearch: '### We accelerate important research by working together\n\nThe major challenge of 21st century research is dealing with the flood of information we can now collect about the world around us. Computers can help, but in many fields the human ability for pattern recognition — and our ability to be surprised — makes us superior. With the help of Zooniverse volunteers, researchers can analyze their information more quickly and accurately than would otherwise be possible, saving time and resources, advancing the ability of computers to do the same tasks, and leading to faster progress and understanding of the world, getting to exciting results more quickly.\n\nOur projects combine contributions from many individual volunteers, relying on a version of the ‘wisdom of crowds’ to produce reliable and accurate data. By having many people look at the data we often can also estimate how likely we are to make an error. The product of a Zooniverse projects is often exactly what’s needed to make progress in many fields of research.',
