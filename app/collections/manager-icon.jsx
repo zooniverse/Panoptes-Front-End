@@ -38,6 +38,7 @@ class CollectionsManagerIcon extends React.Component {
         {this.state.open &&
           <Dialog tag="div" closeButton={true} onCancel={this.close}>
             <CollectionsManager
+              autoFocus={true}
               onSuccess={this.close}
               project={this.props.project}
               subjectIDs={subjectIDs}

@@ -11,6 +11,11 @@ module.exports = createReactClass
     multi: PropTypes.bool.isRequired
     onChange: PropTypes.func
 
+  componentDidMount: ->
+    if @props.autoFocus
+      @refs.collectionSelect.focus()
+    
+
   getDefaultProps: ->
     multi: false
 
