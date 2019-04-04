@@ -6,6 +6,12 @@ import isAdmin from '../../lib/is-admin';
 import * as classifierActions from '../../redux/ducks/classify';
 import * as translationActions from '../../redux/ducks/translations';
 
+/*
+PLEASE DO NOT ADD NEW WORKFLOW SELECTION RULES TO THIS COMPONENT.
+Implement a new selection strategy component which extends this class and overrides getSelectedWorkflow.
+See workflow-select-classroom.jsx and workflow-selection-url.jsx for examples.
+New strategies should then be added to WorkflowStrategy at the bottom of classify.jsx.
+*/
 class WorkflowSelection extends React.Component {
   constructor() {
     super();
