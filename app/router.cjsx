@@ -31,6 +31,7 @@ createReactClass = require 'create-react-class'
 `import UnsubscribeFromEmails from './pages/unsubscribe';`
 `import HomePageRoot from './pages/home';`
 `import PrivacyPolicy from './pages/privacy-policy';`
+`import YouthPrivacyPolicy from './pages/youth-privacy-policy';`
 `import SecurityPolicy from './pages/security-policy';`
 `import AdminPage from './pages/admin';`
 `import SignInPage from './pages/sign-in';`
@@ -102,6 +103,7 @@ module.exports =
       <Route path="register" component={require './partials/register-form'} />
     </Route>
     <Route path="privacy" component={PrivacyPolicy} />
+    <Route path="youth_privacy" component={YouthPrivacyPolicy} />
     <Route path="security" component={SecurityPolicy} />
 
     <Route path="users/:profile_name" component={UserProfilePage}>
