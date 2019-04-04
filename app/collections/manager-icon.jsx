@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Dialog from 'modal-form/dialog';
 import CollectionsManager from './collections-manager';
+import ModalFocus from '../components/modal-focus';
 
 class CollectionsManagerIcon extends React.Component {
   constructor(props) {
@@ -37,12 +38,17 @@ class CollectionsManagerIcon extends React.Component {
 
         {this.state.open &&
           <Dialog tag="div" closeButton={true} onCancel={this.close}>
-            <CollectionsManager
-              onSuccess={this.close}
-              project={this.props.project}
-              subjectIDs={subjectIDs}
-              user={this.props.user}
-            />
+            <ModalFocus
+              onEscape={this.close}
+            >
+              <CollectionsManager
+                autoFocus={true}
+                onSuccess={this.close}
+                project={this.props.project}
+                subjectIDs={subjectIDs}
+                user={this.props.user}
+              />
+            </ModalFocus>
           </Dialog>}
       </button>
     );
