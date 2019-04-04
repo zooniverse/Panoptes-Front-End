@@ -21,6 +21,7 @@ import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialo
 import ProjectThemeButton from './components/ProjectThemeButton';
 import WorkflowSelection from './workflow-selection';
 import ClassroomWorkflowSelection from './workflow-selection-classroom';
+import URLWorkflowSelection from './workflow-selection-url';
 import { zooTheme } from '../../theme';
 
 function onClassificationSaved(actualClassification) {
@@ -361,16 +362,25 @@ const mapDispatchToProps = dispatch => ({
 
 const ConnectedClassifyPage = connect(mapStateToProps, mapDispatchToProps)(ProjectClassifyPage);
 
-function ConnectedClassifyPageWithWorkflow(props) {
-  const workflowKey = props.workflow ? props.workflow.id : 'no-workflow';
-  
+function WorkflowStrategy(props) {
   //Check for WildCam Lab classrooms (see https://github.com/zooniverse/edu-api-front-end)
   const workflowFromUrl = props.location.query && props.location.query.workflow;
   const isProjectForClassrooms = (props.project && props.project.experimental_tools && props.project.experimental_tools.indexOf('wildcam classroom') > -1);
   const isUrlForClassrooms = props.location.query && props.location.query.classroom;
   const isClassroom = isProjectForClassrooms && isUrlForClassrooms && workflowFromUrl;
   
-  const WorkflowStrategy = isClassroom ? ClassroomWorkflowSelection : WorkflowSelection;
+  if (isClassroom) {
+    return <ClassroomWorkflowSelection {...props} />;
+  }
+  if (workflowFromUrl) {
+    return <URLWorkflowSelection {...props} />;
+  }
+  return <WorkflowSelection {...props} />;
+}
+
+function ConnectedClassifyPageWithWorkflow(props) {
+  const workflowKey = props.workflow ? props.workflow.id : 'no-workflow';
+
   return (
     <WorkflowStrategy
       key={workflowKey}

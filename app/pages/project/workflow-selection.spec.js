@@ -134,22 +134,6 @@ describe('WorkflowSelection', function () {
       expect(project.links.active_workflows).to.include(selectedWorkflowID.toString());
     });
 
-    it('should respect the workflow query param if "allow workflow query" is set', function () {
-      location.query.workflow = '6';
-      project.experimental_tools = ['allow workflow query'];
-      controller.getSelectedWorkflow({ project });
-      expect(workflowStub).to.have.been.calledOnce;
-      expect(workflowStub).to.have.been.calledWith('6', true);
-    });
-
-    it('should sanitise the workflow query param if "allow workflow query" is set', function () {
-      location.query.workflow = '6random78';
-      project.experimental_tools = ['allow workflow query'];
-      controller.getSelectedWorkflow({ project });
-      expect(workflowStub).to.have.been.calledOnce;
-      expect(workflowStub).to.have.been.calledWith('6', true);
-    });
-
     describe('without a logged-in user', function () {
       before(function () {
         project.update({ 'configuration.default_workflow': '1' });
@@ -184,28 +168,6 @@ describe('WorkflowSelection', function () {
     describe('with a logged-in user', function () {
       beforeEach(function () {
         controller.setupSplits = () => null;
-        location.query.workflow = '6';
-      });
-
-      it('should load the specified workflow for the project owner', function () {
-        const user = owner;
-        controller.getSelectedWorkflow({ project, preferences, user });
-        expect(workflowStub).to.have.been.calledOnce;
-        expect(workflowStub).to.have.been.calledWith('6', false);
-      });
-
-      it('should load the specified workflow for a collaborator', function () {
-        const user = mockPanoptesResource('users', { id: '2' });
-        controller.getSelectedWorkflow({ project, preferences, user });
-        expect(workflowStub).to.have.been.calledOnce;
-        expect(workflowStub).to.have.been.calledWith('6', false);
-      });
-
-      it('should load the specified workflow for a tester', function () {
-        const user = mockPanoptesResource('users', { id: '3' });
-        controller.getSelectedWorkflow({ project, preferences, user });
-        expect(workflowStub).to.have.been.calledOnce;
-        expect(workflowStub).to.have.been.calledWith('6', false);
       });
 
       it('should load an active workflow for a general user', function () {
@@ -421,29 +383,6 @@ describe('WorkflowSelection', function () {
           expect(controller.getSelectedWorkflow).to.have.been.calledOnce;
         })
         .then(done, done);
-      });
-
-      describe('when a workflow query param is present', function () {
-        before(function () {
-          const location = {
-            query: {
-              workflow: '5'
-            }
-          };
-          wrapper.setProps({ location });
-        });
-
-        after(function () {
-          wrapper.setProps({ location : {} });
-        });
-
-        it('should redirect to the classify page', function (done) {
-          awaitWorkflow
-          .then(function () {
-            expect(context.router.push).to.have.been.calledWith(`/projects/${project.slug}/classify`);
-          })
-          .then(done, done);
-        });
       });
 
       describe('when the project default workflow is invalid', function () {

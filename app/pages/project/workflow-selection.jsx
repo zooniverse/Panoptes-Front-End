@@ -44,20 +44,9 @@ class WorkflowSelection extends React.Component {
     // if none of those are set, select random workflow
     let selectedWorkflowID;
     let activeFilter = true;
-    const workflowFromURL = this.sanitiseID(this.props.location.query.workflow);
     const userSelectedWorkflow = (user && preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
     const projectSetWorkflow = (user && preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
-    if (workflowFromURL &&
-      this.checkUserRoles(project, user)
-    ) {
-      selectedWorkflowID = workflowFromURL;
-      activeFilter = false;
-    } else if (workflowFromURL &&
-      project.experimental_tools &&
-      project.experimental_tools.indexOf('allow workflow query') > -1
-    ) {
-      selectedWorkflowID = workflowFromURL;
-    } else if (userSelectedWorkflow) {
+    if (userSelectedWorkflow) {
       selectedWorkflowID = userSelectedWorkflow;
     } else if (projectSetWorkflow) {
       selectedWorkflowID = projectSetWorkflow;
@@ -88,10 +77,6 @@ class WorkflowSelection extends React.Component {
         // Don't try again and get caught in a loop
         this.workflowSelectionErrorHandler();
       } else {
-        if (this.props.location.query && this.props.location.query.workflow) {
-          this.context.router.push(`/projects/${this.props.project.slug}/classify`);
-        }
-
         this.clearInactiveWorkflow(selectedWorkflowID)
           .then(() => {
             this.getSelectedWorkflow(this.props);
