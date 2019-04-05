@@ -69,6 +69,16 @@ ONE_UP_REDIRECT = createReactClass
   render: ->
     null
 
+# Used to force a refresh on entering a route, causing it to be fetched from
+# the server - and allowing us to reverse proxy other apps to routes in PFE.
+#
+# Usage: <Route path="path/to/location" component={RELOAD} />
+RELOAD = createReactClass
+  componentDidMount: ->
+    window.location.reload()
+  render: ->
+    null
+
 module.exports =
   <Route path="/" component={require './partials/app'}>
     <IndexRoute component={HomePageRoot} />
