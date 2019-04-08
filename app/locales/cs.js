@@ -63,19 +63,19 @@ export default {
     },
     home: {
       organization: 'Organizace',
-      researcher: 'Slova vědců',
-      about: 'O %(title)s',
+      researcher: 'Slovy vědců',
+      about: 'O projektu %(title)s',
       metadata: {
-        statistics: 'Statistiky %(title)s',
+        statistics: 'Statistiky projektu %(title)s',
         classifications: 'Klasifikací',
         volunteers: 'Dobrovolníků',
         completedSubjects: 'Dokončených objektů',
         subjects: 'Objektů'
       },
       talk: {
-        zero: 'Momentálně o **%(title)s** nikdo nemluví.',
-        one: '**1** člověk mluví o **%(title)s** právě teď.',
-        other: '**%(count)s** lidí mluví o **%(title)s** právě teď.'
+        zero: 'Momentálně o projektu **%(title)s** nikdo nemluví.',
+        one: '**1** člověk mluví o projektu **%(title)s** právě teď.',
+        other: '**%(count)s** lidí mluví o projektu **%(title)s** právě teď.'
       },
       joinIn: 'Zapojit se',
       learnMore: 'Dozvědět se více',
@@ -100,7 +100,7 @@ export default {
       },
       readLess: 'Zobrazit méně',
       readMore: 'Zobrazit více',
-      researcher: 'Slova vědců',
+      researcher: 'Slovy vědců',
       viewToggle: 'Zobrazit jako dobrovolník'
     },
     loading: 'Načítání organizace',
@@ -118,13 +118,13 @@ export default {
       clear: 'Zrušit',
       clearFilters: 'Zrušit filtry',
       makeSelection: 'Vyberte',
-      showing: 'Zobrazuje %(count)s z %(max)s',
+      showing: 'Zobrazuje %(count)s kategorií z %(max)s',
       confused: 'Někdy zaměněno za',
       dismiss: 'Zamítnout možnost',
       itsThis: 'Myslím, že to je ono',
       cancel: 'Zrušit',
       identify: 'Identifikovat',
-      surveyOf: 'Výzkum z %(count)s',
+      surveyOf: 'Výzkum z celkového počtu %(count)s kategorií',
       identifications: {
         zero: 'Žádná identifikace',
         one: '1 identifikace',
@@ -151,6 +151,10 @@ export default {
       dataRemoval: '**Removing your data**\n\nDue to the way in which we archive data, it is generally not possible to completely remove your personal data from our systems. However, if you have specific concerns, please contact us and we will see what we can do.',
       contactUser: '**When we will contact you**\n\nIf you do not register, we will never contact you. If you do register, we will contact you by e-mail in the following circumstances:\n\n* Occasionally, we will send e-mail messages to you highlighting a particular aspect of our research, announcing new features, explaining changes to the system, or inviting you to special events.\n\n* We might also use your email to contact you for the purpose of research into our site\'s operation, and we might ask for additional information at that time. Any additional information will be held consitently with this policy, and participation in such studies is entirely optional and participating or otherwise will in no way affect your use of the site.\n\n* We might contact you with a newsletter about the progress of the project.\n\nYou can \'opt out\' of communications from any project or from the Zooniverse as a whole at any time by visiting the Zooniverse [unsubscribe](https://www.zooniverse.org/unsubscribe) page.',
       furtherInfo: '**Further information and requests**\n\nThe Data Controller is the Department of Physics, University of Oxford. For a copy of the information we hold on you please contact the project team at the address below:\n\nProfessor Chris Lintott\nOxford Astrophysics\nDenys Wilkinson Building\nKeble Road\nOxford, OX1 3RH\nUnited Kingdom'
+    },
+    youthPolicy: {
+      title: 'Advice for Volunteers Under 16 Years Old and Their Parent/Guardian',
+      content: 'Please note that it is the parents’/guardians’ responsibility to explain the user agreement and privacy policy in simple terms to their child if signing up under 16s. There is no minimum age for signing up children as Zooniverse would like to encourage public engagement with research for all ages, though the platform may be more suitable for older children. Parents and guardians must supervise children if they are contributing to any message boards.'
     }
   },
   security: {
@@ -239,24 +243,24 @@ export default {
   },
   about: {
     index: {
-      header: 'O projektu',
-      title: 'O projektu',
+      header: 'O Zooniverse',
+      title: 'O Zooniverse',
       nav: {
-        about: 'O projektu',
+        about: 'O Zooniverse',
         publications: 'Publikace',
         ourTeam: 'Náš tým',
-        acknowledgements: 'Poděkování',
+        acknowledgements: 'Acknowledgements',
         contact: 'Kontaktujte nás',
-        faq: 'FAQ',
-        resources: 'Zdroje'
+        faq: 'FAQ - Často kladené dotazy',
+        resources: 'Materiály ke stažení'
       }
     },
     home: {
       title: '## Co je Zooniverse?',
-      whatIsZooniverse: 'Zooniverse je celosvětově nejrozsáhlejší a nejpopulárnější internetový portál pro občanskou vědu (citizen-science). Tento výzkum je možný díky sta tisícům dobrovolníků z celého světa, kteří přišli pomoct odborníkům s jejich výzkumem. Naším cílem je umožnit výzkum, který by jinak nebyl možný, nebo by byl nepraktický. Výsledkem výzkumu za pomoci Zooniverse jsou nové objevy, soubory dat využitelné širší odbornou komunitou a vznik [mnoha publikací](/about/publications).',
-      anyoneCanResearch: '### Se Zooniverse může být každý vědcem\n\nK tomu, abyste se zapojili v jakémkoli Zooniverse projektu, nepotřebujete žádné odborné vzdělání, školení ani odbornou kvalifikaci. Snažíme se, aby se každý zvládl jednoduše zapojit do skutečného akademického výzkumu, od svého vlastního počítače z pohodlí domova.\n\nBudete mít možnost studovat autentické předměty zájmu nashromážděné vědci, jako jsou snímky vzdálených galaxií, historické záznamy a zápisky z diářů nebo videozáběry zvířat v jejich přirozeném prostředí. Tím, že o nich zodpovíte jednoduché otázky, pomůžete přispět našemu porozumění světu okolo nás, naší historii, našemu vesmíru a mnoha dalším.\n\nS naším široce zaměřeným a neustále se rozšiřujícím souborem projektů, pokrývajícími mnoho vědních oborů a témat napříč oblastmi přírodních and humanitních věd, je tu šance pro každého - objevovat, učit se a zabavit se se Zooniverse. Stát se naším dobrovolníkem je jednoduché, klikněte na stránku [Projekty](/projects), vyberte si, který se Vám líbí a začněte.',
-      accelerateResearch: '### Urychlujeme důležitý výzkum tím, že pracujeme společně\n\nNejvětším úskalím vědeckého výzkumu 21. století je zvládnutí záplavy nových dat, které nyní můžeme získávat o světe kolem nás. Počítače sice mohou pomoct, ale v mnoha oblastech nás lidská schopnost rozeznávání obrazových vzorů — a naše schopnost údivu — činí lepšími. S pomocí Zooniverse dobrovolníků mohou vědci analyzovat svá data daleko rychleji a přesněji než by jinak byli schopni. Šetří tím čas a zdroje, posunují schopnost počítačů zvládat ty samé úkoly, dosahují rychlejšího pokroku a porozumění světu a daleko rychleji se dostávají ke vzrušujícím výsledkům.\n\nNaše projekty kombinují příspěvky mnoha jednotlivých dobrovolníků, spoléhaje se na variantu ‘crowdsourcingu’ (moudrosti davů) produkovat věrohodná a přesná data. Tím, že necháme více lidí zpracovat ta samá data, často také dokážeme odhadnout, jak moc pravděpodobné je, že uděláme chybu. Výsledkem Zooniverse projektů je často přesně to, co je potřeba, aby došlo k pokroku v mnoha oblastech výzkumu.',
-      discoveries: '### Dobrovolníci a odborníci dělají skutečné objevy společně\n\nZooniverse projekty jsou konstruovány se záměrem přeměny úsilí dobrovolníků v měřitelné výsledky. Tyto projekty již vyprodukovaly obrovské množství [publikovaných vědeckých studií](/about/publications), stejně tak mnoho open-source setů analyzovaných dat. V několika případech Zooniverse dobrovovolníci dokonce učinili absolutně nečekané a vědecky významné objevy.\n\nVýznamné množství takového výzkumu se odehrává v diskuzních fórech, kde mohou dobrovolníci spolupracovat mezi sebou i s členy vědeckého týmu. Tato diskuzní fóra jsou součástí každého projektu, umožňující cokoli od rychlého použití hashtagů až po hloubkové analýzy. K dispozici je také centrální diskuzní fórum pro obecné diskuze ohledně Zooniverse.\n\nMnoho těch nejzajímavějších objevů ze projektů Zooniverse vzešlo právě z diskuzí mezi dobrovolníky a vědci. Vyzýváme všechny uživatele, aby se zapojili do diskuzí na diskuzních fórech, pokud se chtějí více zapojit.'
+      whatIsZooniverse: 'Zooniverse je celosvětově nejrozsáhlejší a nejpopulárnější internetový portál pro občanskou vědu (citizen-science). Tento výzkum je možný díky sta tisícům dobrovolníků z celého světa, kteří spolu s vědci zapojili do výzkumu. Naším cílem je umožnit takový výzkum, který by byl jinak nerealizovatelný, nebo nepraktický. Zooniverse pomáhá dosáhnout výsledků jako jsou nové objevy, soubory dat využitelné širší odbornou komunitou a vznik [mnoha publikací](/about/publications).',
+      anyoneCanResearch: '### Se Zooniverse se vědcem může stát úplně každý\n\nK tomu, abyste se zapojili v jakémkoli Zooniverse projektu, nepotřebujete žádné odborné vzdělání, školení ani odbornou kvalifikaci. Snažíme se, aby se každý zvládl jednoduše zapojit do skutečného akademického výzkumu, od svého vlastního počítače z pohodlí domova.\n\nBudete mít možnost studovat autentické předměty zájmu nashromážděné vědci, jako jsou snímky vzdálených galaxií, historické záznamy a zápisky z diářů nebo videozáběry zvířat v jejich přirozeném prostředí. Tím, že o nich zodpovíte jednoduché otázky, pomůžete přispět našemu porozumění světu okolo nás, naší historii, našemu vesmíru a mnoha dalším.\n\nNáš široce zaměřený a neustále se rozšiřující soubor projektů napříč mnoha vědními obory dává komukoli šanci objevovat, učit se a bavit se spolu se Zooniverse. Stát se naším dobrovolníkem je jednoduché, klikněte na stránku [Projekty](/projects), vyberte si, který se Vám líbí a začněte.',
+      accelerateResearch: '### Posunujeme důležitý výzkum dopředu tím, že pracujeme společně\n\nNejvětším úskalím vědeckého výzkumu 21. století je zvládnutí záplavy snadno získatelných nových dat o světě okolo nás. Počítače sice mohou v lecčem pomoct, ale v mnoha oblastech je lidská schopnost rozeznávání obrazových vzorů — a naše schopnost údivu stále nad nimi. S pomocí Zooniverse dobrovolníků mohou vědci analyzovat svá data daleko rychleji a přesněji, než by byli schopni svépomocí. Šetří tím čas a zdroje, posunují schopnost počítačů zvládat ty samé úkoly, dosahují rychlejšího pokroku a porozumění světu a daleko rychleji se dostávají ke vzrušujícím výsledkům.\n\nNaše projekty kombinují příspění mnoha jednotlivých dobrovolníků, spoléhaje se na variantu ‘crowdsourcingu’ (moudrosti davů) produkovat věrohodná a přesná data. Tím, že necháme více lidí zpracovat ta samá data, často také dokážeme odhadnout, jak moc pravděpodobné je, že uděláme chybu. Výsledkem Zooniverse projektů je často přesně to, co je potřeba k dosažení pokroku v oblasti daného výzkumu.',
+      discoveries: '### Dobrovolníci a odborníci dělají skutečné objevy společně\n\nZooniverse projekty jsou konstruovány se záměrem přeměny úsilí dobrovolníků v měřitelné výsledky. Výsledkem je obrovské množství [publikovaných vědeckých studií](/about/publications), stejně tak mnoho open-source setů analyzovaných dat. V několika případech Zooniverse dobrovovolníci dokonce učinili absolutně nečekané a vědecky významné objevy.\n\nVýznamné množství takového výzkumu se odehrává na diskuzních fórech, kde mohou dobrovolníci spolupracovat mezi sebou i přímo s jednotlivými členy vědeckého týmu. Tato diskuzní fóra jsou součástí každého projektu a svým uživatelům umožňují cokoli od rychlého použití hashtagů až po hloubkové analýzy. K dispozici je také centrální diskuzní fórum pro obecné diskuze ohledně Zooniverse.\n\nMnoho těch nejzajímavějších objevů z projektů Zooniverse vzešlo právě z diskuzí mezi dobrovolníky a vědci. Vyzýváme všechny uživatele, aby se zapojili do diskuzí na diskuzních fórech, pokud se chtějí více zapojit.'
     },
     publications: {
       nav: {
@@ -632,7 +636,7 @@ export default {
     },
     acknowledgements: {
       title: '## Acknowledging the Zooniverse',
-      citation: '### Academic Citation',
+      citation: '### Akademické citace',
       instructions: 'Per the [Zooniverse Project Builder Policies](https://help.zooniverse.org/getting-started/lab-policies), all research publications using any data derived from Zooniverse approved projects (those listed on the [Zooniverse Projects page](/projects)) are required to acknowledge the Zooniverse and the Project Builder platform. To do so, please use the following text:',
       supportText: '*This publication uses data generated via the [Zooniverse.org](https://www.zooniverse.org/) platform, development of which is funded by generous support, including a Global Impact Award from Google, and by a grant from the Alfred P. Sloan Foundation.*',
       publicationRequest: 'We ask that all researchers making use of the Zooniverse Project Builder platform in any way also consider including the above acknowledgement in their publications.',
@@ -644,7 +648,7 @@ export default {
       enquiries: 'If you are interested in interviewing a member of the team, please [get in touch](contact).'
     },
     contact: {
-      title: '## Contact & Social Media',
+      title: '## Kontakt & Sociální média',
       discussionBoards: 'Most of the time, the best way to reach the Zooniverse team, or any project teams, especially about any project-specific issues, is through the discussion boards.',
       email: 'If you need to contact the Zooniverse team about a general matter, you can also send an email to the team at [contact@zooniverse.org](mailto:contact@zooniverse.org). Please understand that the Zooniverse team is relatively small and very busy, so unfortunately we cannot reply to all of the emails we receive.',
       collaborating: 'If you are interested in collaborating with the Zooniverse, for instance on a custom-built project, please email [collab@zooniverse.org](mailto:collab@zooniverse.org). (Note that our [Project Builder](/lab) offers an effective way to set up a new project without needing to contact the team!)',
@@ -653,18 +657,18 @@ export default {
     },
     faq: {
       title: '## FAQ - Často kladené dotazy',
-      whyNeedHelp: '- **Why do researchers need your help? Why can\'t computers do these tasks?**\nHumans are better than computers at many tasks. For most Zooniverse projects, computers just aren’t good enough to do the required task, or they may miss interesting features that a human would spot - this is why we need your help. Some Zooniverse projects are also using human classifications to help train computers to do better at these research tasks in the future. When you participate in a Zooniverse project, you are contributing to real research.',
-      amIDoingThisRight: '- **How do I know if I\'m doing this right?**\nFor most of the subjects shown in Zooniverse projects, the researchers don\'t know the correct answer and that\'s why they need your help. Human beings are really good at pattern recognition tasks, so generally your first guess is likely the right one. Don’t worry too much about making an occasional mistake - more than one person will review each image, video or graph in a project. Most Zooniverse projects have a Help button, a Frequently Asked Questions (FAQ) page, and a Field Guide with more information to guide you when classifying.',
-      whatHappensToClassifications: '- **What happens to my classification after I submit it?**\nYour classifications are stored in the Zooniverse\'s secure online database. Later on a project\'s research team accesses and combines the multiple volunteer assessments stored for each subject, including your classifications, together. Once you have submitted your response for a given subject image, graph, or video, you can\'t go back and edit it. Further information can be found on the [Zooniverse User Agreement and Privacy Policy page](/privacy).',
-      accountInformation: '- **What does the Zooniverse do with my account information?**\nThe Zooniverse takes very seriously the task of protecting our volunteer\'s personal information and classification data. Details about these efforts can be found on the [Zooniverse User Agreement and Privacy Policy page](/privacy) and the [Zooniverse Security page](/security).',
-      featureRequest: '- **I have a feature request or found a bug; who should I talk to/how do I report it?**\nYou can post your suggestions for new features and report bugs via the [Zooniverse Talk](/talk) or through the [Zooniverse Software repository](https://github.com/zooniverse/Panoptes-Front-End/issues).',
-      hiring: '- **Is the Zooniverse hiring?**\nThe Zooniverse is a collaboration between institutions from the United Kingdom and the United States; all of our team are employed by one or the other of these partner institutions. Check out the [Zoonvierse jobs page](https://jobs.zooniverse.org/) to find out more about employment opportunities within the Zooniverse.',
-      howToAcknowledge: '- **I\'m a project owner/research team member, how do I acknowledge the Zooniverse and the Project Builder Platform in my paper, talk abstract, etc.?**\nYou can find more details on how to cite the Zooniverse in research publications using data derived from use of the Zooniverse Project Builder on our [Acknowledgements page](/about/acknowledgements).',
-      browserSupport: '- **What browser version does Zooniverse support?**\nWe support major browsers up to the second to last version.',
-      furtherHelp: 'Didn\'t find the answer to your question? Ask on [Zooniverse Talk](/talk) or [get in touch](/about/contact).'
+      whyNeedHelp: '- **Proč vědci potřebují Vaši pomoc? Proč tuto úlohu nemohou vykonat počítače?**\nV mnoha oblastech jsou lidé prozatím lepší než počítače. Většina Zooniverse projektů vyžaduje takové úkony, které zatím počítače nezvládnou na potřebné úrovni nebo v nichž by mohly přehlédnout zajímavé vlastnosti, narozdíl od člověka, který by si jich všiml - proto potřebujeme Vaši pomoc. Některé Zooniverse projekty zároveň využívají klasifikace vykonané člověkem k tomu k trénování počítačů - aby se v nichž zlepšily a mohly je vykonávat v budoucnosti. Svou účastí v projektu přispíváte ke zkutečnému vědeckému výzkumu.',
+      amIDoingThisRight: '- **Jak poznám, jestli to dělám správně?**\nU mnoha objektů v našich projektech, vědci správnou odpověď neznají, proto potřebují Vaši pomoc. Lidé jsou velmi dobří v úkolech zaměřených na rozpoznávání vzorů (pattern recognition), obecně, Vaše první odpověď je často ta správná. Netrapte se, pokud občas uděláte chybu - každý snímek, video-nahrávka či graf jsou vyhodnocovány více lidmi v projektu. Většina projektů má Nápovědu, stránku s FAQ - Nejčastěji kladenými dotazy a Průvodce s dalšími informacemi, které Vám při klasifikaci pomohou.',
+      whatHappensToClassifications: '- **Co se stane s mou klasifikací poté, co ji potvrdím?**\nVaše klasifikace jsou bezpečně uloženy v naší online databázi. Později tým vědců zkombinuje Vaši odpověď s odpověďmi dalších dobrovolníků, které jsou v databázi uloženy pro daný objekt. Jakmile potvrdíte Vaši klasifikaci (kliknutím na tlačítko "Dokončit") pro daný objekt (snímek, graf, videonahrávku...), už se nelze vrátit, abyste svou odpověď změnili. Pro více informací navštivě stránku [Zooniverse User Agreement and Privacy Policy page](/privacy).',
+      accountInformation: '- **Jak Zooniverse nakládá s osobními údaji mého Zooniverse účtu?**\nZooniverse bere úlohu ochrany osobních údajů a klasifikací svých dobrovolníků velmi vážně. Více informací ohledně ochrany osobních údajů najdete na stránkách [Zooniverse User Agreement and Privacy Policy page](/privacy) a [Zooniverse Security page](/security).',
+      featureRequest: '- **Mám nápad na vylepšení / Našel jsem chybu (bug); Na koho se obrátit? / Jak chybu nahlásit?**\nSvé nápady nebo objevené chyby můžete prostřednictvím [Zooniverse Diskuze](/talk) nebo pomocí [Zooniverse Software repository](https://github.com/zooniverse/Panoptes-Front-End/issues) na GitHubu.',
+      hiring: '- **Nabírá Zooniverse nové zaměstnance?**\nZooniverse is výsledkem spolupráce institucí Spojeného království Velké Británie a Severního Irska a Spojených států amerických; všichni členové našeho týmu jsou zaměstnáni jednou z těchto partnerských institucí. Více informací naleznete na stránce [Nabídka pracovních míst v Zooniverse](https://jobs.zooniverse.org/).',
+      howToAcknowledge: '- **Jsem zakladatelem projektu/členem vědeckého týmu, jakým způsobem mohu uvádět Zooniverse a Project Builder ve své studii, v abstraktu, epod.?**\nDetaily o tom, jak citovat Zooniverse ve vědeckých publikacích, které využívají data získaná prostřednictvím Zooniverse najdete pod stránkou Project Builder nebo [Acknowledgements](/about/acknowledgements).',
+      browserSupport: '- **Jaké verze prohlíže Zooniverse podporuje?**\nPodporujeme všechny hlavní prohlížeče od druhé až po nejnovější verzi.',
+      furtherHelp: 'Nenašli jste odpověď na svou otázku? Zeptejte se nás prostřednictvím [Zooniverse Diskuze](/talk) nebo nás kontaktujte [Získat kontakt](/about/contact).'
     },
     resources: {
-      title: '## Resources',
+      title: '## Materiály ke stažení',
       filler: 'Useful downloads and guidelines for talking about the Zooniverse.',
       introduction: '### Brand Materials',
       officialMaterials: '[Download official Zooniverse logos](https://github.com/zooniverse/Brand/tree/master/style%%20guide/logos). Our official color is teal hex `#00979D` or `RGBA(65, 149, 155, 1.00)`.',
@@ -678,13 +682,13 @@ export default {
   },
   getInvolved: {
     index: {
-      title: 'Get Involved',
+      title: 'Zapojte se',
       nav: {
-        volunteering: 'Volunteering',
-        education: 'Education',
-        callForProjects: 'Call for Projects',
-        collections: 'Collections',
-        favorites: 'Favorites'
+        volunteering: 'Dobrovolnictví',
+        education: 'Výuka',
+        callForProjects: 'Výběrové řízení projektů',
+        collections: 'Alba',
+        favorites: 'Oblíbené'
       }
     },
     callForProjects: {
@@ -725,33 +729,33 @@ export default {
       }
     },
     education: {
-      title: '## Education in the Zooniverse',
-      becomeCitizenScientist: 'As a volunteer on these websites, both you and your students can become citizen scientists and citizen researchers, participating in real science and other research. If you or your students think you have make a mistake, don’t worry; even the researchers make mistakes. These projects are set up to have more than one volunteer analyzing each piece of data, thereby eliminating the vast majority of human error. Mistakes are a part of the process, and can even help us evaluate the difficulty of the data. As long as everyone does their best, they are helping!',
-      resources: '### Resources for educators using Zooniverse',
-      zooTeach: '- [ZooTeach](http://www.zooteach.org/) is a repository of lessons and resources for teachers. At ZooTeach, you will find a variety of resources for education, including: guides to projects for students and teachers, teacher-created presentations designed to introduce students to a particular project, and lessons developed to connect your students to projects and research within the context of things they already know.',
-      educationPages: '- Many Zooniverse projects have their own education pages with additional resources for teachers. Resources may include a video tutorial of how to use the project, other helpful documents and videos about the classification process, and education resources related to the research behind the project.',
-      joinConversationTitle: '### Take part in the conversation',
-      joinConversationBody: 'Keep up with the latest Zooniverse educational efforts on the [Zooniverse Blog](http://blog.zooniverse.org/) or by following [&#64;zooteach](https://twitter.com/ZooTeach) on Twitter. You can also talk with other Zooniverse educators and peers interested in using people-powered research in all sorts of learning environments on the [Zooniverse Education Talk board](http://zooniverse.org/talk/16).',
-      howEducatorsUseZooniverse: '### How are educators using Zooniverse?',
-      inspiration: 'Looking for a little inspiration? Here are some ways educators have used Zooniverse projects and educational resources:',
-      floatingForests: '- [Floating Forests: Teaching Young Children About Kelp](http://blog.zooniverse.org/2015/04/29/floating-forests-teaching-young-children-about-kelp/)',
-      cosmicCurves: '- [Cosmic Curves: Investigating Gravitational Lensing at the Adler Planetarium](http://blog.zooniverse.org/2014/03/18/cosmic-curves-investigating-gravitational-lensing-at-the-adler-planetarium/)',
-      snapshotSerengeti: '- [Snapshot Serengeti Brings Authentic Research Into Undergraduate Courses](http://blog.zooniverse.org/2014/02/19/snapshot-serengeti-brings-authentic-research-into-undergraduate-courses/)',
-      contactUs: 'We’d love to hear about how you’ve used Zooniverse with youth or adult learners! Please contact [education@zooniverse.org](mailto:education@zooniverse.org) if you have any interesting stories to share.'
+      title: '## Výuka v Zooniverse',
+      becomeCitizenScientist: 'Jakožto dobrovolník na těchto webových stránkách, se můžete Vy i Vaši studenti stát zárove občanskými vědci i výzkumníky, podílejícími se na skutečném vědeckém a jiném výzkumu. Pokud si Vaši studenti myslí, že jste chybovali, nebojte se, dokonce i skuteční vědci dělají chyby. Naše projekty jsou nastaveny tak, že každý zkoumaný objekt je analyzován větším počtem dobrovolníků, čímž je možné eliminovat většinu lidských chyb. Chyby jsou součástí procesu, a mohou být dokonce přínosné - pomohou nám poznat, kdy jde o příliš složitá data. Pokud se všichni snažíme o nejlepší výkon, potom pomáháme!',
+      resources: '### Zdroje pro učitele využívající Zooniverse',
+      zooTeach: '- [ZooTeach](http://www.zooteach.org/) je soubor lekcí a materiálů pro učitele (pouze v angličtině). ZooTeach obsahuje různé materiály pro výuku včetně: návodů projektů pro studenty a učitele, učitelské prezentace navržené k představení jednotlivých projektů studentům, přípravy lekcí vyvinutých k propojení Vašich studentů s projektem a výzkumem v rámci toho, co už znají.',
+      educationPages: '- Mnoho Zooniverse projektů má své vlastní stránky věnované výuce s dalšími zdroji nápadů pro učitele. Takové zdroje mohou obsahovat video-návod, jak pracovat s daným projektem, další užitečné dokumenty a videa o samotném procesu klasifikace nebo výukové materiály spojené s výzkumem nad rámec projektu.',
+      joinConversationTitle: '### Zapojte se do konverzace',
+      joinConversationBody: 'Držte krok s nejnovějšími výukovými pokusy Zooniverse na [Zooniverse Blogu](http://blog.zooniverse.org/) nebo sledujte [&#64;zooteach](https://twitter.com/ZooTeach) na Twitteru. Můžete také diskutovat s jinými učiteli a jinými dobrovolníky, kteří se snaží využít "lidmi-poháněný výzkum" (people-powered research) v různých oblastech vzdělávání na diskuzi [Zooniverse Education Talk board](http://zooniverse.org/talk/16).',
+      howEducatorsUseZooniverse: '### Jak učitelé využívají Zooniverse?',
+      inspiration: 'Hledáte nějakou inspiraci? Zde je několik způsobů, kdy učitelé využili Zooniverse projekty a výukové materiály:',
+      floatingForests: '- [Plovoucí lesy - Floating Forests: Jak učit malé děti o chaluhách](http://blog.zooniverse.org/2015/04/29/floating-forests-teaching-young-children-about-kelp/)',
+      cosmicCurves: '- [Kosmické Křivky - Cosmic Curves: Investigating Gravitational Lensing at the Adler Planetarium](http://blog.zooniverse.org/2014/03/18/cosmic-curves-investigating-gravitational-lensing-at-the-adler-planetarium/)',
+      snapshotSerengeti: '- [Momentky ze Serengeti - Snapshot Serengeti přináší autentický výzkum do "Undergraduate" kurzů](http://blog.zooniverse.org/2014/02/19/snapshot-serengeti-brings-authentic-research-into-undergraduate-courses/)',
+      contactUs: 'Rádi bychom slyšeli, jak jste využili Zooniverse s mladými či dospělými studenty! Prosím, kontaktujte [education@zooniverse.org](mailto:education@zooniverse.org), pokud máte nějaký zajímavý příběh nebo zkušenost, které byste rádi sdíleli.'
     },
     volunteering: {
-      title: '## How to Volunteer',
-      introduction: 'First of all, everyone who contributes to a Zooniverse project is a volunteer! We have a wonderful, global community who help us do what we do. The main ways of volunteering with us are helping us with classifications on data, being a beta tester on projects we\'ve yet to launch, and being a moderator for a project. For more information about any of these roles, just read below.',
-      projectVolunteeringTitle: '### Volunteer on a Project',
-      projectVolunteeringDescription: 'Volunteering on a project is the easiest and most common way of volunteering. We always need volunteers to go onto our projects and classify the data contained in them. You can read more about what happens with the classifications and how it helps the scientific community and the progress of science on the [About](/about) page.',
-      projectLink: 'There is no minimum time requirement needed; do as much or as little as you\'d like. To get started as a classifications volunteer, just to go to the [Projects](/projects) page, have a look through, find one you like the look of, and get stuck in!',
-      betaTesterTitle: '### Volunteer as a Beta Tester',
-      betaTesterDescription: 'Volunteers also help us test projects before they are launched to check that they work properly. This involves working through some classifications on the beta project to check that it works, looking for any bugs, and filling out a questionnaire at the end. This helps us find any issues in the project that need resolving and also assess how suitable the project is for the Zooniverse. You can read some guidelines on what makes a project suitable on the [Policies](https://help.zooniverse.org/getting-started/lab-policies) page, under \'Rules and Regulations\'.',
-      betaTesterSignUp: 'To sign up as a beta tester, go to [www.zooniverse.org/settings/email](/settings/email) and tick the box relating to beta testing. We\'ll then send you emails when a project is ready to be tested. You can change your email settings any time you want using the [same email page](/settings/email) and unticking the box.',
-      projectModeratorTitle: '### Volunteer as a Project Moderator',
-      projectModeratorBody: 'Volunteer moderators have extra permissions in the Talk discussion tool for a particular project. They help moderate discussions and act as a point of contact for the project. Moderators are selected by the project owner. If you\'re interested in becoming a moderator on a project you\'re taking part in, go to the project\'s About page and get in touch with the researcher.',
-      furtherInformationTitle: '### Further Information',
-      contactUs: 'If you\'d like any more information on any of these different roles, contact us via the [Contact Us](/about/contact) page.'
+      title: '## Jak se stát dobrovolníkem',
+      introduction: 'Zaprvé, každý, kdo se zapojuje do projektů Zooniverse project je dobrovolníkem! Máme zde úžasnou komunitu lidí z celého světa, kteří nám pomáhají s tím, co děláme. Hlavní náplní dobrovolnictví u nás je pomoc s klasifikací dat, testováním beta projektů, které se chystáme spustit, a moderováním projektových diskuzí. Pro více informací ke kterékoli z těchto rolí čtěte níže.',
+      projectVolunteeringTitle: '### Dobrovolníkem v projektu',
+      projectVolunteeringDescription: 'Stát se dobrovolníkem v projektu je ten nejjednodušší a nejčastější způsob dobrovolnictví. Stále potřebujeme dobrovolníky, kteří by se přihlásili do našich projektů a klasifikovali jejich data. Přečtěte si více o tom, co se děje s klasifikacemi a jakým způsobem pomáhají vědecké komunitě a vědeckému pokroku na stránce [O Zooniverse](/about).',
+      projectLink: 'Není zde žádný minimální čas, který byste nám museli věnovat; dělejte jen tolik, kolik chcete. Abyste se zapojili jako klasifikující dobrovolník, jděte na stránku [Projekty](/projects), projděte si naši nabídku, zvolte si jeden, který Vás zaujme a zapojte se!',
+      betaTesterTitle: '### Dobrovolníkem jako Beta testerem',
+      betaTesterDescription: 'Dobrovolníci nám také často pomáhají testovat projekty předtím, než je spustíme, abychom zjistili, zda budou dobře fungovat. To obnáší projít několik klasifikací v beta verzi projektu, aby zjistili, že funguje, hledají možné chyby a na závěr vyplňují dotazníky. To nám pomůže najít a vychytat jakékoli problémy, které je nutné vyřešit, ale také posoudit do jaké míry je projekt vhodný pro Zooniverse. Můžete si přečíst nějaké směrnice ohledně toho, jak by měl vypadat projekt vhodný pro Zooniverse na stránce [Zásady - Policies](https://help.zooniverse.org/getting-started/lab-policies), pod položkou \'Pravidla a předpisy - Rules and Regulations\'.',
+      betaTesterSignUp: 'Abyste se přihlásili jako beta tester, jděte na stránku [www.zooniverse.org/settings/email](/settings/email) a zaškrtněte políčko pro beta testování. Poté Vám budeme zasílat emaily, když se objeví projekt připravený k testování. Své emailové nastavení můžete kdykoli změnit [stejná emailová stránka](/settings/email) tím, že rámeček odškrtnete.',
+      projectModeratorTitle: '### Dobrovolník jako moderátor projektu',
+      projectModeratorBody: 'Dobrovolníci moderátoři mají více práv v projektových diskuzích. Pomáhají usměrňovat diskuze a jednat jako konktaktní spojka projektu. Moderátoři jsou vybíráni zakladatelem projektu. Pokud máte zájem stát se moderátorem projektu, do něhož jste se zapojili, jděte na stránku "O projektu" a spojte se s příslušným vědeckým pracovníkem.',
+      furtherInformationTitle: '### Další informace',
+      contactUs: 'Pokud by Vás zajímaly další věci ohledně těchto rolí, kontaktujte nás prostřednictvím stránky [Kontaktujte nás](/about/contact).'
     }
   },
   lab: {
@@ -974,31 +978,31 @@ export default {
   },
   userSettings: {
     account: {
-      displayName: 'Display name (required)',
-      displayNameHelp: 'How your name will appear to other users in Talk and on your Profile Page',
-      realName: 'Real name (optional)',
-      realNameHelp: 'Public; we’ll use this to give acknowledgement in papers, on posters, etc.',
-      interventions: 'Show project intervention notifications.',
-      interventionsHelp: 'Allow projects to display messages while you are classifying.',
-      interventionsPreferences: 'Notification preferences',
+      displayName: 'Zobrazované jméno (povinné)',
+      displayNameHelp: 'Jak se Vaše jméno bude zobrazovat ostatním uživatelům v diskuzích a na Vašem profilu',
+      realName: 'Skutečné jméno (nepovinné)',
+      realNameHelp: 'Veřejné; bude použito v odborných publikacích, apod.',
+      interventions: 'Zobrazovat upozornění ohledně projektové intervence (dotazníky apod.).',
+      interventionsHelp: 'Povolit projektům zobrazovat zprávy v době, kdy klasifikujete.',
+      interventionsPreferences: 'Předvolby upozornění',
       changePassword: {
-        heading: 'Change your password',
-        currentPassword: 'Current password (required)',
-        newPassword: 'New password (required)',
-        tooShort: 'That’s too short',
-        confirmNewPassword: 'Confirm new password (required)',
-        doesntMatch: 'These don’t match',
-        change: 'Change'
+        heading: 'Změnit heslo',
+        currentPassword: 'Současné heslo (povinné)',
+        newPassword: 'Nové heslo (povinné)',
+        tooShort: 'Heslo je příliš krátké',
+        confirmNewPassword: 'Potvrďte nové heslo (povinné)',
+        doesntMatch: 'Zadaná hesla se neshodují',
+        change: 'Změnit'
       }
     },
     profile: {
-      dropImage: 'Drop an image here (or click to select).',
-      changeAvatar: 'Change avatar',
-      avatarImageHelp: 'Drop an image here (square, less than %(size)s KB)',
-      clearAvatar: 'Clear avatar',
-      changeProfileHeader: 'Change profile header',
-      profileHeaderImageHelp: 'Drop an image here (any dimensions, less than %(size)s KB)',
-      clearHeader: 'Clear header'
+      dropImage: 'Sem přesuňte obrázek (nebo klikněte na Vybrat).',
+      changeAvatar: 'Změnit avatar',
+      avatarImageHelp: 'Sem přesuňte obrázek (čtvercový formát, menší než %(size)s KB)',
+      clearAvatar: 'Odstranit avatar',
+      changeProfileHeader: 'Změnit záhlaví Vašeho profilu',
+      profileHeaderImageHelp: 'Sem přesuňte obrázek (libovolný poměr stran, menší než %(size)s KB)',
+      clearHeader: 'Odstranit záhlaví'
     }
   }
 };
