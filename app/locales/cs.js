@@ -85,7 +85,7 @@ export default {
       links: 'Externí odkazy k projektu'
     }
   },
-  organization: {ň
+  organization: {
     error: 'Došlo k chybě během načítání organizace',
     home: {
       introduction: 'Představení',
