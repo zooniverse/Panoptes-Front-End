@@ -17,6 +17,7 @@ import ProjectPage from './project-page';
 import Translations from '../../classifier/translations';
 import getAllLinked from '../../lib/get-all-linked';
 
+counterpart.registerTranslations('cs', require('../../locales/cs').default);
 counterpart.registerTranslations('en', require('../../locales/en').default);
 counterpart.registerTranslations('it', require('../../locales/it').default);
 counterpart.registerTranslations('es', require('../../locales/es').default);
