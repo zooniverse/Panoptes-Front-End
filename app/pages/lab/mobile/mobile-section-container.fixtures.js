@@ -180,6 +180,16 @@ const validationFixtures = {
         }
       ]
     }
+  },
+  questionHasOneImage: {
+    task: {
+      question: '![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg)'
+    }
+  },
+  questionHasTwoImages: {
+    task: {
+      question: '![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg) ![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg)'
+    }
   }
 };
 

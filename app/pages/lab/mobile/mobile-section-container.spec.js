@@ -70,7 +70,7 @@ describe('<MobileSectionContainer />', function () {
       assert.strictEqual(isPlainObject(validations), true);
     });
 
-    function testValidationProp(name, props = {}, expectedResult = true) {
+    function testValidationProp(name, props = {}, expectedResult = true, asWarning = false) {
       const task = fixtures.task(props.task);
       const workflow = fixtures.workflow(props.workflow);
       const project = fixtures.project({
@@ -85,7 +85,7 @@ describe('<MobileSectionContainer />', function () {
       let component = wrapper.find('MobileSection').first();
       let validationToTest = component.props().validations[name];
 
-      assert.strictEqual(validationToTest, convertBooleanToValidation(expectedResult));
+      assert.strictEqual(validationToTest, convertBooleanToValidation(expectedResult, asWarning));
     }
 
     it('should check whether the task question text is too long', function () {
@@ -126,6 +126,11 @@ describe('<MobileSectionContainer />', function () {
     it('should check whether workflow has no subtasks', function () {
       testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasNoSubtasks, true);
       testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasSubtasks, false);
+    });
+
+    it('should check whether workflow question has one image', function () {
+      testValidationProp('workflowQuestionHasOneOrLessImages', validationFixtures.questionHasOneImage, true, true);
+      testValidationProp('workflowQuestionHasOneOrLessImages', validationFixtures.questionHasTwoImages, false, true);
     });
   });
 

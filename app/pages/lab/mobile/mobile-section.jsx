@@ -26,7 +26,7 @@ counterpart.registerTranslations('en', {
       drawingTaskHasOneTool: 'Drawing task must have only 1 tool',
       drawingTaskHasNoSubtasks: 'Drawing tool must not have any subtasks'
     },
-    projectEligible: 'Check this box if you think your question fits in this way.  If you have a Yes/No question, we recommend Yes as the first option listed so that it appears on the right.',
+    projectEligible: 'Check this box if you think your question fits in this way.  If you have a Yes/No two choice question, we recommend Yes as the first option listed so that it appears on the right.',
     projectIneligible: 'Sorry, but the mobile app will not currently work for this workflow. The following are the requirements for the swipe workflow.',
     imageWarning: 'It appears that you have more than one image in your task question. While this is allowed for mobile, we will only show the first image.',
     mobileHelp: 'Mobile app:  Check this box if you would like this workflow available in the mobile app',
