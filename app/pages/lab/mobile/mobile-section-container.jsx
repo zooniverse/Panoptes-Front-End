@@ -11,15 +11,16 @@ const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'drawing'];
 const MARKDOWN_IMAGE = /!\[[^\]]*](:?\([^)]*\)|\[[^\]]*])/g;
 
 function taskQuestionNotTooLong({ task }) {
-  let { question } = task;
-  if (question) {
-    const matchArray = question.match(MARKDOWN_IMAGE);
-    if (matchArray) {
-      matchArray.map((imageLink) => {
-        question = question.replace(imageLink, '');
-      });
-    }
-  }
+  const { question } = task;
+  // TODO: Code to remove markdown images from character count. Change must be made in mobile app checks before addition.
+  // if (question) {
+  //   const matchArray = question.match(MARKDOWN_IMAGE);
+  //   if (matchArray) {
+  //     matchArray.map((imageLink) => {
+  //       question = question.replace(imageLink, '');
+  //     });
+  //   }
+  // }
   return convertBooleanToValidation(question ? question.length < VALID_QUESTION_LENGTH : false);
 }
 
