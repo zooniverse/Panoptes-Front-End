@@ -71,7 +71,6 @@ const validatorFns = {
   single: {
     taskQuestionNotTooLong,
     taskFeedbackDisabled,
-    taskHasTwoAnswers,
     workflowFlipbookDisabled,
     workflowHasSingleTask,
     workflowNotTooManyShortcuts: workflowHasNoMoreThanXShortcuts(2),

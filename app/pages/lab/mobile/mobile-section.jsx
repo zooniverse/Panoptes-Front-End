@@ -16,7 +16,6 @@ counterpart.registerTranslations('en', {
     },
     validations: {
       workflowHasSingleTask: 'Has one Task',
-      taskHasTwoAnswers: 'Has two available answers (e.g. Yes/No)',
       taskQuestionNotTooLong: 'Question has less than 200 characters',
       workflowNotTooManyShortcuts: 'Has less than three shortcuts',
       workflowDoesNotContainShortcuts: 'Has no shortcuts',
@@ -134,7 +133,7 @@ class MobileSection extends Component {
             {
               this.props.validations.workflowQuestionHasOneOrLessImages === ValidationValue.warning ? warningView : null
             }
-            
+
             <ul>
               {map(this.props.validations, renderValidation)}
             </ul>
