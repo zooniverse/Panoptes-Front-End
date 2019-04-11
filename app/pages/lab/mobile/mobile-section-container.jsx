@@ -17,10 +17,6 @@ function taskFeedbackDisabled({ task }) {
   return convertBooleanToValidation(!task.feedback || !task.feedback.enabled);
 }
 
-function taskHasTwoAnswers({ task }) {
-  return convertBooleanToValidation(task.answers ? task.answers.length === 2 : false);
-}
-
 function workflowFlipbookDisabled({ workflow }) {
   return convertBooleanToValidation((workflow.configuration) ? workflow.configuration.multi_image_mode !== 'flipbook' : true);
 }

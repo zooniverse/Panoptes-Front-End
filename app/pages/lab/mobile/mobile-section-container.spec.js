@@ -93,11 +93,6 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('taskQuestionNotTooLong', validationFixtures.taskQuestionTooLong, false);
     });
 
-    it('should check whether the task has two answers', function () {
-      testValidationProp('taskHasTwoAnswers');
-      testValidationProp('taskHasTwoAnswers', validationFixtures.taskHasThreeAnswers, false);
-    });
-
     it('should check whether the task uses feedback', function () {
       testValidationProp('taskFeedbackDisabled');
       testValidationProp('taskFeedbackDisabled', validationFixtures.taskFeedbackEnabled, false);
@@ -149,7 +144,6 @@ describe('<MobileSectionContainer />', function () {
     it('should equal false if any of the validations aren\'t met', function () {
       [
         fixtures.validationFixtures.taskQuestionTooLong,
-        fixtures.validationFixtures.taskHasThreeAnswers,
         fixtures.validationFixtures.taskFeedbackEnabled,
         fixtures.validationFixtures.workflowFlipbookEnabled,
         fixtures.validationFixtures.workflowHasMultipleTasks,
