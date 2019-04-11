@@ -8,9 +8,19 @@ import ValidationValue, { convertBooleanToValidation } from './mobile-validation
 
 const VALID_QUESTION_LENGTH = 200;
 const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'drawing'];
+const MARKDOWN_IMAGE = /!\[[^\]]*](:?\([^)]*\)|\[[^\]]*])/g;
 
 function taskQuestionNotTooLong({ task }) {
-  return convertBooleanToValidation(task.question ? task.question.length < VALID_QUESTION_LENGTH : false);
+  let { question } = task;
+  if (question) {
+    const matchArray = question.match(MARKDOWN_IMAGE);
+    if (matchArray) {
+      matchArray.map((imageLink) => {
+        question = question.replace(imageLink, '');
+      });
+    }
+  }
+  return convertBooleanToValidation(question ? question.length < VALID_QUESTION_LENGTH : false);
 }
 
 function taskFeedbackDisabled({ task }) {
@@ -33,10 +43,9 @@ function workflowHasNoMoreThanXShortcuts(shortcutsLimit) {
 }
 
 function workflowQuestionHasOneOrLessImages({ task }) {
-  const markdownQuestion = /!\[[^\]]*](:?\([^)]*\)|\[[^\]]*])/g;
   let validation = convertBooleanToValidation(false);
   if (task.question) {
-    const matchArray = task.question.match(markdownQuestion);
+    const matchArray = task.question.match(MARKDOWN_IMAGE);
     validation = convertBooleanToValidation(matchArray ? matchArray.length < 2 : true, true);
   }
 
