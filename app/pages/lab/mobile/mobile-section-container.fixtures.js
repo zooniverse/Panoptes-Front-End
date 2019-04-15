@@ -71,15 +71,6 @@ const validationFixtures = {
       question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut dui erat. Vivamus est nisl, accumsan non urna at, elementum tempor urna. Sed eget pulvinar eros. Nunc placerat metus bibendum lacus elementum, vitae sagittis mi tincidunt.'
     }
   },
-  taskHasThreeAnswers: {
-    task: {
-      answers: [
-        { label: 'Yes' },
-        { label: 'No' },
-        { label: 'Maybe' }
-      ]
-    }
-  },
   taskFeedbackEnabled: {
     task: {
       feedback: {
@@ -188,6 +179,16 @@ const validationFixtures = {
           }]
         }
       ]
+    }
+  },
+  questionHasOneImage: {
+    task: {
+      question: '![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg)'
+    }
+  },
+  questionHasTwoImages: {
+    task: {
+      question: '![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg) ![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg)'
     }
   }
 };

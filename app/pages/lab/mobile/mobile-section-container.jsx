@@ -8,17 +8,24 @@ import ValidationValue, { convertBooleanToValidation } from './mobile-validation
 
 const VALID_QUESTION_LENGTH = 200;
 const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'drawing'];
+const MARKDOWN_IMAGE = /!\[[^\]]*](:?\([^)]*\)|\[[^\]]*])/g;
 
 function taskQuestionNotTooLong({ task }) {
-  return convertBooleanToValidation(task.question ? task.question.length < VALID_QUESTION_LENGTH : false);
+  const { question } = task;
+  // TODO: Code to remove markdown images from character count. Change must be made in mobile app checks before addition.
+  // if (question) {
+  //   const matchArray = question.match(MARKDOWN_IMAGE);
+  //   if (matchArray) {
+  //     matchArray.map((imageLink) => {
+  //       question = question.replace(imageLink, '');
+  //     });
+  //   }
+  // }
+  return convertBooleanToValidation(question ? question.length < VALID_QUESTION_LENGTH : false);
 }
 
 function taskFeedbackDisabled({ task }) {
   return convertBooleanToValidation(!task.feedback || !task.feedback.enabled);
-}
-
-function taskHasTwoAnswers({ task }) {
-  return convertBooleanToValidation(task.answers ? task.answers.length === 2 : false);
 }
 
 function workflowFlipbookDisabled({ workflow }) {
@@ -37,10 +44,9 @@ function workflowHasNoMoreThanXShortcuts(shortcutsLimit) {
 }
 
 function workflowQuestionHasOneOrLessImages({ task }) {
-  const markdownQuestion = /!\[[^\]]*](:?\([^)]*\)|\[[^\]]*])/g;
   let validation = convertBooleanToValidation(false);
   if (task.question) {
-    const matchArray = task.question.match(markdownQuestion);
+    const matchArray = task.question.match(MARKDOWN_IMAGE);
     validation = convertBooleanToValidation(matchArray ? matchArray.length < 2 : true, true);
   }
 
@@ -71,7 +77,6 @@ const validatorFns = {
   single: {
     taskQuestionNotTooLong,
     taskFeedbackDisabled,
-    taskHasTwoAnswers,
     workflowFlipbookDisabled,
     workflowHasSingleTask,
     workflowNotTooManyShortcuts: workflowHasNoMoreThanXShortcuts(2),
