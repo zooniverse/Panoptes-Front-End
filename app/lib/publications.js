@@ -4,6 +4,16 @@ const Publications = {
       slug: "zooniverse/galaxy-zoo",
       publications: [
         {
+          citation: "Galaxy Zoo and SPARCFIRE: constraints on spiral arm formation mechanisms from spiral arm number and pitch angles, Hart+ 2018",
+          href: "https://arxiv.org/abs/1708.04628",
+          date: "2018"
+        },
+        {
+          citation: "Galaxy Zoo: constraining the origin of spiral arms, Hart+ 2018",
+          href: "https://arxiv.org/abs/1805.01782",
+          date: "4 May 2018"
+        },
+        {
           citation: "Coordinating Advanced Crowd Work: Extending Citizen Science, Crowston+ 2018.",
           href: "https://crowston.syr.edu/sites/crowston.syr.edu/files/Quench%20to%20distribute.pdf",
           date: "2018"
@@ -299,19 +309,29 @@ const Publications = {
       slug: "ianc2/exoplanet-explorers",
       publications: [
         {
-        citation: "The K2-138 System: A Near-Resonant Chain of Five Sub-Neptune Planets Discovered by Citizen Scientists, Christiansen+ 2018.",
-        href: "https://arxiv.org/abs/1801.03874",
-        date: "January 11, 2018"
+          citation: "The K2-138 System: A Near-Resonant Chain of Five Sub-Neptune Planets Discovered by Citizen Scientists, Christiansen+ 2018.",
+          href: "https://arxiv.org/abs/1801.03874",
+          date: "January 11, 2018"
         },
         {
-         citation: "K2-288Bb: A small Temperate Planet in a Low-mass Binary System Discovered by Citizen Scientists",
-         href: "https://arxiv.org/abs/1902.02789",
-         date: "February 2019"
+          citation: "K2-288Bb: A small Temperate Planet in a Low-mass Binary System Discovered by Citizen Scientists, Feinstein+ 2019",
+          href: "http://iopscience.iop.org/article/10.3847/1538-3881/aafa70",
+          date: "February 2019"
         },
         {
           citation: "Catalog of New K2 Exoplanet Candidates from Citizen Scientists",
           href: "https://ui.adsabs.harvard.edu/#abs/2019RNAAS...3b..43Z/abstract",
           date: "February  2019"
+        },
+        {
+          citation: "Catalog of New K2 Exoplanet Candidates from Citizen Scientists, Zink+ 2019",
+          href: "https://iopscience.iop.org/article/10.3847/2515-5172/ab0a02/meta",
+          date: "2019"
+        },
+        {
+          citation: "K2-138 g: Spitzer Spots a Sixth Sub-Neptune for the Citizen Science System, Christiansen+ 2019",
+          href: "https://ui.adsabs.harvard.edu/abs/2019AAS...23316407H/abstract",
+          date: "2019"
         }
       ]
     },
@@ -379,14 +399,19 @@ const Publications = {
       slug: "marckuchner/backyard-worlds-planet-9",
       publications: [
         {
-        citation: "The First Brown Dwarf Discovered by the Backyard Worlds: Planet 9 Citizen Science Project, Kuchner+ 2017.",
-        href: "http://adsabs.harvard.edu/cgi-bin/bib_query?arXiv:1705.02919",
-        date: "2017"
-      },
+          citation: "The First Brown Dwarf Discovered by the Backyard Worlds: Planet 9 Citizen Science Project, Kuchner+ 2017.",
+          href: "http://iopscience.iop.org/article/10.3847/2041-8213/aa7200/meta",
+          date: "2017"
+        },
         {
-        citation: "WiseView: Visualizing motion and variability of faint WISE sources, Caselden+ 2018.",
-        href: "http://ascl.net/1806.004",
-        date: "2018"
+          citation: "WiseView: Visualizing motion and variability of faint WISE sources, Caselden+ 2018.",
+          href: "http://ascl.net/1806.004",
+          date: "2018"
+        },
+        {
+          citation: "A 3 Gyr White Dwarf with Warm Dust Discovered via the Backyard Worlds: Planet 9 Citizen Science Project, Debes+ 2019",
+          href: "https://arxiv.org/abs/1902.07073",
+          date: "2019"
         }
       ]
     },
@@ -501,7 +526,7 @@ const Publications = {
         },
         {
           citation: "Planet Hunters: New Kepler planet candidates from analysis of quarter 2, Lintott+ 2013.",
-          href: "http://iopscience.iop.org/1538-3881/145/6/151/",
+          href: "https://iopscience.iop.org/article/10.1088/0004-6256/145/6/151/meta",
           date: "Apr 30, 2013"
         },
         {
@@ -649,28 +674,33 @@ const Publications = {
         },
         {
           citation: "Radio Galaxy Zoo: host galaxies and radio morphologies derived from visual inspection, Banfield+ 2015.",
-          href: "http://arXiv.org/abs/1507.07272",
+          href: "https://academic.oup.com/mnras/article/453/3/2326/1075547",
           date: "July 27, 2015"
         },
         {
           citation: "Radio Galaxy Zoo: Cosmological Alignment of Radio Sources, Contigiani+ 2017.",
-          href: "https://arxiv.org/abs/1708.00301",
+          href: "https://academic.oup.com/mnras/article/472/1/636/4060737",
           date: "2017"
         },
         {
-          citation: "Radio Galaxy Zoo: A Search for Hybrid Morphology Radio Galaxies, Kapinska+ 2017.",
-          href: "https://arxiv.org/abs/1711.09611",
+          citation: "Radio Galaxy Zoo: A Search for Hybrid Morphology Radio Galaxies, Kapińska+ 2017.",
+          href: "http://iopscience.iop.org/article/10.3847/1538-3881/aa90b7",
           date: "2017"
         },
         {
           citation: "Radio Galaxy Zoo: Compact and extended radio source classification with deep learning, Lukic+ 2018.",
-          href: "https://arxiv.org/abs/1801.04861",
+          href: "https://academic.oup.com/mnras/article/476/1/246/4826039",
           date: "2018"
         },
         {
           citation: "Radio Galaxy Zoo: Machine learning for radio source host galaxy cross-identification, Alger+ 2018.",
-          href: "https://arxiv.org/abs/1805.05540",
+          href: "https://academic.oup.com/mnras/article/478/4/5547/4999919",
           date: "2018"
+        },
+        {
+          citation: "Radio Galaxy Zoo: ClaRAN - A Deep Learning Classifier for Radio Morphologies, Wu+ 2018",
+          href: "https://arxiv.org/abs/1805.12008",
+          date: "29 Oct 2018"
         }
       ]
     },
@@ -688,12 +718,12 @@ const Publications = {
       publications: [
         {
           citation: "A new M dwarf debris disk candidate in a young moving group discovered with disk detective, Silverberg+ 2016.",
-          href: "http://iopscience.iop.org/article/10.3847/2041-8205/830/2/L28/pdf",
+          href: "http://iopscience.iop.org/article/10.3847/2041-8205/830/2/L28/meta",
           date: "October 2016"
         },
         {
           citation: "Disk Detective: Discovery of New Circumstellar Disk Candidates through Citizen Science, Kuchner+ 2016.",
-          href: "https://arxiv.org/abs/1607.05713",
+          href: "http://iopscience.iop.org/article/10.3847/0004-637X/830/2/84/meta",
           date: "July 2016"
         },
         {
@@ -775,10 +805,26 @@ const Publications = {
       slug: "zooniverse/operation-war-diary",
       publications: [
         {
-        citation: "A Life in the Trenches? The Use of Operation War Diary and Crowdsourcing Methods to Provide an Understanding of the British Army’s Day-to-Day Life on the Western Front, Grayson+ 2016.",
-        href: "http://bjmh.org.uk/index.php/bjmh/article/view/96",
-        date: "2016"
-      }]
+          citation: "The Zooniverse is Expanding: Crowdsourced Solutions to the Hidden Collections Problem and the Rise of the Revolutionary Cataloging Interface, Barber 2019",
+          href: "https://doi.org/10.1080/19386389.2018.1489449",
+          date: "2019"
+        },
+        {
+          citation: "A Life in the Trenches? The Use of Operation War Diary and Crowdsourcing Methods to Provide an Understanding of the British Army’s Day-to-Day Life on the Western Front, Grayson+ 2016.",
+          href: "http://bjmh.org.uk/index.php/bjmh/article/view/96",
+          date: "2016"
+        }
+      ]
+    },
+    {
+      slug: "tkotwim/the-american-soldier",
+      publications: [
+        {
+          citation: "Supporting Historical Research and Education with Crowdsourced Analysis of Primary Sources, Wang 2019",
+          href: "https://vtechworks.lib.vt.edu/handle/10919/87437",
+          date: "2019"
+        }
+      ]
     }
   ],
   nature: [
@@ -788,6 +834,11 @@ const Publications = {
         {
           citation: "Monitoring the mammalian fauna of urban areas using remote cameras and citizen science, Anton+ 2018.",
           href: "https://academic.oup.com/jue/article/4/1/juy002/4947839",
+          date: "2018"
+        },
+        {
+          citation: "Evaluation of remote cameras for monitoring multiple invasive mammals in New Zealand, Anton+ 2018",
+          href: "https://www.researchgate.net/publication/318727598_Evaluation_of_remote_cameras_for_monitoring_multiple_invasive_mammals_in_New_Zealand",
           date: "2018"
         }
       ]
@@ -854,6 +905,51 @@ const Publications = {
           citation: "The spatial distribution of African savannah herbivores: species associations and habitat occupancy in a landscape context, Anderson+ 2016.",
           href: "http://rstb.royalsocietypublishing.org/content/371/1703/20150314",
           date: "August 8, 2016"
+        }, 
+        {
+          citation: "Identifying drivers of spatial variation in occupancy with limited replication camera trap data, Hepler+ 2018",
+          href: "https://esajournals.onlinelibrary.wiley.com/doi/10.1002/ecy.2396",
+          date: "2018"
+        },
+        {
+          citation: "Towards automatic wild animal monitoring: Identification of animal species in camera-trap images using very deep convolutional neural networks, Gomez+ 2017",
+          href: "https://arxiv.org/pdf/1603.06169.pdf",
+          date: "2017"
+        },
+        {
+          citation: "Bats join the ranks of oxpeckers and cleaner fish as partners in a pest‐reducing mutualism, Palmer+ 2019",
+          href: "https://www.researchgate.net/publication/330849616_Bats_join_the_ranks_of_oxpeckers_and_cleaner_fish_as_partners_in_a_pest-reducing_mutualism",
+          date: "2019"
+        }, 
+        {
+          citation: "No respect for apex carnivores Distribution and activity patterns of honey badgers in the Serengeti, Allen+ 2018",
+          href: "https://www.sciencedirect.com/science/article/pii/S1616504717302720",
+          date: "2018"
+        },
+        {
+          citation: "Identifying animal species in camera trap images using deep learning and citizen science, Willi 2018",
+          href: "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13099",
+          date: "2018"
+        },
+        {
+          citation: "Automatically identifying, counting, and describing wild animals in camera-trap images with deep learning, Norouzzadeh+ 2018",
+          href: "https://www.pnas.org/content/115/25/E5716",
+          date: "2018"
+        },
+        {
+          citation: "Giraffe bed and breakfast: Camera traps reveal Tanzanian yellow-billed oxpeckers roosting on their large mammalian hosts, Palmer+ 2018",
+          href: "https://onlinelibrary.wiley.com/doi/full/10.1111/aje.12505",
+          date: "2018"
+        },
+        {
+          citation: "A ‘dynamic’ landscape of fear: prey responses to spatiotemporal variations in predation risk across the lunar cycle, Palmer+ 2017",
+          href: "https://www.researchgate.net/publication/319670534_A_'dynamic'_landscape_of_fear_prey_responses_to_spatiotemporal_variations_in_predation_risk_across_the_lunar_cycle",
+          date: "2017"
+        },
+        {
+          citation: "Evaluating relative abundance indices for terrestrial herbivores from large‐scale camera trap surveys, Palmer+ 2018",
+          href: "https://www.researchgate.net/publication/329288754_Evaluating_relative_abundance_indices_for_terrestrial_herbivores_from_large-scale_camera_trap_surveys",
+          date: "2018"
         }
       ]
     },
@@ -868,16 +964,16 @@ const Publications = {
       ],
     },
     {
-    slug: "zooniverse/penguin-watch",
-    publications: [
-      {
-        citation: "Counting in the Wild, Arteta, C., Lempitsky, V., Zisserman, A. 2016.",
-        href: "https://link.springer.com/chapter/10.1007/978-3-319-46478-7_30",
-        date: "2016"
-      }
-    ],
-  },
-      {
+      slug: "zooniverse/penguin-watch",
+      publications: [
+        {
+          citation: "Counting in the Wild, Arteta, C., Lempitsky, V., Zisserman, A. 2016.",
+          href: "https://link.springer.com/chapter/10.1007/978-3-319-46478-7_30",
+          date: "2016"
+        }
+      ],
+    },
+    {
       slug: "zooniverse/chimp-and-see",
       publications: [
         {
@@ -885,7 +981,17 @@ const Publications = {
           href: "https://onlinelibrary.wiley.com/doi/abs/10.1002/ajpa.23478",
           date: "July 2018"
         }
-    ]
+      ] 
+    },
+    {
+      slug: "zooniverse/plankton-portal",
+      publications: [
+        {
+          citation: "A Tale of Two Crowds: Public Engagement in Plankton Classification, Robinson+ 2017.",
+          href: "https://docs.google.com/spreadsheets/d/1NZ31aVPiQag5V3-zY9tIP2x2WPXFEf9dLIIHBSHkx3M/edit#gid=0",
+          date: "11 April 2017"
+        }
+      ]
     }
   ],
   medicine: [
@@ -980,6 +1086,21 @@ publications: [
     {
     name: "Meta Studies",
     publications: [
+      {
+        citation: "Citizen science frontiers: Efficiency, engagement, and serendipitous discovery with human–machine systems, Trouille+ 2019",
+        href: "https://www.pnas.org/content/116/6/1902.abstract",
+        date: "2019"
+      },
+      {
+        citation: "Open Community Health: Workshop Report, Link+ 2018",
+        href: "http://peerproduction.net/issues/issue-13-open/news-from-nowhere/open-community-health-workshop-report/",
+        date: "April 2018"
+      },
+      {
+        citation: "Everyone counts? Design considerations in online citizen science, Spiers+ 2019",
+        href: "https://jcom.sissa.it/archive/18/01/JCOM_1801_2019_A04",
+        date: "17/01/2019"
+      },
       {
       citation: "Optimizing Interventions via Offline Policy Evaluation: Studies in Citizen Science, Segal+ 2018.",
       href: "http://erichorvitz.com/optimizing-interventions-offline.pdf",
