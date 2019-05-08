@@ -133,17 +133,21 @@ export default class ActiveUsers extends React.Component {
     if (this.context.geordi && this.context.geordi.makeHandler) {
       logClick = this.context.geordi.makeHandler('view-profile-sidebar');
     }
-    return (
-      <li key={user.id}>
-        <Link
-          to={`${baseLink}users/${user.login}`}
-          title={`${user.display_name}'s profile`}
-          onClick={logClick.bind(this, user.display_name)}
-        >
-          {user.display_name}
-        </Link>
-      </li>
-    );
+    if (user && user.id && user.display_name && user.login) {
+      return (
+        <li key={user.id}>
+          <Link
+            to={`${baseLink}users/${user.login}`}
+            title={`${user.display_name}'s profile`}
+            onClick={logClick.bind(this, user.display_name)}
+          >
+            {user.display_name}
+          </Link>
+        </li>
+      );
+    }
+
+    return null
   }
 
   render() {
