@@ -25,7 +25,8 @@ const experimentalFeatures = [
   'general feedback',
   'slider',
   'highlighter',
-  'translator-role'
+  'translator-role',
+  'hide completed workflows'
 ];
 
 class ExperimentalFeatures extends Component {

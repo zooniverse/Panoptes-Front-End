@@ -91,9 +91,16 @@ export default class ProjectHomeContainer extends React.Component {
   }
 
   render() {
+    let shownWorkflows = [];
+    if (this.props.project.experimental_tools.includes('hide completed workflows')) {
+      shownWorkflows = this.state.activeWorkflows.filter(workflow => workflow.completeness !== 1);
+    } else {
+      shownWorkflows = this.state.activeWorkflows;
+    }
+
     return (
       <ProjectHomePage
-        activeWorkflows={this.state.activeWorkflows}
+        activeWorkflows={shownWorkflows}
         background={this.props.background}
         organization={this.props.organization}
         preferences={this.props.preferences}
