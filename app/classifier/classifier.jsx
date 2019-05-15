@@ -370,6 +370,7 @@ class Classifier extends React.Component {
             {showIntervention &&
               <Intervention
                 intervention={intervention}
+                onUnmount={actions.classify.clearIntervention}
                 user={user}
               />
             }
