@@ -51,6 +51,22 @@ describe('Classifier actions', function () {
       });
     });
   });
+
+  describe('clear intervention', function () {
+    const action = {
+      type: 'pfe/classify/CLEAR_INTERVENTION',
+    };
+    const state = {
+      intervention: {
+        message: 'this is an intervention'
+      }
+    };
+    it('should clear intervention messages', function () {
+      const newState = reducer(state, action);
+      expect(newState.intervention).to.be.null;
+    });
+  });
+
   describe('append subjects', function () {
     const subjects = [
         mockSubject('3'),
@@ -157,7 +173,10 @@ describe('Classifier actions', function () {
       const state = {
         classification: { id: '1' },
         workflow: { id: '1' },
-        upcomingSubjects: [subjects[0]]
+        upcomingSubjects: [subjects[0]],
+        intervention: {
+          message: 'This is a test intervention'
+        }
       };
       it('should empty the queue', function () {
         const newState = reducer(state, action);
@@ -167,15 +186,18 @@ describe('Classifier actions', function () {
         const newState = reducer(state, action);
         expect(newState.classification).to.be.null;
       });
-      it('should clear any stored interventions', function () {
+      it('should not clear any stored interventions', function () {
         const newState = reducer(state, action);
-        expect(newState.intervention).to.be.null;
+        expect(newState.intervention).to.eql(state.intervention);
       });
     });
     describe('with multiple subjects in the queue', function () {
       const state = {
         workflow: { id: '1' },
-        upcomingSubjects: subjects
+        upcomingSubjects: subjects,
+        intervention: {
+          message: 'This is a test intervention'
+        }
       };
       it('should shift the first subject off the queue', function () {
         const newState = reducer(state, action);
@@ -185,9 +207,9 @@ describe('Classifier actions', function () {
         const newState = reducer(state, action);
         expect(newState.classification.links.subjects).to.deep.equal(['2']);
       });
-      it('should clear any stored interventions', function () {
+      it('should not clear any stored interventions', function () {
         const newState = reducer(state, action);
-        expect(newState.intervention).to.be.null;
+        expect(newState.intervention).to.eql(state.intervention);
       });
     });
   });

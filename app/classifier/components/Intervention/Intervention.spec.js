@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import Intervention from './Intervention';
+import { Intervention } from './Intervention';
 import { Markdown } from 'markdownz';
 
 describe('Intervention', function () {
@@ -15,10 +15,13 @@ describe('Intervention', function () {
       return { save: () => true };
     })
   };
+  const onUnmount = sinon.stub()
+
   before(function () {
     wrapper = mount(
       <Intervention
         intervention={intervention}
+        onUnmount={onUnmount}
         user={user}
       />);
   });
@@ -46,4 +49,14 @@ describe('Intervention', function () {
       expect(user.update.calledWith(changes)).to.be.true;
     })
   });
+
+  describe('on unmount', function () {
+    before(function () {
+      wrapper.unmount()
+    });
+
+    it('should call onUnmount', function () {
+      expect(onUnmount).to.have.been.calledOnce
+    })
+  })
 });

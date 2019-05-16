@@ -122,6 +122,7 @@ const initialState = {
 };
 
 const ADD_INTERVENTION = 'pfe/classify/ADD_INTERVENTION';
+const CLEAR_INTERVENTION = 'pfe/classify/CLEAR_INTERVENTION';
 const APPEND_SUBJECTS = 'pfe/classify/APPEND_SUBJECTS';
 const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
 const PREPEND_SUBJECTS = 'pfe/classify/PREPEND_SUBJECTS';
@@ -146,6 +147,10 @@ export default function reducer(state = initialState, action = {}) {
         return Object.assign({}, state, { intervention });
       }
       return state;
+    }
+    case CLEAR_INTERVENTION: {
+      const intervention = null;
+      return Object.assign({}, state, { intervention });
     }
     case APPEND_SUBJECTS: {
       const { subjects, workflowID } = action.payload;
@@ -190,12 +195,10 @@ export default function reducer(state = initialState, action = {}) {
       const subject = upcomingSubjects[0];
       if (subject) {
         const classification = createNewClassification(project, workflow, subject, goldStandardMode);
-        const intervention = null;
-        return Object.assign({}, state, { classification, intervention, upcomingSubjects });
+        return Object.assign({}, state, { classification, upcomingSubjects });
       }
       return Object.assign({}, state, {
         classification: null,
-        intervention: null,
         upcomingSubjects: []
       });
     }
@@ -257,6 +260,12 @@ export function addIntervention(data) {
   return {
     type: ADD_INTERVENTION,
     payload: data
+  };
+}
+
+export function clearIntervention() {
+  return {
+    type: CLEAR_INTERVENTION
   };
 }
 
