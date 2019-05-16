@@ -8,7 +8,7 @@ const StyledInterventionMessage = styled.div`
   border-bottom: solid 1px;
   margin: 0 2em 1em;
   padding: 0 0 .7em;
-  
+
   label: {
     font-size: 0.7em;
   }
@@ -39,7 +39,9 @@ function Intervention({ onUnmount, intervention, user }) {
           type="checkbox"
           onChange={onChange}
         />
-        {counterpart('classifier.interventions.optOut')}
+        <Markdown>
+          {counterpart('classifier.interventions.optOut')}
+        </Markdown>
       </label>
     </StyledInterventionMessage>
   );

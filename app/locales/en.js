@@ -26,7 +26,7 @@ export default {
       declineButton: 'No, thanks'
     },
     interventions: {
-      optOut: "Don't show me these messages again."
+      optOut: 'I do not want to take part in this messaging [study](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview). Do not show me further messages.'
     }
   },
   project: {
