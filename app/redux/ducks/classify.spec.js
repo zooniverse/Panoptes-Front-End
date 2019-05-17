@@ -27,27 +27,48 @@ describe('Classifier actions', function () {
       type: 'pfe/classify/ADD_INTERVENTION',
       payload: {
         message: 'Hi there!',
-        project_id: '1'
+        project_id: '1',
+        workflow_id: '2'
       }
     };
-    describe('with a valid project', function () {
+    describe('with a valid project and workflow', function () {
       const state = {
-        classification: { id: '1', links: { project: '1' } },
+        classification: { id: '1', links: { project: '1', workflow: '2' } },
         intervention: null
       };
       it('should store the intervention', function () {
         const newState = reducer(state, action);
         expect(newState.intervention).to.deep.equal(action.payload);
       });
+      describe('with an invalid workflow', function () {
+        const state = {
+          classification: { id: '1', links: { project: '1', workflow: '1' } },
+          intervention: null
+        };
+        it('should not store the intervention', function () {
+          const newState = reducer(state, action);
+          expect(newState.intervention).to.be.null;
+        });
+      });
     });
-    describe('with an invalid project', function () {
+    describe('with an invalid project and valid workflow', function () {
       const state = {
-        classification: { id: '1', links: { project: '2' } },
+        classification: { id: '1', links: { project: '2', workflow: '1' } },
         intervention: null
       };
       it('should ignore the intervention', function () {
         const newState = reducer(state, action);
         expect(newState.intervention).to.be.null;
+      });
+      describe('with an invalid workflow', function () {
+        const state = {
+          classification: { id: '1', links: { project: '2', workflow: '2' } },
+          intervention: null
+        };
+        it('should not store the intervention', function () {
+          const newState = reducer(state, action);
+          expect(newState.intervention).to.be.null;
+        });
       });
     });
   });

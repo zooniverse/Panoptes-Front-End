@@ -143,7 +143,10 @@ export default function reducer(state = initialState, action = {}) {
     case ADD_INTERVENTION: {
       const intervention = action.payload;
       const { classification } = state;
-      if (classification && classification.links.project === intervention.project_id) {
+      const { project, workflow } = classification.links;
+      const matchesProject = project === intervention.project_id;
+      const matchesWorkflow = workflow === intervention.workflow_id;
+      if (classification && matchesProject && matchesWorkflow ) {
         return Object.assign({}, state, { intervention });
       }
       return state;
