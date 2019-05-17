@@ -123,6 +123,7 @@ const initialState = {
 
 const ADD_INTERVENTION = 'pfe/classify/ADD_INTERVENTION';
 const CLEAR_INTERVENTION = 'pfe/classify/CLEAR_INTERVENTION';
+const STORE_INTERVENTION_UUID = 'pfe/classify/STORE_INTERVENTION_UUID';
 const APPEND_SUBJECTS = 'pfe/classify/APPEND_SUBJECTS';
 const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
 const PREPEND_SUBJECTS = 'pfe/classify/PREPEND_SUBJECTS';
@@ -147,6 +148,15 @@ export default function reducer(state = initialState, action = {}) {
         return Object.assign({}, state, { intervention });
       }
       return state;
+    }
+    case STORE_INTERVENTION_UUID: {
+      const { intervention } = state;
+      let lastInterventionUUID = null
+      console.log(intervention);
+      if (intervention && intervention.hasOwnProperty('uuid')) {
+        lastInterventionUUID = intervention.uuid;
+      }
+      return Object.assign({}, state, { lastInterventionUUID });
     }
     case CLEAR_INTERVENTION: {
       const intervention = null;

@@ -67,6 +67,29 @@ describe('Classifier actions', function () {
     });
   });
 
+  describe('store last intervention uuid', function () {
+    const action = {
+      type: 'pfe/classify/STORE_INTERVENTION_UUID',
+    };
+    const state = {
+      intervention: {
+        message: 'this is an intervention',
+        uuid: '2d931510-d99f-494a-8c67-87feb05e1594'
+      }
+    };
+    it('should store the intervention UUID to link the next classification', function () {
+      const newState = reducer(state, action);
+      expect(newState.lastInterventionUUID).to.equal(state.intervention.uuid);
+    });
+    describe('when no intervention exists', function () {
+      const noInterventionState = {};
+      it('should not store the last intervention UUID', function () {
+        const newState = reducer(noInterventionState, action);
+        expect(newState.lastInterventionUUID).to.be.null;
+      });
+    });
+  });
+
   describe('append subjects', function () {
     const subjects = [
         mockSubject('3'),
