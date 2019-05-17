@@ -24,10 +24,8 @@ describe('Intervention', function () {
         intervention={intervention}
         onUnmount={onUnmount}
         user={user}
-      />
-    );
+      />);
   });
-
   it('should render', function () {
     expect(wrapper).to.be.ok;
   });
