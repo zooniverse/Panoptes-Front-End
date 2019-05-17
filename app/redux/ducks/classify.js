@@ -145,12 +145,12 @@ export default function reducer(state = initialState, action = {}) {
       const intervention = action.payload;
       const { classification } = state;
       const { project, workflow } = classification.links;
-      const matchesProject = project === intervention.project_id;
+      const matchesProject = project === String(intervention.project_id);
       // only test workflow matches known state if the incoming payload has this property
       // to allow project level as well as targetted workflow messages
       let matchesWorkflow = true;
       if (intervention.hasOwnProperty('workflow_id')) {
-        matchesWorkflow = workflow === intervention.workflow_id;
+        matchesWorkflow = workflow === String(intervention.workflow_id);
       }
       if (classification && matchesProject && matchesWorkflow ) {
         return Object.assign({}, state, { intervention });

@@ -21,7 +21,7 @@ function mockSubject(id) {
   });
 }
 
-describe.only('Classifier actions', function () {
+describe('Classifier actions', function () {
   describe('add intervention', function () {
     const action = {
       type: 'pfe/classify/ADD_INTERVENTION',
@@ -36,6 +36,20 @@ describe.only('Classifier actions', function () {
       intervention: null
     };
 
+    describe('with non string payload IDs', function () {
+      const intIDAction = {
+        type: 'pfe/classify/ADD_INTERVENTION',
+        payload: {
+          message: 'Hi there!',
+          project_id: 1,
+          workflow_id: 2
+        }
+      };
+      it('should store the intervention', function () {
+        const newState = reducer(state, intIDAction);
+        expect(newState.intervention).to.deep.equal(intIDAction.payload);
+      });
+    });
     describe('with a valid project id but no workflow id', function () {
       const noWorkflowIdAction = {
         type: 'pfe/classify/ADD_INTERVENTION',
