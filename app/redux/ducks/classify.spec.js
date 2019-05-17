@@ -31,6 +31,23 @@ describe('Classifier actions', function () {
         workflow_id: '2'
       }
     };
+    describe('with a valid project id but no workflow id', function () {
+      const noWorkflowIdAction = {
+        type: 'pfe/classify/ADD_INTERVENTION',
+        payload: {
+          message: 'Hi there!',
+          project_id: '1'
+        }
+      };
+      const state = {
+        classification: { id: '1', links: { project: '1', workflow: '2' } },
+        intervention: null
+      };
+      it('should store the intervention', function () {
+        const newState = reducer(state, noWorkflowIdAction);
+        expect(newState.intervention).to.deep.equal(noWorkflowIdAction.payload);
+      });
+    });
     describe('with a valid project and workflow', function () {
       const state = {
         classification: { id: '1', links: { project: '1', workflow: '2' } },

@@ -141,11 +141,17 @@ const TOGGLE_GOLD_STANDARD = 'pfe/classify/TOGGLE_GOLD_STANDARD';
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_INTERVENTION: {
+      // this action payload is the json intervention object from sugar
       const intervention = action.payload;
       const { classification } = state;
       const { project, workflow } = classification.links;
       const matchesProject = project === intervention.project_id;
-      const matchesWorkflow = workflow === intervention.workflow_id;
+      // only test workflow matches known state
+      // if the incoming payload has this property
+      let matchesWorkflow = true;
+      if (intervention.hasOwnProperty('workflow_id')) {
+        let matchesWorkflow = workflow === intervention.workflow_id;
+      }
       if (classification && matchesProject && matchesWorkflow ) {
         return Object.assign({}, state, { intervention });
       }
