@@ -20,10 +20,10 @@ describe('Intervention', function () {
 
   before(function () {
     wrapper = mount(
-    <Intervention
-      intervention={intervention}
-      onUnmount={onUnmount}
-      user={user}
+      <Intervention
+        intervention={intervention}
+        onUnmount={onUnmount}
+        user={user}
       />
     );
   });
@@ -36,16 +36,11 @@ describe('Intervention', function () {
     expect(wrapper.find(Markdown).first().text()).to.equal(newlineMsg);
   });
   it('should show an opt-out message', () => {
-    const optOutHTML = '<div class="markdown "><p>I do not want to take part in this messaging ' +
-      '<a href="https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview" ' +
-      'target="_blank" ref="noopener nofollow">study</a>. Do not show me further messages.</p>' +
-      '\n' + '</div>'
-    expect(wrapper.find(Markdown).last().html()).to.equal(optOutHTML);
-  });
-  it('should show a fallback to english opt-out message', () => {
-    counterpart.setLocale('fr');
-    const optOutText = 'I do not want to take part in this messaging study. Do not show me further messages.\n'
-    expect(wrapper.find(Markdown).last().text()).to.equal(optOutText);
+    const expectedMarkdown = 'I do not want to take part in this messaging [study]' +
+      '(+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).' +
+      ' Do not show me further messages.'
+    const receivedMarkdown = wrapper.find(Markdown).last().props().children;
+    expect(receivedMarkdown).to.equal(expectedMarkdown);
   });
   describe('opt-out checkbox', function () {
     let optOut;
