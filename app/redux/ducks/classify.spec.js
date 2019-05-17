@@ -21,7 +21,7 @@ function mockSubject(id) {
   });
 }
 
-describe('Classifier actions', function () {
+describe.only('Classifier actions', function () {
   describe('add intervention', function () {
     const action = {
       type: 'pfe/classify/ADD_INTERVENTION',
@@ -31,6 +31,11 @@ describe('Classifier actions', function () {
         workflow_id: '2'
       }
     };
+    const state = {
+      classification: { id: '1', links: { project: '1', workflow: '2' } },
+      intervention: null
+    };
+
     describe('with a valid project id but no workflow id', function () {
       const noWorkflowIdAction = {
         type: 'pfe/classify/ADD_INTERVENTION',
@@ -39,51 +44,43 @@ describe('Classifier actions', function () {
           project_id: '1'
         }
       };
-      const state = {
-        classification: { id: '1', links: { project: '1', workflow: '2' } },
-        intervention: null
-      };
       it('should store the intervention', function () {
         const newState = reducer(state, noWorkflowIdAction);
         expect(newState.intervention).to.deep.equal(noWorkflowIdAction.payload);
       });
     });
     describe('with a valid project and workflow', function () {
-      const state = {
-        classification: { id: '1', links: { project: '1', workflow: '2' } },
-        intervention: null
-      };
       it('should store the intervention', function () {
         const newState = reducer(state, action);
         expect(newState.intervention).to.deep.equal(action.payload);
       });
       describe('with an invalid workflow', function () {
-        const state = {
+        const invalidWorkflowState = {
           classification: { id: '1', links: { project: '1', workflow: '1' } },
           intervention: null
         };
         it('should not store the intervention', function () {
-          const newState = reducer(state, action);
+          const newState = reducer(invalidWorkflowState, action);
           expect(newState.intervention).to.be.null;
         });
       });
     });
     describe('with an invalid project and valid workflow', function () {
-      const state = {
+      const invalidProjectState = {
         classification: { id: '1', links: { project: '2', workflow: '1' } },
         intervention: null
       };
       it('should ignore the intervention', function () {
-        const newState = reducer(state, action);
+        const newState = reducer(invalidProjectState, action);
         expect(newState.intervention).to.be.null;
       });
       describe('with an invalid workflow', function () {
-        const state = {
+        const invalidProjectWorkflowState = {
           classification: { id: '1', links: { project: '2', workflow: '2' } },
           intervention: null
         };
         it('should not store the intervention', function () {
-          const newState = reducer(state, action);
+          const newState = reducer(invalidProjectWorkflowState, action);
           expect(newState.intervention).to.be.null;
         });
       });
