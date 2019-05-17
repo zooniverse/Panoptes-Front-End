@@ -185,7 +185,6 @@ export default function reducer(state = initialState, action = {}) {
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
         const classification = createNewClassification(project, workflow, subject, goldStandardMode);
-        const intervention = null;
         return Object.assign({}, state, { classification, intervention });
       }
       return state;

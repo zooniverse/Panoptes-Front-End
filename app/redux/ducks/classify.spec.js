@@ -283,9 +283,15 @@ describe('Classifier actions', function () {
       const newState = reducer(state, action);
       expect(newState.classification.links.workflow).to.equal('1');
     });
-    it('should clear any stored interventions', function () {
-      const newState = reducer(state, action);
-      expect(newState.intervention).to.be.null;
+    it('should not clear any stored interventions', function () {
+      const interventionState = {
+        classification: { id: '1' },
+        workflow: { id: '1' },
+        upcomingSubjects: [mockSubject('1')],
+        intervention: {}
+      };
+      const newState = reducer(interventionState, action);
+      expect(newState.intervention).to.equal(interventionState.intervention);
     });
     it('should clear the subject intervention flag', function () {
       const newState = reducer(state, action);
