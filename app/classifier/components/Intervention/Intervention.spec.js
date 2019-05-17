@@ -4,7 +4,6 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { Intervention } from './Intervention';
 import { Markdown } from 'markdownz';
-import counterpart from 'counterpart';
 
 describe('Intervention', function () {
   let wrapper;
