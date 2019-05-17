@@ -186,7 +186,8 @@ export default function reducer(state = initialState, action = {}) {
     case CREATE_CLASSIFICATION: {
       const { goldStandardMode } = state;
       const { project } = action.payload;
-      const { workflow, lastInterventionUUID } = state;
+      const { workflow } = state;
+      let { lastInterventionUUID} = state;
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
         const classification = createNewClassification(
@@ -196,7 +197,9 @@ export default function reducer(state = initialState, action = {}) {
           goldStandardMode,
           lastInterventionUUID
         );
-        return Object.assign({}, state, { classification });
+        // clear any intervention UUID after we've stored it on the metadata
+        lastInterventionUUID = null;
+        return Object.assign({}, state, { classification, lastInterventionUUID });
       }
       return state;
     }
