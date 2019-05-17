@@ -152,7 +152,6 @@ export default function reducer(state = initialState, action = {}) {
     case STORE_INTERVENTION_UUID: {
       const { intervention } = state;
       let lastInterventionUUID = null
-      console.log(intervention);
       if (intervention && intervention.hasOwnProperty('uuid')) {
         lastInterventionUUID = intervention.uuid;
       }
