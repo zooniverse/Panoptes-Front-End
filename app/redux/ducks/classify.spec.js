@@ -307,6 +307,20 @@ describe('Classifier actions', function () {
       const newState = reducer(state, action);
       expect(newState).to.deep.equal(state);
     });
+    it('should record the lastInteventionUUID as metadata.intervention_uuid', function () {
+      const interventionUUIDState = {
+        classification: { id: '1' },
+        workflow: { id: '1' },
+        upcomingSubjects: [mockSubject('1')],
+        lastInterventionUUID: '2d931510-d99f-494a-8c67-87feb05e1594'
+      };
+      const newState = reducer(interventionUUIDState, action);
+      expect(newState.classification.metadata.intervention_uuid).to.equal(interventionUUIDState.lastInterventionUUID);
+    });
+    it('should not record the lastInteventionUUID if not set', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.hasOwnProperty('intervention_uuid')).to.be.false;
+    });
   });
   describe('resume classification', function () {
     const subject1 = mockSubject('1');

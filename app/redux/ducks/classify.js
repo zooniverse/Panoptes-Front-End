@@ -45,22 +45,27 @@ function awaitWorkflow(workflowId) {
     });
 }
 
-function createNewClassification(project, workflow, subject, goldStandardMode) {
+function createNewClassification(project, workflow, subject, goldStandardMode, lastInterventionUUID) {
   // Record whether this subject was received from Sugar or from the Panoptes API.
   const source = subject.metadata.intervention ? 'sugar' : 'api';
   // Delete the metadata key because we don't want volunteers to see it.
   subject.update({ 'metadata.intervention': undefined });
+  let newMetadata = {
+    workflow_version: workflow.version,
+    started_at: (new Date()).toISOString(),
+    user_agent: navigator.userAgent,
+    user_language: counterpart.getLocale(),
+    utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
+    subject_dimensions: (subject.locations.map(() => null)),
+    source
+  }
+  // record if this classification had an intervention payload directly before it
+  if (lastInterventionUUID) {
+    newMetadata.intervention_uuid = lastInterventionUUID
+  }
   const classification = apiClient.type('classifications').create({
     annotations: [],
-    metadata: {
-      workflow_version: workflow.version,
-      started_at: (new Date()).toISOString(),
-      user_agent: navigator.userAgent,
-      user_language: counterpart.getLocale(),
-      utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
-      subject_dimensions: (subject.locations.map(() => null)),
-      source
-    },
+    metadata: newMetadata,
     links: {
       project: project.id,
       workflow: workflow.id,
@@ -181,11 +186,17 @@ export default function reducer(state = initialState, action = {}) {
     case CREATE_CLASSIFICATION: {
       const { goldStandardMode } = state;
       const { project } = action.payload;
-      const { workflow } = state;
+      const { workflow, lastInterventionUUID } = state;
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
-        const classification = createNewClassification(project, workflow, subject, goldStandardMode);
-        return Object.assign({}, state, { classification, intervention });
+        const classification = createNewClassification(
+          project,
+          workflow,
+          subject,
+          goldStandardMode,
+          lastInterventionUUID
+        );
+        return Object.assign({}, state, { classification });
       }
       return state;
     }
