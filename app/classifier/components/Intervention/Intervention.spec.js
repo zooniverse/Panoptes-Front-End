@@ -7,6 +7,7 @@ import { Markdown } from 'markdownz';
 import counterpart from 'counterpart';
 
 describe('Intervention', function () {
+  let wrapper;
   const intervention = { message: 'Hello!' };
   const { message } = intervention;
   const user = {
@@ -17,12 +18,15 @@ describe('Intervention', function () {
   };
   const onUnmount = sinon.stub()
 
-  let wrapper = mount(
+  before(function () {
+    wrapper = mount(
     <Intervention
       intervention={intervention}
       onUnmount={onUnmount}
       user={user}
-    />);
+      />
+    );
+  });
 
   it('should render', function () {
     expect(wrapper).to.be.ok;
