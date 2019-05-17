@@ -283,8 +283,9 @@ export function addIntervention(data) {
 }
 
 export function clearIntervention() {
-  return {
-    type: CLEAR_INTERVENTION
+  return (dispatch) => {
+    dispatch({type: STORE_INTERVENTION_UUID});
+    dispatch({type: CLEAR_INTERVENTION});
   };
 }
 
