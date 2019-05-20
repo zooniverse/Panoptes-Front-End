@@ -624,6 +624,7 @@ describe('Classifier actions', function () {
         classification: null,
         goldStandardMode: false,
         intervention: null,
+        lastInterventionUUID: null,
         upcomingSubjects: [],
         workflow: fakeWorkflow
       };

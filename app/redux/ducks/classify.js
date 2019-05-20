@@ -122,6 +122,7 @@ const initialState = {
   classification: null,
   goldStandardMode: false,
   intervention: null,
+  lastInterventionUUID: null,
   upcomingSubjects: [],
   workflow: null
 };
