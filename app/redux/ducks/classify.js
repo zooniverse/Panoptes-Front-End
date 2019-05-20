@@ -157,7 +157,7 @@ export default function reducer(state = initialState, action = {}) {
     case STORE_INTERVENTION_UUID: {
       const { intervention } = state;
       let lastInterventionUUID = null
-      if (intervention && intervention.hasOwnProperty('uuid')) {
+      if (intervention && intervention.uuid) {
         lastInterventionUUID = intervention.uuid;
       }
       return Object.assign({}, state, { lastInterventionUUID });
