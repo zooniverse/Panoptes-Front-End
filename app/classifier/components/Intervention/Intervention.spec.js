@@ -30,7 +30,14 @@ describe('Intervention', function () {
   });
   it('should show a notification message', () => {
     const newlineMsg = intervention.message + "\n"
-    expect(wrapper.find(Markdown).text()).to.equal(newlineMsg);
+    expect(wrapper.find(Markdown).first().text()).to.equal(newlineMsg);
+  });
+  it('should show an opt-out message', () => {
+    const expectedMarkdown = 'I do not want to take part in this messaging [study]' +
+      '(+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).' +
+      ' Do not show me further messages.'
+    const receivedMarkdown = wrapper.find(Markdown).last().props().children;
+    expect(receivedMarkdown).to.equal(expectedMarkdown);
   });
   describe('opt-out checkbox', function () {
     let optOut;
