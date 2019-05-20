@@ -144,6 +144,9 @@ export default function reducer(state = initialState, action = {}) {
       // this action payload is the json intervention object from sugar
       const intervention = action.payload;
       const { classification } = state;
+      if (!classification) {
+        return state;
+      }
       const { project, workflow } = classification && classification.links;
       const matchesProject = project === intervention.project_id.toString();
       // only test workflow matches known state if the incoming payload has this property
