@@ -150,7 +150,7 @@ export default function reducer(state = initialState, action = {}) {
       // to allow project level as well as targetted workflow messages
       let matchesWorkflow = true;
       if (intervention.hasOwnProperty('workflow_id')) {
-        matchesWorkflow = workflow === String(intervention.workflow_id);
+        matchesWorkflow = workflow === intervention.workflow_id.toString();
       }
       if (classification && matchesProject && matchesWorkflow ) {
         return Object.assign({}, state, { intervention });
