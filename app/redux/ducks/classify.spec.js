@@ -318,7 +318,7 @@ describe('Classifier actions', function () {
         upcomingSubjects: [mockSubject('1')],
         lastInterventionUUID: '2d931510-d99f-494a-8c67-87feb05e1594'
       };
-      it('should record the lastInteventionUUID as metadata.intervention_uuid', function () {
+      it('should record the lastInterventionUUID as metadata.intervention_uuid', function () {
         const newState = reducer(interventionUUIDState, action);
         expect(newState.classification.metadata.intervention_uuid).to.equal(interventionUUIDState.lastInterventionUUID);
       });
