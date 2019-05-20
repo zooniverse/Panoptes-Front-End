@@ -155,7 +155,7 @@ export default function reducer(state = initialState, action = {}) {
       if (intervention && intervention.workflow_id) {
         matchesWorkflow = workflow === intervention.workflow_id.toString();
       }
-      if (classification && matchesProject && matchesWorkflow ) {
+      if (matchesProject && matchesWorkflow ) {
         return Object.assign({}, state, { intervention });
       }
       return state;
