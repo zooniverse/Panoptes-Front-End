@@ -75,7 +75,10 @@ ONE_UP_REDIRECT = createReactClass
 # Usage: <Route path="path/to/location" component={RELOAD} />
 RELOAD = createReactClass
   componentDidMount: ->
-    window.location.reload()
+    if window.location.hostname is 'www.zooniverse.org'
+      window.location.reload()
+    else
+      window.location = @props.newUrl
   render: ->
     null
 
@@ -88,7 +91,7 @@ module.exports =
     <Route path="about" component={AboutPage} ignoreScrollBehavior>
       <IndexRoute component={AboutHome} />
       <Route path="team" component={TeamPage} />
-      <Route path="publications" component={PublicationsPage} />
+      <Route path="publications" component={() => <RELOAD newUrl='https://fe-content-pages.zooniverse.org/about/publications' />} />
       <Route path="acknowledgements" component={Acknowledgements} />
       <Route path="resources" component={Resources} />
       <Route path="contact" component={Contact} />
