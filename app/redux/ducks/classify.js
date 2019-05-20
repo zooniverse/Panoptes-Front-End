@@ -45,22 +45,27 @@ function awaitWorkflow(workflowId) {
     });
 }
 
-function createNewClassification(project, workflow, subject, goldStandardMode) {
+function createNewClassification(project, workflow, subject, goldStandardMode, lastInterventionUUID) {
   // Record whether this subject was received from Sugar or from the Panoptes API.
   const source = subject.metadata.intervention ? 'sugar' : 'api';
   // Delete the metadata key because we don't want volunteers to see it.
   subject.update({ 'metadata.intervention': undefined });
+  let newMetadata = {
+    workflow_version: workflow.version,
+    started_at: (new Date()).toISOString(),
+    user_agent: navigator.userAgent,
+    user_language: counterpart.getLocale(),
+    utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
+    subject_dimensions: (subject.locations.map(() => null)),
+    source
+  }
+  // record if this classification had an intervention payload directly before it
+  if (lastInterventionUUID) {
+    newMetadata.intervention_uuid = lastInterventionUUID
+  }
   const classification = apiClient.type('classifications').create({
     annotations: [],
-    metadata: {
-      workflow_version: workflow.version,
-      started_at: (new Date()).toISOString(),
-      user_agent: navigator.userAgent,
-      user_language: counterpart.getLocale(),
-      utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
-      subject_dimensions: (subject.locations.map(() => null)),
-      source
-    },
+    metadata: newMetadata,
     links: {
       project: project.id,
       workflow: workflow.id,
@@ -117,12 +122,14 @@ const initialState = {
   classification: null,
   goldStandardMode: false,
   intervention: null,
+  lastInterventionUUID: null,
   upcomingSubjects: [],
   workflow: null
 };
 
 const ADD_INTERVENTION = 'pfe/classify/ADD_INTERVENTION';
 const CLEAR_INTERVENTION = 'pfe/classify/CLEAR_INTERVENTION';
+const STORE_INTERVENTION_UUID = 'pfe/classify/STORE_INTERVENTION_UUID';
 const APPEND_SUBJECTS = 'pfe/classify/APPEND_SUBJECTS';
 const FETCH_SUBJECTS = 'pfe/classify/FETCH_SUBJECTS';
 const PREPEND_SUBJECTS = 'pfe/classify/PREPEND_SUBJECTS';
@@ -160,6 +167,14 @@ export default function reducer(state = initialState, action = {}) {
       }
       return state;
     }
+    case STORE_INTERVENTION_UUID: {
+      const { intervention } = state;
+      let lastInterventionUUID = null
+      if (intervention && intervention.uuid) {
+        lastInterventionUUID = intervention.uuid;
+      }
+      return Object.assign({}, state, { lastInterventionUUID });
+    }
     case CLEAR_INTERVENTION: {
       const intervention = null;
       return Object.assign({}, state, { intervention });
@@ -185,11 +200,19 @@ export default function reducer(state = initialState, action = {}) {
       const { goldStandardMode } = state;
       const { project } = action.payload;
       const { workflow } = state;
+      let { lastInterventionUUID} = state;
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
-        const classification = createNewClassification(project, workflow, subject, goldStandardMode);
-        const intervention = null;
-        return Object.assign({}, state, { classification, intervention });
+        const classification = createNewClassification(
+          project,
+          workflow,
+          subject,
+          goldStandardMode,
+          lastInterventionUUID
+        );
+        // clear any intervention UUID after we've stored it on the metadata
+        lastInterventionUUID = null;
+        return Object.assign({}, state, { classification, lastInterventionUUID });
       }
       return state;
     }
@@ -276,8 +299,9 @@ export function addIntervention(data) {
 }
 
 export function clearIntervention() {
-  return {
-    type: CLEAR_INTERVENTION
+  return (dispatch) => {
+    dispatch({type: STORE_INTERVENTION_UUID});
+    dispatch({type: CLEAR_INTERVENTION});
   };
 }
 

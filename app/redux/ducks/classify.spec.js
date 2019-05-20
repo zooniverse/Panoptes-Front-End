@@ -1,4 +1,4 @@
-import reducer, { loadWorkflow } from './classify';
+import reducer, { clearIntervention, loadWorkflow } from './classify';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -113,6 +113,29 @@ describe('Classifier actions', function () {
     it('should clear intervention messages', function () {
       const newState = reducer(state, action);
       expect(newState.intervention).to.be.null;
+    });
+  });
+
+  describe('store last intervention uuid', function () {
+    const action = {
+      type: 'pfe/classify/STORE_INTERVENTION_UUID',
+    };
+    const state = {
+      intervention: {
+        message: 'this is an intervention',
+        uuid: '2d931510-d99f-494a-8c67-87feb05e1594'
+      }
+    };
+    it('should store the intervention UUID to link the next classification', function () {
+      const newState = reducer(state, action);
+      expect(newState.lastInterventionUUID).to.equal(state.intervention.uuid);
+    });
+    describe('when no intervention exists', function () {
+      const noInterventionState = {};
+      it('should not store the last intervention UUID', function () {
+        const newState = reducer(noInterventionState, action);
+        expect(newState.lastInterventionUUID).to.be.null;
+      });
     });
   });
 
@@ -309,9 +332,15 @@ describe('Classifier actions', function () {
       const newState = reducer(state, action);
       expect(newState.classification.links.workflow).to.equal('1');
     });
-    it('should clear any stored interventions', function () {
-      const newState = reducer(state, action);
-      expect(newState.intervention).to.be.null;
+    it('should not clear any stored interventions', function () {
+      const interventionState = {
+        classification: { id: '1' },
+        workflow: { id: '1' },
+        upcomingSubjects: [mockSubject('1')],
+        intervention: {}
+      };
+      const newState = reducer(interventionState, action);
+      expect(newState.intervention).to.equal(interventionState.intervention);
     });
     it('should clear the subject intervention flag', function () {
       const newState = reducer(state, action);
@@ -326,6 +355,26 @@ describe('Classifier actions', function () {
       state.upcomingSubjects = [];
       const newState = reducer(state, action);
       expect(newState).to.deep.equal(state);
+    });
+    it('should not record the lastInteventionUUID if not set', function () {
+      const newState = reducer(state, action);
+      expect(newState.classification.metadata.hasOwnProperty('intervention_uuid')).to.be.false;
+    });
+    describe('with lastInteventionUUID set', function () {
+      const interventionUUIDState = {
+        classification: { id: '1' },
+        workflow: { id: '1' },
+        upcomingSubjects: [mockSubject('1')],
+        lastInterventionUUID: '2d931510-d99f-494a-8c67-87feb05e1594'
+      };
+      it('should record the lastInterventionUUID as metadata.intervention_uuid', function () {
+        const newState = reducer(interventionUUIDState, action);
+        expect(newState.classification.metadata.intervention_uuid).to.equal(interventionUUIDState.lastInterventionUUID);
+      });
+      it('should clear any lastInteventionUUID if set', function () {
+        const newState = reducer(interventionUUIDState, action);
+        expect(newState.lastInterventionUUID).to.be.null;
+      });
     });
   });
   describe('resume classification', function () {
@@ -515,6 +564,36 @@ describe('Classifier actions', function () {
     });
   });
 
+  describe('clear intervention', function () {
+    const state = {
+      intervention: {
+        message: 'this is an intervention',
+        uuid: '2d931510-d99f-494a-8c67-87feb05e1594'
+      }
+    };
+    let storeState = Object.assign({}, state);
+
+    function fakeDispatch(action) {
+      if(typeof action === 'function') {
+        action = action(fakeDispatch);
+      }
+      storeState = reducer(storeState, action);
+      return storeState;
+    }
+
+    before(function () {
+      clearIntervention()(fakeDispatch);
+    });
+
+    it('should store the intervention UUID to link the next classification', function () {
+      expect(storeState.lastInterventionUUID).to.equal(state.intervention.uuid);
+    });
+
+    it('should clear intervention messages', function () {
+      expect(storeState.intervention).to.be.null;
+    });
+  });
+
   describe('load workflow', function () {
     let awaitWorkflow;
     let state;
@@ -594,6 +673,7 @@ describe('Classifier actions', function () {
         classification: null,
         goldStandardMode: false,
         intervention: null,
+        lastInterventionUUID: null,
         upcomingSubjects: [],
         workflow: fakeWorkflow
       };
