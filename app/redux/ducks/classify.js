@@ -152,7 +152,7 @@ export default function reducer(state = initialState, action = {}) {
       // only test workflow matches known state if the incoming payload has this property
       // to allow project level as well as targetted workflow messages
       let matchesWorkflow = true;
-      if (intervention.hasOwnProperty('workflow_id')) {
+      if (intervention && intervention.workflow_id) {
         matchesWorkflow = workflow === intervention.workflow_id.toString();
       }
       if (classification && matchesProject && matchesWorkflow ) {
