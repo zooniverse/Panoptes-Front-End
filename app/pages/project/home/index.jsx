@@ -36,11 +36,12 @@ export default class ProjectHomeContainer extends React.Component {
     }
   }
 
-  fetchAllWorkflows(props, query) {
+  fetchWorkflows(props, query) {
     if (this.state.activeWorkflows.length === 0) {
       getWorkflowsInOrder(props.project, query)
-        .then((activeWorkflows) => {
-          this.setState({ activeWorkflows });
+        .then((allActiveWorkflows) => {
+          const activeIncompleteWorkflows = allActiveWorkflows.filter(workflow => workflow.completeness !== 1);
+          this.setState({ activeWorkflows: activeIncompleteWorkflows });
         });
     }
   }
@@ -84,23 +85,16 @@ export default class ProjectHomeContainer extends React.Component {
 
     if ((props.project.configuration && props.project.configuration.user_chooses_workflow && !workflowAssignment) ||
       (workflowAssignment && props.user)) {
-      this.setState({ showWorkflowButtons: true }, this.fetchAllWorkflows.bind(this, this.props, { active: true, fields: 'active,completeness,configuration,display_name' }));
+      this.setState({ showWorkflowButtons: true }, this.fetchWorkflows.bind(this, this.props, { active: true, fields: 'active,completeness,configuration,display_name' }));
     } else {
       this.setState({ showWorkflowButtons: false });
     }
   }
 
   render() {
-    let shownWorkflows = [];
-    if (this.props.project.experimental_tools.includes('hide completed workflows')) {
-      shownWorkflows = this.state.activeWorkflows.filter(workflow => workflow.completeness !== 1);
-    } else {
-      shownWorkflows = this.state.activeWorkflows;
-    }
-
     return (
       <ProjectHomePage
-        activeWorkflows={shownWorkflows}
+        activeWorkflows={this.state.activeWorkflows}
         background={this.props.background}
         organization={this.props.organization}
         preferences={this.props.preferences}
