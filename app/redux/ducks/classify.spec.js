@@ -1,4 +1,4 @@
-import reducer, { loadWorkflow } from './classify';
+import reducer, { clearIntervention, loadWorkflow } from './classify';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -512,6 +512,36 @@ describe('Classifier actions', function () {
       };
       const newState = reducer(state, action);
       expect(newState.classification.gold_standard).to.be.undefined;
+    });
+  });
+
+  describe('clear intervention', function () {
+    const state = {
+      intervention: {
+        message: 'this is an intervention',
+        uuid: '2d931510-d99f-494a-8c67-87feb05e1594'
+      }
+    };
+    let storeState = Object.assign({}, state);
+
+    function fakeDispatch(action) {
+      if(typeof action === 'function') {
+        action = action(fakeDispatch);
+      }
+      storeState = reducer(storeState, action);
+      return storeState;
+    }
+
+    before(function () {
+      clearIntervention()(fakeDispatch);
+    });
+
+    it('should store the intervention UUID to link the next classification', function () {
+      expect(storeState.lastInterventionUUID).to.equal(state.intervention.uuid);
+    });
+
+    it('should clear intervention messages', function () {
+      expect(storeState.intervention).to.be.null;
     });
   });
 
