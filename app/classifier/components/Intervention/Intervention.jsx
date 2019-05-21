@@ -14,14 +14,15 @@ const StyledInterventionMessage = styled.div`
   }
 `;
 
-function Intervention({ onUnmount, intervention, user }) {
+function Intervention(props) {
+  const { onUnmount, intervention, user } = props;
   const { message } = intervention;
   const checkbox = React.createRef();
 
   useEffect(() => {
     // the return value of an effect will be called to clean up after the component
     return onUnmount;
-  });
+  }, []);
 
   function onChange() {
     // Invert the checked value because true means do not send me messages.
