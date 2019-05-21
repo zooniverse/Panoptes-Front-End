@@ -32,17 +32,20 @@ function Intervention({ onUnmount, intervention, user }) {
   return (
     <StyledInterventionMessage>
       <Markdown>{message}</Markdown>
-      <label>
-        <input
-          ref={checkbox}
-          autoFocus={true}
-          type="checkbox"
-          onChange={onChange}
-        />
+      <div className="classification-intervention-message-with-optOut">
         <Markdown>
-          {counterpart('classifier.interventions.optOut')}
+          {counterpart('classifier.interventions.studyInfo')}
         </Markdown>
-      </label>
+        <label>
+          <input
+            ref={checkbox}
+            autoFocus={true}
+            type="checkbox"
+            onChange={onChange}
+          />
+          {counterpart('classifier.interventions.optOut')}
+        </label>
+      </div>
     </StyledInterventionMessage>
   );
 }
