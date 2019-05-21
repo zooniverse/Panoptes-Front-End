@@ -14,8 +14,7 @@ const StyledInterventionMessage = styled.div`
   }
 `;
 
-function Intervention({ onUnmount, intervention, user }) {
-  const { message } = intervention;
+function Intervention({ onUnmount, message, user }) {
   const checkbox = React.createRef();
 
   useEffect(() => {

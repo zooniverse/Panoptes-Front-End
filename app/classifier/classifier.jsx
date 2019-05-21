@@ -281,10 +281,18 @@ class Classifier extends React.Component {
     return this.checkForFeedback(taskKey)
       .then(() => {
         actions.classify.completeClassification(annotations);
-        if (!showIntervention && !isCmdClick && originalElement.href) {
-          const subjectTalkPath = `/projects/${project.slug}/talk/subjects/${subject.id}`;
-          browserHistory.push(subjectTalkPath);
-        }
+        // if (!showIntervention && !isCmdClick && originalElement.href) {
+        //   const subjectTalkPath = `/projects/${project.slug}/talk/subjects/${subject.id}`;
+        //   browserHistory.push(subjectTalkPath);
+        // }
+
+        setTimeout(function () {
+          actions.classify.addIntervention({
+            message: 'Hello there.',
+            uuid: '123456',
+            project_id: 1709
+          });
+        }, 500);
       })
       .then(() => {
         workflowHistory = [];
@@ -369,7 +377,7 @@ class Classifier extends React.Component {
             />
             {showIntervention &&
               <Intervention
-                intervention={intervention}
+                message={intervention.message}
                 onUnmount={actions.classify.clearIntervention}
                 user={user}
               />
