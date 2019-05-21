@@ -107,10 +107,19 @@ describe('Classifier actions', function () {
     };
     const state = {
       intervention: {
-        message: 'this is an intervention'
+        message: 'this is an intervention',
+        uuid: '2d931510-d99f-494a-8c67-87feb05e1594'
       }
     };
-    it('should clear intervention messages', function () {
+
+    it('should not clear intervention messages without a matching UUID', function () {
+      action.payload = '12345';
+      const newState = reducer(state, action);
+      expect(newState.intervention).to.eql(state.intervention);
+    });
+
+    it('should clear intervention messages with matching UUID', function () {
+      action.payload = '2d931510-d99f-494a-8c67-87feb05e1594';
       const newState = reducer(state, action);
       expect(newState.intervention).to.be.null;
     });
@@ -126,13 +135,20 @@ describe('Classifier actions', function () {
         uuid: '2d931510-d99f-494a-8c67-87feb05e1594'
       }
     };
+
     it('should store the intervention UUID to link the next classification', function () {
+      action.payload = state.intervention.uuid
       const newState = reducer(state, action);
       expect(newState.lastInterventionUUID).to.equal(state.intervention.uuid);
     });
+
     describe('when no intervention exists', function () {
-      const noInterventionState = {};
       it('should not store the last intervention UUID', function () {
+        const noInterventionState = {
+          intervention: null,
+          lastInterventionUUID: null
+        };
+        action.payload = undefined;
         const newState = reducer(noInterventionState, action);
         expect(newState.lastInterventionUUID).to.be.null;
       });
@@ -581,16 +597,32 @@ describe('Classifier actions', function () {
       return storeState;
     }
 
-    before(function () {
-      clearIntervention()(fakeDispatch);
+    describe('without a matching UUID', function () {
+      before(function () {
+        clearIntervention('12345')(fakeDispatch);
+      });
+
+      it('should store the intervention UUID to link the next classification', function () {
+        expect(storeState.lastInterventionUUID).to.equal('12345');
+      });
+
+      it('should not clear intervention messages', function () {
+        expect(storeState.intervention).to.equal(state.intervention);
+      });
     });
 
-    it('should store the intervention UUID to link the next classification', function () {
-      expect(storeState.lastInterventionUUID).to.equal(state.intervention.uuid);
-    });
+    describe('with a matching UUID', function () {
+      before(function () {
+        clearIntervention('2d931510-d99f-494a-8c67-87feb05e1594')(fakeDispatch);
+      });
 
-    it('should clear intervention messages', function () {
-      expect(storeState.intervention).to.be.null;
+      it('should store the intervention UUID to link the next classification', function () {
+        expect(storeState.lastInterventionUUID).to.equal('2d931510-d99f-494a-8c67-87feb05e1594');
+      });
+
+      it('should clear intervention messages', function () {
+        expect(storeState.intervention).to.be.null;
+      });
     });
   });
 

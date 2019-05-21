@@ -168,14 +168,19 @@ export default function reducer(state = initialState, action = {}) {
       return state;
     }
     case STORE_INTERVENTION_UUID: {
-      const { intervention } = state;
+      const uuid = action.payload;
       let lastInterventionUUID = null
-      if (intervention && intervention.uuid) {
-        lastInterventionUUID = intervention.uuid;
+      if (uuid) {
+        lastInterventionUUID = uuid;
+        return Object.assign({}, state, { lastInterventionUUID });
       }
-      return Object.assign({}, state, { lastInterventionUUID });
+      return state;
     }
     case CLEAR_INTERVENTION: {
+      const uuid = action.payload
+      if (uuid && state.intervention && uuid !== state.intervention.uuid) {
+        return state;
+      }
       const intervention = null;
       return Object.assign({}, state, { intervention });
     }
@@ -298,10 +303,16 @@ export function addIntervention(data) {
   };
 }
 
-export function clearIntervention() {
+export function clearIntervention(uuid) {
   return (dispatch) => {
-    dispatch({type: STORE_INTERVENTION_UUID});
-    dispatch({type: CLEAR_INTERVENTION});
+    dispatch({
+      type: STORE_INTERVENTION_UUID,
+      payload: uuid
+    });
+    dispatch({
+      type: CLEAR_INTERVENTION,
+      payload: uuid
+    });
   };
 }
 
