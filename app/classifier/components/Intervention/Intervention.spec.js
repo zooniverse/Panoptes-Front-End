@@ -57,6 +57,16 @@ describe('Intervention', function () {
     })
   });
 
+  describe('on props change', function () {
+    before(function () {
+      wrapper.setProps({ intervention: {message: 'Hello' } });
+    });
+
+    it('should not call onUnmount', function () {
+      expect(onUnmount).to.have.not.been.called
+    });
+  });
+
   describe('on unmount', function () {
     before(function () {
       wrapper.unmount()
@@ -64,6 +74,6 @@ describe('Intervention', function () {
 
     it('should call onUnmount', function () {
       expect(onUnmount).to.have.been.calledOnce
-    })
-  })
+    });
+  });
 });
