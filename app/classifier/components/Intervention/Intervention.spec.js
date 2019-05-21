@@ -7,7 +7,10 @@ import { Markdown } from 'markdownz';
 
 describe('Intervention', function () {
   let wrapper;
-  const intervention = { message: 'Hello!' };
+  const intervention = {
+    message: 'Hello!',
+    uuid: '12345'
+  };
   const { message } = intervention;
   const user = {
     id: 'a',
@@ -63,7 +66,12 @@ describe('Intervention', function () {
 
   describe('on props change', function () {
     before(function () {
-      wrapper.setProps({ intervention: {message: 'Hello' } });
+      wrapper.setProps({
+        intervention: {
+          message: 'Hello',
+          uuid: '12345'
+        }
+      });
     });
 
     it('should not call onUnmount', function () {
@@ -77,7 +85,7 @@ describe('Intervention', function () {
     });
 
     it('should call onUnmount', function () {
-      expect(onUnmount).to.have.been.calledOnce
+      expect(onUnmount.withArgs(intervention.uuid)).to.have.been.calledOnce
     });
   });
 });

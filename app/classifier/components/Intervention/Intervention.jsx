@@ -16,14 +16,16 @@ const StyledInterventionMessage = styled.div`
 
 function Intervention(props) {
   const { onUnmount, intervention, user } = props;
-  const { message } = intervention;
+  const { message, uuid } = intervention;
   const checkbox = React.createRef();
 
   useEffect(() => {
      /* the return value of an effect will be called to clean up after the component.
      Passing an empty array ([]) as a second argument tells React that your effect doesn’t depend on any values from props or state
      so it never needs to re-run, https://reactjs.org/docs/hooks-effect.html#tip-optimizing-performance-by-skipping-effects */
-    return onUnmount;
+    return function cleanup() {
+      onUnmount(uuid);
+    }
   }, []);
 
   function onChange() {
