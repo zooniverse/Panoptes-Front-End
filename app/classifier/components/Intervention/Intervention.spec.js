@@ -32,10 +32,9 @@ describe('Intervention', function () {
     const newlineMsg = intervention.message + "\n"
     expect(wrapper.find(Markdown).first().text()).to.equal(newlineMsg);
   });
-  it('should show an opt-out message', () => {
+  it('should show a study info message', () => {
     const expectedMarkdown = 'I do not want to take part in this messaging [study]' +
-      '(+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).' +
-      ' Do not show me further messages.'
+      '(+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
     const receivedMarkdown = wrapper.find(Markdown).last().props().children;
     expect(receivedMarkdown).to.equal(expectedMarkdown);
   });
@@ -47,6 +46,11 @@ describe('Intervention', function () {
     });
     after(function () {
       user.update.resetHistory();
+    });
+    it('should have an explanatory label', () => {
+      const expectedLabel = 'Do not show me further messages.'
+      const optOutLabel = wrapper.find('label').text();
+      expect(optOutLabel).to.equal(expectedLabel);
     });
     it('should update the user when checked/unchecked', function () {
       expect(user.update.callCount).to.equal(1);
