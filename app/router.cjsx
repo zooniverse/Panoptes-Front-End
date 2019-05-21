@@ -43,7 +43,6 @@ createReactClass = require 'create-react-class'
 `import EmailSettingsPage from './pages/settings/email';`
 `import AboutPage from './pages/about/index';`
 `import AboutHome from './pages/about/about-home';`
-`import PublicationsPage from './pages/about/publications-page';`
 `import TeamPage from './pages/about/team-page';`
 `import Acknowledgements from './pages/about/acknowledgements';`
 `import Contact from './pages/about/contact';`
