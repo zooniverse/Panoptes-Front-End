@@ -585,7 +585,8 @@ describe('Classifier actions', function () {
       intervention: {
         message: 'this is an intervention',
         uuid: '2d931510-d99f-494a-8c67-87feb05e1594'
-      }
+      },
+      lastInterventionUUID: null
     };
     let storeState = Object.assign({}, state);
 
@@ -621,6 +622,26 @@ describe('Classifier actions', function () {
       });
 
       it('should clear intervention messages', function () {
+        expect(storeState.intervention).to.be.null;
+      });
+    });
+
+    describe('without a UUID', function () {
+      before(function () {
+        storeState = {
+          intervention: {
+            message: 'this is an intervention'
+          },
+          lastInterventionUUID: null
+        };
+        clearIntervention()(fakeDispatch);
+      });
+
+      it('should not store an intervention UUID', function () {
+        expect(storeState.lastInterventionUUID).to.be.null;
+      });
+
+      it('should clear any intervention messages', function () {
         expect(storeState.intervention).to.be.null;
       });
     });
