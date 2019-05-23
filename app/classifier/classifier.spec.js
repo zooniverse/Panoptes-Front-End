@@ -222,7 +222,9 @@ describe('Classifier', function () {
         }
       }
     };
+    const existingUUID = '123456';
     beforeEach(function () {
+      classification.metadata.interventions = {uuid: existingUUID};
       checkForFeedback = sinon.stub(Classifier.prototype, 'checkForFeedback').callsFake(() => Promise.resolve());
       wrapper = shallow(
         <Classifier
@@ -261,6 +263,7 @@ describe('Classifier', function () {
       const changes = actions.classify.updateMetadata.getCall(0).args[0];
       expect(changes.interventions.message).to.be.false;
       expect(changes.interventions.opt_in).to.be.false;
+      expect(changes.interventions.uuid).to.equal(existingUUID);
     });
     it('should record translation metadata', function (done) {
       wrapper.setProps({ workflow });
@@ -378,7 +381,7 @@ describe('Classifier', function () {
     after(function () {
       feedbackCheckSpy.restore();
     })
-    
+
     describe('when the task changes', function () {
 
       beforeEach(function () {
@@ -402,7 +405,7 @@ describe('Classifier', function () {
         expect(feedbackUpdateSpy).to.have.been.calledWith(prevAnnotation);
       });
     });
-    
+
     describe('when a classification is complete', function () {
       let newAnnotation;
 
@@ -425,7 +428,7 @@ describe('Classifier', function () {
           expect(feedbackCheckSpy.callCount).to.equal(1);
         })
         .then(done, done);
-      
+
       });
 
       it('should update feedback for the last annotation', function (done) {
@@ -438,7 +441,7 @@ describe('Classifier', function () {
           expect(feedbackUpdateSpy).to.have.been.calledWith(newAnnotation);
         })
         .then(done, done);
-      
+
       });
     })
 

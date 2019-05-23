@@ -367,9 +367,9 @@ describe('Classifier actions', function () {
         upcomingSubjects: [mockSubject('1')],
         lastInterventionUUID: '2d931510-d99f-494a-8c67-87feb05e1594'
       };
-      it('should record the lastInterventionUUID as metadata.intervention_uuid', function () {
+      it('should record the lastInterventionUUID as metadata.interventions.uuid', function () {
         const newState = reducer(interventionUUIDState, action);
-        expect(newState.classification.metadata.intervention_uuid).to.equal(interventionUUIDState.lastInterventionUUID);
+        expect(newState.classification.metadata.interventions.uuid).to.equal(interventionUUIDState.lastInterventionUUID);
       });
       it('should clear any lastInteventionUUID if set', function () {
         const newState = reducer(interventionUUIDState, action);
@@ -459,22 +459,26 @@ describe('Classifier actions', function () {
         }
       }
     };
-    const state = {
-      classification: mockPanoptesResource('classifications', {
-        id: '1',
-        metadata: {
-          b: 3,
-          c: 4
-        }
-      }),
-      workflow: {
-        id: '1',
-        tasks: {
-          a: {}
-        }
-      },
-      upcomingSubjects: [mockSubject('1'), mockSubject('2')]
-    };
+    // ensure state is reset after each test
+    let state = null;
+    beforeEach(function () {
+      state = {
+        classification: mockPanoptesResource('classifications', {
+          id: '1',
+          metadata: {
+            b: 3,
+            c: 4
+          }
+        }),
+        workflow: {
+          id: '1',
+          tasks: {
+            a: {}
+          }
+        },
+        upcomingSubjects: [mockSubject('1'), mockSubject('2')]
+      };
+    });
     it('should add new keys to classification metadata', function () {
       const newState = reducer(state, action);
       expect(newState.classification.metadata.a).to.equal(1);

@@ -61,7 +61,8 @@ function createNewClassification(project, workflow, subject, goldStandardMode, l
   }
   // record if this classification had an intervention payload directly before it
   if (lastInterventionUUID) {
-    newMetadata.intervention_uuid = lastInterventionUUID
+    newMetadata.interventions = newMetadata.interventions || {};
+    newMetadata.interventions.uuid = lastInterventionUUID
   }
   const classification = apiClient.type('classifications').create({
     annotations: [],
