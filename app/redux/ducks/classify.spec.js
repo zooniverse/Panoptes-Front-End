@@ -99,6 +99,17 @@ describe('Classifier actions', function () {
         });
       });
     });
+    describe('with an existing intervention and a valid payload', function () {
+      it('should ignore the intervention', function () {
+        const existingIntervention = {
+          message: 'this is an intervention',
+          uuid: '123456'
+        };
+        state.intervention = existingIntervention;
+        const newState = reducer(state, action);
+        expect(newState.intervention).to.deep.equal(existingIntervention);
+      });
+    });
   });
 
   describe('clear intervention', function () {
