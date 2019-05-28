@@ -9,7 +9,7 @@ DiscussionPreview = require './discussion-preview'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 FollowBoard = require './follow-board'
-NewDiscussionForm = require './discussion-new-form'
+DiscussionNewForm = require './discussion-new-form'
 Paginator = require './lib/paginator'
 Moderation = require './lib/moderation'
 StickyDiscussionList = require './sticky-discussion-list'
@@ -274,7 +274,7 @@ module.exports = createReactClass
           </button>
 
           {if @state.newDiscussionOpen
-            <NewDiscussionForm
+            <DiscussionNewForm
               boardId={+@props.params.board}
               onCreateDiscussion={@onCreateDiscussion}
               user={@props.user}
