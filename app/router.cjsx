@@ -140,6 +140,7 @@ module.exports =
       <IndexRoute component={FilteredProjectsList} />
     </Route>
 
+    <Route path="/projects/nora-dot-eisner/planet-hunters-tess/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/nora-dot-eisner/planet-hunters-tess/classify' />} />
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
