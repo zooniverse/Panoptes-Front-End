@@ -19,6 +19,7 @@ module.exports = createReactClass
   propTypes:
     boardId: PropTypes.number
     onCreateDiscussion: PropTypes.func
+    project: PropTypes.object
     subject: PropTypes.object # subject response
 
   getInitialState: ->
@@ -33,15 +34,21 @@ module.exports = createReactClass
     @updateBoards newProps.subject if newProps.subject isnt @props.subject
 
   updateBoards: (subject) ->
-    subject?.get 'project'
-      .then (project) =>
-        talkClient.type 'boards'
-          .get
-            section: projectSection(project)
-            subject_default: false
-            page_size: 50
-          .then (boards) =>
-            @setState {boards}
+    if @props.project?.id
+      @getProjectBoards(@props.project)
+    else
+      subject?.get 'project'
+        .then (project) =>
+          @getProjectBoards(project)
+    
+  getProjectBoards: (project) ->
+    talkClient.type 'boards'
+      .get
+        section: projectSection(project)
+        subject_default: false
+        page_size: 50
+      .then (boards) =>
+        @setState {boards}
 
   discussionValidations: (commentBody) ->
     discussionTitle = ReactDOM.findDOMNode(@).querySelector('.new-discussion-title').value
