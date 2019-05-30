@@ -262,7 +262,7 @@ class Classifier extends React.Component {
       {},
       classification.metadata.interventions,
       {
-        message: !!showIntervention,
+        messageShown: !!showIntervention,
         opt_in: !!user && user.intervention_notifications
       }
     );
