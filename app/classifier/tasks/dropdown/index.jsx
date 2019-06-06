@@ -214,7 +214,7 @@ export default class DropdownTask extends React.Component {
             const selectedOptions = this.selectedOptions();
 
             let selectedOption = null;
-            if (selectedOptions && selectedOptions[i] && selectedOptions[i].value) {
+            if (selectedOptions && selectedOptions[i] && (selectedOptions[i].value || selectedOptions[i].value === 0)) {
               selectedOption = selectedOptions[i];
             }
 
@@ -280,7 +280,7 @@ DropdownTask.getDefaultAnnotation = () => ({ value: [] });
 DropdownTask.isAnnotationComplete = (task, annotation) => (
   task.selects.every((select, i) => (
     !select.required ||
-    (annotation.value[i] && annotation.value[i].value)
+    (annotation.value[i] && (annotation.value[i].value || annotation.value[i].value === 0))
   ))
 );
 

@@ -3,10 +3,10 @@
 
 import React from 'react';
 import assert from 'assert';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 import Select from 'react-select'; // required to properly simulate change
-import DropdownTask from './';
+import DropdownTask from '.';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
 import { mockReduxStore } from '../testHelpers';
 
@@ -17,6 +17,7 @@ const singleSelect = {
     title: 'Numbers',
     options: {
       '*': [
+        { label: '0', value: 0 },
         { label: 'One', value: 1 },
         { label: 'Two', value: 2 },
         { label: 'Three', value: 3 }
@@ -66,6 +67,12 @@ describe('DropdownTask:static methods', function () {
     assert.equal(DropdownTask.isAnnotationComplete(singleSelect, annotation), true);
   });
 
+  it('should be complete if required and answered with provided option with value of zero', function () {
+    singleSelect.selects[0].required = true;
+    const annotation = { value: [{ option: true, value: 0 }] };
+    assert.equal(DropdownTask.isAnnotationComplete(singleSelect, annotation), true);
+  });
+
   it('should be complete if required and answered with custom option', function () {
     singleSelect.selects[0].required = true;
     singleSelect.selects[0].allowCreate = true;
@@ -81,6 +88,23 @@ describe('DropdownTask:static methods', function () {
 });
 
 describe('DropdownTask', function () {
+  describe('with single select', function () {
+    const annotation = { value: [{ value: 0, option: true }] };
+
+    const wrapper = shallow(
+      <DropdownTask
+        task={singleSelect}
+        translation={singleSelect}
+        annotation={annotation}
+        onChange={function (a) { return a; }}
+      />, mockReduxStore
+    );
+
+    it('should show that 0 is selected', function () {
+      assert.deepEqual(wrapper.find(Select).prop('value'), { label: '0', value: 0 });
+    });
+  });
+
   describe('with multiple selects', function () {
     describe('and annotation not provided,', function () {
       let annotation;
