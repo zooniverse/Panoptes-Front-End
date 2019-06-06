@@ -3,10 +3,16 @@ import talkClient from 'panoptes-client/lib/talk-client';
 import Publications from './publications';
 
 function getNewestProject() {
-  return apiClient.type('projects').get({ cards: true, page_size: 1, sort: '-launch_date', launch_approved: true })
-  .then(([newestProject]) => {
-    return newestProject;
-  });
+  return apiClient.type('projects').get({
+    cards: true,
+    launch_approved: true,
+    page_size: 1,
+    sort: '-launch_date',
+    state: 'live'
+  })
+    .then(([newestProject]) => {
+      return newestProject;
+    });
 }
 
 function getBlogPosts(returnPosts) {
@@ -20,9 +26,15 @@ function getBlogPosts(returnPosts) {
 }
 
 function getRecentProjects() {
-  const query = { launch_approved: true, page_size: 3, sort: '-updated_at', cards: true };
+  const query = {
+    cards: true,
+    launch_approved: true,
+    page_size: 3,
+    sort: '-updated_at',
+    state: 'live'
+  };
   return apiClient.type('projects').get(query)
-  .then(recentProjects => recentProjects);
+    .then(recentProjects => recentProjects);
 }
 
 function getPublication() {
