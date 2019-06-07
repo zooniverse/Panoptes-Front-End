@@ -10,52 +10,53 @@ import DropdownTask from '.';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
 import { mockReduxStore } from '../testHelpers';
 
-const singleSelect = {
-  instruction: 'Is there something here?',
-  selects: [{
-    id: 'numbers123',
-    title: 'Numbers',
-    options: {
-      '*': [
-        { label: '0', value: 0 },
-        { label: 'One', value: 1 },
-        { label: 'Two', value: 2 },
-        { label: 'Three', value: 3 }
-      ]
-    }
-  }]
-};
+function getMockTasks() {
+  const singleSelect = {
+    instruction: 'Is there something here?',
+    selects: [{
+      id: 'numbers123',
+      title: 'Numbers',
+      options: {
+        '*': [
+          { label: '0', value: 0 },
+          { label: 'One', value: 1 },
+          { label: 'Two', value: 2 },
+          { label: 'Three', value: 3 }
+        ]
+      }
+    }]
+  };
 
-const singleSelectTranslation = {
-  instruction: 'Is there something here?',
-  selects: [{
-    id: 'numbers123',
-    title: 'Numbers',
-    options: {
-      '*': [
-        { label: '0', value: 0 },
-        { label: 'Ein', value: 1 },
-        { label: 'Zwei', value: 2 },
-        { label: 'Drei', value: 3 }
-      ]
-    }
-  }]
-};
+  const singleSelectTranslation = {
+    instruction: 'Is there something here?',
+    selects: [{
+      id: 'numbers123',
+      title: 'Numbers',
+      options: {
+        '*': [
+          { label: '0', value: 0 },
+          { label: 'Ein', value: 1 },
+          { label: 'Zwei', value: 2 },
+          { label: 'Drei', value: 3 }
+        ]
+      }
+    }]
+  };
 
-const multiSelects = workflow.tasks.dropdown;
+  const multiSelects = workflow.tasks.dropdown;
 
-// multiSelects:
-//   1 - Country (required:true)
-//   2 - State (condition:Country, required:true, allowCreate:false)
-//   3 - County (condition:State, allowCreate:true)
-//   4 - City (condition:County, allowCreate:false)
-//   5 - Best State Team (condition:State, allowCreate:true)
+  // multiSelects:
+  //   1 - Country (required:true)
+  //   2 - State (condition:Country, required:true, allowCreate:false)
+  //   3 - County (condition:State, allowCreate:true)
+  //   4 - City (condition:County, allowCreate:false)
+  //   5 - Best State Team (condition:State, allowCreate:true)
+
+  return { singleSelect, singleSelectTranslation, multiSelects }
+}
 
 describe('DropdownTask:static methods', function () {
-  after(function () {
-    singleSelect.selects[0].required = false;
-    singleSelect.selects[0].allowCreate = false;
-  })
+  const { singleSelect, multiSelects } = getMockTasks();
 
   it('should have the correct question text', function () {
     assert.equal(DropdownTask.getTaskText(singleSelect), singleSelect.instruction);
@@ -114,6 +115,7 @@ describe('DropdownTask', function () {
     
     before(function () {
       const annotation = { value: [{ value: 0, option: true }] };
+      const { singleSelect, singleSelectTranslation } = getMockTasks();
 
       wrapper = shallow(
         <DropdownTask
@@ -141,6 +143,7 @@ describe('DropdownTask', function () {
       let annotation;
       let wrapper;
       let onChangeSpy;
+      const { multiSelects } = getMockTasks();
 
       beforeEach(function () {
         annotation = { value: [] };
@@ -226,6 +229,7 @@ describe('DropdownTask', function () {
     describe('and first annotation provided (Country),', function () {
       let annotation;
       let wrapper;
+      const { multiSelects } = getMockTasks();
 
       beforeEach(function () {
         annotation = { value: [
@@ -265,6 +269,7 @@ describe('DropdownTask', function () {
     describe('and all annotations provided, no custom answers,', function () {
       let annotation;
       let wrapper;
+      const { multiSelects } = getMockTasks();
 
       beforeEach(function () {
         annotation = { value: [
@@ -305,6 +310,7 @@ describe('DropdownTask', function () {
     describe('and all annotations provided, including custom answers,', function () {
       let annotation;
       let wrapper;
+      const { multiSelects } = getMockTasks();
 
       beforeEach(function () {
         annotation = { value: [
@@ -344,6 +350,7 @@ describe('DropdownTask', function () {
     describe('and component updated', function () {
       let onChangeSpy
       let wrapper
+      const { singleSelect, multiSelects } = getMockTasks();
 
       before(function () {
         const annotation1 = { value: [] };
