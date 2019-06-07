@@ -21,7 +21,7 @@ export function DropdownSummary(props) {
   }
 
   function getOptionLabel(value, i) {
-    const select = props.task.selects[i];
+    const select = props.translation.selects[i];
     const optionsKeys = getOptionsKeys();
     const optionsKey = select.condition ? optionsKeys[select.condition] : '*';
     const options = select.options[optionsKey];
@@ -144,7 +144,7 @@ export default class DropdownTask extends React.Component {
   }
 
   getOptions(i) {
-    const select = this.props.task.selects[i];
+    const select = this.props.translation.selects[i];
     // the root select's optionsKey is '*' by default and cannot be changed, while any other select's optionsKey is based on conditional answers selected
     const optionsKey = select.condition ? this.getOptionsKey(i) : '*';
     const options = select.options[optionsKey];
