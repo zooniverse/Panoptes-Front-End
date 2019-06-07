@@ -26,6 +26,22 @@ const singleSelect = {
   }]
 };
 
+const singleSelectTranslation = {
+  instruction: 'Is there something here?',
+  selects: [{
+    id: 'numbers123',
+    title: 'Numbers',
+    options: {
+      '*': [
+        { label: '0', value: 0 },
+        { label: 'Ein', value: 1 },
+        { label: 'Zwei', value: 2 },
+        { label: 'Drei', value: 3 }
+      ]
+    }
+  }]
+};
+
 const multiSelects = workflow.tasks.dropdown;
 
 // multiSelects:
@@ -89,19 +105,29 @@ describe('DropdownTask:static methods', function () {
 
 describe('DropdownTask', function () {
   describe('with single select', function () {
-    const annotation = { value: [{ value: 0, option: true }] };
+    let wrapper;
+    
+    before(function () {
+      const annotation = { value: [{ value: 0, option: true }] };
 
-    const wrapper = shallow(
-      <DropdownTask
-        task={singleSelect}
-        translation={singleSelect}
-        annotation={annotation}
-        onChange={function (a) { return a; }}
-      />, mockReduxStore
-    );
+      wrapper = shallow(
+        <DropdownTask
+          task={singleSelect}
+          translation={singleSelectTranslation}
+          annotation={annotation}
+          onChange={function (a) { return a; }}
+        />, mockReduxStore
+      );
+    })
 
     it('should show that 0 is selected', function () {
       assert.deepEqual(wrapper.find(Select).prop('value'), { label: '0', value: 0 });
+    });
+
+    it('should show translated labels', function () {
+      const annotation = { value: [{ value: 1, option: true }] };
+      wrapper.setProps({ annotation });
+      assert.deepEqual(wrapper.find(Select).prop('value'), { label: 'Ein', value: 1 });
     });
   });
 
@@ -311,15 +337,17 @@ describe('DropdownTask', function () {
     });
 
     describe('and component updated', function () {
-      const annotation1 = { value: [] };
-      const annotation2 = { value: [] };
-      const onChangeSpy = sinon.spy();
+      let onChangeSpy
+      let wrapper
 
-      const wrapper = mount(<DropdownTask task={multiSelects} translation={multiSelects} annotation={annotation1} onChange={onChangeSpy} />, mockReduxStore);
-      wrapper.setProps({ task: singleSelect, annotation: annotation2 });
+      before(function () {
+        const annotation1 = { value: [] };
+        const annotation2 = { value: [] };
+        onChangeSpy = sinon.spy();
 
-      // first call on mount should set first task's default values, second call on update should be to set second task's default values
-      const newAnnotation = onChangeSpy.secondCall.args[0];
+        wrapper = mount(<DropdownTask task={multiSelects} translation={multiSelects} annotation={annotation1} onChange={onChangeSpy} />, mockReduxStore);
+        wrapper.setProps({ task: singleSelect, annotation: annotation2 });
+      })
 
       it('should render all selects', function () {
         const renderedSelects = wrapper.find(Select);
@@ -327,10 +355,14 @@ describe('DropdownTask', function () {
       });
 
       it('should have an annotation with values equal in length to the number of selects', function () {
+        // first call on mount should set first task's default values, second call on update should be to set second task's default values
+        const newAnnotation = onChangeSpy.secondCall.args[0];
         assert.equal(newAnnotation.value.length, singleSelect.selects.length);
       });
 
       it('should have an annotation reflecting nothing selected', function () {
+        // first call on mount should set first task's default values, second call on update should be to set second task's default values
+        const newAnnotation = onChangeSpy.secondCall.args[0];
         newAnnotation.value.forEach((annotationValue) => {
           const { option, value } = annotationValue;
           assert.equal(value, null);
