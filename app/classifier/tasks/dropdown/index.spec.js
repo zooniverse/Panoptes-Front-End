@@ -52,6 +52,11 @@ const multiSelects = workflow.tasks.dropdown;
 //   5 - Best State Team (condition:State, allowCreate:true)
 
 describe('DropdownTask:static methods', function () {
+  after(function () {
+    singleSelect.selects[0].required = false;
+    singleSelect.selects[0].allowCreate = false;
+  })
+
   it('should have the correct question text', function () {
     assert.equal(DropdownTask.getTaskText(singleSelect), singleSelect.instruction);
   });
