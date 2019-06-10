@@ -261,7 +261,7 @@ describe('Classifier', function () {
       wrapper.instance().completeClassification(fakeEvent)
       .then(done, done);
       const changes = actions.classify.updateMetadata.getCall(0).args[0];
-      expect(changes.interventions.message).to.be.false;
+      expect(changes.interventions.messageShown).to.be.false;
       expect(changes.interventions.opt_in).to.be.false;
       expect(changes.interventions.uuid).to.equal(existingUUID);
     });
@@ -286,7 +286,7 @@ describe('Classifier', function () {
         wrapper.instance().completeClassification(fakeEvent)
         .then(done, done);
         const changes = actions.classify.updateMetadata.getCall(0).args[0];
-        expect(changes.interventions.message).to.be.true;
+        expect(changes.interventions.messageShown).to.be.true;
       });
       it('should record whether the user is reading interventions', function () {
         wrapper.setProps({ workflow, intervention, user });
