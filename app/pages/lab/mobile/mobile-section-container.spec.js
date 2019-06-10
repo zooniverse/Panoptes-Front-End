@@ -47,8 +47,15 @@ describe('<MobileSectionContainer />', function () {
       shallow(<MobileSectionContainer task={fixtures.task()} workflow={fixtures.workflow()} project={fixtures.project()} />);
     });
 
-    it('should render the <MobileSection /> component if the task type is single or multiple', function () {
+    it('should render the <MobileSection /> component if the task type is single', function () {
       assert.strictEqual(component.length, 1);
+    });
+
+    it('should render the <MobileSection /> component if the task type is multiple', function () {
+      const task = fixtures.task({ type: 'multiple' });
+      wrapper = shallow(<MobileSectionContainer task={task} workflow={fixtures.workflow()} project={fixtures.project()} />);
+      const mobileSection = wrapper.find('MobileSection').first();
+      assert.strictEqual(mobileSection.length, 1);
     });
 
     it('should render nothing if the task type isn\'t single or multiple or drawing', function () {
