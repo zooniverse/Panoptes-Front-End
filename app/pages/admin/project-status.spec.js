@@ -15,18 +15,24 @@ const workflows = [
   {
     active: true,
     configuration: {},
+    retirement: {
+      criteria: 'classification_count',
+      options: { count: 15 }
+    },
     display_name: 'Test Workflow 1',
     id: '1'
   },
   {
     active: true,
     configuration: {},
+    retirement: { criteria: 'never_retire' },
     display_name: 'Test Workflow 2',
     id: '2'
   },
   {
     active: false,
     configuration: {},
+    retirement: { criteria: 'never_retire' },
     display_name: 'Test Workflow 3',
     id: '3'
   }
@@ -37,12 +43,14 @@ describe('ProjectStatus', function () {
   let handleDialogSuccessStub;
   let loadingIndicator;
   let onChangeWorkflowLevelStub;
+  let onChangeWorkflowRetirementStub;
   let wrapper;
 
   before(function () {
     sinon.stub(ProjectStatus.prototype, 'getProject').callsFake(() => Promise.resolve(project));
     sinon.stub(ProjectStatus.prototype, 'getWorkflows').callsFake(() => Promise.resolve(workflows));
     onChangeWorkflowLevelStub = sinon.stub(ProjectStatus.prototype, 'onChangeWorkflowLevel');
+    onChangeWorkflowRetirementStub = sinon.stub(ProjectStatus.prototype, 'onChangeWorkflowRetirement');
     handleDialogCancelStub = sinon.stub(ProjectStatus.prototype, 'handleDialogCancel');
     handleDialogSuccessStub = sinon.stub(ProjectStatus.prototype, 'handleDialogSuccess');
 
@@ -51,6 +59,7 @@ describe('ProjectStatus', function () {
 
   after(function () {
     onChangeWorkflowLevelStub.restore();
+    onChangeWorkflowRetirementStub.restore();
     handleDialogCancelStub.restore();
     handleDialogSuccessStub.restore();
     ProjectStatus.prototype.getProject.restore();
@@ -131,8 +140,13 @@ describe('ProjectStatus', function () {
     });
 
     it('calls #onChangeWorkflowLevel when a user changes a workflow\'s configuration level', function () {
-      wrapper.find('select').first().simulate('change');
+      wrapper.find('select#promotionLevels').first().simulate('change');
       sinon.assert.calledOnce(onChangeWorkflowLevelStub);
+    });
+
+    it('calls #onChangeWorkflowRetirement when a user changes a workflow\'s retirement configuration', function () {
+      wrapper.find('select#retirementConfig').first().simulate('change');
+      sinon.assert.calledOnce(onChangeWorkflowRetirementStub);
     });
 
     it('renders the WorkflowDefaultDialog component when dialogIsOpen state is true', function () {

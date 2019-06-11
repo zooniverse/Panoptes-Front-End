@@ -18,6 +18,7 @@ class ProjectStatus extends Component {
   constructor(props) {
     super(props);
     this.onChangeWorkflowLevel = this.onChangeWorkflowLevel.bind(this);
+    this.onChangeWorkflowRetirement = this.onChangeWorkflowRetirement.bind(this);
     this.getWorkflows = this.getWorkflows.bind(this);
     this.forceUpdate = this.forceUpdate.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
@@ -55,6 +56,14 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
+  onChangeWorkflowRetirement(workflow, event) {
+    this.setState({ error: null });
+    let selected = event.target.value;
+    return workflow.update({ 'retirement.criteria': selected }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+
   getFeaturedProject() {
     return apiClient.type('projects')
       .get({ featured: true, cards: true })
@@ -77,7 +86,7 @@ class ProjectStatus extends Component {
   }
 
   getWorkflows() {
-    const fields = 'display_name,active,configuration';
+    const fields = 'display_name,active,configuration,retirement';
     return getWorkflowsInOrder(this.state.project, { fields }).then((workflows) => {
       const usedWorkflowLevels = this.getUsedWorkflowLevels(workflows);
       this.setState({ usedWorkflowLevels, workflows });
@@ -198,7 +207,8 @@ class ProjectStatus extends Component {
               <label>
                 Level:{' '}
                 <select
-                  onChange={this.onChangeWorkflowLevel.bind(null, workflow)}
+                  id='promotionLevels'
+                  onChange={(event) => this.onChangeWorkflowLevel(workflow, event)}
                   value={workflow.configuration.level && workflow.configuration.level}
                 >
                   <option value="none">none</option>
@@ -214,6 +224,18 @@ class ProjectStatus extends Component {
                       </option>
                     );
                   })}
+                </select>
+              </label>
+              {' | '}
+              <label>
+                Retirement:{' '}
+                <select
+                  id='retirementConfig'
+                  onChange={(event) => this.onChangeWorkflowRetirement(workflow, event)}
+                  value={workflow.retirement.criteria}
+                >
+                  <option value="never_retire">Never Retire</option>
+                  <option value="classification_count">Classification Count - {(workflow.retirement.options && workflow.retirement.options.count) || ''}</option>
                 </select>
               </label>
               <fieldset>
