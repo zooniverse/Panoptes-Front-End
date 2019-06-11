@@ -59,7 +59,6 @@ class ProjectStatus extends Component {
   onChangeWorkflowRetirement(workflow, event) {
     this.setState({ error: null });
     let selected = event.target.value;
-    console.log(selected);
     return workflow.update({ 'retirement.criteria': selected }).save()
       .then(() => this.getWorkflows())
       .catch(error => this.setState({ error }));
@@ -209,7 +208,7 @@ class ProjectStatus extends Component {
                 Level:{' '}
                 <select
                   id='promotionLevels'
-                  onChange={this.onChangeWorkflowLevel.bind(null, workflow)}
+                  onChange={(event) => this.onChangeWorkflowLevel(workflow, event)}
                   value={workflow.configuration.level && workflow.configuration.level}
                 >
                   <option value="none">none</option>
@@ -232,7 +231,7 @@ class ProjectStatus extends Component {
                 Retirement:{' '}
                 <select
                   id='retirementConfig'
-                  onChange={this.onChangeWorkflowRetirement.bind(null, workflow)}
+                  onChange={(event) => this.onChangeWorkflowRetirement(workflow, event)}
                   value={workflow.retirement.criteria}
                 >
                   <option value="never_retire">Never Retire</option>
