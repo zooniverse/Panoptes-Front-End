@@ -459,8 +459,9 @@ describe('Classifier actions', function () {
         }
       }
     };
-    // ensure state is reset after each test
+    // setup state to be reset in beforeEach function
     let state = null;
+
     beforeEach(function () {
       state = {
         classification: mockPanoptesResource('classifications', {
