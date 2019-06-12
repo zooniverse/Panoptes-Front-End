@@ -258,15 +258,20 @@ class Classifier extends React.Component {
     }
     const { already_seen, finished_workflow, retired, selection_state, user_has_finished_workflow, selected_at } = subject;
     const workflowTranslation = translations.strings.workflow[workflow.id];
+    const mergedInterventions = Object.assign(
+      {},
+      classification.metadata.interventions,
+      {
+        messageShown: !!showIntervention,
+        opt_in: !!user && user.intervention_notifications
+      }
+    );
     actions.classify.updateMetadata({
       viewport: {
         width: innerWidth,
         height: innerHeight
       },
-      interventions: {
-        message: !!showIntervention,
-        opt_in: !!user && user.intervention_notifications
-      },
+      interventions: mergedInterventions,
       subject_selection_state: {
         already_seen,
         finished_workflow,
