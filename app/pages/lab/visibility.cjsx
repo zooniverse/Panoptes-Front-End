@@ -90,7 +90,7 @@ module.exports = createReactClass
             <p>
               Review status for this project has been approved. To end the review and make changes, switch back to <em>development</em> mode.
               {unless @props.project.launch_requested or @props.project.launch_approved
-                <span>If you’re ready to launch this project, see the next section.</span>}
+                <span>If you’re ready to launch this project, please email <a href="mailto:contact@zooniverse.org">contact@zooniverse.org</a> to submit your request.</span>}
             </p>
           </span>
         else if @props.project.beta_requested
@@ -104,10 +104,5 @@ module.exports = createReactClass
         }
 
       </div>
-      <hr />
-      <div>
-        <p className="form-label">Temporary notice</p>
-        <p>The workflow settings have moved from the visibility page to the <Link to="/lab/#{@props.project.id}/workflows">workflows page</Link>. For improved discoverability, we have moved these settings so all relevant information and configuration of workflows is in one place.</p>
-      </div>
-
+  
     </div>
