@@ -450,6 +450,8 @@ describe('Classifier actions', function () {
     });
   });
   describe('update classification metadata', function () {
+    // setup state to be reset in beforeEach function
+    let state = null;
     const action = {
       type: 'pfe/classify/UPDATE_METADATA',
       payload: {
@@ -459,8 +461,6 @@ describe('Classifier actions', function () {
         }
       }
     };
-    // setup state to be reset in beforeEach function
-    let state = null;
 
     beforeEach(function () {
       state = {
