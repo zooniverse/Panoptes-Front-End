@@ -90,7 +90,7 @@ module.exports = createReactClass
             <p>
               Review status for this project has been approved. To end the review and make changes, switch back to <em>development</em> mode.
               {unless @props.project.launch_requested or @props.project.launch_approved
-                <span>If you’re ready to launch this project, please email contact@zooniverse.org to submit your request.</span>}
+                <span>If you’re ready to launch this project, please email <a href="mailto:contact@zooniverse.org">contact@zooniverse.org</a> to submit your request.</span>}
             </p>
           </span>
         else if @props.project.beta_requested
