@@ -16,6 +16,7 @@ const params = {
 };
 
 export const organization = mockPanoptesResource('organizations', {
+  announcement: 'Test announcement',
   categories: ['Plants', 'Bugs', 'Butterflies'],
   display_name: 'Test Org',
   description: 'A brief test description',
