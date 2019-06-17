@@ -7,6 +7,29 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import OrganizationPage from './organization-page';
 import { organization } from './organization-container.spec';
+import mockPanoptesResource from '../../../test/mock-panoptes-resource';
+
+const noAnnounceCatUrlsOrg = mockPanoptesResource('organizations', {
+  display_name: 'Test Org',
+  description: 'A brief test description',
+  id: '9876',
+  introduction: 'A brief test introduction',
+  links: {
+    organization_roles: ['1']
+  },
+  urls: null
+});
+
+const emptyArrayUrlsOrg = mockPanoptesResource('organizations', {
+  display_name: 'Test Org',
+  description: 'A brief test description',
+  id: '9876',
+  introduction: 'A brief test introduction',
+  links: {
+    organization_roles: ['1']
+  },
+  urls: []
+});
 
 const organizationPages = [{
   content: 'test content',
@@ -75,15 +98,13 @@ describe('OrganizationPage', function () {
   });
 
   it('should not show announcement if not defined', function () {
-    const wrapper = shallow(<OrganizationPage organization={organization} />);
+    const wrapper = shallow(<OrganizationPage organization={noAnnounceCatUrlsOrg} />);
     const announcement = wrapper.find('.project-announcement-banner');
     assert.equal(announcement.length, 0);
   });
 
   it('should show announcement if defined', function () {
-    const orgWithAnnouncement = organization;
-    orgWithAnnouncement.announcement = 'test announcement';
-    const wrapper = shallow(<OrganizationPage organization={orgWithAnnouncement} />);
+    const wrapper = shallow(<OrganizationPage organization={organization} />);
     const announcement = wrapper.find('.project-announcement-banner');
     assert.equal(announcement.length, 1);
   });
@@ -101,9 +122,7 @@ describe('OrganizationPage', function () {
   });
 
   it('should not show category buttons if the organization does not have categories', function () {
-    const noCategoriesOrg = organization;
-    delete noCategoriesOrg.categories;
-    const wrapper = shallow(<OrganizationPage organization={noCategoriesOrg} />);
+    const wrapper = shallow(<OrganizationPage organization={noAnnounceCatUrlsOrg} />);
     const categories = wrapper.find('.organization-page__category-button');
     assert.equal(categories.length, 0);
   });
@@ -140,6 +159,16 @@ describe('OrganizationPage', function () {
       assert.equal(aboutPageExpanded.length, 1);
       assert.equal(aboutPageExpanded.contains('test content'), true);
     });
+  });
+
+  it('should not render ExternalLinks section if no urls', function () {
+    const wrapper = shallow(<OrganizationPage organization={noAnnounceCatUrlsOrg} />);
+    assert.equal(wrapper.find('ExternalLinksBlockContainer').length, 0);
+  });
+
+  it('should not render ExternalLinks section if urls empty array', function () {
+    const wrapper = shallow(<OrganizationPage organization={emptyArrayUrlsOrg} />);
+    assert.equal(wrapper.find('ExternalLinksBlockContainer').length, 0);
   });
 
   it('should show organization links', function () {
