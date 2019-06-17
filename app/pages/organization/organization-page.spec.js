@@ -20,6 +20,17 @@ const noAnnounceCatUrlsOrg = mockPanoptesResource('organizations', {
   urls: null
 });
 
+const emptyArrayUrlsOrg = mockPanoptesResource('organizations', {
+  display_name: 'Test Org',
+  description: 'A brief test description',
+  id: '9876',
+  introduction: 'A brief test introduction',
+  links: {
+    organization_roles: ['1']
+  },
+  urls: []
+});
+
 const organizationPages = [{
   content: 'test content',
   url_key: 'about'
@@ -150,8 +161,13 @@ describe('OrganizationPage', function () {
     });
   });
 
-  it('should not show ExternalLinks section if no urls', function () {
+  it('should not render ExternalLinks section if no urls', function () {
     const wrapper = shallow(<OrganizationPage organization={noAnnounceCatUrlsOrg} />);
+    assert.equal(wrapper.find('ExternalLinksBlockContainer').length, 0);
+  });
+
+  it('should not render ExternalLinks section if urls empty array', function () {
+    const wrapper = shallow(<OrganizationPage organization={emptyArrayUrlsOrg} />);
     assert.equal(wrapper.find('ExternalLinksBlockContainer').length, 0);
   });
 
