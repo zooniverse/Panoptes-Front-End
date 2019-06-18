@@ -22,8 +22,9 @@ class ProjectNavbar extends Component {
   setBreakpoint(size) {
     // `size` is undefined when the component is first mounted, as there hasn't
     // been time for the callback to fire.
+    // size.width will be 0 when the navbar begins to render, so ignore that too.
     
-    if (size) {
+    if (size && size.width) {
       const useWide = size.width < document.body.clientWidth;
       const newState = (this.state.loading) ? { useWide, loading: false } : { useWide };
       this.setState(newState);
@@ -31,19 +32,10 @@ class ProjectNavbar extends Component {
   }
 
   render() {
-    const NavBarComponent = (this.state.useWide) ? ProjectNavbarWide : ProjectNavbarNarrow;
-
-    return (
-      <React.Fragment>
-        {!this.state.loading &&
-          <NavBarComponent {...this.props}>
-            <SettingsMenu>
-              <LanguagePicker
-                project={this.props.project}
-              />
-            </SettingsMenu>
-          </NavBarComponent>
-        }
+    const { loading, useWide } = this.state;
+    const NavBarComponent = useWide ? ProjectNavbarWide : ProjectNavbarNarrow;
+    const navBar = loading ?
+      (
         <SizeAwareProjectNavbarWide
           {...this.props}
           onSize={this.setBreakpoint}
@@ -52,8 +44,18 @@ class ProjectNavbar extends Component {
             position: 'absolute'
           }}
         />
-      </React.Fragment>
-    );
+      ) :
+      (
+        <NavBarComponent {...this.props}>
+          <SettingsMenu>
+            <LanguagePicker
+              project={this.props.project}
+            />
+          </SettingsMenu>
+        </NavBarComponent>
+      )
+
+      return navBar;
   }
 }
 
