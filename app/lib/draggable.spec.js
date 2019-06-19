@@ -41,6 +41,7 @@ describe('Draggable', function () {
         fakeEvent = {
           type: startEvent,
           preventDefault: sinon.stub(),
+          stopPropagation: sinon.stub(),
           pageX: 50,
           pageY: 30
         };
@@ -69,6 +70,8 @@ describe('Draggable', function () {
       describe('on drag', function () {
         before(function () {
           const fakeEvent = {
+            preventDefault: sinon.stub(),
+            stopPropagation: sinon.stub(),
             pageX: 100,
             pageY: 100
           };
