@@ -28,6 +28,7 @@ counterpart.registerTranslations 'en',
     email: 'Email address'
     emailConflict: 'An account with this address already exists'
     realName: 'Real name'
+    realNamePatternHelp: "Enter a real name, not an email address", 
     whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc'
     agreeToPrivacyPolicy: 'You agree to our %(link)s (required)'
     privacyPolicy: 'privacy policy'
@@ -164,7 +165,14 @@ module.exports = createReactClass
           <Translate content="registerForm.realName" />
           <Translate className="form-help info right-align" content="registerForm.optional" />
         </span>
-        <input type="text" ref="realName" className="standard-input full" disabled={@props.user?} />
+        <input
+          type="text"
+          pattern='[^@]+'
+          ref="realName"
+          className="standard-input full"
+          disabled={@props.user?}
+          title={counterpart('registerForm.realNamePatternHelp')}
+        />
         <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
       </label>
 
