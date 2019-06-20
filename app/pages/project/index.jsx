@@ -242,7 +242,7 @@ class ProjectPageController extends React.Component {
           ]) => {
             const ready = true;
             this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits });
-            this.loadFieldGuide(project.id);
+            this.loadFieldGuide(project.id, locale);
             actions.translations.load('project_page', pages.map(page => page.id), locale);
             return { project, projectPreferences, splits };
           })
@@ -294,13 +294,13 @@ class ProjectPageController extends React.Component {
     }
   }
 
-  loadFieldGuide(projectId) {
+  loadFieldGuide(projectId, locale) {
     return apiClient.type('field_guides').get({ project_id: projectId })
     .then(([guide]) => {
       this.setState({ guide });
       if (guide && guide.id) {
         const { actions, translations } = this.props;
-        actions.translations.load('field_guide', guide.id, translations.locale);
+        actions.translations.load('field_guide', guide.id, locale);
         getAllLinked(guide, 'attached_images')
         .then((images) => {
           const guideIcons = {};
