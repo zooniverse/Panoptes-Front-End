@@ -28,7 +28,7 @@ counterpart.registerTranslations 'en',
     email: 'Email address'
     emailConflict: 'An account with this address already exists'
     realName: 'Real name'
-    realNamePatternHelp: "Enter a real name, not an email address", 
+    realNamePatternHelp: "Enter a name, not an email address", 
     whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc'
     agreeToPrivacyPolicy: 'You agree to our %(link)s (required)'
     privacyPolicy: 'privacy policy'
