@@ -1,4 +1,4 @@
-Staging branch URL:
+Staging branch URL: https://pr-{NUMBER}.pfe-preview.zooniverse.org
 
 Fixes # .
 
