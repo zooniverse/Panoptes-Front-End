@@ -53,7 +53,7 @@ class TranslationsManager extends React.Component {
         {!hasTranslations &&
           <React.Fragment>
             <h2>Add translations to your project</h2>
-            <p>Add some translators to your project from the <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link> and invite them to add translations at <a href={`https://pandora.zooniverse.org/#/project/${project.id}`}>https://pandora.zooniverse.org/#/project/{project.id}</a></p>
+            <p>Add some translators to your project from the <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link> and invite them to add translations at <a href={`https://translations.zooniverse.org/#/project/${project.id}`}>https://translations.zooniverse.org/#/project/{project.id}</a></p>
           </React.Fragment>
         }
         <h2>Project language menu</h2>
