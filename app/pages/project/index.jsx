@@ -50,13 +50,6 @@ class ProjectPageController extends React.Component {
     };
   }
 
-  componentWillMount() {
-    const { actions } = this.props;
-    if (this.props.location.query.language) {
-      actions.translations.setLocale(this.props.location.query.language);
-    }
-  }
-
   componentDidMount() {
     this._boundForceUpdate = this.forceUpdate.bind(this);
     if (this.context.initialLoadComplete) { 
@@ -82,7 +75,7 @@ class ProjectPageController extends React.Component {
     const { actions, translations } = this.props;
     const { project, guide, pages } = this.state;
     const { locale } = translations;
-    if (project && (locale !== prevProps.translations.locale)) {
+    if (project && pages && (locale !== prevProps.translations.locale)) {
       actions.translations.load('project', project.id, locale);
       actions.translations.load('project_page', pages.map(page => page.id), locale);
       if (guide) {
@@ -174,6 +167,7 @@ class ProjectPageController extends React.Component {
   }
 
   fetchProjectData(ownerName, projectName, user) {
+    const { actions, location } = this.props
     this.setState({
       error: null,
       loading: true,
@@ -187,6 +181,11 @@ class ProjectPageController extends React.Component {
         this.setState({ project });
 
         if (project) {
+          let locale = project.primary_language
+          if (location.query.language) {
+            locale = location.query.language;
+          }
+          actions.translations.setLocale(locale);
           // Use apiClient with cached resources from include to get out of cache
           let awaitOrganization;
           const awaitBackground = apiClient.type('backgrounds').get(project.links.background.id)
@@ -216,7 +215,7 @@ class ProjectPageController extends React.Component {
 
           const awaitSplits = this.getSplits(slug, user)
 
-          const awaitTranslation = this.props.actions.translations.load('project', project.id, this.props.translations.locale);
+          const awaitTranslation = actions.translations.load('project', project.id, locale);
 
           Promise.all([
             awaitBackground,
@@ -244,7 +243,7 @@ class ProjectPageController extends React.Component {
             const ready = true;
             this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits });
             this.loadFieldGuide(project.id);
-            this.props.actions.translations.load('project_page', pages.map(page => page.id), this.props.translations.locale);
+            actions.translations.load('project_page', pages.map(page => page.id), locale);
             return { project, projectPreferences, splits };
           })
           .then(({ project, projectPreferences, splits }) => {
