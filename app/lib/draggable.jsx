@@ -25,7 +25,7 @@ function Draggable(props) {
     const multiTouch = e.touches && e.touches.length > 1;
 
     if (!multiTouch) {
-      cancelEvent(e);
+      e.preventDefault()
       
       switch (e.type) {
         case 'mousedown':
@@ -60,7 +60,9 @@ function Draggable(props) {
   function handleDrag(e) {
     const multiTouch = e.touches && e.touches.length > 1;
     if (!multiTouch) {
-      cancelEvent(e);
+      if (e.type && e.type === moveEvent) {
+        cancelEvent(e)
+      }
       const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
       const d = {
         x: eventCoords.pageX - _previousEventCoords.x,
