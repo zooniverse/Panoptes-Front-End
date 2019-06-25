@@ -24,7 +24,7 @@ export default class MultipleChoiceTask extends React.Component {
   }
 
   render() {
-    const { annotation, task, translation } = this.props;
+    const { annotation, autoFocus, task, translation } = this.props;
     const answers = [];
     for (const [i, answer] of task.answers.entries()) {
       if (!answer._key) {
@@ -47,7 +47,7 @@ export default class MultipleChoiceTask extends React.Component {
     }
     return (
       <GenericTask
-        autoFocus={annotation.value.length === 0}
+        autoFocus={autoFocus && annotation.value.length === 0}
         question={translation.question}
         help={translation.help}
         answers={answers}
@@ -100,6 +100,7 @@ MultipleChoiceTask.propTypes = {
   annotation: PropTypes.shape(
     { value: PropTypes.array }
   ),
+  autoFocus: PropTypes.bool,
   onChange: PropTypes.func,
   showRequiredNotice: PropTypes.bool
 };
@@ -117,6 +118,7 @@ MultipleChoiceTask.defaultProps = {
     help: ''
   },
   annotation: { value: [] },
+  autoFocus: false,
   onChange: NOOP,
   showRequiredNotice: false
 };

@@ -21,7 +21,7 @@ export default class SingleChoiceTask extends React.Component {
   }
 
   render() {
-    const { annotation, task, translation } = this.props;
+    const { annotation, autoFocus, task, translation } = this.props;
     if (!task._key) {
       task._key = Math.random();
     }
@@ -48,7 +48,7 @@ export default class SingleChoiceTask extends React.Component {
     }
     return (
       <GenericTask
-        autoFocus={annotation.value === null}
+        autoFocus={autoFocus && annotation.value === null}
         question={translation.question}
         help={translation.help}
         answers={answers}
@@ -97,6 +97,7 @@ SingleChoiceTask.propTypes = {
   annotation: PropTypes.shape(
     { value: PropTypes.number }
   ),
+  autoFocus: PropTypes.bool,
   onChange: PropTypes.func,
   showRequiredNotice: PropTypes.bool
 };
@@ -114,6 +115,7 @@ SingleChoiceTask.defaultProps = {
     help: ''
   },
   annotation: { value: null },
+  autoFocus: false,
   onChange: NOOP,
   showRequiredNotice: false
 };
