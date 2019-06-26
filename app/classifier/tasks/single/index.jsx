@@ -34,7 +34,7 @@ export default class SingleChoiceTask extends React.Component {
 
       answers.push(
         <TaskInputField
-          autoFocus={checked}
+          autoFocus={autoFocus && checked}
           checked={checked}
           className={checked ? 'active' : ''}
           index={i}
