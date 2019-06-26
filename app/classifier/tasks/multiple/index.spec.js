@@ -70,8 +70,8 @@ describe('MultipleChoiceTask', function () {
         mockReduxStore
       );
       const answers = wrapper.dive().prop('answers');
-      it(`should pass autofocus ${autofocus} to its children`, function () {
-        answers.forEach(function (answer) {
+      answers.forEach(function (answer) {
+        it(`should pass autofocus ${autofocus} for answer ${answer.props.index}`, function () {
           const hasFocus = autofocus && annotation.value.includes(answer.props.index);
           expect(answer.props.autoFocus).to.equal(hasFocus);
         })
