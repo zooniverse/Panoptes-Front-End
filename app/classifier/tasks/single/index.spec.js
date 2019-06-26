@@ -34,6 +34,47 @@ describe('SingleChoiceTask', function () {
     });
   });
 
+  describe('with an empty annotation', function () {
+    const annotation = Object.assign({}, radioTypeAnnotation, { value: null });
+    [true, false].forEach(function testAutofocus(autofocus) {
+      const wrapper = shallow(
+        <SingleTask
+          autoFocus={autofocus}
+          task={radioTypeTask}
+          annotation={annotation}
+          translation={radioTypeTask}
+        />,
+        mockReduxStore
+      );
+      const genericTask = wrapper.dive();
+      it(`should pass autofocus ${autofocus} to its children`, function () {
+        expect(genericTask.prop('autoFocus')).to.equal(autofocus);
+      })
+    });
+  });
+
+  describe('with an annotation', function () {
+    const annotation = Object.assign({}, radioTypeAnnotation, { value: 1 });
+    [true, false].forEach(function testAutofocus(autofocus) {
+      const wrapper = shallow(
+        <SingleTask
+          autoFocus={autofocus}
+          task={radioTypeTask}
+          annotation={annotation}
+          translation={radioTypeTask}
+        />,
+        mockReduxStore
+      );
+      const answers = wrapper.dive().prop('answers');
+      it(`should pass autofocus ${autofocus} to its children`, function () {
+        answers.forEach(function (answer) {
+          const hasFocus = autofocus && answer.props.index === annotation.value;
+          expect(answer.props.autoFocus).to.equal(hasFocus);
+        })
+      })
+    });
+  });
+
   describe('input onChange event handler', function() {
     let handleChangeSpy;
     let onChangeSpy;
