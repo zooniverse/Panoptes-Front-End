@@ -54,8 +54,8 @@ export default class DataExportDownloadLink extends React.Component {
             return (<span>Error loading export information</span>);
         } else if (this.recentAndReady(this.state.mostRecent)) {
             return (<span>
-                Most recent data available requested{' '}
-                <a href={this.state.mostRecent.src}>{moment(this.state.mostRecent.updated_at).fromNow()}</a>.
+                {`Most recent data available requested ${moment(this.state.mostRecent.updated_at).fromNow()}, `}
+                <a href={this.state.mostRecent.src}>download your data export</a>.
               </span >);
         } else if (this.pending(this.state.mostRecent)) {
             return (<span>Export is being generated.</span>);
