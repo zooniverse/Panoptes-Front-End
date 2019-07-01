@@ -26,9 +26,7 @@ export default function DataExports (props) {
     <div className="data-exports">
       <p className="form-label">Project data exports</p>
       <p className="form-help">
-        Please note that the Zooniverse will process at most 1 of each
-        export within a 24 hour period and some exports may take a
-        long time to process. We will email you when they are ready.
+        Please note some exports may take a long time to process. We will email you when they are ready. You can only request one of each export within a 24-hour time period.
       </p>
       <p className="form-help">
         For examples of how to work with the data exports, see our&nbsp;
