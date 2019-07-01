@@ -7,7 +7,7 @@ import MobileSection from './mobile-section';
 import ValidationValue, { convertBooleanToValidation } from './mobile-validations';
 
 const VALID_QUESTION_LENGTH = 200;
-const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'drawing'];
+const VALID_TASK_TYPES_FOR_MOBILE = ['single', 'multiple', 'drawing'];
 const MARKDOWN_IMAGE = /!\[[^\]]*](:?\([^)]*\)|\[[^\]]*])/g;
 
 function taskQuestionNotTooLong({ task }) {
@@ -75,6 +75,14 @@ function drawingTaskHasNoSubtasks({ task }) {
 
 const validatorFns = {
   single: {
+    taskQuestionNotTooLong,
+    taskFeedbackDisabled,
+    workflowFlipbookDisabled,
+    workflowHasSingleTask,
+    workflowNotTooManyShortcuts: workflowHasNoMoreThanXShortcuts(2),
+    workflowQuestionHasOneOrLessImages
+  },
+  multiple: {
     taskQuestionNotTooLong,
     taskFeedbackDisabled,
     workflowFlipbookDisabled,
