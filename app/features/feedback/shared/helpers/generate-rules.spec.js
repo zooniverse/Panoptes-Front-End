@@ -81,4 +81,22 @@ describe('feedback: generateRules', function () {
     };
     testSubjectAndWorkflow(subject, workflow);
   });
+
+  describe('with no matching rules', function () {
+    const workflow = {
+      tasks: {
+        T0: mockTaskWithRule('1')
+      }
+    };
+
+    it('should return an empty object for a numeric rule ID', function () {
+      const subject = mockSubjectWithRule(0);
+      expect(generateRules(subject, workflow)).to.be.empty;
+    });
+
+    it('should return an empty object for a string rule ID', function () {
+      const subject = mockSubjectWithRule('0');
+      expect(generateRules(subject, workflow)).to.be.empty;
+    });
+  });
 });
