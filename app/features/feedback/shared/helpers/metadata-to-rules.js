@@ -4,8 +4,9 @@ import _ from 'lodash';
 function metadataToRules(metadata) {
   const rulesObject = _.reduce(metadata, (result, value, key) => {
     const [prefix, ruleKey, propKey] = key.split('_');
+    const stringValue = value.toString()
 
-    if (prefix === '#feedback' && value) {
+    if (prefix === '#feedback' && stringValue) {
       _.set(result, `${ruleKey}.${propKey}`, value);
     }
 
