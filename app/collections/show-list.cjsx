@@ -36,22 +36,14 @@ SubjectNode = createReactClass
     if @props.projectContext
       @updateProjectState(@props.projectContext)
     else
-      @fetchProject(@props.subject)
+    # otherwise use the original project context
+      @props.subject.get('project')
         .then (project) =>
           @updateProjectState(project)
 
   updateProjectState: (project) ->
     @setState {project}
     @isFavorite(project)
-
-  # use the collection project if there is only 1 project for this collection
-  # fallback to the subject project link if no other project context can be determined
-  fetchProject: (subject) ->
-    projectRequest = if @props.collection?.links.projects?.length == 1
-      projectId = @props.collection?.links.projects[0]
-      apiClient.type('projects').get(projectId)
-    else
-      subject.get('project')
 
   isFavorite: (project) ->
     if @props.collection.favorite and @props.collection.links.owner.id is @props.user.id
