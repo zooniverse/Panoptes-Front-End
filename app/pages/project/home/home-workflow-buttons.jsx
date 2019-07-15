@@ -38,8 +38,8 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
                 <Translate content="project.home.getStarted" />{' '}
                 <i className="fa fa-arrow-down" aria-hidden="true" />
               </h3>
-              {this.props.project.workflow_description && (
-                <p className="workflow-choice-container__description">{this.props.project.workflow_description}</p>
+              {this.props.translation.workflow_description && (
+                <p className="workflow-choice-container__description">{this.props.translation.workflow_description}</p>
               )}
               {this.props.activeWorkflows.map((workflow) => {
                 return (
@@ -69,6 +69,7 @@ ProjectHomeWorkflowButtons.defaultProps = {
   project: {},
   showWorkflowButtons: false,
   splits: {},
+  translation: {},
   user: null,
   workflowAssignment: false
 };
@@ -81,11 +82,13 @@ ProjectHomeWorkflowButtons.propTypes = {
   }),
   project: PropTypes.shape({
     redirect: PropTypes.string,
-    slug: PropTypes.string,
-    workflow_description: PropTypes.string
+    slug: PropTypes.string
   }).isRequired,
   showWorkflowButtons: PropTypes.bool.isRequired,
   splits: PropTypes.object,
+  translation: PropTypes.shape({
+    workflow_description: PropTypes.string
+  }).isRequired,
   user: PropTypes.object,
   workflowAssignment: PropTypes.bool
 };
