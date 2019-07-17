@@ -42,6 +42,7 @@ export default {
         faq: 'FAQ',
         education: 'Education',
         team: 'The Team',
+        volunteers: 'Volunteers',
       }
     },
     nav: {

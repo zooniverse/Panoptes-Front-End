@@ -10,7 +10,22 @@ var projectActions = {
       private: true
     }, projectData);
 
-    return projects.create(allProjectData).save();
+    return projects.create(allProjectData)
+      .save()
+      .then(function (projectResource) {
+        apiClient.post(projectResource._getURL('pages'), {
+          project_pages: {
+            language: projectResource.primary_language,
+            title: 'Volunteers',
+            url_key: 'volunteers',
+          }
+        })
+        .catch(function(error) {
+          console.error(error)
+        })
+        return projectResource
+      })
+
   }
 }
 

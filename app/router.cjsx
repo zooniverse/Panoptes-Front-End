@@ -9,7 +9,7 @@ createReactClass = require 'create-react-class'
 `import CollectionCollaborators from './collections/collaborators';`
 `import ProjectHomePage from './pages/project/home';`
 `import AboutProject from './pages/project/about/index';`
-`import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
+`import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults, AboutProjectVolunteers } from './pages/project/about/simple-pages';`
 `import AboutProjectTeam from './pages/project/about/team';`
 `import UserSettingsList from './pages/admin/user-settings-list';`
 `import UserSettings from './pages/admin/user-settings';`
@@ -156,6 +156,7 @@ module.exports =
         <Route path="faq" component={AboutProjectFAQ} />
         <Route path="education" component={AboutProjectEducation} />
         <Route path="team" component={AboutProjectTeam} />
+        <Route path="volunteers" component={AboutProjectVolunteers} />
       </Route>
       <Route path="notifications" component={NotificationsPage} />
       <Route path="talk" component={require './pages/project/talk'}>

@@ -1,8 +1,7 @@
+import counterpart from 'counterpart';
 import PropTypes from 'prop-types';
 import React from 'react';
 import AboutPageLayout from './about-page-layout';
-import Translate from 'react-translate-component';
-import counterpart from 'counterpart';
 
 counterpart.registerTranslations('en', {
   aboutPages: {
@@ -11,16 +10,17 @@ counterpart.registerTranslations('en', {
       faq: 'This project has no frequently asked questions yet.',
       research: 'This project has no science case yet.',
       results: 'This project has no results to report yet.',
+      volunteers: 'No-one has classified on this project yet.',
     }
   }
 });
 
 const SimplePageRenderer = ({ pageSlug, noContent, pages, project }) => {
   const matchingPage = pages.find(page => page.slug === pageSlug);
-  const mainContent = (matchingPage && matchingPage.content && matchingPage.content !== '') 
-      ? matchingPage.content 
+  const mainContent = (matchingPage && matchingPage.content && matchingPage.content !== '')
+      ? matchingPage.content
       : noContent;
-      
+
   return <AboutPageLayout project={project} mainContent={mainContent} />;
 }
 
@@ -62,6 +62,13 @@ const AboutProjectResults = (props) => (
   />
 );
 
+const AboutProjectVolunteers = (props) => (
+  <SimplePageRenderer {...props}
+    pageSlug="volunteers"
+    noContent={counterpart('aboutPages.missingContent.volunteers')}
+  />
+);
+
 const SimplePagePropTypes = {
   pages: PropTypes.array,
   project: PropTypes.object,
@@ -71,10 +78,12 @@ AboutProjectEducation.propTypes = SimplePagePropTypes;
 AboutProjectFAQ.propTypes = SimplePagePropTypes;
 AboutProjectResearch.propTypes = SimplePagePropTypes;
 AboutProjectResults.propTypes = SimplePagePropTypes;
+AboutProjectVolunteers.propTypes = SimplePagePropTypes
 
 export {
   AboutProjectEducation,
   AboutProjectFAQ,
   AboutProjectResearch,
   AboutProjectResults,
+  AboutProjectVolunteers
 };

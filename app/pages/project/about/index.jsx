@@ -11,7 +11,8 @@ const SLUG_MAP = {
   team: 'team',
   results: 'results',
   education: 'education',
-  faq: 'faq'
+  faq: 'faq',
+  volunteers: 'volunteers'
 };
 
 class AboutProject extends Component {
@@ -71,7 +72,7 @@ class AboutProject extends Component {
           title: matchingPage.title,
           content
         };
-      } else if (['science_case', 'team'].includes(url_key)) {
+      } else if (['science_case', 'team', 'volunteers'].includes(url_key)) {
         return { slug: SLUG_MAP[url_key] };
       }
       return null;
