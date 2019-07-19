@@ -18,9 +18,9 @@ function FeedbackMark({ rule }) {
 
 FeedbackMark.propTypes = {
   rule: PropTypes.shape({
-    x: PropTypes.string,
-    y: PropTypes.string,
-    tolerance: PropTypes.string
+    x: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    y: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    tolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
   }).isRequired
 };
 
