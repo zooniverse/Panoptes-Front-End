@@ -20,10 +20,11 @@ class FeedbackSectionContainer extends Component {
     this.saveTaskChanges(editedTask);
   }
 
-  openRuleEditorModal(rule = {}) {
+  openRuleEditorModal(rule = {}, feedbackOptions = {}) {
     const modalComponent = (<RuleEditorModal
       rule={rule}
       saveRule={this.saveRule}
+      feedbackOptions={feedbackOptions}
     />);
     const modalOptions = {
       closeButton: true
@@ -60,6 +61,7 @@ class FeedbackSectionContainer extends Component {
       <FeedbackSection
         deleteRule={this.deleteRule}
         editRule={this.openRuleEditorModal}
+        saveRule={this.saveRule}
         rules={rules}
       />
     );

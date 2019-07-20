@@ -27,6 +27,10 @@ counterpart.registerTranslations('en', {
         title: 'Default success message',
         help: 'The message to show to the volunteer when they make a correct classification. Can be overridden using subject metadata.'
       },
+      defaultPluralSuccessMessage: {
+        title: 'Default plural success message',
+        help: 'The message to show to the volunteer when they make some correct classifications. You can use the "${count}" placeholder to represent the number of successes, e.g. "You found ${count} objects". Can be overridden using subject metadata.'
+      },
       failureEnabled: {
         title: 'Enable negative feedback',
         help: 'Shows a feedback message to the user when they incorrectly identify a known subject.'
@@ -34,7 +38,11 @@ counterpart.registerTranslations('en', {
       defaultFailureMessage: {
         title: 'Default failure message',
         help: 'The message to show to the volunteer when they make an incorrect classification. Can be overridden using subject metadata.'
-      }
+      },
+      defaultPluralFailureMessage: {
+        title: 'Default plural failure message',
+        help: 'The message to show to the volunteer when they make some incorrect classifications. You can use the "${count}" placeholder to represent the number of failures, e.g. "You missed ${count} objects". Can be overridden using subject metadata.'
+      },
     },
     buttons: {
       save: 'Save rule'
@@ -102,7 +110,7 @@ class RuleEditorModal extends Component {
           onChange={handleInputChange.bind(this)}
         />
 
-        {formState.successEnabled && (
+      {formState.successEnabled && (
           <TextInput
             title={fieldText('defaultSuccessMessage.title')}
             help={fieldText('defaultSuccessMessage.help')}
@@ -112,6 +120,16 @@ class RuleEditorModal extends Component {
           />
         )}
 
+        {formState.successEnabled && formState.pluralSuccessMessagesEnabled && (
+            <TextInput
+              title={fieldText('defaultPluralSuccessMessage.title')}
+              help={fieldText('defaultPluralSuccessMessage.help')}
+              name="defaultPluralSuccessMessage"
+              value={formState.defaultPluralSuccessMessage}
+              onChange={handleInputChange.bind(this)}
+            />
+          )}
+
         <CheckboxInput
           title={fieldText('failureEnabled.title')}
           help={fieldText('failureEnabled.help')}
@@ -120,7 +138,7 @@ class RuleEditorModal extends Component {
           onChange={handleInputChange.bind(this)}
         />
 
-        {formState.failureEnabled && (
+      {formState.failureEnabled && (
           <TextInput
             title={fieldText('defaultFailureMessage.title')}
             help={fieldText('defaultFailureMessage.help')}
@@ -129,6 +147,16 @@ class RuleEditorModal extends Component {
             onChange={handleInputChange.bind(this)}
           />
         )}
+
+        {formState.failureEnabled && formState.pluralFailureMessagesEnabled && (
+            <TextInput
+              title={fieldText('defaultPluralFailureMessage.title')}
+              help={fieldText('defaultPluralFailureMessage.help')}
+              name="defaultPluralFailureMessage"
+              value={formState.defaultPluralFailureMessage}
+              onChange={handleInputChange.bind(this)}
+            />
+          )}
 
         <Translate className="form-label" content="RuleEditorModal.strategy" />
 

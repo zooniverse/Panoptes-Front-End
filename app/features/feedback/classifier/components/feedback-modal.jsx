@@ -27,6 +27,7 @@ class FeedbackModal extends React.Component {
 
   render() {
     const { messages, subjectViewerProps } = this.props;
+    console.log(subjectViewerProps);
     return (
       <ModalFocus className="classifier feedbackmodal">
         <Translate content="FeedbackModal.title" component="h2" />
