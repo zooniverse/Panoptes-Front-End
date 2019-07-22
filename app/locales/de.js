@@ -1,131 +1,131 @@
 export default {
-  loading: '(Loading)',
+  loading: '(Laden)',
   classifier: {
-    back: 'Back',
-    backButtonWarning: 'Going back will clear your work for the current task.',
-    close: 'Close',
-    continue: 'Continue',
+    back: 'Zurück',
+    backButtonWarning: 'Das Zurückgehen wird Deine Arbeit in der derzeitigen Aufgabe löschen!',
+    close: 'Schließen',
+    continue: 'Weiter',
     detailsSubTaskFormSubmitButton: 'OK',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
-    dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: 'Let’s go!',
-    next: 'Next',
-    optOut: 'Opt out',
+    done: 'Fertig',
+    doneAndTalk: 'Fertig & Diskutieren',
+    dontShowMinicourse: 'Zeige den Mini-Kurs nicht mehr an.',
+    letsGo: 'Los geht es!',
+    next: 'Weiter',
+    optOut: 'Nicht beteiligen',
     taskTabs: {
-      taskTab: 'Task',
+      taskTab: 'Aufgabe',
       tutorialTab: 'Tutorial'
     },
-    recents: 'Your recent classifications',
-    talk: 'Talk',
-    taskHelpButton: 'Need some help with this task?',
-    miniCourseButton: 'Restart the project mini-course',
+    recents: 'Deine kürzlichen Klassifikationen',
+    talk: 'Diskutieren',
+    taskHelpButton: 'Brauchst Du Hilfe?',
+    miniCourseButton: 'Starte den Mini-Kurs noch einmal.',
     workflowAssignmentDialog: {
-      promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
-      acceptButton: 'Take me to the next level!',
-      declineButton: 'No, thanks'
+      promotionMessage: "Glückwunsch! Du hast den nächsten Workflow freigeschalten. Wenn Du lieber in diesem Workflow bleiben möchtest, kannst Du auswählen hier zu bleiben.",
+      acceptButton: 'Bring mich zum nächsten Level!',
+      declineButton: 'Nein, danke!'
     }
   },
   project: {
-    language: 'Language',
-    loading: 'Loading project',
-    disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
+    language: 'Sprache',
+    loading: 'Projekt wird geladen',
+    disclaimer: 'Dieses Projekt wurde mit dem Zooniverse Project Builder gebaut, ist aber derzeit noch kein offizielles Zooniverse Projekt. Anfragen und Probleme bezüglich dieses Projekts an das Zooniverse Team könnten unbeantwortet bleiben.',
     about: {
-      header: 'About',
+      header: 'Über',
       nav: {
-        research: 'Research',
-        results: 'Results',
+        research: 'Forschung',
+        results: 'Ergebnisse',
         faq: 'FAQ',
-        education: 'Education',
-        team: 'The Team',
+        education: 'Bildung',
+        team: 'Das Team',
       }
     },
     nav: {
-      about: 'About',
-      adminPage: 'Admin page',
-      classify: 'Classify',
-      collections: 'Collect',
-      exploreProject: 'Explore Project',
+      about: 'Über',
+      adminPage: 'Admin-Seite',
+      classify: 'Klassifizieren',
+      collections: 'Sammeln',
+      exploreProject: 'Erkunde das Projekt',
       lab: 'Lab',
-      recents: 'Recents',
-      talk: 'Talk',
-      underReview: 'Under Review',
-      zooniverseApproved: 'Zooniverse Approved'
+      recents: 'Neueste',
+      talk: 'Diskutieren',
+      underReview: 'In Begutachtung',
+      zooniverseApproved: 'Genehmigt von Zooniverse'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
-      title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
+      dark: 'dunklen',
+      light: 'hellen',
+      title: 'Klassifizieren',
+      themeToggle: 'Schalte zum %(theme)s Thema um'
     },
     home: {
-      organization: 'Organization',
-      researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      organization: 'Organisation',
+      researcher: 'Vom Forscherteam',
+      about: 'Über %(title)s',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
-        volunteers: 'Volunteers',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
+        statistics: '%(title)s Statistik',
+        classifications: 'Klassifikationen',
+        volunteers: 'Freiwillige',
+        completedSubjects: 'Fertige Subjekte',
+        subjects: 'Subjekte'
       },
       talk: {
-        zero: 'No one is talking about **%(title)s** right now.',
-        one: '**1** person is talking about **%(title)s** right now.',
-        other: '**%(count)s** people are talking about **%(title)s** right now.'
+        zero: 'Gerade diskutiert niemand in **%(title)s**.',
+        one: '**1** Person diskutiert gerade in **%(title)s**.',
+        other: '**%(count)s** Personen diskutieren gerade in **%(title)s**.'
       },
-      joinIn: 'Join in',
-      learnMore: 'Learn more',
-      getStarted: 'Get started',
-      workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
-      visitLink: 'Visit the project',
-      links: 'External Project Links'
+      joinIn: 'Mach mit',
+      learnMore: 'Erfahre mehr',
+      getStarted: 'Fang an',
+      workflowAssignment: 'Du hast %(workflowDisplayName)s freigeschalten.',
+      visitLink: 'Besuche das Projekt',
+      links: 'Externe Projektlinks'
     }
   },
   organization: {
-    error: 'There was an error retrieving organization',
+    error: 'Es gab einen Fehler beim Aufrufen der Organisation.',
     home: {
-      introduction: 'Introduction',
+      introduction: 'Einführung',
       links: 'Links',
       metadata: {
-        projects: 'Projects'
+        projects: 'Projekte'
       },
       projects: {
-        error: 'There was an error loading organization projects.',
-        loading: 'Loading organization projects...',
-        none: 'There are no projects associated with this organization.'
+        error: 'Es gab einen Fehler beim Laden der Projekte der Organisation.',
+        loading: 'Laden der Projekte dieser Organisation...',
+        none: 'Es gibt keine Projekte, die mit dieser Organisation assoziiert sind.'
       },
-      readLess: 'Read Less',
-      readMore: 'Read More',
-      researcher: 'Words from a researcher',
-      viewToggle: 'View As Volunteer'
+      readLess: 'Zeige weniger',
+      readMore: 'Zeige mehr',
+      researcher: 'Vom Forscherteam',
+      viewToggle: 'Ansicht als Freiwilliger'
     },
-    loading: 'Loading organization',
-    notFound: 'organization not found.',
-    notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...'
+    loading: 'Lade Organisation',
+    notFound: 'Organisation nicht gefunden',
+    notPermission: 'Wenn Du sicher bist, dass die URL korrekt ist, kann es sein, dass Du nicht berechtigt bist diese Organisation zu sehen.',
+    pleaseWait: 'Bitte warten...'
   },
   tasks: {
-    less: 'Less',
-    more: 'More',
+    less: 'Weniger',
+    more: 'Mehr',
     shortcut: {
-      noAnswer: 'No answer'
+      noAnswer: 'Keine Antwort'
     },
     survey: {
-      clear: 'Clear',
-      clearFilters: 'Clear filters',
-      makeSelection: 'Make a selection',
-      showing: 'Showing %(count)s of %(max)s',
-      confused: 'Often confused with',
-      dismiss: 'Dismiss',
-      itsThis: 'I think it’s this',
-      cancel: 'Cancel',
-      identify: 'Identify',
-      surveyOf: 'Survey of %(count)s',
+      clear: 'Löschen',
+      clearFilters: 'Filter löschen',
+      makeSelection: 'Triff eine Auswahl',
+      showing: 'Zeigt %(count)s von %(max)s',
+      confused: 'Oft verwechselt mit',
+      dismiss: 'Verwerfen',
+      itsThis: 'Ich denke, das ist es.',
+      cancel: 'Zurückziehen',
+      identify: 'Identifizieren',
+      surveyOf: 'Überblick über %(count)s',
       identifications: {
-        zero: 'No identifications',
-        one: '1 identification',
-        other: '%(count)s identifications'
+        zero: 'Keine Identifikation',
+        one: '1 Identifikation',
+        other: '%(count)s Identifikationen'
       }
     }
   },
@@ -162,111 +162,132 @@ export default {
   userAdminPage: {
     header: 'Admin',
     nav: {
-      createAdmin: 'Manage Users',
-      projectStatus: 'Set Project Status',
+      createAdmin: 'Verwalte Nutzer',
+      projectStatus: 'Setze den Projektstatus',
       grantbot: 'Grantbot',
-      organizationStatus: 'Set Organization Status'
+      organizationStatus: 'Setze den Organisationsstatus'
     },
-    notAdminMessage: 'You are not an administrator',
-    notSignedInMessage: 'You are not signed in'
+    notAdminMessage: 'Du bist kein Administrator.',
+    notSignedInMessage: 'Du bist nicht angemeldet.'
   },
   signIn: {
-    title: 'Sign in/register',
-    withZooniverse: 'Sign in with your Zooniverse account',
-    whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.',
-    signIn: 'Sign in',
-    register: 'Register',
-    orThirdParty: 'Or sign in with another service',
-    withFacebook: 'Sign in with Facebook',
-    withGoogle: 'Sign in with Google'
+    title: 'Anmeldung/Registrierung',
+    withZooniverse: 'Anmeldung mit Zooniverse Nutzerkonto',
+    whyHaveAccount: 'Angemeldete Nutzer können ihre Arbeit nachverfolgen und werden in Publikationen einbezogen.',
+    signIn: 'Anmeldung',
+    register: 'Registrierung',
+    orThirdParty: 'Oder melde Dich mit einem anderen Service an',
+    withFacebook: 'Anmeldung mit Facebook',
+    withGoogle: 'Anmeldung mit Google'
   },
   notFoundPage: {
-    message: 'Not found'
+    message: 'Nicht gefunden'
   },
   resetPassword: {
-    heading: 'Reset Password',
-    newPasswordFormDialog: 'Enter the same password twice so you can get back to doing some research. Passwords need to be at least 8 characters long.',
-    newPasswordFormLabel: 'New password:',
-    newPasswordConfirmationLabel: 'Repeat your password to confirm:',
-    enterEmailLabel: 'Please enter your email address here and we’ll send you a link you can follow to reset it.',
-    emailSuccess: 'We’ve just sent you an email with a link to reset your password.',
-    emailError: 'There was an error resetting your password.',
-    passwordsDoNotMatch: 'The passwords do not match, please try again.',
-    loggedInDialog: 'You are currently logged in. Please log out if you would like to reset your password.',
-    missingEmailsSpamNote: 'Please check your spam folder if you have not received the reset email.',
-    missingEmailsAlternateNote: 'If you have still not received an email, please try any other email address you may have signed up with.'
+    heading: 'Passwort zurücksetzen',
+    newPasswordFormDialog: 'Gib das gleiche Passwort zur Bestätigung zweimal ein. Passwörter müssen mindestens 8 Zeichen haben.',
+    newPasswordFormLabel: 'Neues Passwort:',
+    newPasswordConfirmationLabel: 'Wiederhole Dein Passwort zur Bestätigung:',
+    enterEmailLabel: 'Bitte gib Deine E-Mail-Adresse hier ein und wir senden einen Link zur Zurücksetzung des Passwortes.',
+    emailSuccess: 'Wir haben soeben eine E-Mail mit einem Link zur Zurücksetzung des Passwortes geschickt.',
+    emailError: 'Es gab einen Fehler beim Zurücksetzen des Passwortes.',
+    passwordsDoNotMatch: 'Die Passwörter stimmen nicht überein. Bitte versuch es nochmal.',
+    loggedInDialog: 'Du bist derzeit angemeldet. Bitte melde Dich ab, wenn Du Dein Passwort ändern willst.',
+    missingEmailsSpamNote: 'Bitte überprüfe im Spamordner, ob Du die E-Mail zum Zurücksetzen nicht erhalten hast.',
+    missingEmailsAlternateNote: 'Wenn Du die E-Mail nicht erhalten hast, versuch bitte noch einmal die E-Mail-Adresse einzugeben, die mit Deinem Zooniverse Nutzerkonto verknüpft ist.'
   },
   workflowToggle: {
-    label: 'Active'
+    label: 'Aktiv'
   },
   collections: {
     createForm: {
-      private: 'Private',
-      submit: 'Add Collection'
+      private: 'Privat',
+      submit: 'Neue Sammlung anlegen'
     }
   },
   emailSettings: {
-    email: 'Email address',
+    email: 'E-Mail-Adresse',
     general: {
-      section: 'Zooniverse email preferences',
-      updates: 'Get general Zooniverse email updates',
-      classify: 'Get email updates when you first classify on a project',
-      note: 'Note: Unticking the box will not unsubscribe you from any of the projects',
-      manual: 'Manage projects individually',
-      beta: 'Get beta project email updates and become a beta tester'
+      section: 'Zooniverse E-Mail-Präferenzen',
+      updates: 'Erhalte allgemeine Zooniverse-Neuigkeiten per E-Mail',
+      classify: 'Erhalte Projekt-Neuigkeiten per E-Mail, wenn Du beginnst in einem Projekt zu klassifizieren',
+      note: 'Beachte: Nicht-Auswählen dieser Box wird keine Auswirkungen auf andere Projekte haben.',
+      manual: 'Verwalte Projekte individuell',
+      beta: 'Erhalte E-Mails über Projekte in der beta-Testung und werde beta-Tester!'
     },
     talk: {
-      section: 'Talk email preferences',
-      header: 'Send me an email',
+      section: 'E-Mail-Präferenzen für Talk',
+      header: 'Sende mir eine E-Mail',
       frequency: {
-        immediate: 'Immediately',
-        day: 'Daily',
-        week: 'Weekly',
-        never: 'Never'
+        immediate: 'Sofort',
+        day: 'Täglich',
+        week: 'Wöchentlich',
+        never: 'Niemals'
       },
       options: {
-        participating_discussions: 'When discussions I\'m participating in are updated',
-        followed_discussions: 'When discussions I\'m following are updated',
-        mentions: 'When I\'m mentioned',
-        group_mentions: 'When I\'m mentioned by group (@admins, @team, etc.)',
-        messages: 'When I receive a private message',
-        started_discussions: 'When a discussion is started in a board I\'m following'
+        participating_discussions: 'Wenn es ein Update gibt in Diskussionen, an denen ich teilnehme.',
+        followed_discussions: 'Wenn es ein Update gibt in Diskussionen, denen ich folge.',
+        mentions: 'Wenn mich jemand erwähnt.',
+        group_mentions: 'Wenn ich von einer Gruppe erwähnt werde (@admins, @team, etc.).',
+        messages: 'Wenn ich eine private Nachricht erhalten habe.',
+        started_discussions: 'Wenn eine neue Diskussion startet in einem Forum, dem ich folge.'
       }
     },
     project: {
-      section: 'Project email preferences',
-      header: 'Project',
+      section: 'E-Mail-Präferenzen im Projekt',
+      header: 'Projekt',
     }
   },
   about: {
     index: {
-      header: 'About',
-      title: 'About',
+      header: 'Über',
+      title: 'Über',
       nav: {
-        about: 'About',
-        publications: 'Publications',
-        ourTeam: 'Our Team',
+        about: 'Über',
+        publications: 'Publikationen',
+        ourTeam: 'Unser Team',
         acknowledgements: 'Acknowledgements',
-        contact: 'Contact Us',
+        contact: 'Kontaktiere uns',
         faq: 'FAQ',
-        resources: 'Resources'
+        resources: 'Ressourcen'
       }
     },
     home: {
-      title: '## What is the Zooniverse?',
-      whatIsZooniverse: 'The Zooniverse is the world’s largest and most popular platform for people-powered research. This research is made possible by volunteers — hundreds of thousands of people around the world who come together to assist professional researchers. Our goal is to enable research that would not be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community, and [many publications](/about/publications).',
-      anyoneCanResearch: '### At the Zooniverse, anyone can be a researcher\n\nYou don’t need any specialised background, training, or expertise to participate in any Zooniverse projects. We make it easy for anyone to contribute to real academic research, on their own computer, at their own convenience.\n\nYou’ll be able to study authentic objects of interest gathered by researchers, like images of faraway galaxies, historical records and diaries, or videos of animals in their natural habitats. By answering simple questions about them, you’ll help contribute to our understanding of our world, our history, our Universe, and more.\n\nWith our wide-ranging and ever-expanding suite of projects, covering many disciplines and topics across the sciences and humanities, there\'s a place for anyone and everyone to explore, learn and have fun in the Zooniverse. To volunteer with us, just go to the [Projects](/projects) page, choose one you like the look of, and get started.',
-      accelerateResearch: '### We accelerate important research by working together\n\nThe major challenge of 21st century research is dealing with the flood of information we can now collect about the world around us. Computers can help, but in many fields the human ability for pattern recognition — and our ability to be surprised — makes us superior. With the help of Zooniverse volunteers, researchers can analyze their information more quickly and accurately than would otherwise be possible, saving time and resources, advancing the ability of computers to do the same tasks, and leading to faster progress and understanding of the world, getting to exciting results more quickly.\n\nOur projects combine contributions from many individual volunteers, relying on a version of the ‘wisdom of crowds’ to produce reliable and accurate data. By having many people look at the data we often can also estimate how likely we are to make an error. The product of a Zooniverse projects is often exactly what’s needed to make progress in many fields of research.',
-      discoveries: '### Volunteers and professionals make real discoveries together\n\nZooniverse projects are constructed with the aim of converting volunteers\' efforts into measurable results. These projects have produced a large number of [published research papers](/about/publications), as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have even made completely unexpected and scientifically significant discoveries.\n\nA significant amount of this research takes place on the Zooniverse discussion boards, where volunteers can work together with each other and with the research teams. These boards are integrated with each project to allow for everything from quick hashtagging to in-depth collaborative analysis. There is also a central Zooniverse board for general chat and discussion about Zooniverse-wide matters.\n\nMany of the most interesting discoveries from Zooniverse projects have come from discussion between volunteers and researchers. We encourage all users to join the conversation on the discussion boards for more in-depth participation.'
+      title: '## Was ist das Zooniverse?',
+      whatIsZooniverse: 'Das Zooniverse ist die weltgrößte und populärste Plattform für personen-getriebene Forschung. Diese Forschung ist nur möglich, weil Freiwillige — hunderttausende Personen aus aller Welt - zusammenkommen, um professionellen Wissenschaftlern zu helfen. Unser Ziel ist es Forschung zu ermöglichen, die sonst nicht durchführbar oder praktisch wäre. Zooniverse Forschung resultiert in neuen Entdeckungen, Datensätzen mit Bedeuting für das größere Forschungsumfeld und [vielen wissenschaftlichen Publikationen](/about/publications).',
+      anyoneCanResearch: '### Bei Zooniverse kann jeder forschen.\n\nDu brauchst keinen spezialisierten Hintergrund, Training oder Expertise zur Teilnahme an einem Zooniverse Projekt. Wir machen es einfach für jeden zu realer akademischen Forschung am eigenen Computer und von überallher beizutragen.\n\nDu hast die Möglichkeit, authentische Objekte, die für Forscher von Interesse sind, wie Bilder von weitentfernten Galaxien, historische Berichte und Tagebücher oder Videos von Tieren in ihrem natürlichen Umfeld zu studieren. Mit der Beantwortung von einfachen Fragen kannst Du zu unserem Verständnis unserer Welt, unserer Geschichte, unseres Universums und mehr beitragen.\n\nMit unserer weiten und ständig steigenden Auswahl an Projekten in vielen Disziplinen und zu verschiedenen Themen in den Natur- und Geisteswissenschaften gibt es einen Platz für alle und jeden, um zu erkunden, zu lernen und Spaß im Zooniverse zu haben. Um hier mitzumachen, gehe einfach zur [Projekte](/projects) Seite, wähle eines aus, was Dir gefällt, und fang an!',
+      accelerateResearch: '### Wir beschleunigen Forschung durch Zusammenarbeit\n\nDie wichtigste Herausforderung des 21. Jahrhunderts ist es, mit der Flut an Informationen umzugehen, die heutzutage über die Welt um uns herum gesammelt werden kann. Computer können helfen, aber in vielen Feldern ist die Fähigkeit des Menschen Muster zu erkennen — und unsere Fähigkeit überrascht zu werden — diesen überlegen. Mit der Hilfe von Freiwilligen im Zooniverse können Wissenschaftler ihre Informationen schneller und genauer als sonst möglich analysieren. Dies spart Zeit und Ressourcen, verbessert die Fähigkeiten von Computern dieselben Aufgaben zu machen und führt zu schnellerem Fortschritt, einem besseren Verständnis der Welt und schneller vorhandenen Ergebnissen.\n\nUnsere Projekte vereinen die Beitrage vieler einzelner Freiwilliger und vertraut auf einer Version der "Weisheit der Masse", um zuverlässige und exakte Daten zu produzieren. Dadurch dass viele Personen auf die Daten schauen, können wir oft auch abschätzen wie wahrscheinlich es ist, dass wir einen Fehler machen. Das Ergebnis eines Zooniverse Projekts ist oftmals genau das, was gebraucht wird, um Fortschritt in vielen Forschungsfeldern zu erzielen.',
+      discoveries: '### Freiwillige und Experten machen zusammen echte Entdeckungen \n\nZooniverse Projekte sind konstruiert mit dem Ziel, das Engagement von Freiwilligen in messbare Ergebnisse zu übertragen. Die Projekte haben bereits eine große Anzahl von [wissenschaftlichen Veröffentlichungen](/about/publications) und mehrere offene Sätze analysierter Daten produziert. In einigen Fällen haben Freiwillige bei Zooniverse völlig unerwartete und wissenschaftlich signifikante Entdeckungen gemacht.\n\nEin signifikanter Anteil dieser Forschung findet auf den Zooniverse Diskussionsforen statt, wo Freiwillige miteinander und mit den Forscherteams zusammenarbeiten können. Diese Foren sind in jedes Projekt integriert, um vom schnellen Hashtag und Kommentar bis zur gründlichen kollaborativen Analyse alles zu erlauben. Es gibt zudem ein zentrales Zooniverse Forum für allgemeine Unterhaltungen und die Diskussion Zooniverse-übergreifender Angelegenheiten.\n\nViele der interessantesten Entdeckungen von Zooniverse Projekten entstehen in Diskussionen zwischen Freiwilligen und Forschern. Wir ermutigen alle Nutzer sich für eine intensive Teilnahme in die Diskussionsforen einzubringen.'
     },
-    team: {
+    publications: {
       nav: {
-        showAll: 'Show All',
+        showAll: 'Zeige alle',
+        space: 'Weltraum',
+        physics: 'Physik',
+        climate: 'Klima',
+        humanities: 'Geisteswissenschaften',
+        nature: 'Natur',
+        medicine: 'Medizin',
+        meta: 'Meta',
+      },
+      content: {
+        header: {
+          showAll: 'Alle Publikationen'
+        },
+        submitNewPublication: 'Um eine neue Publikation anzuzeigen oder eine existierende zu aktualisieren, nutze bitte [dieses Formular](https://docs.google.com/forms/d/e/1FAIpQLSdbAKVT2tGs1WfBqWNrMekFE5lL4ZuMnWlwJuCuNM33QO2ZYg/viewform). Wir zielen darauf ab, Links zu publizierten Studien zu veröffentlichen, die auch der Öffentlichkeit zugänglich sind. Die Angabe von Artikeln, die zur Veröffentlichung akzeptiert, aber noch nicht publiziert sind, sind auch erwünscht.'
+      },
+      publication: {
+        viewPublication: 'Publikation ansehen',
+        viewOpenAccess: 'Open Access-Version ansehen'
+      }
+    },team: {
+      nav: {
+        showAll: 'Zeige alle',
         oxford: 'Oxford',
-        chicago: 'The Adler Planetarium',
+        chicago: 'Das Adler Planetarium',
         minnesota: 'Minnesota',
         portsmouth: 'Portsmouth',
-        california: 'California',
+        california: 'Kalifornien',
         hilo: 'Hilo',
         alumni: 'Alumni'
       },
@@ -611,7 +632,7 @@ export default {
     },
     acknowledgements: {
       title: '## Acknowledging the Zooniverse',
-      citation: '### Academic Citation',
+      citation: '### Akademische Zitation',
       instructions: 'Per the [Zooniverse Project Builder Policies](https://help.zooniverse.org/getting-started/lab-policies), all research publications using any data derived from Zooniverse approved projects (those listed on the [Zooniverse Projects page](/projects)) are required to acknowledge the Zooniverse and the Project Builder platform. To do so, please use the following text:',
       supportText: '*This publication uses data generated via the [Zooniverse.org](https://www.zooniverse.org/) platform, development of which is funded by generous support, including a Global Impact Award from Google, and by a grant from the Alfred P. Sloan Foundation.*',
       publicationRequest: 'We ask that all researchers making use of the Zooniverse Project Builder platform in any way also consider including the above acknowledgement in their publications.',
@@ -623,7 +644,7 @@ export default {
       enquiries: 'If you are interested in interviewing a member of the team, please [get in touch](contact).'
     },
     contact: {
-      title: '## Contact & Social Media',
+      title: '## Kontakt & Social Media',
       discussionBoards: 'Most of the time, the best way to reach the Zooniverse team, or any project teams, especially about any project-specific issues, is through the discussion boards.',
       email: 'If you need to contact the Zooniverse team about a general matter, you can also send an email to the team at [contact@zooniverse.org](mailto:contact@zooniverse.org). Please understand that the Zooniverse team is relatively small and very busy, so unfortunately we cannot reply to all of the emails we receive.',
       collaborating: 'If you are interested in collaborating with the Zooniverse, for instance on a custom-built project, please email [collab@zooniverse.org](mailto:collab@zooniverse.org). (Note that our [Project Builder](/lab) offers an effective way to set up a new project without needing to contact the team!)',
@@ -631,7 +652,7 @@ export default {
       dailyZoo: 'If you want to keep up to date with what\'s going on across the Zooniverse and our latest results, check out the [Daily Zooniverse](http://daily.zooniverse.org/) or the main [Zooniverse blog](http://blog.zooniverse.org/). You can also follow the Zooniverse on [Twitter](http://twitter.com/the_zooniverse), [Facebook](http://facebook.com/therealzooniverse), and [Google+](https://plus.google.com/+ZooniverseOrgReal).'
     },
     faq: {
-      title: '## Frequently Asked Questions',
+      title: '## Häufig gestellte Fragen',
       whyNeedHelp: '- **Why do researchers need your help? Why can\'t computers do these tasks?**\nHumans are better than computers at many tasks. For most Zooniverse projects, computers just aren’t good enough to do the required task, or they may miss interesting features that a human would spot - this is why we need your help. Some Zooniverse projects are also using human classifications to help train computers to do better at these research tasks in the future. When you participate in a Zooniverse project, you are contributing to real research.',
       amIDoingThisRight: '- **How do I know if I\'m doing this right?**\nFor most of the subjects shown in Zooniverse projects, the researchers don\'t know the correct answer and that\'s why they need your help. Human beings are really good at pattern recognition tasks, so generally your first guess is likely the right one. Don’t worry too much about making an occasional mistake - more than one person will review each image, video or graph in a project. Most Zooniverse projects have a Help button, a Frequently Asked Questions (FAQ) page, and a Field Guide with more information to guide you when classifying.',
       whatHappensToClassifications: '- **What happens to my classification after I submit it?**\nYour classifications are stored in the Zooniverse\'s secure online database. Later on a project\'s research team accesses and combines the multiple volunteer assessments stored for each subject, including your classifications, together. Once you have submitted your response for a given subject image, graph, or video, you can\'t go back and edit it. Further information can be found on the [Zooniverse User Agreement and Privacy Policy page](/privacy).',
@@ -643,8 +664,8 @@ export default {
       furtherHelp: 'Didn\'t find the answer to your question? Ask on [Zooniverse Talk](/talk) or [get in touch](/about/contact).'
     },
     resources: {
-      title: '## Resources',
-      filler: 'Useful downloads and guidelines for talking about the Zooniverse.',
+      title: '## Ressourcen',
+      filler: 'Nützliche Materialien und Richtlinien, um über Zooniverse zu sprechen und zu schreiben.',
       introduction: '### Brand Materials',
       officialMaterials: '[Download official Zooniverse logos](https://github.com/zooniverse/Brand/tree/master/style%%20guide/logos). Our official color is teal hex `#00979D` or `RGBA(65, 149, 155, 1.00)`.',
       printables: '[Download printable handouts, posters, and other ephemera](https://github.com/zooniverse/Brand/tree/master/style%%20guide/downloads). If you have specific needs not addressed here, please [let us know](/about/contact).',
@@ -657,13 +678,13 @@ export default {
   },
   getInvolved: {
     index: {
-      title: 'Get Involved',
+      title: 'Beteilige Dich',
       nav: {
-        volunteering: 'Volunteering',
-        education: 'Education',
+        volunteering: 'Freiwilligenbeteiligung',
+        education: 'Bildung',
         callForProjects: 'Call for Projects',
-        collections: 'Collections',
-        favorites: 'Favorites'
+        collections: 'Sammlungen',
+        favorites: 'Favoriten'
       }
     },
     callForProjects: {
@@ -953,28 +974,28 @@ export default {
   },
   userSettings: {
     account: {
-      displayName: 'Display name (required)',
-      displayNameHelp: 'How your name will appear to other users in Talk and on your Profile Page',
-      realName: 'Real name (optional)',
-      realNameHelp: 'Public; we’ll use this to give acknowledgement in papers, on posters, etc.',
+      displayName: 'Angezeigter Name (notwendig)',
+      displayNameHelp: 'Wie Dein Name anderen Nutzern bei Talk und auf Deiner Profilseite angezeigt wird.',
+      realName: 'Richtiger Name (optional)',
+      realNameHelp: 'Öffentlich. Wir werden diesen Namen in wissenschaftlichen Veröffentlichungen und auf Postern etc. für Anerkennung der Mithilfe nutzen.',
       changePassword: {
-        heading: 'Change your password',
-        currentPassword: 'Current password (required)',
-        newPassword: 'New password (required)',
-        tooShort: 'That’s too short',
-        confirmNewPassword: 'Confirm new password (required)',
-        doesntMatch: 'These don’t match',
-        change: 'Change'
+        heading: 'Ändere Dein Passwort',
+        currentPassword: 'Derzeitiges Passwort (notwendig)',
+        newPassword: 'Neues Passwort (notwendig)',
+        tooShort: 'Das ist zu kurz.',
+        confirmNewPassword: 'Bestätige das neue Passwort (notwendig)',
+        doesntMatch: 'Das stimmt nicht überein.',
+        change: 'Änderung'
       }
     },
     profile: {
-      dropImage: 'Drop an image here (or click to select).',
-      changeAvatar: 'Change avatar',
-      avatarImageHelp: 'Drop an image here (square, less than %(size)s KB)',
-      clearAvatar: 'Clear avatar',
-      changeProfileHeader: 'Change profile header',
-      profileHeaderImageHelp: 'Drop an image here (any dimensions, less than %(size)s KB)',
-      clearHeader: 'Clear header'
+      dropImage: 'Ziehe ein Bild hierher (oder klicke auf Auswahl).',
+      changeAvatar: 'Ändere das Profilbild',
+      avatarImageHelp: 'Ziehe ein Bild hierher (quadratisch, weniger als %(size)s KB)',
+      clearAvatar: 'Lösche das Profilbild',
+      changeProfileHeader: 'Ändere den Profil-Header',
+      profileHeaderImageHelp: 'Ziehe ein Bild hierher (jedes Maß, weniger als %(size)s KB)',
+      clearHeader: 'Lösche den Header'
     }
   }
 };
