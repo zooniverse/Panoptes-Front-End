@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import getPfeMarkerColors from '../../shared/helpers/get-pfe-marker-colors';
+
 
 function getGlobalFeedbackOptionsFromRules(rules) {
   // could include HideSubjectViewer here
@@ -14,7 +16,9 @@ function getGlobalFeedbackOptionsFromRules(rules) {
   const successFailureShapesEnabled = _.chain(rules).some(rule => {
     return rule.successFailureShapesEnabled;
   }).value();
-  return {pluralSuccessMessagesEnabled: pluralSuccessMessagesEnabled, pluralFailureMessagesEnabled: pluralFailureMessagesEnabled, colorizeUniqueMessagesEnabled: colorizeUniqueMessagesEnabled, successFailureShapesEnabled: successFailureShapesEnabled}
+  const allowedSuccessFeedbackMarkerColors = _.chain(rules).some().value() ? rules[0].allowedSuccessFeedbackMarkerColors : getPfeMarkerColors();
+  const allowedFailureFeedbackMarkerColors = _.chain(rules).some().value() ? rules[0].allowedFailureFeedbackMarkerColors : getPfeMarkerColors();
+  return {pluralSuccessMessagesEnabled: pluralSuccessMessagesEnabled, pluralFailureMessagesEnabled: pluralFailureMessagesEnabled, colorizeUniqueMessagesEnabled: colorizeUniqueMessagesEnabled, successFailureShapesEnabled: successFailureShapesEnabled, allowedSuccessFeedbackMarkerColors: allowedSuccessFeedbackMarkerColors, allowedFailureFeedbackMarkerColors: allowedFailureFeedbackMarkerColors};
 }
 
 export default getGlobalFeedbackOptionsFromRules;

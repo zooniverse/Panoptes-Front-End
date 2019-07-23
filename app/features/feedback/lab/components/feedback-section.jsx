@@ -4,7 +4,9 @@ import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 
 import CheckboxInput from '../../shared/components/checkbox-input';
+import SelectInput from '../../shared/components/select-input';
 import getGlobalFeedbackOptionsFromRules from '../../shared/helpers/get-global-feedback-options-from-rules';
+import getPfeMarkerColors from '../../shared/helpers/get-pfe-marker-colors';
 
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
@@ -32,6 +34,16 @@ counterpart.registerTranslations('en', {
       successFailureShapesEnabled: {
         title: 'Use a different shaped markers to indicate success and failure:',
         help: 'Check this box to indicate successes using a circle and failures with a square.'
+      },
+      allowedSuccessFeedbackMarkerColors: {
+        title: 'Select colors to allow for unique success message markers:',
+        help: 'Define a list of colours that can be used to mark unique success messages.',
+        placeholder: 'Select colors...'
+      },
+      allowedFailureFeedbackMarkerColors: {
+        title: 'Select colors to allow for unique failure message markers:',
+        help: 'Define a list of colours that can be used to mark unique failure messages.',
+        placeholder: 'Select colors...'
       }
     }
   }
@@ -49,11 +61,42 @@ class FeedbackSection extends Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleAllowedSuccessFeedbackMarkerColors = this.handleAllowedSuccessFeedbackMarkerColors.bind(this);
+    this.handleAllowedFailureFeedbackMarkerColors = this.handleAllowedFailureFeedbackMarkerColors.bind(this);
 
+    this.markerColorOptions = getPfeMarkerColors();
+
+    const globalOptions = getGlobalFeedbackOptionsFromRules(this.props.rules);
+    
     this.state = {
-      form: getGlobalFeedbackOptionsFromRules(this.props.rules),
-      valid: false
+      form: globalOptions,
+      valid: false,
+      allowedSuccessFeedbackMarkerColors: globalOptions.allowedSuccessFeedbackMarkerColors,
+      allowedFailureFeedbackMarkerColors: globalOptions.allowedFailureFeedbackMarkerColors
     };
+
+  }
+
+  handleAllowedSuccessFeedbackMarkerColors(values) {
+    const newState = _.assign({}, this.state);
+    newState.allowedSuccessFeedbackMarkerColors = values;
+    this.setState(newState);
+    this.props.rules.map(rule => {
+      rule.allowedSuccessFeedbackMarkerColors = newState.allowedSuccessFeedbackMarkerColors;
+      // FIXME: This reloads everything on every call!
+      this.props.saveRule(rule);
+    });
+  }
+
+  handleAllowedFailureFeedbackMarkerColors(values) {
+    const newState = _.assign({}, this.state);
+    newState.allowedFailureFeedbackMarkerColors = values;
+    this.setState(newState);
+    this.props.rules.map(rule => {
+      rule.allowedFailureFeedbackMarkerColors = newState.allowedFailureFeedbackMarkerColors;
+      // FIXME: This reloads everything on every call!
+      this.props.saveRule(rule);
+    });
   }
 
   handleInputChange({target}) {
@@ -73,6 +116,7 @@ class FeedbackSection extends Component {
 
   render() {
     const {rules, deleteRule, editRule} = this.props;
+    const colorOptions = this.markerColorOptions;
 
     return (<div className="feedback-section">
       <Translate content="FeedbackSection.title" className="form-label" component="div"/>
@@ -85,12 +129,34 @@ class FeedbackSection extends Component {
         <CheckboxInput title={fieldText('pluralFailureMessagesEnabled.title')} help={fieldText('pluralFailureMessagesEnabled.help')} name="pluralFailureMessagesEnabled" checked={this.state.form.pluralFailureMessagesEnabled} onChange={this.handleInputChange.bind(this)}/>
 
         <CheckboxInput title={fieldText('colorizeUniqueMessagesEnabled.title')} help={fieldText('colorizeUniqueMessagesEnabled.help')} name="colorizeUniqueMessagesEnabled" checked={this.state.form.colorizeUniqueMessagesEnabled} onChange={this.handleInputChange.bind(this)}/>
+        {this.state.form.colorizeUniqueMessagesEnabled &&
+          <SelectInput
+            title={fieldText('allowedSuccessFeedbackMarkerColors.title')}
+            help={fieldText('allowedSuccessFeedbackMarkerColors.help')}
+            options={colorOptions}
+            name="allowedSuccessFeedbackMarkerColors"
+            multi={true}
+            value={this.state.allowedSuccessFeedbackMarkerColors}
+            placeholder={fieldText('allowedSuccessFeedbackMarkerColors.placeholder')}
+            onChange={this.handleAllowedSuccessFeedbackMarkerColors.bind(this)}/>}
+        {this.state.form.colorizeUniqueMessagesEnabled &&
+          <SelectInput
+            title={fieldText('allowedFailureFeedbackMarkerColors.title')}
+            help={fieldText('allowedFailureFeedbackMarkerColors.help')}
+            options={colorOptions}
+            name="allowedFailureFeedbackMarkerColors"
+            multi={true}
+            value={this.state.allowedFailureFeedbackMarkerColors}
+            placeholder={fieldText('allowedFailureFeedbackMarkerColors.placeholder')}
+            onChange={this.handleAllowedFailureFeedbackMarkerColors.bind(this)}/>
+
+      }
 
         <CheckboxInput title={fieldText('successFailureShapesEnabled.title')} help={fieldText('successFailureShapesEnabled.help')} name="successFailureShapesEnabled" checked={this.state.form.successFailureShapesEnabled} onChange={this.handleInputChange.bind(this)}/>
       </div>
       <ul>
         {
-          rules.map(rule => <li key={rule.id} className="feedback-section__feedback-item">
+          _.sortBy(rules,'id').map(rule => <li key={rule.id} className="feedback-section__feedback-item">
             <span className="feedback-section__feedback-item-label">
               {rule.id}
             </span>

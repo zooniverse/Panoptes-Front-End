@@ -4,41 +4,69 @@ import ModalFormDialog from 'modal-form/dialog';
 import FeedbackModal from '../components/feedback-modal';
 import strategies from '../../shared/strategies';
 import getGlobalFeedbackOptionsFromRules from '../../shared/helpers/get-global-feedback-options-from-rules';
+// import getPfeMarkerColors from '../../shared/helpers/get-pfe-marker-colors';
 
-function getFeedbackMessages(feedback, globalFeedbackOptions) {
+function getFeedbackMessagesAndSetMarkerColors(feedback, globalFeedbackOptions) {
+  var colorGroupCounters = {
+    true: 0,
+    false: 0
+  };
+  const allowedColours = {
+    true: globalFeedbackOptions.allowedSuccessFeedbackMarkerColors,
+    false: globalFeedbackOptions.allowedFailureFeedbackMarkerColors
+  };
+  var messageColors = [];
+
   if (globalFeedbackOptions.pluralSuccessMessagesEnabled || globalFeedbackOptions.pluralFailureMessagesEnabled) {
-    let messages = _.chain(feedback).map((item) => {
+    let messages = _.chain(feedback).map((item, index) => {
       let message = false;
       if (item.success && item.successEnabled) {
-        message = [item.pluralSuccessMessage, item.successMessage];
+        message = [index, item.pluralSuccessMessage, item.successMessage];
       } else if (!item.success && item.failureEnabled) {
-        message = [item.pluralFailureMessage, item.failureMessage];
+        message = [index, item.pluralFailureMessage, item.failureMessage];
       }
       return message;
     }).compact();
 
-    let uniqueMessages = messages.groupBy();
-    console.log(uniqueMessages.value());
-
-    let pluralizedMessages = uniqueMessages.map((uniqueMessageGroup, uniqueGroupKey) => {
-      return uniqueMessageGroup.length > 1
-        ? uniqueMessageGroup[0][0].replace('${count}', `${uniqueMessageGroup.length}`)
-        : uniqueMessageGroup[0][1];
+    let uniqueMessages = messages.groupBy(messageData => {
+      return [
+        messageData[1], messageData[2]
+      ];
     });
-    return pluralizedMessages.value();
+
+    let pluralizedMessages = uniqueMessages.map((uniqueMessageGroup) => {
+      const groupSuccess = feedback[uniqueMessageGroup[0][0]].success;
+      const groupAllowedColors = allowedColours[groupSuccess];
+      uniqueMessageGroup.map(messageData => {
+        feedback[messageData[0]].color = groupAllowedColors[colorGroupCounters[groupSuccess] % groupAllowedColors.length].label.toLowerCase()
+      });
+      const groupColor = groupAllowedColors[colorGroupCounters[groupSuccess] % groupAllowedColors.length].label.toLowerCase();
+      messageColors.push(groupColor == 'white' ? 'darkgrey' : groupColor);
+      colorGroupCounters[groupSuccess]++;
+      return uniqueMessageGroup.length > 1
+        ? uniqueMessageGroup[0][1].replace('${count}', `${uniqueMessageGroup.length}`)
+        : uniqueMessageGroup[0][2];
+    });
+    return {messages: pluralizedMessages.value(), messageColors: messageColors}
   }
   // fall through
   let messages = _.chain(feedback).map((item) => {
+    console.log(allowedColors[colorCounter % allowedColors.length])
+    const itemAllowedColors = allowedColours[item.success];
+    item.color = itemAllowedColors[colorGroupCounters[item.success] % itemAllowedColors.length].label.toLowerCase();
+    messageColors.push(item.color == 'white' ? 'darkgrey' : item.color);
     let message = false;
     if (item.success && item.successEnabled) {
       message = item.successMessage;
     } else if (!item.success && item.failureEnabled) {
       message = item.failureMessage;
     }
+    colorGroupCounters[item.success]++;
     return message;
   }).compact();
 
-  return messages.value()
+
+  return {messages: messages.value(), messageColors: messageColors};
 
 }
 
@@ -81,8 +109,10 @@ function getSubjectViewerProps(feedback, globalFeedbackOptions, subjectViewerPro
 
 function openFeedbackModal({feedback, subjectViewerProps, taskId}) {
   const globalFeedbackOptions = getGlobalFeedbackOptionsFromRules(feedback);
+  const {messages, messageColors} = getFeedbackMessagesAndSetMarkerColors(feedback, globalFeedbackOptions);
   const props = {
-    messages: getFeedbackMessages(feedback, globalFeedbackOptions),
+    messages: messages,
+    messageColors : messageColors,
     globalFeedbackOptions: globalFeedbackOptions,
     subjectViewerProps: getSubjectViewerProps(feedback, globalFeedbackOptions, subjectViewerProps, taskId)
   };

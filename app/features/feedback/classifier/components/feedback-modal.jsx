@@ -26,16 +26,16 @@ class FeedbackModal extends React.Component {
   }
 
   render() {
-    const { messages, subjectViewerProps } = this.props;
-    console.log(subjectViewerProps);
+    const { messages, messageColors, subjectViewerProps } = this.props;
+    console.log(this.props);
     return (
       <ModalFocus className="classifier feedbackmodal">
         <Translate content="FeedbackModal.title" component="h2" />
         {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
         <ul>
-          {messages.map(message =>
+          {_.zip(messages, messageColors).map((messageAndColor) =>
             <li key={Math.random()}>
-              {message}
+              <span style={{color : messageAndColor[1]}}>{messageAndColor[0]}</span>
             </li>
           )}
         </ul>

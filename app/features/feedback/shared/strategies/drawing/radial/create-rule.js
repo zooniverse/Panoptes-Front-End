@@ -1,4 +1,5 @@
 import ruleChecker from '../../../helpers/rule-checker';
+import getPfeMarkerColors from '../../../../shared/helpers/get-pfe-marker-colors';
 
 function createRule(subjectRule, workflowRule) {
   const rule = {
@@ -15,6 +16,10 @@ function createRule(subjectRule, workflowRule) {
     pluralFailureMessagesEnabled: workflowRule.pluralFailureMessagesEnabled,
     colorizeUniqueMessagesEnabled: workflowRule.colorizeUniqueMessagesEnabled,
     successFailureShapesEnabled: workflowRule.successFailureShapesEnabled,
+    allowedSuccessFeedbackMarkerColors: workflowRule.allowedSuccessFeedbackMarkerColors || false,
+    allowedFailureFeedbackMarkerColors: workflowRule.allowedFailureFeedbackMarkerColors || false,
+    // allow hard override using metadata - respected in open-feedback-modal
+    color : subjectRule.color || false
   };
 
   if (rule.failureEnabled) {

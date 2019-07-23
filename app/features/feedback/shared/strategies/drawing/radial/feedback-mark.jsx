@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 function FeedbackMark({ rule }) {
-  const color = (rule.success) ? 'yellow' : 'red';
+  const color = rule.color;
   if(rule.successFailureShapesEnabled){
     if(rule.success){
       return (
@@ -50,7 +50,8 @@ FeedbackMark.propTypes = {
   rule: PropTypes.shape({
     x: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     y: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    tolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    tolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    color: PropTypes.string
   }).isRequired
 };
 
