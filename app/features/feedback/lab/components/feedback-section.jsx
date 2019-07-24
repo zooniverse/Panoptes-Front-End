@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
+import _ from 'lodash';
 
 import CheckboxInput from '../../shared/components/checkbox-input';
 import SelectInput from '../../shared/components/select-input';
@@ -79,8 +80,8 @@ class FeedbackSection extends Component {
   }
 
   updateRules(){
-    this.props.rules.map(rule => {
-      rule.allowedSuccessFeedbackMarkerColors = newState.allowedSuccessFeedbackMarkerColors;
+    this.props.rules.map((rule) => {
+      rule.allowedSuccessFeedbackMarkerColors = this.state.allowedSuccessFeedbackMarkerColors;
       // FIXME: This reloads everything on every call!
       this.props.saveRule(rule);
     });
@@ -95,12 +96,7 @@ class FeedbackSection extends Component {
   handleAllowedFailureFeedbackMarkerColors(values) {
     const newState = _.assign({}, this.state);
     newState.allowedFailureFeedbackMarkerColors = values;
-    this.setState(newState);
-    this.props.rules.map(rule => {
-      rule.allowedFailureFeedbackMarkerColors = newState.allowedFailureFeedbackMarkerColors;
-      // FIXME: This reloads everything on every call!
-      this.props.saveRule(rule);
-    });
+    this.setState(newState, this.updateRules);
   }
 
   handleInputChange({target}) {
