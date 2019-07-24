@@ -11,6 +11,7 @@ class FeedbackSectionContainer extends Component {
     this.deleteRule = this.deleteRule.bind(this);
     this.openRuleEditorModal = this.openRuleEditorModal.bind(this);
     this.saveRule = this.saveRule.bind(this);
+    this.saveRules = this.saveRules.bind(this);
     this.saveTaskChanges = this.saveTaskChanges.bind(this);
   }
 
@@ -43,8 +44,22 @@ class FeedbackSectionContainer extends Component {
         rules: []
       }
     });
-
+    console.log(editedTask.rules);
     editedTask.feedback.rules = _.unionBy([rule], editedTask.feedback.rules, 'id');
+    console.log(editedTask.feedback.rules);
+    this.saveTaskChanges(editedTask);
+  }
+
+  saveRules(rules) {
+    const editedTask = _.defaults({}, this.props.task, {
+      feedback: {
+        enabled: false,
+        rules: []
+      }
+    });
+    console.log(editedTask.rules);
+    editedTask.feedback.rules = _.unionBy(rules, editedTask.feedback.rules, 'id');
+    console.log(editedTask.feedback.rules);
     this.saveTaskChanges(editedTask);
   }
 
@@ -62,6 +77,7 @@ class FeedbackSectionContainer extends Component {
         deleteRule={this.deleteRule}
         editRule={this.openRuleEditorModal}
         saveRule={this.saveRule}
+        saveRules={this.saveRules}
         rules={rules}
       />
     );

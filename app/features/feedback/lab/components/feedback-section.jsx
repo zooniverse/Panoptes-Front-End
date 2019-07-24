@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
-import _ from 'lodash';
 
 import CheckboxInput from '../../shared/components/checkbox-input';
 import SelectInput from '../../shared/components/select-input';
@@ -79,23 +78,25 @@ class FeedbackSection extends Component {
 
   }
 
-  updateRules(){
-    this.props.rules.map((rule) => {
-      rule.allowedSuccessFeedbackMarkerColors = this.state.allowedSuccessFeedbackMarkerColors;
-      // FIXME: This reloads everything on every call!
-      this.props.saveRule(rule);
-    });
+  updateRules() {
+    this.props.saveRules(this.props.rules);
   }
 
   handleAllowedSuccessFeedbackMarkerColors(values) {
     const newState = _.assign({}, this.state);
     newState.allowedSuccessFeedbackMarkerColors = values;
+    this.props.rules.map(rule => {
+      rule.allowedSuccessFeedbackMarkerColors = newState.allowedSuccessFeedbackMarkerColors;
+    });
     this.setState(newState, this.updateRules);
   }
 
   handleAllowedFailureFeedbackMarkerColors(values) {
     const newState = _.assign({}, this.state);
     newState.allowedFailureFeedbackMarkerColors = values;
+    this.props.rules.map(rule => {
+      rule.allowedFailureFeedbackMarkerColors = newState.allowedFailureFeedbackMarkerColors;
+    });
     this.setState(newState, this.updateRules);
   }
 
@@ -104,13 +105,13 @@ class FeedbackSection extends Component {
     newState.form[target.name] = (target.type === 'checkbox')
       ? target.checked
       : target.value;
-    this.setState(newState, this.validateRule);
     this.props.rules.map(rule => {
       rule[target.name] = (target.type === 'checkbox')
         ? target.checked
         : target.value;
-      // FIXME: This reloads everything on every call!
-      this.props.saveRule(rule);
+    });
+    this.setState(newState, () => {
+      this.updateRules();
     });
   }
 
@@ -128,41 +129,21 @@ class FeedbackSection extends Component {
 
         <CheckboxInput title={fieldText('pluralFailureMessagesEnabled.title')} help={fieldText('pluralFailureMessagesEnabled.help')} name="pluralFailureMessagesEnabled" checked={this.state.form.pluralFailureMessagesEnabled} onChange={this.handleInputChange.bind(this)}/>
 
-        <CheckboxInput title={fieldText('colorizeUniqueMessagesEnabled.title')} help={fieldText('colorizeUniqueMessagesEnabled.help')} name="colorizeUniqueMessagesEnabled" checked={this.state.form.colorizeUniqueMessagesEnabled} onChange={this.handleInputChange.bind(this)}/>
-        {this.state.form.colorizeUniqueMessagesEnabled &&
-          <SelectInput
-            title={fieldText('allowedSuccessFeedbackMarkerColors.title')}
-            help={fieldText('allowedSuccessFeedbackMarkerColors.help')}
-            options={colorOptions}
-            name="allowedSuccessFeedbackMarkerColors"
-            multi={true}
-            value={this.state.allowedSuccessFeedbackMarkerColors}
-            placeholder={fieldText('allowedSuccessFeedbackMarkerColors.placeholder')}
-            onChange={this.handleAllowedSuccessFeedbackMarkerColors.bind(this)}/>}
-        {this.state.form.colorizeUniqueMessagesEnabled &&
-          <SelectInput
-            title={fieldText('allowedFailureFeedbackMarkerColors.title')}
-            help={fieldText('allowedFailureFeedbackMarkerColors.help')}
-            options={colorOptions}
-            name="allowedFailureFeedbackMarkerColors"
-            multi={true}
-            value={this.state.allowedFailureFeedbackMarkerColors}
-            placeholder={fieldText('allowedFailureFeedbackMarkerColors.placeholder')}
-            onChange={this.handleAllowedFailureFeedbackMarkerColors.bind(this)}/>
-
-      }
+        <CheckboxInput title={fieldText('colorizeUniqueMessagesEnabled.title')} help={fieldText('colorizeUniqueMessagesEnabled.help')} name="colorizeUniqueMessagesEnabled" checked={this.state.form.colorizeUniqueMessagesEnabled} onChange={this.handleInputChange.bind(this)}/> {this.state.form.colorizeUniqueMessagesEnabled && <SelectInput title={fieldText('allowedSuccessFeedbackMarkerColors.title')} help={fieldText('allowedSuccessFeedbackMarkerColors.help')} options={colorOptions} name="allowedSuccessFeedbackMarkerColors" multi={true} value={this.state.allowedSuccessFeedbackMarkerColors} placeholder={fieldText('allowedSuccessFeedbackMarkerColors.placeholder')} onChange={this.handleAllowedSuccessFeedbackMarkerColors.bind(this)}/>}
+        {this.state.form.colorizeUniqueMessagesEnabled && <SelectInput title={fieldText('allowedFailureFeedbackMarkerColors.title')} help={fieldText('allowedFailureFeedbackMarkerColors.help')} options={colorOptions} name="allowedFailureFeedbackMarkerColors" multi={true} value={this.state.allowedFailureFeedbackMarkerColors} placeholder={fieldText('allowedFailureFeedbackMarkerColors.placeholder')} onChange={this.handleAllowedFailureFeedbackMarkerColors.bind(this)}/>}
 
         <CheckboxInput title={fieldText('successFailureShapesEnabled.title')} help={fieldText('successFailureShapesEnabled.help')} name="successFailureShapesEnabled" checked={this.state.form.successFailureShapesEnabled} onChange={this.handleInputChange.bind(this)}/>
       </div>
       <ul>
         {
-          _.sortBy(rules,'id').map(rule => <li key={rule.id} className="feedback-section__feedback-item">
-            <span className="feedback-section__feedback-item-label">
-              {rule.id}
-            </span>
-            <Translate component="button" content="FeedbackSection.edit" onClick={editRule.bind(this, rule, this.state.form)}/>
-            <Translate component="button" content="FeedbackSection.del" onClick={deleteRule.bind(this, rule.id)}/>
-          </li>)
+          _.sortBy(rules, 'id').map(rule => <li key={rule.id} className="feedback-section__feedback-item">
+              <span className="feedback-section__feedback-item-label">
+                {rule.id}
+              </span>
+              <Translate component="button" content="FeedbackSection.edit" onClick={editRule.bind(this, rule, this.state.form)}/>
+              <Translate component="button" content="FeedbackSection.del" onClick={deleteRule.bind(this, rule.id)}/>
+            </li>
+          )
         }
       </ul>
 
@@ -175,6 +156,7 @@ FeedbackSection.propTypes = {
   deleteRule: PropTypes.func,
   editRule: PropTypes.func,
   saveRule: PropTypes.func,
+  saveRules: PropTypes.func,
   rules: PropTypes.arrayOf(PropTypes.shape({id: PropTypes.string}))
 };
 
