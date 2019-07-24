@@ -152,7 +152,6 @@ describe('<MobileSectionContainer />', function () {
       [
         fixtures.validationFixtures.taskQuestionTooLong,
         fixtures.validationFixtures.taskFeedbackEnabled,
-        fixtures.validationFixtures.workflowFlipbookEnabled,
         fixtures.validationFixtures.workflowHasMultipleTasks,
         fixtures.validationFixtures.workflowTooManyShortcuts
       ].map(function (invalidProp) {
