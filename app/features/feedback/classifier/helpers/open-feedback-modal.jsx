@@ -81,7 +81,6 @@ function getFeedbackMarks(feedback) {
       ? item
       : false;
   }).compact().value();
-  console.log(marks);
   return marks;
 
 }

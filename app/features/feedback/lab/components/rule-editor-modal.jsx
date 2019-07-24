@@ -42,7 +42,7 @@ counterpart.registerTranslations('en', {
       defaultPluralFailureMessage: {
         title: 'Default plural failure message',
         help: 'The message to show to the volunteer when they make some incorrect classifications. You can use the "${count}" placeholder to represent the number of failures, e.g. "You missed ${count} objects". Can be overridden using subject metadata.'
-      },
+      }
     },
     buttons: {
       save: 'Save rule'
@@ -192,9 +192,13 @@ RuleEditorModal.propTypes = {
     defaultFailureMessage: PropTypes.string,
     defaultSuccessMessage: PropTypes.string,
     failureEnabled: PropTypes.bool,
+    pluralFailureMessagesEnabled: PropTypes.bool,
+    defaultPluralFailureMessage: PropTypes.string,
     id: PropTypes.string,
     strategy: PropTypes.string,
-    successEnabled: PropTypes.bool
+    successEnabled: PropTypes.bool,
+    pluralSuccessMessagesEnabled: PropTypes.bool,
+    defaultPluralSuccessMessage: PropTypes.string,
   }),
   handleInputChange: PropTypes.func,
   handleSave: PropTypes.func,

@@ -28,20 +28,20 @@ counterpart.registerTranslations('en', {
         help: 'By default, a separate message is displayed for each missed annotation. Check this box to enter a templated pluralized version of the failure message.'
       },
       colorizeUniqueMessagesEnabled: {
-        title: 'Use a different marker color for each unique message:',
+        title: 'Radial Feedback Only: Use a different marker color for each unique message:',
         help: 'Check this box to use a different colour for each unique message. This only applies if specific subjects override the default failure and success messages.'
       },
       successFailureShapesEnabled: {
-        title: 'Use a different shaped markers to indicate success and failure:',
+        title: 'Radial Feedback Only: Use a different shaped markers to indicate success and failure:',
         help: 'Check this box to indicate successes using a circle and failures with a square.'
       },
       allowedSuccessFeedbackMarkerColors: {
-        title: 'Select colors to allow for unique success message markers:',
+        title: 'Radial Feedback Only: Select colors to allow for unique success message markers :',
         help: 'Define a list of colours that can be used to mark unique success messages.',
         placeholder: 'Select colors...'
       },
       allowedFailureFeedbackMarkerColors: {
-        title: 'Select colors to allow for unique failure message markers:',
+        title: 'Radial Feedback Only: Select colors to allow for unique failure message markers:',
         help: 'Define a list of colours that can be used to mark unique failure messages.',
         placeholder: 'Select colors...'
       }
@@ -61,13 +61,14 @@ class FeedbackSection extends Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.updateRules = this.updateRules.bind(this);
     this.handleAllowedSuccessFeedbackMarkerColors = this.handleAllowedSuccessFeedbackMarkerColors.bind(this);
     this.handleAllowedFailureFeedbackMarkerColors = this.handleAllowedFailureFeedbackMarkerColors.bind(this);
 
     this.markerColorOptions = getPfeMarkerColors();
 
     const globalOptions = getGlobalFeedbackOptionsFromRules(this.props.rules);
-    
+
     this.state = {
       form: globalOptions,
       valid: false,
@@ -77,15 +78,18 @@ class FeedbackSection extends Component {
 
   }
 
-  handleAllowedSuccessFeedbackMarkerColors(values) {
-    const newState = _.assign({}, this.state);
-    newState.allowedSuccessFeedbackMarkerColors = values;
-    this.setState(newState);
+  updateRules(){
     this.props.rules.map(rule => {
       rule.allowedSuccessFeedbackMarkerColors = newState.allowedSuccessFeedbackMarkerColors;
       // FIXME: This reloads everything on every call!
       this.props.saveRule(rule);
     });
+  }
+
+  handleAllowedSuccessFeedbackMarkerColors(values) {
+    const newState = _.assign({}, this.state);
+    newState.allowedSuccessFeedbackMarkerColors = values;
+    this.setState(newState, this.updateRules);
   }
 
   handleAllowedFailureFeedbackMarkerColors(values) {

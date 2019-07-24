@@ -3,6 +3,8 @@ import React from 'react';
 import counterpart from 'counterpart';
 import TextInput from '../../components/text-input';
 import CheckboxInput from '../../components/checkbox-input';
+import NumericInput from '../../components/numeric-input';
+
 
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
@@ -20,30 +22,10 @@ counterpart.registerTranslations('en', {
         title: 'Enable pluralized success messages',
         help: 'By default, a separate message is displayed for each successful annotation. Check this box to enter a templated pluralized version of the success message.'
       },
-      pluralFailureMessagesEnabled: {
-        title: 'Enable pluralized failure messages',
-        help: 'By default, a separate message is displayed for each missed annotation. Check this box to enter a templated pluralized version of the failure message.'
-      },
-      pluralSuccessMessagesEnabled: {
-        title: 'Enable pluralized success messages',
-        help: 'By default, a separate message is displayed for each successful annotation. Check this box to enter a templated pluralized version of the success message.'
-      },
-      defaultPluralFailureMessage: {
-        title: 'Default pluralized failure message:',
-        help: 'Enter a pluralized failure message here. You can use the "${count}" placeholder to specify the number of failures e.g. "You missed ${count} objects."'
-      },
-      defaultPluralSuccessMessage: {
-        title: 'Default pluralized success message:',
-        help: 'Enter a pluralized success message here. You can use the "${count}" placeholder to specify the number of successes e.g. "You found ${count} objects."'
-      },
-      colorizeUniqueMessagesEnabled: {
-        title: 'Use a different marker color for each unique message:',
-        help: 'Check this box to use a different colour for each unique message. This only applies if specific subjects override the default failure and success messages.'
-      },
-      successFailureShapesEnabled: {
-        title: 'Use a different shaped markers to indicate success and failure:',
-        help: 'Check this box to indicate successes using a circle and failures with a square.'
-      },
+      defaultOpacity : {
+        title: 'Radial Feedback Only: Default marker fill opacity:',
+        help: 'Defines the alpha value of the marker fill. A value of 1 implies opaque fill, a value of 0 implies tranparent fill. Can be overriden by subject metadata.'
+      }
     }
   }
 });
@@ -74,6 +56,18 @@ function LabComponent({ formState, handleInputChange }) {
         type="number"
         required={true}
       />
+
+      <NumericInput
+          title={fieldText('defaultOpacity.title')}
+          help={fieldText('defaultOpacity.help')}
+          name="defaultOpacity"
+          onChange={handleInputChange.bind(this)}
+          min={0}
+          max={1}
+          step={0.1}
+          value={formState.defaultOpacity}
+          placeholder={0.1}
+        />
     </div>
   );
 }
@@ -82,12 +76,7 @@ LabComponent.propTypes = {
   formState: PropTypes.shape({
     defaultTolerance: PropTypes.string,
     hideSubjectViewer: PropTypes.bool,
-    pluralSuccessMessagesEnabled: PropTypes.bool,
-    pluralFailureMessagesEnabled: PropTypes.bool,
-    defaultPluralSuccessMessage: PropTypes.string,
-    defaultPluralFailureMessage: PropTypes.string,
-    colorizeUniqueMessagesEnabled: PropTypes.bool,
-    successFailureShapesEnabled: PropTypes.bool
+    defaultOpacity: PropTypes.oneOfType([PropTypes.string,PropTypes.number])
   }).isRequired,
   handleInputChange: PropTypes.func.isRequired
 };

@@ -18,3 +18,4 @@ A single subject can have multiple feedback rules. To group the metadata fields 
 - `#feedback_N_failureMessage` (optional) - message to show when the target is incorrectly annotated. Overrides the default failure message set on the workflow task rule.
 - `#feedback_N_pluralSuccessMessage` (optional) - message to show when several targets are correctly annotated. Overrides the default plural success message set on the workflow task rule.
 - `#feedback_N_pluralFailureMessage` (optional) - message to show when several targets are incorrectly annotated. Overrides the default plural failure message set on the workflow task rule.
+- `#feedback_N_opacity` (optional) - The fill opacity of the feedback marks. Overrides the default feedback mark opacity set on the workflow task rule.

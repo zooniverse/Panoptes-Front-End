@@ -8,7 +8,6 @@ import strategies from '../../shared/strategies';
 class RuleEditorModalContainer extends Component {
   constructor(props) {
     super(props);
-    console.log(props)
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
 
@@ -16,7 +15,6 @@ class RuleEditorModalContainer extends Component {
       form: _.assign({}, props.rule, props.feedbackOptions),
       valid: false
     };
-    console.log(this.state)
   }
 
   handleInputChange({ target }) {

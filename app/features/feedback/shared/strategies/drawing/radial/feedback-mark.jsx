@@ -2,7 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 function FeedbackMark({ rule }) {
-  const color = rule.color;
+  var color = rule.color;
+  if (!color){
+    color = rule.success ? "red" : "yellow";
+  }
+
+
   if(rule.successFailureShapesEnabled){
     if(rule.success){
       return (
@@ -12,9 +17,9 @@ function FeedbackMark({ rule }) {
           r={rule.tolerance}
           stroke={color}
           fill={color}
-          fillOpacity="0.0"
+          fillOpacity={rule.opacity}
           strokeOpacity="1.0"
-          strokeWidth="3"
+          strokeWidth="2"
         />);
     }
     else{
@@ -26,9 +31,9 @@ function FeedbackMark({ rule }) {
           height={2*Number(rule.tolerance)}
           stroke={color}
           fill={color}
-          fillOpacity="0.0"
+          fillOpacity={rule.opacity}
           strokeOpacity="1.0"
-          strokeWidth="3"
+          strokeWidth="2"
         />);
     }
   }
@@ -40,8 +45,9 @@ function FeedbackMark({ rule }) {
       r={rule.tolerance}
       stroke={color}
       fill={color}
-      fillOpacity="0.5"
-      strokeOpacity="0.8"
+      fillOpacity={rule.opacity}
+      strokeOpacity="1.0"
+      strokeWidth="2"
     />
   );
 }
@@ -51,7 +57,8 @@ FeedbackMark.propTypes = {
     x: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     y: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     tolerance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    color: PropTypes.string
+    color: PropTypes.string,
+    opacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired
 };
 

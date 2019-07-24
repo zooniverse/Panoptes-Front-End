@@ -18,8 +18,7 @@ function createRule(subjectRule, workflowRule) {
     successFailureShapesEnabled: workflowRule.successFailureShapesEnabled,
     allowedSuccessFeedbackMarkerColors: workflowRule.allowedSuccessFeedbackMarkerColors || false,
     allowedFailureFeedbackMarkerColors: workflowRule.allowedFailureFeedbackMarkerColors || false,
-    // allow hard override using metadata - respected in open-feedback-modal
-    color : subjectRule.color || false
+    opacity : subjectRule.opacity === undefined ? (workflowRule.defaultOpacity === undefined ? 0.1 : workflowRule.defaultOpacity) : subjectRule.opacity
   };
 
   if (rule.failureEnabled) {

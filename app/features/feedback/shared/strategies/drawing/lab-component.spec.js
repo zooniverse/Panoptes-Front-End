@@ -13,10 +13,11 @@ describe('feedback drawing: lab component', function () {
       failureEnabled: true,
       hideSubjectViewer: true,
       id: `${ruleID}`,
-      successEnabled: true
+      successEnabled: true,
+      defaultOpacity: 0.3
     };
   }
-  
+
   describe('with TextInput', function () {
     const handleTextInputChangeSpy = sinon.spy();
     const wrapper = shallow(<LabComponent formState={mockFormState(1234)} handleInputChange={handleTextInputChangeSpy} />);
@@ -25,7 +26,7 @@ describe('feedback drawing: lab component', function () {
     it('should include a TextInput component', function () {
       expect(textInput).to.have.lengthOf(1);
     });
-  
+
     it('should include the default tolerance', function () {
       expect(textInput.prop('value')).to.equal("10");
     });
@@ -51,6 +52,25 @@ describe('feedback drawing: lab component', function () {
 
     it('should call handleInputChange on change', function () {
       checkboxInput.simulate('change');
+      expect(handleCheckboxInputChangeSpy.calledOnce).to.be.true;
+    });
+  });
+
+  describe('with NumericInput', function () {
+    const handleCheckboxInputChangeSpy = sinon.spy();
+    const wrapper = shallow(<LabComponent formState={mockFormState(9101)} handleInputChange={handleCheckboxInputChangeSpy} />);
+    const numericInput = wrapper.find('NumericInput');
+
+    it('should include a NumericInput component', function () {
+      expect(numericInput).to.have.lengthOf(1);
+    });
+
+    it('should reflect the opacity value provided', function () {
+      expect(numericInput.prop('value')).to.equal(0.3);
+    });
+
+    it('should call handleInputChange on change', function () {
+      numericInput.simulate('change');
       expect(handleCheckboxInputChangeSpy.calledOnce).to.be.true;
     });
   });
