@@ -105,11 +105,6 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('taskFeedbackDisabled', validationFixtures.taskFeedbackEnabled, false);
     });
 
-    it('should check whether the workflow uses the flipbook', function () {
-      testValidationProp('workflowFlipbookDisabled');
-      testValidationProp('workflowFlipbookDisabled', validationFixtures.workflowFlipbookEnabled, false);
-    });
-
     it('should check whether the workflow has a single task', function () {
       testValidationProp('workflowHasSingleTask');
       testValidationProp('workflowHasSingleTask', validationFixtures.workflowHasMultipleTasks, false);
