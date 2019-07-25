@@ -47,21 +47,24 @@ ConversationLink = createReactClass
 
   render: ->
     unread = @props.conversation.is_unread
-    <div className="conversation-link #{if unread then 'unread' else ''}">
-      <div>
-        {@state.users.map (user, i) =>
-          <div key={user.id}>
-            <strong><Link key={user.id} to="/users/#{user.login}">{user.display_name}</Link></strong>
-            <div>{timeAgo(@state.messages[0]?.updated_at)}{', ' if i isnt (@state.users.length-1)}</div>
-          </div>}
-      </div>
+    if @state.users.length > 0
+      <div className="conversation-link #{if unread then 'unread' else ''}">
+        <div>
+          {@state.users.map (user, i) =>
+            <div key={user.id}>
+              <strong><Link key={user.id} to="/users/#{user.login}">{user.display_name}</Link></strong>
+              <div>{timeAgo(@state.messages[0]?.updated_at)}{', ' if i isnt (@state.users.length-1)}</div>
+            </div>}
+        </div>
 
-      <Link to="/inbox/#{@props.conversation.id}">
-        {if unread
-          <i className="fa fa-comments-o"/>}
-        {@props.conversation.title}
-      </Link>
-    </div>
+        <Link to="/inbox/#{@props.conversation.id}">
+          {if unread
+            <i className="fa fa-comments-o"/>}
+          {@props.conversation.title}
+        </Link>
+      </div>
+    else
+      <div></div>
 
 module.exports = createReactClass
   displayName: 'TalkInbox'

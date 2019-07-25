@@ -83,19 +83,23 @@ class RecentCollectionsSection extends React.Component {
       return [];
     })
     .then((users) => {
-      let partner = users.find((potentialPartner) => {
-        return potentialPartner !== currentUser;
-      });
-      if (partner === undefined) {
-        // Why're you talking to yourself?
-        partner = currentUser;
+      if (users.length > 0) {
+        let partner = users.find((potentialPartner) => {
+          return potentialPartner !== currentUser;
+        });
+        if (partner === undefined) {
+          // Why're you talking to yourself?
+          partner = currentUser;
+        }
+        const newState = Object.assign({}, this.state.conversationPartners);
+        newState[conversation.id] = partner;
+        this.setState({
+          conversationPartners: newState,
+        });
+        return partner;
+      } else {
+        return null;
       }
-      const newState = Object.assign({}, this.state.conversationPartners);
-      newState[conversation.id] = partner;
-      this.setState({
-        conversationPartners: newState,
-      });
-      return partner;
     });
   };
 
@@ -131,24 +135,31 @@ class RecentCollectionsSection extends React.Component {
       this.setState({
         messageAuthors: authorState,
       });
-      return author.get('avatar')
-      .catch(() => {
-        return [];
-      })
-      .then((avatars) => {
-        const avatar = [].concat(avatars)[0]; // Why's this an array?
-        const avatarState = Object.assign({}, this.state.avatars);
-        avatarState[author.id] = avatar;
-        this.setState({
-          avatars: avatarState,
+      if (author) {
+        return author.get('avatar')
+        .catch(() => {
+          return [];
+        })
+        .then((avatars) => {
+          const avatar = [].concat(avatars)[0]; // Why's this an array?
+          const avatarState = Object.assign({}, this.state.avatars);
+          avatarState[author.id] = avatar;
+          this.setState({
+            avatars: avatarState,
+          });
+          return author;
         });
-        return author;
-      });
+      } else {
+        return {};
+      }
     });
   };
 
   renderConversation = (conversation, index, allConversations) => {
     const partner = this.state.conversationPartners[conversation.id];
+    if (!partner) {
+      return null;
+    }
     const message = this.state.lastMessages[conversation.id];
     const sentLastMessage = !!message && (this.state.messageAuthors[message.id] === this.context.user);
 
