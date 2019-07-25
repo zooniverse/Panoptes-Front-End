@@ -150,7 +150,7 @@ class RecentCollectionsSection extends React.Component {
           return author;
         });
       } else {
-        return [];
+        return {};
       }
     });
   };
@@ -158,7 +158,7 @@ class RecentCollectionsSection extends React.Component {
   renderConversation = (conversation, index, allConversations) => {
     const partner = this.state.conversationPartners[conversation.id];
     if (!partner) {
-      return (<div></div>);
+      return null;
     }
     const message = this.state.lastMessages[conversation.id];
     const sentLastMessage = !!message && (this.state.messageAuthors[message.id] === this.context.user);
