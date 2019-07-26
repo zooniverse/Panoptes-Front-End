@@ -38,10 +38,6 @@ const MULTI_TRUE_MULTI_FALSE_RULES = MULTI_TRUE_MULTI_FALSE.map(generateMinimalR
 const MULTI_TRUE_SINGLE_FALSE_RULES = MULTI_TRUE_SINGLE_FALSE.map(generateMinimalRule);
 const SINGLE_TRUE_MULTI_FALSE_RULES = SINGLE_TRUE_MULTI_FALSE.map(generateMinimalRule);
 
-// console.log(MULTI_TRUE_MULTI_FALSE_RULES);
-// console.log(MULTI_TRUE_SINGLE_FALSE_RULES);
-// console.log(SINGLE_TRUE_MULTI_FALSE_RULES);
-
 describe('helpers > open-feedback-modal > getFeedbackMessages', function() {
   it('should exist', function() {
     expect(getFeedbackMessages).to.be.a('function')
