@@ -4,7 +4,7 @@ import ModalFormDialog from 'modal-form/dialog';
 import FeedbackModal from '../components/feedback-modal';
 import strategies from '../../shared/strategies';
 
-function getFeedbackMessages(feedback) {
+export function getFeedbackMessages(feedback) {
   const messages = _.chain(feedback)
     .map((item) => {
       let message = false;
