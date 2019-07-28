@@ -981,6 +981,7 @@ export default {
       interventions: 'Show project intervention notifications.',
       interventionsHelp: 'Allow projects to display messages while you are classifying.',
       interventionsPreferences: 'Notification preferences',
+      save: 'Save',
       changePassword: {
         heading: 'Change your password',
         currentPassword: 'Current password (required)',

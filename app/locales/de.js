@@ -978,6 +978,7 @@ export default {
       displayNameHelp: 'Wie Dein Name anderen Nutzern bei Talk und auf Deiner Profilseite angezeigt wird.',
       realName: 'Richtiger Name (optional)',
       realNameHelp: 'Öffentlich. Wir werden diesen Namen in wissenschaftlichen Veröffentlichungen und auf Postern etc. für Anerkennung der Mithilfe nutzen.',
+      save: 'Save',
       changePassword: {
         heading: 'Ändere Dein Passwort',
         currentPassword: 'Derzeitiges Passwort (notwendig)',

@@ -986,6 +986,7 @@ export default {
 	  interventions: 'Show project intervention notifications.',
       interventionsHelp: 'Permetti ai progetti di notificare messaggi mentre stai classificando.',
       interventionsPreferences: 'Preferenze di notifica',
+      save: 'Save',
       changePassword: {
         heading: 'Modifica della password',
         currentPassword: 'Password attuale (campo obbligatorio)',

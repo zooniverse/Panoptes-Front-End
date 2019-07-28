@@ -980,6 +980,7 @@ export default {
       displayNameHelp: 'How your name will appear to other users in Talk and on your Profile Page',
       realName: 'Real name (optional)',
       realNameHelp: 'Public; we’ll use this to give acknowledgement in papers, on posters, etc.',
+      save: 'Save',
       changePassword: {
         heading: 'Change your password',
         currentPassword: 'Current password (required)',

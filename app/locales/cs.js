@@ -985,6 +985,7 @@ export default {
       interventions: 'Zobrazovat upozornění ohledně projektové intervence (dotazníky apod.).',
       interventionsHelp: 'Povolit projektům zobrazovat zprávy v době, kdy klasifikujete.',
       interventionsPreferences: 'Předvolby upozornění',
+      save: 'Save',
       changePassword: {
         heading: 'Změnit heslo',
         currentPassword: 'Současné heslo (povinné)',
