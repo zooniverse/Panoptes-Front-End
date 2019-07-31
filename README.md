@@ -6,6 +6,8 @@
 
 ## Getting started
 
+We are no longer actively developing features for this app. PRs will be accepted for bug fixes, translation, and content updates. Active feature development is happening at [https://github.com/zooniverse/front-end-monorepo/](https://github.com/zooniverse/front-end-monorepo/)
+
 ### With Docker
 
 To avoid having to install Node.js or any other dependencies, you can run
