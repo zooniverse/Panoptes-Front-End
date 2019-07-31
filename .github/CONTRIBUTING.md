@@ -1,6 +1,6 @@
 ## Contributing
 
-Thanks a bunch for wanting to help Zooniverse. Here are few quick guidelines to start working on our project:
+Thanks a bunch for wanting to help Zooniverse. We are no longer actively developing new features for this app. We are accepting PRs for bug fixes, translations, and content updates. If you wish to contribute new features, please go to [https://github.com/zooniverse/front-end-monorepo/](https://github.com/zooniverse/front-end-monorepo/). If you want to contribute a bug fix, translation, or content update, please follow the guidelines below:
 
 ### Issue
 
