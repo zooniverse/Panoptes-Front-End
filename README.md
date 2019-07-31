@@ -6,7 +6,7 @@
 
 ## Getting started
 
-We are no longer actively developing features for this app. PRs will be accepted for bug fixes, translation, and content updates. Active feature development is happening at [https://github.com/zooniverse/front-end-monorepo/](https://github.com/zooniverse/front-end-monorepo/)
+We are no longer actively developing features for this app. PRs will be accepted for bug fixes, translations, and content updates. Active feature development is happening at [https://github.com/zooniverse/front-end-monorepo/](https://github.com/zooniverse/front-end-monorepo/)
 
 ### With Docker
 
