@@ -24,7 +24,7 @@ counterpart.registerTranslations('es', require('../../locales/es').default);
 counterpart.registerTranslations('nl', require('../../locales/nl').default);
 counterpart.registerTranslations('pt', require('../../locales/pt').default);
 counterpart.registerTranslations('de', require('../../locales/de').default);
-counterpart.registerTranslations('jp', require('../../locales/jp').default);
+counterpart.registerTranslations('ja', require('../../locales/ja').default);
 
 counterpart.setFallbackLocale('en');
 
