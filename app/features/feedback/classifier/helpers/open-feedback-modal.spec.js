@@ -1,5 +1,9 @@
-import { expect } from 'chai';
-import { getFeedbackMessages } from './open-feedback-modal';
+import {
+  expect
+} from 'chai';
+import {
+  getFeedbackMessages
+} from './open-feedback-modal';
 
 const MULTI_TRUE_MULTI_FALSE = [
   true,
@@ -42,7 +46,7 @@ describe('helpers > open-feedback-modal > getFeedbackMessages', function() {
   it('should exist', function() {
     expect(getFeedbackMessages).to.be.a('function')
   })
-  describe('when reducing a list of feedback messages to unique entries with counts', function(){
+  describe('when reducing a list of feedback messages to unique entries with counts', function() {
     it('The counts for both message classes should be > 1.',
       function() {
         const reduced = getFeedbackMessages(MULTI_TRUE_MULTI_FALSE_RULES)
@@ -61,6 +65,6 @@ describe('helpers > open-feedback-modal > getFeedbackMessages', function() {
       function() {
         const reduced = getFeedbackMessages(SINGLE_TRUE_MULTI_FALSE_RULES)
         expect(reduced).to.deep.equal(['hit (1 match)', 'miss (3 matches)'])
-    })
+      })
   })
 })
