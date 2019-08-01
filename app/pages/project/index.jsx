@@ -24,6 +24,7 @@ counterpart.registerTranslations('es', require('../../locales/es').default);
 counterpart.registerTranslations('nl', require('../../locales/nl').default);
 counterpart.registerTranslations('pt', require('../../locales/pt').default);
 counterpart.registerTranslations('de', require('../../locales/de').default);
+counterpart.registerTranslations('ja', require('../../locales/ja').default);
 
 counterpart.setFallbackLocale('en');
 
@@ -53,7 +54,7 @@ class ProjectPageController extends React.Component {
 
   componentDidMount() {
     this._boundForceUpdate = this.forceUpdate.bind(this);
-    if (this.context.initialLoadComplete) { 
+    if (this.context.initialLoadComplete) {
       this.fetchProjectData(this.props.params.owner, this.props.params.name, this.props.user);
     }
   }
