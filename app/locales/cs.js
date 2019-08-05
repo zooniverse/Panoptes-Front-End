@@ -109,6 +109,7 @@ export default {
     pleaseWait: 'Čekejte prosím...'
   },
   tasks: {
+    hidePreviousMarks: 'Skrýt předchozí značky %(count)s',
     less: 'Méně',
     more: 'Více',
     shortcut: {

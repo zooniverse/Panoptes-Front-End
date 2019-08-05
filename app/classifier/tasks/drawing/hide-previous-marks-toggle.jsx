@@ -1,5 +1,6 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
+import Translate from 'react-translate-component';
 
 class HidePreviousMarksToggle extends React.Component {
   constructor() {
@@ -69,7 +70,9 @@ class HidePreviousMarksToggle extends React.Component {
             onChange={this.setPreviousMarks.bind(this, nextValueToSet)}
           />
           {' '}
-          Hide previous marks {marksCount > 0 ? `(${marksCount})` : undefined }
+          <Translate content="tasks.hidePreviousMarks" with={{
+            count: marksCount > 0 ? `(${marksCount})` : undefined
+          }} />
         </label>
       </div>
     );
@@ -87,7 +90,7 @@ HidePreviousMarksToggle.propTypes = {
 HidePreviousMarksToggle.defaultProps = {
   annotations: [],
   workflow: null,
-  onChange() {}
+  onChange() { }
 };
 
 export default HidePreviousMarksToggle;

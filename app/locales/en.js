@@ -110,6 +110,7 @@ export default {
     pleaseWait: 'Please wait...'
   },
   tasks: {
+    hidePreviousMarks: 'Hide previous marks %(count)s',
     less: 'Less',
     more: 'More',
     shortcut: {
