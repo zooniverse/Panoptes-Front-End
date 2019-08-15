@@ -60,8 +60,8 @@ describe('helpers > open-feedback-modal > getFeedbackMessages', function() {
         expect(reduced).to.deep.equal(['hit (3 matches)', 'miss (1 match)'])
       })
 
-    it('The counts for the success message class should be > 1. ' +
-      'The count for the failure message class should be 1.',
+    it('The counts for the failure message class should be > 1. ' +
+      'The count for the success message class should be 1.',
       function() {
         const reduced = getFeedbackMessages(SINGLE_TRUE_MULTI_FALSE_RULES)
         expect(reduced).to.deep.equal(['hit (1 match)', 'miss (3 matches)'])
