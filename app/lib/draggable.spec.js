@@ -109,6 +109,11 @@ describe('Draggable', function () {
       });
       wrapper.setProps({ disabled: true });
     });
+
+    after(function () {
+      wrapper.setProps({ disabled: false });
+    });
+
     it('should not respond to mousedown', function () {
       wrapper.find('p').simulate('mousedown');
       expect(document.body.addEventListener.callCount).to.equal(0);
@@ -120,6 +125,53 @@ describe('Draggable', function () {
     it('should not respond to pointerdown', function () {
       wrapper.find('p').simulate('pointerdown');
       expect(document.body.addEventListener.callCount).to.equal(0);
+    });
+  });
+
+  describe('with multitouch gestures', function () {
+    function fakeEvent(type) {
+      return {
+        preventDefault: sinon.stub(),
+        type,
+        touches: [
+          {
+            pageX: 30,
+            pageY: 50
+          },
+          {
+            pageX: 40,
+            pageY: 60
+          }
+        ]
+      }
+    }
+
+    before(function () {
+      document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
+        if (eventType === 'touchmove') handleDrag = handler;
+        if (eventType === 'touchend') handleEnd = handler;
+      });
+    });
+
+    it('should not respond to touchstart', function () {
+      wrapper.find('p').simulate('touchstart', fakeEvent('touchstart'));
+      expect(onStart.callCount).to.equal(0);
+    });
+
+    it('should not cancel the default start event', function () {
+      const startEvent = fakeEvent('touchstart');
+      wrapper.find('p').simulate('touchstart', startEvent);
+      expect(startEvent.preventDefault.callCount).to.equal(0);
+    });
+
+    it('should not respond to touchmove', function () {
+      handleDrag(fakeEvent('touchmove'));
+      expect(onDrag.callCount).to.equal(0);
+    });
+
+    it('should not respond to touchend', function () {
+      handleEnd(fakeEvent('touchend'));
+      expect(onEnd.callCount).to.equal(0);
     });
   });
 });
