@@ -15,54 +15,64 @@ function Draggable(props) {
   }
 
   function handleStart(e) {
-    e.preventDefault();
+    const multiTouch = e.touches && e.touches.length > 1;
 
-    switch (e.type) {
-      case 'mousedown':
-        [moveEvent, endEvent] = ['mousemove', 'mouseup'];
-        break;
-      case 'touchstart':
-        [moveEvent, endEvent] = ['touchmove', 'touchend'];
-        break;
-      default:
-        [moveEvent, endEvent] = ['pointermove', 'pointerup'];
-    }
+    if (!multiTouch) {
+      e.preventDefault();
 
-    const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
-    _rememberCoords(eventCoords);
+      switch (e.type) {
+        case 'mousedown':
+          [moveEvent, endEvent] = ['mousemove', 'mouseup'];
+          break;
+        case 'touchstart':
+          [moveEvent, endEvent] = ['touchmove', 'touchend'];
+          break;
+        default:
+          [moveEvent, endEvent] = ['pointermove', 'pointerup'];
+      }
 
-    // Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
-    document.body.classList.add('dragging');
+      const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
+      _rememberCoords(eventCoords);
 
-    document.body.addEventListener(moveEvent, handleDrag);
-    document.body.addEventListener(endEvent, handleEnd);
+      // Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
+      document.body.classList.add('dragging');
 
-    // If there's no `onStart`, `onDrag` will be called on start.
-    const startHandler = props.onStart || handleDrag;
-    if (startHandler) { // You can set it to `false` if you don't want anything to fire.
-      startHandler(eventCoords);
+      document.body.addEventListener(moveEvent, handleDrag);
+      document.body.addEventListener(endEvent, handleEnd);
+
+      // If there's no `onStart`, `onDrag` will be called on start.
+      const startHandler = props.onStart || handleDrag;
+      if (startHandler) { // You can set it to `false` if you don't want anything to fire.
+        startHandler(eventCoords);
+      }
     }
   }
 
   function handleDrag(e) {
-    const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
-    const d = {
-      x: eventCoords.pageX - _previousEventCoords.x,
-      y: eventCoords.pageY - _previousEventCoords.y
-    };
-    props.onDrag(eventCoords, d);
-    _rememberCoords(eventCoords);
+    const multiTouch = e.touches && e.touches.length > 1;
+    if (!multiTouch) {
+      const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
+      const d = {
+        x: eventCoords.pageX - _previousEventCoords.x,
+        y: eventCoords.pageY - _previousEventCoords.y
+      };
+      props.onDrag(eventCoords, d);
+      _rememberCoords(eventCoords);
+    }
   }
 
   function handleEnd(e) {
-    const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
+    const multiTouch = e.touches && e.touches.length > 1;
+    if (!multiTouch) {
+      const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
 
-    document.body.removeEventListener(moveEvent, handleDrag);
-    document.body.removeEventListener(endEvent, handleEnd);
+      document.body.removeEventListener(moveEvent, handleDrag);
+      document.body.removeEventListener(endEvent, handleEnd);
 
-    props.onEnd(eventCoords);
-    _previousEventCoords = {};
-    document.body.classList.remove('dragging');
+      props.onEnd(eventCoords);
+      _previousEventCoords = {};
+      document.body.classList.remove('dragging');
+    }
   }
 
   const { children, disabled } = props;
