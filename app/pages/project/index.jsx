@@ -16,13 +16,6 @@ import * as translationActions from '../../redux/ducks/translations';
 import ProjectPage from './project-page';
 import Translations from '../../classifier/translations';
 import getAllLinked from '../../lib/get-all-linked';
-import locales from '../../locales';
-
-Object.keys(locales).forEach(function registerLocale(key) {
-  counterpart.registerTranslations(key, locales[key]);
-});
-
-counterpart.setFallbackLocale('en');
 
 
 class ProjectPageController extends React.Component {
