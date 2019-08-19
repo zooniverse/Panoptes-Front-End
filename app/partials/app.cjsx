@@ -47,6 +47,8 @@ PanoptesApp = createReactClass
     @geordiLogger.subscribe(new GALogAdapter(window, 'ga'))
 
   componentDidMount: ->
+    if this.props.location.query?.language
+      counterpart.setLocale(this.props.location.query.language);
     @props.notificationsCounter.listen (unreadNotificationsCount) =>
       @setState {unreadNotificationsCount}
 
