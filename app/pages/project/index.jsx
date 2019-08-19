@@ -16,16 +16,11 @@ import * as translationActions from '../../redux/ducks/translations';
 import ProjectPage from './project-page';
 import Translations from '../../classifier/translations';
 import getAllLinked from '../../lib/get-all-linked';
+import locales from '../../locales';
 
-counterpart.registerTranslations('cs', require('../../locales/cs').default);
-counterpart.registerTranslations('en', require('../../locales/en').default);
-counterpart.registerTranslations('it', require('../../locales/it').default);
-counterpart.registerTranslations('es', require('../../locales/es').default);
-counterpart.registerTranslations('nl', require('../../locales/nl').default);
-counterpart.registerTranslations('pt', require('../../locales/pt').default);
-counterpart.registerTranslations('de', require('../../locales/de').default);
-counterpart.registerTranslations('ja', require('../../locales/ja').default);
-counterpart.registerTranslations('fr', require('../../locales/fr').default);
+Object.keys(locales).forEach(function registerLocale(key) {
+  counterpart.registerTranslations(key, locales[key]);
+});
 
 counterpart.setFallbackLocale('en');
 
