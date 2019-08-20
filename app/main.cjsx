@@ -7,6 +7,14 @@ routes = require './router'
 style = require '../css/main.styl'
 { sugarClient } = require 'panoptes-client/lib/sugar'
 
+# register locales
+`import counterpart from 'counterpart';`
+`import locales from './locales';`
+
+Object.keys(locales).forEach((key) -> counterpart.registerTranslations(key, locales[key]))
+
+counterpart.setFallbackLocale('en')
+
 # Redux
 `import { Provider } from 'react-redux';`
 `import configureStore from './redux/store';`
