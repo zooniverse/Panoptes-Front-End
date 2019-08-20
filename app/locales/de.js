@@ -661,7 +661,7 @@ export default {
       hiring: '- **Gibt es offene Stellen bei Zooniverse?**\nZooniverse ist eine Kollaboration zwischen Institutionen aus Großbritannien und den Vereinigten Staaten. Unser gesamtes Team ist bei einer dieser Partnerinstitutionen angestellt. Auf der Seite [Zooniverse jobs page](https://jobs.zooniverse.org/) erfährst Du mehr über Beschäftigungsmöglichkeiten bei Zooniverse.',
       howToAcknowledge: '- **Ich bin ein Projektinhaber / Mitglied des Forschungsteams. Wie kann ich Zooniverse und die Project Builder-Plattform in meiner Forschungsveröffentlichung, meinem Vortrag usw. kreditieren?**\nWeitere Informationen zum Zitieren und Kreditieren der Zooniversum Platform und den hier erzeugten Daten in Forschungsveröffentlichungen findest Du auf unserer Seite [Acknowledgements / Kreditierung](/about/acknowledgements) (derzeit nur in englischer Sprache).',
       browserSupport: '- **Welche Browserversion unterstützt Zooniverse??**\nWir unterstützen die am meisten genutzten  Browser bis zur vorletzten Version.',
-      furtherHelp: 'Hast Du keine Antwort auf Deine Frage gefunden? Besuchen Sie die [Webseite Zooniverse Solutions](https://zooniverse.freshdesk.com/support/solutions), frage im Diskussionsforum [Zooniverse Talk](/talk) oder [kontaktiere uns](/about/contact).'
+      furtherHelp: 'Hast Du keine Antwort auf Deine Frage gefunden? Besuche die [Webseite Zooniverse Solutions](https://zooniverse.freshdesk.com/support/solutions), frage im Diskussionsforum [Zooniverse Talk](/talk) oder [kontaktiere uns](/about/contact).'
     },
     resources: {
       title: '## Ressourcen',
