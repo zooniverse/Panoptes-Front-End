@@ -4,8 +4,8 @@ import ModalFormDialog from 'modal-form/dialog';
 import FeedbackModal from '../components/feedback-modal';
 import strategies from '../../shared/strategies';
 
-function getFeedbackMessages(feedback) {
-  return _.chain(feedback)
+export function getFeedbackMessages(feedback) {
+  const messages = _.chain(feedback)
     .map((item) => {
       let message = false;
       if (item.success && item.successEnabled) {
@@ -15,8 +15,14 @@ function getFeedbackMessages(feedback) {
       }
       return message;
     })
-    .compact()
-    .value();
+    .compact();
+
+  const reducedMessages = messages.groupBy().map((groupData, key) => {
+    return `${key} (${groupData.length} ${groupData.length > 1 ? 'matches' : 'match'})`;
+  }).value();
+
+
+  return reducedMessages;
 }
 
 function getFeedbackMarks(feedback) {
