@@ -5,6 +5,9 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+    entrypoint:
+      - "npm"
+    command: ["start"]
     ports:
       - "3735:3735"
     environment:
