@@ -681,12 +681,12 @@ export default {
   },
   getInvolved: {
     index: {
-      title: 'S\'impliquer,
+      title: 'S\'impliquer',
       nav: {
         volunteering: 'Etre volontaire',
         education: 'Education',
         callForProjects: 'Appel à projets',
-        collections: 'Collections d\'images,
+        collections: 'Collections d\'images',
         favorites: 'Favoris'
       }
     },
