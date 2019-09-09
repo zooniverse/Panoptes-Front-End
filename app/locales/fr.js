@@ -256,42 +256,43 @@ export default {
       title: '## Zooniverse, qu\'est-ce que c\'est?',
       whatIsZooniverse: 'Zooniverse est la plateforme de recherche citoyenne la plus grande et la plus populaire. Cette recherche est rendue possible par des volontaires - plus d’un million de personnes à travers le monde qui se rassemblent pour aider des chercheurs professionnels. Notre objectif est de permettre des recherches qui seraient autrment impossibles ou impraticables. Les résultats de la recherche faites sur Zooniverse se traduisent par de nouvelles découvertes, des jeux de données utiles pour la communauté scientifique au sens large et [de nombreuses publications](/about /publications).',
       anyoneCanResearch: '### Chez Zooniverse, tout le monde peut être un chercheur\n\nVous n\'avez besoin d\'aucune spécialistaion, formation ou expertise pour participer à un projet de Zooniverse. Nous permettons à quiconque de contribuer facilement à de vrais recherches universitaires, sur son propre ordinateur et à sa convenance. \n\nVous pourrez étudier de réels objets d’études récoltés par des scientifiques, tels que des images de galaxies lointaines, des archives historiques et des des journaux intimes ou des vidéos d\'animaux dans leurs habitats naturels. En répondant à des questions simples, vous contribuerez à la compréhension de notre monde, de notre histoire, de notre univers et plus encore.\n\nGrâce a notre vaste et croissante collection de projets, qui couvre de nombreuses disciplines et sujets à travers les sciences et les sciences humaines, il y a une place pour que tout le monde explore, apprenne et s\'amuse chez Zooniverse. Pour vous porter volontaire, allez simplement sur la page [Projets](/projets), choisissez-en un qui vous plait et commencez.',
-      accelerateResearch: '### We accelerate important research by working together\n\nThe major challenge of 21st century research is dealing with the flood of information we can now collect about the world around us. Computers can help, but in many fields the human ability for pattern recognition — and our ability to be surprised — makes us superior. With the help of Zooniverse volunteers, researchers can analyze their information more quickly and accurately than would otherwise be possible, saving time and resources, advancing the ability of computers to do the same tasks, and leading to faster progress and understanding of the world, getting to exciting results more quickly.\n\nOur projects combine contributions from many individual volunteers, relying on a version of the ‘wisdom of crowds’ to produce reliable and accurate data. By having many people look at the data we often can also estimate how likely we are to make an error. The product of a Zooniverse projects is often exactly what’s needed to make progress in many fields of research.',
-      discoveries: '### Volunteers and professionals make real discoveries together\n\nZooniverse projects are constructed with the aim of converting volunteers\' efforts into measurable results. These projects have produced a large number of [published research papers](/about/publications), as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have even made completely unexpected and scientifically significant discoveries.\n\nA significant amount of this research takes place on the Zooniverse discussion boards, where volunteers can work together with each other and with the research teams. These boards are integrated with each project to allow for everything from quick hashtagging to in-depth collaborative analysis. There is also a central Zooniverse board for general chat and discussion about Zooniverse-wide matters.\n\nMany of the most interesting discoveries from Zooniverse projects have come from discussion between volunteers and researchers. We encourage all users to join the conversation on the discussion boards for more in-depth participation.'
+      accelerateResearch: '### Nous accélérons la recherche en travaillant ensemble\n\nLe défi majeur de la recherche au 21ème siècle est de gérer une quantité importante de données que nous pouvons collecter à propos du monde autour de nous. Les ordinateurs peuvent aider, mais dans de nombreux domaines les capacités humaines pour la reconnaissance de motifs - et notre capacité à être surpris -  nous rendent meilleurs. Avec l\'aide des volontaires de Zooniverse, les chercheurs peuvent analyser leurs données plus rapidement et plus précisément, gagner du temps et des ressources, améliorer la capacité des ordinateurs à effectuer les même tâches, et conduire à des progrès plus rapides et à une meilleure compréhension du monde, leur permettant d\'obtenir des résultats passionnants plus rapidement.\n\nNos projets combinent les contribution de nombreux volontaires individuels, reposant sur une idée de "sagesse des foules" pour produire des données fiables et précises. Lorsque plusieurs individus traitent le même groupe de données, cela permet aussi d\'estimer la probabilité de commettre une erreur. Le produit d’un projet Zooniverse est souvent exactement ce qui est nécessaire pour faire des progrès dans de nombreux domaines de recherche.',
+      discoveries: '### Les volontaires et les professionnels font ensemble de véritables découvertes\n\nLes projets Zooniverse sont créés dans le but de convertir les efforts des volontaires en résultats quantifiables. Ces projets ont produit un grand nombre [d\’articles scientifiques publiés](/about/publications), ainsi que plusieurs ensembles en open-source (Code source libre) de données analysées. Dans certains cas, les volontaires de Zooniverse ont même fait d\’importantes découvertes scientifiques totalement inattendues. \n\nUne partie importante de ces recherches ont lieu sur les forums de discussion Zooniverse, où les volontaires peuvent travailler ensemble et avec l\’équipe de chercheurs. Ces discussions sont intégrées dans le forum du projet pour permettre de contribuer facilement aux recherches et à l\’étiquetage d\’information (# ou hashtag) jusqu\’à une analyse collaborative plus détaillée. Il y a également un forum de discussion central de Zooniverse, pour les discussions à propos de Zooniverse en général.\n\nBeaucoup des découvertes les plus intéressantes faites sur des projets Zooniverse sont venues de discussion entre volontaires et chercheurs.  Nous encourageons tous les utilisateurs à joindre les discussions sur le forum pour une participation plus approfondie.'
+
     },
     publications: {
       nav: {
-        showAll: 'Show All',
-        space: 'Space',
-        physics: 'Physics',
-        climate: 'Climate',
-        humanities: 'Humanities',
+        showAll: 'Tout afficher',
+        space: 'Espace',
+        physics: 'Physique',
+        climate: 'Climat',
+        humanities: 'Sciences humaines',
         nature: 'Nature',
-        medicine: 'Medicine',
-        meta: 'Meta',
+        medicine: 'Médecine',
+        meta: 'Méta',
       },
       content: {
         header: {
-          showAll: 'All Publications'
+          showAll: 'Toutes les publications'
         },
-        submitNewPublication: 'To submit a new publication or update an existing one, please use [this form](https://docs.google.com/forms/d/e/1FAIpQLSdbAKVT2tGs1WfBqWNrMekFE5lL4ZuMnWlwJuCuNM33QO2ZYg/viewform). We aim to post links to published papers that can be accessed by the public. Articles accepted for publication but not yet published are also fine.'
+        submitNewPublication: 'Pour soumettre une nouvelle publication ou éditer une publication existante,  merci d\’utiliser [ce formulaire](https://docs.google.com/forms/d/e/1FAIpQLSdbAKVT2tGs1WfBqWNrMekFE5lL4ZuMnWlwJuCuNM33QO2ZYg/viewform). Notre objectif est de poster des liens vers des articles scientifiques publiés accessibles par tout le monde. Les articles acceptés pour publication mais pas encore publiés peuvent également être postés.'
       },
       publication: {
-        viewPublication: 'View publication.',
-        viewOpenAccess: 'View open access version.'
+        viewPublication: 'Voir la publication.',
+        viewOpenAccess: 'Voir la version libre d\'accès.'
       }
 
     },
     team: {
       nav: {
-        showAll: 'Show All',
+        showAll: 'Tout afficher',
         oxford: 'Oxford',
-        chicago: 'The Adler Planetarium',
+        chicago: 'Le Planétarium Adler',
         minnesota: 'Minnesota',
         portsmouth: 'Portsmouth',
-        california: 'California',
+        california: 'Californie',
         hilo: 'Hilo',
-        alumni: 'Alumni'
+        alumni: 'Anciens membres'
       },
       content: {
         header: {
@@ -633,60 +634,60 @@ export default {
       }
     },
     acknowledgements: {
-      title: '## Acknowledging the Zooniverse',
-      citation: '### Academic Citation',
-      instructions: 'Per the [Zooniverse Project Builder Policies](https://help.zooniverse.org/getting-started/lab-policies), all research publications using any data derived from Zooniverse approved projects (those listed on the [Zooniverse Projects page](/projects)) are required to acknowledge the Zooniverse and the Project Builder platform. To do so, please use the following text:',
+      title: '## Remercier Zooniverse',
+      citation: '### Citation Académique',
+      instructions: 'D\'après les [Règles d\'utilisation du Constructeur de projet Zooniverse](https://help.zooniverse.org/getting-started/lab-policies), toutes publications de recherche utilisant des données dérivées d\'un projet Zooniverse approuvé (ceux listés sur la page [Projets de Zooniverse](/projects)) sont requis de remercier Zooniverse et la plateforme de construction de projet. Pour ce faire, merci d\'utiliser le texte suivant:',
       supportText: '*This publication uses data generated via the [Zooniverse.org](https://www.zooniverse.org/) platform, development of which is funded by generous support, including a Global Impact Award from Google, and by a grant from the Alfred P. Sloan Foundation.*',
-      publicationRequest: 'We ask that all researchers making use of the Zooniverse Project Builder platform in any way also consider including the above acknowledgement in their publications.',
-      publicationShareForm: 'We strongly encourage project owners to report published accepted research publications using Zooniverse-produced data to us via [this form](https://docs.google.com/forms/d/e/1FAIpQLSdbAKVT2tGs1WfBqWNrMekFE5lL4ZuMnWlwJuCuNM33QO2ZYg/viewform). You can find a list of publications written using the Zooniverse on our [Publications page](publications).',
-      questions: 'If you have any questions about how to acknowledge the Zooniverse, such as referencing a particular individual or custom code, please [get in touch](contact).',
-      press: '### Writing About Zooniverse in the Press',
-      projectURLs: 'When writing about specific Zooniverse projects in the press, please include the project URL (in print as well as digital editions).',
-      ZooURL: 'When writing about the Zooniverse in general, please include the [Zooniverse.org](https://www.zooniverse.org/) URL somewhere in your article.',
-      enquiries: 'If you are interested in interviewing a member of the team, please [get in touch](contact).'
+      publicationRequest: 'Nous demandons à tous les chercheurs utilisant la plateforme de construction de projet, de quelque manière que ce soit, d\’envisager également d\’inclure le texte de remerciement ci-dessus dans leurs publications.',
+      publicationShareForm: 'Nous encourageons fortement les propriétaires de projet à nous faire part de leurs publications acceptées utilisant des données provenant de Zooniverse via [ce formulaire](https://docs.google.com/forms/d/e/1FAIpQLSdbAKVT2tGs1WfBqWNrMekFE5lL4ZuMnWlwJuCuNM33QO2ZYg/viewform). Vous pouvez trouver une liste des publications scientifiques utilisant des données Zooniverse sur notre page [Publications](publications).',
+      questions: 'Si vous avez d\'autres questions sur la façon dont remercier Zooniverse, par exemple comment remercier un individu particulier ou un code sur mesure, merci de [nous contacter](contact).',
+      press: '### Ecire à propos de Zooniverse dans la Presse',
+      projectURLs: 'Lorsque vous écrivez un article de presse à propos d\'un projet Zooniverse en particulier, merci d\'inclue l\'adresse du site internet du projet (dans les éditions imprimées et numériques).',
+      ZooURL: 'Lorsque vous écrivez un article à propos de Zooniverse en général, merci d\'inclure l\'adresse du site internet [Zooniverse.org](https://www.zooniverse.org/) dans votre article.',
+      enquiries: 'Si vous souhaitez vous entretenir avec un membre de l\'équipe, merci de [nous contacter](contact).'
     },
     contact: {
-      title: '## Contact & Social Media',
-      discussionBoards: 'Most of the time, the best way to reach the Zooniverse team, or any project teams, especially about any project-specific issues, is through the discussion boards.',
-      email: 'If you need to contact the Zooniverse team about a general matter, you can also send an email to the team at [contact@zooniverse.org](mailto:contact@zooniverse.org). Please understand that the Zooniverse team is relatively small and very busy, so unfortunately we cannot reply to all of the emails we receive.',
-      collaborating: 'If you are interested in collaborating with the Zooniverse, for instance on a custom-built project, please email [collab@zooniverse.org](mailto:collab@zooniverse.org). (Note that our [Project Builder](/lab) offers an effective way to set up a new project without needing to contact the team!)',
-      pressInquiries: 'For press inquires, please contact the Zooniverse directors Chris Lintott at [chris@zooniverse.org](mailto:chris@zooniverse.org) or +44 (0) 7808 167288 or Laura Trouille at [trouille@zooniverse.org](mailto:trouille@zooniverse.org) or +1 312 322 0820.',
-      dailyZoo: 'If you want to keep up to date with what\'s going on across the Zooniverse and our latest results, check out the [Daily Zooniverse](http://daily.zooniverse.org/) or the main [Zooniverse blog](http://blog.zooniverse.org/). You can also follow the Zooniverse on [Twitter](http://twitter.com/the_zooniverse), [Facebook](http://facebook.com/therealzooniverse), and [Google+](https://plus.google.com/+ZooniverseOrgReal).'
+      title: '## Contact & Réseaux Sociaux',
+      discussionBoards: 'La plupart du temps, le meilleur moyen de contacter un membre de l\’équipe Zooniverse, ou de l\’équipe de n\’importe quel projet, plus spécifiquement à propos de problèmes en lien avec le projet,  est de poster un message sur le forum Zooniverse ou sur le forum du projet concerné.',
+      email: 'Si vous avez besoin de contacter un membre de l\’équipe Zooniverse à propos d\’un sujet général, vous pouvez aussi envoyé un mail à [contact@zooniverse.org](mailto:contact@zooniverse.org). Notez que l\’équipe Zooniverse est relativement petite et très occupées, il nous est donc malheureusement impossible de répondre à tous les mails que nous recevons et vous remercions de votre compréhension.',
+      collaborating: 'Si vous souhaitez collaborer avec Zooniverse, par exemple pour un projet construit sur demande, merci d’envoyer un mail à [collab@zooniverse.org](mailto:collab@zooniverse.org). (Notez que notre [Constructeur de projet](/lab) offre une façon efficace pour mettre en place un nouveau projet sans avoir à contacter notre équipe !)',
+      pressInquiries: 'Pour les demandes de la part de la presse, merci de contacter les directeurs de Zooniverse, Chris Lintott par mail à [chris@zooniverse.org](mailto:chris@zooniverse.org) ou par téléphone au +44 (0) 7808 167288 ou Laura Trouille par mail à [trouille@zooniverse.org](mailto:trouille@zooniverse.org) ou par téléphone au +1 312 322 0820.',
+      dailyZoo: 'Si vous voulez être informé de ce qu\’il se passe sur Zooniverse et de nos derniers résultats, consultez notre journal, le [Daily Zooniverse](http://daily.zooniverse.org/) ou le [blog Zooniverse](http://blog.zooniverse.org/). Vous pouvez aussi suivre Zooniverse sur [Twitter](http://twitter.com/the_zooniverse), [Facebook](http://facebook.com/therealzooniverse), et [Google+](https://plus.google.com/+ZooniverseOrgReal).'
     },
     faq: {
-      title: '## Frequently Asked Questions',
-      whyNeedHelp: '- **Why do researchers need your help? Why can\'t computers do these tasks?**\nHumans are better than computers at many tasks. For most Zooniverse projects, computers just aren’t good enough to do the required task, or they may miss interesting features that a human would spot - this is why we need your help. Some Zooniverse projects are also using human classifications to help train computers to do better at these research tasks in the future. When you participate in a Zooniverse project, you are contributing to real research.',
-      amIDoingThisRight: '- **How do I know if I\'m doing this right?**\nFor most of the subjects shown in Zooniverse projects, the researchers don\'t know the correct answer and that\'s why they need your help. Human beings are really good at pattern recognition tasks, so generally your first guess is likely the right one. Don’t worry too much about making an occasional mistake - more than one person will review each image, video or graph in a project. Most Zooniverse projects have a Help button, a Frequently Asked Questions (FAQ) page, and a Field Guide with more information to guide you when classifying.',
-      whatHappensToClassifications: '- **What happens to my classification after I submit it?**\nYour classifications are stored in the Zooniverse\'s secure online database. Later on a project\'s research team accesses and combines the multiple volunteer assessments stored for each subject, including your classifications, together. Once you have submitted your response for a given subject image, graph, or video, you can\'t go back and edit it. Further information can be found on the [Zooniverse User Agreement and Privacy Policy page](/privacy).',
-      accountInformation: '- **What does the Zooniverse do with my account information?**\nThe Zooniverse takes very seriously the task of protecting our volunteer\'s personal information and classification data. Details about these efforts can be found on the [Zooniverse User Agreement and Privacy Policy page](/privacy) and the [Zooniverse Security page](/security).',
-      featureRequest: '- **I have a feature request or found a bug; who should I talk to/how do I report it?**\nYou can post your suggestions for new features and report bugs via the [Zooniverse Talk](/talk) or through the [Zooniverse Software repository](https://github.com/zooniverse/Panoptes-Front-End/issues).',
-      hiring: '- **Is the Zooniverse hiring?**\nThe Zooniverse is a collaboration between institutions from the United Kingdom and the United States; all of our team are employed by one or the other of these partner institutions. Check out the [Zoonvierse jobs page](https://jobs.zooniverse.org/) to find out more about employment opportunities within the Zooniverse.',
-      howToAcknowledge: '- **I\'m a project owner/research team member, how do I acknowledge the Zooniverse and the Project Builder Platform in my paper, talk abstract, etc.?**\nYou can find more details on how to cite the Zooniverse in research publications using data derived from use of the Zooniverse Project Builder on our [Acknowledgements page](/about/acknowledgements).',
-      browserSupport: '- **What browser version does Zooniverse support?**\nWe support major browsers up to the second to last version.',
-      furtherHelp: 'Didn\'t find the answer to your question? Visit the [Zooniverse Solutions webpage](https://zooniverse.freshdesk.com/support/solutions), ask on [Zooniverse Talk](/talk) or [get in touch](/about/contact).'
+      title: '## Foire Aux Questions',
+      whyNeedHelp: '- **Pourquoi les chercheurs ont besoin de vous ? Pourquoi les ordinateurs ne peuvent pas effectuer ces tâches ?**\nLes humains sont meilleurs que les ordinateurs dans de nombreuses tâches. Pour la plupart des projets Zooniverse, les ordinateurs ne sont simplement pas assez bons pour effectuer les tâches requises, ou pourraient louper des détails intéressants qu\’un humain pourrait voir – c\’est pourquoi nous avons besoin de votre aide. Certains projets Zooniverse ont aussi besoin de l\’aide d\’humain pour effectuer des classifications qui aident ensuite à entrainer les ordinateurs à être meilleurs dans ces tâches pour les recherches futures. Lorsque vous participez à un projet Zooniverse, vous contribuez à de la véritable recherche.',
+      amIDoingThisRight: '- **Comment savoir si je fais ça correctement ?**\nPour la plupart des activités des projets Zooniverse, les chercheurs ne savent pas quelle est la bonne réponse et c\’est pour cette raison que nous avons besoin de votre aide. Les humains sont très bons pour reconnaître des motifs, donc généralement votre première idée est bonne. N\’ayez pas peur de faire des erreurs occasionnelles – plus d\’une personne vont voir et classifier chaque image, vidéo ou graphique d\’un projet. La plupart des projet Zooniverse ont aussi un bouton Aide, une page de Foire Aux Questions (FAQ) et un Guide de Terrain contenant plus d\’informations pour vous aider lorsque vous classifiez.',
+      whatHappensToClassifications: '- **Que ce passe-t-il lorsque je soumets une classification ?**\nVotre classification est stockée dans la base de donnée en ligne sécurisée de Zooniverse. Plus tard, les membres de l’équipe de recherche du projet accèdent et combinent les classifications de tous les volontaires, y compris la vôtre, pour chaque image, vidéo ou graphique. Une fois que vous avez soumis une classification pour une image, une vidéo ou un graphique, vous ne pourrez pas revenir en arrière et changer votre classification. Plus d\’information peuvent être trouvé sur la page Zooniverse [Accord d\'utilisateur et politique de confidentialité](/privacy).',
+      accountInformation: '- **Qu\’est ce que Zooniverse fait avec mes informations personnelles ?**\nZooniverse prend très au sérieux la protection des informations personnelles des volontaires ainsi que des données de classification. Les détails à propos de ces efforts peuvent être trouvés sur la page Zooniverse [Accord d\'utilisateur et politique de confidentialité](/privacy) et la page Zooniverse [Sécurité](/security).',
+      featureRequest: '- **J\’ai une demande à propos d\’une fonctionnalité du site ou j\’ai trouvé un bug ; qui dois-je contacter/comment le reporter ?**\nVous pouvez poster vos suggestions pour de nouvelles fonctionnalités ou reporter un bug ou un problème sur le [forum Zooniverse](/talk) ou via le [dépôt de logiciel Zooniverse](https://github.com/zooniverse/Panoptes-Front-End/issues).',
+      hiring: '- **Est-ce que Zooniverse embauche ?**\nZooniverse est une collaboration entre des institutions du Royaume-Uni et des Etats-Unis ; toutes nos équipes sont employées par une de nos institutions partenaires.  Allez voir la page [Carrières de Zoonvierse](https://jobs.zooniverse.org/) pour en savoir plus sur les opportunités d\'emploi à Zooniverse.',
+      howToAcknowledge: '- **Je suis un propriétaire de projet/un membre d’une équipe de recherche, comment remercier Zooniverse et la plateforme de construction de projet dans mon article scientifique, mon résumé de conférence, etc. ?**\nVous pouvez trouvez les informations concernant la citation de Zooniverse dans vos articles scientifiques qui utilisent des données dérivées d\’un projet construit avec Zooniverse sur la page [Remerciements](/about/acknowledgements).',
+      browserSupport: '- **Quels versions de navigateur est pris en charge par Zooniverse ?**\nNous prenons en charge les navigateurs majeurs jusqu\'à l\’avant dernière ou la dernière version disponible.',
+      furtherHelp: 'Vous n\’avez pas trouvé de réponse à votre question ? Rendez vous sur la page [Solutions de Zooniverse](https://zooniverse.freshdesk.com/support/solutions), posez votre question sur le [forum Zooniverse](/talk) ou [contactez-nous](/about/contact).'
     },
     resources: {
-      title: '## Resources',
-      filler: 'Useful downloads and guidelines for talking about the Zooniverse.',
-      introduction: '### Brand Materials',
-      officialMaterials: '[Download official Zooniverse logos](https://github.com/zooniverse/Brand/tree/master/style%%20guide/logos). Our official color is teal hex `#00979D` or `RGBA(65, 149, 155, 1.00)`.',
-      printables: '[Download printable handouts, posters, and other ephemera](https://github.com/zooniverse/Brand/tree/master/style%%20guide/downloads). If you have specific needs not addressed here, please [let us know](/about/contact).',
-      press: '### Press Information',
-      tips: 'Tips for writing about the Zooniverse in the press',
-      listOne: '- Please always include URLs when writing about specific projects. If writing generally about the Zooniverse, please include www.zooniverse.org somewhere in your article. Check out the [Acknowledgements page](/about/acknowledgements) for more details about how to correctly acknowledge the Zooniverse.',
-      listTwo: '- Please note: we are a platform for people-powered research, not a company or non-profit.',
-      listThree: '- If you have questions about the Zooniverse and would like to speak to a member of our team, please [contact us](/about/contact).'
+      title: '## Ressources',
+      filler: 'Téléchargements utiles et lignes directrices pour parler de Zooniverse.',
+      introduction: '### Matériaux de marque',
+      officialMaterials: '[Téléchargez le logo officiel de Zooniverse](https://github.com/zooniverse/Brand/tree/master/style%%20guide/logos). Notre couleur officielle est bleu canard: hex `#00979D` or `RGBA(65, 149, 155, 1.00)`.',
+      printables: '[Téléchargez des cartes, posters et d\'autres documents éphémères à imprimer](https://github.com/zooniverse/Brand/tree/master/style%%20guide/downloads). Si vous avez des besoins spécifiques, merci de [nous contacter](/about/contact).',
+      press: '### Informations pour la presse',
+      tips: 'Conseils pour écrire à propos de Zooniverse dans la presse',
+      listOne: '- Merci d\’inclure l\’adresse internet spécifique au projet lorsque vous parlez d\’un projet particulier. Si vous parlez de Zooniverse en général, merci d\’inclure www.zooniverse.org dans votre texte.  Allez voir la page [Remerciements](/about/acknowledgements) pour plus de détails sur la façon de citer correctement Zooniverse.',
+      listTwo: '- Merci de noter que nous sommes une plateforme de recherche participative, et non une entreprise ou un organisme à but non-lucratif.',
+      listThree: '- Si vous avez des questions à propos de Zooniverse et souhaitez parler à un membre de notre équipe, merci de [nous contacter](/about/contact).'
     }
   },
   getInvolved: {
     index: {
-      title: 'Get Involved',
+      title: 'S\'impliquer',
       nav: {
-        volunteering: 'Volunteering',
+        volunteering: 'Etre volontaire',
         education: 'Education',
-        callForProjects: 'Call for Projects',
-        collections: 'Collections',
-        favorites: 'Favorites'
+        callForProjects: 'Appel à projets',
+        collections: 'Collections d\'images',
+        favorites: 'Favoris'
       }
     },
     callForProjects: {
@@ -727,33 +728,33 @@ export default {
       }
     },
     education: {
-      title: '## Education in the Zooniverse',
-      becomeCitizenScientist: 'As a volunteer on these websites, both you and your students can become citizen scientists and citizen researchers, participating in real science and other research. If you or your students think you have make a mistake, don’t worry; even the researchers make mistakes. These projects are set up to have more than one volunteer analyzing each piece of data, thereby eliminating the vast majority of human error. Mistakes are a part of the process, and can even help us evaluate the difficulty of the data. As long as everyone does their best, they are helping!',
-      resources: '### Resources for educators using Zooniverse',
-      zooTeach: '- [ZooTeach](http://www.zooteach.org/) is a repository of lessons and resources for teachers. At ZooTeach, you will find a variety of resources for education, including: guides to projects for students and teachers, teacher-created presentations designed to introduce students to a particular project, and lessons developed to connect your students to projects and research within the context of things they already know.',
-      educationPages: '- Many Zooniverse projects have their own education pages with additional resources for teachers. Resources may include a video tutorial of how to use the project, other helpful documents and videos about the classification process, and education resources related to the research behind the project.',
-      joinConversationTitle: '### Take part in the conversation',
-      joinConversationBody: 'Keep up with the latest Zooniverse educational efforts on the [Zooniverse Blog](http://blog.zooniverse.org/) or by following [&#64;zooteach](https://twitter.com/ZooTeach) on Twitter. You can also talk with other Zooniverse educators and peers interested in using people-powered research in all sorts of learning environments on the [Zooniverse Education Talk board](http://zooniverse.org/talk/16).',
-      howEducatorsUseZooniverse: '### How are educators using Zooniverse?',
-      inspiration: 'Looking for a little inspiration? Here are some ways educators have used Zooniverse projects and educational resources:',
+      title: '## L\'éducation avec Zooniverse',
+      becomeCitizenScientist: 'En tant que volontaire sur les projets Zooniverse, vous et vos élèves pouvez devenir des citoyens  scientifiques et des citoyens chercheurs, participant à de vraies recherches scientifiques et dans d\’autres domaines. Si vous ou vos élèves pensez que vous avez fais une erreur, ne vous inquietez pas, même les chercheurs font des erreurs. Ces projets sont fait de façon à ce que plusieurs volontaires classifient chaque image, vidéo ou graphique du projet, ce qui permet d\’éliminer la grande majorité des erreurs humaines. Les erreurs font parti du jeu et peuvent même nous aider à évaluer la difficulté de la tâche demandée. Tant que toutes les personnes font de leur mieux,  ils aident !',
+      resources: '### Ressources pour les professeurs utilisant Zooniverse',
+      zooTeach: '- [ZooTeach](http://www.zooteach.org/) est un site collectant des leçons et ressources pour professeurs. Sur ZooTeach, vous trouverez une variété de ressources pour l\’éducation, incluant : des guides de projets pour étudiants et professeurs, des présentations crées par des professeur pour introduire un projet particulier à des élèves, et des leçons développées pour connecter vos élèves aux projets et recherches dans des contextes qu\’ils connaissent déjà.',
+      educationPages: '- De nombreux projets Zooniverse ont leur propre page éducative avec des ressources supplémentaires pour professeurs. Ces ressources peuvent inclure des tutoriel vidéo expliquant comment s\’impliquer dans le projet, ainsi que d\’autres documents utiles et des vidéos à propos de la classification, et des ressources expliquant  la recherche effectué grâce au projet Zooniverse.',
+      joinConversationTitle: '### Prenez part aux discussions',
+      joinConversationBody: 'Restez informé des derniers efforts de Zooniverse en matière d\'éducation en consultant le [Blog Zooniverse](http://blog.zooniverse.org/) ou en suivant [&#64;zooteach](https://twitter.com/ZooTeach) sur Twitter. Vous pouvez également discuter avec d\'autres professeurs qui souhaitent utiliser la recherche participative faite sur Zooniverse, d\'une façon ou d\'une autre, dans leur environnement éducatif sur le forum, sur la page de discussion [Education](http://zooniverse.org/talk/16) du forum Zooniverse.',
+      howEducatorsUseZooniverse: '### Comment les professeurs utilisent Zooniverse?',
+      inspiration: 'Vous cherchez un peu d/’inspiration ? Voici quelques façons dont les projets Zooniverse et les ressources éducatives ont été utilisés :',
       floatingForests: '- [Floating Forests: Teaching Young Children About Kelp](http://blog.zooniverse.org/2015/04/29/floating-forests-teaching-young-children-about-kelp/)',
       cosmicCurves: '- [Cosmic Curves: Investigating Gravitational Lensing at the Adler Planetarium](http://blog.zooniverse.org/2014/03/18/cosmic-curves-investigating-gravitational-lensing-at-the-adler-planetarium/)',
       snapshotSerengeti: '- [Snapshot Serengeti Brings Authentic Research Into Undergraduate Courses](http://blog.zooniverse.org/2014/02/19/snapshot-serengeti-brings-authentic-research-into-undergraduate-courses/)',
-      contactUs: 'We’d love to hear about how you’ve used Zooniverse with youth or adult learners! Please contact [education@zooniverse.org](mailto:education@zooniverse.org) if you have any interesting stories to share.'
+      contactUs: 'Nous aimerions savoir comment vous utilisez Zooniverse avec vos étudiants adultes ou enfants ! Merci de contacter [education@zooniverse.org](mailto:education@zooniverse.org) si vous souhaitez partager votre histoire.'
     },
     volunteering: {
-      title: '## How to Volunteer',
-      introduction: 'First of all, everyone who contributes to a Zooniverse project is a volunteer! We have a wonderful, global community who help us do what we do. The main ways of volunteering with us are helping us with classifications on data, being a beta tester on projects we\'ve yet to launch, and being a moderator for a project. For more information about any of these roles, just read below.',
-      projectVolunteeringTitle: '### Volunteer on a Project',
-      projectVolunteeringDescription: 'Volunteering on a project is the easiest and most common way of volunteering. We always need volunteers to go onto our projects and classify the data contained in them. You can read more about what happens with the classifications and how it helps the scientific community and the progress of science on the [About](/about) page.',
-      projectLink: 'There is no minimum time requirement needed; do as much or as little as you\'d like. To get started as a classifications volunteer, just to go to the [Projects](/projects) page, have a look through, find one you like the look of, and get stuck in!',
-      betaTesterTitle: '### Volunteer as a Beta Tester',
-      betaTesterDescription: 'Volunteers also help us test projects before they are launched to check that they work properly. This involves working through some classifications on the beta project to check that it works, looking for any bugs, and filling out a questionnaire at the end. This helps us find any issues in the project that need resolving and also assess how suitable the project is for the Zooniverse. You can read some guidelines on what makes a project suitable on the [Policies](https://help.zooniverse.org/getting-started/lab-policies) page, under \'Rules and Regulations\'.',
-      betaTesterSignUp: 'To sign up as a beta tester, go to [www.zooniverse.org/settings/email](/settings/email) and tick the box relating to beta testing. We\'ll then send you emails when a project is ready to be tested. You can change your email settings any time you want using the [same email page](/settings/email) and unticking the box.',
-      projectModeratorTitle: '### Volunteer as a Project Moderator',
-      projectModeratorBody: 'Volunteer moderators have extra permissions in the Talk discussion tool for a particular project. They help moderate discussions and act as a point of contact for the project. Moderators are selected by the project owner. If you\'re interested in becoming a moderator on a project you\'re taking part in, go to the project\'s About page and get in touch with the researcher.',
-      furtherInformationTitle: '### Further Information',
-      contactUs: 'If you\'d like any more information on any of these different roles, contact us via the [Contact Us](/about/contact) page.'
+      title: '## Comment devenir volontaire',
+      introduction: 'Tout d\’abord il faut savoir que chaque personne contribuant à un projet Zooniverse est un volontaire ! Nous avons une merveilleuse communauté qui nous aide dans ce que nous faisons. Les principales façons d\’être un volontaire parmi nous est de nous aider dans les classifications de données, d\’être un beta testeur de projets qui ne sont pas encore lancés, ou d\’être un modérateur pour un projet. Pour avoir plus d\’information sur chacun de ces rôles, lisez la suite.',
+      projectVolunteeringTitle: '### Volontaire sur un projet',
+      projectVolunteeringDescription: 'Le volontariat sur un projet est la façon la plus facile et la plus commune d\’être volontaire chez Zooniverse. Nous avons toujours besoin de volontaire pour classifier les données contenues dans un projet. Vous pouvez lire plus d’informations sur ce qu\’il se passe lorsque vous classifiez, comment obtenir de l\’aide de la communauté scientifique et connaitre les progrès de la science sur la page [A propos](/about) page.',
+      projectLink: 'Il n\’y a pas de minimum de temps requis ; faites autant que vous le pouvez ou souhaitez. Pour commencer à classifier en temps que volontaire, allez simplement sur la page [Projets](/projects), regardez les projets disponible, trouvez celui qui vous plait le plus et commencez (n\’hésitez pas à en tester plusieurs)!',
+      betaTesterTitle: '### Volontaire comme Beta testeur',
+      betaTesterDescription: 'Les volontaires nous aident aussi à tester des projets avant qu\’ils soient lancés pour vérifier qu\’ils fonctionnent correctement. Ceci implique de faire quelques classifications sur la version beta du projet pour vérifier si ça fonctionne, chercher les potentiels bugs, et remplir un questionnaire. Ceci nous aide à trouver les problèmes dans les projets qui nécessitent d’être résolus et également d\’évaluer si le projet est adapté pour Zooniverse. Vous pouvez lire les règles qui font qu\’un projet est adapté sur la page [Policies](https://help.zooniverse.org/getting-started/lab-policies), sous \'Rules and Regulations\'.',
+      betaTesterSignUp: 'Pour vous enregistrer comme Beta testeur, allez sur [www.zooniverse.org/settings/email](/settings/email) et cochez la case lié aux beta testeurs. Nous vous enverrons un email lorsqu\’un projet sera prêt à être testé. Vous pouvez changer vos préférences et vous désabonner des emails pour beta testeurs en utilisant la [même page] (/settings/email) et en décochant la case.',
+      projectModeratorTitle: '### Volontaire comme modérateur',
+      projectModeratorBody: 'Les modérateurs volontaires ont des droits supplémentaires dans les outils du forum de discussion d\’un projet particulier. Ils peuvent modérer les discussions et agir comme contact pour le projet. Les modérateurs sont sélectionnés par le propriétaire du projet. Si vous souhaitez devenir modérateur d’un projet, allez sur la page « A propos » du projet et contactez les chercheurs.',
+      furtherInformationTitle: '### Plus d\’informations',
+      contactUs: 'Si vous souhaitez plus d\’informations sur les différents rôles des volontaires, merci de [nous contacter](/about/contact).'
     }
   },
   lab: {
@@ -976,28 +977,28 @@ export default {
   },
   userSettings: {
     account: {
-      displayName: 'Display name (required)',
-      displayNameHelp: 'How your name will appear to other users in Talk and on your Profile Page',
-      realName: 'Real name (optional)',
-      realNameHelp: 'Public; we’ll use this to give acknowledgement in papers, on posters, etc.',
+      displayName: 'Identifiant (requis)',
+      displayNameHelp: 'C\'est le nom qui apparaitra dant les forum de discussion et sur votre profil',
+      realName: 'Prénom et Nom (optionnel)',
+      realNameHelp: 'Publique; nous utiliserons ce nom dans les remerciements des articles scientifiques, sur des posters, etc.',
       changePassword: {
-        heading: 'Change your password',
-        currentPassword: 'Current password (required)',
-        newPassword: 'New password (required)',
-        tooShort: 'That’s too short',
-        confirmNewPassword: 'Confirm new password (required)',
-        doesntMatch: 'These don’t match',
-        change: 'Change'
+        heading: 'Changer de mot de passe',
+        currentPassword: 'Mot de passe actuel (requis)',
+        newPassword: 'Nouveau mot de passe (requis)',
+        tooShort: 'Votre mot de passe est trop court',
+        confirmNewPassword: 'Confirmez votre nouveau mot de passe (requis)',
+        doesntMatch: 'Les mots de passe ne correspondent pas',
+        change: 'Changer'
       }
     },
     profile: {
-      dropImage: 'Drop an image here (or click to select).',
-      changeAvatar: 'Change avatar',
-      avatarImageHelp: 'Drop an image here (square, less than %(size)s KB)',
-      clearAvatar: 'Clear avatar',
-      changeProfileHeader: 'Change profile header',
-      profileHeaderImageHelp: 'Drop an image here (any dimensions, less than %(size)s KB)',
-      clearHeader: 'Clear header'
+      dropImage: 'Glissez une image ici (ou cliquez pour sélectionner).',
+      changeAvatar: 'Changer d\'avatar',
+      avatarImageHelp: 'Glissez une image ici (carrée, moins de %(size)s KB)',
+      clearAvatar: 'Supprimer l\'avatar',
+      changeProfileHeader: 'Changer d/image d\'en-tête du profil',
+      profileHeaderImageHelp: 'Glissez une image ici (n\'importe quelles dimensions, moins de %(size)s KB)',
+      clearHeader: 'Supprimer l\'image d\'en-tête'
     }
   }
 };
