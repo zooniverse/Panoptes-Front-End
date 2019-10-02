@@ -31,7 +31,7 @@ export default class HomePage extends React.Component {
       featuredProject: null,
       promotedProjects: [],
       screenWidth: 0,
-      volunteerCount: 1500000
+      volunteerCount: 0
     };
 
     this.showDialog = this.showDialog.bind(this);
