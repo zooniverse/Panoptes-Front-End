@@ -36,7 +36,7 @@ module.exports = createReactClass
           </Link>
         </div>
 
-        <Markdown>{@props.data.comment.body}</Markdown>
+        <Markdown project={@props.project}>{@props.data.comment.body}</Markdown>
 
         <p>Reports:</p>
         <ul>

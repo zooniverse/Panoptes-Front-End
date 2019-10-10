@@ -26,6 +26,7 @@ module.exports = createReactClass
     notification = @props.notification
     comment = @props.data.comment
     commentUser = @props.data.commentUser
+    project = @props.project
 
     if @props.data.comment
       <div className="conversation-message talk-module">
@@ -40,7 +41,7 @@ module.exports = createReactClass
           {comment.discussion_title}
         </Link>
 
-        <Markdown>{comment.body}</Markdown>
+        <Markdown project={project}>{comment.body}</Markdown>
 
         <div className="bottom">
           <Link className="user-profile-link" to="/users/#{commentUser.login}">
