@@ -20,7 +20,8 @@ export default class NotificationSection extends Component {
       loading: false,
       notificationData: [],
       notificationsMap: { },
-      page: 1
+      page: 1,
+      project: null
     };
     this.markAllRead = this.markAllRead.bind(this);
     this.markAsRead = this.markAsRead.bind(this);
@@ -37,6 +38,7 @@ export default class NotificationSection extends Component {
           this.setState({ error });
         })
         .then((project) => {
+          this.setState({ project })
           if (project.links.avatar) {
             apiClient.type('avatars').get(project.links.avatar.id)
               .then((avatar) => {
@@ -269,6 +271,7 @@ export default class NotificationSection extends Component {
                   key={item.notification.id}
                   markAsRead={this.markAsRead}
                   notification={item.notification}
+                  project={this.state.project}
                   user={this.props.user}
                 />);
             }
