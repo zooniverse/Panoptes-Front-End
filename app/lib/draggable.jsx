@@ -18,8 +18,6 @@ function Draggable(props) {
     const multiTouch = e.touches && e.touches.length > 1;
 
     if (!multiTouch) {
-      e.preventDefault();
-
       switch (e.type) {
         case 'mousedown':
           [moveEvent, endEvent] = ['mousemove', 'mouseup'];
@@ -46,6 +44,8 @@ function Draggable(props) {
         startHandler(eventCoords);
       }
     }
+    
+    e.preventDefault();
   }
 
   function handleDrag(e) {
@@ -76,6 +76,7 @@ function Draggable(props) {
   }
 
   const { children, disabled } = props;
+  const usePointer = !!window.PointerEvent;
   const className = classnames({
     [children.props.className]: true,
     draggable: true
@@ -83,9 +84,9 @@ function Draggable(props) {
   const childProps = {
     className,
     'data-disabled': disabled ? true : undefined,
-    onMouseDown: disabled ? undefined : handleStart,
-    onTouchStart: disabled ? undefined : handleStart,
-    onPointerDown: disabled ? undefined : handleStart
+    onMouseDown: (!disabled && !usePointer) ? handleStart : undefined,
+    onTouchStart: (!disabled && !usePointer) ? handleStart : undefined,
+    onPointerDown: (!disabled && usePointer) ? handleStart : undefined
   };
   return React.cloneElement(children, childProps);
 }
