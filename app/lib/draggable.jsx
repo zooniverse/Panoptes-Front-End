@@ -18,6 +18,8 @@ function Draggable(props) {
     const multiTouch = e.touches && e.touches.length > 1;
 
     if (!multiTouch) {
+      e.preventDefault();
+      
       switch (e.type) {
         case 'mousedown':
           [moveEvent, endEvent] = ['mousemove', 'mouseup'];
@@ -44,8 +46,6 @@ function Draggable(props) {
         startHandler(eventCoords);
       }
     }
-    
-    e.preventDefault();
   }
 
   function handleDrag(e) {
