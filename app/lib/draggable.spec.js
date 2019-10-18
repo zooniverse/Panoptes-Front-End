@@ -11,22 +11,23 @@ describe('Draggable', function () {
   let onStart;
   let onDrag;
   let onEnd;
-  before(function () {
-    onStart = sinon.stub();
-    onDrag = sinon.stub().callsFake((e, d) => d);
-    onEnd = sinon.stub();
-    wrapper = shallow(
-      <Draggable
-        onStart={onStart}
-        onDrag={onDrag}
-        onEnd={onEnd}
-      >
-        <p>Hello</p>
-      </Draggable>
-    );
-  });
   
-  function testDrag(startEvent, dragEvent, endEvent) {
+  function testDragEnabled(startEvent, dragEvent, endEvent) {
+    before(function () {
+      onStart = sinon.stub();
+      onDrag = sinon.stub().callsFake((e, d) => d);
+      onEnd = sinon.stub();
+      wrapper = shallow(
+        <Draggable
+          onStart={onStart}
+          onDrag={onDrag}
+          onEnd={onEnd}
+        >
+          <p>Hello</p>
+        </Draggable>
+      );
+    });
+
     describe('on ' + startEvent, function () {
       let fakeEvent;
       before(function () {
@@ -97,9 +98,81 @@ describe('Draggable', function () {
       });
     });
   }
-  testDrag('mousedown', 'mousemove', 'mouseup');
-  testDrag('touchstart', 'touchmove', 'touchend');
-  testDrag('pointerdown', 'pointermove', 'pointerup');
+
+  function testDragDisabled(startEvent, dragEvent, endEvent) {
+    before(function () {
+      onStart = sinon.stub();
+      onDrag = sinon.stub().callsFake((e, d) => d);
+      onEnd = sinon.stub();
+      wrapper = shallow(
+        <Draggable
+          onStart={onStart}
+          onDrag={onDrag}
+          onEnd={onEnd}
+        >
+          <p>Hello</p>
+        </Draggable>
+      );
+    });
+
+    describe('on ' + startEvent, function () {
+      let fakeEvent;
+      before(function () {
+        document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
+          if (eventType === dragEvent) handleDrag = handler;
+          if (eventType === endEvent) handleEnd = handler;
+        });
+        document.body.removeEventListener = sinon.stub();
+        fakeEvent = {
+          type: startEvent,
+          preventDefault: sinon.stub(),
+          pageX: 50,
+          pageY: 30
+        };
+        wrapper.find('p').simulate(startEvent, fakeEvent);
+      });
+      after(function () {
+        onStart.resetHistory();
+        onDrag.resetHistory();
+        onEnd.resetHistory();
+      });
+      it('should not cancel the default event', function () {
+        expect(fakeEvent.preventDefault.callCount).to.equal(0);
+      });
+      it('should not add two event listeners', function () {
+        expect(document.body.addEventListener.callCount).to.equal(0);
+      });
+      it('should not add a listener for ' + dragEvent, function () {
+        expect(document.body.addEventListener.calledWith(dragEvent)).to.be.false;
+      });
+      it('should not add a listener for ' + endEvent, function () {
+        expect(document.body.addEventListener.calledWith(endEvent)).to.be.false;
+      });
+      it('should not call the onStart callback', function () {
+        expect(onStart.callCount).to.equal(0);
+      });
+    });
+  }
+
+  describe('with no support for pointer events', function () {
+    testDragEnabled('mousedown', 'mousemove', 'mouseup');
+    testDragEnabled('touchstart', 'touchmove', 'touchend');
+    testDragDisabled('pointerdown', 'pointermove', 'pointerup');
+  });
+
+  describe('with support for pointer events', function () {
+    before(function () {
+      global.window.PointerEvent = {};
+    });
+
+    after(function () {
+      delete global.window.PointerEvent;
+    });
+    
+    testDragDisabled('mousedown', 'mousemove', 'mouseup');
+    testDragDisabled('touchstart', 'touchmove', 'touchend');
+    testDragEnabled('pointerdown', 'pointermove', 'pointerup');
+  })
 
   describe('when disabled', function () {
     before(function () {
@@ -107,11 +180,16 @@ describe('Draggable', function () {
         if (eventType === 'mousemove') handleDrag = handler;
         if (eventType === 'mouseup') handleEnd = handler;
       });
-      wrapper.setProps({ disabled: true });
-    });
-
-    after(function () {
-      wrapper.setProps({ disabled: false });
+      wrapper = shallow(
+        <Draggable
+          disabled
+          onStart={onStart}
+          onDrag={onDrag}
+          onEnd={onEnd}
+        >
+          <p>Hello</p>
+        </Draggable>
+      );
     });
 
     it('should not respond to mousedown', function () {
@@ -147,6 +225,18 @@ describe('Draggable', function () {
     }
 
     before(function () {
+      onStart = sinon.stub();
+      onDrag = sinon.stub().callsFake((e, d) => d);
+      onEnd = sinon.stub();
+      wrapper = shallow(
+        <Draggable
+          onStart={onStart}
+          onDrag={onDrag}
+          onEnd={onEnd}
+        >
+          <p>Hello</p>
+        </Draggable>
+      );
       document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
         if (eventType === 'touchmove') handleDrag = handler;
         if (eventType === 'touchend') handleEnd = handler;
