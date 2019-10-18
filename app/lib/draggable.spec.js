@@ -5,14 +5,15 @@ import { expect } from 'chai';
 import { Draggable } from './draggable';
 
 describe('Draggable', function () {
-  let wrapper;
-  let handleDrag;
-  let handleEnd;
-  let onStart;
-  let onDrag;
-  let onEnd;
   
   function testDragEnabled(startEvent, dragEvent, endEvent) {
+    let wrapper;
+    let handleDrag = () => false;
+    let handleEnd = () => false;
+    let onStart;
+    let onDrag;
+    let onEnd;
+
     before(function () {
       onStart = sinon.stub();
       onDrag = sinon.stub().callsFake((e, d) => d);
@@ -100,6 +101,12 @@ describe('Draggable', function () {
   }
 
   function testDragDisabled(startEvent, dragEvent, endEvent) {
+    let wrapper;
+    let handleDrag = () => false;
+    let handleEnd = () => false;
+    let onStart;
+    let onDrag;
+    let onEnd;
     before(function () {
       onStart = sinon.stub();
       onDrag = sinon.stub().callsFake((e, d) => d);
@@ -151,10 +158,34 @@ describe('Draggable', function () {
       it('should not call the onStart callback', function () {
         expect(onStart.callCount).to.equal(0);
       });
+      describe('on drag', function () {
+        before(function () {
+          const fakeEvent = {
+            pageX: 100,
+            pageY: 100
+          };
+          handleDrag(fakeEvent);
+        });
+        it('should not call the onDrag callback', function () {
+          expect(onDrag.callCount).to.equal(0);
+        });
+      });
+      describe('on drag end', function () {
+        before(function () {
+          handleEnd({});
+        });
+        it('should not call the onEnd callback', function () {
+          expect(onEnd.callCount).to.equal(0);
+        });
+      });
     });
   }
 
   describe('with no support for pointer events', function () {
+    before(function () {
+      delete global.window.PointerEvent;
+    });
+
     testDragEnabled('mousedown', 'mousemove', 'mouseup');
     testDragEnabled('touchstart', 'touchmove', 'touchend');
     testDragDisabled('pointerdown', 'pointermove', 'pointerup');
@@ -175,6 +206,7 @@ describe('Draggable', function () {
   })
 
   describe('when disabled', function () {
+    let wrapper;
     before(function () {
       document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
         if (eventType === 'mousemove') handleDrag = handler;
@@ -183,9 +215,9 @@ describe('Draggable', function () {
       wrapper = shallow(
         <Draggable
           disabled
-          onStart={onStart}
-          onDrag={onDrag}
-          onEnd={onEnd}
+          onStart={sinon.stub()}
+          onDrag={sinon.stub()}
+          onEnd={sinon.stub()}
         >
           <p>Hello</p>
         </Draggable>
@@ -207,6 +239,12 @@ describe('Draggable', function () {
   });
 
   describe('with multitouch gestures', function () {
+    let wrapper;
+    let handleDrag = () => false;
+    let handleEnd = () => false;
+    let onStart;
+    let onDrag;
+    let onEnd;
     function fakeEvent(type) {
       return {
         preventDefault: sinon.stub(),
