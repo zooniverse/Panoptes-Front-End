@@ -6,7 +6,7 @@ import { Draggable } from './draggable';
 
 describe('Draggable', function () {
   
-  function testDragEnabled(startEvent, dragEvent, endEvent) {
+  function testDragEnabled(startEvent, dragEvent, endEvent, usePointer) {
     let wrapper;
     let handleDrag = () => false;
     let handleEnd = () => false;
@@ -23,6 +23,7 @@ describe('Draggable', function () {
           onStart={onStart}
           onDrag={onDrag}
           onEnd={onEnd}
+          usePointer={usePointer}
         >
           <p>Hello</p>
         </Draggable>
@@ -100,7 +101,7 @@ describe('Draggable', function () {
     });
   }
 
-  function testDragDisabled(startEvent, dragEvent, endEvent) {
+  function testDragDisabled(startEvent, dragEvent, endEvent, usePointer) {
     let wrapper;
     let handleDrag = () => false;
     let handleEnd = () => false;
@@ -116,6 +117,7 @@ describe('Draggable', function () {
           onStart={onStart}
           onDrag={onDrag}
           onEnd={onEnd}
+          usePointer={usePointer}
         >
           <p>Hello</p>
         </Draggable>
@@ -182,27 +184,17 @@ describe('Draggable', function () {
   }
 
   describe('with no support for pointer events', function () {
-    before(function () {
-      delete global.window.PointerEvent;
-    });
 
-    testDragEnabled('mousedown', 'mousemove', 'mouseup');
-    testDragEnabled('touchstart', 'touchmove', 'touchend');
-    testDragDisabled('pointerdown', 'pointermove', 'pointerup');
+    testDragEnabled('mousedown', 'mousemove', 'mouseup', false);
+    testDragEnabled('touchstart', 'touchmove', 'touchend', false);
+    testDragDisabled('pointerdown', 'pointermove', 'pointerup', false);
   });
 
   describe('with support for pointer events', function () {
-    before(function () {
-      global.window.PointerEvent = {};
-    });
-
-    after(function () {
-      delete global.window.PointerEvent;
-    });
     
-    testDragDisabled('mousedown', 'mousemove', 'mouseup');
-    testDragDisabled('touchstart', 'touchmove', 'touchend');
-    testDragEnabled('pointerdown', 'pointermove', 'pointerup');
+    testDragDisabled('mousedown', 'mousemove', 'mouseup', true);
+    testDragDisabled('touchstart', 'touchmove', 'touchend', true);
+    testDragEnabled('pointerdown', 'pointermove', 'pointerup', true);
   })
 
   describe('when disabled', function () {

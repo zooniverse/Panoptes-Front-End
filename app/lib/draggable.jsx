@@ -75,8 +75,7 @@ function Draggable(props) {
     }
   }
 
-  const { children, disabled } = props;
-  const usePointer = !!window.PointerEvent;
+  const { children, disabled, usePointer } = props;
   const className = classnames({
     [children.props.className]: true,
     draggable: true
@@ -98,14 +97,16 @@ Draggable.propTypes = {
   ]),
   onDrag: PropTypes.func,
   onEnd: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  usePointer: PropTypes.bool
 };
 
 Draggable.defaultProps = {
   onStart: false,
   onDrag: () => false,
   onEnd: () => false,
-  disabled: false
+  disabled: false,
+  usePointer: !!window.PointerEvent
 };
 
 export default React.memo(Draggable);
