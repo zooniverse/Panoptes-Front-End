@@ -19,7 +19,7 @@ function Draggable(props) {
 
     if (!multiTouch) {
       e.preventDefault();
-
+      
       switch (e.type) {
         case 'mousedown':
           [moveEvent, endEvent] = ['mousemove', 'mouseup'];
@@ -75,7 +75,7 @@ function Draggable(props) {
     }
   }
 
-  const { children, disabled } = props;
+  const { children, disabled, usePointer } = props;
   const className = classnames({
     [children.props.className]: true,
     draggable: true
@@ -83,9 +83,9 @@ function Draggable(props) {
   const childProps = {
     className,
     'data-disabled': disabled ? true : undefined,
-    onMouseDown: disabled ? undefined : handleStart,
-    onTouchStart: disabled ? undefined : handleStart,
-    onPointerDown: disabled ? undefined : handleStart
+    onMouseDown: (!disabled && !usePointer) ? handleStart : undefined,
+    onTouchStart: (!disabled && !usePointer) ? handleStart : undefined,
+    onPointerDown: (!disabled && usePointer) ? handleStart : undefined
   };
   return React.cloneElement(children, childProps);
 }
@@ -97,14 +97,16 @@ Draggable.propTypes = {
   ]),
   onDrag: PropTypes.func,
   onEnd: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  usePointer: PropTypes.bool
 };
 
 Draggable.defaultProps = {
   onStart: false,
   onDrag: () => false,
   onEnd: () => false,
-  disabled: false
+  disabled: false,
+  usePointer: !!window.PointerEvent
 };
 
 export default React.memo(Draggable);
