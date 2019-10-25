@@ -310,6 +310,7 @@ export default class Tutorial extends React.Component {
                 <label key={thisStep} className="step-through-pip" title={`Step ${thisStep + 1}`}>
                   <input
                     type="radio"
+                    name="tutorial-step"
                     className="step-through-pip-input"
                     aria-label={`Tutorial step ${thisStep + 1} of ${totalSteps}`}
                     checked={thisStep === this.state.stepIndex}
