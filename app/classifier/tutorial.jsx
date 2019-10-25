@@ -102,14 +102,21 @@ export default class Tutorial extends React.Component {
         const tutorialContent = (
           <Provider store={store}>
             <Translations original={tutorial} type="tutorial">
-              <TutorialComponent tutorial={tutorial} media={mediaByID} projectPreferences={projectPreferences} user={user} geordi={geordi} />
+              <TutorialComponent
+                tutorial={tutorial}
+                media={mediaByID}
+                projectPreferences={projectPreferences}
+                user={user}
+                geordi={geordi}
+              />
             </Translations>
           </Provider>
         );
         Dialog.alert(tutorialContent, {
           className: 'tutorial-dialog',
           required: true,
-          closeButton: true
+          closeButton: true,
+          tag: 'section'
         }).catch((e) => {
           console.warn(e);
           return null; // We don't really care if the user canceled or completed the tutorial.
@@ -263,10 +270,17 @@ export default class Tutorial extends React.Component {
         lang={this.props.locale}
         style={tutorialStyle}
       >
-        <MediaCard className="tutorial-step" src={mediaCardSrc}>
-          <Markdown>{this.props.translation.steps[this.state.stepIndex].content}</Markdown>
-          <hr />          
-        </MediaCard>
+        <div
+          aria-live="polite"
+          className="tutorial-step"
+        >
+          <MediaCard
+            src={mediaCardSrc}
+          >
+            <Markdown>{this.props.translation.steps[this.state.stepIndex].content}</Markdown>
+            <hr />
+          </MediaCard>
+        </div>
         <p style={{ textAlign: 'center' }}>
           {(this.state.stepIndex === this.props.tutorial.steps.length - 1) ?
             <button type="submit" className="major-button">
@@ -295,12 +309,12 @@ export default class Tutorial extends React.Component {
                   <input
                     type="radio"
                     className="step-through-pip-input"
-                    aria-label={`Step ${thisStep + 1} of ${totalSteps}`}
+                    aria-label={`Tutorial step ${thisStep + 1} of ${totalSteps}`}
                     checked={thisStep === this.state.stepIndex}
                     autoFocus={thisStep === this.state.stepIndex}
                     onChange={this.goTo.bind(this, totalSteps, thisStep)}
                   />
-                  <span className="step-through-pip-number">{thisStep + 1}</span>
+                    <span className="step-through-pip-number"></span>
                 </label>
               )}
             </span>
