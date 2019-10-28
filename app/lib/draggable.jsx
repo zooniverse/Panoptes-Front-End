@@ -6,7 +6,7 @@ function Draggable(props) {
   let _previousEventCoords = {};
   let moveEvent;
   let endEvent;
-  const rootElement = document.querySelector('#panoptes-main-container') || document.body
+  const rootElement = document.querySelector('#panoptes-main-container') || document.body;
 
   function _rememberCoords(e) {
     _previousEventCoords = {
@@ -14,19 +14,18 @@ function Draggable(props) {
       y: e.pageY
     };
   }
-  
+
   function cancelEvent(e) {
-    console.log(e.type)
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   function handleStart(e) {
     const multiTouch = e.touches && e.touches.length > 1;
 
     if (!multiTouch) {
-      e.preventDefault()
-      
+      e.preventDefault();
+
       switch (e.type) {
         case 'mousedown':
           [moveEvent, endEvent] = ['mousemove', 'mouseup'];
@@ -44,7 +43,6 @@ function Draggable(props) {
       // Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
       rootElement.classList.add('dragging');
 
-      console.log('START', e.type, cancelEvent)
       rootElement.addEventListener(moveEvent, handleDrag);
       rootElement.addEventListener(endEvent, handleEnd);
 
@@ -61,7 +59,7 @@ function Draggable(props) {
     const multiTouch = e.touches && e.touches.length > 1;
     if (!multiTouch) {
       if (e.type && e.type === moveEvent) {
-        cancelEvent(e)
+        cancelEvent(e);
       }
       const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
       const d = {
@@ -70,7 +68,6 @@ function Draggable(props) {
       };
       props.onDrag(eventCoords, d);
       _rememberCoords(eventCoords);
-      return false;
     }
   }
 
@@ -79,7 +76,6 @@ function Draggable(props) {
     if (!multiTouch) {
       const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
 
-      console.log('END', e.type)
       rootElement.removeEventListener(moveEvent, handleDrag);
       rootElement.removeEventListener(endEvent, handleEnd);
 
