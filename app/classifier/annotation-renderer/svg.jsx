@@ -131,8 +131,10 @@ export default class SVGRenderer extends React.Component {
     });
 
     // pan/zoom should override any custom pointer event styles
+    // use touch-action to prevent default scrolling on touch screens
     if (this.props.panEnabled === true) {
       svgProps.style.pointerEvents = 'all';
+      svgProps.style.touchAction = 'pinch-zoom';
     }
 
     let children = [];
