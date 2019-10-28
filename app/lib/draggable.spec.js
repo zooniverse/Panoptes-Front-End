@@ -55,6 +55,9 @@ describe('Draggable', function () {
       it('should cancel the default event', function () {
         expect(fakeEvent.preventDefault.callCount).to.equal(1);
       });
+      it('should not cancel event bubbling', function () {
+        expect(fakeEvent.stopPropagation.callCount).to.equal(0);
+      });
       it('should add two event listeners', function () {
         expect(document.body.addEventListener.callCount).to.equal(2);
       });
@@ -68,10 +71,12 @@ describe('Draggable', function () {
         expect(onStart.callCount).to.equal(1);
       });
       describe('on drag', function () {
+        let fakeEvent
         before(function () {
-          const fakeEvent = {
+          fakeEvent = {
             preventDefault: sinon.stub(),
             stopPropagation: sinon.stub(),
+            type: dragEvent,
             pageX: 100,
             pageY: 100
           };
@@ -85,6 +90,12 @@ describe('Draggable', function () {
         });
         it('should pass the change in y', function () {
           expect(onDrag.returnValues[0].y).to.equal(70);
+        });
+        it('should cancel the default event', function () {
+          expect(fakeEvent.preventDefault.callCount).to.equal(1);
+        });
+        it('should cancel event bubbling', function () {
+          expect(fakeEvent.stopPropagation.callCount).to.equal(1);
         });
       });
       describe('on drag end', function () {
@@ -164,8 +175,9 @@ describe('Draggable', function () {
         expect(onStart.callCount).to.equal(0);
       });
       describe('on drag', function () {
+        let fakeEvent
         before(function () {
-          const fakeEvent = {
+          fakeEvent = {
             pageX: 100,
             pageY: 100
           };
