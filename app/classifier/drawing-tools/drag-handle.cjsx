@@ -2,8 +2,8 @@ React = require 'react'
 createReactClass = require 'create-react-class'
 Draggable = require('../../lib/draggable').default
 
-RADIUS = 4
-OVERSHOOT = 4
+RADIUS = if screen.width > 900 then 4 else 10
+OVERSHOOT = if screen.width > 900 then 4 else 10
 
 module.exports = createReactClass
   displayName: 'DragHandle'
