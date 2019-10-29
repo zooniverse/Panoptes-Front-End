@@ -6,6 +6,7 @@ function Draggable(props) {
   let _previousEventCoords = {};
   let moveEvent;
   let endEvent;
+  const rootElement = document.querySelector('#panoptes-main-container') || document.body;
 
   function _rememberCoords(e) {
     _previousEventCoords = {
@@ -14,12 +15,17 @@ function Draggable(props) {
     };
   }
 
+  function cancelEvent(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   function handleStart(e) {
     const multiTouch = e.touches && e.touches.length > 1;
 
     if (!multiTouch) {
       e.preventDefault();
-      
+
       switch (e.type) {
         case 'mousedown':
           [moveEvent, endEvent] = ['mousemove', 'mouseup'];
@@ -35,10 +41,10 @@ function Draggable(props) {
       _rememberCoords(eventCoords);
 
       // Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
-      document.body.classList.add('dragging');
+      rootElement.classList.add('dragging');
 
-      document.body.addEventListener(moveEvent, handleDrag);
-      document.body.addEventListener(endEvent, handleEnd);
+      rootElement.addEventListener(moveEvent, handleDrag);
+      rootElement.addEventListener(endEvent, handleEnd);
 
       // If there's no `onStart`, `onDrag` will be called on start.
       const startHandler = props.onStart || handleDrag;
@@ -46,11 +52,15 @@ function Draggable(props) {
         startHandler(eventCoords);
       }
     }
+    return false;
   }
 
   function handleDrag(e) {
     const multiTouch = e.touches && e.touches.length > 1;
     if (!multiTouch) {
+      if (e.type && e.type === moveEvent) {
+        cancelEvent(e);
+      }
       const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
       const d = {
         x: eventCoords.pageX - _previousEventCoords.x,
@@ -66,12 +76,12 @@ function Draggable(props) {
     if (!multiTouch) {
       const eventCoords = (e.touches && e.touches[0]) ? e.touches[0] : e;
 
-      document.body.removeEventListener(moveEvent, handleDrag);
-      document.body.removeEventListener(endEvent, handleEnd);
+      rootElement.removeEventListener(moveEvent, handleDrag);
+      rootElement.removeEventListener(endEvent, handleEnd);
 
       props.onEnd(eventCoords);
       _previousEventCoords = {};
-      document.body.classList.remove('dragging');
+      rootElement.classList.remove('dragging');
     }
   }
 

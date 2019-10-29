@@ -30,6 +30,7 @@ module.exports = createReactClass
       if task?.type is 'drawing'
         style:
           pointerEvents: 'all'
+          touchAction: 'pinch-zoom'
       else
         {}
 
