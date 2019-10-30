@@ -117,24 +117,20 @@ class Choice extends React.Component {
               {' '}
               {choice.confusionsOrder.map((otherChoiceID, i) => {
                 const otherChoice = this.props.task.choices[otherChoiceID] || { label: '', images: [] };
-                const currentChoiceTranslation = this.props.translation.choices[this.props.choiceID]
-                const autoFocus = !hasFocus && i === 0;
                 return (
                   <span key={otherChoiceID}>
                     <TriggeredModalForm
                       className="survey-task-confusions-modal"
-                      triggerProps={{ autoFocus }}
+                      triggerProps={{ autoFocus: !hasFocus && i === 0 }}
                       trigger={
                         <span className="survey-task-choice-confusion">
-                          {currentChoiceTranslation.label}
+                          {this.props.translation.choices[otherChoiceID].label}
                         </span>
                       }
                       style={{ maxWidth: '60ch' }}
                     >
                       <ImageFlipper images={otherChoice.images.map(filename => this.props.task.images[filename])} />
-                      <Markdown
-                        content={currentChoiceTranslation.confusions[otherChoiceID]}
-                      />
+                      <Markdown content={this.props.translation.choices[this.props.choiceID].confusions[otherChoiceID]} />
                       <div className="survey-task-choice-confusion-buttons" style={{ textAlign: 'center' }}>
                         <button
                           type="submit"
@@ -169,16 +165,12 @@ class Choice extends React.Component {
               const inputType = question.multiple ? 'checkbox' : 'radio';
               return (
                 <div key={questionId} className="survey-task-choice-question" data-multiple={question.multiple || null}>
-                  <div className="survey-task-choice-question-label">
-                    {translation.questions[questionId].label}
-                  </div>
+                <div className="survey-task-choice-question-label">{translation.questions[questionId].label}</div>
                   <div className="survey-task-choice-answers">
                     {question.answersOrder.map((answerId, i) => {
-                      /* eslint-disable multiline-ternary */
                       const isChecked = question.multiple ?
                         !!this.state.answers[questionId] && this.state.answers[questionId].indexOf(answerId) > -1 :
                         this.state.answers[questionId] === answerId;
-                      /* eslint-enable multiline-ternary */
                       const isFocused = this.state.focusedAnswer === `${questionId}/${answerId}`;
                       return (
                         <span key={answerId}>
