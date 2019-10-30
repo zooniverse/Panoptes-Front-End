@@ -36,7 +36,8 @@ export default class SurveyTask extends React.Component {
 
   static isAnnotationComplete(task, annotation) {
     const minRequiredAnswers = task.required ? 1 : 0;
-    return annotation.value.length >= minRequiredAnswers && !annotation._choiceInProgress;
+    const { _choiceInProgress } = annotation;
+    return annotation.value.length >= minRequiredAnswers && !_choiceInProgress;
   }
 
   constructor(props) {
@@ -101,7 +102,7 @@ export default class SurveyTask extends React.Component {
     onChange(newAnnotation);
   }
 
-  handleAnnotation(choice, answers, e) {
+  handleAnnotation(choice, answers) {
     const { filters } = this.state;
     const { annotation, onChange } = this.props;
 
@@ -130,10 +131,11 @@ export default class SurveyTask extends React.Component {
     const existingAnnotationValue = annotation.value
       && annotation.value.find(value => value.choice === selectedChoiceID);
 
+/* eslint-disable multiline-ternary */
     return (
       <div className="survey-task">
-        {(selectedChoiceID === '') ? (
-          <Chooser
+        {(selectedChoiceID === '') ?
+          (<Chooser
             task={task}
             filters={filters}
             onFilter={this.handleFilter}
@@ -142,9 +144,8 @@ export default class SurveyTask extends React.Component {
             annotation={annotation}
             focusedChoice={focusedChoice}
             translation={translation}
-          />
-        ) : (
-          <Choice
+          />) :
+          (<Choice
             annotation={annotation}
             annotationValue={existingAnnotationValue}
             task={task}
@@ -153,8 +154,8 @@ export default class SurveyTask extends React.Component {
             onCancel={this.clearSelection}
             onConfirm={this.handleAnnotation}
             translation={translation}
-          />
-        )}
+          />)
+        }
       </div>
     );
   }
