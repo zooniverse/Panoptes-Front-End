@@ -118,6 +118,7 @@ class Choice extends React.Component {
               {choice.confusionsOrder.map((otherChoiceID, i) => {
                 const otherChoice = this.props.task.choices[otherChoiceID] || { label: '', images: [] };
                 const currentChoiceTranslation = this.props.translation.choices[this.props.choiceID]
+                const otherChoiceTranslation = this.props.translation.choices[otherChoiceID]
                 const autoFocus = !hasFocus && i === 0;
                 return (
                   <span key={otherChoiceID}>
@@ -126,7 +127,7 @@ class Choice extends React.Component {
                       triggerProps={{ autoFocus }}
                       trigger={
                         <span className="survey-task-choice-confusion">
-                          {currentChoiceTranslation.label}
+                          {otherChoiceTranslation.label}
                         </span>
                       }
                       style={{ maxWidth: '60ch' }}
