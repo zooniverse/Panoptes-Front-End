@@ -95,7 +95,7 @@ class Choices extends React.Component {
     const columnsCount = this.howManyColumns(filteredChoices);
     const sortedFilteredChoices = sortIntoColumns(filteredChoices, columnsCount);
     const thumbnailSize = this.whatSizeThumbnails(sortedFilteredChoices);
-    const choiceNotPresent = this.props.focusedChoice.length === 0 ||
+    const choiceNotPresent = this.props.focusedChoice.length === 0 || 
       filteredChoices.indexOf(this.props.focusedChoice) === -1;
     return (
       <div className="survey-task-chooser-choices" data-thumbnail-size={thumbnailSize} data-columns={columnsCount}>
@@ -118,8 +118,6 @@ class Choices extends React.Component {
             src
           });
           const thumbnail = srcPath || '';
-          const chosenClassName = chosenAlready ? 'survey-task-chooser-choice-button-chosen' : '';
-          const className = `survey-task-chooser-choice-button ${chosenClassName}`;
           return (
             <button
               autoFocus={choiceId === this.props.focusedChoice}
@@ -128,7 +126,7 @@ class Choices extends React.Component {
               ref={button => this.choiceButtons.push(button)}
               tabIndex={tabIndex}
               type="button"
-              className={className}
+              className={`survey-task-chooser-choice-button ${chosenAlready ? 'survey-task-chooser-choice-button-chosen' : ''}`}
               onClick={this.props.onChoose.bind(null, choiceId)}
               onKeyDown={this.handleKeyDown.bind(this, choiceId)}
             >
