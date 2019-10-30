@@ -1,4 +1,4 @@
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
 import React from 'react';
@@ -31,7 +31,7 @@ describe('Choice', function () {
 
   describe('with single answer questions', function () {
     beforeEach(function () {
-      wrapper = shallow(<Choice
+      wrapper = mount(<Choice
         translation={task}
         task={task}
         annotation={annotation}
@@ -39,6 +39,16 @@ describe('Choice', function () {
         choiceID='ar'
       />);
       answer = wrapper.find('input[name="ho"][value="two"]');
+    });
+    it('should render the confusions', function () {
+      const confusions = wrapper.find('.survey-task-choice-confusion');
+      assert.equal(confusions.length, 2);
+    });
+    it('should render the confusions with appropriate labels', function () {
+      const confusionLabels = wrapper.find('.survey-task-choice-confusion');
+      confusionLabels.forEach(function (confusionLabel, i) {
+        assert.equal(confusionLabel.text(), task.choices[task.choices['ar'].confusionsOrder[i]].label);
+      });
     });
     it('should render radio buttons for answers', function () {
       const question = task.questions.ho;
