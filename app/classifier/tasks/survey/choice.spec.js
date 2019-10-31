@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
 import React from 'react';
@@ -29,27 +29,31 @@ describe('Choice', function () {
   let wrapper;
   let answer;
 
-  describe('with single answer questions', function () {
-    beforeEach(function () {
-      wrapper = mount(<Choice
-        translation={task}
-        task={task}
-        annotation={annotation}
-        annotationValue={annotationValue}
-        choiceID='ar'
-      />);
-      answer = wrapper.find('input[name="ho"][value="two"]');
-    });
-    it('should render the confusions', function () {
-      const confusions = wrapper.find('.survey-task-choice-confusion');
+  beforeEach(function () {
+    wrapper = shallow(<Choice
+      translation={task}
+      task={task}
+      annotation={annotation}
+      annotationValue={annotationValue}
+      choiceID='ar'
+    />);
+    answer = wrapper.find('input[name="ho"][value="two"]');
+  });
+
+  describe('with confused with options', function () {
+    it('should render confusions', function () {
+      const confusions = wrapper.find('.survey-task-confusions-modal');
       assert.equal(confusions.length, task.choices['ar'].confusionsOrder.length);
     });
     it('should render the confusions with appropriate labels', function () {
-      const confusionLabels = wrapper.find('.survey-task-choice-confusion');
-      confusionLabels.forEach(function (confusionLabel, i) {
-        assert.equal(confusionLabel.text(), task.choices[task.choices['ar'].confusionsOrder[i]].label);
+      const confusions = wrapper.find('.survey-task-confusions-modal');
+      confusions.forEach(function (confusion, i) {
+        assert.equal(confusion.dive().find('.survey-task-choice-confusion').text(), task.choices[task.choices['ar'].confusionsOrder[i]].label);
       });
     });
+  })
+
+  describe('with single answer questions', function () {
     it('should render radio buttons for answers', function () {
       const question = task.questions.ho;
       const answers = wrapper.find('input[name="ho"][type="radio"]');
