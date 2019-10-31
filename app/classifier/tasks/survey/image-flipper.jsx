@@ -52,7 +52,7 @@ class ImageFlipper extends React.Component {
                   className={`survey-task-image-flipper-pip ${index === this.state.frame ? 'active' : ''}`}
                 >
                   <input
-                    aria-label={`Example ${index + 1}`}
+                    aria-label={`View Example ${index + 1}`}
                     type="radio"
                     name="image-flipper"
                     autoFocus={index === 0}

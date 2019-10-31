@@ -41,12 +41,9 @@ describe('Choice', function () {
   });
 
   describe('with confused with options', function () {
-    it('should render confusions', function () {
-      const confusions = wrapper.find('.survey-task-confusions-modal');
-      assert.equal(confusions.length, task.choices['ar'].confusionsOrder.length);
-    });
     it('should render the confusions with appropriate labels', function () {
       const confusions = wrapper.find('.survey-task-confusions-modal');
+      assert.equal(confusions.length, task.choices['ar'].confusionsOrder.length);
       confusions.forEach(function (confusion, i) {
         assert.equal(confusion.dive().find('.survey-task-choice-confusion').text(), task.choices[task.choices['ar'].confusionsOrder[i]].label);
       });
