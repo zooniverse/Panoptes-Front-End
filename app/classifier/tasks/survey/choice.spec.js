@@ -42,7 +42,7 @@ describe('Choice', function () {
     });
     it('should render the confusions', function () {
       const confusions = wrapper.find('.survey-task-choice-confusion');
-      assert.equal(confusions.length, 2);
+      assert.equal(confusions.length, task.choices['ar'].confusionsOrder.length);
     });
     it('should render the confusions with appropriate labels', function () {
       const confusionLabels = wrapper.find('.survey-task-choice-confusion');
