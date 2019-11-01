@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import Dialog from 'modal-form/dialog';
@@ -8,6 +9,7 @@ import { Provider } from 'react-redux';
 import animatedScrollTo from 'animated-scrollto';
 import classnames from 'classnames';
 import MediaCard from '../components/media-card';
+import ModalFocus from '../components/modal-focus';
 
 import Translations from './translations';
 
@@ -82,28 +84,40 @@ export default class Tutorial extends React.Component {
         });
 
       awaitTutorialMedia.then((mediaByID) => {
-        const tutorialContent = (
-          <Provider store={store}>
-            <Translations original={tutorial} type="tutorial">
-              <TutorialComponent
-                tutorial={tutorial}
-                media={mediaByID}
-                projectPreferences={projectPreferences}
-                user={user}
-                geordi={geordi}
-              />
-            </Translations>
-          </Provider>
+        const container = document.createElement('div');
+        document.body.appendChild(container);
+        function closeTutorial() {
+          ReactDOM.unmountComponentAtNode(container);
+          container.parentNode.removeChild(container);
+        }
+        const tutorialDialog = (
+            <Dialog
+              className="tutorial-dialog"
+              closeButton={true}
+              required={true}
+              tag="section"
+              onCancel={closeTutorial}
+            >
+              <ModalFocus
+                onEscape={closeTutorial}
+              >
+                <Provider store={store}>
+                  <Translations original={tutorial} type="tutorial">
+                    <TutorialComponent
+                      tutorial={tutorial}
+                      media={mediaByID}
+                      projectPreferences={projectPreferences}
+                      user={user}
+                      geordi={geordi}
+                      onComplete={closeTutorial}
+                    />
+                  </Translations>
+                </Provider>
+              </ModalFocus>
+            </Dialog>
         );
-        Dialog.alert(tutorialContent, {
-          className: 'tutorial-dialog',
-          required: true,
-          closeButton: true,
-          tag: 'section'
-        }).catch((e) => {
-          console.warn(e);
-          return null; // We don't really care if the user canceled or completed the tutorial.
-        });
+
+        ReactDOM.render(tutorialDialog, container);
       });
     }
   }
@@ -113,6 +127,7 @@ export default class Tutorial extends React.Component {
     geordi: PropTypes.object,
     locale: PropTypes.string,
     media: PropTypes.shape({}),
+    onComplete: PropTypes.func,
     projectPreferences: PropTypes.shape({
       preferences: PropTypes.object
     }),
@@ -136,6 +151,7 @@ export default class Tutorial extends React.Component {
     defaultStepIndex: 0,
     geordi: {},
     media: {},
+    onComplete: () => true,
     projectPreferences: null,
     tutorial: {},
     user: null
@@ -285,7 +301,11 @@ export default class Tutorial extends React.Component {
         </div>
         <p style={{ textAlign: 'center' }}>
           {(this.state.stepIndex === this.props.tutorial.steps.length - 1) ?
-            <button type="submit" className="major-button">
+            <button
+              type="button"
+              className="major-button"
+              onClick={this.props.onComplete}
+            >
               <Translate content="classifier.letsGo" />
             </button> :
             <button type="button" className="standard-button" onClick={this.goNext.bind(this, totalSteps)}>
@@ -325,7 +345,8 @@ export default class Tutorial extends React.Component {
             <button
               type="button"
               className="step-through-direction step-through-next"
-              aria-label="Next step" title="Next"
+              aria-label="Next step"
+              title="Next"
               disabled={this.state.stepIndex === totalSteps - 1}
               onClick={this.goNext.bind(this, totalSteps)}
             >
