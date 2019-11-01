@@ -98,22 +98,24 @@ export default class Tutorial extends React.Component {
               tag="section"
               onCancel={closeTutorial}
             >
-              <ModalFocus
-                onEscape={closeTutorial}
-              >
-                <Provider store={store}>
-                  <Translations original={tutorial} type="tutorial">
-                    <TutorialComponent
-                      tutorial={tutorial}
-                      media={mediaByID}
-                      projectPreferences={projectPreferences}
-                      user={user}
-                      geordi={geordi}
-                      onComplete={closeTutorial}
-                    />
-                  </Translations>
-                </Provider>
-              </ModalFocus>
+              <div role='dialog'>
+                <ModalFocus
+                  onEscape={closeTutorial}
+                >
+                  <Provider store={store}>
+                    <Translations original={tutorial} type="tutorial">
+                      <TutorialComponent
+                        tutorial={tutorial}
+                        media={mediaByID}
+                        projectPreferences={projectPreferences}
+                        user={user}
+                        geordi={geordi}
+                        onComplete={closeTutorial}
+                      />
+                    </Translations>
+                  </Provider>
+                </ModalFocus>
+              </div>
             </Dialog>
         );
 
