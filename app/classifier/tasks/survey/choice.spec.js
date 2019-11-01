@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
 import React from 'react';
+import TriggeredModalForm from 'modal-form/triggered';
 import Choice from './choice';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
 
@@ -42,10 +43,11 @@ describe('Choice', function () {
 
   describe('with confused with options', function () {
     it('should render the confusions with appropriate labels', function () {
-      const confusions = wrapper.find('.survey-task-confusions-modal');
+      const confusions = wrapper.find(TriggeredModalForm);
       assert.equal(confusions.length, task.choices['ar'].confusionsOrder.length);
       confusions.forEach(function (confusion, i) {
-        assert.equal(confusion.dive().find('.survey-task-choice-confusion').text(), task.choices[task.choices['ar'].confusionsOrder[i]].label);
+        const triggerComponent = confusion.prop('trigger')
+        assert.equal(triggerComponent.props.children, task.choices[task.choices['ar'].confusionsOrder[i]].label);
       });
     });
   })
