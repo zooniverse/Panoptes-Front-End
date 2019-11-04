@@ -12,7 +12,8 @@ class Chooser extends React.Component {
       let rejected = false;
       Object.keys(this.props.filters).map((characteristicId) => {
         const valueId = this.props.filters[characteristicId];
-        if (choice.characteristics[characteristicId] && choice.characteristics[characteristicId].indexOf(valueId) === -1) {
+        const characteristic = choice.characteristics[characteristicId] || [];
+        if (characteristic.indexOf(valueId) === -1) {
           rejected = true;
         }
       });

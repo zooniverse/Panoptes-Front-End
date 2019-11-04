@@ -256,8 +256,10 @@ workflow = apiClient.type('workflows').create
           characteristics:
             pa: ['so', 'st']
             co: ['ta', 'br']
-          confusionsOrder: []
-          confusions: {}
+          confusionsOrder: ['aa','to']
+          confusions:
+            aa: 'They both start with “A”, so _some_ **dummies** get these two mixed up.'
+            to: 'They both have shells.'
 
         to:
           label: 'Tortoise'

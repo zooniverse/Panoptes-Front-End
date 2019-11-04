@@ -32,10 +32,13 @@ class ImageFlipper extends React.Component {
 
   render() {
     return (
-      <span className="survey-task-image-flipper">
+      <div
+        className="survey-task-image-flipper"
+      >
         {this.renderPreload()}
         <Thumbnail
-          alt={`Frame ${this.state.frame}`}
+          alt={`Example photo ${this.state.frame + 1}`}
+          aria-live="polite"
           src={this.props.images[this.state.frame]}
           className="survey-task-image-flipper-image"
           width={500}
@@ -49,19 +52,19 @@ class ImageFlipper extends React.Component {
                   className={`survey-task-image-flipper-pip ${index === this.state.frame ? 'active' : ''}`}
                 >
                   <input
+                    aria-label={`View Example ${index + 1}`}
                     type="radio"
                     name="image-flipper"
                     autoFocus={index === 0}
                     checked={index === this.state.frame}
                     onChange={this.handleFrameChange.bind(this, index)}
                   />
-                  {index + 1}
                 </label>
               )
             )
           }
         </div>
-      </span>
+      </div>
     );
   }
 }

@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
 import React from 'react';
+import TriggeredModalForm from 'modal-form/triggered';
 import Choice from './choice';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
 
@@ -29,17 +30,29 @@ describe('Choice', function () {
   let wrapper;
   let answer;
 
-  describe('with single answer questions', function () {
-    beforeEach(function () {
-      wrapper = shallow(<Choice
-        translation={task}
-        task={task}
-        annotation={annotation}
-        annotationValue={annotationValue}
-        choiceID='ar'
-      />);
-      answer = wrapper.find('input[name="ho"][value="two"]');
+  beforeEach(function () {
+    wrapper = shallow(<Choice
+      translation={task}
+      task={task}
+      annotation={annotation}
+      annotationValue={annotationValue}
+      choiceID='ar'
+    />);
+    answer = wrapper.find('input[name="ho"][value="two"]');
+  });
+
+  describe('with confused with options', function () {
+    it('should render the confusions with appropriate labels', function () {
+      const confusions = wrapper.find(TriggeredModalForm);
+      assert.equal(confusions.length, task.choices['ar'].confusionsOrder.length);
+      confusions.forEach(function (confusion, i) {
+        const triggerComponent = confusion.prop('trigger')
+        assert.equal(triggerComponent.props.children, task.choices[task.choices['ar'].confusionsOrder[i]].label);
+      });
     });
+  })
+
+  describe('with single answer questions', function () {
     it('should render radio buttons for answers', function () {
       const question = task.questions.ho;
       const answers = wrapper.find('input[name="ho"][type="radio"]');
