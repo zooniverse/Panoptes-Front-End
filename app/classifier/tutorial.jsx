@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import animatedScrollTo from 'animated-scrollto';
 import classnames from 'classnames';
 import MediaCard from '../components/media-card';
+import ModalFocus from '../components/modal-focus';
 
 import Translations from './translations';
 
@@ -29,32 +30,15 @@ function arrayToObject(array) {
 }
 
 export default class Tutorial extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.previousActiveElement = document.activeElement;
-    this.goPrevious = this.goPrevious.bind(this);
-    this.goNext = this.goNext.bind(this);
-    this.goTo = this.goTo.bind(this);
-    this.handleStep = this.handleStep.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-
-    this.state = {
-      stepIndex: props.defaultStepIndex
-    }
-  }
-
   static find(workflow) {
     // Prefer fetching the tutorial for the workflow, if a workflow is given.
     if (workflow) {
       return apiClient.type('tutorials').get({ workflow_id: workflow.id })
         .then((tutorials) => {
           // Backwards compatibility for null kind values. We assume these are standard tutorials.
-          const onlyStandardTutorials = tutorials.filter((tutorial) => {
-            return ['tutorial', null].includes(tutorial.kind);
-          });
+          const onlyStandardTutorials = tutorials.filter(tutorial => ['tutorial', null].includes(tutorial.kind));
           return onlyStandardTutorials[0];
-        })
+        });
     } else {
       return Promise.resolve();
     }
@@ -72,8 +56,10 @@ export default class Tutorial extends React.Component {
 
   static checkIfCompleted(tutorial, user, projectPreferences) {
     if (user) {
-      window.prefs = projectPreferences
-      if (projectPreferences && projectPreferences.preferences && projectPreferences.preferences.tutorials_completed_at) {
+      window.prefs = projectPreferences;
+      if (projectPreferences &&
+        projectPreferences.preferences &&
+        projectPreferences.preferences.tutorials_completed_at) {
         return Promise.resolve(!!projectPreferences.preferences.tutorials_completed_at[tutorial.id]);
       }
     }
@@ -86,10 +72,9 @@ export default class Tutorial extends React.Component {
 
     if (tutorial.steps.length !== 0) {
       const awaitTutorialMedia = tutorial.get('attached_images')
-        .catch(() => {
-          // Checking for attached images throws if there are none.
-          return [];
-        }).then((mediaResources) => {
+        // Checking for attached images throws if there are none.
+        .catch(() => [])
+        .then((mediaResources) => {
           const mediaByID = {};
           mediaResources.forEach((mediaResource) => {
             mediaByID[mediaResource.id] = mediaResource;
@@ -99,21 +84,42 @@ export default class Tutorial extends React.Component {
         });
 
       awaitTutorialMedia.then((mediaByID) => {
-        const tutorialContent = (
-          <Provider store={store}>
-            <Translations original={tutorial} type="tutorial">
-              <TutorialComponent tutorial={tutorial} media={mediaByID} projectPreferences={projectPreferences} user={user} geordi={geordi} />
-            </Translations>
-          </Provider>
+        const container = document.createElement('div');
+        document.body.appendChild(container);
+        function closeTutorial() {
+          ReactDOM.unmountComponentAtNode(container);
+          container.parentNode.removeChild(container);
+        }
+        const tutorialDialog = (
+            <Dialog
+              className="tutorial-dialog"
+              closeButton={true}
+              required={true}
+              tag="section"
+              onCancel={closeTutorial}
+            >
+              <div role='dialog'>
+                <ModalFocus
+                  onEscape={closeTutorial}
+                >
+                  <Provider store={store}>
+                    <Translations original={tutorial} type="tutorial">
+                      <TutorialComponent
+                        tutorial={tutorial}
+                        media={mediaByID}
+                        projectPreferences={projectPreferences}
+                        user={user}
+                        geordi={geordi}
+                        onComplete={closeTutorial}
+                      />
+                    </Translations>
+                  </Provider>
+                </ModalFocus>
+              </div>
+            </Dialog>
         );
-        Dialog.alert(tutorialContent, {
-          className: 'tutorial-dialog',
-          required: true,
-          closeButton: true
-        }).catch((e) => {
-          console.warn(e);
-          return null; // We don't really care if the user canceled or completed the tutorial.
-        });
+
+        ReactDOM.render(tutorialDialog, container);
       });
     }
   }
@@ -121,19 +127,24 @@ export default class Tutorial extends React.Component {
   static propTypes = {
     defaultStepIndex: PropTypes.number,
     geordi: PropTypes.object,
+    locale: PropTypes.string,
+    media: PropTypes.shape({}),
+    onComplete: PropTypes.func,
     projectPreferences: PropTypes.shape({
-      preferences: PropTypes.object,
+      preferences: PropTypes.object
     }),
+    rtl: PropTypes.bool,
     tutorial: PropTypes.shape({
+      id: PropTypes.string,
       steps: PropTypes.arrayOf(PropTypes.shape({
         media: PropTypes.string,
-        content: PropTypes.string,
-      })),
+        content: PropTypes.string
+      }))
     }),
     translation: PropTypes.shape({
       steps: PropTypes.arrayOf(PropTypes.shape({
-        content: PropTypes.string,
-      })),
+        content: PropTypes.string
+      }))
     }),
     user: PropTypes.object
   }
@@ -142,9 +153,25 @@ export default class Tutorial extends React.Component {
     defaultStepIndex: 0,
     geordi: {},
     media: {},
+    onComplete: () => true,
     projectPreferences: null,
     tutorial: {},
     user: null
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.previousActiveElement = document.activeElement;
+    this.goPrevious = this.goPrevious.bind(this);
+    this.goNext = this.goNext.bind(this);
+    this.goTo = this.goTo.bind(this);
+    this.handleStep = this.handleStep.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+
+    this.state = {
+      stepIndex: props.defaultStepIndex
+    };
   }
 
   componentDidMount() {
@@ -152,7 +179,7 @@ export default class Tutorial extends React.Component {
   }
 
   componentWillUnmount() {
-    this.handleUnmount();    
+    this.handleUnmount();
     removeEventListener('keydown', this.handleKeyDown);
   }
 
@@ -168,7 +195,7 @@ export default class Tutorial extends React.Component {
   }
 
   goTo(total, index) {
-    this.handleStep(total, index)
+    this.handleStep(total, index);
   }
 
   handleStep(total, index) {
@@ -217,7 +244,7 @@ export default class Tutorial extends React.Component {
       PR #4680 introduced a subtle bug where the API incorrectly created  new values of
       tutorials_completed_at as sparse arrays (see https://github.com/zooniverse/Panoptes-Front-End/issues/4721).
       Here we convert tutorials_completed_at to an object, if it is an array.
-      We also explicitly pass the whole tutorials_completed_at object back to the API, so that the API client doesn't 
+      We also explicitly pass the whole tutorials_completed_at object back to the API, so that the API client doesn't
       try to infer the variable type from the update key.
 */
       if (Array.isArray(tutorials_completed_at)) {
@@ -225,7 +252,7 @@ export default class Tutorial extends React.Component {
       }
       tutorials_completed_at[this.props.tutorial.id] = now;
       projectPreferences
-        .update({'preferences.tutorials_completed_at': tutorials_completed_at})
+        .update({ 'preferences.tutorials_completed_at': tutorials_completed_at })
         .save();
       this.logToGeordi(now);
     }
@@ -233,7 +260,7 @@ export default class Tutorial extends React.Component {
 
   logToGeordi(datetime) {
     this.props.geordi.logEvent({
-      type: "tutorial-completion",
+      type: 'tutorial-completion',
       data: {
         tutorial: this.props.tutorial.id,
         tutorialCompleted: datetime
@@ -250,7 +277,7 @@ export default class Tutorial extends React.Component {
     const className = classnames({
       'tutorial-steps': true,
       rtl: this.props.rtl
-    })
+    });
     const totalSteps = this.props.tutorial.steps.length;
     const allSteps = Array.from(Array(totalSteps).keys());
     const currentStep = this.props.tutorial.steps[this.state.stepIndex];
@@ -263,13 +290,24 @@ export default class Tutorial extends React.Component {
         lang={this.props.locale}
         style={tutorialStyle}
       >
-        <MediaCard className="tutorial-step" src={mediaCardSrc}>
-          <Markdown>{this.props.translation.steps[this.state.stepIndex].content}</Markdown>
-          <hr />          
-        </MediaCard>
+        <div
+          aria-live="polite"
+          className="tutorial-step"
+        >
+          <MediaCard
+            src={mediaCardSrc}
+          >
+            <Markdown>{this.props.translation.steps[this.state.stepIndex].content}</Markdown>
+            <hr />
+          </MediaCard>
+        </div>
         <p style={{ textAlign: 'center' }}>
           {(this.state.stepIndex === this.props.tutorial.steps.length - 1) ?
-            <button type="submit" className="major-button">
+            <button
+              type="button"
+              className="major-button"
+              onClick={this.props.onComplete}
+            >
               <Translate content="classifier.letsGo" />
             </button> :
             <button type="button" className="standard-button" onClick={this.goNext.bind(this, totalSteps)}>
@@ -290,25 +328,27 @@ export default class Tutorial extends React.Component {
           </button>
 
             <span className="step-through-pips">
-              {allSteps.map(thisStep =>
+              {allSteps.map(thisStep => (
                 <label key={thisStep} className="step-through-pip" title={`Step ${thisStep + 1}`}>
                   <input
                     type="radio"
+                    name="tutorial-step"
                     className="step-through-pip-input"
-                    aria-label={`Step ${thisStep + 1} of ${totalSteps}`}
+                    aria-label={`Tutorial step ${thisStep + 1} of ${totalSteps}`}
                     checked={thisStep === this.state.stepIndex}
                     autoFocus={thisStep === this.state.stepIndex}
                     onChange={this.goTo.bind(this, totalSteps, thisStep)}
                   />
-                  <span className="step-through-pip-number">{thisStep + 1}</span>
+                  <span className="step-through-pip-number" />
                 </label>
-              )}
+              ))}
             </span>
 
             <button
               type="button"
               className="step-through-direction step-through-next"
-              aria-label="Next step" title="Next"
+              aria-label="Next step"
+              title="Next"
               disabled={this.state.stepIndex === totalSteps - 1}
               onClick={this.goNext.bind(this, totalSteps)}
             >
