@@ -67,7 +67,7 @@ export default {
       researcher: 'Words from the researcher',
       about: '关于 %(title)s',
       metadata: {
-        statistics: '%(title) 数据',
+        statistics: '%(title)s 数据',
         classifications: '分类',
         volunteers: '志愿者',
         completedSubjects: '已完成目标',
@@ -76,7 +76,7 @@ export default {
       talk: {
         zero: '位用户正在讨论中国绘画与 **%(title)s**.',
         one: '**1** 位用户正在讨论中国绘画与 **%(title)s**.',
-        other: '**%(count)** 位用户正在讨论中国绘画与 **%(title)s**.'
+        other: '**%(count)s** 位用户正在讨论中国绘画与 **%(title)s**.'
       },
       joinIn: 'Join in',
       learnMore: '了解更多',

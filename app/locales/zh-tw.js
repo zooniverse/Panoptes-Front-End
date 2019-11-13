@@ -65,9 +65,9 @@ export default {
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',
-      about: '關於 %(title)',
+      about: '關於 %(title)s',
       metadata: {
-        statistics: '%(title) 數據',
+        statistics: '%(title)s 數據',
         classifications: '分類',
         volunteers: '志願者',
         completedSubjects: '已完成目標',
@@ -76,7 +76,7 @@ export default {
       talk: {
         zero: '位用戶正在討論中 **%(title)s**.',
         one: '**1** 位用戶正在討論中 **%(title)s**.',
-        other: '**%(count)** 位用戶正在討論中 **%(title)s**.'
+        other: '**%(count)s** 位用戶正在討論中 **%(title)s**.'
       },
       joinIn: 'Join in',
       learnMore: '瞭解更多',
