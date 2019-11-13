@@ -9,6 +9,7 @@ export default {
   it: require('./it').default,
   ja: require('./ja').default,
   nl: require('./nl').default,
-  pt: require('./pt').default
+  pt: require('./pt').default,
+  'zh-cn': require('./zh-cn').default,
+  'zh-tw': require('./zh-tw').default
 };
-
