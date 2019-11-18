@@ -1,26 +1,29 @@
-function isAnnotationWithinTolerance(rule, annotation) {
+function isAnnotationWithinEllipse(rule, annotation) {
   const annotationX = annotation.x;
   const annotationY = annotation.y;
   const feedbackX = rule.x;
   const feedbackY = rule.y;
-  const tolerance = rule.tolerance;
+  const feedbackA = rule.a;
+  const feedbackB = rule.b;
+  const feedbackTheta = rule.theta;
+
+  const feedbackThetaRad = Math.PI * (rule.theta/180.0)
+  const projectedX = (annotationX - feedbackX)*Math.cos(feedbackThetaRad) + (annotationY - feedbackY)*Math.sin(feedbackThetaRad) 
+  const projectedY = (annotationY - feedbackY)*Math.cos(feedbackThetaRad) - (annotationX - feedbackX)*Math.sin(feedbackThetaRad)
 
   // Math.pow is a restricted property, but using the exponential operator (**)
   // breaks the build :(
   /* eslint-disable no-restricted-properties */
-  const distance = Math.sqrt(
-    Math.pow((annotationY - feedbackY), 2)
-    + Math.pow((annotationX - feedbackX), 2)
-  );
+  const condition = Math.pow((projectedX/feedbackA), 2) + Math.pow((projectedY/feedbackB), 2);
   /* eslint-enable no-restricted-properties */
 
-  return distance < tolerance;
+  return condition < 1.0;
 }
 
 // Determines whether there are any annotations falling within tolerance for a
 // rule, and appends all successful annotations if so.
 function radialReducer(rule, annotations = []) {
-  const result = annotations.filter(annotation => isAnnotationWithinTolerance(rule, annotation));
+  const result = annotations.filter(annotation => isAnnotationWithinEllipse(rule, annotation));
 
   return Object.assign(rule, {
     success: (result.length > 0),

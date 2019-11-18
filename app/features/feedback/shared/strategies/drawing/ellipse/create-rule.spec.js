@@ -14,7 +14,6 @@ describe('feedback drawing radial create-rule', function () {
   const workflowRule = {
     defaultFailureMessage: "=( Fail",
     defaultSuccessMessage: "Success!",
-    defaultTolerance: "10",
     failureEnabled: true,
     id: "1234",
     strategy: "radial",

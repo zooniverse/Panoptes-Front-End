@@ -7,7 +7,6 @@ function createRule(subjectRule, workflowRule) {
     id: subjectRule.id,
     strategy: workflowRule.strategy,
     successEnabled: workflowRule.successEnabled || false,
-    tolerance: subjectRule.tolerance || workflowRule.defaultTolerance,
     x: subjectRule.x,
     y: subjectRule.y,
     a: subjectRule.a,

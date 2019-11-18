@@ -13,7 +13,7 @@ function FeedbackMark({ rule }) {
       transform={transform}
       stroke={color}
       fill={color}
-      fillOpacity="0.5"
+      fillOpacity="0.3"
       strokeOpacity="0.8"
     />
   );
