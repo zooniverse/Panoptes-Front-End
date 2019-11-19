@@ -684,7 +684,7 @@ export default {
     },
     highlights: {
       title: '## Zooniverse Highlights Book 2019',
-      header: '### Thank You!',
+      thanks: '### Thank You!',
       paragraphOne: 'As a thank you and celebration of the people in people-powered research, in 2019 we put together our first ‘Into the Zooniverse’ highlights book.',
       paragraphTwo: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and over 160 [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of nearly 2 million people working alongside hundreds of professional researchers.',
       paragraphThree: 'The book is an homage to the Zooniverse Year of 2019, highlighting 40 Zooniverse projects out of more than 200 launched to date. There are many fascinating projects we weren’t able to include this year. We hope to continue creating these books annually and look forward to highlighting a whole new set of projects and discoveries next year!',
@@ -692,7 +692,7 @@ export default {
       download: 'Please click here to download a free electronic copy of ‘Into the Zooniverse’.',
       toOrder: '**To order a hard-copy:**',
       order: 'Please click here if you would like to order a hard-copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
-      thanks: 'A special thank you to our volunteers (Mark Benson, Caitlyn Bouongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
+      credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Bouongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
     }
   },
   getInvolved: {
