@@ -21,8 +21,7 @@ class OrganizationPage extends React.Component {
     this.state = {
       category: '',
       finished: false,
-      paused: false,
-      readMore: false
+      paused: false
     };
   }
 
@@ -34,11 +33,6 @@ class OrganizationPage extends React.Component {
   togglePaused() {
     const { paused } = this.state;
     this.setState({ paused: !paused });
-  }
-
-  toggleReadMore() {
-    const { readMore } = this.state;
-    this.setState({ readMore: !readMore });
   }
 
   handleCategoryChange(category) {
@@ -312,22 +306,13 @@ class OrganizationPage extends React.Component {
                 <Translate content="project.home.about" with={{ title: organization.display_name }} />
               </h4>
               {aboutPage && (
-                <div>
                   <Markdown className={aboutContentClass} project={organization}>
                     {aboutPage.content}
                   </Markdown>
-                  <button
-                    className="standard-button organization-details__button"
-                    onClick={() => this.toggleReadMore()}
-                    type="button"
-                  >
-                    {readMore
-                      ? <Translate content="organization.home.readLess" />
-                      : <Translate content="organization.home.readMore" />}
-                  </button>
+                )}
                 </div>
-              )}
             </div>
+            <div className="organization-details__container">
             {organization.urls && organization.urls.length && (
               <ExternalLinksBlockContainer
                 header={(
@@ -341,6 +326,7 @@ class OrganizationPage extends React.Component {
               />
             )}
           </div>
+        </section>
         </section>
       </div>
     );
