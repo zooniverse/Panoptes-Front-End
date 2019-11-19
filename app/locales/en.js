@@ -95,9 +95,14 @@ export default {
         projects: 'Projects'
       },
       projects: {
+        all: 'All',
         error: 'There was an error loading organization projects.',
+        finished: 'Finished Projects',
+        hideSection: 'Hide Section',
         loading: 'Loading organization projects...',
-        none: 'There are no projects associated with this organization.'
+        none: 'There are no %(state)s %(category)s projects associated with this organization.',
+        paused: 'Paused Projects',
+        showSection: 'Show Section'
       },
       readLess: 'Read Less',
       readMore: 'Read More',

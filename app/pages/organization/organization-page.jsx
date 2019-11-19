@@ -19,8 +19,21 @@ class OrganizationPage extends React.Component {
     super();
 
     this.state = {
+      category: '',
+      finished: false,
+      paused: false,
       readMore: false
     };
+  }
+
+  toggleFinished() {
+    const { finished } = this.state;
+    this.setState({ finished: !finished });
+  }
+
+  togglePaused() {
+    const { paused } = this.state;
+    this.setState({ paused: !paused });
   }
 
   toggleReadMore() {
@@ -29,12 +42,11 @@ class OrganizationPage extends React.Component {
   }
 
   handleCategoryChange(category) {
-    const { onChangeQuery } = this.props;
-    onChangeQuery({ category });
+    this.setState({ category });
   }
 
   calculateClasses(buttonCategory) {
-    const { category } = this.props;
+    const { category } = this.state;
     const list = classnames(
       'standard-button',
       'organization-page__category-button',
@@ -61,7 +73,21 @@ class OrganizationPage extends React.Component {
       quoteObject,
       toggleCollaboratorView
     } = this.props;
-    const { readMore } = this.state;
+    const {
+      category,
+      finished,
+      paused,
+      readMore
+    } = this.state;
+
+    let projects = organizationProjects;
+    if (category) {
+      projects = organizationProjects.filter(project => project.tags.some(tag => tag === category.toLowerCase()));
+    }
+
+    const activeProjects = projects.filter(project => project.state === 'live');
+    const finishedProjects = projects.filter(project => project.state === 'finished');
+    const pausedProjects = projects.filter(project => project.state === 'paused');
 
     const researcherAvatarSrc = quoteObject.researcherAvatar || '/assets/simple-avatar.png';
 
@@ -74,6 +100,7 @@ class OrganizationPage extends React.Component {
     return (
       <div className="organization-page">
         <Helmet title={organization.display_name} />
+
         <section
           className="organization-hero"
           style={{ backgroundImage: `url(${organizationBackground.src})` }}
@@ -129,7 +156,7 @@ class OrganizationPage extends React.Component {
                   onChange={this.handleCategoryChange.bind(this, '')}
                   type="radio"
                 />
-                All
+                <Translate content="organization.home.projects.all" />
               </label>
               {organization.categories.map(buttonCategory => (
                 <label
@@ -150,11 +177,89 @@ class OrganizationPage extends React.Component {
             </div>
           )}
           <OrganizationProjectCards
+            category={category}
             errorFetchingProjects={errorFetchingProjects}
             fetchingProjects={fetchingProjects}
-            projects={organizationProjects}
+            projects={activeProjects}
             projectAvatars={projectAvatars}
+            state="active"
           />
+
+          <div>
+            <Translate
+              content="organization.home.projects.paused"
+            />
+            <button
+              onClick={() => this.togglePaused()}
+              type="button"
+            >
+              {paused ? (
+                <>
+                  <i className="fa fa-chevron-up fa-lg" />
+                  {' '}
+                  <Translate
+                    content="organization.home.projects.hideSection"
+                  />
+                </>
+              ) : (
+                <>
+                  <i className="fa fa-chevron-down fa-lg" />
+                  {' '}
+                  <Translate
+                    content="organization.home.projects.showSection"
+                  />
+                </>
+              )}
+            </button>
+          </div>
+          {paused && (
+            <OrganizationProjectCards
+              category={category}
+              errorFetchingProjects={errorFetchingProjects}
+              fetchingProjects={fetchingProjects}
+              projects={pausedProjects}
+              projectAvatars={projectAvatars}
+              state="paused"
+            />
+          )}
+
+          <div>
+            <Translate
+              content="organization.home.projects.finished"
+            />
+            <button
+              onClick={() => this.toggleFinished()}
+              type="button"
+            >
+              {finished ? (
+                <>
+                  <i className="fa fa-chevron-up fa-lg" />
+                  {' '}
+                  <Translate
+                    content="organization.home.projects.hideSection"
+                  />
+                </>
+              ) : (
+                <>
+                  <i className="fa fa-chevron-down fa-lg" />
+                  {' '}
+                  <Translate
+                    content="organization.home.projects.showSection"
+                  />
+                </>
+              )}
+            </button>
+          </div>
+          {finished && (
+            <OrganizationProjectCards
+              category={category}
+              errorFetchingProjects={errorFetchingProjects}
+              fetchingProjects={fetchingProjects}
+              projects={finishedProjects}
+              projectAvatars={projectAvatars}
+              state="finished"
+            />
+          )}
         </section>
 
         <section className="organization-details">
@@ -243,12 +348,10 @@ class OrganizationPage extends React.Component {
 }
 
 OrganizationPage.defaultProps = {
-  category: false,
   collaborator: false,
   collaboratorView: true,
   errorFetchingProjects: {},
   fetchingProjects: false,
-  onChangeQuery: () => {},
   organizationAvatar: {},
   organizationBackground: {},
   organizationPages: [],
@@ -259,17 +362,12 @@ OrganizationPage.defaultProps = {
 };
 
 OrganizationPage.propTypes = {
-  category: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.string
-  ]),
   collaborator: PropTypes.bool,
   collaboratorView: PropTypes.bool,
   errorFetchingProjects: PropTypes.shape({
     message: PropTypes.string
   }),
   fetchingProjects: PropTypes.bool,
-  onChangeQuery: PropTypes.func,
   organization: PropTypes.shape({
     announcement: PropTypes.string,
     categories: PropTypes.arrayOf(

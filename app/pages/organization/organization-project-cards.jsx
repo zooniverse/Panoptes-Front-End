@@ -4,10 +4,12 @@ import Translate from 'react-translate-component';
 import ProjectCard from '../../partials/project-card';
 
 export const OrganizationProjectCards = ({
+  category,
   errorFetchingProjects,
   fetchingProjects,
   projects,
-  projectAvatars
+  projectAvatars,
+  state
 }) => {
   if (fetchingProjects) {
     return (
@@ -18,7 +20,7 @@ export const OrganizationProjectCards = ({
   } else if (!fetchingProjects && projects && !projects.length) {
     return (
       <div className="organization-page__projects-status">
-        <p><Translate content="organization.home.projects.none" /></p>
+        <p><Translate content="organization.home.projects.none" with={{ category, state }} /></p>
       </div>
     );
   } else if (projects && projects.length > 0) {
@@ -52,6 +54,7 @@ export const OrganizationProjectCards = ({
 };
 
 OrganizationProjectCards.propTypes = {
+  category: PropTypes.string,
   errorFetchingProjects: PropTypes.shape({
     message: PropTypes.string
   }),
@@ -67,7 +70,8 @@ OrganizationProjectCards.propTypes = {
       id: PropTypes.string,
       src: PropTypes.string
     })
-  )
+  ),
+  state: PropTypes.string
 };
 
 export default OrganizationProjectCards;
