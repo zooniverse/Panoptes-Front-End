@@ -144,7 +144,7 @@ describe('OrganizationPage', function () {
     let aboutPage;
 
     beforeEach(function () {
-      wrapper = shallow(<OrganizationPage organizationPages={organizationPages} />);
+      wrapper = shallow(<OrganizationPage organization={organization} organizationPages={organizationPages} />);
       aboutPage = wrapper.find('Markdown.organization-details__about-content');
     });
 
