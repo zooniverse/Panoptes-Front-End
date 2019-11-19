@@ -255,7 +255,8 @@ export default {
         contact: 'Contact Us',
         faq: 'FAQ',
         resources: 'Resources',
-        highlights: 'Highlights Book'
+        highlights: 'Highlights Book',
+        donate: 'Donate'
       }
     },
     home: {
@@ -693,6 +694,12 @@ export default {
       toOrder: '**To order a hard-copy:**',
       order: 'Please click here if you would like to order a hard-copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
       credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Bouongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
+    },
+    donate: {
+      title: '## Donate to Support Zooniverse&#46;org',
+      paragraphOne: 'Zooniverse is a collaboration between the University of Oxford, Chicago’s Adler Planetarium, the University of Minnesota – Twin Cities (UMN), hundreds of researchers, and over 2 million participants from around the world. The [Zooniverse teams](https://www.zooniverse.org/about/team) at Oxford, Adler, and UMN include the project leads, web developers, designer, communications lead, and researchers. This unique mix of expertise in research, public engagement, and modern web development supports an amazing community of volunteers and dedicated research teams using the Zooniverse platform.',
+      paragraphTwo: 'Much of the Zooniverse’s funding comes through grants, with some institutional support from Oxford, Adler, and UMN. Please consider making a tax-deductible donation to support the Zooniverse team in continuing these efforts.',
+      paragraphThree: '**Note:** the link above takes you to the Adler Planetarium’s donation portal. The donations made through the site are tagged as coming from the Zooniverse community and will be used to support the Zooniverse team’s efforts.'
     }
   },
   getInvolved: {
