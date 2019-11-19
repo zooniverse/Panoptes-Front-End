@@ -17,45 +17,50 @@ export const OrganizationMetadata = ({ displayName, projects }) => {
     <div className="organization-page__container">
       <div className="project-metadata">
         <span className="organization-details__heading">
-          {displayName}{' '}<Translate content="project.home.metadata.statistics" />
+          {displayName}
+          {' '}
+          <Translate content="project.home.metadata.statistics" />
         </span>
-        {projects && (projects.length > 0) &&
-          <div className="project-metadata-stats">
-            <div className="project-metadata-stat">
-              <div className="project-metadata-stat__value">
-                {projects.length.toLocaleString()}
+        {projects && (projects.length > 0)
+          && (
+            <div className="project-metadata-stats">
+              <div className="project-metadata-stat">
+                <div className="project-metadata-stat__value">
+                  {projects.length.toLocaleString()}
+                </div>
+                <div className="project-metadata-stat__label">
+                  <Translate content="organization.home.metadata.projects" />
+                </div>
               </div>
-              <div className="project-metadata-stat__label">
-                <Translate content="organization.home.metadata.projects" />
+              <div className="project-metadata-stat">
+                <div className="project-metadata-stat__value">
+                  {extractStat('subjects_count').toLocaleString()}
+                </div>
+                <div className="project-metadata-stat__label">
+                  <Translate content="project.home.metadata.subjects" />
+                </div>
+              </div>
+              <div className="project-metadata-stat">
+                <div className="project-metadata-stat__value">
+                  {extractStat('classifications_count').toLocaleString()}
+                </div>
+                <div className="project-metadata-stat__label">
+                  <Translate content="project.home.metadata.classifications" />
+                </div>
+              </div>
+              <div className="project-metadata-stat">
+                <div className="project-metadata-stat__value">
+                  {extractStat('retired_subjects_count').toLocaleString()}
+                </div>
+                <div className="project-metadata-stat__label">
+                  <Translate content="project.home.metadata.completedSubjects" />
+                </div>
               </div>
             </div>
-            <div className="project-metadata-stat">
-              <div className="project-metadata-stat__value">
-                {extractStat('subjects_count').toLocaleString()}
-              </div>
-              <div className="project-metadata-stat__label">
-                <Translate content="project.home.metadata.subjects" />
-              </div>
-            </div>
-            <div className="project-metadata-stat">
-              <div className="project-metadata-stat__value">
-                {extractStat('classifications_count').toLocaleString()}
-              </div>
-              <div className="project-metadata-stat__label">
-                <Translate content="project.home.metadata.classifications" />
-              </div>
-            </div>
-            <div className="project-metadata-stat">
-              <div className="project-metadata-stat__value">
-                {extractStat('retired_subjects_count').toLocaleString()}
-              </div>
-              <div className="project-metadata-stat__label">
-                <Translate content="project.home.metadata.completedSubjects" />
-              </div>
-            </div>
-          </div>}
+          )}
       </div>
-    </div>);
+    </div>
+  );
 };
 
 OrganizationMetadata.propTypes = {
@@ -66,6 +71,11 @@ OrganizationMetadata.propTypes = {
       display_name: PropTypes.string
     })
   )
+};
+
+OrganizationMetadata.defaultProps = {
+  displayName: '',
+  projects: []
 };
 
 export default OrganizationMetadata;

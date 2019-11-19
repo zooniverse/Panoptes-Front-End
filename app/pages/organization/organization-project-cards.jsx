@@ -3,17 +3,24 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import ProjectCard from '../../partials/project-card';
 
-export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjects, projects, projectAvatars }) => {
+export const OrganizationProjectCards = ({
+  errorFetchingProjects,
+  fetchingProjects,
+  projects,
+  projectAvatars
+}) => {
   if (fetchingProjects) {
     return (
       <div className="organization-page__projects-status">
         <p><Translate content="organization.home.projects.loading" /></p>
-      </div>);
+      </div>
+    );
   } else if (!fetchingProjects && projects && !projects.length) {
     return (
       <div className="organization-page__projects-status">
         <p><Translate content="organization.home.projects.none" /></p>
-      </div>);
+      </div>
+    );
   } else if (projects && projects.length > 0) {
     return (
       <div className="project-card-list">
@@ -25,16 +32,22 @@ export const OrganizationProjectCards = ({ errorFetchingProjects, fetchingProjec
           return (
             <ProjectCard key={project.id} project={project} imageSrc={projectAvatar.src} />);
         })}
-      </div>);
+      </div>
+    );
   } else {
     return (
       <div className="organization-page__projects-status">
         <p><Translate content="organization.home.projects.error" /></p>
-        {errorFetchingProjects &&
-          <p>
-            <code>{errorFetchingProjects.toString()}</code>
-          </p>}
-      </div>);
+        {errorFetchingProjects
+          && (
+            <p>
+              <code>
+                {errorFetchingProjects.toString()}
+              </code>
+            </p>
+          )}
+      </div>
+    );
   }
 };
 
