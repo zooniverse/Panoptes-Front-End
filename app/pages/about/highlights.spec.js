@@ -3,21 +3,21 @@
 import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
-import Donate from './donate';
+import Highlights from './highlights';
 
-describe('Donate', function () {
+describe('Highlights', function () {
   it('renders without crashing', function () {
-    shallow(<Donate />);
+    shallow(<Highlights />);
   });
 
   it('renders markdown elements', function () {
-    const wrapper = shallow(<Donate />);
+    const wrapper = shallow(<Highlights />);
     const markdownElements = wrapper.find('Markdown');
-    assert.equal(markdownElements.length, 4);
+    assert.equal(markdownElements.length, 10);
   });
 
   it('renders an image', function () {
-    const wrapper = shallow(<Donate />);
+    const wrapper = shallow(<Highlights />);
     const imageElements = wrapper.find('img');
     assert.equal(imageElements.length, 1);
   });
