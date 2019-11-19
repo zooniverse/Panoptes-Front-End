@@ -84,6 +84,15 @@ class AboutPage extends React.Component {
                     <Translate content="about.index.nav.faq" />
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="/about/highlights"
+                    activeClassName="active"
+                    onClick={this.logClick ? this.logClick.bind(this, 'about.index.nav.highlights') : null}
+                  >
+                    <Translate content="about.index.nav.highlights" />
+                  </Link>
+                </li>
               </ul>
             </nav>
           </div>
