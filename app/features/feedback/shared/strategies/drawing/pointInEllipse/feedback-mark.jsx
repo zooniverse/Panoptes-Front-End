@@ -3,13 +3,16 @@ import React from 'react';
 
 function FeedbackMark({ rule }) {
   const color = (rule.success) ? 'green' : 'red';
-  const transform = `rotate(${-rule.theta}, ${rule.x}, ${rule.y}) translate(${rule.x}, ${rule.y})`;
+  const floatTheta = parseFloat(rule.theta);
+  const transform = `rotate(${-floatTheta}, ${rule.x}, ${rule.y}) translate(${rule.x}, ${rule.y})`;
+  const rx = 0.5*parseFloat(rule.a);
+  const ry = 0.5*parseFloat(rule.b);
   return (
     <ellipse
       cx={0}
       cy={0}
-      rx={0.5*rule.a}
-      ry={0.5*rule.b}
+      rx={rx}
+      ry={ry}
       transform={transform}
       stroke={color}
       fill={color}
