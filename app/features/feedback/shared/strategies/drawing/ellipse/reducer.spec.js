@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import radialReducer from './reducer';
 
-describe('feedback drawing radial reducer', function () {
+describe('feedback drawing ellipse reducer', function () {
   const rule = {
     hideSubjectViewer: false,
     id: "1234",
-    strategy: "radial",
+    strategy: "ellipse",
     successEnabled: true,
     successMessage: "Success!",
     x: "200",
@@ -20,11 +20,6 @@ describe('feedback drawing radial reducer', function () {
     y: 300,
   };
 
-  const annotationTolerance = {
-    x: 225,
-    y: 325
-  };
-
   const annotationFailure = {
     x: 400,
     y: 500
@@ -34,7 +29,7 @@ describe('feedback drawing radial reducer', function () {
     expect(radialReducer(rule, [annotationFailure])).to.deep.equal({
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "radial",
+      strategy: "ellipse",
       success: false,
       successEnabled: true,
       successMessage: "Success!",
@@ -48,7 +43,7 @@ describe('feedback drawing radial reducer', function () {
     expect(radialReducer(rule, [annotationSuccess])).to.deep.equal({
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "radial",
+      strategy: "ellipse",
       success: true,
       successEnabled: true,
       successMessage: "Success!",
@@ -58,29 +53,15 @@ describe('feedback drawing radial reducer', function () {
     });
   });
 
-  it('should return result within tolerance', function () {
-    expect(radialReducer(rule, [annotationTolerance])).to.deep.equal({
-      hideSubjectViewer: false,
-      id: "1234",
-      strategy: "radial",
-      success: true,
-      successEnabled: true,
-      successMessage: "Success!",
-      successfulClassifications: [annotationTolerance],
-      x: "200",
-      y: "300"
-    });
-  });
-
   it('should return result with success with successful and failed annotation', function () {
-    expect(radialReducer(rule, [annotationSuccess, annotationTolerance, annotationFailure])).to.deep.equal({
+    expect(radialReducer(rule, [annotationSuccess, annotationFailure])).to.deep.equal({
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "radial",
+      strategy: "ellipse",
       success: true,
       successEnabled: true,
       successMessage: "Success!",
-      successfulClassifications: [annotationSuccess, annotationTolerance],
+      successfulClassifications: [annotationSuccess],
       x: "200",
       y: "300"
     });

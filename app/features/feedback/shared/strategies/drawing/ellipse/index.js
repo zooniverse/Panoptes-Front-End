@@ -2,7 +2,6 @@ import createRule from './create-rule';
 import FeedbackMark from './feedback-mark';
 import EllipseLabComponent from '../ellipse-lab-component';
 import reducer from './reducer';
-import validations from '../validations';
 
 export default {
   createRule,
@@ -11,5 +10,4 @@ export default {
   labComponent: EllipseLabComponent,
   reducer,
   title: 'Ellipse',
-  validations
 };

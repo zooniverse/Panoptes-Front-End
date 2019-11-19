@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import EllipseLabComponent from './ellipse-lab-component';
 
-describe('feedback drawing: lab component', function () {
+describe('feedback drawing ellipse: lab component', function () {
   function mockFormState(ruleID) {
     return {
       defaultFailureMessage: "Nope, please try again.",

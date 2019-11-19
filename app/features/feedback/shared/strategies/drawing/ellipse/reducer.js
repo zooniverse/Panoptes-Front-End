@@ -8,13 +8,13 @@ function isAnnotationWithinEllipse(rule, annotation) {
   const feedbackTheta = rule.theta;
 
   const feedbackThetaRad = Math.PI * (rule.theta/180.0)
-  const projectedX = (annotationX - feedbackX)*Math.cos(feedbackThetaRad) + (annotationY - feedbackY)*Math.sin(feedbackThetaRad) 
+  const projectedX = (annotationX - feedbackX)*Math.cos(feedbackThetaRad) + (annotationY - feedbackY)*Math.sin(feedbackThetaRad)
   const projectedY = (annotationY - feedbackY)*Math.cos(feedbackThetaRad) - (annotationX - feedbackX)*Math.sin(feedbackThetaRad)
 
   // Math.pow is a restricted property, but using the exponential operator (**)
   // breaks the build :(
   /* eslint-disable no-restricted-properties */
-  const condition = Math.pow((projectedX/feedbackA), 2) + Math.pow((projectedY/feedbackB), 2);
+  const condition = Math.pow((2.0*projectedX/feedbackA), 2) + Math.pow((2.0*projectedY/feedbackB), 2);
   /* eslint-enable no-restricted-properties */
 
   return condition < 1.0;

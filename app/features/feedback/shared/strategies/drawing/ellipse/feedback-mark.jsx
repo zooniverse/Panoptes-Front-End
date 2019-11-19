@@ -3,13 +3,13 @@ import React from 'react';
 
 function FeedbackMark({ rule }) {
   const color = (rule.success) ? 'green' : 'red';
-  const transform = `rotate(${rule.theta}, 0, 0)`
+  const transform = `rotate(${-rule.theta}, ${rule.x}, ${rule.y}) translate(${rule.x}, ${rule.y})`;
   return (
     <ellipse
-      cx={rule.x}
-      cy={rule.y}
-      r1={rule.a}
-      r2={rule.b}
+      cx={0}
+      cy={0}
+      rx={0.5*rule.a}
+      ry={0.5*rule.b}
       transform={transform}
       stroke={color}
       fill={color}
@@ -21,14 +21,27 @@ function FeedbackMark({ rule }) {
 
 FeedbackMark.propTypes = {
   rule: PropTypes.shape({
-    x: PropTypes.string,
-    y: PropTypes.string,
-    a: PropTypes.string,
-    b: PropTypes.string,
-    r1: PropTypes.string,
-    r2: PropTypes.string,
-    theta: PropTypes.string,
-    tolerance: PropTypes.string
+    x: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number]),
+    y: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number]),
+    a: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number]),
+    b: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number]),
+    r1: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number]),
+    r2: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number]),
+    theta: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number]),
   }).isRequired
 };
 
