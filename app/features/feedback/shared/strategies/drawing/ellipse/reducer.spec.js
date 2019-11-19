@@ -35,7 +35,10 @@ describe('feedback drawing ellipse reducer', function () {
       successMessage: "Success!",
       successfulClassifications: [],
       x: "200",
-      y: "300"
+      y: "300",
+      a: "100",
+      b: "50",
+      theta: "20"
     });
   });
 
@@ -49,7 +52,10 @@ describe('feedback drawing ellipse reducer', function () {
       successMessage: "Success!",
       successfulClassifications: [annotationSuccess],
       x: "200",
-      y: "300"
+      y: "300",
+      a: "100",
+      b: "50",
+      theta: "20"
     });
   });
 
@@ -63,7 +69,10 @@ describe('feedback drawing ellipse reducer', function () {
       successMessage: "Success!",
       successfulClassifications: [annotationSuccess],
       x: "200",
-      y: "300"
+      y: "300",
+      a: "100",
+      b: "50",
+      theta: "20"
     });
   });
 });
