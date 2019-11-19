@@ -1,16 +1,30 @@
 .organization-page
   background-color: BACKGROUND_COLOR
-  color: white
-  display: flex
-  flex: 1 0 auto
-  flex-direction: column
   font-family: 'Karla', sans-serif
 
-  &__container
+  &__main
+    padding: 2em 6em 4em 6em
+
+    hr
+      margin-bottom: 2em
+    
+    @media(max-width: 600px)
+      padding: 2em 0 4em 0 
+
+  &__projects
+    display: flex
+    flex-direction: column
+
+  &__project-cards-section
     display: flex
     flex-flow: row wrap
 
-  &__projects-status
+    @media (max-width: 900px)
+      flex-direction: column
+      padding-left: 0
+      text-align: center
+
+  &__project-cards-message
     align-items: center
     color: TEAL_DARK
     display: flex
@@ -18,21 +32,23 @@
     margin: 3em
 
   &__toggle
-    color: TEAL_DARK
-    margin-left: 2em
+    color: #5C5C5C
+    text-align: right
 
   &__categories
     display: flex
-    justify-content: center
     flex-wrap: wrap
+    margin-bottom: 2em
+
+    @media (max-width: 900px)
+      justify-content: center
 
   &__category-button
-    background: white
-    border: 1px #EBEBEB
+    background: BACKGROUND_COLOR
+    border: 1px solid TEAL_MID
     border-radius: 0
-    color: TEAL_MID
-    font-weight: bold
-    margin: .8em .5em
+    color: black
+    margin: 1em 1em 0 0
     width: 150px
 
     @media (max-width: 900px)
@@ -40,21 +56,45 @@
 
     &:focus,
     &:hover
-      background: TEAL_DARK
-      border: 1px TEAL_DARK
+      background: TEAL_MID
+      border: 1px solid TEAL_MID
       color: white
 
     &--active
-      background: TEAL_DARK
-      border: 1px TEAL_DARK
+      background: TEAL_MID
+      border: 1px solid TEAL_MID
       color: white
 
     &--hidden
       left: -9999px
       position: absolute
+  
+  &__section-heading
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    margin-bottom: 2em
+
+  &__section-title
+    color: #5C5C5C
+    font-weight: bold
+    font-size: 1.8em
+    letter-spacing: -.5px
+
+  &__section-button
+    background: BACKGROUND_COLOR
+    color: TEAL_MID
+    margin: 0
+    padding: 0
+
+    &:focus,
+    &:hover
+      background: BACKGROUND_COLOR
+      color: TEAL_MID
 
 .organization-hero
   background-size: cover
+  color: white
   min-height: 400px
   position: relative
 
@@ -82,7 +122,10 @@
 
   &__avatar
     border-radius: 50%
+    height: 8em
+    object-fit: cover
     vertical-align: -.3em
+    width: 8em
 
   &__wrapper
     margin-left: 3em
@@ -92,6 +135,7 @@
       display: flex
       flex-direction: column
       margin-left: 0
+      text-align: center
 
   &__title
     font-size: 2.5em
@@ -101,19 +145,26 @@
     font-size: 1em
     font-weight: normal
 
-    @media (max-width: 900px)
-      margin: .8em
-      text-align: center
-
 .organization-details
+  display: flex
+  flex-direction: column
+  
+  &__container
+    align-items: flex-start
+    display: flex
+    flex-flow: row wrap
+    margin-top: 2em
 
-  &__heading
+  &__content-heading
+    color: black
+    font-weight: bold
+    letter-spacing: 1.5px
     text-transform: uppercase
 
   &__content
-    background-color: TEAL_MID
+    background: white
     flex: 3 1 auto
-    padding: 3em 3em 4em
+    padding: 2em
     text-align: left
     width: 600px
 
@@ -121,7 +172,7 @@
       a
         background: none
         border: 0
-        color: BACKGROUND_COLOR
+        color: TEAL_DARK
         font-weight: bold
         margin: 0
         padding: 0
@@ -175,16 +226,18 @@
 
 .organization-researcher-words
   background-color: white
-  color: ZOONIVERSE_NAVY
-  display: flex
+  color: #5c5c5c
   flex: 2 0 auto
-  flex-direction: column
-  padding: 3em 4vw
+  margin: 0 2em 2em 0
+  padding: 2em
   width: 250px
+
+  @media (max-width: 1180px)
+    margin-right: 0
 
   &__container
     display: flex
-    margin-top: 1.5em
+    margin: 1.5em 0
 
   &__avatar
     border-radius: 50%
@@ -200,7 +253,6 @@
     word-wrap: break-word
 
   &__attribution
-    color: ZOONIVERSE_NAVY
+    color: TEAL_DARK
     font-size: 1em
-    margin: 1em auto
     text-decoration: none
