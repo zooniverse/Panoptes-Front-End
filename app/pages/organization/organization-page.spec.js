@@ -139,26 +139,10 @@ describe('OrganizationPage', function () {
     assert.equal(quote.length, 0);
   });
 
-  describe('with pages about content', function () {
-    let wrapper;
-    let aboutPage;
-
-    beforeEach(function () {
-      wrapper = shallow(<OrganizationPage organization={organization} organizationPages={organizationPages} />);
-      aboutPage = wrapper.find('Markdown.organization-details__about-content');
-    });
-
-    it('should initially show pages about content collapsed', function () {
-      assert.equal(aboutPage.length, 1);
-      assert.equal(aboutPage.contains('test content'), true);
-    });
-
-    it('should show pages about content expanded after clicking Read More', function () {
-      wrapper.find('button.organization-details__button').simulate('click');
-      const aboutPageExpanded = wrapper.find('Markdown.organization-details__about-content--expanded');
-      assert.equal(aboutPageExpanded.length, 1);
-      assert.equal(aboutPageExpanded.contains('test content'), true);
-    });
+  it('should show about page content', function () {
+    const wrapper = shallow(<OrganizationPage organization={organization} organizationPages={organizationPages} />);
+    const aboutPage = wrapper.find('Markdown.organization-details__about-content');
+    assert.equal(aboutPage.contains('test content'), true);
   });
 
   it('should not render ExternalLinks section if no urls', function () {

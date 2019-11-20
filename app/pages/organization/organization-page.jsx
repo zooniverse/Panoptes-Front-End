@@ -86,10 +86,6 @@ class OrganizationPage extends React.Component {
     const researcherAvatarSrc = quoteObject.researcherAvatar || '/assets/simple-avatar.png';
 
     const [aboutPage] = organizationPages.filter(page => page.url_key === 'about');
-    const aboutContentClass = classnames(
-      'organization-details__about-content',
-      { 'organization-details__about-content--expanded': readMore }
-    );
 
     return (
       <div className="organization-page">
@@ -327,7 +323,10 @@ class OrganizationPage extends React.Component {
                   <Translate content="project.home.about" with={{ title: organization.display_name }} />
                 </h4>
                 {aboutPage && (
-                  <Markdown className={aboutContentClass} project={organization}>
+                  <Markdown
+                    className="organization-details__about-content"
+                    project={organization}
+                  >
                     {aboutPage.content}
                   </Markdown>
                 )}
