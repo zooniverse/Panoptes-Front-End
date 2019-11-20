@@ -15,10 +15,12 @@ export const StyledExternalLinksBlock = styled.div`
   })};
   flex: ${props => `1 0 ${props.basis}%`};
   min-width: 400px;
-  padding: 3em 4vw;
+  padding: ${props => props.padding};
 
   ul {
     padding-left: 0;
+    display: ${props => props.ulDisplay};
+    flex-wrap: wrap;
   }
 
     li {
@@ -53,10 +55,24 @@ function isResourceAProject(resource) {
   return Object.keys(resource).includes('workflow_description');
 }
 
-export default function ExternalLinksBlock({ basis, header, links, resource }) {
+export default function ExternalLinksBlock({
+  basis,
+  header,
+  links,
+  resource,
+  padding,
+  ulDisplay,
+  className,
+  organizationLink
+}) {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
-      <StyledExternalLinksBlock basis={basis} isItAProject={isResourceAProject(resource)}>
+      <StyledExternalLinksBlock
+        basis={basis}
+        isItAProject={isResourceAProject(resource)}
+        padding={padding}
+        ulDisplay={ulDisplay}
+      >
         {header}
         <ul>
           {links.map((link) => {
@@ -64,9 +80,11 @@ export default function ExternalLinksBlock({ basis, header, links, resource }) {
             return (
               <li key={url}>
                 <StyledExternalLink
+                  className={className}
                   isExternalLink={isExternalLink}
                   isSocialLink={isSocialLink}
                   label={label}
+                  organizationLink={organizationLink}
                   path={path}
                   site={site}
                   url={url}
@@ -84,13 +102,20 @@ ExternalLinksBlock.defaultProps = {
   basis: '33.333',
   header: null,
   links: [],
-  resource: null
+  resource: null,
+  padding: '3em 4vw',
+  ulDisplay: 'block',
+  className: '',
+  organizationLink: false
 };
 
 ExternalLinksBlock.propTypes = {
   basis: PropTypes.string,
   header: PropTypes.node,
   links: PropTypes.arrayOf(PropTypes.object),
-  resource: PropTypes.object
+  resource: PropTypes.object,
+  padding: PropTypes.string,
+  ulDisplay: PropTypes.string,
+  className: PropTypes.string,
+  organizationLink: PropTypes.bool
 };
-

@@ -329,6 +329,26 @@ class OrganizationPage extends React.Component {
             </div>
 
             <div className="organization-details__container">
+              {organization.urls && organization.urls.length && (
+                <ExternalLinksBlockContainer
+                  header={(
+                    <Translate
+                      className="organization-details__content-heading"
+                      component="h4"
+                      content="organization.home.links"
+                      with={{ title: organization.display_name }}
+                    />
+                  )}
+                  resource={organization}
+                  padding="2em"
+                  ulDisplay="flex"
+                  className="organization-details__link"
+                  organizationLink={true}
+                />
+              )}
+            </div>
+
+            <div className="organization-details__container">
               <div className="organization-details__content">
                 <Translate
                   className="organization-details__content-heading"
@@ -345,20 +365,6 @@ class OrganizationPage extends React.Component {
                   </Markdown>
                 )}
               </div>
-            </div>
-            <div className="organization-details__container">
-              {organization.urls && organization.urls.length && (
-                <ExternalLinksBlockContainer
-                  header={(
-                    <Translate
-                      className="organization-details__heading"
-                      content="organization.home.links"
-                      component="h4"
-                    />
-                  )}
-                  resource={organization}
-                />
-              )}
             </div>
           </section>
         </section>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Markdown } from 'markdownz';
 import { socialIcons } from '../../../../lib/nav-helpers';
 
-export default function ExternalLink({ className, isExternalLink, isSocialLink, label, path, site, url }) {
+export default function ExternalLink({ className, isExternalLink, isSocialLink, label, path, site, url, organizationLink }) {
   let iconClasses;
   let linkLabel = label;
   const linkProps = {
@@ -39,7 +39,13 @@ export default function ExternalLink({ className, isExternalLink, isSocialLink, 
     if (isValidLink) {
       return (
         <a {...linkProps}>
-          <span className="link-title">{linkLabel}</span>
+          <div>
+            <span className="link-title">
+              {organizationLink ? '@' : ''}
+              {linkLabel}
+            </span>
+            {organizationLink && <span style={{ fontWeight: 'bold' }}>{socialIcons[site].label}</span>}
+          </div>
           {iconClasses && <i className={iconClasses} />}
         </a>
       );
@@ -56,7 +62,8 @@ ExternalLink.defaultProps = {
   label: '',
   path: '',
   site: '',
-  url: ''
+  url: '',
+  organizationLink: false
 };
 
 ExternalLink.propTypes = {
@@ -66,5 +73,6 @@ ExternalLink.propTypes = {
   label: PropTypes.string.isRequired,
   path: PropTypes.string,
   site: PropTypes.string,
-  url: PropTypes.string.isRequired
+  url: PropTypes.string.isRequired,
+  organizationLink: PropTypes.bool
 };
