@@ -686,9 +686,9 @@ export default {
     highlights: {
       title: '## Zooniverse Highlights Book 2019',
       thanks: '### Thank You!',
-      paragraphOne: 'As a thank you and celebration of the people in people-powered research, in 2019 we put together our first ‘Into the Zooniverse’ highlights book.',
+      paragraphOne: 'As a thank you and celebration of 2019 projects and impacts, we put together our first ‘Into the Zooniverse’ highlights book.',
       paragraphTwo: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and over 160 [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of nearly 2 million people working alongside hundreds of professional researchers.',
-      paragraphThree: 'The book is an homage to the Zooniverse Year of 2019, highlighting 40 Zooniverse projects out of more than 200 launched to date. There are many fascinating projects we weren’t able to include this year. We hope to continue creating these books annually and look forward to highlighting a whole new set of projects and discoveries next year!',
+      paragraphThree: 'The book is an homage to the Zooniverse Year of 2019, highlighting 40 Zooniverse projects out of more than 200 launched to date. There are many fascinating projects we weren’t able to include this year. We hope to continue creating these books annually, highlighting a whole new set of projects and discoveries next year!',
       toDownload: '**To download a free electronic copy:**',
       download: 'Please click [here](http://bit.ly/zoonibook-2019-pdf) to download a free electronic copy of ‘Into the Zooniverse’.',
       toOrder: '**To order a hard-copy:**',
