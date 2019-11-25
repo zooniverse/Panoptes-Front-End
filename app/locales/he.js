@@ -323,6 +323,24 @@ export default {
       listOne: '- Please always include URLs when writing about specific projects. If writing generally about the Zooniverse, please include www.zooniverse.org somewhere in your article. Check out the [Acknowledgements page](/about/acknowledgements) for more details about how to correctly acknowledge the Zooniverse.',
       listTwo: '- Please note: we are a platform for people-powered research, not a company or non-profit.',
       listThree: '- If you have questions about the Zooniverse and would like to speak to a member of our team, please [contact us](/about/contact).'
+    },
+    highlights: {
+      title: '## Zooniverse Highlights Book 2019',
+      thanks: '### Thank You!',
+      paragraphOne: 'As a thank you and celebration of 2019 projects and impacts, we put together our first ‘Into the Zooniverse’ highlights book.',
+      paragraphTwo: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and over 160 [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of nearly 2 million people working alongside hundreds of professional researchers.',
+      paragraphThree: 'The book is an homage to the Zooniverse Year of 2019, highlighting 40 Zooniverse projects out of more than 200 launched to date. There are many fascinating projects we weren’t able to include this year. We hope to continue creating these books annually, highlighting a whole new set of projects and discoveries next year!',
+      toDownload: '**To download a free electronic copy:**',
+      download: 'Please click [here](http://bit.ly/zoonibook-2019-pdf) to download a free electronic copy of ‘Into the Zooniverse’.',
+      toOrder: '**To order a hard-copy:**',
+      order: 'Please click [here](http://www.lulu.com/shop/the-zooniverse-team/into-the-zooniverse/paperback/product-24329899.html) if you would like to order a hard-copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
+      credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Bouongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
+    },
+    donate: {
+      title: '## Donate to Support Zooniverse&#46;org',
+      paragraphOne: 'Zooniverse is a collaboration between the University of Oxford, Chicago’s Adler Planetarium, the University of Minnesota – Twin Cities (UMN), hundreds of researchers, and over 2 million participants from around the world. The [Zooniverse teams](https://www.zooniverse.org/about/team) at Oxford, Adler, and UMN include the project leads, web developers, designer, communications lead, and researchers. This unique mix of expertise in research, public engagement, and modern web development supports an amazing community of volunteers and dedicated research teams using the Zooniverse platform.',
+      paragraphTwo: 'Much of the Zooniverse’s funding comes through grants, with some institutional support from Oxford, Adler, and UMN. Please consider making a tax-deductible donation to support the Zooniverse team in continuing these efforts.',
+      paragraphThree: '**Note:** the link above takes you to the Adler Planetarium’s donation portal. The donations made through the site are tagged as coming from the Zooniverse community and will be used to support the Zooniverse team’s efforts.'
     }
   },
   getInvolved: {
