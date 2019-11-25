@@ -39,11 +39,13 @@ describe('OrganizationProjectCards', function () {
   });
 
   it('should show no projects associated message if fetchingProjects false and no projects', function () {
-    const message = <Translate content="organization.home.projects.none" />;
+    const message = <Translate content="organization.home.projects.none" with={{ category: 'TestCategory', state: 'active' }} />;
     const wrapper = shallow(
       <OrganizationProjectCards
+        category="TestCategory"
         fetchingProjects={false}
         projects={[]}
+        state="active"
       />);
     const status = wrapper.find('.organization-page__projects-status');
     assert.equal(status.length, 1);

@@ -27,7 +27,6 @@ class OrganizationContainer extends React.Component {
     };
 
     this.toggleCollaboratorView = this.toggleCollaboratorView.bind(this);
-    this.updateQuery = this.updateQuery.bind(this);
   }
 
   componentDidMount() {
@@ -41,8 +40,8 @@ class OrganizationContainer extends React.Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     const { user } = this.context;
-    const { location, params } = this.props;
-    const { collaboratorView, fetchingOrganization, organization } = this.state;
+    const { params } = this.props;
+    const { fetchingOrganization, organization } = this.state;
 
     const noOrgAfterLoad = nextContext.initialLoadComplete && organization === null;
 
@@ -53,14 +52,6 @@ class OrganizationContainer extends React.Component {
       if (!fetchingOrganization) {
         this.fetchOrganization(nextProps.params.name, nextProps.params.owner);
       }
-    }
-
-    if (organization && (nextProps.location.query !== location.query)) {
-      this.fetchProjects(
-        organization,
-        ((isAdmin() || this.isCollaborator()) && collaboratorView),
-        nextProps.location.query
-      );
     }
   }
 
@@ -83,22 +74,6 @@ class OrganizationContainer extends React.Component {
     const newView = !collaboratorView;
     this.setState({ collaboratorView: newView });
     this.fetchProjects(organization, newView);
-  }
-
-  updateQuery(newParams) {
-    const { router } = this.context;
-    const { location } = this.props;
-
-    const query = Object.assign({}, location.query, newParams);
-    const results = [];
-    Object.keys(query).forEach((key) => {
-      if (query[key] === '') {
-        results.push(delete query[key]);
-      }
-    });
-    const newLocation = Object.assign({}, location, { query });
-    newLocation.search = '';
-    router.push(newLocation);
   }
 
   fetchResearcherQuote() {
@@ -141,23 +116,18 @@ class OrganizationContainer extends React.Component {
     }
   }
 
-  fetchProjects(organization, collaboratorView, locationQuery = this.props.location.query) {
+  fetchProjects(organization, collaboratorView) {
     this.setState({ errorFetchingProjects: null, fetchingProjects: true, fetchingProjectAvatars: true });
     const query = {
       include: 'avatar',
       launch_approved: true,
       private: false,
-      sort: '-launch_date',
-      state: 'live'
+      sort: '-launch_date'
     };
 
     if (collaboratorView) {
       delete query.launch_approved;
       delete query.private;
-      delete query.state;
-    }
-    if (locationQuery && locationQuery.category) {
-      query.tags = locationQuery.category;
     }
 
     organization.get('projects', query)
@@ -257,7 +227,7 @@ class OrganizationContainer extends React.Component {
   }
 
   render() {
-    const { location, params } = this.props;
+    const { params } = this.props;
     const {
       collaboratorView,
       error,
@@ -276,12 +246,10 @@ class OrganizationContainer extends React.Component {
     if (organization && (organization.listed || isAdmin() || this.isCollaborator())) {
       return (
         <OrganizationPage
-          category={location && location.query && location.query.category}
           collaborator={isAdmin() || this.isCollaborator()}
           collaboratorView={collaboratorView}
           errorFetchingProjects={errorFetchingProjects}
           fetchingProjects={fetchingProjects}
-          onChangeQuery={this.updateQuery}
           organization={organization}
           organizationAvatar={organizationAvatar}
           organizationBackground={organizationBackground}
@@ -339,18 +307,12 @@ class OrganizationContainer extends React.Component {
 
 OrganizationContainer.contextTypes = {
   initialLoadComplete: PropTypes.bool,
-  router: PropTypes.object.isRequired,
   user: PropTypes.shape({
     id: PropTypes.string
   })
 };
 
 OrganizationContainer.propTypes = {
-  location: PropTypes.shape({
-    query: PropTypes.shape({
-      category: PropTypes.string
-    })
-  }),
   params: PropTypes.shape({
     name: PropTypes.string,
     owner: PropTypes.string
