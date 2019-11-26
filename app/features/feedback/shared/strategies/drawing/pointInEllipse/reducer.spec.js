@@ -5,13 +5,13 @@ describe('feedback drawing pointInEllipseReducer reducer', function () {
   const rule = {
     hideSubjectViewer: false,
     id: "1234",
-    strategy: "ellipse",
+    strategy: "pointInEllipse",
     successEnabled: true,
     successMessage: "Success!",
     x: "200",
     y: "300",
-    a: "100",
-    b: "50",
+    tolerance_a: "100",
+    tolerance_b: "50",
     theta: "20"
   };
 
@@ -29,15 +29,15 @@ describe('feedback drawing pointInEllipseReducer reducer', function () {
     expect(pointInEllipseReducer(rule, [annotationFailure])).to.deep.equal({
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "ellipse",
+      strategy: "pointInEllipse",
       success: false,
       successEnabled: true,
       successMessage: "Success!",
       successfulClassifications: [],
       x: "200",
       y: "300",
-      a: "100",
-      b: "50",
+      tolerance_a: "100",
+      tolerance_b: "50",
       theta: "20"
     });
   });
@@ -46,15 +46,15 @@ describe('feedback drawing pointInEllipseReducer reducer', function () {
     expect(pointInEllipseReducer(rule, [annotationSuccess])).to.deep.equal({
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "ellipse",
+      strategy: "pointInEllipse",
       success: true,
       successEnabled: true,
       successMessage: "Success!",
       successfulClassifications: [annotationSuccess],
       x: "200",
       y: "300",
-      a: "100",
-      b: "50",
+      tolerance_a: "100",
+      tolerance_b: "50",
       theta: "20"
     });
   });
@@ -63,15 +63,15 @@ describe('feedback drawing pointInEllipseReducer reducer', function () {
     expect(pointInEllipseReducer(rule, [annotationSuccess, annotationFailure])).to.deep.equal({
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "ellipse",
+      strategy: "pointInEllipse",
       success: true,
       successEnabled: true,
       successMessage: "Success!",
       successfulClassifications: [annotationSuccess],
       x: "200",
       y: "300",
-      a: "100",
-      b: "50",
+      tolerance_a: "100",
+      tolerance_b: "50",
       theta: "20"
     });
   });
