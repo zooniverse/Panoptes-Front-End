@@ -6,8 +6,8 @@ import reducer from './reducer';
 export default {
   createRule,
   FeedbackMark,
-  id: 'ellipse',
+  id: 'pointInEllipse',
   labComponent: LabComponent,
   reducer,
-  title: 'Ellipse',
+  title: 'Point In Ellipse',
 };

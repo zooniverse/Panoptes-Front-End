@@ -22,7 +22,7 @@ function isAnnotationWithinEllipse(rule, annotation) {
 
 // Determines whether there are any annotations falling within tolerance for a
 // rule, and appends all successful annotations if so.
-function ellipseReducer(rule, annotations = []) {
+function pointInEllipseReducer(rule, annotations = []) {
   const result = annotations.filter(annotation => isAnnotationWithinEllipse(rule, annotation));
 
   return Object.assign(rule, {
@@ -31,4 +31,4 @@ function ellipseReducer(rule, annotations = []) {
   });
 }
 
-export default ellipseReducer;
+export default pointInEllipseReducer;

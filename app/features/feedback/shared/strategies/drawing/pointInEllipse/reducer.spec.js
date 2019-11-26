@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import radialReducer from './reducer';
+import pointInEllipseReducer from './reducer';
 
-describe('feedback drawing ellipse reducer', function () {
+describe('feedback drawing pointInEllipseReducer reducer', function () {
   const rule = {
     hideSubjectViewer: false,
     id: "1234",
@@ -26,7 +26,7 @@ describe('feedback drawing ellipse reducer', function () {
   };
 
   it('should return result with failure', function () {
-    expect(radialReducer(rule, [annotationFailure])).to.deep.equal({
+    expect(pointInEllipseReducer(rule, [annotationFailure])).to.deep.equal({
       hideSubjectViewer: false,
       id: "1234",
       strategy: "ellipse",
@@ -43,7 +43,7 @@ describe('feedback drawing ellipse reducer', function () {
   });
 
   it('should return result with success', function () {
-    expect(radialReducer(rule, [annotationSuccess])).to.deep.equal({
+    expect(pointInEllipseReducer(rule, [annotationSuccess])).to.deep.equal({
       hideSubjectViewer: false,
       id: "1234",
       strategy: "ellipse",
@@ -60,7 +60,7 @@ describe('feedback drawing ellipse reducer', function () {
   });
 
   it('should return result with success with successful and failed annotation', function () {
-    expect(radialReducer(rule, [annotationSuccess, annotationFailure])).to.deep.equal({
+    expect(pointInEllipseReducer(rule, [annotationSuccess, annotationFailure])).to.deep.equal({
       hideSubjectViewer: false,
       id: "1234",
       strategy: "ellipse",

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import createRule from './create-rule';
 
-describe('feedback drawing ellipse create-rule', function () {
+describe('feedback drawing pointInEllipse create-rule', function () {
   const subjectRule = {
     id: "1234",
     x: "200",
