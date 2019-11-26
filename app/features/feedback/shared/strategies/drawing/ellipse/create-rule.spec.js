@@ -6,14 +6,12 @@ describe('feedback drawing ellipse create-rule', function () {
     id: "1234",
     x: "200",
     y: "300",
-    a: "10",
-    b: "10",
-    theta : "0"
   }
 
   const workflowRule = {
     defaultFailureMessage: "=( Fail",
     defaultSuccessMessage: "Success!",
+    defaultTolerance: "20",
     failureEnabled: true,
     id: "1234",
     strategy: "ellipse",
@@ -32,8 +30,8 @@ describe('feedback drawing ellipse create-rule', function () {
       successMessage: "Success!",
       x: "200",
       y: "300",
-      a: "10",
-      b: "10",
+      tolerance_a: "20",
+      tolerance_b: "20",
       theta : "0"
     });
   })
@@ -41,8 +39,8 @@ describe('feedback drawing ellipse create-rule', function () {
   it('should return a valid rule with subject-specific settings', function () {
     subjectRule.failureMessage = "Subject-specific failure message";
     subjectRule.successMessage = "Subject-specific success message";
-    subjectRule.a = "30";
-    subjectRule.b = "60";
+    subjectRule.tolerance_a = "30";
+    subjectRule.tolerance_b = "60";
     subjectRule.theta = "60";
 
     const rule = createRule(subjectRule, workflowRule);
@@ -56,8 +54,8 @@ describe('feedback drawing ellipse create-rule', function () {
       successMessage: "Subject-specific success message",
       x: "200",
       y: "300",
-      a: "30",
-      b: "60",
+      tolerance_a: "30",
+      tolerance_b: "60",
       theta : "60"
     });
   })
