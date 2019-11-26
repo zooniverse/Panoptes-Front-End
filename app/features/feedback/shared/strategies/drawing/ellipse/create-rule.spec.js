@@ -16,7 +16,7 @@ describe('feedback drawing ellipse create-rule', function () {
     defaultSuccessMessage: "Success!",
     failureEnabled: true,
     id: "1234",
-    strategy: "radial",
+    strategy: "ellipse",
     successEnabled: true
   }
 
@@ -27,7 +27,7 @@ describe('feedback drawing ellipse create-rule', function () {
       failureMessage: "=( Fail",
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "radial",
+      strategy: "ellipse",
       successEnabled: true,
       successMessage: "Success!",
       x: "200",
@@ -51,7 +51,7 @@ describe('feedback drawing ellipse create-rule', function () {
       failureMessage: "Subject-specific failure message",
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "radial",
+      strategy: "ellipse",
       successEnabled: true,
       successMessage: "Subject-specific success message",
       x: "200",

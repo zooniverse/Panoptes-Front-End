@@ -30,14 +30,13 @@ function getFeedbackMarks(feedback) {
   // to render an array of components, so we check here to see if we need to
   // render anything, and then pass back the items to be rendered. We then
   // basically repeat this process in the MarkingsRenderer component.
-  const marks = _.chain(feedback)
+  return _.chain(feedback)
     .map((item) => {
       const { FeedbackMark } = strategies[item.strategy];
       return (FeedbackMark) ? item : false;
     })
     .compact()
     .value();
-  return marks;
 }
 
 // The subject viewer will be hidden if `hideSubjectViewer` is enabled on
