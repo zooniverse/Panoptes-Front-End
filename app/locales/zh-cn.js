@@ -689,9 +689,9 @@ export default {
       paragraphThree: 'The book is an homage to the Zooniverse Year of 2019, highlighting 40 Zooniverse projects out of more than 200 launched to date. There are many fascinating projects we weren’t able to include this year. We hope to continue creating these books annually, highlighting a whole new set of projects and discoveries next year!',
       toDownload: '**To download a free electronic copy:**',
       download: 'Please click [here](http://bit.ly/zoonibook19-pdf) to download a free electronic copy of ‘Into the Zooniverse’.',
-      toOrder: '**To order a hard-copy:**',
-      order: 'Please click [here](http://bit.ly/zoonibook19-buy) if you would like to order a hard-copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
-      credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Bouongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
+      toOrder: '**To order a hard copy:**',
+      order: 'Please click [here](http://bit.ly/zoonibook19-buy) if you would like to order a hard copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
+      credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
     },
     donate: {
       title: '## Donate to Support Zooniverse&#46;org',
