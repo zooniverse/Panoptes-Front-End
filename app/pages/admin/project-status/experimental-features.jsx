@@ -9,7 +9,6 @@ const experimentalFeatures = [
   'fan',
   'mini-course',
   'worldwide telescope',
-  'grid',
   'workflow assignment',
   'Gravity Spy Gold Standard',
   'allow workflow query',
