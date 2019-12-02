@@ -48,6 +48,8 @@ createReactClass = require 'create-react-class'
 `import Acknowledgements from './pages/about/acknowledgements';`
 `import Contact from './pages/about/contact';`
 `import Faq from './pages/about/faq';`
+`import Highlights from './pages/about/highlights';`
+`import Donate from './pages/about/donate';`
 `import GetInvolved from './pages/get-involved/index';`
 `import CallForProjects from './pages/get-involved/call-for-projects';`
 `import Education from './pages/get-involved/education';`
@@ -96,6 +98,8 @@ module.exports =
       <Route path="resources" component={Resources} />
       <Route path="contact" component={Contact} />
       <Route path="faq" component={Faq} />
+      <Route path="highlights" component={Highlights} />
+      <Route path="donate" component={Donate} />
     </Route>
 
 
