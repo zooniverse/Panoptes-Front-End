@@ -14,7 +14,7 @@ describe('feedback drawing pointInEllipse create-rule', function () {
     defaultTolerance: "20",
     failureEnabled: true,
     id: "1234",
-    strategy: "ellipse",
+    strategy: "pointInEllipse",
     successEnabled: true
   }
 
