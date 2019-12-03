@@ -49,7 +49,7 @@ describe('feedback drawing pointInEllipse create-rule', function () {
       failureMessage: "Subject-specific failure message",
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "ellipse",
+      strategy: "pointInEllipse",
       successEnabled: true,
       successMessage: "Subject-specific success message",
       x: "200",
