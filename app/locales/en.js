@@ -94,7 +94,12 @@ export default {
       learn: 'Learn more about %(title)s',
       links: 'Connect with %(title)s',
       metadata: {
-        projects: 'Projects'
+        complete: 'Percent complete',
+        heading: 'Organization Statistics',
+        numbers: 'By the numbers',
+        projects: 'Projects',
+        subtitle: 'Keep track of the progress you and your fellow volunteers have made on this project.',
+        text: 'Every click counts! Join %(title)s\'s community to complete this project and help researchers produce important results.'
       },
       projects: {
         all: 'All',

@@ -262,3 +262,67 @@
     font-size: 1em
     text-decoration: none
     text-transform: uppercase
+
+.organization-metadata
+  &__container
+    display: flex
+    margin-top: 1em
+
+    @media(max-width: 900px)
+      flex-direction: column
+
+  &__subtitle
+    font-size: 1em
+
+  &__completeness-section
+    border-bottom: none
+    border-right: 1px solid #979797
+    display: flex
+    flex-direction: column
+    margin-right: 2em
+    padding-right: 2em
+
+    @media(max-width: 900px)
+      border-bottom: 1px solid #979797
+      border-right: none
+      margin: 0 0 2em 0
+      padding: 0 0 2em 0
+
+  &__completeness-text
+    margin-top: 0
+
+  &__progress-bar
+    background-color: BACKGROUND_COLOR
+    height: 2.2em
+    margin-bottom: .8em
+
+  &__progress-bar-meter
+    background: linear-gradient(270deg, #D46256 0%, #F0B200 100%)
+    color: white
+    display: block
+    height: 100%
+    line-height: 2.2em
+    padding-right: 1em
+    text-align: right
+
+  &__progress-bar-label
+    color: #5C5C5C
+    font-weight: bold
+
+  &__numbers-section
+    min-width: 200px
+
+  &__numbers-stats-container
+    display: flex
+    flex-flow: row wrap
+
+  &__numbers-stat-block
+    margin: 0 2em 2em 0
+
+  &__numbers-stat
+    display: block
+    font-size: 2em
+
+  &__numbers-label
+    display: block
+    font-weight: bold
