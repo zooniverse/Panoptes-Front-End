@@ -5,7 +5,6 @@ function isAnnotationWithinEllipse(rule, annotation) {
   const feedbackY = rule.y;
   const feedbackA = rule.tolerance_a;
   const feedbackB = rule.tolerance_b;
-  const feedbackTheta = rule.theta;
 
   const feedbackThetaRad = Math.PI * (rule.theta / 180.0)
   const projectedX = (annotationX - feedbackX) * Math.cos(feedbackThetaRad) + (annotationY - feedbackY) * Math.sin(feedbackThetaRad)
