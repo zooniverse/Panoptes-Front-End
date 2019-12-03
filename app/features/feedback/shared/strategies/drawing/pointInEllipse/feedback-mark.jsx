@@ -5,8 +5,8 @@ function FeedbackMark({ rule }) {
   const color = (rule.success) ? 'green' : 'red';
   const floatTheta = parseFloat(rule.theta);
   const transform = `rotate(${-floatTheta}, ${rule.x}, ${rule.y}) translate(${rule.x}, ${rule.y})`;
-  const rx = 0.5*parseFloat(rule.a);
-  const ry = 0.5*parseFloat(rule.b);
+  const rx = 0.5*parseFloat(rule.toleranceA);
+  const ry = 0.5*parseFloat(rule.toleranceB);
   return (
     <ellipse
       cx={0}
@@ -30,16 +30,10 @@ FeedbackMark.propTypes = {
     y: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number]),
-    a: PropTypes.oneOfType([
+    toleranceA: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number]),
-    b: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number]),
-    r1: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number]),
-    r2: PropTypes.oneOfType([
+    toleranceB: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number]),
     theta: PropTypes.oneOfType([

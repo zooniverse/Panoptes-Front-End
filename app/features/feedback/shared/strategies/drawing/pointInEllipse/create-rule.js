@@ -9,8 +9,8 @@ function createRule(subjectRule, workflowRule) {
     successEnabled: workflowRule.successEnabled || false,
     x: subjectRule.x,
     y: subjectRule.y,
-    tolerance_a: subjectRule.tolerance_a || workflowRule.defaultTolerance,
-    tolerance_b: subjectRule.tolerance_b || workflowRule.defaultTolerance,
+    toleranceA: subjectRule.toleranceA || workflowRule.defaultTolerance,
+    toleranceB: subjectRule.toleranceB || workflowRule.defaultTolerance,
     theta: subjectRule.theta || "0"
   };
 

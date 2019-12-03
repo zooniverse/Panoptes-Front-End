@@ -30,8 +30,8 @@ describe('feedback drawing pointInEllipse create-rule', function () {
       successMessage: "Success!",
       x: "200",
       y: "300",
-      tolerance_a: "20",
-      tolerance_b: "20",
+      toleranceA: "20",
+      toleranceB: "20",
       theta : "0"
     });
   })
@@ -39,8 +39,8 @@ describe('feedback drawing pointInEllipse create-rule', function () {
   it('should return a valid rule with subject-specific settings', function () {
     subjectRule.failureMessage = "Subject-specific failure message";
     subjectRule.successMessage = "Subject-specific success message";
-    subjectRule.tolerance_a = "30";
-    subjectRule.tolerance_b = "60";
+    subjectRule.toleranceA = "30";
+    subjectRule.toleranceB = "60";
     subjectRule.theta = "60";
 
     const rule = createRule(subjectRule, workflowRule);
@@ -54,8 +54,8 @@ describe('feedback drawing pointInEllipse create-rule', function () {
       successMessage: "Subject-specific success message",
       x: "200",
       y: "300",
-      tolerance_a: "30",
-      tolerance_b: "60",
+      toleranceA: "30",
+      toleranceB: "60",
       theta : "60"
     });
   })

@@ -10,8 +10,8 @@ describe('feedback drawing pointInEllipseReducer reducer', function () {
     successMessage: "Success!",
     x: "200",
     y: "300",
-    tolerance_a: "100",
-    tolerance_b: "50",
+    toleranceA: "100",
+    toleranceB: "50",
     theta: "20"
   };
 
@@ -36,8 +36,8 @@ describe('feedback drawing pointInEllipseReducer reducer', function () {
       successfulClassifications: [],
       x: "200",
       y: "300",
-      tolerance_a: "100",
-      tolerance_b: "50",
+      toleranceA: "100",
+      toleranceB: "50",
       theta: "20"
     });
   });
@@ -53,8 +53,8 @@ describe('feedback drawing pointInEllipseReducer reducer', function () {
       successfulClassifications: [annotationSuccess],
       x: "200",
       y: "300",
-      tolerance_a: "100",
-      tolerance_b: "50",
+      toleranceA: "100",
+      toleranceB: "50",
       theta: "20"
     });
   });
@@ -70,8 +70,8 @@ describe('feedback drawing pointInEllipseReducer reducer', function () {
       successfulClassifications: [annotationSuccess],
       x: "200",
       y: "300",
-      tolerance_a: "100",
-      tolerance_b: "50",
+      toleranceA: "100",
+      toleranceB: "50",
       theta: "20"
     });
   });
