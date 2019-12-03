@@ -25,7 +25,7 @@ describe('feedback drawing pointInEllipse create-rule', function () {
       failureMessage: "=( Fail",
       hideSubjectViewer: false,
       id: "1234",
-      strategy: "ellipse",
+      strategy: "pointInEllipse",
       successEnabled: true,
       successMessage: "Success!",
       x: "200",
