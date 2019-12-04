@@ -13,6 +13,7 @@ class Highlights extends React.Component {
           <img className="donate-image" src="/assets/donate-button.png" alt="Donate Button Link" />
         </a>
         <Markdown>{counterpart('about.donate.paragraphThree')}</Markdown>
+        <Markdown>{counterpart('about.donate.paragraphFour')}</Markdown>
       </div>
     );
   }
