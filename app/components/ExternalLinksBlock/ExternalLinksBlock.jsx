@@ -63,7 +63,7 @@ export default function ExternalLinksBlock({
   padding,
   ulDisplay,
   className,
-  organizationLink
+  socialLabel
 }) {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
@@ -84,7 +84,7 @@ export default function ExternalLinksBlock({
                   isExternalLink={isExternalLink}
                   isSocialLink={isSocialLink}
                   label={label}
-                  organizationLink={organizationLink}
+                  socialLabel={socialLabel}
                   path={path}
                   site={site}
                   url={url}
@@ -106,7 +106,7 @@ ExternalLinksBlock.defaultProps = {
   padding: '3em 4vw',
   ulDisplay: 'block',
   className: '',
-  organizationLink: false
+  socialLabel: false
 };
 
 ExternalLinksBlock.propTypes = {
@@ -117,5 +117,5 @@ ExternalLinksBlock.propTypes = {
   padding: PropTypes.string,
   ulDisplay: PropTypes.string,
   className: PropTypes.string,
-  organizationLink: PropTypes.bool
+  socialLabel: PropTypes.bool
 };

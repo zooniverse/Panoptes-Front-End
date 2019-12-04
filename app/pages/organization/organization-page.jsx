@@ -343,7 +343,7 @@ class OrganizationPage extends React.Component {
                   padding="2em"
                   ulDisplay="flex"
                   className="organization-details__link"
-                  organizationLink={true}
+                  socialLabel={true}
                 />
               )}
             </div>
