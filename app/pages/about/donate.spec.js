@@ -13,7 +13,7 @@ describe('Donate', function () {
   it('renders markdown elements', function () {
     const wrapper = shallow(<Donate />);
     const markdownElements = wrapper.find('Markdown');
-    assert.equal(markdownElements.length, 4);
+    assert.equal(markdownElements.length, 5);
   });
 
   it('renders an image', function () {
