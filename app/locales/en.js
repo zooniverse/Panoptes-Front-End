@@ -89,8 +89,10 @@ export default {
   organization: {
     error: 'There was an error retrieving organization',
     home: {
-      introduction: 'Introduction',
-      links: 'Links',
+      about: 'About %(title)s',
+      introduction: '%(title)s Introduction',
+      learn: 'Learn more about %(title)s',
+      links: 'Connect with %(title)s',
       metadata: {
         projects: 'Projects'
       },
@@ -102,11 +104,10 @@ export default {
         loading: 'Loading organization projects...',
         none: 'There are no %(state)s %(category)s projects associated with this organization.',
         paused: 'Paused Projects',
+        projectCategory: 'Project Category',
         showSection: 'Show Section'
       },
-      readLess: 'Read Less',
-      readMore: 'Read More',
-      researcher: 'Words from a researcher',
+      researcher: 'Message from the Researcher',
       viewToggle: 'View As Volunteer'
     },
     loading: 'Loading organization',

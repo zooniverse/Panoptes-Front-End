@@ -21,8 +21,7 @@ class OrganizationPage extends React.Component {
     this.state = {
       category: '',
       finished: false,
-      paused: false,
-      readMore: false
+      paused: false
     };
   }
 
@@ -34,11 +33,6 @@ class OrganizationPage extends React.Component {
   togglePaused() {
     const { paused } = this.state;
     this.setState({ paused: !paused });
-  }
-
-  toggleReadMore() {
-    const { readMore } = this.state;
-    this.setState({ readMore: !readMore });
   }
 
   handleCategoryChange(category) {
@@ -92,10 +86,6 @@ class OrganizationPage extends React.Component {
     const researcherAvatarSrc = quoteObject.researcherAvatar || '/assets/simple-avatar.png';
 
     const [aboutPage] = organizationPages.filter(page => page.url_key === 'about');
-    const aboutContentClass = classnames(
-      'organization-details__about-content',
-      { 'organization-details__about-content--expanded': readMore }
-    );
 
     return (
       <div className="organization-page">
@@ -131,216 +121,246 @@ class OrganizationPage extends React.Component {
           </div>
         </section>
 
-        <section className="resources-container">
-          {collaborator && (
-            <label className="organization-page__toggle" htmlFor="collaborator view">
-              <input
-                id="collaborator view"
-                onChange={() => toggleCollaboratorView()}
-                type="checkbox"
-                value={!collaboratorView}
-              />
-              <Translate content="organization.home.viewToggle" />
-            </label>
-          )}
-          {organization.categories && organization.categories.length > 0 && (
-            <div className="organization-page__categories" ref={(node) => { this.categories = node; }}>
-              <label
-                className={this.calculateClasses('All')}
-                htmlFor="all"
-              >
-                <input
-                  className="organization-page__category-button--hidden"
-                  id="all"
-                  name="category"
-                  onChange={this.handleCategoryChange.bind(this, '')}
-                  type="radio"
-                />
-                <Translate content="organization.home.projects.all" />
-              </label>
-              {organization.categories.map(buttonCategory => (
-                <label
-                  className={this.calculateClasses(buttonCategory)}
-                  htmlFor={buttonCategory}
-                  key={buttonCategory}
-                >
+        <section className="organization-page__main">
+          <section className="organization-page__projects">
+            {collaborator && (
+              <div className="organization-page__toggle">
+                <label htmlFor="collaborator view">
                   <input
-                    className="organization-page__category-button--hidden"
-                    id={buttonCategory}
-                    name="category"
-                    onChange={this.handleCategoryChange.bind(this, buttonCategory)}
-                    type="radio"
+                    id="collaborator view"
+                    onChange={() => toggleCollaboratorView()}
+                    type="checkbox"
+                    value={!collaboratorView}
                   />
-                  {buttonCategory}
+                  <Translate content="organization.home.viewToggle" />
                 </label>
-              ))}
-            </div>
-          )}
-          <OrganizationProjectCards
-            category={category}
-            errorFetchingProjects={errorFetchingProjects}
-            fetchingProjects={fetchingProjects}
-            projects={activeProjects}
-            projectAvatars={projectAvatars}
-            state="active"
-          />
-
-          <div>
-            <Translate
-              content="organization.home.projects.paused"
-            />
-            <button
-              onClick={() => this.togglePaused()}
-              type="button"
-            >
-              {paused ? (
-                <>
-                  <i className="fa fa-chevron-up fa-lg" />
-                  {' '}
-                  <Translate
-                    content="organization.home.projects.hideSection"
-                  />
-                </>
-              ) : (
-                <>
-                  <i className="fa fa-chevron-down fa-lg" />
-                  {' '}
-                  <Translate
-                    content="organization.home.projects.showSection"
-                  />
-                </>
-              )}
-            </button>
-          </div>
-          {paused && (
-            <OrganizationProjectCards
-              category={category}
-              errorFetchingProjects={errorFetchingProjects}
-              fetchingProjects={fetchingProjects}
-              projects={pausedProjects}
-              projectAvatars={projectAvatars}
-              state="paused"
-            />
-          )}
-
-          <div>
-            <Translate
-              content="organization.home.projects.finished"
-            />
-            <button
-              onClick={() => this.toggleFinished()}
-              type="button"
-            >
-              {finished ? (
-                <>
-                  <i className="fa fa-chevron-up fa-lg" />
-                  {' '}
-                  <Translate
-                    content="organization.home.projects.hideSection"
-                  />
-                </>
-              ) : (
-                <>
-                  <i className="fa fa-chevron-down fa-lg" />
-                  {' '}
-                  <Translate
-                    content="organization.home.projects.showSection"
-                  />
-                </>
-              )}
-            </button>
-          </div>
-          {finished && (
-            <OrganizationProjectCards
-              category={category}
-              errorFetchingProjects={errorFetchingProjects}
-              fetchingProjects={fetchingProjects}
-              projects={finishedProjects}
-              projectAvatars={projectAvatars}
-              state="finished"
-            />
-          )}
-        </section>
-
-        <section className="organization-details">
-          <div className="organization-page__container">
-            {quoteObject && quoteObject.quote && (
-              <div className="organization-researcher-words">
-                <Translate className="organization-details__heading" content="organization.home.researcher" />
-                <div className="organization-researcher-words__container">
-                  <img
-                    className="organization-researcher-words__avatar"
-                    alt="presentation"
-                    src={researcherAvatarSrc}
-                  />
-                  <span
-                    className="organization-researcher-words__quote"
-                  >
-                    &quot;
-                    {quoteObject.quote}
-                    &quot;
-                  </span>
-                </div>
-                <Link
-                  className="organization-researcher-words__attribution"
-                  to={quoteObject.slug}
-                >
-                  {' - '}
-                  {quoteObject.displayName}
-                </Link>
               </div>
             )}
-            <div className="organization-details__content">
-              <h4 className="organization-details__heading">
-                {organization.display_name}
-                <Translate content="organization.home.introduction" />
-              </h4>
-              {organization.introduction && (
-                <Markdown project={organization}>{organization.introduction}</Markdown>
-              )}
-            </div>
-          </div>
-
-          <OrganizationMetadata
-            displayName={organization.display_name}
-            projects={organizationProjects}
-          />
-
-          <div className="organization-page__container">
-            <div className="organization-details__content">
-              <h4 className="organization-details__heading">
-                <Translate content="project.home.about" with={{ title: organization.display_name }} />
-              </h4>
-              {aboutPage && (
-                <div>
-                  <Markdown className={aboutContentClass} project={organization}>
-                    {aboutPage.content}
-                  </Markdown>
-                  <button
-                    className="standard-button organization-details__button"
-                    onClick={() => this.toggleReadMore()}
-                    type="button"
+            {organization.categories && organization.categories.length > 0 && (
+              <>
+                <Translate
+                  className="organization-details__content-heading"
+                  component="h4"
+                  content="organization.home.projects.projectCategory"
+                />
+                <div className="organization-page__categories" ref={(node) => { this.categories = node; }}>
+                  <label
+                    className={this.calculateClasses('All')}
+                    htmlFor="all"
                   >
-                    {readMore
-                      ? <Translate content="organization.home.readLess" />
-                      : <Translate content="organization.home.readMore" />}
-                  </button>
+                    <input
+                      className="organization-page__category-button--hidden"
+                      id="all"
+                      name="category"
+                      onChange={this.handleCategoryChange.bind(this, '')}
+                      type="radio"
+                    />
+                    <Translate content="organization.home.projects.all" />
+                  </label>
+                  {organization.categories.map(buttonCategory => (
+                    <label
+                      className={this.calculateClasses(buttonCategory)}
+                      htmlFor={buttonCategory}
+                      key={buttonCategory}
+                    >
+                      <input
+                        className="organization-page__category-button--hidden"
+                        id={buttonCategory}
+                        name="category"
+                        onChange={this.handleCategoryChange.bind(this, buttonCategory)}
+                        type="radio"
+                      />
+                      {buttonCategory}
+                    </label>
+                  ))}
                 </div>
-              )}
-            </div>
-            {organization.urls && organization.urls.length && (
-              <ExternalLinksBlockContainer
-                header={(
-                  <Translate
-                    className="organization-details__heading"
-                    content="organization.home.links"
-                    component="h4"
-                  />
+              </>
+            )}
+            <OrganizationProjectCards
+              category={category}
+              errorFetchingProjects={errorFetchingProjects}
+              fetchingProjects={fetchingProjects}
+              projects={activeProjects}
+              projectAvatars={projectAvatars}
+              state="active"
+            />
+
+            <div className="organization-page__section-heading">
+              <Translate
+                className="organization-page__section-title"
+                content="organization.home.projects.paused"
+              />
+              <button
+                className="standard-button organization-page__section-button"
+                onClick={() => this.togglePaused()}
+                type="button"
+              >
+                {paused ? (
+                  <>
+                    <i className="fa fa-chevron-up fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.hideSection"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <i className="fa fa-chevron-down fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.showSection"
+                    />
+                  </>
                 )}
-                resource={organization}
+              </button>
+            </div>
+            {paused && (
+              <OrganizationProjectCards
+                category={category}
+                errorFetchingProjects={errorFetchingProjects}
+                fetchingProjects={fetchingProjects}
+                projects={pausedProjects}
+                projectAvatars={projectAvatars}
+                state="paused"
               />
             )}
-          </div>
+
+            <div className="organization-page__section-heading">
+              <Translate
+                className="organization-page__section-title"
+                content="organization.home.projects.finished"
+              />
+              <button
+                className="standard-button organization-page__section-button"
+                onClick={() => this.toggleFinished()}
+                type="button"
+              >
+                {finished ? (
+                  <>
+                    <i className="fa fa-chevron-up fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.hideSection"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <i className="fa fa-chevron-down fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.showSection"
+                    />
+                  </>
+                )}
+              </button>
+            </div>
+            {finished && (
+              <OrganizationProjectCards
+                category={category}
+                errorFetchingProjects={errorFetchingProjects}
+                fetchingProjects={fetchingProjects}
+                projects={finishedProjects}
+                projectAvatars={projectAvatars}
+                state="finished"
+              />
+            )}
+          </section>
+
+          <hr />
+
+          <section className="organization-details">
+            <Translate
+              className="organization-page__section-title"
+              content="organization.home.learn"
+              with={{
+                title: organization.display_name
+              }}
+            />
+            <div className="organization-details__container">
+              <div className="organization-details__flex-container">
+                {quoteObject && quoteObject.quote && (
+                  <div className="organization-researcher-words">
+                    <Translate
+                      className="organization-details__content-heading"
+                      content="organization.home.researcher"
+                    />
+                    <div className="organization-researcher-words__container">
+                      <img
+                        className="organization-researcher-words__avatar"
+                        alt="presentation"
+                        src={researcherAvatarSrc}
+                      />
+                      <span
+                        className="organization-researcher-words__quote"
+                      >
+                        &quot;
+                        {quoteObject.quote}
+                        &quot;
+                      </span>
+                    </div>
+                    <Link
+                      className="organization-researcher-words__attribution"
+                      to={quoteObject.slug}
+                    >
+                      {' - '}
+                      {quoteObject.displayName}
+                    </Link>
+                  </div>
+                )}
+                <div className="organization-details__flex-content">
+                  <Translate
+                    className="organization-details__content-heading"
+                    component="h4"
+                    content="organization.home.introduction"
+                    with={{ title: organization.display_name }}
+                  />
+                  {organization.introduction && (
+                    <Markdown project={organization}>{organization.introduction}</Markdown>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="organization-details__container">
+              <OrganizationMetadata
+                displayName={organization.display_name}
+                projects={organizationProjects}
+              />
+            </div>
+
+            <div className="organization-details__container">
+              <div className="organization-details__content">
+                <Translate
+                  className="organization-details__content-heading"
+                  component="h4"
+                  content="organization.home.about"
+                  with={{ title: organization.display_name }}
+                />
+                {aboutPage && (
+                  <Markdown
+                    className="organization-details__about-content"
+                    project={organization}
+                  >
+                    {aboutPage.content}
+                  </Markdown>
+                )}
+              </div>
+            </div>
+            <div className="organization-details__container">
+              {organization.urls && organization.urls.length && (
+                <ExternalLinksBlockContainer
+                  header={(
+                    <Translate
+                      className="organization-details__heading"
+                      content="organization.home.links"
+                      component="h4"
+                    />
+                  )}
+                  resource={organization}
+                />
+              )}
+            </div>
+          </section>
         </section>
       </div>
     );

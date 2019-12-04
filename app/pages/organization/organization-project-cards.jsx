@@ -13,19 +13,19 @@ export const OrganizationProjectCards = ({
 }) => {
   if (fetchingProjects) {
     return (
-      <div className="organization-page__projects-status">
+      <div className="organization-page__project-cards-message">
         <p><Translate content="organization.home.projects.loading" /></p>
       </div>
     );
   } else if (!fetchingProjects && projects && !projects.length) {
     return (
-      <div className="organization-page__projects-status">
+      <div className="organization-page__project-cards-message">
         <p><Translate content="organization.home.projects.none" with={{ category, state }} /></p>
       </div>
     );
   } else if (projects && projects.length > 0) {
     return (
-      <div className="project-card-list">
+      <div className="project-cards-section">
         {projects.map((project) => {
           let projectAvatar = projectAvatars.find(avatar => avatar.links.linked.id === project.id);
           if (!projectAvatar) {
@@ -38,7 +38,7 @@ export const OrganizationProjectCards = ({
     );
   } else {
     return (
-      <div className="organization-page__projects-status">
+      <div className="organization-page__project-cards-message">
         <p><Translate content="organization.home.projects.error" /></p>
         {errorFetchingProjects
           && (
