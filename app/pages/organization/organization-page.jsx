@@ -124,15 +124,17 @@ class OrganizationPage extends React.Component {
         <section className="organization-page__main">
           <section className="organization-page__projects">
             {collaborator && (
-              <label className="organization-page__toggle" htmlFor="collaborator view">
-                <input
-                  id="collaborator view"
-                  onChange={() => toggleCollaboratorView()}
-                  type="checkbox"
-                  value={!collaboratorView}
-                />
-                <Translate content="organization.home.viewToggle" />
-              </label>
+              <div className="organization-page__toggle">
+                <label htmlFor="collaborator view">
+                  <input
+                    id="collaborator view"
+                    onChange={() => toggleCollaboratorView()}
+                    type="checkbox"
+                    value={!collaboratorView}
+                  />
+                  <Translate content="organization.home.viewToggle" />
+                </label>
+              </div>
             )}
             {organization.categories && organization.categories.length > 0 && (
               <>
@@ -275,51 +277,56 @@ class OrganizationPage extends React.Component {
               }}
             />
             <div className="organization-details__container">
-              {quoteObject && quoteObject.quote && (
-                <div className="organization-researcher-words">
+              <div className="organization-details__flex-container">
+                {quoteObject && quoteObject.quote && (
+                  <div className="organization-researcher-words">
                     <Translate
                       className="organization-details__content-heading"
                       content="organization.home.researcher"
                     />
-                  <div className="organization-researcher-words__container">
-                    <img
-                      className="organization-researcher-words__avatar"
-                      alt="presentation"
-                      src={researcherAvatarSrc}
-                    />
-                    <span
-                      className="organization-researcher-words__quote"
+                    <div className="organization-researcher-words__container">
+                      <img
+                        className="organization-researcher-words__avatar"
+                        alt="presentation"
+                        src={researcherAvatarSrc}
+                      />
+                      <span
+                        className="organization-researcher-words__quote"
+                      >
+                        &quot;
+                        {quoteObject.quote}
+                        &quot;
+                      </span>
+                    </div>
+                    <Link
+                      className="organization-researcher-words__attribution"
+                      to={quoteObject.slug}
                     >
-                      &quot;
-                      {quoteObject.quote}
-                      &quot;
-                    </span>
+                      {' - '}
+                      {quoteObject.displayName}
+                    </Link>
                   </div>
-                  <Link
-                    className="organization-researcher-words__attribution"
-                    to={quoteObject.slug}
-                  >
-                    {' - '}
-                    {quoteObject.displayName}
-                  </Link>
-                </div>
-              )}
+                )}
+                <div className="organization-details__flex-content">
                   <Translate
                     className="organization-details__content-heading"
                     component="h4"
                     content="organization.home.introduction"
                     with={{ title: organization.display_name }}
                   />
-                {organization.introduction && (
-                  <Markdown project={organization}>{organization.introduction}</Markdown>
-                )}
+                  {organization.introduction && (
+                    <Markdown project={organization}>{organization.introduction}</Markdown>
+                  )}
+                </div>
               </div>
             </div>
 
-            <OrganizationMetadata
-              displayName={organization.display_name}
-              projects={organizationProjects}
-            />
+            <div className="organization-details__container">
+              <OrganizationMetadata
+                displayName={organization.display_name}
+                projects={organizationProjects}
+              />
+            </div>
 
             <div className="organization-details__container">
               <div className="organization-details__content">
