@@ -89,5 +89,28 @@ describe('ExternalLink', function() {
         wrapper.setProps({ site: 'myh4x0rsite.com/' })
         expect(wrapper.html()).to.be.null
       })
+
+      it('should not include the social media label', function () {
+        const socialLabel = wrapper.find('span.social-label');
+        expect(socialLabel.length).to.equal(0);
+      });
+
+      describe('when the socialLabel property is true', function () {
+        const wrapper = shallow(
+          <ExternalLink
+            isExternalLink={false}
+            isSocialLink={true}
+            path={MOCK_SOCIAL_PATH}
+            site={MOCK_SOCIAL_SITE}
+            socialLabel={true}
+            url={MOCK_SOCIAL_URL}
+          />
+        );
+
+        it('should include the social media label', function () {
+          const socialLabel = wrapper.find('span.social-label');
+          expect(socialLabel.text()).to.equal('Facebook');
+        });
+      });
     });
 });
