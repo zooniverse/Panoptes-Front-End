@@ -277,7 +277,10 @@ class OrganizationPage extends React.Component {
             <div className="organization-details__container">
               {quoteObject && quoteObject.quote && (
                 <div className="organization-researcher-words">
-                  <Translate className="organization-details__heading" content="organization.home.researcher" />
+                    <Translate
+                      className="organization-details__content-heading"
+                      content="organization.home.researcher"
+                    />
                   <div className="organization-researcher-words__container">
                     <img
                       className="organization-researcher-words__avatar"
@@ -301,11 +304,12 @@ class OrganizationPage extends React.Component {
                   </Link>
                 </div>
               )}
-              <div className="organization-details__content">
-                <h4 className="organization-details__content-heading">
-                  {organization.display_name}
-                  <Translate content="organization.home.introduction" />
-                </h4>
+                  <Translate
+                    className="organization-details__content-heading"
+                    component="h4"
+                    content="organization.home.introduction"
+                    with={{ title: organization.display_name }}
+                  />
                 {organization.introduction && (
                   <Markdown project={organization}>{organization.introduction}</Markdown>
                 )}
@@ -319,9 +323,12 @@ class OrganizationPage extends React.Component {
 
             <div className="organization-details__container">
               <div className="organization-details__content">
-                <h4 className="organization-details__content-heading">
-                  <Translate content="project.home.about" with={{ title: organization.display_name }} />
-                </h4>
+                <Translate
+                  className="organization-details__content-heading"
+                  component="h4"
+                  content="organization.home.about"
+                  with={{ title: organization.display_name }}
+                />
                 {aboutPage && (
                   <Markdown
                     className="organization-details__about-content"

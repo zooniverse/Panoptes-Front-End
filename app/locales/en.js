@@ -89,8 +89,8 @@ export default {
   organization: {
     error: 'There was an error retrieving organization',
     home: {
-      about: 'About %9title)s',
-      introduction: 'Introduction to %(title)s',
+      about: 'About %(title)s',
+      introduction: '%(title)s Introduction',
       learn: 'Learn more about %(title)s',
       links: 'Connect with %(title)s',
       metadata: {
@@ -107,7 +107,7 @@ export default {
         projectCategory: 'Project Category',
         showSection: 'Show Section'
       },
-      researcher: 'Words from a researcher',
+      researcher: 'Message from the Researcher',
       viewToggle: 'View As Volunteer'
     },
     loading: 'Loading organization',
