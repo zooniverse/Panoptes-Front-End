@@ -625,10 +625,11 @@ export default {
       credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
     },
     donate: {
-      title: '## Donate to Support Zooniverse&#46;org',
+      title: '## Donate',
       paragraphOne: 'Zooniverse is a collaboration between the University of Oxford, Chicago’s Adler Planetarium, the University of Minnesota – Twin Cities (UMN), hundreds of researchers, and over 2 million participants from around the world. The [Zooniverse teams](https://www.zooniverse.org/about/team) at Oxford, Adler, and UMN include the project leads, web developers, designer, communications lead, and researchers. This unique mix of expertise in research, public engagement, and modern web development supports an amazing community of volunteers and dedicated research teams using the Zooniverse platform.',
-      paragraphTwo: 'Much of the Zooniverse’s funding comes through grants, with some institutional support from Oxford, Adler, and UMN. Please consider making a tax-deductible donation to support the Zooniverse team in continuing these efforts.',
-      paragraphThree: '**Note:** the link above takes you to the Adler Planetarium’s donation portal. The donations made through the site are tagged as coming from the Zooniverse community and will be used to support the Zooniverse team’s efforts.'
+      paragraphTwo: 'Much of the Zooniverse’s funding comes through grants, as well as institutional support from Oxford, Adler, and UMN.',
+      paragraphThree: 'Please consider making a tax-deductible donation. Your unrestricted gift to the Adler Planetarium helps people around the world help researchers unlock their data through online citizen science, astronomers bring telescopes into neighborhoods all over Chicagoland, teenagers launch original experiments into space, and people of all ages connect under the stars.',
+      paragraphFour: 'The link below takes you to a donation portal within the Adler Planetarium’s site. The donations made through this link are tagged as coming from the Zooniverse community.'
     }
   },
   getInvolved: {
