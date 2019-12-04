@@ -61,7 +61,7 @@ describe('OrganizationPage', function () {
           organization={organization}
           toggleCollaboratorView={toggle}
         />);
-      label = wrapper.find('label.organization-page__toggle');
+      label = wrapper.find('div.organization-page__toggle');
       checkbox = label.find('input[type="checkbox"]');
     });
 
@@ -76,7 +76,7 @@ describe('OrganizationPage', function () {
 
     it('should have project view toggle checked if collaboratorView is false', function () {
       wrapper.setProps({ collaboratorView: false });
-      label = wrapper.find('label.organization-page__toggle');
+      label = wrapper.find('div.organization-page__toggle');
       checkbox = label.find('input[type="checkbox"]');
       assert.equal(checkbox.prop('value'), true);
     });
