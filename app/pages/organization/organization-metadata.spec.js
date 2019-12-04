@@ -18,9 +18,10 @@ describe('OrganizationMetadata', function () {
       <OrganizationMetadata
         displayName={organization.display_name}
         projects={organizationProjects}
-      />);
-    const stats = wrapper.find('.project-metadata-stat');
-    assert.equal(stats.length, 4);
+      />
+    );
+    const stats = wrapper.find('.organization-metadata__container');
+    assert.equal(stats.length, 1);
   });
 
   it('should reduce retired subjects count to 75', function () {
@@ -28,8 +29,9 @@ describe('OrganizationMetadata', function () {
       <OrganizationMetadata
         displayName={organization.display_name}
         projects={organizationProjects}
-      />);
-    const retiredSubjects = wrapper.find('.project-metadata-stat__value').at(3);
+      />
+    );
+    const retiredSubjects = wrapper.find('.organization-metadata__numbers-stat').at(3);
     assert.equal(retiredSubjects.text(), '75');
   });
 });
