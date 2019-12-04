@@ -9,11 +9,11 @@ class Highlights extends React.Component {
         <Markdown>{counterpart('about.donate.title')}</Markdown>
         <Markdown>{counterpart('about.donate.paragraphOne')}</Markdown>
         <Markdown>{counterpart('about.donate.paragraphTwo')}</Markdown>
+        <Markdown>{counterpart('about.donate.paragraphThree')}</Markdown>
+        <Markdown>{counterpart('about.donate.paragraphFour')}</Markdown>
         <a href="http://bit.ly/Adler-donate" target="_blank" rel="noopener noreferrer">
           <img className="donate-image" src="/assets/donate-button.png" alt="Donate Button Link" />
         </a>
-        <Markdown>{counterpart('about.donate.paragraphThree')}</Markdown>
-        <Markdown>{counterpart('about.donate.paragraphFour')}</Markdown>
       </div>
     );
   }
