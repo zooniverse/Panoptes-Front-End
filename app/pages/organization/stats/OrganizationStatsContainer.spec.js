@@ -6,8 +6,6 @@ import OrganizationStatsContainer from './OrganizationStatsContainer';
 
 describe('OrganizationStatsContainer', function () {
   it('should render without crashing', function () {
-    const wrapper = shallow(
-      <OrganizationStatsContainer />
-    );
+    shallow(<OrganizationStatsContainer />);
   });
 });
