@@ -1,4 +1,4 @@
-/* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'] */
+/* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'], import/prefer-default-export: 0 */
 /* global describe, it, beforeEach */
 
 import React from 'react';
@@ -8,6 +8,7 @@ import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
 import Translate from 'react-translate-component';
 import OrganizationContainer from './organization-container';
+import OrganizationPage from './organization-page';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
 const params = {
@@ -59,7 +60,7 @@ describe('OrganizationContainer', function () {
   let wrapper;
 
   beforeEach(function () {
-    wrapper = shallow(<OrganizationContainer params={params} />);
+    wrapper = shallow(<OrganizationContainer params={params}><OrganizationPage /></OrganizationContainer>, { context: { router: {}}});
   });
 
   it('should render without crashing', function () {
