@@ -200,25 +200,32 @@
     flex: 3 1 500px
     margin: 2em 1em 0 1em
 
-  &__links
-    background-color: white
-    color: ZOONIVERSE_NAVY
-    display: flex
-    flex: 2 0 auto
-    flex-direction: column
-    padding: 3em 4vw
-    width: 250px
-
   &__link
-    align-items: center
-    display: flex
-    font-size: 1.2em
-    margin-left: .8em
-    margin-top: 20px
-    text-decoration: none
+    color: #5c5c5c
+    font-size: 1em
+    justify-content: flex-end
+    height: 100%
+    margin-right: 2em
+    min-width: 150px
 
-  &__icon
-    padding-right: .1em
+    div
+      display: flex
+      flex-direction: column
+
+    i
+      font-size: 2em
+      margin-right: 0
+
+    .link-title
+      color: TEAL_DARK
+      text-transform: uppercase
+
+      a
+        color: TEAL_DARK
+        text-transform: uppercase
+
+    .social-label
+      font-weight: bold
 
   &__about-content
     columns: 2 400px

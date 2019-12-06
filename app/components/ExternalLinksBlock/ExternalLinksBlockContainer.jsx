@@ -37,12 +37,30 @@ export default class ExternalLinksBlockContainer extends React.Component {
   }
 
   render() {
+    const {
+      basis,
+      className,
+      header,
+      padding,
+      resource,
+      socialLabel,
+      ulDisplay
+    } = this.props;
     const { external, social } = this.getExternalLinks();
     const links = [].concat(external, social);
 
     if (links.length > 0) {
       return (
-        <ExternalLinksBlock header={this.props.header} links={links} basis={this.props.basis} resource={this.props.resource} />
+        <ExternalLinksBlock
+          basis={basis}
+          className={className}
+          header={header}
+          links={links}
+          padding={padding}
+          resource={resource}
+          socialLabel={socialLabel}
+          ulDisplay={ulDisplay}
+        />
       );
     }
 
