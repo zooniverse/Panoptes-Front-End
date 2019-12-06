@@ -7,7 +7,7 @@ Determines whether a point is within a specified ellipticakl region.
 A single subject can have multiple feedback rules. To group the metadata fields for a single feedback rule together, `N` should be an integer that is identical for each rule, e.g.:
 
 ```
-#feedback_1_id,#feedback_1_x,#feedback_1_y,feedback_1_toleranceA,feedback_1_toleranceA,#feedback_1_theta,#feedback_2_id,#feedback_2_x,#feedback_2_y,...
+#feedback_1_id,#feedback_1_x,#feedback_1_y,feedback_1_toleranceA,feedback_1_toleranceB,#feedback_1_theta,#feedback_2_id,#feedback_2_x,#feedback_2_y,...
 ```
 
 - `#feedback_N_id` (**required**) - ID of the corresponding workflow task rule.
