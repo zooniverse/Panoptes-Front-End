@@ -113,7 +113,7 @@ export default {
         showSection: 'Show Section'
       },
       researcher: 'Message from the Researcher',
-      viewToggle: 'View As Volunteer'
+      viewToggle: 'View as volunteer'
     },
     loading: 'Loading organization',
     notFound: 'organization not found.',

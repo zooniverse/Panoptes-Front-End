@@ -25,7 +25,7 @@ export const OrganizationProjectCards = ({
     );
   } else if (projects && projects.length > 0) {
     return (
-      <div className="project-cards-section">
+      <div className="organization-page__project-cards-section">
         {projects.map((project) => {
           let projectAvatar = projectAvatars.find(avatar => avatar.links.linked.id === project.id);
           if (!projectAvatar) {

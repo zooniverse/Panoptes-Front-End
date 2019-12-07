@@ -24,6 +24,12 @@
       padding-left: 0
       text-align: center
 
+    .project-card
+      margin: 0 1em 1em 0
+
+      @media (max-width: 900px)
+        margin-right: 0
+
   &__project-cards-message
     align-items: center
     color: TEAL_DARK
@@ -73,7 +79,7 @@
     display: flex
     flex-direction: row
     justify-content: space-between
-    margin-bottom: 2em
+    margin: 2em 0
 
   &__section-title
     color: #5C5C5C
@@ -163,6 +169,7 @@
     color: black
     font-weight: bold
     letter-spacing: 1.5px
+    line-height: 1.2em
     text-transform: uppercase
 
   &__content
