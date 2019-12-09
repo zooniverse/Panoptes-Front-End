@@ -1,6 +1,7 @@
 import graph2drange from './datavis/graph2drange';
 import column from './drawing/column';
 import radial from './drawing/radial';
+import pointInEllipse from './drawing/pointInEllipse';
 import dud from './dud';
 import singleAnswerQuestion from './single-answer-question';
 
@@ -9,5 +10,6 @@ export default {
   dud,
   graph2drange,
   radial,
+  pointInEllipse,
   singleAnswerQuestion
 };
