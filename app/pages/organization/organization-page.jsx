@@ -146,7 +146,7 @@ class OrganizationPage extends React.Component {
               <>
                 <Translate
                   className="organization-details__content-heading"
-                  component="h4"
+                  component="h3"
                   content="organization.home.projects.projectCategory"
                 />
                 <div className="organization-page__categories" ref={(node) => { this.categories = node; }}>
@@ -214,19 +214,20 @@ class OrganizationPage extends React.Component {
               </button>
             </div>
             {active && (
-            <OrganizationProjectCards
-              category={category}
-              errorFetchingProjects={errorFetchingProjects}
-              fetchingProjects={fetchingProjects}
-              projects={activeProjects}
-              projectAvatars={projectAvatars}
-              state="active"
-            />
+              <OrganizationProjectCards
+                category={category}
+                errorFetchingProjects={errorFetchingProjects}
+                fetchingProjects={fetchingProjects}
+                projects={activeProjects}
+                projectAvatars={projectAvatars}
+                state="active"
+              />
             )}
 
             <div className="organization-page__section-heading">
               <Translate
                 className="organization-page__section-title"
+                component="h2"
                 content="organization.home.projects.paused"
               />
               <button
@@ -267,6 +268,7 @@ class OrganizationPage extends React.Component {
             <div className="organization-page__section-heading">
               <Translate
                 className="organization-page__section-title"
+                component="h2"
                 content="organization.home.projects.finished"
               />
               <button
@@ -310,6 +312,7 @@ class OrganizationPage extends React.Component {
           <section className="organization-details">
             <Translate
               className="organization-page__section-title"
+              component="h2"
               content="organization.home.learn"
               with={{
                 title: organization.display_name
@@ -320,6 +323,7 @@ class OrganizationPage extends React.Component {
                 {quoteObject && quoteObject.quote && (
                   <div className="organization-researcher-words">
                     <Translate
+                      component="h3"
                       className="organization-details__content-heading"
                       content="organization.home.researcher"
                     />
@@ -349,7 +353,7 @@ class OrganizationPage extends React.Component {
                 <div className="organization-details__flex-content">
                   <Translate
                     className="organization-details__content-heading"
-                    component="h4"
+                    component="h3"
                     content="organization.home.introduction"
                     with={{ title: organization.display_name }}
                   />
@@ -373,7 +377,7 @@ class OrganizationPage extends React.Component {
                   header={(
                     <Translate
                       className="organization-details__content-heading"
-                      component="h4"
+                      component="h3"
                       content="organization.home.links"
                       with={{ title: organization.display_name }}
                     />
@@ -391,7 +395,7 @@ class OrganizationPage extends React.Component {
               <div className="organization-details__content">
                 <Translate
                   className="organization-details__content-heading"
-                  component="h4"
+                  component="h3"
                   content="organization.home.about"
                   with={{ title: organization.display_name }}
                 />

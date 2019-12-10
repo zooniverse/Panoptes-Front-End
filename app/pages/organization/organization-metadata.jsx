@@ -19,7 +19,7 @@ export const OrganizationMetadata = ({ displayName, projects }) => {
     <div className="organization-details__content">
       <Translate
         className="organization-details__content-heading"
-        component="h4"
+        component="h3"
         content="organization.home.metadata.heading"
       />
       {projects && (projects.length > 0)
@@ -28,7 +28,7 @@ export const OrganizationMetadata = ({ displayName, projects }) => {
             <section className="organization-metadata__completeness-section">
               <Translate
                 className="organization-metadata__subtitle"
-                component="h5"
+                component="h4"
                 content="organization.home.metadata.subtitle"
               />
               <Translate
@@ -53,7 +53,7 @@ export const OrganizationMetadata = ({ displayName, projects }) => {
             <section className="organization-metadata__numbers-section">
               <Translate
                 className="organization-metadata__subtitle"
-                component="h5"
+                component="h4"
                 content="organization.home.metadata.numbers"
               />
               <div className="organization-metadata__numbers-stats-container">
