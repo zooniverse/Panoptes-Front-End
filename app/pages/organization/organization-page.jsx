@@ -20,9 +20,15 @@ class OrganizationPage extends React.Component {
 
     this.state = {
       category: '',
+      active: true,
       finished: false,
       paused: false
     };
+  }
+
+  toggleActive() {
+    const { active } = this.state;
+    this.setState({ active: !active });
   }
 
   toggleFinished() {
@@ -69,9 +75,9 @@ class OrganizationPage extends React.Component {
     } = this.props;
     const {
       category,
+      active,
       finished,
-      paused,
-      readMore
+      paused
     } = this.state;
 
     let projects = organizationProjects;
@@ -176,6 +182,38 @@ class OrganizationPage extends React.Component {
                 </div>
               </>
             )}
+
+            <div className="organization-page__section-heading">
+              <Translate
+                className="organization-page__section-title"
+                component="h2"
+                content="organization.home.projects.active"
+              />
+              <button
+                className="standard-button organization-page__section-button"
+                onClick={() => this.toggleActive()}
+                type="button"
+              >
+                {active ? (
+                  <>
+                    <i className="fa fa-chevron-up fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.hideSection"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <i className="fa fa-chevron-down fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.showSection"
+                    />
+                  </>
+                )}
+              </button>
+            </div>
+            {active && (
             <OrganizationProjectCards
               category={category}
               errorFetchingProjects={errorFetchingProjects}
@@ -184,6 +222,7 @@ class OrganizationPage extends React.Component {
               projectAvatars={projectAvatars}
               state="active"
             />
+            )}
 
             <div className="organization-page__section-heading">
               <Translate

@@ -102,6 +102,7 @@ export default {
         text: 'Every click counts! Join %(title)s\'s community to complete this project and help researchers produce important results.'
       },
       projects: {
+        active: 'Active Projects',
         all: 'All',
         error: 'There was an error loading organization projects.',
         finished: 'Finished Projects',
