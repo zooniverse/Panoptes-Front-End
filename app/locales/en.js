@@ -119,7 +119,14 @@ export default {
     loading: 'Loading organization',
     notFound: 'organization not found.',
     notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...'
+    pleaseWait: 'Please wait...',
+    stats: {
+      byTheNumbers: 'By the Numbers',
+      classifications: 'Classifications',
+      organizationStatistics: '%(title)s Statistics',
+      projectStats: 'Live Projects (%(count)s)',
+      talk: 'Talk Stats'
+    }
   },
   tasks: {
     hidePreviousMarks: 'Hide previous marks %(count)s',

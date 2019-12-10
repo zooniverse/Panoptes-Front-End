@@ -1,42 +1,72 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import { Markdown } from 'markdownz';
+import React from 'react';
+import Translate from 'react-translate-component';
+import styled from 'styled-components';
 
 import ProjectNavbar from '../../project/components/ProjectNavbar';
 
+import BarChartBlock from './components/BarChartBlock';
+import ByTheNumbers from './components/ByTheNumbers';
+import ProjectStats from './components/ProjectStats';
+import StatsContainer from './components/StatsContainer';
+
+const StyledStatsPageContainer = styled.div`
+  padding: 2em 5vw;
+`;
+
+const StyledPageHeading = styled.h2`
+  letter-spacing: -.5px;
+  margin-bottom: 1.5em;
+`;
+
 class OrganizationStats extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    const { organization, organizationProjects } = this.props;
+
     return (
       <div
         className="project-page"
       >
-        <ProjectNavbar 
+        <ProjectNavbar
           background={this.props.organizationBackground}
           loading={this.props.fetchingProjects}
-          organization={this.props.organization}
-          project={this.props.organization}
+          project={organization}
           projectAvatar={this.props.organizationAvatar}
           projectRoles={this.props.organizationRoles}
           routes={this.props.routes}
-          translation={{ id: this.props.organization.id, display_name: this.props.organization.display_name }}
+          translation={{ id: organization.id, display_name: organization.display_name }}
           user={this.props.user}
         />
-        {(this.props.organization.announcement)
+        {(organization.announcement)
           && (
             <div className="informational project-announcement-banner">
               <Markdown>
-                {this.props.organization.announcement}
+                {organization.announcement}
               </Markdown>
             </div>
           )}
-        <div>
-          <h1>
-            Organization Stats Page
-          </h1>
-          <p>
-            This is the organization stats page.
-          </p>
-        </div>
+        <StyledStatsPageContainer>
+          <Translate 
+            component={StyledPageHeading}
+            content="organization.stats.organizationStatistics"
+            with={{ title: organization.display_name }}
+          />
+          <StatsContainer>
+            <BarChartBlock type="classifications" />
+            <BarChartBlock type="talk" />
+          </StatsContainer>
+          <StatsContainer>
+            <ByTheNumbers
+              projects={organizationProjects}
+            />
+            <ProjectStats />
+          </StatsContainer>
+        </StyledStatsPageContainer>
       </div>
     );
   }
@@ -54,6 +84,7 @@ OrganizationStats.defaultProps = {
   organizationBackground: {
     src: ''
   },
+  organizationProjects: [],
   organizationRoles: [],
   routes: [],
   translation: {
@@ -79,6 +110,12 @@ OrganizationStats.propTypes = {
   organizationAvatar: PropTypes.shape({
     src: PropTypes.string
   }),
+  organizationProjects: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      display_name: PropTypes.string
+    })
+  ),
   organizationRoles: PropTypes.array,
   user: PropTypes.shape({
     id: PropTypes.string
