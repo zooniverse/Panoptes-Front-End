@@ -19,191 +19,397 @@ class OrganizationPage extends React.Component {
     super();
 
     this.state = {
-      readMore: false
+      category: '',
+      active: true,
+      finished: false,
+      paused: false
     };
   }
 
-  toggleReadMore() {
-    this.setState({ readMore: !this.state.readMore });
+  toggleActive() {
+    const { active } = this.state;
+    this.setState({ active: !active });
+  }
+
+  toggleFinished() {
+    const { finished } = this.state;
+    this.setState({ finished: !finished });
+  }
+
+  togglePaused() {
+    const { paused } = this.state;
+    this.setState({ paused: !paused });
   }
 
   handleCategoryChange(category) {
-    this.props.onChangeQuery({ category });
+    this.setState({ category });
   }
 
-  calculateClasses(category) {
+  calculateClasses(buttonCategory) {
+    const { category } = this.state;
     const list = classnames(
       'standard-button',
       'organization-page__category-button',
-      { 'organization-page__category-button--active':
-        (category === this.props.category) || (!this.props.category && (category === 'All')) }
+      {
+        'organization-page__category-button--active': (buttonCategory === category)
+          || (!category && (buttonCategory === 'All'))
+      }
     );
     return list;
   }
 
   render() {
-    const researcherAvatarSrc = this.props.quoteObject.researcherAvatar || '/assets/simple-avatar.png';
+    const {
+      collaborator,
+      collaboratorView,
+      errorFetchingProjects,
+      fetchingProjects,
+      organization,
+      organizationAvatar,
+      organizationBackground,
+      organizationPages,
+      organizationProjects,
+      projectAvatars,
+      quoteObject,
+      toggleCollaboratorView
+    } = this.props;
+    const {
+      category,
+      active,
+      finished,
+      paused
+    } = this.state;
 
-    const [aboutPage] = this.props.organizationPages.filter(page => page.url_key === 'about');
-    const aboutContentClass = classnames(
-      'organization-details__about-content',
-      { 'organization-details__about-content--expanded': this.state.readMore });
-
-    let rearrangedLinks = [];
-    if (this.props.organization.urls) {
-      rearrangedLinks = this.props.organization.urls.sort((a, b) => {
-        if (a.path && !b.path) {
-          return 1;
-        }
-        return 0;
-      });
+    let projects = organizationProjects;
+    if (category) {
+      projects = organizationProjects.filter(project => project.tags.some(tag => tag === category.toLowerCase()));
     }
+
+    const activeProjects = projects.filter(project => project.state === 'live');
+    const finishedProjects = projects.filter(project => project.state === 'finished');
+    const pausedProjects = projects.filter(project => project.state === 'paused');
+
+    const researcherAvatarSrc = quoteObject.researcherAvatar || '/assets/simple-avatar.png';
+
+    const [aboutPage] = organizationPages.filter(page => page.url_key === 'about');
 
     return (
       <div className="organization-page">
-        <Helmet title={this.props.organization.display_name} />
+        <Helmet title={organization.display_name} />
+
         <section
           className="organization-hero"
-          style={{ backgroundImage: `url(${this.props.organizationBackground.src})` }}
+          style={{ backgroundImage: `url(${organizationBackground.src})` }}
         >
           <div className="organization-hero__background-gradient">
-            {this.props.organization.announcement &&
+            {organization.announcement && (
               <Markdown tag="div" className="informational project-announcement-banner">
-                {this.props.organization.announcement}
-              </Markdown>}
+                {organization.announcement}
+              </Markdown>
+            )}
             <div className="organization-hero__container">
-              {this.props.organizationAvatar.src ?
+              {organizationAvatar.src ? (
                 <Thumbnail
-                  alt={`Organization icon for ${this.props.organization.display_name}`}
-                  src={this.props.organizationAvatar.src}
+                  alt={`Organization icon for ${organization.display_name}`}
+                  src={organizationAvatar.src}
                   className="organization-hero__avatar"
                   width={AVATAR_SIZE}
                   height={AVATAR_SIZE}
-                /> : <ZooniverseLogo className="organization-hero__avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />
-              }
+                />
+              ) : (
+                <ZooniverseLogo className="organization-hero__avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />
+              )}
               <div className="organization-hero__wrapper">
-                <h1 className="organization-hero__title">{this.props.organization.display_name}</h1>
-                <p className="organization-hero__description">{this.props.organization.description}</p>
+                <h1 className="organization-hero__title">{organization.display_name}</h1>
+                <p className="organization-hero__description">{organization.description}</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="resources-container">
-          {this.props.collaborator &&
-            <label className="organization-page__toggle" htmlFor="collaborator view">
-              <input
-                id="collaborator view"
-                onChange={() => this.props.toggleCollaboratorView()}
-                type="checkbox"
-                value={!this.props.collaboratorView}
-              />
-              <Translate content="organization.home.viewToggle" />
-            </label>}
-          {this.props.organization.categories && this.props.organization.categories.length > 0 &&
-            <div className="organization-page__categories" ref={(node) => { this.categories = node; }}>
-              <label
-                className={this.calculateClasses('All')}
-                htmlFor="all"
-              >
-                <input
-                  className="organization-page__category-button--hidden"
-                  id="all"
-                  name="category"
-                  onChange={this.handleCategoryChange.bind(this, '')}
-                  type="radio"
-                />
-                All
-              </label>
-              {this.props.organization.categories.map(category =>
-                <label
-                  className={this.calculateClasses(category)}
-                  htmlFor={category}
-                  key={category}
-                >
+        <section className="organization-page__main">
+          <section className="organization-page__projects">
+            {collaborator && (
+              <div className="organization-page__toggle">
+                <label htmlFor="collaborator view">
                   <input
-                    className="organization-page__category-button--hidden"
-                    id={category}
-                    name="category"
-                    onChange={this.handleCategoryChange.bind(this, category)}
-                    type="radio"
+                    id="collaborator view"
+                    onChange={() => toggleCollaboratorView()}
+                    type="checkbox"
+                    value={!collaboratorView}
                   />
-                  {category}
-                </label>)}
-            </div>}
-          <OrganizationProjectCards
-            errorFetchingProjects={this.props.errorFetchingProjects}
-            fetchingProjects={this.props.fetchingProjects}
-            projects={this.props.organizationProjects}
-            projectAvatars={this.props.projectAvatars}
-          />
-        </section>
-
-        <section className="organization-details">
-          <div className="organization-page__container">
-            {this.props.quoteObject && this.props.quoteObject.quote &&
-              <div className="organization-researcher-words">
-                <Translate className="organization-details__heading" content="organization.home.researcher" />
-                <div className="organization-researcher-words__container">
-                  <img
-                    className="organization-researcher-words__avatar"
-                    role="presentation"
-                    src={researcherAvatarSrc}
-                  />
-                  <span
-                    className="organization-researcher-words__quote"
+                  <Translate content="organization.home.viewToggle" />
+                </label>
+              </div>
+            )}
+            {organization.categories && organization.categories.length > 0 && (
+              <>
+                <Translate
+                  className="organization-details__content-heading"
+                  component="h3"
+                  content="organization.home.projects.projectCategory"
+                />
+                <div className="organization-page__categories" ref={(node) => { this.categories = node; }}>
+                  <label
+                    className={this.calculateClasses('All')}
+                    htmlFor="all"
                   >
-                    &quot;{this.props.quoteObject.quote}&quot;
-                  </span>
+                    <input
+                      className="organization-page__category-button--hidden"
+                      id="all"
+                      name="category"
+                      onChange={this.handleCategoryChange.bind(this, '')}
+                      type="radio"
+                    />
+                    <Translate content="organization.home.projects.all" />
+                  </label>
+                  {organization.categories.map(buttonCategory => (
+                    <label
+                      className={this.calculateClasses(buttonCategory)}
+                      htmlFor={buttonCategory}
+                      key={buttonCategory}
+                    >
+                      <input
+                        className="organization-page__category-button--hidden"
+                        id={buttonCategory}
+                        name="category"
+                        onChange={this.handleCategoryChange.bind(this, buttonCategory)}
+                        type="radio"
+                      />
+                      {buttonCategory}
+                    </label>
+                  ))}
                 </div>
-                <Link
-                  className="organization-researcher-words__attribution"
-                  to={this.props.quoteObject.slug}
-                >
-                  - {this.props.quoteObject.displayName}
-                </Link>
-              </div>}
-            <div className="organization-details__content">
-              <h4 className="organization-details__heading">
-                {this.props.organization.display_name} <Translate content="organization.home.introduction" />
-              </h4>
-              {this.props.organization.introduction &&
-                <Markdown project={this.props.organization}>{this.props.organization.introduction}</Markdown>}
-            </div>
-          </div>
+              </>
+            )}
 
-          <OrganizationMetadata
-            displayName={this.props.organization.display_name}
-            projects={this.props.organizationProjects}
-          />
-
-          <div className="organization-page__container">
-            <div className="organization-details__content">
-              <h4 className="organization-details__heading">
-                <Translate content="project.home.about" with={{ title: this.props.organization.display_name }} />
-              </h4>
-              {aboutPage &&
-                <div>
-                  <Markdown className={aboutContentClass} project={this.props.organization}>
-                    {aboutPage.content}
-                  </Markdown>
-                  <button
-                    className="standard-button organization-details__button"
-                    onClick={() => this.toggleReadMore()}
-                  >
-                    {this.state.readMore ?
-                      <Translate content="organization.home.readLess" /> :
-                      <Translate content="organization.home.readMore" />}
-                  </button>
-                </div>}
+            <div className="organization-page__section-heading">
+              <Translate
+                className="organization-page__section-title"
+                component="h2"
+                content="organization.home.projects.active"
+              />
+              <button
+                className="standard-button organization-page__section-button"
+                onClick={() => this.toggleActive()}
+                type="button"
+              >
+                {active ? (
+                  <>
+                    <i className="fa fa-chevron-up fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.hideSection"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <i className="fa fa-chevron-down fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.showSection"
+                    />
+                  </>
+                )}
+              </button>
             </div>
-            {this.props.organization.urls && this.props.organization.urls.length && (
-              <ExternalLinksBlockContainer
-                header={<Translate className="organization-details__heading" content="organization.home.links" component="h4" />}
-                resource={this.props.organization}
+            {active && (
+              <OrganizationProjectCards
+                category={category}
+                errorFetchingProjects={errorFetchingProjects}
+                fetchingProjects={fetchingProjects}
+                projects={activeProjects}
+                projectAvatars={projectAvatars}
+                state="active"
               />
             )}
-          </div>
+
+            <div className="organization-page__section-heading">
+              <Translate
+                className="organization-page__section-title"
+                component="h2"
+                content="organization.home.projects.paused"
+              />
+              <button
+                className="standard-button organization-page__section-button"
+                onClick={() => this.togglePaused()}
+                type="button"
+              >
+                {paused ? (
+                  <>
+                    <i className="fa fa-chevron-up fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.hideSection"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <i className="fa fa-chevron-down fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.showSection"
+                    />
+                  </>
+                )}
+              </button>
+            </div>
+            {paused && (
+              <OrganizationProjectCards
+                category={category}
+                errorFetchingProjects={errorFetchingProjects}
+                fetchingProjects={fetchingProjects}
+                projects={pausedProjects}
+                projectAvatars={projectAvatars}
+                state="paused"
+              />
+            )}
+
+            <div className="organization-page__section-heading">
+              <Translate
+                className="organization-page__section-title"
+                component="h2"
+                content="organization.home.projects.finished"
+              />
+              <button
+                className="standard-button organization-page__section-button"
+                onClick={() => this.toggleFinished()}
+                type="button"
+              >
+                {finished ? (
+                  <>
+                    <i className="fa fa-chevron-up fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.hideSection"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <i className="fa fa-chevron-down fa-lg" />
+                    {' '}
+                    <Translate
+                      content="organization.home.projects.showSection"
+                    />
+                  </>
+                )}
+              </button>
+            </div>
+            {finished && (
+              <OrganizationProjectCards
+                category={category}
+                errorFetchingProjects={errorFetchingProjects}
+                fetchingProjects={fetchingProjects}
+                projects={finishedProjects}
+                projectAvatars={projectAvatars}
+                state="finished"
+              />
+            )}
+          </section>
+
+          <hr />
+
+          <section className="organization-details">
+            <Translate
+              className="organization-page__section-title"
+              component="h2"
+              content="organization.home.learn"
+              with={{
+                title: organization.display_name
+              }}
+            />
+            <div className="organization-details__container">
+              <div className="organization-details__flex-container">
+                {quoteObject && quoteObject.quote && (
+                  <div className="organization-researcher-words">
+                    <Translate
+                      component="h3"
+                      className="organization-details__content-heading"
+                      content="organization.home.researcher"
+                    />
+                    <div className="organization-researcher-words__container">
+                      <img
+                        className="organization-researcher-words__avatar"
+                        alt="presentation"
+                        src={researcherAvatarSrc}
+                      />
+                      <span
+                        className="organization-researcher-words__quote"
+                      >
+                        &quot;
+                        {quoteObject.quote}
+                        &quot;
+                      </span>
+                    </div>
+                    <Link
+                      className="organization-researcher-words__attribution"
+                      to={quoteObject.slug}
+                    >
+                      {' - '}
+                      {quoteObject.displayName}
+                    </Link>
+                  </div>
+                )}
+                <div className="organization-details__flex-content">
+                  <Translate
+                    className="organization-details__content-heading"
+                    component="h3"
+                    content="organization.home.introduction"
+                    with={{ title: organization.display_name }}
+                  />
+                  {organization.introduction && (
+                    <Markdown project={organization}>{organization.introduction}</Markdown>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="organization-details__container">
+              <OrganizationMetadata
+                displayName={organization.display_name}
+                projects={organizationProjects}
+              />
+            </div>
+
+            <div className="organization-details__container">
+              {organization.urls && organization.urls.length && (
+                <ExternalLinksBlockContainer
+                  header={(
+                    <Translate
+                      className="organization-details__content-heading"
+                      component="h3"
+                      content="organization.home.links"
+                      with={{ title: organization.display_name }}
+                    />
+                  )}
+                  resource={organization}
+                  padding="2em"
+                  ulDisplay="flex"
+                  className="organization-details__link"
+                  socialLabel={true}
+                />
+              )}
+            </div>
+
+            <div className="organization-details__container">
+              <div className="organization-details__content">
+                <Translate
+                  className="organization-details__content-heading"
+                  component="h3"
+                  content="organization.home.about"
+                  with={{ title: organization.display_name }}
+                />
+                {aboutPage && (
+                  <Markdown
+                    className="organization-details__about-content"
+                    project={organization}
+                  >
+                    {aboutPage.content}
+                  </Markdown>
+                )}
+              </div>
+            </div>
+          </section>
         </section>
       </div>
     );
@@ -211,13 +417,10 @@ class OrganizationPage extends React.Component {
 }
 
 OrganizationPage.defaultProps = {
-  category: false,
   collaborator: false,
   collaboratorView: true,
   errorFetchingProjects: {},
   fetchingProjects: false,
-  onChangeQuery: () => {},
-  organization: {},
   organizationAvatar: {},
   organizationBackground: {},
   organizationPages: [],
@@ -228,17 +431,12 @@ OrganizationPage.defaultProps = {
 };
 
 OrganizationPage.propTypes = {
-  category: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.string
-  ]),
   collaborator: PropTypes.bool,
   collaboratorView: PropTypes.bool,
   errorFetchingProjects: PropTypes.shape({
     message: PropTypes.string
   }),
   fetchingProjects: PropTypes.bool,
-  onChangeQuery: PropTypes.func,
   organization: PropTypes.shape({
     announcement: PropTypes.string,
     categories: PropTypes.arrayOf(

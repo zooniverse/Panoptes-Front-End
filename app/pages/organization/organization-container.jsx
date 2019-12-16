@@ -27,91 +27,87 @@ class OrganizationContainer extends React.Component {
     };
 
     this.toggleCollaboratorView = this.toggleCollaboratorView.bind(this);
-    this.updateQuery = this.updateQuery.bind(this);
   }
 
   componentDidMount() {
-    if (this.context.initialLoadComplete) {
-      this.fetchOrganization(this.props.params.name, this.props.params.owner);
+    const { initialLoadComplete } = this.context;
+    const { params } = this.props;
+
+    if (initialLoadComplete) {
+      this.fetchOrganization(params.name, params.owner);
     }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const noOrgAfterLoad = nextContext.initialLoadComplete && this.state.organization === null;
+    const { user } = this.context;
+    const { params } = this.props;
+    const { fetchingOrganization, organization } = this.state;
 
-    if (nextProps.params.name !== this.props.params.name ||
-      nextProps.params.owner !== this.props.params.owner ||
-      nextContext.user !== this.context.user ||
-      noOrgAfterLoad) {
-      if (!this.state.fetchingOrganization) {
+    const noOrgAfterLoad = nextContext.initialLoadComplete && organization === null;
+
+    if (nextProps.params.name !== params.name
+      || nextProps.params.owner !== params.owner
+      || nextContext.user !== user
+      || noOrgAfterLoad) {
+      if (!fetchingOrganization) {
         this.fetchOrganization(nextProps.params.name, nextProps.params.owner);
       }
-    }
-
-    if (this.state.organization && (nextProps.location.query !== this.props.location.query)) {
-      this.fetchProjects(
-        this.state.organization,
-        ((isAdmin() || this.isCollaborator()) && this.state.collaboratorView),
-        nextProps.location.query
-      );
     }
   }
 
   isCollaborator() {
-    if (!this.context.user) {
+    const { user } = this.context;
+    const { organizationRoles } = this.state;
+
+    if (!user) {
       return false;
     }
 
-    const collaboratorRoles = this.state.organizationRoles.filter(role =>
-      role.roles.includes('collaborator') || role.roles.includes('owner'));
-    return collaboratorRoles.some(role => role.links.owner.id === this.context.user.id);
+    const collaboratorRoles = organizationRoles
+      .filter(role => role.roles.includes('collaborator') || role.roles.includes('owner'));
+    return collaboratorRoles.some(role => role.links.owner.id === user.id);
   }
 
   toggleCollaboratorView() {
-    const newView = !this.state.collaboratorView;
-    this.setState({ collaboratorView: newView });
-    this.fetchProjects(this.state.organization, newView);
-  }
+    const { collaboratorView, organization } = this.state;
 
-  updateQuery(newParams) {
-    const query = Object.assign({}, this.props.location.query, newParams);
-    const results = [];
-    Object.keys(query).forEach((key) => {
-      if (query[key] === '') {
-        results.push(delete query[key]);
-      }
-    });
-    const newLocation = Object.assign({}, this.props.location, { query });
-    newLocation.search = '';
-    this.context.router.push(newLocation);
+    const newView = !collaboratorView;
+    this.setState({ collaboratorView: newView });
+    this.fetchProjects(organization, newView);
   }
 
   fetchResearcherQuote() {
-    const quotableProjects = this.state.organizationProjects
+    const { organizationProjects, projectAvatars } = this.state;
+
+    const quotableProjects = organizationProjects
       .filter(project => project.researcher_quote);
     const project = quotableProjects[Math.floor(Math.random() * quotableProjects.length)];
     if (project && project.configuration && project.configuration.researcherID) {
       if (project.configuration.researcherID === project.display_name) {
-        const projectAvatar = this.state.projectAvatars.find(avatar => avatar.links.linked.id === project.id);
+        const projectAvatar = projectAvatars.find(avatar => avatar.links.linked.id === project.id);
         if (projectAvatar && projectAvatar.src) {
-          this.setState({ quoteObject: {
-            displayName: project.display_name,
-            quote: project.researcher_quote,
-            researcherAvatar: projectAvatar.src,
-            slug: project.slug
-          }});
+          this.setState({
+            quoteObject: {
+              displayName: project.display_name,
+              quote: project.researcher_quote,
+              researcherAvatar: projectAvatar.src,
+              slug: project.slug
+            }
+          });
         }
       } else {
         apiClient.type('users').get(project.configuration.researcherID)
           .then((researcher) => {
             researcher.get('avatar').then(([avatar]) => {
               if (avatar.src) {
-                this.setState({ quoteObject: {
-                  displayName: project.display_name,
-                  quote: project.researcher_quote,
-                  researcherAvatar: avatar.src,
-                  slug: project.slug
-                }});
+                this.setState({
+                  quoteObject: {
+                    displayName: project.display_name,
+                    quote: project.researcher_quote,
+                    researcherAvatar: avatar.src,
+                    slug: project.slug
+                  }
+                });
               }
             });
           })
@@ -120,23 +116,18 @@ class OrganizationContainer extends React.Component {
     }
   }
 
-  fetchProjects(organization, collaboratorView, locationQuery = this.props.location.query) {
+  fetchProjects(organization, collaboratorView) {
     this.setState({ errorFetchingProjects: null, fetchingProjects: true, fetchingProjectAvatars: true });
     const query = {
       include: 'avatar',
       launch_approved: true,
       private: false,
-      sort: '-launch_date',
-      state: 'live'
+      sort: '-launch_date'
     };
 
     if (collaboratorView) {
       delete query.launch_approved;
       delete query.private;
-      delete query.state;
-    }
-    if (locationQuery && locationQuery.category) {
-      query.tags = locationQuery.category;
     }
 
     organization.get('projects', query)
@@ -236,77 +227,92 @@ class OrganizationContainer extends React.Component {
   }
 
   render() {
-    if (this.state.organization && (this.state.organization.listed || isAdmin() || this.isCollaborator())) {
+    const { params } = this.props;
+    const {
+      collaboratorView,
+      error,
+      errorFetchingProjects,
+      fetchingOrganization,
+      fetchingProjects,
+      organization,
+      organizationAvatar,
+      organizationBackground,
+      organizationPages,
+      organizationProjects,
+      projectAvatars,
+      quoteObject
+    } = this.state;
+
+    if (organization && (organization.listed || isAdmin() || this.isCollaborator())) {
       return (
         <OrganizationPage
-          category={this.props.location && this.props.location.query && this.props.location.query.category}
           collaborator={isAdmin() || this.isCollaborator()}
-          collaboratorView={this.state.collaboratorView}
-          errorFetchingProjects={this.state.errorFetchingProjects}
-          fetchingProjects={this.state.fetchingProjects}
-          onChangeQuery={this.updateQuery}
-          organization={this.state.organization}
-          organizationAvatar={this.state.organizationAvatar}
-          organizationBackground={this.state.organizationBackground}
-          organizationPages={this.state.organizationPages}
-          organizationProjects={this.state.organizationProjects}
-          projectAvatars={this.state.projectAvatars}
-          quoteObject={this.state.quoteObject}
+          collaboratorView={collaboratorView}
+          errorFetchingProjects={errorFetchingProjects}
+          fetchingProjects={fetchingProjects}
+          organization={organization}
+          organizationAvatar={organizationAvatar}
+          organizationBackground={organizationBackground}
+          organizationPages={organizationPages}
+          organizationProjects={organizationProjects}
+          projectAvatars={projectAvatars}
+          quoteObject={quoteObject}
           toggleCollaboratorView={this.toggleCollaboratorView}
-        />);
-    } else if (this.state.fetchingOrganization) {
+        />
+      );
+    } else if (fetchingOrganization) {
       return (
         <div className="content-container">
           <p>
             <Translate content="organization.loading" />
-            <strong>{this.props.params.name}</strong>...
+            <strong>{params.name}</strong>
+            ...
           </p>
-        </div>);
-    } else if (this.state.error) {
+        </div>
+      );
+    } else if (error) {
       return (
         <div className="content-container">
           <p>
             <Translate content="organization.error" />
-            <strong>{this.props.params.name}</strong>.
+            <strong>{params.name}</strong>
+            .
           </p>
           <p>
-            <code>{this.state.error.toString()}</code>
+            <code>{error.toString()}</code>
           </p>
-        </div>);
-    } else if (this.state.organization === undefined || (this.state.organization && !this.state.organization.listed)) {
+        </div>
+      );
+    } else if (organization === undefined || (organization && !organization.listed)) {
       return (
         <div className="content-container">
           <p>
-            <strong>{this.props.params.name} </strong>
-            <Translate content="organization.notFound" with={{ title: this.props.params.name }} />
+            <strong>{params.name}</strong>
+            <Translate content="organization.notFound" with={{ title: params.name }} />
           </p>
           <p>
             <Translate content="organization.notPermission" />
           </p>
-        </div>);
+        </div>
+      );
     } else {
       return (
         <div className="content-container">
           <p><Translate content="organization.pleaseWait" /></p>
-        </div>);
+        </div>
+      );
     }
   }
 }
 
 OrganizationContainer.contextTypes = {
   initialLoadComplete: PropTypes.bool,
-  router: PropTypes.object.isRequired,
   user: PropTypes.shape({
     id: PropTypes.string
   })
 };
 
 OrganizationContainer.propTypes = {
-  location: PropTypes.shape({
-    query: PropTypes.shape({
-      category: PropTypes.string
-    })
-  }),
   params: PropTypes.shape({
     name: PropTypes.string,
     owner: PropTypes.string

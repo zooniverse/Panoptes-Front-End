@@ -1,38 +1,60 @@
 .organization-page
   background-color: BACKGROUND_COLOR
-  color: white
-  display: flex
-  flex: 1 0 auto
-  flex-direction: column
   font-family: 'Karla', sans-serif
 
-  &__container
+  &__main
+    padding: 2em 6em 4em 6em
+
+    hr
+      margin-bottom: 2em
+    
+    @media(max-width: 600px)
+      padding: 2em 0 4em 0 
+
+  &__projects
+    display: flex
+    flex-direction: column
+
+  &__project-cards-section
     display: flex
     flex-flow: row wrap
 
-  &__projects-status
+    @media (max-width: 900px)
+      flex-direction: column
+      padding-left: 0
+      text-align: center
+
+    .project-card
+      margin: 0 1em 1em 0
+
+      @media (max-width: 900px)
+        margin-right: 0
+
+  &__project-cards-message
     align-items: center
     color: TEAL_DARK
     display: flex
-    flex-flow: column
+    flex-direction: column
     margin: 3em
 
   &__toggle
-    color: TEAL_DARK
-    margin-left: 2em
+    color: #5C5C5C
+    text-align: right
 
   &__categories
     display: flex
-    justify-content: center
     flex-wrap: wrap
+    margin-bottom: 2em
+
+    @media (max-width: 900px)
+      justify-content: center
 
   &__category-button
-    background: white
-    border: 1px #EBEBEB
+    background: BACKGROUND_COLOR
+    border: 1px solid TEAL_MID
     border-radius: 0
-    color: TEAL_MID
-    font-weight: bold
-    margin: .8em .5em
+    color: black
+    margin: 1em 1em 0 0
     width: 150px
 
     @media (max-width: 900px)
@@ -40,21 +62,47 @@
 
     &:focus,
     &:hover
-      background: TEAL_DARK
-      border: 1px TEAL_DARK
+      background: TEAL_MID
+      border: 1px solid TEAL_MID
       color: white
 
     &--active
-      background: TEAL_DARK
-      border: 1px TEAL_DARK
+      background: TEAL_MID
+      border: 1px solid TEAL_MID
       color: white
 
     &--hidden
       left: -9999px
       position: absolute
+  
+  &__section-heading
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    margin: 2em 0
+
+  &__section-title
+    color: #5C5C5C
+    font-weight: bold
+    font-size: 1.8em
+    letter-spacing: -.5px
+
+  &__section-button
+    background: BACKGROUND_COLOR
+    color: TEAL_MID
+    margin: 0
+    padding: 0
+    text-transform: uppercase
+
+    &:focus,
+    &:hover
+      background: BACKGROUND_COLOR
+      color: TEAL_MID
+      text-decoration: underline
 
 .organization-hero
   background-size: cover
+  color: white
   min-height: 400px
   position: relative
 
@@ -82,7 +130,10 @@
 
   &__avatar
     border-radius: 50%
+    height: 8em
+    object-fit: cover
     vertical-align: -.3em
+    width: 8em
 
   &__wrapper
     margin-left: 3em
@@ -92,6 +143,7 @@
       display: flex
       flex-direction: column
       margin-left: 0
+      text-align: center
 
   &__title
     font-size: 2.5em
@@ -101,27 +153,36 @@
     font-size: 1em
     font-weight: normal
 
-    @media (max-width: 900px)
-      margin: .8em
-      text-align: center
-
 .organization-details
+  display: flex
+  flex-direction: column
+  
+  &__container
+    margin-top: 2em
 
-  &__heading
+  &__flex-container
+    display: flex
+    flex-wrap: wrap
+    margin: -2em -1em 0 -1em
+
+  &__content-heading
+    color: black
+    font-weight: bold
+    letter-spacing: 1.5px
+    line-height: 1.2em
     text-transform: uppercase
 
   &__content
-    background-color: TEAL_MID
-    flex: 3 1 auto
-    padding: 3em 3em 4em
+    background: white
+    border: 1px solid #E2E5E9
+    padding: 2em
     text-align: left
-    width: 600px
 
     .markdown
       a
         background: none
         border: 0
-        color: BACKGROUND_COLOR
+        color: TEAL_DARK
         font-weight: bold
         margin: 0
         padding: 0
@@ -140,54 +201,55 @@
       p
         line-height: 1.75
 
-  &__button
-    background: TEAL_MID
-    border: white
-    margin-top: 2em
+  &__flex-content
+    @extends .organization-details__content
 
-    &:focus,
-    &:hover
-      background: TEAL_LIGHT
-
-  &__links
-    background-color: white
-    color: ZOONIVERSE_NAVY
-    display: flex
-    flex: 2 0 auto
-    flex-direction: column
-    padding: 3em 4vw
-    width: 250px
+    flex: 3 1 500px
+    margin: 2em 1em 0 1em
 
   &__link
-    align-items: center
-    display: flex
-    font-size: 1.2em
-    margin-left: .8em
-    margin-top: 20px
-    text-decoration: none
+    color: #5c5c5c
+    font-size: 1em
+    justify-content: flex-end
+    height: 100%
+    margin-right: 2em
+    min-width: 150px
 
-  &__icon
-    padding-right: .1em
+    div
+      display: flex
+      flex-direction: column
+
+    i
+      font-size: 2em
+      margin-right: 0
+
+    .link-title
+      color: TEAL_DARK
+      text-transform: uppercase
+
+      a
+        color: TEAL_DARK
+        text-transform: uppercase
+
+    .social-label
+      font-weight: bold
 
   &__about-content
-    max-height: 300px
-    overflow-y: hidden
-
-    &--expanded
-      max-height: none
+    columns: 2 400px
+    column-gap: 4em
 
 .organization-researcher-words
   background-color: white
-  color: ZOONIVERSE_NAVY
-  display: flex
-  flex: 2 0 auto
-  flex-direction: column
-  padding: 3em 4vw
-  width: 250px
+  border: 1px solid #E2E5E9
+  color: #5c5c5c
+  flex: 2 0 200px
+  height: fit-content
+  margin: 2em 1em 0 1em
+  padding: 2em
 
   &__container
     display: flex
-    margin-top: 1.5em
+    margin: 1.5em 0
 
   &__avatar
     border-radius: 50%
@@ -197,13 +259,77 @@
     min-width: 5em
 
   &__quote
-    font-size: 1.75em
+    font-size: 1.5em
     line-height: 1.2em
     overflow: auto
     word-wrap: break-word
 
   &__attribution
-    color: ZOONIVERSE_NAVY
+    color: TEAL_DARK
     font-size: 1em
-    margin: 1em auto
     text-decoration: none
+    text-transform: uppercase
+
+.organization-metadata
+  &__container
+    display: flex
+    margin-top: 1em
+
+    @media(max-width: 900px)
+      flex-direction: column
+
+  &__subtitle
+    font-size: 1em
+
+  &__completeness-section
+    border-bottom: none
+    border-right: 1px solid #979797
+    display: flex
+    flex-direction: column
+    margin-right: 2em
+    padding-right: 2em
+
+    @media(max-width: 900px)
+      border-bottom: 1px solid #979797
+      border-right: none
+      margin: 0 0 2em 0
+      padding: 0 0 2em 0
+
+  &__completeness-text
+    margin-top: 0
+
+  &__progress-bar
+    background-color: BACKGROUND_COLOR
+    height: 2.2em
+    margin-bottom: .8em
+
+  &__progress-bar-meter
+    background: linear-gradient(270deg, #D46256 0%, #F0B200 100%)
+    color: white
+    display: block
+    height: 100%
+    line-height: 2.2em
+    padding-right: 1em
+    text-align: right
+
+  &__progress-bar-label
+    color: #5C5C5C
+    font-weight: bold
+
+  &__numbers-section
+    min-width: 200px
+
+  &__numbers-stats-container
+    display: flex
+    flex-flow: row wrap
+
+  &__numbers-stat-block
+    margin: 0 2em 2em 0
+
+  &__numbers-stat
+    display: block
+    font-size: 2em
+
+  &__numbers-label
+    display: block
+    font-weight: bold

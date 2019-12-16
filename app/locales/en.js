@@ -89,20 +89,32 @@ export default {
   organization: {
     error: 'There was an error retrieving organization',
     home: {
-      introduction: 'Introduction',
-      links: 'Links',
+      about: 'About %(title)s',
+      introduction: '%(title)s Introduction',
+      learn: 'Learn more about %(title)s',
+      links: 'Connect with %(title)s',
       metadata: {
-        projects: 'Projects'
+        complete: 'Percent complete',
+        heading: 'Organization Statistics',
+        numbers: 'By the numbers',
+        projects: 'Projects',
+        subtitle: 'Keep track of the progress you and your fellow volunteers have made on this project.',
+        text: 'Every click counts! Join %(title)s\'s community to complete this project and help researchers produce important results.'
       },
       projects: {
+        active: 'Active Projects',
+        all: 'All',
         error: 'There was an error loading organization projects.',
+        finished: 'Finished Projects',
+        hideSection: 'Hide Section',
         loading: 'Loading organization projects...',
-        none: 'There are no projects associated with this organization.'
+        none: 'There are no %(state)s %(category)s projects associated with this organization.',
+        paused: 'Paused Projects',
+        projectCategory: 'Project Category',
+        showSection: 'Show Section'
       },
-      readLess: 'Read Less',
-      readMore: 'Read More',
-      researcher: 'Words from a researcher',
-      viewToggle: 'View As Volunteer'
+      researcher: 'Message from the Researcher',
+      viewToggle: 'View as volunteer'
     },
     loading: 'Loading organization',
     notFound: 'organization not found.',

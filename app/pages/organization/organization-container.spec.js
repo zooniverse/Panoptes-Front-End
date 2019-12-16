@@ -59,7 +59,7 @@ describe('OrganizationContainer', function () {
   let wrapper;
 
   beforeEach(function () {
-    wrapper = shallow(<OrganizationContainer params={params} />, { context: { router: {}}});
+    wrapper = shallow(<OrganizationContainer params={params} />);
   });
 
   it('should render without crashing', function () {
@@ -106,7 +106,7 @@ describe('OrganizationContainer', function () {
     });
 
     describe('and request for organization roles', function () {
-      wrapper = mount(<OrganizationContainer params={params} location={{}} />, { context: { router: {}}});
+      wrapper = mount(<OrganizationContainer params={params} location={{}} />);
       const container = wrapper.instance();
       const fetchAllOrganizationRolesSpy = sinon.spy(container, 'fetchAllOrganizationRoles');
 
