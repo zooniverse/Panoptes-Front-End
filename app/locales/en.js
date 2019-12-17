@@ -122,6 +122,16 @@ export default {
     pleaseWait: 'Please wait...',
     stats: {
       byTheNumbers: 'By the Numbers',
+      byTheNumbersContent: {
+        classifications: 'Classifications',
+        firstProject: 'First Project',
+        firstProjectLaunch: 'First Project Launch Date',
+        liveProjects: 'Live Projects',
+        pausedProjects: 'Paused Projects',
+        retiredProjects: 'Retired Projects',
+        retiredSubjects: 'Retired Subjects',
+        subjects: 'Subjects'
+      },
       classifications: 'Classifications',
       organizationStatistics: '%(title)s Statistics',
       projectStats: 'Live Projects (%(count)s)',
