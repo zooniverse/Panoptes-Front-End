@@ -1,4 +1,5 @@
 const apiClient = require('panoptes-client/lib/api-client');
+const getAllLinked = require('../../../lib/get-all-linked').default;
 const putFile = require('../../../lib/put-file');
 
 // warn on uploads bigger than 500k
@@ -8,7 +9,7 @@ const mediaActions = {
   fetchMedia(props = this.props) {
     this.setState({ media: null });
 
-    return props.resource.get(this.props.link, { page_size: this.props.pageSize })
+    return getAllLinked(props.resource, props.link)
       .then((media) => {
         return media.filter((medium) => {
           return Object.keys(medium.metadata).length > 0;
