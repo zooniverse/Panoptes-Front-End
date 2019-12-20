@@ -129,10 +129,11 @@ export default {
         liveProjects: 'Live Projects',
         pausedProjects: 'Paused Projects',
         retiredProjects: 'Retired Projects',
-        retiredSubjects: 'Retired Subjects',
+        retiredSubjects: 'Completed Subjects',
         subjects: 'Subjects'
       },
-      classifications: 'Classifications',
+      expandWorkflowStats: 'Expand Workflow Stats',
+      hidden: 'Stats hidden',
       organizationStatistics: '%(title)s Statistics',
       projectStats: 'Live Projects (%(count)s)',
       talk: 'Talk Stats'
