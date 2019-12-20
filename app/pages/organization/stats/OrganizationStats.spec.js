@@ -1,12 +1,16 @@
 /* eslint func-names: off, prefer-arrow-callback: off */
 import React from 'react';
+import Translate from 'react-translate-component';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
-import OrganizationStats from './OrganizationStats';
+import OrganizationStats, { StyledPageHeading } from './OrganizationStats';
+import BarChart from './components/BarChart';
+import ByTheNumbers from './components/ByTheNumbers';
+import ProjectStats from './components/ProjectStats';
 import ProjectNavbar from '../../project/components/ProjectNavbar';
 
-import mockPanoptesResource from '../../../test/mock-panoptes-resource';
+import mockPanoptesResource from '../../../../test/mock-panoptes-resource';
 
 const mockOrg = mockPanoptesResource('organizations', {
   display_name: 'Test Org',
@@ -54,5 +58,25 @@ describe('OrganizationStats', function () {
       expect(markdown).to.have.lengthOf(1);
       expect(markdown.children().text()).to.equal('Big Announcement!');
     });
+  });
+
+  it('should render StyledPageHeading', function () {
+    const wrapper = shallow(<OrganizationStats />);
+    expect(wrapper.find(Translate).prop('component')).to.equal(StyledPageHeading);
+  });
+
+  it('should render two BarCharts', function () {
+    const wrapper = shallow(<OrganizationStats />);
+    expect(wrapper.find(BarChart)).to.have.lengthOf(2);
+  });
+
+  it('should render ByTheNumbers', function () {
+    const wrapper = shallow(<OrganizationStats />);
+    expect(wrapper.find(ByTheNumbers)).to.have.lengthOf(1);
+  });
+
+  it('should render ProjectStats', function () {
+    const wrapper = shallow(<OrganizationStats />);
+    expect(wrapper.find(ProjectStats)).to.have.lengthOf(1);
   });
 });

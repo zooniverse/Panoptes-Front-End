@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import ProjectNavbar from '../../project/components/ProjectNavbar';
 
-import BarChartBlock from './components/BarChartBlock';
+import BarChart from './components/BarChart';
 import ByTheNumbers from './components/ByTheNumbers';
 import ProjectStats from './components/ProjectStats';
 import StatsContainer from './components/StatsContainer';
@@ -15,61 +15,70 @@ const StyledStatsPageContainer = styled.div`
   padding: 2em 5vw;
 `;
 
-const StyledPageHeading = styled.h2`
+export const StyledPageHeading = styled.h2`
   letter-spacing: -.5px;
   margin-bottom: 1.5em;
 `;
 
-class OrganizationStats extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const { organization, organizationProjects } = this.props;
-
-    return (
-      <div
-        className="project-page"
-      >
-        <ProjectNavbar
-          background={this.props.organizationBackground}
-          loading={this.props.fetchingProjects}
-          project={organization}
-          projectAvatar={this.props.organizationAvatar}
-          projectRoles={this.props.organizationRoles}
-          routes={this.props.routes}
-          translation={{ id: organization.id, display_name: organization.display_name }}
-          user={this.props.user}
+function OrganizationStats({
+  fetchingProjects,
+  organization,
+  organizationAvatar,
+  organizationBackground,
+  organizationProjects,
+  organizationRoles,
+  projectAvatars,
+  routes,
+  user
+}) {
+  return (
+    <div
+      className="project-page"
+    >
+      <ProjectNavbar
+        background={organizationBackground}
+        loading={fetchingProjects}
+        project={organization}
+        projectAvatar={organizationAvatar}
+        projectRoles={organizationRoles}
+        routes={routes}
+        translation={{ id: organization.id, display_name: organization.display_name }}
+        user={user}
+      />
+      {(organization.announcement)
+        && (
+          <div className="informational project-announcement-banner">
+            <Markdown>
+              {organization.announcement}
+            </Markdown>
+          </div>
+        )}
+      <StyledStatsPageContainer>
+        <Translate
+          component={StyledPageHeading}
+          content="organization.stats.organizationStatistics"
+          with={{ title: organization.display_name }}
         />
-        {(organization.announcement)
-          && (
-            <div className="informational project-announcement-banner">
-              <Markdown>
-                {organization.announcement}
-              </Markdown>
-            </div>
-          )}
-        <StyledStatsPageContainer>
-          <Translate 
-            component={StyledPageHeading}
-            content="organization.stats.organizationStatistics"
-            with={{ title: organization.display_name }}
+        <StatsContainer>
+          <BarChart
+            projects={organizationProjects}
+            type="classification"
           />
-          <StatsContainer>
-            <BarChartBlock type="classifications" />
-            <BarChartBlock type="talk" />
-          </StatsContainer>
-          <StatsContainer>
-            <ByTheNumbers
-              projects={organizationProjects}
-            />
-            <ProjectStats />
-          </StatsContainer>
-        </StyledStatsPageContainer>
-      </div>
-    );
-  }
+          <BarChart
+            projects={organizationProjects}
+            type="comment"
+          />
+        </StatsContainer>
+        <StatsContainer>
+          <ByTheNumbers projects={organizationProjects} />
+          <ProjectStats
+            projects={organizationProjects}
+            projectAvatars={projectAvatars}
+          />
+        </StatsContainer>
+      </StyledStatsPageContainer>
+    </div>
+  );
 }
 
 OrganizationStats.defaultProps = {
@@ -86,6 +95,7 @@ OrganizationStats.defaultProps = {
   },
   organizationProjects: [],
   organizationRoles: [],
+  projectAvatars: [],
   routes: [],
   translation: {
     id: '',
@@ -117,6 +127,12 @@ OrganizationStats.propTypes = {
     })
   ),
   organizationRoles: PropTypes.array,
+  projectAvatars: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      src: PropTypes.string
+    })
+  ),
   user: PropTypes.shape({
     id: PropTypes.string
   }),

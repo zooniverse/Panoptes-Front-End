@@ -1,1 +1,1 @@
-export { default } from './OrganizationStatsContainer';
+export { default } from './OrganizationStats';
