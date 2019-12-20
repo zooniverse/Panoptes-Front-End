@@ -34,6 +34,22 @@ Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage yo
 
 - `npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>. Note that you'll need write permissions to the Zooniverse S3 bucket.
 
+### Configuration
+
+The app can be configured using the following environment variables:
+
+- `NODE_ENV` - sets the environment of the code, and determines whether to apply any production optimizations to the bundled code, and which set of defaults to apply for e.g. API host url, Talk host url etc.
+- `PANOPTES_API_APPLICATION` - sets the application ID to use when making authentication requests to the Panoptes API. Defaults to that set by `NODE_ENV`.
+- `PANOPTES_API_HOST` - sets the URL of the instance of the Panoptes API. Defaults to that set by `NODE_ENV`.
+- `STAT_HOST` - sets the URL of the instance of the Stats API. Defaults to that set by `NODE_ENV`.
+- `SUGAR_HOST` - sets the URL of the instance of the Sugar API. Defaults to that set by `NODE_ENV`.
+- `TALK_HOST` - sets the URL of the instance of the Talk API. Defaults to that set by `NODE_ENV`.
+
+#### Configuration notes
+
+- Some of these environment variables are set by commands in the `package.json` `scripts` block; in order to override them, you'll need to modify `package.json`.
+- To see the defaults set by the `NODE_ENV` environment variable, see [`config.js`](https://github.com/zooniverse/panoptes-javascript-client/blob/master/lib/config.js) in [panoptes-javascript-client](https://github.com/zooniverse/panoptes-javascript-client).
+
 ### Development
 
 New GitHub PRs from within the Zooniverse organisation will be staged by Jenkins as part of the CI process. Once CI finishes, your changes should be staged at https://pr-{PR-Number}.pfe-preview.zooniverse.org. Jenkins sometimes times out before finishing the build. If a PR build fails, use the link to Jenkins (from your PR) to log in and try restarting the build.

@@ -34,10 +34,15 @@ module.exports = {
     chunkFilename: '[name]-[chunkhash].js',
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'process.env.HEAD_COMMIT': JSON.stringify(process.env.HEAD_COMMIT)
-    }),
+    new webpack.EnvironmentPlugin([
+      'HEAD_COMMIT',
+      'NODE_ENV',
+      'PANOPTES_API_APPLICATION',
+      'PANOPTES_API_HOST',
+      'STAT_HOST',
+      'SUGAR_HOST',
+      'TALK_HOST'
+    ]),
     new CopyWebpackPlugin([
       { from: 'public', to: '.' },
     ]),
