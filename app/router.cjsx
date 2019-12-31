@@ -18,6 +18,7 @@ createReactClass = require 'create-react-class'
 `import Grantbot from './pages/admin/grantbot';`
 `import OrganizationStatusList from './pages/admin/organization-status-list';`
 `import OrganizationStatus from './pages/admin/organization-status';`
+`import EditProjectTalk from './pages/lab/talk';`
 `import EditMediaPage from './pages/lab/media';`
 `import UserProfilePage from './pages/profile/index';`
 `import NotificationsPage from './pages/notifications';`
@@ -252,7 +253,7 @@ module.exports =
       <Route path="collaborators" component={require './pages/lab/collaborators'} />
       <Route path="media" component={EditMediaPage} />
       <Route path="visibility" component={require './pages/lab/visibility'} />
-      <Route path="talk" component={require './pages/lab/talk'} />
+      <Route path="talk" component={EditProjectTalk} />
       <Route path="data-exports" component={DataExports} />
       <Route path="tutorial" component={require './pages/lab/tutorial'} />
       <Route path="guide" component={require './pages/lab/field-guide'} />

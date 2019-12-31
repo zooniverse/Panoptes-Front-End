@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import talkClient from 'panoptes-client/lib/talk-client';
 import CreateSubjectDefaultButton from '../../talk/lib/create-subject-default-button';
 import CreateBoardForm from '../../talk/lib/create-board-form';
@@ -17,7 +16,14 @@ export default class EditProjectTalk extends React.Component {
       suggestedTags: []
     };
 
+    this.board = this.board.bind(this);
     this.createSuggestedTag = this.createSuggestedTag.bind(this);
+    this.deleteSuggestedTag = this.deleteSuggestedTag.bind(this);
+    this.getSuggestedTags = this.getSuggestedTags.bind(this);
+    this.section = this.section.bind(this);
+    this.setBoards = this.setBoards.bind(this);
+    this.suggestedTag = this.suggestedTag.bind(this);
+    this.suggestedTagChanged = this.suggestedTagChanged.bind(this);
   }
 
   componentDidMount() {
@@ -42,19 +48,24 @@ export default class EditProjectTalk extends React.Component {
     const description = descriptionTextarea.value;
 
     talkClient.type('boards').get(board.id).update({ title, description }).save()
-      .then(() => this.setState({ editingBoard: null }, this.setBoards()))
+      .then(() => this.setState({ editingBoard: null }, this.setBoards()));
   }
 
   setBoards() {
     talkClient.type('boards').get({ section: this.section() })
-      .then((boards) => { this.setState({ boards }); }) /* eslint-disable-line */
+      .then((boards) => { this.setState({ boards }); });
+  }
+
+  getSuggestedTags() {
+    talkClient.type('suggested_tags').get({ section: this.section() })
+      .then((suggestedTags) => { this.setState({ suggestedTags }); });
   }
 
   board(board, i) {
     const { editingBoard } = this.state;
     return (
       <li key={board.id}>
-        {editingBoard === board.id
+        {editingBoard === board.id // eslint-disable-line
           ? (
             <div className="talk-module talk-form">
               <span>Title</span>
@@ -102,11 +113,6 @@ export default class EditProjectTalk extends React.Component {
     );
   }
 
-  getSuggestedTags() {
-    talkClient.type('suggested_tags').get({ section: this.section() })
-      .then((suggestedTags) => { this.setState({ suggestedTags }); })
-  }
-
   deleteSuggestedTag(tag) {
     tag.delete().then(() => this.getSuggestedTags());
   }
@@ -146,7 +152,7 @@ export default class EditProjectTalk extends React.Component {
 
   section() {
     const { project } = this.props;
-    projectSection(project);
+    return projectSection(project);
   }
 
   render() {
@@ -199,8 +205,8 @@ export default class EditProjectTalk extends React.Component {
         <p>Your Project&#39;s Discussion Boards</p>
 
         <div>
-          {boards.length
-            ? <ul>{boards.map(this.board)}</ul>
+          {boards.length > 0 // eslint-disable-line
+            ? <ul>{boards.map(this.board)}</ul> // eslint-disable-line
             : (
               <p>
                 See above to add boards to your project, or look in the moderator
@@ -221,7 +227,7 @@ export default class EditProjectTalk extends React.Component {
             type="text"
             ref="newSuggestedTag"
             placeholder="New suggested tag"
-            onKeyUp={this.suggestedTagChanged()}
+            onKeyUp={this.suggestedTagChanged}
           />
           <SingleSubmitButton
             type="submit"
@@ -239,9 +245,11 @@ export default class EditProjectTalk extends React.Component {
 }
 
 EditProjectTalk.defaultProps = {
-  project: {}
+  project: {},
+  user: {}
 };
 
 EditProjectTalk.propTypes = {
-  project: PropTypes.shape()
+  project: PropTypes.shape(),
+  user: PropTypes.shape()
 };
