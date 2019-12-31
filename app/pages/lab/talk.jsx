@@ -16,7 +16,9 @@ export default class EditProjectTalk extends React.Component {
       suggestedTags: []
     };
 
+    this.descriptionRefs = {};
     this.newSuggestedTag = React.createRef();
+    this.titleRefs = {};
 
     this.board = this.board.bind(this);
     this.createSuggestedTag = this.createSuggestedTag.bind(this);
@@ -25,6 +27,8 @@ export default class EditProjectTalk extends React.Component {
     this.onClickDeleteBoard = this.onClickDeleteBoard.bind(this);
     this.section = this.section.bind(this);
     this.setBoards = this.setBoards.bind(this);
+    this.setDescriptionRefs = this.setDescriptionRefs.bind(this);
+    this.setTitleRefs = this.setTitleRefs.bind(this);
     this.suggestedTag = this.suggestedTag.bind(this);
     this.suggestedTagChanged = this.suggestedTagChanged.bind(this);
   }
@@ -43,10 +47,10 @@ export default class EditProjectTalk extends React.Component {
 
   onClickEditTitle(e, board) {
     e.preventDefault();
-    const titleInput = this.refs[`board-title-${board.id}`];
+    const titleInput = this.titleRefs[`board-title-${board.id}`];
     const title = titleInput.value;
 
-    const descriptionTextarea = this.refs[`board-description-${board.id}`];
+    const descriptionTextarea = this.descriptionRefs[`board-description-${board.id}`];
     const description = descriptionTextarea.value;
 
     talkClient.type('boards').get(board.id).update({ title, description }).save()
@@ -63,6 +67,16 @@ export default class EditProjectTalk extends React.Component {
       .then((suggestedTags) => { this.setState({ suggestedTags }); });
   }
 
+  setDescriptionRefs(ref) {
+    if (!ref) return;
+    this.descriptionRefs[ref.id] = ref;
+  }
+
+  setTitleRefs(ref) {
+    if (!ref) return;
+    this.titleRefs[ref.id] = ref;
+  }
+
   board(board, i) {
     const { editingBoard } = this.state;
     return (
@@ -71,9 +85,9 @@ export default class EditProjectTalk extends React.Component {
           ? (
             <div className="talk-module talk-form">
               <span>Title</span>
-              <input ref={`board-title-${board.id}`} type="text" defaultValue={board.title} />
+              <input ref={this.setTitleRefs} id={`board-title-${board.id}`} type="text" defaultValue={board.title} />
               <div>Description</div>
-              <textarea ref={`board-description-${board.id}`} defaultValue={board.description} />
+              <textarea ref={this.setDescriptionRefs} id={`board-description-${board.id}`} defaultValue={board.description} />
               <button type="button" onClick={() => this.setState({ editingBoard: null })}>
                 Cancel
               </button>
