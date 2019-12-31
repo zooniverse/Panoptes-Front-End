@@ -11,6 +11,13 @@ import ByTheNumbers from './components/ByTheNumbers';
 import ProjectStats from './components/ProjectStats';
 import StatsContainer from './components/StatsContainer';
 
+const StyledStatsPage = styled.div`
+  background-color: #edf0f4;
+  border-bottom: 5px solid #005d69;
+  display: flex;
+  flex-direction: column;
+`;
+
 const StyledStatsPageContainer = styled.div`
   padding: 2em 5vw;
 `;
@@ -32,9 +39,7 @@ function OrganizationStats({
   user
 }) {
   return (
-    <div
-      className="project-page"
-    >
+    <StyledStatsPage>
       <ProjectNavbar
         background={organizationBackground}
         loading={fetchingProjects}
@@ -77,7 +82,7 @@ function OrganizationStats({
           />
         </StatsContainer>
       </StyledStatsPageContainer>
-    </div>
+    </StyledStatsPage>
   );
 }
 

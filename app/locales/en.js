@@ -121,6 +121,7 @@ export default {
     notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
     pleaseWait: 'Please wait...',
     stats: {
+      adjustParameters: 'Adjust Parameters',
       byTheNumbers: 'By the Numbers',
       byTheNumbersContent: {
         classifications: 'Classifications',
@@ -132,11 +133,16 @@ export default {
         retiredSubjects: 'Completed Subjects',
         subjects: 'Subjects'
       },
+      classification: 'Classifications',
+      comment: 'Talk Stats',
+      dateRange: 'Date range',
       expandWorkflowStats: 'Expand Workflow Stats',
+      for: 'for',
       hidden: 'Stats hidden',
       organizationStatistics: '%(title)s Statistics',
+      per: '%(type)ss per',
       projectStats: 'Live Projects (%(count)s)',
-      talk: 'Talk Stats'
+      reset: 'Reset view'
     }
   },
   tasks: {
