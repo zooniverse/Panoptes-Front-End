@@ -16,10 +16,13 @@ export default class EditProjectTalk extends React.Component {
       suggestedTags: []
     };
 
+    this.newSuggestedTag = React.createRef();
+
     this.board = this.board.bind(this);
     this.createSuggestedTag = this.createSuggestedTag.bind(this);
     this.deleteSuggestedTag = this.deleteSuggestedTag.bind(this);
     this.getSuggestedTags = this.getSuggestedTags.bind(this);
+    this.onClickDeleteBoard = this.onClickDeleteBoard.bind(this);
     this.section = this.section.bind(this);
     this.setBoards = this.setBoards.bind(this);
     this.suggestedTag = this.suggestedTag.bind(this);
@@ -33,9 +36,8 @@ export default class EditProjectTalk extends React.Component {
 
   onClickDeleteBoard(e, board) {
     e.preventDefault();
-    if (window.confirm(`Are you sure that you want to delete the ${board.title} board? All of it's content will be lost forever`)) {
-      talkClient.type('boards').get(board.id).delete()
-        .then(this.setBoards());
+    if (window.confirm(`Are you sure that you want to delete the ${board.title} board? All of its content will be lost forever`)) {
+      talkClient.type('boards').get(board.id).delete().then(this.setBoards);
     }
   }
 
@@ -138,11 +140,11 @@ export default class EditProjectTalk extends React.Component {
 
   createSuggestedTag(e) {
     e.preventDefault();
-    const name = this.refs.newSuggestedTag.value.trim().toLowerCase()
+    const name = this.newSuggestedTag.current.value.trim().toLowerCase();
     this.setState({ suggestedTagError: null });
     talkClient.type('suggested_tags').create({ section: this.section(), name }).save()
       .then(() => {
-        this.refs.newSuggestedTag.value = '';
+        this.newSuggestedTag.current.value = '';
         this.getSuggestedTags();
       })
       .catch((error) => {
@@ -225,7 +227,7 @@ export default class EditProjectTalk extends React.Component {
           {suggestedTags.map(this.suggestedTag)}
           <input
             type="text"
-            ref="newSuggestedTag"
+            ref={this.newSuggestedTag}
             placeholder="New suggested tag"
             onKeyUp={this.suggestedTagChanged}
           />
