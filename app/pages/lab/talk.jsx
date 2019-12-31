@@ -22,7 +22,9 @@ export default class EditProjectTalk extends React.Component {
 
     this.board = this.board.bind(this);
     this.createSuggestedTag = this.createSuggestedTag.bind(this);
+    this.deleteIconKeyUp = this.deleteIconKeyUp.bind(this);
     this.deleteSuggestedTag = this.deleteSuggestedTag.bind(this);
+    this.editIconKeyUp = this.editIconKeyUp.bind(this);
     this.getSuggestedTags = this.getSuggestedTags.bind(this);
     this.onClickDeleteBoard = this.onClickDeleteBoard.bind(this);
     this.section = this.section.bind(this);
@@ -77,6 +79,21 @@ export default class EditProjectTalk extends React.Component {
     this.titleRefs[ref.id] = ref;
   }
 
+  editIconKeyUp(e, board) {
+    const { editingBoard } = this.state;
+    const key = e.which || e.keyCode;
+    if (key === 13) {
+      this.setState({ editingBoard: editingBoard ? null : board.id });
+    }
+  }
+
+  deleteIconKeyUp(e, board) {
+    const key = e.which || e.keyCode;
+    if (key === 13) {
+      this.onClickDeleteBoard(e, board);
+    }
+  }
+
   board(board, i) {
     const { editingBoard } = this.state;
     return (
@@ -87,7 +104,11 @@ export default class EditProjectTalk extends React.Component {
               <span>Title</span>
               <input ref={this.setTitleRefs} id={`board-title-${board.id}`} type="text" defaultValue={board.title} />
               <div>Description</div>
-              <textarea ref={this.setDescriptionRefs} id={`board-description-${board.id}`} defaultValue={board.description} />
+              <textarea
+                ref={this.setDescriptionRefs}
+                id={`board-description-${board.id}`}
+                defaultValue={board.description}
+              />
               <button type="button" onClick={() => this.setState({ editingBoard: null })}>
                 Cancel
               </button>
@@ -108,6 +129,7 @@ export default class EditProjectTalk extends React.Component {
                 tabIndex="0"
                 title="Edit Title"
                 onClick={() => this.setState({ editingBoard: editingBoard ? null : board.id })}
+                onKeyUp={(e) => { this.editIconKeyUp(e, board); }}
               />
               {' '}
               <i
@@ -116,6 +138,7 @@ export default class EditProjectTalk extends React.Component {
                 tabIndex="0"
                 title="Delete"
                 onClick={(e) => { this.onClickDeleteBoard(e, board); }}
+                onKeyUp={(e) => { this.deleteIconKeyUp(e, board); }}
               />
             </span>
           )}
