@@ -5,6 +5,7 @@ import CreateSubjectDefaultButton from '../../talk/lib/create-subject-default-bu
 import CreateBoardForm from '../../talk/lib/create-board-form';
 import projectSection from '../../talk/lib/project-section';
 import SingleSubmitButton from '../../components/single-submit-button';
+import Paginator from '../../talk/lib/paginator';
 
 export default class EditProjectTalk extends React.Component {
   constructor(props) {
@@ -59,14 +60,16 @@ export default class EditProjectTalk extends React.Component {
       .then(() => this.setState({ editingBoard: null }, this.setBoards()));
   }
 
-  setBoards() {
-    talkClient.type('boards').get({ section: this.section() })
-      .then((boards) => { this.setState({ boards }); });
-  }
-
   getSuggestedTags() {
     talkClient.type('suggested_tags').get({ section: this.section() })
       .then((suggestedTags) => { this.setState({ suggestedTags }); });
+  }
+
+  setBoards(page = 1) {
+    talkClient.type('boards').get({ page, section: this.section() })
+      .then((boards) => {
+        this.setState({ boards });
+      });
   }
 
   setDescriptionRefs(ref) {
@@ -197,6 +200,7 @@ export default class EditProjectTalk extends React.Component {
   render() {
     const { boards, suggestedTagError, suggestedTags } = this.state;
     const { user } = this.props;
+    const meta = (boards[0] && boards[0].getMeta()) || {};
 
     return (
       <div className="edit-project-talk talk">
@@ -252,6 +256,11 @@ export default class EditProjectTalk extends React.Component {
                 controls listed under the talk tab of your project!
               </p>
             )}
+          <Paginator
+            onPageChange={this.setBoards}
+            page={meta.page}
+            pageCount={meta.page_count}
+          />
         </div>
 
         <p>
