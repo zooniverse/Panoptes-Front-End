@@ -7,7 +7,7 @@ export default {
     continue: 'Continuer',
     detailsSubTaskFormSubmitButton: 'OK',
     done: 'Valider',
-    doneAndTalk: 'Fini & Discussion',
+    doneAndTalk: 'Valider & Discussion',
     dontShowMinicourse: 'Ne plus montrer le petit tutoriel dans le futur',
     letsGo: 'À vos marques, prêts, partez!',
     next: 'Suivant',
