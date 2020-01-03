@@ -10,21 +10,54 @@ import Select from './Select';
 const StyledParametersContainer = styled.div`
   background-color: #EFF2F5;
   border-top: 1px solid #A6A7A9;
-  min-height: 200px;
-  padding: 1em;
+  padding: 1.4em;
 `;
 
 const StyledTitle = styled.h4`
-  color: #5c5c5c;
+  color: #5C5C5C;
   font-weight: bold;
   letter-spacing: 1.5px;
-  margin-bottom: .8em;
+  line-height: 17px;
+  margin-bottom: 1.2em;
   text-transform: uppercase;
 `;
 
 const StyledInputsContainer = styled.div`
+  align-items: center;
   display: flex;
-  flex-wrap: wrap;
+  height: 2.5em;
+`;
+
+const StyledText = styled.span`
+  color: #000000;
+  white-space: nowrap;
+`;
+
+const StyledResetContainer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: row-reverse;
+  height: 2.5em;
+  justify-content: space-between;
+  margin-top: 1em;
+`;
+
+const StyledResetButton = styled.button`
+  background-color: #EFF2F5;
+  border: 1px solid #00979D;
+  font: inherit;
+  height: 40px;
+  line-height: 17px;
+  width: 150px;
+
+  &:hover, &:focus {
+    text-decoration: underline;
+  }
+`;
+
+const StyledWarning = styled.span`
+  color: #000000;
+  font-style: italic;
 `;
 
 function Parameters({
@@ -97,8 +130,8 @@ function Parameters({
       />
       <StyledInputsContainer>
         <Translate
-          content="organization.stats.per"
-          with={{ type }}
+          component={StyledText}
+          content={`organization.stats.per${type}`}
         />
         <Select
           current={binBy}
@@ -107,6 +140,7 @@ function Parameters({
           selectFor="binBy"
         />
         <Translate
+          component={StyledText}
           content="organization.stats.for"
         />
         <Select
@@ -115,7 +149,10 @@ function Parameters({
           options={resourceOptions}
           selectFor="resourceId"
         />
+      </StyledInputsContainer>
+      <StyledInputsContainer>
         <Translate
+          component={StyledText}
           content="organization.stats.dateRange"
         />
         <Select
@@ -130,15 +167,23 @@ function Parameters({
           options={maxDateRange}
           selectFor="rangeMax"
         />
-        <button
+      </StyledInputsContainer>
+      <StyledResetContainer>
+        <StyledResetButton
           onClick={() => handleReset()}
           type="button"
         >
           <Translate
             content="organization.stats.reset"
           />
-        </button>
-      </StyledInputsContainer>
+        </StyledResetButton>
+        {binBy === 'hour' ? (
+          <Translate
+            component={StyledWarning}
+            content="organization.stats.hourly"
+          />
+        ) : null}
+      </StyledResetContainer>
     </StyledParametersContainer>
   );
 }

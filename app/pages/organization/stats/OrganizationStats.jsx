@@ -16,6 +16,7 @@ const StyledStatsPage = styled.div`
   border-bottom: 5px solid #005d69;
   display: flex;
   flex-direction: column;
+  font-size: 14px;
 `;
 
 const StyledStatsPageContainer = styled.div`

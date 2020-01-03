@@ -2,6 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
+const StyledSelect = styled.select`
+  margin: 0 3px;
+`;
+
 function Select({
   current,
   handleChange,
@@ -15,7 +19,7 @@ function Select({
   }
 
   return (
-    <select
+    <StyledSelect
       id={`${selectFor}-select-${current}`}
       value={current}
       onChange={handleSelectChange}
@@ -23,7 +27,7 @@ function Select({
       {options.map(({ label, value }) => (
         <option key={value} value={value}>{label}</option>
       ))}
-    </select>
+    </StyledSelect>
   );
 }
 

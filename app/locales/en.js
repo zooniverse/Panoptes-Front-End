@@ -139,8 +139,10 @@ export default {
       expandWorkflowStats: 'Expand Workflow Stats',
       for: 'for',
       hidden: 'Stats hidden',
+      hourly: 'Hourly data only available for the most recent 2 weeks.',
       organizationStatistics: '%(title)s Statistics',
-      per: '%(type)ss per',
+      perclassification: 'Classifications per',
+      percomment: 'Comments per',
       projectStats: 'Live Projects (%(count)s)',
       reset: 'Reset view'
     }
