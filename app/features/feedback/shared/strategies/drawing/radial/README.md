@@ -16,3 +16,4 @@ A single subject can have multiple feedback rules. To group the metadata fields 
 - `#feedback_N_tolerance` (optional) - radius of the target circle. Overrides the default tolerance set on the workflow task rule.
 - `#feedback_N_successMessage` (optional) - message to show when the target is correctly annotated. Overrides the default success message set on the workflow task rule.
 - `#feedback_N_failureMessage` (optional) - message to show when the target is incorrectly annotated. Overrides the default failure message set on the workflow task rule.
+- `#feedback_N_falsePosMode` (optional) - if `true`, specifies that a click within the specified tolerance region should be interpreted as a false positive and no failure message will be displayed. False positives will render as red circles in the modal feedback window if a click is registered within tolerance on and will not render otherwise. The default is `false`.

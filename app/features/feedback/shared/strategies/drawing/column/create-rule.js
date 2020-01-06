@@ -9,19 +9,22 @@ function createRule(subjectRule, workflowRule) {
     successEnabled: workflowRule.successEnabled || false,
     tolerance: subjectRule.tolerance || workflowRule.defaultTolerance,
     x: subjectRule.x,
-    width: subjectRule.width
+    width: subjectRule.width,
+    falsePosMode: subjectRule.falsePosMode || false
   };
 
   if (rule.failureEnabled) {
-    rule.failureMessage = subjectRule.failureMessage ||
-      workflowRule.defaultFailureMessage;
-  }
+    if (!rule.falsePosMode) {
+      rule.failureMessage = subjectRule.failureMessage ||
+        workflowRule.defaultFailureMessage;
+      }
+    }
 
   if (rule.successEnabled) {
     rule.successMessage = subjectRule.successMessage ||
       workflowRule.defaultSuccessMessage;
   }
-  
+
   return ruleChecker(rule);
 }
 

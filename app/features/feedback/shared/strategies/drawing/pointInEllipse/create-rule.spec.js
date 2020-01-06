@@ -32,7 +32,8 @@ describe('feedback drawing pointInEllipse create-rule', function () {
       y: "300",
       toleranceA: "20",
       toleranceB: "20",
-      theta : "0"
+      theta : "0",
+      falsePosMode: false
     });
   })
 
@@ -56,7 +57,33 @@ describe('feedback drawing pointInEllipse create-rule', function () {
       y: "300",
       toleranceA: "30",
       toleranceB: "60",
-      theta : "60"
+      theta : "60",
+      falsePosMode: false
+    });
+  })
+
+  it('should return a valid  false-positive rule with subject-specific settings', function () {
+    subjectRule.failureMessage = "Subject-specific failure message";
+    subjectRule.successMessage = "Subject-specific success message";
+    subjectRule.toleranceA = "30";
+    subjectRule.toleranceB = "60";
+    subjectRule.theta = "60";
+    subjectRule.falsePosMode = true;
+
+    const rule = createRule(subjectRule, workflowRule);
+    expect(rule).to.deep.equal({
+      failureEnabled: true,
+      hideSubjectViewer: false,
+      id: "1234",
+      strategy: "pointInEllipse",
+      successEnabled: true,
+      successMessage: "Subject-specific success message",
+      x: "200",
+      y: "300",
+      toleranceA: "30",
+      toleranceB: "60",
+      theta : "60",
+      falsePosMode: true
     });
   })
 });

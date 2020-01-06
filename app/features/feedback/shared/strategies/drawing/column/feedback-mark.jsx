@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 function FeedbackMark({ rule }) {
-  const color = (rule.success) ? 'green' : 'red';
+  const color = (rule.success) ? (rule.falsePosMode ? 'red' : 'green') : 'red';
+  const fillOpacities = (rule.falsePosMode && !rule.success) ? [0, 0] : [0.2, 0.5];
+  const strokeOpacities = (rule.falsePosMode && !rule.success) ? [0, 0] : [0.6, 0.8];
   const tolerance = parseInt(rule.tolerance, 10);
   return (
     <g>
@@ -13,8 +15,8 @@ function FeedbackMark({ rule }) {
         height="100%"
         stroke="blue"
         fill="blue"
-        fillOpacity="0.2"
-        strokeOpacity="0.6"
+        fillOpacity={fillOpacities[0]}
+        strokeOpacity={strokeOpacities[0]}
       />
       <rect
         x={rule.x}
@@ -23,8 +25,8 @@ function FeedbackMark({ rule }) {
         height="100%"
         stroke={color}
         fill={color}
-        fillOpacity="0.5"
-        strokeOpacity="0.8"
+        fillOpacity={fillOpacities[1]}
+        strokeOpacity={strokeOpacities[1]}
       />
     </g>
   );
