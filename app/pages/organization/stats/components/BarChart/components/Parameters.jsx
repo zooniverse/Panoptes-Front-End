@@ -1,10 +1,10 @@
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 import styled from 'styled-components';
 
 import filterTimeSeries from '../helpers/filterTimeSeries';
+import formatLabel from '../helpers/formatLabel';
 import Select from './Select';
 
 const StyledParametersContainer = styled.div`
@@ -84,13 +84,6 @@ function Parameters({
     { label: project.display_name, value: project.id }
   ));
   resourceOptions.splice(0, 0, { label: 'all', value: 'all' });
-
-  const formatLabel = {
-    hour: date => moment.utc(date).format('MMM-DD hh:mm A'),
-    day: date => moment.utc(date).format('MMM-DD-YYYY'),
-    week: date => moment.utc(date).format('MMM-DD-YYYY'),
-    month: date => moment.utc(date).format('MMM YYYY')
-  };
 
   let maxDateRange = [];
   if (statData && statData.length > 0) {

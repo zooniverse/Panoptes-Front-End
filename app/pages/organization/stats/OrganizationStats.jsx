@@ -93,7 +93,6 @@ OrganizationStats.defaultProps = {
   organization: {
     id: '',
     display_name: '',
-    redirect: '',
     slug: ''
   },
   organizationAvatar: null,
@@ -105,8 +104,8 @@ OrganizationStats.defaultProps = {
   projectAvatars: [],
   routes: [],
   translation: {
-    id: '',
-    display_name: ''
+    display_name: '',
+    id: ''
   },
   user: null
 };
@@ -114,11 +113,9 @@ OrganizationStats.defaultProps = {
 OrganizationStats.propTypes = {
   fetchingProjects: PropTypes.bool,
   organization: PropTypes.shape({
-    configuration: PropTypes.shape({
-      announcement: PropTypes.string
-    }),
-    id: PropTypes.string,
+    announcement: PropTypes.string,
     display_name: PropTypes.string,
+    id: PropTypes.string,
     slug: PropTypes.string
   }),
   organizationBackground: PropTypes.shape({
@@ -145,7 +142,8 @@ OrganizationStats.propTypes = {
   }),
   routes: PropTypes.array,
   translation: PropTypes.shape({
-    display_name: PropTypes.string
+    display_name: PropTypes.string,
+    id: PropTypes.string
   })
 };
 

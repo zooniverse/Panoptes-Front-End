@@ -1,8 +1,12 @@
 import ChartistGraph from 'react-chartist';
-import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+import formatLabel from '../helpers/formatLabel';
+
+const gradientRed = 'hsla(6, 59%, 58%, 1)';
+const gradientYellow = 'hsla(45, 100%, 47%, 1)';
 
 const StyledChartistGraph = styled(ChartistGraph)`
   .ct-chart-bar {
@@ -40,13 +44,6 @@ const StyledChartistGraph = styled(ChartistGraph)`
     }
   }
 `;
-
-const formatLabel = {
-  hour: date => moment.utc(date).format('MMM-DD hh:mm A'),
-  day: date => moment.utc(date).format('MMM-DD-YYYY'),
-  week: date => moment.utc(date).format('MMM-DD-YYYY'),
-  month: date => moment.utc(date).format('MMM YYYY')
-};
 
 function Graph({
   by,
@@ -117,10 +114,10 @@ function Graph({
       y2: 0
     }).elem('stop', {
       offset: 0,
-      'stop-color': 'hsla(6, 59%, 58%, 1)'
+      'stop-color': gradientRed
     }).parent().elem('stop', {
       offset: 1,
-      'stop-color': 'hsla(45, 100%, 47%, 1)'
+      'stop-color': gradientYellow
     });
   }
 
