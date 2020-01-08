@@ -38,6 +38,9 @@ ROLES_INFO =
   translator:
     label: 'Translator'
     description: 'Translators will have access to the translation site.'
+  museum:
+    label: 'Museum'
+    description: 'Museum visitors will experience a different user interface/user experience in the mobile app. This role is designed for curated events, such as a museum exhibit.'
 
 CollaboratorCreator = createReactClass
   displayName: 'CollaboratorCreator'
@@ -51,6 +54,7 @@ CollaboratorCreator = createReactClass
 
   render: ->
     @showTranslatorRole()
+    @showMuseumRole()
 
     style = if @state.creating
       opacity: 0.5
@@ -84,6 +88,10 @@ CollaboratorCreator = createReactClass
   showTranslatorRole: ->
     if (@props.project.experimental_tools?.indexOf('translator-role') > -1) or isAdmin()
       POSSIBLE_ROLES = Object.assign({}, POSSIBLE_ROLES, {translator: 'translator'});
+  
+  showMuseumRole: ->
+    if (@props.project.experimental_tools?.indexOf('museum-role') > -1) or isAdmin()
+      POSSIBLE_ROLES = Object.assign({}, POSSIBLE_ROLES, {museum: 'museum'});
 
   handleSubmit: (e) ->
     e.preventDefault()
