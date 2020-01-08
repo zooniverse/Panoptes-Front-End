@@ -134,7 +134,7 @@ export default {
         subjects: 'Subjects'
       },
       classification: 'Classifications',
-      comment: 'Talk Stats',
+      comment: 'Talk Comments',
       dateRange: 'Date range',
       expandWorkflowStats: 'Expand Workflow Stats',
       for: 'for',

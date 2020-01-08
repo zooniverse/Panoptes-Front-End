@@ -5,11 +5,39 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledChartistGraph = styled(ChartistGraph)`
-  .ct-series-a .ct-bar,
-    .ct-series-a .ct-line,
-      .ct-series-a .ct-point,
-        .ct-series-a .ct-slice-donut {
-    stroke: url(#gradient);
+  .ct-chart-bar {
+    min-height: 250px;
+
+    .ct-series, .ct-series-a {
+      .ct-bar {
+        stroke: url(#gradient);
+
+        &:hover + .ct-tooltip, &:focus + .ct-tooltip {
+          display: block;
+          fill: #5C5C5C;
+        }
+      }
+
+      .ct-tooltip {
+        display: none;
+
+        &:hover, &:focus {
+          display: block;
+          fill: #5C5C5C;
+        }
+      }
+    }
+
+    .ct-labels {
+      .ct-label {
+        color: #5C5C5C;
+
+        &.ct-horizontal, &.ct-end {
+          transform: rotate(-90deg);
+          white-space: nowrap;
+        }
+      }
+    }
   }
 `;
 
@@ -29,15 +57,50 @@ function Graph({
 
   const options = {
     axisX: {
-      labelInterpolationFnc: value => formatLabel[by](value)
+      labelInterpolationFnc: value => formatLabel[by](value),
+      labelOffset: {
+        x: 5,
+        y: 28
+      },
+      showGrid: false
+    },
+    chartPadding: {
+      bottom: 60
     }
   };
 
   function onDraw(ctx) {
-    if (ctx.type === 'bar') {
+    if (ctx.type === 'label') {
+      let ticksLength = 0;
+      if (ctx && ctx.axis && ctx.axis.ticks && ctx.axis.ticks.length) {
+        ticksLength = ctx.axis.ticks.length;
+      }
+      if (ctx.axis.units.dir === 'horizontal') {
+        const svgWidth = ctx.element.parent().parent().width();
+        const width = svgWidth / ticksLength;
+        const numberBars = Math.ceil(20 / width);
+        if (ctx.index % numberBars) {
+          ctx.element.attr({ style: 'display: none' });
+        }
+      }
+    } else if (ctx.type === 'bar') {
+      let seriesLength = 0;
+      if (ctx && ctx.series && ctx.series.length) {
+        seriesLength = ctx.series.length;
+      }
+      const strokeWidth = seriesLength ? (100 / seriesLength) : 5;
       ctx.element.attr({
-        x1: ctx.x1 + 0.001
+        x1: ctx.x1 + 0.001,
+        style: `stroke-width: ${strokeWidth}%`,
+        focusable: true,
+        tabindex: 0
       });
+      ctx.group.elem('text', {
+        x: ctx.x1,
+        y: 15,
+        class: 'ct-tooltip'
+      })
+        .text(ctx.series[ctx.index]);
     }
   }
 
