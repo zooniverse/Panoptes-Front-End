@@ -40,7 +40,7 @@ ROLES_INFO =
     description: 'Translators will have access to the translation site.'
   museum:
     label: 'Museum'
-    description: 'Museum visitors will experience a different user interface/user experience in the mobile app. This role is designed for curated events, such as a museum exhibit.'
+    description: 'Enables a custom interface for the project on the Zooniverse iPad app, specifically designed to be used in a museum or exhibit space. Assign a user to this role to turn on.'
 
 CollaboratorCreator = createReactClass
   displayName: 'CollaboratorCreator'
