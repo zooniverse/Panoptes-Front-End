@@ -53,12 +53,13 @@ class ProjectStatsContainer extends React.Component {
               workflows
             }));
           });
+      } else {
+        newProjectStats.set(project.id, Object.assign({}, project, {
+          avatarSrc: projectAvatar.src,
+          show: false,
+          workflows: []
+        }));
       }
-      newProjectStats.set(project.id, Object.assign({}, project, {
-        avatarSrc: projectAvatar.src,
-        show: false,
-        workflows: []
-      }));
     });
 
     this.setState({ projectStats: newProjectStats });
@@ -90,10 +91,16 @@ class ProjectStatsContainer extends React.Component {
   }
 
   render() {
+    const { projects } = this.props;
     const { projectStats } = this.state;
+
+    const projectIds = projects
+      .filter(project => project.launch_approved && project.state === 'live')
+      .map(project => project.id);
 
     return (
       <ProjectStats
+        projectIds={projectIds}
         projectStats={projectStats}
         toggleWorkflows={this.toggleWorkflows}
       />

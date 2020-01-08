@@ -21,39 +21,43 @@ const StyledProjectStatBlock = styled.div`
   margin-bottom: 2em;
 `;
 
-function ProjectStats({ projectStats, toggleWorkflows }) {
-  const projects = Array.from(projectStats.entries());
-
+function ProjectStats({ projectIds, projectStats, toggleWorkflows }) {
   return (
     <StyledProjectStats>
       <SectionHeading
         content="organization.stats.projectStats"
-        withProp={{ count: projects.length }}
+        withProp={{ count: projectIds.length }}
       />
-      {projects.map(([id, project]) => (
-        <StyledProjectStatBlock key={id}>
-          <Heading
-            resource={project}
-            title={`${project.display_name} (${project.links.active_workflows.length} workflows)`}
-          />
-          <ProgressBar resource={project} />
-          {project.show ? (
-            <WorkflowsShowing
-              project={project}
-              toggleWorkflows={() => toggleWorkflows(id)}
+      {projectStats.size > 0 && projectIds.map((id) => {
+        const project = projectStats.get(id);
+        return project ? (
+          <StyledProjectStatBlock key={`PROJECT_${id}`}>
+            <Heading
+              resource={project}
+              title={`${project.display_name} (${project.links.active_workflows.length} workflows)`}
             />
-          ) : (
-            <WorkflowsHidden
-              toggleWorkflows={() => toggleWorkflows(id)}
-            />
-          )}
-        </StyledProjectStatBlock>
-      ))}
+            <ProgressBar resource={project} />
+            {project.show ? (
+              <WorkflowsShowing
+                project={project}
+                toggleWorkflows={() => toggleWorkflows(id)}
+              />
+            ) : (
+              <WorkflowsHidden
+                toggleWorkflows={() => toggleWorkflows(id)}
+              />
+            )}
+          </StyledProjectStatBlock>
+        ) : null;
+      })}
     </StyledProjectStats>
   );
 }
 
 ProjectStats.propTypes = {
+  projectIds: PropTypes.arrayOf(
+    PropTypes.string
+  ).isRequired,
   projectStats: PropTypes.shape({
     key: PropTypes.string,
     value: PropTypes.object

@@ -16,7 +16,7 @@ function WorkflowsShowing({ project, toggleWorkflows }) {
       />
       <Section>
         {project.workflows.map(workflow => (
-          <div key={workflow.id}>
+          <div key={`WORKFLOW_${workflow.id}`}>
             <Heading
               resource={workflow}
               title={workflow.display_name}
