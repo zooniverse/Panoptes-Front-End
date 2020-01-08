@@ -34,7 +34,7 @@ function ProgressBar({ resource, height }) {
         />
       ) : (
         <StyledProgressBarMeter
-          style={{ width: `${Math.round(resource.completeness * 100)}%` }}
+          style={{ width: `${Math.floor(resource.completeness * 100)}%` }}
         />
       )}
     </StyledProgressBar>

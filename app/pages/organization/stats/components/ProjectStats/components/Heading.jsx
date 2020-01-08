@@ -100,7 +100,7 @@ function Heading({ resource, title }) {
         )}
       </TitleComponent>
       {!hideStat && (
-        <StyledPercent>{`${Math.round(resource.completeness * 100)}%`}</StyledPercent>
+        <StyledPercent>{`${Math.floor(resource.completeness * 100)}%`}</StyledPercent>
       )}
     </StyledHeading>
   );
