@@ -29,12 +29,14 @@ const StyledStat = styled.span`
   color: #5C5C5C;
   display: block;
   font-size: 1.8em;
+  line-height: 31px;
 `;
 
 const StyledStatDescription = styled.span`
   color: #5C5C5C;
   display: block;
   font-weight: bold;
+  line-height: 17px;
 `;
 
 function ByTheNumbers({ projects }) {

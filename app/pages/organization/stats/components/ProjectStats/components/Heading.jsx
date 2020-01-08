@@ -23,6 +23,7 @@ const StyledLink = styled(IndexLink).attrs({
   color: #5C5C5C;
   font-weight: bold;
   letter-spacing: 1.5px;
+  line-height: 17px;
   text-decoration: none;
   text-transform: uppercase;
 
@@ -37,6 +38,7 @@ const StyledRedirect = styled.a`
   color: #5C5C5C;
   font-weight: bold;
   letter-spacing: 1.5px;
+  line-height: 17px;
   text-decoration: none;
   text-transform: uppercase;
 
@@ -49,6 +51,7 @@ const StyledRedirect = styled.a`
 const StyledTitle = styled.h4`
   color: #5C5C5C;
   letter-spacing: 1.5px;
+  line-height: 17px;
   text-transform: uppercase;
 `;
 

@@ -6,6 +6,7 @@ import Translate from 'react-translate-component';
 const StyledSectionHeading = styled.h3`
   font-size: 1em;
   letter-spacing: 1.5px;
+  line-height: 17px;
   margin-bottom: 1.3em;
   text-transform: uppercase;
 `;

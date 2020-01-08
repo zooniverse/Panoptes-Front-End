@@ -20,12 +20,13 @@ const StyledStatsPage = styled.div`
 `;
 
 const StyledStatsPageContainer = styled.div`
-  padding: 2em 5vw;
+  padding: 2.9em 6.6em 6.3em;
 `;
 
 export const StyledPageHeading = styled.h2`
+  font-size: 1.8em;
   letter-spacing: -.5px;
-  margin-bottom: 1.5em;
+  margin-bottom: .8em;
 `;
 
 function OrganizationStats({

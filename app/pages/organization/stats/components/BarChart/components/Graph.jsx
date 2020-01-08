@@ -64,6 +64,9 @@ function Graph({
       },
       showGrid: false
     },
+    axisY: {
+      onlyInteger: true
+    },
     chartPadding: {
       bottom: 60
     }
