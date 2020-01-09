@@ -19,6 +19,9 @@ POSSIBLE_ROLES = {
   tester: 'team'
 }
 
+# NOTE: Panoptes API and Talk API keep track of user roles separately; Panoptes can accept arbitrary role values, but Talk API can't.
+# The key-value pairs of POSSIBLE_ROLES maps the roles on Panoptes API (key) to the 'comparable' roles on Talk API.
+
 ROLES_INFO =
   collaborator:
     label: 'Collaborator'
@@ -41,6 +44,10 @@ ROLES_INFO =
   museum:
     label: 'Museum'
     description: 'Enables a custom interface for the project on the Zooniverse iPad app, specifically designed to be used in a museum or exhibit space.'
+    
+ROLES_NOT_IN_TALK_API = [
+  'museum'
+]
 
 CollaboratorCreator = createReactClass
   displayName: 'CollaboratorCreator'
@@ -101,7 +108,7 @@ CollaboratorCreator = createReactClass
     roles = for checkbox in checkboxes when checkbox.checked
       checkbox.value
 
-    talkRoles = for role, talkRole of POSSIBLE_ROLES when role in roles and role isnt 'museum'  # 'museum' role should be added to Panoptes API's project_roles, but NOT Talk API's 
+    talkRoles = for role, talkRole of POSSIBLE_ROLES when role in roles and role not in ROLES_NOT_IN_TALK_API 
       talkRole
 
     talkRoles = talkRoles.reduce(((memo, role) ->
@@ -233,7 +240,7 @@ module.exports = createReactClass
         user_id: parseInt(projectRoleSet.links.owner.id)
         section: @talkSection()
         name: POSSIBLE_ROLES[role]
-      ).save() unless role is 'museum'  # 'museum' role should be added to Panoptes API's project_roles, but NOT Talk API's 
+      ).save() unless role in ROLES_NOT_IN_TALK_API 
     else
       projectRoleSet.roles.splice index, 1
       filteredRoles = projectRoleSet.talk_roles.filter (talkRole) ->
