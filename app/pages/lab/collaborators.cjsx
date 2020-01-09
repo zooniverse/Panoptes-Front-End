@@ -101,7 +101,7 @@ CollaboratorCreator = createReactClass
     roles = for checkbox in checkboxes when checkbox.checked
       checkbox.value
 
-    talkRoles = for role, talkRole of POSSIBLE_ROLES when role in roles
+    talkRoles = for role, talkRole of POSSIBLE_ROLES when role in roles and role isnt 'museum'  # 'museum' role should be added to Panoptes API's project_roles, but NOT Talk API's 
       talkRole
 
     talkRoles = talkRoles.reduce(((memo, role) ->
@@ -233,7 +233,7 @@ module.exports = createReactClass
         user_id: parseInt(projectRoleSet.links.owner.id)
         section: @talkSection()
         name: POSSIBLE_ROLES[role]
-      ).save()
+      ).save() unless role is 'museum'  # 'museum' role should be added to Panoptes API's project_roles, but NOT Talk API's 
     else
       projectRoleSet.roles.splice index, 1
       filteredRoles = projectRoleSet.talk_roles.filter (talkRole) ->
