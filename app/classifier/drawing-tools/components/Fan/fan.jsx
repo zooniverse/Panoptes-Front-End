@@ -17,7 +17,7 @@ class Fan extends React.Component {
       y,
       radius: 0,
       rotation: 0,
-      spread: 30
+      spread: 10
     };
   }
 
