@@ -61,6 +61,7 @@ describe('ProjectHomeWorkflowButton', function () {
         disabled={false}
         preferences={preferences}
         project={testProject}
+        translation={testWorkflowWithoutLevel}
         translations={translations}
         user={user}
         workflow={testWorkflowWithoutLevel}
@@ -139,6 +140,7 @@ describe('ProjectHomeWorkflowButton', function () {
           disabled={true}
           preferences={preferences}
           project={testProject}
+          translation={testWorkflowWithoutLevel}
           workflow={testWorkflowWithoutLevel}
           workflowAssignment={false}
         />
@@ -161,6 +163,7 @@ describe('ProjectHomeWorkflowButton', function () {
           disabled={false}
           preferences={preferences}
           project={testProject}
+          translation={testWorkflowWithoutLevel}
           workflow={testWorkflowWithoutLevel}
           workflowAssignment={true}
         />
