@@ -3,6 +3,7 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import ProjectHomeWorkflowButton from './home-workflow-button';
 import LoadingIndicator from '../../../components/loading-indicator';
+import Translations from '../../../classifier/translations'
 
 export default class ProjectHomeWorkflowButtons extends React.Component {
   constructor() {
@@ -43,15 +44,21 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
               )}
               {this.props.activeWorkflows.map((workflow) => {
                 return (
-                  <ProjectHomeWorkflowButton
-                    key={workflow.id}
-                    disabled={this.shouldWorkflowBeDisabled(workflow)}
-                    preferences={this.props.preferences}
-                    project={this.props.project}
-                    user={this.props.user}
-                    workflow={workflow}
-                    workflowAssignment={this.props.workflowAssignment}
-                  />);
+                    <Translations
+                      key={workflow.id}
+                      original={workflow}
+                      type="workflow"
+                    >
+                      <ProjectHomeWorkflowButton
+                        disabled={this.shouldWorkflowBeDisabled(workflow)}
+                        preferences={this.props.preferences}
+                        project={this.props.project}
+                        user={this.props.user}
+                        workflow={workflow}
+                        workflowAssignment={this.props.workflowAssignment}
+                      />
+                    </Translations>
+                  );
               })
             }</div>
           </div>)}
