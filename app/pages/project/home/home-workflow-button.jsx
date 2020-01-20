@@ -75,6 +75,7 @@ ProjectHomeWorkflowButton.defaultProps = {
   disabled: false,
   preferences: {},
   project: {},
+  translation: {},
   workflow: {},
   workflowAssignment: false
 };
@@ -95,6 +96,10 @@ ProjectHomeWorkflowButton.propTypes = {
   project: PropTypes.shape({
     slug: PropTypes.string
   }).isRequired,
+  translation: PropTypes.shape({
+    display_name: PropTypes.string,
+    id: PropTypes.string
+  }),
   translations: PropTypes.shape({
     locale: PropTypes.string
   }),
