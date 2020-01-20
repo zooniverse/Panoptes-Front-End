@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import ProjectHomePage from './project-home';
+import * as translationActions from '../../../redux/ducks/translations';
 import getWorkflowsInOrder from '../../../lib/get-workflows-in-order';
 
-export default class ProjectHomeContainer extends React.Component {
+class ProjectHomeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,17 +29,25 @@ export default class ProjectHomeContainer extends React.Component {
     this.fetchTalkSubjects(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.user !== nextProps.user) {
-      this.showWorkflowButtons(nextProps);
+  componentDidUpdate(prevProps) {
+    const { actions, project, translations, user } = this.props;
+    const { activeWorkflows } = this.state;
+    if (user !== prevProps.user) {
+      this.showWorkflowButtons(this.props);
     }
 
-    if (this.props.project !== nextProps.project) {
-      this.fetchResearcherAvatar(nextProps);
+    if (project !== prevProps.project) {
+      this.fetchResearcherAvatar(this.props);
+    }
+
+    if (translations.locale !== prevProps.translations.locale) {
+      actions.translations.load('workflow', activeWorkflows.map(workflow => workflow.id), translations.locale);
     }
   }
 
   fetchWorkflows(props, query) {
+    const { actions, translations } = props;
+    const { locale } = translations;
     if (this.state.activeWorkflows.length === 0) {
       const newQuery = query;
       newQuery.complete = false;
@@ -44,11 +55,13 @@ export default class ProjectHomeContainer extends React.Component {
         .then((incompleteWorkflows) => {
           if (incompleteWorkflows.length > 0) {
             this.setState({ activeWorkflows: incompleteWorkflows });
+            actions.translations.load('workflow', incompleteWorkflows.map(workflow => workflow.id), locale);
           } else {
             delete newQuery.complete;
             getWorkflowsInOrder(props.project, newQuery)
               .then((activeWorkflows) => {
                 this.setState({ activeWorkflows });
+                actions.translations.load('workflow', activeWorkflows.map(workflow => workflow.id), locale);
               });
           }
         });
@@ -184,3 +197,16 @@ ProjectHomeContainer.propTypes = {
     id: PropTypes.string
   })
 };
+
+const mapStateToProps = state => ({
+  translations: state.translations,
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    translations: bindActionCreators(translationActions, dispatch)
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectHomeContainer);
+export { ProjectHomeContainer };
