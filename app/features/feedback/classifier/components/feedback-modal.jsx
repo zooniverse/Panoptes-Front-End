@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
@@ -27,17 +28,24 @@ class FeedbackModal extends React.Component {
 
   render() {
     const { messages, subjectViewerProps } = this.props;
+
     return (
       <ModalFocus className="classifier feedbackmodal">
         <Translate content="FeedbackModal.title" component="h2" />
         {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
-        <ul>
-          {messages.map(message =>
-            <li key={Math.random()}>
-              {message}
-            </li>
-          )}
-        </ul>
+          {_.chain(messages).map((catMessages, cat) => {
+            return (<div>
+              <h5>
+              {cat}
+              </h5>
+              <ul>
+              {catMessages.map((message) =>
+                <li key={Math.random()}>
+                {message}
+                </li>)}
+              </ul>
+            </div>)
+          }).value()}
 
         <div className="buttons">
           <button
@@ -54,7 +62,7 @@ class FeedbackModal extends React.Component {
 }
 
 FeedbackModal.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.string),
+  messages: PropTypes.object,
   subjectViewerProps: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.bool
