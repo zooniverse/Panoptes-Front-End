@@ -6,8 +6,8 @@ import styled from 'styled-components';
 
 const StyledProgressBar = styled.div`
   background-color: #EFF2F5;
-  height: ${props => (props.height === 'small' ? '1.4em' : '2.4em')};
-  margin-bottom: 1em;
+  height: ${props => (props.size === 'small' ? '1.4em' : '2.4em')};
+  margin-bottom: ${props => (props.size === 'small' ? '1.4em' : '1.8em')};
 `;
 
 const StyledProgressBarMeter = styled.span`
@@ -22,11 +22,11 @@ const StyledText = styled.span`
   margin-left: 12px;
 `;
 
-function ProgressBar({ resource, height }) {
+function ProgressBar({ resource, size }) {
   const hideStat = resource && resource.configuration && resource.configuration.stats_hidden;
 
   return (
-    <StyledProgressBar height={height}>
+    <StyledProgressBar size={size}>
       {hideStat ? (
         <Translate
           component={StyledText}
@@ -48,11 +48,11 @@ ProgressBar.propTypes = {
       stats_hidden: PropTypes.bool
     })
   }).isRequired,
-  height: PropTypes.string
+  size: PropTypes.string
 };
 
 ProgressBar.defaultProps = {
-  height: ''
+  size: ''
 };
 
 export default ProgressBar;

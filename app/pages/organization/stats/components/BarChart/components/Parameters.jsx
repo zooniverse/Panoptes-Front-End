@@ -42,16 +42,19 @@ const StyledResetContainer = styled.div`
   margin-top: 1em;
 `;
 
-const StyledResetButton = styled.button`
-  background-color: #EFF2F5;
+const StyledResetButton = styled.button.attrs({
+  activeClassName: 'active'
+})`
+  background: #EFF2F5;
   border: 1px solid #00979D;
   font: inherit;
   height: 40px;
   line-height: 17px;
   width: 150px;
 
-  &:hover, &:focus {
-    text-decoration: underline;
+  &.active, &:hover, &:focus {
+    background: #00979D;
+    color: #FFFFFF;
   }
 `;
 

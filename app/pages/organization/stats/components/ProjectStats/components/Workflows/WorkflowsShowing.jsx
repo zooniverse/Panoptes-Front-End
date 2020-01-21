@@ -24,7 +24,7 @@ function WorkflowsShowing({ project, toggleWorkflows }) {
             />
             <ProgressBar
               resource={workflow}
-              height="small"
+              size="small"
             />
           </div>
         ))}
