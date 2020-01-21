@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import Translate from 'react-translate-component';
+import getAllLinked from '../../lib/get-all-linked';
 import isAdmin from '../../lib/is-admin';
 import OrganizationPage from './organization-page';
 
@@ -130,7 +131,7 @@ class OrganizationContainer extends React.Component {
       delete query.private;
     }
 
-    organization.get('projects', query)
+    getAllLinked(organization, 'projects', query)
       .then((organizationProjects) => {
         this.setState({ fetchingProjects: false, organizationProjects });
         const avatarRequests = organizationProjects
