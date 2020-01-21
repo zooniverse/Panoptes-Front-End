@@ -4,6 +4,7 @@ import { IndexLink } from 'react-router';
 import styled from 'styled-components';
 
 import Avatar from '../../../../../project/components/ProjectNavbar/components/Avatar';
+import getCompleteness from '../helpers/getCompleteness';
 
 const StyledHeading = styled.div`
   display: flex;
@@ -78,6 +79,8 @@ function Heading({ resource, title }) {
 
   const hideStat = resource && resource.configuration && resource.configuration.stats_hidden;
 
+  const completeness = getCompleteness(resource);
+
   return (
     <StyledHeading>
       {resource.avatarSrc && (
@@ -100,7 +103,7 @@ function Heading({ resource, title }) {
         )}
       </TitleComponent>
       {!hideStat && (
-        <StyledPercent>{`${Math.floor(resource.completeness * 100)}%`}</StyledPercent>
+        <StyledPercent>{`${Math.floor(completeness * 100)}%`}</StyledPercent>
       )}
     </StyledHeading>
   );

@@ -4,6 +4,8 @@ import React from 'react';
 import getWorkflowsInOrder from '../../../../../lib/get-workflows-in-order';
 import ProjectStats from './ProjectStats';
 
+const FIELDS = 'classifications_count,completeness,configuration,display_name,retirement,subjects_count';
+
 class ProjectStatsContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +46,7 @@ class ProjectStatsContainer extends React.Component {
       if (index === 0) {
         getWorkflowsInOrder(project, {
           active: true,
-          fields: 'completeness,configuration,display_name'
+          fields: FIELDS
         })
           .then((workflows) => {
             newProjectStats.set(project.id, Object.assign({}, project, {
@@ -76,7 +78,7 @@ class ProjectStatsContainer extends React.Component {
     if (projectStat.workflows.length === 0) {
       getWorkflowsInOrder(project, {
         active: true,
-        fields: 'completeness,configuration,display_name'
+        fields: FIELDS
       })
         .then((workflows) => {
           newProjectStat = Object.assign({}, projectStat, { show: !projectStat.show, workflows });

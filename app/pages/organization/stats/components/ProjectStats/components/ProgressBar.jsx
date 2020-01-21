@@ -4,6 +4,8 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import styled from 'styled-components';
 
+import getCompleteness from '../helpers/getCompleteness';
+
 const StyledProgressBar = styled.div`
   background-color: #EFF2F5;
   height: ${props => (props.size === 'small' ? '1.4em' : '2.4em')};
@@ -25,6 +27,8 @@ const StyledText = styled.span`
 function ProgressBar({ resource, size }) {
   const hideStat = resource && resource.configuration && resource.configuration.stats_hidden;
 
+  const completeness = getCompleteness(resource);
+
   return (
     <StyledProgressBar size={size}>
       {hideStat ? (
@@ -34,7 +38,7 @@ function ProgressBar({ resource, size }) {
         />
       ) : (
         <StyledProgressBarMeter
-          style={{ width: `${Math.floor(resource.completeness * 100)}%` }}
+          style={{ width: `${Math.floor(completeness * 100)}%` }}
         />
       )}
     </StyledProgressBar>

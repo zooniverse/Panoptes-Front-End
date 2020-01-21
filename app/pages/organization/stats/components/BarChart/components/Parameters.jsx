@@ -173,12 +173,12 @@ function Parameters({
             content="organization.stats.reset"
           />
         </StyledResetButton>
-        {binBy === 'hour' ? (
+        {binBy === 'hour' && (
           <Translate
             component={StyledWarning}
             content="organization.stats.hourly"
           />
-        ) : null}
+        )}
       </StyledResetContainer>
     </StyledParametersContainer>
   );
