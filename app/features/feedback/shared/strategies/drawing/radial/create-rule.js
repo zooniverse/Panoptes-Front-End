@@ -13,12 +13,10 @@ function createRule(subjectRule, workflowRule) {
     falsePosMode: subjectRule.falsePosMode || false
   };
 
-  if (rule.failureEnabled) {
-    if (!rule.falsePosMode) {
-      rule.failureMessage = subjectRule.failureMessage ||
-        workflowRule.defaultFailureMessage;
-      }
-    }
+  if (rule.failureEnabled && !rule.falsePosMode) {
+    rule.failureMessage = subjectRule.failureMessage ||
+      workflowRule.defaultFailureMessage;
+  }
 
   if (rule.successEnabled) {
     rule.successMessage = subjectRule.successMessage ||
