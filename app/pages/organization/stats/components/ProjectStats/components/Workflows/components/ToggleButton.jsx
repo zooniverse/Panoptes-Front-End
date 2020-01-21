@@ -8,9 +8,10 @@ const StyledWorkflowsToggleButton = styled.button`
   margin-right: 1em;
 `;
 
-function ToggleButton({ icon, handleClick }) {
+function ToggleButton({ icon, handleClick, label }) {
   return (
     <StyledWorkflowsToggleButton
+      aria-label={label}
       type="button"
       onClick={() => handleClick()}
     >
@@ -21,7 +22,8 @@ function ToggleButton({ icon, handleClick }) {
 
 ToggleButton.propTypes = {
   handleClick: PropTypes.func.isRequired,
-  icon: PropTypes.node.isRequired
+  icon: PropTypes.node.isRequired,
+  label: PropTypes.string.isRequired
 };
 
 export default ToggleButton;

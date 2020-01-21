@@ -6,6 +6,17 @@ const StyledSelect = styled.select`
   margin: 0 3px;
 `;
 
+const HiddenLabel = styled.label`
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+`;
+
 function Select({
   current,
   handleChange,
@@ -19,15 +30,20 @@ function Select({
   }
 
   return (
-    <StyledSelect
-      id={`${selectFor}-select-${current}`}
-      value={current}
-      onChange={handleSelectChange}
-    >
-      {options.map(({ label, value }) => (
-        <option key={value} value={value}>{label}</option>
-      ))}
-    </StyledSelect>
+    <>
+      <HiddenLabel htmlFor={`${selectFor}-select-${current}`}>
+        {`Select ${selectFor}`}
+      </HiddenLabel>
+      <StyledSelect
+        id={`${selectFor}-select-${current}`}
+        value={current}
+        onChange={handleSelectChange}
+      >
+        {options.map(({ label, value }) => (
+          <option key={value} value={value}>{label}</option>
+        ))}
+      </StyledSelect>
+    </>
   );
 }
 

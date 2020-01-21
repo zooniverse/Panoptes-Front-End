@@ -13,6 +13,7 @@ function WorkflowsShowing({ project, toggleWorkflows }) {
       <ToggleButton
         icon={<i className="fa fa-chevron-up fa-lg" />}
         handleClick={toggleWorkflows}
+        label="collapse workflow list"
       />
       <Section>
         {project.workflows.map(workflow => (

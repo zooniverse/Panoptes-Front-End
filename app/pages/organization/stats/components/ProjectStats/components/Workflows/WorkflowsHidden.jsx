@@ -12,6 +12,7 @@ function WorkflowsHidden({ toggleWorkflows }) {
       <ToggleButton
         icon={<i className="fa fa-chevron-down fa-lg" />}
         handleClick={toggleWorkflows}
+        label="expand workflow list"
       />
       <Section>
         <ActionText
