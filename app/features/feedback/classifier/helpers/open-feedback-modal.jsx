@@ -19,7 +19,7 @@ export function getFeedbackMessages(feedback) {
       if (item.success && item.successEnabled) {
         message = item.successMessage;
         category = item.falsePosMode ? categories.FALSEPOS : categories.CORRECT;
-      } else if (!item.success && item.failureEnabled) {
+      } else if (!item.success && !item.falsePosMode && item.failureEnabled) {
         message = item.failureMessage;
         category = categories.INCORRECT;
       }
