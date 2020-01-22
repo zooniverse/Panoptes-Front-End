@@ -34,11 +34,11 @@ class FeedbackModal extends React.Component {
         <Translate content="FeedbackModal.title" component="h2" />
         {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
           {_.chain(messages).map((catMessages, cat) => {
-            return (<div>
-              <h5>
+            return (<div key={Math.random()}>
+              <h3 key={Math.random()}>
               {cat}
-              </h5>
-              <ul>
+              </h3>
+              <ul key={Math.random()}>
               {catMessages.map((message) =>
                 <li key={Math.random()}>
                 {message}
