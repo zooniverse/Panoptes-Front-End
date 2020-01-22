@@ -88,8 +88,6 @@ function openFeedbackModal({ feedback, subjectViewerProps, taskId }) {
     subjectViewerProps: getSubjectViewerProps(feedback, subjectViewerProps, taskId)
   };
 
-  // console.log(props.messages.length);
-
   if (Object.keys(props.messages).length > 0) {
     const modal = (<FeedbackModal {...props} />);
     return ModalFormDialog.alert(modal, {
