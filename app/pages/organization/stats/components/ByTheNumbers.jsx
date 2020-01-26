@@ -19,20 +19,20 @@ const StyledStatBlockContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const StyledStatBlock = styled.div`
+export const StyledStatBlock = styled.div`
   max-width: 250px;
   min-width: 125px;
   margin: 0 1em 1em 0;
 `;
 
-const StyledStat = styled.span`
+export const StyledStat = styled.span`
   color: #5C5C5C;
   display: block;
   font-size: 1.8em;
   line-height: 31px;
 `;
 
-const StyledStatDescription = styled.span`
+export const StyledStatDescription = styled.span`
   color: #5C5C5C;
   display: block;
   font-weight: bold;
@@ -56,7 +56,7 @@ function ByTheNumbers({ projects }) {
 
   const pausedProjectsCount = projects
     .filter(project => project.launch_approved && project.state === 'paused')
-    .length; 
+    .length;
 
   const retiredProjectsCount = projects
     .filter(project => project.launch_approved && project.state === 'finished')
