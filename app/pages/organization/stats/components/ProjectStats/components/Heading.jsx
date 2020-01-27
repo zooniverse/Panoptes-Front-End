@@ -12,12 +12,12 @@ const StyledHeading = styled.div`
   margin-bottom: .5em;
 `;
 
-const StyledAvatar = styled(Avatar)`
+export const StyledAvatar = styled(Avatar)`
   box-shadow: none;
   margin-right: .5em;
 `;
 
-const StyledLink = styled(IndexLink).attrs({
+export const StyledLink = styled(IndexLink).attrs({
   activeClassName: 'active'
 })`
   border-bottom: 2px solid transparent;
@@ -34,7 +34,7 @@ const StyledLink = styled(IndexLink).attrs({
   }
 `;
 
-const StyledRedirect = styled.a`
+export const StyledRedirect = styled.a`
   border-bottom: 2px solid transparent;
   color: #5C5C5C;
   font-weight: bold;
@@ -56,7 +56,7 @@ const StyledTitle = styled.h4`
   text-transform: uppercase;
 `;
 
-const StyledPercent = styled.span`
+export const StyledPercent = styled.span`
   color: #5C5C5C;
   margin-left: auto;
   font-weight: bold;
