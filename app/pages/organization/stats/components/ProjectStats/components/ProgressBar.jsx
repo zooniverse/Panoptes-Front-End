@@ -12,13 +12,13 @@ const StyledProgressBar = styled.div`
   margin-bottom: ${props => (props.size === 'small' ? '1.4em' : '1.8em')};
 `;
 
-const StyledProgressBarMeter = styled.span`
+export const StyledProgressBarMeter = styled.span`
   background: linear-gradient(270deg, #D46256 0%, #F0B200 100%);
   display: block;
   height: 100%;
 `;
 
-const StyledText = styled.span`
+export const StyledText = styled.span`
   color: #000000;
   font-size: 14px;
   margin-left: 12px;
