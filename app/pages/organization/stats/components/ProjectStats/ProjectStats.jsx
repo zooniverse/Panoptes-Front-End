@@ -17,7 +17,7 @@ const StyledProjectStats = styled.section`
   padding: 2em;
 `;
 
-const StyledProjectStatBlock = styled.div`
+export const StyledProjectStatBlock = styled.div`
   margin-bottom: 2em;
 `;
 
