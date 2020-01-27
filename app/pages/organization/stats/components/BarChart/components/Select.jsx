@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledSelect = styled.select`
+export const StyledSelect = styled.select`
   margin: 0 3px;
 `;
 
-const HiddenLabel = styled.label`
+export const HiddenLabel = styled.label`
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;

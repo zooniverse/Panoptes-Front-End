@@ -7,6 +7,13 @@ import filterTimeSeries from '../helpers/filterTimeSeries';
 import formatLabel from '../helpers/formatLabel';
 import Select from './Select';
 
+export const binByOptions = [
+  { label: 'hour', value: 'hour' },
+  { label: 'day', value: 'day' },
+  { label: 'week', value: 'week' },
+  { label: 'month', value: 'month' }
+];
+
 const StyledParametersContainer = styled.div`
   background-color: #EFF2F5;
   border-top: 1px solid #A6A7A9;
@@ -76,13 +83,6 @@ function Parameters({
   statData,
   type
 }) {
-  const binByOptions = [
-    { label: 'hour', value: 'hour' },
-    { label: 'day', value: 'day' },
-    { label: 'week', value: 'week' },
-    { label: 'month', value: 'month' }
-  ];
-
   const resourceOptions = projects.map(project => (
     { label: project.display_name, value: project.id }
   ));
