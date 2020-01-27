@@ -53,11 +53,11 @@ function BarChartBlock({
 }
 
 BarChartBlock.propTypes = {
-  binBy: PropTypes.string.isRequired,
-  handleBinByChange: PropTypes.func.isRequired,
-  handleRangeChange: PropTypes.func.isRequired,
-  handleReset: PropTypes.func.isRequired,
-  handleResourceChange: PropTypes.func.isRequired,
+  binBy: PropTypes.string,
+  handleBinByChange: PropTypes.func,
+  handleRangeChange: PropTypes.func,
+  handleReset: PropTypes.func,
+  handleResourceChange: PropTypes.func,
   projects: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -66,7 +66,7 @@ BarChartBlock.propTypes = {
   ),
   rangeMax: PropTypes.string,
   rangeMin: PropTypes.string,
-  resourceId: PropTypes.string.isRequired,
+  resourceId: PropTypes.string,
   statData: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -79,14 +79,21 @@ BarChartBlock.propTypes = {
       value: PropTypes.number
     })
   ),
-  type: PropTypes.string.isRequired
+  type: PropTypes.string
 };
 
 BarChartBlock.defaultProps = {
+  binBy: '',
+  handleBinByChange: () => {},
+  handleRangeChange: () => {},
+  handleReset: () => {},
+  handleResourceChange: () => {},
   projects: [],
   rangeMax: undefined,
   rangeMin: undefined,
+  resourceId: '',
   statData: [],
+  type: '',
   graphData: []
 };
 
