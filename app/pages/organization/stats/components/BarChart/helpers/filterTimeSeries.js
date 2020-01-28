@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-function filterTimeSeries(series, max, min) {
+function filterTimeSeries(series = [], max, min) {
   return series
     .filter((stat) => {
       const overMin = min ? moment.utc(stat.label) >= moment.utc(min) : true;

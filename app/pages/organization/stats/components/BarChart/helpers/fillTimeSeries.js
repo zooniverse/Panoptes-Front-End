@@ -2,11 +2,11 @@ import moment from 'moment';
 
 const twoWeeksBeforeNow = moment.utc().subtract(2, 'weeks');
 
-function fillTimeSeries(series, by) {
+function fillTimeSeries(series = [], by = 'day', notEarlierThan = twoWeeksBeforeNow) {
   const filledSeries = [];
   let previousLabel = '';
   series.forEach(({ label, value }) => {
-    if (by === 'hour' && moment.utc(label) <= twoWeeksBeforeNow) {
+    if (by === 'hour' && moment.utc(label) <= notEarlierThan) {
       return;
     }
     const difference = moment.utc(label).diff(moment.utc(previousLabel), `${by}s`);
