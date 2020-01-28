@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 
-export const OrganizationMetadata = ({ displayName, projects }) => {
+export const OrganizationMetadata = ({ displayName, projects, slug }) => {
   function extractStat(statName) {
     return projects.reduce((accum, project) => {
       if (project[statName]) {
@@ -15,13 +16,20 @@ export const OrganizationMetadata = ({ displayName, projects }) => {
 
   const percentComplete = Math.round((extractStat('retired_subjects_count') / extractStat('subjects_count') * 100));
 
+  const statsPageLink = `/organizations/${slug}/stats`;
+
   return (
     <div className="organization-details__content">
-      <Translate
-        className="organization-details__content-heading"
-        component="h3"
-        content="organization.home.metadata.heading"
-      />
+      <Link
+        className="organization-metadata__heading-link"
+        to={statsPageLink}
+      >
+        <Translate
+          className="organization-details__content-heading"
+          component="h3"
+          content="organization.home.metadata.heading"
+        />
+      </Link>
       {projects && (projects.length > 0)
         && (
           <div className="organization-metadata__container">
@@ -108,12 +116,14 @@ OrganizationMetadata.propTypes = {
       id: PropTypes.string,
       display_name: PropTypes.string
     })
-  )
+  ),
+  slug: PropTypes.string
 };
 
 OrganizationMetadata.defaultProps = {
   displayName: '',
-  projects: []
+  projects: [],
+  slug: ''
 };
 
 export default OrganizationMetadata;

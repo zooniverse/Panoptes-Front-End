@@ -368,6 +368,7 @@ class OrganizationPage extends React.Component {
               <OrganizationMetadata
                 displayName={organization.display_name}
                 projects={organizationProjects}
+                slug={organization.slug}
               />
             </div>
 
