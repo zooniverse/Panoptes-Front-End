@@ -49,7 +49,7 @@ const StyledResetContainer = styled.div`
   margin-top: 1em;
 `;
 
-const StyledResetButton = styled.button.attrs({
+export const StyledResetButton = styled.button.attrs({
   activeClassName: 'active'
 })`
   background: #EFF2F5;
@@ -185,11 +185,11 @@ function Parameters({
 }
 
 Parameters.propTypes = {
-  binBy: PropTypes.string.isRequired,
-  handleBinByChange: PropTypes.func.isRequired,
-  handleRangeChange: PropTypes.func.isRequired,
-  handleReset: PropTypes.func.isRequired,
-  handleResourceChange: PropTypes.func.isRequired,
+  binBy: PropTypes.string,
+  handleBinByChange: PropTypes.func,
+  handleRangeChange: PropTypes.func,
+  handleReset: PropTypes.func,
+  handleResourceChange: PropTypes.func,
   projects: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -198,7 +198,7 @@ Parameters.propTypes = {
   ),
   rangeMax: PropTypes.string,
   rangeMin: PropTypes.string,
-  resourceId: PropTypes.string.isRequired,
+  resourceId: PropTypes.string,
   statData: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -209,9 +209,15 @@ Parameters.propTypes = {
 };
 
 Parameters.defaultProps = {
+  binBy: '',
+  handleBinByChange: () => {},
+  handleRangeChange: () => {},
+  handleReset: () => {},
+  handleResourceChange: () => {},
   projects: [],
   rangeMax: undefined,
   rangeMin: undefined,
+  resourceId: '',
   statData: []
 };
 
