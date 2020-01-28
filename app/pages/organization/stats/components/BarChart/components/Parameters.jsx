@@ -49,9 +49,7 @@ const StyledResetContainer = styled.div`
   margin-top: 1em;
 `;
 
-export const StyledResetButton = styled.button.attrs({
-  activeClassName: 'active'
-})`
+export const StyledResetButton = styled.button`
   background: #EFF2F5;
   border: 1px solid #00979D;
   font: inherit;

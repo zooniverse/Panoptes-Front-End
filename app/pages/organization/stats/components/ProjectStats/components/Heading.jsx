@@ -17,9 +17,7 @@ export const StyledAvatar = styled(Avatar)`
   margin-right: .5em;
 `;
 
-export const StyledLink = styled(IndexLink).attrs({
-  activeClassName: 'active'
-})`
+export const StyledLink = styled(IndexLink)`
   border-bottom: 2px solid transparent;
   color: #5C5C5C;
   font-weight: bold;
