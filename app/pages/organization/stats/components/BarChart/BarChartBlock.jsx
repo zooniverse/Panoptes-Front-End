@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import LoadingIndicator from '../../../../../components/loading-indicator';
 import SectionHeading from '../SectionHeading';
 import Graph from './components/Graph';
 import Parameters from './components/Parameters';
@@ -32,8 +31,7 @@ function BarChartBlock({
 }) {
   return (
     <StyledBarChartContainer>
-      <SectionHeading content={`organization.stats.${type}`} />
-      {loading && <LoadingIndicator off={!loading} />}
+      <SectionHeading content={`organization.stats.${type}`} loading={loading} />
       <Graph
         by={binBy}
         data={graphData}
