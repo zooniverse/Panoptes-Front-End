@@ -20,7 +20,9 @@ describe('ToggleButton', function () {
     );
   });
 
-  it('should render without crashing', function () {});
+  it('should render without crashing', function () {
+    expect(wrapper).to.be.ok;
+  });
 
   it('should render with icon provided', function () {
     expect(wrapper.containsMatchingElement(<i className="fa fa-chevron-down fa-lg" />)).to.equal(true);

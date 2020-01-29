@@ -46,7 +46,9 @@ describe('Graph', function () {
     wrapper = shallow(<Graph by='day' data={mockData} />);
     chartData = wrapper.prop('data');
   });
-  it('should render without crashing', function () {});
+  it('should render without crashing', function () {
+    expect(wrapper).to.be.ok;
+  });
 
   it('should render as type Bar', function () {
     expect(wrapper.prop('type')).to.equal('Bar');

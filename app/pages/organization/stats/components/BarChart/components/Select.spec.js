@@ -22,7 +22,9 @@ describe('Select', function () {
     );
   });
 
-  it('should render without crashing', function () {});
+  it('should render without crashing', function () {
+    expect(wrapper).to.be.ok;
+  });
 
   it('should render HiddenLabel', function () {
     expect(wrapper.find(HiddenLabel)).to.have.lengthOf(1);

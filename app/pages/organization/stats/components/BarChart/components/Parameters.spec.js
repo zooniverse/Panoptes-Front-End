@@ -20,7 +20,9 @@ describe('Parameters', function () {
     />);
   });
 
-  it('should render without crashing', function () {});
+  it('should render without crashing', function () {
+    expect(wrapper).to.be.ok;
+  });
 
   it('should render binBy Select', function () {
     expect(wrapper.find(Select).at(0).prop('selectFor')).to.equal('binBy');

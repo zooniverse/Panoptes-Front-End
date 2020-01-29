@@ -13,7 +13,9 @@ describe('Workflows Hidden', function () {
     wrapper = shallow(<WorkflowsHidden toggleWorkflows={() => {}} />);
   });
 
-  it('should render without crashing', function () {});
+  it('should render without crashing', function () {
+    expect(wrapper).to.be.ok;
+  });
 
   it('should render a ToggleButton', function () {
     expect(wrapper.find(ToggleButton)).to.have.lengthOf(1);

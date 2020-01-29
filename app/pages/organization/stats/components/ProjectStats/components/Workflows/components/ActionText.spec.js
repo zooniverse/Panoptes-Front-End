@@ -20,7 +20,9 @@ describe('ActionText', function () {
     );
   });
 
-  it('should render without crashing', function () {});
+  it('should render without crashing', function () {
+    expect(wrapper).to.be.ok;
+  });
 
   it('should call handleClick on click', function () {
     wrapper.simulate('click');
