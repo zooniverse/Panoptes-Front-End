@@ -75,6 +75,7 @@ function Parameters({
   handleRangeChange,
   handleReset,
   handleResourceChange,
+  loading,
   rangeMax,
   rangeMin,
   resourceId,
@@ -130,6 +131,7 @@ function Parameters({
         <Select
           current={binBy}
           handleChange={handleBinByChange}
+          loading={loading}
           options={binByOptions}
           selectFor="binBy"
         />
@@ -140,6 +142,7 @@ function Parameters({
         <Select
           current={resourceId}
           handleChange={handleResourceChange}
+          loading={loading}
           options={resourceOptions}
           selectFor="resourceId"
         />
@@ -152,12 +155,14 @@ function Parameters({
         <Select
           current={currentRangeMin}
           handleChange={handleRangeChange}
+          loading={loading}
           options={minDateRange}
           selectFor="rangeMin"
         />
         <Select
           current={currentRangeMax}
           handleChange={handleRangeChange}
+          loading={loading}
           options={maxDateRange}
           selectFor="rangeMax"
         />
@@ -165,6 +170,7 @@ function Parameters({
       <StyledResetContainer>
         <StyledResetButton
           onClick={() => handleReset()}
+          disabled={loading}
           type="button"
         >
           <Translate
@@ -188,6 +194,7 @@ Parameters.propTypes = {
   handleRangeChange: PropTypes.func,
   handleReset: PropTypes.func,
   handleResourceChange: PropTypes.func,
+  loading: PropTypes.bool,
   projects: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -212,6 +219,7 @@ Parameters.defaultProps = {
   handleRangeChange: () => {},
   handleReset: () => {},
   handleResourceChange: () => {},
+  loading: false,
   projects: [],
   rangeMax: undefined,
   rangeMin: undefined,

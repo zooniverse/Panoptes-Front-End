@@ -20,6 +20,7 @@ export const HiddenLabel = styled.label`
 function Select({
   current,
   handleChange,
+  loading,
   options,
   selectFor
 }) {
@@ -37,6 +38,7 @@ function Select({
       <StyledSelect
         id={`${selectFor}-select-${current}`}
         value={current}
+        disabled={loading}
         onChange={handleSelectChange}
       >
         {options.map(({ label, value }) => (
@@ -50,6 +52,7 @@ function Select({
 Select.propTypes = {
   current: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -60,7 +63,8 @@ Select.propTypes = {
 };
 
 Select.defaultProps = {
-  current: undefined
+  current: undefined,
+  loading: false
 };
 
 export default Select;

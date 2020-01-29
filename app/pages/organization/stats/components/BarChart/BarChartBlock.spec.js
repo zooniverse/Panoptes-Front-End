@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
 import BarChartBlock from './BarChartBlock';
+import LoadingIndicator from '../../../../../components/loading-indicator';
 import SectionHeading from '../SectionHeading';
 import Graph from './components/Graph';
 import Parameters from './components/Parameters';
@@ -11,7 +12,7 @@ import Parameters from './components/Parameters';
 describe('BarChartBlock', function () {
   let wrapper;
   before(function () {
-    wrapper = shallow(<BarChartBlock type='classification' />);
+    wrapper = shallow(<BarChartBlock type="classification" />);
   });
 
   it('should render without crashing', function () {
@@ -29,5 +30,15 @@ describe('BarChartBlock', function () {
 
   it('should render Parameters', function () {
     expect(wrapper.find(Parameters)).to.have.lengthOf(1);
+  });
+
+  it('should not render a LoadingIndicator if not loading', function () {
+    wrapper = shallow(<BarChartBlock loading={false} type="classification" />);
+    expect(wrapper.find(LoadingIndicator)).to.have.lengthOf(0);
+  });
+
+  it('should render LoadingIndicator if loading', function () {
+    wrapper = shallow(<BarChartBlock loading={true} type="classification" />);
+    expect(wrapper.find(LoadingIndicator)).to.have.lengthOf(1);
   });
 });

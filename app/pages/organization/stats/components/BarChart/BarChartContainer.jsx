@@ -13,6 +13,7 @@ class BarChartContainer extends React.Component {
 
     this.state = {
       binBy: 'day',
+      loading: false,
       rangeMax: undefined,
       rangeMin: undefined,
       resourceId: 'all',
@@ -32,9 +33,9 @@ class BarChartContainer extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { projects } = this.props;
-    const { binBy, resourceId, statDataByResource } = this.state;
+    const { binBy, loading, resourceId, statDataByResource } = this.state;
 
-    if (prevProps.projects !== projects) {
+    if (!loading && prevProps.projects !== projects) {
       const statData = statDataByResource.get(resourceId);
       if (!statData || !statData[binBy] || statData[binBy].length === 0) {
         this.handleResourceChange(resourceId);
@@ -44,6 +45,7 @@ class BarChartContainer extends React.Component {
 
   getStatData(binBy, resourceId) {
     const { projects, type } = this.props;
+    this.setState({ loading: true });
 
     if (!projects || !projects.length) {
       return Promise.resolve([]);
@@ -74,7 +76,8 @@ class BarChartContainer extends React.Component {
       ))
       .catch(() => {
         if (console) {
-          console.warn('Failed to fetch stats');
+          console.warn(`Failed to fetch ${type} stats for ${projectID} by ${binBy}`);
+          this.setState({ loading: false });
         }
       });
   }
@@ -93,6 +96,7 @@ class BarChartContainer extends React.Component {
           const { rangeMax, rangeMin } = getDefaultRange(stats);
           this.setState({
             binBy,
+            loading: false,
             rangeMax,
             rangeMin,
             statDataByResource: newStatDataByResource
@@ -144,6 +148,7 @@ class BarChartContainer extends React.Component {
           newStatDataByResource.set(resourceId, newStatData);
           const { rangeMax, rangeMin } = getDefaultRange(stats);
           this.setState({
+            loading: false,
             rangeMax,
             rangeMin,
             resourceId,
@@ -161,6 +166,7 @@ class BarChartContainer extends React.Component {
     const { projects, type } = this.props;
     const {
       binBy,
+      loading,
       rangeMax,
       rangeMin,
       resourceId,
@@ -178,11 +184,12 @@ class BarChartContainer extends React.Component {
 
     return (
       <BarChartBlock
+        binBy={binBy}
         handleBinByChange={this.handleBinByChange}
         handleRangeChange={this.handleRangeChange}
         handleReset={this.handleReset}
         handleResourceChange={this.handleResourceChange}
-        binBy={binBy}
+        loading={loading}
         projects={projects}
         rangeMax={rangeMax}
         rangeMin={rangeMin}

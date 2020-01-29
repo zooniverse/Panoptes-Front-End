@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
+import LoadingIndicator from '../../../../../components/loading-indicator';
 import SectionHeading from '../SectionHeading';
 import Graph from './components/Graph';
 import Parameters from './components/Parameters';
@@ -20,6 +21,7 @@ function BarChartBlock({
   handleRangeChange,
   handleReset,
   handleResourceChange,
+  loading,
   projects,
   rangeMax,
   rangeMin,
@@ -31,6 +33,7 @@ function BarChartBlock({
   return (
     <StyledBarChartContainer>
       <SectionHeading content={`organization.stats.${type}`} />
+      {loading && <LoadingIndicator off={!loading} />}
       <Graph
         by={binBy}
         data={graphData}
@@ -41,6 +44,7 @@ function BarChartBlock({
         handleRangeChange={handleRangeChange}
         handleReset={handleReset}
         handleResourceChange={handleResourceChange}
+        loading={loading}
         projects={projects}
         rangeMax={rangeMax}
         rangeMin={rangeMin}
@@ -58,6 +62,7 @@ BarChartBlock.propTypes = {
   handleRangeChange: PropTypes.func,
   handleReset: PropTypes.func,
   handleResourceChange: PropTypes.func,
+  loading: PropTypes.bool,
   projects: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -88,6 +93,7 @@ BarChartBlock.defaultProps = {
   handleRangeChange: () => {},
   handleReset: () => {},
   handleResourceChange: () => {},
+  loading: false,
   projects: [],
   rangeMax: undefined,
   rangeMin: undefined,
