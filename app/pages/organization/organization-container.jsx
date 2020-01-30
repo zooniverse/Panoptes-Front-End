@@ -4,7 +4,6 @@ import apiClient from 'panoptes-client/lib/api-client';
 import Translate from 'react-translate-component';
 import getAllLinked from '../../lib/get-all-linked';
 import isAdmin from '../../lib/is-admin';
-import OrganizationPage from './organization-page';
 
 class OrganizationContainer extends React.Component {
   constructor() {
@@ -228,7 +227,7 @@ class OrganizationContainer extends React.Component {
   }
 
   render() {
-    const { params } = this.props;
+    const { children, params } = this.props;
     const {
       collaboratorView,
       error,
@@ -245,22 +244,20 @@ class OrganizationContainer extends React.Component {
     } = this.state;
 
     if (organization && (organization.listed || isAdmin() || this.isCollaborator())) {
-      return (
-        <OrganizationPage
-          collaborator={isAdmin() || this.isCollaborator()}
-          collaboratorView={collaboratorView}
-          errorFetchingProjects={errorFetchingProjects}
-          fetchingProjects={fetchingProjects}
-          organization={organization}
-          organizationAvatar={organizationAvatar}
-          organizationBackground={organizationBackground}
-          organizationPages={organizationPages}
-          organizationProjects={organizationProjects}
-          projectAvatars={projectAvatars}
-          quoteObject={quoteObject}
-          toggleCollaboratorView={this.toggleCollaboratorView}
-        />
-      );
+      return React.cloneElement(children, {
+        collaborator: isAdmin() || this.isCollaborator(),
+        collaboratorView,
+        errorFetchingProjects,
+        fetchingProjects,
+        organization,
+        organizationAvatar,
+        organizationBackground,
+        organizationPages,
+        organizationProjects,
+        projectAvatars,
+        quoteObject,
+        toggleCollaboratorView: this.toggleCollaboratorView
+      });
     } else if (fetchingOrganization) {
       return (
         <div className="content-container">
@@ -314,6 +311,7 @@ OrganizationContainer.contextTypes = {
 };
 
 OrganizationContainer.propTypes = {
+  children: PropTypes.node,
   params: PropTypes.shape({
     name: PropTypes.string,
     owner: PropTypes.string

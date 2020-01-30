@@ -8,49 +8,50 @@ zoo-orange = #f78d27
   color: #000000
   padding: 1.5em 3vw
 
-.ct-chart
-    .ct-series-a
-      .ct-bar, .ct-slice-donut
-        stroke: zoo-blue
-        &:hover + .ct-tooltip
-        &:focus + .ct-tooltip
-          fill: zoo-blue
-    .ct-series-b
-      .ct-bar, .ct-slice-donut
-        stroke-width: 4.5%
-        stroke: #aaa
-  .progress-label, .ct-label.ct-vertical, .ct-label.ct-horizontal
-    color: #000
-    fill: #000
-  .ct-tooltip
-    text-anchor: middle
-    fill: alpha(zoo-blue, 0)
-    font-size: 1rem
-    font-weight: bold
+.project-page
+  .ct-chart
+      .ct-series-a
+        .ct-bar, .ct-slice-donut
+          stroke: zoo-blue
+          &:hover + .ct-tooltip
+          &:focus + .ct-tooltip
+            fill: zoo-blue
+      .ct-series-b
+        .ct-bar, .ct-slice-donut
+          stroke-width: 4.5%
+          stroke: #aaa
+    .progress-label, .ct-label.ct-vertical, .ct-label.ct-horizontal
+      color: #000
+      fill: #000
+    .ct-tooltip
+      text-anchor: middle
+      fill: alpha(zoo-blue, 0)
+      font-size: 1rem
+      font-weight: bold
 
-.ct-labels-range
-  .ct-label-range
-    font-size: 0.75rem
-  .ct-label-range-last
-    text-align: right
-
-.ct-major-tenth
-  min-height: 20em
-  .ct-chart-bar
-    .ct-label.ct-horizontal.ct-end
-      display: block
-      overflow: hidden
-      text-overflow: ellipsis
-      white-space: nowrap
-      transform: rotate(-90deg) translateY(-6px)
-      transform-origin: 100% 0
+  .ct-labels-range
+    .ct-label-range
+      font-size: 0.75rem
+    .ct-label-range-last
       text-align: right
-      max-height: 1.5em
-      min-width: 100px
-      max-width: 100px
 
-.ct-slice-donut
-  cursor: auto
+  .ct-major-tenth
+    min-height: 20em
+    .ct-chart-bar
+      .ct-label.ct-horizontal.ct-end
+        display: block
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+        transform: rotate(-90deg) translateY(-6px)
+        transform-origin: 100% 0
+        text-align: right
+        max-height: 1.5em
+        min-width: 100px
+        max-width: 100px
+
+  .ct-slice-donut
+    cursor: auto
 
 .date-range
   margin: .5em 0

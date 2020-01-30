@@ -44,7 +44,8 @@ export const projectWithoutRedirect = {
   urls: [socialMediaUrl, externalUrl],
   links: {
     active_workflows: ['35']
-  }
+  },
+  workflow_description: ''
 };
 
 export const projectWithRedirect = {
@@ -54,7 +55,8 @@ export const projectWithRedirect = {
   urls: [socialMediaUrl, externalUrl],
   links: {
     active_workflows: ['35']
-  }
+  },
+  workflow_description: ''
 };
 
 export const workflow = { id: '35' };

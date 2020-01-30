@@ -24,7 +24,8 @@ const experimentalFeatures = [
   'general feedback',
   'slider',
   'highlighter',
-  'translator-role'
+  'translator-role',
+  'museum-role',
 ];
 
 class ExperimentalFeatures extends Component {

@@ -56,8 +56,8 @@ class ProjectHomeWorkflowButton extends React.Component {
         onClick={this.handleWorkflowSelection}
       >
         {(this.props.workflowAssignment && !this.props.disabled) ?
-          <Translate content="project.home.workflowAssignment" with={{ workflowDisplayName: this.props.workflow.display_name }} /> :
-          this.props.workflow.display_name}
+          <Translate content="project.home.workflowAssignment" with={{ workflowDisplayName: this.props.translation.display_name }} /> :
+          this.props.translation.display_name}
       </button>
     );
   }
@@ -75,6 +75,7 @@ ProjectHomeWorkflowButton.defaultProps = {
   disabled: false,
   preferences: {},
   project: {},
+  translation: {},
   workflow: {},
   workflowAssignment: false
 };
@@ -95,6 +96,10 @@ ProjectHomeWorkflowButton.propTypes = {
   project: PropTypes.shape({
     slug: PropTypes.string
   }).isRequired,
+  translation: PropTypes.shape({
+    display_name: PropTypes.string,
+    id: PropTypes.string
+  }),
   translations: PropTypes.shape({
     locale: PropTypes.string
   }),
