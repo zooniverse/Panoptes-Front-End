@@ -20,7 +20,6 @@ counterpart.registerTranslations('en', {
       workflowNotTooManyShortcuts: 'Has less than three shortcuts',
       workflowDoesNotContainShortcuts: 'Has no shortcuts',
       taskFeedbackDisabled: 'Cannot provide feedback',
-      workflowQuestionHasOneOrLessImages: 'Task question has no more than one image',
       drawingToolTypeIsValid: 'Drawing tool must be a rectangle tool',
       drawingTaskHasOneTool: 'Drawing task must have only 1 tool',
       drawingTaskHasNoSubtasks: 'Drawing tool must not have any subtasks'
@@ -129,10 +128,6 @@ class MobileSection extends Component {
               <Translate content={`mobileSection.${helpTextKey}`} component="small" />
             </p>
 
-            {
-              this.props.validations.workflowQuestionHasOneOrLessImages === ValidationValue.warning ? warningView : null
-            }
-
             <ul>
               {map(this.props.validations, renderValidation)}
             </ul>
@@ -162,9 +157,7 @@ class MobileSection extends Component {
 }
 
 MobileSection.propTypes = {
-  validations: PropTypes.shape({
-    workflowQuestionHasOneOrLessImages: PropTypes.string
-  }),
+  validations: PropTypes.shape(),
   enabled: PropTypes.bool,
   toggleChecked: PropTypes.func,
   checked: PropTypes.bool

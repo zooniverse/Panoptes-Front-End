@@ -129,11 +129,6 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasNoSubtasks, true);
       testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasSubtasks, false);
     });
-
-    it('should check whether workflow question has one image', function () {
-      testValidationProp('workflowQuestionHasOneOrLessImages', validationFixtures.questionHasOneImage, true, true);
-      testValidationProp('workflowQuestionHasOneOrLessImages', validationFixtures.questionHasTwoImages, false, true);
-    });
   });
 
   describe('enabled prop', function () {
