@@ -8,6 +8,10 @@ import isAdmin from '../../../../lib/is-admin';
 import { getProjectLinks } from '../../../../lib/nav-helpers';
 import ProjectNavbar from './ProjectNavbar';
 
+function isResourceAProject(resource) {
+  return Object.keys(resource).includes('workflow_description');
+}
+
 class ProjectNavbarContainer extends Component {
   constructor(props) {
     super(props);
@@ -69,10 +73,10 @@ class ProjectNavbarContainer extends Component {
   render() {
     const avatarSrc = _.get(this.props.projectAvatar, 'src', undefined);
     const backgroundSrc = _.get(this.props.background, 'src', undefined);
-    const launched = this.props.project.launch_approved;
-    const navLinks = this.getNavLinks();
+    const launched = this.props.project.launch_approved || this.props.project.listed;
+    const navLinks = isResourceAProject(this.props.project) ? this.getNavLinks() : [];
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
-    const projectLink = `/projects/${this.props.project.slug}`;
+    const projectLink = isResourceAProject(this.props.project) ? `/projects/${this.props.project.slug}` : `/organizations/${this.props.project.slug}`;
     const redirect = this.props.project.redirect ? this.props.project.redirect : '';
     const underReview = this.props.project.beta_approved;
 

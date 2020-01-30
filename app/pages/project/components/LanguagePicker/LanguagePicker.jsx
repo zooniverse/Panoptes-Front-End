@@ -15,7 +15,7 @@ function LanguagePicker(props) {
   const { actions, project, translations } = props;
   const { locale } = translations;
 
-  const languages = project.configuration.languages ? project.configuration.languages : [];
+  const languages = project.configuration && project.configuration.languages ? project.configuration.languages : [];
 
   if (languages.length < 2) {
     return null;

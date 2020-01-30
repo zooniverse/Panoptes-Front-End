@@ -119,7 +119,33 @@ export default {
     loading: 'Loading organization',
     notFound: 'organization not found.',
     notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...'
+    pleaseWait: 'Please wait...',
+    stats: {
+      adjustParameters: 'Adjust Parameters',
+      byTheNumbers: 'By the Numbers',
+      byTheNumbersContent: {
+        classifications: 'Classifications',
+        firstProject: 'First Project',
+        firstProjectLaunch: 'First Project Launch Date',
+        liveProjects: 'Live Projects',
+        pausedProjects: 'Paused Projects',
+        retiredProjects: 'Retired Projects',
+        retiredSubjects: 'Completed Subjects',
+        subjects: 'Subjects'
+      },
+      classification: 'Classifications',
+      comment: 'Talk Comments',
+      dateRange: 'Date range',
+      expandWorkflowStats: 'Expand Workflow Stats',
+      for: 'for',
+      hidden: 'Stats hidden',
+      hourly: 'Hourly data only available for the most recent 2 weeks.',
+      organizationStatistics: '%(title)s Statistics',
+      perclassification: 'Classifications per',
+      percomment: 'Comments per',
+      projectStats: 'Live Projects (%(count)s)',
+      reset: 'Reset view'
+    }
   },
   tasks: {
     hidePreviousMarks: 'Hide previous marks %(count)s',
