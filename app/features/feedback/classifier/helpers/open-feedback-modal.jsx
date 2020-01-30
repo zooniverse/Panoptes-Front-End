@@ -2,15 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import ModalFormDialog from 'modal-form/dialog';
 import FeedbackModal from '../components/feedback-modal';
+import Translate from 'react-translate-component';
 import strategies from '../../shared/strategies';
+import categories from './feedback-categories';
 
 export function getFeedbackMessages(feedback) {
-
-  const categories = {
-    CORRECT: "Successes",
-    INCORRECT: "Failures",
-    FALSEPOS: "False Positives"
-  };
 
   const messages = _.chain(feedback)
     .map((item) => {

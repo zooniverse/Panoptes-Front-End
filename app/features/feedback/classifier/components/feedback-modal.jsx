@@ -33,19 +33,20 @@ class FeedbackModal extends React.Component {
       <ModalFocus className="classifier feedbackmodal">
         <Translate content="FeedbackModal.title" component="h2" />
         {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
+        <div className="messagecontainer">
           {_.chain(messages).map((catMessages, cat) => {
+            const contentString = `feedback.categories.${cat}`;
             return (<div key={Math.random()}>
-              <h3 key={Math.random()}>
-              {cat}
-              </h3>
+            <Translate content={contentString} component="h3" className="categorytitles" />
               <ul key={Math.random()}>
               {catMessages.map((message) =>
-                <li key={Math.random()}>
+                <li key={Math.random()} className="messages">
                 {message}
                 </li>)}
               </ul>
             </div>)
           }).value()}
+          </div>
 
         <div className="buttons">
           <button
