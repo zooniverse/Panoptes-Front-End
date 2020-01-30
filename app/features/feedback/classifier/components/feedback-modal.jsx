@@ -38,7 +38,7 @@ class FeedbackModal extends React.Component {
             const contentString = `feedback.categories.${cat}`;
             return (<div key={Math.random()}>
             <Translate content={contentString} component="h3" className="categorytitles" />
-              <ul key={Math.random()}>
+              <ul>
               {catMessages.map((message) =>
                 <li key={Math.random()} className="messages">
                 {message}
