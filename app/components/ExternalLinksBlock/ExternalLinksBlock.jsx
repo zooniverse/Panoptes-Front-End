@@ -7,7 +7,7 @@ import { zooTheme } from '../../theme';
 
 export const StyledExternalLinksBlock = styled.div`
   background-color: ${({ isItAProject }) => {
-    return (isItAProject) ? zooTheme.colors.background : 'white';
+    return (isItAProject) ? zooTheme.colors.lightTheme.background.default : 'white';
   }};
   box-sizing: border-box;
   color: ${theme('mode', {
