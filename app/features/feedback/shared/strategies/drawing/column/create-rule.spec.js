@@ -17,7 +17,7 @@ describe('feedback drawing column create-rule', function () {
     strategy: "column",
     successEnabled: true
   }
-  
+
   it('should return a valid rule without custom subject-specifics', function () {
     const rule = createRule(subjectRule, workflowRule);
     expect(rule).to.deep.equal({
@@ -30,7 +30,8 @@ describe('feedback drawing column create-rule', function () {
       successMessage: "Success!",
       tolerance: "10",
       width: "100",
-      x: "300"
+      x: "300",
+      falsePosMode: false
     });
   })
 
@@ -50,7 +51,29 @@ describe('feedback drawing column create-rule', function () {
       successMessage: "Subject-specific success message",
       tolerance: "50",
       width: "100",
-      x: "300"
-    });    
+      x: "300",
+      falsePosMode: false
+    });
+  })
+
+  it('should return a valid false-positive rule with subject-specific settings', function () {
+    subjectRule.tolerance = "50";
+    subjectRule.failureMessage = "Subject-specific failure message";
+    subjectRule.successMessage = "Subject-specific success message";
+    subjectRule.falsePosMode = true;
+
+    const rule = createRule(subjectRule, workflowRule);
+    expect(rule).to.deep.equal({
+      failureEnabled: true,
+      hideSubjectViewer: false,
+      id: "1234",
+      strategy: "column",
+      successEnabled: true,
+      successMessage: "Subject-specific success message",
+      tolerance: "50",
+      width: "100",
+      x: "300",
+      falsePosMode: true
+    });
   })
 });

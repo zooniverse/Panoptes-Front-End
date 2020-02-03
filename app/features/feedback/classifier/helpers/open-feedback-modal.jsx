@@ -2,28 +2,45 @@ import _ from 'lodash';
 import React from 'react';
 import ModalFormDialog from 'modal-form/dialog';
 import FeedbackModal from '../components/feedback-modal';
+import Translate from 'react-translate-component';
 import strategies from '../../shared/strategies';
+import categories from './feedback-categories';
 
 export function getFeedbackMessages(feedback) {
+
   const messages = _.chain(feedback)
     .map((item) => {
       let message = false;
+      let category = null;
       if (item.success && item.successEnabled) {
         message = item.successMessage;
-      } else if (!item.success && item.failureEnabled) {
+        category = item.falsePosMode ? categories.FALSEPOS : categories.CORRECT;
+      } else if (!item.success && !item.falsePosMode && item.failureEnabled) {
         message = item.failureMessage;
+        category = categories.INCORRECT;
       }
-      return message;
+      return message ? [message, category] : message;
     })
     .compact();
 
-  const reducedMessages = messages.groupBy().map((groupData, key) => {
-    return `${key} (${groupData.length} ${groupData.length > 1 ? 'matches' : 'match'})`;
-  }).value();
+  const catGroupedReducedMessages = messages.groupBy((message) => {
+      return message[1];
+    }).map((catGroup, cat) => {
+      const reducedMessages = _.chain(catGroup).groupBy((message) => {
+        return message[0];
+      }).map((groupData, key) => {
+        return `${key} (${groupData.length} ${groupData.length > 1 ? 'matches' : 'match'})`;
+      }).value();
+      return {
+        category: cat,
+        messages: reducedMessages
+      };
+    }).keyBy('category')
+    .mapValues('messages')
+    .value();
 
-
-  return reducedMessages;
-}
+  return catGroupedReducedMessages;
+  }
 
 function getFeedbackMarks(feedback) {
   // This is slightly weird, but Coffeescript does not seem to enjoy trying
@@ -67,7 +84,7 @@ function openFeedbackModal({ feedback, subjectViewerProps, taskId }) {
     subjectViewerProps: getSubjectViewerProps(feedback, subjectViewerProps, taskId)
   };
 
-  if (props.messages.length > 0) {
+  if (Object.keys(props.messages).length > 0) {
     const modal = (<FeedbackModal {...props} />);
     return ModalFormDialog.alert(modal, {
       required: true

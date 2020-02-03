@@ -1065,5 +1065,12 @@ export default {
       profileHeaderImageHelp: 'Drop an image here (any dimensions, less than %(size)s KB)',
       clearHeader: 'Clear header'
     }
+  },
+  feedback: {
+    categories: {
+      correct: 'Hits',
+      incorrect: 'Misses',
+      falsepos: 'False Positives'
+    }
   }
 };

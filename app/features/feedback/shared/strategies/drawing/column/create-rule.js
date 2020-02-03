@@ -9,10 +9,11 @@ function createRule(subjectRule, workflowRule) {
     successEnabled: workflowRule.successEnabled || false,
     tolerance: subjectRule.tolerance || workflowRule.defaultTolerance,
     x: subjectRule.x,
-    width: subjectRule.width
+    width: subjectRule.width,
+    falsePosMode: subjectRule.falsePosMode || false
   };
 
-  if (rule.failureEnabled) {
+  if (rule.failureEnabled && !rule.falsePosMode) {
     rule.failureMessage = subjectRule.failureMessage ||
       workflowRule.defaultFailureMessage;
   }
@@ -21,7 +22,7 @@ function createRule(subjectRule, workflowRule) {
     rule.successMessage = subjectRule.successMessage ||
       workflowRule.defaultSuccessMessage;
   }
-  
+
   return ruleChecker(rule);
 }
 

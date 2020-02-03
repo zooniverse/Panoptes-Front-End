@@ -17,7 +17,7 @@ describe('feedback drawing radial create-rule', function () {
     strategy: "radial",
     successEnabled: true
   }
-  
+
   it('should return a valid rule without custom subject-specifics', function () {
     const rule = createRule(subjectRule, workflowRule);
     expect(rule).to.deep.equal({
@@ -31,6 +31,7 @@ describe('feedback drawing radial create-rule', function () {
       tolerance: "10",
       x: "200",
       y: "300",
+      falsePosMode: false
     });
   })
 
@@ -50,7 +51,29 @@ describe('feedback drawing radial create-rule', function () {
       successMessage: "Subject-specific success message",
       tolerance: "50",
       x: "200",
-      y: "300"
-    });    
+      y: "300",
+      falsePosMode: false
+    });
+  })
+
+  it('should return a valid false-positive rule with subject-specific settings', function () {
+    subjectRule.tolerance = "50";
+    subjectRule.failureMessage = "Subject-specific failure message";
+    subjectRule.successMessage = "Subject-specific success message";
+    subjectRule.falsePosMode = true;
+
+    const rule = createRule(subjectRule, workflowRule);
+    expect(rule).to.deep.equal({
+      failureEnabled: true,
+      hideSubjectViewer: false,
+      id: "1234",
+      strategy: "radial",
+      successEnabled: true,
+      successMessage: "Subject-specific success message",
+      tolerance: "50",
+      x: "200",
+      y: "300",
+      falsePosMode: true
+    });
   })
 });
