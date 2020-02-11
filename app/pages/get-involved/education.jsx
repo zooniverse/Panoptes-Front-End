@@ -9,7 +9,7 @@ class Education extends React.Component {
         <Markdown>{counterpart('getInvolved.education.title')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.becomeCitizenScientist')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.resources')}</Markdown>
-        <Markdown>{counterpart('getInvolved.education.zooTeach')}</Markdown>
+        <Markdown>{counterpart('getInvolved.education.zooniverseClassrooms')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.educationPages')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.joinConversationTitle')}</Markdown>
         <Markdown>{counterpart('getInvolved.education.joinConversationBody')}</Markdown>
