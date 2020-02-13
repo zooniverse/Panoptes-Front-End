@@ -7,7 +7,7 @@ export default {
     continue: 'Continua',
     detailsSubTaskFormSubmitButton: 'OK',
     done: 'Completato',
-    doneAndTalk: 'Done & Talk',
+    doneAndTalk: 'Concludi e Commenta',
     dontShowMinicourse: 'Non mostrare più il mini corso',
     letsGo: 'Inizia!',
     next: 'Avanti',
@@ -18,7 +18,7 @@ export default {
     },
     recents: 'Your recent classifications',
     talk: 'Talk',
-    taskHelpButton: 'Need some help with this task?',
+    taskHelpButton: 'Hai bisogno di aiuto?',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
@@ -39,7 +39,7 @@ export default {
         research: 'Ricerca',
         results: 'Risultati',
         faq: 'FAQ',
-        education: 'Education',
+        education: 'Approfondimento',
         team: 'Il Team',
       }
     },
@@ -78,7 +78,7 @@ export default {
         other: '**%(count)s** persone stanno parlando di **%(title)s** in questo momento.'
       },
       joinIn: 'Partecipa',
-      learnMore: 'Learn more',
+      learnMore: 'Per saperne di piu',
       getStarted: 'Inizia ora',
       workflowAssignment: 'You\'ve unlocked level %(workflowDisplayName)s',
       visitLink: 'Visita il progetto',
