@@ -8,6 +8,7 @@ alert = require('../../lib/alert').default
 DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
+isAdmin = require '../../lib/is-admin'
 
 # `import MinMaxEditor from './drawing/min-max-editor';`
 MinMaxEditor = require('./drawing/min-max-editor').default
@@ -145,7 +146,7 @@ module.exports = createReactClass
                         Type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
                           {for toolKey of drawingTools
-                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape", "freehandSegmentLine", "freehandSegmentShape", "anchoredEllipse", "fan"]}
+                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape", "freehandSegmentLine", "freehandSegmentShape", "anchoredEllipse", "fan", "transcriptionLine"]}
                           {if @canUse("grid")
                             <option key="grid" value="grid">grid</option>}
                           {if @canUse("freehandLine")
@@ -160,6 +161,8 @@ module.exports = createReactClass
                             <option key="anchoredEllipse" value="anchoredEllipse">anchored ellipse</option>}
                           {if @canUse("fan")
                             <option key="fan" value="fan">fan tool</option>}
+                          {if isAdmin()
+                            <option key="transcriptionLine" value="transcriptionLine">transcription line</option>}
                         </select>
                       </AutoSave>
                     </div>

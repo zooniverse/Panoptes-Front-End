@@ -19,3 +19,4 @@ module.exports =
   rotateRectangle: require('./rotate-rectangle').default
   triangle: require './triangle'
   pointGrid: require('./point-grid').default
+  transcriptionLine: require './line'
