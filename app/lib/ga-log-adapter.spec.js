@@ -62,6 +62,24 @@ describe('GALogAdapter', () => {
   });
 
   describe('analytics object lifecycle', () => {
+    it('fails gracefully when GA is not available', () => {
+      const fakeGA = () => null;
+      fakeGA.getAll = () => [];
+
+      const fakeWindow = {};
+
+      const adapter = new GALogAdapter(fakeWindow, 'ga');
+
+      adapter.logEvent({ type: 'testMessage' });
+
+      fakeWindow.ga = fakeGA;
+
+      adapter.pending = [];
+      adapter.logEvent({ type: 'testMessage' });
+
+      assert.equal(adapter.pending.length, 0);
+    });
+
     it('initializes the analytics object the first time it sees one', () => {
       const fakeTracker = { get: () => 'UA-AAAA-AA' };
       const fakeGA = () => null;
