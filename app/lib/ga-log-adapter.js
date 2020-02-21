@@ -40,13 +40,15 @@ class GALogAdapter {
 
   initializeGA() {
     // initialize the google analytics object with the tracking code
-    const tracker = this.gaLayer.getAll()[0];
-    const code = tracker.get('trackingId');
-    this.gaLayer('create', code, 'auto');
+    const tracker = this.gaLayer && this.gaLayer.getAll()[0];
+    if (tracker) {
+      const code = tracker.get('trackingId');
+      this.gaLayer('create', code, 'auto');
 
-    // send any analytics messages we'd been waiting to send
-    this.pending.forEach(params => this.gaLayer.apply(null, params));
-    this.pending = [];
+      // send any analytics messages we'd been waiting to send
+      this.pending.forEach(params => this.gaLayer.apply(null, params));
+      this.pending = [];
+    }
   }
 
   enqueue(...args) {
