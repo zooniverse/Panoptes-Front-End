@@ -30,6 +30,14 @@ export default {
       studyInfo: 'I do not want to take part in this messaging [study](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
     }
   },
+  projects: {
+    welcome: {
+      heading: "Welcome! We're so glad you're here",
+      thanks: "Thank you for your interest in helping real research. Here we've gathered a few projects we could really use your help on right now. For more options just scroll down to browse all of our active projects.",
+      talk: "Make sure to also check out [Talk](/talk) where you can chat to other like-minded volunteers.",
+      scrollDown: "Scroll down for even more"
+    }
+  },
   project: {
     language: 'Language',
     loading: 'Loading project',
