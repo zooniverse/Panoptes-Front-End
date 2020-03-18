@@ -31,7 +31,6 @@ class ProjectStatus extends Component {
     this.state = {
       dialogIsOpen: false,
       error: null,
-      featuredProject: null,
       project: null,
       usedWorkflowLevels: [],
       workflows: []
@@ -39,7 +38,6 @@ class ProjectStatus extends Component {
   }
 
   componentDidMount() {
-    this.getFeaturedProject();
     this.getProjectAndWorkflows();
   }
 
@@ -62,14 +60,6 @@ class ProjectStatus extends Component {
     return workflow.update({ 'retirement.criteria': selected }).save()
       .then(() => this.getWorkflows())
       .catch(error => this.setState({ error }));
-  }
-
-  getFeaturedProject() {
-    return apiClient.type('projects')
-      .get({ featured: true, cards: true })
-      .then(([featuredProject]) => {
-        this.setState({ featuredProject });
-      });
   }
 
   getProject() {
@@ -134,19 +124,9 @@ class ProjectStatus extends Component {
   }
 
   handleFeaturedProjectChange({ target }) {
-    const { featuredProject, project } = this.state;
-    project.update({ featured: target.checked });
-    if (featuredProject) {
-      return featuredProject.update({ featured: false }).save()
-        .then(() => project.save())
-        .then(newFeaturedProject => this.setState({
-          featuredProject: newFeaturedProject
-        }))
-        .catch(error => this.setState({ error }));
-    } else {
-      return project.save()
-        .catch(error => this.setState({ error }));
-    }
+    const { project } = this.state;
+    return project.update({ featured: target.checked }).save()
+      .catch(error => this.setState({ error }));
   }
 
   handleToggle(event, workflow) {
