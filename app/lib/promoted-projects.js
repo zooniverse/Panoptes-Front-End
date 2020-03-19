@@ -2,39 +2,39 @@ import locationMatch from './location-match';
 
 const PROMOTED_PROJECTS = {
   production: {
-    60: {
-      image: '/assets/featured-projects/60.jpg',
-      title: 'Chimp & See'
+    1104: {
+      image: '/assets/featured-projects/1104.jpg',
+      title: 'Gravity Spy'
     },
-    21: {
-      image: '/assets/featured-projects/21.jpg',
-      title: 'Galaxy Zoo'
+    3063: {
+      image: '/assets/featured-projects/3063.jpg',
+      title: 'Bash the Bug'
     },
-    376: {
-      image: '/assets/featured-projects/376.jpg',
-      title: 'Shakespeare\'s World'
+    4973: {
+      image: '/assets/featured-projects/4973.jpg',
+      title: 'Antislavery Manuscripts'
     },
-    3098: {
-      image: '/assets/featured-projects/26.jpg',
-      title: 'Muon Hunter'
+    6263: {
+      image: '/assets/featured-projects/6263.jpg',
+      title: 'Penguin Watch'
     }
   },
   other: {
     1731: {
-      image: '/assets/featured-projects/60.jpg',
-      title: 'Chimp & See'
+      image: '/assets/featured-projects/1104.jpg',
+      title: 'Gravity Spy'
     },
     1732: {
-      image: '/assets/featured-projects/21.jpg',
-      title: 'Galaxy Zoo'
+      image: '/assets/featured-projects/3063.jpg',
+      title: 'Bash the Bug'
     },
     1733: {
-      image: '/assets/featured-projects/376.jpg',
-      title: 'Shakespeare\'s World'
+      image: '/assets/featured-projects/4973.jpg',
+      title: 'Antislavery Manuscripts'
     },
     1734: {
-      image: '/assets/featured-projects/3098.jpg',
-      title: 'Muon Hunter'
+      image: '/assets/featured-projects/6263.jpg',
+      title: 'Penguin Watch'
     }
   }
 };
