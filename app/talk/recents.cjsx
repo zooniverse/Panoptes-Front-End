@@ -9,6 +9,7 @@ Paginator = require './lib/paginator'
 projectSection = require './lib/project-section'
 updateQueryParams = require './lib/update-query-params'
 Loading = require('../components/loading-indicator').default
+baseURL = require('./lib/base-url').default
 talkConfig = require './config'
 
 module.exports = createReactClass
@@ -114,9 +115,8 @@ module.exports = createReactClass
   commentTitle: (comment) ->
     <span>
       {if @props.params.owner and @props.params.name
-        baseURL = @props.project?._type._name
         {owner, name} = @props.params
-        <Link to="/#{baseURL}/#{owner}/#{name}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}">
+        <Link to="/#{baseURL(@props.project)}/#{owner}/#{name}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}">
           {comment.discussion_title} on {comment.board_title}
         </Link>
       else

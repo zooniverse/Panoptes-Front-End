@@ -20,6 +20,7 @@ merge = require 'lodash/merge'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require('../lib/alert').default
+baseURL = require('./lib/base-url').default
 `import ActiveUsers from './active-users';`
 ProjectLinker = require './lib/project-linker'
 
@@ -211,7 +212,6 @@ module.exports = createReactClass
     </label>
 
   render: ->
-    baseURL = @props.project?._type._name
     {board} = @state
     discussionsMeta = @state.discussions[0]?.getMeta()
 
@@ -233,7 +233,7 @@ module.exports = createReactClass
               <h2>Moderator Zone:</h2>
 
                 {if @props.section isnt 'zooniverse'
-                  <Link to="/projects/#{@props.params?.owner}/#{@props.params?.name}/talk/moderations">View Reported Comments</Link>
+                  <Link to="/baseURL(@props.project)/#{@props.params?.owner}/#{@props.params?.name}/talk/moderations">View Reported Comments</Link>
                 else
                   <Link to="/talk/moderations">View Reported Comments</Link>
                   }
@@ -300,7 +300,7 @@ module.exports = createReactClass
               {if @props.section is 'zooniverse'
                 <Link className="sidebar-link" to="/talk/recents/#{@props.params.board}">Recent Comments</Link>
               else
-                <Link className="sidebar-link" to="/#{baseURL}/#{@props.params.owner}/#{@props.params.name}/talk/recents/#{@props.params.board}">
+                <Link className="sidebar-link" to="/#{baseURL(@props.project)}/#{@props.params.owner}/#{@props.params.name}/talk/recents/#{@props.params.board}">
                   Recent Comments
                 </Link>}
             </h3>

@@ -6,9 +6,10 @@ import { Link } from 'react-router';
 
 const ProjectTag = (props) => {
   const tag = props.tag.name;
+  const baseURL = props.project._type._name;
   return (
     <div className="truncated">
-      <Link to={`/projects/${props.project.slug}/talk/tags/${tag}`} onClick={props.onClick} >
+      <Link to={`/${baseURL}/${props.project.slug}/talk/tags/${tag}`} onClick={props.onClick} >
         {tag}
       </Link>
       {' '}

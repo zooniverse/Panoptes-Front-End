@@ -18,6 +18,7 @@ SubjectViewer = require '../components/subject-viewer'
 SingleSubmitButton = require '../components/single-submit-button'
 DisplayRoles = require './lib/display-roles'
 CommentContextIcon = require './lib/comment-context-icon'
+baseURL = require('./lib/base-url').default
 `import WrappedMarkdown from '../components/wrapped-markdown';`
 DEFAULT_AVATAR = '/assets/simple-avatar.png'
 
@@ -107,9 +108,8 @@ module.exports = createReactClass
 
   commentSubjectTitle: (comment, subject) ->
     {owner, name} = @props.params
-    baseURL = @props.project?._type._name
     if (comment.focus_type is 'Subject') and (owner and name)
-      <Link to="/#{baseURL}/#{owner}/#{name}/talk/subjects/#{comment.focus_id}" onClick={@logItemClick.bind this, "view-subject-direct"}>
+      <Link to="/#{baseURL(@props.project)}/#{owner}/#{name}/talk/subjects/#{comment.focus_id}" onClick={@logItemClick.bind this, "view-subject-direct"}>
         Subject {subject.id}
       </Link>
     else
@@ -131,8 +131,7 @@ module.exports = createReactClass
   replyLine: (comment) ->
     baseLink = "/"
     if @props.project?
-      baseURL = @props.project?._type._name
-      baseLink += "#{baseURL}/#{@props.project.slug}/"
+      baseLink += "#{baseURL(@props.project)}/#{@props.project.slug}/"
     <div key={comment.id} className="comment-reply-line" ref="comment-reply-#{comment.id}">
       <p>
         <Link to="#{baseLink}users/#{comment.user_login}">{comment.user_display_name}</Link>
@@ -170,8 +169,7 @@ module.exports = createReactClass
     isDeleted = if @props.data.is_deleted then 'deleted' else ''
     profile_link = "/users/#{@props.author?.login}"
     if @props.project?
-      baseURL = @props.project._type._name
-      profile_link = "/#{baseURL}/#{@props.project.slug}#{profile_link}"
+      profile_link = "/#{baseURL(@props.project)}/#{@props.project.slug}#{profile_link}"
     author_login = if @props.author?.login then "@#{@props.author.login}" else ""
     <div className="talk-comment #{activeClass} #{isDeleted}">
       <div className="talk-comment-author">
@@ -191,8 +189,7 @@ module.exports = createReactClass
         {if @props.data.reply_id
           profile_link = "/users/#{@props.data.reply_user_login}"
           if @props.project?
-            baseURL = @props.project?._type._name
-            profile_link = "/#{baseURL}/#{@props.project.slug}#{profile_link}"
+            profile_link = "/#{baseURL(@props.project)}/#{@props.project.slug}#{profile_link}"
           <div className="talk-comment-reply">
             {if @state.replies.length
               <div>

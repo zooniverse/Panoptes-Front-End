@@ -4,6 +4,7 @@ createReactClass = require 'create-react-class'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
+baseURL = require('./lib/base-url').default
 
 module.exports = createReactClass
   displayName: 'TalkBoardDisplay'
@@ -17,10 +18,9 @@ module.exports = createReactClass
   boardLink: ->
     {owner, name} = @props.params
     boardId = @props.data.id
-    baseURL = @props.project?._type._name
 
-    if baseURL
-      <Link to="/#{baseURL}/#{owner}/#{name}/talk/#{boardId}">
+    if @props.project
+      <Link to="/#{baseURL(@props.project)}/#{owner}/#{name}/talk/#{boardId}">
         {@props.data.title}
       </Link>
     else

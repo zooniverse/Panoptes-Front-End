@@ -1,6 +1,7 @@
 React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
+baseURL = require('./lib/base-url').default
 talkConfig = require './config'
 {Link} = require 'react-router'
 
@@ -20,9 +21,8 @@ module.exports = createReactClass
     @props.comment.section isnt 'zooniverse'
 
   projectCommentUrl: ->
-    baseURL = @props.project?._type._name
     {comment, project} = @props
-    "/#{baseURL}/#{project.slug}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    "/#{baseURL(project)}/#{project.slug}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
 
   mainTalkCommentUrl: ->
     {comment} = @props
