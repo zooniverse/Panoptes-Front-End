@@ -139,6 +139,7 @@ module.exports = createReactClass
       @setBoards()
 
   render: ->
+    baseURL = @props.project?._type._name
     <div className="talk-home">
       {if @props.user?
         <div className="talk-moderation">
@@ -200,7 +201,7 @@ module.exports = createReactClass
               {if @props.section is 'zooniverse'
                 <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/talk/recents">Recent Comments</Link>
               else
-                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents">Recent Comments</Link>
+                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/#{baseURL}/#{@props.params.owner}/#{@props.params.name}/talk/recents">Recent Comments</Link>
               }
             </h3>
           </section>

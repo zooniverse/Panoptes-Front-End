@@ -211,6 +211,7 @@ module.exports = createReactClass
     </label>
 
   render: ->
+    baseURL = @props.project?._type._name
     {board} = @state
     discussionsMeta = @state.discussions[0]?.getMeta()
 
@@ -299,7 +300,7 @@ module.exports = createReactClass
               {if @props.section is 'zooniverse'
                 <Link className="sidebar-link" to="/talk/recents/#{@props.params.board}">Recent Comments</Link>
               else
-                <Link className="sidebar-link" to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents/#{@props.params.board}">
+                <Link className="sidebar-link" to="/#{baseURL}/#{@props.params.owner}/#{@props.params.name}/talk/recents/#{@props.params.board}">
                   Recent Comments
                 </Link>}
             </h3>

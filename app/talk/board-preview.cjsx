@@ -17,9 +17,10 @@ module.exports = createReactClass
   boardLink: ->
     {owner, name} = @props.params
     boardId = @props.data.id
+    baseURL = @props.project?._type._name
 
-    if @props.project
-      <Link to="/projects/#{owner}/#{name}/talk/#{boardId}">
+    if baseURL
+      <Link to="/#{baseURL}/#{owner}/#{name}/talk/#{boardId}">
         {@props.data.title}
       </Link>
     else

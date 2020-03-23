@@ -20,14 +20,14 @@ module.exports = createReactClass
 
   discussionLink: ->
     {discussion} = @props
+    baseURL = @props.project?._type._name
 
-    if (@props.params?.owner and @props.params?.name) # get from url if possible
+    if (baseURL && @props.params?.owner and @props.params?.name) # get from url if possible
       {owner, name} = @props.params
-      "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
+      "/#{baseURL}/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
-    else if @props.project.slug # otherwise fetch from project
-      [owner, name] = @props.project.slug.split('/')
-      "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
+    else if (baseURL && @props.project.slug) # otherwise fetch from project
+      "/#{baseURL}/#{@props.project.slug}/talk/#{discussion.board_id}/#{discussion.id}"
 
     else # link to zooniverse main talk
       "/talk/#{discussion.board_id}/#{discussion.id}"
