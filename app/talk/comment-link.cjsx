@@ -20,8 +20,9 @@ module.exports = createReactClass
     @props.comment.section isnt 'zooniverse'
 
   projectCommentUrl: ->
-    {comment} = @props
-    "/projects/#{comment.project_slug}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    baseURL = @props.project?._type._name
+    {comment, project} = @props
+    "/#{baseURL}/#{project.slug}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
 
   mainTalkCommentUrl: ->
     {comment} = @props

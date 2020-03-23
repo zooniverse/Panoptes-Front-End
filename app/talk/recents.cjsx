@@ -114,8 +114,9 @@ module.exports = createReactClass
   commentTitle: (comment) ->
     <span>
       {if @props.params.owner and @props.params.name
+        baseURL = @props.project?._type._name
         {owner, name} = @props.params
-        <Link to="/projects/#{owner}/#{name}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}">
+        <Link to="/#{baseURL}/#{owner}/#{name}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}">
           {comment.discussion_title} on {comment.board_title}
         </Link>
       else
