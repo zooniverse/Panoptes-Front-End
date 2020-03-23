@@ -6,6 +6,7 @@ Comment = require './comment'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
+projectSection = require './lib/project-section'
 updateQueryParams = require './lib/update-query-params'
 Loading = require('../components/loading-indicator').default
 talkConfig = require './config'
@@ -52,7 +53,7 @@ module.exports = createReactClass
     if @props.params.board
       params.board_id = @props.params.board if @props.params.board
     else if @props.project
-      params.section = "project-#{ @props.project.id }"
+      params.section = projectSection(@props.project)
     else
       params.section = 'zooniverse'
     params

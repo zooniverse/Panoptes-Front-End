@@ -2,14 +2,14 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router';
 import counterpart from 'counterpart';
+import projectSection from '../../../talk/lib/project-section'
 import TalkBreadcrumbs from '../../../talk/breadcrumbs';
 import TalkSearchInput from '../../../talk/search-input';
 import TalkFootnote from '../../../talk/footnote';
 
 export default function OrgTalkPage(props) {
   const { organization, user } = props;
-  const section = `org-${organization.id}`;
-  const project = organization
+  const section = projectSection(organization);
   const pageTitle = `${organization.display_name} » ${counterpart('orgTalk.title')}`;
   return (
     <div className="project-text-content talk project">
