@@ -8,7 +8,6 @@ function FeaturedProjectToggle({ error, handleProjectChange, project }) {
         <h4>Featured project</h4>
         <label className="">
           <input
-            disabled={project.featured}
             checked={project.featured}
             name="featured"
             onChange={handleProjectChange}
