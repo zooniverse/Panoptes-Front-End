@@ -37,6 +37,10 @@ export default class FeaturedProjectEditor extends Component {
     const { children } = this.props;
     const { editing, project } = this.state;
     const canEdit = isAdmin();
+    const options = {
+      launch_approved: true,
+      featured: false
+    };
     if (canEdit) {
       return (
         <div className="project-card-editor">
@@ -46,7 +50,7 @@ export default class FeaturedProjectEditor extends Component {
             {editing && 
               <>
                 <button autoFocus className="outlined-button" onClick={this.disableEditor}>cancel</button>
-                <ProjectsSearchSelector launchApproved onChange={this.selectProject} />
+                <ProjectsSearchSelector options={options} onChange={this.selectProject} />
               </>
             }
           </div>

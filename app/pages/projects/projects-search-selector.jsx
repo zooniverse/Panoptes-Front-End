@@ -11,6 +11,11 @@ class SearchSelector extends Component {
     this.searchByName = this.searchByName.bind(this);
   }
 
+  onChange(option) {
+    const onChange = this.props.onChange || this.navigateToProject;
+    onChange(option.value);
+  }
+
   navigateToProject(project) {
     const { redirect, slug } = project;
     if (redirect) {
@@ -20,22 +25,17 @@ class SearchSelector extends Component {
     }
   }
 
-  onChange(option) {
-    const onChange = this.props.onChange || this.navigateToProject;
-    onChange(option.value);
-  }
-
   searchByName(value) {
-    const launch_approved = this.props.launchApproved;
+    const { options } = this.props;
     const query = {
       search: `%${value}%`,
       cards: true,
-      launch_approved
+      ...options
     };
     if ((value != null ? value.trim().length : undefined) > 3) {
       return apiClient.type('projects').get(query, {
         page_size: 10
-      }).then(projects => {
+      }).then((projects) => {
         const opts = projects.map(project => ({
           value: project,
           label: project.display_name
@@ -67,12 +67,14 @@ class SearchSelector extends Component {
 
 SearchSelector.propTypes = {
   className: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  options: PropTypes.shape({})
 };
 
 SearchSelector.defaultProps = {
   className: '',
-  onChange: null
+  onChange: undefined,
+  options: {}
 };
 
 export default SearchSelector;
