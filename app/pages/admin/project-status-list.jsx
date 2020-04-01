@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 import LoadingIndicator from '../../components/loading-indicator';
 import ProjectIcon from '../../components/project-icon';
 import Paginator from '../../talk/lib/paginator';
+import SearchSelector from '../projects/projects-search-selector';
+
+function navigateToProject(option) {
+  const projectUrl = option.value;
+  if (projectUrl.match(/^http.*/)) {
+    window.location.assign(projectUrl);
+  } else {
+    browserHistory.push(['/admin/project_status', projectUrl].join('/'));
+  }
+}
 
 class ProjectStatusList extends Component {
   constructor(props) {
@@ -76,6 +86,7 @@ class ProjectStatusList extends Component {
   render() {
     return (
       <div className="project-status-page">
+        <SearchSelector onChange={navigateToProject} />
         <nav className="project-status-filters">
           <Link to="/admin/project_status">All</Link>
           <Link to="/admin/project_status?filterBy=launch_approved">Launch Approved</Link>
