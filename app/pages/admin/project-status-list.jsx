@@ -16,12 +16,20 @@ function navigateToProject(option) {
   }
 }
 
+function renderProjectListItem(project) {
+  const [owner, name] = project.slug.split('/');
+  return (
+    <div key={project.id}>
+      <ProjectIcon linkTo={`/admin/project_status/${owner}/${name}`} project={project} />
+    </div>
+  );
+}
+
 class ProjectStatusList extends Component {
   constructor(props) {
     super(props);
     this.getProjects = this.getProjects.bind(this);
     this.renderProjectList = this.renderProjectList.bind(this);
-    this.renderProjectListItem = this.renderProjectListItem.bind(this);
     this.state = {
       loading: false,
       projects: [],
@@ -66,23 +74,15 @@ class ProjectStatusList extends Component {
       meta = projects[0].getMeta();
     }
 
-    return (projects.length === 0)
-      ? <div className="project-status-list">No projects found for this filter</div>
-      : <div>
+    return (projects.length === 0) ? <div className="project-status-list">No projects found for this filter</div> :
+      (
+        <div>
           <div className="project-status-list">
-            {projects.map(project => this.renderProjectListItem(project))}
+            {projects.map(project => renderProjectListItem(project))}
           </div>
           <Paginator page={meta.page} pageCount={meta.page_count} />
         </div>
-  }
-
-  renderProjectListItem(project) {
-    const [owner, name] = project.slug.split('/');
-    return (
-      <div key={project.id}>
-        <ProjectIcon linkTo={`/admin/project_status/${owner}/${name}`} project={project} />
-      </div>
-    );
+      );
   }
 
   render() {
