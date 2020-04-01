@@ -90,7 +90,7 @@ class ProjectStatusList extends Component {
 
     return (
       <div className="project-status-page">
-        <SearchSelector onChange={navigateToProject} />
+        <SearchSelector className="project-status-search" onChange={navigateToProject} />
         <nav className="project-status-filters">
           <Link to="/admin/project_status">All</Link>
           <Link to="/admin/project_status?filterBy=launch_approved">Launch Approved</Link>

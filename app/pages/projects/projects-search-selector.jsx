@@ -42,7 +42,7 @@ class SearchSelector extends Component {
   }
 
   render() {
-    const { onChange } = this.props;
+    const { className, onChange } = this.props;
 
     return (
       <Select.Async
@@ -53,17 +53,19 @@ class SearchSelector extends Component {
         searchPromptText="Search by name"
         loadOptions={this.searchByName}
         onChange={onChange || this.navigateToProject}
-        className="search card-search standard-input"
+        className={`search card-search standard-input ${className}`}
       />
     );
   }
 }
 
 SearchSelector.propTypes = {
+  className: PropTypes.string,
   onChange: PropTypes.func
 };
 
 SearchSelector.defaultProps = {
+  className: '',
   onChange: null
 };
 
