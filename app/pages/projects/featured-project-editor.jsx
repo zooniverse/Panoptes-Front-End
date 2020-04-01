@@ -25,8 +25,9 @@ export default class FeaturedProjectEditor extends Component {
   }
 
   selectProject(project) {
+    const currentProject = this.state.project;
     if (project.launch_approved) {
-      this.props.project.update({ featured: false }).save();
+      currentProject.update({ featured: false }).save();
       project.update({ featured: true }).save();
       this.setState({ editing: false, project });
     }
