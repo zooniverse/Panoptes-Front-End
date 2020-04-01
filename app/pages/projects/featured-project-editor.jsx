@@ -25,10 +25,11 @@ export default class FeaturedProjectEditor extends Component {
   }
 
   selectProject(project) {
-    console.log(project)
-    this.props.project.update({ featured: false }).save();
-    project.update({ featured: true }).save();
-    this.setState({ editing: false, project });
+    if (project.launch_approved) {
+      this.props.project.update({ featured: false }).save();
+      project.update({ featured: true }).save();
+      this.setState({ editing: false, project });
+    }
   }
 
   render() {
@@ -44,7 +45,7 @@ export default class FeaturedProjectEditor extends Component {
             {editing && 
               <>
                 <button autoFocus className="outlined-button" onClick={this.disableEditor}>cancel</button>
-                <ProjectsSearchSelector onChange={this.selectProject} />
+                <ProjectsSearchSelector launchApproved onChange={this.selectProject} />
               </>
             }
           </div>

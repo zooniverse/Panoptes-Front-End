@@ -19,7 +19,7 @@ class ProjectsWelcome extends Component {
   }
 
   getFeaturedProjects() {
-    const query = { featured: true, launch_approved: true, cards: true };
+    const query = { featured: true, cards: true };
     return apiClient.type('projects').get(query)
       .then((featuredProjects) => {
         this.setState({ featuredProjects });

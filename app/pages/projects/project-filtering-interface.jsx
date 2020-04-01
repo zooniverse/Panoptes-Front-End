@@ -138,6 +138,7 @@ class ProjectFilteringInterface extends Component {
 
   render() {
     const { discipline, sort } = this.props;
+    const launchApproved = !apiClient.params.admin ? true : undefined;
     return (
       <section className="resources-container">
         <Filmstrip
@@ -146,7 +147,7 @@ class ProjectFilteringInterface extends Component {
           onChange={this.handleDisciplineChange}
         />
         <div className="resource-results-counter">
-          <SearchSelector />
+          <SearchSelector launchApproved={launchApproved} />
           <SortSelector value={sort} onChange={this.handleSortChange} />
         </div>
         {this.renderCounter()}

@@ -26,10 +26,11 @@ class SearchSelector extends Component {
   }
 
   searchByName(value) {
+    const launch_approved = this.props.launchApproved;
     const query = {
       search: `%${value}%`,
       cards: true,
-      launch_approved: !apiClient.params.admin ? true : undefined
+      launch_approved
     };
     if ((value != null ? value.trim().length : undefined) > 3) {
       return apiClient.type('projects').get(query, {
