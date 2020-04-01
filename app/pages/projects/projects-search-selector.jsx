@@ -7,17 +7,22 @@ import Select from 'react-select';
 class SearchSelector extends Component {
   constructor(props) {
     super(props);
-    this.navigateToProject = this.navigateToProject.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.searchByName = this.searchByName.bind(this);
   }
 
-  navigateToProject(option) {
-    const projectUrl = option.value;
-    if (projectUrl.match(/^http.*/)) {
-      window.location.assign(projectUrl);
+  navigateToProject(project) {
+    const { redirect, slug } = project;
+    if (redirect) {
+      window.location.assign(redirect);
     } else {
-      browserHistory.push(['/projects', projectUrl].join('/'));
+      browserHistory.push(['/projects', slug].join('/'));
     }
+  }
+
+  onChange(option) {
+    const onChange = this.props.onChange || this.navigateToProject;
+    onChange(option.value);
   }
 
   searchByName(value) {
@@ -31,7 +36,7 @@ class SearchSelector extends Component {
         page_size: 10
       }).then(projects => {
         const opts = projects.map(project => ({
-          value: project.redirect || project.slug,
+          value: project,
           label: project.display_name
         }));
         return { options: opts };
@@ -42,7 +47,7 @@ class SearchSelector extends Component {
   }
 
   render() {
-    const { className, onChange } = this.props;
+    const { className } = this.props;
 
     return (
       <Select.Async
@@ -52,7 +57,7 @@ class SearchSelector extends Component {
         value=""
         searchPromptText="Search by name"
         loadOptions={this.searchByName}
-        onChange={onChange || this.navigateToProject}
+        onChange={this.onChange}
         className={`search card-search standard-input ${className}`}
       />
     );
