@@ -34,14 +34,14 @@ class ProjectStatusList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { query } = this.props.location;
+    const { location: { query }} = this.props;
     if (prevProps.location.query !== query) {
       this.getProjects();
     }
   }
 
   getProjects() {
-    const { query } = this.props.location;
+    const { location: { query }} = this.props;
 
     const projectsQuery = {
       include: 'avatar',
