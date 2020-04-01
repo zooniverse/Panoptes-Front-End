@@ -22,13 +22,13 @@ class SearchSelector extends Component {
 
   searchByName(value) {
     const query = {
-      search: '%' + value + '%',
+      search: `%${value}%`,
       cards: true,
-      launch_approved: !apiClient.params.admin ? true : undefined,
+      launch_approved: !apiClient.params.admin ? true : undefined
     };
     if ((value != null ? value.trim().length : undefined) > 3) {
       return apiClient.type('projects').get(query, {
-        page_size: 10,
+        page_size: 10
       }).then(projects => {
         const opts = projects.map(project => ({
           value: project.redirect || project.slug,
@@ -42,7 +42,7 @@ class SearchSelector extends Component {
   }
 
   render() {
-    const { onChange } = this.props
+    const { onChange } = this.props;
 
     return (
       <Select.Async
@@ -60,13 +60,11 @@ class SearchSelector extends Component {
 }
 
 SearchSelector.propTypes = {
-  onChange: PropTypes.func,
-  query: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 SearchSelector.defaultProps = {
-  onChange: null,
-  query: PropTypes.func,
+  onChange: null
 };
 
 export default SearchSelector;

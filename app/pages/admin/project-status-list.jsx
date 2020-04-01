@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { browserHistory, Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
+import PropTypes from 'prop-types';
 import LoadingIndicator from '../../components/loading-indicator';
 import ProjectIcon from '../../components/project-icon';
 import Paginator from '../../talk/lib/paginator';
@@ -33,7 +34,8 @@ class ProjectStatusList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.location.query !== this.props.location.query) {
+    const { query } = this.props.location;
+    if (prevProps.location.query !== query) {
       this.getProjects();
     }
   }
@@ -84,6 +86,8 @@ class ProjectStatusList extends Component {
   }
 
   render() {
+    const { error, loading } = this.state;
+
     return (
       <div className="project-status-page">
         <SearchSelector onChange={navigateToProject} />
@@ -94,11 +98,21 @@ class ProjectStatusList extends Component {
           <Link to="/admin/project_status?filterBy=beta_approved">Beta Approved</Link>
           <Link to="/admin/project_status?filterBy=beta_requested">Beta Requested</Link>
         </nav>
-        {(this.state.error) ? <p>{this.state.error}</p> : null}
-        {(this.state.loading) ? <LoadingIndicator /> : this.renderProjectList()}
+        {(error) ? <p>{error}</p> : null}
+        {(loading) ? <LoadingIndicator /> : this.renderProjectList()}
       </div>
     );
   }
 }
+
+ProjectStatusList.propTypes = {
+  location: PropTypes.shape({
+    query: PropTypes.shape()
+  })
+};
+
+ProjectStatusList.defaultProps = {
+  location: {}
+};
 
 export default ProjectStatusList;
