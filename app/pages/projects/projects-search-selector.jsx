@@ -22,13 +22,13 @@ class SearchSelector extends Component {
 
   searchByName(value) {
     const query = {
-      search: '%' + value + '%',
+      search: `%${value}%`,
       cards: true,
-      launch_approved: !apiClient.params.admin ? true : undefined,
+      launch_approved: !apiClient.params.admin ? true : undefined
     };
     if ((value != null ? value.trim().length : undefined) > 3) {
       return apiClient.type('projects').get(query, {
-        page_size: 10,
+        page_size: 10
       }).then(projects => {
         const opts = projects.map(project => ({
           value: project.redirect || project.slug,
@@ -42,6 +42,8 @@ class SearchSelector extends Component {
   }
 
   render() {
+    const { className, onChange } = this.props;
+
     return (
       <Select.Async
         multi={false}
@@ -50,16 +52,21 @@ class SearchSelector extends Component {
         value=""
         searchPromptText="Search by name"
         loadOptions={this.searchByName}
-        onChange={this.navigateToProject}
-        className="search card-search standard-input"
+        onChange={onChange || this.navigateToProject}
+        className={`search card-search standard-input ${className}`}
       />
     );
   }
 }
 
 SearchSelector.propTypes = {
-  onChange: PropTypes.func,
-  query: PropTypes.func,
+  className: PropTypes.string,
+  onChange: PropTypes.func
+};
+
+SearchSelector.defaultProps = {
+  className: '',
+  onChange: null
 };
 
 export default SearchSelector;
