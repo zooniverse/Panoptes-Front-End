@@ -185,8 +185,10 @@ export default function reducer(state = initialState, action = {}) {
       const { subjects, workflowID } = action.payload;
       const { workflow } = state;
       if (workflow && workflow.id === workflowID) {
-        const upcomingSubjects = state.upcomingSubjects.slice();
-        upcomingSubjects.push(...subjects);
+        const newSubjects = state.upcomingSubjects.slice();
+        newSubjects.push(...subjects);
+        // remove duplicates from the upcoming queue by keeping the first instance of each subject.
+        const upcomingSubjects = newSubjects.filter((subject, index) => index === newSubjects.indexOf(subject));
         return Object.assign({}, state, { upcomingSubjects });
       }
       return state;
