@@ -7,6 +7,7 @@ class VideoPlayer extends React.Component {
 
     this.player = null;
 
+    this.endVideo = this.endVideo.bind(this);
     this.playVideo = this.playVideo.bind(this);
     this.setPlayRate = this.setPlayRate.bind(this);
 
@@ -28,13 +29,14 @@ class VideoPlayer extends React.Component {
     this.setState({ playbackRate: parseFloat(e.target.value) });
   }
 
-  playVideo(playing) {
+  playVideo() {
     const { player } = this;
+    const { playing } = this.state
     if (!player) return;
 
-    this.setState({ playing });
+    this.setState({ playing: !playing });
 
-    if (playing) {
+    if (!playing) {
       player.play();
     } else {
       player.pause();
@@ -76,7 +78,7 @@ class VideoPlayer extends React.Component {
           type={`${this.props.type}/${this.props.format}`}
           preload="auto"
           onCanPlay={this.props.onLoad}
-          onClick={this.playVideo.bind(this, !this.state.playing)}
+          onClick={this.playVideo}
           onEnded={this.endVideo}
         >
           Your browser does not support the video format. Please upgrade your browser.
