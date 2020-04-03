@@ -31,7 +31,8 @@ describe('feedback drawing radial create-rule', function () {
       tolerance: "10",
       x: "200",
       y: "300",
-      falsePosMode: false
+      falsePosMode: false,
+      suppressCategoryTitles: false
     });
   })
 
@@ -52,7 +53,8 @@ describe('feedback drawing radial create-rule', function () {
       tolerance: "50",
       x: "200",
       y: "300",
-      falsePosMode: false
+      falsePosMode: false,
+      suppressCategoryTitles: false
     });
   })
 
@@ -61,6 +63,8 @@ describe('feedback drawing radial create-rule', function () {
     subjectRule.failureMessage = "Subject-specific failure message";
     subjectRule.successMessage = "Subject-specific success message";
     subjectRule.falsePosMode = true;
+    subjectRule.suppressCategoryTitles = true;
+
 
     const rule = createRule(subjectRule, workflowRule);
     expect(rule).to.deep.equal({
@@ -73,7 +77,8 @@ describe('feedback drawing radial create-rule', function () {
       tolerance: "50",
       x: "200",
       y: "300",
-      falsePosMode: true
+      falsePosMode: true,
+      suppressCategoryTitles: true
     });
   })
 });

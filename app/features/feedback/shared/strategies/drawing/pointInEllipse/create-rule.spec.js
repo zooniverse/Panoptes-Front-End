@@ -33,7 +33,8 @@ describe('feedback drawing pointInEllipse create-rule', function () {
       toleranceA: "20",
       toleranceB: "20",
       theta : "0",
-      falsePosMode: false
+      falsePosMode: false,
+      suppressCategoryTitles: false
     });
   })
 
@@ -43,6 +44,7 @@ describe('feedback drawing pointInEllipse create-rule', function () {
     subjectRule.toleranceA = "30";
     subjectRule.toleranceB = "60";
     subjectRule.theta = "60";
+    subjectRule.suppressCategoryTitles = false;
 
     const rule = createRule(subjectRule, workflowRule);
     expect(rule).to.deep.equal({
@@ -58,17 +60,19 @@ describe('feedback drawing pointInEllipse create-rule', function () {
       toleranceA: "30",
       toleranceB: "60",
       theta : "60",
-      falsePosMode: false
+      falsePosMode: false,
+      suppressCategoryTitles: false
     });
   })
 
-  it('should return a valid  false-positive rule with subject-specific settings', function () {
+  it('should return a valid false-positive rule with subject-specific settings', function () {
     subjectRule.failureMessage = "Subject-specific failure message";
     subjectRule.successMessage = "Subject-specific success message";
     subjectRule.toleranceA = "30";
     subjectRule.toleranceB = "60";
     subjectRule.theta = "60";
     subjectRule.falsePosMode = true;
+    subjectRule.suppressCategoryTitles = true;
 
     const rule = createRule(subjectRule, workflowRule);
     expect(rule).to.deep.equal({
@@ -83,7 +87,8 @@ describe('feedback drawing pointInEllipse create-rule', function () {
       toleranceA: "30",
       toleranceB: "60",
       theta : "60",
-      falsePosMode: true
+      falsePosMode: true,
+      suppressCategoryTitles: true
     });
   })
 });

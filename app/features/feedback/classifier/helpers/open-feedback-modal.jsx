@@ -14,10 +14,19 @@ export function getFeedbackMessages(feedback) {
       let category = null;
       if (item.success && item.successEnabled) {
         message = item.successMessage;
-        category = item.falsePosMode ? categories.FALSEPOS : categories.CORRECT;
+        if(item.suppressCategoryTitles){
+          category = categories.NULL;
+        } else {
+          category = item.falsePosMode ? categories.FALSEPOS : categories.CORRECT;
+        }
       } else if (!item.success && !item.falsePosMode && item.failureEnabled) {
         message = item.failureMessage;
-        category = categories.INCORRECT;
+        if(item.suppressCategoryTitles){
+          category = categories.NULL;
+        }
+        else {
+          category = categories.INCORRECT;
+        }
       }
       return message ? [message, category] : message;
     })

@@ -1,7 +1,8 @@
 const categories = {
   CORRECT: 'correct',
   INCORRECT: 'incorrect',
-  FALSEPOS: 'falsepos'
+  FALSEPOS: 'falsepos',
+  NULL: 'null'
 };
 
 export default categories

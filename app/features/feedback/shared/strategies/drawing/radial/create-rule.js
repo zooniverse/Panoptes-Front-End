@@ -10,7 +10,8 @@ function createRule(subjectRule, workflowRule) {
     tolerance: subjectRule.tolerance || workflowRule.defaultTolerance,
     x: subjectRule.x,
     y: subjectRule.y,
-    falsePosMode: subjectRule.falsePosMode || false
+    falsePosMode: subjectRule.falsePosMode || false,
+    suppressCategoryTitles: subjectRule.suppressCategoryTitles || false
   };
 
   if (rule.failureEnabled && !rule.falsePosMode) {

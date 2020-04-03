@@ -5,6 +5,7 @@ import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import SubjectViewer from '../../../../components/subject-viewer';
 import ModalFocus from '../../../../components/modal-focus';
+import categories from '../helpers/feedback-categories';
 
 /* eslint-disable max-len */
 counterpart.registerTranslations('en', {
@@ -35,16 +36,27 @@ class FeedbackModal extends React.Component {
         {subjectViewerProps && (<SubjectViewer {...subjectViewerProps} />)}
         <div className="messagecontainer">
           {_.chain(messages).map((catMessages, cat) => {
-            const contentString = `feedback.categories.${cat}`;
-            return (<div key={Math.random()}>
-            <Translate content={contentString} component="h3" className="categorytitles" />
-              <ul>
-              {catMessages.map((message) =>
-                <li key={Math.random()} className="messages">
-                {message}
-                </li>)}
-              </ul>
-            </div>)
+            if(cat === categories.NULL){
+              return (<div key={Math.random()}>
+                <ul>
+                {catMessages.map((message) =>
+                  <li key={Math.random()} className="messages">
+                  {message}
+                  </li>)}
+                </ul>
+              </div>)
+            } else {
+              const contentString = `feedback.categories.${cat}`;
+              return (<div key={Math.random()}>
+              <Translate content={contentString} component="h3" className="categorytitles" />
+                <ul>
+                {catMessages.map((message) =>
+                  <li key={Math.random()} className="messages">
+                  {message}
+                  </li>)}
+                </ul>
+              </div>)
+            }
           }).value()}
           </div>
 

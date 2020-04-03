@@ -12,7 +12,8 @@ function createRule(subjectRule, workflowRule) {
     toleranceA: subjectRule.toleranceA || workflowRule.defaultTolerance,
     toleranceB: subjectRule.toleranceB || workflowRule.defaultTolerance,
     theta: subjectRule.theta || "0",
-    falsePosMode: subjectRule.falsePosMode || false
+    falsePosMode: subjectRule.falsePosMode || false,
+    suppressCategoryTitles: subjectRule.suppressCategoryTitles || false
   };
 
   if (rule.failureEnabled && !rule.falsePosMode) {

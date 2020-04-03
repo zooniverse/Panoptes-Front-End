@@ -31,7 +31,8 @@ describe('feedback drawing column create-rule', function () {
       tolerance: "10",
       width: "100",
       x: "300",
-      falsePosMode: false
+      falsePosMode: false,
+      suppressCategoryTitles: false
     });
   })
 
@@ -39,6 +40,7 @@ describe('feedback drawing column create-rule', function () {
     subjectRule.tolerance = "50";
     subjectRule.failureMessage = "Subject-specific failure message";
     subjectRule.successMessage = "Subject-specific success message";
+    subjectRule.suppressCategoryTitles = false;
 
     const rule = createRule(subjectRule, workflowRule);
     expect(rule).to.deep.equal({
@@ -52,7 +54,8 @@ describe('feedback drawing column create-rule', function () {
       tolerance: "50",
       width: "100",
       x: "300",
-      falsePosMode: false
+      falsePosMode: false,
+      suppressCategoryTitles: false
     });
   })
 
@@ -61,6 +64,7 @@ describe('feedback drawing column create-rule', function () {
     subjectRule.failureMessage = "Subject-specific failure message";
     subjectRule.successMessage = "Subject-specific success message";
     subjectRule.falsePosMode = true;
+    subjectRule.suppressCategoryTitles = true;
 
     const rule = createRule(subjectRule, workflowRule);
     expect(rule).to.deep.equal({
@@ -73,7 +77,8 @@ describe('feedback drawing column create-rule', function () {
       tolerance: "50",
       width: "100",
       x: "300",
-      falsePosMode: true
+      falsePosMode: true,
+      suppressCategoryTitles: true
     });
   })
 });

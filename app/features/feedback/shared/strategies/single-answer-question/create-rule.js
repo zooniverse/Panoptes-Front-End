@@ -6,7 +6,8 @@ function createRule(subjectRule, workflowRule) {
     failureEnabled: workflowRule.failureEnabled || false,
     id: subjectRule.id,
     strategy: workflowRule.strategy,
-    successEnabled: workflowRule.successEnabled || false
+    successEnabled: workflowRule.successEnabled || false,
+    suppressCategoryTitles: subjectRule.suppressCategoryTitles || false
   };
 
   if (rule.failureEnabled) {
