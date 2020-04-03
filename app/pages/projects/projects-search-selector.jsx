@@ -12,8 +12,10 @@ class SearchSelector extends Component {
   }
 
   onChange(option) {
-    const onChange = this.props.onChange || this.navigateToProject;
-    onChange(option.value);
+    if (option) {
+      const onChange = this.props.onChange || this.navigateToProject;
+      onChange(option.value);
+    }
   }
 
   navigateToProject(project) {
