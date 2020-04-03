@@ -196,6 +196,14 @@ describe('Classifier actions', function () {
       const newState = reducer(state, action);
       expect(newState.upcomingSubjects).to.deep.equal(action.payload.subjects);
     });
+    it('should not add duplicate subjects to the queue', function () {
+      const state = {
+        workflow: { id: '1'},
+        upcomingSubjects: [subjects[0], subjects[1], subjects[2]]
+      };
+      const newState = reducer(state, action);
+      expect(newState.upcomingSubjects).to.deep.equal([subjects[0], subjects[1], subjects[2], subjects[3]]);
+    });
   });
   describe('prepend subjects', function () {
     const subjects = [
