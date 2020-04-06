@@ -3,7 +3,8 @@ import { Markdown } from 'markdownz';
 import apiClient from 'panoptes-client/lib/api-client';
 import React, { Component } from 'react';
 import Translate from 'react-translate-component';
-import ProjectCardList from './project-card-list';
+import FeaturedProjectEditor from './featured-project-editor';
+import ProjectCard from '../../partials/project-card';
 
 class ProjectsWelcome extends Component {
   constructor() {
@@ -18,7 +19,7 @@ class ProjectsWelcome extends Component {
   }
 
   getFeaturedProjects() {
-    const query = { featured: true, launch_approved: true, cards: true };
+    const query = { featured: true, cards: true };
     return apiClient.type('projects').get(query)
       .then((featuredProjects) => {
         this.setState({ featuredProjects });
@@ -30,7 +31,13 @@ class ProjectsWelcome extends Component {
         <Translate content="projects.welcome.heading" component="h2" />
         <Translate content="projects.welcome.thanks" component="p" />
         <Markdown>{counterpart('projects.welcome.talk')}</Markdown>
-        <ProjectCardList projects={this.state.featuredProjects} />
+        <div className="project-card-list">
+          {this.state.featuredProjects.map(project =>
+            <FeaturedProjectEditor key={project.id} project={project}>
+              <ProjectCard project={project} />
+            </FeaturedProjectEditor>
+          )}
+        </div>
         <p><Translate content="projects.welcome.scrollDown" component="em" /></p>
       </div>
     );

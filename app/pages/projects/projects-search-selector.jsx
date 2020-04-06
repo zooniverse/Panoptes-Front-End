@@ -7,31 +7,39 @@ import Select from 'react-select';
 class SearchSelector extends Component {
   constructor(props) {
     super(props);
-    this.navigateToProject = this.navigateToProject.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.searchByName = this.searchByName.bind(this);
   }
 
-  navigateToProject(option) {
-    const projectUrl = option.value;
-    if (projectUrl.match(/^http.*/)) {
-      window.location.assign(projectUrl);
+  onChange(option) {
+    if (option) {
+      const onChange = this.props.onChange || this.navigateToProject;
+      onChange(option.value);
+    }
+  }
+
+  navigateToProject(project) {
+    const { redirect, slug } = project;
+    if (redirect) {
+      window.location.assign(redirect);
     } else {
-      browserHistory.push(['/projects', projectUrl].join('/'));
+      browserHistory.push(['/projects', slug].join('/'));
     }
   }
 
   searchByName(value) {
+    const { options } = this.props;
     const query = {
       search: `%${value}%`,
       cards: true,
-      launch_approved: !apiClient.params.admin ? true : undefined
+      ...options
     };
     if ((value != null ? value.trim().length : undefined) > 3) {
       return apiClient.type('projects').get(query, {
         page_size: 10
-      }).then(projects => {
+      }).then((projects) => {
         const opts = projects.map(project => ({
-          value: project.redirect || project.slug,
+          value: project,
           label: project.display_name
         }));
         return { options: opts };
@@ -42,7 +50,7 @@ class SearchSelector extends Component {
   }
 
   render() {
-    const { className, onChange } = this.props;
+    const { className } = this.props;
 
     return (
       <Select.Async
@@ -52,7 +60,7 @@ class SearchSelector extends Component {
         value=""
         searchPromptText="Search by name"
         loadOptions={this.searchByName}
-        onChange={onChange || this.navigateToProject}
+        onChange={this.onChange}
         className={`search card-search standard-input ${className}`}
       />
     );
@@ -61,12 +69,14 @@ class SearchSelector extends Component {
 
 SearchSelector.propTypes = {
   className: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  options: PropTypes.shape({})
 };
 
 SearchSelector.defaultProps = {
   className: '',
-  onChange: null
+  onChange: undefined,
+  options: {}
 };
 
 export default SearchSelector;

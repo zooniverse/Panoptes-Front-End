@@ -7,20 +7,15 @@ import ProjectIcon from '../../components/project-icon';
 import Paginator from '../../talk/lib/paginator';
 import SearchSelector from '../projects/projects-search-selector';
 
-function navigateToProject(option) {
-  const projectUrl = option.value;
-  if (projectUrl.match(/^http.*/)) {
-    window.location.assign(projectUrl);
-  } else {
-    browserHistory.push(['/admin/project_status', projectUrl].join('/'));
-  }
+function navigateToProject(project) {
+  const { slug } = project;
+  browserHistory.push(['/admin/project_status', slug].join('/'));
 }
 
-function renderProjectListItem(project) {
-  const [owner, name] = project.slug.split('/');
+function ProjectListItem({ project }) {
   return (
     <div key={project.id}>
-      <ProjectIcon linkTo={`/admin/project_status/${owner}/${name}`} project={project} />
+      <ProjectIcon linkTo={`/admin/project_status/${project.slug}`} project={project} />
     </div>
   );
 }
@@ -78,7 +73,7 @@ class ProjectStatusList extends Component {
       (
         <div>
           <div className="project-status-list">
-            {projects.map(project => renderProjectListItem(project))}
+            {projects.map(project => <ProjectListItem key={project.id} project={project} />)}
           </div>
           <Paginator page={meta.page} pageCount={meta.page_count} />
         </div>
