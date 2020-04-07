@@ -13,7 +13,7 @@ export default {
   pl: 'Polski',
   pt: 'Português',
   ru: 'русский',
-  sv: 'Svenska'
+  sv: 'Svenska',
   uk: 'українська мова',
   'zh-cn': '简体中文',
   'zh-tw': '繁體中文',
