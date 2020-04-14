@@ -443,10 +443,12 @@ module.exports = createReactClass
       @state.task.characteristics[characteristicID].values[valueID].image = valueIcon
       for choiceID, choice of @state.task.choices
         choice.characteristics[characteristicID] ?= []
-      if isSet
-        choiceID = @makeID row.name
-        if @state.task.choices[choiceID]?.characteristics[characteristicID].indexOf(valueID) is -1
-          @state.task.choices[choiceID]?.characteristics[characteristicID].push valueID
+      choiceID = @makeID row.name
+      valueIdIndex = @state.task.choices[choiceID]?.characteristics[characteristicID].indexOf valueID
+      if isSet and valueIdIndex is -1
+        @state.task.choices[choiceID]?.characteristics[characteristicID].push valueID
+      if not isSet and valueIdIndex >= 0
+        @state.task.choices[choiceID]?.characteristics[characteristicID].splice valueID, 1
 
   addConfusion: ({name, twin, details}) ->
     unless name?
