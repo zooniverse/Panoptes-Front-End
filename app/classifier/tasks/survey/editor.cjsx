@@ -444,11 +444,13 @@ module.exports = createReactClass
       for choiceID, choice of @state.task.choices
         choice.characteristics[characteristicID] ?= []
       choiceID = @makeID row.name
-      valueIdIndex = @state.task.choices[choiceID]?.characteristics[characteristicID].indexOf valueID
+      choiceCharacteristicArray = @state.task.choices[choiceID]?.characteristics[characteristicID]
+      valueIdIndex = choiceCharacteristicArray.indexOf valueID
       if isSet and valueIdIndex is -1
-        @state.task.choices[choiceID]?.characteristics[characteristicID].push valueID
-      if not isSet and valueIdIndex >= 0
-        @state.task.choices[choiceID]?.characteristics[characteristicID].splice valueID, 1
+        @state.task.choices[choiceID]?.characteristics[characteristicID]?.push valueID
+      if not isSet and valueIdIndex > -1
+        choiceCharacteristicArray.splice valueIdIndex, 1
+        @state.task.choices[choiceID]?.characteristics[characteristicID] = choiceCharacteristicArray      
 
   addConfusion: ({name, twin, details}) ->
     unless name?
