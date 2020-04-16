@@ -65,7 +65,7 @@ ONE_UP_REDIRECT = createReactClass
     givenPathSegments = @props.location.pathname.split '/'
     givenPathSegments.pop()
     pathOneLevelUp = givenPathSegments.join '/'
-    @props.history.replace
+    @props.router.replace
       pathname: pathOneLevelUp,
       query: @props.location.query
 
