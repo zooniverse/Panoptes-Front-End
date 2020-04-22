@@ -74,7 +74,7 @@ export default {
     },
     nav: {
       about: 'Over',
-      classify: 'Annoteren',
+      classify: 'Classificeren',
       talk: 'Forum',
       collections: 'Verzamelingen',
       recents: 'Mijn waarnemingen',
@@ -86,7 +86,7 @@ export default {
     classifyPage: {
       dark: 'donker',
       light: 'licht',
-      title: 'Annoteren',
+      title: 'Classificeren',
       themeToggle: 'Wissel naar %(theme)s thema'
     },
     home: {
