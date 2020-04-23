@@ -16,8 +16,8 @@ export default {
       taskTab: 'Uppgift',
       tutorialTab: 'Snabbkurs'
     },
-    recents: 'Dina senaste klssificeringar',
-    talk: 'Diskutera',
+    recents: 'Dina senaste klassificeringar',
+    talk: 'Prata',
     taskHelpButton: 'Behöver du hjälp med den här uppgiften?',
     miniCourseButton: 'Starta om snabbkursen för projektet',
     workflowAssignmentDialog: {
@@ -34,7 +34,7 @@ export default {
     welcome: {
       heading: "Välkommen! Vi är så glada att du är här.",
       thanks: "Tack för att du vill hjälpa till med riktig forskning. Här har vi samlat några project som verkligen skulle kunna få nytta av din hjälp just nu. För fler möjligheter, bläddra nedåt så ser du alla våra aktiva projekt.",
-      talk: "Se till att kolla in [Diskutera](/talk) där du kan chatta med andra likasinnade frivilliga.",
+      talk: "Se till att kolla in [Prata](/talk) där du kan chatta med andra likasinnade frivilliga.",
       scrollDown: "Bläddra ner för ännu mer"
     }
   },
@@ -47,8 +47,8 @@ export default {
       nav: {
         research: 'Forskning',
         results: 'Resultat',
-        faq: 'FAQ',
-        education: 'Utbildning',
+        faq: 'Vanliga frågor',
+        education: 'Bakgrund',
         team: 'Teamet',
       }
     },
@@ -60,7 +60,7 @@ export default {
       exploreProject: 'Utforska projektet',
       lab: 'Labb',
       recents: 'Senaste',
-      talk: 'Diskutera',
+      talk: 'Prata',
       underReview: 'Under granskning',
       zooniverseApproved: 'Zooniverse-godkänt'
     },
@@ -267,7 +267,7 @@ export default {
       beta: 'Få mejl om betaprojekt och bli en betatestare'
     },
     talk: {
-      section: 'Epost-preferenser för Diskutera',
+      section: 'Epost-preferenser för Prata',
       header: 'Skicka epost',
       frequency: {
         immediate: 'På en gång',
@@ -1076,9 +1076,9 @@ export default {
   },
   feedback: {
     categories: {
-      correct: 'Träffar',
-      incorrect: 'Missar',
-      falsepos: 'Falska positiv'
+      correct: 'Lyckat',
+      incorrect: 'Mindre lyckat',
+      falsepos: 'Falskt positiv'
     }
   }
 };
