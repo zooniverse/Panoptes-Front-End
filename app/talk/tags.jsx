@@ -48,14 +48,14 @@ export default class TalkTags extends React.Component {
     if (pageChanged || differentTag || differentProject) {
       const nextPage = (differentTag) ? 1 : nextProps.location.query.page
       console.log('cwrp calling getTags')
-      this.getTags(nextPage, nextProps.params.tag)
+      this.getTags(nextPage, nextProps.params.tag, nextProps.project)
     }
   }
 
-  getTags(page = this.props.location.query.page, name = this.props.params.tag) {
+  getTags(page = this.props.location.query.page, name = this.props.params.tag, project = this.props.project) {
     page || (page = 1);
     const taggable_type = 'Subject'
-    const section = `project-${this.props.project.id}`
+    const section = `project-${project.id}`
     return talkClient.type('tags/popular').get({ page, taggable_type, section, name })
       .then((tags) => {
         const meta = (tags && tags[0]) ? tags[0].getMeta() : {}
