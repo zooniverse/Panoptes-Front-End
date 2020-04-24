@@ -27,9 +27,10 @@ export default class TalkTags extends React.Component {
     const { params, project } = this.props
     const slugInURL = (params) ? `${params.owner}/${params.name}` : '';
     const slugInProject = (project) ? project.slug : '';
-    console.log('slugInProject', slugInProject)
-    console.log('slugInURL', slugInURL)
+    console.log('cdm slugInProject', slugInProject)
+    console.log('cdm slugInURL', slugInURL)
     if (slugInURL === slugInProject) {
+      console.log('cdm calling getTags')
       this.getTags()
     }
   }
@@ -38,9 +39,15 @@ export default class TalkTags extends React.Component {
     const pageChanged = nextProps.location.query.page !== this.props.location.query.page
     const differentTag = nextProps.params.tag !== this.props.params.tag
     const differentProject = nextProps.project !== this.props.project
+    const { params, project } = this.props
+    const slugInURL = (params) ? `${params.owner}/${params.name}` : '';
+    const slugInProject = (project) ? project.slug : '';
+    console.log('cwrp slugInProject', slugInProject)
+    console.log('cwrp slugInURL', slugInURL)
 
     if (pageChanged || differentTag || differentProject) {
       const nextPage = (differentTag) ? 1 : nextProps.location.query.page
+      console.log('cwrp calling getTags')
       this.getTags(nextPage, nextProps.params.tag)
     }
   }
