@@ -19,12 +19,12 @@ const project = {
   slug: 'zooniverse/snapshot-cats'
 }
 
-describe.only('TalkTags', function () {
+describe('TalkTags', function () {
   it('should render without crashing', function () {
     const wrapper = shallow(
       <TalkTags location={location} params={params} project={project} />,
-      { disableLifecycleMethods: true }
+      { context: { router: { goBack: () => {} } }, disableLifecycleMethods: true }
     );
-    expect(wrapper).to.be.ok()
+    expect(wrapper).to.be.ok
   })
 });
