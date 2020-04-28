@@ -52,7 +52,6 @@ describe('FeaturedProjects', function () {
   });
 
   it('should have an h2 tag containing the text "Featured Project"', function () {
-    console.log(wrapper.debug())
     const title = wrapper.find('h2');
     expect(title.text()).to.equal('Featured Projects');
   });
