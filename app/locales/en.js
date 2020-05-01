@@ -66,6 +66,7 @@ export default {
     },
     classifyPage: {
       dark: 'dark',
+      fieldGuide: 'Field Guide',
       light: 'light',
       title: 'Classify',
       themeToggle: 'Switch to %(theme)s theme'
