@@ -74,7 +74,7 @@ export default class TalkTags extends React.Component {
       <div className="talk-search">
         <h1>Subjects tagged with {this.props.params.tag}</h1>
 
-        <button className="link-style" type="button" onClick={this.context.router.goBack}>
+      <button className="link-style" type="button" onClick={this.context.router.goBack}>
         <i className="fa fa-backward" /> Back
       </button>
 
