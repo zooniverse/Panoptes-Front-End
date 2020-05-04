@@ -68,9 +68,9 @@ export default {
         subjects: 'Subjects'
       },
       talk: {
-        zero: 'No one is talking about <strong>%(title)s</strong> right now.',
-        one: '<strong>1</strong> person is talking about <strong>%(title)s</strong> right now.',
-        other: '<strong>%(count)s</strong> people are talking about <strong>%(title)s</strong> right now.'
+        zero: 'No one is talking about **%(title)s** right now.',
+        one: '**1** person is talking about **%(title)s** right now.',
+        other: '**%(count)s** people are talking about **%(title)s** right now.'
       },
       joinIn: 'Join in',
       learnMore: 'Learn more',
