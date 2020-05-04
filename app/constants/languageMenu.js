@@ -8,6 +8,7 @@ export default {
   fr: 'Francais',
   he: 'עברית',
   hi: 'हिन्दी',
+  hr: 'Hrvatski',
   it: 'Italiano',
   ja: '日本人',
   kn: 'ಕನ್ನಡ',
