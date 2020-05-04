@@ -7,7 +7,7 @@ import counterpart from 'counterpart';
 import apiClient from 'panoptes-client/lib/api-client';
 import LoginDialog from '../partials/login-dialog';
 import alert from '../lib/alert';
-import FeaturedProject from './home-common/featured-project';
+import FeaturedProjects from './home-common/featured-projects';
 import HomePageSocial from './home-common/social';
 import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
@@ -28,7 +28,7 @@ export default class HomePage extends React.Component {
     this.resizeTimeout = NaN;
     this.state = {
       count: 0,
-      featuredProject: null,
+      featuredProjects: [],
       promotedProjects: [],
       screenWidth: 0,
       volunteerCount: 0
@@ -54,8 +54,8 @@ export default class HomePage extends React.Component {
   getFeaturedProject() {
     const query = { featured: true, launch_approved: true, cards: true };
     return apiClient.type('projects').get(query)
-      .then(([featuredProject]) => {
-        this.setState({ featuredProject });
+      .then((featuredProjects) => {
+        this.setState({ featuredProjects });
       });
   }
 
@@ -138,7 +138,7 @@ export default class HomePage extends React.Component {
         </div>
 
         <div className="flex-container">
-          <FeaturedProject project={this.state.featuredProject} />
+          <FeaturedProjects projects={this.state.featuredProjects} />
         </div>
 
         <div className="flex-container">

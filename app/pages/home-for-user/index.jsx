@@ -12,7 +12,7 @@ import MyBuildsSection from './my-builds';
 import HomePageSocial from '../home-common/social';
 import getColorFromString from '../../lib/get-color-from-string';
 import mediaActions from '../lab/actions/media';
-import FeaturedProject from '../home-common/featured-project';
+import FeaturedProjects from '../home-common/featured-projects';
 
 const SECTIONS = {
   projects: RecentProjectsSection,
@@ -26,7 +26,7 @@ export default class HomePageForUser extends React.Component {
     super(props);
     this.state = {
       backgroundSrc: '',
-      featuredProject: null,
+      featuredProjects: [],
       totalClassifications: 0,
       ribbonData: [],
       loading: false,
@@ -45,7 +45,7 @@ export default class HomePageForUser extends React.Component {
 
   componentDidMount() {
     this.fetchRibbonData(this.props.user);
-    this.getFeaturedProject();
+    this.getFeaturedProjects();
     this.handleHashChange();
   }
 
@@ -69,11 +69,11 @@ export default class HomePageForUser extends React.Component {
     this.setState({ OpenSectionComponent });
   }
 
-  getFeaturedProject() {
+  getFeaturedProjects() {
     const query = { featured: true, launch_approved: true, cards: true };
     return apiClient.type('projects').get(query)
-      .then(([featuredProject]) => {
-        this.setState({ featuredProject });
+      .then((featuredProjects) => {
+        this.setState({ featuredProjects });
       });
   }
 
@@ -249,7 +249,7 @@ export default class HomePageForUser extends React.Component {
 
   render() {
     if (!this.props.user) return null;
-    const { featuredProject, OpenSectionComponent } = this.state;
+    const { featuredProjects, OpenSectionComponent } = this.state;
     return (
       <div className="on-home-page" ref={(node) => { this.node = node; }}>
         <div className="home-page-for-user">
@@ -294,7 +294,7 @@ export default class HomePageForUser extends React.Component {
           </div>
         </div>
 
-        <FeaturedProject project={featuredProject} />
+        <FeaturedProjects projects={featuredProjects} />
 
         <HomePageSocial />
 
