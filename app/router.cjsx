@@ -58,6 +58,7 @@ createReactClass = require 'create-react-class'
 `import DevClassifierPage from './pages/dev-classifier';`
 `import Resources from './pages/about/resources-page';`
 `import DataExports from './pages/lab/data-exports';`
+`import TalkTags from './talk/tags';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = createReactClass
@@ -173,7 +174,7 @@ module.exports =
         <Route path="moderations" component={require './talk/moderations'} />
         <Route path="subjects/:id" component={SubjectPageController} />
         <Route path="recents/:board" component={require './talk/recents'} />
-        <Route path="tags/:tag" component={require './talk/tags'} />
+        <Route path="tags/:tag" component={TalkTags} />
         <Route path=":board" component={require './talk/board'} />
         <Route path=":board/:discussion" component={require './talk/discussion'} />
       </Route>
