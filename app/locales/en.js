@@ -738,7 +738,7 @@ export default {
       toDownload: '**To download a free electronic copy:**',
       download: 'Please click [here](https://bit.ly/zoonibook19-pdf-new) to download a free electronic copy of ‘Into the Zooniverse’.',
       toOrder: '**To order a hard copy:**',
-      order: 'Please click [here](http://bit.ly/zoonibook19-buy) if you would like to order a hard copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
+      order: 'Please click [here](https://bit.ly/zoonibook19-buy-new) if you would like to order a hard copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
       credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
     },
     donate: {
