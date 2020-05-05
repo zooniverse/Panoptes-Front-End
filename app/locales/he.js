@@ -1,22 +1,22 @@
 export default {
-  loading: '(Loading)',
+  loading: '(בטעינה)',
   classifier: {
-    back: 'Back',
-    backButtonWarning: 'Going back will clear your work for the current task.',
-    close: 'Close',
-    continue: 'Continue',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
+    back: 'אחורה',
+    backButtonWarning: 'חזרה אחורה תבטל את התשובה שסימנתם/ן',
+    close: 'סגור',
+    continue: 'המשך',
+    done: 'שמור',
+    doneAndTalk: 'שמור ועבור לשיחה',
     dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: 'Let’s go!',
-    next: 'Next',
+    letsGo: '!בואו נתחיל',
+    next: 'הלאה',
     optOut: 'Opt out',
     taskTabs: {
-      taskTab: 'Task',
-      tutorialTab: 'Tutorial'
+      taskTab: 'משימה',
+      tutorialTab: 'הדרכה'
     },
-    recents: 'Your recent classifications',
-    talk: 'Talk',
+    recents: 'הקיטלוגים האחרונים שלך',
+    talk: 'שיחה',
     taskHelpButton: 'Need some help with this task?',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
@@ -26,58 +26,58 @@ export default {
     }
   },
   project: {
-    loading: 'Loading project',
+    loading: 'פרויקט בטעינה',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
     about: {
-      header: 'About',
+      header: 'אודות',
       nav: {
-        research: 'Research',
-        results: 'Results',
-        faq: 'FAQ',
-        education: 'Education',
-        team: 'The Team',
+        research: 'מחקר',
+        results: 'תוצאות',
+        faq: 'שאלות נפוצות',
+        education: 'מידע חינוכי',
+        team: 'צוות',
       }
     },
     nav: {
-      about: 'About',
+      about: 'אודות',
       adminPage: 'Admin page',
-      classify: 'Classify',
-      collections: 'Collect',
+      classify: 'קיטלוג',
+      collections: 'אוספים',
       exploreProject: 'Explore Project',
       lab: 'Lab',
-      recents: 'Recents',
-      talk: 'Talk',
+      recents: 'לאחרונה',
+      talk: 'שיחה',
       underReview: 'Under Review',
       zooniverseApproved: 'Zooniverse Approved'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
-      title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
-    },
+      dark: 'כהה',
+      light: 'בהיר',
+      title: 'קיטלוג',
+      themeToggle: '%(theme)s החלף לרקע'
+    },  
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',
       about: 'About %(title)s',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
-        volunteers: 'Volunteers',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
+        statistics: 'סטטיסטיקות',
+        classifications: 'קיטלוגים',
+        volunteers: 'משתתפים',
+        completedSubjects: 'פריטים הושלמו',
+        subjects: 'פריטים'
       },
       talk: {
-        zero: 'No one is talking about <strong>%(title)s</strong> right now.',
-        one: '<strong>1</strong> person is talking about <strong>%(title)s</strong> right now.',
-        other: '<strong>%(count)s</strong> people are talking about <strong>%(title)s</strong> right now.'
+      	zero: 'כרגע <strong>%(title)s</strong> אף אחד לא משוחח על'
+		one: 'כרגע <strong>%(title)s</strong> משוחח על <strong>1</strong> אדם' 
+		other: 'כרגע <strong>%(title)s</strong> אנשים משוחחים על <strong>%(count)s</strong>'
       },
-      joinIn: 'Join in',
-      learnMore: 'Learn more',
-      getStarted: 'Get started',
+      joinIn: 'הצטרפו לשיחה',
+      learnMore: 'למידע נוסף',
+      getStarted: 'בואו נתחיל',
       workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
       visitLink: 'Visit the project',
-      links: 'External Project Links'
+      links: 'קישורים חיצוניים'
     }
   },
   organization: {
@@ -255,7 +255,8 @@ export default {
       whatIsZooniverse: 'The Zooniverse is the world’s largest and most popular platform for people-powered research. This research is made possible by volunteers — more than a million people around the world who come together to assist professional researchers. Our goal is to enable research that would not be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community, and [many publications](/about/publications).',
       anyoneCanResearch: '### At the Zooniverse, anyone can be a researcher\n\nYou don’t need any specialised background, training, or expertise to participate in any Zooniverse projects. We make it easy for anyone to contribute to real academic research, on their own computer, at their own convenience.\n\nYou’ll be able to study authentic objects of interest gathered by researchers, like images of faraway galaxies, historical records and diaries, or videos of animals in their natural habitats. By answering simple questions about them, you’ll help contribute to our understanding of our world, our history, our Universe, and more.\n\nWith our wide-ranging and ever-expanding suite of projects, covering many disciplines and topics across the sciences and humanities, there\'s a place for anyone and everyone to explore, learn and have fun in the Zooniverse. To volunteer with us, just go to the [Projects](/projects) page, choose one you like the look of, and get started.',
       accelerateResearch: '### We accelerate important research by working together\n\nThe major challenge of 21st century research is dealing with the flood of information we can now collect about the world around us. Computers can help, but in many fields the human ability for pattern recognition — and our ability to be surprised — makes us superior. With the help of Zooniverse volunteers, researchers can analyze their information more quickly and accurately than would otherwise be possible, saving time and resources, advancing the ability of computers to do the same tasks, and leading to faster progress and understanding of the world, getting to exciting results more quickly.\n\nOur projects combine contributions from many individual volunteers, relying on a version of the ‘wisdom of crowds’ to produce reliable and accurate data. By having many people look at the data we often can also estimate how likely we are to make an error. The product of a Zooniverse projects is often exactly what’s needed to make progress in many fields of research.',
-      discoveries: '### Volunteers and professionals make real discoveries together\n\nZooniverse projects are constructed with the aim of converting volunteers\' efforts into measurable results. These projects have produced a large number of [published research papers](/about/publications), as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have even made completely unexpected and scientifically significant discoveries.\n\nA significant amount of this research takes place on the Zooniverse discussion boards, where volunteers can work together with each other and with the research teams. These boards are integrated with each project to allow for everything from quick hashtagging to in-depth collaborative analysis. There is also a central Zooniverse board for general chat and discussion about Zooniverse-wide matters.\n\nMany of the most interesting discoveries from Zooniverse projects have come from discussion between volunteers and researchers. We encourage all users to join the conversation on the discussion boards for more in-depth participation.'
+      discoveries: '### Volunteers and professionals make real discoveries together\n\nZooniverse projects are constructed with the aim of converting volunteers\' efforts into measurable results. These projects have produced a large number of [published research papers](/about/publications), as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have even made completely unexpected and scientifically significant discoveries.\n\nA significant amount of this research takes place on the Zooniverse discussion boards, where volunteers can work together with each other and with the research teams. These boards are integrated with each project to allow for everything from quick hashtagging to in-depth col
+      orative analysis. There is also a central Zooniverse board for general chat and discussion about Zooniverse-wide matters.\n\nMany of the most interesting discoveries from Zooniverse projects have come from discussion between volunteers and researchers. We encourage all users to join the conversation on the discussion boards for more in-depth participation.'
     },
     publications: {
       nav: {
