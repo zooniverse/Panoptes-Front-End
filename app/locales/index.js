@@ -7,6 +7,7 @@ export default {
   fr: require('./fr').default,
   he: require('./he').default,
   hi: require('./hi').default,
+  hr: require('./hr').default,
   it: require('./it').default,
   ja: require('./ja').default,
   kn: require('./kn').default,

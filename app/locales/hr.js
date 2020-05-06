@@ -1,109 +1,162 @@
 export default {
-  loading: '(בטעינה)',
+  loading: '(Loading)',
   classifier: {
-    back: 'אחורה',
-    backButtonWarning: 'חזרה אחורה תבטל את התשובה שסימנתם/ן',
-    close: 'סגור',
-    continue: 'המשך',
-    done: 'שמור',
-    doneAndTalk: 'שמור ועבור לשיחה',
+    back: 'Back',
+    backButtonWarning: 'Going back will clear your work for the current task.',
+    close: 'Close',
+    continue: 'Continue',
+    detailsSubTaskFormSubmitButton: 'OK',
+    done: 'Done',
+    doneAndTalk: 'Done & Talk',
     dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: '!בואו נתחיל',
-    next: 'הלאה',
+    letsGo: 'Let’s go!',
+    next: 'Next',
     optOut: 'Opt out',
     taskTabs: {
-      taskTab: 'משימה',
-      tutorialTab: 'הדרכה'
+      taskTab: 'Task',
+      tutorialTab: 'Tutorial'
     },
-    recents: 'הקיטלוגים האחרונים שלך',
-    talk: 'שיחה',
+    recents: 'Your recent classifications',
+    talk: 'Talk',
     taskHelpButton: 'Need some help with this task?',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
       acceptButton: 'Take me to the next level!',
       declineButton: 'No, thanks'
+    },
+    interventions: {
+      optOut: 'Do not show me further messages.',
+      studyInfo: 'I do not want to take part in this messaging [study](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
+    }
+  },
+  projects: {
+    welcome: {
+      heading: "Welcome! We're so glad you're here",
+      thanks: "Thank you for your interest in helping real research. Here we've gathered a few projects we could really use your help on right now. For more options just scroll down to browse all of our active projects.",
+      talk: "Make sure to also check out [Talk](/talk) where you can chat to other like-minded volunteers.",
+      scrollDown: "Scroll down for even more"
     }
   },
   project: {
-    loading: 'פרויקט בטעינה',
+    language: 'Language',
+    loading: 'Loading project',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
     about: {
-      header: 'אודות',
+      header: 'About',
       nav: {
-        research: 'מחקר',
-        results: 'תוצאות',
-        faq: 'שאלות נפוצות',
-        education: 'מידע חינוכי',
-        team: 'צוות',
+        research: 'Research',
+        results: 'Results',
+        faq: 'FAQ',
+        education: 'Education',
+        team: 'The Team',
       }
     },
     nav: {
-      about: 'אודות',
+      about: 'About',
       adminPage: 'Admin page',
-      classify: 'קיטלוג',
-      collections: 'אוספים',
+      classify: 'Classify',
+      collections: 'Collect',
       exploreProject: 'Explore Project',
       lab: 'Lab',
-      recents: 'לאחרונה',
-      talk: 'שיחה',
+      recents: 'Recents',
+      talk: 'Talk',
       underReview: 'Under Review',
       zooniverseApproved: 'Zooniverse Approved'
     },
     classifyPage: {
-      dark: 'כהה',
-      light: 'בהיר',
-      title: 'קיטלוג',
-      themeToggle: '%(theme)s החלף לרקע'
-    },  
+      dark: 'dark',
+      light: 'light',
+      title: 'Classify',
+      themeToggle: 'Switch to %(theme)s theme'
+    },
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',
       about: 'About %(title)s',
       metadata: {
-        statistics: 'סטטיסטיקות',
-        classifications: 'קיטלוגים',
-        volunteers: 'משתתפים',
-        completedSubjects: 'פריטים הושלמו',
-        subjects: 'פריטים'
+        statistics: '%(title)s Statistics',
+        classifications: 'Classifications',
+        volunteers: 'Volunteers',
+        completedSubjects: 'Completed Subjects',
+        subjects: 'Subjects'
       },
       talk: {
-      	zero: 'כרגע ***%(title)s*** אף אחד לא משוחח על',
-		    one: 'כרגע ***%(title)s*** אדם ***1*** משוחח על', 
-		    other: 'כרגע ***%(title)s*** אנשים משוחחים על ***%(count)s***'
+        zero: 'No one is talking about **%(title)s** right now.',
+        one: '**1** person is talking about **%(title)s** right now.',
+        other: '**%(count)s** people are talking about **%(title)s** right now.'
       },
-      joinIn: 'הצטרפו לשיחה',
-      learnMore: 'למידע נוסף',
-      getStarted: 'בואו נתחיל',
+      joinIn: 'Join in',
+      learnMore: 'Learn more',
+      getStarted: 'Get started',
       workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
       visitLink: 'Visit the project',
-      links: 'קישורים חיצוניים'
+      links: 'External Project Links'
     }
   },
   organization: {
     error: 'There was an error retrieving organization',
     home: {
-      introduction: 'Introduction',
-      links: 'Links',
+      about: 'About %(title)s',
+      introduction: '%(title)s Introduction',
+      learn: 'Learn more about %(title)s',
+      links: 'Connect with %(title)s',
       metadata: {
-        projects: 'Projects'
+        complete: 'Percent complete',
+        heading: 'Organization Statistics',
+        numbers: 'By the numbers',
+        projects: 'Projects',
+        subtitle: 'Keep track of the progress you and your fellow volunteers have made on this project.',
+        text: 'Every click counts! Join %(title)s\'s community to complete this project and help researchers produce important results.'
       },
       projects: {
+        active: 'Active Projects',
+        all: 'All',
         error: 'There was an error loading organization projects.',
+        finished: 'Finished Projects',
+        hideSection: 'Hide Section',
         loading: 'Loading organization projects...',
-        none: 'There are no projects associated with this organization.'
+        none: 'There are no %(state)s %(category)s projects associated with this organization.',
+        paused: 'Paused Projects',
+        projectCategory: 'Project Category',
+        showSection: 'Show Section'
       },
-      readLess: 'Read Less',
-      readMore: 'Read More',
-      researcher: 'Words from a researcher',
-      viewToggle: 'View As Volunteer'
+      researcher: 'Message from the Researcher',
+      viewToggle: 'View as volunteer'
     },
     loading: 'Loading organization',
     notFound: 'organization not found.',
     notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...'
+    pleaseWait: 'Please wait...',
+    stats: {
+      adjustParameters: 'Adjust Parameters',
+      byTheNumbers: 'By the Numbers',
+      byTheNumbersContent: {
+        classifications: 'Classifications',
+        firstProject: 'First Project',
+        firstProjectLaunch: 'First Project Launch Date',
+        liveProjects: 'Live Projects',
+        pausedProjects: 'Paused Projects',
+        retiredProjects: 'Retired Projects',
+        retiredSubjects: 'Completed Subjects',
+        subjects: 'Subjects'
+      },
+      classification: 'Classifications',
+      comment: 'Talk Comments',
+      dateRange: 'Date range',
+      expandWorkflowStats: 'Expand Workflow Stats',
+      for: 'for',
+      hidden: 'Stats hidden',
+      hourly: 'Hourly data only available for the most recent 2 weeks.',
+      organizationStatistics: '%(title)s Statistics',
+      perclassification: 'Classifications per',
+      percomment: 'Comments per',
+      projectStats: 'Live Projects (%(count)s)',
+      reset: 'Reset view'
+    }
   },
   tasks: {
+    hidePreviousMarks: 'Hide previous marks %(count)s',
     less: 'Less',
     more: 'More',
     shortcut: {
@@ -130,21 +183,21 @@ export default {
   privacy: {
     title: 'Zooniverse User Agreement and Privacy Policy',
     userAgreement: {
-      summary: '## User Agreement\n**Summary**\n\nThe Zooniverse is a suite of citizen science projects operated by the Citizen Science Alliance (CSA), which support scientific research by involving members of the public - you - in the processes of analyzing and discussing data. Data from these projects is used to study online community design and theory, interface design, and other topics. This document describes what will happen to your contributions if you choose to contribute and what data we collect, how we use it and how we protect it.',
-      contribution: '**What you agree to if you contribute to the Zooniverse**\n\nProjects involving the public are needed to enable researchers to cope with the otherwise unmanageable flood of data. The web provides a means of reaching a large audience willing to devote their free time to projects that can add to our knowledge of the world and the Universe.\n\nThe major goal for this project is for the analyzed data to be available to the researchers for use, modification and redistribution in order to further scientific research. Therefore, if you contribute to the Zooniverse, you grant the CSA and its collaborators, permission to use your contributions however we like to further this goal, trusting us to do the right thing with your data. However, you give us this permission non-exclusively, meaning that you yourself still own your contribution.\n\nWe ask you to grant us these broad permissions, because they allow us to change the legal details by which we keep the data available; this is important because the legal environment can change and we need to be able to respond without obtaining permission from every single contributor.\n\nFinally, you must not contribute data to the Zooniverse that you do not own. For example, do not copy information from published journal articles. If people do this, it can cause major legal headaches for us.',
+      summary: '## User Agreement\n**Summary**\n\nThe Zooniverse is a suite of citizen science projects operated by research groups in several institutions which support scientific research by involving members of the public - you - in the processes of analyzing and discussing data. Data from these projects is used to study online community design and theory, interface design, and other topics. This document describes what will happen to your contributions if you choose to contribute and what data we collect, how we use it and how we protect it.',
+      contribution: '**What you agree to if you contribute to the Zooniverse**\n\nProjects involving the public are needed to enable researchers to cope with the otherwise unmanageable flood of data. The web provides a means of reaching a large audience willing to devote their free time to projects that can add to our knowledge of the world and the Universe.\n\nThe major goal for this project is for the analyzed data to be available to the researchers for use, modification and redistribution in order to further scientific research. Therefore, if you contribute to the Zooniverse, you grant us and our collaborators permission to use your contributions however we like to further this goal, trusting us to do the right thing with your data. However, you give us this permission non-exclusively, meaning that you yourself still own your contribution.\n\nWe ask you to grant us these broad permissions, because they allow us to change the legal details by which we keep the data available; this is important because the legal environment can change and we need to be able to respond without obtaining permission from every single contributor.\n\nFinally, you must not contribute data to the Zooniverse that you do not own. For example, do not copy information from published journal articles. If people do this, it can cause major legal headaches for us.',
       data: '**What you may do with Zooniverse data**\n\nYou retain ownership of any contribution you make to the Zooniverse, and any recorded interaction with the dataset associated with the Zooniverse. You may use, distribute or modify your individual contribution in any way you like. However, you do not possess ownership of the dataset itself. This license does not apply to data about you, covered in the Privacy Policy.',
-      legal: '**Legal details**\n\nBy submitting your contribution to the Zooniverse, you agree to grant the CSA a perpetual, royalty-free, non-exclusive, sub-licensable license to: use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, and exercise all copyright and publicity rights with respect to your contribution worldwide and/or to incorporate your contribution in other works in any media now known or later developed for the full term of any rights that may exist in your contribution.\n\nIf you do not want to grant to the CSA the rights set out above, you cannot interact with the Zooniverse.\n\nBy interacting with the Zooniverse, you:\n\n* Warrant that your contribution contains only data that you have the right to make available to the CSA for all the purposes specified above, is not defamatory, and does not infringe any law; and\n\n* Indemnify the CSA against all legal fees, damages and other expenses that may be incurred by the CSA as a result of your breach of the above warranty; and\n\n* Waive any moral rights in your contribution for the purposes specified above.\n\nThis license does not apply to data about you, covered in the Privacy Policy.'
+      legal: '**Legal details**\n\nBy submitting your contribution to the Zooniverse, you agree to grant us a perpetual, royalty-free, non-exclusive, sub-licensable license to: use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, and exercise all copyright and publicity rights with respect to your contribution worldwide and/or to incorporate your contribution in other works in any media now known or later developed for the full term of any rights that may exist in your contribution.\n\nIf you do not want to grant to us the rights set out above, you cannot interact with the Zooniverse.\n\nBy interacting with the Zooniverse, you:\n\n* Warrant that your contribution contains only data that you have the right to make available to us for all the purposes specified above, is not defamatory, and does not infringe any law; and\n\n* Indemnify us against all legal fees, damages and other expenses that may be incurred by us as a result of your breach of the above warranty; and\n\n* Waive any moral rights in your contribution for the purposes specified above.\n\nThis license does not apply to data about you, covered in the Privacy Policy.'
     },
     privacyPolicy: {
-      intro: '## Privacy Policy\n\nIn addition to the contributions you make towards the scientific goals of the Zooniverse, we collect additional data about you to support and improve the operation of the project. We also conduct experiments on the design of the website that we evaluate based on your reactions and behavior. This Privacy Policy describes what data we collect, how we use it and how we protect it.\n\nWe respect the privacy of every individual who participates in the Zooniverse. We operate in accordance with the United Kingdom Data Protection Act 1998 and the Freedom of Information Act 2000, as well as with United States regulations regarding protection of human subjects in research.',
-      data: '**Data we collect**\n\n_Identifying information_: If you register with the Zooniverse, we ask you to create a username and supply your e-mail address. Your e-mail address is not visible to other users, but others will see your username in various contexts. Notably, your username is associated with any classifications or other contributions you make, e.g., on Talk pages. You may optionally provide your real name to be included when we publically thank participants, e.g., in presentations, publications or discoveries.\n\n_Usage information_: We also monitor how people use our website, and aggregate general statistics about users and traffic patterns as well as data about how users respond to various site features. This includes, among other things, recording:\n\n* When you log in.\n\n* Pages you request.\n\n* Classifications you make.\n\n* Other contributions, such as posts on Talk pages.\n\nIf you register and log in, the logs associate these activities with your username. Otherwise, they are associated with your IP address. In order to collect this data, we may use software that collects statistics from IP data. This software can determine what times of day people access our site, which country they access the websites from, how long they visit for, what browser they are using, etc.',
-      info: '**What we do with the information we gather**\n\nUsage information is collected to help us improve our website in particular for the following reasons:\n\n* Internal record keeping.\n\n* We may periodically send email promoting new research-related projects or other information relating to our research. Information about these contacts is given below. We will not use your contact information for commercial purposes.\n\n* We may use the information to customize the website.\n\n* We may use the information to conduct experiments regarding the use of various site features.',
-      thirdParties: '**What is shared with third parties**\n\nWe will never release e-mail addresses to third parties without your express permission. We will also never share data we collect about you unless (a) it cannot be associated with you or your username, and (b) it is necessary to accomplish our research goals. Specifically, we may share your anonymized data with research study participants, other researchers, or in scholarly work describing our research. For example, we might use one of your classifications as an illustration in a paper, show some of your classifications to another user to see if they agree or disagree, or publish statistics about user interaction.\n\nContributions you make to the Talk pages are widely available to others. Aside from the above, information is held as confidentially as is practical within our secured database.',
-      cookies: '**How we use cookies**\n\nIn some areas of our site, a cookie may be placed on your computer. A cookie is a small file that resides on your computer\'s hard drive that allows us to improve the quality of your visit to our websites by responding to you as an individual.\n\nWe use traffic log cookies to identify which pages are being used and improve our website. We only use this information for statistical analysis purposes, they are not shared with other sites and are not used for advertisements.\n\nYou can choose to accept or decline cookies. Most web browsers automatically accept cookies, but you can usually modify your browser setting to decline cookies if you prefer. However, if you choose to decline cookies from the Zooniverse then functionality, including your ability to log-in and participate, will be impaired.\n\nAcceptance of cookies is implied if you continue to access our website without adjusting your browser settings.',
-      dataStorage: '**Where we store your data**\n\nWe use Amazon Web Services so we can quickly and reliably serve our website to an unpredictable number of people. This means that your data will be stored in multiple locations, including the United States of America (USA). Amazon is a participant in the Safe Harbor program developed by the USA Department of Commerce and the European Union (EU). Amazon has certified that it adheres to the Safe Harbor Privacy Principles agreed upon by the USA and the EU.\n\nOur mailing list server, which contains a copy of subscribed email addresses and no other personal data, is hosted on a virtual private server with Linode in the UK.',
+      intro: '## Privacy Policy\n\nIn addition to the contributions you make towards the scientific goals of the Zooniverse, we collect additional data about you to support and improve the operation of the project. We also conduct experiments on the design of the website that we evaluate based on your reactions and behavior. This Privacy Policy describes what data we collect, how we use it and how we protect it.\n\nWe respect the privacy of every individual who participates in the Zooniverse. We operate in accordance with the General Data Protection Regulation and the Freedom of Information Act 2000, as well as with United Kingdom and United States regulations regarding protection of human subjects in research.',
+      data: '**Data we collect**\n\n_Identifying information_: If you register with the Zooniverse, we ask you to create a username and supply your e-mail address. Your e-mail address is not visible to other users, but others will see your username in various contexts. Notably, your username is associated with any classifications or other contributions you make, including on comments submitted to Talk, the discussion forums hosted by the Zooniverse. You may optionally provide your real name to be included when we publically thank participants, e.g., in presentations, publications or discoveries.\n\n_Usage information_: We also monitor how people use our website, and aggregate general statistics about users and traffic patterns as well as data about how users respond to various site features. This includes, among other things, recording:\n\n* When you log in.\n\n* Pages you request.\n\n* Classifications you make.\n\n* Other contributions, such as posts on Talk pages.\n\nIf you register and log in, the logs associate these activities with your username. Otherwise, they are solely associated with your IP address. In order to collect this data, we may use software such as Google Analytics that collects statistics from IP data. This software can determine what times of day people access our site, which country they access the websites from, how long they visit for, along with technical details of their computer (browser, screen type, processor).',
+      info: '**What we do with the information we gather**\n\nUsage information is collected to help us improve our website, and for the following reasons:\n\n* Internal record keeping.\n\n* If you agree, we will periodically send email promoting new research-related projects or other information relating to our research. Information about these contacts is given below. We will not use your contact information for commercial purposes.\n\n* We will use the information to customize the website.\n\n* To conduct experiments regarding the use of site features.',
+      thirdParties: '**What is shared with third parties**\n\nWe will never release e-mail addresses to third parties without your express permission. We will also never share data we collect about your use of the site unless (a) it cannot be associated with you or your username, and (b) it is necessary to accomplish our research goals. Specifically, we can share your anonymized data with research study participants, other researchers, or in scholarly work describing our research. For example, we might use one of your classifications as an illustration in a paper, show some of your classifications to another user to see if they agree or disagree, or publish statistics about user interaction.\n\n If you choose to give us a `Publishable Name\' on registration, this is available to research teams in projects you have participated in for purposes of giving credit for your work in published papers and elsewhere.\n\nContributions you make to the Talk pages are widely available to others. Aside from the above, information is held within our secured database. Passwords are hashed rather than being stored in plain text.',
+      cookies: '**How we use cookies**\n\nIn some areas of our site, a cookie might be placed on your computer. A cookie is a small file that resides on your computer\'s hard drive that allows us to improve the quality of your visit to our websites by responding to you as an individual.\n\nWe use cookies to identify which pages are being used and improve our website. We only use this information for statistical analysis purposes, they are not shared with other sites and are not used for advertisements.\n\nYou can choose to accept or decline cookies. Most web browsers automatically accept cookies, but you can usually modify your browser setting to decline cookies if you prefer. However, if you choose to decline cookies from the Zooniverse then functionality, including your ability to log-in and participate, will be impaired.\n\nAcceptance of cookies is implied if you continue to access our website without adjusting your browser settings.',
+      dataStorage: '**Where we store your data**\n\nWe use Amazon Web Services so we can quickly and reliably serve our website to an unpredictable number of people. This means that your data will be stored in multiple locations, including the United States of America (USA). Amazon is a participant in the Privacy Shield program developed by the USA Department of Commerce and the European Union (EU). \n\nOur mailing list server, which contains a copy of subscribed email addresses and no other personal data, is hosted on a virtual private server with Linode in the UK.',
       security: '**Security measures**\n\nMembers of the research teams are made aware of our privacy policy and practices by reviewing this statement upon joining the team. We follow industry best practices to secure user data, and access to the database and logs are limited to members of the research group and system administrative staff.',
       dataRemoval: '**Removing your data**\n\nDue to the way in which we archive data, it is generally not possible to completely remove your personal data from our systems. However, if you have specific concerns, please contact us and we will see what we can do.',
-      contactUser: '**When we will contact you**\n\nIf you do not register, we will never contact you. If you do register, we will contact you by e-mail in the following circumstances:\n\n* Occasionally, we will send e-mail messages to you highlighting a particular aspect of our research, announcing new features, explaining changes to the system, or inviting you to special events.\n\n* We may also use your information to contact you for the purpose of research into our site\'s operation. We may contact you by email. We may ask for additional information at that time. Providing additional information is entirely optional and will in no way affect your service in the site.\n\n* We may contact you with a newsletter about the progress of the project.\n\nYou are unlikely to receive more than two messages per month.\n\nYou can \'opt out\' of the newsletter at any time by visiting the Zooniverse [unsubscribe](https://www.zooniverse.org/unsubscribe) page.',
+      contactUser: '**When we will contact you**\n\nIf you do not register, we will never contact you. If you do register, we will contact you by e-mail in the following circumstances:\n\n* Occasionally, we will send e-mail messages to you highlighting a particular aspect of our research, announcing new features, explaining changes to the system, or inviting you to special events.\n\n* We might also use your email to contact you for the purpose of research into our site\'s operation, and we might ask for additional information at that time. Any additional information will be held consitently with this policy, and participation in such studies is entirely optional and participating or otherwise will in no way affect your use of the site.\n\n* We might contact you with a newsletter about the progress of the project.\n\nYou can \'opt out\' of communications from any project or from the Zooniverse as a whole at any time by visiting the Zooniverse [unsubscribe](https://www.zooniverse.org/unsubscribe) page.',
       furtherInfo: '**Further information and requests**\n\nThe Data Controller is the Department of Physics, University of Oxford. For a copy of the information we hold on you please contact the project team at the address below:\n\nProfessor Chris Lintott\nOxford Astrophysics\nDenys Wilkinson Building\nKeble Road\nOxford, OX1 3RH\nUnited Kingdom'
     },
     youthPolicy: {
@@ -247,7 +300,9 @@ export default {
         acknowledgements: 'Acknowledgements',
         contact: 'Contact Us',
         faq: 'FAQ',
-        resources: 'Resources'
+        resources: 'Resources',
+        highlights: 'Highlights Book',
+        donate: 'Donate'
       }
     },
     home: {
@@ -255,8 +310,7 @@ export default {
       whatIsZooniverse: 'The Zooniverse is the world’s largest and most popular platform for people-powered research. This research is made possible by volunteers — more than a million people around the world who come together to assist professional researchers. Our goal is to enable research that would not be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community, and [many publications](/about/publications).',
       anyoneCanResearch: '### At the Zooniverse, anyone can be a researcher\n\nYou don’t need any specialised background, training, or expertise to participate in any Zooniverse projects. We make it easy for anyone to contribute to real academic research, on their own computer, at their own convenience.\n\nYou’ll be able to study authentic objects of interest gathered by researchers, like images of faraway galaxies, historical records and diaries, or videos of animals in their natural habitats. By answering simple questions about them, you’ll help contribute to our understanding of our world, our history, our Universe, and more.\n\nWith our wide-ranging and ever-expanding suite of projects, covering many disciplines and topics across the sciences and humanities, there\'s a place for anyone and everyone to explore, learn and have fun in the Zooniverse. To volunteer with us, just go to the [Projects](/projects) page, choose one you like the look of, and get started.',
       accelerateResearch: '### We accelerate important research by working together\n\nThe major challenge of 21st century research is dealing with the flood of information we can now collect about the world around us. Computers can help, but in many fields the human ability for pattern recognition — and our ability to be surprised — makes us superior. With the help of Zooniverse volunteers, researchers can analyze their information more quickly and accurately than would otherwise be possible, saving time and resources, advancing the ability of computers to do the same tasks, and leading to faster progress and understanding of the world, getting to exciting results more quickly.\n\nOur projects combine contributions from many individual volunteers, relying on a version of the ‘wisdom of crowds’ to produce reliable and accurate data. By having many people look at the data we often can also estimate how likely we are to make an error. The product of a Zooniverse projects is often exactly what’s needed to make progress in many fields of research.',
-      discoveries: '### Volunteers and professionals make real discoveries together\n\nZooniverse projects are constructed with the aim of converting volunteers\' efforts into measurable results. These projects have produced a large number of [published research papers](/about/publications), as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have even made completely unexpected and scientifically significant discoveries.\n\nA significant amount of this research takes place on the Zooniverse discussion boards, where volunteers can work together with each other and with the research teams. These boards are integrated with each project to allow for everything from quick hashtagging to in-depth col
-      orative analysis. There is also a central Zooniverse board for general chat and discussion about Zooniverse-wide matters.\n\nMany of the most interesting discoveries from Zooniverse projects have come from discussion between volunteers and researchers. We encourage all users to join the conversation on the discussion boards for more in-depth participation.'
+      discoveries: '### Volunteers and professionals make real discoveries together\n\nZooniverse projects are constructed with the aim of converting volunteers\' efforts into measurable results. These projects have produced a large number of [published research papers](/about/publications), as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have even made completely unexpected and scientifically significant discoveries.\n\nA significant amount of this research takes place on the Zooniverse discussion boards, where volunteers can work together with each other and with the research teams. These boards are integrated with each project to allow for everything from quick hashtagging to in-depth collaborative analysis. There is also a central Zooniverse board for general chat and discussion about Zooniverse-wide matters.\n\nMany of the most interesting discoveries from Zooniverse projects have come from discussion between volunteers and researchers. We encourage all users to join the conversation on the discussion boards for more in-depth participation.'
     },
     publications: {
       nav: {
@@ -278,6 +332,356 @@ export default {
       publication: {
         viewPublication: 'View publication.',
         viewOpenAccess: 'View open access version.'
+      }
+    },
+    team: {
+      nav: {
+        showAll: 'Show All',
+        oxford: 'Oxford',
+        chicago: 'The Adler Planetarium',
+        minnesota: 'Minnesota',
+        portsmouth: 'Portsmouth',
+        california: 'California',
+        hilo: 'Hilo',
+        alumni: 'Alumni'
+      },
+      content: {
+        header: {
+          showAll: 'Zooniverse Team'
+        },
+        adamMcMaster: {
+          title: 'Infrastructure Engineer',
+          bio: `Adam is responsible for managing the Zooniverse's web hosting infrastructure.,
+          He has a computer science degree and has worked in web hosting and development for many years.
+          He's also working on a degree in astronomy with the OU.`
+        },
+        alexBowyer: {
+          title: 'Web Science Architect',
+          bio: `Alex worked remotely for Zooniverse from his home in Northumberland.
+          He designed and ran Zooniverse experiments and developed infrastructure and front-end code. Alex
+          is a Dad of three, an improv player, a board gamer, and is running five half-marathons in 2016.`
+        },
+        alexWeiksnar: {
+          title: 'Developer',
+          bio: `Alex previously attended University of Miami, where he studied Psychology,
+          Biology, and English. Alex enjoys reading, coding, and sailing in his free time.`
+        },
+        aliSwanson: {
+          title: 'Researcher',
+          bio: `Ali spent most of her PhD chasing lions around the Serengeti. She finished
+          her PhD in Ecology, Evolution, and Behavior at the University of Minnesota in 2014,
+          and joined the Zooniverse as a Postdoc in Ecology and Citizen Science.`
+        },
+        amyBoyer: {
+          title: 'Developer',
+          bio: `Amy has been a Zooniverse developer at the Adler since November 2015. She holds a BS and
+          MS in computer science and has over a decade of industry experience. An aspiring astronomer as
+          a child, she couldn't be happier to have landed here.`
+        },
+        andreaSimenstad: {
+          title: 'Developer',
+          bio: `Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.`
+        },
+        arfonSmith: {
+          title: 'Technical Lead',
+          bio: `Arfon was co-founder and Technical Lead of the Zooniverse for the first five years of the project.
+          Arfon served as Director of Citizen Science at the Adler Planetarium and co-lead of the Zooniverse until fall 2013.`
+        },
+        beckyRother: {
+          title: 'Visual Designer',
+          bio: `Becky joined the Zooniverse team as designer in 2017. With a background in mobile apps and product design and a degree in journalism, she's excited to use her powers for good with the Zooniverse team.`
+        },
+        beverleyNewing: {
+          title: 'Web Developer Intern',
+          bio: `Beverley is an English and German literature graduate and worked as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.`
+        },
+        brianCarstensen: {
+          title: 'UX Developer',
+          bio: `Brian Carstensen moved from Chicago to Oxford and back again. Brian has a degree
+          in graphic design from Columbia College in Chicago, and worked in that field for a
+          number of years before finding a niche in web development.`
+        },
+        brookeSimmons: {
+          title: 'Researcher',
+          bio: `Brooke is an astrophysicist studying black holes, galaxies, and how citizen
+          science can be applied to other non-traditional problems.`
+        },
+        camAllen: {
+          title: 'Developer',
+          bio: `Responsible for building the Zooniverse's API infrastructure.
+          Cam considers himself a music and fine wine connoisseur - others do not.
+          In his spare time he enjoys playing an obscure form of rugby.`
+        },
+        chrisLintott: {
+          title: 'Zooniverse PI',
+          bio: `Astronomer and co-founder of both Galaxy Zoo and the Zooniverse that grew from it,
+          Chris is interested in how galaxies form and evolve, how citizen science can change the
+          world, and whether the Chicago Fire can get their act together.`
+        },
+        chrisSnyder: {
+          title: 'Project Manager',
+          bio: `Chris Snyder began working on the Zooniverse team in fall 2012 as a web developer. In July 2013,
+          he became the technical project manager. He received a degree in computer science from the University of Dayton.`
+        },
+        christopherDoogue: {
+          title: 'Project Assistant',
+          bio: `Chris supported the Zooniverse Oxford team from 2014-16. He had been with the Department
+          of Astrophysics for over 2 years administratively supporting various projects. A former trained actor,
+          he has the ability to look like he's smiling in the face of adversity!`
+        },
+        colemanKrawczyk: {
+          title: 'Data Scientist',
+          bio: `Coleman is helping to create new data analysis and visualization tools for existing Zooniverse
+          projects as well as identifying new projects within the University of Portsmouth. He received
+          his PhD in astrophysics from Drexel University.`
+        },
+        darrenMcRoy: {
+          title: 'Community Manager',
+          bio: `Darren (DZM) served as a liaison to the Zooniverse community and assisted with strategic
+          content for projects. A Northwestern University graduate in journalism, he is also a golf addict,
+          amateur author, and hopeless animal lover.`
+        },
+        darrylWright: {
+          title: 'Researcher',
+          bio: 'Darryl is doing machine learning research with the Zooniverse, based in Minnesota.'
+        },
+        grantMiller: {
+          title: 'Communications Lead',
+          bio: `A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
+          social media and publishes the Daily Zooniverse blog.`
+        },
+        hannahSewell: {
+          title: 'Web Development placement student',
+          bio: `Hannah is a PhD student in plant genetics from The University of Sheffield.
+          She is visiting Zooniverse on a placement to learn web development for a few months and is definitely not an intern.`
+        },
+        helenSpiers: {
+          title: 'Researcher',
+          bio: `After finishing a PhD studying the molecular basis of human brain development, Helen joined the Zooniverse as a Postdoc in citizen science and medical research.`
+        },
+        gregHines: {
+          title: 'Data Scientist',
+          bio: `Greg used machine learning and statistics to help projects analyse their volunteer
+          classifications. He has a PhD in Computer Science from University of Waterloo, Canada.
+          Greg loves to eat pancakes with real maple syrup and run ultramarathons.`
+
+        },
+        heathVanSingel: {
+          title: 'Designer',
+          bio: `Heath was the UX/UI Designer at the Zooniverse where he worked to craft thoughtful and
+          engaging user experiences. Apart from design, Heath also enjoys illustration, a good sci-fi or fantasy
+          novel, and exploring his new home in the Pacific Northwest.`
+        },
+        hughDickinson: {
+          title: 'Researcher',
+          bio: `Hugh is a postdoc studying the Zooniverse.`
+        },
+        jamesArtz: {
+          title: 'Developer',
+          bio: `James joined the Zooniverse team in 2017. Before discovering his passion for code,
+          he received a Ph.D in Mediterranean Archaeology from SUNY Buffalo, focusing on ancient Greece.
+          In his free time he enjoys wood working and the ancient art of fermentation.`
+        },
+        jimODonnell: {
+          title: 'UX Developer',
+          bio: `Professional cynic but his heart's not in it. Web developer for the Zooniverse,
+          Web Standards organiser, Amnesty UK activist.`
+        },
+        jenGupta: {
+          title: 'Educator',
+          bio: `Jen works on Galaxy Zoo education in her role as the SEPnet/Ogden Outreach Officer
+          for the Institute of Cosmology and Gravitation, and has a PhD in astrophysics. Active
+          galactic nuclei were her first love.`
+        },
+        jordanMartin: {
+          title: 'Visual Designer',
+          bio: `Jordan joined at the Adler Planetarium as Zooniverse's Visual Designer
+          starting in 2015. She spent her time making our user interfaces beautiful,
+          engaging, and a rewarding experience. At home she spends time with her
+          two cats and many houseplants.`
+        },
+        julieFeldt: {
+          title: 'Educator',
+          bio: `Julie has a background in space physics and museum studies. She works on educational
+          experiences, and Skype in the Classroom lessons for the Zooniverse. She loves to run, mostly
+          to compensate for her love of cupcakes and chocolate.`
+        },
+        karenMasters: {
+          title: 'Researcher',
+          bio: `Karen is an astronomer and the Project Scientist of Galaxy Zoo, which she's been
+          involved in as a researcher since 2008. She's particularly interested in the evolution of
+          spiral galaxies.`
+        },
+
+        kellyBorden: {
+          title: 'Educator',
+          bio: `With a background in museum education, Kelly joined the Zooniverse in 2011 to bring
+          an educator's perspective and spread the word amongst teachers and students. She's fond of
+          several C's: chocolate, cats, coffee, and more chocolate.`
+        },
+        kyleWillett: {
+          title: 'Researcher',
+          bio: `Kyle is an astronomer who studies galaxies, masers, and black holes (although he's
+          been getting more into data science). He worked on both Galaxy Zoo and Radio Galaxy Zoo,
+          and developed advanced tools for the volunteers.`
+        },
+        lauraTrouille: {
+          title: 'Zooniverse co-I',
+          bio: `In July 2015, Laura became Director of Citizen Science at the Adler Planetarium and
+          co-I of the Zooniverse. While earning her Ph.D. in 2010 studying galaxy evolution,
+          she embodied cosmic collisions as a roller derby queen aptly named ‘The Big Bang’.`
+        },
+        lauraWhyte: {
+          title: 'Adler Planetarium Zooniverse Director',
+          bio: `Laura was the Director of Citizen Science at Adler Planetarium and co-lead of the
+          Zooniverse from fall 2013 to summer 2015.`
+
+        },
+        lucyFortson: {
+          title: 'University of Minnesota Zooniverse Director',
+          bio: `Associate Professor of Physics and Astronomy at the University of Minnesota. One of the Zooniverse
+          co-founders, she helps with project wrangling (aka management) and strategic planning while trying
+          to squeeze a bit of galaxy evolution science in.`
+        },
+        mariamSaeedi: {
+          title: 'Web Developer Intern',
+          bio: `Mariam is the 2017 Web Development Intern at Zooniverse.
+          She is proficient with HTML and CSS and is currently learning JavaScript and Rails.`
+        },
+        markBouslog: {
+          title: 'Developer',
+          bio: `Mark is a front-end web developer for the Zooniverse team at the Adler Planetarium. Joining in
+          November 2015 from a career in accounting, he’s thrilled to focus his number crunching to 1’s and 0’s
+          and is constantly inspired and humbled by the power of programming, citizen science and coffee.`
+        },
+        martenVeldthuis: {
+          title: 'Developer',
+          bio: `Marten joined the development team in 2015. He has a degree in
+          computer science and enjoys crafting maintainable software. Marten learned about orbital
+          mechanics from Kerbal Space Program, and feels like he's therefore basically an astrophysicist.`
+        },
+        megSchwamb: {
+          title: 'Researcher',
+          bio: `Meg is a planetary scientist and astronomer involved in the Planet Four projects,
+          and Comet Hunters for which she is project scientist. She studies small bodies in the
+          Solar System, exoplanets, and Mars. Meg has a fondness for baking, soccer, and champagne.`
+        },
+        melanieBeck: {
+          title: 'Researcher',
+          bio: `A PhD student at the University of Minnesota, Melanie works on combining machine learning
+          with volunteer votes for classification tasks on the Galaxy Zoo project with the goal of classifying
+          *billions* of galaxies that future telescopes will see.`
+        },
+        michaelParrish: {
+          title: 'Rails/Backend Developer',
+          bio: `Software developer at the Zooniverse. He pwns databases daily. Dog, fishing, snakes, and bourbon.`
+        },
+        noahMalmed: {
+          title: 'Mobile App Developer',
+          bio: `Noah mainly has a background in mobile app development as well as some firmware and backend experience.
+          Outside of work, Noah enjoys cooking, baking and climbing.`
+        },
+        perryRoper: {
+          title: 'Developer',
+          bio: 'Perry was a developer with the Zooniverse, based in Oxford.'
+        },
+        rebeccaSmethurst: {
+          title: 'Researcher',
+          bio: `Becky is an astrophysicist working towards her doctorate in Oxford. She is
+          interested in how galaxies change over time and how we can track this evolution.
+          Happy-go-lucky about outreach, the Zooniverse and everything.`
+        },
+        robinSchaaf: {
+          title: 'Mobile App Developer',
+          bio: `Robin has a background in web development for educational institutions.  In her free time she enjoys board games and playing bass guitar.`
+        },
+        robertSimpson: {
+          title: 'Developer',
+          bio: `Robert was one of the founding developers of the Zooniverse, based in Oxford.
+          If you can keep your head when all around you are losing theirs, you are probably
+          Rob Simpson.`
+        },
+        rogerHutchings: {
+          title: 'Developer',
+          bio: `Roger builds front end interfaces for the Zooniverse, and enjoys coding, music and rebuilding
+          motorbikes in his spare time.`
+        },
+        ronaCostello: {
+          title: 'Web Development placement student',
+          bio: `Rona is a PhD student studying plant evolution at Oxford and has joined the Zooniverse to get some web development experience for a few months.
+          Enjoys movies, board games and hanging out under the sea.`
+        },
+        samanthaBlickhan: {
+          title: 'IMLS Postdoctoral Fellow',
+          bio: `Samantha Blickhan is the IMLS Postdoctoral Fellow in the Department of Citizen Science at the Adler Planetarium, working on transcription projects for the Zooniverse. She received her Ph.D. in Musicology from Royal Holloway, University of London, with a thesis on the palaeography of British song notation in the 12th and 13th centuries. Her research interests include music and perception, and their relationships with writing systems, technology and pedagogy.`
+        },
+        samuelAroney: {
+          title: 'Web Development placement student',
+          bio: `Samuel is a DPhil student studying the swimming behaviour of soil bacteria at Oxford.
+          He joined Zooniverse to learn professional coding skills and perhaps build something useful.`
+        },
+        sandorKruk: {
+          title: 'Researcher',
+          bio: `Sandor is a graduate student working on his PhD in Astrophysics at Oxford.
+          He is looking at how galaxies evolve using data from Galaxy Zoo and enjoys stargazing,
+          using telescopes, and dancing in his free time.`
+        },
+        sarahAllen: {
+          title: 'Developer',
+          bio: `Sarah Allen is a front-end web developer for the Zooniverse team at the Adler
+          Planetarium starting in September 2014. She also has a degree in music and enjoys cooking
+          and live concerts in her free time.`
+        },
+        saschaIshikawa: {
+          title: 'Developer',
+          bio: `Sascha joined the Zooniverse team in November 2013 as a front-end developer.
+          A former researcher and software developer at NASA Ames, he received degrees in both
+          computer science and mechanical engineering.`
+        },
+        shaunANoordin: {
+          title: 'Developer',
+          bio: `Shaun was raised by Nintendo consoles and somehow transformed his love
+          for video games into a love for creating interactive experiences. When not at
+          his PC playing games or reading comics, he's at his PC studying web design and
+          coding experimental apps.`
+        },
+        simoneDuca: {
+          title: 'Developer',
+          bio: `Simone joined the Zooniverse in 2015 as a frontend developer. In a previous life, he received a Phd in logic and philosophy
+          from Bristol. After moving "Up North", he joined another worthy cause in 2018.`
+        },
+        stuartLynn: {
+          title: 'Developer',
+          bio: `Stuart arrived at the Adler as a developer in July 2011, having been one of the founding
+          developers at Oxford. He studied mathematical physics at Edinburgh University and received his doctorate
+          in astrophysics from Royal Observatory Edinburgh. Data analysis maestro and web developer.`
+        },
+        steveRaden: {
+          title: 'Developer',
+          bio: 'Steve Raden was a developer at the Adler in Chicago.'
+        },
+        veronicaMaidel: {
+          title: 'Data Scientist',
+          bio: `Veronica is a Data Scientist who worked on discovering patterns in Zooniverse data, by manipulating
+          it and using it to create machine learning models. She received a PhD in Information Science and Technology
+          from Syracuse University.`
+        },
+        victoriaVanHyning: {
+          title: 'Researcher',
+          bio: `Victoria is a British Academy postdoctoral fellow in English at Oxford, and is the humanities PI
+          at Zooniverse. She works on Science Gossip, Annotate, and Shakespeare's World and more. Coffee is her lifeblood.`
+        },
+        willGranger: {
+          title: 'Developer',
+          bio: `Will joined the Adler Planetarium in 2016 as a front-end developer for the Zooniverse.
+          In the past, he has taught English overseas, toured in bands, and helped open a music venue in Alabama.`
+        },
+        zachWolfenbarger: {
+          title: 'Developer',
+          bio: `Zach is a software developer. He was a molecular biologist, but then the lab needed some code
+          to be written and the die was cast. He’s also in a couple of bands and can be found playing shows at bars
+          and comic conventions all over the midwest.`
+        }
       }
     },
     acknowledgements: {
@@ -308,10 +712,10 @@ export default {
       whatHappensToClassifications: '- **What happens to my classification after I submit it?**\nYour classifications are stored in the Zooniverse\'s secure online database. Later on a project\'s research team accesses and combines the multiple volunteer assessments stored for each subject, including your classifications, together. Once you have submitted your response for a given subject image, graph, or video, you can\'t go back and edit it. Further information can be found on the [Zooniverse User Agreement and Privacy Policy page](/privacy).',
       accountInformation: '- **What does the Zooniverse do with my account information?**\nThe Zooniverse takes very seriously the task of protecting our volunteer\'s personal information and classification data. Details about these efforts can be found on the [Zooniverse User Agreement and Privacy Policy page](/privacy) and the [Zooniverse Security page](/security).',
       featureRequest: '- **I have a feature request or found a bug; who should I talk to/how do I report it?**\nYou can post your suggestions for new features and report bugs via the [Zooniverse Talk](/talk) or through the [Zooniverse Software repository](https://github.com/zooniverse/Panoptes-Front-End/issues).',
-      hiring: '- **Is the Zooniverse hiring?**\nThe Zooniverse is a collaboration between institutions from the United Kingdom and the United States; all of our team are employed by one or the other of these partner institutions. Check out the [Zoonvierse jobs page](https://jobs.zooniverse.org/) to find out more about employment opportunities within the Zooniverse.',
+      hiring: '- **Is the Zooniverse hiring?**\nThe Zooniverse is a collaboration between institutions from the United Kingdom and the United States; all of our team are employed by one or the other of these partner institutions. Check out the [Zooniverse jobs page](https://jobs.zooniverse.org/) to find out more about employment opportunities within the Zooniverse.',
       howToAcknowledge: '- **I\'m a project owner/research team member, how do I acknowledge the Zooniverse and the Project Builder Platform in my paper, talk abstract, etc.?**\nYou can find more details on how to cite the Zooniverse in research publications using data derived from use of the Zooniverse Project Builder on our [Acknowledgements page](/about/acknowledgements).',
       browserSupport: '- **What browser version does Zooniverse support?**\nWe support major browsers up to the second to last version.',
-      furtherHelp: 'Didn\'t find the answer to your question? Visit the [Zooniverse Solutions webpage](https://zooniverse.freshdesk.com/support/solutions), ask on [Zooniverse Talk](/talk) or [get in touch](/about/contact).'
+      furtherHelp: 'Didn\'t find the answer to your question? Visit the [Zooniverse Solutions webpage](https://zooniverse.freshdesk.com/support/solutions), ask on [Zooniverse Talk](/talk), or [get in touch](/about/contact).'
     },
     resources: {
       title: '## Resources',
@@ -631,7 +1035,7 @@ export default {
           title: '### Subject Sets',
           intro: 'On this page, you can add groups of data to be classified.',
           summary: 'To do so, drag and drop items onto the drop zone in the browser and then upload. You can give each set a name so that you can easily distinguish between them.',
-          details: 'Subject sets can be pretty powerful, and sometimes complex. You can have a single subject set that you add to over time, or have multiple subject sets, say, from different years or places. You can have different subject sets for different workflows, but you don\'t have to. You can even have multiple images in a given subject. For more details and advice on creating and structuring subject sets and associated manifests, check out https://help.zooniverse.org/getting-started/example and scroll down to DETAILS - Subject sets and manifest details, a.k.a. “What is a manifest?”'
+          details: 'Subject sets can be pretty powerful, and sometimes complex. You can have a single subject set that you add to over time, or have multiple subject sets, say, from different years or places. You can have different subject sets for different workflows, but you don\'t have to. You can even have multiple images in a given subject. For more details and advice on creating and structuring subject sets and associated manifests, check out https://www.zooniverse.orghttps://help.zooniverse.org/getting-started/example and scroll down to DETAILS - Subject sets and manifest details, a.k.a. “What is a manifest?”'
         },
         furtherHelp: {
           title: '## Further Help',
@@ -647,6 +1051,9 @@ export default {
       displayNameHelp: 'How your name will appear to other users in Talk and on your Profile Page',
       realName: 'Real name (optional)',
       realNameHelp: 'Public; we’ll use this to give acknowledgement in papers, on posters, etc.',
+      interventions: 'Show project intervention notifications.',
+      interventionsHelp: 'Allow projects to display messages while you are classifying.',
+      interventionsPreferences: 'Notification preferences',
       changePassword: {
         heading: 'Change your password',
         currentPassword: 'Current password (required)',
@@ -665,6 +1072,13 @@ export default {
       changeProfileHeader: 'Change profile header',
       profileHeaderImageHelp: 'Drop an image here (any dimensions, less than %(size)s KB)',
       clearHeader: 'Clear header'
+    }
+  },
+  feedback: {
+    categories: {
+      correct: 'Hits',
+      incorrect: 'Misses',
+      falsepos: 'False Positives'
     }
   }
 };
