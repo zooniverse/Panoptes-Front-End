@@ -41,7 +41,7 @@ export default class FieldGuideContainer extends React.Component {
         <Pullout className="field-guide-pullout" side="right" open={this.state.revealed}>
           <button type="button" className="field-guide-pullout-toggle" onClick={this.toggleFieldGuide}>
             <strong>
-              <Translate content="project.classifyPage.fieldGuide" />
+              <Translate content="project.fieldGuide" />
             </strong>
           </button>
           <Provider store={this.context.store}>

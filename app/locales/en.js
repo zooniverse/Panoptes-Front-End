@@ -42,6 +42,7 @@ export default {
     language: 'Language',
     loading: 'Loading project',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
+    fieldGuide: 'Field Guide',
     about: {
       header: 'About',
       nav: {
@@ -66,7 +67,6 @@ export default {
     },
     classifyPage: {
       dark: 'dark',
-      fieldGuide: 'Field Guide',
       light: 'light',
       title: 'Classify',
       themeToggle: 'Switch to %(theme)s theme'

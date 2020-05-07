@@ -30,6 +30,7 @@ export default {
     language: 'Langue',
     loading: 'Chargement du projet',
     disclaimer: 'Ce projet a été créé avec le Zooniverse Project Builder mais ce n\'est pas encore un projet officiel de Zooniverse. Les questions et problèmes a propos de ce projet adressés à l\'équipe de Zooniverse peut ne pas recevoir de réponse.',
+    fieldGuide: 'Field Guide',
     about: {
       header: 'À propos',
       nav: {
