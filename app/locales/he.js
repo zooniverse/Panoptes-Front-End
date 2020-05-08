@@ -8,7 +8,7 @@ export default {
     done: 'שמור',
     doneAndTalk: 'שמור ועבור לשיחה',
     dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: '!בואו נתחיל',
+    letsGo: 'בואו נתחיל!',
     next: 'הלאה',
     optOut: 'Opt out',
     taskTabs: {
@@ -54,12 +54,12 @@ export default {
       dark: 'כהה',
       light: 'בהיר',
       title: 'קיטלוג',
-      themeToggle: '%(theme)s החלף לרקע'
+      themeToggle: 'החלף לרקע %(theme)s'
     },
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      about: 'על הפרויקט %(title)s',
       metadata: {
         statistics: 'סטטיסטיקות',
         classifications: 'קיטלוגים',
@@ -68,9 +68,9 @@ export default {
         subjects: 'פריטים'
       },
       talk: {
-        zero: 'כרגע **%(title)s** אף אחד לא משוחח על',
-        one: 'כרגע **%(title)s** אדם **1** משוחח על',
-        other: 'כרגע **%(title)s** אנשים משוחחים על **%(count)s**'
+        zero: 'אף אחד לא משוחח על הפרויקט כרגע',
+        one: 'אדם 1 משוחח על הפרויקט כרגע',
+        other: '**%(count)s** אנשים משוחחים על הפרויקט כרגע '
       },
       joinIn: 'הצטרפו לשיחה',
       learnMore: 'למידע נוסף',
