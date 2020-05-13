@@ -28,7 +28,7 @@ export default {
   project: {
     loading: 'פרויקט בטעינה',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
-    fieldGuide: 'מדריך המעשי',
+    fieldGuide: 'מדריך מעשי',
     about: {
       header: 'אודות',
       nav: {
