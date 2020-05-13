@@ -33,6 +33,7 @@ export default {
     language: 'Jazyk',
     loading: 'Projekt se načítá',
     disclaimer: 'Tento projekt byl vybudován za pomoci aplikace Zooniverse Project Builder, ale zatím není oficiálním projektem Zooniverse. Dotazy a připomínky týkající se tohoto projektu směřované na tým Zooniverse se nemusí dočkat odezvy.',
+    fieldGuide: 'Field Guide',
     about: {
       header: 'O projektu',
       nav: {
