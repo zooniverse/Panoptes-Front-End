@@ -42,6 +42,7 @@ export default {
     language: 'Språk',
     loading: 'Laddar projekt',
     disclaimer: 'Detta projekt har byggs med hjälp av Zooniverse Project Buildermen är ännu något officiellt Zooniverse-project. Frågor och problem som rapporteras till Zooniverse-teamet kanske inte får svar.',
+    fieldGuide: 'Field Guide',
     about: {
       header: 'Om',
       nav: {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Pullout from 'react-pullout';
 import { Provider } from 'react-redux';
 import FieldGuide from './field-guide';
+import Translate from 'react-translate-component';
 import Translations from '../../classifier/translations';
 
 export default class FieldGuideContainer extends React.Component {
@@ -39,7 +40,9 @@ export default class FieldGuideContainer extends React.Component {
       return (
         <Pullout className="field-guide-pullout" side="right" open={this.state.revealed}>
           <button type="button" className="field-guide-pullout-toggle" onClick={this.toggleFieldGuide}>
-            <strong>Field guide</strong>
+            <strong>
+              <Translate content="project.fieldGuide" />
+            </strong>
           </button>
           <Provider store={this.context.store}>
             <Translations original={this.props.guide} type="field_guide" >

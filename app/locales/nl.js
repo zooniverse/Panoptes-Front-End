@@ -62,6 +62,7 @@ export default {
     language: 'Taal',
     loading: 'Project wordt geladen',
     disclaimer: 'Dit project is gemaakt met de Zooniverse projectbouwer maar nog geen officieel Zooniverse project. Vragen over het project die gestuurd worden aan het Zooniverseteam worden mogelijk niet beantwoord.',
+    fieldGuide: 'Field Guide',
     about: {
       header: 'Over',
       nav: {
