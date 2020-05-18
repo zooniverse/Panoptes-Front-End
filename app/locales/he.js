@@ -1,22 +1,22 @@
 export default {
-  loading: '(Loading)',
+  loading: '(בטעינה)',
   classifier: {
-    back: 'Back',
-    backButtonWarning: 'Going back will clear your work for the current task.',
-    close: 'Close',
-    continue: 'Continue',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
+    back: 'אחורה',
+    backButtonWarning: 'חזרה אחורה תבטל את התשובה שסימנתם/ן',
+    close: 'סגור',
+    continue: 'המשך',
+    done: 'שמור',
+    doneAndTalk: 'שמור ועבור לשיחה',
     dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: 'Let’s go!',
-    next: 'Next',
+    letsGo: 'בואו נתחיל!',
+    next: 'הלאה',
     optOut: 'Opt out',
     taskTabs: {
-      taskTab: 'Task',
-      tutorialTab: 'Tutorial'
+      taskTab: 'משימה',
+      tutorialTab: 'הדרכה'
     },
-    recents: 'Your recent classifications',
-    talk: 'Talk',
+    recents: 'הקיטלוגים האחרונים שלך',
+    talk: 'שיחה',
     taskHelpButton: 'Need some help with this task?',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
@@ -26,59 +26,59 @@ export default {
     }
   },
   project: {
-    loading: 'Loading project',
+    loading: 'פרויקט בטעינה',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
-    fieldGuide: 'Field Guide',
+    fieldGuide: 'מדריך מעשי',
     about: {
-      header: 'About',
+      header: 'אודות',
       nav: {
-        research: 'Research',
-        results: 'Results',
-        faq: 'FAQ',
-        education: 'Education',
-        team: 'The Team',
+        research: 'מחקר',
+        results: 'תוצאות',
+        faq: 'שאלות נפוצות',
+        education: 'מידע חינוכי',
+        team: 'צוות',
       }
     },
     nav: {
-      about: 'About',
+      about: 'אודות',
       adminPage: 'Admin page',
-      classify: 'Classify',
-      collections: 'Collect',
+      classify: 'קיטלוג',
+      collections: 'אוספים',
       exploreProject: 'Explore Project',
       lab: 'Lab',
-      recents: 'Recents',
-      talk: 'Talk',
+      recents: 'לאחרונה',
+      talk: 'שיחה',
       underReview: 'Under Review',
       zooniverseApproved: 'Zooniverse Approved'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
-      title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
+      dark: 'כהה',
+      light: 'בהיר',
+      title: 'קיטלוג',
+      themeToggle: 'החלף לרקע %(theme)s'
     },
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      about: 'על הפרויקט %(title)s',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
-        volunteers: 'Volunteers',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
+        statistics: 'סטטיסטיקות',
+        classifications: 'קיטלוגים',
+        volunteers: 'משתתפים',
+        completedSubjects: 'פריטים הושלמו',
+        subjects: 'פריטים'
       },
       talk: {
-        zero: 'No one is talking about **%(title)s** right now.',
-        one: '**1** person is talking about **%(title)s** right now.',
-        other: '**%(count)s** people are talking about **%(title)s** right now.'
+        zero: 'אף אחד לא משוחח על הפרויקט כרגע',
+        one: 'אדם 1 משוחח על הפרויקט כרגע',
+        other: '**%(count)s** אנשים משוחחים על הפרויקט כרגע '
       },
-      joinIn: 'Join in',
-      learnMore: 'Learn more',
-      getStarted: 'Get started',
+      joinIn: 'הצטרפו לשיחה',
+      learnMore: 'למידע נוסף',
+      getStarted: 'בואו נתחיל',
       workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
       visitLink: 'Visit the project',
-      links: 'External Project Links'
+      links: 'קישורים חיצוניים'
     }
   },
   organization: {
