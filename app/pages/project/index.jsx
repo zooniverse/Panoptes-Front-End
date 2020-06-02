@@ -204,7 +204,9 @@ class ProjectPageController extends React.Component {
 
           const awaitProjectPreferences = this.getUserProjectPreferences(project, user);
 
-          const awaitSplits = this.getSplits(slug, user)
+          // Temporarily disabled since Seven-Ten is not being used right now
+          // Add back into the Promise.all if and when used again
+          // const awaitSplits = this.getSplits(slug, user)
 
           const awaitTranslation = actions.translations.load('project', project.id, locale);
 
@@ -217,7 +219,6 @@ class ProjectPageController extends React.Component {
             awaitProjectCompleteness,
             awaitProjectRoles,
             awaitProjectPreferences,
-            awaitSplits,
             awaitTranslation
           ])
           .then(([
