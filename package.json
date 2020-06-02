@@ -102,9 +102,9 @@
     "stylus": "~0.54.5",
     "stylus-loader": "~3.0.2",
     "webpack": "~4.29.3",
-    "webpack-cli": "~3.2.3",
+    "webpack-cli": "~3.3.11",
     "webpack-dashboard": "~3.2.0",
-    "webpack-dev-server": "~3.1.14",
+    "webpack-dev-server": "~3.11.0",
     "whatwg-url": "~7.0.0"
   },
   "engines": {
