@@ -67,7 +67,7 @@ export default {
       researcher: 'Palavras do investigador',
       about: 'Sobre %(title)s',
       metadata: {
-        statistics: '%(title)s Estatísticas',
+        statistics: 'Estatísticas %(title)s',
         classifications: 'Classificações',
         volunteers: 'Voluntários',
         completedSubjects: 'Assuntos Completados',
