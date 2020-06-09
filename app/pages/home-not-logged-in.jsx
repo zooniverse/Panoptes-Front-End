@@ -13,6 +13,7 @@ import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
 import HomePagePromoted from './home-not-logged-in/promoted';
 import PROMOTED_PROJECTS from '../lib/promoted-projects';
+import BLMBanner from './projects/blm-banner';
 
 counterpart.registerTranslations('en', {
   notLoggedInHomePage: {
@@ -42,7 +43,7 @@ export default class HomePage extends React.Component {
     addEventListener('resize', this.handleResize);
     this.handleResize();
     this.getClassificationCounts();
-    this.getFeaturedProject();
+    // this.getFeaturedProject();
     this.getVolunteerCount();
     this.getPromotedProjects();
   }
@@ -137,9 +138,7 @@ export default class HomePage extends React.Component {
           </section>
         </div>
 
-        <div className="flex-container">
-          <FeaturedProjects projects={this.state.featuredProjects} />
-        </div>
+        <BLMBanner />
 
         <div className="flex-container">
           <HomePageDiscover showDialog={this.showDialog} />
