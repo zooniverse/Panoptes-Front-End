@@ -5,7 +5,6 @@ import Translate from 'react-translate-component';
 import { browserHistory } from 'react-router';
 import { Helmet } from 'react-helmet';
 
-import BLMBanner from './blm-banner';
 import ProjectsWelcome from './projects-welcome'
 import StatusLink from './status-link';
 
@@ -74,7 +73,7 @@ class ProjectsPage extends Component {
           </div>
         </section>
         <section className="resources-container">
-          <BLMBanner />
+          <ProjectsWelcome />
           {children}
         </section>
       </div>
