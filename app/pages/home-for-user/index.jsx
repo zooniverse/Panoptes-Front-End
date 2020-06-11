@@ -13,7 +13,6 @@ import HomePageSocial from '../home-common/social';
 import getColorFromString from '../../lib/get-color-from-string';
 import mediaActions from '../lab/actions/media';
 import FeaturedProjects from '../home-common/featured-projects';
-import BLMBanner from '../projects/blm-banner';
 
 const SECTIONS = {
   projects: RecentProjectsSection,
@@ -46,7 +45,7 @@ export default class HomePageForUser extends React.Component {
 
   componentDidMount() {
     this.fetchRibbonData(this.props.user);
-    // this.getFeaturedProjects();
+    this.getFeaturedProjects();
     this.handleHashChange();
   }
 
@@ -295,7 +294,7 @@ export default class HomePageForUser extends React.Component {
           </div>
         </div>
 
-        <BLMBanner />
+        <FeaturedProjects projects={featuredProjects} />
 
         <HomePageSocial />
 
