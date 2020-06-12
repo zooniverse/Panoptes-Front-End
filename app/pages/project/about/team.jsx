@@ -21,6 +21,7 @@ counterpart.registerTranslations('en', {
     moderator: 'Moderator',
     tester: 'Tester',
     expert: 'Expert',
+    museum: 'Museum',
   }
 });
 
