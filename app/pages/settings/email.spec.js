@@ -90,6 +90,7 @@ const user = {
   email: 'An email address',
   beta_email_communication: false,
   global_email_communication: true,
+  nasa_email_communication: true,
   project_email_communication: true,
   get() {
     return Promise.resolve([]);
@@ -135,6 +136,11 @@ describe('EmailSettings', function () {
   it('shows beta email preference correctly', function () {
     const betaEmail = wrapper.find('input[name="beta_email_communication"]');
     assert.equal(betaEmail.prop('checked'), user.beta_email_communication);
+  });
+  
+  it('shows NASA email preference correctly', function () {
+    const nasaEmail = wrapper.find('input[name="nasa_email_communication"]');
+    assert.equal(nasaEmail.prop('checked'), user.nasa_email_communication);
   });
 
   describe('project listing', function () {
