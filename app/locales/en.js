@@ -267,8 +267,7 @@ export default {
       manual: 'Manage projects individually',
       beta: 'Get beta project email updates and become a beta tester',
       partnerPreferences: 'Zooniverse partner email preferences',
-      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts',
-      nasaNote: 'Note: this opt-in email reflects an on-going partnership between NASA and Zooniverse.'
+      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
     },
     talk: {
       section: 'Talk email preferences',
