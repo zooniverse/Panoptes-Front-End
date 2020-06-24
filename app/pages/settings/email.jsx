@@ -299,6 +299,9 @@ class EmailSettingsPage extends React.Component {
             </label>
           </AutoSave>
           <br />
+          <span>
+            <Translate className="preference-note" content="emailSettings.general.nasaNote" />
+          </span>
         </p>
 
         <p>
