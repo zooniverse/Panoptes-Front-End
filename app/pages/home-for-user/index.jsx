@@ -121,7 +121,14 @@ export default class HomePageForUser extends React.Component {
       if (projectPreferences.length === 0) {
         return projectPreferences;
       } else {
+        // continue paging through preferences until we've got them all.
+        const meta = projectPreferences[0].getMeta();
+        if (meta.page !== meta.page_count) {
+          getRibbonData(user, meta.page + 1);
+        }
+        // filter out projects you haven't classified on.
         let activePreferences = projectPreferences.filter((preference) => { return preference.activity_count > 0; });
+        // get the projects that you have classified on, if any.
         if (activePreferences.length > 0) {
           activePreferences = activePreferences.map((preference, i) => {
             preference.sort_order = i;
@@ -157,10 +164,6 @@ export default class HomePageForUser extends React.Component {
                 return { ribbonData, totalClassifications };
               });
             });
-        }
-        const meta = projectPreferences[0].getMeta();
-        if (meta.page !== meta.page_count) {
-          getRibbonData(user, meta.page + 1);
         }
       }
     });
