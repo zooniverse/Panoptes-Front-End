@@ -91,6 +91,8 @@ const user = {
   beta_email_communication: false,
   global_email_communication: true,
   project_email_communication: true,
+  project_team_email_communication: true,
+  project_team_email_eligible: false,
   get() {
     return Promise.resolve([]);
   }
@@ -135,6 +137,21 @@ describe('EmailSettings', function () {
   it('shows beta email preference correctly', function () {
     const betaEmail = wrapper.find('input[name="beta_email_communication"]');
     assert.equal(betaEmail.prop('checked'), user.beta_email_communication);
+  });
+
+  it('does not show project team email preference if user not eligible', function () {
+    const projectTeamEmail = wrapper.find('input[name="project_team_email_communication"]');
+    assert.equal(projectTeamEmail.length, 0);
+  });
+
+  it('shows project team email preference if user is eligible', function () {
+    const projectTeamEligibleUser = Object.assign({}, user);
+    projectTeamEligibleUser.project_team_email_eligible = true;
+    wrapper.setProps({ user: projectTeamEligibleUser });
+
+    const projectTeamEmail = wrapper.find('input[name="project_team_email_communication"]');
+    assert.equal(projectTeamEmail.length, 1);
+    assert.equal(projectTeamEmail.prop('checked'), user.project_team_email_communication);
   });
 
   describe('project listing', function () {
