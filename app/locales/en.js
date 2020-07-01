@@ -265,7 +265,8 @@ export default {
       classify: 'Get email updates when you first classify on a project',
       note: 'Note: Unticking the box will not unsubscribe you from any of the projects',
       manual: 'Manage projects individually',
-      beta: 'Get beta project email updates and become a beta tester'
+      beta: 'Get beta project email updates and become a beta tester',
+      projectTeam: 'Get email updates for project owners, collaborators, and moderators'
     },
     talk: {
       section: 'Talk email preferences',
