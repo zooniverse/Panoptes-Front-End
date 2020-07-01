@@ -381,6 +381,7 @@ EmailSettingsPage.propTypes = {
     beta_email_communication: PropTypes.bool,
     project_email_communication: PropTypes.bool,
     global_email_communication: PropTypes.bool,
+    nasa_email_communication: PropTypes.bool,
     get: PropTypes.func
   })
 };
