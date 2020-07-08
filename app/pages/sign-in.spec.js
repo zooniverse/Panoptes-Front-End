@@ -27,11 +27,4 @@ describe('SignIn', function () {
       assert.equal(linkElements.length, 2);
     });
   });
-
-  describe('third party auth', function () {
-    it('renders buttons for facebook and google sign in', function () {
-      const thirdPartyAuthButtons = wrapper.find('button');
-      assert.equal(thirdPartyAuthButtons.length, 2);
-    });
-  });
 });
