@@ -20,16 +20,6 @@ const SignInPage = ({ children }) =>
         {children}
       </div>
     </div>
-    <div className="oauth-providers">
-      <Translate content="signIn.orThirdParty" />
-      <br />
-      <div>
-        <button type="button"><Translate content="signIn.withFacebook" /></button>
-      </div>
-      <div>
-        <button type="button"><Translate content="signIn.withGoogle" /></button>
-      </div>
-    </div>
   </div>);
 
 SignInPage.defaultProps = {
