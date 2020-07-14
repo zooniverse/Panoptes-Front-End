@@ -6,7 +6,7 @@ export default {
     close: 'Fechar',
     continue: 'Continuar',
     detailsSubTaskFormSubmitButton: 'OK',
-    done: 'Concluir e Discutir',
+    done: 'Concluir',
     doneAndTalk: 'Concluir e Discutir',
     dontShowMinicourse: 'Não mostrar o minicurso no futuro',
     letsGo: 'Vamos!',
