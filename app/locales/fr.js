@@ -214,7 +214,9 @@ export default {
       classify: 'Recevoir un e-mail quand vous avez fait une première classification dans un projet.',
       note: 'Note: Décocher la case ne vas vous désabonner à aucun des projets',
       manual: 'Gérer les projets individuellement',
-      beta: 'Recevoir les nouvelles sur le projet beta et devenir un testeur beta.'
+      beta: 'Recevoir les nouvelles sur le projet beta et devenir un testeur beta.',
+      partnerPreferences: 'Zooniverse partner email preferences',
+      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
     },
     talk: {
       section: 'Préférence pour les e-mails de la section Discussions',

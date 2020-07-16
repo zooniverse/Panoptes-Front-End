@@ -214,7 +214,9 @@ export default {
       classify: 'Erhalte Projekt-Neuigkeiten per E-Mail, wenn Du beginnst in einem Projekt zu klassifizieren',
       note: 'Beachte: Nicht-Auswählen dieser Box wird keine Auswirkungen auf andere Projekte haben.',
       manual: 'Verwalte Projekte individuell',
-      beta: 'Erhalte E-Mails über Projekte in der Beta-Testung und werde Beta-Tester!'
+      beta: 'Erhalte E-Mails über Projekte in der Beta-Testung und werde Beta-Tester!',
+      partnerPreferences: 'Zooniverse partner email preferences',
+      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
     },
     talk: {
       section: 'E-Mail-Präferenzen für Talk',

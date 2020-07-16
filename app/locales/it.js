@@ -217,7 +217,9 @@ export default {
       classify: 'Ricevi aggiornamenti sui progetti a cui hai contribuito',
       note: 'Note: Unticking the box will not unsubscribe you from any of the projects',
       manual: 'Manage projects individually',
-      beta: 'Diventa beta-tester e ricevi email sui progetti in beta'
+      beta: 'Diventa beta-tester e ricevi email sui progetti in beta',
+      partnerPreferences: 'Zooniverse partner email preferences',
+      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
     },
     talk: {
       section: 'Preferenze per Talk',
