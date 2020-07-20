@@ -218,7 +218,9 @@ export default {
       classify: 'Dostávat emailové aktualizace projektů po Vaší první klasifikaci v projektu.',
       note: 'Poznámka: Odstraněním značky z rámečku se neodhlásíte z žádného projektu.',
       manual: 'Spravovat projekty individuálně',
-      beta: 'Dostávat emailové aktualizace o beta projektech a stát se beta testerem.'
+      beta: 'Dostávat emailové aktualizace o beta projektech a stát se beta testerem.',
+      partnerPreferences: 'Zooniverse partner email preferences',
+      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
     },
     talk: {
       section: 'Emailové předvolby pro Diskuze',

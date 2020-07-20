@@ -202,7 +202,9 @@ export default {
       classify: 'Receba actualizações por email quando classificar pela primeira vez num projecto',
       note: 'Nota: Desmarcar a caixa não cancelará a sua inscrição em nenhum dos projectos',
       manual: 'Gerir projectos individualmente',
-      beta: 'Receba actualizações por e-mail do projecto beta e torne-se um testador beta'
+      beta: 'Receba actualizações por e-mail do projecto beta e torne-se um testador beta',
+      partnerPreferences: 'Zooniverse partner email preferences',
+      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
     },
     talk: {
       section: 'Preferências de e-mail para Falar',

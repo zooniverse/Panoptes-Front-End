@@ -265,7 +265,9 @@ export default {
       classify: 'Få uppdateringar med epost när du börjar klassificera för ett projekt',
       note: 'Obs: Om du avbockar här avslutas inte din prenumeration på något av projekten',
       manual: 'Hantera varje projekt för sig',
-      beta: 'Få mejl om betaprojekt och bli en betatestare'
+      beta: 'Få mejl om betaprojekt och bli en betatestare',
+      partnerPreferences: 'Zooniverse partner email preferences',
+      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
     },
     talk: {
       section: 'Epost-preferenser för Prata',

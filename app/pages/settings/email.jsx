@@ -281,6 +281,24 @@ class EmailSettingsPage extends React.Component {
               <Translate content="emailSettings.general.beta" />
             </label>
           </AutoSave>
+          <br />
+          <p>
+            <strong>
+              <Translate content="emailSettings.general.partnerPreferences" />
+            </strong>
+          </p>
+          <AutoSave resource={this.props.user}>
+            <label>
+              <input
+                type="checkbox"
+                name="nasa_email_communication"
+                checked={this.props.user.nasa_email_communication}
+                onChange={handleInputChange.bind(this.props.user)}
+              />{' '}
+              <Translate content="emailSettings.general.nasa" />
+            </label>
+          </AutoSave>
+          <br />
         </p>
 
         <p>
@@ -363,6 +381,7 @@ EmailSettingsPage.propTypes = {
     beta_email_communication: PropTypes.bool,
     project_email_communication: PropTypes.bool,
     global_email_communication: PropTypes.bool,
+    nasa_email_communication: PropTypes.bool,
     get: PropTypes.func
   })
 };

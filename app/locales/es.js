@@ -195,6 +195,47 @@ export default {
   workflowToggle: {
     label: 'Active'
   },
+  collections: {
+    createForm: {
+      private: 'Private',
+      submit: 'Add Collection'
+    }
+  },
+  emailSettings: {
+    email: 'Email address',
+    general: {
+      section: 'Zooniverse email preferences',
+      updates: 'Get general Zooniverse email updates',
+      classify: 'Get email updates when you first classify on a project',
+      note: 'Note: Unticking the box will not unsubscribe you from any of the projects',
+      manual: 'Manage projects individually',
+      beta: 'Get beta project email updates and become a beta tester',
+      partnerPreferences: 'Zooniverse partner email preferences',
+      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
+    },
+    talk: {
+      section: 'Talk email preferences',
+      header: 'Send me an email',
+      frequency: {
+        immediate: 'Immediately',
+        day: 'Daily',
+        week: 'Weekly',
+        never: 'Never'
+      },
+      options: {
+        participating_discussions: 'When discussions I\'m participating in are updated',
+        followed_discussions: 'When discussions I\'m following are updated',
+        mentions: 'When I\'m mentioned',
+        group_mentions: 'When I\'m mentioned by group (@admins, @team, etc.)',
+        messages: 'When I receive a private message',
+        started_discussions: 'When a discussion is started in a board I\'m following'
+      }
+    },
+    project: {
+      section: 'Project email preferences',
+      header: 'Project',
+    }
+  },
   about: {
     publications: {
       nav: {
