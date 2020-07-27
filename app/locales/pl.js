@@ -34,7 +34,7 @@ export default {
     language: 'Język',
     loading: 'Loading project',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
-    fieldGuide: 'Field Guide',
+    fieldGuide: 'Przewodnik',
     about: {
       header: 'Opis',
       nav: {
