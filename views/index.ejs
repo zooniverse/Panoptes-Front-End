@@ -23,54 +23,21 @@
     <!--Deployed commit: <%= process.env.HEAD_COMMIT %>-->
     <!--Build env: <%= process.env.NODE_ENV %>-->
 
-    <noscript>
-      <p style="text-align: center;">
-        Sorry, it looks like you have JavaScript disabled.
-        <strong><a href="http://enable-javascript.com/">Learn how to enable it.</a></strong>
-      </p>
-    </noscript>
+    <h1>Under Maintenance</h1>
+    
+    <p>The Zooniverse is currently under maintenance. We'll be up again soon.</p>
+    
+    <p>You can keep up-to-date with the status of the platform at all times via our page at <a href="https://status.zooniverse.org">status.zooniverse.org</a>, and via our <a href="https://twitter.com/the_zooniverse">Twitter account</a>.</p>
+    
+    <!-- Google Tag Manager -->	
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WDW6V4"	
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>	
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':	
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],	
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=	
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);	
+    })(window,document,'script','dataLayer','GTM-WDW6V4');</script>	
+    <!-- End Google Tag Manager -->	
 
-    <script>
-      if (typeof SVGElement === 'undefined' || (new XMLHttpRequest()).withCredentials !== false) {
-        document.write([
-          '<p style="text-align: center;">',
-            'Sorry, it looks like your browser is too old to run this app.',
-            '<strong><a href="http://browsehappy.com/">Check out your upgrade options.</a></strong>',
-            '<small><em><a href="https://www.whatismybrowser.com/guides/why-should-i-update-my-web-browser">Why?</a></em></small>',
-          '</p>',
-        ].join('\n'));
-      }
-    </script>
-
-    <!-- Talk sticky -->
-    <li id="talk-sticky-placeholder"  class="talk-sticky-placeholder fa fa-bars" style="display: none"></li>
-
-    <!-- Google Tag Manager -->
-    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WDW6V4"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WDW6V4');</script>
-    <!-- End Google Tag Manager -->
-
-    <i id="font-awesome-test" class="fa" style="opacity: 0; pointer-events: none; position: absolute;"></i>
-    <script>
-      addEventListener('DOMContentLoaded', function() {
-        var testIcon = document.getElementById('font-awesome-test');
-        var testIconFontFamily = getComputedStyle(testIcon).fontFamily;
-        if (testIconFontFamily !== 'FontAwesome') {
-          var fallbackLinkTag = '<link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css" />';
-          document.head.insertAdjacentHTML('beforeEnd', fallbackLinkTag);
-        }
-        testIcon.parentNode.removeChild(testIcon);
-      });
-    </script>
-
-    <div id="panoptes-main-container"></div>
-
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,es6,Promise,fetch,Array.prototype.includes,Array.prototype.find,Object.values&amp;flags=gated"></script>
-    <script>('assign' in Object) || document.write('<script src="/fallback-polyfills.js"></'+'script>');</script>
   </body>
 </html>
