@@ -15,6 +15,7 @@ export default {
   nl: require('./nl').default,
   pl: require('./pl').default,
   pt: require('./pt').default,
+  ru: require('./ru').default,
   sv: require('./sv').default,
   'zh-cn': require('./zh-cn').default,
   'zh-tw': require('./zh-tw').default
