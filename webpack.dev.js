@@ -14,6 +14,7 @@ var config = {
     ],
     historyApiFallback: true,
     host: process.env.HOST || "localhost",
+    https: true,
     overlay: true,
     port: 3735
   },
