@@ -10,7 +10,7 @@ export default {
   hi: 'हिन्दी',
   hr: 'Hrvatski',
   it: 'Italiano',
-  ja: '日本人',
+  ja: '日本語',
   kn: 'ಕನ್ನಡ',
   ko: '한국어',
   nl: 'Nederlands',
