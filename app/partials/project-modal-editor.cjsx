@@ -83,6 +83,12 @@ ProjectModalEditor = createReactClass
   onClick: (stepIndex) ->
     @setState stepToEdit: stepIndex
 
+  changeFrequency: (e) ->
+    console.log @props.projectModal
+    @props.projectModal.update
+      'configuration.minicourse_frequency': e.target.value
+    @props.projectModal.save()
+
   handleStepRemove: (stepToRemove) ->
     if @props.projectModal.steps.length is 0
       stepIndex = null
@@ -129,6 +135,22 @@ ProjectModalEditor = createReactClass
         </AutoSave>
         <p><button className="pill-button" onClick={@props.onProjectModalDelete}>Delete {@props.kind}</button></p>
       </div>
+      {if @props.kind is 'mini-course' 
+        <div className="project-modal-frequency">
+          <label htmlFor="mini-course-frequency">Mini-Course Prompt Frequency</label>
+          <input
+            type="number"
+            id="mini-course-frequency"
+            placeholder="5"
+            name="mini-course-frequency"
+            value={@props.projectModal?.configuration?.minicourse_frequency}
+            min="1"
+            max="100"
+            step="1"
+            onChange={@changeFrequency}
+          />
+        </div>
+      }
       {if @props.projectModal.steps.length is 0
         <p>This {@props.kind} has no steps.</p>
       else
