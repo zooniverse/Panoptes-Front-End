@@ -84,7 +84,6 @@ ProjectModalEditor = createReactClass
     @setState stepToEdit: stepIndex
 
   changeFrequency: (e) ->
-    console.log @props.projectModal
     @props.projectModal.update
       'configuration.minicourse_frequency': e.target.value
     @props.projectModal.save()
