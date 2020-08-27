@@ -87,19 +87,13 @@ ProjectModalEditor = createReactClass
 
   changeFrequency: (e) ->
     if @state.error then @setState { error: '' }
-    # allowedString = /^(\d|\d(,\d)*)$/g
-    # if e.target.value and allowedString.test(e.target.value)
     @setState { frequency: e.target.value }
-    # else
-    #   @setState { error: 'Frequency must be a single digit or comma separated digits without spaces.' }
 
   saveFrequency: (e) ->
     e.preventDefault()
     if @state.error then @setState { error: '' }
     allowedString = /^(\d(,\d)*)$/
-    console.log(allowedString.test(@state.frequency), @state.frequency)
     if allowedString.test(@state.frequency)
-      console.log('allowed!!!!!')
       splitString = @state.frequency.split(',')
       frequency = splitString.map((digit) => parseInt(digit))
       @props.projectModal.update
