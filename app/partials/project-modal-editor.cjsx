@@ -76,7 +76,7 @@ ProjectModalEditor = createReactClass
 
     onStepOrderChange: ->
       console.log 'ProjectModalEditor onStepOrderChange', arguments
-      # if @props.projectModal?.configuration?.minicourse_frequency then @props.projectModal?.configuration?.minicourse_frequency.join ", " else ''
+
   getInitialState: ->
     error: ''
     frequency: if @props.projectModal?.configuration?.minicourse_frequency then @props.projectModal?.configuration?.minicourse_frequency.join "," else ''
