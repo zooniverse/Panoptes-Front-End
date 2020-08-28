@@ -104,7 +104,7 @@ ProjectModalEditor = createReactClass
         'configuration.minicourse_frequency': undefined
       @props.projectModal.save()
     else 
-      @setState { error: 'Frequency must be a single digit or comma separated digits without spaces.' }
+      @setState { error: 'Frequency must be a single whole number or comma separated whole numbers without spaces.' }
 
   handleStepRemove: (stepToRemove) ->
     if @props.projectModal.steps.length is 0
