@@ -116,8 +116,15 @@ ClassifierWrapper = createReactClass
       @props.requestUserProjectPreferences(@props.project, @props.user)
 
   maybeLaunchMiniCourse: ->
-    frequency = @state.minicourse?.configuration?.minicourse_frequency or PROMPT_MINI_COURSE_EVERY
-    shouldPrompt = classificationsThisSession % frequency is 0
+    configurationFrequency = @state.minicourse?.configuration?.minicourse_frequency
+    console.log('configurationFrequency', configurationFrequency)
+    console.log('classificationsThisSession', classificationsThisSession)
+    if configurationFrequency?.length > 1
+      shouldPrompt = configurationFrequency.includes(classificationsThisSession)
+    else
+      frequency = if configurationFrequency?.length is 1 then configurationFrequency[0] else PROMPT_MINI_COURSE_EVERY
+      shouldPrompt = classificationsThisSession % frequency is 0
+
     split = @props.splits?['mini-course.visible']
     isntHidden = not split or split?.variant?.value?.auto
     if shouldPrompt and isntHidden

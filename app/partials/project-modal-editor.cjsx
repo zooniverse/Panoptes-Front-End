@@ -78,15 +78,33 @@ ProjectModalEditor = createReactClass
       console.log 'ProjectModalEditor onStepOrderChange', arguments
 
   getInitialState: ->
+    error: ''
+    frequency: if @props.projectModal?.configuration?.minicourse_frequency then @props.projectModal?.configuration?.minicourse_frequency.join "," else ''
     stepToEdit: 0
 
   onClick: (stepIndex) ->
     @setState stepToEdit: stepIndex
 
   changeFrequency: (e) ->
-    @props.projectModal.update
-      'configuration.minicourse_frequency': e.target.value
-    @props.projectModal.save()
+    if @state.error then @setState { error: '' }
+    @setState { frequency: e.target.value }
+
+  saveFrequency: (e) ->
+    e.preventDefault()
+    if @state.error then @setState { error: '' }
+    allowedString = /^(\d(,\d)*)$/
+    if allowedString.test(@state.frequency)
+      splitString = @state.frequency.split(',')
+      frequency = splitString.map((digit) => parseInt(digit))
+      @props.projectModal.update
+        'configuration.minicourse_frequency': frequency
+      @props.projectModal.save()
+    else if !@state.frequency
+      @props.projectModal.update
+        'configuration.minicourse_frequency': undefined
+      @props.projectModal.save()
+    else 
+      @setState { error: 'Frequency must be a single whole number or comma separated whole numbers without spaces.' }
 
   handleStepRemove: (stepToRemove) ->
     if @props.projectModal.steps.length is 0
@@ -136,18 +154,20 @@ ProjectModalEditor = createReactClass
       </div>
       {if @props.kind is 'mini-course' 
         <div className="project-modal-frequency">
-          <label htmlFor="mini-course-frequency">Mini-Course Prompt Frequency</label>
-          <input
-            type="number"
-            id="mini-course-frequency"
-            placeholder="5"
-            name="mini-course-frequency"
-            value={@props.projectModal?.configuration?.minicourse_frequency}
-            min="1"
-            max="100"
-            step="1"
-            onChange={@changeFrequency}
-          />
+          <p>{@state.error}</p>
+          <form>
+            <label htmlFor="mini-course-frequency">Mini-Course Prompt Frequency</label>
+            <input
+              type="text"
+              id="mini-course-frequency"
+              placeholder="5"
+              name="mini-course-frequency"
+              value={@state.frequency}
+              onChange={@changeFrequency}
+              title='A single digit or comma separated digits without spaces'
+            />{' '}
+            <button type="submit" onClick={@saveFrequency}>Save</button>
+          </form>
         </div>
       }
       {if @props.projectModal.steps.length is 0
