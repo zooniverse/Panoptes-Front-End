@@ -117,8 +117,6 @@ ClassifierWrapper = createReactClass
 
   maybeLaunchMiniCourse: ->
     configurationFrequency = @state.minicourse?.configuration?.minicourse_frequency
-    console.log('configurationFrequency', configurationFrequency)
-    console.log('classificationsThisSession', classificationsThisSession)
     if configurationFrequency?.length > 1
       shouldPrompt = configurationFrequency.includes(classificationsThisSession)
     else
