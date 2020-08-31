@@ -164,7 +164,7 @@ ProjectModalEditor = createReactClass
               name="mini-course-frequency"
               value={@state.frequency}
               onChange={@changeFrequency}
-              title='A single digit or comma separated digits without spaces'
+              title='A single whole number or comma separated whole numbers without spaces'
             />{' '}
             <button type="submit" onClick={@saveFrequency}>Save</button>
           </form>
