@@ -95,7 +95,7 @@ ProjectModalEditor = createReactClass
     allowedString = /^(\d(,\d)*)$/
     if allowedString.test(@state.frequency)
       splitString = @state.frequency.split(',')
-      frequency = splitString.map((digit) => parseInt(digit))
+      frequency = splitString.map((number) => parseInt(number))
       @props.projectModal.update
         'configuration.minicourse_frequency': frequency
       @props.projectModal.save()
