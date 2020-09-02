@@ -92,7 +92,7 @@ ProjectModalEditor = createReactClass
   saveFrequency: (e) ->
     e.preventDefault()
     if @state.error then @setState { error: '' }
-    allowedString = /^(\d(,\d)*)$/
+    allowedString = /^(\d(,\d+)*)$/
     if allowedString.test(@state.frequency)
       splitString = @state.frequency.split(',')
       frequency = splitString.map((number) => parseInt(number))
