@@ -6,6 +6,7 @@ import handleInputChange from '../../../lib/handle-input-change';
 
 const UserDetails = (props) => {
   const handleUserChange = handleInputChange.bind(props.user);
+  const created = new Date(props.user.created_at)
 
   function onChange(e) {
     handleUserChange(e);
@@ -19,6 +20,8 @@ const UserDetails = (props) => {
         <li>Login: {props.user.login}</li>
         <li>Display name: {props.user.display_name}</li>
         <li>Email address: {props.user.email}</li>
+        <li>Valid email: {props.user.valid_email ? 'Yes' : 'No'}</li>
+        <li>Signed up: {created.toString()}</li>
       </ul>
 
       <form>
