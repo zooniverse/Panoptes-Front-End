@@ -75,9 +75,11 @@ module.exports = createReactClass
       when 1 then @startDiscussion()
 
   render: ->
+    invalidEmail = <p>You must have a <Link to="/settings/email">valid email address</Link> in order to contribute to the conversation.</p>
     return <Loading /> if @state.loading
     return @noDefaultBoardMessage() unless @state.boards
     return @loginPrompt() unless @props.user
+    return invalidEmail unless @props.user?.valid_email
 
     if @state.boards.length < 1
       @renderTab()
