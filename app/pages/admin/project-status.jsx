@@ -76,7 +76,7 @@ class ProjectStatus extends Component {
   }
 
   getWorkflows() {
-    const fields = 'display_name,active,configuration,retirement';
+    const fields = 'display_name,active,configuration,grouped,retirement';
     return getWorkflowsInOrder(this.state.project, { fields }).then((workflows) => {
       const usedWorkflowLevels = this.getUsedWorkflowLevels(workflows);
       this.setState({ usedWorkflowLevels, workflows });
@@ -161,6 +161,14 @@ class ProjectStatus extends Component {
     }
     workflow.update({ 'configuration.image_layout': newLayout }).save();
   }
+
+  toggleWorkflowGrouped(event, workflow) {
+    workflow
+      .update({ grouped: event.target.checked })
+      .save()
+      .catch(error => this.setState({ error }));
+  }
+
   renderWorkflows() {
     if (this.state.workflows.length === 0) {
       return <div>No workflows found</div>;
@@ -234,6 +242,15 @@ class ProjectStatus extends Component {
                   no max height
                 </label>
               </fieldset>
+              <label>
+                <input
+                  id="grouped"
+                  type="checkbox"
+                  onChange={event => this.toggleWorkflowGrouped(event, workflow)}
+                  defaultChecked={workflow.grouped}
+                />
+                  Use grouped subject selection
+              </label>
             </li>
           );
         })}
