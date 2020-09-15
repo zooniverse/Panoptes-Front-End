@@ -20,8 +20,18 @@ const UserDetails = (props) => {
         <li>Login: {props.user.login}</li>
         <li>Display name: {props.user.display_name}</li>
         <li>Email address: {props.user.email}</li>
-        <li>Valid email: {props.user.valid_email ? 'Yes' : 'No'}</li>
         <li>Signed up: {created.toString()}</li>
+        <li>
+          <label>
+            Valid email:{' '}
+            <input
+              type="checkbox"
+              name="valid_email"
+              checked={props.user.valid_email}
+              onChange={onChange}
+            />
+          </label>
+        </li>
       </ul>
 
       <form>
