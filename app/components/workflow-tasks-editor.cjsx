@@ -1,7 +1,7 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 ChangeListener = require './change-listener'
-handleInputChange = require '../lib/handle-input-change'
+handleInputChange = require('../lib/handle-input-change').default
 
 AnswerEditor = createReactClass
   displayName: 'AnswerEditor'

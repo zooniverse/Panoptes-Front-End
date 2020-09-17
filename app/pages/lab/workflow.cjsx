@@ -1,7 +1,7 @@
 React = require 'react'
 PropTypes = require 'prop-types'
 createReactClass = require 'create-react-class'
-handleInputChange = require '../../lib/handle-input-change'
+handleInputChange = require('../../lib/handle-input-change').default
 PromiseRenderer = require '../../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
 ModalFormDialog = require 'modal-form/dialog'
