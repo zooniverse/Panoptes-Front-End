@@ -13,7 +13,8 @@ module.exports = createReactClass
   displayName: 'FullWidthLineTool'
 
   statics:
-    defaultValues: ({y}) ->
+    defaultValues: ({y}, {naturalWidth}) ->
+      x: naturalWidth
       y: y
 
     initMove: ({y}) ->
@@ -23,11 +24,11 @@ module.exports = createReactClass
       y >= 0 and y <= naturalHeight
 
   render: ->
-    {y} = @props.mark
+    {x, y} = @props.mark
     points =
-      x1: '0%'
+      x1: 0
       y1: y
-      x2: '100%'
+      x2: x
       y2: y
     {x1, y1, x2, y2} = points
 
