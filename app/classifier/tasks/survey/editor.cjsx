@@ -99,7 +99,7 @@ module.exports = createReactClass
                 <span className="filename">{@state.confusionsName}</span>}
             </div>
             <div className="columns-container" style={marginBottom: '0.2em'}>
-              <FileButton className="major-button column" accept=".csv, .tsv" disabled={@checkAdd()} onSelect={@handleFiles.bind this, 'questionsName', @addQuestion, @cleanQuestions}>{if @state.task.questionsOrder.length is 0 then "Add" else "Replace"} questions</FileButton>
+              <FileButton className="major-button column" accept=".csv, .tsv" disabled={@checkAdd()} onSelect={@handleFiles.bind this, 'questionsName', @addQuestion, @cleanQuestions}>{if @state.task.questions.keys?.length is 0 then "Add" else "Replace"} questions</FileButton>
               <TriggeredModalForm trigger={
                 <span className="secret-button">
                 <i className="fa fa-question-circle"></i>
@@ -665,7 +665,7 @@ module.exports = createReactClass
       contentWarnings.push {source: 'confusions', message: 'No confusions added.'}
 
     #questions
-    if @state.task.questionsOrder.length is 0
+    if @state.task.questions.keys?.length is 0
       contentWarnings.push {source: 'questions', message: 'No questions added.'}
 
     #images-choices
