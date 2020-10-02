@@ -6,8 +6,8 @@ export default {
     close: '閉じる',
     continue: '続ける',
     detailsSubTaskFormSubmitButton: 'OK',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
+    done: '完了',
+    doneAndTalk: '完了とトーク',
     dontShowMinicourse: 'Do not show mini-course in the future',
     letsGo: 'さあ、やってみましょう！',
     next: '次へ',
@@ -32,7 +32,7 @@ export default {
   },
   projects: {
     welcome: {
-      heading: "Welcome! We're so glad you're here",
+      heading: "ようこそ！来てくれたことを感謝しております。",
       thanks: '我々の研究を支援することに興味を持っていただき誠に感謝しています。ここでは、皆様の参加することができるいくつかのプロジェクトを集めました。その他のオプションについては、ロジェクトのすべてを参照するために下にスクロールしてください。',
       talk: 'Make sure to also check out [Talk](/talk) where you can chat to other like-minded volunteers.',
       scrollDown: 'Scroll down for even more'
@@ -49,7 +49,7 @@ export default {
         research: '研究',
         results: '結果',
         faq: 'よくある質問',
-        education: 'Education',
+        education: '教育',
         team: 'チームメンバー'
       }
     },
@@ -60,27 +60,27 @@ export default {
       collections: 'コレクション',
       exploreProject: 'Explore Project',
       lab: 'Lab',
-      recents: 'Recents',
+      recents: '最近',
       talk: 'トーク',
       underReview: 'Under Review',
       zooniverseApproved: 'Zooniverse Approved'
     },
     classifyPage: {
-      dark: '暗',
-      light: '明',
+      dark: 'ダーク',
+      light: 'ライト',
       title: '分類する',
-      themeToggle: 'Switch to %(theme)s theme'
+      themeToggle: '%(theme)s へ切り替える'
     },
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      about: '%(title)s について',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: '分類',
-        volunteers: 'ボランティア達',
-        completedSubjects: '終了した',
-        subjects: '対象物'
+        statistics: '%(title)s 統計',
+        classifications: '分類数',
+        volunteers: 'ボランティア数',
+        completedSubjects: '分類された対象物数',
+        subjects: '対象物数'
       },
       talk: {
         zero: 'No one is talking about **%(title)s** right now.',
@@ -88,11 +88,11 @@ export default {
         other: '**%(count)s** people are talking about **%(title)s** right now.'
       },
       joinIn: '参加する',
-      learnMore: 'はじめる',
-      getStarted: 'Get started',
+      learnMore: 'このプロジェクトについて',
+      getStarted: 'はじめる',
       workflowAssignment: "You've unlocked %(workflowDisplayName)s",
       visitLink: 'Visit the project',
-      links: 'External Project Links'
+      links: '外部プロジェクト リンク'
     }
   },
   organization: {
