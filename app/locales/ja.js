@@ -4,7 +4,7 @@ export default {
     back: '戻る',
     backButtonWarning: 'Going back will clear your work for the current task.',
     close: '閉じる',
-    continue: '続ける',
+    continue: '次へ',
     detailsSubTaskFormSubmitButton: 'OK',
     done: '完了',
     doneAndTalk: '完了とトーク',
