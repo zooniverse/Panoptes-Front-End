@@ -31,6 +31,9 @@ import ExpertOptions from './expert-options';
 
 import openFeedbackModal from '../features/feedback/classifier';
 
+import { getCrowdHandler } from './crowd_manager';
+
+
 // For easy debugging
 window.cachedClassification = CacheClassification;
 
@@ -47,6 +50,7 @@ class Classifier extends React.Component {
     this.onNextTask = this.onNextTask.bind(this);
     this.onPrevTask = this.onPrevTask.bind(this);
     this.onNextSubject = this.onNextSubject.bind(this);
+    this.crowdHandler = getCrowdHandler()
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
@@ -267,6 +271,7 @@ class Classifier extends React.Component {
       }
     );
     actions.classify.updateMetadata({
+      ...this.crowdHandler.getMetadata(),
       viewport: {
         width: innerWidth,
         height: innerHeight
