@@ -23,6 +23,12 @@ import WorkflowSelection from './workflow-selection';
 import ClassroomWorkflowSelection from './workflow-selection-classroom';
 import { zooTheme } from '../../theme';
 
+// Disable beforeunload to prevent warning popup (via https://stackoverflow.com/a/61927625)
+window.addEventListener('beforeunload', e => {
+  window.onbeforeunload = null;
+  e.stopImmediatePropagation();
+});
+
 function onClassificationSaved(actualClassification) {
   Split.classificationCreated(actualClassification); // Metric log needs classification id
 }
@@ -363,13 +369,13 @@ const ConnectedClassifyPage = connect(mapStateToProps, mapDispatchToProps)(Proje
 
 function ConnectedClassifyPageWithWorkflow(props) {
   const workflowKey = props.workflow ? props.workflow.id : 'no-workflow';
-  
+
   //Check for WildCam Lab classrooms (see https://github.com/zooniverse/edu-api-front-end)
   const workflowFromUrl = props.location.query && props.location.query.workflow;
   const isProjectForClassrooms = (props.project && props.project.experimental_tools && props.project.experimental_tools.indexOf('wildcam classroom') > -1);
   const isUrlForClassrooms = props.location.query && props.location.query.classroom;
   const isClassroom = isProjectForClassrooms && isUrlForClassrooms && workflowFromUrl;
-  
+
   const WorkflowStrategy = isClassroom ? ClassroomWorkflowSelection : WorkflowSelection;
   return (
     <WorkflowStrategy
