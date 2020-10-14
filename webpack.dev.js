@@ -29,13 +29,15 @@ var config = {
   },
   plugins: [
     new webpack.EnvironmentPlugin([
+      'CLICKWORKER_POSTBACK_URL',
       'HEAD_COMMIT',
+      'MTURK_POSTBACK_URL',
       'NODE_ENV',
       'PANOPTES_API_APPLICATION',
       'PANOPTES_API_HOST',
       'STAT_HOST',
       'SUGAR_HOST',
-      'TALK_HOST'
+      'TALK_HOST',
     ]),
     new CopyWebpackPlugin([
       { from: 'public', to: '.' }
