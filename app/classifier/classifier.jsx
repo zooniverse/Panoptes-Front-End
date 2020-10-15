@@ -301,6 +301,7 @@ class Classifier extends React.Component {
         this.setState({ annotations, showIntervention, showSummary, workflowHistory });
       })
       .then(onComplete)
+      .then(this.crowdHandler.triggerCallback)
       .then(() => {
         return showLastStep ? null : this.onNextSubject();
       })

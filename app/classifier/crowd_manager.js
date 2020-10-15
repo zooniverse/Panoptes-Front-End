@@ -45,9 +45,6 @@ class ClickworkerHandler extends NoopHandler {
       clickworker: {...metadata}
     }
   }
-
-  triggerCallback() {
-  }
 }
 
 class MTurkHandler extends NoopHandler {
@@ -66,10 +63,6 @@ class MTurkHandler extends NoopHandler {
     return {
       mturk: {...metadata}
     }
-  }
-
-  triggerCallback() {
-
   }
 }
 
