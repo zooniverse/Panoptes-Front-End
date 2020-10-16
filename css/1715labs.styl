@@ -5,3 +5,13 @@
 a[href*="/talk/"],           // Any Talk links
 a[href*="/talk/"] + button   // Final 'Next' button
   display: none !important
+
+
+// Overlay to block interaction when in MTurk's Preview Mode
+.previewmode_overlay
+  height: 100%
+  width: 100%
+  z-index: 100
+  position: absolute
+  top: 0
+  left: 0

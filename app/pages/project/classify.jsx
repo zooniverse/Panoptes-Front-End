@@ -293,6 +293,9 @@ export class ProjectClassifyPage extends React.Component {
       >
         <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
 
+        {crowdHandler.previewMode &&
+          <div className="previewmode_overlay" />}
+
         {this.props.projectIsComplete &&
           <FinishedBanner project={this.props.project} />}
 
