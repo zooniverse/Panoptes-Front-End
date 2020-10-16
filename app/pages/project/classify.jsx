@@ -27,7 +27,8 @@ import { getCrowdHandler } from '../../crowd_handler';
 
 const crowdHandler = getCrowdHandler()
 
-// Disable beforeunload to prevent warning popup (via https://stackoverflow.com/a/61927625)
+// Disable beforeunload to prevent warning popup (via https://stackoverflow.com/a/61927625) - for
+// some reason, this tends to fire in crowd platform iFrames.
 window.addEventListener('beforeunload', e => {
   window.onbeforeunload = null;
   e.stopImmediatePropagation();
@@ -35,7 +36,7 @@ window.addEventListener('beforeunload', e => {
 
 function onClassificationSaved(actualClassification) {
   Split.classificationCreated(actualClassification); // Metric log needs classification id
-  crowdHandler.triggerCallback(actualClassification)
+  crowdHandler.triggerCallback(actualClassification);
 }
 
 function isPresent(val) {
