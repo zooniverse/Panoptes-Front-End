@@ -149,6 +149,9 @@ module.exports =
     <Route path="/projects/nora-dot-eisner/planet-hunters-tess" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/nora-dot-eisner/planet-hunters-tess' />} />
     <Route path="/projects/nora-dot-eisner/planet-hunters-tess/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/nora-dot-eisner/planet-hunters-tess/classify' />} />
 
+    <Route path="/projects/adamamiller/stellar-sleuths" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/adamamiller/stellar-sleuths' />} />
+    <Route path="/projects/adamamiller/stellar-sleuths/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/adamamiller/stellar-sleuths/classify' />} />
+
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
