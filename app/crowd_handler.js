@@ -22,8 +22,14 @@ class NoopHandler {
   constructor(queryParams) {
     this._queryParams = queryParams
     this.previewMode = false
+    console.group('1715 Labs Crowd Handler config')
+    console.info('CLICKWORKER_POSTBACK_URL', process.env.CLICKWORKER_POSTBACK_URL)
+    console.info('MTURK_POSTBACK_URL', process.env.MTURK_POSTBACK_URL)
+    console.groupEnd()
   }
 
+  // Extract the keys passed via the arguments from the queryParams property, and return as
+  // an object.
   constructMetadata() {
     const metadata = {}
     for (const targetParam of arguments) {
@@ -35,11 +41,13 @@ class NoopHandler {
     return metadata
   }
 
+  // Provide the crowd platform metadata for the classification.
   getMetadata() {
     console.info('NoopHandler, so no additional metadata')
     return {}
   }
 
+  // Trigger the postback process for completing a task on the crowd platform.
   triggerCallback(classification) {
     console.info('NoopHandler, so nothing to do here')
     console.info('Classification:', classification)
@@ -64,7 +72,6 @@ class ClickworkerHandler extends NoopHandler {
     }
 
     const newUrl = process.env.CLICKWORKER_POSTBACK_URL + '?' + qs.stringify(redirectQueryParams)
-    console.info(newUrl)
     window.location = newUrl
   }
 }
@@ -75,6 +82,9 @@ class MTurkHandler extends NoopHandler {
     this.previewMode = this.determinePreviewMode()
   }
 
+  // MTurk has a preview mode which should be set when the `assignmentId` query param is set to
+  // `'ASSIGNMENT_ID_NOT_AVAILABLE'`. In preview mode, interaction with the underlying iFrame needs
+  // needs to be prevented.
   determinePreviewMode() {
     return this._queryParams.assignmentId &&
       this._queryParams.assignmentId === 'ASSIGNMENT_ID_NOT_AVAILABLE'
