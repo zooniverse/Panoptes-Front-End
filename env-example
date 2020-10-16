@@ -1,0 +1,7 @@
+# Production
+# CLICKWORKER_POSTBACK_URL="https://o3db0ff9ca.execute-api.us-east-1.amazonaws.com/production/clickworker"
+# MTURK_POSTBACK_URL="https://www.mturk.com/mturk/externalSubmit"
+
+# Staging
+# CLICKWORKER_POSTBACK_URL="https://9tvckrvn9e.execute-api.us-east-1.amazonaws.com/staging/clickworker"
+# MTURK_POSTBACK_URL="https://workersandbox.mturk.com/mturk/externalSubmit"
