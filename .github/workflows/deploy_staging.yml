@@ -1,0 +1,32 @@
+name: Deploy to Staging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10'
+      - run: npm install
+      - name: Build app
+        run: npm run build --if-present
+        env:
+          CLICKWORKER_POSTBACK_URL: 'https://9tvckrvn9e.execute-api.us-east-1.amazonaws.com/staging/clickworker'
+          MTURK_POSTBACK_URL: 'https://workersandbox.mturk.com/mturk/externalSubmit'
+          NODE_ENV: 'production'
+      - uses: jakejarvis/s3-sync-action@master
+        with:
+          # will need to re-enable --acl public-read
+          args: --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: classifiers.1715labs.com
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'eu-west-2'
+          SOURCE_DIR: 'dist'
+          DEST_DIR: '1715labs-pfe/staging'
