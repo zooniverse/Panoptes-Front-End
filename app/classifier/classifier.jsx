@@ -31,7 +31,6 @@ import ExpertOptions from './expert-options';
 
 import openFeedbackModal from '../features/feedback/classifier';
 
-import { getCrowdHandler } from './crowd_manager';
 
 
 // For easy debugging
@@ -50,7 +49,6 @@ class Classifier extends React.Component {
     this.onNextTask = this.onNextTask.bind(this);
     this.onPrevTask = this.onPrevTask.bind(this);
     this.onNextSubject = this.onNextSubject.bind(this);
-    this.crowdHandler = getCrowdHandler()
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
@@ -271,7 +269,7 @@ class Classifier extends React.Component {
       }
     );
     actions.classify.updateMetadata({
-      ...this.crowdHandler.getMetadata(),
+      ...this.props.crowdHandler.getMetadata(),
       viewport: {
         width: innerWidth,
         height: innerHeight
@@ -296,12 +294,12 @@ class Classifier extends React.Component {
           browserHistory.push(subjectTalkPath);
         }
       })
+      .then(() => console.info(classification))
       .then(() => {
         workflowHistory = [];
         this.setState({ annotations, showIntervention, showSummary, workflowHistory });
       })
       .then(onComplete)
-      .then(this.crowdHandler.triggerCallback)
       .then(() => {
         return showLastStep ? null : this.onNextSubject();
       })

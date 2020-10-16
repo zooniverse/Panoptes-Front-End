@@ -23,6 +23,10 @@ import WorkflowSelection from './workflow-selection';
 import ClassroomWorkflowSelection from './workflow-selection-classroom';
 import { zooTheme } from '../../theme';
 
+import { getCrowdHandler } from '../../crowd_handler';
+
+const crowdHandler = getCrowdHandler()
+
 // Disable beforeunload to prevent warning popup (via https://stackoverflow.com/a/61927625)
 window.addEventListener('beforeunload', e => {
   window.onbeforeunload = null;
@@ -31,6 +35,7 @@ window.addEventListener('beforeunload', e => {
 
 function onClassificationSaved(actualClassification) {
   Split.classificationCreated(actualClassification); // Metric log needs classification id
+  crowdHandler.triggerCallback(actualClassification)
 }
 
 function isPresent(val) {
@@ -260,6 +265,7 @@ export class ProjectClassifyPage extends React.Component {
           key={classification.links.workflow}
           {...this.props}
           classification={classification}
+          crowdHandler={crowdHandler}
           subject={subject}
           demoMode={demoMode}
           onChangeDemoMode={this.handleDemoModeChange.bind(this)}
