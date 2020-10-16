@@ -9,6 +9,7 @@
     "data-uri-to-blob": "0.0.4",
     "debounce": "~1.2.0",
     "dompurify": "~2.0.3",
+    "dotenv-webpack": "~1.7.0",
     "drag-reorderable": "~0.2.0",
     "engine.io-client": "~3.3.0",
     "hash.js": "~1.1.7",

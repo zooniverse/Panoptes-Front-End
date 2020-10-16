@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: [
@@ -34,6 +35,7 @@ module.exports = {
     chunkFilename: '[name]-[chunkhash].js',
   },
   plugins: [
+    new Dotenv(),
     new webpack.EnvironmentPlugin([
       'CLICKWORKER_POSTBACK_URL',
       'HEAD_COMMIT',

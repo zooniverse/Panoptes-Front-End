@@ -5,6 +5,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var DashboardPlugin = require('webpack-dashboard/plugin');
+const Dotenv = require('dotenv-webpack');
 
 var config = {
   mode: 'development',
@@ -28,6 +29,7 @@ var config = {
     filename: '[name].js',
   },
   plugins: [
+    new Dotenv(),
     new webpack.EnvironmentPlugin([
       'CLICKWORKER_POSTBACK_URL',
       'HEAD_COMMIT',
