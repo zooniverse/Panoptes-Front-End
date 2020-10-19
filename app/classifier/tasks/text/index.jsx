@@ -34,10 +34,6 @@ export default class TextTask extends React.PureComponent {
     });
   }
 
-  componentDidUpdate() {
-    this.handleResize();
-  }
-
   componentWillUnmount() {
     this.debouncedUpdateAnnotation.flush();
     clearTimeout(this.handleMount);
@@ -69,6 +65,7 @@ export default class TextTask extends React.PureComponent {
         this.textInput.current.setSelectionRange((value.length - textAfter.length), (value.length - textAfter.length));
         this.textInput.current.focus();
       }
+      this.handleResize();
     });
 
     this.updateAnnotation(value);
@@ -76,10 +73,12 @@ export default class TextTask extends React.PureComponent {
 
   handleChange() {
     const value = this.textInput.current.value;
-    if (value.length < this.state.value.length) {
-      this.setState({ rows: 1, value });
-    } else {
-      this.setState({ value });
+    if (value !== this.state.value) {
+      if (value.length < this.state.value.length) {
+        this.setState({ rows: 1, value }, this.handleResize);
+      } else {
+        this.setState({ value }, this.handleResize);
+      }
     }
 
     this.debouncedUpdateAnnotation(value);
