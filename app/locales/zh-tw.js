@@ -39,9 +39,9 @@ export default {
       header: '關於',
       nav: {
         research: '研究項目',
-        results: 'Results',
+        results: '結果',
         faq: 'FAQ',
-        education: 'Education',
+        education: '教育',
         team: '研究團隊',
       }
     },
