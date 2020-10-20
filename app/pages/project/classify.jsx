@@ -24,6 +24,7 @@ import ClassroomWorkflowSelection from './workflow-selection-classroom';
 import { zooTheme } from '../../theme';
 
 import { getCrowdHandler } from '../../crowd_handler';
+import PreviewModeOverlay from './preview-mode-overlay';
 
 const crowdHandler = getCrowdHandler()
 
@@ -295,7 +296,7 @@ export class ProjectClassifyPage extends React.Component {
         <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
 
         {crowdHandler.previewMode &&
-          <div className="previewmode_overlay" />}
+          <PreviewModeOverlay />}
 
         {this.props.projectIsComplete &&
           <FinishedBanner project={this.props.project} />}
