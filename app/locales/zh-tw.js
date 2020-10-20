@@ -79,7 +79,7 @@ export default {
         one: '**1** 位用戶正在討論中 **%(title)s**.',
         other: '**%(count)s** 位用戶正在討論中 **%(title)s**.'
       },
-      joinIn: 'Join in',
+      joinIn: '加入',
       learnMore: '瞭解更多',
       getStarted: '開始',
       workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
@@ -845,8 +845,8 @@ export default {
           details: '- **Project Details:** Here you can add information that generates a home page for your project. Start by naming and describing your project, add a logo and background image.',
           about: '- **關於:** Here you can add all sorts of additional pages, including *Research, Team, Results, Education,* and *FAQ*',
           collaborators: '- **Collaborators:** Add people to your team. You can specify their roles so that they have access to the tools they need (such as access to the project before it\'s public).',
-          fieldGuide: '- **實地指南:** A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they\'re seeing.',
-          tutorial: '- **教程:** This is where you create tutorials to show your users how to contribute to your project.',
+          fieldGuide: '- **實戰手冊:** A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they\'re seeing.',
+          tutorial: '- **說明:** This is where you create tutorials to show your users how to contribute to your project.',
           media: '- **Media:** Add images you need for your project pages (not the images you want people to classify!)',
           visibility: '- **Visibility:** Set your project\'s "state" - private or public, live or in development, and apply for review by the Zooniverse. You can also activate or deactivate specific workflows on this page.',
           talk: '- **討論:** Create and manage discussion boards for your project.',
@@ -903,12 +903,12 @@ export default {
           backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         fieldGuide: {
-          title: '### 實地指南',
+          title: '### 實戰手冊',
           intro: 'A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they\'re seeing. It\'s available anywhere in your project, accessible via a tab on the right-hand side of the screen.',
           details: 'Information can be grouped into different sections, and each section should have a title and an icon. Content for each section is rendered with [Markdown](http://markdownlivepreview.com/), so you can include any media you\'ve uploaded for your project there.'
         },
         tutorial: {
-          title: '### 教程',
+          title: '### 說明',
           intro: 'In this section, you can create a step-by-step tutorial to show your users how to use your project. You can upload images and enter text to create each step of the tutorial. You can add as many steps as you want, but keep your tutorial as short as possible so volunteers can start classifying as soon as possible.',
           details: 'In some cases, you might have several different workflows, and will therefore need several different tutorials. In the Workflows tab, you can specify which tutorial shows for the workflow a volunteer is on.'
         },
