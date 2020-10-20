@@ -7,14 +7,14 @@ export default {
     continue: 'Continue',
     detailsSubTaskFormSubmitButton: 'OK',
     done: '完成',
-    doneAndTalk: '完成討論',
+    doneAndTalk: '完成並前往討論區',
     dontShowMinicourse: 'Do not show mini-course in the future',
     letsGo: 'Let’s go!',
-    next: '下一個',
+    next: '下一步',
     optOut: 'Opt out',
     taskTabs: {
       taskTab: '任務',
-      tutorialTab: '教程'
+      tutorialTab: '說明'
     },
     recents: 'Your recent classifications',
     talk: '討論',
@@ -39,9 +39,9 @@ export default {
       header: '關於',
       nav: {
         research: '研究項目',
-        results: 'Results',
+        results: '成果',
         faq: 'FAQ',
-        education: 'Education',
+        education: '教育',
         team: '研究團隊',
       }
     },
