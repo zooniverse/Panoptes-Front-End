@@ -62,6 +62,18 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
+  onChangeSubjectViewer(workflow, event) {
+    this.setState({ error: null })
+    let selected = event.target.value
+    selected = selected === 'none' ? undefined : selected;
+    if (!workflow.configuration.classifier_version) {
+      workflow.update({ 'configuration.classifier_version': '2.0' });
+    }
+    return workflow.update({ 'configuration.subject_viewer': selected }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+
   getProject() {
     const { owner, name } = this.props.params;
     const slug = `${owner}/${name}`;
@@ -175,7 +187,7 @@ class ProjectStatus extends Component {
     }
 
     return (
-      <ul className="project-status__section-list">
+      <div>
         {this.state.dialogIsOpen &&
           <WorkflowDefaultDialog
             onCancel={this.handleDialogCancel}
@@ -183,51 +195,63 @@ class ProjectStatus extends Component {
           />}
         {this.state.workflows.map((workflow) => {
           return (
-            <li key={workflow.id} className="section-list__item">
-              {this.state.project.configuration &&
-                this.state.project.configuration.default_workflow === workflow.id ? ' * ' : ''}
-              <WorkflowToggle
-                workflow={workflow}
-                name="active"
-                checked={workflow.active}
-                handleToggle={event => this.handleToggle(event, workflow)}
-              />{' | '}
-              <label>
-                Level:{' '}
-                <select
-                  id='promotionLevels'
-                  onChange={(event) => this.onChangeWorkflowLevel(workflow, event)}
-                  value={workflow.configuration.level && workflow.configuration.level}
-                >
-                  <option value="none">none</option>
-                  {this.state.workflows.map((w, i) => {
-                    const value = i + 1;
-                    return (
-                      <option
-                        key={i + Math.random()}
-                        value={value}
-                        disabled={this.state.usedWorkflowLevels.indexOf(value) > -1}
-                      >
-                        {value}
-                      </option>
-                    );
-                  })}
-                </select>
-              </label>
-              {' | '}
-              <label>
-                Retirement:{' '}
-                <select
-                  id='retirementConfig'
-                  onChange={(event) => this.onChangeWorkflowRetirement(workflow, event)}
-                  value={workflow.retirement.criteria}
-                >
-                  <option value="never_retire">Never Retire</option>
-                  <option value="classification_count">Classification Count - {(workflow.retirement.options && workflow.retirement.options.count) || ''}</option>
-                </select>
-              </label>
-              <fieldset>
-                <legend>Subject image layout</legend>
+            <fieldset key={workflow.id} className="project-status__section-settings">
+              <legend>{`Workflow ${workflow.id}: ${workflow.display_name}`}</legend>
+              <div>
+                <h4>Workflow Activeness</h4>
+                {this.state.project.configuration &&
+                  this.state.project.configuration.default_workflow === workflow.id ? ' * ' : ''}
+                <WorkflowToggle
+                  workflow={workflow}
+                  name="active"
+                  checked={workflow.active}
+                  handleToggle={event => this.handleToggle(event, workflow)}
+                />
+              </div>
+              <hr />
+              <div>
+                <h4>Workflow assignment/promotion settings</h4>
+                <label>
+                  Level:{' '}
+                  <select
+                    id='promotionLevels'
+                    onChange={(event) => this.onChangeWorkflowLevel(workflow, event)}
+                    value={workflow.configuration.level && workflow.configuration.level}
+                  >
+                    <option value="none">none</option>
+                    {this.state.workflows.map((w, i) => {
+                      const value = i + 1;
+                      return (
+                        <option
+                          key={i + Math.random()}
+                          value={value}
+                          disabled={this.state.usedWorkflowLevels.indexOf(value) > -1}
+                        >
+                          {value}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </label>
+              </div>
+              <hr />
+              <div>
+                <h4>Subject retirement settings</h4>
+                <label>
+                  Retirement:{' '}
+                  <select
+                    id='retirementConfig'
+                    onChange={(event) => this.onChangeWorkflowRetirement(workflow, event)}
+                    value={workflow.retirement.criteria}
+                  >
+                    <option value="never_retire">Never Retire</option>
+                    <option value="classification_count">Classification Count - {(workflow.retirement.options && workflow.retirement.options.count) || ''}</option>
+                  </select>
+                </label>
+              </div>
+              <hr />
+              <div>
+                <h4>Subject viewer layout settings</h4>
                 <label>
                   <input
                     type="checkbox"
@@ -241,20 +265,44 @@ class ProjectStatus extends Component {
                   />
                   no max height
                 </label>
-              </fieldset>
-              <label>
-                <input
-                  id="grouped"
-                  type="checkbox"
-                  onChange={event => this.toggleWorkflowGrouped(event, workflow)}
-                  defaultChecked={workflow.grouped}
-                />
+              </div>
+              <hr />
+              <div>
+                <h4>Subject selection settings</h4>
+                <label>
+                  <input
+                    id="grouped"
+                    type="checkbox"
+                    onChange={event => this.toggleWorkflowGrouped(event, workflow)}
+                    defaultChecked={workflow.grouped}
+                  />
                   Use grouped subject selection
-              </label>
-            </li>
+                </label>
+              </div>
+              <hr />
+              <div>
+                <h4>Classifier 2.0 (rewrite) settings</h4>
+                <label>
+                  Subject Viewer:{' '}
+                  <select
+                    id="subject-viewers"
+                    onChange={(event) => this.onChangeSubjectViewer(workflow, event)}
+                    value={workflow.configuration.subject_viewer}
+                  >
+                    <option value="none">None Selected</option>
+                    <option value="dataImage">Data Image</option>
+                    <option value="lightcurve">(D3/TESS) Light Curve</option>
+                    <option value="multiFrame">Multi-Frame</option>
+                    <option value="singleImage">Single Image</option>
+                    <option value="subjectGroup">Subject Group</option>
+                    <option value="variableStar">Variable Star</option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
           );
         })}
-      </ul>
+      </div>
     );
   }
 
@@ -336,8 +384,7 @@ class ProjectStatus extends Component {
         />
         <ExperimentalFeatures project={project} />
         <div className="project-status__section">
-          <h4>Workflow Settings</h4>
-          <small>The workflow level dropdown is for the workflow assignment experimental feature.</small>
+          <h3>Workflow Settings</h3>
           <br />
           <small>An asterisk (*) denotes a default workflow.</small>
           {this.state.error &&
