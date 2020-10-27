@@ -8,7 +8,7 @@ debounce = require 'debounce'
 DragReorderable = require 'drag-reorderable'
 classnames = require 'classnames'
 AutoSave = require '../components/auto-save'
-handleInputChange = require '../lib/handle-input-change'
+handleInputChange = require('../lib/handle-input-change').default
 alert = require('../lib/alert').default
 confirm = require('../lib/confirm').default
 

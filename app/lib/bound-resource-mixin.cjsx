@@ -1,4 +1,4 @@
-handleInputChange = require './handle-input-change'
+handleInputChange = require('./handle-input-change').default
 
 DEFAULT_UNSAVED_CHANGES_WARNING = '''
     Are you sure you want to leave this page?

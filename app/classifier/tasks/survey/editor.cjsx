@@ -6,7 +6,7 @@ Details = require '../../../components/details'
 TriggeredModalForm = require 'modal-form/triggered'
 surveyEditorHelp = require('./editor-help').default
 AutoSave = require '../../../components/auto-save'
-handleInputChange = require '../../../lib/handle-input-change'
+handleInputChange = require('../../../lib/handle-input-change').default
 NextTaskSelector = require '../next-task-selector'
 # `import MediaArea from '../../../pages/lab/media-area/';`
 MediaArea = require('../../../pages/lab/media-area/').default

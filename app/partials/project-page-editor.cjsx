@@ -1,7 +1,7 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 AutoSave = require '../components/auto-save'
-handleInputChange = require '../lib/handle-input-change'
+handleInputChange = require('../lib/handle-input-change').default
 apiClient = require 'panoptes-client/lib/api-client'
 PromiseToSetState = require '../lib/promise-to-set-state'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
