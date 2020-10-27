@@ -49,6 +49,7 @@ const UserDetails = (props) => {
                 Zooniverse general emails
               </label>
             </li>
+            <li>
               <label>
                 <input
                   type="checkbox"
@@ -58,7 +59,17 @@ const UserDetails = (props) => {
                 />{' '}
                 Beta test emails
               </label>
+            </li>
             <li>
+              <label>
+                <input
+                  type="checkbox"
+                  name="nasa_email_communication"
+                  checked={props.user.nasa_email_communication}
+                  onChange={onChange}
+                />{' '}
+                NASA emails
+              </label>
             </li>
           </ul>
         </fieldset>

@@ -9,7 +9,7 @@ export default function handleInputChange(e) {
     throw new Error('Bind the handleInputChange function to a json-api-client Model instance')
   }
 
-  let valueProperty = 'value';
+  let valueProperty;
   switch (e.target.type) {
     case 'checkbox': {
       valueProperty = 'checked';
@@ -19,9 +19,12 @@ export default function handleInputChange(e) {
       valueProperty = 'files';
       break;
     }
+    default: {
+      valueProperty = 'value';
+    }
   }
 
-  const value = e.target[valueProperty];
+  let value = e.target[valueProperty];
 
   if (e.target.dataset?.jsonValue) {
     value = JSON.parse(value);
