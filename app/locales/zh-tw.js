@@ -7,7 +7,7 @@ export default {
     continue: 'Continue',
     detailsSubTaskFormSubmitButton: 'OK',
     done: '完成',
-    doneAndTalk: '完成討論',
+    doneAndTalk: '完成並前往討論區',
     dontShowMinicourse: 'Do not show mini-course in the future',
     letsGo: 'Let’s go!',
     next: '繼續',
