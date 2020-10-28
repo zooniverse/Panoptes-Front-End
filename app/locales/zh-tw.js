@@ -1,7 +1,7 @@
 export default {
   loading: '(Loading)',
   classifier: {
-    back: 'Back',
+    back: '返回',
     backButtonWarning: 'Going back will clear your work for the current task.',
     close: 'Close',
     continue: 'Continue',
@@ -10,13 +10,13 @@ export default {
     doneAndTalk: '完成討論',
     dontShowMinicourse: 'Do not show mini-course in the future',
     letsGo: 'Let’s go!',
-    next: '下一個',
+    next: '繼續',
     optOut: 'Opt out',
     taskTabs: {
       taskTab: '任務',
-      tutorialTab: '教程'
+      tutorialTab: '說明'
     },
-    recents: 'Your recent classifications',
+    recents: '這些是你最近完成的分類',
     talk: '討論',
     taskHelpButton: '需要幫助？',
     miniCourseButton: 'Restart the project mini-course',
@@ -34,14 +34,14 @@ export default {
     language: '語言',
     loading: 'Loading project',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
-    fieldGuide: 'Field Guide',
+    fieldGuide: '實戰手冊',
     about: {
       header: '關於',
       nav: {
         research: '研究項目',
-        results: 'Results',
-        faq: 'FAQ',
-        education: 'Education',
+        results: '成果',
+        faq: '常見問題',
+        education: '教育應用',
         team: '研究團隊',
       }
     },
@@ -79,7 +79,7 @@ export default {
         one: '**1** 位用戶正在討論中 **%(title)s**.',
         other: '**%(count)s** 位用戶正在討論中 **%(title)s**.'
       },
-      joinIn: 'Join in',
+      joinIn: '加入',
       learnMore: '瞭解更多',
       getStarted: '開始',
       workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
@@ -180,8 +180,8 @@ export default {
     title: 'Sign in/register',
     withZooniverse: 'Sign in with your Zooniverse account',
     whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.',
-    signIn: 'Sign in',
-    register: 'Register',
+    signIn: '登入',
+    register: '註冊',
     orThirdParty: 'Or sign in with another service',
     withFacebook: 'Sign in with Facebook',
     withGoogle: 'Sign in with Google'
