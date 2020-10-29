@@ -1,24 +1,24 @@
 export default {
   loading: '(Loading)',
   classifier: {
-    back: '返回',
+    back: 'Back',
     backButtonWarning: 'Going back will clear your work for the current task.',
     close: 'Close',
     continue: 'Continue',
     detailsSubTaskFormSubmitButton: 'OK',
-    done: '完成',
-    doneAndTalk: '完成並前往討論區',
+    done: 'Done',
+    doneAndTalk: 'Done & Talk',
     dontShowMinicourse: 'Do not show mini-course in the future',
     letsGo: 'Let’s go!',
-    next: '繼續',
+    next: 'Next',
     optOut: 'Opt out',
     taskTabs: {
-      taskTab: '任務',
-      tutorialTab: '說明'
+      taskTab: 'Task',
+      tutorialTab: 'Tutorial'
     },
-    recents: '這些是你最近完成的分類',
-    talk: '討論',
-    taskHelpButton: '需要幫助？',
+    recents: 'Your recent classifications',
+    talk: 'Talk',
+    taskHelpButton: 'Need some help with this task?',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
@@ -30,85 +30,131 @@ export default {
       studyInfo: 'I do not want to take part in this messaging [study](+tab+https://docs.google.com/document/d/1gLyN6Dgff8dOCOC88f47OD6TtFrfSJltsLgJMKkYMso/preview).'
     }
   },
+  projects: {
+    welcome: {
+      heading: "Welcome! We're so glad you're here",
+      thanks: "Thank you for your interest in helping real research. Here we've gathered a few projects we could really use your help on right now. For more options just scroll down to browse all of our active projects.",
+      talk: "Make sure to also check out [Talk](/talk) where you can chat to other like-minded volunteers.",
+      scrollDown: "Scroll down for even more"
+    }
+  },
   project: {
-    language: '語言',
+    language: 'Language',
     loading: 'Loading project',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
-    fieldGuide: '實戰手冊',
+    fieldGuide: 'Field Guide',
     about: {
-      header: '關於',
+      header: 'About',
       nav: {
-        research: '研究項目',
-        results: '成果',
-        faq: '常見問題',
-        education: '教育應用',
-        team: '研究團隊',
+        research: 'Research',
+        results: 'Results',
+        faq: 'FAQ',
+        education: 'Education',
+        team: 'The Team',
       }
     },
     nav: {
-      about: '關於',
+      about: 'About',
       adminPage: 'Admin page',
-      classify: '分類',
-      collections: '收藏',
-      exploreProject: '探索項目',
-      lab: '實驗室',
-      recents: '最近',
-      talk: '討論',
+      classify: 'Classify',
+      collections: 'Collect',
+      exploreProject: 'Explore Project',
+      lab: 'Lab',
+      recents: 'Recents',
+      talk: 'Talk',
       underReview: 'Under Review',
       zooniverseApproved: 'Zooniverse Approved'
     },
     classifyPage: {
       dark: 'dark',
       light: 'light',
-      title: '分類',
+      title: 'Classify',
       themeToggle: 'Switch to %(theme)s theme'
     },
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',
-      about: '關於 %(title)s',
+      about: 'About %(title)s',
       metadata: {
-        statistics: '%(title)s 數據',
-        classifications: '分類',
-        volunteers: '志願者',
-        completedSubjects: '已完成目標',
-        subjects: '目標'
+        statistics: '%(title)s Statistics',
+        classifications: 'Classifications',
+        volunteers: 'Volunteers',
+        completedSubjects: 'Completed Subjects',
+        subjects: 'Subjects'
       },
       talk: {
-        zero: '位用戶正在討論中 **%(title)s**.',
-        one: '**1** 位用戶正在討論中 **%(title)s**.',
-        other: '**%(count)s** 位用戶正在討論中 **%(title)s**.'
+        zero: 'No one is talking about **%(title)s** right now.',
+        one: '**1** person is talking about **%(title)s** right now.',
+        other: '**%(count)s** people are talking about **%(title)s** right now.'
       },
-      joinIn: '加入',
-      learnMore: '瞭解更多',
-      getStarted: '開始',
+      joinIn: 'Join in',
+      learnMore: 'Learn more',
+      getStarted: 'Get started',
       workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
       visitLink: 'Visit the project',
-      links: '外部鏈接'
+      links: 'External Project Links'
     }
   },
   organization: {
     error: 'There was an error retrieving organization',
     home: {
-      introduction: 'Introduction',
-      links: 'Links',
+      about: 'About %(title)s',
+      introduction: '%(title)s Introduction',
+      learn: 'Learn more about %(title)s',
+      links: 'Connect with %(title)s',
       metadata: {
-        projects: 'Projects'
+        complete: 'Percent complete',
+        heading: 'Organization Statistics',
+        numbers: 'By the numbers',
+        projects: 'Projects',
+        subtitle: 'Keep track of the progress you and your fellow volunteers have made on this project.',
+        text: 'Every click counts! Join %(title)s\'s community to complete this project and help researchers produce important results.'
       },
       projects: {
+        active: 'Active Projects',
+        all: 'All',
         error: 'There was an error loading organization projects.',
+        finished: 'Finished Projects',
+        hideSection: 'Hide Section',
         loading: 'Loading organization projects...',
-        none: 'There are no projects associated with this organization.'
+        none: 'There are no %(state)s %(category)s projects associated with this organization.',
+        paused: 'Paused Projects',
+        projectCategory: 'Project Category',
+        showSection: 'Show Section'
       },
-      readLess: 'Read Less',
-      readMore: 'Read More',
-      researcher: 'Words from a researcher',
-      viewToggle: 'View As Volunteer'
+      researcher: 'Message from the Researcher',
+      viewToggle: 'View as volunteer'
     },
     loading: 'Loading organization',
     notFound: 'organization not found.',
     notPermission: 'If you\'re sure the URL is correct, you might not have permission to view this organization.',
-    pleaseWait: 'Please wait...'
+    pleaseWait: 'Please wait...',
+    stats: {
+      adjustParameters: 'Adjust Parameters',
+      byTheNumbers: 'By the Numbers',
+      byTheNumbersContent: {
+        classifications: 'Classifications',
+        firstProject: 'First Project',
+        firstProjectLaunch: 'First Project Launch Date',
+        liveProjects: 'Live Projects',
+        pausedProjects: 'Paused Projects',
+        retiredProjects: 'Retired Projects',
+        retiredSubjects: 'Completed Subjects',
+        subjects: 'Subjects'
+      },
+      classification: 'Classifications',
+      comment: 'Talk Comments',
+      dateRange: 'Date range',
+      expandWorkflowStats: 'Expand Workflow Stats',
+      for: 'for',
+      hidden: 'Stats hidden',
+      hourly: 'Hourly data only available for the most recent 2 weeks.',
+      organizationStatistics: '%(title)s Statistics',
+      perclassification: 'Classifications per',
+      percomment: 'Comments per',
+      projectStats: 'Live Projects (%(count)s)',
+      reset: 'Reset view'
+    }
   },
   tasks: {
     hidePreviousMarks: 'Hide previous marks %(count)s',
@@ -126,7 +172,7 @@ export default {
       dismiss: 'Dismiss',
       itsThis: 'I think it’s this',
       cancel: 'Cancel',
-      identify: '辨識',
+      identify: 'Identify',
       surveyOf: 'Survey of %(count)s',
       identifications: {
         zero: 'No identifications',
@@ -180,8 +226,8 @@ export default {
     title: 'Sign in/register',
     withZooniverse: 'Sign in with your Zooniverse account',
     whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.',
-    signIn: '登入',
-    register: '註冊',
+    signIn: 'Sign in',
+    register: 'Register',
     orThirdParty: 'Or sign in with another service',
     withFacebook: 'Sign in with Facebook',
     withGoogle: 'Sign in with Google'
@@ -248,16 +294,18 @@ export default {
   },
   about: {
     index: {
-      header: '關於',
-      title: '關於',
+      header: 'About',
+      title: 'About',
       nav: {
-        about: '關於',
+        about: 'About',
         publications: 'Publications',
         ourTeam: 'Our Team',
         acknowledgements: 'Acknowledgements',
         contact: 'Contact Us',
         faq: 'FAQ',
-        resources: 'Resources'
+        resources: 'Resources',
+        highlights: 'Highlights Book',
+        donate: 'Donate'
       }
     },
     home: {
@@ -691,9 +739,9 @@ export default {
       paragraphTwo: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and over 160 [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of nearly 2 million people working alongside hundreds of professional researchers.',
       paragraphThree: 'The book is an homage to the Zooniverse Year of 2019, highlighting 40 Zooniverse projects out of more than 200 launched to date. There are many fascinating projects we weren’t able to include this year. We hope to continue creating these books annually, highlighting a whole new set of projects and discoveries next year!',
       toDownload: '**To download a free electronic copy:**',
-      download: 'Please click [here](http://bit.ly/zoonibook19-pdf) to download a free electronic copy of ‘Into the Zooniverse’.',
+      download: 'Please click [here](https://bit.ly/zoonibook19-pdf-new) to download a free electronic copy of ‘Into the Zooniverse’.',
       toOrder: '**To order a hard copy:**',
-      order: 'Please click [here](http://bit.ly/zoonibook19-buy) if you would like to order a hard copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
+      order: 'Please click [here](https://bit.ly/zoonibook19-buy-new) if you would like to order a hard copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
       credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
     },
     donate: {
@@ -792,10 +840,10 @@ export default {
           inDetail: {
             title: '* [Project building in detail](#project-building-in-detail)',
             projectDetails: '* [Project Details](#project-details)',
-            about: '  * [關於](#about)',
+            about: '  * [About](#about)',
             collaborators: '* [Collaborators](#collaborators)',
-            fieldGuide: '* [實地指南](#field-guide)',
-            tutorial: '* [教程](#tutorial)',
+            fieldGuide: '* [Field Guide](#field-guide)',
+            tutorial: '* [Tutorial](#tutorial)',
             media: '* [Media](#media)',
             visibility: '* [Visibility](#visibility)',
             workflows: '* [Workflows](#workflow-details)',
@@ -843,21 +891,21 @@ export default {
           title: '### Project',
           intro: 'The tabs listed below are where you enter descriptive information for your project.',
           details: '- **Project Details:** Here you can add information that generates a home page for your project. Start by naming and describing your project, add a logo and background image.',
-          about: '- **關於:** Here you can add all sorts of additional pages, including *Research, Team, Results, Education,* and *FAQ*',
+          about: '- **About:** Here you can add all sorts of additional pages, including *Research, Team, Results, Education,* and *FAQ*',
           collaborators: '- **Collaborators:** Add people to your team. You can specify their roles so that they have access to the tools they need (such as access to the project before it\'s public).',
-          fieldGuide: '- **實地指南:** A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they\'re seeing.',
-          tutorial: '- **教程:** This is where you create tutorials to show your users how to contribute to your project.',
+          fieldGuide: '- **Field Guide:** A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they\'re seeing.',
+          tutorial: '- **Tutorial:** This is where you create tutorials to show your users how to contribute to your project.',
           media: '- **Media:** Add images you need for your project pages (not the images you want people to classify!)',
           visibility: '- **Visibility:** Set your project\'s "state" - private or public, live or in development, and apply for review by the Zooniverse. You can also activate or deactivate specific workflows on this page.',
-          talk: '- **討論:** Create and manage discussion boards for your project.',
+          talk: '- **Talk:** Create and manage discussion boards for your project.',
           dataExports: '- **Data Exports:** Access your raw and aggregated classification data, subject data, and comments from Talk.'
         },
         workflow: {
-          title: '### 工作流程',
+          title: '### Workflows',
           body: 'A workflow is the sequence of tasks volunteers are asked to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow tab is where you define those tasks and set the order in which volunteers are asked to do them. Your project might have multiple workflows (if you want to set different tasks for different image sets). See the detailed [Workflow](#workflow-details) section for more information.'
         },
         subjects: {
-          title: '### 目標',
+          title: '### Subjects',
           body: 'A subject is a unit of data to be analyzed. A single subject can include more than one image. A “subject set” consists of both the "manifest" (a list of the subjects and their properties), and the images themselves. Subjects can be grouped into different sets if useful for your research. See the [Subject Details](#subject-sets) section for more on subjects.',
           backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
@@ -882,10 +930,10 @@ export default {
           backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         about: {
-          title: '### 關於',
+          title: '### About',
           intro: 'This section contains pages where you can enter further information for Research, Team, Results, Education and FAQ. All of these pages use [Markdown](http://markdownlivepreview.com/) to format text and display images.',
-          research: '* **研究項目:** Use this section to explain your research to your audience in as much detail as you\'d like. Explaining your motivation to volunteers is critical for the success of your project – please fill in this page (it will display even if you don’t)!',
-          team: '* **研究團隊:** Introduce the members of your team, and the roles they play in your project.',
+          research: '* **Research:** Use this section to explain your research to your audience in as much detail as you\'d like. Explaining your motivation to volunteers is critical for the success of your project – please fill in this page (it will display even if you don’t)!',
+          team: '* **Team:** Introduce the members of your team, and the roles they play in your project.',
           results: '* **Results:** Share results from your project with volunteers and the public here. This page will only display if you add content to it.',
           education: '* **Education:** On this page, you can provide resources for educators and students to use alongside your project, such as course syllabi, pedagogical tools, further reading, and instructions on how the project might be used in an educational context. This page will only display if you add content to it.',
           faq: '* **FAQ:** Add details here about your research, how to classify, and what you plan to do with the classifications. This page can evolve as your project does so that your active community members have a resource to point new users to. This page will only display if you add content to it.'
@@ -903,12 +951,12 @@ export default {
           backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         fieldGuide: {
-          title: '### 實地指南',
+          title: '### Field Guide',
           intro: 'A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they\'re seeing. It\'s available anywhere in your project, accessible via a tab on the right-hand side of the screen.',
           details: 'Information can be grouped into different sections, and each section should have a title and an icon. Content for each section is rendered with [Markdown](http://markdownlivepreview.com/), so you can include any media you\'ve uploaded for your project there.'
         },
         tutorial: {
-          title: '### 教程',
+          title: '### Tutorial',
           intro: 'In this section, you can create a step-by-step tutorial to show your users how to use your project. You can upload images and enter text to create each step of the tutorial. You can add as many steps as you want, but keep your tutorial as short as possible so volunteers can start classifying as soon as possible.',
           details: 'In some cases, you might have several different workflows, and will therefore need several different tutorials. In the Workflows tab, you can specify which tutorial shows for the workflow a volunteer is on.'
         },
@@ -925,7 +973,7 @@ export default {
           backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
         },
         talk: {
-          title: '### 討論',
+          title: '### Talk',
           intro: '“Talk” is the name for the discussion boards attached to your project. On your Talk, volunteers will be able to discuss your project and subjects with each other, as well as with you and your project’s researchers. **Maintaining a vibrant and active Talk is important for keeping your volunteers engaged with your project.** Conversations on Talk also can lead to additional research discoveries.',
           details: 'You can use this page to set up the initial Talk boards for your project. We highly recommend first activating the default subject-discussion board, which hosts a single dedicated conversation for each subject. After that, you can add additional boards, where each board will host conversation about a general topic. Example boards might include: “Announcements,” “Project Discussion,” “Questions for the Research Team,” or “Technical Support.”'
         },
@@ -1027,6 +1075,13 @@ export default {
       changeProfileHeader: 'Change profile header',
       profileHeaderImageHelp: 'Drop an image here (any dimensions, less than %(size)s KB)',
       clearHeader: 'Clear header'
+    }
+  },
+  feedback: {
+    categories: {
+      correct: 'Hits',
+      incorrect: 'Misses',
+      falsepos: 'False Positives'
     }
   }
 };
