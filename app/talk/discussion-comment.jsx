@@ -56,14 +56,7 @@ class DiscussionComment extends React.Component {
   }
 
   render() {
-    if (this.props.user && !this.props.user.valid_email) {
-      return(
-        <p>
-          You must have a <Link to="/settings/email">valid email address</Link> in order to contribute to the conversation.
-        </p>
-      )
-    }
-    if (this.props.user && this.props.user.valid_email) {
+    if (this.props.user) {
       const baseLink = this.props.project ? `projects/${this.props.project.slug}` : '/';
       return (
         <div>
