@@ -57,7 +57,7 @@ const WorkflowsTable = ({
                   Active
                 </label>
               </td>
-              <td>
+              <td class="stats_completeness_type">
                 <label>
                   <input
                     checked={statsCompletenessType === 'classification'}
