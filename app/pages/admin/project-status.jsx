@@ -88,7 +88,7 @@ class ProjectStatus extends Component {
   }
 
   getWorkflows() {
-    const fields = 'display_name,active,configuration,grouped,retirement';
+    const fields = 'display_name,active,configuration,grouped,prioritized,retirement';
     return getWorkflowsInOrder(this.state.project, { fields }).then((workflows) => {
       const usedWorkflowLevels = this.getUsedWorkflowLevels(workflows);
       this.setState({ usedWorkflowLevels, workflows });
@@ -177,6 +177,13 @@ class ProjectStatus extends Component {
   toggleWorkflowGrouped(event, workflow) {
     workflow
       .update({ grouped: event.target.checked })
+      .save()
+      .catch(error => this.setState({ error }));
+  }
+
+  toggleWorkflowPrioritized(event, workflow) {
+    workflow
+      .update({ prioritized: event.target.checked })
       .save()
       .catch(error => this.setState({ error }));
   }
@@ -277,6 +284,15 @@ class ProjectStatus extends Component {
                     defaultChecked={workflow.grouped}
                   />
                   Use grouped subject selection
+                </label>
+                <label>
+                  <input
+                    id="prioritized"
+                    type="checkbox"
+                    onChange={event => this.toggleWorkflowPrioritized(event, workflow)}
+                    defaultChecked={workflow.prioritized}
+                  />
+                  Use prioritized (sequential) subject selection
                 </label>
               </div>
               <hr />
