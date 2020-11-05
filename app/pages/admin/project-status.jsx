@@ -88,7 +88,7 @@ class ProjectStatus extends Component {
   }
 
   getWorkflows() {
-    const fields = 'display_name,active,configuration,grouped,retirement';
+    const fields = 'display_name,active,configuration,grouped,prioritized,retirement';
     return getWorkflowsInOrder(this.state.project, { fields }).then((workflows) => {
       const usedWorkflowLevels = this.getUsedWorkflowLevels(workflows);
       this.setState({ usedWorkflowLevels, workflows });
