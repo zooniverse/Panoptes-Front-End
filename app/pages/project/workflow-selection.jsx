@@ -27,7 +27,7 @@ class WorkflowSelection extends React.Component {
     const { actions, locale, preferences, workflow } = this.props;
     const prevPrefs = prevProps.preferences && prevProps.preferences.id;
     const currentPrefs = preferences && preferences.id;
-    
+
     if (prevProps.project.id !== this.props.project.id) {
       this.getSelectedWorkflow(this.props);
     }
@@ -89,7 +89,12 @@ class WorkflowSelection extends React.Component {
         this.workflowSelectionErrorHandler();
       } else {
         if (this.props.location.query && this.props.location.query.workflow) {
-          this.context.router.push(`/projects/${this.props.project.slug}/classify`);
+          const fallbackLocation = {
+            pathname: this.props.location.pathname,
+            query: this.props.location.query,
+          }
+          delete fallbackLocation.query.workflow
+          this.context.router.push(fallbackLocation)
         }
 
         this.clearInactiveWorkflow(selectedWorkflowID)
