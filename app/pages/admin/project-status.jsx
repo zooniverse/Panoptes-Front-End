@@ -181,6 +181,13 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
+  toggleWorkflowPrioritized(event, workflow) {
+    workflow
+      .update({ prioritized: event.target.checked })
+      .save()
+      .catch(error => this.setState({ error }));
+  }
+
   renderWorkflows() {
     if (this.state.workflows.length === 0) {
       return <div>No workflows found</div>;
@@ -277,6 +284,15 @@ class ProjectStatus extends Component {
                     defaultChecked={workflow.grouped}
                   />
                   Use grouped subject selection
+                </label>
+                <label>
+                  <input
+                    id="prioritized"
+                    type="checkbox"
+                    onChange={event => this.toggleWorkflowPrioritized(event, workflow)}
+                    defaultChecked={workflow.prioritized}
+                  />
+                  Use prioritized (sequential) subject selection
                 </label>
               </div>
               <hr />
