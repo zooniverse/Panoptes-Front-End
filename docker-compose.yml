@@ -1,13 +1,9 @@
-version: '3.2'
+version: '3.7'
 
 services:
   dev:
     build:
       context: ./
-      dockerfile: Dockerfile
-    entrypoint:
-      - "npm"
-    command: ["start"]
     ports:
       - "3735:3735"
     environment:
@@ -24,4 +20,7 @@ services:
       - TALK_HOST=${TALK_HOST}
     volumes:
       - ${PWD}:/src
-      - /src/node_modules
+      - node_modules:/src/node_modules
+
+volumes:
+  node_modules:
