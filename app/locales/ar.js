@@ -328,16 +328,15 @@ export default {
       listThree: '- If you have questions about the Zooniverse and would like to speak to a member of our team, please [contact us](/about/contact).'
     },
     highlights: {
-      title: '## Zooniverse Highlights Book 2019',
-      thanks: '### Thank You!',
-      paragraphOne: 'As a thank you and celebration of 2019 projects and impacts, we put together our first ‘Into the Zooniverse’ highlights book.',
-      paragraphTwo: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and over 160 [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of nearly 2 million people working alongside hundreds of professional researchers.',
-      paragraphThree: 'The book is an homage to the Zooniverse Year of 2019, highlighting 40 Zooniverse projects out of more than 200 launched to date. There are many fascinating projects we weren’t able to include this year. We hope to continue creating these books annually, highlighting a whole new set of projects and discoveries next year!',
-      toDownload: '**To download a free electronic copy:**',
-      download: 'Please click [here](http://bit.ly/zoonibook19-pdf) to download a free electronic copy of ‘Into the Zooniverse’.',
-      toOrder: '**To order a hard copy:**',
-      order: 'Please click [here](http://bit.ly/zoonibook19-buy) if you would like to order a hard copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
-      credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
+      title: '## Zooniverse Highlights',
+      paragraphOne: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and many [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community working alongside hundreds of professional researchers.',
+      paragraphTwo: 'These books commemorate and honor the efforts of everyone involved, providing just a glimpse into the ways Zooniverse community members can make a real, personal impact on the world around them. Each highlights 40 of the many projects that have been active on the Zooniverse website and app during the academic years 2018 – 2020. There are so many fascinating projects we haven’t been able to include, so we hope to continue to create these books in the future.',
+      sectionHeader: '### Volume %(volumeNumber)s: %(year)s',
+      toDownload: '[To download a free electronic copy](%(url)s)',
+      paragraphThree: '[Purchase on %(purchaseSource)s](%(url)s). Note, the cost simply covers printing and postage fees – we will not be making any profit through sales of the hard copy of the book.',
+      imageAlt: 'Zooniverse Highlights Book Cover %(year)s',
+      bookTwoThanks: '_A special thank you to our interns, Dr. Aleksandra Kuznetsova and Adler teens Alejandro Sanchez and Mattie Williams, who wrote text and interviewed research teams. We’re so thankful to them for their time and efforts!_',
+      bookOneThanks: '_A special thank you to our volunteers, Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata, who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts!_',
     },
     donate: {
       title: '## Donate',
