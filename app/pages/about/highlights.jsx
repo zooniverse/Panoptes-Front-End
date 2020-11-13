@@ -14,10 +14,10 @@ class Highlights extends React.Component {
           <img
             alt={counterpart('about.highlights.imageAlt', { year: '2020' })}
             className='highlights__book-image'
-            src="/assets/highlights-book-2020.png" 
+            src="/assets/highlights-book-2020.jpg" 
           />
           <div className='highlights__book-description'>
-            <Markdown>{counterpart('about.highlights.toDownload', { url: 'https://bit.ly/zoonibook20-pdf' })}</Markdown>
+            <Markdown>{counterpart('about.highlights.toDownload', { url: 'https://bit.ly/zoonibook20-download' })}</Markdown>
             <Markdown>{counterpart('about.highlights.paragraphThree', { purchaseSource: 'Blurb.com', url: 'https://bit.ly/zoonibook20-buy' })}</Markdown>
             <Markdown>{counterpart('about.highlights.bookTwoThanks')}</Markdown>
           </div>
@@ -30,7 +30,7 @@ class Highlights extends React.Component {
             src="/assets/highlights-book-2019.png"
           />
           <div className='highlights__book-description'>
-            <Markdown>{counterpart('about.highlights.toDownload', { url: 'https://bit.ly/zoonibook19-pdf-new' })}</Markdown>
+            <Markdown>{counterpart('about.highlights.toDownload', { url: 'https://bit.ly/zoonibook19-download' })}</Markdown>
             <Markdown>{counterpart('about.highlights.paragraphThree', { purchaseSource: 'Lulu.com', url: 'https://bit.ly/zoonibook19-buy-new' })}</Markdown>
             <Markdown>{counterpart('about.highlights.bookTwoThanks')}</Markdown>
           </div>
