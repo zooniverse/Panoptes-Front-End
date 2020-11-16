@@ -5,24 +5,37 @@ import { Markdown } from 'markdownz';
 class Highlights extends React.Component {
   render() {
     return (
-      <div>
+      <section>
         <Markdown>{counterpart('about.highlights.title')}</Markdown>
-        <br />
-        <Markdown>{counterpart('about.highlights.thanks')}</Markdown>
         <Markdown>{counterpart('about.highlights.paragraphOne')}</Markdown>
-        <div className="highlights-separator">
-          <img src="/assets/highlights.png" alt="Zooniverse Highlights Book Cover" />
-          <div>
-            <Markdown>{counterpart('about.highlights.paragraphTwo')}</Markdown>
-            <Markdown>{counterpart('about.highlights.paragraphThree')}</Markdown>
+        <Markdown>{counterpart('about.highlights.paragraphTwo')}</Markdown>
+        <Markdown>{counterpart('about.highlights.sectionHeader', { volumeNumber: '2', year: '2020' })}</Markdown>
+        <div className='highlights__book-section'>
+          <img
+            alt={counterpart('about.highlights.imageAlt', { year: '2020' })}
+            className='highlights__book-image'
+            src="/assets/highlights-book-2020.jpg" 
+          />
+          <div className='highlights__book-description'>
+            <Markdown>{counterpart('about.highlights.toDownload', { url: 'https://bit.ly/zoonibook20-download' })}</Markdown>
+            <Markdown>{counterpart('about.highlights.paragraphThree', { purchaseSource: 'Blurb.com', url: 'https://bit.ly/zoonibook20-buy' })}</Markdown>
+            <Markdown>{counterpart('about.highlights.bookTwoThanks')}</Markdown>
           </div>
         </div>
-        <Markdown>{counterpart('about.highlights.toDownload')}</Markdown>
-        <Markdown>{counterpart('about.highlights.download')}</Markdown>
-        <Markdown>{counterpart('about.highlights.toOrder')}</Markdown>
-        <Markdown>{counterpart('about.highlights.order')}</Markdown>
-        <Markdown>{counterpart('about.highlights.credits')}</Markdown>
-      </div>
+        <Markdown>{counterpart('about.highlights.sectionHeader', { volumeNumber: '1', year: '2019' })}</Markdown>
+        <div className='highlights__book-section'>
+          <img
+            alt={counterpart('about.highlights.imageAlt', { year: '2019' })}
+            className='highlights__book-image'
+            src="/assets/highlights-book-2019.png"
+          />
+          <div className='highlights__book-description'>
+            <Markdown>{counterpart('about.highlights.toDownload', { url: 'https://bit.ly/zoonibook19-download' })}</Markdown>
+            <Markdown>{counterpart('about.highlights.paragraphThree', { purchaseSource: 'Lulu.com', url: 'https://bit.ly/zoonibook19-buy-new' })}</Markdown>
+            <Markdown>{counterpart('about.highlights.bookTwoThanks')}</Markdown>
+          </div>
+        </div>
+      </section>
     );
   }
 }
