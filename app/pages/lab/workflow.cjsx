@@ -103,7 +103,7 @@ EditWorkflowPage = createReactClass
           <strong>
             You cannot edit tasks for an active workflow on a live project, all the task fields below will be inactive.
             <br />
-            To edit these fields, deactivate your workflow on the <Link to="/lab/#{@props.project.id}/workflows">worfklows page</Link> - do not change your project to development.
+            To edit these fields, deactivate your workflow on the <Link to="/lab/#{@props.project.id}/workflows">workflows page</Link> - do not change your project to development.
           </strong>
         </p>}
       <div className="columns-container">
