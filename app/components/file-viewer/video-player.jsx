@@ -13,7 +13,7 @@ class VideoPlayer extends React.Component {
 
     this.state = {
       playing: false,
-      playbackRate: 1
+      playbackRate: 0.75
     };
   }
 
@@ -67,7 +67,7 @@ class VideoPlayer extends React.Component {
   }
 
   render() {
-    const rates = [0.25, 0.5, 1];
+    const rates = [0.25, 0.75, 1];
     return (
       <div className="subject-video-frame">
         <video
@@ -80,6 +80,8 @@ class VideoPlayer extends React.Component {
           onCanPlay={this.props.onLoad}
           onClick={this.playVideo}
           onEnded={this.endVideo}
+          loop="true"
+          autoplay="true"
         >
           Your browser does not support the video format. Please upgrade your browser.
         </video>
