@@ -58,7 +58,7 @@ const WorkflowsTable = ({
                 </label>
               </td>
               <td>
-                <label>
+                <label class="standard-table__label__completeness">
                   <input
                     checked={statsCompletenessType === 'classification'}
                     name={`stats_completeness_type.${workflow.id}`}
@@ -69,7 +69,7 @@ const WorkflowsTable = ({
                   Classification Count
                 </label>
                 {' '}
-                <label>
+                <label class="standard-table__label__completeness">
                   <input
                     checked={statsCompletenessType === 'retirement'}
                     name={`stats_completeness_type.${workflow.id}`}
