@@ -20,7 +20,7 @@ export default class DataExportDownloadLink extends React.Component {
     }
 
     recentAndReady(exported) {
-        return exported && (exported.metadata.state === 'ready' || !exported.metadata.state);
+        return exported?.metadata && (exported.metadata.state === 'ready' || !exported.metadata.state);
     }
 
     pending(exported) {

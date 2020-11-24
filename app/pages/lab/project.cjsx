@@ -25,6 +25,10 @@ EditProjectPage = createReactClass
   contextTypes:
     router: PropTypes.object.isRequired
 
+  componentDidCatch: (error, info) ->
+    console.log(error, info);
+    this.setState({ error, info });
+
   getDefaultProps: ->
     project: id: '2'
     workflowActions: workflowActions
@@ -36,7 +40,16 @@ EditProjectPage = createReactClass
   labPath: (postFix = '') ->
     "/lab/#{@props.project.id}#{postFix}"
 
+  renderError: ->
+    <div>
+      <h1><code>{this.state.error.message}</code></h1>
+      <p>{!!this.state.info && <pre>{this.state.info.componentStack}</pre>}</p>
+    </div>
+
   render: ->
+    if @state.error
+      return @renderError()
+
     linkParams =
       projectID: @props.project.id
 
