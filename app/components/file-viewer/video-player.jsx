@@ -82,6 +82,7 @@ class VideoPlayer extends React.Component {
           onEnded={this.endVideo}
           loop="true"
           autoplay="true"
+          muted="true"
         >
           Your browser does not support the video format. Please upgrade your browser.
         </video>
