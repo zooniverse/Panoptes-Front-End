@@ -210,7 +210,7 @@ export const teamMembers = {
     name: "Marten Veldthuis",
     twitter: "mveldth",
     image: "/assets/team/marten.jpg",
-    location: "oxford"
+    location: "alumni"
   },
   megSchwamb: {
     name: "Meg Schwamb",
