@@ -5,6 +5,8 @@ import { getSessionID } from '../../lib/session';
 import seenThisSession from '../../lib/seen-this-session';
 import tasks from '../../classifier/tasks';
 import * as translations from './translations';
+import appendQuery from 'append-query'
+import { crowdHandler } from '../../crowd_handler';
 
 function awaitSubjects(subjectQuery) {
   return apiClient.get('/subjects/queued', subjectQuery)
@@ -20,6 +22,21 @@ function awaitSubjects(subjectQuery) {
       });
     }
   });
+}
+
+// Add the crowd provider's query params to the subject location to support the secure image server
+function addCrowdParams(subjects) {
+  // Gets the actual values without the `[crowd name]` parent key
+  const crowdParams = Object.values(crowdHandler.getMetadata())[0]
+  return subjects.map((subject) => {
+    subject.locations = subject.locations.map((location) => {
+      let [mimeType, url] = Object.entries(location)[0]
+      return {
+        [mimeType]: appendQuery(url, crowdParams)
+      }
+    })
+    return subject
+  })
 }
 
 function awaitSubjectSet(workflow) {
@@ -348,6 +365,7 @@ export function fetchSubjects(workflow) {
       return subjectQuery;
     })
     .then(awaitSubjects)
+    .then(addCrowdParams)
     .then((subjects) => {
       const filteredSubjects = subjects.filter((subject) => {
         const notSeen = !subject.already_seen &&

@@ -149,3 +149,5 @@ export function getCrowdHandler() {
   console.info('No crowd provider detected')
   return new NoopHandler(queryParams)
 }
+
+export const crowdHandler = getCrowdHandler()
