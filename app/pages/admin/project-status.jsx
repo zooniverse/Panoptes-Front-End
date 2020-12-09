@@ -20,6 +20,8 @@ class ProjectStatus extends Component {
     this.onChangeWorkflowLevel = this.onChangeWorkflowLevel.bind(this);
     this.onChangeWorkflowRetirement = this.onChangeWorkflowRetirement.bind(this);
     this.onChangeTrainingDefaultChance = this.onChangeTrainingDefaultChance.bind(this);
+    this.onChangeTrainingSetIds = this.onChangeTrainingSetIds.bind(this);
+    this.onChangeTrainingChances = this.onChangeTrainingChances.bind(this);
     this.getWorkflows = this.getWorkflows.bind(this);
     this.forceUpdate = this.forceUpdate.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
@@ -62,13 +64,35 @@ class ProjectStatus extends Component {
       .then(() => this.getWorkflows())
       .catch(error => this.setState({ error }));
   }
-  
+
   onChangeTrainingDefaultChance (workflow, event) {
     this.setState({ error: null });
     const val = parseInt(event.target.value);
     if (isNaN(val)) return;  // Ignore invalid values
     // TODO: if the value is an empty string, the field should be deleted altogether.
     return workflow.update({ 'configuration.training_default_chance': val }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+
+  onChangeTrainingSetIds(workflow, event) {
+    this.setState({ error: null });
+    let val = event.target.value || '';
+    val = val.split(',').map((str) => { return parseInt(str) })
+      .filter((num) => { return !isNaN(num) });
+    // TODO: if the value is an empty string, the field should be deleted altogether.
+    return workflow.update({ 'configuration.training_set_ids': val }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+
+  onChangeTrainingChances(workflow, event) {
+    this.setState({ error: null });
+    let val = event.target.value || '';
+    val = val.split(',').map((str) => { return parseFloat(str) })
+      .filter((num) => { return !isNaN(num) });
+    // TODO: if the value is an empty string, the field should be deleted altogether.
+    return workflow.update({ 'configuration.training_chances': val }).save()
       .then(() => this.getWorkflows())
       .catch(error => this.setState({ error }));
   }
@@ -271,7 +295,23 @@ class ProjectStatus extends Component {
               <div>
                 <h4>Configure Training Data</h4>
                 <label>
-                  training_default_chance:{' '}
+                  Training Set IDs:{' '}
+                  <input
+                    type="text"
+                    onChange={(event) => this.onChangeTrainingSetIds(workflow, event)}
+                    value={(workflow.configuration.training_set_ids || '')}
+                  />
+                </label>
+                <label>
+                  Training Chances:{' '}
+                  <input
+                    type="text"
+                    onChange={(event) => this.onChangeTrainingChances(workflow, event)}
+                    value={(workflow.configuration.training_chances || '')}
+                  />
+                </label>
+                <label>
+                  Training Default Chance:{' '}
                   <input
                     type="text"
                     onChange={(event) => this.onChangeTrainingDefaultChance(workflow, event)}
