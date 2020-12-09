@@ -19,6 +19,7 @@ class ProjectStatus extends Component {
     super(props);
     this.onChangeWorkflowLevel = this.onChangeWorkflowLevel.bind(this);
     this.onChangeWorkflowRetirement = this.onChangeWorkflowRetirement.bind(this);
+    this.onChangeTrainingDefaultChance = this.onChangeTrainingDefaultChance.bind(this);
     this.getWorkflows = this.getWorkflows.bind(this);
     this.forceUpdate = this.forceUpdate.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
@@ -58,6 +59,16 @@ class ProjectStatus extends Component {
     this.setState({ error: null });
     let selected = event.target.value;
     return workflow.update({ 'retirement.criteria': selected }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+  
+  onChangeTrainingDefaultChance (workflow, event) {
+    this.setState({ error: null });
+    const val = parseInt(event.target.value);
+    if (isNaN(val)) return;  // Ignore invalid values
+    // TODO: if the value is an empty string, the field should be deleted altogether.
+    return workflow.update({ 'configuration.training_default_chance': val }).save()
       .then(() => this.getWorkflows())
       .catch(error => this.setState({ error }));
   }
@@ -254,6 +265,18 @@ class ProjectStatus extends Component {
                     <option value="never_retire">Never Retire</option>
                     <option value="classification_count">Classification Count - {(workflow.retirement.options && workflow.retirement.options.count) || ''}</option>
                   </select>
+                </label>
+              </div>
+              <hr />
+              <div>
+                <h4>Configure Training Data</h4>
+                <label>
+                  training_default_chance:{' '}
+                  <input
+                    type="text"
+                    onChange={(event) => this.onChangeTrainingDefaultChance(workflow, event)}
+                    value={(workflow.configuration.training_default_chance || '')}
+                  />
                 </label>
               </div>
               <hr />
