@@ -12,6 +12,7 @@ SubjectUploader = require '../../partials/subject-uploader'
 UploadDropTarget = require '../../components/upload-drop-target'
 ManifestView = require '../../components/manifest-view'
 isAdmin = require '../../lib/is-admin'
+addIndexFields = require('./subject-sets/addIndexFields').default
 
 NOOP = Function.prototype
 
@@ -300,6 +301,7 @@ EditSubjectSetPage = createReactClass
       # TODO: Look into PapaParse features.
       # Maybe wan we parse the file object directly in a worker.
       {data, errors} = Papa?.parse e.target.result.trim(), header: true
+      addIndexFields(@props.subjectSet, data)
       @subjectsFromManifest(data, errors, file.name)
     reader.readAsText file
 
