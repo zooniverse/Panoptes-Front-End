@@ -1,8 +1,12 @@
+import constants from './constants'
+
+const { INDEX_FIELD_HEADER } = constants;
+
 export default function addIndexFields(subjectSet, data) {
   const [row] = data;
   const headers = Object.keys(row);
   const indexFields = headers
-    .filter(header => header.startsWith('&'))
+    .filter(header => header.startsWith(INDEX_FIELD_HEADER))
     .map(header => header.slice(1));
   if (indexFields.length > 0) {
     subjectSet.update({ 'metadata.indexFields': indexFields.join(',') });
