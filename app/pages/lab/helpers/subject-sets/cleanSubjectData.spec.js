@@ -3,6 +3,8 @@ import cleanSubjectData from './cleanSubjectData';
 
 describe('cleanSubjectData', function () {
   const rawData = {
+    id: 23,
+    '&indexedID': 25,
     ' &title': 'a title ',
     description: 'a description',
     '&creator': ' someone ',
@@ -18,6 +20,8 @@ describe('cleanSubjectData', function () {
 
   it('should not alter the subject data', function () {
     expect(rawData).to.deep.equal({
+      id: 23,
+      '&indexedID': 25,
       ' &title': 'a title ',
       description: 'a description',
       '&creator': ' someone ',
@@ -26,11 +30,16 @@ describe('cleanSubjectData', function () {
     });
   });
 
+  it('should pass through numerical fields', function () {
+    expect(cleanData.id).to.equal(23);
+  });
+
   it('should trim whitespace', function () {
     expect(cleanData.date).to.equal('2nd March 1888');
   });
 
   it('should trim leading ampersands', function () {
+    expect(cleanData.indexedID).to.equal(25);
     expect(cleanData.title).to.equal('a title');
     expect(cleanData.creator).to.equal('someone');
   });
