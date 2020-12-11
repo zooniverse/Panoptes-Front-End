@@ -12,7 +12,7 @@ SubjectUploader = require '../../partials/subject-uploader'
 UploadDropTarget = require '../../components/upload-drop-target'
 ManifestView = require '../../components/manifest-view'
 isAdmin = require '../../lib/is-admin'
-addIndexFields = require('./subject-sets/addIndexFields').default
+{ addIndexFields, cleanSubjectData } = require './helpers/subject-sets'
 
 NOOP = Function.prototype
 
@@ -307,10 +307,7 @@ EditSubjectSetPage = createReactClass
 
   subjectsFromManifest: (data, errors, fileName) ->
     metadatas = for rawData in data
-      cleanData = {}
-      for key, value of rawData
-        cleanData[key.trim()] = value?.trim?() ? value
-      cleanData
+      cleanSubjectData(rawData)
 
     subjects = []
     for metadata in metadatas
