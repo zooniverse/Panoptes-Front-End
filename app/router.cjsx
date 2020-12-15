@@ -152,6 +152,9 @@ module.exports =
     <Route path="/projects/adamamiller/zwickys-stellar-sleuths" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/adamamiller/zwickys-stellar-sleuths' />} />
     <Route path="/projects/adamamiller/zwickys-stellar-sleuths/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/adamamiller/zwickys-stellar-sleuths/classify' />} />
 
+    <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service' />} />
+    <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service/classify' />} />
+
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
