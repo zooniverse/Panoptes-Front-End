@@ -25,7 +25,7 @@ ProjectCard = createReactClass
     if !!@props.imageSrc
       conditionalStyle.backgroundImage = "url('#{ @props.imageSrc }')"
     else if !!@props.project.avatar_src
-      conditionalStyle.backgroundImage = "url('//#{ @props.project.avatar_src }')"
+      conditionalStyle.backgroundImage = "url('#{ @props.project.avatar_src }')"
     else
       conditionalStyle.background = "url('/assets/simple-pattern.png') center center repeat"
 
