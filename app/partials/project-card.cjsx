@@ -25,9 +25,10 @@ ProjectCard = createReactClass
     if !!@props.imageSrc
       conditionalStyle.backgroundImage = "url('#{ @props.imageSrc }')"
     else if !!@props.project.avatar_src
-      try
-        backgroundImageSrc = new URL(@props.project.avatar_src)
-      catch error
+      urlRegex = new RegExp('^https?:\/\/[^\s]+');
+      if urlRegex.test(@props.project.avatar_src)
+        backgroundImageSrc = @props.project.avatar_src
+      else
         backgroundImageSrc = "//#{ @props.project.avatar_src }"
 
       conditionalStyle.backgroundImage = "url('#{ backgroundImageSrc }')"
