@@ -144,8 +144,9 @@ class ProjectStatus extends Component {
           (wf.configuration.training_chances && wf.configuration.training_chances.join)
           ? wf.configuration.training_chances.join(',')
           : '';
+        // Note: please allow default chance to be 0. This is a valid edge case.
         valTrainingDefaultChance[wf.id] =
-          wf.configuration.training_default_chance
+          (wf.configuration.training_default_chance >= 0 && wf.configuration.training_default_chance !== null)
           ? wf.configuration.training_default_chance
           : '';
       })
@@ -364,7 +365,6 @@ class ProjectStatus extends Component {
                     value={(this.state.valTrainingDefaultChance[workflow.id] || '')}
                   />
                 </label>
-                <label>Debug: {this.state.valTrainingDefaultChance[workflow.id]}</label>
               </div>
               <hr />
               <div>
