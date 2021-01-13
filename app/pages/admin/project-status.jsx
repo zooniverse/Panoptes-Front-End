@@ -329,6 +329,7 @@ class ProjectStatus extends Component {
                 <label>
                   Training Set IDs:{' '}
                   <input
+                    id="training-set-ids"
                     type="text"
                     onBlur={(event) => this.onBlurTrainingSetIds(workflow, event)}
                     onChange={(event) => {
@@ -342,6 +343,7 @@ class ProjectStatus extends Component {
                 <label>
                   Training Chances:{' '}
                   <input
+                    id="training-chances"
                     type="text"
                     onBlur={(event) => this.onBlurTrainingChances(workflow, event)}
                     onChange={(event) => {
@@ -355,6 +357,7 @@ class ProjectStatus extends Component {
                 <label>
                   Training Default Chance:{' '}
                   <input
+                    id="training-default-chance"
                     type="text"
                     onBlur={(event) => this.onBlurTrainingDefaultChance(workflow, event)}
                     onChange={(event) => {
