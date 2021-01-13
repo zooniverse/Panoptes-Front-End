@@ -21,7 +21,7 @@ class ProjectStatus extends Component {
     this.onChangeWorkflowRetirement = this.onChangeWorkflowRetirement.bind(this);
     this.onChangeTrainingDefaultChance = this.onChangeTrainingDefaultChance.bind(this);
     this.onChangeTrainingSetIds = this.onChangeTrainingSetIds.bind(this);
-    this.onChangeTrainingChances = this.onChangeTrainingChances.bind(this);
+    this.onBlurTrainingChances = this.onBlurTrainingChances.bind(this);
     this.getWorkflows = this.getWorkflows.bind(this);
     this.forceUpdate = this.forceUpdate.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
@@ -36,7 +36,10 @@ class ProjectStatus extends Component {
       error: null,
       project: null,
       usedWorkflowLevels: [],
-      workflows: []
+      workflows: [],
+      
+      // transitional input values for text input fields, in the format of { workflow_id_1: 'string', ... }
+      valTrainingChances: {}
     };
   }
 
@@ -86,9 +89,9 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
-  onChangeTrainingChances(workflow, event) {
+  onBlurTrainingChances(workflow, event) {
     this.setState({ error: null });
-    let val = event.target.value || '';
+    let val = this.state.valTrainingChances[workflow.id] || '';
     val = val.split(',').map((str) => { return parseFloat(str) })
       .filter((num) => { return !isNaN(num) });
     // TODO: if the value is an empty string, the field should be deleted altogether.
@@ -125,8 +128,22 @@ class ProjectStatus extends Component {
   getWorkflows() {
     const fields = 'display_name,active,configuration,grouped,prioritized,retirement';
     return getWorkflowsInOrder(this.state.project, { fields }).then((workflows) => {
+      
+      // Setup transitional input values
+      const valTrainingChances = {}
+      workflows.forEach((wf) => {
+        valTrainingChances[wf.id] =
+          (wf.configuration.training_chances && wf.configuration.training_chances.join)
+          ? wf.configuration.training_chances.join(',')
+          : ''
+      })
+      
       const usedWorkflowLevels = this.getUsedWorkflowLevels(workflows);
-      this.setState({ usedWorkflowLevels, workflows });
+      this.setState({
+        usedWorkflowLevels,
+        valTrainingChances,
+        workflows,
+      });
     });
   }
 
@@ -303,11 +320,20 @@ class ProjectStatus extends Component {
                   />
                 </label>
                 <label>
+                  DEBUG Training Chances for {workflow.id}: "{this.state.valTrainingChances[workflow.id]}"
+                </label>
+                <label>
                   Training Chances:{' '}
                   <input
                     type="text"
-                    onChange={(event) => this.onChangeTrainingChances(workflow, event)}
-                    value={(workflow.configuration.training_chances || '')}
+                    onBlur={(event) => this.onBlurTrainingChances(workflow, event)}
+                    onChange={(event) => {
+                      const new_valTrainingChances = Object.apply({}, this.state.valTrainingChances)
+                      new_valTrainingChances[workflow.id] = event.target.value
+                      this.setState({ valTrainingChances: new_valTrainingChances })
+                    
+                    }}
+                    value={this.state.valTrainingChances[workflow.id]}
                   />
                 </label>
                 <label>
