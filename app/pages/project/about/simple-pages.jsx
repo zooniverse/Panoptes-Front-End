@@ -4,17 +4,6 @@ import AboutPageLayout from './about-page-layout';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 
-counterpart.registerTranslations('en', {
-  aboutPages: {
-    missingContent: {
-      education: 'This project has no educational resources yet.',
-      faq: 'This project has no frequently asked questions yet.',
-      research: 'This project has no science case yet.',
-      results: 'This project has no results to report yet.',
-    }
-  }
-});
-
 const SimplePageRenderer = ({ pageSlug, noContent, pages, project }) => {
   const matchingPage = pages.find(page => page.slug === pageSlug);
   const mainContent = (matchingPage && matchingPage.content && matchingPage.content !== '') 

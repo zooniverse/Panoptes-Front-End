@@ -1,5 +1,25 @@
 export default {
   loading: '読み込み中',
+  aboutPages: {
+    missingContent: {
+      education: 'This project has no educational resources yet.',
+      faq: 'This project has no frequently asked questions yet.',
+      research: 'This project has no science case yet.',
+      results: 'This project has no results to report yet.',
+      team: 'This project has no team information.',
+    }
+  },
+  projectRoles: {
+    title: 'The Team',
+    owner: 'Owner',
+    collaborator: 'Collaborator',
+    translator: 'Translator',
+    scientist: 'Researcher',
+    moderator: 'Moderator',
+    tester: 'Tester',
+    expert: 'Expert',
+    museum: 'Museum',
+  },
   classifier: {
     back: '戻る',
     backButtonWarning: 'Going back will clear your work for the current task.',
