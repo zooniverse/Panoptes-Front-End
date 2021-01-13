@@ -19,7 +19,7 @@ class ProjectStatus extends Component {
     super(props);
     this.onChangeWorkflowLevel = this.onChangeWorkflowLevel.bind(this);
     this.onChangeWorkflowRetirement = this.onChangeWorkflowRetirement.bind(this);
-    this.onChangeTrainingDefaultChance = this.onChangeTrainingDefaultChance.bind(this);
+    this.onBlurTrainingDefaultChance = this.onBlurTrainingDefaultChance.bind(this);
     this.onBlurTrainingSetIds = this.onBlurTrainingSetIds.bind(this);
     this.onBlurTrainingChances = this.onBlurTrainingChances.bind(this);
     this.getWorkflows = this.getWorkflows.bind(this);
@@ -39,8 +39,9 @@ class ProjectStatus extends Component {
       workflows: [],
 
       // transitional input values for text input fields, in the format of { workflow_id_1: 'string', ... }
+      valTrainingSetIds: {},
       valTrainingChances: {},
-      valTrainingSetIds: {}
+      valTrainingDefaultChance: {}
     };
   }
 
@@ -69,16 +70,6 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
-  onChangeTrainingDefaultChance (workflow, event) {
-    this.setState({ error: null });
-    const val = event.target.value ? parseInt(event.target.value) : '';
-    if (val && isNaN(val)) return;  // Ignore invalid values (note: empty string is considered valid here)
-    // TODO: if the value is an empty string, the field should be deleted altogether.
-    return workflow.update({ 'configuration.training_default_chance': val }).save()
-      .then(() => this.getWorkflows())
-      .catch(error => this.setState({ error }));
-  }
-
   onBlurTrainingSetIds(workflow, event) {
     this.setState({ error: null });
     let val = this.state.valTrainingSetIds[workflow.id] || '';
@@ -97,6 +88,18 @@ class ProjectStatus extends Component {
       .filter((num) => { return !isNaN(num) });
     // TODO: if the value is an empty string, the field should be deleted altogether.
     return workflow.update({ 'configuration.training_chances': val }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+
+  onBlurTrainingDefaultChance (workflow, event) {
+    this.setState({ error: null });
+    const val =
+      this.state.valTrainingDefaultChance[workflow.id]
+      ? parseFloat(this.state.valTrainingDefaultChance[workflow.id]) : '';
+    if (val && isNaN(val)) return;  // Ignore invalid values (note: empty string is considered valid here)
+    // TODO: if the value is an empty string, the field should be deleted altogether.
+    return workflow.update({ 'configuration.training_default_chance': val }).save()
       .then(() => this.getWorkflows())
       .catch(error => this.setState({ error }));
   }
@@ -131,24 +134,29 @@ class ProjectStatus extends Component {
     return getWorkflowsInOrder(this.state.project, { fields }).then((workflows) => {
 
       // Setup transitional input values
-      const valTrainingChances = {}, valTrainingSetIds = {}
+      const valTrainingSetIds = {}, valTrainingChances = {}, valTrainingDefaultChance = {}
       workflows.forEach((wf) => {
+        valTrainingSetIds[wf.id] =
+          (wf.configuration.training_set_ids && wf.configuration.training_set_ids.join)
+          ? wf.configuration.training_set_ids.join(',')
+          : '';
         valTrainingChances[wf.id] =
           (wf.configuration.training_chances && wf.configuration.training_chances.join)
           ? wf.configuration.training_chances.join(',')
           : '';
-        valTrainingSetIds[wf.id] =
-          (wf.configuration.training_set_ids && wf.configuration.training_set_ids.join)
-          ? wf.configuration.training_set_ids.join(',')
+        valTrainingDefaultChance[wf.id] =
+          wf.configuration.training_default_chance
+          ? wf.configuration.training_default_chance
           : '';
       })
 
       const usedWorkflowLevels = this.getUsedWorkflowLevels(workflows);
       this.setState({
         usedWorkflowLevels,
-        valTrainingChances,
         valTrainingSetIds,
-        workflows,
+        valTrainingChances,
+        valTrainingDefaultChance,
+        workflows
       });
     });
   }
@@ -347,10 +355,16 @@ class ProjectStatus extends Component {
                   Training Default Chance:{' '}
                   <input
                     type="text"
-                    onChange={(event) => this.onChangeTrainingDefaultChance(workflow, event)}
-                    value={(workflow.configuration.training_default_chance || '')}
+                    onBlur={(event) => this.onBlurTrainingDefaultChance(workflow, event)}
+                    onChange={(event) => {
+                      const updatedTrainingDefaultChance = Object.apply({}, this.state.valTrainingDefaultChance)
+                      updatedTrainingDefaultChance[workflow.id] = event.target.value
+                      this.setState({ valTrainingDefaultChance: updatedTrainingDefaultChance })
+                    }}
+                    value={(this.state.valTrainingDefaultChance[workflow.id] || '')}
                   />
                 </label>
+                <label>Debug: {this.state.valTrainingDefaultChance[workflow.id]}</label>
               </div>
               <hr />
               <div>
