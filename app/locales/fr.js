@@ -49,7 +49,7 @@ export default {
   project: {
     language: 'Langue',
     loading: 'Chargement du projet',
-    disclaimer: 'Ce projet a été créé avec le Zooniverse Project Builder mais ce n\'est pas encore un projet officiel de Zooniverse. Les questions et problèmes a propos de ce projet adressés à l\'équipe de Zooniverse peut ne pas recevoir de réponse.',
+    disclaimer: 'Ce projet a été créé avec le Zooniverse Project Builder mais n\'est pas encore un projet officiel de Zooniverse. Les questions et problèmes à propos de ce projet adressés à l\'équipe de Zooniverse peut ne pas recevoir de réponse.',
     fieldGuide: 'Guide Pratique',
     about: {
       header: 'À propos',
@@ -84,7 +84,7 @@ export default {
       researcher: 'Quelques mots de l\'équipe de recherche',
       about: 'À propos de %(title)s',
       metadata: {
-        statistics: 'Les statistiques de %(title)s',
+        statistics: 'Statistiques de %(title)s',
         classifications: 'Classifications',
         volunteers: 'Volontaires',
         completedSubjects: 'Sujets complétés',
