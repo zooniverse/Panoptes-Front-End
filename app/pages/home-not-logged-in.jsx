@@ -11,8 +11,6 @@ import FeaturedProjects from './home-common/featured-projects';
 import HomePageSocial from './home-common/social';
 import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
-import HomePagePromoted from './home-not-logged-in/promoted';
-import PROMOTED_PROJECTS from '../lib/promoted-projects';
 
 counterpart.registerTranslations('en', {
   notLoggedInHomePage: {
@@ -29,7 +27,6 @@ export default class HomePage extends React.Component {
     this.state = {
       count: 0,
       featuredProjects: [],
-      promotedProjects: [],
       screenWidth: 0,
       volunteerCount: 0
     };
@@ -44,7 +41,6 @@ export default class HomePage extends React.Component {
     this.getClassificationCounts();
     this.getFeaturedProject();
     this.getVolunteerCount();
-    this.getPromotedProjects();
   }
 
   componentWillUnmount() {
@@ -78,22 +74,6 @@ export default class HomePage extends React.Component {
         count += statObject.doc_count;
       });
       this.setState({ count }); // number will only appear on production
-    });
-  }
-
-  getPromotedProjects() {
-    apiClient.type('projects').get({ id: Object.keys(PROMOTED_PROJECTS), cards: true })
-    .then((promotedProjects) => {
-      promotedProjects.map((project) => {
-        const promotedProject = PROMOTED_PROJECTS[project.id];
-        project.image = promotedProject.image;
-        project.title = promotedProject.title;
-        return project;
-      });
-      this.setState({ promotedProjects });
-    })
-    .catch((error) => {
-      console.warn(error);
     });
   }
 
@@ -143,10 +123,6 @@ export default class HomePage extends React.Component {
 
         <div className="flex-container">
           <HomePageDiscover showDialog={this.showDialog} />
-        </div>
-
-        <div className="flex-container">
-          <HomePagePromoted promotedProjects={this.state.promotedProjects} />
         </div>
 
         <div className="flex-container">
