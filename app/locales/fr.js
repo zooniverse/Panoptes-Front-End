@@ -58,7 +58,7 @@ export default {
         results: 'Résultats',
         faq: 'FAQ',
         education: 'Éducation',
-        team: 'L\'Équipe',
+        team: 'Équipe',
       }
     },
     nav: {
