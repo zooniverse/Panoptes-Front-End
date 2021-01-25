@@ -1,5 +1,25 @@
 export default {
   loading: '(Chargement)',
+  aboutPages: {
+    missingContent: {
+      education: 'Ce projet n\'a pas de ressources éducatives pour l\'instant.',
+      faq: 'Ce projet ne comporte pas de questions fréquentes pour l\'instant.',
+      research: 'Ce projet n\'a pas de description de recherche pour l\'instant.',
+      results: 'Ce projet n\'a pas de résultats à partager pour l\'instant.',
+      team: 'Ce projet n\'a pas d\'information sur l\'équipe pour l\'instant.',
+    }
+  },
+  projectRoles: {
+    title: 'L\'équipe',
+    owner: 'Administrateur/trice',
+    collaborator: 'Collaborateur/trice',
+    translator: 'Traducteur/trice',
+    scientist: 'Chercheur/e',
+    moderator: 'Modérateur/trice',
+    tester: 'Testeur/e',
+    expert: 'Expert/èrte',
+    museum: 'Musée',
+  },
   classifier: {
     back: 'Retour',
     backButtonWarning: 'Retourner en arrière va effacer le travail fait sur cette tâche.',
@@ -29,7 +49,7 @@ export default {
   project: {
     language: 'Langue',
     loading: 'Chargement du projet',
-    disclaimer: 'Ce projet a été créé avec le Zooniverse Project Builder mais ce n\'est pas encore un projet officiel de Zooniverse. Les questions et problèmes a propos de ce projet adressés à l\'équipe de Zooniverse peut ne pas recevoir de réponse.',
+    disclaimer: 'Ce projet a été créé avec le Zooniverse Project Builder mais n\'est pas encore un projet officiel de Zooniverse. Les questions et problèmes à propos de ce projet adressés à l\'équipe de Zooniverse peut ne pas recevoir de réponse.',
     fieldGuide: 'Guide Pratique',
     about: {
       header: 'À propos',
@@ -38,7 +58,7 @@ export default {
         results: 'Résultats',
         faq: 'FAQ',
         education: 'Éducation',
-        team: 'L\'Équipe',
+        team: 'Équipe',
       }
     },
     nav: {
@@ -64,7 +84,7 @@ export default {
       researcher: 'Quelques mots de l\'équipe de recherche',
       about: 'À propos de %(title)s',
       metadata: {
-        statistics: 'Les statistiques de %(title)s',
+        statistics: 'Statistiques de %(title)s',
         classifications: 'Classifications',
         volunteers: 'Volontaires',
         completedSubjects: 'Sujets complétés',
