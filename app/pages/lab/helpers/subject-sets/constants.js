@@ -1,3 +1,3 @@
 export default {
-  INDEX_FIELD_HEADER: '&'
+  INDEX_FIELD_HEADER: '%'
 }

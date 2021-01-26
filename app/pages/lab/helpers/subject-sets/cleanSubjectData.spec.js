@@ -4,12 +4,12 @@ import cleanSubjectData from './cleanSubjectData';
 describe('cleanSubjectData', function () {
   const rawData = {
     id: 23,
-    '&indexedID': 25,
-    ' &title': 'a title ',
+    '%indexedID': 25,
+    ' %title': 'a title ',
     description: 'a description',
-    '&creator': ' someone ',
+    '%creator': ' someone ',
     ' date ': ' 2nd March 1888 ',
-    ' &bits&bobs': ' some random text '
+    ' %bits%bobs': ' some random text '
   };
 
   let cleanData;
@@ -21,12 +21,12 @@ describe('cleanSubjectData', function () {
   it('should not alter the subject data', function () {
     expect(rawData).to.deep.equal({
       id: 23,
-      '&indexedID': 25,
-      ' &title': 'a title ',
+      '%indexedID': 25,
+      ' %title': 'a title ',
       description: 'a description',
-      '&creator': ' someone ',
+      '%creator': ' someone ',
       ' date ': ' 2nd March 1888 ',
-      ' &bits&bobs': ' some random text '
+      ' %bits%bobs': ' some random text '
     });
   });
 
@@ -38,13 +38,13 @@ describe('cleanSubjectData', function () {
     expect(cleanData.date).to.equal('2nd March 1888');
   });
 
-  it('should trim leading ampersands', function () {
+  it('should trim leading percent signs', function () {
     expect(cleanData.indexedID).to.equal(25);
     expect(cleanData.title).to.equal('a title');
     expect(cleanData.creator).to.equal('someone');
   });
 
-  it('should ignore other ampersands', function () {
-    expect(cleanData['bits&bobs']).to.equal('some random text');
+  it('should ignore other percent signs', function () {
+    expect(cleanData['bits%bobs']).to.equal('some random text');
   });
 });

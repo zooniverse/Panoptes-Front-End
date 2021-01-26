@@ -18,9 +18,9 @@ describe('addIndexFields', function () {
   describe('with marked headers in the manifest', function () {
     beforeEach(function () {
       const data = [{
-        '&title': 'test thing',
+        '%title': 'test thing',
         description: 'ignore me',
-        '&creator': 'someone'
+        '%creator': 'someone'
       }];
       addIndexFields(subjectSet, data);
     });
