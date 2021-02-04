@@ -6,6 +6,7 @@ useScroll = require 'react-router-scroll/lib/useScroll'
 routes = require './router'
 style = require '../css/main.styl'
 { sugarClient } = require 'panoptes-client/lib/sugar'
+initSentry = require('./lib/init-sentry').default
 
 # register locales
 `import counterpart from 'counterpart';`
@@ -50,6 +51,8 @@ shouldUpdateScroll = (prevRouterProps, routerProps) ->
     false
   else
     true
+
+initSentry()
 
 ReactDOM.render <Provider store={store}><Router history={browserHistory} render={applyRouterMiddleware(useScroll(shouldUpdateScroll))}>{routes}</Router></Provider>,
   document.getElementById('panoptes-main-container')
