@@ -22,37 +22,37 @@ export default {
   },
   classifier: {
     back: 'واپس',
-    backButtonWarning: 'واپس جانے سے آلکا موجودہ کام صاف ہو جاےگا',
+    backButtonWarning: 'واپس جانے سے آپ کا موجودہ کام ختم/غائب جائےگا۔ا',
     close: 'بند کریں',
-    continue: 'کریں رکھیں',
+    continue: 'جاری رکھیںں',
     detailsSubTaskFormSubmitButton: 'ٹھیک ہے',
-    done: 'ہو گیا',
-    doneAndTalk: 'ہو گیا اور بات کریں',
+    done: 'ختم ہو گیا',
+    doneAndTalk: 'ختم ہو گیا اور بات کریں',
     dontShowMinicourse: 'مستقبل میں منی کورس نہ دکھائیں ',
-    letsGo: ' چلےں',
-    next: 'اگلے',
-    optOut: 'آپٹ آؤٹ ​/  حصا نہ لےں',
+    letsGo: 'چلیں',
+    next: 'اگلا',
+    optOut: 'آپٹ آؤٹ/حصہ نہ لیں-باہر جائیںں',
     taskTabs: {
       taskTab: 'کام',
       tutorialTab: 'سبق / درس'
     },
-    recents: 'آپکے حالیہ درجے',
+    recents: 'آپ کی حالیہ درجہ بندی',
     talk: 'بات کریں',
-    taskHelpButton: 'اس کام میں کوی مد د چاہیی؟',
-    miniCourseButton: 'منی کورس کو پھر شرو کریں',
+    taskHelpButton: 'اس کام میں کوئی مدد درکار ہے؟',
+    miniCourseButton: 'منی کورس کو پھر شرو ع کریں',
     workflowAssignmentDialog: {
       promotionMessage: 'مبارک ہو! آپ نے اگلا ورک فلو شورو کر لیا ہی . اگر آپ اس ہی ورک فلو کوجاری رکھنا چاہیں ، تو آپ یس ہی فلو کو جارے رکھ سکتے ہیں .',
       acceptButton: 'مجھے اگلے درجے پر لے چلیں ​',
-      declineButton: 'نہیں ، شکریہ'
+      declineButton: 'جی نہیں ، شکریہ'
     },
     interventions: {
-      optOut: 'اگلے میسیج نہ دکھائیں',
+      optOut: 'مزید پیغامات نہ دکھائیں',
       studyInfo: 'میں اس میسیج پروجیکٹ کا حصہ نہیں بننا چاہتا/ ​چاہہتی'
     }
   },
   projects: {
     welcome: {
-      heading: 'خوش آمدید ، ہمیں آپکے یہاں آنے پر کھوشی ھوئی',
+      heading: 'خوشی ہوئی',
       thanks: 'ہمارے پاس کچھ پروجیکٹ ہیں جس میں ہم آپ کی مدد لے سکتے ہیں',
       talk: 'اپنے جیسے دوسرے ولنٹیر سے بات کریں',
       scrollDown: 'اور جاننے کے لئے سکرول کریں'
@@ -60,53 +60,53 @@ export default {
   },
   project: {
     language: 'زبان',
-    loading: 'پروجیکٹ لوڈ ہو رہا ہی',
+    loading: 'پروجیکٹ لوڈ ہو رہا ہے',
     disclaimer: "اس پروجیکٹ کو 'زونیورس پروجیکٹ بیلڈر ' کی مدد سے بنایا گیا ہی لیکن یہ اب تک زونیورس ٹیم کا تسلیم کیا پروجیکٹ نہیں ہے . اس سے جوڑے کوئی بھی سوالات یا مسائل اگر زونیورس ٹیم کی طرف بھتے ہیں تو یہ ممکن ہے\nکے انہے کوئی  جواب نہ ملے .",
     fieldGuide: 'فیلڈ گائیڈ',
     about: {
-      header: 'بارے میں / متعلق',
+      header: 'کےبارے میں/کے متعلق',
       nav: {
         research: 'ریسرچ/ تحقیق',
-        results: 'نتیجے',
+        results: 'نتائج',
         faq: 'اکثر پوچھے جانے والے سوالات ',
         education: 'تعلیم',
         team: 'ٹیم'
       }
     },
     nav: {
-      about: 'بارے میں / متعلق',
-      adminPage: 'اڈمین کا پیج',
-      classify: 'درجے ',
-      collections: 'جما (کریں)',
-      exploreProject: 'پروجیکٹ کے بارے میں اور جانے',
+      about: 'کے بارے میں/کے متعلق',
+      adminPage: 'ایڈمن کا صفحہ',
+      classify: 'درجہ بندی',
+      collections: 'جمع(کریں)',
+      exploreProject: 'پروجیکٹ کے بارے میں اورجانیں',
       lab: 'لیب',
       recents: 'حالیہ',
-      talk: 'بات (کرین)',
+      talk: 'بات (کریں)',
       underReview: 'زیر جائزہ',
-      zooniverseApproved: 'زونیورس س منظورشدہ (منظور)'
+      zooniverseApproved: 'زونیورس سے منظورشدہ (منظور)'
     },
     classifyPage: {
       dark: 'گہرا',
       light: 'ہلکا',
       title: 'درجہ بندی (کریں)',
-      themeToggle: 'تھیم کو تبدیل کریں'
+      themeToggle: 'موضوع تبدیل کریںں'
     },
     home: {
       organization: 'تنظیم',
-      researcher: 'محقق سے الفاظ',
-      about: '%(title)s کے بارے میں',
+      researcher: 'محقق کے الفاظ',
+      about: '%(title)s عنوان کے متعلق/کے بارے میں',
       metadata: {
-        statistics: '%(title)s اعداد و شمار',
+        statistics: '%(title)s عنوان کے اعداد و شمار',
         classifications: 'درجہ بندی',
         volunteers: 'رضاکار / ولنٹیر',
-        completedSubjects: 'مکمل مضامین',
+        completedSubjects: 'تکمیل شدہ مضامین',
         subjects: 'مضامین'
       },
       joinIn: 'شامل ہوں',
-      learnMore: 'اورجانیے',
+      learnMore: 'اور جانیں',
       getStarted: 'شروع کریں',
-      visitLink: 'پروجیکٹ دیکھیں (آمد کریں)',
-      links: 'بہاری (دوسرے) پروجیکٹ کے لنک'
+      visitLink: 'پروجیکٹ کا جائزہ لیں',
+      links: 'باہری (دیگر) پروجیکٹ کے لنک'
     }
   },
   organization: {
@@ -173,21 +173,21 @@ export default {
   tasks: {
     hidePreviousMarks: 'پچھلے نشانات چھپائیں',
     less: 'کم',
-    more: 'اور  / زیادہ',
+    more: 'اور مزید',
     shortcut: {
       noAnswer: 'کوئی جواب نہیں'
     },
     survey: {
-      clear: 'صاف ',
+      clear: 'واضح',
       clearFilters: ' فلٹر صاف ​ کریں ​ ',
       makeSelection: 'منتخب کریں',
       showing: '%(count)s کے %(max)s دکھایا جا رہا ہے',
-      confused: 'اکثر ',
+      confused: 'اکثر غیر واضح',
       dismiss: 'خارج کریں',
-      itsThis: 'میرے خیال میں یہ ہے',
+      itsThis: 'میرے خیال میں یہی / وہی ہے',
       cancel: 'منسوخ ',
       identify: 'شناخت',
-      surveyOf: '%(count)s کا سروے',
+      surveyOf: '%(count)s کا جائزہ',
       identifications: {
         zero: 'کوئی شناخت نہیں',
         one: '۱ شناخت ',
@@ -238,7 +238,7 @@ export default {
   collections: {
     createForm: {
       private: 'ذاتی / نجی',
-      submit: 'شامل کریں / جما ​کریں'
+      submit: 'مجموعہ شامل /جمع کریں'
     }
   },
   emailSettings: {
