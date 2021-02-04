@@ -3,6 +3,7 @@
  * DS205: Consider reworking code to avoid use of IIFEs
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
+import { captureException, withScope } from '@sentry/browser';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -17,6 +18,17 @@ import ProjectPage from './project-page';
 import Translations from '../../classifier/translations';
 import getAllLinked from '../../lib/get-all-linked';
 
+/**
+  Send exceptions and React error info to Sentry
+*/
+function logToSentry(error, info) {
+  withScope((scope) => {
+    Object.keys(info).forEach((key) => {
+      scope.setExtra(key, info[key]);
+    });
+    captureException(error);
+  });
+}
 
 class ProjectPageController extends React.Component {
   constructor() {
@@ -92,6 +104,7 @@ class ProjectPageController extends React.Component {
 
   componentDidCatch(error, info) {
     console.log(error, info);
+    logToSentry(error, info);
     const loading = false;
     const ready = false;
     this.setState({ error, info, loading, ready });
