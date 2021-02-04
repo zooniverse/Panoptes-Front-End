@@ -1,6 +1,8 @@
 {
   "name": "panoptes-front-end",
   "dependencies": {
+    "@sentry/browser": "~6.1.0",
+    "@sentry/tracing": "~6.1.0",
     "animated-scrollto": "~1.1.0",
     "chart.js": "~2.7.3",
     "chartist": "~0.11.0",
