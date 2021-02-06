@@ -52,7 +52,7 @@ shouldUpdateScroll = (prevRouterProps, routerProps) ->
   else
     true
 
-initSentry()
+# initSentry()
 
 ReactDOM.render <Provider store={store}><Router history={browserHistory} render={applyRouterMiddleware(useScroll(shouldUpdateScroll))}>{routes}</Router></Provider>,
   document.getElementById('panoptes-main-container')
