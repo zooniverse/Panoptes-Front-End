@@ -2,6 +2,7 @@ React = require 'react'
 createReactClass = require 'create-react-class'
 classnames = require 'classnames'
 {Markdown} = require 'markdownz'
+Translate = require('react-translate-component')
 CroppedImage = require('../../components/cropped-image').default
 
 module.exports = createReactClass
@@ -97,7 +98,7 @@ module.exports = createReactClass
         <button type="button" className="field-guide-header-button" disabled={atRoot} onClick={levelUp}>
           <i className="fa fa-chevron-left fa-fw"></i>
         </button>
-        <strong>Field Guide</strong>
+        <Translate component="strong" content="project.fieldGuide" />
         <button type="button" className="field-guide-header-button" onClick={@props.onClickClose}>
           <i className="fa fa-times fa-fw"></i>
         </button>
