@@ -65,6 +65,7 @@ MediaAreaController.defaultProps = {
   metadata: {},
   onAdd: () => {},
   onDelete: () => {},
+  page: 1,
   pageSize: 200,
   resource: null,
   style: {},
@@ -92,6 +93,7 @@ MediaAreaController.propTypes = {
   metadata: PropTypes.object,
   onAdd: PropTypes.func,
   onDelete: PropTypes.func,
+  page: PropTypes.number,
   pageSize: PropTypes.number,
   resource: PropTypes.shape({
     _getURL: PropTypes.func,

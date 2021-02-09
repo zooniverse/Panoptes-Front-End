@@ -7,8 +7,11 @@ const MAX_FILE_SIZE = 500 * 1024;
 const mediaActions = {
   fetchMedia(props = this.props) {
     this.setState({ media: null });
-
-    return props.resource.get(this.props.link, { page_size: this.props.pageSize })
+    
+    const page_size = this.props.pageSize || 10
+    const page = this.props.page || 1
+    
+    return props.resource.get(this.props.link, { page, page_size })
       .then((media) => {
         return media.filter((medium) => {
           return Object.keys(medium.metadata).length > 0;
