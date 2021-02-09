@@ -12,6 +12,8 @@ export default class MediaAreaController extends React.Component {
     this.state = {
       errors: [],
       media: null,
+      page: 1,  // Current page. Controlled by the user.
+      page_count: 1,  // Total number of pages. Update when we fetch the from resource's metadata.
       pendingFiles: [],
       pendingMedia: []
     };
@@ -41,19 +43,22 @@ export default class MediaAreaController extends React.Component {
 
   render() {
     return (
-      <MediaAreaView
-        className={this.props.className}
-        errors={this.state.errors}
-        media={this.state.media}
-        onDelete={this.handleDelete}
-        onDrop={this.handleDrop}
-        onSelect={this.handleFileSelection}
-        pendingFiles={this.state.pendingFiles}
-        pendingMedia={this.state.pendingMedia}
-        style={this.props.style}
-      >
-        {this.props.children}
-      </MediaAreaView>
+      <div>
+        <MediaAreaView
+          className={this.props.className}
+          errors={this.state.errors}
+          media={this.state.media}
+          onDelete={this.handleDelete}
+          onDrop={this.handleDrop}
+          onSelect={this.handleFileSelection}
+          pendingFiles={this.state.pendingFiles}
+          pendingMedia={this.state.pendingMedia}
+          style={this.props.style}
+        >
+          {this.props.children}
+        </MediaAreaView>
+        <div>Page {this.state.page} of {this.state.page_count}</div>
+      </div>
     );
   }
 }
@@ -65,8 +70,7 @@ MediaAreaController.defaultProps = {
   metadata: {},
   onAdd: () => {},
   onDelete: () => {},
-  page: 1,
-  pageSize: 200,
+  pageSize: 5,  // DEBUG 200,
   resource: null,
   style: {},
   actions: mediaActions
@@ -93,7 +97,6 @@ MediaAreaController.propTypes = {
   metadata: PropTypes.object,
   onAdd: PropTypes.func,
   onDelete: PropTypes.func,
-  page: PropTypes.number,
   pageSize: PropTypes.number,
   resource: PropTypes.shape({
     _getURL: PropTypes.func,

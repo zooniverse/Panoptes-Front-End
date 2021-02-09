@@ -8,17 +8,24 @@ const mediaActions = {
   fetchMedia(props = this.props) {
     this.setState({ media: null });
     
-    const page_size = this.props.pageSize || 10
-    const page = this.props.page || 1
+    const page_size = this.props.pageSize
+    const page = this.state.page 
     
     return props.resource.get(this.props.link, { page, page_size })
       .then((media) => {
-        return media.filter((medium) => {
-          return Object.keys(medium.metadata).length > 0;
-        });
+        const meta = media.length ? media[0].getMeta() : {};  // Derive the paging metadata for all the media, from the first media item.
+        return {
+          meta,
+          filteredMedia: media.filter((medium) => {
+            return Object.keys(medium.metadata).length > 0;
+          }),
+        };
       })
-      .then((filteredMedia) => {
-        this.setState({ media: filteredMedia });
+      .then((data) => {
+        this.setState({
+          page_count: data.meta.page_count || 1,
+          media: data.filteredMedia,
+        });
       }).catch((error) => { return []; });
   },
 
