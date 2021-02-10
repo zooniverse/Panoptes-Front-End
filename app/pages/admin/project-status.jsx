@@ -333,7 +333,7 @@ class ProjectStatus extends Component {
                     type="text"
                     onBlur={(event) => this.onBlurTrainingSetIds(workflow, event)}
                     onChange={(event) => {
-                      const updatedTrainingSetIds = Object.apply({}, this.state.valTrainingSetIds)
+                      const updatedTrainingSetIds = Object.assign({}, this.state.valTrainingSetIds)
                       updatedTrainingSetIds[workflow.id] = event.target.value
                       this.setState({ valTrainingSetIds: updatedTrainingSetIds })
                     }}
@@ -347,7 +347,7 @@ class ProjectStatus extends Component {
                     type="text"
                     onBlur={(event) => this.onBlurTrainingChances(workflow, event)}
                     onChange={(event) => {
-                      const updatedTrainingChances = Object.apply({}, this.state.valTrainingChances)
+                      const updatedTrainingChances = Object.assign({}, this.state.valTrainingChances)
                       updatedTrainingChances[workflow.id] = event.target.value
                       this.setState({ valTrainingChances: updatedTrainingChances })
                     }}
@@ -361,7 +361,7 @@ class ProjectStatus extends Component {
                     type="text"
                     onBlur={(event) => this.onBlurTrainingDefaultChance(workflow, event)}
                     onChange={(event) => {
-                      const updatedTrainingDefaultChance = Object.apply({}, this.state.valTrainingDefaultChance)
+                      const updatedTrainingDefaultChance = Object.assign({}, this.state.valTrainingDefaultChance)
                       updatedTrainingDefaultChance[workflow.id] = event.target.value
                       this.setState({ valTrainingDefaultChance: updatedTrainingDefaultChance })
                     }}
