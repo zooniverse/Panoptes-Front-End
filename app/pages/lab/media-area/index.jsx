@@ -4,6 +4,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import MediaAreaView from './media-area-view';
 import putFile from '../../../lib/put-file';
 import mediaActions from '../actions/media';
+import Paginator from '../../../talk/lib/paginator';
 
 export default class MediaAreaController extends React.Component {
   constructor(props) {
@@ -37,8 +38,14 @@ export default class MediaAreaController extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.resource !== nextProps.resource) {
-      this.fetchMedia(nextProps);
+      this.fetchMedia(nextProps, 1);
     }
+  }
+  
+  onPageChange (page) {
+    // When user requests the page to change, first fetch the media,
+    // and THEN update the state.page. (This is done in fetchMedia)
+    this.fetchMedia(this.props, page);
   }
 
   render() {
@@ -57,7 +64,11 @@ export default class MediaAreaController extends React.Component {
         >
           {this.props.children}
         </MediaAreaView>
-        <div>Page {this.state.page} of {this.state.page_count}</div>
+        <Paginator
+          page={this.state.page}
+          onPageChange={this.onPageChange.bind(this)}
+          pageCount={this.state.page_count}
+        />
       </div>
     );
   }
@@ -70,7 +81,7 @@ MediaAreaController.defaultProps = {
   metadata: {},
   onAdd: () => {},
   onDelete: () => {},
-  pageSize: 5,  // DEBUG 200,
+  pageSize: 200,
   resource: null,
   style: {},
   actions: mediaActions

@@ -5,13 +5,12 @@ const putFile = require('../../../lib/put-file');
 const MAX_FILE_SIZE = 500 * 1024;
 
 const mediaActions = {
-  fetchMedia(props = this.props) {
+  fetchMedia(props = this.props, page = 1) {
     this.setState({ media: null });
     
-    const page_size = this.props.pageSize
-    const page = this.state.page 
+    const page_size = props.pageSize;
     
-    return props.resource.get(this.props.link, { page, page_size })
+    return props.resource.get(props.link, { page, page_size })
       .then((media) => {
         const meta = media.length ? media[0].getMeta() : {};  // Derive the paging metadata for all the media, from the first media item.
         return {
@@ -23,6 +22,7 @@ const mediaActions = {
       })
       .then((data) => {
         this.setState({
+          page,
           page_count: data.meta.page_count || 1,
           media: data.filteredMedia,
         });
