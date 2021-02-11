@@ -6,7 +6,7 @@ const MAX_FILE_SIZE = 500 * 1024;
 
 const mediaActions = {
   fetchMedia(props = this.props, page = 1) {
-    this.setState({ media: null });
+    this.setState({ media: null, page });
     
     const page_size = props.pageSize;
     
@@ -22,7 +22,6 @@ const mediaActions = {
       })
       .then((data) => {
         this.setState({
-          page,
           page_count: data.meta.page_count || 1,
           media: data.filteredMedia,
         });

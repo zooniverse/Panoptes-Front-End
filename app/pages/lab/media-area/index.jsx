@@ -43,8 +43,8 @@ export default class MediaAreaController extends React.Component {
   }
   
   onPageChange (page) {
-    // When user requests the page to change, first fetch the media,
-    // and THEN update the state.page. (This is done in fetchMedia)
+    // When user requests the page to change, the media fetch AND the update
+    // of state.page is done in fetchMedia()
     this.fetchMedia(this.props, page);
   }
 
