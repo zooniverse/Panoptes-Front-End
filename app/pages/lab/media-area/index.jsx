@@ -51,6 +51,11 @@ export default class MediaAreaController extends React.Component {
   render() {
     return (
       <div>
+        <Paginator
+          page={this.state.page}
+          onPageChange={this.onPageChange.bind(this)}
+          pageCount={this.state.page_count}
+        />
         <MediaAreaView
           className={this.props.className}
           errors={this.state.errors}
