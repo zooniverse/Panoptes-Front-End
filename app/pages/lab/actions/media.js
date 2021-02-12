@@ -17,14 +17,21 @@ const mediaActions = {
           return Object.keys(medium.metadata).length > 0;
         })
         
-        this.setState({
+        return {
           page_count: meta.page_count || 1,
           media: filteredMedia,
-        });
+        }
         
-        return filteredMedia;
+      }).catch((error) => {
+        console.error(error);
+        return {
+          page_count: 1,
+          media: filteredMedia,
+        }
         
-      }).catch((error) => { console.error(error); return []; });
+      }).then((data) => {        
+        this.setState(data);
+      });
   },
 
   handleDrop(event) {
