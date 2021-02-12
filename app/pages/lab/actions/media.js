@@ -13,19 +13,18 @@ const mediaActions = {
     return props.resource.get(props.link, { page, page_size })
       .then((media) => {
         const meta = media.length ? media[0].getMeta() : {};  // Derive the paging metadata for all the media, from the first media item.
-        return {
-          meta,
-          filteredMedia: media.filter((medium) => {
-            return Object.keys(medium.metadata).length > 0;
-          }),
-        };
-      })
-      .then((data) => {
+        const filteredMedia = media.filter((medium) => {
+          return Object.keys(medium.metadata).length > 0;
+        })
+        
         this.setState({
-          page_count: data.meta.page_count || 1,
-          media: data.filteredMedia,
+          page_count: meta.page_count || 1,
+          media: filteredMedia,
         });
-      }).catch((error) => { return []; });
+        
+        return filteredMedia;
+        
+      }).catch((error) => { console.error(error); return []; });
   },
 
   handleDrop(event) {
