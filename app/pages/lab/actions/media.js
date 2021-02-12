@@ -26,7 +26,7 @@ const mediaActions = {
         console.error(error);
         return {
           page_count: 1,
-          media: filteredMedia,
+          media: [],
         }
         
       }).then((data) => {        
