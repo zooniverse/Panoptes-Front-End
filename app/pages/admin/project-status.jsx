@@ -411,6 +411,8 @@ class ProjectStatus extends Component {
               <hr />
               <div>
                 <h4>Classifier 2.0 (rewrite) settings</h4>
+                <p>Note that that Scatter Plot is preferred over TESS Light Curve for that kind of JSON subject data. The TESS light curve viewer is built specifically for their requirements. The code in the viewer assumes the project is using a task like them.</p>
+
                 <label>
                   Subject Viewer:{' '}
                   <select
@@ -422,6 +424,7 @@ class ProjectStatus extends Component {
                     <option value="dataImage">Data Image</option>
                     <option value="lightcurve">(D3/TESS) Light Curve</option>
                     <option value="multiFrame">Multi-Frame</option>
+                    <option value="scatterPlot">Scatter Plot</option>
                     <option value="singleImage">Single Image</option>
                     <option value="subjectGroup">Subject Group</option>
                     <option value="variableStar">Variable Star</option>
