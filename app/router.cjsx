@@ -155,8 +155,6 @@ module.exports =
     <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service' />} />
     <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service/classify' />} />
 
-    <Route path="/projects/mschwamb/planet-four/authors" component={() => <RELOAD newUrl='https://authors.planetfour.org/' />} />
-
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
