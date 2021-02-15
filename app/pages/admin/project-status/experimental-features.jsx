@@ -26,6 +26,7 @@ const experimentalFeatures = [
   'highlighter',
   'translator-role',
   'museum-role',
+  'transcription-task'
 ];
 
 class ExperimentalFeatures extends Component {
