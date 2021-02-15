@@ -86,6 +86,13 @@ RELOAD = createReactClass
   render: ->
     null
 
+ExternalRedirect = createReactClass
+  componentDidMount: ->
+    if @props.newUrl
+      window.location = @props.newUrl
+  render: ->
+    null
+
 module.exports =
   <Route path="/" component={require './partials/app'}>
     <IndexRoute component={HomePageRoot} />
@@ -154,6 +161,8 @@ module.exports =
 
     <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service' />} />
     <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service/classify' />} />
+
+    <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
