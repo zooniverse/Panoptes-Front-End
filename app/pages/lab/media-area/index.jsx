@@ -4,6 +4,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import MediaAreaView from './media-area-view';
 import putFile from '../../../lib/put-file';
 import mediaActions from '../actions/media';
+import Paginator from '../../../talk/lib/paginator';
 
 export default class MediaAreaController extends React.Component {
   constructor(props) {
@@ -12,6 +13,8 @@ export default class MediaAreaController extends React.Component {
     this.state = {
       errors: [],
       media: null,
+      page: 1,  // Current page. Controlled by the user.
+      page_count: 1,  // Total number of pages. Update when we fetch the from resource's metadata.
       pendingFiles: [],
       pendingMedia: []
     };
@@ -35,25 +38,43 @@ export default class MediaAreaController extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.resource !== nextProps.resource) {
-      this.fetchMedia(nextProps);
+      this.fetchMedia(nextProps, 1);
     }
+  }
+  
+  onPageChange (page) {
+    // When user requests the page to change, the media fetch AND the update
+    // of state.page is done in fetchMedia()
+    this.fetchMedia(this.props, page);
   }
 
   render() {
     return (
-      <MediaAreaView
-        className={this.props.className}
-        errors={this.state.errors}
-        media={this.state.media}
-        onDelete={this.handleDelete}
-        onDrop={this.handleDrop}
-        onSelect={this.handleFileSelection}
-        pendingFiles={this.state.pendingFiles}
-        pendingMedia={this.state.pendingMedia}
-        style={this.props.style}
-      >
-        {this.props.children}
-      </MediaAreaView>
+      <div>
+        <Paginator
+          page={this.state.page}
+          onPageChange={this.onPageChange.bind(this)}
+          pageCount={this.state.page_count}
+        />
+        <MediaAreaView
+          className={this.props.className}
+          errors={this.state.errors}
+          media={this.state.media}
+          onDelete={this.handleDelete}
+          onDrop={this.handleDrop}
+          onSelect={this.handleFileSelection}
+          pendingFiles={this.state.pendingFiles}
+          pendingMedia={this.state.pendingMedia}
+          style={this.props.style}
+        >
+          {this.props.children}
+        </MediaAreaView>
+        <Paginator
+          page={this.state.page}
+          onPageChange={this.onPageChange.bind(this)}
+          pageCount={this.state.page_count}
+        />
+      </div>
     );
   }
 }
