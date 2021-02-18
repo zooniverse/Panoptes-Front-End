@@ -162,6 +162,9 @@ module.exports =
     <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service' />} />
     <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service/classify' />} />
 
+    <Route path="/projects/blicksam/transcription-task-testing" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/blicksam/transcription-task-testing' />} />
+    <Route path="/projects/blicksam/transcription-task-testing/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/blicksam/transcription-task-testing/classify' />} />
+
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
