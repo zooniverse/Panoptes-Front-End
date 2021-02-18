@@ -62,7 +62,7 @@ EditWorkflowPage = createReactClass
     @props.project.uncacheLink 'workflows'
     @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
 
-  canUseTask: (project, task)->
+  canUseTask: (project, task) ->
     task in project.experimental_tools
 
   handleTaskChange: (taskKey, taskDescription) ->
@@ -150,7 +150,8 @@ EditWorkflowPage = createReactClass
                             when 'dropdown' then <i className="fa fa-list fa-fw"></i>
                             when 'combo' then <i className="fa fa-cubes fa-fw"></i>
                             when 'slider' then <i className="fa fa-sliders fa-fw"></i>
-                            when 'highlighter' then <i className="fa fa-i-cursor"></i>}
+                            when 'highlighter' then <i className="fa fa-i-cursor"></i>
+                            when 'transcription' then <i className="fa fa-font fa-fw"></i>}
                           {' '}
                           {taskDefinition || 'Task editor is unavailable'}
                           {if key is @props.workflow.first_task
@@ -233,6 +234,14 @@ EditWorkflowPage = createReactClass
                         <i className="fa fa-sliders fa-2x"></i>
                         <br />
                         <small><strong>Slider</strong></small>
+                      </button>
+                    </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "transcription-task")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={() => console.log 'add transcription task'} title="Transcription tasks: the volunteer marks a line under text and transcribes the text into a text box. If caesar is configured, then text suggestions if available from other volunteers are options.">
+                        <i className="fa fa-font fa-2x"></i>
+                        <br />
+                        <small><strong>Transcription</strong></small>
                       </button>
                     </AutoSave>}
                 </TriggeredModalForm>
