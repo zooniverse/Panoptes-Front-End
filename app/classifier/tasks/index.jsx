@@ -9,6 +9,7 @@ import TextTask from './text/';
 import DropdownTask from './dropdown/';
 import ShortcutTask from './shortcut/';
 import Highlighter from './highlighter/';
+import TranscriptionTask from './transcription'
 
 const tasks = {
   combo: ComboTask,
@@ -21,7 +22,8 @@ const tasks = {
   text: TextTask,
   dropdown: DropdownTask,
   shortcut: ShortcutTask,
-  highlighter: Highlighter
+  highlighter: Highlighter,
+  transcription: TranscriptionTask
 };
 
 export default tasks;
