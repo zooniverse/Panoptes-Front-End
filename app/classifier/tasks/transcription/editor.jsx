@@ -1,7 +1,8 @@
 import React from 'react'
 import { MarkdownEditor, MarkdownHelp } from 'markdownz'
 import handleInputChange from '../../../lib/handle-input-change'
-import AutoSave from '../../../components/auto-save.coffee'
+import AutoSave from '../../../components/auto-save'
+import NextTaskSelector from '../next-task-selector'
 
 export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) {
   function handleChange() {
@@ -26,6 +27,12 @@ export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) 
           <MarkdownEditor name={`${taskPrefix}.help`} onHelp={() => {alert(<MarkdownHelp/>)}} value={task.help ?? ""} rows="7" className="full" onChange={handleChange} />
         </AutoSave>
         <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
+      </div>
+      <div>
+        <AutoSave resource={workflow}>
+            Next task{' '}
+          <NextTaskSelector workflow={`${taskPrefix}.next`} value={task.next ?? ''} onChange={handleChange} />
+        </AutoSave>
       </div>
     </div>
   )

@@ -32,7 +32,6 @@ module.exports = createReactClass
       when 'text' then ['instruction']
       when 'slider' then ['instruction']
       when 'highlighter' then ['instruction', 'highlighterLabels']
-      when 'transcription' then ['instruction']
 
     isAQuestion = @props.task.type in ['single', 'multiple']
     canBeRequired = @props.task.type in ['single', 'multiple', 'text']
