@@ -3,11 +3,11 @@ import TranscriptionTaskEditor from './editor'
 
 class TranscriptionTask extends React.PureComponent {
   render() {
-    return null
+    return null;
   }
 }
 
-TranscriptionTask.Editor = TranscriptionTaskEditor
+TranscriptionTask.Editor = TranscriptionTaskEditor;
 TranscriptionTask.getTaskText = task => task.instruction;
 
 export default TranscriptionTask
