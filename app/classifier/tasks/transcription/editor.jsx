@@ -39,7 +39,7 @@ export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) 
         </AutoSave>
         <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
       </div>
-      <br />
+      <hr />
       <div className="drawing-task-details-editor">
         <p>Text sub-task</p>
         <SubTaskEditor
@@ -47,6 +47,23 @@ export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) 
           subtaskPrefix={`${toolPath}.details.0`}
           workflow={workflow}
         />
+      </div>
+      <hr />
+      <div>
+        <p>Transcription line tool</p>
+        <p>
+          This is a 2-click line mark tool which has pre-set colors. These colors map to the following states:
+          <dl>
+            <dt><img src='https://via.placeholder.com/10x10.png/06FE76?text=+' /> Green</dt>
+            <dd>A transcription line mark currently selected by the volunteer.</dd>
+            <dt><img src='https://via.placeholder.com/10x10.png/235DFF?text=+' /> Blue</dt>
+            <dd>A transcription line mark made by the volunteer.</dd>
+            <dt><img src='https://via.placeholder.com/10x10.png/FF40FF?text=+' /> Purple </dt>
+            <dd>A transcription line mark made previously by another volunteer. This mark can be selected to create a new transcription to submit.</dd>
+            <dt><img src='https://via.placeholder.com/10x10.png/979797?text=+' /> Gray</dt>
+            <dd>A transcription line mark which has reached consensus. The mark and transcriptions are view only.</dd>
+          </dl>
+        </p>
       </div>
     </div>
   )
