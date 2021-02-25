@@ -4,8 +4,9 @@ import { expect } from 'chai';
 import taskComponents from './';
 
 const tasks = Object.keys(taskComponents);
+const tasksWithoutTranscription = tasks.filter((taskType) => taskType !== 'transcription' )
 
-tasks.forEach(function (taskType) {
+tasksWithoutTranscription.forEach(function (taskType) {
   const TaskComponent = taskComponents[taskType];
   const task = TaskComponent.getDefaultTask();
   const workflow = {};
