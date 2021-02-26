@@ -20,8 +20,8 @@ export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) 
 
   return (
     <div className={`workflow-task-editor ${task.type}`}>
-      <p>The transcription task comprises of a pre-configured drawing task using a two-click line drawing mark, the transcription line tool, and text sub-task.</p>
-      <p>Only the instructions, help text, and text modifiers are editable.</p>
+      <p className='form-help'>The transcription task comprises of a pre-configured drawing task using a two-click line drawing mark, the transcription line tool, and text sub-task.</p>
+      <p className='form-help'>Only the instructions, help text, and text modifiers are editable.</p>
       <div>
         <AutoSave resource={workflow}>
           <span className="form-label">Main text</span>
@@ -41,7 +41,7 @@ export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) 
       </div>
       <hr />
       <div className="drawing-task-details-editor">
-        <p>Text sub-task</p>
+        <p className='form-label'>Text sub-task</p>
         <SubTaskEditor
           subtask={subtask}
           subtaskPrefix={`${toolPath}.details.0`}
@@ -50,8 +50,8 @@ export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) 
       </div>
       <hr />
       <div>
-        <p>Transcription line tool</p>
-        <p>
+        <p className='form-label'>Transcription line tool</p>
+        <small className="form-help">
           This is a 2-click line mark tool which has pre-set colors. These colors map to the following states:
           <dl>
             <dt><img src='https://via.placeholder.com/10x10.png/06FE76?text=+' /> Green</dt>
@@ -63,7 +63,7 @@ export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) 
             <dt><img src='https://via.placeholder.com/10x10.png/979797?text=+' /> Gray</dt>
             <dd>A transcription line mark which has reached consensus. The mark and transcriptions are view only.</dd>
           </dl>
-        </p>
+        </small>
       </div>
     </div>
   )
