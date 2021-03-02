@@ -5,7 +5,8 @@ import merge from 'lodash/merge';
 const DEFAULT_LOCALE = counterpart.getLocale();
 const RTL_LANGUAGES = [
   'ar',
-  'he'
+  'he',
+  'ur'
 ];
 
 counterpart.setFallbackLocale(DEFAULT_LOCALE);
@@ -68,7 +69,7 @@ export default function reducer(state = initialState, action = {}) {
           resourceTranslations[translation.translated_id] = translation;
         });
       });
-      
+
       strings = Object.assign({}, state.strings, { [translated_type]: resourceTranslations });
       return Object.assign({}, state, { strings });
     }
