@@ -58,7 +58,7 @@ export default function TranscriptionTaskEditor({ task, taskPrefix, workflow }) 
             <dd>A transcription line mark currently selected by the volunteer.</dd>
             <dt><img src='https://via.placeholder.com/10x10.png/235DFF?text=+' /> Blue</dt>
             <dd>A transcription line mark made by the volunteer.</dd>
-            <dt><img src='https://via.placeholder.com/10x10.png/FF40FF?text=+' /> Purple </dt>
+            <dt><img src='https://via.placeholder.com/10x10.png/FF40FF?text=+' /> Pink </dt>
             <dd>A transcription line mark made previously by another volunteer. This mark can be selected to create a new transcription to submit.</dd>
             <dt><img src='https://via.placeholder.com/10x10.png/979797?text=+' /> Gray</dt>
             <dd>A transcription line mark which has reached consensus. The mark and transcriptions are view only.</dd>
