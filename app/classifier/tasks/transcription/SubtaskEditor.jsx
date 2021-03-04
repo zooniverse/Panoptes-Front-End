@@ -63,7 +63,6 @@ export default function SubTaskEditor({ subtask, subtaskPrefix, workflow }) {
           {"Unclear"}
         </label>
       </section>
-      <hr/>
     </div>
   )
 }
