@@ -41,6 +41,7 @@ EditWorkflowPage = createReactClass
     deletionInProgress: false
     deletionError: null
     workflowCreationInProgress: false
+    showTaskAddButtons: false
 
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
@@ -73,6 +74,9 @@ EditWorkflowPage = createReactClass
   isThereNotADefinedTask: () ->
     workflowTasks = Object.keys(@props.workflow.tasks)
     workflowTasks.length is 0
+
+  showTaskAddButtons: () ->
+    @setState((prevState) => { showTaskAddButtons: !prevState.showTaskAddButtons })
 
   render: ->
     window.editingWorkflow = @props.workflow
@@ -161,91 +165,91 @@ EditWorkflowPage = createReactClass
                       </div>}
               </div>
 
-              <p>
-                <TriggeredModalForm trigger={
-                  <span className="standard-button">
-                    <i className="fa fa-plus-circle"></i>{' '}
-                    Add a task
-                  </span>
-                }>
-                  <AutoSave resource={@props.workflow}>
-                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s).">
-                      <i className="fa fa-question-circle fa-2x"></i>
-                      <br />
-                      <small><strong>Question</strong></small>
-                    </button>
-                  </AutoSave>{' '}
-                  <AutoSave resource={@props.workflow}>
-                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'drawing'} title="Marking tasks: the volunteer marks or draws directly on the image(s) using tools that you specify. They can also give sub-classifications for each mark.">
-                      <i className="fa fa-pencil fa-2x"></i>
-                      <br />
-                      <small><strong>Drawing</strong></small>
-                    </button>
-                  </AutoSave>{' '}
-                  <AutoSave resource={@props.workflow}>
-                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
-                      <i className="fa fa-file-text-o fa-2x"></i>
-                      <br />
-                      <small><strong>Text</strong></small>
-                    </button>
-                  </AutoSave>{' '}
-                  <AutoSave resource={@props.workflow}>
-                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
-                      <i className="fa fa-binoculars fa-2x"></i>
-                      <br />
-                      <small><strong>Survey</strong></small>
-                    </button>
-                  </AutoSave>{' '}
-                  {if @canUseTask(@props.project, "highlighter")
+              <div className="edit-workflow-page__section">
+                <button type="button" className="standard-button" onClick={@showTaskAddButtons}>
+                  <i className="fa fa-plus-circle"></i>{' '}
+                  Add a task
+                </button>
+                {if @state.showTaskAddButtons
+                  <div className="edit-workflow-page__section edit-workflow-page__task-add-buttons">
                     <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'highlighter'} title="Highlighter: The volunteer can highlight piece of text.">
-                        <i className="fa fa-i-cursor fa-2x"></i>
+                      <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s).">
+                        <i className="fa fa-question-circle fa-2x"></i>
                         <br />
-                        <small><strong>Highlighter</strong></small>
+                        <small><strong>Question</strong></small>
                       </button>
-                    </AutoSave>}{' '}
-                  {if @canUseTask(@props.project, "crop")
+                    </AutoSave>{' '}
                     <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">
-                        <i className="fa fa-crop fa-2x"></i>
+                      <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'drawing'} title="Marking tasks: the volunteer marks or draws directly on the image(s) using tools that you specify. They can also give sub-classifications for each mark.">
+                        <i className="fa fa-pencil fa-2x"></i>
                         <br />
-                        <small><strong>Crop</strong></small>
+                        <small><strong>Drawing</strong></small>
                       </button>
-                    </AutoSave>}{' '}
-                  {if @canUseTask(@props.project, "dropdown")
+                    </AutoSave>{' '}
+                    <AutoSave resource={@props.workflow}>
+                      <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
+                        <i className="fa fa-file-text-o fa-2x"></i>
+                        <br />
+                        <small><strong>Text</strong></small>
+                      </button>
+                    </AutoSave>{' '}
+                    <AutoSave resource={@props.workflow}>
+                      <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
+                        <i className="fa fa-binoculars fa-2x"></i>
+                        <br />
+                        <small><strong>Survey</strong></small>
+                      </button>
+                    </AutoSave>{' '}
+                    {if @canUseTask(@props.project, "highlighter")
                       <AutoSave resource={@props.workflow}>
-                        <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'dropdown'} title="Dropdown tasks: the volunteer selects an option from a list. Conditional dropdowns can be created, and if a research team enables the feature, a volunteer can enter text if the answer they'd like to provide is not an option available.">
-                          <i className="fa fa-list fa-2x"></i>
+                        <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'highlighter'} title="Highlighter: The volunteer can highlight piece of text.">
+                          <i className="fa fa-i-cursor fa-2x"></i>
                           <br />
-                          <small><strong>Dropdown</strong></small>
+                          <small><strong>Highlighter</strong></small>
                         </button>
                       </AutoSave>}{' '}
-                  {if @canUseTask(@props.project, "combo")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'combo'} title="Combo tasks: show a bunch of tasks at the same time.">
-                        <i className="fa fa-cubes fa-2x"></i>
-                        <br />
-                        <small><strong>Combo</strong></small>
-                      </button>
-                    </AutoSave>}{' '}
-                  {if @canUseTask(@props.project, "slider")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
-                        <i className="fa fa-sliders fa-2x"></i>
-                        <br />
-                        <small><strong>Slider</strong></small>
-                      </button>
-                    </AutoSave>}{' '}
-                  {if @canUseTask(@props.project, "transcription-task")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={() => console.log 'add transcription task'} title="Transcription tasks: the volunteer marks a line under text and transcribes the text into a text box. If caesar is configured, then text suggestions if available from other volunteers are options.">
-                        <i className="fa fa-font fa-2x"></i>
-                        <br />
-                        <small><strong>Transcription</strong></small>
-                      </button>
-                    </AutoSave>}
-                </TriggeredModalForm>
-              </p>
+                    {if @canUseTask(@props.project, "crop")
+                      <AutoSave resource={@props.workflow}>
+                        <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">
+                          <i className="fa fa-crop fa-2x"></i>
+                          <br />
+                          <small><strong>Crop</strong></small>
+                        </button>
+                      </AutoSave>}{' '}
+                    {if @canUseTask(@props.project, "dropdown")
+                        <AutoSave resource={@props.workflow}>
+                          <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'dropdown'} title="Dropdown tasks: the volunteer selects an option from a list. Conditional dropdowns can be created, and if a research team enables the feature, a volunteer can enter text if the answer they'd like to provide is not an option available.">
+                            <i className="fa fa-list fa-2x"></i>
+                            <br />
+                            <small><strong>Dropdown</strong></small>
+                          </button>
+                        </AutoSave>}{' '}
+                    {if @canUseTask(@props.project, "combo")
+                      <AutoSave resource={@props.workflow}>
+                        <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'combo'} title="Combo tasks: show a bunch of tasks at the same time.">
+                          <i className="fa fa-cubes fa-2x"></i>
+                          <br />
+                          <small><strong>Combo</strong></small>
+                        </button>
+                      </AutoSave>}{' '}
+                    {if @canUseTask(@props.project, "slider")
+                      <AutoSave resource={@props.workflow}>
+                        <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
+                          <i className="fa fa-sliders fa-2x"></i>
+                          <br />
+                          <small><strong>Slider</strong></small>
+                        </button>
+                      </AutoSave>}{' '}
+                    {if @canUseTask(@props.project, "transcription-task")
+                      <AutoSave resource={@props.workflow}>
+                        <button type="button" className="minor-button" onClick={() => console.log 'add transcription task'} title="Transcription tasks: the volunteer marks a line under text and transcribes the text into a text box. If caesar is configured, then text suggestions if available from other volunteers are options.">
+                          <i className="fa fa-font fa-2x"></i>
+                          <br />
+                          <small><strong>Transcription</strong></small>
+                        </button>
+                      </AutoSave>}
+                    </div>}
+              </div>
 
               <AutoSave tag="div" resource={@props.workflow}>
                 <small>First task</small>{' '}
@@ -637,7 +641,7 @@ EditWorkflowPage = createReactClass
       changes.first_task = nextTaskID
 
     @props.workflow.update changes
-    @setState selectedTaskKey: nextTaskID
+    @setState { selectedTaskKey: nextTaskID, showTaskAddButtons: false }
 
   handleSetPanAndZoom: (e) ->
     @props.workflow.update
