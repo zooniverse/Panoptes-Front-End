@@ -1,43 +1,23 @@
 export default {
-  loading: '(Loading)',
-  aboutPages: {
-    missingContent: {
-      education: 'This project has no educational resources yet.',
-      faq: 'This project has no frequently asked questions yet.',
-      research: 'This project has no science case yet.',
-      results: 'This project has no results to report yet.',
-      team: 'This project has no team information.',
-    }
-  },
-  projectRoles: {
-    title: 'The Team',
-    owner: 'Owner',
-    collaborator: 'Collaborator',
-    translator: 'Translator',
-    scientist: 'Researcher',
-    moderator: 'Moderator',
-    tester: 'Tester',
-    expert: 'Expert',
-    museum: 'Museum',
-  },
+  loading: '(قيد التحميل)',
   classifier: {
-    back: 'Back',
-    backButtonWarning: 'Going back will clear your work for the current task.',
-    close: 'Close',
-    continue: 'Continue',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
+    back: 'إلى الخلف',
+    backButtonWarning: 'العودة إلى الخلف ستُلغي الجواب الذي أشرتم/نّ إليه',
+    close: 'أغلِق',
+    continue: 'واصل',
+    done: 'حفظ',
+    doneAndTalk: 'احفظ وانتقل إلى المحادثة',
     dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: 'Let’s go!',
-    next: 'Next',
+    letsGo: 'هيّا نبدأ!',
+    next: 'التالي',
     optOut: 'Opt out',
     taskTabs: {
-      taskTab: 'Task',
-      tutorialTab: 'Tutorial'
+      taskTab: 'مهمّة',
+      tutorialTab: 'إرشاد'
     },
-    recents: 'Your recent classifications',
+    recents: 'فهرَساتك الأخيرة',
     talk: 'Talk',
-    taskHelpButton: 'Need some help with this task?',
+    taskHelpButton: 'بحاجة إلى مساعدة في هذه المهمّة؟',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
@@ -46,59 +26,59 @@ export default {
     }
   },
   project: {
-    loading: 'Loading project',
+    loading: 'مشروع قيد التحميل',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
-    fieldGuide: 'Field Guide',
+    fieldGuide: 'الدليل العمليّ',
     about: {
-      header: 'About',
+      header: 'من نحن',
       nav: {
-        research: 'Research',
-        results: 'Results',
-        faq: 'FAQ',
-        education: 'Education',
-        team: 'The Team',
+        research: 'البحث',
+        results: 'المُخرَجات',
+        faq: 'أسئلة مُتكرّرة',
+        education: 'معلومات تربويّة',
+        team: 'الطاقم',
       }
     },
     nav: {
-      about: 'About',
+      about: 'من نحن',
       adminPage: 'Admin page',
-      classify: 'Classify',
-      collections: 'Collect',
+      classify: 'فَهرَسَة',
+      collections: 'مجموعات',
       exploreProject: 'Explore Project',
       lab: 'Lab',
-      recents: 'Recents',
-      talk: 'Talk',
+      recents: 'مؤخّرًا',
+      talk: 'محادثة',
       underReview: 'Under Review',
       zooniverseApproved: 'Zooniverse Approved'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
-      title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
+      dark: 'غامق',
+      light: 'فاتح',
+      title: 'فَهرَسَة',
+      themeToggle: 'استبدل الخلفيّة %(theme)s'
     },
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      about: 'عن المشروع %(title)s',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
-        volunteers: 'Volunteers',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
+        statistics: 'إحصائيّات',
+        classifications: 'فَهرَسات',
+        volunteers: 'مشاركون',
+        completedSubjects: 'موادّ اُستكمِلت',
+        subjects: 'موادّ'
       },
       talk: {
-        zero: 'No one is talking about **%(title)s** right now.',
-        one: '**1** person is talking about **%(title)s** right now.',
-        other: '**%(count)s** people are talking about **%(title)s** right now.'
+        zero: 'لا أحد يتحدّث عن المشروع الآن',
+        one: 'شخص واحد يتحدّث عن المشروع الآن',
+        other: '**%(count)s** أشخاص يتحدّثون عن المشروع الآن'
       },
-      joinIn: 'Join in',
-      learnMore: 'Learn more',
-      getStarted: 'Get started',
+      joinIn: 'انضمّوا إلى المحادثة',
+      learnMore: 'لمعلومات إضافيّة',
+      getStarted: 'هيّا نبدأ',
       workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
       visitLink: 'Visit the project',
-      links: 'External Project Links'
+      links: 'روابط خارجيّة'
     }
   },
   organization: {
@@ -232,9 +212,7 @@ export default {
       classify: 'Get email updates when you first classify on a project',
       note: 'Note: Unticking the box will not unsubscribe you from any of the projects',
       manual: 'Manage projects individually',
-      beta: 'Get beta project email updates and become a beta tester',
-      partnerPreferences: 'Zooniverse partner email preferences',
-      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
+      beta: 'Get beta project email updates and become a beta tester'
     },
     talk: {
       section: 'Talk email preferences',
@@ -348,15 +326,16 @@ export default {
       listThree: '- If you have questions about the Zooniverse and would like to speak to a member of our team, please [contact us](/about/contact).'
     },
     highlights: {
-      title: '## Zooniverse Highlights',
-      paragraphOne: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and many [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community working alongside hundreds of professional researchers.',
-      paragraphTwo: 'These books commemorate and honor the efforts of everyone involved, providing just a glimpse into the ways Zooniverse community members can make a real, personal impact on the world around them. Each highlights 40 of the many projects that have been active on the Zooniverse website and app during the academic years 2018 – 2020. There are so many fascinating projects we haven’t been able to include, so we hope to continue to create these books in the future.',
-      sectionHeader: '### Volume %(volumeNumber)s: %(year)s',
-      toDownload: '[Download a pdf](%(url)s)',
-      paragraphThree: '[Purchase on %(purchaseSource)s](%(url)s). Note, the cost simply covers printing and postage fees – we will not be making any profit through sales of the hard copy of the book.',
-      imageAlt: 'Zooniverse Highlights Book Cover %(year)s',
-      bookTwoThanks: '_A special thank you to our interns, Dr. Aleksandra Kuznetsova and Adler teens Alejandro Sanchez and Mattie Williams, who wrote text and interviewed research teams. We’re so thankful to them for their time and efforts!_',
-      bookOneThanks: '_A special thank you to our volunteers, Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata, who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts!_',
+      title: '## Zooniverse Highlights Book 2019',
+      thanks: '### Thank You!',
+      paragraphOne: 'As a thank you and celebration of 2019 projects and impacts, we put together our first ‘Into the Zooniverse’ highlights book.',
+      paragraphTwo: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and over 160 [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of nearly 2 million people working alongside hundreds of professional researchers.',
+      paragraphThree: 'The book is an homage to the Zooniverse Year of 2019, highlighting 40 Zooniverse projects out of more than 200 launched to date. There are many fascinating projects we weren’t able to include this year. We hope to continue creating these books annually, highlighting a whole new set of projects and discoveries next year!',
+      toDownload: '**To download a free electronic copy:**',
+      download: 'Please click [here](http://bit.ly/zoonibook19-pdf) to download a free electronic copy of ‘Into the Zooniverse’.',
+      toOrder: '**To order a hard copy:**',
+      order: 'Please click [here](http://bit.ly/zoonibook19-buy) if you would like to order a hard copy of ‘Into the Zooniverse’. Note, the cost simply covers Lulu.com’s printing and postage fees - we will not be making any profit through sales of the hard copy of the book.',
+      credits: 'A special thank you to our volunteers (Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata) who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts.'
     },
     donate: {
       title: '## Donate',
