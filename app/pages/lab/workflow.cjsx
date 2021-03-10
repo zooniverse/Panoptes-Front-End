@@ -10,7 +10,7 @@ ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {Link} = require 'react-router'
 MultiImageSubjectOptionsEditor = require '../../components/multi-image-subject-options-editor'
-tasks = require('../../classifier/tasks').default
+taskComponents = require('../../classifier/tasks').default
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
@@ -134,7 +134,7 @@ EditWorkflowPage = createReactClass
                   for key, definition of @props.workflow.tasks
                     unless definition.type is 'shortcut'
                       classNames = ['secret-button', 'nav-list-item']
-                      taskDefinition = tasks[definition.type]?.getTaskText definition
+                      taskDefinition = taskComponents[definition.type]?.getTaskText definition
                       if key is @state.selectedTaskKey
                         classNames.push 'active'
                       <div key={key}>
@@ -259,7 +259,7 @@ EditWorkflowPage = createReactClass
                   else
                     for taskKey, definition of @props.workflow.tasks
                       unless definition.type is 'shortcut'
-                        <option key={taskKey} value={taskKey}>{tasks[definition.type]?.getTaskText definition}</option>}
+                        <option key={taskKey} value={taskKey}>{taskComponents[definition.type]?.getTaskText definition}</option>}
                 </select>
               </AutoSave>
             </div>
@@ -491,7 +491,7 @@ EditWorkflowPage = createReactClass
 
         <div className={taskEditorClasses}>
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
-            TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type]?.Editor
+            TaskEditorComponent = taskComponents[@props.workflow.tasks[@state.selectedTaskKey].type]?.Editor
             <div>
               {if 'shortcut' in @props.project.experimental_tools
                 <ShortcutEditor workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]}>
@@ -654,7 +654,7 @@ EditWorkflowPage = createReactClass
       unless @props.workflow.configuration.classifier_version? && @props.workflow.configuration.classifier_version is '2.0'
         changes['configuration.classifier_version'] = "2.0"
 
-    changes["tasks.#{nextTaskID}"] = tasks[type].getDefaultTask()
+    changes["tasks.#{nextTaskID}"] = taskComponents[type].getDefaultTask()
     unless @props.workflow.first_task
       changes.first_task = nextTaskID
 
@@ -669,7 +669,7 @@ EditWorkflowPage = createReactClass
       instruction: "Welcome to the new Transcription Task! There are two ways to transcribe, depending on whether anyone else has seen this image previously.      1. If the document has no previous volunteer-made marks: underline a single row of text by clicking at the start and end of the line (please draw your marks in the order you’re reading the text), and follow the instructions on the pop-up for transcribing the text you’ve just underlined.      2. If the document has previous annotations: click on an underline mark to view, select, edit, and/or submit previous transcriptions.",
       tools: [
         {
-          color: "#00ff00",
+          color: "",
           details: [
             {
               help: "",
@@ -720,8 +720,8 @@ EditWorkflowPage = createReactClass
     unless @props.workflow.configuration.subject_viewer? && @props.workflow.configuration.subject_viewer is 'multiFrame'
       changes['configuration.subject_viewer'] = 'multiFrame'
 
-    @props.workflow.update changes
-    @setState selectedTaskKey: nextTaskID
+    @props.workflow.update(changes).save()
+    @setState { selectedTaskKey: nextTaskID, showTaskAddButtons: false }
 
   handleSetPanAndZoom: (e) ->
     @props.workflow.update
