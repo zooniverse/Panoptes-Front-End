@@ -626,13 +626,15 @@ EditWorkflowPage = createReactClass
     }</PromiseRenderer>
 
   getNextTaskID: ->
+    nextTaskNumber = -1
     # This could be random, but we might as well make it sorta meaningful.
     taskCount = Object.keys(@props.workflow.tasks).length
     taskIDNumber = -1
     until nextTaskID? and nextTaskID not of @props.workflow.tasks
       taskIDNumber += 1
-      nextTaskID = "T#{taskCount + taskIDNumber}"
-    { nextTaskID, taskCount }
+      nextTaskNumber = taskCount + taskIDNumber
+      nextTaskID = "T#{nextTaskNumber}"
+    { nextTaskID, nextTaskNumber }
 
   getNextStepID: ->
     stepCount = @props.workflow.steps.length
@@ -697,8 +699,8 @@ EditWorkflowPage = createReactClass
 
   addNewTranscriptionTask: () ->
     nextStepID = @getNextStepID()
-    { nextTaskID, taskCount } = @getNextTaskID()
-    questionTaskID = "T#{taskCount + 1}"
+    { nextTaskID, nextTaskNumber } = @getNextTaskID()
+    questionTaskID = "T#{nextTaskNumber + 1}"
     changes = {}
 
     # Steps changes
