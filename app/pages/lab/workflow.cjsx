@@ -625,11 +625,15 @@ EditWorkflowPage = createReactClass
         <span>This project has no mini-courses.</span>
     }</PromiseRenderer>
 
-  getNextTaskID: ->
+  getNextTaskID: (lastTaskNumber) ->
+    # The task ID could be random, but we might as well make it sorta meaningful.
     nextTaskNumber = -1
-    # This could be random, but we might as well make it sorta meaningful.
-    taskCount = Object.keys(@props.workflow.tasks).length
     taskIDNumber = -1
+    taskCount = Object.keys(@props.workflow.tasks).length
+    # We want to allow 0 despite it being falsey
+    unless lastTaskNumber is null or lastTaskNumber is undefined
+      taskIDNumber = lastTaskNumber
+
     until nextTaskID? and nextTaskID not of @props.workflow.tasks
       taskIDNumber += 1
       nextTaskNumber = taskCount + taskIDNumber
@@ -700,18 +704,18 @@ EditWorkflowPage = createReactClass
   addNewTranscriptionTask: () ->
     nextStepID = @getNextStepID()
     { nextTaskID, nextTaskNumber } = @getNextTaskID()
-    questionTaskID = "T#{nextTaskNumber + 1}"
+    questionTaskID = @getNextTaskID(nextTaskNumber)
     changes = {}
 
     # Steps changes
-    newStep = [nextStepID, { taskKeys: [nextTaskID, questionTaskID] }]
+    newStep = [nextStepID, { taskKeys: [nextTaskID, questionTaskID.nextTaskID] }]
     newSteps = [...@props.workflow.steps, newStep]
     changes["steps"] = newSteps
 
     # Tasks changes
-    tasks = @buildTranscriptionTask(nextTaskID, questionTaskID)
+    tasks = @buildTranscriptionTask(nextTaskID, questionTaskID.nextTaskID)
     changes["tasks.#{nextTaskID}"] = tasks[nextTaskID]
-    changes["tasks.#{questionTaskID}"] = tasks[questionTaskID]
+    changes["tasks.#{questionTaskID.nextTaskID}"] = tasks[questionTaskID.nextTaskID]
 
     configuration = {}
     # Configure version 2.0 in the workflow if missing
