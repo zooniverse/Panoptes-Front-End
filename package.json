@@ -109,7 +109,7 @@
     "whatwg-url": "~7.0.0"
   },
   "engines": {
-    "node": ">=10",
+    "node": ">=14",
     "npm": ">=6"
   },
   "license": "Apache-2.0",

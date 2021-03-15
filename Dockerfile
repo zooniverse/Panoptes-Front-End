@@ -1,4 +1,4 @@
-FROM node:10.17.0-alpine
+FROM node:14.16-alpine
 
 WORKDIR /src
 RUN chown -R node:node /src
