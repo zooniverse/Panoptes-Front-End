@@ -10,7 +10,7 @@ ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {Link} = require 'react-router'
 MultiImageSubjectOptionsEditor = require '../../components/multi-image-subject-options-editor'
-tasks = require('../../classifier/tasks').default
+taskComponents = require('../../classifier/tasks').default
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
@@ -134,7 +134,7 @@ EditWorkflowPage = createReactClass
                   for key, definition of @props.workflow.tasks
                     unless definition.type is 'shortcut'
                       classNames = ['secret-button', 'nav-list-item']
-                      taskDefinition = tasks[definition.type]?.getTaskText definition
+                      taskDefinition = taskComponents[definition.type]?.getTaskText definition
                       if key is @state.selectedTaskKey
                         classNames.push 'active'
                       <div key={key}>
@@ -242,7 +242,7 @@ EditWorkflowPage = createReactClass
                       </AutoSave>}{' '}
                     {if @canUseTask(@props.project, "transcription-task")
                       <AutoSave resource={@props.workflow}>
-                        <button type="button" className="minor-button" onClick={() => console.log 'add transcription task'} title="Transcription tasks: the volunteer marks a line under text and transcribes the text into a text box. If caesar is configured, then text suggestions if available from other volunteers are options.">
+                        <button type="submit" className="minor-button" onClick={@addNewTranscriptionTask} title="Transcription tasks: the volunteer marks a line under text and transcribes the text into a text box. If caesar is configured, then text suggestions if available from other volunteers are options.">
                           <i className="fa fa-font fa-2x"></i>
                           <br />
                           <small><strong>Transcription</strong></small>
@@ -259,7 +259,7 @@ EditWorkflowPage = createReactClass
                   else
                     for taskKey, definition of @props.workflow.tasks
                       unless definition.type is 'shortcut'
-                        <option key={taskKey} value={taskKey}>{tasks[definition.type]?.getTaskText definition}</option>}
+                        <option key={taskKey} value={taskKey}>{taskComponents[definition.type]?.getTaskText definition}</option>}
                 </select>
               </AutoSave>
             </div>
@@ -491,10 +491,10 @@ EditWorkflowPage = createReactClass
 
         <div className={taskEditorClasses}>
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
-            TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type]?.Editor
+            TaskEditorComponent = taskComponents[@props.workflow.tasks[@state.selectedTaskKey].type]?.Editor
             <div>
               {if 'shortcut' in @props.project.experimental_tools
-                <ShortcutEditor workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} >
+                <ShortcutEditor workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]}>
                   <TaskEditorComponent
                     workflow={@props.workflow}
                     task={@props.workflow.tasks[@state.selectedTaskKey]}
@@ -625,22 +625,108 @@ EditWorkflowPage = createReactClass
         <span>This project has no mini-courses.</span>
     }</PromiseRenderer>
 
-  addNewTask: (type) ->
-    taskCount = Object.keys(@props.workflow.tasks).length
-
-    # Task IDs aren't displayed anywhere.
-    # This could be random, but we might as well make it sorta meaningful.
+  getNextTaskID: (lastTaskNumber) ->
+    # The task ID could be random, but we might as well make it sorta meaningful.
+    nextTaskNumber = -1
     taskIDNumber = -1
+    taskCount = Object.keys(@props.workflow.tasks).length
+    # We want to allow 0 despite it being falsey
+    unless lastTaskNumber is null or lastTaskNumber is undefined
+      taskIDNumber = lastTaskNumber
+
     until nextTaskID? and nextTaskID not of @props.workflow.tasks
       taskIDNumber += 1
-      nextTaskID = "T#{taskCount + taskIDNumber}"
+      nextTaskNumber = taskCount + taskIDNumber
+      nextTaskID = "T#{nextTaskNumber}"
+    { nextTaskID, nextTaskNumber }
 
+  getNextStepID: ->
+    stepCount = @props.workflow.steps.length
+    lastStep = @props.workflow.steps[stepCount - 1]
+    stepIDNumber = 0
+    if lastStep
+      stepIDNumber = stepCount
+    "S#{stepIDNumber}"
+
+  addNewTask: (type) ->
     changes = {}
-    changes["tasks.#{nextTaskID}"] = tasks[type].getDefaultTask()
+    { nextTaskID } = @getNextTaskID()
+  
+    if @canUseTask(@props.project, "transcription-task")
+      nextStepID = @getNextStepID()
+      newStep = [nextStepID, { taskKeys: [nextTaskID] }]
+      newSteps = [...@props.workflow.steps, newStep]
+      changes["steps"] = newSteps
+      unless @props.workflow.configuration.classifier_version? && @props.workflow.configuration.classifier_version is '2.0'
+        changes['configuration.classifier_version'] = "2.0"
+
+    changes["tasks.#{nextTaskID}"] = taskComponents[type].getDefaultTask()
     unless @props.workflow.first_task
       changes.first_task = nextTaskID
 
     @props.workflow.update changes
+    @setState { selectedTaskKey: nextTaskID, showTaskAddButtons: false }
+
+  buildTranscriptionTask: (transcriptionTaskID, questionTaskID) ->
+    tasks = {}
+
+    tasks[transcriptionTaskID] = {
+      help: "**To underline and transcribe**: Click a dot at the start and end of a row of text to create an underline mark. Adjust the mark by clicking and dragging the dots at the start and end of the line. Delete the mark by clicking on the X. Type into the pop-up box to transcribe the text you’ve underlined.      **To interact with previous annotations**: Click on a pink underline mark to see previous transcriptions. Select a transcription from the dropdown menu to populate the text box. Submit as is, or edit the text by clicking into the text box. If you don’t agree with any of the previous options, transcribe directly into the box.",
+      instruction: "Welcome to the new Transcription Task! There are two ways to transcribe, depending on whether anyone else has seen this image previously.      1. If the document has no previous volunteer-made marks: underline a single row of text by clicking at the start and end of the line (please draw your marks in the order you’re reading the text), and follow the instructions on the pop-up for transcribing the text you’ve just underlined.      2. If the document has previous annotations: click on an underline mark to view, select, edit, and/or submit previous transcriptions.",
+      tools: [
+        {
+          color: "",
+          details: [
+            {
+              help: "",
+              instruction: "Transcribe the line of text that you've marked.",
+              required: "true",
+              type: "text"
+            }
+          ],
+          label: "Single line of text",
+          type: "transcriptionLine"
+        }
+      ],
+      type: "transcription"
+    }
+
+    tasks[questionTaskID] = {
+      answers: [{label: "Yes"}, {label: "No"}],
+      help: "If all the volunteer-made underline marks are **grey**, that indicates that consensus (agreement) has been achieved for all lines on the page and it is now ready to be retired from the project: **click YES**. ↵↵If there are non-grey underline marks on the page, that means those lines have not yet reached consensus: **click NO**.",
+      question: "Have all the volunteer-made underline marks turned grey?",
+      required: "true",
+      type: "single"
+    }
+    
+    tasks
+
+  addNewTranscriptionTask: () ->
+    nextStepID = @getNextStepID()
+    { nextTaskID, nextTaskNumber } = @getNextTaskID()
+    questionTaskID = @getNextTaskID(nextTaskNumber)
+    changes = {}
+
+    # Steps changes
+    newStep = [nextStepID, { taskKeys: [nextTaskID, questionTaskID.nextTaskID] }]
+    newSteps = [...@props.workflow.steps, newStep]
+    changes["steps"] = newSteps
+
+    # Tasks changes
+    tasks = @buildTranscriptionTask(nextTaskID, questionTaskID.nextTaskID)
+    changes["tasks.#{nextTaskID}"] = tasks[nextTaskID]
+    changes["tasks.#{questionTaskID.nextTaskID}"] = tasks[questionTaskID.nextTaskID]
+
+    configuration = {}
+    # Configure version 2.0 in the workflow if missing
+    unless @props.workflow.configuration.classifier_version? && @props.workflow.configuration.classifier_version is '2.0'
+      changes['configuration.classifier_version'] = "2.0"
+
+    # Configure the subject viewer if missing
+    unless @props.workflow.configuration.subject_viewer? && @props.workflow.configuration.subject_viewer is 'multiFrame'
+      changes['configuration.subject_viewer'] = 'multiFrame'
+
+    @props.workflow.update(changes).save()
     @setState { selectedTaskKey: nextTaskID, showTaskAddButtons: false }
 
   handleSetPanAndZoom: (e) ->
@@ -765,17 +851,52 @@ EditWorkflowPage = createReactClass
     setTimeout =>
       @setState forceReloader: @state.forceReloader + 1
 
+  updateFirstTask: () ->
+    if @props.workflow.first_task not of @props.workflow.tasks
+      @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
+
+  prepareStepForRemoval: (taskKey) ->
+    steps = [...@props.workflow.steps]
+    stepIndex = @props.workflow.steps.findIndex (step) =>
+      { taskKeys } = step[1]
+      taskKeys.includes(taskKey)
+    # Remove the step
+    steps.splice(stepIndex, 1)
+
+    { steps, stepIndex }
+
+  deleteStepAndTask: (taskKey) ->
+    changes = {}
+    { steps, stepIndex } = @prepareStepForRemoval(taskKey)
+
+    # Remove the tasks
+    @props.workflow.steps[stepIndex][1].taskKeys.forEach (taskKey) =>
+      if @props.workflow.tasks[taskKey]
+        changes["tasks.#{taskKey}"] = undefined
+
+    # Remove the step
+    changes.steps = steps
+
+    if changes.steps?.length is 0
+      # If no more steps, remove the classifier version 2.0 designation
+      changes["configuration.classifier_version"] = undefined
+    
+    @props.workflow.update changes
+
   handleTaskDelete: (taskKey, e) ->
     shortcut = @props.workflow.tasks[taskKey].unlinkedTask
     if e.shiftKey or confirm 'Really delete this task?'
-      changes = {}
-      if shortcut
-        changes["tasks.#{shortcut}"] = undefined
-      changes["tasks.#{taskKey}"] = undefined
-      @props.workflow.update changes
+      if @canUseTask(@props.project, "transcription-task")
+        @deleteStepAndTask(taskKey)
+      else 
+        changes = {}
+        if shortcut
+          changes["tasks.#{shortcut}"] = undefined
+        changes["tasks.#{taskKey}"] = undefined
+        @props.workflow.update changes
 
-      if @props.workflow.first_task not of @props.workflow.tasks
-        @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
+      @updateFirstTask()
+
 
 module.exports = createReactClass
   displayName: 'EditWorkflowPageWrapper'
