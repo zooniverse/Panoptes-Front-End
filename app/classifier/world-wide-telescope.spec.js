@@ -138,7 +138,7 @@ describe('WorldWideTelescope render without incomplete annotations', function ()
   });
 });
 
-describe('WorldWideTelescope with classification', function() {
+xdescribe('WorldWideTelescope with classification', function() {
   let wrapper;
 
   before(function () {
