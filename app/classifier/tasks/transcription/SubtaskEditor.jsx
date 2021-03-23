@@ -62,6 +62,21 @@ export default function SubTaskEditor({ subtask, subtaskPrefix, workflow }) {
           <input type="checkbox" value="unclear" checked={tagExists('unclear')} onChange={updateTags} />
           {"Unclear"}
         </label>
+        <br/>
+        <label>
+          <input type="checkbox" value="underline" checked={tagExists('underline')} onChange={updateTags} />
+          {"Underline"}
+        </label>
+        <br/>
+        <label>
+          <input type="checkbox" value="superscript" checked={tagExists('superscript')} onChange={updateTags} />
+          {"Superscript"}
+        </label>
+        <br/>
+        <label>
+          <input type="checkbox" value="&amp;" checked={tagExists('&')} onChange={updateTags} />
+          {"&"}
+        </label>
       </section>
     </div>
   )
