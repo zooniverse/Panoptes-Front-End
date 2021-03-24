@@ -26,7 +26,7 @@ export default class CollectionCard extends React.Component {
       this.collectionCard.style.backgroundImage = `url('${thumbnailSrc}')`;
       this.collectionCard.style.backgroundPosition = 'initial';
       this.collectionCard.style.backgroundRepeat = 'no-repeat';
-      this.collectionCard.style.backgroundSize = 'cover';
+      this.collectionCard.style.backgroundSize = 'contain';
     }
   }
 
