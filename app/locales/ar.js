@@ -1,5 +1,5 @@
 export default {
-  loading: '(Loading)',
+  loading: '(قيد التحميل)',
   aboutPages: {
     missingContent: {
       education: 'This project has no educational resources yet.',
@@ -21,23 +21,23 @@ export default {
     museum: 'Museum',
   },
   classifier: {
-    back: 'Back',
-    backButtonWarning: 'Going back will clear your work for the current task.',
-    close: 'Close',
-    continue: 'Continue',
-    done: 'Done',
-    doneAndTalk: 'Done & Talk',
+    back: 'إلى الخلف',
+    backButtonWarning: 'العودة إلى الخلف ستُلغي الجواب الذي أشرتم/نّ إليه',
+    close: 'أغلِق',
+    continue: 'واصل',
+    done: 'حفظ',
+    doneAndTalk: 'احفظ وانتقل إلى المحادثة',
     dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: 'Let’s go!',
-    next: 'Next',
+    letsGo: 'هيّا نبدأ!',
+    next: 'التالي',
     optOut: 'Opt out',
     taskTabs: {
-      taskTab: 'Task',
-      tutorialTab: 'Tutorial'
+      taskTab: 'مهمّة',
+      tutorialTab: 'إرشاد'
     },
-    recents: 'Your recent classifications',
+    recents: 'فهرَساتك الأخيرة',
     talk: 'Talk',
-    taskHelpButton: 'Need some help with this task?',
+    taskHelpButton: 'بحاجة إلى مساعدة في هذه المهمّة؟',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
@@ -46,59 +46,59 @@ export default {
     }
   },
   project: {
-    loading: 'Loading project',
+    loading: 'مشروع قيد التحميل',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
-    fieldGuide: 'Field Guide',
+    fieldGuide: 'الدليل العمليّ',
     about: {
-      header: 'About',
+      header: 'من نحن',
       nav: {
-        research: 'Research',
-        results: 'Results',
-        faq: 'FAQ',
-        education: 'Education',
-        team: 'The Team',
+        research: 'البحث',
+        results: 'المُخرَجات',
+        faq: 'أسئلة مُتكرّرة',
+        education: 'معلومات تربويّة',
+        team: 'الطاقم',
       }
     },
     nav: {
-      about: 'About',
+      about: 'من نحن',
       adminPage: 'Admin page',
-      classify: 'Classify',
-      collections: 'Collect',
+      classify: 'فَهرَسَة',
+      collections: 'مجموعات',
       exploreProject: 'Explore Project',
       lab: 'Lab',
-      recents: 'Recents',
-      talk: 'Talk',
+      recents: 'مؤخّرًا',
+      talk: 'محادثة',
       underReview: 'Under Review',
       zooniverseApproved: 'Zooniverse Approved'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
-      title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
+      dark: 'غامق',
+      light: 'فاتح',
+      title: 'فَهرَسَة',
+      themeToggle: 'استبدل الخلفيّة %(theme)s'
     },
     home: {
       organization: 'Organization',
       researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      about: 'عن المشروع %(title)s',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
-        volunteers: 'Volunteers',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
+        statistics: 'إحصائيّات',
+        classifications: 'فَهرَسات',
+        volunteers: 'مشاركون',
+        completedSubjects: 'موادّ اُستكمِلت',
+        subjects: 'موادّ'
       },
       talk: {
-        zero: 'No one is talking about **%(title)s** right now.',
-        one: '**1** person is talking about **%(title)s** right now.',
-        other: '**%(count)s** people are talking about **%(title)s** right now.'
+        zero: 'لا أحد يتحدّث عن المشروع الآن',
+        one: 'شخص واحد يتحدّث عن المشروع الآن',
+        other: '**%(count)s** أشخاص يتحدّثون عن المشروع الآن'
       },
-      joinIn: 'Join in',
-      learnMore: 'Learn more',
-      getStarted: 'Get started',
+      joinIn: 'انضمّوا إلى المحادثة',
+      learnMore: 'لمعلومات إضافيّة',
+      getStarted: 'هيّا نبدأ',
       workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
       visitLink: 'Visit the project',
-      links: 'External Project Links'
+      links: 'روابط خارجيّة'
     }
   },
   organization: {
