@@ -37,7 +37,7 @@ export default {
     },
     recents: 'הקיטלוגים האחרונים שלך',
     talk: 'שיחה',
-    taskHelpButton: 'Need some help with this task?',
+    taskHelpButton: '?זקוק/ה לעזרה עם המשימה הזו',
     miniCourseButton: 'Restart the project mini-course',
     workflowAssignmentDialog: {
       promotionMessage: "Congratulations! You've unlocked the next workflow. If you prefer to stay on this workflow, you can choose to stay.",
