@@ -45,10 +45,15 @@ EditWorkflowPage = createReactClass
 
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
-    viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
-    @context.router.createHref
-      pathname: "/projects/#{owner}/#{name}/classify"
-      query: viewQuery
+    usingTranscriptionTask = Object.keys(@props.workflow.tasks).some((taskKey) => @props.workflow.tasks[taskKey].type is 'transcription')
+    if @canUseTask(@props.project, "transcription-task") and usingTranscriptionTask
+      env = process.env.NODE_ENV
+      "https://fe-project.zooniverse.org/projects/#{owner}/#{name}/classify/workflow/#{@props.workflow.id}?env=#{env}"
+    else
+      viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
+      @context.router.createHref
+        pathname: "/projects/#{owner}/#{name}/classify"
+        query: viewQuery
 
   showCreateWorkflow: ->
     @setState workflowCreationInProgress: true
