@@ -115,7 +115,7 @@ module.exports = createReactClass
                       <div className="workflow-choice-setting">
                         <AutoSave resource={@props.workflow}>
                           Next task{' '}
-                          <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
+                          <NextTaskSelector task={@props.task} workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
                         </AutoSave>
                       </div>
 
@@ -266,7 +266,7 @@ module.exports = createReactClass
         <div>
           <AutoSave resource={@props.workflow}>
             Next task{' '}
-            <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleChange} />
+            <NextTaskSelector task={@props.task} workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleChange} />
           </AutoSave>
         </div>}
     </div>

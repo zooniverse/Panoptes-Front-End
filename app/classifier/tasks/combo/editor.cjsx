@@ -77,7 +77,7 @@ ComboTaskEditor = createReactClass
       <p>
         <label>
           Next task:{' '}
-          <NextTaskSelector workflow={@props.workflow} value={@props.task.next} onChange={@setNextTask} />
+          <NextTaskSelector task={@props.task} workflow={@props.workflow} value={@props.task.next} onChange={@setNextTask} />
         </label>
         <br />
         <span className="form-help">This overrides anything set by a sub-task.</span>
