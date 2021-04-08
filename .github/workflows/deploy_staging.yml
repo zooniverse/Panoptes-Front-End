@@ -7,7 +7,7 @@ on:
           - master
 
 jobs:
-  deploy_staging_branch:
+  deploy_staging:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
