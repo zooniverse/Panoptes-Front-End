@@ -1,0 +1,94 @@
+name: Deploy PFE Staging
+
+on:
+    # Run this workflow on creation (or sync to source branch) of a new pull request
+    push:
+        branches:
+          - master
+
+jobs:
+  deploy_staging:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: azure/login@v1
+      with:
+          creds: ${{ secrets.AZURE_STATIC_SITES }}
+
+    - name: Node.js build
+      id: build
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+    - run: npm install
+    - run: npm run _build-staging
+
+    - name: Upload to blob storage
+      id: upload
+      uses: azure/CLI@v1
+      with:
+        creds: ${{ secrets.AZURE_STATIC_SITES }}
+        inlineScript: |
+            az storage blob upload-batch \
+              --account-name zooniversestatic \
+              --content-cache-control 'public, immutable, max-age=604800' \
+              --destination '$web/preview.zooniverse.org/panoptes-front-end/master' \
+              --source ./dist
+            az storage blob upload \
+              --account-name zooniversestatic \
+              --content-cache-control 'public, max-age=60' \
+              --container-name '$web' \
+              --name 'preview.zooniverse.org/panoptes-front-end/master/index.html' \
+              --file ./dist/index.html
+
+    - name: Slack notification
+      uses: 8398a7/action-slack@v3
+      if: always()
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      with:
+        fields: took
+        status: custom
+        custom_payload: |
+          {
+            "channel": "#deploys",
+            "icon_emoji": ":octocat:",
+            "username": "Deploy Action",
+            "attachments": [{
+              "color": '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              "mrkdwn_in": ["text"],
+              "author_name": "${{ github.actor }}",
+              "author_link": "https://github.com/${{ github.actor }}/",
+              "author_icon": "https://github.com/${{ github.actor }}.png?size=40",
+              "title": "PFE Staging deploy complete",
+              "title_link": "https://master.pfe-preview.zooniverse.org",
+              "fields": [
+                  {
+                      "title": "Status",
+                      "value": '${{ job.status }}' === 'success' ? `:white_check_mark: Success in ${process.env.AS_TOOK}` : '${{ job.status }}' === 'failure' ? ':x: Failed' : ':warning: Warning',
+                      "short": true
+                  },
+                  {
+                      "title": "Triggered by",
+                      "value": "${{ github.event_name }}",
+                      "short": true
+                  },
+                  {
+                      "title": "Initiated by",
+                      "value": "<https://github.com/${{ github.repository }}/pull/${{ github.event.number }}|${{ github.event.pull_request.title }}>"
+                  },
+                  {
+                      "title": "Run Link",
+                      "value": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+              ],
+              "thumb_url": "https://raw.githubusercontent.com/zooniverse/Brand/master/style%20guide/logos/zooniverse-emblem/zooniverse-logo-teal.png",
+              "footer": "<https://github.com/${{ github.repository }}|${{ github.repository }}> #${{ github.run_number }}",
+              "footer_icon": "https://www.zooniverse.org/favicon.ico"
+            }]
+          }
+
+# Azure logout
+    - name: logout
+      run: |
+            az logout
