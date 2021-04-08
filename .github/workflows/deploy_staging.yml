@@ -2,7 +2,9 @@ name: Deploy PFE Staging
 
 on:
     # Run this workflow on creation (or sync to source branch) of a new pull request
-    pull_request:
+    push:
+        branches:
+          - master
 
 jobs:
   deploy_staging_branch:
