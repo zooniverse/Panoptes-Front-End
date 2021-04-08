@@ -22,8 +22,6 @@ change dependencies in `package.json`.
 
 - `docker-compose run --rm dev test` runs the tests.
 
-- `docker-compose run --rm dev run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
-
 ### With Node.js
 
 Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage your Node installations with **nvm**.
@@ -31,8 +29,6 @@ Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage yo
 - `npm install` installs dependencies.
 
 - `npm start` builds and runs the site locally.
-
-- `npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>. Note that you'll need write permissions to the Zooniverse S3 bucket.
 
 ### Configuration
 
@@ -74,7 +70,17 @@ You can run the tests with `npm test`.
 
 ## Deployment
 
-See https://github.com/zooniverse/how-to-zooniverse/blob/master/Devops/how-PFE-deploys.md for details on how PFE deploys.
+Deployment is handled by Github Action.
+
+### Staging
+
+On opening of pull requests, a Github Action is triggered to deploy to a branch staging location. The blob storage location depends on the pull request number, e.g. `https://pr-5926.pfe-preview.zooniverse.org`.
+
+On push to master, a Github Action is triggered to deploy to master staging found at `https://master.pfe-preview.zooniverse.org`. 
+
+### Production
+
+Production deployments are triggered by an update to which commit the `production-release` tag is pointed to. This tag should be updated via chat ops and then a Github Action will run that builds and uploads the files to our cloud provider found at `https://www.zooniverse.org`. The production deployment can be run ad hoc in the actions tab as needed if you have the appropriate permissions on the repository, but only do this in an emergency.
 
 ## Directory structure
 
