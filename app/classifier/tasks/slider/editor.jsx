@@ -16,6 +16,7 @@ const SliderTaskEditor = (props) => {
         <span className="form-label">Next task</span>
         <br />
         <NextTaskSelector
+          task={props.task}
           workflow={props.workflow}
           name={`${props.taskPrefix}.next`}
           value={props.task.next ? props.task.next : ''}

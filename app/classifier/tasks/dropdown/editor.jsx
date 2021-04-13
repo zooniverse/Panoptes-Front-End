@@ -216,6 +216,7 @@ export default class DropdownEditor extends React.Component {
           <span className="form-label">Next task</span>
           <br />
           <NextTaskSelector
+            task={this.props.task}
             workflow={this.props.workflow}
             name={`${this.props.taskPrefix}.next`}
             value={this.props.task.next || ''}
