@@ -26,7 +26,8 @@ const experimentalFeatures = [
   'highlighter',
   'translator-role',
   'museum-role',
-  'transcription-task'
+  'transcription-task',
+  'wildcam classroom'  // Indicates a Project is linked to a "WildCam Lab"-type Zooniverse Classroom. Allows the classifier to select a workflow (i.e. "classroom assignment") directly via ID.
 ];
 
 class ExperimentalFeatures extends Component {
