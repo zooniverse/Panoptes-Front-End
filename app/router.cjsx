@@ -165,6 +165,9 @@ module.exports =
     <Route path="/projects/blicksam/transcription-task-testing" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/blicksam/transcription-task-testing' />} />
     <Route path="/projects/blicksam/transcription-task-testing/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/blicksam/transcription-task-testing/classify' />} />
 
+    <Route path="/projects/humphrydavy/davy-notebooks-project" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/humphrydavy/davy-notebooks-project' />} />
+    <Route path="/projects/humphrydavy/davy-notebooks-project/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/humphrydavy/davy-notebooks-project/classify' />} />
+
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
