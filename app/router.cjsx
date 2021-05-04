@@ -101,7 +101,7 @@ module.exports =
 
     <Route path="about" component={AboutPage} ignoreScrollBehavior>
       <IndexRoute component={AboutHome} />
-      <Route path="team" component={TeamPage} />
+      <Route path="team" component={() => <RELOAD newUrl='https://fe-content-pages.zooniverse.org/about/team' />} />
       <Route path="publications" component={() => <RELOAD newUrl='https://fe-content-pages.zooniverse.org/about/publications' />} />
       <Route path="acknowledgements" component={Acknowledgements} />
       <Route path="resources" component={Resources} />
