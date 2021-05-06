@@ -21,7 +21,7 @@
     "mocha": "~5.2.0",
     "modal-form": "~2.9",
     "moment": "~2.24.0",
-    "panoptes-client": "~3.3.1",
+    "panoptes-client": "~3.0.0-rc.0",
     "papaparse": "^5.2.0",
     "polished": "~2.3.3",
     "prop-types": "~15.7.1",
