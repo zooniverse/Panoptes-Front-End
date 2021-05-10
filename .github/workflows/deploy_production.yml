@@ -18,12 +18,20 @@ jobs:
       with:
           creds: ${{ secrets.AZURE_STATIC_SITES }}
 
+    - name: Cache dependencies
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
     - name: Node.js build
       id: build
       uses: actions/setup-node@v1
       with:
         node-version: '14.x'
-    - run: npm install
+    - run: npm ci
     - run: npm run _build-production
 
     - name: Upload to blob storage
