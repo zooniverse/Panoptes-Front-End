@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import GenericTask from '../generic';
-import GenericTaskEditor from '../generic-editor';
+// import GenericTaskEditor from '../generic-editor';
+import SubjectGroupComparisonEditor from './editor';
 import SubjectGroupComparisonSummary from './summary';
 import TaskInputField from '../components/TaskInputField';
 
@@ -31,7 +32,7 @@ export default class SubjectGroupComparisonTask extends React.Component {
 }
 
 // Define the static methods and values
-SubjectGroupComparisonTask.Editor = GenericTaskEditor;
+SubjectGroupComparisonTask.Editor = SubjectGroupComparisonEditor;
 SubjectGroupComparisonTask.Summary = SubjectGroupComparisonSummary;
 SubjectGroupComparisonTask.getDefaultTask = () => {
   return {
