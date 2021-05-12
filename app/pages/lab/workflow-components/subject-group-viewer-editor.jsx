@@ -145,7 +145,10 @@ export default class SubjectGroupViewerEditor extends React.Component {
       <div>
         <span class="form-label">Subject Group Viewer Configuration</span>
         <br />
-        <small class="form-help">Note: the Subject Group Viewer (aka "grid drawing tool") can only be used on the FEM classifier, not the PFE classifier.</small>
+        <small class="form-help">
+          The Subject Group Viewer (aka "grid drawing tool") can only be used on the FEM classifier, not the PFE classifier.
+          If you enable the SGViewer, be sure to add a Subject Group Comparison Task.
+        </small>
         <br />
         <label>
           <input type="checkbox" checked={enableSGViewer} onChange={this.toggleSubjectViewer.bind(this)} />
