@@ -14,6 +14,7 @@ export default class SubjectGroupComparisonEditor extends React.Component {
     
     return (
       <div className={`workflow-task-editor ${props.task.type}`}>
+        <div><b>Subject Group Comparison Task</b></div>
         <div>
           <AutoSave resource={props.workflow}>
             <span className="form-label">Main text</span>

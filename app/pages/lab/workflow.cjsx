@@ -253,7 +253,15 @@ EditWorkflowPage = createReactClass
                           <br />
                           <small><strong>Transcription</strong></small>
                         </button>
-                      </AutoSave>}
+                      </AutoSave>}{' '}
+                    {if @canUseTask(@props.project, "subjectGroupViewer")
+                      <AutoSave resource={@props.workflow}>
+                        <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'subjectGroupComparison'} title="Subject Group Comparison Task: the volunteer looks at a grid of images, and selects the cells that look different. Be sure to enable the 'Subject Group Viewer' configuration for the workflow">
+                          <i className="fa fa-th fa-2x"></i>
+                          <br />
+                          <small><strong>Subject Group Comparison (aka "Grid")</strong></small>
+                        </button>
+                      </AutoSave>}{' '}
                     </div>}
               </div>
 
