@@ -19,6 +19,7 @@ classnames = require 'classnames'
 ShortcutEditor = require('../../classifier/tasks/shortcut/editor').default
 FeedbackSection = require('../../features/feedback/lab').default
 MobileSection = require('./mobile').default
+SubjectGroupViewerEditor = require('./workflow-components/subject-group-viewer-editor').default
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -380,6 +381,14 @@ EditWorkflowPage = createReactClass
 
               <hr />
 
+            </div>}
+
+          {if 'subjectGroupViewer' in @props.project.experimental_tools
+            <div>
+              <SubjectGroupViewerEditor
+                workflow={@props.workflow}
+              />
+              <hr />
             </div>}
 
           <div>
