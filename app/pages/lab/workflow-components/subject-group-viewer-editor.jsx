@@ -50,6 +50,7 @@ export default class SubjectGroupViewerEditor extends React.Component {
   updateViewerConfig (event) {
     if (!event.target) return
     this.setState({
+      stateChanged: true,
       [event.target.dataset.configkey]: event.target.value,
     })
   }
@@ -76,7 +77,13 @@ export default class SubjectGroupViewerEditor extends React.Component {
     this.props.workflow.update({
       'configuration.subject_viewer_config': subject_viewer_config,
       'configuration.subject_group': subject_group,
-    }).save()
+    })
+    .save()
+    .then(() => {
+      this.setState({
+        stateChanged: false,
+      })
+    })
   }
   
   /*
@@ -169,8 +176,9 @@ export default class SubjectGroupViewerEditor extends React.Component {
                 </tr>
               </tbody>
             </table>
+            <small class="form-help">Note: as of May 2021, the maximum grid size is 25 cells.</small>
             <br/>
-            <button onClick={this.saveViewerConfig.bind(this)}>Save viewer config</button>
+            <button onClick={this.saveViewerConfig.bind(this)} disabled={!this.state.stateChanged}>Save viewer config</button>
           </div>
         )}
       </div>
