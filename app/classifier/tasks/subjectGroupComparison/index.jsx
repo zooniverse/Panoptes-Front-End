@@ -13,13 +13,6 @@ export default class SubjectGroupComparisonTask extends React.Component {
     super(props);
   }
 
-  handleChange(index, e) {
-    if (e.target.checked) {
-      const newAnnotation = Object.assign({}, this.props.annotation, { value: index });
-      this.props.onChange(newAnnotation);
-    }
-  }
-
   render() {
     const { annotation, autoFocus, task, translation } = this.props;
     if (!task._key) {
