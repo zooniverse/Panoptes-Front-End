@@ -10,6 +10,7 @@ import DropdownTask from './dropdown/';
 import ShortcutTask from './shortcut/';
 import Highlighter from './highlighter/';
 import TranscriptionTask from './transcription'
+import SubjectGroupComparisonTask from './subjectGroupComparison';
 
 const tasks = {
   combo: ComboTask,
@@ -23,7 +24,8 @@ const tasks = {
   dropdown: DropdownTask,
   shortcut: ShortcutTask,
   highlighter: Highlighter,
-  transcription: TranscriptionTask
+  transcription: TranscriptionTask,
+  subjectGroupComparison: SubjectGroupComparisonTask,
 };
 
 export default tasks;
