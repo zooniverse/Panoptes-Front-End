@@ -32,9 +32,8 @@ module.exports = createReactClass
       when 'text' then ['instruction']
       when 'slider' then ['instruction']
       when 'highlighter' then ['instruction', 'highlighterLabels']
-      when 'subjectGroupComparison' then ['question']
 
-    isAQuestion = @props.task.type in ['single', 'multiple', 'subjectGroupComparison']
+    isAQuestion = @props.task.type in ['single', 'multiple']
     canBeRequired = @props.task.type in ['single', 'multiple', 'text']
 
     <div className="workflow-task-editor #{@props.task.type}">
