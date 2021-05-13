@@ -27,7 +27,8 @@ const experimentalFeatures = [
   'translator-role',
   'museum-role',
   'transcription-task',
-  'wildcam classroom'  // Indicates a Project is linked to a "WildCam Lab"-type Zooniverse Classroom. Allows the classifier to select a workflow (i.e. "classroom assignment") directly via ID.
+  'wildcam classroom',  // Indicates a Project is linked to a "WildCam Lab"-type Zooniverse Classroom. Allows the classifier to select a workflow (i.e. "classroom assignment") directly via ID.
+  'subjectGroupViewer',  // Enables Subject Group Viewer and Subject Group Comparison Task, used for grid-like cell selection tasks. SGV and SGCT can be edited in PFE, but only works on the FEM classifier.
 ];
 
 class ExperimentalFeatures extends Component {

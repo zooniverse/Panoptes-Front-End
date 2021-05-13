@@ -19,6 +19,7 @@ classnames = require 'classnames'
 ShortcutEditor = require('../../classifier/tasks/shortcut/editor').default
 FeedbackSection = require('../../features/feedback/lab').default
 MobileSection = require('./mobile').default
+SubjectGroupViewerEditor = require('./workflow-components/subject-group-viewer-editor').default
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -252,7 +253,15 @@ EditWorkflowPage = createReactClass
                           <br />
                           <small><strong>Transcription</strong></small>
                         </button>
-                      </AutoSave>}
+                      </AutoSave>}{' '}
+                    {if @canUseTask(@props.project, "subjectGroupViewer")
+                      <AutoSave resource={@props.workflow}>
+                        <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'subjectGroupComparison'} title="Subject Group Comparison Task: the volunteer looks at a grid of images, and selects the cells that look different. Be sure to enable the 'Subject Group Viewer' configuration for the workflow">
+                          <i className="fa fa-th fa-2x"></i>
+                          <br />
+                          <small><strong>Subject Group Comparison (aka "Grid")</strong></small>
+                        </button>
+                      </AutoSave>}{' '}
                     </div>}
               </div>
 
@@ -380,6 +389,14 @@ EditWorkflowPage = createReactClass
 
               <hr />
 
+            </div>}
+
+          {if 'subjectGroupViewer' in @props.project.experimental_tools
+            <div>
+              <SubjectGroupViewerEditor
+                workflow={@props.workflow}
+              />
+              <hr />
             </div>}
 
           <div>
