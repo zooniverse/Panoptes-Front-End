@@ -126,8 +126,12 @@ export default class HomePageForUser extends React.Component {
         if (meta.page !== meta.page_count) {
           getRibbonData(user, meta.page + 1);
         }
-        // filter out projects you haven't classified on.
-        let activePreferences = projectPreferences.filter((preference) => { return preference.activity_count > 0; });
+        // filter out projects you haven't classified on AND that are not marked as hidden.
+        let activePreferences = projectPreferences.filter((preference) => {
+          let userHasClassified = preference.activity_count > 0;
+          let isVisiblePreference = !preference.settings['hidden'];
+          return userHasClassified && isVisiblePreference;
+        });
         // get the projects that you have classified on, if any.
         if (activePreferences.length > 0) {
           activePreferences = activePreferences.map((preference, i) => {
