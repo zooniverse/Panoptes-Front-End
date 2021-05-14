@@ -14,7 +14,7 @@ module.exports = createReactClass
   componentDidMount: ->
     if @props.autoFocus
       @refs.collectionSelect.focus()
-    
+
 
   getDefaultProps: ->
     multi: false
@@ -39,7 +39,7 @@ module.exports = createReactClass
       .then (collections) ->
         options = collections.map (collection) -> {
             value: collection.id,
-            label: collection.display_name,
+            label: collection.display_name + ' (' + collection.links.owner.display_name + ')',
             collection: collection
           }
         { options }
