@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import TaskTranslations fom '../translations'
+
 function AnnotationView({
   annotation = null,
   onChange,
@@ -40,7 +42,7 @@ function AnnotationView({
               {' '}
               <button
                 className="survey-identification-remove"
-                onClick={handleRemove.bind(this, i)}
+                onClick={i => handleRemove(i)}
                 title="Remove"
                 type="button"
               >
