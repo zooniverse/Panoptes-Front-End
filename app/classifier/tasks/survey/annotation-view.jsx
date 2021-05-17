@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import TaskTranslations fom '../translations'
+import TaskTranslations from '../translations'
 
-function AnnotationView({
+export function AnnotationView({
   annotation = null,
   onChange,
   task = null,
-  workflow = null
+  translation = null,
 }) {
   function handleRemove(index) {
     annotation.value.splice(index, 1);
@@ -20,7 +20,7 @@ function AnnotationView({
 
       if (answerKeys.indexOf(questionID) >= 0) {
         const answerLabels = [].concat(identification.answers[questionID]).map((answerID) => {
-          return task.questions[questionID].answers[answerID].label;
+          return translation.questions[questionID].answers[answerID].label;
         });
         return answerLabels.join(', ');
       }
@@ -30,7 +30,7 @@ function AnnotationView({
   if (!annotation.value) return null;
 
   return (
-    <div>
+    <>
       {annotation.value.map((identification, i) => {
         identification._key = `IDENTIFICATION_KEY_${i}`;
         const answersList = answerByQuestion(identification).filter(Boolean).join('; ');
@@ -38,7 +38,7 @@ function AnnotationView({
         return (
           <span key={identification._key}>
             <span className="survey-identification-proxy" title={answersList}>
-              {task.choices[identification.choice].label}
+              {translation.choices[identification.choice].label}
               {' '}
               <button
                 className="survey-identification-remove"
@@ -52,7 +52,7 @@ function AnnotationView({
           </span>
         );
       })}
-    </div>
+    </>
   );
 }
 
@@ -68,4 +68,23 @@ AnnotationView.propTypes = {
   })
 };
 
-export default AnnotationView;
+export default function LocalisedAnnotationView({
+  annotation = null,
+  onChange,
+  task = null,
+  workflow = null
+}) {
+  return (
+    <TaskTranslations
+      taskKey={annotation.task}
+      task={task}
+      workflowID={workflow.id}
+    >
+      <AnnotationView
+        annotation={annotation}
+        onChange={onChange}
+        task={task}
+      />
+    </TaskTranslations>
+  )
+};

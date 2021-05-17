@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import React from 'react';
-import AnnotationView from './annotation-view';
+import { AnnotationView } from './annotation-view';
 
 const annotationValue = {
   answers: {
@@ -43,6 +43,7 @@ describe('AnnotationView', function() {
       annotation={annotation}
       onChange={onChange}
       task={task}
+      translation={task}
     />
   );
 
