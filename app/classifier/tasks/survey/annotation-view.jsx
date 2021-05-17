@@ -1,15 +1,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-function AnnotationView(props) {
+function AnnotationView({
+  annotation = null,
+  onChange,
+  task = null,
+  workflow = null
+}) {
   function handleRemove(index) {
-    const { annotation, onChange } = props;
     annotation.value.splice(index, 1);
     onChange(annotation);
   }
 
   function answerByQuestion(identification) {
-    const { task } = props;
     return task.questionsOrder.map((questionID) => {
       const answerKeys = Object.keys(identification.answers);
 
@@ -22,7 +25,6 @@ function AnnotationView(props) {
     });
   }
 
-  const { annotation, task } = props;
   if (!annotation.value) return null;
 
   return (
@@ -62,11 +64,6 @@ AnnotationView.propTypes = {
     questions: PropTypes.object,
     questionsOrder: PropTypes.array
   })
-};
-
-AnnotationView.defaultProps = {
-  annotation: null,
-  task: null
 };
 
 export default AnnotationView;
