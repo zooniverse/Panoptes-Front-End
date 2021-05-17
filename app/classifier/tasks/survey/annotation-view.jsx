@@ -33,17 +33,18 @@ export function AnnotationView({
     <>
       {annotation.value.map((identification, i) => {
         identification._key = `IDENTIFICATION_KEY_${i}`;
-        const answersList = answerByQuestion(identification).filter(Boolean).join('; ');
+        const answersList = answerByQuestion(identification).filter(Boolean).join('; ').trim();
+        const answersLabel = answersList ? `(${answersList})` : ''
 
         return (
           <span key={identification._key}>
-            <span className="survey-identification-proxy" title={answersList}>
-              {translation.choices[identification.choice].label}
+            <span className="survey-identification-proxy">
+              {translation.choices[identification.choice].label} {answersLabel}
               {' '}
               <button
                 className="survey-identification-remove"
                 onClick={i => handleRemove(i)}
-                title="Remove"
+                aria-label="Remove"
                 type="button"
               >
                 &times;
