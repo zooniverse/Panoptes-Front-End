@@ -53,5 +53,3 @@ ReactDOM.render <Provider store={store}><Router history={browserHistory} render=
 
 # Are we connected to the latest back end?
 require('./lib/log-deployed-commit')()
-
-require('./lib/split-config')
