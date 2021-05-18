@@ -1,22 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { TextSplit } from 'seven-ten';
 import tasks from './tasks';
 import TaskTranslations from './tasks/translations';
 
 const DefaultClassificationSummary = (props) => {
-  let firstTimeClassified;
-  if (props.classificationCount === 0) {
-    firstTimeClassified = (
-      <TextSplit
-        splitKey="subject.first-to-classify"
-        textKey="message"
-        splits={props.splits}
-        default={''}
-        elementType={"p"}
-      />
-    );
-  }
   let body = 'No annotations';
   if ((props.classification) && (props.classification.annotations.length > 0)) {
     body = [];
@@ -44,7 +31,6 @@ const DefaultClassificationSummary = (props) => {
   }
   return (
     <div className="classification-summary">
-      {firstTimeClassified}
       {body}
     </div>
   );
