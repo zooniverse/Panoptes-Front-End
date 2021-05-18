@@ -7,7 +7,6 @@ MiniCourse = require './mini-course'
 Tutorial = require('./tutorial').default
 CustomSignInPrompt = require('./custom-sign-in-prompt').default;
 isAdmin = require '../lib/is-admin'
-{ VisibilitySplit } = require 'seven-ten'
 { connect } = require 'react-redux';
 { bindActionCreators } = require 'redux';
 translationActions  = require '../redux/ducks/translations';
@@ -174,13 +173,6 @@ ClassifierWrapper = createReactClass
         <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
         </CustomSignInPrompt>}
-
-      {if @state.classificationCount is 0 and @props.splits?['subject.first-to-classify.visible']
-        <VisibilitySplit splits={@props.splits} splitKey={'subject.first-to-classify.visible'} elementKey={'div'}>
-          <div className="classifier-announcement-banner classifier-announcement-banner--yellow">
-            <p>You're the first person to classify this subject!</p>
-          </div>
-        </VisibilitySplit>}
 
       {if @props.workflow? and @props.subject?
         <Classifier {...@props}

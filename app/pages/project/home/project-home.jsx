@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
-import { VisibilitySplit } from 'seven-ten';
 
 import getSubjectLocations from '../../../lib/get-subject-locations';
 import Thumbnail from '../../../components/thumbnail';
@@ -62,14 +61,12 @@ const ProjectHomePage = (props) => {
               <Translate content="project.home.learnMore" />
             </Link>}
           {canClassify && showGetStartedLink &&
-            <VisibilitySplit splits={props.splits} splitKey='workflow.assignment' elementKey='link'>
-              <Link
-                to={`/projects/${props.project.slug}/classify`}
-                className="project-home-page__button call-to-action__button call-to-action__button--get-started"
-              >
-                <Translate content="project.home.getStarted" />
-              </Link>
-            </VisibilitySplit>}
+            <Link
+              to={`/projects/${props.project.slug}/classify`}
+              className="project-home-page__button call-to-action__button call-to-action__button--get-started"
+            >
+              <Translate content="project.home.getStarted" />
+            </Link>}
           {props.project && props.project.redirect &&
             <a href={props.project.redirect} className="project-home-page__button">
               <strong><Translate content="project.home.visitLink" /></strong>
@@ -82,19 +79,17 @@ const ProjectHomePage = (props) => {
             className="project-disclaimer"
             content="project.disclaimer"
           />}
-        <VisibilitySplit splits={props.splits} splitKey='workflow.assignment' elementKey='div'>
-          <ProjectHomeWorkflowButtons
-            activeWorkflows={props.activeWorkflows}
-            preferences={props.preferences}
-            project={props.project}
-            projectIsComplete={props.projectIsComplete}
-            showWorkflowButtons={props.showWorkflowButtons}
-            workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
-            splits={props.splits}
-            translation={props.translation}
-            user={props.user}
-          />
-        </VisibilitySplit>
+        <ProjectHomeWorkflowButtons
+          activeWorkflows={props.activeWorkflows}
+          preferences={props.preferences}
+          project={props.project}
+          projectIsComplete={props.projectIsComplete}
+          showWorkflowButtons={props.showWorkflowButtons}
+          workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
+          splits={props.splits}
+          translation={props.translation}
+          user={props.user}
+        />
       </div>
 
       {renderTalkSubjectsPreview && (

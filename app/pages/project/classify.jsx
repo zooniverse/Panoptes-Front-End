@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import counterpart from 'counterpart';
-import { Split } from 'seven-ten';
 
 import ClassificationQueue from '../../lib/classification-queue';
 
@@ -24,7 +23,6 @@ import ClassroomWorkflowSelection from './workflow-selection-classroom';
 import { zooTheme } from '../../theme';
 
 function onClassificationSaved(actualClassification) {
-  Split.classificationCreated(actualClassification); // Metric log needs classification id
 }
 
 function isPresent(val) {
@@ -52,7 +50,6 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidMount() {
-    Split.classifierVisited();
     const { workflow } = this.props;
 
     if (workflow) {

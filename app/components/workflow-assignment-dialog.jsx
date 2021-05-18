@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Dialog from 'modal-form/dialog';
 import ReactDOM from 'react-dom';
-import { TextSplit } from 'seven-ten';
 import Translate from 'react-translate-component';
 
 class WorkflowAssignmentDialog extends React.Component {
@@ -45,26 +44,18 @@ class WorkflowAssignmentDialog extends React.Component {
   render() {
     return (
       <div className="content-container">
-        <TextSplit
-          splitKey="workflow.advance"
-          textKey="accept"
-          splits={this.props.splits}
-          default={this.advanceDefault()}
-          elementType="p"
-        />
+        <p>
+          {this.advanceDefault()}
+        </p>
 
         <div className="workflow-assignment-dialog__buttons">
           <button className="standard-button" type="submit">
             <Translate content="classifier.workflowAssignmentDialog.acceptButton" />
           </button>
           <button className="minor-button" onClick={this.handlePromotionDecline} type="button">
-            <TextSplit
-              splitKey="workflow.advance"
-              textKey="decline"
-              splits={this.props.splits}
-              default={<Translate content="classifier.workflowAssignmentDialog.declineButton" />}
-              elementType="p"
-            />
+            <p>
+              <Translate content="classifier.workflowAssignmentDialog.declineButton" />
+            </p>
           </button>
         </div>
       </div>
