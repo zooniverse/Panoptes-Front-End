@@ -20,10 +20,6 @@ describe('MinicourseButton', function() {
     expect(wrapper).to.be.ok;
   });
 
-  it('should render a VisibilitySplit component', function() {
-    expect(wrapper.find('VisibilitySplit')).to.have.lengthOf(1);
-  });
-
   it('should render a ThemeProvider component', function() {
     expect(wrapper.find('ThemeProvider')).to.have.lengthOf(1);
   });
