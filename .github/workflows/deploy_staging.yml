@@ -9,6 +9,8 @@ on:
 jobs:
   deploy_staging:
     runs-on: ubuntu-latest
+    env:
+      HEAD_COMMIT: ${{ github.sha }}
     steps:
     - uses: actions/checkout@v2
     - uses: azure/login@v1
@@ -22,6 +24,9 @@ jobs:
         node-version: '14.x'
     - run: npm install
     - run: npm run _build-staging
+
+    - name: Write commit_id.txt
+      run: echo ${HEAD_COMMIT} > ./dist/commit_id.txt
 
     - name: Upload to blob storage
       id: upload
@@ -40,6 +45,12 @@ jobs:
               --container-name '$web' \
               --name 'preview.zooniverse.org/panoptes-front-end/master/index.html' \
               --file ./dist/index.html
+            az storage blob upload \
+              --account-name zooniversestatic \
+              --content-cache-control 'public, max-age=60' \
+              --container-name '$web' \
+              --name 'preview.zooniverse.org/panoptes-front-end/master/commit_id.txt' \
+              --file ./dist/commit_id.txt
 
     - name: Slack notification
       uses: 8398a7/action-slack@v3
