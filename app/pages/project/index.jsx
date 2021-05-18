@@ -8,7 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import apiClient from 'panoptes-client/lib/api-client';
-import { Split } from 'seven-ten';
 import counterpart from 'counterpart';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -99,7 +98,6 @@ class ProjectPageController extends React.Component {
     if (project) {
       actions.interventions.unsubscribe(`project-${this.state.project.id}`);
     }
-    Split.clear();
   }
 
   componentDidCatch(error, info) {
@@ -108,40 +106,6 @@ class ProjectPageController extends React.Component {
     const loading = false;
     const ready = false;
     this.setState({ error, info, loading, ready });
-  }
-
-  getSplits(slug, user) {
-    if (user) {
-      return Split.load(slug)
-        .catch((error) => {
-          console.error(error);
-          return {};
-        })
-        .then((splits) => {
-          if (!splits) {
-            return {};
-          }
-          if (splits && this.context.geordi) {
-            Object.keys(splits).forEach((split) => {
-              let notFound = true;
-              // log the first active split and skip the remaining splits
-              if (notFound && splits[split].state === 'active') {
-                notFound = false;
-                const experiment = splits[split].name;
-                const cohort = splits[split].variant ? splits[split].variant.name : undefined;
-                this.context.geordi.remember({ experiment, cohort });
-              }
-            });
-          }
-          return splits;
-        });
-    } else {
-      Split.clear();
-      if (this.context.geordi) {
-        this.context.geordi.forget(['experiment', 'cohort']);
-      }
-      return Promise.resolve({});
-    }
   }
 
   getUserProjectPreferences(project, user) {
@@ -217,10 +181,6 @@ class ProjectPageController extends React.Component {
 
           const awaitProjectPreferences = this.getUserProjectPreferences(project, user);
 
-          // Temporarily disabled since Seven-Ten is not being used right now
-          // Add back into the Promise.all if and when used again
-          // const awaitSplits = this.getSplits(slug, user)
-
           const awaitTranslation = actions.translations.load('project', project.id, locale);
 
           Promise.all([
@@ -250,9 +210,6 @@ class ProjectPageController extends React.Component {
             this.loadFieldGuide(project.id, locale);
             actions.translations.load('project_page', pages.map(page => page.id), locale);
             return { project, projectPreferences, splits };
-          })
-          .then(({ project, projectPreferences, splits }) => {
-            if (project.experimental_tools.includes('workflow assignment')) this.handleSplitWorkflowAssignment(projectPreferences, splits);
           })
           .then(() => {
             this.setState({ ready: true })
@@ -325,38 +282,6 @@ class ProjectPageController extends React.Component {
       this.setState({ projectPreferences });
       if (this.props.user) {
         projectPreferences.save();
-      }
-    }
-  }
-
-  handleSplitWorkflowAssignment(projectPreferences, splits) {
-    if (splits['workflow.assignment']) {
-      const projectWorkflowToSet = (splits['workflow.assignment'].variant
-        && splits['workflow.assignment'].variant.value
-        && splits['workflow.assignment'].variant.value.workflow_id)
-          ? splits['workflow.assignment'].variant.value.workflow_id
-          : '';
-
-      const doesNotHaveProjectSetWorkflow = !(projectPreferences.settings && projectPreferences.settings.workflow_id);
-
-      const userSelectedWorkflow = (projectPreferences.preferences && projectPreferences.preferences.selected_workflow)
-        ? projectPreferences.preferences.selected_workflow
-        : '';
-
-      if (splits['workflow.assignment'].variant.value.only_new_users) {
-        const newToProject = Object.keys(projectPreferences.preferences).length === 0;
-        if (newToProject) this.handleProjectPreferencesChange('settings.workflow_id', projectWorkflowToSet);
-      } else {
-        if (doesNotHaveProjectSetWorkflow) {
-          this.handleProjectPreferencesChange('settings.workflow_id', projectWorkflowToSet);
-
-          if (userSelectedWorkflow && projectWorkflowToSet &&
-            userSelectedWorkflow !== projectWorkflowToSet) {
-              // if split is not only for new users
-              // clear the user selected workflow if defined
-              this.handleProjectPreferencesChange('preferences.selected_workflow', undefined)
-          }
-        }
       }
     }
   }

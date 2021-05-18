@@ -3,7 +3,6 @@ import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
-import { Split } from 'seven-ten';
 import { ProjectPageController } from './';
 import { project } from '../dev-classifier/mock-data';
 
@@ -29,7 +28,6 @@ describe('ProjectPageController', function () {
     apiRequestStub = sinon.stub(apiClient, 'request').callsFake(function (method, url, payload) {
       return Promise.resolve([]);
     }); 
-    sinon.stub(Split, 'load').callsFake(() => Promise.resolve([]));
     fetchProjectStub = sinon.stub(ProjectPageController.prototype, 'fetchProjectData').callsFake(function () {
       return Promise.resolve([]);
     });
@@ -37,7 +35,6 @@ describe('ProjectPageController', function () {
 
   after(function () {
     apiRequestStub.restore();
-    Split.load.restore();
     fetchProjectStub.restore();
   });
 
