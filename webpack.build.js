@@ -36,15 +36,13 @@ module.exports = {
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      patterns: [
-        'HEAD_COMMIT': '',
-        'NODE_ENV': 'staging',
-        'PANOPTES_API_APPLICATION': '',
-        'PANOPTES_API_HOST': '',
-        'STAT_HOST': '',
-        'SUGAR_HOST': '',
-        'TALK_HOST': ''
-      ]
+      'HEAD_COMMIT': '',
+      'NODE_ENV': 'staging',
+      'PANOPTES_API_APPLICATION': '',
+      'PANOPTES_API_HOST': '',
+      'STAT_HOST': '',
+      'SUGAR_HOST': '',
+      'TALK_HOST': ''
     }),
     new CopyWebpackPlugin({
       patterns: [
