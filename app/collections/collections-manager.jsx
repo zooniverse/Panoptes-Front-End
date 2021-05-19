@@ -80,6 +80,7 @@ class CollectionsManager extends React.Component {
             autoFocus={autoFocus}
             onChange={this.onChange}
             multi={true}
+            user={this.props.user}
           />
           <button
             type="button"
@@ -108,13 +109,17 @@ CollectionsManager.defaultProps = {
   autoFocus: false,
   onSuccess: () => {},
   project: null,
-  subjectIDs: []
+  subjectIDs: [],
+  user: null
 };
 
 CollectionsManager.propTypes = {
   autoFocus: PropTypes.bool,
   onSuccess: PropTypes.func,
   project: PropTypes.shape({
+    id: PropTypes.string
+  }),
+  user: PropTypes.shape({
     id: PropTypes.string
   }),
   subjectIDs: PropTypes.arrayOf(PropTypes.string)
