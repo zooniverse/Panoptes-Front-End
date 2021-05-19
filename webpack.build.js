@@ -2,7 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+var NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 module.exports = {
   entry: [
@@ -56,6 +57,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash].css'
     }),
+    new NodePolyfillPlugin(),  // Required for Webpack 5, since it removes Node.js polyfills
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],

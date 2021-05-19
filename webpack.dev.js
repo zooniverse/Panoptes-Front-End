@@ -5,6 +5,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var DashboardPlugin = require('webpack-dashboard/plugin');
+var NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 var config = {
   mode: 'development',
@@ -48,7 +49,8 @@ var config = {
       inject: 'body',
       filename: 'index.html'
     }),
-    new DashboardPlugin({ port: 3736 }) // Change this here and in the package.json start script if needed.
+    new DashboardPlugin({ port: 3736 }), // Change this here and in the package.json start script if needed.
+    new NodePolyfillPlugin(),  // Required for Webpack 5, since it removes Node.js polyfills
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
