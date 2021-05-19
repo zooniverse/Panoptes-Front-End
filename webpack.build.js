@@ -43,9 +43,11 @@ module.exports = {
       'SUGAR_HOST',
       'TALK_HOST'
     ]),
-    new CopyWebpackPlugin([
-      { from: 'public', to: '.' },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '.' },
+      ]
+    }),
     new HtmlWebpackPlugin({
       template: 'views/index.ejs',
       inject: 'body',
@@ -58,6 +60,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
     modules: ['.', 'node_modules'],
+    fallback: {
+      fs: false,
+    }
   },
   module: {
     rules: [{
@@ -101,8 +106,5 @@ module.exports = {
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/],
-  },
-  node: {
-    fs: 'empty',
   },
 };

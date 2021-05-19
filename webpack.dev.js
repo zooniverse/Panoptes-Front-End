@@ -37,9 +37,11 @@ var config = {
       'SUGAR_HOST',
       'TALK_HOST'
     ]),
-    new CopyWebpackPlugin([
-      { from: 'public', to: '.' }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '.' }
+      ]
+    }),
     new HtmlWebpackPlugin({
       useBasePath: false,
       template: 'views/index.ejs',
@@ -50,7 +52,10 @@ var config = {
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
-    modules: ['.', 'node_modules']
+    modules: ['.', 'node_modules'],
+    fallback: {
+      fs: false,
+    }
   },
   module: {
     rules: [{
@@ -98,9 +103,6 @@ var config = {
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/]
-  },
-  node: {
-    fs: "empty"
   }
 };
 
