@@ -10,6 +10,7 @@ module.exports = createReactClass
   propTypes:
     multi: PropTypes.bool.isRequired
     onChange: PropTypes.func
+    user: PropTypes.object
 
   componentDidMount: ->
     if @props.autoFocus
@@ -36,13 +37,22 @@ module.exports = createReactClass
     query.search = "#{value}" unless value is ''
 
     apiClient.type('collections').get query
-      .then (collections) ->
-        options = collections.map (collection) -> {
+      .then (collections) =>
+        options = collections.map (collection) =>
+          {
             value: collection.id,
-            label: collection.display_name + ' (' + collection.links.owner.display_name + ')',
+            label: @collectionDisplayName(collection),
             collection: collection
           }
         { options }
+
+  collectionDisplayName: (collection) ->
+    if collection.links.owner.id == @props.user.id
+      # use the collection display name when the collection owner is the logged in user
+      collection.display_name
+    else
+      # add the other collection owner name to help disambiguate this collection from the logged in user's
+      collection.display_name + ' (' + collection.links.owner.display_name + ')'
 
   getSelected: ->
     @state.collections
