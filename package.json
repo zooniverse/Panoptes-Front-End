@@ -21,7 +21,6 @@
     "mocha": "~5.2.0",
     "modal-form": "~2.9",
     "moment": "~2.24.0",
-    "node-polyfill-webpack-plugin": "~1.1.2",
     "panoptes-client": "~3.3.2",
     "papaparse": "^5.2.0",
     "path-browserify": "~1.0.1",
