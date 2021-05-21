@@ -24,6 +24,7 @@
     "node-polyfill-webpack-plugin": "~1.1.2",
     "panoptes-client": "~3.3.2",
     "papaparse": "^5.2.0",
+    "path-browserify": "~1.0.1",
     "polished": "~2.3.3",
     "prop-types": "~15.7.1",
     "qs": "~6.6.0",
@@ -51,6 +52,7 @@
     "styled-theming": "~2.2.0",
     "sugar-client": "~1.0.1",
     "svg-path-properties": "~0.4.8",
+    "util": "~0.12.3",
     "visible-element": "~1.0.1"
   },
   "devDependencies": {

@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-var NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 module.exports = {
   entry: [
@@ -37,7 +36,7 @@ module.exports = {
   plugins: [
     new webpack.EnvironmentPlugin({
       'HEAD_COMMIT': '',
-      'NODE_ENV': 'staging',
+      'NODE_ENV': 'production',
       'PANOPTES_API_APPLICATION': '',
       'PANOPTES_API_HOST': '',
       'STAT_HOST': '',
@@ -57,13 +56,17 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash].css'
     }),
-    new NodePolyfillPlugin(),  // Required for Webpack 5, since it removes Node.js polyfills
+    new webpack.ProvidePlugin({  // Required for Webpack 5, since it removes Node.js polyfills
+      process: 'process/browser',
+    }),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
     modules: ['.', 'node_modules'],
-    fallback: {
+    fallback: {  // Required for Webpack 5, since it removes Node.js polyfills
       fs: false,
+      path: require.resolve('path-browserify'),
+      util: require.resolve('util'),
     }
   },
   module: {
