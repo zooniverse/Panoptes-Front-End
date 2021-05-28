@@ -26,12 +26,15 @@ WorkflowCreateForm = createReactClass
 
     newWorkflow =
       display_name: @refs.newDisplayName.value
-      primary_language: counterpart.getLocale()
+      primary_language: workflowToClone?.primary_language
+      steps: workflowToClone?.steps ? undefined
       tasks: workflowToClone?.tasks ? {}
       first_task: workflowToClone?.first_task ? ''
       configuration: workflowToClone?.configuration ? {}
       retirement: workflowToClone?.retirement ? {}
       active: @props.workflowActiveStatus ? false
+      grouped: workflowToClone?.grouped ? false
+      prioritized: workflowToClone?.prioritized ? false
 
     awaitSubmission = @props.onSubmit(@props.projectID, newWorkflow)
 
