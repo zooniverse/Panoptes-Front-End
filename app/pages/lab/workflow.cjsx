@@ -105,7 +105,7 @@ EditWorkflowPage = createReactClass
       </h3>
       {if @state.workflowCreationInProgress
         <ModalFormDialog tag="div">
-          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} workflowActiveStatus={not @props.project.live} />
+          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  project={@props.project} workflowToClone={@props.workflow} workflowActiveStatus={not @props.project.live} />
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       {if @props.project.live and @props.workflow.active
@@ -533,7 +533,7 @@ EditWorkflowPage = createReactClass
                   project={@props.project}
                   onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
                 />
-              else 
+              else
                 <div>Editor is not available.</div>}
               <hr />
               <br />
@@ -673,7 +673,7 @@ EditWorkflowPage = createReactClass
   addNewTask: (type) ->
     changes = {}
     { nextTaskID } = @getNextTaskID()
-  
+
     if @canUseTask(@props.project, "transcription-task")
       nextStepID = @getNextStepID()
       newStep = [nextStepID, { taskKeys: [nextTaskID] }]
@@ -720,7 +720,7 @@ EditWorkflowPage = createReactClass
       required: "true",
       type: "single"
     }
-    
+
     tasks
 
   addNewTranscriptionTask: () ->
@@ -902,7 +902,7 @@ EditWorkflowPage = createReactClass
     if changes.steps?.length is 0
       # If no more steps, remove the classifier version 2.0 designation
       changes["configuration.classifier_version"] = undefined
-    
+
     @props.workflow.update changes
 
   handleTaskDelete: (taskKey, e) ->
@@ -910,7 +910,7 @@ EditWorkflowPage = createReactClass
     if e.shiftKey or confirm 'Really delete this task?'
       if @canUseTask(@props.project, "transcription-task")
         @deleteStepAndTask(taskKey)
-      else 
+      else
         changes = {}
         if shortcut
           changes["tasks.#{shortcut}"] = undefined

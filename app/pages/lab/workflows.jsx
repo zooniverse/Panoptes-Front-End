@@ -79,7 +79,7 @@ const WorkflowsPage = (props) => {
             onSubmit={props.workflowActions.createWorkflowForProject}
             onCancel={props.hideCreateWorkflow}
             onSuccess={props.handleWorkflowCreation}
-            projectID={props.project.id}
+            project={props.project}
             workflowActiveStatus={!props.project.live}
           />
         </ModalFormDialog>
