@@ -7,7 +7,7 @@ WorkflowCreateForm = createReactClass
     onCancel: ->
     onSubmit: ->
     onSuccess: ->
-    projectID: ''
+    project: null
     workflowToClone: null
     workflowActiveStatus: false
 
@@ -26,7 +26,7 @@ WorkflowCreateForm = createReactClass
 
     newWorkflow =
       display_name: @refs.newDisplayName.value
-      primary_language: workflowToClone?.primary_language || counterpart.getLocale()
+      primary_language: workflowToClone?.primary_language || @props.project.primary_language
       steps: workflowToClone?.steps ? undefined
       tasks: workflowToClone?.tasks ? {}
       first_task: workflowToClone?.first_task ? ''
@@ -36,7 +36,7 @@ WorkflowCreateForm = createReactClass
       grouped: workflowToClone?.grouped ? false
       prioritized: workflowToClone?.prioritized ? false
 
-    awaitSubmission = @props.onSubmit(@props.projectID, newWorkflow)
+    awaitSubmission = @props.onSubmit(@props.project.id, newWorkflow)
 
     Promise.resolve(awaitSubmission)
       .then (result) =>
