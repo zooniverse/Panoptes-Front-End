@@ -26,7 +26,7 @@ WorkflowCreateForm = createReactClass
 
     newWorkflow =
       display_name: @refs.newDisplayName.value
-      primary_language: workflowToClone?.primary_language
+      primary_language: workflowToClone?.primary_language || counterpart.getLocale()
       steps: workflowToClone?.steps ? undefined
       tasks: workflowToClone?.tasks ? {}
       first_task: workflowToClone?.first_task ? ''
