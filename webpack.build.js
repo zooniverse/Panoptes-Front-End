@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: [
@@ -34,18 +34,20 @@ module.exports = {
     chunkFilename: '[name]-[chunkhash].js',
   },
   plugins: [
-    new webpack.EnvironmentPlugin([
-      'HEAD_COMMIT',
-      'NODE_ENV',
-      'PANOPTES_API_APPLICATION',
-      'PANOPTES_API_HOST',
-      'STAT_HOST',
-      'SUGAR_HOST',
-      'TALK_HOST'
-    ]),
-    new CopyWebpackPlugin([
-      { from: 'public', to: '.' },
-    ]),
+    new webpack.EnvironmentPlugin({
+      'HEAD_COMMIT': '',
+      'NODE_ENV': 'production',
+      'PANOPTES_API_APPLICATION': '',
+      'PANOPTES_API_HOST': '',
+      'STAT_HOST': '',
+      'SUGAR_HOST': '',
+      'TALK_HOST': ''
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '.' },
+      ]
+    }),
     new HtmlWebpackPlugin({
       template: 'views/index.ejs',
       inject: 'body',
@@ -54,10 +56,18 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash].css'
     }),
+    new webpack.ProvidePlugin({  // Required for Webpack 5, since it removes Node.js polyfills
+      process: 'process/browser',
+    }),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
     modules: ['.', 'node_modules'],
+    fallback: {  // Required for Webpack 5, since it removes Node.js polyfills
+      fs: false,
+      path: require.resolve('path-browserify'),
+      util: require.resolve('util'),
+    }
   },
   module: {
     rules: [{
@@ -101,8 +111,5 @@ module.exports = {
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/],
-  },
-  node: {
-    fs: 'empty',
   },
 };

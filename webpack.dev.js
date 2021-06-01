@@ -28,29 +28,39 @@ var config = {
     filename: '[name].js',
   },
   plugins: [
-    new webpack.EnvironmentPlugin([
-      'HEAD_COMMIT',
-      'NODE_ENV',
-      'PANOPTES_API_APPLICATION',
-      'PANOPTES_API_HOST',
-      'STAT_HOST',
-      'SUGAR_HOST',
-      'TALK_HOST'
-    ]),
-    new CopyWebpackPlugin([
-      { from: 'public', to: '.' }
-    ]),
+    new webpack.EnvironmentPlugin({
+      'HEAD_COMMIT': '',
+      'NODE_ENV': 'staging',
+      'PANOPTES_API_APPLICATION': '',
+      'PANOPTES_API_HOST': '',
+      'STAT_HOST': '',
+      'SUGAR_HOST': '',
+      'TALK_HOST': ''
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '.' }
+      ]
+    }),
     new HtmlWebpackPlugin({
       useBasePath: false,
       template: 'views/index.ejs',
       inject: 'body',
       filename: 'index.html'
     }),
-    new DashboardPlugin({ port: 3736 }) // Change this here and in the package.json start script if needed.
+    new DashboardPlugin({ port: 3736 }), // Change this here and in the package.json start script if needed.
+    new webpack.ProvidePlugin({  // Required for Webpack 5, since it removes Node.js polyfills
+      process: 'process/browser',
+    }),
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
-    modules: ['.', 'node_modules']
+    modules: ['.', 'node_modules'],
+    fallback: {  // Required for Webpack 5, since it removes Node.js polyfills
+      fs: false,
+      path: require.resolve('path-browserify'),
+      util: require.resolve('util'),
+    }
   },
   module: {
     rules: [{
@@ -98,9 +108,6 @@ var config = {
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/]
-  },
-  node: {
-    fs: "empty"
   }
 };
 
