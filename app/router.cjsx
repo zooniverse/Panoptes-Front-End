@@ -170,6 +170,9 @@ module.exports =
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
+    <Route path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents' />} />
+    <Route path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents/classify' />} />
+
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
