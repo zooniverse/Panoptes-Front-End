@@ -35,17 +35,18 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_STATIC_SITES }}
         inlineScript: |
-            az storage blob upload-batch \
-              --account-name zooniversestatic \
-              --content-cache-control 'public, immutable, max-age=604800' \
-              --destination '$web/preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}' \
-              --source ./dist
             az storage blob upload \
               --account-name zooniversestatic \
               --content-cache-control 'public, max-age=60' \
               --container-name '$web' \
               --name 'preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}/index.html' \
               --file ./dist/index.html
+            rm ./dist/index.html
+            az storage blob upload-batch \
+              --account-name zooniversestatic \
+              --content-cache-control 'public, immutable, max-age=604800' \
+              --destination '$web/preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}' \
+              --source ./dist
 
     - name: Slack notification
       uses: 8398a7/action-slack@v3
