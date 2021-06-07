@@ -15,6 +15,8 @@ workflow.configuration: {
     cell_width: 200,
     grid_columns: 5,
     grid_rows: 5,
+    grid_max_width: '',  // CSS value, string, optional
+    grid_max_height: '70vh',  // CSS value, string, optional
   },
   subject_group: {   // Used by the backend "/subjects/grouped" endpoint
     num_columns: 5,  // this must match grid_columns
@@ -39,6 +41,8 @@ export default class SubjectGroupViewerEditor extends React.Component {
       cell_width: subjectViewerConfig.cell_width || '',
       grid_columns: subjectViewerConfig.grid_columns || '',
       grid_rows: subjectViewerConfig.grid_rows || '',
+      grid_max_width: subjectViewerConfig.grid_max_width || '',
+      grid_max_height: subjectViewerConfig.grid_max_height || '',
     }
   }
   
@@ -65,6 +69,8 @@ export default class SubjectGroupViewerEditor extends React.Component {
       cell_width: parseInt(state.cell_width),
       grid_columns: parseInt(state.grid_columns),
       grid_rows: parseInt(state.grid_rows),
+      grid_max_width: state.grid_max_width,
+      grid_max_height: state.grid_max_height,
     }
     
     const subject_group = {
@@ -106,6 +112,8 @@ export default class SubjectGroupViewerEditor extends React.Component {
           cell_width: 200,
           grid_columns: 5,
           grid_rows: 5,
+          // grid_max_width: '',  // Optional, do not define
+          // grid_max_height: '',  // Optional, do not define
         },
         subject_group: {
           num_columns: 5,
@@ -121,6 +129,8 @@ export default class SubjectGroupViewerEditor extends React.Component {
         cell_width: newConfig.subject_viewer_config.cell_width,
         grid_columns: newConfig.subject_viewer_config.grid_columns,
         grid_rows: newConfig.subject_viewer_config.grid_rows,
+        grid_max_width: '',
+        grid_max_height: '',
       })
       
     } else {
@@ -176,6 +186,14 @@ export default class SubjectGroupViewerEditor extends React.Component {
                 <tr>
                   <td>grid_rows</td>
                   <td><input data-configkey="grid_rows" value={this.state.grid_rows} onChange={this.updateViewerConfig.bind(this)} /> cells</td>
+                </tr>
+                <tr>
+                  <td>grid_max_width</td>
+                  <td><input data-configkey="grid_max_width" value={this.state.grid_max_width} onChange={this.updateViewerConfig.bind(this)} /> CSS units (e.g. 1000px or 50vw)</td>
+                </tr>
+                <tr>
+                  <td>grid_max_height</td>
+                  <td><input data-configkey="grid_max_height" value={this.state.grid_max_height} onChange={this.updateViewerConfig.bind(this)} /> CSS units</td>
                 </tr>
               </tbody>
             </table>
