@@ -189,15 +189,16 @@ export default class SubjectGroupViewerEditor extends React.Component {
                 </tr>
                 <tr>
                   <td>grid_max_width</td>
-                  <td><input data-configkey="grid_max_width" value={this.state.grid_max_width} onChange={this.updateViewerConfig.bind(this)} /> CSS units (e.g. 1000px or 50vw)</td>
+                  <td><input data-configkey="grid_max_width" value={this.state.grid_max_width} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
                 </tr>
                 <tr>
                   <td>grid_max_height</td>
-                  <td><input data-configkey="grid_max_height" value={this.state.grid_max_height} onChange={this.updateViewerConfig.bind(this)} /> CSS units</td>
+                  <td><input data-configkey="grid_max_height" value={this.state.grid_max_height} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
                 </tr>
               </tbody>
             </table>
-            <small class="form-help">Note: as of May 2021, the maximum grid size is 25 cells.</small>
+            <small class="form-help">Note: as of May 2021, the maximum grid size is 25 cells.</small><br />
+            <small class="form-help">Note: grid_max_width and grid_max height are fully optional and used only if users say the grid is "exceeding the visible browser space". (Usually happens with really wide screens.) Either leave blank, or use CSS units, e.g. 1000px or 50vw.</small>
             <br/>
             <button onClick={this.saveViewerConfig.bind(this)} disabled={!this.state.stateChanged}>Save viewer config</button>
           </div>
