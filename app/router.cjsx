@@ -93,6 +93,26 @@ ExternalRedirect = createReactClass
   render: ->
     null
 
+{ lazy, Suspense } = React
+`
+function withSuspense(Component) {
+  const LazyComponent = lazy(() => Component)
+  return function (props) {
+    return (
+      <Suspense fallback="loading…">
+        <LazyComponent {...props} />
+      </Suspense>
+    )
+  }
+}
+
+const ProjectTalk = withSuspense(import('./pages/project/talk'));
+const TalkIndex = withSuspense(import('./talk/init'));
+const TalkRecents = withSuspense(import('./talk/recents'));
+const TalkBoard = withSuspense(import('./talk/board'));
+const TalkDiscussion = withSuspense(import('./talk/discussion'));
+`
+
 module.exports =
   <Route path="/" component={require './partials/app'}>
     <IndexRoute component={HomePageRoot} />
@@ -190,17 +210,17 @@ module.exports =
         <Route path="team" component={AboutProjectTeam} />
       </Route>
       <Route path="notifications" component={NotificationsPage} />
-      <Route path="talk" component={require './pages/project/talk'}>
-        <IndexRoute component={require './talk/init'} />
-        <Route path="recents" component={require './talk/recents'} />
+      <Route path="talk" component={ProjectTalk}>
+        <IndexRoute component={TalkIndex} />
+        <Route path="recents" component={TalkRecents} />
         <Route path="not-found" component={NotFoundPage} />
         <Route path="search" component={require './talk/search'} />
         <Route path="moderations" component={require './talk/moderations'} />
         <Route path="subjects/:id" component={SubjectPageController} />
-        <Route path="recents/:board" component={require './talk/recents'} />
+        <Route path="recents/:board" component={TalkRecents} />
         <Route path="tags/:tag" component={TalkTags} />
-        <Route path=":board" component={require './talk/board'} />
-        <Route path=":board/:discussion" component={require './talk/discussion'} />
+        <Route path=":board" component={TalkBoard} />
+        <Route path=":board/:discussion" component={TalkDiscussion} />
       </Route>
       <Route path="stats" component={require './pages/project/stats'} />
       <Route path="favorites" component={require('./pages/collections/index')}>
@@ -238,14 +258,14 @@ module.exports =
     <Route path=":section/notifications" component={NotificationsPage} />
 
     <Route path="talk" component={require './talk'}>
-      <IndexRoute component={require './talk/init'} />
-      <Route path="recents" component={require './talk/recents'} />
+      <IndexRoute component={TalkIndex} />
+      <Route path="recents" component={TalkRecents} />
       <Route path="not-found" component={NotFoundPage} />
       <Route path="search" component={require './talk/search'} />
       <Route path="moderations" component={require './talk/moderations'} />
-      <Route path=":board" component={require './talk/board'} />
-      <Route path="recents/:board" component={require './talk/recents'} />
-      <Route name="talk-discussion" path=":board/:discussion" component={require './talk/discussion'} />
+      <Route path=":board" component={TalkBoard} />
+      <Route path="recents/:board" component={TalkRecents} />
+      <Route name="talk-discussion" path=":board/:discussion" component={TalkDiscussion} />
     </Route>
 
     <Route path="favorites" component={require('./pages/collections')}>
