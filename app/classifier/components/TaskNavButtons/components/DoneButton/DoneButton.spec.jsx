@@ -30,9 +30,9 @@ describe('DoneButton', function() {
   });
 
   describe('when props.completed is true', function() {
-    it('should render null', function () {
+    it('should not render', function () {
       const wrapper = mount(<DoneButton completed={true} />, mockReduxStore);
-      expect(wrapper.html()).to.be.null;
+      expect(wrapper.html()).to.equal('');
     });
   });
 
