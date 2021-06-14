@@ -40,7 +40,9 @@ describe('PanZoom', function () {
       let zoomInButton;
 
       beforeEach(function () {
-        wrapper = mount(<PanZoom enabled={true} />);
+        wrapper = mount(<PanZoom enabled={true} />, {
+          attachTo: document.body
+        });
         zoomInButton = wrapper.find('button.zoom-in');
         wrapper.instance().handleFocus('zoomIn');
       });
