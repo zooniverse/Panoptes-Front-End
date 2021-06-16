@@ -173,6 +173,9 @@ module.exports =
     <Route path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents' />} />
     <Route path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents/classify' />} />
 
+    <Route path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/zookeeper/galaxy-zoo-weird-and-wonderful' />} />
+    <Route path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/zookeeper/galaxy-zoo-weird-and-wonderful/classify' />} />
+
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
