@@ -12,10 +12,10 @@ const users = [
 
 describe('ActiveUsers', function () {
   let getActiveIdsStub;
-  let fetchUsersSpy;
   let pageCountSpy;
   let boundedPageSpy;
   let userIdSpy;
+  let fetchUsersStub;
   let wrapper;
 
   before(function () {
@@ -23,17 +23,17 @@ describe('ActiveUsers', function () {
     pageCountSpy = sinon.spy(ActiveUsers.prototype, 'pageCount');
     boundedPageSpy = sinon.spy(ActiveUsers.prototype, 'boundedPage');
     userIdSpy = sinon.spy(ActiveUsers.prototype, 'userIdsOnPage');
-    fetchUsersSpy = sinon.stub(ActiveUsers.prototype, 'fetchUncachedUsers').callsFake(() => Promise.resolve(users));
+    fetchUsersStub = sinon.stub(ActiveUsers.prototype, 'fetchUncachedUsers').callsFake(() => Promise.resolve(users));
     wrapper = shallow(<ActiveUsers />);
   });
 
   after(function () {
     const spiesandStubs = [
       getActiveIdsStub,
-      fetchUsersSpy,
       pageCountSpy,
       boundedPageSpy,
-      userIdSpy
+      userIdSpy,
+      fetchUsersStub
     ];
     spiesandStubs.forEach(spy => spy.restore());
     // ensure we unmount to unset the saved timers
@@ -52,7 +52,7 @@ describe('ActiveUsers', function () {
     sinon.assert.calledOnce(getActiveIdsStub);
     sinon.assert.calledOnce(boundedPageSpy);
     sinon.assert.calledOnce(userIdSpy);
-    sinon.assert.calledWith(fetchUsersSpy, activeIds);
+    sinon.assert.calledWith(fetchUsersStub, activeIds);
     sinon.assert.calledWith(pageCountSpy, activeIds);
   });
 });
