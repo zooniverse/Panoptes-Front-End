@@ -15,6 +15,7 @@ describe('ActiveUsers', function () {
   let fetchUsersSpy;
   let pageCountSpy;
   let boundedPageSpy;
+  let restartStub;
   let userIdSpy;
   let wrapper;
 
@@ -24,6 +25,7 @@ describe('ActiveUsers', function () {
     pageCountSpy = sinon.spy(ActiveUsers.prototype, 'pageCount');
     boundedPageSpy = sinon.spy(ActiveUsers.prototype, 'boundedPage');
     userIdSpy = sinon.spy(ActiveUsers.prototype, 'userIdsOnPage');
+    restartStub = sinon.stub(ActiveUsers.prototype, 'restartTimer')
     wrapper = shallow(<ActiveUsers />);
     wrapper.setState({ users });
   });
@@ -34,7 +36,8 @@ describe('ActiveUsers', function () {
       fetchUsersSpy,
       pageCountSpy,
       boundedPageSpy,
-      userIdSpy
+      userIdSpy,
+      restartStub
     ];
     spies.forEach(spy => spy.restore());
   });
@@ -53,5 +56,6 @@ describe('ActiveUsers', function () {
     sinon.assert.calledOnce(userIdSpy);
     sinon.assert.calledWith(fetchUsersSpy, activeIds);
     sinon.assert.calledWith(pageCountSpy, activeIds);
+    sinon.assert.calledOnce(restartStub);
   });
 });
