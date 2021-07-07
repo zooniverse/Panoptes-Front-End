@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import ActiveUsers from './active-users';
 
-const activeIds = ['1234', '5678'];
+const activeIds = ['1', '2'];
 const users = [
   { id: '1', display_name: 'Test_User_1', login: 'testUser1' },
   { id: '2', display_name: 'Test_User_2', login: 'testUser2' }
@@ -12,31 +12,32 @@ const users = [
 
 describe('ActiveUsers', function () {
   let getActiveIdsStub;
-  let fetchUsersSpy;
   let pageCountSpy;
   let boundedPageSpy;
   let userIdSpy;
+  let fetchUsersStub;
   let wrapper;
 
   before(function () {
     getActiveIdsStub = sinon.stub(ActiveUsers.prototype, 'getActiveUserIds').callsFake(() => Promise.resolve(activeIds));
-    fetchUsersSpy = sinon.spy(ActiveUsers.prototype, 'fetchUncachedUsers');
     pageCountSpy = sinon.spy(ActiveUsers.prototype, 'pageCount');
     boundedPageSpy = sinon.spy(ActiveUsers.prototype, 'boundedPage');
     userIdSpy = sinon.spy(ActiveUsers.prototype, 'userIdsOnPage');
+    fetchUsersStub = sinon.stub(ActiveUsers.prototype, 'fetchUncachedUsers').callsFake(() => Promise.resolve(users));
     wrapper = shallow(<ActiveUsers />);
-    wrapper.setState({ users });
   });
 
   after(function () {
-    const spies = [
+    const spiesandStubs = [
       getActiveIdsStub,
-      fetchUsersSpy,
       pageCountSpy,
       boundedPageSpy,
-      userIdSpy
+      userIdSpy,
+      fetchUsersStub
     ];
-    spies.forEach(spy => spy.restore());
+    spiesandStubs.forEach(spy => spy.restore());
+    // ensure we unmount to unset the saved timers
+    wrapper.unmount();
   });
 
   it('should render without crashing', function() {
@@ -51,7 +52,7 @@ describe('ActiveUsers', function () {
     sinon.assert.calledOnce(getActiveIdsStub);
     sinon.assert.calledOnce(boundedPageSpy);
     sinon.assert.calledOnce(userIdSpy);
-    sinon.assert.calledWith(fetchUsersSpy, activeIds);
+    sinon.assert.calledWith(fetchUsersStub, activeIds);
     sinon.assert.calledWith(pageCountSpy, activeIds);
   });
 });
