@@ -20,6 +20,7 @@ export default class ActiveUsers extends React.Component {
     };
 
     this.onPageChange = this.onPageChange.bind(this);
+    this.restartTimer = this.restartTimer.bind(this);
   }
 
   componentDidMount() {
