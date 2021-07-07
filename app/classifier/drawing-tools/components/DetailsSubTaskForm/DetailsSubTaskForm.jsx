@@ -1,4 +1,5 @@
 import React from 'react';
+import merge from 'lodash/merge';
 import PropTypes from 'prop-types';
 import StickyModalForm from 'modal-form/sticky';
 import { connect, Provider } from 'react-redux';
@@ -132,9 +133,10 @@ export class DetailsSubTaskForm extends React.Component {
                 if (!detailTask._key) detailTask._key = Math.random();
                 const TaskComponent = tasks[detailTask.type];
                 const workflowTranslation = translations.strings.workflow[workflow.id]
-                const detailTranslation = workflowTranslation ?
+                const detailTranslationStrings = workflowTranslation ?
                   workflowTranslation.strings.tasks[toolProps.taskKey].tools[toolProps.mark.tool].details[i] :
                   detailTask;
+                const detailTranslation = merge({}, detailTask, detailTranslationStrings);
                 
                 return (
                   <TaskComponent
