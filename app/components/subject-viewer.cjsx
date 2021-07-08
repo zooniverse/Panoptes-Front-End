@@ -85,6 +85,11 @@ module.exports = createReactClass
       initialFrame = default_frame - 1
     initialFrame
 
+  componentDidMount: () ->
+    if @props.subject?.metadata['#subject_group_id']?
+      @setState
+        inFlipbookMode: false
+
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.subject is @props.subject
       clearTimeout @signInAttentionTimeout
