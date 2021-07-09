@@ -85,6 +85,11 @@ module.exports = createReactClass
       initialFrame = default_frame - 1
     initialFrame
 
+  componentDidMount: () ->
+    if @props.subject?.metadata['#subject_group_id']?
+      @setState
+        inFlipbookMode: false
+
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.subject is @props.subject
       clearTimeout @signInAttentionTimeout
@@ -109,6 +114,7 @@ module.exports = createReactClass
       'subject-viewer--flipbook': @state.inFlipbookMode
       'subject-viewer--invert': @state.invert
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
+      'subject-viewer--layout-grid4': @props.subject?.metadata['#subject_group_id']
     })
 
     isIE = 'ActiveXObject' of window
