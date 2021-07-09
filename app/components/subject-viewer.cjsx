@@ -114,6 +114,7 @@ module.exports = createReactClass
       'subject-viewer--flipbook': @state.inFlipbookMode
       'subject-viewer--invert': @state.invert
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
+      'subject-viewer--layout-grid4': @props.subject?.metadata['#subject_group_id']
     })
 
     isIE = 'ActiveXObject' of window
