@@ -3,6 +3,7 @@ import React from 'react';
 import SubjectViewer from '../components/subject-viewer';
 import ActiveUsers from '../talk/active-users';
 import ProjectLinker from '../talk/lib/project-linker';
+import SubjectMetadata from './subject-metadata';
 import SubjectCommentForm from './comment-form';
 import SubjectCommentList from './comment-list';
 import SubjectDiscussionList from './discussion-list';
@@ -28,6 +29,7 @@ const SubjectPage = (props) => {
                 isFavorite={props.isFavorite}
               />
 
+              <SubjectMetadata subject={props.subject} />
               <SubjectCommentList subject={props.subject} {...props} />
               <SubjectCollectionList collections={props.collections} {...props} />
               <SubjectDiscussionList subject={props.subject} {...props} />
