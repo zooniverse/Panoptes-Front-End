@@ -17,10 +17,12 @@ metadata display component".
  */
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import Loading from '../components/loading-indicator';
 
 const SubjectMetadata = (props) => {
+  const [expandSubjectGroup, setExpandSubjectGroup] = useState(false);
+  
   if (props.project && props.subject) {
     const metadata = props.subject.metadata || {};
     
@@ -36,11 +38,15 @@ const SubjectMetadata = (props) => {
       
       subjectGroupHtml = (
         <div>
-          <p>This Subject is a group of subjects, with a Subject Group ID of <b>{metadata['#subject_group_id']}</b> and consisting of...</p>
+          <p>
+            This Subject is a group of subjects, with a Subject Group ID of <b>{metadata['#subject_group_id']}</b> and consisting of {subjects.length} subject(s).
+            &nbsp;
+            <button onClick={()=>{ setExpandSubjectGroup(!expandSubjectGroup) }}>
+              {expandSubjectGroup ? 'hide' : 'show'}
+            </button>
+          </p>
+          {expandSubjectGroup && (
           <ul>
-            {(subjects.length === 0) && (
-              <li>...no subjects, strangely enough. (This is likely an error)</li>
-            )}
             {subjects.map(subjectId => {
               return (
                 <li>
@@ -53,13 +59,14 @@ const SubjectMetadata = (props) => {
               )
             })}
           </ul>
+          )}
         </div>
       )
     }
     
     return (
       <div className="subject-metadata">
-        <h2>Additional Subject information</h2>
+        <h3>Additional Subject information</h3>
         {subjectGroupHtml}
       </div>
     );
