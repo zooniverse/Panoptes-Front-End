@@ -64,12 +64,17 @@ const SubjectMetadata = (props) => {
       )
     }
     
-    return (
-      <div className="subject-metadata">
-        <h3>Additional Subject information</h3>
-        {subjectGroupHtml}
-      </div>
-    );
+    // Only display if the Subject has something interesting to say
+    if (subjectGroupHtml) {
+      return (
+        <div className="subject-metadata">
+          <h3>Additional Subject information</h3>
+          {subjectGroupHtml}
+        </div>
+      );
+    }
+    
+    return null;
   }
 
   return (<Loading />);
