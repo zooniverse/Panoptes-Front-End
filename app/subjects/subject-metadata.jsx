@@ -25,17 +25,17 @@ const SubjectMetadata = (props) => {
     const metadata = props.subject.metadata || {};
     
     // A "Subject Group" is a Subject that's a collection of other Subjects.
-    const isSubjectGroup = metadata.['#group_subject_ids'] && metadata.['#subject_group_id'];
+    const isSubjectGroup = metadata['#group_subject_ids'] && metadata['#subject_group_id'];
     let subjectGroupHtml = null;
     
     if (isSubjectGroup) {
-      const subjects = (typeof metadata.['#group_subject_ids'] === 'string')
-        ? metadata.['#group_subject_ids'].split('-')
+      const subjects = (typeof metadata['#group_subject_ids'] === 'string')
+        ? metadata['#group_subject_ids'].split('-')
         : [];
       
       subjectGroupHtml = (
         <div>
-          <p>This Subject is a group of subjects, with a Subject Group ID of <b>{metadata.['#subject_group_id']}</b> and consisting of...</p>
+          <p>This Subject is a group of subjects, with a Subject Group ID of <b>{metadata['#subject_group_id']}</b> and consisting of...</p>
           <ul>
             {(subjects.length === 0) && (
               <li>...no subjects, strangely enough. (This is likely an error)</li>
