@@ -1,6 +1,6 @@
 import apiClient from 'panoptes-client/lib/api-client';
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
@@ -14,13 +14,21 @@ import ClassificationQueue from '../../lib/classification-queue';
 import * as classifierActions from '../../redux/ducks/classify';
 import * as translationActions from '../../redux/ducks/translations';
 
-import Classifier from '../../classifier';
 import FinishedBanner from './finished-banner';
 import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';
 import ProjectThemeButton from './components/ProjectThemeButton';
 import WorkflowSelection from './workflow-selection';
 import ClassroomWorkflowSelection from './workflow-selection-classroom';
 import { zooTheme } from '../../theme';
+
+const LazyClassifier = lazy(() => import('../../classifier'))
+function Classifier(props) {
+  return (
+    <Suspense fallback="loading…">
+      <LazyClassifier {...props} />
+    </Suspense>
+  )
+}
 
 function onClassificationSaved(actualClassification) {
 }
