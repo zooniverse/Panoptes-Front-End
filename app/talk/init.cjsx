@@ -14,6 +14,7 @@ Loading = require('../components/loading-indicator').default
 SingleSubmitButton = require '../components/single-submit-button'
 ZooniverseTeam = require './lib/zoo-team.cjsx'
 alert = require('../lib/alert').default
+baseURL = require('./lib/base-url').default
 AddZooTeamForm = require './add-zoo-team-form'
 DragReorderable = require 'drag-reorderable'
 Paginator = require './lib/paginator'
@@ -164,7 +165,7 @@ module.exports = createReactClass
                 </button>
               </ZooniverseTeam>
                 {if @props.section isnt 'zooniverse'
-                  <Link to="/projects/#{@props.params?.owner}/#{@props.params?.name}/talk/moderations">
+                  <Link to="/#{baseURL(@props.project)}/#{@props.params?.owner}/#{@props.params?.name}/talk/moderations">
                     View Reported Comments
                   </Link>
                 else
@@ -200,7 +201,7 @@ module.exports = createReactClass
               {if @props.section is 'zooniverse'
                 <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/talk/recents">Recent Comments</Link>
               else
-                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents">Recent Comments</Link>
+                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/#{baseURL(@props.project)}/#{@props.params.owner}/#{@props.params.name}/talk/recents">Recent Comments</Link>
               }
             </h3>
           </section>
