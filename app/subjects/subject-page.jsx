@@ -29,7 +29,7 @@ const SubjectPage = (props) => {
                 isFavorite={props.isFavorite}
               />
 
-              <SubjectMetadata subject={props.subject} />
+              <SubjectMetadata subject={props.subject} project={props.project} />
               <SubjectCommentList subject={props.subject} {...props} />
               <SubjectCollectionList collections={props.collections} {...props} />
               <SubjectDiscussionList subject={props.subject} {...props} />

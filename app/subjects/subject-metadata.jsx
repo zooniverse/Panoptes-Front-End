@@ -21,7 +21,7 @@ import React from 'react';
 import Loading from '../components/loading-indicator';
 
 const SubjectMetadata = (props) => {
-  if (props.subject) {
+  if (props.project && props.subject) {
     const metadata = props.subject.metadata || {};
     
     // A "Subject Group" is a Subject that's a collection of other Subjects.
@@ -29,6 +29,7 @@ const SubjectMetadata = (props) => {
     let subjectGroupHtml = null;
     
     if (isSubjectGroup) {
+      const projectSlug = props.project.slug || ''
       const subjects = (typeof metadata['#group_subject_ids'] === 'string')
         ? metadata['#group_subject_ids'].split('-')
         : [];
@@ -40,16 +41,22 @@ const SubjectMetadata = (props) => {
             {(subjects.length === 0) && (
               <li>...no subjects, strangely enough. (This is likely an error)</li>
             )}
-            {subjects.map(sbj => {
-              return (<li>Subject {sbj}</li>)
+            {subjects.map(subjectId => {
+              return (
+                <li>
+                  <a
+                    href={`/projects/${projectSlug}/talk/subjects/${subjectId}`}
+                  >
+                    Subject {subjectId}
+                  </a>
+                </li>
+              )
             })}
           </ul>
         </div>
       )
     }
     
-
-    console.log('+++ Subject: ', props.subject)
     return (
       <div className="subject-metadata">
         <h2>Additional Subject information</h2>
@@ -62,10 +69,14 @@ const SubjectMetadata = (props) => {
 };
 
 SubjectMetadata.defaultProps = {
-  subject: null
+  project: null,
+  subject: null,
 };
 
 SubjectMetadata.propTypes = {
+  project: PropTypes.shape({
+    id: PropTypes.string
+  }),
   subject: PropTypes.shape({
     id: PropTypes.string
   }),
