@@ -17,16 +17,34 @@ const subject_ofType_subjectGroup = {
   }
 }
 
+const subject_ofType_singleImage = {
+  id: '8000',
+  locations: [
+    { 'image/png': 'https://placekitten.com/200/200'},
+  ],
+}
+
 const project = {
   id: '1',
   slug: 'zooniverse/survos-testing'
 }
 
 describe('SubjectMetadata', function () {
-  it('should render without crashing', function () {
-    const wrapper = shallow(
-      <SubjectMetadata subject={subject_ofType_subjectGroup} project={project} />
-    );
-    expect(wrapper).to.be.ok
+  describe('with Subject Group type of Subject', function () {
+    it('should render without crashing', function () {
+      const wrapper = shallow(
+        <SubjectMetadata subject={subject_ofType_subjectGroup} project={project} />
+      );
+      expect(wrapper).to.be.ok
+    })
+  })
+  
+  describe('with single image Subject', function () {
+    it('should not render', function () {
+      const wrapper = shallow(
+        <SubjectMetadata subject={subject_ofType_subjectGroup} project={project} />
+      );
+      expect(wrapper).to.be.empty
+    })
   })
 });
