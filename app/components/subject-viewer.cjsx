@@ -73,6 +73,7 @@ module.exports = createReactClass
     frameDurationIntervalId: null
     inFlipbookMode: @props.allowFlipbook
     invert: false
+    isGroupSubject: false
     promptingToSignIn: false
 
   getInitialFrame: ->
@@ -86,9 +87,10 @@ module.exports = createReactClass
     initialFrame
 
   componentDidMount: () ->
-    if @props.subject?.metadata['#subject_group_id']?
+    if @props.subject?.metadata?['#subject_group_id']?
       @setState
         inFlipbookMode: false
+        isGroupSubject: true
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.subject is @props.subject
@@ -99,10 +101,14 @@ module.exports = createReactClass
         frame: 0
 
   componentDidUpdate: (prevProps) ->
+    isGroupSubject = @props.subject?.metadata?['#subject_group_id']?
     if @props.subject isnt prevProps.subject
       # turn off the slideshow player and reset any counters
       @setPlaying false
-      @setState frame: @getInitialFrame()
+      @setState
+        frame: @getInitialFrame()
+        inFlipbookMode: !isGroupSubject
+        isGroupSubject: isGroupSubject
 
   logSubjClick: (logType) ->
     @context.geordi?.logEvent
@@ -114,7 +120,7 @@ module.exports = createReactClass
       'subject-viewer--flipbook': @state.inFlipbookMode
       'subject-viewer--invert': @state.invert
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
-      'subject-viewer--layout-grid4': @props.subject?.metadata['#subject_group_id']
+      'subject-viewer--layout-grid4': @state.isGroupSubject
     })
 
     isIE = 'ActiveXObject' of window
