@@ -36,15 +36,21 @@ describe('SubjectMetadata', function () {
         <SubjectMetadata subject={subject_ofType_subjectGroup} project={project} />
       );
       expect(wrapper).to.be.ok
-    })
-  })
-  
+    });
+    
+    it('should list the correct number of component Subjects (when expanded)', function () {
+      const wrapper = shallow(
+        <SubjectMetadata subject={subject_ofType_subjectGroup} project={project} expandSubjectGroup={true} />
+      );
+      expect(wrapper.find('li')).to.have.lengthOf(4);
+    });
+  });
   describe('with single image Subject', function () {
     it('should not render', function () {
       const wrapper = shallow(
         <SubjectMetadata subject={subject_ofType_subjectGroup} project={project} />
       );
       expect(wrapper).to.be.empty
-    })
-  })
+    });
+  });
 });

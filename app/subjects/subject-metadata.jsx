@@ -21,7 +21,7 @@ import React, { useState } from 'react';
 import Loading from '../components/loading-indicator';
 
 const SubjectMetadata = (props) => {
-  const [expandSubjectGroup, setExpandSubjectGroup] = useState(false);
+  const [expandSubjectGroup, setExpandSubjectGroup] = useState(props.expandSubjectGroup);
   
   if (props.project && props.subject) {
     const metadata = props.subject.metadata || {};
@@ -39,7 +39,7 @@ const SubjectMetadata = (props) => {
       subjectGroupHtml = (
         <div>
           <p>
-            This Subject is a group of subjects, with a Subject Group ID of <b>{metadata['#subject_group_id']}</b> and consisting of {subjects.length} subject(s).
+            This Subject is a group of subjects, with a Subject Group ID of <b>{metadata['#subject_group_id']}</b> and consisting of <b>{subjects.length}</b> subject(s).
             &nbsp;
             <button onClick={()=>{ setExpandSubjectGroup(!expandSubjectGroup) }}>
               {expandSubjectGroup ? 'hide' : 'show'}
@@ -49,7 +49,7 @@ const SubjectMetadata = (props) => {
           <ul>
             {subjects.map(subjectId => {
               return (
-                <li>
+                <li key={`subjectGroup-subject-${subjectId}`}>
                   <a
                     href={`/projects/${projectSlug}/talk/subjects/${subjectId}`}
                   >
@@ -81,11 +81,13 @@ const SubjectMetadata = (props) => {
 };
 
 SubjectMetadata.defaultProps = {
+  expandSubjectGroup: false,
   project: null,
   subject: null,
 };
 
 SubjectMetadata.propTypes = {
+  expandSubjectGroup: PropTypes.bool,
   project: PropTypes.shape({
     id: PropTypes.string
   }),
