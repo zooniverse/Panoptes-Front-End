@@ -131,9 +131,14 @@ module.exports = createReactClass
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     subjectLocations = getSubjectLocations @props.subject
     if subjectIsLikelyAudioPlusImage @props.subject
-          mainDisplay = @renderFrame @state.frame, {subjectLocations : subjectLocations, isAudioPlusImage : true}
+      mainDisplay = @renderFrame @state.frame, {subjectLocations : subjectLocations, isAudioPlusImage : true}
     else if @state.inFlipbookMode
       mainDisplay = @renderFrame @state.frame
+    else if @state.isGroupSubject
+      componentSubjectIds = @props.subject?.metadata?['#group_subject_ids']?.split('-') || []
+      mainDisplay = @props.subject.locations.map (frame, index) =>
+        linkToSubject = "/projects/#{@props.project?.slug}/talk/subjects/#{componentSubjectIds[index]}"      
+        @renderFrame index, {key: "frame-#{index}", isGroupSubject: true, linkToSubject}
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
         @renderFrame index, {key: "frame-#{index}"}
