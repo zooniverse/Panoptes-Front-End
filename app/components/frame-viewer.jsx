@@ -104,9 +104,13 @@ export default class FrameViewer extends React.Component {
           </FrameWrapper>
         </PanZoom>
       );
-    } else if (this.props.isGroupSubject && this.props.linkToSubject) {
+    } else if (this.props.isGroupSubject) {
       return (
-        <a href={this.props.linkToSubject} style={{ display: 'block', border: '1px solid cyan'}}>
+        <a
+          href={this.props.groupSubjectLink}
+          title={`Subject ${this.props.groupSubjectId}`}
+          style={{ display: 'block', border: '1px solid cyan'}}
+        >
           <FileViewer
             src={src}
             type={type}
@@ -143,8 +147,9 @@ FrameViewer.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object),
   frame: PropTypes.number,
   frameWrapper: PropTypes.func,
+  groupSubjectId: PropTypes.string,
+  groupSubjectLink: PropTypes.string,
   isGroupSubject: PropTypes.bool,
-  linkToSubject: PropTypes.string,
   modification: PropTypes.object,
   onChange: PropTypes.func,
   onLoad: PropTypes.func,
@@ -163,8 +168,9 @@ FrameViewer.propTypes = {
 FrameViewer.defaultProps = {
   annotations: [],
   frame: 0,
+  groupSubjectId: undefined,
+  groupSubjectLink: undefined,  // If a Subject is a "Subject Group", each frame can link to its constituent Subject's Talk page.
   isGroupSubject: false,  // A "Subject Group" is a type of Subject that's composed of many (single image) Subjects
-  linkToSubject: undefined,  // If a Subject is a "Subject Group", each frame can link to its constituent Subject's Talk page.
   onChange: () => {},
   preferences: { },
   subject: {

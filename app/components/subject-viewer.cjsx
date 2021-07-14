@@ -137,8 +137,9 @@ module.exports = createReactClass
     else if @state.isGroupSubject
       componentSubjectIds = @props.subject?.metadata?['#group_subject_ids']?.split('-') || []
       mainDisplay = @props.subject.locations.map (frame, index) =>
-        linkToSubject = "/projects/#{@props.project?.slug}/talk/subjects/#{componentSubjectIds[index]}"      
-        @renderFrame index, {key: "frame-#{index}", isGroupSubject: true, linkToSubject}
+        groupSubjectId = componentSubjectIds[index]
+        groupSubjectLink = "/projects/#{@props.project?.slug}/talk/subjects/#{componentSubjectIds[index]}"      
+        @renderFrame index, {key: "frame-#{index}", isGroupSubject: true, groupSubjectId, groupSubjectLink}
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
         @renderFrame index, {key: "frame-#{index}"}
