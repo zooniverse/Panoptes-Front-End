@@ -109,8 +109,13 @@
 
   &.subject-viewer--invert
     // Talk
+    &.subject-viewer--layout-grid4
+      .subject-container
+        .subject-image-frame
+          img
+            filter: invert(100%)
     .subject-container
-      .subject-image-frame
+      .subject-image-frame:only-child
         img
           filter: invert(100%)
       .subject-video-frame:only-child
