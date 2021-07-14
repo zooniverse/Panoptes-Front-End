@@ -20,7 +20,7 @@ change dependencies in `package.json`.
 
 - `docker-compose down` stops the development server.
 
-- `docker-compose run --rm dev test` runs the tests.
+- `docker-compose run --rm shell` starts a container running a shell eg. for running tests.
 
 ### With Node.js
 
