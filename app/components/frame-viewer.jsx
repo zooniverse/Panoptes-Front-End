@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Link } from 'react-router';
 import getSubjectLocation from '../lib/get-subject-location';
 import getSubjectLocations from '../lib/get-subject-locations';
 import PanZoom from './pan-zoom';
@@ -106,8 +107,8 @@ export default class FrameViewer extends React.Component {
       );
     } else if (this.props.isGroupSubject) {
       return (
-        <a
-          href={this.props.groupSubjectLink}
+        <Link
+          to={this.props.groupSubjectLink}
           title={`Subject ${this.props.groupSubjectId}`}
           style={{ display: 'block', border: '1px solid cyan'}}
         >
@@ -121,7 +122,7 @@ export default class FrameViewer extends React.Component {
             registerProgressObject={this.props.registerProgressObject}
             {...modellingProps}
           />
-        </a>
+        </Link>
       )
     } else {
       return (

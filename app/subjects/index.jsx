@@ -23,7 +23,7 @@ export default class SubjectPageContainer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.params && nextProps.params && nextProps.params.id !== this.props.params.id) {
-      this.setSubject();
+      this.setSubject(nextProps);
     }
 
     if (nextProps.location.query.collections_page !== this.props.location.query.collections_page) {
@@ -35,8 +35,8 @@ export default class SubjectPageContainer extends React.Component {
     this.getCollections(this.state.subject, page);
   }
 
-  setSubject() {
-    const subjectId = this.props.params.id.toString();
+  setSubject(props = this.props) {
+    const subjectId = props.params.id.toString();
     apiClient.type('subjects').get(subjectId, { include: 'project' })
       .then((subject) => {
         this.setState({ subject });
