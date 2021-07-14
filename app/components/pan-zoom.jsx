@@ -1,9 +1,9 @@
 /* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
 import PropTypes from 'prop-types';
 
-import React from 'react';
+import React, { Component } from 'react';
 
-class PanZoom extends React.Component {
+class PanZoom extends Component {
   constructor() {
     super();
     this.frameKeyPan = this.frameKeyPan.bind(this);
@@ -40,12 +40,12 @@ class PanZoom extends React.Component {
     this.zoomReset();
   }
 
-  componentWillUpdate(newProps) {
-    const newSubject = newProps.subject !== this.props.subject;
-    const widthChanged = newProps.frameDimensions.width !== this.props.frameDimensions.width;
-    const heightChanged = newProps.frameDimensions.height !== this.props.frameDimensions.height;
+  componentDidUpdate(prevProps) {
+    const newSubject = prevProps.subject !== this.props.subject;
+    const widthChanged = prevProps.frameDimensions.width !== this.props.frameDimensions.width;
+    const heightChanged = prevProps.frameDimensions.height !== this.props.frameDimensions.height;
     if (newSubject || widthChanged || heightChanged) {
-      this.zoomReset(newProps);
+      this.zoomReset();
     }
   }
 
@@ -133,8 +133,8 @@ class PanZoom extends React.Component {
     this.zoomReset();
   }
 
-  zoomReset(props) {
-    props = props || this.props;
+  zoomReset() {
+    const { props } = this;
     this.setState({
       viewBoxDimensions: {
         width: props.frameDimensions.width,

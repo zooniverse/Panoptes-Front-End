@@ -39,11 +39,11 @@ describe('PanZoom', function () {
       let wrapper;
       let zoomInButton;
 
-      beforeEach(function () {
+      before(function () {
         wrapper = mount(<PanZoom enabled={true} />, {
           attachTo: document.body
         });
-        zoomInButton = wrapper.find('button.zoom-in');
+        zoomInButton = wrapper.instance().zoomIn
         wrapper.instance().handleFocus('zoomIn');
       });
 
@@ -52,7 +52,7 @@ describe('PanZoom', function () {
       });
 
       it('should focus the button passed as the argument', function () {
-        assert.equal(document.activeElement, zoomInButton.instance());
+        assert.equal(document.activeElement, zoomInButton);
       });
     });
 
