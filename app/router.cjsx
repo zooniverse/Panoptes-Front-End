@@ -10,23 +10,9 @@ createReactClass = require 'create-react-class'
 `import SubjectSetsContainer from './pages/lab/subject-sets-container';`
 `import SubjectSetsList from './pages/lab/subject-sets';`
 `import TranslationsManager from './pages/lab/translations';`
-`import HomePageRoot from './pages/home';`
 `import NotFoundPage from './pages/not-found';`
 
 `import DataExports from './pages/lab/data-exports';`
-
-# <Redirect from="home" to="/" /> doesn't work.
-ONE_UP_REDIRECT = createReactClass
-  componentDidMount: ->
-    givenPathSegments = @props.location.pathname.split '/'
-    givenPathSegments.pop()
-    pathOneLevelUp = givenPathSegments.join '/'
-    @props.router.replace
-      pathname: pathOneLevelUp,
-      query: @props.location.query
-
-  render: ->
-    null
 
 # Used to force a refresh on entering a route, causing it to be fetched from
 # the server - and allowing us to reverse proxy other apps to routes in PFE.
@@ -50,9 +36,7 @@ ExternalRedirect = createReactClass
 
 module.exports =
   <Route path="/" component={require './partials/app'}>
-    <IndexRoute component={HomePageRoot} />
-    <Route path="home" component={ONE_UP_REDIRECT} />
-    <Route path="home-for-user" component={require('./pages/home-for-user').default} />
+    <IndexRoute component={require './pages/lab'} />
 
     <Route path="lab" component={require './pages/lab'} />
     <Route path="lab/:projectID" component={require './pages/lab/project'}>
