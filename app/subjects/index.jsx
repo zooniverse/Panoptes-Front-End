@@ -21,13 +21,13 @@ export default class SubjectPageContainer extends React.Component {
     this.setSubject();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.params && nextProps.params && nextProps.params.id !== this.props.params.id) {
-      this.setSubject(nextProps);
+  componentDidUpdate(prevProps) {
+    if (prevProps.params && this.props.params && this.props.params.id !== prevProps.params.id) {
+      this.setSubject();
     }
 
-    if (nextProps.location.query.collections_page !== this.props.location.query.collections_page) {
-      this.getCollections(this.state.subject, nextProps.location.query.collections_page);
+    if (this.props.location.query.collections_page !== prevProps.location.query.collections_page) {
+      this.getCollections(this.state.subject, this.props.location.query.collections_page);
     }
   }
 
