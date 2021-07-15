@@ -1,10 +1,10 @@
 name: Deploy PFE Staging
 
 on:
-    # Run this workflow on creation (or sync to source branch) of a new pull request
+    # Run this workflow on updates to the lab branch.
     push:
         branches:
-          - master
+          - lab
 
 jobs:
   deploy_staging:
@@ -46,20 +46,20 @@ jobs:
               --account-name zooniversestatic \
               --content-cache-control 'public, max-age=60' \
               --container-name '$web' \
-              --name 'preview.zooniverse.org/panoptes-front-end/master/index.html' \
+              --name 'preview.zooniverse.org/panoptes-front-end/lab/index.html' \
               --file ./dist/index.html
             rm ./dist/index.html
             az storage blob upload \
               --account-name zooniversestatic \
               --content-cache-control 'public, max-age=60' \
               --container-name '$web' \
-              --name 'preview.zooniverse.org/panoptes-front-end/master/commit_id.txt' \
+              --name 'preview.zooniverse.org/panoptes-front-end/lab/commit_id.txt' \
               --file ./dist/commit_id.txt
             rm ./dist/commit_id.txt
             az storage blob upload-batch \
               --account-name zooniversestatic \
               --content-cache-control 'public, immutable, max-age=604800' \
-              --destination '$web/preview.zooniverse.org/panoptes-front-end/master' \
+              --destination '$web/preview.zooniverse.org/panoptes-front-end/lab' \
               --source ./dist
 
     - name: Slack notification
