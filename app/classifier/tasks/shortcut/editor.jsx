@@ -70,42 +70,45 @@ export default class ShortcutEditor extends React.Component {
         {children}
         <hr />
 
-        <label htmlFor="shortcut" title="Shortcut Options to End Classification">
-          <AutoSave resource={this.props.workflow}>
-            <span className="form-label">Shortcut Option</span>{' '}
-            <input id="shortcut" type="checkbox" checked={shortcuts !== undefined} onChange={this.toggleShortcut} />
-          </AutoSave>
-        </label>
-
-        <br />
-
-        <small className="form-help">
-          Give volunteers the choice to skip to the end
-          of a classification if one of the following options is selected.
-        </small>
-
-        {shortcuts && (
-          <div className="workflow-task-editor-choices">
-            {shortcuts.answers.map((shortcut, index) => {
-              if (shortcut._key === undefined) { shortcut._key = Math.random(); }
-              return (
-                <div key={shortcut._key} className="workflow-choice-editor">
-                  <AutoSave resource={this.props.workflow}>
-                    <textarea name={`tasks.${this.props.task.unlinkedTask}.answers.${index}.label`} value={shortcut.label} onChange={handleChange} />
-                  </AutoSave>
-
-                  <AutoSave resource={this.props.workflow}>
-                    <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={this.removeChoice.bind(this, index)}>&times;</button>
-                  </AutoSave>
-                </div>
-              );
-            })}
-
+        <div className="deprecated">
+          <label htmlFor="shortcut" title="Shortcut Options to End Classification">
             <AutoSave resource={this.props.workflow}>
-              <button type="button" className="workflow-choice-add-button" title="Add Shortcut" onClick={this.addAnswer}>+</button>
+              <span className="form-label">Shortcut Option</span>{' '}
+              <input id="shortcut" type="checkbox" checked={shortcuts !== undefined} onChange={this.toggleShortcut} />
             </AutoSave>
+          </label>
 
-            </div>)}
+          <br />
+
+          <small className="form-help">
+            Give volunteers the choice to skip to the end
+            of a classification if one of the following options is selected.
+          </small>
+
+          {shortcuts && (
+            <div className="workflow-task-editor-choices">
+              {shortcuts.answers.map((shortcut, index) => {
+                if (shortcut._key === undefined) { shortcut._key = Math.random(); }
+                return (
+                  <div key={shortcut._key} className="workflow-choice-editor">
+                    <AutoSave resource={this.props.workflow}>
+                      <textarea name={`tasks.${this.props.task.unlinkedTask}.answers.${index}.label`} value={shortcut.label} onChange={handleChange} />
+                    </AutoSave>
+
+                    <AutoSave resource={this.props.workflow}>
+                      <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={this.removeChoice.bind(this, index)}>&times;</button>
+                    </AutoSave>
+                  </div>
+                );
+              })}
+
+              <AutoSave resource={this.props.workflow}>
+                <button type="button" className="workflow-choice-add-button" title="Add Shortcut" onClick={this.addAnswer}>+</button>
+              </AutoSave>
+
+              </div>
+            )}
+        </div>
 
         {' '}
       </div>
