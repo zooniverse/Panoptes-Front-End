@@ -1,4 +1,4 @@
-name: Deploy PFE Staging
+name: Deploy lab branch
 
 on:
     # Run this workflow on updates to the lab branch.
@@ -31,7 +31,7 @@ jobs:
       with:
         node-version: '14.x'
     - run: npm ci
-    - run: npm run _build-staging
+    - run: npm run _build-production
 
     - name: Write commit_id.txt
       run: echo ${HEAD_COMMIT} > ./dist/commit_id.txt
