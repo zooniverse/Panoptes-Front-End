@@ -108,9 +108,9 @@ export default class FrameViewer extends React.Component {
     } else if (this.props.isGroupSubject) {
       return (
         <Link
-          to={this.props.groupSubjectLink}
+          className="linked-image"
           title={`Subject ${this.props.groupSubjectId}`}
-          style={{ display: 'block', border: '1px solid cyan'}}
+          to={this.props.groupSubjectLink}
         >
           <FileViewer
             src={src}
