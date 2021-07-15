@@ -127,6 +127,19 @@
     .subject-container
       align-items: center
       justify-content: space-between
+      
+      // For certain Subject types, e.g. Subject Groups, individual images are linked to individual subjects
+      > a.linked-image
+        outline: 1px solid TEAL_MID
+        display: block
+        margin-bottom: 0.2em
+        
+        img
+          display: block
+
+        &:focus, &:hover
+          outline: 1px solid MAIN_HIGHLIGHT
+      
     &.subject-viewer--layout-grid2
       .subject-container > *
         width: 49%
