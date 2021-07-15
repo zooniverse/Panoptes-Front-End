@@ -102,12 +102,13 @@ module.exports = createReactClass
 
   componentDidUpdate: (prevProps) ->
     isGroupSubject = @props.subject?.metadata?['#subject_group_id']?
+    allowFlipbook = @props.allowFlipbook || isGroupSubject
     if @props.subject isnt prevProps.subject
       # turn off the slideshow player and reset any counters
       @setPlaying false
       @setState
         frame: @getInitialFrame()
-        inFlipbookMode: !isGroupSubject
+        inFlipbookMode: allowFlipbook
         isGroupSubject: isGroupSubject
 
   logSubjClick: (logType) ->
