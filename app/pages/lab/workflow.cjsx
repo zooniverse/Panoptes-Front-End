@@ -238,14 +238,6 @@ EditWorkflowPage = createReactClass
                           <small><strong>Combo</strong></small>
                         </button>
                       </AutoSave>}{' '}
-                    {if @canUseTask(@props.project, "slider")
-                      <AutoSave resource={@props.workflow}>
-                        <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'slider'} title="Slider tasks: the volunteer uses a slider to select a numeric value.">
-                          <i className="fa fa-sliders fa-2x"></i>
-                          <br />
-                          <small><strong>Slider</strong></small>
-                        </button>
-                      </AutoSave>}{' '}
                     {if @canUseTask(@props.project, "transcription-task")
                       <AutoSave resource={@props.workflow}>
                         <button type="submit" className="minor-button" onClick={@addNewTranscriptionTask} title="Transcription tasks: the volunteer marks a line under text and transcribes the text into a text box. If caesar is configured, then text suggestions if available from other volunteers are options.">
