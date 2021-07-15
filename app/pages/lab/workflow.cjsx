@@ -299,7 +299,7 @@ EditWorkflowPage = createReactClass
 
           <hr />
 
-          <div>
+          <div className="deprecated">
             <AutoSave resource={@props.workflow}>
             <span className="form-label">Set annotation persistence</span><br />
             <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
@@ -312,7 +312,7 @@ EditWorkflowPage = createReactClass
             <hr />
           </div>
 
-          <div className={disabledIfWorkflowInactive}>
+          <div className="deprecated">
             <AutoSave resource={@props.project}>
               <span className="form-label">Set as default</span><br />
               <small className="form-help">If you have more than one workflow, you can set which should be default. Only one can be default.</small>
@@ -340,7 +340,7 @@ EditWorkflowPage = createReactClass
           <hr />
 
           <div>
-            <div>
+            <div className="deprecated">
               <AutoSave resource={@props.workflow}>
                 <span className="form-label">Classification summaries</span><br />
                 <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
@@ -356,7 +356,7 @@ EditWorkflowPage = createReactClass
           </div>
 
           {if 'sim notification' in @props.project.experimental_tools
-            <div>
+            <div className="unsupported">
               <div>
                 <AutoSave resource={@props.workflow}>
                   <span className="form-label">Simulation subject notification</span><br />
@@ -374,7 +374,7 @@ EditWorkflowPage = createReactClass
             </div>}
 
           {if 'Gravity Spy Gold Standard' in @props.project.experimental_tools
-            <div>
+            <div className="deprecated">
               <div>
                 <AutoSave resource={@props.workflow}>
                   <span className="form-label">Gravity Spy Gold Standard</span><br />
@@ -400,7 +400,7 @@ EditWorkflowPage = createReactClass
             </div>}
 
           <div>
-            <div>
+            <div className="deprecated">
               <AutoSave resource={@props.workflow}>
                 <span className="form-label">Pan and zoom</span><br />
                 <small className="form-help">Pan and zoom allows the user to zoom in and out and pan image subjects in the classification interface.</small>
@@ -415,17 +415,19 @@ EditWorkflowPage = createReactClass
             <hr />
           </div>
 
-          <AutoSave tag="div" resource={@props.workflow}>
-            <span className="form-label">Multi-image options</span><br />
-            <small className="form-help">Choose how to display multiple images</small>
-            <MultiImageSubjectOptionsEditor workflow={@props.workflow} />
-          </AutoSave>
+          <div className="deprecated">
+            <AutoSave tag="div" resource={@props.workflow}>
+              <span className="form-label">Multi-image options</span><br />
+              <small className="form-help">Choose how to display multiple images</small>
+              <MultiImageSubjectOptionsEditor workflow={@props.workflow} />
+            </AutoSave>
+          </div>
 
           <hr />
 
           {if 'enable subject flags' in @props.project.experimental_tools
             <div>
-              <div>
+              <div className="unsupported">
                 <AutoSave resource={@props.workflow}>
                   <span className="form-label">Subject Flags</span><br />
                   <small className="form-help">Flags allow volunteers to mark subjects as inappropriate.</small>
@@ -441,7 +443,7 @@ EditWorkflowPage = createReactClass
 
             </div>}
 
-          <div>
+          <div className="unsupported">
             <AutoSave tag="label" resource={@props.workflow}>
               <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
               Allow Users To Flip Image Color
@@ -465,7 +467,7 @@ EditWorkflowPage = createReactClass
 
           {if 'worldwide telescope' in @props.project.experimental_tools
             <div>
-              <div>
+              <div className="deprecated">
                 <AutoSave resource={@props.workflow}>
                   <span className="form-label">Use World Wide Telescope API</span><br />
                   <small className="form-help">Allow user to view subject in the WWT after classifying.</small>

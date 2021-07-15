@@ -1,3 +1,19 @@
+.deprecated > *,
+.unsupported > *
+  opacity: 0.5
+  pointer-events: none
+  touch-action: none
+
+.deprecated::before
+  content: 'deprecated'
+  display: block
+  font-weight: bold
+
+.unsupported::before
+  content: 'not yet supported'
+  display: block
+  font-weight: bold
+
 .researcher-quote
   z-index: 2
 
