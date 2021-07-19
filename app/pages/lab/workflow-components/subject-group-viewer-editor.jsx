@@ -170,28 +170,28 @@ export default class SubjectGroupViewerEditor extends React.Component {
             <table>
               <tbody>
                 <tr>
-                  <td>cell_width</td>
-                  <td><input title="cell_width" data-configkey="cell_width" value={this.state.cell_width} onChange={this.updateViewerConfig.bind(this)} /> pixels</td>
+                  <td><label for="sgv-config-cell_width">cell_width</label></td>
+                  <td><input id="sgv-config-cell_width" data-configkey="cell_width" value={this.state.cell_width} onChange={this.updateViewerConfig.bind(this)} /> pixels</td>
                 </tr>
                 <tr>
-                  <td>cell_height</td>
-                  <td><input title="cell_height" data-configkey="cell_height" value={this.state.cell_height} onChange={this.updateViewerConfig.bind(this)} /> pixels</td>
+                  <td><label for="sgv-config-cell_height">cell_height</label></td>
+                  <td><input id="sgv-config-cell_height" data-configkey="cell_height" value={this.state.cell_height} onChange={this.updateViewerConfig.bind(this)} /> pixels</td>
                 </tr>
                 <tr>
-                  <td>grid_columns</td>
-                  <td><input title="grid_columns" data-configkey="grid_columns" value={this.state.grid_columns} onChange={this.updateViewerConfig.bind(this)} /> cells</td>
+                  <td><label for="sgv-config-grid_columns">grid_columns</label></td>
+                  <td><input id="sgv-config-grid_columns" data-configkey="grid_columns" value={this.state.grid_columns} onChange={this.updateViewerConfig.bind(this)} /> cells</td>
                 </tr>
                 <tr>
-                  <td>grid_rows</td>
-                  <td><input title="grid_rows" data-configkey="grid_rows" value={this.state.grid_rows} onChange={this.updateViewerConfig.bind(this)} /> cells</td>
+                  <td><label for="sgv-config-grid_rows">grid_rows</label></td>
+                  <td><input id="sgv-config-grid_rows" data-configkey="grid_rows" value={this.state.grid_rows} onChange={this.updateViewerConfig.bind(this)} /> cells</td>
                 </tr>
                 <tr>
-                  <td>grid_max_width</td>
-                  <td><input title="grid_max_width" data-configkey="grid_max_width" value={this.state.grid_max_width} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
+                  <td><label for="sgv-config-grid_max_width">grid_max_width</label></td>
+                  <td><input id="sgv-config-grid_max_width" data-configkey="grid_max_width" value={this.state.grid_max_width} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
                 </tr>
                 <tr>
-                  <td>grid_max_height</td>
-                  <td><input title="grid_max_height" data-configkey="grid_max_height" value={this.state.grid_max_height} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
+                  <td><label for="sgv-config-grid_max_height">grid_max_height</label></td>
+                  <td><input id="sgv-config-grid_max_height" data-configkey="grid_max_height" value={this.state.grid_max_height} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
                 </tr>
               </tbody>
             </table>
