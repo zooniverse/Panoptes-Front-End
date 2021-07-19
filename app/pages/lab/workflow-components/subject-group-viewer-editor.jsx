@@ -171,27 +171,27 @@ export default class SubjectGroupViewerEditor extends React.Component {
               <tbody>
                 <tr>
                   <td>cell_width</td>
-                  <td><input data-configkey="cell_width" value={this.state.cell_width} onChange={this.updateViewerConfig.bind(this)} /> pixels</td>
+                  <td><input title="cell_width" data-configkey="cell_width" value={this.state.cell_width} onChange={this.updateViewerConfig.bind(this)} /> pixels</td>
                 </tr>
                 <tr>
                   <td>cell_height</td>
-                  <td><input data-configkey="cell_height" value={this.state.cell_height} onChange={this.updateViewerConfig.bind(this)} /> pixels</td>
+                  <td><input title="cell_height" data-configkey="cell_height" value={this.state.cell_height} onChange={this.updateViewerConfig.bind(this)} /> pixels</td>
                 </tr>
                 <tr>
                   <td>grid_columns</td>
-                  <td><input data-configkey="grid_columns" value={this.state.grid_columns} onChange={this.updateViewerConfig.bind(this)} /> cells</td>
+                  <td><input title="grid_columns" data-configkey="grid_columns" value={this.state.grid_columns} onChange={this.updateViewerConfig.bind(this)} /> cells</td>
                 </tr>
                 <tr>
                   <td>grid_rows</td>
-                  <td><input data-configkey="grid_rows" value={this.state.grid_rows} onChange={this.updateViewerConfig.bind(this)} /> cells</td>
+                  <td><input title="grid_rows" data-configkey="grid_rows" value={this.state.grid_rows} onChange={this.updateViewerConfig.bind(this)} /> cells</td>
                 </tr>
                 <tr>
                   <td>grid_max_width</td>
-                  <td><input data-configkey="grid_max_width" value={this.state.grid_max_width} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
+                  <td><input title="grid_max_width" data-configkey="grid_max_width" value={this.state.grid_max_width} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
                 </tr>
                 <tr>
                   <td>grid_max_height</td>
-                  <td><input data-configkey="grid_max_height" value={this.state.grid_max_height} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
+                  <td><input title="grid_max_height" data-configkey="grid_max_height" value={this.state.grid_max_height} onChange={this.updateViewerConfig.bind(this)} placeholder="Optional" /> CSS units</td>
                 </tr>
               </tbody>
             </table>
