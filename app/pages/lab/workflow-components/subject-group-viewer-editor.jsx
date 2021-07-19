@@ -112,8 +112,6 @@ export default class SubjectGroupViewerEditor extends React.Component {
           cell_width: 200,
           grid_columns: 5,
           grid_rows: 5,
-          // grid_max_width: '',  // Optional, do not define
-          // grid_max_height: '',  // Optional, do not define
         },
         subject_group: {
           num_columns: 5,
