@@ -176,6 +176,9 @@ module.exports =
     <Route path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/zookeeper/galaxy-zoo-weird-and-wonderful' />} />
     <Route path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/zookeeper/galaxy-zoo-weird-and-wonderful/classify' />} />
 
+    <Route path="/projects/hughdickinson/superwasp-black-hole-hunters" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/hughdickinson/superwasp-black-hole-hunters' />} />
+    <Route path="/projects/hughdickinson/superwasp-black-hole-hunters/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/hughdickinson/superwasp-black-hole-hunters/classify' />} />
+    
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
