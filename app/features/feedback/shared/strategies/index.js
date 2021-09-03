@@ -4,6 +4,7 @@ import radial from './drawing/radial';
 import pointInEllipse from './drawing/pointInEllipse';
 import dud from './dud';
 import singleAnswerQuestion from './single-answer-question';
+import survey from './survey';
 
 export default {
   column,
@@ -11,5 +12,6 @@ export default {
   graph2drange,
   radial,
   pointInEllipse,
-  singleAnswerQuestion
+  singleAnswerQuestion,
+  survey
 };
