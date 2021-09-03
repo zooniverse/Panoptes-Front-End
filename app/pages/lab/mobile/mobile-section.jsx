@@ -17,10 +17,12 @@ counterpart.registerTranslations('en', {
     validations: {
       workflowHasSingleTask: 'Has one Task',
       taskQuestionNotTooLong: 'Question has less than 200 characters',
+      taskInstructionNotTooLong: 'Instruction has less than 200 characters',
       workflowNotTooManyShortcuts: 'Has less than three shortcuts',
       workflowDoesNotContainShortcuts: 'Has no shortcuts',
       taskFeedbackDisabled: 'Cannot provide feedback',
       workflowQuestionHasOneOrLessImages: 'Task question has no more than one image',
+      workflowInstructionHasOneOrLessImages: 'Task instruction has no more than one image',
       drawingToolTypeIsValid: 'Drawing tool must be a rectangle tool',
       drawingTaskHasOneTool: 'Drawing task must have only 1 tool',
       drawingTaskHasNoSubtasks: 'Drawing tool must not have any subtasks'
