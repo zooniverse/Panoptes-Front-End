@@ -29,7 +29,7 @@ counterpart.registerTranslations('en', {
     },
     projectEligible: 'Check this box if you think your question fits in this way.  If you have a Yes/No two choice question, we recommend Yes as the first option listed so that it appears on the right.',
     projectIneligible: 'Sorry, but the mobile app will not currently work for this workflow. The following are the requirements for the swipe workflow.',
-    imageWarning: 'It appears that you have more than one image in your task question. While this is allowed for mobile, we will only show the first image.',
+    imageWarning: 'It appears that you have more than one image in your task question or drawing instruction. While this is allowed for mobile, we will only show the first image.',
     mobileHelp: 'Mobile app:  Check this box if you would like this workflow available in the mobile app',
   }
 });
@@ -133,6 +133,10 @@ class MobileSection extends Component {
 
             {
               this.props.validations.workflowQuestionHasOneOrLessImages === ValidationValue.warning ? warningView : null
+            }
+
+            {
+              this.props.validations.workflowInstructionHasOneOrLessImages === ValidationValue.warning ? warningView : null
             }
 
             <ul>
