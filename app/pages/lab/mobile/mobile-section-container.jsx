@@ -12,7 +12,7 @@ const MARKDOWN_IMAGE = /!\[[^\]]*](:?\([^)]*\)|\[[^\]]*])/g;
 
 function taskQuestionNotTooLong({ task }) {
   const { question } = task;
-  // TODO: Code to remove markdown images from character count. Change must be made in mobile app checks before addition.
+  // TODO: Code to remove markdown images from character count. Change must be made in mobile app checks before addition (see zooniverse/mobile/issues/253).
   // if (question) {
   //   const matchArray = question.match(MARKDOWN_IMAGE);
   //   if (matchArray) {
@@ -27,7 +27,7 @@ function taskQuestionNotTooLong({ task }) {
 // A drawing task has task.instruction, instead of task.question, as the property edited in the "Main Text" input in the drawing task editor
 function taskInstructionNotTooLong({ task }) {
   const { instruction } = task;
-  // TODO: Code to remove markdown images from character count. Change must be made in mobile app checks before addition.
+  // TODO: Code to remove markdown images from character count. Change must be made in mobile app checks before addition (see zooniverse/mobile/issues/253).
   // if (instruction) {
   //   const matchArray = instruction.match(MARKDOWN_IMAGE);
   //   if (matchArray) {
