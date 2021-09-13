@@ -4,6 +4,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="zooniverse:deployed_commit" content="<%= process.env.HEAD_COMMIT %>">
+    <meta name="zooniverse:build_env" content="<%= process.env.NODE_ENV %>">
+    <meta name="zooniverse:build_date" content="<%= new Date() %>">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla:400,700" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300,400">
@@ -19,10 +22,6 @@
   </head>
 
   <body>
-    <!--Last build: <%= new Date() %>-->
-    <!--Deployed commit: <%= process.env.HEAD_COMMIT %>-->
-    <!--Build env: <%= process.env.NODE_ENV %>-->
-
     <noscript>
       <p style="text-align: center;">
         Sorry, it looks like you have JavaScript disabled.
