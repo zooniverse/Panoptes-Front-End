@@ -423,6 +423,7 @@ export default {
       dropImage: 'Arraste uma imagem para aqui (ou clique para seleccionar).',
       changeAvatar: 'Mude o avatar',
       avatarImageHelp: 'Colocar aqui uma imagem (quadrada, menor que %(size)s KB)',
+      clearAvatar: 'Limpar o avatar',
       changeProfileHeader: 'Mudar o cabeçalho do perfil',
       profileHeaderImageHelp: 'Colocar aqui uma imagem (qualquer dimensão, menor que %(size)s KB)',
       clearHeader: 'Limpar o cabeçalho'
