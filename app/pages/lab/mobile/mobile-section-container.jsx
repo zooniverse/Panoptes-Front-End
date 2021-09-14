@@ -12,7 +12,7 @@ const MARKDOWN_IMAGE = /!\[[^\]]*](:?\([^)]*\)|\[[^\]]*])/g;
 
 function taskQuestionNotTooLong({ task }) {
   const { question } = task;
-  // TODO: Code to remove markdown images from character count. Change must be made in mobile app checks before addition.
+  // TODO: Code to remove markdown images from character count. Change must be made in mobile app checks before addition (see zooniverse/mobile/issues/253).
   // if (question) {
   //   const matchArray = question.match(MARKDOWN_IMAGE);
   //   if (matchArray) {
@@ -22,6 +22,21 @@ function taskQuestionNotTooLong({ task }) {
   //   }
   // }
   return convertBooleanToValidation(question ? question.length < VALID_QUESTION_LENGTH : false);
+}
+
+// A drawing task has task.instruction, instead of task.question, as the property edited in the "Main Text" input in the drawing task editor
+function taskInstructionNotTooLong({ task }) {
+  const { instruction } = task;
+  // TODO: Code to remove markdown images from character count. Change must be made in mobile app checks before addition (see zooniverse/mobile/issues/253).
+  // if (instruction) {
+  //   const matchArray = instruction.match(MARKDOWN_IMAGE);
+  //   if (matchArray) {
+  //     matchArray.map((imageLink) => {
+  //       instruction = instruction.replace(imageLink, '');
+  //     });
+  //   }
+  // }
+  return convertBooleanToValidation(instruction ? instruction.length < VALID_QUESTION_LENGTH : false);
 }
 
 function taskFeedbackDisabled({ task }) {
@@ -43,6 +58,16 @@ function workflowQuestionHasOneOrLessImages({ task }) {
   let validation = convertBooleanToValidation(false);
   if (task.question) {
     const matchArray = task.question.match(MARKDOWN_IMAGE);
+    validation = convertBooleanToValidation(matchArray ? matchArray.length < 2 : true, true);
+  }
+
+  return validation;
+}
+
+function workflowInstructionHasOneOrLessImages({ task }) {
+  let validation = convertBooleanToValidation(false);
+  if (task.instruction) {
+    const matchArray = task.instruction.match(MARKDOWN_IMAGE);
     validation = convertBooleanToValidation(matchArray ? matchArray.length < 2 : true, true);
   }
 
@@ -85,12 +110,14 @@ const validatorFns = {
     workflowQuestionHasOneOrLessImages
   },
   drawing: {
+    taskInstructionNotTooLong,
     taskFeedbackDisabled,
     workflowHasSingleTask,
     drawingToolTypeIsValid,
     drawingTaskHasOneTool,
     drawingTaskHasNoSubtasks,
-    workflowDoesNotContainShortcuts: workflowHasNoMoreThanXShortcuts(0)
+    workflowDoesNotContainShortcuts: workflowHasNoMoreThanXShortcuts(0),
+    workflowInstructionHasOneOrLessImages
   }
 };
 
@@ -194,6 +221,7 @@ MobileSectionContainer.propTypes = {
   task: PropTypes.shape({
     answers: PropTypes.array,
     feedback: PropTypes.object,
+    instruction: PropTypes.string,
     question: PropTypes.string,
     type: PropTypes.string,
     unlinkedTask: PropTypes.string
@@ -212,6 +240,7 @@ MobileSectionContainer.propTypes = {
 MobileSectionContainer.defaultProps = {
   task: {
     type: '',
+    instruction: '',
     question: '',
     answers: [],
     feedback: {

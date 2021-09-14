@@ -71,6 +71,30 @@ const validationFixtures = {
       question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut dui erat. Vivamus est nisl, accumsan non urna at, elementum tempor urna. Sed eget pulvinar eros. Nunc placerat metus bibendum lacus elementum, vitae sagittis mi tincidunt.'
     }
   },
+  taskInstructionNotTooLong: {
+    task: {
+      instruction: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      tools: [
+        {
+          type: 'rectangle',
+          details: []
+        }
+      ],
+      type: 'drawing'
+    }
+  },
+  taskInstructionTooLong: {
+    task: {
+      instruction: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut dui erat. Vivamus est nisl, accumsan non urna at, elementum tempor urna. Sed eget pulvinar eros. Nunc placerat metus bibendum lacus elementum, vitae sagittis mi tincidunt.',
+      tools: [
+        {
+          type: 'rectangle',
+          details: []
+        }
+      ],
+      type: 'drawing'
+    }
+  },
   taskFeedbackEnabled: {
     task: {
       feedback: {
@@ -189,6 +213,30 @@ const validationFixtures = {
   questionHasTwoImages: {
     task: {
       question: '![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg) ![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg)'
+    }
+  },
+  instructionHasOneImage: {
+    task: {
+      instruction: '![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg)',
+      tools: [
+        {
+          type: 'rectangle',
+          details: []
+        }
+      ],
+      type: 'drawing'
+    }
+  },
+  instructionHasTwoImages: {
+    task: {
+      instruction: '![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg) ![image.jpg](https://panoptes-uploads.zooniverse.org/staging/location.jpeg)',
+      tools: [
+        {
+          type: 'rectangle',
+          details: []
+        }
+      ],
+      type: 'drawing'
     }
   }
 };
