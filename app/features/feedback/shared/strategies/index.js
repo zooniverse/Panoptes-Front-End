@@ -4,7 +4,7 @@ import radial from './drawing/radial';
 import pointInEllipse from './drawing/pointInEllipse';
 import dud from './dud';
 import singleAnswerQuestion from './single-answer-question';
-import survey from './survey';
+import surveySimple from './survey/simple';
 
 export default {
   column,
@@ -13,5 +13,5 @@ export default {
   radial,
   pointInEllipse,
   singleAnswerQuestion,
-  survey
+  surveySimple
 };

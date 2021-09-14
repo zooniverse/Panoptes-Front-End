@@ -10,19 +10,19 @@ describe('Feedback > Survey > Index', function () {
   })
 
   it('should have a `id` property', function () {
-    expect(index.id).to.equal('survey')
+    expect(index.id).to.equal('surveySimple')
   })
 
   it('should have a `title` property', function () {
-    expect(index.title).to.equal('Survey')
+    expect(index.title).to.equal('Survey: Simple')
   })
 
   it('should have a `labComponent` property', function () {
-    expect(index.labComponent).to.equal(null)
+    expect(index.labComponent).to.be.null
   })
 
   it('should have a `validations` property', function () {
-    expect(index.validations).to.equal(null)
+    expect(index.validations).to.be.null
   })
 
   it('should have a `reducer` property', function () {
