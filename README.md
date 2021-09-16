@@ -1,6 +1,6 @@
 # Panoptes (front end)
 
-![Build Status](https://travis-ci.org/zooniverse/Panoptes-Front-End.svg?branch=master)
+![Build Status](https://github.com/zooniverse/Panoptes-Front-End/actions/workflows/ci-tests.yml/badge.svg?branch=master)
 
 [![Coverage Status](https://coveralls.io/repos/github/zooniverse/Panoptes-Front-End/badge.svg)](https://coveralls.io/github/zooniverse/Panoptes-Front-End)
 
