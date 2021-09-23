@@ -42,6 +42,7 @@ MonorepoRoute.createRouteFromReactElement = (element, parentRoute) => {
     <Route path={path}>
       <IndexRoute component={withReload(`https://fe-project.zooniverse.org/${path}`)} />
       <Route path="classify" component={withReload(`https://fe-project.zooniverse.org/${path}/classify`)} />
+      <Route path="about" component={withReload(`https://fe-project.zooniverse.org/${path}/about`)} />
     </Route>,
     parentRoute
   )[0];
