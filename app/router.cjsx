@@ -155,23 +155,14 @@ module.exports =
     </Route>
 
     <MonorepoRoute path="/projects/nora-dot-eisner/planet-hunters-tess" />
-    <MonorepoRoute path="/projects/nora-dot-eisner/planet-hunters-tess/classify" />
     <MonorepoRoute path="/projects/adamamiller/zwickys-stellar-sleuths" />
-    <MonorepoRoute path="/projects/adamamiller/zwickys-stellar-sleuths/classify" />
     <MonorepoRoute path="/projects/msalmon/hms-nhs-the-nautical-health-service" />
-    <MonorepoRoute path="/projects/msalmon/hms-nhs-the-nautical-health-service/classify" />
     <MonorepoRoute path="/projects/blicksam/transcription-task-testing" />
-    <MonorepoRoute path="/projects/blicksam/transcription-task-testing/classify" />
     <MonorepoRoute path="/projects/humphrydavy/davy-notebooks-project" />
-    <MonorepoRoute path="/projects/humphrydavy/davy-notebooks-project/classify" />
     <MonorepoRoute path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents" />
-    <MonorepoRoute path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents/classify" />
     <MonorepoRoute path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful" />
-    <MonorepoRoute path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful/classify" />
     <MonorepoRoute path="/projects/hughdickinson/superwasp-black-hole-hunters" />
-    <MonorepoRoute path="/projects/hughdickinson/superwasp-black-hole-hunters/classify" />
     <MonorepoRoute path="/projects/bogden/scarlets-and-blues" />
-    <MonorepoRoute path="/projects/bogden/scarlets-and-blues/classify" />
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { IndexRoute, Route } from 'react-router';
 import { createRoutesFromReactChildren } from 'react-router/lib//RouteUtils';
 
 /*
@@ -15,12 +15,11 @@ function RELOAD({ newUrl }) {
     window.location = newUrl;
   }
 
-  // we should never get here.
-  return (
-    <div>
-      Loading…
-    </div>
-  );
+  return null;
+}
+
+function withReload(newUrl) {
+  return () => <RELOAD newUrl={newUrl} />;
 }
 
 /*
@@ -39,11 +38,21 @@ function MonorepoRoute() {
 MonorepoRoute.createRouteFromReactElement = (element, parentRoute) => {
   const { path } = element.props;
 
-  function Reload() {
-    return <RELOAD newUrl={`https://fe-project.zooniverse.org/${path}`} />;
-  }
-  const monorepoRoute = createRoutesFromReactChildren(<Route path={path} />, parentRoute)[0];
-  monorepoRoute.component = Reload;
+  const monorepoRoute = createRoutesFromReactChildren(
+    <Route path={path}>
+      <IndexRoute component={withReload(`https://fe-project.zooniverse.org/${path}`)} />
+      <Route path="classify" component={withReload(`https://fe-project.zooniverse.org/${path}/classify`)} />
+    </Route>,
+    parentRoute
+  )[0];
+  monorepoRoute.component = ({ children }) => (
+      <div>
+        Loading…
+        {React.Children.map(children, child =>
+          React.cloneElement(child, { path })
+        )}
+      </div>
+    );
   return monorepoRoute;
 };
 
