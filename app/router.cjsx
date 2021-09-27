@@ -59,6 +59,7 @@ createReactClass = require 'create-react-class'
 `import Resources from './pages/about/resources-page';`
 `import DataExports from './pages/lab/data-exports';`
 `import TalkTags from './talk/tags';`
+`import MonorepoRoute from './MonorepoRoute';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = createReactClass
@@ -153,45 +154,16 @@ module.exports =
       <IndexRoute component={FilteredProjectsList} />
     </Route>
 
-    <Route path="/projects/nora-dot-eisner/planet-hunters-tess" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/nora-dot-eisner/planet-hunters-tess' />} />
-    <Route path="/projects/nora-dot-eisner/planet-hunters-tess/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/nora-dot-eisner/planet-hunters-tess/classify' />} />
-    <Route path="/projects/nora-dot-eisner/planet-hunters-tess/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/nora-dot-eisner/planet-hunters-tess/about' />} />
-
-    <Route path="/projects/adamamiller/zwickys-stellar-sleuths" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/adamamiller/zwickys-stellar-sleuths' />} />
-    <Route path="/projects/adamamiller/zwickys-stellar-sleuths/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/adamamiller/zwickys-stellar-sleuths/classify' />} />
-    <Route path="/projects/adamamiller/zwickys-stellar-sleuths/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/adamamiller/zwickys-stellar-sleuths/about' />} />
-
-    <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service' />} />
-    <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service/classify' />} />
-    <Route path="/projects/msalmon/hms-nhs-the-nautical-health-service/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/msalmon/hms-nhs-the-nautical-health-service/about' />} />
-
-    <Route path="/projects/blicksam/transcription-task-testing" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/blicksam/transcription-task-testing' />} />
-    <Route path="/projects/blicksam/transcription-task-testing/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/blicksam/transcription-task-testing/classify' />} />
-    <Route path="/projects/blicksam/transcription-task-testing/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/blicksam/transcription-task-testing/about' />} />
-
-    <Route path="/projects/humphrydavy/davy-notebooks-project" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/humphrydavy/davy-notebooks-project' />} />
-    <Route path="/projects/humphrydavy/davy-notebooks-project/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/humphrydavy/davy-notebooks-project/classify' />} />
-    <Route path="/projects/humphrydavy/davy-notebooks-project/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/humphrydavy/davy-notebooks-project/about' />} />
-
-    <Route path="/projects/kmc35/peoples-contest-digital-archive" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/kmc35/peoples-contest-digital-archive' />} />
-    <Route path="/projects/kmc35/peoples-contest-digital-archive/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/kmc35/peoples-contest-digital-archive/classify' />} />
-    <Route path="/projects/kmc35/peoples-contest-digital-archive/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/kmc35/peoples-contest-digital-archive/about' />} />
-
-    <Route path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents' />} />
-    <Route path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents/classify' />} />
-    <Route path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents/about' />} />
-
-    <Route path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/zookeeper/galaxy-zoo-weird-and-wonderful' />} />
-    <Route path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/zookeeper/galaxy-zoo-weird-and-wonderful/classify' />} />
-    <Route path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/zookeeper/galaxy-zoo-weird-and-wonderful/about' />} />
-
-    <Route path="/projects/hughdickinson/superwasp-black-hole-hunters" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/hughdickinson/superwasp-black-hole-hunters' />} />
-    <Route path="/projects/hughdickinson/superwasp-black-hole-hunters/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/hughdickinson/superwasp-black-hole-hunters/classify' />} />
-    <Route path="/projects/hughdickinson/superwasp-black-hole-hunters/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/hughdickinson/superwasp-black-hole-hunters/about' />} />
-
-    <Route path="/projects/bogden/scarlets-and-blues" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/bogden/scarlets-and-blues' />} />
-    <Route path="/projects/bogden/scarlets-and-blues/classify" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/bogden/scarlets-and-blues/classify' />} />
-    <Route path="/projects/bogden/scarlets-and-blues/about" component={() => <RELOAD newUrl='https://fe-project.zooniverse.org/projects/bogden/scarlets-and-blues/about' />} />
+    <MonorepoRoute path="/projects/nora-dot-eisner/planet-hunters-tess" />
+    <MonorepoRoute path="/projects/adamamiller/zwickys-stellar-sleuths" />
+    <MonorepoRoute path="/projects/msalmon/hms-nhs-the-nautical-health-service" />
+    <MonorepoRoute path="/projects/blicksam/transcription-task-testing" />
+    <MonorepoRoute path="/projects/humphrydavy/davy-notebooks-project" />
+    <MonorepoRoute path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents" />
+    <MonorepoRoute path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful" />
+    <MonorepoRoute path="/projects/hughdickinson/superwasp-black-hole-hunters" />
+    <MonorepoRoute path="/projects/bogden/scarlets-and-blues" />
+    <MonorepoRoute path="/projects/kmc35/peoples-contest-digital-archive" />
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
