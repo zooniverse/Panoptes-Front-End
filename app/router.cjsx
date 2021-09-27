@@ -164,6 +164,7 @@ module.exports =
     <MonorepoRoute path="/projects/hughdickinson/superwasp-black-hole-hunters" />
     <MonorepoRoute path="/projects/bogden/scarlets-and-blues" />
     <MonorepoRoute path="/projects/kmc35/peoples-contest-digital-archive" />
+    <MonorepoRoute path="/projects/rachaelsking/corresponding-with-quakers" />
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
