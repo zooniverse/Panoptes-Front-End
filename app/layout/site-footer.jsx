@@ -178,11 +178,6 @@ class AppFooter extends React.Component {
                   <i className="fa fa-twitter fa-fw"></i>
                 </a>{' '}
               </li>
-              <li>
-                <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank">
-                  <i className="fa fa-google-plus fa-fw"></i>
-                </a>{' '}
-              </li>
             </ul>
           </nav>
         </div>
