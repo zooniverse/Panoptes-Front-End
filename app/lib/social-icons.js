@@ -3,7 +3,6 @@ const SOCIAL_ICONS = {
   'facebook.com/': 'facebook-square',
   'github.com/': 'github',
   'pinterest.com/': 'pinterest',
-  'plus.google.com/': 'google-plus',
   'reddit.com/': 'reddit',
   'tumblr.com/': 'tumblr',
   'twitter.com/': 'twitter',
