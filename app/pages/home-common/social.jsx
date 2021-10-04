@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import counterpart from 'counterpart';
 import moment from 'moment';
 import ProjectCard from '../../partials/project-card';
-import { getPublication, getRecentProjects, getBlogPosts, getNewestProject } from '../../lib/get-social-data';
+import { getRecentProjects, getBlogPosts, getNewestProject } from '../../lib/get-social-data';
 import striptags from 'striptags';
 
 counterpart.registerTranslations('en', {
@@ -15,7 +15,7 @@ counterpart.registerTranslations('en', {
     news: 'News',
     latestProject: 'Latest Project',
     recentProjects: 'Project Updates',
-    recentPublications: 'Recent Publications'
+    recentPublications: 'Publications'
   }
 });
 
@@ -25,7 +25,6 @@ export default class HomePageSocial extends React.Component {
     this.state = {
       blogPosts: [],
       newestProject: {},
-      newestPublication: {},
       recentProjects: []
     };
   }
@@ -35,7 +34,6 @@ export default class HomePageSocial extends React.Component {
   }
 
   getSocial() {
-    this.setState({ newestPublication: getPublication() })
     getNewestProject().then((newestProject) => {
       this.setState({
         newestProject
@@ -92,7 +90,7 @@ export default class HomePageSocial extends React.Component {
   }
 
   render() {
-    const { blogPosts, newestProject, newestPublication, recentProjects } = this.state;
+    const { blogPosts, newestProject, recentProjects } = this.state;
 
     return (
       <section className="home-social">
@@ -129,11 +127,6 @@ export default class HomePageSocial extends React.Component {
             {recentProjects.map(project => this.renderUpdatedProject(project))}
 
             <Translate className="tertiary-kicker" component="h3" content="socialHomePage.recentPublications" />
-            <span className="timestamp-label">{newestPublication.date}</span>
-            <span className="regular-body">{newestPublication.citation}</span>
-            <a className="home-social__italic-link" href={newestPublication.href}> Read More... </a>
-            <hr />
-
             <Link to="/about/publications" className="primary-button primary-button--light">See All Publications</Link>
           </div>
 
