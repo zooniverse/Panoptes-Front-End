@@ -27,9 +27,9 @@ const experimentalFeatures = [
   'translator-role',
   'museum-role',
   'transcription-task',
-  'wildcam classroom',  // Indicates a Project is linked to a "WildCam Lab"-type Zooniverse Classroom. Allows the classifier to select a workflow (i.e. "classroom assignment") directly via ID.
-  'subjectGroupViewer',  // Enables Subject Group Viewer and Subject Group Comparison Task, used for grid-like cell selection tasks. SGV and SGCT can be edited in PFE, but only works on the FEM classifier.
-  'quicktalk',  // Enables "QuickTalk" component in FEM Classifier, which allows users to access Talk discussions on the Classifier page.
+  'wildcam classroom', // Indicates a Project is linked to a "WildCam Lab"-type Zooniverse Classroom. Allows the classifier to select a workflow (i.e. "classroom assignment") directly via ID.
+  'subjectGroupViewer', // Enables Subject Group Viewer and Subject Group Comparison Task, used for grid-like cell selection tasks. SGV and SGCT can be edited in PFE, but only works on the FEM classifier.
+  'quicktalk' // Enables "QuickTalk" component in FEM Classifier, which allows users to access Talk discussions on the Classifier page.
 ];
 
 class ExperimentalFeatures extends Component {
@@ -65,23 +65,24 @@ class ExperimentalFeatures extends Component {
 
   render() {
     return (
-      <div className="project-status__section">
+      <div className='project-status__section'>
         <h4>Experimental Features</h4>
         <AutoSave resource={this.props.project}>
-          <div className="project-status__section-table">
-            {experimentalFeatures.map((feature) => {
-              return (
-                <label key={feature} className="project-status__section-table-row">
-                  <input
-                    type="checkbox"
-                    name={feature}
-                    checked={this.isEnabled(feature)}
-                    onChange={this.updateFeatures.bind(this, feature)}
-                  />
-                  {feature.charAt(0).toUpperCase() + feature.slice(1)}
-                </label>
-              );
-            })}
+          <div className='project-status__section-table'>
+            {experimentalFeatures.map((feature) => (
+              <label
+                key={feature}
+                className='project-status__section-table-row'
+              >
+                <input
+                  type='checkbox'
+                  name={feature}
+                  checked={this.isEnabled(feature)}
+                  onChange={this.updateFeatures.bind(this, feature)}
+                />
+                {feature.charAt(0).toUpperCase() + feature.slice(1)}
+              </label>
+            ))}
           </div>
         </AutoSave>
       </div>
