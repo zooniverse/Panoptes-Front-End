@@ -3,33 +3,35 @@ import React, { Component } from 'react';
 import AutoSave from '../../../components/auto-save';
 
 const experimentalFeatures = [
-  'crop',
-  'combo',
-  'dropdown',
-  'fan',
-  'mini-course',
-  'worldwide telescope',
-  'workflow assignment',
-  'Gravity Spy Gold Standard',
   'allow workflow query',
+  'anchoredEllipse',
+  'combo',
+  'crop',
+  'dropdown',
+  'enable subject flags',
   'expert comparison summary',
-  'shortcut',
+  'fan',
   'freehandLine',
-  'freehandShape',
   'freehandSegmentLine',
   'freehandSegmentShape',
-  'anchoredEllipse',
-  'enable subject flags',
-  'sim notification',
+  'freehandShape',
   'general feedback',
-  'slider',
+  'Gravity Spy Gold Standard',
   'highlighter',
-  'translator-role',
+  'mini-course',
   'museum-role',
-  'transcription-task',
-  'wildcam classroom', // Indicates a Project is linked to a "WildCam Lab"-type Zooniverse Classroom. Allows the classifier to select a workflow (i.e. "classroom assignment") directly via ID.
+  'quicktalk', // Enables "QuickTalk" component in FEM Classifier, which allows users to access Talk discussions on the Classifier page.
+  'shortcut',
+  'sim notification',
+  'slider',
   'subjectGroupViewer', // Enables Subject Group Viewer and Subject Group Comparison Task, used for grid-like cell selection tasks. SGV and SGCT can be edited in PFE, but only works on the FEM classifier.
-  'quicktalk' // Enables "QuickTalk" component in FEM Classifier, which allows users to access Talk discussions on the Classifier page.
+  'temporalPoint',
+  'temporalRotateRectangle',
+  'transcription-task',
+  'translator-role',
+  'wildcam classroom', // Indicates a Project is linked to a "WildCam Lab"-type Zooniverse Classroom. Allows the classifier to select a workflow (i.e. "classroom assignment") directly via ID.
+  'workflow assignment',
+  'worldwide telescope'
 ];
 
 class ExperimentalFeatures extends Component {
