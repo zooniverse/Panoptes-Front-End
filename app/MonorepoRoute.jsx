@@ -8,18 +8,18 @@ import { createRoutesFromReactChildren } from 'react-router/lib//RouteUtils';
 
  Usage: <Route path="path/to/location" component={RELOAD} />
 */
-function RELOAD({ newUrl }) {
+function RELOAD({ path }) {
+  let newUrl = `https://fe-project.zooniverse.org${path}`;
   if (window.location.hostname === 'www.zooniverse.org') {
-    window.location.reload();
-  } else {
-    window.location = newUrl;
+    newUrl = `https://www.zooniverse.org${path}`;
   }
+  window.location.replace(newUrl)
 
   return null;
 }
 
-function withReload(newUrl) {
-  return () => <RELOAD newUrl={newUrl} />;
+function withReload(path) {
+  return () => <RELOAD path={path} />;
 }
 
 /*
@@ -40,9 +40,9 @@ MonorepoRoute.createRouteFromReactElement = (element, parentRoute) => {
 
   const monorepoRoute = createRoutesFromReactChildren(
     <Route path={path}>
-      <IndexRoute component={withReload(`https://fe-project.zooniverse.org${path}`)} />
-      <Route path="classify" component={withReload(`https://fe-project.zooniverse.org${path}/classify`)} />
-      <Route path="about" component={withReload(`https://fe-project.zooniverse.org${path}/about`)} />
+      <IndexRoute component={withReload(path)} />
+      <Route path="classify" component={withReload(`${path}/classify`)} />
+      <Route path="about" component={withReload(`${path}/about`)} />
     </Route>,
     parentRoute
   )[0];
