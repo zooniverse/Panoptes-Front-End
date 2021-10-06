@@ -162,9 +162,9 @@ module.exports = createReactClass
                           {if @canUse("fan")
                             <option key="fan" value="fan">fan tool</option>}
                           {if @canUse("temporalPoint")
-                            <option key="temporalPoint" value="temporalPoint">temporalPoint tool</option>}
+                            <option key="temporalPoint" value="temporalPoint">temporalPoint</option>}
                           {if @canUse("temporalRotateRectangle")
-                            <option key="temporalRotateRectangle" value="temporalRotateRectangle">temporalRotateRectangle tool</option>}
+                            <option key="temporalRotateRectangle" value="temporalRotateRectangle">temporalRotateRectangle</option>}
                           {if isAdmin()
                             <option key="transcriptionLine" value="transcriptionLine">transcription line</option>}
                         </select>
