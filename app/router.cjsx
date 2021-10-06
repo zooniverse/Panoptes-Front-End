@@ -59,7 +59,7 @@ createReactClass = require 'create-react-class'
 `import Resources from './pages/about/resources-page';`
 `import DataExports from './pages/lab/data-exports';`
 `import TalkTags from './talk/tags';`
-`import MonorepoRoute from './MonorepoRoute';`
+`import MonorepoRoutes from './MonorepoRoutes';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = createReactClass
@@ -74,20 +74,16 @@ ONE_UP_REDIRECT = createReactClass
   render: ->
     null
 
-# Used to force a refresh on entering a route, causing it to be fetched from
-# the server - and allowing us to reverse proxy other apps to routes in PFE.
-#
-# Usage: <Route path="path/to/location" component={RELOAD} />
-RELOAD = createReactClass
-  componentDidMount: ->
-    { path } = @props
-    newUrl = "https://fe-content-pages.zooniverse.org/#{path}"
+redirectAboutPage = (nextState, replace, done) ->
+  try
+    { pathname } = nextState.location
+    newUrl = "https://fe-content-pages.zooniverse.org#{pathname}"
     if window.location.hostname is 'www.zooniverse.org'
-      newUrl = "https://www.zooniverse.org/#{path}"
+      newUrl = "https://www.zooniverse.org#{pathname}"
     window.location.replace(newUrl)
-
-  render: ->
-    null
+    done()
+  catch error
+    done(error)
 
 ExternalRedirect = createReactClass
   componentDidMount: ->
@@ -104,8 +100,8 @@ module.exports =
 
     <Route path="about" component={AboutPage} ignoreScrollBehavior>
       <IndexRoute component={AboutHome} />
-      <Route path="team" component={() => <RELOAD path='about/team' />} />
-      <Route path="publications" component={() => <RELOAD path='about/publications' />} />
+      <Route path="team" onEnter={redirectAboutPage} />
+      <Route path="publications" onEnter={redirectAboutPage} />
       <Route path="acknowledgements" component={Acknowledgements} />
       <Route path="resources" component={Resources} />
       <Route path="contact" component={Contact} />
@@ -156,18 +152,7 @@ module.exports =
       <IndexRoute component={FilteredProjectsList} />
     </Route>
 
-    <MonorepoRoute path="/projects/nora-dot-eisner/planet-hunters-tess" />
-    <MonorepoRoute path="/projects/adamamiller/zwickys-stellar-sleuths" />
-    <MonorepoRoute path="/projects/msalmon/hms-nhs-the-nautical-health-service" />
-    <MonorepoRoute path="/projects/blicksam/transcription-task-testing" />
-    <MonorepoRoute path="/projects/humphrydavy/davy-notebooks-project" />
-    <MonorepoRoute path="/projects/mainehistory/beyond-borders-transcribing-historic-maine-land-documents" />
-    <MonorepoRoute path="/projects/zookeeper/galaxy-zoo-weird-and-wonderful" />
-    <MonorepoRoute path="/projects/hughdickinson/superwasp-black-hole-hunters" />
-    <MonorepoRoute path="/projects/bogden/scarlets-and-blues" />
-    <MonorepoRoute path="/projects/kmc35/peoples-contest-digital-archive" />
-    <MonorepoRoute path="/projects/rachaelsking/corresponding-with-quakers" />
-    <MonorepoRoute path="/projects/mariaedgeworthletters/maria-edgeworth-letters" />
+    <MonorepoRoutes />
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 

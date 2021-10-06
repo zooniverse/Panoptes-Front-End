@@ -2,24 +2,18 @@ import React from 'react';
 import { IndexRoute, Route } from 'react-router';
 import { createRoutesFromReactChildren } from 'react-router/lib//RouteUtils';
 
-/*
- Used to force a refresh on entering a route, causing it to be fetched from
- the server - and allowing us to reverse proxy other apps to routes in PFE.
-
- Usage: <Route path="path/to/location" component={RELOAD} />
-*/
-function RELOAD({ path }) {
-  let newUrl = `https://fe-project.zooniverse.org${path}`;
-  if (window.location.hostname === 'www.zooniverse.org') {
-    newUrl = `https://www.zooniverse.org${path}`;
+function redirectProjectPage(nextState, replace, done) {
+  try {
+    const { pathname } = nextState.location;
+    let newUrl = `https://fe-project.zooniverse.org${pathname}`;
+    if (window.location.hostname === 'www.zooniverse.org') {
+      newUrl = `https://www.zooniverse.org${pathname}`;
+    }
+    window.location.replace(newUrl);
+    done();
+  } catch (error) {
+    done(error);
   }
-  window.location.replace(newUrl)
-
-  return null;
-}
-
-function withReload(path) {
-  return () => <RELOAD path={path} />;
 }
 
 /*
@@ -40,20 +34,20 @@ MonorepoRoute.createRouteFromReactElement = (element, parentRoute) => {
 
   const monorepoRoute = createRoutesFromReactChildren(
     <Route path={path}>
-      <IndexRoute component={withReload(path)} />
-      <Route path="classify" component={withReload(`${path}/classify`)} />
-      <Route path="about" component={withReload(`${path}/about`)} />
+      <IndexRoute onEnter={redirectProjectPage} />
+      <Route path="classify" onEnter={redirectProjectPage} />
+      <Route path="about" onEnter={redirectProjectPage} />
     </Route>,
     parentRoute
   )[0];
   monorepoRoute.component = ({ children }) => (
-      <div>
-        Loading…
-        {React.Children.map(children, child =>
-          React.cloneElement(child, { path })
-        )}
-      </div>
-    );
+    <div>
+      Loading…
+      {React.Children.map(children, child =>
+        React.cloneElement(child, { path })
+      )}
+    </div>
+  );
   return monorepoRoute;
 };
 
