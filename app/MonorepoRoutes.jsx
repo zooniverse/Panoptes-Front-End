@@ -18,7 +18,8 @@ const SLUGS = [
   "bogden/scarlets-and-blues",
   "kmc35/peoples-contest-digital-archive",
   "rachaelsking/corresponding-with-quakers",
-  "mariaedgeworthletters/maria-edgeworth-letters"
+  "mariaedgeworthletters/maria-edgeworth-letters",
+  "pmlogan/poets-and-lovers"
 ]
 /*
   This is a very useful article explaining how to write custom Route components for react-router v3.
