@@ -84,14 +84,14 @@ export default {
     },
     home: {
       organization: 'Organization',
-      researcher: 'Words from the researcher',
-      about: 'About %(title)s',
+      researcher: 'Parole dai ricercatori',
+      about: 'A proposito di %(title)s',
       metadata: {
-        statistics: '%(title)s Statistics',
-        classifications: 'Classifications',
+        statistics: 'Statistiche %(title)s',
+        classifications: 'Classificazioni',
         volunteers: 'Volontari',
-        completedSubjects: 'Completed Subjects',
-        subjects: 'Subjects'
+        completedSubjects: 'Soggetti completati',
+        subjects: 'Soggetti'
       },
       talk: {
         zero: 'Nessuno sta parlando di **%(title)s** in questo momento.',
