@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
-const SUPPORTED_TYPES = ['text', 'application'];
-const SUPPORTED_FORMATS = ['plain', 'json'];
+const SUPPORTED_TYPES = ['text'];
+const SUPPORTED_FORMATS = ['plain'];
 
 const cache = {};
 
