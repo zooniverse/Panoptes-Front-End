@@ -15,7 +15,8 @@ counterpart.registerTranslations('en', {
     news: 'News',
     latestProject: 'Latest Project',
     recentProjects: 'Project Updates',
-    recentPublications: 'Publications'
+    recentPublications: 'Publications',
+    recentPublicationsBlurb: 'The contributions of Zooniverse volunteers produce real research. Our projects have led to hundreds of peer-reviewed publications across a wide range of disciplines.',
   }
 });
 
@@ -127,6 +128,8 @@ export default class HomePageSocial extends React.Component {
             {recentProjects.map(project => this.renderUpdatedProject(project))}
 
             <Translate className="tertiary-kicker" component="h3" content="socialHomePage.recentPublications" />
+            <Translate className="regular-body" component="span" content="socialHomePage.recentPublicationsBlurb" />
+            <br/>
             <Link to="/about/publications" className="primary-button primary-button--light">See All Publications</Link>
           </div>
 
