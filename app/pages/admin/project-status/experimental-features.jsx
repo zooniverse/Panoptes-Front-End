@@ -24,6 +24,7 @@ const experimentalFeatures = [
   'shortcut',
   'sim notification',
   'slider',
+  'indexedSubjectSetNextPrevButtons',  // FEM only. Enables the "Next" and "Previous" buttons to appear on the SubjectSetProgressBanner, if and only if the Subject Set is indexed on the Subject Set Search API. Originally designed for Engaging Crowds 2021.
   'subjectGroupViewer', // Enables Subject Group Viewer and Subject Group Comparison Task, used for grid-like cell selection tasks. SGV and SGCT can be edited in PFE, but only works on the FEM classifier.
   'temporalPoint', // temporal tools only works in FEM!
   'temporalRotateRectangle', // temporal tools only works in FEM!
