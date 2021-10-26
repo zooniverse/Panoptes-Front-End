@@ -306,7 +306,7 @@ module.exports =
       <Redirect from="workflow/*" to="workflows/*" />
       <Route path="workflows" component={WorkflowsContainer}>
         <IndexRoute component={WorkflowsList} />
-        <Route path=":workflowID" component={require './pages/lab/workflow'} />
+        <Route path=":workflowID" component={require './pages/lab-fem/workflow'} />
       </Route>
       # --------
       <Redirect from="subject-set/*" to="subject-sets/*" />
