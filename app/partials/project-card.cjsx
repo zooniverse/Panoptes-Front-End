@@ -4,6 +4,8 @@ createReactClass = require 'create-react-class'
 FlexibleLink = require('../components/flexible-link').default
 Translate = require 'react-translate-component'
 
+monorepoSlugs = require('../monorepoSlugs').default
+
 ProjectCard = createReactClass
   displayName: 'ProjectCard'
   propTypes:
@@ -18,6 +20,11 @@ ProjectCard = createReactClass
   render: ->
     conditionalStyle = {}
     detailStyle = {}
+    usesMonorepo = monorepoSlugs.includes(@props.project.slug)
+    monorepoLink = if window.location.hostname is 'www.zooniverse.org'
+        "https://www.zooniverse.org/projects/#{@props.project.slug}"
+      else
+        "https://frontend.preview.zooniverse.org/projects/#{@props.project.slug}"
 
     if @props.landingPage
       detailStyle.cursor = "default"
@@ -42,6 +49,8 @@ ProjectCard = createReactClass
       @props.project.redirect
     else if !!@props.href
       @props.href
+    else if usesMonorepo
+      monorepoLink
     else
       '/projects/' + @props.project.slug
 
