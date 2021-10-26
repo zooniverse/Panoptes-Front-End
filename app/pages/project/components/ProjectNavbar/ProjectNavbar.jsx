@@ -67,7 +67,8 @@ ProjectNavbar.defaultProps = {
   projectLink: '',
   projectTitle: '',
   redirect: '',
-  underReview: false
+  underReview: false,
+  usesMonorepo: false
 };
 
 ProjectNavbar.propTypes = {
@@ -78,7 +79,8 @@ ProjectNavbar.propTypes = {
   projectTitle: PropTypes.string,
   projectLink: PropTypes.string,
   redirect: PropTypes.string,
-  underReview: PropTypes.bool
+  underReview: PropTypes.bool,
+  usesMonorepo: PropTypes.bool
 };
 
 export default ProjectNavbar;
