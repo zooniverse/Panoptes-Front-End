@@ -56,6 +56,7 @@ class ProjectNavbarContainer extends Component {
     return _.map(links, link => ({
       disabled: link.disabled || false,
       isExternalLink: link.isExternalLink || false,
+      isMonorepoLink: link.isMonorepoLink || false,
       label: counterpart(link.translationPath),
       url: link.url
     }));
