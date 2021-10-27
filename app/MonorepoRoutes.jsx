@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router';
 import { createRoutesFromReactChildren } from 'react-router/lib//RouteUtils';
 import MonorepoRoute from './MonorepoRoute';
-import SLUGS from './monorepoSlugs'
+import { SLUGS } from './monorepoUtils';
 
 /*
   This is a very useful article explaining how to write custom Route components for react-router v3.

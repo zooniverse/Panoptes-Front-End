@@ -1,4 +1,4 @@
-export default [
+export const SLUGS = [
   'nora-dot-eisner/planet-hunters-tess',
   'adamamiller/zwickys-stellar-sleuths',
   'msalmon/hms-nhs-the-nautical-health-service',
@@ -13,3 +13,14 @@ export default [
   'mariaedgeworthletters/maria-edgeworth-letters',
   'pmlogan/poets-and-lovers'
 ];
+
+export function usesMonorepo(slug) {
+  return SLUGS.includes(slug);
+}
+
+export function monorepoURL(slug) {
+  if (window.location.hostname === 'www.zooniverse.org') {
+    return `https://www.zooniverse.org/projects/${slug}`;
+  }
+  return `https://frontend.preview.zooniverse.org/projects/${slug}`;
+}
