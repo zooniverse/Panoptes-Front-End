@@ -568,14 +568,25 @@ EditWorkflowPage = createReactClass
 
     <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
       <div>
-        <table>
+        <table role="presentation">
           <tbody>
             {for subjectSet in projectSubjectSets
               assigned = subjectSet in workflowSubjectSets
               toggle = @handleSubjectSetToggle.bind this, subjectSet
               <tr key={subjectSet.id}>
-                <td><input type="checkbox" checked={assigned} onChange={toggle} /></td>
-                <td>{subjectSet.display_name} (#{subjectSet.id})</td>
+                <td>
+                  <input
+                    id={"subjectSet#{subjectSet.id}"}
+                    type="checkbox"
+                    checked={assigned}
+                    onChange={toggle}
+                  />
+                </td>
+                <td>
+                  <label for={"subjectSet#{subjectSet.id}"}>
+                    {subjectSet.display_name} (#{subjectSet.id})
+                  </label>
+                </td>
               </tr>}
           </tbody>
         </table>
