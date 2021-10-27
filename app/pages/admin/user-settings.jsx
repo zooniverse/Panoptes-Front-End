@@ -7,6 +7,7 @@ import UserProperties from './user-settings/properties';
 import UserResources from './user-settings/resources';
 import UserLimitToggle from './user-settings/limit-toggle';
 import DeleteUser from './user-settings/delete-user';
+import { getUserProjects } from './user-settings/stats';
 
 class UserSettings extends Component {
   constructor(props) {
@@ -15,12 +16,31 @@ class UserSettings extends Component {
     this.getUser = this.getUser.bind(this);
 
     this.state = {
-      editUser: null
+      editUser: null,
+      ribbonData: [],
+      totalClassifications: 0
     };
   }
 
   componentDidMount() {
     this.getUser();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.editUser?.id !== prevState.editUser?.id) {
+      getUserProjects(this.state.editUser)
+      .then(projects => {
+        this.setState((prevState) => {
+          const ribbonData = prevState.ribbonData.concat(projects);
+          const totalClassifications = ribbonData
+          .filter(Boolean)
+          .reduce((total, project) => {
+            return total + project.classifications;
+          }, 0);
+          return { ribbonData, totalClassifications };
+        });
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -45,6 +65,7 @@ class UserSettings extends Component {
       return <div>You cannot edit your own account</div>;
     }
 
+    console.log(this.state)
     return (
       <div>
         <div className="project-status">
@@ -64,6 +85,17 @@ class UserSettings extends Component {
         <br />
         <UserResources type="projects" user={this.state.editUser} />
         <UserResources type="organizations" user={this.state.editUser} />
+        <h4>Classification history</h4>
+        <p>Total classifications: {this.state.totalClassifications}</p>
+        <ul>
+        {this.state.ribbonData.map(project => (
+          <li key={project.id}>
+            <p><b>{project.display_name}</b><br/>
+              Classifications: {project.classifications}
+            </p>
+          </li>
+        ))}
+        </ul>
       </div>
     );
   }
