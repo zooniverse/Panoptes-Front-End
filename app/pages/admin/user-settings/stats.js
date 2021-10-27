@@ -27,19 +27,19 @@ function getProjectsForPreferences(preferences) {
     });
 }
 
-export function getUserProjects(user, _page = 1) {
+export function getUserProjects(user, callback, _page = 1) {
   return user.get('project_preferences', {
     sort: '-updated_at',
     page: _page
   })
   .then((projectPreferences) => {
     if (projectPreferences.length === 0) {
-      return projectPreferences;
+      return [];
     } else {
       // continue paging through preferences until we've got them all.
       const meta = projectPreferences[0].getMeta();
       if (meta.page !== meta.page_count) {
-        getUserProjects(user, meta.page + 1);
+        getUserProjects(user, callback, meta.page + 1);
       }
       // filter out projects you haven't classified on AND that are not marked as hidden.
       let activePreferences = projectPreferences.filter((preference) => {
@@ -53,7 +53,7 @@ export function getUserProjects(user, _page = 1) {
           preference.sort_order = i;
           return preference;
         });
-        return getProjectsForPreferences(activePreferences)
+        const projects = getProjectsForPreferences(activePreferences)
           .then((projects) => {
             return projects
             .sort((a, b) => {
@@ -73,6 +73,7 @@ export function getUserProjects(user, _page = 1) {
               };
             });
           })
+          .then(callback)
       }
     }
   });

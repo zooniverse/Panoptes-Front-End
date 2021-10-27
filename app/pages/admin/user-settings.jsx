@@ -28,18 +28,18 @@ class UserSettings extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.editUser?.id !== prevState.editUser?.id) {
-      getUserProjects(this.state.editUser)
-      .then(projects => {
+      const callback = (projects) => {
+        console.log({ projects })
         this.setState((prevState) => {
           const ribbonData = prevState.ribbonData.concat(projects);
           const totalClassifications = ribbonData
-          .filter(Boolean)
           .reduce((total, project) => {
             return total + project.classifications;
           }, 0);
           return { ribbonData, totalClassifications };
         });
-      })
+      };
+      getUserProjects(this.state.editUser, callback)
     }
   }
 
