@@ -14,6 +14,7 @@ class UserSettings extends Component {
     super(props);
     this.boundForceUpdate = this.forceUpdate.bind(this);
     this.getUser = this.getUser.bind(this);
+    this.updateUserProjects = this.updateUserProjects.bind(this);
 
     this.state = {
       editUser: null,
@@ -28,18 +29,7 @@ class UserSettings extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.editUser?.id !== prevState.editUser?.id) {
-      const callback = (projects) => {
-        console.log({ projects })
-        this.setState((prevState) => {
-          const ribbonData = prevState.ribbonData.concat(projects);
-          const totalClassifications = ribbonData
-          .reduce((total, project) => {
-            return total + project.classifications;
-          }, 0);
-          return { ribbonData, totalClassifications };
-        });
-      };
-      getUserProjects(this.state.editUser, callback)
+      getUserProjects(this.state.editUser, this.updateUserProjects)
     }
   }
 
@@ -54,6 +44,17 @@ class UserSettings extends Component {
     });
   }
 
+  updateUserProjects(projects) {
+    this.setState((prevState) => {
+      const ribbonData = prevState.ribbonData.concat(projects);
+      const totalClassifications = ribbonData
+      .reduce((total, project) => {
+        return total + project.classifications;
+      }, 0);
+      return { ribbonData, totalClassifications };
+    });
+  }
+
   render() {
     if (!this.state.editUser) {
       return (
@@ -65,7 +66,6 @@ class UserSettings extends Component {
       return <div>You cannot edit your own account</div>;
     }
 
-    console.log(this.state)
     return (
       <div>
         <div className="project-status">

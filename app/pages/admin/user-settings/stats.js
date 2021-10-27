@@ -27,6 +27,26 @@ function getProjectsForPreferences(preferences) {
     });
 }
 
+function sortProjects(projects) {
+  return projects
+  .sort((a, b) => {
+    return a.sort_order - b.sort_order;
+  })
+  .filter(Boolean)
+  .map((project, i) => {
+    return {
+      avatar_src: projects[i].avatar_src,
+      id: projects[i].id,
+      slug: projects[i].slug,
+      display_name: projects[i].display_name,
+      description: projects[i].description,
+      classifications: projects[i].activity_count,
+      updated_at: projects[i].updated_at,
+      redirect: projects[i].redirect
+    };
+  });
+}
+
 export function getUserProjects(user, callback, _page = 1) {
   return user.get('project_preferences', {
     sort: '-updated_at',
@@ -54,25 +74,7 @@ export function getUserProjects(user, callback, _page = 1) {
           return preference;
         });
         const projects = getProjectsForPreferences(activePreferences)
-          .then((projects) => {
-            return projects
-            .sort((a, b) => {
-              return a.sort_order - b.sort_order;
-            })
-            .filter(Boolean)
-            .map((project, i) => {
-              return {
-                avatar_src: projects[i].avatar_src,
-                id: projects[i].id,
-                slug: projects[i].slug,
-                display_name: projects[i].display_name,
-                description: projects[i].description,
-                classifications: projects[i].activity_count,
-                updated_at: projects[i].updated_at,
-                redirect: projects[i].redirect
-              };
-            });
-          })
+          .then(sortProjects)
           .then(callback)
       }
     }
