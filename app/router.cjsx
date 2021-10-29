@@ -60,7 +60,7 @@ createReactClass = require 'create-react-class'
 `import DataExports from './pages/lab/data-exports';`
 `import TalkTags from './talk/tags';`
 `import MonorepoRoutes from './MonorepoRoutes';`
-`import FEMLabSplitter from './pages/lab/fem-lab-splitter';`
+`import FEMLabSplitter from './pages/lab-fem/fem-lab-splitter';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = createReactClass
