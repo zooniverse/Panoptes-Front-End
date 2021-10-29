@@ -101,7 +101,7 @@ class ExternalRedirect extends React.Component {
   }
 }
 
-module.exports =
+export const routes = (
   <Route path="/" component={require('./partials/app')}>
     <IndexRoute component={HomePageRoot} />
     <Route path="home" component={ONE_UP_REDIRECT} />
@@ -308,3 +308,4 @@ module.exports =
     } />
     <Route path="*" component={NotFoundPage} />
   </Route>
+)
