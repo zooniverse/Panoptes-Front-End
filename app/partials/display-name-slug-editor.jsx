@@ -55,9 +55,9 @@ class DisplayNameSlugEditor extends Component {
     return (
       <div>
         <AutoSave resource={resource}>
-          <span className="form-label">Name</span>
-          <br />
-          <input type="text" 
+          <label for="displayName" className="form-label">Name</label>
+          <input type="text"
+            id="displayName"
             className="standard-input full" 
             name="display_name" 
             value={resource.display_name} 
