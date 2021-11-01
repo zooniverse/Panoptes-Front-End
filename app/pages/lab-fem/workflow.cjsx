@@ -120,9 +120,9 @@ EditWorkflowPage = createReactClass
         <div className="column">
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
-              <span className="form-label">Workflow title</span>
+              <label className="form-label" for="displayName">Workflow title</label>
               <br />
-              <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={handleInputChange.bind @props.workflow} />
+              <input type="text" id="displayName" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={handleInputChange.bind @props.workflow} />
             </AutoSave>
             <small className="form-help">If you let your volunteers choose which workflow to attempt, this text will appear as an option on the project front page.</small>
 
