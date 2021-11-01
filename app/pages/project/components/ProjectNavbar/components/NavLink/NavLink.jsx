@@ -33,13 +33,19 @@ export const StyledExternalLink = styled(ExternalLink)`
   }
 `;
 
+export const StyledAnchor = styled('a')`
+  ${commonStyles}
+  color: white;
+  text-decoration: none;
+`;
+
 export const StyledLinkPlaceholder = styled.span`
   color: lightgrey;
   cursor: not-allowed;
   ${commonStyles}
 `;
 
-function NavLink({ className, disabled, isExternalLink, label, onClick, url }) {
+function NavLink({ className, disabled, isExternalLink, isMonorepoLink, label, onClick, url }) {
   const linkProps = {
     className,
     disabled,
@@ -63,6 +69,14 @@ function NavLink({ className, disabled, isExternalLink, label, onClick, url }) {
     );
   }
 
+  if (isMonorepoLink) {
+    return (
+      <StyledAnchor className={className} href={url}>
+        {label}
+      </StyledAnchor>
+    )
+  }
+
   return (
     <LinkComponent {...linkProps}>
       {label}
@@ -74,6 +88,7 @@ NavLink.defaultProps = {
   className: '',
   disabled: false,
   isExternalLink: false,
+  isMonorepoLink: false,
   label: '',
   onClick: () => true,
   url: ''
@@ -83,6 +98,7 @@ NavLink.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
   isExternalLink: PropTypes.bool,
+  isMonorepoLink: PropTypes.bool,
   label: PropTypes.string,
   onClick: PropTypes.func,
   url: PropTypes.string
