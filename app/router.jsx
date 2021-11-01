@@ -59,6 +59,7 @@ import Resources from './pages/about/resources-page';
 import DataExports from './pages/lab/data-exports';
 import TalkTags from './talk/tags';
 import MonorepoRoutes from './MonorepoRoutes';
+import FEMLabRouter from './pages/lab-fem/fem-lab-router'
 
 // <Redirect from="home" to="/" /> doesn't work.
 
@@ -278,7 +279,7 @@ export const routes = (
       <Redirect from="workflow/*" to="workflows/*" />
       <Route path="workflows" component={WorkflowsContainer}>
         <IndexRoute component={WorkflowsList} />
-        <Route path=":workflowID" component={require('./pages/lab/workflow')} />
+        <Route path=":workflowID" component={FEMLabRouter} />
       </Route>
       <Redirect from="subject-set/*" to="subject-sets/*" />
       <Route path="subject-sets" component={SubjectSetsContainer}>
