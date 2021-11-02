@@ -4,8 +4,22 @@ import React, { useEffect, useState } from 'react';
 // 6 is Cats on staging, 1166 is Ghosts on production.
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production' ? '6' : '1166';
 
+function compareNames(setA, setB) {
+  if (setA.display_name < setB.display_name) {
+    return -1;
+  }
+  if (setA.display_name > setB.display_name) {
+    return 1;
+  }
+  return 0;
+}
+
 function fetchSubjectSets(project) {
   return project.get('subject_sets', { sort: '-id', page_size: 250 });
+}
+
+function sortSubjectSets(subjectSets) {
+  return subjectSets.sort(compareNames);
 }
 
 /**
@@ -22,6 +36,7 @@ export default function SubjectSetLinker({
 
   function fetchData() {
     fetchSubjectSets(project)
+      .then(sortSubjectSets)
       .then(setProjectSets);
   }
 
