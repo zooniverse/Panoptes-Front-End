@@ -4,9 +4,17 @@ This folder contains code for a modified Project Builder interface. This Project
 Builder is used to build projects that are compatible with the
 [Front-End-Monorepo](https://github.com/zooniverse/front-end-monorepo) classifier.
 
-- The FEM-compatible Project Builder is accessible from the `/fem-lab` route.
-  Double-check the router.cjsx file to be sure.
-- Code is based on the original Project Builder in the adjacent `./lab` folder.
+This is how the FEM-Compatible Project Builder works:
+- The Project Builder now _automatically switches_ between PFE-compatible pages
+  and FEM-compatible pages, _depending on the project._
+- e.g. https://master.pfe-preview.zooniverse.org/lab/1873/workflows/3532 will
+  give you the FEM-compatible workflow editor, IF project 1873 is configured to
+  use FEM. Otherwise, you'll get the PFE-compatible workflow editor.
+- The lynchpin for this behaviour is `FEMLabRouter`, which checks for FEM
+  compatibility and performs the component switching.
+- Any code that's not the FEMLabRouter is based on the original Project Builder
+  in the adjacent `./lab` folder. Compare the modifications by running, e.g.
+  `diff app/pages/lab/workflow.cjsx app/pages/lab-fem/workflow.cjsx`
 
 Context: in 2019(-ish?), the Zooniverse started to migrate its front end
 website/classifier from the Panoptes-Front-End (PFE) codebase to the newer
