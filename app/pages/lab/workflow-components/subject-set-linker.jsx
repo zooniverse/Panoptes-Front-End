@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production' ? '6' : '1166';
 
 function fetchSubjectSets(project) {
-  return project.get('subject_sets', { sort: 'display_name', page_size: 250 });
+  return project.get('subject_sets', { sort: '-id', page_size: 250 });
 }
 
 /**
