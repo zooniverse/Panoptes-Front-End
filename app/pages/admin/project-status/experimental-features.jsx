@@ -11,6 +11,7 @@ const experimentalFeatures = [
   'enable subject flags',
   'expert comparison summary',
   'fan',
+  'femLab',  // Indicates that the Project should use the FEM-compatible Project Builder (lab) pages
   'freehandLine',
   'freehandSegmentLine',
   'freehandSegmentShape',

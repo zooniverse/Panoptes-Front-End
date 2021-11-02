@@ -16,6 +16,15 @@ This is how the FEM-Compatible Project Builder works:
   in the adjacent `./lab` folder. Compare the modifications by running, e.g.
   `diff app/pages/lab/workflow.cjsx app/pages/lab-fem/workflow.cjsx`
 
+At the moment, this is how the FEMLabRouter determine if we should use a
+FEM-compatible pages:
+- Use FEM Lab if ANY one or more of the following conditions are met:
+  - Project is already using the FEM Classifier (i.e. has its slug registered in
+    the monorepo routes)
+  - Project has `experimental_tools.femLab = true`
+  - `?femLab=true` query param is set
+- Use PFE Lab in all other cases, OR if `?pfeLab=true` query param is set.
+
 Context: in 2019(-ish?), the Zooniverse started to migrate its front end
 website/classifier from the Panoptes-Front-End (PFE) codebase to the newer
 Front-End-Monorepo (FEM) codebase. As of 2021, the migration is still ongoing.

@@ -15,8 +15,9 @@ export default function FEMLabRouter (props) {
   // solution to figuring out whether a project is FEM-compatible.
   const thisProjectUsesFEM = (  // Use FEM-compatible pages if...
     usesMonorepo(props?.project?.slug)  // ...the project slug is registered in the PFE code
-    || !!props?.location?.query?.femLab // ...or ?femLab=true flag is set
-  ) && !props?.location?.query?.pfeLab  // ...UNLESS ?pfeLab=true flag is set
+    || props?.project?.experimental_tools?.includes('femLab')  // ...OR the project has the femLab experimental too
+    || !!props?.location?.query?.femLab // ...OR ?femLab=true query param is set
+  ) && !props?.location?.query?.pfeLab  // ...UNLESS ?pfeLab=true query param is set
 
   const thisRoute = props?.routes?.map(r=>r.path).join('/').replace('//', '/') || ''
   switch (thisRoute) {
