@@ -120,9 +120,9 @@ EditWorkflowPage = createReactClass
         <div className="column">
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
-              <span className="form-label">Workflow title</span>
+              <label className="form-label" for="displayName">Workflow title</label>
               <br />
-              <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={handleInputChange.bind @props.workflow} />
+              <input type="text" id="displayName" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={handleInputChange.bind @props.workflow} />
             </AutoSave>
             <small className="form-help">If you let your volunteers choose which workflow to attempt, this text will appear as an option on the project front page.</small>
 
@@ -574,14 +574,25 @@ EditWorkflowPage = createReactClass
 
     <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
       <div>
-        <table>
+        <table role="presentation">
           <tbody>
             {for subjectSet in projectSubjectSets
               assigned = subjectSet in workflowSubjectSets
               toggle = @handleSubjectSetToggle.bind this, subjectSet
               <tr key={subjectSet.id}>
-                <td><input type="checkbox" checked={assigned} onChange={toggle} /></td>
-                <td>{subjectSet.display_name} (#{subjectSet.id})</td>
+                <td>
+                  <input
+                    id={"subjectSet#{subjectSet.id}"}
+                    type="checkbox"
+                    checked={assigned}
+                    onChange={toggle}
+                  />
+                </td>
+                <td>
+                  <label for={"subjectSet#{subjectSet.id}"}>
+                    {subjectSet.display_name} (#{subjectSet.id})
+                  </label>
+                </td>
               </tr>}
           </tbody>
         </table>

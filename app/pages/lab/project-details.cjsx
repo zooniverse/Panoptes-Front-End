@@ -135,9 +135,8 @@ module.exports = createReactClass
 
           <p>
             <AutoSave resource={@props.project}>
-              <span className="form-label">Description</span>
-              <br />
-              <input className="standard-input full" name="description" value={@props.project.description} onChange={handleInputChange.bind @props.project} />
+              <label for="description" className="form-label">Description</label>
+              <input id="description" className="standard-input full" name="description" value={@props.project.description} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project. <CharLimit limit={300} string={@props.project.description ? ''} /></small>
           </p>
@@ -153,24 +152,22 @@ module.exports = createReactClass
 
           <p>
             <AutoSave resource={@props.project}>
-              <span className="form-label">Workflow Description</span>
-              <br />
-              <textarea className="standard-input full" name="workflow_description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
+              <label for="workflowDescription" className="form-label">Workflow Description</label>
+              <textarea id="workflowDescription" className="standard-input full" name="workflow_description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit={500} string={@props.project.workflow_description ? ''} /></small>
           </p>
 
           <div>
             <AutoSave resource={@props.project}>
-              <span className="form-label">Researcher Quote</span>
-              <br />
+              <label for="researcherQuote" className="form-label">Researcher Quote</label>
               <Select
                 className="researcher-quote"
                 placeholder="Choose a Researcher"
                 onChange={@handleResearcherChange}
                 options={@researcherOptions()}
                 value={@props.project?.configuration?.researcherID} />
-              <textarea className="standard-input full" name="researcher_quote" value={@props.project.researcher_quote} onChange={handleInputChange.bind @props.project} />
+              <textarea id="researcherQuote" className="standard-input full" name="researcher_quote" value={@props.project.researcher_quote} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">This text will appear on a project landing page alongside an avatar of the selected researcher. <CharLimit limit={255} string={@props.project.researcher_quote ? ''} /></small>
           </div>
