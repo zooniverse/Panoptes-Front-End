@@ -61,7 +61,8 @@ export default function SubjectSetLinker({
 
   function addDemoSet() {
     project.uncacheLink('subject_sets');
-    workflow.addLink('subject_sets', [DEMO_SUBJECT_SET_ID]);
+    workflow.addLink('subject_sets', [DEMO_SUBJECT_SET_ID])
+      .then(() => fetchData());
   }
 
   function handleToggle(subjectSet, event) {
