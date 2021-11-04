@@ -2,7 +2,6 @@ import React from 'react'
 
 import Workflow from '../lab/workflow'
 import FEMWorkflow from './workflow'
-import { usesMonorepo } from '../../monorepoUtils';
 
 /**
 The Front End Monorepo Lab (Project Builder) Router returns a different
@@ -14,8 +13,7 @@ export default function FEMLabRouter (props) {
   // 2 Nov 2011. We need to come back to this once we have a better foundational
   // solution to figuring out whether a project is FEM-compatible.
   const thisProjectUsesFEM = (  // Use FEM-compatible pages if...
-    usesMonorepo(props?.project?.slug)  // ...the project slug is registered in the PFE code
-    || props?.project?.experimental_tools?.includes('femLab')  // ...OR the project has the femLab experimental too
+    props?.project?.experimental_tools?.includes('femLab')  // ...the project has the femLab experimental tool
     || !!props?.location?.query?.femLab // ...OR ?femLab=true query param is set
   ) && !props?.location?.query?.pfeLab  // ...UNLESS ?pfeLab=true query param is set
 
