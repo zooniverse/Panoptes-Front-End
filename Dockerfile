@@ -10,7 +10,7 @@ USER node
 ADD package.json /src/
 ADD package-lock.json /src/
 
-RUN npm install --unsafe-perm
+RUN npm ci
 
 ADD . /src/
 
