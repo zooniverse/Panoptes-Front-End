@@ -20,6 +20,7 @@ ShortcutEditor = require('../../classifier/tasks/shortcut/editor').default
 FeedbackSection = require('../../features/feedback/lab').default
 MobileSection = require('../lab/mobile').default
 SubjectGroupViewerEditor = require('../lab/workflow-components/subject-group-viewer-editor').default
+SubjectSetLinker = require('../lab/workflow-components/subject-set-linker').default
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -286,7 +287,10 @@ EditWorkflowPage = createReactClass
           <div>
             <span className="form-label">Associated subject sets</span><br />
             <small className="form-help">Choose the set of subjects you want to use for this workflow.</small>
-            {@renderSubjectSets()}
+            <SubjectSetLinker
+              project={@props.project}
+              workflow={@props.workflow}
+            />
           </div>
 
           <hr />
@@ -560,44 +564,6 @@ EditWorkflowPage = createReactClass
       </div>
     </div>
 
-  renderSubjectSets: ->
-    projectAndWorkflowSubjectSets = Promise.all [
-      @props.project.get 'subject_sets', sort: 'display_name', page_size: 250
-      @props.workflow.get 'subject_sets', sort: 'display_name', page_size: 250
-    ]
-
-    <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
-      <div>
-        <table role="presentation">
-          <tbody>
-            {for subjectSet in projectSubjectSets
-              assigned = subjectSet in workflowSubjectSets
-              toggle = @handleSubjectSetToggle.bind this, subjectSet
-              <tr key={subjectSet.id}>
-                <td>
-                  <input
-                    id={"subjectSet#{subjectSet.id}"}
-                    type="checkbox"
-                    checked={assigned}
-                    onChange={toggle}
-                  />
-                </td>
-                <td>
-                  <label for={"subjectSet#{subjectSet.id}"}>
-                    {subjectSet.display_name} (#{subjectSet.id})
-                  </label>
-                </td>
-              </tr>}
-          </tbody>
-        </table>
-        {if projectSubjectSets.length is 0
-          <p>
-            This project has no subject sets.{' '}
-            <button type="button" onClick={@addDemoSubjectSet}>Add an example subject set</button>
-          </p>}
-      </div>
-    }</PromiseRenderer>
-
   renderTutorials: ->
     projectAndWorkflowTutorials = Promise.all [
       apiClient.type('tutorials').get project_id: @props.project.id, page_size: 100
@@ -801,20 +767,6 @@ EditWorkflowPage = createReactClass
     if @props.workflow.configuration.custom_summary
       'world_wide_telescope' in @props.workflow.configuration.custom_summary
 
-  handleSubjectSetToggle: (subjectSet, e) ->
-    shouldAdd = e.target.checked
-
-    ensureSaved = if @props.workflow.hasUnsavedChanges()
-      @props.workflow.save()
-    else
-      Promise.resolve()
-
-    ensureSaved.then =>
-      if shouldAdd
-        @props.workflow.addLink 'subject_sets', [subjectSet.id]
-      else
-        @props.workflow.removeLink 'subject_sets', subjectSet.id
-
   handleDefaultWorkflowToggle: (e) ->
     shouldSet = e.target.checked
 
@@ -848,10 +800,6 @@ EditWorkflowPage = createReactClass
 
   removeTutorial: (tutorial, workflowTutorials, e) ->
     @props.workflow.removeLink 'tutorials', tutorial.id
-
-  addDemoSubjectSet: ->
-    @props.project.uncacheLink 'subject_sets'
-    @props.workflow.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
 
   handleDelete: ->
     @setState deletionError: null
