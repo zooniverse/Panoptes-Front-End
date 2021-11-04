@@ -19,6 +19,7 @@ const experimentalFeatures = [
   'general feedback',
   'Gravity Spy Gold Standard',
   'highlighter',
+  'indexedSubjectSetNextPrevButtons',  // FEM only. Enables the "Next" and "Previous" buttons to appear on the SubjectSetProgressBanner, if and only if the Subject Set is indexed on the Subject Set Search API. Originally designed for Engaging Crowds 2021.
   'mini-course',
   'museum-role',
   'quicktalk', // Enables "QuickTalk" component in FEM Classifier, which allows users to access Talk discussions on the Classifier page.
