@@ -96,11 +96,12 @@ export default class SocialLinksEditor extends React.Component {
     return (
       <tr key={i}>
         {!precedeSiteName && (
-          <td>{site}</td>
+          <td><label for={`socialLink${i}`}>{site}</label></td>
         )}
         <AutoSave tag="td" resource={this.props.project}>
           <input
             type="text"
+            id={`socialLink${i}`}
             name={`urls.${site}.url`}
             value={value}
             onChange={this.handleNewLink.bind(this, site)}
@@ -109,7 +110,7 @@ export default class SocialLinksEditor extends React.Component {
           />
         </AutoSave>
         {precedeSiteName && (
-          <td>.{site}</td>
+          <td><label for={`socialLink${i}`}>.{site}</label></td>
         )}
         <td>
           <button type="button" onClick={this.handleRemoveLink.bind(this, site)}>

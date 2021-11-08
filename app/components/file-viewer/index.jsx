@@ -33,8 +33,6 @@ function subjectViewerSelector(props) {
       return VIEWERS.audio;
     }
     // ... add other here if necessary
-  } else if (props.format === 'json') {
-    return VIEWERS.text;
   }
   return VIEWERS[props.type] || DefaultViewer;
 }

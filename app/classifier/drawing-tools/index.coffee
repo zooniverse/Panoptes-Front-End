@@ -20,3 +20,8 @@ module.exports =
   triangle: require './triangle'
   pointGrid: require('./point-grid').default
   transcriptionLine: require './line'
+
+#  Temporal tools only work in FEM's classifier.
+#  We're importing 'placeholders' here only to allow these tools to be edited in PFE Lab.
+  temporalPoint: require './point'
+  temporalRotateRectangle: require('./rotate-rectangle').default
