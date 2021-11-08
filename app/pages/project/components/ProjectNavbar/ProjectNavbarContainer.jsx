@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../../../lib/is-admin';
+import { usesMonorepo, monorepoURL } from '../../../../monorepoUtils';
 
 import { getProjectLinks } from '../../../../lib/nav-helpers';
 import ProjectNavbar from './ProjectNavbar';
@@ -56,6 +57,7 @@ class ProjectNavbarContainer extends Component {
     return _.map(links, link => ({
       disabled: link.disabled || false,
       isExternalLink: link.isExternalLink || false,
+      isMonorepoLink: link.isMonorepoLink || false,
       label: counterpart(link.translationPath),
       url: link.url
     }));
@@ -77,8 +79,11 @@ class ProjectNavbarContainer extends Component {
     const navLinks = isResourceAProject(this.props.project) ? this.getNavLinks() : [];
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
     const projectLink = isResourceAProject(this.props.project) ? `/projects/${this.props.project.slug}` : `/organizations/${this.props.project.slug}`;
-    const redirect = this.props.project.redirect ? this.props.project.redirect : '';
+    let redirect = this.props.project.redirect ? this.props.project.redirect : '';
     const underReview = this.props.project.beta_approved;
+    if (usesMonorepo(this.props.project.slug)) {
+      redirect = monorepoURL(this.props.project.slug)
+    }
 
     return (
       <ProjectNavbar
@@ -91,6 +96,7 @@ class ProjectNavbarContainer extends Component {
         projectLink={projectLink}
         redirect={redirect}
         underReview={underReview}
+        usesMonorepo={usesMonorepo(this.props.project.slug)}
       />
     );
   }

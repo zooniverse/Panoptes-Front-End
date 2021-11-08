@@ -20,6 +20,7 @@ ShortcutEditor = require('../../classifier/tasks/shortcut/editor').default
 FeedbackSection = require('../../features/feedback/lab').default
 MobileSection = require('./mobile').default
 SubjectGroupViewerEditor = require('./workflow-components/subject-group-viewer-editor').default
+SubjectSetLinker = require('./workflow-components/subject-set-linker').default
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -120,9 +121,9 @@ EditWorkflowPage = createReactClass
         <div className="column">
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
-              <span className="form-label">Workflow title</span>
+              <label className="form-label" for="displayName">Workflow title</label>
               <br />
-              <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={handleInputChange.bind @props.workflow} />
+              <input type="text" id="displayName" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={handleInputChange.bind @props.workflow} />
             </AutoSave>
             <small className="form-help">If you let your volunteers choose which workflow to attempt, this text will appear as an option on the project front page.</small>
 
@@ -294,7 +295,10 @@ EditWorkflowPage = createReactClass
           <div>
             <span className="form-label">Associated subject sets</span><br />
             <small className="form-help">Choose the set of subjects you want to use for this workflow.</small>
-            {@renderSubjectSets()}
+            <SubjectSetLinker
+              project={@props.project}
+              workflow={@props.workflow}
+            />
           </div>
 
           <hr />
@@ -566,33 +570,6 @@ EditWorkflowPage = createReactClass
       </div>
     </div>
 
-  renderSubjectSets: ->
-    projectAndWorkflowSubjectSets = Promise.all [
-      @props.project.get 'subject_sets', sort: 'display_name', page_size: 250
-      @props.workflow.get 'subject_sets', sort: 'display_name', page_size: 250
-    ]
-
-    <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
-      <div>
-        <table>
-          <tbody>
-            {for subjectSet in projectSubjectSets
-              assigned = subjectSet in workflowSubjectSets
-              toggle = @handleSubjectSetToggle.bind this, subjectSet
-              <tr key={subjectSet.id}>
-                <td><input type="checkbox" checked={assigned} onChange={toggle} /></td>
-                <td>{subjectSet.display_name} (#{subjectSet.id})</td>
-              </tr>}
-          </tbody>
-        </table>
-        {if projectSubjectSets.length is 0
-          <p>
-            This project has no subject sets.{' '}
-            <button type="button" onClick={@addDemoSubjectSet}>Add an example subject set</button>
-          </p>}
-      </div>
-    }</PromiseRenderer>
-
   renderTutorials: ->
     projectAndWorkflowTutorials = Promise.all [
       apiClient.type('tutorials').get project_id: @props.project.id, page_size: 100
@@ -796,20 +773,6 @@ EditWorkflowPage = createReactClass
     if @props.workflow.configuration.custom_summary
       'world_wide_telescope' in @props.workflow.configuration.custom_summary
 
-  handleSubjectSetToggle: (subjectSet, e) ->
-    shouldAdd = e.target.checked
-
-    ensureSaved = if @props.workflow.hasUnsavedChanges()
-      @props.workflow.save()
-    else
-      Promise.resolve()
-
-    ensureSaved.then =>
-      if shouldAdd
-        @props.workflow.addLink 'subject_sets', [subjectSet.id]
-      else
-        @props.workflow.removeLink 'subject_sets', subjectSet.id
-
   handleDefaultWorkflowToggle: (e) ->
     shouldSet = e.target.checked
 
@@ -843,10 +806,6 @@ EditWorkflowPage = createReactClass
 
   removeTutorial: (tutorial, workflowTutorials, e) ->
     @props.workflow.removeLink 'tutorials', tutorial.id
-
-  addDemoSubjectSet: ->
-    @props.project.uncacheLink 'subject_sets'
-    @props.workflow.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
 
   handleDelete: ->
     @setState deletionError: null

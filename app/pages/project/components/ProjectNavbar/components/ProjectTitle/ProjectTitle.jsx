@@ -75,8 +75,8 @@ export const StyledUnderReview = styled.small`
 `;
 
 
-function ProjectTitle({ launched, link, redirect, title, underReview }) {
-  const TitleComponent = (redirect) ? StyledRedirect : StyledLink;
+function ProjectTitle({ launched, link, redirect, title, underReview, usesMonorepo }) {
+  const TitleComponent = (redirect || usesMonorepo) ? StyledRedirect : StyledLink;
   const zooniverseApprovedTranslation = counterpart('project.nav.zooniverseApproved');
 
   return (
@@ -87,7 +87,7 @@ function ProjectTitle({ launched, link, redirect, title, underReview }) {
         <TitleComponent to={link} href={redirect}>
           <span>
             {title}
-            {redirect && <span>{' '}<i className="fa fa-external-link" /></span>}
+            {redirect && !usesMonorepo && <span>{' '}<i className="fa fa-external-link" /></span>}
           </span>
         </TitleComponent>
         {launched &&
@@ -110,7 +110,8 @@ ProjectTitle.defaultProps = {
   link: '',
   redirect: '',
   title: '',
-  underReview: false
+  underReview: false,
+  usesMonorepo: false
 };
 
 ProjectTitle.propTypes = {
@@ -118,7 +119,8 @@ ProjectTitle.propTypes = {
   link: PropTypes.string,
   redirect: PropTypes.string,
   title: PropTypes.string,
-  underReview: PropTypes.bool
+  underReview: PropTypes.bool,
+  usesMonorepo: PropTypes.bool
 };
 
 export default ProjectTitle;
