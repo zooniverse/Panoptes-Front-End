@@ -37,15 +37,4 @@ function getRecentProjects() {
     .then(recentProjects => recentProjects);
 }
 
-function getPublication() {
-  const articles = [];
-  Object.keys(Publications).forEach((category) => {
-    Publications[category].map(project => articles.push(...project.publications));
-  });
-  const newestPublication = articles.sort((a, b) => {
-    return new Date(b.date) - new Date(a.date);
-  }).shift();
-  return newestPublication;
-}
-
-export { getPublication, getRecentProjects, getBlogPosts, getNewestProject };
+export { getRecentProjects, getBlogPosts, getNewestProject };
