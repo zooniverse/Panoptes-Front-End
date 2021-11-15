@@ -23,12 +23,6 @@
     "label": "Pinterest",
     "pathBeforeSite": false
   },
-  "plus.google.com/": {
-    "icon": "fa-google-plus",
-    "ariaLabel": "Link to Google+ page",
-    "label": "Google+",
-    "pathBeforeSite": false
-  },
   "reddit.com/": {
     "icon": "fa-reddit",
     "ariaLabel": "Link to Reddit",
