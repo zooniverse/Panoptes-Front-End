@@ -11,7 +11,8 @@ export const SLUGS = [
   'kmc35/peoples-contest-digital-archive',
   'rachaelsking/corresponding-with-quakers',
   'mariaedgeworthletters/maria-edgeworth-letters',
-  'pmlogan/poets-and-lovers'
+  'pmlogan/poets-and-lovers',
+  'emhaston/the-rbge-herbarium-exploring-gesneriaceae-the-african-violet-family'
 ];
 
 export function usesMonorepo(slug) {
