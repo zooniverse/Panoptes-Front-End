@@ -16,7 +16,6 @@ FileButton = require '../../components/file-button'
 WorkflowCreateForm = require '../lab/workflow-create-form'
 workflowActions = require '../lab/actions/workflow'
 classnames = require 'classnames'
-ShortcutEditor = require('./_classifier/tasks/shortcut/editor').default
 FeedbackSection = require('../../features/feedback/lab').default
 MobileSection = require('../lab/mobile').default
 SubjectGroupViewerEditor = require('../lab/workflow-components/subject-group-viewer-editor').default
@@ -513,17 +512,7 @@ EditWorkflowPage = createReactClass
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = taskComponents[@props.workflow.tasks[@state.selectedTaskKey].type]?.Editor
             <div>
-              {if 'shortcut' in @props.project.experimental_tools
-                <ShortcutEditor workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]}>
-                  <TaskEditorComponent
-                    workflow={@props.workflow}
-                    task={@props.workflow.tasks[@state.selectedTaskKey]}
-                    taskPrefix="tasks.#{@state.selectedTaskKey}"
-                    project={@props.project}
-                    onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
-                  />
-                </ShortcutEditor>
-              else if TaskEditorComponent
+              {if TaskEditorComponent  # Note: ShortcutEditor deprecated (and removed entirely) for FEM-lab
                 <TaskEditorComponent
                   workflow={@props.workflow}
                   task={@props.workflow.tasks[@state.selectedTaskKey]}
