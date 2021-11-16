@@ -106,9 +106,6 @@ export default class HomePageSocial extends React.Component {
             <a href="https://www.facebook.com/therealzooniverse" aria-label="Visit Zooniverse Facebook" rel="noopener noreferrer" target="_blank">
               <i className="fa fa-facebook" />
             </a>
-            <a href="https://plus.google.com/+ZooniverseOrgReal" aria-label="Visit Zooniverse Google" rel="noopener noreferrer" target="_blank">
-              <i className="fa fa-google-plus" />{' '}
-            </a>
           </span>
         </div>
 
