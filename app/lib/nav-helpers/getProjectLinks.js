@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import isAdmin from '../is-admin';
 import userHasLabAccess from './userHasLabAccess';
+import { monorepoURL, usesMonorepo } from '../../monorepoUtils';
 
 function getProjectLinks({ project, projectRoles, user }) {
   const { id, redirect, slug } = project;
@@ -45,6 +46,13 @@ function getProjectLinks({ project, projectRoles, user }) {
   };
 
   const canClassify = project.links.active_workflows && project.links.active_workflows.length > 0;
+
+  if (usesMonorepo(slug)) {
+    links.about.url = `${monorepoURL(slug)}/about`;
+    links.about.isMonorepoLink = true;
+    links.classify.url = `${monorepoURL(slug)}/classify`;
+    links.classify.isMonorepoLink = true;
+  }
 
   // For projects with external front ends
   if (redirect) {

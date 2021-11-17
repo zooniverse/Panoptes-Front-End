@@ -1,7 +1,7 @@
 module.exports = {
   require: [
     '@babel/register',
-    'coffee-script/register',
+    'coffeescript/register',
     'coffee-react/register'
   ]
 }

@@ -43,7 +43,6 @@ jobs:
       id: upload
       uses: azure/CLI@v1
       with:
-        creds: ${{ secrets.AZURE_STATIC_SITES }}
         inlineScript: |
             az storage blob upload \
               --account-name zooniversestatic \

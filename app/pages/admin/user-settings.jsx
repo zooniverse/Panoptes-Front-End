@@ -7,20 +7,30 @@ import UserProperties from './user-settings/properties';
 import UserResources from './user-settings/resources';
 import UserLimitToggle from './user-settings/limit-toggle';
 import DeleteUser from './user-settings/delete-user';
+import { getUserProjects } from './user-settings/stats';
 
 class UserSettings extends Component {
   constructor(props) {
     super(props);
     this.boundForceUpdate = this.forceUpdate.bind(this);
     this.getUser = this.getUser.bind(this);
+    this.updateUserProjects = this.updateUserProjects.bind(this);
 
     this.state = {
-      editUser: null
+      editUser: null,
+      ribbonData: [],
+      totalClassifications: 0
     };
   }
 
   componentDidMount() {
     this.getUser();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.editUser?.id !== prevState.editUser?.id) {
+      getUserProjects(this.state.editUser, this.updateUserProjects)
+    }
   }
 
   componentWillUnmount() {
@@ -31,6 +41,17 @@ class UserSettings extends Component {
     apiClient.type('users').get(this.props.params.id).then((editUser) => {
       editUser.listen('change', this.boundForceUpdate);
       this.setState({ editUser });
+    });
+  }
+
+  updateUserProjects(projects) {
+    this.setState((prevState) => {
+      const ribbonData = prevState.ribbonData.concat(projects);
+      const totalClassifications = ribbonData
+      .reduce((total, project) => {
+        return total + project.classifications;
+      }, 0);
+      return { ribbonData, totalClassifications };
     });
   }
 
@@ -64,6 +85,17 @@ class UserSettings extends Component {
         <br />
         <UserResources type="projects" user={this.state.editUser} />
         <UserResources type="organizations" user={this.state.editUser} />
+        <h4>Classification history</h4>
+        <p>Total classifications: {this.state.totalClassifications}</p>
+        <ul>
+        {this.state.ribbonData.map(project => (
+          <li key={project.id}>
+            <p><b>{project.display_name}</b><br/>
+              Classifications: {project.classifications}
+            </p>
+          </li>
+        ))}
+        </ul>
       </div>
     );
   }
