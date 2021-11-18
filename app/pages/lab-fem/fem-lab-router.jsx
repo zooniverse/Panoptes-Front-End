@@ -14,7 +14,7 @@ export default function FEMLabRouter (props) {
   // solution to figuring out whether a project is FEM-compatible.
   const thisProjectUsesFEM = (  // Use FEM-compatible pages if...
     props?.project?.experimental_tools?.includes('femLab')  // ...the project has the femLab experimental tool
-    || props?.location?.query?.femLab === 'true' // ...OR ?femLab=true query param is set
+    || props?.location?.query?.femLab === 'true'  // ...OR ?femLab=true query param is set
   ) && props?.location?.query?.pfeLab !== 'true'  // ...UNLESS ?pfeLab=true query param is set
 
   const thisRoute = props?.routes?.map(r=>r.path).join('/').replace('//', '/') || ''

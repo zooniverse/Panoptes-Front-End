@@ -53,13 +53,28 @@ EditProjectPage = createReactClass
     linkParams =
       projectID: @props.project.id
 
+    thisProjectUsesFEM = (  # Use FEM-compatible pages if...
+      'femLab' in @props?.project?.experimental_tools \  # ...the project has the femLab experimental tool
+      or @props?.location?.query?.femLab is 'true'  # ...OR ?femLab=true query param is set
+    ) and @props?.location?.query?.pfeLab isnt 'true'  # ...UNLESS ?pfeLab=true query param is set
+
+    projectLink = "/projects/#{@props.project.slug}"
+    if thisProjectUsesFEM then projectLink = "https://frontend.preview.zooniverse.org#{projectLink}"
+
     <div className="columns-container content-container">
       <Helmet title="#{counterpart 'projectLab.edit'} » #{@props.project.display_name}" />
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
           <li>
-            <Link to={"/projects/#{@props.project.slug}"} className="standard-button view-project-button" target="_blank" title="Open the current project in a new tab.">View project</Link>
+            <Link
+              to={projectLink}
+              className="standard-button view-project-button"
+              target="_blank"
+              title="Open the current project in a new tab."
+            >
+              View project
+            </Link>
           </li>
           <li><IndexLink to={@labPath()} activeClassName='active' className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
             Project details
