@@ -1,5 +1,5 @@
 /*
-This utility is used to determine if a Zooniverse project should be using
+These utilities are used to determine if a Zooniverse project should be using
 the FEM-compatible (Front-End-Monorepo) version of the Project Builder (Lab).
 
 Context: this code was created during the 2020/2021 transitory period where
@@ -11,13 +11,15 @@ project should use the **FEM Classifier + project page.**
  */
 
 /**
+isThisProjectUsingFEMLab() does exactly what it says on the tin.
+
 Arguments:
 - project: Zooniverse project resource
 - location: react-router location object
 
 Returns: true or false
  */
-export default function isThisProjectUsingFEMLab (project, location) {
+export function isThisProjectUsingFEMLab (project, location) {
   return (  // Use FEM-compatible pages if...
     project?.experimental_tools?.includes('femLab')  // ...the project has the femLab experimental tool
     || location?.query?.femLab === 'true'  // ...OR ?femLab=true query param is set

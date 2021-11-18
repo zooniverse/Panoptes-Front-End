@@ -3,7 +3,7 @@ import React from 'react'
 import Workflow from '../lab/workflow'
 import FEMWorkflow from './workflow'
 
-import isThisProjectUsingFEMLab from './is-this-project-using-fem-lab'
+import { isThisProjectUsingFEMLab } from './fem-lab-utilities'
 
 /**
 The Front End Monorepo Lab (Project Builder) Router returns a different
