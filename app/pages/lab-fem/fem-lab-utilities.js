@@ -25,3 +25,5 @@ export function isThisProjectUsingFEMLab (project, location) {
     || location?.query?.femLab === 'true'  // ...OR ?femLab=true query param is set
   ) && location?.query?.pfeLab !== 'true'  // ...UNLESS ?pfeLab=true query param is set
 }
+
+export const FEM_LAB_PREVIEW_HOST = 'https://frontend.preview.zooniverse.org'

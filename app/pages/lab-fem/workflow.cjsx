@@ -20,6 +20,7 @@ FeedbackSection = require('../../features/feedback/lab').default
 MobileSection = require('../lab/mobile').default
 SubjectGroupViewerEditor = require('../lab/workflow-components/subject-group-viewer-editor').default
 SubjectSetLinker = require('../lab/workflow-components/subject-set-linker').default
+`import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities';`
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats

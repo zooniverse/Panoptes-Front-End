@@ -11,7 +11,7 @@ ChangeListener = require '../../components/change-listener'
 workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
 `import LabStatus from '../../partials/lab-status.jsx';`
-`import { isThisProjectUsingFEMLab } from '../lab-fem/fem-lab-utilities';`
+`import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from '../lab-fem/fem-lab-utilities';`
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
@@ -57,7 +57,7 @@ EditProjectPage = createReactClass
     thisProjectUsesFEM = isThisProjectUsingFEMLab @props.project, @props.location
 
     projectLink = "/projects/#{@props.project.slug}"
-    if thisProjectUsesFEM then projectLink = "https://frontend.preview.zooniverse.org#{projectLink}"
+    if thisProjectUsesFEM then projectLink = "#{FEM_LAB_PREVIEW_HOST}#{projectLink}"
 
     <div className="columns-container content-container">
       <Helmet title="#{counterpart 'projectLab.edit'} » #{@props.project.display_name}" />
