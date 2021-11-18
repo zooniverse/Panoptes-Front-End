@@ -11,6 +11,7 @@ ChangeListener = require '../../components/change-listener'
 workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
 `import LabStatus from '../../partials/lab-status.jsx';`
+`import isThisProjectUsingFEMLab from '../lab-fem/is-this-project-using-fem-lab';`
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
@@ -53,11 +54,8 @@ EditProjectPage = createReactClass
     linkParams =
       projectID: @props.project.id
 
-    thisProjectUsesFEM = (  # Use FEM-compatible pages if...
-      'femLab' in @props?.project?.experimental_tools \  # ...the project has the femLab experimental tool
-      or @props?.location?.query?.femLab is 'true'  # ...OR ?femLab=true query param is set
-    ) and @props?.location?.query?.pfeLab isnt 'true'  # ...UNLESS ?pfeLab=true query param is set
-
+    thisProjectUsesFEM = isThisProjectUsingFEMLab @props.project, @props.location
+    
     projectLink = "/projects/#{@props.project.slug}"
     if thisProjectUsesFEM then projectLink = "https://frontend.preview.zooniverse.org#{projectLink}"
 

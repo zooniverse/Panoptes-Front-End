@@ -1,4 +1,4 @@
-/**
+/*
 These utilities are used to determine if a Zooniverse project should be using
 the FEM (Front-End-Monorepo) Classifier + project page.
 
