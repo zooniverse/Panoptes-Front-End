@@ -46,7 +46,7 @@ module.exports = createReactClass
       <span className="form-label">INSTRUCTIONS</span>
       <p><small>The survey task is ideal for asking volunteers to identify wildlife species in camera trap photos, but can be used anytime you have a lot of choices you need volunteers to filter from.</small></p>
       <p><small><a href="https://www.zooniverse.org/projects/aliburchard/cameratraptest/about/faq">See here</a> for detailed instructions.</small></p>
-      <p><small><a href="http://bit.ly/1QSpevJ">Click here</a> to download Choices, Characteristics, Confusions and Questions templates.</small></p>
+      <p><small><a href="https://bit.ly/survey-task-templates">Click here</a> to download Choices, Characteristics, Confusions and Questions templates.</small></p>
       <p><small>You can Apply changes after adding an individual csv file or many csv files.</small></p>
       <hr />
 
