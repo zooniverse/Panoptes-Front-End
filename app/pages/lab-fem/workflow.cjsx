@@ -98,6 +98,13 @@ EditWorkflowPage = createReactClass
     disabledIfWorkflowInactive = classnames({ 'disabled-section': projectLiveWorkflowInactive })
     taskEditorClasses = classnames({'column': true, 'disabled-section': projectLiveWorkflowActive})
 
+    # FEM: if persist_annotations or hide_classification_summaries is undefined, default to TRUE
+    persist_annotations = @props.workflow.configuration.persist_annotations
+    persist_annotations = true if persist_annotations is undefined
+
+    hide_classification_summaries = @props.workflow.configuration.hide_classification_summaries
+    hide_classification_summaries = true if hide_classification_summaries is undefined
+
     <div className="edit-workflow-page">
       <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
         <button onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="Copy workflow">
@@ -301,7 +308,7 @@ EditWorkflowPage = createReactClass
             <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
             <br />
             <label>
-              <input ref="persistAnnotation" type="checkbox" checked={@props.workflow.configuration.persist_annotations} onChange={@handlePersistAnnotationsToggle} />
+              <input ref="persistAnnotation" type="checkbox" checked={persist_annotations} onChange={@handlePersistAnnotationsToggle} />
               Persist annotations
             </label>
             </AutoSave>
@@ -342,7 +349,7 @@ EditWorkflowPage = createReactClass
                 <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
                 <br />
                 <label>
-                  <input ref="hideClassificationSummaries" type="checkbox" checked={@props.workflow.configuration.hide_classification_summaries} onChange={@handleSetHideClassificationSummaries} />
+                  <input ref="hideClassificationSummaries" type="checkbox" checked={hide_classification_summaries} onChange={@handleSetHideClassificationSummaries} />
                   Hide classification summaries
                 </label>
               </AutoSave>
