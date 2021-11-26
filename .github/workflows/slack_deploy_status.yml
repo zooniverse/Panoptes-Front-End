@@ -1,32 +1,32 @@
 name: Send job status notification to Slack
 
 on:
-    # Run this workflow from other workflows
-    workflow_call:
-      inputs:
-        deploy_url:
-          description: 'Deployed URL'
-          required: true
-          type: string
-        name:
-          default: 'PFE deploy status'
-          description: 'Job name'
-          required: false
-          type: string
-        status: 
-          description: 'Deploy status'
-          required: true
-          type: string
-        title:
-          description: 'Notification title'
-          required: true
-          type: string
-      secrets:
-        webhook_url:
-          required: true
+  # Run this workflow from other workflows
+  workflow_call:
+    inputs:
+      deploy_url:
+        description: 'Deployed URL'
+        required: true
+        type: string
+      job_name:
+        default: 'PFE deploy status'
+        description: 'Job name to report on'
+        required: false
+        type: string
+      status: 
+        description: 'Deploy status'
+        required: true
+        type: string
+      title:
+        description: 'Notification title'
+        required: true
+        type: string
+    secrets:
+      webhook_url:
+        required: true
 jobs:
   slack_notification:
-    name: ${{ inputs.name }}
+    name: PFE deploy status
     runs-on: ubuntu-latest
     steps:
     - name: Slack notification
@@ -35,7 +35,7 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.webhook_url }}
       with:
-        job_name: ${{ inputs.name }}
+        job_name: ${{ inputs.job_name }}
         fields: took
         status: custom
         custom_payload: |

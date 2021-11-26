@@ -6,6 +6,7 @@ on:
 
 jobs:
   deploy_staging_branch:
+    name: Deploy staging branch
     uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
     with:
       commit_id: ${{ github.sha }}
@@ -18,6 +19,7 @@ jobs:
     needs: deploy_staging_branch
     with:
       deploy_url: 'https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
+      job_name: Deploy staging branch
       status: ${{ needs.deploy_staging_branch.outputs.status }}
       title: 'Deploy https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
     secrets:
