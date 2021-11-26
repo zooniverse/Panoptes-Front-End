@@ -850,13 +850,19 @@ EditWorkflowPage = createReactClass
     changes = {}
     { steps, stepIndex } = @prepareStepForRemoval(taskKey)
 
-    # Remove the tasks
-    @props.workflow.steps[stepIndex][1].taskKeys.forEach (taskKey) =>
-      if @props.workflow.tasks[taskKey]
-        changes["tasks.#{taskKey}"] = undefined
+    # Logic branch: does the Task exist in a Step?
+    if stepIndex >= 0
+      # If the Task exists in a Step, then delete ALL the Tasks in that Step
+      @props.workflow.steps[stepIndex][1].taskKeys.forEach (taskKey2) =>
+        if @props.workflow.tasks[taskKey2]
+          changes["tasks.#{taskKey2}"] = undefined
 
-    # Remove the step
-    changes.steps = steps
+      # Now remove the Step
+      changes.steps = steps
+
+    else
+      # If the Task doesn't exist in a Step, just delete it from the Tasks list
+      changes["tasks.#{taskKey}"] = undefined
 
     if changes.steps?.length is 0
       # If no more steps, remove the classifier version 2.0 designation
