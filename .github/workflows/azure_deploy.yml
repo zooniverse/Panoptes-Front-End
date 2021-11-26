@@ -12,6 +12,11 @@ on:
           description: 'npm build script'
           required: true
           type: string
+        source:
+          default: './dist'
+          description: 'Source directory'
+          required: false
+          type: string
         target:
           description: 'Path to target folder'
           required: true
@@ -54,7 +59,7 @@ jobs:
     - run: npm run ${{ inputs.script }}
 
     - name: Write commit_id.txt
-      run: echo ${HEAD_COMMIT} > ./dist/commit_id.txt
+      run: echo ${HEAD_COMMIT} > ${{ inputs.source }}/commit_id.txt
 
     - name: Upload to blob storage
       id: upload
@@ -66,20 +71,20 @@ jobs:
               --content-cache-control 'public, max-age=60' \
               --container-name '$web' \
               --name '${{ inputs.target }}/index.html' \
-              --file ./dist/index.html
-            rm ./dist/index.html
+              --file '${{ inputs.source }}/index.html'
+            rm ${{ inputs.source }}/index.html
             az storage blob upload \
               --account-name zooniversestatic \
               --content-cache-control 'public, max-age=60' \
               --container-name '$web' \
               --name '${{ inputs.target }}/commit_id.txt' \
-              --file ./dist/commit_id.txt
-            rm ./dist/commit_id.txt
+              --file '${{ inputs.source }}/commit_id.txt'
+            rm ${{ inputs.source }}/commit_id.txt
             az storage blob upload-batch \
               --account-name zooniversestatic \
               --content-cache-control 'public, immutable, max-age=604800' \
               --destination '$web/${{ inputs.target }}' \
-              --source ./dist
+              --source ${{ inputs.source }}
 
 # Azure logout
     - name: logout
