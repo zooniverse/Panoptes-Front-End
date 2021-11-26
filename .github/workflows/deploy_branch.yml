@@ -14,53 +14,11 @@ jobs:
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
   slack_notification:
-    runs-on: ubuntu-latest
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_deploy_status.yml@reusable-workflows
     needs: deploy_staging_branch
-    steps:
-    - name: Slack notification
-      uses: 8398a7/action-slack@v3
-      if: always()
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        STAGING_URL: 'http://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
-      with:
-        fields: took
-        status: custom
-        custom_payload: |
-          {
-            "channel": "#deploys",
-            "icon_emoji": ":octocat:",
-            "username": "Deploy Action",
-            "attachments": [{
-              "color": '${{ needs.deploy_staging_branch.outputs.status }}' === 'success' ? 'good' : '${{ needs.deploy_staging_branch.outputs.status }}' === 'failure' ? 'danger' : 'warning',
-              "mrkdwn_in": ["text"],
-              "author_name": "${{ github.actor }}",
-              "author_link": "https://github.com/${{ github.actor }}/",
-              "author_icon": "https://github.com/${{ github.actor }}.png?size=40",
-              "title": "${{ env.STAGING_URL }}",
-              "title_link": "${{ env.STAGING_URL }}",
-              "fields": [
-                  {
-                      "title": "Status",
-                      "value": '${{ needs.deploy_staging_branch.outputs.status }}' === 'success' ? `:white_check_mark: Success in ${process.env.AS_TOOK}` : '${{ needs.deploy_staging_branch.outputs.status }}' === 'failure' ? ':x: Failed' : ':warning: Warning',
-                      "short": true
-                  },
-                  {
-                      "title": "Triggered by",
-                      "value": "${{ github.event_name }}",
-                      "short": true
-                  },
-                  {
-                      "title": "Initiated by",
-                      "value": "<https://github.com/${{ github.repository }}/pull/${{ github.event.number }}|${{ github.event.pull_request.title }}>"
-                  },
-                  {
-                      "title": "Run Link",
-                      "value": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                  }
-              ],
-              "thumb_url": "https://raw.githubusercontent.com/zooniverse/Brand/master/style%20guide/logos/zooniverse-emblem/zooniverse-logo-teal.png",
-              "footer": "<https://github.com/${{ github.repository }}|${{ github.repository }}> #${{ github.run_number }}",
-              "footer_icon": "https://www.zooniverse.org/favicon.ico"
-            }]
-          }
+    with:
+      deploy_url: 'https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
+      status: ${{ needs.deploy_staging_branch.outputs.status }}
+      title: 'Deploy https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
+    secrets:
+      webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

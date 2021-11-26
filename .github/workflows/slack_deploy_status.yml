@@ -1,0 +1,79 @@
+name: Send job status notification to Slack
+
+on:
+    # Run this workflow from other workflows
+    workflow_call:
+      inputs:
+        deploy_url:
+          description: 'Deployed URL'
+          required: true
+          type: string
+        name:
+          default: 'PFE deploy status'
+          description: 'Job name'
+          required: false
+          type: string
+        status: 
+          description: 'Deploy status'
+          required: true
+          type: string
+        title:
+          description: 'Notification title'
+          required: true
+          type: string
+      secrets:
+        webhook_url:
+          required: true
+jobs:
+  slack_notification:
+    name: ${{ inputs.name }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Slack notification
+      uses: 8398a7/action-slack@v3
+      if: always()
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.webhook_url }}
+      with:
+        job_name: ${{ inputs.name }}
+        fields: took
+        status: custom
+        custom_payload: |
+          {
+            "channel": "#deploys",
+            "icon_emoji": ":octocat:",
+            "username": "Deploy Action",
+            "attachments": [{
+              "color": '${{ inputs.status }}' === 'success' ? 'good' : '${{ inputs.status }}' === 'failure' ? 'danger' : 'warning',
+              "mrkdwn_in": ["text"],
+              "author_name": "${{ github.actor }}",
+              "author_link": "https://github.com/${{ github.actor }}/",
+              "author_icon": "https://github.com/${{ github.actor }}.png?size=40",
+              "title": "${{ inputs.title }}",
+              "title_link": "${{ inputs.deploy_url }}",
+              "fields": [
+                  {
+                      "title": "Status",
+                      "value": '${{ inputs.status }}' === 'success' ? `:white_check_mark: Success in ${process.env.AS_TOOK}` : '${{ inputs.status }}' === 'failure' ? ':x: Failed' : ':warning: Warning',
+                      "short": true
+                  },
+                  {
+                      "title": "Triggered by",
+                      "value": "${{ github.event_name }}",
+                      "short": true
+                  },
+                  {
+                      "title": "Initiated by",
+                      "value": "<https://github.com/${{ github.repository }}/pull/${{ github.event.number }}|${{ github.event.pull_request.title }}>"
+                  },
+                  {
+                      "title": "Run Link",
+                      "value": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+              ],
+              "thumb_url": "https://raw.githubusercontent.com/zooniverse/Brand/master/style%20guide/logos/zooniverse-emblem/zooniverse-logo-teal.png",
+              "footer": "<https://github.com/${{ github.repository }}|${{ github.repository }}> #${{ github.run_number }}",
+              "footer_icon": "https://www.zooniverse.org/favicon.ico"
+            }]
+          }
+  
