@@ -16,6 +16,9 @@ export const SLUGS = [
 ];
 
 export function usesMonorepo(slug) {
+  if (window.location.hostname === 'frontend.preview.zooniverse.org') {
+    return true;
+  }
   return SLUGS.includes(slug);
 }
 
