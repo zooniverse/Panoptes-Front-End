@@ -6,47 +6,17 @@ on:
 
 jobs:
   deploy_staging_branch:
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
+    with:
+      commit_id: ${{ github.sha }}
+      script: '_build-staging'
+      target: 'preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}'
+    secrets:
+      creds: ${{ secrets.AZURE_STATIC_SITES }}
+  slack_notification:
     runs-on: ubuntu-latest
+    needs: deploy_staging_branch
     steps:
-    - uses: actions/checkout@v2
-    - uses: azure/login@v1
-      with:
-          creds: ${{ secrets.AZURE_STATIC_SITES }}
-
-    - name: Cache dependencies
-      uses: actions/cache@v1
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
-    - name: Node.js build
-      id: build
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-    - run: npm ci
-    - run: npm run _build-staging
-
-    - name: Upload to blob storage
-      id: upload
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-            az storage blob upload \
-              --account-name zooniversestatic \
-              --content-cache-control 'public, max-age=60' \
-              --container-name '$web' \
-              --name 'preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}/index.html' \
-              --file ./dist/index.html
-            rm ./dist/index.html
-            az storage blob upload-batch \
-              --account-name zooniversestatic \
-              --content-cache-control 'public, immutable, max-age=604800' \
-              --destination '$web/preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}' \
-              --source ./dist
-
     - name: Slack notification
       uses: 8398a7/action-slack@v3
       if: always()
@@ -62,7 +32,7 @@ jobs:
             "icon_emoji": ":octocat:",
             "username": "Deploy Action",
             "attachments": [{
-              "color": '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              "color": '${{ needs.deploy_staging_branch.outputs.status }}' === 'success' ? 'good' : '${{ needs.deploy_staging_branch.outputs.status }}' === 'failure' ? 'danger' : 'warning',
               "mrkdwn_in": ["text"],
               "author_name": "${{ github.actor }}",
               "author_link": "https://github.com/${{ github.actor }}/",
@@ -72,7 +42,7 @@ jobs:
               "fields": [
                   {
                       "title": "Status",
-                      "value": '${{ job.status }}' === 'success' ? `:white_check_mark: Success in ${process.env.AS_TOOK}` : '${{ job.status }}' === 'failure' ? ':x: Failed' : ':warning: Warning',
+                      "value": '${{ needs.deploy_staging_branch.outputs.status }}' === 'success' ? `:white_check_mark: Success in ${process.env.AS_TOOK}` : '${{ needs.deploy_staging_branch.outputs.status }}' === 'failure' ? ':x: Failed' : ':warning: Warning',
                       "short": true
                   },
                   {
@@ -94,8 +64,3 @@ jobs:
               "footer_icon": "https://www.zooniverse.org/favicon.ico"
             }]
           }
-
-# Azure logout
-    - name: logout
-      run: |
-            az logout
