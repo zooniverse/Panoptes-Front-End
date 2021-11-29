@@ -49,6 +49,7 @@ import Acknowledgements from './pages/about/acknowledgements';
 import Contact from './pages/about/contact';
 import Faq from './pages/about/faq';
 import Highlights from './pages/about/highlights';
+import MobileAppPage from './pages/about/mobile-app';
 import Donate from './pages/about/donate';
 import GetInvolved from './pages/get-involved/index';
 import CallForProjects from './pages/get-involved/call-for-projects';
@@ -117,6 +118,7 @@ export const routes = (
       <Route path="contact" component={Contact} />
       <Route path="faq" component={Faq} />
       <Route path="highlights" component={Highlights} />
+      <Route path="mobile-app" component={MobileAppPage} />
       <Route path="donate" component={Donate} />
     </Route>
 

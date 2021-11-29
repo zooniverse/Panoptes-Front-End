@@ -325,6 +325,7 @@ export default {
         faq: 'FAQ',
         resources: 'Resources',
         highlights: 'Highlights Book',
+        mobileApp: 'Mobile App',
         donate: 'Donate'
       }
     },
@@ -762,6 +763,19 @@ export default {
       imageAlt: 'Zooniverse Highlights Book Cover %(year)s',
       bookTwoThanks: '_A special thank you to our interns, Dr. Aleksandra Kuznetsova and Adler teens Alejandro Sanchez and Mattie Williams, who wrote text and interviewed research teams. We’re so thankful to them for their time and efforts!_',
       bookOneThanks: '_A special thank you to our volunteers, Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata, who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts!_',
+    },
+    mobileApp: {
+      title: '## Zooniverse Mobile App',
+      paragraphOne: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin luctus eleifend tincidunt. Donec tempor lectus ligula, ac mattis neque efficitur sed. Etiam et consectetur neque, pulvinar ultricies metus. Aenean in rutrum nunc. Aliquam est lectus, dapibus id nulla et, pellentesque tempus lectus. Praesent maximus, augue ac tincidunt mollis, dui metus fermentum ipsum, ut porta arcu urna et nisl. Nam placerat lectus erat, at sagittis nisl lacinia vitae.',
+      paragraphTwo: 'Mauris eu dolor in leo elementum luctus nec vitae diam. Suspendisse non metus facilisis, rhoncus orci sit amet, ultrices massa. Maecenas cursus sit amet ligula sit amet dapibus. Proin id lectus eu nibh mollis maximus. Aliquam imperdiet, felis ut dictum sagittis, nibh velit semper felis, vel sagittis felis dui ac velit. Sed elementum vestibulum dui, et ornare risus. Cras at eleifend sem.',
+      android: {
+        header: '### Android',
+        download: '[Download from Google Play](%(url)s)'
+      },
+      ios: {
+        header: '### iOS',
+        download: '[Download from the App Store](%(url)s)'
+      },
     },
     donate: {
       title: '## Donate',
