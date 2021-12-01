@@ -507,6 +507,10 @@ class ProjectStatus extends Component {
             <li>Launch Requested: <Toggle project={project} field="launch_requested" /></li>
             <li>Launch Approved: <Toggle project={project} field="launch_approved" /></li>
           </ul>
+          <h4>Opt-In API Features</h4>
+          <ul className="project-status__section-list">
+            <li>Run SubjectSet Completion Events: <Toggle project={project} field="run_subject_set_completion_events" /></li>
+          </ul>
         </div>
         <RedirectToggle project={project} />
         <FeaturedProjectToggle
