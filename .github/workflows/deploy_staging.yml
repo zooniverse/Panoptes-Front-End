@@ -20,7 +20,7 @@ jobs:
     needs: deploy_staging
     with:
       deploy_url: 'https://master.pfe-preview.zooniverse.org'
-      status: ${{ needs.deploy_staging.outputs.status }}
+      status: ${{ needs.deploy_staging.result }}
       title: 'PFE Staging deploy complete'
     secrets:
       webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -23,7 +23,7 @@ jobs:
     needs: deploy_production
     with:
       deploy_url: 'https://www.zooniverse.org'
-      status: ${{ needs.deploy_production.outputs.status }}
+      status: ${{ needs.deploy_production.result }}
       title: 'PFE Production deploy complete'
     secrets:
       webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

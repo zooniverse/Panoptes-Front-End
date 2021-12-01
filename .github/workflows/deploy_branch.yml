@@ -20,7 +20,7 @@ jobs:
     with:
       deploy_url: 'https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
       job_name: Deploy staging branch
-      status: ${{ needs.deploy_staging_branch.outputs.status }}
+      status: ${{ needs.deploy_staging_branch.result }}
       title: 'Deploy https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
     secrets:
       webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
