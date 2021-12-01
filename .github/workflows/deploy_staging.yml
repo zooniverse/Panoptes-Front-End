@@ -8,19 +8,15 @@ on:
 
 jobs:
   deploy_staging:
+    name: Deploy staging
     uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
     with:
       commit_id: ${{ github.sha }}
+      deploy_url: 'https://master.pfe-preview.zooniverse.org'
+      job_name: Deploy staging
       script: '_build-staging'
       target: 'preview.zooniverse.org/panoptes-front-end/master'
-    secrets:
-      creds: ${{ secrets.AZURE_STATIC_SITES }}
-  slack_notification:
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_deploy_status.yml@reusable-workflows
-    needs: deploy_staging
-    with:
-      deploy_url: 'https://master.pfe-preview.zooniverse.org'
-      status: ${{ needs.deploy_staging.result }}
       title: 'PFE Staging deploy complete'
     secrets:
-      webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      creds: ${{ secrets.AZURE_STATIC_SITES }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

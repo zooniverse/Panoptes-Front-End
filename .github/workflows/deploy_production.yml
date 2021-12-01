@@ -11,19 +11,15 @@ on:
 
 jobs:
   deploy_production:
+    name: Deploy production
     uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
     with:
       commit_id: ${{ github.sha }}
+      deploy_url: 'https://www.zooniverse.org'
+      job_name: Deploy production
       script: '_build-production'
       target: 'www.zooniverse.org'
-    secrets:
-      creds: ${{ secrets.AZURE_STATIC_SITES }}
-  slack_notification:
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_deploy_status.yml@reusable-workflows
-    needs: deploy_production
-    with:
-      deploy_url: 'https://www.zooniverse.org'
-      status: ${{ needs.deploy_production.result }}
       title: 'PFE Production deploy complete'
     secrets:
-      webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      creds: ${{ secrets.AZURE_STATIC_SITES }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
