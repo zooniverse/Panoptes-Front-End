@@ -38,10 +38,6 @@ on:
           required: true
         slack_webhook_url:
           required: true
-      outputs:
-        status:
-          description: 'Deploy status'
-          value: ${{ jobs.deploy.outputs.status }}
 
 jobs:
   deploy:
