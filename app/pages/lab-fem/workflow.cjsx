@@ -48,9 +48,14 @@ EditWorkflowPage = createReactClass
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
     usingTranscriptionTask = Object.keys(@props.workflow.tasks).some((taskKey) => @props.workflow.tasks[taskKey].type is 'transcription')
-    if @canUseTask(@props.project, "transcription-task") and usingTranscriptionTask
+    if isThisProjectUsingFEMLab(@props.project, @props.location)
+      return "#{FEM_LAB_PREVIEW_HOST}/projects/#{owner}/#{name}/classify/workflow/#{@props.workflow.id}"
+    
+    # WARNING: transcription-task case may no longer be correct as of Dec 2021
+    else if @canUseTask(@props.project, "transcription-task") and usingTranscriptionTask
       env = process.env.NODE_ENV
       "https://fe-project.zooniverse.org/projects/#{owner}/#{name}/classify/workflow/#{@props.workflow.id}?env=#{env}"
+
     else
       viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
       @context.router.createHref
