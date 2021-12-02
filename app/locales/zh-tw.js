@@ -705,15 +705,14 @@ export default {
       listThree: '- If you have questions about the Zooniverse and would like to speak to a member of our team, please [contact us](/about/contact).'
     },
     highlights: {
-      title: '## Zooniverse Highlights',
-      paragraphOne: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and many [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community working alongside hundreds of professional researchers.',
-      paragraphTwo: 'These books commemorate and honor the efforts of everyone involved, providing just a glimpse into the ways Zooniverse community members can make a real, personal impact on the world around them. Each highlights 40 of the many projects that have been active on the Zooniverse website and app during the academic years 2018 – 2020. There are so many fascinating projects we haven’t been able to include, so we hope to continue to create these books in the future.',
-      sectionHeader: '### Volume %(volumeNumber)s: %(year)s',
-      toDownload: '[Download a pdf](%(url)s)',
-      paragraphThree: '[Purchase on %(purchaseSource)s](%(url)s). Note, the cost simply covers printing and postage fees – we will not be making any profit through sales of the hard copy of the book.',
       imageAlt: 'Zooniverse Highlights Book Cover %(year)s',
-      bookTwoThanks: '_A special thank you to our interns, Dr. Aleksandra Kuznetsova and Adler teens Alejandro Sanchez and Mattie Williams, who wrote text and interviewed research teams. We’re so thankful to them for their time and efforts!_',
-      bookOneThanks: '_A special thank you to our volunteers, Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata, who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts!_',
+      paragraphOne: 'Since 2007, Zooniverse projects have led to many unexpected and scientifically significant discoveries and many [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of Zooniverse participants engaged in these projects alongside the research teams.',
+      paragraphTwo: 'These ‘Into the Zooniverse’ books commemorate and honor the efforts of everyone involved, providing just a glimpse into the ways Zooniverse community members have a real impact on the world around them. Each book highlights a subset of projects that were active that year. There are so many fascinating projects we haven’t been able to include yet; we hope to continue creating these books into the future.',
+      paragraphThree: 'Click on the links below to access the books. Note: the cost to purchase a hard copy simply covers printing and postage fees. We do not make any profit through sales of the hard copies of the books.',
+      sectionHeader: '### Volume %(volumeNumber)s: %(year)s',
+      title: '## Zooniverse Highlights',
+      toDownload: '[Download a pdf](%(url)s)',
+      toPurchase: '[Purchase on %(purchaseSource)s](%(url)s)'
     },
     donate: {
       title: '## Donate',

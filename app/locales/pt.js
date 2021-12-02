@@ -340,16 +340,14 @@ export default {
       listThree: ' - Se tem perguntas sobre o Zooniverse e gostaria de falar com um membro da nossa equipa, por favor, [contacte-nos](/about/contact).'
     },
     highlights: {
-      title: '## Livro de Destaques Zooniverse 2019',
-      thanks: '### Obrigado!',
-      paragraphOne: 'Como agradecimento e celebração dos projectos e destaques de 2019, compilámos o nosso primeiro livro de destaques ‘Into the Zooniverse.',
-      paragraphTwo: 'Na última década, os projectos do Zooniverse levaram a muitas descobertas inesperadas e cientificamente significativas e mais de 160 [peer-reviewed publications](https://zooniverse.org/publications). Tudo isso seria impossível se não fosse a nossa comunidade global de quase 2 milhões de pessoas trabalhando ao lado de centenas de pesquisadores profissionais.',
-      paragraphThree: 'O livro é uma homenagem ao Ano de 2019 do Zooniverse, destacando 40 projectos Zooniverse de entre os mais de 200 lançados até ao momento. Existem muitos projectos fascinantes que não pudemos incluir este ano. Esperamos continuar a criar estes livros anualmente, destacando todo um novo conjunto de projectos e descobertas no próximo ano!',
-      toDownload: '**Para descarregar uma cópia electrónica gratuita:**',
-      download: 'Por favor clique em [here](http://bit.ly/zoonibook19-pdf-new) para descarregar uma cópia eletrónica gratuita de ‘Into the Zooniverse’.',
-      toOrder: '**Para solicitar uma cópia impressa:**',
-      order: 'Por favor clique [aqui](http://bit.ly/zoonibook19-buy-new) para solicitar uma cópia impressa de ‘Into the Zooniverse’. Note que o custo apenas cobre as despesas de impressão e as taxas postais - não obtemos lucro com as vendas da cópia impressa do livro.',
-      credits: 'Um agradecimento especial aos nossos voluntários (Mark Benson, Caitlyn Buongiorno, Leslie Grove e Andrew Salata) que escreveram o texto, corrigiram-no com as equipas de investigação e criaram o livro em colaboração com a &quot;designer&quot; do Zooniverse, Becky Rother. Estamos-lhes muito gratos pelo seu tempo e esforço.'
+      imageAlt: 'Zooniverse Highlights Book Cover %(year)s',
+      paragraphOne: 'Since 2007, Zooniverse projects have led to many unexpected and scientifically significant discoveries and many [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of Zooniverse participants engaged in these projects alongside the research teams.',
+      paragraphTwo: 'These ‘Into the Zooniverse’ books commemorate and honor the efforts of everyone involved, providing just a glimpse into the ways Zooniverse community members have a real impact on the world around them. Each book highlights a subset of projects that were active that year. There are so many fascinating projects we haven’t been able to include yet; we hope to continue creating these books into the future.',
+      paragraphThree: 'Click on the links below to access the books. Note: the cost to purchase a hard copy simply covers printing and postage fees. We do not make any profit through sales of the hard copies of the books.',
+      sectionHeader: '### Volume %(volumeNumber)s: %(year)s',
+      title: '## Zooniverse Highlights',
+      toDownload: '[Download a pdf](%(url)s)',
+      toPurchase: '[Purchase on %(purchaseSource)s](%(url)s)'
     },
     donate: {
       title: '## Donativo',
