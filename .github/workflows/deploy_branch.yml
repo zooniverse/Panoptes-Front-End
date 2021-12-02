@@ -7,14 +7,21 @@ on:
 jobs:
   deploy_staging_branch:
     name: Deploy staging branch
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@production-release
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
     with:
       commit_id: ${{ github.sha }}
-      deploy_url: 'https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
-      job_name: Deploy staging branch
       script: '_build-staging'
       target: 'preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}'
-      title: 'Deploy https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
+  slack_notification:
+    name: Send Slack notification
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_notification.yml@reusable-workflows
+    needs: deploy_staging_branch
+    with:
+      deploy_url: 'https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
+      job_name: Deploy staging branch
+      status: ${{ needs.deploy_staging_branch.result }}
+      title: 'Deploy https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
+    secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
