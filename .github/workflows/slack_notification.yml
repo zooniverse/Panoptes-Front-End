@@ -30,7 +30,6 @@ jobs:
     steps:
       - name: Slack notification
         uses: 8398a7/action-slack@v3
-        if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
         with:
