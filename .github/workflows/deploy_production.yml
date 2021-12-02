@@ -10,12 +10,17 @@ on:
     workflow_dispatch:
 
 jobs:
-  deploy_production:
-    name: Deploy production
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
+  build:
+    name: Build production
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@reusable-workflows
     with:
       commit_id: ${{ github.sha }}
       script: '_build-production'
+  deploy_production:
+    name: Deploy production
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
+    needs: build
+    with:
       target: 'www.zooniverse.org'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
@@ -25,7 +30,7 @@ jobs:
     needs: deploy_production
     with:
       deploy_url: 'https://www.zooniverse.org'
-      job_name: Deploy production
+      job_name: Build production / build
       status: ${{ needs.deploy_production.result }}
       title: 'PFE Production deploy complete'
     secrets:

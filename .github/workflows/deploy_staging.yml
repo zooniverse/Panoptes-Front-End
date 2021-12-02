@@ -7,12 +7,17 @@ on:
           - master
 
 jobs:
-  deploy_staging:
-    name: Deploy staging
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@production-release
+  build:
+    name: Build staging
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@reusable-workflows
     with:
       commit_id: ${{ github.sha }}
       script: '_build-staging'
+  deploy_staging:
+    name: Deploy staging
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@production-release
+    needs: build
+    with:
       target: 'preview.zooniverse.org/panoptes-front-end/master'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
@@ -23,7 +28,7 @@ jobs:
     needs: deploy_staging
     with:
       deploy_url: 'https://master.pfe-preview.zooniverse.org'
-      job_name: Deploy staging
+      job_name: Build staging / build
       status: ${{ needs.deploy_staging.result }}
       title: 'PFE Staging deploy complete'
     secrets:

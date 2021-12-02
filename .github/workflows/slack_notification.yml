@@ -34,7 +34,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
         with:
-          job_name: ${{ inputs.job_name }} / deploy
+          job_name: ${{ inputs.job_name }}
           fields: took
           status: custom
           custom_payload: |
