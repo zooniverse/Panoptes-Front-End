@@ -12,7 +12,7 @@ on:
 jobs:
   deploy_production:
     name: Deploy production
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@production-release
     with:
       commit_id: ${{ github.sha }}
       deploy_url: 'https://www.zooniverse.org'
