@@ -11,6 +11,7 @@ ChangeListener = require '../../components/change-listener'
 workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
 `import LabStatus from '../../partials/lab-status.jsx';`
+`import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from '../lab-fem/fem-lab-utilities';`
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
@@ -53,13 +54,30 @@ EditProjectPage = createReactClass
     linkParams =
       projectID: @props.project.id
 
+    thisProjectUsesFEM = isThisProjectUsingFEMLab @props.project, @props.location
+
+    projectLink = "/projects/#{@props.project.slug}"
+    if isThisProjectUsingFEMLab(@props.project, @props.location)
+      env = process.env.NODE_ENV
+      if env is 'production'
+        projectLink = "#{FEM_LAB_PREVIEW_HOST}#{projectLink}"
+      else
+        projectLink = "#{FEM_LAB_PREVIEW_HOST}#{projectLink}?env=#{env}"
+
     <div className="columns-container content-container">
       <Helmet title="#{counterpart 'projectLab.edit'} » #{@props.project.display_name}" />
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
           <li>
-            <Link to={"/projects/#{@props.project.slug}"} className="standard-button view-project-button" target="_blank" title="Open the current project in a new tab.">View project</Link>
+            <Link
+              to={projectLink}
+              className="standard-button view-project-button"
+              target="_blank"
+              title="Open the current project in a new tab."
+            >
+              View project
+            </Link>
           </li>
           <li><IndexLink to={@labPath()} activeClassName='active' className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
             Project details

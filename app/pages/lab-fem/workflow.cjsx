@@ -20,6 +20,7 @@ FeedbackSection = require('../../features/feedback/lab').default
 MobileSection = require('../lab/mobile').default
 SubjectGroupViewerEditor = require('../lab/workflow-components/subject-group-viewer-editor').default
 SubjectSetLinker = require('../lab/workflow-components/subject-set-linker').default
+`import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities';`
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -47,9 +48,18 @@ EditWorkflowPage = createReactClass
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
     usingTranscriptionTask = Object.keys(@props.workflow.tasks).some((taskKey) => @props.workflow.tasks[taskKey].type is 'transcription')
-    if @canUseTask(@props.project, "transcription-task") and usingTranscriptionTask
+    if isThisProjectUsingFEMLab(@props.project, @props.location)
+      env = process.env.NODE_ENV
+      if env is 'production'
+        return "#{FEM_LAB_PREVIEW_HOST}/projects/#{owner}/#{name}/classify/workflow/#{@props.workflow.id}"
+      else
+        return "#{FEM_LAB_PREVIEW_HOST}/projects/#{owner}/#{name}/classify/workflow/#{@props.workflow.id}?env=#{env}"
+
+    # WARNING: transcription-task case may no longer be correct as of Dec 2021
+    else if @canUseTask(@props.project, "transcription-task") and usingTranscriptionTask
       env = process.env.NODE_ENV
       "https://fe-project.zooniverse.org/projects/#{owner}/#{name}/classify/workflow/#{@props.workflow.id}?env=#{env}"
+
     else
       viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
       @context.router.createHref
@@ -96,6 +106,13 @@ EditWorkflowPage = createReactClass
     disabledIfLive = classnames({ 'disabled-section': projectLiveWorkflowActive })
     disabledIfWorkflowInactive = classnames({ 'disabled-section': projectLiveWorkflowInactive })
     taskEditorClasses = classnames({'column': true, 'disabled-section': projectLiveWorkflowActive})
+
+    # FEM: if persist_annotations or hide_classification_summaries is undefined, default to TRUE
+    persist_annotations = @props.workflow.configuration.persist_annotations
+    persist_annotations = true if persist_annotations is undefined
+
+    hide_classification_summaries = @props.workflow.configuration.hide_classification_summaries
+    hide_classification_summaries = true if hide_classification_summaries is undefined
 
     <div className="edit-workflow-page">
       <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
@@ -300,7 +317,7 @@ EditWorkflowPage = createReactClass
             <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
             <br />
             <label>
-              <input ref="persistAnnotation" type="checkbox" checked={@props.workflow.configuration.persist_annotations} onChange={@handlePersistAnnotationsToggle} />
+              <input ref="persistAnnotation" type="checkbox" checked={persist_annotations} onChange={@handlePersistAnnotationsToggle} />
               Persist annotations
             </label>
             </AutoSave>
@@ -341,7 +358,7 @@ EditWorkflowPage = createReactClass
                 <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
                 <br />
                 <label>
-                  <input ref="hideClassificationSummaries" type="checkbox" checked={@props.workflow.configuration.hide_classification_summaries} onChange={@handleSetHideClassificationSummaries} />
+                  <input ref="hideClassificationSummaries" type="checkbox" checked={hide_classification_summaries} onChange={@handleSetHideClassificationSummaries} />
                   Hide classification summaries
                 </label>
               </AutoSave>
