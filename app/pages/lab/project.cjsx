@@ -57,7 +57,7 @@ EditProjectPage = createReactClass
     thisProjectUsesFEM = isThisProjectUsingFEMLab @props.project, @props.location
 
     projectLink = "/projects/#{@props.project.slug}"
-    if thisProjectUsesFEM then
+    if isThisProjectUsingFEMLab(@props.project, @props.location)
       env = process.env.NODE_ENV
       if env is 'production'
         projectLink = "#{FEM_LAB_PREVIEW_HOST}#{projectLink}"
