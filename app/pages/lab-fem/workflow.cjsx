@@ -49,8 +49,12 @@ EditWorkflowPage = createReactClass
     [owner, name] = @props.project.slug.split('/')
     usingTranscriptionTask = Object.keys(@props.workflow.tasks).some((taskKey) => @props.workflow.tasks[taskKey].type is 'transcription')
     if isThisProjectUsingFEMLab(@props.project, @props.location)
-      return "#{FEM_LAB_PREVIEW_HOST}/projects/#{owner}/#{name}/classify/workflow/#{@props.workflow.id}"
-    
+      env = process.env.NODE_ENV
+      if env is 'production'
+        return "#{FEM_LAB_PREVIEW_HOST}/projects/#{owner}/#{name}/classify/workflow/#{@props.workflow.id}"
+      else
+        return "#{FEM_LAB_PREVIEW_HOST}/projects/#{owner}/#{name}/classify/workflow/#{@props.workflow.id}?env=#{env}"
+
     # WARNING: transcription-task case may no longer be correct as of Dec 2021
     else if @canUseTask(@props.project, "transcription-task") and usingTranscriptionTask
       env = process.env.NODE_ENV

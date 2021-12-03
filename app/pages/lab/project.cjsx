@@ -57,7 +57,12 @@ EditProjectPage = createReactClass
     thisProjectUsesFEM = isThisProjectUsingFEMLab @props.project, @props.location
 
     projectLink = "/projects/#{@props.project.slug}"
-    if thisProjectUsesFEM then projectLink = "#{FEM_LAB_PREVIEW_HOST}#{projectLink}"
+    if thisProjectUsesFEM then
+      env = process.env.NODE_ENV
+      if env is 'production'
+        projectLink = "#{FEM_LAB_PREVIEW_HOST}#{projectLink}"
+      else
+        projectLink = "#{FEM_LAB_PREVIEW_HOST}#{projectLink}?env=#{env}"
 
     <div className="columns-container content-container">
       <Helmet title="#{counterpart 'projectLab.edit'} » #{@props.project.display_name}" />
