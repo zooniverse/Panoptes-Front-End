@@ -13,6 +13,6 @@ describe('AboutPage', function () {
   it('renders Translate elements', function () {
     const wrapper = shallow(<AboutPage />);
     const translateElements = wrapper.find('Translate');
-    assert.equal(translateElements.length, 10);
+    assert.equal(translateElements.length, 11);
   });
 });
