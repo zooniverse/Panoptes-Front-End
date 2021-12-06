@@ -9,6 +9,8 @@ class MobileAppPage extends React.Component {
         <Markdown>{counterpart('about.mobileApp.title')}</Markdown>
         <Markdown>{counterpart('about.mobileApp.paragraphOne')}</Markdown>
         <Markdown>{counterpart('about.mobileApp.paragraphTwo')}</Markdown>
+        <Markdown>{counterpart('about.mobileApp.paragraphThree')}</Markdown>
+        <Markdown>{counterpart('about.mobileApp.paragraphFour')}</Markdown>
         <div className='mobileApp__sections'>
           <div className='mobileApp__section'>
             <Markdown>{counterpart('about.mobileApp.android.header')}</Markdown>
