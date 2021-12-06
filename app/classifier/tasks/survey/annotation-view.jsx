@@ -14,6 +14,12 @@ export function AnnotationView({
     onChange(annotation);
   }
 
+  function onClick(event) {
+    const { target } = event
+    const { index } = target.dataset
+    handleRemove(index)
+  }
+
   function answerByQuestion(identification) {
     return task.questionsOrder.map((questionID) => {
       const answerKeys = Object.keys(identification.answers);
@@ -43,7 +49,8 @@ export function AnnotationView({
               {' '}
               <button
                 className="survey-identification-remove"
-                onClick={i => handleRemove(i)}
+                data-index={i}
+                onClick={onClick}
                 aria-label="Remove"
                 type="button"
               >

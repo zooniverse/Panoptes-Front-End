@@ -68,7 +68,13 @@ describe('AnnotationView', function() {
   describe('The delete button', function() {
     it('should call the onChange callback', function() {
       const deleteButton = wrapper.find('.survey-identification-remove');
-      deleteButton.simulate('click');
+      deleteButton.simulate('click', {
+        target: {
+          dataset: {
+            index: 0
+          }
+        }
+      });
       expect(onChange.calledOnce).to.be.true;
     });
 
