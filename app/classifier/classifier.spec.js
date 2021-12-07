@@ -53,6 +53,7 @@ const workflow = mockPanoptesResource('workflow', {
   configuration: {
     hide_classification_summaries: false
   },
+  first_task: 'T0',
   tasks: {
     T0: {},
     T1: {}

@@ -315,7 +315,7 @@ class Classifier extends React.Component {
   }
 
   render() {
-    const { actions, goldStandardMode, intervention, user } = this.props;
+    const { actions, goldStandardMode, intervention, user, workflow } = this.props;
     const { showIntervention, showSummary, workflowHistory } = this.state;
     const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const taskAreaVariant = goldStandardMode ? 'goldStandardMode' : 'default';
@@ -325,6 +325,17 @@ class Classifier extends React.Component {
       'large-image': largeFormatImage,
       [this.props.className]: !!this.props.className
     });
+
+    /*
+      Throw an error if the workflow has tasks but a first task isn't set,
+      otherwise the classifier will crash deeper down the component tree.
+    */
+    if (!workflow.first_task) {
+      const hasTasks = Object.keys(workflow.tasks).length
+      if (hasTasks) {
+        throw new Error('First task has not been set for workflow.')
+      }
+    }
 
     let currentClassification;
     let currentTask;
