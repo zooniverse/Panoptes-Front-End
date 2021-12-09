@@ -325,6 +325,7 @@ export default {
         faq: 'FAQ',
         resources: 'Resources',
         highlights: 'Highlights Book',
+        mobileApp: 'Mobile App',
         donate: 'Donate'
       }
     },
@@ -761,6 +762,21 @@ export default {
       title: '## Zooniverse Highlights',
       toDownload: '[Download a pdf](%(url)s)',
       toPurchase: '[Purchase on %(purchaseSource)s](%(url)s)'
+    },
+    mobileApp: {
+      title: '## Zooniverse Mobile App',
+      paragraphOne: 'The Zooniverse mobile app is a great way to get involved in Zooniverse projects on-the-go. Folks swipe on their phones to identify wildlife camera photos with animals in them. They draw rectangles around gravitational waves and tag distant galaxies. You can join the fun with your existing Zooniverse account, whether you have an iOS or an Android device!',
+      paragraphTwo: 'If you’re already working on a project that you think could go on mobile, please post in that project’s Talk discussion forum to start the conversation with the research team and us. The more, the merrier!',
+      paragraphThree: 'For more information about the Zooniverse mobile app, check out [https://blog.zooniverse.org/?s=mobile](https://blog.zooniverse.org/?s=mobile).',
+      paragraphFour: '**For researchers:** Mobile-enabled projects receive more classifications and so are able to finish more quickly. Please note: only certain kinds of projects can be enabled on mobile (see details within the blog posts linked above and instructions within the [Project Builder](http://zooniverse.org/lab) workflow editor interface). If you have any questions about the Zooniverse mobile app, email us at [contact@zooniverse.org](mailto:contact@zooniverse.org)!',
+      android: {
+        header: '### Android',
+        download: '[Download from Google Play](%(url)s)'
+      },
+      ios: {
+        header: '### iOS',
+        download: '[Download from the App Store](%(url)s)'
+      },
     },
     donate: {
       title: '## Donate',

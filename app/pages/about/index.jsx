@@ -85,6 +85,14 @@ function AboutPage({ children }) {
               </li>
               <li>
                 <Link
+                  to="/about/mobile-app"
+                  activeClassName="active"
+                >
+                  <Translate content="about.index.nav.mobileApp" />
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/about/donate"
                   activeClassName="active"
                 >
