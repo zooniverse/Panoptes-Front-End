@@ -7,16 +7,32 @@ on:
           - master
 
 jobs:
+  build:
+    name: Build staging
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@reusable-workflows
+    with:
+      commit_id: ${{ github.sha }}
+      output: 'dist'
+      script: '_build-staging'
   deploy_staging:
     name: Deploy staging
     uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@production-release
+    needs: build
     with:
-      commit_id: ${{ github.sha }}
-      deploy_url: 'https://master.pfe-preview.zooniverse.org'
-      job_name: Deploy staging
-      script: '_build-staging'
+      source: 'dist'
       target: 'preview.zooniverse.org/panoptes-front-end/master'
-      title: 'PFE Staging deploy complete'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+  slack_notification:
+    name: Send Slack notification
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_notification.yml@reusable-workflows
+    needs: deploy_staging
+    if: always()
+    with:
+      deploy_url: 'https://master.pfe-preview.zooniverse.org'
+      job_name: Build staging / build
+      status: ${{ needs.deploy_staging.result }}
+      title: 'PFE Staging deploy complete'
+    secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

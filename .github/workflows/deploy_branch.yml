@@ -5,16 +5,31 @@ on:
     pull_request:
 
 jobs:
-  deploy_staging_branch:
-    name: Deploy staging branch
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@production-release
+  build:
+    name: Build staging branch
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@reusable-workflows
     with:
       commit_id: ${{ github.sha }}
-      deploy_url: 'https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
-      job_name: Deploy staging branch
+      output: 'dist'
       script: '_build-staging'
+  deploy_staging_branch:
+    name: Deploy staging branch
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
+    needs: build
+    with:
+      source: 'dist'
       target: 'preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}'
-      title: 'Deploy https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
+  slack_notification:
+    name: Send Slack notification
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_notification.yml@reusable-workflows
+    needs: deploy_staging_branch
+    if: always()
+    with:
+      deploy_url: 'https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
+      job_name: Build staging branch / build
+      status: ${{ needs.deploy_staging_branch.result }}
+      title: 'Deploy https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
+    secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
