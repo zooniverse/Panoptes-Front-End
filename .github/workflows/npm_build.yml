@@ -17,10 +17,9 @@ on:
           description: 'npm build script'
           required: true
           type: string
-        source:
-          default: 'dist'
-          description: 'Source directory'
-          required: false
+        output:
+          description: 'Output directory name'
+          required: true
           type: string
 
 jobs:
@@ -48,11 +47,11 @@ jobs:
     - run: npm run ${{ inputs.script }}
 
     - name: Write commit_id.txt
-      run: echo ${HEAD_COMMIT} > ./${{ inputs.source }}/commit_id.txt
+      run: echo ${HEAD_COMMIT} > ./${{ inputs.output }}/commit_id.txt
 
     - name: Save build
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ inputs.source }}
-        path: ./${{ inputs.source }}/
+        name: ${{ inputs.output }}
+        path: ./${{ inputs.output }}/
 

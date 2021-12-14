@@ -15,12 +15,14 @@ jobs:
     uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@reusable-workflows
     with:
       commit_id: ${{ github.sha }}
+      output: 'dist'
       script: '_build-production'
   deploy_production:
     name: Deploy production
     uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
     needs: build
     with:
+      source: 'dist'
       target: 'www.zooniverse.org'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}

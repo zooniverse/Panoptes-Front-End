@@ -10,12 +10,14 @@ jobs:
     uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@reusable-workflows
     with:
       commit_id: ${{ github.sha }}
+      output: 'dist'
       script: '_build-staging'
   deploy_staging_branch:
     name: Deploy staging branch
     uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@reusable-workflows
     needs: build
     with:
+      source: 'dist'
       target: 'preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}

@@ -5,9 +5,8 @@ on:
     workflow_call:
       inputs:
         source:
-          default: 'dist'
           description: 'Source package'
-          required: false
+          required: true
           type: string
         target:
           description: 'Path to target folder'
