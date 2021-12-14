@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build staging
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@reusable-workflows
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@production-release
     with:
       commit_id: ${{ github.sha }}
       output: 'dist'
@@ -26,7 +26,7 @@ jobs:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
   slack_notification:
     name: Send Slack notification
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_notification.yml@reusable-workflows
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_notification.yml@production-release
     needs: deploy_staging
     if: always()
     with:
