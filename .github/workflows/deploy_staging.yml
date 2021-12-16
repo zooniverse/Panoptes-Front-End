@@ -23,7 +23,6 @@ jobs:
       target: 'preview.zooniverse.org/panoptes-front-end/master'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
   slack_notification:
     name: Send Slack notification
     uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_notification.yml@production-release
