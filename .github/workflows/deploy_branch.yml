@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Build staging branch
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@production-release
+    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@clean-up-npm-caching
     with:
       commit_id: ${{ github.sha }}
       output: 'dist'
