@@ -7,7 +7,8 @@ import UserProperties from './user-settings/properties';
 import UserResources from './user-settings/resources';
 import UserLimitToggle from './user-settings/limit-toggle';
 import DeleteUser from './user-settings/delete-user';
-import { getUserProjects } from './user-settings/stats';
+import { getUserClassifications, getUserProjects } from './user-settings/stats';
+import ClassificationData from './user-settings/ClassificationData';
 
 class UserSettings extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class UserSettings extends Component {
     this.updateUserProjects = this.updateUserProjects.bind(this);
 
     this.state = {
+      classifications: [],
       editUser: null,
       ribbonData: [],
       totalClassifications: 0
@@ -30,6 +32,8 @@ class UserSettings extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.editUser?.id !== prevState.editUser?.id) {
       getUserProjects(this.state.editUser, this.updateUserProjects)
+      getUserClassifications(this.state.editUser)
+        .then(classifications => this.setState({ classifications }))
     }
   }
 
@@ -86,16 +90,28 @@ class UserSettings extends Component {
         <UserResources type="projects" user={this.state.editUser} />
         <UserResources type="organizations" user={this.state.editUser} />
         <h4>Classification history</h4>
-        <p>Total classifications: {this.state.totalClassifications}</p>
-        <ul>
-        {this.state.ribbonData.map(project => (
-          <li key={project.id}>
-            <p><b>{project.display_name}</b><br/>
-              Classifications: {project.classifications}
-            </p>
-          </li>
-        ))}
-        </ul>
+        <details>
+          <summary>Total classifications: {this.state.totalClassifications}</summary>
+          <ul>
+          {this.state.ribbonData.map(project => (
+            <li key={project.id}>
+              <p><b>{project.display_name}</b><br/>
+                Classifications: {project.classifications}
+              </p>
+            </li>
+          ))}
+          </ul>
+        </details>
+        <details>
+          <summary>Recent classifications {this.state.classifications.length}</summary>
+          <ol>
+          {this.state.classifications.map(classification => (
+            <li key={classification.id}>
+              <ClassificationData classification={classification} />
+            </li>
+          ))}
+          </ol>
+        </details>
       </div>
     );
   }
