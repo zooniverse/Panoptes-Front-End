@@ -7,7 +7,8 @@ import UserProperties from './user-settings/properties';
 import UserResources from './user-settings/resources';
 import UserLimitToggle from './user-settings/limit-toggle';
 import DeleteUser from './user-settings/delete-user';
-import { getUserProjects } from './user-settings/stats';
+import { getUserClassifications, getUserProjects } from './user-settings/stats';
+import ClassificationData from './user-settings/ClassificationData';
 
 class UserSettings extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class UserSettings extends Component {
     this.updateUserProjects = this.updateUserProjects.bind(this);
 
     this.state = {
+      classifications: [],
       editUser: null,
       ribbonData: [],
       totalClassifications: 0
@@ -30,6 +32,8 @@ class UserSettings extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.editUser?.id !== prevState.editUser?.id) {
       getUserProjects(this.state.editUser, this.updateUserProjects)
+      getUserClassifications(this.state.editUser)
+        .then(classifications => this.setState({ classifications }))
     }
   }
 
@@ -97,6 +101,16 @@ class UserSettings extends Component {
             </li>
           ))}
           </ul>
+        </details>
+        <details>
+          <summary>Recent classifications {this.state.classifications.length}</summary>
+          <ol>
+          {this.state.classifications.map(classification => (
+            <li key={classification.id}>
+              <ClassificationData classification={classification} />
+            </li>
+          ))}
+          </ol>
         </details>
       </div>
     );

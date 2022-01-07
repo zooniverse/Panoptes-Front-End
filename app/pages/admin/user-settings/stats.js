@@ -80,3 +80,10 @@ export function getUserProjects(user, callback, _page = 1) {
     }
   });
 }
+
+export function getUserClassifications(user, _page = 1) {
+  return user.get('classifications', {
+    sort: '-created_at',
+    page: _page
+  })
+}
