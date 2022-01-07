@@ -86,16 +86,18 @@ class UserSettings extends Component {
         <UserResources type="projects" user={this.state.editUser} />
         <UserResources type="organizations" user={this.state.editUser} />
         <h4>Classification history</h4>
-        <p>Total classifications: {this.state.totalClassifications}</p>
-        <ul>
-        {this.state.ribbonData.map(project => (
-          <li key={project.id}>
-            <p><b>{project.display_name}</b><br/>
-              Classifications: {project.classifications}
-            </p>
-          </li>
-        ))}
-        </ul>
+        <details>
+          <summary>Total classifications: {this.state.totalClassifications}</summary>
+          <ul>
+          {this.state.ribbonData.map(project => (
+            <li key={project.id}>
+              <p><b>{project.display_name}</b><br/>
+                Classifications: {project.classifications}
+              </p>
+            </li>
+          ))}
+          </ul>
+        </details>
       </div>
     );
   }
