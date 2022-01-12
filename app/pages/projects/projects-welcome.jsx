@@ -77,6 +77,7 @@ class ProjectsWelcome extends Component {
   }
 
   render() {
+    const isLoggedIn = this.state.user;
     return (
       <div className="resources-container welcome-banner">
         <Translate content="projects.welcome.heading" component="h2" />
@@ -89,7 +90,7 @@ class ProjectsWelcome extends Component {
             </FeaturedProjectEditor>
           )}
         </div>
-        <Translate content="projects.welcome.recommended" component="p" />
+        {isLoggedIn && <Translate content="projects.welcome.recommended" component="p" /> }
         <div className="project-card-list">
           {this.state.recommendedProjects.map(project =>
             <FeaturedProjectEditor key={project.id} project={project}>
