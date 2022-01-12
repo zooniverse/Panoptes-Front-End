@@ -44,7 +44,7 @@ class ProjectsPage extends Component {
   }
 
   render() {
-    const { children, location } = this.props;
+    const { children, location, user } = this.props;
     return (
       <div className="secondary-page all-resources-page">
         <Helmet title={counterpart('projectsHome.title')} />
@@ -73,7 +73,7 @@ class ProjectsPage extends Component {
           </div>
         </section>
         <section className="resources-container">
-          <ProjectsWelcome />
+          <ProjectsWelcome user={user} />
           {children}
         </section>
       </div>
