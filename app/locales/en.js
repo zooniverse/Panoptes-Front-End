@@ -54,6 +54,7 @@ export default {
     welcome: {
       heading: "Welcome! We're so glad you're here",
       thanks: "Thank you for your interest in helping real research. Here we've gathered a few projects we could really use your help on right now. For more options just scroll down to browse all of our active projects.",
+      recommended: "Here are some projects we thought you might like :)",
       talk: "Make sure to also check out [Talk](/talk) where you can chat to other like-minded volunteers.",
       scrollDown: "Scroll down for even more"
     }
