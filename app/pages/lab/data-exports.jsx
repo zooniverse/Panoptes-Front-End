@@ -30,7 +30,7 @@ function validateSubjectSetExportId(project, subjectSetId) {
 
 export default function DataExports (props) {
   const warningsForProject = getWarningsForProject(props.project.id, props.warnings)
-  const subjectSetExportId = validateSubjectSetExportId(props.project, props.location.query['subject-sets']);
+  const subjectSetExportId = validateSubjectSetExportId(props.project, props.location?.query['subject-sets']);
   return (
     <div className="data-exports">
       <p className="form-label">Project data exports</p>
