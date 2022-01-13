@@ -32,7 +32,7 @@ export default class DataExportDownloadLink extends React.Component {
     }
 
     getExport() {
-        return this.props.project.get(this.props.exportType).then((response) => {
+        return this.props.resource.get(this.props.exportType).then((response) => {
             if (response.errors) {
                 this.setState({requested: true, error: response.errors});
             } else {
@@ -66,7 +66,7 @@ export default class DataExportDownloadLink extends React.Component {
 }
 
 DataExportDownloadLink.propTypes = {
-    project: PropTypes.object,
+    resource: PropTypes.object,
     exportType: PropTypes.string
 }
 
