@@ -64,7 +64,8 @@ export default function reducer(state = initialState, action = {}) {
       const resourceTranslations = {};
       translations.forEach((translation, i) => {
         Object.keys(translation.strings).map((translationKey) => {
-          const newTranslation = explodeTranslationKey(translationKey, translation.strings[translationKey]);
+          const translationValue = translation.strings[translationKey] || '';
+          const newTranslation = explodeTranslationKey(translationKey, translationValue.trim());
           translation.strings = merge(translation.strings, newTranslation);
           resourceTranslations[translation.translated_id] = translation;
         });
