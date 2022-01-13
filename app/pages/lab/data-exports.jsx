@@ -19,9 +19,21 @@ counterpart.registerTranslations('en', {
   }
 });
 
+function validateSubjectSetExportId(project, subjectSetId) {
+  if (!subjectSetId) return null;
+
+  // check the subject set is linked to this project and thus valid for exporting
+  const subjectSetBelongsToProject = project.links.subject_sets.includes(subjectSetId.toString());
+  if (subjectSetBelongsToProject) return subjectSetId.toString();
+}
+
 export default function DataExports (props) {
   const warningsForProject = getWarningsForProject(props.project.id, props.warnings)
-  console.info(warningsForProject)
+  const subjectSetIdFromLocation = props.location.query['subject-sets'];
+  console.log(subjectSetIdFromLocation);
+  const subjectSetExportId = validateSubjectSetExportId(props.project, subjectSetIdFromLocation);
+  console.log(subjectSetExportId);
+  console.info(warningsForProject);
   return (
     <div className="data-exports">
       <p className="form-label">Project data exports</p>
@@ -56,6 +68,9 @@ export default function DataExports (props) {
           <div className="row">
             <WorkflowClassificationExportButton project={props.project} />
           </div>
+          {/* make sure the subject set belongs to the project */}
+          {/* so we can trust the auth here */}
+          {/* get the subject id from the location prop */}
           <div className="row">
             <DataExportButton
               project={props.project}
@@ -73,8 +88,8 @@ export default function DataExports (props) {
           <div className="row">
             <p>
               <strong>Workflow contents export: </strong>
-              <DataExportDownloadLink 
-                project={props.project} 
+              <DataExportDownloadLink
+                project={props.project}
                 exportType="workflow_contents_export" />
               {' '}
               This export can no longer be generated. We've generated one just prior to disabling the generation. The workflow contents exports have been merged into the normal workflow export. The "strings" column is now available directly in the workflows export, and the "version" column from the workflow contents export is called "minor_version" in the workflows export. This means you no longer need to look up rows from two files in order to know what the actual setup of the workflow was for the version number specified by a classification.
