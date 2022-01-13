@@ -10,7 +10,7 @@ describe('DataExportDownloadLink', function () {
 
     before(function () {
         project = { get: sinon.fake.resolves("foo") }
-        wrapper = shallow(<DataExportDownloadLink project={project} exportType="fake_export" />);
+        wrapper = shallow(<DataExportDownloadLink resource={project} exportType="fake_export" />);
     });
 
     it('renders without crashing', function () {
@@ -25,7 +25,7 @@ describe('DataExportDownloadLink', function () {
     it('renders a link to the export', function (done) {
         const href = "https://foo.bar/file.csv";
         project.get = sinon.fake.resolves([{ metadata: { state: 'ready' }, src: href, updated_at: "2019-01-01T23:12:10Z" }]);
-        wrapper = shallow(<DataExportDownloadLink project={project} exportType="fake_export" />);
+        wrapper = shallow(<DataExportDownloadLink resource={project} exportType="fake_export" />);
         wrapper.instance().getExport().then(() => {
             assert.equal(wrapper.find('a').prop('href'), href);
         }).then(done, done);
@@ -33,7 +33,7 @@ describe('DataExportDownloadLink', function () {
 
     it('renders an error when panoptes fails', function (done) {
         project.get = sinon.fake.resolves({errors: "Something went wrong. Oops"});
-        wrapper = shallow(<DataExportDownloadLink project={project} exportType="fake_export" />);
+        wrapper = shallow(<DataExportDownloadLink resource={project} exportType="fake_export" />);
         wrapper.instance().getExport().then(() => {
             assert.equal(wrapper.text(), "Error loading export information");
         }).then(done, done);
@@ -41,7 +41,7 @@ describe('DataExportDownloadLink', function () {
 
     it('renders a message when export is still generating', function (done) {
         project.get = sinon.fake.resolves([{ metadata: { state: 'pending' }}]);
-        wrapper = shallow(<DataExportDownloadLink project={project} exportType="fake_export" />);
+      wrapper = shallow(<DataExportDownloadLink resource={project} exportType="fake_export" />);
         wrapper.instance().getExport().then(() => {
             assert.equal(wrapper.text(), "Export is being generated.");
         }).then(done, done);
@@ -49,7 +49,7 @@ describe('DataExportDownloadLink', function () {
 
     it('renders a message when export was never requested', function (done) {
         project.get = sinon.fake.resolves([]);
-        wrapper = shallow(<DataExportDownloadLink project={project} exportType="fake_export" />);
+      wrapper = shallow(<DataExportDownloadLink resource={project} exportType="fake_export" />);
         wrapper.instance().getExport().then(() => {
             assert.equal(wrapper.text(), 'Never previously requested.');
         }).then(done, done);
