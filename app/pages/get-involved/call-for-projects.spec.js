@@ -13,6 +13,6 @@ describe('CallForProjects', function () {
   it('renders markdown elements', function () {
     const wrapper = shallow(<CallForProjects />);
     const markdownElements = wrapper.find('Markdown');
-    assert.equal(markdownElements.length, 31);
+    assert.equal(markdownElements.length, 12);
   });
 });
