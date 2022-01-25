@@ -82,15 +82,13 @@ export default function DataExports (props) {
           </div>
           {subjectSetExportId
             && (
-              <>
-                <div className="row">
-                  <h4>Subject Set Data</h4>
-                  <SubjectSetDataExportButton
-                    project={props.project}
-                    subjectSetId={subjectSetExportId}
-                    buttonKey="projectDetails.subjectSetClassificationExport" />
-                </div>
-              </>
+              <div className="row">
+                <h4>Subject Set Data</h4>
+                <SubjectSetDataExportButton
+                  project={props.project}
+                  subjectSetId={subjectSetExportId}
+                  buttonKey="projectDetails.subjectSetClassificationExport" />
+              </div>
             )
           }
           <div className="row">
