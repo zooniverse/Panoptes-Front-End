@@ -40,7 +40,7 @@ module.exports = createReactClass
         </button> {' '}
         <small className="form-help">
           CSV format.{' '}
-          <DataExportDownloadLink project={@props.project} exportType={@props.exportType} />
+          <DataExportDownloadLink resource={@props.project} exportType={@props.exportType} />
           <br />
         </small>
 

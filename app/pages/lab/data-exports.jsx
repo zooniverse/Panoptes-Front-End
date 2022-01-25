@@ -6,12 +6,14 @@ import { Markdown } from 'markdownz';
 import { projectsWithWarnings } from './data-exports-warnings'
 import WorkflowClassificationExportButton from './workflow-classification-export-button';
 import DataExportButton from  '../../partials/data-export-button';
+import SubjectSetDataExportButton from '../../partials/subject-set-data-export-button';
 import TalkDataExportButton from  '../../talk/data-export-button';
 import DataExportDownloadLink from '../../partials/data-export-download-link';
 
 counterpart.registerTranslations('en', {
   projectDetails: {
     classificationExport: 'Request new classification export',
+    subjectSetClassificationExport: 'Request new subject set classification export',
     subjectExport: 'Request new subject export',
     workflowExport: 'Request new workflow export',
     commentsExport: 'Request new talk comments export',
@@ -19,9 +21,17 @@ counterpart.registerTranslations('en', {
   }
 });
 
+function validateSubjectSetExportId(project, subjectSetId) {
+  // if the subject set is found in the project's subject set links
+  // then the user has acces to the project / subject set and can request exports
+  const subjectSetBelongsToProject = project.links.subject_sets.includes(subjectSetId?.toString());
+  return (subjectSetBelongsToProject ? subjectSetId.toString() : null);
+}
+
 export default function DataExports (props) {
   const warningsForProject = getWarningsForProject(props.project.id, props.warnings)
   console.info(warningsForProject)
+  const subjectSetExportId = validateSubjectSetExportId(props.project, props.location?.query['subject-sets']);
   return (
     <div className="data-exports">
       <p className="form-label">Project data exports</p>
@@ -70,11 +80,22 @@ export default function DataExports (props) {
               exportType="workflows_export"
             />
           </div>
+          {subjectSetExportId
+            && (
+              <div className="row">
+                <h4>Subject Set Data</h4>
+                <SubjectSetDataExportButton
+                  project={props.project}
+                  subjectSetId={subjectSetExportId}
+                  buttonKey="projectDetails.subjectSetClassificationExport" />
+              </div>
+            )
+          }
           <div className="row">
             <p>
               <strong>Workflow contents export: </strong>
-              <DataExportDownloadLink 
-                project={props.project} 
+              <DataExportDownloadLink
+                resource={props.project}
                 exportType="workflow_contents_export" />
               {' '}
               This export can no longer be generated. We've generated one just prior to disabling the generation. The workflow contents exports have been merged into the normal workflow export. The "strings" column is now available directly in the workflows export, and the "version" column from the workflow contents export is called "minor_version" in the workflows export. This means you no longer need to look up rows from two files in order to know what the actual setup of the workflow was for the version number specified by a classification.
