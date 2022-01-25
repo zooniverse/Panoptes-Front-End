@@ -1,8 +1,15 @@
+import counterpart from 'counterpart';
 import apiClient from 'panoptes-client/lib/api-client';
 import React, { Component } from 'react';
 import Translate from 'react-translate-component';
 import PropTypes from 'prop-types';
 import DataExportDownloadLink from './data-export-download-link'
+
+counterpart.registerTranslations('en', {
+  dataExportDetails: {
+    subjectSetExportId: 'Export for Subject Set ID: '
+  }
+});
 
 class SubjectSetDataExportButton extends Component {
   constructor(props) {
@@ -48,32 +55,36 @@ class SubjectSetDataExportButton extends Component {
 
   render() {
     const { exportRequested, exportError, subjectSet } = this.state;
-    const { buttonKey, exportType } = this.props;
+    const { buttonKey, exportType, subjectSetId } = this.props;
     return (
       <div>
-        <div>
-          <button type="button" disabled={exportRequested} onClick={this.requestDataExport}>
-            <Translate content={buttonKey} />
-          </button>
-          {' '}
+        <div role="doc-subtitle">
           <small className="form-help">
-            CSV format.
-            {' '}
-            {subjectSet && <DataExportDownloadLink resource={subjectSet} exportType={exportType} /> }
-            <br />
+            <Translate content="dataExportDetails.subjectSetExportId" />
+            {subjectSetId}
           </small>
-          {(() => {
-            if (exportError) {
-              return (<div className="form-help error">{exportError.toString()}</div>);
-            } else if (exportRequested) {
-              return (
-                <div className="form-help success">
-                  We’ve received your request, check your email for a link to your data soon!
-                </div>
-              );
-            }
-          })()}
         </div>
+        <button type="button" disabled={exportRequested} onClick={this.requestDataExport}>
+          <Translate content={buttonKey} />
+        </button>
+        {' '}
+        <small className="form-help">
+          CSV format.
+          {' '}
+          {subjectSet && <DataExportDownloadLink resource={subjectSet} exportType={exportType} /> }
+          <br />
+        </small>
+        {(() => {
+          if (exportError) {
+            return (<div className="form-help error">{exportError.toString()}</div>);
+          } else if (exportRequested) {
+            return (
+              <div className="form-help success">
+                We’ve received your request, check your email for a link to your data soon!
+              </div>
+            );
+          }
+        })()}
       </div>
     );
   }
