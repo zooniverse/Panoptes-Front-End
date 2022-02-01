@@ -168,6 +168,14 @@ export const routes = (
 
     <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
 
+    /*
+    2022 Feb Temporary fix: a recent issue of "Sky and Telescope" misprinted the
+    URL for the Bursts from Space project. This is a workaround.
+    See https://zooniverse.slack.com/archives/C14TTCLNN/p1643655013402769
+    Please remove in 6 months time.
+    */
+    <Redirect from="projects/mike-walmsley/bursts-from-space" to="projects/mikewalmsley/bursts-from-space"/>
+
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
