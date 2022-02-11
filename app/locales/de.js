@@ -77,7 +77,7 @@ export default {
       dark: 'dunklen',
       light: 'hellen',
       title: 'Klassifizieren',
-      themeToggle: 'Schalte zum %(theme)s Thema um'
+      themeToggle: 'Klicken für %(theme)s Hintergrund'
     },
     home: {
       organization: 'Organisation',
