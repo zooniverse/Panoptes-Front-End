@@ -12,9 +12,6 @@ module.exports = function (api) {
             '@babel/plugin-proposal-class-properties'
           ],
           [
-            '@babel/plugin-transform-react-jsx'
-          ],
-          [
             'transform-es2015-modules-commonjs'
           ]
         ]
@@ -25,9 +22,6 @@ module.exports = function (api) {
             '@babel/plugin-proposal-class-properties'
           ],
           [
-            '@babel/plugin-transform-react-jsx'
-          ],
-          [
             'transform-es2015-modules-commonjs'
           ]
         ]
@@ -36,9 +30,6 @@ module.exports = function (api) {
         plugins: [
           [
             '@babel/plugin-proposal-class-properties'
-          ],
-          [
-            '@babel/plugin-transform-react-jsx'
           ],
           [
             'transform-es2015-modules-commonjs'
@@ -52,9 +43,6 @@ module.exports = function (api) {
           ],
           [
             '@babel/plugin-proposal-class-properties'
-          ],
-          [
-            '@babel/plugin-transform-react-jsx'
           ],
           [
             'transform-es2015-modules-commonjs'
