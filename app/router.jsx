@@ -61,6 +61,7 @@ import DataExports from './pages/lab/data-exports';
 import TalkTags from './talk/tags';
 import MonorepoRoutes from './MonorepoRoutes';
 import FEMLabRouter from './pages/lab-fem/fem-lab-router'
+import IIIFSubjectSet from './pages/lab/components/IIIFSubjectSet'
 
 // <Redirect from="home" to="/" /> doesn't work.
 
@@ -294,6 +295,7 @@ export const routes = (
       <Redirect from="subject-set/*" to="subject-sets/*" />
       <Route path="subject-sets" component={SubjectSetsContainer}>
         <IndexRoute component={SubjectSetsList} />
+        <Route path="iiif" component={IIIFSubjectSet} />
         <Route path=":subjectSetID" component={require('./pages/lab/subject-set')} />
       </Route>
       <Route path="mini-course" component={require('./pages/lab/mini-course')} />
