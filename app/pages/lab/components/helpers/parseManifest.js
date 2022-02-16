@@ -10,7 +10,7 @@ function parseCanvas(canvas, index) {
   const id = canvas.images[0].resource.service['@id'];
   const thumb = `${id}/full/!400,400/0/default.jpg`
   const metadata = {
-    priority: index
+    priority: index + 1
   }
   return { id, thumb, locations, metadata }
 }
