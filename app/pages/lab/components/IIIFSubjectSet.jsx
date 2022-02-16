@@ -2,6 +2,7 @@ import { useRef, useMemo, useState } from 'react'
 
 import { parseManifest } from './helpers'
 import { useManifest } from './hooks'
+import UploadButton from './UploadButton'
 
 const imgStyle = {
   display: 'inline-block'
@@ -18,7 +19,7 @@ function IIIFThumbnail({ subject }) {
   )
 }
 
-export default function IIIFSubjectSet() {
+export default function IIIFSubjectSet({ project }) {
   const manifestUrl = useRef()
   const [url, setUrl] = useState('')
   const { manifest, error } = useManifest(url)
@@ -43,7 +44,8 @@ export default function IIIFSubjectSet() {
         {Object.entries(metadata).map(([key, value]) => <li key={key}><b>{key}</b> {value}</li>)}
         </ul>
       }
-      {subjects && <p>{subjects.slice(0,20).map(subject => <IIIFThumbnail key = {subject.id} subject={subject} />)}</p>}
+      {subjects && <p>{subjects.slice(0,20).map(subject => <IIIFThumbnail key={subject.id} subject={subject} />)}</p>}
+      {subjects && <UploadButton manifest={manifest} metadata={metadata} project={project} subjects={subjects} />}
     </>
   )
 }
