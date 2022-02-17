@@ -14,7 +14,13 @@ export default function UploadButton({
   const [uploadCount, setUploadCount] = useState(0);
 
   const uploaded = [];
-  const failed = [];
+  let failed = [];
+  const subjectSetSnapshot = {
+    display_name: manifest.label,
+    metadata,
+    links:
+      { project: project.id }
+  }
 
   function createSnapshot(subject) {
     const { priority, ...subjectMetadata } = subject.metadata;
@@ -42,17 +48,21 @@ export default function UploadButton({
     setUploadCount(count => count + 1);
   }
 
+  async function uploadSnapshots(snapshots) {
+    const awaitUploads = snapshots.map(uploadSubject);
+    return await Promise.all(awaitUploads)
+  }
+
   async function createSet() {
     setUploading(true);
-    const _subjectSet = await createSubjectSet({
-      display_name: manifest.label,
-      metadata,
-      links:
-        { project: project.id }
-    });
-
-    const uploadQueue = subjects.map(createSnapshot)
-    await Promise.all(uploadQueue.map(uploadSubject));
+    const _subjectSet = await createSubjectSet(subjectSetSnapshot);
+    let uploadQueue = subjects.map(createSnapshot)
+    await uploadSnapshots(uploadQueue);
+    if (failed.length) {
+      retryQueue = failed.slice();
+      failed = [];
+      await uploadSnapshots(retryQueue);
+    }
     _subjectSet.addLink('subjects', uploaded.map(subject => subject.id));
     setSubjectSet(_subjectSet);
   }
