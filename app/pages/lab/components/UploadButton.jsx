@@ -1,7 +1,32 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 
-import { createSubject, createSubjectSet } from './helpers';
+import { createSubjectSet } from './helpers';
+import { useSubjectUploads } from './hooks'
+
+function subjectSetSnapshot(manifest, metadata, project) {
+  return {
+    display_name: manifest.label,
+    metadata,
+    links:
+      { project: project.id }
+  }
+}
+
+function subjectSnapshot(metadata, project, subject) {
+  const { priority, ...subjectMetadata } = subject.metadata;
+  const { locations } = subject;
+  return {
+    locations,
+    metadata: {
+      ['#priority']: priority,
+      ...metadata,
+      ...subjectMetadata
+    },
+    links:
+      { project: project.id }
+  };
+}
 
 export default function UploadButton({
   manifest,
@@ -11,67 +36,22 @@ export default function UploadButton({
 }) {
   const [subjectSet, setSubjectSet] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadCount, setUploadCount] = useState(0);
-
-  const uploaded = [];
-  let failed = [];
-  const subjectSetSnapshot = {
-    display_name: manifest.label,
-    metadata,
-    links:
-      { project: project.id }
-  }
-
-  function createSnapshot(subject) {
-    const { priority, ...subjectMetadata } = subject.metadata;
-    const { locations } = subject;
-    return {
-      locations,
-      metadata: {
-        ['#priority']: priority,
-        ...metadata,
-        ...subjectMetadata
-      },
-      links:
-        { project: project.id }
-    };
-  }
-
-  async function uploadSubject(snapshot) {
-    try {
-      const panoptesSubject = await createSubject(snapshot);
-      uploaded.push(panoptesSubject);
-    } catch (error) {
-      console.error(error);
-      failed.push(snapshot);
-    }
-    setUploadCount(count => count + 1);
-  }
-
-  async function uploadSnapshots(snapshots) {
-    const awaitUploads = snapshots.map(uploadSubject);
-    return await Promise.all(awaitUploads)
-  }
+  const [uploadQueue, setUploadQueue] = useState([]);
+  const { loaded, uploadCount } = useSubjectUploads(uploadQueue, subjectSet);
 
   async function createSet() {
     setUploading(true);
-    const _subjectSet = await createSubjectSet(subjectSetSnapshot);
-    let uploadQueue = subjects.map(createSnapshot)
-    await uploadSnapshots(uploadQueue);
-    if (failed.length) {
-      retryQueue = failed.slice();
-      failed = [];
-      await uploadSnapshots(retryQueue);
-    }
-    _subjectSet.addLink('subjects', uploaded.map(subject => subject.id));
+    const _subjectSet = await createSubjectSet(subjectSetSnapshot(manifest, metadata, project));
     setSubjectSet(_subjectSet);
+    const _uploadQueue = subjects.map(subject => subjectSnapshot(metadata, project, subject));
+    setUploadQueue(_uploadQueue);
   }
 
   return (
     <>
       {subjects && !uploading && <button onClick={createSet}>Create a subject set</button>}
       {uploading && <p>Uploading {uploadCount}/{subjects.length} subjects.</p>}
-      {subjectSet?.id && <Link to={`/lab/${project.id}/subject-sets/${subjectSet.id}`}>{subjectSet.display_name}</Link>}
+      {loaded && <Link to={`/lab/${project.id}/subject-sets/${subjectSet.id}`}>{subjectSet.display_name}</Link>}
     </>
   )
 }
