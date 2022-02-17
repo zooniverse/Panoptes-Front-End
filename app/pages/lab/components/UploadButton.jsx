@@ -13,10 +13,13 @@ export default function UploadButton({
   const [uploading, setUploading] = useState(false);
   const [uploadCount, setUploadCount] = useState(0);
 
-  async function uploadSubject(subject) {
+  const uploaded = [];
+  const failed = [];
+
+  function createSnapshot(subject) {
     const { priority, ...subjectMetadata } = subject.metadata;
     const { locations } = subject;
-    const panoptesSubject = await createSubject({
+    return {
       locations,
       metadata: {
         ['#priority']: priority,
@@ -25,9 +28,18 @@ export default function UploadButton({
       },
       links:
         { project: project.id }
-    });
+    };
+  }
+
+  async function uploadSubject(snapshot) {
+    try {
+      const panoptesSubject = await createSubject(snapshot);
+      uploaded.push(panoptesSubject);
+    } catch (error) {
+      console.error(error);
+      failed.push(snapshot);
+    }
     setUploadCount(count => count + 1);
-    return panoptesSubject;
   }
 
   async function createSet() {
@@ -39,8 +51,9 @@ export default function UploadButton({
         { project: project.id }
     });
 
-    const _subjects = await Promise.all(subjects.map(uploadSubject));
-    _subjectSet.addLink('subjects', _subjects.map(subject => subject.id));
+    const uploadQueue = subjects.map(createSnapshot)
+    await Promise.all(uploadQueue.map(uploadSubject));
+    _subjectSet.addLink('subjects', uploaded.map(subject => subject.id));
     setSubjectSet(_subjectSet);
   }
 
