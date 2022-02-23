@@ -127,14 +127,14 @@ class Choice extends React.Component {
                       triggerProps={{ autoFocus }}
                       trigger={
                         <span className="survey-task-choice-confusion">
-                          {otherChoiceTranslation.label}
+                          {otherChoiceTranslation?.label || `translation.choices.${otherChoiceID}`}
                         </span>
                       }
                       style={{ maxWidth: '60ch' }}
                     >
                       <ImageFlipper images={otherChoice.images.map(filename => this.props.task.images[filename])} />
                       <Markdown
-                        content={currentChoiceTranslation.confusions[otherChoiceID]}
+                        content={currentChoiceTranslation.confusions[otherChoiceID] || `translation.confusions.${otherChoiceID}`}
                       />
                       <div className="survey-task-choice-confusion-buttons" style={{ textAlign: 'center' }}>
                         <button
@@ -171,7 +171,7 @@ class Choice extends React.Component {
               return (
                 <div key={questionId} className="survey-task-choice-question" data-multiple={question.multiple || null}>
                   <div className="survey-task-choice-question-label">
-                    {translation.questions[questionId].label}
+                    {translation.questions[questionId]?.label || `translation.questions.${questionId}.label`}
                   </div>
                   <div className="survey-task-choice-answers">
                     {question.answersOrder.map((answerId, i) => {
@@ -200,7 +200,7 @@ class Choice extends React.Component {
                               onFocus={this.handleFocus.bind(this, questionId, answerId)}
                               onBlur={this.handleFocus.bind(this, null, null)}
                             />
-                            {translation.questions[questionId].answers[answerId].label}
+                            {translation.questions[questionId]?.answers[answerId]?.label || `translation.questions.${questionId}.answers.${answerId}.label`}
                           </label>
                           {' '}
                           {hasFocus = true}
