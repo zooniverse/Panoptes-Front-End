@@ -7,14 +7,15 @@ on:
 jobs:
   build:
     name: Build staging branch
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@production-release
+    uses: zooniverse/ci-cd/.github/workflows/npm_build.yaml@main
     with:
       commit_id: ${{ github.sha }}
+      node_version: '16.x'
       output: 'dist'
       script: '_build-staging'
   deploy_staging_branch:
     name: Deploy staging branch
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@production-release
+    uses: zooniverse/ci-cd/.github/workflows/deploy_static.yaml@main
     needs: build
     with:
       source: 'dist'
@@ -23,13 +24,14 @@ jobs:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
   slack_notification:
     name: Send Slack notification
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_notification.yml@production-release
+    uses: zooniverse/ci-cd/.github/workflows/slack_notification.yaml@main
     needs: deploy_staging_branch
     if: always()
     with:
-      deploy_url: 'https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
+      commit_id: ${{ github.sha }}
       job_name: Build staging branch / build
       status: ${{ needs.deploy_staging_branch.result }}
       title: 'Deploy https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
+      title_link: 'https://pr-${{ github.event.number }}.pfe-preview.zooniverse.org'
     secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

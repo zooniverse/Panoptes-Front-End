@@ -12,14 +12,15 @@ on:
 jobs:
   build:
     name: Build production
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/npm_build.yml@production-release
+    uses: zooniverse/ci-cd/.github/workflows/npm_build.yaml@main
     with:
       commit_id: ${{ github.sha }}
+      node_version: '16.x'
       output: 'dist'
       script: '_build-production'
   deploy_production:
     name: Deploy production
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/azure_deploy.yml@production-release
+    uses: zooniverse/ci-cd/.github/workflows/deploy_static.yaml@main
     needs: build
     with:
       source: 'dist'
@@ -28,13 +29,14 @@ jobs:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
   slack_notification:
     name: Send Slack notification
-    uses: zooniverse/Panoptes-Front-End/.github/workflows/slack_notification.yml@production-release
+    uses: zooniverse/ci-cd/.github/workflows/slack_notification.yaml@main
     needs: deploy_production
     if: always()
     with:
-      deploy_url: 'https://www.zooniverse.org'
+      commit_id: ${{ github.sha }}
       job_name: Build production / build
       status: ${{ needs.deploy_production.result }}
       title: 'PFE Production deploy complete'
+      title_link: 'https://www.zooniverse.org'
     secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
