@@ -98,9 +98,9 @@
     "stylus": "~0.54.8",
     "stylus-loader": "~4.3.3",
     "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
+    "webpack-cli": "~4.9.2",
     "webpack-dashboard": "^3.2.1",
-    "webpack-dev-server": "^3.11.0",
+    "webpack-dev-server": "~4.7.4",
     "whatwg-url": "~7.0.0"
   },
   "engines": {
@@ -125,7 +125,7 @@
   "scripts": {
     "coverage": "nyc report --reporter=lcov",
     "start": "export NODE_ENV=development; check-engines && check-dependencies && webpack-dashboard -p 3736 -- webpack-dev-server --config ./webpack.dev.js",
-    "_build": "export HEAD_COMMIT=$(git rev-parse --short HEAD); check-engines && check-dependencies && rimraf dist; webpack --config ./webpack.build.js --progress --profile --colors",
+    "_build": "export HEAD_COMMIT=$(git rev-parse --short HEAD); check-engines && check-dependencies && rimraf dist; webpack --config ./webpack.build.js --progress --color",
     "_build-production": "export NODE_ENV=production; npm run _build",
     "_build-staging": "export NODE_ENV=staging; npm run _build",
     "serve-static": "export NODE_ENV=staging; check-engines && check-dependencies && npm run _build && node ./static-server.js",

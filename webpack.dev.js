@@ -14,8 +14,11 @@ var config = {
     ],
     historyApiFallback: true,
     host: process.env.HOST || "localhost",
-    https: true,
-    overlay: true,
+    client: {
+      overlay: true,
+      progress: true
+    },
+    server: 'https',
     port: 3735
   },
   devtool: 'cheap-module-source-map',
