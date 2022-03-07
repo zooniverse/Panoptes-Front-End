@@ -1,6 +1,6 @@
 import { useRef, useMemo, useState } from 'react'
 
-import { parseManifest } from './helpers'
+import { parseManifestV2 } from './helpers'
 import { useManifest } from './hooks'
 import { MetadataEditor, UploadButton } from './'
 
@@ -24,7 +24,7 @@ export default function IIIFSubjectSet({ project }) {
   const [metadata, setMetadata] = useState(null)
   const [url, setUrl] = useState('')
   const { manifest, error } = useManifest(url)
-  const { label, metadata: newMetadata, subjects, thumb } = useMemo(() => (manifest ? parseManifest(manifest) : {}), [manifest])
+  const { label, metadata: newMetadata, subjects, thumb } = useMemo(() => (manifest ? parseManifestV2(manifest) : {}), [manifest])
 
   if(newMetadata && !metadata) {
     setMetadata(newMetadata)

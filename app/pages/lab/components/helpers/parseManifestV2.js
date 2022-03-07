@@ -16,7 +16,7 @@ function parseCanvas(canvas, index) {
   return { thumb, locations, metadata };
 }
 
-export default function parseManifest(manifest) {
+export default function parseManifestV2(manifest) {
   const { sequences, structures } = manifest;
   const [sequence] = sequences;
   const subjects = sequence.canvases.map((canvas, index) => {
