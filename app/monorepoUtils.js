@@ -24,7 +24,8 @@ export const SLUGS = [
   'mariaedgeworthletters/maria-edgeworth-letters',
   'pmlogan/poets-and-lovers',
   'emhaston/the-rbge-herbarium-exploring-gesneriaceae-the-african-violet-family',
-  'printmigrationnetwork/print'
+  'printmigrationnetwork/print',
+  'profdrrogerlouismartinez-davila/deciphering-secrets-unlocking-the-manuscripts-of-medieval-spain'
 ];
 
 export function usesMonorepo(slug) {
