@@ -49,7 +49,7 @@ export default function UploadButton({
 
   return (
     <>
-      {subjects && !uploading && <button onClick={createSet}>Create a subject set</button>}
+      {subjects && !uploading && <button className="standard-button" onClick={createSet}>Create a subject set</button>}
       {uploading && <p>Uploading {uploadCount}/{subjects.length} subjects.</p>}
       {loaded && <Link to={`/lab/${project.id}/subject-sets/${subjectSet.id}`}>{subjectSet.display_name}</Link>}
     </>

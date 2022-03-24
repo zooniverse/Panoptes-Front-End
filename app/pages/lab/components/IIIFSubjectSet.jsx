@@ -39,12 +39,13 @@ export default function IIIFSubjectSet({ project }) {
 
   return (
     <>
-      <label htmlFor="iiifUrl">Manifest URL</label>
-      <input id="iiifUrl" ref={manifestUrl} size="100" type="text" defaultValue="https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100022589096.0x000002/manifest.json" />
-      <button onClick={onClick}>Fetch manifest</button>
+      <h1>Create a new subject set</h1>
+      <label className="form-label" htmlFor="iiifUrl">Enter a manifest URL</label>
+      <input className="standard-input full" id="iiifUrl" ref={manifestUrl} size="100" type="text" defaultValue="https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100022589096.0x000002/manifest.json" />
+      <button className="standard-button" onClick={onClick}>Fetch manifest</button>
       {error && <p><b>{error.status}: {error.message}</b></p>}
       {manifest && <MetadataEditor caption={manifest.label} metadata={metadata} onChange={setMetadata} />}
-      {subjects && <p>{subjects.slice(0,20).map(subject => <IIIFThumbnail key={subject.id} subject={subject} />)}</p>}
+      {subjects && <p>{subjects.slice(0,10).map(subject => <IIIFThumbnail key={subject.id} subject={subject} />)}</p>}
       {subjects && <UploadButton manifest={manifest} metadata={metadata} project={project} subjects={subjects} />}
     </>
   )
