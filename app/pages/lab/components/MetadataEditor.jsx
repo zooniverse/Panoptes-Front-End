@@ -1,3 +1,4 @@
+import { Markdown } from 'markdownz';
 import { func, object, string } from 'prop-types';
 
 export default function MetadataEditor({
@@ -37,7 +38,7 @@ export default function MetadataEditor({
     {Object.entries(metadata).map(([key, value]) => (
       <tr key={key}>
         <td><strong>{key}</strong></td>
-        <td>{value}</td>
+        <Markdown tag="td" content={value} inline />
         <td><input type="checkbox" checked={key.startsWith('#')} name={key} value={value} onChange={onMetadataChange} /></td>
       </tr>
     ))}

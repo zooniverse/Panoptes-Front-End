@@ -1,3 +1,5 @@
+import TurndownService from 'turndown';
+
 const MAX_WIDTH = 1400
 const MAX_HEIGHT = 2000
 
@@ -20,6 +22,7 @@ function parseCanvas(canvas, index) {
 }
 
 export default function parseManifestV2(manifest) {
+  const turndownService = new TurndownService();
   const { sequences, structures } = manifest;
   const [sequence] = sequences;
   const subjects = sequence.canvases.map((canvas, index) => {
@@ -31,7 +34,7 @@ export default function parseManifestV2(manifest) {
     "iiif:manifest": manifest['@id']
   };
   manifest.metadata.forEach(({ label, value }) => {
-    metadata[label] = value;
+    metadata[label] = turndownService.turndown(value);
   });
   const thumb = subjects[0].thumb;
   const label = subjects[0].alt;
