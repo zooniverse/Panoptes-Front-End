@@ -1,7 +1,7 @@
 import TurndownService from 'turndown';
 
-const MAX_WIDTH = 1400
-const MAX_HEIGHT = 2000
+export const MAX_WIDTH = 1400
+export const MAX_HEIGHT = 2000
 
 function parseCanvasImage(image) {
   const { resource } = image;
