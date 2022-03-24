@@ -1,7 +1,10 @@
+const MAX_WIDTH = 1400
+const MAX_HEIGHT = 2000
+
 function parseCanvasImage(image) {
   const { resource } = image;
   const id = resource.service['@id'];
-  const src = `${id}/full/!1400,2000/0/default.jpg`;
+  const src = `${id}/full/!${MAX_WIDTH},${MAX_HEIGHT}/0/default.jpg`;
   return { 'image/jpeg': src };
 }
 
