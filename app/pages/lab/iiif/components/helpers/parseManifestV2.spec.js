@@ -49,7 +49,7 @@ describe('parseManifestV2', function () {
     })
   })
 
-  it('should assign canvas identifers to each subject', function () {
+  it('should assign canvas identifiers to each subject', function () {
     sequence.canvases.forEach((canvas, index) => {
       const subject = data.subjects[index];
       expect(subject.metadata['iiif:canvas']).to.equal(canvas['@id']);

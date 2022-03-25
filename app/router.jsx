@@ -61,7 +61,7 @@ import DataExports from './pages/lab/data-exports';
 import TalkTags from './talk/tags';
 import MonorepoRoutes from './MonorepoRoutes';
 import FEMLabRouter from './pages/lab-fem/fem-lab-router'
-import IIIFSubjectSet from './pages/lab/components/IIIFSubjectSet'
+import IIIFSubjectSet from './pages/lab/iiif'
 
 // <Redirect from="home" to="/" /> doesn't work.
 
