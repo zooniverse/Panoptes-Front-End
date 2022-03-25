@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 
 import { createSubjectSet } from './helpers';
@@ -31,6 +31,7 @@ function subjectSnapshot(metadata, project, subject) {
 export default function UploadButton({
   manifest,
   metadata,
+  onLoad = () => true,
   project,
   subjects
 }) {
@@ -38,6 +39,12 @@ export default function UploadButton({
   const [uploading, setUploading] = useState(false);
   const [uploadQueue, setUploadQueue] = useState([]);
   const { loaded, uploadCount } = useSubjectUploads(uploadQueue, subjectSet);
+
+  useEffect(() => {
+    if (loaded) {
+      onLoad()
+    }
+  }, [loaded])
 
   async function createSet() {
     setUploading(true);
