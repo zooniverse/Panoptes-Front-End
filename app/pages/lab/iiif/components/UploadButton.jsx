@@ -35,6 +35,7 @@ export default function UploadButton({
   project,
   subjects
 }) {
+  const [error, setError] = useState(null);
   const [subjectSet, setSubjectSet] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadQueue, setUploadQueue] = useState([]);
@@ -47,17 +48,22 @@ export default function UploadButton({
   }, [loaded])
 
   async function createSet() {
-    setUploading(true);
-    const _subjectSet = await createSubjectSet(subjectSetSnapshot(manifest, metadata, project));
-    setSubjectSet(_subjectSet);
-    const _uploadQueue = subjects.map(subject => subjectSnapshot(metadata, project, subject));
-    setUploadQueue(_uploadQueue);
+    try {
+      setUploading(true);
+      const _subjectSet = await createSubjectSet(subjectSetSnapshot(manifest, metadata, project));
+      setSubjectSet(_subjectSet);
+      const _uploadQueue = subjects.map(subject => subjectSnapshot(metadata, project, subject));
+      setUploadQueue(_uploadQueue);
+    } catch (error) {
+      setError(error)
+    }
   }
 
   return (
     <>
       {subjects && !uploading && <button className="standard-button" onClick={createSet}>Create a subject set</button>}
       {uploading && <p>Uploading {uploadCount}/{subjects.length} subjects.</p>}
+      {error && <p><strong>{error.message}</strong></p>}
       {loaded && <Link to={`/lab/${project.id}/subject-sets/${subjectSet.id}`}>{subjectSet.display_name}</Link>}
     </>
   )
