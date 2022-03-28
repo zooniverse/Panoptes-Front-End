@@ -45,7 +45,7 @@ export default function IIIFSubjectSet({ project }) {
       <button className="standard-button" onClick={onClick}>Fetch manifest</button>
       {error && <p><b>{error.status}: {error.message}</b></p>}
       {manifest && <MetadataEditor caption={manifest.label} metadata={metadata} onChange={setMetadata} />}
-      {subjects && <p>{subjects.slice(0,10).map(subject => <IIIFThumbnail key={subject.id} subject={subject} />)}</p>}
+      {subjects && <p>{subjects.slice(0,10).map(subject => <IIIFThumbnail key={subject.canvasID} subject={subject} />)}</p>}
       {subjects && <UploadButton manifest={manifest} metadata={metadata} project={project} subjects={subjects} />}
     </>
   )

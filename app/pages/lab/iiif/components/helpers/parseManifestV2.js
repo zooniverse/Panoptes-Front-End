@@ -27,8 +27,9 @@ export default function parseManifestV2(manifest) {
   const [sequence] = sequences;
   const subjects = sequence.canvases.map((canvas, index) => {
     const alt = structures?.[index].label;
+    const canvasID = canvas['@id'];
     const { thumb, locations, metadata } = parseCanvas(canvas, index);
-    return { alt, locations, metadata, thumb };
+    return { alt, canvasID, locations, metadata, thumb };
   });
   const metadata = {
     "iiif:manifest": manifest['@id']
