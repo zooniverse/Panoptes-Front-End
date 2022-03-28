@@ -3,6 +3,8 @@ import TurndownService from 'turndown';
 export const MAX_WIDTH = 1400
 export const MAX_HEIGHT = 2000
 
+const turndownService = new TurndownService();
+
 function parseCanvasImage(image) {
   const { resource } = image;
   const id = resource.service['@id'];
@@ -21,8 +23,44 @@ function parseCanvas(canvas, index) {
   return { thumb, locations, metadata };
 }
 
+function parseValue({ label, value }) {
+  if (value[`@language`]) {
+    const language = value[`@language`];
+    label = `${label}:${language}`;
+  }
+
+  if (value[`@value`]) {
+    value = value['@value'];
+  }
+
+  return {
+    label,
+    value: turndownService.turndown(value.toString())
+  };
+}
+
+function parseMetadataItem({ label, value }) {
+  if (Array.isArray(value)) {
+    return value.map(v => parseValue({ label, value: v }));
+  }
+
+  return [
+    parseValue({ label, value })
+  ];
+}
+
+function parseMetadata(manifest) {
+  const metadata = {};
+  manifest.metadata.forEach(({ label, value }) => {
+    const items = parseMetadataItem({ label, value });
+    items.forEach(({ label, value }) => {
+      metadata[label] = value;
+    })
+  });
+  return metadata;
+}
+
 export default function parseManifestV2(manifest) {
-  const turndownService = new TurndownService();
   const { sequences, structures } = manifest;
   const [sequence] = sequences;
   const subjects = sequence.canvases.map((canvas, index) => {
@@ -32,12 +70,10 @@ export default function parseManifestV2(manifest) {
     return { alt, canvasID, locations, metadata, thumb };
   });
   const metadata = {
-    "iiif:manifest": manifest['@id']
+    "iiif:manifest": manifest['@id'],
+    ...parseMetadata(manifest)
   };
-  manifest.metadata.forEach(({ label, value }) => {
-    metadata[label] = turndownService.turndown(value);
-  });
-  const thumb = subjects[0].thumb;
-  const label = subjects[0].alt;
+  const thumb = subjects[0]?.thumb;
+  const label = subjects[0]?.alt;
   return { label, metadata, subjects, thumb };
 }
