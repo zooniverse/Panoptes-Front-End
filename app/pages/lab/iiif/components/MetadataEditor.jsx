@@ -35,13 +35,15 @@ export default function MetadataEditor({
           <th>Hidden</th>
         </tr>
       </thead>
-    {Object.entries(metadata).map(([key, value]) => (
-      <tr key={key}>
-        <td><strong>{key}</strong></td>
-        <Markdown tag="td" content={value} inline />
-        <td><input type="checkbox" checked={key.startsWith('#')} name={key} value={value} onChange={onMetadataChange} /></td>
-      </tr>
-    ))}
+      <tbody>
+      {Object.entries(metadata).map(([key, value]) => (
+        <tr key={key}>
+          <td><strong>{key}</strong></td>
+          <Markdown tag="td" content={value} inline />
+          <td><input type="checkbox" checked={key.startsWith('#')} name={key} value={value} onChange={onMetadataChange} /></td>
+        </tr>
+      ))}
+      </tbody>
     </table>
   );
 }
