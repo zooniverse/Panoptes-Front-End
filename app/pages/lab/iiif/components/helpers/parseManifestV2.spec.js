@@ -17,13 +17,6 @@ describe('parseManifestV2', function () {
       expect(data.metadata['iiif:manifest']).to.equal(manifest['@id']);
   })
 
-  it('should convert manifest metadata to Markdown', function () {
-    manifest.metadata.forEach(({ label, value }) => {
-      const markdownValue = turndownService.turndown(value);
-      expect(data.metadata[label]).to.equal(markdownValue);
-    })
-  })
-
   it('should generate subjects from the default sequence', function () {
     expect(data.subjects.length).to.equal(sequence.canvases.length)
   })
@@ -53,6 +46,35 @@ describe('parseManifestV2', function () {
     sequence.canvases.forEach((canvas, index) => {
       const subject = data.subjects[index];
       expect(subject.metadata['iiif:canvas']).to.equal(canvas['@id']);
+    })
+  })
+
+  describe('metadata', function () {
+    it('should convert manifest metadata to Markdown', function () {
+      manifest.metadata.forEach(({ label, value }) => {
+        const markdownValue = turndownService.turndown(value);
+        expect(data.metadata[label]).to.equal(markdownValue);
+      })
+    })
+
+    it('should parse metadata items in multiple languages', function () {
+      const mockManifest = {
+        metadata: [
+          {
+            label: "Published",
+            value: [
+              { '@language': 'en', '@value': 'in Paris, 1790' },
+              { '@language': 'fr', '@value': 'en Paris, 1790' }
+            ]
+          }
+        ],
+        sequences: [
+          { canvases: [] }
+        ]
+      };
+      const { metadata } = parseManifestV2(mockManifest);
+      expect(metadata['Published:en']).to.equal('in Paris, 1790');
+      expect(metadata['Published:fr']).to.equal('en Paris, 1790');
     })
   })
 })
