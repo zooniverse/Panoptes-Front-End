@@ -76,5 +76,37 @@ describe('parseManifestV2', function () {
       expect(metadata['Published:en']).to.equal('in Paris, 1790');
       expect(metadata['Published:fr']).to.equal('en Paris, 1790');
     })
+
+    it('should parse metadata labels in multiple languages', function () {
+      const mockManifest = {
+        metadata: [
+          {
+            label: [
+              { "@value":"Author", "@language": "en" },
+              { "@value":"Awdur", "@language": "cy-GB" }
+            ],
+            value:"Cardiganshire Constabulary"
+          },
+          {
+            label: [
+              { "@value":"Repository", "@language": "en" },
+              { "@value":"Ystorfa", "@language": "cy-GB" }
+            ],
+            value: [
+              { "@value":"This content has been digitised by The National Library of Wales", "@language": "en" },
+              { "@value":"Digidwyd y cynnwys hwn gan Lyfrgell Genedlaethol Cymru", "@language": "cy-GB" }
+            ]
+          }
+        ],
+        sequences: [
+          { canvases: [] }
+        ]
+      };
+      const { metadata } = parseManifestV2(mockManifest);
+      expect(metadata['Author:en']).to.equal('Cardiganshire Constabulary');
+      expect(metadata['Awdur:cy-GB']).to.equal('Cardiganshire Constabulary');
+      expect(metadata['Repository:en']).to.equal('This content has been digitised by The National Library of Wales');
+      expect(metadata['Ystorfa:cy-GB']).to.equal('Digidwyd y cynnwys hwn gan Lyfrgell Genedlaethol Cymru');
+    })
   })
 })
