@@ -24,12 +24,22 @@ function parseCanvas(canvas, index) {
 }
 
 function parseValue({ label, value }) {
-  if (value[`@language`]) {
-    const language = value[`@language`];
+  let language
+
+  if (value['@language']) {
+    language = value['@language'];
     label = `${label}:${language}`;
   }
 
-  if (value[`@value`]) {
+  if (label['@language']) {
+    language = label['@language'];
+    label = `${label['@value']}:${language}`;
+    if (Array.isArray(value)) {
+      value = value.find(v => v['@language'] === language)
+    }
+  }
+
+  if (value['@value']) {
     value = value['@value'];
   }
 
@@ -40,6 +50,10 @@ function parseValue({ label, value }) {
 }
 
 function parseMetadataItem({ label, value }) {
+  if (Array.isArray(label)) {
+    return label.map(l => parseValue({ label: l, value }))
+  }
+
   if (Array.isArray(value)) {
     return value.map(v => parseValue({ label, value: v }));
   }
