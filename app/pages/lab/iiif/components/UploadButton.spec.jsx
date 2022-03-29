@@ -10,7 +10,7 @@ import manifest from './helpers/mockManifest.json';
 describe('IIIF > UploadButton', function () {
   let wrapper;
   const { metadata, subjects } = parseManifestV2(manifest);
-  const project = { id: 'testProject' };
+  const project = { id: 'testProject', uncacheLink: sinon.stub() };
 
   beforeEach(function () {
     wrapper = mount(<UploadButton manifest={manifest} metadata={metadata} project={project} subjects={subjects} />);
