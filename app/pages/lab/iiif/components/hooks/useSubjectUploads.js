@@ -4,6 +4,7 @@ import { createSubject } from '../helpers'
 
 export default function useSubjectUploads(snapshots = [], subjectSet) {
   const [uploaded, setUploaded] = useState([])
+  const [error, setError] = useState(null)
   const [failed, setFailed] = useState([])
   const [finished, setFinished] = useState(false)
   const [loaded, setLoaded] = useState(false)
@@ -15,8 +16,11 @@ export default function useSubjectUploads(snapshots = [], subjectSet) {
       setUploaded(subjects => [...subjects, panoptesSubject])
       setUploadCount(count => count + 1)
     } catch (error) {
-      console.error(error)
-      setFailed(subjects => [...subjects, snapshot])
+      if (error.status) {
+        setError(error)
+      } else {
+        setFailed(subjects => [...subjects, snapshot])
+      }
     }
   }
 
@@ -46,5 +50,5 @@ export default function useSubjectUploads(snapshots = [], subjectSet) {
     }
   }, [failed, finished, uploaded])
 
-  return { loaded, uploadCount }
+  return { error, loaded, uploadCount }
 }

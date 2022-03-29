@@ -39,13 +39,17 @@ export default function UploadButton({
   const [subjectSet, setSubjectSet] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadQueue, setUploadQueue] = useState([]);
-  const { loaded, uploadCount } = useSubjectUploads(uploadQueue, subjectSet);
+  const { error: uploadError, loaded, uploadCount } = useSubjectUploads(uploadQueue, subjectSet);
 
   useEffect(() => {
     if (loaded) {
       onLoad()
     }
   }, [loaded])
+
+  useEffect(() => {
+    setError(uploadError)
+  }, [uploadError])
 
   async function createSet() {
     try {
@@ -63,7 +67,7 @@ export default function UploadButton({
     <>
       {subjects && !uploading && <button className="standard-button" onClick={createSet}>Create a subject set</button>}
       {uploading && <p>Uploading {uploadCount}/{subjects.length} subjects.</p>}
-      {error && <p><strong>{error.message}</strong></p>}
+      {error && <p><strong>{error.status}: {error.message}</strong></p>}
       {loaded && <Link to={`/lab/${project.id}/subject-sets/${subjectSet.id}`}>{subjectSet.display_name}</Link>}
     </>
   )
