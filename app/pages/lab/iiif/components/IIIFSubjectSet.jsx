@@ -28,9 +28,8 @@ function parseManifest(manifest) {
   return { error }
 }
 
-export default function IIIFSubjectSet({ project }) {
+export default function IIIFSubjectSet({ project, onSubjectSetChange }) {
   let error
-
   const [metadata, setMetadata] = useState(null)
   const manifestUrl = useRef()
   const [url, setUrl] = useState('')
@@ -69,7 +68,13 @@ export default function IIIFSubjectSet({ project }) {
       {error && <p><b>{error.status}: {error.message}</b></p>}
       {manifest && metadata && <MetadataEditor caption={manifest.label} metadata={metadata} onChange={setMetadata} />}
       {subjects && <p>{subjects.slice(0,10).map(subject => <IIIFThumbnail key={subject.canvasID} subject={subject} />)}</p>}
-      {subjects && <UploadButton manifest={manifest} metadata={metadata} project={project} subjects={subjects} />}
+      {subjects && <UploadButton
+        manifest={manifest}
+        metadata={metadata}
+        project={project}
+        subjects={subjects}
+        onLoad={onSubjectSetChange}
+      />}
     </>
   )
 }

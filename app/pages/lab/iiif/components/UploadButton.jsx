@@ -55,6 +55,7 @@ export default function UploadButton({
     try {
       setUploading(true);
       const _subjectSet = await createSubjectSet(subjectSetSnapshot(manifest, metadata, project));
+      project.uncacheLink('subject_sets');
       setSubjectSet(_subjectSet);
       const _uploadQueue = subjects.map(subject => subjectSnapshot(metadata, project, subject));
       setUploadQueue(_uploadQueue);
