@@ -73,6 +73,7 @@ SubjectSetListing = createReactClass
 
   getInitialState: ->
     pageCount: NaN
+    subjectCount: @props.subjectSet.set_member_subjects_count
     subjects: null
 
   componentWillReceiveProps: (nextProps) ->
@@ -91,9 +92,12 @@ SubjectSetListing = createReactClass
       page: page
 
     gettingSetMemberSubjects.then ([setMemberSubject]) =>
-      newPageCount = setMemberSubject?.getMeta().page_count
+      meta = setMemberSubject?.getMeta()
+      newPageCount = meta?.page_count
       unless newPageCount is @state.pageCount
-        @setState pageCount: newPageCount
+        @setState
+          pageCount: newPageCount
+          subjectCount: meta?.count
 
     gettingSubjects = gettingSetMemberSubjects.get 'subject'
     gettingSubjects.then( (subjects) =>
@@ -108,21 +112,23 @@ SubjectSetListing = createReactClass
     @setSubjectResources(@props.subjectSet.id, pageValue)
 
   render: ->
-    if @state.subjects
-      <div>
-        <SubjectSetListingTable subjects={@state.subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
-        <nav className="pagination">
-          Page <select value={@props.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @newPage(e.target.value)}>
-            {if isNaN @state.pageCount
-              <option>?</option>
-            else
-              for p in [1..@state.pageCount]
-                <option key={p} value={p}>{p}</option>}
-          </select> of {@state.pageCount || '?'}
-        </nav>
-      </div>
-    else
-      null
+    <div>
+      <p>This set contains {@state.subjectCount} subjects:</p>
+      {if @state.subjects
+        <div>
+          <SubjectSetListingTable subjects={@state.subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
+          <nav className="pagination">
+            Page <select value={@props.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @newPage(e.target.value)}>
+              {if isNaN @state.pageCount
+                <option>?</option>
+              else
+                for p in [1..@state.pageCount]
+                  <option key={p} value={p}>{p}</option>}
+            </select> of {@state.pageCount || '?'}
+          </nav>
+        </div>
+      }
+    </div>
 
   previewSubject: (subject) ->
     alert <div className="content-container subject-preview">
@@ -198,7 +204,6 @@ EditSubjectSetPage = createReactClass
 
       <hr />
 
-      This set contains {@props.subjectSet.set_member_subjects_count} subjects:<br />
       <SubjectSetListing subjectSet={@props.subjectSet} page={@state.page} newPage={@newPage} user={@props.user} />
 
       <hr />
