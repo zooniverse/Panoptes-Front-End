@@ -9,6 +9,7 @@ class PanZoom extends Component {
     this.frameKeyPan = this.frameKeyPan.bind(this);
     this.panByDrag = this.panByDrag.bind(this);
     this.rotateClockwise = this.rotateClockwise.bind(this);
+    this.rotateFreely = this.rotateFreely.bind(this);
     this.stopZoom = this.stopZoom.bind(this);
     this.togglePanOn = this.togglePanOn.bind(this);
     this.togglePanOff = this.togglePanOff.bind(this);
@@ -261,11 +262,24 @@ class PanZoom extends Component {
   }
 
   rotateClockwise() {
-    const newRotation = this.state.rotation + 90;
+    const newRotation = (this.state.rotation + 90) % 360;
     this.setState({
       rotation: newRotation,
       transform: `rotate(${newRotation} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
     });
+  }
+
+  /*
+  TODO: hide this behind an experimental flag
+   */
+  rotateFreely(event) {
+    if (!event?.target) return
+    const newRotation = event.target.value % 360
+    console.log(newRotation)
+    this.setState({
+      rotation: newRotation,
+      transform: `rotate(${newRotation} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
+    })
   }
 
   render() {
@@ -330,6 +344,9 @@ class PanZoom extends Component {
             </div>
             <div>
               <button title="rotate" className={'rotate fa fa-repeat'} onClick={this.rotateClockwise} />
+            </div>
+            <div style={{ display: 'flex', height: '80px' }}>
+              <input style={{ width: '60px', transform: 'rotate(270deg)' }} type="range" min={0} max={360} value={this.state.rotation % 360} onChange={this.rotateFreely} />
             </div>
             <div>
               <button
