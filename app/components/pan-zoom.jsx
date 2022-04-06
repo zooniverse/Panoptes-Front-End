@@ -30,7 +30,6 @@ class PanZoom extends Component {
     };
   }
 
-
   componentDidMount() {
     // these events enable a user to navigate an image using arrows, +, and - keys,
     // while the user is in pan and zoom mode.
@@ -275,7 +274,6 @@ class PanZoom extends Component {
   rotateFreely(event) {
     if (!event?.target) return
     const newRotation = event.target.value % 360
-    console.log(newRotation)
     this.setState({
       rotation: newRotation,
       transform: `rotate(${newRotation} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
@@ -283,6 +281,8 @@ class PanZoom extends Component {
   }
 
   render() {
+    console.log('+++ experimental_tools: ', this.props.experimental_tools)
+
     const children = React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
         viewBoxDimensions: this.state.viewBoxDimensions,
@@ -366,6 +366,7 @@ class PanZoom extends Component {
 PanZoom.propTypes = {
   children: PropTypes.node,
   enabled: PropTypes.bool,
+  experimental_tools: PropTypes.array,  // Taken from project.experimental_tools
   frameDimensions: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number
@@ -378,6 +379,7 @@ PanZoom.propTypes = {
 PanZoom.defaultProps = {
   children: null,
   enabled: false,
+  experimental_tools: [],
   frameDimensions: {
     height: 0,
     width: 0
