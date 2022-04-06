@@ -281,7 +281,7 @@ class PanZoom extends Component {
   }
 
   render() {
-    console.log('+++ experimental_tools: ', this.props.experimental_tools)
+    const canUseFreeRotation = this.props.experimental_tools?.indexOf?.('subjectViewer-freeRotation') > -1
 
     const children = React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
@@ -345,9 +345,11 @@ class PanZoom extends Component {
             <div>
               <button title="rotate" className={'rotate fa fa-repeat'} onClick={this.rotateClockwise} />
             </div>
-            <div style={{ display: 'flex', height: '80px' }}>
-              <input style={{ width: '60px', transform: 'rotate(270deg)' }} type="range" min={0} max={360} value={this.state.rotation % 360} onChange={this.rotateFreely} />
-            </div>
+            {canUseFreeRotation && (
+              <div style={{ display: 'flex', height: '80px' }}>
+                <input style={{ width: '60px', transform: 'rotate(270deg)' }} type="range" min={0} max={360} value={this.state.rotation % 360} onChange={this.rotateFreely} />
+              </div>
+            )}
             <div>
               <button
                 title="reset zoom levels"
