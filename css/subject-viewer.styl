@@ -105,6 +105,14 @@
           background-color: #bbc0c0
           color: #575959
 
+      .experimental-free-rotation
+        display: flex
+        height: 5.5em
+
+        input[type=range]
+          width: 5em
+          transform: rotate(270deg)
+
   &.subject-viewer--invert
     // Talk
     &.subject-viewer--layout-grid4
@@ -125,19 +133,19 @@
     .subject-container
       align-items: center
       justify-content: space-between
-      
+
       // For certain Subject types, e.g. Subject Groups, individual images are linked to individual subjects
       > a.linked-image
         outline: 1px solid TEAL_MID
         display: block
         margin-bottom: 0.2em
-        
+
         img
           display: block
 
         &:focus, &:hover
           outline: 1px solid MAIN_HIGHLIGHT
-      
+
     &.subject-viewer--layout-grid2
       .subject-container > *
         width: 49%

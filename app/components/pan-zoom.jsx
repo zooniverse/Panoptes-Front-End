@@ -346,8 +346,8 @@ class PanZoom extends Component {
               <button title="rotate" className={'rotate fa fa-repeat'} onClick={this.rotateClockwise} />
             </div>
             {canUseFreeRotation && (
-              <div style={{ display: 'flex', height: '80px' }}>
-                <input style={{ width: '60px', transform: 'rotate(270deg)' }} type="range" min={0} max={360} value={this.state.rotation % 360} onChange={this.rotateFreely} />
+              <div class="experimental-free-rotation">
+                <input type="range" min={0} max={360} value={this.state.rotation % 360} onChange={this.rotateFreely} />
               </div>
             )}
             <div>
