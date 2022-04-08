@@ -75,6 +75,7 @@ export default class FrameViewer extends React.Component {
         <PanZoom
           ref={(c) => { this.panZoom = c; }}
           enabled={this.props.zoomControls && zoomEnabled}
+          experimental_tools={this.props.project?.experimental_tools}
           frameDimensions={this.state.frameDimensions}
           subject={this.props.subject}
         >

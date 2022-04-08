@@ -23,6 +23,10 @@ describe('PanZoom', function () {
       assert.equal(wrapper.find('button.reset').length, 1);
     });
 
+    it('should NOT, by default, render experimental free rotation slider', function () {
+      assert.equal(wrapper.find('.experimental-free-rotation').length, 0);
+    });
+
     it('if this.state.panEnabled is false, PanZoom should render a pointer button', function () {
       assert.equal(wrapper.find('button.fa-mouse-pointer').length, 1);
     });
@@ -453,6 +457,30 @@ describe('PanZoom', function () {
         const updatedTransformation = `rotate(90 ${wrapper.props().frameDimensions.width / 2} ${wrapper.props().frameDimensions.height / 2})`;
 
         assert.equal(wrapper.state('transform'), updatedTransformation);
+      });
+    });
+
+    describe('#rotateFreely() (Experimental)', function () {
+      let originalFrameDimensions;
+      let wrapper;
+
+      beforeEach(function () {
+        originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+        wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} experimental_tools={['subjectViewer-freeRotation']} />);
+      });
+
+      it('should render experimental free rotation slider when specified', function () {
+        assert.equal(wrapper.find('.experimental-free-rotation').length, 1);
+      });
+
+      it('should set this.state.rotation to the free rotation slider\'s value', function () {
+        const sliderEvent = {
+          target: {
+            value: 69
+          }
+        }
+        wrapper.instance().rotateFreely(sliderEvent);
+        assert.equal(wrapper.state('rotation'), 69);
       });
     });
   });

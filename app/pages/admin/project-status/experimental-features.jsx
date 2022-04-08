@@ -27,6 +27,7 @@ const experimentalFeatures = [
   'sim notification',
   'slider',
   'subjectGroupViewer', // Enables Subject Group Viewer and Subject Group Comparison Task, used for grid-like cell selection tasks. SGV and SGCT can be edited in PFE, but only works on the FEM classifier.
+  'subjectViewer-freeRotation',  // Allows PFE Subject Viewer to rotate freely instead of in 90 degree increments
   'temporalPoint', // temporal tools only works in FEM!
   'temporalRotateRectangle', // temporal tools only works in FEM!
   'transcription-task',
