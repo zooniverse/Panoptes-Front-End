@@ -268,9 +268,6 @@ class PanZoom extends Component {
     });
   }
 
-  /*
-  TODO: hide this behind an experimental flag
-   */
   rotateFreely(event) {
     if (!event?.target) return
     const newRotation = event.target.value % 360
