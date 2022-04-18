@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import TextFromSubjectTaskEditor from './editor';
@@ -6,21 +5,15 @@ import TextFromSubjectTaskEditor from './editor';
 // The TextFromSubject task is an experimental FEM task.
 // The TextFromSubject task is a text task that initializes the annotation value from a text subject's content.
 
-export default class TextFromSubjectTask extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div>
-        <p>
-          The TextFromSubject task is designed exclusively for the front-end-monorepo.
-          It is not intended to be used in Panoptes-Front-End.
-        </p>
-      </div>
-    );
-  }
+export default function TextFromSubjectTask() {
+  return (
+    <div>
+      <p>
+        The TextFromSubject task is designed exclusively for the front-end-monorepo.
+        It is not intended to be used in Panoptes-Front-End.
+      </p>
+    </div>
+  );
 }
 
 // Define the static methods and values
