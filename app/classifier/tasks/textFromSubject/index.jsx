@@ -1,6 +1,27 @@
+import PropTypes from 'prop-types';
+import React from 'react';
+
 import TextFromSubjectTaskEditor from './editor';
 
-const TextFromSubjectTask = {};
+// The TextFromSubject task is an experimental FEM task.
+// The TextFromSubject task is a text task that initializes the annotation value from a text subject's content.
+
+export default class TextFromSubjectTask extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+        <p>
+          The TextFromSubject task is designed exclusively for the front-end-monorepo.
+          It is not intended to be used in Panoptes-Front-End.
+        </p>
+      </div>
+    );
+  }
+}
 
 // Define the static methods and values
 
@@ -14,5 +35,5 @@ TextFromSubjectTask.getDefaultTask = () => ({
   type: 'textFromSubject'
 });
 TextFromSubjectTask.getTaskText = task => (task.instruction);
-
-export default TextFromSubjectTask;
+// isAnnotationComplete will return false within PFE to prevent classifications from being submitted within PFE, as the TextFromSubject task is exclusively for the front-end-monorepo.
+TextFromSubjectTask.isAnnotationComplete = () => false;
