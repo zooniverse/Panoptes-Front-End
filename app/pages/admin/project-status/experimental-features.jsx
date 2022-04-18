@@ -30,6 +30,7 @@ const experimentalFeatures = [
   'subjectViewer-freeRotation',  // Allows PFE Subject Viewer to rotate freely instead of in 90 degree increments
   'temporalPoint', // temporal tools only works in FEM!
   'temporalRotateRectangle', // temporal tools only works in FEM!
+  'textFromSubject', // textFromSubject task only works in FEM!
   'transcription-task',
   'translator-role',
   'wildcam classroom', // Indicates a Project is linked to a "WildCam Lab"-type Zooniverse Classroom. Allows the classifier to select a workflow (i.e. "classroom assignment") directly via ID.
