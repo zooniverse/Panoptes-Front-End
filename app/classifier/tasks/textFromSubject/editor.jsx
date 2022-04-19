@@ -18,9 +18,15 @@ export default function TextFromSubjectEditor({
       <section>
         <div>
           <AutoSave resource={workflow}>
-            <span className="form-label">Main text</span>
+            <label
+              className="form-label"
+              htmlFor={`${taskPrefix}-instruction`}
+            >
+              Main text
+            </label>
             <br />
             <textarea
+              id={`${taskPrefix}-instruction`}
               name={`${taskPrefix}.instruction`}
               value={task.instruction}
               className="standard-input full"
