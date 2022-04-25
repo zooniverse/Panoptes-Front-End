@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pullout from 'react-pullout';
-import { Provider } from 'react-redux';
+import { Provider, ReactReduxContext } from 'react-redux';
 import FieldGuide from './field-guide';
 import Translate from 'react-translate-component';
 import Translations from '../../classifier/translations';
@@ -17,25 +17,12 @@ export default class FieldGuideContainer extends React.Component {
     this.toggleFieldGuide = this.toggleFieldGuide.bind(this);
   }
 
-  logClick(type) {
-    if (this.context && this.context.geordi) {
-      this.context.geordi.logEvent({ type });
-    }
-  }
-
   toggleFieldGuide() {
-    let type = 'open-field-guide';
-
-    if (this.state.revealed) {
-      type = 'close-field-guide';
-    }
-
-    this.logClick(type);
-
     this.setState((prevState) => { return { revealed: !prevState.revealed }; });
   }
 
   render() {
+    const { store } = this.context
     if (this.props.guide && this.props.guide.items.length > 0 && this.props.guideIcons) {
       return (
         <Pullout className="field-guide-pullout" side="right" open={this.state.revealed}>
@@ -44,7 +31,7 @@ export default class FieldGuideContainer extends React.Component {
               <Translate content="project.fieldGuide" />
             </strong>
           </button>
-          <Provider store={this.context.store}>
+          <Provider store={store}>
             <Translations original={this.props.guide} type="field_guide" >
               <FieldGuide
                 items={this.props.guide.items}
@@ -75,7 +62,4 @@ FieldGuideContainer.propTypes = {
   guideIcons: PropTypes.object
 };
 
-FieldGuideContainer.contextTypes = {
-  geordi: PropTypes.object,
-  store: PropTypes.object
-};
+FieldGuideContainer.contextType = ReactReduxContext;

@@ -8,12 +8,22 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
+import { Provider } from 'react-redux';
 import { MinicourseButton, StyledRestartButton } from './MinicourseButton';
+
+export const store = {
+  subscribe: () => { },
+  dispatch: () => { },
+  getState: () => ({ userInterface: { theme: 'light' } })
+};
 
 describe('MinicourseButton', function() {
   let wrapper;
   before(function() {
-    wrapper = mount(<MinicourseButton />);
+    wrapper = mount(<MinicourseButton />, {
+      wrappingComponent: Provider,
+      wrappingComponentProps: { store }
+    });
   });
 
   it('should render without crashing', function() {

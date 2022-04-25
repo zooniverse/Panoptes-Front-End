@@ -7,6 +7,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 import TutorialTab from './TutorialTab';
@@ -24,8 +25,8 @@ const store = {
 };
 
 const mockReduxStore = {
-  context: { store },
-  childContextTypes: { store: PropTypes.object.isRequired }
+  wrappingComponent: Provider,
+  wrappingComponentProps: { store }
 };
 
 describe('TutorialTab', function() {

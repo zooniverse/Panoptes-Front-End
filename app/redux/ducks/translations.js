@@ -50,15 +50,26 @@ const initialState = {
 
 // Reducer
 export default function reducer(state = initialState, action = {}) {
-  let type, strings, translations;
   switch (action.type) {
-    case SET_LANGUAGES:
-      const languages = Object.assign({}, state.languages, { [action.payload.type]: action.payload.languages });
-      return Object.assign({}, state, { languages });
-    case SET_LOCALE:
+    case SET_LANGUAGES: {
+      const languages = {
+        ...state.languages,
+        [action.payload.type]: action.payload.languages
+      };
+      return {
+        ...state,
+        languages
+      };
+    }
+    case SET_LOCALE: {
       const locale = action.payload;
       const rtl = RTL_LANGUAGES.indexOf(locale) > -1;
-      return Object.assign({}, state, { locale, rtl });
+      return {
+        ...state,
+        locale,
+        rtl
+      };
+    }
     case SET_TRANSLATIONS: {
       const { translated_type, translations } = action.payload;
       const resourceTranslations = {};
@@ -71,8 +82,14 @@ export default function reducer(state = initialState, action = {}) {
         });
       });
 
-      strings = Object.assign({}, state.strings, { [translated_type]: resourceTranslations });
-      return Object.assign({}, state, { strings });
+      const strings = {
+        ...state.strings,
+        [translated_type]: resourceTranslations
+      };
+      return {
+        ...state,
+        strings
+      };
     }
     default:
       return state;

@@ -7,6 +7,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
 import TaskNavButtons, { ButtonsWrapper } from './TaskNavButtons';
@@ -18,8 +19,8 @@ const store = {
 };
 
 const mockReduxStore = {
-  context: { store },
-  childContextTypes: { store: PropTypes.object.isRequired }
+  wrappingComponent: Provider,
+  wrappingComponentProps: { store }
 };
 
 const classification = { gold_standard: false };

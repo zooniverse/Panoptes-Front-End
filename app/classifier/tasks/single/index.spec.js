@@ -1,6 +1,6 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'], 'react/jsx-filename-extension': 0 */
 /* global describe, it, beforeEach */
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
@@ -17,7 +17,7 @@ describe('SingleChoiceTask', function () {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = shallow(<SingleTask task={radioTypeTask} annotation={annotation} translation={radioTypeTask} />, mockReduxStore);
+      wrapper = mount(<SingleTask task={radioTypeTask} annotation={annotation} translation={radioTypeTask} />, mockReduxStore);
     });
 
     it('should render without crashing', function () {
@@ -37,7 +37,7 @@ describe('SingleChoiceTask', function () {
   describe('with an empty annotation', function () {
     const annotation = Object.assign({}, radioTypeAnnotation, { value: null });
     [true, false].forEach(function testAutofocus(autofocus) {
-      const wrapper = shallow(
+      const wrapper = mount(
         <SingleTask
           autoFocus={autofocus}
           task={radioTypeTask}
@@ -46,7 +46,7 @@ describe('SingleChoiceTask', function () {
         />,
         mockReduxStore
       );
-      const genericTask = wrapper.dive();
+      const genericTask = wrapper.find(GenericTask);
       it(`should pass autofocus ${autofocus} to its children`, function () {
         expect(genericTask.prop('autoFocus')).to.equal(autofocus);
       })
@@ -56,7 +56,7 @@ describe('SingleChoiceTask', function () {
   describe('with an annotation', function () {
     const annotation = Object.assign({}, radioTypeAnnotation, { value: 1 });
     [true, false].forEach(function testAutofocus(autofocus) {
-      const wrapper = shallow(
+      const wrapper = mount(
         <SingleTask
           autoFocus={autofocus}
           task={radioTypeTask}
@@ -65,7 +65,7 @@ describe('SingleChoiceTask', function () {
         />,
         mockReduxStore
       );
-      const answers = wrapper.dive().prop('answers');
+      const answers = wrapper.find(GenericTask).prop('answers');
       answers.forEach(function (answer) {
         it(`should pass autofocus ${autofocus} for answer ${answer.props.index}`, function () {
           const hasFocus = autofocus && answer.props.index === annotation.value;
@@ -87,7 +87,7 @@ describe('SingleChoiceTask', function () {
     });
 
     beforeEach(function() {
-      wrapper = shallow(
+      wrapper = mount(
         <SingleTask
           task={radioTypeTask}
           translation={radioTypeTask}

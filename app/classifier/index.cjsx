@@ -7,7 +7,7 @@ MiniCourse = require './mini-course'
 Tutorial = require('./tutorial').default
 CustomSignInPrompt = require('./custom-sign-in-prompt').default;
 isAdmin = require '../lib/is-admin'
-{ connect } = require 'react-redux';
+{ connect, ReactReduxContext } = require 'react-redux';
 { bindActionCreators } = require 'redux';
 translationActions  = require '../redux/ducks/translations';
 
@@ -28,10 +28,6 @@ RELOAD_UPP_EVERY = 5
 
 ClassifierWrapper = createReactClass
   displayName: 'ClassifierWrapper'
-
-  contextTypes:
-    geordi: PropTypes.object
-    store: PropTypes.object
 
   propTypes:
     classification: PropTypes.object
@@ -203,5 +199,7 @@ mapDispatchToProps = (dispatch) -> ({
   }
 });
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(ClassifierWrapper)
-module.exports.ClassifierWrapper = ClassifierWrapper
+ClassifierWrapper.contextType = ReactReduxContext;
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(ClassifierWrapper);
+module.exports.ClassifierWrapper = ClassifierWrapper;
