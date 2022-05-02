@@ -19,7 +19,7 @@
     "lodash": "~4.17.11",
     "markdownz": "~7.8.1",
     "modal-form": "~2.9",
-    "moment": "~2.24.0",
+    "moment": "~2.29.0",
     "panoptes-client": "~3.3.2",
     "papaparse": "^5.2.0",
     "polished": "~2.3.3",
