@@ -81,6 +81,9 @@
       text-align: center
       background: grey;
       border-radius: .1em;
+      display: flex
+      flex-direction: column
+
       .draw-pan-toggle
         background-color: #F9F9F9
         border: solid 1px #989898
@@ -106,14 +109,18 @@
           color: #575959
 
       .experimental-free-rotation
+        flex-grow: 1
         display: flex
+        flex-direction: column
         justify-content: center
+        align-items: center
         width: 2em
-        height: 5.5em
+        padding-top: 0.5em
+        padding-bottom: 0.5em
 
         input[type=range]
-          width: 5em
-          transform: rotate(270deg)
+          flex-grow: 1
+          -webkit-appearance: slider-vertical
 
   &.subject-viewer--invert
     // Talk
