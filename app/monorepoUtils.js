@@ -25,7 +25,8 @@ export const SLUGS = [
   'pmlogan/poets-and-lovers',
   'emhaston/the-rbge-herbarium-exploring-gesneriaceae-the-african-violet-family',
   'printmigrationnetwork/print',
-  'profdrrogerlouismartinez-davila/deciphering-secrets-unlocking-the-manuscripts-of-medieval-spain'
+  'profdrrogerlouismartinez-davila/deciphering-secrets-unlocking-the-manuscripts-of-medieval-spain',
+  'skirmizi/ottoman-turkish-crowdsourcing'
 ];
 
 export function usesMonorepo(slug) {

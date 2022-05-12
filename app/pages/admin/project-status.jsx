@@ -422,10 +422,12 @@ class ProjectStatus extends Component {
                   >
                     <option value="none">None Selected</option>
                     <option value="dataImage">Data Image</option>
+                    <option value="imageAndText">Image and Text</option>
                     <option value="lightcurve">(D3/TESS) Light Curve</option>
                     <option value="multiFrame">Multi-Frame</option>
                     <option value="scatterPlot">Scatter Plot</option>
                     <option value="singleImage">Single Image</option>
+                    <option value="singleText">Single Text</option>
                     <option value="subjectGroup">Subject Group</option>
                     <option value="variableStar">Variable Star</option>
                   </select>
