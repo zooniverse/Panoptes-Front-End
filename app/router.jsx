@@ -233,6 +233,21 @@ export const routes = (
     </Route>
 
     <Route path="projects/:locale/:owner/:name" component={require('./pages/project').default}>
+      <IndexRoute component={ProjectHomePage} />
+      <Route path="home" component={ONE_UP_REDIRECT} />
+      <Route path="classify" component={require('./pages/project/classify').default} />
+      <Redirect from="research" to="about/research"/>
+      <Redirect from="results" to="about/results"/>
+      <Redirect from="faq" to="about/faq"/>
+      <Redirect from="education" to="about/education"/>
+      <Route path="about" component={AboutProject}>
+        <IndexRedirect to="research" />
+        <Route path="research" component={AboutProjectResearch} />
+        <Route path="results" component={AboutProjectResults} />
+        <Route path="faq" component={AboutProjectFAQ} />
+        <Route path="education" component={AboutProjectEducation} />
+        <Route path="team" component={AboutProjectTeam} />
+      </Route>
       <Route path="notifications" component={NotificationsPage} />
       <Route path="talk" component={require('./pages/project/talk')}>
         <IndexRoute component={require('./talk/init')} />
