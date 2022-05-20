@@ -5,7 +5,7 @@ import { createRoutesFromReactChildren } from 'react-router/lib//RouteUtils';
 function redirectProjectPage(nextState, replace, done) {
   try {
     const { pathname } = nextState.location;
-    let newUrl = `https://fe-project.zooniverse.org${pathname}`;
+    let newUrl = `https://frontend.preview.zooniverse.org${pathname}`;
     if (window.location.hostname === 'www.zooniverse.org') {
       newUrl = `https://www.zooniverse.org${pathname}`;
     }
