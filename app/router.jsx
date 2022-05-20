@@ -177,62 +177,7 @@ export const routes = (
     */
     <Redirect from="projects/mike-walmsley/bursts-from-space" to="projects/mikewalmsley/bursts-from-space"/>
 
-    <Route path="projects/:owner/:name" component={require('./pages/project').default}>
-      <IndexRoute component={ProjectHomePage} />
-      <Route path="home" component={ONE_UP_REDIRECT} />
-      <Route path="classify" component={require('./pages/project/classify').default} />
-      <Redirect from="research" to="about/research"/>
-      <Redirect from="results" to="about/results"/>
-      <Redirect from="faq" to="about/faq"/>
-      <Redirect from="education" to="about/education"/>
-      <Route path="about" component={AboutProject}>
-        <IndexRedirect to="research" />
-        <Route path="research" component={AboutProjectResearch} />
-        <Route path="results" component={AboutProjectResults} />
-        <Route path="faq" component={AboutProjectFAQ} />
-        <Route path="education" component={AboutProjectEducation} />
-        <Route path="team" component={AboutProjectTeam} />
-      </Route>
-      <Route path="notifications" component={NotificationsPage} />
-      <Route path="talk" component={require('./pages/project/talk')}>
-        <IndexRoute component={require('./talk/init')} />
-        <Route path="recents" component={require('./talk/recents')} />
-        <Route path="not-found" component={NotFoundPage} />
-        <Route path="search" component={require('./talk/search')} />
-        <Route path="moderations" component={require('./talk/moderations')} />
-        <Route path="subjects/:id" component={SubjectPageController} />
-        <Route path="recents/:board" component={require('./talk/recents')} />
-        <Route path="tags/:tag" component={TalkTags} />
-        <Route path=":board" component={require('./talk/board')} />
-        <Route path=":board/:discussion" component={require('./talk/discussion')} />
-      </Route>
-      <Route path="stats" component={require('./pages/project/stats')} />
-      <Route path="favorites" component={require('./pages/collections/index')}>
-        <IndexRoute component={require('./pages/collections/favorites-list')} />
-        <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
-      </Route>
-
-      <Route path="collections" component={require('./pages/collections/index')}>
-         <IndexRoute component={require('./pages/collections/collections-list')} />
-         <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
-      </Route>
-
-      <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
-        <IndexRoute component={require('./collections/show-list')} />
-        <Route path="settings" component={CollectionSettings} />
-        <Route path="collaborators" component={CollectionCollaborators} />
-        <Route path="talk" component={require('./collections/show-list')} />
-      </Route>
-      <Route path="users/:profile_name" component={UserProfilePage}>
-        <IndexRoute component={require('./pages/profile/feed')} />
-        <Route path="favorites" component={require('./pages/collections/favorites-list')} />
-        <Route path="collections" component={require('./pages/collections/collections-list')} />
-        <Route path="message" component={require('./pages/profile/private-message')} />
-      </Route>
-      <Route path="recents" component={Recents} />
-    </Route>
-
-    <Route path="projects/:locale/:owner/:name" component={require('./pages/project').default}>
+    <Route path="projects(/:locale)/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" component={require('./pages/project/classify').default} />
