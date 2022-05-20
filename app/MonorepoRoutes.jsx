@@ -21,6 +21,9 @@ MonorepoRoutes.createRouteFromReactElement = (element, parentRoute) => {
   const monorepoRoutes = createRoutesFromReactChildren(
     <Route path='projects'>
       {SLUGS.map(slug => <MonorepoRoute path={slug} />)}
+      <Route path=':locale'>
+        {SLUGS.map(slug => <MonorepoRoute path={slug} />)}
+      </Route>
     </Route>,
     parentRoute
   )[0];

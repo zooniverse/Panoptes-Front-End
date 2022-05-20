@@ -135,7 +135,7 @@ class ProjectPageController extends React.Component {
   }
 
   fetchProjectData(ownerName, projectName, user) {
-    const { actions, location } = this.props
+    const { actions, location, params } = this.props
     this.setState({
       error: null,
       loading: true,
@@ -150,6 +150,9 @@ class ProjectPageController extends React.Component {
 
         if (project) {
           let locale = project.primary_language
+          if (params.locale) {
+            locale = params.locale
+          }
           if (location.query.language) {
             locale = location.query.language;
           }
