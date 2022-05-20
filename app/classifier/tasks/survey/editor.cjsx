@@ -292,7 +292,7 @@ module.exports = createReactClass
         </label>
         <p>
           <small>
-            If checked then thumbnails will always show as small. If unchecked then thumbnails will show as small, medium, large, or not at all (choices > 30) based on the number of choices shown. The number of choices shown will change based on filters.
+            If checked, then thumbnails will always show as small. If unchecked, then thumbnails will show as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. The number of choices shown will change based on filters.
           </small>
         </p>
       </div>
