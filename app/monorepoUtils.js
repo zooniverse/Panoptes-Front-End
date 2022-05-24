@@ -26,7 +26,8 @@ export const SLUGS = [
   'emhaston/the-rbge-herbarium-exploring-gesneriaceae-the-african-violet-family',
   'printmigrationnetwork/print',
   'profdrrogerlouismartinez-davila/deciphering-secrets-unlocking-the-manuscripts-of-medieval-spain',
-  'skirmizi/ottoman-turkish-crowdsourcing'
+  'skirmizi/ottoman-turkish-crowdsourcing',
+  'bldigital/in-the-spotlight'
 ];
 
 export function usesMonorepo(slug) {

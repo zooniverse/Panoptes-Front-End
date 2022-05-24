@@ -47,5 +47,10 @@ describe('LanguagePicker', function () {
     it('should pass the new language to setLocale', function () {
       expect(changeSpy.calledWith('nl')).to.be.true;
     });
+
+    it('should add the new language to the page URL', function () {
+      const searchParams = new URLSearchParams(window.location.search)
+      expect(searchParams.get('language')).to.equal('nl')
+    });
   });
 });

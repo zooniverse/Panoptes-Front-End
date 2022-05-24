@@ -23,6 +23,9 @@ function LanguagePicker(props) {
 
   function onChange(e) {
     actions.translations.setLocale(e.target.value);
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('language', e.target.value);
+    window.history.pushState({}, '', `${window.location.pathname}?${searchParams}`);
   }
 
   return (
