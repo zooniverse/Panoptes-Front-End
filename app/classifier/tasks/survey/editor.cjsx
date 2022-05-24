@@ -283,12 +283,19 @@ module.exports = createReactClass
 
       <hr />
 
-      <label>
-        <AutoSave resource={@props.workflow}>
-          <input type="checkbox" name="#{@props.taskPrefix}.alwaysShowThumbnails" checked={@props.task.alwaysShowThumbnails} onChange={handleInputChange.bind @props.workflow} />{' '}
-          Always show thumbnails
-        </AutoSave>
-      </label>
+      <div>
+        <label>
+          <AutoSave resource={@props.workflow}>
+            <input type="checkbox" name="#{@props.taskPrefix}.alwaysShowThumbnails" checked={@props.task.alwaysShowThumbnails} onChange={handleInputChange.bind @props.workflow} />{' '}
+            Always show thumbnails
+          </AutoSave>
+        </label>
+        <p>
+          <small>
+            If checked, then thumbnails will always show as small. If unchecked, then thumbnails will show as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. The number of choices shown will change based on filters.
+          </small>
+        </p>
+      </div>
     </div>
 
   handleImportTabs: (tab) ->
