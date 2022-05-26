@@ -12,7 +12,7 @@ jobs:
       commit_id: ${{ github.sha }}
       node_version: '16.x'
       output: 'dist'
-      script: '_build-staging'
+      script: 'build-production'
   deploy_staging_branch:
     name: Deploy staging branch
     uses: zooniverse/ci-cd/.github/workflows/deploy_static.yaml@main
