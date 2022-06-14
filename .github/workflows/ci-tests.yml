@@ -17,7 +17,7 @@ jobs:
     - name: Use Node.js 16
       uses: actions/setup-node@v2
       with:
-        node-version: '16.x'
+        node-version: '16.13.x'
         cache: 'npm'
 
     - run: npm ci
