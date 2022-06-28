@@ -17,7 +17,7 @@ jobs:
       commit_id: ${{ github.sha }}
       node_version: '16.13.x'
       output: 'dist'
-      script: '_build-production'
+      script: 'build-production'
   deploy_production:
     name: Deploy production
     uses: zooniverse/ci-cd/.github/workflows/deploy_static.yaml@main
