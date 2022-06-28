@@ -399,7 +399,7 @@ EditWorkflowPage = createReactClass
               <div>
                 <AutoSave resource={@props.workflow}>
                   <span className="form-label">Gravity Spy Gold Standard</span><br />
-                  <small className="form-help">Notify a user how they've classified a Gold Standard subject.</small>
+                  <small className="form-help">Notify a user how they&apos;ve classified a Gold Standard subject.</small>
                   <br />
                   <label>
                     <input type="checkbox" onChange={@handleSetGravitySpyGoldStandard} checked={@props.workflow.configuration.gravity_spy_gold_standard}/>
@@ -464,7 +464,7 @@ EditWorkflowPage = createReactClass
 
             </div>}
 
-          <div className="unsupported">
+          <div>
             <AutoSave tag="label" resource={@props.workflow}>
               <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
               Allow Users To Flip Image Color
@@ -481,7 +481,7 @@ EditWorkflowPage = createReactClass
             <small className="form-help">How many people should classify each subject before it is “done”? Once a subject has reached the retirement limit it will no longer be shown to any volunteers.</small>
             <br />
             <br />
-            <small className="form-help">If you'd like more complex retirement rules, please get in touch via the <a href='/about/contact'>Contact Us</a> page.</small>
+            <small className="form-help">If you&apos;d like more complex retirement rules, please get in touch via the <a href='/about/contact'>Contact Us</a> page.</small>
           </p>
 
           <hr />
