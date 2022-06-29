@@ -769,7 +769,7 @@ export default {
         volunteering: 'Volunteering',
         education: 'Education',
         callForProjects: 'Call for Projects',
-        collections: 'Kolekcje',
+        collections: 'Collections',
         favorites: 'Favorites'
       }
     },

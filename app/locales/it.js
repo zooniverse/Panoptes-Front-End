@@ -727,7 +727,7 @@ export default {
       nav: {
         volunteering: 'Volontariato',
         education: 'Scuola',
-        callForProjects: 'Call for Projects',
+        callForProjects: 'Bando per progetti',
         collections: 'Collezioni',
         favorites: 'Preferiti'
       }

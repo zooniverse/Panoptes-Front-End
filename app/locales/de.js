@@ -722,7 +722,7 @@ export default {
       nav: {
         volunteering: 'Freiwilligenbeteiligung',
         education: 'Bildung',
-        callForProjects: 'Call for Projects',
+        callForProjects: 'Aufruf für Projekte',
         collections: 'Sammlungen',
         favorites: 'Favoriten'
       }
