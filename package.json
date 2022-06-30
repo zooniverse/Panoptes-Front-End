@@ -127,7 +127,7 @@
     "coverage": "nyc report --reporter=lcov",
     "start": "export NODE_ENV=development; check-engines && check-dependencies && webpack-dashboard -p 3736 -- webpack-dev-server --config ./webpack.dev.js",
     "_build": "export HEAD_COMMIT=$(git rev-parse --short HEAD); check-engines && check-dependencies && rimraf dist; webpack --config ./webpack.build.js --progress --color",
-    "build-production": "export NODE_ENV=production; npm run _build",
+    "build-production": "export NODE_ENV=staging; npm run _build",
     "serve-static": "export NODE_ENV=staging; check-engines && check-dependencies && npm run _build && node ./static-server.js",
     "test-and-watch": "NODE_ENV=development BABEL_ENV=test mocha --watch --watch-extensions js,jsx,coffee,cjsx test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
     "test": "NODE_ENV=development BABEL_ENV=test nyc mocha --exit test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
