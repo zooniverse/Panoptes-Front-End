@@ -209,10 +209,11 @@ module.exports = createReactClass
           <div>
             External links<br />
             <small className="form-help">
-              Adding an external link will make it appear as a new tab alongside
-              the about, classify, talk, and collect tabs. You can rearrange the
+              Adding an external link will populate an entry in a list of links
+              in the bottom right section of the project landing page.  These
+              links open in a new tab when clicked. You can rearrange the
               displayed order by clicking and dragging on the left gray tab next
-              to each link below.
+              to each link.
             </small>
             <br />
             <small className="form-help">
@@ -222,10 +223,13 @@ module.exports = createReactClass
             <div className="edit-social-links">
               <h5>Social Links Section</h5>
               <small className="form-help">
-                Adding a social link will append a media icon at
-                the end of your project menu bar. You can rearrange the
-                displayed order by clicking and dragging on the left gray
-                tab next to each link below.
+                A specialized form of an external link, adding a social link
+                will populate an entry in the list of links in the bottom right
+                section of the project landing page that includes
+                service-specific icons. You can rearrange the displayed order by
+                clicking and dragging on the left gray tab next to each link,
+                but all social links follow after external links in the
+                displayed list.
               </small>
               <SocialLinksEditor project={@props.project} />
             </div>
@@ -256,8 +260,8 @@ module.exports = createReactClass
     allTags = @state.disciplineTagList.concat sanitizedTags
     @handleTagChange(allTags)
 
-  handleTagChange: (value) ->  
-    changes = 
+  handleTagChange: (value) ->
+    changes =
       tags: value
     @props.project.update(changes)
 
