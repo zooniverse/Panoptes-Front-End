@@ -798,19 +798,16 @@ export default {
       }
     },
     callForProjects: {
-      bio: {
-        header: '## Call for Biomedical Project Proposals',
-        wouldResearchBenefit: 'Would your research benefit from the involvement of thousands of volunteers? We are currently seeking proposals for biomedical projects to be developed as part of the Zooniverse platform. The Zooniverse is the world’s largest and most successful online platform for crowd-sourced research; we currently have over 1.5 million registered volunteers working in collaboration with professional researchers on more than 50 research projects across a range of disciplines, from physics to biology.',
-        projectBuilder: 'Using our unique [Project Builder](/lab) you can create your own Zooniverse project for free with a set of tried and tested tools, including multiple-choice questions and region marking or drawing tools. If we don’t yet offer the tools you need, please propose your project below; we are particularly interested in developing novel projects that extend the functionality of our platform.',
-        projectSelection: '### Project Selection',
-        expandFunctionality: 'We are looking for biomedical projects that will help us expand the functionality of the Zooniverse and build on the selection of tools available to researchers via our platform. Projects may involve a processing task applied to images, graphs, videos or another data format, data collection, or a combination of the two. Successful projects will be developed and hosted by the Zooniverse team, in close collaboration with the applicants.',
-        examples: 'Examples of our current biomedical projects include [Microscopy Masters](https://www.zooniverse.org/projects/jbrugg/microscopy-masters), where volunteers classify cryo-electron microscopy images to advance understanding of protein and virus structure, and [Worm Watch Lab](https://www.wormwatchlab.org/), which aims to improve understanding of the relationship between genes and behaviour.',
-        selectionCriteriaTitle: '### Selection Criteria:',
-        selectionCriteriaOne: '1. Projects extending the capability of the Zooniverse platform or serving as case studies for crowdsourcing in new areas are encouraged.',
-        selectionCriteriaTwo: '2. Alignment with biomedical research (long-term aim of research is to improve human health outcomes).',
-        selectionCriteriaThree: '3. Merit and usefulness of the data expected to result from the project.',
-        deadline: '### Deadline\nProject proposals are accepted on a rolling basis. Applications will be reviewed at the beginning of each month.',
-        submissionLink: '[SUBMIT A BIOMEDICAL PROPOSAL](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)'
+      general: {
+        header: '## Build a Zooniverse Project',
+        wouldResearchBenefit: 'Would your research benefit from the involvement of thousands of volunteers? The Zooniverse is the world’s largest and most successful online platform for crowd-sourced research; we have millions of registered volunteers working in collaboration with professional researchers on more than 50 research projects across a range of disciplines, from astronomy to the humanities.',
+        projectBuilder: 'Using our unique [Project Builder](/lab) you can create your own Zooniverse project for free with a set of tried and tested tools, including multiple-choice questions and region marking or drawing tools. To get started, visit [Zooniverse Help](https://help.zooniverse.org) and dig into our [project building guide](https://help.zooniverse.org/getting-started) and [best practices](https://help.zooniverse.org/best-practices) pages.'
+      },
+      nasa: {
+        header: '## Call for NASA Projects',
+        wouldResearchBenefit: 'Are you a researcher working on a project relevant to one of NASA’s Science Mission Directorate divisions (Astrophysics, Biological and Physical Sciences, Heliophysics, and the Planetary Science) who would benefit from contributions from Zooniverse volunteers? As part of an [on-going partnership](https://blog.zooniverse.org/2020/07/22/nasa-and-zooniverse-announce-partnership) with NASA, the Zooniverse seeks to build on its current support of NASA research teams and encourage the development of new projects on our platform.',
+        support: 'Whether you are already building workflows using the Project Builder or you are just starting to consider how crowdsourced contributions could advance your research, the Zooniverse team has dedicated effort to support teams during project development and implementation. We are happy to discuss and support proposals to NASA citizen science funding calls (including the [Citizen Science Seed Funding Program](https://science.nasa.gov/science-news/citizenscience/nasa-funding-available-for-scientists), the [Citizen Science for Earth Systems Program](https://www.earthdata.nasa.gov/esds/competitive-programs/csesp), and other NASA ROSES funding opportunities) for projects interested in using the Zooniverse platform.',
+        contact: 'If you have questions or require any further guidance, please contact Cliff Johnson, Zooniverse Science Lead and NASA liaison: cliff@zooniverse.org.'
       }
     },
     education: {
