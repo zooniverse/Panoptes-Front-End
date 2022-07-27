@@ -1,3 +1,4 @@
+import counterpart from 'counterpart';
 import _ from 'lodash';
 
 import isAdmin from '../is-admin';
@@ -6,41 +7,49 @@ import { monorepoURL, usesMonorepo } from '../../monorepoUtils';
 
 function getProjectLinks({ project, projectRoles, user }) {
   const { id, redirect, slug } = project;
+  const searchParams = new URLSearchParams(window.location.search);
+  const env = searchParams.get('env');
+  const locale = counterpart.getLocale();
+  const navSearchParams = new URLSearchParams({ env });
+  if (locale !== project.primary_language) {
+    navSearchParams.set('language', locale);
+  }
+  const query = `${navSearchParams}` ? `?${navSearchParams}` : '';
 
   const links = {
     about: {
       order: 0,
-      url: `/projects/${slug}/about`,
+      url: `/projects/${slug}/about${query}`,
       translationPath: 'project.nav.about'
     },
     classify: {
       order: 1,
-      url: `/projects/${slug}/classify`,
+      url: `/projects/${slug}/classify${query}`,
       translationPath: 'project.nav.classify'
     },
     talk: {
       order: 2,
-      url: `/projects/${slug}/talk`,
+      url: `/projects/${slug}/talk${query}`,
       translationPath: 'project.nav.talk'
     },
     collections: {
       order: 3,
-      url: `/projects/${slug}/collections`,
+      url: `/projects/${slug}/collections${query}`,
       translationPath: 'project.nav.collections'
     },
     recents: {
       order: 4,
-      url: `/projects/${slug}/recents`,
+      url: `/projects/${slug}/recents${query}`,
       translationPath: 'project.nav.recents'
     },
     admin: {
       order: 5,
-      url: `/admin/project_status/${slug}`,
+      url: `/admin/project_status/${slug}${query}`,
       translationPath: 'project.nav.adminPage'
     },
     lab: {
       order: 6,
-      url: `/lab/${id}`,
+      url: `/lab/${id}${query}`,
       translationPath: 'project.nav.lab'
     }
   };
@@ -48,9 +57,11 @@ function getProjectLinks({ project, projectRoles, user }) {
   const canClassify = project.links.active_workflows && project.links.active_workflows.length > 0;
 
   if (usesMonorepo(slug)) {
-    links.about.url = `${monorepoURL(slug)}/about`;
+    const i18nSlug = locale === 'en' ? slug : `${locale}/${slug}`;
+    const query = env === 'staging' ? '?env=staging' : '';
+    links.about.url = `${monorepoURL(i18nSlug)}/about${query}`;
     links.about.isMonorepoLink = true;
-    links.classify.url = `${monorepoURL(slug)}/classify`;
+    links.classify.url = `${monorepoURL(i18nSlug)}/classify${query}`;
     links.classify.isMonorepoLink = true;
   }
 
