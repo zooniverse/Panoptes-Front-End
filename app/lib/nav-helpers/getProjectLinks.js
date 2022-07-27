@@ -10,11 +10,18 @@ function getProjectLinks({ project, projectRoles, user }) {
   const searchParams = new URLSearchParams(window.location.search);
   const env = searchParams.get('env');
   const locale = counterpart.getLocale();
-  const navSearchParams = new URLSearchParams({ env });
+  const newSearchParams = new URLSearchParams();
+
+  // For most projects, primary_language is en
   if (locale !== project.primary_language) {
-    navSearchParams.set('language', locale);
+    newSearchParams.set('language', locale);
   }
-  const query = `${navSearchParams}` ? `?${navSearchParams}` : '';
+
+  if (env) {
+    newSearchParams.set('env', env);
+  }
+
+  const query = `${newSearchParams}` ? `?${newSearchParams}` : '';
 
   const links = {
     about: {
@@ -58,10 +65,10 @@ function getProjectLinks({ project, projectRoles, user }) {
 
   if (usesMonorepo(slug)) {
     const i18nSlug = locale === 'en' ? slug : `${locale}/${slug}`;
-    const query = env === 'staging' ? '?env=staging' : '';
-    links.about.url = `${monorepoURL(i18nSlug)}/about${query}`;
+    const envQuery = env === 'staging' ? '?env=staging' : '';
+    links.about.url = `${monorepoURL(i18nSlug)}/about${envQuery}`;
     links.about.isMonorepoLink = true;
-    links.classify.url = `${monorepoURL(i18nSlug)}/classify${query}`;
+    links.classify.url = `${monorepoURL(i18nSlug)}/classify${envQuery}`;
     links.classify.isMonorepoLink = true;
   }
 
