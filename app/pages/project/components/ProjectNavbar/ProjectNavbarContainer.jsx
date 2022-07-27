@@ -73,28 +73,16 @@ class ProjectNavbarContainer extends Component {
   }
 
   render() {
-    const searchParams = new URLSearchParams(window.location.search);
-    const env = searchParams.get('env');
-    const locale = counterpart.getLocale();
-    const newSearchParams = new URLSearchParams({ env });
-    if (locale !== this.props.project.primary_language) {
-      newSearchParams.set('language', locale);
-    }
-    const query = `${newSearchParams}` ? `?${newSearchParams}` : '';
     const avatarSrc = _.get(this.props.projectAvatar, 'src', undefined);
     const backgroundSrc = _.get(this.props.background, 'src', undefined);
     const launched = this.props.project.launch_approved || this.props.project.listed;
     const navLinks = isResourceAProject(this.props.project) ? this.getNavLinks() : [];
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
-    const projectLink = isResourceAProject(this.props.project) ?
-      `/projects/${this.props.project.slug}${query}` :
-      `/organizations/${this.props.project.slug}${query}`;
+    const projectLink = isResourceAProject(this.props.project) ? `/projects/${this.props.project.slug}` : `/organizations/${this.props.project.slug}`;
     let redirect = this.props.project.redirect ? this.props.project.redirect : '';
     const underReview = this.props.project.beta_approved;
     if (usesMonorepo(this.props.project.slug)) {
-      const i18nSlug = locale === 'en' ? this.props.project.slug : `${locale}/${this.props.project.slug}`;
-      const query = env === 'staging' ? '?env=staging' : '';
-      redirect = `${monorepoURL(i18nSlug)}${query}`;
+      redirect = monorepoURL(this.props.project.slug)
     }
 
     return (
