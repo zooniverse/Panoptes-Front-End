@@ -181,7 +181,7 @@ ProjectCreationForm = createReactClass
         @setState busy: false
 
   render: ->
-    <form onSubmit={@handleSubmit} style={maxWidth: '90vw', width: '60ch'}>
+    <form onSubmit={@handleSubmit} style={maxWidth: '50vw', width: '60ch'}>
       <p>
         <label>
           <span className="form-label">Project name</span><br />
