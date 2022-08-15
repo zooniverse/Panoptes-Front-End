@@ -162,7 +162,7 @@ export default {
         retiredSubjects: 'Tamamlanan Temalar',
         subjects: 'Temalar'
       },
-      classification: 'Transkripsiyonlar/Sınıflandırmalar',
+      classification: 'Sınıflandırmalar',
       comment: 'Sohbet Yorumları',
       dateRange: 'Tarih aralığı',
       expandWorkflowStats: 'İş Akışı İstatistiklerini Genişlet',
