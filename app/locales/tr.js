@@ -76,7 +76,7 @@ export default {
     nav: {
       about: 'Hakkımızda',
       adminPage: 'Admin sayfası',
-      classify: 'Transkripsiyon/Sınıflandırma',
+      classify: 'Sınıflandırma',
       collections: 'Toplamak',
       exploreProject: 'Projeyi Keşfet',
       lab: 'Lab',
