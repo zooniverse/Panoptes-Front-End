@@ -224,7 +224,7 @@ class ApplyForBetaForm extends React.Component {
 
         {this.createCheckbox('bestPracticesReviewed', <span>I have reviewed the <a href="https://help.zooniverse.org/best-practices" target="_blank" rel="noopener noreferrer">best practices</a></span>)}
 
-        {this.createCheckbox('feedbackReviewed', <span>I have reviewed the sample <a href="https://docs.google.com/a/zooniverse.org/forms/d/1o7yTqpytWWhSOqQhJYiKaeHIaax7xYVUyTOaG3V0xA4/viewform" target="_blank" rel="noopener noreferrer">project review feedback form</a></span>)}
+        {this.createCheckbox('feedbackReviewed', <span>I have reviewed the sample <a href="https://docs.google.com/forms/d/e/1FAIpQLSd21yl-dmWFEF78cwMiatfOBxMXSZoPR8E_tMJZZEUdkYtpcw/viewform" target="_blank" rel="noopener noreferrer">beta test project feedback form</a></span>)}
 
         <p className="form-help">To be eligible for beta review, projects also require:</p>
         <ul className="form-help">

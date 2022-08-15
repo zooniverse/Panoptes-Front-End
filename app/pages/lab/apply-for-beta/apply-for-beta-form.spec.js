@@ -220,7 +220,7 @@ describe('ApplyForBeta component:', function() {
 
       describe('feedback form checkbox:', function() {
         const setFeedbackFormWrappers = function() {
-          setWrappers('I have reviewed the sample project review feedback form');
+          setWrappers('I have reviewed the sample beta test project feedback form');
         };
 
         beforeEach(testSetup);

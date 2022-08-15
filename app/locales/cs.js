@@ -732,22 +732,6 @@ export default {
         favorites: 'Oblíbené'
       }
     },
-    callForProjects: {
-      bio: {
-        header: '## Call for Biomedical Project Proposals',
-        wouldResearchBenefit: 'Would your research benefit from the involvement of thousands of volunteers? We are currently seeking proposals for biomedical projects to be developed as part of the Zooniverse platform. The Zooniverse is the world’s largest and most successful online platform for crowd-sourced research; we currently have over 1.5 million registered volunteers working in collaboration with professional researchers on more than 50 research projects across a range of disciplines, from physics to biology.',
-        projectBuilder: 'Using our unique [Project Builder](/lab) you can create your own Zooniverse project for free with a set of tried and tested tools, including multiple-choice questions and region marking or drawing tools. If we don’t yet offer the tools you need, please propose your project below; we are particularly interested in developing novel projects that extend the functionality of our platform.',
-        projectSelection: '### Project Selection',
-        expandFunctionality: 'We are looking for biomedical projects that will help us expand the functionality of the Zooniverse and build on the selection of tools available to researchers via our platform. Projects may involve a processing task applied to images, graphs, videos or another data format, data collection, or a combination of the two. Successful projects will be developed and hosted by the Zooniverse team, in close collaboration with the applicants.',
-        examples: 'Examples of our current biomedical projects include [Microscopy Masters](https://www.zooniverse.org/projects/jbrugg/microscopy-masters), where volunteers classify cryo-electron microscopy images to advance understanding of protein and virus structure, and [Worm Watch Lab](https://www.wormwatchlab.org/), which aims to improve understanding of the relationship between genes and behaviour.',
-        selectionCriteriaTitle: '### Selection Criteria:',
-        selectionCriteriaOne: '1. Projects extending the capability of the Zooniverse platform or serving as case studies for crowdsourcing in new areas are encouraged.',
-        selectionCriteriaTwo: '2. Alignment with biomedical research (long-term aim of research is to improve human health outcomes).',
-        selectionCriteriaThree: '3. Merit and usefulness of the data expected to result from the project.',
-        deadline: '### Deadline\nProject proposals are accepted on a rolling basis. Applications will be reviewed at the beginning of each month.',
-        submissionLink: '[SUBMIT A BIOMEDICAL PROPOSAL](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)'
-      }
-    },
     education: {
       title: '## Výuka v Zooniverse',
       becomeCitizenScientist: 'Jakožto dobrovolník na těchto webových stránkách, se můžete Vy i Vaši studenti stát zároveň občanskými vědci i výzkumníky, podílejícími se na skutečném vědeckém výzkumu. Pokud si Vaši studenti myslí, že jste chybovali, nebojte se, dokonce i skuteční vědci dělají chyby. Naše projekty jsou nastaveny tak, že každý zkoumaný objekt je analyzován větším počtem dobrovolníků, čímž je možné eliminovat většinu lidských chyb. Chyby jsou součástí procesu, a mohou být dokonce přínosné - pomohou nám poznat, kdy jde o příliš složitá data. Pokud se všichni snažíme o nejlepší výkon, potom pomáháme!',
@@ -872,10 +856,8 @@ export default {
           announcementBanner: '* **Announcement Banner:** This text will appear as a banner at the top of all your project’s pages. Only use this when you’ve got a big important announcement to make! Many projects use this to signal the end of a beta review, or other major events in a project’s life cycle.',
           disciplineTag: '* **Discipline Tag:** Enter or select one or more discipline tags to identify which field(s) of research your project belongs to. These tags will determine the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project.',
           otherTags: '* **Other Tags:** Enter a list of additional tags to describe your project separated by commas to help users find your project.',
-          externalLinks: '* **External links:** Adding an external link will make it appear as a new tab alongside the About, Classify, Talk, and Collect tabs. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
-          socialLinks: '* **Social links:** Adding a social link will append a media icon at the end of your project menu bar. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
-          checkboxPrivate: '* **Checkbox: Private project:** On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you\'re still editing it. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left-hand side of the Project Builder). Team members you add can see your project even if it\'s private. Once your project is public, anyone with the link can view and classify on it.',
-          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
+          externalLinks: '* **External links:** Adding an external link will populate an entry in a list of links in the bottom right section of the project landing page.  These links open in a new tab when clicked. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
+          socialLinks: '* **Social links:** A specialized form of an external link, adding a social link will populate an entry in the list of links in the bottom right section of the project landing page that includes service-specific icons. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link, but all social links follow after external links in the displayed list.'
         },
         about: {
           title: '### About',

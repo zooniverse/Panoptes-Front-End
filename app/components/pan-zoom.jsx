@@ -344,7 +344,7 @@ class PanZoom extends Component {
             </div>
             {canUseFreeRotation && (
               <div className="experimental-free-rotation">
-                <input type="range" min={0} max={359} value={this.state.rotation % 360} onChange={this.rotateFreely} />
+                <input type="range" min={0} max={359} value={this.state.rotation % 360} onChange={this.rotateFreely} orient="vertical" />
               </div>
             )}
             <div>
