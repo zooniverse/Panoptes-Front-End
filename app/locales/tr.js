@@ -153,7 +153,7 @@ export default {
       adjustParameters: 'Parametreleri Ayarlayın',
       byTheNumbers: 'Sayılara göre',
       byTheNumbersContent: {
-        classifications: 'Transkripsiyonlar/Sınıflandırmalar',
+        classifications: 'Sınıflandırmalar',
         firstProject: 'İlk Proje',
         firstProjectLaunch: 'İlk Proje Lansman Tarihi',
         liveProjects: 'Devam Eden Projeler',
