@@ -170,7 +170,7 @@ export default {
       hidden: 'İstatistikler gizlendi',
       hourly: 'Yalnızca en son 2 haftaya ait saatlik veriler mevcuttur.',
       organizationStatistics: '%(title)s İstatistikler',
-      perclassification: 'Transkripsiyonlar/Sınıflandırmalar ',
+      perclassification: 'Sınıflandırmalar',
       percomment: 'Yorumlar ',
       projectStats: 'Devam Eden Projeler (%(count)s)',
       reset: 'Görünümü sıfırla'
