@@ -97,7 +97,7 @@ export default {
       about: '%(title)s hakkında',
       metadata: {
         statistics: '%(title)s İstatistikler',
-        classifications: 'Transkripsiyonlar/Sınıflandırmalar',
+        classifications: 'Sınıflandırmalar',
         volunteers: 'Gönüllüler',
         completedSubjects: 'Tamamlanan temalar',
         subjects: 'Temalar'
