@@ -252,7 +252,7 @@ export default {
     general: {
       section: 'Zooniverse e-posta tercihleri',
       updates: 'Genel Zooniverse e-posta güncellemelerini alın',
-      classify: 'Bir projede ilk transkripsiyon/sınıflandırma yaptığınızda e-posta güncellemesi alın',
+      classify: 'Bir projede ilk sınıflandırma yaptığınızda e-posta güncellemesi alın',
       note: 'Not: Kutunun işaretini kaldırmak, herhangi bir projeden aboneliğinizi iptal etmeyecektir.',
       manual: 'Projeleri ayrı ayrı yönetin',
       beta: 'Beta projesi e-posta güncellemelerini alın ve beta test kullanıcısı olun',
