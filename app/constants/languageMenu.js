@@ -18,6 +18,7 @@ export default {
   pt: 'Português',
   ru: 'русский',
   sv: 'Svenska',
+  tr: 'Türkçe',
   uk: 'українська мова',
   ur: 'اردو',
   'zh-cn': '简体中文',
