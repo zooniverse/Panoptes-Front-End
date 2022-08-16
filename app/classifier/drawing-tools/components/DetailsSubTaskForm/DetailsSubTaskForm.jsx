@@ -2,7 +2,7 @@ import React from 'react';
 import merge from 'lodash/merge';
 import PropTypes from 'prop-types';
 import StickyModalForm from 'modal-form/sticky';
-import { connect, Provider } from 'react-redux';
+import { connect, Provider, ReactReduxContext } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import Translate from 'react-translate-component';
@@ -76,9 +76,7 @@ export class DetailsSubTaskForm extends React.Component {
     })
   }
 
-  static contextTypes = {
-    store: PropTypes.object
-  }
+  static contextType = ReactReduxContext;
 
   componentDidUpdate() {
     // What is this even doing? When this was in the root component, it was always being called for any update
@@ -117,6 +115,7 @@ export class DetailsSubTaskForm extends React.Component {
   
   render() {
     const { theme, tasks, toolProps, translations, workflow } = this.props;
+    const { store } = this.context;
 
     const detailsAreComplete = this.areDetailsComplete(tasks, toolProps);
 
@@ -127,7 +126,7 @@ export class DetailsSubTaskForm extends React.Component {
           onSubmit={this.handleDetailsFormClose}
           onCancel={this.handleDetailsFormClose}
         >
-          <Provider store={this.context.store}>
+          <Provider store={store}>
             <ModalFocus onEscape={this.handleDetailsFormClose} preserveFocus={false}>
               {toolProps.details.map((detailTask, i) => {
                 if (!detailTask._key) detailTask._key = Math.random();

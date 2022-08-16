@@ -412,5 +412,5 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ProjectPageController);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectPageController);
 export { ProjectPageController };

@@ -7,6 +7,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
@@ -19,8 +20,8 @@ export const store = {
 };
 
 export const mockReduxStore = {
-  context: { store },
-  childContextTypes: { store: PropTypes.object.isRequired }
+  wrappingComponent: Provider,
+  wrappingComponentProps: { store }
 };
 
 describe('NextButton', function() {

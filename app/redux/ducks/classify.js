@@ -50,7 +50,7 @@ function createNewClassification(project, workflow, subject, goldStandardMode, l
   const source = subject.metadata.intervention ? 'sugar' : 'api';
   // Delete the metadata key because we don't want volunteers to see it.
   subject.update({ 'metadata.intervention': undefined });
-  let newMetadata = {
+  const newMetadata = {
     workflow_version: workflow.version,
     started_at: (new Date()).toISOString(),
     user_agent: navigator.userAgent,
@@ -58,11 +58,11 @@ function createNewClassification(project, workflow, subject, goldStandardMode, l
     utc_offset: ((new Date()).getTimezoneOffset() * 60).toString(), // In seconds
     subject_dimensions: (subject.locations.map(() => null)),
     source
-  }
+  };
   // record if this classification had an intervention payload directly before it
   if (lastInterventionUUID) {
     newMetadata.interventions = newMetadata.interventions || {};
-    newMetadata.interventions.uuid = lastInterventionUUID
+    newMetadata.interventions.uuid = lastInterventionUUID;
   }
   const classification = apiClient.type('classifications').create({
     annotations: [],
@@ -164,22 +164,31 @@ export default function reducer(state = initialState, action = {}) {
       if (intervention && intervention.workflow_id) {
         matchesWorkflow = workflow === intervention.workflow_id.toString();
       }
-      if (matchesProject && matchesWorkflow ) {
-        return Object.assign({}, state, { intervention });
+      if (matchesProject && matchesWorkflow) {
+        return {
+          ...state,
+          intervention
+        };
       }
       return state;
     }
     case STORE_INTERVENTION_UUID: {
       const { intervention } = state;
-      let lastInterventionUUID = null
+      let lastInterventionUUID = null;
       if (intervention && intervention.uuid) {
         lastInterventionUUID = intervention.uuid;
       }
-      return Object.assign({}, state, { lastInterventionUUID });
+      return {
+        ...state,
+        lastInterventionUUID
+      };
     }
     case CLEAR_INTERVENTION: {
       const intervention = null;
-      return Object.assign({}, state, { intervention });
+      return {
+        ...state,
+        intervention
+      };
     }
     case APPEND_SUBJECTS: {
       const { subjects, workflowID } = action.payload;
@@ -189,7 +198,10 @@ export default function reducer(state = initialState, action = {}) {
         newSubjects.push(...subjects);
         // remove duplicates from the upcoming queue by keeping the first instance of each subject.
         const upcomingSubjects = newSubjects.filter((subject, index) => index === newSubjects.indexOf(subject));
-        return Object.assign({}, state, { upcomingSubjects });
+        return {
+          ...state,
+          upcomingSubjects
+        };
       }
       return state;
     }
@@ -198,13 +210,16 @@ export default function reducer(state = initialState, action = {}) {
       const classification = finishClassification(state.workflow, state.classification, annotations);
       const { workflow, subjects } = classification.links;
       seenThisSession.add(workflow, subjects);
-      return Object.assign({}, state, { classification });
+      return {
+        ...state,
+        classification
+      };
     }
     case CREATE_CLASSIFICATION: {
       const { goldStandardMode } = state;
       const { project } = action.payload;
       const { workflow } = state;
-      let { lastInterventionUUID} = state;
+      let { lastInterventionUUID } = state;
       if (state.upcomingSubjects.length > 0) {
         const subject = state.upcomingSubjects[0];
         const classification = createNewClassification(
@@ -216,14 +231,21 @@ export default function reducer(state = initialState, action = {}) {
         );
         // clear any intervention UUID after we've stored it on the metadata
         lastInterventionUUID = null;
-        return Object.assign({}, state, { classification, lastInterventionUUID });
+        return {
+          ...state,
+          classification,
+          lastInterventionUUID
+        };
       }
       return state;
     }
     case UPDATE_METADATA: {
       const metadata = Object.assign({}, state.classification.metadata, action.payload.metadata);
       const classification = state.classification.update({ metadata });
-      return Object.assign({}, state, { classification });
+      return {
+        ...state,
+        classification
+      };
     }
     case NEXT_SUBJECT: {
       const { goldStandardMode } = state;
@@ -236,10 +258,11 @@ export default function reducer(state = initialState, action = {}) {
         const classification = createNewClassification(project, workflow, subject, goldStandardMode);
         return Object.assign({}, state, { classification, upcomingSubjects });
       }
-      return Object.assign({}, state, {
+      return {
+        ...state,
         classification: null,
         upcomingSubjects: []
-      });
+      };
     }
     case PREPEND_SUBJECTS: {
       const { subjects, workflowID } = action.payload;
@@ -249,7 +272,10 @@ export default function reducer(state = initialState, action = {}) {
         const currentSubject = subjectQueue.shift();
         subjectQueue.unshift(currentSubject, ...subjects);
         const upcomingSubjects = subjectQueue.filter(Boolean);
-        return Object.assign({}, state, { upcomingSubjects });
+        return {
+          ...state,
+          upcomingSubjects
+        };
       }
       return state;
     }
@@ -260,35 +286,58 @@ export default function reducer(state = initialState, action = {}) {
       if (!isCurrentSubject) {
         const upcomingSubjects = state.upcomingSubjects.slice();
         upcomingSubjects.unshift(subject);
-        return Object.assign({}, state, { classification, upcomingSubjects });
+        return {
+          ...state,
+          classification,
+          upcomingSubjects
+        };
       }
-      return Object.assign({}, state, { classification });
+      return {
+        ...state,
+        classification
+      };
     }
     case RESET: {
       const upcomingSubjects = state.upcomingSubjects.slice();
       destroySubjects(upcomingSubjects);
-      return Object.assign({}, initialState);
+      return {
+        ...initialState
+      };
     }
     case RESET_SUBJECTS: {
       const classification = null;
       const upcomingSubjects = state.upcomingSubjects.slice();
       destroySubjects(upcomingSubjects);
-      return Object.assign({}, state, { classification, upcomingSubjects });
+      return {
+        ...state,
+        classification,
+        upcomingSubjects
+      };
     }
     case SAVE_ANNOTATIONS: {
       const { annotations } = action.payload;
       const classification = state.classification && state.classification.update({ annotations });
-      return Object.assign({}, state, { classification });
+      return {
+        ...state,
+        classification
+      };
     }
     case SET_WORKFLOW: {
       const { workflow } = action.payload;
-      return Object.assign({}, initialState, { workflow });
+      return {
+        ...initialState,
+        workflow
+      };
     }
     case TOGGLE_GOLD_STANDARD: {
       const { goldStandard } = action.payload;
       const { classification } = state;
       classification.update({ gold_standard: goldStandard });
-      return Object.assign({}, state, { classification, goldStandardMode: goldStandard });
+      return {
+        ...state,
+        classification,
+        goldStandardMode: goldStandard
+      };
     }
     default:
       return state;
@@ -304,8 +353,8 @@ export function addIntervention(data) {
 
 export function clearIntervention() {
   return (dispatch) => {
-    dispatch({type: STORE_INTERVENTION_UUID});
-    dispatch({type: CLEAR_INTERVENTION});
+    dispatch({ type: STORE_INTERVENTION_UUID });
+    dispatch({ type: CLEAR_INTERVENTION });
   };
 }
 
@@ -422,6 +471,13 @@ export function saveAnnotations(annotations) {
   };
 }
 
+export function setWorkflow(workflow) {
+  return {
+    type: SET_WORKFLOW,
+    payload: { workflow }
+  };
+}
+
 export function loadWorkflow(workflowId, locale, preferences) {
   return (dispatch) => {
     if (preferences) {
@@ -462,13 +518,6 @@ export function loadWorkflow(workflowId, locale, preferences) {
 export function reset() {
   return {
     type: RESET
-  };
-}
-
-export function setWorkflow(workflow) {
-  return {
-    type: SET_WORKFLOW,
-    payload: { workflow }
   };
 }
 

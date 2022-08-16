@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useStore } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import { darken, lighten } from 'polished';
@@ -68,11 +68,12 @@ export const StyledTutorialButton = styled.button.attrs({
 
 export function TutorialTab(props, context) {
   const disabled = !(props.tutorial && props.tutorial.steps && props.tutorial.steps.length > 0);
+  const store = useStore();
   return (
     <ThemeProvider theme={{ mode: props.theme }}>
       <StyledTutorialButton
         disabled={disabled}
-        onClick={Tutorial.start.bind(Tutorial, props.tutorial, props.user, props.projectPreferences, context.geordi, context.store)}
+        onClick={Tutorial.start.bind(Tutorial, props.tutorial, props.user, props.projectPreferences, context.geordi, store)}
       >
         <Translate content="classifier.taskTabs.tutorialTab" />
       </StyledTutorialButton>
@@ -96,8 +97,7 @@ TutorialTab.propTypes = {
 
 TutorialTab.contextTypes = {
   geordi: PropTypes.object,
-  store: PropTypes.object
-};
+}
 
 const mapStateToProps = state => ({
   theme: state.userInterface.theme

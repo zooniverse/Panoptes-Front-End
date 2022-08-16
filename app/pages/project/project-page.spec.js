@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { shallow, mount } from 'enzyme';
 import { expect } from 'chai';
+import { Provider } from 'react-redux';
 import sinon from 'sinon';
 import GeordiLogger from '../../lib/zooniverse-logging';
 import { projectWithoutRedirect } from '../../../test/mockObjects';
@@ -118,8 +119,9 @@ describe('ProjectPage', function () {
             <Page />
           </ProjectPage>,
           { 
-            context: { geordi, store },
-            childContextTypes: { store: PropTypes.object.isRequired }
+            context: { geordi },
+            wrappingComponent: Provider,
+            wrappingComponentProps: { store }
           }
         );
       });

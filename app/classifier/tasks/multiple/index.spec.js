@@ -1,6 +1,6 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'], 'react/jsx-filename-extension': 0 */
 /* global describe, it, beforeEach */
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
@@ -17,7 +17,7 @@ describe('MultipleChoiceTask', function () {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = shallow(<MultipleTask
+      wrapper = mount(<MultipleTask
         task={checkboxTypeTask}
         annotation={annotation}
         translation={checkboxTypeTask}
@@ -41,7 +41,7 @@ describe('MultipleChoiceTask', function () {
   describe('with an empty annotation', function () {
     const annotation = Object.assign({}, checkboxTypeAnnotation, { value: [] });
     [true, false].forEach(function testAutofocus(autofocus) {
-      const wrapper = shallow(
+      const wrapper = mount(
         <MultipleTask
           autoFocus={autofocus}
           task={checkboxTypeTask}
@@ -50,7 +50,7 @@ describe('MultipleChoiceTask', function () {
         />,
         mockReduxStore
       );
-      const genericTask = wrapper.dive();
+      const genericTask = wrapper.find(GenericTask);
       it(`should pass autofocus ${autofocus} to its children`, function () {
         expect(genericTask.prop('autoFocus')).to.equal(autofocus);
       })
@@ -60,7 +60,7 @@ describe('MultipleChoiceTask', function () {
   describe('with an annotation', function () {
     const annotation = Object.assign({}, checkboxTypeAnnotation, { value: [0, 1] });
     [true, false].forEach(function testAutofocus(autofocus) {
-      const wrapper = shallow(
+      const wrapper = mount(
         <MultipleTask
           autoFocus={autofocus}
           task={checkboxTypeTask}
@@ -69,7 +69,7 @@ describe('MultipleChoiceTask', function () {
         />,
         mockReduxStore
       );
-      const answers = wrapper.dive().prop('answers');
+      const answers = wrapper.find(GenericTask).prop('answers');
       answers.forEach(function (answer) {
         it(`should pass autofocus ${autofocus} for answer ${answer.props.index}`, function () {
           const hasFocus = autofocus && annotation.value.includes(answer.props.index);
@@ -88,7 +88,7 @@ describe('MultipleChoiceTask', function () {
       handleChangeSpy = sinon.spy(MultipleTask.prototype, 'handleChange');
       onChangeSpy = sinon.spy();
       setStateSpy = sinon.spy(MultipleTask.prototype, 'setState');
-      wrapper = shallow(
+      wrapper = mount(
         <MultipleTask
           task={checkboxTypeTask}
           translation={checkboxTypeTask}
