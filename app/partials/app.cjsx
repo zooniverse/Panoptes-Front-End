@@ -82,7 +82,7 @@ PanoptesApp = createReactClass
       <AppStatus />
       <IOStatus />
       <AppLayout {...@props}>
-        {React.cloneElement @props.children, user: @state.user}
+        {React.cloneElement @props.children, user: @state.user, initialLoadComplete: @state.initialLoadComplete}
       </AppLayout>
     </div>
 
