@@ -30,6 +30,14 @@ Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage yo
 
 - `npm start` builds and runs the site locally.
 
+⚠️ **Note:** as of Node 16.15, running _npm install_ results in errors such as _npm ERR! ERESOLVE could not resolve_ and _Conflicting peer dependency: foobar@x.y.z_ You can bypass this problem by instead running `npm install --legacy-peer-deps`. Please see [issue 6155](https://github.com/zooniverse/Panoptes-Front-End/issues/6155) for more details
+
+### Viewing the Website
+
+Open your web browser of choice and go to `https://localhost:3735/`
+
+If you want to _login_ via the Panoptes API and _view authenticated pages,_ then you'll need to set up and use `https://local.zooniverse.org:3735` instead of using localhost:3735. Otherwise, you'll run into CORS errors. (You need to add the hostname to your hosts file, pointing to local. [Instructions are on our Stackoverflow](https://stackoverflow.com/c/zooniverse/questions/109).)
+
 ### Configuration
 
 The app can be configured using the following environment variables:
@@ -76,7 +84,7 @@ Deployment is handled by Github Action.
 
 On opening of pull requests, a Github Action is triggered to deploy to a branch staging location. The blob storage location depends on the pull request number, e.g. `https://pr-5926.pfe-preview.zooniverse.org`.
 
-On push to master, a Github Action is triggered to deploy to master staging found at `https://master.pfe-preview.zooniverse.org`. 
+On push to master, a Github Action is triggered to deploy to master staging found at `https://master.pfe-preview.zooniverse.org`.
 
 ### Production
 
