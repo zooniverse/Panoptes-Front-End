@@ -40,6 +40,20 @@ Open your web browser of choice and go to `https://localhost:3735/`
 
 If you want to _login_ via the Panoptes API and _view authenticated pages,_ then you'll need to set up and use `https://local.zooniverse.org:3735` instead of using localhost:3735. Otherwise, you'll run into CORS errors. (You need to add the hostname to your hosts file, pointing to local. Instructions are on [our Stackoverflow](https://stackoverflow.com/c/zooniverse/questions/109).)
 
+**Troubleshooting: web browser blocks local website**
+
+The problem: when attempting to view _localhost:3735_ or _local.zooniverse.org:3735,_ my web browser stops me and shows a warning screen.
+
+Example errors: "Your connection is not private / NET::ERR_CERT_AUTHORITY_INVALID" on Chrome 104; "Warning: Potential Security Risk Ahead" on Firefox 103; "This connection is not private" on Safari 15.4.
+
+The cause: the local web server is running HTTPS, and it's using a self-signed certificate. Modern web browsers consider these certificates very untrustworthy, and a possible indicator of a man-in-the-middle attack.
+
+The solution(s):
+- For Firefox or Safari, open the _advanced options_ on the warning page, and then click whatever's the equivalent of _"accept risk and continue"._
+- For Chrome, type in the _interstitial bypass keyword_ (`thisisunsafe`) anywhere on the window to temporarily bypass the warning; or ⚠️ manually add the SSL cert to your computer's list of trusted certificates. [See Stackoverflow for additional details.](https://stackoverflow.com/questions/7580508/getting-chrome-to-accept-self-signed-localhost-certificate)
+
+⚠️ Warning: please be careful if you do change your web browser's or computer's security settings.
+
 ### Configuration
 
 The app can be configured using the following environment variables:
