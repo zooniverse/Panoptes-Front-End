@@ -13,7 +13,7 @@ We are no longer actively developing features for this app. PRs will be accepted
 To avoid having to install Node.js or any other dependencies, you can run
 everything with Docker and Docker Compose.
 
-- `docker-compose build` will build a local Docker image and run `npm install`. Run this whenever you
+- `docker-compose build` will build a local Docker image and run `npm ci`. Run this whenever you
 change dependencies in `package.json`.
 
 - `docker-compose up` starts a development web server that listens on port 3735.
@@ -26,11 +26,13 @@ change dependencies in `package.json`.
 
 Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage your Node installations with **nvm**.
 
-- `npm install` installs dependencies.
+- `npm ci` installs dependencies.
 
 - `npm start` builds and runs the site locally.
 
-⚠️ **Note:** as of Node 16.15, running _npm install_ results in errors such as _npm ERR! ERESOLVE could not resolve_ and _Conflicting peer dependency: foobar@x.y.z_ You can bypass this problem by instead running `npm install --legacy-peer-deps`. Please see [issue 6155](https://github.com/zooniverse/Panoptes-Front-End/issues/6155) for more details.
+Note 1: _[npm ci](https://docs.npmjs.com/cli/v8/commands/npm-ci)_ (clean install) is preferred over _npm install,_ as it doesn't modify the package lock.
+
+⚠️ **Note 2:** as of Node 16.15, running _npm ci_ results in errors such as _npm ERR! ERESOLVE could not resolve_ and _Conflicting peer dependency: foobar@x.y.z_ You can bypass this problem by instead running `npm ci --legacy-peer-deps`. Please see [issue 6155](https://github.com/zooniverse/Panoptes-Front-End/issues/6155) for more details.
 
 ### Viewing the Website
 
@@ -68,7 +70,7 @@ While editing, do your best to follow style and architecture conventions already
 
 ### What to do if it doesn't run
 
-Try `rm -rf ./node_modules && npm install` to freshen up your dependencies. And read the warnings, they should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies. If you use `docker-compose` to build and test the site, you shouldn't run into any problems with the Node version, but `docker-compose build` will build a new image with a fresh `npm install`.
+Try `rm -rf ./node_modules && npm ci` to freshen up your dependencies. And read the warnings, they should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies. If you use `docker-compose` to build and test the site, you shouldn't run into any problems with the Node version, but `docker-compose build` will build a new image with a fresh `npm ci`.
 
 ## Testing
 
