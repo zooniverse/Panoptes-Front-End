@@ -27,7 +27,8 @@ export const SLUGS = [
   'printmigrationnetwork/print',
   'profdrrogerlouismartinez-davila/deciphering-secrets-unlocking-the-manuscripts-of-medieval-spain',
   'skirmizi/ottoman-turkish-crowdsourcing',
-  'bldigital/in-the-spotlight'
+  'bldigital/in-the-spotlight',
+  'md68135/notes-from-nature-labs'
 ];
 
 export function usesMonorepo(slug) {
