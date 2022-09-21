@@ -17,6 +17,7 @@ export const SLUGS = [
   'humphrydavy/davy-notebooks-project',
   'mainehistory/beyond-borders-transcribing-historic-maine-land-documents',
   'zookeeper/galaxy-zoo-weird-and-wonderful',
+  'zookeeper/planet-hunters-tessting',
   'hughdickinson/superwasp-black-hole-hunters',
   'bogden/scarlets-and-blues',
   'kmc35/peoples-contest-digital-archive',
