@@ -127,7 +127,7 @@ export default class HomePageSocial extends React.Component {
             <Translate className="tertiary-kicker" component="h3" content="socialHomePage.recentPublications" />
             <Translate className="regular-body" component="span" content="socialHomePage.recentPublicationsBlurb" />
             <br/>
-            <Link to="/about/publications" className="primary-button primary-button--light">See All Publications</Link>
+            <a href="/about/publications" className="primary-button primary-button--light">See All Publications</a>
           </div>
 
           <div className="home-social__content--vertical-line"></div>
