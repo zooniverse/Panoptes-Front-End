@@ -50,6 +50,3 @@ store = initStore()
 
 ReactDOM.render <Provider store={store}><Router history={browserHistory} render={applyRouterMiddleware(useScroll(shouldUpdateScroll))}>{routes}</Router></Provider>,
   document.getElementById('panoptes-main-container')
-
-# Are we connected to the latest back end?
-require('./lib/log-deployed-commit')()
