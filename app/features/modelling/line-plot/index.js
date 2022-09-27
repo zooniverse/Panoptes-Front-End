@@ -1,4 +1,4 @@
-import { Chart } from 'chart.js';
+import Chart from 'chart.js/auto';
 
 // Help at http://www.chartjs.org/docs/latest
 class LinePlotModel {
