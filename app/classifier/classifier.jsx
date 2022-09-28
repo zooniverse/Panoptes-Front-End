@@ -111,7 +111,7 @@ class Classifier extends React.Component {
     );
 
     awaitExpertClassification.then((expertClassification) => {
-      expertClassification = expertClassification || subject.expert_classification_data[workflow.id];
+      expertClassification = expertClassification || subject.expert_classification_data?.[workflow.id];
       if (this.props.workflow === workflow && this.props.subject === subject) {
         window.expertClassification = expertClassification;
         this.setState({ expertClassification });
