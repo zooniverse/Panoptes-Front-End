@@ -17,6 +17,15 @@ isAdmin = require '../../lib/is-admin'
 NOOP = Function.prototype
 
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3', '.m4a', '.mpeg', '.txt', '.json']
+VALID_FILE_TYPES = [
+  'text/csv',
+  'text/plain',
+  'text/tab-separated-values',
+  'image/*',
+  'video/*',
+  'audio/*',
+  'application/json'
+]
 INVALID_FILENAME_CHARS = ['/', '\\', ':', ',']
 MAX_FILE_SIZE = 1000 * 1024
 
@@ -212,7 +221,7 @@ EditSubjectSetPage = createReactClass
         <p>You've reached your subject upload limit. Please <a href='/about/contact'> contact us</a> to request changes to your allowance.</p>
       else
         <p>
-          <UploadDropTarget accept={"text/csv, text/tab-separated-values, image/*, video/*, audio/*, text/*, application/json"} multiple onSelect={@handleFileSelection}>
+          <UploadDropTarget accept={VALID_FILE_TYPES.join(',')} multiple onSelect={@handleFileSelection}>
             <strong>Drag-and-drop or click to upload manifests and subject images here (you must select the media files as well as the manifest)</strong><br />
             Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
             Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers in the main classification interface or in the Talk discussion tool.<br />
