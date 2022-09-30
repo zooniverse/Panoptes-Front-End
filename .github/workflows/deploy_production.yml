@@ -15,7 +15,7 @@ jobs:
     uses: zooniverse/ci-cd/.github/workflows/npm_build.yaml@main
     with:
       commit_id: ${{ github.sha }}
-      node_version: '16.13.x'
+      node_version: '16'
       output: 'dist'
       script: 'build-production'
   deploy_production:
