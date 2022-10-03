@@ -3,7 +3,7 @@ name: CI Tests
 on:
   pull_request:
   push:
-    branches:    
+    branches:
       - master
   workflow_dispatch:
 jobs:
@@ -12,12 +12,11 @@ jobs:
 
    steps:
     # See: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow#using-the-checkout-action
-    - uses: actions/checkout@v2
-
+    - uses: actions/checkout@v3
     - name: Use Node.js 16
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: '16.13.x'
+        node-version: 16
         cache: 'npm'
 
     - run: npm ci
