@@ -25,7 +25,8 @@ TextFromSubjectTask.getDefaultAnnotation = () => ({
 TextFromSubjectTask.getDefaultTask = () => ({
   help: '',
   instruction: 'Correct the text',
-  type: 'textFromSubject'
+  type: 'textFromSubject',
+  required: false
 });
 TextFromSubjectTask.getTaskText = task => (task.instruction);
 // isAnnotationComplete will return false within PFE to prevent classifications from being submitted within PFE, as the TextFromSubject task is exclusively for the front-end-monorepo.
