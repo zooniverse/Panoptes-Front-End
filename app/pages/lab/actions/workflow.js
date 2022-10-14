@@ -14,8 +14,8 @@ var workflowActions = {
   copyWorkflowForProject: async function(project, workflowData) {
     const oldLinks = new Set(project.links.workflows);
     const [newProject] = await project.addLink('workflows', [workflowData.id]);
-    const newLinks = newProject?.links
-    const newWorkflowID = newLinks?.workflows.find(workflowID => !oldLinks.has(workflowID));
+    const newLinks = newProject?.links.workflows
+    const newWorkflowID = newLinks?.find(workflowID => !oldLinks.has(workflowID));
     if (!newWorkflowID) {
       return Promise.reject(new Error('no new workflow links on project.'))
     }
