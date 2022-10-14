@@ -39,6 +39,7 @@ SubjectGroupComparisonTask.getDefaultTask = () => {
     type: 'subjectGroupComparison',
     question: 'Enter a question.',
     help: '',
+    required: false
   };
 };
 SubjectGroupComparisonTask.getTaskText = (task) => {

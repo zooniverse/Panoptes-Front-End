@@ -16,6 +16,7 @@ export default class SurveyTask extends React.Component {
   static getDefaultTask() {
     return {
       type: 'survey',
+      required: false,
       characteristicsOrder: [],
       characteristics: {},
       choicesOrder: [],

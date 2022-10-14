@@ -67,6 +67,7 @@ SingleChoiceTask.getDefaultTask = () => {
     type: 'single',
     question: 'Enter a question.',
     help: '',
+    required: false,
     answers: []
   };
 };

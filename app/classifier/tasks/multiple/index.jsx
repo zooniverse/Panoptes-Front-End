@@ -66,6 +66,7 @@ MultipleChoiceTask.getDefaultTask = () => {
     type: 'multiple',
     question: 'Enter a question.',
     help: '',
+    required: false,
     answers: []
   };
 };

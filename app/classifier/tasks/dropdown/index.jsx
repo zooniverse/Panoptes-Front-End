@@ -263,6 +263,7 @@ DropdownTask.getDefaultTask = () => ({
   type: 'dropdown',
   instruction: 'Select or type an option',
   help: '',
+  required: false,
   selects: [
     {
       id: Math.random().toString(16).split('.')[1],
