@@ -536,18 +536,28 @@ EditWorkflowPage = createReactClass
 
         <div className={taskEditorClasses}>
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
-            TaskEditorComponent = taskComponents[@props.workflow.tasks[@state.selectedTaskKey].type]?.Editor
+            task = @props.workflow.tasks[@state.selectedTaskKey]
+            if task.required is 'true'
+              task.required = true
+            if task.required is 'false'
+              task.required = false
+            TaskEditorComponent = taskComponents[task.type]?.Editor
+            taskWithDefaults = {
+              required: false,
+              ...task
+            }
             <div>
               {if TaskEditorComponent  # Note: ShortcutEditor deprecated (and removed entirely) for FEM-lab
                 <TaskEditorComponent
                   workflow={@props.workflow}
-                  task={@props.workflow.tasks[@state.selectedTaskKey]}
+                  task={taskWithDefaults}
                   taskPrefix="tasks.#{@state.selectedTaskKey}"
                   project={@props.project}
                   onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
                 />
               else
-                <div>Editor is not available.</div>}
+                <div>Editor is not available.</div>
+              }
               <hr />
               <br />
 
@@ -574,7 +584,8 @@ EditWorkflowPage = createReactClass
           else
             <div className="form-help">
               <p>Choose a task to edit. The configuration for that task will appear here.</p>
-            </div>}
+            </div>
+          }
         </div>
       </div>
     </div>
