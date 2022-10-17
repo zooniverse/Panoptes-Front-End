@@ -106,7 +106,7 @@ EditWorkflowPage = createReactClass
       </h3>
       {if @state.workflowCreationInProgress
         <ModalFormDialog tag="div">
-          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  project={@props.project} workflowToClone={@props.workflow} workflowActiveStatus={not @props.project.live} />
+          <WorkflowCreateForm onSubmit={@props.workflowActions.copyWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  project={@props.project} workflowToClone={@props.workflow} workflowActiveStatus={not @props.project.live} />
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       {if @props.project.live and @props.workflow.active
