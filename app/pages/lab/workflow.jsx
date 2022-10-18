@@ -163,7 +163,7 @@ const EditWorkflowPage = createReactClass({
                         definition = this.props.workflow.tasks[key];
                         if (definition.type !== 'shortcut') {
                           const classNames = ['secret-button', 'nav-list-item'];
-                          const taskDefinition = taskComponents[definition.type] != null ? taskComponents[definition.type].getTaskText(definition) : undefined;
+                          const taskDefinition = taskComponents[definition.type]?.getTaskText(definition);
                           if (key === this.state.selectedTaskKey) {
                             classNames.push('active');
                           }
@@ -307,7 +307,7 @@ const EditWorkflowPage = createReactClass({
                         for (let taskKey in this.props.workflow.tasks) {
                           definition = this.props.workflow.tasks[taskKey];
                           if (definition.type !== 'shortcut') {
-                            result1.push(<option key={taskKey} value={taskKey}>{(taskComponents[definition.type] != null ? taskComponents[definition.type].getTaskText(definition) : undefined)}</option>);
+                            result1.push(<option key={taskKey} value={taskKey}>{taskComponents[definition.type]?.getTaskText(definition)}</option>);
                           } else {
                             result1.push(undefined);
                           }
@@ -362,7 +362,7 @@ const EditWorkflowPage = createReactClass({
                 {projectLiveWorkflowInactive ? <span><br /><small className="form-help">Inactive workflows on live projects cannot be made default.</small></span> : undefined}
                 <br />
                 <label>
-                  <input ref="defaultWorkflow" type="checkbox" disabled={projectLiveWorkflowInactive} checked={(this.props.project.configuration != null ? this.props.project.configuration.default_workflow : undefined) === this.props.workflow.id} onChange={this.handleDefaultWorkflowToggle} />
+                  <input ref="defaultWorkflow" type="checkbox" disabled={projectLiveWorkflowInactive} checked={this.props.project.configuration?.default_workflow === this.props.workflow.id} onChange={this.handleDefaultWorkflowToggle} />
                   Default workflow
                 </label>
               </AutoSave>
@@ -564,7 +564,7 @@ const EditWorkflowPage = createReactClass({
               if (task.required === 'false') {
                 task.required = false;
               }
-              const TaskEditorComponent = taskComponents[task.type] != null ? taskComponents[task.type].Editor : undefined;
+              const TaskEditorComponent = taskComponents[task.type]?.Editor;
               const taskWithDefaults = {
                 required: false,
                 ...task
@@ -940,7 +940,7 @@ const EditWorkflowPage = createReactClass({
     if (confirmed) {
       this.setState({deletionInProgress: true});
 
-      if (this.props.workflow.id === (this.props.project.configuration != null ? this.props.project.configuration.default_workflow : undefined)) {
+      if (this.props.workflow.id === this.props.project.configuration?.default_workflow) {
         this.props.project.update({'configuration.default_workflow': undefined});
         this.props.project.save();
       }
@@ -1004,7 +1004,7 @@ const EditWorkflowPage = createReactClass({
       changes[`tasks.${taskKey}`] = undefined;
     }
 
-    if ((changes.steps != null ? changes.steps.length : undefined) === 0) {
+    if (changes.steps?.length === 0) {
       // If no more steps, remove the classifier version 2.0 designation
       changes["configuration.classifier_version"] = undefined;
     }
