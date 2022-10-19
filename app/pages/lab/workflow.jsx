@@ -1031,24 +1031,16 @@ const EditWorkflowPage = createReactClass({
 });
 
 
-module.exports = createReactClass({
-  displayName: 'EditWorkflowPageWrapper',
-
-  getDefaultProps() {
-    return {
-      params: {
-        workflowID: ''
-      }
-    };
-  },
-
-  render() {
-    return <PromiseRenderer promise={apiClient.type('workflows').get(this.props.params.workflowID, {})}>{workflow => {
-      return <ChangeListener target={workflow}>{() => {
-        return <EditWorkflowPage {...this.props} workflow={workflow} />;
-      }
-      }</ChangeListener>;
-    }
-    }</PromiseRenderer>;
+export default function EditWorkflowPageWrapper (props) {
+  const params = props.params || {
+    workflowID: ''
   }
-});
+
+  return <PromiseRenderer promise={apiClient.type('workflows').get(params.workflowID, {})}>{workflow => {
+    return <ChangeListener target={workflow}>{() => {
+      return <EditWorkflowPage {...props} workflow={workflow} />;
+    }
+    }</ChangeListener>;
+  }
+  }</PromiseRenderer>;
+}
