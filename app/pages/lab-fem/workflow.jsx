@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import handleInputChange from '../../lib/handle-input-change';
 import PromiseRenderer from '../../components/promise-renderer';
 import TriggeredModalForm from 'modal-form/triggered';
@@ -26,30 +25,19 @@ const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
 : '1166'; // Ghosts
 
-const EditWorkflowPage = createReactClass({
-  displayName: 'EditWorkflowPage',
+class EditWorkflowPage extends React.Component {
+  constructor (props) {
+    super(props);
 
-  contextTypes: {
-    router: PropTypes.object.isRequired
-  },
-
-  getDefaultProps() {
-    return {
-      workflow: null,
-      workflowActions
-    };
-  },
-
-  getInitialState() {
-    return {
-      selectedTaskKey: this.props.workflow.first_task,
+    this.state = {
+      selectedTaskKey: props.workflow.first_task,
       forceReloader: 0,
       deletionInProgress: false,
       deletionError: null,
       workflowCreationInProgress: false,
       showTaskAddButtons: false
     };
-  },
+  }
 
   workflowLink() {
     let env;
@@ -75,15 +63,15 @@ const EditWorkflowPage = createReactClass({
         query: viewQuery
       });
     }
-  },
+  }
 
   showCreateWorkflow() {
     return this.setState({workflowCreationInProgress: true});
-  },
+  }
 
   hideCreateWorkflow() {
     return this.setState({workflowCreationInProgress: false});
-  },
+  }
 
   handleWorkflowCreation(workflow) {
     this.hideCreateWorkflow();
@@ -91,26 +79,26 @@ const EditWorkflowPage = createReactClass({
     this.context.router.push(newLocation);
     this.props.project.uncacheLink('workflows');
     return this.props.project.uncacheLink('subject_sets');
-  }, // An "expert" subject set is automatically created with each workflow.
+  } // An "expert" subject set is automatically created with each workflow.
 
   canUseTask(project, task) {
     return Array.from(project.experimental_tools).includes(task);
-  },
+  }
 
   handleTaskChange(taskKey, taskDescription) {
     const changes = {};
     changes[`tasks.${taskKey}`] = taskDescription;
     return this.props.workflow.update(changes).save();
-  },
+  }
 
   isThereNotADefinedTask() {
     const workflowTasks = Object.keys(this.props.workflow.tasks);
     return workflowTasks.length === 0;
-  },
+  }
 
   showTaskAddButtons() {
     return this.setState(prevState => ({ showTaskAddButtons: !prevState.showTaskAddButtons }));
-  },
+  }
 
   render() {
     let definition;
@@ -639,7 +627,7 @@ const EditWorkflowPage = createReactClass({
         </div>
       </div>
     );
-  },
+  }
 
   renderTutorials() {
     const projectAndWorkflowTutorials = Promise.all([
@@ -679,7 +667,7 @@ const EditWorkflowPage = createReactClass({
       }
       }</PromiseRenderer>
     );
-  },
+  }
 
   renderMiniCourses() {
     const projectAndWorkflowTutorials = Promise.all([
@@ -717,7 +705,7 @@ const EditWorkflowPage = createReactClass({
       }
       }</PromiseRenderer>
     );
-  },
+  }
 
   getNextTaskID(lastTaskNumber) {
     // The task ID could be random, but we might as well make it sorta meaningful.
@@ -736,7 +724,7 @@ const EditWorkflowPage = createReactClass({
       nextTaskID = `T${nextTaskNumber}`;
     }
     return { nextTaskID, nextTaskNumber };
-  },
+  }
 
   getNextStepID() {
     const stepCount = this.props.workflow.steps.length;
@@ -746,7 +734,7 @@ const EditWorkflowPage = createReactClass({
       stepIDNumber = stepCount;
     }
     return `S${stepIDNumber}`;
-  },
+  }
 
   addNewTask(type) {
     const changes = {};
@@ -769,7 +757,7 @@ const EditWorkflowPage = createReactClass({
 
     this.props.workflow.update(changes);
     return this.setState({ selectedTaskKey: nextTaskID, showTaskAddButtons: false });
-  },
+  }
 
   buildTranscriptionTask(transcriptionTaskID, questionTaskID) {
     const tasks = {};
@@ -804,7 +792,7 @@ const EditWorkflowPage = createReactClass({
     };
 
     return tasks;
-  },
+  }
 
   addNewTranscriptionTask() {
     const nextStepID = this.getNextStepID();
@@ -835,42 +823,42 @@ const EditWorkflowPage = createReactClass({
 
     this.props.workflow.update(changes).save();
     return this.setState({ selectedTaskKey: nextTaskID, showTaskAddButtons: false });
-  },
+  }
 
   handleSetPanAndZoom(e) {
     return this.props.workflow.update({
       'configuration.pan_and_zoom': e.target.checked});
-  },
+  }
 
   handleSetHideClassificationSummaries(e) {
     return this.props.workflow.update({
       'configuration.hide_classification_summaries': e.target.checked});
-  },
+  }
 
   handlePersistAnnotationsToggle(e) {
     return this.props.workflow.update({
       'configuration.persist_annotations': e.target.checked});
-  },
+  }
 
   handleSetSimNotification(e) {
     return this.props.workflow.update({
       'configuration.sim_notification': e.target.checked});
-  },
+  }
 
   handleSetInvert(e) {
     return this.props.workflow.update({
       'configuration.invert_subject': e.target.checked});
-  },
+  }
 
   handleSetGravitySpyGoldStandard(e) {
     return this.props.workflow.update({
       'configuration.gravity_spy_gold_standard': e.target.checked});
-  },
+  }
 
   enableSubjectFlags(e) {
     return this.props.workflow.update({
       'configuration.enable_subject_flags': e.target.checked});
-  },
+  }
 
   handleSetWorldWideTelescope(e) {
     if (!this.props.workflow.configuration.custom_summary) {
@@ -886,13 +874,13 @@ const EditWorkflowPage = createReactClass({
     }
     return this.props.workflow.update({
       'configuration.custom_summary' : summary_path});
-  },
+  }
 
   telescopeValue() {
     if (this.props.workflow.configuration.custom_summary) {
       return Array.from(this.props.workflow.configuration.custom_summary).includes('world_wide_telescope');
     }
-  },
+  }
 
   handleDefaultWorkflowToggle(e) {
     const shouldSet = e.target.checked;
@@ -904,7 +892,7 @@ const EditWorkflowPage = createReactClass({
       this.props.project.update({'configuration.default_workflow': undefined});
       return this.props.project.save();
     }
-  },
+  }
 
   handleTutorialToggle(tutorial, workflowTutorials, e) {
     const shouldAdd = e.target.checked;
@@ -940,11 +928,11 @@ const EditWorkflowPage = createReactClass({
           return this.props.workflow.removeLink('tutorials', tutorial.id);
         }
     });
-  },
+  }
 
   removeTutorial(tutorial, workflowTutorials, e) {
     return this.props.workflow.removeLink('tutorials', tutorial.id);
-  },
+  }
 
   handleDelete() {
     this.setState({deletionError: null});
@@ -970,20 +958,20 @@ const EditWorkflowPage = createReactClass({
         }
       });
     }
-  },
+  }
 
   handleViewClick() {
     return setTimeout(() => {
       return this.setState({forceReloader: this.state.forceReloader + 1});
     });
-  },
+  }
 
   updateFirstTask() {
     if (!(this.props.workflow.first_task in this.props.workflow.tasks)) {
       let left;
       return this.props.workflow.update({first_task: (left = Object.keys(this.props.workflow.tasks)[0]) != null ? left : ''});
     }
-  },
+  }
 
   prepareStepForRemoval(taskKey) {
     const steps = [...this.props.workflow.steps];
@@ -995,7 +983,7 @@ const EditWorkflowPage = createReactClass({
     steps.splice(stepIndex, 1);
 
     return { steps, stepIndex };
-  },
+  }
 
   deleteStepAndTask(taskKey) {
     const changes = {};
@@ -1024,7 +1012,7 @@ const EditWorkflowPage = createReactClass({
     }
 
     return this.props.workflow.update(changes);
-  },
+  }
 
   handleTaskDelete(taskKey, e) {
     const shortcut = this.props.workflow.tasks[taskKey].unlinkedTask;
@@ -1043,7 +1031,16 @@ const EditWorkflowPage = createReactClass({
       return this.updateFirstTask();
     }
   }
-});
+};
+
+EditWorkflowPage.contextTypes = {
+  router: PropTypes.object.isRequired
+};
+
+EditWorkflowPage.defaultProps = {
+  workflow: null,
+  workflowActions: workflowActions
+};
 
 export default function EditWorkflowPageWrapper (props) {
   const params = props.params || {
