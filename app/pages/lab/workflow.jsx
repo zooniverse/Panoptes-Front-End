@@ -22,10 +22,9 @@ const MobileSection = require('./mobile').default;
 const SubjectGroupViewerEditor = require('./workflow-components/subject-group-viewer-editor').default;
 const SubjectSetLinker = require('./workflow-components/subject-set-linker').default;
 
-const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production' ?
-  '6' // Cats
-:
-  '1166'; // Ghosts
+const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
+? '6' // Cats
+: '1166'; // Ghosts
 
 const EditWorkflowPage = createReactClass({
   displayName: 'EditWorkflowPage',

@@ -22,10 +22,9 @@ const SubjectGroupViewerEditor = require('../lab/workflow-components/subject-gro
 const SubjectSetLinker = require('../lab/workflow-components/subject-set-linker').default;
 import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities';
 
-const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production' ?
-  '6' // Cats
-:
-  '1166'; // Ghosts
+const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
+? '6' // Cats
+: '1166'; // Ghosts
 
 const EditWorkflowPage = createReactClass({
   displayName: 'EditWorkflowPage',
