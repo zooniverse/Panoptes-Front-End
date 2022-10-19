@@ -134,7 +134,7 @@ class EditWorkflowPage extends React.Component {
         </h3>
         {this.state.workflowCreationInProgress ?
           <ModalFormDialog tag="div">
-            <WorkflowCreateForm onSubmit={this.props.workflowActions.createWorkflowForProject} onCancel={this.hideCreateWorkflow.bind(this)} onSuccess={this.handleWorkflowCreation.bind(this)}  project={this.props.project} workflowToClone={this.props.workflow} workflowActiveStatus={!this.props.project.live} />
+            <WorkflowCreateForm onSubmit={this.props.workflowActions.copyWorkflowForProject} onCancel={this.hideCreateWorkflow.bind(this)} onSuccess={this.handleWorkflowCreation.bind(this)}  project={this.props.project} workflowToClone={this.props.workflow} workflowActiveStatus={!this.props.project.live} />
           </ModalFormDialog> : undefined}
         <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
         {this.props.project.live && this.props.workflow.active ?
