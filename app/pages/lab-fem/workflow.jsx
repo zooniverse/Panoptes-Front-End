@@ -1,25 +1,25 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import handleInputChange from '../../lib/handle-input-change';
-import PromiseRenderer from '../../components/promise-renderer';
+import handleInputChange from '../../lib/handle-input-change.js';
+import PromiseRenderer from '../../components/promise-renderer.cjsx';
 import TriggeredModalForm from 'modal-form/triggered';
 import ModalFormDialog from 'modal-form/dialog';
 import apiClient from 'panoptes-client/lib/api-client';
-import ChangeListener from '../../components/change-listener';
-import RetirementRulesEditor from '../../components/retirement-rules-editor';
+import ChangeListener from '../../components/change-listener.cjsx';
+import RetirementRulesEditor from '../../components/retirement-rules-editor.cjsx';
 import {Link} from 'react-router';
-import MultiImageSubjectOptionsEditor from '../../components/multi-image-subject-options-editor';
+import MultiImageSubjectOptionsEditor from '../../components/multi-image-subject-options-editor.cjsx';
 import taskComponents from '../../classifier/tasks';
-import AutoSave from '../../components/auto-save';
-import FileButton from '../../components/file-button';
-import WorkflowCreateForm from '../lab/workflow-create-form';
-import workflowActions from '../lab/actions/workflow';
+import AutoSave from '../../components/auto-save.coffee';
+import FileButton from '../../components/file-button.cjsx';
+import WorkflowCreateForm from '../lab/workflow-create-form.cjsx';
+import workflowActions from '../lab/actions/workflow.js';
 import classnames from 'classnames';
 import FeedbackSection from '../../features/feedback/lab';
 import MobileSection from '../lab/mobile';
-import SubjectGroupViewerEditor from '../lab/workflow-components/subject-group-viewer-editor';
-import SubjectSetLinker from '../lab/workflow-components/subject-set-linker';
-import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities';
+import SubjectGroupViewerEditor from '../lab/workflow-components/subject-group-viewer-editor.jsx';
+import SubjectSetLinker from '../lab/workflow-components/subject-set-linker.jsx';
+import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities.js';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
