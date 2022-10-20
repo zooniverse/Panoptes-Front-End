@@ -281,7 +281,7 @@ module.exports = createReactClass
   toggleHidePrevMarksEnabled: (e) ->
     enableHidePrevMarks = e.target.checked
     @props.task.enableHidePrevMarks = enableHidePrevMarks
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   toggleMultipleChoice: (e) ->
     newType = if e.target.checked
@@ -289,7 +289,7 @@ module.exports = createReactClass
     else
       'single'
     @props.task.type = newType
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   addChoice: (type) ->
     switch type
@@ -300,12 +300,12 @@ module.exports = createReactClass
   addAnswer: ->
     @props.task.answers.push
       label: 'Enter an answer'
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   addHighlighterLabels: ->
     @props.task.highlighterLabels.push
       label: 'Enter label'
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   addTool: ->
     @props.task.tools.push
@@ -313,7 +313,7 @@ module.exports = createReactClass
       label: 'Tool name'
       color: '#00ff00'
       details: []
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   editToolDetails: (task, toolIndex) ->
     @props.task.tools[toolIndex].details ?= []
@@ -333,4 +333,4 @@ module.exports = createReactClass
 
   removeChoice: (choicesName, index) ->
     @props.task[choicesName].splice index, 1
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
