@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import handleInputChange from '../../lib/handle-input-change';
 import PromiseRenderer from '../../components/promise-renderer';
@@ -25,7 +25,7 @@ const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
 : '1166'; // Ghosts
 
-class EditWorkflowPage extends React.Component {
+class EditWorkflowPage extends Component {
   constructor (props) {
     super(props);
 
