@@ -310,7 +310,7 @@ module.exports = createReactClass
     @props.task.questionsMap = newTask.questionsMap
     @props.task.questionsOrder = newTask.questionsOrder
 
-    @props.workflow.update('tasks').save()
+    @props.onChange @props.task
       .then =>
         @clearState()
 
@@ -544,14 +544,14 @@ module.exports = createReactClass
   handleImageAdd: (media) ->
     @setState resettingFiles: true
     @props.task.images[media.metadata.filename] = media.src
-    @props.workflow.update('tasks').save()
+    @props.onChange @props.task
       .then =>
         @setState resettingFiles: false
 
   handleImageDelete: (media) ->
     @setState resettingFiles: true
     delete @props.task.images[media.metadata.filename]
-    @props.workflow.update('tasks').save()
+    @props.onChange @props.task
       .then =>
         @setState resettingFiles: false
 
@@ -595,7 +595,7 @@ module.exports = createReactClass
         questionsOrder: []
         questions: {}
         questionsMap: {}
-      @props.workflow.update 'tasks'
+      @props.onChange @props.task
       @clearState()
 
   resetMedia: (e) ->
