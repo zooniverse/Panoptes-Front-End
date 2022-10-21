@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import handleInputChange from '../../lib/handle-input-change.js';
 import PromiseRenderer from '../../components/promise-renderer.cjsx';
@@ -1062,16 +1062,31 @@ EditWorkflowPage.defaultProps = {
   workflowActions: workflowActions
 };
 
-export default function EditWorkflowPageWrapper (props) {
-  const params = props.params || {
-    workflowID: ''
-  }
+const defaultParams = {
+  workflowID: ''
+}
+export default function EditWorkflowPageWrapper({
+  params = defaultParams,
+  ...props
+}) {
+  const [workflow, setWorkflow] = useState(null);
+  const [error, setError] = useState(null);
 
-  return <PromiseRenderer promise={apiClient.type('workflows').get(params.workflowID, {})}>{workflow => {
-    return <ChangeListener target={workflow}>{() => {
-      return <EditWorkflowPage {...props} workflow={workflow} />;
-    }
-    }</ChangeListener>;
+  useEffect(function loadWorkflow() {
+    apiClient.type('workflows')
+      .get(params.workflowID, {})
+      .catch(error => {
+        setError(error);
+        return null;
+      })
+      .then(setWorkflow);
+  }, [params.workflowID]);
+  
+  if (workflow) {
+    return <EditWorkflowPage {...props} params={params} workflow={workflow} />;
   }
-  }</PromiseRenderer>;
+  if (error) {
+    return <p>{error.message}</p>
+  }
+  return <p>Loading…</p>;
 }
