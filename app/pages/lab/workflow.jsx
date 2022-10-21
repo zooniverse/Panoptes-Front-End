@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import handleInputChange from '../../lib/handle-input-change.js';
 import PromiseRenderer from '../../components/promise-renderer.cjsx';
@@ -28,6 +28,26 @@ const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 class EditWorkflowPage extends Component {
   constructor (props) {
     super(props);
+
+    /*
+      React doesn't automatically bind event handlers to the component so do that here.
+    */
+    this.addNewTranscriptionTask = this.addNewTranscriptionTask.bind(this);
+    this.enableSubjectFlags = this.enableSubjectFlags.bind(this);
+    this.handleDefaultWorkflowToggle = this.handleDefaultWorkflowToggle.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handlePersistAnnotationsToggle = this.handlePersistAnnotationsToggle.bind(this);
+    this.handleSetGravitySpyGoldStandard = this.handleSetGravitySpyGoldStandard.bind(this);
+    this.handleSetHideClassificationSummaries = this.handleSetHideClassificationSummaries.bind(this);
+    this.handleSetInvert = this.handleSetInvert.bind(this);
+    this.handleSetPanAndZoom = this.handleSetPanAndZoom.bind(this);
+    this.handleSetSimNotification = this.handleSetSimNotification.bind(this);
+    this.handleSetWorldWideTelescope = this.handleSetWorldWideTelescope.bind(this);
+    this.handleViewClick = this.handleViewClick.bind(this);
+    this.handleWorkflowCreation = this.handleWorkflowCreation.bind(this);
+    this.hideCreateWorkflow = this.hideCreateWorkflow.bind(this);
+    this.showCreateWorkflow = this.showCreateWorkflow.bind(this);
+    this.showTaskAddButtons = this.showTaskAddButtons.bind(this)
 
     this.state = {
       selectedTaskKey: props.workflow.first_task,
@@ -106,13 +126,13 @@ class EditWorkflowPage extends Component {
     return (
       <div className="edit-workflow-page">
         <h3>{this.props.workflow.display_name} #{this.props.workflow.id}{' '}
-          <button onClick={this.showCreateWorkflow.bind(this)} disabled={this.state.workflowCreationInProgress} title="Copy workflow">
+          <button onClick={this.showCreateWorkflow} disabled={this.state.workflowCreationInProgress} title="Copy workflow">
             <i className="fa fa-copy"/>
           </button>
         </h3>
         {this.state.workflowCreationInProgress ?
           <ModalFormDialog tag="div">
-            <WorkflowCreateForm onSubmit={this.props.workflowActions.copyWorkflowForProject} onCancel={this.hideCreateWorkflow.bind(this)} onSuccess={this.handleWorkflowCreation.bind(this)}  project={this.props.project} workflowToClone={this.props.workflow} workflowActiveStatus={!this.props.project.live} />
+            <WorkflowCreateForm onSubmit={this.props.workflowActions.copyWorkflowForProject} onCancel={this.hideCreateWorkflow} onSuccess={this.handleWorkflowCreation}  project={this.props.project} workflowToClone={this.props.workflow} workflowActiveStatus={!this.props.project.live} />
           </ModalFormDialog> : undefined}
         <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
         {this.props.project.live && this.props.workflow.active ?
@@ -190,7 +210,7 @@ class EditWorkflowPage extends Component {
                 </div>
 
                 <div className="edit-workflow-page__section">
-                  <button type="button" className="standard-button" onClick={this.showTaskAddButtons.bind(this)}>
+                  <button type="button" className="standard-button" onClick={this.showTaskAddButtons}>
                     <i className="fa fa-plus-circle"></i>{' '}
                     Add a task
                   </button>
@@ -266,7 +286,7 @@ class EditWorkflowPage extends Component {
                         </AutoSave> : undefined}{' '}
                       {this.canUseTask(this.props.project, "transcription-task") ?
                         <AutoSave resource={this.props.workflow}>
-                          <button type="submit" className="minor-button" onClick={this.addNewTranscriptionTask.bind(this)} title="Transcription tasks: the volunteer marks a line under text and transcribes the text into a text box. If caesar is configured, then text suggestions if available from other volunteers are options.">
+                          <button type="submit" className="minor-button" onClick={this.addNewTranscriptionTask} title="Transcription tasks: the volunteer marks a line under text and transcribes the text into a text box. If caesar is configured, then text suggestions if available from other volunteers are options.">
                             <i className="fa fa-font fa-2x"></i>
                             <br />
                             <small><strong>Transcription</strong></small>
@@ -335,7 +355,7 @@ class EditWorkflowPage extends Component {
               <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
               <br />
               <label>
-                <input ref="persistAnnotation" type="checkbox" checked={this.props.workflow.configuration.persist_annotations} onChange={this.handlePersistAnnotationsToggle.bind(this)} />
+                <input ref="persistAnnotation" type="checkbox" checked={this.props.workflow.configuration.persist_annotations} onChange={this.handlePersistAnnotationsToggle} />
                 Persist annotations
               </label>
               </AutoSave>
@@ -349,7 +369,7 @@ class EditWorkflowPage extends Component {
                 {projectLiveWorkflowInactive ? <span><br /><small className="form-help">Inactive workflows on live projects cannot be made default.</small></span> : undefined}
                 <br />
                 <label>
-                  <input ref="defaultWorkflow" type="checkbox" disabled={projectLiveWorkflowInactive} checked={this.props.project.configuration?.default_workflow === this.props.workflow.id} onChange={this.handleDefaultWorkflowToggle.bind(this)} />
+                  <input ref="defaultWorkflow" type="checkbox" disabled={projectLiveWorkflowInactive} checked={this.props.project.configuration?.default_workflow === this.props.workflow.id} onChange={this.handleDefaultWorkflowToggle} />
                   Default workflow
                 </label>
               </AutoSave>
@@ -376,7 +396,7 @@ class EditWorkflowPage extends Component {
                   <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
                   <br />
                   <label>
-                    <input ref="hideClassificationSummaries" type="checkbox" checked={this.props.workflow.configuration.hide_classification_summaries} onChange={this.handleSetHideClassificationSummaries.bind(this)} />
+                    <input ref="hideClassificationSummaries" type="checkbox" checked={this.props.workflow.configuration.hide_classification_summaries} onChange={this.handleSetHideClassificationSummaries} />
                     Hide classification summaries
                   </label>
                 </AutoSave>
@@ -394,7 +414,7 @@ class EditWorkflowPage extends Component {
                     <small className="form-help">For this feature to work, it requires hidden subject metadata with the column label <code>{'#sim'}</code> and the value set to <code>true</code> or <code>false.</code></small>
                     <br />
                     <label>
-                      <input type="checkbox" checked={this.props.workflow.configuration.sim_notification} onChange={this.handleSetSimNotification.bind(this)} />
+                      <input type="checkbox" checked={this.props.workflow.configuration.sim_notification} onChange={this.handleSetSimNotification} />
                       Simluation subject notification
                     </label>
                   </AutoSave>
@@ -411,7 +431,7 @@ class EditWorkflowPage extends Component {
                     <small className="form-help">Notify a user how they&apos;ve classified a Gold Standard subject.</small>
                     <br />
                     <label>
-                      <input type="checkbox" onChange={this.handleSetGravitySpyGoldStandard.bind(this)} checked={this.props.workflow.configuration.gravity_spy_gold_standard}/>
+                      <input type="checkbox" onChange={this.handleSetGravitySpyGoldStandard} checked={this.props.workflow.configuration.gravity_spy_gold_standard}/>
                       Gravity Spy Gold Standard
                     </label>
                   </AutoSave>
@@ -436,7 +456,7 @@ class EditWorkflowPage extends Component {
                   <small className="form-help">Pan and zoom allows the user to zoom in and out and pan image subjects in the classification interface.</small>
                   <br />
                   <label>
-                    <input ref="panAndZoomToggle" type="checkbox" checked={this.props.workflow.configuration.pan_and_zoom} onChange={this.handleSetPanAndZoom.bind(this)} />
+                    <input ref="panAndZoomToggle" type="checkbox" checked={this.props.workflow.configuration.pan_and_zoom} onChange={this.handleSetPanAndZoom} />
                     Pan and Zoom
                   </label>
                 </AutoSave>
@@ -461,7 +481,7 @@ class EditWorkflowPage extends Component {
                     <small className="form-help">Flags allow volunteers to mark subjects as inappropriate.</small>
                     <br />
                     <label>
-                      <input type="checkbox" onChange={this.enableSubjectFlags.bind(this)} checked={this.props.workflow.configuration.enable_subject_flags}/>
+                      <input type="checkbox" onChange={this.enableSubjectFlags} checked={this.props.workflow.configuration.enable_subject_flags}/>
                       Enable Subject Flags
                     </label>
                   </AutoSave>
@@ -473,7 +493,7 @@ class EditWorkflowPage extends Component {
 
             <div>
               <AutoSave tag="label" resource={this.props.workflow}>
-                <input type="checkbox" name="invert_subject" checked={this.props.workflow.configuration.invert_subject} onChange={this.handleSetInvert.bind(this)} />
+                <input type="checkbox" name="invert_subject" checked={this.props.workflow.configuration.invert_subject} onChange={this.handleSetInvert} />
                 Allow Users To Flip Image Color
               </AutoSave>
 
@@ -501,7 +521,7 @@ class EditWorkflowPage extends Component {
                     <small className="form-help">Allow user to view subject in the WWT after classifying.</small>
                     <br />
                     <label htmlFor="world_wide_telescope_summary">
-                      <input type="checkbox" onChange={this.handleSetWorldWideTelescope.bind(this)} checked={this.telescopeValue()}/>
+                      <input type="checkbox" onChange={this.handleSetWorldWideTelescope} checked={this.telescopeValue()}/>
                       WorldWide Telescope
                     </label>
                   </AutoSave>
@@ -517,7 +537,7 @@ class EditWorkflowPage extends Component {
                   href={this.workflowLink()}
                   className="standard-button"
                   target="from-lab"
-                  onClick={this.handleViewClick.bind(this)}
+                  onClick={this.handleViewClick}
                 >
                   Test this workflow
                 </a> : undefined}
@@ -532,7 +552,7 @@ class EditWorkflowPage extends Component {
 
             <div className={disabledIfLive}>
               <small>
-                <button type="button" className="minor-button" disabled={this.state.deletionInProgress} data-busy={this.state.deletionInProgress || null} onClick={this.handleDelete.bind(this)}>
+                <button type="button" className="minor-button" disabled={this.state.deletionInProgress} data-busy={this.state.deletionInProgress || null} onClick={this.handleDelete}>
                   Delete this workflow
                 </button>
               </small>{' '}
@@ -1027,16 +1047,31 @@ EditWorkflowPage.defaultProps = {
   workflowActions: workflowActions
 };
 
-export default function EditWorkflowPageWrapper (props) {
-  const params = props.params || {
-    workflowID: ''
-  }
+const defaultParams = {
+  workflowID: ''
+}
+export default function EditWorkflowPageWrapper({
+  params = defaultParams,
+  ...props
+}) {
+  const [workflow, setWorkflow] = useState(null);
+  const [error, setError] = useState(null);
 
-  return <PromiseRenderer promise={apiClient.type('workflows').get(params.workflowID, {})}>{workflow => {
-    return <ChangeListener target={workflow}>{() => {
-      return <EditWorkflowPage {...props} workflow={workflow} />;
-    }
-    }</ChangeListener>;
+  useEffect(function loadWorkflow() {
+    apiClient.type('workflows')
+      .get(params.workflowID, {})
+      .catch(error => {
+        setError(error);
+        return null;
+      })
+      .then(setWorkflow);
+  }, [params.workflowID]);
+
+  if (workflow) {
+    return <EditWorkflowPage {...props} params={params} workflow={workflow} />;
   }
-  }</PromiseRenderer>;
+  if (error) {
+    return <p>{error.message}</p>
+  }
+  return <p>Loading…</p>;
 }

@@ -1081,7 +1081,7 @@ export default function EditWorkflowPageWrapper({
       })
       .then(setWorkflow);
   }, [params.workflowID]);
-  
+
   if (workflow) {
     return <EditWorkflowPage {...props} params={params} workflow={workflow} />;
   }
