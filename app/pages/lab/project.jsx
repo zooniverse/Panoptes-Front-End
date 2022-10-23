@@ -6,7 +6,6 @@ import LoadingIndicator from '../../components/loading-indicator.jsx';
 import { Helmet } from 'react-helmet';
 import apiClient from 'panoptes-client/lib/api-client';
 import counterpart from 'counterpart';
-import workflowActions from './actions/workflow.js';
 import isAdmin from '../../lib/is-admin.coffee';
 import LabStatus from '../../partials/lab-status.jsx';
 import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from '../lab-fem/fem-lab-utilities.js';
