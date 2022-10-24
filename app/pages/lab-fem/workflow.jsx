@@ -1071,6 +1071,7 @@ export default function EditWorkflowPageWrapper({
 }) {
   const [workflow, setWorkflow] = useState(null);
   const [error, setError] = useState(null);
+  const [payload, setPayload] = useState([]);
 
   useEffect(function loadWorkflow() {
     apiClient.type('workflows')
@@ -1081,6 +1082,16 @@ export default function EditWorkflowPageWrapper({
       })
       .then(setWorkflow);
   }, [params.workflowID]);
+
+  useEffect(function subscribeToWorkflow() {
+    function onWorkflowChange(...payload) {
+      setPayload(payload);
+    }
+    workflow?.listen('change', onWorkflowChange);
+    return () => {
+      workflow?.stopListening('change', onWorkflowChange);
+    }
+  }, [workflow]);
 
   if (workflow) {
     return <EditWorkflowPage {...props} params={params} workflow={workflow} />;
