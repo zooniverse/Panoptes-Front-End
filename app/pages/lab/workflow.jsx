@@ -46,41 +46,24 @@ export function Tutorials({ project, workflow }) {
   }, [project?.id, workflow?.id]);
 
   function removeTutorial() {
+    setWorkflowTutorial(null)
     return workflow.removeLink('tutorials', workflowTutorial?.id);
   }
 
   function handleTutorialToggle(e, tutorial) {
     const shouldAdd = e.target.checked;
 
-    const ensureSaved = workflow.hasUnsavedChanges() ?
-      workflow.save()
-    :
-      Promise.resolve();
+    const ensureSaved = workflow.hasUnsavedChanges() ? workflow.save() : Promise.resolve();
 
     return ensureSaved
       .then(() => {
         if (shouldAdd) {
           workflow.addLink('tutorials', [tutorial.id]);
-
-          return (() => {
-            tutorials.forEach(workflowTutorial => {
-              if (((workflowTutorial.kind === null) && (tutorial.kind === 'tutorial')) || ((workflowTutorial.kind === 'tutorial') && (tutorial.kind === null))) {
-                if (workflowTutorial.id !== tutorial.id) { 
-                  return workflow.removeLink('tutorials', workflowTutorial.id);
-                }
-                return undefined;
-              } else if (workflowTutorial.kind === tutorial.kind) {
-                if (workflowTutorial.id !== tutorial.id) {
-                  return workflow.removeLink('tutorials', workflowTutorial.id);
-                }
-                return undefined;
-              } else {
-                return undefined;
-              }
-            })
-          })
+          if (workflowTutorial?.id) {
+            workflow.removeLink('tutorials', workflowTutorial.id);
+          }
+          setWorkflowTutorial(tutorial)
         }
-      return workflow.removeLink('tutorials', tutorial.id);
     });
   }
 
@@ -141,41 +124,24 @@ export function MiniCourses({ project, workflow }) {
   }, [project?.id, workflow?.id]);
 
   function removeTutorial() {
+    setWorkflowTutorial(null)
     return workflow.removeLink('tutorials', workflowTutorial?.id);
   }
 
   function handleTutorialToggle(e, tutorial) {
     const shouldAdd = e.target.checked;
 
-    const ensureSaved = workflow.hasUnsavedChanges() ?
-      workflow.save()
-    :
-      Promise.resolve();
+    const ensureSaved = workflow.hasUnsavedChanges() ? workflow.save() : Promise.resolve();
 
     return ensureSaved
       .then(() => {
         if (shouldAdd) {
           workflow.addLink('tutorials', [tutorial.id]);
-
-          return (() => {
-            tutorials.forEach(workflowTutorial => {
-              if (((workflowTutorial.kind === null) && (tutorial.kind === 'tutorial')) || ((workflowTutorial.kind === 'tutorial') && (tutorial.kind === null))) {
-                if (workflowTutorial.id !== tutorial.id) { 
-                  return workflow.removeLink('tutorials', workflowTutorial.id);
-                }
-                return undefined;
-              } else if (workflowTutorial.kind === tutorial.kind) {
-                if (workflowTutorial.id !== tutorial.id) {
-                  return workflow.removeLink('tutorials', workflowTutorial.id);
-                }
-                return undefined;
-              } else {
-                return undefined;
-              }
-            })
-          })
+          if (workflowTutorial?.id) {
+            workflow.removeLink('tutorials', workflowTutorial.id);
+          }
+          setWorkflowTutorial(tutorial)
         }
-      return workflow.removeLink('tutorials', tutorial.id);
     });
   }
 
