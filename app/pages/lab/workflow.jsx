@@ -1,7 +1,6 @@
 import { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import handleInputChange from '../../lib/handle-input-change.js';
-import PromiseRenderer from '../../components/promise-renderer.cjsx';
 import TriggeredModalForm from 'modal-form/triggered';
 import ModalFormDialog from 'modal-form/dialog';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -24,6 +23,196 @@ import SubjectSetLinker from './workflow-components/subject-set-linker.jsx';
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
 : '1166'; // Ghosts
+
+export function Tutorials({ project, workflow }) {
+  const [tutorials, setTutorials] = useState([]);
+  const [workflowTutorial, setWorkflowTutorial] = useState(null);
+
+  useEffect(function loadTutorials() {
+    Promise.all([
+      apiClient.type('tutorials')
+        .get({ project_id: project.id, page_size: 100 })
+        .catch(() => []),
+      apiClient.type('tutorials')
+        .get({ workflow_id: workflow.id, page_size: 100 })
+        .catch(() => [])
+    ])
+    .then(([projectTutorials, workflowTutorials]) => {
+      const tutorials = projectTutorials.filter(value => value.kind === 'tutorial' || value.kind === null);
+      const [workflowTutorial] = tutorials.filter(value => workflowTutorials.includes(value));
+      setTutorials(tutorials);
+      setWorkflowTutorial(workflowTutorial);
+    });
+  }, [project?.id, workflow?.id]);
+
+  function removeTutorial() {
+    return workflow.removeLink('tutorials', workflowTutorial?.id);
+  }
+
+  function handleTutorialToggle(e, tutorial) {
+    const shouldAdd = e.target.checked;
+
+    const ensureSaved = workflow.hasUnsavedChanges() ?
+      workflow.save()
+    :
+      Promise.resolve();
+
+    return ensureSaved
+      .then(() => {
+        if (shouldAdd) {
+          workflow.addLink('tutorials', [tutorial.id]);
+
+          return (() => {
+            tutorials.forEach(workflowTutorial => {
+              if (((workflowTutorial.kind === null) && (tutorial.kind === 'tutorial')) || ((workflowTutorial.kind === 'tutorial') && (tutorial.kind === null))) {
+                if (workflowTutorial.id !== tutorial.id) { 
+                  return workflow.removeLink('tutorials', workflowTutorial.id);
+                }
+                return undefined;
+              } else if (workflowTutorial.kind === tutorial.kind) {
+                if (workflowTutorial.id !== tutorial.id) {
+                  return workflow.removeLink('tutorials', workflowTutorial.id);
+                }
+                return undefined;
+              } else {
+                return undefined;
+              }
+            })
+          })
+        }
+      return workflow.removeLink('tutorials', tutorial.id);
+    });
+  }
+
+  if (tutorials.length > 0) {
+    return (
+      <form className="workflow-link-tutorials-form">
+        <span className="form-label">Tutorials</span>
+        <label>
+          <input
+            name="tutorial"
+            type="radio"
+            value=""
+            checked={!workflowTutorial}
+            onChange={removeTutorial}
+          />
+          No tutorial
+        </label>
+        {tutorials.map(tutorial => {
+          const assignedTutorial = tutorial === workflowTutorial;
+          const toggleTutorial = event => handleTutorialToggle(event, tutorial);
+          return (
+            <label key={tutorial.id}>
+              <input
+                name="tutorial"
+                type="radio"
+                checked={assignedTutorial}
+                value={tutorial.id}
+                onChange={toggleTutorial}
+              />
+              Tutorial #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
+            </label>
+          );
+        })}
+      </form>
+    );
+  }
+  return <span>This project has no tutorials.</span>;
+}
+
+export function MiniCourses({ project, workflow }) {
+  const [tutorials, setTutorials] = useState([]);
+  const [workflowTutorial, setWorkflowTutorial] = useState(null);
+
+  useEffect(function loadTutorials() {
+    Promise.all([
+      apiClient.type('tutorials')
+        .get({ project_id: project.id, page_size: 100, kind: 'mini-course' })
+        .catch(() => []),
+      apiClient.type('tutorials')
+        .get({ workflow_id: workflow.id, page_size: 100, kind: 'mini-course'})
+        .catch(() => [])
+    ])
+    .then(([projectTutorials, workflowTutorials]) => {
+      const [workflowTutorial] = projectTutorials.filter(value => workflowTutorials.includes(value));
+      setTutorials(projectTutorials);
+      setWorkflowTutorial(workflowTutorial);
+    });
+  }, [project?.id, workflow?.id]);
+
+  function removeTutorial() {
+    return workflow.removeLink('tutorials', workflowTutorial?.id);
+  }
+
+  function handleTutorialToggle(e, tutorial) {
+    const shouldAdd = e.target.checked;
+
+    const ensureSaved = workflow.hasUnsavedChanges() ?
+      workflow.save()
+    :
+      Promise.resolve();
+
+    return ensureSaved
+      .then(() => {
+        if (shouldAdd) {
+          workflow.addLink('tutorials', [tutorial.id]);
+
+          return (() => {
+            tutorials.forEach(workflowTutorial => {
+              if (((workflowTutorial.kind === null) && (tutorial.kind === 'tutorial')) || ((workflowTutorial.kind === 'tutorial') && (tutorial.kind === null))) {
+                if (workflowTutorial.id !== tutorial.id) { 
+                  return workflow.removeLink('tutorials', workflowTutorial.id);
+                }
+                return undefined;
+              } else if (workflowTutorial.kind === tutorial.kind) {
+                if (workflowTutorial.id !== tutorial.id) {
+                  return workflow.removeLink('tutorials', workflowTutorial.id);
+                }
+                return undefined;
+              } else {
+                return undefined;
+              }
+            })
+          })
+        }
+      return workflow.removeLink('tutorials', tutorial.id);
+    });
+  }
+
+  if (tutorials.length > 0) {
+    return (
+      <form className="workflow-link-tutorials-form">
+        <span className="form-label">Mini-Courses</span>
+        <label>
+          <input
+            name="minicourse"
+            type="radio"
+            value=""
+            checked={!workflowTutorial}
+            onChange={removeTutorial}
+          />
+          No mini-course
+        </label>
+        {tutorials.map(tutorial => {
+          const assignedTutorial = tutorial === workflowTutorial;
+          const toggleTutorial = event => handleTutorialToggle(event, tutorial);
+          return (
+            <label key={tutorial.id}>
+              <input
+                name="minicourse"
+                type="radio"
+                checked={assignedTutorial}
+                onChange={toggleTutorial}
+              />
+              Mini-Course #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
+            </label>
+          );
+        })}
+      </form>
+    );
+  }
+  return <span>This project has no mini-courses.</span>;
+}
 
 class EditWorkflowPage extends Component {
   constructor (props) {
@@ -378,12 +567,14 @@ class EditWorkflowPage extends Component {
             <hr />
 
             <div ref="link-tutorials-section">
-              <span className="form-label">Associated tutorial {Array.from(this.props.project.experimental_tools).includes('mini-course') ? "and/or mini-course" : undefined}</span><br />
-              <small className="form-help">Choose the tutorial {Array.from(this.props.project.experimental_tools).includes('mini-course') ? "and/or mini-course" : undefined} you want to use for this workflow.</small><br />
+              <span className="form-label">Associated tutorial {this.props.project?.experimental_tools.includes('mini-course') ? "and/or mini-course" : undefined}</span><br />
+              <small className="form-help">Choose the tutorial {this.props.project?.experimental_tools.includes('mini-course') ? "and/or mini-course" : undefined} you want to use for this workflow.</small><br />
               <small className="form-help">Only one can be associated with a workflow at a time.</small>
               <div>
-                {this.renderTutorials()}
-                {Array.from(this.props.project.experimental_tools).includes('mini-course') ? this.renderMiniCourses() : undefined}
+                <Tutorials project={this.props.project} workflow={this.props.workflow} />
+                {this.props.project?.experimental_tools.includes('mini-course') &&
+                  <MiniCourses project={this.props.project} workflow={this.props.workflow} />
+                }
               </div>
             </div>
 
@@ -634,84 +825,6 @@ class EditWorkflowPage extends Component {
     );
   }
 
-  renderTutorials() {
-    const projectAndWorkflowTutorials = Promise.all([
-      apiClient.type('tutorials').get({project_id: this.props.project.id, page_size: 100}),
-      apiClient.type('tutorials').get({workflow_id: this.props.workflow.id, page_size: 100})
-    ]);
-    return (
-      <PromiseRenderer promise={projectAndWorkflowTutorials}>{([projectTutorials, workflowTutorials]) => {
-        // Backwards compatibility with tutorials with null kind values
-        const tutorials = projectTutorials.filter(function(value){ if ((value.kind === 'tutorial') || (value.kind === null)) { return value; } });
-        const workflowTutorial = tutorials.filter(function(value) { if (Array.from(workflowTutorials).includes(value)) { return value; } })[0];
-        if (tutorials.length > 0) {
-          return (
-            <form className="workflow-link-tutorials-form">
-              <span className="form-label">Tutorials</span>
-              <label>
-                <input name="tutorial" type="radio" value="" checked={!workflowTutorial} onChange={this.removeTutorial.bind(this, workflowTutorial, workflowTutorials)} />
-                No tutorial
-              </label>
-              {(() => {
-              const result = [];
-              for (let tutorial of Array.from(tutorials)) {
-                const assignedTutorial = tutorial === workflowTutorial;
-                const toggleTutorial = this.handleTutorialToggle.bind(this, tutorial, workflowTutorials);
-                result.push(<label key={tutorial.id}>
-                  <input name="tutorial" type="radio" checked={assignedTutorial} value={tutorial.id} onChange={toggleTutorial} />
-                  Tutorial #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
-                </label>);
-              }
-              return result;
-            })()}
-            </form>
-          );
-        } else {
-          return <span>This project has no tutorials.</span>;
-        }
-      }
-      }</PromiseRenderer>
-    );
-  }
-
-  renderMiniCourses() {
-    const projectAndWorkflowTutorials = Promise.all([
-      apiClient.type('tutorials').get({project_id: this.props.project.id, page_size: 100, kind: 'mini-course'}),
-      apiClient.type('tutorials').get({workflow_id: this.props.workflow.id, page_size: 100, kind: 'mini-course'})
-    ]);
-    return (
-      <PromiseRenderer promise={projectAndWorkflowTutorials}>{([projectTutorials, workflowTutorials]) => {
-        const workflowMiniCourse = projectTutorials.filter(function(value) { if (Array.from(workflowTutorials).includes(value)) { return value; } })[0];
-        if (projectTutorials.length > 0) {
-          return (
-            <form className="workflow-link-tutorials-form">
-              <span className="form-label">Mini-Courses</span>
-              <label>
-                <input name="minicourse" type="radio" value="" checked={!workflowMiniCourse} onChange={this.removeTutorial.bind(this, workflowMiniCourse, workflowTutorials)} />
-                No mini-course
-              </label>
-              {(() => {
-              const result = [];
-              for (let tutorial of Array.from(projectTutorials)) {
-                const assignedTutorial = tutorial === workflowMiniCourse;
-                const toggleTutorial = this.handleTutorialToggle.bind(this, tutorial, workflowTutorials);
-                result.push(<label key={tutorial.id}>
-                  <input name="minicourse" type="radio" checked={assignedTutorial} onChange={toggleTutorial} />
-                  Mini-Course #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
-                </label>);
-              }
-              return result;
-            })()}
-            </form>
-          );
-        } else {
-          return <span>This project has no mini-courses.</span>;
-        }
-      }
-      }</PromiseRenderer>
-    );
-  }
-
   getNextTaskID(lastTaskNumber) {
     // The task ID could be random, but we might as well make it sorta meaningful.
     let nextTaskID;
@@ -897,46 +1010,6 @@ class EditWorkflowPage extends Component {
       this.props.project.update({'configuration.default_workflow': undefined});
       return this.props.project.save();
     }
-  }
-
-  handleTutorialToggle(tutorial, workflowTutorials, e) {
-    const shouldAdd = e.target.checked;
-
-    const ensureSaved = this.props.workflow.hasUnsavedChanges() ?
-      this.props.workflow.save()
-    :
-      Promise.resolve();
-
-    return ensureSaved
-      .then(() => {
-        if (shouldAdd) {
-          this.props.workflow.addLink('tutorials', [tutorial.id]);
-
-          return (() => {
-            const result = [];
-            for (let workflowTutorial of Array.from(workflowTutorials)) {
-              if (((workflowTutorial.kind === null) && (tutorial.kind === 'tutorial')) || ((workflowTutorial.kind === 'tutorial') && (tutorial.kind === null))) {
-                if (workflowTutorial.id !== tutorial.id) { result.push(this.props.workflow.removeLink('tutorials', workflowTutorial.id)); } else {
-                  result.push(undefined);
-                }
-              } else if (workflowTutorial.kind === tutorial.kind) {
-                if (workflowTutorial.id !== tutorial.id) { result.push(this.props.workflow.removeLink('tutorials', workflowTutorial.id)); } else {
-                  result.push(undefined);
-                }
-              } else {
-                result.push(undefined);
-              }
-            }
-            return result;
-          })();
-        } else {
-          return this.props.workflow.removeLink('tutorials', tutorial.id);
-        }
-    });
-  }
-
-  removeTutorial(tutorial, workflowTutorials, e) {
-    return this.props.workflow.removeLink('tutorials', tutorial.id);
   }
 
   handleDelete() {
