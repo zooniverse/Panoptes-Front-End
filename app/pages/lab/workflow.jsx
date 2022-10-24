@@ -50,8 +50,10 @@ export function Tutorials({ project, workflow }) {
     return workflow.removeLink('tutorials', workflowTutorial?.id);
   }
 
-  function handleTutorialToggle(e, tutorial) {
-    const shouldAdd = e.target.checked;
+  function onChange(event) {
+    const shouldAdd = event.target.checked;
+    const tutorialID = event.target.value;
+    const tutorial = tutorials.find(tutorial => tutorial.id === tutorialID);
 
     const ensureSaved = workflow.hasUnsavedChanges() ? workflow.save() : Promise.resolve();
 
@@ -83,7 +85,6 @@ export function Tutorials({ project, workflow }) {
         </label>
         {tutorials.map(tutorial => {
           const assignedTutorial = tutorial === workflowTutorial;
-          const toggleTutorial = event => handleTutorialToggle(event, tutorial);
           return (
             <label key={tutorial.id}>
               <input
@@ -91,7 +92,7 @@ export function Tutorials({ project, workflow }) {
                 type="radio"
                 checked={assignedTutorial}
                 value={tutorial.id}
-                onChange={toggleTutorial}
+                onChange={onChange}
               />
               Tutorial #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
             </label>
@@ -128,8 +129,10 @@ export function MiniCourses({ project, workflow }) {
     return workflow.removeLink('tutorials', workflowTutorial?.id);
   }
 
-  function handleTutorialToggle(e, tutorial) {
-    const shouldAdd = e.target.checked;
+  function onChange(event) {
+    const shouldAdd = event.target.checked;
+    const tutorialID = event.target.value;
+    const tutorial = tutorials.find(tutorial => tutorial.id === tutorialID);
 
     const ensureSaved = workflow.hasUnsavedChanges() ? workflow.save() : Promise.resolve();
 
@@ -161,14 +164,13 @@ export function MiniCourses({ project, workflow }) {
         </label>
         {tutorials.map(tutorial => {
           const assignedTutorial = tutorial === workflowTutorial;
-          const toggleTutorial = event => handleTutorialToggle(event, tutorial);
           return (
             <label key={tutorial.id}>
               <input
                 name="minicourse"
                 type="radio"
                 checked={assignedTutorial}
-                onChange={toggleTutorial}
+                onChange={onChange}
               />
               Mini-Course #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
             </label>
