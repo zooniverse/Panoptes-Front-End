@@ -18,8 +18,9 @@ import FeedbackSection from '../../features/feedback/lab';
 import MobileSection from '../lab/mobile';
 import SubjectGroupViewerEditor from '../lab/workflow-components/subject-group-viewer-editor.jsx';
 import SubjectSetLinker from '../lab/workflow-components/subject-set-linker.jsx';
+import MiniCourses from '../lab/workflow-components/mini-courses.jsx';
+import Tutorials from '../lab/workflow-components/tutorials.jsx';
 import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities.js';
-import { MiniCourses, Tutorials } from '../lab/workflow.jsx';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
