@@ -49,32 +49,34 @@ export default function Tutorials({ project, workflow }) {
   if (tutorials.length > 0) {
     return (
       <form className="workflow-link-tutorials-form">
-        <span className="form-label">Tutorials</span>
-        <label>
-          <input
-            name="tutorial"
-            type="radio"
-            value=""
-            checked={!workflowTutorial}
-            onChange={removeTutorial}
-          />
-          No tutorial
-        </label>
-        {tutorials.map(tutorial => {
-          const assignedTutorial = tutorial === workflowTutorial;
-          return (
-            <label key={tutorial.id}>
+        <fieldset>
+          <legend className="form-label">Tutorials</legend>
+            <label>
               <input
                 name="tutorial"
                 type="radio"
-                checked={assignedTutorial}
-                value={tutorial.id}
-                onChange={onChange}
+                value=""
+                checked={!workflowTutorial}
+                onChange={removeTutorial}
               />
-              Tutorial #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
+              No tutorial
             </label>
-          );
-        })}
+            {tutorials.map(tutorial => {
+              const assignedTutorial = tutorial === workflowTutorial;
+              return (
+                <label key={tutorial.id}>
+                  <input
+                    name="tutorial"
+                    type="radio"
+                    checked={assignedTutorial}
+                    value={tutorial.id}
+                    onChange={onChange}
+                  />
+                  Tutorial #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
+                </label>
+              );
+            })}
+        </fieldset>
       </form>
     );
   }

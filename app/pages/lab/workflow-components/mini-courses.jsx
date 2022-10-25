@@ -48,32 +48,34 @@ export default function MiniCourses({ project, workflow }) {
   if (tutorials.length > 0) {
     return (
       <form className="workflow-link-tutorials-form">
-        <span className="form-label">Mini-Courses</span>
-        <label>
-          <input
-            name="minicourse"
-            type="radio"
-            value=""
-            checked={!workflowTutorial}
-            onChange={removeTutorial}
-          />
-          No mini-course
-        </label>
-        {tutorials.map(tutorial => {
-          const assignedTutorial = tutorial === workflowTutorial;
-          return (
-            <label key={tutorial.id}>
-              <input
-                name="minicourse"
-                type="radio"
-                checked={assignedTutorial}
-                value={tutorial.id}
-                onChange={onChange}
-              />
-              Mini-Course #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
-            </label>
-          );
-        })}
+        <fieldset>
+          <legend className="form-label">Mini-Courses</legend>
+          <label>
+            <input
+              name="minicourse"
+              type="radio"
+              value=""
+              checked={!workflowTutorial}
+              onChange={removeTutorial}
+            />
+            No mini-course
+          </label>
+          {tutorials.map(tutorial => {
+            const assignedTutorial = tutorial === workflowTutorial;
+            return (
+              <label key={tutorial.id}>
+                <input
+                  name="minicourse"
+                  type="radio"
+                  checked={assignedTutorial}
+                  value={tutorial.id}
+                  onChange={onChange}
+                />
+                Mini-Course #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
+              </label>
+            );
+          })}
+        </fieldset>
       </form>
     );
   }
