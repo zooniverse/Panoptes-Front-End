@@ -91,7 +91,7 @@ export default function EditProjectCollaborators({
     } else {
       projectRoleSet.roles.splice(index, 1);
       const filteredRoles = projectRoleSet.talk_roles.filter(talkRole => talkRole === possibleRoles[role]);
-      filteredRoles[0]?.delete();
+      talkRoleAction = filteredRoles[0]?.delete();
     }
 
     Promise.all([projectRoleSet.update('roles').save(), talkRoleAction])
@@ -170,7 +170,8 @@ export default function EditProjectCollaborators({
       <CollaboratorCreator
         possibleRoles={possibleRoles}
         project={project}
-        onAdd={addCollaborator} />
+        onAdd={addCollaborator}
+      />
     </div>
   );
 }
