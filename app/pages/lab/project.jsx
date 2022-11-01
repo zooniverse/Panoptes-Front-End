@@ -305,8 +305,8 @@ export default function EditProjectPageWrapper({
       setLoading(true)
       apiClient.type('projects')
         .get(params.projectID)
-        .then(setProject)
         .catch(() => null)
+        .then(setProject)
         .then(() => {
           setLoading(false)
         });
@@ -325,8 +325,8 @@ export default function EditProjectPageWrapper({
             }
           })
           Promise.all(awaitOwners)
+            .catch(() => [])
             .then(setOwners)
-            .catch(() => null)
             .then(() => {
               setLoading(false)
             })
