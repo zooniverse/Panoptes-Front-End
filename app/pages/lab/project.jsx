@@ -305,8 +305,8 @@ export default function EditProjectPageWrapper({
       setLoading(true)
       apiClient.type('projects')
         .get(params.projectID)
-        .then(setProject)
         .catch(() => null)
+        .then(setProject)
         .then(() => {
           setLoading(false)
         });
@@ -316,20 +316,16 @@ export default function EditProjectPageWrapper({
   useEffect(function fetchOwners() {
     if (project && user) {
       setLoading(true)
-      project?.get('project_roles', user.id)
+      project?.get('project_roles', { user_id: user.id })
+        .catch(() => [])
         .then(projectRoles => {
-          const awaitOwners = [];
-          projectRoles.forEach(projectRole => {
-            if (projectRole.roles.includes('owner') || projectRole.roles.includes('collaborator')) {
-              awaitOwners.push(projectRole.get('owner'));
-            }
-          })
-          Promise.all(awaitOwners)
-            .then(setOwners)
-            .catch(() => null)
-            .then(() => {
-              setLoading(false)
-            })
+          const ownerRoles = projectRoles.filter(({ roles }) => roles.includes('owner') || roles.includes('collaborator'));
+          const awaitOwners = ownerRoles.map(ownerRole => ownerRole.get('owner'));
+          return Promise.all(awaitOwners)
+        })
+        .then(setOwners)
+        .then(() => {
+          setLoading(false)
         });
     }
   }, [project, user]);
