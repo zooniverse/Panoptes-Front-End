@@ -90,15 +90,14 @@ export default function EditProjectCollaborators({
       }
     } else {
       projectRoleSet.roles.splice(index, 1);
-      const filteredRoles = projectRoleSet.talk_roles.filter(talkRole => talkRole.name === possibleRoles[role]);
-      talkRoleAction = filteredRoles[0]?.delete();
+      const [filteredRole] = projectRoleSet.talk_roles.filter(talkRole => talkRole.name === possibleRoles[role]);
+      talkRoleAction = filteredRole?.delete();
     }
 
     Promise.all([projectRoleSet.update('roles').save(), talkRoleAction])
       .catch(error => setError(error))
       .then(() => {
-        const savingIndex = saving.indexOf(projectRoleSet.id);
-        setSaving(saving.splice(savingIndex, 1));
+        setSaving(saving.filter(id => id !== projectRoleSet.id));
       });
   }
 
@@ -113,8 +112,7 @@ export default function EditProjectCollaborators({
     .catch(setError)
     .then(() => {
       project.uncacheLink('project_roles');
-      const savingIndex = saving.indexOf(projectRoleSet.id);
-      setSaving(saving.splice(savingIndex, 1));
+      setSaving(saving.filter(id => id !== projectRoleSet.id));
       setProjectRoleSets(projectRoleSets.filter(roleSet => roleSet.id !== projectRoleSet.id));
     });
   }
