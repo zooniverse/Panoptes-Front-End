@@ -90,7 +90,7 @@ export default function EditProjectCollaborators({
       }
     } else {
       projectRoleSet.roles.splice(index, 1);
-      const filteredRoles = projectRoleSet.talk_roles.filter(talkRole => talkRole === possibleRoles[role]);
+      const filteredRoles = projectRoleSet.talk_roles.filter(talkRole => talkRole.name === possibleRoles[role]);
       talkRoleAction = filteredRoles[0]?.delete();
     }
 
