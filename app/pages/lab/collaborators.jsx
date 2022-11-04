@@ -98,6 +98,7 @@ export default function EditProjectCollaborators({
       .catch(error => setError(error))
       .then(() => {
         setSaving(saving.filter(id => id !== projectRoleSet.id));
+        fetchProjectRoles();
       });
   }
 
