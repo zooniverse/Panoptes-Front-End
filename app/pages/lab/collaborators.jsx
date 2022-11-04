@@ -119,7 +119,7 @@ export default function EditProjectCollaborators({
     });
   }
 
-  function addCollaborator() {
+  function refreshProjectRoles() {
     project.uncacheLink('project_roles');
     fetchProjectRoles();
   }
@@ -170,7 +170,7 @@ export default function EditProjectCollaborators({
       <CollaboratorCreator
         possibleRoles={possibleRoles}
         project={project}
-        onAdd={addCollaborator}
+        onAdd={refreshProjectRoles}
       />
     </div>
   );
