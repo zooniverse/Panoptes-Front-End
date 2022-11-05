@@ -21,15 +21,15 @@ export default {
     museum: 'Museum',
   },
   classifier: {
-    back: 'Back',
+    back: '返回',
     backButtonWarning: 'Going back will clear your work for the current task.',
-    close: 'Close',
-    continue: 'Continue',
+    close: '关闭',
+    continue: '继续',
     detailsSubTaskFormSubmitButton: 'OK',
     done: '完成',
     doneAndTalk: '完成 讨论',
     dontShowMinicourse: 'Do not show mini-course in the future',
-    letsGo: 'Let’s go!',
+    letsGo: '让我们开始吧！',
     next: '下一个',
     optOut: 'Opt out',
     taskTabs: {
@@ -54,15 +54,15 @@ export default {
     language: '语言',
     loading: 'Loading project',
     disclaimer: 'This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response.',
-    fieldGuide: 'Field Guide',
+    fieldGuide: '文本教程',
     about: {
       header: '关于',
       nav: {
         research: '研究项目',
-        results: 'Results',
-        faq: 'FAQ',
-        education: 'Education',
-        team: '研究团队',
+        results: '结果',
+        faq: '常见问题',
+        education: '教育',
+        team: '研究团队'
       }
     },
     nav: {
@@ -78,10 +78,10 @@ export default {
       zooniverseApproved: 'Zooniverse Approved'
     },
     classifyPage: {
-      dark: 'dark',
-      light: 'light',
-      title: 'Classify',
-      themeToggle: 'Switch to %(theme)s theme'
+      dark: '深色',
+      light: '浅色',
+      title: '分类',
+      themeToggle: '切换至 %(theme)s 主题'
     },
     home: {
       organization: 'Organization',
@@ -95,11 +95,11 @@ export default {
         subjects: '目标'
       },
       talk: {
-        zero: '位用户正在讨论中国绘画与 **%(title)s**.',
-        one: '**1** 位用户正在讨论中国绘画与 **%(title)s**.',
-        other: '**%(count)s** 位用户正在讨论中国绘画与 **%(title)s**.'
+        zero: '位用户正在讨论 **%(title)s**.',
+        one: '**1** 位用户正在讨论 **%(title)s**.',
+        other: '**%(count)s** 位用户正在讨论 **%(title)s**.'
       },
-      joinIn: 'Join in',
+      joinIn: '加入',
       learnMore: '了解更多',
       getStarted: '开始',
       workflowAssignment: 'You\'ve unlocked %(workflowDisplayName)s',
@@ -197,14 +197,14 @@ export default {
     notSignedInMessage: 'You are not signed in'
   },
   signIn: {
-    title: 'Sign in/register',
-    withZooniverse: 'Sign in with your Zooniverse account',
-    whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.',
-    signIn: 'Sign in',
-    register: 'Register',
-    orThirdParty: 'Or sign in with another service',
-    withFacebook: 'Sign in with Facebook',
-    withGoogle: 'Sign in with Google'
+    title: '登录/注册',
+    withZooniverse: '通过 Zooniverse 账号登录',
+    whyHaveAccount: '登录的志愿者们可以追踪他们的工作，并在任何相关结果的发表中得到致谢。',
+    signIn: '登录',
+    register: '注册',
+    orThirdParty: '或通过第三方账号登录',
+    withFacebook: '通过脸书（Facebook）账号登录',
+    withGoogle: '通过谷歌（Google）账号登录'
   },
   notFoundPage: {
     message: 'Not found'
