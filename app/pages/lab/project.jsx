@@ -219,7 +219,7 @@ function EditProjectPage({
                 Subject Sets
               </Link>
             </li>
-            {((project.experimental_tools?.indexOf('translator-role') > -1) || isAdmin()) &&
+            {(project.experimental_tools?.includes('translator-role') || isAdmin()) ?
               <li>
                 <Link
                   aria-current={pathname === labPath('/translations') ? 'page' : undefined}
@@ -230,7 +230,7 @@ function EditProjectPage({
                   Translations
                 </Link>
               </li>
-            }
+            : null}
             <li>
               <h2 className="nav-list-header">Need some help?</h2>
               <ul className="nav-list">
