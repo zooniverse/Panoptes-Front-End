@@ -26,7 +26,9 @@ function RenderError({
   return (
     <div>
       <h1><code>{error.message}</code></h1>
-      <p>{info?.componentStack && <pre>{info.componentStack}</pre>}</p>
+      <p>
+        {info?.componentStack ? <pre>{info.componentStack}</pre> : null}
+      </p>
     </div>
   )
 }
@@ -147,7 +149,7 @@ function EditProjectPage({
                 Tutorial
               </Link>
             </li>
-            {(project.experimental_tools.includes('mini-course')) &&
+            {(project.experimental_tools.includes('mini-course')) ?
               <li>
                 <Link
                   aria-current={pathname === labPath('/mini-course') ? 'page' : undefined}
@@ -158,7 +160,7 @@ function EditProjectPage({
                   Mini-course
                 </Link>
               </li>
-            }
+            : null}
             <li>
               <Link
                 aria-current={pathname === labPath('/media') ? 'page' : undefined}
@@ -259,9 +261,9 @@ function EditProjectPage({
               <LoadingIndicator off={!deleteState.deletionInProgress} />
             </button>
           </p>
-          {deleteState.deletionError &&
+          {deleteState.deletionError ?
             <p className="form-help error">{deleteState.deletionError.message}</p>
-          }
+          : null}
         </nav>
 
         <hr />
