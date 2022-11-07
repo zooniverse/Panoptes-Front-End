@@ -22,6 +22,7 @@ import SubjectSetLinker from './workflow-components/subject-set-linker.jsx';
 import MiniCourses from './workflow-components/mini-courses.jsx';
 import Tutorials from './workflow-components/tutorials.jsx';
 import TaskOptions from './workflow-components/task-options.jsx';
+import TaskPicker from './workflow-components/task-picker.jsx';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
@@ -167,49 +168,12 @@ class EditWorkflowPage extends Component {
                       <small className="form-help">(No tasks yet)</small>
                     </div>
                   :
-                    (() => {
-                      const result = [];
-                      for (let key in this.props.workflow.tasks) {
-                        definition = this.props.workflow.tasks[key];
-                        if (definition.type !== 'shortcut') {
-                          const classNames = ['secret-button', 'nav-list-item'];
-                          const taskDefinition = taskComponents[definition.type]?.getTaskText(definition);
-                          if (key === this.state.selectedTaskKey) {
-                            classNames.push('active');
-                          }
-                          result.push(<div key={key}>
-                            <button
-                              type="button"
-                              className={classNames.join(' ')}
-                              onClick={this.setState.bind(this, {selectedTaskKey: key}, null)}
-                            >
-                              {(() => { switch (definition.type) {
-                                case 'single': return <i className="fa fa-dot-circle-o fa-fw"></i>;
-                                case 'multiple': return <i className="fa fa-check-square-o fa-fw"></i>;
-                                case 'drawing': return <i className="fa fa-pencil fa-fw"></i>;
-                                case 'survey': return <i className="fa fa-binoculars fa-fw"></i>;
-                                case 'flexibleSurvey': return <i className="fa fa-binoculars fa-fw"></i>;
-                                case 'crop': return <i className="fa fa-crop fa-fw"></i>;
-                                case 'text': return <i className="fa fa-file-text-o fa-fw"></i>;
-                                case 'dropdown': return <i className="fa fa-list fa-fw"></i>;
-                                case 'combo': return <i className="fa fa-cubes fa-fw"></i>;
-                                case 'slider': return <i className="fa fa-sliders fa-fw"></i>;
-                                case 'highlighter': return <i className="fa fa-i-cursor"></i>;
-                                case 'transcription': return <i className="fa fa-font fa-fw"></i>;
-                              } })()}
-                              {' '}
-                              {taskDefinition || 'Task editor is unavailable'}
-                              {key === this.props.workflow.first_task ?
-                                <small> <em>(first)</em></small> : undefined}
-                              <small style={{float: 'right'}}>{key}</small>
-                            </button>
-                          </div>);
-                        } else {
-                          result.push(undefined);
-                        }
-                      }
-                      return result;
-                    })()}
+                    <TaskPicker
+                      onClick={(taskKey) => this.setState({ selectedTaskKey: taskKey })}
+                      selectedTaskKey={this.state.selectedTaskKey}
+                      workflow={this.props.workflow}
+                    />
+                  }
                 </div>
 
                 <div className="edit-workflow-page__section">
