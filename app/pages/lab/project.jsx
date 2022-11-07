@@ -219,7 +219,7 @@ function EditProjectPage({
                 Subject Sets
               </Link>
             </li>
-            {(project.experimental_tools?.indexOf('translator-role') > -1) || isAdmin() &&
+            {((project.experimental_tools?.indexOf('translator-role') > -1) || isAdmin()) &&
               <li>
                 <Link
                   aria-current={pathname === labPath('/translations') ? 'page' : undefined}
