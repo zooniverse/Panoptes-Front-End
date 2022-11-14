@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import MediaAreaView from './media-area-view';
-import putFile from '../../../lib/put-file';
-import mediaActions from '../actions/media';
-import Paginator from '../../../talk/lib/paginator';
+import MediaAreaView from './media-area-view.jsx';
+import putFile from '../../../lib/put-file.js';
+import mediaActions from '../actions/media.js';
+import Paginator from '../../../talk/lib/paginator.cjsx';
 
-export default class MediaAreaController extends React.Component {
+export default class MediaAreaController extends Component {
   constructor(props) {
     super(props);
 
@@ -30,6 +30,7 @@ export default class MediaAreaController extends React.Component {
     this.handleSuccess = this.props.actions.handleSuccess.bind(this);
     this.handleError = this.props.actions.handleError.bind(this);
     this.removeFromPending = this.props.actions.removeFromPending.bind(this);
+    this.onPageChange = this.onPageChange.bind(this)
   }
 
   componentDidMount() {
@@ -53,7 +54,7 @@ export default class MediaAreaController extends React.Component {
       <div>
         <Paginator
           page={this.state.page}
-          onPageChange={this.onPageChange.bind(this)}
+          onPageChange={this.onPageChange}
           pageCount={this.state.page_count}
         />
         <MediaAreaView
@@ -71,7 +72,7 @@ export default class MediaAreaController extends React.Component {
         </MediaAreaView>
         <Paginator
           page={this.state.page}
-          onPageChange={this.onPageChange.bind(this)}
+          onPageChange={this.onPageChange}
           pageCount={this.state.page_count}
         />
       </div>

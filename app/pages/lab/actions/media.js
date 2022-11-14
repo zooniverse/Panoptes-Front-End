@@ -3,6 +3,7 @@ const putFile = require('../../../lib/put-file');
 
 // warn on uploads bigger than 500k
 const MAX_FILE_SIZE = 500 * 1024;
+const ALLOWED_TYPES = ['image', 'audio', 'video'];
 
 const mediaActions = {
   fetchMedia(props = this.props, page = 1) {
@@ -52,7 +53,10 @@ const mediaActions = {
   addFiles(files) {
     console.log(`Adding ${files.length} files`);
     this.setState({ errors: [] });
-    files.forEach(this.addFile);
+    files.filter(file => {
+      const [type, format] = file.type.split('/');
+      return ALLOWED_TYPES.includes(type);
+    }).forEach(this.addFile);
   },
 
   addFile(file) {

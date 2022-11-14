@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import MediaArea from './media-area';
+import { Component } from 'react';
+import MediaArea from './media-area/index.jsx';
 
-export default class EditMediaPage extends React.Component {
+export default class EditMediaPage extends Component {
   constructor(props) {
     super(props);
 
