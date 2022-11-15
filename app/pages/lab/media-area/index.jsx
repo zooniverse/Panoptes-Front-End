@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import { Component } from 'react';
-import apiClient from 'panoptes-client/lib/api-client';
 import MediaAreaView from './media-area-view.jsx';
-import putFile from '../../../lib/put-file.js';
 import mediaActions from '../actions/media.js';
 import Paginator from '../../../talk/lib/paginator.cjsx';
 
@@ -30,7 +28,7 @@ export default class MediaAreaController extends Component {
     this.handleSuccess = this.props.actions.handleSuccess.bind(this);
     this.handleError = this.props.actions.handleError.bind(this);
     this.removeFromPending = this.props.actions.removeFromPending.bind(this);
-    this.onPageChange = this.onPageChange.bind(this)
+    this.onPageChange = this.onPageChange.bind(this);
   }
 
   componentDidMount() {
@@ -43,7 +41,7 @@ export default class MediaAreaController extends Component {
     }
   }
   
-  onPageChange (page) {
+  onPageChange(page) {
     // When user requests the page to change, the media fetch AND the update
     // of state.page is done in fetchMedia()
     this.fetchMedia(this.props, page);

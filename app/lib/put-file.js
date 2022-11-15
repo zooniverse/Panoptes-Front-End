@@ -1,25 +1,27 @@
-module.exports = function (location, file, headers = {}) {
-  const azureHeader = {
-    'x-ms-blob-type': 'BlockBlob'
-  };
-  const allHeaders = Object.assign({}, headers, azureHeader);
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = (e) => {
-      let ref;
-      if (e.target.readyState === e.target.DONE) {
-        if ((200 <= (ref = e.target.status) && ref < 300)) {
-          return resolve(e.target);
-        } else {
-          return reject(e.target);
-        }
-      }
+const ALLOWED_MEDIA_TYPES = ['image', 'audio', 'video'];
+const ALLOWED_FILE_TYPES = ['text/plain', 'application/json', 'application/pdf'];
+
+export default async function putFile(url, file, headers = {}) {
+  const [type] = file.type.split('/');
+  const allowedUpload =
+    ALLOWED_MEDIA_TYPES.includes(type) ||
+    ALLOWED_FILE_TYPES.includes(file.type);
+  if (allowedUpload) {
+    const options = {
+      method: 'PUT',
+      headers: {
+        ...headers,
+        'x-ms-blob-type': 'BlockBlob'
+      },
+      body: file
     };
-    xhr.open('PUT', location);
-    Object.keys(allHeaders).forEach((header) =>  {
-      const value = allHeaders[header];
-      xhr.setRequestHeader(header, value);
-    })
-    return xhr.send(file);
-  });
+    const response = await fetch(url, options);
+    if (response.ok) {
+      return response.blob();
+    } else {
+      throw new Error(`${response.status}: ${url} upload failed. ${response.statusText}`);
+    }
+  } else {
+    throw new Error(`${file.type} files cannot be uploaded to Panoptes.`);
+  }
 };
