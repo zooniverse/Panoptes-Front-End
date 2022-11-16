@@ -1,5 +1,5 @@
-var apiClient = require('panoptes-client/lib/api-client');
-var putFile = require('../../../lib/put-file');
+import apiClient from 'panoptes-client/lib/api-client';
+import putFile from '../../../lib/put-file.js';
 
 var projects = apiClient.type('projects');
 var guides = apiClient.type('field_guides');

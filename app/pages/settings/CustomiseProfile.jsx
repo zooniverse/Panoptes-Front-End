@@ -4,7 +4,7 @@ import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import apiClient from 'panoptes-client/lib/api-client';
 import ImageSelector from '../../components/image-selector';
-import putFile from '../../lib/put-file';
+import putFile from '../../lib/put-file.js';
 
 const MAX_AVATAR_SIZE = 65536;
 const MAX_HEADER_SIZE = 256000;
