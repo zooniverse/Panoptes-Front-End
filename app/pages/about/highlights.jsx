@@ -27,7 +27,7 @@ class Highlights extends React.Component {
           <img
             alt={counterpart('about.highlights.imageAlt', { year: '2021' })}
             className="highlights__book-image"
-            src="/assets/highlights-book-2021.png"
+            src="/assets/highlights-book-2021.jpg"
           />
           <div className="highlights__book-description">
             <Markdown>{counterpart('about.highlights.toDownload', { url: 'https://bit.ly/zoonibook21-download-pdf' })}</Markdown>
