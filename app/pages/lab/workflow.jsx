@@ -8,7 +8,7 @@ import ChangeListener from '../../components/change-listener.cjsx';
 import RetirementRulesEditor from '../../components/retirement-rules-editor.cjsx';
 import {Link} from 'react-router';
 import MultiImageSubjectOptionsEditor from '../../components/multi-image-subject-options-editor.cjsx';
-import taskComponents from '../../classifier/tasks';
+import taskComponents from '../../classifier/tasks/index.js';
 import AutoSave from '../../components/auto-save.coffee';
 import FileButton from '../../components/file-button.cjsx';
 import WorkflowCreateForm from './workflow-create-form.cjsx';
@@ -21,6 +21,7 @@ import SubjectGroupViewerEditor from './workflow-components/subject-group-viewer
 import SubjectSetLinker from './workflow-components/subject-set-linker.jsx';
 import MiniCourses from './workflow-components/mini-courses.jsx';
 import Tutorials from './workflow-components/tutorials.jsx';
+import TaskOptions from './workflow-components/task-options.jsx';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
@@ -115,6 +116,7 @@ class EditWorkflowPage extends Component {
     window.editingWorkflow = this.props.workflow;
 
     const noTasksDefined = Object.keys(this.props.workflow.tasks).length === 0;
+    const handleWorkflowChange = handleInputChange.bind(this.props.workflow);
 
     const stats_completeness_type = this.props.workflow.configuration.stats_completeness_type != null ? this.props.workflow.configuration.stats_completeness_type : 'retirement';
 
@@ -150,7 +152,7 @@ class EditWorkflowPage extends Component {
               <AutoSave tag="label" resource={this.props.workflow}>
                 <label className="form-label" for="displayName">Workflow title</label>
                 <br />
-                <input type="text" id="displayName" name="display_name" value={this.props.workflow.display_name} className="standard-input full" onChange={handleInputChange.bind(this.props.workflow)} />
+                <input type="text" id="displayName" name="display_name" value={this.props.workflow.display_name} className="standard-input full" onChange={handleWorkflowChange} />
               </AutoSave>
               <small className="form-help">If you let your volunteers choose which workflow to attempt, this text will appear as an option on the project front page.</small>
 
@@ -305,23 +307,13 @@ class EditWorkflowPage extends Component {
                 </div>
 
                 <AutoSave tag="div" resource={this.props.workflow}>
-                  <small>First task</small>{' '}
-                  <select name="first_task" value={this.props.workflow.first_task} disabled={noTasksDefined} onChange={handleInputChange.bind(this.props.workflow)}>
+                  <label className='form-label' htmlFor='first_task'>First task</label>{' '}
+                  <select id='first_task' name="first_task" value={this.props.workflow.first_task} disabled={noTasksDefined} onChange={handleWorkflowChange}>
                     {noTasksDefined ?
                       <option>(No tasks yet)</option>
                     :
-                      (() => {
-                        const result1 = [];
-                        for (let taskKey in this.props.workflow.tasks) {
-                          definition = this.props.workflow.tasks[taskKey];
-                          if (definition.type !== 'shortcut') {
-                            result1.push(<option key={taskKey} value={taskKey}>{taskComponents[definition.type]?.getTaskText(definition)}</option>);
-                          } else {
-                            result1.push(undefined);
-                          }
-                        }
-                        return result1;
-                      })()}
+                      <TaskOptions tasks={this.props.workflow.tasks} />
+                    }
                   </select>
                 </AutoSave>
               </div>
