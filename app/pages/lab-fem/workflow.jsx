@@ -20,7 +20,7 @@ import SubjectGroupViewerEditor from '../lab/workflow-components/subject-group-v
 import SubjectSetLinker from '../lab/workflow-components/subject-set-linker.jsx';
 import MiniCourses from '../lab/workflow-components/mini-courses.jsx';
 import Tutorials from '../lab/workflow-components/tutorials.jsx';
-import TaskOptions from './workflow-components/task-options.jsx';
+import TaskOptions from '../lab/workflow-components/task-options.jsx';
 import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities.js';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
