@@ -13,4 +13,5 @@ export default function TaskIcon({ type }) {
     case 'highlighter': return <i className="fa fa-i-cursor"></i>;
     case 'transcription': return <i className="fa fa-font fa-fw"></i>;
   }
+  return null
 }
