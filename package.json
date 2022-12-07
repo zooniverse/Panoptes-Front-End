@@ -82,7 +82,7 @@
     "eslint-plugin-jsx-a11y": "~6.2.1",
     "eslint-plugin-react": "~7.12.4",
     "eslint-watch": "~4.0.2",
-    "express": "~4.16.4",
+    "express": "~4.18.2",
     "file-loader": "~6.2.0",
     "html-webpack-plugin": "~4.5.2",
     "jsdom": "~16.6.0",
