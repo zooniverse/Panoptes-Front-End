@@ -84,20 +84,20 @@ class ProjectHomeContainer extends React.Component {
   }
 
   fetchResearcherAvatar(props) {
-    if (props.project.configuration && props.project.configuration.researcherID) {
+    if (props.project.configuration?.researcherID) {
       if (props.project.configuration.researcherID === props.project.display_name) {
-        if (props.projectAvatar && props.projectAvatar.src) {
+        if (props.projectAvatar?.src) {
           this.setState({ researcherAvatar: props.projectAvatar.src });
         }
       } else {
         apiClient.type('users').get(this.props.project.configuration.researcherID)
+          .catch(() => null)
           .then((researcher) => {
-            researcher.get('avatar').then(([avatar]) => {
-              if (avatar.src) {
-                this.setState({ researcherAvatar: avatar.src });
-              }
-            });
-          }).catch(error => console.error(error));
+            if (researcher?.avatar_src) {
+              this.setState({ researcherAvatar: researcher.avatar_src });
+            }
+          })
+          .catch(error => console.error(error));
       }
     }
   }

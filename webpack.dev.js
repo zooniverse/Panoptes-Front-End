@@ -69,7 +69,7 @@ var config = {
       }, {
         loader: 'coffee-loader'
       }, {
-        loader: 'cjsx-loader'
+        loader: path.resolve('./webpack/cjsx-loader.js')
       }]
     }, {
       test: /\.coffee$/,

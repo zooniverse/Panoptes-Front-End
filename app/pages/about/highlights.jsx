@@ -10,12 +10,24 @@ class Highlights extends React.Component {
         <Markdown>{counterpart('about.highlights.paragraphOne')}</Markdown>
         <Markdown>{counterpart('about.highlights.paragraphTwo')}</Markdown>
         <Markdown>{counterpart('about.highlights.paragraphThree')}</Markdown>
+        <Markdown>{counterpart('about.highlights.sectionHeader', { volumeNumber: '4', year: '2022' })}</Markdown>
+        <div className="highlights__book-section">
+          <img
+            alt={counterpart('about.highlights.imageAlt', { year: '2022' })}
+            className="highlights__book-image"
+            src="/assets/highlights-book-2022.jpg"
+          />
+          <div className="highlights__book-description">
+            <Markdown>{counterpart('about.highlights.toDownload', { url: 'https://bit.ly/zoonibook22-download-pdf' })}</Markdown>
+            <Markdown>{counterpart('about.highlights.toPurchase', { purchaseSource: 'Blurb.com', url: 'https://bit.ly/zoonibook22-buy' })}</Markdown>
+          </div>
+        </div>
         <Markdown>{counterpart('about.highlights.sectionHeader', { volumeNumber: '3', year: '2021' })}</Markdown>
         <div className="highlights__book-section">
           <img
             alt={counterpart('about.highlights.imageAlt', { year: '2021' })}
             className="highlights__book-image"
-            src="/assets/highlights-book-2021.png"
+            src="/assets/highlights-book-2021.jpg"
           />
           <div className="highlights__book-description">
             <Markdown>{counterpart('about.highlights.toDownload', { url: 'https://bit.ly/zoonibook21-download-pdf' })}</Markdown>

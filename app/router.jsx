@@ -62,6 +62,8 @@ import TalkTags from './talk/tags';
 import MonorepoRoutes from './MonorepoRoutes';
 import FEMLabRouter from './pages/lab-fem/fem-lab-router'
 import IIIFSubjectSet from './pages/lab/iiif'
+import projectLab from './pages/lab/project.jsx'
+import Collaborators from './pages/lab/collaborators.jsx'
 
 // <Redirect from="home" to="/" /> doesn't work.
 
@@ -325,7 +327,7 @@ export const routes = (
     </Route>
 
     <Route path="lab" component={require('./pages/lab')} />
-    <Route path="lab/:projectID" component={require('./pages/lab/project')}>
+    <Route path="lab/:projectID" component={projectLab}>
       <IndexRoute component={require('./pages/lab/project-details')} />
       <Route path="about" component={require('./pages/lab/about')}>
         <IndexRedirect to='research' />
@@ -335,7 +337,7 @@ export const routes = (
         <Route path="education" component={require('./pages/lab/about/education')} />
         <Route path="team" component={require('./pages/lab/about/team')} />
       </Route>
-      <Route path="collaborators" component={require('./pages/lab/collaborators')} />
+      <Route path="collaborators" component={Collaborators} />
       <Route path="media" component={EditMediaPage} />
       <Route path="visibility" component={require('./pages/lab/visibility')} />
       <Route path="talk" component={EditProjectTalk} />

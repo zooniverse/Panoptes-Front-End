@@ -7,7 +7,7 @@ counterpart = require 'counterpart'
 `import AppStatus from './app-status';`
 IOStatus = require './io-status'
 AppLayout = require('../layout').default
-{generateSessionID} = require '../lib/session'
+{getSessionID} = require '../lib/session'
 NotificationsCounter = require('../lib/notifications-counter').default
 apiClient = require 'panoptes-client/lib/api-client'
 
@@ -54,7 +54,7 @@ PanoptesApp = createReactClass
 
     auth.listen 'change', @handleAuthChange
     @handleAuthChange()
-    generateSessionID()
+    getSessionID()
   
   componentDidUpdate: (prevProps) ->
     if prevProps.params isnt @props.params 

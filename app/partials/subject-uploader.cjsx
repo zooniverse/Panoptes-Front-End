@@ -1,7 +1,7 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
-putFile = require '../lib/put-file'
+putFile = require('../lib/put-file').default
 
 NOOP = Function.prototype
 
