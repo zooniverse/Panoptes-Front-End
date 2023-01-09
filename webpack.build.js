@@ -34,15 +34,18 @@ module.exports = {
     chunkFilename: '[name]-[chunkhash].js',
   },
   plugins: [
-    new webpack.EnvironmentPlugin([
-      'HEAD_COMMIT',
-      'NODE_ENV',
-      'PANOPTES_API_APPLICATION',
-      'PANOPTES_API_HOST',
-      'STAT_HOST',
-      'SUGAR_HOST',
-      'TALK_HOST'
-    ]),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+    new webpack.EnvironmentPlugin({
+      'HEAD_COMMIT': null,
+      'NODE_ENV': 'production',
+      'PANOPTES_API_APPLICATION': null,
+      'PANOPTES_API_HOST': null,
+      'STAT_HOST': null,
+      'SUGAR_HOST': null,
+      'TALK_HOST': null
+    }),
     new CopyWebpackPlugin([
       { from: 'public', to: '.' },
     ]),
@@ -58,6 +61,14 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
     modules: ['.', 'node_modules'],
+    fallback: {
+      fs: false,
+      // for markdown-it plugins
+      path: require.resolve("path-browserify"),
+      util: require.resolve("util"),
+      url: require.resolve("url"),
+      process: false,
+    }
   },
   module: {
     rules: [{
@@ -101,8 +112,5 @@ module.exports = {
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/],
-  },
-  node: {
-    fs: 'empty',
-  },
+  }
 };
