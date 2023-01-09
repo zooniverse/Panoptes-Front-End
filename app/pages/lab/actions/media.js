@@ -142,4 +142,4 @@ const mediaActions = {
   }
 };
 
-module.exports = mediaActions;
+export default mediaActions;

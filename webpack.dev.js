@@ -31,15 +31,18 @@ var config = {
     filename: '[name].js',
   },
   plugins: [
-    new webpack.EnvironmentPlugin([
-      'HEAD_COMMIT',
-      'NODE_ENV',
-      'PANOPTES_API_APPLICATION',
-      'PANOPTES_API_HOST',
-      'STAT_HOST',
-      'SUGAR_HOST',
-      'TALK_HOST'
-    ]),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+    new webpack.EnvironmentPlugin({
+      'HEAD_COMMIT': null,
+      'NODE_ENV': 'development',
+      'PANOPTES_API_APPLICATION': null,
+      'PANOPTES_API_HOST': null,
+      'STAT_HOST': null,
+      'SUGAR_HOST': null,
+      'TALK_HOST': null
+    }),
     new CopyWebpackPlugin([
       { from: 'public', to: '.' }
     ]),
@@ -53,7 +56,15 @@ var config = {
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
-    modules: ['.', 'node_modules']
+    modules: ['.', 'node_modules'],
+    fallback: {
+      fs: false,
+      // for markdown-it plugins
+      path: require.resolve("path-browserify"),
+      util: require.resolve("util"),
+      url: require.resolve("url"),
+      process: false,
+    }
   },
   module: {
     rules: [{
@@ -101,9 +112,6 @@ var config = {
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/]
-  },
-  node: {
-    fs: "empty"
   }
 };
 
