@@ -43,9 +43,11 @@ var config = {
       'SUGAR_HOST': null,
       'TALK_HOST': null
     }),
-    new CopyWebpackPlugin([
-      { from: 'public', to: '.' }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '.' }
+      ]
+    }),
     new HtmlWebpackPlugin({
       useBasePath: false,
       template: 'views/index.ejs',
