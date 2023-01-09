@@ -65,7 +65,7 @@
     "babel-loader": "~9.1.2",
     "babel-plugin-rewire": "~1.2.0",
     "babel-plugin-transform-es2015-modules-commonjs": "~6.26.2",
-    "chai": "~4.2.0",
+    "chai": "~4.3.7",
     "check-dependencies": "~1.1.0",
     "check-engines": "~1.6.0",
     "coffee-loader": "~0.9.0",
