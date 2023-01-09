@@ -46,9 +46,11 @@ module.exports = {
       'SUGAR_HOST': null,
       'TALK_HOST': null
     }),
-    new CopyWebpackPlugin([
-      { from: 'public', to: '.' },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '.' }
+      ]
+    }),
     new HtmlWebpackPlugin({
       template: 'views/index.ejs',
       inject: 'body',
