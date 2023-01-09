@@ -16,7 +16,7 @@
     "hash.js": "~1.1.7",
     "history": "~3.3.0",
     "lodash": "~4.17.11",
-    "markdownz": "~7.10.1",
+    "markdownz": "~8.0.0",
     "modal-form": "~2.9",
     "moment": "~2.29.0",
     "panoptes-client": "~4.2",
