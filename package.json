@@ -24,7 +24,7 @@
     "polished": "~2.3.3",
     "prop-types": "~15.8.1",
     "qs": "~6.6.0",
-    "rc-slider": "~8.6.5",
+    "rc-slider": "~10.1.0",
     "react": "~17.0.2",
     "react-chartist": "~0.13.3",
     "react-dom": "~17.0.2",
