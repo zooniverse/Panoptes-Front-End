@@ -21,7 +21,7 @@
     "moment": "~2.29.0",
     "panoptes-client": "~4.2",
     "papaparse": "^5.2.0",
-    "polished": "~2.3.3",
+    "polished": "~4.2.2",
     "prop-types": "~15.8.1",
     "qs": "~6.6.0",
     "rc-slider": "~8.6.5",
