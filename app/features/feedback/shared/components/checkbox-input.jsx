@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 
-function CheckboxInput({ title, help, onChange, checked, name }) {
+function CheckboxInput({
+  title, help, onChange, checked, name
+}) {
   return (
     <fieldset>
       <label>

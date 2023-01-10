@@ -8,12 +8,12 @@ import GeordiLogger from '../../lib/zooniverse-logging';
 import { projectWithoutRedirect } from '../../../test/mockObjects';
 import ProjectPage from './project-page';
 import ProjectNavbar from './components/ProjectNavbar';
-import ProjectHomeContainer from './home/';
+import ProjectHomeContainer from './home';
 
 const store = {
   subscribe: () => { },
   dispatch: () => { },
-  getState: () => ({ userInterface: { theme: 'light' } })
+  getState: () => ({ userInterface: { theme: 'light' }})
 };
 
 function Page() {
@@ -22,20 +22,20 @@ function Page() {
   );
 }
 
-describe('ProjectPage', function () {
+describe('ProjectPage', () => {
   const project = projectWithoutRedirect;
 
-  it('should render without crashing', function () {
+  it('should render without crashing', () => {
     shallow(<ProjectPage><Page /></ProjectPage>);
   });
 
-  it('should render the project nav bar', function () {
+  it('should render the project nav bar', () => {
     const wrapper = shallow(<ProjectPage><Page /></ProjectPage>);
     expect(wrapper.find(ProjectNavbar)).to.have.lengthOf(1);
   });
 
-  describe('conditional rendering of the project announcement', function () {
-    it('should not render a Markdown component if there is not an announcement', function () {
+  describe('conditional rendering of the project announcement', () => {
+    it('should not render a Markdown component if there is not an announcement', () => {
       const wrapper = shallow(
         <ProjectPage
           project={project}
@@ -46,7 +46,7 @@ describe('ProjectPage', function () {
       expect(wrapper.find('Markdown')).to.have.lengthOf(0);
     });
 
-    it('should render a Markdown component if there is an announcement', function () {
+    it('should render a Markdown component if there is an announcement', () => {
       const projectWithAnnouncement = Object.assign({}, project, { configuration: { announcement: 'Big Announcement!' }});
       const wrapper = shallow(
         <ProjectPage
@@ -61,12 +61,12 @@ describe('ProjectPage', function () {
     });
   });
 
-  describe('when the field guide renders', function() {
-    beforeEach(function() {
+  describe('when the field guide renders', () => {
+    beforeEach(() => {
       project.slug = 'test/project';
     });
 
-    it('should not display on the project home page', function() {
+    it('should not display on the project home page', () => {
       const wrapper = shallow(
         <ProjectPage
           project={project}
@@ -77,7 +77,7 @@ describe('ProjectPage', function () {
       expect(wrapper.find('FieldGuideContainer')).to.have.lengthOf(0);
     });
 
-    it('should display on other project pages', function() {
+    it('should display on other project pages', () => {
       const wrapper = shallow(
         <ProjectPage
           project={project}
@@ -89,36 +89,35 @@ describe('ProjectPage', function () {
     });
   });
 
-  describe('on component lifecycle', function () {
-
+  describe('on component lifecycle', () => {
     let geordiRememberSpy;
     let geordiForgetSpy;
     const geordi = new GeordiLogger();
 
     let wrapper;
 
-    before(function () {
+    before(() => {
       geordiRememberSpy = sinon.spy(geordi, 'remember');
       geordiForgetSpy = sinon.spy(geordi, 'forget');
     });
 
-    afterEach(function () {
+    afterEach(() => {
       geordiRememberSpy.resetHistory();
       geordiForgetSpy.resetHistory();
     });
 
-    after(function () {
+    after(() => {
       geordiRememberSpy.restore();
       geordiForgetSpy.restore();
     });
 
-    describe('on mount/unmount', function () {
-      beforeEach(function () {
+    describe('on mount/unmount', () => {
+      beforeEach(() => {
         wrapper = mount(
           <ProjectPage project={project}>
             <Page />
           </ProjectPage>,
-          { 
+          {
             context: { geordi },
             wrappingComponent: Provider,
             wrappingComponentProps: { store }
@@ -126,22 +125,22 @@ describe('ProjectPage', function () {
         );
       });
 
-      it('remembers the project slug in geordi projectToken context', function () {
+      it('remembers the project slug in geordi projectToken context', () => {
         expect(geordiRememberSpy.calledOnce).to.be.true;
         expect(geordiRememberSpy.calledWith({ projectToken: 'test/project' })).to.be.true;
       });
 
-      it('forgets the project slug in geordi projectToken context', function () {
+      it('forgets the project slug in geordi projectToken context', () => {
         wrapper.unmount();
         expect(geordiForgetSpy.calledOnce).to.be.true;
         expect(geordiForgetSpy.calledWith(['projectToken'])).to.be.true;
-      })
+      });
     });
 
-    describe('on project props change', function () {
+    describe('on project props change', () => {
       const newProject = { id: '999', title: 'fake project', slug: 'owner/name' };
       const newChannel = `project-${newProject.id}`;
-      beforeEach(function () {
+      beforeEach(() => {
         wrapper = shallow(
           <ProjectPage project={project}>
             <Page />
@@ -152,7 +151,7 @@ describe('ProjectPage', function () {
         wrapper.setProps({ project: newProject });
       });
 
-      it('remembers new project slug in geordi projectToken context', function () {
+      it('remembers new project slug in geordi projectToken context', () => {
         expect(geordiRememberSpy.calledOnce).to.be.true;
         expect(geordiRememberSpy.calledWith({ projectToken: 'owner/name' })).to.be.true;
       });

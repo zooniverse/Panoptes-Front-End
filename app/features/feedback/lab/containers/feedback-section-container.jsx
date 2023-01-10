@@ -21,10 +21,12 @@ class FeedbackSectionContainer extends Component {
   }
 
   openRuleEditorModal(rule = {}) {
-    const modalComponent = (<RuleEditorModal
-      rule={rule}
-      saveRule={this.saveRule}
-    />);
+    const modalComponent = (
+      <RuleEditorModal
+        rule={rule}
+        saveRule={this.saveRule}
+      />
+    );
     const modalOptions = {
       closeButton: true
     };

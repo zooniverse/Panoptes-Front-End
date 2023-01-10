@@ -7,34 +7,31 @@ import ApplyForBetaForm from './apply-for-beta-form';
 const MINIMUM_SUBJECT_COUNT = 100;
 const REQUIRED_PAGES = ['Research', 'FAQ'];
 
-const createProjectProp = (properties) => {
-  return Object.assign({}, {
-    id: "1234",
-    links: {
-      active_workflows: [1, 2]
-    },
-    private: false,
-    live: true,
-  }, properties);
-};
+const createProjectProp = properties => Object.assign({}, {
+  id: '1234',
+  links: {
+    active_workflows: [1, 2]
+  },
+  private: false,
+  live: true
+}, properties);
 
-const assertLabelAndCheckboxExist = function(label, checkbox) {
+const assertLabelAndCheckboxExist = function (label, checkbox) {
   assert.ok(label.length, 'Label exists');
   assert.ok(checkbox.length, 'Checkbox exists');
 };
 
-const assertCheckboxDisabled = function(checkbox, disabled = true) {
+const assertCheckboxDisabled = function (checkbox, disabled = true) {
   const message = `Checkbox is ${disabled ? 'disabled' : 'enabled'}`;
   assert.ok(checkbox.prop('disabled') === disabled, message);
 };
 
-const assertCheckboxChecked = function(checkbox, checked = true) {
+const assertCheckboxChecked = function (checkbox, checked = true) {
   const message = `Checkbox is ${checked ? 'checked' : 'unchecked'}`;
   assert.ok(checkbox.prop('checked') === checked, message);
 };
 
-describe('ApplyForBeta component:', function() {
-
+describe('ApplyForBeta component:', () => {
   let project = {};
   let workflows = [];
   let applyFn = Function.prototype;
@@ -44,193 +41,190 @@ describe('ApplyForBeta component:', function() {
   let mockPages = [];
   let mockSubjectSets = [];
 
-  const testSetup = function() {
+  const testSetup = function () {
     project = createProjectProp();
     workflows = [1, 2, 3].map(i => ({
       id: i.toString(),
       active: false,
       links: {
-        subject_sets: [(i + 3).toString()],
-      },
+        subject_sets: [(i + 3).toString()]
+      }
     }));
     applyFn = sinon.spy();
     mockPages = [];
     mockSubjectSets = [
-      { id: "0", set_member_subjects_count: 98 },
+      { id: '0', set_member_subjects_count: 98 }
     ];
   };
 
   ApplyForBetaForm.__Rewire__('apiClient', {
-    type: (type) => ({
-      get: function () {
+    type: type => ({
+      get() {
         let result = null;
-        const resolver = (value) => new Promise(resolve => resolve(value));
+        const resolver = value => new Promise(resolve => resolve(value));
         if (type === 'projects') {
           result = {
-            get: () => resolver(mockPages),
+            get: () => resolver(mockPages)
           };
         } else if (type === 'subject_sets') {
           result = resolver(mockSubjectSets);
         }
         return result;
-      },
-    }),
+      }
+    })
   });
 
-  it('should render without crashing', function() {
+  it('should render without crashing', () => {
     testSetup();
     shallow(<ApplyForBetaForm project={project} />);
   });
 
-  describe('checkbox validation:', function() {
-
-    const setWrappers = function(labelText) {
+  describe('checkbox validation:', () => {
+    const setWrappers = function (labelText) {
       wrapper = shallow(<ApplyForBetaForm project={project} workflows={workflows} />);
-      label = wrapper.findWhere(function(node) {
-        return node.type() === 'label' && node.text() === labelText;
-      }).first();
+      label = wrapper.findWhere(node => node.type() === 'label' && node.text() === labelText).first();
       checkbox = label.find('input[type="checkbox"]').first();
-    }
+    };
 
-    describe('disabled checkboxes:', function() {
-      describe('public status checkbox:', function() {
-        const setPublicStatusWrappers = function() {
+    describe('disabled checkboxes:', () => {
+      describe('public status checkbox:', () => {
+        const setPublicStatusWrappers = function () {
           setWrappers('Project is public');
-        }
+        };
 
         beforeEach(testSetup);
 
-        it('should exist', function() {
+        it('should exist', () => {
           setPublicStatusWrappers();
           assertLabelAndCheckboxExist(label, checkbox);
         });
 
-        it('should be disabled', function() {
+        it('should be disabled', () => {
           setPublicStatusWrappers();
           assertCheckboxDisabled(checkbox);
         });
 
-        it('should be unchecked if the project is private', function() {
+        it('should be unchecked if the project is private', () => {
           project.private = true;
           setPublicStatusWrappers();
           assertCheckboxChecked(checkbox, false);
         });
 
-        it('should be checked if the project is public', function() {
+        it('should be checked if the project is public', () => {
           setPublicStatusWrappers();
           assertCheckboxChecked(checkbox);
         });
       });
 
-      describe('live status checkbox:', function() {
-        const setLiveStatusWrappers = function() {
+      describe('live status checkbox:', () => {
+        const setLiveStatusWrappers = function () {
           setWrappers('Project is live');
-        }
+        };
 
         beforeEach(testSetup);
 
-        it('should exist', function() {
+        it('should exist', () => {
           setLiveStatusWrappers();
           assertLabelAndCheckboxExist(label, checkbox);
         });
 
-        it('should be disabled', function() {
+        it('should be disabled', () => {
           setLiveStatusWrappers();
           assertCheckboxDisabled(checkbox);
         });
 
-        it('should be unchecked if the project is in development', function() {
+        it('should be unchecked if the project is in development', () => {
           project.live = false;
           setLiveStatusWrappers();
           assertCheckboxChecked(checkbox, false);
         });
 
-        it('should be checked if the project is live', function() {
+        it('should be checked if the project is live', () => {
           setLiveStatusWrappers();
           assertCheckboxChecked(checkbox);
         });
       });
 
-      describe('active workflow checkbox:', function() {
-        const setActiveWorkflowStatusWrappers = function() {
+      describe('active workflow checkbox:', () => {
+        const setActiveWorkflowStatusWrappers = function () {
           setWrappers('Project has at least one active workflow');
         };
 
         beforeEach(testSetup);
 
-        it('should exist', function() {
+        it('should exist', () => {
           setActiveWorkflowStatusWrappers();
           assertLabelAndCheckboxExist(label, checkbox);
         });
 
-        it('should be disabled', function() {
+        it('should be disabled', () => {
           setActiveWorkflowStatusWrappers();
           assertCheckboxDisabled(checkbox);
         });
 
-        it('should be unchecked if the project has no active workflows', function() {
+        it('should be unchecked if the project has no active workflows', () => {
           project.links.active_workflows = undefined;
           setActiveWorkflowStatusWrappers();
           assertCheckboxChecked(checkbox, false);
         });
 
-        it('should be checked if the project has at least one active workflow', function() {
+        it('should be checked if the project has at least one active workflow', () => {
           setActiveWorkflowStatusWrappers();
           assertCheckboxChecked(checkbox);
         });
       });
     });
 
-    describe('enabled checkboxes:', function() {
-      describe('lab policies checkbox:', function() {
-        const setLabPoliciesWrappers = function() {
+    describe('enabled checkboxes:', () => {
+      describe('lab policies checkbox:', () => {
+        const setLabPoliciesWrappers = function () {
           setWrappers('I have reviewed the policies');
         };
 
         beforeEach(testSetup);
 
-        it('should exist', function() {
+        it('should exist', () => {
           setLabPoliciesWrappers();
           assertLabelAndCheckboxExist(label, checkbox);
         });
 
-        it('should be enabled', function() {
+        it('should be enabled', () => {
           setLabPoliciesWrappers();
           assertCheckboxDisabled(checkbox, false);
         });
       });
 
-      describe('best practices checkbox:', function() {
-        const setBestPracticesWrappers = function() {
+      describe('best practices checkbox:', () => {
+        const setBestPracticesWrappers = function () {
           setWrappers('I have reviewed the best practices');
         };
 
         beforeEach(testSetup);
 
-        it('should exist', function() {
+        it('should exist', () => {
           setBestPracticesWrappers();
           assertLabelAndCheckboxExist(label, checkbox);
         });
 
-        it('should be enabled', function() {
+        it('should be enabled', () => {
           setBestPracticesWrappers();
           assertCheckboxDisabled(checkbox, false);
         });
       });
 
-      describe('feedback form checkbox:', function() {
-        const setFeedbackFormWrappers = function() {
+      describe('feedback form checkbox:', () => {
+        const setFeedbackFormWrappers = function () {
           setWrappers('I have reviewed the sample beta test project feedback form');
         };
 
         beforeEach(testSetup);
 
-        it('should exist', function() {
+        it('should exist', () => {
           setFeedbackFormWrappers();
           assertLabelAndCheckboxExist(label, checkbox);
         });
 
-        it('should be enabled', function() {
+        it('should be enabled', () => {
           setFeedbackFormWrappers();
           assertCheckboxDisabled(checkbox, false);
         });
@@ -314,23 +308,22 @@ describe('ApplyForBeta component:', function() {
   //   });
   // });
 
-  describe('apply button behaviour:', function() {
+  describe('apply button behaviour:', () => {
     beforeEach(testSetup);
 
-    it('should exist', function() {
+    it('should exist', () => {
       wrapper = shallow(<ApplyForBetaForm project={project} workflows={workflows} />);
       const button = wrapper.find('button.standard-button').first();
       assert(button.length > 0, 'Button exists');
     });
 
-    it('should be disabled unless all checkboxes are checked', function() {
+    it('should be disabled unless all checkboxes are checked', () => {
       workflows[0].active = true;
       wrapper = mount(<ApplyForBetaForm project={project} workflows={workflows} />);
       const checkboxes = wrapper.find('input[type="checkbox"]');
-      checkboxes.forEach(function(checkbox, index) {
-        if (index < (checkboxes.length - 1))
-          checkbox.simulate('change', { target: { checked: true }});
-      })
+      checkboxes.forEach((checkbox, index) => {
+        if (index < (checkboxes.length - 1)) checkbox.simulate('change', { target: { checked: true }});
+      });
       const button = wrapper.find('button.standard-button').first();
       assert(button.prop('disabled') === true, 'Button is disabled');
     });
@@ -361,5 +354,4 @@ describe('ApplyForBeta component:', function() {
     //   }, 0);
     // });
   });
-
 });

@@ -13,9 +13,10 @@ class UnsubscribeFromEmails extends Component {
       emailError: false,
       emailIsValid: false,
       emailValue: '',
-      inProgress: false,
+      inProgress: false
     };
   }
+
   componentDidMount() {
     return this.handleChange;
   }
@@ -51,7 +52,12 @@ class UnsubscribeFromEmails extends Component {
       <form onSubmit={this.handleSubmit}>
         <p><strong>Unsubscribe from all Zooniverse emails, except Talk.</strong></p>
         <p>We get it - no one likes to keep receiving email they don't want.</p>
-        <p>Just enter your email address here and we'll <b>unsubscribe you from all</b> our email lists.</p>
+        <p>
+Just enter your email address here and we'll
+          <b>unsubscribe you from all</b>
+          {' '}
+our email lists.
+        </p>
         <p>
           <input
             className="standard-input"
@@ -67,7 +73,8 @@ class UnsubscribeFromEmails extends Component {
             className="standard-button"
             disabled={disabledButton}
             type="submit"
-          >Submit
+          >
+Submit
           </button>
           {' '}
           {this.renderIconFeedback()}
@@ -103,7 +110,12 @@ class UnsubscribeFromEmails extends Component {
     return (
       <div>
         <p><strong>Your unsubscribe request was successfully processed.</strong></p>
-        <p>If you change your mind, just visit your <a href="/settings">account settings</a> page to update your email preferences.</p>
+        <p>
+If you change your mind, just visit your
+          <a href="/settings">account settings</a>
+          {' '}
+page to update your email preferences.
+        </p>
       </div>
     );
   }
@@ -116,8 +128,8 @@ class UnsubscribeFromEmails extends Component {
     return (
       <div className="centered-grid">
         {query.processed
-        ? this.renderTokenFlowFeedback()
-        : this.renderForm(defaultValue, disabledButton)}
+          ? this.renderTokenFlowFeedback()
+          : this.renderForm(defaultValue, disabledButton)}
       </div>
     );
   }

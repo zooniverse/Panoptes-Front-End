@@ -1,16 +1,16 @@
 import { expect } from 'chai';
 import columnReducer from './reducer';
 
-describe('feedback drawing column reducer', function () {
+describe('feedback drawing column reducer', () => {
   const rule = {
     hideSubjectViewer: false,
-    id: "1234",
-    strategy: "column",
+    id: '1234',
+    strategy: 'column',
     successEnabled: true,
-    successMessage: "Success!",
-    tolerance: "50",
-    width: "100",
-    x: "300"
+    successMessage: 'Success!',
+    tolerance: '50',
+    width: '100',
+    x: '300'
   };
 
   const annotationSuccess = {
@@ -28,63 +28,63 @@ describe('feedback drawing column reducer', function () {
     x: 600
   };
 
-  it('should return result with failure', function () {
+  it('should return result with failure', () => {
     expect(columnReducer(rule, [annotationFailure])).to.deep.equal({
       hideSubjectViewer: false,
-      id: "1234",
-      strategy: "column",
+      id: '1234',
+      strategy: 'column',
       success: false,
       successEnabled: true,
-      successMessage: "Success!",
+      successMessage: 'Success!',
       successfulClassifications: [],
-      tolerance: "50",
-      width: "100",
-      x: "300"
+      tolerance: '50',
+      width: '100',
+      x: '300'
     });
   });
 
-  it('should return result with success', function () {
+  it('should return result with success', () => {
     expect(columnReducer(rule, [annotationSuccess])).to.deep.equal({
       hideSubjectViewer: false,
-      id: "1234",
-      strategy: "column",
+      id: '1234',
+      strategy: 'column',
       success: true,
       successEnabled: true,
-      successMessage: "Success!",
+      successMessage: 'Success!',
       successfulClassifications: [annotationSuccess],
-      tolerance: "50",
-      width: "100",
-      x: "300"
+      tolerance: '50',
+      width: '100',
+      x: '300'
     });
   });
 
-  it('should return result within tolerance', function () {
+  it('should return result within tolerance', () => {
     expect(columnReducer(rule, [annotationTolerance])).to.deep.equal({
       hideSubjectViewer: false,
-      id: "1234",
-      strategy: "column",
+      id: '1234',
+      strategy: 'column',
       success: true,
       successEnabled: true,
-      successMessage: "Success!",
+      successMessage: 'Success!',
       successfulClassifications: [annotationTolerance],
-      tolerance: "50",
-      width: "100",
-      x: "300"
+      tolerance: '50',
+      width: '100',
+      x: '300'
     });
   });
 
-  it('should return result with success with successful and failed annotation', function () {
+  it('should return result with success with successful and failed annotation', () => {
     expect(columnReducer(rule, [annotationSuccess, annotationTolerance, annotationFailure])).to.deep.equal({
       hideSubjectViewer: false,
-      id: "1234",
-      strategy: "column",
+      id: '1234',
+      strategy: 'column',
       success: true,
       successEnabled: true,
-      successMessage: "Success!",
+      successMessage: 'Success!',
       successfulClassifications: [annotationSuccess, annotationTolerance],
-      tolerance: "50",
-      width: "100",
-      x: "300"
+      tolerance: '50',
+      width: '100',
+      x: '300'
     });
   });
 });

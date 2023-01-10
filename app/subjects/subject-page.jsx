@@ -10,56 +10,61 @@ import SubjectMentionList from './mention-list';
 import SubjectCollectionList from './subject-collection-list';
 import PopularTags from '../talk/popular-tags';
 
-const SubjectPage = (props) => {
-  return (
-    <div className="subject-page talk">
-      <div className="talk-list-content">
+const SubjectPage = props => (
+  <div className="subject-page talk">
+    <div className="talk-list-content">
+      <section>
+        {props.subject
+            && (
+              <div>
+                <h1>
+Subject
+                  {props.subject.id}
+                </h1>
+                <SubjectViewer
+                  subject={props.subject}
+                  user={props.user}
+                  project={props.project}
+                  linkToFullImage={true}
+                  metadataFilters={['#']}
+                  talkInvert={true}
+                  isFavorite={props.isFavorite}
+                />
+
+                <SubjectCommentList subject={props.subject} {...props} />
+                <SubjectCollectionList collections={props.collections} {...props} />
+                <SubjectDiscussionList subject={props.subject} {...props} />
+                <SubjectMentionList subject={props.subject} {...props} />
+                <SubjectCommentForm subject={props.subject} {...props} />
+              </div>
+            )}
+      </section>
+      <div className="talk-sidebar">
         <section>
-          {props.subject &&
-            <div>
-              <h1>Subject {props.subject.id}</h1>
-              <SubjectViewer
-                subject={props.subject}
-                user={props.user}
-                project={props.project}
-                linkToFullImage={true}
-                metadataFilters={['#']}
-                talkInvert={true}
-                isFavorite={props.isFavorite}
-              />
-
-              <SubjectCommentList subject={props.subject} {...props} />
-              <SubjectCollectionList collections={props.collections} {...props} />
-              <SubjectDiscussionList subject={props.subject} {...props} />
-              <SubjectMentionList subject={props.subject} {...props} />
-              <SubjectCommentForm subject={props.subject} {...props} />
-            </div>}
+          {props.subject
+              && (
+                <PopularTags
+                  header={<h3>Popular Tags:</h3>}
+                  section={props.section}
+                  type="Subject"
+                  id={props.subject.id}
+                  project={props.project}
+                />
+              )}
         </section>
-        <div className="talk-sidebar">
-          <section>
-            {props.subject &&
-              <PopularTags
-                header={<h3>Popular Tags:</h3>}
-                section={props.section}
-                type="Subject"
-                id={props.subject.id}
-                project={props.project}
-              />}
-          </section>
 
-          <section>
-            <ActiveUsers section={props.section} project={props.project} />
-          </section>
+        <section>
+          <ActiveUsers section={props.section} project={props.project} />
+        </section>
 
-          <section>
-            <h3>Projects:</h3>
-            <ProjectLinker user={props.user} />
-          </section>
-        </div>
+        <section>
+          <h3>Projects:</h3>
+          <ProjectLinker user={props.user} />
+        </section>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 SubjectPage.defaultProps = {
   isFavorite: false

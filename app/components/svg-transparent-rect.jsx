@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 class SVGTransparentRect extends React.Component {
-
   constructor() {
     super();
     this.fixWeirdSize = this.fixWeirdSize.bind(this);

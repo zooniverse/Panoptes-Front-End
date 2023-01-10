@@ -4,7 +4,9 @@ import merge from 'lodash/merge';
 import { connect } from 'react-redux';
 
 function TaskTranslations(props) {
-  const { task, taskKey, translations, workflowID } = props;
+  const {
+    task, taskKey, translations, workflowID
+  } = props;
   const workflowTranslation = translations.strings.workflow[workflowID] || {};
   const taskStrings = workflowTranslation.strings ? workflowTranslation.strings.tasks[taskKey] : {};
   const translation = merge({}, task, taskStrings);

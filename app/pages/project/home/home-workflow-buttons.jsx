@@ -3,7 +3,7 @@ import React from 'react';
 import Translate from 'react-translate-component';
 import ProjectHomeWorkflowButton from './home-workflow-button';
 import LoadingIndicator from '../../../components/loading-indicator';
-import Translations from '../../../classifier/translations'
+import Translations from '../../../classifier/translations';
 
 export default class ProjectHomeWorkflowButtons extends React.Component {
   constructor() {
@@ -14,9 +14,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
   shouldWorkflowBeDisabled(workflow) {
     if (this.props.user && workflow.configuration.level && this.props.preferences && this.props.preferences.settings) {
-      const currentWorkflowAtLevel = this.props.activeWorkflows.filter((activeWorkflow) => {
-        return (activeWorkflow.id === this.props.preferences.settings.workflow_id) ? activeWorkflow : null;
-      });
+      const currentWorkflowAtLevel = this.props.activeWorkflows.filter(activeWorkflow => ((activeWorkflow.id === this.props.preferences.settings.workflow_id) ? activeWorkflow : null));
       const currentLevel = (currentWorkflowAtLevel.length > 0) ? currentWorkflowAtLevel[0].configuration.level : 1;
 
       return (workflow.configuration.level > currentLevel);
@@ -32,39 +30,41 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
     return (
       <div className="project-home-workflow-buttons">
-        {this.props.showWorkflowButtons && this.props.activeWorkflows.length > 0 &&
-          (<div className="project-home-page__container project-home-workflow-buttons__workflow-choice-container">
-            <div className="project-home-page__content">
-              <h3 className="workflow-choice-container__call-to-action">
-                <Translate content="project.home.getStarted" />{' '}
-                <i className="fa fa-arrow-down" aria-hidden="true" />
-              </h3>
-              {this.props.translation.workflow_description && (
-                <p className="workflow-choice-container__description">{this.props.translation.workflow_description}</p>
-              )}
-              {this.props.activeWorkflows.map((workflow) => {
-                return (
-                    <Translations
-                      key={workflow.id}
-                      original={workflow}
-                      type="workflow"
-                    >
-                      <ProjectHomeWorkflowButton
-                        disabled={this.shouldWorkflowBeDisabled(workflow)}
-                        preferences={this.props.preferences}
-                        project={this.props.project}
-                        user={this.props.user}
-                        workflow={workflow}
-                        workflowAssignment={this.props.workflowAssignment}
-                      />
-                    </Translations>
-                  );
-              })
-            }</div>
-          </div>)}
+        {this.props.showWorkflowButtons && this.props.activeWorkflows.length > 0
+          && (
+            <div className="project-home-page__container project-home-workflow-buttons__workflow-choice-container">
+              <div className="project-home-page__content">
+                <h3 className="workflow-choice-container__call-to-action">
+                  <Translate content="project.home.getStarted" />
+                  {' '}
+                  <i className="fa fa-arrow-down" aria-hidden="true" />
+                </h3>
+                {this.props.translation.workflow_description && (
+                  <p className="workflow-choice-container__description">{this.props.translation.workflow_description}</p>
+                )}
+                {this.props.activeWorkflows.map(workflow => (
+                  <Translations
+                    key={workflow.id}
+                    original={workflow}
+                    type="workflow"
+                  >
+                    <ProjectHomeWorkflowButton
+                      disabled={this.shouldWorkflowBeDisabled(workflow)}
+                      preferences={this.props.preferences}
+                      project={this.props.project}
+                      user={this.props.user}
+                      workflow={workflow}
+                      workflowAssignment={this.props.workflowAssignment}
+                    />
+                  </Translations>
+                ))
+                }
+              </div>
+            </div>
+          )}
 
-        {this.props.showWorkflowButtons && this.props.activeWorkflows.length === 0 &&
-          <div className="project-home-page__container workflow-choice"><LoadingIndicator /></div>}
+        {this.props.showWorkflowButtons && this.props.activeWorkflows.length === 0
+          && <div className="project-home-page__container workflow-choice"><LoadingIndicator /></div>}
       </div>
     );
   }

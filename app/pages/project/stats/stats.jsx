@@ -17,7 +17,7 @@ export class GraphSelect extends React.Component {
 
     this.state = {
       workflowsLoaded: false,
-      statData: null,
+      statData: null
     };
   }
 
@@ -46,12 +46,12 @@ export class GraphSelect extends React.Component {
         projectID: this.props.projectId,
         workflowID: workflowId,
         period: binBy,
-        type: this.props.type,
+        type: this.props.type
       })
-      .then((data) => (
-        data.map((statObject) => ({
+      .then(data => (
+        data.map(statObject => ({
           label: statObject.key_as_string,
-          value: statObject.doc_count,
+          value: statObject.doc_count
         }))
       ))
       .then((statData) => {
@@ -84,7 +84,7 @@ export class GraphSelect extends React.Component {
     let workflowSelect;
     if (this.props.workflows) {
       const options = [
-        <option value={`project_id=${this.props.projectId}`} key={"workflowSelectAll"}>All</option>,
+        <option value={`project_id=${this.props.projectId}`} key="workflowSelectAll">All</option>
       ];
       let key = 0;
       for (const workflow of this.props.workflows) {
@@ -104,7 +104,9 @@ export class GraphSelect extends React.Component {
         }
         workflowSelect = (
           <span>
-            {' '}for{' '}
+            {' '}
+for
+            {' '}
             <select onChange={this.handleWorkflowSelect} value={value}>
               {options}
             </select>
@@ -138,7 +140,9 @@ export class GraphSelect extends React.Component {
       const workflowSelect = this.workflowSelect();
       output = (
         <div>
-          {this.props.type[0].toUpperCase() + this.props.type.substring(1)}s per{' '}
+          {this.props.type[0].toUpperCase() + this.props.type.substring(1)}
+s per
+          {' '}
           <select value={this.props.by} onChange={this.handleGraphChange}>
             <option value="hour">hour</option>
             <option value="day">day</option>
@@ -162,7 +166,7 @@ export class GraphSelect extends React.Component {
 }
 
 GraphSelect.defaultProps = {
-  by: 'day',
+  by: 'day'
 };
 
 GraphSelect.propTypes = {
@@ -175,7 +179,7 @@ GraphSelect.propTypes = {
   workflows: PropTypes.array,
   handleGraphChange: PropTypes.func,
   handleRangeChange: PropTypes.func,
-  handleWorkflowChange: PropTypes.func,
+  handleWorkflowChange: PropTypes.func
 };
 
 export const Eta = (props) => {
@@ -183,7 +187,9 @@ export const Eta = (props) => {
   if (props.numDays !== undefined) {
     output = (
       <div>
-        <span className="progress-stats-label">ETC*</span> {`${props.numDays} days`}
+        <span className="progress-stats-label">ETC*</span>
+        {' '}
+        {`${props.numDays} days`}
       </div>
     );
   }
@@ -191,7 +197,7 @@ export const Eta = (props) => {
 };
 
 Eta.propTypes = {
-  numDays: PropTypes.number,
+  numDays: PropTypes.number
 };
 
 export class WorkflowProgress extends React.Component {
@@ -201,7 +207,7 @@ export class WorkflowProgress extends React.Component {
     this.componentDidMount = this.componentDidMount.bind(this);
 
     this.state = {
-      statData: null,
+      statData: null
     };
   }
 
@@ -210,10 +216,10 @@ export class WorkflowProgress extends React.Component {
       .query({
         workflowID: this.props.workflow.id,
         period: 'day',
-        type: 'classification',
+        type: 'classification'
       })
-      .then((data) => (
-        data.map((statObject) => (
+      .then(data => (
+        data.map(statObject => (
           statObject.doc_count
         ))
       ))
@@ -228,13 +234,12 @@ export class WorkflowProgress extends React.Component {
   }
 
   calcDaysToCompletion(totalCount) {
-    let numDays = undefined;
+    let numDays;
     const dataLength = this.state.statData.length;
     const compeletness = this.props.workflow.completeness == 1;
     if (compeletness) {
       numDays = 0;
-    }
-    else if (dataLength > 1) {
+    } else if (dataLength > 1) {
       let value;
       let days;
       if (dataLength > 15) {
@@ -262,8 +267,10 @@ export class WorkflowProgress extends React.Component {
       retiredDiv = (
         <div>
           <span className="progress-stats-label">Images retired:</span>
-          {' '}{this.props.workflow.retired_set_member_subjects_count.toLocaleString()}
-          {' / '}{this.props.workflow.subjects_count.toLocaleString()}
+          {' '}
+          {this.props.workflow.retired_set_member_subjects_count.toLocaleString()}
+          {' / '}
+          {this.props.workflow.subjects_count.toLocaleString()}
         </div>
       );
     }
@@ -272,11 +279,12 @@ export class WorkflowProgress extends React.Component {
       retirement = (
         <div>
           <span className="progress-stats-label">Retirement limit:</span>
-          {' '}{this.props.workflow.retirement.options.count.toLocaleString()}
+          {' '}
+          {this.props.workflow.retirement.options.count.toLocaleString()}
         </div>
       );
       if (this.state.statData) {
-        eta = <Eta numDays={this.calcDaysToCompletion(totalCount)}/>;
+        eta = <Eta numDays={this.calcDaysToCompletion(totalCount)} />;
       }
       if (this.props.workflow.configuration) {
         if (this.props.workflow.configuration.stats_completeness_type === 'classification' && completeness !== 1) {
@@ -309,7 +317,7 @@ export class WorkflowProgress extends React.Component {
 }
 
 WorkflowProgress.propTypes = {
-  workflow: PropTypes.object,
+  workflow: PropTypes.object
 };
 
 export class ProjectStatsPage extends React.Component {
@@ -351,11 +359,18 @@ export class ProjectStatsPage extends React.Component {
       classificationFootnoteMarker = <span><sup>&#8224;</sup></span>;
       classificationFootnote = (
         <span className="project-stats-footer">
-         {classificationFootnoteMarker}
+          {classificationFootnoteMarker}
          Due to an issue with our stats server all data before
-         {' '}{moment.utc(classificationGap[1]).format('MMM-DD-YYYY')} is
-         {' '}currently unavailable.  We are currently working to resolve this issue.
-         {' '}<b>No</b> classifications were lost in this time.
+          {' '}
+          {moment.utc(classificationGap[1]).format('MMM-DD-YYYY')}
+          {' '}
+is
+          {' '}
+currently unavailable.  We are currently working to resolve this issue.
+          {' '}
+          <b>No</b>
+          {' '}
+classifications were lost in this time.
         </span>
       );
     }
@@ -367,9 +382,16 @@ export class ProjectStatsPage extends React.Component {
         <span className="project-stats-footer">
           {talkFootnoteMarker}
           Due to an issue with our stats server all data before
-          {' '}{moment.utc(talkGap[1]).format('MMM-DD-YYYY')} is
-          {' '}currently unavailable.  We are currently working to resolve this issue.
-          {' '}<b>No</b> talk comments were lost in this time.
+          {' '}
+          {moment.utc(talkGap[1]).format('MMM-DD-YYYY')}
+          {' '}
+is
+          {' '}
+currently unavailable.  We are currently working to resolve this issue.
+          {' '}
+          <b>No</b>
+          {' '}
+talk comments were lost in this time.
         </span>
       );
     }
@@ -378,8 +400,10 @@ export class ProjectStatsPage extends React.Component {
       ETAFootnote = (
         <span className="project-stats-footer">
           *Estimated time to completion is based on the classification rate
-          {' '}for the past 14 days and may be incorrect due to the way
-          {' '}we currently report the data, or unavailable for some workflows.
+          {' '}
+for the past 14 days and may be incorrect due to the way
+          {' '}
+we currently report the data, or unavailable for some workflows.
         </span>
       );
     }
@@ -406,7 +430,8 @@ export class ProjectStatsPage extends React.Component {
           <hr />
         </div>
         <span className="project-stats-heading">
-          Classification Stats{classificationFootnoteMarker}
+          Classification Stats
+          {classificationFootnoteMarker}
         </span>
         <div>
           <GraphSelect
@@ -424,7 +449,10 @@ export class ProjectStatsPage extends React.Component {
         </div>
         {classificationFootnote}
         <hr />
-        <span className="project-stats-heading">Talk Stats{talkFootnoteMarker}</span>
+        <span className="project-stats-heading">
+Talk Stats
+          {talkFootnoteMarker}
+        </span>
         <div>
           <GraphSelect
             handleGraphChange={this.props.handleGraphChange}
@@ -443,7 +471,7 @@ export class ProjectStatsPage extends React.Component {
 
 ProjectStatsPage.defaultProps = {
   totalVolunteers: 0,
-  currentClassifications: 0,
+  currentClassifications: 0
 };
 
 ProjectStatsPage.propTypes = {
@@ -460,5 +488,5 @@ ProjectStatsPage.propTypes = {
   handleGraphChange: PropTypes.func,
   handleRangeChange: PropTypes.func,
   handleWorkflowChange: PropTypes.func,
-  workflowId: PropTypes.string,
+  workflowId: PropTypes.string
 };

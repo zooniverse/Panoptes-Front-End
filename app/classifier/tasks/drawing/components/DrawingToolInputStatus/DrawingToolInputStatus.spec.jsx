@@ -16,17 +16,17 @@ describe('DrawingToolInputStatus', function () {
     expect(wrapper).to.be.ok;
   });
 
-  it('should render a StyledDrawingToolInputStatus component', function() {
+  it('should render a StyledDrawingToolInputStatus component', function () {
     const wrapper = mount(<DrawingToolInputStatus />);
     expect(wrapper.find(StyledDrawingToolInputStatus)).to.have.lengthOf(1);
   });
 
-  it('should not render any requirements if props.tool.min or props.tool.max is not defined', function() {
+  it('should not render any requirements if props.tool.min or props.tool.max is not defined', function () {
     const wrapper = mount(<DrawingToolInputStatus />);
     expect(wrapper.find('span')).to.have.lengthOf(0);
   });
 
-  it('should render minimum drawing requirements if props.tool.min is defined', function() {
+  it('should render minimum drawing requirements if props.tool.min is defined', function () {
     const wrapper = mount(<DrawingToolInputStatus tool={{ min: 1 }} />);
     expect(wrapper.find('span')).to.have.lengthOf(1);
     expect(wrapper.text()).to.equal('0 of 1 required drawn');

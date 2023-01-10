@@ -17,7 +17,7 @@ class Dialog extends React.Component {
     const scrollable = this.content.scrollHeight > this.wrapper.clientHeight;
     this.setState({ scrollable });
   }
-  
+
   componentDidUpdate() {
     if (this.state.scrollable) {
       this.content.focus();
@@ -40,7 +40,7 @@ class Dialog extends React.Component {
             ref={(element) => { this.content = element; }}
             tabIndex={this.state.scrollable ? 0 : undefined}
           >
-            <div className="wrapper" >
+            <div className="wrapper">
               {this.props.children}
             </div>
           </div>

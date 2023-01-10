@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import getFeedbackFromTasks from './get-feedback-from-tasks';
 
-describe('Feedback: getFeedbackFromTasks', function () {
+describe('Feedback: getFeedbackFromTasks', () => {
   const tasks = {
     T0: {
       feedback: {
@@ -30,13 +30,13 @@ describe('Feedback: getFeedbackFromTasks', function () {
       }
     }
   };
-  it('should include tasks with feedback enabled', function () {
+  it('should include tasks with feedback enabled', () => {
     expect(getFeedbackFromTasks(tasks)).to.have.property('T0');
   });
-  it('should ignore tasks with feedback disabled', function () {
+  it('should ignore tasks with feedback disabled', () => {
     expect(getFeedbackFromTasks(tasks)).not.to.have.property('T1');
   });
-  it('should copy rules from tasks with feedback enabled', function () {
+  it('should copy rules from tasks with feedback enabled', () => {
     expect(getFeedbackFromTasks(tasks).T0).to.deep.equal(tasks.T0.feedback.rules);
   });
 });

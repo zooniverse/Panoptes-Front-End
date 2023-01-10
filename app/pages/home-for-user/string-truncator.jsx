@@ -8,7 +8,7 @@ class StringTruncator extends React.Component {
     children: PropTypes.string.isRequired,
     splitter: PropTypes.instanceOf(RegExp),
     chop: PropTypes.number,
-    ellipsis: PropTypes.element,
+    ellipsis: PropTypes.element
   };
 
   static defaultProps = {
@@ -17,11 +17,11 @@ class StringTruncator extends React.Component {
     children: '',
     splitter: /(\W*\s)/,
     reduceBy: 4,
-    ellipsis: <span>…</span>,
+    ellipsis: <span>…</span>
   };
 
   state = {
-    truncatedString: '',
+    truncatedString: ''
   };
 
   componentDidMount() {
@@ -56,7 +56,7 @@ class StringTruncator extends React.Component {
     const wordsThatMightFit = allWords.slice(0, lastWord);
 
     this.setState({
-      truncatedString: wordsThatMightFit.join('').trim(),
+      truncatedString: wordsThatMightFit.join('').trim()
     }, () => {
       if (this.container.offsetHeight < this.container.scrollHeight) {
         // TODO: Binary-search this to iterate as few times as necessary.
@@ -69,7 +69,7 @@ class StringTruncator extends React.Component {
     let possibleEllipsis;
     if (this.state.truncatedString !== this.props.children) {
       possibleEllipsis = React.cloneElement(this.props.ellipsis, {
-        className: ['string-truncator__ellipsis', this.props.ellipsis.props.className].join(' ').trim(),
+        className: ['string-truncator__ellipsis', this.props.ellipsis.props.className].join(' ').trim()
       });
     }
 
@@ -80,9 +80,9 @@ class StringTruncator extends React.Component {
         } else {
           this.container = null;
         }
-      },
+      }
     }, this.props, {
-      className: ['string-truncator', this.props.className].join(' ').trim(),
+      className: ['string-truncator', this.props.className].join(' ').trim()
     }), this.state.truncatedString, possibleEllipsis);
   }
 }

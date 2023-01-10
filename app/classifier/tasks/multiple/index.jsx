@@ -11,7 +11,7 @@ export default class MultipleChoiceTask extends React.Component {
   handleChange(index, e) {
     const value = this.props.annotation.value.slice(0);
     if (e.target.checked) {
-      this.setState({ focus: {} });
+      this.setState({ focus: {}});
       if (!value.includes(index)) {
         value.push(index);
       }
@@ -24,7 +24,9 @@ export default class MultipleChoiceTask extends React.Component {
   }
 
   render() {
-    const { annotation, autoFocus, task, translation } = this.props;
+    const {
+      annotation, autoFocus, task, translation
+    } = this.props;
     const answers = [];
     for (const [i, answer] of task.answers.entries()) {
       if (!answer._key) {
@@ -61,21 +63,15 @@ export default class MultipleChoiceTask extends React.Component {
 // Define the static methods and values
 MultipleChoiceTask.Editor = GenericTaskEditor;
 MultipleChoiceTask.Summary = MultipleChoiceSummary;
-MultipleChoiceTask.getDefaultTask = () => {
-  return {
-    type: 'multiple',
-    question: 'Enter a question.',
-    help: '',
-    required: false,
-    answers: []
-  };
-};
-MultipleChoiceTask.getTaskText = (task) => {
-  return task.question;
-};
-MultipleChoiceTask.getDefaultAnnotation = () => {
-  return { value: [] };
-};
+MultipleChoiceTask.getDefaultTask = () => ({
+  type: 'multiple',
+  question: 'Enter a question.',
+  help: '',
+  required: false,
+  answers: []
+});
+MultipleChoiceTask.getTaskText = task => task.question;
+MultipleChoiceTask.getDefaultAnnotation = () => ({ value: [] });
 MultipleChoiceTask.isAnnotationComplete = (task, annotation) => {
   const minRequiredAnswers = task.required ? 1 : 0;
   return annotation.value.length >= minRequiredAnswers;

@@ -1,7 +1,7 @@
 import { shallow, mount } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
-import Shortcut from './';
+import Shortcut from '.';
 
 const workflow = {
   tasks: {
@@ -29,44 +29,44 @@ const annotation = {
   value: null
 };
 
-describe('Shortcut', function() {
+describe('Shortcut', () => {
   let wrapper;
 
-  it('should render with default props', function() {
+  it('should render with default props', () => {
     wrapper = shallow(<Shortcut translation={task} />);
   });
 
-  it('should update on annotation change', function() {
+  it('should update on annotation change', () => {
     wrapper = shallow(<Shortcut translation={task} />);
     wrapper.setProps({ annotation });
   });
 });
 
-describe('Shortcut functionality', function () {
+describe('Shortcut functionality', () => {
   let wrapper;
 
-  before(function () {
+  before(() => {
     wrapper = mount(<Shortcut translation={task} task={task} annotation={annotation} workflow={workflow} />);
     wrapper.find('input').first().simulate('change', { target: { checked: true }});
     wrapper.update();
   });
 
-  it('should show an active button with a shortcut', function () {
+  it('should show an active button with a shortcut', () => {
     assert.equal(wrapper.find('label[htmlFor="shortcut-1"]').hasClass('active'), true);
   });
 
-  it('should remove shortcut when deselected', function () {
+  it('should remove shortcut when deselected', () => {
     wrapper.find('input').first().simulate('change', { target: { checked: false }});
     wrapper.update();
     assert.equal(wrapper.find('label').first().hasClass('active'), false);
   });
 
-  it('should render multiple shortcuts', function () {
+  it('should render multiple shortcuts', () => {
     assert.equal(wrapper.find('label').length, 2);
   });
 
-  it('should add a shortcut to the current annotation', function () {
+  it('should add a shortcut to the current annotation', () => {
     wrapper.find('input').first().simulate('change', { target: { checked: true }});
-    assert.equal(wrapper.props().annotation.shortcut.value.length, 2)
+    assert.equal(wrapper.props().annotation.shortcut.value.length, 2);
   });
 });

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import metadataToRules from './metadata-to-rules';
 
-describe('feedback: metadataToRules', function () {
+describe('feedback: metadataToRules', () => {
   function mockSubjectWithRule(ruleID) {
     return {
       metadata: {
@@ -37,29 +37,29 @@ describe('feedback: metadataToRules', function () {
     }];
   }
 
-  it('should generate a rules object for string IDs', function () {
+  it('should generate a rules object for string IDs', () => {
     const subject = mockSubjectWithRule('0');
     const rules = metadataToRules(subject.metadata);
     expect(rules).to.deep.equal(expectedRules('0'));
   });
 
-  it('should generate a rules object for numerical IDs', function () {
+  it('should generate a rules object for numerical IDs', () => {
     const subject = mockSubjectWithRule(0);
     const rules = metadataToRules(subject.metadata);
     expect(rules).to.deep.equal(expectedRules(0));
   });
 
-  describe('with subject metadata feedback ruleIndex not an integer', function () {
+  describe('with subject metadata feedback ruleIndex not an integer', () => {
     let logError;
-    before(function () {
+    before(() => {
       logError = sinon.stub(console, 'error');
     });
 
-    after(function () {
+    after(() => {
       console.error.restore();
     });
 
-    it('should console error with message', function () {
+    it('should console error with message', () => {
       const improperMetadataSubject = mockSubjectWithRuleNonIntegerN(0);
       metadataToRules(improperMetadataSubject.metadata);
 
@@ -68,8 +68,8 @@ describe('feedback: metadataToRules', function () {
     });
   });
 
-  describe('with undefined metadata', function () {
-    it('should generate an empty rules object', function () {
+  describe('with undefined metadata', () => {
+    it('should generate an empty rules object', () => {
       expect(metadataToRules()).to.be.empty;
     });
   });

@@ -49,19 +49,15 @@ export default class FrameViewer extends React.Component {
     if (this.props.isAudioPlusImage) {
       const subjectLocations = getSubjectLocations(this.props.subject);
       type = Object.keys(subjectLocations);
-      format = Object.keys(subjectLocations).map(locationKey =>
-         subjectLocations[locationKey][0]
-      );
-      src = Object.keys(subjectLocations).map(locationKey =>
-         subjectLocations[locationKey][1]
-      );
+      format = Object.keys(subjectLocations).map(locationKey => subjectLocations[locationKey][0]);
+      src = Object.keys(subjectLocations).map(locationKey => subjectLocations[locationKey][1]);
     } else {
       ({ type, format, src } = getSubjectLocation(this.props.subject, this.props.frame));
     }
     const zoomEnabled = (
-      this.props.workflow &&
-      this.props.workflow.configuration.pan_and_zoom &&
-      (type === 'image' || type === 'application' || this.props.isAudioPlusImage)
+      this.props.workflow
+      && this.props.workflow.configuration.pan_and_zoom
+      && (type === 'image' || type === 'application' || this.props.isAudioPlusImage)
     );
     const modellingProps = type === 'application' ? { // could be a more specific type check here
       annotation: this.props.annotation,
@@ -124,7 +120,7 @@ export default class FrameViewer extends React.Component {
             {...modellingProps}
           />
         </Link>
-      )
+      );
     } else {
       return (
         <FileViewer
@@ -171,8 +167,8 @@ FrameViewer.defaultProps = {
   annotations: [],
   frame: 0,
   groupSubjectId: undefined,
-  groupSubjectLink: undefined,  // If a Subject is a "Subject Group", each frame can link to its constituent Subject's Talk page.
-  isGroupSubject: false,  // A "Subject Group" is a type of Subject that's composed of many (single image) Subjects
+  groupSubjectLink: undefined, // If a Subject is a "Subject Group", each frame can link to its constituent Subject's Talk page.
+  isGroupSubject: false, // A "Subject Group" is a type of Subject that's composed of many (single image) Subjects
   onChange: () => {},
   preferences: { },
   subject: {

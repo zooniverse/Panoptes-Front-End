@@ -7,10 +7,14 @@ const TextTaskSummary = ({ annotation, task }) => (
       {task.instruction}
     </div>
     <div className="answers">
-      {annotation && annotation.value &&
-        <div className="answer">
-          “<code>{annotation.value}</code>”
-        </div>}
+      {annotation && annotation.value
+        && (
+          <div className="answer">
+          “
+            <code>{annotation.value}</code>
+”
+          </div>
+        )}
     </div>
   </div>
 );

@@ -35,7 +35,7 @@ const SliderTaskEditor = (props) => {
             rows="4"
             className="full"
             onChange={handleChange}
-            onHelp={() => { return alert(<MarkdownHelp />); }}
+            onHelp={() => alert(<MarkdownHelp />)}
           />
         </AutoSave>
         <small className="form-help">Add text and images for a help window.</small>

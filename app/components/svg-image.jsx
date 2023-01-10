@@ -5,8 +5,7 @@ const FILTERS = {
   invert: "url('#svg-invert-filter')"
 };
 
-const INVERT =
-  `<svg style="position: fixed; right: 100%; top: 100%; visibility: hidden;">
+const INVERT = `<svg style="position: fixed; right: 100%; top: 100%; visibility: hidden;">
     <defs>
       <filter id="svg-invert-filter" color-interpolation-filters="sRGB">
         <feComponentTransfer>
@@ -20,7 +19,6 @@ const INVERT =
 
 
 class SVGImage extends React.Component {
-
   constructor() {
     super();
     this.fixWeirdSize = this.fixWeirdSize.bind(this);

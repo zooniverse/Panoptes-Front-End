@@ -39,9 +39,11 @@ const SubjectSetsPage = (props) => {
             onClick={props.createNewSubjectSet}
             disabled={props.subjectSetCreationInProgress}
           >
-            New subject set{' '}
+            New subject set
+            {' '}
             <LoadingIndicator off={!props.subjectSetCreationInProgress} />
-          </button>{' '}
+          </button>
+          {' '}
           {props.subjectSetCreationError && (
             <div className="form-help error">{props.subjectSetCreationError.message}</div>
           )}

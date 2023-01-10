@@ -78,7 +78,9 @@ class RuleEditorModal extends Component {
   }
 
   render() {
-    const { formState, handleInputChange, handleSave, valid } = this.props;
+    const {
+      formState, handleInputChange, handleSave, valid
+    } = this.props;
     const StrategyComponent = getStrategyComponent(formState.strategy);
     return (
       <div className="edit-feedback-modal">
@@ -140,8 +142,8 @@ class RuleEditorModal extends Component {
           onChange={this.strategySelectInterface}
         />
 
-        {(StrategyComponent) &&
-          <StrategyComponent formState={formState} handleInputChange={handleInputChange} />
+        {(StrategyComponent)
+          && <StrategyComponent formState={formState} handleInputChange={handleInputChange} />
         }
 
         <div className="edit-feedback-modal__buttons">

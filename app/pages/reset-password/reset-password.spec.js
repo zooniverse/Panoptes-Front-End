@@ -13,24 +13,24 @@ const location = {
   }
 };
 
-describe('ResetPasswordPage', function () {
+describe('ResetPasswordPage', () => {
   let wrapper;
 
-  before(function () {
-    wrapper = shallow(<ResetPasswordPage />, { context: { router: { push: function () {} }}});
+  before(() => {
+    wrapper = shallow(<ResetPasswordPage />, { context: { router: { push() {} }}});
   });
 
-  it('renders without crashing', function () {
+  it('renders without crashing', () => {
     const ResetPasswordPageContainer = wrapper.find('div.centered-grid');
     assert.equal(ResetPasswordPageContainer.length, 1);
   });
 
-  it('renders SubmitEmailForm for a not logged in user', function () {
+  it('renders SubmitEmailForm for a not logged in user', () => {
     wrapper.setProps({ user: null });
     assert.equal(wrapper.find('SubmitEmailForm').length, 1);
   });
 
-  it('renders NewPasswordForm when given a password reset token', function () {
+  it('renders NewPasswordForm when given a password reset token', () => {
     wrapper.setProps({ user, location });
     assert.equal(wrapper.find('NewPasswordForm').length, 1);
   });

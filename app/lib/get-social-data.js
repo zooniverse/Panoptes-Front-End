@@ -10,9 +10,7 @@ function getNewestProject() {
     sort: '-launch_date',
     state: 'live'
   })
-    .then(([newestProject]) => {
-      return newestProject;
-    });
+    .then(([newestProject]) => newestProject);
 }
 
 function getBlogPosts(returnPosts) {

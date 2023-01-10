@@ -1,17 +1,17 @@
-import { cloneElement, useEffect, useState } from 'react'
+import { cloneElement, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Link, IndexLink } from 'react-router';
-import LoadingIndicator from '../../components/loading-indicator.jsx';
 import { Helmet } from 'react-helmet';
 import apiClient from 'panoptes-client/lib/api-client';
 import counterpart from 'counterpart';
+import LoadingIndicator from '../../components/loading-indicator.jsx';
 import isAdmin from '../../lib/is-admin.coffee';
 import LabStatus from '../../partials/lab-status.jsx';
 import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from '../lab-fem/fem-lab-utilities.js';
 
-const DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
-const DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
+const DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set';
+const DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT';
 
 counterpart.registerTranslations('en', {
   projectLab: {
@@ -30,7 +30,7 @@ function RenderError({
         {info?.componentStack ? <pre>{info.componentStack}</pre> : null}
       </p>
     </div>
-  )
+  );
 }
 
 function EditProjectPage({
@@ -59,13 +59,13 @@ function EditProjectPage({
       setDeleteState(oldState => ({ ...oldState, deletionInProgress: true }));
       project.delete()
         .then(() => {
-          router.push('/lab')
+          router.push('/lab');
         })
-        .catch(error => {
-          setDeleteState(oldState => ({ ...oldState, deletionError: error }))
+        .catch((error) => {
+          setDeleteState(oldState => ({ ...oldState, deletionError: error }));
         })
         .then(() => {
-          setDeleteState(oldState => ({ ...oldState, deletionInProgress: false }))
+          setDeleteState(oldState => ({ ...oldState, deletionInProgress: false }));
         });
     }
   }
@@ -82,12 +82,15 @@ function EditProjectPage({
       }
     }
 
-    const { pathname } = location
+    const { pathname } = location;
     return (
       <div className="columns-container content-container">
         <Helmet title={`${counterpart('projectLab.edit')} » ${project.display_name}`} />
         <nav aria-label="Lab navigation">
-          <h2 className="nav-list-header">Project #{project.id}</h2>
+          <h2 className="nav-list-header">
+Project #
+            {project.id}
+          </h2>
           <ul className="nav-list">
             <li>
               <Link
@@ -149,18 +152,20 @@ function EditProjectPage({
                 Tutorial
               </Link>
             </li>
-            {(project.experimental_tools.includes('mini-course')) ?
-              <li>
-                <Link
-                  aria-current={pathname === labPath('/mini-course') ? 'page' : undefined}
-                  to={labPath('/mini-course')}
-                  className="nav-list-item"
-                  title="Create a pop-up mini-course for your project’s classification interface"
-                >
+            {(project.experimental_tools.includes('mini-course'))
+              ? (
+                <li>
+                  <Link
+                    aria-current={pathname === labPath('/mini-course') ? 'page' : undefined}
+                    to={labPath('/mini-course')}
+                    className="nav-list-item"
+                    title="Create a pop-up mini-course for your project’s classification interface"
+                  >
                   Mini-course
-                </Link>
-              </li>
-            : null}
+                  </Link>
+                </li>
+              )
+              : null}
             <li>
               <Link
                 aria-current={pathname === labPath('/media') ? 'page' : undefined}
@@ -221,18 +226,20 @@ function EditProjectPage({
                 Subject Sets
               </Link>
             </li>
-            {(project.experimental_tools?.includes('translator-role') || isAdmin()) ?
-              <li>
-                <Link
-                  aria-current={pathname === labPath('/translations') ? 'page' : undefined}
-                  to={labPath('/translations')}
-                  className="nav-list-item"
-                  title="Preview your project's translations"
-                >
+            {(project.experimental_tools?.includes('translator-role') || isAdmin())
+              ? (
+                <li>
+                  <Link
+                    aria-current={pathname === labPath('/translations') ? 'page' : undefined}
+                    to={labPath('/translations')}
+                    className="nav-list-item"
+                    title="Preview your project's translations"
+                  >
                   Translations
-                </Link>
-              </li>
-            : null}
+                  </Link>
+                </li>
+              )
+              : null}
             <li>
               <h2 className="nav-list-header">Need some help?</h2>
               <ul className="nav-list">
@@ -261,9 +268,9 @@ function EditProjectPage({
               <LoadingIndicator off={!deleteState.deletionInProgress} />
             </button>
           </p>
-          {deleteState.deletionError ?
-            <p className="form-help error">{deleteState.deletionError.message}</p>
-          : null}
+          {deleteState.deletionError
+            ? <p className="form-help error">{deleteState.deletionError.message}</p>
+            : null}
         </nav>
 
         <hr />
@@ -286,48 +293,48 @@ export default function EditProjectPageWrapper({
   user,
   ...props
 }) {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [owners, setOwners] = useState([]);
   const [project, setProject] = useState(null);
-  const [payload, setPayload] = useState([])
+  const [payload, setPayload] = useState([]);
 
   // this replaces the old ChangeHandler component
-  useEffect(function watchProject() {
+  useEffect(() => {
     function onProjectChange(...payload) {
       setPayload(payload);
     }
     project?.listen('change', onProjectChange);
     return () => {
       project?.stopListening('change', onProjectChange);
-    }
+    };
   }, [project]);
 
-  useEffect(function fetchProject() {
+  useEffect(() => {
     if (user) {
-      setLoading(true)
+      setLoading(true);
       apiClient.type('projects')
         .get(params.projectID)
         .catch(() => null)
         .then(setProject)
         .then(() => {
-          setLoading(false)
+          setLoading(false);
         });
     }
   }, [params.projectID, user]);
 
-  useEffect(function fetchOwners() {
+  useEffect(() => {
     if (project && user) {
-      setLoading(true)
+      setLoading(true);
       project?.get('project_roles', { user_id: user.id })
         .catch(() => [])
-        .then(projectRoles => {
+        .then((projectRoles) => {
           const ownerRoles = projectRoles.filter(({ roles }) => roles.includes('owner') || roles.includes('collaborator'));
           const awaitOwners = ownerRoles.map(ownerRole => ownerRole.get('owner'));
-          return Promise.all(awaitOwners)
+          return Promise.all(awaitOwners);
         })
         .then(setOwners)
         .then(() => {
-          setLoading(false)
+          setLoading(false);
         });
     }
   }, [project, user]);
@@ -367,7 +374,7 @@ export default function EditProjectPageWrapper({
       </div>
     );
   } catch (error) {
-    return(
+    return (
       <div className="content-container">
         <p className="form-help error">{error.toString()}</p>
       </div>

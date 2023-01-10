@@ -9,14 +9,16 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { ProjectNavbarNarrow, StyledBackground, StyledOuterWrapper, StyledInnerWrapper } from './ProjectNavbarNarrow';
+import {
+  ProjectNavbarNarrow, StyledBackground, StyledOuterWrapper, StyledInnerWrapper
+} from './ProjectNavbarNarrow';
 
 const MOCK_LINKS = [{ url: 'https://www.google.com' }, { url: 'https://www.yahoo.com' }];
 
-describe('ProjectNavbarNarrow', function() {
+describe('ProjectNavbarNarrow', function () {
   let wrapper;
   const handleOpenSpy = sinon.spy(ProjectNavbarNarrow.prototype, 'handleOpen');
-  before(function() {
+  before(function () {
     wrapper = shallow(
       <ProjectNavbarNarrow
         navLinks={MOCK_LINKS}
@@ -24,9 +26,9 @@ describe('ProjectNavbarNarrow', function() {
     );
   });
 
-  it('should render without crashing', function() {});
+  it('should render without crashing', function () {});
 
-  it('should render a StyledBackground component', function() {
+  it('should render a StyledBackground component', function () {
     expect(wrapper.find(StyledBackground)).to.have.lengthOf(1);
   });
 
@@ -54,8 +56,8 @@ describe('ProjectNavbarNarrow', function() {
     expect(wrapper.find('NarrowMenu')).to.have.lengthOf(1);
   });
 
-  describe('when #handleOpen is toggled', function() {
-    it('should call setState when #handleOpen is toggled', function() {
+  describe('when #handleOpen is toggled', function () {
+    it('should call setState when #handleOpen is toggled', function () {
       const previousState = wrapper.state();
       wrapper.instance().handleOpen();
       expect(handleOpenSpy.calledOnce).to.be.true;

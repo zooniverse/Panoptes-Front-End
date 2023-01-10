@@ -4,7 +4,7 @@ import tasks from './tasks';
 import seenThisSession from '../lib/seen-this-session';
 import getSubjectLocation from '../lib/get-subject-location';
 import WarningBanner from './warning-banner';
-import AnnotationRenderer from './annotation-renderer/';
+import AnnotationRenderer from './annotation-renderer';
 
 export default class FrameAnnotator extends React.Component {
   constructor(props) {

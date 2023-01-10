@@ -66,15 +66,18 @@ class CollectionsManager extends React.Component {
     return (
       <div className="collections-manager">
         <h2 className="collections-manager__header">
-          Add Subject to Collection{' '}<LoadingIndicator off={!this.state.adding} />
+          Add Subject to Collection
+          {' '}
+          <LoadingIndicator off={!this.state.adding} />
         </h2>
 
         <div>
-          {this.state.errors.length > 0 &&
-            <ul>
-              {this.state.errors.map((error, i) =>
-                <li key={i} className="form-help error">{error}</li>)}
-            </ul>}
+          {this.state.errors.length > 0
+            && (
+              <ul>
+                {this.state.errors.map((error, i) => <li key={i} className="form-help error">{error}</li>)}
+              </ul>
+            )}
           <CollectionSearch
             ref={(node) => { this.search = node; }}
             autoFocus={autoFocus}

@@ -9,8 +9,13 @@ class LimitToggle extends Component {
     return (
       <div>
         <AutoSave resource={this.props.editUser}>
-          Subject Limit:{' '}
-          <input type="number" min="1" ref="subjectLimit" name="subject_limit"
+          Subject Limit:
+          {' '}
+          <input
+            type="number"
+            min="1"
+            ref="subjectLimit"
+            name="subject_limit"
             value={this.props.editUser.subject_limit}
             onChange={handleInputChange.bind(this.props.editUser)}
           />

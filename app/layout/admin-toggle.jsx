@@ -5,19 +5,19 @@ import classnames from 'classnames';
 import Translate from 'react-translate-component';
 
 counterpart.registerTranslations('en', {
-  footerAdminMode: 'Admin mode',
+  footerAdminMode: 'Admin mode'
 });
 
 class AdminToggle extends React.Component {
   componentDidMount() {
     apiClient.update({
-      'params.admin': !!localStorage.getItem('adminFlag') || undefined,
+      'params.admin': !!localStorage.getItem('adminFlag') || undefined
     });
   }
 
   toggleAdminMode = (e) => {
     apiClient.update({
-      'params.admin': e.target.checked || undefined,
+      'params.admin': e.target.checked || undefined
     });
 
     if (e.target.checked) {
@@ -31,14 +31,15 @@ class AdminToggle extends React.Component {
     return (
       <label
         className={classnames('footer-admin-toggle', {
-          'footer-admin-toggle--active': !!apiClient.params.admin,
+          'footer-admin-toggle--active': !!apiClient.params.admin
         })}
       >
         <input
           type="checkbox"
           checked={!!apiClient.params.admin}
           onChange={this.toggleAdminMode}
-        />{' '}
+        />
+        {' '}
         <Translate content="footerAdminMode" />
       </label>
     );

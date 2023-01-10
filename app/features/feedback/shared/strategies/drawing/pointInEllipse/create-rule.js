@@ -11,18 +11,18 @@ function createRule(subjectRule, workflowRule) {
     y: subjectRule.y,
     toleranceA: subjectRule.toleranceA || workflowRule.defaultTolerance,
     toleranceB: subjectRule.toleranceB || workflowRule.defaultTolerance,
-    theta: subjectRule.theta || "0",
+    theta: subjectRule.theta || '0',
     falsePosMode: subjectRule.falsePosMode || false
   };
 
   if (rule.failureEnabled && !rule.falsePosMode) {
-    rule.failureMessage = subjectRule.failureMessage ||
-      workflowRule.defaultFailureMessage;
+    rule.failureMessage = subjectRule.failureMessage
+      || workflowRule.defaultFailureMessage;
   }
 
   if (rule.successEnabled) {
-    rule.successMessage = subjectRule.successMessage ||
-      workflowRule.defaultSuccessMessage;
+    rule.successMessage = subjectRule.successMessage
+      || workflowRule.defaultSuccessMessage;
   }
 
   return ruleChecker(rule);

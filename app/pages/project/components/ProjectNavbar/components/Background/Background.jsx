@@ -57,11 +57,13 @@ function Background({ src, ...otherProps }) {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <BackgroundWrapper hasBg={!!src} {...otherProps}>
-        {src &&
-          <ImgBackground src={src}>
-            {isMSBrowser &&
-              <IEContrastLayer />}
-          </ImgBackground>}
+        {src
+          && (
+            <ImgBackground src={src}>
+              {isMSBrowser
+              && <IEContrastLayer />}
+            </ImgBackground>
+          )}
       </BackgroundWrapper>
     </ThemeProvider>
   );

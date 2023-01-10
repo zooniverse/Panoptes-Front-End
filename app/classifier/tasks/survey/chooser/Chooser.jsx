@@ -5,7 +5,6 @@ import CharacteristicsFilter from './CharacteristicsFilter';
 import Choices from './Choices';
 
 class Chooser extends React.Component {
-
   getFilteredChoices() {
     return this.props.task.choicesOrder.map((choiceId) => {
       const choice = this.props.task.choices[choiceId];
@@ -30,7 +29,9 @@ class Chooser extends React.Component {
   }
 
   render() {
-    const { annotation, task, translation, filters, focusedChoice, onChoose, onFilter, onRemove } = this.props;
+    const {
+      annotation, task, translation, filters, focusedChoice, onChoose, onFilter, onRemove
+    } = this.props;
     const filteredChoices = this.getFilteredChoices();
     return (
       <div className="survey-task-chooser">
@@ -64,7 +65,9 @@ class Chooser extends React.Component {
             disabled={Object.keys(filters).length === 0}
             onClick={this.handleClearFilters.bind(this)}
           >
-            <i className="fa fa-ban" /> <Translate content="tasks.survey.clearFilters" />
+            <i className="fa fa-ban" />
+            {' '}
+            <Translate content="tasks.survey.clearFilters" />
           </button>
         </div>
       </div>

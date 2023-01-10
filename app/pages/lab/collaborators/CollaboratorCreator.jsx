@@ -31,8 +31,8 @@ export default function CollaboratorCreator({
     event.preventDefault();
     const checkboxes = rolesTable.current?.querySelectorAll('[name="role"]');
     const users = userSearch.current?.value().map(option => parseInt(option.value));
-    let roles = [];
-    checkboxes.forEach(checkbox => {
+    const roles = [];
+    checkboxes.forEach((checkbox) => {
       if (checkbox.checked) {
         roles.push(checkbox.value);
       }
@@ -75,21 +75,21 @@ export default function CollaboratorCreator({
         checkboxes.forEach(checkbox => checkbox.checked = false);
         onAdd();
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.message.match(/not allowed to create this role/i)) {
           error.message = 'Your account status on this project is still being setup. Please try again later.';
         }
-        setError(error)
+        setError(error);
       })
       .then(() => {
-        setCreating(false)
+        setCreating(false);
       });
   }
 
-  return(
+  return (
     <div>
-      {error &&
-        <p className="form-help error">{error.toString()}</p>
+      {error
+        && <p className="form-help error">{error.toString()}</p>
       }
       <form style={style}>
         <div>
@@ -99,8 +99,8 @@ export default function CollaboratorCreator({
         <table ref={rolesTable} className="standard-table">
           <tbody>
             {Object.entries(possibleRoles).map(([role, label]) => (
-              <tr key={role + '-' + label}>
-                <td><input id={ID_PREFIX + role} type="checkbox" name="role" value={role} disabled={role === 'owner'}/></td>
+              <tr key={`${role}-${label}`}>
+                <td><input id={ID_PREFIX + role} type="checkbox" name="role" value={role} disabled={role === 'owner'} /></td>
                 <td><strong><label htmlFor={ID_PREFIX + role}>{ROLES_INFO[role].label}</label></strong></td>
                 <td>{ROLES_INFO[role].description}</td>
               </tr>

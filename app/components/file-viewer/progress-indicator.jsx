@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 class ProgressIndicator extends React.Component {
-
   progressAsPercentString() {
     // TODO: Implement correct range handling.
     return `${100 * (this.props.progressPosition / this.props.progressRange[1])}%`;
@@ -50,7 +49,6 @@ class ProgressIndicator extends React.Component {
       </div>
     );
   }
-
 }
 
 ProgressIndicator.propTypes = {

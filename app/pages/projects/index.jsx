@@ -5,7 +5,7 @@ import Translate from 'react-translate-component';
 import { browserHistory } from 'react-router';
 import { Helmet } from 'react-helmet';
 
-import ProjectsWelcome from './projects-welcome'
+import ProjectsWelcome from './projects-welcome';
 import StatusLink from './status-link';
 
 counterpart.registerTranslations('en', {

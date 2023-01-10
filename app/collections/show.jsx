@@ -72,7 +72,7 @@ class CollectionPage extends React.Component {
     const title = `${this.props.collection.display_name} (${this.props.collection.links.subjects ? this.props.collection.links.subjects.length : 0})`;
     const baseType = this.props.collection.favorite ? 'favorites' : 'collections';
     let baseLink = '';
-    if (!!this.props.project) {
+    if (this.props.project) {
       baseLink = `/projects/${this.props.project.slug}`;
     }
     const baseCollectionLink = `${baseLink}/collections/${this.props.collection.slug}`;
@@ -81,10 +81,8 @@ class CollectionPage extends React.Component {
     const collectionsLinkMessageKey = `collectionPage.${baseType}Link`;
 
     let userRole = [];
-    if (!!this.props.user) {
-      userRole = this.props.roles.filter((collectionRole) => {
-        return collectionRole.links.owner.id === this.props.user.id;
-      });
+    if (this.props.user) {
+      userRole = this.props.roles.filter(collectionRole => collectionRole.links.owner.id === this.props.user.id);
     }
 
     let displayRole = '';
@@ -105,19 +103,25 @@ class CollectionPage extends React.Component {
             </IndexLink>
             <br />
             <Link to={profileLink} className="collection__link collection-owner">
-              BY {this.props.owner.display_name}
+              BY
+              {' '}
+              {this.props.owner.display_name}
             </Link>
             {displayRole}
           </div>
           <nav className="collection-nav">
-            {this.state.canCollaborate ?
-              <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="collection__link collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
-                <Translate content="collectionPage.settings" />
-              </Link> : null}
-            {this.state.canCollaborate ?
-                <Link to={`${baseCollectionLink}/collaborators`} activeClassName="active" className="collection__link collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
+            {this.state.canCollaborate
+              ? (
+                <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="collection__link collection-nav-item" onClick={this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
+                  <Translate content="collectionPage.settings" />
+                </Link>
+              ) : null}
+            {this.state.canCollaborate
+              ? (
+                <Link to={`${baseCollectionLink}/collaborators`} activeClassName="active" className="collection__link collection-nav-item" onClick={this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
                   <Translate content="collectionPage.collaborators" />
-                </Link> : null}
+                </Link>
+              ) : null}
             <Link to={baseCollectionsLink} className="collection__link collection-nav-item">
               <Translate content={collectionsLinkMessageKey} user={this.props.owner.display_name} />
             </Link>
@@ -206,19 +210,18 @@ class CollectionPageWrapper extends React.Component {
             owner
           });
         });
-    }).catch((e) => {
-      console.error(e);
-      this.setState({
-        error: e,
-        loading: false
+    })
+      .catch((e) => {
+        console.error(e);
+        this.setState({
+          error: e,
+          loading: false
+        });
       });
-    });
   };
 
-  fetchCollectionOwner = (collection) => {
-    return apiClient.type('users').get(collection.links.owner.id)
-      .then(owner => owner);
-  };
+  fetchCollectionOwner = collection => apiClient.type('users').get(collection.links.owner.id)
+    .then(owner => owner);
 
   fetchAllCollectionRoles = (collection, _page = 1) => {
     const fetchAllCollectionRoles = this.fetchAllCollectionRoles;
@@ -258,7 +261,8 @@ class CollectionPageWrapper extends React.Component {
           roles={this.state.roles}
         >
           {this.props.children}
-        </CollectionPage>);
+        </CollectionPage>
+      );
     }
     if (this.state.error) {
       output = <Translate component="p" content="collectionsPageWrapper.error" />;

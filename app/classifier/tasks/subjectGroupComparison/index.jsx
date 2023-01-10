@@ -15,7 +15,9 @@ export default class SubjectGroupComparisonTask extends React.Component {
   }
 
   render() {
-    const { annotation, autoFocus, task, translation } = this.props;
+    const {
+      annotation, autoFocus, task, translation
+    } = this.props;
     if (!task._key) {
       task._key = Math.random();
     }
@@ -34,23 +36,15 @@ export default class SubjectGroupComparisonTask extends React.Component {
 // Define the static methods and values
 SubjectGroupComparisonTask.Editor = SubjectGroupComparisonEditor;
 SubjectGroupComparisonTask.Summary = SubjectGroupComparisonSummary;
-SubjectGroupComparisonTask.getDefaultTask = () => {
-  return {
-    type: 'subjectGroupComparison',
-    question: 'Enter a question.',
-    help: '',
-    required: false
-  };
-};
-SubjectGroupComparisonTask.getTaskText = (task) => {
-  return task.question;
-};
-SubjectGroupComparisonTask.getDefaultAnnotation = () => {
-  return { value: null };
-};
-SubjectGroupComparisonTask.isAnnotationComplete = (task, annotation) => {
-  return (!task.required || annotation.value !== null);
-};
+SubjectGroupComparisonTask.getDefaultTask = () => ({
+  type: 'subjectGroupComparison',
+  question: 'Enter a question.',
+  help: '',
+  required: false
+});
+SubjectGroupComparisonTask.getTaskText = task => task.question;
+SubjectGroupComparisonTask.getDefaultAnnotation = () => ({ value: null });
+SubjectGroupComparisonTask.isAnnotationComplete = (task, annotation) => (!task.required || annotation.value !== null);
 
 SubjectGroupComparisonTask.propTypes = {
   task: PropTypes.shape(

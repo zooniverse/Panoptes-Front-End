@@ -52,7 +52,7 @@ function getMockTasks() {
   //   4 - City (condition:County, allowCreate:false)
   //   5 - Best State Team (condition:State, allowCreate:true)
 
-  return { singleSelect, singleSelectTranslation, multiSelects }
+  return { singleSelect, singleSelectTranslation, multiSelects };
 }
 
 describe('DropdownTask:static methods', function () {
@@ -112,7 +112,7 @@ describe('DropdownTask:static methods', function () {
 describe('DropdownTask', function () {
   describe('with single select', function () {
     let wrapper;
-    
+
     before(function () {
       const annotation = { value: [{ value: 0, option: true }] };
       const { singleSelect, singleSelectTranslation } = getMockTasks();
@@ -125,7 +125,7 @@ describe('DropdownTask', function () {
           onChange={function (a) { return a; }}
         />, mockReduxStore
       );
-    })
+    });
 
     it('should show that 0 is selected', function () {
       assert.deepEqual(wrapper.find(Select).prop('value'), { label: '0', value: 0 });
@@ -232,13 +232,15 @@ describe('DropdownTask', function () {
       const { multiSelects } = getMockTasks();
 
       beforeEach(function () {
-        annotation = { value: [
-          { value: 'USA-value', option: true },
-          { value: null, option: false },
-          { value: null, option: false },
-          { value: null, option: false },
-          { value: null, option: false }
-        ] };
+        annotation = {
+          value: [
+            { value: 'USA-value', option: true },
+            { value: null, option: false },
+            { value: null, option: false },
+            { value: null, option: false },
+            { value: null, option: false }
+          ]
+        };
 
         wrapper = mount(<DropdownTask task={multiSelects} translation={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />, mockReduxStore);
       });
@@ -272,13 +274,15 @@ describe('DropdownTask', function () {
       const { multiSelects } = getMockTasks();
 
       beforeEach(function () {
-        annotation = { value: [
-          { value: 'Mypos-value', option: true },
-          { value: 'Rohan-value', option: true },
-          { value: 'GothamCounty-value', option: true },
-          { value: 'Gotham-value', option: true },
-          { value: 'Isotopes-value', option: true }
-        ] };
+        annotation = {
+          value: [
+            { value: 'Mypos-value', option: true },
+            { value: 'Rohan-value', option: true },
+            { value: 'GothamCounty-value', option: true },
+            { value: 'Gotham-value', option: true },
+            { value: 'Isotopes-value', option: true }
+          ]
+        };
 
         wrapper = mount(<DropdownTask task={multiSelects} translation={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />, mockReduxStore);
       });
@@ -313,13 +317,15 @@ describe('DropdownTask', function () {
       const { multiSelects } = getMockTasks();
 
       beforeEach(function () {
-        annotation = { value: [
-          { value: 'Canada-value', option: true },
-          { value: 'QC', option: true },
-          { value: 'Laval', option: false },
-          { value: null, option: false },
-          { value: 'Rocket', option: false }
-        ] };
+        annotation = {
+          value: [
+            { value: 'Canada-value', option: true },
+            { value: 'QC', option: true },
+            { value: 'Laval', option: false },
+            { value: null, option: false },
+            { value: 'Rocket', option: false }
+          ]
+        };
 
         wrapper = mount(<DropdownTask task={multiSelects} translation={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />, mockReduxStore);
       });
@@ -348,8 +354,8 @@ describe('DropdownTask', function () {
     });
 
     describe('and component updated', function () {
-      let onChangeSpy
-      let wrapper
+      let onChangeSpy;
+      let wrapper;
       const { singleSelect, multiSelects } = getMockTasks();
 
       before(function () {
@@ -359,7 +365,7 @@ describe('DropdownTask', function () {
 
         wrapper = mount(<DropdownTask task={multiSelects} translation={multiSelects} annotation={annotation1} onChange={onChangeSpy} />, mockReduxStore);
         wrapper.setProps({ task: singleSelect, annotation: annotation2 });
-      })
+      });
 
       it('should render all selects', function () {
         const renderedSelects = wrapper.find(Select);

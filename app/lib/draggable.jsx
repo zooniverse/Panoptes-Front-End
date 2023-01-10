@@ -121,4 +121,3 @@ Draggable.defaultProps = {
 
 export default React.memo(Draggable);
 export { Draggable };
-

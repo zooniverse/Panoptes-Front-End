@@ -78,11 +78,16 @@ class CollectionsCreateForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.onSubmit} className="collections-create-form">
-        {this.props.project &&
-          <span>This collection will be linked to {this.props.project.display_name}</span>}
+        {this.props.project
+          && (
+            <span>
+This collection will be linked to
+              {this.props.project.display_name}
+            </span>
+          )}
         <div className="form-help error">
-          {this.state.error &&
-              this.renderError()}
+          {this.state.error
+              && this.renderError()}
         </div>
         <input
           className="collection-create-form__input--name"

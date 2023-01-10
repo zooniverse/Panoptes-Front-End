@@ -4,8 +4,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import { Draggable } from './draggable';
 
-describe('Draggable', function () {
-  
+describe('Draggable', () => {
   function testDragEnabled(startEvent, dragEvent, endEvent, usePointer) {
     let wrapper;
     let handleDrag = () => false;
@@ -14,7 +13,7 @@ describe('Draggable', function () {
     let onDrag;
     let onEnd;
 
-    before(function () {
+    before(() => {
       onStart = sinon.stub();
       onDrag = sinon.stub().callsFake((e, d) => d);
       onEnd = sinon.stub();
@@ -30,9 +29,9 @@ describe('Draggable', function () {
       );
     });
 
-    describe('on ' + startEvent, function () {
+    describe(`on ${startEvent}`, () => {
       let fakeEvent;
-      before(function () {
+      before(() => {
         document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
           if (eventType === dragEvent) handleDrag = handler;
           if (eventType === endEvent) handleEnd = handler;
@@ -47,32 +46,32 @@ describe('Draggable', function () {
         };
         wrapper.find('p').simulate(startEvent, fakeEvent);
       });
-      after(function () {
+      after(() => {
         onStart.resetHistory();
         onDrag.resetHistory();
         onEnd.resetHistory();
       });
-      it('should cancel the default event', function () {
+      it('should cancel the default event', () => {
         expect(fakeEvent.preventDefault.callCount).to.equal(1);
       });
-      it('should not cancel event bubbling', function () {
+      it('should not cancel event bubbling', () => {
         expect(fakeEvent.stopPropagation.callCount).to.equal(0);
       });
-      it('should add two event listeners', function () {
+      it('should add two event listeners', () => {
         expect(document.body.addEventListener.callCount).to.equal(2);
       });
-      it('should add a listener for ' + dragEvent, function () {
+      it(`should add a listener for ${dragEvent}`, () => {
         expect(document.body.addEventListener.calledWith(dragEvent)).to.be.true;
       });
-      it('should add a listener for ' + endEvent, function () {
+      it(`should add a listener for ${endEvent}`, () => {
         expect(document.body.addEventListener.calledWith(endEvent)).to.be.true;
       });
-      it('should call the onStart callback', function () {
+      it('should call the onStart callback', () => {
         expect(onStart.callCount).to.equal(1);
       });
-      describe('on drag', function () {
-        let fakeEvent
-        before(function () {
+      describe('on drag', () => {
+        let fakeEvent;
+        before(() => {
           fakeEvent = {
             preventDefault: sinon.stub(),
             stopPropagation: sinon.stub(),
@@ -82,33 +81,33 @@ describe('Draggable', function () {
           };
           handleDrag(fakeEvent);
         });
-        it('should call the onDrag callback', function () {
+        it('should call the onDrag callback', () => {
           expect(onDrag.callCount).to.equal(1);
         });
-        it('should pass the change in x', function () {
+        it('should pass the change in x', () => {
           expect(onDrag.returnValues[0].x).to.equal(50);
         });
-        it('should pass the change in y', function () {
+        it('should pass the change in y', () => {
           expect(onDrag.returnValues[0].y).to.equal(70);
         });
-        it('should cancel the default event', function () {
+        it('should cancel the default event', () => {
           expect(fakeEvent.preventDefault.callCount).to.equal(1);
         });
-        it('should cancel event bubbling', function () {
+        it('should cancel event bubbling', () => {
           expect(fakeEvent.stopPropagation.callCount).to.equal(1);
         });
       });
-      describe('on drag end', function () {
-        before(function () {
+      describe('on drag end', () => {
+        before(() => {
           handleEnd({});
         });
-        it('should remove the ' + dragEvent + ' listener', function () {
+        it(`should remove the ${dragEvent} listener`, () => {
           expect(document.body.removeEventListener.calledWith(dragEvent)).to.be.true;
         });
-        it('should remove the ' + endEvent + ' listener', function () {
+        it(`should remove the ${endEvent} listener`, () => {
           expect(document.body.removeEventListener.calledWith(endEvent)).to.be.true;
         });
-        it('should call the onEnd callback', function () {
+        it('should call the onEnd callback', () => {
           expect(onEnd.callCount).to.equal(1);
         });
       });
@@ -122,7 +121,7 @@ describe('Draggable', function () {
     let onStart;
     let onDrag;
     let onEnd;
-    before(function () {
+    before(() => {
       onStart = sinon.stub();
       onDrag = sinon.stub().callsFake((e, d) => d);
       onEnd = sinon.stub();
@@ -138,9 +137,9 @@ describe('Draggable', function () {
       );
     });
 
-    describe('on ' + startEvent, function () {
+    describe(`on ${startEvent}`, () => {
       let fakeEvent;
-      before(function () {
+      before(() => {
         document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
           if (eventType === dragEvent) handleDrag = handler;
           if (eventType === endEvent) handleEnd = handler;
@@ -154,74 +153,72 @@ describe('Draggable', function () {
         };
         wrapper.find('p').simulate(startEvent, fakeEvent);
       });
-      after(function () {
+      after(() => {
         onStart.resetHistory();
         onDrag.resetHistory();
         onEnd.resetHistory();
       });
-      it('should not cancel the default event', function () {
+      it('should not cancel the default event', () => {
         expect(fakeEvent.preventDefault.callCount).to.equal(0);
       });
-      it('should not add two event listeners', function () {
+      it('should not add two event listeners', () => {
         expect(document.body.addEventListener.callCount).to.equal(0);
       });
-      it('should not add a listener for ' + dragEvent, function () {
+      it(`should not add a listener for ${dragEvent}`, () => {
         expect(document.body.addEventListener.calledWith(dragEvent)).to.be.false;
       });
-      it('should not add a listener for ' + endEvent, function () {
+      it(`should not add a listener for ${endEvent}`, () => {
         expect(document.body.addEventListener.calledWith(endEvent)).to.be.false;
       });
-      it('should not call the onStart callback', function () {
+      it('should not call the onStart callback', () => {
         expect(onStart.callCount).to.equal(0);
       });
-      describe('on drag', function () {
-        let fakeEvent
-        before(function () {
+      describe('on drag', () => {
+        let fakeEvent;
+        before(() => {
           fakeEvent = {
             pageX: 100,
             pageY: 100
           };
           handleDrag(fakeEvent);
         });
-        it('should not call the onDrag callback', function () {
+        it('should not call the onDrag callback', () => {
           expect(onDrag.callCount).to.equal(0);
         });
       });
-      describe('on drag end', function () {
-        before(function () {
+      describe('on drag end', () => {
+        before(() => {
           handleEnd({});
         });
-        it('should not call the onEnd callback', function () {
+        it('should not call the onEnd callback', () => {
           expect(onEnd.callCount).to.equal(0);
         });
       });
     });
   }
 
-  describe('with no support for pointer events', function () {
-
+  describe('with no support for pointer events', () => {
     testDragEnabled('mousedown', 'mousemove', 'mouseup', false);
     testDragEnabled('touchstart', 'touchmove', 'touchend', false);
     testDragDisabled('pointerdown', 'pointermove', 'pointerup', false);
   });
 
-  describe('with support for pointer events', function () {
-    
+  describe('with support for pointer events', () => {
     testDragDisabled('mousedown', 'mousemove', 'mouseup', true);
     testDragDisabled('touchstart', 'touchmove', 'touchend', true);
     testDragEnabled('pointerdown', 'pointermove', 'pointerup', true);
-  })
+  });
 
-  describe('when disabled', function () {
+  describe('when disabled', () => {
     let wrapper;
-    before(function () {
+    before(() => {
       document.body.addEventListener = sinon.stub().callsFake((eventType, handler) => {
         if (eventType === 'mousemove') handleDrag = handler;
         if (eventType === 'mouseup') handleEnd = handler;
       });
       wrapper = shallow(
         <Draggable
-          disabled
+          disabled={true}
           onStart={sinon.stub()}
           onDrag={sinon.stub()}
           onEnd={sinon.stub()}
@@ -231,21 +228,21 @@ describe('Draggable', function () {
       );
     });
 
-    it('should not respond to mousedown', function () {
+    it('should not respond to mousedown', () => {
       wrapper.find('p').simulate('mousedown');
       expect(document.body.addEventListener.callCount).to.equal(0);
     });
-    it('should not respond to touchstart', function () {
+    it('should not respond to touchstart', () => {
       wrapper.find('p').simulate('touchstart');
       expect(document.body.addEventListener.callCount).to.equal(0);
     });
-    it('should not respond to pointerdown', function () {
+    it('should not respond to pointerdown', () => {
       wrapper.find('p').simulate('pointerdown');
       expect(document.body.addEventListener.callCount).to.equal(0);
     });
   });
 
-  describe('with multitouch gestures', function () {
+  describe('with multitouch gestures', () => {
     let wrapper;
     let handleDrag = () => false;
     let handleEnd = () => false;
@@ -266,10 +263,10 @@ describe('Draggable', function () {
             pageY: 60
           }
         ]
-      }
+      };
     }
 
-    before(function () {
+    before(() => {
       onStart = sinon.stub();
       onDrag = sinon.stub().callsFake((e, d) => d);
       onEnd = sinon.stub();
@@ -288,23 +285,23 @@ describe('Draggable', function () {
       });
     });
 
-    it('should not respond to touchstart', function () {
+    it('should not respond to touchstart', () => {
       wrapper.find('p').simulate('touchstart', fakeEvent('touchstart'));
       expect(onStart.callCount).to.equal(0);
     });
 
-    it('should not cancel the default start event', function () {
+    it('should not cancel the default start event', () => {
       const startEvent = fakeEvent('touchstart');
       wrapper.find('p').simulate('touchstart', startEvent);
       expect(startEvent.preventDefault.callCount).to.equal(0);
     });
 
-    it('should not respond to touchmove', function () {
+    it('should not respond to touchmove', () => {
       handleDrag(fakeEvent('touchmove'));
       expect(onDrag.callCount).to.equal(0);
     });
 
-    it('should not respond to touchend', function () {
+    it('should not respond to touchend', () => {
       handleEnd(fakeEvent('touchend'));
       expect(onEnd.callCount).to.equal(0);
     });

@@ -39,9 +39,7 @@ export default class ActiveUsers extends React.Component {
 
   getActiveUserIds() {
     return sugarApiClient.get('/active_users', { channel: this.props.section })
-      .then(activeUserIds =>
-        activeUserIds.map(user => user.id).reverse()
-      )
+      .then(activeUserIds => activeUserIds.map(user => user.id).reverse())
       .catch(() => {
         this.restartTimer();
       });
@@ -149,19 +147,19 @@ export default class ActiveUsers extends React.Component {
       );
     }
 
-    return null
+    return null;
   }
 
   render() {
     return (
       <div className="talk-active-users">
         <h3>
-          {this.state.total} Active Participants:
+          {this.state.total}
+          {' '}
+Active Participants:
         </h3>
         <ul>
-          {this.state.users.map(user =>
-            this.userLink(user)
-          )}
+          {this.state.users.map(user => this.userLink(user))}
         </ul>
         {this.state.pageCount > 1 && (
           <Paginator

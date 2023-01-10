@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 
-const SubmitEmailForm = ({ user, onSubmit, onChange, disabled, inProgress, emailSuccess, emailError }) => {
+const SubmitEmailForm = ({
+  user, onSubmit, onChange, disabled, inProgress, emailSuccess, emailError
+}) => {
   if (user) {
     return (
       <Translate
@@ -33,27 +35,32 @@ const SubmitEmailForm = ({ user, onSubmit, onChange, disabled, inProgress, email
           disabled={disabled}
         >
           Submit
-        </button>{' '}
+        </button>
+        {' '}
 
-        {inProgress &&
-          <i className="fa fa-spinner fa-spin form-help" />}
+        {inProgress
+          && <i className="fa fa-spinner fa-spin form-help" />}
 
-        {emailSuccess &&
-          <i className="fa fa-check-circle form-help success" />}
+        {emailSuccess
+          && <i className="fa fa-check-circle form-help success" />}
       </p>
 
-      {emailSuccess &&
-        <Translate
-          component="p"
-          content="resetPassword.emailSuccess"
-        />}
+      {emailSuccess
+        && (
+          <Translate
+            component="p"
+            content="resetPassword.emailSuccess"
+          />
+        )}
 
-      {emailError &&
-        <Translate
-          className="form-help error"
-          component="small"
-          content="resetPassword.emailError"
-        />}
+      {emailError
+        && (
+          <Translate
+            className="form-help error"
+            component="small"
+            content="resetPassword.emailError"
+          />
+        )}
       <p>
         <Translate
           component="small"

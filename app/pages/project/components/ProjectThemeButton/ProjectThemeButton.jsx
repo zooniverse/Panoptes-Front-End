@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as userInterfaceActions from '../../../../redux/ducks/userInterface';
 
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
+import * as userInterfaceActions from '../../../../redux/ducks/userInterface';
 import { pxToRem, zooTheme } from '../../../../theme';
 
 export const StyledProjectThemeButtonWrapper = styled.p`
@@ -42,7 +42,7 @@ export const StyledProjectThemeButton = styled.button.attrs({
 
 export class ProjectThemeButton extends React.Component {
   static defaultProps = {
-    actions: { theme: { setTheme: () => {} } },
+    actions: { theme: { setTheme: () => {} }},
     theme: 'light'
   }
 
@@ -61,7 +61,7 @@ export class ProjectThemeButton extends React.Component {
 
   toggleTheme() {
     const newTheme = (this.props.theme === zooTheme.mode.light) ? zooTheme.mode.dark : zooTheme.mode.light;
-    this.props.actions.theme.setTheme(newTheme)
+    this.props.actions.theme.setTheme(newTheme);
   }
 
   render() {

@@ -7,18 +7,18 @@ class WrappedMarkdown extends React.Component {
   static propTypes = {
     content: PropTypes.string,
     project: PropTypes.object,
-    header: PropTypes.string,
+    header: PropTypes.string
   };
 
   onClick = (e) => {
     const rightButtonPressed = (!!e.button && e.button > 0);
     const modifierKey = (e.ctrlKey || e.metaKey);
     const hasNamedTarget = e.target.target;
-    if (e.target.origin === window.location.origin &&
-      e.target.pathname !== window.location.pathname &&
-      !rightButtonPressed &&
-      !modifierKey &&
-      !hasNamedTarget) {
+    if (e.target.origin === window.location.origin
+      && e.target.pathname !== window.location.pathname
+      && !rightButtonPressed
+      && !modifierKey
+      && !hasNamedTarget) {
       const newURL = e.target.pathname + e.target.search + e.target.hash;
       browserHistory.push(newURL);
       e.preventDefault();
@@ -29,7 +29,7 @@ class WrappedMarkdown extends React.Component {
     return (
       <div onClick={this.onClick}>
         <Markdown
-          relNofollow
+          relNofollow={true}
           content={this.props.content}
           project={this.props.project}
           header={this.props.header}

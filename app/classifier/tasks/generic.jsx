@@ -40,18 +40,17 @@ class GenericTask extends React.Component {
       rtl: translations.rtl
     });
     alert(
-      (resolve, reject) =>
-        (
-          <div
-            className={className}
-            lang={translations.locale}
-          >
-            <Markdown className="classification-task-help">
-              {this.props.help}
-            </Markdown>
-            <button className="standard-button" onClick={reject}>Close</button>
-          </div>
-        )
+      (resolve, reject) => (
+        <div
+          className={className}
+          lang={translations.locale}
+        >
+          <Markdown className="classification-task-help">
+            {this.props.help}
+          </Markdown>
+          <button className="standard-button" onClick={reject}>Close</button>
+        </div>
+      )
     );
   }
 
@@ -81,8 +80,8 @@ class GenericTask extends React.Component {
           )}
         </div>
         {required}
-        {this.props.help &&
-          <TaskHelpButton onClick={this.showHelp} />}
+        {this.props.help
+          && <TaskHelpButton onClick={this.showHelp} />}
       </div>
     );
   }

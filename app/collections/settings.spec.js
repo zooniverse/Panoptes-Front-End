@@ -38,8 +38,7 @@ describe('<CollectionSettings />', function () {
       canCollaborate={true}
       collection={collectionWithoutDefaultSubject}
     />,
-      { context: { router: {}}}
-    );
+    { context: { router: {}}});
     deleteButton = wrapper.find('button.error');
   });
   after(function () {

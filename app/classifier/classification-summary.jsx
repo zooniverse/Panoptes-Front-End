@@ -23,7 +23,6 @@ class ClassificationSummary extends React.Component {
     };
 
     this.hasExpert = !!this.props.expertClassification;
-
   }
 
   isSubjectASim() {
@@ -39,10 +38,10 @@ class ClassificationSummary extends React.Component {
   }
 
   showExoplanetSimFeedback() {
-    return (this.props.workflow.configuration &&
-      this.props.workflow.configuration.sim_notification &&
-      this.isSubjectASim() &&
-      this.props.classification.annotations[0].value === 0
+    return (this.props.workflow.configuration
+      && this.props.workflow.configuration.sim_notification
+      && this.isSubjectASim()
+      && this.props.classification.annotations[0].value === 0
     );
   }
 
@@ -60,9 +59,9 @@ class ClassificationSummary extends React.Component {
       );
     }
 
-    if (this.props.workflow.configuration &&
-        this.props.workflow.configuration.custom_summary &&
-        this.props.workflow.configuration.custom_summary.includes('world_wide_telescope')) {
+    if (this.props.workflow.configuration
+        && this.props.workflow.configuration.custom_summary
+        && this.props.workflow.configuration.custom_summary.includes('world_wide_telescope')) {
       return (
         <strong>
           <WorldWideTelescope
@@ -75,10 +74,10 @@ class ClassificationSummary extends React.Component {
       );
     }
 
-    if (this.props.workflow.configuration &&
-        this.props.workflow.configuration.custom_summary) {
+    if (this.props.workflow.configuration
+        && this.props.workflow.configuration.custom_summary) {
       summariesHook.push(
-        <Markdown className='classification-summary'>
+        <Markdown className="classification-summary">
           {this.props.workflow.configuration.custom_summary}
         </Markdown>
       );
@@ -92,13 +91,15 @@ class ClassificationSummary extends React.Component {
 
     return (
       <div>
-        { this.hasExpert ?
-          <div className="has-expert-classification">
+        { this.hasExpert
+          ? (
+            <div className="has-expert-classification">
             Expert classification available.&nbsp;
-            { this.state.showExpert ?
-              <button type="button" onClick={this.dontShowExpert}>Hide</button> :
-              <button type="button" onClick={this.doShowExpert}>Show</button> }
-          </div> : '' }
+              { this.state.showExpert
+                ? <button type="button" onClick={this.dontShowExpert}>Hide</button>
+                : <button type="button" onClick={this.doShowExpert}>Show</button> }
+            </div>
+          ) : '' }
 
         <div>
           { summariesHook.length ? summariesHook.map(item => item) : null }

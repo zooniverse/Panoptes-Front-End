@@ -6,9 +6,7 @@ import ExternalLink from './components/ExternalLink';
 import { zooTheme } from '../../theme';
 
 export const StyledExternalLinksBlock = styled.div`
-  background-color: ${({ isItAProject }) => {
-    return (isItAProject) ? zooTheme.colors.lightTheme.background.default : 'white';
-  }};
+  background-color: ${({ isItAProject }) => ((isItAProject) ? zooTheme.colors.lightTheme.background.default : 'white')};
   box-sizing: border-box;
   color: ${theme('mode', {
     light: zooTheme.colors.navy.default
@@ -76,7 +74,9 @@ export default function ExternalLinksBlock({
         {header}
         <ul>
           {links.map((link) => {
-            const { isExternalLink, isSocialLink, label, path, site, url } = link;
+            const {
+              isExternalLink, isSocialLink, label, path, site, url
+            } = link;
             return (
               <li key={url}>
                 <StyledExternalLink

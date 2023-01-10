@@ -4,7 +4,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import TextTask from './';
+import TextTask from '.';
 import TextSummary from './summary';
 import { mockReduxStore, textTypeAnnotation, textTypeTask } from '../testHelpers';
 
@@ -57,7 +57,8 @@ describe('TextTask', function () {
           onChange={onChangeSpy}
           task={textTypeTask}
           translation={textTypeTask}
-        />, mockReduxStore);
+        />, mockReduxStore
+      );
     });
 
     afterEach(function () {

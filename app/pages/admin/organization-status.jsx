@@ -76,23 +76,30 @@ class OrganizationStatus extends Component {
 
     return (
       <ul className="project-status__section-list">
-        {this.state.projects.map(project =>
+        {this.state.projects.map(project => (
           <li key={project.id} className="section-list__item">
             <Link to={`/admin/project_status/${project.slug}`}>{`${project.id} - ${project.display_name}`}</Link>
             <ul className="project-status__section-list">
               <li className="project-status__org-project-list-item">
-                Private: {project.private.toString()}
+                Private:
+                {' '}
+                {project.private.toString()}
               </li>
               <li className="project-status__org-project-list-item">
-                Live: {project.live.toString()}
+                Live:
+                {' '}
+                {project.live.toString()}
               </li>
               <li className="project-status__org-project-list-item">
-                Launch Approved: {project.launch_approved.toString()}
+                Launch Approved:
+                {' '}
+                {project.launch_approved.toString()}
               </li>
             </ul>
           </li>
-        )}
-      </ul>);
+        ))}
+      </ul>
+    );
   }
 
   render() {
@@ -106,7 +113,9 @@ class OrganizationStatus extends Component {
         <div className="project-status__section">
           <h4>Information</h4>
           <ul>
-            <li>Id:{' '}
+            <li>
+Id:
+              {' '}
               <a href={`${LAB_APP_URL}/organizations/${this.state.organization.id}`}>
                 {this.state.organization.id}
               </a>
@@ -116,7 +125,8 @@ class OrganizationStatus extends Component {
           <ul className="project-status__section-list">
             <li>
               <label htmlFor="listed-true" style={{ whiteSpace: 'nowrap' }}>
-                Listed:{' '}
+                Listed:
+                {' '}
                 <input
                   name="listed"
                   type="checkbox"
@@ -127,7 +137,8 @@ class OrganizationStatus extends Component {
               </label>
             </li>
             <li>
-              Listed At:{' '}
+              Listed At:
+              {' '}
               {this.state.organization.listed ? moment(this.state.organization.listed_at).calendar() : 'N/A'}
             </li>
             <li>{this.renderError()}</li>

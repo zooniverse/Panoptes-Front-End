@@ -105,7 +105,9 @@ export default class RotateRectangleTool extends React.Component {
   }
 
   render() {
-    const { x, y, width, height, angle } = this.props.mark;
+    const {
+      x, y, width, height, angle
+    } = this.props.mark;
     const xCenter = width / 2;
     const yCenter = height / 2;
     const deletePosition = this.getDeletePosition(0, width);

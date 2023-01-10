@@ -21,7 +21,9 @@ export default class SingleChoiceTask extends React.Component {
   }
 
   render() {
-    const { annotation, autoFocus, task, translation } = this.props;
+    const {
+      annotation, autoFocus, task, translation
+    } = this.props;
     if (!task._key) {
       task._key = Math.random();
     }
@@ -62,24 +64,16 @@ export default class SingleChoiceTask extends React.Component {
 // Define the static methods and values
 SingleChoiceTask.Editor = GenericTaskEditor;
 SingleChoiceTask.Summary = SingleChoiceSummary;
-SingleChoiceTask.getDefaultTask = () => {
-  return {
-    type: 'single',
-    question: 'Enter a question.',
-    help: '',
-    required: false,
-    answers: []
-  };
-};
-SingleChoiceTask.getTaskText = (task) => {
-  return task.question;
-};
-SingleChoiceTask.getDefaultAnnotation = () => {
-  return { value: null };
-};
-SingleChoiceTask.isAnnotationComplete = (task, annotation) => {
-  return (!task.required || annotation.value !== null);
-};
+SingleChoiceTask.getDefaultTask = () => ({
+  type: 'single',
+  question: 'Enter a question.',
+  help: '',
+  required: false,
+  answers: []
+});
+SingleChoiceTask.getTaskText = task => task.question;
+SingleChoiceTask.getDefaultAnnotation = () => ({ value: null });
+SingleChoiceTask.isAnnotationComplete = (task, annotation) => (!task.required || annotation.value !== null);
 
 SingleChoiceTask.propTypes = {
   task: PropTypes.shape(

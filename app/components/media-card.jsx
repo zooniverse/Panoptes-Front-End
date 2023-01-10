@@ -5,7 +5,9 @@ import Thumbnail from './thumbnail';
 const IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'svg'];
 const VIDEO_EXTENSIONS = ['mp4'];
 
-const MediaCard = ({ children, className, src, style }) => {
+const MediaCard = ({
+  children, className, src, style
+}) => {
   const srcExtension = src.split('.').pop().toLowerCase();
   let renderType;
 
@@ -15,9 +17,9 @@ const MediaCard = ({ children, className, src, style }) => {
     renderType = (
       <video
         className="media-card-media"
-        autoPlay
-        loop
-        controls
+        autoPlay={true}
+        loop={true}
+        controls={true}
         src={src}
       >
         <p>Your browser does not support this video format.</p>
@@ -26,11 +28,12 @@ const MediaCard = ({ children, className, src, style }) => {
   } else console.warn(`Not sure how to render ${src}`);
 
   return (
-    <div className={`media-card ${className}`} style={style} >
+    <div className={`media-card ${className}`} style={style}>
       {src && (
         <div className="media-card-header">
           {renderType}
-        </div>)}
+        </div>
+      )}
 
       {children && (
         <div className="media-card-content">{children}</div>)}

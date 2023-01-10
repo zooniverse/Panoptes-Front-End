@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import generateRules from './generate-rules';
 
-describe('feedback: generateRules', function () {
+describe('feedback: generateRules', () => {
   function mockSubjectWithRule(ruleID) {
     return {
       metadata: {
@@ -28,28 +28,28 @@ describe('feedback: generateRules', function () {
     };
   }
   function testSubjectAndWorkflow(subject, workflow) {
-    it('should generate rules for tasks with feedback enabled', function () {
+    it('should generate rules for tasks with feedback enabled', () => {
       expect(generateRules(subject, workflow)).to.have.property('T0');
     });
-    it('should not generate rules for tasks with feedback disabled', function () {
+    it('should not generate rules for tasks with feedback disabled', () => {
       expect(generateRules(subject, workflow)).not.to.have.property('T1');
     });
-    it('should copy subject rules', function () {
+    it('should copy subject rules', () => {
       const taskFeedbackRule = generateRules(subject, workflow).T0[0];
       expect(taskFeedbackRule).to.have.property('failureMessage');
       expect(taskFeedbackRule.failureMessage).to.equal('Actually, this sound is from noise (background)');
     });
   }
 
-  describe('without feedback defined', function () {
+  describe('without feedback defined', () => {
     const subject = {};
     const workflow = {};
-    it('should return an empty object', function () {
+    it('should return an empty object', () => {
       expect(generateRules(subject, workflow)).to.be.empty;
     });
   });
 
-  describe('with task feedback enabled', function () {
+  describe('with task feedback enabled', () => {
     const subject = mockSubjectWithRule('51');
     const workflow = {
       tasks: {
@@ -60,7 +60,7 @@ describe('feedback: generateRules', function () {
     testSubjectAndWorkflow(subject, workflow);
   });
 
-  describe('with a numeric rule ID', function () {
+  describe('with a numeric rule ID', () => {
     const subject = mockSubjectWithRule(51);
     const workflow = {
       tasks: {
@@ -71,7 +71,7 @@ describe('feedback: generateRules', function () {
     testSubjectAndWorkflow(subject, workflow);
   });
 
-  describe('with an alphanumeric rule ID', function () {
+  describe('with an alphanumeric rule ID', () => {
     const subject = mockSubjectWithRule('feedback rule');
     const workflow = {
       tasks: {
@@ -82,42 +82,41 @@ describe('feedback: generateRules', function () {
     testSubjectAndWorkflow(subject, workflow);
   });
 
-  describe('with no matching rules', function () {
-    describe('when the workflow rule ID is truthy', function () {
+  describe('with no matching rules', () => {
+    describe('when the workflow rule ID is truthy', () => {
       const workflow = {
         tasks: {
           T0: mockTaskWithRule('1')
         }
       };
 
-      it('should return an empty object for a falsy subject rule ID', function () {
+      it('should return an empty object for a falsy subject rule ID', () => {
         const subject = mockSubjectWithRule(0);
         expect(generateRules(subject, workflow)).to.be.empty;
       });
 
-      it('should return an empty object for a truthy subject rule ID', function () {
+      it('should return an empty object for a truthy subject rule ID', () => {
         const subject = mockSubjectWithRule('0');
         expect(generateRules(subject, workflow)).to.be.empty;
       });
-    })
+    });
 
-    describe('when the workflow rule ID is falsy', function () {
+    describe('when the workflow rule ID is falsy', () => {
       const workflow = {
         tasks: {
           T0: mockTaskWithRule(0)
         }
       };
 
-      it('should return an empty object for a numeric subject rule ID', function () {
+      it('should return an empty object for a numeric subject rule ID', () => {
         const subject = mockSubjectWithRule(1);
         expect(generateRules(subject, workflow)).to.be.empty;
       });
 
-      it('should return an empty object for a string subject rule ID', function () {
+      it('should return an empty object for a string subject rule ID', () => {
         const subject = mockSubjectWithRule('1');
         expect(generateRules(subject, workflow)).to.be.empty;
       });
-      
-    })
+    });
   });
 });

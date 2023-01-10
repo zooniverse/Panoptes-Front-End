@@ -14,13 +14,13 @@ import {
   workflow
 } from '../../../../../test';
 
-describe('ProjectNavbarContainer', function() {
+describe('ProjectNavbarContainer', () => {
   let wrapper;
   const getNavLinksSpy = sinon.spy(ProjectNavbarContainer.prototype, 'getNavLinks');
   const getOrganizationLinkSpy = sinon.spy(ProjectNavbarContainer.prototype, 'getOrganizationLink');
   const getProjectLinksSpy = sinon.spy(ProjectNavbarContainer.prototype, 'getProjectLinks');
 
-  before(function() {
+  before(() => {
     getNavLinksSpy.resetHistory();
     getProjectLinksSpy.resetHistory();
     getOrganizationLinkSpy.resetHistory();
@@ -39,21 +39,21 @@ describe('ProjectNavbarContainer', function() {
     );
   });
 
-  it('should render without crashing', function() {});
+  it('should render without crashing', () => {});
 
-  it('should call getNavLinks on render', function() {
+  it('should call getNavLinks on render', () => {
     expect(getNavLinksSpy.calledOnce).to.be.true;
   });
 
-  it('should call getProjectLinks on render', function() {
+  it('should call getProjectLinks on render', () => {
     expect(getProjectLinksSpy.calledOnce).to.be.true;
   });
 
-  it('should call getOrganizationLink on render', function() {
+  it('should call getOrganizationLink on render', () => {
     expect(getOrganizationLinkSpy.calledOnce).to.be.true;
   });
 
-  it('renders ProjectNavbar', function() {
+  it('renders ProjectNavbar', () => {
     expect(wrapper.find('ProjectNavbar')).to.have.lengthOf(1);
   });
 });

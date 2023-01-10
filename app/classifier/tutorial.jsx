@@ -57,9 +57,9 @@ export default class Tutorial extends React.Component {
   static checkIfCompleted(tutorial, user, projectPreferences) {
     if (user) {
       window.prefs = projectPreferences;
-      if (projectPreferences &&
-        projectPreferences.preferences &&
-        projectPreferences.preferences.tutorials_completed_at) {
+      if (projectPreferences
+        && projectPreferences.preferences
+        && projectPreferences.preferences.tutorials_completed_at) {
         return Promise.resolve(!!projectPreferences.preferences.tutorials_completed_at[tutorial.id]);
       }
     }
@@ -91,32 +91,32 @@ export default class Tutorial extends React.Component {
           container.parentNode.removeChild(container);
         }
         const tutorialDialog = (
-            <Dialog
-              className="tutorial-dialog"
-              closeButton={true}
-              required={true}
-              tag="section"
-              onCancel={closeTutorial}
-            >
-              <div role='dialog'>
-                <ModalFocus
-                  onEscape={closeTutorial}
-                >
-                  <Provider store={store}>
-                    <Translations original={tutorial} type="tutorial">
-                      <TutorialComponent
-                        tutorial={tutorial}
-                        media={mediaByID}
-                        projectPreferences={projectPreferences}
-                        user={user}
-                        geordi={geordi}
-                        onComplete={closeTutorial}
-                      />
-                    </Translations>
-                  </Provider>
-                </ModalFocus>
-              </div>
-            </Dialog>
+          <Dialog
+            className="tutorial-dialog"
+            closeButton={true}
+            required={true}
+            tag="section"
+            onCancel={closeTutorial}
+          >
+            <div role="dialog">
+              <ModalFocus
+                onEscape={closeTutorial}
+              >
+                <Provider store={store}>
+                  <Translations original={tutorial} type="tutorial">
+                    <TutorialComponent
+                      tutorial={tutorial}
+                      media={mediaByID}
+                      projectPreferences={projectPreferences}
+                      user={user}
+                      geordi={geordi}
+                      onComplete={closeTutorial}
+                    />
+                  </Translations>
+                </Provider>
+              </ModalFocus>
+            </div>
+          </Dialog>
         );
 
         ReactDOM.render(tutorialDialog, container);
@@ -240,7 +240,7 @@ export default class Tutorial extends React.Component {
         projectPreferences.preferences.tutorials_completed_at = {};
       }
       let { tutorials_completed_at } = projectPreferences.preferences;
-/*
+      /*
       PR #4680 introduced a subtle bug where the API incorrectly created  new values of
       tutorials_completed_at as sparse arrays (see https://github.com/zooniverse/Panoptes-Front-End/issues/4721).
       Here we convert tutorials_completed_at to an object, if it is an array.
@@ -302,60 +302,66 @@ export default class Tutorial extends React.Component {
           </MediaCard>
         </div>
         <p style={{ textAlign: 'center' }}>
-          {(this.state.stepIndex === this.props.tutorial.steps.length - 1) ?
-            <button
-              type="button"
-              className="major-button"
-              onClick={this.props.onComplete}
-            >
-              <Translate content="classifier.letsGo" />
-            </button> :
-            <button type="button" className="standard-button" onClick={this.goNext.bind(this, totalSteps)}>
-              <Translate content="classifier.continue" />
-            </button>}
+          {(this.state.stepIndex === this.props.tutorial.steps.length - 1)
+            ? (
+              <button
+                type="button"
+                className="major-button"
+                onClick={this.props.onComplete}
+              >
+                <Translate content="classifier.letsGo" />
+              </button>
+            )
+            : (
+              <button type="button" className="standard-button" onClick={this.goNext.bind(this, totalSteps)}>
+                <Translate content="classifier.continue" />
+              </button>
+            )}
         </p>
-        {totalSteps > 1 &&
-          <div className="step-through-controls" style={{ position: 'relative' }}>
-            <button
-              type="button"
-              className="step-through-direction step-through-previous"
-              aria-label="Previous step"
-              title="Previous"
-              disabled={this.state.stepIndex === 0}
-              onClick={this.goPrevious.bind(this, totalSteps)}
-            >
+        {totalSteps > 1
+          && (
+            <div className="step-through-controls" style={{ position: 'relative' }}>
+              <button
+                type="button"
+                className="step-through-direction step-through-previous"
+                aria-label="Previous step"
+                title="Previous"
+                disabled={this.state.stepIndex === 0}
+                onClick={this.goPrevious.bind(this, totalSteps)}
+              >
               ◀
-          </button>
+              </button>
 
-            <span className="step-through-pips">
-              {allSteps.map(thisStep => (
-                <label key={thisStep} className="step-through-pip" title={`Step ${thisStep + 1}`}>
-                  <input
-                    type="radio"
-                    name="tutorial-step"
-                    className="step-through-pip-input"
-                    aria-label={`Tutorial step ${thisStep + 1} of ${totalSteps}`}
-                    checked={thisStep === this.state.stepIndex}
-                    autoFocus={thisStep === this.state.stepIndex}
-                    onChange={this.goTo.bind(this, totalSteps, thisStep)}
-                  />
-                  <span className="step-through-pip-number" />
-                </label>
-              ))}
-            </span>
+              <span className="step-through-pips">
+                {allSteps.map(thisStep => (
+                  <label key={thisStep} className="step-through-pip" title={`Step ${thisStep + 1}`}>
+                    <input
+                      type="radio"
+                      name="tutorial-step"
+                      className="step-through-pip-input"
+                      aria-label={`Tutorial step ${thisStep + 1} of ${totalSteps}`}
+                      checked={thisStep === this.state.stepIndex}
+                      autoFocus={thisStep === this.state.stepIndex}
+                      onChange={this.goTo.bind(this, totalSteps, thisStep)}
+                    />
+                    <span className="step-through-pip-number" />
+                  </label>
+                ))}
+              </span>
 
-            <button
-              type="button"
-              className="step-through-direction step-through-next"
-              aria-label="Next step"
-              title="Next"
-              disabled={this.state.stepIndex === totalSteps - 1}
-              onClick={this.goNext.bind(this, totalSteps)}
-            >
+              <button
+                type="button"
+                className="step-through-direction step-through-next"
+                aria-label="Next step"
+                title="Next"
+                disabled={this.state.stepIndex === totalSteps - 1}
+                onClick={this.goNext.bind(this, totalSteps)}
+              >
               ▶
-          </button>
+              </button>
 
-          </div>}
+            </div>
+          )}
       </div>
     );
   }

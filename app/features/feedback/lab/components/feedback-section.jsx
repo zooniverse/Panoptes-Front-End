@@ -32,7 +32,7 @@ function FeedbackSection({ deleteRule, editRule, rules }) {
       />
 
       <ul>
-        {rules.map(rule =>
+        {rules.map(rule => (
           <li key={rule.id} className="feedback-section__feedback-item">
             <span className="feedback-section__feedback-item-label">
               {rule.id}
@@ -48,7 +48,7 @@ function FeedbackSection({ deleteRule, editRule, rules }) {
               onClick={deleteRule.bind(this, rule.id)}
             />
           </li>
-        )}
+        ))}
       </ul>
 
       <Translate

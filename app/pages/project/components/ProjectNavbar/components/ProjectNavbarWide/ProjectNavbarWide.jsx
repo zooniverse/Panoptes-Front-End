@@ -76,7 +76,6 @@ export const StyledNavLink = styled(NavLink)`
 `;
 
 function ProjectNavbarWide(props) {
-
   const {
     avatarSrc,
     backgroundSrc,
@@ -95,7 +94,7 @@ function ProjectNavbarWide(props) {
     <StyledHeaderWide {...otherProps}>
       <Background src={backgroundSrc} />
       <StyledOuterWrapper>
-          {children}
+        {children}
         <StyledWrapper>
           <StyledAvatar
             src={avatarSrc}
@@ -115,7 +114,8 @@ function ProjectNavbarWide(props) {
               {navLinks.map(link => (
                 <ListItem key={link.url || link.to}>
                   <StyledNavLink {...link} />
-                </ListItem>))}
+                </ListItem>
+              ))}
             </List>
           </Nav>
         </StyledWrapper>

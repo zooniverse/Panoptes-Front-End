@@ -8,7 +8,7 @@ import enLocale from '../../../locales/en';
 
 counterpart.registerTranslations('en', enLocale);
 
-const noIdentification = { 
+const noIdentification = {
   task: 'survey',
   value: []
 };
@@ -39,7 +39,7 @@ const twoIdentifications = {
       ]
     },
     filters: {}
-    }, {
+  }, {
     choice: 'to',
     answers: {
       ho: 'two',
@@ -57,116 +57,116 @@ const task = workflow.tasks.survey;
 const oneExpectedSummary = 'Armadillo: 2; Moving, Eating';
 const twoExpectedSummary = ['Armadillo: 1; Moving', 'Tortoise: 2; Eating; Nope; HECK YES'];
 
-describe('Survey task summary, no identifications, not expanded', function() {
+describe('Survey task summary, no identifications, not expanded', () => {
   const wrapper = mount(<Summary annotation={noIdentification} task={task} translation={task} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
 
-  it('should summarise the survey task', function() {
+  it('should summarise the survey task', () => {
     const count = task.choicesOrder.length;
     assert.equal(`Survey of ${count}`, question.text());
   });
 
-  it('should show one answer node', function() {
+  it('should show one answer node', () => {
     assert.equal(answers.length, 1);
   });
 
-  it('should summarise the number of identifications', function() {
+  it('should summarise the number of identifications', () => {
     assert.equal(answers.text(), 'No identifications');
   });
 });
 
-describe('Survey task summary, no identifications, expanded', function() {
+describe('Survey task summary, no identifications, expanded', () => {
   const wrapper = mount(<Summary annotation={noIdentification} task={task} translation={task} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
 
-  it('should summarise the survey task', function() {
+  it('should summarise the survey task', () => {
     const count = task.choicesOrder.length;
     assert.equal(`Survey of ${count}`, question.text());
   });
 
-  it('should show one answer node', function() {
+  it('should show one answer node', () => {
     assert.equal(answers.length, 1);
   });
 
-  it('should summarise the number of identifications', function() {
+  it('should summarise the number of identifications', () => {
     assert.equal(answers.text(), 'No identifications');
   });
 });
 
-describe('Survey task summary, one identification, not expanded', function() {
+describe('Survey task summary, one identification, not expanded', () => {
   const wrapper = mount(<Summary annotation={oneIdentification} task={task} translation={task} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
 
-  it('should summarise the survey task', function() {
+  it('should summarise the survey task', () => {
     const count = task.choicesOrder.length;
     assert.equal(`Survey of ${count}`, question.text());
   });
 
-  it('should show one answer node', function() {
+  it('should show one answer node', () => {
     assert.equal(answers.length, 1);
   });
 
-  it('should summarise the number of identifications', function() {
+  it('should summarise the number of identifications', () => {
     assert.equal(answers.text(), '1 identification');
   });
 });
 
-describe('Survey task summary, one identification, expanded', function() {
+describe('Survey task summary, one identification, expanded', () => {
   const wrapper = mount(<Summary annotation={oneIdentification} task={task} translation={task} expanded={true} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
 
-  it('should summarise the survey task', function() {
+  it('should summarise the survey task', () => {
     const count = task.choicesOrder.length;
     assert.equal(`Survey of ${count}`, question.text());
   });
 
-  it('should show two answer nodes', function() {
+  it('should show two answer nodes', () => {
     assert.equal(answers.length, 2);
   });
 
-  it('should summarise the identification and questions', function() {
+  it('should summarise the identification and questions', () => {
     assert.equal(answers.last().text(), oneExpectedSummary);
   });
 });
 
-describe('Survey task summary, two identifications, not expanded', function() {
+describe('Survey task summary, two identifications, not expanded', () => {
   const wrapper = mount(<Summary annotation={twoIdentifications} task={task} translation={task} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
 
-  it('should summarise the survey task', function() {
+  it('should summarise the survey task', () => {
     const count = task.choicesOrder.length;
     assert.equal(`Survey of ${count}`, question.text());
   });
 
-  it('should show one answer node', function() {
+  it('should show one answer node', () => {
     assert.equal(answers.length, 1);
   });
 
-  it('should summarise the number of identifications', function() {
+  it('should summarise the number of identifications', () => {
     assert.equal(answers.text(), '2 identifications');
   });
 });
 
-describe('Survey task summary, two identifications, expanded', function() {
+describe('Survey task summary, two identifications, expanded', () => {
   const wrapper = mount(<Summary annotation={twoIdentifications} task={task} translation={task} expanded={true} />);
   const question = wrapper.find('.question span').first();
   const answers = wrapper.find('.answers .answer');
 
-  it('should summarise the survey task', function() {
+  it('should summarise the survey task', () => {
     const count = task.choicesOrder.length;
     assert.equal(`Survey of ${count}`, question.text());
   });
 
-  it('should show three answer nodes', function() {
+  it('should show three answer nodes', () => {
     assert.equal(answers.length, 3);
   });
 
-  it('should summarise the identification and questions', function() {
+  it('should summarise the identification and questions', () => {
     assert.equal(answers.at(0).text(), '2 identifications');
     assert.equal(answers.at(1).text(), twoExpectedSummary[0]);
     assert.equal(answers.at(2).text(), twoExpectedSummary[1]);

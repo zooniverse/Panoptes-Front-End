@@ -1,7 +1,7 @@
 class CacheClassification {
   constructor() {
     this.state = {
-      cachedClassification: null,
+      cachedClassification: null
     };
   }
 
@@ -25,7 +25,8 @@ class CacheClassification {
 
     if (cachedAnnotation) {
       const index = cachedClassification.annotations.findIndex(
-        (annotation) => annotation.task === taskKey);
+        annotation => annotation.task === taskKey
+      );
 
       if (index > -1) {
         cachedClassification.annotations.splice(index, 1);
@@ -54,5 +55,5 @@ class CacheClassification {
   }
 }
 
-const cachedClassification = new CacheClassification;
+const cachedClassification = new CacheClassification();
 export default cachedClassification;

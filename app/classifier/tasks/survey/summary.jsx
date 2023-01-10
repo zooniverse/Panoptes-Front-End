@@ -33,13 +33,17 @@ class SurveySummary extends React.Component {
               count: task.choicesOrder.length
             }}
           />
-          {this.state.expanded ?
-            <button type="button" className="toggle-more" onClick={this.setExpanded.bind(this, false)}>
-              <Translate content="tasks.less" />
-            </button> :
-            <button type="button" className="toggle-more" onClick={this.setExpanded.bind(this, true)}>
-              <Translate content="tasks.more" />
-            </button>}
+          {this.state.expanded
+            ? (
+              <button type="button" className="toggle-more" onClick={this.setExpanded.bind(this, false)}>
+                <Translate content="tasks.less" />
+              </button>
+            )
+            : (
+              <button type="button" className="toggle-more" onClick={this.setExpanded.bind(this, true)}>
+                <Translate content="tasks.more" />
+              </button>
+            )}
         </div>
         <div className="answers">
           <div className="answer">
@@ -50,8 +54,8 @@ class SurveySummary extends React.Component {
               }}
             />
           </div>
-          {this.state.expanded &&
-            choiceSummaries.map((choiceSummary, i) => (
+          {this.state.expanded
+            && choiceSummaries.map((choiceSummary, i) => (
               <div key={i} className="answer">
                 {choiceSummary}
               </div>

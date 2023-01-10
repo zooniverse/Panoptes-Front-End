@@ -51,7 +51,9 @@ SliderSummary.propTypes = {
   ).isRequired
 };
 
-const SliderTask = ({ task, translation, annotation, onChange, autoFocus }) => {
+const SliderTask = ({
+  task, translation, annotation, onChange, autoFocus
+}) => {
   function handleChange(e) {
     let value = e.target.value;
     value = Math.min(parseFloat(value, 10), parseFloat(task.max, 10));
@@ -110,18 +112,10 @@ const SliderTask = ({ task, translation, annotation, onChange, autoFocus }) => {
 SliderTask.displayName = 'SliderTask';
 SliderTask.Editor = SliderTaskEditor;
 SliderTask.Summary = SliderSummary;
-SliderTask.getDefaultTask = () => {
-  return SLIDERTASKDEFAULT;
-};
-SliderTask.getTaskText = (task) => {
-  return task.instruction;
-};
-SliderTask.getDefaultAnnotation = (task) => {
-  return { value: task.defaultValue };
-};
-SliderTask.isAnnotationComplete = (task, annotation) => {
-  return (annotation.value !== null);
-};
+SliderTask.getDefaultTask = () => SLIDERTASKDEFAULT;
+SliderTask.getTaskText = task => task.instruction;
+SliderTask.getDefaultAnnotation = task => ({ value: task.defaultValue });
+SliderTask.isAnnotationComplete = (task, annotation) => (annotation.value !== null);
 SliderTask.propTypes = {
   annotation: PropTypes.shape({
     value: PropTypes.oneOfType([

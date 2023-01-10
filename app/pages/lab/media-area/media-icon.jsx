@@ -8,7 +8,7 @@ export default class MediaIcon extends React.Component {
     super(props);
 
     this.state = {
-      deleting: false,
+      deleting: false
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -30,14 +30,14 @@ export default class MediaIcon extends React.Component {
     let mediaElement;
     switch (format) {
       case 'audio':
-        mediaElement = <audio controls src={this.props.resource.src} />;
+        mediaElement = <audio controls={true} src={this.props.resource.src} />;
         break;
       case 'video':
-        mediaElement = <video controls src={this.props.resource.src} style={{ maxHeight: '80vh', maxWidth: '60vw' }} />;
+        mediaElement = <video controls={true} src={this.props.resource.src} style={{ maxHeight: '80vh', maxWidth: '60vw' }} />;
         break;
       default:
-        mediaElement = 
-          <TriggeredModalForm trigger={
+        mediaElement = (
+          <TriggeredModalForm trigger={(
             <Thumbnail
               className="media-icon-thumbnail"
               format={format}
@@ -45,11 +45,13 @@ export default class MediaIcon extends React.Component {
               height={this.props.height}
               style={{ position: 'relative' }}
             />
-          }>
+          )}
+          >
             <div className="content-container">
               <img alt="" src={this.props.resource.src} style={{ maxHeight: '80vh', maxWidth: '60vw' }} />
             </div>
-          </TriggeredModalForm>;
+          </TriggeredModalForm>
+        );
     }
 
     return (
@@ -58,17 +60,19 @@ export default class MediaIcon extends React.Component {
           {mediaElement}
           <button type="button" className="media-icon-delete-button" disabled={this.state.deleting} onClick={this.handleDelete}>&times;</button>
         </div>
-        {this.props.resource.metadata &&
-          <div>
-            <span className="media-icon-label" style={{ position: 'relative' }}>{this.props.resource.metadata.filename}</span>
-            <textarea
-              className="media-icon-markdown"
-              value={`![${this.props.resource.metadata.filename}](${this.props.resource.src})`}
-              readOnly
-              style={{ position: 'relative' }}
-              onFocus={(e) => { e.target.setSelectionRange(0, e.target.value.length); }}
-            />
-          </div>}
+        {this.props.resource.metadata
+          && (
+            <div>
+              <span className="media-icon-label" style={{ position: 'relative' }}>{this.props.resource.metadata.filename}</span>
+              <textarea
+                className="media-icon-markdown"
+                value={`![${this.props.resource.metadata.filename}](${this.props.resource.src})`}
+                readOnly={true}
+                style={{ position: 'relative' }}
+                onFocus={(e) => { e.target.setSelectionRange(0, e.target.value.length); }}
+              />
+            </div>
+          )}
       </div>
     );
   }
@@ -77,7 +81,7 @@ export default class MediaIcon extends React.Component {
 MediaIcon.defaultProps = {
   height: 80,
   onDelete: () => {},
-  resource: null,
+  resource: null
 };
 
 MediaIcon.propTypes = {
@@ -87,6 +91,6 @@ MediaIcon.propTypes = {
     delete: PropTypes.func,
     id: PropTypes.string,
     metadata: PropTypes.object,
-    src: PropTypes.string,
-  }),
+    src: PropTypes.string
+  })
 };

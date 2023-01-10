@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import FreehandSegmentShapeTool from './freehand-segment-shape';
 
-describe('FreehandSegmentShapeTool', function () {
+describe('FreehandSegmentShapeTool', () => {
   let mark = FreehandSegmentShapeTool.defaultValues();
   const x = 200;
   const y = 400;
@@ -39,47 +39,47 @@ describe('FreehandSegmentShapeTool', function () {
     }
   ];
 
-  it('should initialize with correct values', function () {
+  it('should initialize with correct values', () => {
     expect(mark.points.length).to.equal(0);
     expect(mark._inProgress).to.be.false;
     expect(mark._currentlyDrawing).to.be.false;
   });
 
-  describe('static methods', function () {
-    before(function () {
+  describe('static methods', () => {
+    before(() => {
       mark = FreehandSegmentShapeTool.initStart({ x, y }, mark);
     });
 
-    it('create an initial mark', function () {
+    it('create an initial mark', () => {
       expect(mark.points[0].x).to.equal(x);
       expect(mark.points[0].y).to.equal(y);
       expect(mark._inProgress).to.be.true;
       expect(mark._currentlyDrawing).to.be.true;
     });
 
-    coords.forEach(function (coord, i) {
-      it('should round coordinates on move to angle ' + roundedCoords[i].x, function () {
+    coords.forEach((coord, i) => {
+      it(`should round coordinates on move to angle ${roundedCoords[i].x}`, () => {
         const newMark = FreehandSegmentShapeTool.initMove(coord, mark);
         expect(newMark.points[i + 1].x).to.equal(roundedCoords[i].x);
         expect(newMark.points[i + 1].y).to.equal(roundedCoords[i].y);
       });
     });
 
-    it('should finish drawing on initial release', function () {
+    it('should finish drawing on initial release', () => {
       const newMark = FreehandSegmentShapeTool.initRelease({ x, y }, mark);
       expect(newMark._currentlyDrawing).to.be.false;
     });
 
-    it('should designate as completed when forceComplete', function () {
+    it('should designate as completed when forceComplete', () => {
       mark = FreehandSegmentShapeTool.forceComplete(mark);
       expect(FreehandSegmentShapeTool.isComplete(mark)).to.be.true;
     });
   });
 
-  describe('rendered component', function () {
+  describe('rendered component', () => {
     let wrapper;
     const onChange = sinon.stub().callsFake(() => null);
-    const getEventOffset = sinon.stub().callsFake((e) => e);
+    const getEventOffset = sinon.stub().callsFake(e => e);
 
     const renderedMark = {
       points: roundedCoords,
@@ -110,7 +110,7 @@ describe('FreehandSegmentShapeTool', function () {
       type: 'mouseleave'
     };
 
-    before(function () {
+    before(() => {
       wrapper = shallow(
         <FreehandSegmentShapeTool
           color="blue"
@@ -124,35 +124,35 @@ describe('FreehandSegmentShapeTool', function () {
       );
     });
 
-    it('should correctly render the delete position', function () {
+    it('should correctly render the delete position', () => {
       const deleteButtonPos = wrapper.instance().getDeletePosition(renderedMark.points);
       expect(deleteButtonPos.x).to.equal(284);
       expect(deleteButtonPos.y).to.equal(400);
     });
 
-    it('should handle finish click correctly', function () {
+    it('should handle finish click correctly', () => {
       wrapper.instance().handleFinishClick();
       const newMark = onChange.getCall(0).args[0];
       expect(onChange.callCount).to.equal(1);
       expect(newMark._inProgress).to.be.false;
     });
 
-    it('should handle finish move correctly when in viewer', function () {
+    it('should handle finish move correctly when in viewer', () => {
       wrapper.instance().handleFinishMove(mockEventInViewer);
       expect(wrapper.state().mouseWithinViewer).to.be.true;
     });
 
-    it('should handle finish hover correctly when in viewer', function () {
+    it('should handle finish hover correctly when in viewer', () => {
       wrapper.instance().handleFinishHover(mockEventInViewer);
       expect(wrapper.state().firstPointHover).to.be.true;
     });
 
-    it('should handle finish move correctly when out of viewer', function () {
+    it('should handle finish move correctly when out of viewer', () => {
       wrapper.instance().handleFinishMove(mockEventOutOfViewer);
       expect(wrapper.state().mouseWithinViewer).to.be.false;
     });
 
-    it('should handle finish hover correctly when out of viewer', function () {
+    it('should handle finish hover correctly when out of viewer', () => {
       wrapper.instance().handleFinishHover(mockEventOutOfViewer);
       expect(wrapper.state().firstPointHover).to.be.false;
     });

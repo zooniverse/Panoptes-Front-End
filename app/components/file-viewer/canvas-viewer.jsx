@@ -30,6 +30,7 @@ class CanvasViewer extends React.Component {
     };
     this.model = {};
   }
+
   componentDidMount() {
     // add the canvas and prep for rendering
     this.createNewModel(this.props)
@@ -41,6 +42,7 @@ class CanvasViewer extends React.Component {
         this.setState({ modelFailedToLoad: true });
       });
   }
+
   componentWillUpdate(nextProps) {
     // if the subject has updated we need to re-initialise the model
     if (this.props.src !== nextProps.src || this.props.frame !== nextProps.frame) {
@@ -54,24 +56,26 @@ class CanvasViewer extends React.Component {
         });
     }
   }
+
   componentDidUpdate(oldProps) {
     // The component has just updated. We now trigger a render!
     // If we're not loading, we have zoomed/panned or the new annotation is
     // different from the old one, update (render) the model!
     if (
-      !this.state.loading &&
-      (
+      !this.state.loading
+      && (
         // old view box is not the same as new view box
         !Object.keys(this.props.viewBoxDimensions).every(
           key => oldProps.viewBoxDimensions[key] === this.props.viewBoxDimensions[key]
-        ) ||
+        )
         // the old annotation is not the same as the new one
-        !isMatch(oldProps.annotation, this.props.annotation)
+        || !isMatch(oldProps.annotation, this.props.annotation)
       )
     ) {
       this.model.update(this.props.annotations, this.props.viewBoxDimensions);
     }
   }
+
   onLoad({ width, height }) {
     this.setState({
       loading: false
@@ -82,6 +86,7 @@ class CanvasViewer extends React.Component {
       }
     }));
   }
+
   /* eslint-disable class-methods-use-this */
   getModelForFrame(metadata, frame) {
     const model = metadata['#models'].filter(
@@ -90,6 +95,7 @@ class CanvasViewer extends React.Component {
     // check if model is an empty (shouln't be)
     return modelSelector(model[0] || {});
   }
+
   /* eslint-enable class-methods-use-this */
   setMessage(message) {
     this.setState({
@@ -97,17 +103,21 @@ class CanvasViewer extends React.Component {
       message
     });
   }
+
   modelDidError({ modelErrorMessage }) {
     this.setState({ modelFailedToLoad: true, modelErrorMessage });
   }
+
   resizeCanvas({ width, height }) {
     const canvasSize = { width, height };
     this.setState({ canvasSize });
   }
+
   changeCanvasStyleSize({ width, height }) {
     const canvasStyle = { width, height };
     this.setState({ canvasStyle });
   }
+
   createNewModel(props) {
     if (!this.state.loading) this.setState({ loading: true });
     return new Promise((resolve, reject) => {
@@ -139,6 +149,7 @@ class CanvasViewer extends React.Component {
       }
     });
   }
+
   render() {
     if (this.state.modelFailedToLoad) {
       return (
@@ -149,7 +160,7 @@ class CanvasViewer extends React.Component {
       );
     }
     return (
-      <div className="subject-canvas-frame" >
+      <div className="subject-canvas-frame">
         <canvas
           className="subject pan-active"
           width={this.state.canvasSize.width}
@@ -158,17 +169,21 @@ class CanvasViewer extends React.Component {
           style={Object.assign({}, this.props.style, this.state.canvasStyle)}
         />
         {
-          this.state.hasMessage && this.state.message !== null &&
-          <span
-            className="canvas-renderer-message"
-          >
-            {this.state.message}
-          </span>
+          this.state.hasMessage && this.state.message !== null
+          && (
+            <span
+              className="canvas-renderer-message"
+            >
+              {this.state.message}
+            </span>
+          )
         }
-        {this.state.loading &&
-          <div className="loading-cover" style={this.props.overlayStyle} >
-            <LoadingIndicator />
-          </div>}
+        {this.state.loading
+          && (
+            <div className="loading-cover" style={this.props.overlayStyle}>
+              <LoadingIndicator />
+            </div>
+          )}
       </div>
     );
   }
@@ -194,7 +209,9 @@ CanvasViewer.propTypes = {
 };
 /* eslint-enable react/forbid-prop-types */
 CanvasViewer.defaultProps = {
-  viewBoxDimensions: { height: 512, width: 512, x: 0, y: 0 }
+  viewBoxDimensions: {
+    height: 512, width: 512, x: 0, y: 0
+  }
 };
 
 export default CanvasViewer;

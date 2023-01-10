@@ -40,19 +40,17 @@ export default class FavoritesButton extends React.Component {
   }
 
   promptToSignIn() {
-    alert((resolve) => {
-      return (
-        <SignInPrompt onChoose={resolve()}>
-          <p>You must be signed in to save your favorites.</p>
-        </SignInPrompt>
-      );
-    });
+    alert(resolve => (
+      <SignInPrompt onChoose={resolve()}>
+        <p>You must be signed in to save your favorites.</p>
+      </SignInPrompt>
+    ));
   }
 
   findFavoriteCollection() {
     return apiClient.type('collections')
       .get({ project_ids: this.props.project.id, favorite: true, owner: this.props.user.login })
-      .then(([favorites]) => { return (favorites || null); });
+      .then(([favorites]) => (favorites || null));
   }
 
   favoriteSubject(isFavorite) {
@@ -140,7 +138,7 @@ export default class FavoritesButton extends React.Component {
 
   render() {
     const iconClasses = classnames({
-      'favorited': this.state.favorited,
+      favorited: this.state.favorited,
       'fa fa-heart': this.state.favorited,
       'fa fa-heart-o': !this.state.favorited,
       'fa-fw': true

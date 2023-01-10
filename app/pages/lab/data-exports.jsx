@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Markdown } from 'markdownz';
 
-import { projectsWithWarnings } from './data-exports-warnings'
+import { projectsWithWarnings } from './data-exports-warnings';
 import WorkflowClassificationExportButton from './workflow-classification-export-button';
-import DataExportButton from  '../../partials/data-export-button';
+import DataExportButton from '../../partials/data-export-button';
 import SubjectSetDataExportButton from '../../partials/subject-set-data-export-button';
-import TalkDataExportButton from  '../../talk/data-export-button';
+import TalkDataExportButton from '../../talk/data-export-button';
 import DataExportDownloadLink from '../../partials/data-export-download-link';
 
 counterpart.registerTranslations('en', {
@@ -17,7 +17,7 @@ counterpart.registerTranslations('en', {
     subjectExport: 'Request new subject export',
     workflowExport: 'Request new workflow export',
     commentsExport: 'Request new talk comments export',
-    tagsExport: 'Request new talk tags export',
+    tagsExport: 'Request new talk tags export'
   }
 });
 
@@ -28,9 +28,9 @@ function validateSubjectSetExportId(project, subjectSetId) {
   return (subjectSetBelongsToProject ? subjectSetId.toString() : null);
 }
 
-export default function DataExports (props) {
-  const warningsForProject = getWarningsForProject(props.project.id, props.warnings)
-  console.info(warningsForProject)
+export default function DataExports(props) {
+  const warningsForProject = getWarningsForProject(props.project.id, props.warnings);
+  console.info(warningsForProject);
   const subjectSetExportId = validateSubjectSetExportId(props.project, props.location?.query['subject-sets']);
   return (
     <div className="data-exports">
@@ -42,15 +42,16 @@ export default function DataExports (props) {
         For examples of how to work with the data exports, see our&nbsp;
         <a href="https://github.com/zooniverse/Data-digging">
           Data Digging code repository
-        </a> or use our&nbsp;
+        </a>
+        {' '}
+or use our&nbsp;
         <a href="https://github.com/zooniverse/aggregation-for-caesar">
           Panoptes Aggregation python package
-        </a>.
+        </a>
+.
       </p>
       <div>
-        {(warningsForProject.length > 0) && warningsForProject.map(warning =>
-          <Warning key={warning} text={warning} />
-        )}
+        {(warningsForProject.length > 0) && warningsForProject.map(warning => <Warning key={warning} text={warning} />)}
       </div>
       <div className="columns-container">
         <div>
@@ -87,7 +88,8 @@ export default function DataExports (props) {
                 <SubjectSetDataExportButton
                   project={props.project}
                   subjectSetId={subjectSetExportId}
-                  buttonKey="projectDetails.subjectSetClassificationExport" />
+                  buttonKey="projectDetails.subjectSetClassificationExport"
+                />
               </div>
             )
           }
@@ -96,7 +98,8 @@ export default function DataExports (props) {
               <strong>Workflow contents export: </strong>
               <DataExportDownloadLink
                 resource={props.project}
-                exportType="workflow_contents_export" />
+                exportType="workflow_contents_export"
+              />
               {' '}
               This export can no longer be generated. We've generated one just prior to disabling the generation. The workflow contents exports have been merged into the normal workflow export. The "strings" column is now available directly in the workflows export, and the "version" column from the workflow contents export is called "minor_version" in the workflows export. This means you no longer need to look up rows from two files in order to know what the actual setup of the workflow was for the version number specified by a classification.
             </p>
@@ -121,7 +124,7 @@ export default function DataExports (props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 DataExports.propTypes = {
@@ -132,25 +135,24 @@ DataExports.propTypes = {
     message: PropTypes.string,
     projects: PropTypes.arrayOf(PropTypes.string)
   }))
-}
+};
 
 DataExports.defaultProps = {
   warnings: projectsWithWarnings
-}
+};
 
 export function Warning({ text }) {
   return (
-    <Markdown tag='section' className="data-export-warning">
+    <Markdown tag="section" className="data-export-warning">
       {text}
     </Markdown>
-  )
+  );
 }
 
 function getWarningsForProject(currentProjectId, warnings) {
   return warnings
-    .map(bug => bug.projects.includes(currentProjectId)
-        ? bug.message
-        : null
-    )
-    .filter(warning => warning)
+    .map(bug => (bug.projects.includes(currentProjectId)
+      ? bug.message
+      : null))
+    .filter(warning => warning);
 }

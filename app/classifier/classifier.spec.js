@@ -63,54 +63,54 @@ const workflow = mockPanoptesResource('workflow', {
 const subject = mockPanoptesResource('subject', {
   id: 'a',
   locations: [
-    { 'text/plain': 'a fake URL'}
+    { 'text/plain': 'a fake URL' }
   ]
 });
 
 let wrapper;
-before(function () {
+before(() => {
   wrapper = shallow(<Classifier />, mockReduxStore);
 });
 
-describe('Classifier', function () {
-  it('should render with only default props', function () {
+describe('Classifier', () => {
+  it('should render with only default props', () => {
     const instance = wrapper.instance();
     expect(instance).to.be.instanceOf(Classifier);
   });
 
-  describe('on mount', function () {
-    it('should initialise annotations', function () {
+  describe('on mount', () => {
+    it('should initialise annotations', () => {
       const state = wrapper.state();
       expect(state.annotations).to.have.lengthOf(0);
     });
-    it('should initialise workflow history', function () {
+    it('should initialise workflow history', () => {
       const state = wrapper.state();
       expect(state.workflowHistory).to.have.lengthOf(0);
     });
 
-    describe('with an incomplete classification', function () {
-      before(function () {
+    describe('with an incomplete classification', () => {
+      before(() => {
         wrapper = shallow(<Classifier classification={classification} subject={subject} />, mockReduxStore);
         wrapper.instance().componentDidMount();
       });
-      it('should preserve annotations from an incomplete classification', function () {
+      it('should preserve annotations from an incomplete classification', () => {
         const state = wrapper.state();
         expect(state.annotations).to.deep.equal(classification.annotations);
       });
-      it('should rebuild workflow history from an incomplete classification', function () {
+      it('should rebuild workflow history from an incomplete classification', () => {
         const state = wrapper.update().state();
         expect(state.workflowHistory).to.deep.equal(['T0', 'T1']);
       });
-    })
+    });
   });
 
-  describe('on receiving a new classification', function () {
-    before(function () {
+  describe('on receiving a new classification', () => {
+    before(() => {
       wrapper = shallow(<Classifier />, mockReduxStore);
     });
 
-    describe('with annotations', function () {
-      it('should resume work in progress', function () {
+    describe('with annotations', () => {
+      it('should resume work in progress', () => {
         const newProps = { classification, subject };
         wrapper.setProps(newProps);
         const state = wrapper.state();
@@ -119,13 +119,13 @@ describe('Classifier', function () {
       });
     });
 
-    describe('without annotations', function () {
-      it('should reset annotations and workflow history', function () {
+    describe('without annotations', () => {
+      it('should reset annotations and workflow history', () => {
         const newProps = {
           classification: {
             annotations: []
           }
-        }
+        };
         wrapper.setProps(newProps);
         const state = wrapper.state();
         expect(state.annotations).to.have.lengthOf(0);
@@ -134,11 +134,11 @@ describe('Classifier', function () {
     });
   });
 
-  describe('on receiving a new subject', function () {
-    before(function () {
+  describe('on receiving a new subject', () => {
+    before(() => {
       wrapper = shallow(<Classifier />, mockReduxStore);
     });
-    it('should reset annotations and workflow history', function () {
+    it('should reset annotations and workflow history', () => {
       const newProps = {
         subject: {
           locations: []
@@ -149,7 +149,7 @@ describe('Classifier', function () {
       expect(state.annotations).to.have.lengthOf(0);
       expect(state.workflowHistory).to.have.lengthOf(0);
     });
-    it('should preserve any existing annotations', function () {
+    it('should preserve any existing annotations', () => {
       const newProps = { classification, subject };
       wrapper.setProps(newProps);
       const state = wrapper.state();
@@ -158,7 +158,7 @@ describe('Classifier', function () {
     });
   });
 
-  describe('on subject image load', function () {
+  describe('on subject image load', () => {
     const actions = {
       classify: {
         updateMetadata: sinon.stub().callsFake(changes => changes)
@@ -173,7 +173,7 @@ describe('Classifier', function () {
       },
       preventDefault: () => null
     };
-    beforeEach(function () {
+    beforeEach(() => {
       wrapper = shallow(
         <Classifier
           actions={actions}
@@ -185,10 +185,10 @@ describe('Classifier', function () {
       );
       wrapper.instance().handleSubjectImageLoad(fakeEvent, 0);
     });
-    afterEach(function () {
+    afterEach(() => {
       actions.classify.updateMetadata.resetHistory();
     });
-    it('should update the classification with the image dimensions', function () {
+    it('should update the classification with the image dimensions', () => {
       const expectedChanges = {
         subject_dimensions: [fakeEvent.target]
       };
@@ -197,7 +197,7 @@ describe('Classifier', function () {
     });
   });
 
-  describe('on completing a classification', function () {
+  describe('on completing a classification', () => {
     let checkForFeedback;
     let fakeEvent;
     const actions = {
@@ -214,7 +214,7 @@ describe('Classifier', function () {
       locale: 'it',
       strings: {
         workflow: {
-          '3' : {
+          3: {
             id: '123',
             translated_type: 'Workflow',
             translated_id: '3',
@@ -224,8 +224,8 @@ describe('Classifier', function () {
       }
     };
     const existingUUID = '123456';
-    beforeEach(function () {
-      classification.metadata.interventions = {uuid: existingUUID};
+    beforeEach(() => {
+      classification.metadata.interventions = { uuid: existingUUID };
       checkForFeedback = sinon.stub(Classifier.prototype, 'checkForFeedback').callsFake(() => Promise.resolve());
       wrapper = shallow(
         <Classifier
@@ -241,111 +241,111 @@ describe('Classifier', function () {
       fakeEvent = {
         currentTarget: {},
         preventDefault: () => null
-      }
+      };
     });
-    afterEach(function () {
+    afterEach(() => {
       checkForFeedback.restore();
       actions.classify.completeClassification.resetHistory();
       actions.classify.updateMetadata.resetHistory();
     });
 
-    it('should complete the classification', function (done) {
+    it('should complete the classification', (done) => {
       wrapper.setProps({ workflow });
-      wrapper.instance().completeClassification(fakeEvent).then(function () {
+      wrapper.instance().completeClassification(fakeEvent).then(() => {
         const { annotations } = wrapper.state();
         expect(actions.classify.completeClassification).to.have.been.calledWith(annotations);
       })
-      .then(done, done);
+        .then(done, done);
     });
-    it('should record intervention metadata', function (done) {
+    it('should record intervention metadata', (done) => {
       wrapper.setProps({ workflow });
       wrapper.instance().completeClassification(fakeEvent)
-      .then(done, done);
+        .then(done, done);
       const changes = actions.classify.updateMetadata.getCall(0).args[0];
       expect(changes.interventions.messageShown).to.be.false;
       expect(changes.interventions.opt_in).to.be.false;
       expect(changes.interventions.uuid).to.equal(existingUUID);
     });
-    it('should record translation metadata', function (done) {
+    it('should record translation metadata', (done) => {
       wrapper.setProps({ workflow });
       wrapper.instance().completeClassification(fakeEvent)
-      .then(done, done);
+        .then(done, done);
       const changes = actions.classify.updateMetadata.getCall(0).args[0];
       const { translations } = wrapper.instance().props;
       expect(changes.workflow_translation_id).to.equal(translations.strings.workflow[workflow.id].id);
       expect(changes.user_language).to.equal('it');
-    })
-    describe('with an intervention message', function () {
+    });
+    describe('with an intervention message', () => {
       const intervention = {
         message: 'Hello!'
       };
       const user = {
         intervention_notifications: true
       };
-      it('should record that an intervention was received', function (done) {
+      it('should record that an intervention was received', (done) => {
         wrapper.setProps({ workflow, intervention, user });
         wrapper.instance().completeClassification(fakeEvent)
-        .then(done, done);
+          .then(done, done);
         const changes = actions.classify.updateMetadata.getCall(0).args[0];
         expect(changes.interventions.messageShown).to.be.true;
       });
-      it('should record whether the user is reading interventions', function () {
+      it('should record whether the user is reading interventions', () => {
         wrapper.setProps({ workflow, intervention, user });
         wrapper.instance().completeClassification(fakeEvent);
         const changes = actions.classify.updateMetadata.getCall(0).args[0];
         expect(changes.interventions.opt_in).to.equal(user.intervention_notifications);
       });
     });
-    describe('with summaries enabled', function () {
-      it('should display a classification summary', function (done) {
+    describe('with summaries enabled', () => {
+      it('should display a classification summary', (done) => {
         wrapper.setProps({ workflow });
         wrapper.instance().completeClassification(fakeEvent)
-        .then(function () {
-          wrapper.update();
-          const state = wrapper.state();
-          expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(1);
-        })
-        .then(done, done);
+          .then(() => {
+            wrapper.update();
+            const state = wrapper.state();
+            expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(1);
+          })
+          .then(done, done);
       });
-      it('should not update annotations on going to Talk', function (done) {
+      it('should not update annotations on going to Talk', (done) => {
         wrapper.setProps({ workflow });
         wrapper.instance().completeClassification(fakeEvent)
-        .then(function () {
-          wrapper.update();
-          wrapper.unmount();
-          expect(actions.classify.saveAnnotations.callCount).to.equal(0);
-        })
-        .then(done, done);
+          .then(() => {
+            wrapper.update();
+            wrapper.unmount();
+            expect(actions.classify.saveAnnotations.callCount).to.equal(0);
+          })
+          .then(done, done);
       });
     });
 
-    describe('with summaries disabled', function () {
-      it('should not show a summary', function (done) {
+    describe('with summaries disabled', () => {
+      it('should not show a summary', (done) => {
         workflow.configuration.hide_classification_summaries = true;
         wrapper.setProps({ workflow });
         wrapper.instance().completeClassification(fakeEvent)
-        .then(function () {
-          wrapper.update();
-          const state = wrapper.state();
-          expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(0);
-        })
-        .then(done, done);
+          .then(() => {
+            wrapper.update();
+            const state = wrapper.state();
+            expect(wrapper.find('ClassificationSummary')).to.have.lengthOf(0);
+          })
+          .then(done, done);
       });
     });
   });
 
-  describe('with feedback enabled', function () {
+  describe('with feedback enabled', () => {
     let feedbackInitSpy;
     let feedbackUpdateSpy;
     let feedbackCheckSpy;
 
-    before(function () {
+    before(() => {
       feedbackInitSpy = sinon.spy();
       feedbackUpdateSpy = sinon.spy();
       feedbackCheckSpy = sinon.spy(Classifier.prototype, 'checkForFeedback');
     });
 
-    beforeEach(function () {
+    beforeEach(() => {
       const feedback = {
         active: true
       };
@@ -374,44 +374,43 @@ describe('Classifier', function () {
       wrapper.instance().componentDidMount();
     });
 
-    afterEach(function () {
+    afterEach(() => {
       feedbackUpdateSpy.resetHistory();
       feedbackCheckSpy.resetHistory();
     });
 
-    after(function () {
+    after(() => {
       feedbackCheckSpy.restore();
-    })
+    });
 
-    describe('when the task changes', function () {
-
-      beforeEach(function () {
-        const newAnnotation = {task: 'T3', value: 'new task'};
+    describe('when the task changes', () => {
+      beforeEach(() => {
+        const newAnnotation = { task: 'T3', value: 'new task' };
         const annotations = classification.annotations.slice();
         annotations.push(newAnnotation);
         wrapper.instance().updateAnnotations(annotations);
         wrapper.instance().onNextTask(newAnnotation.task);
       });
 
-      it('should check for feedback', function () {
+      it('should check for feedback', () => {
         expect(feedbackCheckSpy.callCount).to.equal(1);
       });
 
-      it('should update feedback', function () {
+      it('should update feedback', () => {
         expect(feedbackUpdateSpy.callCount).to.equal(1);
       });
 
-      it('should update feedback for the previous annotation', function () {
+      it('should update feedback for the previous annotation', () => {
         const prevAnnotation = classification.annotations[1];
         expect(feedbackUpdateSpy).to.have.been.calledWith(prevAnnotation);
       });
     });
 
-    describe('when a classification is complete', function () {
+    describe('when a classification is complete', () => {
       let newAnnotation;
 
-      beforeEach(function () {
-        newAnnotation = {task: 'T3', value: 'new task'};
+      beforeEach(() => {
+        newAnnotation = { task: 'T3', value: 'new task' };
         const annotations = classification.annotations.slice();
         annotations.push(newAnnotation);
         const workflowHistory = wrapper.state().workflowHistory;
@@ -419,58 +418,56 @@ describe('Classifier', function () {
         wrapper.setState({ annotations, workflowHistory });
       });
 
-      it('should check for feedback', function (done) {
+      it('should check for feedback', (done) => {
         const fakeEvent = {
           currentTarget: {},
           preventDefault: () => null
-        }
+        };
         wrapper.instance().completeClassification(fakeEvent)
-        .then(function () {
-          expect(feedbackCheckSpy.callCount).to.equal(1);
-        })
-        .then(done, done);
-
+          .then(() => {
+            expect(feedbackCheckSpy.callCount).to.equal(1);
+          })
+          .then(done, done);
       });
 
-      it('should update feedback for the last annotation', function (done) {
+      it('should update feedback for the last annotation', (done) => {
         const fakeEvent = {
           currentTarget: {},
           preventDefault: () => null
-        }
+        };
         wrapper.instance().completeClassification(fakeEvent)
-        .then(function () {
-          expect(feedbackUpdateSpy).to.have.been.calledWith(newAnnotation);
-        })
-        .then(done, done);
-
+          .then(() => {
+            expect(feedbackUpdateSpy).to.have.been.calledWith(newAnnotation);
+          })
+          .then(done, done);
       });
-    })
+    });
 
-    describe('when the first task loads', function () {
-      beforeEach(function () {
+    describe('when the first task loads', () => {
+      beforeEach(() => {
         const newProps = {
           subject: Object.assign({}, subject, { id: 'b' }),
           classification: mockPanoptesResource('classifications', { annotations: [] })
-        }
+        };
         wrapper.setProps(newProps);
-        const newAnnotation = {task: 'T0', value: 'default value'};
+        const newAnnotation = { task: 'T0', value: 'default value' };
         const annotations = classification.annotations.slice();
         annotations.push(newAnnotation);
         wrapper.instance().updateAnnotations(annotations);
         wrapper.instance().onNextTask(newAnnotation.task);
       });
 
-      it('should not check for feedback', function () {
+      it('should not check for feedback', () => {
         expect(feedbackCheckSpy.callCount).to.equal(0);
       });
 
-      it('should not update feedback', function () {
+      it('should not update feedback', () => {
         expect(feedbackUpdateSpy.callCount).to.equal(0);
-      })
+      });
     });
   });
 
-  describe('on updating annotations', function () {
+  describe('on updating annotations', () => {
     const actions = {
       classify: {
         saveAnnotations: sinon.stub().callsFake(annotations => annotations)
@@ -487,12 +484,12 @@ describe('Classifier', function () {
       value: 3
     }];
 
-    before(function () {
+    before(() => {
       wrapper.setProps({ actions });
       wrapper.instance().updateAnnotations(mockAnnotations);
     });
 
-    it('should save any annotations in progress', function () {
+    it('should save any annotations in progress', () => {
       const annotations = actions.classify.saveAnnotations.returnValues[0];
       expect(annotations).to.deep.equal(mockAnnotations);
     });

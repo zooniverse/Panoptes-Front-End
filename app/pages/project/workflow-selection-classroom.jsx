@@ -6,7 +6,9 @@ import { WorkflowSelection } from './workflow-selection';
 
 export class ClassroomWorkflowSelection extends WorkflowSelection {
   getSelectedWorkflow(props) {
-    const { actions, locale, location, project, preferences } = props;
+    const {
+      actions, locale, location, project, preferences
+    } = props;
 
     // Normally, WildCam Classrooms are "custom programs" with a different
     // (cloned) workflow for each Assignment. We expect a numerical Workflow ID.

@@ -49,216 +49,218 @@ const user = {
   id: '242'
 };
 
-describe('ProjectHome', function() {
+describe('ProjectHome', () => {
   let wrapper;
-  before(function() {
+  before(() => {
     wrapper = shallow(
       <ProjectHome
         activeWorkflows={activeWorkflows}
         background={background}
         project={project}
-        researcherAvatar={''}
+        researcherAvatar=""
         translation={translation}
       />
     );
   });
 
-  it('should render without crashing', function() {});
+  it('should render without crashing', () => {});
 
-  it('should render ProjectHomeWorkflowButtons', function() {
+  it('should render ProjectHomeWorkflowButtons', () => {
     expect(wrapper.find('ProjectHomeWorkflowButtons')).to.have.lengthOf(1);
   });
 
-  it('should render ProjectMetadata', function() {
+  it('should render ProjectMetadata', () => {
     expect(wrapper.find('ProjectMetadata')).to.have.lengthOf(1);
   });
 
-  describe('with a launch-approved project', function () {
+  describe('with a launch-approved project', () => {
     project.launch_approved = true;
     wrapper = shallow(
       <ProjectHome
         project={project}
         background={background}
         translation={translation}
-      />);
+      />
+    );
     const disclaimer = wrapper.find({ content: 'project.disclaimer' });
-    it('should not render the Zooniverse disclaimer.', function () {
+    it('should not render the Zooniverse disclaimer.', () => {
       expect(disclaimer).to.have.lengthOf(0);
     });
   });
 
-  describe('without approval', function () {
+  describe('without approval', () => {
     project.launch_approved = false;
     wrapper = shallow(
       <ProjectHome
         project={project}
         background={background}
         translation={translation}
-      />);
+      />
+    );
     const disclaimer = wrapper.find({ content: 'project.disclaimer' });
-    it('should render the Zooniverse disclaimer.', function () {
+    it('should render the Zooniverse disclaimer.', () => {
       expect(disclaimer).to.have.lengthOf(1);
     });
   });
 
-  describe('when the project is not complete', function() {
-    it('should not render FinishedBanner', function() {
+  describe('when the project is not complete', () => {
+    it('should not render FinishedBanner', () => {
       expect(wrapper.find('FinishedBanner')).to.have.lengthOf(0);
     });
   });
 
-  describe('when the project is complete', function() {
-    before(function() {
+  describe('when the project is complete', () => {
+    before(() => {
       wrapper.setProps({ projectIsComplete: true });
     });
-    after(function() {
+    after(() => {
       wrapper.setProps({ projectIsComplete: false });
     });
 
-    it('should render FinishedBanner if props.projectIsComplete is true', function() {
+    it('should render FinishedBanner if props.projectIsComplete is true', () => {
       expect(wrapper.find('FinishedBanner')).to.have.lengthOf(1);
     });
   });
 
-  describe('when the project is not linked to an organization', function() {
-    it('should not render a Link component linking to the organization', function() {
+  describe('when the project is not linked to an organization', () => {
+    it('should not render a Link component linking to the organization', () => {
       expect(wrapper.find({ to: `/organizations/${organization.slug}` })).to.have.lengthOf(0);
     });
 
-    it('should use the class .project-home-page__description--top-padding', function() {
+    it('should use the class .project-home-page__description--top-padding', () => {
       expect(wrapper.find('.project-home-page__description--top-padding')).to.have.lengthOf(1);
     });
   });
 
-  describe('when the project is linked to an organization', function() {
-    before(function() {
+  describe('when the project is linked to an organization', () => {
+    before(() => {
       wrapper.setProps({ organization });
     });
 
-    it('should render a Link component linking to the organization', function() {
+    it('should render a Link component linking to the organization', () => {
       expect(wrapper.find({ to: `/organizations/${organization.slug}` })).to.have.lengthOf(1);
     });
 
-    it('should not use the class .project-home-page__description--top-padding', function() {
+    it('should not use the class .project-home-page__description--top-padding', () => {
       expect(wrapper.find('.project-home-page__description--top-padding')).to.have.lengthOf(0);
     });
 
-    it('should render a Translation component for the Link text', function() {
+    it('should render a Translation component for the Link text', () => {
       const link = wrapper.find({ to: `/organizations/${organization.slug}` });
       expect(link.find('Translate')).to.have.lengthOf(1);
     });
   });
 
-  describe('when the project does not have a redirect', function() {
-    it('should render a Link component to the project about page', function() {
+  describe('when the project does not have a redirect', () => {
+    it('should render a Link component to the project about page', () => {
       expect(wrapper.find({ to: `/projects/${project.slug}/about` })).to.have.lengthOf(1);
     });
 
-    it('should render a Translate component for the about page Link text', function() {
+    it('should render a Translate component for the about page Link text', () => {
       expect(wrapper.find({ to: `/projects/${project.slug}/about` }).find('Translate')).to.have.lengthOf(1);
     });
 
-    it('should render a Link component to the classify page if props.showWorkflowButtons is false', function() {
+    it('should render a Link component to the classify page if props.showWorkflowButtons is false', () => {
       expect(wrapper.find({ to: `/projects/${project.slug}/classify` })).to.have.lengthOf(1);
     });
 
-    it('should render a Translate component for the about page Link text', function() {
+    it('should render a Translate component for the about page Link text', () => {
       expect(wrapper.find({ to: `/projects/${project.slug}/classify` }).find('Translate')).to.have.lengthOf(1);
     });
   });
 
-  describe('when the project does have a redirect', function() {
-    before(function() {
+  describe('when the project does have a redirect', () => {
+    before(() => {
       const projectWithRedirect = Object.assign({}, project, { redirect: 'https://identifyanimals.org' });
       wrapper.setProps({ project: projectWithRedirect });
     });
 
-    it('should not render a Link component to the project about page', function() {
+    it('should not render a Link component to the project about page', () => {
       expect(wrapper.find({ to: `/projects/${project.slug}/about` })).to.have.lengthOf(0);
     });
 
-    it('should not render a Link component to the classify page', function() {
+    it('should not render a Link component to the classify page', () => {
       expect(wrapper.find({ to: `/projects/${project.slug}/classify` })).to.have.lengthOf(0);
     });
 
-    it('should render an html anchor tag linked to the redirect url', function() {
+    it('should render an html anchor tag linked to the redirect url', () => {
       expect(wrapper.find('a.project-home-page__button')).to.have.lengthOf(1);
     });
 
-    it('should render a Translate component for the anchor tag text', function() {
+    it('should render a Translate component for the anchor tag text', () => {
       expect(wrapper.find('a.project-home-page__button').find('Translate')).to.have.lengthOf(1);
     });
   });
 
-  describe('when there are not talk subject', function() {
-    it('should not render subject talk divs', function() {
+  describe('when there are not talk subject', () => {
+    it('should not render subject talk divs', () => {
       expect(wrapper.find('.project-home-page__talk-image')).to.have.lengthOf(0);
     });
   });
 
-  describe('when there are talk subjects', function() {
-    before(function() {
+  describe('when there are talk subjects', () => {
+    before(() => {
       wrapper.setProps({ talkSubjects });
     });
 
-    it('should render 3 subject talk divs', function() {
+    it('should render 3 subject talk divs', () => {
       expect(wrapper.find('.project-home-page__talk-image')).to.have.lengthOf(3);
     });
 
-    it('should render 3 Link components for each subject', function() {
+    it('should render 3 Link components for each subject', () => {
       talkSubjects.forEach((subject) => {
         expect(wrapper.find({ to: `/projects/${project.slug}/talk/subjects/${subject.id}` })).to.have.lengthOf(1);
       });
     });
 
-    it('should render 3 Thumbnail components for each subject', function() {
+    it('should render 3 Thumbnail components for each subject', () => {
       talkSubjects.forEach((subject) => {
         expect(wrapper.find({ src: subject.locations[0]['image/png'] })).to.have.lengthOf(1);
       });
     });
 
-    it('should render a TalkStatus component', function() {
+    it('should render a TalkStatus component', () => {
       expect(wrapper.find('TalkStatus')).to.have.lengthOf(1);
     });
   });
 
-  describe('when a project does not have a researcher quote', function() {
-    it('should not render the researcher quote div', function() {
+  describe('when a project does not have a researcher quote', () => {
+    it('should not render the researcher quote div', () => {
       expect(wrapper.find('.project-home-page__researcher-words')).to.have.lengthOf(0);
     });
   });
 
-  describe('when a project has a researcher quote', function() {
-    before(function() {
+  describe('when a project has a researcher quote', () => {
+    before(() => {
       const projectWithResearcherQuote = Object.assign({}, project, { researcher_quote: 'Important thoughts!' });
       wrapper.setProps({ project: projectWithResearcherQuote });
     });
 
-    it('should render the researcher quote div', function() {
+    it('should render the researcher quote div', () => {
       expect(wrapper.find('.project-home-page__researcher-words')).to.have.lengthOf(1);
     });
 
-    it('should use the default avatar if props.researcherAvatar is not defined', function() {
+    it('should use the default avatar if props.researcherAvatar is not defined', () => {
       expect(wrapper.find({ src: '/assets/simple-avatar.png' })).to.have.lengthOf(1);
     });
 
-    it('should use props.researcherAvatar if it is defined', function() {
+    it('should use props.researcherAvatar if it is defined', () => {
       const researcherAvatar = 'researcher.png';
       wrapper.setProps({ researcherAvatar });
       expect(wrapper.find({ src: researcherAvatar })).to.have.lengthOf(1);
     });
   });
 
-  describe('the project about section', function() {
-    it('should render a Translate component', function() {
+  describe('the project about section', () => {
+    it('should render a Translate component', () => {
       expect(wrapper.find({ content: 'project.home.about' })).to.have.lengthOf(1);
     });
 
-    it('should not render a Markdown component if there is no project introduction', function() {
+    it('should not render a Markdown component if there is no project introduction', () => {
       expect(wrapper.find('.project-home-page__about-text').find('Markdown')).to.have.lengthOf(0);
     });
 
-    it('should render a Markdown component if there is a project introduction', function() {
+    it('should render a Markdown component if there is a project introduction', () => {
       const projectWithIntroduction = Object.assign({}, project, { introduction: 'Please help our project' });
 
       wrapper.setProps({ project: projectWithIntroduction });

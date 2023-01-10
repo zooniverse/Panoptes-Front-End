@@ -36,17 +36,20 @@ class FeedbackModal extends React.Component {
         <div className="messagecontainer">
           {_.chain(messages).map((catMessages, cat) => {
             const contentString = `feedback.categories.${cat}`;
-            return (<div key={Math.random()}>
-            <Translate content={contentString} component="h3" className="categorytitles" />
-              <ul>
-              {catMessages.map((message) =>
-                <li key={Math.random()} className="messages">
-                {message}
-                </li>)}
-              </ul>
-            </div>)
+            return (
+              <div key={Math.random()}>
+                <Translate content={contentString} component="h3" className="categorytitles" />
+                <ul>
+                  {catMessages.map(message => (
+                    <li key={Math.random()} className="messages">
+                      {message}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
           }).value()}
-          </div>
+        </div>
 
         <div className="buttons">
           <button

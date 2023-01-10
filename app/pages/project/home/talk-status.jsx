@@ -7,7 +7,6 @@ import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 
 export default class TalkStatus extends React.Component {
-
   constructor() {
     super();
     this.state = {
@@ -21,12 +20,10 @@ export default class TalkStatus extends React.Component {
 
   talkItems() {
     sugarApiClient.get('/active_users', { channel: `project-${this.props.project.id}` })
-    .then((activeUsers) => {
-      this.setState({ activeUsers: activeUsers.length });
-    })
-    .catch(() => {
-      return null;
-    });
+      .then((activeUsers) => {
+        this.setState({ activeUsers: activeUsers.length });
+      })
+      .catch(() => null);
   }
 
   render() {

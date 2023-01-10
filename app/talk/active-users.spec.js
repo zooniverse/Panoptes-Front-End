@@ -10,7 +10,7 @@ const users = [
   { id: '2', display_name: 'Test_User_2', login: 'testUser2' }
 ];
 
-describe('ActiveUsers', function () {
+describe('ActiveUsers', () => {
   let getActiveIdsStub;
   let pageCountSpy;
   let boundedPageSpy;
@@ -18,7 +18,7 @@ describe('ActiveUsers', function () {
   let fetchUsersStub;
   let wrapper;
 
-  before(function () {
+  before(() => {
     getActiveIdsStub = sinon.stub(ActiveUsers.prototype, 'getActiveUserIds').callsFake(() => Promise.resolve(activeIds));
     pageCountSpy = sinon.spy(ActiveUsers.prototype, 'pageCount');
     boundedPageSpy = sinon.spy(ActiveUsers.prototype, 'boundedPage');
@@ -27,7 +27,7 @@ describe('ActiveUsers', function () {
     wrapper = shallow(<ActiveUsers />);
   });
 
-  after(function () {
+  after(() => {
     const spiesandStubs = [
       getActiveIdsStub,
       pageCountSpy,
@@ -40,15 +40,15 @@ describe('ActiveUsers', function () {
     wrapper.unmount();
   });
 
-  it('should render without crashing', function() {
+  it('should render without crashing', () => {
     expect(wrapper.instance()).to.be.instanceOf(ActiveUsers);
   });
 
-  it('should render the correct number of users', function() {
+  it('should render the correct number of users', () => {
     expect(wrapper.find('li')).to.have.lengthOf(2);
   });
 
-  it('should call all expected functions on mount', function() {
+  it('should call all expected functions on mount', () => {
     sinon.assert.calledOnce(getActiveIdsStub);
     sinon.assert.calledOnce(boundedPageSpy);
     sinon.assert.calledOnce(userIdSpy);

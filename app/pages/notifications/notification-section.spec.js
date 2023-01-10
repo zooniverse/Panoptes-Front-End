@@ -5,96 +5,98 @@ import { shallow } from 'enzyme';
 import NotificationSection from './notification-section';
 
 const notifications = [
-  { notification: {
-    id: '123',
-    source_type: 'DataRequest',
-    url: '/',
-    message: 'test message',
-    created_at: '2016-12-09T16:09:50.641Z',
+  {
+    notification: {
+      id: '123',
+      source_type: 'DataRequest',
+      url: '/',
+      message: 'test message',
+      created_at: '2016-12-09T16:09:50.641Z'
+    },
+    data: { projectName: 'TestingProject' }
   },
-    data: { projectName: 'TestingProject' },
-  },
-  { notification: {
-    id: '124',
-    source_type: 'DataRequest',
-    url: '/',
-    message: 'test message',
-    created_at: '2016-12-10T16:09:50.641Z',
-  },
-    data: { projectName: 'TestingProject' },
-  },
+  {
+    notification: {
+      id: '124',
+      source_type: 'DataRequest',
+      url: '/',
+      message: 'test message',
+      created_at: '2016-12-10T16:09:50.641Z'
+    },
+    data: { projectName: 'TestingProject' }
+  }
 ];
 
-describe('Notification Section', function() {
+describe('Notification Section', () => {
   let wrapper;
 
-  before(function () {
+  before(() => {
     sinon.stub(NotificationSection.prototype, 'getUnreadCount').callsFake(() => null);
   });
 
-  after(function () {
+  after(() => {
     NotificationSection.prototype.getUnreadCount.restore();
   });
 
-  describe('it can display a Zooniverse section', function () {
-    beforeEach(function () {
+  describe('it can display a Zooniverse section', () => {
+    beforeEach(() => {
       wrapper = shallow(
-        <NotificationSection projectID={''} slug={null} user={{ id: 1 }} section={'zooniverse'} />,
+        <NotificationSection projectID="" slug={null} user={{ id: 1 }} section="zooniverse" />,
       );
     });
 
-    it('should display the correct title', function () {
+    it('should display the correct title', () => {
       assert.equal(wrapper.find('.notification-section__title').text(), 'Zooniverse');
     });
 
-    it('should link to the home page', function () {
+    it('should link to the home page', () => {
       assert.equal(wrapper.find('Link').prop('to'), '/');
     });
 
-    it('shows the Zooniverse logo', function () {
+    it('shows the Zooniverse logo', () => {
       assert.equal(wrapper.find('ZooniverseLogo').length, 1);
     });
   });
 
-  describe('it correctly displays a project', function () {
-    before(function () {
+  describe('it correctly displays a project', () => {
+    before(() => {
       sinon.stub(NotificationSection.prototype, 'componentWillMount').callsFake(() => null);
       wrapper = shallow(<NotificationSection />);
       wrapper.setState({ name: 'Testing' });
     });
 
-    after(function () {
+    after(() => {
       NotificationSection.prototype.componentWillMount.restore();
     });
 
-    it('should display the correct title', function () {
+    it('should display the correct title', () => {
       assert.equal(wrapper.find('.notification-section__title').text(), 'Testing');
     });
   });
 
-  describe('will render appropriately when open', function () {
-    beforeEach(function () {
+  describe('will render appropriately when open', () => {
+    beforeEach(() => {
       wrapper = shallow(
-        <NotificationSection expanded={true} projectID={''} slug={null} user={{ id: 1 }} section={'zooniverse'} />,
+        <NotificationSection expanded={true} projectID="" slug={null} user={{ id: 1 }} section="zooniverse" />,
       );
       wrapper.setState({ notificationData: notifications });
     });
 
-    it('should display the correct number of notifications', function () {
+    it('should display the correct number of notifications', () => {
       assert.equal(wrapper.find('Notification').length, 2);
     });
 
-    it('should show an unread notification in place of an avatar', function () {
+    it('should show an unread notification in place of an avatar', () => {
       wrapper.setState({ unread: 1 });
       assert.equal(wrapper.find('circle').length, 1);
     });
 
-    it('should show close icon', function () {
+    it('should show close icon', () => {
       assert.equal(wrapper.find('.fa-chevron-up').length, 1);
     });
   });
 
-  describe('will update notifications as read', function () {
+  describe('will update notifications as read', () => {
     const newNotifications = [
       {
         id: '123',
@@ -145,24 +147,24 @@ describe('Notification Section', function() {
     wrapper.setState({ notifications: newNotifications });
     wrapper.instance().markAsRead(newNotifications[0]);
 
-    it('should update read notification as read (delivered)', function () {
+    it('should update read notification as read (delivered)', () => {
       assert.equal(newNotifications[0].update.calledWith({ delivered: true }), true);
       assert.equal(newNotifications[0].save.called, true);
     });
 
-    it('should update related notifications as read (delivered)', function () {
+    it('should update related notifications as read (delivered)', () => {
       assert.equal(newNotifications[1].update.calledWith({ delivered: true }), true);
       assert.equal(newNotifications[1].save.called, true);
     });
 
-    it('should not update unrelated notifications', function () {
+    it('should not update unrelated notifications', () => {
       assert.equal(newNotifications[2].update.called, false);
       assert.equal(newNotifications[2].save.called, false);
       assert.equal(newNotifications[3].update.called, false);
       assert.equal(newNotifications[3].save.called, false);
     });
 
-    it('should update the notifications counter', function () {
+    it('should update the notifications counter', () => {
       assert.equal(notificationsCounter.update.called, true);
     });
   });

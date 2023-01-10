@@ -198,16 +198,18 @@ export default class DropdownEditor extends React.Component {
             </p>
           </section>
 
-          {this.state.editSelect &&
-            <Dialog required={true}>
-              <DropdownDialog
-                selects={selects}
-                initialSelect={this.state.editSelect}
-                related={this.getRelated(this.state.editSelect)}
-                onSave={this.handleSave}
-                onCancel={this.handleCancel}
-              />
-            </Dialog>}
+          {this.state.editSelect
+            && (
+              <Dialog required={true}>
+                <DropdownDialog
+                  selects={selects}
+                  initialSelect={this.state.editSelect}
+                  related={this.getRelated(this.state.editSelect)}
+                  onSave={this.handleSave}
+                  onCancel={this.handleCancel}
+                />
+              </Dialog>
+            )}
 
           <hr />
         </div>
@@ -224,7 +226,8 @@ export default class DropdownEditor extends React.Component {
           />
         </AutoSave>
 
-      </div>);
+      </div>
+    );
   }
 }
 

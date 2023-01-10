@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-function TextInput({ title, help, onChange, name, type = 'text', required = false, value }) {
+function TextInput({
+  title, help, onChange, name, type = 'text', required = false, value
+}) {
   return (
     <fieldset>
       <label>

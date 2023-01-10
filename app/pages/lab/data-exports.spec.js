@@ -3,68 +3,66 @@ import assert from 'assert';
 import { shallow, render } from 'enzyme';
 
 import DataExports, { Warning } from './data-exports';
-import WorkflowClassificationExportButton from "./workflow-classification-export-button";
-import DataExportButton from  "../../partials/data-export-button";
-import TalkDataExportButton from  "../../talk/data-export-button";
+import WorkflowClassificationExportButton from './workflow-classification-export-button';
+import DataExportButton from '../../partials/data-export-button';
+import TalkDataExportButton from '../../talk/data-export-button';
 
 const testProject = {
   id: '1',
   links: {
     subject_sets: []
   }
-}
+};
 
-describe('DataExports', function () {
+describe('DataExports', () => {
   let wrapper;
   let dataExportButtons;
   let talkDataExportButtons;
 
-  before(function () {
+  before(() => {
     wrapper = shallow(<DataExports project={testProject} />);
-    dataExportButtons = wrapper.find(DataExportButton)
-    talkDataExportButtons = wrapper.find(TalkDataExportButton)
-  })
+    dataExportButtons = wrapper.find(DataExportButton);
+    talkDataExportButtons = wrapper.find(TalkDataExportButton);
+  });
 
-  it('should render without crashing', function () {});
+  it('should render without crashing', () => {});
 
-  it('should show a classifications export button', function () {
+  it('should show a classifications export button', () => {
     const buttonToTest = findByExportType(dataExportButtons, 'classifications_export');
     assert.equal(buttonToTest.length, 1);
     assert.equal(buttonToTest.prop('project'), testProject);
   });
 
-  it('should show a classifications export button', function () {
-    const buttonToTest = wrapper.find(WorkflowClassificationExportButton)
+  it('should show a classifications export button', () => {
+    const buttonToTest = wrapper.find(WorkflowClassificationExportButton);
     assert.equal(buttonToTest.length, 1);
     assert.equal(buttonToTest.prop('project'), testProject);
   });
 
-  it('should show a subjects export button', function () {
+  it('should show a subjects export button', () => {
     const buttonToTest = findByExportType(dataExportButtons, 'subjects_export');
     assert.equal(buttonToTest.length, 1);
     assert.equal(buttonToTest.prop('project'), testProject);
-
   });
 
-  it('should show a workflows export button', function () {
+  it('should show a workflows export button', () => {
     const buttonToTest = findByExportType(dataExportButtons, 'workflows_export');
     assert.equal(buttonToTest.length, 1);
     assert.equal(buttonToTest.prop('project'), testProject);
-
   });
 
-  it('should show a Talk comments export button', function () {
+  it('should show a Talk comments export button', () => {
     const buttonToTest = findByExportType(talkDataExportButtons, 'comments'); assert.equal(buttonToTest.length, 1);
     assert.equal(buttonToTest.prop('project'), testProject);
   });
 
-  it('should show a Talk tags export button', function () {
+  it('should show a Talk tags export button', () => {
     const buttonToTest = findByExportType(talkDataExportButtons, 'tags');
     assert.equal(buttonToTest.length, 1);
     assert.equal(buttonToTest.prop('project'), testProject);
   });
 
-  it('should show a warning if required', function () {
+  it('should show a warning if required', () => {
     const noWarnings = wrapper.find(Warning);
     assert.equal(noWarnings.length, 0);
 
@@ -73,7 +71,7 @@ describe('DataExports', function () {
         projects: ['1'],
         message: 'foobar'
       }
-    ]
+    ];
 
     const wrapperWithWarning = shallow(
       <DataExports warnings={warnings} project={testProject} />
@@ -84,8 +82,6 @@ describe('DataExports', function () {
   });
 });
 
-function findByExportType (selector, exportType) {
-  return selector.findWhere(function(button) {
-    return button.prop('exportType') === exportType;
-  });
+function findByExportType(selector, exportType) {
+  return selector.findWhere(button => button.prop('exportType') === exportType);
 }

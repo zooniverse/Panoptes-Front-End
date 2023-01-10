@@ -20,14 +20,20 @@ export default class SVGRenderer extends React.Component {
 
     if (clientRect) {
       const { width, height } = clientRect;
-      let { left, right, top, bottom } = clientRect;
+      let {
+        left, right, top, bottom
+      } = clientRect;
       left += pageXOffset;
       right += pageXOffset;
       top += pageYOffset;
       bottom += pageYOffset;
-      return { left, right, top, bottom, width, height };
+      return {
+        left, right, top, bottom, width, height
+      };
     }
-    return { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 };
+    return {
+      left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0
+    };
   }
 
   getScale() {

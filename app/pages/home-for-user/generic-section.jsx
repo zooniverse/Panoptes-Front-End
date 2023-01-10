@@ -8,7 +8,7 @@ class HomePageSection extends React.Component {
     loading: PropTypes.bool,
     error: PropTypes.object,
     onClose: PropTypes.func,
-    children: PropTypes.node,
+    children: PropTypes.node
   };
 
   render() {
@@ -19,12 +19,12 @@ class HomePageSection extends React.Component {
             className="fa fa-spinner fa-spin fa-fw"
             style={{
               alignSelf: 'center',
-              visibility: this.props.loading ? '' : 'hidden',
+              visibility: this.props.loading ? '' : 'hidden'
             }}
-          ></i>
+          />
           <span className="home-page-section__header-label">{this.props.title}</span>
           <Link to="#" className="secret-button" title="Close this section" aria-label="Close this section" onClick={this.props.onClose}>
-            <i className="fa fa-times"></i>
+            <i className="fa fa-times" />
           </Link>
         </header>
         {!!this.props.error && (

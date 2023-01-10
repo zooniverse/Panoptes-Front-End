@@ -142,7 +142,7 @@ class ProfileUser extends Component {
 
     return (
       <div className={pageClasses}>
-        <Helmet title={this.props.profileUser ? `${counterpart("profile.title")} » ${this.props.profileUser.display_name}` : counterpart('loading')} />
+        <Helmet title={this.props.profileUser ? `${counterpart('profile.title')} » ${this.props.profileUser.display_name}` : counterpart('loading')} />
         <section className="hero user-profile-hero" style={headerStyle}>
           <div className="overlay" />
           <div className="hero-container">
@@ -150,7 +150,9 @@ class ProfileUser extends Component {
               <Avatar user={this.props.profileUser} />
               {this.props.profileUser.display_name}
               <span className="login-name">
-                ({this.props.profileUser.login})
+                (
+                {this.props.profileUser.login}
+)
               </span>
             </h1>
 

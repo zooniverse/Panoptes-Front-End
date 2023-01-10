@@ -27,15 +27,15 @@ function tearDown() {
   wrapper = null;
 }
 
-describe('Featured Project Toggle', function () {
+describe('Featured Project Toggle', () => {
   beforeEach(setup);
   afterEach(tearDown);
 
-  it('should render the featured checkbox when the project is launch_approved', function () {
+  it('should render the featured checkbox when the project is launch_approved', () => {
     expect(checkbox).to.have.lengthOf(1);
   });
 
-  it('should render a checked featured check box when the project is launch_approved and featured', function () {
+  it('should render a checked featured check box when the project is launch_approved and featured', () => {
     wrapper.setProps({
       project: {
         featured: true,
@@ -45,12 +45,12 @@ describe('Featured Project Toggle', function () {
     expect(wrapper.find('input[type="checkbox"][checked=true]')).to.have.lengthOf(1);
   });
 
-  it('should call handleProjectChange on checkbox change', function () {
+  it('should call handleProjectChange on checkbox change', () => {
     checkbox.simulate('change');
     expect(featuredChangeSpy.called).to.be.true;
   });
 
-  it('should not render the featured checkbox when the project is not launch_approved', function () {
+  it('should not render the featured checkbox when the project is not launch_approved', () => {
     wrapper.setProps({
       project: {
         featured: false,

@@ -32,53 +32,67 @@ const ProjectHomePage = (props) => {
     };
   }
 
-  const showGetStartedLink = (!props.showWorkflowButtons && projectIsNotRedirected) || props.splits['workflow.assignment']
+  const showGetStartedLink = (!props.showWorkflowButtons && projectIsNotRedirected) || props.splits['workflow.assignment'];
 
   return (
     <div className="project-home-page">
       <div className="project-page project-background" style={backgroundStyle}>
 
-        {props.projectIsComplete &&
-          (<div className="project-home-page__finished-banner-container">
-            <FinishedBanner project={props.project} />
-          </div>)}
+        {props.projectIsComplete
+          && (
+            <div className="project-home-page__finished-banner-container">
+              <FinishedBanner project={props.project} />
+            </div>
+          )}
 
-        {props.organization &&
-          <Link
-            to={`/organizations/${props.organization.slug}`}
-            className="project-home-page__organization"
-          >
-            <Translate content="project.home.organization" />: {props.organization.display_name}
-          </Link>}
+        {props.organization
+          && (
+            <Link
+              to={`/organizations/${props.organization.slug}`}
+              className="project-home-page__organization"
+            >
+              <Translate content="project.home.organization" />
+:
+              {props.organization.display_name}
+            </Link>
+          )}
 
         <div className={descriptionClass}>
           {props.translation.description}
         </div>
 
         <div className="project-home-page__call-to-action">
-          {projectIsNotRedirected &&
-            <Link to={`/projects/${props.project.slug}/about`} className="project-home-page__button call-to-action__button call-to-action__button--learn-more">
-              <Translate content="project.home.learnMore" />
-            </Link>}
-          {canClassify && showGetStartedLink &&
-            <Link
-              to={`/projects/${props.project.slug}/classify`}
-              className="project-home-page__button call-to-action__button call-to-action__button--get-started"
-            >
-              <Translate content="project.home.getStarted" />
-            </Link>}
-          {props.project && props.project.redirect &&
-            <a href={props.project.redirect} className="project-home-page__button">
-              <strong><Translate content="project.home.visitLink" /></strong>
-              <i className="fa fa-external-link" />
-            </a>}
+          {projectIsNotRedirected
+            && (
+              <Link to={`/projects/${props.project.slug}/about`} className="project-home-page__button call-to-action__button call-to-action__button--learn-more">
+                <Translate content="project.home.learnMore" />
+              </Link>
+            )}
+          {canClassify && showGetStartedLink
+            && (
+              <Link
+                to={`/projects/${props.project.slug}/classify`}
+                className="project-home-page__button call-to-action__button call-to-action__button--get-started"
+              >
+                <Translate content="project.home.getStarted" />
+              </Link>
+            )}
+          {props.project && props.project.redirect
+            && (
+              <a href={props.project.redirect} className="project-home-page__button">
+                <strong><Translate content="project.home.visitLink" /></strong>
+                <i className="fa fa-external-link" />
+              </a>
+            )}
         </div>
-        {!props.project.launch_approved &&
-          <Translate
-            component="p"
-            className="project-disclaimer"
-            content="project.disclaimer"
-          />}
+        {!props.project.launch_approved
+          && (
+            <Translate
+              component="p"
+              className="project-disclaimer"
+              content="project.disclaimer"
+            />
+          )}
         <ProjectHomeWorkflowButtons
           activeWorkflows={props.activeWorkflows}
           preferences={props.preferences}
@@ -108,7 +122,7 @@ const ProjectHomePage = (props) => {
             }
             return (
               <div className="project-home-page__talk-image" key={subject.id}>
-                <Link to={`/projects/${props.project.slug}/talk/subjects/${subject.id}`} >
+                <Link to={`/projects/${props.project.slug}/talk/subjects/${subject.id}`}>
                   <Thumbnail
                     alt=""
                     controls={false}
@@ -143,9 +157,14 @@ const ProjectHomePage = (props) => {
 
             <div className="researcher-words__wrapper">
               <img className="researcher-words__avatar" role="presentation" src={avatarSrc} alt="The researcher" />
-              <p className="researcher-words__quote">&quot;{props.translation.researcher_quote}&quot;</p>
+              <p className="researcher-words__quote">
+&quot;
+                {props.translation.researcher_quote}
+&quot;
+              </p>
             </div>
-          </div>)}
+          </div>
+        )}
 
         <div className="project-home-page__about-text" style={(props.project.researcher_quote && props.project.urls && props.project.urls.length > 0) ? { flexBasis: '33.333%' } : { flexBasis: '66.666%' }}>
           <Translate
@@ -156,10 +175,12 @@ const ProjectHomePage = (props) => {
               title: props.translation.display_name
             }}
           />
-          {props.project.introduction &&
-            <Markdown project={props.project}>
-              {props.translation.introduction}
-            </Markdown>}
+          {props.project.introduction
+            && (
+              <Markdown project={props.project}>
+                {props.translation.introduction}
+              </Markdown>
+            )}
         </div>
         <ExternalLinksBlock
           header={<Translate className="project-home-page__small-header" component="h4" content="project.home.links" />}

@@ -7,10 +7,10 @@ import { Link, IndexLink } from 'react-router';
 
 class GetInvolved extends React.Component {
   componentWillReceiveProps(nextProps, nextContext) {
-    this.logClick = !!nextContext &&
-      !!nextContext.geordi &&
-      !!nextContext.geordi.makeHandler &&
-      nextContext.geordi.makeHandler('about-menu');
+    this.logClick = !!nextContext
+      && !!nextContext.geordi
+      && !!nextContext.geordi.makeHandler
+      && nextContext.geordi.makeHandler('about-menu');
   }
 
   render() {

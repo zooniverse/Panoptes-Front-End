@@ -3,7 +3,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import React, { Component } from 'react';
 import Translate from 'react-translate-component';
 import PropTypes from 'prop-types';
-import DataExportDownloadLink from './data-export-download-link'
+import DataExportDownloadLink from './data-export-download-link';
 
 counterpart.registerTranslations('en', {
   dataExportDetails: {
@@ -40,7 +40,7 @@ class SubjectSetDataExportButton extends Component {
   requestDataExport() {
     const { subjectSetId, exportType, contentType } = this.props;
     const url = `/subject_sets/${subjectSetId}/${exportType}`;
-    apiClient.post(url, { media: { content_type: contentType } })
+    apiClient.post(url, { media: { content_type: contentType }})
       .then(() => { this.handleExportSuccess(); })
       .catch((err) => { this.handleExportFail(err); });
   }
@@ -102,7 +102,7 @@ SubjectSetDataExportButton.propTypes = {
 
 SubjectSetDataExportButton.defaultProps = {
   contentType: 'text/csv',
-  exportType: 'classifications_export',
+  exportType: 'classifications_export'
 };
 
 export default SubjectSetDataExportButton;

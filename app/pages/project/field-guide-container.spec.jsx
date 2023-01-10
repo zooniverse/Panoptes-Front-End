@@ -12,66 +12,66 @@ const guide = {
   }]
 };
 
-describe('FieldGuideContainer', function () {
-  it('should render without crashing', function() {
+describe('FieldGuideContainer', () => {
+  it('should render without crashing', () => {
     const wrapper = shallow(<FieldGuideContainer />);
     expect(wrapper.exists()).to.be.true;
   });
 
-  describe('when there is no guide', function () {
-    it('should render null', function () {
+  describe('when there is no guide', () => {
+    it('should render null', () => {
       const wrapper = shallow(<FieldGuideContainer />);
       expect(wrapper.html()).to.be.null;
     });
   });
 
-  describe('when there is a guide', function () {
+  describe('when there is a guide', () => {
     let wrapper;
-    before(function() {
+    before(() => {
       wrapper = shallow(
         <FieldGuideContainer guide={guide} project={{ id: '2' }} guideIcons={{ 2: { src: 'icon.jpg' }}} />
       );
     });
 
-    it('should render a Pullout component', function () {
+    it('should render a Pullout component', () => {
       expect(wrapper.find('Pullout')).to.have.lengthOf(1);
     });
 
-    it('should render a FieldGuide component', function () {
+    it('should render a FieldGuide component', () => {
       expect(wrapper.find('FieldGuide')).to.have.lengthOf(1);
     });
 
-    it('should wrap the FieldGuide component with a Provider', function () {
+    it('should wrap the FieldGuide component with a Provider', () => {
       expect(wrapper.find('Provider')).to.have.lengthOf(1);
     });
   });
 
-  describe('the toggle field guide button', function () {
+  describe('the toggle field guide button', () => {
     let wrapper;
     let toggleFieldGuideSpy;
     let initialRevealedState;
-    before(function () {
+    before(() => {
       toggleFieldGuideSpy = sinon.spy(FieldGuideContainer.prototype, 'toggleFieldGuide');
       wrapper = shallow(
-        <FieldGuideContainer guide={guide} project={{ id: '2' }} guideIcons={{ 2: { src: 'icon.jpg' } }} />
+        <FieldGuideContainer guide={guide} project={{ id: '2' }} guideIcons={{ 2: { src: 'icon.jpg' }}} />
       );
       initialRevealedState = wrapper.state('revealed');
     });
 
-    afterEach(function () {
+    afterEach(() => {
       toggleFieldGuideSpy.resetHistory();
     });
 
-    after(function () {
+    after(() => {
       toggleFieldGuideSpy.restore();
     });
 
-    it('should call toggleFieldGuide when the button is clicked', function () {
+    it('should call toggleFieldGuide when the button is clicked', () => {
       wrapper.find('button').simulate('click');
       expect(toggleFieldGuideSpy.calledOnce).to.be.true;
     });
 
-    it('should set the revealed state to be the opposite of the previous revealed state on button click', function () {
+    it('should set the revealed state to be the opposite of the previous revealed state on button click', () => {
       expect(initialRevealedState).to.not.equal(wrapper.state('revealed'));
       expect(initialRevealedState).to.be.false;
       expect(wrapper.state('revealed')).to.be.true;

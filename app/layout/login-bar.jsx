@@ -8,8 +8,8 @@ import LoginDialog from '../partials/login-dialog';
 counterpart.registerTranslations('en', {
   loginBar: {
     signIn: 'Sign in',
-    register: 'Register',
-  },
+    register: 'Register'
+  }
 });
 
 class LoginBar extends React.Component {
@@ -20,9 +20,9 @@ class LoginBar extends React.Component {
   showDialog = (event) => {
     const which = event.currentTarget.value;
     this.context.geordi.logEvent({
-      type: which === 'sign-in' ? 'login' : 'register-link',
+      type: which === 'sign-in' ? 'login' : 'register-link'
     });
-    alert((resolve) => <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />);
+    alert(resolve => <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />);
   };
 
   render() {
@@ -34,7 +34,7 @@ class LoginBar extends React.Component {
           </span>
         </button>
 
-        <span className="site-nav__link-buncher"></span>
+        <span className="site-nav__link-buncher" />
 
         <button type="button" value="register" className="secret-button" onClick={this.showDialog}>
           <span className="site-nav__link">

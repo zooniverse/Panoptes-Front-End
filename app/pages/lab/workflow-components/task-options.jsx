@@ -1,6 +1,6 @@
 import taskComponents from '../../../classifier/tasks/index.js';
 
-function TaskOption({ definition, taskKey}) {
+function TaskOption({ definition, taskKey }) {
   if (definition.type !== 'shortcut') {
     return (
       <option key={taskKey} value={taskKey}>

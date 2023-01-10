@@ -17,7 +17,7 @@ import TaskTab from './components/TaskTab';
 const store = {
   subscribe: () => { },
   dispatch: () => { },
-  getState: () => ({ userInterface: { theme: 'light' } })
+  getState: () => ({ userInterface: { theme: 'light' }})
 };
 
 const mockReduxStore = {
@@ -25,25 +25,25 @@ const mockReduxStore = {
   wrappingComponentProps: { store }
 };
 
-describe('TaskTabs', function() {
+describe('TaskTabs', function () {
   let wrapper;
-  before(function() {
+  before(function () {
     wrapper = mount(<TaskTabs />, mockReduxStore);
   });
 
-  it('should render without crashing', function() {
+  it('should render without crashing', function () {
     expect(wrapper).to.be.ok;
   });
 
-  it('should render a TabsWrapper', function() {
+  it('should render a TabsWrapper', function () {
     expect(wrapper.find(TabsWrapper)).to.have.lengthOf(1);
   });
 
-  it('should render a TaskTab component', function() {
+  it('should render a TaskTab component', function () {
     expect(wrapper.find(TaskTab)).to.have.lengthOf(1);
   });
 
-  it('should render a TutorialTab', function() {
+  it('should render a TutorialTab', function () {
     expect(wrapper.find(TutorialTab)).to.have.lengthOf(1);
   });
 });

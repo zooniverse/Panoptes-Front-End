@@ -5,11 +5,11 @@ import { shallow } from 'enzyme';
 import Tutorial from './tutorial';
 import mockPanoptesResource from '../../test/mock-panoptes-resource';
 
-describe('Tutorial', function () {
-  describe('on unmount', function () {
+describe('Tutorial', () => {
+  describe('on unmount', () => {
     let wrapper;
 
-    before(function () {
+    before(() => {
       const tutorial = {
         id: 'a',
         steps: [{}]
@@ -31,13 +31,13 @@ describe('Tutorial', function () {
       wrapper.instance().handleUnmount();
     });
 
-    it('should convert preferences.tutorials_completed_at from array to object', function () {
+    it('should convert preferences.tutorials_completed_at from array to object', () => {
       const { tutorials_completed_at } = wrapper.instance().props.projectPreferences.preferences;
       expect(tutorials_completed_at).to.not.be.an.instanceof(Array);
       expect(tutorials_completed_at['100']).to.equal('Hello');
     });
 
-    it('should add the current tutorial to tutorials_completed_at', function () {
+    it('should add the current tutorial to tutorials_completed_at', () => {
       const { tutorials_completed_at } = wrapper.instance().props.projectPreferences.preferences;
       const { tutorial } = wrapper.instance().props;
       expect(tutorials_completed_at[tutorial.id]).to.exist;

@@ -15,7 +15,7 @@ class VersionList extends Component {
     this.state = {
       loading: false,
       users: null,
-      versions: null,
+      versions: null
     };
   }
 
@@ -37,10 +37,10 @@ class VersionList extends Component {
   createVersionString(version) {
     const versionAuthor = this.state.users.find(user => user.id === version.whodunnit);
     const [property] = Object.keys(version.changeset);
-    const [oldValue, newValue] = version.changeset[property];    
+    const [oldValue, newValue] = version.changeset[property];
     const time = moment(version.created_at).fromNow();
 
-    // There are some versions that have no `whodunnit` property, so set a fallback. 
+    // There are some versions that have no `whodunnit` property, so set a fallback.
     // It was probably a ghost.
     const versionAuthorName = (versionAuthor) ? versionAuthor.display_name : '👻 SOMEONE 👻';
     const versionEntry = [versionAuthorName, 'changed', property];
@@ -58,7 +58,7 @@ class VersionList extends Component {
 
     this.setState({ loading: true });
     return this.props.project.get('versions')
-      .then(versions => {
+      .then((versions) => {
         const userIds = uniq(versions.map(version => version.whodunnit));
         return apiClient.type('users').get(userIds)
           .then(users => ({ versions, users }))
@@ -68,7 +68,7 @@ class VersionList extends Component {
         this.setState({
           loading: false,
           versions: versions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)),
-          users,
+          users
         });
       })
       .catch(error => console.error('Error retrieving version data', error));
@@ -79,9 +79,7 @@ class VersionList extends Component {
       <div>
         <h4>Recent Status Changes</h4>
         <ul className="project-status__section-list">
-          {this.state.versions.map(version =>
-            <li key={version.id}>{this.createVersionString(version)}</li>
-          )}
+          {this.state.versions.map(version => <li key={version.id}>{this.createVersionString(version)}</li>)}
         </ul>
       </div>
     );

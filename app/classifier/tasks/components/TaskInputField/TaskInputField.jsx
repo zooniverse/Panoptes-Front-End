@@ -101,9 +101,9 @@ export const StyledTaskInputField = styled.label`
     border-width: 2px;
     border-style: solid;
     border-color: ${theme('mode', {
-      dark: zooTheme.colors.teal.dark,
-      light: zooTheme.colors.teal.mid
-    })};
+    dark: zooTheme.colors.teal.dark,
+    light: zooTheme.colors.teal.mid
+  })};
     color: ${HOVER.color};
   }
 
@@ -116,9 +116,9 @@ export const StyledTaskInputField = styled.label`
   input:focus:checked + ${StyledTaskLabel},
   input:checked + ${StyledTaskLabel}:hover {
     border: ${theme('mode', {
-      dark: `2px solid ${zooTheme.colors.teal.dark}`,
-      light: `2px solid ${zooTheme.colors.teal.dark}`
-    })};
+    dark: `2px solid ${zooTheme.colors.teal.dark}`,
+    light: `2px solid ${zooTheme.colors.teal.dark}`
+  })};
   }
 `;
 

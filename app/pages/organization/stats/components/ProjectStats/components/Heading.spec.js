@@ -4,7 +4,9 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
 import mockPanoptesResource from '../../../../../../../test/mock-panoptes-resource';
-import Heading, { StyledAvatar, StyledLink, StyledPercent, StyledRedirect } from './Heading';
+import Heading, {
+  StyledAvatar, StyledLink, StyledPercent, StyledRedirect
+} from './Heading';
 
 const mockProject = mockPanoptesResource('projects', {
   avatarSrc: '/project/avatar/url',
@@ -33,7 +35,7 @@ describe('Heading', function () {
     shallow(
       <Heading
         resource={mockProject}
-        title={mockProject.display_name} 
+        title={mockProject.display_name}
       />
     );
   });
@@ -43,7 +45,7 @@ describe('Heading', function () {
       wrapper = shallow(
         <Heading
           resource={mockProject}
-          title={mockProject.display_name} 
+          title={mockProject.display_name}
         />
       );
     });
@@ -65,7 +67,7 @@ describe('Heading', function () {
         wrapper = shallow(
           <Heading
             resource={mockProjectWithRedirect}
-            title={mockProjectWithRedirect.display_name} 
+            title={mockProjectWithRedirect.display_name}
           />
         );
       });
@@ -85,7 +87,7 @@ describe('Heading', function () {
     wrapper = shallow(
       <Heading
         resource={mockWorkflowStatsHidden}
-        title={mockProjectWithRedirect.display_name} 
+        title={mockProjectWithRedirect.display_name}
       />
     );
     expect(wrapper.find(StyledPercent)).to.have.lengthOf(0);

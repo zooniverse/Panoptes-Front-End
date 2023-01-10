@@ -30,7 +30,9 @@ class ProjectHomeContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { actions, project, translations, user } = this.props;
+    const {
+      actions, project, translations, user
+    } = this.props;
     const { activeWorkflows } = this.state;
     if (user !== prevProps.user) {
       this.showWorkflowButtons(this.props);
@@ -69,11 +71,13 @@ class ProjectHomeContainer extends React.Component {
   }
 
   fetchTalkSubjects(props) {
-    talkClient.type('comments').get({ section: `project-${props.project.id}`, page_size: 10, sort: '-created_at', focus_type: 'Subject' })
+    talkClient.type('comments').get({
+      section: `project-${props.project.id}`, page_size: 10, sort: '-created_at', focus_type: 'Subject'
+    })
       .then((comments) => {
         if (comments.length > 0) {
           const subjectIds = comments.map(x => x.focus_id);
-          const uniqueSubjects = subjectIds.filter((el, i, arr) => { return arr.indexOf(el) === i; });
+          const uniqueSubjects = subjectIds.filter((el, i, arr) => arr.indexOf(el) === i);
           uniqueSubjects.splice(3, 7);
           apiClient.type('subjects').get(uniqueSubjects)
             .then((subjects) => {
@@ -105,8 +109,8 @@ class ProjectHomeContainer extends React.Component {
   showWorkflowButtons(props) {
     const workflowAssignment = this.props.project.experimental_tools.includes('workflow assignment');
 
-    if ((props.project.configuration && props.project.configuration.user_chooses_workflow && !workflowAssignment) ||
-      (workflowAssignment && props.user)) {
+    if ((props.project.configuration && props.project.configuration.user_chooses_workflow && !workflowAssignment)
+      || (workflowAssignment && props.user)) {
       this.setState({ showWorkflowButtons: true }, this.fetchWorkflows.bind(this, this.props, { active: true, fields: 'active,completeness,configuration,display_name' }));
     } else {
       this.setState({ showWorkflowButtons: false });
@@ -199,7 +203,7 @@ ProjectHomeContainer.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  translations: state.translations,
+  translations: state.translations
 });
 
 const mapDispatchToProps = dispatch => ({

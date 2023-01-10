@@ -16,7 +16,7 @@ const StyledWorkflowsActionText = styled.button`
 
 function ActionText({ content, handleClick }) {
   return (
-    <StyledWorkflowsActionText 
+    <StyledWorkflowsActionText
       type="button"
       onClick={() => handleClick()}
     >

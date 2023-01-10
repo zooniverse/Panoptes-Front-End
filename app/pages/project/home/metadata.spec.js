@@ -4,10 +4,10 @@ import { render } from 'enzyme';
 
 import ProjectMetadata from './metadata';
 
-describe('ProjectMetadata', function() {
+describe('ProjectMetadata', () => {
   let project;
 
-  before(function() {
+  before(() => {
     project = {
       classifiers_count: 0,
       classifications_count: 0,
@@ -19,25 +19,25 @@ describe('ProjectMetadata', function() {
     };
   });
 
-  describe('render', function() {
+  describe('render', () => {
     let wrapper;
-    before(function() {
+    before(() => {
       wrapper = render(<ProjectMetadata project={project} translation={project} />);
     });
 
-    it('renders stats', function() {
+    it('renders stats', () => {
       assert(wrapper.find('.project-metadata-stat').length, 4);
     });
 
-    it('renders 56% completeness', function() {
+    it('renders 56% completeness', () => {
       assert(wrapper.find('rect').first().prop('width'), 0.56);
     });
 
-    it('excludes TalkStatus by default', function() {
+    it('excludes TalkStatus by default', () => {
       assert.notEqual(wrapper.find('.project-home-page__talk-stat').length, 1);
     });
 
-    it('includes TalkStatus if showTalkStatus prop is true', function() {
+    it('includes TalkStatus if showTalkStatus prop is true', () => {
       wrapper = render(<ProjectMetadata project={project} translation={project} showTalkStatus={true} />);
       assert(wrapper.find('.project-home-page__talk-stat').length, 1);
     });

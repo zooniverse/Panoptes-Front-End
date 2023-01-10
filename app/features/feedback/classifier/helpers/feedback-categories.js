@@ -4,4 +4,4 @@ const categories = {
   FALSEPOS: 'falsepos'
 };
 
-export default categories
+export default categories;

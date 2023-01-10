@@ -18,7 +18,7 @@ class WorkflowAssignmentDialog extends React.Component {
     const snapshotWi = ['5371', '2439'];
     let promotionMessage = <Translate content="classifier.workflowAssignmentDialog.promotionMessage" />;
     const gravitySpyMessage = "Congratulations! Because you're doing so well, you can level up and access more types of glitches, have more options for classifying them, and see glitches that our computer algorithms are even less confident in. If you prefer to stay at this level, you can choose to stay.";
-    const snapshotWiMessage = "Congratulations! You’ve unlocked the next level and can now access a new challenge about the environment you see in the trail camera images. If you prefer, you can choose to stay.";
+    const snapshotWiMessage = 'Congratulations! You’ve unlocked the next level and can now access a new challenge about the environment you see in the trail camera images. If you prefer, you can choose to stay.';
 
     if (props.project && props.project.id === gravitySpy) {
       promotionMessage = gravitySpyMessage;
@@ -32,14 +32,11 @@ class WorkflowAssignmentDialog extends React.Component {
   handlePromotionDecline = () => {
     // Hacky way to get the dialog to close.
     // Need to rework Modal Form to allow custom cancel events on child DOM elements
-    const closeButton =
-      ReactDOM.findDOMNode(this).parentNode.querySelector('.modal-dialog-close-button');
+    const closeButton = ReactDOM.findDOMNode(this).parentNode.querySelector('.modal-dialog-close-button');
     closeButton.click();
   };
 
-  advanceDefault = () => {
-    return this.getPromotionMessage(this.props);
-  };
+  advanceDefault = () => this.getPromotionMessage(this.props);
 
   render() {
     return (

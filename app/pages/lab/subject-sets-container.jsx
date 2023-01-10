@@ -36,9 +36,9 @@ export default class SubjectSetsContainer extends React.Component {
 
   getSubjectSets(page = 1) {
     this.props.project.get('subject_sets', { sort: 'display_name', page })
-    .then((subjectSets) => {
-      this.setState({ subjectSets, loading: false });
-    });
+      .then((subjectSets) => {
+        this.setState({ subjectSets, loading: false });
+      });
   }
 
   createNewSubjectSet() {

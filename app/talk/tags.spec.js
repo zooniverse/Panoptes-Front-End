@@ -5,25 +5,25 @@ import TalkTags from './tags';
 
 const location = {
   query: {}
-}
+};
 
 const params = {
   name: 'snapshot-cats',
   owner: 'zooniverse',
   tag: 'cats'
-}
+};
 
 const project = {
   id: '1',
   slug: 'zooniverse/snapshot-cats'
-}
+};
 
-describe('TalkTags', function () {
-  it('should render without crashing', function () {
+describe('TalkTags', () => {
+  it('should render without crashing', () => {
     const wrapper = shallow(
       <TalkTags location={location} params={params} project={project} />,
-      { context: { router: { goBack: () => {} } }, disableLifecycleMethods: true }
+      { context: { router: { goBack: () => {} }}, disableLifecycleMethods: true }
     );
-    expect(wrapper).to.be.ok
-  })
+    expect(wrapper).to.be.ok;
+  });
 });

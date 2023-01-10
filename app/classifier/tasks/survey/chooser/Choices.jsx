@@ -95,8 +95,8 @@ class Choices extends React.Component {
     const columnsCount = this.howManyColumns(filteredChoices);
     const sortedFilteredChoices = sortIntoColumns(filteredChoices, columnsCount);
     const thumbnailSize = this.whatSizeThumbnails(sortedFilteredChoices);
-    const choiceNotPresent = this.props.focusedChoice.length === 0 ||
-      filteredChoices.indexOf(this.props.focusedChoice) === -1;
+    const choiceNotPresent = this.props.focusedChoice.length === 0
+      || filteredChoices.indexOf(this.props.focusedChoice) === -1;
     return (
       <div className="survey-task-chooser-choices" data-thumbnail-size={thumbnailSize} data-columns={columnsCount}>
         {sortedFilteredChoices.length === 0 && <div><em>No matches.</em></div>}
@@ -133,12 +133,14 @@ class Choices extends React.Component {
               onKeyDown={this.handleKeyDown.bind(this, choiceId)}
             >
               <span className="survey-task-chooser-choice">
-                {choice.images.length > 0 &&
-                  <span
-                    className="survey-task-chooser-choice-thumbnail"
-                    role="presentation"
-                    style={{ backgroundImage: `url('${thumbnail}')` }}
-                  />
+                {choice.images.length > 0
+                  && (
+                    <span
+                      className="survey-task-chooser-choice-thumbnail"
+                      role="presentation"
+                      style={{ backgroundImage: `url('${thumbnail}')` }}
+                    />
+                  )
                 }
                 <span className="survey-task-chooser-choice-label">{translation.choices[choiceId].label}</span>
               </span>

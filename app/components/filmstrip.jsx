@@ -81,15 +81,19 @@ export default class Filmstrip extends React.Component {
           <div className="filmstrip__strip" ref={(element) => { this.strip = element; }}>
             <ul>
               <li>
-                <button className={this.calculateClasses('all')} onClick={this.selectFilter.bind(this, '')} >
-                  <p>All<br />Disciplines</p>
+                <button className={this.calculateClasses('all')} onClick={this.selectFilter.bind(this, '')}>
+                  <p>
+All
+                    <br />
+Disciplines
+                  </p>
                 </button>
               </li>
               {this.props.filterCards.map((filter, i) => {
                 const filterName = filter.value.replace(' ', '-');
                 return (
                   <li key={i}>
-                    <button key={i} className={this.calculateClasses(filter.value)} onClick={this.selectFilter.bind(this, filter.value)} >
+                    <button key={i} className={this.calculateClasses(filter.value)} onClick={this.selectFilter.bind(this, filter.value)}>
                       <span key={i} className={`filmstrip--disciplines__discipline-card__icon filmstrip--disciplines__discipline-card__icon-${filterName}`} />
                       <p>{filter.label}</p>
                     </button>
@@ -103,7 +107,6 @@ export default class Filmstrip extends React.Component {
       </div>
     );
   }
-
 }
 
 Filmstrip.propTypes = {

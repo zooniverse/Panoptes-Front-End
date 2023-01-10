@@ -19,13 +19,15 @@ class ImageViewer extends React.Component {
 
   render() {
     return (
-      <div className="subject-image-frame" >
+      <div className="subject-image-frame">
         <img className="subject pan-active" alt="" src={this.props.src} style={this.props.style} onLoad={this.onLoad} tabIndex={0} onFocus={this.props.onFocus} onBlur={this.props.onBlur} />
 
-        {this.state.loading &&
-          <div className="loading-cover" style={this.props.overlayStyle} >
-            <LoadingIndicator />
-          </div>}
+        {this.state.loading
+          && (
+            <div className="loading-cover" style={this.props.overlayStyle}>
+              <LoadingIndicator />
+            </div>
+          )}
       </div>
     );
   }

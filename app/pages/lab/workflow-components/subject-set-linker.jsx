@@ -68,7 +68,7 @@ export default function SubjectSetLinker({
   function handleToggle(subjectSet, event) {
     if (workflow.hasUnsavedChanges()) {
       workflow.save()
-      .then(() => updateLink(event.target.checked, subjectSet));
+        .then(() => updateLink(event.target.checked, subjectSet));
     } else {
       updateLink(event.target.checked, subjectSet);
     }
@@ -77,7 +77,8 @@ export default function SubjectSetLinker({
   if (hasNoSets) {
     return (
       <p>
-        This project has no subject sets.{' '}
+        This project has no subject sets.
+        {' '}
         <button type="button" onClick={addDemoSet}>Add an example subject set</button>
       </p>
     );
@@ -93,7 +94,11 @@ export default function SubjectSetLinker({
             onChange={event => handleToggle(subjectSet, event)}
           />
           <label htmlFor={`subjectSet${subjectSet.id}`}>
-            {subjectSet.display_name} (#{subjectSet.id})
+            {subjectSet.display_name}
+            {' '}
+(#
+            {subjectSet.id}
+)
           </label>
         </li>
       ))}

@@ -14,7 +14,7 @@ describe('ActionText', function () {
   before(function () {
     wrapper = shallow(
       <ActionText
-        content='organization.stats.expandWorkflowStats'
+        content="organization.stats.expandWorkflowStats"
         handleClick={handleClickSpy}
       />
     );

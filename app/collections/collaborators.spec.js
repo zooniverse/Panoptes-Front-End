@@ -7,9 +7,9 @@ import { CollectionCollaborators, RoleCreator, RoleRow } from './collaborators';
 let resolveMock;
 
 const asyncMock = function () {
-  return new Promise(function (resolve) {
+  return new Promise(((resolve) => {
     resolveMock = resolve;
-  });
+  }));
 };
 
 const getMetaMock = function () {
@@ -47,55 +47,55 @@ const owner = {
   id: '3'
 };
 
-describe('<CollectionCollaborators />', function () {
+describe('<CollectionCollaborators />', () => {
   let wrapper;
   let addUserSpy;
   let deleteUserSpy;
   let componentDidMountStub;
-  before(function () {
+  before(() => {
     addUserSpy = sinon.spy(RoleCreator.prototype, 'handleSubmit');
     deleteUserSpy = sinon.spy(RoleRow.prototype, 'confirmDelete');
     componentDidMountStub = sinon.stub(CollectionCollaborators.prototype, 'componentDidMount');
-    wrapper = mount(<CollectionCollaborators owner={owner} />, { context: { router: {} } });
+    wrapper = mount(<CollectionCollaborators owner={owner} />, { context: { router: {}}});
     wrapper.setState({ hasSettingsRole: true, roleSets });
   });
 
-  after(function () {
+  after(() => {
     addUserSpy.restore();
     deleteUserSpy.restore();
     componentDidMountStub.restore();
   });
 
-  it('should render without crashing', function() {
+  it('should render without crashing', () => {
     assert.equal(wrapper, wrapper);
   });
 
-  it('shows three settings options', function() {
+  it('shows three settings options', () => {
     assert.equal(wrapper.find('dl').children().length, 3);
   });
 
-  it('will show a button to remove each user', function() {
+  it('will show a button to remove each user', () => {
     const rowCount = wrapper.find('RoleRow').find('button').length;
     assert.equal(rowCount, 2);
   });
 
-  it('will bold the font of an active role', function() {
+  it('will bold the font of an active role', () => {
     const firstRow = wrapper.find('RoleRow').first();
     assert.equal(firstRow.find('strong').last().text(), 'Viewer');
   });
 
-  it('will allow three roles to be added to a user', function() {
+  it('will allow three roles to be added to a user', () => {
     const creationRoleRows = wrapper.find('RoleCreator').find('dt').length;
     assert.equal(creationRoleRows, 3);
   });
 
-  it('should call this.handleSubmit() when adding a user', function() {
+  it('should call this.handleSubmit() when adding a user', () => {
     const addUserButton = wrapper.find('RoleCreator').find('button');
     addUserButton.simulate('click');
     sinon.assert.calledOnce(addUserSpy);
   });
 
-  it('will call this.confirmDelete() when removing a user', function() {
+  it('will call this.confirmDelete() when removing a user', () => {
     const removeUserButton = wrapper.find('RoleRow').first().find('button');
     removeUserButton.simulate('click');
     sinon.assert.calledOnce(deleteUserSpy);

@@ -8,43 +8,32 @@ const MINIMUM_SUBJECT_COUNT = 100;
 const REQUIRED_PAGES = ['Research', 'FAQ'];
 
 // Static functions
-const projectHasActiveWorkflows = (project) => {
-  return project.links.active_workflows && project.links.active_workflows.length > 0;
-};
+const projectHasActiveWorkflows = project => project.links.active_workflows && project.links.active_workflows.length > 0;
 
 const projectHasMinimumActiveSubjects = (project) => {
   const subjectCount = project.subjects_count;
-  return (subjectCount >= MINIMUM_SUBJECT_COUNT) ?
-    true : `The project only has ${subjectCount} of ${MINIMUM_SUBJECT_COUNT} required subjects`;
+  return (subjectCount >= MINIMUM_SUBJECT_COUNT)
+    ? true : `The project only has ${subjectCount} of ${MINIMUM_SUBJECT_COUNT} required subjects`;
 };
 
-const projectHasRequiredContent = (project) => {
-  // Second parameter is an empty object to prevent request caching.
-  return apiClient.type('projects')
-    .get(project.id)
-    .get('pages', {})
-    .then((projectPages) => {
-      const missingPages = REQUIRED_PAGES.reduce((accumulator, requiredPage) => {
-        const pagePresent = projectPages.find((page) => {
-          return requiredPage === page.title;
-        });
-        if (!pagePresent || (pagePresent.content === null || pagePresent.content === '')) {
-          accumulator.push(requiredPage);
-        }
-        return accumulator;
-      }, []);
-      const errorMessage = `The following pages are missing content: ${missingPages.join(', ')}`;
-      return (missingPages.length === 0) ? true : errorMessage;
-    });
-};
+// Second parameter is an empty object to prevent request caching.
+const projectHasRequiredContent = project => apiClient.type('projects')
+  .get(project.id)
+  .get('pages', {})
+  .then((projectPages) => {
+    const missingPages = REQUIRED_PAGES.reduce((accumulator, requiredPage) => {
+      const pagePresent = projectPages.find(page => requiredPage === page.title);
+      if (!pagePresent || (pagePresent.content === null || pagePresent.content === '')) {
+        accumulator.push(requiredPage);
+      }
+      return accumulator;
+    }, []);
+    const errorMessage = `The following pages are missing content: ${missingPages.join(', ')}`;
+    return (missingPages.length === 0) ? true : errorMessage;
+  });
+const projectIsLive = project => project.live === true;
 
-const projectIsLive = (project) => {
-  return project.live === true;
-};
-
-const projectIsPublic = (project) => {
-  return project.private === false;
-};
+const projectIsPublic = project => project.private === false;
 
 const renderValidationErrors = (errors) => {
   if (errors.length) {
@@ -52,9 +41,7 @@ const renderValidationErrors = (errors) => {
       <div>
         <p className="form-help">The following errors need to be fixed:</p>
         <ul className="form-help error error-messages">
-          {errors.map((error) => {
-            return <li key={error}>{error}</li>;
-          })}
+          {errors.map(error => <li key={error}>{error}</li>)}
         </ul>
       </div>
     );
@@ -116,21 +103,17 @@ class ApplyForBetaForm extends React.Component {
       projectHasMinimumActiveSubjects(this.props.project),
       projectHasRequiredContent(this.props.project)
     ])
-    .catch((error) => {
-      console.error('Error requesting project data', error);
-    })
-    .then((results) => {
-      this.setState({ doingAsyncValidation: false });
-      if (results.every((result) => {
-        return typeof result === 'boolean' && result === true;
-      })) {
-        return true;
-      }
-      const errors = results.filter((result) => {
-        return typeof result !== 'boolean';
+      .catch((error) => {
+        console.error('Error requesting project data', error);
+      })
+      .then((results) => {
+        this.setState({ doingAsyncValidation: false });
+        if (results.every(result => typeof result === 'boolean' && result === true)) {
+          return true;
+        }
+        const errors = results.filter(result => typeof result !== 'boolean');
+        return Promise.reject(errors);
       });
-      return Promise.reject(errors);
-    });
   }
 
   toggleValidation(validationName, event) {
@@ -142,12 +125,8 @@ class ApplyForBetaForm extends React.Component {
   canApplyForReview() {
     const { validations } = this.state;
     const values = Object.keys(validations)
-      .map((key) => {
-        return validations[key];
-      });
-    return values.every((value) => {
-      return value === true;
-    });
+      .map(key => validations[key]);
+    return values.every(value => value === true);
   }
 
   createCheckbox(validationName, content, disabled = false) {
@@ -181,7 +160,6 @@ class ApplyForBetaForm extends React.Component {
   }
 
   updateValidationsFromProps(props) {
-
     // We need to do a props comparison, otherwise we get a loop where props
     // update state -> updates state repeatedly.
     //
@@ -209,8 +187,8 @@ class ApplyForBetaForm extends React.Component {
   }
 
   render() {
-    const applyButtonDisabled = !this.canApplyForReview() ||
-      this.state.doingAsyncValidation;
+    const applyButtonDisabled = !this.canApplyForReview()
+      || this.state.doingAsyncValidation;
     return (
       <div>
 
@@ -220,15 +198,29 @@ class ApplyForBetaForm extends React.Component {
 
         {this.createCheckbox('projectHasActiveWorkflows', <span>Project has at least one active workflow</span>, true)}
 
-        {this.createCheckbox('labPolicyReviewed', <span>I have reviewed the <a href="/lab-policies" target="_blank" rel="noopener noreferrer">policies</a></span>)}
+        {this.createCheckbox('labPolicyReviewed', <span>
+I have reviewed the
+          <a href="/lab-policies" target="_blank" rel="noopener noreferrer">policies</a>
+        </span>)}
 
-        {this.createCheckbox('bestPracticesReviewed', <span>I have reviewed the <a href="https://help.zooniverse.org/best-practices" target="_blank" rel="noopener noreferrer">best practices</a></span>)}
+        {this.createCheckbox('bestPracticesReviewed', <span>
+I have reviewed the
+          <a href="https://help.zooniverse.org/best-practices" target="_blank" rel="noopener noreferrer">best practices</a>
+        </span>)}
 
-        {this.createCheckbox('feedbackReviewed', <span>I have reviewed the sample <a href="https://docs.google.com/forms/d/e/1FAIpQLSd21yl-dmWFEF78cwMiatfOBxMXSZoPR8E_tMJZZEUdkYtpcw/viewform" target="_blank" rel="noopener noreferrer">beta test project feedback form</a></span>)}
+        {this.createCheckbox('feedbackReviewed', <span>
+I have reviewed the sample
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSd21yl-dmWFEF78cwMiatfOBxMXSZoPR8E_tMJZZEUdkYtpcw/viewform" target="_blank" rel="noopener noreferrer">beta test project feedback form</a>
+        </span>)}
 
         <p className="form-help">To be eligible for beta review, projects also require:</p>
         <ul className="form-help">
-          <li>at least {MINIMUM_SUBJECT_COUNT} subjects in active workflows</li>
+          <li>
+at least
+            {MINIMUM_SUBJECT_COUNT}
+            {' '}
+subjects in active workflows
+          </li>
           <li>content on the Research and FAQ pages in the About page</li>
         </ul>
         <p className="form-help">These will be checked when you click &quot;Apply for review&quot;.</p>

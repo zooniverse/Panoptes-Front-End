@@ -16,26 +16,26 @@ export const StyledStickyModalForm = styled(StickyModalForm)`
 
   .modal-form {
     background: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.background.default,
-      light: 'white'
-    })};
+    dark: zooTheme.colors.darkTheme.background.default,
+    light: 'white'
+  })};
     border: solid thin ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.background.border,
-      light: zooTheme.colors.lightTheme.background.border
-    })};
+    dark: zooTheme.colors.darkTheme.background.border,
+    light: zooTheme.colors.lightTheme.background.border
+  })};
     border-radius: 0;
     color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.font,
-      light: zooTheme.colors.lightTheme.font
-    })};
+    dark: zooTheme.colors.darkTheme.font,
+    light: zooTheme.colors.lightTheme.font
+  })};
     pointer-events: all;
   }
 
   .modal-form-pointer {
     background: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.background.default,
-      light: 'white'
-    })};
+    dark: zooTheme.colors.darkTheme.background.default,
+    light: 'white'
+  })};
   }
 
   .details-sub-task-form__submit-button-wrapper {
@@ -45,7 +45,7 @@ export const StyledStickyModalForm = styled(StickyModalForm)`
       width: 100%;
     }
   }
-`
+`;
 
 export class DetailsSubTaskForm extends React.Component {
   constructor() {
@@ -80,7 +80,7 @@ export class DetailsSubTaskForm extends React.Component {
 
   componentDidUpdate() {
     // What is this even doing? When this was in the root component, it was always being called for any update
-    // Only thing changing is the transform prop. 
+    // Only thing changing is the transform prop.
     // I've passed all of the parent's props to this because I don't know what this was reacting to
     // In the modal-form code, this method is for repositioning the underlay's width and height
     // But the opacity is 0, so we can't see it!
@@ -112,9 +112,11 @@ export class DetailsSubTaskForm extends React.Component {
     }
     this.props.onFormClose();
   }
-  
+
   render() {
-    const { theme, tasks, toolProps, translations, workflow } = this.props;
+    const {
+      theme, tasks, toolProps, translations, workflow
+    } = this.props;
     const { store } = this.context;
 
     const detailsAreComplete = this.areDetailsComplete(tasks, toolProps);
@@ -131,12 +133,12 @@ export class DetailsSubTaskForm extends React.Component {
               {toolProps.details.map((detailTask, i) => {
                 if (!detailTask._key) detailTask._key = Math.random();
                 const TaskComponent = tasks[detailTask.type];
-                const workflowTranslation = translations.strings.workflow[workflow.id]
-                const detailTranslationStrings = workflowTranslation ?
-                  workflowTranslation.strings.tasks[toolProps.taskKey].tools[toolProps.mark.tool].details[i] :
-                  detailTask;
+                const workflowTranslation = translations.strings.workflow[workflow.id];
+                const detailTranslationStrings = workflowTranslation
+                  ? workflowTranslation.strings.tasks[toolProps.taskKey].tools[toolProps.mark.tool].details[i]
+                  : detailTask;
                 const detailTranslation = merge({}, detailTask, detailTranslationStrings);
-                
+
                 return (
                   <TaskComponent
                     key={detailTask._key}
@@ -147,7 +149,7 @@ export class DetailsSubTaskForm extends React.Component {
                     onChange={this.handleDetailsChange.bind(this, i)}
                     showRequiredNotice={true}
                   />
-                )
+                );
               })}
               <hr />
               <p className="details-sub-task-form__submit-button-wrapper">

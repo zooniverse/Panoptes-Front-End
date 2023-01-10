@@ -26,6 +26,7 @@ export default class Highlighter extends React.Component {
     }
     return start;
   }
+
   static selectableArea(selection, range, offset, start, end) {
     const spansNodes = range.startContainer !== range.endContainer;
     const noAreaSelected = start === end;
@@ -33,6 +34,7 @@ export default class Highlighter extends React.Component {
     const isSelectable = !spansNodes && !noAreaSelected && subjectSelection;
     return isSelectable;
   }
+
   // in Edge and IE, when highlighting a word at the end of a line
   // sometimes an extra character is added to the range.endOffset value
   static extraNewLineCharacter(range) {
@@ -44,12 +46,14 @@ export default class Highlighter extends React.Component {
     }
     return endOffset;
   }
+
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.createButtons = this.createButtons.bind(this);
     this.createLabelAnnotation = this.createLabelAnnotation.bind(this);
   }
+
   createLabelAnnotation(selection, toolIndex) {
     // currently we only deal with one selection at a time
     const range = selection.getRangeAt(0);
@@ -72,6 +76,7 @@ export default class Highlighter extends React.Component {
     }
     selection.collapseToEnd();
   }
+
   handleChange(toolIndex) {
     const selection = document.getSelection();
     this.createLabelAnnotation(selection, toolIndex);
@@ -89,6 +94,7 @@ export default class Highlighter extends React.Component {
       />
     );
   }
+
   render() {
     if (this.props.task.highlighterLabels !== null) {
       const labels = this.props.task.highlighterLabels.map(this.createButtons);
@@ -105,11 +111,10 @@ export default class Highlighter extends React.Component {
       );
     } else {
       return (
-        <div>{'No labels for the Highlighter Tool'}</div>
+        <div>No labels for the Highlighter Tool</div>
       );
     }
   }
-
 }
 
 Highlighter.Editor = GenericTaskEditor;
@@ -177,4 +182,4 @@ Highlighter.defaultProps = {
     instruction: 'Highlight the text',
     type: 'highlighter'
   }
-}
+};

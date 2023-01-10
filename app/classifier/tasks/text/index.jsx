@@ -117,19 +117,22 @@ export default class TextTask extends React.PureComponent {
             value={this.state.value}
           />
         </label>
-        {this.props.task.text_tags && this.props.task.text_tags.length > 0 &&
-          <div className="transcription-metadata-tags">
-            {this.props.task.text_tags.map(tag => (
-              <input
-                type="button"
-                className="standard-button text-tag"
-                key={tag}
-                value={tag}
-                onClick={this.setTagSelection}
-              />
-            ))}
-          </div>}
-      </GenericTask>);
+        {this.props.task.text_tags && this.props.task.text_tags.length > 0
+          && (
+            <div className="transcription-metadata-tags">
+              {this.props.task.text_tags.map(tag => (
+                <input
+                  type="button"
+                  className="standard-button text-tag"
+                  key={tag}
+                  value={tag}
+                  onClick={this.setTagSelection}
+                />
+              ))}
+            </div>
+          )}
+      </GenericTask>
+    );
   }
 }
 

@@ -10,13 +10,13 @@ export default class ExternalLinksBlockContainer extends React.Component {
     const partitionedLinks = _.partition(allExternalLinks, link => (link.site));
 
     const external = partitionedLinks[1]
-      .map(link => {
+      .map((link) => {
         if (isURL(link.url)) {
           return {
             isExternalLink: true,
             label: link.label,
             url: link.url
-          }
+          };
         }
       })
       .filter(link => link);

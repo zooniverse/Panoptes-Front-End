@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import cleanSubjectData from './cleanSubjectData';
 
-describe('cleanSubjectData', function () {
+describe('cleanSubjectData', () => {
   const rawData = {
     id: 23,
     '%indexedID': 25,
@@ -14,11 +14,11 @@ describe('cleanSubjectData', function () {
 
   let cleanData;
 
-  before(function () {
+  before(() => {
     cleanData = cleanSubjectData(rawData);
   });
 
-  it('should not alter the subject data', function () {
+  it('should not alter the subject data', () => {
     expect(rawData).to.deep.equal({
       id: 23,
       '%indexedID': 25,
@@ -30,21 +30,21 @@ describe('cleanSubjectData', function () {
     });
   });
 
-  it('should pass through numerical fields', function () {
+  it('should pass through numerical fields', () => {
     expect(cleanData.id).to.equal(23);
   });
 
-  it('should trim whitespace', function () {
+  it('should trim whitespace', () => {
     expect(cleanData.date).to.equal('2nd March 1888');
   });
 
-  it('should trim leading percent signs', function () {
+  it('should trim leading percent signs', () => {
     expect(cleanData.indexedID).to.equal(25);
     expect(cleanData.title).to.equal('a title');
     expect(cleanData.creator).to.equal('someone');
   });
 
-  it('should ignore other percent signs', function () {
+  it('should ignore other percent signs', () => {
     expect(cleanData['bits%bobs']).to.equal('some random text');
   });
 });

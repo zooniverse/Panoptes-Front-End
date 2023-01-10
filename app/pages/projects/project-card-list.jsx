@@ -6,20 +6,18 @@ class ProjectCardList extends Component {
   render() {
     return (
       <div className="project-card-list">
-        {this.props.projects.map(project =>
-          <ProjectCard key={project.id} project={project} />
-        )}
+        {this.props.projects.map(project => <ProjectCard key={project.id} project={project} />)}
       </div>
     );
   }
 }
 
 ProjectCardList.propTypes = {
-  projects: PropTypes.array.isRequired,
+  projects: PropTypes.array.isRequired
 };
 
 ProjectCardList.defaultProps = {
-  projects: [],
+  projects: []
 };
 
 export default ProjectCardList;

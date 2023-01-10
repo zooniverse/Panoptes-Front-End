@@ -1,9 +1,9 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'] */
 /* global describe, it, beforeEach */
 import React from 'react';
-import WarningBanner from './warning-banner';
 import assert from 'assert';
 import { shallow } from 'enzyme';
+import WarningBanner from './warning-banner';
 
 describe('WarningBanner', function () {
   let wrapper;

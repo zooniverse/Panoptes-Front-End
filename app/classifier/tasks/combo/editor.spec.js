@@ -10,32 +10,32 @@ const task = {
   tasks: ['write', 'ask', 'features', 'draw', 'survey', 'slider']
 };
 
-describe('ComboEditor', function () {
+describe('ComboEditor', () => {
   const wrapper = mount(<ComboEditor workflow={workflow} task={task} />);
 
-  it('should render for a workflow and task', function () {
+  it('should render for a workflow and task', () => {
     assert.equal(wrapper.instance() instanceof ComboEditor, true);
   });
 
-  it('should add new tasks to the combo when selected', function () {
+  it('should add new tasks to the combo when selected', () => {
     wrapper.find('select[value="stuck"]').simulate('change', { target: { value: 'dropdown' }});
     const { props } = wrapper.instance();
     assert.notEqual(props.task.tasks.indexOf('dropdown'), -1);
   });
 
-  it('should allow tasks to be deleted from the combo', function () {
+  it('should allow tasks to be deleted from the combo', () => {
     wrapper.find('ul.drag-reorderable button').first().simulate('click');
     const { props } = wrapper.instance();
     assert.equal(props.task.tasks.indexOf('write'), -1);
   });
 });
 
-describe('deleting a workflow task', function () {
+describe('deleting a workflow task', () => {
   const workflowCopy = Object.assign({}, workflow);
   const tasks = Object.assign({}, workflow.tasks);
   delete tasks.ask;
   workflowCopy.tasks = tasks;
-  it('should render and update the combo task', function () {
+  it('should render and update the combo task', () => {
     const wrapper = mount(<ComboEditor workflow={workflowCopy} task={task} />);
     const { props } = wrapper.instance();
     assert.equal(props.task.tasks.indexOf('ask'), -1);

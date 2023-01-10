@@ -4,9 +4,9 @@
 
 import React from 'react';
 import assert from 'assert';
-import PanZoom from './pan-zoom';
 import sinon from 'sinon';
 import { shallow, mount } from 'enzyme';
+import PanZoom from './pan-zoom';
 
 describe('PanZoom', function () {
   describe('if props.panEnabled is true', function () {
@@ -47,7 +47,7 @@ describe('PanZoom', function () {
         wrapper = mount(<PanZoom enabled={true} />, {
           attachTo: document.body
         });
-        zoomInButton = wrapper.instance().zoomIn
+        zoomInButton = wrapper.instance().zoomIn;
         wrapper.instance().handleFocus('zoomIn');
       });
 
@@ -62,20 +62,30 @@ describe('PanZoom', function () {
 
     describe('#cannotZoomOut()', function () {
       let wrapper;
-      const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+      const originalFrameDimensions = {
+        width: 100, height: 100, x: 0, y: 0
+      };
 
       beforeEach(function () {
         wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
       });
 
       it('returns false if there is room to zoom out', function () {
-        wrapper.setState({ viewBoxDimensions: { width: 50, heigth: 50, x: 25, y: 25 }});
+        wrapper.setState({
+          viewBoxDimensions: {
+            width: 50, heigth: 50, x: 25, y: 25
+          }
+        });
 
         assert.equal(wrapper.instance().cannotZoomOut(), false);
       });
 
       it('returns true if there is not room to zoom out', function () {
-        wrapper.setState({ viewBoxDimensions: { width: 100, height: 100, x: 0, y: 0 }});
+        wrapper.setState({
+          viewBoxDimensions: {
+            width: 100, height: 100, x: 0, y: 0
+          }
+        });
 
         assert.equal(wrapper.instance().cannotZoomOut(), true);
       });
@@ -83,26 +93,43 @@ describe('PanZoom', function () {
 
     describe('#cannotResetZoomRotate', function () {
       let wrapper;
-      const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+      const originalFrameDimensions = {
+        width: 100, height: 100, x: 0, y: 0
+      };
 
       beforeEach(function () {
         wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
       });
 
       it('returns false if state.rotation is not 0', function () {
-        wrapper.setState({ viewBoxDimensions: { width: 100, height: 100, x: 0, y: 0 }, rotation: 90 });
+        wrapper.setState({
+          viewBoxDimensions: {
+            width: 100, height: 100, x: 0, y: 0
+          },
+          rotation: 90
+        });
 
         assert.equal(wrapper.instance().cannotResetZoomRotate(), false);
       });
 
       it('returns false if there frameDimensions are not identical to viewBoxDimensions', function () {
-        wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 0, y: 0 }, rotation: 0 });
+        wrapper.setState({
+          viewBoxDimensions: {
+            width: 50, height: 50, x: 0, y: 0
+          },
+          rotation: 0
+        });
 
         assert.equal(wrapper.instance().cannotResetZoomRotate(), false);
       });
 
       it('returns true if there is not room to zoom out and degrees rotated is 0', function () {
-        wrapper.setState({ viewBoxDimensions: { width: 100, height: 100, x: 0, y: 0 }, rotation: 0 });
+        wrapper.setState({
+          viewBoxDimensions: {
+            width: 100, height: 100, x: 0, y: 0
+          },
+          rotation: 0
+        });
 
         assert.equal(wrapper.instance().cannotResetZoomRotate(), true);
       });
@@ -150,13 +177,20 @@ describe('PanZoom', function () {
 
     describe('#keyDownZoomButton()', function () {
       it('it should call #zoom()', function () {
-        const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+        const originalFrameDimensions = {
+          width: 100, height: 100, x: 0, y: 0
+        };
         const wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
         const zoomSpy = sinon.spy(wrapper.instance(), 'zoom');
         const change = 10;
         const keyEvent = { which: 13, preventDefault() { return 'This is a mock'; } };
         wrapper.setState(
-          { viewBoxDimensions: { width: 50, height: 50, x: 25, y: 25 }, panEnabled: true }
+          {
+            viewBoxDimensions: {
+              width: 50, height: 50, x: 25, y: 25
+            },
+            panEnabled: true
+          }
         );
         wrapper.instance().keyDownZoomButton(change, keyEvent);
 
@@ -180,9 +214,15 @@ describe('PanZoom', function () {
 
     describe('#zoomReset()', function () {
       it('should reset the viewBoxDimensions to the orignal frame dimensions', function () {
-        const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+        const originalFrameDimensions = {
+          width: 100, height: 100, x: 0, y: 0
+        };
         const wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
-        wrapper.setState({ viewBoxDimensions: { width: 50, heigth: 50, x: 25, y: 25 }});
+        wrapper.setState({
+          viewBoxDimensions: {
+            width: 50, heigth: 50, x: 25, y: 25
+          }
+        });
         wrapper.instance().zoomReset();
 
         assert.deepEqual(wrapper.state('viewBoxDimensions'), originalFrameDimensions);
@@ -231,8 +271,12 @@ describe('PanZoom', function () {
 
     describe('#panByDrag()', function () {
       let wrapper;
-      const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
-      const zoomedViewBoxDimensions = { width: 50, height: 50, x: 25, y: 25 };
+      const originalFrameDimensions = {
+        width: 100, height: 100, x: 0, y: 0
+      };
+      const zoomedViewBoxDimensions = {
+        width: 50, height: 50, x: 25, y: 25
+      };
 
       beforeEach(function () {
         wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
@@ -250,8 +294,12 @@ describe('PanZoom', function () {
     });
 
     describe('#frameKeyPan()', function () {
-      const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
-      const zoomedViewBoxDimensions = { width: 50, height: 50, x: 25, y: 25 };
+      const originalFrameDimensions = {
+        width: 100, height: 100, x: 0, y: 0
+      };
+      const zoomedViewBoxDimensions = {
+        width: 50, height: 50, x: 25, y: 25
+      };
       let panHorizontalSpy;
       let panVerticalSpy;
       let zoomSpy;
@@ -331,8 +379,12 @@ describe('PanZoom', function () {
     });
 
     describe('#wheelZoom()', function () {
-      const originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
-      const zoomedViewBoxDimensions = { width: 50, height: 50, x: 25, y: 25 };
+      const originalFrameDimensions = {
+        width: 100, height: 100, x: 0, y: 0
+      };
+      const zoomedViewBoxDimensions = {
+        width: 50, height: 50, x: 25, y: 25
+      };
       let panHorizontalSpy;
       let panVerticalSpy;
       let zoomSpy;
@@ -370,9 +422,15 @@ describe('PanZoom', function () {
       let wrapper;
 
       beforeEach(function () {
-        originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+        originalFrameDimensions = {
+          width: 100, height: 100, x: 0, y: 0
+        };
         wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
-        wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 25, y: 25 }});
+        wrapper.setState({
+          viewBoxDimensions: {
+            width: 50, height: 50, x: 25, y: 25
+          }
+        });
       });
 
       it('should change state.viewBoxDimensions.x value by the provided direction', function () {
@@ -406,9 +464,15 @@ describe('PanZoom', function () {
       let wrapper;
 
       beforeEach(function () {
-        originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+        originalFrameDimensions = {
+          width: 100, height: 100, x: 0, y: 0
+        };
         wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
-        wrapper.setState({ viewBoxDimensions: { width: 50, height: 50, x: 25, y: 25 }});
+        wrapper.setState({
+          viewBoxDimensions: {
+            width: 50, height: 50, x: 25, y: 25
+          }
+        });
       });
 
       it('should change state.viewBoxDimensions.y by the provided direction', function () {
@@ -442,7 +506,9 @@ describe('PanZoom', function () {
       let wrapper;
 
       beforeEach(function () {
-        originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+        originalFrameDimensions = {
+          width: 100, height: 100, x: 0, y: 0
+        };
         wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} />);
       });
 
@@ -465,7 +531,9 @@ describe('PanZoom', function () {
       let wrapper;
 
       beforeEach(function () {
-        originalFrameDimensions = { width: 100, height: 100, x: 0, y: 0 };
+        originalFrameDimensions = {
+          width: 100, height: 100, x: 0, y: 0
+        };
         wrapper = mount(<PanZoom enabled={true} frameDimensions={originalFrameDimensions} experimental_tools={['subjectViewer-freeRotation']} />);
       });
 
@@ -478,7 +546,7 @@ describe('PanZoom', function () {
           target: {
             value: 69
           }
-        }
+        };
         wrapper.instance().rotateFreely(sliderEvent);
         assert.equal(wrapper.state('rotation'), 69);
       });

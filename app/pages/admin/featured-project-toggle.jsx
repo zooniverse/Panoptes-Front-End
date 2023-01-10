@@ -22,7 +22,11 @@ function FeaturedProjectToggle({ error, handleProjectChange, project }) {
   return (
     <div>
       <h4>Featured project</h4>
-      <p>{project.display_name} has not been approved for launch, so it can't be featured.</p>
+      <p>
+        {project.display_name}
+        {' '}
+has not been approved for launch, so it can't be featured.
+      </p>
     </div>
   );
 }

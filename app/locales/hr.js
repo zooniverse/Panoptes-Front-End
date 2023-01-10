@@ -6,7 +6,7 @@ export default {
       faq: 'This project has no frequently asked questions yet.',
       research: 'This project has no science case yet.',
       results: 'This project has no results to report yet.',
-      team: 'This project has no team information.',
+      team: 'This project has no team information.'
     }
   },
   projectRoles: {
@@ -18,7 +18,7 @@ export default {
     moderator: 'Moderator',
     tester: 'Tester',
     expert: 'Expert',
-    museum: 'Museum',
+    museum: 'Museum'
   },
   classifier: {
     back: 'Natrag',
@@ -219,7 +219,7 @@ export default {
     },
     project: {
       section: 'Project email preferences',
-      header: 'Project',
+      header: 'Project'
     }
   },
   about: {
@@ -249,4 +249,4 @@ export default {
       }
     }
   }
-}
+};

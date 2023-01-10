@@ -10,32 +10,34 @@ export default function UserRow({
   projectRoleSet
 }) {
   const [user, setUser] = useState(null);
-  useEffect(function loadOwner() {
+  useEffect(() => {
     projectRoleSet.get('owner')
-    .then(owner => setUser(owner));
-  }, [projectRoleSet])
+      .then(owner => setUser(owner));
+  }, [projectRoleSet]);
 
   return (
     <p>
-      <strong>{user?.display_name}</strong>{' '}
+      <strong>{user?.display_name}</strong>
+      {' '}
       <button type="button" className="secret-button" onClick={onDelete}>&times;</button>
       <br />
 
       <span className="columns-container inline">
-        {Object.keys(possibleRoles).map(role => {
+        {Object.keys(possibleRoles).map((role) => {
           const toggleThisRole = () => onToggle(role);
           return (
             <label key={role}>
               <input
-              type="checkbox"
-              name={role}
-              checked={projectRoleSet.roles.includes(role)}
-              disabled={role === 'owner' || disabled}
-              onChange={toggleThisRole}
-            />{' '}
+                type="checkbox"
+                name={role}
+                checked={projectRoleSet.roles.includes(role)}
+                disabled={role === 'owner' || disabled}
+                onChange={toggleThisRole}
+              />
+              {' '}
               {ROLES_INFO[role].label}
             </label>
-          )
+          );
         })}
       </span>
     </p>

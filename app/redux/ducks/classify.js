@@ -8,18 +8,18 @@ import * as translations from './translations';
 
 function awaitSubjects(subjectQuery) {
   return apiClient.get('/subjects/queued', subjectQuery)
-  .catch((error) => {
-    if (error.message.indexOf('please try again') === -1) {
-      throw error;
-    } else {
-      return new Promise((resolve, reject) => {
-        const fetchSubjectsAgain = (() => apiClient.get('/subjects/queued', subjectQuery)
-        .then(resolve)
-        .catch(reject));
-        setTimeout(fetchSubjectsAgain, 2000);
-      });
-    }
-  });
+    .catch((error) => {
+      if (error.message.indexOf('please try again') === -1) {
+        throw error;
+      } else {
+        return new Promise((resolve, reject) => {
+          const fetchSubjectsAgain = (() => apiClient.get('/subjects/queued', subjectQuery)
+            .then(resolve)
+            .catch(reject));
+          setTimeout(fetchSubjectsAgain, 2000);
+        });
+      }
+    });
 }
 
 function awaitSubjectSet(workflow) {
@@ -281,8 +281,8 @@ export default function reducer(state = initialState, action = {}) {
     }
     case RESUME_CLASSIFICATION: {
       const { classification, subject } = action.payload;
-      const isCurrentSubject = state.upcomingSubjects[0] &&
-        subject.id === state.upcomingSubjects[0].id;
+      const isCurrentSubject = state.upcomingSubjects[0]
+        && subject.id === state.upcomingSubjects[0].id;
       if (!isCurrentSubject) {
         const upcomingSubjects = state.upcomingSubjects.slice();
         upcomingSubjects.unshift(subject);
@@ -399,9 +399,9 @@ export function fetchSubjects(workflow) {
     .then(awaitSubjects)
     .then((subjects) => {
       const filteredSubjects = subjects.filter((subject) => {
-        const notSeen = !subject.already_seen &&
-          !subject.retired &&
-          !seenThisSession.check(workflow, subject);
+        const notSeen = !subject.already_seen
+          && !subject.retired
+          && !seenThisSession.check(workflow, subject);
         return notSeen;
       });
       const subjectsToLoad = (filteredSubjects.length > 0) ? filteredSubjects : subjects;
@@ -492,26 +492,26 @@ export function loadWorkflow(workflowId, locale, preferences) {
     });
     const awaitTranslation = dispatch(translations.load('workflow', workflowId, locale));
     return Promise.all([awaitWorkflow(workflowId), awaitTranslation])
-    .then(([workflow]) => setWorkflow(workflow))
-    .catch((error) => {
-      const errorType = error.status && parseInt(error.status / 100, 10);
-      if (errorType === 4) {
+      .then(([workflow]) => setWorkflow(workflow))
+      .catch((error) => {
+        const errorType = error.status && parseInt(error.status / 100, 10);
+        if (errorType === 4) {
         // Clear all stored preferences if this workflow doesn't exist for this user.
-        if (preferences) {
-          preferences.update({ 'preferences.selected_workflow': undefined });
-          if (preferences.settings && preferences.settings.workflow_id === workflowId) {
-            preferences.update({ 'settings.workflow_id': undefined });
+          if (preferences) {
+            preferences.update({ 'preferences.selected_workflow': undefined });
+            if (preferences.settings && preferences.settings.workflow_id === workflowId) {
+              preferences.update({ 'settings.workflow_id': undefined });
+            }
           }
         }
-      }
-      return setWorkflow(null);
-    })
-    .then((action) => {
-      if (preferences) {
-        preferences.save();
-      }
-      return dispatch(action);
-    });
+        return setWorkflow(null);
+      })
+      .then((action) => {
+        if (preferences) {
+          preferences.save();
+        }
+        return dispatch(action);
+      });
   };
 }
 

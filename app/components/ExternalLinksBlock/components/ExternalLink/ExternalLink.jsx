@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { Markdown } from 'markdownz';
 import { socialIcons } from '../../../../lib/nav-helpers';
 
-export default function ExternalLink({ className, isExternalLink, isSocialLink, label, path, site, url, socialLabel }) {
+export default function ExternalLink({
+  className, isExternalLink, isSocialLink, label, path, site, url, socialLabel
+}) {
   let iconClasses;
   let linkLabel = label;
   const linkProps = {

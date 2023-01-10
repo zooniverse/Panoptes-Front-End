@@ -50,11 +50,22 @@ class TranslationsManager extends React.Component {
     return (
       <div>
         <h1>Translations</h1>
-        {!hasTranslations &&
-          <React.Fragment>
-            <h2>Add translations to your project</h2>
-            <p>Add some translators to your project from the <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link> and invite them to add translations at <a href={`https://translations.zooniverse.org/#/project/${project.id}`}>https://translations.zooniverse.org/#/project/{project.id}</a></p>
-          </React.Fragment>
+        {!hasTranslations
+          && (
+            <React.Fragment>
+              <h2>Add translations to your project</h2>
+              <p>
+Add some translators to your project from the
+                <Link to={`/lab/${project.id}/collaborators`}>Collaborators page</Link>
+                {' '}
+and invite them to add translations at
+                <a href={`https://translations.zooniverse.org/#/project/${project.id}`}>
+https://translations.zooniverse.org/#/project/
+                  {project.id}
+                </a>
+              </p>
+            </React.Fragment>
+          )
         }
         <h2>Project language menu</h2>
         <p>
@@ -70,7 +81,13 @@ class TranslationsManager extends React.Component {
             const checked = projectLanguages.indexOf(language) > -1;
             return (
               <tr key={language}>
-                <td>{languageMenu[language]} ({language})</td>
+                <td>
+                  {languageMenu[language]}
+                  {' '}
+(
+                  {language}
+)
+                </td>
                 <td>
                   <input
                     type="checkbox"
@@ -84,20 +101,22 @@ class TranslationsManager extends React.Component {
             );
           })}
         </table>
-        {!!hasTranslations &&
-          <React.Fragment>
-            <h2>Project translations</h2>
-            <ul className="translations">
-              {translationLanguages.map(languageCode => (
-                <li key={languageCode}>
-                  <TranslationTools
-                    languageCode={languageCode}
-                    project={project}
-                  />
-                </li>
-              ))}
-            </ul>
-          </React.Fragment>
+        {!!hasTranslations
+          && (
+            <React.Fragment>
+              <h2>Project translations</h2>
+              <ul className="translations">
+                {translationLanguages.map(languageCode => (
+                  <li key={languageCode}>
+                    <TranslationTools
+                      languageCode={languageCode}
+                      project={project}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </React.Fragment>
+          )
         }
       </div>
     );

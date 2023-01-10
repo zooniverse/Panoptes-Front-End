@@ -31,9 +31,9 @@ class UserSettings extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.editUser?.id !== prevState.editUser?.id) {
-      getUserProjects(this.state.editUser, this.updateUserProjects)
+      getUserProjects(this.state.editUser, this.updateUserProjects);
       getUserClassifications(this.state.editUser)
-        .then(classifications => this.setState({ classifications }))
+        .then(classifications => this.setState({ classifications }));
     }
   }
 
@@ -52,9 +52,7 @@ class UserSettings extends Component {
     this.setState((prevState) => {
       const ribbonData = prevState.ribbonData.concat(projects);
       const totalClassifications = ribbonData
-      .reduce((total, project) => {
-        return total + project.classifications;
-      }, 0);
+        .reduce((total, project) => total + project.classifications, 0);
       return { ribbonData, totalClassifications };
     });
   }
@@ -73,14 +71,23 @@ class UserSettings extends Component {
     return (
       <div>
         <div className="project-status">
-          <h4>Details for {this.state.editUser.login}</h4>
+          <h4>
+Details for
+            {this.state.editUser.login}
+          </h4>
           <UserDetails user={this.state.editUser} />
 
-          <h4>Settings for {this.state.editUser.login}</h4>
+          <h4>
+Settings for
+            {this.state.editUser.login}
+          </h4>
           <UserProperties user={this.state.editUser} />
 
           <ul>
-            <li>Uploaded subjects: {this.state.editUser.uploaded_subjects_count}</li>
+            <li>
+Uploaded subjects:
+              {this.state.editUser.uploaded_subjects_count}
+            </li>
             <li><UserLimitToggle editUser={this.state.editUser} /></li>
           </ul>
 
@@ -91,25 +98,35 @@ class UserSettings extends Component {
         <UserResources type="organizations" user={this.state.editUser} />
         <h4>Classification history</h4>
         <details>
-          <summary>Total classifications: {this.state.totalClassifications}</summary>
+          <summary>
+Total classifications:
+            {this.state.totalClassifications}
+          </summary>
           <ul>
-          {this.state.ribbonData.map(project => (
-            <li key={project.id}>
-              <p><b>{project.display_name}</b><br/>
-                Classifications: {project.classifications}
-              </p>
-            </li>
-          ))}
+            {this.state.ribbonData.map(project => (
+              <li key={project.id}>
+                <p>
+                  <b>{project.display_name}</b>
+                  <br />
+                Classifications:
+                  {' '}
+                  {project.classifications}
+                </p>
+              </li>
+            ))}
           </ul>
         </details>
         <details>
-          <summary>Recent classifications {this.state.classifications.length}</summary>
+          <summary>
+Recent classifications
+            {this.state.classifications.length}
+          </summary>
           <ol>
-          {this.state.classifications.map(classification => (
-            <li key={classification.id}>
-              <ClassificationData classification={classification} />
-            </li>
-          ))}
+            {this.state.classifications.map(classification => (
+              <li key={classification.id}>
+                <ClassificationData classification={classification} />
+              </li>
+            ))}
           </ol>
         </details>
       </div>

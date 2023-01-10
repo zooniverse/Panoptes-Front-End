@@ -26,6 +26,7 @@ class LinePlotModel {
         console.warn(e);
       });
   }
+
   update() {
     return null;
   }

@@ -1,5 +1,5 @@
-import React from 'react'
-import TranscriptionTaskEditor from './editor'
+import React from 'react';
+import TranscriptionTaskEditor from './editor';
 
 class TranscriptionTask extends React.PureComponent {
   render() {
@@ -10,4 +10,4 @@ class TranscriptionTask extends React.PureComponent {
 TranscriptionTask.Editor = TranscriptionTaskEditor;
 TranscriptionTask.getTaskText = task => task.instruction;
 
-export default TranscriptionTask
+export default TranscriptionTask;

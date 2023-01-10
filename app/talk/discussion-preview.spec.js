@@ -1,6 +1,6 @@
 import React from 'react';
 import assert from 'assert';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 import { shallow } from 'enzyme';
 import DiscussionPreview from './discussion-preview';
 
@@ -15,17 +15,17 @@ const discussion = {
   latest_comment: 1234
 };
 
-describe('DiscussionPreview', function(){
-  it('should link to /talk without a project', function () {
+describe('DiscussionPreview', () => {
+  it('should link to /talk without a project', () => {
     const wrapper = shallow(<DiscussionPreview discussion={discussion} />);
     assert.equal(wrapper.find(Link).prop('to'), '/talk/3456/42');
   });
-  it('should link to /talk with an empty project', function () {
+  it('should link to /talk with an empty project', () => {
     const project = {};
     const wrapper = shallow(<DiscussionPreview project={project} discussion={discussion} />);
     assert.equal(wrapper.find(Link).prop('to'), '/talk/3456/42');
   });
-  it('should link to a project slug if present', function () {
+  it('should link to a project slug if present', () => {
     const wrapper = shallow(<DiscussionPreview project={validProject} discussion={discussion} />);
     assert.equal(wrapper.find(Link).prop('to'), '/projects/test/project/talk/3456/42');
   });

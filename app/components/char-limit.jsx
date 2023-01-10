@@ -5,7 +5,12 @@ const CharLimit = ({ limit, string }) => {
   const remaining = limit - string.length;
   return (
     <span>
-      {remaining} of {limit} characters remaining.
+      {remaining}
+      {' '}
+of
+      {limit}
+      {' '}
+characters remaining.
     </span>
   );
 };

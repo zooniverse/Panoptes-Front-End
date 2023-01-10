@@ -4,9 +4,9 @@ import { Link } from 'react-router';
 import classNames from 'classnames';
 import counterpart from 'counterpart';
 import moment from 'moment';
+import striptags from 'striptags';
 import ProjectCard from '../../partials/project-card';
 import { getRecentProjects, getBlogPosts, getNewestProject } from '../../lib/get-social-data';
-import striptags from 'striptags';
 
 counterpart.registerTranslations('en', {
   socialHomePage: {
@@ -16,7 +16,7 @@ counterpart.registerTranslations('en', {
     latestProject: 'Latest Project',
     recentProjects: 'Project Updates',
     recentPublications: 'Publications',
-    recentPublicationsBlurb: 'The contributions of Zooniverse volunteers produce real research. Our projects have led to hundreds of peer-reviewed publications across a wide range of disciplines.',
+    recentPublicationsBlurb: 'The contributions of Zooniverse volunteers produce real research. Our projects have led to hundreds of peer-reviewed publications across a wide range of disciplines.'
   }
 });
 
@@ -54,7 +54,10 @@ export default class HomePageSocial extends React.Component {
     return (
       <div key={project.id}>
         <h4 className="timestamp-label">{timestamp}</h4>
-        <h5 className="tertiary-headline">{project.display_name} </h5>
+        <h5 className="tertiary-headline">
+          {project.display_name}
+          {' '}
+        </h5>
         <a className="home-social__italic-link" href={link}> View Project </a>
         <hr />
       </div>
@@ -75,9 +78,12 @@ export default class HomePageSocial extends React.Component {
       <div key={i} className={classes}>
         {i !== 0 && (<hr />)}
         <h4 className="timestamp-label">{timestamp}</h4>
-        <h5 className="tertiary-headline">{post.title} </h5>
+        <h5 className="tertiary-headline">
+          {post.title}
+          {' '}
+        </h5>
         <div className="home-social__blog-post">
-          <div style={background}></div>
+          <div style={background} />
           <div>
             <span className="regular-body">{striptags(post.excerpt)}</span>
             <br />
@@ -126,17 +132,15 @@ export default class HomePageSocial extends React.Component {
 
             <Translate className="tertiary-kicker" component="h3" content="socialHomePage.recentPublications" />
             <Translate className="regular-body" component="span" content="socialHomePage.recentPublicationsBlurb" />
-            <br/>
+            <br />
             <a href="/about/publications" className="primary-button primary-button--light">See All Publications</a>
           </div>
 
-          <div className="home-social__content--vertical-line"></div>
+          <div className="home-social__content--vertical-line" />
 
           <div className="home-social__daily">
             <Translate className="tertiary-headline__headline" component="h2" content="socialHomePage.daily" />
-            {blogPosts.map((post, i) => {
-              return this.renderBlogPost(post, i);
-            })}
+            {blogPosts.map((post, i) => this.renderBlogPost(post, i))}
             <hr />
             <a href="http://blog.zooniverse.org" className="primary-button primary-button--light">See All Posts</a>
           </div>

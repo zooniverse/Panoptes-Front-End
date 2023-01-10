@@ -30,7 +30,7 @@ counterpart.registerTranslations('en', {
     projectEligible: 'Check this box if you think your question fits in this way.  If you have a Yes/No two choice question, we recommend Yes as the first option listed so that it appears on the right.',
     projectIneligible: 'Sorry, but the mobile app will not currently work for this workflow. The following are the requirements for the swipe workflow.',
     imageWarning: 'It appears that you have more than one image in your task question or drawing instruction. While this is allowed for mobile, we will only show the first image.',
-    mobileHelp: 'Mobile app:  Check this box if you would like this workflow available in the mobile app',
+    mobileHelp: 'Mobile app:  Check this box if you would like this workflow available in the mobile app'
   }
 });
 
@@ -65,21 +65,19 @@ const iconColorFromValidation = (validation) => {
   }
 };
 
-const renderLink = (link, key) => {
-  return (
-    <li key={link}>
-      <small>
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Translate content={`mobileSection.download.${key}`} />
-        </a>
-      </small>
-    </li>
-  );
-};
+const renderLink = (link, key) => (
+  <li key={link}>
+    <small>
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Translate content={`mobileSection.download.${key}`} />
+      </a>
+    </small>
+  </li>
+);
 
 const renderValidation = (validationValue, validationCheckName) => {
   const icon = iconFromValidation(validationValue);
@@ -93,12 +91,11 @@ const renderValidation = (validationValue, validationCheckName) => {
 };
 
 class MobileSection extends Component {
-
   render() {
     const warningView = (
       <p>
-        <i className={'fa fa-exclamation-triangle'} style={{ color: '#FFCC00', paddingRight: 5 }} aria-hidden="true" />
-        <Translate content={'mobileSection.imageWarning'} component="small" />
+        <i className="fa fa-exclamation-triangle" style={{ color: '#FFCC00', paddingRight: 5 }} aria-hidden="true" />
+        <Translate content="mobileSection.imageWarning" component="small" />
       </p>
     );
 

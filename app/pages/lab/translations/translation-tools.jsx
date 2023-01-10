@@ -12,10 +12,14 @@ function TranslationTools(props) {
         <span>
           {language.label}
         </span>
-        <i className="fa fa-hand-o-right fa-fw" /> Preview
+        <i className="fa fa-hand-o-right fa-fw" />
+        {' '}
+Preview
       </Link>
       <a href={`https://translations.zooniverse.org/?#/project/${project.id}?language=${languageCode}`}>
-        <i className="fa fa-pencil fa-fw" /> Edit
+        <i className="fa fa-pencil fa-fw" />
+        {' '}
+Edit
       </a>
     </span>
   );

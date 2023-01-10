@@ -5,24 +5,24 @@ export default function MiniCourses({ project, workflow }) {
   const [tutorials, setTutorials] = useState([]);
   const [workflowTutorial, setWorkflowTutorial] = useState(null);
 
-  useEffect(function loadTutorials() {
+  useEffect(() => {
     Promise.all([
       apiClient.type('tutorials')
         .get({ project_id: project.id, page_size: 100, kind: 'mini-course' })
         .catch(() => []),
       apiClient.type('tutorials')
-        .get({ workflow_id: workflow.id, page_size: 100, kind: 'mini-course'})
+        .get({ workflow_id: workflow.id, page_size: 100, kind: 'mini-course' })
         .catch(() => [])
     ])
-    .then(([projectTutorials, workflowTutorials]) => {
-      const [workflowTutorial] = projectTutorials.filter(value => workflowTutorials.includes(value));
-      setTutorials(projectTutorials);
-      setWorkflowTutorial(workflowTutorial);
-    });
+      .then(([projectTutorials, workflowTutorials]) => {
+        const [workflowTutorial] = projectTutorials.filter(value => workflowTutorials.includes(value));
+        setTutorials(projectTutorials);
+        setWorkflowTutorial(workflowTutorial);
+      });
   }, [project?.id, workflow?.id]);
 
   function removeTutorial() {
-    setWorkflowTutorial(null)
+    setWorkflowTutorial(null);
     return workflow.removeLink('tutorials', workflowTutorial?.id);
   }
 
@@ -40,9 +40,9 @@ export default function MiniCourses({ project, workflow }) {
           if (workflowTutorial?.id) {
             workflow.removeLink('tutorials', workflowTutorial.id);
           }
-          setWorkflowTutorial(tutorial)
+          setWorkflowTutorial(tutorial);
         }
-    });
+      });
   }
 
   if (tutorials.length > 0) {
@@ -60,7 +60,7 @@ export default function MiniCourses({ project, workflow }) {
             />
             No mini-course
           </label>
-          {tutorials.map(tutorial => {
+          {tutorials.map((tutorial) => {
             const assignedTutorial = tutorial === workflowTutorial;
             return (
               <label key={tutorial.id}>
@@ -71,7 +71,10 @@ export default function MiniCourses({ project, workflow }) {
                   value={tutorial.id}
                   onChange={onChange}
                 />
-                Mini-Course #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
+                Mini-Course #
+                {tutorial.id}
+                {' '}
+                {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
               </label>
             );
           })}

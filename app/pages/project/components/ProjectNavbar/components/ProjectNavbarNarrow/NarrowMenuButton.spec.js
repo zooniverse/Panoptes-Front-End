@@ -12,35 +12,35 @@ import sinon from 'sinon';
 import NarrowMenuButton, { OpenMenuButton } from './NarrowMenuButton';
 import en from '../../../../../../locales/en';
 
-describe('NarrowMenuButton', function() {
+describe('NarrowMenuButton', function () {
   let wrapper;
   const onClickSpy = sinon.spy();
-  before(function() {
+  before(function () {
     wrapper = shallow(<NarrowMenuButton onClick={onClickSpy} />);
   });
 
-  it('should render without crashing', function() {});
+  it('should render without crashing', function () {});
 
-  it('should use the ThemeProvider', function() {
+  it('should use the ThemeProvider', function () {
     expect(wrapper.find('ThemeProvider')).to.have.lengthOf(1);
   });
 
-  it('should render an OpenMenuButton', function() {
+  it('should render an OpenMenuButton', function () {
     expect(wrapper.find(OpenMenuButton)).to.have.lengthOf(1);
   });
 
-  it('should call props.onClick on click', function() {
+  it('should call props.onClick on click', function () {
     wrapper.find(OpenMenuButton).simulate('click');
     expect(onClickSpy.calledOnce).to.be.true;
   });
 
-  it('should use project.nav.exploreProject English string as the default label', function() {
+  it('should use project.nav.exploreProject English string as the default label', function () {
     expect(wrapper.dive().html().includes(en.project.nav.exploreProject)).to.be.true;
   });
 
-  describe('when props.open is false', function() {
+  describe('when props.open is false', function () {
     let icon;
-    before(function() {
+    before(function () {
       icon = wrapper.find('i');
     });
 
@@ -49,14 +49,14 @@ describe('NarrowMenuButton', function() {
       expect(icon.hasClass('fa-angle-up')).to.be.false;
     });
 
-    it('should not add the open class to OpenMenuButton', function() {
+    it('should not add the open class to OpenMenuButton', function () {
       expect(wrapper.find(OpenMenuButton).hasClass('open')).to.be.false;
     });
   });
 
-  describe('when props.open is true', function() {
+  describe('when props.open is true', function () {
     let icon;
-    before(function() {
+    before(function () {
       wrapper.setProps({ open: true });
       icon = wrapper.find('i');
     });
@@ -66,7 +66,7 @@ describe('NarrowMenuButton', function() {
       expect(icon.hasClass('fa-angle-down')).to.be.false;
     });
 
-    it('should add the open class to OpenMenuButton', function() {
+    it('should add the open class to OpenMenuButton', function () {
       expect(wrapper.find(OpenMenuButton).hasClass('open')).to.be.true;
     });
   });

@@ -3,7 +3,6 @@ import React from 'react';
 import Summary from './summary';
 
 export default class Shortcut extends React.Component {
-
   toggleShortcut(index, e) {
     const value = this.props.annotation.shortcut ? this.props.annotation.shortcut.value : [];
     let newAnnotation;
@@ -25,7 +24,9 @@ export default class Shortcut extends React.Component {
   }
 
   render() {
-    const { annotation, task, translation, workflow } = this.props;
+    const {
+      annotation, task, translation, workflow
+    } = this.props;
     const options = workflow.tasks[task.unlinkedTask] ? workflow.tasks[task.unlinkedTask].answers : [];
     const active = annotation.shortcut ? annotation.shortcut.value : [];
 
@@ -40,7 +41,8 @@ export default class Shortcut extends React.Component {
                 <small>
                   <strong>
                     <input id={`shortcut-${i}`} type="checkbox" checked={active.includes(i)} onChange={this.toggleShortcut.bind(this, i)} />
-                    {' '}{translation.answers[i].label}
+                    {' '}
+                    {translation.answers[i].label}
                   </strong>
                 </small>
               </label>
@@ -51,29 +53,22 @@ export default class Shortcut extends React.Component {
       </div>
     );
   }
-
 }
 
 Shortcut.Summary = Summary;
 
-Shortcut.getDefaultTask = (question) => {
-  return {
-    answers: [],
-    type: 'shortcut',
-    question
-  };
-};
+Shortcut.getDefaultTask = question => ({
+  answers: [],
+  type: 'shortcut',
+  question
+});
 
-Shortcut.getTaskText = (task) => {
-  return task.question;
-};
+Shortcut.getTaskText = task => task.question;
 
-Shortcut.getDefaultAnnotation = () => {
-  return {
-    _key: Math.random(),
-    value: []
-  };
-};
+Shortcut.getDefaultAnnotation = () => ({
+  _key: Math.random(),
+  value: []
+});
 
 Shortcut.propTypes = {
   annotation: PropTypes.shape(

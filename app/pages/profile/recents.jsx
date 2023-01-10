@@ -31,50 +31,52 @@ class Recents extends React.Component {
             <Translate content="classifier.recents" component="h1" />
           </div>
         </div>
-        {(this.state.recents.length > 0) &&
-          <div className="content-container collection-page-with-project-context">
-            <ul className="collections-show">
-              {this.state.recents.map((recent) => {
-                const locations = getSubjectLocations(recent);
-                let type = '';
-                let format = '';
-                let src = '';
-                if (locations.image) {
-                  type = 'image';
-                  [format, src] = locations.image;
-                } else if (locations.video) {
-                  type = 'video';
-                  [format, src] = locations.video;
-                }
-                const fakeSubject = {
-                  id: recent.links.subject,
-                  locations: [{ [`${type}/${format}`]: src }]
-                };
-                return (
-                  <li key={recent.id} className="collection-subject-viewer">
-                    <SubjectViewer
-                      project={project}
-                      subject={fakeSubject}
-                      user={user}
-                    >
-                      <Link
-                        className="subject-link"
-                        to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}
+        {(this.state.recents.length > 0)
+          && (
+            <div className="content-container collection-page-with-project-context">
+              <ul className="collections-show">
+                {this.state.recents.map((recent) => {
+                  const locations = getSubjectLocations(recent);
+                  let type = '';
+                  let format = '';
+                  let src = '';
+                  if (locations.image) {
+                    type = 'image';
+                    [format, src] = locations.image;
+                  } else if (locations.video) {
+                    type = 'video';
+                    [format, src] = locations.video;
+                  }
+                  const fakeSubject = {
+                    id: recent.links.subject,
+                    locations: [{ [`${type}/${format}`]: src }]
+                  };
+                  return (
+                    <li key={recent.id} className="collection-subject-viewer">
+                      <SubjectViewer
+                        project={project}
+                        subject={fakeSubject}
+                        user={user}
                       >
-                        <Thumbnail
-                          alt={`Subject ${recent.links.subject}`}
-                          src={src}
-                          type={type}
-                          format={format}
-                          height={250}
-                        />
-                      </Link>
-                    </SubjectViewer>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+                        <Link
+                          className="subject-link"
+                          to={`/projects/${project.slug}/talk/subjects/${recent.links.subject}`}
+                        >
+                          <Thumbnail
+                            alt={`Subject ${recent.links.subject}`}
+                            src={src}
+                            type={type}
+                            format={format}
+                            height={250}
+                          />
+                        </Link>
+                      </SubjectViewer>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )
         }
       </div>
     );

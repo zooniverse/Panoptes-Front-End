@@ -30,7 +30,7 @@ FeedbackMark.propTypes = {
       PropTypes.string,
       PropTypes.number]),
     falsePosMode: PropTypes.bool,
-    success: PropTypes.bool,
+    success: PropTypes.bool
   }).isRequired
 };
 

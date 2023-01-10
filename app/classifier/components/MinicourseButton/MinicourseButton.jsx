@@ -15,17 +15,17 @@ export const StyledRestartButton = styled(RestartButton).attrs({
   background-color: transparent;
   border: none;
   color: ${
-    theme('mode', {
-      dark: zooTheme.colors.teal.light,
-      light: zooTheme.colors.teal.dark
-    })
-  };
+  theme('mode', {
+    dark: zooTheme.colors.teal.light,
+    light: zooTheme.colors.teal.dark
+  })
+};
   cursor: pointer;
   display: inline-block;
-  font-size: ${ pxToRem(14) };
-  letter-spacing: ${ pxToRem(1) };
-  margin-bottom: ${ pxToRem(20) };
-  margin-top: ${ pxToRem(20) };
+  font-size: ${pxToRem(14)};
+  letter-spacing: ${pxToRem(1)};
+  margin-bottom: ${pxToRem(20)};
+  margin-top: ${pxToRem(20)};
   text-align: center;
   text-transform: uppercase;
   width: 100%;
@@ -36,7 +36,7 @@ export const StyledRestartButton = styled(RestartButton).attrs({
 `;
 
 export function MinicourseButton(props, context) {
-  const store = useStore()
+  const store = useStore();
   const shouldRender = props.minicourse && props.user && props.minicourse.steps && (props.minicourse.steps.length > 0);
   return (
     <ThemeProvider theme={{ mode: props.theme }}>

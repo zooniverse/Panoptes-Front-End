@@ -19,4 +19,3 @@ export default function initStore() {
   sugarClient.on('experiment', message => onInterventionMessage(store, message));
   return store;
 }
-

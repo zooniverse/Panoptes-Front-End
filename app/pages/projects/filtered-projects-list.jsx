@@ -8,14 +8,18 @@ counterpart.registerTranslations('en', {
   projects: {
     button: 'Get Started',
     countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(projectCount)s projects found.',
-    notFoundMessage: 'Sorry, no projects found.',
-  },
+    notFoundMessage: 'Sorry, no projects found.'
+  }
 });
 
 class FilteredProjectsList extends Component {
   render() {
-    const { discipline, page, sort, status, page_size } = this.props.location.query;
-    const filteringProps = { discipline, page, sort, status, page_size };
+    const {
+      discipline, page, sort, status, page_size
+    } = this.props.location.query;
+    const filteringProps = {
+      discipline, page, sort, status, page_size
+    };
     return (
       <ProjectFilteringInterface
         onChangeQuery={this.context.updateQuery}
@@ -26,11 +30,11 @@ class FilteredProjectsList extends Component {
 }
 
 FilteredProjectsList.contextTypes = {
-  updateQuery: PropTypes.func,
+  updateQuery: PropTypes.func
 };
 
 FilteredProjectsList.propTypes = {
-  location: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 };
 
 export default FilteredProjectsList;

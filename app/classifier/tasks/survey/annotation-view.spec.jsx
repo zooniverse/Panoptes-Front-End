@@ -37,7 +37,7 @@ const task = {
   questionsOrder: ['bat', 'rat']
 };
 
-describe('AnnotationView', function() {
+describe('AnnotationView', () => {
   const wrapper = shallow(
     <AnnotationView
       annotation={annotation}
@@ -47,26 +47,26 @@ describe('AnnotationView', function() {
     />
   );
 
-  describe('AnnotationView render', function() {
-    it('should render without crashing', function() {
+  describe('AnnotationView render', () => {
+    it('should render without crashing', () => {
       expect(wrapper).to.be.ok;
     });
 
-    it('should render the correct annotation', function() {
+    it('should render the correct annotation', () => {
       const view = wrapper.find('.survey-identification-proxy');
       const viewText = view.first().text();
       expect(view.length).to.equal(1);
       expect(viewText).to.contain(annotationValue.choice);
     });
 
-    it('should render a delete button', function() {
+    it('should render a delete button', () => {
       const deleteButton = wrapper.find('.survey-identification-remove');
       expect(deleteButton.length).to.equal(1);
     });
   });
 
-  describe('The delete button', function() {
-    it('should call the onChange callback', function() {
+  describe('The delete button', () => {
+    it('should call the onChange callback', () => {
       const deleteButton = wrapper.find('.survey-identification-remove');
       deleteButton.simulate('click', {
         target: {
@@ -78,7 +78,7 @@ describe('AnnotationView', function() {
       expect(onChange.calledOnce).to.be.true;
     });
 
-    it('should delete the selected annotation onClick', function() {
+    it('should delete the selected annotation onClick', () => {
       const returnValues = onChange.returnValues[0];
       wrapper.setProps({ annotation: returnValues });
       const view = wrapper.find('.survey-identification-proxy');

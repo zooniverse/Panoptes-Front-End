@@ -107,18 +107,14 @@ export function listLanguages(translated_type, translated_id) {
     return apiClient
       .type('translations')
       .get({ translated_type, translated_id })
-      .then((translations) => {
-        return dispatch({
-          type: SET_LANGUAGES,
-          payload: {
-            type: translated_type,
-            languages: translations.map(translation => translation.language)
-          }
-        });
-      })
-      .catch((error) => {
-        return dispatch({ type: ERROR, payload: error });
-      });
+      .then(translations => dispatch({
+        type: SET_LANGUAGES,
+        payload: {
+          type: translated_type,
+          languages: translations.map(translation => translation.language)
+        }
+      }))
+      .catch(error => dispatch({ type: ERROR, payload: error }));
   };
 }
 
@@ -145,7 +141,7 @@ export function load(translated_type, translated_id, language) {
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.warn(
           translated_type,
           translated_id,

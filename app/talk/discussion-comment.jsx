@@ -39,9 +39,9 @@ class DiscussionComment extends React.Component {
     }
 
     return talkClient.type('comments')
-    .create(comment)
-    .save()
-    .then(this.props.onSubmitComment);
+      .create(comment)
+      .save()
+      .then(this.props.onSubmitComment);
   }
 
   commentValidations(commentBody) {
@@ -65,7 +65,10 @@ class DiscussionComment extends React.Component {
             <p>
               <Link to={`${baseLink}users/${this.props.user.login}`}>{this.props.user.display_name}</Link>
             </p>
-            <div className="user-mention-name">@{this.props.user.login}</div>
+            <div className="user-mention-name">
+@
+              {this.props.user.login}
+            </div>
             <DisplayRoles roles={this.props.roles} section={this.props.discussion.section} />
           </div>
 
@@ -84,7 +87,12 @@ class DiscussionComment extends React.Component {
       );
     } else {
       return (
-        <p>Please <button className="link-style" type="button" onClick={this.promptToSignIn}>sign in</button> to contribute to the discussion</p>
+        <p>
+Please
+          <button className="link-style" type="button" onClick={this.promptToSignIn}>sign in</button>
+          {' '}
+to contribute to the discussion
+        </p>
       );
     }
   }

@@ -17,16 +17,16 @@ const project = {
   configuration: {}
 };
 
-describe('WorkflowsPage', function () {
+describe('WorkflowsPage', () => {
   let wrapper;
   let reorderWorkflowButton;
   const showCreateWorkflowSpy = sinon.spy();
   const toggleReorderSpy = sinon.spy();
 
-  before(function () {
+  before(() => {
     wrapper = shallow(
       <WorkflowsPage
-        labPath={(url) => { return url; }}
+        labPath={url => url}
         handleWorkflowReorder={function () {}}
         project={project}
         showCreateWorkflow={showCreateWorkflowSpy}
@@ -37,34 +37,34 @@ describe('WorkflowsPage', function () {
     reorderWorkflowButton = wrapper.find('[data-button="reorderWorkflow"]');
   });
 
-  it('will display a message when no workflows are present', function () {
+  it('will display a message when no workflows are present', () => {
     const message = 'No workflows are currently associated with this project.';
     assert.equal(wrapper.contains(<p>{message}</p>), true);
   });
 
-  it('should call the workflow create handler', function () {
+  it('should call the workflow create handler', () => {
     wrapper.find('[data-button="createWorkflow"]').simulate('click');
     sinon.assert.calledOnce(showCreateWorkflowSpy);
   });
 
-  it('should default render the table view', function() {
+  it('should default render the table view', () => {
     wrapper.setProps({ workflows });
     assert.equal(wrapper.find('Paginator').length, 1);
     assert.equal(reorderWorkflowButton.text(), 'Reorder view');
   });
 
-  it('should call the toggleReorder handler', function() {
+  it('should call the toggleReorder handler', () => {
     reorderWorkflowButton.simulate('click');
     sinon.assert.calledOnce(toggleReorderSpy);
   });
 
-  it('should render the reorderable view after toggled', function() {
+  it('should render the reorderable view after toggled', () => {
     wrapper.setProps({ reorder: true });
     assert.equal(wrapper.find('DragReorderable').length, 1);
     assert.equal(wrapper.find('[data-button="reorderWorkflow"]').text(), 'Table view');
   });
 
-  it('should re-render the table view when table view button is clicked', function() {
+  it('should re-render the table view when table view button is clicked', () => {
     reorderWorkflowButton.simulate('click');
     sinon.assert.calledTwice(toggleReorderSpy);
     wrapper.setProps({ reorder: false });

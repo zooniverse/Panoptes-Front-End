@@ -3,8 +3,8 @@ import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import classnames from 'classnames';
-import HomePageSection from './generic-section';
 import { Link } from 'react-router';
+import HomePageSection from './generic-section';
 import StringTruncator from './string-truncator';
 
 
@@ -12,11 +12,11 @@ const LOADER_BULLETS = '• • •';
 
 class RecentCollectionsSection extends React.Component {
   static propTypes = {
-    onClose: PropTypes.func,
+    onClose: PropTypes.func
   };
 
   static contextTypes = {
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
   };
 
   state = {
@@ -25,7 +25,7 @@ class RecentCollectionsSection extends React.Component {
     conversations: [],
     messageAuthors: {},
     avatars: {},
-    lastMessages: {},
+    lastMessages: {}
   };
 
   componentDidMount() {
@@ -45,48 +45,41 @@ class RecentCollectionsSection extends React.Component {
       conversationPartners: {},
       messageAuthors: {},
       avatars: {},
-      lastMessages: {},
+      lastMessages: {}
     });
 
     talkClient.type('conversations').get({
       user_id: user.id,
       page_size: 10,
       sort: '-updated_at',
-      include: 'users',
+      include: 'users'
     })
-    .then((conversations) => {
-      this.setState({ conversations });
+      .then((conversations) => {
+        this.setState({ conversations });
 
-      return Promise.all(conversations.map((conversation) => {
-        return Promise.all([
+        return Promise.all(conversations.map(conversation => Promise.all([
           this.fetchConversationPartner(conversation, user),
-          this.fetchLastMessage(conversation),
-        ]);
-      }));
-    })
-    .catch((error) => {
-      this.setState({
-        error: error,
-        conversations: [],
+          this.fetchLastMessage(conversation)
+        ])));
+      })
+      .catch((error) => {
+        this.setState({
+          error,
+          conversations: []
+        });
+      })
+      .then(() => {
+        this.setState({
+          loading: false
+        });
       });
-    })
-    .then(() => {
-      this.setState({
-        loading: false,
-      });
-    });
   };
 
-  fetchConversationPartner = (conversation, currentUser) => {
-    return apiClient.type('users').get(conversation.links.users) // Talk's user links are broken.
-    .catch(() => {
-      return [];
-    })
+  fetchConversationPartner = (conversation, currentUser) => apiClient.type('users').get(conversation.links.users) // Talk's user links are broken.
+    .catch(() => [])
     .then((users) => {
       if (users.length > 0) {
-        let partner = users.find((potentialPartner) => {
-          return potentialPartner !== currentUser;
-        });
+        let partner = users.find(potentialPartner => potentialPartner !== currentUser);
         if (partner === undefined) {
           // Why're you talking to yourself?
           partner = currentUser;
@@ -94,66 +87,53 @@ class RecentCollectionsSection extends React.Component {
         const newState = Object.assign({}, this.state.conversationPartners);
         newState[conversation.id] = partner;
         this.setState({
-          conversationPartners: newState,
+          conversationPartners: newState
         });
         return partner;
       } else {
         return null;
       }
     });
-  };
 
-  fetchLastMessage = (conversation) => {
-    return conversation.get('messages', {
-      page_size: 1,
-      sort: '-created_at',
-    })
-    .catch(() => {
-      return [];
-    })
+  fetchLastMessage = conversation => conversation.get('messages', {
+    page_size: 1,
+    sort: '-created_at'
+  })
+    .catch(() => [])
     .then(([message]) => {
       const newState = Object.assign({}, this.state.lastMessages);
       newState[conversation.id] = message;
       this.setState({
-        lastMessages: newState,
+        lastMessages: newState
       });
       return this.fetchMessageAuthor(message)
-      .then(() => {
-        return message;
-      });
+        .then(() => message);
     });
-  };
 
-  fetchMessageAuthor = (message) => {
-    return apiClient.type('users').get(message.links.user) // Talk's user links are broken.
-    .catch(() => {
-      return null;
-    })
+  fetchMessageAuthor = message => apiClient.type('users').get(message.links.user) // Talk's user links are broken.
+    .catch(() => null)
     .then((author) => {
       const authorState = Object.assign({}, this.state.messageAuthors);
       authorState[message.id] = author;
       this.setState({
-        messageAuthors: authorState,
+        messageAuthors: authorState
       });
       if (author) {
         return author.get('avatar')
-        .catch(() => {
-          return [];
-        })
-        .then((avatars) => {
-          const avatar = [].concat(avatars)[0]; // Why's this an array?
-          const avatarState = Object.assign({}, this.state.avatars);
-          avatarState[author.id] = avatar;
-          this.setState({
-            avatars: avatarState,
+          .catch(() => [])
+          .then((avatars) => {
+            const avatar = [].concat(avatars)[0]; // Why's this an array?
+            const avatarState = Object.assign({}, this.state.avatars);
+            avatarState[author.id] = avatar;
+            this.setState({
+              avatars: avatarState
+            });
+            return author;
           });
-          return author;
-        });
       } else {
         return {};
       }
     });
-  };
 
   renderConversation = (conversation, index, allConversations) => {
     const partner = this.state.conversationPartners[conversation.id];
@@ -170,7 +150,7 @@ class RecentCollectionsSection extends React.Component {
 
     const allClassNames = classnames('recent-conversation-link', {
       'recent-conversation-link--first': index === 0,
-      'recent-conversation-link--last': index === allConversations.length - 1,
+      'recent-conversation-link--last': index === allConversations.length - 1
     });
 
     return (
@@ -219,13 +199,11 @@ class RecentCollectionsSection extends React.Component {
         )}
 
         <ul className="recent-conversations-list">
-          {this.state.conversations.map((conversation, i, allConversations) => {
-            return (
-              <li key={conversation.id} className="recent-conversations-list__item">
-                {this.renderConversation(conversation, i, allConversations)}
-              </li>
-            );
-          })}
+          {this.state.conversations.map((conversation, i, allConversations) => (
+            <li key={conversation.id} className="recent-conversations-list__item">
+              {this.renderConversation(conversation, i, allConversations)}
+            </li>
+          ))}
         </ul>
       </HomePageSection>
     );

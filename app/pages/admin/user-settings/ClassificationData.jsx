@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 function ClassificationEntry({
   name,
@@ -9,36 +9,56 @@ function ClassificationEntry({
       <>
         <b>annotations:</b>
         <ol>
-          {value.map(annotation => <li>{JSON.stringify(annotation)}<br/></li>)}
+          {value.map(annotation => (
+            <li>
+              {JSON.stringify(annotation)}
+              <br />
+            </li>
+          ))}
         </ol>
       </>
-    )
+    );
   }
   if (name === 'metadata') {
-    const entries = Object.entries(value)
+    const entries = Object.entries(value);
     return (
       <>
         <b>metadata:</b>
         <ul>
-          {entries.map(([key, value]) => <li><b>{key}:</b>{JSON.stringify(value)}<br/></li>)}
+          {entries.map(([key, value]) => (
+            <li>
+              <b>
+                {key}
+:
+              </b>
+              {JSON.stringify(value)}
+              <br />
+            </li>
+          ))}
         </ul>
       </>
-    )
+    );
   }
   return (
     <>
-      <b>{name}:</b> {JSON.stringify(value)}<br/>
+      <b>
+        {name}
+:
+      </b>
+      {' '}
+      {JSON.stringify(value)}
+      <br />
     </>
-  )
+  );
 }
 
 export default function Classification({
   classification = {}
 }) {
-  const entries = Object.entries(classification).filter(([key, value]) => !key.startsWith('_'))
+  const entries = Object.entries(classification).filter(([key, value]) => !key.startsWith('_'));
   return (
     <code>
       {entries.map(([key, value]) => <ClassificationEntry key={key} name={key} value={value} />)}
     </code>
-  )
+  );
 }

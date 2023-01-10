@@ -6,7 +6,7 @@ export default {
       faq: 'This project has no frequently asked questions yet.',
       research: 'This project has no science case yet.',
       results: 'This project has no results to report yet.',
-      team: 'This project has no team information.',
+      team: 'This project has no team information.'
     }
   },
   projectRoles: {
@@ -18,7 +18,7 @@ export default {
     moderator: 'Moderator',
     tester: 'Tester',
     expert: 'Expert',
-    museum: 'Museum',
+    museum: 'Museum'
   },
   classifier: {
     back: 'אחורה',
@@ -56,7 +56,7 @@ export default {
         results: 'תוצאות',
         faq: 'שאלות נפוצות',
         education: 'מידע חינוכי',
-        team: 'צוות',
+        team: 'צוות'
       }
     },
     nav: {
@@ -256,7 +256,7 @@ export default {
     },
     project: {
       section: 'Project email preferences',
-      header: 'Project',
+      header: 'Project'
     }
   },
   about: {
@@ -289,7 +289,7 @@ export default {
         humanities: 'Humanities',
         nature: 'Nature',
         medicine: 'Medicine',
-        meta: 'Meta',
+        meta: 'Meta'
       },
       content: {
         header: {

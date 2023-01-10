@@ -57,7 +57,7 @@ describe('<MobileSectionContainer />', function () {
       const mobileSection = wrapper.find('MobileSection').first();
       assert.strictEqual(mobileSection.length, 1);
     });
-    
+
     it('should render the <MobileSection /> component if the task type is drawing', function () {
       const task = fixtures.task({
         tools: [{
@@ -70,7 +70,7 @@ describe('<MobileSectionContainer />', function () {
       const mobileSection = wrapper.find('MobileSection').first();
       assert.strictEqual(mobileSection.length, 1);
     });
-  
+
     it('should render nothing if the task type isn\'t single or multiple or drawing', function () {
       const task = fixtures.task({ type: 'survey' });
       wrapper = shallow(<MobileSectionContainer task={task} workflow={fixtures.workflow()} project={fixtures.project()} />);

@@ -60,12 +60,10 @@ export default class SubjectPageContainer extends React.Component {
       .then((collections) => {
         let isFavorite = false;
         if (collections && this.props.user) {
-          const favoriteCollection = collections.filter((collection) => {
-            return (
-              collection.favorite &&
-              collection.links.owner.id === this.props.user.id &&
-              collection.links.projects.includes(this.props.project.id));
-          });
+          const favoriteCollection = collections.filter(collection => (
+            collection.favorite
+              && collection.links.owner.id === this.props.user.id
+              && collection.links.projects.includes(this.props.project.id)));
           if (favoriteCollection.length > 0) {
             isFavorite = favoriteCollection[0].links.subjects.includes(subject.id);
           }

@@ -60,7 +60,8 @@ describe('OrganizationPage', function () {
           collaborator={true}
           organization={organization}
           toggleCollaboratorView={toggle}
-        />);
+        />
+      );
       label = wrapper.find('div.organization-page__toggle');
       checkbox = label.find('input[type="checkbox"]');
     });
@@ -92,7 +93,8 @@ describe('OrganizationPage', function () {
       <OrganizationPage
         collaborator={false}
         organization={organization}
-      />);
+      />
+    );
     const label = wrapper.find('label.organization-page__toggle');
     assert.equal(label.length, 0);
   });

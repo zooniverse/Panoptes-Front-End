@@ -55,4 +55,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(TaskHelpButton);
-

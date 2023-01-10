@@ -11,7 +11,7 @@ export default class ClassificationViewer extends React.Component {
     this.state = {
       showOnlyLast: false,
       showThrowaways: false
-    }
+    };
 
     this.togglePersistAnnotations = this.togglePersistAnnotations.bind(this);
     this.toggleMultiImageCloneMarkers = this.toggleMultiImageCloneMarkers.bind(this);
@@ -60,13 +60,13 @@ export default class ClassificationViewer extends React.Component {
   }
 
   render() {
-    const showing = (this.state.showOnlyLast) ?
-      this.props.annotations[this.props.annotations.length - 1] :
-      this.props.annotations
+    const showing = (this.state.showOnlyLast)
+      ? this.props.annotations[this.props.annotations.length - 1]
+      : this.props.annotations;
 
-    const replacer = (this.state.showThrowaways) ?
-      null :
-      this.ignoreUnderscoredProperties
+    const replacer = (this.state.showThrowaways)
+      ? null
+      : this.ignoreUnderscoredProperties;
 
     return (
       <div className="classifier--dev__tools">
@@ -77,7 +77,8 @@ export default class ClassificationViewer extends React.Component {
             type="checkbox"
             checked={this.state.showOnlyLast}
             onChange={this.toggleShowOnlyLast}
-          />{' '}
+          />
+          {' '}
           Show only the last annotation
         </label>
         &ensp;
@@ -86,7 +87,8 @@ export default class ClassificationViewer extends React.Component {
             type="checkbox"
             checked={this.state.showThrowaways}
             onChange={this.toggleShowThrowaways}
-          />{' '}
+          />
+          {' '}
           Show throwaway properties
         </label>
         &ensp;
@@ -95,7 +97,8 @@ export default class ClassificationViewer extends React.Component {
             type="checkbox"
             checked={this.props.workflow.configuration.persist_annotations}
             onChange={this.togglePersistAnnotations}
-          />{' '}
+          />
+          {' '}
           Persist Annotations
         </label>
         &ensp;
@@ -104,7 +107,8 @@ export default class ClassificationViewer extends React.Component {
             type="checkbox"
             checked={this.props.workflow.configuration.multi_image_clone_markers}
             onChange={this.toggleMultiImageCloneMarkers}
-          />{' '}
+          />
+          {' '}
           Clone markings between frames
         </label>
         <br />

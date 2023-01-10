@@ -5,7 +5,6 @@ import DrawingToolRoot from './root';
 import DeleteButton from './delete-button';
 
 class PointGridTool extends React.Component {
-
   static defaultValues({ x, y }) {
     return { x, y };
   }
@@ -60,18 +59,23 @@ class PointGridTool extends React.Component {
     return (
       <DrawingToolRoot tool={this} transform={`translate(${x}, ${y})`}>
         <rect
-          x="0" y="0" width={width}
+          x="0"
+          y="0"
+          width={width}
           height={height}
           fill={this.props.color}
           fillOpacity={this.props.opacity / 100}
           strokeOpacity={(this.props.selected) ? '.8' : '0'}
         />
 
-        {!!this.props.selected &&
-          <DeleteButton
-            tool={this} {...this.getDeleteButtonPosition(row, col, width, height)}
-            getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix}
-          />
+        {!!this.props.selected
+          && (
+            <DeleteButton
+              tool={this}
+              {...this.getDeleteButtonPosition(row, col, width, height)}
+              getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix}
+            />
+          )
         }
       </DrawingToolRoot>
     );

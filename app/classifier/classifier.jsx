@@ -81,7 +81,7 @@ class Classifier extends React.Component {
       this.loadSubject(nextProps.subject);
     }
 
-    if (this.context.geordi && ((this.props.subject !== nextProps.subject) ||  !this.context.geordi.keys.subjectID)) {
+    if (this.context.geordi && ((this.props.subject !== nextProps.subject) || !this.context.geordi.keys.subjectID)) {
       this.context.geordi.remember({ subjectID: nextProps.subject.id });
     }
 
@@ -106,8 +106,8 @@ class Classifier extends React.Component {
         workflow_id: workflow.id,
         subject_ids: [subject.id]
       })
-      .catch(() => [])
-      .then(([expertClassification]) => expertClassification)
+        .catch(() => [])
+        .then(([expertClassification]) => expertClassification)
     );
 
     awaitExpertClassification.then((expertClassification) => {
@@ -120,7 +120,7 @@ class Classifier extends React.Component {
   }
 
   checkForFeedback(taskId) {
-    this.updateFeedback(taskId)
+    this.updateFeedback(taskId);
 
     const { feedback } = this.props;
     const taskFeedback = (feedback.rules && feedback.rules[taskId]) ? feedback.rules[taskId] : [];
@@ -136,7 +136,7 @@ class Classifier extends React.Component {
       project: this.props.project,
       user: this.props.user,
       preferences: this.props.preferences,
-      annotations: annotations,
+      annotations,
       annotation: {},
       frame: 0,
       frameWrapper: FrameAnnotator,
@@ -186,12 +186,12 @@ class Classifier extends React.Component {
     }
 
     preloadSubject(subject)
-    .then(() => {
-      if (this.props.subject === subject) { // The subject could have changed while we were loading.
-        this.setState({ subjectLoading: false });
-        this.props.onLoad();
-      }
-    });
+      .then(() => {
+        if (this.props.subject === subject) { // The subject could have changed while we were loading.
+          this.setState({ subjectLoading: false });
+          this.props.onLoad();
+        }
+      });
   }
 
   // Whenever a subject image is loaded in the annotator, record its size at that time.
@@ -199,9 +199,13 @@ class Classifier extends React.Component {
     const { actions, classification } = this.props;
     this.context.geordi.remember({ subjectID: this.props.subject.id });
 
-    const { naturalWidth, naturalHeight, clientWidth, clientHeight } = e.target;
+    const {
+      naturalWidth, naturalHeight, clientWidth, clientHeight
+    } = e.target;
     const subject_dimensions = classification.metadata.subject_dimensions.slice();
-    subject_dimensions[frameIndex] = { naturalWidth, naturalHeight, clientWidth, clientHeight };
+    subject_dimensions[frameIndex] = {
+      naturalWidth, naturalHeight, clientWidth, clientHeight
+    };
     actions.classify.updateMetadata({ subject_dimensions });
   }
 
@@ -220,7 +224,7 @@ class Classifier extends React.Component {
   }
 
   onNextTask(taskKey) {
-    const workflowHistory  = this.state.workflowHistory.slice();
+    const workflowHistory = this.state.workflowHistory.slice();
     const prevTaskKey = workflowHistory[workflowHistory.length - 1];
     workflowHistory.push(taskKey);
     if (prevTaskKey) {
@@ -232,31 +236,35 @@ class Classifier extends React.Component {
   }
 
   onPrevTask() {
-    const workflowHistory  = this.state.workflowHistory.slice();
+    const workflowHistory = this.state.workflowHistory.slice();
     workflowHistory.pop();
     this.setState({ workflowHistory });
   }
 
   completeClassification(e) {
-    const { actions, classification, onComplete, intervention, project, subject, translations, user, workflow } = this.props;
+    const {
+      actions, classification, onComplete, intervention, project, subject, translations, user, workflow
+    } = this.props;
     const originalElement = e.currentTarget;
     const isCmdClick = e.metaKey;
     const annotations = this.state.annotations.slice();
     let workflowHistory = this.state.workflowHistory.slice();
     const taskKey = workflowHistory[workflowHistory.length - 1];
 
-    const showIntervention = user &&
-      user.intervention_notifications &&
-      intervention;
-    const showSummary = !workflow.configuration.hide_classification_summaries ||
-      this.subjectIsGravitySpyGoldStandard();
+    const showIntervention = user
+      && user.intervention_notifications
+      && intervention;
+    const showSummary = !workflow.configuration.hide_classification_summaries
+      || this.subjectIsGravitySpyGoldStandard();
     const showLastStep = showIntervention || showSummary;
 
     // don't swallow cmd-click on links
     if (!isCmdClick) {
       e.preventDefault();
     }
-    const { already_seen, finished_workflow, retired, selection_state, user_has_finished_workflow, selected_at } = subject;
+    const {
+      already_seen, finished_workflow, retired, selection_state, user_has_finished_workflow, selected_at
+    } = subject;
     const workflowTranslation = translations.strings.workflow[workflow.id];
     const mergedInterventions = Object.assign(
       {},
@@ -293,12 +301,12 @@ class Classifier extends React.Component {
       })
       .then(() => {
         workflowHistory = [];
-        this.setState({ annotations, showIntervention, showSummary, workflowHistory });
+        this.setState({
+          annotations, showIntervention, showSummary, workflowHistory
+        });
       })
       .then(onComplete)
-      .then(() => {
-        return showLastStep ? null : this.onNextSubject();
-      })
+      .then(() => (showLastStep ? null : this.onNextSubject()))
       .catch(error => console.error(error));
   }
 
@@ -315,7 +323,9 @@ class Classifier extends React.Component {
   }
 
   render() {
-    const { actions, goldStandardMode, intervention, user, workflow } = this.props;
+    const {
+      actions, goldStandardMode, intervention, user, workflow
+    } = this.props;
     const { showIntervention, showSummary, workflowHistory } = this.state;
     const currentTaskKey = workflowHistory.length > 0 ? workflowHistory[workflowHistory.length - 1] : null;
     const taskAreaVariant = goldStandardMode ? 'goldStandardMode' : 'default';
@@ -331,9 +341,9 @@ class Classifier extends React.Component {
       otherwise the classifier will crash deeper down the component tree.
     */
     if (!workflow.first_task) {
-      const hasTasks = Object.keys(workflow.tasks).length
+      const hasTasks = Object.keys(workflow.tasks).length;
       if (hasTasks) {
-        throw new Error('First task has not been set for workflow.')
+        throw new Error('First task has not been set for workflow.');
       }
     }
 
@@ -383,38 +393,44 @@ class Classifier extends React.Component {
               user={this.props.user}
               workflow={this.props.workflow}
             />
-            {showIntervention &&
-              <Intervention
-                intervention={intervention}
-                onUnmount={actions.classify.clearIntervention}
-                user={user}
-              />
+            {showIntervention
+              && (
+                <Intervention
+                  intervention={intervention}
+                  onUnmount={actions.classify.clearIntervention}
+                  user={user}
+                />
+              )
             }
-            {currentTaskKey &&
-              <Task
-                preferences={this.props.preferences}
-                user={this.props.user}
-                project={this.props.project}
-                workflow={this.props.workflow}
-                annotations={this.state.annotations}
-                task={currentTask}
-                annotation={currentAnnotation}
-                subjectLoading={this.state.subjectLoading}
-                updateAnnotations={this.updateAnnotations}
-              />
+            {currentTaskKey
+              && (
+                <Task
+                  preferences={this.props.preferences}
+                  user={this.props.user}
+                  project={this.props.project}
+                  workflow={this.props.workflow}
+                  annotations={this.state.annotations}
+                  task={currentTask}
+                  annotation={currentAnnotation}
+                  subjectLoading={this.state.subjectLoading}
+                  updateAnnotations={this.updateAnnotations}
+                />
+              )
             }
-            {showSummary &&
-              <ClassificationSummary
-                project={this.props.project}
-                workflow={this.props.workflow}
-                subject={this.props.subject}
-                classification={currentClassification}
-                expertClassification={this.state.expertClassification}
-                splits={this.props.splits}
-                classificationCount={this.props.classificationCount}
-                hasGSGoldStandard={this.subjectIsGravitySpyGoldStandard()}
-                toggleExpertClassification={this.toggleExpertClassification}
-              />
+            {showSummary
+              && (
+                <ClassificationSummary
+                  project={this.props.project}
+                  workflow={this.props.workflow}
+                  subject={this.props.subject}
+                  classification={currentClassification}
+                  expertClassification={this.state.expertClassification}
+                  splits={this.props.splits}
+                  classificationCount={this.props.classificationCount}
+                  hasGSGoldStandard={this.subjectIsGravitySpyGoldStandard()}
+                  toggleExpertClassification={this.toggleExpertClassification}
+                />
+              )
             }
             <TaskNav
               annotation={currentAnnotation}
@@ -432,12 +448,14 @@ class Classifier extends React.Component {
               onNextTask={this.onNextTask}
               onPrevTask={this.onPrevTask}
             >
-              {!!this.props.expertClassifier &&
-                <ExpertOptions
-                  userRoles={this.props.userRoles}
-                  demoMode={this.props.demoMode}
-                  onChangeDemoMode={this.props.onChangeDemoMode}
-                />}
+              {!!this.props.expertClassifier
+                && (
+                  <ExpertOptions
+                    userRoles={this.props.userRoles}
+                    demoMode={this.props.demoMode}
+                    onChangeDemoMode={this.props.onChangeDemoMode}
+                  />
+                )}
             </TaskNav>
 
             <MinicourseButton
@@ -448,31 +466,39 @@ class Classifier extends React.Component {
               user={this.props.user}
             />
 
-            {!!this.props.demoMode &&
-              <p style={{ textAlign: 'center' }}>
-                <i className="fa fa-trash" />{' '}
-                <small>
-                  <strong>Demo mode:</strong>
-                  <br />
-                  No classifications are being recorded.{' '}
-                  <button type="button" className="secret-button" onClick={this.changeDemoMode.bind(this, false)}>
-                    <u>Disable</u>
-                  </button>
-                </small>
-              </p>
+            {!!this.props.demoMode
+              && (
+                <p style={{ textAlign: 'center' }}>
+                  <i className="fa fa-trash" />
+                  {' '}
+                  <small>
+                    <strong>Demo mode:</strong>
+                    <br />
+                  No classifications are being recorded.
+                    {' '}
+                    <button type="button" className="secret-button" onClick={this.changeDemoMode.bind(this, false)}>
+                      <u>Disable</u>
+                    </button>
+                  </small>
+                </p>
+              )
             }
-            {!!currentClassification.gold_standard &&
-              <p style={{ textAlign: 'center' }}>
-                <i className="fa fa-star" />{' '}
-                <small>
-                  <strong>Gold standard mode:</strong>
-                  <br />
-                  Please ensure this classification is completely accurate.{' '}
-                  <button type="button" className="secret-button" onClick={() => actions.classify.toggleGoldStandard(undefined)}>
-                    <u>Disable</u>
-                  </button>
-                </small>
-              </p>
+            {!!currentClassification.gold_standard
+              && (
+                <p style={{ textAlign: 'center' }}>
+                  <i className="fa fa-star" />
+                  {' '}
+                  <small>
+                    <strong>Gold standard mode:</strong>
+                    <br />
+                  Please ensure this classification is completely accurate.
+                    {' '}
+                    <button type="button" className="secret-button" onClick={() => actions.classify.toggleGoldStandard(undefined)}>
+                      <u>Disable</u>
+                    </button>
+                  </small>
+                </p>
+              )
             }
 
           </TaskArea>

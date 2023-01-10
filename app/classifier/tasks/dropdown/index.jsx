@@ -40,12 +40,21 @@ export function DropdownSummary(props) {
           } else {
             displayAnswer = answer.value;
           }
-          return (<div key={i} className="answer">
-            <i className="fa fa-arrow-circle-o-right" /> {props.task.selects[i].title} - {displayAnswer}
-          </div>);
+          return (
+            <div key={i} className="answer">
+              <i className="fa fa-arrow-circle-o-right" />
+              {' '}
+              {props.task.selects[i].title}
+              {' '}
+-
+              {' '}
+              {displayAnswer}
+            </div>
+          );
         })}
       </div>
-    </div>);
+    </div>
+  );
 }
 
 DropdownSummary.propTypes = {
@@ -159,9 +168,9 @@ export default class DropdownTask extends React.Component {
 
     // return of true will disable select, false will enable select
     if (
-      select.condition && // will return false (enable select) for root/first select, which should never be disabled
-      !select.allowCreate && // will return false (enable select) if select allows create, a select with allow create should never be disabled, regagrdless of condition
-      (!this.props.annotation.value[conditionIndex] || !this.props.annotation.value[conditionIndex].option)
+      select.condition // will return false (enable select) for root/first select, which should never be disabled
+      && !select.allowCreate // will return false (enable select) if select allows create, a select with allow create should never be disabled, regagrdless of condition
+      && (!this.props.annotation.value[conditionIndex] || !this.props.annotation.value[conditionIndex].option)
       // will return true (disable select) if no conditional answer provided or the conditional answer provided is a custom/created answer (thereby making current select's options irrelevant)
     ) {
       return true;
@@ -225,8 +234,8 @@ export default class DropdownTask extends React.Component {
 
             return (
               <div id={select.id} key={select.id}>
-                {(select.title !== this.props.translation.instruction) &&
-                  <div>{select.title}</div>}
+                {(select.title !== this.props.translation.instruction)
+                  && <div>{select.title}</div>}
                 <SelectComponent
                   options={options}
                   onChange={this.onChangeSelect.bind(this, i)}
@@ -249,7 +258,8 @@ export default class DropdownTask extends React.Component {
                     }
                   }}
                 />
-              </div>);
+              </div>
+            );
           })}
         </div>
       </GenericTask>
@@ -280,8 +290,8 @@ DropdownTask.getTaskText = task => (task.instruction);
 DropdownTask.getDefaultAnnotation = () => ({ value: [] });
 DropdownTask.isAnnotationComplete = (task, annotation) => (
   task.selects.every((select, i) => (
-    !select.required ||
-    (annotation.value[i] && (annotation.value[i].value || annotation.value[i].value === 0))
+    !select.required
+    || (annotation.value[i] && (annotation.value[i].value || annotation.value[i].value === 0))
   ))
 );
 

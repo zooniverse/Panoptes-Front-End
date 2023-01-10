@@ -64,7 +64,7 @@ class ResetPasswordPage extends React.Component {
     const token = this.props.location.query.reset_password_token;
     const password = event.target[0].value;
     const confirmation = event.target[1].value;
-    const passwordMatch = password === confirmation
+    const passwordMatch = password === confirmation;
     if (!passwordMatch) {
       this.setState({
         inProgress: false,
@@ -79,7 +79,7 @@ class ResetPasswordPage extends React.Component {
     auth.resetPassword({ password, confirmation, token })
       .then(() => {
         this.setState({
-          resetSuccess: true,
+          resetSuccess: true
         });
         alert(resolve => <LoginDialog onSuccess={resolve} />);
         this.context.router.push('/projects');
@@ -104,25 +104,29 @@ class ResetPasswordPage extends React.Component {
           content="resetPassword.heading"
         />
 
-        {this.props.location.query && !this.props.location.query.reset_password_token &&
-          <SubmitEmailForm
-            user={this.props.user}
-            onSubmit={this.handleEmailSubmit}
-            onChange={this.handleEmailChange}
-            disabled={!this.state.emailIsValid}
-            inProgress={this.state.inProgress}
-            emailSuccess={this.state.emailSuccess}
-            emailError={this.state.emailError}
-          />}
+        {this.props.location.query && !this.props.location.query.reset_password_token
+          && (
+            <SubmitEmailForm
+              user={this.props.user}
+              onSubmit={this.handleEmailSubmit}
+              onChange={this.handleEmailChange}
+              disabled={!this.state.emailIsValid}
+              inProgress={this.state.inProgress}
+              emailSuccess={this.state.emailSuccess}
+              emailError={this.state.emailError}
+            />
+          )}
 
-        {this.props.location.query && this.props.location.query.reset_password_token && !this.state.resetSuccess &&
-          <NewPasswordForm
-            onSubmit={this.handlePasswordResetSubmit}
-            disabled={this.state.resetSuccess}
-            inProgress={this.state.inProgress}
-            resetSuccess={this.state.resetSuccess}
-            resetError={this.state.resetError}
-          />}
+        {this.props.location.query && this.props.location.query.reset_password_token && !this.state.resetSuccess
+          && (
+            <NewPasswordForm
+              onSubmit={this.handlePasswordResetSubmit}
+              disabled={this.state.resetSuccess}
+              inProgress={this.state.inProgress}
+              resetSuccess={this.state.resetSuccess}
+              resetError={this.state.resetError}
+            />
+          )}
       </div>
     );
   }

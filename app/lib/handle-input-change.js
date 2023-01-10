@@ -6,7 +6,7 @@ export default function handleInputChange(e) {
   Ensure that it's called in the context of a JSON-API Model instance.
   */
   if (typeof this.update !== 'function' || typeof this.emit !== 'function') {
-    throw new Error('Bind the handleInputChange function to a json-api-client Model instance')
+    throw new Error('Bind the handleInputChange function to a json-api-client Model instance');
   }
 
   let valueProperty;

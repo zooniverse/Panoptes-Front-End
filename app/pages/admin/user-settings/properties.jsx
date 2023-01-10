@@ -11,26 +11,31 @@ const UserProperties = (props) => {
     <div>
       <ul>
         <li>
-          <input type="checkbox" name="admin" checked={props.user.admin} disabled />{' '}
+          <input type="checkbox" name="admin" checked={props.user.admin} disabled={true} />
+          {' '}
           Admin
         </li>
         <li>
-          <input type="checkbox" name="login_prompt" checked={props.user.login_prompt} disabled />{' '}
+          <input type="checkbox" name="login_prompt" checked={props.user.login_prompt} disabled={true} />
+          {' '}
           Login prompt
         </li>
         <li>
-          <input type="checkbox" name="private_profile" checked={props.user.private_profile} disabled />{' '}
+          <input type="checkbox" name="private_profile" checked={props.user.private_profile} disabled={true} />
+          {' '}
           Private profile
         </li>
         <li>
           <AutoSave resource={props.user}>
-            <input type="checkbox" name="upload_whitelist" checked={props.user.upload_whitelist} onChange={handleChange} />{' '}
+            <input type="checkbox" name="upload_whitelist" checked={props.user.upload_whitelist} onChange={handleChange} />
+            {' '}
             Whitelist subject uploads
           </AutoSave>
         </li>
         <li>
           <AutoSave resource={props.user}>
-            <input type="checkbox" name="banned" checked={props.user.banned} onChange={handleChange} />{' '}
+            <input type="checkbox" name="banned" checked={props.user.banned} onChange={handleChange} />
+            {' '}
             Ban user
           </AutoSave>
         </li>
@@ -38,10 +43,10 @@ const UserProperties = (props) => {
 
     </div>
   );
-}
+};
 
 UserProperties.propTypes = {
   user: PropTypes.object
-}
+};
 
 export default UserProperties;

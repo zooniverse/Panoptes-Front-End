@@ -11,7 +11,7 @@ export const StyledNextButton = styled.button.attrs({
   disabled: props => props.disabled,
   type: props => props.type
 })`
-  background: ${theme('mode', { 
+  background: ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.default,
     light: zooTheme.colors.highlight.default
   })};
@@ -36,34 +36,36 @@ export const StyledNextButton = styled.button.attrs({
 
   &:hover:not(:disabled), &:focus:not(:disabled) {
     background: ${theme('mode', {
-      dark: zooTheme.colors.highlight.default,
-      light: zooTheme.colors.lightTheme.button.nextHover
-    })};
+    dark: zooTheme.colors.highlight.default,
+    light: zooTheme.colors.lightTheme.button.nextHover
+  })};
     color: ${theme('mode', {
-      dark: 'black',
-      light: 'black'
-    })};;
+    dark: 'black',
+    light: 'black'
+  })};;
   }
 
   &:disabled {
     background: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.background.default,
-      light: zooTheme.colors.highlight.light
-    })};
+    dark: zooTheme.colors.darkTheme.background.default,
+    light: zooTheme.colors.highlight.light
+  })};
     border: ${theme('mode', {
-      dark: `solid thin ${zooTheme.colors.highlight.default}`,
-      light: `solid thin ${zooTheme.colors.highlight.default}`
-    })};
+    dark: `solid thin ${zooTheme.colors.highlight.default}`,
+    light: `solid thin ${zooTheme.colors.highlight.default}`
+  })};
     color: ${theme('mode', {
-      dark: zooTheme.colors.highlight.default,
-      light: 'black'
-    })};
+    dark: zooTheme.colors.highlight.default,
+    light: 'black'
+  })};
     cursor: not-allowed;
     opacity: 0.5;
   }
 `;
 
-export function NextButton({ autoFocus, disabled, classifierTheme, onClick }) {
+export function NextButton({
+  autoFocus, disabled, classifierTheme, onClick
+}) {
   return (
     <ThemeProvider theme={{ mode: classifierTheme }}>
       <StyledNextButton

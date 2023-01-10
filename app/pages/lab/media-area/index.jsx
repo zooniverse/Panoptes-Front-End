@@ -11,8 +11,8 @@ export default class MediaAreaController extends Component {
     this.state = {
       errors: [],
       media: null,
-      page: 1,  // Current page. Controlled by the user.
-      page_count: 1,  // Total number of pages. Update when we fetch the from resource's metadata.
+      page: 1, // Current page. Controlled by the user.
+      page_count: 1, // Total number of pages. Update when we fetch the from resource's metadata.
       pendingFiles: [],
       pendingMedia: []
     };
@@ -40,7 +40,7 @@ export default class MediaAreaController extends Component {
       this.fetchMedia(nextProps, 1);
     }
   }
-  
+
   onPageChange(page) {
     // When user requests the page to change, the media fetch AND the update
     // of state.page is done in fetchMedia()

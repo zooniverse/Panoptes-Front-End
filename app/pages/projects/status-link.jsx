@@ -10,7 +10,7 @@ class StatusLink extends Component {
   handleClick() {
     this.props.updateQuery({
       status: this.props.status,
-      page: '1',
+      page: '1'
     });
   }
 
@@ -30,7 +30,7 @@ StatusLink.propTypes = {
   children: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   status: PropTypes.string.isRequired,
-  updateQuery: PropTypes.func.isRequired,
+  updateQuery: PropTypes.func.isRequired
 };
 
 export default StatusLink;

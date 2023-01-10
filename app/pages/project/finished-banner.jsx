@@ -10,7 +10,7 @@ export default class FinishedBanner extends React.Component {
 
     this.state = {
       hasResultsPage: false,
-      hide: false,
+      hide: false
     };
 
     this.getResultsPageExistence = this.getResultsPageExistence.bind(this);
@@ -31,9 +31,7 @@ export default class FinishedBanner extends React.Component {
 
   getResultsPageExistence(project) {
     return project.get('pages').then((pages) => {
-      const resultsPages = pages.filter((page) => {
-        return (page.url_key === 'results' ? page : null);
-      });
+      const resultsPages = pages.filter(page => (page.url_key === 'results' ? page : null));
       return (!!resultsPages[0]);
     });
   }
@@ -49,7 +47,7 @@ export default class FinishedBanner extends React.Component {
   refresh(project) {
     this.setState({
       hasResultsPage: false,
-      hide: false,
+      hide: false
     });
 
     this.getResultsPageExistence(project)
@@ -65,9 +63,11 @@ export default class FinishedBanner extends React.Component {
       <span>
         <strong>
           <Link to={`/projects/${owner}/${name}/results`}>See the results</Link>
-        </strong>{' '}
+        </strong>
+        {' '}
         <small>
-          or{' '}
+          or
+          {' '}
           <button type="button" className="secret-button" onClick={this.hide}><u>dismiss this message</u></button>
         </small>
       </span>
@@ -86,8 +86,10 @@ export default class FinishedBanner extends React.Component {
     return (
       <div className="successful project-announcement-banner">
         <p>
-          <strong>Great work!</strong>{' '}
-          Looks like this project is out of data at the moment!<br />
+          <strong>Great work!</strong>
+          {' '}
+          Looks like this project is out of data at the moment!
+          <br />
           {this.state.hasResultsPage ? this.renderResultsPage() : null}
         </p>
       </div>
@@ -97,13 +99,13 @@ export default class FinishedBanner extends React.Component {
 
 FinishedBanner.defaultProps = {
   dismissFor: THREE_DAYS,
-  project: {},
+  project: {}
 };
 
 FinishedBanner.propTypes = {
   dismissFor: PropTypes.number,
   project: PropTypes.shape({
     id: PropTypes.string,
-    slug: PropTypes.string,
+    slug: PropTypes.string
   })
 };

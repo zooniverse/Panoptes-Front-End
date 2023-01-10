@@ -136,7 +136,7 @@
     "test": "NODE_ENV=development BABEL_ENV=test nyc mocha --exit test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*) --reporter nyan || true",
     "test-one": "NODE_ENV=development BABEL_ENV=test nyc mocha --exit test/setup.js test/enzyme-configuration.js $1",
     "test-ci": "NODE_ENV=development BABEL_ENV=test nyc mocha --exit test/setup.js test/enzyme-configuration.js $(find app -name *.spec.js*)",
-    "lint": "eslint ./app --ext .jsx,.js",
+    "lint": "eslint --fix ./app --ext .jsx,.js",
     "lint:watch": "esw --watch --color ./app --ext .jsx,.js"
   }
 }

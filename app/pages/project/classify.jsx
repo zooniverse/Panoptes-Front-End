@@ -78,7 +78,9 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { classification, upcomingSubjects, user, workflow } = this.props;
+    const {
+      classification, upcomingSubjects, user, workflow
+    } = this.props;
     const { promptWorkflowAssignmentDialog } = this.state;
 
     if (!promptWorkflowAssignmentDialog && user !== null) {
@@ -96,8 +98,8 @@ export class ProjectClassifyPage extends React.Component {
       }
     }
 
-    if (workflow &&
-      classification !== prevProps.classification
+    if (workflow
+      && classification !== prevProps.classification
     ) {
       if (classification) {
         // we've just started a new classification.
@@ -120,10 +122,10 @@ export class ProjectClassifyPage extends React.Component {
     this.maybePromptWorkflowAssignmentDialog(this.props);
     if (workflow) {
       actions.classifier.fetchSubjects(workflow)
-      .then(() => actions.classifier.createClassification(project))
-      .catch((error) => {
-        this.setState({ rejected: { classification: error }});
-      });
+        .then(() => actions.classifier.createClassification(project))
+        .catch((error) => {
+          this.setState({ rejected: { classification: error }});
+        });
     }
   }
 
@@ -137,7 +139,7 @@ export class ProjectClassifyPage extends React.Component {
     }
 
     if (classification && classification.links.workflow === workflow.id) {
-     // Resume an existing workflow session with a valid classification
+      // Resume an existing workflow session with a valid classification
       actions.classifier.resumeClassification(classification);
     } else if (classification) {
     // Empty the queue and restart if we've changed workflows since the last classification was created.
@@ -152,13 +154,13 @@ export class ProjectClassifyPage extends React.Component {
     // Only for Gravity Spy which is assigning workflows to logged in users
     const { preferences, project, workflow } = this.props;
     if (project.experimental_tools.indexOf('workflow assignment') > -1) {
-      const assignedWorkflowID = preferences &&
-        preferences.settings &&
-        preferences.settings.workflow_id;
+      const assignedWorkflowID = preferences
+        && preferences.settings
+        && preferences.settings.workflow_id;
       const currentWorkflowID = workflow && workflow.id;
       if (assignedWorkflowID && currentWorkflowID && assignedWorkflowID !== currentWorkflowID) {
-        const isActiveWorkflow = project.links.active_workflows &&
-          project.links.active_workflows.indexOf(assignedWorkflowID) > -1;
+        const isActiveWorkflow = project.links.active_workflows
+          && project.links.active_workflows.indexOf(assignedWorkflowID) > -1;
         if (isActiveWorkflow) {
           if (this.state.promptWorkflowAssignmentDialog === false) {
             this.setState({ promptWorkflowAssignmentDialog: true });
@@ -197,11 +199,11 @@ export class ProjectClassifyPage extends React.Component {
   }
 
   maybePromptWorkflowAssignmentDialog(props) {
-    const { actions, preferences, project, splits, translations } = props;
+    const {
+      actions, preferences, project, splits, translations
+    } = props;
     if (this.state.promptWorkflowAssignmentDialog) {
-      WorkflowAssignmentDialog.start({ splits, project }).then(() =>
-        this.setState({ promptWorkflowAssignmentDialog: false })
-      ).then(() => {
+      WorkflowAssignmentDialog.start({ splits, project }).then(() => this.setState({ promptWorkflowAssignmentDialog: false })).then(() => {
         if (preferences.preferences.selected_workflow !== preferences.settings.workflow_id) {
           actions.classifier.loadWorkflow(preferences.settings.workflow_id, translations.locale, preferences);
         }
@@ -262,7 +264,10 @@ export class ProjectClassifyPage extends React.Component {
       );
     } else if (this.state.rejected && this.state.rejected.classification) {
       return (
-        <code>Please try again. Something went wrong: {this.state.rejected.classification.toString()}</code>
+        <code>
+Please try again. Something went wrong:
+          {this.state.rejected.classification.toString()}
+        </code>
       );
     } else {
       return (
@@ -278,11 +283,11 @@ export class ProjectClassifyPage extends React.Component {
       >
         <Helmet title={`${this.props.project.display_name} » ${counterpart('project.classifyPage.title')}`} />
 
-        {this.props.projectIsComplete &&
-          <FinishedBanner project={this.props.project} />}
+        {this.props.projectIsComplete
+          && <FinishedBanner project={this.props.project} />}
 
-        {this.state.validUserGroup &&
-          <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
+        {this.state.validUserGroup
+          && <p className="anouncement-banner--group">You are classifying as a student of your classroom.</p>}
 
         {this.props.workflow ? this.renderClassifier() : <p>Loading workflow</p>}
         <ProjectThemeButton />
@@ -360,13 +365,13 @@ const ConnectedClassifyPage = connect(mapStateToProps, mapDispatchToProps)(Proje
 
 function ConnectedClassifyPageWithWorkflow(props) {
   const workflowKey = props.workflow ? props.workflow.id : 'no-workflow';
-  
-  //Check for WildCam Lab classrooms (see https://github.com/zooniverse/edu-api-front-end)
+
+  // Check for WildCam Lab classrooms (see https://github.com/zooniverse/edu-api-front-end)
   const workflowFromUrl = props.location.query && props.location.query.workflow;
   const isProjectForClassrooms = (props.project && props.project.experimental_tools && props.project.experimental_tools.indexOf('wildcam classroom') > -1);
   const isUrlForClassrooms = props.location.query && props.location.query.classroom;
   const isClassroom = isProjectForClassrooms && isUrlForClassrooms && workflowFromUrl;
-  
+
   const WorkflowStrategy = isClassroom ? ClassroomWorkflowSelection : WorkflowSelection;
   return (
     <WorkflowStrategy

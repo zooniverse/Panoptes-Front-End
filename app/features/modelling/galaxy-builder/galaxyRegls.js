@@ -61,12 +61,12 @@ float stepSize = 1.0 / resolution / 2.0;\nfloat pixel = 0.0;\n`;
       s += `pixel += ${fname}(x`;
       if (i === 0) { s += ', '; } else { s += ` + ${i}.0 * stepSize, `; }
       if (j === 0) {
-        s += `y, mu, roll, rEff, axRatio, c, i0, n) / newDensity;\n`;
+        s += 'y, mu, roll, rEff, axRatio, c, i0, n) / newDensity;\n';
       } else {
         s += `y + ${j}.0 * stepSize, mu, roll, rEff, axRatio, c, i0, n) / newDensity;\n`;
       }
     }
-    s += `\n`;
+    s += '\n';
   }
   return s;
 }

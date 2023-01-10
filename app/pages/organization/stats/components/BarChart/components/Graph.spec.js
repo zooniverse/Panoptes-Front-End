@@ -43,7 +43,7 @@ describe('Graph', function () {
   let wrapper;
   let chartData;
   before(function () {
-    wrapper = shallow(<Graph by='day' data={mockData} />);
+    wrapper = shallow(<Graph by="day" data={mockData} />);
     chartData = wrapper.prop('data');
   });
   it('should render without crashing', function () {

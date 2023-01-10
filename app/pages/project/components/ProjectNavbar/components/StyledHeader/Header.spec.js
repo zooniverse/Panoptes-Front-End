@@ -10,8 +10,8 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import Header from './Header';
 
-describe('Header', function() {
-  it('should render without crashing', function() {
+describe('Header', function () {
+  it('should render without crashing', function () {
     shallow(<Header />);
   });
 });

@@ -19,6 +19,7 @@ class TaskNav extends React.Component {
       this.addAnnotationForTask(workflow.first_task);
     }
   }
+
   // Next (or first question)
   addAnnotationForTask(taskKey) {
     const { workflow } = this.props;
@@ -91,11 +92,11 @@ class TaskNav extends React.Component {
       nextTaskKey = '';
     }
 
-    const showDoneAndTalkLink = !nextTaskKey &&
-      this.props.workflow.configuration.hide_classification_summaries &&
-      this.props.project &&
-      !disableTalk &&
-      !completed;
+    const showDoneAndTalkLink = !nextTaskKey
+      && this.props.workflow.configuration.hide_classification_summaries
+      && this.props.project
+      && !disableTalk
+      && !completed;
 
     return (
       <div>

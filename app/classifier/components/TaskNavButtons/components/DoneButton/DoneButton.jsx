@@ -33,30 +33,30 @@ export const StyledDoneButton = styled.button.attrs({
 
   &:hover, &:focus {
     background: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.button.done.hover,
-      light: darken(0.15, zooTheme.colors.lightTheme.button.done)
-    })};
+    dark: zooTheme.colors.darkTheme.button.done.hover,
+    light: darken(0.15, zooTheme.colors.lightTheme.button.done)
+  })};
     border: ${theme('mode', {
-      dark: `solid thin ${zooTheme.colors.darkTheme.button.done.default}`,
-      light: `solid thin ${darken(0.15, zooTheme.colors.lightTheme.button.done)}`
-    })};
+    dark: `solid thin ${zooTheme.colors.darkTheme.button.done.default}`,
+    light: `solid thin ${darken(0.15, zooTheme.colors.lightTheme.button.done)}`
+  })};
     color: 'white';
   }
 
   &:disabled {
     background: ${theme('mode', {
-      dark: lighten(0.05, zooTheme.colors.darkTheme.background.default),
-      light: lighten(0.05, zooTheme.colors.lightTheme.button.done)
-    })};
+    dark: lighten(0.05, zooTheme.colors.darkTheme.background.default),
+    light: lighten(0.05, zooTheme.colors.lightTheme.button.done)
+  })};
 
     border: ${theme('mode', {
-      dark: `solid thin ${zooTheme.colors.darkTheme.button.done.default}`,
-      light: `solid thin ${lighten(0.05, zooTheme.colors.lightTheme.button.done)}`
-    })};
+    dark: `solid thin ${zooTheme.colors.darkTheme.button.done.default}`,
+    light: `solid thin ${lighten(0.05, zooTheme.colors.lightTheme.button.done)}`
+  })};
     color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.font,
-      light: '#EEF1F4'
-    })};
+    dark: zooTheme.colors.darkTheme.font,
+    light: '#EEF1F4'
+  })};
     cursor: not-allowed;
     opacity: 0.5;
   }
@@ -72,7 +72,8 @@ export function DoneButton(props) {
         >
           {props.demoMode && <i className="fa fa-trash fa-fw" />}
           {props.goldStandardMode && <i className="fa fa-star fa-fw" />}
-          {' '}<Translate content="classifier.done" />
+          {' '}
+          <Translate content="classifier.done" />
         </StyledDoneButton>
       </ThemeProvider>
     );

@@ -44,20 +44,20 @@ export const StyledBackButton = styled.button.attrs({
 
   &:focus, &:hover {
     background: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.background.default,
-      light: `linear-gradient(
+    dark: zooTheme.colors.darkTheme.background.default,
+    light: `linear-gradient(
         ${zooTheme.colors.lightTheme.button.answer.gradient.top},
         ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
       )`
-    })};
+  })};
     border: ${theme('mode', {
-      dark: `thin solid ${zooTheme.colors.darkTheme.button.answer.default}`,
-      light: 'thin solid transparent'
-    })};
+    dark: `thin solid ${zooTheme.colors.darkTheme.button.answer.default}`,
+    light: 'thin solid transparent'
+  })};
     color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.font,
-      light: 'black'
-    })};
+    dark: zooTheme.colors.darkTheme.font,
+    light: 'black'
+  })};
   }
 `;
 
@@ -123,10 +123,12 @@ export class BackButton extends React.Component {
           >
             <Translate content="classifier.back" />
           </StyledBackButton>
-          {this.state.showWarning &&
-            <StyledBackButtonToolTip>
-              <Translate content="classifier.backButtonWarning" />
-            </StyledBackButtonToolTip>}
+          {this.state.showWarning
+            && (
+              <StyledBackButtonToolTip>
+                <Translate content="classifier.backButtonWarning" />
+              </StyledBackButtonToolTip>
+            )}
         </StyledBackButtonWrapper>
       </ThemeProvider>
     );

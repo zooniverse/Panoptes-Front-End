@@ -10,9 +10,9 @@ function BlurredImage(props) {
         style={{
           backgroundImage: `url('${props.src}')`,
           backgroundPosition: props.position,
-          fontSize: props.blur,
+          fontSize: props.blur
         }}
-      ></div>
+      />
     </div>
   );
 }
@@ -22,14 +22,14 @@ BlurredImage.propTypes = {
   style: PropTypes.object.isRequired,
   src: PropTypes.string.isRequired,
   position: PropTypes.string.isRequired,
-  blur: PropTypes.any,
+  blur: PropTypes.any
 };
 
 BlurredImage.defaultProps = {
   className: '',
   style: {},
   src: '',
-  position: '',
+  position: ''
 };
 
 export default BlurredImage;

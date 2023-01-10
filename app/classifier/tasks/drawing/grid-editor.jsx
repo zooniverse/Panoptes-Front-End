@@ -88,7 +88,8 @@ class GridEditor extends React.Component {
     return (
       <div className="grid-editor workflow-choice-setting">
         <AutoSave resource={this.props.workflow}>
-          Rows{' '}
+          Rows
+          {' '}
           <input
             type="number"
             inputMode="numeric"
@@ -103,7 +104,8 @@ class GridEditor extends React.Component {
         </AutoSave>
 
         <AutoSave resource={this.props.workflow}>
-          Columns{' '}
+          Columns
+          {' '}
           <input
             type="number"
             inputMode="numeric"
@@ -118,7 +120,8 @@ class GridEditor extends React.Component {
         </AutoSave>
 
         <AutoSave resource={this.props.workflow}>
-          X Offset{' '}
+          X Offset
+          {' '}
           <input
             type="number"
             inputMode="numeric"
@@ -133,7 +136,8 @@ class GridEditor extends React.Component {
         </AutoSave>
 
         <AutoSave resource={this.props.workflow}>
-          Y Offset{' '}
+          Y Offset
+          {' '}
           <input
             type="number"
             inputMode="numeric"
@@ -148,7 +152,8 @@ class GridEditor extends React.Component {
         </AutoSave>
 
         <AutoSave resource={this.props.workflow}>
-          Opacity{' '}
+          Opacity
+          {' '}
           <input
             type="number"
             inputMode="numeric"
@@ -161,7 +166,8 @@ class GridEditor extends React.Component {
             style={{ width: '5ch' }}
             onChange={this.onChangeOpacity}
           />
-        </AutoSave>/100
+        </AutoSave>
+/100
       </div>
     );
   }

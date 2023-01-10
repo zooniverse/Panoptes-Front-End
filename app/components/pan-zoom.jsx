@@ -60,8 +60,8 @@ class PanZoom extends Component {
   }
 
   cannotZoomOut() {
-    return this.props.frameDimensions.width === this.state.viewBoxDimensions.width &&
-    this.props.frameDimensions.height === this.state.viewBoxDimensions.height;
+    return this.props.frameDimensions.width === this.state.viewBoxDimensions.width
+    && this.props.frameDimensions.height === this.state.viewBoxDimensions.height;
   }
 
   cannotResetZoomRotate() {
@@ -99,8 +99,8 @@ class PanZoom extends Component {
     const newNaturalX = this.state.viewBoxDimensions.x - ((newNaturalWidth - this.state.viewBoxDimensions.width) / 2);
     const newNaturalY = this.state.viewBoxDimensions.y - ((newNaturalHeight - this.state.viewBoxDimensions.height) / 2);
 
-    if ((newNaturalWidth > this.props.frameDimensions.width) ||
-    (newNaturalHeight * change > this.props.frameDimensions.height)) {
+    if ((newNaturalWidth > this.props.frameDimensions.width)
+    || (newNaturalHeight * change > this.props.frameDimensions.height)) {
       this.zoomReset();
     } else {
       this.setState({
@@ -162,13 +162,13 @@ class PanZoom extends Component {
   panByDrag(e, d) {
     if (!this.state.panEnabled) return;
 
-    const maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width) +
-    (this.props.frameDimensions.width * 0.6);
+    const maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width)
+    + (this.props.frameDimensions.width * 0.6);
     const minumumX = -(this.props.frameDimensions.width * 0.6);
     const changedX = this.state.viewBoxDimensions.x - d.x;
 
-    const maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height) +
-    (this.props.frameDimensions.height * 0.6);
+    const maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height)
+    + (this.props.frameDimensions.height * 0.6);
     const minimumY = -(this.props.frameDimensions.height * 0.6);
     const changedY = this.state.viewBoxDimensions.y - d.y;
 
@@ -231,8 +231,8 @@ class PanZoom extends Component {
   }
 
   panHorizontal(direction) {
-    const maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width) +
-    (this.props.frameDimensions.width * 0.6);
+    const maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width)
+    + (this.props.frameDimensions.width * 0.6);
     const minumumX = -(this.props.frameDimensions.width * 0.6);
     const changedX = this.state.viewBoxDimensions.x + direction;
     this.setState({
@@ -246,8 +246,8 @@ class PanZoom extends Component {
   }
 
   panVertical(direction) {
-    const maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height) +
-    (this.props.frameDimensions.height * 0.6);
+    const maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height)
+    + (this.props.frameDimensions.height * 0.6);
     const minimumY = -(this.props.frameDimensions.height * 0.6);
     const changedY = this.state.viewBoxDimensions.y + direction;
     this.setState({
@@ -269,92 +269,92 @@ class PanZoom extends Component {
   }
 
   rotateFreely(event) {
-    if (!event?.target) return
-    const newRotation = event.target.value % 360
+    if (!event?.target) return;
+    const newRotation = event.target.value % 360;
     this.setState({
       rotation: newRotation,
       transform: `rotate(${newRotation} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
-    })
+    });
   }
 
   render() {
-    const canUseFreeRotation = this.props.experimental_tools?.indexOf?.('subjectViewer-freeRotation') > -1
+    const canUseFreeRotation = this.props.experimental_tools?.indexOf?.('subjectViewer-freeRotation') > -1;
 
-    const children = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {
-        viewBoxDimensions: this.state.viewBoxDimensions,
-        panByDrag: this.panByDrag,
-        panEnabled: this.state.panEnabled,
-        transform: this.state.transform,
-        rotation: this.state.rotation
-      })
-    );
+    const children = React.Children.map(this.props.children, child => React.cloneElement(child, {
+      viewBoxDimensions: this.state.viewBoxDimensions,
+      panByDrag: this.panByDrag,
+      panEnabled: this.state.panEnabled,
+      transform: this.state.transform,
+      rotation: this.state.rotation
+    }));
     return (
       <div ref={(element) => { this.root = element; }}>
         {children}
-        {this.props.enabled ?
-          <div className="pan-zoom-controls" >
-            <div className="draw-pan-toggle" >
-              <div className={this.state.panEnabled ? '' : 'active'} >
-                <button title="annotate" className="fa fa-mouse-pointer" onClick={this.togglePanOff} />
+        {this.props.enabled
+          ? (
+            <div className="pan-zoom-controls">
+              <div className="draw-pan-toggle">
+                <div className={this.state.panEnabled ? '' : 'active'}>
+                  <button title="annotate" className="fa fa-mouse-pointer" onClick={this.togglePanOff} />
+                </div>
+                <div className={this.state.panEnabled ? 'active' : ''}>
+                  <button
+                    title="pan"
+                    ref={(element) => { this.pan = element; }}
+                    className="fa fa-arrows"
+                    onClick={this.handleFocus.bind(this, 'pan')}
+                    onFocus={this.togglePanOn}
+                    onBlur={this.togglePanOff}
+                  />
+                </div>
               </div>
-              <div className={this.state.panEnabled ? 'active' : ''}>
+              <div>
                 <button
-                  title="pan"
-                  ref={(element) => { this.pan = element; }}
-                  className="fa fa-arrows"
-                  onClick={this.handleFocus.bind(this, 'pan')}
+                  title="zoom out"
+                  ref={(element) => { this.zoomOut = element; }}
+                  className={`zoom-out fa fa-minus ${this.cannotZoomOut() ? 'disabled' : ''}`}
+                  onMouseDown={this.continuousZoom.bind(this, 1.1)}
+                  onMouseUp={this.stopZoom}
+                  onMouseOut={this.stopZoom}
+                  onKeyDown={this.keyDownZoomButton.bind(this, 1.1)}
+                  onKeyUp={this.stopZoom}
                   onFocus={this.togglePanOn}
                   onBlur={this.togglePanOff}
+                  onClick={this.handleFocus.bind(this, 'zoomOut')}
+                />
+              </div>
+              <div>
+                <button
+                  title="zoom in"
+                  ref={(element) => { this.zoomIn = element; }}
+                  className="zoom-in fa fa-plus"
+                  onMouseDown={this.continuousZoom.bind(this, 0.9)}
+                  onMouseUp={this.stopZoom}
+                  onMouseOut={this.stopZoom}
+                  onKeyDown={this.keyDownZoomButton.bind(this, 0.9)}
+                  onKeyUp={this.stopZoom}
+                  onFocus={this.togglePanOn}
+                  onBlur={this.togglePanOff}
+                  onClick={this.handleFocus.bind(this, 'zoomIn')}
+                />
+              </div>
+              <div>
+                <button title="rotate" className="rotate fa fa-repeat" onClick={this.rotateClockwise} />
+              </div>
+              {canUseFreeRotation && (
+                <div className="experimental-free-rotation">
+                  <input type="range" min={0} max={359} value={this.state.rotation % 360} onChange={this.rotateFreely} orient="vertical" />
+                </div>
+              )}
+              <div>
+                <button
+                  title="reset zoom levels"
+                  className={`reset fa fa-refresh ${this.cannotResetZoomRotate() ? ' disabled' : ''}`}
+                  onClick={this.onReset}
                 />
               </div>
             </div>
-            <div>
-              <button
-                title="zoom out"
-                ref={(element) => { this.zoomOut = element; }}
-                className={`zoom-out fa fa-minus ${this.cannotZoomOut() ? 'disabled' : ''}`}
-                onMouseDown={this.continuousZoom.bind(this, 1.1)}
-                onMouseUp={this.stopZoom}
-                onMouseOut={this.stopZoom}
-                onKeyDown={this.keyDownZoomButton.bind(this, 1.1)}
-                onKeyUp={this.stopZoom}
-                onFocus={this.togglePanOn}
-                onBlur={this.togglePanOff}
-                onClick={this.handleFocus.bind(this, 'zoomOut')}
-              />
-            </div>
-            <div>
-              <button
-                title="zoom in"
-                ref={(element) => { this.zoomIn = element; }}
-                className="zoom-in fa fa-plus"
-                onMouseDown={this.continuousZoom.bind(this, 0.9)}
-                onMouseUp={this.stopZoom}
-                onMouseOut={this.stopZoom}
-                onKeyDown={this.keyDownZoomButton.bind(this, 0.9)}
-                onKeyUp={this.stopZoom}
-                onFocus={this.togglePanOn}
-                onBlur={this.togglePanOff}
-                onClick={this.handleFocus.bind(this, 'zoomIn')}
-              />
-            </div>
-            <div>
-              <button title="rotate" className={'rotate fa fa-repeat'} onClick={this.rotateClockwise} />
-            </div>
-            {canUseFreeRotation && (
-              <div className="experimental-free-rotation">
-                <input type="range" min={0} max={359} value={this.state.rotation % 360} onChange={this.rotateFreely} orient="vertical" />
-              </div>
-            )}
-            <div>
-              <button
-                title="reset zoom levels"
-                className={`reset fa fa-refresh ${this.cannotResetZoomRotate() ? ' disabled' : ''}`}
-                onClick={this.onReset}
-              />
-            </div>
-          </div>
+          )
           : ''
         }
       </div>
@@ -365,7 +365,7 @@ class PanZoom extends Component {
 PanZoom.propTypes = {
   children: PropTypes.node,
   enabled: PropTypes.bool,
-  experimental_tools: PropTypes.array,  // Taken from project.experimental_tools
+  experimental_tools: PropTypes.array, // Taken from project.experimental_tools
   frameDimensions: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number

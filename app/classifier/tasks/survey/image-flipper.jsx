@@ -44,24 +44,22 @@ class ImageFlipper extends React.Component {
           width={500}
         />
         <div className="survey-task-image-flipper-pips">
-          {this.props.images.length > 1 &&
-            this.props.images.map((image, index) =>
-              (
-                <label
-                  key={image}
-                  className={`survey-task-image-flipper-pip ${index === this.state.frame ? 'active' : ''}`}
-                >
-                  <input
-                    aria-label={`View Example ${index + 1}`}
-                    type="radio"
-                    name="image-flipper"
-                    autoFocus={index === 0}
-                    checked={index === this.state.frame}
-                    onChange={this.handleFrameChange.bind(this, index)}
-                  />
-                </label>
-              )
-            )
+          {this.props.images.length > 1
+            && this.props.images.map((image, index) => (
+              <label
+                key={image}
+                className={`survey-task-image-flipper-pip ${index === this.state.frame ? 'active' : ''}`}
+              >
+                <input
+                  aria-label={`View Example ${index + 1}`}
+                  type="radio"
+                  name="image-flipper"
+                  autoFocus={index === 0}
+                  checked={index === this.state.frame}
+                  onChange={this.handleFrameChange.bind(this, index)}
+                />
+              </label>
+            ))
           }
         </div>
       </div>

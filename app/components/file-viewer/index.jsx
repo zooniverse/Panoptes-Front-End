@@ -10,7 +10,9 @@ import CanvasViewer from './canvas-viewer';
 function DefaultViewer(props) {
   return (
     <p>
-    Unknown file type: {props.type}
+    Unknown file type:
+      {' '}
+      {props.type}
     </p>
   );
 }
@@ -93,6 +95,6 @@ FileViewer.propTypes = {
 
 FileViewer.defaultProps = {
   annotations: []
-}
+};
 
 export default FileViewer;

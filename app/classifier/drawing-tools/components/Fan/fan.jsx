@@ -10,7 +10,6 @@ const MINIMUM_SIZE = 10;
 const MAXIMUM_SPREAD = 180;
 
 class Fan extends React.Component {
-
   static defaultValues({ x, y }) {
     return {
       x,
@@ -77,8 +76,12 @@ class Fan extends React.Component {
   }
 
   render() {
-    const { disabled, getScreenCurrentTransformationMatrix, mark, scale, selected } = this.props;
-    const { x, y, rotation, radius, spread } = mark;
+    const {
+      disabled, getScreenCurrentTransformationMatrix, mark, scale, selected
+    } = this.props;
+    const {
+      x, y, rotation, radius, spread
+    } = mark;
     const tanSpread = Math.tan(spread * (Math.PI / 360));
     const spreadRadius = (radius * tanSpread) / (1 + tanSpread);
     const spreadX = radius - spreadRadius;
@@ -129,36 +132,38 @@ class Fan extends React.Component {
             d={fanPath}
           />
         </Draggable>
-        {selected &&
-          <React.Fragment>
-            <DeleteButton
-              tool={this}
-              x={radius + 25}
-              y={-25}
-              getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
-            />
-            <DragHandle
-              x={radius}
-              y={0}
-              scale={scale}
-              onDrag={this.handleRotate.bind(this)}
-              getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
-            />
-            <DragHandle
-              x={spreadX}
-              y={-spreadRadius}
-              scale={scale}
-              onDrag={this.handleSpread.bind(this)}
-              getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
-            />
-            <DragHandle
-              x={spreadX}
-              y={spreadRadius}
-              scale={scale}
-              onDrag={this.handleSpread.bind(this)}
-              getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
-            />
-          </React.Fragment>
+        {selected
+          && (
+            <React.Fragment>
+              <DeleteButton
+                tool={this}
+                x={radius + 25}
+                y={-25}
+                getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
+              />
+              <DragHandle
+                x={radius}
+                y={0}
+                scale={scale}
+                onDrag={this.handleRotate.bind(this)}
+                getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
+              />
+              <DragHandle
+                x={spreadX}
+                y={-spreadRadius}
+                scale={scale}
+                onDrag={this.handleSpread.bind(this)}
+                getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
+              />
+              <DragHandle
+                x={spreadX}
+                y={spreadRadius}
+                scale={scale}
+                onDrag={this.handleSpread.bind(this)}
+                getScreenCurrentTransformationMatrix={getScreenCurrentTransformationMatrix}
+              />
+            </React.Fragment>
+          )
         }
       </DrawingToolRoot>
     );

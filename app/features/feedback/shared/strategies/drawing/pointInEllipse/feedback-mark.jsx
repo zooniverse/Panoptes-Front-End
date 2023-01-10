@@ -8,8 +8,8 @@ function FeedbackMark({ rule }) {
 
   const floatTheta = parseFloat(rule.theta);
   const transform = `rotate(${-floatTheta}, ${rule.x}, ${rule.y}) translate(${rule.x}, ${rule.y})`;
-  const rx = 0.5*parseFloat(rule.toleranceA);
-  const ry = 0.5*parseFloat(rule.toleranceB);
+  const rx = 0.5 * parseFloat(rule.toleranceA);
+  const ry = 0.5 * parseFloat(rule.toleranceB);
   return (
     <ellipse
       cx={0}
@@ -43,7 +43,7 @@ FeedbackMark.propTypes = {
       PropTypes.string,
       PropTypes.number]),
     falsePosMode: PropTypes.bool,
-    success: PropTypes.bool,
+    success: PropTypes.bool
   }).isRequired
 };
 

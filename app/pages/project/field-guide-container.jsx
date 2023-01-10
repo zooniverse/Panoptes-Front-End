@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Pullout from 'react-pullout';
 import { Provider, ReactReduxContext } from 'react-redux';
-import FieldGuide from './field-guide';
 import Translate from 'react-translate-component';
+import FieldGuide from './field-guide';
 import Translations from '../../classifier/translations';
 
 export default class FieldGuideContainer extends React.Component {
@@ -18,11 +18,11 @@ export default class FieldGuideContainer extends React.Component {
   }
 
   toggleFieldGuide() {
-    this.setState((prevState) => { return { revealed: !prevState.revealed }; });
+    this.setState(prevState => ({ revealed: !prevState.revealed }));
   }
 
   render() {
-    const { store } = this.context
+    const { store } = this.context;
     if (this.props.guide && this.props.guide.items.length > 0 && this.props.guideIcons) {
       return (
         <Pullout className="field-guide-pullout" side="right" open={this.state.revealed}>
@@ -32,7 +32,7 @@ export default class FieldGuideContainer extends React.Component {
             </strong>
           </button>
           <Provider store={store}>
-            <Translations original={this.props.guide} type="field_guide" >
+            <Translations original={this.props.guide} type="field_guide">
               <FieldGuide
                 items={this.props.guide.items}
                 icons={this.props.guideIcons}

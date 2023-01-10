@@ -102,70 +102,74 @@ class Choice extends React.Component {
     let hasFocus = choice.images.length > 1;
     return (
       <div className="survey-task-choice">
-        {choice.images.length > 0 &&
-          <ImageFlipper
-            images={choice.images.map(filename => task.images[filename])}
-          />
+        {choice.images.length > 0
+          && (
+            <ImageFlipper
+              images={choice.images.map(filename => task.images[filename])}
+            />
+          )
         }
         <div className="survey-task-choice-content">
           <div className="survey-task-choice-label">{translation.choices[choiceID].label}</div>
           <div className="survey-task-choice-description">{translation.choices[choiceID].description}</div>
 
-          {choice.confusionsOrder.length > 0 &&
-            <div className="survey-task-choice-confusions">
-              <Translate content="tasks.survey.confused" />
-              {' '}
-              {choice.confusionsOrder.map((otherChoiceID, i) => {
-                const otherChoice = this.props.task.choices[otherChoiceID] || { label: '', images: [] };
-                const currentChoiceTranslation = this.props.translation.choices[this.props.choiceID]
-                const otherChoiceTranslation = this.props.translation.choices[otherChoiceID]
-                const autoFocus = !hasFocus && i === 0;
-                return (
-                  <span key={otherChoiceID}>
-                    <TriggeredModalForm
-                      className="survey-task-confusions-modal"
-                      triggerProps={{ autoFocus }}
-                      trigger={
-                        <span className="survey-task-choice-confusion">
-                          {otherChoiceTranslation?.label || `translation.choices.${otherChoiceID}`}
-                        </span>
-                      }
-                      style={{ maxWidth: '60ch' }}
-                    >
-                      <ImageFlipper images={otherChoice.images.map(filename => this.props.task.images[filename])} />
-                      <Markdown
-                        content={currentChoiceTranslation.confusions[otherChoiceID] || `translation.confusions.${otherChoiceID}`}
-                      />
-                      <div className="survey-task-choice-confusion-buttons" style={{ textAlign: 'center' }}>
-                        <button
-                          type="submit"
-                          autoFocus={true && otherChoice.images.length < 2}
-                          className="major-button identfiy"
-                        >
-                          <Translate content="tasks.survey.dismiss" />
-                        </button>
-                        {' '}
-                        <button
-                          type="button"
-                          className="standard-button cancel"
-                          onClick={this.props.onSwitch.bind(null, otherChoiceID)}
-                        >
-                          <Translate content="tasks.survey.itsThis" />
-                        </button>
-                      </div>
-                    </TriggeredModalForm>
-                    {' '}
-                    {hasFocus = true}
-                  </span>
-                );
-              })}
-            </div>
+          {choice.confusionsOrder.length > 0
+            && (
+              <div className="survey-task-choice-confusions">
+                <Translate content="tasks.survey.confused" />
+                {' '}
+                {choice.confusionsOrder.map((otherChoiceID, i) => {
+                  const otherChoice = this.props.task.choices[otherChoiceID] || { label: '', images: [] };
+                  const currentChoiceTranslation = this.props.translation.choices[this.props.choiceID];
+                  const otherChoiceTranslation = this.props.translation.choices[otherChoiceID];
+                  const autoFocus = !hasFocus && i === 0;
+                  return (
+                    <span key={otherChoiceID}>
+                      <TriggeredModalForm
+                        className="survey-task-confusions-modal"
+                        triggerProps={{ autoFocus }}
+                        trigger={(
+                          <span className="survey-task-choice-confusion">
+                            {otherChoiceTranslation?.label || `translation.choices.${otherChoiceID}`}
+                          </span>
+                        )}
+                        style={{ maxWidth: '60ch' }}
+                      >
+                        <ImageFlipper images={otherChoice.images.map(filename => this.props.task.images[filename])} />
+                        <Markdown
+                          content={currentChoiceTranslation.confusions[otherChoiceID] || `translation.confusions.${otherChoiceID}`}
+                        />
+                        <div className="survey-task-choice-confusion-buttons" style={{ textAlign: 'center' }}>
+                          <button
+                            type="submit"
+                            autoFocus={true && otherChoice.images.length < 2}
+                            className="major-button identfiy"
+                          >
+                            <Translate content="tasks.survey.dismiss" />
+                          </button>
+                          {' '}
+                          <button
+                            type="button"
+                            className="standard-button cancel"
+                            onClick={this.props.onSwitch.bind(null, otherChoiceID)}
+                          >
+                            <Translate content="tasks.survey.itsThis" />
+                          </button>
+                        </div>
+                      </TriggeredModalForm>
+                      {' '}
+                      {hasFocus = true}
+                    </span>
+                  );
+                })}
+              </div>
+            )
           }
 
           <hr />
 
-          {!choice.noQuestions &&
-            getQuestionIDs(task, choiceID).map((questionId) => {
+          {!choice.noQuestions
+            && getQuestionIDs(task, choiceID).map((questionId) => {
               const question = task.questions[questionId] || { answers: {}, answersOrder: [] };
               const inputType = question.multiple ? 'checkbox' : 'radio';
               return (
@@ -176,9 +180,9 @@ class Choice extends React.Component {
                   <div className="survey-task-choice-answers">
                     {question.answersOrder.map((answerId, i) => {
                       /* eslint-disable multiline-ternary */
-                      const isChecked = question.multiple ?
-                        !!this.state.answers[questionId] && this.state.answers[questionId].indexOf(answerId) > -1 :
-                        this.state.answers[questionId] === answerId;
+                      const isChecked = question.multiple
+                        ? !!this.state.answers[questionId] && this.state.answers[questionId].indexOf(answerId) > -1
+                        : this.state.answers[questionId] === answerId;
                       /* eslint-enable multiline-ternary */
                       const isFocused = this.state.focusedAnswer === `${questionId}/${answerId}`;
                       return (

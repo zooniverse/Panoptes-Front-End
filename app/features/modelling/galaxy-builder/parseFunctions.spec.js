@@ -6,14 +6,18 @@ import assert from 'assert';
 // import sinon from 'sinon';
 import { cloneDeep } from 'lodash';
 
-import { hasComp, parseDisk, parseBulge, parseBar, parseSpiralArms } from './parseFunctions';
+import {
+  hasComp, parseDisk, parseBulge, parseBar, parseSpiralArms
+} from './parseFunctions';
 
 const annotations = [
   {
     value: [
       {
         task: 'drawDisk',
-        value: [{ tool: 0, frame: 1, x: 1.0, y: 1.0, rx: 5.0, ry: 5.0, angle: 0.0 }]
+        value: [{
+          tool: 0, frame: 1, x: 1.0, y: 1.0, rx: 5.0, ry: 5.0, angle: 0.0
+        }]
       },
       { task: 'scaleSlider', value: '1' },
       { task: 'intensitySlider', value: '0.4' }
@@ -24,7 +28,9 @@ const annotations = [
     value: [
       {
         task: 'drawBulge',
-        value: [{ tool: 0, frame: 1, x: 1.0, y: 1.0, rx: 5.0, ry: 5.0, angle: 0.0 }]
+        value: [{
+          tool: 0, frame: 1, x: 1.0, y: 1.0, rx: 5.0, ry: 5.0, angle: 0.0
+        }]
       },
       { task: 'scaleSlider', value: '1' },
       { task: 'intensitySlider', value: '0.4' },
@@ -36,7 +42,9 @@ const annotations = [
     value: [
       {
         task: 'drawBar',
-        value: [{ tool: 0, frame: 1, x: 1.0, y: 1.0, rx: 5.0, ry: 5.0, angle: 0.0 }]
+        value: [{
+          tool: 0, frame: 1, x: 1.0, y: 1.0, rx: 5.0, ry: 5.0, angle: 0.0
+        }]
       },
       { task: 'scaleSlider', value: '1' },
       { task: 'intensitySlider', value: '0.4' },
@@ -73,22 +81,30 @@ const state = {
     disk: {
       name: 'disk',
       func: () => null,
-      default: { mux: 0, muy: 0, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
+      default: {
+        mux: 0, muy: 0, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2
+      }
     },
     bulge: {
       name: 'bulge',
       func: () => null,
-      default: { mux: 100, muy: 100, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
+      default: {
+        mux: 100, muy: 100, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2
+      }
     },
     bar: {
       name: 'bar',
       func: () => null,
-      default: { mux: 100, muy: 100, rx: 5, ry: 5, scale: 5 / 8, roll: 0, i0: 0.75, n: 2, c: 2 }
+      default: {
+        mux: 100, muy: 100, rx: 5, ry: 5, scale: 5 / 8, roll: 0, i0: 0.75, n: 2, c: 2
+      }
     },
     spiral: {
       name: 'spiral',
       func: () => null,
-      default: { mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, falloff: 1 }
+      default: {
+        mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, falloff: 1
+      }
     }
   }
 };
@@ -132,7 +148,9 @@ describe('parseBar', function () {
 describe('parseSpiralArms', function () {
   const comps = [
     () => null,
-    { name: 'disk', mux: 0.8, muy: 408.8, rx: 4, ry: 4, scale: 1, roll: 0, i0: 0.4, n: 1, c: 2 }
+    {
+      name: 'disk', mux: 0.8, muy: 408.8, rx: 4, ry: 4, scale: 1, roll: 0, i0: 0.4, n: 1, c: 2
+    }
   ];
   it('should return an empty list for an annotation without a drawn shape', function () {
     assert.equal(parseSpiralArms(annotationWithoutShape[3], state, []).length, 0);

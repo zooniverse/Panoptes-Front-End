@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Translate from 'react-translate-component';
 
-const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetError, minLength }) => (
+const NewPasswordForm = ({
+  onSubmit, disabled, inProgress, resetSuccess, resetError, minLength
+}) => (
   <form onSubmit={onSubmit}>
     <Translate
       component="p"
@@ -17,9 +19,9 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         type="password"
         className="standard-input"
         size="20"
-        required
-        pattern={".{"+minLength+",}"}
-        title={minLength+" characters minimum"}
+        required={true}
+        pattern={`.{${minLength},}`}
+        title={`${minLength} characters minimum`}
         autoComplete="new-password"
       />
     </label>
@@ -32,9 +34,9 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         type="password"
         className="standard-input"
         size="20"
-        required
-        pattern={".{"+minLength+",}"}
-        title={minLength+" characters minimum"}
+        required={true}
+        pattern={`.{${minLength},}`}
+        title={`${minLength} characters minimum`}
         autoComplete="new-password"
       />
     </label>
@@ -45,18 +47,21 @@ const NewPasswordForm = ({ onSubmit, disabled, inProgress, resetSuccess, resetEr
         disabled={disabled}
       >
         Submit
-      </button>{' '}
+      </button>
+      {' '}
 
-      {inProgress &&
-        <i className="fa fa-spinner fa-spin form-help" />}
+      {inProgress
+        && <i className="fa fa-spinner fa-spin form-help" />}
 
-      {resetSuccess &&
-        <i className="fa fa-check-circle form-help success" />}
+      {resetSuccess
+        && <i className="fa fa-check-circle form-help success" />}
 
-      {resetError &&
-        <small className="form-help error">
-          {resetError}
-        </small>}
+      {resetError
+        && (
+          <small className="form-help error">
+            {resetError}
+          </small>
+        )}
     </p>
   </form>
 );

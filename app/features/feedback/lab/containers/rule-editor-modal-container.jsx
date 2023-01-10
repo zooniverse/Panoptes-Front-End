@@ -45,12 +45,14 @@ class RuleEditorModalContainer extends Component {
   }
 
   render() {
-    return (<RuleEditorModal
-      formState={this.state.form}
-      handleInputChange={this.handleInputChange}
-      handleSave={this.handleSave}
-      valid={this.state.valid}
-    />);
+    return (
+      <RuleEditorModal
+        formState={this.state.form}
+        handleInputChange={this.handleInputChange}
+        handleSave={this.handleSave}
+        valid={this.state.valid}
+      />
+    );
   }
 }
 

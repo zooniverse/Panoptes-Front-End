@@ -1,132 +1,132 @@
-var statesMexico = [
+const statesMexico = [
   {
-    value: "DIF",
-    label: "Distrito Federal"
+    value: 'DIF',
+    label: 'Distrito Federal'
   },
   {
-    value: "AGS",
-    label: "Aguascalientes"
+    value: 'AGS',
+    label: 'Aguascalientes'
   },
   {
-    value: "BCN",
-    label: "Baja California"
+    value: 'BCN',
+    label: 'Baja California'
   },
   {
-    value: "BCS",
-    label: "Baja California Sur"
+    value: 'BCS',
+    label: 'Baja California Sur'
   },
   {
-    value: "CAM",
-    label: "Campeche"
+    value: 'CAM',
+    label: 'Campeche'
   },
   {
-    value: "CHP",
-    label: "Chiapas"
+    value: 'CHP',
+    label: 'Chiapas'
   },
   {
-    value: "CHI",
-    label: "Chihuahua"
+    value: 'CHI',
+    label: 'Chihuahua'
   },
   {
-    value: "COA",
-    label: "Coahuila"
+    value: 'COA',
+    label: 'Coahuila'
   },
   {
-    value: "COL",
-    label: "Colima"
+    value: 'COL',
+    label: 'Colima'
   },
   {
-    value: "DUR",
-    label: "Durango"
+    value: 'DUR',
+    label: 'Durango'
   },
   {
-    value: "GTO",
-    label: "Guanajuato"
+    value: 'GTO',
+    label: 'Guanajuato'
   },
   {
-    value: "GRO",
-    label: "Guerrero"
+    value: 'GRO',
+    label: 'Guerrero'
   },
   {
-    value: "HGO",
-    label: "Hidalgo"
+    value: 'HGO',
+    label: 'Hidalgo'
   },
   {
-    value: "JAL",
-    label: "Jalisco"
+    value: 'JAL',
+    label: 'Jalisco'
   },
   {
-    value: "MEX",
-    label: "México"
+    value: 'MEX',
+    label: 'México'
   },
   {
-    value: "MIC",
-    label: "Michoacán"
+    value: 'MIC',
+    label: 'Michoacán'
   },
   {
-    value: "MOR",
-    label: "Morelos"
+    value: 'MOR',
+    label: 'Morelos'
   },
   {
-    value: "NAY",
-    label: "Nayarit"
+    value: 'NAY',
+    label: 'Nayarit'
   },
   {
-    value: "NLE",
-    label: "Nuevo León"
+    value: 'NLE',
+    label: 'Nuevo León'
   },
   {
-    value: "OAX",
-    label: "Oaxaca"
+    value: 'OAX',
+    label: 'Oaxaca'
   },
   {
-    value: "PUE",
-    label: "Puebla"
+    value: 'PUE',
+    label: 'Puebla'
   },
   {
-    value: "QRO",
-    label: "Querétaro"
+    value: 'QRO',
+    label: 'Querétaro'
   },
   {
-    value: "ROO",
-    label: "Quintana Roo"
+    value: 'ROO',
+    label: 'Quintana Roo'
   },
   {
-    value: "SLP",
-    label: "San Luis Potosí"
+    value: 'SLP',
+    label: 'San Luis Potosí'
   },
   {
-    value: "SIN",
-    label: "Sinaloa"
+    value: 'SIN',
+    label: 'Sinaloa'
   },
   {
-    value: "SON",
-    label: "Sonora"
+    value: 'SON',
+    label: 'Sonora'
   },
   {
-    value: "TAB",
-    label: "Tabasco"
+    value: 'TAB',
+    label: 'Tabasco'
   },
   {
-    value: "TAM",
-    label: "Tamaulipas"
+    value: 'TAM',
+    label: 'Tamaulipas'
   },
   {
-    value: "TLX",
-    label: "Tlaxcala"
+    value: 'TLX',
+    label: 'Tlaxcala'
   },
   {
-    value: "VER",
-    label: "Veracruz"
+    value: 'VER',
+    label: 'Veracruz'
   },
   {
-    value: "YUC",
-    label: "Yucatán"
+    value: 'YUC',
+    label: 'Yucatán'
   },
   {
-    value: "ZAC",
-    label: "Zacatecas"
+    value: 'ZAC',
+    label: 'Zacatecas'
   }
-]
+];
 
 module.exports = statesMexico;

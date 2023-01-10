@@ -11,7 +11,7 @@ export const Progress = (props) => {
   }
   const percent = progress * 100;
   const data = {
-    series: [progress, 1 - progress],
+    series: [progress, 1 - progress]
   };
   return (
     <div className="svg-container progress-container">
@@ -28,13 +28,13 @@ Progress.defaultProps = {
     donutWidth: '20%',
     startAngle: 0,
     total: 1,
-    showLabel: false,
-  },
+    showLabel: false
+  }
 };
 
 Progress.propTypes = {
   progress: PropTypes.number,
-  options: PropTypes.object,
+  options: PropTypes.object
 };
 
 export class Graph extends React.Component {
@@ -54,14 +54,14 @@ export class Graph extends React.Component {
       hour: 'asHours',
       day: 'asDays',
       week: 'asWeeks',
-      month: 'asMonths',
+      month: 'asMonths'
     };
 
     this.formatLabel = {
-      hour: (date) => { return moment.utc(date).format('MMM-DD hh:mm A'); },
-      day: (date) => { return moment.utc(date).format('MMM-DD-YYYY'); },
-      week: (date) => { return moment.utc(date).format('MMM-DD-YYYY'); },
-      month: (date) => { return moment.utc(date).format('MMM-DD-YYYY'); },
+      hour: date => moment.utc(date).format('MMM-DD hh:mm A'),
+      day: date => moment.utc(date).format('MMM-DD-YYYY'),
+      week: date => moment.utc(date).format('MMM-DD-YYYY'),
+      month: date => moment.utc(date).format('MMM-DD-YYYY')
     };
 
     const data = this.processData(props.data, props.by);
@@ -107,14 +107,13 @@ export class Graph extends React.Component {
       data.element.attr({
         style: `stroke-width: ${100 / length}%`,
         focusable: true,
-        tabindex: 0,
+        tabindex: 0
       });
       data.group.elem('text', {
         x: data.x1,
         y: 15,
-        class: 'ct-label ct-tooltip',
-      }
-      ).text(data.series[data.index]);
+        class: 'ct-label ct-tooltip'
+      }).text(data.series[data.index]);
     }
   }
 
@@ -145,7 +144,7 @@ export class Graph extends React.Component {
     const newState = {
       minIdx: event[0],
       maxIdx: event[1],
-      midIdx: event[1] + event[0],
+      midIdx: event[1] + event[0]
     };
     this.setState(newState, this.onRangeChange);
   }
@@ -155,7 +154,7 @@ export class Graph extends React.Component {
     const newState = {
       minIdx: Math.floor((event - diff) / 2),
       maxIdx: Math.floor((event + diff) / 2),
-      midIdx: event,
+      midIdx: event
     };
     if (newState.minIdx >= 0 & newState.maxIdx < this.state.data.labels.length) {
       this.setState(newState, this.onRangeChange);
@@ -172,7 +171,7 @@ export class Graph extends React.Component {
     const newState = {
       minIdx: min,
       maxIdx: max,
-      midIdx: min + max,
+      midIdx: min + max
     };
     this.setState(newState, this.onRangeChange);
   }
@@ -180,7 +179,7 @@ export class Graph extends React.Component {
   processData(inputData, binBy) {
     const data = {
       labels: [],
-      series: [[]],
+      series: [[]]
     };
     let previousLabel = '';
     let idx = 0;
@@ -215,10 +214,10 @@ export class Graph extends React.Component {
   render() {
     const dataSlice = {
       labels: this.state.data.labels.slice(this.state.minIdx, this.state.maxIdx + 1),
-      series: [this.state.data.series[0].slice(this.state.minIdx, this.state.maxIdx + 1)],
+      series: [this.state.data.series[0].slice(this.state.minIdx, this.state.maxIdx + 1)]
     };
 
-    let smallChart = undefined;
+    let smallChart;
     if (this.state.data.labels.length > this.props.num) {
       smallChart = (
         <div>
@@ -229,7 +228,8 @@ export class Graph extends React.Component {
           />
           <ChartistGraph
             listener={{ draw: this.onDrawSmall }}
-            type="Bar" data={this.state.data}
+            type="Bar"
+            data={this.state.data}
             options={this.props.optionsSmall}
           />
           <div className="top-slider">
@@ -237,7 +237,7 @@ export class Graph extends React.Component {
               ref="top-slider"
               min={0}
               max={this.state.data.labels.length - 1}
-              range
+              range={true}
               allowCross={false}
               value={[this.state.minIdx, this.state.maxIdx]}
               tipFormatter={null}
@@ -267,7 +267,8 @@ export class Graph extends React.Component {
         <ChartistGraph
           className="ct-major-tenth"
           listener={{ draw: this.onDraw }}
-          type="Bar" data={dataSlice}
+          type="Bar"
+          data={dataSlice}
           options={this.props.options}
         />
       </div>
@@ -280,31 +281,31 @@ Graph.defaultProps = {
   options: {
     axisX: {
       offset: 90,
-      showGrid: false,
+      showGrid: false
     },
     axisY: {
-      onlyInteger: true,
+      onlyInteger: true
     },
     chartPadding: {
       top: 15,
       right: 15,
       bottom: 5,
       left: 15
-    },
+    }
   },
   optionsSmall: {
     axisX: {
       offset: 15,
       position: 'start',
       labelOffset: {
-        y: -10,
+        y: -10
       },
-      showGrid: false,
+      showGrid: false
     },
     axisY: {
       offset: 0,
       showLabel: false,
-      showGrid: false,
+      showGrid: false
     },
     width: '100%',
     height: '50px',
@@ -312,13 +313,13 @@ Graph.defaultProps = {
       top: 0,
       right: 15,
       bottom: 0,
-      left: 15,
+      left: 15
     },
     classNames: {
       label: 'ct-label-range',
-      labelGroup: 'ct-labels-range',
-    },
-  },
+      labelGroup: 'ct-labels-range'
+    }
+  }
 };
 
 Graph.propTypes = {
@@ -328,23 +329,21 @@ Graph.propTypes = {
   options: PropTypes.object,
   optionsSmall: PropTypes.object,
   range: PropTypes.array,
-  handleRangeChange: PropTypes.func,
+  handleRangeChange: PropTypes.func
 };
 
-const DateRange = (props) => {
-  return (
-    <div className="date-range">
-      <span className="progress-stats-label">Current date range:</span>
-      <span>{` ${props.dateMin} to ${props.dateMax}`}</span>
-      <button className="standard-button date-reset" onClick={props.setDefaultRange}>
+const DateRange = props => (
+  <div className="date-range">
+    <span className="progress-stats-label">Current date range:</span>
+    <span>{` ${props.dateMin} to ${props.dateMax}`}</span>
+    <button className="standard-button date-reset" onClick={props.setDefaultRange}>
         Reset date range
-      </button>
-    </div>
-  );
-};
+    </button>
+  </div>
+);
 
 DateRange.propTypes = {
   dateMin: PropTypes.string,
   dateMax: PropTypes.string,
-  setDefaultRange: PropTypes.func,
+  setDefaultRange: PropTypes.func
 };

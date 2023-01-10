@@ -1,7 +1,7 @@
 import TurndownService from 'turndown';
 
-export const MAX_WIDTH = 1400
-export const MAX_HEIGHT = 2000
+export const MAX_WIDTH = 1400;
+export const MAX_HEIGHT = 2000;
 
 const turndownService = new TurndownService();
 
@@ -17,14 +17,14 @@ function parseCanvas(canvas, index) {
   const thumbId = canvas.images[0].resource.service['@id'];
   const thumb = `${thumbId}/full/!400,400/0/default.jpg`;
   const metadata = {
-    "iiif:canvas": canvas['@id'],
+    'iiif:canvas': canvas['@id'],
     priority: index + 1
   };
   return { thumb, locations, metadata };
 }
 
 function parseValue({ label, value }) {
-  let language
+  let language;
 
   if (value['@language']) {
     language = value['@language'];
@@ -35,7 +35,7 @@ function parseValue({ label, value }) {
     language = label['@language'];
     label = `${label['@value']}:${language}`;
     if (Array.isArray(value)) {
-      value = value.find(v => v['@language'] === language)
+      value = value.find(v => v['@language'] === language);
     }
   }
 
@@ -51,7 +51,7 @@ function parseValue({ label, value }) {
 
 function parseMetadataItem({ label, value }) {
   if (Array.isArray(label)) {
-    return label.map(l => parseValue({ label: l, value }))
+    return label.map(l => parseValue({ label: l, value }));
   }
 
   if (Array.isArray(value)) {
@@ -69,7 +69,7 @@ function parseMetadata(manifest) {
     const items = parseMetadataItem({ label, value });
     items.forEach(({ label, value }) => {
       metadata[label] = value;
-    })
+    });
   });
   return metadata;
 }
@@ -81,13 +81,17 @@ export default function parseManifestV2(manifest) {
     const alt = structures?.[index].label;
     const canvasID = canvas['@id'];
     const { thumb, locations, metadata } = parseCanvas(canvas, index);
-    return { alt, canvasID, locations, metadata, thumb };
+    return {
+      alt, canvasID, locations, metadata, thumb
+    };
   });
   const metadata = {
-    "iiif:manifest": manifest['@id'],
+    'iiif:manifest': manifest['@id'],
     ...parseMetadata(manifest)
   };
   const thumb = subjects[0]?.thumb;
   const label = subjects[0]?.alt;
-  return { label, metadata, subjects, thumb };
+  return {
+    label, metadata, subjects, thumb
+  };
 }

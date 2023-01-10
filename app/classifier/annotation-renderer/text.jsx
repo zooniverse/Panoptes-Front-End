@@ -4,7 +4,6 @@ import tasks from '../tasks';
 import getSubjectLocation from '../../lib/get-subject-location';
 
 export default class TextRenderer extends React.Component {
-
   render() {
     let taskDescription;
     let InsideSubject;

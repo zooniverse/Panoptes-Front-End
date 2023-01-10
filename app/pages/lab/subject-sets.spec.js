@@ -13,36 +13,36 @@ const subjectSets = [
   { id: '2', display_name: 'Cool Subject Set', getMeta: meta }
 ];
 
-describe('SubjectSetsPage', function () {
+describe('SubjectSetsPage', () => {
   let wrapper;
   const newSubjectSet = sinon.spy();
 
-  before(function () {
+  before(() => {
     wrapper = shallow(
       <SubjectSetsPage
-        labPath={(url) => { return url; }}
+        labPath={url => url}
         createNewSubjectSet={newSubjectSet}
       />
     );
     wrapper.setProps({ loading: false });
   });
 
-  it('will display a message when no subject sets are present', function () {
+  it('will display a message when no subject sets are present', () => {
     const message = 'No subject sets are currently associated with this project.';
     assert.equal(wrapper.contains(<p>{message}</p>), true);
   });
 
-  it('will display the correct amount of subject sets', function () {
+  it('will display the correct amount of subject sets', () => {
     wrapper.setProps({ subjectSets });
     assert.equal(wrapper.find('Link').length, 2);
   });
 
-  it('should call the subject set create handler', function () {
+  it('should call the subject set create handler', () => {
     wrapper.find('button').simulate('click');
     sinon.assert.called(newSubjectSet);
   });
 
-  it('will display a paginator', function () {
+  it('will display a paginator', () => {
     assert.equal(wrapper.find('Paginator').length, 1);
   });
 });

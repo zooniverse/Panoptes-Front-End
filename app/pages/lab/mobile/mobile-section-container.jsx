@@ -87,9 +87,7 @@ function drawingTaskHasOneTool({ task }) {
 }
 
 function drawingTaskHasNoSubtasks({ task }) {
-  const toolHasSubtasks = task.tools.reduce((hasSubtasks, tool) => {
-    return hasSubtasks || tool.details.length > 0;
-  }, false);
+  const toolHasSubtasks = task.tools.reduce((hasSubtasks, tool) => hasSubtasks || tool.details.length > 0, false);
 
   return convertBooleanToValidation(!toolHasSubtasks);
 }
@@ -173,18 +171,10 @@ class MobileSectionContainer extends Component {
 
     return updateWorkflow.save()
       .then(() => project.get('workflows'))
-      .then(allWorkflows => {
-        return allWorkflows.reduce((hasSwipeWorkflow, thisWorkflow) => {
-          return (hasSwipeWorkflow)
-            ? hasSwipeWorkflow
-            : thisWorkflow.mobile_friendly;
-        }, false);
-      })
-      .then(mobileFriendly => {
-        return (mobileFriendly === project.mobile_friendly)
-          ? true
-          : this.toggleMobileFriendlyStatus();
-      })
+      .then(allWorkflows => allWorkflows.reduce((hasSwipeWorkflow, thisWorkflow) => ((hasSwipeWorkflow) || thisWorkflow.mobile_friendly), false))
+      .then(mobileFriendly => ((mobileFriendly === project.mobile_friendly)
+        ? true
+        : this.toggleMobileFriendlyStatus()))
       .catch(error => console.error(error));
   }
 

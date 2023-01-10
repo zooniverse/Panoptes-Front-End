@@ -12,16 +12,16 @@ class Toggle extends Component {
   }
 
   set(property, value) {
-    let setting = this.state.setting
+    const setting = this.state.setting;
     setting[property] = true;
     this.setState({ error: null, setting });
 
-    let changes = { };
+    const changes = { };
     changes[property] = value;
     this.props.project.update(changes).save()
       .catch(error => this.setState({ error }))
       .then(() => {
-        let changedSetting = this.state.setting;
+        const changedSetting = this.state.setting;
         changedSetting[property] = false;
         this.setState({ setting: changedSetting });
       });

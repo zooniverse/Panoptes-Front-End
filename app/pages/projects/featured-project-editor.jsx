@@ -6,7 +6,7 @@ import isAdmin from '../../lib/is-admin';
 
 export default class FeaturedProjectEditor extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.disableEditor = this.disableEditor.bind(this);
     this.enableEditor = this.enableEditor.bind(this);
     this.selectProject = this.selectProject.bind(this);
@@ -47,11 +47,13 @@ export default class FeaturedProjectEditor extends Component {
           {cloneElement(children, { project })}
           <div className="controls">
             {!editing && <button className="outlined-button" onClick={this.enableEditor}>edit</button>}
-            {editing && 
+            {editing
+              && (
               <>
-                <button autoFocus className="outlined-button" onClick={this.disableEditor}>cancel</button>
+                <button autoFocus={true} className="outlined-button" onClick={this.disableEditor}>cancel</button>
                 <ProjectsSearchSelector options={options} onChange={this.selectProject} />
               </>
+              )
             }
           </div>
         </div>

@@ -14,7 +14,7 @@ class SortSelector extends Component {
         value={value}
         placeholder="Sort by"
         searchPromptText="Select a sort order"
-        closeAfterClick
+        closeAfterClick={true}
         className="standard-input search card-sort"
         options={sortMethods}
         onChange={onChange}
@@ -26,12 +26,12 @@ class SortSelector extends Component {
 SortSelector.propTypes = {
   onChange: PropTypes.func.isRequired,
   sortMethods: PropTypes.array.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired
 };
 
 SortSelector.defaultProps = {
   sortMethods: PROJECT_SORTS,
-  value: 'default',
+  value: 'default'
 };
 
 export default SortSelector;

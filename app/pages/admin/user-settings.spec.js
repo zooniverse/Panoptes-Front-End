@@ -4,34 +4,34 @@ import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import UserSettings from './user-settings';
 
-describe('UserSettings', function () {
+describe('UserSettings', () => {
   let wrapper;
-  let user = {id: '1', login: "tester", get: sinon.stub().resolves([])};
-  let editUser = {id: '2', login: 'volunteer', get: sinon.stub().resolves([])};
+  const user = { id: '1', login: 'tester', get: sinon.stub().resolves([]) };
+  const editUser = { id: '2', login: 'volunteer', get: sinon.stub().resolves([]) };
 
-  before(function () {
+  before(() => {
     sinon.stub(UserSettings.prototype, 'getUser').callsFake(() => null);
   });
 
-  after(function () {
+  after(() => {
     UserSettings.prototype.getUser.restore();
   });
 
-  it('errors when no user found', function () {
+  it('errors when no user found', () => {
     wrapper = shallow(<UserSettings user={user} />);
     wrapper.setState({ editUser: null });
     assert(wrapper.contains('No user found'));
   });
 
-  it('errors when editing yourself', function () {
+  it('errors when editing yourself', () => {
     wrapper = shallow(<UserSettings user={user} />);
     wrapper.setState({ editUser: user });
-    assert(wrapper.contains("You cannot edit your own account"));
+    assert(wrapper.contains('You cannot edit your own account'));
   });
 
-  it('renders without errors if there is a user', function () {
+  it('renders without errors if there is a user', () => {
     wrapper = shallow(<UserSettings user={user} />);
-    wrapper.setState({ editUser: editUser });
+    wrapper.setState({ editUser });
     assert.equal(wrapper.find('UserProperties').length, 1);
     assert.equal(wrapper.find('LimitToggle').length, 1);
     assert.equal(wrapper.find('DeleteUser').length, 1);

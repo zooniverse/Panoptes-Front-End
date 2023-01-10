@@ -1,4 +1,4 @@
-var provincesCanada = [
+const provincesCanada = [
   {
     value: 'AB',
     label: 'Alberta'
@@ -51,6 +51,6 @@ var provincesCanada = [
     value: 'YT',
     label: 'Yukon Territory'
   }
-]
+];
 
 module.exports = provincesCanada;

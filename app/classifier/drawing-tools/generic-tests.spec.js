@@ -44,15 +44,15 @@ for (const toolType in drawingTools) {
   let wrapper;
   const TaskComponent = drawingTools[toolType];
 
-  describe(`Task  ${toolType}`, function() {
+  describe(`Task  ${toolType}`, () => {
     let mark;
 
-    before(function () {
+    before(() => {
       mark = TaskComponent.defaultValues({ x, y }, props);
       mark.tool = 0;
     });
 
-    it('should make changes with initStart', function() {
+    it('should make changes with initStart', () => {
       const initialMark = Object.assign({}, mark);
       if (TaskComponent.initStart) {
         const initStartResult = TaskComponent.initStart(cursors[0], mark);
@@ -61,7 +61,7 @@ for (const toolType in drawingTools) {
       }
     });
 
-    it ('should make changes with initMove', function() {
+    it('should make changes with initMove', () => {
       const initialMark = Object.assign({}, mark);
       if (TaskComponent.initMove) {
         const markChanges = TaskComponent.initMove(cursors[1], mark);
@@ -70,7 +70,7 @@ for (const toolType in drawingTools) {
       }
     });
 
-    it ('should run initRelease', function() {
+    it('should run initRelease', () => {
       const initialMark = Object.assign({}, mark);
       if (TaskComponent.initRelease) {
         const initReleaseResult = TaskComponent.initRelease(cursors[2], mark);
@@ -79,28 +79,28 @@ for (const toolType in drawingTools) {
       }
     });
 
-    it ('should return a boolean with initValid', function() {
+    it('should return a boolean with initValid', () => {
       if (TaskComponent.initValid) {
         const isValid = TaskComponent.initValid(mark, props);
         expect(isValid).to.be.a('boolean');
       }
     });
 
-    it ('should run getDistance', function() {
+    it('should run getDistance', () => {
       if (TaskComponent.getDistance) {
         const distance = TaskComponent.getDistance(cursors[0].x, cursors[0].y, cursors[1].x, cursors[1].y);
         expect(Math.round(distance)).to.equal(71);
       }
     });
 
-    it ('should correctly calculate getAngle', function() {
+    it('should correctly calculate getAngle', () => {
       if (TaskComponent.getAngle) {
         const angle = TaskComponent.getAngle(cursors[0].x, cursors[0].y, cursors[1].x, cursors[1].y);
         expect(Math.abs(angle)).to.equal(135);
       }
     });
 
-    it ('should successfuly check for completed mark', function() {
+    it('should successfuly check for completed mark', () => {
       if (TaskComponent.forceComplete) {
         TaskComponent.forceComplete(mark);
       }
@@ -112,20 +112,20 @@ for (const toolType in drawingTools) {
     });
   });
 
-  describe('rendered component', function () {
+  describe('rendered component', () => {
     const mark = TaskComponent.defaultValues({ x, y }, props);
 
     if (TaskComponent.initStart) {
       Object.assign(mark, TaskComponent.initStart({ x, y }, mark));
     }
 
-    before(function () {
+    before(() => {
       wrapper = shallow(
         <TaskComponent {...props} mark={mark} />
       );
     });
 
-    it('should render correctly', function () {
+    it('should render correctly', () => {
       expect(wrapper).to.be.ok;
       expect(wrapper.instance()).to.be.an.instanceof(TaskComponent);
     });

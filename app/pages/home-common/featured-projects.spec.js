@@ -25,7 +25,7 @@ const featuredProjects = [
   }
 ];
 
-describe('FeaturedProjects', function () {
+describe('FeaturedProjects', () => {
   let wrapper;
 
   function setup() {
@@ -43,20 +43,20 @@ describe('FeaturedProjects', function () {
   beforeEach(setup);
   afterEach(tearDown);
 
-  it('should render without crashing', function () {
+  it('should render without crashing', () => {
     expect(wrapper).to.have.lengthOf(1);
   });
 
-  it('should have a section as container', function () {
+  it('should have a section as container', () => {
     expect(wrapper.find('section')).to.have.lengthOf(1);
   });
 
-  it('should have an h2 tag containing the text "Featured Project"', function () {
+  it('should have an h2 tag containing the text "Featured Project"', () => {
     const title = wrapper.find('h2');
     expect(title.text()).to.equal('Featured Projects');
   });
 
-  it('should render a ProjectCard component', function () {
+  it('should render a ProjectCard component', () => {
     const projectCards = wrapper.find('ProjectCard');
     expect(projectCards).to.have.lengthOf(featuredProjects.length);
   });

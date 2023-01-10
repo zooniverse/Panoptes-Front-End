@@ -10,7 +10,7 @@ export default function AppLayout(props) {
         <div className="app-layout__admin-indicator" title="Admin mode on!" />
       </AdminOnly>
 
-      <header className='app-layout__header'>
+      <header className="app-layout__header">
         <SiteNav params={props.params} />
       </header>
 

@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import createDOMPurify from 'dompurify';
 import AutoSave from '../components/auto-save';
 import handleInputChange from '../lib/handle-input-change';
-import createDOMPurify from 'dompurify';
 
 const DOMPurify = createDOMPurify(window);
 
@@ -15,7 +15,7 @@ class DisplayNameSlugEditor extends Component {
     this.state = {
       currentSlug: props.resource.slug,
       currentName: props.resource.display_name,
-      url: null,
+      url: null
     };
   }
 
@@ -29,8 +29,8 @@ class DisplayNameSlugEditor extends Component {
 
   getResourceUrl() {
     this.props.resource.get('owner')
-      .then(owner => {
-        const {resource, resourceType} = this.props; 
+      .then((owner) => {
+        const { resource, resourceType } = this.props;
         this.setState({
           url: `/${resourceType}s/${resource.slug}`
         });
@@ -44,69 +44,79 @@ class DisplayNameSlugEditor extends Component {
   }
 
   warnURLChange(resource, currentSlug) {
-    return resource.slug !== currentSlug && 
-      currentSlug.match(/untitled-project/i) === null;
+    return resource.slug !== currentSlug
+      && currentSlug.match(/untitled-project/i) === null;
   }
 
   render() {
-    const {state, undoNameChange} = this;
-    const {resource, resourceType} = this.props;
+    const { state, undoNameChange } = this;
+    const { resource, resourceType } = this.props;
 
     return (
       <div>
         <AutoSave resource={resource}>
-          <label for="displayName" className="form-label">Name</label>
-          <input type="text"
+          <label htmlFor="displayName" className="form-label">Name</label>
+          <input
+            type="text"
             id="displayName"
-            className="standard-input full" 
-            name="display_name" 
-            value={resource.display_name} 
-            onChange={handleInputChange.bind(resource)} 
+            className="standard-input full"
+            name="display_name"
+            value={resource.display_name}
+            onChange={handleInputChange.bind(resource)}
             disabled={resource.live}
           />
         </AutoSave>
 
         {(this.warnURLChange(resource, state.currentSlug))
-          ? <small className="form-help">
-              You’re changing the url of your {resourceType}. Users with bookmarks and links in Talk will no longer work. 
+          ? (
+            <small className="form-help">
+              You’re changing the url of your
+              {' '}
+              {resourceType}
+. Users with bookmarks and links in Talk will no longer work.
               {' '}
               <button type="button" onClick={undoNameChange.bind(this, resource, state.currentName)}>
                 Undo
               </button>
               {' '}
             </small>
+          )
           : null
         }
 
         {(state.url)
-          ? <small className="form-help">
+          ? (
+            <small className="form-help">
               {(resource.live)
                 ? `You cannot change a live ${resourceType}'s name.`
                 : `The ${resourceType} name is the first thing people will see about the ${resourceType}, and it will show up in the ${resourceType} URL. Try to keep it short and sweet.`
               }
               {' '}
-              Your {resourceType}’s URL is
+              Your
+              {' '}
+              {resourceType}
+’s URL is
               {' '}
               <a href={window.location.origin + state.url}>
                 {state.url}
               </a>
             </small>
+          )
           : null
         }
       </div>
     );
   }
-
 }
 
 DisplayNameSlugEditor.propTypes = {
   resource: PropTypes.object,
-  resourceType: PropTypes.string,
+  resourceType: PropTypes.string
 };
 
 DisplayNameSlugEditor.defaultProps = {
   resource: {},
-  resourceType: '',
+  resourceType: ''
 };
 
 export default DisplayNameSlugEditor;

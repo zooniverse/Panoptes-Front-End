@@ -2,12 +2,11 @@
 
 import React from 'react';
 import assert from 'assert';
-import PublicationsPage from './publications-page';
 import { shallow } from 'enzyme';
+import PublicationsPage from './publications-page';
 
 
 describe('PublicationsPage', () => {
-
   it('renders without crashing', function () {
     shallow(<PublicationsPage />);
   });
@@ -18,9 +17,9 @@ describe('PublicationsPage', () => {
     assert.notEqual(navItems.length, 0);
   });
 
-  it('renders publication lists when projects not null', () =>  {
+  it('renders publication lists when projects not null', () => {
     const wrapper = shallow(<PublicationsPage />);
-    wrapper.setState({ projects: {} });
+    wrapper.setState({ projects: {}});
     const publications = wrapper.find('.publications-list');
     assert.notEqual(publications.length, 0);
   });

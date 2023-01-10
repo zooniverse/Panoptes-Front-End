@@ -13,7 +13,7 @@ class Grantbot extends Component {
     this.performProjectChecks = this.performProjectChecks.bind(this);
     this.state = {
       project: null,
-      hasRetirementBeenChanged: [],
+      hasRetirementBeenChanged: []
     };
   }
 
@@ -28,10 +28,10 @@ class Grantbot extends Component {
       <section style={{ padding: '0 1em' }}>
         <h2>Grantbot</h2>
         <ProjectSearch onSelect={this.selectProject} />
-        
-        {(this.state.hasRetirementBeenChanged.length > 0) && 
-          <RetirementRules data={this.state.hasRetirementBeenChanged} />}
-          
+
+        {(this.state.hasRetirementBeenChanged.length > 0)
+          && <RetirementRules data={this.state.hasRetirementBeenChanged} />}
+
       </section>
     );
   }
@@ -40,12 +40,12 @@ class Grantbot extends Component {
     const checks = [
       {
         stateName: 'hasRetirementBeenChanged',
-        promise: helpers.hasRetirementBeenChanged.bind(undefined, this.state.project),
+        promise: helpers.hasRetirementBeenChanged.bind(undefined, this.state.project)
       }
     ];
 
     return Promise.all(checks.map(performCheck))
-      .then(checkResults => {
+      .then((checkResults) => {
         const stateObject = checkResults.reduce((newState, check) => {
           newState[check.stateName] = check.data;
           return newState;
@@ -58,14 +58,13 @@ class Grantbot extends Component {
   selectProject(project) {
     this.setState({ project });
   }
-
 }
 
 function performCheck(check) {
   return check.promise()
     .then(response => ({
       stateName: check.stateName,
-      data: response,
+      data: response
     }))
     .catch(error => console.error(error));
 }

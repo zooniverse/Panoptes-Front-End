@@ -3,37 +3,37 @@ import assert from 'assert';
 import { shallow } from 'enzyme';
 import SecurityPolicy from './security-policy';
 
-describe('SecurityPolicy', function () {
+describe('SecurityPolicy', () => {
   let wrapper;
 
-  before(function () {
+  before(() => {
     wrapper = shallow(<SecurityPolicy />);
   });
 
-  it('should render without crashing', function () {
+  it('should render without crashing', () => {
     const securityPolicyContainer = wrapper.find('div.content-container');
     assert.equal(securityPolicyContainer.length, 1);
   });
 
-  describe('heading', function () {
-    it('renders a <Translate /> component', function () {
+  describe('heading', () => {
+    it('renders a <Translate /> component', () => {
       assert.equal(wrapper.find('Translate').length, 1);
     });
 
-    it('renders page title content', function () {
+    it('renders page title content', () => {
       assert.equal(wrapper.find('Translate').prop('content'), 'security.title');
     });
   });
 
-  describe('intro', function () {
-    it('renders one markdown element', function () {
+  describe('intro', () => {
+    it('renders one markdown element', () => {
       const markdownElement = wrapper.find('Markdown').first();
       assert.equal(markdownElement.length, 1);
     });
   });
 
-  describe('details', function () {
-    it('renders one markdown element', function () {
+  describe('details', () => {
+    it('renders one markdown element', () => {
       const markdownElement = wrapper.find('Markdown').last();
       assert.equal(markdownElement.length, 1);
     });

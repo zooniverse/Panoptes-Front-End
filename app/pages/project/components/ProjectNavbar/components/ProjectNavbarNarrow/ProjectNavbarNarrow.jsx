@@ -39,9 +39,7 @@ export class ProjectNavbarNarrow extends Component {
   }
 
   handleOpen() {
-    this.setState((prevState) => {
-      return { menuOpen: !this.state.menuOpen };
-    });
+    this.setState(prevState => ({ menuOpen: !this.state.menuOpen }));
   }
 
   render() {
@@ -64,7 +62,7 @@ export class ProjectNavbarNarrow extends Component {
         <StyledBackground src={backgroundSrc} />
 
         <StyledOuterWrapper>
-            {children}
+          {children}
           <StyledInnerWrapper>
             <Avatar
               src={avatarSrc}

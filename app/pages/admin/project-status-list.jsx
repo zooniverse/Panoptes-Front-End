@@ -69,8 +69,8 @@ class ProjectStatusList extends Component {
       meta = projects[0].getMeta();
     }
 
-    return (projects.length === 0) ? <div className="project-status-list">No projects found for this filter</div> :
-      (
+    return (projects.length === 0) ? <div className="project-status-list">No projects found for this filter</div>
+      : (
         <div>
           <div className="project-status-list">
             {projects.map(project => <ProjectListItem key={project.id} project={project} />)}

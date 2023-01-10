@@ -1,13 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
 import ModalFormDialog from 'modal-form/dialog';
-import FeedbackModal from '../components/feedback-modal';
 import Translate from 'react-translate-component';
+import FeedbackModal from '../components/feedback-modal';
 import strategies from '../../shared/strategies';
 import categories from './feedback-categories';
 
 export function getFeedbackMessages(feedback) {
-
   const messages = _.chain(feedback)
     .map((item) => {
       let message = false;
@@ -23,24 +22,18 @@ export function getFeedbackMessages(feedback) {
     })
     .compact();
 
-  const catGroupedReducedMessages = messages.groupBy((message) => {
-      return message[1];
-    }).map((catGroup, cat) => {
-      const reducedMessages = _.chain(catGroup).groupBy((message) => {
-        return message[0];
-      }).map((groupData, key) => {
-        return `${key} (${groupData.length} ${groupData.length > 1 ? 'matches' : 'match'})`;
-      }).value();
-      return {
-        category: cat,
-        messages: reducedMessages
-      };
-    }).keyBy('category')
+  const catGroupedReducedMessages = messages.groupBy(message => message[1]).map((catGroup, cat) => {
+    const reducedMessages = _.chain(catGroup).groupBy(message => message[0]).map((groupData, key) => `${key} (${groupData.length} ${groupData.length > 1 ? 'matches' : 'match'})`).value();
+    return {
+      category: cat,
+      messages: reducedMessages
+    };
+  }).keyBy('category')
     .mapValues('messages')
     .value();
 
   return catGroupedReducedMessages;
-  }
+}
 
 function getFeedbackMarks(feedback) {
   // This is slightly weird, but Coffeescript does not seem to enjoy trying
@@ -59,8 +52,7 @@ function getFeedbackMarks(feedback) {
 // The subject viewer will be hidden if `hideSubjectViewer` is enabled on
 // _any_ feedback rule.
 function getHideSubjectViewer(feedback) {
-  return feedback.reduce((result, item) =>
-    (result || item.hideSubjectViewer) || false, false);
+  return feedback.reduce((result, item) => (result || item.hideSubjectViewer) || false, false);
 }
 
 function getSubjectViewerProps(feedback, subjectViewerProps, taskId) {

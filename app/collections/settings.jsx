@@ -46,18 +46,22 @@ export default class CollectionSettings extends React.Component {
         <div className="confirm-delete-dialog content-container">
           <p>Are you sure you want to delete this collection? This action is irreversible!</p>
 
-          {this.state.isDeleting &&
-            <div>
-              <button className="major-button" disabled={true}><i className="fa fa-spinner" /></button>
-              {' '}
-            </div>}
+          {this.state.isDeleting
+            && (
+              <div>
+                <button className="major-button" disabled={true}><i className="fa fa-spinner" /></button>
+                {' '}
+              </div>
+            )}
 
-          {!this.state.isDeleting &&
-            <div>
-              <button className="minor-button" autoFocus={true} onClick={resolve}>No, don&apos;t delete it.</button>
-              {' '}
-              <button className="major-button" onClick={handleDelete}>Yes, delete it!</button>
-            </div>}
+          {!this.state.isDeleting
+            && (
+              <div>
+                <button className="minor-button" autoFocus={true} onClick={resolve}>No, don&apos;t delete it.</button>
+                {' '}
+                <button className="major-button" onClick={handleDelete}>Yes, delete it!</button>
+              </div>
+            )}
         </div>
       );
     });
@@ -91,10 +95,10 @@ export default class CollectionSettings extends React.Component {
 
   handleDescriptionInputChange(event) {
     const description = event.target.value;
-    this.setState({ description })
+    this.setState({ description });
 
     if (description.length <= 300) {
-       this.props.collection.update({ description });
+      this.props.collection.update({ description });
     }
   }
 
@@ -110,8 +114,8 @@ export default class CollectionSettings extends React.Component {
     return (
       <div className="collection-settings-tab">
         <h2>Collection Settings</h2>
-        {this.state.error &&
-          <p>Something went wrong. Please try again</p>}
+        {this.state.error
+          && <p>Something went wrong. Please try again</p>}
         <DisplayNameSlugEditor resource={this.props.collection} resourceType="collection" />
 
         <hr />
@@ -129,15 +133,16 @@ export default class CollectionSettings extends React.Component {
           </form>
         </AutoSave>
         <small>
-          Describe your collection in more detail.{' '}
+          Describe your collection in more detail.
+          {' '}
           <CharLimit
             limit={300}
             string={this.props.collection.description}
           />
         </small>
         <br />
-        {this.state.description.length > 300 &&
-          <span className="form-help error">Description cannot be more than 300 characters.</span>}
+        {this.state.description.length > 300
+          && <span className="form-help error">Description cannot be more than 300 characters.</span>}
         <hr />
 
         <h3 className="form-label">Visibility</h3>
@@ -169,7 +174,11 @@ export default class CollectionSettings extends React.Component {
         </form>
 
         <p className="form-help">
-          Only the assigned <strong>collaborators</strong> can view a private project.
+          Only the assigned
+          {' '}
+          <strong>collaborators</strong>
+          {' '}
+can view a private project.
           Anyone with the URL can access a public project.
         </p>
 
@@ -186,8 +195,8 @@ export default class CollectionSettings extends React.Component {
           Note: Setting the subject cover is only supported for image subjects at this time.
         </p>
 
-        {this.props.collection.default_subject_src &&
-          <Thumbnail className="cover-subject-preview" src={this.props.collection.default_subject_src} width={300} />}
+        {this.props.collection.default_subject_src
+          && <Thumbnail className="cover-subject-preview" src={this.props.collection.default_subject_src} width={300} />}
 
         <hr />
 

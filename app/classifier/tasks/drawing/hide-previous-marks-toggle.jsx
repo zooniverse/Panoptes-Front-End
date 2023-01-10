@@ -70,9 +70,12 @@ class HidePreviousMarksToggle extends React.Component {
             onChange={this.setPreviousMarks.bind(this, nextValueToSet)}
           />
           {' '}
-          <Translate content="tasks.hidePreviousMarks" with={{
-            count: marksCount > 0 ? `(${marksCount})` : undefined
-          }} />
+          <Translate
+            content="tasks.hidePreviousMarks"
+            with={{
+              count: marksCount > 0 ? `(${marksCount})` : undefined
+            }}
+          />
         </label>
       </div>
     );

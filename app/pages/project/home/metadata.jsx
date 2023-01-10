@@ -37,7 +37,8 @@ export default class ProjectMetadata extends React.Component {
           <rect fill="hsl(0, 0%, 75%)" stroke="none" x={percentComplete} y="0" width={1 - percentComplete} height="1" />
         </svg>
         <br />
-        {Math.floor(percentComplete * 100)}% Complete
+        {Math.floor(percentComplete * 100)}
+% Complete
       </div>
     );
   }

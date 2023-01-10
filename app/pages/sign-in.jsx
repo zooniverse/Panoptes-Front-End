@@ -5,8 +5,8 @@ import Translate from 'react-translate-component';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
 
-const SignInPage = ({ children }) =>
-  (<div className="sign-in-page content-container">
+const SignInPage = ({ children }) => (
+  <div className="sign-in-page content-container">
     <Helmet title={counterpart('signIn.register')} />
     <Translate component="h1" content="signIn.withZooniverse" />
     <Translate component="p" content="signIn.whyHaveAccount" />
@@ -20,7 +20,8 @@ const SignInPage = ({ children }) =>
         {children}
       </div>
     </div>
-  </div>);
+  </div>
+);
 
 SignInPage.defaultProps = {
   children: null

@@ -57,26 +57,26 @@ class AboutProject extends Component {
 
   constructPagesData() {
     return Object.keys(SLUG_MAP)
-    .map((url_key) => {
-      const { pages, translations } = this.props;
-      const matchingPage = pages.find(page => page.url_key === url_key) || {};
-      const pageTranslations = translations ? translations.strings.project_page : [];
-      const matchingTranslation = pageTranslations[matchingPage.id];
-      const { content } = (matchingTranslation && matchingTranslation.strings) ?
-        matchingTranslation.strings :
-        matchingPage;
-      if (content) {
-        return {
-          slug: SLUG_MAP[url_key],
-          title: matchingPage.title,
-          content
-        };
-      } else if (['science_case', 'team'].includes(url_key)) {
-        return { slug: SLUG_MAP[url_key] };
-      }
-      return null;
-    })
-    .filter(Boolean);
+      .map((url_key) => {
+        const { pages, translations } = this.props;
+        const matchingPage = pages.find(page => page.url_key === url_key) || {};
+        const pageTranslations = translations ? translations.strings.project_page : [];
+        const matchingTranslation = pageTranslations[matchingPage.id];
+        const { content } = (matchingTranslation && matchingTranslation.strings)
+          ? matchingTranslation.strings
+          : matchingPage;
+        if (content) {
+          return {
+            slug: SLUG_MAP[url_key],
+            title: matchingPage.title,
+            content
+          };
+        } else if (['science_case', 'team'].includes(url_key)) {
+          return { slug: SLUG_MAP[url_key] };
+        }
+        return null;
+      })
+      .filter(Boolean);
   }
 
   constructTeamData(roles, users) {
@@ -84,11 +84,12 @@ class AboutProject extends Component {
       users.map(user => ({
         userResource: user,
         roles: roles.find(role => user.id === role.links.owner.id).roles
-      }))).then(team => this.setState({ team }));
+      }))
+    ).then(team => this.setState({ team }));
   }
 
   renderAbout() {
-    const { state: { pages, team }, props: { children, project } } = this;
+    const { state: { pages, team }, props: { children, project }} = this;
     return (
       <div className="project-about-page">
         <Helmet title={`${this.props.translation.display_name} » ${counterpart('project.about.header')}`} />

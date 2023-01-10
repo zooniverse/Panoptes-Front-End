@@ -20,7 +20,7 @@ function _testRetirementCriteria({ retirement }) {
 function hasRetirementBeenChanged(project) {
   return new Promise((resolve, reject) => {
     project.get('workflows')
-      .then(workflows => {
+      .then((workflows) => {
         if (!workflows.length) {
           return resolve([]);
         }
@@ -29,7 +29,7 @@ function hasRetirementBeenChanged(project) {
           id: workflow.id,
           name: workflow.display_name,
           retirementHasBeenChanged: _testRetirementCriteria(workflow),
-          type: 'workflow',
+          type: 'workflow'
         }));
 
         resolve(result);

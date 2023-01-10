@@ -15,7 +15,7 @@ describe('ToggleButton', function () {
       <ToggleButton
         icon={<i className="fa fa-chevron-down fa-lg" />}
         handleClick={handleClickSpy}
-        label='expand workflow list'
+        label="expand workflow list"
       />
     );
   });

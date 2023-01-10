@@ -21,7 +21,6 @@ export default class WorkflowsContainer extends React.Component {
     this.onPageChange = this.onPageChange.bind(this);
     this.showCreateWorkflow = this.showCreateWorkflow.bind(this);
     this.toggleReorder = this.toggleReorder.bind(this);
-
   }
 
   componentDidMount() {
@@ -42,9 +41,9 @@ export default class WorkflowsContainer extends React.Component {
     if (this.state.reorder) {
       this.context.router.push({ pathname: this.props.location.pathname, query: null });
       getWorkflowsInOrder(this.props.project, { fields: 'display_name' })
-      .then((workflows) => {
-        this.setState({ workflows, loading: false });
-      });
+        .then((workflows) => {
+          this.setState({ workflows, loading: false });
+        });
     } else {
       this.props.project.get('workflows', { page })
         .then((workflows) => {
@@ -60,8 +59,8 @@ export default class WorkflowsContainer extends React.Component {
   }
 
   handleWorkflowStatusChange(e, page, workflow) {
-    const defaultWorkflow = (this.props.project && this.props.project.configuration && this.props.project.configuration.default_workflow) ?
-      this.props.project.configuration.default_workflow : null;
+    const defaultWorkflow = (this.props.project && this.props.project.configuration && this.props.project.configuration.default_workflow)
+      ? this.props.project.configuration.default_workflow : null;
     const checked = e.target.checked;
     workflow.update({ active: checked }).save()
       .then((workflow) => {
@@ -94,9 +93,7 @@ export default class WorkflowsContainer extends React.Component {
   }
 
   handleWorkflowReorder(newOrder) {
-    const newOrderIDs = newOrder.map((workflow) => {
-      return workflow.id;
-    });
+    const newOrderIDs = newOrder.map(workflow => workflow.id);
     this.props.project.update({
       'configuration.workflow_order': newOrderIDs
     });
@@ -114,9 +111,7 @@ export default class WorkflowsContainer extends React.Component {
   }
 
   toggleReorder() {
-    this.setState((prevState) => {
-      return { reorder: !prevState.reorder };
-    }, this.getWorkflowList);
+    this.setState(prevState => ({ reorder: !prevState.reorder }), this.getWorkflowList);
   }
 
   render() {

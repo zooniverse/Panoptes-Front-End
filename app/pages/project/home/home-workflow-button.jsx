@@ -26,7 +26,9 @@ class ProjectHomeWorkflowButton extends React.Component {
   }
 
   handleWorkflowSelection(e) {
-    const { actions, classifierWorkflow, project, preferences, translations, workflow } = this.props;
+    const {
+      actions, classifierWorkflow, project, preferences, translations, workflow
+    } = this.props;
     if (classifierWorkflow && classifierWorkflow.id === workflow.id) {
       browserHistory.push(`/projects/${project.slug}/classify`);
     } else {
@@ -42,9 +44,9 @@ class ProjectHomeWorkflowButton extends React.Component {
       'project-home-page__button--disabled': this.props.disabled
     });
 
-    if (this.props.workflowAssignment &&
-        this.props.workflow.configuration &&
-        !this.props.workflow.configuration.level) {
+    if (this.props.workflowAssignment
+        && this.props.workflow.configuration
+        && !this.props.workflow.configuration.level) {
       return (null);
     }
 
@@ -55,9 +57,9 @@ class ProjectHomeWorkflowButton extends React.Component {
         className={buttonClasses}
         onClick={this.handleWorkflowSelection}
       >
-        {(this.props.workflowAssignment && !this.props.disabled) ?
-          <Translate content="project.home.workflowAssignment" with={{ workflowDisplayName: this.props.translation.display_name }} /> :
-          this.props.translation.display_name}
+        {(this.props.workflowAssignment && !this.props.disabled)
+          ? <Translate content="project.home.workflowAssignment" with={{ workflowDisplayName: this.props.translation.display_name }} />
+          : this.props.translation.display_name}
       </button>
     );
   }
@@ -127,4 +129,3 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectHomeWorkflowButton);
 export { ProjectHomeWorkflowButton };
-

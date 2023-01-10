@@ -17,23 +17,21 @@ function FeaturedProjects({ projects }) {
       <section className="home-featured">
         <Translate className="secondary-kicker" component="h2" content="homeFeaturedProjects.header" />
         <div className="project-card-list">
-          {projects.map((project) => {
-            return (
-              <FeaturedProjectEditor key={project.id} project={project}>
-                <ProjectCard project={project} />
-              </FeaturedProjectEditor>
-            )
-          })}
+          {projects.map(project => (
+            <FeaturedProjectEditor key={project.id} project={project}>
+              <ProjectCard project={project} />
+            </FeaturedProjectEditor>
+          ))}
         </div>
       </section>
-    )
+    );
   }
   return null;
 }
 
 FeaturedProjects.defaultProps = {
   projects: []
-}
+};
 
 FeaturedProjects.propTypes = {
   projects: PropTypes.arrayOf(PropTypes.shape({

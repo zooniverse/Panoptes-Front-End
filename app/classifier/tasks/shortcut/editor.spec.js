@@ -80,7 +80,7 @@ describe('ShortcutEditor', function () {
     let toggleStub;
     let addStub;
     let removeStub;
-    
+
     before(function () {
       toggleStub = sinon.stub(ShortcutEditor.prototype, 'toggleShortcut');
       addStub = sinon.stub(ShortcutEditor.prototype, 'addAnswer');
@@ -110,7 +110,7 @@ describe('ShortcutEditor', function () {
     });
 
     it('should call toggleShortcut with an input toggle', function () {
-      wrapper.find('input').simulate('change', { target: { checked: true } });
+      wrapper.find('input').simulate('change', { target: { checked: true }});
       sinon.assert.called(toggleStub);
     });
 

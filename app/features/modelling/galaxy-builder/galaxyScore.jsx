@@ -14,9 +14,13 @@ const ModelScore = (props) => {
   }
   return (
     <div>
-      <div>Score: {s}</div>
+      <div>
+Score:
+        {s}
+      </div>
       <progress max="100" value={s} />
-    </div>);
+    </div>
+  );
 };
 
 /* eslint-disable react/forbid-prop-types */

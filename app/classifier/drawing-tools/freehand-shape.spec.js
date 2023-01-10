@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import FreehandShapeTool from './freehand-shape';
 
-describe('FreehandShapeTool', function () {
+describe('FreehandShapeTool', () => {
   let mark = FreehandShapeTool.defaultValues();
   const x = 200;
   const y = 400;
@@ -38,34 +38,34 @@ describe('FreehandShapeTool', function () {
     }
   ];
 
-  before(function () {
+  before(() => {
     mark = FreehandShapeTool.initStart({ x, y }, mark);
   });
 
-  it('create an initial mark', function () {
+  it('create an initial mark', () => {
     expect(mark.points[0].x).to.equal(x);
     expect(mark.points[0].y).to.equal(y);
     expect(mark._inProgress).to.be.true;
   });
 
-  coords.forEach(function (coord, i) {
-    it('should round coordinates on move to angle ' + roundedCoords[i].x, function () {
+  coords.forEach((coord, i) => {
+    it(`should round coordinates on move to angle ${roundedCoords[i].x}`, () => {
       const newMark = FreehandShapeTool.initMove(coord, mark);
       expect(newMark.points[i + 1].x).to.equal(roundedCoords[i].x);
       expect(newMark.points[i + 1].y).to.equal(roundedCoords[i].y);
     });
   });
 
-  it('should finish drawing on initial release', function () {
+  it('should finish drawing on initial release', () => {
     const newMark = FreehandShapeTool.initRelease({ x, y }, mark);
     expect(newMark._inProgress).to.be.false;
   });
 
-  it('should designate a mark as valid', function () {
+  it('should designate a mark as valid', () => {
     expect(FreehandShapeTool.initValid(mark)).to.be.true;
   });
 
-  describe('rendered component', function () {
+  describe('rendered component', () => {
     let wrapper;
 
     const mark = {
@@ -78,7 +78,7 @@ describe('FreehandShapeTool', function () {
       vertical: 1
     };
 
-    before(function () {
+    before(() => {
       wrapper = shallow(
         <FreehandShapeTool
           mark={mark}
@@ -89,7 +89,7 @@ describe('FreehandShapeTool', function () {
       );
     });
 
-    it('should correctly render the delete position', function () {
+    it('should correctly render the delete position', () => {
       const deleteButtonPos = wrapper.instance().getDeletePosition(mark.points);
       expect(deleteButtonPos.x).to.equal(284);
       expect(deleteButtonPos.y).to.equal(400);

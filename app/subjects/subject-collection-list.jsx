@@ -16,15 +16,13 @@ const SubjectCollectionList = (props) => {
       <div className="collection-card-list">
         <h2>Collections:</h2>
         <div>
-          {props.collections.map((collection) => {
-            return (
-              <CollectionCard
-                key={`collection-${collection.id}`}
-                collection={collection}
-                linkTo={`/projects/${props.project.slug}/collections/${collection.slug}`}
-              />
-            );
-          })}
+          {props.collections.map(collection => (
+            <CollectionCard
+              key={`collection-${collection.id}`}
+              collection={collection}
+              linkTo={`/projects/${props.project.slug}/collections/${collection.slug}`}
+            />
+          ))}
         </div>
         <Paginator
           className="talk"

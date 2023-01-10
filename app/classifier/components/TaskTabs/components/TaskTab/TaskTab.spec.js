@@ -10,8 +10,8 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import { TaskTab } from './TaskTab';
 
-describe('TaskTab', function() {
-  it('should render without crashing', function() {
+describe('TaskTab', function () {
+  it('should render without crashing', function () {
     const wrapper = shallow(<TaskTab />);
     expect(wrapper).to.be.ok;
   });

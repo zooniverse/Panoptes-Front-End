@@ -59,19 +59,15 @@ export class RoleCreator extends React.Component {
       error: null
     });
 
-    const roleSets = users.map(id =>
-      apiClient.type('collection_roles').create({
-        roles,
-        links: {
-          collection: this.props.collection.id,
-          user: id
-        }
-      })
-    );
+    const roleSets = users.map(id => apiClient.type('collection_roles').create({
+      roles,
+      links: {
+        collection: this.props.collection.id,
+        user: id
+      }
+    }));
 
-    Promise.all((roleSets.map(roleSet =>
-      roleSet.save()
-    )))
+    Promise.all((roleSets.map(roleSet => roleSet.save())))
       .then(() => {
         this.userSearch.clear();
         checkboxes.forEach((box) => {
@@ -116,7 +112,7 @@ export class RoleCreator extends React.Component {
           </div>
 
           <dl className="collection-list">
-            {POSSIBLE_ROLES.map(role =>
+            {POSSIBLE_ROLES.map(role => (
               <div key={role}>
                 <dt>
                   <input id={ID_PREFIX + role} type="checkbox" name="role" value={role} disabled={role === 'owner'} />
@@ -124,7 +120,7 @@ export class RoleCreator extends React.Component {
                 </dt>
                 <dd>{ROLES_INFO[role].description}</dd>
               </div>
-            )}
+            ))}
           </dl>
 
           <p>
@@ -226,9 +222,9 @@ export class RoleRow extends React.Component {
     return promise.then(() => {
       this.setState({ saving: false });
     })
-    .catch((error) => {
-      this.setState({ error });
-    });
+      .catch((error) => {
+        this.setState({ error });
+      });
   }
 
   render() {
@@ -238,7 +234,8 @@ export class RoleRow extends React.Component {
       <p>
         {owner && (<strong>{owner.login}</strong>)}
 
-        {' '}<button type="button" className="secret-button" onClick={this.confirmDelete}>&times;</button>
+        {' '}
+        <button type="button" className="secret-button" onClick={this.confirmDelete}>&times;</button>
 
         <span className="columns-container inline">
           {POSSIBLE_ROLES.map((role) => {
@@ -247,7 +244,8 @@ export class RoleRow extends React.Component {
 
             return (
               <label htmlFor={role.id} key={role}>
-                <input id={role.id} type="checkbox" name={role} checked={checkedRole} disabled={this.state.saving} onChange={this.toggleRole.bind(this, role)} />{' '}
+                <input id={role.id} type="checkbox" name={role} checked={checkedRole} disabled={this.state.saving} onChange={this.toggleRole.bind(this, role)} />
+                {' '}
                 {boldRole}
               </label>
             );
@@ -284,9 +282,9 @@ export class CollectionCollaborators extends React.Component {
 
   componentDidMount() {
     checkIfCollectionOwner(this.props.user, this.props.collection)
-    .then((hasSettingsRole) => {
-      this.setState({ hasSettingsRole });
-    });
+      .then((hasSettingsRole) => {
+        this.setState({ hasSettingsRole });
+      });
     this.update(this.props.location.query.page || 1);
   }
 
@@ -300,7 +298,7 @@ export class CollectionCollaborators extends React.Component {
     if (_page >= 1) {
       apiClient.type('collection_roles').get({ collection_id: this.props.collection.id, page: _page })
         .then((roleSets) => {
-            this.setState({ roleSets });
+          this.setState({ roleSets });
         });
     }
   }
@@ -320,7 +318,10 @@ export class CollectionCollaborators extends React.Component {
     if (this.state.hasSettingsRole) {
       return (
         <div className="collection-settings-tab">
-          <h1>Collaborators {this.props.collection ? `with ${this.props.collection.display_name}` : ''}</h1>
+          <h1>
+Collaborators
+            {this.props.collection ? `with ${this.props.collection.display_name}` : ''}
+          </h1>
           <hr />
 
           {this.state.error && (<p className="form-help error">{this.state.error.toString()}</p>)}
@@ -329,8 +330,8 @@ export class CollectionCollaborators extends React.Component {
           <RoleCreator collection={this.props.collection} onAdd={this.handleCollaboratorChange} />
 
           <hr />
-          {roleSets.length === 0 &&
-            <p className="helpful-tip">No collaborators found.</p>}
+          {roleSets.length === 0
+            && <p className="helpful-tip">No collaborators found.</p>}
 
           {roleSets.length === 1 && (
             <p className="helpful-tip">None yet. Add some with the form above.</p>)}

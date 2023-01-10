@@ -6,7 +6,7 @@ export default class DragAndDropTarget extends React.Component {
     super(props);
 
     this.state = {
-      canDrop: false,
+      canDrop: false
     };
 
     this.handleDragEnter = this.handleDragEnter.bind(this);
@@ -61,7 +61,7 @@ DragAndDropTarget.defaultProps = {
   onDragEnter: () => {},
   onDragOver: () => {},
   onDragLeave: () => {},
-  onDrop: () => {},
+  onDrop: () => {}
 };
 
 DragAndDropTarget.propTypes = {
@@ -70,5 +70,5 @@ DragAndDropTarget.propTypes = {
   onDragEnter: PropTypes.func,
   onDragOver: PropTypes.func,
   onDragLeave: PropTypes.func,
-  onDrop: PropTypes.func,
+  onDrop: PropTypes.func
 };

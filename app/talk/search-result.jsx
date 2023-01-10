@@ -28,10 +28,10 @@ export default class TalkSearchResult extends React.Component {
   getSubject(comment) {
     if (comment.focus_id && (comment.focus_type === 'Subject')) {
       apiClient.type('subjects').get(comment.focus_id)
-      .then((media) => {
-        const subject = getSubjectLocation(media);
-        this.setState({ subject });
-      });
+        .then((media) => {
+          const subject = getSubjectLocation(media);
+          this.setState({ subject });
+        });
     }
   }
 

@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import apiClient from 'panoptes-client/lib/api-client';
-import { ProjectPageController } from './';
+import { ProjectPageController } from '.';
 import { project } from '../dev-classifier/mock-data';
 
 const location = {
@@ -19,28 +19,23 @@ const context = {
   router: {}
 };
 
-describe('ProjectPageController', function () {
+describe('ProjectPageController', () => {
   let wrapper;
   let apiRequestStub;
   let fetchProjectStub;
 
-  before(function () {
-    apiRequestStub = sinon.stub(apiClient, 'request').callsFake(function (method, url, payload) {
-      return Promise.resolve([]);
-    }); 
-    fetchProjectStub = sinon.stub(ProjectPageController.prototype, 'fetchProjectData').callsFake(function () {
-      return Promise.resolve([]);
-    });
+  before(() => {
+    apiRequestStub = sinon.stub(apiClient, 'request').callsFake((method, url, payload) => Promise.resolve([]));
+    fetchProjectStub = sinon.stub(ProjectPageController.prototype, 'fetchProjectData').callsFake(() => Promise.resolve([]));
   });
 
-  after(function () {
+  after(() => {
     apiRequestStub.restore();
     fetchProjectStub.restore();
   });
 
-  describe('with initial load complete', function () {
-    
-    beforeEach(function () {
+  describe('with initial load complete', () => {
+    beforeEach(() => {
       context.initialLoadComplete = true;
       wrapper = mount(
         <ProjectPageController
@@ -50,17 +45,17 @@ describe('ProjectPageController', function () {
         { context }
       );
     });
-    
-    afterEach(function () {
+
+    afterEach(() => {
       fetchProjectStub.resetHistory();
     });
-    
-    it('should fetch project data on mount.', function () {
+
+    it('should fetch project data on mount.', () => {
       sinon.assert.calledOnce(fetchProjectStub);
       sinon.assert.calledWith(fetchProjectStub, params.owner, params.name);
     });
-    
-    it('should fetch project data again on project change.', function () {
+
+    it('should fetch project data again on project change.', () => {
       wrapper.setState({ loading: false });
       wrapper.setProps({
         params: {
@@ -71,16 +66,16 @@ describe('ProjectPageController', function () {
       sinon.assert.calledTwice(fetchProjectStub);
       sinon.assert.calledWith(fetchProjectStub, 'someone', 'another-project');
     });
-    
-    it('should fetch project data again on user change.', function () {
+
+    it('should fetch project data again on user change.', () => {
       const user = { id: '1' };
       wrapper.setState({ loading: false });
       wrapper.setProps({ user });
       sinon.assert.calledTwice(fetchProjectStub);
       sinon.assert.calledWith(fetchProjectStub, params.owner, params.name, user);
     });
-    
-    it('should not fetch project data again while the first request is still loading.', function () {
+
+    it('should not fetch project data again while the first request is still loading.', () => {
       const translations = { locale: 'es' };
       wrapper.setState({ loading: false });
       wrapper.setProps({ translations });
@@ -89,9 +84,8 @@ describe('ProjectPageController', function () {
     });
   });
 
-  describe('without initial load complete', function () {
-    
-    beforeEach(function () {
+  describe('without initial load complete', () => {
+    beforeEach(() => {
       context.initialLoadComplete = false;
       wrapper = mount(
         <ProjectPageController
@@ -101,16 +95,16 @@ describe('ProjectPageController', function () {
         { context }
       );
     });
-    
-    afterEach(function () {
+
+    afterEach(() => {
       fetchProjectStub.resetHistory();
     });
-    
-    it('should not fetch project data on mount.', function () {
+
+    it('should not fetch project data on mount.', () => {
       sinon.assert.notCalled(fetchProjectStub);
     });
-    
-    it('should fetch project data again on project change.', function () {
+
+    it('should fetch project data again on project change.', () => {
       wrapper.setState({ loading: false });
       wrapper.setProps({
         params: {
@@ -121,22 +115,22 @@ describe('ProjectPageController', function () {
       sinon.assert.calledOnce(fetchProjectStub);
       sinon.assert.calledWith(fetchProjectStub, 'someone', 'another-project');
     });
-    
-    it('should not fetch project data again on user change.', function () {
+
+    it('should not fetch project data again on user change.', () => {
       const user = { id: '1' };
       wrapper.setState({ loading: false });
       wrapper.setProps({ user });
       sinon.assert.notCalled(fetchProjectStub);
     });
-    
-    it('should not fetch project data again on any other prop change.', function () {
+
+    it('should not fetch project data again on any other prop change.', () => {
       const translations = { locale: 'es' };
       wrapper.setProps({ translations });
       sinon.assert.notCalled(fetchProjectStub);
     });
   });
 
-  describe('on component lifecycle', function () {
+  describe('on component lifecycle', () => {
     const channel = `project-${project.id}`;
     const actions = {
       interventions: {
@@ -147,13 +141,13 @@ describe('ProjectPageController', function () {
 
     let wrapper;
 
-    afterEach(function () {
+    afterEach(() => {
       actions.interventions.subscribe.resetHistory();
       actions.interventions.unsubscribe.resetHistory();
     });
 
-    describe('on initial project load', function () {
-      beforeEach(function () {
+    describe('on initial project load', () => {
+      beforeEach(() => {
         context.initialLoadComplete = true;
         wrapper = mount(
           <ProjectPageController
@@ -166,20 +160,20 @@ describe('ProjectPageController', function () {
         wrapper.setState({ project });
       });
 
-      it('subscribes the user to the sugar project channel', function () {
+      it('subscribes the user to the sugar project channel', () => {
         expect(actions.interventions.subscribe.callCount).to.equal(1);
         expect(actions.interventions.subscribe.calledWith(channel)).to.be.true;
       });
 
-      it('does not try to unsubcribe from a previous project channel', function () {
+      it('does not try to unsubcribe from a previous project channel', () => {
         expect(actions.interventions.unsubscribe.callCount).to.equal(0);
       });
     });
 
-    describe('on project state change', function () {
+    describe('on project state change', () => {
       const newProject = { id: '999', title: 'fake project', slug: 'owner/name' };
       const newChannel = `project-${newProject.id}`;
-      beforeEach(function () {
+      beforeEach(() => {
         wrapper = mount(
           <ProjectPageController
             actions={actions}
@@ -193,19 +187,19 @@ describe('ProjectPageController', function () {
         wrapper.setState({ project: newProject });
       });
 
-      it('unsubscribes old project from sugar', function () {
+      it('unsubscribes old project from sugar', () => {
         expect(actions.interventions.unsubscribe.callCount).to.equal(1);
         expect(actions.interventions.unsubscribe.calledWith(channel)).to.true;
       });
 
-      it('subscribes new project to sugar', function () {
+      it('subscribes new project to sugar', () => {
         expect(actions.interventions.subscribe.callCount).to.equal(1);
         expect(actions.interventions.subscribe.calledWith(newChannel)).to.be.true;
       });
     });
 
-    describe('on unmount', function () {
-      beforeEach(function () {
+    describe('on unmount', () => {
+      beforeEach(() => {
         context.initialLoadComplete = true;
         wrapper = mount(
           <ProjectPageController
@@ -218,7 +212,7 @@ describe('ProjectPageController', function () {
         wrapper.setState({ project });
       });
 
-      it('unsubscribes the user from the sugar project channel', function () {
+      it('unsubscribes the user from the sugar project channel', () => {
         wrapper.unmount();
         expect(actions.interventions.unsubscribe.callCount).to.equal(1);
         expect(actions.interventions.unsubscribe.calledWith(channel)).to.be.true;

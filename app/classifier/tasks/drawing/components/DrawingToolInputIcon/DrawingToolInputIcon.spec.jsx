@@ -10,13 +10,13 @@ import { mount } from 'enzyme';
 import { expect } from 'chai';
 import DrawingToolInputIcon, { StyledDrawingToolInputIcon } from './DrawingToolInputIcon';
 
-describe('DrawingToolInputIcon', function() {
-  it('should render without crashing', function() {
+describe('DrawingToolInputIcon', function () {
+  it('should render without crashing', function () {
     const wrapper = mount(<DrawingToolInputIcon />);
     expect(wrapper).to.be.ok;
   });
 
-  it('should render a StyledDrawingToolInputIcon component', function() {
+  it('should render a StyledDrawingToolInputIcon component', function () {
     const wrapper = mount(<DrawingToolInputIcon />);
     expect(wrapper.find(StyledDrawingToolInputIcon)).to.have.lengthOf(1);
   });

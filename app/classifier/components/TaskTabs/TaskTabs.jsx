@@ -10,7 +10,9 @@ export const TabsWrapper = styled.div`
 `;
 
 // TODO: make TaskTab and TutorialTab actual functional tabs according to design
-export default function TaskTabs({ projectPreferences, tutorial, user, workflow }) {
+export default function TaskTabs({
+  projectPreferences, tutorial, user, workflow
+}) {
   return (
     <TabsWrapper>
       <TaskTab />
@@ -30,4 +32,3 @@ TaskTabs.propTypes = {
   user: PropTypes.object,
   workflow: PropTypes.object
 };
-

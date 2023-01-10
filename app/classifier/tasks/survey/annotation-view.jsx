@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import TaskTranslations from '../translations'
+import TaskTranslations from '../translations';
 
 export function AnnotationView({
   annotation = null,
   onChange,
   task = null,
-  translation = null,
+  translation = null
 }) {
   function handleRemove(index) {
     annotation.value.splice(index, 1);
@@ -15,9 +15,9 @@ export function AnnotationView({
   }
 
   function onClick(event) {
-    const { target } = event
-    const { index } = target.dataset
-    handleRemove(index)
+    const { target } = event;
+    const { index } = target.dataset;
+    handleRemove(index);
   }
 
   function answerByQuestion(identification) {
@@ -25,9 +25,7 @@ export function AnnotationView({
       const answerKeys = Object.keys(identification.answers);
 
       if (answerKeys.indexOf(questionID) >= 0) {
-        const answerLabels = [].concat(identification.answers[questionID]).map((answerID) => {
-          return translation.questions[questionID].answers[answerID].label;
-        });
+        const answerLabels = [].concat(identification.answers[questionID]).map(answerID => translation.questions[questionID].answers[answerID].label);
         return answerLabels.join(', ');
       }
     });
@@ -40,12 +38,14 @@ export function AnnotationView({
       {annotation.value.map((identification, i) => {
         identification._key = `IDENTIFICATION_KEY_${i}`;
         const answersList = answerByQuestion(identification).filter(Boolean).join('; ').trim();
-        const answersLabel = answersList ? `(${answersList})` : ''
+        const answersLabel = answersList ? `(${answersList})` : '';
 
         return (
           <span key={identification._key}>
             <span className="survey-identification-proxy">
-              {translation.choices[identification.choice].label} {answersLabel}
+              {translation.choices[identification.choice].label}
+              {' '}
+              {answersLabel}
               {' '}
               <button
                 className="survey-identification-remove"
@@ -94,5 +94,5 @@ export default function LocalisedAnnotationView({
         task={task}
       />
     </TaskTranslations>
-  )
-};
+  );
+}

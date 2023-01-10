@@ -5,18 +5,18 @@ import { sugarClient } from 'panoptes-client/lib/sugar';
 import reducer, { processIntervention, subscribe, unsubscribe } from './interventions';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 
-describe('Intervention actions', function () {
+describe('Intervention actions', () => {
   let subscribeSpy;
   let unsubscribeSpy;
-  before(function () {
+  before(() => {
     subscribeSpy = sinon.stub(sugarClient, 'subscribeTo').callsFake(() => true);
     unsubscribeSpy = sinon.stub(sugarClient, 'unsubscribeFrom').callsFake(() => true);
   });
-  after(function () {
+  after(() => {
     subscribeSpy.restore();
     unsubscribeSpy.restore();
   });
-  describe('subscribe', function () {
+  describe('subscribe', () => {
     const state = {
       error: null
     };
@@ -24,17 +24,17 @@ describe('Intervention actions', function () {
       type: 'pfe/interventions/SUBSCRIBE',
       payload: 'A channel'
     };
-    before(function () {
+    before(() => {
       const newState = reducer(state, action);
     });
-    it('should subscribe to Sugar', function () {
+    it('should subscribe to Sugar', () => {
       expect(subscribeSpy.callCount).to.equal(1);
     });
-    it('should subscribe to the specified channel', function () {
+    it('should subscribe to the specified channel', () => {
       expect(subscribeSpy.calledWith(action.payload)).to.be.true;
     });
   });
-  describe('unsubscribe', function () {
+  describe('unsubscribe', () => {
     const state = {
       error: null
     };
@@ -42,17 +42,17 @@ describe('Intervention actions', function () {
       type: 'pfe/interventions/UNSUBSCRIBE',
       payload: 'A channel'
     };
-    before(function () {
+    before(() => {
       const newState = reducer(state, action);
     });
-    it('should unsubscribe from Sugar', function () {
+    it('should unsubscribe from Sugar', () => {
       expect(unsubscribeSpy.callCount).to.equal(1);
     });
-    it('should unsubscribe from the specified channel', function () {
+    it('should unsubscribe from the specified channel', () => {
       expect(unsubscribeSpy.calledWith(action.payload)).to.be.true;
     });
   });
-  describe('on error', function () {
+  describe('on error', () => {
     const state = {
       error: null
     };
@@ -60,20 +60,20 @@ describe('Intervention actions', function () {
       type: 'pfe/interventions/ERROR',
       payload: 'Oh no!'
     };
-    it('should store the error', function () {
+    it('should store the error', () => {
       const newState = reducer(state, action);
       expect(newState.error).to.equal(action.payload);
     });
   });
-  describe('action creators', function () {
-    describe('processIntervention', function () {
-      describe('unknown experiment data format', function () {
+  describe('action creators', () => {
+    describe('processIntervention', () => {
+      describe('unknown experiment data format', () => {
         const message = {
           data: {
             payload: 'do something unknown'
           }
         };
-        it('should dispatch the error action with useful message', function () {
+        it('should dispatch the error action with useful message', () => {
           const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/interventions/ERROR',
@@ -83,14 +83,14 @@ describe('Intervention actions', function () {
         });
       });
 
-      describe('missing data in payload', function () {
+      describe('missing data in payload', () => {
         const message = {
           type: 'experiment',
           payload: {
             message: 'can i haz your money?'
           }
         };
-        it('should dispatch the error action with useful message', function () {
+        it('should dispatch the error action with useful message', () => {
           const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/interventions/ERROR',
@@ -100,7 +100,7 @@ describe('Intervention actions', function () {
         });
       });
 
-      describe('non intervention message', function () {
+      describe('non intervention message', () => {
         const message = {
           type: 'experiment',
           data: {
@@ -109,7 +109,7 @@ describe('Intervention actions', function () {
             message: 'You are doing great'
           }
         };
-        it('should dispatch the error action with useful message', function () {
+        it('should dispatch the error action with useful message', () => {
           const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/interventions/ERROR',
@@ -119,7 +119,7 @@ describe('Intervention actions', function () {
         });
       });
 
-      describe('unknown intervention type', function () {
+      describe('unknown intervention type', () => {
         const message = {
           type: 'experiment',
           data: {
@@ -128,7 +128,7 @@ describe('Intervention actions', function () {
             message: 'can i send you pics?'
           }
         };
-        it('should dispatch the error action with useful message', function () {
+        it('should dispatch the error action with useful message', () => {
           const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/interventions/ERROR',
@@ -138,7 +138,7 @@ describe('Intervention actions', function () {
         });
       });
 
-      describe('with an intervention message event', function () {
+      describe('with an intervention message event', () => {
         const message = {
           type: 'experiment',
           data: {
@@ -147,7 +147,7 @@ describe('Intervention actions', function () {
             message: 'a generic message'
           }
         };
-        it('should store the message data', function () {
+        it('should store the message data', () => {
           const action = processIntervention(message);
           const expectedAction = {
             type: 'pfe/classify/ADD_INTERVENTION',
@@ -157,7 +157,7 @@ describe('Intervention actions', function () {
         });
       });
 
-      describe('with an intervention subject queue event', function () {
+      describe('with an intervention subject queue event', () => {
         const message = {
           type: 'experiment',
           data: {
@@ -167,26 +167,26 @@ describe('Intervention actions', function () {
             workflow_id: 1
           }
         };
-        const subject = mockPanoptesResource('subjects', { id: 'a', metadata: {} });
+        const subject = mockPanoptesResource('subjects', { id: 'a', metadata: {}});
         const fakeType = {
           get: sinon.stub().resolves([subject])
         };
         const fakeDispatch = sinon.stub().callsFake(() => true);
-        before(function () {
+        before(() => {
           sinon.stub(apiClient, 'type').callsFake(() => fakeType);
           processIntervention(message)(fakeDispatch);
         });
-        after(function () {
+        after(() => {
           apiClient.type.restore();
         });
-        it('should request new subjects', function () {
+        it('should request new subjects', () => {
           const { subject_ids } = message.data;
           expect(fakeType.get.calledWith(subject_ids)).to.be.true;
-        })
-        it('should flag new subjects', function () {
+        });
+        it('should flag new subjects', () => {
           expect(subject.metadata.intervention).to.be.true;
         });
-        it('should dispatch a prependSubjects action', function () {
+        it('should dispatch a prependSubjects action', () => {
           const { subject_ids, workflow_id } = message.data;
           const expectedAction = {
             type: 'pfe/classify/PREPEND_SUBJECTS',
@@ -199,8 +199,8 @@ describe('Intervention actions', function () {
         });
       });
     });
-    describe('subscribe', function () {
-      it('should create a subscribe action', function () {
+    describe('subscribe', () => {
+      it('should create a subscribe action', () => {
         const expectedAction = {
           type: 'pfe/interventions/SUBSCRIBE',
           payload: 'A channel'
@@ -208,8 +208,8 @@ describe('Intervention actions', function () {
         expect(subscribe('A channel')).to.deep.equal(expectedAction);
       });
     });
-    describe('unsubscribe', function () {
-      it('should create an unsubscribe action', function () {
+    describe('unsubscribe', () => {
+      it('should create an unsubscribe action', () => {
         const expectedAction = {
           type: 'pfe/interventions/UNSUBSCRIBE',
           payload: 'A channel'

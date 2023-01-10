@@ -12,7 +12,7 @@ import sinon from 'sinon';
 import ProjectNavbar from './ProjectNavbar';
 
 describe('ProjectNavbar', function () {
-  before(function() {
+  before(function () {
     Object.defineProperty(document.body, 'clientWidth', { value: 100 });
   });
 
@@ -22,11 +22,11 @@ describe('ProjectNavbar', function () {
 
   describe('child rendering', function () {
     let wrapper;
-    before(function() {
+    before(function () {
       wrapper = shallow(<ProjectNavbar />);
     });
 
-    it('should not render either navbar variants if SizeAwareProjectNavbarWide component\'s callback hasn\'t fired yet', function() {
+    it('should not render either navbar variants if SizeAwareProjectNavbarWide component\'s callback hasn\'t fired yet', function () {
       expect(wrapper.find('withSizes(ProjectNavbarNarrow)')).to.have.lengthOf(0);
       expect(wrapper.find('ProjectNavbarWide')).to.have.lengthOf(0);
     });
@@ -47,7 +47,7 @@ describe('ProjectNavbar', function () {
   describe('setBreakpoint behavior', function () {
     let wrapper;
     let setBreakpointSpy;
-    before(function() {
+    before(function () {
       setBreakpointSpy = sinon.spy(ProjectNavbar.prototype, 'setBreakpoint');
       wrapper = shallow(<ProjectNavbar />);
       wrapper.setState({ loading: false });
@@ -57,7 +57,7 @@ describe('ProjectNavbar', function () {
       setBreakpointSpy.resetHistory();
     });
 
-    after(function() {
+    after(function () {
       setBreakpointSpy.restore();
     });
 
@@ -69,7 +69,7 @@ describe('ProjectNavbar', function () {
 
     it('should correctly set the state if clientWidth is too narrow to render ProjectNavbarWide', function () {
       wrapper.instance().setBreakpoint({ width: 110 });
-      expect(setBreakpointSpy.calledOnce).to.be.true;      
+      expect(setBreakpointSpy.calledOnce).to.be.true;
       expect(wrapper.state('useWide')).to.equal(false);
     });
   });

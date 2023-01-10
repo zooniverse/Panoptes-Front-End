@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
 
-function SelectInput({ help, onChange, multi = false, name, options, placeholder = '', title, value }) {
+function SelectInput({
+  help, onChange, multi = false, name, options, placeholder = '', title, value
+}) {
   return (
     <fieldset>
       <label>

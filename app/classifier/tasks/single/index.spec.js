@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme';
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import SingleTask from './';
+import SingleTask from '.';
 import GenericTask from '../generic';
 import { mockReduxStore, radioTypeAnnotation, radioTypeTask } from '../testHelpers';
 
@@ -13,7 +13,7 @@ const annotation = Object.assign({}, radioTypeAnnotation, {
 });
 
 describe('SingleChoiceTask', function () {
-  describe('when it renders', function() {
+  describe('when it renders', function () {
     let wrapper;
 
     beforeEach(function () {
@@ -49,7 +49,7 @@ describe('SingleChoiceTask', function () {
       const genericTask = wrapper.find(GenericTask);
       it(`should pass autofocus ${autofocus} to its children`, function () {
         expect(genericTask.prop('autoFocus')).to.equal(autofocus);
-      })
+      });
     });
   });
 
@@ -70,12 +70,12 @@ describe('SingleChoiceTask', function () {
         it(`should pass autofocus ${autofocus} for answer ${answer.props.index}`, function () {
           const hasFocus = autofocus && answer.props.index === annotation.value;
           expect(answer.props.autoFocus).to.equal(hasFocus);
-        })
-      })
+        });
+      });
     });
   });
 
-  describe('input onChange event handler', function() {
+  describe('input onChange event handler', function () {
     let handleChangeSpy;
     let onChangeSpy;
     let setStateSpy;
@@ -86,7 +86,7 @@ describe('SingleChoiceTask', function () {
       setStateSpy = sinon.spy(SingleTask.prototype, 'setState');
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
       wrapper = mount(
         <SingleTask
           task={radioTypeTask}
@@ -110,13 +110,13 @@ describe('SingleChoiceTask', function () {
 
     it('should call handleChange with the answer array index', function () {
       const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
-      firstAnswer.props.onChange({ target: { checked: true } });
+      firstAnswer.props.onChange({ target: { checked: true }});
       expect(handleChangeSpy).to.have.been.calledWith(0);
     });
 
     it('should call props.onChange when an answer changes and the target is checked', function () {
       const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
-      firstAnswer.props.onChange({ target: { checked: true } });
+      firstAnswer.props.onChange({ target: { checked: true }});
       expect(onChangeSpy).to.have.been.calledOnce;
     });
   });
@@ -160,7 +160,7 @@ describe('SingleChoiceSummary', function () {
 
   it('should have a question', function () {
     const question = summary.find('.question');
-    expect(question).to.have.lengthOf(1)
+    expect(question).to.have.lengthOf(1);
   });
 
   it('the default expanded state should be false', function () {
@@ -169,7 +169,7 @@ describe('SingleChoiceSummary', function () {
 
   it('should have one answer when collapsed', function () {
     const answers = summary.find('.answer');
-    expect(answers).to.have.lengthOf(1)
+    expect(answers).to.have.lengthOf(1);
   });
 
   it('should have the correct answer label when the value if falsy (i.e. 0)', function () {

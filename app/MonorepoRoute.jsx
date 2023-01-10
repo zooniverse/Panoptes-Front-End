@@ -43,9 +43,7 @@ MonorepoRoute.createRouteFromReactElement = (element, parentRoute) => {
   monorepoRoute.component = ({ children }) => (
     <div>
       Loading…
-      {React.Children.map(children, child =>
-        React.cloneElement(child, { path })
-      )}
+      {React.Children.map(children, child => React.cloneElement(child, { path }))}
     </div>
   );
   return monorepoRoute;

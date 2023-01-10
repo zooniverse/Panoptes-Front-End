@@ -14,13 +14,13 @@ function createRule(subjectRule, workflowRule) {
   };
 
   if (rule.failureEnabled && !rule.falsePosMode) {
-    rule.failureMessage = subjectRule.failureMessage ||
-      workflowRule.defaultFailureMessage;
+    rule.failureMessage = subjectRule.failureMessage
+      || workflowRule.defaultFailureMessage;
   }
 
   if (rule.successEnabled) {
-    rule.successMessage = subjectRule.successMessage ||
-      workflowRule.defaultSuccessMessage;
+    rule.successMessage = subjectRule.successMessage
+      || workflowRule.defaultSuccessMessage;
   }
 
   return ruleChecker(rule);

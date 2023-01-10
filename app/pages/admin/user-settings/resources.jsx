@@ -54,12 +54,14 @@ class Resources extends Component {
     return (
       <div>
         <h3>{this.props.type.charAt(0).toUpperCase() + this.props.type.slice(1)}</h3>
-        {this.state.resources.length > 0 ? <div>
-          <span>links = &apos;lab - home&apos;</span>
-          <ul>
-            {this.state.resources.map(resource => this.resourceLink(resource))}
-          </ul>
-        </div> : <p>None</p>}
+        {this.state.resources.length > 0 ? (
+          <div>
+            <span>links = &apos;lab - home&apos;</span>
+            <ul>
+              {this.state.resources.map(resource => this.resourceLink(resource))}
+            </ul>
+          </div>
+        ) : <p>None</p>}
       </div>
     );
   }

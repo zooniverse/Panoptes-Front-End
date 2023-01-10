@@ -40,10 +40,10 @@ export default class AccountBar extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    this.logClick = !!nextContext &&
-      !!nextContext.geordi &&
-      !!nextContext.geordi.makeHandler &&
-      nextContext.geordi.makeHandler('about-menu');
+    this.logClick = !!nextContext
+      && !!nextContext.geordi
+      && !!nextContext.geordi.makeHandler
+      && nextContext.geordi.makeHandler('about-menu');
   }
 
   componentWillUnmount() {
@@ -75,9 +75,9 @@ export default class AccountBar extends React.Component {
   }
 
   renderMessages() {
-    const mobile = this.state.unread ?
-      <i className="fa fa-envelope fa-fw" aria-label={`${this.state.messageCount} unread messages`} /> :
-      <i className="fa fa-envelope-o fa-fw" aria-label="No new messages" />;
+    const mobile = this.state.unread
+      ? <i className="fa fa-envelope fa-fw" aria-label={`${this.state.messageCount} unread messages`} />
+      : <i className="fa fa-envelope-o fa-fw" aria-label="No new messages" />;
 
     if (this.props.isMobile) {
       return mobile;
@@ -95,11 +95,16 @@ export default class AccountBar extends React.Component {
     return (
       <span className="account-bar">
 
-        <NotificationsLink isMobile={this.props.isMobile} params={this.props.params} user={this.context.user} linkProps={{
-          className: 'site-nav__link',
-          activeClassName: 'site-nav__link--active',
-          onClick: this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
-        }} />
+        <NotificationsLink
+          isMobile={this.props.isMobile}
+          params={this.props.params}
+          user={this.context.user}
+          linkProps={{
+            className: 'site-nav__link',
+            activeClassName: 'site-nav__link--active',
+            onClick: this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
+          }}
+        />
 
         <Link
           to="/inbox"
@@ -122,12 +127,13 @@ export default class AccountBar extends React.Component {
 
         <ExpandableMenu
           className="site-nav__modal"
-          trigger={
+          trigger={(
             <span className="site-nav__link">
-              <strong>{this.context.user.display_name}</strong>{' '}
+              <strong>{this.context.user.display_name}</strong>
+              {' '}
               <i className="fa fa-chevron-down" />
             </span>
-          }
+          )}
           triggerProps={{
             className: 'secret-button'
           }}

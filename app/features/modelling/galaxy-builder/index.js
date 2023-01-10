@@ -2,17 +2,25 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 import baseModel from '../baseReglModel';
 import { drawSersic, drawSpiral } from './galaxyRegls';
-import { convolvePSF, calculateDifference, scaleModel, maskImage, panZoom } from './postProcessingRegl';
-import { parseDisk, parseBulge, parseBar, parseSpiralArms } from './parseFunctions';
+import {
+  convolvePSF, calculateDifference, scaleModel, maskImage, panZoom
+} from './postProcessingRegl';
+import {
+  parseDisk, parseBulge, parseBar, parseSpiralArms
+} from './parseFunctions';
 
 class GalaxyBuilderModel extends baseModel {
-  constructor(canvas, { frame, metadata, src, sizing }, eventHandlers) {
+  constructor(canvas, {
+    frame, metadata, src, sizing
+  }, eventHandlers) {
     const modelErrorMessage = `
     Sorry, this project requires features which are not supported by your
     device. Please try again on a different computer, and let us know in talk
     if you're still having problems. You can comment on photos (the second
     image) in Talk, but please do not classify!`;
-    super(canvas, { frame, metadata, src, sizing }, eventHandlers, modelErrorMessage);
+    super(canvas, {
+      frame, metadata, src, sizing
+    }, eventHandlers, modelErrorMessage);
     this.panZoom = panZoom(this.regl);
     this.scaleModel = scaleModel(this.regl);
     this.state.shouldCompareToImage = false;
@@ -31,6 +39,7 @@ class GalaxyBuilderModel extends baseModel {
         });
     }
   }
+
   handleDataLoad(data) {
     if (this.state.modelHasErrored) return Promise.resolve();
     const oldViewBox = this.state.sizing;
@@ -78,6 +87,7 @@ class GalaxyBuilderModel extends baseModel {
     this.eventHandlers.onLoad(this.state.sizing);
     return Promise.resolve();
   }
+
   setModel() {
     // return taskName: render method object
     try {
@@ -85,22 +95,30 @@ class GalaxyBuilderModel extends baseModel {
         disk: {
           name: 'disk',
           func: drawSersic(this.regl),
-          default: { mux: 0, muy: 0, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
+          default: {
+            mux: 0, muy: 0, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2
+          }
         },
         bulge: {
           name: 'bulge',
           func: drawSersic(this.regl),
-          default: { mux: 100, muy: 100, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2 }
+          default: {
+            mux: 100, muy: 100, rx: 10, ry: 15, scale: 5 / 8, roll: 0, i0: 0.75, n: 1, c: 2
+          }
         },
         bar: {
           name: 'bar',
           func: drawSersic(this.regl),
-          default: { mux: 100, muy: 100, rx: 5, ry: 5, scale: 5 / 8, roll: 0, i0: 0.75, n: 2, c: 2 }
+          default: {
+            mux: 100, muy: 100, rx: 5, ry: 5, scale: 5 / 8, roll: 0, i0: 0.75, n: 2, c: 2
+          }
         },
         spiral: {
           name: 'spiral',
           func: drawSpiral(this.regl, this.canvas),
-          default: { mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, falloff: 1 }
+          default: {
+            mux: 100, muy: 100, rx: 5, ry: 5, spread: 1, roll: 0, i0: 0.75, n: 2, c: 2, falloff: 1
+          }
         }
       };
     } catch (e) {
@@ -111,6 +129,7 @@ class GalaxyBuilderModel extends baseModel {
       });
     }
   }
+
   calculateModel(annotations, viewBox) {
     // TODO: store calculated functions in state to be re-called rather than
     //       re-calculated
@@ -199,6 +218,7 @@ class GalaxyBuilderModel extends baseModel {
     }
     this.eventHandlers.setMessage(message);
   }
+
   getScore() {
     // images have been treated by normalisation to [0, 1] then arcsinh stretch
     // with a = 0.1. Need to calc difference in normal space

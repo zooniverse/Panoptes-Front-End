@@ -138,7 +138,6 @@ class AudioPlayer extends React.Component {
       </div>
     );
   }
-
 }
 
 AudioPlayer.propTypes = {

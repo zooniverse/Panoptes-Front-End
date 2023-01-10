@@ -19,11 +19,11 @@ Arguments:
 
 Returns: true or false
  */
-export function isThisProjectUsingFEMLab (project, location) {
-  return (  // Use FEM-compatible pages if...
-    project?.experimental_tools?.includes('femLab')  // ...the project has the femLab experimental tool
-    || location?.query?.femLab === 'true'  // ...OR ?femLab=true query param is set
-  ) && location?.query?.pfeLab !== 'true'  // ...UNLESS ?pfeLab=true query param is set
+export function isThisProjectUsingFEMLab(project, location) {
+  return ( // Use FEM-compatible pages if...
+    project?.experimental_tools?.includes('femLab') // ...the project has the femLab experimental tool
+    || location?.query?.femLab === 'true' // ...OR ?femLab=true query param is set
+  ) && location?.query?.pfeLab !== 'true'; // ...UNLESS ?pfeLab=true query param is set
 }
 
-export const FEM_LAB_PREVIEW_HOST = 'https://frontend.preview.zooniverse.org'
+export const FEM_LAB_PREVIEW_HOST = 'https://frontend.preview.zooniverse.org';

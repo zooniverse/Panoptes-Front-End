@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import AutoSave from '../../../components/auto-save';
 import handleInputChange from '../../../lib/handle-input-change';
-import Shortcut from './';
+import Shortcut from '.';
 
 export default class ShortcutEditor extends React.Component {
   constructor(props) {
@@ -60,9 +60,7 @@ export default class ShortcutEditor extends React.Component {
       shortcuts = this.props.workflow.tasks[this.props.task.unlinkedTask];
     }
     const handleChange = handleInputChange.bind(this.props.workflow);
-    const children = React.Children.map(this.props.children, (child) => {
-      return React.cloneElement(child);
-    });
+    const children = React.Children.map(this.props.children, child => React.cloneElement(child));
 
     return (
       <div>
@@ -72,7 +70,8 @@ export default class ShortcutEditor extends React.Component {
 
         <label htmlFor="shortcut" title="Shortcut Options to End Classification">
           <AutoSave resource={this.props.workflow}>
-            <span className="form-label">Shortcut Option</span>{' '}
+            <span className="form-label">Shortcut Option</span>
+            {' '}
             <input id="shortcut" type="checkbox" checked={shortcuts !== undefined} onChange={this.toggleShortcut} />
           </AutoSave>
         </label>
@@ -105,14 +104,14 @@ export default class ShortcutEditor extends React.Component {
               <button type="button" className="workflow-choice-add-button" title="Add Shortcut" onClick={this.addAnswer}>+</button>
             </AutoSave>
 
-            </div>)}
+          </div>
+        )}
 
         {' '}
       </div>
 
     );
   }
-
 }
 
 ShortcutEditor.propTypes = {

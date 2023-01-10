@@ -19,8 +19,8 @@ export default function Selection(props) {
     >
       {props.annotation.text}
       {' '}
-      {!props.disabled &&
-        <button className="survey-identification-remove" aria-label="Delete" title="Delete">&times;</button>}
+      {!props.disabled
+        && <button className="survey-identification-remove" aria-label="Delete" title="Delete">&times;</button>}
     </span>
   );
 }

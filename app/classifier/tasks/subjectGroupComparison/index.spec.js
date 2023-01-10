@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import SubjectGroupComparisonTask from './';
+import SubjectGroupComparisonTask from '.';
 import GenericTask from '../generic';
 import { mockReduxStore, radioTypeAnnotation, radioTypeTask } from '../testHelpers';
 
@@ -13,7 +13,7 @@ const annotation = Object.assign({}, radioTypeAnnotation, {
 });
 
 describe('SubjectGroupComparisonTask', function () {
-  describe('when it renders', function() {
+  describe('when it renders', function () {
     let wrapper;
 
     beforeEach(function () {
@@ -69,6 +69,6 @@ describe('SubjectGroupComparison', function () {
 
   it('should have a question', function () {
     const question = summary.find('.question');
-    expect(question).to.have.lengthOf(1)
+    expect(question).to.have.lengthOf(1);
   });
 });

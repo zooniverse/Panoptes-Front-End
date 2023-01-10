@@ -106,12 +106,14 @@ class ProjectPageController extends React.Component {
     // logToSentry(error, info);
     const loading = false;
     const ready = false;
-    this.setState({ error, info, loading, ready });
+    this.setState({
+      error, info, loading, ready
+    });
   }
 
   getUserProjectPreferences(project, user) {
-    const userPreferences = user ?
-      user.get('project_preferences', { project_id: project.id })
+    const userPreferences = user
+      ? user.get('project_preferences', { project_id: project.id })
         .then(([projectPreferences]) => {
           if (projectPreferences) {
             return projectPreferences;
@@ -122,11 +124,10 @@ class ProjectPageController extends React.Component {
               },
               preferences: {}
             })
-            .save();
+              .save();
           }
         })
-    :
-      Promise.resolve(null);
+      : Promise.resolve(null);
 
     return userPreferences
       .catch((error) => {
@@ -136,7 +137,7 @@ class ProjectPageController extends React.Component {
   }
 
   fetchProjectData(ownerName, projectName, user) {
-    const { actions, location, params } = this.props
+    const { actions, location, params } = this.props;
     this.setState({
       error: null,
       loading: true,
@@ -150,9 +151,9 @@ class ProjectPageController extends React.Component {
         this.setState({ project });
 
         if (project) {
-          let locale = project.primary_language
+          let locale = project.primary_language;
           if (params.locale) {
-            locale = params.locale
+            locale = params.locale;
           }
           if (location.query.language) {
             locale = location.query.language;
@@ -161,12 +162,12 @@ class ProjectPageController extends React.Component {
           // Use apiClient with cached resources from include to get out of cache
           let awaitOrganization;
           const awaitBackground = apiClient.type('backgrounds').get(project.links.background.id)
-          .catch(error => {
-            if (error.status === 404) { return { src: '' }; } else { return console.error(error); }
-          });
+            .catch((error) => {
+              if (error.status === 404) { return { src: '' }; } else { return console.error(error); }
+            });
 
           if (project.links?.organization) {
-            const query = isAdmin() ? null : { listed: true }
+            const query = isAdmin() ? null : { listed: true };
             awaitOrganization = project.get('organization', query)
               .catch(error => null);
           } else {
@@ -198,30 +199,32 @@ class ProjectPageController extends React.Component {
             awaitProjectPreferences,
             awaitTranslation
           ])
-          .then(([
-            background,
-            organization,
-            owner,
-            pages,
-            projectAvatar,
-            projectIsComplete,
-            projectRoles,
-            projectPreferences,
-            splits
-          ]) => {
-            const ready = true;
-            this.setState({ background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits });
-            this.loadFieldGuide(project.id, locale);
-            actions.translations.load('project_page', pages.map(page => page.id), locale);
-            return { project, projectPreferences, splits };
-          })
-          .then(() => {
-            this.setState({ ready: true })
-          })
-          .catch((error) => {
-            this.setState({ error });
-            console.error(error);
-          });
+            .then(([
+              background,
+              organization,
+              owner,
+              pages,
+              projectAvatar,
+              projectIsComplete,
+              projectRoles,
+              projectPreferences,
+              splits
+            ]) => {
+              const ready = true;
+              this.setState({
+                background, organization, owner, pages, projectAvatar, projectIsComplete, projectRoles, projectPreferences, splits
+              });
+              this.loadFieldGuide(project.id, locale);
+              actions.translations.load('project_page', pages.map(page => page.id), locale);
+              return { project, projectPreferences, splits };
+            })
+            .then(() => {
+              this.setState({ ready: true });
+            })
+            .catch((error) => {
+              this.setState({ error });
+              console.error(error);
+            });
         } else {
           this.setState({
             background: null,
@@ -236,17 +239,16 @@ class ProjectPageController extends React.Component {
             workflow: null
           });
         }
-    })
-    .catch((error) => {
-      this.setState({ error });
-    })
-    .then(() => {
-      this.setState({ loading: false });
-    });
+      })
+      .catch((error) => {
+        this.setState({ error });
+      })
+      .then(() => {
+        this.setState({ loading: false });
+      });
   }
 
   requestUserProjectPreferences(project, user) {
-
     if (user) {
       return user.get('project_preferences', { project_id: project.id })
         .then(([projectPreferences]) => {
@@ -262,19 +264,19 @@ class ProjectPageController extends React.Component {
 
   loadFieldGuide(projectId, locale) {
     return apiClient.type('field_guides').get({ project_id: projectId })
-    .then(([guide]) => {
-      this.setState({ guide });
-      if (guide && guide.id) {
-        const { actions, translations } = this.props;
-        actions.translations.load('field_guide', guide.id, locale);
-        getAllLinked(guide, 'attached_images')
-        .then((images) => {
-          const guideIcons = {};
-          images.map(image => guideIcons[image.id] = image);
-          this.setState({ guideIcons });
-        });
-      }
-    });
+      .then(([guide]) => {
+        this.setState({ guide });
+        if (guide && guide.id) {
+          const { actions, translations } = this.props;
+          actions.translations.load('field_guide', guide.id, locale);
+          getAllLinked(guide, 'attached_images')
+            .then((images) => {
+              const guideIcons = {};
+              images.map(image => guideIcons[image.id] = image);
+              this.setState({ guideIcons });
+            });
+        }
+      });
   }
 
   handleProjectPreferencesChange(key, value) {
@@ -300,58 +302,75 @@ class ProjectPageController extends React.Component {
     return (
       <div className="project-page-wrapper">
         <Helmet title={title} />
-        {(!launchApproved && betaApproved) ?
-          <div className="beta-border" /> : undefined}
+        {(!launchApproved && betaApproved)
+          ? <div className="beta-border" /> : undefined}
 
-        {!!this.state.ready &&
-          <Translations
-            original={this.state.project}
-            type="project"
-          >
-            <ProjectPage
-              {...this.props}
-              background={this.state.background}
-              guide={this.state.guide}
-              guideIcons={this.state.guideIcons}
-              loading={this.state.loading}
-              organization={this.state.organization}
-              owner={this.state.owner}
-              pages={this.state.pages}
-              preferences={this.state.projectPreferences}
-              project={this.state.project}
-              projectAvatar={this.state.projectAvatar}
-              projectIsComplete={this.state.projectIsComplete}
-              projectRoles={this.state.projectRoles}
-              requestUserProjectPreferences={this.requestUserProjectPreferences.bind(this)}
-              splits={this.state.splits}
-              workflow={this.props.workflow}
-            />
-          </Translations>
+        {!!this.state.ready
+          && (
+            <Translations
+              original={this.state.project}
+              type="project"
+            >
+              <ProjectPage
+                {...this.props}
+                background={this.state.background}
+                guide={this.state.guide}
+                guideIcons={this.state.guideIcons}
+                loading={this.state.loading}
+                organization={this.state.organization}
+                owner={this.state.owner}
+                pages={this.state.pages}
+                preferences={this.state.projectPreferences}
+                project={this.state.project}
+                projectAvatar={this.state.projectAvatar}
+                projectIsComplete={this.state.projectIsComplete}
+                projectRoles={this.state.projectRoles}
+                requestUserProjectPreferences={this.requestUserProjectPreferences.bind(this)}
+                splits={this.state.splits}
+                workflow={this.props.workflow}
+              />
+            </Translations>
+          )
         }
-        {!!this.state.loading &&
-          <div className="content-container">
-            <p>
-              Loading{' '}
-              <strong>{slug}</strong>...
-            </p>
-          </div>
-        }
-        {!!this.state.error &&
-          ((this.state.error.message === 'NOT_FOUND') ?
-            <div className="content-container">
-              <p>Project <code>{slug}</code> not found.</p>
-              <p>If you are sure the URL is correct, you might not have permission to view this project.</p>
-            </div> :
+        {!!this.state.loading
+          && (
             <div className="content-container">
               <p>
-                There was an error retrieving project{' '}
-                <strong>{slug}</strong>.
-              </p>
-              <p>
-                <code>{this.state.error.message}</code>
-                {!!this.state.info && <pre>{this.state.info.componentStack}</pre>}
+              Loading
+                {' '}
+                <strong>{slug}</strong>
+...
               </p>
             </div>
+          )
+        }
+        {!!this.state.error
+          && ((this.state.error.message === 'NOT_FOUND')
+            ? (
+              <div className="content-container">
+                <p>
+Project
+                  <code>{slug}</code>
+                  {' '}
+not found.
+                </p>
+                <p>If you are sure the URL is correct, you might not have permission to view this project.</p>
+              </div>
+            )
+            : (
+              <div className="content-container">
+                <p>
+                There was an error retrieving project
+                  {' '}
+                  <strong>{slug}</strong>
+.
+                </p>
+                <p>
+                  <code>{this.state.error.message}</code>
+                  {!!this.state.info && <pre>{this.state.info.componentStack}</pre>}
+                </p>
+              </div>
+            )
           )
         }
       </div>

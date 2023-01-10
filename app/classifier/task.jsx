@@ -57,46 +57,46 @@ class Task extends React.Component {
     return (
       <div className="task-container" style={this.props.subjectLoading ? disabledStyle : null}>
         <div className="coverable-task-container">
-          {persistentHooksBeforeTask.map((HookComponent, i) => {
-            return (<HookComponent key={i} {...taskHookProps} />);
-          })}
+          {persistentHooksBeforeTask.map((HookComponent, i) => (<HookComponent key={i} {...taskHookProps} />))}
 
-          {!!annotation &&
-            <TaskTranslations
-              taskKey={annotation.task}
-              task={task}
-              workflowID={workflow.id}
-            >
-              <TaskComponent
-                key={annotation.task}
-                autoFocus={true}
-                taskTypes={tasks}
-                workflow={workflow}
+          {!!annotation
+            && (
+              <TaskTranslations
+                taskKey={annotation.task}
                 task={task}
-                preferences={this.props.preferences}
-                annotation={annotation}
-                onChange={this.handleAnnotationChange}
-              />
-            </TaskTranslations>
+                workflowID={workflow.id}
+              >
+                <TaskComponent
+                  key={annotation.task}
+                  autoFocus={true}
+                  taskTypes={tasks}
+                  workflow={workflow}
+                  task={task}
+                  preferences={this.props.preferences}
+                  annotation={annotation}
+                  onChange={this.handleAnnotationChange}
+                />
+              </TaskTranslations>
+            )
           }
 
-          {persistentHooksAfterTask.map((HookComponent, i) => {
-            return (<HookComponent key={i} {...taskHookProps} />);
-          })}
+          {persistentHooksAfterTask.map((HookComponent, i) => (<HookComponent key={i} {...taskHookProps} />))}
 
-          {!!task.unlinkedTask &&
-            <TaskTranslations
-              taskKey={task.unlinkedTask}
-              task={workflow.tasks[task.unlinkedTask]}
-              workflowID={workflow.id}
-            >
-              <Shortcut
-                task={task}
-                workflow={workflow}
-                annotation={annotation}
-                onChange={this.handleAnnotationChange}
-              />
-            </TaskTranslations>
+          {!!task.unlinkedTask
+            && (
+              <TaskTranslations
+                taskKey={task.unlinkedTask}
+                task={workflow.tasks[task.unlinkedTask]}
+                workflowID={workflow.id}
+              >
+                <Shortcut
+                  task={task}
+                  workflow={workflow}
+                  annotation={annotation}
+                  onChange={this.handleAnnotationChange}
+                />
+              </TaskTranslations>
+            )
           }
 
           {this.props.children}

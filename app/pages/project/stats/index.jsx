@@ -44,19 +44,18 @@ class ProjectStatsPageController extends React.Component {
     };
     getWorkflowsInOrder(project, query)
       .then((workflows) => {
-        const workflowsSetToBeVisible =
-          workflows.filter((workflow) => {
-            let statsVisible = workflow.active;
-            if (workflow.configuration.stats_hidden !== undefined) {
-              statsVisible = !workflow.configuration.stats_hidden;
-            }
-            // statsVisible = statsVisible || !workflow.configuration.stats_hidden;
-            // let statsVisible = !workflow.configuration.stats_hidden;
-            // if (!workflow.active) {
-            //   statsVisible = !(workflow.configuration.stats_hidden === undefined) && statsVisible;
-            // }
-            return (statsVisible ? workflow : null);
-          });
+        const workflowsSetToBeVisible = workflows.filter((workflow) => {
+          let statsVisible = workflow.active;
+          if (workflow.configuration.stats_hidden !== undefined) {
+            statsVisible = !workflow.configuration.stats_hidden;
+          }
+          // statsVisible = statsVisible || !workflow.configuration.stats_hidden;
+          // let statsVisible = !workflow.configuration.stats_hidden;
+          // if (!workflow.active) {
+          //   statsVisible = !(workflow.configuration.stats_hidden === undefined) && statsVisible;
+          // }
+          return (statsVisible ? workflow : null);
+        });
         this.setState({ workflowList: workflowsSetToBeVisible });
       });
   }

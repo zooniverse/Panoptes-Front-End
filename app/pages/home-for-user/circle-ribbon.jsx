@@ -36,7 +36,7 @@ class CircleRibbon extends React.Component {
 
   state = {
     totalClassifications: 0,
-    hoverIndex: -1,
+    hoverIndex: -1
   };
 
   componentDidMount() {
@@ -52,9 +52,7 @@ class CircleRibbon extends React.Component {
 
   setTotal = (data) => {
     this.setState({
-      totalClassifications: data.reduce((total, project) => {
-        return total + project.classifications;
-      }, 0),
+      totalClassifications: data.reduce((total, project) => total + project.classifications, 0)
     });
   };
 
@@ -64,16 +62,14 @@ class CircleRibbon extends React.Component {
     const radians = startingFromTop * Math.PI / 180;
     return {
       x: radius * Math.cos(radians),
-      y: radius * Math.sin(radians),
+      y: radius * Math.sin(radians)
     };
   };
 
   getTooltipPoint = (project, radius) => {
     const index = this.props.data.indexOf(project);
 
-    const amount = (this.props.data.slice(0, index).reduce((start, otherArc) => {
-      return start + otherArc.classifications;
-    }, 0) + (project.classifications / 2)) / this.state.totalClassifications;
+    const amount = (this.props.data.slice(0, index).reduce((start, otherArc) => start + otherArc.classifications, 0) + (project.classifications / 2)) / this.state.totalClassifications;
 
     const midpoint = this.getPointOnCircle(amount, radius);
 
@@ -85,19 +81,19 @@ class CircleRibbon extends React.Component {
 
     return {
       x: x / offsetWidth,
-      y: y / offsetHeight,
+      y: y / offsetHeight
     };
   };
 
   handleMouseEnter = (event) => {
     this.setState({
-      hoverIndex: event.target.getAttribute('data-index'),
+      hoverIndex: event.target.getAttribute('data-index')
     });
   };
 
   handleMouseLeave = () => {
     this.setState({
-      hoverIndex: -1,
+      hoverIndex: -1
     });
   };
 
@@ -124,9 +120,7 @@ class CircleRibbon extends React.Component {
   renderArc = (project) => {
     const index = this.props.data.indexOf(project);
 
-    const startAmount = this.props.data.slice(0, index).reduce((count, otherArc) => {
-      return count + otherArc.classifications;
-    }, 0) / this.state.totalClassifications;
+    const startAmount = this.props.data.slice(0, index).reduce((count, otherArc) => count + otherArc.classifications, 0) / this.state.totalClassifications;
 
     if (!isFinite(startAmount)) {
       return null;
@@ -215,14 +209,20 @@ class CircleRibbon extends React.Component {
               borderColor: hoveredArc.color,
               position: 'absolute',
               left: `${tooltipPosition.x * 100}%`,
-              top: `${tooltipPosition.y * 100}%`,
+              top: `${tooltipPosition.y * 100}%`
             }}
           >
-            <strong>{hoveredArc.slug}</strong>{' '}
+            <strong>{hoveredArc.slug}</strong>
+            {' '}
             <br />
             <small>
-              {hoveredArc.classifications} classifications{' '}
-              ({Math.round((hoveredArc.classifications / this.state.totalClassifications) * 100)}%)
+              {hoveredArc.classifications}
+              {' '}
+classifications
+              {' '}
+              (
+              {Math.round((hoveredArc.classifications / this.state.totalClassifications) * 100)}
+%)
             </small>
           </div>
         )}

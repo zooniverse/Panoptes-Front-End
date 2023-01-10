@@ -107,7 +107,7 @@ describe('ByTheNumbers', function () {
     expect(wrapper.find(StyledStat).at(3).text()).to.equal((66000).toLocaleString());
   });
 
-  it('should render classifications description', function() {
+  it('should render classifications description', function () {
     expect(wrapper.find(Translate).at(3).props().component)
       .to.equal(StyledStatDescription);
     expect(wrapper.find(Translate).at(3).props().content)

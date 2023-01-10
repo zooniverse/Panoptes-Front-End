@@ -33,7 +33,9 @@ class BarChartContainer extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { projects } = this.props;
-    const { binBy, loading, resourceId, statDataByResource } = this.state;
+    const {
+      binBy, loading, resourceId, statDataByResource
+    } = this.state;
 
     if (!loading && prevProps.projects !== projects) {
       const statData = statDataByResource.get(resourceId);

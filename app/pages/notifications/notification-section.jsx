@@ -38,7 +38,7 @@ export default class NotificationSection extends Component {
           this.setState({ error });
         })
         .then((project) => {
-          this.setState({ project })
+          this.setState({ project });
           if (project.links.avatar) {
             apiClient.type('avatars').get(project.links.avatar.id)
               .then((avatar) => {
@@ -115,18 +115,20 @@ export default class NotificationSection extends Component {
   }
 
   getUnreadCount() {
-    return talkClient.type('notifications').get({ page: 1, page_size: 1, delivered: false, section: this.props.section })
-    .catch((error) => {
-      this.setState({ error });
+    return talkClient.type('notifications').get({
+      page: 1, page_size: 1, delivered: false, section: this.props.section
     })
-    .then(([project]) => {
-      if (project) {
-        const count = project.getMeta().count || 0;
-        this.setState({ unread: count });
-      } else {
-        this.setState({ unread: 0 });
-      }
-    });
+      .catch((error) => {
+        this.setState({ error });
+      })
+      .then(([project]) => {
+        if (project) {
+          const count = project.getMeta().count || 0;
+          this.setState({ unread: count });
+        } else {
+          this.setState({ unread: 0 });
+        }
+      });
   }
 
   markAllRead() {
@@ -134,12 +136,10 @@ export default class NotificationSection extends Component {
       data.notification.update({ delivered: true });
     });
     this.setState({ unread: 0 });
-    return talkClient.put('/notifications/read', { section: this.props.section }).then(() => {
-      return talkClient.type('notifications').get({ page_size: 1, delivered: false }).then(([notification]) => {
-        const count = notification ? notification.getMeta().count : 0;
-        if (count === 0) this.context.notificationsCounter.setUnread(0);
-      });
-    });
+    return talkClient.put('/notifications/read', { section: this.props.section }).then(() => talkClient.type('notifications').get({ page_size: 1, delivered: false }).then(([notification]) => {
+      const count = notification ? notification.getMeta().count : 0;
+      if (count === 0) this.context.notificationsCounter.setUnread(0);
+    }));
   }
 
   markAsRead(readNotification) {
@@ -152,15 +152,13 @@ export default class NotificationSection extends Component {
           || notification.source.discussion_id === readNotification.source.discussion_id)
     ));
     const notificationPromises = relatedNotifications
-      .map((relatedNotification) => {
-        return relatedNotification
-          .update({ delivered: true })
-          .save()
-          .catch((error) => {
-            console.warn(error);
-            return {};
-          });
-      });
+      .map(relatedNotification => relatedNotification
+        .update({ delivered: true })
+        .save()
+        .catch((error) => {
+          console.warn(error);
+          return {};
+        }));
     Promise.all(notificationPromises).then(() => notificationsCounter.update(user));
   }
 
@@ -195,7 +193,11 @@ export default class NotificationSection extends Component {
     return (
       <svg className="notification-section__img">
         <circle cx="0" cy="0" r="100" fill="#E45950">
-          <title> {`${this.state.unread} Unread Notification(s)`} </title>
+          <title>
+            {' '}
+            {`${this.state.unread} Unread Notification(s)`}
+            {' '}
+          </title>
         </circle>
         <text x={centerNum} y="50%" stroke="white" strokeWidth="2px" dy=".3em">{unreadNotifications}</text>
       </svg>
@@ -273,7 +275,8 @@ export default class NotificationSection extends Component {
                   notification={item.notification}
                   project={this.state.project}
                   user={this.props.user}
-                />);
+                />
+              );
             }
             return this.renderError(item);
           })
@@ -284,13 +287,36 @@ export default class NotificationSection extends Component {
             <Paginator
               className="notification-section__container"
               firstAndLast={false}
-              itemCount
-              nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
+              itemCount={true}
+              nextLabel={(
+                <span>
+older
+                  <i className="fa fa-chevron-right" />
+                </span>
+              )}
               page={+this.state.currentMeta.page}
               pageCount={this.state.lastMeta.page_count}
               pageSelector={false}
-              previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
-              totalItems={<span className="notification-section__item-count">{firstNotification} - {lastNotification} of {l.count}</span>}
+              previousLabel={(
+                <span>
+                  <i className="fa fa-chevron-left" />
+                  {' '}
+previous
+                </span>
+              )}
+              totalItems={(
+                <span className="notification-section__item-count">
+                  {firstNotification}
+                  {' '}
+-
+                  {' '}
+                  {lastNotification}
+                  {' '}
+of
+                  {' '}
+                  {l.count}
+                </span>
+              )}
             />
           </div>
         )}

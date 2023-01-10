@@ -49,14 +49,16 @@ class OrganizationStatusList extends Component {
       meta = organizations[0].getMeta();
     }
 
-    return (organizations.length === 0) ?
-      <div className="project-status-list">No organizations found for this filter</div> :
-      <div>
-        <div className="project-status-list">
-          {organizations.map(organization => this.renderOrganizationListItem(organization))}
+    return (organizations.length === 0)
+      ? <div className="project-status-list">No organizations found for this filter</div>
+      : (
+        <div>
+          <div className="project-status-list">
+            {organizations.map(organization => this.renderOrganizationListItem(organization))}
+          </div>
+          <Paginator page={meta.page} pageCount={meta.page_count} />
         </div>
-        <Paginator page={meta.page} pageCount={meta.page_count} />
-      </div>;
+      );
   }
 
   renderOrganizationListItem(organization) {

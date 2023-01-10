@@ -63,14 +63,16 @@ export default class Thumbnail extends React.Component {
     }
 
     return (
-      <div  style={style}>
+      <div style={style}>
         <img alt="" {...this.props} src={src} {...dimensions} onError={this.handleError} />
       </div>
     );
   }
 }
 
-Thumbnail.getThumbnailSrc = function getThumbnailSrc({ origin, width, height, src }) {
+Thumbnail.getThumbnailSrc = function getThumbnailSrc({
+  origin, width, height, src
+}) {
   if (!src) {
     return undefined;
   }
@@ -78,7 +80,7 @@ Thumbnail.getThumbnailSrc = function getThumbnailSrc({ origin, width, height, sr
   let srcPath = src.split('//').pop();
   srcPath = srcPath.replace('static.zooniverse.org/', '');
   return (`${origin}/${width}x${height}/${srcPath}`);
-}
+};
 
 Thumbnail.defaultProps = {
   controls: true,

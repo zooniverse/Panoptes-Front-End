@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 
 import { createSubjectSet } from './helpers';
-import { useSubjectUploads } from './hooks'
+import { useSubjectUploads } from './hooks';
 
 function subjectSetSnapshot(manifest, metadata, project) {
   return {
@@ -10,7 +10,7 @@ function subjectSetSnapshot(manifest, metadata, project) {
     metadata,
     links:
       { project: project.id }
-  }
+  };
 }
 
 function subjectSnapshot(metadata, project, subject) {
@@ -19,7 +19,7 @@ function subjectSnapshot(metadata, project, subject) {
   return {
     locations,
     metadata: {
-      ['#priority']: priority,
+      '#priority': priority,
       ...metadata,
       ...subjectMetadata
     },
@@ -43,13 +43,13 @@ export default function UploadButton({
 
   useEffect(() => {
     if (loaded) {
-      onLoad()
+      onLoad();
     }
-  }, [loaded])
+  }, [loaded]);
 
   useEffect(() => {
-    setError(uploadError)
-  }, [uploadError])
+    setError(uploadError);
+  }, [uploadError]);
 
   async function createSet() {
     try {
@@ -60,16 +60,34 @@ export default function UploadButton({
       const _uploadQueue = subjects.map(subject => subjectSnapshot(metadata, project, subject));
       setUploadQueue(_uploadQueue);
     } catch (error) {
-      setError(error)
+      setError(error);
     }
   }
 
   return (
     <>
       {subjects && !uploading && <button className="standard-button" onClick={createSet}>Create a subject set</button>}
-      {uploading && <p>Uploading {uploadCount}/{subjects.length} subjects.</p>}
-      {error && <p><strong>{error.status}: {error.message}</strong></p>}
+      {uploading && (
+        <p>
+Uploading
+          {uploadCount}
+/
+          {subjects.length}
+          {' '}
+subjects.
+        </p>
+      )}
+      {error && (
+        <p>
+          <strong>
+            {error.status}
+:
+            {' '}
+            {error.message}
+          </strong>
+        </p>
+      )}
       {loaded && <Link to={`/lab/${project.id}/subject-sets/${subjectSet.id}`}>{subjectSet.display_name}</Link>}
     </>
-  )
+  );
 }

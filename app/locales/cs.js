@@ -6,7 +6,7 @@ export default {
       faq: 'This project has no frequently asked questions yet.',
       research: 'This project has no science case yet.',
       results: 'This project has no results to report yet.',
-      team: 'This project has no team information.',
+      team: 'This project has no team information.'
     }
   },
   projectRoles: {
@@ -18,7 +18,7 @@ export default {
     moderator: 'Moderator',
     tester: 'Tester',
     expert: 'Expert',
-    museum: 'Museum',
+    museum: 'Museum'
   },
   classifier: {
     back: 'Zpět',
@@ -41,12 +41,12 @@ export default {
     taskHelpButton: 'Potřebuješ pomoct s tímto úkolem?',
     miniCourseButton: 'Znovu spustit Mini-kurz',
     workflowAssignmentDialog: {
-      promotionMessage: "Gratulujeme! Otevřela se ti další úroveň s úkoly. Pokud si přeješ zůstat v té současné, můžeš.",
+      promotionMessage: 'Gratulujeme! Otevřela se ti další úroveň s úkoly. Pokud si přeješ zůstat v té současné, můžeš.',
       acceptButton: 'Jít do další úrovně!',
       declineButton: 'Ne, děkuji'
     },
     interventions: {
-      optOut: "Tyto zprávy již nezobrazovat."
+      optOut: 'Tyto zprávy již nezobrazovat.'
     }
   },
   project: {
@@ -61,7 +61,7 @@ export default {
         results: 'Výsledky',
         faq: 'FAQ - Často kladené dotazy',
         education: 'Výuka',
-        team: 'Tým',
+        team: 'Tým'
       }
     },
     nav: {
@@ -262,7 +262,7 @@ export default {
     },
     project: {
       section: 'Emailové předvolby k projektům',
-      header: 'Projekt',
+      header: 'Projekt'
     }
   },
   about: {
@@ -295,7 +295,7 @@ export default {
         humanities: 'Humanitní vědy',
         nature: 'Příroda',
         medicine: 'Medicína',
-        meta: 'Meta',
+        meta: 'Meta'
       },
       content: {
         header: {
@@ -354,7 +354,7 @@ export default {
         },
         andreaSimenstad: {
           title: 'Developer',
-          bio: `Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.`
+          bio: 'Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.'
         },
         arfonSmith: {
           title: 'Technical Lead',
@@ -363,11 +363,11 @@ export default {
         },
         beckyRother: {
           title: 'Visual Designer',
-          bio: `Becky joined the Zooniverse team as designer in 2017. With a background in mobile apps and product design and a degree in journalism, she's excited to use her powers for good with the Zooniverse team.`
+          bio: 'Becky joined the Zooniverse team as designer in 2017. With a background in mobile apps and product design and a degree in journalism, she\'s excited to use her powers for good with the Zooniverse team.'
         },
         beverleyNewing: {
           title: 'Web Developer Intern',
-          bio: `Beverley is an English and German literature graduate and worked as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.`
+          bio: 'Beverley is an English and German literature graduate and worked as a Web Developer Intern at Zooniverse. In her spare time she\'s an avid fan of geese and enjoys motorbiking.'
         },
         brianCarstensen: {
           title: 'UX Developer',
@@ -431,7 +431,7 @@ export default {
         },
         helenSpiers: {
           title: 'Researcher',
-          bio: `After finishing a PhD studying the molecular basis of human brain development, Helen joined the Zooniverse as a Postdoc in citizen science and medical research.`
+          bio: 'After finishing a PhD studying the molecular basis of human brain development, Helen joined the Zooniverse as a Postdoc in citizen science and medical research.'
         },
         gregHines: {
           title: 'Data Scientist',
@@ -448,7 +448,7 @@ export default {
         },
         hughDickinson: {
           title: 'Researcher',
-          bio: `Hugh is a postdoc studying the Zooniverse.`
+          bio: 'Hugh is a postdoc studying the Zooniverse.'
         },
         jamesArtz: {
           title: 'Developer',
@@ -548,7 +548,7 @@ export default {
         },
         michaelParrish: {
           title: 'Rails/Backend Developer',
-          bio: `Software developer at the Zooniverse. He pwns databases daily. Dog, fishing, snakes, and bourbon.`
+          bio: 'Software developer at the Zooniverse. He pwns databases daily. Dog, fishing, snakes, and bourbon.'
         },
         noahMalmed: {
           title: 'Mobile App Developer',
@@ -567,7 +567,7 @@ export default {
         },
         robinSchaaf: {
           title: 'Mobile App Developer',
-          bio: `Robin has a background in web development for educational institutions.  In her free time she enjoys board games and playing bass guitar.`
+          bio: 'Robin has a background in web development for educational institutions.  In her free time she enjoys board games and playing bass guitar.'
         },
         robertSimpson: {
           title: 'Developer',
@@ -587,7 +587,7 @@ export default {
         },
         samanthaBlickhan: {
           title: 'IMLS Postdoctoral Fellow',
-          bio: `Samantha Blickhan is the IMLS Postdoctoral Fellow in the Department of Citizen Science at the Adler Planetarium, working on transcription projects for the Zooniverse. She received her Ph.D. in Musicology from Royal Holloway, University of London, with a thesis on the palaeography of British song notation in the 12th and 13th centuries. Her research interests include music and perception, and their relationships with writing systems, technology and pedagogy.`
+          bio: 'Samantha Blickhan is the IMLS Postdoctoral Fellow in the Department of Citizen Science at the Adler Planetarium, working on transcription projects for the Zooniverse. She received her Ph.D. in Musicology from Royal Holloway, University of London, with a thesis on the palaeography of British song notation in the 12th and 13th centuries. Her research interests include music and perception, and their relationships with writing systems, technology and pedagogy.'
         },
         samuelAroney: {
           title: 'Web Development placement student',

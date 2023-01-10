@@ -21,56 +21,56 @@ function runCommonTests(wrapper) {
   return { question, answers };
 }
 
-describe('GenericTask', function () {
+describe('GenericTask', () => {
   const wrapper = mount(<GenericTask question={task.question} answers={task.answers} />, mockReduxStore);
   const { question, answers } = runCommonTests(wrapper);
 
-  it('should have a question and answers', function () {
+  it('should have a question and answers', () => {
     assert.equal(question.hostNodes().length, 1);
     assert.equal(answers.length, task.answers.length);
   });
 
-  it('should not be required', function () {
+  it('should not be required', () => {
     assert.equal(wrapper.find('.required-task-warning').length, 0);
   });
 
-  it('should not show a help button', function () {
+  it('should not show a help button', () => {
     assert.equal(wrapper.contains(<button type="button" className="minor-button" onClick={wrapper.instance().showHelp}>Need some help with this task?</button>), false);
   });
 });
 
-describe('GenericTask: required', function () {
+describe('GenericTask: required', () => {
   const wrapper = mount(<GenericTask question={task.question} answers={task.answers} required={true} showRequiredNotice={true} />, mockReduxStore);
   const { question, answers } = runCommonTests(wrapper);
 
-  it('should have a question and answers', function () {
+  it('should have a question and answers', () => {
     assert.equal(question.hostNodes().length, 1);
     assert.equal(answers.length, task.answers.length);
   });
 
-  it('should be required', function () {
+  it('should be required', () => {
     assert.equal(wrapper.find('.required-task-warning').length, 1);
   });
 
-  it('should not show a help button', function () {
+  it('should not show a help button', () => {
     assert.equal(wrapper.contains(<button type="button" className="minor-button" onClick={wrapper.instance().showHelp}>Need some help with this task?</button>), false);
   });
 });
 
-describe('GenericTask: with help', function () {
+describe('GenericTask: with help', () => {
   const wrapper = mount(<GenericTask question={task.question} answers={task.answers} help="This is some help text." />, mockReduxStore);
   const { question, answers } = runCommonTests(wrapper);
 
-  it('should have a question and answers', function () {
+  it('should have a question and answers', () => {
     assert.equal(question.hostNodes().length, 1);
     assert.equal(answers.length, task.answers.length);
   });
 
-  it('should not be required', function () {
+  it('should not be required', () => {
     assert.equal(wrapper.find('.required-task-warning').length, 0);
   });
 
-  it('should show a help button', function () {
+  it('should show a help button', () => {
     assert.equal(wrapper.find('TaskHelpButton').length, 1);
   });
 });

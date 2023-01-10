@@ -57,10 +57,10 @@ export default class HomePage extends React.Component {
 
   getVolunteerCount() {
     apiClient.type('users').get({ page_size: 1 })
-    .then(([user]) => {
-      const meta = user.getMeta();
-      this.setState({ volunteerCount: meta.count });
-    });
+      .then(([user]) => {
+        const meta = user.getMeta();
+        this.setState({ volunteerCount: meta.count });
+      });
   }
 
   getClassificationCounts() {
@@ -69,19 +69,17 @@ export default class HomePage extends React.Component {
       period: 'year',
       type: 'classification'
     })
-    .then((data) => {
-      data.map((statObject) => {
-        count += statObject.doc_count;
+      .then((data) => {
+        data.map((statObject) => {
+          count += statObject.doc_count;
+        });
+        this.setState({ count }); // number will only appear on production
       });
-      this.setState({ count }); // number will only appear on production
-    });
   }
 
   showDialog(event) {
     const which = event.currentTarget.value;
-    alert(resolve =>
-      <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />
-    );
+    alert(resolve => <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />);
   }
 
   handleResize() {

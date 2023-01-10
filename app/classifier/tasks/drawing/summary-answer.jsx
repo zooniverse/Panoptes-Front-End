@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import tasks from '../../tasks';
+import tasks from '..';
 
 function getCorrectSingularOrPluralOfDrawingType(type, number) {
   return number !== 1 ? `${type}s` : type;
@@ -16,7 +16,13 @@ function MarkProperty({ property, mark, tool }) {
     case 'sources':
       return null;
     case 'points':
-      return <code>{mark.points.length}&nbsp;points{' '}</code>;
+      return (
+        <code>
+          {mark.points.length}
+&nbsp;points
+          {' '}
+        </code>
+      );
     case 'details':
       return tool.details.map((task, i) => {
         const SummaryComponent = tasks[task.type].Summary;
@@ -30,7 +36,17 @@ function MarkProperty({ property, mark, tool }) {
         );
       });
     default:
-      return <code><strong>{property}:</strong>&nbsp;{mark[property]}{' '}</code>;
+      return (
+        <code>
+          <strong>
+            {property}
+:
+          </strong>
+&nbsp;
+          {mark[property]}
+          {' '}
+        </code>
+      );
   }
 }
 
@@ -51,18 +67,25 @@ export default function SummaryAnswer({ expanded, tool, marks }) {
       <p>
         <strong>{stripMarkdownFromLabel(tool.label)}</strong>
         {' '}
-        ({marks.length} {getCorrectSingularOrPluralOfDrawingType(tool.type, marks.length)} marked)
+        (
+        {marks.length}
+        {' '}
+        {getCorrectSingularOrPluralOfDrawingType(tool.type, marks.length)}
+        {' '}
+marked)
       </p>
-      {expanded &&
-        <ol>
-          {marks.map(mark => (
-            <li key={mark._key}>
-              {Object.keys(mark)
-                .filter(property => property[0] !== '_')
-                .map(property => <MarkProperty key={property} tool={tool} mark={mark} property={property} />)}
-            </li>
-          ))}
-        </ol>
+      {expanded
+        && (
+          <ol>
+            {marks.map(mark => (
+              <li key={mark._key}>
+                {Object.keys(mark)
+                  .filter(property => property[0] !== '_')
+                  .map(property => <MarkProperty key={property} tool={tool} mark={mark} property={property} />)}
+              </li>
+            ))}
+          </ol>
+        )
       }
     </div>
   );

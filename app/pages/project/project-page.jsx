@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Markdown } from 'markdownz';
 import ProjectNavbar from './components/ProjectNavbar';
 import FieldGuideContainer from './field-guide-container';
-import ProjectHomeContainer from './home/';
+import ProjectHomeContainer from './home';
 
 export default class ProjectPage extends React.Component {
   componentDidMount() {
@@ -24,7 +24,7 @@ export default class ProjectPage extends React.Component {
   render() {
     const containerClassNames = classNames({
       'project-page': true,
-      'rtl': this.props.translations.rtl
+      rtl: this.props.translations.rtl
     });
 
     return (
@@ -43,12 +43,14 @@ export default class ProjectPage extends React.Component {
           user={this.props.user}
           translation={this.props.translation}
         />
-        {(this.props.project.configuration && this.props.project.configuration.announcement) &&
-          <div className="informational project-announcement-banner">
-            <Markdown>
-              {this.props.project.configuration.announcement}
-            </Markdown>
-          </div>}
+        {(this.props.project.configuration && this.props.project.configuration.announcement)
+          && (
+            <div className="informational project-announcement-banner">
+              <Markdown>
+                {this.props.project.configuration.announcement}
+              </Markdown>
+            </div>
+          )}
         {React.cloneElement(this.props.children, {
           background: this.props.background,
           onChangePreferences: this.props.onChangePreferences,
@@ -66,11 +68,13 @@ export default class ProjectPage extends React.Component {
           user: this.props.user,
           workflow: this.props.workflow
         })}
-        {React.Children.only(this.props.children).type !== ProjectHomeContainer &&
-          <FieldGuideContainer
-            guide={this.props.guide}
-            guideIcons={this.props.guideIcons}
-          />}
+        {React.Children.only(this.props.children).type !== ProjectHomeContainer
+          && (
+            <FieldGuideContainer
+              guide={this.props.guide}
+              guideIcons={this.props.guideIcons}
+            />
+          )}
       </div>
     );
   }

@@ -11,7 +11,7 @@ const experimentalFeatures = [
   'enable subject flags',
   'expert comparison summary',
   'fan',
-  'femLab',  // Indicates that the Project should use the FEM-compatible Project Builder (lab) pages
+  'femLab', // Indicates that the Project should use the FEM-compatible Project Builder (lab) pages
   'freehandLine',
   'freehandSegmentLine',
   'freehandSegmentShape',
@@ -19,7 +19,7 @@ const experimentalFeatures = [
   'general feedback',
   'Gravity Spy Gold Standard',
   'highlighter',
-  'indexedSubjectSetNextPrevButtons',  // FEM only. Enables the "Next" and "Previous" buttons to appear on the SubjectSetProgressBanner, if and only if the Subject Set is indexed on the Subject Set Search API. Originally designed for Engaging Crowds 2021.
+  'indexedSubjectSetNextPrevButtons', // FEM only. Enables the "Next" and "Previous" buttons to appear on the SubjectSetProgressBanner, if and only if the Subject Set is indexed on the Subject Set Search API. Originally designed for Engaging Crowds 2021.
   'mini-course',
   'museum-role',
   'quicktalk', // Enables "QuickTalk" component in FEM Classifier, which allows users to access Talk discussions on the Classifier page.
@@ -27,7 +27,7 @@ const experimentalFeatures = [
   'sim notification',
   'slider',
   'subjectGroupViewer', // Enables Subject Group Viewer and Subject Group Comparison Task, used for grid-like cell selection tasks. SGV and SGCT can be edited in PFE, but only works on the FEM classifier.
-  'subjectViewer-freeRotation',  // Allows PFE Subject Viewer to rotate freely instead of in 90 degree increments
+  'subjectViewer-freeRotation', // Allows PFE Subject Viewer to rotate freely instead of in 90 degree increments
   'temporalPoint', // temporal tools only works in FEM!
   'temporalRotateRectangle', // temporal tools only works in FEM!
   'textFromSubject', // textFromSubject task only works in FEM!
@@ -71,17 +71,17 @@ class ExperimentalFeatures extends Component {
 
   render() {
     return (
-      <div className='project-status__section'>
+      <div className="project-status__section">
         <h4>Experimental Features</h4>
         <AutoSave resource={this.props.project}>
-          <div className='project-status__section-table'>
-            {experimentalFeatures.map((feature) => (
+          <div className="project-status__section-table">
+            {experimentalFeatures.map(feature => (
               <label
                 key={feature}
-                className='project-status__section-table-row'
+                className="project-status__section-table-row"
               >
                 <input
-                  type='checkbox'
+                  type="checkbox"
                   name={feature}
                   checked={this.isEnabled(feature)}
                   onChange={this.updateFeatures.bind(this, feature)}

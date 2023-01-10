@@ -5,7 +5,7 @@ export default function Tutorials({ project, workflow }) {
   const [tutorials, setTutorials] = useState([]);
   const [workflowTutorial, setWorkflowTutorial] = useState(null);
 
-  useEffect(function loadTutorials() {
+  useEffect(() => {
     Promise.all([
       apiClient.type('tutorials')
         .get({ project_id: project.id, page_size: 100 })
@@ -14,16 +14,16 @@ export default function Tutorials({ project, workflow }) {
         .get({ workflow_id: workflow.id, page_size: 100 })
         .catch(() => [])
     ])
-    .then(([projectTutorials, workflowTutorials]) => {
-      const tutorials = projectTutorials.filter(value => value.kind === 'tutorial' || value.kind === null);
-      const [workflowTutorial] = tutorials.filter(value => workflowTutorials.includes(value));
-      setTutorials(tutorials);
-      setWorkflowTutorial(workflowTutorial);
-    });
+      .then(([projectTutorials, workflowTutorials]) => {
+        const tutorials = projectTutorials.filter(value => value.kind === 'tutorial' || value.kind === null);
+        const [workflowTutorial] = tutorials.filter(value => workflowTutorials.includes(value));
+        setTutorials(tutorials);
+        setWorkflowTutorial(workflowTutorial);
+      });
   }, [project?.id, workflow?.id]);
 
   function removeTutorial() {
-    setWorkflowTutorial(null)
+    setWorkflowTutorial(null);
     return workflow.removeLink('tutorials', workflowTutorial?.id);
   }
 
@@ -41,9 +41,9 @@ export default function Tutorials({ project, workflow }) {
           if (workflowTutorial?.id) {
             workflow.removeLink('tutorials', workflowTutorial.id);
           }
-          setWorkflowTutorial(tutorial)
+          setWorkflowTutorial(tutorial);
         }
-    });
+      });
   }
 
   if (tutorials.length > 0) {
@@ -51,31 +51,34 @@ export default function Tutorials({ project, workflow }) {
       <form className="workflow-link-tutorials-form">
         <fieldset>
           <legend className="form-label">Tutorials</legend>
-            <label>
-              <input
-                name="tutorial"
-                type="radio"
-                value=""
-                checked={!workflowTutorial}
-                onChange={removeTutorial}
-              />
+          <label>
+            <input
+              name="tutorial"
+              type="radio"
+              value=""
+              checked={!workflowTutorial}
+              onChange={removeTutorial}
+            />
               No tutorial
-            </label>
-            {tutorials.map(tutorial => {
-              const assignedTutorial = tutorial === workflowTutorial;
-              return (
-                <label key={tutorial.id}>
-                  <input
-                    name="tutorial"
-                    type="radio"
-                    checked={assignedTutorial}
-                    value={tutorial.id}
-                    onChange={onChange}
-                  />
-                  Tutorial #{tutorial.id} {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
-                </label>
-              );
-            })}
+          </label>
+          {tutorials.map((tutorial) => {
+            const assignedTutorial = tutorial === workflowTutorial;
+            return (
+              <label key={tutorial.id}>
+                <input
+                  name="tutorial"
+                  type="radio"
+                  checked={assignedTutorial}
+                  value={tutorial.id}
+                  onChange={onChange}
+                />
+                  Tutorial #
+                {tutorial.id}
+                {' '}
+                {tutorial.display_name ? ` - ${tutorial.display_name}` : undefined}
+              </label>
+            );
+          })}
         </fieldset>
       </form>
     );

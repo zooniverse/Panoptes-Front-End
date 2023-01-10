@@ -54,8 +54,7 @@ class ClassificationQueue {
     }
 
     if (process.env.BABEL_ENV !== 'test') console.log('Saving queued classifications:', pendingClassifications.length);
-    return Promise.all(pendingClassifications.map((classificationData) => {
-      return this.apiClient.type('classifications').create(classificationData).save()
+    return Promise.all(pendingClassifications.map(classificationData => this.apiClient.type('classifications').create(classificationData).save()
       .then((actualClassification) => {
         console.log('Saved classification', actualClassification.id);
         this.onClassificationSaved(actualClassification);
@@ -76,8 +75,7 @@ class ClassificationQueue {
         } else {
           console.error('Dropping malformed classification permanently', classificationData);
         }
-      });
-    }));
+      })));
   }
 
   _loadQueue() {
@@ -93,7 +91,6 @@ class ClassificationQueue {
   _saveQueue(queue) {
     this.storage.setItem(FAILED_CLASSIFICATION_QUEUE_NAME, JSON.stringify(queue));
   }
-
 }
 
 export default ClassificationQueue;

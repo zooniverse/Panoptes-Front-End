@@ -75,30 +75,39 @@ export const StyledUnderReview = styled.small`
 `;
 
 
-function ProjectTitle({ launched, link, redirect, title, underReview, usesMonorepo }) {
+function ProjectTitle({
+  launched, link, redirect, title, underReview, usesMonorepo
+}) {
   const TitleComponent = (redirect || usesMonorepo) ? StyledRedirect : StyledLink;
   const zooniverseApprovedTranslation = counterpart('project.nav.zooniverseApproved');
 
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <H1>
-        {underReview && !launched &&
-          <StyledUnderReview>{counterpart('project.nav.underReview')}</StyledUnderReview>}
+        {underReview && !launched
+          && <StyledUnderReview>{counterpart('project.nav.underReview')}</StyledUnderReview>}
         <TitleComponent to={link} href={redirect}>
           <span>
             {title}
-            {redirect && !usesMonorepo && <span>{' '}<i className="fa fa-external-link" /></span>}
+            {redirect && !usesMonorepo && (
+              <span>
+                {' '}
+                <i className="fa fa-external-link" />
+              </span>
+            )}
           </span>
         </TitleComponent>
-        {launched &&
-          <StyledCheckMarkWrapper
-            className="fa-stack"
-            aria-label={zooniverseApprovedTranslation}
-            title={zooniverseApprovedTranslation}
-          >
-            <i className="fa fa-circle fa-stack-2x" />
-            <StyledCheckMark className="fa fa-check fa-stack-1x" />
-          </StyledCheckMarkWrapper>
+        {launched
+          && (
+            <StyledCheckMarkWrapper
+              className="fa-stack"
+              aria-label={zooniverseApprovedTranslation}
+              title={zooniverseApprovedTranslation}
+            >
+              <i className="fa fa-circle fa-stack-2x" />
+              <StyledCheckMark className="fa fa-check fa-stack-1x" />
+            </StyledCheckMarkWrapper>
+          )
         }
       </H1>
     </ThemeProvider>

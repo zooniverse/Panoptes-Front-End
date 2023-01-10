@@ -29,7 +29,7 @@ export default class MediaAreaView extends React.Component {
     const addButtonStyle = {
       height: '80px',
       lineHeight: '100px',
-      width: '100px',
+      width: '100px'
     };
 
     return (
@@ -38,19 +38,24 @@ export default class MediaAreaView extends React.Component {
         style={Object.assign({ position: 'relative' }, this.props.style)}
       >
         {(this.props.pendingFiles.length !== 0) ? <hr /> : null}
-        {this.props.pendingFiles.map((file) => {
-          return (
-            <div key={file.name}>
-              <small>
-                <i className="fa fa-spinner fa-spin" />{' '}
-                <strong>{file.name}</strong>
-              </small>
-            </div>
-          );
-        })}
-        {this.props.errors.map(({ file, error }) => {
-          return (<div key={file.name}>{error.toString()} ({file.name})</div>);
-        })}
+        {this.props.pendingFiles.map(file => (
+          <div key={file.name}>
+            <small>
+              <i className="fa fa-spinner fa-spin" />
+              {' '}
+              <strong>{file.name}</strong>
+            </small>
+          </div>
+        ))}
+        {this.props.errors.map(({ file, error }) => (
+          <div key={file.name}>
+            {error.toString()}
+            {' '}
+(
+            {file.name}
+)
+          </div>
+        ))}
         {this.props.errors.length !== 0 && <hr />}
 
         <DragAndDropTarget
@@ -102,7 +107,7 @@ MediaAreaView.defaultProps = {
   onSelect: () => {},
   pendingFiles: [],
   pendingMedia: [],
-  style: {},
+  style: {}
 };
 
 MediaAreaView.propTypes = {
@@ -115,5 +120,5 @@ MediaAreaView.propTypes = {
   onSelect: PropTypes.func,
   pendingFiles: PropTypes.array,
   pendingMedia: PropTypes.array,
-  style: PropTypes.object,
+  style: PropTypes.object
 };

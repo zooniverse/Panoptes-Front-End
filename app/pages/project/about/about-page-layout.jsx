@@ -15,7 +15,7 @@ const AboutPageLayout = ({ project, mainContent, aside }) => (
 AboutPageLayout.propTypes = {
   project: PropTypes.object,
   mainContent: PropTypes.string,
-  aside: PropTypes.element,
+  aside: PropTypes.element
 };
 
 export default AboutPageLayout;

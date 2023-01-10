@@ -52,7 +52,9 @@ export const StyledNavLink = styled(NavLink)`
   }
 `;
 
-function NarrowMenu({ height, links, open, toggleMenuFn }) {
+function NarrowMenu({
+  height, links, open, toggleMenuFn
+}) {
   const openClass = (open) ? 'open' : '';
   return (
     <MenuWrapper className={openClass} height={height}>

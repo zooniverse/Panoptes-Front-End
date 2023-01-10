@@ -12,24 +12,24 @@ import TaskInputLabel, { StyledTaskInputLabel } from './TaskInputLabel';
 
 const label = 'test label';
 
-describe('TaskInputLabel', function() {
-  it('should render without crashing', function() {
+describe('TaskInputLabel', function () {
+  it('should render without crashing', function () {
     const wrapper = mount(<TaskInputLabel />);
     expect(wrapper).to.be.ok;
   });
 
-  it('should render a StyledTaskInputLabel', function() {
+  it('should render a StyledTaskInputLabel', function () {
     const wrapper = mount(<TaskInputLabel />);
     expect(wrapper.find(StyledTaskInputLabel)).to.have.lengthOf(1);
   });
 
-  it('should use props.label as the innerHTML text', function() {
+  it('should use props.label as the innerHTML text', function () {
     const wrapper = mount(<TaskInputLabel label={label} />);
     // \n added by markdown
     expect(wrapper.text()).to.equal(`${label}\n`);
   });
 
-  it('should not render props.labelIcon if not defined', function() {
+  it('should not render props.labelIcon if not defined', function () {
     const wrapper = mount(<TaskInputLabel label={label} />);
     expect(wrapper.find('span#icon')).to.have.lengthOf(0);
   });
@@ -39,8 +39,8 @@ describe('TaskInputLabel', function() {
     expect(wrapper.find('div#status')).to.have.lengthOf(0);
   });
 
-  it('should render props.labelIcon if defined', function() {
-    const wrapper = mount(<TaskInputLabel label={label} labelIcon={<span id="icon" />}/>);
+  it('should render props.labelIcon if defined', function () {
+    const wrapper = mount(<TaskInputLabel label={label} labelIcon={<span id="icon" />} />);
     expect(wrapper.find('span#icon')).to.have.lengthOf(1);
   });
 

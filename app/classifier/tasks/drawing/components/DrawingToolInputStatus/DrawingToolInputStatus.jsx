@@ -13,16 +13,30 @@ export default function DrawingToolInputStatus({ count, tool }) {
   const maxStyleColor = (count === tool.max) ? 'orange' : '';
   return (
     <StyledDrawingToolInputStatus>
-      {count}{' '}
-      {(!!tool.min || !!tool.max) &&
-        'of '}
-      {!!tool.min &&
-        <span style={{ color: minStyleColor }}>{tool.min} required</span>}
-      {!!tool.min && !!tool.max &&
-        ', '}
-      {!!tool.max &&
-        <span style={{ color: maxStyleColor }}>{tool.max} maximum</span>}
-      {' '}drawn
+      {count}
+      {' '}
+      {(!!tool.min || !!tool.max)
+        && 'of '}
+      {!!tool.min
+        && (
+          <span style={{ color: minStyleColor }}>
+            {tool.min}
+            {' '}
+required
+          </span>
+        )}
+      {!!tool.min && !!tool.max
+        && ', '}
+      {!!tool.max
+        && (
+          <span style={{ color: maxStyleColor }}>
+            {tool.max}
+            {' '}
+maximum
+          </span>
+        )}
+      {' '}
+drawn
     </StyledDrawingToolInputStatus>
   );
 }

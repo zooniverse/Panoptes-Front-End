@@ -24,10 +24,12 @@ class WorkflowSelection extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { actions, locale, preferences, workflow } = this.props;
+    const {
+      actions, locale, preferences, workflow
+    } = this.props;
     const prevPrefs = prevProps.preferences && prevProps.preferences.id;
     const currentPrefs = preferences && preferences.id;
-    
+
     if (prevProps.project.id !== this.props.project.id) {
       this.getSelectedWorkflow(this.props);
     }
@@ -47,14 +49,14 @@ class WorkflowSelection extends React.Component {
     const workflowFromURL = this.sanitiseID(this.props.location.query.workflow);
     const userSelectedWorkflow = (user && preferences && preferences.preferences) ? this.sanitiseID(preferences.preferences.selected_workflow) : undefined;
     const projectSetWorkflow = (user && preferences && preferences.settings) ? this.sanitiseID(preferences.settings.workflow_id) : undefined;
-    if (workflowFromURL &&
-      this.checkUserRoles(project, user)
+    if (workflowFromURL
+      && this.checkUserRoles(project, user)
     ) {
       selectedWorkflowID = workflowFromURL;
       activeFilter = false;
-    } else if (workflowFromURL &&
-      project.experimental_tools &&
-      project.experimental_tools.indexOf('allow workflow query') > -1
+    } else if (workflowFromURL
+      && project.experimental_tools
+      && project.experimental_tools.indexOf('allow workflow query') > -1
     ) {
       selectedWorkflowID = workflowFromURL;
     } else if (userSelectedWorkflow) {
@@ -72,7 +74,9 @@ class WorkflowSelection extends React.Component {
   }
 
   getWorkflow(selectedWorkflowID, activeFilter = true) {
-    const { actions, locale, preferences, project } = this.props;
+    const {
+      actions, locale, preferences, project
+    } = this.props;
     const sanitisedWorkflowID = this.sanitiseID(selectedWorkflowID);
     const validWorkflows = activeFilter ? project.links.active_workflows : project.links.workflows;
     const isValidWorkflow = validWorkflows.indexOf ? validWorkflows.indexOf(sanitisedWorkflowID) > -1 : false;
@@ -81,8 +85,8 @@ class WorkflowSelection extends React.Component {
       return actions.classifier.loadWorkflow(sanitisedWorkflowID, locale, preferences);
     } else {
       if (process.env.BABEL_ENV !== 'test') console.log(`No workflow ${selectedWorkflowID} for project ${this.props.project.id}`);
-      if (this.props.project.configuration &&
-        selectedWorkflowID === this.props.project.configuration.default_workflow
+      if (this.props.project.configuration
+        && selectedWorkflowID === this.props.project.configuration.default_workflow
       ) {
         // If a project still has an inactive workflow set as a default workflow prior to this being fix in the lab.
         // Don't try again and get caught in a loop

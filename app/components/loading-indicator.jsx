@@ -5,7 +5,8 @@ const LoadingIndicator = ({ children, off }) => {
   const visibility = off ? 'hidden' : 'visible';
   return (
     <span className="loading-indicator" style={{ visibility }}>
-      <span className="loading-indicator-icon" />{' '}
+      <span className="loading-indicator-icon" />
+      {' '}
       {children}
     </span>
   );

@@ -21,6 +21,4 @@ describe('TeamPage', function () {
     const navItems = wrapper.find('.side-bar-button');
     assert.notEqual(navItems.length, 0);
   });
-
-
 });

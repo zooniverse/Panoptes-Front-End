@@ -6,7 +6,7 @@ export default {
       faq: 'Este projecto ainda não tem perguntas frequentes.',
       research: 'Este projecto ainda não tem caso científico.',
       results: 'Este projecto ainda não tem resultados a reportar.',
-      team: 'Este projecto não tem informa.',
+      team: 'Este projecto não tem informa.'
     }
   },
   projectRoles: {
@@ -18,7 +18,7 @@ export default {
     moderator: 'Moderador',
     tester: 'Verificador',
     expert: 'Especialista',
-    museum: 'Museu',
+    museum: 'Museu'
   },
   classifier: {
     back: 'Voltar',
@@ -119,7 +119,7 @@ export default {
         numbers: 'Em números',
         projects: 'Projectos',
         subtitle: 'Mantenha-se a par do progresso alcançado por si e pelos seus colegas voluntários do projecto.',
-        text: "Todos os toques contam! Junte-se à comunidade do projecto %(title)s para o completar e ajudar os investigadores a produzir resultados importantes."
+        text: 'Todos os toques contam! Junte-se à comunidade do projecto %(title)s para o completar e ajudar os investigadores a produzir resultados importantes.'
       },
       projects: {
         active: 'Projectos Activos',

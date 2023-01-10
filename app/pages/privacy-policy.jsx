@@ -4,8 +4,8 @@ import Translate from 'react-translate-component';
 import { Markdown } from 'markdownz';
 import { Link } from 'react-router';
 
-const PrivacyPolicy = () =>
-  (<div className="content-container">
+const PrivacyPolicy = () => (
+  <div className="content-container">
     <Translate component="h1" content="privacy.title" />
     <Link to="/youth_privacy">
       <Translate content="privacy.youthPolicy.title" />
@@ -30,6 +30,7 @@ const PrivacyPolicy = () =>
         <Markdown>{counterpart('privacy.privacyPolicy.furtherInfo')}</Markdown>
       </div>
     </div>
-  </div>);
+  </div>
+);
 
 export default PrivacyPolicy;

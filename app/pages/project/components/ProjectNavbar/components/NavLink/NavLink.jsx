@@ -45,7 +45,9 @@ export const StyledLinkPlaceholder = styled.span`
   ${commonStyles}
 `;
 
-function NavLink({ className, disabled, isExternalLink, isMonorepoLink, label, onClick, url }) {
+function NavLink({
+  className, disabled, isExternalLink, isMonorepoLink, label, onClick, url
+}) {
   const linkProps = {
     className,
     disabled,
@@ -74,7 +76,7 @@ function NavLink({ className, disabled, isExternalLink, isMonorepoLink, label, o
       <StyledAnchor className={className} href={url}>
         {label}
       </StyledAnchor>
-    )
+    );
   }
 
   return (

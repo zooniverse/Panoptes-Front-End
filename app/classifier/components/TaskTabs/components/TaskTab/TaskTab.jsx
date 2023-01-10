@@ -9,7 +9,7 @@ import { pxToRem, zooTheme } from '../../../../../theme';
 
 export const StyledTaskTab = styled.button.attrs({
   type: 'button'
-}) `
+})`
   background-color: ${theme('mode', {
     dark: zooTheme.colors.darkTheme.background.default,
     light: 'white'

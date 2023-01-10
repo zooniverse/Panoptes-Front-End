@@ -1,4 +1,4 @@
-const excludedProjects = []
+const excludedProjects = [];
 
 class ZooniverseLogging {
   constructor() {

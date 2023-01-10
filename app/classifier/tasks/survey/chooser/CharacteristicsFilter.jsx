@@ -25,13 +25,13 @@ class CharacteristicsFilter extends React.Component {
               ref={`${characteristicId}-dropdown`}
               className="survey-task-chooser-characteristic-menu"
               triggerProps={{ autoFocus: i === 0 && !this.props.focusedChoice }}
-              trigger={
+              trigger={(
                 <span className="survey-task-chooser-characteristic" data-is-active={!!selectedValue}>
                   <span className="survey-task-chooser-characteristic-label">
                     {selectedValue ? selectedValueStrings.label : characteristicStrings.label}
                   </span>
                 </span>
-                }
+              )}
             >
               <div className="survey-task-chooser-characteristic-menu-container">
                 {characteristic.valuesOrder.map((valueId) => {
@@ -56,13 +56,15 @@ class CharacteristicsFilter extends React.Component {
                       autoFocus={autoFocus}
                       onClick={this.handleFilter.bind(this, characteristicId, valueId)}
                     >
-                      {value.image ?
-                        <img
-                          src={task.images[value.image]}
-                          alt={valueStrings.label}
-                          className="survey-task-chooser-characteristic-value-icon"
-                        /> :
-                        valueStrings.label
+                      {value.image
+                        ? (
+                          <img
+                            src={task.images[value.image]}
+                            alt={valueStrings.label}
+                            className="survey-task-chooser-characteristic-value-icon"
+                          />
+                        )
+                        : valueStrings.label
                       }
                     </button>
                   );

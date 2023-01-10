@@ -46,7 +46,12 @@ class UserProfilePage extends Component {
     } else {
       return (
         <div className="centered-grid">
-          <p>User <strong>{this.props.params.profile_name}</strong> not found</p>
+          <p>
+User
+            <strong>{this.props.params.profile_name}</strong>
+            {' '}
+not found
+          </p>
         </div>
       );
     }

@@ -19,11 +19,13 @@ export default function TaskNavButtons(props) {
   if (props.showNextButton) {
     return (
       <ButtonsWrapper>
-        {props.showBackButton &&
-          <BackButton
-            areAnnotationsNotPersisted={props.areAnnotationsNotPersisted}
-            onClick={props.destroyCurrentAnnotation}
-          />}
+        {props.showBackButton
+          && (
+            <BackButton
+              areAnnotationsNotPersisted={props.areAnnotationsNotPersisted}
+              onClick={props.destroyCurrentAnnotation}
+            />
+          )}
         <NextButton
           autoFocus={false}
           onClick={props.addAnnotationForTask}
@@ -55,19 +57,23 @@ export default function TaskNavButtons(props) {
 
   return (
     <ButtonsWrapper>
-      {props.showBackButton &&
-        <BackButton
-          areAnnotationsNotPersisted={props.areAnnotationsNotPersisted}
-          onClick={props.destroyCurrentAnnotation}
-        />}
-      {props.showDoneAndTalkLink &&
-        <TalkLink
-          disabled={props.waitingForAnswer}
-          onClick={props.completeClassification}
-          projectSlug={props.project.slug}
-          subjectId={props.subject.id}
-          translateContent="classifier.doneAndTalk"
-        />}
+      {props.showBackButton
+        && (
+          <BackButton
+            areAnnotationsNotPersisted={props.areAnnotationsNotPersisted}
+            onClick={props.destroyCurrentAnnotation}
+          />
+        )}
+      {props.showDoneAndTalkLink
+        && (
+          <TalkLink
+            disabled={props.waitingForAnswer}
+            onClick={props.completeClassification}
+            projectSlug={props.project.slug}
+            subjectId={props.subject.id}
+            translateContent="classifier.doneAndTalk"
+          />
+        )}
       <DoneButton
         completed={props.completed}
         demoMode={props.demoMode}

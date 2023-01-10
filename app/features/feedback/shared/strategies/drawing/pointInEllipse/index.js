@@ -9,5 +9,5 @@ export default {
   id: 'pointInEllipse',
   labComponent: LabComponent,
   reducer,
-  title: 'Point In Ellipse',
+  title: 'Point In Ellipse'
 };

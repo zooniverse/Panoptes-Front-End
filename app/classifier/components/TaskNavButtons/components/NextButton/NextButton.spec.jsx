@@ -16,7 +16,7 @@ import NextButton, { StyledNextButton } from './NextButton';
 export const store = {
   subscribe: () => { },
   dispatch: () => { },
-  getState: () => ({ userInterface: { theme: 'light' } })
+  getState: () => ({ userInterface: { theme: 'light' }})
 };
 
 export const mockReduxStore = {
@@ -24,8 +24,8 @@ export const mockReduxStore = {
   wrappingComponentProps: { store }
 };
 
-describe('NextButton', function() {
-  describe('rendering', function() {
+describe('NextButton', function () {
+  describe('rendering', function () {
     let wrapper;
     before(function () {
       wrapper = mount(<NextButton />, mockReduxStore);
@@ -48,7 +48,7 @@ describe('NextButton', function() {
     });
   });
 
-  describe('onClick event', function() {
+  describe('onClick event', function () {
     let wrapper;
     const onClickSpy = sinon.spy();
     before(function () {
@@ -61,7 +61,7 @@ describe('NextButton', function() {
     });
   });
 
-  describe('props.disabled', function() {
+  describe('props.disabled', function () {
     let wrapper;
     before(function () {
       wrapper = mount(<NextButton />, mockReduxStore);

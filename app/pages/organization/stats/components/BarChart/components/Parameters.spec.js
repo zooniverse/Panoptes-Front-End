@@ -14,10 +14,11 @@ describe('Parameters', function () {
 
   before(function () {
     wrapper = shallow(
-    <Parameters
-      handleReset={handleResetSpy}
-      type='classification'
-    />);
+      <Parameters
+        handleReset={handleResetSpy}
+        type="classification"
+      />
+    );
   });
 
   it('should render without crashing', function () {

@@ -132,30 +132,34 @@ export default class SurveyTask extends React.Component {
     const existingAnnotationValue = annotation.value
       && annotation.value.find(value => value.choice === selectedChoiceID);
 
-/* eslint-disable multiline-ternary */
+    /* eslint-disable multiline-ternary */
     return (
       <div className="survey-task">
-        {(selectedChoiceID === '') ?
-          (<Chooser
-            task={task}
-            filters={filters}
-            onFilter={this.handleFilter}
-            onChoose={this.handleChoice}
-            onRemove={this.handleRemove}
-            annotation={annotation}
-            focusedChoice={focusedChoice}
-            translation={translation}
-          />) :
-          (<Choice
-            annotation={annotation}
-            annotationValue={existingAnnotationValue}
-            task={task}
-            choiceID={selectedChoiceID}
-            onSwitch={this.handleChoice}
-            onCancel={this.clearSelection}
-            onConfirm={this.handleAnnotation}
-            translation={translation}
-          />)
+        {(selectedChoiceID === '')
+          ? (
+            <Chooser
+              task={task}
+              filters={filters}
+              onFilter={this.handleFilter}
+              onChoose={this.handleChoice}
+              onRemove={this.handleRemove}
+              annotation={annotation}
+              focusedChoice={focusedChoice}
+              translation={translation}
+            />
+          )
+          : (
+            <Choice
+              annotation={annotation}
+              annotationValue={existingAnnotationValue}
+              task={task}
+              choiceID={selectedChoiceID}
+              onSwitch={this.handleChoice}
+              onCancel={this.clearSelection}
+              onConfirm={this.handleAnnotation}
+              translation={translation}
+            />
+          )
         }
       </div>
     );

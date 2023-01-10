@@ -51,23 +51,21 @@ export default function EditProjectCollaborators({
       getAllLinked(project, 'project_roles'),
       talkClient.type('roles').get({ section, page_size: 100 })
     ])
-    .then(([panoptesRoles, talkRoles]) => {
-      return panoptesRoles.map(roleSet => {
+      .then(([panoptesRoles, talkRoles]) => panoptesRoles.map((roleSet) => {
         if (roleSet.links.owner.type === 'users') {
-          roleSet['talk_roles'] = talkRoles.filter((role) => role.links.user === roleSet.links.owner.id);
+          roleSet.talk_roles = talkRoles.filter(role => role.links.user === roleSet.links.owner.id);
         }
         return roleSet;
-      });
-    })
-    .then(setProjectRoleSets);
+      }))
+      .then(setProjectRoleSets);
   }
 
-  useEffect(function fetchOwner() {
+  useEffect(() => {
     project.get('owner')
-      .then(setProjectOwner)
+      .then(setProjectOwner);
   }, [project]);
 
-  useEffect(function onProjectChange() {
+  useEffect(() => {
     fetchProjectRoles();
   }, [project]);
 
@@ -81,12 +79,12 @@ export default function EditProjectCollaborators({
       projectRoleSet.roles.push(role);
       if (!ROLES_NOT_IN_TALK_API.includes(role)) {
         talkRoleAction = talkClient.type('roles')
-        .create({
-          user_id: parseInt(projectRoleSet.links.owner.id),
-          section: projectSection(project),
-          name: possibleRoles[role]
-        })
-        .save();
+          .create({
+            user_id: parseInt(projectRoleSet.links.owner.id),
+            section: projectSection(project),
+            name: possibleRoles[role]
+          })
+          .save();
       }
     } else {
       projectRoleSet.roles.splice(index, 1);
@@ -110,12 +108,12 @@ export default function EditProjectCollaborators({
       projectRoleSet.delete(),
       ...projectRoleSet.talk_roles.map(talkRole => talkRole.delete())
     ])
-    .catch(setError)
-    .then(() => {
-      project.uncacheLink('project_roles');
-      setSaving(saving.filter(id => id !== projectRoleSet.id));
-      setProjectRoleSets(projectRoleSets.filter(roleSet => roleSet.id !== projectRoleSet.id));
-    });
+      .catch(setError)
+      .then(() => {
+        project.uncacheLink('project_roles');
+        setSaving(saving.filter(id => id !== projectRoleSet.id));
+        setProjectRoleSets(projectRoleSets.filter(roleSet => roleSet.id !== projectRoleSet.id));
+      });
   }
 
   function refreshProjectRoles() {
@@ -126,9 +124,9 @@ export default function EditProjectCollaborators({
   return (
     <div>
       <div className="form-label">Project Owner</div>
-        <p>
-      {user.id === projectOwner?.id ? 'You are the project owner.' : projectOwner?.display_name + ' is the project owner.'}
-        </p>
+      <p>
+        {user.id === projectOwner?.id ? 'You are the project owner.' : `${projectOwner?.display_name} is the project owner.`}
+      </p>
 
       <br />
 
@@ -136,15 +134,15 @@ export default function EditProjectCollaborators({
 
       <hr />
 
-      {error &&
-        <p className="form-help error">{error.toString()}</p>
+      {error
+        && <p className="form-help error">{error.toString()}</p>
       }
 
       <div>
-        {projectRoleSets.length > 1 ?
-          projectRoleSets.map(projectRoleSet => {
+        {projectRoleSets.length > 1
+          ? projectRoleSets.map((projectRoleSet) => {
             if (!projectRoleSet.roles.includes('owner')) {
-              const onToggle = (role) => toggleRole(projectRoleSet, role);
+              const onToggle = role => toggleRole(projectRoleSet, role);
               const onDelete = () => removeRoleSet(projectRoleSet);
               return (
                 <UserRow
@@ -155,11 +153,11 @@ export default function EditProjectCollaborators({
                   onDelete={onDelete}
                   onToggle={onToggle}
                 />
-              )
+              );
             }
-            return null
-          }) :
-          <em className="form-help">None yet</em>
+            return null;
+          })
+          : <em className="form-help">None yet</em>
         }
       </div>
 

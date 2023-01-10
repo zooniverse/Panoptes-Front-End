@@ -75,7 +75,7 @@ export default class ExternalLinksEditor extends React.Component {
           <input
             type="text"
             name={`urls.${idx}.label`}
-            required
+            required={true}
             value={link.label}
             onChange={this.handleLinkChange}
             onMouseDown={this.handleDisableDrag}
@@ -87,7 +87,7 @@ export default class ExternalLinksEditor extends React.Component {
             type="url"
             name={`urls.${idx}.url`}
             pattern="https?://.+"
-            required
+            required={true}
             value={link.url}
             onChange={this.handleLinkChange}
             onMouseDown={this.handleDisableDrag}

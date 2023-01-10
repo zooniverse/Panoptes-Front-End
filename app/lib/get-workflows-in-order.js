@@ -2,9 +2,9 @@ import getAllLinked from './get-all-linked';
 
 function getWorkflowsInOrder(project, query) {
   query = query || {};
-  const order = (project.configuration && project.configuration.workflow_order) ?
-    project.configuration.workflow_order :
-    [];
+  const order = (project.configuration && project.configuration.workflow_order)
+    ? project.configuration.workflow_order
+    : [];
 
   return getAllLinked(project, 'workflows', query).then((workflows) => {
     const workflowsByID = {};
@@ -21,10 +21,10 @@ function getWorkflowsInOrder(project, query) {
 
     return workflowsInOrder;
   })
-  .catch((error) => {
-    console.info(error);
-    return Promise.resolve([]);
-  });
+    .catch((error) => {
+      console.info(error);
+      return Promise.resolve([]);
+    });
 }
 
 export default getWorkflowsInOrder;

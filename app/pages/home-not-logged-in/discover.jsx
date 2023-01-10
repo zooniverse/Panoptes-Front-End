@@ -21,7 +21,7 @@ counterpart.registerTranslations('en', {
   }
 });
 
-const HomePageDiscover = (({ showDialog }) =>
+const HomePageDiscover = (({ showDialog }) => (
   <section className="home-discover">
     <div className="home-discover__content">
       <Translate className="secondary-kicker" component="h2" content="discoverHomePage.what" />
@@ -59,7 +59,7 @@ const HomePageDiscover = (({ showDialog }) =>
     </div>
 
   </section>
-);
+));
 
 HomePageDiscover.propTypes = {
   showDialog: PropTypes.func

@@ -10,8 +10,8 @@ import { mount } from 'enzyme';
 import { expect } from 'chai';
 import TaskArea from './TaskArea';
 
-describe('TaskArea', function() {
-  it('should render without crashing', function() {
+describe('TaskArea', function () {
+  it('should render without crashing', function () {
     const wrapper = mount(<TaskArea />);
     expect(wrapper).to.be.ok;
   });

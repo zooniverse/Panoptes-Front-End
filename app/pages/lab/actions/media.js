@@ -8,29 +8,25 @@ const ALLOWED_TYPES = ['image', 'audio', 'video'];
 const mediaActions = {
   fetchMedia(props = this.props, page = 1) {
     this.setState({ media: null, page });
-    
+
     const page_size = props.pageSize;
-    
+
     return props.resource.get(props.link, { page, page_size })
       .then((media) => {
-        const meta = media.length ? media[0].getMeta() : {};  // Derive the paging metadata for all the media, from the first media item.
-        const filteredMedia = media.filter((medium) => {
-          return Object.keys(medium.metadata).length > 0;
-        })
-        
+        const meta = media.length ? media[0].getMeta() : {}; // Derive the paging metadata for all the media, from the first media item.
+        const filteredMedia = media.filter(medium => Object.keys(medium.metadata).length > 0);
+
         return {
           page_count: meta.page_count || 1,
-          media: filteredMedia,
-        }
-        
+          media: filteredMedia
+        };
       }).catch((error) => {
         console.error(error);
         return {
           page_count: 1,
-          media: [],
-        }
-        
-      }).then((data) => {        
+          media: []
+        };
+      }).then((data) => {
         this.setState(data);
       });
   },
@@ -53,7 +49,7 @@ const mediaActions = {
   addFiles(files) {
     console.log(`Adding ${files.length} files`);
     this.setState({ errors: [] });
-    files.filter(file => {
+    files.filter((file) => {
       const [type, format] = file.type.split('/');
       return ALLOWED_TYPES.includes(type);
     }).forEach(this.addFile);
@@ -79,12 +75,12 @@ const mediaActions = {
 
   createLinkedResource(file, location = this.props.resource._getURL(this.props.link)) {
     console.log(`Creating resource for ${file.name}, ${(file.type)}`);
-    const content_type = file.type === 'audio/mp3' ? 'audio/mpeg' : file.type
+    const content_type = file.type === 'audio/mp3' ? 'audio/mpeg' : file.type;
     const payload = {
       media: {
         content_type,
-        metadata: Object.assign({ filename: file.name, size: file.size }, this.props.metadata),
-      },
+        metadata: Object.assign({ filename: file.name, size: file.size }, this.props.metadata)
+      }
     };
 
     return apiClient.post(location, payload)
@@ -101,19 +97,17 @@ const mediaActions = {
 
   uploadMedia(file, medium) {
     console.log(`Uploading ${file.name} => ${medium.src}`);
-    const content_type = file.type === 'audio/mp3' ? 'audio/mpeg' : file.type
+    const content_type = file.type === 'audio/mp3' ? 'audio/mpeg' : file.type;
     return putFile(medium.src, file, { 'Content-Type': content_type })
-      .then(() => {
-        return medium.refresh().then((media) => {
-          // Another weird array.
-          return ([].concat(media)[0]);
-        });
-      }).catch((error) => {
-        return medium.delete()
-          .then(() => {
-            throw error;
-          });
-      });
+      .then(() => ( // Another weird array.
+                  medium.refresh().then((media) => ( ([].concat(media)[0]))
+              )
+                                                                                 )
+                                         )
+            )).catch(error => ( medium.delete()
+        .then(() => ( {
+          throw error;
+        }));
   },
 
   handleSuccess(medium) {

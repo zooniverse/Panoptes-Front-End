@@ -4,7 +4,7 @@ import { Provider, ReactReduxContext } from 'react-redux';
 export const store = {
   subscribe: () => { },
   dispatch: () => { },
-  getState: () => ({ userInterface: { theme: 'light' } })
+  getState: () => ({ userInterface: { theme: 'light' }})
 };
 
 export const mockReduxStore = {

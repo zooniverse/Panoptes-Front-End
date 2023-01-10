@@ -38,19 +38,22 @@ counterpart.registerTranslations('en', {
   }
 });
 
-const GZ123_COUNT = 98989226
-const OUROBOROS_COUNT = 142800311
-const OTHERS_COUNT = 8680290
-const OUROBOROS_USER_COUNT = 124921
+const GZ123_COUNT = 98989226;
+const OUROBOROS_COUNT = 142800311;
+const OTHERS_COUNT = 8680290;
+const OUROBOROS_USER_COUNT = 124921;
 
 
-const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =>
+const HomePageResearch = (({
+  count, screenWidth, showDialog, volunteerCount
+}) => (
   <section className="home-research">
     <Translate className="tertiary-kicker" component="h2" content="researchHomePage.works" />
     <span className="class-counter">{(count + GZ123_COUNT + OUROBOROS_COUNT + OTHERS_COUNT).toLocaleString()}</span>
     <Translate className="main-kicker" component="h3" content="researchHomePage.classifications" />
     <div className="home-research__classification-count">
-      <h3 className="main-kicker">{(volunteerCount + OUROBOROS_USER_COUNT).toLocaleString()}</h3>{' '}
+      <h3 className="main-kicker">{(volunteerCount + OUROBOROS_USER_COUNT).toLocaleString()}</h3>
+      {' '}
       <Translate className="main-kicker" component="h3" content="researchHomePage.registeredUsers" />
     </div>
 
@@ -100,7 +103,7 @@ const HomePageResearch = (({ count, screenWidth, showDialog, volunteerCount }) =
     </div>
 
   </section>
-);
+));
 
 HomePageResearch.propTypes = {
   count: PropTypes.number,

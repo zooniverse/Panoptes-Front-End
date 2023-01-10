@@ -60,8 +60,7 @@ const project = mockPanoptesResource('projects',
       owner: { id: '1' },
       workflows: ['1', '2', '3', '4', '5']
     }
-  }
-);
+  });
 
 const owner = mockPanoptesResource(
   'users',
@@ -80,7 +79,7 @@ const preferences = mockPanoptesResource(
   }
 );
 
-describe('ClassroomWorkflowSelection', function () {
+describe('ClassroomWorkflowSelection', () => {
   let wrapper;
   let controller;
   let workflowStub;
@@ -95,26 +94,25 @@ describe('ClassroomWorkflowSelection', function () {
     }
   };
 
-  before(function () {
+  before(() => {
     workflowStub = sinon.stub(ClassroomWorkflowSelection.prototype, 'getWorkflow').callsFake(() => {});
   });
 
-  describe('selecting a workflow ID', function () {
-
-    beforeEach(function () {
+  describe('selecting a workflow ID', () => {
+    beforeEach(() => {
       actions.classifier.loadWorkflow.resetHistory();
     });
 
-    afterEach(function () {
+    afterEach(() => {
       project.experimental_tools = [];
       location.query = {};
     });
 
-    after(function () {
+    after(() => {
       workflowStub.restore();
     });
 
-    it('should always load the workflow specified in the URL', function () {
+    it('should always load the workflow specified in the URL', () => {
       location.query.workflow = '1234';
       wrapper = shallow(
         <ClassroomWorkflowSelection
@@ -122,7 +120,7 @@ describe('ClassroomWorkflowSelection', function () {
           project={project}
           preferences={preferences}
           projectRoles={projectRoles}
-          locale='en'
+          locale="en"
           location={location}
         >
           <StubPage />
@@ -133,15 +131,15 @@ describe('ClassroomWorkflowSelection', function () {
       expect(actions.classifier.loadWorkflow).to.have.been.calledWith(location.query.workflow, 'en', preferences);
     });
 
-    it('should sanitise the workflow query param', function () {
-      location.query.workflow = '12345rty'
+    it('should sanitise the workflow query param', () => {
+      location.query.workflow = '12345rty';
       wrapper = shallow(
         <ClassroomWorkflowSelection
           actions={actions}
           project={project}
           preferences={preferences}
           projectRoles={projectRoles}
-          locale='en'
+          locale="en"
           location={location}
         >
           <StubPage />
@@ -152,15 +150,15 @@ describe('ClassroomWorkflowSelection', function () {
       expect(actions.classifier.loadWorkflow).to.have.been.calledWith('12345', 'en', preferences);
     });
 
-    it('should not load a workflow without a workflow query parameter', function () {
-      location.query = {}
+    it('should not load a workflow without a workflow query parameter', () => {
+      location.query = {};
       wrapper = shallow(
         <ClassroomWorkflowSelection
           actions={actions}
           project={project}
           preferences={preferences}
           projectRoles={projectRoles}
-          locale='en'
+          locale="en"
           location={location}
         >
           <StubPage />
@@ -171,23 +169,23 @@ describe('ClassroomWorkflowSelection', function () {
     });
   });
 
-  describe('with a valid workflow loaded', function () {
-    before(function () {
+  describe('with a valid workflow loaded', () => {
+    before(() => {
       wrapper = shallow(
         <ClassroomWorkflowSelection
           actions={actions}
           project={project}
           preferences={preferences}
           projectRoles={projectRoles}
-          locale='en'
+          locale="en"
           location={location}
         >
           <StubPage />
         </ClassroomWorkflowSelection>,
         { context }
       );
-    })
-    it('should render the child component', function () {
+    });
+    it('should render the child component', () => {
       const workflow = mockPanoptesResource('workflows',
         {
           id: 'a',
@@ -195,8 +193,7 @@ describe('ClassroomWorkflowSelection', function () {
           links: {
             project: project.id
           }
-        }
-      );
+        });
       expect(wrapper.find(StubPage)).to.have.lengthOf(0);
       wrapper.setProps({ workflow });
       const child = wrapper.find(StubPage);

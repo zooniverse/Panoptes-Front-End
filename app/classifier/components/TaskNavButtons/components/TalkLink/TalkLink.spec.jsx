@@ -11,8 +11,8 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { TalkLink, StyledTalkLink, StyledDisabledTalkPlaceholder } from './TalkLink';
 
-describe('TalkLink', function() {
-  describe('rendering', function() {
+describe('TalkLink', function () {
+  describe('rendering', function () {
     let wrapper;
     const projectSlug = 'zooniverse/cool-project';
     const subjectId = '1';
@@ -28,20 +28,20 @@ describe('TalkLink', function() {
       expect(wrapper.find('Translate')).to.have.lengthOf(1);
     });
 
-    it('should default the translation content to "classifier.talk"', function() {
+    it('should default the translation content to "classifier.talk"', function () {
       expect(wrapper.find('Translate').props().content).to.equal('classifier.talk');
     });
 
-    it('should use props.translateContent in the Translation component if defined', function() {
+    it('should use props.translateContent in the Translation component if defined', function () {
       wrapper.setProps({ translateContent: 'classifier.doneAndTalk' });
-      expect(wrapper.find('Translate').props().content).to.equal('classifier.doneAndTalk'); 
+      expect(wrapper.find('Translate').props().content).to.equal('classifier.doneAndTalk');
     });
 
-    it('should use props.projectSlug in the Link to props', function() {
+    it('should use props.projectSlug in the Link to props', function () {
       expect(wrapper.find('Link').props().to).to.include(projectSlug);
     });
 
-    it('should use props.subjectId in the Link to props', function() {
+    it('should use props.subjectId in the Link to props', function () {
       expect(wrapper.find('Link').props().to).to.include(subjectId);
     });
   });
@@ -63,18 +63,18 @@ describe('TalkLink', function() {
   //   });
   // });
 
-  describe('props.disabled', function() {
+  describe('props.disabled', function () {
     let wrapper;
     before(function () {
       wrapper = mount(<TalkLink />);
     });
 
-    it('should render a StyledTalkLink when props.disabled is false', function() {
+    it('should render a StyledTalkLink when props.disabled is false', function () {
       expect(wrapper.find(StyledTalkLink)).to.have.lengthOf(1);
       expect(wrapper.find(StyledDisabledTalkPlaceholder)).to.have.lengthOf(0);
     });
 
-    it('should render a StyledDisabledTalkPlaceholder when props.disabled is true', function() {
+    it('should render a StyledDisabledTalkPlaceholder when props.disabled is true', function () {
       wrapper.setProps({ disabled: true });
       expect(wrapper.find(StyledTalkLink)).to.have.lengthOf(0);
       expect(wrapper.find(StyledDisabledTalkPlaceholder)).to.have.lengthOf(1);

@@ -72,11 +72,11 @@ export default class DrawingToolRoot extends React.Component {
           this.focusDrawingTool();
           return toolProps.onSelect(e);
         }
-      }
+      };
     }
 
     return (
-      <g className = "drawing-tool" {...rootProps } {...this.props }>
+      <g className="drawing-tool" {...rootProps} {...this.props}>
         <g
           className="drawing-tool-main"
           {...mainStyle}
@@ -89,13 +89,15 @@ export default class DrawingToolRoot extends React.Component {
           {this.props.children}
         </g>
 
-        {openDetails &&
-          <DetailsSubTaskForm
-            onFormClose={this.focusDrawingTool}
-            tasks={tasks}
-            toolProps={toolProps}
-            {...this.props}
-          />}
+        {openDetails
+          && (
+            <DetailsSubTaskForm
+              onFormClose={this.focusDrawingTool}
+              tasks={tasks}
+              toolProps={toolProps}
+              {...this.props}
+            />
+          )}
       </g>
     );
   }

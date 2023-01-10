@@ -20,39 +20,39 @@ const testProject = {
   ]
 };
 
-describe('SocialLinksEditor', function () {
+describe('SocialLinksEditor', () => {
   let wrapper;
   let removeStub;
 
-  it('should render without crashing', function () {
+  it('should render without crashing', () => {
     shallow(<SocialLinksEditor project={mockPanoptesResource('projects', testProject)} />);
   });
 
-  before(function () {
+  before(() => {
     removeStub = sinon.stub(SocialLinksEditor.prototype, 'handleRemoveLink');
     wrapper = mount(<SocialLinksEditor project={mockPanoptesResource('projects', testProject)} />);
   });
 
-  after(function () {
+  after(() => {
     removeStub.restore();
   });
 
-  it('should contain the correct number of rows', function () {
+  it('should contain the correct number of rows', () => {
     const rows = wrapper.find('tr');
     assert.equal(rows.length, 12);
   });
 
-  it('should rearrange the default social links on load', function () {
+  it('should rearrange the default social links on load', () => {
     const rearrangedLinks = wrapper.state().socialOrder;
     assert.equal(rearrangedLinks[0], 'facebook.com/');
   });
 
-  it('should correctly display paths', function () {
+  it('should correctly display paths', () => {
     const input = wrapper.find('input').first();
     assert.equal(input.props().value, 'test');
   });
 
-  it('should call handleRemoveLink() when link is removed', function () {
+  it('should call handleRemoveLink() when link is removed', () => {
     const button = wrapper.find('button').first();
     button.simulate('click');
     sinon.assert.calledOnce(removeStub);

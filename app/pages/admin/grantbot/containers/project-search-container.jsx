@@ -16,24 +16,24 @@ class ProjectSearch extends React.Component {
 
   searchProjects(value) {
     const returnObject = { options: [] };
-    
+
     const searchOptions = {
       page_size: 10,
-      search: value, 
+      search: value
     };
 
     return new Promise((resolve, reject) => {
       if (!value) {
         return resolve(returnObject);
       }
-      
+
       return apiClient.type('projects').get(searchOptions)
-        .then(projects => {
+        .then((projects) => {
           this.setState({ projectsCache: projects });
           returnObject.options = projects.map(({ id, slug }) => ({
             value: id,
-            label: slug,
-          }))
+            label: slug
+          }));
           return resolve(returnObject);
         })
         .catch(error => console.error(error));
@@ -44,9 +44,7 @@ class ProjectSearch extends React.Component {
     this.setState({ selectedProject: selected });
 
     if (this.props.onSelect) {
-
-      const selectedProjectResource = this.state.projectsCache.find(project => 
-        project.id === selected.value);
+      const selectedProjectResource = this.state.projectsCache.find(project => project.id === selected.value);
 
       if (selectedProjectResource) {
         this.props.onSelect(selectedProjectResource);
@@ -65,7 +63,7 @@ class ProjectSearch extends React.Component {
         className="search standard-input"
         closeAfterClick={true}
         loadOptions={this.searchProjects}
-        matchProp={'label'}
+        matchProp="label"
         onChange={this.onChange}
         name="projects"
         placeholder="Start typing a project slug..."
@@ -77,7 +75,7 @@ class ProjectSearch extends React.Component {
 }
 
 ProjectSearch.propTypes = {
-  onSelect: PropTypes.func,
+  onSelect: PropTypes.func
 };
 
 export default ProjectSearch;

@@ -45,13 +45,13 @@ export const StyledTalkLink = styled(Link)`
 
   &:hover, &:focus {
     background: ${theme('mode', {
-      dark: TALK_LINK_BLUE_HOVER_DARK,
-      light: darken(0.25, TALK_LINK_BLUE_HOVER)
-    })};
+    dark: TALK_LINK_BLUE_HOVER_DARK,
+    light: darken(0.25, TALK_LINK_BLUE_HOVER)
+  })};
     border: ${theme('mode', {
-      dark: `thin solid ${TALK_LINK_BLUE}`,
-      light: `thin solid ${darken(0.25, TALK_LINK_BLUE_HOVER)}`
-    })};
+    dark: `thin solid ${TALK_LINK_BLUE}`,
+    light: `thin solid ${darken(0.25, TALK_LINK_BLUE_HOVER)}`
+  })};
   }
 `;
 
@@ -76,7 +76,9 @@ export const StyledDisabledTalkPlaceholder = styled.span`
 
 // TODO: Add Seven-Ten visibility split wrapper
 // because we want to test removing the talk links from the classifier task area
-export function TalkLink({ disabled, onClick, projectSlug, subjectId, theme, translateContent }) {
+export function TalkLink({
+  disabled, onClick, projectSlug, subjectId, theme, translateContent
+}) {
   if (disabled) {
     return (
       <ThemeProvider theme={{ mode: theme }}>

@@ -29,32 +29,30 @@ class RecentProjectsSection extends React.Component {
         onClose={onClose}
       >
         {(projects === 0)
-        ? <div className="home-page-section__header-label">
-            <p> You have no recent projects. </p>
-          </div>
-        : [<div key="project-header" className="home-page-section__sub-header">
+          ? (
+            <div className="home-page-section__header-label">
+              <p> You have no recent projects. </p>
+            </div>
+          )
+          : [<div key="project-header" className="home-page-section__sub-header">
             <a href="/#projects" className="outlined-button" onClick={this.toggleAllProjects}>
               <span className="home-page-section__header-label">
                 See all
               </span>
             </a>
-          </div>, 
-          <div key="project-list" className="project-card-list">
+          </div>,
+            <div key="project-list" className="project-card-list">
             <span>
-            {visibleProjects.map((project) => {
-              return (
+                {visibleProjects.map(project => (
                 <ProjectIcon key={project.id} project={project} badge={project.classifications} />
-              );
-            })}
-            </span>
+              ))}
+              </span>
             <span className={className}>
-            {hiddenProjects.map((project) => {
-              return (
+                {hiddenProjects.map(project => (
                 <ProjectIcon key={project.id} project={project} badge={project.classifications} />
-              );
-            })}
-            </span>
-        </div>]}
+              ))}
+              </span>
+          </div>]}
       </HomePageSection>
     );
   }

@@ -40,21 +40,19 @@ class TextViewer extends Component {
       this.element.dispatchEvent(e);
     } else {
       this.setState({ content: 'Loading…' });
-      fetch(src + '?=')
-      .then((response) => {
-        return response.text();
-      })
-      .then((content) => {
-        cache[src] = content;
-        this.setState({ content });
-        const e = new Event('load');
-        e.data = content;
-        this.element.dispatchEvent(e);
-      })
-      .catch((e) => {
-        const content = e.message;
-        this.setState({ content });
-      });
+      fetch(`${src}?=`)
+        .then(response => response.text())
+        .then((content) => {
+          cache[src] = content;
+          this.setState({ content });
+          const e = new Event('load');
+          e.data = content;
+          this.element.dispatchEvent(e);
+        })
+        .catch((e) => {
+          const content = e.message;
+          this.setState({ content });
+        });
     }
   }
 

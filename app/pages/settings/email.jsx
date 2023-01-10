@@ -6,7 +6,9 @@ import talkClient from 'panoptes-client/lib/talk-client';
 import AutoSave from '../../components/auto-save';
 import handleInputChange from '../../lib/handle-input-change';
 
-function TalkPreferenceOption({ preference, index, digest, onChange }) {
+function TalkPreferenceOption({
+  preference, index, digest, onChange
+}) {
   return (
     <td className="option">
       <input
@@ -32,25 +34,27 @@ TalkPreferenceOption.propTypes = {
 function TalkPreferences(props) {
   const { talkPreferences, onChange } = props;
   return (
-    (talkPreferences.length > 0) ?
-      <tbody>
-        {talkPreferences.map((pref, i) => {
-          if (pref.category !== 'system' && pref.category !== 'moderation_reports') {
-            return (
-              <tr key={pref.id}>
-                <Translate component="td" content={`emailSettings.talk.options.${pref.category}`} />
-                <TalkPreferenceOption preference={pref} index={i} digest="immediate" onChange={onChange} />
-                <TalkPreferenceOption preference={pref} index={i} digest="daily" onChange={onChange} />
-                <TalkPreferenceOption preference={pref} index={i} digest="weekly" onChange={onChange} />
-                <TalkPreferenceOption preference={pref} index={i} digest="never" onChange={onChange} />
-              </tr>
-            );
-          } else {
-            return null;
-          }
-        })}
-      </tbody> :
-      <tbody />
+    (talkPreferences.length > 0)
+      ? (
+        <tbody>
+          {talkPreferences.map((pref, i) => {
+            if (pref.category !== 'system' && pref.category !== 'moderation_reports') {
+              return (
+                <tr key={pref.id}>
+                  <Translate component="td" content={`emailSettings.talk.options.${pref.category}`} />
+                  <TalkPreferenceOption preference={pref} index={i} digest="immediate" onChange={onChange} />
+                  <TalkPreferenceOption preference={pref} index={i} digest="daily" onChange={onChange} />
+                  <TalkPreferenceOption preference={pref} index={i} digest="weekly" onChange={onChange} />
+                  <TalkPreferenceOption preference={pref} index={i} digest="never" onChange={onChange} />
+                </tr>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </tbody>
+      )
+      : <tbody />
   );
 }
 
@@ -108,16 +112,19 @@ ProjectPreferences.propTypes = {
 function Pagination({ meta, page, onChange }) {
   if (meta) {
     return (
-      <nav className="pagination">{'Page'}
+      <nav className="pagination">
+        {'Page'}
         <select
           value={page}
           disabled={meta.page_count < 2}
           onChange={onChange}
         >
-          {Array.from(Array(meta.page_count), (p, i) => {
-            return <option key={i} value={i + 1}>{i + 1}</option>;
-          })}
-        </select> {' of '} {meta.page_count || '?'}
+          {Array.from(Array(meta.page_count), (p, i) => <option key={i} value={i + 1}>{i + 1}</option>)}
+        </select>
+        {' '}
+        {' of '}
+        {' '}
+        {meta.page_count || '?'}
       </nav>
     );
   } else {
@@ -163,10 +170,10 @@ class EmailSettingsPage extends React.Component {
 
   getTalkPreferences() {
     talkClient.type('subscription_preferences').get()
-    .then((preferences) => {
-      const talkPreferences = this.sortPreferences(preferences);
-      this.setState({ talkPreferences });
-    });
+      .then((preferences) => {
+        const talkPreferences = this.sortPreferences(preferences);
+        this.setState({ talkPreferences });
+      });
   }
 
   getProjectForPreferences(user) {
@@ -174,27 +181,27 @@ class EmailSettingsPage extends React.Component {
       page: this.state.page,
       sort: 'display_name'
     })
-    .then((preferences) => {
-      if (preferences.length > 0) {
-        const projectIDs = preferences.map(pref => pref.links.project);
-        apiClient.type('projects').get({
-          id: projectIDs
-        })
-        .then((projects) => {
-          this.setState({
-            meta: preferences[0].getMeta(),
-            projectPreferences: preferences,
-            projects
-          });
-        })
-        .catch((error) => {
-          console.warn(error.message);
-        });
-      }
-    })
-    .catch((error) => {
-      console.log('Something went wrong. Error: ', error);
-    });
+      .then((preferences) => {
+        if (preferences.length > 0) {
+          const projectIDs = preferences.map(pref => pref.links.project);
+          apiClient.type('projects').get({
+            id: projectIDs
+          })
+            .then((projects) => {
+              this.setState({
+                meta: preferences[0].getMeta(),
+                projectPreferences: preferences,
+                projects
+              });
+            })
+            .catch((error) => {
+              console.warn(error.message);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log('Something went wrong. Error: ', error);
+      });
   }
 
   handleProjectPreferenceChange(index, event) {
@@ -202,11 +209,11 @@ class EmailSettingsPage extends React.Component {
     projectPreferences[index].update({
       email_communication: !!event.target.checked
     })
-    .save()
-    .then((updatedPref) => {
-      projectPreferences[index] = updatedPref;
-      this.setState({ projectPreferences });
-    });
+      .save()
+      .then((updatedPref) => {
+        projectPreferences[index] = updatedPref;
+        this.setState({ projectPreferences });
+      });
   }
 
   handleTalkPreferenceChange(index, event) {
@@ -214,11 +221,11 @@ class EmailSettingsPage extends React.Component {
     talkPreferences[index].update({
       email_digest: event.target.value
     })
-    .save()
-    .then((updatedPref) => {
-      talkPreferences[index] = updatedPref;
-      this.setState({ talkPreferences });
-    });
+      .save()
+      .then((updatedPref) => {
+        talkPreferences[index] = updatedPref;
+        this.setState({ talkPreferences });
+      });
   }
 
   sortPreferences(preferences) {
@@ -229,9 +236,7 @@ class EmailSettingsPage extends React.Component {
       'mentions', 'group_mentions',
       'messages'
     ];
-    return preferences.sort((a, b) => {
-      return order.indexOf(a.category) > order.indexOf(b.category);
-    });
+    return preferences.sort((a, b) => order.indexOf(a.category) > order.indexOf(b.category));
   }
 
   render() {
@@ -265,7 +270,8 @@ class EmailSettingsPage extends React.Component {
                 name="global_email_communication"
                 checked={this.props.user.global_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
-              />{' '}
+              />
+              {' '}
               <Translate content="emailSettings.general.updates" />
             </label>
           </AutoSave>
@@ -277,7 +283,8 @@ class EmailSettingsPage extends React.Component {
                 name="beta_email_communication"
                 checked={this.props.user.beta_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
-              />{' '}
+              />
+              {' '}
               <Translate content="emailSettings.general.beta" />
             </label>
           </AutoSave>
@@ -294,7 +301,8 @@ class EmailSettingsPage extends React.Component {
                 name="nasa_email_communication"
                 checked={this.props.user.nasa_email_communication}
                 onChange={handleInputChange.bind(this.props.user)}
-              />{' '}
+              />
+              {' '}
               <Translate content="emailSettings.general.nasa" />
             </label>
           </AutoSave>
@@ -334,7 +342,8 @@ class EmailSettingsPage extends React.Component {
               name="project_email_communication"
               checked={this.props.user.project_email_communication}
               onChange={handleInputChange.bind(this.props.user)}
-            />{' '}
+            />
+            {' '}
             <Translate content="emailSettings.general.classify" />
           </label>
         </AutoSave>
@@ -346,7 +355,7 @@ class EmailSettingsPage extends React.Component {
               <th>
                 <i className="fa fa-envelope-o fa-fw" />
               </th>
-              <Translate component="th" content="emailSettings.project.header"/>
+              <Translate component="th" content="emailSettings.project.header" />
             </tr>
           </thead>
           <ProjectPreferences

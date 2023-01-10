@@ -52,9 +52,7 @@ class StarChart {
     this.OTHER = 2;
 
     const edges = [[this.x, this.y], [this.x, this.y + this.height], [this.x + this.width, this.y], [this.x + this.width, this.y + this.height]];
-    this.corners = edges.map(pt =>
-      new SimplePoint(pt[0], pt[1])
-    );
+    this.corners = edges.map(pt => new SimplePoint(pt[0], pt[1]));
   }
 
   bounds() {
@@ -69,9 +67,7 @@ class StarChart {
   }
 
   closestCornerDistance(p) {
-    const distance = this.corners.map(corner =>
-      this.calculateDistance(p, corner)
-    );
+    const distance = this.corners.map(corner => this.calculateDistance(p, corner));
     return {
       chart: this,
       distance: (Math.min.apply(null, distance))
@@ -98,9 +94,7 @@ class StarChart {
     if (!this.midpoints) {
       this.calculateMidpoints();
     }
-    const distances = this.midpoints.map(midpoint =>
-      this.calculateDistance(p, midpoint)
-    );
+    const distances = this.midpoints.map(midpoint => this.calculateDistance(p, midpoint));
     return {
       chart: this,
       distance: Math.min.apply(null, distances)
@@ -176,8 +170,8 @@ class StarChart {
   buildAxes() {
     if (this.axisPoints.length >= 3 && this.axisLabels.length >= 2) {
       this.valid = true;
-      const xRange = (this.findAxis(this.axisPoints)).xAxis.sort((a, b) => { return a.x > b.x; });
-      const yRange = (this.findAxis(this.axisPoints)).yAxis.sort((a, b) => { return a.y > b.y; });
+      const xRange = (this.findAxis(this.axisPoints)).xAxis.sort((a, b) => a.x > b.x);
+      const yRange = (this.findAxis(this.axisPoints)).yAxis.sort((a, b) => a.y > b.y);
       const xLabel = this.findLabels(xRange, this.axisLabels);
       const yLabel = this.findLabels(yRange, this.axisLabels);
       this.xAxis = new Axis(xRange, xLabel.value);
@@ -242,8 +236,8 @@ StarCoord.fromGlatGlon = (xAxis, yAxis, xAxisGlat, epoch1950) => {
     glon = glon.replace(/[^\d.-]/g, '');
   }
   const [b, l, pole_ra, pole_dec, posangle] = [s._toRadians(glat), s._toRadians(glon), s._toRadians(192.859508), s._toRadians(27.128336), s._toRadians(122.932 - 90.0)];
-  const ra = s._toDegrees(Math.atan2((Math.cos(b) * Math.cos(l - posangle)), ((Math.sin(b) * Math.cos(pole_dec)) - (Math.cos(b) * Math.sin(pole_dec) * Math.sin(l - posangle)))) + pole_ra)
-  const dec = s._toDegrees((Math.asin(Math.cos(b) * Math.cos(pole_dec) * Math.sin(l - posangle)) + (Math.sin(b) * Math.sin(pole_dec))))
+  const ra = s._toDegrees(Math.atan2((Math.cos(b) * Math.cos(l - posangle)), ((Math.sin(b) * Math.cos(pole_dec)) - (Math.cos(b) * Math.sin(pole_dec) * Math.sin(l - posangle)))) + pole_ra);
+  const dec = s._toDegrees((Math.asin(Math.cos(b) * Math.cos(pole_dec) * Math.sin(l - posangle)) + (Math.sin(b) * Math.sin(pole_dec))));
   return new StarCoord(ra, dec);
 };
 
@@ -259,36 +253,32 @@ StarCoord._epochConvert = (ra, dec) => {
 };
 
 StarCoord._transform = (ra, dec) => {
-  const r0 = [ Math.cos(ra) * Math.cos(dec), Math.sin(ra) * Math.cos(dec), Math.sin(dec) ];
+  const r0 = [Math.cos(ra) * Math.cos(dec), Math.sin(ra) * Math.cos(dec), Math.sin(dec)];
 
   const matrix = [
-   0.9999256782, -0.0111820611, -0.0048579477,
-   0.0111820610,  0.9999374784, -0.0000271765,
-   0.0048579479, -0.0000271474,  0.9999881997 ];
+    0.9999256782, -0.0111820611, -0.0048579477,
+    0.0111820610, 0.9999374784, -0.0000271765,
+    0.0048579479, -0.0000271474, 0.9999881997];
 
   const s0 = [
-   r0[0]*matrix[0] + r0[1]*matrix[1] + r0[2]*matrix[2],
-   r0[0]*matrix[3] + r0[1]*matrix[4] + r0[2]*matrix[5],
-   r0[0]*matrix[6] + r0[1]*matrix[7] + r0[2]*matrix[8] ];
+    r0[0] * matrix[0] + r0[1] * matrix[1] + r0[2] * matrix[2],
+    r0[0] * matrix[3] + r0[1] * matrix[4] + r0[2] * matrix[5],
+    r0[0] * matrix[6] + r0[1] * matrix[7] + r0[2] * matrix[8]];
 
-  const r = Math.sqrt( s0[0]*s0[0] + s0[1]*s0[1] + s0[2]*s0[2] );
+  const r = Math.sqrt(s0[0] * s0[0] + s0[1] * s0[1] + s0[2] * s0[2]);
 
-  const result = [ 0.0, 0.0 ];
-  result[1] = Math.asin( s0[2]/r );
-  const cosaa = ( (s0[0]/r) / Math.cos(result[1] ) );
-  const sinaa = ( (s0[1]/r) / Math.cos(result[1] ) );
-  result[0] = Math.atan2(sinaa,cosaa);
-  if ( result[0] < 0.0 ) result[0] = result[0] + Math.PI + Math.PI;
+  const result = [0.0, 0.0];
+  result[1] = Math.asin(s0[2] / r);
+  const cosaa = ((s0[0] / r) / Math.cos(result[1]));
+  const sinaa = ((s0[1] / r) / Math.cos(result[1]));
+  result[0] = Math.atan2(sinaa, cosaa);
+  if (result[0] < 0.0) result[0] = result[0] + Math.PI + Math.PI;
   return result;
-}
-
-StarCoord._toRadians = (degrees) => {
-  return (degrees * Math.PI) / 180.0;
 };
 
-StarCoord._toDegrees = (radians) => {
-  return (radians * 180.0) / Math.PI;
-};
+StarCoord._toRadians = degrees => (degrees * Math.PI) / 180.0;
+
+StarCoord._toDegrees = radians => (radians * 180.0) / Math.PI;
 
 StarCoord._parseDegrees = (str, dec) => {
   if (!isNaN(str)) return parseFloat(str);
@@ -310,19 +300,19 @@ StarCoord._parseDegrees = (str, dec) => {
 StarCoord._raConvert = (match, isNeg) => {
   const multiplier = isNeg ? -1 : 1;
 
-  return (parseInt(match[1], 10) * 15 +
-  (parseInt(match[2], 10) / 4 || 0) +
-  (parseInt(match[3], 10) / 240 || 0)) *
-  multiplier;
+  return (parseInt(match[1], 10) * 15
+  + (parseInt(match[2], 10) / 4 || 0)
+  + (parseInt(match[3], 10) / 240 || 0))
+  * multiplier;
 };
 
 StarCoord._decConvert = (match, isNeg) => {
   const multiplier = isNeg ? -1 : 1;
 
-  return (parseInt(match[1], 10) +
-  (parseInt(match[2], 10) / 60 || 0) +
-  (parseInt(match[3], 10) / 3600 || 0)) *
-  multiplier;
+  return (parseInt(match[1], 10)
+  + (parseInt(match[2], 10) / 60 || 0)
+  + (parseInt(match[3], 10) / 3600 || 0))
+  * multiplier;
 };
 
 class Plate {
@@ -434,27 +424,21 @@ export default class WorldWideTelescope extends React.Component {
     });
 
     // parse chart rectangles
-    this.charts = telescopeAnnotations[0].value.map(annotation =>
-      new StarChart(annotation)
-    );
+    this.charts = telescopeAnnotations[0].value.map(annotation => new StarChart(annotation));
 
     // assign axis points to charts
     telescopeAnnotations[1].value.forEach((annotation) => {
       const point = new AxisPoint(annotation);
-      const distances = this.charts.map(chart =>
-        chart.closestCornerDistance(point)
-      );
-      const closest = distances.sort((a, b) => { return a.distance > b.distance; })[0].chart;
+      const distances = this.charts.map(chart => chart.closestCornerDistance(point));
+      const closest = distances.sort((a, b) => a.distance > b.distance)[0].chart;
       closest.addAxisPoint(point);
     });
 
     // assign axis labels to charts
     telescopeAnnotations[2].value.forEach((annotation) => {
       const label = new AxisLabel(annotation);
-      const distances = this.charts.map(chart =>
-        chart.closestMidpointDistance(label)
-      );
-      const closest = distances.sort((a, b) => { return a.distance > b.distance; })[0].chart;
+      const distances = this.charts.map(chart => chart.closestMidpointDistance(label));
+      const closest = distances.sort((a, b) => a.distance > b.distance)[0].chart;
       closest.addAxisLabel(label);
     });
 
@@ -482,19 +466,21 @@ export default class WorldWideTelescope extends React.Component {
     return (
       <div className="worldwide-telescope">
         {!!plates.length && (<p>View Your Classification!</p>)}
-        {plates.map((plate, idx) => {
-          return (
-            <div className="worldwide-telescope__container" key={idx}>
-              <div>
-                <img role="presentation" className="worldwide-telescope__chart-image" src={`${plate.getCropUrl()}`} />
-              </div>
-              <div className="worldwide-telescope__content">
-                <a target="_blank" rel="noopener noreferrer" href={plate.getWwtUrl()} className="standard-button">World Wide Telescope</a>
-                <p>If the image appears misaligned within World Wide Telescope, please click on Talk and label the subject with <a target="_blank" rel="noopener noreferrer" href={`https://zooniverse.org/projects/${this.props.project.slug}/talk/tags/misaligned`}>#misaligned</a>.</p>
-              </div>
+        {plates.map((plate, idx) => (
+          <div className="worldwide-telescope__container" key={idx}>
+            <div>
+              <img role="presentation" className="worldwide-telescope__chart-image" src={`${plate.getCropUrl()}`} />
             </div>
-          );
-        })}
+            <div className="worldwide-telescope__content">
+              <a target="_blank" rel="noopener noreferrer" href={plate.getWwtUrl()} className="standard-button">World Wide Telescope</a>
+              <p>
+If the image appears misaligned within World Wide Telescope, please click on Talk and label the subject with
+                <a target="_blank" rel="noopener noreferrer" href={`https://zooniverse.org/projects/${this.props.project.slug}/talk/tags/misaligned`}>#misaligned</a>
+.
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     );
   }

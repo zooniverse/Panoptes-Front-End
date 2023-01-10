@@ -57,7 +57,7 @@ export default class HomePageForUser extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if( this.state.OpenSectionComponent !== prevState.OpenSectionComponent) {
+    if (this.state.OpenSectionComponent !== prevState.OpenSectionComponent) {
       if (this.openSection) {
         this.openSection.scrollIntoView();
       }
@@ -88,27 +88,25 @@ export default class HomePageForUser extends React.Component {
     });
 
     user.get('profile_header')
-    .catch(() => {
-      return [];
-    })
-    .then((profileHeaders) => {
-      const profileHeader = [].concat(profileHeaders)[0];
-      if (profileHeader) {
-        this.setState({
-          backgroundSrc: profileHeader.src
-        });
-      }
-    });
+      .catch(() => [])
+      .then((profileHeaders) => {
+        const profileHeader = [].concat(profileHeaders)[0];
+        if (profileHeader) {
+          this.setState({
+            backgroundSrc: profileHeader.src
+          });
+        }
+      });
 
     this.getRibbonData(user)
-    .catch((error) => {
-      this.setState({ error });
-    })
-    .then(() => {
-      this.setState({
-        loading: false
+      .catch((error) => {
+        this.setState({ error });
+      })
+      .then(() => {
+        this.setState({
+          loading: false
+        });
       });
-    });
   }
 
   getRibbonData(user, _page = 1) {
@@ -117,43 +115,39 @@ export default class HomePageForUser extends React.Component {
       sort: '-updated_at',
       page: _page
     })
-    .then((projectPreferences) => {
-      if (projectPreferences.length === 0) {
-        return projectPreferences;
-      } else {
+      .then((projectPreferences) => {
+        if (projectPreferences.length === 0) {
+          return projectPreferences;
+        } else {
         // continue paging through preferences until we've got them all.
-        const meta = projectPreferences[0].getMeta();
-        if (meta.page !== meta.page_count) {
-          getRibbonData(user, meta.page + 1);
-        }
-        // filter out projects you haven't classified on AND that are not marked as hidden.
-        let activePreferences = projectPreferences.filter((preference) => {
-          let userHasClassified = preference.activity_count > 0;
-          let isVisiblePreference = !preference.settings['hidden'];
-          return userHasClassified && isVisiblePreference;
-        });
-        // get the projects that you have classified on, if any.
-        if (activePreferences.length > 0) {
-          activePreferences = activePreferences.map((preference, i) => {
+          const meta = projectPreferences[0].getMeta();
+          if (meta.page !== meta.page_count) {
+            getRibbonData(user, meta.page + 1);
+          }
+          // filter out projects you haven't classified on AND that are not marked as hidden.
+          let activePreferences = projectPreferences.filter((preference) => {
+            const userHasClassified = preference.activity_count > 0;
+            const isVisiblePreference = !preference.settings.hidden;
+            return userHasClassified && isVisiblePreference;
+          });
+          // get the projects that you have classified on, if any.
+          if (activePreferences.length > 0) {
+            activePreferences = activePreferences.map((preference, i) => {
             // add the classification counts to the total
             // this will include all classifications a user has contributed
             // regardless of the project's visibility setting, i.e. private or public.
-            this.setState((prevState) => {
-              const totalClassifications = prevState.totalClassifications + preference.activity_count;
-              return { totalClassifications };
+              this.setState((prevState) => {
+                const totalClassifications = prevState.totalClassifications + preference.activity_count;
+                return { totalClassifications };
+              });
+              preference.sort_order = i;
+              return preference;
             });
-            preference.sort_order = i;
-            return preference;
-          });
-          this.getProjectsForPreferences(activePreferences)
-            .then((projects) => {
-              return projects
-              .sort((a, b) => {
-                return a.sort_order - b.sort_order;
-              })
-              .filter(Boolean)
-              .map((project, i) => {
-                return {
+            this.getProjectsForPreferences(activePreferences)
+              .then(projects => projects
+                .sort((a, b) => a.sort_order - b.sort_order)
+                .filter(Boolean)
+                .map((project, i) => ({
                   avatar_src: projects[i].avatar_src,
                   id: projects[i].id,
                   slug: projects[i].slug,
@@ -163,24 +157,20 @@ export default class HomePageForUser extends React.Component {
                   classifications: projects[i].activity_count,
                   updated_at: projects[i].updated_at,
                   redirect: projects[i].redirect
-                };
+                })))
+              .then((projects) => {
+                this.setState((prevState) => {
+                  const ribbonData = prevState.ribbonData.concat(projects);
+                  return { ribbonData };
+                });
               });
-            })
-            .then((projects) => {
-              this.setState((prevState) => {
-                const ribbonData = prevState.ribbonData.concat(projects);
-                return { ribbonData };
-              });
-            });
+          }
         }
-      }
-    });
+      });
   }
 
   getProjectsForPreferences(preferences) {
-    const projectIDs = preferences.map((projectPreference) => {
-      return projectPreference.links.project;
-    });
+    const projectIDs = preferences.map(projectPreference => projectPreference.links.project);
     return apiClient
       .type('projects')
       .get({ id: projectIDs, cards: true, page_size: preferences.length })
@@ -221,13 +211,15 @@ export default class HomePageForUser extends React.Component {
         <div className="home-page-for-user__menu-column">
           <Link to="#projects" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-history fa-fw" />{' '}
+              <i className="fa fa-history fa-fw" />
+              {' '}
               My recent projects
             </span>
           </Link>
           <Link to="#collections" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-th-large fa-fw" />{' '}
+              <i className="fa fa-th-large fa-fw" />
+              {' '}
               My collections
             </span>
           </Link>
@@ -235,13 +227,15 @@ export default class HomePageForUser extends React.Component {
         <div className="home-page-for-user__menu-column">
           <Link to="#messages" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-envelope fa-fw" />{' '}
+              <i className="fa fa-envelope fa-fw" />
+              {' '}
               Messages
             </span>
           </Link>
           <Link to="#builds" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw" />{' '}
+              <i className="fa fa-cog fa-fw" />
+              {' '}
               My builds
             </span>
           </Link>
@@ -252,7 +246,7 @@ export default class HomePageForUser extends React.Component {
 
   updateBackground(event) {
     const file = event.target.files[0];
-    const location = this.props.user._getURL('profile_header')
+    const location = this.props.user._getURL('profile_header');
     return this.createLinkedResource(file, location)
       .then(this.uploadMedia.bind(this, file))
       .then((media) => {
@@ -287,22 +281,30 @@ export default class HomePageForUser extends React.Component {
             <CircleRibbon user={this.props.user} loading={this.state.loading} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
             <div className="home-page-for-user__welcome">
-              Hello {this.props.user.display_name},<br />
-              you have made {this.state.totalClassifications} classifications to date.
+              Hello
+              {' '}
+              {this.props.user.display_name}
+,
+              <br />
+              you have made
+              {' '}
+              {this.state.totalClassifications}
+              {' '}
+classifications to date.
             </div>
 
             {this.renderMenu(OpenSectionComponent)}
 
             {OpenSectionComponent && (
               <OpenSectionComponent
-                ref={ (component) => this.openSection = ReactDOM.findDOMNode(component) }
+                ref={component => this.openSection = ReactDOM.findDOMNode(component)}
                 projects={this.state.ribbonData}
                 onClose={this.deselectSection}
               />
             )}
 
-            {!OpenSectionComponent &&
-              <i className="home-page-for-user__down-arrow fa fa-arrow-down" aria-hidden="true" />}
+            {!OpenSectionComponent
+              && <i className="home-page-for-user__down-arrow fa fa-arrow-down" aria-hidden="true" />}
 
           </div>
         </div>

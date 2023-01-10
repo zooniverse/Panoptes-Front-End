@@ -1,9 +1,9 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'] */
 /* global describe, it, beforeEach */
 import React from 'react';
-import DefaultClassificationSummary from './default-classification-summary';
 import assert from 'assert';
 import { shallow } from 'enzyme';
+import DefaultClassificationSummary from './default-classification-summary';
 
 const workflow = {
   tasks: {

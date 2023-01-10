@@ -3,7 +3,6 @@ import React from 'react';
 import Selection from './selection';
 
 export default class LabelRenderer extends React.Component {
-
   constructor(props) {
     super(props);
     this.createNewContent = this.createNewContent.bind(this);
@@ -53,8 +52,8 @@ export default class LabelRenderer extends React.Component {
       this.props.children, child => (React.cloneElement(child, { className: 'invisible', onLoad: this.onLoad }))
     );
     return (
-      <div className="label-renderer" >
-        <div className="text-viewer" >
+      <div className="label-renderer">
+        <div className="text-viewer">
           {labeledContent}
         </div>
         {children}

@@ -49,19 +49,19 @@ function prependSubjectQueue(data) {
       payload: subjectIDs
     });
     apiClient.type('subjects').get(subjectIDs)
-    .catch((error) => {
-      dispatch(reportError(error));
-      return [];
-    })
-    .then(subjects => subjects.map((subject) => {
+      .catch((error) => {
+        dispatch(reportError(error));
+        return [];
+      })
+      .then(subjects => subjects.map((subject) => {
       /* record that this subject was added by an intervention, rather than
       queued from the API. */
-      subject.update({ 'metadata.intervention': true });
-      return subject;
-    }))
-    .then((subjects) => {
-      dispatch(prependSubjects(subjects, workflowID));
-    });
+        subject.update({ 'metadata.intervention': true });
+        return subject;
+      }))
+      .then((subjects) => {
+        dispatch(prependSubjects(subjects, workflowID));
+      });
   };
 }
 
@@ -81,27 +81,27 @@ export function processIntervention(message) {
   // }
 
   // Only process known intervention experiment events from sugar.
-  var { type = 'unknown' } = message;
-  if (type !== "experiment") {
-    return reportError("Unexpected message on user experiment channel");
-  };
+  const { type = 'unknown' } = message;
+  if (type !== 'experiment') {
+    return reportError('Unexpected message on user experiment channel');
+  }
 
-  var { data = 'missing' } = message;
+  const { data = 'missing' } = message;
   if (data === 'missing') {
-    return reportError("Missing data object in message");
-  };
+    return reportError('Missing data object in message');
+  }
 
-  var { event = 'unknown' } = data;
+  const { event = 'unknown' } = data;
   if (event !== 'intervention') {
-    return reportError("Unknown intervention event message")
-  };
+    return reportError('Unknown intervention event message');
+  }
 
   // If required, this is where checks for correct user
   // and other sugar channel payload checking can be added
 
   const { event_type } = data;
 
-  switch(event_type) {
+  switch (event_type) {
     case 'message':
       return addIntervention(data);
       break;
@@ -109,7 +109,6 @@ export function processIntervention(message) {
       return prependSubjectQueue(data);
       break;
     default:
-      return reportError("Unknown intervention event type, expected 'message' or 'subject_queue'")
+      return reportError("Unknown intervention event type, expected 'message' or 'subject_queue'");
   }
 }
-

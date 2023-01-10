@@ -26,7 +26,7 @@ function AnnotationRenderer(props) {
   const Renderer = VIEWERS[props.type] || DefaultRenderer;
 
   return (
-    <Renderer {...props} >
+    <Renderer {...props}>
       {props.children}
     </Renderer>
   );

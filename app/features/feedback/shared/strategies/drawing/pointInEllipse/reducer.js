@@ -6,9 +6,9 @@ function isAnnotationWithinEllipse(rule, annotation) {
   const feedbackA = rule.toleranceA;
   const feedbackB = rule.toleranceB;
 
-  const feedbackThetaRad = Math.PI * (-rule.theta / 180.0)
-  const projectedX = (annotationX - feedbackX) * Math.cos(feedbackThetaRad) + (annotationY - feedbackY) * Math.sin(feedbackThetaRad)
-  const projectedY = (annotationY - feedbackY) * Math.cos(feedbackThetaRad) - (annotationX - feedbackX) * Math.sin(feedbackThetaRad)
+  const feedbackThetaRad = Math.PI * (-rule.theta / 180.0);
+  const projectedX = (annotationX - feedbackX) * Math.cos(feedbackThetaRad) + (annotationY - feedbackY) * Math.sin(feedbackThetaRad);
+  const projectedY = (annotationY - feedbackY) * Math.cos(feedbackThetaRad) - (annotationX - feedbackX) * Math.sin(feedbackThetaRad);
 
   // Math.pow is a restricted property, but using the exponential operator (**)
   // breaks the build :(

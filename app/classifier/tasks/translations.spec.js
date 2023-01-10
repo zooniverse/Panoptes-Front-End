@@ -18,7 +18,7 @@ const initialTranslations = {
 const translations = {
   strings: {
     workflow: {
-      '1': {
+      1: {
         translated_type: 'Workflow',
         translated_id: '1',
         strings: {
@@ -116,7 +116,7 @@ const expectedTranslation = {
   }
 };
 
-describe('Task translation with a translation', function () {
+describe('Task translation with a translation', () => {
   const wrapper = mount(
     <TaskTranslations taskKey="survey" task={task} translations={translations} workflowID="1">
       <StubTask task={task} />
@@ -124,16 +124,16 @@ describe('Task translation with a translation', function () {
   );
   const stubTask = wrapper.find(StubTask);
 
-  it('should not mutate the original task', function () {
+  it('should not mutate the original task', () => {
     assert.deepEqual(stubTask.prop('task'), expectedTask);
   });
 
-  it('should copy translation strings to the translation object', function () {
+  it('should copy translation strings to the translation object', () => {
     assert.deepEqual(stubTask.prop('translation'), expectedTranslation);
   });
 });
 
-describe('Task translation without a translation', function () {
+describe('Task translation without a translation', () => {
   const wrapper = mount(
     <TaskTranslations taskKey="survey" task={task} translations={initialTranslations} workflowID="1">
       <StubTask task={task} />
@@ -141,11 +141,11 @@ describe('Task translation without a translation', function () {
   );
   const stubTask = wrapper.find(StubTask);
 
-  it('should not mutate the original task', function () {
+  it('should not mutate the original task', () => {
     assert.deepEqual(stubTask.prop('task'), expectedTask);
   });
 
-  it('should fall back to using the workflow task strings', function () {
+  it('should fall back to using the workflow task strings', () => {
     assert.deepEqual(stubTask.prop('translation'), expectedTask);
   });
 });

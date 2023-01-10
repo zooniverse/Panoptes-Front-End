@@ -6,7 +6,7 @@ import handleInputChange from '../../../lib/handle-input-change';
 
 const UserDetails = (props) => {
   const handleUserChange = handleInputChange.bind(props.user);
-  const created = new Date(props.user.created_at)
+  const created = new Date(props.user.created_at);
 
   function onChange(e) {
     handleUserChange(e);
@@ -16,14 +16,30 @@ const UserDetails = (props) => {
   return (
     <div className="user-details">
       <ul>
-        <li>ID: {props.user.id}</li>
-        <li>Login: {props.user.login}</li>
-        <li>Display name: {props.user.display_name}</li>
-        <li>Email address: {props.user.email}</li>
-        <li>Signed up: {created.toString()}</li>
+        <li>
+ID:
+          {props.user.id}
+        </li>
+        <li>
+Login:
+          {props.user.login}
+        </li>
+        <li>
+Display name:
+          {props.user.display_name}
+        </li>
+        <li>
+Email address:
+          {props.user.email}
+        </li>
+        <li>
+Signed up:
+          {created.toString()}
+        </li>
         <li>
           <label>
-            Valid email:{' '}
+            Valid email:
+            {' '}
             <input
               type="checkbox"
               name="valid_email"
@@ -45,7 +61,8 @@ const UserDetails = (props) => {
                   name="global_email_communication"
                   checked={props.user.global_email_communication}
                   onChange={onChange}
-                />{' '}
+                />
+                {' '}
                 Zooniverse general emails
               </label>
             </li>
@@ -56,7 +73,8 @@ const UserDetails = (props) => {
                   name="beta_email_communication"
                   checked={props.user.beta_email_communication}
                   onChange={onChange}
-                />{' '}
+                />
+                {' '}
                 Beta test emails
               </label>
             </li>
@@ -67,7 +85,8 @@ const UserDetails = (props) => {
                   name="nasa_email_communication"
                   checked={props.user.nasa_email_communication}
                   onChange={onChange}
-                />{' '}
+                />
+                {' '}
                 NASA emails
               </label>
             </li>
@@ -77,10 +96,10 @@ const UserDetails = (props) => {
 
     </div>
   );
-}
+};
 
 UserDetails.propTypes = {
   user: PropTypes.object
-}
+};
 
 export default UserDetails;

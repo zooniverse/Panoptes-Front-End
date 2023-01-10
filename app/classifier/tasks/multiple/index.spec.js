@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme';
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import MultipleTask from './';
+import MultipleTask from '.';
 import GenericTask from '../generic';
 import { mockReduxStore, checkboxTypeAnnotation, checkboxTypeTask } from '../testHelpers';
 
@@ -13,7 +13,7 @@ const annotation = Object.assign({}, checkboxTypeAnnotation, {
 });
 
 describe('MultipleChoiceTask', function () {
-  describe('when it renders', function() {
+  describe('when it renders', function () {
     let wrapper;
 
     beforeEach(function () {
@@ -53,7 +53,7 @@ describe('MultipleChoiceTask', function () {
       const genericTask = wrapper.find(GenericTask);
       it(`should pass autofocus ${autofocus} to its children`, function () {
         expect(genericTask.prop('autoFocus')).to.equal(autofocus);
-      })
+      });
     });
   });
 
@@ -74,17 +74,17 @@ describe('MultipleChoiceTask', function () {
         it(`should pass autofocus ${autofocus} for answer ${answer.props.index}`, function () {
           const hasFocus = autofocus && annotation.value.includes(answer.props.index);
           expect(answer.props.autoFocus).to.equal(hasFocus);
-        })
-      })
+        });
+      });
     });
   });
 
-  describe('input onChange event handler', function() {
+  describe('input onChange event handler', function () {
     let handleChangeSpy;
     let onChangeSpy;
     let setStateSpy;
     let wrapper;
-    before(function() {
+    before(function () {
       handleChangeSpy = sinon.spy(MultipleTask.prototype, 'handleChange');
       onChangeSpy = sinon.spy();
       setStateSpy = sinon.spy(MultipleTask.prototype, 'setState');
@@ -98,34 +98,34 @@ describe('MultipleChoiceTask', function () {
       );
     });
 
-    afterEach(function() {
+    afterEach(function () {
       handleChangeSpy.resetHistory();
       onChangeSpy.resetHistory();
       setStateSpy.resetHistory();
     });
 
-    after(function() {
+    after(function () {
       handleChangeSpy.restore();
       setStateSpy.restore();
     });
 
     it('should call props.onChange when an answer changes', function () {
       const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
-      firstAnswer.props.onChange({ target: { checked: true } });
+      firstAnswer.props.onChange({ target: { checked: true }});
       expect(onChangeSpy).to.have.been.calledOnce;
     });
 
-    it('should call handleChange with the answer array index', function() {
+    it('should call handleChange with the answer array index', function () {
       wrapper.setProps({ annotation });
       const firstAnswer = wrapper.find(GenericTask).prop('answers')[0];
-      firstAnswer.props.onChange({ target: { checked: true } });
+      firstAnswer.props.onChange({ target: { checked: true }});
       expect(handleChangeSpy).to.have.been.calledWith(0);
     });
   });
 
   describe('static methods', function () {
     it('should be incomplete', function () {
-      expect(MultipleTask.isAnnotationComplete(checkboxTypeTask, { value: [] })).to.be.false
+      expect(MultipleTask.isAnnotationComplete(checkboxTypeTask, { value: [] })).to.be.false;
     });
 
     it('should be complete', function () {

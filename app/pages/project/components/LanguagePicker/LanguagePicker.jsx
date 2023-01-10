@@ -43,8 +43,7 @@ function LanguagePicker(props) {
           >
             {languageMenu[language]}
           </option>
-          )
-        )}
+        ))}
       </select>
     </StyledLabel>
   );

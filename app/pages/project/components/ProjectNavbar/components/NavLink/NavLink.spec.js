@@ -10,7 +10,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
 import NavLink from './NavLink';
-import { getProjectLinks  } from '../../../../../../lib/nav-helpers';
+import { getProjectLinks } from '../../../../../../lib/nav-helpers';
 import {
   buildLinksWithLabels,
   projectRoles,
@@ -20,13 +20,13 @@ import {
 
 const MOCK_EXTERNAL_URL = 'https://www.google.com';
 
-describe('NavLink', function() {
-  it('renders without crashing', function() {
+describe('NavLink', function () {
+  it('renders without crashing', function () {
     shallow(<NavLink />);
   });
 
-  describe('when the link is disabled', function() {
-    it('should be the StyledLinkPlaceholder component ', function() {
+  describe('when the link is disabled', function () {
+    it('should be the StyledLinkPlaceholder component ', function () {
       const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, user: null });
       const navLinksWithLabels = buildLinksWithLabels(navLinks);
       const classifyLink = navLinksWithLabels[1];
@@ -35,10 +35,10 @@ describe('NavLink', function() {
     });
   });
 
-  describe('when the link is internal', function() {
+  describe('when the link is internal', function () {
     let wrapper;
     let firstLink;
-    before(function() {
+    before(function () {
       const navLinks = getProjectLinks({ project: projectWithoutRedirect, projectRoles, user: null });
       const navLinksWithLabels = buildLinksWithLabels(navLinks);
       firstLink = navLinksWithLabels[0];
@@ -50,26 +50,26 @@ describe('NavLink', function() {
       expect(wrapper.name()).to.equal('Styled(Link)');
     });
 
-    it('should set props.to using props.url', function() {
+    it('should set props.to using props.url', function () {
       expect(wrapper.props().to).to.equal(firstLink.url);
     });
 
-    it('should use props.label as the text', function() {
+    it('should use props.label as the text', function () {
       expect(wrapper.html().includes(firstLink.label)).to.true;
     });
 
-    it('should not use a font awesome icon', function() {
+    it('should not use a font awesome icon', function () {
       expect(wrapper.find('i')).to.have.lengthOf(0);
     });
   });
 
-  describe('when the link is external', function() {
+  describe('when the link is external', function () {
     let wrapper;
-    before(function() {
+    before(function () {
       wrapper = shallow(<NavLink isExternalLink={true} url={MOCK_EXTERNAL_URL} label="My Link" />);
     });
 
-    it('should be the StyledExternalLink component', function() {
+    it('should be the StyledExternalLink component', function () {
       expect(wrapper.name()).to.equal('Styled(ExternalLink)');
     });
   });

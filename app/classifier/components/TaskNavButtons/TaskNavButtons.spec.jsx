@@ -15,7 +15,7 @@ import TaskNavButtons, { ButtonsWrapper } from './TaskNavButtons';
 const store = {
   subscribe: () => { },
   dispatch: () => { },
-  getState: () => ({ userInterface: { theme: 'light' } })
+  getState: () => ({ userInterface: { theme: 'light' }})
 };
 
 const mockReduxStore = {
@@ -29,7 +29,7 @@ const subject = { id: '1' };
 
 const project = { slug: 'zooniverse/my-project' };
 
-describe('TaskNavButtons', function() {
+describe('TaskNavButtons', function () {
   it('should render without crashing', function () {
     const wrapper = shallow(<TaskNavButtons classification={classification} project={project} subject={subject} />);
     expect(wrapper).to.be.ok;
@@ -40,7 +40,7 @@ describe('TaskNavButtons', function() {
     expect(wrapper.find('NextButton')).to.have.lengthOf(0);
   });
 
-  describe('when props.showNextButton is true', function() {
+  describe('when props.showNextButton is true', function () {
     let wrapper;
     before(function () {
       wrapper = mount(<TaskNavButtons classification={classification} project={project} subject={subject} showNextButton={true} />, mockReduxStore);
@@ -55,7 +55,7 @@ describe('TaskNavButtons', function() {
       expect(wrapper.find(ButtonsWrapper)).to.have.lengthOf(1);
     });
 
-    it('should not render a BackButton if props.showBackButton is false', function() {
+    it('should not render a BackButton if props.showBackButton is false', function () {
       expect(wrapper.find('BackButton')).to.have.lengthOf(0);
     });
 
@@ -70,7 +70,7 @@ describe('TaskNavButtons', function() {
     });
   });
 
-  describe('when props.completed is true and props.showNextButton is false', function() {
+  describe('when props.completed is true and props.showNextButton is false', function () {
     let wrapper;
     before(function () {
       wrapper = mount(<TaskNavButtons completed={true} classification={classification} project={project} subject={subject} />, mockReduxStore);
@@ -80,7 +80,7 @@ describe('TaskNavButtons', function() {
       expect(wrapper.find('NextButton')).to.have.lengthOf(1);
     });
 
-    it('should render a ButtonsWrapper component', function() {
+    it('should render a ButtonsWrapper component', function () {
       expect(wrapper.find(ButtonsWrapper)).to.have.lengthOf(1);
     });
 
@@ -89,13 +89,13 @@ describe('TaskNavButtons', function() {
     });
   });
 
-  describe('the default rendering', function() {
+  describe('the default rendering', function () {
     let wrapper;
     before(function () {
       wrapper = mount(<TaskNavButtons classification={classification} project={project} subject={subject} />, mockReduxStore);
     });
 
-    it('should render a DoneButton component', function() {
+    it('should render a DoneButton component', function () {
       expect(wrapper.find('DoneButton')).to.have.lengthOf(1);
     });
 
@@ -108,7 +108,7 @@ describe('TaskNavButtons', function() {
       expect(wrapper.find('BackButton')).to.have.lengthOf(1);
     });
 
-    it('should not render a TalkLink component if props.showDoneAndTalkLink is false', function() {
+    it('should not render a TalkLink component if props.showDoneAndTalkLink is false', function () {
       expect(wrapper.find('TalkLink')).to.have.lengthOf(0);
     });
 

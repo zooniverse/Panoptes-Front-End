@@ -1,7 +1,9 @@
 import reglBase from 'regl';
 
 class BaseReglModel {
-  constructor(canvas, { frame, metadata, src, sizing }, eventHandlers, errMessage) {
+  constructor(canvas, {
+    frame, metadata, src, sizing
+  }, eventHandlers, errMessage) {
     this.eventHandlers = eventHandlers;
     this.modelErrorMessage = errMessage;
     this.update = this.update.bind(this); // function to call on new annotation
@@ -29,6 +31,7 @@ class BaseReglModel {
     };
     this.setModel();
   }
+
   update(annotations, newViewBox) {
     // this function parses the new annotation and then triggers a render.
     // update the render funtions
@@ -43,9 +46,11 @@ class BaseReglModel {
     this.calculateModel(annotations, newViewBox);
     this.state.pixels({ copy: true });
   }
+
   kill() {
     this.regl.destroy();
   }
+
   setBaseTexture(texData) {
     try {
       this.baseTexture = this.regl.texture(texData);
@@ -53,6 +58,7 @@ class BaseReglModel {
       console.warn('Inside Model.setBaseTexture2d:', err);
     }
   }
+
   getTexture() {
     return this.state.modelHasErrored ? {} : {
       data: this.regl.read(),
@@ -60,6 +66,7 @@ class BaseReglModel {
       height: this.canvas.height
     };
   }
+
   // -------------- Functions to be overwritten by child classes --------------
   /* eslint-disable class-methods-use-this */
   getModel() {
@@ -69,13 +76,16 @@ class BaseReglModel {
     /* eslint-enable no-console */
     return [];
   }
+
   calculateModel() {
     // function to be overwritten to render model from annotation
     return false;
   }
+
   getScore() {
     return 0;
   }
+
   handlePanZoom(newSizing) {
     // This function will be used to zoom/rotate/scale the image according to the
     // new viewBoxDimensions (in comparison to those that arrived with the model)

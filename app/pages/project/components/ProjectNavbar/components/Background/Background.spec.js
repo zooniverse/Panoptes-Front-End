@@ -17,24 +17,24 @@ describe('Background', function () {
   let wrapper;
 
   it('should render without crashing', function () {
-    shallow(<Background src={''} />);
+    shallow(<Background src="" />);
   });
 
-  describe('when props.src is not defined', function() {
+  describe('when props.src is not defined', function () {
     before(function () {
-      wrapper = shallow(<Background src={''} />);
+      wrapper = shallow(<Background src="" />);
     });
 
-    it('should set BackgroundWrapper\'s prop.hasBg to false', function() {
+    it('should set BackgroundWrapper\'s prop.hasBg to false', function () {
       expect(wrapper.children().props().hasBg).to.be.false;
     });
 
-    it('should not render ImgBackground', function() {
+    it('should not render ImgBackground', function () {
       expect(wrapper.find(ImgBackground)).to.have.lengthOf(0);
     });
   });
 
-  describe('when props.src is defined', function() {
+  describe('when props.src is defined', function () {
     before(function () {
       wrapper = shallow(<Background src={MOCK_SRC} />);
     });

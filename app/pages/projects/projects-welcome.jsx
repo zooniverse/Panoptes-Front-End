@@ -25,6 +25,7 @@ class ProjectsWelcome extends Component {
         this.setState({ featuredProjects });
       });
   }
+
   render() {
     return (
       <div className="resources-container welcome-banner">
@@ -32,11 +33,11 @@ class ProjectsWelcome extends Component {
         <Translate content="projects.welcome.thanks" component="p" />
         <Markdown>{counterpart('projects.welcome.talk')}</Markdown>
         <div className="project-card-list">
-          {this.state.featuredProjects.map(project =>
+          {this.state.featuredProjects.map(project => (
             <FeaturedProjectEditor key={project.id} project={project}>
               <ProjectCard project={project} />
             </FeaturedProjectEditor>
-          )}
+          ))}
         </div>
         <p><Translate content="projects.welcome.scrollDown" component="em" /></p>
       </div>

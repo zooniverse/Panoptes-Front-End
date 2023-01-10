@@ -18,7 +18,7 @@ class VideoPlayer extends React.Component {
   }
 
   componentDidMount() {
-    this.player.controlsList = "nodownload"; // Non-spec option for Chrome browsers to hide the display of a download button
+    this.player.controlsList = 'nodownload'; // Non-spec option for Chrome browsers to hide the display of a download button
   }
 
   componentDidUpdate() {
@@ -31,7 +31,7 @@ class VideoPlayer extends React.Component {
 
   playVideo() {
     const { player } = this;
-    const { playing } = this.state
+    const { playing } = this.state;
     if (!player) return;
 
     this.setState({ playing: !playing });
@@ -48,22 +48,21 @@ class VideoPlayer extends React.Component {
   }
 
   renderSpeedControls(rates) {
-    return rates.map((rate, i) => {
-      return (
-        <label key={`rate-${i}`} className="secret-button">
-          <input
-            type="radio"
-            name={`playRate${this.props.frame}`}
-            value={rate}
-            checked={rate === this.state.playbackRate}
-            onChange={this.setPlayRate}
-          />
-          <span>
-            {rate}&times;
-          </span>
-        </label>
-      );
-    });
+    return rates.map((rate, i) => (
+      <label key={`rate-${i}`} className="secret-button">
+        <input
+          type="radio"
+          name={`playRate${this.props.frame}`}
+          value={rate}
+          checked={rate === this.state.playbackRate}
+          onChange={this.setPlayRate}
+        />
+        <span>
+          {rate}
+&times;
+        </span>
+      </label>
+    ));
   }
 
   render() {
@@ -87,14 +86,15 @@ class VideoPlayer extends React.Component {
         {this.props.showControls && (
           <span className="subject-video-controls">
             <span className="video-speed">
-            Speed: {this.renderSpeedControls(rates)}
+            Speed:
+              {' '}
+              {this.renderSpeedControls(rates)}
             </span>
           </span>
         )}
       </div>
     );
   }
-
 }
 
 VideoPlayer.propTypes = {

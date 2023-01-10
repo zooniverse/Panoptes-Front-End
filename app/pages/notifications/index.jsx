@@ -5,7 +5,7 @@ import Translate from 'react-translate-component';
 import talkClient from 'panoptes-client/lib/talk-client';
 import { Helmet } from 'react-helmet';
 import Loading from '../../components/loading-indicator';
-import NotificationSection from '../notifications/notification-section';
+import NotificationSection from './notification-section';
 import CollapsableSection from '../../components/collapsable-section';
 
 counterpart.registerTranslations('en', {
@@ -46,15 +46,15 @@ export default class NotificationsPage extends React.Component {
 
   getProjectNotifications() {
     talkClient.type('notifications').get({ page: 1, page_size: 50 })
-    .then((projNotifications) => {
-      this.groupNotifications(projNotifications);
-    })
-    .then(() => {
-      if (this.props.project) this.setState({ expanded: `project-${this.props.project.id}` });
-    })
-    .catch((e) => {
-      console.error('Unable to load notifications', e);
-    });
+      .then((projNotifications) => {
+        this.groupNotifications(projNotifications);
+      })
+      .then(() => {
+        if (this.props.project) this.setState({ expanded: `project-${this.props.project.id}` });
+      })
+      .catch((e) => {
+        console.error('Unable to load notifications', e);
+      });
   }
 
   groupNotifications(notifications) {
@@ -73,13 +73,13 @@ export default class NotificationsPage extends React.Component {
     });
     if (this.props.project && projectSections.indexOf(`project-${this.props.project.id}`) < 0) {
       talkClient.type('notifications').get({ page: 1, page_size: 1, section: `project-${this.props.project.id}` })
-      .then(([notification]) => {
-        if (notification) {
-          projectNotifications.push(notification);
-          this.setState({ projNotifications: projectNotifications });
-          this.setState({ expanded: `project-${this.props.project.id}` });
-        }
-      });
+        .then(([notification]) => {
+          if (notification) {
+            projectNotifications.push(notification);
+            this.setState({ projNotifications: projectNotifications });
+            this.setState({ expanded: `project-${this.props.project.id}` });
+          }
+        });
     }
     this.setState({ projNotifications: projectNotifications });
   }
@@ -111,7 +111,8 @@ export default class NotificationsPage extends React.Component {
     } else if (this.state.projNotifications.length === 0) {
       notificationView = (
         <div className="centering talk-module notifications-title">
-          <Translate content="notifications.noNotifications" />{' '}
+          <Translate content="notifications.noNotifications" />
+          {' '}
           <Translate content="notifications.participation" />
         </div>
       );
@@ -138,7 +139,7 @@ export default class NotificationsPage extends React.Component {
 
     return (
       <div className="talk notifications">
-        <Helmet title={counterpart("notifications.header")} />
+        <Helmet title={counterpart('notifications.header')} />
         <div className="content-container">
           <h3 className={headerStyle}>
             <Translate content="notifications.title" />

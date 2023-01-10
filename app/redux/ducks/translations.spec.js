@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import mockPanoptesResource from '../../../test/mock-panoptes-resource';
 import reducer, { load, listLanguages, setLocale } from './translations';
 
-describe('translations actions', function () {
+describe('translations actions', () => {
   let state;
   let newState;
   const initialState = {
@@ -23,7 +23,7 @@ describe('translations actions', function () {
       project_page: {}
     }
   };
-  const fakeDispatch = sinon.stub().callsFake(function (action) {
+  const fakeDispatch = sinon.stub().callsFake((action) => {
     if (typeof action === 'function') {
       action = action(fakeDispatch);
     }
@@ -41,44 +41,40 @@ describe('translations actions', function () {
     }
   });
 
-  before(function () {
+  before(() => {
     sinon.stub(counterpart, 'setLocale');
   });
 
-  after(function () {
+  after(() => {
     counterpart.setLocale.restore();
   });
 
-  beforeEach(function () {
+  beforeEach(() => {
     state = initialState;
   });
 
-  describe('load', function () {
+  describe('load', () => {
     let awaitTranslations;
 
-    before(function () {
-      sinon.stub(apiClient, 'type').callsFake(function (type) {
-        return {
-          get: sinon.stub().callsFake(function () {
-            return Promise.resolve([fakeTranslation]);
-          })
-        };
-      });
+    before(() => {
+      sinon.stub(apiClient, 'type').callsFake(type => ({
+        get: sinon.stub().callsFake(() => Promise.resolve([fakeTranslation]))
+      }));
       awaitTranslations = load('workflow', '123', 'es')(fakeDispatch);
     });
 
-    after(function () {
+    after(() => {
       apiClient.type.restore();
       counterpart.setLocale.resetHistory();
       fakeDispatch.resetHistory();
     });
 
-    it('should set the counterpart locale', function () {
+    it('should set the counterpart locale', () => {
       expect(counterpart.setLocale).to.have.been.calledOnce;
       expect(counterpart.setLocale).to.have.been.calledWith('es');
     });
 
-    it('should dispatch a load action', function () {
+    it('should dispatch a load action', () => {
       const load = {
         type: 'pfe/translations/LOAD',
         translated_type: 'workflow',
@@ -88,14 +84,14 @@ describe('translations actions', function () {
       expect(fakeDispatch.firstCall).to.have.been.calledWith(load);
     });
 
-    it('should load the expected translation', function (done) {
-      awaitTranslations.then(function (newState) {
+    it('should load the expected translation', (done) => {
+      awaitTranslations.then((newState) => {
         expect(newState.strings.workflow['123'].id).to.equal(fakeTranslation.id);
       })
-      .then(done, done);
+        .then(done, done);
     });
 
-    it('should explode translation strings into nested objects for backwards compatibility with old projects', function (done) {
+    it('should explode translation strings into nested objects for backwards compatibility with old projects', (done) => {
       const tasks = {
         T0: {
           question: fakeTranslation.strings['tasks.T0.question'],
@@ -109,41 +105,37 @@ describe('translations actions', function () {
           }
         }
       };
-      awaitTranslations.then(function (newState) {
+      awaitTranslations.then((newState) => {
         expect(newState.strings.workflow['123'].strings.tasks).to.deep.equal(tasks);
       })
-      .then(done, done);
+        .then(done, done);
     });
 
-    it('should not change state', function () {
+    it('should not change state', () => {
       expect(state).to.deep.equal(initialState);
     });
   });
 
-  describe('listLanguages', function () {
+  describe('listLanguages', () => {
     let awaitLanguages;
     const fakeTranslations = [
-      { language: 'es'},
-      { language: 'en'}
+      { language: 'es' },
+      { language: 'en' }
     ];
 
-    before(function () {
-      sinon.stub(apiClient, 'type').callsFake(function (type) {
-        return {
-          get: sinon.stub().callsFake(function () {
-            return Promise.resolve(fakeTranslations);
-          })
-        };
-      });
+    before(() => {
+      sinon.stub(apiClient, 'type').callsFake(type => ({
+        get: sinon.stub().callsFake(() => Promise.resolve(fakeTranslations))
+      }));
       awaitLanguages = listLanguages('project', '123')(fakeDispatch);
     });
 
-    after(function () {
+    after(() => {
       apiClient.type.restore();
       fakeDispatch.resetHistory();
     });
 
-    it('should dispatch a load action', function () {
+    it('should dispatch a load action', () => {
       const load = {
         type: 'pfe/translations/LOAD',
         translated_type: 'project',
@@ -152,42 +144,42 @@ describe('translations actions', function () {
       expect(fakeDispatch.firstCall).to.have.been.calledWith(load);
     });
 
-    it('should list the expected languages', function (done) {
-      awaitLanguages.then(function (newState) {
+    it('should list the expected languages', (done) => {
+      awaitLanguages.then((newState) => {
         expect(newState.languages.project).to.deep.equal(['es', 'en']);
       })
-      .then(done, done);
+        .then(done, done);
     });
 
-    it('should not change state', function () {
+    it('should not change state', () => {
       expect(state).to.deep.equal(initialState);
     });
   });
 
-  describe('setLocale', function () {
-    before(function () {
+  describe('setLocale', () => {
+    before(() => {
       newState = fakeDispatch(setLocale('es'));
     });
 
-    it('should set the locale', function () {
+    it('should set the locale', () => {
       expect(newState.locale).to.equal('es');
     });
 
-    it('should set the counterpart locale', function () {
+    it('should set the counterpart locale', () => {
       expect(counterpart.setLocale).to.have.been.calledOnce;
       expect(counterpart.setLocale).to.have.been.calledWith('es');
     });
 
-    it('should not set the rtl flag for ltr languages', function () {
+    it('should not set the rtl flag for ltr languages', () => {
       expect(newState.rtl).to.be.false;
     });
 
-    it('should set the rtl flag for rtl languages', function () {
+    it('should set the rtl flag for rtl languages', () => {
       newState = fakeDispatch(setLocale('he'));
       expect(newState.rtl).to.be.true;
     });
 
-    it('should not change state', function () {
+    it('should not change state', () => {
       expect(state).to.deep.equal(initialState);
     });
   });

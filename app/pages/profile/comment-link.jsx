@@ -27,15 +27,15 @@ class CommentLink extends React.Component {
     const [rootType, rootID] = comment.section.split('-');
     if (rootType === 'project' && rootID) {
       apiClient.type('projects').get(rootID)
-      .then(project => this.setState({ projectTitle: project.display_name }));
+        .then(project => this.setState({ projectTitle: project.display_name }));
     }
   }
 
   render() {
     const { comment } = this.props;
-    const href = comment.project_slug ?
-      `/projects/${comment.project_slug}/talk/${comment.board_id}/${comment.discussion_id}?comment=${comment.id}` :
-      `/talk/${comment.board_id}/${comment.discussion_id}?comment=${comment.id}`;
+    const href = comment.project_slug
+      ? `/projects/${comment.project_slug}/talk/${comment.board_id}/${comment.discussion_id}?comment=${comment.id}`
+      : `/talk/${comment.board_id}/${comment.discussion_id}?comment=${comment.id}`;
     return (
       <div className="profile-feed-comment-link">
         <header>
@@ -43,15 +43,27 @@ class CommentLink extends React.Component {
             {moment(comment.created_at).fromNow()}
           </span>
           <span>
-            {' '}in{' '}
+            {' '}
+in
+            {' '}
             <Link to={href}>
-              {!!this.state.projectTitle.length && !this.props.project &&
-                <span>
-                  <strong className="comment-project">{this.state.projectTitle}</strong>
-                  <span>{' '}➞{' '}</span>
-                </span>}
+              {!!this.state.projectTitle.length && !this.props.project
+                && (
+                  <span>
+                    <strong className="comment-project">{this.state.projectTitle}</strong>
+                    <span>
+                      {' '}
+➞
+                      {' '}
+                    </span>
+                  </span>
+                )}
               <strong className="comment-board">{comment.board_title}</strong>
-              <span>{' '}➞{' '}</span>
+              <span>
+                {' '}
+➞
+                {' '}
+              </span>
               <strong className="comment-discussion">{comment.discussion_title}</strong>
             </Link>
           </span>

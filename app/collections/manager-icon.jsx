@@ -36,20 +36,22 @@ class CollectionsManagerIcon extends React.Component {
       >
         <i className="fa fa-list fa-fw" />
 
-        {this.state.open &&
-          <Dialog tag="div" closeButton={true} onCancel={this.close}>
-            <ModalFocus
-              onEscape={this.close}
-            >
-              <CollectionsManager
-                autoFocus={true}
-                onSuccess={this.close}
-                project={this.props.project}
-                subjectIDs={subjectIDs}
-                user={this.props.user}
-              />
-            </ModalFocus>
-          </Dialog>}
+        {this.state.open
+          && (
+            <Dialog tag="div" closeButton={true} onCancel={this.close}>
+              <ModalFocus
+                onEscape={this.close}
+              >
+                <CollectionsManager
+                  autoFocus={true}
+                  onSuccess={this.close}
+                  project={this.props.project}
+                  subjectIDs={subjectIDs}
+                  user={this.props.user}
+                />
+              </ModalFocus>
+            </Dialog>
+          )}
       </button>
     );
   }

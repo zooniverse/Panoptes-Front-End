@@ -16,7 +16,7 @@ export default class AnchoredEllipseTool extends React.Component {
 
     this.getDeletePosition = this.getDeletePosition.bind(this);
   }
-  
+
   static defaultValues(values, dimensions) {
     // const x = (containerRect.width / 2) / scale.horizontal;
     // const y = (containerRect.height / 2) / scale.vertical;
@@ -64,7 +64,7 @@ export default class AnchoredEllipseTool extends React.Component {
   handleRadiusHandleDrag(coord, e, d) {
     const { x, y } = this.props.getEventOffset(e);
     const r = this.constructor.getDistance(this.props.mark.x, this.props.mark.y, x, y);
-    const angle = this.constructor.getAngle(this.props.mark.x, this.props.mark.y , x, y);
+    const angle = this.constructor.getAngle(this.props.mark.x, this.props.mark.y, x, y);
     this.props.mark[`r${coord}`] = r;
     this.props.mark.angle = angle;
     if (coord === 'y') this.props.mark.angle -= 90;
@@ -82,20 +82,24 @@ export default class AnchoredEllipseTool extends React.Component {
 
     return (
       <DrawingToolRoot tool={this} transform={positionAndRotate}>
-        {this.props.selected &&
-          <g>
-            <line x1="0" y1="0" x2={this.props.mark.rx} y2="0" strokeWidth={guideWidth} strokeDasharray={GUIDE_DASH} />
-            <line x1="0" y1="0" x2="0" y2={-1 * this.props.mark.ry} strokeWidth={guideWidth} strokeDasharray={GUIDE_DASH} />
-          </g>}
+        {this.props.selected
+          && (
+            <g>
+              <line x1="0" y1="0" x2={this.props.mark.rx} y2="0" strokeWidth={guideWidth} strokeDasharray={GUIDE_DASH} />
+              <line x1="0" y1="0" x2="0" y2={-1 * this.props.mark.ry} strokeWidth={guideWidth} strokeDasharray={GUIDE_DASH} />
+            </g>
+          )}
 
         <ellipse rx={this.props.mark.rx} ry={this.props.mark.ry} />
 
-        {this.props.selected &&
-          <g>
-            <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={this.props.mark.angle} getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix} />
-            <DragHandle onDrag={this.handleRadiusHandleDrag.bind(this, 'x')} x={this.props.mark.rx} y={0} scale={this.props.scale} getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix} />
-            <DragHandle onDrag={this.handleRadiusHandleDrag.bind(this, 'y')} x={0} y={-1 * this.props.mark.ry} scale={this.props.scale} getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix} />
-          </g>}
+        {this.props.selected
+          && (
+            <g>
+              <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={this.props.mark.angle} getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix} />
+              <DragHandle onDrag={this.handleRadiusHandleDrag.bind(this, 'x')} x={this.props.mark.rx} y={0} scale={this.props.scale} getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix} />
+              <DragHandle onDrag={this.handleRadiusHandleDrag.bind(this, 'y')} x={0} y={-1 * this.props.mark.ry} scale={this.props.scale} getScreenCurrentTransformationMatrix={this.props.getScreenCurrentTransformationMatrix} />
+            </g>
+          )}
       </DrawingToolRoot>
     );
   }

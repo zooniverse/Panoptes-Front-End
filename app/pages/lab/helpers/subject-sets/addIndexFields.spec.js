@@ -2,10 +2,10 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import addIndexFields from './addIndexFields';
 
-describe('addIndexFields', function () {
+describe('addIndexFields', () => {
   let subjectSet;
 
-  beforeEach(function () {
+  beforeEach(() => {
     subjectSet = {
       metadata: {},
       update(data) {
@@ -15,8 +15,8 @@ describe('addIndexFields', function () {
     };
   });
 
-  describe('with marked headers in the manifest', function () {
-    beforeEach(function () {
+  describe('with marked headers in the manifest', () => {
+    beforeEach(() => {
       const data = [{
         '%title': 'test thing',
         description: 'ignore me',
@@ -25,17 +25,17 @@ describe('addIndexFields', function () {
       addIndexFields(subjectSet, data);
     });
 
-    it('should set subject set index fields', function () {
+    it('should set subject set index fields', () => {
       expect(subjectSet.metadata.indexFields).to.equal('title,creator');
     });
 
-    it('should save the subject set', function () {
+    it('should save the subject set', () => {
       expect(subjectSet.save).to.have.been.calledOnce;
     });
   });
 
-  describe('without marked headers in the manifest', function () {
-    beforeEach(function () {
+  describe('without marked headers in the manifest', () => {
+    beforeEach(() => {
       const data = [{
         title: 'test thing',
         description: 'ignore me',
@@ -44,11 +44,11 @@ describe('addIndexFields', function () {
       addIndexFields(subjectSet, data);
     });
 
-    it('should not set subject set index fields', function () {
+    it('should not set subject set index fields', () => {
       expect(subjectSet.metadata.indexFields).to.be.undefined;
     });
 
-    it('should not save the subject set', function () {
+    it('should not save the subject set', () => {
       expect(subjectSet.save).to.not.have.been.called;
     });
   });

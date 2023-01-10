@@ -7,7 +7,7 @@ class ResourcesPage extends React.Component {
     return (
       <div>
         <Markdown>{counterpart('about.resources.title')}</Markdown>
-        <Markdown>{counterpart('about.resources.filler')}</Markdown>        
+        <Markdown>{counterpart('about.resources.filler')}</Markdown>
         <Markdown>{counterpart('about.resources.introduction')}</Markdown>
         <Markdown>{counterpart('about.resources.officialMaterials')}</Markdown>
         <Markdown>{counterpart('about.resources.printables')}</Markdown>

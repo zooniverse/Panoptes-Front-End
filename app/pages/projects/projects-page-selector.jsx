@@ -16,20 +16,21 @@ class PageSelector extends Component {
     return (
       <div>
         {(totalPages > 1)
-        ? [...Array(totalPages).keys()].map((i) => {
-          const page = i + 1;
-          const active = page === +currentPage;
-          return (
-            <button
-              onClick={this.handleChange.bind(this, page)}
-              key={page}
-              className="pill-button"
-              style={{ border: active ? '2px solid' : 'none' }}
-            >
-              {page}
-            </button>);
-        })
-        : null}
+          ? [...Array(totalPages).keys()].map((i) => {
+            const page = i + 1;
+            const active = page === +currentPage;
+            return (
+              <button
+                onClick={this.handleChange.bind(this, page)}
+                key={page}
+                className="pill-button"
+                style={{ border: active ? '2px solid' : 'none' }}
+              >
+                {page}
+              </button>
+            );
+          })
+          : null}
       </div>
     );
   }
@@ -47,12 +48,12 @@ class PageSelector extends Component {
 PageSelector.propTypes = {
   currentPage: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
-  totalPages: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired
 };
 
 PageSelector.defaultProps = {
   currentPage: 1,
-  totalPages: 0,
+  totalPages: 0
 };
 
 export default PageSelector;

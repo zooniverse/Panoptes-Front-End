@@ -8,19 +8,21 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import ProjectNavbarWide, { StyledAvatar, StyledWrapper, StyledHeaderWide, StyledNavLink, Nav } from './ProjectNavbarWide';
+import ProjectNavbarWide, {
+  StyledAvatar, StyledWrapper, StyledHeaderWide, StyledNavLink, Nav
+} from './ProjectNavbarWide';
 
 const MOCK_LINKS = [{ url: 'https://www.google.com' }, { url: 'https://www.yahoo.com' }];
 
-describe('ProjectNavbarWide', function() {
+describe('ProjectNavbarWide', function () {
   let wrapper;
-  before(function() {
+  before(function () {
     wrapper = shallow(<ProjectNavbarWide navLinks={MOCK_LINKS} />);
   });
 
-  it('should render without crashing', function() {});
+  it('should render without crashing', function () {});
 
-  it('should render a StyledHeaderWide component', function() {
+  it('should render a StyledHeaderWide component', function () {
     expect(wrapper.find(StyledHeaderWide)).to.have.lengthOf(1);
   });
 

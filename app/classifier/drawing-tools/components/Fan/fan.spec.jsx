@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import Fan from './fan';
 
-describe('Fan Tool', function () {
+describe('Fan Tool', () => {
   let mark;
   const x = 200;
   const y = 400;
@@ -43,21 +43,21 @@ describe('Fan Tool', function () {
     }
   ];
   const rotations = [0, 45, 90, 135, 180, 225, 270, 315];
-  before(function () {
+  before(() => {
     mark = Fan.initStart({ x, y });
   });
-  it('should create a mark at a given position', function () {
+  it('should create a mark at a given position', () => {
     expect(mark.x).to.equal(x);
     expect(mark.y).to.equal(y);
     expect(mark._inProgress).to.be.true;
   });
-  cursors.forEach(function (cursor, i) {
-    it('should update after a cursor move to angle ' + rotations[i], function () {
+  cursors.forEach((cursor, i) => {
+    it(`should update after a cursor move to angle ${rotations[i]}`, () => {
       const newMark = Fan.initMove(cursor, mark);
       expect(newMark.rotation).to.equal(rotations[i]);
     });
   });
-  it('should update mark radius after a cursor move', function () {
+  it('should update mark radius after a cursor move', () => {
     const cursor = {
       x: 170,
       y: 360
@@ -65,12 +65,12 @@ describe('Fan Tool', function () {
     const newMark = Fan.initMove(cursor, mark);
     expect(newMark.radius).to.equal(50);
   });
-  it('should finish drawing on initial release', function () {
+  it('should finish drawing on initial release', () => {
     const newMark = Fan.initRelease();
     expect(newMark._inProgress).to.be.false;
   });
 
-  describe('rendered component', function () {
+  describe('rendered component', () => {
     let wrapper;
     const onChange = sinon.stub().callsFake(() => null);
     const mark = {
@@ -81,7 +81,7 @@ describe('Fan Tool', function () {
       spread: 30
     };
 
-    before(function () {
+    before(() => {
       wrapper = shallow(
         <Fan
           mark={mark}
@@ -94,14 +94,13 @@ describe('Fan Tool', function () {
       );
     });
 
-    describe('the rotation drag handle', function () {
-
-      afterEach(function () {
+    describe('the rotation drag handle', () => {
+      afterEach(() => {
         onChange.resetHistory();
       });
 
-      cursors.forEach(function (cursor, i) {
-        it('should update rotation to ' + rotations[i], function () {
+      cursors.forEach((cursor, i) => {
+        it(`should update rotation to ${rotations[i]}`, () => {
           wrapper.instance().handleRotate(cursor);
           expect(onChange.callCount).to.equal(1);
           const newMark = onChange.getCall(0).args[0];
@@ -109,7 +108,7 @@ describe('Fan Tool', function () {
         });
       });
 
-      it('should update radius when dragged', function () {
+      it('should update radius when dragged', () => {
         const cursor = {
           x: 170,
           y: 360
@@ -121,16 +120,15 @@ describe('Fan Tool', function () {
       });
     });
 
-    describe('the spread drag handles', function () {
-
-      afterEach(function () {
+    describe('the spread drag handles', () => {
+      afterEach(() => {
         onChange.resetHistory();
       });
 
-      cursors.forEach(function (cursor, i) {
+      cursors.forEach((cursor, i) => {
         const cursorAngle = rotations[i];
-        [15, 30, 45, 70, 90].forEach(function (halfSpread) {
-          it('should update spread correctly for mark rotation ' + (rotations[i] - halfSpread) + ', spread ' + halfSpread, function () {
+        [15, 30, 45, 70, 90].forEach((halfSpread) => {
+          it(`should update spread correctly for mark rotation ${rotations[i] - halfSpread}, spread ${halfSpread}`, () => {
             mark.rotation = cursorAngle - halfSpread;
             wrapper.setProps({ mark });
             wrapper.instance().handleSpread(cursor);
@@ -139,7 +137,7 @@ describe('Fan Tool', function () {
             expect(newMark.spread).to.equal(halfSpread * 2);
           });
 
-          it('should update spread correctly for mark rotation ' + (rotations[i] - halfSpread) + ', spread ' + -halfSpread, function () {
+          it(`should update spread correctly for mark rotation ${rotations[i] - halfSpread}, spread ${-halfSpread}`, () => {
             mark.rotation = cursorAngle + halfSpread;
             wrapper.setProps({ mark });
             wrapper.instance().handleSpread(cursor);
@@ -150,9 +148,9 @@ describe('Fan Tool', function () {
         });
       });
 
-      it('should not allow spreads greater than 180 degrees', function () {
-        cursors.forEach(function (cursor, i) {
-          [95, 120, -95, -120].forEach(function (halfSpread) {
+      it('should not allow spreads greater than 180 degrees', () => {
+        cursors.forEach((cursor, i) => {
+          [95, 120, -95, -120].forEach((halfSpread) => {
             const cursorAngle = rotations[i];
             mark.rotation = cursorAngle - halfSpread;
             wrapper.setProps({ mark });
@@ -164,7 +162,7 @@ describe('Fan Tool', function () {
           });
         });
       });
-      it('should update correctly when the cursor crosses the x-axis', function () {
+      it('should update correctly when the cursor crosses the x-axis', () => {
         const cursor = {
           x: 300,
           y: 400

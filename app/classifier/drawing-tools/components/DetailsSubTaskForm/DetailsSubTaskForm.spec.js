@@ -38,15 +38,15 @@ const mockReduxStore = {
 
 const toolProps = {
   annotations: [],
-  color: "#00ff00",
+  color: '#00ff00',
   containerRect: {},
   details: [{
     _key: 0.41412246953808407,
     answers: [{ label: 'yes' }, { label: 'no' }],
-    help: "",
-    question: "Is this fragmentary?",
+    help: '',
+    question: 'Is this fragmentary?',
     required: false,
-    type: "multiple"
+    type: 'multiple'
   }],
   disabled: false,
   mark: {
@@ -61,18 +61,18 @@ const toolProps = {
   onChange: sinon.stub().callsFake(() => {}),
   scale: {},
   selected: true,
-  size: "large",
-  taskKey: "T0"
+  size: 'large',
+  taskKey: 'T0'
 };
 
 const translations = {
   languages: {},
   locale: 'en',
   strings: { workflow: {}}
-}
+};
 
-describe('DetailsSubTaskForm', function() {
-  describe('render', function() {
+describe('DetailsSubTaskForm', function () {
+  describe('render', function () {
     let wrapper;
     before(function () {
       wrapper = shallow(<DetailsSubTaskForm

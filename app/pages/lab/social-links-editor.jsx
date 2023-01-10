@@ -96,7 +96,7 @@ export default class SocialLinksEditor extends React.Component {
     return (
       <tr key={i}>
         {!precedeSiteName && (
-          <td><label for={`socialLink${i}`}>{site}</label></td>
+          <td><label htmlFor={`socialLink${i}`}>{site}</label></td>
         )}
         <AutoSave tag="td" resource={this.props.project}>
           <input
@@ -110,7 +110,12 @@ export default class SocialLinksEditor extends React.Component {
           />
         </AutoSave>
         {precedeSiteName && (
-          <td><label for={`socialLink${i}`}>.{site}</label></td>
+          <td>
+            <label htmlFor={`socialLink${i}`}>
+.
+              {site}
+            </label>
+          </td>
         )}
         <td>
           <button type="button" onClick={this.handleRemoveLink.bind(this, site)}>

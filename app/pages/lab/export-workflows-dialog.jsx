@@ -119,7 +119,9 @@ ExportWorkflowsDialog.propTypes = {
   onFail: PropTypes.func.isRequired
 };
 
-const ExportWorkflowListItem = ({ workflow, media, onChange, workflowError }) => {
+const ExportWorkflowListItem = ({
+  workflow, media, onChange, workflowError
+}) => {
   const myMedia = workflow ? media[workflow.id] : null;
   const now = new Date();
   const lockoutTime = new Date();
@@ -141,21 +143,31 @@ const ExportWorkflowListItem = ({ workflow, media, onChange, workflowError }) =>
           onChange={onChange}
         />
         {workflow.display_name}
-        {' '}(#{workflow.id})
+        {' '}
+(#
+        {workflow.id}
+)
         <small>
-          {myMedia &&
-            <a
-              title={myMedia.updated_at}
-              href={myMedia.src}
-              className="workflow-export-list__link"
-            >
-              {Moment(myMedia.updated_at).fromNow()}
-            </a>}
-          {!myMedia &&
-            <span className="workflow-export-list__span">No exports have been requested.</span>}
+          {myMedia
+            && (
+              <a
+                title={myMedia.updated_at}
+                href={myMedia.src}
+                className="workflow-export-list__link"
+              >
+                {Moment(myMedia.updated_at).fromNow()}
+              </a>
+            )}
+          {!myMedia
+            && <span className="workflow-export-list__span">No exports have been requested.</span>}
         </small>
-        {workflowError[workflow.id] &&
-          <div className="form-help error">We had a problem requesting your export data: {workflowError[workflow.id]}</div>}
+        {workflowError[workflow.id]
+          && (
+            <div className="form-help error">
+We had a problem requesting your export data:
+              {workflowError[workflow.id]}
+            </div>
+          )}
       </li>
     </div>
   );

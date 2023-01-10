@@ -4,7 +4,10 @@ export default {
   choices:
   <div className="content-container">
     <p>
-      User-identifiable <strong>choices</strong>, with these headers:
+      User-identifiable
+      {' '}
+      <strong>choices</strong>
+, with these headers:
     </p>
 
     <table className="standard-table">
@@ -18,7 +21,11 @@ export default {
         <tr className="form-label">
           <td>The label for the choice</td>
           <td>A short description of the choice</td>
-          <td>Representative images of the choice, <code>;</code>-separated</td>
+          <td>
+Representative images of the choice,
+            <code>;</code>
+-separated
+          </td>
           <td>Y or N for whether you want "sub-questions" to appear</td>
         </tr>
         <tr>
@@ -38,12 +45,17 @@ export default {
   </div>,
   images:
   <div className="content-container">
-    Pick some <strong>images</strong>. Make sure they have the exact same names as the ones in your other files.
+    Pick some
+    {' '}
+    <strong>images</strong>
+. Make sure they have the exact same names as the ones in your other files.
   </div>,
   characteristics:
   <div className="content-container">
     <p>
-      <strong>Characteristics</strong> of those choices that the user can filter through. Note that the values in Name have to match the values in choices.csv exactly. Format like this:
+      <strong>Characteristics</strong>
+      {' '}
+of those choices that the user can filter through. Note that the values in Name have to match the values in choices.csv exactly. Format like this:
     </p>
 
     <table className="standard-table">
@@ -57,7 +69,23 @@ export default {
         </tr>
         <tr className="form-label">
           <td>Choice name</td>
-          <td colSpan="4"><code>Characteristic</code>=<code>value</code>; <code>icon filename</code>, with each row marked <code>Y</code> or <code>N</code> for that choice</td>
+          <td colSpan="4">
+            <code>Characteristic</code>
+=
+            <code>value</code>
+;
+            {' '}
+            <code>icon filename</code>
+, with each row marked
+            {' '}
+            <code>Y</code>
+            {' '}
+or
+            {' '}
+            <code>N</code>
+            {' '}
+for that choice
+          </td>
         </tr>
         <tr>
           <td>Shark</td>
@@ -79,7 +107,11 @@ export default {
   confusions:
   <div className="content-container">
     <p>
-      Commonly <strong>confused pairs</strong> of choices:
+      Commonly
+      {' '}
+      <strong>confused pairs</strong>
+      {' '}
+of choices:
     </p>
 
     <table className="standard-table">
@@ -105,7 +137,9 @@ export default {
   questions:
   <div className="content-container">
     <p>
-      <strong>Questions</strong> to ask about each identification:
+      <strong>Questions</strong>
+      {' '}
+to ask about each identification:
     </p>
 
     <table className="standard-table">
@@ -120,9 +154,24 @@ export default {
         </tr>
         <tr className="form-label">
           <td>The question to ask</td>
-          <td>Can the user select multiple answers? <code>Y</code> or <code>N</code></td>
-          <td>Is an answer required? <code>Y</code> or <code>N</code></td>
-          <td>The answers separated with <code>;</code></td>
+          <td>
+Can the user select multiple answers?
+            <code>Y</code>
+            {' '}
+or
+            <code>N</code>
+          </td>
+          <td>
+Is an answer required?
+            <code>Y</code>
+            {' '}
+or
+            <code>N</code>
+          </td>
+          <td>
+The answers separated with
+            <code>;</code>
+          </td>
           <td>Choices to ask this question for (leave blank for all by default).</td>
           <td>Choices to not ask this question for.</td>
         </tr>

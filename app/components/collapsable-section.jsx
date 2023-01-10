@@ -15,13 +15,11 @@ export default class CollapsableSection extends Component {
   }
 
   render() {
-    const children = React.Children.map(this.props.children, child =>
-       React.cloneElement(child, {
-         toggleSection: this.onSectionToggle,
-         expanded: this.props.expanded,
-         section: this.props.section
-       })
-    );
+    const children = React.Children.map(this.props.children, child => React.cloneElement(child, {
+      toggleSection: this.onSectionToggle,
+      expanded: this.props.expanded,
+      section: this.props.section
+    }));
     return (
       <div>
         {children}

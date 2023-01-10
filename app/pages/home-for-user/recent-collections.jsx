@@ -30,9 +30,7 @@ class RecentCollectionsSection extends React.Component {
     }
   }
 
-  shared = (collection) => {
-    return this.context.user.id !== collection.links.owner.id;
-  };
+  shared = collection => this.context.user.id !== collection.links.owner.id;
 
   fetchCollections = (user) => {
     this.setState({
@@ -47,19 +45,19 @@ class RecentCollectionsSection extends React.Component {
       favorite: false,
       current_user_roles: 'owner,contributor,collaborator,viewer'
     })
-    .then((collections) => {
-      this.setState({ collections });
-    })
-    .catch((error) => {
-      this.setState({
-        error: error
+      .then((collections) => {
+        this.setState({ collections });
+      })
+      .catch((error) => {
+        this.setState({
+          error
+        });
+      })
+      .then(() => {
+        this.setState({
+          loading: false
+        });
       });
-    })
-    .then(() => {
-      this.setState({
-        loading: false
-      });
-    });
   };
 
   render() {
@@ -81,16 +79,15 @@ class RecentCollectionsSection extends React.Component {
         )}
 
         <div className="collections-card-list">
-          {this.state.collections.map((collection) => {
-            return (
-              <CollectionCard
-                key={collection.id}
-                shared={this.shared(collection)}
-                collection={collection}
-                linkTo={`/collections/${collection.slug}`}
-                translationObjectName="collectionsPage"
-              />);
-          })}
+          {this.state.collections.map(collection => (
+            <CollectionCard
+              key={collection.id}
+              shared={this.shared(collection)}
+              collection={collection}
+              linkTo={`/collections/${collection.slug}`}
+              translationObjectName="collectionsPage"
+            />
+          ))}
         </div>
       </HomePageSection>
     );

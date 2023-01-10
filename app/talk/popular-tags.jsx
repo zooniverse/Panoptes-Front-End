@@ -8,7 +8,7 @@ const ProjectTag = (props) => {
   const tag = props.tag.name;
   return (
     <div className="truncated">
-      <Link to={`/projects/${props.project.slug}/talk/tags/${tag}`} onClick={props.onClick} >
+      <Link to={`/projects/${props.project.slug}/talk/tags/${tag}`} onClick={props.onClick}>
         {tag}
       </Link>
       {' '}
@@ -20,7 +20,7 @@ const TalkTag = (props) => {
   const tag = props.tag.name;
   return (
     <div className="truncated">
-      <Link to={`/talk/search/?query=${tag}`} onClick={props.onClick} >
+      <Link to={`/talk/search/?query=${tag}`} onClick={props.onClick}>
         {tag}
       </Link>
       {' '}

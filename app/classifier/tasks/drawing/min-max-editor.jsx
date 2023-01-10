@@ -6,22 +6,22 @@ class MinMaxEditor extends React.Component {
   static propTypes = {
     name: PropTypes.string,
     choice: PropTypes.object,
-    workflow: PropTypes.object,
+    workflow: PropTypes.object
   };
 
   state = {
-    tool: null,
+    tool: null
   };
 
   componentWillMount() {
     this.setState({
-      tool: this.props.choice,
+      tool: this.props.choice
     });
   }
 
   componentWillReceiveProps(newProps) {
     this.setState({
-      tool: newProps.choice,
+      tool: newProps.choice
     });
   }
 
@@ -40,9 +40,9 @@ class MinMaxEditor extends React.Component {
 
   onChangeMax = (e) => {
     const tool = this.state.tool;
-    const newMax = e.target.value && e.target.value < this.state.tool.min ?
-      this.state.tool.min :
-      e.target.value;
+    const newMax = e.target.value && e.target.value < this.state.tool.min
+      ? this.state.tool.min
+      : e.target.value;
     if (newMax) {
       tool.max = newMax;
     } else {
@@ -62,7 +62,8 @@ class MinMaxEditor extends React.Component {
     return (
       <div className="min-max-editor workflow-choice-setting">
         <AutoSave resource={this.props.workflow}>
-          Min{' '}
+          Min
+          {' '}
           <input
             type="number"
             inputMode="numeric"
@@ -76,7 +77,8 @@ class MinMaxEditor extends React.Component {
           />
         </AutoSave>
         <AutoSave resource={this.props.workflow}>
-          Max{' '}
+          Max
+          {' '}
           <input
             type="number"
             inputMode="numeric"

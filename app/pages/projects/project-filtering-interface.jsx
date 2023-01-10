@@ -25,22 +25,26 @@ class ProjectFilteringInterface extends Component {
       pages: 0,
       projectCount: 0,
       query: {},
-      pageSize: null,
+      pageSize: null
     };
   }
 
   componentDidMount() {
-    const { discipline, page, sort, status, page_size } = this.props;
+    const {
+      discipline, page, sort, status, page_size
+    } = this.props;
     this.loadProjects(discipline, page, sort, status, page_size);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { discipline, page, sort, status, page_size } = nextProps;
-    if (discipline !== this.props.discipline ||
-        page !== this.props.page ||
-        sort !== this.props.sort ||
-        status !== this.props.status ||
-        page_size !== this.props.page_size) {
+    const {
+      discipline, page, sort, status, page_size
+    } = nextProps;
+    if (discipline !== this.props.discipline
+        || page !== this.props.page
+        || sort !== this.props.sort
+        || status !== this.props.status
+        || page_size !== this.props.page_size) {
       this.loadProjects(discipline, page, sort, status, page_size);
     }
   }
@@ -48,7 +52,7 @@ class ProjectFilteringInterface extends Component {
   loadProjects(discipline, page, sort, status, pageSize) {
     this.setState({
       error: null,
-      loading: true,
+      loading: true
     });
     const query = {
       tags: discipline || undefined,
@@ -58,7 +62,7 @@ class ProjectFilteringInterface extends Component {
       cards: true,
       include: ['avatar'],
       state: status,
-      page_size: pageSize,
+      page_size: pageSize
     };
     if (!query.tags) {
       delete query.tags;
@@ -67,14 +71,17 @@ class ProjectFilteringInterface extends Component {
       .then((projects) => {
         if (projects.length > 0) {
           const hasMeta = (projects[0] !== null && projects[0].getMeta() !== null);
-          let pages = 0, projectCount = 0;
+          let pages = 0; let
+            projectCount = 0;
           if (hasMeta) {
             const meta = projects[0].getMeta();
             pages = meta.page_count;
             projectCount = meta.count;
             pageSize = meta.page_size;
           }
-          this.setState({ projects, pages, projectCount, pageSize });
+          this.setState({
+            projects, pages, projectCount, pageSize
+          });
         } else {
           this.setState({ projects: [], pages: 0, projectCount: 0 });
         }
@@ -127,12 +134,14 @@ class ProjectFilteringInterface extends Component {
 
   renderPageSelector() {
     const { page } = this.props;
-    return (this.state.pages > 1) ?
-      <PageSelector
-        currentPage={+page}
-        totalPages={this.state.pages}
-        onChange={this.handlePageChange}
-      />
+    return (this.state.pages > 1)
+      ? (
+        <PageSelector
+          currentPage={+page}
+          totalPages={this.state.pages}
+          onChange={this.handlePageChange}
+        />
+      )
       : null;
   }
 
@@ -141,7 +150,7 @@ class ProjectFilteringInterface extends Component {
     const launch_approved = !apiClient.params.admin ? true : undefined;
     const options = {
       launch_approved
-    }
+    };
     return (
       <section className="resources-container">
         <Filmstrip
@@ -167,14 +176,14 @@ ProjectFilteringInterface.propTypes = {
   onChangeQuery: PropTypes.func.isRequired,
   page: PropTypes.string.isRequired,
   sort: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired
 };
 
 ProjectFilteringInterface.defaultProps = {
   discipline: '',
   page: '1',
   sort: '-launch_date',
-  status: 'live',
+  status: 'live'
 };
 
 export default ProjectFilteringInterface;

@@ -1,5 +1,7 @@
-import {IndexRoute, IndexRedirect, Route, Redirect} from 'react-router'
-import React from 'react'
+import {
+  IndexRoute, IndexRedirect, Route, Redirect
+} from 'react-router';
+import React from 'react';
 
 import ProjectsPage from './pages/projects/index';
 import FilteredProjectsList from './pages/projects/filtered-projects-list';
@@ -8,7 +10,9 @@ import CollectionSettings from './collections/settings';
 import CollectionCollaborators from './collections/collaborators';
 import ProjectHomePage from './pages/project/home';
 import AboutProject from './pages/project/about/index';
-import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';
+import {
+  AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults
+} from './pages/project/about/simple-pages';
 import AboutProjectTeam from './pages/project/about/team';
 import UserSettingsList from './pages/admin/user-settings-list';
 import UserSettings from './pages/admin/user-settings';
@@ -60,49 +64,49 @@ import Resources from './pages/about/resources-page';
 import DataExports from './pages/lab/data-exports';
 import TalkTags from './talk/tags';
 import MonorepoRoutes from './MonorepoRoutes';
-import FEMLabRouter from './pages/lab-fem/fem-lab-router'
-import IIIFSubjectSet from './pages/lab/iiif'
-import projectLab from './pages/lab/project.jsx'
-import Collaborators from './pages/lab/collaborators.jsx'
+import FEMLabRouter from './pages/lab-fem/fem-lab-router';
+import IIIFSubjectSet from './pages/lab/iiif';
+import projectLab from './pages/lab/project.jsx';
+import Collaborators from './pages/lab/collaborators.jsx';
 
 // <Redirect from="home" to="/" /> doesn't work.
 
 class ONE_UP_REDIRECT extends React.Component {
-  componentDidMount () {
-    let givenPathSegments = this.props.location.pathname.split('/')
-    givenPathSegments.pop()
-    const pathOneLevelUp = givenPathSegments.join('/')
-    this.props.router.replace(pathOneLevelUp, this.props.location.query)
+  componentDidMount() {
+    const givenPathSegments = this.props.location.pathname.split('/');
+    givenPathSegments.pop();
+    const pathOneLevelUp = givenPathSegments.join('/');
+    this.props.router.replace(pathOneLevelUp, this.props.location.query);
   }
 
-  render () {
-    return null
+  render() {
+    return null;
   }
 }
 
-function redirectAboutPage (nextState, replace, done) {
+function redirectAboutPage(nextState, replace, done) {
   try {
-    const { pathname } = nextState.location
-    const newUrl = `https://fe-content-pages.zooniverse.org${pathname}`
+    const { pathname } = nextState.location;
+    const newUrl = `https://fe-content-pages.zooniverse.org${pathname}`;
     if (window.location.hostname === 'www.zooniverse.org') {
-      newUrl = `https://www.zooniverse.org${pathname}`
+      newUrl = `https://www.zooniverse.org${pathname}`;
     }
-    window.location.replace(newUrl)
-    done()
+    window.location.replace(newUrl);
+    done();
   } catch (error) {
-    done(error)
+    done(error);
   }
 }
 
 class ExternalRedirect extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     if (this.props.newUrl) {
-      window.location = this.props.newUrl
+      window.location = this.props.newUrl;
     }
   }
 
-  render () {
-    return null
+  render() {
+    return null;
   }
 }
 
@@ -112,7 +116,7 @@ export const routes = (
     <Route path="home" component={ONE_UP_REDIRECT} />
     <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
-    <Route path="about" component={AboutPage} ignoreScrollBehavior>
+    <Route path="about" component={AboutPage} ignoreScrollBehavior={true}>
       <IndexRoute component={AboutHome} />
       <Route path="team" onEnter={redirectAboutPage} />
       <Route path="publications" onEnter={redirectAboutPage} />
@@ -126,7 +130,7 @@ export const routes = (
     </Route>
 
 
-    <Route path="get-involved" component={GetInvolved} ignoreScrollBehavior>
+    <Route path="get-involved" component={GetInvolved} ignoreScrollBehavior={true}>
       <IndexRoute component={Volunteering} />
       <Route path="call-for-projects" component={CallForProjects} />
       <Route path="education" component={Education} />
@@ -169,7 +173,7 @@ export const routes = (
 
     <MonorepoRoutes />
 
-    <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl='https://authors.planetfour.org/' />} />
+    <Route path="/projects/mschwamb/planet-four/authors" component={() => <ExternalRedirect newUrl="https://authors.planetfour.org/" />} />
 
     /*
     2022 Feb Temporary fix: a recent issue of "Sky and Telescope" misprinted the
@@ -177,16 +181,16 @@ export const routes = (
     See https://zooniverse.slack.com/archives/C14TTCLNN/p1643655013402769
     Please remove in 6 months time.
     */
-    <Redirect from="projects/mike-walmsley/bursts-from-space" to="projects/mikewalmsley/bursts-from-space"/>
+    <Redirect from="projects/mike-walmsley/bursts-from-space" to="projects/mikewalmsley/bursts-from-space" />
 
     <Route path="projects/:owner/:name" component={require('./pages/project').default}>
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" component={require('./pages/project/classify').default} />
-      <Redirect from="research" to="about/research"/>
-      <Redirect from="results" to="about/results"/>
-      <Redirect from="faq" to="about/faq"/>
-      <Redirect from="education" to="about/education"/>
+      <Redirect from="research" to="about/research" />
+      <Redirect from="results" to="about/results" />
+      <Redirect from="faq" to="about/faq" />
+      <Redirect from="education" to="about/education" />
       <Route path="about" component={AboutProject}>
         <IndexRedirect to="research" />
         <Route path="research" component={AboutProjectResearch} />
@@ -215,8 +219,8 @@ export const routes = (
       </Route>
 
       <Route path="collections" component={require('./pages/collections/index')}>
-         <IndexRoute component={require('./pages/collections/collections-list')} />
-         <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
+        <IndexRoute component={require('./pages/collections/collections-list')} />
+        <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
       </Route>
 
       <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
@@ -238,10 +242,10 @@ export const routes = (
       <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" component={require('./pages/project/classify').default} />
-      <Redirect from="research" to="about/research"/>
-      <Redirect from="results" to="about/results"/>
-      <Redirect from="faq" to="about/faq"/>
-      <Redirect from="education" to="about/education"/>
+      <Redirect from="research" to="about/research" />
+      <Redirect from="results" to="about/results" />
+      <Redirect from="faq" to="about/faq" />
+      <Redirect from="education" to="about/education" />
       <Route path="about" component={AboutProject}>
         <IndexRedirect to="research" />
         <Route path="research" component={AboutProjectResearch} />
@@ -270,8 +274,8 @@ export const routes = (
       </Route>
 
       <Route path="collections" component={require('./pages/collections/index')}>
-         <IndexRoute component={require('./pages/collections/collections-list')} />
-         <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
+        <IndexRoute component={require('./pages/collections/collections-list')} />
+        <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
       </Route>
 
       <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
@@ -315,8 +319,8 @@ export const routes = (
     </Route>
 
     <Route path="collections" component={require('./pages/collections')}>
-       <IndexRoute component={require('./pages/collections/collections-list')} />
-       <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
+      <IndexRoute component={require('./pages/collections/collections-list')} />
+      <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
     </Route>
 
     <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
@@ -330,7 +334,7 @@ export const routes = (
     <Route path="lab/:projectID" component={projectLab}>
       <IndexRoute component={require('./pages/lab/project-details')} />
       <Route path="about" component={require('./pages/lab/about')}>
-        <IndexRedirect to='research' />
+        <IndexRedirect to="research" />
         <Route path="research" component={require('./pages/lab/about/research')} />
         <Route path="results" component={require('./pages/lab/about/results')} />
         <Route path="faq" component={require('./pages/lab/about/faq')} />
@@ -370,12 +374,24 @@ export const routes = (
       <Route path="organization-status/:owner/:name" component={OrganizationStatus} />
     </Route>
 
-    <Route path="todo" component={() => <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
+    <Route
+      path="todo"
+      component={() => (
+        <div className="content-container">
+          <i className="fa fa-cogs" />
+          {' '}
+TODO
+        </div>
+      )}
+    />
     <Route path="dev/workflow-tasks-editor" component={require('./components/workflow-tasks-editor')} />
-    <Route path="dev/classifier" component={(process.env.NODE_ENV === 'production')
-      ? NotFoundPage
-      : DevClassifierPage
-    } />
+    <Route
+      path="dev/classifier"
+      component={(process.env.NODE_ENV === 'production')
+        ? NotFoundPage
+        : DevClassifierPage
+      }
+    />
     <Route path="*" component={NotFoundPage} />
   </Route>
-)
+);

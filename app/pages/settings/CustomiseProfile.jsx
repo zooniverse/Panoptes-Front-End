@@ -24,10 +24,10 @@ class CustomiseProfile extends React.Component {
 
   getUserResource(type) {
     return this.props.user.get(type, {})
-    .then(([resource]) => {
-      this.setState({ [type]: resource });
-      return resource;
-    });
+      .then(([resource]) => {
+        this.setState({ [type]: resource });
+        return resource;
+      });
   }
 
   handleMediaChange(type, file) {
@@ -35,33 +35,35 @@ class CustomiseProfile extends React.Component {
     const errorProp = `${type}Error`;
     this.setState({ [errorProp]: null });
     apiClient.post(user._getURL(type), { media: { content_type: file.type }})
-    .then(([resource]) => {
-      putFile(resource.src, file, { 'Content-Type': file.type })
-      .then(() => this.getUserResource(type))
-      .then((updatedResource) => {
-        this.setState({ [type]: updatedResource });
+      .then(([resource]) => {
+        putFile(resource.src, file, { 'Content-Type': file.type })
+          .then(() => this.getUserResource(type))
+          .then((updatedResource) => {
+            this.setState({ [type]: updatedResource });
+          });
+      })
+      .catch((error) => {
+        this.setState({ [errorProp]: error });
       });
-    })
-    .catch((error) => {
-      this.setState({ [errorProp]: error });
-    });
   }
 
   handleMediaClear(type) {
     const errorProp = `${type}Error`;
     this.setState({ [errorProp]: null });
     this.getUserResource(type)
-    .then((resource) => {
-      !!resource && resource.delete();
-      this.setState({ [type]: {} });
-    })
-    .catch((error) => {
-      this.setState({ [errorProp]: error });
-    });
+      .then((resource) => {
+        !!resource && resource.delete();
+        this.setState({ [type]: {}});
+      })
+      .catch((error) => {
+        this.setState({ [errorProp]: error });
+      });
   }
 
   render() {
-    const { avatar, avatarError, profile_header, profile_headerError } = this.state;
+    const {
+      avatar, avatarError, profile_header, profile_headerError
+    } = this.state;
     const placeholder = <Translate className="content-container" content="userSettings.profile.dropImage" component="p" />;
     return (
       <div>
@@ -92,8 +94,8 @@ class CustomiseProfile extends React.Component {
               </button>
             </div>
           </div>
-          {!!avatarError &&
-            <div className="form-help error">{avatarError.toString()}</div>
+          {!!avatarError
+            && <div className="form-help error">{avatarError.toString()}</div>
           }
         </div>
         <hr />
@@ -123,8 +125,8 @@ class CustomiseProfile extends React.Component {
               </button>
             </div>
           </div>
-          {!!profile_headerError &&
-            <div className="form-help error">{profile_headerError.toString()}</div>}
+          {!!profile_headerError
+            && <div className="form-help error">{profile_headerError.toString()}</div>}
         </div>
       </div>
     );

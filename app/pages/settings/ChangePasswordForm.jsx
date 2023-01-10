@@ -5,7 +5,6 @@ import counterpart from 'counterpart';
 const MIN_PASSWORD_LENGTH = 8;
 
 export default class ChangePasswordForm extends React.Component {
-
   constructor() {
     super();
     this.state = {
@@ -55,9 +54,9 @@ export default class ChangePasswordForm extends React.Component {
   renderStatus() {
     let status = null;
     if (this.state.inProgress) {
-      status = <i className="fa fa-spinner fa-spin form-help"></i>;
+      status = <i className="fa fa-spinner fa-spin form-help" />;
     } else if (this.state.success) {
-      status = <i className="fa fa-check-circle form-help success"></i>;
+      status = <i className="fa fa-check-circle form-help success" />;
     } else if (this.state.error) {
       status = <small className="form-help error">{this.state.error.toString()}</small>;
     }
@@ -79,7 +78,7 @@ export default class ChangePasswordForm extends React.Component {
               className="standard-input"
               size="30"
               onChange={(e) => { this.setState({ old: e.target.value }); }}
-              required
+              required={true}
             />
           </label>
         </div>
@@ -92,11 +91,11 @@ export default class ChangePasswordForm extends React.Component {
               className="standard-input"
               size="30"
               onChange={(e) => { this.setState({ new: e.target.value }); }}
-              required
+              required={true}
             />
           </label>
-          {this.state.new.length > 0 && this.tooShort() ?
-            <small className="form-help error">{counterpart('userSettings.account.changePassword.tooShort')}</small>
+          {this.state.new.length > 0 && this.tooShort()
+            ? <small className="form-help error">{counterpart('userSettings.account.changePassword.tooShort')}</small>
             : null}
         </div>
         <div>
@@ -108,11 +107,11 @@ export default class ChangePasswordForm extends React.Component {
               className="standard-input"
               size="30"
               onChange={(e) => { this.setState({ confirmation: e.target.value }); }}
-              required
+              required={true}
             />
           </label>
-          {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch() ?
-            <small className="form-help error">{counterpart('userSettings.account.changePassword.doesntMatch')}</small>
+          {this.state.confirmation.length >= this.state.new.length - 1 && this.doesntMatch()
+            ? <small className="form-help error">{counterpart('userSettings.account.changePassword.doesntMatch')}</small>
             : null}
         </div>
         <p>
@@ -122,7 +121,8 @@ export default class ChangePasswordForm extends React.Component {
             disabled={!this.state.old || !this.state.new || this.tooShort() || this.doesntMatch() || this.state.inProgress}
           >
             {counterpart('userSettings.account.changePassword.change')}
-          </button>{' '}
+          </button>
+          {' '}
           {this.renderStatus()}
         </p>
       </form>

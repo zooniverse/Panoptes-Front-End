@@ -34,34 +34,34 @@ export const StyledTutorialButton = styled.button.attrs({
 
   &:focus, &:hover {
     background: ${theme('mode', {
-      dark: `linear-gradient(
+    dark: `linear-gradient(
         ${zooTheme.colors.darkTheme.button.answer.gradient.top},
         ${zooTheme.colors.darkTheme.button.answer.gradient.bottom}
       )`,
-      light: `linear-gradient(
+    light: `linear-gradient(
         ${zooTheme.colors.lightTheme.button.answer.gradient.top},
         ${zooTheme.colors.lightTheme.button.answer.gradient.bottom}
       )`
-    })};
+  })};
     color: ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.font,
-      light: 'black'
-    })};
+    dark: zooTheme.colors.darkTheme.font,
+    light: 'black'
+  })};
   }
 
   &:disabled {
     background: ${theme('mode', {
-      dark: darken(0.04, zooTheme.colors.darkTheme.background.default),
-      light: zooTheme.colors.lightTheme.background.default
-    })};
+    dark: darken(0.04, zooTheme.colors.darkTheme.background.default),
+    light: zooTheme.colors.lightTheme.background.default
+  })};
     border: 1px solid ${theme('mode', {
-      dark: zooTheme.colors.darkTheme.background.default,
-      light: darken(0.05, zooTheme.colors.lightTheme.background.default)
-    })};
+    dark: zooTheme.colors.darkTheme.background.default,
+    light: darken(0.05, zooTheme.colors.lightTheme.background.default)
+  })};
     color: ${theme('mode', {
-      dark: lighten(0.10, zooTheme.colors.darkTheme.background.default),
-      light: zooTheme.colors.lightTheme.button.answer.disabled
-    })};
+    dark: lighten(0.10, zooTheme.colors.darkTheme.background.default),
+    light: zooTheme.colors.lightTheme.button.answer.disabled
+  })};
     cursor: not-allowed;
   }
 `;
@@ -96,8 +96,8 @@ TutorialTab.propTypes = {
 };
 
 TutorialTab.contextTypes = {
-  geordi: PropTypes.object,
-}
+  geordi: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   theme: state.userInterface.theme

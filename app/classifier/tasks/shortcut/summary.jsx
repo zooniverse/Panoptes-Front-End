@@ -7,14 +7,12 @@ function ShortcutSummary(props) {
   let answer;
 
   if (props.annotation.value != null) {
-    answer = props.annotation.value.map((index) => {
-      return (
-        <div key={index} className="answer">
-          <i className="fa fa-check-circle-o fa-fw" />
-          <Markdown tag="span" inline={true}>{props.translation.answers[index].label}</Markdown>
-        </div>
-      );
-    });
+    answer = props.annotation.value.map(index => (
+      <div key={index} className="answer">
+        <i className="fa fa-check-circle-o fa-fw" />
+        <Markdown tag="span" inline={true}>{props.translation.answers[index].label}</Markdown>
+      </div>
+    ));
   } else {
     answer = <div className="answer"><Translate content="tasks.shortcut.noAnswer" /></div>;
   }

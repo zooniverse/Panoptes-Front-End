@@ -56,13 +56,13 @@ export const StyledTaskInputLabel = styled(Markdown)`
 export default function TaskInputLabel({ label, labelIcon, labelStatus }) {
   return (
     <StyledTaskInputLabelWrapper>
-      {labelIcon &&
-        labelIcon}
+      {labelIcon
+        && labelIcon}
       <StyledTaskInputLabel label={label} labelIcon={labelIcon}>
         {label}
       </StyledTaskInputLabel>
-      {labelStatus &&
-        labelStatus}
+      {labelStatus
+        && labelStatus}
     </StyledTaskInputLabelWrapper>
   );
 }

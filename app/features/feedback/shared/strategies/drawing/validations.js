@@ -3,8 +3,8 @@ function validateDefaultTolerance(formState) {
     return false;
   } else {
     const re = /^\d+(?:\.\d+)?$/;
-    return typeof formState.defaultTolerance === 'string' &&
-      re.test(formState.defaultTolerance);
+    return typeof formState.defaultTolerance === 'string'
+      && re.test(formState.defaultTolerance);
   }
 }
 

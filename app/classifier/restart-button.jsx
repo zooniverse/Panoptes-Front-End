@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const RestartButton = ({ children, className, start, shouldRender, style }) => {
+const RestartButton = ({
+  children, className, start, shouldRender, style
+}) => {
   if (shouldRender) {
     return (
       <button type="button" className={className} style={style} onClick={start}>

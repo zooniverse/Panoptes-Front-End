@@ -30,17 +30,17 @@ export default function MarkingsRenderer(props) {
   return (
     <g className="combo-task-persist-inside-subject-container">
       {Object.keys(props.taskTypes)
-        .filter((taskType) => { return taskType !== 'combo'; })
+        .filter(taskType => taskType !== 'combo')
         .map((taskType) => {
           const TaskComponent = props.taskTypes[taskType];
           if (TaskComponent.AnnotationRenderer === SVGRenderer && TaskComponent.PersistInsideSubject) {
             // when a combo annotation changes make sure the combo annotation updated correctly with only the
             // current combo task's annotatons.  This is a hack to make drawing tasks work in a combo task.
             let { annotation } = props;
-            if (annotation &&
-              annotation.task &&
-              props.workflow.tasks &&
-              props.workflow.tasks[annotation.task].type === 'combo'
+            if (annotation
+              && annotation.task
+              && props.workflow.tasks
+              && props.workflow.tasks[annotation.task].type === 'combo'
             ) {
               const idx = allComboTypes.lastIndexOf(taskType);
               if (idx > -1) {

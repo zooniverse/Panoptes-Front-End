@@ -8,7 +8,7 @@ export default class CustomSignInPrompt extends React.Component {
     super(props);
     this.hide = this.hide.bind(this);
     this.state = {
-      hidden: true,
+      hidden: true
     };
   }
 
@@ -27,13 +27,15 @@ export default class CustomSignInPrompt extends React.Component {
       return (
         <div className="classifier-announcement-banner custom-sign-in-banner">
           <span>
-            <i className="fa fa-exclamation-circle" aria-hidden="true"></i>{' '}
+            <i className="fa fa-exclamation-circle" aria-hidden="true" />
+            {' '}
             {this.props.children}
           </span>
           <button type="button" className="secret-button" onClick={this.hide}>
             x
           </button>
-        </div>);
+        </div>
+      );
     }
 
     return (null);
@@ -43,12 +45,12 @@ export default class CustomSignInPrompt extends React.Component {
 CustomSignInPrompt.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node).isRequired,
-    PropTypes.node.isRequired,
+    PropTypes.node.isRequired
   ]),
-  classificationsThisSession: PropTypes.number.isRequired,
+  classificationsThisSession: PropTypes.number.isRequired
 };
 
 CustomSignInPrompt.defaultProps = {
   children: null,
-  classificationsThisSession: 0,
+  classificationsThisSession: 0
 };
