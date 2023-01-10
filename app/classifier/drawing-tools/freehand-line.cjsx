@@ -38,7 +38,7 @@ module.exports = createReactClass
 
     initValid: (mark) ->
       path = createPathFromCoords mark.points
-      properties = svgPathProperties path
+      properties = new svgPathProperties path
       properties?.getTotalLength() > MINIMUM_LENGTH
 
   getDeletePosition: ([startCoords, otherCoords...]) ->

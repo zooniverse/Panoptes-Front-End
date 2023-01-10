@@ -35,7 +35,7 @@ class FreehandShapeTool extends React.Component {
 
   static initValid(mark) {
     const path = createPathFromCoords(mark.points);
-    const properties = svgPathProperties(path);
+    const properties = new svgPathProperties(path);
     return properties.getTotalLength() > MINIMUM_LENGTH;
   }
 
