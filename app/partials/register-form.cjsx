@@ -20,7 +20,7 @@ counterpart.registerTranslations 'en',
     whyUserName: 'You’ll use this name to log in. It will be shown publicly. '
     badChars: "Only letters, numbers, '.', '_', and '-'."
     nameConflict: 'That username is taken'
-    forgotPassword: 'Forget your password?'
+    forgotPassword: 'Forgot my password'
     password: 'Password'
     passwordTooShort: 'Must be at least 8 characters'
     confirmPassword: 'Confirm password'
