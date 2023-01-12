@@ -117,7 +117,11 @@ class OrganizationPage extends React.Component {
                   height={AVATAR_SIZE}
                 />
               ) : (
-                <ZooniverseLogo className="organization-hero__avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />
+                <ZooniverseLogo
+                  title={`Default organization icon for ${organization.display_name}`}
+                  className="organization-hero__avatar"
+                  width={AVATAR_SIZE}
+                  height={AVATAR_SIZE} />
               )}
               <div className="organization-hero__wrapper">
                 <h1 className="organization-hero__title">{organization.display_name}</h1>
