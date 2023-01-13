@@ -115,7 +115,7 @@ const ProjectHomePage = (props) => {
                     type={type}
                     format={format}
                     src={src}
-                    width={400}
+                    width={600}
                   />
                 </Link>
               </div>
