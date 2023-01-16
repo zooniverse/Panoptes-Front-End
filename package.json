@@ -86,7 +86,7 @@
     "file-loader": "~6.2.0",
     "html-webpack-plugin": "~5.5.0",
     "jsdom": "~21.0.0",
-    "marked": "~4.2.5",
+    "marked": "~4.2.12",
     "mini-css-extract-plugin": "~2.7.2",
     "mocha": "~10.2.0",
     "nib": "~1.2.0",
