@@ -14,15 +14,13 @@ import FileButton from '../../components/file-button.cjsx';
 import WorkflowCreateForm from './workflow-create-form.cjsx';
 import workflowActions from './actions/workflow.js';
 import classnames from 'classnames';
-import ShortcutEditor from '../../classifier/tasks/shortcut/editor.jsx';
-import FeedbackSection from '../../features/feedback/lab';
-import MobileSection from './mobile';
 import SubjectGroupViewerEditor from './workflow-components/subject-group-viewer-editor.jsx';
 import SubjectSetLinker from './workflow-components/subject-set-linker.jsx';
 import MiniCourses from './workflow-components/mini-courses.jsx';
 import Tutorials from './workflow-components/tutorials.jsx';
 import TaskOptions from './workflow-components/task-options.jsx';
 import TaskPicker from './workflow-components/task-picker.jsx';
+import TaskEditor from './workflow-components/task-editor.jsx';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
@@ -50,7 +48,8 @@ class EditWorkflowPage extends Component {
     this.handleWorkflowCreation = this.handleWorkflowCreation.bind(this);
     this.hideCreateWorkflow = this.hideCreateWorkflow.bind(this);
     this.showCreateWorkflow = this.showCreateWorkflow.bind(this);
-    this.showTaskAddButtons = this.showTaskAddButtons.bind(this)
+    this.showTaskAddButtons = this.showTaskAddButtons.bind(this);
+    this.handleTaskDelete = this.handleTaskDelete.bind(this);
 
     this.state = {
       selectedTaskKey: props.workflow.first_task,
@@ -95,12 +94,6 @@ class EditWorkflowPage extends Component {
 
   canUseTask(project, task) {
     return Array.from(project.experimental_tools).includes(task);
-  }
-
-  handleTaskChange(taskKey, taskDescription) {
-    const changes = {};
-    changes[`tasks.${taskKey}`] = taskDescription;
-    return this.props.workflow.update(changes).save();
   }
 
   isThereNotADefinedTask() {
@@ -521,72 +514,12 @@ class EditWorkflowPage extends Component {
           </div>
 
           <div className={taskEditorClasses}>
-            {(() => {
-            if ((this.state.selectedTaskKey != null) && (this.props.workflow.tasks[this.state.selectedTaskKey] != null)) {
-              const task = this.props.workflow.tasks[this.state.selectedTaskKey];
-              if (task.required === 'true') {
-                task.required = true;
-              }
-              if (task.required === 'false') {
-                task.required = false;
-              }
-              const TaskEditorComponent = taskComponents[task.type]?.Editor;
-              const taskWithDefaults = {
-                required: false,
-                ...task
-              };
-              return <div>
-                {Array.from(this.props.project.experimental_tools).includes('shortcut') ?
-                  <ShortcutEditor workflow={this.props.workflow} task={taskWithDefaults}>
-                    <TaskEditorComponent
-                      workflow={this.props.workflow}
-                      task={taskWithDefaults}
-                      taskPrefix={`tasks.${this.state.selectedTaskKey}`}
-                      project={this.props.project}
-                      onChange={this.handleTaskChange.bind(this, this.state.selectedTaskKey)}
-                    />
-                  </ShortcutEditor>
-                : TaskEditorComponent ?
-                  <TaskEditorComponent
-                    workflow={this.props.workflow}
-                    task={taskWithDefaults}
-                    taskPrefix={`tasks.${this.state.selectedTaskKey}`}
-                    project={this.props.project}
-                    onChange={this.handleTaskChange.bind(this, this.state.selectedTaskKey)}
-                  />
-                :
-                  <div>Editor is not available.</div>
-                }
-                <hr />
-                <br />
-
-                {Array.from(this.props.project.experimental_tools).includes('general feedback') ?
-                  <FeedbackSection
-                    task={this.props.workflow.tasks[this.state.selectedTaskKey]}
-                    saveFn={this.handleTaskChange.bind(this, this.state.selectedTaskKey)}
-                  /> : undefined}
-                <hr />
-                <br />
-
-                <MobileSection
-                  project={this.props.project}
-                  workflow={this.props.workflow}
-                  task={this.props.workflow.tasks[this.state.selectedTaskKey]}
-                />
-
-                <AutoSave resource={this.props.workflow}>
-                  <small>
-                    <button type="button" className="minor-button" onClick={this.handleTaskDelete.bind(this, this.state.selectedTaskKey)}>Delete this task</button>
-                  </small>
-                </AutoSave>
-              </div>;
-            } else {
-              return <div className="form-help">
-                <p>Choose a task to edit. The configuration for that task will appear here.</p>
-              </div>;
-            }
-          })()
-            }
+            <TaskEditor
+              onDelete={this.handleTaskDelete}
+              project={this.props.project}
+              selectedTaskKey={this.state.selectedTaskKey}
+              workflow={this.props.workflow}
+            />
           </div>
         </div>
       </div>

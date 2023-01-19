@@ -114,7 +114,6 @@ const ProjectHomePage = (props) => {
                     controls={false}
                     type={type}
                     format={format}
-                    height={240}
                     src={src}
                     width={600}
                   />

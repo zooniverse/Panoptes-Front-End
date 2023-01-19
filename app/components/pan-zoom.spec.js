@@ -145,6 +145,7 @@ describe('PanZoom', function () {
         wrapper.instance().clearZoomingTimeout();
 
         sinon.assert.called(clearTimeoutSpy);
+        clock.restore();
       });
     });
 
