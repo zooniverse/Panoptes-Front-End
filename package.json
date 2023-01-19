@@ -5,7 +5,7 @@
     "@sentry/browser": "~7.31.0",
     "@sentry/tracing": "~7.31.1",
     "animated-scrollto": "~1.1.0",
-    "chart.js": "~4.1.2",
+    "chart.js": "~4.2.0",
     "chartist": "~0.11.0",
     "classnames": "~2.3.2",
     "counterpart": "~0.18.6",
