@@ -515,6 +515,7 @@ class EditWorkflowPage extends Component {
 
           <div className={taskEditorClasses}>
             <TaskEditor
+              pfeLab={true}
               onDelete={this.handleTaskDelete}
               project={this.props.project}
               selectedTaskKey={this.state.selectedTaskKey}
