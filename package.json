@@ -19,7 +19,7 @@
     "markdownz": "~8.0.2",
     "modal-form": "~2.9",
     "moment": "~2.29.0",
-    "panoptes-client": "~4.2",
+    "panoptes-client": "github:zooniverse/panoptes-javascript-client#json-api-client",
     "papaparse": "^5.2.0",
     "polished": "~4.2.2",
     "prop-types": "~15.8.1",
