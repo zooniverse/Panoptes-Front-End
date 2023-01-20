@@ -32,7 +32,7 @@ export default function TaskEditor({ pfeLab = false,onDelete, project, selectedT
     };
 
     return <div>
-      {project.experimental_tools?.includes('shortcut' && pfeLab) ?
+      {(project.experimental_tools?.includes('shortcut') && pfeLab) ?
         <ShortcutEditor workflow={workflow} task={taskWithDefaults}>
           <TaskEditorComponent
             workflow={workflow}
