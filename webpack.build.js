@@ -110,7 +110,7 @@ module.exports = {
       ],
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
-      use: 'file-loader',
+      type: 'asset/resource'
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/],
