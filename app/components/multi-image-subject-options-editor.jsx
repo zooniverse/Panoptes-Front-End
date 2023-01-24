@@ -52,79 +52,83 @@ export default function MultiImageSubjectLayoutEditor ({
   // ChangeListener requires a function. (Or a handler)
   function render () {
     return (
-      <div className="multi-image-subject-layout-editor">
+      <div className='multi-image-subject-layout-editor'>
         <div>
-          <select id="multi_image_mode" onChange={handleSelectMode} value={mode}>
-            <option value="flipbook">Show flipbook</option>
-            <option value="separate">Show separate frames</option>
+          <select id='multi_image_mode' onChange={handleSelectMode} value={mode}>
+            <option value='flipbook'>Show flipbook</option>
+            <option value='separate'>Show separate frames</option>
           </select>
         </div>
         <div>
           <input
-            type="checkbox"
-            id="enable_switching_flipbook_and_separate"
-            name="enable_switching_flipbook_and_separate"
+            type='checkbox'
+            id='enable_switching_flipbook_and_separate'
+            name='enable_switching_flipbook_and_separate'
             checked={enableSwitchingChecked}
             onChange={toggleEnableSwitching}
           />
-          <label htmlFor="enable_switching_flipbook_and_separate">
+          <label htmlFor='enable_switching_flipbook_and_separate'>
             Allow users to choose flipbook or separate frames
-            </label>
+          </label>
         </div>
         {workflow?.configuration?.multi_image_mode === 'separate' ?
           <div>
+            <span>
+              Show separate frames as:
+            </span>
+            <br/>
             <label>
-              Show separate frames as
               <input
-                type="radio"
-                id="multi_image_row"
-                name="multi_image_layout"
-                value="row"
+                type='radio'
+                value='row'
+                checked={layout === 'row'}
                 onChange={handleSelectLayout}
               />
+              Single row (side by side)
             </label>
-
             <br/>
-
-            <label htmlFor="multi_image_row">Single row (side by side)</label>
-            <input
-              type="radio"
-              id="multi_image_grid2"
-              name="multi_image_layout"
-              value="grid2"
-              onChange={handleSelectLayout}
-            />
-            <label htmlFor="multi_image_grid2">Grid (2col)</label>
-            <input
-              type="radio" id="multi_image_grid3"
-              name="multi_image_layout"
-              value="grid3"
-              onChange={handleSelectLayout}
-            />
-            <label htmlFor="multi_image_grid3">Grid (3col)</label>
+            <label>
+              <input
+                type='radio'
+                value='grid2'
+                checked={layout === 'grid2'}
+                onChange={handleSelectLayout}
+              />
+              Grid (2col)
+            </label>
+            <br/>
+            <label>
+              <input
+                type='radio'
+                value='grid3'
+                checked={layout === 'grid3'}
+                onChange={handleSelectLayout}
+              />
+              Grid (3col)
+            </label>
           </div>
         : undefined }
         <div>
           <input
-            type="checkbox"
-            id="multi_image_clone_markers"
-            name="multi_image_clone_markers"
+            type='checkbox'
+            id='multi_image_clone_markers'
+            name='multi_image_clone_markers'
             checked={cloneMarksChecked}
             onChange={toggleCloneMarks}
           />
-          <label htmlFor="multi_image_clone_markers">Clone markers in all frames</label>
+          <label htmlFor='multi_image_clone_markers'>Clone markers in all frames</label>
         </div>
         <div>
-          <label htmlFor="flipbook_play_iterations">Flipbook Play Iterations</label> {' '}
+          <label htmlFor='flipbook_play_iterations'>Flipbook Play Iterations</label> {' '}
           <input
-            type="number"
-            id="flipbook_play_iterations"
-            placeholder="∞"
+            type='number'
+            id='flipbook_play_iterations'
+            placeholder='∞'
             value={iterations}
-            name="flipbook_play_iterations"
-            min="1"
-            max="100"
-            step="1"
+            name='flipbook_play_iterations'
+            min='1'
+            max='100'
+            step='1'
             onChange={toggleInfiniteLoop}
           />
           <br />
