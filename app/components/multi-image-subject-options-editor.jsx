@@ -45,7 +45,6 @@ export default function MultiImageSubjectLayoutEditor ({
   const enableSwitchingChecked = !!workflow?.configuration?.enable_switching_flipbook_and_separate
   const layout = workflow?.configuration?.multi_image_layout || defaultLayout
 
-  // TODO: figure out how to handle iterations. 0 corresponds to infinity!
   const iterations = (workflow?.configuration?.playIterations >= 0)
     ? workflow.configuration.playIterations : 3
 
@@ -60,14 +59,12 @@ export default function MultiImageSubjectLayoutEditor ({
           </select>
         </div>
         <div>
-          <input
-            type='checkbox'
-            id='enable_switching_flipbook_and_separate'
-            name='enable_switching_flipbook_and_separate'
-            checked={enableSwitchingChecked}
-            onChange={toggleEnableSwitching}
-          />
-          <label htmlFor='enable_switching_flipbook_and_separate'>
+          <label>
+            <input
+              type='checkbox'
+              checked={enableSwitchingChecked}
+              onChange={toggleEnableSwitching}
+            />
             Allow users to choose flipbook or separate frames
           </label>
         </div>
@@ -109,28 +106,28 @@ export default function MultiImageSubjectLayoutEditor ({
           </div>
         : undefined }
         <div>
-          <input
-            type='checkbox'
-            id='multi_image_clone_markers'
-            name='multi_image_clone_markers'
-            checked={cloneMarksChecked}
-            onChange={toggleCloneMarks}
-          />
-          <label htmlFor='multi_image_clone_markers'>Clone markers in all frames</label>
+          <label>
+            <input
+              type='checkbox'
+              checked={cloneMarksChecked}
+              onChange={toggleCloneMarks}
+            />
+            Clone markers in all frames
+          </label>
         </div>
         <div>
-          <label htmlFor='flipbook_play_iterations'>Flipbook Play Iterations</label> {' '}
-          <input
-            type='number'
-            id='flipbook_play_iterations'
-            placeholder='∞'
-            value={iterations}
-            name='flipbook_play_iterations'
-            min='1'
-            max='100'
-            step='1'
-            onChange={toggleInfiniteLoop}
-          />
+          <label>
+            Flipbook Play Iterations {' '}
+            <input
+              type='number'
+              placeholder='∞'
+              value={iterations}
+              min='1'
+              max='100'
+              step='1'
+              onChange={toggleInfiniteLoop}
+            />
+          </label>
           <br />
           <small>An empty iteration value denotes infinite loop.</small>
         </div>
