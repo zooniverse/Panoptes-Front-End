@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import ChangeListener from './change-listener'
 
+const defaultLayout = 'row'
+const defaultMode = 'flipbook_and_separate'
+
 export default function MultiImageSubjectLayoutEditor ({
   workflow = null
 }) {
-
-  const defaultLayout = 'row'
-  const defaultMode = 'flipbook_and_separate'
-
-  useEffect(function updateRadios () {
-    // Set relevant layout radio as checked.
-    console.log('+++ UPDATE RADIOS')
-
-    // const layout = (workflow.configuration !== null ? workflow.configuration.multi_image_layout : undefined) || defaultLayout;
-    // return __guard__(ReactDOM.findDOMNode(this).querySelector('input[type="radio"][value="'+layout+'"]'), x => x.defaultChecked = true);
-  }, [workflow])
 
   function toggleCloneMarks (e) {
     return workflow.update({
@@ -51,9 +43,11 @@ export default function MultiImageSubjectLayoutEditor ({
   const mode = workflow?.configuration?.multi_image_mode || defaultMode
   const cloneMarksChecked = !!workflow?.configuration?.multi_image_clone_markers
   const enableSwitchingChecked = !!workflow?.configuration?.enable_switching_flipbook_and_separate
+  const layout = workflow?.configuration?.multi_image_layout || defaultLayout
 
   // TODO: figure out how to handle iterations. 0 corresponds to infinity!
-  const iterations = (workflow?.configuration?.playIterations >= 0) ? workflow.configuration.playIterations : 3
+  const iterations = (workflow?.configuration?.playIterations >= 0)
+    ? workflow.configuration.playIterations : 3
 
   // ChangeListener requires a function. (Or a handler)
   function render () {
@@ -66,22 +60,58 @@ export default function MultiImageSubjectLayoutEditor ({
           </select>
         </div>
         <div>
-          <input type="checkbox" id="enable_switching_flipbook_and_separate" name="enable_switching_flipbook_and_separate" checked={enableSwitchingChecked} onChange={toggleEnableSwitching} />
-          <label htmlFor="enable_switching_flipbook_and_separate">Allow users to choose flipbook or separate frames</label>
+          <input
+            type="checkbox"
+            id="enable_switching_flipbook_and_separate"
+            name="enable_switching_flipbook_and_separate"
+            checked={enableSwitchingChecked}
+            onChange={toggleEnableSwitching}
+          />
+          <label htmlFor="enable_switching_flipbook_and_separate">
+            Allow users to choose flipbook or separate frames
+            </label>
         </div>
         {workflow?.configuration?.multi_image_mode === 'separate' ?
           <div>
-            <label>Show separate frames as <input type="radio" id="multi_image_row" name="multi_image_layout" value="row" onChange={handleSelectLayout} /></label><br/>
+            <label>
+              Show separate frames as
+              <input
+                type="radio"
+                id="multi_image_row"
+                name="multi_image_layout"
+                value="row"
+                onChange={handleSelectLayout}
+              />
+            </label>
+
+            <br/>
 
             <label htmlFor="multi_image_row">Single row (side by side)</label>
-            <input type="radio" id="multi_image_grid2" name="multi_image_layout" value="grid2" onChange={handleSelectLayout} />
+            <input
+              type="radio"
+              id="multi_image_grid2"
+              name="multi_image_layout"
+              value="grid2"
+              onChange={handleSelectLayout}
+            />
             <label htmlFor="multi_image_grid2">Grid (2col)</label>
-            <input type="radio" id="multi_image_grid3" name="multi_image_layout" value="grid3" onChange={handleSelectLayout} />
+            <input
+              type="radio" id="multi_image_grid3"
+              name="multi_image_layout"
+              value="grid3"
+              onChange={handleSelectLayout}
+            />
             <label htmlFor="multi_image_grid3">Grid (3col)</label>
           </div>
         : undefined }
         <div>
-          <input type="checkbox" id="multi_image_clone_markers" name="multi_image_clone_markers" checked={cloneMarksChecked} onChange={toggleCloneMarks} />
+          <input
+            type="checkbox"
+            id="multi_image_clone_markers"
+            name="multi_image_clone_markers"
+            checked={cloneMarksChecked}
+            onChange={toggleCloneMarks}
+          />
           <label htmlFor="multi_image_clone_markers">Clone markers in all frames</label>
         </div>
         <div>
