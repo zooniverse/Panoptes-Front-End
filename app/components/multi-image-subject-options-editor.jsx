@@ -77,6 +77,7 @@ export default function MultiImageSubjectLayoutEditor ({
             <label>
               <input
                 type='radio'
+                name='multi_image_layout'
                 value='row'
                 checked={layout === 'row'}
                 onChange={handleSelectLayout}
@@ -87,6 +88,7 @@ export default function MultiImageSubjectLayoutEditor ({
             <label>
               <input
                 type='radio'
+                name='multi_image_layout'
                 value='grid2'
                 checked={layout === 'grid2'}
                 onChange={handleSelectLayout}
@@ -97,6 +99,7 @@ export default function MultiImageSubjectLayoutEditor ({
             <label>
               <input
                 type='radio'
+                name='multi_image_layout'
                 value='grid3'
                 checked={layout === 'grid3'}
                 onChange={handleSelectLayout}
