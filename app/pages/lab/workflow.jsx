@@ -7,7 +7,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import ChangeListener from '../../components/change-listener.cjsx';
 import RetirementRulesEditor from '../../components/retirement-rules-editor.cjsx';
 import {Link} from 'react-router';
-import MultiImageSubjectOptionsEditor from '../../components/multi-image-subject-options-editor.cjsx';
+import MultiImageSubjectOptionsEditor from '../../components/multi-image-subject-options-editor.jsx';
 import taskComponents from '../../classifier/tasks/index.js';
 import AutoSave from '../../components/auto-save.coffee';
 import FileButton from '../../components/file-button.cjsx';
