@@ -3,7 +3,7 @@
   "dependencies": {
     "@babel/runtime": "~7.20.13",
     "@sentry/browser": "~7.35.0",
-    "@sentry/tracing": "~7.34.0",
+    "@sentry/tracing": "~7.35.0",
     "animated-scrollto": "~1.1.0",
     "chart.js": "~4.2.0",
     "chartist": "~0.11.0",
