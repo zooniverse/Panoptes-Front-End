@@ -3,31 +3,37 @@ import apiClient from 'panoptes-client/lib/api-client';
 
 export default function Tutorials({ project, workflow }) {
   const [tutorials, setTutorials] = useState([]);
-  const [workflowTutorial, setWorkflowTutorial] = useState(null);
+  const [linkedTutorials, setLinkedTutorials] = useState([]);
 
   useEffect(function loadTutorials() {
-    Promise.all([
-      apiClient.type('tutorials')
-        .get({ project_id: project.id, page_size: 100 })
-        .catch(() => []),
-      apiClient.type('tutorials')
-        .get({ workflow_id: workflow.id, page_size: 100 })
-        .catch(() => [])
-    ])
-    .then(([projectTutorials, workflowTutorials]) => {
-      const tutorials = projectTutorials.filter(value => value.kind === 'tutorial' || value.kind === null);
-      const [workflowTutorial] = tutorials.filter(value => workflowTutorials.includes(value));
-      setTutorials(tutorials);
-      setWorkflowTutorial(workflowTutorial);
-    });
+    apiClient.type('tutorials')
+      .get({ project_id: project.id, page_size: 100 })
+      .catch(() => [])
+      .then(tutorials => {
+        setTutorials(tutorials.filter(value => value.kind === 'tutorial' || value.kind === null));
+      });
+    apiClient.type('tutorials')
+      .get({ workflow_id: workflow.id, page_size: 100 })
+      .catch(() => [])
+      .then(tutorials => {
+        setLinkedTutorials(tutorials.filter(value => value.kind === 'tutorial' || value.kind === null));
+      });
   }, [project?.id, workflow?.id]);
 
-  function removeTutorial() {
-    setWorkflowTutorial(null)
-    return workflow.removeLink('tutorials', workflowTutorial?.id);
+  function updateTutorialLinks(linkedTutorial) {
+    linkedTutorials
+      .filter(tutorial => tutorial.id !== linkedTutorial?.id)
+      .forEach(tutorial => workflow.removeLink('tutorials', tutorial?.id));
+    if (linkedTutorial) {
+      workflow.addLink('tutorials', [linkedTutorial.id]);
+      setLinkedTutorials([linkedTutorial]);
+    } else {
+      setLinkedTutorials([]);
+    }
   }
 
   function onChange(event) {
+    // TODO: radio groups only fire change events for the checked input, so what does this line do?
     const shouldAdd = event.target.checked;
     const tutorialID = event.target.value;
     const tutorial = tutorials.find(tutorial => tutorial.id === tutorialID);
@@ -37,11 +43,7 @@ export default function Tutorials({ project, workflow }) {
     return ensureSaved
       .then(() => {
         if (shouldAdd) {
-          workflow.addLink('tutorials', [tutorial.id]);
-          if (workflowTutorial?.id) {
-            workflow.removeLink('tutorials', workflowTutorial.id);
-          }
-          setWorkflowTutorial(tutorial)
+          updateTutorialLinks(tutorial);
         }
     });
   }
@@ -56,13 +58,13 @@ export default function Tutorials({ project, workflow }) {
                 name="tutorial"
                 type="radio"
                 value=""
-                checked={!workflowTutorial}
-                onChange={removeTutorial}
+                checked={!linkedTutorials.length}
+                onChange={onChange}
               />
               No tutorial
             </label>
             {tutorials.map(tutorial => {
-              const assignedTutorial = tutorial === workflowTutorial;
+              const assignedTutorial = linkedTutorials.includes(tutorial);
               return (
                 <label key={tutorial.id}>
                   <input
