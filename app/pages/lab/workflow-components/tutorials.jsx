@@ -32,20 +32,14 @@ export default function Tutorials({ project, workflow }) {
     }
   }
 
-  function onChange(event) {
-    // TODO: radio groups only fire change events for the checked input, so what does this line do?
-    const shouldAdd = event.target.checked;
-    const tutorialID = event.target.value;
+  async function onChange({ target }) {
+    const tutorialID = target?.value;
     const tutorial = tutorials.find(tutorial => tutorial.id === tutorialID);
 
     const ensureSaved = workflow.hasUnsavedChanges() ? workflow.save() : Promise.resolve();
 
-    return ensureSaved
-      .then(() => {
-        if (shouldAdd) {
-          updateTutorialLinks(tutorial);
-        }
-    });
+    await ensureSaved;
+    updateTutorialLinks(tutorial);
   }
 
   if (tutorials.length > 0) {
