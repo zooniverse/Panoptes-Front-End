@@ -34,18 +34,13 @@ export default class HomePageSocial extends React.Component {
     this.getSocial();
   }
 
-  getSocial() {
-    getNewestProject().then((newestProject) => {
-      this.setState({
-        newestProject
-      });
-    });
-    getRecentProjects().then((recentProjects) => {
-      this.setState({ recentProjects });
-    });
-    getBlogPosts((blogPosts) => {
-      this.setState({ blogPosts });
-    });
+  async getSocial() {
+    const newestProject = await getNewestProject();
+    this.setState({ newestProject });
+    const recentProjects = await getRecentProjects();
+    this.setState({ recentProjects });
+    const blogPosts = await getBlogPosts(blogPosts);
+    this.setState({ blogPosts });
   }
 
   renderUpdatedProject(project) {
