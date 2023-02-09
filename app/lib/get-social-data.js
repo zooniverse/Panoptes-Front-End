@@ -15,14 +15,18 @@ function getNewestProject() {
     });
 }
 
-function getBlogPosts(returnPosts) {
-  const request = new XMLHttpRequest();
-  request.open('GET', `${talkClient.root}/social`, true);
-  request.onload = () => {
-    const data = JSON.parse(request.responseText);
-    returnPosts(data.posts);
-  };
-  request.send();
+async function getBlogPosts() {
+  let posts = []
+  try {
+    const response = await fetch(`${talkClient.root}/social`);
+    if (response.ok) {
+      const data = await response.json();
+      posts = data.posts;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return posts;
 }
 
 function getRecentProjects() {
