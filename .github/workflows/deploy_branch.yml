@@ -10,7 +10,7 @@ jobs:
     uses: zooniverse/ci-cd/.github/workflows/npm_build.yaml@main
     with:
       commit_id: ${{ github.sha }}
-      node_version: '16'
+      node_version: 'lts/hydrogen'
       output: 'dist'
       script: 'build-production'
   deploy_staging_branch:
