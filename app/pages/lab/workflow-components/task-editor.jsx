@@ -4,7 +4,7 @@ import MobileSection from '../mobile/index.js';
 import AutoSave from '../../../components/auto-save.coffee';
 import taskComponents from '../../../classifier/tasks/index.js';
 
-export default function TaskEditor({ pfeLab = false,onDelete, project, selectedTaskKey, workflow }) {
+export default function TaskEditor({ pfeLab = false, onDelete, project, selectedTaskKey, workflow }) {
   const task = workflow.tasks[selectedTaskKey];
 
   function onChange(taskDescription) {
