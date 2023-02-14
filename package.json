@@ -11,7 +11,7 @@
     "counterpart": "~0.18.6",
     "data-uri-to-blob": "0.0.4",
     "debounce": "~1.2.0",
-    "dompurify": "~2.4.3",
+    "dompurify": "~3.0.0",
     "drag-reorderable": "~0.2.0",
     "hash.js": "~1.1.7",
     "history": "~3.3.0",
