@@ -1,16 +1,13 @@
 import { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import handleInputChange from '../../lib/handle-input-change.js';
-import TriggeredModalForm from 'modal-form/triggered';
 import ModalFormDialog from 'modal-form/dialog';
 import apiClient from 'panoptes-client/lib/api-client';
-import ChangeListener from '../../components/change-listener.cjsx';
 import RetirementRulesEditor from '../../components/retirement-rules-editor.cjsx';
-import {Link} from 'react-router';
-import MultiImageSubjectOptionsEditor from '../../components/multi-image-subject-options-editor.jsx';
+import { Link } from 'react-router';
+import FemMultiImageSubjectOptionsEditor from './components/fem-multi-image-subject-options-editor.jsx';
 import taskComponents from '../../classifier/tasks/index.js';
 import AutoSave from '../../components/auto-save.coffee';
-import FileButton from '../../components/file-button.cjsx';
 import WorkflowCreateForm from '../lab/workflow-create-form.cjsx';
 import workflowActions from '../lab/actions/workflow.js';
 import classnames from 'classnames';
@@ -440,11 +437,9 @@ class EditWorkflowPage extends Component {
               <hr />
             </div>
 
-            <div className="deprecated">
+            <div>
               <AutoSave tag="div" resource={this.props.workflow}>
-                <span className="form-label">Multi-image options</span><br />
-                <small className="form-help">Choose how to display multiple images</small>
-                <MultiImageSubjectOptionsEditor workflow={this.props.workflow} />
+                <FemMultiImageSubjectOptionsEditor workflow={this.props.workflow} />
               </AutoSave>
             </div>
 
