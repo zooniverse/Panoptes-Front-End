@@ -5,7 +5,7 @@ import ModalFormDialog from 'modal-form/dialog';
 import apiClient from 'panoptes-client/lib/api-client';
 import RetirementRulesEditor from '../../components/retirement-rules-editor.cjsx';
 import { Link } from 'react-router';
-import FemMultiImageSubjectOptionsEditor from './fem-multi-image-subject-options-editor.jsx';
+import FemMultiImageSubjectOptionsEditor from './components/fem-multi-image-subject-options-editor.jsx';
 import taskComponents from '../../classifier/tasks/index.js';
 import AutoSave from '../../components/auto-save.coffee';
 import WorkflowCreateForm from '../lab/workflow-create-form.cjsx';

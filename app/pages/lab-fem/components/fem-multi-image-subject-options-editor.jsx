@@ -15,13 +15,6 @@ export default function FemMultiImageSubjectLayoutEditor ({
     })
   }
 
-  function handleSelectMode (e) {
-    const mode = e.target.value;
-    return workflow.update({
-      'configuration.multi_image_mode': mode
-    })
-  }
-
   function handleSelectPlayIterations (e) {
     const iterations = e.target.value;
     return workflow.update({
@@ -29,7 +22,6 @@ export default function FemMultiImageSubjectLayoutEditor ({
     })
   }
 
-  const mode = workflow?.configuration?.multi_image_mode || 'flipbook_and_separate'
   const enableSwitchingChecked = !!workflow?.configuration?.enable_switching_flipbook_and_separate
   const enableAutoplayChecked = !!workflow?.configuration?.flipbook_autoplay
   const iterations = (workflow?.configuration?.playIterations >= 0) ? workflow.configuration.playIterations : 3
@@ -37,17 +29,7 @@ export default function FemMultiImageSubjectLayoutEditor ({
   return (
     <div className='multi-image-subject-layout-editor'>
       <span className="form-label">{`Multi-image options (Flipbook Viewer)`}</span><br/>
-      {/** Un-comment when ready to implement separate-frames-view-first in FEM */}
-      {/* <div>
-        <label htmlFor='multi-image-mode'>
-          <small className="form-help">Choose how to display subjects with multiple images. If your subjects 
-          are in a sequence, such as camera trap images, volunteers can play them in a loop using the Flipbook viewer.</small>
-        </label><br/>
-        <select id='multi-image-mode' onChange={handleSelectMode} value={mode}>
-          <option value='flipbook'>{`Flipbook Viewer (default)`}</option>
-          <option value='separate'>Separate Frames Viewer</option>
-        </select>
-      </div> */}
+      <small className="form-help">Choose how to display subjects with multiple images.</small>
       <div>
         <select id='flipbook-play-iterations' onChange={handleSelectPlayIterations} value={iterations}>
           <option value=''>Infinite</option>
