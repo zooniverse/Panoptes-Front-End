@@ -116,7 +116,7 @@ class UserSettings extends Component {
           <form onSubmit={this.updateSubjectID}>
             <label for="subjectId">
               Filter by subject ID:
-              <input id="subjectID" name="subjectID" type="text" defaultValue='' />
+              <input id="subjectId" name="subjectID" type="text" defaultValue='' />
             </label>
           </form>
           <ol>
