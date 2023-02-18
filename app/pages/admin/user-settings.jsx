@@ -114,10 +114,9 @@ class UserSettings extends Component {
         <details>
           <summary>Recent classifications {this.state.classifications.length}</summary>
           <form onSubmit={this.updateSubjectID}>
-            <label for="subjectId">
-              Filter by subject ID:
-              <input id="subjectId" name="subjectID" type="text" defaultValue='' />
-            </label>
+            <label for="subjectId">Filter by subject ID: </label>
+            <input id="subjectId" name="subjectID" type="text" defaultValue='' pattern='\d+' />
+            <input type="submit" value="Go" />
           </form>
           <ol>
           {this.state.classifications.map(classification => (
