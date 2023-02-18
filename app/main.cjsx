@@ -45,7 +45,7 @@ shouldUpdateScroll = (prevRouterProps, routerProps) ->
   else
     true
 
-# initSentry()
+initSentry()
 store = initStore()
 
 ReactDOM.render <Provider store={store}><Router history={browserHistory} render={applyRouterMiddleware(useScroll(shouldUpdateScroll))}>{routes}</Router></Provider>,
