@@ -9,16 +9,56 @@ class LinePlotModel {
     fetch(`${src}?=`)
       .then(response => response.json())
       .then((data) => {
+        let datasets;
+        const { chartOptions, data: FEMdata, ...rest } = data;
+        if (FEMdata) {
+          datasets = FEMdata.map( (data, index) => {
+            const { seriesData, seriesOptions } = data
+            return {
+              data: seriesData,
+              label: `Series ${index + 1}`,
+              pointStyle: seriesOptions.glyph,
+              backgroundColor: seriesOptions.color,
+              borderColor: '#000000'
+            }
+          });
+        }
+        if (data.datasets) {
+          datasets = data.datasets
+        }
         console.log({
           type: 'scatter',
-          data
+          data: {
+            datasets,
+            ...rest
+          }
         });
         this.lineChart = new Chart(
           this.ctx,
           {
             type: 'scatter',
-            data,
-            options: {}
+            data: {
+              datasets,
+              ...rest
+            },
+            options: {
+              scales: {
+                x: {
+                  reverse: chartOptions?.invertAxes?.x || false,
+                  title: {
+                    display: true,
+                    text: chartOptions?.xAxisLabel
+                  }
+                },
+                y: {
+                  reverse: chartOptions?.invertAxes?.y || false,
+                  title: {
+                    display: true,
+                    text: chartOptions?.yAxisLabel
+                  }
+                }
+              }
+            }
           }
         );
       })
