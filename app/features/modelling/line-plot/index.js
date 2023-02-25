@@ -16,7 +16,7 @@ class LinePlotModel {
             const { seriesData, seriesOptions } = data
             return {
               data: seriesData,
-              label: `Series ${index + 1}`,
+              label: seriesOptions.label || `Series ${index + 1}`,
               pointStyle: seriesOptions.glyph,
               backgroundColor: seriesOptions.color,
               borderColor: '#000000'
@@ -42,6 +42,13 @@ class LinePlotModel {
               ...rest
             },
             options: {
+              plugins: {
+                legend: {
+                  labels: {
+                    usePointStyle: true
+                  }
+                }
+              },
               scales: {
                 x: {
                   reverse: chartOptions?.invertAxes?.x || false,
