@@ -57,7 +57,7 @@ export default {
     about: {
       header: 'Sobre',
       nav: {
-        research: 'Investigaçã',
+        research: 'Investigação',
         results: 'Resultados',
         faq: 'FAQ',
         education: 'Educação',
@@ -80,7 +80,7 @@ export default {
       dark: 'escuro',
       light: 'claro',
       title: 'Classificar',
-      themeToggle: 'Mudar para %(theme)s tema'
+      themeToggle: 'Mudar para o tema %(theme)s'
     },
     home: {
       organization: 'Organização',
