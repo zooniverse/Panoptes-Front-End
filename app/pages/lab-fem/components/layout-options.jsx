@@ -11,7 +11,7 @@ export default function LayoutOptions({ workflow = null }) {
 
   return (
     <div>
-      <span className="form-label">Subject image display</span>
+      <span className="form-label">Image Display Options</span>
       <br />
       <small className="form-help">
         By default, subject images stretch to fit the width of the volunteer's
