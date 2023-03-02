@@ -46,7 +46,7 @@ class CanvasViewer extends React.Component {
     if (this.props.src !== oldProps.src || this.props.frame !== oldProps.frame) {
       this.createNewModel()
         .then(() => (
-          this.model.update()
+          this.model.update(this.props.annotations, this.props.viewBoxDimensions)
         ))
         .catch((e) => {
           console.warn(e);

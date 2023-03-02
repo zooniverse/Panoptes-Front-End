@@ -2,7 +2,7 @@ import Chart from 'chart.js/auto';
 
 // Help at http://www.chartjs.org/docs/latest
 class LinePlotModel {
-  constructor(canvas, { frame, src }) {
+  constructor(canvas, { frame, src }, { onLoad, modelDidError }) {
     this.ctx = canvas.getContext('2d');
     console.log('Line Plot', this.ctx, frame, src);
     this.frame = frame;
@@ -68,8 +68,11 @@ class LinePlotModel {
             }
           }
         );
+        const { height, width } = canvas.getBoundingClientRect()
+        onLoad({ height, width })
       })
       .catch((e) => {
+        modelDidError({ modelErrorMessage: error.message })
         console.warn(e);
       });
   }
