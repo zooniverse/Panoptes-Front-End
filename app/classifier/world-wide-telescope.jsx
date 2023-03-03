@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import getSubjectLocation from '../lib/get-subject-location';
+import getSubjectLocation from '../lib/getSubjectLocation';
 
 class SimplePoint {
   constructor(x, y) {

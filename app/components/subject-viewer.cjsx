@@ -5,12 +5,12 @@ FavoritesButton = require('../collections/favorites-button').default
 Dialog = require 'modal-form/dialog'
 {Markdown} = require 'markdownz'
 classnames = require 'classnames'
-getSubjectLocation = require '../lib/get-subject-location'
+getSubjectLocation =  require('../lib/getSubjectLocation').default
 FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
 FrameViewer = require('./frame-viewer').default
 CollectionsManagerIcon = require('../collections/manager-icon').default
-getSubjectLocations = require('../lib/get-subject-locations').default
+getSubjectLocations = require('../lib/getSubjectLocations').default
 
 NOOP = Function.prototype
 
