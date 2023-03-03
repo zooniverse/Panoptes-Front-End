@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
-import getSubjectLocation from '../lib/get-subject-location';
-import getSubjectLocations from '../lib/get-subject-locations';
+import getSubjectLocation from '../lib/getSubjectLocation';
+import getSubjectLocations from '../lib/getSubjectLocations';
 import PanZoom from './pan-zoom';
 import FileViewer from './file-viewer';
 
