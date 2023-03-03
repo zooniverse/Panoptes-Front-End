@@ -34,8 +34,6 @@ Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage yo
 
 ⚠️ **Note 2:** as of Node 16.15, running _npm ci_ results in errors such as _npm ERR! ERESOLVE could not resolve_ and _Conflicting peer dependency: foobar@x.y.z_ You can bypass this problem by instead running `npm ci --legacy-peer-deps`. Please see [issue 6155](https://github.com/zooniverse/Panoptes-Front-End/issues/6155) for more details.
 
-⚠️ **Note 3:** as of Node 18, you may need to include the HOST such as `HOST=local.zooniverse.org npm start`.
-
 ### Viewing the Website
 
 Open your web browser of choice and go to `https://localhost:3735/`
