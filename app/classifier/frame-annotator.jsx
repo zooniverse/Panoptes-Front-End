@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import tasks from './tasks';
 import seenThisSession from '../lib/seen-this-session';
-import getSubjectLocation from '../lib/get-subject-location';
+import getSubjectLocation from '../lib/getSubjectLocation';
 import WarningBanner from './warning-banner';
 import AnnotationRenderer from './annotation-renderer/';
 

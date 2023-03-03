@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Markdown } from 'markdownz';
 import Translate from 'react-translate-component';
 
-import getSubjectLocations from '../../../lib/get-subject-locations';
+import getSubjectLocations from '../../../lib/getSubjectLocations';
 import Thumbnail from '../../../components/thumbnail';
 import FinishedBanner from '../finished-banner';
 import ProjectMetadata from './metadata';
