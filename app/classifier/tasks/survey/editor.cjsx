@@ -21,6 +21,7 @@ module.exports = createReactClass
     workflow: null
     task: {}
     taskPrefix: ''
+    pfeLab: false
 
   getInitialState: ->
     importErrors: []
@@ -49,6 +50,26 @@ module.exports = createReactClass
       <p><small><a href="https://bit.ly/Zooniverse-SurveyTaskFiles">Click here</a> to download Choices, Characteristics, Confusions and Questions templates.</small></p>
       <p><small>You can Apply changes after adding an individual csv file or many csv files.</small></p>
       <hr />
+
+      {if !@props.pfeLab  # show the instruction input if in FEM lab (don't show in PFE lab)
+        <div>
+          <AutoSave resource={@props.workflow}>
+            <label htmlFor="#{@props.taskPrefix}.instruction">
+              <span className="form-label">Main text</span>
+            </label>
+            <br />
+            <textarea
+              id="#{@props.taskPrefix}.instruction"
+              name="#{@props.taskPrefix}.instruction"
+              value={@props.task.instruction}
+              className="standard-input full"
+              onChange={handleInputChange.bind @props.workflow}
+            />
+          </AutoSave>
+          <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You can use markdown to format this text.</small>
+          <hr />
+        </div>
+      }
 
       <p>
         <span className="form-label">FILE INPUT</span>
