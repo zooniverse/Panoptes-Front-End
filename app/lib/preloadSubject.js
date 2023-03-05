@@ -4,8 +4,9 @@ import loadImage from './loadImage';
 
 function preloadLocation(subject, type, src) {
   if (type === 'image') {
-    return loadImage(src).catch((error) => {
-      console.error(error);
+    return loadImage(src).catch((errorEvent) => {
+      console.error(errorEvent);
+      const error = new Error('Subject Image: loading failed.');
       withScope((scope) => {
         scope.setExtra('subjectID', subject.id);
         scope.setExtra('type', type);
