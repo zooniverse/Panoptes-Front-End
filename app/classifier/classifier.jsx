@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import styled, { ThemeProvider } from 'styled-components';
 import classNames from 'classnames';
 
-import preloadSubject from '../lib/preload-subject';
+import preloadSubject from '../lib/preloadSubject';
 import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
 import * as classifierActions from '../redux/ducks/classify';
