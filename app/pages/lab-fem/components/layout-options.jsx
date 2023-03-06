@@ -24,7 +24,7 @@ export default function LayoutOptions({ workflow = null }) {
           id="use_natural_subject_dimensions"
           type="checkbox"
           checked={useNaturalSubjectDimensions}
-          onChange={handleNaturalSubjectDimesions}
+          onChange={handleNaturalSubjectDimensions}
         />
         Display subject image using natural width and height
       </label>
