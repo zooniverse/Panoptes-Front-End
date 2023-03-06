@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { captureException } from '@sentry/browser';
+import { captureException, withScope } from '@sentry/browser';
 import LoadingIndicator from '../loading-indicator';
 
 class ImageViewer extends React.Component {
@@ -19,8 +19,18 @@ class ImageViewer extends React.Component {
     this.props.onLoad(e);
   }
 
-  onError(error) {
-    captureException(error);
+  onError(errorEvent) {
+    console.error(errorEvent);
+    const { format, frame, src, type } = this.props;
+    const error = new Error('Image Viewer: loading failed.');
+    withScope((scope) => {
+      scope.setTag('ImageError', 'imageViewer');
+      scope.setExtra('frame', frame);
+      scope.setExtra('type', type);
+      scope.setExtra('format', format);
+      scope.setExtra('src', src);
+      captureException(error);
+    });
   }
 
   render() {
