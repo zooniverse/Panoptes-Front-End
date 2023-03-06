@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function LayoutOptions({ workflow = null }) {
-  const handleNaturalSubjectDimesions = (e) => {
+  const handleNaturalSubjectDimensions = (e) => {
     return workflow.update({
       "configuration.use_natural_subject_dimensions": e.target.checked,
     });
