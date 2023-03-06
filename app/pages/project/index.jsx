@@ -103,7 +103,7 @@ class ProjectPageController extends React.Component {
 
   componentDidCatch(error, info) {
     console.log(error, info);
-    // logToSentry(error, info);
+    logToSentry(error, info);
     const loading = false;
     const ready = false;
     this.setState({ error, info, loading, ready });

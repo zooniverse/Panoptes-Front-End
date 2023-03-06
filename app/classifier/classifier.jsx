@@ -1,3 +1,4 @@
+import { captureException, withScope } from '@sentry/browser';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { browserHistory } from 'react-router';
@@ -67,8 +68,8 @@ class Classifier extends React.Component {
     this.loadSubject(this.props.subject);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.user !== this.props.user) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
       if (this.props.demoMode) {
         this.props.onChangeDemoMode(false);
       }
@@ -77,26 +78,14 @@ class Classifier extends React.Component {
       }
     }
 
-    if (nextProps.subject !== this.props.subject) {
-      this.loadSubject(nextProps.subject);
+    if (prevProps.subject !== this.props.subject) {
+      this.loadSubject();
     }
 
-    if (this.context.geordi && ((this.props.subject !== nextProps.subject) ||  !this.context.geordi.keys.subjectID)) {
-      this.context.geordi.remember({ subjectID: nextProps.subject.id });
-    }
-
-    if (nextProps.classification !== this.props.classification) {
-      const annotations = nextProps.classification.annotations.slice();
+    if (prevProps.classification !== this.props.classification) {
+      const annotations = this.props.classification.annotations.slice();
       const workflowHistory = annotations.map(annotation => annotation.task);
       this.setState({ annotations, workflowHistory });
-    }
-  }
-
-  componentWillUnmount() {
-    try {
-      !!this.context.geordi && this.context.geordi.forget(['subjectID']);
-    } catch (err) {
-      console.error(err);
     }
   }
 
@@ -168,8 +157,8 @@ class Classifier extends React.Component {
     this.props.actions.feedback.update(currentAnnotation);
   }
 
-  loadSubject(subject) {
-    const { actions, project, workflow } = this.props;
+  loadSubject() {
+    const { actions, project, subject, workflow } = this.props;
     if (actions.feedback) {
       actions.feedback.init(project, subject, workflow);
     }
@@ -186,10 +175,19 @@ class Classifier extends React.Component {
     }
 
     preloadSubject(subject)
-    .then(() => {
-      if (this.props.subject === subject) { // The subject could have changed while we were loading.
+    .then((loadedSubject) => {
+      if (loadedSubject?.id === subject?.id) { // The subject could have changed while we were loading.
         this.setState({ subjectLoading: false });
         this.props.onLoad();
+      } else {
+        const subjectError = new Error(`Unable to load subject ${loadedSubject.id}`);
+        console.error(error);
+        withScope((scope) => {
+          scope.setTag('ImageError', 'subjectMismatch');
+          scope.setExtra('loadedSubject', loadedSubject?.id);
+          scope.setExtra('actualSubject', subject?.id)
+          captureException(error);
+        });
       }
     });
   }
