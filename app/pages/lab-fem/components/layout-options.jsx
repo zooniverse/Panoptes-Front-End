@@ -16,7 +16,7 @@ export default function LayoutOptions({ workflow = null }) {
       <small className="form-help">
         By default, subject images stretch to fit the width of the volunteer's
         browser. Check this option if you want the subject's maximum dimensions
-        to be the image's natural width and natural height.{" "}
+        to be the image's original width and height.
       </small>
       <br />
       <label htmlFor="use_natural_subject_dimensions">
@@ -26,7 +26,7 @@ export default function LayoutOptions({ workflow = null }) {
           checked={useNaturalSubjectDimensions}
           onChange={handleNaturalSubjectDimensions}
         />
-        Display subject image using natural width and height
+        Display subject image using original width and height
       </label>
     </div>
   );
