@@ -24,6 +24,7 @@ class ImageViewer extends React.Component {
     const { format, frame, src, type } = this.props;
     const error = new Error('Image Viewer: loading failed.');
     withScope((scope) => {
+      scope.setTag('ImageError', 'imageViewer');
       scope.setExtra('frame', frame);
       scope.setExtra('type', type);
       scope.setExtra('format', format);

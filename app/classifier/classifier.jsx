@@ -183,6 +183,7 @@ class Classifier extends React.Component {
         const subjectError = new Error(`Unable to load subject ${loadedSubject.id}`);
         console.error(error);
         withScope((scope) => {
+          scope.setTag('ImageError', 'subjectMismatch');
           scope.setExtra('loadedSubject', loadedSubject?.id);
           scope.setExtra('actualSubject', subject?.id)
           captureException(error);

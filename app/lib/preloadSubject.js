@@ -8,6 +8,7 @@ function preloadLocation(subject, type, src) {
       console.error(errorEvent);
       const error = new Error('Subject Image: loading failed.');
       withScope((scope) => {
+        scope.setTag('ImageError', 'preloader')
         scope.setExtra('subjectID', subject.id);
         scope.setExtra('type', type);
         scope.setExtra('location', src);
