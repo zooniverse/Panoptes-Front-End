@@ -19,8 +19,9 @@ export default function LayoutOptions({ workflow = null }) {
         to be the image's natural width and natural height.{" "}
       </small>
       <br />
-      <label>
+      <label htmlFor="use_natural_subject_dimensions">
         <input
+          id="use_natural_subject_dimensions"
           type="checkbox"
           checked={useNaturalSubjectDimensions}
           onChange={handleNaturalSubjectDimesions}
