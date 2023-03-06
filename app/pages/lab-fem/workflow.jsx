@@ -5,6 +5,7 @@ import ModalFormDialog from 'modal-form/dialog';
 import apiClient from 'panoptes-client/lib/api-client';
 import RetirementRulesEditor from '../../components/retirement-rules-editor.cjsx';
 import { Link } from 'react-router';
+import LayoutOptions from './components/layout-options.jsx';
 import FemMultiImageSubjectOptionsEditor from './components/fem-multi-image-subject-options-editor.jsx';
 import taskComponents from '../../classifier/tasks/index.js';
 import AutoSave from '../../components/auto-save.coffee';
@@ -113,6 +114,7 @@ class EditWorkflowPage extends Component {
   showTaskAddButtons() {
     return this.setState(prevState => ({ showTaskAddButtons: !prevState.showTaskAddButtons }));
   }
+
 
   render() {
     let definition;
@@ -315,6 +317,14 @@ class EditWorkflowPage extends Component {
                 project={this.props.project}
                 workflow={this.props.workflow}
               />
+            </div>
+
+            <hr />
+
+            <div>
+              <AutoSave tag="div" resource={this.props.workflow}>
+                <LayoutOptions workflow={this.props.workflow} />
+              </AutoSave>
             </div>
 
             <hr />
