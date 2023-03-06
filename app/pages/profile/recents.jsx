@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import SubjectViewer from '../../components/subject-viewer';
 import Thumbnail from '../../components/thumbnail';
-import getSubjectLocations from '../../lib/get-subject-locations';
+import getSubjectLocations from '../../lib/getSubjectLocations';
 
 class Recents extends React.Component {
   constructor() {

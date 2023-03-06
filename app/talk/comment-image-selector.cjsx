@@ -1,7 +1,7 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 apiClient = require 'panoptes-client/lib/api-client'
-getSubjectLocation = require '../lib/get-subject-location'
+getSubjectLocation = require('../lib/getSubjectLocation').default
 SingleSubmitButton = require '../components/single-submit-button'
 
 module.exports = createReactClass

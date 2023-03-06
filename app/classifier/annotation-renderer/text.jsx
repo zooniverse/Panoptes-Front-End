@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import tasks from '../tasks';
-import getSubjectLocation from '../../lib/get-subject-location';
+import getSubjectLocation from '../../lib/getSubjectLocation';
 
 export default class TextRenderer extends React.Component {
 
