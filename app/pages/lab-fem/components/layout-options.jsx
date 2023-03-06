@@ -2,12 +2,12 @@ import React from "react";
 
 export default function LayoutOptions({ workflow = null }) {
   const handleNaturalSubjectDimensions = (e) => {
-    return workflow.update({
-      "configuration.use_natural_subject_dimensions": e.target.checked,
+    workflow.update({
+      "configuration.display_natural_subject_dimensions": e.target.checked,
     });
   };
 
-  const useNaturalSubjectDimensions = !!workflow?.configuration?.use_natural_subject_dimensions
+  const displayNaturalSubjectDimensions = !!workflow?.configuration?.display_natural_subject_dimensions
 
   return (
     <div>
@@ -19,11 +19,11 @@ export default function LayoutOptions({ workflow = null }) {
         to be the image's original width and height.
       </small>
       <br />
-      <label htmlFor="use_natural_subject_dimensions">
+      <label htmlFor="natural_subject_dimensions">
         <input
-          id="use_natural_subject_dimensions"
+          id="natural_subject_dimensions"
           type="checkbox"
-          checked={useNaturalSubjectDimensions}
+          checked={displayNaturalSubjectDimensions}
           onChange={handleNaturalSubjectDimensions}
         />
         Display subject image using original width and height
