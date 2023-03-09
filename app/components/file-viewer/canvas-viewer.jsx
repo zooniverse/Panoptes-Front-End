@@ -41,20 +41,18 @@ class CanvasViewer extends React.Component {
         this.setState({ modelFailedToLoad: true });
       });
   }
-  componentWillUpdate(nextProps) {
-    // if the subject has updated we need to re-initialise the model
-    if (this.props.src !== nextProps.src || this.props.frame !== nextProps.frame) {
-      this.createNewModel(nextProps)
+
+  componentDidUpdate(oldProps) {
+    if (this.props.src !== oldProps.src || this.props.frame !== oldProps.frame) {
+      this.createNewModel()
         .then(() => (
-          this.model.update(nextProps.annotations, nextProps.viewBoxDimensions)
+          this.model.update(this.props.annotations, this.props.viewBoxDimensions)
         ))
         .catch((e) => {
           console.warn(e);
           this.setState({ modelFailedToLoad: true });
         });
     }
-  }
-  componentDidUpdate(oldProps) {
     // The component has just updated. We now trigger a render!
     // If we're not loading, we have zoomed/panned or the new annotation is
     // different from the old one, update (render) the model!
@@ -84,11 +82,14 @@ class CanvasViewer extends React.Component {
   }
   /* eslint-disable class-methods-use-this */
   getModelForFrame(metadata, frame) {
-    const model = metadata['#models'].filter(
-      models => models.frame === frame
-    );
+    let model = { frame, model: 'LINE_PLOT'};
+    if (metadata['#models']) {
+      model = metadata['#models'].find(
+        models => models.frame === frame
+      );
+    }
     // check if model is an empty (shouln't be)
-    return modelSelector(model[0] || {});
+    return modelSelector(model);
   }
   /* eslint-enable class-methods-use-this */
   setMessage(message) {
@@ -108,19 +109,19 @@ class CanvasViewer extends React.Component {
     const canvasStyle = { width, height };
     this.setState({ canvasStyle });
   }
-  createNewModel(props) {
+  createNewModel() {
     if (!this.state.loading) this.setState({ loading: true });
     return new Promise((resolve, reject) => {
-      if (props.subject.metadata && props.subject.metadata['#models']) {
-        const Model = this.getModelForFrame(props.subject.metadata, props.frame);
+      if (this.props.subject.metadata) {
+        const Model = this.getModelForFrame(this.props.subject.metadata, this.props.frame);
         this.model = new Model(
           this.canvas,
           // pass metadata for model
           {
-            frame: props.frame,
-            metadata: props.subject.metadata,
-            src: props.src,
-            sizing: props.viewBoxDimensions
+            frame: this.props.frame,
+            metadata: this.props.subject.metadata,
+            src: this.props.src,
+            sizing: this.props.viewBoxDimensions
           },
           // pass event handlers
           {
@@ -139,6 +140,7 @@ class CanvasViewer extends React.Component {
       }
     });
   }
+
   render() {
     if (this.state.modelFailedToLoad) {
       return (

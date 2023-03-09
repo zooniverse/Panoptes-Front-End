@@ -16,7 +16,8 @@ export default class CollectionCard extends React.Component {
 
   setSubjectPreview(src) {
     const splitSrc = src ? src.split('.') : [];
-    if (src && splitSrc[splitSrc.length - 1] !== 'mp4') {
+    const extension = splitSrc[splitSrc.length - 1];
+    if (src &&  !['mp4', 'json'].includes(extension)) {
       const thumbnailSrc = Thumbnail.getThumbnailSrc({
         origin: 'https://thumbnails.zooniverse.org',
         width: 220,
