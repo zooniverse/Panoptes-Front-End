@@ -32,22 +32,13 @@
 
 ## Strategies
 
-A strategy is the method for reconciling a user's annotations and the known data defined on the subject. The following strategies are available:
+A strategy is the method for reconciling a user's annotations and the known data defined on the subject. The following strategies are available; please follow links to strategy-specific documentation:
 
-### Radial
-
-Uses the point tool. Determines whether any points lie within a defined tolerance of a point defined on the subject metadata.
-
-#### Additional workflow options
-
-- **Default tolerance** - a default tolerance value around the point defined on the subject.
-
-#### Additional Subject metadata fields
-
-- `#feedback_N_x` **(required)** - the X coordinate for the known point.
-- `#feedback_N_y` **(required)** - the Y coordinate for the known point.
-- `#feedback_N_tolerance` (optional) - the radius around the known point for a valid annotation. Defaults the the value defined on the workflow if not set.
-
-### Dud
-
-Determines whether there should be any annotations or not. There are no additional workflow options or subject fields required.
+- Drawing
+    - [Radial](shared/strategies/drawing/radial/README.md)
+    - [Point In Ellipse](shared/strategies/drawing/pointInEllipse/README.md)
+    - [Column](shared/strategies/drawing/column/README.md)
+- [Dud](shared/strategies/dud/README.md)
+- [Single Answer Question](shared/strategies/single-answer-question/README.md)
+- [Survey: Simple](shared/strategies/survey/simple/README.md)
+- [Datavis: Graph2dRange](shared/strategies/datavis/graph2drange/README.md)
