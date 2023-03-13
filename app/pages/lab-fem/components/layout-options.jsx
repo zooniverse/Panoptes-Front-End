@@ -1,32 +1,30 @@
 import React from "react";
 
 export default function LayoutOptions({ workflow = null }) {
-  const handleNaturalSubjectDimensions = (e) => {
+  const handleLimitSubjectHeight = (e) => {
     workflow.update({
-      "configuration.display_natural_subject_dimensions": e.target.checked,
+      "configuration.limit_subject_height": e.target.checked,
     });
   };
 
-  const displayNaturalSubjectDimensions = !!workflow?.configuration?.display_natural_subject_dimensions
+  const limitSubjectHeight = !!workflow?.configuration?.limit_subject_height
 
   return (
     <div>
       <span className="form-label">Image Display Options</span>
       <br />
       <small className="form-help">
-        By default, subject images stretch to fit the width of the volunteer's
-        browser. Check this option if you want the subject's maximum dimensions
-        to be the image's original width and height.
+        Check this option if you want to limit subject height to always fit in the browser window. The max height will be the image's original pixel height.
       </small>
       <br />
-      <label htmlFor="natural_subject_dimensions">
+      <label htmlFor="limit_subject_height">
         <input
-          id="natural_subject_dimensions"
+          id="limit_subject_height"
           type="checkbox"
-          checked={displayNaturalSubjectDimensions}
-          onChange={handleNaturalSubjectDimensions}
+          checked={limitSubjectHeight}
+          onChange={handleLimitSubjectHeight}
         />
-        Display subject image using original width and height
+        Limit subject image height
       </label>
     </div>
   );
