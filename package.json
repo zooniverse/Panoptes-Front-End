@@ -95,7 +95,7 @@
     "rimraf": "~4.4.0",
     "sinon": "~15.0.2",
     "sinon-chai": "~3.7.0",
-    "style-loader": "~3.3.1",
+    "style-loader": "~3.3.2",
     "stylus": "~0.59.0",
     "stylus-loader": "~7.1.0",
     "url": "~0.11.0",
