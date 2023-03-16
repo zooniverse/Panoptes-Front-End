@@ -1,4 +1,4 @@
-import Chart from 'chart.js/auto';
+import { Chart } from 'chart.js/auto';
 
 // Help at http://www.chartjs.org/docs/latest
 class LinePlotModel {
@@ -71,9 +71,9 @@ class LinePlotModel {
         const { height, width } = canvas.getBoundingClientRect()
         onLoad({ height, width })
       })
-      .catch((e) => {
+      .catch((error) => {
         modelDidError({ modelErrorMessage: error.message })
-        console.warn(e);
+        console.warn(error);
       });
   }
   update() {
