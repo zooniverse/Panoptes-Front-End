@@ -19,7 +19,7 @@
     "markdownz": "~8.0.3",
     "modal-form": "~2.9",
     "moment": "~2.29.0",
-    "panoptes-client": "~5.2.3",
+    "panoptes-client": "~5.2.4",
     "papaparse": "^5.4.0",
     "polished": "~4.2.2",
     "prop-types": "~15.8.1",
