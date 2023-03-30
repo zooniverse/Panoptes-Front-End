@@ -220,10 +220,10 @@ export const routes = (
       </Route>
 
       <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
-        <IndexRoute component={require('./collections/show-list')} />
+        <IndexRoute component={require('./collections/show-list').default} />
         <Route path="settings" component={CollectionSettings} />
         <Route path="collaborators" component={CollectionCollaborators} />
-        <Route path="talk" component={require('./collections/show-list')} />
+        <Route path="talk" component={require('./collections/show-list').default} />
       </Route>
       <Route path="users/:profile_name" component={UserProfilePage}>
         <IndexRoute component={require('./pages/profile/feed')} />
@@ -275,10 +275,10 @@ export const routes = (
       </Route>
 
       <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
-        <IndexRoute component={require('./collections/show-list')} />
+        <IndexRoute component={require('./collections/show-list').default} />
         <Route path="settings" component={CollectionSettings} />
         <Route path="collaborators" component={CollectionCollaborators} />
-        <Route path="talk" component={require('./collections/show-list')} />
+        <Route path="talk" component={require('./collections/show-list').default} />
       </Route>
       <Route path="users/:profile_name" component={UserProfilePage}>
         <IndexRoute component={require('./pages/profile/feed')} />
@@ -320,10 +320,10 @@ export const routes = (
     </Route>
 
     <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
-      <IndexRoute component={require('./collections/show-list')} />
+      <IndexRoute component={require('./collections/show-list').default} />
       <Route path="settings" component={CollectionSettings} />
       <Route path="collaborators" component={CollectionCollaborators} />
-      <Route path="talk" component={require('./collections/show-list')} />
+      <Route path="talk" component={require('./collections/show-list').default} />
     </Route>
 
     <Route path="lab" component={require('./pages/lab')} />
