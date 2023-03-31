@@ -170,7 +170,7 @@ class CollectionPageWrapper extends React.Component {
   }
 
   componentWillUnmount() {
-    this.state.collection.stopListening('change', this.listenToCollection);
+    this.state.collection?.stopListening('change', this.listenToCollection);
   }
 
   listenToCollection = () => {
