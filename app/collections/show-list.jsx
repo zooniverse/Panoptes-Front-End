@@ -70,6 +70,7 @@ function SubjectNode({
     async function getSubjectProject() {
       const project = await subject.get('project');
       setProject(project);
+      checkFavorite(project);
     }
 
     if (projectContext) {
@@ -78,7 +79,6 @@ function SubjectNode({
       }
     } else {
       getSubjectProject();
-      checkFavorite(project);
     }
   }, [projectContext, subject])
 
