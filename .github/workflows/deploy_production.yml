@@ -27,16 +27,3 @@ jobs:
       target: 'www.zooniverse.org'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
-  slack_notification:
-    name: Send Slack notification
-    uses: zooniverse/ci-cd/.github/workflows/slack_notification.yaml@main
-    needs: deploy_production
-    if: always()
-    with:
-      commit_id: ${{ github.sha }}
-      job_name: Build production / build
-      status: ${{ needs.deploy_production.result }}
-      title: 'PFE Production deploy complete'
-      title_link: 'https://www.zooniverse.org'
-    secrets:
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
