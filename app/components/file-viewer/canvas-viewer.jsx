@@ -153,6 +153,7 @@ class CanvasViewer extends React.Component {
     return (
       <div className="subject-canvas-frame" >
         <canvas
+          key={this.props.src}
           className="subject pan-active"
           width={this.state.canvasSize.width}
           height={this.state.canvasSize.height}

@@ -60,6 +60,10 @@ export default class Thumbnail extends React.Component {
       );
     }
 
+    if (this.props.type === 'application') {
+      return null;
+    }
+
     return (
       <div  style={style}>
         <img alt="" {...this.props} src={src} {...dimensions} onError={this.handleError} />
