@@ -16,7 +16,7 @@ const sanitiseOptions = {
 }
 
 const ALLOWED_MEDIA_TYPES = ['image', 'audio', 'video'];
-const ALLOWED_FILE_TYPES = ['text/plain', 'application/json', 'application/pdf'];
+const ALLOWED_FILE_TYPES = ['text/csv', 'text/plain', 'application/json', 'application/pdf'];
 
 export default async function putFile(url, file, headers = {}) {
   const [type] = file.type.split('/');
