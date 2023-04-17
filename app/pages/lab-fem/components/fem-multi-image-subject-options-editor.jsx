@@ -15,6 +15,13 @@ export default function FemMultiImageSubjectLayoutEditor ({
     })
   }
 
+  function handleSelectLayout (e) {
+    const layout = e.target.value
+    return workflow.update({
+      'configuration.multi_image_layout': layout
+    })
+  }
+
   function handleSelectPlayIterations (e) {
     const iterations = e.target.value;
     return workflow.update({
@@ -24,7 +31,8 @@ export default function FemMultiImageSubjectLayoutEditor ({
 
   const enableSwitchingChecked = !!workflow?.configuration?.enable_switching_flipbook_and_separate
   const enableAutoplayChecked = !!workflow?.configuration?.flipbook_autoplay
-  const iterations = (workflow?.configuration?.playIterations >= 0) ? workflow.configuration.playIterations : 3
+  const iterations = workflow?.configuration?.playIterations >= 0 ? workflow.configuration.playIterations : 3
+  const layout = workflow?.configuration?.multi_image_layout || 'col'
 
   return (
     <div className='multi-image-subject-layout-editor'>
@@ -55,9 +63,58 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={enableSwitchingChecked}
             onChange={toggleEnableSwitching}
           />
-          Allow Separate Frames View - <small>volunteers can choose flipbook or a one-column separate frames view</small>
+          Allow Separate Frames View - <small>volunteers can choose flipbook or a separate frames view</small>
         </label>
       </div>
+
+      {enableSwitchingChecked && <div>
+        <br />
+        <span>Show separate frames as:</span>
+        <br />
+        <label>
+          <input
+            type="radio"
+            name="multi_image_layout"
+            value="col"
+            checked={layout === "col"}
+            onChange={handleSelectLayout}
+          />
+          Single column (all frames stacked vertically)
+        </label>
+        <br />
+        <label>
+          <input
+            type="radio"
+            name="multi_image_layout"
+            value="row"
+            checked={layout === "row"}
+            onChange={handleSelectLayout}
+          />
+          Single row (all frames side by side horizontally)
+        </label>
+        <br />
+        <label>
+          <input
+            type="radio"
+            name="multi_image_layout"
+            value="grid2"
+            checked={layout === "grid2"}
+            onChange={handleSelectLayout}
+          />
+          Grid (frames distributed evenly over 2 columns)
+        </label>
+        <br />
+        <label>
+          <input
+            type="radio"
+            name="multi_image_layout"
+            value="grid3"
+            checked={layout === "grid3"}
+            onChange={handleSelectLayout}
+          />
+          Grid (frames distributed evenly over 3 columns)
+        </label>
+      </div>}
     </div>
   )
 }
