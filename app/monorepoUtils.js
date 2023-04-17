@@ -29,7 +29,8 @@ export const SLUGS = [
   'profdrrogerlouismartinez-davila/deciphering-secrets-unlocking-the-manuscripts-of-medieval-spain',
   'skirmizi/ottoman-turkish-crowdsourcing',
   'bldigital/in-the-spotlight',
-  'md68135/notes-from-nature-labs'
+  'md68135/notes-from-nature-labs',
+  'fulsdavid/the-daily-minor-planet'
 ];
 
 export function usesMonorepo(slug) {
