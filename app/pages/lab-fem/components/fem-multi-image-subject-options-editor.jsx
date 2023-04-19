@@ -79,7 +79,7 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={layout === "col"}
             onChange={handleSelectLayout}
           />
-          Single column (all frames stacked vertically)
+          Single column - <small>all frames stacked vertically (recommended for landscape subjects, and this is the default for mobile devices)</small>
         </label>
         <br />
         <label>
@@ -90,7 +90,7 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={layout === "row"}
             onChange={handleSelectLayout}
           />
-          Single row (all frames side by side horizontally)
+          Single row - <small>all frames side by side horizontally (recommended only for portrait subjects)</small>
         </label>
         <br />
         <label>
