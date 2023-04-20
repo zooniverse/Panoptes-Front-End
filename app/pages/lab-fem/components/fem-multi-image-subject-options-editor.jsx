@@ -79,8 +79,9 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={layout === "col"}
             onChange={handleSelectLayout}
           />
-          Single column - <small>all frames stacked vertically (recommended for landscape subjects, and this is the default for mobile devices)</small>
+          Single column
         </label>
+        <small> - all frames stacked vertically (recommended for landscape subjects; default for mobile devices)</small>
         <br />
         <label>
           <input
@@ -90,8 +91,9 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={layout === "row"}
             onChange={handleSelectLayout}
           />
-          Single row - <small>all frames side by side horizontally (recommended only for portrait subjects)</small>
+          Single row
         </label>
+        <small> - all frames side by side horizontally (recommended only for portrait subjects)</small>
         <br />
         <label>
           <input
@@ -101,8 +103,9 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={layout === "grid2"}
             onChange={handleSelectLayout}
           />
-          Grid (frames distributed evenly over 2 columns)
+          Grid
         </label>
+        <small> - frames distributed evenly over 2 columns</small>
         <br />
         <label>
           <input
@@ -112,8 +115,9 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={layout === "grid3"}
             onChange={handleSelectLayout}
           />
-          Grid (frames distributed evenly over 3 columns)
+          Grid
         </label>
+        <small> - frames distributed evenly over 3 columns</small>
       </div>}
     </div>
   )
