@@ -15,6 +15,13 @@ export default function FemMultiImageSubjectLayoutEditor ({
     })
   }
 
+  function handleSelectLayout (e) {
+    const layout = e.target.value
+    return workflow.update({
+      'configuration.multi_image_layout': layout
+    })
+  }
+
   function handleSelectPlayIterations (e) {
     const iterations = e.target.value;
     return workflow.update({
@@ -24,7 +31,8 @@ export default function FemMultiImageSubjectLayoutEditor ({
 
   const enableSwitchingChecked = !!workflow?.configuration?.enable_switching_flipbook_and_separate
   const enableAutoplayChecked = !!workflow?.configuration?.flipbook_autoplay
-  const iterations = (workflow?.configuration?.playIterations >= 0) ? workflow.configuration.playIterations : 3
+  const iterations = workflow?.configuration?.playIterations >= 0 ? workflow.configuration.playIterations : 3
+  const layout = workflow?.configuration?.multi_image_layout || 'col'
 
   return (
     <div className='multi-image-subject-layout-editor'>
@@ -36,7 +44,8 @@ export default function FemMultiImageSubjectLayoutEditor ({
           <option value={3}>3</option>
           <option value={5}>5</option>
         </select>
-        <label htmlFor='flipbook-play-iterations'>{' '}Play Iterations - <small>choose how many times the images loop</small></label>
+        <label htmlFor='flipbook-play-iterations'>{' '}Play Iterations</label>
+        <small> - choose how many times the images loop</small>
       </div>
       <div>
         <label>
@@ -45,8 +54,9 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={enableAutoplayChecked}
             onChange={toggleFlipbookAutoplay}
             />
-          Autoplay - <small>automatically loop through a subject's images when the page loads</small>
+          Autoplay
         </label>
+        <small> - automatically loop through a subject's images when the page loads</small>
       </div>
       <div>
         <label>
@@ -55,9 +65,62 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={enableSwitchingChecked}
             onChange={toggleEnableSwitching}
           />
-          Allow Separate Frames View - <small>volunteers can choose flipbook or a one-column separate frames view</small>
+          Allow Separate Frames View - <small>volunteers can choose flipbook or a separate frames view</small>
         </label>
       </div>
+
+      {enableSwitchingChecked && <div>
+        <br />
+        <span>Show separate frames as:</span>
+        <br />
+        <label>
+          <input
+            type="radio"
+            name="multi_image_layout"
+            value="col"
+            checked={layout === "col"}
+            onChange={handleSelectLayout}
+          />
+          Single column
+        </label>
+        <small> - all frames stacked vertically (recommended for landscape subjects; default for mobile devices)</small>
+        <br />
+        <label>
+          <input
+            type="radio"
+            name="multi_image_layout"
+            value="row"
+            checked={layout === "row"}
+            onChange={handleSelectLayout}
+          />
+          Single row
+        </label>
+        <small> - all frames side by side horizontally (recommended only for portrait subjects)</small>
+        <br />
+        <label>
+          <input
+            type="radio"
+            name="multi_image_layout"
+            value="grid2"
+            checked={layout === "grid2"}
+            onChange={handleSelectLayout}
+          />
+          Grid
+        </label>
+        <small> - frames distributed evenly over 2 columns</small>
+        <br />
+        <label>
+          <input
+            type="radio"
+            name="multi_image_layout"
+            value="grid3"
+            checked={layout === "grid3"}
+            onChange={handleSelectLayout}
+          />
+          Grid
+        </label>
+        <small> - frames distributed evenly over 3 columns</small>
+      </div>}
     </div>
   )
 }
