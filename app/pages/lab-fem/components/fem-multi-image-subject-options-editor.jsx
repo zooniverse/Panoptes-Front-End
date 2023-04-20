@@ -44,7 +44,8 @@ export default function FemMultiImageSubjectLayoutEditor ({
           <option value={3}>3</option>
           <option value={5}>5</option>
         </select>
-        <label htmlFor='flipbook-play-iterations'>{' '}Play Iterations - <small>choose how many times the images loop</small></label>
+        <label htmlFor='flipbook-play-iterations'>{' '}Play Iterations</label>
+        <small> - choose how many times the images loop</small>
       </div>
       <div>
         <label>
@@ -53,8 +54,9 @@ export default function FemMultiImageSubjectLayoutEditor ({
             checked={enableAutoplayChecked}
             onChange={toggleFlipbookAutoplay}
             />
-          Autoplay - <small>automatically loop through a subject's images when the page loads</small>
+          Autoplay
         </label>
+        <small> - automatically loop through a subject's images when the page loads</small>
       </div>
       <div>
         <label>
