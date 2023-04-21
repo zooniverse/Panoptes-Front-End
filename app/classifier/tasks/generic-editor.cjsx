@@ -124,17 +124,17 @@ module.exports = createReactClass
                       <AutoSave resource={@props.workflow} >
                         Color{' '}
                         <select style={{background: choice.color}} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          <option style={{background: "#ff6639"}} value="#ff6639">Red</option>
-                          <option style={{background: "#ffa539"}} value="#ffa539">Orange</option>
-                          <option style={{background: "#F5D76E"}} value="#F5D76E">Yellow</option>
-                          <option style={{background: "#FC6399"}} value="#FC6399">Pink</option>
-                          <option style={{background: "#C9F227"}} value="#C9F227">Yellow Green</option>
-                          <option style={{background: "#35D056"}} value="#35D056">Green</option>
-                          <option style={{background: "#00FF7F"}} value="#00FF7F">Seafoam</option>
-                          <option style={{background: "#57c4f7"}} value="#57c4f7">Blue</option>
-                          <option style={{background: "#DCC6E0"}} value="#DCC6E0">Light Purple</option>
-                          <option style={{background: "#BAC1ff"}} value="#BAC1ff">Violet</option>
-                          <option style={{background: "#00ffff"}} value="#00ffff">Cyan</option>
+                          <option style={{background: "#e65252"}} value="#e65252">Red Orange</option>
+                          <option style={{background: "#f1ae45"}} value="#f1ae45">Goldenrod</option>
+                          <option style={{background: "#fced54"}} value="#fced54">Laser Lemon</option>
+                          <option style={{background: "#ee7bcf"}} value="#ee7bcf">Cotton Candy</option>
+                          <option style={{background: "#c7f55b"}} value="#c7f55b">Granny Smith Apple</option>
+                          <option style={{background: "#65eeca"}} value="#65eeca">Jungle Green</option>
+                          <option style={{background: "#52db72"}} value="#52db72">Screamin Green</option>
+                          <option style={{background: "#7cdff2"}} value="#7cdff2">Robin&apos;s Egg Blue</option>
+                          <option style={{background: "#8aa0d3"}} value="#8aa0d3">Indigo</option>
+                          <option style={{background: "#c17ddf"}} value="#c17ddf">Violet</option>
+                          <option style={{background: "#e7bbe3"}} value="#e7bbe3">Wisteria</option>
                         </select>
                       </AutoSave>
                     </div>
