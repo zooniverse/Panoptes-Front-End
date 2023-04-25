@@ -24,16 +24,3 @@ jobs:
       target: 'preview.zooniverse.org/panoptes-front-end/master'
     secrets:
       creds: ${{ secrets.AZURE_STATIC_SITES }}
-  slack_notification:
-    name: Send Slack notification
-    uses: zooniverse/ci-cd/.github/workflows/slack_notification.yaml@main
-    needs: deploy_staging
-    if: always()
-    with:
-      commit_id: ${{ github.sha }}
-      job_name: Build staging / build
-      status: ${{ needs.deploy_staging.result }}
-      title: 'PFE Staging deploy complete'
-      title_link: 'https://master.pfe-preview.zooniverse.org'
-    secrets:
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

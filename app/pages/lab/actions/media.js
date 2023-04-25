@@ -4,6 +4,7 @@ import putFile from '../../../lib/put-file.js';
 // warn on uploads bigger than 500k
 const MAX_FILE_SIZE = 500 * 1024;
 const ALLOWED_TYPES = ['image', 'audio', 'video'];
+const ALLOWED_FORMATS = ['text/plain', 'text/csv', 'application/pdf'];
 
 const mediaActions = {
   fetchMedia(props = this.props, page = 1) {
@@ -55,7 +56,7 @@ const mediaActions = {
     this.setState({ errors: [] });
     files.filter(file => {
       const [type, format] = file.type.split('/');
-      return ALLOWED_TYPES.includes(type);
+      return ALLOWED_TYPES.includes(type) || ALLOWED_FORMATS.includes(file.type);
     }).forEach(this.addFile);
   },
 

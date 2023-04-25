@@ -222,11 +222,11 @@ function CollectionShowList({
     />);
   }
 
-  function handleDeleteSubject(subject) {
-    const index = subjects.indexOf(subject);
-    setSubjects(subjects.splice(index, 1));
+  function handleDeleteSubject(subjectToDelete) {
+    const newSubjects = subjects.filter(subject => subject !== subjectToDelete)
+    setSubjects(newSubjects);
 
-    collection.removeLink('subjects', [subject.id.toString()])
+    collection.removeLink('subjects', [subjectToDelete.id.toString()])
       .then(() => {
         collection.uncacheLink('subjects');
     });
