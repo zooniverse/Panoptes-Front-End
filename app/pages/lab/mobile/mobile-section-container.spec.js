@@ -133,6 +133,19 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('workflowNotTooManyShortcuts', validationFixtures.workflowTooManyShortcuts, false);
     });
 
+    it('should check whether the workflow has grouped subject selection', function () {
+      testValidationProp(
+        'workflowDoesNotUseGroupedSubjectSelection',
+        validationFixtures.workflowDoesNotUseGroupedSubjectSelection,
+        true
+      );
+      testValidationProp(
+        'workflowDoesNotUseGroupedSubjectSelection',
+        validationFixtures.workflowUsesGroupedSubjectSelection,
+        false
+      );
+    });
+
     it('should check whether workflow has correct drawing task type', function () {
       testValidationProp('drawingToolTypeIsValid', validationFixtures.workflowHasValidDrawingTask, true);
       testValidationProp('drawingToolTypeIsValid', validationFixtures.workflowHasInvalidDrawingTask, false);
@@ -176,7 +189,8 @@ describe('<MobileSectionContainer />', function () {
         fixtures.validationFixtures.taskQuestionTooLong,
         fixtures.validationFixtures.taskFeedbackEnabled,
         fixtures.validationFixtures.workflowHasMultipleTasks,
-        fixtures.validationFixtures.workflowTooManyShortcuts
+        fixtures.validationFixtures.workflowTooManyShortcuts,
+        fixtures.validationFixtures.workflowUsesGroupedSubjectSelection
       ].map(function (invalidProp) {
         const task = fixtures.task(invalidProp.task);
         const workflow = fixtures.workflow(invalidProp.workflow);

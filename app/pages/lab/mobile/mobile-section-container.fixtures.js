@@ -133,6 +133,16 @@ const validationFixtures = {
       unlinkedTask: 'T1'
     }
   },
+  workflowDoesNotUseGroupedSubjectSelection: {
+    workflow: {
+      grouped: false
+    }
+  },
+  workflowUsesGroupedSubjectSelection: {
+    workflow: {
+      grouped: true
+    }
+  },
   workflowHasValidDrawingTask: {
     task: {
       type: 'drawing',
