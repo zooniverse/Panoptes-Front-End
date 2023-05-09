@@ -304,6 +304,7 @@ module.exports = createReactClass
 
   addHighlighterLabels: ->
     @props.task.highlighterLabels.push
+      color: '#e65252'
       label: 'Enter label'
     @props.onChange @props.task
 
