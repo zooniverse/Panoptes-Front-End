@@ -30,7 +30,8 @@ export const SLUGS = [
   'skirmizi/ottoman-turkish-crowdsourcing',
   'bldigital/in-the-spotlight',
   'md68135/notes-from-nature-labs',
-  'fulsdavid/the-daily-minor-planet'
+  'fulsdavid/the-daily-minor-planet',
+  'blicksam/human-machine-collaborative-transcription'
 ];
 
 export function usesMonorepo(slug) {
