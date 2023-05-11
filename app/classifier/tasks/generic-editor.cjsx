@@ -10,6 +10,20 @@ NextTaskSelector = require './next-task-selector'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 isAdmin = require '../../lib/is-admin'
 
+highlighterLabelColorOptions = [
+  { value: "#e65252", label: "Red Orange" },
+  { value: "#f1ae45", label: "Goldenrod" },
+  { value: "#fced54", label: "Laser Lemon" },
+  { value: "#ee7bcf", label: "Cotton Candy" },
+  { value: "#c7f55b", label: "Granny Smith Apple" },
+  { value: "#65eeca", label: "Jungle Green" },
+  { value: "#52db72", label: "Screamin Green" },
+  { value: "#7cdff2", label: "Robin's Egg Blue" },
+  { value: "#8aa0d3", label: "Indigo" },
+  { value: "#c17ddf", label: "Violet" },
+  { value: "#e7bbe3", label: "Wisteria" }
+];
+
 # `import MinMaxEditor from './drawing/min-max-editor';`
 MinMaxEditor = require('./drawing/min-max-editor').default
 GridEditor = require('./drawing/grid-editor').default
@@ -124,17 +138,14 @@ module.exports = createReactClass
                       <AutoSave resource={@props.workflow} >
                         Color{' '}
                         <select style={{background: choice.color}} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          <option style={{background: "#e65252"}} value="#e65252">Red Orange</option>
-                          <option style={{background: "#f1ae45"}} value="#f1ae45">Goldenrod</option>
-                          <option style={{background: "#fced54"}} value="#fced54">Laser Lemon</option>
-                          <option style={{background: "#ee7bcf"}} value="#ee7bcf">Cotton Candy</option>
-                          <option style={{background: "#c7f55b"}} value="#c7f55b">Granny Smith Apple</option>
-                          <option style={{background: "#65eeca"}} value="#65eeca">Jungle Green</option>
-                          <option style={{background: "#52db72"}} value="#52db72">Screamin Green</option>
-                          <option style={{background: "#7cdff2"}} value="#7cdff2">Robin&apos;s Egg Blue</option>
-                          <option style={{background: "#8aa0d3"}} value="#8aa0d3">Indigo</option>
-                          <option style={{background: "#c17ddf"}} value="#c17ddf">Violet</option>
-                          <option style={{background: "#e7bbe3"}} value="#e7bbe3">Wisteria</option>
+                          {for labelOption in highlighterLabelColorOptions
+                            <option
+                              key={labelOption.value}
+                              style={{ background: labelOption.value }}
+                              value={labelOption.value}
+                            >
+                              {labelOption.label}
+                            </option>}
                         </select>
                       </AutoSave>
                     </div>
@@ -303,8 +314,12 @@ module.exports = createReactClass
     @props.onChange @props.task
 
   addHighlighterLabels: ->
+    highlighterLabelColors = highlighterLabelColorOptions.map((option) => option.value)
+    taskColors = @props.task.highlighterLabels.map((label) => label.color)
+    newColor = highlighterLabelColors.find((color) => taskColors.indexOf(color) == -1) || highlighterLabelColors[0]
+
     @props.task.highlighterLabels.push
-      color: '#e65252'
+      color: newColor
       label: 'Enter label'
     @props.onChange @props.task
 
