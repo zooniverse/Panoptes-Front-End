@@ -49,6 +49,7 @@ export default function TaskEditor({ pfeLab = false, onDelete, project, selected
           taskPrefix={`tasks.${selectedTaskKey}`}
           project={project}
           onChange={onChange}
+          pfeLab={pfeLab}
         />
       :
         <div>Editor is not available.</div>
