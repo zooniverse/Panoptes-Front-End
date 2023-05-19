@@ -86,7 +86,7 @@
     "html-webpack-plugin": "~5.5.1",
     "jsdom": "~22.0.0",
     "marked": "~5.0.2",
-    "mini-css-extract-plugin": "~2.7.5",
+    "mini-css-extract-plugin": "~2.7.6",
     "mocha": "~10.2.0",
     "nib": "~1.2.0",
     "nyc": "~15.1.0",
