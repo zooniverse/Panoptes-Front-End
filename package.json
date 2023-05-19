@@ -72,7 +72,7 @@
     "coffee-react": "~5.0.1",
     "coffeescript": "~2.7.0",
     "copy-webpack-plugin": "~11.0.0",
-    "css-loader": "~6.7.3",
+    "css-loader": "~6.7.4",
     "ejs": "~3.1.9",
     "engine.io-client": "~6.4.0",
     "enzyme": "~3.11.0",
