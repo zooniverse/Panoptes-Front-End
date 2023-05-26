@@ -97,7 +97,7 @@
     "sinon-chai": "~3.7.0",
     "style-loader": "~3.3.3",
     "stylus": "~0.59.0",
-    "stylus-loader": "~7.1.0",
+    "stylus-loader": "~7.1.1",
     "url": "~0.11.0",
     "util": "~0.12.5",
     "webpack": "~5.84.1",
