@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import apiClient from 'panoptes-client/lib/api-client';
 
+import SubjectViewer from '../../components/subject-viewer';
 import ClassificationData from './user-settings/ClassificationData';
 
 export default function SubjectAdmin({ params }) {
@@ -24,9 +25,20 @@ export default function SubjectAdmin({ params }) {
     setFetching(true);
   }
 
+  const pageStyle = {
+    width: '50vw'
+  }
+  const subjectStyle = {
+    maxHeight: '80vh',
+    overflow: 'hidden'
+  }
+
   return(
-    <div>
+    <div style={pageStyle}>
       <h1>Subject {params.id}</h1>
+      <div style={subjectStyle}>
+        {subject && <SubjectViewer subject={subject} />}
+      </div>
       <h2>Classifications</h2>
       <ol>
       {classifications.map(classification => (
