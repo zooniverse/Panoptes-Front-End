@@ -10,6 +10,7 @@ import ProjectHomePage from './pages/project/home';
 import AboutProject from './pages/project/about/index';
 import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';
 import AboutProjectTeam from './pages/project/about/team';
+import SubjectAdmin from './pages/admin/subject';
 import UserSettingsList from './pages/admin/user-settings-list';
 import UserSettings from './pages/admin/user-settings';
 import ProjectStatusList from './pages/admin/project-status-list';
@@ -363,6 +364,7 @@ export const routes = (
       <IndexRoute component={UserSettingsList} />
       <Route path="users" component={UserSettingsList} />
       <Route path="users/:id" component={UserSettings} />
+      <Route path="subjects/:id" component={SubjectAdmin} />
       <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={ProjectStatus} />
       <Route path="grantbot" component={Grantbot} />
