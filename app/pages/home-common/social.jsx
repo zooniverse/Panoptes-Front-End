@@ -70,7 +70,7 @@ export default class HomePageSocial extends React.Component {
       <div key={i} className={classes}>
         {i !== 0 && (<hr />)}
         <h4 className="timestamp-label">{timestamp}</h4>
-        <h5 className="tertiary-headline">{post.title} </h5>
+        <h5 className="tertiary-headline"><a href={post.link}>{post.title}</a></h5>
         <div className="home-social__blog-post">
           <div style={background}></div>
           <div>
