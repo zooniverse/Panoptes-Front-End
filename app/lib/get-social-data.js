@@ -3,8 +3,10 @@ import talkClient from 'panoptes-client/lib/talk-client';
 import Publications from './publications';
 
 const BLOG_FEEDS = [
-  'https://public-api.wordpress.com/rest/v1.1/sites/36711287/posts',
-  'https://public-api.wordpress.com/rest/v1.1/sites/57182749/posts'
+  // daily.zooniverse.org
+  'https://public-api.wordpress.com/rest/v1.1/sites/57182749/posts',
+  // blog.zooniverse.org
+  'https://public-api.wordpress.com/rest/v1.1/sites/36711287/posts'
 ]
 
 function removeEntities(htmlString) {
@@ -55,7 +57,7 @@ async function getBlogPosts() {
   try {
     const feeds = await Promise.all(BLOG_FEEDS.map(fetchBlogFeed));
     feeds.forEach(feed => {
-      posts = posts.concat(feed).slice(0,4)
+      posts = posts.concat(feed.slice(0,3))
     });
     return posts.map(parseFeedPost);
   } catch (error) {
