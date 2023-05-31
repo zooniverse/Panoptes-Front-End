@@ -8,16 +8,9 @@ const BLOG_FEEDS = [
 ]
 
 function removeEntities(htmlString) {
-  return htmlString
-    .replaceAll('&#8217;', '\'')
-    .replaceAll('&#8220;', '"')
-    .replaceAll('&#8221;', '"')
-    .replaceAll('&#38;', '&')
-    .replaceAll('&nbsp;', '')
-    .replaceAll('[&hellip;]', '')
-    .replaceAll('<p>', '')
-    .replaceAll('</p>', '')
-    .trim();
+  const container = document.createElement('div');
+  container.innerHTML = htmlString;
+  return container.textContent;
 }
 
 function parseFeedPost(post) {
@@ -35,7 +28,7 @@ async function fetchBlogFeed(url) {
     const response = await fetch(url);
     if (response.ok) {
       const feed = await response.json();
-      return feed.posts.map(parseFeedPost);
+      return feed.posts;
     }
     return [];
   } catch (error) {
@@ -64,7 +57,7 @@ async function getBlogPosts() {
     feeds.forEach(feed => {
       posts = posts.concat(feed).slice(0,4)
     });
-    return posts;
+    return posts.map(parseFeedPost);
   } catch (error) {
     console.error(error);
   }
