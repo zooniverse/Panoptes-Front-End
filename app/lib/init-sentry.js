@@ -1,5 +1,4 @@
-import { init, setUser } from '@sentry/browser';
-import { Integrations } from '@sentry/tracing';
+import { init, setUser, BrowserTracing } from '@sentry/browser';
 
 function onUnhandledPromiseRejection(event) {
   event.preventDefault();
@@ -9,7 +8,7 @@ function onUnhandledPromiseRejection(event) {
 export default function initSentry() {
   init({
     dsn: 'https://36a5af57df8b426ba710c0accec90544@o274434.ingest.sentry.io/5623615',
-    integrations: [new Integrations.BrowserTracing()],
+    integrations: [new BrowserTracing()],
     tracesSampleRate: 1.0
   });
   window.onunhandledrejection = onUnhandledPromiseRejection;
