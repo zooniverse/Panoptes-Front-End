@@ -1,4 +1,4 @@
-import { init, BrowserTracing } from '@sentry/browser';
+import { init, setUser, BrowserTracing } from '@sentry/browser';
 
 function onUnhandledPromiseRejection(event) {
   event.preventDefault();
@@ -12,4 +12,9 @@ export default function initSentry() {
     tracesSampleRate: 1.0
   });
   window.onunhandledrejection = onUnhandledPromiseRejection;
+}
+
+export function addSentryUser(user) {
+  const sentryUser = user ? { id: user.id, username: user.login } : null;
+  setUser(sentryUser);
 }
