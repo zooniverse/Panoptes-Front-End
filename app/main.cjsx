@@ -3,9 +3,11 @@ ReactDOM = require 'react-dom'
 apiClient = require 'panoptes-client/lib/api-client'
 { applyRouterMiddleware, Router, browserHistory } = require 'react-router'
 useScroll = require 'react-router-scroll/lib/useScroll'
-routes = require './router'
+{ routes } = require './router'
 style = require '../css/main.styl'
-{ sugarClient } = require 'panoptes-client/lib/sugar'
+{ Provider } = require('react-redux')
+initStore = require('./redux/init-store').default
+initSentry = require('./lib/init-sentry').default
 
 # register locales
 `import counterpart from 'counterpart';`
@@ -14,14 +16,6 @@ style = require '../css/main.styl'
 Object.keys(locales).forEach((key) -> counterpart.registerTranslations(key, locales[key]))
 
 counterpart.setFallbackLocale('en')
-
-# Redux
-`import { Provider } from 'react-redux';`
-`import configureStore from './redux/store';`
-`import { processIntervention } from './redux/ducks/interventions';`
-store = configureStore()
-apiClient.type('subject_sets').listen('add-or-remove', () => store.dispatch(emptySubjectQueue()));
-sugarClient.on('experiment', (message) => store.dispatch(processIntervention(message)));
 
 # Redirect any old `/#/foo`-style URLs to `/foo`
 # ensuring we preserve the location path, search and hash fragments
@@ -51,10 +45,8 @@ shouldUpdateScroll = (prevRouterProps, routerProps) ->
   else
     true
 
+initSentry()
+store = initStore()
+
 ReactDOM.render <Provider store={store}><Router history={browserHistory} render={applyRouterMiddleware(useScroll(shouldUpdateScroll))}>{routes}</Router></Provider>,
   document.getElementById('panoptes-main-container')
-
-# Are we connected to the latest back end?
-require('./lib/log-deployed-commit')()
-
-require('./lib/split-config')

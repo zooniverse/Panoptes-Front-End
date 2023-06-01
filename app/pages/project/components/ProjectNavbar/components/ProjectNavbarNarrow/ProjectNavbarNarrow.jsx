@@ -55,7 +55,8 @@ export class ProjectNavbarNarrow extends Component {
       projectTitle,
       navLinks,
       redirect,
-      underReview
+      underReview,
+      usesMonorepo
     } = this.props;
 
     return (
@@ -76,6 +77,7 @@ export class ProjectNavbarNarrow extends Component {
               redirect={redirect}
               title={projectTitle}
               underReview={underReview}
+              usesMonorepo={usesMonorepo}
             />
             <NarrowMenuButton
               open={this.state.menuOpen}
@@ -118,7 +120,8 @@ ProjectNavbarNarrow.propTypes = {
   projectLink: PropTypes.string,
   projectTitle: PropTypes.string,
   redirect: PropTypes.string,
-  underReview: PropTypes.bool
+  underReview: PropTypes.bool,
+  usesMonorepo: PropTypes.bool
 };
 
 const mapSizesToProps = ({ height }) => ({

@@ -8,7 +8,10 @@ import DataExportButton from  "../../partials/data-export-button";
 import TalkDataExportButton from  "../../talk/data-export-button";
 
 const testProject = {
-  id: '1'
+  id: '1',
+  links: {
+    subject_sets: []
+  }
 }
 
 describe('DataExports', function () {

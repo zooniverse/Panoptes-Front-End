@@ -6,25 +6,6 @@ import counterpart from 'counterpart';
 import AboutPageLayout from './about-page-layout';
 import Avatar from '../../../partials/avatar';
 
-counterpart.registerTranslations('en', {
-  aboutPages: {
-    missingContent: {
-      team: 'This project has no team information.',
-    }
-  },
-  projectRoles: {
-    title: 'The Team',
-    owner: 'Owner',
-    collaborator: 'Collaborator',
-    translator: 'Translator',
-    scientist: 'Researcher',
-    moderator: 'Moderator',
-    tester: 'Tester',
-    expert: 'Expert',
-    museum: 'Museum',
-  }
-});
-
 const createTeamList = (team, projectSlug) => (
   <div>
     <Translate content="projectRoles.title" />

@@ -1,5 +1,25 @@
 export default {
   loading: 'Идет загрузка',
+  aboutPages: {
+    missingContent: {
+      education: 'This project has no educational resources yet.',
+      faq: 'This project has no frequently asked questions yet.',
+      research: 'This project has no science case yet.',
+      results: 'This project has no results to report yet.',
+      team: 'This project has no team information.',
+    }
+  },
+  projectRoles: {
+    title: 'The Team',
+    owner: 'Owner',
+    collaborator: 'Collaborator',
+    translator: 'Translator',
+    scientist: 'Researcher',
+    moderator: 'Moderator',
+    tester: 'Tester',
+    expert: 'Expert',
+    museum: 'Museum',
+  },
   classifier: {
     back: 'назад',
     backButtonWarning: 'Если Вы нажмете "назад", Ваша работа по текущему заданию не сохранится',
@@ -355,16 +375,14 @@ export default {
       listThree: '- Если у Вас есть вопросы о  Zooniverse и Вы хотели бы поговорить с членом нашей команды, пожалуйста [свяжитесь с нами](/about/contact).'
     },
     highlights: {
-      title: '## Достижения Zooniverse 2019',
-      thanks: '### Спасибо!',
-      paragraphOne: 'Чтобы поблагодарить наших волонтеров и отпраздновать достижения проектов 2019 года, мы решили создать книгу "Во вселенной Zooniverse"  2019.',
-      paragraphTwo: 'В течение последних десяти лет проекты Zooniverse привели ко многим неожиданным научным открытиям и были описаны в более чем 160 научных статьях ([peer-reviewed publications](https://zooniverse.org/publications)). Это все было бы невозможно без помощи почти 2 миллионов волонтеров по всему миру, которые работают вместе с профессиональными исследователями. ',
-      paragraphThree: 'Книга "Во вселенной Zooniverse" 2019 рассказывает о 40 проектах Zooniverse из более чем 200 стран, запущенных на сегодняшний день. Еще остается много интересных проектов, которые мы не смогли включить в эту книгу. Мы надеемся продолжить создание подобных книг ежегодно, освещая целый ряд новых проектов и открытий!',
-      toDownload: '**Скачать бесплатную электронную версию**',
-      download: 'Чтобы скачать бесплатную электронную версию книги "Во вселенной Zooniverse", пожалуйста, нажмите  [здесь](http://bit.ly/zoonibook19-pdf-new).',
-      toOrder: '**Заказать книгу в твердой обложке**',
-      order: 'Если Вы хотите заказать книгу "Во вселенной Zooniverse" в твердой обложке, пожалуйста, нажмите [здесь](http://bit.ly/zoonibook19-buy-new). Цена покрывает только печать книги через платформу Lulu.com и почтовые расходы. Мы не получаем никакой прибыли от продажи книг.',
-      credits: 'Особая благодарность нашим волотнерам (Марк Бенсон (Mark Benson), Кейтлин Буонджорно (Caitlyn Buongiorno), Лесли Гроув (Leslie Grove) и Эндрю Салата (Andrew Salata)), которые написали текст, отредактировали его вместе с исследовательскими группами и сделали книгу в сотрудничестве с дизайнером Zooniverse Бекки Ротер (Becky Rother). Мы очень благодарны им за их время и работу.'
+      imageAlt: 'Zooniverse Highlights Book Cover %(year)s',
+      paragraphOne: 'Since 2007, Zooniverse projects have led to many unexpected and scientifically significant discoveries and many [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of Zooniverse participants engaged in these projects alongside the research teams.',
+      paragraphTwo: 'These ‘Into the Zooniverse’ books commemorate and honor the efforts of everyone involved, providing just a glimpse into the ways Zooniverse community members have a real impact on the world around them. Each book highlights a subset of projects that were active that year. There are so many fascinating projects we haven’t been able to include yet; we hope to continue creating these books into the future.',
+      paragraphThree: 'Click on the links below to access the books. Note: the cost to purchase a hard copy simply covers printing and postage fees. We do not make any profit through sales of the hard copies of the books.',
+      sectionHeader: '### Volume %(volumeNumber)s: %(year)s',
+      title: '## Zooniverse Highlights',
+      toDownload: '[Download a pdf](%(url)s)',
+      toPurchase: '[Purchase on %(purchaseSource)s](%(url)s)'
     },
     donate: {
       title: '## Донаты',

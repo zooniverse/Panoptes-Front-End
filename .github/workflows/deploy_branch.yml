@@ -1,0 +1,24 @@
+name: Deploy PFE Staging Branch
+
+on:
+    # Run this workflow on creation (or sync to source branch) of a new pull request
+    pull_request:
+
+jobs:
+  build:
+    name: Build staging branch
+    uses: zooniverse/ci-cd/.github/workflows/npm_build.yaml@main
+    with:
+      commit_id: ${{ github.sha }}
+      node_version: 'lts/hydrogen'
+      output: 'dist'
+      script: 'build-production'
+  deploy_staging_branch:
+    name: Deploy staging branch
+    uses: zooniverse/ci-cd/.github/workflows/deploy_static.yaml@main
+    needs: build
+    with:
+      source: 'dist'
+      target: 'preview.zooniverse.org/panoptes-front-end/pr-${{ github.event.number }}'
+    secrets:
+      creds: ${{ secrets.AZURE_STATIC_SITES }}

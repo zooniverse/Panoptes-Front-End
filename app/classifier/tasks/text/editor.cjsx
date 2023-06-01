@@ -86,6 +86,6 @@ module.exports = createReactClass
         <AutoSave resource={@props.workflow}>
           <span className="form-label">Next task</span>
           <br />
-          <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
+          <NextTaskSelector task={@props.task} workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
         </AutoSave>}
     </div>

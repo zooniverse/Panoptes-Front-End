@@ -3,11 +3,11 @@
  * DS205: Consider reworking code to avoid use of IIFEs
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
+import { captureException, withScope } from '@sentry/browser';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import apiClient from 'panoptes-client/lib/api-client';
-import { Split } from 'seven-ten';
 import counterpart from 'counterpart';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -16,7 +16,19 @@ import * as translationActions from '../../redux/ducks/translations';
 import ProjectPage from './project-page';
 import Translations from '../../classifier/translations';
 import getAllLinked from '../../lib/get-all-linked';
+import isAdmin from '../../lib/is-admin';
 
+/**
+  Send exceptions and React error info to Sentry
+*/
+function logToSentry(error, info) {
+  withScope((scope) => {
+    Object.keys(info).forEach((key) => {
+      scope.setExtra(key, info[key]);
+    });
+    captureException(error);
+  });
+}
 
 class ProjectPageController extends React.Component {
   constructor() {
@@ -87,48 +99,14 @@ class ProjectPageController extends React.Component {
     if (project) {
       actions.interventions.unsubscribe(`project-${this.state.project.id}`);
     }
-    Split.clear();
   }
 
   componentDidCatch(error, info) {
     console.log(error, info);
+    logToSentry(error, info);
     const loading = false;
     const ready = false;
     this.setState({ error, info, loading, ready });
-  }
-
-  getSplits(slug, user) {
-    if (user) {
-      return Split.load(slug)
-        .catch((error) => {
-          console.error(error);
-          return {};
-        })
-        .then((splits) => {
-          if (!splits) {
-            return {};
-          }
-          if (splits && this.context.geordi) {
-            Object.keys(splits).forEach((split) => {
-              let notFound = true;
-              // log the first active split and skip the remaining splits
-              if (notFound && splits[split].state === 'active') {
-                notFound = false;
-                const experiment = splits[split].name;
-                const cohort = splits[split].variant ? splits[split].variant.name : undefined;
-                this.context.geordi.remember({ experiment, cohort });
-              }
-            });
-          }
-          return splits;
-        });
-    } else {
-      Split.clear();
-      if (this.context.geordi) {
-        this.context.geordi.forget(['experiment', 'cohort']);
-      }
-      return Promise.resolve({});
-    }
   }
 
   getUserProjectPreferences(project, user) {
@@ -158,7 +136,7 @@ class ProjectPageController extends React.Component {
   }
 
   fetchProjectData(ownerName, projectName, user) {
-    const { actions, location } = this.props
+    const { actions, location, params } = this.props
     this.setState({
       error: null,
       loading: true,
@@ -173,6 +151,9 @@ class ProjectPageController extends React.Component {
 
         if (project) {
           let locale = project.primary_language
+          if (params.locale) {
+            locale = params.locale
+          }
           if (location.query.language) {
             locale = location.query.language;
           }
@@ -184,10 +165,10 @@ class ProjectPageController extends React.Component {
             if (error.status === 404) { return { src: '' }; } else { return console.error(error); }
           });
 
-          if (project.links && project.links.organization) {
-            awaitOrganization = project.get('organization', { listed: true })
-              .catch(error => [])
-              .then(response => (response && response.display_name) ? response : null);
+          if (project.links?.organization) {
+            const query = isAdmin() ? null : { listed: true }
+            awaitOrganization = project.get('organization', query)
+              .catch(error => null);
           } else {
             awaitOrganization = Promise.resolve(null);
           }
@@ -203,10 +184,6 @@ class ProjectPageController extends React.Component {
           const awaitProjectRoles = getAllLinked(project, 'project_roles').catch(error => console.error(error));
 
           const awaitProjectPreferences = this.getUserProjectPreferences(project, user);
-
-          // Temporarily disabled since Seven-Ten is not being used right now
-          // Add back into the Promise.all if and when used again
-          // const awaitSplits = this.getSplits(slug, user)
 
           const awaitTranslation = actions.translations.load('project', project.id, locale);
 
@@ -237,9 +214,6 @@ class ProjectPageController extends React.Component {
             this.loadFieldGuide(project.id, locale);
             actions.translations.load('project_page', pages.map(page => page.id), locale);
             return { project, projectPreferences, splits };
-          })
-          .then(({ project, projectPreferences, splits }) => {
-            if (project.experimental_tools.includes('workflow assignment')) this.handleSplitWorkflowAssignment(projectPreferences, splits);
           })
           .then(() => {
             this.setState({ ready: true })
@@ -312,38 +286,6 @@ class ProjectPageController extends React.Component {
       this.setState({ projectPreferences });
       if (this.props.user) {
         projectPreferences.save();
-      }
-    }
-  }
-
-  handleSplitWorkflowAssignment(projectPreferences, splits) {
-    if (splits['workflow.assignment']) {
-      const projectWorkflowToSet = (splits['workflow.assignment'].variant
-        && splits['workflow.assignment'].variant.value
-        && splits['workflow.assignment'].variant.value.workflow_id)
-          ? splits['workflow.assignment'].variant.value.workflow_id
-          : '';
-
-      const doesNotHaveProjectSetWorkflow = !(projectPreferences.settings && projectPreferences.settings.workflow_id);
-
-      const userSelectedWorkflow = (projectPreferences.preferences && projectPreferences.preferences.selected_workflow)
-        ? projectPreferences.preferences.selected_workflow
-        : '';
-
-      if (splits['workflow.assignment'].variant.value.only_new_users) {
-        const newToProject = Object.keys(projectPreferences.preferences).length === 0;
-        if (newToProject) this.handleProjectPreferencesChange('settings.workflow_id', projectWorkflowToSet);
-      } else {
-        if (doesNotHaveProjectSetWorkflow) {
-          this.handleProjectPreferencesChange('settings.workflow_id', projectWorkflowToSet);
-
-          if (userSelectedWorkflow && projectWorkflowToSet &&
-            userSelectedWorkflow !== projectWorkflowToSet) {
-              // if split is not only for new users
-              // clear the user selected workflow if defined
-              this.handleProjectPreferencesChange('preferences.selected_workflow', undefined)
-          }
-        }
       }
     }
   }
@@ -471,5 +413,5 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(ProjectPageController);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectPageController);
 export { ProjectPageController };

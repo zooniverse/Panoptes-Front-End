@@ -1,0 +1,29 @@
+name: CI Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+jobs:
+  run_tests:
+   runs-on: ubuntu-latest
+
+   steps:
+    # See: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow#using-the-checkout-action
+    - uses: actions/checkout@v3
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 'lts/hydrogen'
+        cache: 'npm'
+
+    - run: npm ci
+    - run: npm run test-ci
+    - run: npm run coverage
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}

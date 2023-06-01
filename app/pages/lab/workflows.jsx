@@ -7,6 +7,7 @@ import WorkflowCreateForm from './workflow-create-form';
 import LoadingIndicator from '../../components/loading-indicator';
 import Paginator from '../../talk/lib/paginator';
 import WorkflowsTable from './workflows-table';
+import workflowActions from './actions/workflow.js';
 
 const WorkflowsPage = (props) => {
   const reorderButton = props.reorder ?
@@ -76,10 +77,10 @@ const WorkflowsPage = (props) => {
       {props.workflowCreationInProgress && (
         <ModalFormDialog tag="div">
           <WorkflowCreateForm
-            onSubmit={props.workflowActions.createWorkflowForProject}
+            onSubmit={workflowActions.createWorkflowForProject}
             onCancel={props.hideCreateWorkflow}
             onSuccess={props.handleWorkflowCreation}
-            projectID={props.project.id}
+            project={props.project}
             workflowActiveStatus={!props.project.live}
           />
         </ModalFormDialog>
@@ -113,10 +114,7 @@ const WorkflowsPage = (props) => {
 
 WorkflowsPage.defaultProps = {
   labPath: () => {},
-  workflows: [],
-  workflowActions: {
-    createWorkflowForProject: () => {}
-  }
+  workflows: []
 };
 
 WorkflowsPage.propTypes = {

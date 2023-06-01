@@ -19,9 +19,9 @@ Describe your changes.
 
 - [ ] Does it work in all major browsers: Firefox, Chrome, Edge, Safari?
 - [ ] Does it work on mobile?
-- [ ] Can you `rm -rf node_modules/ && npm install` and app works as expected?
+- [ ] Can you `npm ci` and app works as expected?
 - [ ] If the component is in coffeescript, is it converted to ES6? Is it free of eslint errors? Is the conversion its own commit?
-- [ ] Are the tests passing locally and on Travis?
+- [ ] Are the tests passing locally and on GitHub Actions?
 
 # Optional
 

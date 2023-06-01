@@ -7,8 +7,7 @@ MiniCourse = require './mini-course'
 Tutorial = require('./tutorial').default
 CustomSignInPrompt = require('./custom-sign-in-prompt').default;
 isAdmin = require '../lib/is-admin'
-{ VisibilitySplit } = require 'seven-ten'
-{ connect } = require 'react-redux';
+{ connect, ReactReduxContext } = require 'react-redux';
 { bindActionCreators } = require 'redux';
 translationActions  = require '../redux/ducks/translations';
 
@@ -29,10 +28,6 @@ RELOAD_UPP_EVERY = 5
 
 ClassifierWrapper = createReactClass
   displayName: 'ClassifierWrapper'
-
-  contextTypes:
-    geordi: PropTypes.object
-    store: PropTypes.object
 
   propTypes:
     classification: PropTypes.object
@@ -175,13 +170,6 @@ ClassifierWrapper = createReactClass
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
         </CustomSignInPrompt>}
 
-      {if @state.classificationCount is 0 and @props.splits?['subject.first-to-classify.visible']
-        <VisibilitySplit splits={@props.splits} splitKey={'subject.first-to-classify.visible'} elementKey={'div'}>
-          <div className="classifier-announcement-banner classifier-announcement-banner--yellow">
-            <p>You're the first person to classify this subject!</p>
-          </div>
-        </VisibilitySplit>}
-
       {if @props.workflow? and @props.subject?
         <Classifier {...@props}
           workflow={@props.workflow}
@@ -211,5 +199,7 @@ mapDispatchToProps = (dispatch) -> ({
   }
 });
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(ClassifierWrapper)
-module.exports.ClassifierWrapper = ClassifierWrapper
+ClassifierWrapper.contextType = ReactReduxContext;
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(ClassifierWrapper);
+module.exports.ClassifierWrapper = ClassifierWrapper;

@@ -5,12 +5,12 @@ FavoritesButton = require('../collections/favorites-button').default
 Dialog = require 'modal-form/dialog'
 {Markdown} = require 'markdownz'
 classnames = require 'classnames'
-getSubjectLocation = require '../lib/get-subject-location'
+getSubjectLocation =  require('../lib/getSubjectLocation').default
 FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
 FrameViewer = require('./frame-viewer').default
 CollectionsManagerIcon = require('../collections/manager-icon').default
-getSubjectLocations = require('../lib/get-subject-locations').default
+getSubjectLocations = require('../lib/getSubjectLocations').default
 
 NOOP = Function.prototype
 
@@ -73,6 +73,7 @@ module.exports = createReactClass
     frameDurationIntervalId: null
     inFlipbookMode: @props.allowFlipbook
     invert: false
+    isGroupSubject: false
     promptingToSignIn: false
 
   getInitialFrame: ->
@@ -85,6 +86,12 @@ module.exports = createReactClass
       initialFrame = default_frame - 1
     initialFrame
 
+  componentDidMount: () ->
+    if @props.subject?.metadata?['#subject_group_id']?
+      @setState
+        inFlipbookMode: false
+        isGroupSubject: true
+
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.subject is @props.subject
       clearTimeout @signInAttentionTimeout
@@ -94,10 +101,15 @@ module.exports = createReactClass
         frame: 0
 
   componentDidUpdate: (prevProps) ->
+    isGroupSubject = @props.subject?.metadata?['#subject_group_id']?
+    allowFlipbook = @props.allowFlipbook || isGroupSubject
     if @props.subject isnt prevProps.subject
       # turn off the slideshow player and reset any counters
       @setPlaying false
-      @setState frame: @getInitialFrame()
+      @setState
+        frame: @getInitialFrame()
+        inFlipbookMode: allowFlipbook
+        isGroupSubject: isGroupSubject
 
   logSubjClick: (logType) ->
     @context.geordi?.logEvent
@@ -109,6 +121,7 @@ module.exports = createReactClass
       'subject-viewer--flipbook': @state.inFlipbookMode
       'subject-viewer--invert': @state.invert
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
+      'subject-viewer--layout-grid4': @state.isGroupSubject
     })
 
     isIE = 'ActiveXObject' of window
@@ -119,9 +132,15 @@ module.exports = createReactClass
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     subjectLocations = getSubjectLocations @props.subject
     if subjectIsLikelyAudioPlusImage @props.subject
-          mainDisplay = @renderFrame @state.frame, {subjectLocations : subjectLocations, isAudioPlusImage : true}
+      mainDisplay = @renderFrame @state.frame, {subjectLocations : subjectLocations, isAudioPlusImage : true}
     else if @state.inFlipbookMode
       mainDisplay = @renderFrame @state.frame
+    else if @state.isGroupSubject
+      componentSubjectIds = @props.subject?.metadata?['#group_subject_ids']?.split('-') || []
+      mainDisplay = @props.subject.locations.map (frame, index) =>
+        groupSubjectId = componentSubjectIds[index]
+        groupSubjectLink = "/projects/#{@props.project?.slug}/talk/subjects/#{componentSubjectIds[index]}"      
+        @renderFrame index, {key: "frame-#{index}", isGroupSubject: true, groupSubjectId, groupSubjectLink}
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
         @renderFrame index, {key: "frame-#{index}"}

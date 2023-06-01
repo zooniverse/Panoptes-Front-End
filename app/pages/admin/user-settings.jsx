@@ -7,20 +7,35 @@ import UserProperties from './user-settings/properties';
 import UserResources from './user-settings/resources';
 import UserLimitToggle from './user-settings/limit-toggle';
 import DeleteUser from './user-settings/delete-user';
+import { getUserClassifications, getUserProjects } from './user-settings/stats';
+import ClassificationData from './user-settings/ClassificationData';
 
 class UserSettings extends Component {
   constructor(props) {
     super(props);
     this.boundForceUpdate = this.forceUpdate.bind(this);
     this.getUser = this.getUser.bind(this);
+    this.updateUserProjects = this.updateUserProjects.bind(this);
+    this.updateSubjectID = this.updateSubjectID.bind(this);
 
     this.state = {
-      editUser: null
+      classifications: [],
+      editUser: null,
+      ribbonData: [],
+      totalClassifications: 0
     };
   }
 
   componentDidMount() {
     this.getUser();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.editUser?.id !== prevState.editUser?.id) {
+      getUserProjects(this.state.editUser, this.updateUserProjects)
+      getUserClassifications(this.state.editUser)
+        .then(classifications => this.setState({ classifications }))
+    }
   }
 
   componentWillUnmount() {
@@ -32,6 +47,25 @@ class UserSettings extends Component {
       editUser.listen('change', this.boundForceUpdate);
       this.setState({ editUser });
     });
+  }
+
+  updateUserProjects(projects) {
+    this.setState((prevState) => {
+      const ribbonData = prevState.ribbonData.concat(projects);
+      const totalClassifications = ribbonData
+      .reduce((total, project) => {
+        return total + project.classifications;
+      }, 0);
+      return { ribbonData, totalClassifications };
+    });
+  }
+
+  async updateSubjectID(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const subjectID = data.get('subjectID');
+    const classifications = await getUserClassifications(this.state.editUser, subjectID);
+    this.setState({ classifications });
   }
 
   render() {
@@ -64,6 +98,34 @@ class UserSettings extends Component {
         <br />
         <UserResources type="projects" user={this.state.editUser} />
         <UserResources type="organizations" user={this.state.editUser} />
+        <h4>Classification history</h4>
+        <details>
+          <summary>Total classifications: {this.state.totalClassifications}</summary>
+          <ul>
+          {this.state.ribbonData.map(project => (
+            <li key={project.id}>
+              <p><b>{project.display_name}</b><br/>
+                Classifications: {project.classifications}
+              </p>
+            </li>
+          ))}
+          </ul>
+        </details>
+        <details>
+          <summary>Recent classifications {this.state.classifications.length}</summary>
+          <form onSubmit={this.updateSubjectID}>
+            <label for="subjectId">Filter by subject ID: </label>
+            <input id="subjectId" name="subjectID" type="text" defaultValue='' pattern='\d+' />
+            <input type="submit" value="Go" />
+          </form>
+          <ol>
+          {this.state.classifications.map(classification => (
+            <li key={classification.id}>
+              <ClassificationData classification={classification} />
+            </li>
+          ))}
+          </ol>
+        </details>
       </div>
     );
   }

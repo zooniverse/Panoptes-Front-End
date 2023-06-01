@@ -6,7 +6,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import DiscussionPreview from './discussion-preview';
 import CommentLink from './comment-link';
 import CommentContextIcon from './lib/comment-context-icon';
-import getSubjectLocation from '../lib/get-subject-location';
+import getSubjectLocation from '../lib/getSubjectLocation';
 import Thumbnail from '../components/thumbnail';
 
 // This isn't very reuseable as it's prop is a comment resource with it's

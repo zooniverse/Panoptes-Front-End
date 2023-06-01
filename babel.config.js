@@ -1,18 +1,23 @@
 module.exports = function (api) {
   api.cache(true);
   return {
+    plugins: [
+      [
+        '@babel/plugin-transform-runtime',
+        {
+          helpers: false
+        }
+      ]
+    ],
     presets: [
       '@babel/preset-env',
-      '@babel/preset-react'
+      ['@babel/preset-react', { runtime: 'automatic' }]
     ],
     env: {
       development: {
         plugins: [
           [
             '@babel/plugin-proposal-class-properties'
-          ],
-          [
-            '@babel/plugin-transform-react-jsx'
           ],
           [
             'transform-es2015-modules-commonjs'
@@ -25,9 +30,6 @@ module.exports = function (api) {
             '@babel/plugin-proposal-class-properties'
           ],
           [
-            '@babel/plugin-transform-react-jsx'
-          ],
-          [
             'transform-es2015-modules-commonjs'
           ]
         ]
@@ -36,9 +38,6 @@ module.exports = function (api) {
         plugins: [
           [
             '@babel/plugin-proposal-class-properties'
-          ],
-          [
-            '@babel/plugin-transform-react-jsx'
           ],
           [
             'transform-es2015-modules-commonjs'
@@ -52,9 +51,6 @@ module.exports = function (api) {
           ],
           [
             '@babel/plugin-proposal-class-properties'
-          ],
-          [
-            '@babel/plugin-transform-react-jsx'
           ],
           [
             'transform-es2015-modules-commonjs'

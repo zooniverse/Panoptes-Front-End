@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useStore } from 'react-redux';
 
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styled-theming';
 import Translate from 'react-translate-component';
-import { VisibilitySplit } from 'seven-ten';
 import RestartButton from '../../restart-button';
 import MiniCourse from '../../mini-course';
 import { pxToRem, zooTheme } from '../../../theme';
@@ -37,21 +36,20 @@ export const StyledRestartButton = styled(RestartButton).attrs({
 `;
 
 export function MinicourseButton(props, context) {
+  const store = useStore()
   const shouldRender = props.minicourse && props.user && props.minicourse.steps && (props.minicourse.steps.length > 0);
   return (
-    <VisibilitySplit splits={props.splits} splitKey={'mini-course.visible'} elementKey={'div'}>
-      <ThemeProvider theme={{ mode: props.theme }}>
-        <StyledRestartButton
-          preferences={props.projectPreferences}
-          shouldRender={shouldRender}
-          start={MiniCourse.restart.bind(MiniCourse, props.minicourse, props.projectPreferences, props.user, context.geordi, context.store)}
-          user={props.user}
-          workflow={props.workflow}
-        >
-          <Translate content="classifier.miniCourseButton" />
-        </StyledRestartButton>
-      </ThemeProvider>
-    </VisibilitySplit>
+    <ThemeProvider theme={{ mode: props.theme }}>
+      <StyledRestartButton
+        preferences={props.projectPreferences}
+        shouldRender={shouldRender}
+        start={MiniCourse.restart.bind(MiniCourse, props.minicourse, props.projectPreferences, props.user, context.geordi, store)}
+        user={props.user}
+        workflow={props.workflow}
+      >
+        <Translate content="classifier.miniCourseButton" />
+      </StyledRestartButton>
+    </ThemeProvider>
   );
 }
 
@@ -71,8 +69,7 @@ MinicourseButton.propTypes = {
 };
 
 MinicourseButton.contextTypes = {
-  geordi: PropTypes.object,
-  store: PropTypes.object
+  geordi: PropTypes.object
 };
 
 const mapStateToProps = state => ({

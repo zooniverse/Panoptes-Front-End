@@ -39,7 +39,7 @@ export default class SocialLinksEditor extends React.Component {
     let index = this.indexFinder(this.props.project.urls, site);
     if (index < 0) { index = this.props.project.urls.length; }
     let url = `https://${site}${e.target.value}`;
-    if (socialIcons[site].pathBeforeSite) {
+    if (socialIcons[site]?.pathBeforeSite) {
       url = `https://${e.target.value}.${site}`;
     }
 
@@ -91,16 +91,17 @@ export default class SocialLinksEditor extends React.Component {
   renderRow(site, i) {
     const index = this.indexFinder(this.props.project.urls, site);
     const value = index >= 0 ? this.props.project.urls[index].path : '';
-    const precedeSiteName = socialIcons[site].pathBeforeSite;
+    const precedeSiteName = socialIcons[site]?.pathBeforeSite;
 
     return (
       <tr key={i}>
         {!precedeSiteName && (
-          <td>{site}</td>
+          <td><label for={`socialLink${i}`}>{site}</label></td>
         )}
         <AutoSave tag="td" resource={this.props.project}>
           <input
             type="text"
+            id={`socialLink${i}`}
             name={`urls.${site}.url`}
             value={value}
             onChange={this.handleNewLink.bind(this, site)}
@@ -109,7 +110,7 @@ export default class SocialLinksEditor extends React.Component {
           />
         </AutoSave>
         {precedeSiteName && (
-          <td>.{site}</td>
+          <td><label for={`socialLink${i}`}>.{site}</label></td>
         )}
         <td>
           <button type="button" onClick={this.handleRemoveLink.bind(this, site)}>

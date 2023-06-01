@@ -5,7 +5,7 @@ AutoSave = require '../../components/auto-save'
 handleInputChange = require('../../lib/handle-input-change').default
 ImageSelector = require '../../components/image-selector'
 apiClient = require 'panoptes-client/lib/api-client'
-putFile = require '../../lib/put-file'
+putFile = require('../../lib/put-file').default
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 alert = require('../../lib/alert').default
@@ -135,9 +135,8 @@ module.exports = createReactClass
 
           <p>
             <AutoSave resource={@props.project}>
-              <span className="form-label">Description</span>
-              <br />
-              <input className="standard-input full" name="description" value={@props.project.description} onChange={handleInputChange.bind @props.project} />
+              <label for="description" className="form-label">Description</label>
+              <input id="description" className="standard-input full" name="description" value={@props.project.description} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project. <CharLimit limit={300} string={@props.project.description ? ''} /></small>
           </p>
@@ -153,24 +152,22 @@ module.exports = createReactClass
 
           <p>
             <AutoSave resource={@props.project}>
-              <span className="form-label">Workflow Description</span>
-              <br />
-              <textarea className="standard-input full" name="workflow_description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
+              <label for="workflowDescription" className="form-label">Workflow Description</label>
+              <textarea id="workflowDescription" className="standard-input full" name="workflow_description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit={500} string={@props.project.workflow_description ? ''} /></small>
           </p>
 
           <div>
             <AutoSave resource={@props.project}>
-              <span className="form-label">Researcher Quote</span>
-              <br />
+              <label for="researcherQuote" className="form-label">Researcher Quote</label>
               <Select
                 className="researcher-quote"
                 placeholder="Choose a Researcher"
                 onChange={@handleResearcherChange}
                 options={@researcherOptions()}
                 value={@props.project?.configuration?.researcherID} />
-              <textarea className="standard-input full" name="researcher_quote" value={@props.project.researcher_quote} onChange={handleInputChange.bind @props.project} />
+              <textarea id="researcherQuote" className="standard-input full" name="researcher_quote" value={@props.project.researcher_quote} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">This text will appear on a project landing page alongside an avatar of the selected researcher. <CharLimit limit={255} string={@props.project.researcher_quote ? ''} /></small>
           </div>
@@ -212,10 +209,11 @@ module.exports = createReactClass
           <div>
             External links<br />
             <small className="form-help">
-              Adding an external link will make it appear as a new tab alongside
-              the about, classify, talk, and collect tabs. You can rearrange the
+              Adding an external link will populate an entry in a list of links
+              in the bottom right section of the project landing page.  These
+              links open in a new tab when clicked. You can rearrange the
               displayed order by clicking and dragging on the left gray tab next
-              to each link below.
+              to each link.
             </small>
             <br />
             <small className="form-help">
@@ -225,10 +223,13 @@ module.exports = createReactClass
             <div className="edit-social-links">
               <h5>Social Links Section</h5>
               <small className="form-help">
-                Adding a social link will append a media icon at
-                the end of your project menu bar. You can rearrange the
-                displayed order by clicking and dragging on the left gray
-                tab next to each link below.
+                A specialized form of an external link, adding a social link
+                will populate an entry in the list of links in the bottom right
+                section of the project landing page that includes
+                service-specific icons. You can rearrange the displayed order by
+                clicking and dragging on the left gray tab next to each link,
+                but all social links follow after external links in the
+                displayed list.
               </small>
               <SocialLinksEditor project={@props.project} />
             </div>
@@ -259,8 +260,8 @@ module.exports = createReactClass
     allTags = @state.disciplineTagList.concat sanitizedTags
     @handleTagChange(allTags)
 
-  handleTagChange: (value) ->  
-    changes = 
+  handleTagChange: (value) ->
+    changes =
       tags: value
     @props.project.update(changes)
 

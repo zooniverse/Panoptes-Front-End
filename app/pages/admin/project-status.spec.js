@@ -44,6 +44,9 @@ describe('ProjectStatus', function () {
   let loadingIndicator;
   let onChangeWorkflowLevelStub;
   let onChangeWorkflowRetirementStub;
+  let onBlurTrainingDefaultChanceStub;
+  let onBlurTrainingSetIdsStub;
+  let onBlurTrainingChancesStub;
   let onChangeSubjectViewerStub;
   let wrapper;
 
@@ -52,6 +55,9 @@ describe('ProjectStatus', function () {
     sinon.stub(ProjectStatus.prototype, 'getWorkflows').callsFake(() => Promise.resolve(workflows));
     onChangeWorkflowLevelStub = sinon.stub(ProjectStatus.prototype, 'onChangeWorkflowLevel');
     onChangeWorkflowRetirementStub = sinon.stub(ProjectStatus.prototype, 'onChangeWorkflowRetirement');
+    onBlurTrainingDefaultChanceStub = sinon.stub(ProjectStatus.prototype, 'onBlurTrainingDefaultChance');
+    onBlurTrainingSetIdsStub = sinon.stub(ProjectStatus.prototype, 'onBlurTrainingSetIds');
+    onBlurTrainingChancesStub = sinon.stub(ProjectStatus.prototype, 'onBlurTrainingChances');
     onChangeSubjectViewerStub = sinon.stub(ProjectStatus.prototype, 'onChangeSubjectViewer');
     handleDialogCancelStub = sinon.stub(ProjectStatus.prototype, 'handleDialogCancel');
     handleDialogSuccessStub = sinon.stub(ProjectStatus.prototype, 'handleDialogSuccess');
@@ -62,6 +68,9 @@ describe('ProjectStatus', function () {
   after(function () {
     onChangeWorkflowLevelStub.restore();
     onChangeWorkflowRetirementStub.restore();
+    onBlurTrainingDefaultChanceStub.restore();
+    onBlurTrainingSetIdsStub.restore();
+    onBlurTrainingChancesStub.restore();
     handleDialogCancelStub.restore();
     handleDialogSuccessStub.restore();
     ProjectStatus.prototype.getProject.restore();
@@ -153,7 +162,22 @@ describe('ProjectStatus', function () {
       wrapper.find('select#retirementConfig').first().simulate('change');
       sinon.assert.calledOnce(onChangeWorkflowRetirementStub);
     });
-
+    
+    it('calls #onBlurTrainingDefaultChance when a user finishes making changes to a workflow\'s "training -> default chance" configuration', function () {
+      wrapper.find('input#training-default-chance').first().simulate('blur');
+      sinon.assert.calledOnce(onBlurTrainingDefaultChanceStub);
+    });
+    
+    it('calls #onBlurTrainingSetIds when a user finishes making changes to a workflow\'s "training -> set IDs" configuration', function () {
+      wrapper.find('input#training-set-ids').first().simulate('blur');
+      sinon.assert.calledOnce(onBlurTrainingSetIdsStub);
+    });
+    
+    it('calls #onBlurTrainingChances when a user finishes making changes to a workflow\'s "training -> chances" configuration', function () {
+      wrapper.find('input#training-chances').first().simulate('blur');
+      sinon.assert.calledOnce(onBlurTrainingChancesStub);
+    });
+    
     it('calls #onChangeSubjectViewer when a user changes a workflow\'s subject viewer configuration', function () {
       wrapper.find('select#subject-viewers').first().simulate('change');
       sinon.assert.calledOnce(onChangeSubjectViewerStub);

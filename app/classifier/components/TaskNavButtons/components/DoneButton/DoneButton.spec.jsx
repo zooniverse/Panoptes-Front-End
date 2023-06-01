@@ -7,6 +7,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
@@ -19,8 +20,8 @@ export const store = {
 };
 
 export const mockReduxStore = {
-  context: { store },
-  childContextTypes: { store: PropTypes.object.isRequired }
+  wrappingComponent: Provider,
+  wrappingComponentProps: { store }
 };
 
 describe('DoneButton', function() {
@@ -30,9 +31,9 @@ describe('DoneButton', function() {
   });
 
   describe('when props.completed is true', function() {
-    it('should render null', function () {
+    it('should not render', function () {
       const wrapper = mount(<DoneButton completed={true} />, mockReduxStore);
-      expect(wrapper.html()).to.be.null;
+      expect(wrapper.html()).to.equal('');
     });
   });
 

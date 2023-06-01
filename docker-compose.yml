@@ -1,6 +1,15 @@
 version: '3.7'
 
 services:
+  shell:
+    image: panoptes-front-end_dev:latest
+    build:
+      context: ./
+    entrypoint:
+      - "/bin/sh"
+    volumes:
+      - ${PWD}:/src
+      - node_modules:/src/node_modules
   dev:
     build:
       context: ./

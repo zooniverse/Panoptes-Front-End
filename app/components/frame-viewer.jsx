@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import getSubjectLocation from '../lib/get-subject-location';
-import getSubjectLocations from '../lib/get-subject-locations';
+import { Link } from 'react-router';
+import getSubjectLocation from '../lib/getSubjectLocation';
+import getSubjectLocations from '../lib/getSubjectLocations';
 import PanZoom from './pan-zoom';
 import FileViewer from './file-viewer';
 
@@ -74,6 +75,7 @@ export default class FrameViewer extends React.Component {
         <PanZoom
           ref={(c) => { this.panZoom = c; }}
           enabled={this.props.zoomControls && zoomEnabled}
+          experimental_tools={this.props.project?.experimental_tools}
           frameDimensions={this.state.frameDimensions}
           subject={this.props.subject}
         >
@@ -104,6 +106,25 @@ export default class FrameViewer extends React.Component {
           </FrameWrapper>
         </PanZoom>
       );
+    } else if (this.props.isGroupSubject) {
+      return (
+        <Link
+          className="linked-image"
+          title={`Subject ${this.props.groupSubjectId}`}
+          to={this.props.groupSubjectLink}
+        >
+          <FileViewer
+            src={src}
+            type={type}
+            format={format}
+            frame={this.props.frame}
+            onLoad={this.handleLoad}
+            progressListener={this.props.progressListener}
+            registerProgressObject={this.props.registerProgressObject}
+            {...modellingProps}
+          />
+        </Link>
+      )
     } else {
       return (
         <FileViewer
@@ -128,6 +149,9 @@ FrameViewer.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object),
   frame: PropTypes.number,
   frameWrapper: PropTypes.func,
+  groupSubjectId: PropTypes.string,
+  groupSubjectLink: PropTypes.string,
+  isGroupSubject: PropTypes.bool,
   modification: PropTypes.object,
   onChange: PropTypes.func,
   onLoad: PropTypes.func,
@@ -146,6 +170,9 @@ FrameViewer.propTypes = {
 FrameViewer.defaultProps = {
   annotations: [],
   frame: 0,
+  groupSubjectId: undefined,
+  groupSubjectLink: undefined,  // If a Subject is a "Subject Group", each frame can link to its constituent Subject's Talk page.
+  isGroupSubject: false,  // A "Subject Group" is a type of Subject that's composed of many (single image) Subjects
   onChange: () => {},
   preferences: { },
   subject: {

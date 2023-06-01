@@ -6,8 +6,8 @@ import UserSettings from './user-settings';
 
 describe('UserSettings', function () {
   let wrapper;
-  let user = {id: '1', login: "tester"};
-  let editUser = {id: '2', login: 'volunteer'};
+  let user = {id: '1', login: "tester", get: sinon.stub().resolves([])};
+  let editUser = {id: '2', login: 'volunteer', get: sinon.stub().resolves([])};
 
   before(function () {
     sinon.stub(UserSettings.prototype, 'getUser').callsFake(() => null);

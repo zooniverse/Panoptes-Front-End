@@ -114,7 +114,6 @@ class Choices extends React.Component {
           const srcPath = Thumbnail.getThumbnailSrc({
             origin: 'https://thumbnails.zooniverse.org',
             width: 500,
-            height: 500,
             src
           });
           const thumbnail = srcPath || '';

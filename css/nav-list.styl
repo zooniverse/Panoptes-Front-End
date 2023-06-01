@@ -28,7 +28,9 @@
   text-decoration: none
   width: 100%
 
-  &.active
+  &.active,
+  &[aria-current=page],
+  &[aria-pressed=true]
     background: MAIN_HIGHLIGHT
     border-top-color: transparent
     color: white

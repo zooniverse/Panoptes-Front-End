@@ -19,6 +19,9 @@ class ProjectStatus extends Component {
     super(props);
     this.onChangeWorkflowLevel = this.onChangeWorkflowLevel.bind(this);
     this.onChangeWorkflowRetirement = this.onChangeWorkflowRetirement.bind(this);
+    this.onBlurTrainingDefaultChance = this.onBlurTrainingDefaultChance.bind(this);
+    this.onBlurTrainingSetIds = this.onBlurTrainingSetIds.bind(this);
+    this.onBlurTrainingChances = this.onBlurTrainingChances.bind(this);
     this.getWorkflows = this.getWorkflows.bind(this);
     this.forceUpdate = this.forceUpdate.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
@@ -33,7 +36,12 @@ class ProjectStatus extends Component {
       error: null,
       project: null,
       usedWorkflowLevels: [],
-      workflows: []
+      workflows: [],
+
+      // transitional input values for text input fields, in the format of { workflow_id_1: 'string', ... }
+      valTrainingSetIds: {},
+      valTrainingChances: {},
+      valTrainingDefaultChance: {}
     };
   }
 
@@ -58,6 +66,40 @@ class ProjectStatus extends Component {
     this.setState({ error: null });
     let selected = event.target.value;
     return workflow.update({ 'retirement.criteria': selected }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+
+  onBlurTrainingSetIds(workflow, event) {
+    this.setState({ error: null });
+    let val = this.state.valTrainingSetIds[workflow.id] || '';
+    val = val.split(',').map((str) => { return parseInt(str) })
+      .filter((num) => { return !isNaN(num) });
+    // TODO: if the value is an empty string, the field should be deleted altogether.
+    return workflow.update({ 'configuration.training_set_ids': val }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+
+  onBlurTrainingChances(workflow, event) {
+    this.setState({ error: null });
+    let val = this.state.valTrainingChances[workflow.id] || '';
+    val = val.split(',').map((str) => { return parseFloat(str) })
+      .filter((num) => { return !isNaN(num) });
+    // TODO: if the value is an empty string, the field should be deleted altogether.
+    return workflow.update({ 'configuration.training_chances': val }).save()
+      .then(() => this.getWorkflows())
+      .catch(error => this.setState({ error }));
+  }
+
+  onBlurTrainingDefaultChance (workflow, event) {
+    this.setState({ error: null });
+    const val =
+      this.state.valTrainingDefaultChance[workflow.id]
+      ? parseFloat(this.state.valTrainingDefaultChance[workflow.id]) : '';
+    if (val && isNaN(val)) return;  // Ignore invalid values (note: empty string is considered valid here)
+    // TODO: if the value is an empty string, the field should be deleted altogether.
+    return workflow.update({ 'configuration.training_default_chance': val }).save()
       .then(() => this.getWorkflows())
       .catch(error => this.setState({ error }));
   }
@@ -90,8 +132,33 @@ class ProjectStatus extends Component {
   getWorkflows() {
     const fields = 'display_name,active,configuration,grouped,prioritized,retirement';
     return getWorkflowsInOrder(this.state.project, { fields }).then((workflows) => {
+
+      // Setup transitional input values
+      const valTrainingSetIds = {}, valTrainingChances = {}, valTrainingDefaultChance = {}
+      workflows.forEach((wf) => {
+        valTrainingSetIds[wf.id] =
+          (wf.configuration.training_set_ids && wf.configuration.training_set_ids.join)
+          ? wf.configuration.training_set_ids.join(',')
+          : '';
+        valTrainingChances[wf.id] =
+          (wf.configuration.training_chances && wf.configuration.training_chances.join)
+          ? wf.configuration.training_chances.join(',')
+          : '';
+        // Note: please allow default chance to be 0. This is a valid edge case.
+        valTrainingDefaultChance[wf.id] =
+          (wf.configuration.training_default_chance >= 0 && wf.configuration.training_default_chance !== null)
+          ? wf.configuration.training_default_chance
+          : '';
+      })
+
       const usedWorkflowLevels = this.getUsedWorkflowLevels(workflows);
-      this.setState({ usedWorkflowLevels, workflows });
+      this.setState({
+        usedWorkflowLevels,
+        valTrainingSetIds,
+        valTrainingChances,
+        valTrainingDefaultChance,
+        workflows
+      });
     });
   }
 
@@ -258,6 +325,52 @@ class ProjectStatus extends Component {
               </div>
               <hr />
               <div>
+                <h4>Configure Training Data</h4>
+                <label>
+                  Training Set IDs:{' '}
+                  <input
+                    id="training-set-ids"
+                    type="text"
+                    onBlur={(event) => this.onBlurTrainingSetIds(workflow, event)}
+                    onChange={(event) => {
+                      const updatedTrainingSetIds = Object.assign({}, this.state.valTrainingSetIds)
+                      updatedTrainingSetIds[workflow.id] = event.target.value
+                      this.setState({ valTrainingSetIds: updatedTrainingSetIds })
+                    }}
+                    value={this.state.valTrainingSetIds[workflow.id]}
+                  />
+                </label>
+                <label>
+                  Training Chances:{' '}
+                  <input
+                    id="training-chances"
+                    type="text"
+                    onBlur={(event) => this.onBlurTrainingChances(workflow, event)}
+                    onChange={(event) => {
+                      const updatedTrainingChances = Object.assign({}, this.state.valTrainingChances)
+                      updatedTrainingChances[workflow.id] = event.target.value
+                      this.setState({ valTrainingChances: updatedTrainingChances })
+                    }}
+                    value={this.state.valTrainingChances[workflow.id]}
+                  />
+                </label>
+                <label>
+                  Training Default Chance:{' '}
+                  <input
+                    id="training-default-chance"
+                    type="text"
+                    onBlur={(event) => this.onBlurTrainingDefaultChance(workflow, event)}
+                    onChange={(event) => {
+                      const updatedTrainingDefaultChance = Object.assign({}, this.state.valTrainingDefaultChance)
+                      updatedTrainingDefaultChance[workflow.id] = event.target.value
+                      this.setState({ valTrainingDefaultChance: updatedTrainingDefaultChance })
+                    }}
+                    value={(this.state.valTrainingDefaultChance[workflow.id] || '')}
+                  />
+                </label>
+              </div>
+              <hr />
+              <div>
                 <h4>Subject viewer layout settings</h4>
                 <label>
                   <input
@@ -298,6 +411,8 @@ class ProjectStatus extends Component {
               <hr />
               <div>
                 <h4>Classifier 2.0 (rewrite) settings</h4>
+                <p>Note that that Scatter Plot is preferred over TESS Light Curve for that kind of JSON subject data. The TESS light curve viewer is built specifically for their requirements. The code in the viewer assumes the project is using a task like them.</p>
+
                 <label>
                   Subject Viewer:{' '}
                   <select
@@ -307,9 +422,12 @@ class ProjectStatus extends Component {
                   >
                     <option value="none">None Selected</option>
                     <option value="dataImage">Data Image</option>
+                    <option value="imageAndText">Image and Text</option>
                     <option value="lightcurve">(D3/TESS) Light Curve</option>
                     <option value="multiFrame">Multi-Frame</option>
+                    <option value="scatterPlot">Scatter Plot</option>
                     <option value="singleImage">Single Image</option>
+                    <option value="singleText">Single Text</option>
                     <option value="subjectGroup">Subject Group</option>
                     <option value="variableStar">Variable Star</option>
                   </select>
@@ -390,6 +508,10 @@ class ProjectStatus extends Component {
             <li>Beta Approved: <Toggle project={project} field="beta_approved" /></li>
             <li>Launch Requested: <Toggle project={project} field="launch_requested" /></li>
             <li>Launch Approved: <Toggle project={project} field="launch_approved" /></li>
+          </ul>
+          <h4>Opt-In API Features</h4>
+          <ul className="project-status__section-list">
+            <li>Run SubjectSet Completion Events: <Toggle project={project} field="run_subject_set_completion_events" /></li>
           </ul>
         </div>
         <RedirectToggle project={project} />

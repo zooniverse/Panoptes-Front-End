@@ -4,25 +4,24 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="zooniverse:deployed_commit" content="<%= process.env.HEAD_COMMIT %>">
+    <meta name="zooniverse:build_env" content="<%= process.env.NODE_ENV %>">
+    <meta name="zooniverse:build_date" content="<%= new Date() %>">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla:400,700" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300,400">
-    <meta name="google-site-verification" content="bcDZuAlk550Gho9TJsiyHFj_PzVXVkkVvGB13YWFtUo" />
+    <meta name="google-site-verification" content="lzxc2Vg-7APyUKZ2OZ02RxxYNkx3Ef575OPkzxYZhRA" />
 
     <!-- Facebook OG tags -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Zooniverse" />
     <meta property="og:description" content="The Zooniverse is the world’s largest and most popular platform for people-powered research." />
-    <meta property="og:image" content="https://zooniverse-static.s3.amazonaws.com/assets/zooniverse-icon-web-black.png" />
+    <meta property="og:image" content="https://static.zooniverse.org/assets/zooniverse-icon-web-black.png" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:image" content="https://zooniverse-static.s3.amazonaws.com/assets/zooniverse-icon-web-black.png" />
+    <meta name="twitter:image" content="https://static.zooniverse.org/assets/zooniverse-icon-web-black.png" />
   </head>
 
   <body>
-    <!--Last build: <%= new Date() %>-->
-    <!--Deployed commit: <%= process.env.HEAD_COMMIT %>-->
-    <!--Build env: <%= process.env.NODE_ENV %>-->
-
     <noscript>
       <p style="text-align: center;">
         Sorry, it looks like you have JavaScript disabled.
@@ -70,7 +69,7 @@
 
     <div id="panoptes-main-container"></div>
 
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,es6,Promise,fetch,Array.prototype.includes,Array.prototype.find,Object.values&amp;flags=gated"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,es6,Promise,fetch,Array.prototype.includes,Array.prototype.find,Object.entries,Object.values&amp;flags=gated"></script>
     <script>('assign' in Object) || document.write('<script src="/fallback-polyfills.js"></'+'script>');</script>
   </body>
 </html>

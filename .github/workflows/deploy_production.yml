@@ -1,0 +1,29 @@
+name: Deploy PFE Production
+
+on:
+    # Run this workflow on push to production-release tag (via chatops)
+    push:
+        tags:
+          - production-release
+
+    # Allow running this workflow manually from the Actions tab
+    workflow_dispatch:
+
+jobs:
+  build:
+    name: Build production
+    uses: zooniverse/ci-cd/.github/workflows/npm_build.yaml@main
+    with:
+      commit_id: ${{ github.sha }}
+      node_version: 'lts/hydrogen'
+      output: 'dist'
+      script: 'build-production'
+  deploy_production:
+    name: Deploy production
+    uses: zooniverse/ci-cd/.github/workflows/deploy_static.yaml@main
+    needs: build
+    with:
+      source: 'dist'
+      target: 'www.zooniverse.org'
+    secrets:
+      creds: ${{ secrets.AZURE_STATIC_SITES }}

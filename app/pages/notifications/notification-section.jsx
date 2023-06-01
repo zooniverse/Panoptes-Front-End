@@ -171,7 +171,7 @@ export default class NotificationSection extends Component {
     if (this.state.unread > 0) return this.unreadCircle();
 
     if (this.state.name === 'Zooniverse') {
-      avatar = <ZooniverseLogo width="40" height="40" />;
+      avatar = <ZooniverseLogo title="Zooniverse Logo" width="40" height="40" />;
     } else {
       avatar = <img src={src} className="notification-section__img" alt="Project Avatar" />;
     }

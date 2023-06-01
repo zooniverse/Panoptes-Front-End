@@ -310,6 +310,7 @@ module.exports = createReactClass
 
   render: ->
     {discussion} = @state
+    boardID = @props.params.board
 
     <div className="talk-discussion">
       <Helmet title="#{discussion?.title} » #{counterpart 'projectTalk.title'}" />
@@ -353,7 +354,7 @@ module.exports = createReactClass
 
                   <div>
                     <p><strong>Board:</strong></p>
-                    <select defaultValue={discussion.board_id}>
+                    <select defaultValue={boardID}>
                       {@state.boards.map (board, i) =>
                         <option key={board.id} value={board.id}>{board.title}</option>
                         }

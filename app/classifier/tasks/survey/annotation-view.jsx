@@ -1,45 +1,57 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-function AnnotationView(props) {
+import TaskTranslations from '../translations'
+
+export function AnnotationView({
+  annotation = null,
+  onChange,
+  task = null,
+  translation = null,
+}) {
   function handleRemove(index) {
-    const { annotation, onChange } = props;
     annotation.value.splice(index, 1);
     onChange(annotation);
   }
 
+  function onClick(event) {
+    const { target } = event
+    const { index } = target.dataset
+    handleRemove(index)
+  }
+
   function answerByQuestion(identification) {
-    const { task } = props;
     return task.questionsOrder.map((questionID) => {
       const answerKeys = Object.keys(identification.answers);
 
       if (answerKeys.indexOf(questionID) >= 0) {
         const answerLabels = [].concat(identification.answers[questionID]).map((answerID) => {
-          return task.questions[questionID].answers[answerID].label;
+          return translation.questions[questionID].answers[answerID].label;
         });
         return answerLabels.join(', ');
       }
     });
   }
 
-  const { annotation, task } = props;
   if (!annotation.value) return null;
 
   return (
-    <div>
+    <>
       {annotation.value.map((identification, i) => {
         identification._key = `IDENTIFICATION_KEY_${i}`;
-        const answersList = answerByQuestion(identification).filter(Boolean).join('; ');
+        const answersList = answerByQuestion(identification).filter(Boolean).join('; ').trim();
+        const answersLabel = answersList ? `(${answersList})` : ''
 
         return (
           <span key={identification._key}>
-            <span className="survey-identification-proxy" title={answersList}>
-              {task.choices[identification.choice].label}
+            <span className="survey-identification-proxy">
+              {translation.choices[identification.choice].label} {answersLabel}
               {' '}
               <button
                 className="survey-identification-remove"
-                onClick={handleRemove.bind(this, i)}
-                title="Remove"
+                data-index={i}
+                onClick={onClick}
+                aria-label="Remove"
                 type="button"
               >
                 &times;
@@ -48,7 +60,7 @@ function AnnotationView(props) {
           </span>
         );
       })}
-    </div>
+    </>
   );
 }
 
@@ -64,9 +76,23 @@ AnnotationView.propTypes = {
   })
 };
 
-AnnotationView.defaultProps = {
-  annotation: null,
-  task: null
+export default function LocalisedAnnotationView({
+  annotation = null,
+  onChange,
+  task = null,
+  workflow = null
+}) {
+  return (
+    <TaskTranslations
+      taskKey={annotation.task}
+      task={task}
+      workflowID={workflow.id}
+    >
+      <AnnotationView
+        annotation={annotation}
+        onChange={onChange}
+        task={task}
+      />
+    </TaskTranslations>
+  )
 };
-
-export default AnnotationView;

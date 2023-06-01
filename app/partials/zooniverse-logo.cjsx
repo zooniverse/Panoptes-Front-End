@@ -9,7 +9,7 @@ module.exports = createReactClass
   getDefaultProps: ->
     width: '1em'
     height: '1em'
-    title: 'Zooniverse Logo'
+    title: 'Zooniverse'
 
   getInitialState: ->
     nextID += 1

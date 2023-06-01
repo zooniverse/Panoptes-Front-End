@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import React from 'react';
-import AnnotationView from './annotation-view';
+import { AnnotationView } from './annotation-view';
 
 const annotationValue = {
   answers: {
@@ -43,6 +43,7 @@ describe('AnnotationView', function() {
       annotation={annotation}
       onChange={onChange}
       task={task}
+      translation={task}
     />
   );
 
@@ -67,7 +68,13 @@ describe('AnnotationView', function() {
   describe('The delete button', function() {
     it('should call the onChange callback', function() {
       const deleteButton = wrapper.find('.survey-identification-remove');
-      deleteButton.simulate('click');
+      deleteButton.simulate('click', {
+        target: {
+          dataset: {
+            index: 0
+          }
+        }
+      });
       expect(onChange.calledOnce).to.be.true;
     });
 

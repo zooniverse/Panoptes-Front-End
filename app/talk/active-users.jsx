@@ -20,6 +20,8 @@ export default class ActiveUsers extends React.Component {
     };
 
     this.onPageChange = this.onPageChange.bind(this);
+    // ensure this is bound correctly for setTimeout calling context
+    this.update = this.update.bind(this);
   }
 
   componentDidMount() {

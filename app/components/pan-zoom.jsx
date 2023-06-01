@@ -1,14 +1,15 @@
 /* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
 import PropTypes from 'prop-types';
 
-import React from 'react';
+import React, { Component } from 'react';
 
-class PanZoom extends React.Component {
+class PanZoom extends Component {
   constructor() {
     super();
     this.frameKeyPan = this.frameKeyPan.bind(this);
     this.panByDrag = this.panByDrag.bind(this);
     this.rotateClockwise = this.rotateClockwise.bind(this);
+    this.rotateFreely = this.rotateFreely.bind(this);
     this.stopZoom = this.stopZoom.bind(this);
     this.togglePanOn = this.togglePanOn.bind(this);
     this.togglePanOff = this.togglePanOff.bind(this);
@@ -29,7 +30,6 @@ class PanZoom extends React.Component {
     };
   }
 
-
   componentDidMount() {
     // these events enable a user to navigate an image using arrows, +, and - keys,
     // while the user is in pan and zoom mode.
@@ -40,12 +40,12 @@ class PanZoom extends React.Component {
     this.zoomReset();
   }
 
-  componentWillUpdate(newProps) {
-    const newSubject = newProps.subject !== this.props.subject;
-    const widthChanged = newProps.frameDimensions.width !== this.props.frameDimensions.width;
-    const heightChanged = newProps.frameDimensions.height !== this.props.frameDimensions.height;
+  componentDidUpdate(prevProps) {
+    const newSubject = prevProps.subject !== this.props.subject;
+    const widthChanged = prevProps.frameDimensions.width !== this.props.frameDimensions.width;
+    const heightChanged = prevProps.frameDimensions.height !== this.props.frameDimensions.height;
     if (newSubject || widthChanged || heightChanged) {
-      this.zoomReset(newProps);
+      this.zoomReset();
     }
   }
 
@@ -133,8 +133,8 @@ class PanZoom extends React.Component {
     this.zoomReset();
   }
 
-  zoomReset(props) {
-    props = props || this.props;
+  zoomReset() {
+    const { props } = this;
     this.setState({
       viewBoxDimensions: {
         width: props.frameDimensions.width,
@@ -261,14 +261,25 @@ class PanZoom extends React.Component {
   }
 
   rotateClockwise() {
-    const newRotation = this.state.rotation + 90;
+    const newRotation = (this.state.rotation + 90) % 360;
     this.setState({
       rotation: newRotation,
       transform: `rotate(${newRotation} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
     });
   }
 
+  rotateFreely(event) {
+    if (!event?.target) return
+    const newRotation = event.target.value % 360
+    this.setState({
+      rotation: newRotation,
+      transform: `rotate(${newRotation} ${this.props.frameDimensions.width / 2} ${this.props.frameDimensions.height / 2})`
+    })
+  }
+
   render() {
+    const canUseFreeRotation = this.props.experimental_tools?.indexOf?.('subjectViewer-freeRotation') > -1
+
     const children = React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
         viewBoxDimensions: this.state.viewBoxDimensions,
@@ -331,6 +342,11 @@ class PanZoom extends React.Component {
             <div>
               <button title="rotate" className={'rotate fa fa-repeat'} onClick={this.rotateClockwise} />
             </div>
+            {canUseFreeRotation && (
+              <div className="experimental-free-rotation">
+                <input type="range" min={0} max={359} value={this.state.rotation % 360} onChange={this.rotateFreely} orient="vertical" />
+              </div>
+            )}
             <div>
               <button
                 title="reset zoom levels"
@@ -349,6 +365,7 @@ class PanZoom extends React.Component {
 PanZoom.propTypes = {
   children: PropTypes.node,
   enabled: PropTypes.bool,
+  experimental_tools: PropTypes.array,  // Taken from project.experimental_tools
   frameDimensions: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number
@@ -361,6 +378,7 @@ PanZoom.propTypes = {
 PanZoom.defaultProps = {
   children: null,
   enabled: false,
+  experimental_tools: [],
   frameDimensions: {
     height: 0,
     width: 0

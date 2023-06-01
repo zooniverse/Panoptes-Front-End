@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import counterpart from 'counterpart';
 import moment from 'moment';
 import ProjectCard from '../../partials/project-card';
-import { getPublication, getRecentProjects, getBlogPosts, getNewestProject } from '../../lib/get-social-data';
+import { getRecentProjects, getBlogPosts, getNewestProject } from '../../lib/get-social-data';
 import striptags from 'striptags';
 
 counterpart.registerTranslations('en', {
@@ -15,7 +15,8 @@ counterpart.registerTranslations('en', {
     news: 'News',
     latestProject: 'Latest Project',
     recentProjects: 'Project Updates',
-    recentPublications: 'Recent Publications'
+    recentPublications: 'Publications',
+    recentPublicationsBlurb: 'The contributions of Zooniverse volunteers produce real research. Our projects have led to hundreds of peer-reviewed publications across a wide range of disciplines.',
   }
 });
 
@@ -25,7 +26,6 @@ export default class HomePageSocial extends React.Component {
     this.state = {
       blogPosts: [],
       newestProject: {},
-      newestPublication: {},
       recentProjects: []
     };
   }
@@ -34,19 +34,13 @@ export default class HomePageSocial extends React.Component {
     this.getSocial();
   }
 
-  getSocial() {
-    this.setState({ newestPublication: getPublication() })
-    getNewestProject().then((newestProject) => {
-      this.setState({
-        newestProject
-      });
-    });
-    getRecentProjects().then((recentProjects) => {
-      this.setState({ recentProjects });
-    });
-    getBlogPosts((blogPosts) => {
-      this.setState({ blogPosts });
-    });
+  async getSocial() {
+    const newestProject = await getNewestProject();
+    this.setState({ newestProject });
+    const recentProjects = await getRecentProjects();
+    this.setState({ recentProjects });
+    const blogPosts = await getBlogPosts(blogPosts);
+    this.setState({ blogPosts });
   }
 
   renderUpdatedProject(project) {
@@ -92,7 +86,7 @@ export default class HomePageSocial extends React.Component {
   }
 
   render() {
-    const { blogPosts, newestProject, newestPublication, recentProjects } = this.state;
+    const { blogPosts, newestProject, recentProjects } = this.state;
 
     return (
       <section className="home-social">
@@ -106,9 +100,6 @@ export default class HomePageSocial extends React.Component {
             </a>
             <a href="https://www.facebook.com/therealzooniverse" aria-label="Visit Zooniverse Facebook" rel="noopener noreferrer" target="_blank">
               <i className="fa fa-facebook" />
-            </a>
-            <a href="https://plus.google.com/+ZooniverseOrgReal" aria-label="Visit Zooniverse Google" rel="noopener noreferrer" target="_blank">
-              <i className="fa fa-google-plus" />{' '}
             </a>
           </span>
         </div>
@@ -129,12 +120,9 @@ export default class HomePageSocial extends React.Component {
             {recentProjects.map(project => this.renderUpdatedProject(project))}
 
             <Translate className="tertiary-kicker" component="h3" content="socialHomePage.recentPublications" />
-            <span className="timestamp-label">{newestPublication.date}</span>
-            <span className="regular-body">{newestPublication.citation}</span>
-            <a className="home-social__italic-link" href={newestPublication.href}> Read More... </a>
-            <hr />
-
-            <Link to="/about/publications" className="primary-button primary-button--light">See All Publications</Link>
+            <Translate className="regular-body" component="span" content="socialHomePage.recentPublicationsBlurb" />
+            <br/>
+            <a href="/about/publications" className="primary-button primary-button--light">See All Publications</a>
           </div>
 
           <div className="home-social__content--vertical-line"></div>

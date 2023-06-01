@@ -21,6 +21,7 @@ module.exports = createReactClass
     workflow: null
     task: {}
     taskPrefix: ''
+    pfeLab: false
 
   getInitialState: ->
     importErrors: []
@@ -46,9 +47,29 @@ module.exports = createReactClass
       <span className="form-label">INSTRUCTIONS</span>
       <p><small>The survey task is ideal for asking volunteers to identify wildlife species in camera trap photos, but can be used anytime you have a lot of choices you need volunteers to filter from.</small></p>
       <p><small><a href="https://www.zooniverse.org/projects/aliburchard/cameratraptest/about/faq">See here</a> for detailed instructions.</small></p>
-      <p><small><a href="http://bit.ly/1QSpevJ">Click here</a> to download Choices, Characteristics, Confusions and Questions templates.</small></p>
+      <p><small><a href="https://bit.ly/Zooniverse-SurveyTaskFiles">Click here</a> to download Choices, Characteristics, Confusions and Questions templates.</small></p>
       <p><small>You can Apply changes after adding an individual csv file or many csv files.</small></p>
       <hr />
+
+      {if !@props.pfeLab  # show the instruction input if in FEM lab (don't show in PFE lab)
+        <div>
+          <AutoSave resource={@props.workflow}>
+            <label htmlFor="#{@props.taskPrefix}.instruction">
+              <span className="form-label">Main text</span>
+            </label>
+            <br />
+            <textarea
+              id="#{@props.taskPrefix}.instruction"
+              name="#{@props.taskPrefix}.instruction"
+              value={@props.task.instruction}
+              className="standard-input full"
+              onChange={handleInputChange.bind @props.workflow}
+            />
+          </AutoSave>
+          <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You can use markdown to format this text.</small>
+          <hr />
+        </div>
+      }
 
       <p>
         <span className="form-label">FILE INPUT</span>
@@ -202,7 +223,7 @@ module.exports = createReactClass
         <AutoSave resource={@props.workflow}>
           <span className="form-label">Next task</span>
           <br />
-          <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
+          <NextTaskSelector task={@props.task} workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
         </AutoSave>
       </p>
 
@@ -283,12 +304,19 @@ module.exports = createReactClass
 
       <hr />
 
-      <label>
-        <AutoSave resource={@props.workflow}>
-          <input type="checkbox" name="#{@props.taskPrefix}.alwaysShowThumbnails" checked={@props.task.alwaysShowThumbnails} onChange={handleInputChange.bind @props.workflow} />{' '}
-          Always show thumbnails
-        </AutoSave>
-      </label>
+      <div>
+        <label>
+          <AutoSave resource={@props.workflow}>
+            <input type="checkbox" name="#{@props.taskPrefix}.alwaysShowThumbnails" checked={@props.task.alwaysShowThumbnails} onChange={handleInputChange.bind @props.workflow} />{' '}
+            Always show thumbnails
+          </AutoSave>
+        </label>
+        <p>
+          <small>
+            If checked, then thumbnails will always show as small. If unchecked, then thumbnails will show as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. The number of choices shown will change based on filters.
+          </small>
+        </p>
+      </div>
     </div>
 
   handleImportTabs: (tab) ->
@@ -303,7 +331,7 @@ module.exports = createReactClass
     @props.task.questionsMap = newTask.questionsMap
     @props.task.questionsOrder = newTask.questionsOrder
 
-    @props.workflow.update('tasks').save()
+    @props.onChange @props.task
       .then =>
         @clearState()
 
@@ -537,14 +565,14 @@ module.exports = createReactClass
   handleImageAdd: (media) ->
     @setState resettingFiles: true
     @props.task.images[media.metadata.filename] = media.src
-    @props.workflow.update('tasks').save()
+    @props.onChange @props.task
       .then =>
         @setState resettingFiles: false
 
   handleImageDelete: (media) ->
     @setState resettingFiles: true
     delete @props.task.images[media.metadata.filename]
-    @props.workflow.update('tasks').save()
+    @props.onChange @props.task
       .then =>
         @setState resettingFiles: false
 
@@ -588,7 +616,7 @@ module.exports = createReactClass
         questionsOrder: []
         questions: {}
         questionsMap: {}
-      @props.workflow.update 'tasks'
+      @props.onChange @props.task
       @clearState()
 
   resetMedia: (e) ->

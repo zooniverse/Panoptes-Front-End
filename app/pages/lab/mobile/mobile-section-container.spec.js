@@ -57,7 +57,20 @@ describe('<MobileSectionContainer />', function () {
       const mobileSection = wrapper.find('MobileSection').first();
       assert.strictEqual(mobileSection.length, 1);
     });
-
+    
+    it('should render the <MobileSection /> component if the task type is drawing', function () {
+      const task = fixtures.task({
+        tools: [{
+          details: [],
+          type: 'rectangle'
+        }],
+        type: 'drawing'
+      });
+      wrapper = shallow(<MobileSectionContainer task={task} workflow={fixtures.workflow()} project={fixtures.project()} />);
+      const mobileSection = wrapper.find('MobileSection').first();
+      assert.strictEqual(mobileSection.length, 1);
+    });
+  
     it('should render nothing if the task type isn\'t single or multiple or drawing', function () {
       const task = fixtures.task({ type: 'survey' });
       wrapper = shallow(<MobileSectionContainer task={task} workflow={fixtures.workflow()} project={fixtures.project()} />);
@@ -100,6 +113,11 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('taskQuestionNotTooLong', validationFixtures.taskQuestionTooLong, false);
     });
 
+    it('should check whether the task instruction text is too long', function () {
+      testValidationProp('taskInstructionNotTooLong', validationFixtures.taskInstructionNotTooLong, true);
+      testValidationProp('taskInstructionNotTooLong', validationFixtures.taskInstructionTooLong, false);
+    });
+
     it('should check whether the task uses feedback', function () {
       testValidationProp('taskFeedbackDisabled');
       testValidationProp('taskFeedbackDisabled', validationFixtures.taskFeedbackEnabled, false);
@@ -115,24 +133,42 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('workflowNotTooManyShortcuts', validationFixtures.workflowTooManyShortcuts, false);
     });
 
+    it('should check whether the workflow has grouped subject selection', function () {
+      testValidationProp(
+        'workflowDoesNotUseGroupedSubjectSelection',
+        validationFixtures.workflowDoesNotUseGroupedSubjectSelection,
+        true
+      );
+      testValidationProp(
+        'workflowDoesNotUseGroupedSubjectSelection',
+        validationFixtures.workflowUsesGroupedSubjectSelection,
+        false
+      );
+    });
+
     it('should check whether workflow has correct drawing task type', function () {
       testValidationProp('drawingToolTypeIsValid', validationFixtures.workflowHasValidDrawingTask, true);
       testValidationProp('drawingToolTypeIsValid', validationFixtures.workflowHasInvalidDrawingTask, false);
     });
 
-    it('should check whether workflow has only one tool', function () {
+    it('should check whether drawing task has only one tool', function () {
       testValidationProp('drawingTaskHasOneTool', validationFixtures.drawingTaskHasOneTool, true);
       testValidationProp('drawingTaskHasOneTool', validationFixtures.drawingTaskHasTwoTools, false);
     });
 
-    it('should check whether workflow has no subtasks', function () {
+    it('should check whether drawing task has no subtasks', function () {
       testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasNoSubtasks, true);
       testValidationProp('drawingTaskHasNoSubtasks', validationFixtures.drawingTaskHasSubtasks, false);
     });
 
-    it('should check whether workflow question has one image', function () {
+    it('should check whether task question has one image', function () {
       testValidationProp('workflowQuestionHasOneOrLessImages', validationFixtures.questionHasOneImage, true, true);
       testValidationProp('workflowQuestionHasOneOrLessImages', validationFixtures.questionHasTwoImages, false, true);
+    });
+
+    it('should check whether task instruction has one image', function () {
+      testValidationProp('workflowInstructionHasOneOrLessImages', validationFixtures.instructionHasOneImage, true, true);
+      testValidationProp('workflowInstructionHasOneOrLessImages', validationFixtures.instructionHasTwoImages, false, true);
     });
   });
 
@@ -153,7 +189,8 @@ describe('<MobileSectionContainer />', function () {
         fixtures.validationFixtures.taskQuestionTooLong,
         fixtures.validationFixtures.taskFeedbackEnabled,
         fixtures.validationFixtures.workflowHasMultipleTasks,
-        fixtures.validationFixtures.workflowTooManyShortcuts
+        fixtures.validationFixtures.workflowTooManyShortcuts,
+        fixtures.validationFixtures.workflowUsesGroupedSubjectSelection
       ].map(function (invalidProp) {
         const task = fixtures.task(invalidProp.task);
         const workflow = fixtures.workflow(invalidProp.workflow);

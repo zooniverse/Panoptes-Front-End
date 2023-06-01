@@ -87,6 +87,7 @@ function ProjectNavbarWide(props) {
     projectLink,
     redirect,
     underReview,
+    usesMonorepo,
     ...otherProps
   } = props;
 
@@ -107,6 +108,7 @@ function ProjectNavbarWide(props) {
             redirect={redirect}
             title={projectTitle}
             underReview={underReview}
+            usesMonorepo={usesMonorepo}
           />
           <Nav>
             <List>
@@ -133,7 +135,8 @@ ProjectNavbarWide.propTypes = {
   projectLink: PropTypes.string,
   projectTitle: PropTypes.string,
   redirect: PropTypes.string,
-  underReview: PropTypes.bool
+  underReview: PropTypes.bool,
+  usesMonorepo: PropTypes.bool
 };
 
 export default ProjectNavbarWide;

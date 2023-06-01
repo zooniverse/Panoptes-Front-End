@@ -17,6 +17,7 @@ export default class SubjectSetsContainer extends React.Component {
     this.onPageChange = this.onPageChange.bind(this);
     this.labPath = this.labPath.bind(this);
     this.createNewSubjectSet = this.createNewSubjectSet.bind(this);
+    this.getSubjectSets = this.getSubjectSets.bind(this);
   }
 
   componentDidMount() {
@@ -80,7 +81,8 @@ export default class SubjectSetsContainer extends React.Component {
       createNewSubjectSet: this.createNewSubjectSet,
       defaultSubjectSetName: DEFAULT_SUBJECT_SET_NAME,
       labPath: this.labPath,
-      onPageChange: this.onPageChange
+      onPageChange: this.onPageChange,
+      onSubjectSetChange: this.getSubjectSets
     };
 
     const allProps = Object.assign({}, this.state, this.props, hookProps);

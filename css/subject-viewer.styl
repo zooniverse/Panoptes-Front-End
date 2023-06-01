@@ -35,8 +35,6 @@
 
   .subject-video-controls
     display: inline-block
-    position: absolute
-    bottom: -1.4em
     left: 0
     width: 30vw
 
@@ -83,6 +81,9 @@
       text-align: center
       background: grey;
       border-radius: .1em;
+      display: flex
+      flex-direction: column
+
       .draw-pan-toggle
         background-color: #F9F9F9
         border: solid 1px #989898
@@ -107,8 +108,27 @@
           background-color: #bbc0c0
           color: #575959
 
+      .experimental-free-rotation
+        flex-grow: 1
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        width: 2em
+        padding-top: 0.5em
+        padding-bottom: 0.5em
+
+        input[type=range]
+          flex-grow: 1
+          -webkit-appearance: slider-vertical
+
   &.subject-viewer--invert
     // Talk
+    &.subject-viewer--layout-grid4
+      .subject-container
+        .subject-image-frame
+          img
+            filter: invert(100%)
     .subject-container
       .subject-image-frame:only-child
         img
@@ -122,12 +142,28 @@
     .subject-container
       align-items: center
       justify-content: space-between
+
+      // For certain Subject types, e.g. Subject Groups, individual images are linked to individual subjects
+      > a.linked-image
+        outline: 1px solid TEAL_MID
+        display: block
+        margin-bottom: 0.2em
+
+        img
+          display: block
+
+        &:focus, &:hover
+          outline: 1px solid MAIN_HIGHLIGHT
+
     &.subject-viewer--layout-grid2
       .subject-container > *
         width: 49%
     &.subject-viewer--layout-grid3
       .subject-container > *
         width: 33%
+    &.subject-viewer--layout-grid4
+      .subject-container > *
+        max-width: 100px
 
 .subject
   .subject-tools

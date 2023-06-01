@@ -1,5 +1,25 @@
 export default {
   loading: '(Cargando)',
+  aboutPages: {
+    missingContent: {
+      education: 'This project has no educational resources yet.',
+      faq: 'This project has no frequently asked questions yet.',
+      research: 'This project has no science case yet.',
+      results: 'This project has no results to report yet.',
+      team: 'This project has no team information.',
+    }
+  },
+  projectRoles: {
+    title: 'The Team',
+    owner: 'Owner',
+    collaborator: 'Collaborator',
+    translator: 'Translator',
+    scientist: 'Researcher',
+    moderator: 'Moderator',
+    tester: 'Tester',
+    expert: 'Expert',
+    museum: 'Museum',
+  },
   classifier: {
     back: 'Atrás',
     backButtonWarning: 'Al regresar se borrará su trabajo para la tarea actual.',
@@ -122,31 +142,6 @@ export default {
         one: '1 identificación',
         other: '%(count)s identificaciones'
       }
-    }
-  },
-  privacy: {
-    title: 'Términos de uso y política de privacidad de Zooniverse',
-    userAgreement: {
-      summary: '## Acuerdo del Usuario\n**Resumen**\n\nZooniverse es una suite de proyectos de ciencia ciudadana operada por la Citizen Science Alliance (CSA), que apoya la investigación científica involucrando a miembros del público (usted) en los procesos de análisis y discusión de datos. Los datos de estos proyectos se utilizan para estudiar diseño y teoría de comunidades virtuales, diseño de interfaces y otros temas. Este documento describe lo que sucederá con sus contribuciones si usted decide contribuir y qué datos recopilamos, cómo los usamos y cómo los protegemos.',
-      contribution: '**Lo que usted acepta si colabora con Zooniverse**\n\nLos proyectos que involucran al público son necesarios para que los investigadores puedan trabajar con cantidades de datos que de otra manera serían inmanejables. La red proporciona un medio para alcanzar a una gran audiencia dispuesta a dedicar su tiempo libre a proyectos que pueden contribuir a nuestro conocimiento del mundo y el universo.\n\nLa meta principal de este proyecto es que los datos analizados estén disponibles para que los investigadores los utilicen, modifiquen y redistribuyan para posteriores investigaciones científicas. Por lo tanto, si usted colabora con Zooniverse, le otorga permiso a la CSA y a sus colaboradores para utilizar sus contribuciones en cualquier forma para avanzar en esta meta, confiando en que haremos lo correcto con sus datos. Sin embargo, usted otorga este permiso de forma no exclusiva, lo que significa que usted sigue siendo dueño de su contribución.\n\nLe pedimos que nos otorgue estos permisos porque esto nos permite cambiar los detalles legales que rigen la forma en que aseguramos que los datos sigan siendo disponibles. Esto es importante debido a que el ambiente legal puede cambiar y necesitamos ser capaces de responder a estos cambios sin obtener permiso de cada uno de los contribuyentes.\n\nPor último, usted no debe entregar datos a Zooniverse que no sean de su propiedad. Por ejemplo, no copie información de artículos publicados en revistas especializadas. Si las personas hacen esto, nos pueden causar fuertes dolores de cabeza legales.',
-      data: '**Lo que usted puede hacer con los datos de Zooniverse**\n\nUsted mantiene la propiedad de cualquier contribución que haga para Zooniverse y de cualquier interacción registrada con el conjunto de datos asociados a Zooniverse. Usted puede utilizar, redistribuir o modificar su contribución individual en la forma que desee. Sin embargo, usted no tiene la propiedad del conjunto de datos en sí. Esta licencia no aplica a los datos acerca de usted que se cubren en la política de privacidad.',
-      legal: '**Detalles legales**\n\nAl enviar su contribución a Zooniverse, usted acepta otorgar a la CSA una licencia perpetua, libre de regalías, no exclusiva, sublicenciable para: utilizar, reproducir, modificar, adaptar, publicar, traducir, crear trabajos derivados de, distribuir y ejercer todos los derechos de autor y publicidad con respecto a su contribución en cualquier parte del mundo y/o incorporar su contribución a otros trabajos en cualquier medio conocido actualmente o creado posteriormente durante el periodo completo de cualquier derecho que pudiera existir en su contribución.\n\nSi usted no desea otorgar a la CSA los derechos expuestos anteriormente, no puede interactuar con Zooniverse.\n\nAl interactuar con Zooniverse, usted:\n\n* Garantiza que su contribución contiene únicamente datos sobre los que tiene derechos para poner a disponibilidad de la CSA para todos los propósitos especificados anteriormente, y no es difamatoria ni infringe ley alguna; e\n\n* Indemniza a la CSA contra cualquier honorario legal, daño u otros gastos en que pudiera incurrir la CSA como resultado de su incumplimiento de la garantía anterior; y\n\n* Renuncia a cualquier derecho moral de su contribución para los fines especificados anteriormente.\n\nEsta licencia no aplica a los datos acerca de usted que se cubren en la política de privacidad.'
-    },
-    privacyPolicy: {
-      intro: '## Política de privacidad\n\nAdemás de las contribuciones que usted haga para los objetivos científicos de Zooniverse, nosotros recopilamos datos adicionales acerca de usted para apoyar y mejorar la operación del proyecto. También llevamos a cabo experimentos sobre el diseño del sitio web que evaluamos con base en sus reacciones y comportamiento. Esta política de privacidad describe los datos que recopilamos, cómo los usamos y cómo los protegemos.\n\nNosotros respetamos la privacidad de todo individuo que participa en Zooniverse. Nosotros operamos de acuerdo con la ley de protección de datos del Reino Unido de 1998 (United Kingdom Data Protection Act 1998) y la ley de libertad de información de 2000 (Freedom of Information Act 2000), así como con la regulación de Estados Unidos con respecto a la protección de sujetos humanos de investigación.',
-      data: '**Los datos que recopilamos**\n\n_Identificando información_: Si usted se registra en Zooniverse, le pedimos que cree un nombre de usuario y proporcione una dirección de correo electrónico. Su dirección de correo electrónico no es visible para otros usuarios, pero otros verán su nombre de usuario en varios contextos. En particular, su nombre de usuario se asocia a cualquier clasificación u otra contribución que usted realice, por ejemplo, en las páginas para Hablar (o Hablemos). De forma opcional, usted puede proporcionar su nombre real para incluirlo cuando agradezcamos públicamente a los participantes, por ejemplo, en presentaciones, publicaciones o descubrimientos.\n\n_Uso de la información_: También monitoreamos cómo las personas utilizan nuestro sitio web y agregamos estadísticas generales acerca de los usuarios y patrones de tráfico, así como datos sobre cómo los usuarios responden a varias características del sitio. Esto incluye, entre otras cosas, el registro de:\n\n* Cuándo inicia una sesión.\n\n* Las páginas que visita.\n\n* Las clasificaciones que realiza.\n\n* Otras contribuciones como publicaciones en páginas para Hablar.\n\nSi usted se registra e inicia una sesión, el sitio vincula estas actividades con su nombre de usuario. Si no se registra, su actividad será vinculada con su dirección IP. Para recopilar estos datos, podríamos utilizar software que recopila estadísticas de datos IP. Este software puede determinar en qué horas del día las personas acceden a nuestro sitio, de qué país acceden a los sitios web, cuánto duran sus visitas, qué navegador utilizan, etc.',
-      info: '**Lo que hacemos con la información que recolectamos**\n\nLa información de uso se recopila para ayudarnos a mejorar nuestro sitio web, en particular por las razones siguientes:\n\n* Mantenimiento del registro interno\n\n* Periódicamente podemos enviar correos electrónicos que promuevan nuevos proyectos de investigación u otra información referente a nuestras actividades. La información sobre estos contactos se proporciona más adelante. No utilizaremos su información de contacto para propósitos comerciales.\n\n* Podemos utilizar la información para adaptar el sitio web.\n\n* Podemos utilizar la información para llevar a cabo experimentos con respecto al uso de varias características del sitio.',
-      thirdParties: '**Lo que se comparte con terceros**\n\nNunca divulgaremos direcciones electrónicas a terceros sin su permiso expreso. Tampoco compartiremos los datos que recopilemos acerca de usted a menos que (a) no se pueda asociar a usted o a su nombre de usuario; y (b) sea necesario para lograr nuestros objetivos de investigación. Específicamente, nosotros podríamos compartir sus datos anonimizados con participantes de estudios de investigación, otros investigadores o en trabajos académicos que describan nuestra investigación. Por ejemplo, podríamos utilizar alguna de sus clasificaciones como ilustración para un documento, mostrar algunas de sus clasificaciones a otro usuario para ver si está de acuerdo o en desacuerdo, o publicar estadísticas acerca de la interacción entre usuarios.\n\nLas contribuciones que usted haga en las páginas para Hablar (o Hablemos) están ampliamente disponibles para otros. Aparte de esto, la información se mantiene de la forma más confidencial posible dentro de nuestra base de datos segura.',
-      cookies: '**Cómo utilizamos las cookies**\n\nSe podría colocar una cookie en su computadora al visitar algunas partes de nuestro sitio. Una cookie es un archivo pequeño que reside en el disco duro de su computadora y nos permite mejorar la calidad de sus visitas futuras a nuestros sitios web.\n\nNosotros utilizamos cookies de registro para identificar qué páginas se están utilizando y mejorar nuestro sitio web. Nosotros utilizamos esta información únicamente con fines de análisis estadísticos, no se comparten con otros sitios ni se utilizan para enviar anuncios comerciales.\n\nUsted puede elegir aceptar o rechazar las cookies. La mayoría de los navegadores aceptan las cookies de forma automática, pero normalmente usted puede modificar la configuración de su navegador para rechazar las cookies, si lo prefiere. No obstante, si usted elige rechazar las cookies de Zooniverse, la funcionalidad, incluida su capacidad para iniciar sesión y participar, se verá afectada.\n\nLa aceptación de las cookies está implícita si usted continúa accediendo a nuestro sitio web sin ajustar la configuración de su navegador.',
-      dataStorage: '**Dónde almacenamos sus datos**\n\nNosotros utilizamos Amazon Web Services con el fin de poner nuestro sitio a disposición de una cantidad impredecible de usuarios de forma rápida y confiable. Esto significa que sus datos se guardarán en ubicaciones múltiples, incluidos los Estados Unidos de América (EUA). Amazon es un participante del programa Safe Harbor, creado por el Departamento de Comercio de EUA y la Unión Europea (UE). Amazon ha certificado que se adhiere a los principios de privacidad de Safe Harbor acordados por EUA y la UE.\n\nNuestro servidor de listas de correos, que contiene una copia de las direcciones de correo electrónico suscritas y ningún otro dato personal, está alojado en un servidor virtual privado con Linode, en el Reino Unido.',
-      security: '**Medidas de seguridad**\n\nLos investigadores leen esta declaración al momento de unirse a nuestro equipo, para asegurarnos de que conozcan nuestras políticas de privacidad y seguridad de datos. Nosotros seguimos las mejores prácticas del sector para asegurar los datos de los usuarios. El acceso a la base de datos y entradas publicadas se limita a los miembros de nuestro grupo de investigadores y personal administrativo.',
-      dataRemoval: '**Eliminación de sus datos**\n\nDebido a la manera en que archivamos los datos, generalmente no es posible eliminar por completo sus datos personales de nuestros sistemas. Sin embargo, si usted tiene alguna preocupación específica, por favor contáctenos y veremos qué podemos hacer.',
-      contactUser: '**Cuándo lo contactaremos**\n\nSi usted no se registra, nosotros nunca lo contactaremos. Si usted se registra, lo contactaremos por correo electrónico en las siguientes circunstancias:\n\n* Ocasionalmente le enviaremos mensajes de correo electrónico en los que se resalte algún aspecto particular de nuestra investigación, se anuncien características nuevas de nuestro sitio, se expliquen cambios en el sistema o se le invite a eventos especiales.\n\n* También podemos contactarlo con fines de investigación sobre la operación de nuestro sitio. Podemos contactarlo por correo electrónico y pedirle información adicional en ese momento. El que usted nos proporcione información adicional es completamente opcional y de ninguna manera afectará su acceso o uso de nuestro sitio.\n\n* Podemos contactarlo con algún boletín acerca del progreso de un proyecto.\n\nEs poco probable que usted reciba más de dos mensajes nuestros por mes.\n\nUsted puede dejar de recibir nuestro boletín en cualquier momento visitando la página [unsuscribe](https://www.zooniverse.org/unsubscribe) de Zooniverse.',
-      furtherInfo: '**Mayor información y solicitudes**\n\nEl controlador de datos es el Departamento de Física de la Universidad de Oxford. Para obtener una copia de la información que tenemos sobre usted, por favor contacte al equipo del proyecto en la siguiente dirección:\n\nProfessor Chris Lintott\nOxford Astrophysics\nDenys Wilkinson Building\nKeble Road\nOxford, OX1 3RH\nUnited Kingdom'
-    },
-    youthPolicy: {
-      title: 'Advice for Volunteers Under 16 Years Old and Their Parent/Guardian',
-      content: 'Please note that it is the parents’/guardians’ responsibility to explain the user agreement and privacy policy in simple terms to their child if signing up under 16s. There is no minimum age for signing up children as Zooniverse would like to encourage public engagement with research for all ages, though the platform may be more suitable for older children. Parents and guardians must supervise children if they are contributing to any message boards.'
     }
   },
   security: {
@@ -655,15 +650,14 @@ export default {
       listThree: '- If you have questions about the Zooniverse and would like to speak to a member of our team, please [contact us](/about/contact).'
     },
     highlights: {
-      title: '## Zooniverse Highlights',
-      paragraphOne: 'Over the past decade, Zooniverse projects have led to many unexpected and scientifically significant discoveries and many [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community working alongside hundreds of professional researchers.',
-      paragraphTwo: 'These books commemorate and honor the efforts of everyone involved, providing just a glimpse into the ways Zooniverse community members can make a real, personal impact on the world around them. Each highlights 40 of the many projects that have been active on the Zooniverse website and app during the academic years 2018 – 2020. There are so many fascinating projects we haven’t been able to include, so we hope to continue to create these books in the future.',
-      sectionHeader: '### Volume %(volumeNumber)s: %(year)s',
-      toDownload: '[Download a pdf](%(url)s)',
-      paragraphThree: '[Purchase on %(purchaseSource)s](%(url)s). Note, the cost simply covers printing and postage fees – we will not be making any profit through sales of the hard copy of the book.',
       imageAlt: 'Zooniverse Highlights Book Cover %(year)s',
-      bookTwoThanks: '_A special thank you to our interns, Dr. Aleksandra Kuznetsova and Adler teens Alejandro Sanchez and Mattie Williams, who wrote text and interviewed research teams. We’re so thankful to them for their time and efforts!_',
-      bookOneThanks: '_A special thank you to our volunteers, Mark Benson, Caitlyn Buongiorno, Leslie Grove, and Andrew Salata, who wrote text, vetted it with research teams, and designed the book in collaboration with Zooniverse designer Becky Rother. We’re so thankful to them for their time and efforts!_',
+      paragraphOne: 'Since 2007, Zooniverse projects have led to many unexpected and scientifically significant discoveries and many [peer-reviewed publications](https://zooniverse.org/publications). All of this would have been impossible if it weren’t for our global community of Zooniverse participants engaged in these projects alongside the research teams.',
+      paragraphTwo: 'These ‘Into the Zooniverse’ books commemorate and honor the efforts of everyone involved, providing just a glimpse into the ways Zooniverse community members have a real impact on the world around them. Each book highlights a subset of projects that were active that year. There are so many fascinating projects we haven’t been able to include yet; we hope to continue creating these books into the future.',
+      paragraphThree: 'Click on the links below to access the books. Note: the cost to purchase a hard copy simply covers printing and postage fees. We do not make any profit through sales of the hard copies of the books.',
+      sectionHeader: '### Volume %(volumeNumber)s: %(year)s',
+      title: '## Zooniverse Highlights',
+      toDownload: '[Download a pdf](%(url)s)',
+      toPurchase: '[Purchase on %(purchaseSource)s](%(url)s)'
     },
     donate: {
       title: '## Donate',
@@ -682,43 +676,6 @@ export default {
         callForProjects: 'Call for Projects',
         collections: 'Collections',
         favorites: 'Favorites'
-      }
-    },
-    callForProjects: {
-      audio: {
-        header: '## Call for Zooniverse Audio Transcription Project Proposals',
-        intro: 'Would your research benefit from the involvement of hundreds or even thousands of volunteers? Zooniverse.org is the world’s largest and most successful online platform for crowdsourced research. We currently have over 1.6 million registered volunteers working in collaboration with professional researchers on more than 70 research projects across a range of disciplines, from astronomy to biology, climatology to humanities subjects.',
-        seekingProposals: 'Thanks to a generous grant from the Institute of Museum and Library Services, we are currently seeking proposals for two new custom audio transcription projects in the humanities or from GLAM institutions (Galleries, Libraries, Archives and Museums), to be developed as part of the Zooniverse platform.',
-        projectSelection: '### Project Selection',
-        requirements: 'This call will be limited to research teams with audio recordings of spoken language (not limited to English) which would benefit from transcription into digital text formats and/or classification tasks like metadata tagging. We are particularly keen to work on projects where the resulting data can be incorporated into an existing content management system (CMS) and used for research purposes.',
-        audioCompatibility: 'Audio compatibility is currently not available on our free [Project Builder](https://www.zooniverse.org/lab) tool. One aim of this effort will be to use these projects to help test and expand the functionality of our audio tools.',
-        selectionCriteriaTitle: '### Selection Criteria',
-        selectionCriteriaOne: '1. We are looking for projects that harness crowdsourced audio transcription for the purposes of unlocking data currently trapped in sources that cannot be transcribed through automation, and for which human effort is truly necessary. Therefore, proposals should address any previously-attempted methods of automated speech to text transcription.',
-        selectionCriteriaTwo: '2. The data extracted must have an audience or usefulness, be this to academic researchers, members of the public or both.',
-        selectionCriteriaThree: '3. Audio clips for transcription should feature one speaker at a time (per audio clip), as our current research effort does not include speaker diarization.',
-        selectionCriteriaFour: '4. Project teams need clear plans for how to make the crowdsourced data openly and publicly available, ideally through a CMS or site hosted and maintained by your institution.',
-        selectionCriteriaFive: '5. Audio material must be digitized; we do not have funds to support digitization of audio material.',
-        selectionCriteriaSix: '6. We will not accept projects if the material for transcription has previously been edited or published as text.',
-        furtherNotes: '### Further Notes',
-        imlsGrantInfo: 'The two selected audio transcription projects will be part of an ongoing Zooniverse effort, [Transforming Libraries and Archives through Crowdsourcing](https://www.imls.gov/grants/awarded/lg-71-16-0028-16). We particularly welcome applications from marginalized or underrepresented groups, or which utilize content about or generated by underrepresented groups.',
-        deadline: '### Deadline for Audio Project Proposals:',
-        contact: 'Project proposals are due by 28 February 2018. If you have questions or require any further guidance, please contact Samantha Blickhan, IMLS Postdoctoral Fellow: samantha@zooniverse.org.',
-        submissionLink: '[SUBMIT AN AUDIO TRANSCRIPTION PROPOSAL](https://goo.gl/forms/ALbUaRN17Rlq7AkD3)',
-        break: '***'
-      },
-      bio: {
-        header: '## Call for Biomedical Project Proposals',
-        wouldResearchBenefit: 'Would your research benefit from the involvement of thousands of volunteers? We are currently seeking proposals for biomedical projects to be developed as part of the Zooniverse platform. The Zooniverse is the world’s largest and most successful online platform for crowd-sourced research; we currently have over 1.5 million registered volunteers working in collaboration with professional researchers on more than 50 research projects across a range of disciplines, from physics to biology.',
-        projectBuilder: 'Using our unique [Project Builder](/lab) you can create your own Zooniverse project for free with a set of tried and tested tools, including multiple-choice questions and region marking or drawing tools. If we don’t yet offer the tools you need, please propose your project below; we are particularly interested in developing novel projects that extend the functionality of our platform.',
-        projectSelection: '### Project Selection',
-        expandFunctionality: 'We are looking for biomedical projects that will help us expand the functionality of the Zooniverse and build on the selection of tools available to researchers via our platform. Projects may involve a processing task applied to images, graphs, videos or another data format, data collection, or a combination of the two. Successful projects will be developed and hosted by the Zooniverse team, in close collaboration with the applicants.',
-        examples: 'Examples of our current biomedical projects include [Microscopy Masters](https://www.zooniverse.org/projects/jbrugg/microscopy-masters), where volunteers classify cryo-electron microscopy images to advance understanding of protein and virus structure, and [Worm Watch Lab](https://www.wormwatchlab.org/), which aims to improve understanding of the relationship between genes and behaviour.',
-        selectionCriteriaTitle: '### Selection Criteria:',
-        selectionCriteriaOne: '1. Projects extending the capability of the Zooniverse platform or serving as case studies for crowdsourcing in new areas are encouraged.',
-        selectionCriteriaTwo: '2. Alignment with biomedical research (long-term aim of research is to improve human health outcomes).',
-        selectionCriteriaThree: '3. Merit and usefulness of the data expected to result from the project.',
-        deadline: '### Deadline\nProject proposals are accepted on a rolling basis. Applications will be reviewed at the beginning of each month.',
-        submissionLink: '[SUBMIT A BIOMEDICAL PROPOSAL](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)'
       }
     },
     education: {
@@ -845,10 +802,8 @@ export default {
           announcementBanner: '* **Announcement Banner:** This text will appear as a banner at the top of all your project’s pages. Only use this when you’ve got a big important announcement to make! Many projects use this to signal the end of a beta review, or other major events in a project’s life cycle.',
           disciplineTag: '* **Discipline Tag:** Enter or select one or more discipline tags to identify which field(s) of research your project belongs to. These tags will determine the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project.',
           otherTags: '* **Other Tags:** Enter a list of additional tags to describe your project separated by commas to help users find your project.',
-          externalLinks: '* **External links:** Adding an external link will make it appear as a new tab alongside the About, Classify, Talk, and Collect tabs. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
-          socialLinks: '* **Social links:** Adding a social link will append a media icon at the end of your project menu bar. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
-          checkboxPrivate: '* **Checkbox: Private project:** On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you\'re still editing it. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left-hand side of the Project Builder). Team members you add can see your project even if it\'s private. Once your project is public, anyone with the link can view and classify on it.',
-          backToTop: '[Back to top](#how-to-create-a-project-with-our-project-builder)'
+          externalLinks: '* **External links:** Adding an external link will populate an entry in a list of links in the bottom right section of the project landing page.  These links open in a new tab when clicked. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link.',
+          socialLinks: '* **Social links:** A specialized form of an external link, adding a social link will populate an entry in the list of links in the bottom right section of the project landing page that includes service-specific icons. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link, but all social links follow after external links in the displayed list.'
         },
         about: {
           title: '### About',

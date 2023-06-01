@@ -35,7 +35,7 @@ export default class LabelRenderer extends React.Component {
             const newLabel = <Selection key={a} annotation={currentAnnotation} disabled={this.props.disabled} />;
             newContent.push(newLabel);
             // 3. re-set last focusIndex with annotation index
-            lastFocusIndex = currentAnnotation.end;
+            lastFocusIndex = currentAnnotation.end + 1;
           }
         }
       }

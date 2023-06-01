@@ -169,18 +169,23 @@ class AppFooter extends React.Component {
 
             <ul className="app-footer__nav-list app-footer__nav-list--social">
               <li>
-                <a href="https://www.facebook.com/therealzooniverse" target="_blank">
+                <a
+                  aria-label="Zooniverse Facebook"
+                  href="https://www.facebook.com/therealzooniverse"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <i className="fa fa-facebook fa-fw"></i>
                 </a>{' '}
               </li>
               <li>
-                <a href="https://twitter.com/the_zooniverse" target="_blank">
+                <a
+                  aria-label="Zooniverse Twitter"
+                  href="https://twitter.com/the_zooniverse"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <i className="fa fa-twitter fa-fw"></i>
-                </a>{' '}
-              </li>
-              <li>
-                <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank">
-                  <i className="fa fa-google-plus fa-fw"></i>
                 </a>{' '}
               </li>
             </ul>

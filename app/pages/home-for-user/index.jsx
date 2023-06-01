@@ -126,11 +126,22 @@ export default class HomePageForUser extends React.Component {
         if (meta.page !== meta.page_count) {
           getRibbonData(user, meta.page + 1);
         }
-        // filter out projects you haven't classified on.
-        let activePreferences = projectPreferences.filter((preference) => { return preference.activity_count > 0; });
+        // filter out projects you haven't classified on AND that are not marked as hidden.
+        let activePreferences = projectPreferences.filter((preference) => {
+          let userHasClassified = preference.activity_count > 0;
+          let isVisiblePreference = !preference.settings['hidden'];
+          return userHasClassified && isVisiblePreference;
+        });
         // get the projects that you have classified on, if any.
         if (activePreferences.length > 0) {
           activePreferences = activePreferences.map((preference, i) => {
+            // add the classification counts to the total
+            // this will include all classifications a user has contributed
+            // regardless of the project's visibility setting, i.e. private or public.
+            this.setState((prevState) => {
+              const totalClassifications = prevState.totalClassifications + preference.activity_count;
+              return { totalClassifications };
+            });
             preference.sort_order = i;
             return preference;
           });
@@ -158,10 +169,7 @@ export default class HomePageForUser extends React.Component {
             .then((projects) => {
               this.setState((prevState) => {
                 const ribbonData = prevState.ribbonData.concat(projects);
-                const totalClassifications = ribbonData.reduce((total, project) => {
-                  return total + project.classifications;
-                }, 0);
-                return { ribbonData, totalClassifications };
+                return { ribbonData };
               });
             });
         }

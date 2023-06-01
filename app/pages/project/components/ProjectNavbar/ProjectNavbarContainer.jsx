@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../../../../lib/is-admin';
+import { usesMonorepo, monorepoURL } from '../../../../monorepoUtils';
 
 import { getProjectLinks } from '../../../../lib/nav-helpers';
 import ProjectNavbar from './ProjectNavbar';
@@ -56,6 +57,7 @@ class ProjectNavbarContainer extends Component {
     return _.map(links, link => ({
       disabled: link.disabled || false,
       isExternalLink: link.isExternalLink || false,
+      isMonorepoLink: link.isMonorepoLink || false,
       label: counterpart(link.translationPath),
       url: link.url
     }));
@@ -71,14 +73,34 @@ class ProjectNavbarContainer extends Component {
   }
 
   render() {
+    const searchParams = new URLSearchParams(window.location.search);
+    const env = searchParams.get('env');
+    const locale = counterpart.getLocale();
+    const newSearchParams = new URLSearchParams();
+
+    // For most projects, primary_language is en
+    if (locale !== this.props.project.primary_language) {
+      newSearchParams.set('language', locale);
+    }
+
+    if (env) {
+      newSearchParams.set('env', env);
+    }
+
+    const query = `${newSearchParams}` ? `?${newSearchParams}` : '';
     const avatarSrc = _.get(this.props.projectAvatar, 'src', undefined);
     const backgroundSrc = _.get(this.props.background, 'src', undefined);
     const launched = this.props.project.launch_approved || this.props.project.listed;
     const navLinks = isResourceAProject(this.props.project) ? this.getNavLinks() : [];
     const projectTitle = _.get(this.props.translation, 'display_name', undefined);
-    const projectLink = isResourceAProject(this.props.project) ? `/projects/${this.props.project.slug}` : `/organizations/${this.props.project.slug}`;
-    const redirect = this.props.project.redirect ? this.props.project.redirect : '';
+    const projectLink = isResourceAProject(this.props.project) ? `/projects/${this.props.project.slug}${query}` : `/organizations/${this.props.project.slug}${query}`;
+    let redirect = this.props.project.redirect ? this.props.project.redirect : '';
     const underReview = this.props.project.beta_approved;
+    if (usesMonorepo(this.props.project.slug)) {
+      const i18nSlug = locale === 'en' ? this.props.project.slug : `${locale}/${this.props.project.slug}`;
+      const envQuery = env === 'staging' ? '?env=staging' : '';
+      redirect = `${monorepoURL(i18nSlug)}${envQuery}`;
+    }
 
     return (
       <ProjectNavbar
@@ -91,6 +113,7 @@ class ProjectNavbarContainer extends Component {
         projectLink={projectLink}
         redirect={redirect}
         underReview={underReview}
+        usesMonorepo={usesMonorepo(this.props.project.slug)}
       />
     );
   }

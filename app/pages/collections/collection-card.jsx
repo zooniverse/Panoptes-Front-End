@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import FlexibleLink from '../../components/flexible-link';
+import Thumbnail from '../../components/thumbnail'
 
 export default class CollectionCard extends React.Component {
   constructor(props) {
@@ -15,11 +16,18 @@ export default class CollectionCard extends React.Component {
 
   setSubjectPreview(src) {
     const splitSrc = src ? src.split('.') : [];
-    if (src && splitSrc[splitSrc.length - 1] !== 'mp4') {
-      this.collectionCard.style.backgroundImage = `url('${src}')`;
+    const extension = splitSrc[splitSrc.length - 1];
+    if (src &&  !['mp4', 'json'].includes(extension)) {
+      const thumbnailSrc = Thumbnail.getThumbnailSrc({
+        origin: 'https://thumbnails.zooniverse.org',
+        width: 220,
+        height: 270,
+        src
+      })
+      this.collectionCard.style.backgroundImage = `url('${thumbnailSrc}')`;
       this.collectionCard.style.backgroundPosition = 'initial';
       this.collectionCard.style.backgroundRepeat = 'no-repeat';
-      this.collectionCard.style.backgroundSize = 'cover';
+      this.collectionCard.style.backgroundSize = 'contain';
     }
   }
 

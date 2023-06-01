@@ -4,6 +4,8 @@ createReactClass = require 'create-react-class'
 FlexibleLink = require('../components/flexible-link').default
 Translate = require 'react-translate-component'
 
+{ monorepoURL, usesMonorepo } = require('../monorepoUtils')
+
 ProjectCard = createReactClass
   displayName: 'ProjectCard'
   propTypes:
@@ -36,6 +38,8 @@ ProjectCard = createReactClass
       @props.project.redirect
     else if !!@props.href
       @props.href
+    else if usesMonorepo(@props.project.slug)
+      monorepoURL(@props.project.slug)
     else
       '/projects/' + @props.project.slug
 

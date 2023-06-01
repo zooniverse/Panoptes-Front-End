@@ -12,10 +12,21 @@ SubjectUploader = require '../../partials/subject-uploader'
 UploadDropTarget = require '../../components/upload-drop-target'
 ManifestView = require '../../components/manifest-view'
 isAdmin = require '../../lib/is-admin'
+{ addIndexFields, cleanSubjectData } = require './helpers/subject-sets'
+{ default: IndexedSubjectSet } = require './subject-sets/IndexedSubjectSet'
 
 NOOP = Function.prototype
 
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3', '.m4a', '.mpeg', '.txt', '.json']
+VALID_FILE_TYPES = [
+  'text/csv',
+  'text/plain',
+  'text/tab-separated-values',
+  'image/*',
+  'video/*',
+  'audio/*',
+  'application/json'
+]
 INVALID_FILENAME_CHARS = ['/', '\\', ':', ',']
 MAX_FILE_SIZE = 1000 * 1024
 
@@ -72,6 +83,7 @@ SubjectSetListing = createReactClass
 
   getInitialState: ->
     pageCount: NaN
+    subjectCount: @props.subjectSet.set_member_subjects_count
     subjects: null
 
   componentWillReceiveProps: (nextProps) ->
@@ -90,9 +102,12 @@ SubjectSetListing = createReactClass
       page: page
 
     gettingSetMemberSubjects.then ([setMemberSubject]) =>
-      newPageCount = setMemberSubject?.getMeta().page_count
+      meta = setMemberSubject?.getMeta()
+      newPageCount = meta?.page_count
       unless newPageCount is @state.pageCount
-        @setState pageCount: newPageCount
+        @setState
+          pageCount: newPageCount
+          subjectCount: meta?.count
 
     gettingSubjects = gettingSetMemberSubjects.get 'subject'
     gettingSubjects.then( (subjects) =>
@@ -107,21 +122,23 @@ SubjectSetListing = createReactClass
     @setSubjectResources(@props.subjectSet.id, pageValue)
 
   render: ->
-    if @state.subjects
-      <div>
-        <SubjectSetListingTable subjects={@state.subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
-        <nav className="pagination">
-          Page <select value={@props.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @newPage(e.target.value)}>
-            {if isNaN @state.pageCount
-              <option>?</option>
-            else
-              for p in [1..@state.pageCount]
-                <option key={p} value={p}>{p}</option>}
-          </select> of {@state.pageCount || '?'}
-        </nav>
-      </div>
-    else
-      null
+    <div>
+      <p>This set contains {@state.subjectCount} subjects:</p>
+      {if @state.subjects
+        <div>
+          <SubjectSetListingTable subjects={@state.subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
+          <nav className="pagination">
+            Page <select value={@props.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @newPage(e.target.value)}>
+              {if isNaN @state.pageCount
+                <option>?</option>
+              else
+                for p in [1..@state.pageCount]
+                  <option key={p} value={p}>{p}</option>}
+            </select> of {@state.pageCount || '?'}
+          </nav>
+        </div>
+      }
+    </div>
 
   previewSubject: (subject) ->
     alert <div className="content-container subject-preview">
@@ -195,9 +212,11 @@ EditSubjectSetPage = createReactClass
         </p>
       </form>
 
+      {if @props.subjectSet.metadata.indexFields
+        <IndexedSubjectSet subjectSet={@props.subjectSet} />
+      }
       <hr />
 
-      This set contains {@props.subjectSet.set_member_subjects_count} subjects:<br />
       <SubjectSetListing subjectSet={@props.subjectSet} page={@state.page} newPage={@newPage} user={@props.user} />
 
       <hr />
@@ -206,7 +225,7 @@ EditSubjectSetPage = createReactClass
         <p>You've reached your subject upload limit. Please <a href='/about/contact'> contact us</a> to request changes to your allowance.</p>
       else
         <p>
-          <UploadDropTarget accept={"text/csv, text/tab-separated-values, image/*, video/*, audio/*, text/*, application/json"} multiple onSelect={@handleFileSelection}>
+          <UploadDropTarget accept={VALID_FILE_TYPES.join(',')} multiple onSelect={@handleFileSelection}>
             <strong>Drag-and-drop or click to upload manifests and subject images here (you must select the media files as well as the manifest)</strong><br />
             Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
             Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers in the main classification interface or in the Talk discussion tool.<br />
@@ -300,15 +319,13 @@ EditSubjectSetPage = createReactClass
       # TODO: Look into PapaParse features.
       # Maybe wan we parse the file object directly in a worker.
       {data, errors} = Papa?.parse e.target.result.trim(), header: true
+      addIndexFields(@props.subjectSet, data)
       @subjectsFromManifest(data, errors, file.name)
     reader.readAsText file
 
   subjectsFromManifest: (data, errors, fileName) ->
     metadatas = for rawData in data
-      cleanData = {}
-      for key, value of rawData
-        cleanData[key.trim()] = value?.trim?() ? value
-      cleanData
+      cleanSubjectData(rawData)
 
     subjects = []
     for metadata in metadatas

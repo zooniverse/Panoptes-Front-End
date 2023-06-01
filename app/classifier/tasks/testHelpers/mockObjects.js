@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Provider, ReactReduxContext } from 'react-redux';
 
 export const store = {
   subscribe: () => { },
@@ -7,8 +8,8 @@ export const store = {
 };
 
 export const mockReduxStore = {
-  context: { store },
-  childContextTypes: { store: PropTypes.object.isRequired }
+  wrappingComponent: Provider,
+  wrappingComponentProps: { store }
 };
 
 export const radioTypeAnnotation = {
