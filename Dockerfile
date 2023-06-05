@@ -1,14 +1,13 @@
-FROM node:16
+FROM node:18-alpine
 
 WORKDIR /src
 RUN chown -R node:node /src
-
-RUN apk add --no-cache git
 
 USER node
 
 ADD package.json /src/
 ADD package-lock.json /src/
+ADD .npmrc /src/
 
 RUN npm ci
 

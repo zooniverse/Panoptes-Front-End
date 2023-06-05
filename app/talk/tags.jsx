@@ -4,7 +4,7 @@ import { Link } from  'react-router';
 import talkClient from  'panoptes-client/lib/talk-client';
 import apiClient from  'panoptes-client/lib/api-client';
 import Paginator from  './lib/paginator';
-import getSubjectLocation from  '../lib/get-subject-location';
+import getSubjectLocation from  '../lib/getSubjectLocation';
 import resourceCount from  './lib/resource-count';
 import ProjectLinker from  './lib/project-linker';
 import Loading from '../components/loading-indicator';

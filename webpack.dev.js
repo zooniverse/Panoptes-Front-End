@@ -13,7 +13,6 @@ var config = {
       '.zooniverse.org'
     ],
     historyApiFallback: true,
-    host: process.env.HOST || "localhost",
     client: {
       overlay: true,
       progress: true
@@ -31,18 +30,23 @@ var config = {
     filename: '[name].js',
   },
   plugins: [
-    new webpack.EnvironmentPlugin([
-      'HEAD_COMMIT',
-      'NODE_ENV',
-      'PANOPTES_API_APPLICATION',
-      'PANOPTES_API_HOST',
-      'STAT_HOST',
-      'SUGAR_HOST',
-      'TALK_HOST'
-    ]),
-    new CopyWebpackPlugin([
-      { from: 'public', to: '.' }
-    ]),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+    new webpack.EnvironmentPlugin({
+      'HEAD_COMMIT': null,
+      'NODE_ENV': 'development',
+      'PANOPTES_API_APPLICATION': null,
+      'PANOPTES_API_HOST': null,
+      'STAT_HOST': null,
+      'SUGAR_HOST': null,
+      'TALK_HOST': null
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '.' }
+      ]
+    }),
     new HtmlWebpackPlugin({
       useBasePath: false,
       template: 'views/index.ejs',
@@ -53,7 +57,15 @@ var config = {
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
-    modules: ['.', 'node_modules']
+    modules: ['.', 'node_modules'],
+    fallback: {
+      fs: false,
+      // for markdown-it plugins
+      path: require.resolve("path-browserify"),
+      util: require.resolve("util"),
+      url: require.resolve("url"),
+      process: false,
+    }
   },
   module: {
     rules: [{
@@ -69,7 +81,7 @@ var config = {
       }, {
         loader: 'coffee-loader'
       }, {
-        loader: 'cjsx-loader'
+        loader: path.resolve('./webpack/cjsx-loader.js')
       }]
     }, {
       test: /\.coffee$/,
@@ -97,13 +109,10 @@ var config = {
       }]
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
-      use: 'file-loader'
+      type: 'asset/resource'
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/]
-  },
-  node: {
-    fs: "empty"
   }
 };
 

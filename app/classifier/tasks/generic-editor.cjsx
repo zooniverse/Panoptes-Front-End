@@ -10,6 +10,20 @@ NextTaskSelector = require './next-task-selector'
 {MarkdownEditor, MarkdownHelp} = require 'markdownz'
 isAdmin = require '../../lib/is-admin'
 
+highlighterLabelColorOptions = [
+  { value: "#e65252", label: "Red Orange" },
+  { value: "#f1ae45", label: "Goldenrod" },
+  { value: "#fced54", label: "Laser Lemon" },
+  { value: "#ee7bcf", label: "Cotton Candy" },
+  { value: "#c7f55b", label: "Granny Smith Apple" },
+  { value: "#65eeca", label: "Jungle Green" },
+  { value: "#52db72", label: "Screamin Green" },
+  { value: "#7cdff2", label: "Robin's Egg Blue" },
+  { value: "#8aa0d3", label: "Indigo" },
+  { value: "#c17ddf", label: "Violet" },
+  { value: "#e7bbe3", label: "Wisteria" }
+];
+
 # `import MinMaxEditor from './drawing/min-max-editor';`
 MinMaxEditor = require('./drawing/min-max-editor').default
 GridEditor = require('./drawing/grid-editor').default
@@ -124,17 +138,14 @@ module.exports = createReactClass
                       <AutoSave resource={@props.workflow} >
                         Color{' '}
                         <select style={{background: choice.color}} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          <option style={{background: "#ff6639"}} value="#ff6639">Red</option>
-                          <option style={{background: "#ffa539"}} value="#ffa539">Orange</option>
-                          <option style={{background: "#F5D76E"}} value="#F5D76E">Yellow</option>
-                          <option style={{background: "#FC6399"}} value="#FC6399">Pink</option>
-                          <option style={{background: "#C9F227"}} value="#C9F227">Yellow Green</option>
-                          <option style={{background: "#35D056"}} value="#35D056">Green</option>
-                          <option style={{background: "#00FF7F"}} value="#00FF7F">Seafoam</option>
-                          <option style={{background: "#57c4f7"}} value="#57c4f7">Blue</option>
-                          <option style={{background: "#DCC6E0"}} value="#DCC6E0">Light Purple</option>
-                          <option style={{background: "#BAC1ff"}} value="#BAC1ff">Violet</option>
-                          <option style={{background: "#00ffff"}} value="#00ffff">Cyan</option>
+                          {for labelOption in highlighterLabelColorOptions
+                            <option
+                              key={labelOption.value}
+                              style={{ background: labelOption.value }}
+                              value={labelOption.value}
+                            >
+                              {labelOption.label}
+                            </option>}
                         </select>
                       </AutoSave>
                     </div>
@@ -281,7 +292,7 @@ module.exports = createReactClass
   toggleHidePrevMarksEnabled: (e) ->
     enableHidePrevMarks = e.target.checked
     @props.task.enableHidePrevMarks = enableHidePrevMarks
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   toggleMultipleChoice: (e) ->
     newType = if e.target.checked
@@ -289,7 +300,7 @@ module.exports = createReactClass
     else
       'single'
     @props.task.type = newType
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   addChoice: (type) ->
     switch type
@@ -300,12 +311,17 @@ module.exports = createReactClass
   addAnswer: ->
     @props.task.answers.push
       label: 'Enter an answer'
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   addHighlighterLabels: ->
+    highlighterLabelColors = highlighterLabelColorOptions.map((option) => option.value)
+    taskColors = @props.task.highlighterLabels.map((label) => label.color)
+    newColor = highlighterLabelColors.find((color) => taskColors.indexOf(color) == -1) || highlighterLabelColors[0]
+
     @props.task.highlighterLabels.push
+      color: newColor
       label: 'Enter label'
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   addTool: ->
     @props.task.tools.push
@@ -313,7 +329,7 @@ module.exports = createReactClass
       label: 'Tool name'
       color: '#00ff00'
       details: []
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task
 
   editToolDetails: (task, toolIndex) ->
     @props.task.tools[toolIndex].details ?= []
@@ -333,4 +349,4 @@ module.exports = createReactClass
 
   removeChoice: (choicesName, index) ->
     @props.task[choicesName].splice index, 1
-    @props.workflow.update 'tasks'
+    @props.onChange @props.task

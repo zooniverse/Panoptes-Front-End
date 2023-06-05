@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const MAX_THUMBNAIL_DIMENSION = 999;
-
 export default class Thumbnail extends React.Component {
   constructor(props) {
     super(props);
@@ -38,8 +36,8 @@ export default class Thumbnail extends React.Component {
     };
 
     const style = {
-      maxWidth: this.props.width,
-      maxHeight: this.props.height
+      maxWidth: this.props.width ? `${this.props.width}px` : undefined,
+      maxHeight: this.props.height ? `${this.props.height}px` : undefined
     };
 
     if (this.props.type === 'video') {
@@ -62,6 +60,10 @@ export default class Thumbnail extends React.Component {
       );
     }
 
+    if (this.props.type === 'application') {
+      return null;
+    }
+
     return (
       <div  style={style}>
         <img alt="" {...this.props} src={src} {...dimensions} onError={this.handleError} />
@@ -70,7 +72,7 @@ export default class Thumbnail extends React.Component {
   }
 }
 
-Thumbnail.getThumbnailSrc = function getThumbnailSrc({ origin, width, height, src }) {
+Thumbnail.getThumbnailSrc = function getThumbnailSrc({ origin, width = '', height = '', src }) {
   if (!src) {
     return undefined;
   }
@@ -83,11 +85,11 @@ Thumbnail.getThumbnailSrc = function getThumbnailSrc({ origin, width, height, sr
 Thumbnail.defaultProps = {
   controls: true,
   format: '',
-  height: MAX_THUMBNAIL_DIMENSION,
+  height: '',
   origin: 'https://thumbnails.zooniverse.org',
   src: '',
   type: 'image',
-  width: MAX_THUMBNAIL_DIMENSION
+  width: ''
 };
 
 Thumbnail.propTypes = {

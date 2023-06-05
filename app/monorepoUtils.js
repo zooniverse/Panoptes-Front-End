@@ -17,6 +17,7 @@ export const SLUGS = [
   'humphrydavy/davy-notebooks-project',
   'mainehistory/beyond-borders-transcribing-historic-maine-land-documents',
   'zookeeper/galaxy-zoo-weird-and-wonderful',
+  'zookeeper/planet-hunters-tessting',
   'hughdickinson/superwasp-black-hole-hunters',
   'bogden/scarlets-and-blues',
   'kmc35/peoples-contest-digital-archive',
@@ -27,7 +28,10 @@ export const SLUGS = [
   'printmigrationnetwork/print',
   'profdrrogerlouismartinez-davila/deciphering-secrets-unlocking-the-manuscripts-of-medieval-spain',
   'skirmizi/ottoman-turkish-crowdsourcing',
-  'bldigital/in-the-spotlight'
+  'bldigital/in-the-spotlight',
+  'md68135/notes-from-nature-labs',
+  'fulsdavid/the-daily-minor-planet',
+  'blicksam/human-machine-collaborative-transcription'
 ];
 
 export function usesMonorepo(slug) {

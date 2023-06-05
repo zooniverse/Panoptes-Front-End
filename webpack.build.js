@@ -34,18 +34,23 @@ module.exports = {
     chunkFilename: '[name]-[chunkhash].js',
   },
   plugins: [
-    new webpack.EnvironmentPlugin([
-      'HEAD_COMMIT',
-      'NODE_ENV',
-      'PANOPTES_API_APPLICATION',
-      'PANOPTES_API_HOST',
-      'STAT_HOST',
-      'SUGAR_HOST',
-      'TALK_HOST'
-    ]),
-    new CopyWebpackPlugin([
-      { from: 'public', to: '.' },
-    ]),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+    new webpack.EnvironmentPlugin({
+      'HEAD_COMMIT': null,
+      'NODE_ENV': 'production',
+      'PANOPTES_API_APPLICATION': null,
+      'PANOPTES_API_HOST': null,
+      'STAT_HOST': null,
+      'SUGAR_HOST': null,
+      'TALK_HOST': null
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '.' },
+      ]
+    }),
     new HtmlWebpackPlugin({
       template: 'views/index.ejs',
       inject: 'body',
@@ -58,6 +63,14 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.cjsx', '.coffee', '.styl', '.css'],
     modules: ['.', 'node_modules'],
+    fallback: {
+      fs: false,
+      // for markdown-it plugins
+      path: require.resolve("path-browserify"),
+      util: require.resolve("util"),
+      url: require.resolve("url"),
+      process: false,
+    }
   },
   module: {
     rules: [{
@@ -73,7 +86,7 @@ module.exports = {
       }, {
         loader: 'coffee-loader'
       }, {
-        loader: 'cjsx-loader'
+        loader: path.resolve('./webpack/cjsx-loader.js')
       }],
     }, {
       test: /\.coffee$/,
@@ -97,12 +110,9 @@ module.exports = {
       ],
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
-      use: 'file-loader',
+      type: 'asset/resource'
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/],
-  },
-  node: {
-    fs: 'empty',
-  },
+  }
 };

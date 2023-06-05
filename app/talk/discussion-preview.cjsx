@@ -5,7 +5,7 @@ createReactClass = require 'create-react-class'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
 baseURL = require('./lib/base-url').default
-getSubjectLocation = require '../lib/get-subject-location'
+getSubjectLocation = require('../lib/getSubjectLocation').default
 
 # `import Thumbnail from '../components/thumbnail';`
 Thumbnail = require('../components/thumbnail').default

@@ -54,6 +54,10 @@ function workflowHasNoMoreThanXShortcuts(shortcutsLimit) {
   };
 }
 
+function workflowDoesNotUseGroupedSubjectSelection({ workflow }) {
+  return convertBooleanToValidation(!workflow.grouped);
+}
+
 function workflowQuestionHasOneOrLessImages({ task }) {
   let validation = convertBooleanToValidation(false);
   if (task.question) {
@@ -100,6 +104,7 @@ const validatorFns = {
     taskFeedbackDisabled,
     workflowHasSingleTask,
     workflowNotTooManyShortcuts: workflowHasNoMoreThanXShortcuts(2),
+    workflowDoesNotUseGroupedSubjectSelection,
     workflowQuestionHasOneOrLessImages
   },
   multiple: {
@@ -107,6 +112,7 @@ const validatorFns = {
     taskFeedbackDisabled,
     workflowHasSingleTask,
     workflowNotTooManyShortcuts: workflowHasNoMoreThanXShortcuts(2),
+    workflowDoesNotUseGroupedSubjectSelection,
     workflowQuestionHasOneOrLessImages
   },
   drawing: {
@@ -117,6 +123,7 @@ const validatorFns = {
     drawingTaskHasOneTool,
     drawingTaskHasNoSubtasks,
     workflowDoesNotContainShortcuts: workflowHasNoMoreThanXShortcuts(0),
+    workflowDoesNotUseGroupedSubjectSelection,
     workflowInstructionHasOneOrLessImages
   }
 };

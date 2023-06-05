@@ -16,6 +16,7 @@ import * as translationActions from '../../redux/ducks/translations';
 import ProjectPage from './project-page';
 import Translations from '../../classifier/translations';
 import getAllLinked from '../../lib/get-all-linked';
+import isAdmin from '../../lib/is-admin';
 
 /**
   Send exceptions and React error info to Sentry
@@ -102,7 +103,7 @@ class ProjectPageController extends React.Component {
 
   componentDidCatch(error, info) {
     console.log(error, info);
-    // logToSentry(error, info);
+    logToSentry(error, info);
     const loading = false;
     const ready = false;
     this.setState({ error, info, loading, ready });
@@ -164,10 +165,10 @@ class ProjectPageController extends React.Component {
             if (error.status === 404) { return { src: '' }; } else { return console.error(error); }
           });
 
-          if (project.links && project.links.organization) {
-            awaitOrganization = project.get('organization', { listed: true })
-              .catch(error => [])
-              .then(response => (response && response.display_name) ? response : null);
+          if (project.links?.organization) {
+            const query = isAdmin() ? null : { listed: true }
+            awaitOrganization = project.get('organization', query)
+              .catch(error => null);
           } else {
             awaitOrganization = Promise.resolve(null);
           }

@@ -13,7 +13,7 @@ We are no longer actively developing features for this app. PRs will be accepted
 To avoid having to install Node.js or any other dependencies, you can run
 everything with Docker and Docker Compose.
 
-- `docker-compose build` will build a local Docker image and run `npm install`. Run this whenever you
+- `docker-compose build` will build a local Docker image and run `npm ci`. Run this whenever you
 change dependencies in `package.json`.
 
 - `docker-compose up` starts a development web server that listens on port 3735.
@@ -26,9 +26,33 @@ change dependencies in `package.json`.
 
 Make sure you have Node 8 and `npm` 5 or greater. It's recommended you manage your Node installations with **nvm**.
 
-- `npm install` installs dependencies.
+- `npm ci` installs dependencies.
 
 - `npm start` builds and runs the site locally.
+
+⚠️ **Note 1:** _[npm ci](https://docs.npmjs.com/cli/v8/commands/npm-ci)_ (clean install) is preferred over _npm install,_ as it doesn't modify the package lock.
+
+⚠️ **Note 2:** as of Node 16.15, running _npm ci_ results in errors such as _npm ERR! ERESOLVE could not resolve_ and _Conflicting peer dependency: foobar@x.y.z_ You can bypass this problem by instead running `npm ci --legacy-peer-deps`. Please see [issue 6155](https://github.com/zooniverse/Panoptes-Front-End/issues/6155) for more details.
+
+### Viewing the Website
+
+Open your web browser of choice and go to `https://localhost:3735/`
+
+If you want to _login_ via the Panoptes API and _view authenticated pages,_ then you'll need to set up and use `https://local.zooniverse.org:3735` instead of using localhost:3735. Otherwise, you'll run into CORS errors. (You need to add the hostname to your hosts file, pointing to local. Instructions are on [our Stackoverflow](https://stackoverflow.com/c/zooniverse/questions/109).)
+
+**Troubleshooting: web browser blocks local website**
+
+The problem: when attempting to view _localhost:3735_ or _local.zooniverse.org:3735,_ my web browser stops me and shows a warning screen.
+
+Example errors: "Your connection is not private / NET::ERR_CERT_AUTHORITY_INVALID" on Chrome 104; "Warning: Potential Security Risk Ahead" on Firefox 103; "This connection is not private" on Safari 15.4.
+
+The cause: the local web server is running HTTPS, and it's using a self-signed certificate. Modern web browsers consider these certificates very untrustworthy, and a possible indicator of a man-in-the-middle attack.
+
+The solution(s):
+- For Firefox or Safari, open the _advanced options_ on the warning page, and then click whatever's the equivalent of _"accept risk and continue"._
+- For Chrome, type in the _interstitial bypass keyword_ (`thisisunsafe`) anywhere on the window to temporarily bypass the warning; or ⚠️ manually add the SSL cert to your computer's list of trusted certificates. [See Stackoverflow for additional details.](https://stackoverflow.com/questions/7580508/getting-chrome-to-accept-self-signed-localhost-certificate)
+
+⚠️ Warning: please be careful if you do change your web browser's or computer's security settings.
 
 ### Configuration
 
@@ -60,7 +84,7 @@ While editing, do your best to follow style and architecture conventions already
 
 ### What to do if it doesn't run
 
-Try `rm -rf ./node_modules && npm install` to freshen up your dependencies. And read the warnings, they should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies. If you use `docker-compose` to build and test the site, you shouldn't run into any problems with the Node version, but `docker-compose build` will build a new image with a fresh `npm install`.
+Try `npm ci` to freshen up your dependencies. And read the warnings, they should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies. If you use `docker-compose` to build and test the site, you shouldn't run into any problems with the Node version, but `docker-compose build` will build a new image with a fresh `npm ci`.
 
 ## Testing
 
@@ -76,7 +100,7 @@ Deployment is handled by Github Action.
 
 On opening of pull requests, a Github Action is triggered to deploy to a branch staging location. The blob storage location depends on the pull request number, e.g. `https://pr-5926.pfe-preview.zooniverse.org`.
 
-On push to master, a Github Action is triggered to deploy to master staging found at `https://master.pfe-preview.zooniverse.org`. 
+On push to master, a Github Action is triggered to deploy to master staging found at `https://master.pfe-preview.zooniverse.org`.
 
 ### Production
 

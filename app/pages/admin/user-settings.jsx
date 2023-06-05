@@ -16,6 +16,7 @@ class UserSettings extends Component {
     this.boundForceUpdate = this.forceUpdate.bind(this);
     this.getUser = this.getUser.bind(this);
     this.updateUserProjects = this.updateUserProjects.bind(this);
+    this.updateSubjectID = this.updateSubjectID.bind(this);
 
     this.state = {
       classifications: [],
@@ -57,6 +58,14 @@ class UserSettings extends Component {
       }, 0);
       return { ribbonData, totalClassifications };
     });
+  }
+
+  async updateSubjectID(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const subjectID = data.get('subjectID');
+    const classifications = await getUserClassifications(this.state.editUser, subjectID);
+    this.setState({ classifications });
   }
 
   render() {
@@ -104,6 +113,11 @@ class UserSettings extends Component {
         </details>
         <details>
           <summary>Recent classifications {this.state.classifications.length}</summary>
+          <form onSubmit={this.updateSubjectID}>
+            <label for="subjectId">Filter by subject ID: </label>
+            <input id="subjectId" name="subjectID" type="text" defaultValue='' pattern='\d+' />
+            <input type="submit" value="Go" />
+          </form>
           <ol>
           {this.state.classifications.map(classification => (
             <li key={classification.id}>

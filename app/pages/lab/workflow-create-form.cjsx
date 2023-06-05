@@ -25,18 +25,13 @@ WorkflowCreateForm = createReactClass
     workflowToClone = @props.workflowToClone
 
     newWorkflow =
+      id: workflowToClone?.id
       display_name: @refs.newDisplayName.value
-      primary_language: workflowToClone?.primary_language || @props.project.primary_language
-      steps: workflowToClone?.steps ? undefined
-      tasks: workflowToClone?.tasks ? {}
-      first_task: workflowToClone?.first_task ? ''
-      configuration: workflowToClone?.configuration ? {}
-      retirement: workflowToClone?.retirement ? {}
-      active: @props.workflowActiveStatus ? false
-      grouped: workflowToClone?.grouped ? false
-      prioritized: workflowToClone?.prioritized ? false
+      first_task: ''
+      primary_language: @props.project.primary_language
+      tasks: {}
 
-    awaitSubmission = @props.onSubmit(@props.project.id, newWorkflow)
+    awaitSubmission = @props.onSubmit(@props.project, newWorkflow)
 
     Promise.resolve(awaitSubmission)
       .then (result) =>

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from '../../lib/draggable';
 import tasks from '../tasks';
-import getSubjectLocation from '../../lib/get-subject-location';
+import getSubjectLocation from '../../lib/getSubjectLocation';
 import SVGImage from '../../components/svg-image';
 import SVGTransparentRect from '../../components/svg-transparent-rect';
 

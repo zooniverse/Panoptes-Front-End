@@ -10,6 +10,7 @@ import ProjectHomePage from './pages/project/home';
 import AboutProject from './pages/project/about/index';
 import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';
 import AboutProjectTeam from './pages/project/about/team';
+import SubjectAdmin from './pages/admin/subject';
 import UserSettingsList from './pages/admin/user-settings-list';
 import UserSettings from './pages/admin/user-settings';
 import ProjectStatusList from './pages/admin/project-status-list';
@@ -62,6 +63,8 @@ import TalkTags from './talk/tags';
 import MonorepoRoutes from './MonorepoRoutes';
 import FEMLabRouter from './pages/lab-fem/fem-lab-router'
 import IIIFSubjectSet from './pages/lab/iiif'
+import projectLab from './pages/lab/project.jsx'
+import Collaborators from './pages/lab/collaborators.jsx'
 
 // <Redirect from="home" to="/" /> doesn't work.
 
@@ -218,10 +221,10 @@ export const routes = (
       </Route>
 
       <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
-        <IndexRoute component={require('./collections/show-list')} />
+        <IndexRoute component={require('./collections/show-list').default} />
         <Route path="settings" component={CollectionSettings} />
         <Route path="collaborators" component={CollectionCollaborators} />
-        <Route path="talk" component={require('./collections/show-list')} />
+        <Route path="talk" component={require('./collections/show-list').default} />
       </Route>
       <Route path="users/:profile_name" component={UserProfilePage}>
         <IndexRoute component={require('./pages/profile/feed')} />
@@ -273,10 +276,10 @@ export const routes = (
       </Route>
 
       <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
-        <IndexRoute component={require('./collections/show-list')} />
+        <IndexRoute component={require('./collections/show-list').default} />
         <Route path="settings" component={CollectionSettings} />
         <Route path="collaborators" component={CollectionCollaborators} />
-        <Route path="talk" component={require('./collections/show-list')} />
+        <Route path="talk" component={require('./collections/show-list').default} />
       </Route>
       <Route path="users/:profile_name" component={UserProfilePage}>
         <IndexRoute component={require('./pages/profile/feed')} />
@@ -330,14 +333,14 @@ export const routes = (
     </Route>
 
     <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
-      <IndexRoute component={require('./collections/show-list')} />
+      <IndexRoute component={require('./collections/show-list').default} />
       <Route path="settings" component={CollectionSettings} />
       <Route path="collaborators" component={CollectionCollaborators} />
-      <Route path="talk" component={require('./collections/show-list')} />
+      <Route path="talk" component={require('./collections/show-list').default} />
     </Route>
 
     <Route path="lab" component={require('./pages/lab')} />
-    <Route path="lab/:projectID" component={require('./pages/lab/project')}>
+    <Route path="lab/:projectID" component={projectLab}>
       <IndexRoute component={require('./pages/lab/project-details')} />
       <Route path="about" component={require('./pages/lab/about')}>
         <IndexRedirect to='research' />
@@ -347,7 +350,7 @@ export const routes = (
         <Route path="education" component={require('./pages/lab/about/education')} />
         <Route path="team" component={require('./pages/lab/about/team')} />
       </Route>
-      <Route path="collaborators" component={require('./pages/lab/collaborators')} />
+      <Route path="collaborators" component={Collaborators} />
       <Route path="media" component={EditMediaPage} />
       <Route path="visibility" component={require('./pages/lab/visibility')} />
       <Route path="talk" component={EditProjectTalk} />
@@ -373,6 +376,7 @@ export const routes = (
       <IndexRoute component={UserSettingsList} />
       <Route path="users" component={UserSettingsList} />
       <Route path="users/:id" component={UserSettings} />
+      <Route path="subjects/:id" component={SubjectAdmin} />
       <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={ProjectStatus} />
       <Route path="grantbot" component={Grantbot} />

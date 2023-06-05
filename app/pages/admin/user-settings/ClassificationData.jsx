@@ -6,23 +6,27 @@ function ClassificationEntry({
 }) {
   if (name === 'annotations') {
     return (
-      <>
-        <b>annotations:</b>
+      <details>
+        <summary>
+          <b>annotations:</b>
+        </summary>
         <ol>
           {value.map(annotation => <li>{JSON.stringify(annotation)}<br/></li>)}
         </ol>
-      </>
+      </details>
     )
   }
   if (name === 'metadata') {
     const entries = Object.entries(value)
     return (
-      <>
-        <b>metadata:</b>
+      <details>
+        <summary>
+          <b>metadata:</b>
+        </summary>
         <ul>
           {entries.map(([key, value]) => <li><b>{key}:</b>{JSON.stringify(value)}<br/></li>)}
         </ul>
-      </>
+      </details>
     )
   }
   return (

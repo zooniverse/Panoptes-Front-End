@@ -1,5 +1,6 @@
 React = require 'react'
 PropTypes = require 'prop-types'
+Sentry = require '@sentry/browser'
 createReactClass = require 'create-react-class'
 auth = require 'panoptes-client/lib/auth'
 { Helmet } = require 'react-helmet'
@@ -7,8 +8,9 @@ counterpart = require 'counterpart'
 `import AppStatus from './app-status';`
 IOStatus = require './io-status'
 AppLayout = require('../layout').default
-{generateSessionID} = require '../lib/session'
+{getSessionID} = require '../lib/session'
 NotificationsCounter = require('../lib/notifications-counter').default
+{ addSentryUser } = require('../lib/init-sentry')
 apiClient = require 'panoptes-client/lib/api-client'
 
 GeordiLogger = (require '../lib/zooniverse-logging').default
@@ -54,7 +56,7 @@ PanoptesApp = createReactClass
 
     auth.listen 'change', @handleAuthChange
     @handleAuthChange()
-    generateSessionID()
+    getSessionID()
   
   componentDidUpdate: (prevProps) ->
     if prevProps.params isnt @props.params 
@@ -70,7 +72,7 @@ PanoptesApp = createReactClass
         initialLoadComplete: true
         user: user
       @updateNotificationsCount user
-      @geordiLogger.remember userID: user.id if user?
+      addSentryUser(user)
 
   updateNotificationsCount: (user) ->
     user or= @state.user
