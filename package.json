@@ -59,7 +59,7 @@
     "@babel/plugin-transform-runtime": "~7.22.4",
     "@babel/preset-env": "~7.22.4",
     "@babel/preset-react": "~7.22.3",
-    "@babel/register": "~7.21.0",
+    "@babel/register": "~7.22.5",
     "@wojtekmaj/enzyme-adapter-react-17": "~0.8.0",
     "babel-loader": "~9.1.2",
     "babel-plugin-rewire": "~1.2.0",
