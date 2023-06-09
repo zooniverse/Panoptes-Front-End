@@ -411,25 +411,30 @@ class ProjectStatus extends Component {
               <hr />
               <div>
                 <h4>Classifier 2.0 (rewrite) settings</h4>
-                <p>Note that that Scatter Plot is preferred over TESS Light Curve for that kind of JSON subject data. The TESS light curve viewer is built specifically for their requirements. The code in the viewer assumes the project is using a task like them.</p>
+                <div id="subject-viewer-help-text">
+                  <p>Note that 'JSON data charts' is preferred over TESS Light Curve for JSON subject data. The TESS light curve viewer is built specifically for their requirements. The code in the viewer assumes the project is using a task like them. Individual JSON data viewers are deprecated and should not be used on new projects.</p>
+                  <p>Subjects with a <abbr title="Multipurpose Internet Mail Extensions">MIME</abbr> type of <code>application/json</code> will use the JSON data setting by default.</p>
+                </div>
 
                 <label>
                   Subject Viewer:{' '}
                   <select
+                    aria-describedby="subject-viewer-help-text"
                     id="subject-viewers"
                     onChange={(event) => this.onChangeSubjectViewer(workflow, event)}
                     value={workflow.configuration.subject_viewer}
                   >
                     <option value="none">None Selected</option>
-                    <option value="dataImage">Data Image</option>
+                    <option value="dataImage">Data Image DEPRECATED</option>
                     <option value="imageAndText">Image and Text</option>
-                    <option value="lightcurve">(D3/TESS) Light Curve</option>
+                    <option value="jsonData">JSON data charts</option>
+                    <option value="lightcurve">(D3/TESS) Light Curve DEPRECATED</option>
                     <option value="multiFrame">Multi-Frame</option>
-                    <option value="scatterPlot">Scatter Plot</option>
+                    <option value="scatterPlot">Scatter Plot DEPRECATED</option>
                     <option value="singleImage">Single Image</option>
                     <option value="singleText">Single Text</option>
                     <option value="subjectGroup">Subject Group</option>
-                    <option value="variableStar">Variable Star</option>
+                    <option value="variableStar">Variable Star DEPRECATED</option>
                   </select>
                 </label>
               </div>
