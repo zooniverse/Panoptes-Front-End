@@ -305,23 +305,25 @@ module.exports = createReactClass
       <hr />
 
       <div>
-        <span className="form-label">Thumbnails</span>
-        <p>
-          <small>
-            <strong>Default</strong> - will show thumbnails as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. The number of choices shown will change based on filters.
-          </small>
-        </p>
-        <p>
-          <small>
-            <strong>Show</strong> - will always show thumbnails as small, regardless of the number of choices shown.
-          </small>
-        </p>
-        <p>
-          <small>
-            <strong>Hide</strong> - will never show thumbnails.
-          </small>
-        </p>
         <AutoSave resource={@props.workflow}>
+          <label htmlFor="#{@props.taskPrefix}.thumbnails">
+              <span className="form-label">Thumbnails</span>
+          </label>
+          <p>
+            <small>
+              <strong>Default</strong> - will show thumbnails as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. The number of choices shown will change based on filters.
+            </small>
+          </p>
+          <p>
+            <small>
+              <strong>Show</strong> - will always show thumbnails as small, regardless of the number of choices shown.
+            </small>
+          </p>
+          <p>
+            <small>
+              <strong>Hide</strong> - will never show thumbnails.
+            </small>
+          </p>
           <select
             name="#{@props.taskPrefix}.thumbnails"
             onChange={handleInputChange.bind @props.workflow}
