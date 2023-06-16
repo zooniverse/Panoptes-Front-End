@@ -45,8 +45,11 @@ class Choices extends React.Component {
   }
 
   whatSizeThumbnails({ length }) {
-    if (this.props.task.alwaysShowThumbnails) {
+    if (this.props.task.alwaysShowThumbnails || this.props.task.thumbnails === 'show') {
       return 'small';
+    }
+    if (this.props.task.thumbnails === 'hide') {
+      return 'none';
     }
     if (length > 30) {
       return 'none';
@@ -165,7 +168,8 @@ Choices.propTypes = {
     choices: PropTypes.object,
     choicesOrder: PropTypes.array,
     images: PropTypes.object,
-    questions: PropTypes.object
+    questions: PropTypes.object,
+    thumbnails: PropTypes.string
   }),
   translation: PropTypes.shape({
     characteristics: PropTypes.object,
