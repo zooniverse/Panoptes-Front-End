@@ -45,7 +45,11 @@ class Choices extends React.Component {
   }
 
   whatSizeThumbnails({ length }) {
-    if (this.props.task.alwaysShowThumbnails || this.props.task.thumbnails === 'show') {
+    // if new survey task thumbnails property is undefined and legacy alwaysShowThumbnails is true, then show thumbnails to support legacy alwaysShowThumbnails functionality
+    if (!this.props.task.thumbnails && this.props.task.alwaysShowThumbnails) {
+      return 'small';
+    }
+    if (this.props.task.thumbnails === 'show') {
       return 'small';
     }
     if (this.props.task.thumbnails === 'hide') {
