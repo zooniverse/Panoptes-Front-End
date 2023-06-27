@@ -67,6 +67,7 @@ PanoptesApp = createReactClass
 
   handleAuthChange: ->
     @geordiLogger.forget ['userID']
+    console.log('AUTH CHANGE EVENT')
     auth.checkCurrent().then (user) =>
       @setState
         initialLoadComplete: true
