@@ -83,7 +83,6 @@ Chooser.propTypes = {
   onFilter: PropTypes.func,
   onRemove: PropTypes.func,
   task: PropTypes.shape({
-    alwaysShowThumbnails: PropTypes.bool,
     characteristics: PropTypes.object,
     characteristicsOrder: PropTypes.array,
     choices: PropTypes.object,
