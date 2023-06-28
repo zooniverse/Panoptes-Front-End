@@ -31,7 +31,8 @@ export const SLUGS = [
   'bldigital/in-the-spotlight',
   'md68135/notes-from-nature-labs',
   'fulsdavid/the-daily-minor-planet',
-  'blicksam/human-machine-collaborative-transcription'
+  'blicksam/human-machine-collaborative-transcription',
+  'communitiesandcrowds/how-did-we-get-here'
 ];
 
 export function usesMonorepo(slug) {
