@@ -305,17 +305,35 @@ module.exports = createReactClass
       <hr />
 
       <div>
-        <label>
-          <AutoSave resource={@props.workflow}>
-            <input type="checkbox" name="#{@props.taskPrefix}.alwaysShowThumbnails" checked={@props.task.alwaysShowThumbnails} onChange={handleInputChange.bind @props.workflow} />{' '}
-            Always show thumbnails
-          </AutoSave>
-        </label>
-        <p>
-          <small>
-            If checked, then thumbnails will always show as small. If unchecked, then thumbnails will show as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. The number of choices shown will change based on filters.
-          </small>
-        </p>
+        <AutoSave resource={@props.workflow}>
+          <label htmlFor="#{@props.taskPrefix}.thumbnails">
+              <span className="form-label">Thumbnails</span>
+          </label>
+          <p>
+            <small>
+              <strong>Default</strong> - will show thumbnails as small, medium, large, or not at all (when choices > 30) based on the number of choices shown. Note that volunteer-selected filters change the number of choices shown.
+            </small>
+          </p>
+          <p>
+            <small>
+              <strong>Show Small</strong> - will always show thumbnails as small, regardless of the number of choices shown.
+            </small>
+          </p>
+          <p>
+            <small>
+              <strong>Hide All</strong> - will never show thumbnails.
+            </small>
+          </p>
+          <select
+            name="#{@props.taskPrefix}.thumbnails"
+            onChange={handleInputChange.bind @props.workflow}
+            value={if @props.task.thumbnails then @props.task.thumbnails else if @props.task.alwaysShowThumbnails then "show" else "default"}
+          >
+            <option value="default">Default</option>
+            <option value="hide">Hide</option>
+            <option value="show">Show</option>
+          </select>
+        </AutoSave>
       </div>
     </div>
 
