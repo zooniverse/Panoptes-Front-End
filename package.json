@@ -50,7 +50,7 @@
     "visible-element": "~1.0.1"
   },
   "devDependencies": {
-    "@babel/cli": "~7.22.5",
+    "@babel/cli": "~7.22.6",
     "@babel/core": "~7.22.6",
     "@babel/eslint-parser": "~7.22.5",
     "@babel/node": "~7.22.5",
