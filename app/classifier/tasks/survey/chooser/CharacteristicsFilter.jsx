@@ -100,7 +100,6 @@ CharacteristicsFilter.propTypes = {
   focusedChoice: PropTypes.string,
   onFilter: PropTypes.func,
   task: PropTypes.shape({
-    alwaysShowThumbnails: PropTypes.bool,
     characteristics: PropTypes.object,
     characteristicsOrder: PropTypes.array,
     choices: PropTypes.object,

@@ -32,7 +32,8 @@ export const SLUGS = [
   'md68135/notes-from-nature-labs',
   'fulsdavid/the-daily-minor-planet',
   'blicksam/human-machine-collaborative-transcription',
-  'zooniverse/gravity-spy'
+  'zooniverse/gravity-spy',
+  'communitiesandcrowds/how-did-we-get-here'
 ];
 
 export function usesMonorepo(slug) {
