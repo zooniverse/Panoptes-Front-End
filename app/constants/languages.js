@@ -108,6 +108,7 @@ const languages = [
   { value: 'te', label: 'Telugu' },
   { value: 'th', label: 'Thai' },
   { value: 'bo-cn', label: 'Tibetan (PRC)' },
+  { value: 'ven', label: 'Tshivenḓa' },
   { value: 'tr', label: 'Turkish' },
   { value: 'tk-tm', label: 'Turkmen (Turkmenistan)' },
   { value: 'ug-cn', label: 'Uighur (PRC)' },
@@ -118,6 +119,7 @@ const languages = [
   { value: 'vi', label: 'Vietlabelse' },
   { value: 'cy', label: 'Welsh' },
   { value: 'wo-sn', label: 'Wolof (Senegal)' },
+  { value: 'tso', label: 'Xitsonga'},
   { value: 'sah-ru', label: 'Yakut (Russia)' },
   { value: 'ii-cn', label: 'Yi (PRC)' },
   { value: 'yo-ng', label: 'Yoruba (Nigeria)' }
