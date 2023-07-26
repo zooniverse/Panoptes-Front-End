@@ -1,4 +1,5 @@
 export default {
+  af: 'Afrikaans',
   en: 'English',
   ar: 'العربية',
   cs: 'Čeština',
@@ -9,6 +10,8 @@ export default {
   he: 'עברית',
   hi: 'हिन्दी',
   hr: 'Hrvatski',
+  xh: 'isiXhosa',
+  zu: 'isiZulu',
   it: 'Italiano',
   ja: '日本語',
   kn: 'ಕನ್ನಡ',
@@ -17,10 +20,13 @@ export default {
   pl: 'Polski',
   pt: 'Português',
   ru: 'русский',
+  tn: 'Setswana',
   sv: 'Svenska',
+  ve: 'Tshivenḓa',
   tr: 'Türkçe',
   uk: 'українська мова',
   ur: 'اردو',
+  ts: 'Xitsonga',
   'zh-cn': '简体中文',
   'zh-tw': '繁體中文'
 };
