@@ -33,7 +33,8 @@ export const SLUGS = [
   'fulsdavid/the-daily-minor-planet',
   'blicksam/human-machine-collaborative-transcription',
   'zooniverse/gravity-spy',
-  'communitiesandcrowds/how-did-we-get-here'
+  'communitiesandcrowds/how-did-we-get-here',
+  'zooniverse/snapshot-serengeti'
 ];
 
 export function usesMonorepo(slug) {
