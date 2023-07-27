@@ -2,7 +2,7 @@
   "name": "panoptes-front-end",
   "dependencies": {
     "@babel/runtime": "~7.22.6",
-    "@sentry/browser": "~7.60.0",
+    "@sentry/browser": "~7.60.1",
     "animated-scrollto": "~1.1.0",
     "chart.js": "~4.3.1",
     "chartist": "~0.11.0",
