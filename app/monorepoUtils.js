@@ -34,7 +34,8 @@ export const SLUGS = [
   'blicksam/human-machine-collaborative-transcription',
   'zooniverse/gravity-spy',
   'communitiesandcrowds/how-did-we-get-here',
-  'zooniverse/snapshot-serengeti'
+  'zooniverse/snapshot-serengeti',
+  'aeuk/elephant-id'
 ];
 
 export function usesMonorepo(slug) {
