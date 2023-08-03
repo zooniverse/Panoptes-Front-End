@@ -12,6 +12,7 @@ export default {
   hr: 'Hrvatski',
   xh: 'isiXhosa',
   zu: 'isiZulu',
+  id: 'Bahasa Indonesia',
   it: 'Italiano',
   ja: '日本語',
   kn: 'ಕನ್ನಡ',
