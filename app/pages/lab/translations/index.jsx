@@ -58,7 +58,7 @@ class TranslationsManager extends React.Component {
         }
         <h2>Project language menu</h2>
         <p>
-          Tick languages here to publish those translations, and make them available to your volunteers. If you've submitted translations for a language missing in the checkboxes, email contact@zooniverse.org.
+          Tick languages here to publish those translations, and make them available to your volunteers. If you've submitted translations for a language and it's missing a checkbox, email contact@zooniverse.org.
         </p>
         <table>
           <tr>
