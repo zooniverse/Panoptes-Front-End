@@ -58,12 +58,12 @@ class TranslationsManager extends React.Component {
         }
         <h2>Project language menu</h2>
         <p>
-          Tick languages here to publish those translations, and make them available to your volunteers.
+          Check which languages you’d like to make available to your volunteers. If you don’t see a published language as a selection below please email <a href="mailto:contact@zooniverse.org">contact@zooniverse.org</a> with your project ID.
         </p>
         <table>
           <tr>
             <th>Language</th>
-            <th>Published?</th>
+            <th>Publish</th>
           </tr>
           {languageMenuCodes.map((language) => {
             const disabled = language === project.primary_language;
