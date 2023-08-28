@@ -65,6 +65,7 @@ import FEMLabRouter from './pages/lab-fem/fem-lab-router'
 import IIIFSubjectSet from './pages/lab/iiif'
 import projectLab from './pages/lab/project.jsx'
 import Collaborators from './pages/lab/collaborators.jsx'
+import PagesEditor from './pages/lab-pages-editor'
 
 // <Redirect from="home" to="/" /> doesn't work.
 
@@ -348,6 +349,7 @@ export const routes = (
       <Redirect from="workflow/*" to="workflows/*" />
       <Route path="workflows" component={WorkflowsContainer}>
         <IndexRoute component={WorkflowsList} />
+        <Route path="editor/:workflowID" component={PagesEditor} />
         <Route path=":workflowID" component={FEMLabRouter} />
       </Route>
       <Redirect from="subject-set/*" to="subject-sets/*" />
