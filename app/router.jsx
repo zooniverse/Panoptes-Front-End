@@ -349,7 +349,7 @@ export const routes = (
       <Redirect from="workflow/*" to="workflows/*" />
       <Route path="workflows" component={WorkflowsContainer}>
         <IndexRoute component={WorkflowsList} />
-        <Route path="editor/:workflowID" component={PagesEditor} />
+        <Route path="editor/:workflowId" component={PagesEditor} />  {/* Note this is worflowId, not workflowID (caps) */}
         <Route path=":workflowID" component={FEMLabRouter} />
       </Route>
       <Redirect from="subject-set/*" to="subject-sets/*" />
