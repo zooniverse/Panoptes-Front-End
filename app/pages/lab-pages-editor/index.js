@@ -10,7 +10,10 @@ export default function PagesEditor (props) {
   return (
     <div>
       <h5>Pages Editor</h5>
-      <DataManager workflowId={params?.workflowId}>
+      <DataManager
+        key={params?.workflowId || '-'}  // 
+        workflowId={params?.workflowId}
+      >
         <h6>Workflow {params?.workflowId}</h6>
         <Tester />
       </DataManager>

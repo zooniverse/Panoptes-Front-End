@@ -9,33 +9,52 @@ import { useEffect, useState } from 'react'
 import { WorkflowContext } from './context.js'
 
 export default function DataManager ({
+  // key: to ensure DataManager renders FRESH (with states reset) whenever workflowId changes, use <DataManager key={workflowId} ... />
   children,
   workflowId,
 }) {
-  const [ workflow, setWorkflow ] = useState(null)
-  const [ status, setStatus ] = useState('ready')
+  let initialised = false
+  const [ apiData, setApiData ] = useState({
+    workflow: null,
+    status: 'ready',
+  })
 
-  useEffect(async function fetchWorkflow () {
-    if (workflowId) {
-      setWorkflow(null)
-      setStatus('fetching')
-      try {
-        const wf = await apiClient.type('workflows').get(workflowId)
-        setWorkflow(wf)
-        setStatus('success')
-      } catch (err) {
-        console.error('DataManager: ', err)
-        setWorkflow(null)
-        setStatus('error')
-      }
-    } else {
-      setWorkflow(null)
-      setStatus('ready')
+  // Fetch workflow when the component loads for the first time.
+  // See notes about 'key' prop, to ensure states are reset:
+  // https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes
+  // Also see general pattern notes:
+  // https://react.dev/reference/react/useEffect#fetching-data-with-effects
+  useEffect(async function whenComponentMounts_doInitialise () {
+    console.log('+++ DataManager: fetchWorkflow', workflowId)
+    if (initialised) return 
+    if (!workflowId) return
+
+    try {
+      setApiData({
+        workflow: null,
+        status: 'fetching'
+      })
+
+      const wf = await apiClient.type('workflows').get(workflowId)
+      if (!wf) throw new Error('No workflow')
+
+      setApiData({
+        workflow: wf,
+        status: 'ready'
+      })
+      initialised = true
+
+    } catch (err) {
+      console.error('DataManager: ', err)
+      setApiData({
+        workflow: null,
+        status: 'error'
+      })
+      initialised = true  // Don't re-run the initialisation function again
     }
-  }, [ workflowId ])
 
-  if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>)
-  // if (!workflow) return null
+    return () => { initialised = false }
+  }, [ workflowId ])
 
   /*
   Updates the workflow with new data.
@@ -44,15 +63,19 @@ export default function DataManager ({
     console.log('+++ TODO')
   }
 
-  const workflowData = {
-    workflow, update
+  const contextData = {
+    workflow: apiData.workflow,
+    update
   }
+
+  if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>)
+  // if (!workflow) return null
 
   return (
     <WorkflowContext.Provider
-      value={workflowData}
+      value={contextData}
     >
-      <div>{status}</div>
+      <div>{apiData.status}</div>
       {children}
     </WorkflowContext.Provider>
   )
