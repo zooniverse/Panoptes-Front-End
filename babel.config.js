@@ -17,9 +17,6 @@ module.exports = function (api) {
       development: {
         plugins: [
           [
-            '@babel/plugin-proposal-class-properties'
-          ],
-          [
             'transform-es2015-modules-commonjs'
           ]
         ]
@@ -27,18 +24,12 @@ module.exports = function (api) {
       staging: {
         plugins: [
           [
-            '@babel/plugin-proposal-class-properties'
-          ],
-          [
             'transform-es2015-modules-commonjs'
           ]
         ]
       },
       production: {
         plugins: [
-          [
-            '@babel/plugin-proposal-class-properties'
-          ],
           [
             'transform-es2015-modules-commonjs'
           ]
@@ -48,9 +39,6 @@ module.exports = function (api) {
         plugins: [
           [
             'babel-plugin-rewire'
-          ],
-          [
-            '@babel/plugin-proposal-class-properties'
           ],
           [
             'transform-es2015-modules-commonjs'
