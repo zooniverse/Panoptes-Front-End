@@ -4,6 +4,10 @@ Responsible for fetching, updating, and saving Workflow resources from/to
 the Panoptes service.
  */
 
+/*
+eslint-disable no-console
+ */
+
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -14,34 +18,10 @@ function DataManager({
   children = null,
   workflowId = ''
 }) {
-  let initialised = false;
   const [apiData, setApiData] = useState({
     workflow: null,
     status: 'ready'
   });
-
-  async function fetchWorkflow() {
-    try {
-      setApiData({
-        workflow: null,
-        status: 'fetching'
-      });
-
-      const wf = await apiClient.type('workflows').get(workflowId);
-      if (!wf) throw new Error('No workflow');
-
-      setApiData({
-        workflow: wf,
-        status: 'ready'
-      });
-    } catch (err) {
-      console.error('DataManager: ', err);
-      setApiData({
-        workflow: null,
-        status: 'error'
-      });
-    }
-  }
 
   // Fetch workflow when the component loads for the first time.
   // See notes about 'key' prop, to ensure states are reset:
@@ -49,9 +29,31 @@ function DataManager({
   // Also see general pattern notes:
   // https://react.dev/reference/react/useEffect#fetching-data-with-effects
   useEffect(() => {
-    if (!initialised) fetchWorkflow();
-    initialised = true;
-    return () => { initialised = false; };
+    async function fetchWorkflow() {
+      console.log('+++ fetchWorkflow');
+      try {
+        setApiData({
+          workflow: null,
+          status: 'fetching'
+        });
+
+        const wf = await apiClient.type('workflows').get(workflowId);
+        if (!wf) throw new Error('No workflow');
+
+        setApiData({
+          workflow: wf,
+          status: 'ready'
+        });
+      } catch (err) {
+        console.error('DataManager: ', err);
+        setApiData({
+          workflow: null,
+          status: 'error'
+        });
+      }
+    }
+
+    fetchWorkflow();
   }, [workflowId]);
 
   /*

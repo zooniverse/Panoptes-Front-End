@@ -1,3 +1,7 @@
+/*
+eslint-disable no-console
+ */
+
 import React from 'react';
 import { useWorkflowContext } from './context.js';
 
@@ -7,9 +11,7 @@ export default function Tester() {
   console.log('+++ workflow: ', workflow);
   console.log('+++ HELLO WORLD!');
 
-  function doUpdate(e) {
-
-  }
+  function doUpdate(e) {}
 
   if (!workflow) return null;
 
