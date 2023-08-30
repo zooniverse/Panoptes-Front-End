@@ -11,8 +11,8 @@ import { WorkflowContext } from './context.jsx';
 
 function DataManager({
   // key: to ensure DataManager renders FRESH (with states reset) whenever workflowId changes, use <DataManager key={workflowId} ... />
-  children,
-  workflowId
+  children = null,
+  workflowId = ''
 }) {
   let initialised = false;
   const [apiData, setApiData] = useState({
@@ -81,6 +81,7 @@ function DataManager({
   );
 }
 
+/* eslint-disable */
 DataManager.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -88,10 +89,6 @@ DataManager.propTypes = {
   ]),
   workflowId: PropTypes.string
 };
-
-DataManager.defaultProps = {
-  children: null,
-  workflowId: ''
-};
+/* eslint-enable */
 
 export default DataManager;
