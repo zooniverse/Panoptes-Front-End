@@ -1,22 +1,37 @@
-import DataManager from './DataManager.jsx'
-import Tester from './Tester.jsx'
+import React from 'react';
+import PropTypes from 'prop-types';
+import DataManager from './DataManager.jsx';
+import Tester from './Tester.jsx';
 
-export default function PagesEditor (props) {
-  console.log('+++ props: ', props)
-  const { params } = props
-
-  console.log('')
+function PagesEditor(props) {
+  const { params } = props;
 
   return (
     <div>
       <h5>Pages Editor</h5>
       <DataManager
-        key={params?.workflowId || '-'}  // 
+        key={params?.workflowId || '-'} //
         workflowId={params?.workflowId}
       >
-        <h6>Workflow {params?.workflowId}</h6>
+        <h6>
+          Workflow
+          {' '}
+          {params?.workflowId}
+        </h6>
         <Tester />
       </DataManager>
     </div>
-  )
+  );
 }
+
+PagesEditor.propTypes = {
+  params: PropTypes.shape({
+    workflowId: PropTypes.string
+  })
+};
+
+PagesEditor.defaultProps = {
+  params: {}
+};
+
+export default PagesEditor;

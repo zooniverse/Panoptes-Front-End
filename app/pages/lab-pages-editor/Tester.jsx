@@ -1,24 +1,28 @@
-import { useWorkflowContext } from './context.jsx'
+import React from 'react';
+import { useWorkflowContext } from './context.jsx';
 
-export default function Tester () {
-  const { workflow, update } = useWorkflowContext()
+export default function Tester() {
+  const { workflow, update } = useWorkflowContext();
 
-  console.log('+++ workflow: ', workflow)
-  console.log('+++ HELLO WORLD!')
+  console.log('+++ workflow: ', workflow);
+  console.log('+++ HELLO WORLD!');
 
-  function doUpdate (e) {
+  function doUpdate(e) {
 
   }
 
-  if (!workflow) return null
+  if (!workflow) return null;
 
   return (
-    <div style={{ pad: '1em', border: '1px solid #808080' }}>
+    <div>
       <h6>Tester</h6>
-      <div>Workflow is called "{workflow?.display_name}"</div>
-      <form onSubmit={() => { return false }}>
+      <div>
+        Workflow is called
+        {workflow?.display_name}
+      </div>
+      <form onSubmit={() => false}>
         <input defaultValue={workflow?.display_name} onBlur={doUpdate} />
       </form>
     </div>
-  )
+  );
 }
