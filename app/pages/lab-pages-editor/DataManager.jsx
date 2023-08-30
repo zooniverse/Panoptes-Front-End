@@ -6,7 +6,7 @@ the Panoptes service.
 
 import apiClient from 'panoptes-client/lib/api-client'
 import { useEffect, useState } from 'react'
-import { WorkflowContext } from './context.js'
+import { WorkflowContext } from './context.jsx'
 
 export default function DataManager ({
   // key: to ensure DataManager renders FRESH (with states reset) whenever workflowId changes, use <DataManager key={workflowId} ... />

@@ -1,5 +1,5 @@
-import DataManager from './DataManager.js'
-import Tester from './Tester.js'
+import DataManager from './DataManager.jsx'
+import Tester from './Tester.jsx'
 
 export default function PagesEditor (props) {
   console.log('+++ props: ', props)

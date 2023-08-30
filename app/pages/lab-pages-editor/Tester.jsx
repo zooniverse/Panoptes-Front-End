@@ -1,4 +1,4 @@
-import { useWorkflowContext } from './context'
+import { useWorkflowContext } from './context.jsx'
 
 export default function Tester () {
   const { workflow, update } = useWorkflowContext()
