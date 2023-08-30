@@ -1,5 +1,5 @@
 import React from 'react';
-import { useWorkflowContext } from './context.jsx';
+import { useWorkflowContext } from './context.js';
 
 export default function Tester() {
   const { workflow, update } = useWorkflowContext();
