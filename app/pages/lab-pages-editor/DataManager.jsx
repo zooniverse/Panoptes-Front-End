@@ -4,11 +4,12 @@ Responsible for fetching, updating, and saving Workflow resources from/to
 the Panoptes service.
  */
 
-/*
-eslint-disable no-console
- */
+// ESLint: don't import global React, and don't use .defaultProps.
+/* eslint-disable no-console */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/require-default-props */
 
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import apiClient from 'panoptes-client/lib/api-client';
 import { WorkflowContext } from './context.js';
@@ -83,7 +84,6 @@ function DataManager({
   );
 }
 
-/* eslint-disable */
 DataManager.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -91,6 +91,5 @@ DataManager.propTypes = {
   ]),
   workflowId: PropTypes.string
 };
-/* eslint-enable */
 
 export default DataManager;

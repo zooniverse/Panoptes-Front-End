@@ -1,8 +1,8 @@
-/*
-eslint-disable no-console
- */
+// ESLint: don't import global React, and don't use .defaultProps.
+/* eslint-disable no-console */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/require-default-props */
 
-import React from 'react';
 import { useWorkflowContext } from './context.js';
 
 export default function Tester() {
@@ -11,7 +11,10 @@ export default function Tester() {
   console.log('+++ workflow: ', workflow);
   console.log('+++ HELLO WORLD!');
 
-  function doUpdate(e) {}
+  function doUpdate(e) {
+    console.log('+++ doUpdate: ', e);
+    update();
+  }
 
   if (!workflow) return null;
 
