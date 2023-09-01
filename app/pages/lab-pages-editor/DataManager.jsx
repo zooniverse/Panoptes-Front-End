@@ -57,19 +57,36 @@ function DataManager({
     fetchWorkflow();
   }, [workflowId]);
 
-  /*
-  Updates the workflow with new data.
-   */
-  function update(data) {
-    console.log('+++ TODO');
-  }
-
   // Wrap contextData in a memo so it doesn't re-create a new object on every render.
   // See https://react.dev/reference/react/useContext#optimizing-re-renders-when-passing-objects-and-functions
-  const contextData = useMemo(() => ({
-    workflow: apiData.workflow,
-    update
-  }), [apiData.workflow]);
+  const contextData = useMemo(() => {
+    console.log('+++ DataManager.useMemo');
+
+    /*
+    Updates the workflow with new data.
+    */
+    async function update(data) {
+      console.log('+++ DataManager.update()');
+
+      setApiData({
+        workflow: apiData.workflow,
+        status: 'updating'
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Note to self: hang on, will setting setApiData() cause the useMemo to update perpetually?
+      setApiData({
+        workflow: apiData.workflow,
+        status: 'ready'
+      });
+    }
+
+    return {
+      workflow: apiData.workflow,
+      update
+    };
+  }, [apiData.workflow]); // Note to self: change this to workflowId?
 
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
   // if (!workflow) return null

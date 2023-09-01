@@ -13,7 +13,9 @@ export default function Tester() {
 
   function doUpdate(e) {
     console.log('+++ doUpdate: ', e);
-    update();
+    update({
+      display_name: e.target.value || ''
+    });
   }
 
   if (!workflow) return null;
