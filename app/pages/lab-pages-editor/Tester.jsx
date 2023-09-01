@@ -7,9 +7,7 @@ import { useWorkflowContext } from './context.js';
 
 export default function Tester() {
   const { workflow, update } = useWorkflowContext();
-
-  console.log('+++ workflow: ', workflow);
-  console.log('+++ HELLO WORLD!');
+  console.log('+++ <Tester> render');
 
   function doUpdate(e) {
     console.log('+++ doUpdate: ', e);
