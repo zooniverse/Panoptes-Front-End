@@ -67,13 +67,15 @@ function DataManager({
     */
     async function update(data) {
       console.log('+++ DataManager.update()');
+      const wf = apiData.workflow;
+      if (!wf) return;
 
       setApiData({
-        workflow: apiData.workflow,
+        workflow: wf,
         status: 'updating'
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await wf.update(data).save();
 
       // Note to self: hang on, will setting setApiData() cause the useMemo to update perpetually?
       setApiData({
