@@ -72,16 +72,18 @@ function DataManager({
       const wf = apiData.workflow;
       if (!wf) return;
 
-      setApiData({
-        workflow: wf,
+      setApiData((prevState) => ({
+        ...prevState,
         status: 'updating'
-      });
+      }));
 
-      await wf.update(data).save();
+      const newWorkflow = await wf.update(data).save();
+
+      console.log('+++ are they the same? ', newWorkflow === wf);
 
       // Note to self: hang on, will setting setApiData() cause the useMemo to update perpetually?
       setApiData({
-        workflow: apiData.workflow,
+        workflow: newWorkflow,
         status: 'ready'
       });
 
@@ -93,7 +95,7 @@ function DataManager({
       // has changed when the change is local to the resource itself?
       // Does the workflow object have an internal version tracker?
       // @shaunanoordin 20230902
-      setRandomFlagToPromptMemoUpdate(Math.floor(Math.random() * 10000));
+      // setRandomFlagToPromptMemoUpdate(Math.floor(Math.random() * 10000));
     }
 
     return {
