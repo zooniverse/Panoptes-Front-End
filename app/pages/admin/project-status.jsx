@@ -412,7 +412,7 @@ class ProjectStatus extends Component {
               <div>
                 <h4>Classifier 2.0 (rewrite) settings</h4>
                 <div id="subject-viewer-help-text">
-                  <p>Note that 'JSON data charts' is preferred over TESS Light Curve for JSON subject data. The TESS light curve viewer is built specifically for their requirements. The code in the viewer assumes the project is using a task like them. Individual JSON data viewers are deprecated and should not be used on new projects.</p>
+                  <p>Note that 'JSON data charts' is preferred over TESS Light Curve for JSON subject data. The TESS light curve viewer is built specifically for their requirements. The code in the viewer assumes the project is using a task like them. <strong>Individual JSON data viewers are deprecated and should not be used on new projects.</strong></p>
                   <p>Subjects with a <abbr title="Multipurpose Internet Mail Extensions">MIME</abbr> type of <code>application/json</code> will use the JSON data setting by default.</p>
                 </div>
 
