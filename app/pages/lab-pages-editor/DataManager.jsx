@@ -24,8 +24,6 @@ function DataManager({
     status: 'ready'
   });
 
-  const [randomFlagToPromptMemoUpdate, setRandomFlagToPromptMemoUpdate] = useState(0);
-
   // Fetch workflow when the component loads for the first time.
   // See notes about 'key' prop, to ensure states are reset:
   // https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes
@@ -79,30 +77,17 @@ function DataManager({
 
       const newWorkflow = await wf.update(data).save();
 
-      console.log('+++ are they the same? ', newWorkflow === wf);
-
-      // Note to self: hang on, will setting setApiData() cause the useMemo to update perpetually?
       setApiData({
-        workflow: newWorkflow,
+        workflow: newWorkflow, // Note: newWorkflow is actually the same as the old wf, so useMemo will have to listen to status changing instead.
         status: 'ready'
       });
-
-      // Hmmm... this seems to be the only thing that's updating the context properly.
-      // Without it, it seems that setApiData() isn't changing the value
-      // (object reference) of`apiData.workflow`, which means the useMemo
-      // doesn't realise that oohhh wait I think I get it now.
-      // TODO: how to indicate that the value of the apiData.workflow object
-      // has changed when the change is local to the resource itself?
-      // Does the workflow object have an internal version tracker?
-      // @shaunanoordin 20230902
-      // setRandomFlagToPromptMemoUpdate(Math.floor(Math.random() * 10000));
     }
 
     return {
       workflow: apiData.workflow,
       update
     };
-  }, [apiData.workflow, randomFlagToPromptMemoUpdate]);
+  }, [apiData.workflow, apiData.status]);
 
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
   // if (!workflow) return null
