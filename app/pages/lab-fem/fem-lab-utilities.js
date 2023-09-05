@@ -1,3 +1,4 @@
+import apiClient from 'panoptes-client/lib/api-client';
 /*
 These utilities are used to determine if a Zooniverse project should be using
 the FEM-compatible (Front-End-Monorepo) version of the Project Builder (Lab).
@@ -27,3 +28,16 @@ export function isThisProjectUsingFEMLab (project, location) {
 }
 
 export const FEM_LAB_PREVIEW_HOST = 'https://frontend.preview.zooniverse.org'
+
+export async function isWorkflowUsingJSONSubjects(workflow) {
+  if (workflow?.configuration.subject_viewer === 'jsonData') {
+    return true;
+  }
+  const subjects = await apiClient.type('subjects').get({ workflow_id: workflow.id });
+  return subjects.some(subject => {
+    return subject.locations.some(l => {
+      const [ key ] = Object.keys(l);
+      return key === 'application/json';
+    });
+  });
+}
