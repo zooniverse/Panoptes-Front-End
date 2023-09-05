@@ -23,6 +23,7 @@ function DataManager({
     workflow: null,
     status: 'ready'
   });
+  const [updateCounter, setUpdateCounter] = useState(0); // Number of updates so far, only used to trigger useMemo.
 
   // Fetch workflow when the component loads for the first time.
   // See notes about 'key' prop, to ensure states are reset:
@@ -57,10 +58,30 @@ function DataManager({
     fetchWorkflow();
   }, [workflowId]);
 
+  // Option B
+  useEffect(() => {
+    // When workflow changes, update the counter so useMemo knows to update the context.
+    function onWorkflowChange() {
+      console.log('+++ 🟡 onWorkflowChange');
+      setUpdateCounter((uc) => uc + 1);
+    }
+
+    function onWorkflowSave() {
+      console.log('+++ 🔵 onWorkflowSave');
+    }
+
+    apiClient.listen('change', onWorkflowChange);
+    apiClient.listen('save', onWorkflowSave);
+    return () => {
+      apiClient.stopListening('change', onWorkflowChange);
+      apiClient.stopListening('save', onWorkflowSave);
+    };
+  }, [apiClient]);
+
   // Wrap contextData in a memo so it doesn't re-create a new object on every render.
   // See https://react.dev/reference/react/useContext#optimizing-re-renders-when-passing-objects-and-functions
   const contextData = useMemo(() => {
-    console.log('+++ DataManager.useMemo');
+    console.log('+++ 🌀 DataManager.useMemo');
 
     /*
     Updates the workflow with new data.
@@ -75,7 +96,9 @@ function DataManager({
         status: 'updating'
       }));
 
+      console.log('+++ 🔴 DataManager.update() updating...');
       const newWorkflow = await wf.update(data).save();
+      console.log('+++ 🟢 DataManager.update() complete');
 
       setApiData({
         workflow: newWorkflow, // Note: newWorkflow is actually the same as the old wf, so useMemo will have to listen to status changing instead.
@@ -87,7 +110,8 @@ function DataManager({
       workflow: apiData.workflow,
       update
     };
-  }, [apiData.workflow, apiData.status]);
+  // }, [apiData.workflow, apiData.status]); // Option A
+  }, [apiData.workflow, updateCounter]); // Option B
 
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
   // if (!workflow) return null
