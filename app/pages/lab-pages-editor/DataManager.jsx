@@ -60,6 +60,7 @@ function DataManager({
 
   // Option B
   useEffect(() => {
+    const wf = apiData.workflow;
     // When workflow changes, update the counter so useMemo knows to update the context.
     function onWorkflowChange() {
       console.log('+++ 🟡 onWorkflowChange');
@@ -70,13 +71,13 @@ function DataManager({
       console.log('+++ 🔵 onWorkflowSave');
     }
 
-    apiClient.listen('change', onWorkflowChange);
-    apiClient.listen('save', onWorkflowSave);
+    wf?.listen('change', onWorkflowChange);
+    wf?.listen('save', onWorkflowSave);
     return () => {
-      apiClient.stopListening('change', onWorkflowChange);
-      apiClient.stopListening('save', onWorkflowSave);
+      wf?.stopListening('change', onWorkflowChange);
+      wf?.stopListening('save', onWorkflowSave);
     };
-  }, [apiClient]);
+  }, [apiData.workflow]);
 
   // Wrap contextData in a memo so it doesn't re-create a new object on every render.
   // See https://react.dev/reference/react/useContext#optimizing-re-renders-when-passing-objects-and-functions
