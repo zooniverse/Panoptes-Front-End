@@ -8,12 +8,10 @@ import { useWorkflowContext } from './context.js';
 export default function Tester() {
   const { workflow, update } = useWorkflowContext();
 
-  console.log('+++ workflow: ', workflow);
-  console.log('+++ HELLO WORLD!');
-
   function doUpdate(e) {
-    console.log('+++ doUpdate: ', e);
-    update();
+    update({
+      display_name: e.target.value || ''
+    });
   }
 
   if (!workflow) return null;
