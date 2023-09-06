@@ -1,4 +1,4 @@
-/* eslint-disable prefer-arrow-callback */
+/* eslint-disable prefer-arrow-callback, react/jsx-filename-extension */
 
 import React from 'react';
 import assert from 'assert';
@@ -7,28 +7,33 @@ import sinon from 'sinon';
 
 import talkClient from 'panoptes-client/lib/talk-client';
 
+import Loading from '../../components/loading-indicator';
 import NotificationsPage from './index';
 
 const testNotifications = [
   {
     id: '123',
-    section: 'project-4321'
+    section: 'project-4321',
+    getMeta: () => ({ next_page: null })
   },
   {
     id: '124',
-    section: 'project-1234'
+    section: 'project-1234',
+    getMeta: () => ({ next_page: null })
   },
   {
     id: '125',
-    section: 'zooniverse'
+    section: 'zooniverse',
+    getMeta: () => ({ next_page: null })
   },
   {
     id: '126',
-    section: 'project-4321'
+    section: 'project-4321',
+    getMeta: () => ({ next_page: null })
   }
 ];
 
-describe('NotificationsPage', function() {
+describe('NotificationsPage', function () {
   describe('without a user', function () {
     let wrapper;
 
@@ -42,6 +47,43 @@ describe('NotificationsPage', function() {
   });
 
   describe('with a user', function () {
+    describe('with an error', function () {
+      let wrapper;
+      const testError = new Error('Test error');
+
+      before(function () {
+        sinon.stub(talkClient, 'request').callsFake(() => Promise.reject(testError));
+
+        wrapper = mount(<NotificationsPage user={{ id: '456' }} />);
+      });
+
+      after(function () {
+        talkClient.request.restore();
+      });
+
+      it('should render an error message', function () {
+        assert.equal(wrapper.find('.centering').text(), 'Test error');
+      });
+    });
+
+    describe('while loading', function () {
+      let wrapper;
+
+      before(function () {
+        sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve(null));
+
+        wrapper = mount(<NotificationsPage user={{ id: '456' }} />);
+      });
+
+      after(function () {
+        talkClient.request.restore();
+      });
+
+      it('should render a loading message', function () {
+        assert.equal(wrapper.find(Loading).length, 1);
+      });
+    });
+
     describe('without notifications', function () {
       let wrapper;
 
@@ -60,45 +102,24 @@ describe('NotificationsPage', function() {
       });
     });
 
-    // The following tests are failing because the CollapsableSection component and Paginator component (child of NotificationSection) require a router context. There are also issues with enzyme, coffeescript, and child class components.
+    // The following tests are failing because the CollapsableSection component and Paginator component (child of NotificationSection) require a router context. There are also issues with enzyme, coffeescript, and children that are class components.
 
-  //   describe('with a project and notifications', function () {
-  //     let wrapper;
-  //     let sections;
+    // describe('with notifications', function () {
+    //   let wrapper;
 
-  //     before(function () {
-  //       sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve(testNotifications));
+    //   before(function () {
+    //     sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve(testNotifications));
 
-  //       wrapper = mount(
-  //         <NotificationsPage
-  //           user={{ id: '456' }}
-  //           project={{ id: '4321' }}
-  //         />,
-  //         { context: { router: { location: { pathname: '/notifications' }}}}
-  //       );
-  //       sections = wrapper.find('CollapsableSection');
-  //     });
+    //     wrapper = mount(<NotificationsPage user={{ id: '456' }} />);
+    //   });
 
-  //     after(function () {
-  //       talkClient.request.restore();
-  //     });
+    //   after(function () {
+    //     talkClient.request.restore();
+    //   });
 
-  //     it('should render the correct number of sections', function () {
-  //       assert.equal(sections.length, 3);
-  //     });
-
-  //     it('should render the Zooniverse section first', function () {
-  //       assert.equal(sections.at(0).prop('section'), 'zooniverse');
-  //     });
-
-  //     it('should expand the correct section', function () {
-  //       assert.equal(sections.at(0).prop('expanded'), false);
-
-  //       assert.equal(sections.at(1).prop('section', 'project-4321'));
-  //       assert.equal(sections.at(1).prop('expanded'), true);
-
-  //       assert.equal(sections.at(2).prop('expanded'), false);
-  //     });
-  //   });
+    //   it('should render notifications sections', function () {
+    //     assert.equal(wrapper.find('.notification-section').length, 3);
+    //   });
+    // });
   });
 });

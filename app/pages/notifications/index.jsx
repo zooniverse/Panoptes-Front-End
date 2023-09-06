@@ -1,10 +1,17 @@
 import counterpart from 'counterpart';
-import talkClient from 'panoptes-client/lib/talk-client';
-import { shape, string } from 'prop-types';
+import {
+  arrayOf,
+  bool,
+  func,
+  oneOfType,
+  shape,
+  string
+} from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import Translate from 'react-translate-component';
 
+import useNotifications from './useNotifications';
 import NotificationSection from './notification-section';
 import CollapsableSection from '../../components/collapsable-section';
 import Loading from '../../components/loading-indicator';
@@ -19,15 +26,64 @@ counterpart.registerTranslations('en', {
   }
 });
 
-export default function NotificationsPage({ location, project, user }) {
-  const [groupedNotifications, setNotifications] = useState([]);
-  const [expanded, setExpanded] = useState(false);
+export function NotificationsSections({
+  expanded,
+  groupedNotifications,
+  handleExpand,
+  location,
+  user
+}) {
+  return (
+    <div>
+      <div className="list">
+        {groupedNotifications.map((notification) => {
+          const opened = notification.section === expanded || groupedNotifications.length === 1;
+          return (
+            <CollapsableSection
+              key={notification.section}
+              callbackParent={() => {
+                const section = expanded === notification.section ? false : notification.section;
+                handleExpand(section);
+              }}
+              expanded={opened}
+              section={notification.section}
+            >
+              <NotificationSection
+                key={notification.id}
+                location={location}
+                projectID={notification.project_id}
+                slug={notification.project_slug}
+                user={user}
+              />
+            </CollapsableSection>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
-  useEffect(() => {
-    if (user) {
-      getNotifications();
-    }
-  }, [user]);
+const DEFAULT_HANDLER = () => true;
+
+NotificationsSections.defaultProps = {
+  expanded: false,
+  groupedNotifications: [],
+  handleExpand: DEFAULT_HANDLER
+};
+
+NotificationsSections.propTypes = {
+  expanded: oneOfType([bool, string]),
+  groupedNotifications: arrayOf(shape({ section: string })),
+  handleExpand: func
+};
+
+export default function NotificationsPage({ location, project, user }) {
+  const [expanded, setExpanded] = useState(false);
+  const {
+    loading,
+    notifications,
+    error
+  } = useNotifications(user);
 
   useEffect(() => {
     if (project) {
@@ -35,10 +91,14 @@ export default function NotificationsPage({ location, project, user }) {
     }
   }, [project]);
 
-  function groupNotifications(notifications) {
+  function handleExpand(section) {
+    setExpanded(section);
+  }
+
+  function groupNotifications(allNotifications) {
     const projectSections = [];
     const projectNotifications = [];
-    notifications.forEach((notification) => {
+    allNotifications.forEach((notification) => {
       if (projectSections.indexOf(notification.section) < 0) {
         if (notification.section === 'zooniverse') {
           projectSections.unshift(notification.section);
@@ -49,88 +109,35 @@ export default function NotificationsPage({ location, project, user }) {
         }
       }
     });
-    if (project && projectSections.indexOf(`project-${project.id}`) < 0) {
-      talkClient.type('notifications').get({ page: 1, page_size: 1, section: `project-${project.id}` })
-        .then(([notification]) => {
-          if (notification) {
-            projectNotifications.push(notification);
-            setNotifications(projectNotifications);
-            setExpanded(`project-${project.id}`);
-          }
-        });
-    }
-
-    setNotifications(projectNotifications);
+    return projectNotifications;
   }
 
-  function getNotifications() {
-    talkClient.type('notifications').get({ page: 1, page_size: 50 })
-      .then((notifications) => {
-        groupNotifications(notifications);
-      })
-      .then(() => {
-        if (project) setExpanded(`project-${project.id}`);
-      })
-      .catch((e) => {
-        console.error('Unable to load notifications', e);
-      });
+  let groupedNotifications = [];
+  if (notifications?.length > 0) {
+    groupedNotifications = groupNotifications(notifications);
   }
 
-  function renderNotifications() {
-    let notificationView;
-
-    if (groupedNotifications.length > 0) {
-      notificationView = (
-        <div>
-          <div className="list">
-            {groupedNotifications.map((notification) => {
-              const opened = notification.section === expanded || groupedNotifications.length === 1;
-              return (
-                <CollapsableSection
-                  key={notification.section}
-                  callbackParent={() => {
-                    setExpanded(expanded === notification.section ? false : notification.section);
-                  }}
-                  expanded={opened}
-                  section={notification.section}
-                >
-                  <NotificationSection
-                    key={notification.id}
-                    location={location}
-                    projectID={notification.project_id}
-                    slug={notification.project_slug}
-                    user={user}
-                  />
-                </CollapsableSection>
-              );
-            })}
-          </div>
-        </div>
-      );
-    } else if (groupedNotifications.length === 0) {
-      notificationView = (
-        <div className="centering talk-module notifications-title">
-          <Translate content="notifications.noNotifications" />
-          {' '}
-          <Translate content="notifications.participation" />
-        </div>
-      );
-    } else {
-      notificationView = <Loading />;
-    }
-
-    return notificationView;
-  }
-
-  let signedIn;
   const headerStyle = project ? 'notifications-title talk-module' : 'notifications-title';
 
-  if (user) {
-    signedIn = renderNotifications();
-  } else {
-    signedIn = (
-      <div className="centering talk-module">
-        <Translate content="notifications.signedOut" />
+  let content = '';
+  if (!user) {
+    content = (
+      <Translate content="notifications.signedOut" />
+    );
+  } else if (error) {
+    content = (
+      <span>{error.message}</span>
+    );
+  } else if (loading) {
+    content = (
+      <Loading />
+    );
+  } else if (notifications?.length === 0) {
+    content = (
+      <div className="centering talk-module notifications-title">
+        <Translate content="notifications.noNotifications" />
+        {' '}
+        <Translate content="notifications.participation" />
       </div>
     );
   }
@@ -142,7 +149,19 @@ export default function NotificationsPage({ location, project, user }) {
         <h3 className={headerStyle}>
           <Translate content="notifications.title" />
         </h3>
-        {signedIn}
+        {content ? (
+          <div className="centering talk-module">
+            {content}
+          </div>
+        ) : (
+          <NotificationsSections
+            expanded={expanded}
+            groupedNotifications={groupedNotifications}
+            handleExpand={handleExpand}
+            location={location}
+            user={user}
+          />
+        )}
       </div>
     </div>
   );
