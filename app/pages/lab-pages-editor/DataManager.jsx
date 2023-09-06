@@ -32,7 +32,6 @@ function DataManager({
   // https://react.dev/reference/react/useEffect#fetching-data-with-effects
   useEffect(() => {
     async function fetchWorkflow() {
-      console.log('+++ fetchWorkflow');
       try {
         setApiData({
           workflow: null,
@@ -58,37 +57,23 @@ function DataManager({
     fetchWorkflow();
   }, [workflowId]);
 
-  // Option B
+  // Listen for workflow changes, and update a counter to prompt useMemo to update the context.
   useEffect(() => {
     const wf = apiData.workflow;
-    // When workflow changes, update the counter so useMemo knows to update the context.
     function onWorkflowChange() {
-      console.log('+++ 🟡 onWorkflowChange');
       setUpdateCounter((uc) => uc + 1);
     }
-
-    function onWorkflowSave() {
-      console.log('+++ 🔵 onWorkflowSave');
-    }
-
     wf?.listen('change', onWorkflowChange);
-    wf?.listen('save', onWorkflowSave);
     return () => {
       wf?.stopListening('change', onWorkflowChange);
-      wf?.stopListening('save', onWorkflowSave);
     };
   }, [apiData.workflow]);
 
   // Wrap contextData in a memo so it doesn't re-create a new object on every render.
   // See https://react.dev/reference/react/useContext#optimizing-re-renders-when-passing-objects-and-functions
   const contextData = useMemo(() => {
-    console.log('+++ 🌀 DataManager.useMemo');
-
-    /*
-    Updates the workflow with new data.
-    */
+    // Updates the workflow with new data.
     async function update(data) {
-      console.log('+++ DataManager.update()');
       const wf = apiData.workflow;
       if (!wf) return;
 
@@ -97,9 +82,7 @@ function DataManager({
         status: 'updating'
       }));
 
-      console.log('+++ 🔴 DataManager.update() updating...');
       const newWorkflow = await wf.update(data).save();
-      console.log('+++ 🟢 DataManager.update() complete');
 
       setApiData({
         workflow: newWorkflow, // Note: newWorkflow is actually the same as the old wf, so useMemo will have to listen to status changing instead.
@@ -111,8 +94,7 @@ function DataManager({
       workflow: apiData.workflow,
       update
     };
-  // }, [apiData.workflow, apiData.status]); // Option A
-  }, [apiData.workflow, updateCounter]); // Option B
+  }, [apiData.workflow, updateCounter]);
 
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
   // if (!workflow) return null
