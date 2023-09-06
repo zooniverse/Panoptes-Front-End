@@ -63,11 +63,16 @@ export default class NotificationSection extends Component {
 
   componentDidMount() {
     this.getUnreadCount();
+
+    if (this.props.expanded) {
+      this.getNotifications(this.props.location.query.page);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     const pageChanged = nextProps.location.query.page !== this.state.page;
     const userChanged = nextProps.user && nextProps.user !== this.props.user;
+
     if ((pageChanged || userChanged) && nextProps.expanded) {
       this.getNotifications(nextProps.location.query.page);
     }
@@ -302,6 +307,11 @@ export default class NotificationSection extends Component {
 
 NotificationSection.propTypes = {
   expanded: PropTypes.bool,
+  location: PropTypes.shape({
+    query: PropTypes.shape({
+      page: PropTypes.string
+    })
+  }),
   projectID: PropTypes.string,
   section: PropTypes.string,
   slug: PropTypes.string,
@@ -318,5 +328,10 @@ NotificationSection.contextTypes = {
 
 NotificationSection.defaultProps = {
   expanded: false,
+  location: {
+    query: {
+      page: '1'
+    }
+  },
   toggleSection: () => {}
 };

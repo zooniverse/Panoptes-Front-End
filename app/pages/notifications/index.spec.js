@@ -1,82 +1,104 @@
-// These tests are skipped until a solution can be found for cjsx imports with the coffee-script test compiler
+/* eslint-disable prefer-arrow-callback */
 
 import React from 'react';
 import assert from 'assert';
-import Notifications from './index';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
+import talkClient from 'panoptes-client/lib/talk-client';
+
+import NotificationsPage from './index';
+
 const testNotifications = [
-  { id: '123',
+  {
+    id: '123',
     section: 'project-4321'
   },
-  { id: '124',
+  {
+    id: '124',
     section: 'project-1234'
   },
-  { id: '125',
+  {
+    id: '125',
     section: 'zooniverse'
   },
-  { id: '126',
+  {
+    id: '126',
     section: 'project-4321'
   }
 ];
 
-describe('Notifications', function() {
-  let wrapper;
-  let notifications;
+describe('NotificationsPage', function() {
+  describe('without a user', function () {
+    let wrapper;
 
-  describe('it will display according to user', function() {
-    it('will ask user to sign in', function() {
-      wrapper = mount(<Notifications user={null} />);
-      assert.equal(wrapper.find('.talk-module').text(), 'You\'re not signed in.');
+    before(function () {
+      wrapper = mount(<NotificationsPage user={null} />);
     });
 
-    it('will notify when no notifications present', function() {
-      const stub = sinon.stub(Notifications.prototype, 'componentDidMount');
-      wrapper = mount(<Notifications user={{ id: 1 }} />);
-      assert(wrapper.contains(<span>You have no notifications.</span>));
-      stub.restore();
+    it('should render not signed in message', function () {
+      assert.equal(wrapper.find('.centering').text(), 'You\'re not signed in.');
     });
   });
 
-  describe('it correctly display projects', function() {
-    beforeEach(function () {
-      wrapper = shallow(
-        <Notifications user={{ id: 1 }} />,
-        { disableLifecycleMethods: true }
-      );
-      wrapper.instance().groupNotifications(testNotifications);
-      notifications = shallow(wrapper.instance().renderNotifications());
+  describe('with a user', function () {
+    describe('without notifications', function () {
+      let wrapper;
+
+      before(function () {
+        sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve([]));
+
+        wrapper = mount(<NotificationsPage user={{ id: '456' }} />);
+      });
+
+      after(function () {
+        talkClient.request.restore();
+      });
+
+      it('should render a no notifications message', function () {
+        assert.equal(wrapper.find('.centering').text(), 'You have no notifications. You can receive notifications by participating in Talk, following discussions, and receiving messages.');
+      });
     });
 
-    it('will place zooniverse section first', function() {
-      assert.equal(notifications.find('.list').childAt(0).prop('section'), 'zooniverse');
-    });
+    // The following tests are failing because the CollapsableSection component and Paginator component (child of NotificationSection) require a router context. There are also issues with enzyme, coffeescript, and child class components.
 
-    it('will display correct number of sections', function() {
-      assert.equal(notifications.find('.list').children().length, 3);
-    });
-  });
+  //   describe('with a project and notifications', function () {
+  //     let wrapper;
+  //     let sections;
 
-  describe('will open sections correctly', function() {
-    beforeEach(function () {
-      wrapper = shallow(
-        <Notifications user={{ id: 1 }} />,
-        { disableLifecycleMethods: true }
-      );
-      wrapper.setState({ expanded: 'project-1234' });
-      wrapper.instance().groupNotifications(testNotifications);
-      notifications = shallow(wrapper.instance().renderNotifications());
-    });
+  //     before(function () {
+  //       sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve(testNotifications));
 
-    it('will open the active project', function() {
-      const activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-1234');
-      assert.equal(activeProject.prop('expanded'), true);
-    });
+  //       wrapper = mount(
+  //         <NotificationsPage
+  //           user={{ id: '456' }}
+  //           project={{ id: '4321' }}
+  //         />,
+  //         { context: { router: { location: { pathname: '/notifications' }}}}
+  //       );
+  //       sections = wrapper.find('CollapsableSection');
+  //     });
 
-    it('will keep other projects closed', function() {
-      const activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-4321');
-      assert.equal(activeProject.prop('expanded'), false);
-    });
+  //     after(function () {
+  //       talkClient.request.restore();
+  //     });
+
+  //     it('should render the correct number of sections', function () {
+  //       assert.equal(sections.length, 3);
+  //     });
+
+  //     it('should render the Zooniverse section first', function () {
+  //       assert.equal(sections.at(0).prop('section'), 'zooniverse');
+  //     });
+
+  //     it('should expand the correct section', function () {
+  //       assert.equal(sections.at(0).prop('expanded'), false);
+
+  //       assert.equal(sections.at(1).prop('section', 'project-4321'));
+  //       assert.equal(sections.at(1).prop('expanded'), true);
+
+  //       assert.equal(sections.at(2).prop('expanded'), false);
+  //     });
+  //   });
   });
 });

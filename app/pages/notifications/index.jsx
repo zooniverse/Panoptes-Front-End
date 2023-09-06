@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import counterpart from 'counterpart';
-import Translate from 'react-translate-component';
 import talkClient from 'panoptes-client/lib/talk-client';
+import { shape, string } from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import Loading from '../../components/loading-indicator';
-import NotificationSection from '../notifications/notification-section';
+import Translate from 'react-translate-component';
+
+import NotificationSection from './notification-section';
 import CollapsableSection from '../../components/collapsable-section';
+import Loading from '../../components/loading-indicator';
 
 counterpart.registerTranslations('en', {
   notifications: {
@@ -18,46 +19,23 @@ counterpart.registerTranslations('en', {
   }
 });
 
-export default class NotificationsPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onChildChanged = this.onChildChanged.bind(this);
-    this.state = {
-      projNotifications: [],
-      expanded: false
-    };
-  }
+export default function NotificationsPage({ location, project, user }) {
+  const [groupedNotifications, setNotifications] = useState([]);
+  const [expanded, setExpanded] = useState(false);
 
-  componentDidMount() {
-    if (this.props.user) {
-      this.getProjectNotifications();
+  useEffect(() => {
+    if (user) {
+      getNotifications();
     }
-  }
+  }, [user]);
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.user !== null && nextProps.user !== this.props.user) {
-      this.getProjectNotifications();
+  useEffect(() => {
+    if (project) {
+      setExpanded(`project-${project.id}`);
     }
-  }
+  }, [project]);
 
-  onChildChanged(section) {
-    this.setState({ expanded: section });
-  }
-
-  getProjectNotifications() {
-    talkClient.type('notifications').get({ page: 1, page_size: 50 })
-    .then((projNotifications) => {
-      this.groupNotifications(projNotifications);
-    })
-    .then(() => {
-      if (this.props.project) this.setState({ expanded: `project-${this.props.project.id}` });
-    })
-    .catch((e) => {
-      console.error('Unable to load notifications', e);
-    });
-  }
-
-  groupNotifications(notifications) {
+  function groupNotifications(notifications) {
     const projectSections = [];
     const projectNotifications = [];
     notifications.forEach((notification) => {
@@ -71,36 +49,57 @@ export default class NotificationsPage extends React.Component {
         }
       }
     });
-    if (this.props.project && projectSections.indexOf(`project-${this.props.project.id}`) < 0) {
-      talkClient.type('notifications').get({ page: 1, page_size: 1, section: `project-${this.props.project.id}` })
-      .then(([notification]) => {
-        if (notification) {
-          projectNotifications.push(notification);
-          this.setState({ projNotifications: projectNotifications });
-          this.setState({ expanded: `project-${this.props.project.id}` });
-        }
-      });
+    if (project && projectSections.indexOf(`project-${project.id}`) < 0) {
+      talkClient.type('notifications').get({ page: 1, page_size: 1, section: `project-${project.id}` })
+        .then(([notification]) => {
+          if (notification) {
+            projectNotifications.push(notification);
+            setNotifications(projectNotifications);
+            setExpanded(`project-${project.id}`);
+          }
+        });
     }
-    this.setState({ projNotifications: projectNotifications });
+
+    setNotifications(projectNotifications);
   }
 
-  renderNotifications() {
+  function getNotifications() {
+    talkClient.type('notifications').get({ page: 1, page_size: 50 })
+      .then((notifications) => {
+        groupNotifications(notifications);
+      })
+      .then(() => {
+        if (project) setExpanded(`project-${project.id}`);
+      })
+      .catch((e) => {
+        console.error('Unable to load notifications', e);
+      });
+  }
+
+  function renderNotifications() {
     let notificationView;
 
-    if (this.state.projNotifications.length > 0) {
+    if (groupedNotifications.length > 0) {
       notificationView = (
         <div>
           <div className="list">
-            {this.state.projNotifications.map((notification, i) => {
-              const opened = notification.section === this.state.expanded || this.state.projNotifications.length === 1;
+            {groupedNotifications.map((notification) => {
+              const opened = notification.section === expanded || groupedNotifications.length === 1;
               return (
-                <CollapsableSection key={i} callbackParent={this.onChildChanged} expanded={opened} section={notification.section}>
+                <CollapsableSection
+                  key={notification.section}
+                  callbackParent={() => {
+                    setExpanded(expanded === notification.section ? false : notification.section);
+                  }}
+                  expanded={opened}
+                  section={notification.section}
+                >
                   <NotificationSection
                     key={notification.id}
-                    location={this.props.location}
+                    location={location}
                     projectID={notification.project_id}
                     slug={notification.project_slug}
-                    user={this.props.user}
+                    user={user}
                   />
                 </CollapsableSection>
               );
@@ -108,10 +107,11 @@ export default class NotificationsPage extends React.Component {
           </div>
         </div>
       );
-    } else if (this.state.projNotifications.length === 0) {
+    } else if (groupedNotifications.length === 0) {
       notificationView = (
         <div className="centering talk-module notifications-title">
-          <Translate content="notifications.noNotifications" />{' '}
+          <Translate content="notifications.noNotifications" />
+          {' '}
           <Translate content="notifications.participation" />
         </div>
       );
@@ -122,44 +122,53 @@ export default class NotificationsPage extends React.Component {
     return notificationView;
   }
 
-  render() {
-    let signedIn;
-    const headerStyle = this.props.project ? 'notifications-title talk-module' : 'notifications-title';
+  let signedIn;
+  const headerStyle = project ? 'notifications-title talk-module' : 'notifications-title';
 
-    if (this.props.user) {
-      signedIn = this.renderNotifications();
-    } else {
-      signedIn = (
-        <div className="centering talk-module">
-          <Translate content="notifications.signedOut" />
-        </div>
-      );
-    }
-
-    return (
-      <div className="talk notifications">
-        <Helmet title={counterpart("notifications.header")} />
-        <div className="content-container">
-          <h3 className={headerStyle}>
-            <Translate content="notifications.title" />
-          </h3>
-
-          {signedIn}
-        </div>
+  if (user) {
+    signedIn = renderNotifications();
+  } else {
+    signedIn = (
+      <div className="centering talk-module">
+        <Translate content="notifications.signedOut" />
       </div>
     );
   }
+
+  return (
+    <div className="talk notifications">
+      <Helmet title={counterpart('notifications.header')} />
+      <div className="content-container">
+        <h3 className={headerStyle}>
+          <Translate content="notifications.title" />
+        </h3>
+        {signedIn}
+      </div>
+    </div>
+  );
 }
 
+NotificationsPage.defaultProps = {
+  location: {
+    query: {
+      page: '1'
+    }
+  },
+  project: null,
+  user: null
+};
+
 NotificationsPage.propTypes = {
-  location: PropTypes.shape({
-    query: PropTypes.object
+  location: shape({
+    query: shape({
+      page: string
+    })
   }),
-  project: PropTypes.shape({
-    id: PropTypes.string
+  project: shape({
+    id: string
   }),
-  user: PropTypes.shape({
-    display_name: PropTypes.string,
-    login: PropTypes.string
+  user: shape({
+    display_name: string,
+    login: string
   })
 };
