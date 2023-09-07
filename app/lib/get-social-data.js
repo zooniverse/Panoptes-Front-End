@@ -20,7 +20,7 @@ function parseFeedPost(post) {
     id: post.ID,
     title: removeEntities(post.title),
     excerpt: removeEntities(post.excerpt),
-    created_at: post.date,
+    created_at: new Date(post.date),
     link: post.URL,
     image: post.featured_image
   };
