@@ -61,7 +61,7 @@ async function getBlogPosts() {
     });
     return posts
       .map(parseFeedPost)
-      .sort((a,b) => a.created_at < b.created_at);
+      .sort((a,b) => b.created_at - a.created_at);
   } catch (error) {
     console.error(error);
   }
