@@ -33,26 +33,41 @@ export function NotificationsSections({
   location,
   user
 }) {
+  const notificationSectionIDs = Object.keys(groupedNotifications);
+  if (notificationSectionIDs.includes('zooniverse')) {
+    notificationSectionIDs.splice(notificationSectionIDs.indexOf('zooniverse'), 1);
+    notificationSectionIDs.unshift('zooniverse');
+  }
+
   return (
     <div>
       <div className="list">
-        {groupedNotifications.map((notification) => {
-          const opened = notification.section === expanded || groupedNotifications.length === 1;
+        {notificationSectionIDs.map((notificationSectionID) => {
+          const opened = notificationSectionID === expanded || notificationSectionIDs.length === 1;
+          const slug = groupedNotifications[notificationSectionID][0].project_slug;
+          const notifications = groupedNotifications[notificationSectionID] || [];
+          const uniqueNotifications = notifications.filter((notification, index, self) => (
+            index === self.findIndex((t) => t.id === notification.id)
+          ));
+          const unreads = uniqueNotifications.filter((notification) => !notification.delivered);
+
           return (
             <CollapsableSection
-              key={notification.section}
+              key={`collapsable-section-${notificationSectionID}`}
               callbackParent={() => {
-                const section = expanded === notification.section ? false : notification.section;
+                const section = expanded === notificationSectionID ? false : notificationSectionID;
                 handleExpand(section);
               }}
               expanded={opened}
-              section={notification.section}
+              section={notificationSectionID}
             >
               <NotificationSection
-                key={notification.id}
+                key={`notification-section-${notificationSectionID}`}
                 location={location}
-                projectID={notification.project_id}
-                slug={notification.project_slug}
+                notifications={uniqueNotifications}
+                projectID={notificationSectionID}
+                slug={slug}
+                unread={unreads.length}
                 user={user}
               />
             </CollapsableSection>
@@ -67,13 +82,18 @@ const DEFAULT_HANDLER = () => true;
 
 NotificationsSections.defaultProps = {
   expanded: false,
-  groupedNotifications: [],
+  groupedNotifications: {},
   handleExpand: DEFAULT_HANDLER
 };
 
 NotificationsSections.propTypes = {
   expanded: oneOfType([bool, string]),
-  groupedNotifications: arrayOf(shape({ section: string })),
+  groupedNotifications: shape({
+    id: arrayOf(shape({
+      id: string,
+      project_id: string
+    }))
+  }),
   handleExpand: func
 };
 
@@ -87,32 +107,28 @@ export default function NotificationsPage({ location, project, user }) {
 
   useEffect(() => {
     if (project) {
-      setExpanded(`project-${project.id}`);
+      setExpanded(project.id);
     }
   }, [project]);
 
-  function handleExpand(section) {
-    setExpanded(section);
+  function handleExpand(sectionID) {
+    setExpanded(sectionID);
   }
 
   function groupNotifications(allNotifications) {
-    const projectSections = [];
-    const projectNotifications = [];
+    const notificationsMap = {};
     allNotifications.forEach((notification) => {
-      if (projectSections.indexOf(notification.section) < 0) {
-        if (notification.section === 'zooniverse') {
-          projectSections.unshift(notification.section);
-          projectNotifications.unshift(notification);
-        } else {
-          projectSections.push(notification.section);
-          projectNotifications.push(notification);
-        }
+      const { project_id: projectID, section } = notification;
+      const notificationSectionID = projectID || section;
+      if (!notificationsMap[notificationSectionID]) {
+        notificationsMap[notificationSectionID] = [notification];
       }
+      notificationsMap[notificationSectionID].push(notification);
     });
-    return projectNotifications;
+    return notificationsMap;
   }
 
-  let groupedNotifications = [];
+  let groupedNotifications = {};
   if (notifications?.length > 0) {
     groupedNotifications = groupNotifications(notifications);
   }

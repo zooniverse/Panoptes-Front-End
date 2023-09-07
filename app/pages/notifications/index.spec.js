@@ -2,7 +2,7 @@
 
 import React from 'react';
 import assert from 'assert';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import sinon from 'sinon';
 
 import talkClient from 'panoptes-client/lib/talk-client';
@@ -102,7 +102,8 @@ describe('NotificationsPage', function () {
       });
     });
 
-    // The following tests are failing because the CollapsableSection component and Paginator component (child of NotificationSection) require a router context. There are also issues with enzyme, coffeescript, and children that are class components.
+    // The following tests are failing because the CollapsableSection component and Paginator component (child of NotificationSection) require router context.
+    // There are also issues with enzyme, coffeescript, and children that are class components.
 
     // describe('with notifications', function () {
     //   let wrapper;
