@@ -20,7 +20,7 @@ function parseFeedPost(post) {
     id: post.ID,
     title: removeEntities(post.title),
     excerpt: removeEntities(post.excerpt),
-    created_at: post.date,
+    created_at: new Date(post.date),
     link: post.URL,
     image: post.featured_image
   };
@@ -59,7 +59,9 @@ async function getBlogPosts() {
     feeds.forEach(feed => {
       posts = posts.concat(feed.slice(0,3))
     });
-    return posts.map(parseFeedPost);
+    return posts
+      .map(parseFeedPost)
+      .sort((a,b) => b.created_at - a.created_at);
   } catch (error) {
     console.error(error);
   }
