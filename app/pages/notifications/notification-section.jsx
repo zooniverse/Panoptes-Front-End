@@ -59,31 +59,31 @@ export default class NotificationSection extends Component {
   }
 
   componentDidMount() {
-    const { expanded, notifications } = this.props;
+    const { expanded, location, notifications } = this.props;
+    const page = parseInt(location.query.page, 10) || 1;
 
     if (expanded) {
-      this.fetchNotificationData(notifications);
+      this.fetchNotificationData(notifications, page);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const { expanded, location } = this.props;
+    const page = parseInt(location.query.page, 10) || 1;
+    const nextPage = parseInt(nextProps.location.query.page, 10) || 1;
 
     if (nextProps.expanded && !expanded) {
-      this.fetchNotificationData(nextProps.notifications);
+      this.fetchNotificationData(nextProps.notifications, nextPage);
     }
 
-    if (nextProps.location.query.page !== location.query.page) {
-      this.fetchNotificationData(nextProps.notifications);
+    if (nextPage !== page) {
+      this.fetchNotificationData(nextProps.notifications, nextPage);
     }
   }
 
-  fetchNotificationData(notifications) {
-    const { location } = this.props;
-
+  fetchNotificationData(notifications, page = 1) {
     this.setState({ loading: true });
 
-    const page = parseInt(location.query.page, 10) || 1;
     const activeNotifications = notifications.slice((page - 1) * 5, page * 5);
 
     getNotificationData(activeNotifications)
