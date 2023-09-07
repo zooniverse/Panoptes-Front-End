@@ -59,7 +59,9 @@ async function getBlogPosts() {
     feeds.forEach(feed => {
       posts = posts.concat(feed.slice(0,3))
     });
-    return posts.map(parseFeedPost);
+    return posts
+      .map(parseFeedPost)
+      .sort((a,b) => a.created_at < b.created_at);
   } catch (error) {
     console.error(error);
   }
