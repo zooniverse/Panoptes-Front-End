@@ -7,6 +7,7 @@ import { StrictMode } from 'react';
 import PropTypes from 'prop-types';
 import DataManager from './DataManager.jsx';
 import Tester from './Tester.jsx';
+import { useWorkflowContext } from './context.js';
 
 function PagesEditor(props) {
   const { params } = props;
@@ -14,11 +15,11 @@ function PagesEditor(props) {
   return (
     <StrictMode>
       <div className="lab-pages-editor">
-        <h5>Pages Editor</h5>
         <DataManager
           key={params?.workflowId || '-'} //
           workflowId={params?.workflowId}
         >
+          <WorkflowHeader />
           <h6>
             Workflow
             {' '}
@@ -28,6 +29,18 @@ function PagesEditor(props) {
         </DataManager>
       </div>
     </StrictMode>
+  );
+}
+
+function WorkflowHeader() {
+  const { workflow } = useWorkflowContext();
+
+  if (!workflow) return null;
+
+  return (
+    <header>
+      <h1>{workflow.display_name}</h1>
+    </header>
   );
 }
 
