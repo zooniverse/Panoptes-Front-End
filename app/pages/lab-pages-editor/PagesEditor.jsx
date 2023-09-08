@@ -13,7 +13,7 @@ function PagesEditor(props) {
 
   return (
     <StrictMode>
-      <div>
+      <div className="lab-pages-editor">
         <h5>Pages Editor</h5>
         <DataManager
           key={params?.workflowId || '-'} //
