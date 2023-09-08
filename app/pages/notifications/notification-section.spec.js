@@ -1,47 +1,79 @@
+/* eslint-disable func-names, prefer-arrow-callback, react/jsx-filename-extension */
+
 import React from 'react';
 import assert from 'assert';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import NotificationSection from './notification-section';
 
-const notifications = [
-  {
-    notification: {
-      id: '123',
-      source_type: 'DataRequest',
-      url: '/',
-      message: 'test message',
-      created_at: '2016-12-09T16:09:50.641Z'
-    },
-    data: { projectName: 'TestingProject' }
-  },
-  {
-    notification: {
-      id: '124',
-      source_type: 'DataRequest',
-      url: '/',
-      message: 'test message',
-      created_at: '2016-12-10T16:09:50.641Z'
-    },
-    data: { projectName: 'TestingProject' }
+const notificationComment = {
+  id: '123',
+  source_type: 'Comment',
+  delivered: true,
+  source: {
+    discussion_id: '456'
   }
+};
+
+const notificationDataRequest = {
+  id: '124',
+  source_type: 'DataRequest',
+  delivered: true
+};
+
+const notificationDiscussion = {
+  id: '456',
+  source_type: 'Discussion',
+  delivered: true
+};
+
+const notificationModeration = {
+  id: '457',
+  source_type: 'Moderation',
+  delivered: true
+};
+
+const notificationCommentUnread = {
+  id: '125',
+  source_type: 'Comment',
+  delivered: false,
+  source: {
+    discussion_id: '456'
+  }
+};
+
+const notifications = [
+  notificationComment,
+  notificationDataRequest,
+  notificationDiscussion,
+  notificationModeration
 ];
 
-describe.skip('Notification Section', function() {
-  let wrapper;
+const notificationData = notifications.map((notification) => {
+  const dataType = notification.source_type.toLowerCase();
+  return {
+    notification,
+    data: {
+      [dataType]: {
+        id: notification.id.split('').reverse().join('')
+      }
+    }
+  };
+});
 
-  before(function () {
-    sinon.stub(NotificationSection.prototype, 'getUnreadCount').callsFake(() => null);
-  });
-
-  after(function () {
-    NotificationSection.prototype.getUnreadCount.restore();
-  });
-
+describe('NotificationSection', function () {
   describe('it can display a Zooniverse section', function () {
-    beforeEach(function () {
+    let wrapper;
+
+    before(function () {
       wrapper = shallow(
-        <NotificationSection projectID={''} slug={null} user={{ id: 1 }} section={'zooniverse'} />,
+        <NotificationSection
+          expanded={false}
+          notifications={notifications}
+          projectID="zooniverse"
+          section="zooniverse"
+          user={{ id: '1' }}
+        />
       );
     });
 
@@ -49,7 +81,7 @@ describe.skip('Notification Section', function() {
       assert.equal(wrapper.find('.notification-section__title').text(), 'Zooniverse');
     });
 
-    it('should link to the home page', function () {
+    it('should link to the Zooniverse home page', function () {
       assert.equal(wrapper.find('Link').prop('to'), '/');
     });
 
@@ -58,11 +90,22 @@ describe.skip('Notification Section', function() {
     });
   });
 
-  describe('it correctly displays a project', function () {
+  describe('it can display a project section', function () {
+    let wrapper;
+
     before(function () {
       sinon.stub(NotificationSection.prototype, 'componentWillMount').callsFake(() => null);
-      wrapper = shallow(<NotificationSection />);
-      wrapper.setState({ name: 'Testing' });
+
+      wrapper = shallow(
+        <NotificationSection
+          expanded={false}
+          notifications={notifications}
+          projectID="1234"
+          section="1234"
+          user={{ id: '1' }}
+        />
+      );
+      wrapper.setState({ name: 'Test Project' });
     });
 
     after(function () {
@@ -70,25 +113,60 @@ describe.skip('Notification Section', function() {
     });
 
     it('should display the correct title', function () {
-      assert.equal(wrapper.find('.notification-section__title').text(), 'Testing');
+      assert.equal(wrapper.find('.notification-section__title').text(), 'Test Project');
+    });
+  });
+
+  describe('it can display a section with unread notifications', function () {
+    let wrapper;
+    const notificationsWithUnread = Array.from(notifications);
+    notificationsWithUnread.push(notificationCommentUnread);
+
+    before(function () {
+      wrapper = shallow(
+        <NotificationSection
+          expanded={false}
+          notifications={notificationsWithUnread}
+          projectID="zooniverse"
+          section="zooniverse"
+          user={{ id: '1' }}
+        />
+      );
+
+      wrapper.setState({
+        loading: false,
+        name: 'Zooniverse'
+      });
+    });
+
+    it('should show an unread notification in place of an avatar', function () {
+      assert.equal(wrapper.find('circle').length, 1);
     });
   });
 
   describe('will render appropriately when open', function () {
-    beforeEach(function () {
+    let wrapper;
+
+    before(function () {
       wrapper = shallow(
-        <NotificationSection expanded={true} projectID={''} slug={null} user={{ id: 1 }} section={'zooniverse'} />,
+        <NotificationSection
+          expanded={true}
+          notifications={notifications}
+          projectID="zooniverse"
+          section="zooniverse"
+          user={{ id: '1' }}
+        />,
+        { disableLifecycleMethods: true }
       );
-      wrapper.setState({ notificationData: notifications });
+      wrapper.setState({
+        loading: false,
+        name: 'Zooniverse',
+        notificationData
+      });
     });
 
     it('should display the correct number of notifications', function () {
-      assert.equal(wrapper.find('Notification').length, 2);
-    });
-
-    it('should show an unread notification in place of an avatar', function () {
-      wrapper.setState({ unread: 1 });
-      assert.equal(wrapper.find('circle').length, 1);
+      assert.equal(wrapper.find('Notification').length, 4);
     });
 
     it('should show close icon', function () {
@@ -96,76 +174,48 @@ describe.skip('Notification Section', function() {
     });
   });
 
-  describe('will update notifications as read', function () {
-    const newNotifications = [
-      {
-        id: '123',
-        delivered: false,
-        source: {
-          discussion_id: '456'
-        },
-        source_type: 'Comment',
-        update: sinon.stub().returnsThis(),
-        save: sinon.stub().resolves({})
-      },
-      {
-        id: '124',
-        delivered: false,
-        source: {
-          discussion_id: '456'
-        },
-        source_type: 'Comment',
-        update: sinon.stub().returnsThis(),
-        save: sinon.stub().rejects()
-      },
-      {
-        id: '125',
-        delivered: false,
-        source_type: 'Moderation',
-        source: {},
-        update: sinon.stub().returnsThis(),
-        save: sinon.stub().resolves({})
-      },
-      {
-        id: '126',
-        delivered: false,
-        source: {
-          discussion_id: '789'
-        },
-        source_type: 'Comment',
-        update: sinon.stub().returnsThis(),
-        save: sinon.stub().resolves({})
-      }
-    ];
-    const notificationsCounter = {
+  describe.skip('will update notifications as read', function () {
+    let wrapper;
+    const notificationsWithUnread = Array.from(notifications);
+    notificationsWithUnread.push(notificationCommentUnread);
+
+    const notificationsCounterStub = {
       update: sinon.stub()
     };
-    wrapper = shallow(
-      <NotificationSection expanded={true} />,
-      { context: { notificationsCounter }, disableLifeCycleMethods: true }
-    );
-    wrapper.setState({ notifications: newNotifications });
-    wrapper.instance().markAsRead(newNotifications[0]);
+
+    before(function () {
+      wrapper = shallow(
+        <NotificationSection
+          expanded={true}
+          notifications={notificationsWithUnread}
+          projectID="zooniverse"
+          section="zooniverse"
+          user={{ id: '1' }}
+        />,
+        {
+          context: {
+            notificationsCounter: notificationsCounterStub
+          },
+          disableLifecycleMethods: true
+        }
+      );
+      wrapper.setState({
+        loading: false,
+        name: 'Zooniverse'
+      });
+      // wrapper.instance().markAsRead();
+    });
 
     it('should update read notification as read (delivered)', function () {
-      assert.equal(newNotifications[0].update.calledWith({ delivered: true }), true);
-      assert.equal(newNotifications[0].save.called, true);
+      assert.equal(true, false);
     });
 
     it('should update related notifications as read (delivered)', function () {
-      assert.equal(newNotifications[1].update.calledWith({ delivered: true }), true);
-      assert.equal(newNotifications[1].save.called, true);
-    });
-
-    it('should not update unrelated notifications', function () {
-      assert.equal(newNotifications[2].update.called, false);
-      assert.equal(newNotifications[2].save.called, false);
-      assert.equal(newNotifications[3].update.called, false);
-      assert.equal(newNotifications[3].save.called, false);
+      assert.equal(true, false);
     });
 
     it('should update the notifications counter', function () {
-      assert.equal(notificationsCounter.update.called, true);
+      assert.equal(true, false);
     });
   });
 });

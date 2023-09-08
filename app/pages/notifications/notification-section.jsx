@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
+import talkClient from 'panoptes-client/lib/talk-client';
 import { Link } from 'react-router';
+
 import Notification from './notification.cjsx';
-import Paginator from '../../talk/lib/paginator.cjsx';
-import ZooniverseLogo from '../../partials/zooniverse-logo.cjsx';
-import getNotificationData from '../../lib/get-notification-data';
 import Loading from '../../components/loading-indicator';
+import getNotificationData from '../../lib/get-notification-data';
+import ZooniverseLogo from '../../partials/zooniverse-logo.cjsx';
+import Paginator from '../../talk/lib/paginator.cjsx';
 
 export default class NotificationSection extends Component {
   constructor(props) {
@@ -18,7 +20,7 @@ export default class NotificationSection extends Component {
       notificationData: [],
       project: null
     };
-    // this.markAllRead = this.markAllRead.bind(this);
+    this.markAllRead = this.markAllRead.bind(this);
     this.markAsRead = this.markAsRead.bind(this);
   }
 
@@ -92,27 +94,27 @@ export default class NotificationSection extends Component {
       });
   }
 
-  // TODO: check if works or remove
-  // markAllRead() {
-  //   const { notificationsCounter } = this.context;
-  //   const { section } = this.props;
-  //   const { notificationData } = this.state;
+  markAllRead() {
+    const { notificationsCounter } = this.context;
+    const { section, toggleSection } = this.props;
+    const { notificationData } = this.state;
 
-  //   const requestSection = section === 'zooniverse' ? 'zooniverse' : `project-${section}`;
+    const requestSection = section === 'zooniverse' ? 'zooniverse' : `project-${section}`;
 
-  //   notificationData.forEach((data) => {
-  //     data.notification.update({ delivered: true });
-  //   });
-  //   return talkClient
-  //     .put('/notifications/read', { section: requestSection })
-  //     .then(() => talkClient
-  //       .type('notifications')
-  //       .get({ page_size: 1, delivered: false })
-  //       .then(([notification]) => {
-  //         const count = notification ? notification.getMeta().count : 0;
-  //         if (count === 0) notificationsCounter.setUnread(0);
-  //       }));
-  // }
+    notificationData.forEach((data) => {
+      data.notification.update({ delivered: true });
+    });
+    return talkClient
+      .put('/notifications/read', { section: requestSection })
+      .then(() => talkClient
+        .type('notifications')
+        .get({ page_size: 1, delivered: false })
+        .then(([notification]) => {
+          const count = notification ? notification.getMeta().count : 0;
+          if (count === 0) notificationsCounter.setUnread(0);
+          toggleSection(false);
+        }));
+  }
 
   markAsRead(readNotification) {
     const { notificationsCounter } = this.context;
@@ -133,14 +135,14 @@ export default class NotificationSection extends Component {
     Promise.all(notificationPromises).then(() => notificationsCounter.update(user));
   }
 
-  avatarFor() {
-    const { slug, unread } = this.props;
+  avatarFor(unread) {
+    const { slug } = this.props;
     const { avatar, name } = this.state;
 
     const src = avatar || '/assets/simple-avatar.jpg';
     let sectionAvatar;
 
-    if (unread > 0) return this.unreadCircle();
+    if (unread > 0) return this.unreadCircle(unread);
 
     if (name === 'Zooniverse') {
       sectionAvatar = <ZooniverseLogo title="Zooniverse Logo" width="40" height="40" />;
@@ -154,9 +156,7 @@ export default class NotificationSection extends Component {
     );
   }
 
-  unreadCircle() {
-    const { unread } = this.props;
-
+  unreadCircle(unread) {
     let centerNum = '40%';
 
     if (unread > 99) {
@@ -178,7 +178,7 @@ export default class NotificationSection extends Component {
     );
   }
 
-  renderHeader() {
+  renderHeader(unread) {
     const { expanded, toggleSection } = this.props;
     const { name } = this.state;
 
@@ -188,7 +188,7 @@ export default class NotificationSection extends Component {
       <div onClick={toggleSection}>
         <div className="notification-section__container">
           <div className="notification-section__item">
-            {this.avatarFor()}
+            {this.avatarFor(unread)}
           </div>
 
           <div className="notification-section__item">
@@ -207,11 +207,13 @@ export default class NotificationSection extends Component {
 
   render() {
     const {
-      expanded, location, notifications, unread, user
+      expanded, location, notifications, user
     } = this.props;
     const {
       error, loading, notificationData, project
     } = this.state;
+
+    const unread = notifications.filter((notification) => notification.delivered === false).length;
 
     const page = parseInt(location.query.page, 10) || 1;
     const pageCount = Math.ceil(notifications.length / 5);
@@ -221,7 +223,7 @@ export default class NotificationSection extends Component {
     return (
       <div className="notification-section">
 
-        {this.renderHeader()}
+        {this.renderHeader(unread)}
 
         {!!error && (
           <div className="notification-section__error">
@@ -235,19 +237,22 @@ export default class NotificationSection extends Component {
           </span>
         )}
 
-        {/* {(expanded && unread > 0) && (
-          <button onClick={this.markAllRead}>
+        {(expanded && unread > 0) && (
+          <button
+            onClick={this.markAllRead}
+            type="button"
+          >
             Mark All Read
           </button>
-        )} */}
+        )}
 
         {(expanded && !loading) && (
           notificationData.map((item) => {
             if (item.notification) {
               return (
                 <Notification
-                  data={item.data}
                   key={item.notification.id}
+                  data={item.data}
                   markAsRead={this.markAsRead}
                   notification={item.notification}
                   project={project}
@@ -312,15 +317,15 @@ NotificationSection.propTypes = {
   section: PropTypes.string,
   slug: PropTypes.string,
   toggleSection: PropTypes.func,
-  unread: PropTypes.number,
   user: PropTypes.shape({
-    display_name: PropTypes.string,
-    login: PropTypes.string
+    id: PropTypes.string
   })
 };
 
 NotificationSection.contextTypes = {
-  notificationsCounter: PropTypes.object
+  notificationsCounter: PropTypes.shape({
+    setUnread: PropTypes.func
+  })
 };
 
 NotificationSection.defaultProps = {
@@ -335,5 +340,5 @@ NotificationSection.defaultProps = {
   section: '',
   slug: '',
   toggleSection: () => {},
-  unread: 0
+  user: null
 };

@@ -49,7 +49,6 @@ export function NotificationsSections({
           const uniqueNotifications = notifications.filter((notification, index, self) => (
             index === self.findIndex((t) => t.id === notification.id)
           ));
-          const unreads = uniqueNotifications.filter((notification) => !notification.delivered);
 
           return (
             <CollapsableSection
@@ -67,7 +66,6 @@ export function NotificationsSections({
                 notifications={uniqueNotifications}
                 projectID={notificationSectionID}
                 slug={slug}
-                unread={unreads.length}
                 user={user}
               />
             </CollapsableSection>

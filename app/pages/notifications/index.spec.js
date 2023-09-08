@@ -1,4 +1,4 @@
-/* eslint-disable prefer-arrow-callback, react/jsx-filename-extension */
+/* eslint-disable func-names, prefer-arrow-callback, react/jsx-filename-extension */
 
 import React from 'react';
 import assert from 'assert';
