@@ -83,8 +83,9 @@ function EditProjectPage({
     }
 
     const { pathname } = location
+    const isPartOfPagesEditorExperiment = pathname?.includes('workflows/editor') // PagesEditor: see pages/lab-pages-editor
     return (
-      <div className="columns-container content-container">
+      <div className={`columns-container content-container ${isPartOfPagesEditorExperiment ? 'pages-editor-container' : ''}`}>
         <Helmet title={`${counterpart('projectLab.edit')} » ${project.display_name}`} />
         <nav aria-label="Lab navigation">
           <h2 className="nav-list-header">Project #{project.id}</h2>
