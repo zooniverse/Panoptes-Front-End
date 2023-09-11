@@ -64,7 +64,6 @@ export function NotificationsSections({
                 key={`notification-section-${notificationSectionID}`}
                 location={location}
                 notifications={uniqueNotifications}
-                projectID={notificationSectionID}
                 slug={slug}
                 user={user}
               />

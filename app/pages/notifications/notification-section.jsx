@@ -24,44 +24,20 @@ export default class NotificationSection extends Component {
     this.markAsRead = this.markAsRead.bind(this);
   }
 
-  componentWillMount() {
-    const { projectID, section } = this.props;
+  componentDidMount() {
+    const {
+      expanded,
+      location,
+      notifications,
+      section
+    } = this.props;
 
     if (section === 'zooniverse') {
-      this.setState({
-        name: 'Zooniverse'
-      });
+      this.setState({ name: 'Zooniverse' });
     } else {
-      apiClient.type('projects').get(projectID, { include: 'avatar' })
-        .catch((error) => {
-          this.setState({ error });
-        })
-        .then((project) => {
-          this.setState({ project });
-          if (project.links.avatar) {
-            apiClient.type('avatars').get(project.links.avatar.id)
-              .then((avatar) => {
-                this.setState({
-                  name: project.display_name,
-                  avatar: avatar.src
-                });
-              })
-              .catch(() => {
-                this.setState({
-                  name: project.display_name
-                });
-              });
-          } else {
-            this.setState({
-              name: project.display_name
-            });
-          }
-        });
+      this.fetchProjectData(section);
     }
-  }
 
-  componentDidMount() {
-    const { expanded, location, notifications } = this.props;
     const page = parseInt(location.query.page, 10) || 1;
 
     if (expanded) {
@@ -69,17 +45,31 @@ export default class NotificationSection extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { expanded, location } = this.props;
-    const page = parseInt(location.query.page, 10) || 1;
-    const nextPage = parseInt(nextProps.location.query.page, 10) || 1;
+  componentDidUpdate(prevProps) {
+    const {
+      expanded,
+      location,
+      notifications,
+      section
+    } = this.props;
 
-    if (nextProps.expanded && !expanded) {
-      this.fetchNotificationData(nextProps.notifications, nextPage);
+    if (section !== prevProps.section) {
+      if (section === 'zooniverse') {
+        this.setState({ name: 'Zooniverse' });
+      } else {
+        this.fetchProjectData(section);
+      }
     }
 
-    if (nextPage !== page) {
-      this.fetchNotificationData(nextProps.notifications, nextPage);
+    const page = parseInt(location.query.page, 10) || 1;
+    const prevPage = parseInt(prevProps.location.query.page, 10) || 1;
+
+    if (expanded && !prevProps.expanded) {
+      this.fetchNotificationData(notifications, page);
+    }
+
+    if (page !== prevPage) {
+      this.fetchNotificationData(notifications, page);
     }
   }
 
@@ -91,6 +81,36 @@ export default class NotificationSection extends Component {
     getNotificationData(activeNotifications)
       .then((notificationData) => {
         this.setState({ notificationData, loading: false });
+      });
+  }
+
+  fetchProjectData(projectID) {
+    apiClient.type('projects')
+      .get(projectID, { include: 'avatar' })
+      .catch((error) => {
+        this.setState({ error });
+      })
+      .then((project) => {
+        this.setState({ project });
+        if (project.links.avatar) {
+          apiClient.type('avatars')
+            .get(project.links.avatar.id)
+            .then((avatar) => {
+              this.setState({
+                name: project.display_name,
+                avatar: avatar.src
+              });
+            })
+            .catch(() => {
+              this.setState({
+                name: project.display_name
+              });
+            });
+        } else {
+          this.setState({
+            name: project.display_name
+          });
+        }
       });
   }
 
@@ -313,7 +333,6 @@ NotificationSection.propTypes = {
   notifications: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string
   })),
-  projectID: PropTypes.string,
   section: PropTypes.string,
   slug: PropTypes.string,
   toggleSection: PropTypes.func,
@@ -336,7 +355,6 @@ NotificationSection.defaultProps = {
     }
   },
   notifications: [],
-  projectID: '',
   section: '',
   slug: '',
   toggleSection: () => {},

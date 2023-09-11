@@ -90,7 +90,6 @@ describe('NotificationSection', function () {
         <NotificationSection
           expanded={false}
           notifications={notifications}
-          projectID="zooniverse"
           section="zooniverse"
           user={{ id: '1' }}
         />
@@ -114,22 +113,19 @@ describe('NotificationSection', function () {
     let wrapper;
 
     before(function () {
-      sinon.stub(NotificationSection.prototype, 'componentWillMount').callsFake(() => null);
-
       wrapper = shallow(
         <NotificationSection
           expanded={false}
           notifications={notifications}
-          projectID="1234"
           section="1234"
           user={{ id: '1' }}
-        />
+        />,
+        { disableLifecycleMethods: true }
       );
-      wrapper.setState({ name: 'Test Project' });
-    });
-
-    after(function () {
-      NotificationSection.prototype.componentWillMount.restore();
+      wrapper.setState({
+        avatar: '/project/avatar/url',
+        name: 'Test Project'
+      });
     });
 
     it('should display the correct title', function () {
@@ -145,7 +141,6 @@ describe('NotificationSection', function () {
         <NotificationSection
           expanded={false}
           notifications={notificationsWithUnread}
-          projectID="zooniverse"
           section="zooniverse"
           user={{ id: '1' }}
         />
@@ -170,7 +165,6 @@ describe('NotificationSection', function () {
         <NotificationSection
           expanded={true}
           notifications={notifications}
-          projectID="zooniverse"
           section="zooniverse"
           user={{ id: '1' }}
         />,
@@ -204,7 +198,6 @@ describe('NotificationSection', function () {
         <NotificationSection
           expanded={true}
           notifications={notificationsWithUnread}
-          projectID="zooniverse"
           section="zooniverse"
           user={{ id: '1' }}
         />,
@@ -260,7 +253,6 @@ describe('NotificationSection', function () {
         <NotificationSection
           expanded={true}
           notifications={notificationsWithUnread}
-          projectID="zooniverse"
           section="zooniverse"
           toggleSection={toggleSectionSpy}
           user={{ id: '1' }}
