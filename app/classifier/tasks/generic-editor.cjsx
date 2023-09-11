@@ -46,6 +46,7 @@ module.exports = createReactClass
       when 'text' then ['instruction']
       when 'slider' then ['instruction']
       when 'highlighter' then ['instruction', 'highlighterLabels']
+      when 'dataVisAnnotation' then ['instruction', 'tools']
 
     isAQuestion = @props.task.type in ['single', 'multiple']
     canBeRequired = @props.task.type in ['single', 'multiple', 'text']
@@ -134,6 +135,23 @@ module.exports = createReactClass
                       </div>
 
                   when 'highlighter'
+                    <div className="workflow-choice-setting" >
+                      <AutoSave resource={@props.workflow} >
+                        Color{' '}
+                        <select style={{background: choice.color}} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
+                          {for labelOption in highlighterLabelColorOptions
+                            <option
+                              key={labelOption.value}
+                              style={{ background: labelOption.value }}
+                              value={labelOption.value}
+                            >
+                              {labelOption.label}
+                            </option>}
+                        </select>
+                      </AutoSave>
+                    </div>
+
+                  when 'dataVisAnnotation'
                     <div className="workflow-choice-setting" >
                       <AutoSave resource={@props.workflow} >
                         Color{' '}
@@ -259,22 +277,27 @@ module.exports = createReactClass
                 <small className="form-help"> Add labels for the highlighter tool.</small>
               </div>
             when 'tools'
-              <div>
-                <small className="form-help">Select which marks you want for this task, and what to call each of them. The tool name will be displayed on the classification page next to each marking option. Use the simplest tool that will give you the results you need for your research.</small><br />
-                <small className="form-help"><b>bezier:</b> an arbitrary shape made of point-to-point curves. The midpoint of each segment drawn can be dragged to adjust the curvature. </small><br />
-                <small className="form-help"><b>circle:</b> a point and a radius.</small><br />
-                <small className="form-help"><b>column:</b> a box with full height but variable width; this tool <i>cannot</i> be rotated.</small><br />
-                <small className="form-help"><b>ellipse:</b> an oval of any size and axis ratio; this tool <i>can</i> be rotated.</small><br />
-                <small className="form-help"><b>line:</b> a straight line at any angle.</small><br />
-                <small className="form-help"><b>point:</b> X marks the spot.</small><br />
-                <small className="form-help"><b>polygon:</b> an arbitrary shape made of point-to-point lines.</small><br />
-                <small className="form-help"><b>rectangle:</b> a box of any size and length-width ratio; this tool <i>cannot</i> be rotated.</small><br />
-                <small className="form-help"><b>triangle:</b> an equilateral triangle of any size and vertex distance from the center; this tool <i>can</i> be rotated.</small><br />
-                {if @canUse("grid")
-                  <small className="form-help"><b>grid table</b>: cells which can be made into a table for consecutive annotations.</small>}
-                {if @canUse("anchoredEllipse")
-                  <small className="form-help"><b>anchored ellipse</b>: creates an ellipes in the center of the subject during the first click, and does not allow it to be dragged.</small>}}
-              </div>}
+              if @props.task.type is 'dataVisAnnotation'
+                <div>
+                  <small className="form-help"> Add labels for the data selection tool.</small>
+                </div>
+              if @props.task.type is 'drawing'
+                <div>
+                  <small className="form-help">Select which marks you want for this task, and what to call each of them. The tool name will be displayed on the classification page next to each marking option. Use the simplest tool that will give you the results you need for your research.</small><br />
+                  <small className="form-help"><b>bezier:</b> an arbitrary shape made of point-to-point curves. The midpoint of each segment drawn can be dragged to adjust the curvature. </small><br />
+                  <small className="form-help"><b>circle:</b> a point and a radius.</small><br />
+                  <small className="form-help"><b>column:</b> a box with full height but variable width; this tool <i>cannot</i> be rotated.</small><br />
+                  <small className="form-help"><b>ellipse:</b> an oval of any size and axis ratio; this tool <i>can</i> be rotated.</small><br />
+                  <small className="form-help"><b>line:</b> a straight line at any angle.</small><br />
+                  <small className="form-help"><b>point:</b> X marks the spot.</small><br />
+                  <small className="form-help"><b>polygon:</b> an arbitrary shape made of point-to-point lines.</small><br />
+                  <small className="form-help"><b>rectangle:</b> a box of any size and length-width ratio; this tool <i>cannot</i> be rotated.</small><br />
+                  <small className="form-help"><b>triangle:</b> an equilateral triangle of any size and vertex distance from the center; this tool <i>can</i> be rotated.</small><br />
+                  {if @canUse("grid")
+                    <small className="form-help"><b>grid table</b>: cells which can be made into a table for consecutive annotations.</small>}
+                  {if @canUse("anchoredEllipse")
+                    <small className="form-help"><b>anchored ellipse</b>: creates an ellipes in the center of the subject during the first click, and does not allow it to be dragged.</small>}}
+                </div>}
         </div>}
 
       {unless @props.task.type is 'single' or @props.isSubtask
@@ -324,11 +347,21 @@ module.exports = createReactClass
     @props.onChange @props.task
 
   addTool: ->
-    @props.task.tools.push
-      type: 'point'
-      label: 'Tool name'
-      color: '#00ff00'
-      details: []
+    if @props.task.type is 'drawing'
+      @props.task.tools.push
+        type: 'point'
+        label: 'Tool name'
+        color: '#00ff00'
+        details: []
+    if @props.task.type is 'dataVisAnnotation'
+      # data selection uses the same colours as the text selection tool.
+      highlighterLabelColors = highlighterLabelColorOptions.map((option) => option.value)
+      taskColors = @props.task.tools.map((tool) => tool.color)
+      newColor = highlighterLabelColors.find((color) => taskColors.indexOf(color) == -1) || highlighterLabelColors[0]
+      @props.task.tools.push
+        type: 'graph2dRangeX'
+        label: 'Tool name'
+        color: newColor
     @props.onChange @props.task
 
   editToolDetails: (task, toolIndex) ->

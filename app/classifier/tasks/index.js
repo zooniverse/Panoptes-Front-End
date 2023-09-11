@@ -12,6 +12,7 @@ import ShortcutTask from './shortcut';
 import Highlighter from './highlighter';
 import TranscriptionTask from './transcription';
 import SubjectGroupComparisonTask from './subjectGroupComparison';
+import DataVisAnnotationTask from './dataVisAnnotation'
 
 const tasks = {
   combo: ComboTask,
@@ -27,7 +28,8 @@ const tasks = {
   shortcut: ShortcutTask,
   highlighter: Highlighter,
   transcription: TranscriptionTask,
-  subjectGroupComparison: SubjectGroupComparisonTask
+  subjectGroupComparison: SubjectGroupComparisonTask,
+  dataVisAnnotation: DataVisAnnotationTask
 };
 
 export default tasks;

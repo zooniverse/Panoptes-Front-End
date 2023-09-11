@@ -19,7 +19,7 @@ import Tutorials from '../lab/workflow-components/tutorials.jsx';
 import TaskOptions from '../lab/workflow-components/task-options.jsx';
 import TaskEditor from '../lab/workflow-components/task-editor.jsx';
 import TaskPicker from '../lab/workflow-components/task-picker.jsx';
-import { isThisProjectUsingFEMLab, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities.js';
+import { isThisProjectUsingFEMLab, isWorkflowUsingJSONSubjects, FEM_LAB_PREVIEW_HOST } from './fem-lab-utilities.js';
 
 const DEMO_SUBJECT_SET_ID = process.env.NODE_ENV === 'production'
 ? '6' // Cats
@@ -56,8 +56,11 @@ class EditWorkflowPage extends Component {
       deletionInProgress: false,
       deletionError: null,
       workflowCreationInProgress: false,
-      showTaskAddButtons: false
+      showTaskAddButtons: false,
+      workflowUsesJSONSubjects: false
     };
+    isWorkflowUsingJSONSubjects(props.workflow)
+      .then(workflowUsesJSONSubjects => this.setState({ workflowUsesJSONSubjects }))
   }
 
   workflowLink() {
@@ -280,6 +283,14 @@ class EditWorkflowPage extends Component {
                             <i className="fa fa-th fa-2x"></i>
                             <br />
                             <small><strong>Subject Group Comparison (aka "Grid")</strong></small>
+                          </button>
+                        </AutoSave> : undefined}{' '}
+                        { this.state.workflowUsesJSONSubjects ?
+                        <AutoSave resource={this.props.workflow}>
+                          <button type="button" className="minor-button" onClick={this.addNewTask.bind(this, 'dataVisAnnotation')} title="Data annotation: the volunteer can select chart data.">
+                            <i className="fa fa-i-cursor fa-2x"></i>
+                            <br />
+                            <small><strong>Data annotation</strong></small>
                           </button>
                         </AutoSave> : undefined}{' '}
                       </div> : undefined}

@@ -35,7 +35,9 @@ export const SLUGS = [
   'zooniverse/gravity-spy',
   'communitiesandcrowds/how-did-we-get-here',
   'zooniverse/snapshot-serengeti',
-  'aeuk/elephant-id'
+  'aeuk/elephant-id',
+  'sophiemu/solar-jet-hunter',
+  'elliereed185/knitting-leaflet-project'
 ];
 
 export function usesMonorepo(slug) {

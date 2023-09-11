@@ -65,7 +65,7 @@ export default class HomePageSocial extends React.Component {
       'home-social__blog-section--white': i === 0,
       'home-social__blog-section--gray': i !== 0
     });
-    const timestamp = moment(new Date(post.created_at)).fromNow();
+    const timestamp = moment(post.created_at).fromNow();
     return (
       <div key={i} className={classes}>
         {i !== 0 && (<hr />)}
