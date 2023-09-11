@@ -176,26 +176,27 @@ export default class DropdownEditor extends React.Component {
               editDropdown={this.editDropdown}
               deleteDropdown={this.deleteDropdown}
             />
-            <p>
-              <button type="button" className="minor-button" onClick={() => this.editDropdown('create')}>
-                <i className="fa fa-plus" />
-                Add a Dropdown
-              </button>
-              <label>
-                <span> Dependent On </span>
-                <select
-                  id="condition"
-                  ref={(node) => { this.condition = node; }}
-                  defaultValue={`${selects.length - 1}`}
-                >
-                  {selects.map((selectOption, i) => (
-                    <option key={selectOption.id} value={i}>{selectOption.title}</option>
-                  ))}
-                </select>
-              </label>
-              <br />
-
-            </p>
+            {this.props.pfeLab && // for FEMLab we don't want to allow nested dropdowns. Only SimpleDropdowns
+              <p>
+                <button type="button" className="minor-button" onClick={() => this.editDropdown('create')}>
+                  <i className="fa fa-plus" />
+                  Add a Dropdown
+                </button>
+                <label>
+                  <span> Dependent On </span>
+                  <select
+                    id="condition"
+                    ref={(node) => { this.condition = node; }}
+                    defaultValue={`${selects.length - 1}`}
+                  >
+                    {selects.map((selectOption, i) => (
+                      <option key={selectOption.id} value={i}>{selectOption.title}</option>
+                    ))}
+                  </select>
+                </label>
+                <br />
+              </p>
+            }
           </section>
 
           {this.state.editSelect &&
@@ -203,6 +204,7 @@ export default class DropdownEditor extends React.Component {
               <DropdownDialog
                 selects={selects}
                 initialSelect={this.state.editSelect}
+                pfeLab={this.props.pfeLab}
                 related={this.getRelated(this.state.editSelect)}
                 onSave={this.handleSave}
                 onCancel={this.handleCancel}

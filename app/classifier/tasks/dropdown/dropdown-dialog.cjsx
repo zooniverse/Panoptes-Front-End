@@ -15,6 +15,7 @@ DropdownDialog = createReactClass
   getDefaultProps: ->
     selects: []
     initialSelect: {}
+    pfeLab: false
     related: []
     onCancel: ->
     onSave: ->
@@ -61,7 +62,7 @@ DropdownDialog = createReactClass
     select = @state.editSelect
     select.title = @refs.title.value
     select.required = @refs.required.checked
-    select.allowCreate = @refs.allowCreate.checked
+    select.allowCreate = if @refs.allowCreate then @refs.allowCreate.checked else false
     @setState editSelect: select
 
   onChangeConditionalAnswer: (select, index, e) ->
@@ -199,9 +200,11 @@ DropdownDialog = createReactClass
       <label className="pill-button" title={dropdownEditorHelp.required}>
         Required <input type="checkbox" ref="required" checked={select.required} onChange={@editSelect}></input>
       </label>{' '}
-      <label className="pill-button" title={dropdownEditorHelp.allowCreate}>
-        Allow Create <input type="checkbox" ref="allowCreate" checked={select.allowCreate} onChange={@editSelect}></input>
-      </label>
+      {if @props.pfeLab is true # for FEMLab we don't want to allow freeform responses
+        <label className="pill-button" title={dropdownEditorHelp.allowCreate}>
+          Allow Create <input type="checkbox" ref="allowCreate" checked={select.allowCreate} onChange={@editSelect}></input>
+        </label>
+      }
       <br />
 
       {if select.condition?
