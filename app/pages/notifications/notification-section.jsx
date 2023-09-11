@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import { Link } from 'react-router';

@@ -1,6 +1,6 @@
 import counterpart from 'counterpart';
 import { shape, string } from 'prop-types';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Helmet } from 'react-helmet';
 import Translate from 'react-translate-component';
 import talkClient from 'panoptes-client/lib/talk-client';
