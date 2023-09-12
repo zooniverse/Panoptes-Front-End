@@ -1,9 +1,46 @@
+$grey = #c0c0c0
+
+$tiny = 0.25em
+$small = 0.5em
+
 .columns-container.content-container.pages-editor-container
   margin: 0
 
 .lab-pages-editor
-  background: #f0f0f0
+  box-sizing: border-box
+  max-width: 800px
+  margin: 0 auto
 
-  header
-    h1
+  *
+    box-sizing: border-box
+
+  .workflow-header
+    border-bottom: 1px solid $grey
+    padding-bottom: $small
+
+    a
+      display: inline-block
+      text-decoration: none
+
+      .icon
+        margin-right: $small
+
+    button
+      background: none
+      border: none
+      cursor: pointer
+      font-weight: bold
       text-transform: uppercase
+
+  .workflow-settings-page
+    margin-top: $small
+
+    label[for=display_name]
+      display: block
+      font-weight: bold
+      text-transform: uppercase
+
+      input
+        display: block
+        margin-top: $tiny
+        width: 100%
