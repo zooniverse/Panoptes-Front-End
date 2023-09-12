@@ -5,7 +5,7 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
-import GoBackIcon from '../icons/GoBackIcon.jsx';
+import ReturnIcon from '../icons/ReturnIcon.jsx';
 import { useWorkflowContext } from '../context.js';
 import strings from '../strings.json';
 
@@ -18,18 +18,18 @@ export default function WorkflowHeader({
   if (!workflow) return null;
 
   return (
-    <header>
+    <div className="workflow-header">
       <Link to={returnUrl}>
-        <GoBackIcon />
-        {strings.PagesEditor.components.WorkflowHeader.go_back}
+        <ReturnIcon />
+        {strings.PagesEditor.components.WorkflowHeader.return}
       </Link>
       <button type="button">
-        Tasks
+        {strings.PagesEditor.components.WorkflowHeader.tasks}
       </button>
       <button type="button">
-        Workflow Settings
+        {strings.PagesEditor.components.WorkflowHeader.workflow_settings}
       </button>
-    </header>
+    </div>
   );
 }
 

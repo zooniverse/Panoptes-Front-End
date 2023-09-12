@@ -2,7 +2,9 @@
   "PagesEditor": {
     "components": {
       "WorkflowHeader": {
-        "go_back": "Back to Workflows"
+        "return": "Back to Workflows",
+        "tasks": "Tasks",
+        "workflow_settings": "Workflow Settings"
       }
     }
   }
