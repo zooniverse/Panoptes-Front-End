@@ -15,6 +15,10 @@ export default function WorkflowHeader({
   const { workflow } = useWorkflowContext();
   const returnUrl = `/lab/${projectId}/workflows`;
 
+  function onClick() {
+    console.log('TODO');
+  }
+
   if (!workflow) return null;
 
   return (
@@ -23,10 +27,10 @@ export default function WorkflowHeader({
         <ReturnIcon />
         {strings.PagesEditor.components.WorkflowHeader.return}
       </Link>
-      <button type="button">
+      <button type="button" onClick={onClick}>
         {strings.PagesEditor.components.WorkflowHeader.tasks}
       </button>
-      <button type="button">
+      <button type="button" onClick={onClick}>
         {strings.PagesEditor.components.WorkflowHeader.workflow_settings}
       </button>
     </div>
