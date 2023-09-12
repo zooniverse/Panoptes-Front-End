@@ -1,0 +1,9 @@
+{
+  "PagesEditor": {
+    "components": {
+      "WorkflowHeader": {
+        "go_back": "Back to Workflows"
+      }
+    }
+  }
+}
