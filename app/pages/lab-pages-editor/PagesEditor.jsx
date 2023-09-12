@@ -28,7 +28,6 @@ function PagesEditor({ params }) {
         >
           <WorkflowHeader projectId={projectId} />
           <WorkflowSettingsPage />
-          <Tester />
         </DataManager>
       </div>
     </StrictMode>
