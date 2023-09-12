@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import DataManager from './DataManager.jsx';
 import Tester from './Tester.jsx';
 import WorkflowHeader from './components/WorkflowHeader.jsx';
+import WorkflowSettingsPage from './components/WorkflowSettingsPage.jsx';
 
 function PagesEditor({ params }) {
   const { workflowID: workflowId, projectID: projectId } = params;
@@ -26,6 +27,7 @@ function PagesEditor({ params }) {
           workflowId={workflowId}
         >
           <WorkflowHeader projectId={projectId} />
+          <WorkflowSettingsPage />
           <Tester />
         </DataManager>
       </div>
