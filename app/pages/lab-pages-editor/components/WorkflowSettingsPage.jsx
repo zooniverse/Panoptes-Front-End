@@ -13,6 +13,8 @@ export default function WorkflowSettingsPage() {
     e.preventDefault();
     try {
       console.log('+++ onSubmit: ', e);
+      // TODO: on Submit, run update() on every available field.
+      // also, make sure the 'data-updaterule' rules are implemented.
     } catch (err) {
       console.error('WorkflowSettingsPageError: ', err);
     }
@@ -24,7 +26,6 @@ export default function WorkflowSettingsPage() {
     let value = e.target.value || '';
     const { updaterule } = e.target.dataset;
 
-    console.log('+++ e.target.dataset', e.target.dataset)
     if (updaterule === 'convert_to_number') value = parseInt(value);
 
     update({
@@ -65,7 +66,7 @@ export default function WorkflowSettingsPage() {
           <legend>Subject Retirement</legend>
           <p>
             Set how many people should classify each subject before it is
-            &quo;done.&quo; Once a subject has reached the retirement limit it
+            &quot;done.&quot; Once a subject has reached the retirement limit it
             will no longer be shown to volunteers.
           </p>
           <div className="flex-row">
@@ -76,8 +77,9 @@ export default function WorkflowSettingsPage() {
               name="retirement.criteria"
               onChange={doUpdate}
             >
-              <option value="junk">Junk</option>
               <option value="classification_count">Classification count</option>
+              <option value="never_retire">Never retire</option>
+              {/* TODO: this is just a POC - never_retire should be removed, even though it's a valid option on the API. */}
             </select>
             <input
               aria-label="Retirement count"
