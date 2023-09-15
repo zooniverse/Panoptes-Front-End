@@ -1,25 +1,65 @@
-$grey = #c0c0c0
+$grey = #A6A7A9
 
 $tiny = 0.25em
 $small = 0.5em
 
+$fontFamilies = Karla, Arial, sans-serif
+
+$fontSizeS = 14px
+$fontSizeM = 16px
+$fontSizeL = 18px
+
+$fontWeightBold = 700
+
+// Container
+// Affects everything outside the pages editor
+// -----------------------------------------------------------------------------
 .columns-container.content-container.pages-editor-container
   margin: 0
 
+// Pages Editor
+// -----------------------------------------------------------------------------
 .lab-pages-editor
   box-sizing: border-box
+  font-family: $fontFamilies
+  font-size: $fontSizeM
   max-width: 800px
   margin: 0 auto
 
+  // General UI
+  // ---------------------------------------------------------------------------
   *
     box-sizing: border-box
+  
+  input
+    font-family: $fontFamilies
+    font-size: $fontSizeM
+  
+  input[type=text]
+    border-radius: $tiny
+    border: 1.5px solid $grey
+    padding: $small
+
+  button
+    font-family: $fontFamilies
+
+  fieldset
+    padding: 0
+
+    legend
+      font-size: $fontSizeL
+      padding: 0
+  
+  // Component: Workflow Header
+  // ---------------------------------------------------------------------------
 
   .workflow-header
-    border-bottom: 1px solid $grey
+    border-bottom: 0.5px solid $grey
     padding-bottom: $small
 
     a
       display: inline-block
+      font-size: $fontSizeS
       text-decoration: none
 
       .icon
@@ -29,18 +69,24 @@ $small = 0.5em
       background: none
       border: none
       cursor: pointer
-      font-weight: bold
+      font-size: $fontSizeL
+      font-weight: $fontWeightBold
       text-transform: uppercase
+
+  // Component: Workflow Settings Page
+  // ---------------------------------------------------------------------------
 
   .workflow-settings-page
     margin-top: $small
 
     label[for=display_name]
       display: block
-      font-weight: bold
+      font-size: $fontSizeL
+      font-weight: $fontWeightBold
       text-transform: uppercase
 
       input
         display: block
+        font-size: $fontSizeL
         margin-top: $tiny
         width: 100%
