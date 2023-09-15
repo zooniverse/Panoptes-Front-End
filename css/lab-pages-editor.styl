@@ -2,8 +2,9 @@ $grey1 = #A6A7A9
 $grey2 = #808080
 $black = #000000
 
-$tiny = 0.25em
-$small = 0.5em
+$sizeXS = 0.25em
+$sizeS = 0.5em
+$sizeM = 20px
 
 $fontFamilies = Karla, Arial, sans-serif
 
@@ -29,7 +30,7 @@ $fontWeightBoldPlus = 700
   font-size: $fontSizeM
   max-width: 800px
   margin: 0 auto
-  padding: 0 20px
+  padding: 0 $sizeM
 
   // General UI
   // ---------------------------------------------------------------------------
@@ -47,13 +48,13 @@ $fontWeightBoldPlus = 700
   input[type=text], input[type=number]
     border: 1.5px solid $grey1
     color: $black
-    padding: $small
+    padding: $sizeS
   
   select
     border: 1.5px solid $grey1
     color: $black
     font-size: $fontSizeM
-    padding: $small
+    padding: $sizeS
   
   button
     color: $black
@@ -68,7 +69,7 @@ $fontWeightBoldPlus = 700
   .flex-row
     display: flex
     flex-direction: row
-    gap: $small
+    gap: $sizeS
   
   .small-width
     width: 60px
@@ -81,7 +82,7 @@ $fontWeightBoldPlus = 700
 
   .workflow-header
     border-bottom: 0.5px solid $grey1
-    padding-bottom: $small
+    padding-bottom: $sizeS
 
     a
       display: inline-block
@@ -89,7 +90,7 @@ $fontWeightBoldPlus = 700
       text-decoration: none
 
       .icon
-        margin-right: $small
+        margin-right: $sizeS
 
     button
       background: none
@@ -104,10 +105,10 @@ $fontWeightBoldPlus = 700
 
   .workflow-settings-page
     display: grid
-    gap: 20px
+    gap: $sizeM
     grid-template-columns: auto auto
     grid-template-rows: auto auto
-    margin-top: $small
+    margin-top: $sizeS
 
     // Workflow Title
     label[for=display_name]
@@ -119,15 +120,16 @@ $fontWeightBoldPlus = 700
       text-transform: uppercase
 
       input
-        border-radius: $tiny
+        border-radius: $sizeXS
         display: block
         font-size: $fontSizeL
-        margin-top: $tiny
+        margin-top: $sizeXS
         width: 100%
     
     // Group of Config Options/Controls
     fieldset
       border: none
+      margin-bottom: $sizeM
       padding: 0
 
       legend
