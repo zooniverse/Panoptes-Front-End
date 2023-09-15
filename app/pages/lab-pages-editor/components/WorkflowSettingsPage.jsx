@@ -27,9 +27,11 @@ export default function WorkflowSettingsPage() {
     const { updaterule } = e.target.dataset;
 
     if (updaterule === 'convert_to_number') value = parseInt(value);
+    if (updaterule === 'undefined_if_empty') value = value || undefined;
 
     update({
       [key]: value
+      // 'configuration.classifier_version': '2.0' // TODO: figure out if this needs 
     });
   }
 
@@ -64,7 +66,7 @@ export default function WorkflowSettingsPage() {
 
         <fieldset>
           <legend>Subject Retirement</legend>
-          <p>
+          <p id="subject-retirement-info">
             Set how many people should classify each subject before it is
             &quot;done.&quot; Once a subject has reached the retirement limit it
             will no longer be shown to volunteers.
@@ -74,6 +76,7 @@ export default function WorkflowSettingsPage() {
               aria-label="Retirement criteria"
               className="flex-item"
               defaultValue={workflow?.retirement?.criteria}
+              aria-describedby="subject-retirement-info"
               name="retirement.criteria"
               onChange={doUpdate}
             >
@@ -105,8 +108,29 @@ export default function WorkflowSettingsPage() {
       <div className="column-group col-2">
         <fieldset>
           <legend>Subject Viewer</legend>
-          <p>Choose how to display your subjects. Refer to the Subject Viewer section of the Glossary for more info.</p>
-          <p>TODO</p>
+          <p id="subject-viewer-info">
+            Choose how to display your subjects.
+            Refer to the Subject Viewer section of the Glossary for more info.
+          </p>
+          <div className="flex-row">
+            <select
+              aria-label="Subject viewer"
+              className="flex-item"
+              data-updaterule="undefined_if_empty"
+              defaultValue={workflow?.configuration?.subject_viewer || ''}
+              aria-describedby="subject-viewer-info"
+              name="configuration.subject_viewer"
+              onChange={doUpdate}
+            >
+              <option value="">None selected (default)</option>
+              <option value="imageAndText">Image and Text</option>
+              <option value="jsonData">JSON data charts</option>
+              <option value="multiFrame">Multi-Frame</option>
+              <option value="singleImage">Single Image</option>
+              <option value="singleText">Single Text</option>
+              <option value="subjectGroup">Subject Group</option>
+            </select>
+          </div>
         </fieldset>
 
         <fieldset className="disabled">
