@@ -11,7 +11,8 @@ $fontSizeS = 14px
 $fontSizeM = 16px
 $fontSizeL = 18px
 
-$fontWeightBold = 700
+$fontWeightBold = 600
+$fontWeightBoldPlus = 700
 
 // Container
 // Affects everything outside the pages editor
@@ -75,7 +76,7 @@ $fontWeightBold = 700
       border: none
       cursor: pointer
       font-size: $fontSizeL
-      font-weight: $fontWeightBold
+      font-weight: $fontWeightBoldPlus
       text-transform: uppercase
 
   // Component: Workflow Settings Page
@@ -91,7 +92,7 @@ $fontWeightBold = 700
     label[for=display_name]
       display: block
       font-size: $fontSizeL
-      font-weight: $fontWeightBold
+      font-weight: $fontWeightBoldPlus
       grid-column: 1 / span 2
       grid-row: 1
       text-transform: uppercase
@@ -111,6 +112,9 @@ $fontWeightBold = 700
         font-size: $fontSizeL
         padding: 0
         text-transform: uppercase
+      
+      p
+        font-size: $fontSizeS
       
       .small-info
         font-size: $fontSizeS
