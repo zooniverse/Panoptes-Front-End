@@ -44,17 +44,36 @@ $fontWeightBoldPlus = 700
     font-size: $fontSizeM
   
   input[type=text]
-    border-radius: $tiny
     border: 1.5px solid $grey1
     color: $black
     padding: $small
-
+  
+  select
+    border: 1.5px solid $grey1
+    color: $black
+    font-size: $fontSizeM
+    padding: $small
+  
   button
     color: $black
     font-family: $fontFamilies
   
   hr
     border-top: 1px solid $grey2
+
+  // General Layout
+  // ---------------------------------------------------------------------------
+
+  .flex-row
+    display: flex
+    flex-direction: row
+    gap: $small
+  
+  .small-width
+    width: 60px
+
+  .flex-item
+    flex: 1 1 auto
   
   // Component: Workflow Header
   // ---------------------------------------------------------------------------
@@ -89,6 +108,7 @@ $fontWeightBoldPlus = 700
     grid-template-rows: auto auto
     margin-top: $small
 
+    // Workflow Title
     label[for=display_name]
       display: block
       font-size: $fontSizeL
@@ -98,11 +118,13 @@ $fontWeightBoldPlus = 700
       text-transform: uppercase
 
       input
+        border-radius: $tiny
         display: block
         font-size: $fontSizeL
         margin-top: $tiny
         width: 100%
     
+    // Group of Config Options/Controls
     fieldset
       border: none
       padding: 0
@@ -119,7 +141,7 @@ $fontWeightBoldPlus = 700
       .small-info
         font-size: $fontSizeS
         font-style: italic
-    
+
     .col-1
       grid-column: 1
       grid-row: 2

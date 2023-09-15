@@ -63,7 +63,22 @@ export default function WorkflowSettingsPage() {
             &quo;done.&quo; Once a subject has reached the retirement limit it
             will no longer be shown to volunteers.
           </p>
-          <p>TODO</p>
+          <div className="flex-row">
+            <select
+              className="flex-item"
+              name="retirement.criteria"
+              defaultValue={workflow?.retirement?.criteria}
+            >
+              <option value="junk">Junk</option>
+              <option value="classification_count">Classification count</option>
+            </select>
+            <input
+              className="small-width"
+              name="retirement.options.count"
+              type="text"
+              defaultValue={workflow?.retirement?.options?.count}
+            />
+          </div>
           <p className="small-info">
             If you&apos;d like more complex retirement rules such as conditional
             retirement using Caesar, please get in touch via the Contact Us
