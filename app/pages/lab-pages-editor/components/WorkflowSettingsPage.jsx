@@ -29,9 +29,12 @@ export default function WorkflowSettingsPage() {
     if (updaterule === 'convert_to_number') value = parseInt(value);
     if (updaterule === 'undefined_if_empty') value = value || undefined;
 
+    // TODO: due to onBlur={doUpdate}, keyboard navigation may accidentally cause the Workflow to update multiple times.
+    // One solution is to check if the new value is different from the existing one.
+
     update({
       [key]: value
-      // 'configuration.classifier_version': '2.0' // TODO: figure out if this needs 
+      // 'configuration.classifier_version': '2.0' // TODO: figure out if this needed.
     });
   }
 
@@ -77,7 +80,7 @@ export default function WorkflowSettingsPage() {
             &quot;done.&quot; Once a subject has reached the retirement limit it
             will no longer be shown to volunteers.
           </p>
-          <div className="flex-row">
+          <div className="flex-row align-start">
             <select
               aria-label="Retirement criteria"
               className="flex-item"
@@ -118,7 +121,7 @@ export default function WorkflowSettingsPage() {
             Choose how to display your subjects.
             Refer to the Subject Viewer section of the Glossary for more info.
           </p>
-          <div className="flex-row">
+          <div className="flex-row align-start">
             <select
               aria-label="Subject viewer"
               className="flex-item"
@@ -156,7 +159,7 @@ export default function WorkflowSettingsPage() {
           <p>TEST: HTML and styling for checkbox input</p>
           <label
             htmlFor="placeholder-1"
-            className="flex-row"
+            className="flex-row align-start"
           >
             <input
               type="checkbox"
@@ -168,7 +171,7 @@ export default function WorkflowSettingsPage() {
           </label>
           <label
             htmlFor="placeholder-2"
-            className="flex-row"
+            className="flex-row align-start"
           >
             <input
               type="checkbox"
@@ -183,7 +186,7 @@ export default function WorkflowSettingsPage() {
           </label>
           <label
             htmlFor="placeholder-3"
-            className="flex-row"
+            className="flex-row align-start"
           >
             <input
               type="checkbox"
@@ -204,7 +207,7 @@ export default function WorkflowSettingsPage() {
           <legend>Quicktalk</legend>
           <p>TEST: HTML and styling for radio options</p>
           <label
-            className="flex-row"
+            className="flex-row align-start"
             htmlFor="placeholder-4-a"
           >
             <input
@@ -217,7 +220,7 @@ export default function WorkflowSettingsPage() {
             <span>Placeholder 4, Option A</span>
           </label>
           <label
-            className="flex-row"
+            className="flex-row align-start"
             htmlFor="placeholder-4-b"
           >
             <input
@@ -230,7 +233,7 @@ export default function WorkflowSettingsPage() {
             <span>Placeholder 4, Option B</span>
           </label>
           <label
-            className="flex-row"
+            className="flex-row align-start"
             htmlFor="placeholder-4-c"
           >
             <input
