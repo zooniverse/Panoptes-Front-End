@@ -58,10 +58,51 @@ export default function WorkflowSettingsPage() {
 
         <fieldset>
           <legend>Subject Retirement</legend>
-          <p>Set how many people should classify each subject before it is &quo;done.&quo; Once a subject has reached the retirement limit it will no longer be shown to volunteers.</p>
+          <p>
+            Set how many people should classify each subject before it is
+            &quo;done.&quo; Once a subject has reached the retirement limit it
+            will no longer be shown to volunteers.
+          </p>
           <p>TODO</p>
+          <p className="small-info">
+            If you&apos;d like more complex retirement rules such as conditional
+            retirement using Caesar, please get in touch via the Contact Us
+            page.
+          </p>
         </fieldset>
       </div>
+
+      <div className="column-group col-2">
+        <fieldset>
+          <legend>Subject Viewer</legend>
+          <p>Choose how to display your subjects. Refer to the Subject Viewer section of the Glossary for more info.</p>
+          <p>TODO</p>
+        </fieldset>
+
+        <fieldset className="disabled">
+          <legend>Multi-Image Options</legend>
+          <p>
+            Choose how to display subjects with multiple images.
+            If your subjects are in a sequence, such as camera trap images,
+            volunteers can play them like a .gif using the Flipbook viewer.
+          </p>
+          <p>TODO</p>
+        </fieldset>
+
+        <hr />
+
+        <fieldset>
+          <legend>Classification Tools</legend>
+          <p>TODO</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Quicktalk</legend>
+          <p>TODO</p>
+        </fieldset>
+
+      </div>
+
     </form>
   );
 }
