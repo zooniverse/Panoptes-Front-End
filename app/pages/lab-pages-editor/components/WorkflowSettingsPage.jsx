@@ -174,6 +174,7 @@ export default function WorkflowSettingsPage() {
             className="flex-row align-start"
           >
             <input
+              defaultChecked={true}
               type="checkbox"
               id="placeholder-2"
               name="placeholder-2"
@@ -224,6 +225,7 @@ export default function WorkflowSettingsPage() {
             htmlFor="placeholder-4-b"
           >
             <input
+              defaultChecked={true}
               type="radio"
               id="placeholder-4-b"
               name="placeholder-4"
@@ -248,7 +250,6 @@ export default function WorkflowSettingsPage() {
         </fieldset>
 
       </div>
-
     </form>
   );
 }

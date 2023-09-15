@@ -1,6 +1,7 @@
 $grey1 = #A6A7A9
 $grey2 = #808080
 $black = #000000
+$teal = #00979D
 
 $sizeXS = 0.25em
 $sizeS = 0.5em
@@ -24,6 +25,7 @@ $fontWeightBoldPlus = 700
 // Pages Editor
 // -----------------------------------------------------------------------------
 .lab-pages-editor
+  accent-color: $teal
   box-sizing: border-box
   color: $black
   font-family: $fontFamilies
@@ -49,6 +51,11 @@ $fontWeightBoldPlus = 700
     border: 1.5px solid $grey1
     color: $black
     padding: $sizeS
+  
+  input[type=radio], input[type=checkbox]
+    flex: 0 0 auto
+    width: $fontSizeM
+    height: $fontSizeM
   
   select
     border: 1.5px solid $grey1
