@@ -89,13 +89,18 @@ $fontWeightBoldPlus = 700
   
   .align-start
     align-items: flex-start
+
+  .justify-around
+    justify-content: space-around
+  
+  .spacing-bottom
+    margin-bottom: $sizeXS
   
   // Component: Workflow Header
   // ---------------------------------------------------------------------------
 
   .workflow-header
     border-bottom: 0.5px solid $grey1
-    padding-bottom: $sizeS
 
     a
       display: inline-block
@@ -112,6 +117,13 @@ $fontWeightBoldPlus = 700
       font-size: $fontSizeL
       font-weight: $fontWeightBoldPlus
       text-transform: uppercase
+
+      &.selected
+        border-bottom: 4px solid $teal
+      
+      &.unselected
+        color: $grey1
+        border-bottom: 4px solid transparent
 
   // Component: Workflow Settings Page
   // ---------------------------------------------------------------------------

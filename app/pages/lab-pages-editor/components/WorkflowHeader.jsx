@@ -22,17 +22,19 @@ export default function WorkflowHeader({
   if (!workflow) return null;
 
   return (
-    <div className="workflow-header">
+    <div className="workflow-header flex-row">
       <Link to={returnUrl}>
         <ReturnIcon />
         {strings.PagesEditor.components.WorkflowHeader.return}
       </Link>
-      <button type="button" onClick={onClick}>
-        {strings.PagesEditor.components.WorkflowHeader.tasks}
-      </button>
-      <button type="button" onClick={onClick}>
-        {strings.PagesEditor.components.WorkflowHeader.workflow_settings}
-      </button>
+      <div className="flex-row flex-item justify-around">
+        <button className="unselected" type="button" onClick={onClick}>
+          {strings.PagesEditor.components.WorkflowHeader.tasks}
+        </button>
+        <button className="selected" type="button" onClick={onClick}>
+          {strings.PagesEditor.components.WorkflowHeader.workflow_settings}
+        </button>
+      </div>
     </div>
   );
 }

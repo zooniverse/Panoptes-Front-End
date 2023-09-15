@@ -80,7 +80,7 @@ export default function WorkflowSettingsPage() {
             &quot;done.&quot; Once a subject has reached the retirement limit it
             will no longer be shown to volunteers.
           </p>
-          <div className="flex-row align-start">
+          <div className="flex-row align-start spacing-bottom">
             <select
               aria-label="Retirement criteria"
               className="flex-item"
@@ -121,7 +121,7 @@ export default function WorkflowSettingsPage() {
             Choose how to display your subjects.
             Refer to the Subject Viewer section of the Glossary for more info.
           </p>
-          <div className="flex-row align-start">
+          <div className="flex-row align-start spacing-bottom">
             <select
               aria-label="Subject viewer"
               className="flex-item"
@@ -159,7 +159,7 @@ export default function WorkflowSettingsPage() {
           <p>TEST: HTML and styling for checkbox input</p>
           <label
             htmlFor="placeholder-1"
-            className="flex-row align-start"
+            className="flex-row align-start spacing-bottom"
           >
             <input
               type="checkbox"
@@ -171,7 +171,7 @@ export default function WorkflowSettingsPage() {
           </label>
           <label
             htmlFor="placeholder-2"
-            className="flex-row align-start"
+            className="flex-row align-start spacing-bottom"
           >
             <input
               defaultChecked={true}
@@ -187,7 +187,7 @@ export default function WorkflowSettingsPage() {
           </label>
           <label
             htmlFor="placeholder-3"
-            className="flex-row align-start"
+            className="flex-row align-start spacing-bottom"
           >
             <input
               type="checkbox"
@@ -208,7 +208,7 @@ export default function WorkflowSettingsPage() {
           <legend>Quicktalk</legend>
           <p>TEST: HTML and styling for radio options</p>
           <label
-            className="flex-row align-start"
+            className="flex-row align-start spacing-bottom"
             htmlFor="placeholder-4-a"
           >
             <input
@@ -221,7 +221,7 @@ export default function WorkflowSettingsPage() {
             <span>Placeholder 4, Option A</span>
           </label>
           <label
-            className="flex-row align-start"
+            className="flex-row align-start spacing-bottom"
             htmlFor="placeholder-4-b"
           >
             <input
@@ -235,7 +235,7 @@ export default function WorkflowSettingsPage() {
             <span>Placeholder 4, Option B</span>
           </label>
           <label
-            className="flex-row align-start"
+            className="flex-row align-start spacing-bottom"
             htmlFor="placeholder-4-c"
           >
             <input
