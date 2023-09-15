@@ -1,4 +1,5 @@
-$grey = #A6A7A9
+$grey1 = #A6A7A9
+$grey2 = #808080
 $black = #000000
 
 $tiny = 0.25em
@@ -43,7 +44,7 @@ $fontWeightBold = 700
   
   input[type=text]
     border-radius: $tiny
-    border: 1.5px solid $grey
+    border: 1.5px solid $grey1
     color: $black
     padding: $small
 
@@ -51,11 +52,14 @@ $fontWeightBold = 700
     color: $black
     font-family: $fontFamilies
   
+  hr
+    border-top: 1px solid $grey2
+  
   // Component: Workflow Header
   // ---------------------------------------------------------------------------
 
   .workflow-header
-    border-bottom: 0.5px solid $grey
+    border-bottom: 0.5px solid $grey1
     padding-bottom: $small
 
     a
