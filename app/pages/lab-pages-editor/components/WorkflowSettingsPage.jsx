@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/require-default-props */
+/* eslint-disable radix */
 
 import { useWorkflowContext } from '../context.js';
-import strings from '../strings.json';
+import strings from '../strings.json'; // TODO: move all text into strings
 
 export default function WorkflowSettingsPage() {
   const { workflow, update } = useWorkflowContext();
@@ -20,7 +21,11 @@ export default function WorkflowSettingsPage() {
 
   function doUpdate(e) {
     const key = e.target.name;
-    const value = e.target.value || '';
+    let value = e.target.value || '';
+    const { updaterule } = e.target.dataset;
+
+    console.log('+++ e.target.dataset', e.target.dataset)
+    if (updaterule === 'convert_to_number') value = parseInt(value);
 
     update({
       [key]: value
@@ -65,18 +70,26 @@ export default function WorkflowSettingsPage() {
           </p>
           <div className="flex-row">
             <select
+              aria-label="Retirement criteria"
               className="flex-item"
-              name="retirement.criteria"
               defaultValue={workflow?.retirement?.criteria}
+              name="retirement.criteria"
+              onChange={doUpdate}
             >
               <option value="junk">Junk</option>
               <option value="classification_count">Classification count</option>
             </select>
             <input
+              aria-label="Retirement count"
               className="small-width"
-              name="retirement.options.count"
-              type="text"
               defaultValue={workflow?.retirement?.options?.count}
+              data-updaterule="convert_to_number"
+              max="100"
+              min="1"
+              name="retirement.options.count"
+              onBlur={doUpdate}
+              placeholder="∞"
+              type="number"
             />
           </div>
           <p className="small-info">
