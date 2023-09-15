@@ -1,4 +1,5 @@
 $grey = #A6A7A9
+$black = #000000
 
 $tiny = 0.25em
 $small = 0.5em
@@ -21,6 +22,7 @@ $fontWeightBold = 700
 // -----------------------------------------------------------------------------
 .lab-pages-editor
   box-sizing: border-box
+  color: $black
   font-family: $fontFamilies
   font-size: $fontSizeM
   max-width: 800px
@@ -31,6 +33,10 @@ $fontWeightBold = 700
   *
     box-sizing: border-box
   
+  a
+    color: $black
+    text-decoration: none
+
   input
     font-family: $fontFamilies
     font-size: $fontSizeM
@@ -38,17 +44,26 @@ $fontWeightBold = 700
   input[type=text]
     border-radius: $tiny
     border: 1.5px solid $grey
+    color: $black
     padding: $small
 
   button
+    color: $black
     font-family: $fontFamilies
 
   fieldset
+    border: none
     padding: 0
 
     legend
+      font-weight: $fontWeightBold
       font-size: $fontSizeL
       padding: 0
+      text-transform: uppercase
+    
+    .small-info
+      font-size: $fontSizeS
+      font-style: italic
   
   // Component: Workflow Header
   // ---------------------------------------------------------------------------

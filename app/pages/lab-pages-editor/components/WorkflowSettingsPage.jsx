@@ -40,6 +40,28 @@ export default function WorkflowSettingsPage() {
           onBlur={doUpdate}
         />
       </label>
+
+      <div className="column-group col-1">
+        <fieldset>
+          <legend>Associated Subject Sets</legend>
+          <p>Choose the set of subjects you want to use for this workflow. Add subject sets in the Subject Sets tab.</p>
+          <p>TODO</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Associated Tutorial</legend>
+          <p>Choose the tutorials you want to use for this workflow. Create tutorials in the Tutorial tab.</p>
+          <p>TODO</p>
+        </fieldset>
+
+        <hr />
+
+        <fieldset>
+          <legend>Subject Retirement</legend>
+          <p>Set how many people should classify each subject before it is &quo;done.&quo; Once a subject has reached the retirement limit it will no longer be shown to volunteers.</p>
+          <p>TODO</p>
+        </fieldset>
+      </div>
     </form>
   );
 }
