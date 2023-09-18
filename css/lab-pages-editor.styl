@@ -1,0 +1,179 @@
+$grey1 = #A6A7A9
+$grey2 = #808080
+$black = #000000
+$teal = #00979D
+
+$sizeXS = 0.25em
+$sizeS = 0.5em
+$sizeM = 20px
+
+$fontFamilies = Karla, Arial, sans-serif
+
+$fontSizeS = 14px
+$fontSizeM = 16px
+$fontSizeL = 18px
+
+$fontWeightBold = 600
+$fontWeightBoldPlus = 700
+
+// Container
+// Affects everything outside the pages editor
+// -----------------------------------------------------------------------------
+.columns-container.content-container.pages-editor-container
+  margin: 0
+
+// Pages Editor
+// -----------------------------------------------------------------------------
+.lab-pages-editor
+  accent-color: $teal
+  box-sizing: border-box
+  color: $black
+  font-family: $fontFamilies
+  font-size: $fontSizeM
+  max-width: 840px
+  margin: 0 auto
+  padding: 0 $sizeM
+
+  // General UI
+  // ---------------------------------------------------------------------------
+  *
+    box-sizing: border-box
+  
+  a
+    color: $black
+    text-decoration: none
+
+  input
+    font-family: $fontFamilies
+    font-size: $fontSizeM
+  
+  input[type=text], input[type=number]
+    border: 1.5px solid $grey1
+    color: $black
+    padding: $sizeS
+  
+  input[type=radio], input[type=checkbox]
+    flex: 0 0 auto
+    width: $fontSizeM
+    height: $fontSizeM
+  
+  select
+    border: 1.5px solid $grey1
+    color: $black
+    font-size: $fontSizeM
+    padding: $sizeS
+  
+  button
+    color: $black
+    font-family: $fontFamilies
+  
+  hr
+    border-top: 1px solid $grey2
+  
+  .disabled, .disabled *
+    color: $grey1
+
+  // General Layout
+  // ---------------------------------------------------------------------------
+
+  .flex-row
+    display: flex
+    flex-direction: row
+    gap: $sizeS
+  
+  .small-width
+    width: 60px
+
+  .flex-item
+    flex: 1 1 auto
+  
+  .align-start
+    align-items: flex-start
+
+  .justify-around
+    justify-content: space-around
+  
+  .spacing-bottom
+    margin-bottom: $sizeXS
+  
+  // Component: Workflow Header
+  // ---------------------------------------------------------------------------
+
+  .workflow-header
+    border-bottom: 0.5px solid $grey1
+
+    a
+      display: inline-block
+      font-size: $fontSizeS
+      text-decoration: none
+
+      .icon
+        margin-right: $sizeS
+
+    button
+      background: none
+      border: none
+      cursor: pointer
+      font-size: $fontSizeL
+      font-weight: $fontWeightBoldPlus
+      text-transform: uppercase
+
+      &.selected
+        border-bottom: 4px solid $teal
+      
+      &.unselected
+        color: $grey1
+        border-bottom: 4px solid transparent
+
+  // Component: Workflow Settings Page
+  // ---------------------------------------------------------------------------
+
+  .workflow-settings-page
+    display: grid
+    gap: $sizeM
+    grid-template-columns: auto auto
+    grid-template-rows: auto auto
+    margin-top: $sizeS
+
+    // Workflow Title
+    label[for=display_name]
+      display: block
+      font-size: $fontSizeL
+      font-weight: $fontWeightBoldPlus
+      grid-column: 1 / span 2
+      grid-row: 1
+      text-transform: uppercase
+
+      input
+        border-radius: $sizeXS
+        display: block
+        font-size: $fontSizeL
+        margin-top: $sizeXS
+        width: 100%
+    
+    // Group of Config Options/Controls
+    fieldset
+      border: none
+      margin-bottom: $sizeM
+      padding: 0
+
+      legend
+        font-weight: $fontWeightBold
+        font-size: $fontSizeL
+        padding: 0
+        text-transform: uppercase
+      
+      p
+        font-size: $fontSizeS
+      
+      .small-info
+        font-size: $fontSizeS
+        font-style: italic
+
+    .col-1
+      grid-column: 1
+      grid-row: 2
+
+    .col-2
+      grid-column: 2
+      grid-row: 2
