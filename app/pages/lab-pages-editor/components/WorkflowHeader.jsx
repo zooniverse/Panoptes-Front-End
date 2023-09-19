@@ -17,6 +17,15 @@ export default function WorkflowHeader({
 }) {
   const { workflow } = useWorkflowContext();
   const returnUrl = `/lab/${projectId}/workflows`;
+  const tabs = [
+    {
+      id: 'pages-editor_workflow-header-tab-button_task',
+      label: strings.PagesEditor.components.WorkflowHeader.tasks
+    }, {
+      id: 'pages-editor_workflow-header-tab-button_settings',
+      label: strings.PagesEditor.components.WorkflowHeader.workflow_settings
+    }
+  ];
 
   function onClick(e) {
     const { tab } = e.target.dataset;
@@ -31,23 +40,20 @@ export default function WorkflowHeader({
         <ReturnIcon />
         {strings.PagesEditor.components.WorkflowHeader.return}
       </Link>
-      <div className="flex-row flex-item justify-around">
-        <button
-          className={(currentTab === 0) ? 'selected' : 'unselected'}
-          data-tab="0"
-          onClick={onClick}
-          type="button"
-        >
-          {strings.PagesEditor.components.WorkflowHeader.tasks}
-        </button>
-        <button
-          className={(currentTab === 1) ? 'selected' : 'unselected'}
-          data-tab="1"
-          onClick={onClick}
-          type="button"
-        >
-          {strings.PagesEditor.components.WorkflowHeader.workflow_settings}
-        </button>
+      <div
+        role="tablist"
+        className="flex-row flex-item justify-around"
+      >
+        {tabs.map((tab, index) => (
+          <TabButton
+            id={tab.id}
+            index={index}
+            key={`${tab.id}`}
+            label={tab.label}
+            onClick={onClick}
+            selected={(currentTab === index)}
+          />
+        ))}
       </div>
     </div>
   );
@@ -57,4 +63,34 @@ WorkflowHeader.propTypes = {
   currentTab: PropTypes.number,
   projectId: PropTypes.string,
   setCurrentTab: PropTypes.func
+};
+
+function TabButton({
+  id,
+  index,
+  label = '',
+  onClick = () => {},
+  selected = false
+}) {
+  return (
+    <button
+      aria-selected={selected}
+      className={selected ? 'selected' : 'unselected'}
+      data-tab={index}
+      id={id}
+      onClick={onClick}
+      role="tab"
+      type="button"
+    >
+      {label}
+    </button>
+  );
+}
+
+TabButton.propTypes = {
+  id: PropTypes.string,
+  index: PropTypes.number,
+  label: PropTypes.string,
+  onClick: PropTypes.func,
+  selected: PropTypes.bool
 };
