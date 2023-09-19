@@ -11,7 +11,7 @@ import { useWorkflowContext } from '../context.js';
 import strings from '../strings.json';
 
 export default function WorkflowHeader({
-  currentTab = 1000,
+  currentTab = 0,
   projectId = '',
   setCurrentTab = () => {}
 }) {
@@ -27,9 +27,27 @@ export default function WorkflowHeader({
     }
   ];
 
+  // When clicking a tab button, make that tab active. This is pretty straightforward.
   function onClick(e) {
     const { tab } = e.target.dataset;
     setCurrentTab(parseInt(tab));
+  }
+
+  // When a tab button has focus, the left/right keys will switch to the prev/next tab.
+  function onKeyUp(e) {
+    let changeTab = 0;
+    if (e.key === 'ArrowLeft') changeTab = -1;
+    if (e.key === 'ArrowRight') changeTab = +1;
+
+    if (changeTab !== 0) {
+      const newTab = (currentTab + changeTab + tabs.length) % tabs.length;
+      setCurrentTab(newTab);
+      e.preventDefault?.();
+      e.stopPropagation?.();
+      return false;
+    }
+
+    return true;
   }
 
   if (!workflow) return null;
@@ -51,6 +69,7 @@ export default function WorkflowHeader({
             key={`${tab.id}`}
             label={tab.label}
             onClick={onClick}
+            onKeyUp={onKeyUp}
             selected={(currentTab === index)}
           />
         ))}
@@ -70,6 +89,7 @@ function TabButton({
   index,
   label = '',
   onClick = () => {},
+  onKeyUp = () => {},
   selected = false
 }) {
   return (
@@ -79,6 +99,7 @@ function TabButton({
       data-tab={index}
       id={id}
       onClick={onClick}
+      onKeyUp={onKeyUp}
       role="tab"
       type="button"
     >
@@ -92,5 +113,6 @@ TabButton.propTypes = {
   index: PropTypes.number,
   label: PropTypes.string,
   onClick: PropTypes.func,
+  onKeyUp: PropTypes.func,
   selected: PropTypes.bool
 };
