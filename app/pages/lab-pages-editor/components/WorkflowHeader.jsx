@@ -42,6 +42,8 @@ export default function WorkflowHeader({
     if (changeTab !== 0) {
       const newTab = (currentTab + changeTab + tabs.length) % tabs.length;
       setCurrentTab(newTab);
+      document?.querySelector(`#${tabs[newTab]?.id}`)?.focus();
+
       e.preventDefault?.();
       e.stopPropagation?.();
       return false;
@@ -101,6 +103,7 @@ function TabButton({
       onClick={onClick}
       onKeyUp={onKeyUp}
       role="tab"
+      tabIndex={selected ? undefined : -1}
       type="button"
     >
       {label}
