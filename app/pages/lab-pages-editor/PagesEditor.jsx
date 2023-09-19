@@ -32,7 +32,14 @@ function PagesEditor({ params }) {
             projectId={projectId}
             setCurrentTab={setCurrentTab}
           />
-          {(currentTab === 0) && <p>tasks</p>}
+          {(currentTab === 0) && (
+            <div role="tabpanel" aria-labelledby="pages-editor_workflow-header-tab-button_task">
+              <p>Tasks will appear on this panel.</p>
+              <button type="button" onClick={() => console.log('This is a placeholder')}>
+                And this is a button for you to focus on with keyboard navigation.
+              </button>
+            </div>
+          )}
           {(currentTab === 1) && <WorkflowSettingsPage />}
         </DataManager>
       </div>
