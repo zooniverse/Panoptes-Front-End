@@ -104,7 +104,7 @@ function TabButton({
       onClick={onClick}
       onKeyUp={onKeyUp}
       role="tab"
-      tabIndex={selected ? undefined : -1}
+      tabIndex={selected ? 0 : -1}
       type="button"
     >
       {label}
