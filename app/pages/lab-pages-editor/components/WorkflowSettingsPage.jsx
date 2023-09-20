@@ -48,10 +48,8 @@ export default function WorkflowSettingsPage() {
 
   return (
     <form
-      aria-labelledby="pages-editor_workflow-header-tab-button_settings"
       className="workflow-settings-page"
       onSubmit={onSubmit}
-      role="tabpanel"
     >
       <label htmlFor="display_name">
         Workflow Name

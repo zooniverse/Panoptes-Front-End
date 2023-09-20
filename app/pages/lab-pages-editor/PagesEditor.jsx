@@ -12,13 +12,22 @@ import { StrictMode, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import DataManager from './DataManager.jsx';
-import Tester from './Tester.jsx';
 import WorkflowHeader from './components/WorkflowHeader.jsx';
 import WorkflowSettingsPage from './components/WorkflowSettingsPage.jsx';
+import strings from './strings.json';
 
 function PagesEditor({ params }) {
   const { workflowID: workflowId, projectID: projectId } = params;
   const [currentTab, setCurrentTab] = useState(0);
+  const tabs = [
+    {
+      id: 'pages-editor_workflow-header-tab-button_task',
+      label: strings.PagesEditor.components.WorkflowHeader.tasks
+    }, {
+      id: 'pages-editor_workflow-header-tab-button_settings',
+      label: strings.PagesEditor.components.WorkflowHeader.workflow_settings
+    }
+  ];
 
   return (
     <StrictMode>
@@ -31,16 +40,27 @@ function PagesEditor({ params }) {
             currentTab={currentTab}
             projectId={projectId}
             setCurrentTab={setCurrentTab}
+            tabs={tabs}
           />
           {(currentTab === 0) && (
-            <div role="tabpanel" aria-labelledby="pages-editor_workflow-header-tab-button_task">
+            <div
+              aria-labelledby={tabs[0].id}
+              role="tabpanel"
+            >
               <p>Tasks will appear on this panel.</p>
               <button type="button" onClick={() => console.log('This is a placeholder')}>
                 And this is a button for you to focus on with keyboard navigation.
               </button>
             </div>
           )}
-          {(currentTab === 1) && <WorkflowSettingsPage />}
+          {(currentTab === 1) && (
+            <div
+              aria-labelledby={tabs[1].id}
+              role="tabpanel"
+            >
+              <WorkflowSettingsPage />
+            </div>
+          )}
         </DataManager>
       </div>
     </StrictMode>

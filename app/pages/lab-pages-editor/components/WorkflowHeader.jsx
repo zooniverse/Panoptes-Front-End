@@ -13,19 +13,11 @@ import strings from '../strings.json';
 export default function WorkflowHeader({
   currentTab = 0,
   projectId = '',
-  setCurrentTab = () => {}
+  setCurrentTab = () => {},
+  tabs = []
 }) {
   const { workflow } = useWorkflowContext();
   const returnUrl = `/lab/${projectId}/workflows`;
-  const tabs = [
-    {
-      id: 'pages-editor_workflow-header-tab-button_task',
-      label: strings.PagesEditor.components.WorkflowHeader.tasks
-    }, {
-      id: 'pages-editor_workflow-header-tab-button_settings',
-      label: strings.PagesEditor.components.WorkflowHeader.workflow_settings
-    }
-  ];
 
   // When clicking a tab button, make that tab active. This is pretty straightforward.
   function onClick(e) {
@@ -83,7 +75,13 @@ export default function WorkflowHeader({
 WorkflowHeader.propTypes = {
   currentTab: PropTypes.number,
   projectId: PropTypes.string,
-  setCurrentTab: PropTypes.func
+  setCurrentTab: PropTypes.func,
+  tabs: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      label: PropTypes.string
+    })
+  )
 };
 
 function TabButton({
