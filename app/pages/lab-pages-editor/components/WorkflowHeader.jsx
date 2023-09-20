@@ -95,7 +95,6 @@ function TabButton({
   return (
     <button
       aria-selected={selected}
-      className={selected ? 'selected' : 'unselected'}
       data-tab={index}
       id={id}
       onClick={onClick}

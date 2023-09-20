@@ -118,10 +118,10 @@ $fontWeightBoldPlus = 700
       font-weight: $fontWeightBoldPlus
       text-transform: uppercase
 
-      &.selected
+      &[aria-selected=true]
         border-bottom: 4px solid $teal
       
-      &.unselected
+      &[aria-selected=false]
         color: $grey1
         border-bottom: 4px solid transparent
 
