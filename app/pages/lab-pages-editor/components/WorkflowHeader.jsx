@@ -98,7 +98,7 @@ function TabButton({
   return (
     <button
       aria-controls={targetPanel}
-      aria-selected={selected}
+      aria-selected={selected ? 'true' : 'false'}
       data-tab={index}
       id={id}
       onClick={onClick}
