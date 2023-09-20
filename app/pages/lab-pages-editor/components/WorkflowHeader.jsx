@@ -65,6 +65,7 @@ export default function WorkflowHeader({
             onClick={onClick}
             onKeyUp={onKeyUp}
             selected={(currentTab === index)}
+            targetPanel={tab.targetPanel}
           />
         ))}
       </div>
@@ -79,7 +80,8 @@ WorkflowHeader.propTypes = {
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
-      label: PropTypes.string
+      label: PropTypes.string,
+      targetPanel: PropTypes.string
     })
   )
 };
@@ -90,10 +92,12 @@ function TabButton({
   label = '',
   onClick = () => {},
   onKeyUp = () => {},
-  selected = false
+  selected = false,
+  targetPanel = ''
 }) {
   return (
     <button
+      aria-controls={targetPanel}
       aria-selected={selected}
       data-tab={index}
       id={id}
@@ -114,5 +118,6 @@ TabButton.propTypes = {
   label: PropTypes.string,
   onClick: PropTypes.func,
   onKeyUp: PropTypes.func,
-  selected: PropTypes.bool
+  selected: PropTypes.bool,
+  targetPanel: PropTypes.string
 };

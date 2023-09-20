@@ -22,10 +22,12 @@ function PagesEditor({ params }) {
   const tabs = [
     {
       id: 'pages-editor_workflow-header-tab-button_task',
-      label: strings.PagesEditor.components.WorkflowHeader.tasks
+      label: strings.PagesEditor.components.WorkflowHeader.tasks,
+      targetPanel: 'pages-editor_tab-panel_task'
     }, {
       id: 'pages-editor_workflow-header-tab-button_settings',
-      label: strings.PagesEditor.components.WorkflowHeader.workflow_settings
+      label: strings.PagesEditor.components.WorkflowHeader.workflow_settings,
+      targetPanel: 'pages-editor_tab-panel_settings'
     }
   ];
 
@@ -45,6 +47,7 @@ function PagesEditor({ params }) {
           {(currentTab === 0) && (
             <div
               aria-labelledby={tabs[0].id}
+              id={tabs[0].targetPanel}
               role="tabpanel"
             >
               <p>Tasks will appear on this panel.</p>
@@ -56,6 +59,7 @@ function PagesEditor({ params }) {
           {(currentTab === 1) && (
             <div
               aria-labelledby={tabs[1].id}
+              id={tabs[1].targetPanel}
               role="tabpanel"
             >
               <WorkflowSettingsPage />
