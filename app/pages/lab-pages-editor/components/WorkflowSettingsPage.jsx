@@ -47,7 +47,10 @@ export default function WorkflowSettingsPage() {
   if (!workflow) return null;
 
   return (
-    <form className="workflow-settings-page" onSubmit={onSubmit}>
+    <form
+      className="workflow-settings-page"
+      onSubmit={onSubmit}
+    >
       <label htmlFor="display_name">
         Workflow Name
         <input
