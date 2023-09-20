@@ -141,3 +141,22 @@ describe('DropdownEditor: methods', function () {
     assert.equal(newSelect.allowCreate, true);
   });
 });
+
+describe('DropdownEditor SimpleDropdown', function () {
+  // NOTE: This is a very simple test for rendering differences between PFELab and FEMLab
+  // It does not test the functionality of the Dropdown Editor Modal
+
+  it('should render the multi-dropdown in PFE', function () {
+    let mockWorkflow = mockPanoptesResource('workflows', {});
+    let wrapper = shallow(<DropdownEditor pfeLab={true} task={defaultDropdownTask} workflow={mockWorkflow} />);
+    let button = wrapper.find('button.minor-button')
+    assert.equal(button.length, 1);
+  });
+
+  it('should not render the multidropdown in FEM', function () {
+    let mockWorkflow = mockPanoptesResource('workflows', {});
+    let wrapper = shallow(<DropdownEditor pfeLab={false} task={defaultDropdownTask} workflow={mockWorkflow} />);
+    let button = wrapper.find('button.minor-button')
+    assert.equal(button.length, 0);
+  });
+});
