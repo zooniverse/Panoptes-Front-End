@@ -68,7 +68,7 @@ export default {
       about: 'Sobre',
       adminPage: 'Pág. Admin.',
       classify: 'Classificar',
-      collections: 'Coleccionar',
+      collections: 'Colecionar',
       exploreProject: 'Explorar o Projecto',
       lab: 'Lab',
       recents: 'Recentes',
