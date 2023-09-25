@@ -66,6 +66,7 @@ export default {
       classify: 'Clasificar',
       talk: 'Hablemos',
       collections: 'Colecciones',
+      exploreProject: 'Explorar el proyecto',
       recents: 'Recientes',
       lab: 'Laboratorio',
       adminPage: 'Página del Administrador',
