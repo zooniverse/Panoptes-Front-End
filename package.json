@@ -88,7 +88,7 @@
     "nyc": "~15.1.0",
     "path-browserify": "~1.0.1",
     "process": "~0.11.10",
-    "rimraf": "~5.0.4",
+    "rimraf": "~5.0.5",
     "sinon": "~16.0.0",
     "sinon-chai": "~3.7.0",
     "style-loader": "~3.3.3",
