@@ -16,6 +16,7 @@ ProjectCard = createReactClass
     imageSrc: ''
     href: ''
     landingPage: false
+    project: {}
 
   render: ->
     conditionalStyle = {}
