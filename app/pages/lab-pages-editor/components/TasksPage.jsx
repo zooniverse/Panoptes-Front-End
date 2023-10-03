@@ -10,6 +10,12 @@ export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
   const isActive = true; // TODO
 
+  function addNewTask() {
+    if (!workflow || !update) return;
+  }
+
+  console.log('+++ workflow: ', workflow);
+
   if (!workflow) return null;
 
   return (
@@ -37,7 +43,28 @@ export default function TasksPage() {
             <option disabled={true}>Choose starting test</option>
           </select>
         </div>
+        <div>
+          {Object.entries(workflow.tasks).map(([key, val]) => (
+            <TaskItem
+              task={val}
+              taskId={key}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
+}
+
+function TaskItem({ task, taskId }) {
+  if (!task || !taskId) return null;
+
+  const text = task.question;
+
+  return (
+    <div className="task-item">
+      {taskId}
+      {text}
+    </div>
+  )
 }
