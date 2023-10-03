@@ -1,7 +1,11 @@
 $grey1 = #A6A7A9
 $grey2 = #808080
+$grey3 = #5C5C5C
+$grey4 = #979797
 $black = #000000
 $teal = #00979D
+$greenBright = #1ED359
+$redBright = #ff0000
 
 $sizeXS = 0.25em
 $sizeS = 0.5em
@@ -12,6 +16,7 @@ $fontFamilies = Karla, Arial, sans-serif
 $fontSizeS = 14px
 $fontSizeM = 16px
 $fontSizeL = 18px
+$fontSizeXL = 24px
 
 $fontWeightBold = 600
 $fontWeightBoldPlus = 700
@@ -77,6 +82,7 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .flex-row
+    align-items: center
     display: flex
     flex-direction: row
     gap: $sizeS
@@ -177,3 +183,34 @@ $fontWeightBoldPlus = 700
     .col-2
       grid-column: 2
       grid-row: 2
+
+  // Component: Tasks Page
+  // ---------------------------------------------------------------------------
+
+  .tasks-page
+
+    .workflow-title
+      border-bottom: 1.5px solid $grey1
+      margin-bottom: $sizeS
+      margin-top: $sizeM
+
+      h2
+        color: $grey3
+        font-size: $fontSizeXL
+        font-weight: $fontWeightBoldPlus
+        text-transform: uppercase
+      
+      .workflow-id
+        color: $grey4
+        font-size: $fontSizeS
+
+      .status-active, .status-inactive
+        font-size: $fontSizeS
+        margin-left: $sizeS
+        text-transform: uppercase
+
+      .status-active
+        color: $greenBright
+
+      .status-inactive
+        color: $redBright
