@@ -2,10 +2,11 @@ $grey1 = #A6A7A9
 $grey2 = #808080
 $grey3 = #5C5C5C
 $grey4 = #979797
+$grey5 = #E2E5E9
 $black = #000000
 $teal = #00979D
 $greenBright = #1ED359
-$redBright = #FF0000  // Improvised; not design-approved.
+$redBright = #E45950
 $yellow = #F0B200
 
 $sizeXS = 0.25em
@@ -14,6 +15,7 @@ $sizeM = 20px
 
 $fontFamilies = Karla, Arial, sans-serif
 
+$fontSizeXS = 10px
 $fontSizeS = 14px
 $fontSizeM = 16px
 $fontSizeL = 18px
@@ -110,9 +112,12 @@ $fontWeightBoldPlus = 700
   .justify-around
     justify-content: space-around
   
-  .spacing-bottom
+  .spacing-bottom-XS
     margin-bottom: $sizeXS
   
+  .spacing-bottom-M
+      margin-bottom: $sizeM
+
   // Component: Workflow Header
   // ---------------------------------------------------------------------------
 
@@ -225,6 +230,27 @@ $fontWeightBoldPlus = 700
 
       .status-inactive
         color: $redBright
+    
+    .steps-list
+      margin-top: $sizeM
+
+    .step-item
+      background: $grey5
+      border: 1px solid $grey1
+      border-radius: $sizeXS
+      margin-top: $sizeM
+      padding: $sizeS $sizeM
+    
+    .task-item
+      .task-key
+        background: $yellow
+        border-radius: $sizeM
+        font-size: $fontSizeXS
+        padding: 0 $sizeS
+      
+      .task-text
+        font-size: $fontSizeS
+        font-weight: $fontWeightBold
 
   .big-text
     color: $black

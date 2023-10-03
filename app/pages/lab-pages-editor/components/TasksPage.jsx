@@ -43,9 +43,10 @@ export default function TasksPage() {
             <option disabled={true}>Choose starting test</option>
           </select>
         </div>
-        <div>
+        <div className="steps-list">
+          {/* WARNING: this should be workflow.steps*/}
           {Object.entries(workflow.tasks).map(([key, val]) => (
-            <TaskItem
+            <StepItem
               task={val}
               taskId={key}
             />
@@ -56,15 +57,26 @@ export default function TasksPage() {
   );
 }
 
-function TaskItem({ task, taskId }) {
+// WARNING/TODO: this should be handling steps, not tasks
+function StepItem({ task, taskId }) {
   if (!task || !taskId) return null;
 
   const text = task.question;
 
   return (
-    <div className="task-item">
-      {taskId}
-      {text}
+    <div className="step-item">
+      <div className="task-item">
+        <div className="flex-row spacing-bottom-M">
+          <span className="task-key">{taskId}</span>
+          <span className="task-icon">(icon)</span>
+          <span className="task-text flex-item">{text}</span>
+          <button className="plain" type="button">(copy)</button>
+          <button className="plain" type="button">(edit)</button>
+        </div>
+        <div className="flex-row">
+          <input className="flex-item" type="text" value="Enter answer here" />
+        </div>
+      </div>
     </div>
   )
 }
