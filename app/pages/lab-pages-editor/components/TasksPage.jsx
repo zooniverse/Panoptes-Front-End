@@ -19,14 +19,22 @@ export default function TasksPage() {
         <span className="workflow-id">{`#${workflow?.id}`}</span>
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
       </div>
-      {/* TODO: the Tasks thing might need to be a section? */}
+      {/* TODO: the Tasks thing might need to be a section? Also some things need better semantic tags */}
       <div>
-        <div>Tasks</div>
+        <div className="big-text">Tasks</div>
         <div className="flex-row">
-          <button className="flex-item" type="button">Add a new Task +</button>
-          <select className="flex-item">
-            <option>T0</option>
-            <option>T1</option>
+          <button
+            className="flex-item big primary"
+            type="button"
+          >
+            Add a new Task +
+          </button>
+          {/* Dev observation: the <select> should have some label to indicate it's for choosing the starting task. */}
+          <select
+            aria-label="Choose starting test"
+            className="flex-item"
+          >
+            <option disabled={true}>Choose starting test</option>
           </select>
         </div>
       </div>

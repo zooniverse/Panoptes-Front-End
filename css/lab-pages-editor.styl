@@ -5,7 +5,8 @@ $grey4 = #979797
 $black = #000000
 $teal = #00979D
 $greenBright = #1ED359
-$redBright = #ff0000
+$redBright = #FF0000  // Improvised; not design-approved.
+$yellow = #F0B200
 
 $sizeXS = 0.25em
 $sizeS = 0.5em
@@ -71,6 +72,16 @@ $fontWeightBoldPlus = 700
   button
     color: $black
     font-family: $fontFamilies
+
+    &.big
+      border: none
+      box-shadow: 1px 1px 4px 0px #00000040
+      font-size: 14px
+      padding: 12px
+    
+    &.primary
+      background: $yellow
+      
   
   hr
     border-top: 1px solid $grey2
@@ -214,3 +225,9 @@ $fontWeightBoldPlus = 700
 
       .status-inactive
         color: $redBright
+
+  .big-text
+    color: $black
+    font-size: $fontSizeL
+    font-weight: $fontWeightBold
+    text-transform: uppercase
