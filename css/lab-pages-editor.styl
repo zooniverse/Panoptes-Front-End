@@ -83,7 +83,10 @@ $fontWeightBoldPlus = 700
     
     &.primary
       background: $yellow
-      
+    
+    &.plain
+      background: none
+      border: none
   
   hr
     border-top: 1px solid $grey2
@@ -251,6 +254,13 @@ $fontWeightBoldPlus = 700
       .task-text
         font-size: $fontSizeS
         font-weight: $fontWeightBold
+      
+    .grip-bar
+      cursor: grab
+      justify-content: center
+
+      &:active
+        cursor: grabbing
 
   .big-text
     color: $black

@@ -6,12 +6,14 @@
 import { useWorkflowContext } from '../context.js';
 import strings from '../strings.json'; // TODO: move all text into strings
 
+import GripIcon from '../icons/GripIcon.jsx';
+
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
   const isActive = true; // TODO
 
-  function addNewTask() {
-    if (!workflow || !update) return;
+  function placeholderEventHandler() {
+    console.log('+++ TODO');
   }
 
   console.log('+++ workflow: ', workflow);
@@ -31,6 +33,7 @@ export default function TasksPage() {
         <div className="flex-row">
           <button
             className="flex-item big primary"
+            onClick={placeholderEventHandler}
             type="button"
           >
             Add a new Task +
@@ -44,11 +47,11 @@ export default function TasksPage() {
           </select>
         </div>
         <div className="steps-list">
-          {/* WARNING: this should be workflow.steps*/}
+          {/* WARNING: this should be workflow.steps */}
           {Object.entries(workflow.tasks).map(([key, val]) => (
             <StepItem
               task={val}
-              taskId={key}
+              taskKey={key}
             />
           ))}
         </div>
@@ -58,20 +61,33 @@ export default function TasksPage() {
 }
 
 // WARNING/TODO: this should be handling steps, not tasks
-function StepItem({ task, taskId }) {
-  if (!task || !taskId) return null;
+function StepItem({ task, taskKey }) {
+  if (!task || !taskKey) return null;
 
-  const text = task.question;
+  const text = task.instruction;
 
   return (
     <div className="step-item">
+      <div className="grip-bar flex-row spacing-bottom-XS">
+        <GripIcon color="#A6A7A9" />
+      </div>
       <div className="task-item">
         <div className="flex-row spacing-bottom-M">
-          <span className="task-key">{taskId}</span>
-          <span className="task-icon">(icon)</span>
+          <span className="task-key">{taskKey}</span>
+          <span className="task-icon">
+            {/* TODO: change icon and aria label depending on task type*/}
+            <i
+              aria-label="Task type: text"
+              className="fa fa fa-file-text-o fa-fw"
+            />
+          </span>
           <span className="task-text flex-item">{text}</span>
-          <button className="plain" type="button">(copy)</button>
-          <button className="plain" type="button">(edit)</button>
+          <button aria-label="Copy" className="plain" type="button">
+            <i className="fa fa-copy" />
+          </button>
+          <button aria-label="Edit" className="plain" type="button">
+            <i className="fa fa-pencil" />
+          </button>
         </div>
         <div className="flex-row">
           <input className="flex-item" type="text" value="Enter answer here" />
