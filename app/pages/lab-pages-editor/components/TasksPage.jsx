@@ -46,7 +46,7 @@ export default function TasksPage() {
             <option disabled={true}>Choose starting test</option>
           </select>
         </div>
-        <div className="steps-list">
+        <ul className="steps-list">
           {/* WARNING: this should be workflow.steps */}
           {Object.entries(workflow.tasks).map(([key, val]) => (
             <StepItem
@@ -54,7 +54,7 @@ export default function TasksPage() {
               taskKey={key}
             />
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   );
@@ -67,7 +67,7 @@ function StepItem({ task, taskKey }) {
   const text = task.instruction;
 
   return (
-    <div className="step-item">
+    <li className="step-item">
       <div className="grip-bar flex-row spacing-bottom-XS">
         <GripIcon color="#A6A7A9" />
       </div>
@@ -93,6 +93,6 @@ function StepItem({ task, taskKey }) {
           <input className="flex-item" type="text" value="Enter answer here" />
         </div>
       </div>
-    </div>
+    </li>
   )
 }
