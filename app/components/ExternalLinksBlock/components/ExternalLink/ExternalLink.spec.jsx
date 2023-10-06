@@ -38,7 +38,7 @@ describe('ExternalLink', function() {
     });
 
     it('should render the markdown hyperlink correctly', function () {
-      expect(markdownHtml).to.equal('<a href="https://www.google.com" target="_blank" rel="noopener nofollow noreferrer"></a>')
+      expect(markdownHtml).to.equal('<a rel="noopener nofollow noreferrer" target="_blank" href="https://www.google.com"></a>')
     });
 
     it('should have the Font Awesome external link icon', function () {
