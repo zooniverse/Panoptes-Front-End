@@ -27,9 +27,8 @@ export default function TasksPage() {
         <span className="workflow-id">{`#${workflow?.id}`}</span>
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
       </div>
-      {/* TODO: the Tasks thing might need to be a section? Also some things need better semantic tags */}
-      <div>
-        <div className="big-text">Tasks</div>
+      <section>
+        <h3>Tasks</h3>
         <div className="flex-row">
           <button
             className="flex-item big primary"
@@ -55,7 +54,7 @@ export default function TasksPage() {
             />
           ))}
         </ul>
-      </div>
+      </section>
     </div>
   );
 }
