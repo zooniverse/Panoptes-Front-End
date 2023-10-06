@@ -71,28 +71,30 @@ function StepItem({ task, taskKey }) {
       <div className="grip-bar flex-row spacing-bottom-XS">
         <GripIcon color="#A6A7A9" />
       </div>
-      <div className="task-item">
-        <div className="flex-row spacing-bottom-M">
-          <span className="task-key">{taskKey}</span>
-          <span className="task-icon">
-            {/* TODO: change icon and aria label depending on task type*/}
-            <i
-              aria-label="Task type: text"
-              className="fa fa fa-file-text-o fa-fw"
-            />
-          </span>
-          <span className="task-text flex-item">{text}</span>
-          <button aria-label="Copy" className="plain" type="button">
-            <i className="fa fa-copy" />
-          </button>
-          <button aria-label="Edit" className="plain" type="button">
-            <i className="fa fa-pencil" />
-          </button>
-        </div>
-        <div className="flex-row">
-          <input className="flex-item" type="text" value="Enter answer here" />
-        </div>
-      </div>
+      <ul className="tasks-list">
+        <li className="task-item">
+          <div className="flex-row spacing-bottom-M">
+            <span className="task-key">{taskKey}</span>
+            <span className="task-icon">
+              {/* TODO: change icon and aria label depending on task type*/}
+              <i
+                aria-label="Task type: text"
+                className="fa fa fa-file-text-o fa-fw"
+              />
+            </span>
+            <span className="task-text flex-item">{text}</span>
+            <button aria-label={`Copy Task ${taskKey}`} className="plain" type="button">
+              <i className="fa fa-copy" />
+            </button>
+            <button aria-label={`Edit Task ${taskKey}`} className="plain" type="button">
+              <i className="fa fa-pencil" />
+            </button>
+          </div>
+          <div className="flex-row">
+            <input className="flex-item" type="text" value="Enter answer here" />
+          </div>
+        </li>
+      </ul>
     </li>
   )
 }
