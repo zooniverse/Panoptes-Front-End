@@ -27,7 +27,7 @@ describe('TextTask', function () {
     });
 
     it('should have an instruction', function () {
-      const instruction = wrapper.find('.question');
+      const instruction = wrapper.find('label.question');
       expect(instruction.hostNodes()).to.have.lengthOf(1);
     });
 
