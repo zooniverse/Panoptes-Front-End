@@ -27,8 +27,8 @@ export default function TasksPage() {
         <span className="workflow-id">{`#${workflow?.id}`}</span>
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
       </div>
-      <section>
-        <h3>Tasks</h3>
+      <section aria-labelledby='workflow-tasks-heading'>
+        <h3 id='workflow-tasks-heading'>Tasks</h3>
         <div className="flex-row">
           <button
             className="flex-item big primary"
