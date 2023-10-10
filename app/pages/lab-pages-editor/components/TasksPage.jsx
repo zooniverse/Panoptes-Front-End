@@ -47,10 +47,10 @@ export default function TasksPage() {
         </div>
         <ul className="steps-list">
           {/* WARNING: this should be workflow.steps */}
-          {Object.entries(workflow.tasks).map(([key, val]) => (
+          {Object.entries(workflow.tasks).map(([taskKey, task]) => (
             <StepItem
-              task={val}
-              taskKey={key}
+              task={task}
+              taskKey={taskKey}
             />
           ))}
         </ul>
