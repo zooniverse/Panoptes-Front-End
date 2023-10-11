@@ -77,20 +77,21 @@ function StepItem({ task, taskKey }) {
             <span className="task-key">{taskKey}</span>
             <span className="task-icon">
               {/* TODO: change icon and aria label depending on task type*/}
-              <i
+              <span
                 aria-label="Task type: text"
                 className="fa fa fa-file-text-o fa-fw"
+                role="img"
               />
             </span>
             <span className="task-text flex-item">{text}</span>
             <button aria-label={`Delete Step ${stepKey}`} className="plain" type="button">
-              <i className="fa fa-trash" />
+              <span className="fa fa-trash" role="img" />
             </button>
             <button aria-label={`Copy Step ${stepKey}`} className="plain" type="button">
-              <i className="fa fa-copy" />
+              <span className="fa fa-copy" role="img" />
             </button>
             <button aria-label={`Edit Step ${stepKey}`} className="plain" type="button">
-              <i className="fa fa-pencil" />
+              <span className="fa fa-pencil" role="img" />
             </button>
           </div>
           <div className="flex-row">

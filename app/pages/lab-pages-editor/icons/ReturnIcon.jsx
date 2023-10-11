@@ -2,6 +2,6 @@
 
 export default function ReturnIcon() {
   return (
-    <i className="icon fa fa-chevron-left" />
+    <span className="icon fa fa-chevron-left" role="img" />
   );
 }
