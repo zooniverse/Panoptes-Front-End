@@ -64,7 +64,10 @@ function StepItem({ task, taskKey }) {
   const stepKey = 'TODO';
   if (!task || !taskKey) return null;
 
-  const text = task.instruction;
+  // TODO: use Panoptes Translations API.
+  // e.g. pull from workflow.strings['tasks.T0.instruction']
+  // Task.instruction/question isn't particularly standardised across different task types.
+  const text = task.instruction || task.question || '';
 
   return (
     <li className="step-item">
