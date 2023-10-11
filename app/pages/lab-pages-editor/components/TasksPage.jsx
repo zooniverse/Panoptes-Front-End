@@ -71,8 +71,14 @@ function StepItem({ task, taskKey }) {
 
   return (
     <li className="step-item">
-      <div className="grip-bar flex-row spacing-bottom-XS">
-        <GripIcon color="#A6A7A9" />
+      <div className="grab-handle flex-row spacing-bottom-XS">
+        <button aria-label={`Rearrange Page ${stepKey} upwards`} className="plain" type="button">
+          <span className="fa fa-caret-up" role="img" />
+        </button>
+        <GripIcon color="#A6A7A9" /> {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
+        <button aria-label={`Rearrange Page/Step ${stepKey} downwards`} className="plain" type="button">
+          <span className="fa fa-caret-down" role="img" />
+        </button>
       </div>
       <ul className="tasks-list" aria-label={`List of Tasks for Page/Step ${stepKey}`}>
         <li className="task-item">
@@ -87,13 +93,13 @@ function StepItem({ task, taskKey }) {
               />
             </span>
             <span className="task-text flex-item">{text}</span>
-            <button aria-label={`Delete Step ${stepKey}`} className="plain" type="button">
+            <button aria-label={`Delete Page/Step ${stepKey}`} className="plain" type="button">
               <span className="fa fa-trash" role="img" />
             </button>
-            <button aria-label={`Copy Step ${stepKey}`} className="plain" type="button">
+            <button aria-label={`Copy Page/Step ${stepKey}`} className="plain" type="button">
               <span className="fa fa-copy" role="img" />
             </button>
-            <button aria-label={`Edit Step ${stepKey}`} className="plain" type="button">
+            <button aria-label={`Edit Page/Step ${stepKey}`} className="plain" type="button">
               <span className="fa fa-pencil" role="img" />
             </button>
           </div>
