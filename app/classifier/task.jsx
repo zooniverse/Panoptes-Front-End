@@ -73,6 +73,7 @@ class Task extends React.Component {
                 taskTypes={tasks}
                 workflow={workflow}
                 task={task}
+                taskKey={annotation.task}
                 preferences={this.props.preferences}
                 annotation={annotation}
                 onChange={this.handleAnnotationChange}

@@ -116,7 +116,7 @@ ComboTask = createReactClass
             task={taskDescription}
             workflowID={@props.workflow.id}
           >
-            <TaskComponent {...@props} autoFocus={i is 0} task={taskDescription} annotation={annotation} onChange={@handleChange.bind this, i} />
+            <TaskComponent {...@props} autoFocus={i is 0} task={taskDescription} taskKey={task} annotation={annotation} onChange={@handleChange.bind this, i} />
           </TaskTranslations>
         </div>}
     </div>

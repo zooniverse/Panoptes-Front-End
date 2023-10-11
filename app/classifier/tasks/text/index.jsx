@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import _ from 'lodash';
+import { Markdown } from 'markdownz';
 
 import GenericTask from '../generic';
 import TextTaskEditor from './editor';
@@ -100,23 +101,30 @@ export default class TextTask extends React.PureComponent {
   }
 
   render() {
+    const inputID = `text-${this.props.taskKey}`
     return (
       <GenericTask
-        question={this.props.translation.instruction}
         help={this.props.translation.help}
         required={this.props.task.required}
       >
-        <label className="answer" htmlFor="textInput">
-          <textarea
-            className="standard-input full"
-            onBlur={this.debouncedUpdateAnnotation.flush}
-            onChange={this.handleChange}
-            ref={this.textInput}
-            rows={this.state.rows}
-            style={{ lineHeight: `${LINEHEIGHT}px`, overflow: 'hidden' }}
-            value={this.state.value}
-          />
+        <label className="question" htmlFor={inputID}>
+          <Markdown
+            inline
+            tag='span'
+          >
+            {this.props.translation.instruction}
+          </Markdown>
         </label>
+        <textarea
+          id={inputID}
+          className="standard-input full"
+          onBlur={this.debouncedUpdateAnnotation.flush}
+          onChange={this.handleChange}
+          ref={this.textInput}
+          rows={this.state.rows}
+          style={{ lineHeight: `${LINEHEIGHT}px`, overflow: 'hidden' }}
+          value={this.state.value}
+        />
         {this.props.task.text_tags && this.props.task.text_tags.length > 0 &&
           <div className="transcription-metadata-tags">
             {this.props.task.text_tags.map(tag => (
@@ -166,7 +174,8 @@ TextTask.propTypes = {
     text_tags: PropTypes.arrayOf(
       PropTypes.string
     )
-  })
+  }),
+  taskKey: PropTypes.string.isRequired
 };
 
 TextTask.defaultProps = {
