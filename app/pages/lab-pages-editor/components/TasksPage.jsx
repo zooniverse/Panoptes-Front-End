@@ -45,7 +45,7 @@ export default function TasksPage() {
             <option disabled={true}>Choose starting test</option>
           </select>
         </div>
-        <ul className="steps-list">
+        <ul className="steps-list" aria-label="List of Pages/Steps">
           {/* WARNING: this should be workflow.steps */}
           {Object.entries(workflow.tasks).map(([taskKey, task]) => (
             <StepItem
@@ -61,6 +61,7 @@ export default function TasksPage() {
 
 // WARNING/TODO: this should be handling steps, not tasks
 function StepItem({ task, taskKey }) {
+  const stepKey = 'TODO';
   if (!task || !taskKey) return null;
 
   const text = task.instruction;
@@ -70,7 +71,7 @@ function StepItem({ task, taskKey }) {
       <div className="grip-bar flex-row spacing-bottom-XS">
         <GripIcon color="#A6A7A9" />
       </div>
-      <ul className="tasks-list">
+      <ul className="tasks-list" aria-label={`List of Tasks for Page/Step ${stepKey}`}>
         <li className="task-item">
           <div className="flex-row spacing-bottom-M">
             <span className="task-key">{taskKey}</span>
