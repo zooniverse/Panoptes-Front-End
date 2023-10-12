@@ -10,6 +10,9 @@ provincesCanada = require './presets/provinces-Canada' # value = two-letter post
 statesMexico = require './presets/states-Mexico' # value = three-letter ISO 3166-2 abbreviation
 # IMPORTANT: before adding preset options, confirm values are not duplicated in existing presets
 
+OPTIONS_MIN = 4
+OPTIONS_MAX = 250
+
 DropdownDialog = createReactClass
 
   getDefaultProps: ->
@@ -150,6 +153,13 @@ DropdownDialog = createReactClass
     if not @state.editSelect.title
       return window.alert('Dropdowns must have a Title.')
 
+    # for FEMLab we want to enforce a min and max number of options
+    numOptions = @state.editSelect.options['*'].length
+    if @props.pfeLab is false and numOptions < OPTIONS_MIN
+      return window.alert('Dropdowns must have at least 4 options.')
+    else if @props.pfeLab is false and numOptions > OPTIONS_MAX
+      return window.alert('Dropdowns must have fewer than 200 options.')
+
     selectTitles = @props.selects
       .filter (select) => select isnt @props.initialSelect
       .map (select) -> select.title
@@ -196,6 +206,9 @@ DropdownDialog = createReactClass
         {if select.condition?
           <span>Dependent on {@state.conditionalSelects[@state.conditionalSelects.length - 1]?.title}</span>}
       </p>
+      {if @props.pfeLab is false # for FEMLab we want to indicate a minimum number of options
+        <p><i>Enter a minimum of 4 choices</i></p>
+      }
 
       <label className="pill-button" title={dropdownEditorHelp.required}>
         Required <input type="checkbox" ref="required" checked={select.required} onChange={@editSelect}></input>
