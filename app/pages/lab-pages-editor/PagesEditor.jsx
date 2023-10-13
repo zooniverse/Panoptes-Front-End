@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 
 import DataManager from './DataManager.jsx';
 import WorkflowHeader from './components/WorkflowHeader.jsx';
+import TasksPage from './components/TasksPage.jsx';
 import WorkflowSettingsPage from './components/WorkflowSettingsPage.jsx';
 import strings from './strings.json';
 
@@ -50,10 +51,7 @@ function PagesEditor({ params }) {
               id={tabs[0].targetPanel}
               role="tabpanel"
             >
-              <p>Tasks will appear on this panel.</p>
-              <button type="button" onClick={() => console.log('This is a placeholder')}>
-                And this is a button for you to focus on with keyboard navigation.
-              </button>
+              <TasksPage />
             </div>
           )}
           {(currentTab === 1) && (

@@ -1,7 +1,13 @@
 $grey1 = #A6A7A9
 $grey2 = #808080
+$grey3 = #5C5C5C
+$grey4 = #979797
+$grey5 = #E2E5E9
 $black = #000000
 $teal = #00979D
+$greenBright = #1ED359
+$redBright = #E45950
+$yellow = #F0B200
 
 $sizeXS = 0.25em
 $sizeS = 0.5em
@@ -9,9 +15,11 @@ $sizeM = 20px
 
 $fontFamilies = Karla, Arial, sans-serif
 
+$fontSizeXS = 10px
 $fontSizeS = 14px
 $fontSizeM = 16px
 $fontSizeL = 18px
+$fontSizeXL = 24px
 
 $fontWeightBold = 600
 $fontWeightBoldPlus = 700
@@ -66,6 +74,19 @@ $fontWeightBoldPlus = 700
   button
     color: $black
     font-family: $fontFamilies
+
+    &.big
+      border: none
+      box-shadow: 1px 1px 4px 0px #00000040
+      font-size: 14px
+      padding: 12px
+    
+    &.primary
+      background: $yellow
+    
+    &.plain
+      background: none
+      border: none
   
   hr
     border-top: 1px solid $grey2
@@ -77,6 +98,7 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .flex-row
+    align-items: center
     display: flex
     flex-direction: row
     gap: $sizeS
@@ -93,9 +115,12 @@ $fontWeightBoldPlus = 700
   .justify-around
     justify-content: space-around
   
-  .spacing-bottom
+  .spacing-bottom-XS
     margin-bottom: $sizeXS
   
+  .spacing-bottom-M
+      margin-bottom: $sizeM
+
   // Component: Workflow Header
   // ---------------------------------------------------------------------------
 
@@ -177,3 +202,79 @@ $fontWeightBoldPlus = 700
     .col-2
       grid-column: 2
       grid-row: 2
+
+  // Component: Tasks Page
+  // ---------------------------------------------------------------------------
+
+  .tasks-page
+
+    .workflow-title
+      border-bottom: 1.5px solid $grey1
+      margin-bottom: $sizeS
+      margin-top: $sizeM
+
+      h2
+        color: $grey3
+        font-size: $fontSizeXL
+        font-weight: $fontWeightBoldPlus
+        text-transform: uppercase
+      
+      .workflow-id
+        color: $grey4
+        font-size: $fontSizeS
+
+      .status-active, .status-inactive
+        font-size: $fontSizeS
+        margin-left: $sizeS
+        text-transform: uppercase
+
+      .status-active
+        color: $greenBright
+
+      .status-inactive
+        color: $redBright
+    
+    section
+      h3
+        color: $black
+        font-size: $fontSizeL
+        font-weight: $fontWeightBold
+        margin: 0
+        text-transform: uppercase
+    
+    .steps-list
+      list-style: none
+      margin: $sizeM 0 0 0
+      padding: 0
+
+    .step-item
+      background: $grey5
+      border: 1px solid $grey1
+      border-radius: $sizeXS
+      margin-top: $sizeM
+      padding: $sizeS $sizeM
+    
+    .tasks-list
+      list-style: none
+      padding: 0
+    
+    .task-item
+      .task-key
+        background: $yellow
+        border-radius: $sizeM
+        font-size: $fontSizeXS
+        padding: 0 $sizeS
+      
+      .task-text
+        font-size: $fontSizeS
+        font-weight: $fontWeightBold
+      
+    .grab-handle
+      cursor: grab
+      justify-content: center
+
+      &:active
+        cursor: grabbing
+      
+      .fa
+        color: $grey1
