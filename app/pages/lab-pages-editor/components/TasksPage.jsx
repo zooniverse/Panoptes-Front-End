@@ -74,12 +74,12 @@ function StepItem({ task, taskKey }) {
     <li className="step-item">
       <div className="grab-handle flex-row spacing-bottom-XS">
         <button aria-label={`Rearrange Page ${stepKey} upwards`} className="plain" type="button">
-          <span className="fa fa-caret-up" role="img" />
+          <span className="fa fa-caret-up" />
         </button>
         {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
         <GripIcon color="#A6A7A9" />
         <button aria-label={`Rearrange Page/Step ${stepKey} downwards`} className="plain" type="button">
-          <span className="fa fa-caret-down" role="img" />
+          <span className="fa fa-caret-down" />
         </button>
       </div>
       <ul className="tasks-list" aria-label={`Tasks for Page/Step ${stepKey}`}>
