@@ -2,14 +2,15 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/require-default-props */
 /* eslint-disable radix */
+/* eslint-disable react/jsx-boolean-value */
 
 import { useWorkflowContext } from '../context.js';
-import strings from '../strings.json'; // TODO: move all text into strings
+// import strings from '../strings.json'; // TODO: move all text into strings
 
 import GripIcon from '../icons/GripIcon.jsx';
 
 export default function TasksPage() {
-  const { workflow, update } = useWorkflowContext();
+  const { workflow } = useWorkflowContext();
   const isActive = true; // TODO
 
   function placeholderEventHandler() {
@@ -27,8 +28,8 @@ export default function TasksPage() {
         <span className="workflow-id">{`#${workflow?.id}`}</span>
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
       </div>
-      <section aria-labelledby='workflow-tasks-heading'>
-        <h3 id='workflow-tasks-heading'>Tasks</h3>
+      <section aria-labelledby="workflow-tasks-heading">
+        <h3 id="workflow-tasks-heading">Tasks</h3>
         <div className="flex-row">
           <button
             className="flex-item big primary"
@@ -39,13 +40,13 @@ export default function TasksPage() {
           </button>
           {/* Dev observation: the <select> should have some label to indicate it's for choosing the starting task. */}
           <select
-            aria-label="Choose starting test"
+            aria-label="Choose starting page"
             className="flex-item"
           >
-            <option disabled={true}>Choose starting test</option>
+            <option disabled>Choose starting Page</option>
           </select>
         </div>
-        <ul className="steps-list" aria-label="List of Pages/Steps">
+        <ul className="steps-list" aria-label="Pages/Steps">
           {/* WARNING: this should be workflow.steps */}
           {Object.entries(workflow.tasks).map(([taskKey, task]) => (
             <StepItem
@@ -75,17 +76,18 @@ function StepItem({ task, taskKey }) {
         <button aria-label={`Rearrange Page ${stepKey} upwards`} className="plain" type="button">
           <span className="fa fa-caret-up" role="img" />
         </button>
-        <GripIcon color="#A6A7A9" /> {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
+        {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
+        <GripIcon color="#A6A7A9" />
         <button aria-label={`Rearrange Page/Step ${stepKey} downwards`} className="plain" type="button">
           <span className="fa fa-caret-down" role="img" />
         </button>
       </div>
-      <ul className="tasks-list" aria-label={`List of Tasks for Page/Step ${stepKey}`}>
+      <ul className="tasks-list" aria-label={`Tasks for Page/Step ${stepKey}`}>
         <li className="task-item">
           <div className="flex-row spacing-bottom-M">
             <span className="task-key">{taskKey}</span>
             <span className="task-icon">
-              {/* TODO: change icon and aria label depending on task type*/}
+              {/* TODO: change icon and aria label depending on task type */}
               <span
                 aria-label="Task type: text"
                 className="fa fa fa-file-text-o fa-fw"
@@ -109,5 +111,5 @@ function StepItem({ task, taskKey }) {
         </li>
       </ul>
     </li>
-  )
+  );
 }
