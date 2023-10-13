@@ -96,13 +96,13 @@ function StepItem({ task, taskKey }) {
             </span>
             <span className="task-text flex-item">{text}</span>
             <button aria-label={`Delete Page/Step ${stepKey}`} className="plain" type="button">
-              <span className="fa fa-trash" role="img" />
+              <span className="fa fa-trash" />
             </button>
             <button aria-label={`Copy Page/Step ${stepKey}`} className="plain" type="button">
-              <span className="fa fa-copy" role="img" />
+              <span className="fa fa-copy" />
             </button>
             <button aria-label={`Edit Page/Step ${stepKey}`} className="plain" type="button">
-              <span className="fa fa-pencil" role="img" />
+              <span className="fa fa-pencil" />
             </button>
           </div>
           <div className="flex-row">
