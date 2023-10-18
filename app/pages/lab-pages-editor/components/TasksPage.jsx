@@ -100,6 +100,13 @@ export default function TasksPage() {
     update({ tasks, steps });
   }
 
+  function experimentalReset() {
+    update({
+      tasks: {},
+      steps: []
+    });
+  }
+
   console.log('+++ workflow: ', workflow);
 
   if (!workflow) return null;
@@ -138,6 +145,13 @@ export default function TasksPage() {
             />
           ))}
         </ul>
+        <button
+          className="big primary"
+          onClick={experimentalReset}
+          type="button"
+        >
+          RESET
+        </button>
       </section>
     </div>
   );
