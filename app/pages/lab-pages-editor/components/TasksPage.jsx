@@ -80,11 +80,27 @@ export default function TasksPage() {
   }
 
   // Automatically adds one pre-built Text Task
-  function experimentalAddNewTask() {
+  function experimentalAddNewTaskWithStep(taskType = 'text') {
     const newTaskKey = getNewTaskKey(workflow?.tasks);
     const newStepKey = getNewStepKey(workflow?.steps);
+    const newTask = createTask(taskType);
+    const newStep = createStep(newStepKey, [newTaskKey]);
+
+    if (!newTaskKey || !newStepKey || !newTask || !newStep || true) {
+      console.error('TasksPage: could not create Task');
+      return;
+    }
+
+    const tasks = {
+      ...workflow.tasks,
+      [newTaskKey]: newTask
+    };
+    const steps = [...workflow.steps, newStep];
+
+    const updatePayload = { tasks, steps };
 
     console.log(`+++ adding new Task: ${newTaskKey} to ${newStepKey}`);
+    console.log('+++ payload: ', updatePayload);
   }
 
   console.log('+++ workflow: ', workflow);
@@ -103,7 +119,7 @@ export default function TasksPage() {
         <div className="flex-row">
           <button
             className="flex-item big primary"
-            onClick={experimentalAddNewTask}
+            onClick={experimentalAddNewTaskWithStep}
             type="button"
           >
             Add a new Task +
