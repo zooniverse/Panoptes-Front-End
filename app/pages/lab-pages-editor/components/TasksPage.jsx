@@ -72,7 +72,7 @@ function autoConvertIntoWorkflowsWithSteps(workflow) {
 }
 
 export default function TasksPage() {
-  const { workflow } = useWorkflowContext();
+  const { workflow, update } = useWorkflowContext();
   const isActive = true; // TODO
 
   function placeholderEventHandler() {
@@ -86,7 +86,7 @@ export default function TasksPage() {
     const newTask = createTask(taskType);
     const newStep = createStep(newStepKey, [newTaskKey]);
 
-    if (!newTaskKey || !newStepKey || !newTask || !newStep || true) {
+    if (!newTaskKey || !newStepKey || !newTask || !newStep) {
       console.error('TasksPage: could not create Task');
       return;
     }
@@ -97,10 +97,7 @@ export default function TasksPage() {
     };
     const steps = [...workflow.steps, newStep];
 
-    const updatePayload = { tasks, steps };
-
-    console.log(`+++ adding new Task: ${newTaskKey} to ${newStepKey}`);
-    console.log('+++ payload: ', updatePayload);
+    update({ tasks, steps });
   }
 
   console.log('+++ workflow: ', workflow);
