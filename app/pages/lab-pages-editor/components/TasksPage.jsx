@@ -9,12 +9,70 @@ import { useWorkflowContext } from '../context.js';
 
 import GripIcon from '../icons/GripIcon.jsx';
 
+const TASK_KEY_PREFIX = 'T';
+const STEP_KEY_PREFIX = 'P'; // Steps are known as Pages to users
+
+/*
+Transforms "T1234" (string) to 1234 (number).
+Returns 0 by default.
+ */
+function convertKeyToIndex(taskKeyOrStepKey = '') {
+  // regular expression looks like /^(?:T|P)(\d+)$/ - only the '\d+' is captured.
+  const re = RegExp(`^(?:${TASK_KEY_PREFIX}|${STEP_KEY_PREFIX})(\\d+)$`);
+  const indexStr = taskKeyOrStepKey?.match(re)?.[1]; // [1] is the '\d+' capture group.
+  return parseInt(indexStr) || 0;
+}
+
+function getNewTaskKey(tasks = {}) {
+  let newIndex = 0;
+  const taskKeys = Object.keys(tasks);
+  taskKeys.forEach((taskKey) => {
+    const index = convertKeyToIndex(taskKey);
+    newIndex = (newIndex <= index) ? index + 1 : newIndex;
+  });
+  return `${TASK_KEY_PREFIX}${newIndex}`;
+}
+
+function getNewStepKey(steps = []) {
+  let newIndex = 0;
+  const stepKeys = steps.map((step) => (step[0] || '')).filter((step) => (step.length > 0));
+  stepKeys.forEach((stepKey) => {
+    const index = convertKeyToIndex(stepKey);
+    newIndex = (newIndex <= index) ? index + 1 : newIndex;
+  });
+  return `${STEP_KEY_PREFIX}${newIndex}`;
+}
+
+function createTask(taskKey, taskType) {
+  return {};
+}
+
+function createStep(stepKey) {
+
+}
+
+function addTaskToStep() {
+
+}
+
+function autoConvertWorkflowsWithSteps(workflow) {
+
+}
+
 export default function TasksPage() {
   const { workflow } = useWorkflowContext();
   const isActive = true; // TODO
 
   function placeholderEventHandler() {
     console.log('+++ TODO');
+  }
+
+  // Automatically adds one pre-built Text Task
+  function experimentalAddNewTask() {
+    const newTaskKey = getNewTaskKey(workflow?.tasks);
+    const newStepKey = getNewStepKey(workflow?.steps);
+
+    console.log(`+++ adding new Task: ${newTaskKey} to ${newStepKey}`);
   }
 
   console.log('+++ workflow: ', workflow);
@@ -33,7 +91,7 @@ export default function TasksPage() {
         <div className="flex-row">
           <button
             className="flex-item big primary"
-            onClick={placeholderEventHandler}
+            onClick={experimentalAddNewTask}
             type="button"
           >
             Add a new Task +
