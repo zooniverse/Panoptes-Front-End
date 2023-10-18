@@ -43,19 +43,31 @@ function getNewStepKey(steps = []) {
   return `${STEP_KEY_PREFIX}${newIndex}`;
 }
 
-function createTask(taskKey, taskType) {
-  return {};
+/*
+Creates an empty/placeholder Task that's ready to be inserted into a Workflow.
+NOTE: the Task Key isn't handled by this function. Whatever's calling this
+function needs to assign the appropriate Task Key to this Task, and then add it
+to the Workflow.
+ */
+function createTask(taskType = 'text') {
+  // TODO
+  // Placeholder only
+  return {
+    help: '',
+    instruction: 'This is an example Text Task.',
+    required: false,
+    type: 'text'
+  };
 }
 
-function createStep(stepKey) {
-
+/*
+Creates a Step, with tasks, that's ready to be inserted into a Workflow.
+ */
+function createStep(stepKey, taskKeys = []) {
+  return [stepKey, { taskKeys }];
 }
 
-function addTaskToStep() {
-
-}
-
-function autoConvertWorkflowsWithSteps(workflow) {
+function autoConvertIntoWorkflowsWithSteps(workflow) {
 
 }
 
