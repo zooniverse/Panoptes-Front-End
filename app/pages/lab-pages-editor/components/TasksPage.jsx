@@ -5,79 +5,17 @@
 /* eslint-disable react/jsx-boolean-value */
 
 import { useWorkflowContext } from '../context.js';
+import getNewTaskKey from '../helpers/getNewTaskKey.js';
+import getNewStepKey from '../helpers/getNewStepKey.js';
+import createTask from '../helpers/createTask.js';
+import createStep from '../helpers/createStep.js';
 // import strings from '../strings.json'; // TODO: move all text into strings
 
 import GripIcon from '../icons/GripIcon.jsx';
 
-const TASK_KEY_PREFIX = 'T';
-const STEP_KEY_PREFIX = 'P'; // Steps are known as Pages to users
-
-/*
-Transforms "T1234" (string) to 1234 (number).
-Returns 0 by default.
- */
-function convertKeyToIndex(taskKeyOrStepKey = '') {
-  // regular expression looks like /^(?:T|P)(\d+)$/ - only the '\d+' is captured.
-  const re = RegExp(`^(?:${TASK_KEY_PREFIX}|${STEP_KEY_PREFIX})(\\d+)$`);
-  const indexStr = taskKeyOrStepKey?.match(re)?.[1]; // [1] is the '\d+' capture group.
-  return parseInt(indexStr) || 0;
-}
-
-function getNewTaskKey(tasks = {}) {
-  let newIndex = 0;
-  const taskKeys = Object.keys(tasks);
-  taskKeys.forEach((taskKey) => {
-    const index = convertKeyToIndex(taskKey);
-    newIndex = (newIndex <= index) ? index + 1 : newIndex;
-  });
-  return `${TASK_KEY_PREFIX}${newIndex}`;
-}
-
-function getNewStepKey(steps = []) {
-  let newIndex = 0;
-  const stepKeys = steps.map((step) => (step[0] || '')).filter((step) => (step.length > 0));
-  stepKeys.forEach((stepKey) => {
-    const index = convertKeyToIndex(stepKey);
-    newIndex = (newIndex <= index) ? index + 1 : newIndex;
-  });
-  return `${STEP_KEY_PREFIX}${newIndex}`;
-}
-
-/*
-Creates an empty/placeholder Task that's ready to be inserted into a Workflow.
-NOTE: the Task Key isn't handled by this function. Whatever's calling this
-function needs to assign the appropriate Task Key to this Task, and then add it
-to the Workflow.
- */
-function createTask(taskType = 'text') {
-  // TODO
-  // Placeholder only
-  return {
-    help: '',
-    instruction: 'This is an example Text Task.',
-    required: false,
-    type: 'text'
-  };
-}
-
-/*
-Creates a Step, with tasks, that's ready to be inserted into a Workflow.
- */
-function createStep(stepKey, taskKeys = []) {
-  return [stepKey, { taskKeys }];
-}
-
-function autoConvertIntoWorkflowsWithSteps(workflow) {
-
-}
-
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
   const isActive = true; // TODO
-
-  function placeholderEventHandler() {
-    console.log('+++ TODO');
-  }
 
   // Automatically adds one pre-built Text Task
   function experimentalAddNewTaskWithStep(taskType = 'text') {
@@ -106,8 +44,6 @@ export default function TasksPage() {
       steps: []
     });
   }
-
-  console.log('+++ workflow: ', workflow);
 
   if (!workflow) return null;
 
