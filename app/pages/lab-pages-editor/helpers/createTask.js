@@ -5,13 +5,9 @@ function needs to assign the appropriate Task Key to this Task, and then add it
 to the Workflow.
  */
 
-export default function createTask(taskType = 'text') {
-  // TODO
-  // Placeholder only
-  return {
-    help: '',
-    instruction: 'This is an example Text Task.',
-    required: false,
-    type: 'text'
-  };
+import tasks from '../../../classifier/tasks';
+
+export default function createTask(taskType) {
+  console.log('+++ taskType: ', taskType, tasks)
+  return tasks[taskType]?.getDefaultTask();
 }

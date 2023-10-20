@@ -18,10 +18,10 @@ export default function TasksPage() {
   const isActive = true; // TODO
 
   // Automatically adds one pre-built Text Task
-  function experimentalAddNewTaskWithStep(taskType = 'text') {
+  function experimentalAddNewTaskWithStep() {
     const newTaskKey = getNewTaskKey(workflow?.tasks);
     const newStepKey = getNewStepKey(workflow?.steps);
-    const newTask = createTask(taskType);
+    const newTask = createTask('text');
     const newStep = createStep(newStepKey, [newTaskKey]);
 
     if (!newTaskKey || !newStepKey || !newTask || !newStep) {
