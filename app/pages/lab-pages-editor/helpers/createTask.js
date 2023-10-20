@@ -8,6 +8,5 @@ to the Workflow.
 import tasks from '../../../classifier/tasks';
 
 export default function createTask(taskType) {
-  console.log('+++ taskType: ', taskType, tasks)
   return tasks[taskType]?.getDefaultTask();
 }
