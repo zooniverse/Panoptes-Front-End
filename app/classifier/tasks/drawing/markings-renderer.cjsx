@@ -1,7 +1,7 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 drawingTools = require '../../drawing-tools'
-deleteIfOutOfBounds = require '../../drawing-tools/delete-if-out-of-bounds'
+deleteIfOutOfBounds = require('../../drawing-tools/delete-if-out-of-bounds').default
 strategies = require('../../../features/feedback/shared/strategies').default
 
 module.exports = createReactClass
