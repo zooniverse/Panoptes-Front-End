@@ -71,9 +71,9 @@ module.exports = createReactClass
   handleInitDrag: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
     mark = @props.annotation.value[@props.annotation.value.length - 1]
-    MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
+    MarkComponent = mark && drawingTools[taskDescription.tools[mark.tool].type]
 
-    if MarkComponent.initMove?
+    if mark and MarkComponent.initMove?
       mouseCoords = @props.getEventOffset e
       initMoveValues = MarkComponent.initMove mouseCoords, mark, e
       for key, value of initMoveValues
@@ -85,18 +85,17 @@ module.exports = createReactClass
     pref = @props.preferences?.preferences ? {}
     taskDescription = @props.workflow.tasks[@props.annotation.task]
     mark = @props.annotation.value[@props.annotation.value.length - 1]
-    MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
+    MarkComponent = mark && drawingTools[taskDescription.tools[mark?.tool].type]
 
-    toolName = taskDescription.tools[mark.tool].type
-    @context.geordi?.logEvent type: "draw-#{toolName}"
+    toolName = mark && taskDescription.tools[mark.tool].type
 
-    if MarkComponent.initRelease?
+    if mark and MarkComponent.initRelease?
       mouseCoords = @props.getEventOffset e
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
       for key, value of initReleaseValues
         mark[key] = value
 
-    if MarkComponent.saveState? and pref.activeTemplate
+    if mark and MarkComponent.saveState? and pref.activeTemplate
       multipleMarks = MarkComponent.saveState mark, pref[pref.activeTemplate], pref.activeTemplate
       for multiple in multipleMarks
         @props.annotation.value.push multiple
@@ -106,7 +105,7 @@ module.exports = createReactClass
 
     @onChange()
 
-    if MarkComponent.initValid?
+    if mark and MarkComponent.initValid?
       unless MarkComponent.initValid mark, @props
         @destroyMark @props.annotation, mark
 
