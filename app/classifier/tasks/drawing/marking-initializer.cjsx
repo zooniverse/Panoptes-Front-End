@@ -10,6 +10,8 @@ module.exports = createReactClass
   contextTypes:
     geordi: PropTypes.object
 
+  activeMarkIndex: -1
+
   getDefaultProps: ->
     annotation: null
     annotations: []
@@ -66,11 +68,12 @@ module.exports = createReactClass
       for key, value of initValues
         mark[key] = value
 
+    this.activeMarkIndex = @props.annotation.value.length - 1
     @onChange()
 
   handleInitDrag: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
-    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    mark = @props.annotation.value[this.activeMarkIndex]
     MarkComponent = mark && drawingTools[taskDescription.tools[mark.tool].type]
 
     if mark and MarkComponent.initMove?
@@ -84,7 +87,7 @@ module.exports = createReactClass
   handleInitRelease: (e) ->
     pref = @props.preferences?.preferences ? {}
     taskDescription = @props.workflow.tasks[@props.annotation.task]
-    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    mark = @props.annotation.value[this.activeMarkIndex]
     MarkComponent = mark && drawingTools[taskDescription.tools[mark?.tool].type]
 
     toolName = mark && taskDescription.tools[mark.tool].type
@@ -107,6 +110,7 @@ module.exports = createReactClass
 
     if mark and MarkComponent.initValid?
       unless MarkComponent.initValid mark, @props
+        this.activeMarkIndex = -1
         @destroyMark @props.annotation, mark
 
   destroyMark: (annotation, mark) ->
