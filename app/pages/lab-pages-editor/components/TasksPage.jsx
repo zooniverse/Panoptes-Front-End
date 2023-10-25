@@ -5,19 +5,45 @@
 /* eslint-disable react/jsx-boolean-value */
 
 import { useWorkflowContext } from '../context.js';
+import getNewTaskKey from '../helpers/getNewTaskKey.js';
+import getNewStepKey from '../helpers/getNewStepKey.js';
+import createTask from '../helpers/createTask.js';
+import createStep from '../helpers/createStep.js';
 // import strings from '../strings.json'; // TODO: move all text into strings
 
 import GripIcon from '../icons/GripIcon.jsx';
 
 export default function TasksPage() {
-  const { workflow } = useWorkflowContext();
+  const { workflow, update } = useWorkflowContext();
   const isActive = true; // TODO
 
-  function placeholderEventHandler() {
-    console.log('+++ TODO');
+  // Automatically adds one pre-built Text Task
+  function experimentalAddNewTaskWithStep() {
+    const newTaskKey = getNewTaskKey(workflow?.tasks);
+    const newStepKey = getNewStepKey(workflow?.steps);
+    const newTask = createTask('text');
+    const newStep = createStep(newStepKey, [newTaskKey]);
+
+    if (!newTaskKey || !newStepKey || !newTask || !newStep) {
+      console.error('TasksPage: could not create Task');
+      return;
+    }
+
+    const tasks = {
+      ...workflow.tasks,
+      [newTaskKey]: newTask
+    };
+    const steps = [...workflow.steps, newStep];
+
+    update({ tasks, steps });
   }
 
-  console.log('+++ workflow: ', workflow);
+  function experimentalReset() {
+    update({
+      tasks: {},
+      steps: []
+    });
+  }
 
   if (!workflow) return null;
 
@@ -33,7 +59,7 @@ export default function TasksPage() {
         <div className="flex-row">
           <button
             className="flex-item big primary"
-            onClick={placeholderEventHandler}
+            onClick={experimentalAddNewTaskWithStep}
             type="button"
           >
             Add a new Task +
@@ -55,6 +81,13 @@ export default function TasksPage() {
             />
           ))}
         </ul>
+        <button
+          className="big primary"
+          onClick={experimentalReset}
+          type="button"
+        >
+          RESET
+        </button>
       </section>
     </div>
   );
