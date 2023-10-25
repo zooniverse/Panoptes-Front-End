@@ -16,7 +16,7 @@ jobs:
     - name: Use Node.js 18
       uses: actions/setup-node@v3
       with:
-        node-version: 'lts/hydrogen'
+        node-version: 'lts/iron'
         cache: 'npm'
 
     - run: npm ci
