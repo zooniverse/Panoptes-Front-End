@@ -1,10 +1,13 @@
 React = require 'react'
 createReactClass = require 'create-react-class'
 drawingTools = require '../../drawing-tools'
+deleteIfOutOfBounds = require('../../drawing-tools/delete-if-out-of-bounds').default
 strategies = require('../../../features/feedback/shared/strategies').default
 
 module.exports = createReactClass
   displayName: 'MarkingsRenderer'
+
+  tools: []
 
   getDefaultProps: ->
     annotations: []
@@ -35,9 +38,14 @@ module.exports = createReactClass
     @setState oldSetOfMarks: newSetOfMarks
     # console.log 'Marks are now', newSetOfMarks
 
+  componentDidUpdate: () ->
+    for tool in this.tools
+      deleteIfOutOfBounds(tool)
+
   render: ->
     skippedMarks = 0
     drawingInProgress = false
+    this.tools = []
     <g>
       {for annotation in @props.annotations
         annotation._key ?= Math.random()
@@ -83,6 +91,7 @@ module.exports = createReactClass
                   vertical: 0.001
               toolEnv =
                 containerRect: @props.containerRect
+                getContainerRect: @props.getContainerRect
                 scale: scale
                 disabled: isPriorAnnotation || drawingInProgress
                 selected: mark is @state.selection and not isPriorAnnotation
@@ -114,7 +123,13 @@ module.exports = createReactClass
                 getScreenCurrentTransformationMatrix: @props.getScreenCurrentTransformationMatrix
 
               ToolComponent = drawingTools[toolDescription.type]
-              <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
+              <ToolComponent
+                ref={(tool) => this.tools.push(tool) if tool}
+                key={mark._key}
+                {...toolProps}
+                {...toolEnv}
+                {...toolMethods}
+              />}
           </g>}
     </g>
 
@@ -136,8 +151,9 @@ module.exports = createReactClass
     if mark is @state.selection
       @setState selection: null
     markIndex = annotation.value.indexOf mark
-    annotation.value.splice markIndex, 1
-    @props.onChange annotation
+    if markIndex > -1
+      annotation.value.splice markIndex, 1
+      @props.onChange annotation
     if mark.templateID
       index = []
       for cell in annotation.value
