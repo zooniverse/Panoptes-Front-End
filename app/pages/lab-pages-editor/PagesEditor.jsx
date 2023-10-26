@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 
 import DataManager from './DataManager.jsx';
 import WorkflowHeader from './components/WorkflowHeader.jsx';
-import TasksPage from './components/TasksPage.jsx';
+import TasksPage from './components/TasksPage';
 import WorkflowSettingsPage from './components/WorkflowSettingsPage.jsx';
 import strings from './strings.json';
 

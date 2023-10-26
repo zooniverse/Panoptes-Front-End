@@ -4,14 +4,14 @@
 /* eslint-disable radix */
 /* eslint-disable react/jsx-boolean-value */
 
-import { useWorkflowContext } from '../context.js';
-import getNewTaskKey from '../helpers/getNewTaskKey.js';
-import getNewStepKey from '../helpers/getNewStepKey.js';
-import createTask from '../helpers/createTask.js';
-import createStep from '../helpers/createStep.js';
-// import strings from '../strings.json'; // TODO: move all text into strings
+import { useWorkflowContext } from '../../context.js';
+import getNewTaskKey from '../../helpers/getNewTaskKey.js';
+import getNewStepKey from '../../helpers/getNewStepKey.js';
+import createTask from '../../helpers/createTask.js';
+import createStep from '../../helpers/createStep.js';
+// import strings from '../../strings.json'; // TODO: move all text into strings
 
-import GripIcon from '../icons/GripIcon.jsx';
+import GripIcon from '../../icons/GripIcon.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
