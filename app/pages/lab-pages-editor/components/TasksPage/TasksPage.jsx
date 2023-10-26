@@ -11,6 +11,7 @@ import createTask from '../../helpers/createTask.js';
 import createStep from '../../helpers/createStep.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
+import StepItem from './StepItem.jsx';
 import GripIcon from '../../icons/GripIcon.jsx';
 
 export default function TasksPage() {
@@ -74,10 +75,11 @@ export default function TasksPage() {
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
           {/* WARNING: this should be workflow.steps */}
-          {Object.entries(workflow.tasks).map(([taskKey, task]) => (
+          {workflow.steps.map(([stepKey, step]) => (
             <StepItem
-              task={task}
-              taskKey={taskKey}
+              task={workflow.tasks}
+              step={step}
+              stepKey={stepKey}
             />
           ))}
         </ul>
@@ -94,7 +96,7 @@ export default function TasksPage() {
 }
 
 // WARNING/TODO: this should be handling steps, not tasks
-function StepItem({ task, taskKey }) {
+function OLD_StepItem({ task, taskKey }) {
   const stepKey = 'TODO';
   if (!task || !taskKey) return null;
 
