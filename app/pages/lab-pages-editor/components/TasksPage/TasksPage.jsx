@@ -11,7 +11,7 @@ import createTask from '../../helpers/createTask.js';
 import createStep from '../../helpers/createStep.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
-import StepItem from './StepItem.jsx';
+import StepItem from './components/StepItem.jsx';
 import GripIcon from '../../icons/GripIcon.jsx';
 
 export default function TasksPage() {
@@ -77,7 +77,7 @@ export default function TasksPage() {
           {/* WARNING: this should be workflow.steps */}
           {workflow.steps.map(([stepKey, step]) => (
             <StepItem
-              task={workflow.tasks}
+              allTasks={workflow.tasks}
               step={step}
               stepKey={stepKey}
             />
