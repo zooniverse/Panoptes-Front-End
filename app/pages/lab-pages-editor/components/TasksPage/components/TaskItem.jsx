@@ -13,7 +13,7 @@ function TaskItem({
   task,
   taskKey
 }) {
-  if (!task || !taskKey) return <li className="task-item">Task ???</li>;
+  if (!task || !taskKey) return <li className="task-item">ERROR: could not render Task</li>;
 
   // TODO: use Panoptes Translations API.
   // e.g. pull from workflow.strings['tasks.T0.instruction']

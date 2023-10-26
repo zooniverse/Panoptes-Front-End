@@ -16,9 +16,9 @@ function StepItem({
   step,
   stepKey
 }) {
-  if (!step || !stepKey || !allTasks) return <li className="step-item">Step ???</li>;
+  if (!step || !stepKey || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
 
-  console.log('+++ ', stepKey, step, allTasks);
+  const taskKeys = step.taskKeys || [];
 
   return (
     <li className="step-item">
@@ -33,9 +33,12 @@ function StepItem({
         </button>
       </div>
       <ul className="tasks-list" aria-label={`Tasks for Page/Step ${stepKey}`}>
-        {Object.entries(allTasks).map(([taskKey, task]) => (
-          <TaskItem task={task} taskKey={taskKey} />
-        ))}
+        {taskKeys.map((taskKey) => {
+          const task = allTasks[taskKey];
+          return (
+            <TaskItem task={task} taskKey={taskKey} />
+          );
+        })}
       </ul>
     </li>
   );
