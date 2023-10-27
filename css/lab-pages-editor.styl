@@ -8,6 +8,7 @@ $teal = #00979D
 $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
+$white = #FFFFFF
 
 $sizeXS = 0.25em
 $sizeS = 0.5em
@@ -261,11 +262,26 @@ $fontWeightBoldPlus = 700
         
         .step-controls-center
           margin: auto
+
+          > *
+            vertical-align: middle
+          
+          .fa
+            color: $grey1
         
         .step-controls-right
           text-align: right
           min-width: 5rem
-    
+
+          button
+            background: $white
+            border: 1px solid $yellow
+            border-radius: $sizeS
+            margin-left: $sizeXS
+
+            .fa
+              color: $grey3
+
     .tasks-list
       list-style: none
       padding: 0
