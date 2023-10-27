@@ -12,7 +12,6 @@ import createStep from '../../helpers/createStep.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import StepItem from './components/StepItem.jsx';
-import GripIcon from '../../icons/GripIcon.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
@@ -92,59 +91,5 @@ export default function TasksPage() {
         </button>
       </section>
     </div>
-  );
-}
-
-// WARNING/TODO: this should be handling steps, not tasks
-function OLD_StepItem({ task, taskKey }) {
-  const stepKey = 'TODO';
-  if (!task || !taskKey) return null;
-
-  // TODO: use Panoptes Translations API.
-  // e.g. pull from workflow.strings['tasks.T0.instruction']
-  // Task.instruction/question isn't particularly standardised across different task types.
-  const text = task.instruction || task.question || '';
-
-  return (
-    <li className="step-item">
-      <div className="grab-handle flex-row spacing-bottom-XS">
-        <button aria-label={`Rearrange Page ${stepKey} upwards`} className="plain" type="button">
-          <span className="fa fa-caret-up" />
-        </button>
-        {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
-        <GripIcon color="#A6A7A9" />
-        <button aria-label={`Rearrange Page/Step ${stepKey} downwards`} className="plain" type="button">
-          <span className="fa fa-caret-down" />
-        </button>
-      </div>
-      <ul className="tasks-list" aria-label={`Tasks for Page/Step ${stepKey}`}>
-        <li className="task-item">
-          <div className="flex-row spacing-bottom-M">
-            <span className="task-key">{taskKey}</span>
-            <span className="task-icon">
-              {/* TODO: change icon and aria label depending on task type */}
-              <span
-                aria-label="Task type: text"
-                className="fa fa fa-file-text-o fa-fw"
-                role="img"
-              />
-            </span>
-            <span className="task-text flex-item">{text}</span>
-            <button aria-label={`Delete Page/Step ${stepKey}`} className="plain" type="button">
-              <span className="fa fa-trash" />
-            </button>
-            <button aria-label={`Copy Page/Step ${stepKey}`} className="plain" type="button">
-              <span className="fa fa-copy" />
-            </button>
-            <button aria-label={`Edit Page/Step ${stepKey}`} className="plain" type="button">
-              <span className="fa fa-pencil" />
-            </button>
-          </div>
-          <div className="flex-row">
-            <input className="flex-item" type="text" value="Enter answer here" />
-          </div>
-        </li>
-      </ul>
-    </li>
   );
 }

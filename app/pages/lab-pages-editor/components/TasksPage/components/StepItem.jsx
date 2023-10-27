@@ -22,15 +22,33 @@ function StepItem({
 
   return (
     <li className="step-item">
-      <div className="grab-handle flex-row spacing-bottom-XS">
-        <button aria-label={`Rearrange Page ${stepKey} upwards`} className="plain" type="button">
-          <span className="fa fa-caret-up" />
-        </button>
-        {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
-        <GripIcon color="#A6A7A9" />
-        <button aria-label={`Rearrange Page/Step ${stepKey} downwards`} className="plain" type="button">
-          <span className="fa fa-caret-down" />
-        </button>
+      <div className="flex-row spacing-bottom-XS">
+        <span className="debug-0" />
+        <div
+          className="debug-1"
+        >
+          <button aria-label={`Rearrange Page ${stepKey} upwards`} className="plain" type="button">
+            <span className="fa fa-caret-up" />
+          </button>
+          {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
+          <GripIcon className="grab-handle" color="#A6A7A9" />
+          <button aria-label={`Rearrange Page/Step ${stepKey} downwards`} className="plain" type="button">
+            <span className="fa fa-caret-down" />
+          </button>
+        </div>
+        <div
+          className="debug-2"
+        >
+          <button aria-label={`Delete Page/Step ${stepKey}`} className="plain" type="button">
+            <span className="fa fa-trash" />
+          </button>
+          <button aria-label={`Copy Page/Step ${stepKey}`} className="plain" type="button">
+            <span className="fa fa-copy" />
+          </button>
+          <button aria-label={`Edit Page/Step ${stepKey}`} className="plain" type="button">
+            <span className="fa fa-pencil" />
+          </button>
+        </div>
       </div>
       <ul className="tasks-list" aria-label={`Tasks for Page/Step ${stepKey}`}>
         {taskKeys.map((taskKey) => {
