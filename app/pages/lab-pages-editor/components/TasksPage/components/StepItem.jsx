@@ -22,11 +22,9 @@ function StepItem({
 
   return (
     <li className="step-item">
-      <div className="flex-row spacing-bottom-XS">
-        <span className="debug-0" />
-        <div
-          className="debug-1"
-        >
+      <div className="step-controls flex-row spacing-bottom-XS">
+        <span className="step-controls-left" />
+        <div className="step-controls-center">
           <button aria-label={`Rearrange Page ${stepKey} upwards`} className="plain" type="button">
             <span className="fa fa-caret-up" />
           </button>
@@ -36,9 +34,7 @@ function StepItem({
             <span className="fa fa-caret-down" />
           </button>
         </div>
-        <div
-          className="debug-2"
-        >
+        <div className="step-controls-right">
           <button aria-label={`Delete Page/Step ${stepKey}`} className="plain" type="button">
             <span className="fa fa-trash" />
           </button>
