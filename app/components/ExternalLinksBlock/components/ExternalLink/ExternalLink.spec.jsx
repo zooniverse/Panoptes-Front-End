@@ -34,11 +34,11 @@ describe('ExternalLink', function() {
         />
       );
       markdownLink = wrapper.find('span.link-title');
-      markdownHtml = markdownLink.props().dangerouslySetInnerHTML.__html;
+      markdownHtml = markdownLink.html();
     });
 
     it('should render the markdown hyperlink correctly', function () {
-      expect(markdownHtml).to.equal('<a rel="noopener nofollow noreferrer" target="_blank" href="https://www.google.com"></a>')
+      expect(markdownHtml).to.equal('<span class="markdown link-title"><a rel="noopener nofollow noreferrer" target="_blank" href="https://www.google.com"></a></span>')
     });
 
     it('should have the Font Awesome external link icon', function () {
