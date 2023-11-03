@@ -8,6 +8,7 @@ $teal = #00979D
 $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
+$white = #FFFFFF
 
 $sizeXS = 0.25em
 $sizeS = 0.5em
@@ -254,15 +255,42 @@ $fontWeightBoldPlus = 700
       border-radius: $sizeXS
       margin-top: $sizeM
       padding: $sizeS $sizeM
-    
+
+      .step-controls
+        .step-controls-left
+          min-width: 5rem
+        
+        .step-controls-center
+          margin: auto
+
+          > *
+            vertical-align: middle
+          
+          .fa
+            color: $grey1
+        
+        .step-controls-right
+          text-align: right
+          min-width: 5rem
+
+          button
+            background: $white
+            border: 1px solid $yellow
+            border-radius: $sizeS
+            margin-left: $sizeXS
+
+            .fa
+              color: $grey3
+
     .tasks-list
       list-style: none
       padding: 0
     
     .task-item
       .task-key
-        background: $yellow
+        background: $grey3
         border-radius: $sizeM
+        color: $white
         font-size: $fontSizeXS
         padding: 0 $sizeS
       
@@ -272,10 +300,18 @@ $fontWeightBoldPlus = 700
       
     .grab-handle
       cursor: grab
-      justify-content: center
 
       &:active
         cursor: grabbing
-      
-      .fa
-        color: $grey1
+
+.debug-0
+  width: 6em
+
+.debug-1
+  background: #f0c0c0
+  margin: auto
+
+.debug-2
+  background: #c0f0f0
+  text-align: right
+  width: 6em
