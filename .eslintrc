@@ -13,6 +13,7 @@
     "react/no-multi-comp": 0,
     "react/react-in-jsx-scope": 0,
     "react/require-default-props": 0,
+    "no-console": 0,
     "array-callback-return": "off",
     "arrow-body-style": ["warn", "as-needed"],
     "comma-dangle": ["warn", "never"],  
