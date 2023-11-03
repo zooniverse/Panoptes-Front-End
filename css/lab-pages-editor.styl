@@ -14,7 +14,9 @@ $shadowColour = #00000080
 
 $sizeXS = 4px
 $sizeS = 8px
-$sizeM = 20px
+$sizeM = 16px
+$sizeL = 24px
+$sizeXL = 32px
 
 $fontFamilies = Karla, Arial, sans-serif
 
@@ -123,7 +125,7 @@ $fontWeightBoldPlus = 700
     margin-bottom: $sizeXS
   
   .spacing-bottom-M
-      margin-bottom: $sizeM
+    margin-bottom: $sizeM
 
   // Component: Workflow Header
   // ---------------------------------------------------------------------------
@@ -254,6 +256,21 @@ $fontWeightBoldPlus = 700
 
         button
           color: $white
+      
+      .dialog-body
+        padding: $sizeS $sizeL
+
+        &.new-task
+          background: $grey5
+        
+        &.edit-step
+          background: $white
+        
+        button.new-task-button
+          display: flex
+          flex-direction: vertical
+          width: $sizeXL
+          height: $sizeXL
     
     section
       h3

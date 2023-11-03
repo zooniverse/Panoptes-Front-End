@@ -58,8 +58,21 @@ function NewTaskButtonAndDialog() {
             <CloseIcon />
           </button>
         </div>
-        <form className="dialog-body">
-          ...
+        <form className="dialog-body new-task">
+          <p>
+            A task is a unit of work you are asking volunteers to do.
+            You can ask them to answer a question or mark an image.
+          </p>
+          <div>
+            <button type="button" className="new-task-button">
+              <span
+                aria-label="Task type: text"
+                className="fa fa fa-file-text-o fa-fw"
+                role="img"
+              />
+              <span>Text</span>
+            </button>
+          </div>
         </form>
       </dialog>
     </>
