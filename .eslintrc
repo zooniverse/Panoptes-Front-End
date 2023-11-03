@@ -16,7 +16,7 @@
     "no-console": 0,
     "array-callback-return": "off",
     "arrow-body-style": ["warn", "as-needed"],
-    "comma-dangle": ["warn", "never"],  
+    "comma-dangle": ["warn", "never"],
     "import/extensions": "off",
     "import/no-unresolved": "off",
     "indent": ["warn", 2, {"SwitchCase": 1}],
