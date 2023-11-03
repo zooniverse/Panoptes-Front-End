@@ -29,7 +29,7 @@ function StepItem({
             <span className="fa fa-caret-up" />
           </button>
           {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
-          <GripIcon className="grab-handle" color="#A6A7A9" />
+          <GripIcon className="grab-handle" />
           <button aria-label={`Rearrange Page/Step ${stepKey} downwards`} className="plain" type="button">
             <span className="fa fa-caret-down" />
           </button>

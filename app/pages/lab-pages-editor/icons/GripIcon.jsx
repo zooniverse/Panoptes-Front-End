@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 export default function GripIcon({
   className = '',
-  color = '#000000',
+  color = 'currentColor',
   size = 16
 }) {
   const x1 = (4 / 16) * size;
