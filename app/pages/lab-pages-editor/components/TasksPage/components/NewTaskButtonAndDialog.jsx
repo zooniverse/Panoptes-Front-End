@@ -7,6 +7,7 @@
 
 import { useRef } from 'react';
 
+import CloseIcon from '../../../icons/CloseIcon.jsx';
 // import strings from '../../../strings.json'; // TODO: move all text into strings
 
 function NewTaskButtonAndDialog() {
@@ -40,13 +41,24 @@ function NewTaskButtonAndDialog() {
       </button>
       <dialog
         autofocus="true"
-        className="new-task-dialog"
+        aria-labelledby="dialog-title"
         ref={newTaskDialog}
         /* open="true"  // MDN recommends not using this attribute. But if we have to, use "true", not {true} */
       >
-        <div>Add New Task</div>
-        <button type="button" onClick={closeNewTaskDialog}>Close</button>
-        <form>
+        <div className="dialog-header flex-row">
+          <h4 id="dialog-title" className="flex-item">
+            Choose a Task type
+          </h4>
+          <button
+            className="plain"
+            onClick={closeNewTaskDialog}
+            type="button"
+          >
+            <CloseIcon />
+          </button>
+        </div>
+        <form className="dialog-body">
+          ...
         </form>
       </dialog>
     </>

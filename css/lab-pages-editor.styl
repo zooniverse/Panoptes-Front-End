@@ -9,6 +9,9 @@ $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
 $white = #FFFFFF
+$backdropColour = #80800080
+$shadowColour = #00000080
+
 
 $sizeXS = 0.25em
 $sizeS = 0.5em
@@ -235,6 +238,23 @@ $fontWeightBoldPlus = 700
 
       .status-inactive
         color: $redBright
+    
+    dialog
+      border: 1px solid $grey1
+      border-radius: $sizeM
+      box-shadow: 1px 1px 6px 0px $shadowColour
+      padding: 0
+
+      &::backdrop
+        background: $backdropColour
+      
+      .dialog-header
+        background: $teal
+        color: $white
+        padding: $sizeXS $sizeM
+
+        button
+          color: $white
     
     section
       h3
