@@ -4,6 +4,7 @@
 /* eslint-disable radix */
 /* eslint-disable react/jsx-boolean-value */
 /* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/no-unknown-property */
 
 import { useRef } from 'react';
 
