@@ -11,6 +11,7 @@ import createTask from '../../helpers/createTask.js';
 import createStep from '../../helpers/createStep.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
+import NewTaskButtonAndDialog from './components/NewTaskButtonAndDialog.jsx';
 import StepItem from './components/StepItem.jsx';
 
 export default function TasksPage() {
@@ -57,13 +58,7 @@ export default function TasksPage() {
       <section aria-labelledby="workflow-tasks-heading">
         <h3 id="workflow-tasks-heading">Tasks</h3>
         <div className="flex-row">
-          <button
-            className="flex-item big primary"
-            onClick={experimentalAddNewTaskWithStep}
-            type="button"
-          >
-            Add a new Task +
-          </button>
+          <NewTaskButtonAndDialog />
           {/* Dev observation: the <select> should have some label to indicate it's for choosing the starting task. */}
           <select
             aria-label="Choose starting page"
