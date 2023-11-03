@@ -73,7 +73,6 @@ export default function TasksPage() {
           </select>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
-          {/* WARNING: this should be workflow.steps */}
           {workflow.steps.map(([stepKey, step]) => (
             <StepItem
               allTasks={workflow.tasks}
