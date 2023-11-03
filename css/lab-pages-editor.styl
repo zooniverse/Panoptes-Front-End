@@ -17,6 +17,7 @@ $sizeS = 8px
 $sizeM = 16px
 $sizeL = 24px
 $sizeXL = 32px
+$sizeXXL = 64px
 
 $fontFamilies = Karla, Arial, sans-serif
 
@@ -108,6 +109,9 @@ $fontWeightBoldPlus = 700
     display: flex
     flex-direction: row
     gap: $sizeS
+  
+  .flex-wrap
+    flex-wrap: wrap
   
   .small-width
     width: 60px
@@ -253,6 +257,7 @@ $fontWeightBoldPlus = 700
         background: $teal
         color: $white
         padding: $sizeXS $sizeM
+        text-transform: uppercase
 
         button
           color: $white
@@ -267,10 +272,20 @@ $fontWeightBoldPlus = 700
           background: $white
         
         button.new-task-button
+          align-items: center
           display: flex
-          flex-direction: vertical
-          width: $sizeXL
-          height: $sizeXL
+          flex-direction: column
+          justify-content: center
+          margin-bottom: $sizeM
+          margin-right: $sizeM
+          height: $sizeXXL
+          width: $sizeXXL
+
+          &:last-child
+            margin-right: 0
+
+          .fa
+            font-size: $fontSizeXL
     
     section
       h3

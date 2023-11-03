@@ -63,7 +63,23 @@ function NewTaskButtonAndDialog() {
             A task is a unit of work you are asking volunteers to do.
             You can ask them to answer a question or mark an image.
           </p>
-          <div>
+          <div className="flex-row flex-wrap">
+            <button type="button" className="new-task-button">
+              <span
+                aria-label="Task type: text"
+                className="fa fa fa-file-text-o fa-fw"
+                role="img"
+              />
+              <span>Text</span>
+            </button>
+            <button type="button" className="new-task-button">
+              <span
+                aria-label="Task type: text"
+                className="fa fa fa-file-text-o fa-fw"
+                role="img"
+              />
+              <span>Text</span>
+            </button>
             <button type="button" className="new-task-button">
               <span
                 aria-label="Task type: text"
