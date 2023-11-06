@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
-import statsClient from 'panoptes-client/lib/stats-client';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import apiClient from 'panoptes-client/lib/api-client';
