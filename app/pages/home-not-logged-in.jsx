@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router';
-import statsClient from 'panoptes-client/lib/stats-client';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
 import apiClient from 'panoptes-client/lib/api-client';
@@ -11,6 +10,10 @@ import FeaturedProjects from './home-common/featured-projects';
 import HomePageSocial from './home-common/social';
 import HomePageDiscover from './home-not-logged-in/discover';
 import HomePageResearch from './home-not-logged-in/research';
+
+const ERAS_STATS_URL = (process.env.NODE_ENV === 'staging' || process.env.NODE_ENV === 'development')
+  ? 'https://eras-staging.zooniverse.org'
+  : 'https://eras.zooniverse.org';
 
 counterpart.registerTranslations('en', {
   notLoggedInHomePage: {
@@ -64,17 +67,18 @@ export default class HomePage extends React.Component {
   }
 
   getClassificationCounts() {
-    let count = 0;
-    statsClient.query({
-      period: 'year',
-      type: 'classification'
+    fetch(ERAS_STATS_URL + '/classifications').then((response) => {
+      if (!response.ok) {
+        console.error('ERAS STATS CLASSIFICATIONS COUNT NONLOGGED IN HOMEPAGE: ERROR')
+        throw Error(response.statusText);
+      }
+      return response.json()
+    }).then(data => {
+      let count = data.total_count
+      this.setState({ count });
+    }).catch((err) => {
+      console.error('ERAS TOTAL CLASSIFICATION COUNT: from ' + ERAS_STATS_URL + '/classifications', err)
     })
-    .then((data) => {
-      data.map((statObject) => {
-        count += statObject.doc_count;
-      });
-      this.setState({ count }); // number will only appear on production
-    });
   }
 
   showDialog(event) {
