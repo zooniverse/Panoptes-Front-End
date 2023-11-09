@@ -9,6 +9,7 @@
 import { useRef } from 'react';
 
 import CloseIcon from '../../../icons/CloseIcon.jsx';
+import TaskIcon from '../../../icons/TaskIcon.jsx';
 // import strings from '../../../strings.json'; // TODO: move all text into strings
 
 function NewTaskButtonAndDialog() {
@@ -65,28 +66,16 @@ function NewTaskButtonAndDialog() {
           </p>
           <div className="flex-row flex-wrap">
             <button type="button" className="new-task-button">
-              <span
-                aria-label="Task type: text"
-                className="fa fa fa-file-text-o fa-fw"
-                role="img"
-              />
+              <TaskIcon type='text' />
               <span>Text</span>
             </button>
             <button type="button" className="new-task-button">
-              <span
-                aria-label="Task type: text"
-                className="fa fa fa-file-text-o fa-fw"
-                role="img"
-              />
-              <span>Text</span>
+              <TaskIcon type='single' />
+              <span>Question</span>
             </button>
             <button type="button" className="new-task-button">
-              <span
-                aria-label="Task type: text"
-                className="fa fa fa-file-text-o fa-fw"
-                role="img"
-              />
-              <span>Text</span>
+              <TaskIcon type='drawing' />
+              <span>Drawing</span>
             </button>
           </div>
         </form>
