@@ -7,12 +7,15 @@
 /* eslint-disable react/no-unknown-property */
 
 import { useRef } from 'react';
+import PropTypes from 'prop-types';
 
 import CloseIcon from '../../../icons/CloseIcon.jsx';
 import TaskIcon from '../../../icons/TaskIcon.jsx';
 // import strings from '../../../strings.json'; // TODO: move all text into strings
 
-function NewTaskButtonAndDialog() {
+function NewTaskButtonAndDialog({
+  addTask = () => {}
+}) {
   const newTaskDialog = useRef(null);
 
   function openNewTaskDialog() {
@@ -21,6 +24,13 @@ function NewTaskButtonAndDialog() {
 
   function closeNewTaskDialog() {
     newTaskDialog.current?.close();
+  }
+
+  function addNewTask(e) {
+    const tasktype = e?.currentTarget?.dataset?.tasktype;
+    // Protip: don't use event.target, since it might return the child of the button, instead of the button itself
+
+    addTask(tasktype);
   }
 
   /*
@@ -64,15 +74,30 @@ function NewTaskButtonAndDialog() {
             You can ask them to answer a question or mark an image.
           </p>
           <div className="flex-row flex-wrap">
-            <button type="button" className="new-task-button">
+            <button
+              className="new-task-button"
+              data-tasktype="text"
+              onClick={addNewTask}
+              type="button"
+            >
               <TaskIcon type='text' />
               <span>Text</span>
             </button>
-            <button type="button" className="new-task-button">
+            <button
+              className="new-task-button"
+              data-tasktype="single"
+              onClick={addNewTask}
+              type="button"
+            >
               <TaskIcon type='single' />
               <span>Question</span>
             </button>
-            <button type="button" className="new-task-button">
+            <button
+              className="new-task-button"
+              data-tasktype="drawing"
+              onClick={addNewTask}
+              type="button"
+            >
               <TaskIcon type='drawing' />
               <span>Drawing</span>
             </button>
@@ -83,6 +108,8 @@ function NewTaskButtonAndDialog() {
   );
 }
 
-NewTaskButtonAndDialog.propTypes = {};
+NewTaskButtonAndDialog.propTypes = {
+  addTask: PropTypes.func
+};
 
 export default NewTaskButtonAndDialog;
