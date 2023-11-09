@@ -33,15 +33,6 @@ function NewTaskButtonAndDialog({
     addTask(tasktype);
   }
 
-  /*
-  WARNING: the <dialog> element should automatically close with the Esc key,
-  but this seems disabled. This doesn't seem to be a problem with React, but
-  with PFE.
-   */
-  // function dialogOnKeyUp(e) {
-  //  if (e.key === 'Escape') newTaskDialog.current?.close();
-  // }
-
   return (
     <>
       <button
