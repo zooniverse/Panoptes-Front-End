@@ -9,7 +9,12 @@ import PropTypes from 'prop-types';
 
 // import strings from '../../../strings.json'; // TODO: move all text into strings
 import TaskItem from './TaskItem.jsx';
+import CopyIcon from '../../../icons/CopyIcon.jsx';
+import DeleteIcon from '../../../icons/DeleteIcon.jsx';
+import EditIcon from '../../../icons/EditIcon.jsx';
 import GripIcon from '../../../icons/GripIcon.jsx';
+import MoveDownIcon from '../../../icons/MoveDownIcon.jsx';
+import MoveUpIcon from '../../../icons/MoveUpIcon.jsx';
 
 function StepItem({
   allTasks,
@@ -26,23 +31,23 @@ function StepItem({
         <span className="step-controls-left" />
         <div className="step-controls-center">
           <button aria-label={`Rearrange Page ${stepKey} upwards`} className="plain" type="button">
-            <span className="fa fa-caret-up" />
+            <MoveUpIcon />
           </button>
           {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
           <GripIcon className="grab-handle" />
           <button aria-label={`Rearrange Page/Step ${stepKey} downwards`} className="plain" type="button">
-            <span className="fa fa-caret-down" />
+            <MoveDownIcon />
           </button>
         </div>
         <div className="step-controls-right">
           <button aria-label={`Delete Page/Step ${stepKey}`} className="plain" type="button">
-            <span className="fa fa-trash" />
+            <DeleteIcon />
           </button>
           <button aria-label={`Copy Page/Step ${stepKey}`} className="plain" type="button">
-            <span className="fa fa-copy" />
+            <CopyIcon />
           </button>
           <button aria-label={`Edit Page/Step ${stepKey}`} className="plain" type="button">
-            <span className="fa fa-pencil" />
+            <EditIcon />
           </button>
         </div>
       </div>
