@@ -42,7 +42,6 @@ function NewTaskButtonAndDialog() {
         Add a new Task +
       </button>
       <dialog
-        autofocus="true"
         aria-labelledby="dialog-title"
         ref={newTaskDialog}
         /* open="true"  // MDN recommends not using this attribute. But if we have to, use "true", not {true} */
