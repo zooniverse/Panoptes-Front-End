@@ -143,9 +143,9 @@ export default class DropdownEditor extends React.Component {
                 </label>
               </AutoSave>
               <small className="form-help">
-                `Describe the task, or ask the question, in a way that is clear to a non-expert.
+                Describe the task, or ask the question, in a way that is clear to a non-expert.
                 If the task main text is the same as the dropdown title, only the main text will be displayed.
-                You can use markdown to format this text.`
+                Markdown can be used only to add images (with alt text), bold and italic text.
               </small>
               <br />
             </div>
