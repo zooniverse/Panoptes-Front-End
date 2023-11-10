@@ -14,7 +14,7 @@ import TaskIcon from '../../../icons/TaskIcon.jsx';
 // import strings from '../../../strings.json'; // TODO: move all text into strings
 
 function NewTaskButtonAndDialog({
-  addTask = () => {}
+  addTaskWithStep = () => {}
 }) {
   const newTaskDialog = useRef(null);
 
@@ -30,7 +30,8 @@ function NewTaskButtonAndDialog({
     const tasktype = e?.currentTarget?.dataset?.tasktype;
     // Protip: don't use event.target, since it might return the child of the button, instead of the button itself
 
-    addTask(tasktype);
+    closeNewTaskDialog();
+    addTaskWithStep(tasktype);
   }
 
   return (
@@ -100,7 +101,7 @@ function NewTaskButtonAndDialog({
 }
 
 NewTaskButtonAndDialog.propTypes = {
-  addTask: PropTypes.func
+  addTaskWithStep: PropTypes.func
 };
 
 export default NewTaskButtonAndDialog;
