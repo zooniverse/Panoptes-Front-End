@@ -66,7 +66,7 @@ module.exports = createReactClass
               onChange={handleInputChange.bind @props.workflow}
             />
           </AutoSave>
-          <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You can use markdown to format this text.</small>
+          <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. Markdown can be used only to add images (with alt text), bold and italic text.</small>
           <hr />
         </div>
       }

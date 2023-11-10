@@ -42,7 +42,7 @@ module.exports = createReactClass
             <br />
             <textarea name="#{@props.taskPrefix}.instruction" value={@props.task.instruction} className="standard-input full" onChange={handleChange} />
           </AutoSave>
-          <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You can use markdown to format this text.</small><br />
+          <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. Note: this is a label for the text input; markdown can be used only to add images (with alt text), bold and italic text.</small><br />
         </div>
         <br/>
         {unless @props.isSubtask
