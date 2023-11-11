@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import counterpart from 'counterpart';
+import { shape, string } from 'prop-types';
+import { Component } from 'react';
+import { Helmet } from 'react-helmet';
 import Translate from 'react-translate-component';
 import talkClient from 'panoptes-client/lib/talk-client';
-import { Helmet } from 'react-helmet';
-import Loading from '../../components/loading-indicator';
-import NotificationSection from '../notifications/notification-section';
+
+import NotificationSection from './notification-section';
 import CollapsableSection from '../../components/collapsable-section';
+import Loading from '../../components/loading-indicator';
 
 counterpart.registerTranslations('en', {
   notifications: {
@@ -18,148 +19,212 @@ counterpart.registerTranslations('en', {
   }
 });
 
-export default class NotificationsPage extends React.Component {
+export default class NotificationsPage extends Component {
   constructor(props) {
     super(props);
-    this.onChildChanged = this.onChildChanged.bind(this);
+
     this.state = {
-      projNotifications: [],
-      expanded: false
+      error: null,
+      expanded: false,
+      loading: false,
+      notifications: []
     };
+
+    this.handleExpand = this.handleExpand.bind(this);
   }
 
   componentDidMount() {
-    if (this.props.user) {
-      this.getProjectNotifications();
+    const { project, user } = this.props;
+
+    if (user) {
+      this.fetchNotifications();
+    }
+
+    if (project) {
+      this.setState({ expanded: project.id });
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.user !== null && nextProps.user !== this.props.user) {
-      this.getProjectNotifications();
+  componentDidUpdate(prevProps) {
+    const { project, user } = this.props;
+
+    if (user && !prevProps.user) {
+      this.fetchNotifications();
+    }
+
+    if (project !== prevProps.project) {
+      this.setState({ expanded: project.id });
     }
   }
 
-  onChildChanged(section) {
-    this.setState({ expanded: section });
+  handleExpand(sectionID) {
+    this.setState({ expanded: sectionID });
   }
 
-  getProjectNotifications() {
-    talkClient.type('notifications').get({ page: 1, page_size: 50 })
-    .then((projNotifications) => {
-      this.groupNotifications(projNotifications);
-    })
-    .then(() => {
-      if (this.props.project) this.setState({ expanded: `project-${this.props.project.id}` });
-    })
-    .catch((e) => {
-      console.error('Unable to load notifications', e);
-    });
-  }
+  async fetchNotifications() {
+    this.setState({ loading: true });
 
-  groupNotifications(notifications) {
-    const projectSections = [];
-    const projectNotifications = [];
-    notifications.forEach((notification) => {
-      if (projectSections.indexOf(notification.section) < 0) {
-        if (notification.section === 'zooniverse') {
-          projectSections.unshift(notification.section);
-          projectNotifications.unshift(notification);
-        } else {
-          projectSections.push(notification.section);
-          projectNotifications.push(notification);
-        }
+    function requestAllNotifications() {
+      let notifications = [];
+
+      function getNotifications(page) {
+        return talkClient
+          .type('notifications')
+          .get({ page, page_size: 50 })
+          .then((response) => {
+            notifications = notifications.concat(response);
+            const meta = response[0] ? response[0].getMeta() : null;
+            if (meta && meta.next_page) {
+              return getNotifications(meta.next_page);
+            }
+            return Promise.resolve(notifications);
+          })
+          .catch((error) => {
+            throw error;
+          });
       }
-    });
-    if (this.props.project && projectSections.indexOf(`project-${this.props.project.id}`) < 0) {
-      talkClient.type('notifications').get({ page: 1, page_size: 1, section: `project-${this.props.project.id}` })
-      .then(([notification]) => {
-        if (notification) {
-          projectNotifications.push(notification);
-          this.setState({ projNotifications: projectNotifications });
-          this.setState({ expanded: `project-${this.props.project.id}` });
-        }
-      });
+      return getNotifications(1);
     }
-    this.setState({ projNotifications: projectNotifications });
+
+    try {
+      const notifications = await requestAllNotifications();
+      this.setState({ notifications, loading: false });
+    } catch (error) {
+      this.setState({ error, loading: false });
+    }
   }
 
-  renderNotifications() {
-    let notificationView;
-
-    if (this.state.projNotifications.length > 0) {
-      notificationView = (
-        <div>
-          <div className="list">
-            {this.state.projNotifications.map((notification, i) => {
-              const opened = notification.section === this.state.expanded || this.state.projNotifications.length === 1;
-              return (
-                <CollapsableSection key={i} callbackParent={this.onChildChanged} expanded={opened} section={notification.section}>
-                  <NotificationSection
-                    key={notification.id}
-                    location={this.props.location}
-                    projectID={notification.project_id}
-                    slug={notification.project_slug}
-                    user={this.props.user}
-                  />
-                </CollapsableSection>
-              );
-            })}
-          </div>
-        </div>
-      );
-    } else if (this.state.projNotifications.length === 0) {
-      notificationView = (
-        <div className="centering talk-module notifications-title">
-          <Translate content="notifications.noNotifications" />{' '}
-          <Translate content="notifications.participation" />
-        </div>
-      );
-    } else {
-      notificationView = <Loading />;
-    }
-
-    return notificationView;
+  groupNotifications(allNotifications) {
+    const notificationsMap = {};
+    allNotifications.forEach((notification) => {
+      const { project_id: projectID, section } = notification;
+      const notificationSectionID = projectID || section;
+      if (!notificationsMap[notificationSectionID]) {
+        notificationsMap[notificationSectionID] = [notification];
+      }
+      notificationsMap[notificationSectionID].push(notification);
+    });
+    return notificationsMap;
   }
 
   render() {
-    let signedIn;
-    const headerStyle = this.props.project ? 'notifications-title talk-module' : 'notifications-title';
+    const {
+      location, project, user
+    } = this.props;
+    const {
+      error, expanded, loading, notifications
+    } = this.state;
 
-    if (this.props.user) {
-      signedIn = this.renderNotifications();
-    } else {
-      signedIn = (
-        <div className="centering talk-module">
-          <Translate content="notifications.signedOut" />
+    let groupedNotifications = {};
+    let groupedNotificationsIDs = [];
+    if (notifications?.length > 0) {
+      groupedNotifications = this.groupNotifications(notifications);
+      groupedNotificationsIDs = Object.keys(groupedNotifications);
+      if (groupedNotificationsIDs.includes('zooniverse')) {
+        groupedNotificationsIDs.splice(groupedNotificationsIDs.indexOf('zooniverse'), 1);
+        groupedNotificationsIDs.unshift('zooniverse');
+      }
+    }
+
+    const headerStyle = project ? 'notifications-title talk-module' : 'notifications-title';
+
+    let content = '';
+    if (!user) {
+      content = (
+        <Translate content="notifications.signedOut" />
+      );
+    } else if (error) {
+      content = (
+        <span>{error.message}</span>
+      );
+    } else if (loading) {
+      content = (
+        <Loading />
+      );
+    } else if (notifications?.length === 0) {
+      content = (
+        <div className="centering talk-module notifications-title">
+          <Translate content="notifications.noNotifications" />
+          {' '}
+          <Translate content="notifications.participation" />
         </div>
       );
     }
 
     return (
       <div className="talk notifications">
-        <Helmet title={counterpart("notifications.header")} />
+        <Helmet title={counterpart('notifications.header')} />
         <div className="content-container">
           <h3 className={headerStyle}>
             <Translate content="notifications.title" />
           </h3>
+          {content ? (
+            <div className="centering talk-module">
+              {content}
+            </div>
+          ) : (
+            <div>
+              <div className="list">
+                {groupedNotificationsIDs.map((notificationSectionID) => {
+                  const opened = notificationSectionID === expanded || groupedNotificationsIDs.length === 1;
 
-          {signedIn}
+                  const slug = groupedNotifications[notificationSectionID][0].project_slug;
+
+                  const sectionNotifications = groupedNotifications[notificationSectionID] || [];
+                  const uniqueNotifications = sectionNotifications.filter((notification, index, self) => (
+                    index === self.findIndex((t) => t.id === notification.id)
+                  ));
+
+                  return (
+                    <CollapsableSection
+                      key={`collapsable-section-${notificationSectionID}`}
+                      callbackParent={() => {
+                        const section = expanded === notificationSectionID ? false : notificationSectionID;
+                        this.handleExpand(section);
+                      }}
+                      expanded={opened}
+                      section={notificationSectionID}
+                    >
+                      <NotificationSection
+                        key={`notification-section-${notificationSectionID}`}
+                        location={location}
+                        notifications={uniqueNotifications}
+                        slug={slug}
+                        user={user}
+                      />
+                    </CollapsableSection>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
   }
 }
 
+NotificationsPage.defaultProps = {
+  location: {
+    query: {
+      page: '1'
+    }
+  },
+  project: null,
+  user: null
+};
+
 NotificationsPage.propTypes = {
-  location: PropTypes.shape({
-    query: PropTypes.object
+  location: shape({
+    query: shape({
+      page: string
+    })
   }),
-  project: PropTypes.shape({
-    id: PropTypes.string
+  project: shape({
+    id: string
   }),
-  user: PropTypes.shape({
-    display_name: PropTypes.string,
-    login: PropTypes.string
+  user: shape({
+    display_name: string,
+    login: string
   })
 };

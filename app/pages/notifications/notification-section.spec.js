@@ -1,45 +1,98 @@
+/* eslint-disable func-names, prefer-arrow-callback, react/jsx-filename-extension */
+
 import React from 'react';
 import assert from 'assert';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
+import talkClient from 'panoptes-client/lib/talk-client';
+
 import NotificationSection from './notification-section';
 
+const notificationComment = {
+  id: '123',
+  source_type: 'Comment',
+  delivered: true,
+  source: {
+    discussion_id: '789'
+  },
+  update: sinon.stub().returnsThis(),
+  save: sinon.stub().resolves({})
+};
+
+const notificationDataRequest = {
+  id: '124',
+  source_type: 'DataRequest',
+  delivered: true,
+  update: sinon.stub().returnsThis(),
+  save: sinon.stub().resolves({})
+};
+
+const notificationModeration = {
+  id: '126',
+  source_type: 'Moderation',
+  delivered: true,
+  update: sinon.stub().returnsThis(),
+  save: sinon.stub().resolves({})
+};
+
+const notificationCommentUnread1 = {
+  id: '127',
+  source_type: 'Comment',
+  delivered: false,
+  source: {
+    discussion_id: '790'
+  },
+  update: sinon.stub().returnsThis(),
+  save: sinon.stub().resolves({})
+};
+
+const notificationCommentUnread2 = {
+  id: '128',
+  source_type: 'Comment',
+  delivered: false,
+  source: {
+    discussion_id: '790'
+  },
+  update: sinon.stub().returnsThis(),
+  save: sinon.stub().resolves({})
+};
+
 const notifications = [
-  { notification: {
-    id: '123',
-    source_type: 'DataRequest',
-    url: '/',
-    message: 'test message',
-    created_at: '2016-12-09T16:09:50.641Z',
-  },
-    data: { projectName: 'TestingProject' },
-  },
-  { notification: {
-    id: '124',
-    source_type: 'DataRequest',
-    url: '/',
-    message: 'test message',
-    created_at: '2016-12-10T16:09:50.641Z',
-  },
-    data: { projectName: 'TestingProject' },
-  },
+  notificationComment,
+  notificationDataRequest,
+  notificationModeration
 ];
 
-describe('Notification Section', function() {
-  let wrapper;
+const notificationsWithUnread = notifications.concat([notificationCommentUnread1, notificationCommentUnread2]);
 
-  before(function () {
-    sinon.stub(NotificationSection.prototype, 'getUnreadCount').callsFake(() => null);
-  });
+function notificationDataItem(notification) {
+  const dataType = notification.source_type.toLowerCase();
+  return {
+    notification,
+    data: {
+      [dataType]: {
+        id: notification.id.split('').reverse().join('')
+      }
+    }
+  };
+}
 
-  after(function () {
-    NotificationSection.prototype.getUnreadCount.restore();
-  });
+const notificationData = notifications.map((notification) => notificationDataItem(notification));
 
+const notificationDataUnread = notificationsWithUnread.map((notification) => notificationDataItem(notification));
+
+describe('NotificationSection', function () {
   describe('it can display a Zooniverse section', function () {
-    beforeEach(function () {
+    let wrapper;
+
+    before(function () {
       wrapper = shallow(
-        <NotificationSection projectID={''} slug={null} user={{ id: 1 }} section={'zooniverse'} />,
+        <NotificationSection
+          expanded={false}
+          notifications={notifications}
+          section="zooniverse"
+          user={{ id: '1' }}
+        />
       );
     });
 
@@ -47,7 +100,7 @@ describe('Notification Section', function() {
       assert.equal(wrapper.find('.notification-section__title').text(), 'Zooniverse');
     });
 
-    it('should link to the home page', function () {
+    it('should link to the Zooniverse home page', function () {
       assert.equal(wrapper.find('Link').prop('to'), '/');
     });
 
@@ -56,37 +109,76 @@ describe('Notification Section', function() {
     });
   });
 
-  describe('it correctly displays a project', function () {
-    before(function () {
-      sinon.stub(NotificationSection.prototype, 'componentWillMount').callsFake(() => null);
-      wrapper = shallow(<NotificationSection />);
-      wrapper.setState({ name: 'Testing' });
-    });
+  describe('it can display a project section', function () {
+    let wrapper;
 
-    after(function () {
-      NotificationSection.prototype.componentWillMount.restore();
+    before(function () {
+      wrapper = shallow(
+        <NotificationSection
+          expanded={false}
+          notifications={notifications}
+          section="1234"
+          user={{ id: '1' }}
+        />,
+        { disableLifecycleMethods: true }
+      );
+      wrapper.setState({
+        avatar: '/project/avatar/url',
+        name: 'Test Project'
+      });
     });
 
     it('should display the correct title', function () {
-      assert.equal(wrapper.find('.notification-section__title').text(), 'Testing');
+      assert.equal(wrapper.find('.notification-section__title').text(), 'Test Project');
+    });
+  });
+
+  describe('it can display a section with unread notifications', function () {
+    let wrapper;
+
+    before(function () {
+      wrapper = shallow(
+        <NotificationSection
+          expanded={false}
+          notifications={notificationsWithUnread}
+          section="zooniverse"
+          user={{ id: '1' }}
+        />
+      );
+
+      wrapper.setState({
+        loading: false,
+        name: 'Zooniverse'
+      });
+    });
+
+    it('should show an unread notification circle in place of an avatar', function () {
+      assert.equal(wrapper.find('circle').length, 1);
     });
   });
 
   describe('will render appropriately when open', function () {
-    beforeEach(function () {
+    let wrapper;
+
+    before(function () {
       wrapper = shallow(
-        <NotificationSection expanded={true} projectID={''} slug={null} user={{ id: 1 }} section={'zooniverse'} />,
+        <NotificationSection
+          expanded={true}
+          notifications={notifications}
+          section="zooniverse"
+          user={{ id: '1' }}
+        />,
+        { disableLifecycleMethods: true }
       );
-      wrapper.setState({ notificationData: notifications });
+      wrapper.setState({
+        loading: false,
+        name: 'Zooniverse',
+        notificationData
+      });
     });
 
     it('should display the correct number of notifications', function () {
-      assert.equal(wrapper.find('Notification').length, 2);
-    });
-
-    it('should show an unread notification in place of an avatar', function () {
-      wrapper.setState({ unread: 1 });
-      assert.equal(wrapper.find('circle').length, 1);
+      assert.equal(wrapper.find('Notification').length, 3);
     });
 
     it('should show close icon', function () {
@@ -94,76 +186,110 @@ describe('Notification Section', function() {
     });
   });
 
-  describe('will update notifications as read', function () {
-    const newNotifications = [
-      {
-        id: '123',
-        delivered: false,
-        source: {
-          discussion_id: '456'
-        },
-        source_type: 'Comment',
-        update: sinon.stub().returnsThis(),
-        save: sinon.stub().resolves({})
-      },
-      {
-        id: '124',
-        delivered: false,
-        source: {
-          discussion_id: '456'
-        },
-        source_type: 'Comment',
-        update: sinon.stub().returnsThis(),
-        save: sinon.stub().rejects()
-      },
-      {
-        id: '125',
-        delivered: false,
-        source_type: 'Moderation',
-        source: {},
-        update: sinon.stub().returnsThis(),
-        save: sinon.stub().resolves({})
-      },
-      {
-        id: '126',
-        delivered: false,
-        source: {
-          discussion_id: '789'
-        },
-        source_type: 'Comment',
-        update: sinon.stub().returnsThis(),
-        save: sinon.stub().resolves({})
-      }
-    ];
-    const notificationsCounter = {
+  describe('will update notification as read', function () {
+    let wrapper;
+
+    const notificationsCounterStub = {
       update: sinon.stub()
     };
-    wrapper = shallow(
-      <NotificationSection expanded={true} />,
-      { context: { notificationsCounter }, disableLifeCycleMethods: true }
-    );
-    wrapper.setState({ notifications: newNotifications });
-    wrapper.instance().markAsRead(newNotifications[0]);
 
-    it('should update read notification as read (delivered)', function () {
-      assert.equal(newNotifications[0].update.calledWith({ delivered: true }), true);
-      assert.equal(newNotifications[0].save.called, true);
+    before(function () {
+      wrapper = shallow(
+        <NotificationSection
+          expanded={true}
+          notifications={notificationsWithUnread}
+          section="zooniverse"
+          user={{ id: '1' }}
+        />,
+        {
+          context: {
+            notificationsCounter: notificationsCounterStub
+          },
+          disableLifecycleMethods: true
+        }
+      );
+      wrapper.setState({
+        loading: false,
+        name: 'Zooniverse',
+        notificationData: notificationDataUnread
+      });
+      wrapper.instance().markAsRead(notificationDataUnread[4].notification);
     });
 
-    it('should update related notifications as read (delivered)', function () {
-      assert.equal(newNotifications[1].update.calledWith({ delivered: true }), true);
-      assert.equal(newNotifications[1].save.called, true);
+    it('should update unread notification as read (delivered)', function () {
+      assert.equal(notificationCommentUnread2.update.calledWith({ delivered: true }), true);
+      assert.equal(notificationCommentUnread2.save.called, true);
+    });
+
+    it('should update related unread notifications as read (delivered)', function () {
+      assert.equal(notificationCommentUnread1.update.calledWith({ delivered: true }), true);
+      assert.equal(notificationCommentUnread1.save.called, true);
     });
 
     it('should not update unrelated notifications', function () {
-      assert.equal(newNotifications[2].update.called, false);
-      assert.equal(newNotifications[2].save.called, false);
-      assert.equal(newNotifications[3].update.called, false);
-      assert.equal(newNotifications[3].save.called, false);
+      assert.equal(notificationComment.update.called, false);
+      assert.equal(notificationDataRequest.update.called, false);
+      assert.equal(notificationModeration.update.called, false);
     });
 
     it('should update the notifications counter', function () {
-      assert.equal(notificationsCounter.update.called, true);
+      assert.equal(notificationsCounterStub.update.called, true);
+    });
+  });
+
+  describe('will update all notifications as read', function () {
+    let wrapper;
+    let toggleSectionSpy;
+
+    const notificationsCounterStub = {
+      setUnread: sinon.stub()
+    };
+
+    before(function () {
+      sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve([]));
+      toggleSectionSpy = sinon.spy();
+
+      wrapper = shallow(
+        <NotificationSection
+          expanded={true}
+          notifications={notificationsWithUnread}
+          section="zooniverse"
+          toggleSection={toggleSectionSpy}
+          user={{ id: '1' }}
+        />,
+        {
+          context: {
+            notificationsCounter: notificationsCounterStub
+          },
+          disableLifecycleMethods: true
+        }
+      );
+      wrapper.setState({
+        loading: false,
+        name: 'Zooniverse',
+        notificationData: notificationDataUnread
+      });
+      wrapper.instance().markAllRead();
+    });
+
+    after(function () {
+      talkClient.request.restore();
+    });
+
+    it('should update all notifications as read (delivered)', function () {
+      assert.equal(notificationComment.update.calledWith({ delivered: true }), true);
+      assert.equal(notificationDataRequest.update.calledWith({ delivered: true }), true);
+      assert.equal(notificationModeration.update.calledWith({ delivered: true }), true);
+      assert.equal(notificationCommentUnread1.update.calledWith({ delivered: true }), true);
+      assert.equal(notificationCommentUnread2.update.calledWith({ delivered: true }), true);
+    });
+
+    it('should call toggleSection', function () {
+      assert.equal(toggleSectionSpy.calledWith(false), true);
+    });
+
+    it('should update the notifications counter', function () {
+      assert.equal(notificationsCounterStub.setUnread.calledWith(0), true);
     });
   });
 });

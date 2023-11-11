@@ -1,82 +1,145 @@
-// These tests are skipped until a solution can be found for cjsx imports with the coffee-script test compiler
+/* eslint-disable func-names, prefer-arrow-callback, react/jsx-filename-extension */
 
 import React from 'react';
 import assert from 'assert';
-import Notifications from './index';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
+import talkClient from 'panoptes-client/lib/talk-client';
+
+import Loading from '../../components/loading-indicator';
+import NotificationsPage from './index';
+
 const testNotifications = [
-  { id: '123',
-    section: 'project-4321'
+  {
+    id: '123',
+    project_id: '4321',
+    section: 'project-4321',
+    getMeta: () => ({ next_page: null })
   },
-  { id: '124',
-    section: 'project-1234'
+  {
+    id: '124',
+    project_id: '1234',
+    section: 'project-1234',
+    getMeta: () => ({ next_page: null })
   },
-  { id: '125',
-    section: 'zooniverse'
+  {
+    id: '125',
+    project_id: '',
+    section: 'zooniverse',
+    getMeta: () => ({ next_page: null })
   },
-  { id: '126',
-    section: 'project-4321'
+  {
+    id: '126',
+    project_id: '4321',
+    section: 'project-4321',
+    getMeta: () => ({ next_page: null })
   }
 ];
 
-describe('Notifications', function() {
-  let wrapper;
-  let notifications;
+describe('NotificationsPage', function () {
+  describe('without a user', function () {
+    let wrapper;
 
-  describe('it will display according to user', function() {
-    it('will ask user to sign in', function() {
-      wrapper = mount(<Notifications user={null} />);
-      assert.equal(wrapper.find('.talk-module').text(), 'You\'re not signed in.');
+    before(function () {
+      wrapper = mount(<NotificationsPage user={null} />);
     });
 
-    it('will notify when no notifications present', function() {
-      const stub = sinon.stub(Notifications.prototype, 'componentDidMount');
-      wrapper = mount(<Notifications user={{ id: 1 }} />);
-      assert(wrapper.contains(<span>You have no notifications.</span>));
-      stub.restore();
+    it('should render not signed in message', function () {
+      assert.equal(wrapper.find('.centering').text(), 'You\'re not signed in.');
     });
   });
 
-  describe('it correctly display projects', function() {
-    beforeEach(function () {
-      wrapper = shallow(
-        <Notifications user={{ id: 1 }} />,
-        { disableLifecycleMethods: true }
-      );
-      wrapper.instance().groupNotifications(testNotifications);
-      notifications = shallow(wrapper.instance().renderNotifications());
+  describe('with a user', function () {
+    describe('with an error', function () {
+      let wrapper;
+      const testError = new Error('Test error');
+
+      before(function () {
+        sinon.stub(talkClient, 'request').callsFake(() => Promise.reject(testError));
+
+        wrapper = mount(<NotificationsPage user={{ id: '456' }} />);
+      });
+
+      after(function () {
+        talkClient.request.restore();
+      });
+
+      it('should render an error message', function () {
+        assert.equal(wrapper.find('.centering').text(), 'Test error');
+      });
     });
 
-    it('will place zooniverse section first', function() {
-      assert.equal(notifications.find('.list').childAt(0).prop('section'), 'zooniverse');
+    describe('while loading', function () {
+      let wrapper;
+
+      before(function () {
+        sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve(null));
+
+        wrapper = mount(<NotificationsPage user={{ id: '456' }} />);
+      });
+
+      after(function () {
+        talkClient.request.restore();
+      });
+
+      it('should render a loading message', function () {
+        assert.equal(wrapper.find(Loading).length, 1);
+      });
     });
 
-    it('will display correct number of sections', function() {
-      assert.equal(notifications.find('.list').children().length, 3);
-    });
-  });
+    describe('without notifications', function () {
+      let wrapper;
 
-  describe('will open sections correctly', function() {
-    beforeEach(function () {
-      wrapper = shallow(
-        <Notifications user={{ id: 1 }} />,
-        { disableLifecycleMethods: true }
-      );
-      wrapper.setState({ expanded: 'project-1234' });
-      wrapper.instance().groupNotifications(testNotifications);
-      notifications = shallow(wrapper.instance().renderNotifications());
-    });
+      before(function () {
+        sinon.stub(talkClient, 'request').callsFake(() => Promise.resolve([]));
 
-    it('will open the active project', function() {
-      const activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-1234');
-      assert.equal(activeProject.prop('expanded'), true);
+        wrapper = mount(<NotificationsPage user={{ id: '456' }} />);
+      });
+
+      after(function () {
+        talkClient.request.restore();
+      });
+
+      it('should render a no notifications message', function () {
+        assert.equal(wrapper.find('.centering').text(), 'You have no notifications. You can receive notifications by participating in Talk, following discussions, and receiving messages.');
+      });
     });
 
-    it('will keep other projects closed', function() {
-      const activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-4321');
-      assert.equal(activeProject.prop('expanded'), false);
+    describe('with notifications', function () {
+      let wrapper;
+
+      before(function () {
+        wrapper = shallow(
+          <NotificationsPage
+            project={{ id: '1234' }}
+            user={{ id: '456' }}
+          />,
+          { disableLifecycleMethods: true }
+        );
+        wrapper.setState({
+          expanded: '1234',
+          notifications: testNotifications
+        });
+      });
+
+      it('will display correct number of sections', function () {
+        assert.equal(wrapper.find('CollapsableSection').length, 3);
+      });
+
+      it('will place Zooniverse section first', function () {
+        assert.equal(wrapper.find('CollapsableSection').at(0).prop('section'), 'zooniverse');
+      });
+
+      it('will open the active project', function () {
+        assert.equal(wrapper.find('CollapsableSection').at(1).prop('expanded'), true);
+        assert.equal(wrapper.find('CollapsableSection').at(1).prop('section'), '1234');
+      });
+
+      it('will keep other projects closed', function () {
+        assert.equal(wrapper.find('CollapsableSection').at(0).prop('expanded'), false);
+        assert.equal(wrapper.find('CollapsableSection').at(2).prop('expanded'), false);
+      });
     });
   });
 });
