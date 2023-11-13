@@ -34,7 +34,7 @@ export default function TasksPage() {
       ...workflow.tasks,
       [newTaskKey]: newTask
     };
-    const steps = [...workflow.steps, newStep];
+    const steps = linkStepsInWorkflow([...workflow.steps, newStep]);
 
     update({ tasks, steps });
   }
