@@ -47,7 +47,7 @@ export default function TasksPage() {
   }
 
   function experimentalLinkSteps() {
-    const newSteps = linkStepsInWorkflow(workflow?.steps);
+    const newSteps = linkStepsInWorkflow(workflow?.steps, workflow?.tasks);
     console.log('+++ linkStepsInWorkflow()\n', workflow?.steps, '\n==>\n', newSteps);
   }
 
