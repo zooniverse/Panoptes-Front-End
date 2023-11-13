@@ -93,16 +93,18 @@ export default function TasksPage() {
           }}
         >
           <button
-            className="big primary"
+            className="big"
             onClick={experimentalReset}
             type="button"
+            style={{ margin: '0 4px' }}
           >
             RESET
           </button>
           <button
-            className="big primary"
+            className="big"
             onClick={experimentalLinkSteps}
             type="button"
+            style={{ margin: '0 4px' }}
           >
             LINK
           </button>
