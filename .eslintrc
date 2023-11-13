@@ -7,10 +7,16 @@
   },
   "parser": "@babel/eslint-parser",
   "rules": {
-    "react/jsx-boolean-value": ["error","always"],
+    "react/jsx-boolean-value": 0,
     "react/prefer-es6-class": 0,
     "react/prefer-stateless-function": 0,
     "react/no-multi-comp": 0,
+    "react/react-in-jsx-scope": 0,
+    "react/require-default-props": {
+      "classes": "defaultProps",
+      "functions": "ignore"
+    },
+    "no-console": 0,
     "array-callback-return": "off",
     "arrow-body-style": ["warn", "as-needed"],
     "comma-dangle": ["warn", "never"],
