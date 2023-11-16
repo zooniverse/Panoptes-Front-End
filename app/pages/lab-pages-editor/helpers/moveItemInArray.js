@@ -3,6 +3,10 @@ Moves an item in an array.
 
 - Input: array of whatever, index of item to be moved from, index to move item to.
 - Output: returns a COPY of the array, with the items moved.
+
+Examples:
+- moveItemInArray(['a','b','c','d','e'], 2, 3) => ['a', 'b', 'd', 'c', 'e']
+- moveItemInArray(['a','b','c','d','e'], 2, 1) => ['a', 'c', 'b', 'd', 'e']
  */
 
 export default function moveItemInArray(
