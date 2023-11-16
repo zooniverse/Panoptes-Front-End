@@ -18,24 +18,44 @@ import MoveUpIcon from '../../../icons/MoveUpIcon.jsx';
 
 function StepItem({
   allTasks,
+  moveStep = () => {},
   step,
-  stepKey
+  stepKey,
+  stepIndex
 }) {
   if (!step || !stepKey || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
 
   const taskKeys = step.taskKeys || [];
+
+  function moveStepUp() {
+    moveStep(stepIndex, stepIndex - 1);
+  }
+
+  function moveStepDown() {
+    moveStep(stepIndex, stepIndex + 1);
+  }
 
   return (
     <li className="step-item">
       <div className="step-controls flex-row spacing-bottom-XS">
         <span className="step-controls-left" />
         <div className="step-controls-center">
-          <button aria-label={`Rearrange Page ${stepKey} upwards`} className="plain" type="button">
+          <button
+            aria-label={`Rearrange Page ${stepKey} upwards`}
+            className="plain"
+            onClick={moveStepUp}
+            type="button"
+          >
             <MoveUpIcon />
           </button>
           {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
           <GripIcon className="grab-handle" />
-          <button aria-label={`Rearrange Page/Step ${stepKey} downwards`} className="plain" type="button">
+          <button
+            aria-label={`Rearrange Page/Step ${stepKey} downwards`}
+            className="plain"
+            onClick={moveStepDown}
+            type="button"
+          >
             <MoveDownIcon />
           </button>
         </div>
@@ -65,8 +85,10 @@ function StepItem({
 
 StepItem.propTypes = {
   allTasks: PropTypes.object,
+  moveStep: PropTypes.func,
   step: PropTypes.object,
-  stepKey: PropTypes.string
+  stepKey: PropTypes.string,
+  stepIndex: PropTypes.number
 };
 
 export default StepItem;

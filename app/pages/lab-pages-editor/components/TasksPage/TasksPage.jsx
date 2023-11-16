@@ -5,11 +5,12 @@
 /* eslint-disable react/jsx-boolean-value */
 
 import { useWorkflowContext } from '../../context.js';
-import getNewTaskKey from '../../helpers/getNewTaskKey.js';
-import getNewStepKey from '../../helpers/getNewStepKey.js';
-import createTask from '../../helpers/createTask.js';
 import createStep from '../../helpers/createStep.js';
+import createTask from '../../helpers/createTask.js';
+import getNewStepKey from '../../helpers/getNewStepKey.js';
+import getNewTaskKey from '../../helpers/getNewTaskKey.js';
 import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
+import moveItemInArray from '../../helpers/moveItemInArray.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import NewTaskButtonAndDialog from './components/NewTaskButtonAndDialog.jsx';
@@ -51,6 +52,10 @@ export default function TasksPage() {
     update({ steps: newSteps });
   }
 
+  function moveStep(from, to) {
+    console.log('+++ moveStep: ', from, to);
+  }
+
   if (!workflow) return null;
 
   return (
@@ -75,11 +80,13 @@ export default function TasksPage() {
           </select>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
-          {workflow.steps.map(([stepKey, step]) => (
+          {workflow.steps.map(([stepKey, step], index) => (
             <StepItem
               allTasks={workflow.tasks}
+              moveStep={moveStep}
               step={step}
               stepKey={stepKey}
+              stepIndex={index}
             />
           ))}
         </ul>
