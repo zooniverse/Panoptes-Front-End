@@ -54,6 +54,11 @@ export default function TasksPage() {
 
   function moveStep(from, to) {
     console.log('+++ moveStep: ', from, to);
+    const oldSteps = workflow?.steps || [];
+    if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
+
+    const steps = linkStepsInWorkflow(moveItemInArray(oldSteps, from, to));
+    update({ steps });
   }
 
   if (!workflow) return null;
