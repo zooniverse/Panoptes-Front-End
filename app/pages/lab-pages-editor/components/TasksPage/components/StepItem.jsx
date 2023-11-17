@@ -35,9 +35,45 @@ function StepItem({
     moveStep(stepIndex, stepIndex + 1);
   }
 
+  function onDragStart(e) {
+    // TODO: drag item is step-body, but only the drag handle should initiate drag start
+    console.log('+++ dragStart:', e);
+    e.dataTransfer.setData('text/plain', stepIndex + '');
+  }
+
+  function onDragEnter(e) {
+    e.preventDefault(); // Prevent default, to ensure onDrop works.
+  }
+
+  function onDragLeave(e) {
+    e.preventDefault();
+  }
+
+  function onDrop(e) {
+    const from = parseInt(e.dataTransfer.getData('text/plain')) || 0;
+    const to = stepIndex;
+    console.log('+++ onDrop: ', from, to);
+    moveStep(from, to);
+    e.preventDefault();
+  }
+
+  function onDragOver(e) {
+    e.preventDefault(); // Prevent default, to ensure onDrop works.
+  }
+
   return (
     <li className="step-item">
-      <div className="step-body">
+      <div
+        className="step-drop-target"
+        onDragEnter={onDragEnter}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+      ></div>
+      <div
+        className="step-body"
+        draggable="true" /* This is enumerated, and has to be a string. */
+        onDragStart={onDragStart}
+      >
         <div className="step-controls flex-row spacing-bottom-XS">
           <span className="step-controls-left" />
           <div className="step-controls-center">
@@ -52,7 +88,6 @@ function StepItem({
             {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
             <GripIcon
               className="grab-handle"
-              draggable="true" /* This is enumerated, and has to be a string. */
             />
             <button
               aria-label={`Rearrange Page/Step ${stepKey} downwards`}
@@ -88,6 +123,7 @@ function StepItem({
           })}
         </ul>
       </div>
+      <div className="step-drop-target"></div>
     </li>
   );
 }
