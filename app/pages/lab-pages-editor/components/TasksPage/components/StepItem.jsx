@@ -75,7 +75,11 @@ function StepItem({
         {taskKeys.map((taskKey) => {
           const task = allTasks[taskKey];
           return (
-            <TaskItem task={task} taskKey={taskKey} />
+            <TaskItem
+              key={`taskItem-${taskKey}`}
+              task={task}
+              taskKey={taskKey}
+            />
           );
         })}
       </ul>

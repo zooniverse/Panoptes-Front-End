@@ -86,6 +86,7 @@ export default function TasksPage() {
         <ul className="steps-list" aria-label="Pages/Steps">
           {workflow.steps.map(([stepKey, step], index) => (
             <StepItem
+              key={`stepItem-${stepKey}`}
               allTasks={workflow.tasks}
               moveStep={moveStep}
               step={step}
