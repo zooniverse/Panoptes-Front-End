@@ -37,52 +37,57 @@ function StepItem({
 
   return (
     <li className="step-item">
-      <div className="step-controls flex-row spacing-bottom-XS">
-        <span className="step-controls-left" />
-        <div className="step-controls-center">
-          <button
-            aria-label={`Rearrange Page ${stepKey} upwards`}
-            className="plain"
-            onClick={moveStepUp}
-            type="button"
-          >
-            <MoveUpIcon />
-          </button>
-          {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
-          <GripIcon className="grab-handle" />
-          <button
-            aria-label={`Rearrange Page/Step ${stepKey} downwards`}
-            className="plain"
-            onClick={moveStepDown}
-            type="button"
-          >
-            <MoveDownIcon />
-          </button>
-        </div>
-        <div className="step-controls-right">
-          <button aria-label={`Delete Page/Step ${stepKey}`} className="plain" type="button">
-            <DeleteIcon />
-          </button>
-          <button aria-label={`Copy Page/Step ${stepKey}`} className="plain" type="button">
-            <CopyIcon />
-          </button>
-          <button aria-label={`Edit Page/Step ${stepKey}`} className="plain" type="button">
-            <EditIcon />
-          </button>
-        </div>
-      </div>
-      <ul className="tasks-list" aria-label={`Tasks for Page/Step ${stepKey}`}>
-        {taskKeys.map((taskKey) => {
-          const task = allTasks[taskKey];
-          return (
-            <TaskItem
-              key={`taskItem-${taskKey}`}
-              task={task}
-              taskKey={taskKey}
+      <div className="step-body">
+        <div className="step-controls flex-row spacing-bottom-XS">
+          <span className="step-controls-left" />
+          <div className="step-controls-center">
+            <button
+              aria-label={`Rearrange Page ${stepKey} upwards`}
+              className="plain"
+              onClick={moveStepUp}
+              type="button"
+            >
+              <MoveUpIcon />
+            </button>
+            {/* TODO: add drag/drop functionality. Perhaps this needs to be wider, too. */}
+            <GripIcon
+              className="grab-handle"
+              draggable="true" /* This is enumerated, and has to be a string. */
             />
-          );
-        })}
-      </ul>
+            <button
+              aria-label={`Rearrange Page/Step ${stepKey} downwards`}
+              className="plain"
+              onClick={moveStepDown}
+              type="button"
+            >
+              <MoveDownIcon />
+            </button>
+          </div>
+          <div className="step-controls-right">
+            <button aria-label={`Delete Page/Step ${stepKey}`} className="plain" type="button">
+              <DeleteIcon />
+            </button>
+            <button aria-label={`Copy Page/Step ${stepKey}`} className="plain" type="button">
+              <CopyIcon />
+            </button>
+            <button aria-label={`Edit Page/Step ${stepKey}`} className="plain" type="button">
+              <EditIcon />
+            </button>
+          </div>
+        </div>
+        <ul className="tasks-list" aria-label={`Tasks for Page/Step ${stepKey}`}>
+          {taskKeys.map((taskKey) => {
+            const task = allTasks[taskKey];
+            return (
+              <TaskItem
+                key={`taskItem-${taskKey}`}
+                task={task}
+                taskKey={taskKey}
+              />
+            );
+          })}
+        </ul>
+      </div>
     </li>
   );
 }
