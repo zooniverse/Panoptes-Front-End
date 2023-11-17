@@ -5,6 +5,7 @@
 /* eslint-disable react/jsx-boolean-value */
 /* eslint-disable react/forbid-prop-types */
 
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 // import strings from '../../../strings.json'; // TODO: move all text into strings
@@ -41,34 +42,11 @@ function StepItem({
     e.dataTransfer.setData('text/plain', stepIndex + '');
   }
 
-  function onDragEnter(e) {
-    e.preventDefault(); // Prevent default, to ensure onDrop works.
-  }
-
-  function onDragLeave(e) {
-    e.preventDefault();
-  }
-
-  function onDrop(e) {
-    const from = parseInt(e.dataTransfer.getData('text/plain')) || 0;
-    const to = stepIndex;
-    console.log('+++ onDrop: ', from, to);
-    moveStep(from, to);
-    e.preventDefault();
-  }
-
-  function onDragOver(e) {
-    e.preventDefault(); // Prevent default, to ensure onDrop works.
-  }
-
   return (
     <li className="step-item">
-      <div
-        className="step-drop-target"
-        onDragEnter={onDragEnter}
-        onDragOver={onDragOver}
-        onDrop={onDrop}
-      ></div>
+      {(stepIndex === 0)
+      ? <DropTarget targetIndex={stepIndex} moveStep={moveStep} />
+      : null}
       <div
         className="step-body"
         draggable="true" /* This is enumerated, and has to be a string. */
@@ -123,7 +101,7 @@ function StepItem({
           })}
         </ul>
       </div>
-      <div className="step-drop-target"></div>
+      <DropTarget targetIndex={stepIndex + 1} moveStep={moveStep} />
     </li>
   );
 }
@@ -135,5 +113,45 @@ StepItem.propTypes = {
   stepKey: PropTypes.string,
   stepIndex: PropTypes.number
 };
+
+function DropTarget({
+  targetIndex = 0,
+  moveStep = () => {}
+}) {
+  const [active, setActive] = useState(false);
+
+  function onDragEnter(e) {
+    setActive(true);
+    e.preventDefault(); // Prevent default, to ensure onDrop works.
+  }
+
+  function onDragLeave(e) {
+    setActive(false);
+    e.preventDefault();  // Probably unnecessary for onDrop, but oh well
+  }
+
+  function onDragOver(e) {
+    e.preventDefault(); // Prevent default, to ensure onDrop works.
+  }
+
+  function onDrop(e) {
+    const from = parseInt(e.dataTransfer.getData('text/plain')) || 0;
+    const to = targetIndex;
+    console.log('+++ onDrop: ', from, to);
+    // moveStep(from, to);
+    setActive(false);
+    e.preventDefault();
+  }
+
+  return (
+    <div
+      className={`step-drop-target ${active ? 'active' : ''}`}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+    ></div>
+  );
+}
 
 export default StepItem;
