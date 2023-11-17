@@ -136,9 +136,8 @@ function DropTarget({
 
   function onDrop(e) {
     const from = parseInt(e.dataTransfer.getData('text/plain')) || 0;
-    const to = targetIndex;
-    console.log('+++ onDrop: ', from, to);
-    // moveStep(from, to);
+    const to = (from < targetIndex) ? targetIndex - 1 : targetIndex;
+    moveStep(from, to);
     setActive(false);
     e.preventDefault();
   }
