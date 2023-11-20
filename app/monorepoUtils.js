@@ -18,7 +18,7 @@ export const SLUGS = [
   'mainehistory/beyond-borders-transcribing-historic-maine-land-documents',
   'zookeeper/galaxy-zoo-weird-and-wonderful',
   'zookeeper/planet-hunters-tessting',
-  'hughdickinson/superwasp-black-hole-hunters',
+  'cobalt-lensing/black-hole-hunters',
   'bogden/scarlets-and-blues',
   'kmc35/peoples-contest-digital-archive',
   'rachaelsking/corresponding-with-quakers',
