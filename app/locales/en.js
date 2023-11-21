@@ -237,7 +237,8 @@ export default {
       createAdmin: 'Manage Users',
       projectStatus: 'Set Project Status',
       grantbot: 'Grantbot',
-      organizationStatus: 'Set Organization Status'
+      organizationStatus: 'Set Organization Status',
+      userGroupStatus: 'Set User Group Status',
     },
     notAdminMessage: 'You are not an administrator',
     notSignedInMessage: 'You are not signed in'

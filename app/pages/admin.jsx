@@ -55,6 +55,14 @@ const AdminPage = ({ user, children }) => {
                 >
                   <Translate content="userAdminPage.nav.organizationStatus" />
                 </Link>
+                <Link
+                  to="/admin/user-group-status"
+                  type="button"
+                  className="secret-button admin-button"
+                  activeClassName="active"
+                >
+                  <Translate content="userAdminPage.nav.userGroupStatus" />
+                </Link>
               </nav>
             </aside>
             <section className="admin-tab-content">
