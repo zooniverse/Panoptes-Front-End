@@ -2,6 +2,6 @@
 
 export default function DeleteIcon({ alt }) {
   return (
-    <span className="icon fa fa-trash" alt={alt} role={!!alt ? 'img' : undefined} />
+    <span className="icon fa fa-trash" aria-label={alt} role={!!alt ? 'img' : undefined} />
   );
 }

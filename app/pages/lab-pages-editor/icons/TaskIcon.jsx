@@ -9,6 +9,7 @@ const faTaskIcons = {
 };
 
 function TaskIcon({
+  alt,
   type
 }) {
   const faTaskIcon = faTaskIcons[type] || 'fa-times-circle';
