@@ -68,6 +68,7 @@ function NewTaskButtonAndDialog({
           </p>
           <div className="flex-row flex-wrap">
             <button
+              aria-label="Add new Text Task"
               className="new-task-button"
               data-tasktype="text"
               onClick={addNewTask}
@@ -77,6 +78,7 @@ function NewTaskButtonAndDialog({
               <span>Text</span>
             </button>
             <button
+              aria-label="Add new Question Task"
               className="new-task-button"
               data-tasktype="single"
               onClick={addNewTask}
@@ -86,6 +88,7 @@ function NewTaskButtonAndDialog({
               <span>Question</span>
             </button>
             <button
+              aria-label="Add new Drawing Task"
               className="new-task-button"
               data-tasktype="drawing"
               onClick={addNewTask}
