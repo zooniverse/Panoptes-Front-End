@@ -4,6 +4,7 @@
 import PropTypes from 'prop-types';
 
 export default function GripIcon({
+  alt,
   className = 'icon',
   color = 'currentColor',
   size = 16
@@ -16,7 +17,7 @@ export default function GripIcon({
   const r = (1.5 / 16) * size;
 
   return (
-    <svg width={size} height={size} className={className}>
+    <svg aria-label={alt} width={size} height={size} className={className}>
       <g fill={color}>
         <circle r={r} cx={x1} cy={y1} />
         <circle r={r} cx={x2} cy={y1} />
