@@ -53,6 +53,7 @@ function NewTaskButtonAndDialog({
             Choose a Task type
           </h4>
           <button
+            aria-label="Close dialog"
             className="plain"
             onClick={closeNewTaskDialog}
             type="button"

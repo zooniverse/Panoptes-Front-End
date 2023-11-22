@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
-export default function MoveDownIcon() {
+export default function MoveDownIcon({ alt }) {
   return (
-    <span className="icon fa fa-caret-down" role="img" />
+    <span className="icon fa fa-caret-down" alt={alt} role={!!alt ? 'img' : undefined} />
   );
 }
