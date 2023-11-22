@@ -16,9 +16,9 @@ function TaskIcon({
 
   return (
     <span
-      aria-label="Task type: text"
       className={`fa fa-fw ${faTaskIcon}`}
-      role="img"
+      aria-label={alt}
+      role={!!alt ? 'img' : undefined}
     />
   );
 }
