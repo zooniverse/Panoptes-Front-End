@@ -37,11 +37,11 @@ function NewTaskButtonAndDialog({
   return (
     <>
       <button
-        className="flex-item big primary"
+        className="flex-item big primary decoration-plus"
         onClick={openNewTaskDialog}
         type="button"
       >
-        Add a new Task +
+        Add a new Task
       </button>
       <dialog
         aria-labelledby="dialog-title"
