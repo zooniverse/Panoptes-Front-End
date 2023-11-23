@@ -11,17 +11,17 @@ import createTask from '../../helpers/createTask.js';
 import createStep from '../../helpers/createStep.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
+import NewTaskButtonAndDialog from './components/NewTaskButtonAndDialog.jsx';
 import StepItem from './components/StepItem.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
   const isActive = true; // TODO
 
-  // Automatically adds one pre-built Text Task
-  function experimentalAddNewTaskWithStep() {
+  function experimentalAddNewTaskWithStep(taskType) {
     const newTaskKey = getNewTaskKey(workflow?.tasks);
     const newStepKey = getNewStepKey(workflow?.steps);
-    const newTask = createTask('text');
+    const newTask = createTask(taskType);
     const newStep = createStep(newStepKey, [newTaskKey]);
 
     if (!newTaskKey || !newStepKey || !newTask || !newStep) {
@@ -57,13 +57,9 @@ export default function TasksPage() {
       <section aria-labelledby="workflow-tasks-heading">
         <h3 id="workflow-tasks-heading">Tasks</h3>
         <div className="flex-row">
-          <button
-            className="flex-item big primary"
-            onClick={experimentalAddNewTaskWithStep}
-            type="button"
-          >
-            Add a new Task +
-          </button>
+          <NewTaskButtonAndDialog
+            addTaskWithStep={experimentalAddNewTaskWithStep}
+          />
           {/* Dev observation: the <select> should have some label to indicate it's for choosing the starting task. */}
           <select
             aria-label="Choose starting page"

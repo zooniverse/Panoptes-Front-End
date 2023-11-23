@@ -9,10 +9,15 @@ $greenBright = #1ED359
 $redBright = #E45950
 $yellow = #F0B200
 $white = #FFFFFF
+$backdropColour = #80808080
+$shadowColour = #00000080
 
-$sizeXS = 0.25em
-$sizeS = 0.5em
-$sizeM = 20px
+$sizeXS = 4px
+$sizeS = 8px
+$sizeM = 16px
+$sizeL = 24px
+$sizeXL = 32px
+$sizeXXL = 64px
 
 $fontFamilies = Karla, Arial, sans-serif
 
@@ -95,6 +100,10 @@ $fontWeightBoldPlus = 700
   
   .disabled, .disabled *
     color: $grey1
+  
+  .decoration-plus
+    &::after
+      content: ' +'
 
   // General Layout
   // ---------------------------------------------------------------------------
@@ -104,6 +113,9 @@ $fontWeightBoldPlus = 700
     display: flex
     flex-direction: row
     gap: $sizeS
+  
+  .flex-wrap
+    flex-wrap: wrap
   
   .small-width
     width: 60px
@@ -121,7 +133,7 @@ $fontWeightBoldPlus = 700
     margin-bottom: $sizeXS
   
   .spacing-bottom-M
-      margin-bottom: $sizeM
+    margin-bottom: $sizeM
 
   // Component: Workflow Header
   // ---------------------------------------------------------------------------
@@ -236,6 +248,49 @@ $fontWeightBoldPlus = 700
       .status-inactive
         color: $redBright
     
+    dialog
+      border: 1px solid $grey1
+      border-radius: $sizeS
+      box-shadow: 1px 1px 6px 0px $shadowColour
+      padding: 0
+
+      &::backdrop
+        background: $backdropColour
+      
+      .dialog-header
+        background: $teal
+        color: $white
+        padding: $sizeXS $sizeM
+        text-transform: uppercase
+
+        button
+          color: $white
+      
+      .dialog-body
+        padding: $sizeS $sizeL
+
+        &.new-task
+          background: $grey5
+        
+        &.edit-step
+          background: $white
+        
+        button.new-task-button
+          align-items: center
+          display: flex
+          flex-direction: column
+          justify-content: center
+          margin-bottom: $sizeM
+          margin-right: $sizeM
+          height: $sizeXXL
+          width: $sizeXXL
+
+          &:last-child
+            margin-right: 0
+
+          .fa
+            font-size: $fontSizeXL
+    
     section
       h3
         color: $black
@@ -265,8 +320,6 @@ $fontWeightBoldPlus = 700
 
           > *
             vertical-align: middle
-          
-          .fa
             color: $grey1
         
         .step-controls-right
