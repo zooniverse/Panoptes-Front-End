@@ -14,7 +14,7 @@ export default function linkStepsInWorkflow(steps = [], tasks = {}) {
   const newSteps = steps.map((step, index) => {
     const [stepId, stepBody] = step;
 
-    const isFinalStepInArray = index >= (steps.length - 1);
+    const isFinalStepInArray = index === (steps.length - 1);
     const canBranch = canStepBranch(step, tasks);
     const nextStep = (isFinalStepInArray || canBranch) ? undefined : steps[index+1]?.[0];
 
