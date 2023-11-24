@@ -9,6 +9,7 @@ import getNewTaskKey from '../../helpers/getNewTaskKey.js';
 import getNewStepKey from '../../helpers/getNewStepKey.js';
 import createTask from '../../helpers/createTask.js';
 import createStep from '../../helpers/createStep.js';
+import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import NewTaskButtonAndDialog from './components/NewTaskButtonAndDialog.jsx';
@@ -33,7 +34,7 @@ export default function TasksPage() {
       ...workflow.tasks,
       [newTaskKey]: newTask
     };
-    const steps = [...workflow.steps, newStep];
+    const steps = linkStepsInWorkflow([...workflow.steps, newStep]);
 
     update({ tasks, steps });
   }
@@ -43,6 +44,11 @@ export default function TasksPage() {
       tasks: {},
       steps: []
     });
+  }
+
+  function experimentalLinkSteps() {
+    const newSteps = linkStepsInWorkflow(workflow?.steps, workflow?.tasks);
+    update({ steps: newSteps });
   }
 
   if (!workflow) return null;
@@ -77,13 +83,32 @@ export default function TasksPage() {
             />
           ))}
         </ul>
-        <button
-          className="big primary"
-          onClick={experimentalReset}
-          type="button"
+
+        {/* EXPERIMENTAL */}
+        <div
+          style={{
+            padding: '16px',
+            margin: '8px 0',
+            border: '2px dashed #c04040'
+          }}
         >
-          RESET
-        </button>
+          <button
+            className="big"
+            onClick={experimentalReset}
+            type="button"
+            style={{ margin: '0 4px' }}
+          >
+            RESET
+          </button>
+          <button
+            className="big"
+            onClick={experimentalLinkSteps}
+            type="button"
+            style={{ margin: '0 4px' }}
+          >
+            LINK
+          </button>
+        </div>
       </section>
     </div>
   );
