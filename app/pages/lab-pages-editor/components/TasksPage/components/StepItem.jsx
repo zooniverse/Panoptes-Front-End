@@ -38,7 +38,6 @@ function StepItem({
 
   function onDragStart(e) {
     // TODO: drag item is step-body, but only the drag handle should initiate drag start
-    console.log('+++ dragStart:', e);
     e.dataTransfer.setData('text/plain', stepIndex + '');
   }
 
