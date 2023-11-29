@@ -57,7 +57,7 @@ function StepItem({
           <div className="step-controls-center">
             <button
               aria-label={`Rearrange Page ${stepKey} upwards`}
-              className="plain"
+              className="move-button plain"
               onClick={moveStepUp}
               type="button"
             >
@@ -69,7 +69,7 @@ function StepItem({
             />
             <button
               aria-label={`Rearrange Page/Step ${stepKey} downwards`}
-              className="plain"
+              className="move-button plain"
               onClick={moveStepDown}
               type="button"
             >

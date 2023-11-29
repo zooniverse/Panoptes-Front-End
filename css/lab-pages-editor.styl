@@ -312,11 +312,17 @@ $fontWeightBoldPlus = 700
         border-radius: $sizeXS
         padding: $sizeS $sizeM
 
+        &:has(.move-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
+          outline: 2px solid $yellow
+
       .step-controls
         cursor: grab
 
         &:active
           cursor: grabbing
+        
+        .move-button:focus
+          outline: 1px solid $yellow
         
         .step-controls-left
           min-width: 5rem
