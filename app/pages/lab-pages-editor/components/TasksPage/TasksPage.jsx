@@ -4,6 +4,7 @@
 /* eslint-disable radix */
 /* eslint-disable react/jsx-boolean-value */
 
+import { useState } from 'react'
 import { useWorkflowContext } from '../../context.js';
 import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
@@ -18,6 +19,7 @@ import StepItem from './components/StepItem.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
+  const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const isActive = true; // TODO
 
   function experimentalAddNewTaskWithStep(taskType) {
@@ -87,8 +89,10 @@ export default function TasksPage() {
           {workflow.steps.map(([stepKey, step], index) => (
             <StepItem
               key={`stepItem-${stepKey}`}
+              activeDragItem={activeDragItem}
               allTasks={workflow.tasks}
               moveStep={moveStep}
+              setActiveDragItem={setActiveDragItem}
               step={step}
               stepKey={stepKey}
               stepIndex={index}

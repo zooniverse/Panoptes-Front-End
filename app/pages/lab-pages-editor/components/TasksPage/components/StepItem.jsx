@@ -16,10 +16,13 @@ import EditIcon from '../../../icons/EditIcon.jsx';
 import GripIcon from '../../../icons/GripIcon.jsx';
 import MoveDownIcon from '../../../icons/MoveDownIcon.jsx';
 import MoveUpIcon from '../../../icons/MoveUpIcon.jsx';
+import { propTypes } from 'modal-form/sticky.js';
 
 function StepItem({
+  activeDragItem = -1,
   allTasks,
   moveStep = () => {},
+  setActiveDragItem = () => {},
   step,
   stepKey,
   stepIndex
@@ -39,12 +42,18 @@ function StepItem({
   function onDragStart(e) {
     // TODO: drag item is step-body, but only the drag handle should initiate drag start
     e.dataTransfer.setData('text/plain', stepIndex + '');
+    setActiveDragItem(stepIndex);  // Use state because DropTarget's onDragEnter CAN'T read dragEvent.dataTransfer.getData()
   }
 
   return (
     <li className="step-item">
       {(stepIndex === 0)
-      ? <DropTarget targetIndex={stepIndex} moveStep={moveStep} />
+      ? <DropTarget
+          activeDragItem={activeDragItem}
+          moveStep={moveStep}
+          setActiveDragItem={setActiveDragItem}
+          targetIndex={stepIndex}
+        />
       : null}
       <div
         className="step-body"
@@ -100,27 +109,38 @@ function StepItem({
           })}
         </ul>
       </div>
-      <DropTarget targetIndex={stepIndex + 1} moveStep={moveStep} />
+      <DropTarget
+        activeDragItem={activeDragItem}
+        moveStep={moveStep}
+        setActiveDragItem={setActiveDragItem}
+        targetIndex={stepIndex + 1}  /* Don't forget the +1 ! */
+      />
     </li>
   );
 }
 
 StepItem.propTypes = {
+  activeDragItem: PropTypes.number,
   allTasks: PropTypes.object,
   moveStep: PropTypes.func,
+  setActiveDragItem: PropTypes.func,
   step: PropTypes.object,
   stepKey: PropTypes.string,
   stepIndex: PropTypes.number
 };
 
 function DropTarget({
-  targetIndex = 0,
-  moveStep = () => {}
+  activeDragItem = -1,
+  moveStep = () => {},
+  setActiveDragItem = () => {},
+  targetIndex = 0
 }) {
   const [active, setActive] = useState(false);
 
   function onDragEnter(e) {
-    setActive(true);
+    const from = activeDragItem;
+    const to = (from < targetIndex) ? targetIndex - 1 : targetIndex; 
+    setActive(from !== to);
     e.preventDefault(); // Prevent default, to ensure onDrop works.
   }
 
@@ -138,6 +158,7 @@ function DropTarget({
     const to = (from < targetIndex) ? targetIndex - 1 : targetIndex;
     moveStep(from, to);
     setActive(false);
+    setActiveDragItem(-1);
     e.preventDefault();
   }
 
@@ -150,6 +171,13 @@ function DropTarget({
       onDrop={onDrop}
     ></div>
   );
+}
+
+DropTarget.propTypes = {
+  activeDragItem: PropTypes.number,
+  moveStep: PropTypes.func,
+  setActiveDragItem: PropTypes.func,
+  targetIndex: propTypes.number
 }
 
 export default StepItem;
