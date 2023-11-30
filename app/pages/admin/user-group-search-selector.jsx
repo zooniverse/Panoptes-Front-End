@@ -1,3 +1,4 @@
+import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
@@ -16,11 +17,11 @@ class SearchSelector extends Component {
     browserHistory.push(['/admin/user-group-status', userGroupID].join('/'));
   }
 
-  searchByName(value) {
+  searchByName = debounce((value) => {
     const query = {
       search: `%${value}%`
     };
-    if ((value != null ? value.trim().length : undefined) > 5) {
+    if ((value != null ? value.trim().length : undefined) > 3) {
       return apiClient.type('user_groups').get(query, {
         page_size: 10
       }).then((userGroups) => {
@@ -33,7 +34,7 @@ class SearchSelector extends Component {
     } else {
       return Promise.resolve({ options: [] });
     }
-  }
+  }, 500); // 500ms delay
 
   render() {
     const { className } = this.props;
