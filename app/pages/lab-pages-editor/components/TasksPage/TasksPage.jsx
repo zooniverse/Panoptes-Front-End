@@ -4,7 +4,7 @@
 /* eslint-disable radix */
 /* eslint-disable react/jsx-boolean-value */
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useWorkflowContext } from '../../context.js';
 import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
@@ -14,11 +14,13 @@ import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
+import EditStepDialog from './components/EditStepDialog.jsx';
 import NewTaskButtonAndDialog from './components/NewTaskButtonAndDialog.jsx';
 import StepItem from './components/StepItem.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
+  const editStepDialog = useRef(null);
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const isActive = true; // TODO
 
@@ -62,6 +64,10 @@ export default function TasksPage() {
     update({ steps });
   }
 
+  function editStep() {
+    editStepDialog.current?.openDialog();
+  }
+
   if (!workflow) return null;
 
   return (
@@ -99,6 +105,9 @@ export default function TasksPage() {
             />
           ))}
         </ul>
+        <EditStepDialog
+          ref={editStepDialog}
+        />
 
         {/* EXPERIMENTAL */}
         <div
@@ -123,6 +132,14 @@ export default function TasksPage() {
             style={{ margin: '0 4px' }}
           >
             LINK
+          </button>
+          <button
+            className="big"
+            onClick={editStep}
+            type="button"
+            style={{ margin: '0 4px' }}
+          >
+            EDIT STEP
           </button>
         </div>
       </section>
