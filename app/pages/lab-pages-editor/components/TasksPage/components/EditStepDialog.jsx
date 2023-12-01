@@ -8,8 +8,8 @@ function EditStepDialog({
   const [ stepKey, stepBody ] = step ;
   const editStepDialog = useRef(null);
 
+  // the dialog is opened via the parent TasksPage.
   function openDialog() {
-    console.log('+++ editStepDialog', editStepDialog)
     editStepDialog.current?.showModal();
   }
 
@@ -19,7 +19,6 @@ function EditStepDialog({
 
   useImperativeHandle(forwardedRef, () => {
     return {
-      closeDialog,
       openDialog
     };
   });

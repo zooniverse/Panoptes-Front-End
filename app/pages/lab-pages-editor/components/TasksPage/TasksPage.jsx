@@ -26,7 +26,8 @@ export default function TasksPage() {
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const isActive = true; // TODO
 
-  function experimentalAddNewTaskWithStep(taskType) {
+  // Adds a new Task (with default settings), inside a new Step. Returns the newly created step index.
+  async function addNewTaskWithStep(taskType) {
     const newTaskKey = getNewTaskKey(workflow?.tasks);
     const newStepKey = getNewStepKey(workflow?.steps);
     const newTask = createTask(taskType);
@@ -43,7 +44,8 @@ export default function TasksPage() {
     };
     const steps = linkStepsInWorkflow([...workflow.steps, newStep]);
 
-    update({ tasks, steps });
+    await update({ tasks, steps });
+    return steps.length - 1;
   }
 
   function experimentalReset() {
@@ -67,9 +69,7 @@ export default function TasksPage() {
   }
 
   function editStep(stepIndex) {
-    const step = workflow?.steps[stepIndex];
     setActiveStepIndex(stepIndex);
-    console.log('+++ editStep', step);
     editStepDialog.current?.openDialog();
   }
 
@@ -121,7 +121,8 @@ export default function TasksPage() {
         </ul>
         <NewTaskDialog
           ref={newTaskDialog}
-          addTaskWithStep={experimentalAddNewTaskWithStep}
+          addTaskWithStep={addNewTaskWithStep}
+          editStep={editStep}
         />
         <EditStepDialog
           ref={editStepDialog}

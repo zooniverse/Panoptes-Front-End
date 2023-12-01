@@ -5,11 +5,13 @@ import CloseIcon from '../../../icons/CloseIcon.jsx';
 import TaskIcon from '../../../icons/TaskIcon.jsx';
 // import strings from '../../../strings.json'; // TODO: move all text into strings
 
-function NewTaskButtonAndDialog({
-  addTaskWithStep = () => {}
+function NewTaskDialog({
+  addTaskWithStep = () => {},
+  editStep = () => {}
 }, forwardedRef) {
   const newTaskDialog = useRef(null);
 
+  // the dialog is opened via the parent TasksPage.
   function openDialog() {
     newTaskDialog.current?.showModal();
   }
@@ -24,12 +26,13 @@ function NewTaskButtonAndDialog({
     };
   });
 
-  function addNewTask(e) {
+  async function addNewTask(e) {
     const tasktype = e?.currentTarget?.dataset?.tasktype;
     // Protip: don't use event.target, since it might return the child of the button, instead of the button itself
 
     closeDialog();
-    addTaskWithStep(tasktype);
+    const newStepIndex = await addTaskWithStep(tasktype);
+    editStep(newStepIndex);
   }
 
   return (
@@ -93,8 +96,9 @@ function NewTaskButtonAndDialog({
   );
 }
 
-NewTaskButtonAndDialog.propTypes = {
-  addTaskWithStep: PropTypes.func
+NewTaskDialog.propTypes = {
+  addTaskWithStep: PropTypes.func,
+  editStep: PropTypes.func
 };
 
-export default forwardRef(NewTaskButtonAndDialog);
+export default forwardRef(NewTaskDialog);
