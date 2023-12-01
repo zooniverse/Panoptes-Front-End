@@ -266,30 +266,29 @@ $fontWeightBoldPlus = 700
         button
           color: $white
       
-      .dialog-body
-        padding: $sizeS $sizeL
-
-        &.new-task
+      &.new-task
+        .dialog-body
+          padding: $sizeS $sizeL
           background: $grey5
+
+          button.new-task-button
+            align-items: center
+            display: flex
+            flex-direction: column
+            justify-content: center
+            margin-bottom: $sizeM
+            margin-right: $sizeM
+            height: $sizeXXL
+            width: $sizeXXL
+
+            &:last-child
+              margin-right: 0
+
+            .fa
+              font-size: $fontSizeXL
         
         &.edit-step
           background: $white
-        
-        button.new-task-button
-          align-items: center
-          display: flex
-          flex-direction: column
-          justify-content: center
-          margin-bottom: $sizeM
-          margin-right: $sizeM
-          height: $sizeXXL
-          width: $sizeXXL
-
-          &:last-child
-            margin-right: 0
-
-          .fa
-            font-size: $fontSizeXL
     
     section
       h3

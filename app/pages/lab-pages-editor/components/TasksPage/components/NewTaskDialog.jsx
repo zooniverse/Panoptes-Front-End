@@ -38,6 +38,7 @@ function NewTaskDialog({
   return (
     <dialog
       aria-labelledby="dialog-title"
+      className="new-task"
       ref={newTaskDialog}
       /* open="true"  // MDN recommends not using this attribute. But if we have to, use "true", not {true} */
     >
@@ -54,7 +55,7 @@ function NewTaskDialog({
           <CloseIcon />
         </button>
       </div>
-      <form className="dialog-body new-task">
+      <form className="dialog-body">
         <p>
           A task is a unit of work you are asking volunteers to do.
           You can ask them to answer a question or mark an image.
