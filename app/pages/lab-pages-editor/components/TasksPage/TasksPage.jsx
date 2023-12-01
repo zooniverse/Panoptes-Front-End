@@ -64,7 +64,9 @@ export default function TasksPage() {
     update({ steps });
   }
 
-  function editStep() {
+  function editStep(stepIndex) {
+    const step = workflow?.steps[stepIndex];
+    console.log('+++ editStep', step);
     editStepDialog.current?.openDialog();
   }
 
@@ -97,6 +99,7 @@ export default function TasksPage() {
               key={`stepItem-${stepKey}`}
               activeDragItem={activeDragItem}
               allTasks={workflow.tasks}
+              editStep={editStep}
               moveStep={moveStep}
               setActiveDragItem={setActiveDragItem}
               step={step}

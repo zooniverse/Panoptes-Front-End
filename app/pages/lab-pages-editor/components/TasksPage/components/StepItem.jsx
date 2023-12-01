@@ -21,6 +21,7 @@ import { propTypes } from 'modal-form/sticky.js';
 function StepItem({
   activeDragItem = -1,
   allTasks,
+  editStep = () => {},
   moveStep = () => {},
   setActiveDragItem = () => {},
   step,
@@ -30,6 +31,10 @@ function StepItem({
   if (!step || !stepKey || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
 
   const taskKeys = step.taskKeys || [];
+
+  function edit() {
+    editStep(stepIndex);
+  }
 
   function moveStepUp() {
     moveStep(stepIndex, stepIndex - 1);
@@ -91,7 +96,12 @@ function StepItem({
             <button aria-label={`Copy Page/Step ${stepKey}`} className="plain" type="button">
               <CopyIcon />
             </button>
-            <button aria-label={`Edit Page/Step ${stepKey}`} className="plain" type="button">
+            <button
+              aria-label={`Edit Page/Step ${stepKey}`}
+              className="plain"
+              onClick={edit}
+              type="button"
+            >
               <EditIcon />
             </button>
           </div>
@@ -122,6 +132,7 @@ function StepItem({
 StepItem.propTypes = {
   activeDragItem: PropTypes.number,
   allTasks: PropTypes.object,
+  editStep: PropTypes.func,
   moveStep: PropTypes.func,
   setActiveDragItem: PropTypes.func,
   step: PropTypes.object,
@@ -177,7 +188,7 @@ DropTarget.propTypes = {
   activeDragItem: PropTypes.number,
   moveStep: PropTypes.func,
   setActiveDragItem: PropTypes.func,
-  targetIndex: propTypes.number
+  targetIndex: PropTypes.number
 }
 
 export default StepItem;
