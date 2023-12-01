@@ -21,6 +21,7 @@ import StepItem from './components/StepItem.jsx';
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
   const editStepDialog = useRef(null);
+  const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const isActive = true; // TODO
 
@@ -66,6 +67,7 @@ export default function TasksPage() {
 
   function editStep(stepIndex) {
     const step = workflow?.steps[stepIndex];
+    setActiveStepIndex(stepIndex);
     console.log('+++ editStep', step);
     editStepDialog.current?.openDialog();
   }
@@ -110,6 +112,8 @@ export default function TasksPage() {
         </ul>
         <EditStepDialog
           ref={editStepDialog}
+          step={workflow?.steps[activeStepIndex]}
+          stepIndex={activeStepIndex}
         />
 
         {/* EXPERIMENTAL */}

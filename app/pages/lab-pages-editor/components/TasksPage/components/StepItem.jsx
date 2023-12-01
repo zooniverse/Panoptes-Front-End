@@ -16,7 +16,6 @@ import EditIcon from '../../../icons/EditIcon.jsx';
 import GripIcon from '../../../icons/GripIcon.jsx';
 import MoveDownIcon from '../../../icons/MoveDownIcon.jsx';
 import MoveUpIcon from '../../../icons/MoveUpIcon.jsx';
-import { propTypes } from 'modal-form/sticky.js';
 
 function StepItem({
   activeDragItem = -1,

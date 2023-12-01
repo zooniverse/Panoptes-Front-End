@@ -1,8 +1,11 @@
 import { forwardRef, useRef, useImperativeHandle } from 'react';
+import PropTypes from 'prop-types';
 
 function EditStepDialog({
-  step
+  step = [],
+  stepIndex = -1
 }, forwardedRef) {
+  const [ stepKey, stepBody ] = step ;
   const editStepDialog = useRef(null);
 
   function openDialog() {
@@ -21,7 +24,6 @@ function EditStepDialog({
     };
   });
 
-  // if (!step) return null;
 
   return (
     <dialog
@@ -30,10 +32,15 @@ function EditStepDialog({
       /* open="true"  // MDN recommends not using this attribute. But if we have to, use "true", not {true} */
     >
       <form className="dialog-body edit-step">
-        Edit Step Dialog
+        Edit Step Dialog: {stepKey}
       </form>
     </dialog>
   );
 }
+
+EditStepDialog.propTypes = {
+  step: PropTypes.object,
+  stepIndex: PropTypes.number
+};
 
 export default forwardRef(EditStepDialog);
