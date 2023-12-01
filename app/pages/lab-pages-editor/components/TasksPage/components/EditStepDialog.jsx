@@ -24,7 +24,6 @@ function EditStepDialog({
     };
   });
 
-
   return (
     <dialog
       /* aria-labelledby="dialog-title"*/

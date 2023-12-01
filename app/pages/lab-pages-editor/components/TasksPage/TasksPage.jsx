@@ -15,12 +15,13 @@ import moveItemInArray from '../../helpers/moveItemInArray.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import EditStepDialog from './components/EditStepDialog.jsx';
-import NewTaskButtonAndDialog from './components/NewTaskButtonAndDialog.jsx';
+import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
   const editStepDialog = useRef(null);
+  const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const isActive = true; // TODO
@@ -72,6 +73,10 @@ export default function TasksPage() {
     editStepDialog.current?.openDialog();
   }
 
+  function openNewTaskDialog() {
+    newTaskDialog.current?.openDialog();
+  }
+
   if (!workflow) return null;
 
   return (
@@ -84,9 +89,13 @@ export default function TasksPage() {
       <section aria-labelledby="workflow-tasks-heading">
         <h3 id="workflow-tasks-heading">Tasks</h3>
         <div className="flex-row">
-          <NewTaskButtonAndDialog
-            addTaskWithStep={experimentalAddNewTaskWithStep}
-          />
+          <button
+            className="flex-item big primary decoration-plus"
+            onClick={openNewTaskDialog}
+            type="button"
+          >
+            Add a new Task
+          </button>
           {/* Dev observation: the <select> should have some label to indicate it's for choosing the starting task. */}
           <select
             aria-label="Choose starting page"
@@ -110,6 +119,10 @@ export default function TasksPage() {
             />
           ))}
         </ul>
+        <NewTaskDialog
+          ref={newTaskDialog}
+          addTaskWithStep={experimentalAddNewTaskWithStep}
+        />
         <EditStepDialog
           ref={editStepDialog}
           step={workflow?.steps[activeStepIndex]}
