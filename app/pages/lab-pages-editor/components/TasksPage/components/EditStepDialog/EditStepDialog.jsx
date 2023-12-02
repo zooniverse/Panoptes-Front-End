@@ -2,7 +2,7 @@ import { forwardRef, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 
 import EditTaskForm from './EditTaskForm.jsx';
-import CloseIcon from '../../../icons/CloseIcon.jsx';
+import CloseIcon from '../../../../icons/CloseIcon.jsx';
 
 function EditStepDialog({
   allTasks = {},
