@@ -1,20 +1,28 @@
-export default function EditTaskForm({
+import TextTask from './types/TextTask.jsx';
+
+const taskTypes = {
+  'text': TextTask
+};
+
+export default function EditTaskForm({  // It's not actually a form, but a fieldset that's part of a form.
   task,
   taskKey
 }) {
   if (!task || !taskKey) return <li>ERROR: could not render Task</li>;
 
+  const TaskForm = taskTypes[task.type];
+
   return (
-    <form
+    <fieldset
       className="edit-task-form"
-      onSubmit={onSubmit}
     >
-      {taskKey}
-    </form>
+      <legend>{taskKey}</legend>
+      {(TaskForm)
+        ? <TaskForm />
+        : null
+      }
+    </fieldset>
   );
 }
 
-function onSubmit(e) {
-  e.preventDefault();
-  return false;
-}
+

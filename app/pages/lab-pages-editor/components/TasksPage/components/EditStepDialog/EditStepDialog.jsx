@@ -51,7 +51,10 @@ function EditStepDialog({
           <CloseIcon />
         </button>
       </div>
-      <div className="dialog-body">
+      <form
+        className="dialog-body"
+        onSubmit={onSubmit}
+      >
         {taskKeys.map((taskKey) => {
           const task = allTasks[taskKey];
           return (
@@ -62,7 +65,10 @@ function EditStepDialog({
             />
           );
         })}
-      </div>
+        <div class="edit-task-form-controls">
+          <button>Save</button>
+        </div>
+      </form>
     </dialog>
   );
 }
@@ -72,5 +78,10 @@ EditStepDialog.propTypes = {
   step: PropTypes.object,
   stepIndex: PropTypes.number
 };
+
+function onSubmit(e) {
+  e.preventDefault();
+  return false;
+}
 
 export default forwardRef(EditStepDialog);
