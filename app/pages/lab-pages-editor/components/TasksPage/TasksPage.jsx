@@ -126,7 +126,8 @@ export default function TasksPage() {
         />
         <EditStepDialog
           ref={editStepDialog}
-          step={workflow?.steps[activeStepIndex]}
+          allTasks={workflow.tasks}
+          step={workflow.steps[activeStepIndex]}
           stepIndex={activeStepIndex}
         />
 

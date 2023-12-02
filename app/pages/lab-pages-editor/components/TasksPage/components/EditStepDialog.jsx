@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import CloseIcon from '../../../icons/CloseIcon.jsx';
 
 function EditStepDialog({
+  allTasks = {},
   step = [],
   stepIndex = -1
 }, forwardedRef) {
@@ -25,6 +26,8 @@ function EditStepDialog({
     };
   });
 
+  const title = 'Create a (???) Task'
+
   return (
     <dialog
       aria-labelledby="dialog-title"
@@ -33,8 +36,9 @@ function EditStepDialog({
       /* open="true"  // MDN recommends not using this attribute. But if we have to, use "true", not {true} */
     >
       <div className="dialog-header flex-row">
+        <span className="step-key">{stepKey}</span>
         <h4 id="dialog-title" className="flex-item">
-          {stepKey}
+          {title}
         </h4>
         <button
           aria-label="Close dialog"
@@ -53,6 +57,7 @@ function EditStepDialog({
 }
 
 EditStepDialog.propTypes = {
+  allTasks: PropTypes.object,
   step: PropTypes.object,
   stepIndex: PropTypes.number
 };

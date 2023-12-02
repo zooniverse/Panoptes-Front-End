@@ -287,8 +287,11 @@ $fontWeightBoldPlus = 700
             .fa
               font-size: $fontSizeXL
         
-        &.edit-step
-          background: $white
+      &.edit-step
+        background: $white
+      
+        .dialog-body
+          padding: $sizeS $sizeL
     
     section
       h3
@@ -304,7 +307,6 @@ $fontWeightBoldPlus = 700
       padding: 0
 
     .step-item
-
       .step-body
         background: $grey5
         border: 1px solid $grey1
@@ -358,13 +360,6 @@ $fontWeightBoldPlus = 700
       padding: 0
     
     .task-item
-      .task-key
-        background: $grey3
-        border-radius: $sizeM
-        color: $white
-        font-size: $fontSizeXS
-        padding: 0 $sizeS
-      
       .task-text
         font-size: $fontSizeS
         font-weight: $fontWeightBold
@@ -374,6 +369,14 @@ $fontWeightBoldPlus = 700
 
       &:active
         cursor: grabbing
+  
+  .task-key
+  .step-key
+    background: $grey3
+    border-radius: $sizeM
+    color: $white
+    font-size: $fontSizeXS
+    padding: 0 $sizeS
 
 .debug-0
   width: 6em
