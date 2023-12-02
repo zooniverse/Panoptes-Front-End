@@ -1,10 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/require-default-props */
-/* eslint-disable radix */
-/* eslint-disable react/jsx-boolean-value */
-/* eslint-disable react/forbid-prop-types */
-
 import PropTypes from 'prop-types';
 
 // import strings from '../../../strings.json'; // TODO: move all text into strings

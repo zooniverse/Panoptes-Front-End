@@ -1,9 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/require-default-props */
-/* eslint-disable radix */
-/* eslint-disable react/jsx-boolean-value */
-
 import { useRef, useState } from 'react'
 import { useWorkflowContext } from '../../context.js';
 import createStep from '../../helpers/createStep.js';
