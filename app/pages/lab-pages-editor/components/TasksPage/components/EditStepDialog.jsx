@@ -1,6 +1,7 @@
 import { forwardRef, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 
+import EditTaskForm from './EditTaskForm.jsx';
 import CloseIcon from '../../../icons/CloseIcon.jsx';
 
 function EditStepDialog({
@@ -9,6 +10,7 @@ function EditStepDialog({
   stepIndex = -1
 }, forwardedRef) {
   const [ stepKey, stepBody ] = step ;
+  const taskKeys = stepBody?.taskKeys || [];
   const editStepDialog = useRef(null);
 
   // the dialog is opened via the parent TasksPage.
@@ -49,9 +51,18 @@ function EditStepDialog({
           <CloseIcon />
         </button>
       </div>
-      <form className="dialog-body">
-        Edit step
-      </form>
+      <div className="dialog-body">
+        {taskKeys.map((taskKey) => {
+          const task = allTasks[taskKey];
+          return (
+            <EditTaskForm
+              key={`editTaskForm-${taskKey}`}
+              task={task}
+              taskKey={taskKey}
+            />
+          );
+        })}
+      </div>
     </dialog>
   );
 }

@@ -105,7 +105,10 @@ function StepItem({
             </button>
           </div>
         </div>
-        <ul className="tasks-list" aria-label={`Tasks for Page/Step ${stepKey}`}>
+        <ul
+          aria-label={`Tasks for Page/Step ${stepKey}`}
+          className="tasks-list"
+        >
           {taskKeys.map((taskKey) => {
             const task = allTasks[taskKey];
             return (
