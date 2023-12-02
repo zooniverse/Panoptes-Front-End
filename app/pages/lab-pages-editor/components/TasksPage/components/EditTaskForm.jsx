@@ -7,8 +7,14 @@ export default function EditTaskForm({
   return (
     <form
       className="edit-task-form"
+      onSubmit={onSubmit}
     >
       {taskKey}
     </form>
   );
+}
+
+function onSubmit(e) {
+  e.preventDefault();
+  return false;
 }

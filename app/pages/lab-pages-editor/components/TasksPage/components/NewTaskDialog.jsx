@@ -55,7 +55,10 @@ function NewTaskDialog({
           <CloseIcon />
         </button>
       </div>
-      <form className="dialog-body">
+      <form
+        className="dialog-body"
+        onSubmit={onSubmit}
+      >
         <p>
           A task is a unit of work you are asking volunteers to do.
           You can ask them to answer a question or mark an image.
@@ -101,5 +104,10 @@ NewTaskDialog.propTypes = {
   addTaskWithStep: PropTypes.func,
   editStep: PropTypes.func
 };
+
+function onSubmit(e) {
+  e.preventDefault();
+  return false;
+}
 
 export default forwardRef(NewTaskDialog);

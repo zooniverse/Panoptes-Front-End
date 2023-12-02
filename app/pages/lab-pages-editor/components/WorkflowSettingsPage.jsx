@@ -11,12 +11,8 @@ export default function WorkflowSettingsPage() {
 
   function onSubmit(e) {
     e.preventDefault();
-    try {
-      // TODO: on Submit, run update() on every available field.
-      // also, make sure the 'data-updaterule' rules are implemented.
-    } catch (err) {
-      console.error('WorkflowSettingsPageError: ', err);
-    }
+    // TODO: on Submit, run update() on every available field.
+    // also, make sure the 'data-updaterule' rules are implemented.
     return false;
   }
 
