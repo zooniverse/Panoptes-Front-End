@@ -16,7 +16,7 @@ import moveItemInArray from '../../helpers/moveItemInArray.js';
 
 import EditStepDialog from './components/EditStepDialog.jsx';
 import NewTaskDialog from './components/NewTaskDialog.jsx';
-import StepItem from './components/StepItem.jsx';
+import StepItem from './components/StepItem';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();

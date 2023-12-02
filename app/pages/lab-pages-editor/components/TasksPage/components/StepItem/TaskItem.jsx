@@ -8,7 +8,7 @@
 import PropTypes from 'prop-types';
 
 // import strings from '../../../strings.json'; // TODO: move all text into strings
-import TaskIcon from '../../../icons/TaskIcon.jsx';
+import TaskIcon from '../../../../icons/TaskIcon.jsx';
 
 const TaskLabels = {
   'drawing': 'Drawing Task',
