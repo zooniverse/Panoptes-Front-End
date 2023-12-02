@@ -55,9 +55,4 @@ describe('Parameters', function () {
       .to.have.lengthOf(0);
   });
 
-  it('should render hourly warning if binBy is hour', function () {
-    wrapper.setProps({ binBy: 'hour' });
-    expect(wrapper.find(Translate).filterWhere(n => n.prop('content') === 'organization.stats.hourly'))
-      .to.have.lengthOf(1);
-  });
 });

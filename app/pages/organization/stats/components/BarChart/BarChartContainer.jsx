@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import statsClient from 'panoptes-client/lib/stats-client';
+import statsClient from 'panoptes-client/lib/eras-client';
 
 import fillTimeSeries from './helpers/fillTimeSeries';
 import filterTimeSeries from './helpers/filterTimeSeries';
@@ -61,15 +61,15 @@ class BarChartContainer extends React.Component {
     const query = {
       period: binBy,
       projectID,
-      type
+      type: type + 's'
     };
 
     return statsClient
       .query(query)
       .then(data => (
-        data.map(statObject => ({
-          label: statObject.key_as_string,
-          value: statObject.doc_count
+        data.data.map(statObject => ({
+          label: statObject.period,
+          value: statObject.count
         }))
       )).then(data => (
         fillTimeSeries(data, binBy)

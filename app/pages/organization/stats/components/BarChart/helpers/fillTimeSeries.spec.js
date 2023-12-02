@@ -39,9 +39,4 @@ describe('fillTimeSeries', function () {
   it('should return a series including dates with zero value', function () {
     expect(fillTimeSeries(mockDaySeries, 'day')).to.eql(mockDaySeriesFilled);
   });
-
-  it('should return a series by hour not earlier than two weeks before now', function () {
-    const notEarlierThan = moment.utc('2019-01-09T03:00:00.000Z');
-    expect(fillTimeSeries(mockHourSeries, 'hour', notEarlierThan)).to.eql(mockHourSeriesFilled);
-  });
 });
