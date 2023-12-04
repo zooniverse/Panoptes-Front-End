@@ -4,6 +4,12 @@ import PropTypes from 'prop-types';
 import EditTaskForm from './EditTaskForm.jsx';
 import CloseIcon from '../../../../icons/CloseIcon.jsx';
 
+const taskNames = {
+  'drawing': 'Drawing',
+  'single': 'Single Question',
+  'text': 'Text',
+}
+
 function EditStepDialog({
   allTasks = {},
   step = [],
@@ -29,7 +35,9 @@ function EditStepDialog({
     };
   });
 
-  const title = 'Create a (???) Task'
+  const firstTask = allTasks?.[taskKeys?.[0]]
+  const taskName = taskNames[firstTask?.type] || '???';
+  const title = `Edit ${taskName} Task`;
 
   return (
     <dialog
