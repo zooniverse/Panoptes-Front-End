@@ -33,13 +33,17 @@ export default function TextTask({
         >
           Main Text
         </label>
-        <input
-          id={`task-${taskKey}-instruction`}
-          type="text"
-          value={instruction}
-          onBlur={update}
-          onChange={(e) => { setInstruction(e?.target?.value) }}
-        />
+        <div className="flex-row">
+          <span className="task-key">{taskKey}</span>
+          <input
+            className="flex-item"
+            id={`task-${taskKey}-instruction`}
+            type="text"
+            value={instruction}
+            onBlur={update}
+            onChange={(e) => { setInstruction(e?.target?.value) }}
+          />
+        </div>
         {/* <button>Delete</button> */}
       </div>
       <div className="input-row">
