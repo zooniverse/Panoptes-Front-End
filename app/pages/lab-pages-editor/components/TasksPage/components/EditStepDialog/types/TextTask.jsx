@@ -28,6 +28,7 @@ export default function TextTask({
     <div className="text-task">
       <div className="input-row">
         <label
+          className="big"
           htmlFor={`task-${taskKey}-instruction`}
         >
           Main Text
@@ -55,6 +56,7 @@ export default function TextTask({
       </div>
       <div className="input-row">
         <label
+          className="big"
           htmlFor={`task-${taskKey}-help`}
         >
           Help Text
