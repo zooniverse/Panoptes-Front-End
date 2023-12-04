@@ -67,9 +67,6 @@ function EditStepDialog({
             />
           );
         })}
-        <div className="edit-task-form-controls">
-          <button>Save</button>
-        </div>
       </form>
     </dialog>
   );

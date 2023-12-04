@@ -25,20 +25,23 @@ export default function TextTask({
   useEffect(update, [required]);
 
   return (
-    <div>
-      <div>
-        <label>Main Text</label>
-        <div className="flex-row">
-          <input
-            className="flex-item"
-            value={instruction}
-            onBlur={update}
-            onChange={(e) => { setInstruction(e?.target?.value) }}
-          />
-          <button>Delete</button>
-        </div>
+    <div className="text-task">
+      <div className="input-row">
+        <label
+          htmlFor={`task-${taskKey}-instruction`}
+        >
+          Main Text
+        </label>
+        <input
+          id={`task-${taskKey}-instruction`}
+          type="text"
+          value={instruction}
+          onBlur={update}
+          onChange={(e) => { setInstruction(e?.target?.value) }}
+        />
+        {/* <button>Delete</button> */}
       </div>
-      <div>
+      <div className="input-row">
         <label>
           <input
             type="checkbox"
@@ -50,9 +53,14 @@ export default function TextTask({
           Required
         </label>
       </div>
-      <div>
-        <label>Help Text</label>
+      <div className="input-row">
+        <label
+          htmlFor={`task-${taskKey}-help`}
+        >
+          Help Text
+        </label>
         <textarea
+          id={`task-${taskKey}-help`}
           value={help}
           onBlur={update}
           onChange={(e) => { setHelp(e?.target?.value) }}
