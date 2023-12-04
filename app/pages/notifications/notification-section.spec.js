@@ -138,12 +138,26 @@ describe('Notification Section', function() {
     const notificationsCounter = {
       update: sinon.stub()
     };
-    wrapper = shallow(
-      <NotificationSection expanded={true} />,
-      { context: { notificationsCounter }, disableLifeCycleMethods: true }
-    );
-    wrapper.setState({ notifications: newNotifications });
-    wrapper.instance().markAsRead(newNotifications[0]);
+
+    before(function () {
+      wrapper = shallow(
+        <NotificationSection
+          expanded={true}
+          section="zooniverse"
+          user={{ id: '1' }}
+        />,
+        {
+          context: { notificationsCounter }, 
+          disableLifeCycleMethods: true
+        }
+      );
+      wrapper.setState({
+        loading: false,
+        notificationData: [],
+        notifications: newNotifications
+      });
+      wrapper.instance().markAsRead(newNotifications[0]);
+    });
 
     it('should update read notification as read (delivered)', function () {
       assert.equal(newNotifications[0].update.calledWith({ delivered: true }), true);

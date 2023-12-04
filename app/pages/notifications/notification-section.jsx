@@ -19,6 +19,7 @@ export default class NotificationSection extends Component {
       lastMeta: { },
       loading: false,
       notificationData: [],
+      notifications: [],
       notificationsMap: { },
       page: 1,
       project: null
@@ -318,5 +319,6 @@ NotificationSection.contextTypes = {
 
 NotificationSection.defaultProps = {
   expanded: false,
-  toggleSection: () => {}
+  toggleSection: () => {},
+  user: null
 };
