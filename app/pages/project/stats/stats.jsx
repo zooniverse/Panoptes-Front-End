@@ -46,7 +46,7 @@ export class GraphSelect extends React.Component {
       period: binBy,
       type: this.props.type,
     }
-    if (this.props.type == 'comments') {
+    if (this.props.type == 'comments' || workflowId == undefined) {
       queryObj = {...queryObj,
         projectID: this.props.projectId
       }
