@@ -43,7 +43,7 @@ export default function TextTask({
         {/* <button>Delete</button> */}
       </div>
       <div className="input-row">
-        <label>
+        <label className="narrow">
           <input
             type="checkbox"
             checked={required}
@@ -51,7 +51,9 @@ export default function TextTask({
               setRequired(!!e?.target?.checked);
             }}
           />
-          Required
+          <span>
+            Required
+          </span>
         </label>
       </div>
       <div className="input-row">
