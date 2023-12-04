@@ -17,7 +17,7 @@ export default function EditTaskForm({  // It's not actually a form, but a field
     <fieldset
       className="edit-task-form"
     >
-      <legend>{taskKey}</legend>
+      <legend className="task-key">{taskKey}</legend>
       {(TaskForm)
         ? <TaskForm
             task={task}
