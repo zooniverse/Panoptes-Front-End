@@ -7,7 +7,8 @@ import CloseIcon from '../../../../icons/CloseIcon.jsx';
 function EditStepDialog({
   allTasks = {},
   step = [],
-  stepIndex = -1
+  stepIndex = -1,
+  updateTask
 }, forwardedRef) {
   const [ stepKey, stepBody ] = step ;
   const taskKeys = stepBody?.taskKeys || [];
@@ -62,6 +63,7 @@ function EditStepDialog({
               key={`editTaskForm-${taskKey}`}
               task={task}
               taskKey={taskKey}
+              updateTask={updateTask}
             />
           );
         })}

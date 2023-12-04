@@ -6,19 +6,24 @@ const taskTypes = {
 
 export default function EditTaskForm({  // It's not actually a form, but a fieldset that's part of a form.
   task,
-  taskKey
+  taskKey,
+  updateTask
 }) {
   if (!task || !taskKey) return <li>ERROR: could not render Task</li>;
 
   const TaskForm = taskTypes[task.type];
-
+  
   return (
     <fieldset
       className="edit-task-form"
     >
       <legend>{taskKey}</legend>
       {(TaskForm)
-        ? <TaskForm />
+        ? <TaskForm
+            task={task}
+            taskKey={taskKey}
+            updateTask={updateTask}
+          />
         : null
       }
     </fieldset>
