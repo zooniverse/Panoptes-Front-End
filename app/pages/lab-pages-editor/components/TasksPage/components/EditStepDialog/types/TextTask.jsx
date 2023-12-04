@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function TextTask({
   task,
@@ -9,6 +9,7 @@ export default function TextTask({
   const [ instruction, setInstruction ] = useState(task?.instruction || '');
   const [ required, setRequired ] = useState(!!task?.required);
 
+  // Update is usually called manually onBlur, after user input is complete.
   function update() {
     const newTask = {
       ...task,
@@ -18,6 +19,10 @@ export default function TextTask({
     };
     updateTask(taskKey, newTask);
   }
+
+  // For inputs that don't have onBlur, update triggers automagically.
+  // (You can't call update() in the onChange() right after setStateValue().)
+  useEffect(update, [required]);
 
   return (
     <div>
@@ -40,7 +45,6 @@ export default function TextTask({
             checked={required}
             onChange={(e) => {
               setRequired(!!e?.target?.checked);
-              update();
             }}
           />
           Required
