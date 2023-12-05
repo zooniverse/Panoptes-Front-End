@@ -162,16 +162,16 @@ export default {
         retiredSubjects: '完了した画像',
         subjects: '画像'
       },
-      classification: '分類',
-      comment: 'トークのコメント',
+      classifications: '分類',
+      comments: 'トークのコメント',
       dateRange: '日付の範囲',
       expandWorkflowStats: 'ワークフロー統計を展開',
       for: '対象',
       hidden: '統計を非表示',
       hourly: '1時間ごとのデータは直近2週間分のみ利用可能です。',
       organizationStatistics: '%(title)s 統計',
-      perclassification: 'あたりの分類',
-      percomment: 'あたりのコメント',
+      perclassifications: 'あたりの分類',
+      percomments: 'あたりのコメント',
       projectStats: '進行中のプロジェクト (%(count)s)',
       reset: '表示をリセット'
     }
