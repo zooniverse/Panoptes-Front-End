@@ -61,7 +61,7 @@ class BarChartContainer extends React.Component {
     const query = {
       period: binBy,
       projectID,
-      type: type + 's'
+      type,
     };
 
     return statsClient

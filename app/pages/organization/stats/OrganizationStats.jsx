@@ -69,11 +69,11 @@ function OrganizationStats({
         <StatsContainer>
           <BarChart
             projects={organizationProjects}
-            type="classification"
+            type="classifications"
           />
           <BarChart
             projects={organizationProjects}
-            type="comment"
+            type="comments"
           />
         </StatsContainer>
         <StatsContainer>
