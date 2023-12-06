@@ -51,8 +51,8 @@ export class GraphSelect extends React.Component {
     }
     statsClient
       .query(queryObj)
-      .then((data) => (
-        data.data.map((statObject) => ({
+      .then((response) => (
+        response?.data.map((statObject) => ({
           label: statObject.period,
           value: statObject.count,
         }))

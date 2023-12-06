@@ -66,8 +66,8 @@ class BarChartContainer extends React.Component {
 
     return statsClient
       .query(query)
-      .then(data => (
-        data.data.map(statObject => ({
+      .then(response => (
+        response?.data.map(statObject => ({
           label: statObject.period,
           value: statObject.count
         }))
