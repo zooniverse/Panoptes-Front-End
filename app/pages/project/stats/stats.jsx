@@ -214,8 +214,8 @@ export class WorkflowProgress extends React.Component {
         period: 'day',
         type: 'classifications',
       })
-      .then((data) => (
-        data.data.map((statObject) => statObject.count)
+      .then((response) => (
+        response?.data.map((statObject) => statObject.count)
       ))
       .then((statData) => {
         this.setState({ statData });
