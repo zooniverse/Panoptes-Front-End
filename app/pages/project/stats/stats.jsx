@@ -41,15 +41,13 @@ export class GraphSelect extends React.Component {
   }
 
   getStats(workflowId, binBy) {
-    let queryObj = {
+    const queryObj = {
       workflowID: workflowId,
       period: binBy,
       type: this.props.type,
     }
-    if (this.props.type == 'comments' || workflowId == undefined) {
-      queryObj = {...queryObj,
-        projectID: this.props.projectId
-      }
+    if (this.props.type === 'comments' || !workflowId) {
+      queryObj.projectID = this.props.projectId;
     }
     statsClient
       .query(queryObj)
