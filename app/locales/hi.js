@@ -142,16 +142,16 @@ export default {
         retiredSubjects: 'पूर्ण विषय',
         subjects: 'विषय'
       },
-      classification: 'श्रेणियां',
-      comment: 'बात, चर्चा',
+      classifications: 'श्रेणियां',
+      comments: 'बात, चर्चा',
       dateRange: 'दिनांक की रेंज ',
       expandWorkflowStats: 'कार्य गति विस्तार की सांख्यिकी ',
       for: 'के लिए',
       hidden: 'छुपे ',
       hourly: 'घंटेवार डेटा सिर्फ विगत २ हफ़्तों के लिए उपलब्ध है',
       organizationStatistics: '%(title)s के आँकड़े',
-      perclassification: 'हर श्रेणीयां',
-      percomment: 'हर कमेंट',
+      perclassifications: 'हर श्रेणीयां',
+      percomments: 'हर कमेंट',
       projectStats: 'जारी परियोजनाएं (%(count)s)',
       reset: 'Reset view'
     }

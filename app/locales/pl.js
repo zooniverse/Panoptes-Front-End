@@ -154,16 +154,16 @@ export default {
         retiredSubjects: 'Completed Subjects',
         subjects: 'Subjects'
       },
-      classification: 'Classifications',
-      comment: 'Talk Comments',
+      classifications: 'Classifications',
+      comments: 'Talk Comments',
       dateRange: 'Date range',
       expandWorkflowStats: 'Expand Workflow Stats',
       for: 'for',
       hidden: 'Stats hidden',
       hourly: 'Hourly data only available for the most recent 2 weeks.',
       organizationStatistics: '%(title)s statystyka',
-      perclassification: 'Classifications per',
-      percomment: 'Comments per',
+      perclassifications: 'Classifications per',
+      percomments: 'Comments per',
       projectStats: 'Live Projects (%(count)s)',
       reset: 'Reset view'
     }

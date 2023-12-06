@@ -162,16 +162,16 @@ export default {
         retiredSubjects: 'Tamamlanan Temalar',
         subjects: 'Temalar'
       },
-      classification: 'Sınıflandırmalar',
-      comment: 'Sohbet Yorumları',
+      classifications: 'Sınıflandırmalar',
+      comments: 'Sohbet Yorumları',
       dateRange: 'Tarih aralığı',
       expandWorkflowStats: 'İş Akışı İstatistiklerini Genişlet',
       for: 'için',
       hidden: 'İstatistikler gizlendi',
       hourly: 'Yalnızca en son 2 haftaya ait saatlik veriler mevcuttur.',
       organizationStatistics: '%(title)s İstatistikler',
-      perclassification: 'Sınıflandırmalar',
-      percomment: 'Yorumlar ',
+      perclassifications: 'Sınıflandırmalar',
+      percomments: 'Yorumlar ',
       projectStats: 'Devam Eden Projeler (%(count)s)',
       reset: 'Görünümü sıfırla'
     }

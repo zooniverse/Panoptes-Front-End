@@ -6,9 +6,6 @@ function fillTimeSeries(series = [], by = 'day', notEarlierThan = twoWeeksBefore
   const filledSeries = [];
   let previousLabel = '';
   series.forEach(({ label, value }) => {
-    if (by === 'hour' && moment.utc(label) <= notEarlierThan) {
-      return;
-    }
     const difference = moment.utc(label).diff(moment.utc(previousLabel), `${by}s`);
 
     if (difference > 1) {

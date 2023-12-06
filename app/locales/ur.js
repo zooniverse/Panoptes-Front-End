@@ -142,16 +142,16 @@ export default {
         retiredSubjects: 'مکمل مضامین',
         subjects: ' مضامین'
       },
-      classification: 'درجہ بندیاں',
-      comment: 'تبصرے',
+      classifications: 'درجہ بندیاں',
+      comments: 'تبصرے',
       dateRange: 'تاریخ کا عرصہ',
       expandWorkflowStats: 'ورک فلو کے اعدادوشمار کو وسیع کریں',
       for: 'کے لئے',
       hidden: 'پوشیدہ اعداد و شمار ',
       hourly: 'حالیہ 2 ہفتوں کا ہی گھنٹہ وارانہ ڈیٹا دستیاب ہے۔',
       organizationStatistics: '(عنوان) کے اعدادوشمار',
-      perclassification: 'درجہ بندی فی',
-      percomment: 'تبصرے فی ',
+      perclassifications: 'درجہ بندی فی',
+      percomments: 'تبصرے فی ',
       projectStats: 'لایئو پروجیکٹس(%(count)s)',
       reset: 'بصری معائنہ کو ترتیب دیں۔ '
     }

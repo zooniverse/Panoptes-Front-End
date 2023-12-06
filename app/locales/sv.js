@@ -162,16 +162,16 @@ export default {
         retiredSubjects: 'Avslutade ämnen',
         subjects: 'Ämnen'
       },
-      classification: 'Klassificeringar',
-      comment: 'Kommentarer',
+      classifications: 'Klassificeringar',
+      comments: 'Kommentarer',
       dateRange: 'Spann i datum',
       expandWorkflowStats: 'Expandera statistik för arbetsflöde',
       for: 'för',
       hidden: 'Statistik dold',
       hourly: 'Data timme för timme finns endast för de senaste 2 veckorna.',
       organizationStatistics: '%(title)s statistik',
-      perclassification: 'Klassificeringar',
-      percomment: 'Kommentar per',
+      perclassifications: 'Klassificeringar',
+      percomments: 'Kommentar per',
       projectStats: 'Pågående projekt (%(count)s)',
       reset: 'Återställ'
     }

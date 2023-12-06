@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import statsClient from 'panoptes-client/lib/stats-client';
+import statsClient from 'panoptes-client/lib/eras-client';
 import moment from 'moment';
 import { Progress, Graph } from './charts.jsx';
 
@@ -41,17 +41,20 @@ export class GraphSelect extends React.Component {
   }
 
   getStats(workflowId, binBy) {
+    const queryObj = {
+      workflowID: workflowId,
+      period: binBy,
+      type: this.props.type,
+    }
+    if (this.props.type === 'comments' || !workflowId) {
+      queryObj.projectID = this.props.projectId;
+    }
     statsClient
-      .query({
-        projectID: this.props.projectId,
-        workflowID: workflowId,
-        period: binBy,
-        type: this.props.type,
-      })
-      .then((data) => (
-        data.map((statObject) => ({
-          label: statObject.key_as_string,
-          value: statObject.doc_count,
+      .query(queryObj)
+      .then((response) => (
+        response?.data.map((statObject) => ({
+          label: statObject.period,
+          value: statObject.count,
         }))
       ))
       .then((statData) => {
@@ -138,9 +141,8 @@ export class GraphSelect extends React.Component {
       const workflowSelect = this.workflowSelect();
       output = (
         <div>
-          {this.props.type[0].toUpperCase() + this.props.type.substring(1)}s per{' '}
+          {this.props.type[0].toUpperCase() + this.props.type.substring(1)} per{' '}
           <select value={this.props.by} onChange={this.handleGraphChange}>
-            <option value="hour">hour</option>
             <option value="day">day</option>
             <option value="week">week</option>
             <option value="month">month</option>
@@ -210,18 +212,17 @@ export class WorkflowProgress extends React.Component {
       .query({
         workflowID: this.props.workflow.id,
         period: 'day',
-        type: 'classification',
+        type: 'classifications',
       })
-      .then((data) => (
-        data.map((statObject) => (
-          statObject.doc_count
-        ))
+      .then((response) => (
+        response?.data.map((statObject) => statObject.count)
       ))
       .then((statData) => {
         this.setState({ statData });
       })
-      .catch(() => {
+      .catch((e) => {
         if (console) {
+          console.log(e)
           console.warn('Failed to fetch stats');
         }
       });
@@ -416,7 +417,7 @@ export class ProjectStatsPage extends React.Component {
             workflows={this.props.workflows}
             failedWorkflows={this.props.failedWorkflows}
             workflowId={this.props.workflowId}
-            type="classification"
+            type="classifications"
             projectId={this.props.projectId}
             by={this.props.classificationsBy}
             range={this.props.classificationRange}
@@ -429,7 +430,7 @@ export class ProjectStatsPage extends React.Component {
           <GraphSelect
             handleGraphChange={this.props.handleGraphChange}
             handleRangeChange={this.props.handleRangeChange}
-            type="comment"
+            type="comments"
             projectId={this.props.projectId}
             by={this.props.commentsBy}
             range={this.props.commentRange}

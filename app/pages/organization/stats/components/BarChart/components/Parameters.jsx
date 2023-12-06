@@ -8,7 +8,6 @@ import formatLabel from '../helpers/formatLabel';
 import Select from './Select';
 
 export const binByOptions = [
-  { label: 'hour', value: 'hour' },
   { label: 'day', value: 'day' },
   { label: 'week', value: 'week' },
   { label: 'month', value: 'month' }
@@ -177,12 +176,6 @@ function Parameters({
             content="organization.stats.reset"
           />
         </StyledResetButton>
-        {binBy === 'hour' && (
-          <Translate
-            component={StyledWarning}
-            content="organization.stats.hourly"
-          />
-        )}
       </StyledResetContainer>
     </StyledParametersContainer>
   );
