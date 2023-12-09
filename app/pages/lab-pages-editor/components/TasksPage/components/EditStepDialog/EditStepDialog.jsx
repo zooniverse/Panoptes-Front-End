@@ -76,6 +76,14 @@ function EditStepDialog({
           );
         })}
       </form>
+      <div className="dialog-footer">
+        <button
+          onClick={closeDialog}
+          type="button"
+        >
+          Done
+        </button>
+      </div>
     </dialog>
   );
 }
