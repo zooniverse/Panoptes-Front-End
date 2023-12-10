@@ -22,6 +22,11 @@ export default function SingleQuestionTask({
     updateTask(taskKey, newTask);
   }
 
+  function addChoice(e) {
+    e.preventDefault();
+    return false;
+  }
+
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
   useEffect(update, [required]);
@@ -49,18 +54,42 @@ export default function SingleQuestionTask({
         {/* <button>Delete</button> */}
       </div>
       <div className="input-row">
-        <label className="narrow">
-          <input
-            type="checkbox"
-            checked={required}
-            onChange={(e) => {
-              setRequired(!!e?.target?.checked);
-            }}
-          />
-          <span>
-            Required
-          </span>
-        </label>
+        <label className="big">Choices</label>
+        <div className="flex-row">
+          <button
+            aria-label="Add choice"
+            class="big"
+            onClick={addChoice}
+            type="button"
+          >
+            +
+          </button>
+          <label className="narrow">
+            <input
+              type="checkbox"
+              checked={required}
+              onChange={(e) => {
+                setRequired(!!e?.target?.checked);
+              }}
+            />
+            <span>
+              Required
+            </span>
+          </label>
+        </div>
+      </div>
+      <div className="input-row">
+        <ul>
+          {answers.map(({ label, next }, index) => (
+            <li>
+              <input
+                key={`single-question-task-answer-${index}`}
+                type="text"
+                value={label}
+              />
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="input-row">
         <label
