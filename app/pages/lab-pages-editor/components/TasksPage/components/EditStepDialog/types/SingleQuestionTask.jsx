@@ -43,10 +43,15 @@ export default function SingleQuestionTask({
   }
 
   function deleteAnswer(e) {
-    // const newAnswers = [ ...answers, { label: '', next: undefined }];
-    // setAnswers(newAnswers);
-    
-    // update()
+    const index = e?.target?.dataset?.index;
+    if (index === undefined || index < 0 || index >= answers.length) return;
+
+    const newAnswers = answers.slice()
+    newAnswers.splice(index, 1);
+    setAnswers(newAnswers);
+
+    // TODO: UPDATE!
+    // update(newAnswers)
 
     e.preventDefault();
     return false;
