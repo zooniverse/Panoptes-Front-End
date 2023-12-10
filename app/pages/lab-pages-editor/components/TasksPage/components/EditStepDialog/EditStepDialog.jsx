@@ -76,8 +76,10 @@ function EditStepDialog({
           );
         })}
       </form>
-      <div className="dialog-footer">
+      <div className="dialog-footer flex-row">
+        <div className="flex-item" />
         <button
+          className="big"
           onClick={closeDialog}
           type="button"
         >

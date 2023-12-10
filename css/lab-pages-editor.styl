@@ -15,6 +15,7 @@ $shadowColour = #00000080
 
 $sizeXS = 4px
 $sizeS = 8px
+$sizeSM = 12px
 $sizeM = 16px
 $sizeL = 24px
 $sizeXL = 32px
@@ -91,8 +92,8 @@ $fontWeightBoldPlus = 700
     &.big
       border: none
       box-shadow: 1px 1px 4px 0px #00000040
-      font-size: 14px
-      padding: 12px
+      font-size: $fontSizeS
+      padding: $sizeSM
     
     &.primary
       background: $yellow
@@ -339,7 +340,14 @@ $fontWeightBoldPlus = 700
             min-height: 8em
         
       .dialog-footer
-        padding: $sizeXS $sizeM
+        padding: $sizeXS $sizeL $sizeL $sizeL
+
+        button.big
+          border: 3px solid $grey1
+          border-radius: $sizeXS
+          font-size: $fontSizeM
+          padding: $sizeS $sizeXL
+          text-transform: uppercase
 
     section
       h3
