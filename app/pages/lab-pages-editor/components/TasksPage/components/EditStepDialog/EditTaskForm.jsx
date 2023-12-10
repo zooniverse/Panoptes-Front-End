@@ -1,6 +1,8 @@
+import SingleQuestionTask from './types/SingleQuestionTask.jsx';
 import TextTask from './types/TextTask.jsx';
 
 const taskTypes = {
+  'single': SingleQuestionTask,
   'text': TextTask
 };
 
