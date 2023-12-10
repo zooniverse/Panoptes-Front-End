@@ -12,9 +12,11 @@ export default function SingleQuestionTask({
 
   // Update is usually called manually onBlur, after user input is complete.
   function update() {
+    const nonEmptyAnswers = answers.filter(({ label }) => label.trim().length > 0);
+
     const newTask = {
       ...task,
-      answers,
+      answers: nonEmptyAnswers,
       help,
       question,
       required
@@ -22,7 +24,30 @@ export default function SingleQuestionTask({
     updateTask(taskKey, newTask);
   }
 
-  function addChoice(e) {
+  function addAnswer(e) {
+    const newAnswers = [ ...answers, { label: '', next: undefined }];
+    setAnswers(newAnswers);
+
+    e.preventDefault();
+    return false;
+  }
+
+  function editAnswer(e) {
+    const index = e?.target?.dataset?.index;
+    if (index === undefined || index < 0 || index >= answers.length) return;
+
+    const answer = answers[index];
+    const newLabel = e?.target?.value || '';
+
+    setAnswers(answers.with(index, { ...answer, label: newLabel }));
+  }
+
+  function deleteAnswer(e) {
+    // const newAnswers = [ ...answers, { label: '', next: undefined }];
+    // setAnswers(newAnswers);
+    
+    // update()
+
     e.preventDefault();
     return false;
   }
@@ -58,8 +83,8 @@ export default function SingleQuestionTask({
         <div className="flex-row">
           <button
             aria-label="Add choice"
-            class="big"
-            onClick={addChoice}
+            className="big"
+            onClick={addAnswer}
             type="button"
           >
             +
@@ -81,12 +106,26 @@ export default function SingleQuestionTask({
       <div className="input-row">
         <ul>
           {answers.map(({ label, next }, index) => (
-            <li>
+            <li
+              aria-label={`Choice ${index}`}
+              className="flex-row"
+              key={`single-question-task-answer-${index}`}
+            >
               <input
-                key={`single-question-task-answer-${index}`}
+                className="flex-item"
+                onChange={editAnswer}
+                onBlur={update}
                 type="text"
                 value={label}
+                data-index={index}
               />
+              <button
+                aria-label={`Delete choice ${index}`}
+                onClick={deleteAnswer}
+                data-index={index}
+              >
+                x
+              </button>
             </li>
           ))}
         </ul>
