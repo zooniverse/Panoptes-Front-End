@@ -115,6 +115,7 @@ export default function TasksPage() {
             <StepItem
               key={`stepItem-${step[0]}`}
               activeDragItem={activeDragItem}
+              allSteps={workflow.steps}
               allTasks={workflow.tasks}
               editStep={editStep}
               moveStep={moveStep}

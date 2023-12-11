@@ -16,6 +16,7 @@ import MoveUpIcon from '../../../../icons/MoveUpIcon.jsx';
 
 function StepItem({
   activeDragItem = -1,
+  allSteps,
   allTasks,
   editStep = () => {},
   moveStep = () => {},
@@ -24,7 +25,7 @@ function StepItem({
   stepIndex
 }) {
   const [stepKey, stepBody] = step || [];
-  if (!stepKey || !stepBody || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
+  if (!stepKey || !stepBody || !allSteps || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
 
   const taskKeys = stepBody.taskKeys || [];
 
@@ -122,7 +123,9 @@ function StepItem({
         </ul>
         {branchingTask && (
           <BranchingControls
+            allSteps={allSteps}
             task={branchingTask}
+            taskKey={branchingTaskKey}
           />
         )}
       </div>
@@ -138,6 +141,7 @@ function StepItem({
 
 StepItem.propTypes = {
   activeDragItem: PropTypes.number,
+  allSteps: PropTypes.array,
   allTasks: PropTypes.object,
   editStep: PropTypes.func,
   moveStep: PropTypes.func,
