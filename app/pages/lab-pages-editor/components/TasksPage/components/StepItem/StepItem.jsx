@@ -114,6 +114,7 @@ function StepItem({
             );
           })}
         </ul>
+        ...
       </div>
       <DropTarget
         activeDragItem={activeDragItem}
