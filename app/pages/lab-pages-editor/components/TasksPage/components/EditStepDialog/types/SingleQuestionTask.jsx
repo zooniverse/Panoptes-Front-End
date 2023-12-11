@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import MinusIcon from '../../../../../icons/MinusIcon.jsx';
+import PlusIcon from '../../../../../icons/PlusIcon.jsx';
+
 export default function SingleQuestionTask({
   task,
   taskKey,
@@ -43,6 +46,8 @@ export default function SingleQuestionTask({
   }
 
   function deleteAnswer(e) {
+    console.log('+++ deleteAnswer: ', e?.target, e?.target?.dataset?.index)
+
     const index = e?.target?.dataset?.index;
     if (index === undefined || index < 0 || index >= answers.length) return;
 
@@ -92,7 +97,7 @@ export default function SingleQuestionTask({
             onClick={addAnswer}
             type="button"
           >
-            +
+            <PlusIcon />
           </button>
           <label className="narrow">
             <input
@@ -127,9 +132,10 @@ export default function SingleQuestionTask({
               <button
                 aria-label={`Delete choice ${index}`}
                 onClick={deleteAnswer}
+                className="big"
                 data-index={index}
               >
-                x
+                <MinusIcon data-index={index} />
               </button>
             </li>
           ))}
