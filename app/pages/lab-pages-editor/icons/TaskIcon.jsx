@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-
 import PropTypes from 'prop-types';
 
 const faTaskIcons = {

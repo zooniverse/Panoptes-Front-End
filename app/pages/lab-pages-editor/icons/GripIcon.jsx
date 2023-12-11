@@ -1,6 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/require-default-props */
-
 import PropTypes from 'prop-types';
 
 export default function GripIcon({
