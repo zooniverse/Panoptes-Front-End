@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import DropTarget from './DropTarget.jsx';
 import TaskItem from './TaskItem.jsx';
 
+import canStepBranch from '../../../../helpers/canStepBranch.js';
+
+import BranchingControls from './BranchingControls.jsx';
 import CopyIcon from '../../../../icons/CopyIcon.jsx';
 import DeleteIcon from '../../../../icons/DeleteIcon.jsx';
 import EditIcon from '../../../../icons/EditIcon.jsx';
@@ -18,12 +21,12 @@ function StepItem({
   moveStep = () => {},
   setActiveDragItem = () => {},
   step,
-  stepKey,
   stepIndex
 }) {
-  if (!step || !stepKey || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
+  const [stepKey, stepBody] = step || [];
+  if (!stepKey || !stepBody || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
 
-  const taskKeys = step.taskKeys || [];
+  const taskKeys = stepBody.taskKeys || [];
 
   function edit() {
     editStep(stepIndex);
@@ -42,6 +45,9 @@ function StepItem({
     e.dataTransfer.setData('text/plain', stepIndex + '');
     setActiveDragItem(stepIndex);  // Use state because DropTarget's onDragEnter CAN'T read dragEvent.dataTransfer.getData()
   }
+
+  const branchingTaskKey = canStepBranch(step, allTasks);
+  const branchingTask = allTasks?.[branchingTaskKey];
 
   return (
     <li className="step-item">
@@ -114,7 +120,11 @@ function StepItem({
             );
           })}
         </ul>
-        ...
+        {branchingTask && (
+          <BranchingControls
+            task={branchingTask}
+          />
+        )}
       </div>
       <DropTarget
         activeDragItem={activeDragItem}
@@ -132,8 +142,7 @@ StepItem.propTypes = {
   editStep: PropTypes.func,
   moveStep: PropTypes.func,
   setActiveDragItem: PropTypes.func,
-  step: PropTypes.object,
-  stepKey: PropTypes.string,
+  step: PropTypes.array,
   stepIndex: PropTypes.number
 };
 

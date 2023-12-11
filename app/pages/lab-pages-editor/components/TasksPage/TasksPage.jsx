@@ -111,16 +111,16 @@ export default function TasksPage() {
           </select>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
-          {workflow.steps.map(([stepKey, step], index) => (
+          {workflow.steps.map((step, index) => (
             <StepItem
-              key={`stepItem-${stepKey}`}
+              key={`stepItem-${step[0]}`}
               activeDragItem={activeDragItem}
               allTasks={workflow.tasks}
               editStep={editStep}
               moveStep={moveStep}
               setActiveDragItem={setActiveDragItem}
               step={step}
-              stepKey={stepKey}
+              stepKey={step[0]}
               stepIndex={index}
             />
           ))}
