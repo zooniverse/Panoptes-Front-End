@@ -437,6 +437,39 @@ $fontWeightBoldPlus = 700
 
       &:active
         cursor: grabbing
+    
+    ul.branching-controls
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      justify-content: center
+      list-style: none
+      margin: 0
+      padding: 0
+      
+      li
+        margin: 0 $sizeM $sizeL $sizeM
+        padding: 0
+      
+      .fake-button
+        background: $white
+        border: 1px solid $grey1
+        border-radius: 2px
+        color: $black
+        font-family: $fontFamilies
+        font-size: $fontSizeXS
+        padding: $sizeS $sizeM
+        text-align: center
+      
+      select
+        background: $yellow
+        border-radius: $sizeM
+        border: 2px solid $grey1
+        font-size: $fontSizeXS
+
+        &.next-is-submit
+          background: $white
+          border: 2px solid $yellow
   
   .task-key
   .step-key

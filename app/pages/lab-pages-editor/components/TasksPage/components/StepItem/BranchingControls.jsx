@@ -16,8 +16,9 @@ export default function BranchingControls({
     <ul className="branching-controls">
       {answers.map((answer, index) => (
         <li key={`branching-controls-answer-${index}`}>
-          <div className="not-button">{answer.label}</div>
+          <div className="fake-button">{answer.label}</div>
           <select
+            className={(!answer?.next) ? 'next-is-submit' : ''}
             data-index={index}
             onChange={onChange}
             value={answer?.next || ''}
@@ -25,7 +26,7 @@ export default function BranchingControls({
             <option
               value={''}
             >
-              SUBMIT
+              Submit
             </option>
             {allSteps.map(([stepKey, stepBody]) => {
               const taskKeys = stepBody?.taskKeys?.toString() || '(none)';
