@@ -38,7 +38,9 @@ export const SLUGS = [
   'aeuk/elephant-id',
   'sophiemu/solar-jet-hunter',
   'elliereed185/knitting-leaflet-project',
-  'dschopper/the-abcs-of-dialect'
+  'dschopper/the-abcs-of-dialect',
+  'willcharlie/etch-a-cell-correct-a-cell',
+  'hughdickinson/galaxy-zoo-clump-scout-ii'
 ];
 
 export function usesMonorepo(slug) {
