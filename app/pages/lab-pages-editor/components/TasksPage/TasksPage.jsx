@@ -11,6 +11,7 @@ import moveItemInArray from '../../helpers/moveItemInArray.js';
 import EditStepDialog from './components/EditStepDialog';
 import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem';
+import ExternalLinkIcon from '../../icons/ExternalLinkIcon.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
@@ -100,6 +101,7 @@ export default function TasksPage() {
     update({ tasks: newTasks });
   }
 
+  const previewUrl = 'https://frontend.preview.zooniverse.org/projects/darkeshard/example-1982/classify/workflow/3711?env=staging';
   if (!workflow) return null;
 
   return (
@@ -119,13 +121,13 @@ export default function TasksPage() {
           >
             Add a new Task
           </button>
-          {/* Dev observation: the <select> should have some label to indicate it's for choosing the starting task. */}
-          <select
-            aria-label="Choose starting page"
-            className="flex-item"
+          <a
+            className="flex-item button-link"
+            href={previewUrl}
+            target='_blank'
           >
-            <option disabled>Choose starting Page</option>
-          </select>
+            Preview Workflow <ExternalLinkIcon />
+          </a>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
           {workflow.steps.map((step, index) => (

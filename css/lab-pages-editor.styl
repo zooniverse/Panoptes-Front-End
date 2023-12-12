@@ -85,6 +85,7 @@ $fontWeightBoldPlus = 700
     padding: $sizeS
   
   button
+    border-radius: $sizeXS
     color: $black
     cursor: pointer
     font-family: $fontFamilies
@@ -102,6 +103,18 @@ $fontWeightBoldPlus = 700
       background: none
       border: none
   
+  a.button-link
+    border: 1px solid $yellow
+    border-radius: $sizeXS
+    color: $black
+    cursor: pointer
+    display: inline-block
+    font-family: $fontFamilies
+    font-size: $fontSizeS
+    line-height: 1em
+    padding: $sizeSM
+    text-align: center
+
   hr
     border-top: 1px solid $grey2
   
@@ -268,7 +281,6 @@ $fontWeightBoldPlus = 700
       
       button.big
         border: 3px solid $grey1
-        border-radius: $sizeXS
         font-size: $fontSizeM
         padding: $sizeS $sizeXL
         text-transform: uppercase
