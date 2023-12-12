@@ -83,6 +83,23 @@ export default function TasksPage() {
     update({tasks});
   }
 
+  // Changes the optional "next page" of a branching answer/choice
+  function updateAnswerNext(taskKey, answerIndex, next = undefined) {
+    // Check if input is valid
+    const task = workflow?.tasks?.[taskKey];
+    const answer = task?.answers[answerIndex];
+    if (!task || !answer) return;
+    
+    const newTasks = workflow.tasks ? { ...workflow.tasks } : {};  // Copy tasks
+    const newAnswers = task.answers.with(answerIndex, { ...answer, next })  // Copy, then modify, answers
+    newTasks[taskKey] = {  // Insert modified answers into the task inside the copied tasks. Phew!
+      ...task,
+      answers: newAnswers
+    }
+
+    update({ tasks: newTasks });
+  }
+
   if (!workflow) return null;
 
   return (
@@ -123,6 +140,7 @@ export default function TasksPage() {
               step={step}
               stepKey={step[0]}
               stepIndex={index}
+              updateAnswerNext={updateAnswerNext}
             />
           ))}
         </ul>

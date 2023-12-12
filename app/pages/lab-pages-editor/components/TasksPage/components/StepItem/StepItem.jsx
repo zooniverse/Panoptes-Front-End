@@ -22,7 +22,8 @@ function StepItem({
   moveStep = () => {},
   setActiveDragItem = () => {},
   step,
-  stepIndex
+  stepIndex,
+  updateAnswerNext = () => {}
 }) {
   const [stepKey, stepBody] = step || [];
   if (!stepKey || !stepBody || !allSteps || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
@@ -126,6 +127,7 @@ function StepItem({
             allSteps={allSteps}
             task={branchingTask}
             taskKey={branchingTaskKey}
+            updateAnswerNext={updateAnswerNext}
           />
         )}
       </div>
@@ -147,7 +149,8 @@ StepItem.propTypes = {
   moveStep: PropTypes.func,
   setActiveDragItem: PropTypes.func,
   step: PropTypes.array,
-  stepIndex: PropTypes.number
+  stepIndex: PropTypes.number,
+  updateAnswerNext: PropTypes.func
 };
 
 export default StepItem;

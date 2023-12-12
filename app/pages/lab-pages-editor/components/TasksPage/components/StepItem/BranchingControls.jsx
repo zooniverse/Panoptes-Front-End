@@ -1,15 +1,17 @@
 export default function BranchingControls({
   allSteps = [],
   task,
-  taskKey
+  taskKey,
+  updateAnswerNext = () => {}
 }) {
   if (!task || !taskKey) return null;
 
   const answers = task.answers || []
-  console.log('+++ task ', task)
 
   function onChange(e) {
-    console.log('+++ onChange: ', e?.target?.value, e?.target?.dataset.index);
+    const next = e.target?.value;
+    const index = e?.target?.dataset.index;
+    updateAnswerNext(taskKey, index, next);
   }
 
   return (
