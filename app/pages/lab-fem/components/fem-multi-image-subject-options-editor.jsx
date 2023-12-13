@@ -3,6 +3,12 @@ import React from 'react'
 export default function FemMultiImageSubjectLayoutEditor ({
   workflow = null
 }) {
+  function toggleCloneMarks (e) {
+    return workflow.update({
+      'configuration.multi_image_clone_markers': e.target.checked
+    })
+  }
+
   function toggleEnableSwitching (e) {
     return workflow.update({
       'configuration.enable_switching_flipbook_and_separate': e.target.checked
@@ -33,6 +39,8 @@ export default function FemMultiImageSubjectLayoutEditor ({
   const enableAutoplayChecked = !!workflow?.configuration?.flipbook_autoplay
   const iterations = workflow?.configuration?.playIterations >= 0 ? workflow.configuration.playIterations : 3
   const layout = workflow?.configuration?.multi_image_layout || 'col'
+  const cloneMarksChecked = !!workflow?.configuration?.multi_image_clone_markers
+
 
   return (
     <div className='multi-image-subject-layout-editor'>
@@ -66,6 +74,17 @@ export default function FemMultiImageSubjectLayoutEditor ({
             onChange={toggleEnableSwitching}
           />
           Allow Separate Frames View - <small>volunteers can choose flipbook or a separate frames view</small>
+        </label>
+      </div>
+      
+      <div>
+        <label>
+          <input
+            type='checkbox'
+            checked={cloneMarksChecked}
+            onChange={toggleCloneMarks}
+          />
+          Clone marks in all frames - <small>for drawing tasks</small>
         </label>
       </div>
 
