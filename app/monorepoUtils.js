@@ -40,7 +40,8 @@ export const SLUGS = [
   'elliereed185/knitting-leaflet-project',
   'dschopper/the-abcs-of-dialect',
   'willcharlie/etch-a-cell-correct-a-cell',
-  'hughdickinson/galaxy-zoo-clump-scout-ii'
+  'hughdickinson/galaxy-zoo-clump-scout-ii',
+  'zookeeper/elephant-id-ey'
 ];
 
 export function usesMonorepo(slug) {
