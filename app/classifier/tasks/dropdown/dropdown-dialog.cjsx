@@ -154,7 +154,7 @@ DropdownDialog = createReactClass
       return window.alert('Dropdowns must have a Title.')
 
     # for FEMLab we want to enforce a min and max number of options
-    numOptions = @state.editSelect.options['*'].length
+    numOptions = @state.editSelect.options['*']?.length
     if @props.pfeLab is false and numOptions < OPTIONS_MIN
       return window.alert('Dropdowns must have at least 4 options.')
     else if @props.pfeLab is false and numOptions > OPTIONS_MAX
