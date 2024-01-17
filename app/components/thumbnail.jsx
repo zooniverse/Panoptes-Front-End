@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import FileViewer from './file-viewer'
+
 export default class Thumbnail extends React.Component {
   constructor(props) {
     super(props);
@@ -61,11 +63,19 @@ export default class Thumbnail extends React.Component {
     }
 
     if (this.props.type === 'application') {
-      return null;
+      const fakeSubject = {
+        locations: [{ 'application/json': this.props.src }],
+        metadata: {}
+      };
+      return (
+        <div style={style}>
+          <FileViewer type='application' format='json' src={this.props.src} subject={fakeSubject} />
+        </div>
+      );
     }
 
     return (
-      <div  style={style}>
+      <div style={style}>
         <img alt="" {...this.props} src={src} {...dimensions} onError={this.handleError} />
       </div>
     );
