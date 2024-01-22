@@ -17,7 +17,7 @@ isAdmin = require '../../lib/is-admin'
 
 NOOP = Function.prototype
 
-VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3', '.m4a', '.mpeg', '.txt', '.json']
+VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3', '.mp4', '.m4a', '.mpeg', '.txt', '.json']
 VALID_FILE_TYPES = [
   'text/csv',
   'text/plain',
