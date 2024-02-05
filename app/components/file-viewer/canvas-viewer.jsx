@@ -195,8 +195,10 @@ CanvasViewer.propTypes = {
   }),
   onLoad: PropTypes.func
 };
+const DEFAULT_HANDLER = () => true;
 /* eslint-enable react/forbid-prop-types */
 CanvasViewer.defaultProps = {
+  onLoad: DEFAULT_HANDLER,
   viewBoxDimensions: { height: 512, width: 512, x: 0, y: 0 }
 };
 
