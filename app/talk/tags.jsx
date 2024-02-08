@@ -54,14 +54,24 @@ export default class TalkTags extends React.Component {
         return Promise.all(tags.map((tag) => {
           return apiClient.type('subjects').get(tag.taggable_id.toString())
             .then((subject) => {
-              const taggable_id = subject.id
-              return talkClient.type('tags/popular').get({ taggable_type, taggable_id })
-                .then((subjectTags) => {
-                  return tag.update({ subject, subjectTags })
-                })
+              if (subject) {
+                const taggable_id = subject.id
+                return talkClient.type('tags/popular').get({ taggable_type, taggable_id })
+                  .then((subjectTags) => {
+                    return tag.update({ subject, subjectTags })
+                  })
+              } else {
+                return tag
+              }
+            })
+            .catch((error) => {
+              console.log('Error loading subject', error)
             })
         })).then((tags) => {
-          return this.setState({ meta, tags })
+          const filteredTags = tags.filter((tag) => {
+            return tag && tag.subject
+          })
+          return this.setState({ meta, tags: filteredTags })
         })
       })
   }
