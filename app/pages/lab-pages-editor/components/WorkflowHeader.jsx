@@ -4,7 +4,6 @@
 /* eslint-disable radix */
 
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 
 import ReturnIcon from '../icons/ReturnIcon.jsx';
 import { useWorkflowContext } from '../context.js';
@@ -48,10 +47,10 @@ export default function WorkflowHeader({
 
   return (
     <div className="workflow-header flex-row">
-      <Link to={returnUrl}>
+      <a href={returnUrl}> {/* Formerly <Link> from 'react-router', but React was throwing Legacy Context errors. */}
         <ReturnIcon />
         {strings.PagesEditor.components.WorkflowHeader.return}
-      </Link>
+      </a>
       <div
         role="tablist"
         className="flex-row flex-item justify-around"
