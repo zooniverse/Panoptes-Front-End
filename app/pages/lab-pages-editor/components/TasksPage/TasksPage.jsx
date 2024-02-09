@@ -4,12 +4,14 @@
 /* eslint-disable radix */
 /* eslint-disable react/jsx-boolean-value */
 
+import { useState } from 'react'
 import { useWorkflowContext } from '../../context.js';
-import getNewTaskKey from '../../helpers/getNewTaskKey.js';
-import getNewStepKey from '../../helpers/getNewStepKey.js';
-import createTask from '../../helpers/createTask.js';
 import createStep from '../../helpers/createStep.js';
+import createTask from '../../helpers/createTask.js';
+import getNewStepKey from '../../helpers/getNewStepKey.js';
+import getNewTaskKey from '../../helpers/getNewTaskKey.js';
 import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
+import moveItemInArray from '../../helpers/moveItemInArray.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import NewTaskButtonAndDialog from './components/NewTaskButtonAndDialog.jsx';
@@ -17,6 +19,7 @@ import StepItem from './components/StepItem.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
+  const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const isActive = true; // TODO
 
   function experimentalAddNewTaskWithStep(taskType) {
@@ -51,6 +54,14 @@ export default function TasksPage() {
     update({ steps: newSteps });
   }
 
+  function moveStep(from, to) {
+    const oldSteps = workflow?.steps || [];
+    if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
+
+    const steps = linkStepsInWorkflow(moveItemInArray(oldSteps, from, to));
+    update({ steps });
+  }
+
   if (!workflow) return null;
 
   return (
@@ -75,11 +86,16 @@ export default function TasksPage() {
           </select>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
-          {workflow.steps.map(([stepKey, step]) => (
+          {workflow.steps.map(([stepKey, step], index) => (
             <StepItem
+              key={`stepItem-${stepKey}`}
+              activeDragItem={activeDragItem}
               allTasks={workflow.tasks}
+              moveStep={moveStep}
+              setActiveDragItem={setActiveDragItem}
               step={step}
               stepKey={stepKey}
+              stepIndex={index}
             />
           ))}
         </ul>
