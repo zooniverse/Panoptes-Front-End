@@ -62,6 +62,7 @@ export default function TasksPage() {
     update({ steps });
   }
 
+  // aka openEditStepDialog
   function editStep(stepIndex) {
     setActiveStepIndex(stepIndex);
     editStepDialog.current?.openDialog();
@@ -69,6 +70,17 @@ export default function TasksPage() {
 
   function openNewTaskDialog() {
     newTaskDialog.current?.openDialog();
+  }
+
+  function deleteTask(taskKey) {
+    // TODO
+  }
+
+  function updateTask(taskKey, task) {
+    if (!taskKey) return;
+    const tasks = JSON.parse(JSON.stringify(workflow?.tasks || {}));
+    tasks[taskKey] = task
+    update({tasks});
   }
 
   if (!workflow) return null;
@@ -123,6 +135,8 @@ export default function TasksPage() {
           allTasks={workflow.tasks}
           step={workflow.steps[activeStepIndex]}
           stepIndex={activeStepIndex}
+          deleteTask={deleteTask}
+          updateTask={updateTask}
         />
 
         {/* EXPERIMENTAL */}

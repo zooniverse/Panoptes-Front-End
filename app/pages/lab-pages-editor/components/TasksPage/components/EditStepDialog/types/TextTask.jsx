@@ -1,27 +1,78 @@
+import { useEffect, useState } from 'react';
+
 export default function TextTask({
   task,
-  taskKey
+  taskKey,
+  updateTask = () => {}
 }) {
+  const [ help, setHelp ] = useState(task?.help || '');
+  const [ instruction, setInstruction ] = useState(task?.instruction || '');
+  const [ required, setRequired ] = useState(!!task?.required);
+
+  // Update is usually called manually onBlur, after user input is complete.
+  function update() {
+    const newTask = {
+      ...task,
+      help,
+      instruction,
+      required
+    };
+    updateTask(taskKey, newTask);
+  }
+
+  // For inputs that don't have onBlur, update triggers automagically.
+  // (You can't call update() in the onChange() right after setStateValue().)
+  useEffect(update, [required]);
+
   return (
-    <div>
-      <div>
-        <label>Main Text</label>
+    <div className="text-task">
+      <div className="input-row">
+        <label
+          className="big"
+          htmlFor={`task-${taskKey}-instruction`}
+        >
+          Main Text
+        </label>
         <div className="flex-row">
+          <span className="task-key">{taskKey}</span>
           <input
             className="flex-item"
+            id={`task-${taskKey}-instruction`}
+            type="text"
+            value={instruction}
+            onBlur={update}
+            onChange={(e) => { setInstruction(e?.target?.value) }}
           />
-          <button>Delete</button>
         </div>
+        {/* <button>Delete</button> */}
       </div>
-      <div>
-        <label>
-          <input type="checkbox" />
-          Required
+      <div className="input-row">
+        <label className="narrow">
+          <input
+            type="checkbox"
+            checked={required}
+            onChange={(e) => {
+              setRequired(!!e?.target?.checked);
+            }}
+          />
+          <span>
+            Required
+          </span>
         </label>
       </div>
-      <div>
-        <label>Help Text</label>
-        <textarea />
+      <div className="input-row">
+        <label
+          className="big"
+          htmlFor={`task-${taskKey}-help`}
+        >
+          Help Text
+        </label>
+        <textarea
+          id={`task-${taskKey}-help`}
+          value={help}
+          onBlur={update}
+          onChange={(e) => { setHelp(e?.target?.value) }}
+        />
       </div>
     </div>
   );

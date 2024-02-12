@@ -4,10 +4,17 @@ import PropTypes from 'prop-types';
 import EditTaskForm from './EditTaskForm.jsx';
 import CloseIcon from '../../../../icons/CloseIcon.jsx';
 
+const taskNames = {
+  'drawing': 'Drawing',
+  'single': 'Single Question',
+  'text': 'Text',
+}
+
 function EditStepDialog({
   allTasks = {},
   step = [],
-  stepIndex = -1
+  stepIndex = -1,
+  updateTask
 }, forwardedRef) {
   const [ stepKey, stepBody ] = step ;
   const taskKeys = stepBody?.taskKeys || [];
@@ -28,7 +35,9 @@ function EditStepDialog({
     };
   });
 
-  const title = 'Create a (???) Task'
+  const firstTask = allTasks?.[taskKeys?.[0]]
+  const taskName = taskNames[firstTask?.type] || '???';
+  const title = `Edit ${taskName} Task`;
 
   return (
     <dialog
@@ -62,13 +71,21 @@ function EditStepDialog({
               key={`editTaskForm-${taskKey}`}
               task={task}
               taskKey={taskKey}
+              updateTask={updateTask}
             />
           );
         })}
-        <div className="edit-task-form-controls">
-          <button>Save</button>
-        </div>
       </form>
+      <div className="dialog-footer flex-row">
+        <div className="flex-item" />
+        <button
+          className="big"
+          onClick={closeDialog}
+          type="button"
+        >
+          Done
+        </button>
+      </div>
     </dialog>
   );
 }

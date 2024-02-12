@@ -3,6 +3,7 @@ $grey2 = #808080
 $grey3 = #5C5C5C
 $grey4 = #979797
 $grey5 = #E2E5E9
+$grey6 = #EFF2F5
 $black = #000000
 $teal = #00979D
 $greenBright = #1ED359
@@ -14,6 +15,7 @@ $shadowColour = #00000080
 
 $sizeXS = 4px
 $sizeS = 8px
+$sizeSM = 12px
 $sizeM = 16px
 $sizeL = 24px
 $sizeXL = 32px
@@ -58,6 +60,7 @@ $fontWeightBoldPlus = 700
     text-decoration: none
 
   input
+  textarea
     font-family: $fontFamilies
     font-size: $fontSizeM
   
@@ -70,6 +73,10 @@ $fontWeightBoldPlus = 700
     flex: 0 0 auto
     width: $fontSizeM
     height: $fontSizeM
+  
+  textarea
+    border: 1.5px solid $grey1
+    padding: $sizeS
   
   select
     border: 1.5px solid $grey1
@@ -85,8 +92,8 @@ $fontWeightBoldPlus = 700
     &.big
       border: none
       box-shadow: 1px 1px 4px 0px #00000040
-      font-size: 14px
-      padding: 12px
+      font-size: $fontSizeS
+      padding: $sizeSM
     
     &.primary
       background: $yellow
@@ -259,6 +266,13 @@ $fontWeightBoldPlus = 700
       &::backdrop
         background: $backdropColour
       
+      button.big
+        border: 3px solid $grey1
+        border-radius: $sizeXS
+        font-size: $fontSizeM
+        padding: $sizeS $sizeXL
+        text-transform: uppercase
+      
       .dialog-header
         background: $teal
         color: $white
@@ -294,7 +308,59 @@ $fontWeightBoldPlus = 700
       
         .dialog-body
           padding: $sizeS $sizeL
-    
+      
+        .edit-task-form
+          // Yup, the form is actually a fieldset, so maybe strip out the default values
+          padding: 0
+          margin: 0
+          border: none
+
+          legend
+            display: none  // TODO: reconsider design
+
+          .input-row
+            margin-bottom: $sizeSM
+          
+          label.big
+            display: block
+            font-weight: $fontWeightBold
+            font-size: $fontSizeL
+            margin-bottom: $sizeS
+            text-transform: uppercase
+          
+          label.narrow
+            > *
+              vertical-align: middle
+
+          input[type=text]
+          input[type=checkbox]
+          textarea
+            box-shadow: 1px 1px 4px 0px #00000040 inset
+          
+          input[type=text]
+          textarea
+            background: $grey6
+            border-radius: $sizeXS
+            color: $black
+            padding: $sizeS $sizeM
+            width: 100%
+          
+          textarea
+            min-height: 8em
+          
+          .single-question-task
+            ul
+              list-style: none
+              margin: 0
+              padding: 0
+            
+            li
+              margin: $sizeSM 0
+              padding: 0
+        
+      .dialog-footer
+        padding: $sizeXS $sizeL $sizeL $sizeL
+
     section
       h3
         color: $black
