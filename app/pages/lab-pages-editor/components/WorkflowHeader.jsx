@@ -1,8 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/require-default-props */
-/* eslint-disable radix */
-
 import PropTypes from 'prop-types';
 
 import ReturnIcon from '../icons/ReturnIcon.jsx';

@@ -253,6 +253,8 @@ $fontWeightBoldPlus = 700
       border-radius: $sizeS
       box-shadow: 1px 1px 6px 0px $shadowColour
       padding: 0
+      width: 800px
+      max-width: 90vw
 
       &::backdrop
         background: $backdropColour
@@ -266,30 +268,32 @@ $fontWeightBoldPlus = 700
         button
           color: $white
       
-      .dialog-body
-        padding: $sizeS $sizeL
-
-        &.new-task
+      &.new-task
+        .dialog-body
+          padding: $sizeS $sizeL
           background: $grey5
-        
-        &.edit-step
-          background: $white
-        
-        button.new-task-button
-          align-items: center
-          display: flex
-          flex-direction: column
-          justify-content: center
-          margin-bottom: $sizeM
-          margin-right: $sizeM
-          height: $sizeXXL
-          width: $sizeXXL
 
-          &:last-child
-            margin-right: 0
+          button.new-task-button
+            align-items: center
+            display: flex
+            flex-direction: column
+            justify-content: center
+            margin-bottom: $sizeM
+            margin-right: $sizeM
+            height: $sizeXXL
+            width: $sizeXXL
 
-          .fa
-            font-size: $fontSizeXL
+            &:last-child
+              margin-right: 0
+
+            .fa
+              font-size: $fontSizeXL
+        
+      &.edit-step
+        background: $white
+      
+        .dialog-body
+          padding: $sizeS $sizeL
     
     section
       h3
@@ -305,7 +309,6 @@ $fontWeightBoldPlus = 700
       padding: 0
 
     .step-item
-
       .step-body
         background: $grey5
         border: 1px solid $grey1
@@ -359,13 +362,6 @@ $fontWeightBoldPlus = 700
       padding: 0
     
     .task-item
-      .task-key
-        background: $grey3
-        border-radius: $sizeM
-        color: $white
-        font-size: $fontSizeXS
-        padding: 0 $sizeS
-      
       .task-text
         font-size: $fontSizeS
         font-weight: $fontWeightBold
@@ -375,6 +371,14 @@ $fontWeightBoldPlus = 700
 
       &:active
         cursor: grabbing
+  
+  .task-key
+  .step-key
+    background: $grey3
+    border-radius: $sizeM
+    color: $white
+    font-size: $fontSizeXS
+    padding: 0 $sizeS
 
 .debug-0
   width: 6em

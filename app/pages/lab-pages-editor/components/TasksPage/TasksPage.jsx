@@ -1,10 +1,4 @@
-/* eslint-disable no-console */
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/require-default-props */
-/* eslint-disable radix */
-/* eslint-disable react/jsx-boolean-value */
-
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useWorkflowContext } from '../../context.js';
 import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
@@ -14,15 +8,20 @@ import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
-import NewTaskButtonAndDialog from './components/NewTaskButtonAndDialog.jsx';
-import StepItem from './components/StepItem.jsx';
+import EditStepDialog from './components/EditStepDialog';
+import NewTaskDialog from './components/NewTaskDialog.jsx';
+import StepItem from './components/StepItem';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
+  const editStepDialog = useRef(null);
+  const newTaskDialog = useRef(null);
+  const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const isActive = true; // TODO
 
-  function experimentalAddNewTaskWithStep(taskType) {
+  // Adds a new Task (with default settings), inside a new Step. Returns the newly created step index.
+  async function addNewTaskWithStep(taskType) {
     const newTaskKey = getNewTaskKey(workflow?.tasks);
     const newStepKey = getNewStepKey(workflow?.steps);
     const newTask = createTask(taskType);
@@ -39,7 +38,8 @@ export default function TasksPage() {
     };
     const steps = linkStepsInWorkflow([...workflow.steps, newStep]);
 
-    update({ tasks, steps });
+    await update({ tasks, steps });
+    return steps.length - 1;
   }
 
   function experimentalReset() {
@@ -62,6 +62,15 @@ export default function TasksPage() {
     update({ steps });
   }
 
+  function editStep(stepIndex) {
+    setActiveStepIndex(stepIndex);
+    editStepDialog.current?.openDialog();
+  }
+
+  function openNewTaskDialog() {
+    newTaskDialog.current?.openDialog();
+  }
+
   if (!workflow) return null;
 
   return (
@@ -74,9 +83,13 @@ export default function TasksPage() {
       <section aria-labelledby="workflow-tasks-heading">
         <h3 id="workflow-tasks-heading">Tasks</h3>
         <div className="flex-row">
-          <NewTaskButtonAndDialog
-            addTaskWithStep={experimentalAddNewTaskWithStep}
-          />
+          <button
+            className="flex-item big primary decoration-plus"
+            onClick={openNewTaskDialog}
+            type="button"
+          >
+            Add a new Task
+          </button>
           {/* Dev observation: the <select> should have some label to indicate it's for choosing the starting task. */}
           <select
             aria-label="Choose starting page"
@@ -91,6 +104,7 @@ export default function TasksPage() {
               key={`stepItem-${stepKey}`}
               activeDragItem={activeDragItem}
               allTasks={workflow.tasks}
+              editStep={editStep}
               moveStep={moveStep}
               setActiveDragItem={setActiveDragItem}
               step={step}
@@ -99,6 +113,17 @@ export default function TasksPage() {
             />
           ))}
         </ul>
+        <NewTaskDialog
+          ref={newTaskDialog}
+          addTaskWithStep={addNewTaskWithStep}
+          editStep={editStep}
+        />
+        <EditStepDialog
+          ref={editStepDialog}
+          allTasks={workflow.tasks}
+          step={workflow.steps[activeStepIndex]}
+          stepIndex={activeStepIndex}
+        />
 
         {/* EXPERIMENTAL */}
         <div
@@ -123,6 +148,14 @@ export default function TasksPage() {
             style={{ margin: '0 4px' }}
           >
             LINK
+          </button>
+          <button
+            className="big"
+            onClick={editStep}
+            type="button"
+            style={{ margin: '0 4px' }}
+          >
+            EDIT STEP
           </button>
         </div>
       </section>

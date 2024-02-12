@@ -88,6 +88,8 @@ function DataManager({
         workflow: newWorkflow, // Note: newWorkflow is actually the same as the old wf, so useMemo will have to listen to status changing instead.
         status: 'ready'
       });
+
+      return newWorkflow;
     }
 
     return {

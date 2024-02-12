@@ -1,8 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/require-default-props */
-/* eslint-disable radix */
-
 import { useWorkflowContext } from '../context.js';
 import strings from '../strings.json'; // TODO: move all text into strings
 
@@ -11,12 +6,8 @@ export default function WorkflowSettingsPage() {
 
   function onSubmit(e) {
     e.preventDefault();
-    try {
-      // TODO: on Submit, run update() on every available field.
-      // also, make sure the 'data-updaterule' rules are implemented.
-    } catch (err) {
-      console.error('WorkflowSettingsPageError: ', err);
-    }
+    // TODO: on Submit, run update() on every available field.
+    // also, make sure the 'data-updaterule' rules are implemented.
     return false;
   }
 
