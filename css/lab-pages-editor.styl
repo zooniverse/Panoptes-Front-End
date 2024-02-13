@@ -85,6 +85,7 @@ $fontWeightBoldPlus = 700
     padding: $sizeS
   
   button
+    border-radius: $sizeXS
     color: $black
     cursor: pointer
     font-family: $fontFamilies
@@ -102,6 +103,18 @@ $fontWeightBoldPlus = 700
       background: none
       border: none
   
+  a.button-link
+    border: 1px solid $yellow
+    border-radius: $sizeXS
+    color: $black
+    cursor: pointer
+    display: inline-block
+    font-family: $fontFamilies
+    font-size: $fontSizeS
+    line-height: 1em
+    padding: $sizeSM
+    text-align: center
+
   hr
     border-top: 1px solid $grey2
   
@@ -268,7 +281,6 @@ $fontWeightBoldPlus = 700
       
       button.big
         border: 3px solid $grey1
-        border-radius: $sizeXS
         font-size: $fontSizeM
         padding: $sizeS $sizeXL
         text-transform: uppercase
@@ -321,14 +333,14 @@ $fontWeightBoldPlus = 700
           .input-row
             margin-bottom: $sizeSM
           
-          label.big
+          label.big, span.big
             display: block
             font-weight: $fontWeightBold
             font-size: $fontSizeL
             margin-bottom: $sizeS
             text-transform: uppercase
           
-          label.narrow
+          label.narrow, span.narrow
             > *
               vertical-align: middle
 
@@ -381,6 +393,7 @@ $fontWeightBoldPlus = 700
         border-radius: $sizeXS
         padding: $sizeS $sizeM
 
+        &:active
         &:has(.move-button:focus)  // Note: :has() is experimental as of Nov 2023, and not supported on Firefox
           outline: 2px solid $yellow
 
@@ -437,6 +450,46 @@ $fontWeightBoldPlus = 700
 
       &:active
         cursor: grabbing
+    
+    ul.branching-controls
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      justify-content: center
+      list-style: none
+      margin: 0
+      padding: 0
+      
+      li
+        display: flex
+        flex-direction: column
+        margin: 0 $sizeM $sizeL $sizeM
+        padding: 0
+      
+      .fake-button
+        background: $white
+        border: 1px solid $grey1
+        border-radius: 2px
+        color: $black
+        font-family: $fontFamilies
+        font-size: $fontSizeXS
+        padding: $sizeS $sizeM
+        text-align: center
+      
+      .next-arrow
+        color: $yellow
+        display: block
+        margin: 0 auto
+      
+      select
+        background: $yellow
+        border-radius: $sizeM
+        border: 2px solid $grey1
+        font-size: $fontSizeXS
+
+        &.next-is-submit
+          background: $white
+          border: 2px solid $yellow
   
   .task-key
   .step-key

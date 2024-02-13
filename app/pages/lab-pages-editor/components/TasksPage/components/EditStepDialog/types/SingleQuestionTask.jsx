@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import MinusIcon from '../../../../../icons/MinusIcon.jsx';
 import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 
+const DEFAULT_HANDLER = () => {};
+
 export default function SingleQuestionTask({
   task,
   taskKey,
-  updateTask = () => {}
+  updateTask = DEFAULT_HANDLER
 }) {
   const [ answers, setAnswers ] = useState(task?.answers || []);
   const [ help, setHelp ] = useState(task?.help || '');
@@ -47,6 +49,7 @@ export default function SingleQuestionTask({
   }
 
   function deleteAnswer(e) {
+    console.log('+++ deleteAnswer', e?.target)
     const index = e?.target?.dataset?.index;
     if (index === undefined || index < 0 || index >= answers.length) return;
 
@@ -76,7 +79,7 @@ export default function SingleQuestionTask({
           <span className="task-key">{taskKey}</span>
           <input
             className="flex-item"
-            id={`task-${taskKey}-question`}
+            id={`task-${taskKey}-instruction`}
             type="text"
             value={question}
             onBlur={update}
@@ -86,7 +89,7 @@ export default function SingleQuestionTask({
         {/* <button>Delete</button> */}
       </div>
       <div className="input-row">
-        <label className="big">Choices</label>
+        <span className="big">Choices</span>
         <div className="flex-row">
           <button
             aria-label="Add choice"
@@ -96,29 +99,30 @@ export default function SingleQuestionTask({
           >
             <PlusIcon />
           </button>
-          <label className="narrow">
+          <span className="narrow">
             <input
+              id={`task-${taskKey}-required`}
               type="checkbox"
               checked={required}
               onChange={(e) => {
                 setRequired(!!e?.target?.checked);
               }}
             />
-            <span>
+            <label htmlFor={`task-${taskKey}-required`}>
               Required
-            </span>
-          </label>
+            </label>
+          </span>
         </div>
       </div>
       <div className="input-row">
         <ul>
           {answers.map(({ label, next }, index) => (
             <li
-              aria-label={`Choice ${index}`}
               className="flex-row"
               key={`single-question-task-answer-${index}`}
             >
               <input
+                aria-label={`Choice ${index}`}
                 className="flex-item"
                 onChange={editAnswer}
                 onBlur={update}
@@ -131,6 +135,7 @@ export default function SingleQuestionTask({
                 onClick={deleteAnswer}
                 className="big"
                 data-index={index}
+                type="button"
               >
                 <MinusIcon data-index={index} />
               </button>

@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
+const DEFAULT_HANDLER = () => {};
+
 function DropTarget({
   activeDragItem = -1,
-  moveStep = () => {},
-  setActiveDragItem = () => {},
+  moveStep = DEFAULT_HANDLER,
+  setActiveDragItem = DEFAULT_HANDLER,
   targetIndex = 0
 }) {
   const [active, setActive] = useState(false);

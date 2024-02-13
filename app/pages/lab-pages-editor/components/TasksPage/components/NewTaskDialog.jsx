@@ -5,9 +5,11 @@ import CloseIcon from '../../../icons/CloseIcon.jsx';
 import TaskIcon from '../../../icons/TaskIcon.jsx';
 // import strings from '../../../strings.json'; // TODO: move all text into strings
 
+const DEFAULT_HANDLER = () => {};
+
 function NewTaskDialog({
-  addTaskWithStep = () => {},
-  editStep = () => {}
+  addTaskWithStep = DEFAULT_HANDLER,
+  editStep = DEFAULT_HANDLER
 }, forwardedRef) {
   const newTaskDialog = useRef(null);
 

@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import DropTarget from './DropTarget.jsx';
 import TaskItem from './TaskItem.jsx';
 
+import canStepBranch from '../../../../helpers/canStepBranch.js';
+
+import BranchingControls from './BranchingControls.jsx';
 import CopyIcon from '../../../../icons/CopyIcon.jsx';
 import DeleteIcon from '../../../../icons/DeleteIcon.jsx';
 import EditIcon from '../../../../icons/EditIcon.jsx';
@@ -11,19 +14,23 @@ import GripIcon from '../../../../icons/GripIcon.jsx';
 import MoveDownIcon from '../../../../icons/MoveDownIcon.jsx';
 import MoveUpIcon from '../../../../icons/MoveUpIcon.jsx';
 
+const DEFAULT_HANDLER = () => {};
+
 function StepItem({
   activeDragItem = -1,
+  allSteps,
   allTasks,
-  editStep = () => {},
-  moveStep = () => {},
-  setActiveDragItem = () => {},
+  editStep = DEFAULT_HANDLER,
+  moveStep = DEFAULT_HANDLER,
+  setActiveDragItem = DEFAULT_HANDLER,
   step,
-  stepKey,
-  stepIndex
+  stepIndex,
+  updateAnswerNext = DEFAULT_HANDLER
 }) {
-  if (!step || !stepKey || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
+  const [stepKey, stepBody] = step || [];
+  if (!stepKey || !stepBody || !allSteps || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
 
-  const taskKeys = step.taskKeys || [];
+  const taskKeys = stepBody.taskKeys || [];
 
   function edit() {
     editStep(stepIndex);
@@ -42,6 +49,9 @@ function StepItem({
     e.dataTransfer.setData('text/plain', stepIndex + '');
     setActiveDragItem(stepIndex);  // Use state because DropTarget's onDragEnter CAN'T read dragEvent.dataTransfer.getData()
   }
+
+  const branchingTaskKey = canStepBranch(step, allTasks);
+  const branchingTask = allTasks?.[branchingTaskKey];
 
   return (
     <li className="step-item">
@@ -114,6 +124,14 @@ function StepItem({
             );
           })}
         </ul>
+        {branchingTask && (
+          <BranchingControls
+            allSteps={allSteps}
+            task={branchingTask}
+            taskKey={branchingTaskKey}
+            updateAnswerNext={updateAnswerNext}
+          />
+        )}
       </div>
       <DropTarget
         activeDragItem={activeDragItem}
@@ -127,13 +145,14 @@ function StepItem({
 
 StepItem.propTypes = {
   activeDragItem: PropTypes.number,
+  allSteps: PropTypes.array,
   allTasks: PropTypes.object,
   editStep: PropTypes.func,
   moveStep: PropTypes.func,
   setActiveDragItem: PropTypes.func,
-  step: PropTypes.object,
-  stepKey: PropTypes.string,
-  stepIndex: PropTypes.number
+  step: PropTypes.array,
+  stepIndex: PropTypes.number,
+  updateAnswerNext: PropTypes.func
 };
 
 export default StepItem;

@@ -4,10 +4,12 @@ import ReturnIcon from '../icons/ReturnIcon.jsx';
 import { useWorkflowContext } from '../context.js';
 import strings from '../strings.json';
 
+const DEFAULT_HANDLER = () => {};
+
 export default function WorkflowHeader({
   currentTab = 0,
   projectId = '',
-  setCurrentTab = () => {},
+  setCurrentTab = DEFAULT_HANDLER,
   tabs = []
 }) {
   const { workflow } = useWorkflowContext();
@@ -84,8 +86,8 @@ function TabButton({
   id,
   index,
   label = '',
-  onClick = () => {},
-  onKeyUp = () => {},
+  onClick = DEFAULT_HANDLER,
+  onKeyUp = DEFAULT_HANDLER,
   selected = false,
   targetPanel = ''
 }) {
