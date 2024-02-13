@@ -1,8 +1,10 @@
+const DEFAULT_HANDLER = () => {};
+
 export default function BranchingControls({
   allSteps = [],
   task,
   taskKey,
-  updateAnswerNext = () => {}
+  updateAnswerNext = DEFAULT_HANDLER
 }) {
   if (!task || !taskKey) return null;
 

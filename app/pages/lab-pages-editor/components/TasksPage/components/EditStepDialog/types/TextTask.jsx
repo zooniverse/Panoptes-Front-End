@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 
+const DEFAULT_HANDLER = () => {};
+
 export default function TextTask({
   task,
   taskKey,
-  updateTask = () => {}
+  updateTask = DEFAULT_HANDLER
 }) {
   const [ help, setHelp ] = useState(task?.help || '');
   const [ instruction, setInstruction ] = useState(task?.instruction || '');

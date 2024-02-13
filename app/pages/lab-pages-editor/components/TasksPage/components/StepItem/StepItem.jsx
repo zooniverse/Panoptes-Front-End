@@ -14,16 +14,18 @@ import GripIcon from '../../../../icons/GripIcon.jsx';
 import MoveDownIcon from '../../../../icons/MoveDownIcon.jsx';
 import MoveUpIcon from '../../../../icons/MoveUpIcon.jsx';
 
+const DEFAULT_HANDLER = () => {};
+
 function StepItem({
   activeDragItem = -1,
   allSteps,
   allTasks,
-  editStep = () => {},
-  moveStep = () => {},
-  setActiveDragItem = () => {},
+  editStep = DEFAULT_HANDLER,
+  moveStep = DEFAULT_HANDLER,
+  setActiveDragItem = DEFAULT_HANDLER,
   step,
   stepIndex,
-  updateAnswerNext = () => {}
+  updateAnswerNext = DEFAULT_HANDLER
 }) {
   const [stepKey, stepBody] = step || [];
   if (!stepKey || !stepBody || !allSteps || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;

@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import MinusIcon from '../../../../../icons/MinusIcon.jsx';
 import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 
+const DEFAULT_HANDLER = () => {};
+
 export default function SingleQuestionTask({
   task,
   taskKey,
-  updateTask = () => {}
+  updateTask = DEFAULT_HANDLER
 }) {
   const [ answers, setAnswers ] = useState(task?.answers || []);
   const [ help, setHelp ] = useState(task?.help || '');
