@@ -124,6 +124,7 @@ export default function TasksPage() {
           <a
             className="flex-item button-link"
             href={previewUrl}
+            rel="noopener noreferrer"
             target='_blank'
           >
             Preview Workflow <ExternalLinkIcon />
