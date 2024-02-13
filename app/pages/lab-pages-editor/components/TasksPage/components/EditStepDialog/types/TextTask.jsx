@@ -49,18 +49,19 @@ export default function TextTask({
         {/* <button>Delete</button> */}
       </div>
       <div className="input-row">
-        <label className="narrow">
+        <span className="narrow">
           <input
+            id={`task-${taskKey}-required`}
             type="checkbox"
             checked={required}
             onChange={(e) => {
               setRequired(!!e?.target?.checked);
             }}
           />
-          <span>
+          <label htmlFor={`task-${taskKey}-required`}>
             Required
-          </span>
-        </label>
+          </label>
+        </span>
       </div>
       <div className="input-row">
         <label
