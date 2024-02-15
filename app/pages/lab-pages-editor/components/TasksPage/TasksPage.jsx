@@ -66,6 +66,9 @@ export default function TasksPage() {
   function deleteStep(stepKey) {
     // TODO
     console.log('+++ deleteStep: ', stepKey);
+    const confirmed = confirm(`Delete Page ${stepKey}?`);
+    if (!confirmed) return;
+    alert('Deleted!');
   }
 
   // aka openEditStepDialog
