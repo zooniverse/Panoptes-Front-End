@@ -81,6 +81,36 @@ export default function TasksPage() {
 
     console.log('+++ newSteps: ', steps, '\n ===> \n', newSteps);
     console.log('+++ newTasks: ', tasks, '\n ===> \n', newTasks);
+
+    cleanupTasksAndSteps(newTasks, newSteps);
+  }
+
+  /*
+  Clean up tasks and steps.
+  - Remove orphaned references in branching tasks.
+  - Remove steps without tasks.
+  - Remove tasks not associated with any step.
+   */
+  function cleanupTasksAndSteps(tasks = {}, steps = []) {
+    const newTasks = { ...tasks };  // Copy tasks
+    const newSteps = steps.slice();  // Copy steps
+
+    const taskKeys = Object.keys(newTasks);
+    const stepKeys = newSteps.map(step => step[0]);
+
+    console.log('+++ cleanupTasksAndSteps: ', taskKeys, stepKeys);
+
+    // WARNING: modifying task object.
+    // TODO: create a deep copy before modifying?
+    Object.values(tasks).forEach(taskBody => {
+      taskBody?.answers?.forEach(answer => {
+        if (answer.next && !taskKeys.includes(answer.next) && !stepKeys.includes(answer.next)) {
+          console.log('+++ answer: ', answer);
+        }
+      })
+    });
+
+    return { tasks: newTasks, steps: newSteps };
   }
 
   // aka openEditStepDialog
