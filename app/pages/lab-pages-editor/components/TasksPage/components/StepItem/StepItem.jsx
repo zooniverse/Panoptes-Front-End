@@ -20,6 +20,7 @@ function StepItem({
   activeDragItem = -1,
   allSteps,
   allTasks,
+  deleteStep = DEFAULT_HANDLER,
   editStep = DEFAULT_HANDLER,
   moveStep = DEFAULT_HANDLER,
   setActiveDragItem = DEFAULT_HANDLER,
@@ -32,7 +33,11 @@ function StepItem({
 
   const taskKeys = stepBody.taskKeys || [];
 
-  function edit() {
+  function doDelete() {
+    deleteStep(stepKey);
+  }
+
+  function doEdit() {
     editStep(stepIndex);
   }
 
@@ -93,16 +98,21 @@ function StepItem({
             </button>
           </div>
           <div className="step-controls-right">
-            <button aria-label={`Delete Page/Step ${stepKey}`} className="plain" type="button">
+            <button
+              aria-label={`Delete Page/Step ${stepKey}`}
+              className="plain"
+              onClick={doDelete}
+              type="button"
+            >
               <DeleteIcon />
             </button>
-            <button aria-label={`Copy Page/Step ${stepKey}`} className="plain" type="button">
+            <button aria-label={`Copy Page/Step ${stepKey}`} className="disabled plain" type="button">
               <CopyIcon />
             </button>
             <button
               aria-label={`Edit Page/Step ${stepKey}`}
               className="plain"
-              onClick={edit}
+              onClick={doEdit}
               type="button"
             >
               <EditIcon />
@@ -147,6 +157,7 @@ StepItem.propTypes = {
   activeDragItem: PropTypes.number,
   allSteps: PropTypes.array,
   allTasks: PropTypes.object,
+  deleteStep: PropTypes.func,
   editStep: PropTypes.func,
   moveStep: PropTypes.func,
   setActiveDragItem: PropTypes.func,

@@ -63,6 +63,11 @@ export default function TasksPage() {
     update({ steps });
   }
 
+  function deleteStep(stepKey) {
+    // TODO
+    console.log('+++ deleteStep: ', stepKey);
+  }
+
   // aka openEditStepDialog
   function editStep(stepIndex) {
     setActiveStepIndex(stepIndex);
@@ -76,6 +81,7 @@ export default function TasksPage() {
   function deleteTask(taskKey) {
     if (!taskKey) return;
 
+    // TODO
     console.log('+++ deleteTask: ', taskKey);
   }
 
@@ -139,6 +145,7 @@ export default function TasksPage() {
               activeDragItem={activeDragItem}
               allSteps={workflow.steps}
               allTasks={workflow.tasks}
+              deleteStep={deleteStep}
               editStep={editStep}
               moveStep={moveStep}
               setActiveDragItem={setActiveDragItem}
