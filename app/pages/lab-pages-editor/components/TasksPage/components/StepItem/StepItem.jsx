@@ -34,7 +34,7 @@ function StepItem({
   const taskKeys = stepBody.taskKeys || [];
 
   function doDelete() {
-    deleteStep(stepKey);
+    deleteStep(stepIndex);
   }
 
   function doEdit() {

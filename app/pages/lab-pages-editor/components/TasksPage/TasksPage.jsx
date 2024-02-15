@@ -63,12 +63,24 @@ export default function TasksPage() {
     update({ steps });
   }
 
-  function deleteStep(stepKey) {
+  function deleteStep(stepIndex) {
+    if (!workflow) return;
+    const { steps, tasks } = workflow;
+    const [ stepKey, stepBody ] = steps[stepIndex] || [];
+    const tasksToBeDeleted = stepBody?.taskKeys || [];
+
+    // const confirmed = confirm(`Delete Page ${stepKey}?`);
+    // if (!confirmed) return;
+
     // TODO
-    console.log('+++ deleteStep: ', stepKey);
-    const confirmed = confirm(`Delete Page ${stepKey}?`);
-    if (!confirmed) return;
-    alert('Deleted!');
+    console.log('+++ deleteStep: ', stepKey, stepBody, tasksToBeDeleted);
+
+    const newSteps = steps.toSpliced(stepIndex, 1);  // Copy then delete Step at stepIndex
+    const newTasks = tasks ? { ...tasks } : {};  // Copy tasks
+    tasksToBeDeleted.forEach(taskKey => delete newTasks[taskKey]);
+
+    console.log('+++ newSteps: ', steps, '\n ===> \n', newSteps);
+    console.log('+++ newTasks: ', tasks, '\n ===> \n', newTasks);
   }
 
   // aka openEditStepDialog
