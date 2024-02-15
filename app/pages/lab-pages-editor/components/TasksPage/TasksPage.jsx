@@ -74,7 +74,9 @@ export default function TasksPage() {
   }
 
   function deleteTask(taskKey) {
-    // TODO
+    if (!taskKey) return;
+
+    console.log('+++ deleteTask: ', taskKey);
   }
 
   function updateTask(taskKey, task) {
