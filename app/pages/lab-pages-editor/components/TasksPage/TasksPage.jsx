@@ -82,9 +82,9 @@ export default function TasksPage() {
 
   /*
   Clean up tasks and steps.
-  - Remove orphaned references in branching tasks.
   - TODO: Remove steps without tasks.
   - TODO: Remove tasks not associated with any step.
+  - Remove orphaned references in branching tasks.
    */
   function cleanupTasksAndSteps(tasks = {}, steps = []) {
     const newTasks = structuredClone(tasks);  // Copy tasks
@@ -93,7 +93,7 @@ export default function TasksPage() {
     const taskKeys = Object.keys(newTasks);
     const stepKeys = newSteps.map(step => step[0]);
 
-    Object.values(tasks).forEach(taskBody => {
+    Object.values(newTasks).forEach(taskBody => {
       taskBody?.answers?.forEach(answer => {
         // If the branching answer points to a non-existent Task Key or Step Key, remove the 'next'.
         if (answer.next && !taskKeys.includes(answer.next) && !stepKeys.includes(answer.next)) {
