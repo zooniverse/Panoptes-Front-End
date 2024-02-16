@@ -50,9 +50,29 @@ export default function TasksPage() {
     });
   }
 
-  function experimentalLinkSteps() {
-    const newSteps = linkStepsInWorkflow(workflow?.steps, workflow?.tasks);
-    update({ steps: newSteps });
+  function experimentalQuickSetup() {
+    update({
+      tasks: {
+        'T0': {
+          answers: [
+            {next: "P1", label: "Animals"},
+            {next: "P2", label: "Fruits"},
+            {label: "Neither"}
+          ],
+          help: '',
+          question: 'Do you like Animals or Fruits?',
+          required: false,
+          type: 'single'
+        },
+        'T1': { help: '', type: 'text', required: false, instruction: 'Which animal?' },
+        'T2': { help: '', type: 'text', required: false, instruction: 'Which fruit?' }
+      },
+      steps: [
+        ['P0', { next: 'P1', stepKey: 'P0', taskKeys: ["T0"] }],
+        ['P1', { next: 'P2', stepKey: 'P1', taskKeys: ["T1"] }],
+        ['P2', { stepKey: 'P2', taskKeys: ["T2"] }]
+      ]
+    });
   }
 
   function moveStep(from, to) {
@@ -223,19 +243,11 @@ export default function TasksPage() {
           </button>
           <button
             className="big"
-            onClick={experimentalLinkSteps}
+            onClick={experimentalQuickSetup}
             type="button"
             style={{ margin: '0 4px' }}
           >
-            LINK
-          </button>
-          <button
-            className="big"
-            onClick={editStep}
-            type="button"
-            style={{ margin: '0 4px' }}
-          >
-            EDIT STEP
+            QUICK SETUP
           </button>
         </div>
       </section>
