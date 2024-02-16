@@ -69,43 +69,35 @@ export default function TasksPage() {
     const [ stepKey, stepBody ] = steps[stepIndex] || [];
     const tasksToBeDeleted = stepBody?.taskKeys || [];
 
-    // const confirmed = confirm(`Delete Page ${stepKey}?`);
-    // if (!confirmed) return;
-
-    // TODO
-    console.log('+++ deleteStep: ', stepKey, stepBody, tasksToBeDeleted);
+    const confirmed = confirm(`Delete Page ${stepKey}?`);
+    if (!confirmed) return;
 
     const newSteps = steps.toSpliced(stepIndex, 1);  // Copy then delete Step at stepIndex
     const newTasks = tasks ? { ...tasks } : {};  // Copy tasks
     tasksToBeDeleted.forEach(taskKey => delete newTasks[taskKey]);
 
-    console.log('+++ newSteps: ', steps, '\n ===> \n', newSteps);
-    console.log('+++ newTasks: ', tasks, '\n ===> \n', newTasks);
-
-    cleanupTasksAndSteps(newTasks, newSteps);
+    const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
+    update(cleanedTasksAndSteps);
   }
 
   /*
   Clean up tasks and steps.
   - Remove orphaned references in branching tasks.
-  - Remove steps without tasks.
-  - Remove tasks not associated with any step.
+  - TODO: Remove steps without tasks.
+  - TODO: Remove tasks not associated with any step.
    */
   function cleanupTasksAndSteps(tasks = {}, steps = []) {
-    const newTasks = { ...tasks };  // Copy tasks
+    const newTasks = structuredClone(tasks);  // Copy tasks
     const newSteps = steps.slice();  // Copy steps
 
     const taskKeys = Object.keys(newTasks);
     const stepKeys = newSteps.map(step => step[0]);
 
-    console.log('+++ cleanupTasksAndSteps: ', taskKeys, stepKeys);
-
-    // WARNING: modifying task object.
-    // TODO: create a deep copy before modifying?
     Object.values(tasks).forEach(taskBody => {
       taskBody?.answers?.forEach(answer => {
+        // If the branching answer points to a non-existent Task Key or Step Key, remove the 'next'.
         if (answer.next && !taskKeys.includes(answer.next) && !stepKeys.includes(answer.next)) {
-          console.log('+++ answer: ', answer);
+          delete answer.next;
         }
       })
     });
@@ -125,9 +117,7 @@ export default function TasksPage() {
 
   function deleteTask(taskKey) {
     if (!taskKey) return;
-
     // TODO
-    console.log('+++ deleteTask: ', taskKey);
   }
 
   function updateTask(taskKey, task) {
