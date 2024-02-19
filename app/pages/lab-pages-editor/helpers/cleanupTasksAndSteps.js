@@ -5,7 +5,10 @@ Clean up tasks and steps.
 - Remove orphaned references in branching tasks.
 
 - Returns { tasks, steps }
-  */
+ */
+
+import linkStepsInWorkflow from './linkStepsInWorkflow.js';
+
 export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
   const newTasks = structuredClone(tasks);  // Copy tasks
   const newSteps = steps.slice();  // Copy steps
@@ -13,6 +16,7 @@ export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
   const taskKeys = Object.keys(newTasks);
   const stepKeys = newSteps.map(step => step[0]);
 
+  // Remove orphaned references in branching tasks.
   Object.values(newTasks).forEach(taskBody => {
     taskBody?.answers?.forEach(answer => {
       // If the branching answer points to a non-existent Task Key or Step Key, remove the 'next'.
@@ -22,5 +26,8 @@ export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
     })
   });
 
-  return { tasks: newTasks, steps: newSteps };
+  // Remember to re-link steps to close gaps created by missing Steps.
+  const newStepsLinked = linkStepsInWorkflow(newSteps, newTasks);
+
+  return { tasks: newTasks, steps: newStepsLinked };
 }
