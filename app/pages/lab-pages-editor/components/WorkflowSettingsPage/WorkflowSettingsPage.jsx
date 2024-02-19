@@ -1,5 +1,4 @@
-import { useWorkflowContext } from '../context.js';
-import strings from '../strings.json'; // TODO: move all text into strings
+import { useWorkflowContext } from '../../context.js';
 
 export default function WorkflowSettingsPage() {
   const { workflow, update } = useWorkflowContext();

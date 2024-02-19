@@ -14,12 +14,13 @@ import PropTypes from 'prop-types';
 import DataManager from './DataManager.jsx';
 import WorkflowHeader from './components/WorkflowHeader.jsx';
 import TasksPage from './components/TasksPage';
-import WorkflowSettingsPage from './components/WorkflowSettingsPage.jsx';
+import WorkflowSettingsPage from './components/WorkflowSettingsPage';
 import strings from './strings.json';
 
 function PagesEditor({ params }) {
   const { workflowID: workflowId, projectID: projectId } = params;
-  const [currentTab, setCurrentTab] = useState(0);
+  // const [currentTab, setCurrentTab] = useState(0);
+  const [currentTab, setCurrentTab] = useState(1);  // TEMP: set default tab to WorkflowSettingsPage while in development.
   const tabs = [
     {
       id: 'pages-editor_workflow-header-tab-button_task',
