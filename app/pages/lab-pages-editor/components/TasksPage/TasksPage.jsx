@@ -140,8 +140,8 @@ export default function TasksPage() {
     update({ tasks: newTasks });
   }
 
-  console.log('+++ project: ', project);
-  const previewUrl = 'https://frontend.preview.zooniverse.org/projects/darkeshard/example-1982/classify/workflow/3711?env=staging';
+  const previewEnv = getPreviewEnv();
+  const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;
   if (!workflow) return null;
 
   return (
@@ -230,4 +230,22 @@ export default function TasksPage() {
       </section>
     </div>
   );
+}
+
+function getPreviewEnv() {
+  const hostname = window?.location?.hostname || '';
+  const params = new URLSearchParams(window?.location?.search);
+  const explicitEnv = params.get('env');
+
+  // If an explicit ?env=... is specified, use that.
+  if (explicitEnv) return `?env=${explicitEnv}`;
+
+  // The following URLs default to using staging:
+  // https://local.zooniverse.org:3735/lab/1982/workflows/editor/3711
+  // https://pr-7046.pfe-preview.zooniverse.org/lab/1982/workflows/editor/3711?env=staging
+  if (hostname.match(/^(local|.*\.pfe-preview)\.zooniverse\.org$/ig)) {
+    return '?env=staging'
+  }
+
+  return '';
 }
