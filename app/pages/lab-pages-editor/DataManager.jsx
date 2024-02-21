@@ -2,6 +2,10 @@
 Data Manager
 Responsible for fetching, updating, and saving Workflow resources from/to
 the Panoptes service.
+
+Also fetches the project resource for secondary purposes. (e.g. figuring out
+which Subject Sets are available for the workflow, available experimental tools,
+and the workflow's preview URL.)
  */
 
 // ESLint: don't import global React, and don't use .defaultProps.
@@ -68,6 +72,7 @@ function DataManager({
   }, [workflowId]);
 
   // Listen for workflow changes, and update a counter to prompt useMemo to update the context.
+  // NOTE: we're not listening for *project* changes, as the DataManager isn't meant to update that resource.
   useEffect(() => {
     const wf = apiData.workflow;
     function onWorkflowChange() {
@@ -94,19 +99,21 @@ function DataManager({
 
       const newWorkflow = await wf.update(data).save();
 
-      setApiData({
+      setApiData((prevState) => ({
+        ...prevState,
         workflow: newWorkflow, // Note: newWorkflow is actually the same as the old wf, so useMemo will have to listen to status changing instead.
         status: 'ready'
-      });
+      }));
 
       return newWorkflow;
     }
 
     return {
+      project: apiData.project,
       workflow: apiData.workflow,
       update
     };
-  }, [apiData.workflow, updateCounter]);
+  }, [apiData.project, apiData.workflow, updateCounter]);
 
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
   // if (!workflow) return null

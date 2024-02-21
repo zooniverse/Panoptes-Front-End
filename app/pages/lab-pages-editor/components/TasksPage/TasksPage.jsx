@@ -15,7 +15,7 @@ import StepItem from './components/StepItem';
 import ExternalLinkIcon from '../../icons/ExternalLinkIcon.jsx';
 
 export default function TasksPage() {
-  const { workflow, update } = useWorkflowContext();
+  const { project, workflow, update } = useWorkflowContext();
   const editStepDialog = useRef(null);
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
@@ -140,6 +140,7 @@ export default function TasksPage() {
     update({ tasks: newTasks });
   }
 
+  console.log('+++ project: ', project);
   const previewUrl = 'https://frontend.preview.zooniverse.org/projects/darkeshard/example-1982/classify/workflow/3711?env=staging';
   if (!workflow) return null;
 
