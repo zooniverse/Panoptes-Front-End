@@ -38,6 +38,7 @@ function PagesEditor({ params }) {
       <div className="lab-pages-editor">
         <DataManager
           key={workflowId || '-'} //
+          projectId={projectId}
           workflowId={workflowId}
         >
           <WorkflowHeader

@@ -17,9 +17,11 @@ import { WorkflowContext } from './context.js';
 function DataManager({
   // key: to ensure DataManager renders FRESH (with states reset) whenever workflowId changes, use <DataManager key={workflowId} ... />
   children = null,
+  projectId = '',
   workflowId = ''
 }) {
   const [apiData, setApiData] = useState({
+    project: null,
     workflow: null,
     status: 'ready'
   });
@@ -31,30 +33,38 @@ function DataManager({
   // Also see general pattern notes:
   // https://react.dev/reference/react/useEffect#fetching-data-with-effects
   useEffect(() => {
-    async function fetchWorkflow() {
+    async function fetchProjectAndWorkflow() {
       try {
         setApiData({
+          project: null,
           workflow: null,
           status: 'fetching'
         });
 
-        const wf = await apiClient.type('workflows').get(workflowId);
+        const [ proj, wf ] = await Promise.all([
+          apiClient.type('projects').get(projectId),
+          apiClient.type('workflows').get(workflowId)
+        ]);
+        if (!proj) throw new Error('No project');
         if (!wf) throw new Error('No workflow');
 
         setApiData({
+          project: proj,
           workflow: wf,
           status: 'ready'
         });
+
       } catch (err) {
         console.error('DataManager: ', err);
         setApiData({
+          project: null,
           workflow: null,
           status: 'error'
         });
       }
     }
 
-    fetchWorkflow();
+    fetchProjectAndWorkflow();
   }, [workflowId]);
 
   // Listen for workflow changes, and update a counter to prompt useMemo to update the context.
@@ -116,6 +126,7 @@ DataManager.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
+  projectId: PropTypes.string,
   workflowId: PropTypes.string
 };
 
