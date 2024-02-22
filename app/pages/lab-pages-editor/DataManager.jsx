@@ -122,7 +122,12 @@ function DataManager({
     <WorkflowContext.Provider
       value={contextData}
     >
-      <div>{apiData.status}</div>
+      {apiData.status === 'fetching' && (
+        <div className="status-banner fetching">Fetching data...</div>
+      )}
+      {apiData.status === 'error' && (
+        <div className="status-banner error">ERROR: could not fetch data</div>
+      )}
       {children}
     </WorkflowContext.Provider>
   );
