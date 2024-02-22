@@ -2,7 +2,7 @@ import { useWorkflowContext } from '../../context.js';
 import AssociatedSubjectSets from './components/AssociatedSubjectSets.jsx';
 
 export default function WorkflowSettingsPage() {
-  const { workflow, update } = useWorkflowContext();
+  const { workflow, update, project } = useWorkflowContext();
 
   function onSubmit(e) {
     e.preventDefault();
@@ -55,8 +55,7 @@ export default function WorkflowSettingsPage() {
         <fieldset>
           <legend>Associated Subject Sets</legend>
           <p>Choose the set of subjects you want to use for this workflow. Add subject sets in the Subject Sets tab.</p>
-          <p>TODO</p>
-          <AssociatedSubjectSets workflow={workflow} />
+          <AssociatedSubjectSets project={project} workflow={workflow} />
         </fieldset>
 
         <fieldset>

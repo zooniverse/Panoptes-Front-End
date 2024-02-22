@@ -124,6 +124,17 @@ $fontWeightBoldPlus = 700
   .decoration-plus
     &::after
       content: ' +'
+  
+  .status-banner
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    padding: 0.5em
+
+    &.error
+      background: $redBright
+      color: $white
 
   // General Layout
   // ---------------------------------------------------------------------------
