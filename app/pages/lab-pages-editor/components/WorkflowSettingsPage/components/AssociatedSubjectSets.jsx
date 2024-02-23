@@ -7,6 +7,7 @@ export default function AssociatedSubjectSets({ project, workflow }) {
     subjectSets: null,
     status: 'ready'
   });
+  const [linkedSubjectSets, setLinkedSubjectSets] = useState(workflow?.links?.subject_sets || []);
 
   useEffect(() => {
     async function fetchSubjectSets() {
@@ -36,6 +37,18 @@ export default function AssociatedSubjectSets({ project, workflow }) {
     fetchSubjectSets();
   }, [project, workflow]);
 
+  function toggleSubjectSet(e) {
+    const subjectSetId = e?.currentTarget?.dataset?.subjectset;
+    if (!subjectSetId) return;
+    const alreadyLinked = linkedSubjectSets.includes(subjectSetId);
+
+    if (alreadyLinked) {
+      setLinkedSubjectSets(linkedSubjectSets.filter(sset => sset !== subjectSetId));
+    } else {
+      setLinkedSubjectSets([ ...linkedSubjectSets, subjectSetId]);  // Copy, then push
+    }
+  }
+
   if (!project || !workflow) return null;
 
   if (apiData.status === 'fetching') {
@@ -48,10 +61,20 @@ export default function AssociatedSubjectSets({ project, workflow }) {
 
   return (
     <ul className="checkbox-group">
+      <li>DEBUG (state): {(linkedSubjectSets).join(' , ')}</li>
+      <li>DEBUG (workflow): {(workflow?.links?.subject_sets || []).join(' , ')}</li>
       {apiData?.subjectSets?.map((subjectSet, index) => (
         <li key={`associated-subject-set-${subjectSet.id}`}>
-          <input id={`associated-subject-set-${subjectSet.id}`} type="checkbox" />
-          <label htmlFor={`associated-subject-set-${subjectSet.id}`}>{subjectSet.display_name || '???'}</label>
+          <input
+            checked={!!linkedSubjectSets.includes(subjectSet.id)}
+            data-subjectset={subjectSet.id}
+            id={`associated-subject-set-${subjectSet.id}`}
+            onChange={toggleSubjectSet}
+            type="checkbox"
+          />
+          <label htmlFor={`associated-subject-set-${subjectSet.id}`}>
+            {subjectSet.display_name || '???'} (#{subjectSet.id})
+          </label>
         </li>
       ))}
     </ul>
