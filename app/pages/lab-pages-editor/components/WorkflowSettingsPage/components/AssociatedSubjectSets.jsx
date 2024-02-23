@@ -17,7 +17,7 @@ export default function AssociatedSubjectSets({ project, workflow }) {
           status: 'fetching'
         });
 
-        const ssets = await project.get('subject_sets', { sort: '-id', page_size: ARBITRARY_PAGE_SIZE });
+        const ssets = await project.get('subject_sets', { sort: '+id', page_size: ARBITRARY_PAGE_SIZE });
         if (!ssets) throw new Error('No subject sets');
 
         setApiData({
@@ -42,10 +42,12 @@ export default function AssociatedSubjectSets({ project, workflow }) {
     if (!subjectSetId) return;
     const alreadyLinked = linkedSubjectSets.includes(subjectSetId);
 
-    if (alreadyLinked) {
+    if (alreadyLinked) {  // If already linked, remove it.
       setLinkedSubjectSets(linkedSubjectSets.filter(sset => sset !== subjectSetId));
-    } else {
-      setLinkedSubjectSets([ ...linkedSubjectSets, subjectSetId]);  // Copy, then push
+      workflow.removeLink('subject_sets', [subjectSetId]);
+    } else {  // If not yet linked, add it.
+      setLinkedSubjectSets([ ...linkedSubjectSets, subjectSetId]);
+      workflow.addLink('subject_sets', [subjectSetId]);
     }
   }
 
@@ -61,8 +63,6 @@ export default function AssociatedSubjectSets({ project, workflow }) {
 
   return (
     <ul className="checkbox-group">
-      <li>DEBUG (state): {(linkedSubjectSets).join(' , ')}</li>
-      <li>DEBUG (workflow): {(workflow?.links?.subject_sets || []).join(' , ')}</li>
       {apiData?.subjectSets?.map((subjectSet, index) => (
         <li key={`associated-subject-set-${subjectSet.id}`}>
           <input
