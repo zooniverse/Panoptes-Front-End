@@ -147,99 +147,14 @@ export default function WorkflowSettingsPage() {
 
         <hr />
 
-        <fieldset>
+        <fieldset className="disabled">
           <legend>Classification Tools</legend>
-          <p>TEST: HTML and styling for checkbox input</p>
-          <label
-            htmlFor="placeholder-1"
-            className="flex-row align-start spacing-bottom-XS"
-          >
-            <input
-              type="checkbox"
-              id="placeholder-1"
-              name="placeholder-1"
-              onChange={testUpdate}
-            />
-            <span>Placeholder 1</span>
-          </label>
-          <label
-            htmlFor="placeholder-2"
-            className="flex-row align-start spacing-bottom-XS"
-          >
-            <input
-              defaultChecked={true}
-              type="checkbox"
-              id="placeholder-2"
-              name="placeholder-2"
-              onChange={testUpdate}
-            />
-            <span>
-              Placeholder 2 -
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel tellus quam.
-            </span>
-          </label>
-          <label
-            htmlFor="placeholder-3"
-            className="flex-row align-start spacing-bottom-XS"
-          >
-            <input
-              type="checkbox"
-              id="placeholder-3"
-              name="placeholder-3"
-              onChange={testUpdate}
-            />
-            <span>
-              Placeholder 3 -
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel tellus quam.
-              Praesent lobortis dapibus nisi, ultricies blandit quam mattis vel.
-              Nunc consequat sem finibus, facilisis augue quis, euismod velit.
-            </span>
-          </label>
+          <p>TODO</p>
         </fieldset>
 
-        <fieldset>
+        <fieldset className="disabled">
           <legend>Quicktalk</legend>
-          <p>TEST: HTML and styling for radio options</p>
-          <label
-            className="flex-row align-start spacing-bottom-XS"
-            htmlFor="placeholder-4-a"
-          >
-            <input
-              type="radio"
-              id="placeholder-4-a"
-              name="placeholder-4"
-              onChange={testUpdate}
-              value="Option A"
-            />
-            <span>Placeholder 4, Option A</span>
-          </label>
-          <label
-            className="flex-row align-start spacing-bottom-XS"
-            htmlFor="placeholder-4-b"
-          >
-            <input
-              defaultChecked={true}
-              type="radio"
-              id="placeholder-4-b"
-              name="placeholder-4"
-              onChange={testUpdate}
-              value="Option B"
-            />
-            <span>Placeholder 4, Option B</span>
-          </label>
-          <label
-            className="flex-row align-start spacing-bottom-XS"
-            htmlFor="placeholder-4-c"
-          >
-            <input
-              type="radio"
-              id="placeholder-4-c"
-              name="placeholder-4"
-              onChange={testUpdate}
-              value="Option C"
-            />
-            <span>Placeholder 4, Option C</span>
-          </label>
+          <p>TODO</p>
         </fieldset>
 
       </div>
