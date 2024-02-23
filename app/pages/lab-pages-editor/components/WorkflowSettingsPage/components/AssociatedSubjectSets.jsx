@@ -62,7 +62,7 @@ export default function AssociatedSubjectSets({ project, workflow }) {
   }
 
   return (
-    <ul className="checkbox-group">
+    <ul className="input-group">
       {apiData?.subjectSets?.map((subjectSet, index) => (
         <li key={`associated-subject-set-${subjectSet.id}`}>
           <input
