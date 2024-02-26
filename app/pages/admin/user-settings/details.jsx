@@ -21,7 +21,7 @@ const UserDetails = (props) => {
         <li>Display name: {props.user.display_name}</li>
         <li>Email address: {props.user.email}</li>
         <li>Signed up: {created.toString()}</li>
-        <li>Email confirmed at: {props.user.confirmed_at}</li>
+        <li>Email confirmed at: {props.user.confirmed_at ?? "Not Confirmed"}</li>
         <li>
           <label>
             Valid email:{' '}
