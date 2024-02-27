@@ -7,6 +7,7 @@ import handleInputChange from '../../../lib/handle-input-change';
 const UserDetails = (props) => {
   const handleUserChange = handleInputChange.bind(props.user);
   const created = new Date(props.user.created_at)
+  const confirmed = props.user.confirmed_at ? new Date(props.user.confirmed_at) : 'Not Confirmed'
 
   function onChange(e) {
     handleUserChange(e);
@@ -21,7 +22,7 @@ const UserDetails = (props) => {
         <li>Display name: {props.user.display_name}</li>
         <li>Email address: {props.user.email}</li>
         <li>Signed up: {created.toString()}</li>
-        <li>Email confirmed at: {props.user.confirmed_at ?? "Not Confirmed"}</li>
+        <li>Email confirmed at: {confirmed.toString()}</li>
         <li>
           <label>
             Valid email:{' '}
