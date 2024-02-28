@@ -13,25 +13,32 @@ export default function AssociatedTutorial({ project, workflow }) {
   useEffect(() => {
     async function fetchTutorials() {
       try {
+        if (!workflow || !project) throw new Error('No workflow and/or no project.');
+
         setApiData({
           tutorials: null,
           status: 'fetching'
         });
 
-        const tutorials = await apiClient.type('tutorials').get({ project_id: project.id, page_size: ARBITRARY_PAGE_SIZE });
-        if (!tutorials) throw new Error('No tutorials');
+        // First we need to fetch all tutorials associated with the project.
+        const tutorialsLinkedToProject = await apiClient.type('tutorials').get({ project_id: project.id, page_size: ARBITRARY_PAGE_SIZE });
+        if (!tutorialsLinkedToProject) throw new Error('No tutorials');
 
+        // Now we need to fetch all tutorials associated with the workflow!
+        // There should be only one linked workflow, at maximum.
+        const tutorialsLinkedToWorkflow = await apiClient.type('tutorials').get({ workflow_id: workflow.id, page_size: ARBITRARY_PAGE_SIZE });
+        const currentlyLinkedWorkflowId = tutorialsLinkedToWorkflow?.[0]?.id || null;
+
+        setLinkedTutorial(currentlyLinkedWorkflowId);
         setApiData({
-          tutorials,
+          tutorials: tutorialsLinkedToProject,
           status: 'ready'
         });
-
-        console.log('+++ tutorials', tutorials);
 
       } catch (err) {
         console.error('AssosicatedTutorial: ', err);
         setApiData({
-          subjectSets: null,
+          tutorials: null,
           status: 'error'
         });
       }
@@ -42,16 +49,49 @@ export default function AssociatedTutorial({ project, workflow }) {
 
   function selectTutorial(e) {
     const tutorialId = e?.currentTarget?.dataset?.tutorial;
+    updateWorkflow(tutorialId);
+  }
 
-    console.log('+++ selectTutorial: ', tutorialId)
-    
-    setLinkedTutorial(tutorialId);
+  async function updateWorkflow(tutorialId = null) {
+    try {
+      if (tutorialId === linkedTutorial) return;
+      if (!workflow || !project) throw new Error('No workflow and/or no project.');
+
+      setApiData({
+        ...apiData,
+        status: 'updating'
+      });
+
+      if (linkedTutorial) { // Unlink any current tutorial...
+        await workflow.removeLink('tutorials', linkedTutorial);
+      }
+
+      if (tutorialId) { // ...before linking a new one
+        await workflow.addLink('tutorials', [tutorialId]);
+      }
+
+      setLinkedTutorial(tutorialId);
+      setApiData({
+        ...apiData,
+        status: 'ready'
+      });
+    } catch (err) {
+      console.error('AssosicatedTutorial: ', err);
+      setApiData({
+        ...apiData,
+        status: 'error'
+      });
+    }
   }
 
   if (!project || !workflow) return null;
 
   if (apiData.status === 'fetching') {
     return (<div className="status-banner fetching">Fetching Tutorials...</div>)
+  }
+
+  if (apiData.status === 'updating') {
+    return (<div className="status-banner updating">Updating...</div>)
   }
 
   if (apiData.status === 'error') {
