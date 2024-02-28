@@ -19,7 +19,8 @@ import strings from './strings.json';
 
 function PagesEditor({ params }) {
   const { workflowID: workflowId, projectID: projectId } = params;
-  const [currentTab, setCurrentTab] = useState(0);
+  // const [currentTab, setCurrentTab] = useState(0);
+  const [currentTab, setCurrentTab] = useState(1);  // TEMPORARY
   const tabs = [
     {
       id: 'pages-editor_workflow-header-tab-button_task',
