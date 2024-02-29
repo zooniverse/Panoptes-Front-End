@@ -6,6 +6,7 @@ import getNewStepKey from '../../helpers/getNewStepKey.js';
 import getNewTaskKey from '../../helpers/getNewTaskKey.js';
 import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
+import cleanupTasksAndSteps from '../../helpers/cleanupTasksAndSteps.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import EditStepDialog from './components/EditStepDialog';
@@ -50,9 +51,29 @@ export default function TasksPage() {
     });
   }
 
-  function experimentalLinkSteps() {
-    const newSteps = linkStepsInWorkflow(workflow?.steps, workflow?.tasks);
-    update({ steps: newSteps });
+  function experimentalQuickSetup() {
+    update({
+      tasks: {
+        'T0': {
+          answers: [
+            {next: "P1", label: "Animals"},
+            {next: "P2", label: "Fruits"},
+            {label: "Neither"}
+          ],
+          help: '',
+          question: 'Do you like Animals or Fruits?',
+          required: false,
+          type: 'single'
+        },
+        'T1': { help: '', type: 'text', required: false, instruction: 'Which animal?' },
+        'T2': { help: '', type: 'text', required: false, instruction: 'Which fruit?' }
+      },
+      steps: [
+        ['P0', { next: 'P1', stepKey: 'P0', taskKeys: ["T0"] }],
+        ['P1', { next: 'P2', stepKey: 'P1', taskKeys: ["T1"] }],
+        ['P2', { stepKey: 'P2', taskKeys: ["T2"] }]
+      ]
+    });
   }
 
   function moveStep(from, to) {
@@ -61,6 +82,23 @@ export default function TasksPage() {
 
     const steps = linkStepsInWorkflow(moveItemInArray(oldSteps, from, to));
     update({ steps });
+  }
+
+  function deleteStep(stepIndex) {
+    if (!workflow) return;
+    const { steps, tasks } = workflow;
+    const [ stepKey, stepBody ] = steps[stepIndex] || [];
+    const tasksToBeDeleted = stepBody?.taskKeys || [];
+
+    const confirmed = confirm(`Delete Page ${stepKey}?`);
+    if (!confirmed) return;
+
+    const newSteps = steps.toSpliced(stepIndex, 1);  // Copy then delete Step at stepIndex
+    const newTasks = tasks ? { ...tasks } : {};  // Copy tasks
+    tasksToBeDeleted.forEach(taskKey => delete newTasks[taskKey]);
+
+    const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
+    update(cleanedTasksAndSteps);
   }
 
   // aka openEditStepDialog
@@ -74,6 +112,7 @@ export default function TasksPage() {
   }
 
   function deleteTask(taskKey) {
+    if (!taskKey) return;
     // TODO
   }
 
@@ -137,6 +176,7 @@ export default function TasksPage() {
               activeDragItem={activeDragItem}
               allSteps={workflow.steps}
               allTasks={workflow.tasks}
+              deleteStep={deleteStep}
               editStep={editStep}
               moveStep={moveStep}
               setActiveDragItem={setActiveDragItem}
@@ -179,19 +219,11 @@ export default function TasksPage() {
           </button>
           <button
             className="big"
-            onClick={experimentalLinkSteps}
+            onClick={experimentalQuickSetup}
             type="button"
             style={{ margin: '0 4px' }}
           >
-            LINK
-          </button>
-          <button
-            className="big"
-            onClick={editStep}
-            type="button"
-            style={{ margin: '0 4px' }}
-          >
-            EDIT STEP
+            QUICK SETUP
           </button>
         </div>
       </section>

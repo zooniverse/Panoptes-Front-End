@@ -16,7 +16,7 @@ export default function SingleQuestionTask({
   const [ required, setRequired ] = useState(!!task?.required);
 
   // Update is usually called manually onBlur, after user input is complete.
-  function update(optionalStateOverrides) { 
+  function update(optionalStateOverrides) {
     const _answers = optionalStateOverrides?.answers || answers
     const nonEmptyAnswers = _answers.filter(({ label }) => label.trim().length > 0);
 
@@ -49,15 +49,14 @@ export default function SingleQuestionTask({
   }
 
   function deleteAnswer(e) {
-    console.log('+++ deleteAnswer', e?.target)
     const index = e?.target?.dataset?.index;
     if (index === undefined || index < 0 || index >= answers.length) return;
 
     const newAnswers = answers.slice()
     newAnswers.splice(index, 1);
     setAnswers(newAnswers);
-    update({ answer: newAnswers });  // Use optional state override, since setAnswers() won't reflect new values in this step of the lifecycle.
-
+    update({ answers: newAnswers });  // Use optional state override, since setAnswers() won't reflect new values in this step of the lifecycle.
+    
     e.preventDefault();
     return false;
   }
