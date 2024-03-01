@@ -7,6 +7,7 @@ import getNewTaskKey from '../../helpers/getNewTaskKey.js';
 import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 import cleanupTasksAndSteps from '../../helpers/cleanupTasksAndSteps.js';
+import getPreviewEnv from '../../helpers/getPreviewEnv.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import EditStepDialog from './components/EditStepDialog';
@@ -230,22 +231,4 @@ export default function TasksPage() {
       </section>
     </div>
   );
-}
-
-function getPreviewEnv() {
-  const hostname = window?.location?.hostname || '';
-  const params = new URLSearchParams(window?.location?.search);
-  const explicitEnv = params.get('env');
-
-  // If an explicit ?env=... is specified, use that.
-  if (explicitEnv) return `?env=${explicitEnv}`;
-
-  // The following URLs default to using staging:
-  // https://local.zooniverse.org:3735/lab/1982/workflows/editor/3711
-  // https://pr-7046.pfe-preview.zooniverse.org/lab/1982/workflows/editor/3711?env=staging
-  if (hostname.match(/^(local|.*\.pfe-preview)\.zooniverse\.org$/ig)) {
-    return '?env=staging'
-  }
-
-  return '';
 }
