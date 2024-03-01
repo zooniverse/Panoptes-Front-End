@@ -7,6 +7,7 @@ import getNewTaskKey from '../../helpers/getNewTaskKey.js';
 import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 import cleanupTasksAndSteps from '../../helpers/cleanupTasksAndSteps.js';
+import getPreviewEnv from '../../helpers/getPreviewEnv.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import EditStepDialog from './components/EditStepDialog';
@@ -15,7 +16,7 @@ import StepItem from './components/StepItem';
 import ExternalLinkIcon from '../../icons/ExternalLinkIcon.jsx';
 
 export default function TasksPage() {
-  const { workflow, update } = useWorkflowContext();
+  const { project, workflow, update } = useWorkflowContext();
   const editStepDialog = useRef(null);
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
@@ -140,7 +141,8 @@ export default function TasksPage() {
     update({ tasks: newTasks });
   }
 
-  const previewUrl = 'https://frontend.preview.zooniverse.org/projects/darkeshard/example-1982/classify/workflow/3711?env=staging';
+  const previewEnv = getPreviewEnv();
+  const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;
   if (!workflow) return null;
 
   return (

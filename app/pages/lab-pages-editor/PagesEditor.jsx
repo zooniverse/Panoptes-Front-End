@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 import DataManager from './DataManager.jsx';
 import WorkflowHeader from './components/WorkflowHeader.jsx';
 import TasksPage from './components/TasksPage';
-import WorkflowSettingsPage from './components/WorkflowSettingsPage.jsx';
+import WorkflowSettingsPage from './components/WorkflowSettingsPage';
 import strings from './strings.json';
 
 function PagesEditor({ params }) {
@@ -37,6 +37,7 @@ function PagesEditor({ params }) {
       <div className="lab-pages-editor">
         <DataManager
           key={workflowId || '-'} //
+          projectId={projectId}
           workflowId={workflowId}
         >
           <WorkflowHeader

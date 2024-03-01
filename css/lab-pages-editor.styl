@@ -48,7 +48,7 @@ $fontWeightBoldPlus = 700
   font-size: $fontSizeM
   max-width: 840px
   margin: 0 auto
-  padding: 0 $sizeM
+  padding: $sizeM $sizeM
 
   // General UI
   // ---------------------------------------------------------------------------
@@ -124,6 +124,17 @@ $fontWeightBoldPlus = 700
   .decoration-plus
     &::after
       content: ' +'
+  
+  .status-banner
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    padding: 0.5em
+
+    &.error
+      background: $redBright
+      color: $white
 
   // General Layout
   // ---------------------------------------------------------------------------
@@ -236,6 +247,21 @@ $fontWeightBoldPlus = 700
     .col-2
       grid-column: 2
       grid-row: 2
+    
+    ul.input-group
+      list-style: none
+      padding: 0
+      margin: 0
+
+      li
+        display: flex
+        flex-direction: row
+        gap: $sizeXS
+        margin: $sizeXS 0
+        padding: 0
+
+        input[type=checkbox]
+          margin: $sizeXS
 
   // Component: Tasks Page
   // ---------------------------------------------------------------------------

@@ -2,6 +2,10 @@
 Data Manager
 Responsible for fetching, updating, and saving Workflow resources from/to
 the Panoptes service.
+
+Also fetches the project resource for secondary purposes. (e.g. figuring out
+which Subject Sets are available for the workflow, available experimental tools,
+and the workflow's preview URL.)
  */
 
 // ESLint: don't import global React, and don't use .defaultProps.
@@ -17,9 +21,11 @@ import { WorkflowContext } from './context.js';
 function DataManager({
   // key: to ensure DataManager renders FRESH (with states reset) whenever workflowId changes, use <DataManager key={workflowId} ... />
   children = null,
+  projectId = '',
   workflowId = ''
 }) {
   const [apiData, setApiData] = useState({
+    project: null,
     workflow: null,
     status: 'ready'
   });
@@ -31,33 +37,42 @@ function DataManager({
   // Also see general pattern notes:
   // https://react.dev/reference/react/useEffect#fetching-data-with-effects
   useEffect(() => {
-    async function fetchWorkflow() {
+    async function fetchProjectAndWorkflow() {
       try {
         setApiData({
+          project: null,
           workflow: null,
           status: 'fetching'
         });
 
-        const wf = await apiClient.type('workflows').get(workflowId);
+        const [ proj, wf ] = await Promise.all([
+          apiClient.type('projects').get(projectId),
+          apiClient.type('workflows').get(workflowId)
+        ]);
+        if (!proj) throw new Error('No project');
         if (!wf) throw new Error('No workflow');
 
         setApiData({
+          project: proj,
           workflow: wf,
           status: 'ready'
         });
+
       } catch (err) {
         console.error('DataManager: ', err);
         setApiData({
+          project: null,
           workflow: null,
           status: 'error'
         });
       }
     }
 
-    fetchWorkflow();
+    fetchProjectAndWorkflow();
   }, [workflowId]);
 
   // Listen for workflow changes, and update a counter to prompt useMemo to update the context.
+  // NOTE: we're not listening for *project* changes, as the DataManager isn't meant to update that resource.
   useEffect(() => {
     const wf = apiData.workflow;
     function onWorkflowChange() {
@@ -84,19 +99,21 @@ function DataManager({
 
       const newWorkflow = await wf.update(data).save();
 
-      setApiData({
+      setApiData((prevState) => ({
+        ...prevState,
         workflow: newWorkflow, // Note: newWorkflow is actually the same as the old wf, so useMemo will have to listen to status changing instead.
         status: 'ready'
-      });
+      }));
 
       return newWorkflow;
     }
 
     return {
+      project: apiData.project,
       workflow: apiData.workflow,
       update
     };
-  }, [apiData.workflow, updateCounter]);
+  }, [apiData.project, apiData.workflow, updateCounter]);
 
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
   // if (!workflow) return null
@@ -105,7 +122,12 @@ function DataManager({
     <WorkflowContext.Provider
       value={contextData}
     >
-      <div>{apiData.status}</div>
+      {apiData.status === 'fetching' && (
+        <div className="status-banner fetching">Fetching data...</div>
+      )}
+      {apiData.status === 'error' && (
+        <div className="status-banner error">ERROR: could not fetch data</div>
+      )}
       {children}
     </WorkflowContext.Provider>
   );
@@ -116,6 +138,7 @@ DataManager.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
+  projectId: PropTypes.string,
   workflowId: PropTypes.string
 };
 
