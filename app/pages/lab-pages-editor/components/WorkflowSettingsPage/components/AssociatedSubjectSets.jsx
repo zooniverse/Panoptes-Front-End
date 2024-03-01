@@ -26,7 +26,7 @@ export default function AssociatedSubjectSets({ project, workflow }) {
         });
 
       } catch (err) {
-        console.error('AssosicatedSubjectSets: ', err);
+        console.error('AssociatedSubjectSets: ', err);
         setApiData({
           subjectSets: null,
           status: 'error'
