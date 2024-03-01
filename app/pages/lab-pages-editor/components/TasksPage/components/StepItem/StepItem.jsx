@@ -142,6 +142,11 @@ function StepItem({
             updateAnswerNext={updateAnswerNext}
           />
         )}
+        {!branchingTask && (
+          <div>
+            DEBUG: Next is {stepBody?.next || '(undefined)'}
+          </div>
+        )}
       </div>
       <DropTarget
         activeDragItem={activeDragItem}
