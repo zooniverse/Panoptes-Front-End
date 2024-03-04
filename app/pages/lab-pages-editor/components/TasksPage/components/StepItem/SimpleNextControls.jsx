@@ -1,3 +1,5 @@
+import NextStepArrow from './NextStepArrow.jsx';
+
 export default function SimpleNextControls({
   step
 }) {
@@ -5,8 +7,9 @@ export default function SimpleNextControls({
   const [ stepId, stepBody ] = step;
 
   return (
-    <div>
-      NEXT: {stepBody?.next}
+    <div className="next-step-controls simple-next-controls">
+      <NextStepArrow className="next-arrow" />
+      <div>NEXT: {stepBody?.next}</div>
     </div>
   );
 }
