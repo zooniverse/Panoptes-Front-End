@@ -6,7 +6,9 @@ import TaskItem from './TaskItem.jsx';
 
 import canStepBranch from '../../../../helpers/canStepBranch.js';
 
-import BranchingControls from './BranchingControls.jsx';
+import BranchingNextControls from './BranchingNextControls.jsx';
+import SimpleNextControls from './SimpleNextControls.jsx';
+
 import CopyIcon from '../../../../icons/CopyIcon.jsx';
 import DeleteIcon from '../../../../icons/DeleteIcon.jsx';
 import EditIcon from '../../../../icons/EditIcon.jsx';
@@ -135,7 +137,7 @@ function StepItem({
           })}
         </ul>
         {branchingTask && (
-          <BranchingControls
+          <BranchingNextControls
             allSteps={allSteps}
             task={branchingTask}
             taskKey={branchingTaskKey}
@@ -143,9 +145,9 @@ function StepItem({
           />
         )}
         {!branchingTask && (
-          <div>
-            DEBUG: Next is {stepBody?.next || '(undefined)'}
-          </div>
+          <SimpleNextControls
+            step={step}
+          />
         )}
       </div>
       <DropTarget
