@@ -479,22 +479,9 @@ $fontWeightBoldPlus = 700
 
       &:active
         cursor: grabbing
-    
-    ul.branching-controls
-      display: flex
-      flex-direction: row
-      flex-wrap: wrap
-      justify-content: center
-      list-style: none
-      margin: 0
-      padding: 0
-      
-      li
-        display: flex
-        flex-direction: column
-        margin: 0 $sizeM $sizeL $sizeM
-        padding: 0
-      
+
+    .next-step-controls
+
       .fake-button
         background: $white
         border: 1px solid $grey1
@@ -519,6 +506,25 @@ $fontWeightBoldPlus = 700
         &.next-is-submit
           background: $white
           border: 2px solid $yellow
+
+      &.simple-next-controls
+        display: flex
+        flex-direction: column
+      
+      &.branching-next-controls
+        display: flex
+        flex-direction: row
+        flex-wrap: wrap
+        justify-content: center
+        list-style: none
+        margin: 0
+        padding: 0
+        
+        li
+          display: flex
+          flex-direction: column
+          margin: 0 $sizeM $sizeL $sizeM
+          padding: 0
   
   .task-key
   .step-key
