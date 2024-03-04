@@ -1,6 +1,6 @@
 const DEFAULT_HANDLER = () => {};
 
-export default function BranchingControls({
+export default function BranchingNextControls({
   allSteps = [],
   task,
   taskKey,
