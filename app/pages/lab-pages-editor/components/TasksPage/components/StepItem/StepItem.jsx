@@ -146,6 +146,7 @@ function StepItem({
         )}
         {!branchingTask && (
           <SimpleNextControls
+            allSteps={allSteps}
             step={step}
           />
         )}

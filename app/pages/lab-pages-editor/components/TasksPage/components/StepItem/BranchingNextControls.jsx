@@ -21,7 +21,7 @@ export default function BranchingNextControls({
   return (
     <ul className="next-step-controls branching-next-controls">
       {answers.map((answer, index) => (
-        <li key={`branching-controls-answer-${index}`}>
+        <li key={`branching-next-controls-answer-${index}`}>
           <div className="fake-button">{answer.label}</div>
           <NextStepArrow className="next-arrow" />
           <select
@@ -39,7 +39,7 @@ export default function BranchingNextControls({
               const taskKeys = stepBody?.taskKeys?.toString() || '(none)';
               return (
                 <option
-                  key={`branching-controls-answer-${index}-option-${stepKey}`}
+                  key={`branching-next-controls-answer-${index}-option-${stepKey}`}
                   value={stepKey}
                 >
                   {taskKeys}
