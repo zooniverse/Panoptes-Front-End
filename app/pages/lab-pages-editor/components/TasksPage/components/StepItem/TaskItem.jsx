@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 // import strings from '../../../strings.json'; // TODO: move all text into strings
 import TaskIcon from '../../../../icons/TaskIcon.jsx';
+import BranchingNextControls from './BranchingNextControls.jsx';
 
 const TaskLabels = {
   'drawing': 'Drawing Task',
@@ -9,9 +10,14 @@ const TaskLabels = {
   'text': 'Text Task'
 };
 
+const DEFAULT_HANDLER = () => {};
+
 function TaskItem({
+  allSteps = [],
+  isBranchingTask = true,
   task,
-  taskKey
+  taskKey,
+  updateAnswerNext = DEFAULT_HANDLER
 }) {
   if (!task || !taskKey) return <li className="task-item">ERROR: could not render Task</li>;
 
@@ -32,6 +38,14 @@ function TaskItem({
         </span>
         <span className="task-text flex-item">{taskText}</span>
       </div>
+      {isBranchingTask && (
+        <BranchingNextControls
+          allSteps={allSteps}
+          task={task}
+          taskKey={taskKey}
+          updateAnswerNext={updateAnswerNext}
+        />
+      )}
     </li>
   );
 }

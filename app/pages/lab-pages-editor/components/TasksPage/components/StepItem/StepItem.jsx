@@ -6,7 +6,6 @@ import TaskItem from './TaskItem.jsx';
 
 import canStepBranch from '../../../../helpers/canStepBranch.js';
 
-import BranchingNextControls from './BranchingNextControls.jsx';
 import SimpleNextControls from './SimpleNextControls.jsx';
 
 import CopyIcon from '../../../../icons/CopyIcon.jsx';
@@ -58,8 +57,7 @@ function StepItem({
   }
 
   const branchingTaskKey = canStepBranch(step, allTasks);
-  const branchingTask = allTasks?.[branchingTaskKey];
-
+  
   return (
     <li className="step-item">
       {(stepIndex === 0)
@@ -129,22 +127,17 @@ function StepItem({
             const task = allTasks[taskKey];
             return (
               <TaskItem
+                allSteps={allSteps}
+                isBranchingTask={branchingTaskKey === taskKey}
                 key={`taskItem-${taskKey}`}
                 task={task}
                 taskKey={taskKey}
+                updateAnswerNext={updateAnswerNext}
               />
             );
           })}
         </ul>
-        {branchingTask && (
-          <BranchingNextControls
-            allSteps={allSteps}
-            task={branchingTask}
-            taskKey={branchingTaskKey}
-            updateAnswerNext={updateAnswerNext}
-          />
-        )}
-        {!branchingTask && (
+        {!branchingTaskKey && (
           <SimpleNextControls
             allSteps={allSteps}
             step={step}
