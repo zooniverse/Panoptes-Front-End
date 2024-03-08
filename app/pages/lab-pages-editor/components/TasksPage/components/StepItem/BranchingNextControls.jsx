@@ -19,7 +19,7 @@ export default function BranchingNextControls({
   }
 
   return (
-    <ul className="next-step-controls branching-next-controls">
+    <ul className="next-controls horizontal-list">
       {answers.map((answer, index) => (
         <li key={`branching-next-controls-answer-${index}`}>
           <div className="fake-button">{answer.label}</div>

@@ -14,7 +14,7 @@ const DEFAULT_HANDLER = () => {};
 
 function TaskItem({
   allSteps = [],
-  isBranchingTask = true,
+  isBranchingTask = false,
   task,
   taskKey,
   updateAnswerNext = DEFAULT_HANDLER
@@ -46,13 +46,50 @@ function TaskItem({
           updateAnswerNext={updateAnswerNext}
         />
       )}
+      {!isBranchingTask && (
+        <PlaceholderAnswers task={task} taskKey={taskKey} />
+      )}
     </li>
   );
 }
 
 TaskItem.propTypes = {
+  allSteps: PropTypes.arrayOf(PropTypes.object),
+  isBranchingTask: PropTypes.bool,
   task: PropTypes.object,
-  taskKey: PropTypes.string
+  taskKey: PropTypes.string,
+  updateAnswerNext: PropTypes.func
 };
 
 export default TaskItem;
+
+function PlaceholderAnswers({
+  task,
+  taskKey
+}) {
+  if (!task || !taskKey) return null;
+
+  if (task.type === 'single') {
+    const answers = task.answers || [];
+
+    return (
+      <ul className="horizontal-list">
+        {answers.map((answer, index) => (
+          <li key={`placeholder-answer-${taskKey}-${index}`}>
+            <div className="fake-button">{answer.label}</div>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  if (task.type === 'text') {
+    return (
+      <div>
+        <div className="fake-text-input">Participant text here</div>
+      </div>
+    );
+  }
+
+  return null;
+}
