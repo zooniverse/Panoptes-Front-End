@@ -163,7 +163,7 @@ export default function TasksPage() {
   }
 
   // Changes the optional "next page" of a branching answer/choice
-  function updateAnswerNext(taskKey, answerIndex, next = undefined) {
+  function updateNextStepForTaskAnswer(taskKey, answerIndex, next = undefined) {
     // Check if input is valid
     const task = workflow?.tasks?.[taskKey];
     const answer = task?.answers[answerIndex];
@@ -223,7 +223,7 @@ export default function TasksPage() {
               step={step}
               stepKey={step[0]}
               stepIndex={index}
-              updateAnswerNext={updateAnswerNext}
+              updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
             />
           ))}
         </ul>

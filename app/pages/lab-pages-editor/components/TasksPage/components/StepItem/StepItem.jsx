@@ -27,7 +27,7 @@ function StepItem({
   setActiveDragItem = DEFAULT_HANDLER,
   step,
   stepIndex,
-  updateAnswerNext = DEFAULT_HANDLER
+  updateNextStepForTaskAnswer = DEFAULT_HANDLER
 }) {
   const [stepKey, stepBody] = step || [];
   if (!stepKey || !stepBody || !allSteps || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
@@ -132,7 +132,7 @@ function StepItem({
                 key={`taskItem-${taskKey}`}
                 task={task}
                 taskKey={taskKey}
-                updateAnswerNext={updateAnswerNext}
+                updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
               />
             );
           })}
@@ -164,7 +164,7 @@ StepItem.propTypes = {
   setActiveDragItem: PropTypes.func,
   step: PropTypes.array,
   stepIndex: PropTypes.number,
-  updateAnswerNext: PropTypes.func
+  updateNextStepForTaskAnswer: PropTypes.func
 };
 
 export default StepItem;
