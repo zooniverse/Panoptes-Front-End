@@ -6,7 +6,7 @@ export default function BranchingNextControls({
   allSteps = [],
   task,
   taskKey,
-  updateAnswerNext = DEFAULT_HANDLER
+  updateNextStepForTaskAnswer = DEFAULT_HANDLER
 }) {
   if (!task || !taskKey) return null;
 
@@ -15,7 +15,7 @@ export default function BranchingNextControls({
   function onChange(e) {
     const next = e.target?.value;
     const index = e?.target?.dataset.index;
-    updateAnswerNext(taskKey, index, next);
+    updateNextStepForTaskAnswer(taskKey, index, next);
   }
 
   return (

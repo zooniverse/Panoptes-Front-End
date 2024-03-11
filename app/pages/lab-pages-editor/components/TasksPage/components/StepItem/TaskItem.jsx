@@ -17,7 +17,7 @@ function TaskItem({
   isBranchingTask = false,
   task,
   taskKey,
-  updateAnswerNext = DEFAULT_HANDLER
+  updateNextStepForTaskAnswer = DEFAULT_HANDLER
 }) {
   if (!task || !taskKey) return <li className="task-item">ERROR: could not render Task</li>;
 
@@ -43,7 +43,7 @@ function TaskItem({
           allSteps={allSteps}
           task={task}
           taskKey={taskKey}
-          updateAnswerNext={updateAnswerNext}
+          updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
         />
       )}
       {!isBranchingTask && (
@@ -58,7 +58,7 @@ TaskItem.propTypes = {
   isBranchingTask: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,
-  updateAnswerNext: PropTypes.func
+  updateNextStepForTaskAnswer: PropTypes.func
 };
 
 export default TaskItem;
