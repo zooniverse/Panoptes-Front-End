@@ -43,7 +43,8 @@ export const SLUGS = [
   'hughdickinson/galaxy-zoo-clump-scout-ii',
   'zookeeper/elephant-id-ey',
   'johandmi/arctic-archives-unraveling-greenlands-weather-history',
-  'bmtcollections/documentation-detectives-transcribing-accession-registers'
+  'bmtcollections/documentation-detectives-transcribing-accession-registers',
+  'bluejackets/civil-war-bluejackets'
 ];
 
 export function usesMonorepo(slug) {
