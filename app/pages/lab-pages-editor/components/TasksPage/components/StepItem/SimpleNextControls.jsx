@@ -41,6 +41,7 @@ export default function SimpleNextControls({
           );
         })}
       </select>
+      <div>[[{stepBody?.next}]]</div>
     </div>
   );
 }
