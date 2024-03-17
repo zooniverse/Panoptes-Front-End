@@ -7,8 +7,6 @@ Clean up tasks and steps.
 - Returns { tasks, steps }
  */
 
-import linkStepsInWorkflow from './linkStepsInWorkflow.js';
-
 export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
   const newTasks = structuredClone(tasks);  // Copy tasks
   const newSteps = steps.slice();  // Copy steps
@@ -26,8 +24,5 @@ export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
     })
   });
 
-  // Remember to re-link steps to close gaps created by missing Steps.
-  const newStepsLinked = linkStepsInWorkflow(newSteps, newTasks);
-
-  return { tasks: newTasks, steps: newStepsLinked };
+  return { tasks: newTasks, steps: newSteps };
 }

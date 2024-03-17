@@ -4,7 +4,6 @@ import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
 import getNewStepKey from '../../helpers/getNewStepKey.js';
 import getNewTaskKey from '../../helpers/getNewTaskKey.js';
-import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 import cleanupTasksAndSteps from '../../helpers/cleanupTasksAndSteps.js';
 import getPreviewEnv from '../../helpers/getPreviewEnv.js';
@@ -39,7 +38,7 @@ export default function TasksPage() {
       ...workflow.tasks,
       [newTaskKey]: newTask
     };
-    const steps = linkStepsInWorkflow([...workflow.steps, newStep]);
+    const steps = [...workflow.steps, newStep];
 
     await update({ tasks, steps });
     return steps.length - 1;
@@ -119,7 +118,7 @@ export default function TasksPage() {
     const oldSteps = workflow?.steps || [];
     if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
 
-    const steps = linkStepsInWorkflow(moveItemInArray(oldSteps, from, to));
+    const steps = moveItemInArray(oldSteps, from, to);
     update({ steps });
   }
 
