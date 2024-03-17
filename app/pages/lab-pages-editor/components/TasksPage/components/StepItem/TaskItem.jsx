@@ -54,7 +54,7 @@ function TaskItem({
 }
 
 TaskItem.propTypes = {
-  allSteps: PropTypes.arrayOf(PropTypes.object),
+  allSteps: PropTypes.arrayOf(PropTypes.array),
   isBranchingTask: PropTypes.bool,
   task: PropTypes.object,
   taskKey: PropTypes.string,

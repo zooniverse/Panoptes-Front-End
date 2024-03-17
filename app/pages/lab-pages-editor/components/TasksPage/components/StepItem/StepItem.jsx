@@ -27,6 +27,7 @@ function StepItem({
   setActiveDragItem = DEFAULT_HANDLER,
   step,
   stepIndex,
+  updateNextStepForStep = DEFAULT_HANDLER,
   updateNextStepForTaskAnswer = DEFAULT_HANDLER
 }) {
   const [stepKey, stepBody] = step || [];
@@ -141,6 +142,7 @@ function StepItem({
           <SimpleNextControls
             allSteps={allSteps}
             step={step}
+            updateNextStepForStep={updateNextStepForStep}
           />
         )}
       </div>
@@ -164,6 +166,7 @@ StepItem.propTypes = {
   setActiveDragItem: PropTypes.func,
   step: PropTypes.array,
   stepIndex: PropTypes.number,
+  updateNextStepForStep: PropTypes.func,
   updateNextStepForTaskAnswer: PropTypes.func
 };
 
