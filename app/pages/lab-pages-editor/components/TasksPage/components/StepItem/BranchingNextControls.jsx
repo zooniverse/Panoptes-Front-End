@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import NextStepArrow from './NextStepArrow.jsx';
 
 const DEFAULT_HANDLER = () => {};
@@ -52,3 +53,10 @@ export default function BranchingNextControls({
     </ul>
   );
 }
+
+BranchingNextControls.propTypes = {
+  allSteps: PropTypes.arrayOf(PropTypes.array),
+  task: PropTypes.object,
+  taskKey: PropTypes.string,
+  updateNextStepForTaskAnswer: PropTypes.func
+};

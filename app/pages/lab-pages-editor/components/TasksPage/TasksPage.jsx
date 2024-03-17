@@ -162,6 +162,19 @@ export default function TasksPage() {
     update({tasks});
   }
 
+  // Changes the optional "next page" of a step/page
+  function updateNextStepForStep(stepKey, next = undefined) {
+    // Check if input is valid
+    const stepIndex = workflow?.steps?.findIndex(step => step[0] === stepKey);
+    const stepBody = workflow?.steps?.[stepIndex]?.[1];
+    if (!stepBody) return;
+
+    const newSteps = workflow.steps.slice();
+    newSteps[stepIndex] = [stepKey, { ...stepBody, next }];
+
+    update({ steps: newSteps });
+  }
+
   // Changes the optional "next page" of a branching answer/choice
   function updateNextStepForTaskAnswer(taskKey, answerIndex, next = undefined) {
     // Check if input is valid
@@ -223,6 +236,7 @@ export default function TasksPage() {
               step={step}
               stepKey={step[0]}
               stepIndex={index}
+              updateNextStepForStep={updateNextStepForStep}
               updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
             />
           ))}

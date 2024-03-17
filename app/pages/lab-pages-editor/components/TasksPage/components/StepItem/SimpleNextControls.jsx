@@ -1,13 +1,20 @@
+import PropTypes from 'prop-types';
 import NextStepArrow from './NextStepArrow.jsx';
+
+const DEFAULT_HANDLER = () => {};
 
 export default function SimpleNextControls({
   allSteps = [],
-  step
+  step,
+  updateNextStepForStep = DEFAULT_HANDLER
 }) {
   if (!step) return null;
   const [ stepKey, stepBody ] = step;
 
-  function onChange() {}
+  function onChange(e) {
+    const next = e.target?.value;
+    updateNextStepForStep(stepKey, next);
+  }
 
   return (
     <div className="next-controls vertical-layout">
@@ -37,3 +44,9 @@ export default function SimpleNextControls({
     </div>
   );
 }
+
+SimpleNextControls.propTypes = {
+  allSteps: PropTypes.arrayOf(PropTypes.array),
+  step: PropTypes.array,
+  updateNextStepForStep: PropTypes.func
+};
