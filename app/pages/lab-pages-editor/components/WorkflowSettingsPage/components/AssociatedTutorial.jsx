@@ -39,7 +39,7 @@ export default function AssociatedTutorial({ project, workflow }) {
         });
 
       } catch (err) {
-        console.error('AssosicatedTutorial: ', err);
+        console.error('AssociatedTutorial: ', err);
         setApiData({
           tutorials: null,
           status: 'error'
@@ -74,7 +74,7 @@ export default function AssociatedTutorial({ project, workflow }) {
         status: 'ready'
       });
     } catch (err) {
-      console.error('AssosicatedTutorial: ', err);
+      console.error('AssociatedTutorial: ', err);
       setApiData({
         ...apiData,
         status: 'error'
