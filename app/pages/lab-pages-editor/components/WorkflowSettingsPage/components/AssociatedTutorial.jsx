@@ -47,11 +47,6 @@ export default function AssociatedTutorial({ project, workflow }) {
     fetchTutorials();
   }, [project, workflow]);
 
-  function selectTutorial(e) {
-    const tutorialId = e?.currentTarget?.dataset?.tutorial;
-    updateWorkflow(tutorialId);
-  }
-
   async function updateWorkflow(tutorialId = null) {
     try {
       if (tutorialId === linkedTutorial) return;
@@ -84,6 +79,11 @@ export default function AssociatedTutorial({ project, workflow }) {
     }
   }
 
+  function selectTutorial(e) {
+    const tutorialId = e?.currentTarget?.dataset?.tutorial;
+    updateWorkflow(tutorialId);
+  }
+  
   if (!project || !workflow) return null;
 
   if (apiData.status === 'fetching') {
