@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react';
 const ARBITRARY_PAGE_SIZE = 250;  // If a project has more than this number of subject sets, then we need a better solution.
 
 export default function AssociatedSubjectSets({ project, workflow }) {
+  const [linkedSubjectSets, setLinkedSubjectSets] = useState(workflow?.links?.subject_sets || []);
   const [apiData, setApiData] = useState({
     subjectSets: null,
     status: 'ready'
   });
-  const [linkedSubjectSets, setLinkedSubjectSets] = useState(workflow?.links?.subject_sets || []);
-
+  
   useEffect(() => {
     async function fetchSubjectSets() {
       try {

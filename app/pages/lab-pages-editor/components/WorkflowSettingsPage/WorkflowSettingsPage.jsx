@@ -1,5 +1,6 @@
 import { useWorkflowContext } from '../../context.js';
 import AssociatedSubjectSets from './components/AssociatedSubjectSets.jsx';
+import AssociatedTutorial from './components/AssociatedTutorial.jsx';
 
 export default function WorkflowSettingsPage() {
   const { workflow, update, project } = useWorkflowContext();
@@ -61,7 +62,7 @@ export default function WorkflowSettingsPage() {
         <fieldset>
           <legend>Associated Tutorial</legend>
           <p>Choose the tutorials you want to use for this workflow. Create tutorials in the Tutorial tab.</p>
-          <p>TODO</p>
+          <AssociatedTutorial project={project} workflow={workflow} />
         </fieldset>
 
         <hr />
