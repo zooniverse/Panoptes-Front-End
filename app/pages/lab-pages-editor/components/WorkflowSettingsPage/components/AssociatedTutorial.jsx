@@ -22,7 +22,10 @@ export default function AssociatedTutorial({ project, workflow }) {
 
         // First we need to fetch all tutorials associated with the project.
         const tutorialsLinkedToProject = await apiClient.type('tutorials').get({ project_id: project.id, page_size: ARBITRARY_PAGE_SIZE });
-        if (!tutorialsLinkedToProject) throw new Error('No tutorials');
+        
+        // If a project has no tutorials, tutorialsLinkedToProject will be [].
+        // If tutorialsLinkedToProject is undefined, then that's an error.
+        if (!tutorialsLinkedToProject) throw new Error('Unexpected error fetching tutorials.');
 
         // Now we need to fetch all tutorials associated with the workflow!
         // There should be only one linked workflow, at maximum.
@@ -83,7 +86,7 @@ export default function AssociatedTutorial({ project, workflow }) {
     const tutorialId = e?.currentTarget?.dataset?.tutorial;
     updateWorkflow(tutorialId);
   }
-  
+
   if (!project || !workflow) return null;
 
   if (apiData.status === 'fetching') {
