@@ -77,9 +77,15 @@ function EditStepDialog({
         })}
       </form>
       <div className="dialog-footer flex-row">
-        <div className="flex-item" />
         <button
-          className="big"
+          className="big flex-item"
+          onClick={closeDialog}
+          type="button"
+        >
+          Add New Task
+        </button>
+        <button
+          className="big teal-border"
           onClick={closeDialog}
           type="button"
         >
