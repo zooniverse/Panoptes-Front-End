@@ -22,8 +22,10 @@ export default function TasksPage() {
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
   const isActive = true; // TODO
 
-  // Adds a new Task (with default settings), inside a new Step. Returns the newly created step index.
-  async function addNewTaskWithStep(taskType) {
+  // Adds a new Task (with default settings).
+  // If no Step is specified, a new Step is created.
+  // Returns the newly created step index.
+  async function addTask(taskType, stepKey) {
     const newTaskKey = getNewTaskKey(workflow?.tasks);
     const newStepKey = getNewStepKey(workflow?.steps);
     const newTask = createTask(taskType);
@@ -42,6 +44,84 @@ export default function TasksPage() {
 
     await update({ tasks, steps });
     return steps.length - 1;
+  }
+
+
+  function updateTask(taskKey, task) {
+    if (!taskKey) return;
+    const tasks = JSON.parse(JSON.stringify(workflow?.tasks || {}));
+    tasks[taskKey] = task
+    update({tasks});
+  }
+
+  function deleteTask(taskKey) {
+    if (!taskKey) return;
+    // TODO
+  }
+
+  // aka openEditStepDialog
+  function editStep(stepIndex) {
+    setActiveStepIndex(stepIndex);
+    editStepDialog.current?.openDialog();
+  }
+
+  function moveStep(from, to) {
+    const oldSteps = workflow?.steps || [];
+    if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
+
+    const steps = moveItemInArray(oldSteps, from, to);
+    update({ steps });
+  }
+
+  function deleteStep(stepIndex) {
+    if (!workflow) return;
+    const { steps, tasks } = workflow;
+    const [ stepKey, stepBody ] = steps[stepIndex] || [];
+    const tasksToBeDeleted = stepBody?.taskKeys || [];
+
+    const confirmed = confirm(`Delete Page ${stepKey}?`);
+    if (!confirmed) return;
+
+    const newSteps = steps.toSpliced(stepIndex, 1);  // Copy then delete Step at stepIndex
+    const newTasks = tasks ? { ...tasks } : {};  // Copy tasks
+    tasksToBeDeleted.forEach(taskKey => delete newTasks[taskKey]);
+
+    const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
+    update(cleanedTasksAndSteps);
+  }
+
+  function openNewTaskDialog() {
+    newTaskDialog.current?.openDialog();
+  }
+
+  // Changes the optional "next page" of a step/page
+  function updateNextStepForStep(stepKey, next = undefined) {
+    // Check if input is valid
+    const stepIndex = workflow?.steps?.findIndex(step => step[0] === stepKey);
+    const stepBody = workflow?.steps?.[stepIndex]?.[1];
+    if (!stepBody) return;
+
+    const newSteps = workflow.steps.slice();
+    newSteps[stepIndex] = [stepKey, { ...stepBody, next }];
+
+    update({ steps: newSteps });
+  }
+
+  // Changes the optional "next page" of a branching answer/choice
+  function updateNextStepForTaskAnswer(taskKey, answerIndex, next = undefined) {
+    // Check if input is valid
+    const task = workflow?.tasks?.[taskKey];
+    const answer = task?.answers[answerIndex];
+    if (!task || !answer) return;
+    
+    const newTasks = workflow.tasks ? { ...workflow.tasks } : {};  // Copy tasks
+    const newAnswers = task.answers.with(answerIndex, { ...answer, next })  // Copy, then modify, answers
+    newTasks[taskKey] = {  // Insert modified answers into the task inside the copied tasks. Phew!
+      ...task,
+      answers: newAnswers
+    }
+
+    update({ tasks: newTasks });
   }
 
   function experimentalReset() {
@@ -114,83 +194,6 @@ export default function TasksPage() {
     });
   }
 
-  function moveStep(from, to) {
-    const oldSteps = workflow?.steps || [];
-    if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
-
-    const steps = moveItemInArray(oldSteps, from, to);
-    update({ steps });
-  }
-
-  function deleteStep(stepIndex) {
-    if (!workflow) return;
-    const { steps, tasks } = workflow;
-    const [ stepKey, stepBody ] = steps[stepIndex] || [];
-    const tasksToBeDeleted = stepBody?.taskKeys || [];
-
-    const confirmed = confirm(`Delete Page ${stepKey}?`);
-    if (!confirmed) return;
-
-    const newSteps = steps.toSpliced(stepIndex, 1);  // Copy then delete Step at stepIndex
-    const newTasks = tasks ? { ...tasks } : {};  // Copy tasks
-    tasksToBeDeleted.forEach(taskKey => delete newTasks[taskKey]);
-
-    const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
-    update(cleanedTasksAndSteps);
-  }
-
-  // aka openEditStepDialog
-  function editStep(stepIndex) {
-    setActiveStepIndex(stepIndex);
-    editStepDialog.current?.openDialog();
-  }
-
-  function openNewTaskDialog() {
-    newTaskDialog.current?.openDialog();
-  }
-
-  function deleteTask(taskKey) {
-    if (!taskKey) return;
-    // TODO
-  }
-
-  function updateTask(taskKey, task) {
-    if (!taskKey) return;
-    const tasks = JSON.parse(JSON.stringify(workflow?.tasks || {}));
-    tasks[taskKey] = task
-    update({tasks});
-  }
-
-  // Changes the optional "next page" of a step/page
-  function updateNextStepForStep(stepKey, next = undefined) {
-    // Check if input is valid
-    const stepIndex = workflow?.steps?.findIndex(step => step[0] === stepKey);
-    const stepBody = workflow?.steps?.[stepIndex]?.[1];
-    if (!stepBody) return;
-
-    const newSteps = workflow.steps.slice();
-    newSteps[stepIndex] = [stepKey, { ...stepBody, next }];
-
-    update({ steps: newSteps });
-  }
-
-  // Changes the optional "next page" of a branching answer/choice
-  function updateNextStepForTaskAnswer(taskKey, answerIndex, next = undefined) {
-    // Check if input is valid
-    const task = workflow?.tasks?.[taskKey];
-    const answer = task?.answers[answerIndex];
-    if (!task || !answer) return;
-    
-    const newTasks = workflow.tasks ? { ...workflow.tasks } : {};  // Copy tasks
-    const newAnswers = task.answers.with(answerIndex, { ...answer, next })  // Copy, then modify, answers
-    newTasks[taskKey] = {  // Insert modified answers into the task inside the copied tasks. Phew!
-      ...task,
-      answers: newAnswers
-    }
-
-    update({ tasks: newTasks });
-  }
-
   const previewEnv = getPreviewEnv();
   const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;
   if (!workflow) return null;
@@ -242,7 +245,7 @@ export default function TasksPage() {
         </ul>
         <NewTaskDialog
           ref={newTaskDialog}
-          addTaskWithStep={addNewTaskWithStep}
+          addTask={addTask}
           editStep={editStep}
         />
         <EditStepDialog
