@@ -13,10 +13,9 @@ const taskNames = {
 function EditStepDialog({
   allTasks = {},
   step = [],
-  stepIndex = -1,
   updateTask
 }, forwardedRef) {
-  const [ stepKey, stepBody ] = step ;
+  const [ stepKey, stepBody ] = step;
   const taskKeys = stepBody?.taskKeys || [];
   const editStepDialog = useRef(null);
 
@@ -99,7 +98,7 @@ function EditStepDialog({
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
   step: PropTypes.object,
-  stepIndex: PropTypes.number
+  updateTask: PropTypes.func
 };
 
 function onSubmit(e) {

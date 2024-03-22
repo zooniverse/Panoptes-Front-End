@@ -8,7 +8,7 @@ import TaskIcon from '../../../icons/TaskIcon.jsx';
 const DEFAULT_HANDLER = () => {};
 
 function NewTaskDialog({
-  addTaskWithStep = DEFAULT_HANDLER,
+  addTask = DEFAULT_HANDLER,
   editStep = DEFAULT_HANDLER
 }, forwardedRef) {
   const newTaskDialog = useRef(null);
@@ -33,7 +33,7 @@ function NewTaskDialog({
     // Protip: don't use event.target, since it might return the child of the button, instead of the button itself
 
     closeDialog();
-    const newStepIndex = await addTaskWithStep(tasktype);
+    const newStepIndex = await addTask(tasktype);
     editStep(newStepIndex);
   }
 
@@ -103,7 +103,7 @@ function NewTaskDialog({
 }
 
 NewTaskDialog.propTypes = {
-  addTaskWithStep: PropTypes.func,
+  addTask: PropTypes.func,
   editStep: PropTypes.func
 };
 
