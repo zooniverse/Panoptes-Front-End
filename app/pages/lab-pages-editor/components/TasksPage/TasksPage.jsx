@@ -27,11 +27,29 @@ export default function TasksPage() {
   // Returns the newly created step index.
   async function addTask(taskType, stepKey) {
     const newTaskKey = getNewTaskKey(workflow?.tasks);
-    const newStepKey = getNewStepKey(workflow?.steps);
     const newTask = createTask(taskType);
-    const newStep = createStep(newStepKey, [newTaskKey]);
+    const steps = workflow?.steps?.slice() || [];
+    
+    // If a stepKey is defined, add the new Task to that Step.
+    // If not, create a new Step, and then add the new Task to that Step.
+    let step, stepIndex
+    if (stepKey) {
+      stepIndex = workflow?.steps?.findIndex(s => s[0] === stepKey);
+      step = workflow?.steps?.[stepIndex];
 
-    if (!newTaskKey || !newStepKey || !newTask || !newStep) {
+      if (step) {
+        const stepBody = step[1] || {}
+        const stepBodyTaskKeys = (stepBody.taskKeys || []).push(newTaskKey);
+        steps[stepIndex] = [ stepKey, { ...stepBody, taskKeys: stepBodyTaskKeys } ];
+      }
+
+    } else {
+      const newStepKey = getNewStepKey(workflow?.steps);
+      step = createStep(newStepKey, [newTaskKey]);
+      steps.push(step);
+    }
+
+    if (!newTaskKey || !newTask || !step) {
       console.error('TasksPage: could not create Task');
       return;
     }
@@ -40,12 +58,10 @@ export default function TasksPage() {
       ...workflow.tasks,
       [newTaskKey]: newTask
     };
-    const steps = [...workflow.steps, newStep];
 
     await update({ tasks, steps });
     return steps.length - 1;
   }
-
 
   function updateTask(taskKey, task) {
     if (!taskKey) return;
