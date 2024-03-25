@@ -9,7 +9,7 @@ const DEFAULT_HANDLER = () => {};
 
 function NewTaskDialog({
   addTask = DEFAULT_HANDLER,
-  editStep = DEFAULT_HANDLER
+  openEditStepDialog = DEFAULT_HANDLER
 }, forwardedRef) {
   const newTaskDialog = useRef(null);
 
@@ -34,7 +34,7 @@ function NewTaskDialog({
 
     closeDialog();
     const newStepIndex = await addTask(tasktype);
-    editStep(newStepIndex);
+    openEditStepDialog(newStepIndex);
   }
 
   return (
@@ -104,7 +104,7 @@ function NewTaskDialog({
 
 NewTaskDialog.propTypes = {
   addTask: PropTypes.func,
-  editStep: PropTypes.func
+  openEditStepDialog: PropTypes.func
 };
 
 function onSubmit(e) {
