@@ -4,7 +4,6 @@ import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
 import getNewStepKey from '../../helpers/getNewStepKey.js';
 import getNewTaskKey from '../../helpers/getNewTaskKey.js';
-import linkStepsInWorkflow from '../../helpers/linkStepsInWorkflow.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 import cleanupTasksAndSteps from '../../helpers/cleanupTasksAndSteps.js';
 import getPreviewEnv from '../../helpers/getPreviewEnv.js';
@@ -39,7 +38,7 @@ export default function TasksPage() {
       ...workflow.tasks,
       [newTaskKey]: newTask
     };
-    const steps = linkStepsInWorkflow([...workflow.steps, newStep]);
+    const steps = [...workflow.steps, newStep];
 
     await update({ tasks, steps });
     return steps.length - 1;
@@ -57,9 +56,9 @@ export default function TasksPage() {
       tasks: {
         'T0': {
           answers: [
-            {next: "P1", label: "Animals"},
-            {next: "P2", label: "Fruits"},
-            {label: "Neither"}
+            {next: 'P1', label: 'Animals'},
+            {next: 'P2', label: 'Fruits'},
+            {label: 'Neither'}
           ],
           help: '',
           question: 'Do you like Animals or Fruits?',
@@ -70,9 +69,47 @@ export default function TasksPage() {
         'T2': { help: '', type: 'text', required: false, instruction: 'Which fruit?' }
       },
       steps: [
-        ['P0', { next: 'P1', stepKey: 'P0', taskKeys: ["T0"] }],
+        ['P0', { stepKey: 'P0', taskKeys: ["T0"] }],
         ['P1', { next: 'P2', stepKey: 'P1', taskKeys: ["T1"] }],
         ['P2', { stepKey: 'P2', taskKeys: ["T2"] }]
+      ]
+    });
+  }
+
+  function experimentalQuickSetupBranching() {
+    update({
+      tasks: {
+        'T1.1': {
+          answers: [
+            {next: 'P2', label: 'Go to the 🔴 RED page'},
+            {next: 'P3', label: 'Go to the 🔵 BLUE page'},
+          ],
+          help: '',
+          question: 'Oh dear, this page has multiple branching tasks. Let\'s see what happens',
+          required: false,
+          type: 'single'
+        },
+        'T1.2': {
+          answers: [
+            {next: 'P4', label: 'Go to the 🟡 YELLOW page'},
+            {next: 'P5', label: 'Go to the 🟢 GREEN page'},
+          ],
+          help: '',
+          question: 'This is the second branching task. If you answer both on the page, where do you branch to?',
+          required: false,
+          type: 'single'
+        },
+        'T2': { help: '', type: 'text', required: false, instruction: 'Welcome to the 🔴 RED page! How do you feel?' },
+        'T3': { help: '', type: 'text', required: false, instruction: 'Welcome to the 🔵 BLUE page! How do you feel?' },
+        'T4': { help: '', type: 'text', required: false, instruction: 'Welcome to the 🟡 YELLOW page! How do you feel?' },
+        'T5': { help: '', type: 'text', required: false, instruction: 'Welcome to the 🟢 GREEN page! How do you feel?' },
+      },
+      steps: [
+        ['P1', { stepKey: 'P1', taskKeys: ['T1.1', 'T1.2'] }],
+        ['P2', { stepKey: 'P2', taskKeys: ['T2'] }],
+        ['P3', { stepKey: 'P3', taskKeys: ['T3'] }],
+        ['P4', { stepKey: 'P4', taskKeys: ['T4'] }],
+        ['P5', { stepKey: 'P5', taskKeys: ['T5'] }],
       ]
     });
   }
@@ -81,7 +118,7 @@ export default function TasksPage() {
     const oldSteps = workflow?.steps || [];
     if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
 
-    const steps = linkStepsInWorkflow(moveItemInArray(oldSteps, from, to));
+    const steps = moveItemInArray(oldSteps, from, to);
     update({ steps });
   }
 
@@ -124,8 +161,21 @@ export default function TasksPage() {
     update({tasks});
   }
 
+  // Changes the optional "next page" of a step/page
+  function updateNextStepForStep(stepKey, next = undefined) {
+    // Check if input is valid
+    const stepIndex = workflow?.steps?.findIndex(step => step[0] === stepKey);
+    const stepBody = workflow?.steps?.[stepIndex]?.[1];
+    if (!stepBody) return;
+
+    const newSteps = workflow.steps.slice();
+    newSteps[stepIndex] = [stepKey, { ...stepBody, next }];
+
+    update({ steps: newSteps });
+  }
+
   // Changes the optional "next page" of a branching answer/choice
-  function updateAnswerNext(taskKey, answerIndex, next = undefined) {
+  function updateNextStepForTaskAnswer(taskKey, answerIndex, next = undefined) {
     // Check if input is valid
     const task = workflow?.tasks?.[taskKey];
     const answer = task?.answers[answerIndex];
@@ -185,7 +235,8 @@ export default function TasksPage() {
               step={step}
               stepKey={step[0]}
               stepIndex={index}
-              updateAnswerNext={updateAnswerNext}
+              updateNextStepForStep={updateNextStepForStep}
+              updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
             />
           ))}
         </ul>
@@ -225,7 +276,15 @@ export default function TasksPage() {
             type="button"
             style={{ margin: '0 4px' }}
           >
-            QUICK SETUP
+            QUICK SETUP (simple)
+          </button>
+          <button
+            className="big"
+            onClick={experimentalQuickSetupBranching}
+            type="button"
+            style={{ margin: '0 4px' }}
+          >
+            QUICK SETUP (advanced, branching)
           </button>
         </div>
       </section>

@@ -3,15 +3,14 @@ Clean up tasks and steps.
 - TODO: Remove steps without tasks.
 - TODO: Remove tasks not associated with any step.
 - Remove orphaned references in branching tasks.
+- Remove orphaned references in steps.
 
 - Returns { tasks, steps }
  */
 
-import linkStepsInWorkflow from './linkStepsInWorkflow.js';
-
 export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
   const newTasks = structuredClone(tasks);  // Copy tasks
-  const newSteps = steps.slice();  // Copy steps
+  let newSteps = steps.slice();  // Copy steps
 
   const taskKeys = Object.keys(newTasks);
   const stepKeys = newSteps.map(step => step[0]);
@@ -25,9 +24,19 @@ export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
       }
     })
   });
+  
+  // Remove orphaned references in steps.
+  newSteps = newSteps.map(step => {
+    const [stepKey, stepBody] = step;
+    const newStepBody = { ...stepBody };
+    
+    // If the stepBody points to a non-existent Task Key or Step Key, remove the 'next'.
+    if (newStepBody.next && !taskKeys.includes(newStepBody.next) && !stepKeys.includes(newStepBody.next)) {
+      delete newStepBody.next;
+    }
+    
+    return [ stepKey, newStepBody ]
+  })
 
-  // Remember to re-link steps to close gaps created by missing Steps.
-  const newStepsLinked = linkStepsInWorkflow(newSteps, newTasks);
-
-  return { tasks: newTasks, steps: newStepsLinked };
+  return { tasks: newTasks, steps: newSteps };
 }

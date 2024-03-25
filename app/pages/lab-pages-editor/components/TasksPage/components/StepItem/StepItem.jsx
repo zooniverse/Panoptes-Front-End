@@ -6,7 +6,8 @@ import TaskItem from './TaskItem.jsx';
 
 import canStepBranch from '../../../../helpers/canStepBranch.js';
 
-import BranchingControls from './BranchingControls.jsx';
+import SimpleNextControls from './SimpleNextControls.jsx';
+
 import CopyIcon from '../../../../icons/CopyIcon.jsx';
 import DeleteIcon from '../../../../icons/DeleteIcon.jsx';
 import EditIcon from '../../../../icons/EditIcon.jsx';
@@ -26,7 +27,8 @@ function StepItem({
   setActiveDragItem = DEFAULT_HANDLER,
   step,
   stepIndex,
-  updateAnswerNext = DEFAULT_HANDLER
+  updateNextStepForStep = DEFAULT_HANDLER,
+  updateNextStepForTaskAnswer = DEFAULT_HANDLER
 }) {
   const [stepKey, stepBody] = step || [];
   if (!stepKey || !stepBody || !allSteps || !allTasks) return <li className="step-item">ERROR: could not render Step</li>;
@@ -56,8 +58,7 @@ function StepItem({
   }
 
   const branchingTaskKey = canStepBranch(step, allTasks);
-  const branchingTask = allTasks?.[branchingTaskKey];
-
+  
   return (
     <li className="step-item">
       {(stepIndex === 0)
@@ -127,19 +128,21 @@ function StepItem({
             const task = allTasks[taskKey];
             return (
               <TaskItem
+                allSteps={allSteps}
+                isBranchingTask={branchingTaskKey === taskKey}
                 key={`taskItem-${taskKey}`}
                 task={task}
                 taskKey={taskKey}
+                updateNextStepForTaskAnswer={updateNextStepForTaskAnswer}
               />
             );
           })}
         </ul>
-        {branchingTask && (
-          <BranchingControls
+        {!branchingTaskKey && (
+          <SimpleNextControls
             allSteps={allSteps}
-            task={branchingTask}
-            taskKey={branchingTaskKey}
-            updateAnswerNext={updateAnswerNext}
+            step={step}
+            updateNextStepForStep={updateNextStepForStep}
           />
         )}
       </div>
@@ -163,7 +166,8 @@ StepItem.propTypes = {
   setActiveDragItem: PropTypes.func,
   step: PropTypes.array,
   stepIndex: PropTypes.number,
-  updateAnswerNext: PropTypes.func
+  updateNextStepForStep: PropTypes.func,
+  updateNextStepForTaskAnswer: PropTypes.func
 };
 
 export default StepItem;
