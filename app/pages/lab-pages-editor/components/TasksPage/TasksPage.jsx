@@ -75,12 +75,6 @@ export default function TasksPage() {
     // TODO
   }
 
-  // aka openEditStepDialog
-  function editStep(stepIndex) {
-    setActiveStepIndex(stepIndex);
-    editStepDialog.current?.openDialog();
-  }
-
   function moveStep(from, to) {
     const oldSteps = workflow?.steps || [];
     if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
@@ -108,6 +102,11 @@ export default function TasksPage() {
 
   function openNewTaskDialog() {
     newTaskDialog.current?.openDialog();
+  }
+
+  function openEditStepDialog(stepIndex) {
+    setActiveStepIndex(stepIndex);
+    editStepDialog.current?.openDialog();
   }
 
   // Changes the optional "next page" of a step/page
@@ -248,8 +247,8 @@ export default function TasksPage() {
               allSteps={workflow.steps}
               allTasks={workflow.tasks}
               deleteStep={deleteStep}
-              editStep={editStep}
               moveStep={moveStep}
+              openEditStepDialog={openEditStepDialog}
               setActiveDragItem={setActiveDragItem}
               step={step}
               stepKey={step[0]}
@@ -262,7 +261,7 @@ export default function TasksPage() {
         <NewTaskDialog
           ref={newTaskDialog}
           addTask={addTask}
-          editStep={editStep}
+          openEditStepDialog={openEditStepDialog}
         />
         <EditStepDialog
           ref={editStepDialog}
