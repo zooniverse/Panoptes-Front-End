@@ -208,6 +208,7 @@ export default function TasksPage() {
           ref={editStepDialog}
           allTasks={workflow.tasks}
           onClose={handleCloseEditStepDialog}
+          openNewTaskDialog={openNewTaskDialog}
           step={workflow.steps[activeStepIndex]}
           stepIndex={activeStepIndex}
           deleteTask={deleteTask}
