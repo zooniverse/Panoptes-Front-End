@@ -101,13 +101,22 @@ export default function TasksPage() {
     update(cleanedTasksAndSteps);
   }
 
-  function openNewTaskDialog() {
+  function openNewTaskDialog(stepIndex = -1) {
+    setActiveStepIndex(stepIndex);
     newTaskDialog.current?.openDialog();
+  }
+
+  function openNewTaskDialogForNewStep() {
+    openNewTaskDialog(-1);
   }
 
   function openEditStepDialog(stepIndex) {
     setActiveStepIndex(stepIndex);
     editStepDialog.current?.openDialog();
+  }
+
+  function handleCloseEditStepDialog() {
+    setActiveStepIndex(-1);
   }
 
   // Changes the optional "next page" of a step/page
@@ -156,7 +165,7 @@ export default function TasksPage() {
         <div className="flex-row">
           <button
             className="flex-item big primary decoration-plus"
-            onClick={openNewTaskDialog}
+            onClick={openNewTaskDialogForNewStep}
             type="button"
           >
             Add a new Task
@@ -169,6 +178,7 @@ export default function TasksPage() {
           >
             Preview Workflow <ExternalLinkIcon />
           </a>
+          <span>[DEBUG] activeStepIndex({activeStepIndex})</span>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
           {workflow.steps.map((step, index) => (
@@ -197,6 +207,7 @@ export default function TasksPage() {
         <EditStepDialog
           ref={editStepDialog}
           allTasks={workflow.tasks}
+          onClose={handleCloseEditStepDialog}
           step={workflow.steps[activeStepIndex]}
           stepIndex={activeStepIndex}
           deleteTask={deleteTask}
