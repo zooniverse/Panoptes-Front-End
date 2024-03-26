@@ -10,8 +10,11 @@ const taskNames = {
   'text': 'Text',
 }
 
+const DEFAULT_HANDLER = () => {};
+
 function EditStepDialog({
   allTasks = {},
+  onClose = DEFAULT_HANDLER,
   step = [],
   updateTask
 }, forwardedRef) {
@@ -25,6 +28,7 @@ function EditStepDialog({
   }
 
   function closeDialog() {
+    onClose();
     editStepDialog.current?.close();
   }
 
@@ -97,6 +101,7 @@ function EditStepDialog({
 
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
+  onClose: PropTypes.func,
   step: PropTypes.object,
   updateTask: PropTypes.func
 };
