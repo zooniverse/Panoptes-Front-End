@@ -50,6 +50,9 @@ export default class TalkSearchResult extends React.Component {
     const comment = this.props.data;
     const discussion = this.discussionFromComment(comment);
     const [owner, name] = comment.project_slug ? comment.project_slug.split('/') : [];
+    const commentProject = {
+      slug: comment?.project_slug || ''
+    }
 
     return (
       <div className="talk-search-result talk-module">
@@ -67,7 +70,7 @@ export default class TalkSearchResult extends React.Component {
         )}
         <CommentContextIcon comment={comment} />
         <CommentLink comment={comment} project={this.props.project}>{comment.discussion_title}</CommentLink>
-        <Markdown content={comment.body} project={this.props.project} />
+        <Markdown content={comment.body} project={commentProject}/>
         <DiscussionPreview {...this.props} discussion={discussion} owner={owner} name={name} comment={comment} />
       </div>
     );
