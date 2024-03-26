@@ -15,7 +15,9 @@ const DEFAULT_HANDLER = () => {};
 function EditStepDialog({
   allTasks = {},
   onClose = DEFAULT_HANDLER,
+  openNewTaskDialog = DEFAULT_HANDLER,
   step = [],
+  stepIndex = -1,
   updateTask
 }, forwardedRef) {
   const [ stepKey, stepBody ] = step;
@@ -82,7 +84,7 @@ function EditStepDialog({
       <div className="dialog-footer flex-row">
         <button
           className="big flex-item"
-          onClick={closeDialog}
+          onClick={() => { openNewTaskDialog(stepIndex) }}
           type="button"
         >
           Add New Task
@@ -103,6 +105,7 @@ EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
   onClose: PropTypes.func,
   step: PropTypes.object,
+  stepIndex: PropTypes.number,
   updateTask: PropTypes.func
 };
 
