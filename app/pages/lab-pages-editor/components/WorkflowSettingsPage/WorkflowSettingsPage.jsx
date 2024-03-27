@@ -29,12 +29,6 @@ export default function WorkflowSettingsPage() {
     });
   }
 
-  function testUpdate(e) {
-    const key = e.target.name;
-    const value = e.target.value || '';
-    console.log('+++ testUpdate: ', key, value);
-  }
-
   if (!workflow) return null;
 
   return (
