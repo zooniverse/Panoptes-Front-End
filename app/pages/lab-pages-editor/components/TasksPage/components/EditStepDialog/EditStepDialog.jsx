@@ -24,6 +24,12 @@ function EditStepDialog({
   const taskKeys = stepBody?.taskKeys || [];
   const editStepDialog = useRef(null);
 
+  useImperativeHandle(forwardedRef, () => {
+    return {
+      openDialog
+    };
+  });
+
   // the dialog is opened via the parent TasksPage.
   function openDialog() {
     editStepDialog.current?.showModal();
@@ -34,11 +40,9 @@ function EditStepDialog({
     editStepDialog.current?.close();
   }
 
-  useImperativeHandle(forwardedRef, () => {
-    return {
-      openDialog
-    };
-  });
+  function handleClickAddTaskButton() {
+    openNewTaskDialog(stepIndex);
+  }
 
   const firstTask = allTasks?.[taskKeys?.[0]]
   const taskName = taskNames[firstTask?.type] || '???';
@@ -84,7 +88,7 @@ function EditStepDialog({
       <div className="dialog-footer flex-row">
         <button
           className="big flex-item"
-          onClick={() => { openNewTaskDialog(stepIndex) }}
+          onClick={handleClickAddTaskButton}
           type="button"
         >
           Add New Task

@@ -35,6 +35,8 @@ export default function TasksPage() {
     // If not, create a new Step, and then add the new Task to that Step.
     let step, stepIndex
     if (stepKey) {
+      console.log('+++ [A] existing stepKey: ', stepKey);
+
       stepIndex = workflow?.steps?.findIndex(s => s[0] === stepKey);
       step = workflow?.steps?.[stepIndex];
 
@@ -46,8 +48,11 @@ export default function TasksPage() {
 
     } else {
       const newStepKey = getNewStepKey(workflow?.steps);
+      console.log('+++ [B] newStepKey: ', newStepKey);
+
       step = createStep(newStepKey, [newTaskKey]);
       steps.push(step);
+      stepIndex = steps.length - 1;
     }
 
     if (!newTaskKey || !newTask || !step) {
@@ -61,7 +66,8 @@ export default function TasksPage() {
     };
 
     await update({ tasks, steps });
-    return steps.length - 1;
+    console.log('+++ stepIndex: ', stepIndex);
+    return stepIndex;
   }
 
   function updateTask(taskKey, task) {
@@ -106,13 +112,13 @@ export default function TasksPage() {
     newTaskDialog.current?.openDialog();
   }
 
-  function openNewTaskDialogForNewStep() {
-    openNewTaskDialog(-1);
-  }
-
   function openEditStepDialog(stepIndex) {
     setActiveStepIndex(stepIndex);
     editStepDialog.current?.openDialog();
+  }
+
+  function handleClickAddTaskButton() {
+    openNewTaskDialog(-1);
   }
 
   function handleCloseEditStepDialog() {
@@ -165,7 +171,7 @@ export default function TasksPage() {
         <div className="flex-row">
           <button
             className="flex-item big primary decoration-plus"
-            onClick={openNewTaskDialogForNewStep}
+            onClick={handleClickAddTaskButton}
             type="button"
           >
             Add a new Task
