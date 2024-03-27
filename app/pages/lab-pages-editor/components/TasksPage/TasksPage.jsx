@@ -24,9 +24,11 @@ export default function TasksPage() {
   const activeStepKey = workflow?.steps?.[activeStepIndex]?.[0];
   const isActive = true; // TODO
 
-  // Adds a new Task (with default settings).
-  // If no Step is specified, a new Step is created.
-  // Returns the newly created step index.
+  /*
+  Adds a new Task of a specified type (with default settings) to a Step.
+  If no Step is specified, a new Step is created.
+  Returns the newly created step index.
+   */
   async function addTask(taskType, stepIndex = -1) {
     const newTaskKey = getNewTaskKey(workflow?.tasks);
     const newTask = createTask(taskType);
@@ -64,11 +66,14 @@ export default function TasksPage() {
     return (stepIndex < 0) ? steps.length - 1 : stepIndex;
   }
 
+  /*
+  Updates (or adds) a Task
+   */
   function updateTask(taskKey, task) {
     if (!taskKey) return;
-    const tasks = JSON.parse(JSON.stringify(workflow?.tasks || {}));
-    tasks[taskKey] = task
-    update({tasks});
+    const newTasks = structuredClone(workflow?.tasks || {});  // Copy tasks
+    newTasks[taskKey] = task;
+    update({ tasks: newTasks });
   }
 
   function deleteTask(taskKey) {
