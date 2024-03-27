@@ -34,10 +34,13 @@ export default function TasksPage() {
     
     let step
     if (stepIndex < 0) {
+      // If no step is specified, we create a new one.
       const newStepKey = getNewStepKey(workflow?.steps);
       step = createStep(newStepKey, [newTaskKey]);
       steps.push(step);
+
     } else {
+      // If a step is specified, we'll add the Task to that one.
       step = workflow?.steps?.[stepIndex];
       if (step) {
         const [stepKey, stepBody] = step;
