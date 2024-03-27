@@ -21,38 +21,30 @@ export default function TasksPage() {
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
+  const activeStepKey = workflow?.steps?.[activeStepIndex]?.[0];
   const isActive = true; // TODO
 
   // Adds a new Task (with default settings).
   // If no Step is specified, a new Step is created.
   // Returns the newly created step index.
-  async function addTask(taskType, stepKey) {
+  async function addTask(taskType, stepIndex = -1) {
     const newTaskKey = getNewTaskKey(workflow?.tasks);
     const newTask = createTask(taskType);
     const steps = workflow?.steps?.slice() || [];
     
-    // If a stepKey is defined, add the new Task to that Step.
-    // If not, create a new Step, and then add the new Task to that Step.
-    let step, stepIndex
-    if (stepKey) {
-      console.log('+++ [A] existing stepKey: ', stepKey);
-
-      stepIndex = workflow?.steps?.findIndex(s => s[0] === stepKey);
-      step = workflow?.steps?.[stepIndex];
-
-      if (step) {
-        const stepBody = step[1] || {}
-        const stepBodyTaskKeys = (stepBody.taskKeys || []).push(newTaskKey);
-        steps[stepIndex] = [ stepKey, { ...stepBody, taskKeys: stepBodyTaskKeys } ];
-      }
-
-    } else {
+    let step
+    if (stepIndex < 0) {
       const newStepKey = getNewStepKey(workflow?.steps);
-      console.log('+++ [B] newStepKey: ', newStepKey);
-
       step = createStep(newStepKey, [newTaskKey]);
       steps.push(step);
-      stepIndex = steps.length - 1;
+    } else {
+      step = workflow?.steps?.[stepIndex];
+      if (step) {
+        const [stepKey, stepBody] = step;
+        const stepBodyTaskKeys = stepBody?.taskKeys?.slice() || [];
+        stepBodyTaskKeys.push(newTaskKey);
+        steps[stepIndex] = [ stepKey, { ...stepBody, taskKeys: stepBodyTaskKeys } ];
+      }
     }
 
     if (!newTaskKey || !newTask || !step) {
@@ -66,8 +58,7 @@ export default function TasksPage() {
     };
 
     await update({ tasks, steps });
-    console.log('+++ stepIndex: ', stepIndex);
-    return stepIndex;
+    return (stepIndex < 0) ? steps.length - 1 : stepIndex;
   }
 
   function updateTask(taskKey, task) {
@@ -184,7 +175,7 @@ export default function TasksPage() {
           >
             Preview Workflow <ExternalLinkIcon />
           </a>
-          <span>[DEBUG] activeStepIndex({activeStepIndex})</span>
+          <span>[DEBUG] step ({activeStepIndex})({activeStepKey})</span>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
           {workflow.steps.map((step, index) => (
@@ -209,6 +200,7 @@ export default function TasksPage() {
           ref={newTaskDialog}
           addTask={addTask}
           openEditStepDialog={openEditStepDialog}
+          stepIndex={activeStepIndex}
         />
         <EditStepDialog
           ref={editStepDialog}
