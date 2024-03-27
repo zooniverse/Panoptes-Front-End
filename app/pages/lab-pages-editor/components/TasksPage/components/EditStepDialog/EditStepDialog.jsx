@@ -10,15 +10,25 @@ const taskNames = {
   'text': 'Text',
 }
 
+const DEFAULT_HANDLER = () => {};
+
 function EditStepDialog({
   allTasks = {},
+  onClose = DEFAULT_HANDLER,
+  openNewTaskDialog = DEFAULT_HANDLER,
   step = [],
   stepIndex = -1,
   updateTask
 }, forwardedRef) {
-  const [ stepKey, stepBody ] = step ;
+  const [ stepKey, stepBody ] = step;
   const taskKeys = stepBody?.taskKeys || [];
   const editStepDialog = useRef(null);
+
+  useImperativeHandle(forwardedRef, () => {
+    return {
+      openDialog
+    };
+  });
 
   // the dialog is opened via the parent TasksPage.
   function openDialog() {
@@ -26,14 +36,13 @@ function EditStepDialog({
   }
 
   function closeDialog() {
+    onClose();
     editStepDialog.current?.close();
   }
 
-  useImperativeHandle(forwardedRef, () => {
-    return {
-      openDialog
-    };
-  });
+  function handleClickAddTaskButton() {
+    openNewTaskDialog(stepIndex);
+  }
 
   const firstTask = allTasks?.[taskKeys?.[0]]
   const taskName = taskNames[firstTask?.type] || '???';
@@ -77,9 +86,15 @@ function EditStepDialog({
         })}
       </form>
       <div className="dialog-footer flex-row">
-        <div className="flex-item" />
         <button
-          className="big"
+          className="big flex-item"
+          onClick={handleClickAddTaskButton}
+          type="button"
+        >
+          Add New Task
+        </button>
+        <button
+          className="big teal-border"
           onClick={closeDialog}
           type="button"
         >
@@ -92,8 +107,10 @@ function EditStepDialog({
 
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
+  onClose: PropTypes.func,
   step: PropTypes.object,
-  stepIndex: PropTypes.number
+  stepIndex: PropTypes.number,
+  updateTask: PropTypes.func
 };
 
 function onSubmit(e) {

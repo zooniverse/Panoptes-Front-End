@@ -22,8 +22,8 @@ function StepItem({
   allSteps,
   allTasks,
   deleteStep = DEFAULT_HANDLER,
-  editStep = DEFAULT_HANDLER,
   moveStep = DEFAULT_HANDLER,
+  openEditStepDialog = DEFAULT_HANDLER,
   setActiveDragItem = DEFAULT_HANDLER,
   step,
   stepIndex,
@@ -40,7 +40,7 @@ function StepItem({
   }
 
   function doEdit() {
-    editStep(stepIndex);
+    openEditStepDialog(stepIndex);
   }
 
   function moveStepUp() {
@@ -161,8 +161,8 @@ StepItem.propTypes = {
   allSteps: PropTypes.array,
   allTasks: PropTypes.object,
   deleteStep: PropTypes.func,
-  editStep: PropTypes.func,
   moveStep: PropTypes.func,
+  openEditStepDialog: PropTypes.func,
   setActiveDragItem: PropTypes.func,
   step: PropTypes.array,
   stepIndex: PropTypes.number,
