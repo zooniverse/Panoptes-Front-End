@@ -1,9 +1,10 @@
 export default function NextStepArrow({
   alt,
+  arrowhead = false,
   className = 'icon',
   color = 'currentColor',
   height = 48,
-  pad = 4,
+  pad = 0,
   strokeWidth = 2,
   width = 16
 }) {
@@ -18,8 +19,8 @@ export default function NextStepArrow({
     <svg aria-label={alt} width={width} height={height} className={className}>
       <g stroke={color} strokeWidth={strokeWidth}>
         <line x1={xB} y1={yA} x2={xB} y2={yC} />
-        <line x1={xA} y1={yB} x2={xB} y2={yC} />
-        <line x1={xC} y1={yB} x2={xB} y2={yC} />
+        {arrowhead && <line x1={xA} y1={yB} x2={xB} y2={yC} />}
+        {arrowhead && <line x1={xC} y1={yB} x2={xB} y2={yC} />}
       </g>
     </svg>
   );
