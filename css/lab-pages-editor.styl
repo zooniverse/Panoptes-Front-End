@@ -475,6 +475,11 @@ $fontWeightBoldPlus = 700
       padding: 0
     
     .task-item
+      margin-top: $sizeL
+
+      &:first-child
+        margin-top: 0
+
       .task-text
         font-size: $fontSizeS
         font-weight: $fontWeightBold
@@ -518,7 +523,7 @@ $fontWeightBoldPlus = 700
       li
         display: flex
         flex-direction: column
-        margin: 0 $sizeM $sizeL $sizeM
+        margin: 0 $sizeM
         padding: 0
     
     div.vertical-layout
