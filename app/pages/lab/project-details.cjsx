@@ -210,8 +210,7 @@ module.exports = createReactClass
             External links<br />
             <small className="form-help">
               Adding an external link will populate an entry in a list of links
-              in the bottom right section of the project landing page.  These
-              links open in a new tab when clicked. You can rearrange the
+              in the bottom right section of the project landing page. You can rearrange the
               displayed order by clicking and dragging on the left gray tab next
               to each link.
             </small>
