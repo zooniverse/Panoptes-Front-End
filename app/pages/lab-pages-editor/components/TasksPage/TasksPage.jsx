@@ -183,7 +183,6 @@ export default function TasksPage() {
           >
             Preview Workflow <ExternalLinkIcon />
           </a>
-          <span>[DEBUG] step ({activeStepIndex})({activeStepKey})</span>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
           {workflow.steps.map((step, index) => (
