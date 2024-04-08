@@ -1,10 +1,13 @@
+import PropTypes from 'prop-types';
+import NextStepArrow from './NextStepArrow.jsx';
+
 const DEFAULT_HANDLER = () => {};
 
-export default function BranchingControls({
+export default function BranchingNextControls({
   allSteps = [],
   task,
   taskKey,
-  updateAnswerNext = DEFAULT_HANDLER
+  updateNextStepForTaskAnswer = DEFAULT_HANDLER
 }) {
   if (!task || !taskKey) return null;
 
@@ -13,13 +16,13 @@ export default function BranchingControls({
   function onChange(e) {
     const next = e.target?.value;
     const index = e?.target?.dataset.index;
-    updateAnswerNext(taskKey, index, next);
+    updateNextStepForTaskAnswer(taskKey, index, next);
   }
 
   return (
-    <ul className="branching-controls">
+    <ul className="next-controls horizontal-list">
       {answers.map((answer, index) => (
-        <li key={`branching-controls-answer-${index}`}>
+        <li key={`branching-next-controls-answer-${index}`}>
           <div className="fake-button">{answer.label}</div>
           <NextStepArrow className="next-arrow" />
           <select
@@ -37,7 +40,7 @@ export default function BranchingControls({
               const taskKeys = stepBody?.taskKeys?.toString() || '(none)';
               return (
                 <option
-                  key={`branching-controls-answer-${index}-option-${stepKey}`}
+                  key={`branching-next-controls-answer-${index}-option-${stepKey}`}
                   value={stepKey}
                 >
                   {taskKeys}
@@ -51,29 +54,9 @@ export default function BranchingControls({
   );
 }
 
-function NextStepArrow({
-  alt,
-  className = 'icon',
-  color = 'currentColor',
-  height = 48,
-  pad = 4,
-  strokeWidth = 2,
-  width = 16
-}) {
-  const xA = 0 + pad;
-  const xB = width * 0.5;
-  const xC = width - pad;
-  const yA = 0 + pad;
-  const yB = height - (width / 2);
-  const yC = height - pad;
-
-  return (
-    <svg aria-label={alt} width={width} height={height} className={className}>
-      <g stroke={color} strokeWidth={strokeWidth}>
-        <line x1={xB} y1={yA} x2={xB} y2={yC} />
-        <line x1={xA} y1={yB} x2={xB} y2={yC} />
-        <line x1={xC} y1={yB} x2={xB} y2={yC} />
-      </g>
-    </svg>
-  );
-}
+BranchingNextControls.propTypes = {
+  allSteps: PropTypes.arrayOf(PropTypes.array),
+  task: PropTypes.object,
+  taskKey: PropTypes.string,
+  updateNextStepForTaskAnswer: PropTypes.func
+};

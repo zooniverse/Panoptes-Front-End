@@ -479,32 +479,9 @@ $fontWeightBoldPlus = 700
 
       &:active
         cursor: grabbing
-    
-    ul.branching-controls
-      display: flex
-      flex-direction: row
-      flex-wrap: wrap
-      justify-content: center
-      list-style: none
-      margin: 0
-      padding: 0
-      
-      li
-        display: flex
-        flex-direction: column
-        margin: 0 $sizeM $sizeL $sizeM
-        padding: 0
-      
-      .fake-button
-        background: $white
-        border: 1px solid $grey1
-        border-radius: 2px
-        color: $black
-        font-family: $fontFamilies
-        font-size: $fontSizeXS
-        padding: $sizeS $sizeM
-        text-align: center
-      
+
+    .next-controls
+
       .next-arrow
         color: $yellow
         display: block
@@ -519,6 +496,30 @@ $fontWeightBoldPlus = 700
         &.next-is-submit
           background: $white
           border: 2px solid $yellow
+
+      &.simple-next-controls
+        display: flex
+        flex-direction: column
+    
+    ul.horizontal-list
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      justify-content: center
+      list-style: none
+      margin: 0
+      padding: 0
+      
+      li
+        display: flex
+        flex-direction: column
+        margin: 0 $sizeM $sizeL $sizeM
+        padding: 0
+    
+    div.vertical-layout
+      display: flex
+      flex-direction: column
+      align-items: center
   
   .task-key
   .step-key
@@ -527,6 +528,26 @@ $fontWeightBoldPlus = 700
     color: $white
     font-size: $fontSizeXS
     padding: 0 $sizeS
+  
+  .fake-button
+    background: $white
+    border: 1px solid $grey1
+    border-radius: 2px
+    color: $black
+    font-family: $fontFamilies
+    font-size: $fontSizeXS
+    padding: $sizeS $sizeM
+    text-align: center
+  
+  .fake-text-input
+    background: $white
+    border: 1px solid $grey1
+    border-radius: 2px
+    color: $grey4
+    font-family: $fontFamilies
+    font-size: $fontSizeS
+    padding: $sizeS $sizeM
+    box-shadow: 1px 1px 4px 0px $shadowColour inset
 
 .debug-0
   width: 6em
