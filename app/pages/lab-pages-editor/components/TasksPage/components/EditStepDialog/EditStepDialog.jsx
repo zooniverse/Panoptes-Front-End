@@ -14,6 +14,7 @@ const DEFAULT_HANDLER = () => {};
 
 function EditStepDialog({
   allTasks = {},
+  deleteTask,
   onClose = DEFAULT_HANDLER,
   openNewTaskDialog = DEFAULT_HANDLER,
   step = [],
@@ -78,6 +79,7 @@ function EditStepDialog({
           return (
             <EditTaskForm
               key={`editTaskForm-${taskKey}`}
+              deleteTask={deleteTask}
               task={task}
               taskKey={taskKey}
               updateTask={updateTask}
@@ -94,7 +96,7 @@ function EditStepDialog({
           Add New Task
         </button>
         <button
-          className="big teal-border"
+          className="big done"
           onClick={closeDialog}
           type="button"
         >
@@ -107,6 +109,7 @@ function EditStepDialog({
 
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
+  deleteTask: PropTypes.func,
   onClose: PropTypes.func,
   step: PropTypes.object,
   stepIndex: PropTypes.number,

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
 import MinusIcon from '../../../../../icons/MinusIcon.jsx';
 import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 
@@ -8,6 +9,7 @@ const DEFAULT_HANDLER = () => {};
 export default function SingleQuestionTask({
   task,
   taskKey,
+  deleteTask = DEFAULT_HANDLER,
   updateTask = DEFAULT_HANDLER
 }) {
   const [ answers, setAnswers ] = useState(task?.answers || []);
@@ -28,6 +30,10 @@ export default function SingleQuestionTask({
       required
     };
     updateTask(taskKey, newTask);
+  }
+
+  function doDelete() {
+    deleteTask(taskKey);
   }
 
   function addAnswer(e) {
@@ -84,8 +90,15 @@ export default function SingleQuestionTask({
             onBlur={update}
             onChange={(e) => { setQuestion(e?.target?.value) }}
           />
+          <button
+            aria-label={`Delete Task ${taskKey}`}
+            className="big"
+            onClick={doDelete}
+            type="button"
+          >
+            <DeleteIcon />
+          </button>
         </div>
-        {/* <button>Delete</button> */}
       </div>
       <div className="input-row">
         <span className="big">Choices</span>

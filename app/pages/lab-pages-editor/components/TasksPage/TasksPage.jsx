@@ -78,6 +78,8 @@ export default function TasksPage() {
 
   function deleteTask(taskKey) {
     if (!taskKey) return;
+
+    console.log('+++ Delete Task: ', taskKey);
     // TODO
   }
 
