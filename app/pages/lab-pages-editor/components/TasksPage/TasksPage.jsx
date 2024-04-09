@@ -21,7 +21,6 @@ export default function TasksPage() {
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
-  const activeStepKey = workflow?.steps?.[activeStepIndex]?.[0];
   const isActive = true; // TODO
 
   /*
@@ -85,7 +84,7 @@ export default function TasksPage() {
     const newTasks = structuredClone(workflow?.tasks || {});
     delete newTasks[taskKey];
 
-    // Delete task 
+    // Delete the task reference in steps
     const newSteps = structuredClone(workflow?.steps || {});
     newSteps.forEach(step => {
       const stepBody = step[1] || {};
@@ -94,7 +93,6 @@ export default function TasksPage() {
 
     // Cleanup, then commit
     const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps);    
-    // console.log('+++ Delete Task: ', taskKey, ' ==> \n', cleanedTasksAndSteps);
     update(cleanedTasksAndSteps);
   }
 
@@ -109,16 +107,15 @@ export default function TasksPage() {
   function deleteStep(stepIndex) {
     if (!workflow) return;
     const { steps, tasks } = workflow;
-    const [ stepKey, stepBody ] = steps[stepIndex] || [];
-    const tasksToBeDeleted = stepBody?.taskKeys || [];
+    const [ stepKey ] = steps[stepIndex] || [];
 
     const confirmed = confirm(`Delete Page ${stepKey}?`);
     if (!confirmed) return;
 
     const newSteps = steps.toSpliced(stepIndex, 1);  // Copy then delete Step at stepIndex
     const newTasks = tasks ? { ...tasks } : {};  // Copy tasks
-    tasksToBeDeleted.forEach(taskKey => delete newTasks[taskKey]);
 
+    // cleanedupTasksAndSteps() will also remove tasks not associated with any step.
     const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
     update(cleanedTasksAndSteps);
   }
