@@ -10,7 +10,7 @@ Clean up tasks and steps.
 
 export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
   const newTasks = structuredClone(tasks);  // Copy tasks
-  let newSteps = steps.slice();  // Copy steps
+  let newSteps = structuredClone(steps);  // Copy steps. This is a deep copy, compared to steps.slice()
 
   const taskKeys = Object.keys(newTasks);
   const stepKeys = newSteps.map(step => step[0]);
@@ -28,14 +28,13 @@ export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
   // Remove orphaned references in steps.
   newSteps = newSteps.map(step => {
     const [stepKey, stepBody] = step;
-    const newStepBody = { ...stepBody };
     
     // If the stepBody points to a non-existent Task Key or Step Key, remove the 'next'.
-    if (newStepBody.next && !taskKeys.includes(newStepBody.next) && !stepKeys.includes(newStepBody.next)) {
-      delete newStepBody.next;
+    if (stepBody.next && !taskKeys.includes(stepBody.next) && !stepKeys.includes(stepBody.next)) {
+      delete stepBody.next;
     }
     
-    return [ stepKey, newStepBody ]
+    return [ stepKey, stepBody ]
   })
 
   return { tasks: newTasks, steps: newSteps };
