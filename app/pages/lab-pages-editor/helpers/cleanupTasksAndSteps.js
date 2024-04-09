@@ -12,9 +12,6 @@ export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
   const newTasks = structuredClone(tasks);  // Copy tasks
   let newSteps = structuredClone(steps);  // Copy steps. This is a deep copy, compared to steps.slice()
 
-  const taskKeys = Object.keys(newTasks);
-  const stepKeys = newSteps.map(step => step[0]);
-
   // Remove steps without tasks.
   newSteps = newSteps.filter(step => step?.[1]?.taskKeys?.length > 0);
 
@@ -26,6 +23,9 @@ export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
     });
     if (!existsInAnyStep) delete newTasks[taskKey];
   });
+
+  const taskKeys = Object.keys(newTasks);
+  const stepKeys = newSteps.map(step => step[0]);
 
   // Remove orphaned references in branching tasks.
   Object.values(newTasks).forEach(task => {

@@ -27,6 +27,7 @@ function EditStepDialog({
 
   useImperativeHandle(forwardedRef, () => {
     return {
+      closeDialog,
       openDialog
     };
   });

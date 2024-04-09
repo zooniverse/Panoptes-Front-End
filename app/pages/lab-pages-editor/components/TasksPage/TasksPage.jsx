@@ -76,22 +76,37 @@ export default function TasksPage() {
   }
 
   function deleteTask(taskKey) {
-    // First check: does it exist?
-    if (!taskKey) return;
-    if (!workflow?.tasks?.[taskKey]) return;
+    // First check: does the task exist?
+    if (!workflow || !taskKey || !workflow?.tasks?.[taskKey]) return;
 
-    // Delete the task
-    const newTasks = structuredClone(workflow?.tasks || {});
+    // Second check: is this the only task in the step?
+    const activeStepTaskKeys = workflow.steps?.[activeStepIndex]?.[1]?.taskKeys || [];
+    const onlyTaskInStep = !!(activeStepTaskKeys.length === 1 && activeStepTaskKeys[0] === taskKey);
+
+    // Third check: are you sure?
+    const confirmed = onlyTaskInStep
+      ? confirm(`Delete Task ${taskKey}? This will also delete the Page.`)
+      : confirm(`Delete Task ${taskKey}?`);
+    if (!confirmed) return;
+
+    // Delete the task.
+    const newTasks = structuredClone(workflow.tasks || {});
     delete newTasks[taskKey];
 
-    // Delete the task reference in steps
-    const newSteps = structuredClone(workflow?.steps || {});
+    // Delete the task reference in steps.
+    const newSteps = structuredClone(workflow.steps || {});
     newSteps.forEach(step => {
       const stepBody = step[1] || {};
       stepBody.taskKeys = (stepBody?.taskKeys || []).filter(key => key !== taskKey);
-    }); 
+    });
 
-    // Cleanup, then commit
+    // Close the Edit Step Dialog, if necessary. 
+    // Note that this will also trigger handleCloseEditStepDialog()
+    if (onlyTaskInStep) {
+      editStepDialog.current?.closeDialog();
+    }
+
+    // Cleanup, then commit.
     const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps);    
     update(cleanedTasksAndSteps);
   }
