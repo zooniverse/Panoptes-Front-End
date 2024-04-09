@@ -16,6 +16,7 @@ export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
   const stepKeys = newSteps.map(step => step[0]);
 
   // Remove steps without tasks
+  newSteps = newSteps.filter(step => step?.[1]?.taskKeys?.length > 0);
 
   // Remove orphaned references in branching tasks.
   Object.values(newTasks).forEach(task => {
