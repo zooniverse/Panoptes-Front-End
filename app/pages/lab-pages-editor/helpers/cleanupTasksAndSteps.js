@@ -15,14 +15,16 @@ export default function cleanupTasksAndSteps(tasks = {}, steps = []) {
   const taskKeys = Object.keys(newTasks);
   const stepKeys = newSteps.map(step => step[0]);
 
+  // Remove steps without tasks
+
   // Remove orphaned references in branching tasks.
-  Object.values(newTasks).forEach(taskBody => {
-    taskBody?.answers?.forEach(answer => {
+  Object.values(newTasks).forEach(task => {
+    task?.answers?.forEach(answer => {
       // If the branching answer points to a non-existent Task Key or Step Key, remove the 'next'.
       if (answer.next && !taskKeys.includes(answer.next) && !stepKeys.includes(answer.next)) {
         delete answer.next;
       }
-    })
+    });
   });
   
   // Remove orphaned references in steps.

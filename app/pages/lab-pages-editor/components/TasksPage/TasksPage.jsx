@@ -77,10 +77,25 @@ export default function TasksPage() {
   }
 
   function deleteTask(taskKey) {
+    // First check: does it exist?
     if (!taskKey) return;
+    if (!workflow?.tasks?.[taskKey]) return;
 
-    console.log('+++ Delete Task: ', taskKey);
-    // TODO
+    // Delete the task
+    const newTasks = structuredClone(workflow?.tasks || {});
+    delete newTasks[taskKey];
+
+    // Delete task 
+    const newSteps = structuredClone(workflow?.steps || {});
+    newSteps.forEach(step => {
+      const stepBody = step[1] || {};
+      stepBody.taskKeys = (stepBody?.taskKeys || []).filter(key => key !== taskKey);
+    }); 
+
+    // Cleanup, then commit
+    const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps);    
+    // console.log('+++ Delete Task: ', taskKey, ' ==> \n', cleanedTasksAndSteps);
+    update(cleanedTasksAndSteps);
   }
 
   function moveStep(from, to) {
