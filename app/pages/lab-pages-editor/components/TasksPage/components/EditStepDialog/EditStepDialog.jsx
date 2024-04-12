@@ -6,7 +6,8 @@ import CloseIcon from '../../../../icons/CloseIcon.jsx';
 
 const taskNames = {
   'drawing': 'Drawing',
-  'single': 'Single Question',
+  'multiple': 'Multiple Answer Question',
+  'single': 'Single Answer Question',
   'text': 'Text',
 }
 

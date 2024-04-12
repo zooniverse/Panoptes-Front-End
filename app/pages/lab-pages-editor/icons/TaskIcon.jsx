@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 
 const faTaskIcons = {
   'drawing': 'fa-pencil',
-  'single': 'fa-question-circle',  // Single question
+  'multiple': 'fa-question-circle',  // Multiple answer question
+  'single': 'fa-question-circle',  // Single answer question
   'text': 'fa-file-text-o'
 };
 

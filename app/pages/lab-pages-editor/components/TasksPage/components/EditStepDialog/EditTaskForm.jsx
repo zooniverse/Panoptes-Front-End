@@ -2,6 +2,7 @@ import SingleQuestionTask from './types/SingleQuestionTask.jsx';
 import TextTask from './types/TextTask.jsx';
 
 const taskTypes = {
+  'multiple': SingleQuestionTask,  // Shared with single answer question task
   'single': SingleQuestionTask,
   'text': TextTask
 };

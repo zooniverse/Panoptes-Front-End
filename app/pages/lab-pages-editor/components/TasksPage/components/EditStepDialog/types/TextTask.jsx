@@ -30,6 +30,7 @@ export default function TextTask({
 
   // For inputs that don't have onBlur, update triggers automagically.
   // (You can't call update() in the onChange() right after setStateValue().)
+  // TODO: useEffect() means update() is called on the first render, which is unnecessary. Clean this up.
   useEffect(update, [required]);
 
   return (
