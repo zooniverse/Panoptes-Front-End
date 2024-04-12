@@ -69,7 +69,7 @@ function PlaceholderAnswers({
 }) {
   if (!task || !taskKey) return null;
 
-  if (task.type === 'single') {
+  if (task.type === 'single' || task.type === 'multiple') {
     const answers = task.answers || [];
 
     return (
