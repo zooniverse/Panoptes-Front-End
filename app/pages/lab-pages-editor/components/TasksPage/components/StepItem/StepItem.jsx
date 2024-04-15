@@ -138,14 +138,14 @@ function StepItem({
             );
           })}
         </ul>
-        {!branchingTaskKey && (
-          <SimpleNextControls
-            allSteps={allSteps}
-            step={step}
-            updateNextStepForStep={updateNextStepForStep}
-          />
-        )}
       </div>
+      {!branchingTaskKey && (
+        <SimpleNextControls
+          allSteps={allSteps}
+          step={step}
+          updateNextStepForStep={updateNextStepForStep}
+        />
+      )}
       <DropTarget
         activeDragItem={activeDragItem}
         moveStep={moveStep}
