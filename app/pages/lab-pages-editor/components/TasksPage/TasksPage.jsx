@@ -193,7 +193,7 @@ export default function TasksPage() {
   // Limited Branching Rule:
   // - a Step can only have 1 branching task.
   // - If a Step has a branching task, it can't have any other tasks.
-  const enforceLimitedBranchingRule = !!canStepBranch(workflow?.steps?.[activeStepIndex], workflow?.tasks)
+  const enforceLimitedBranchingRule = workflow?.steps?.[activeStepIndex]?.[1]?.taskKeys?.length > 0
 
   const previewEnv = getPreviewEnv();
   const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;

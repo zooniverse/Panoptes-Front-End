@@ -117,7 +117,7 @@ function NewTaskDialog({
             <span>Drawing</span>
           </button>
         </div>
-        <div>DEBUG: enforceLimitedBranchingRule = {!!enforceLimitedBranchingRule}</div>
+        <div>DEBUG: enforceLimitedBranchingRule = {enforceLimitedBranchingRule ? 'YES' : 'NO'}</div>
       </form>
     </dialog>
   );
