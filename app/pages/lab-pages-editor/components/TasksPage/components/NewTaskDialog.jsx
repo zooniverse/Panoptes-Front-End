@@ -41,10 +41,12 @@ function NewTaskDialog({
 
     closeDialog();
 
-    if (stepIndex < 0) {
+    const addingTaskToNewStep = stepIndex < 0
+    if (addingTaskToNewStep) {
       const newStepIndex = await addTask(tasktype);
       openEditStepDialog(newStepIndex);
-    } else {
+
+    } else {  // Adding task to existing Step
       await addTask(tasktype, stepIndex);
       openEditStepDialog(stepIndex);
     }
