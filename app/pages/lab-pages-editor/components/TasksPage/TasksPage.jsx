@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { useWorkflowContext } from '../../context.js';
+import canStepBranch from '../../helpers/canStepBranch.js';
 import createStep from '../../helpers/createStep.js';
 import createTask from '../../helpers/createTask.js';
 import getNewStepKey from '../../helpers/getNewStepKey.js';
@@ -182,6 +183,11 @@ export default function TasksPage() {
 
     update({ tasks: newTasks });
   }
+  
+  // Limited Branching Rule:
+  // - a Step can only have 1 branching task.
+  // - If a Step has a branching task, it can't have any other tasks.
+  const shouldEnforceLimitedBranchingRule = !!canStepBranch(workflow?.steps?.[activeStepIndex], workflow?.tasks)
 
   const previewEnv = getPreviewEnv();
   const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;
