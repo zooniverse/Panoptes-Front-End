@@ -30,20 +30,21 @@ export default function TasksPage() {
   Returns the newly created step index.
    */
   async function addTask(taskType, stepIndex = -1) {
-    const newTaskKey = getNewTaskKey(workflow?.tasks);
+    if (!workflow) return;
+    const newTaskKey = getNewTaskKey(workflow.tasks);
     const newTask = createTask(taskType);
-    const steps = workflow?.steps?.slice() || [];
+    const steps = workflow.steps?.slice() || [];
     
     let step
     if (stepIndex < 0) {
       // If no step is specified, we create a new one.
-      const newStepKey = getNewStepKey(workflow?.steps);
+      const newStepKey = getNewStepKey(workflow.steps);
       step = createStep(newStepKey, [newTaskKey]);
       steps.push(step);
 
     } else {
       // If a step is specified, we'll add the Task to that one.
-      step = workflow?.steps?.[stepIndex];
+      step = workflow.steps?.[stepIndex];
       if (step) {
         const [stepKey, stepBody] = step;
         const stepBodyTaskKeys = stepBody?.taskKeys?.slice() || [];
@@ -70,8 +71,8 @@ export default function TasksPage() {
   Updates (or adds) a Task
    */
   function updateTask(taskKey, task) {
-    if (!taskKey) return;
-    const newTasks = structuredClone(workflow?.tasks || {});  // Copy tasks
+    if (!workflow || !taskKey) return;
+    const newTasks = structuredClone(workflow.tasks);  // Copy tasks
     newTasks[taskKey] = task;
     update({ tasks: newTasks });
   }
@@ -91,11 +92,11 @@ export default function TasksPage() {
     if (!confirmed) return;
 
     // Delete the task.
-    const newTasks = structuredClone(workflow.tasks || {});
+    const newTasks = structuredClone(workflow.tasks) || {};
     delete newTasks[taskKey];
 
     // Delete the task reference in steps.
-    const newSteps = structuredClone(workflow.steps || {});
+    const newSteps = structuredClone(workflow.steps) || [];
     newSteps.forEach(step => {
       const stepBody = step[1] || {};
       stepBody.taskKeys = (stepBody?.taskKeys || []).filter(key => key !== taskKey);
@@ -113,7 +114,8 @@ export default function TasksPage() {
   }
 
   function moveStep(from, to) {
-    const oldSteps = workflow?.steps || [];
+    if (!workflow) return;
+    const oldSteps = workflow.steps || [];
     if (from < 0 || to < 0 || from >= oldSteps.length || to >= oldSteps.length) return;
 
     const steps = moveItemInArray(oldSteps, from, to);
@@ -156,9 +158,11 @@ export default function TasksPage() {
 
   // Changes the optional "next page" of a step/page
   function updateNextStepForStep(stepKey, next = undefined) {
+    if (!workflow || !workflow.steps) return;
+
     // Check if input is valid
-    const stepIndex = workflow?.steps?.findIndex(step => step[0] === stepKey);
-    const stepBody = workflow?.steps?.[stepIndex]?.[1];
+    const stepIndex = workflow.steps.findIndex(step => step[0] === stepKey);
+    const stepBody = workflow.steps[stepIndex]?.[1];
     if (!stepBody) return;
 
     const newSteps = workflow.steps.slice();
@@ -169,12 +173,14 @@ export default function TasksPage() {
 
   // Changes the optional "next page" of a branching answer/choice
   function updateNextStepForTaskAnswer(taskKey, answerIndex, next = undefined) {
+    if (!workflow || !workflow?.tasks) return;
+
     // Check if input is valid
-    const task = workflow?.tasks?.[taskKey];
+    const task = workflow.tasks[taskKey];
     const answer = task?.answers[answerIndex];
     if (!task || !answer) return;
     
-    const newTasks = workflow.tasks ? { ...workflow.tasks } : {};  // Copy tasks
+    const newTasks = structuredClone(workflow.tasks);  // Copy tasks
     const newAnswers = task.answers.with(answerIndex, { ...answer, next })  // Copy, then modify, answers
     newTasks[taskKey] = {  // Insert modified answers into the task inside the copied tasks. Phew!
       ...task,
