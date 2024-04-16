@@ -193,7 +193,7 @@ export default function TasksPage() {
   // Limited Branching Rule:
   // - a Step can only have 1 branching task.
   // - If a Step has a branching task, it can't have any other tasks.
-  const shouldEnforceLimitedBranchingRule = !!canStepBranch(workflow?.steps?.[activeStepIndex], workflow?.tasks)
+  const enforceLimitedBranchingRule = !!canStepBranch(workflow?.steps?.[activeStepIndex], workflow?.tasks)
 
   const previewEnv = getPreviewEnv();
   const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;
@@ -247,12 +247,14 @@ export default function TasksPage() {
         <NewTaskDialog
           ref={newTaskDialog}
           addTask={addTask}
+          enforceLimitedBranchingRule={enforceLimitedBranchingRule}
           openEditStepDialog={openEditStepDialog}
           stepIndex={activeStepIndex}
         />
         <EditStepDialog
           ref={editStepDialog}
           allTasks={workflow.tasks}
+          enforceLimitedBranchingRule={enforceLimitedBranchingRule}
           onClose={handleCloseEditStepDialog}
           openNewTaskDialog={openNewTaskDialog}
           step={workflow.steps[activeStepIndex]}

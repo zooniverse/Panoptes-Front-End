@@ -16,6 +16,7 @@ const DEFAULT_HANDLER = () => {};
 function EditStepDialog({
   allTasks = {},
   deleteTask,
+  enforceLimitedBranchingRule = false,
   onClose = DEFAULT_HANDLER,
   openNewTaskDialog = DEFAULT_HANDLER,
   step = [],
@@ -112,6 +113,7 @@ function EditStepDialog({
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
   deleteTask: PropTypes.func,
+  enforceLimitedBranchingRule: PropTypes.bool,
   onClose: PropTypes.func,
   step: PropTypes.object,
   stepIndex: PropTypes.number,
