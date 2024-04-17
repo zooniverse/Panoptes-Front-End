@@ -50,7 +50,9 @@ function EditStepDialog({
 
   const firstTask = allTasks?.[taskKeys?.[0]]
   const taskName = taskNames[firstTask?.type] || '???';
-  const title = `Edit ${taskName} Task`;
+  const title = taskKeys?.length > 1
+    ? 'Edit A Multi-Task Page'
+    : `Edit ${taskName} Task`;
 
   return (
     <dialog
