@@ -93,6 +93,7 @@ function EditStepDialog({
       <div className="dialog-footer flex-row">
         <button
           className="big flex-item"
+          disabled={!!enforceLimitedBranchingRule}
           onClick={handleClickAddTaskButton}
           type="button"
         >
