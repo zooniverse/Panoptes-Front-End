@@ -7,10 +7,11 @@ import PlusIcon from '../../../../../icons/PlusIcon.jsx';
 const DEFAULT_HANDLER = () => {};
 
 export default function SingleQuestionTask({
+  enforceLimitedBranchingRule,
+  deleteTask = DEFAULT_HANDLER,
   task,
   taskKey,
-  deleteTask = DEFAULT_HANDLER,
-  updateTask = DEFAULT_HANDLER
+  updateTask = DEFAULT_HANDLER  
 }) {
   const [ answers, setAnswers ] = useState(task?.answers || []);
   const [ help, setHelp ] = useState(task?.help || '');
@@ -132,6 +133,7 @@ export default function SingleQuestionTask({
               id={`task-${taskKey}-multiple`}
               type="checkbox"
               checked={isMultiple}
+              disabled={enforceLimitedBranchingRule?.stepHasManyTasks && isMultiple /* If rule is enforced, you can't switch a Multi Question Task to a Single Question Task. */}
               onChange={(e) => {
                 setIsMultiple(!!e?.target?.checked);
               }}

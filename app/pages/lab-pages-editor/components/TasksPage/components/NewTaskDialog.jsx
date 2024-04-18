@@ -9,7 +9,7 @@ const DEFAULT_HANDLER = () => {};
 
 function NewTaskDialog({
   addTask = DEFAULT_HANDLER,
-  enforceLimitedBranchingRule = false,
+  enforceLimitedBranchingRule,
   openEditStepDialog = DEFAULT_HANDLER,
   stepIndex = -1
 }, forwardedRef) {
@@ -55,7 +55,7 @@ function NewTaskDialog({
 
   // The Question Task is either a Single Answer Question Task, or a Multiple Answer Question Task.
   // By default, this is 'single', but under certain conditions, a new Question Task will be created as a Multiple Answer Question Task.
-  const questionTaskType = (!enforceLimitedBranchingRule) ? 'single' : 'multiple'
+  const questionTaskType = (!enforceLimitedBranchingRule?.stepHasOneTask) ? 'single' : 'multiple'
 
   return (
     <dialog
@@ -124,7 +124,11 @@ function NewTaskDialog({
 
 NewTaskDialog.propTypes = {
   addTask: PropTypes.func,
-  enforceLimitedBranchingRule: PropTypes.bool,
+  enforceLimitedBranchingRule: PropTypes.shape({
+    stepHasBranch: PropTypes.bool,
+    stepHasOneTask: PropTypes.bool,
+    stepHasManyTasks: PropTypes.bool
+  }),
   openEditStepDialog: PropTypes.func,
   stepIndex: PropTypes.number
 };

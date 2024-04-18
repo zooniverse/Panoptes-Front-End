@@ -16,7 +16,7 @@ const DEFAULT_HANDLER = () => {};
 function EditStepDialog({
   allTasks = {},
   deleteTask,
-  enforceLimitedBranchingRule = false,
+  enforceLimitedBranchingRule,
   onClose = DEFAULT_HANDLER,
   openNewTaskDialog = DEFAULT_HANDLER,
   step = [],
@@ -85,6 +85,7 @@ function EditStepDialog({
             <EditTaskForm
               key={`editTaskForm-${taskKey}`}
               deleteTask={deleteTask}
+              enforceLimitedBranchingRule={enforceLimitedBranchingRule}
               task={task}
               taskKey={taskKey}
               updateTask={updateTask}
@@ -95,7 +96,7 @@ function EditStepDialog({
       <div className="dialog-footer flex-row">
         <button
           className="big flex-item"
-          disabled={!!enforceLimitedBranchingRule}
+          disabled={!!enforceLimitedBranchingRule?.stepHasBranch}
           onClick={handleClickAddTaskButton}
           type="button"
         >
@@ -116,7 +117,11 @@ function EditStepDialog({
 EditStepDialog.propTypes = {
   allTasks: PropTypes.object,
   deleteTask: PropTypes.func,
-  enforceLimitedBranchingRule: PropTypes.bool,
+  enforceLimitedBranchingRule: PropTypes.shape({
+    stepHasBranch: PropTypes.bool,
+    stepHasOneTask: PropTypes.bool,
+    stepHasManyTasks: PropTypes.bool
+  }),
   onClose: PropTypes.func,
   step: PropTypes.object,
   stepIndex: PropTypes.number,
