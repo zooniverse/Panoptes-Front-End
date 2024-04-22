@@ -50,7 +50,6 @@ export const SLUGS = [
   'abbsta/south-coast-threatened-fauna-recovery-project',
   'forestis/cedar-creek-eyes-on-the-wild',
   'zooniverse/chicago-wildlife-watch',
-  'zooniverse/wildcam-gorongosa/',
   'elwest/woodpecker-cavity-cam',
   'victorav/the-koster-seafloor-observatory',
   'victorav/spyfish-aotearoa',
