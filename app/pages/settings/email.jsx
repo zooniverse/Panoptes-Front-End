@@ -256,12 +256,12 @@ class EmailSettingsPage extends React.Component {
           </AutoSave>
           <div>
             {(isEmailValid)
-              ? <div><i className='fa fa-check-circle' style={{ color: '#51db72' }} /> Yeah looking good</div>
-              : <div><i className='fa fa-times-circle' style={{ color: '#e35950' }} /> Oh no</div>
+              ? <div><i className='fa fa-check-circle' style={{ color: '#51db72' }} /> <Translate content="emailSettings.general.emailValid" /></div>
+              : <div><i className='fa fa-times-circle' style={{ color: '#e35950' }} /> <Translate content="emailSettings.general.emailInvalid" /> | <Translate content="emailSettings.general.emailInvalidPrompt" /></div>
             }
             {(isEmailVerfied)
-              ? <div><i className='fa fa-check-circle' style={{ color: '#51db72' }} /> Yeah looking good</div>
-              : <div><i className='fa fa-times-circle' style={{ color: '#e35950' }} /> Oh no</div>
+              ? <div><i className='fa fa-check-circle' style={{ color: '#51db72' }} /> <Translate content="emailSettings.general.emailVerified" /></div>
+              : <div><i className='fa fa-times-circle' style={{ color: '#e35950' }} /> <Translate content="emailSettings.general.emailUnverified" /> | <Translate content="emailSettings.general.emailUnverifiedPrompt" /></div>
             }
           </div>
         </p>

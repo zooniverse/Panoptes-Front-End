@@ -287,7 +287,13 @@ export default {
       manual: 'Manage projects individually',
       beta: 'Get beta project email updates and become a beta tester',
       partnerPreferences: 'Zooniverse partner email preferences',
-      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts'
+      nasa: 'Get periodic email updates from NASA regarding broader NASA citizen science projects and efforts',
+      emailValid: 'Valid email',
+      emailInvalid: 'Verified email',
+      emailInvalidPrompt: 'Please re-enter your email above',
+      emailVerified: 'Verified email',
+      emailUnverified: 'Unverified email',
+      emailUnverifiedPrompt: 'Resend confirmation email'
     },
     talk: {
       section: 'Talk email preferences',
