@@ -235,6 +235,9 @@ class EmailSettingsPage extends React.Component {
   }
 
   render() {
+    const isEmailValid = !!this.props.user?.valid_email;
+    const isEmailVerfied = !!this.props.user?.confirmed_at;
+  
     return (
       <div className="content-container">
         <p>
@@ -251,6 +254,16 @@ class EmailSettingsPage extends React.Component {
               onChange={handleInputChange.bind(this.props.user)}
             />
           </AutoSave>
+          <div>
+            {(isEmailValid)
+              ? <div><i className='fa fa-check-circle' style={{ color: '#51db72' }} /> Yeah looking good</div>
+              : <div><i className='fa fa-times-circle' style={{ color: '#e35950' }} /> Oh no</div>
+            }
+            {(isEmailVerfied)
+              ? <div><i className='fa fa-check-circle' style={{ color: '#51db72' }} /> Yeah looking good</div>
+              : <div><i className='fa fa-times-circle' style={{ color: '#e35950' }} /> Oh no</div>
+            }
+          </div>
         </p>
         <p>
           <strong>
