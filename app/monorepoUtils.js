@@ -44,7 +44,18 @@ export const SLUGS = [
   'zookeeper/elephant-id-ey',
   'johandmi/arctic-archives-unraveling-greenlands-weather-history',
   'bmtcollections/documentation-detectives-transcribing-accession-registers',
-  'bluejackets/civil-war-bluejackets'
+  'bluejackets/civil-war-bluejackets',
+  'sandiegozooglobal/wildwatch-burrowing-owl',
+  'leinwc/island-critter-cam',
+  'abbsta/south-coast-threatened-fauna-recovery-project',
+  'forestis/cedar-creek-eyes-on-the-wild',
+  'zooniverse/chicago-wildlife-watch',
+  'elwest/woodpecker-cavity-cam',
+  'victorav/the-koster-seafloor-observatory',
+  'victorav/spyfish-aotearoa',
+  'dangogh/wheres-walleye',
+  'bcosentino/squirrelmapper',
+  'embeller/offal-wildlife-watching'
 ];
 
 export function usesMonorepo(slug) {
