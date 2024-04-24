@@ -14,7 +14,7 @@ var config = {
     ],
     historyApiFallback: true,
     client: {
-      overlay: true,
+      overlay: false,
       progress: true
     },
     server: 'https',
