@@ -284,10 +284,12 @@ class EmailSettingsPage extends React.Component {
                   <i className='fa fa-times-circle' style={{ color: '#e35950' }} />
                   {' '}
                   <Translate content="emailSettings.general.emailUnverified" />
+                  {/*
                   {' | '}
                   <a href="#" onClick={this.requestConfirmationEmail}>
                     <Translate content="emailSettings.general.emailUnverifiedPrompt" />
                   </a>
+                  */}
                 </div>
             }
           </div>
