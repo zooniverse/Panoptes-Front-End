@@ -152,7 +152,7 @@ Production deployments are triggered by an update to which commit the `productio
 
 Each task component class should have a couple static components:
 
-- `Summary`: Shows the post-classification summary of the tasks's annotation.
+- `Summary`: Shows the post-classification summary of the tasks' annotation.
 
 - `Editor`: The component used to edit the workflow task in the project builder.
 
@@ -192,7 +192,7 @@ Some static methods, called from the `MarkInitializer` component, which controls
 
 - `initStart`: For every mousedown/touchstart until `isComplete` returns true, return the values for the mark.
 
-- `initMove`" For every mousemove/touchmove, return new values for the mark.
+- `initMove`: For every mousemove/touchmove, return new values for the mark.
 
 - `initRelease`: For every mouseup/touchend, return new values for the mark.
 
