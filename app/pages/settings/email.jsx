@@ -240,8 +240,8 @@ class EmailSettingsPage extends React.Component {
   }
 
   render() {
-    const isEmailValid = false && !!this.props.user?.valid_email;
-    const isEmailVerfied = true || !!this.props.user?.confirmed_at;
+    const isEmailValid = !!this.props.user?.valid_email;
+    const isEmailVerfied = !!this.props.user?.confirmed_at;
   
     return (
       <div className="content-container">
@@ -278,13 +278,14 @@ class EmailSettingsPage extends React.Component {
               ? <div>
                   <i className='fa fa-check-circle' style={{ color: '#51db72' }} />
                   {' '}
-                  <Translate content="emailSettings.general.emailVerified" /></div>
+                  <Translate content="emailSettings.general.emailVerified" />
+                </div>
               : <div>
                   <i className='fa fa-times-circle' style={{ color: '#e35950' }} />
                   {' '}
                   <Translate content="emailSettings.general.emailUnverified" />
                   {' | '}
-                  <a href="#" onClick={requestConfirmationEmail}>
+                  <a href="#" onClick={this.requestConfirmationEmail}>
                     <Translate content="emailSettings.general.emailUnverifiedPrompt" />
                   </a>
                 </div>
