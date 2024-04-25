@@ -309,7 +309,11 @@ $fontWeightBoldPlus = 700
         border: 3px solid $grey1
         font-size: $fontSizeM
         padding: $sizeS $sizeXL
+        box-shadow: none
         text-transform: uppercase
+
+        &.teal-border
+          border: 3px solid $teal
       
       .dialog-header
         background: $teal
@@ -398,6 +402,7 @@ $fontWeightBoldPlus = 700
         
       .dialog-footer
         padding: $sizeXS $sizeL $sizeL $sizeL
+        margin-bottom: $sizeL
 
     section
       h3
@@ -470,6 +475,11 @@ $fontWeightBoldPlus = 700
       padding: 0
     
     .task-item
+      margin-top: $sizeL
+
+      &:first-child
+        margin-top: 0
+
       .task-text
         font-size: $fontSizeS
         font-weight: $fontWeightBold
@@ -513,7 +523,7 @@ $fontWeightBoldPlus = 700
       li
         display: flex
         flex-direction: column
-        margin: 0 $sizeM $sizeL $sizeM
+        margin: 0 $sizeM
         padding: 0
     
     div.vertical-layout

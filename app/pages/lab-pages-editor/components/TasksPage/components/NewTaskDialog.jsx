@@ -8,8 +8,9 @@ import TaskIcon from '../../../icons/TaskIcon.jsx';
 const DEFAULT_HANDLER = () => {};
 
 function NewTaskDialog({
-  addTaskWithStep = DEFAULT_HANDLER,
-  editStep = DEFAULT_HANDLER
+  addTask = DEFAULT_HANDLER,
+  openEditStepDialog = DEFAULT_HANDLER,
+  stepIndex = -1
 }, forwardedRef) {
   const newTaskDialog = useRef(null);
 
@@ -28,13 +29,25 @@ function NewTaskDialog({
     };
   });
 
-  async function addNewTask(e) {
+  /*
+  When an "add Task of type X" button is clicked, we add the Task and then
+  open the Edit Step Dialog. This behaviour is different whether a stepIndex
+  has been defined or not. (i.e. whether we're adding a Task to a new Step, or
+  to an existing Step.)
+   */
+  async function handleClickAddTask(e) {
     const tasktype = e?.currentTarget?.dataset?.tasktype;
     // Protip: don't use event.target, since it might return the child of the button, instead of the button itself
 
     closeDialog();
-    const newStepIndex = await addTaskWithStep(tasktype);
-    editStep(newStepIndex);
+
+    if (stepIndex < 0) {
+      const newStepIndex = await addTask(tasktype);
+      openEditStepDialog(newStepIndex);
+    } else {
+      await addTask(tasktype, stepIndex);
+      openEditStepDialog(stepIndex);
+    }
   }
 
   return (
@@ -70,7 +83,7 @@ function NewTaskDialog({
             aria-label="Add new Text Task"
             className="new-task-button"
             data-tasktype="text"
-            onClick={addNewTask}
+            onClick={handleClickAddTask}
             type="button"
           >
             <TaskIcon type='text' />
@@ -80,7 +93,7 @@ function NewTaskDialog({
             aria-label="Add new Question Task"
             className="new-task-button"
             data-tasktype="single"
-            onClick={addNewTask}
+            onClick={handleClickAddTask}
             type="button"
           >
             <TaskIcon type='single' />
@@ -90,7 +103,7 @@ function NewTaskDialog({
             aria-label="Add new Drawing Task"
             className="new-task-button"
             data-tasktype="drawing"
-            onClick={addNewTask}
+            onClick={handleClickAddTask}
             type="button"
           >
             <TaskIcon type='drawing' />
@@ -103,8 +116,9 @@ function NewTaskDialog({
 }
 
 NewTaskDialog.propTypes = {
-  addTaskWithStep: PropTypes.func,
-  editStep: PropTypes.func
+  addTask: PropTypes.func,
+  openEditStepDialog: PropTypes.func,
+  stepIndex: PropTypes.number
 };
 
 function onSubmit(e) {
