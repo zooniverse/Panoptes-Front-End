@@ -13,7 +13,7 @@ counterpart.registerTranslations('en', {
     about: `
       Zooniverse gives people of all ages and backgrounds the chance to participate
       in real research with over 50 active online citizen science projects. Work with
-      2.7 million registered users around the world to contribute to research
+      millions of registered users around the world to contribute to research
       projects led by hundreds of researchers.
     `,
     classifications: 'Classifications so far by',
