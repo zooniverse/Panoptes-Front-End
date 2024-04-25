@@ -7,6 +7,7 @@ const taskTypes = {
 };
 
 export default function EditTaskForm({  // It's not actually a form, but a fieldset that's part of a form.
+  deleteTask,
   task,
   taskKey,
   updateTask
@@ -22,6 +23,7 @@ export default function EditTaskForm({  // It's not actually a form, but a field
       <legend className="task-key">{taskKey}</legend>
       {(TaskForm)
         ? <TaskForm
+            deleteTask={deleteTask}
             task={task}
             taskKey={taskKey}
             updateTask={updateTask}

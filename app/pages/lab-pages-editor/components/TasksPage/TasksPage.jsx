@@ -21,7 +21,6 @@ export default function TasksPage() {
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
-  const activeStepKey = workflow?.steps?.[activeStepIndex]?.[0];
   const isActive = true; // TODO
 
   /*
@@ -77,8 +76,39 @@ export default function TasksPage() {
   }
 
   function deleteTask(taskKey) {
-    if (!taskKey) return;
-    // TODO
+    // First check: does the task exist?
+    if (!workflow || !taskKey || !workflow?.tasks?.[taskKey]) return;
+
+    // Second check: is this the only task in the step?
+    const activeStepTaskKeys = workflow.steps?.[activeStepIndex]?.[1]?.taskKeys || [];
+    const onlyTaskInStep = !!(activeStepTaskKeys.length === 1 && activeStepTaskKeys[0] === taskKey);
+
+    // Third check: are you sure?
+    const confirmed = onlyTaskInStep
+      ? confirm(`Delete Task ${taskKey}? This will also delete the Page.`)
+      : confirm(`Delete Task ${taskKey}?`);
+    if (!confirmed) return;
+
+    // Delete the task.
+    const newTasks = structuredClone(workflow.tasks || {});
+    delete newTasks[taskKey];
+
+    // Delete the task reference in steps.
+    const newSteps = structuredClone(workflow.steps || {});
+    newSteps.forEach(step => {
+      const stepBody = step[1] || {};
+      stepBody.taskKeys = (stepBody?.taskKeys || []).filter(key => key !== taskKey);
+    });
+
+    // Close the Edit Step Dialog, if necessary. 
+    // Note that this will also trigger handleCloseEditStepDialog()
+    if (onlyTaskInStep) {
+      editStepDialog.current?.closeDialog();
+    }
+
+    // Cleanup, then commit.
+    const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps);    
+    update(cleanedTasksAndSteps);
   }
 
   function moveStep(from, to) {
@@ -92,16 +122,15 @@ export default function TasksPage() {
   function deleteStep(stepIndex) {
     if (!workflow) return;
     const { steps, tasks } = workflow;
-    const [ stepKey, stepBody ] = steps[stepIndex] || [];
-    const tasksToBeDeleted = stepBody?.taskKeys || [];
+    const [ stepKey ] = steps[stepIndex] || [];
 
     const confirmed = confirm(`Delete Page ${stepKey}?`);
     if (!confirmed) return;
 
     const newSteps = steps.toSpliced(stepIndex, 1);  // Copy then delete Step at stepIndex
     const newTasks = tasks ? { ...tasks } : {};  // Copy tasks
-    tasksToBeDeleted.forEach(taskKey => delete newTasks[taskKey]);
 
+    // cleanedupTasksAndSteps() will also remove tasks not associated with any step.
     const cleanedTasksAndSteps = cleanupTasksAndSteps(newTasks, newSteps); 
     update(cleanedTasksAndSteps);
   }

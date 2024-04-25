@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import DeleteIcon from '../../../../../icons/DeleteIcon.jsx';
 
 const DEFAULT_HANDLER = () => {};
 
 export default function TextTask({
   task,
   taskKey,
+  deleteTask = DEFAULT_HANDLER,
   updateTask = DEFAULT_HANDLER
 }) {
   const [ help, setHelp ] = useState(task?.help || '');
@@ -20,6 +22,10 @@ export default function TextTask({
       required
     };
     updateTask(taskKey, newTask);
+  }
+
+  function doDelete() {
+    deleteTask(taskKey);
   }
 
   // For inputs that don't have onBlur, update triggers automagically.
@@ -45,8 +51,15 @@ export default function TextTask({
             onBlur={update}
             onChange={(e) => { setInstruction(e?.target?.value) }}
           />
+          <button
+            aria-label={`Delete Task ${taskKey}`}
+            className="big"
+            onClick={doDelete}
+            type="button"
+          >
+            <DeleteIcon />
+          </button>
         </div>
-        {/* <button>Delete</button> */}
       </div>
       <div className="input-row">
         <span className="narrow">
