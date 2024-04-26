@@ -45,7 +45,6 @@ export const SLUGS = [
   'johandmi/arctic-archives-unraveling-greenlands-weather-history',
   'bmtcollections/documentation-detectives-transcribing-accession-registers',
   'bluejackets/civil-war-bluejackets',
-  'sandiegozooglobal/wildwatch-burrowing-owl',
   'leinwc/island-critter-cam',
   'abbsta/south-coast-threatened-fauna-recovery-project',
   'forestis/cedar-creek-eyes-on-the-wild',
