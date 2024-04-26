@@ -13,7 +13,7 @@ export default function ExperimentalPanel({
 
   function experimentalQuickSetup() {
     update({
-      first_task: 'P0',
+      first_task: '',
       tasks: {
         'T0': {
           answers: [

@@ -20,6 +20,7 @@ export default function TasksPage() {
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
   const [ activeDragItem, setActiveDragItem ] = useState(-1);  // Keeps track of active item being dragged (StepItem). This is because "dragOver" CAN'T read the data from dragEnter.dataTransfer.getData().
+  const firstStepKey = workflow?.steps?.[0]?.[0] || '';
   const isActive = true; // TODO
 
   /*
@@ -155,8 +156,10 @@ export default function TasksPage() {
   }
 
   function handleChangeStartingPage(e) {
-    const first_task = e?.target?.value || '';
-    update({ first_task });
+    const targetStepKey = e?.target?.value || '';
+    const targetStepIndex = workflow?.steps?.findIndex(([stepKey]) => stepKey === targetStepKey) || -1;
+    if (targetStepIndex < 0) return;
+    moveStep(targetStepIndex, 0);
   }
 
   // Changes the optional "next page" of a step/page
@@ -228,7 +231,7 @@ export default function TasksPage() {
             aria-label="Choose starting Page"
             className="flex-item"
             onChange={handleChangeStartingPage}
-            defaultValue={workflow?.first_task || ''}
+            value={firstStepKey}
           >
             <option value="">Choose starting page</option>
             {workflow.steps?.map(([stepKey, stepBody]) => (
@@ -236,7 +239,7 @@ export default function TasksPage() {
                 key={`choose-starting-page-${stepKey}`}
                 value={stepKey}
               >
-                {workflow.first_task === stepKey && 'Starting page: '}
+                {firstStepKey === stepKey && 'Starting page: '}
                 {stepBody?.taskKeys?.join(', ') || `(${stepKey})` /* Note: if you see the stepKey instead of the taskKeys, something's wrong. */}
               </option>
             ))}
