@@ -170,7 +170,10 @@ $fontWeightBoldPlus = 700
   // ---------------------------------------------------------------------------
 
   .workflow-header
-    margin-bottom: $sizeXL
+    margin-bottom: $sizeXXL
+
+    a
+      min-width: 40%
 
     .workflow-header-links
       margin-bottom: $sizeM
@@ -184,6 +187,8 @@ $fontWeightBoldPlus = 700
           margin-right: $sizeS
 
     .workflow-header-tabs
+      gap: $sizeXL
+      justify-content: center
       border-bottom: 0.5px solid $grey1
 
       button
