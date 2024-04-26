@@ -155,7 +155,7 @@ export default function TasksPage() {
   }
 
   function handleChangeStartingPage(e) {
-    console.log('+++ handleChangeStartingPage: ', e);
+    console.log('+++ handleChangeStartingPage: ', e?.target?.value);
   }
 
   // Changes the optional "next page" of a step/page

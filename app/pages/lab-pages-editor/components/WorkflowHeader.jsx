@@ -21,7 +21,7 @@ export default function WorkflowHeader({
 
   // When clicking a tab button, make that tab active. This is pretty straightforward.
   function onClick(e) {
-    const { tab } = e.target.dataset;
+    const { tab } = e?.target?.dataset || {};
     setCurrentTab(parseInt(tab));
   }
 
