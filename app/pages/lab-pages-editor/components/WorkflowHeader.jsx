@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 
+import getPreviewEnv from '../helpers/getPreviewEnv.js';
+import ExternalLinkIcon from '../icons/ExternalLinkIcon.jsx';
 import ReturnIcon from '../icons/ReturnIcon.jsx';
 import { useWorkflowContext } from '../context.js';
 import strings from '../strings.json';
@@ -12,8 +14,10 @@ export default function WorkflowHeader({
   setCurrentTab = DEFAULT_HANDLER,
   tabs = []
 }) {
-  const { workflow } = useWorkflowContext();
+  const { project, workflow } = useWorkflowContext();
   const returnUrl = `/lab/${projectId}/workflows`;
+  const previewEnv = getPreviewEnv();
+  const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;
 
   // When clicking a tab button, make that tab active. This is pretty straightforward.
   function onClick(e) {
@@ -43,14 +47,25 @@ export default function WorkflowHeader({
   if (!workflow) return null;
 
   return (
-    <div className="workflow-header flex-row">
-      <a href={returnUrl}> {/* Formerly <Link> from 'react-router', but React was throwing Legacy Context errors. */}
-        <ReturnIcon />
-        {strings.PagesEditor.components.WorkflowHeader.return}
-      </a>
+    <div className="workflow-header">
+      <div className="workflow-header-links flex-row">
+        <a href={returnUrl}> {/* Formerly <Link> from 'react-router', but React was throwing Legacy Context errors. */}
+          <ReturnIcon />
+          {strings.PagesEditor.components.WorkflowHeader.return}
+        </a>
+        <span className="flex-item" />
+        <a
+          className="button-link"
+          href={previewUrl}
+          rel="noopener noreferrer"
+          target='_blank'
+        >
+          Preview Workflow <ExternalLinkIcon />
+        </a>
+      </div>
       <div
         role="tablist"
-        className="flex-row flex-item justify-around"
+        className="workflow-header-tabs flex-row flex-item justify-around"
       >
         {tabs.map((tab, index) => (
           <TabButton
