@@ -7,14 +7,12 @@ import getNewStepKey from '../../helpers/getNewStepKey.js';
 import getNewTaskKey from '../../helpers/getNewTaskKey.js';
 import moveItemInArray from '../../helpers/moveItemInArray.js';
 import cleanupTasksAndSteps from '../../helpers/cleanupTasksAndSteps.js';
-import getPreviewEnv from '../../helpers/getPreviewEnv.js';
 // import strings from '../../strings.json'; // TODO: move all text into strings
 
 import ExperimentalPanel from './ExperimentalPanel.jsx';
 import EditStepDialog from './components/EditStepDialog';
 import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem';
-import ExternalLinkIcon from '../../icons/ExternalLinkIcon.jsx';
 
 export default function TasksPage() {
   const { project, workflow, update } = useWorkflowContext();
@@ -156,6 +154,10 @@ export default function TasksPage() {
     setActiveStepIndex(-1);
   }
 
+  function handleChangeStartingPage(e) {
+    console.log('+++ handleChangeStartingPage: ', e);
+  }
+
   // Changes the optional "next page" of a step/page
   function updateNextStepForStep(stepKey, next = undefined) {
     if (!workflow || !workflow.steps) return;
@@ -201,8 +203,6 @@ export default function TasksPage() {
     stepHasOneTask: activeStep?.[1]?.taskKeys?.length > 0,
     stepHasManyTasks: activeStep?.[1]?.taskKeys?.length > 1
   }
-  const previewEnv = getPreviewEnv();
-  const previewUrl = `https://frontend.preview.zooniverse.org/projects/${project?.slug}/classify/workflow/${workflow?.id}${previewEnv}`;
   if (!workflow) return null;
 
   return (
@@ -222,14 +222,21 @@ export default function TasksPage() {
           >
             Add a new Task
           </button>
-          <a
-            className="flex-item button-link"
-            href={previewUrl}
-            rel="noopener noreferrer"
-            target='_blank'
+          <select
+            aria-label="Choose starting Page"
+            className="flex-item"
+            onChange={handleChangeStartingPage}
           >
-            Preview Workflow <ExternalLinkIcon />
-          </a>
+            <option value="">Choose starting page</option>
+            {workflow?.steps?.map(([stepKey, stepBody]) => (
+              <option
+                key={`choose-starting-page-${stepKey}`}
+                value={stepKey}
+              >
+                {stepBody?.taskKeys?.join(', ') || `Page ${stepKey}`}
+              </option>
+            ))}
+          </select>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
           {workflow.steps.map((step, index) => (
