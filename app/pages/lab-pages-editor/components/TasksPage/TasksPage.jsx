@@ -231,6 +231,7 @@ export default function TasksPage() {
             aria-label="Choose starting Page"
             className="flex-item workflow-starting-page"
             onChange={handleChangeStartingPage}
+            style={(workflow?.steps?.length < 1) ? { display: 'none' } : undefined}
             value={firstStepKey}
           >
             <option value="">Choose starting page</option>
