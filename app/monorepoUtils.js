@@ -53,7 +53,6 @@ export const SLUGS = [
   'elwest/woodpecker-cavity-cam',
   'victorav/the-koster-seafloor-observatory',
   'victorav/spyfish-aotearoa',
-  'dangogh/wheres-walleye',
   'bcosentino/squirrelmapper',
   'embeller/offal-wildlife-watching'
 ];
