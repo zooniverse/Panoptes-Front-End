@@ -15,7 +15,7 @@ import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem';
 
 export default function TasksPage() {
-  const { project, workflow, update } = useWorkflowContext();
+  const { workflow, update } = useWorkflowContext();
   const editStepDialog = useRef(null);
   const newTaskDialog = useRef(null);
   const [ activeStepIndex, setActiveStepIndex ] = useState(-1);  // Tracks which Step is being edited.
@@ -155,7 +155,8 @@ export default function TasksPage() {
   }
 
   function handleChangeStartingPage(e) {
-    console.log('+++ handleChangeStartingPage: ', e?.target?.value);
+    const first_task = e?.target?.value || '';
+    update({ first_task });
   }
 
   // Changes the optional "next page" of a step/page
@@ -203,13 +204,14 @@ export default function TasksPage() {
     stepHasOneTask: activeStep?.[1]?.taskKeys?.length > 0,
     stepHasManyTasks: activeStep?.[1]?.taskKeys?.length > 1
   }
+
   if (!workflow) return null;
 
   return (
     <div className="tasks-page">
       <div className="workflow-title flex-row">
-        <h2 className="flex-item">{workflow?.display_name}</h2>
-        <span className="workflow-id">{`#${workflow?.id}`}</span>
+        <h2 className="flex-item">{workflow.display_name}</h2>
+        <span className="workflow-id">{`#${workflow.id}`}</span>
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
       </div>
       <section aria-labelledby="workflow-tasks-heading">
@@ -226,20 +228,22 @@ export default function TasksPage() {
             aria-label="Choose starting Page"
             className="flex-item"
             onChange={handleChangeStartingPage}
+            defaultValue={workflow?.first_task || ''}
           >
             <option value="">Choose starting page</option>
-            {workflow?.steps?.map(([stepKey, stepBody]) => (
+            {workflow.steps?.map(([stepKey, stepBody]) => (
               <option
                 key={`choose-starting-page-${stepKey}`}
                 value={stepKey}
               >
-                {stepBody?.taskKeys?.join(', ') || `Page ${stepKey}`}
+                {workflow.first_task === stepKey && 'Starting page: '}
+                {stepBody?.taskKeys?.join(', ') || `(${stepKey})` /* Note: if you see the stepKey instead of the taskKeys, something's wrong. */}
               </option>
             ))}
           </select>
         </div>
         <ul className="steps-list" aria-label="Pages/Steps">
-          {workflow.steps.map((step, index) => (
+          {workflow.steps?.map((step, index) => (
             <StepItem
               key={`stepItem-${step[0]}`}
               activeDragItem={activeDragItem}
