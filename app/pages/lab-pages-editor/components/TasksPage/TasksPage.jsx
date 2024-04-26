@@ -229,7 +229,7 @@ export default function TasksPage() {
           </button>
           <select
             aria-label="Choose starting Page"
-            className="flex-item"
+            className="flex-item workflow-starting-page"
             onChange={handleChangeStartingPage}
             value={firstStepKey}
           >
