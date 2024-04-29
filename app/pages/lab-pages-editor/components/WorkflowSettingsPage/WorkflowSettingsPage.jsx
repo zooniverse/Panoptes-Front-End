@@ -18,6 +18,7 @@ export default function WorkflowSettingsPage() {
     const { updaterule } = e?.target?.dataset || {};
     if (!key) return;
 
+    if (updaterule === 'checkbox') value = !!e?.target?.checked;
     if (updaterule === 'convert_to_number') value = parseInt(value);
     if (updaterule === 'undefined_if_empty') value = value || undefined;
 
@@ -104,6 +105,28 @@ export default function WorkflowSettingsPage() {
       </div>
 
       <div className="column-group col-2">
+
+        <fieldset>
+          <legend>Image Display Options</legend>
+          <p id="subject-viewer-info">
+            Check this option if you want to limit subject height to always fit in the browser window. The max height will be the image's original pixel height.
+          </p>
+          <div className="flex-row spacing-bottom-XS">
+            <input
+              checked={!!workflow?.configuration?.limit_subject_height}
+              data-updaterule="checkbox"
+              id="limit_subject_height"
+              name="configuration.limit_subject_height"
+              onChange={doUpdate}
+              type="checkbox"
+            />
+            <label htmlFor="limit_subject_height">
+              Limit subject image height
+            </label>
+          </div>
+        </fieldset>
+
+        {/*
         <fieldset>
           <legend>Subject Viewer</legend>
           <p id="subject-viewer-info">
@@ -152,6 +175,7 @@ export default function WorkflowSettingsPage() {
           <legend>Quicktalk</legend>
           <p>TODO</p>
         </fieldset>
+        */}
 
       </div>
     </form>
