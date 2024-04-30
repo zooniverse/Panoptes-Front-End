@@ -109,9 +109,9 @@ export default function WorkflowSettingsPage() {
         <fieldset>
           <legend>Image Display Options</legend>
           <p id="subject-viewer-info">
-            Check this option if you want to limit subject height to always fit in the browser window. The max height will be the image's original pixel height.
+            Check "limit subject image height" if you want to limit subject height to always fit in the browser window. The max height will be the image's original pixel height.
           </p>
-          <div className="flex-row spacing-bottom-XS">
+          <div className="flex-row align-start spacing-bottom-XS">
             <input
               checked={!!workflow?.configuration?.limit_subject_height}
               data-updaterule="checkbox"
@@ -122,6 +122,19 @@ export default function WorkflowSettingsPage() {
             />
             <label htmlFor="limit_subject_height">
               Limit subject image height
+            </label>
+          </div>
+          <div className="flex-row align-start spacing-bottom-XS">
+            <input
+              checked={!!workflow?.configuration?.invert_subject}
+              data-updaterule="checkbox"
+              id="invert_subject"
+              name="configuration.invert_subject"
+              onChange={doUpdate}
+              type="checkbox"
+            />
+            <label htmlFor="invert_subject">
+              Allow users to flip image color
             </label>
           </div>
         </fieldset>
