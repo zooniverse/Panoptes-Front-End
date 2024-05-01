@@ -114,6 +114,28 @@ export default function WorkflowSettingsPage() {
           </p>
 
           <div className="flex-row align-start spacing-bottom-XS">
+            <select
+              aria-label="Play iterations"
+              className="flex-item"
+              defaultValue={ /* If undefined, default value is '3'. If empty string '', it's infinite. */
+                (workflow?.configuration?.playIterations === undefined)
+                ? '3'
+                : workflow?.configuration?.playIterations
+              }
+              id="playIterations"
+              name="configuration.playIterations"
+              onChange={doUpdate}
+            >
+              <option value="">Infinite</option>
+              <option value="3">3</option>
+              <option value="5">5</option>
+            </select>
+            <label htmlFor="playIterations">
+              Play Iterations - choose how many times the images loop
+            </label>
+          </div>
+
+          <div className="flex-row align-start spacing-bottom-XS">
             <input
               checked={!!workflow?.configuration?.flipbook_autoplay}
               data-updaterule="checkbox"
