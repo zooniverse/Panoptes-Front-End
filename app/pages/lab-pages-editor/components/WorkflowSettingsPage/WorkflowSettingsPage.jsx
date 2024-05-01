@@ -4,6 +4,7 @@ import AssociatedTutorial from './components/AssociatedTutorial.jsx';
 
 export default function WorkflowSettingsPage() {
   const { workflow, update, project } = useWorkflowContext();
+  const showSeparateFramesOptions = !!workflow?.configuration?.enable_switching_flipbook_and_separate;
 
   function onSubmit(e) {
     e.preventDefault();
@@ -80,7 +81,7 @@ export default function WorkflowSettingsPage() {
               onChange={doUpdate}
             >
               <option value="classification_count">Classification count</option>
-              <option value="never_retire">Never retire</option>
+              {/* <option value="never_retire">Never retire</option> */}
               {/* TODO: this is just a POC - never_retire should be removed, even though it's a valid option on the API. */}
             </select>
             <input
@@ -107,8 +108,60 @@ export default function WorkflowSettingsPage() {
       <div className="column-group col-2">
 
         <fieldset>
+          <legend>Multi-Image Options</legend>
+          <p id="multi-image-info">
+            Choose how to display subjects with multiple images. If your subjects are in sequence, such as camera trap images, volunteers can play them like a .gif using the Flipbook viewer.
+          </p>
+
+          <div className="flex-row align-start spacing-bottom-XS">
+            <input
+              checked={!!workflow?.configuration?.flipbook_autoplay}
+              data-updaterule="checkbox"
+              id="flipbook_autoplay"
+              name="configuration.flipbook_autoplay"
+              onChange={doUpdate}
+              type="checkbox"
+            />
+            <label htmlFor="flipbook_autoplay">
+              Autoplay - automatically loop through a subject's images when the page loads
+            </label>
+          </div>
+
+          <div className="flex-row align-start spacing-bottom-XS">
+            <input
+              checked={!!workflow?.configuration?.enable_switching_flipbook_and_separate}
+              data-updaterule="checkbox"
+              id="enable_switching_flipbook_and_separate"
+              name="configuration.enable_switching_flipbook_and_separate"
+              onChange={doUpdate}
+              type="checkbox"
+            />
+            <label htmlFor="enable_switching_flipbook_and_separate">
+              Allow Separate Frames View - volunteers can choose flipbook or a separate frames view
+            </label>
+          </div>
+
+          <div className="flex-row align-start spacing-bottom-XS">
+            <input
+              checked={!!workflow?.configuration?.multi_image_clone_markers}
+              data-updaterule="checkbox"
+              id="multi_image_clone_markers"
+              name="configuration.multi_image_clone_markers"
+              onChange={doUpdate}
+              type="checkbox"
+            />
+            <label htmlFor="multi_image_clone_markers">
+              Clone marks in all frames - for drawing tasks
+            </label>
+          </div>
+
+        </fieldset>
+
+        <hr />
+
+        <fieldset>
           <legend>Image Display Options</legend>
-          <p id="subject-viewer-info">
+          <p id="limit-subject-height-info">
             Check "limit subject image height" if you want to limit subject height to always fit in the browser window. The max height will be the image's original pixel height.
           </p>
           <div className="flex-row align-start spacing-bottom-XS">
@@ -140,6 +193,8 @@ export default function WorkflowSettingsPage() {
         </fieldset>
 
         {/*
+        <hr />
+
         <fieldset>
           <legend>Subject Viewer</legend>
           <p id="subject-viewer-info">
