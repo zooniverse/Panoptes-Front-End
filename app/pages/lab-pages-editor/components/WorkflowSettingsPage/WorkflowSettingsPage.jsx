@@ -2,8 +2,16 @@ import { useWorkflowContext } from '../../context.js';
 import AssociatedSubjectSets from './components/AssociatedSubjectSets.jsx';
 import AssociatedTutorial from './components/AssociatedTutorial.jsx';
 
+// Use ?showRemovedOptions=true to show options that are technically valid in
+// the API, but removed from the editor.
+function getShowRemovedOptions() {
+  const params = new URLSearchParams(window?.location?.search);
+  return !!params.get('showRemovedOptions');
+}
+
 export default function WorkflowSettingsPage() {
   const { workflow, update, project } = useWorkflowContext();
+  const showRemovedOptions = getShowRemovedOptions();
   const showSeparateFramesOptions = !!workflow?.configuration?.enable_switching_flipbook_and_separate;
 
   function onSubmit(e) {
@@ -76,26 +84,31 @@ export default function WorkflowSettingsPage() {
               aria-label="Retirement criteria"
               className="flex-item"
               defaultValue={workflow?.retirement?.criteria}
+              disabled={!showRemovedOptions}
               aria-describedby="subject-retirement-info"
               name="retirement.criteria"
               onChange={doUpdate}
             >
               <option value="classification_count">Classification count</option>
-              {/* <option value="never_retire">Never retire</option> */}
-              {/* TODO: this is just a POC - never_retire should be removed, even though it's a valid option on the API. */}
+              {(showRemovedOptions || workflow?.retirement?.criteria === 'never_retire') &&
+                <option value="never_retire">Never retire</option>
+              }
             </select>
-            <input
-              aria-label="Retirement count"
-              className="small-width"
-              defaultValue={workflow?.retirement?.options?.count}
-              data-updaterule="convert_to_number"
-              max="100"
-              min="1"
-              name="retirement.options.count"
-              onBlur={doUpdate}
-              placeholder="∞"
-              type="number"
-            />
+            {/* Reason for removal (May 2024): standardisation. PFE/FEM Lab doesn't allow "never retire" option, nor setting the retirement count. */}
+            {showRemovedOptions && (workflow?.retirement?.criteria === 'classification_count') && (
+              <input
+                aria-label="Retirement count"
+                className="small-width"
+                defaultValue={workflow?.retirement?.options?.count}
+                data-updaterule="convert_to_number"
+                max="100"
+                min="1"
+                name="retirement.options.count"
+                onBlur={doUpdate}
+                placeholder="∞"
+                type="number"
+              />
+            )}
           </div>
           <p className="small-info">
             If you&apos;d like more complex retirement rules such as conditional
@@ -214,58 +227,36 @@ export default function WorkflowSettingsPage() {
           </div>
         </fieldset>
 
-        {/*
-        <hr />
+        {showRemovedOptions && (<>  {/* Reason for removal (Apr 2024): we want users to use automatic subject viewer selection, to reduce complexity and complications. */}
+          <hr />
 
-        <fieldset>
-          <legend>Subject Viewer</legend>
-          <p id="subject-viewer-info">
-            Choose how to display your subjects.
-            Refer to the Subject Viewer section of the Glossary for more info.
-          </p>
-          <div className="flex-row align-start spacing-bottom-XS">
-            <select
-              aria-label="Subject viewer"
-              className="flex-item"
-              data-updaterule="undefined_if_empty"
-              defaultValue={workflow?.configuration?.subject_viewer || ''}
-              aria-describedby="subject-viewer-info"
-              name="configuration.subject_viewer"
-              onChange={doUpdate}
-            >
-              <option value="">None selected (default)</option>
-              <option value="imageAndText">Image and Text</option>
-              <option value="jsonData">JSON data charts</option>
-              <option value="multiFrame">Multi-Frame</option>
-              <option value="singleImage">Single Image</option>
-              <option value="singleText">Single Text</option>
-              <option value="subjectGroup">Subject Group</option>
-            </select>
-          </div>
-        </fieldset>
-
-        <fieldset className="disabled">
-          <legend>Multi-Image Options</legend>
-          <p>
-            Choose how to display subjects with multiple images.
-            If your subjects are in a sequence, such as camera trap images,
-            volunteers can play them like a .gif using the Flipbook viewer.
-          </p>
-          <p>TODO</p>
-        </fieldset>
-
-        <hr />
-
-        <fieldset className="disabled">
-          <legend>Classification Tools</legend>
-          <p>TODO</p>
-        </fieldset>
-
-        <fieldset className="disabled">
-          <legend>Quicktalk</legend>
-          <p>TODO</p>
-        </fieldset>
-        */}
+          <fieldset>
+            <legend>Subject Viewer</legend>
+            <p id="subject-viewer-info">
+              Choose how to display your subjects.
+              Refer to the Subject Viewer section of the Glossary for more info.
+            </p>
+            <div className="flex-row align-start spacing-bottom-XS">
+              <select
+                aria-label="Subject viewer"
+                className="flex-item"
+                data-updaterule="undefined_if_empty"
+                defaultValue={workflow?.configuration?.subject_viewer || ''}
+                aria-describedby="subject-viewer-info"
+                name="configuration.subject_viewer"
+                onChange={doUpdate}
+              >
+                <option value="">None selected (default)</option>
+                <option value="imageAndText">Image and Text</option>
+                <option value="jsonData">JSON data charts</option>
+                <option value="multiFrame">Multi-Frame</option>
+                <option value="singleImage">Single Image</option>
+                <option value="singleText">Single Text</option>
+                <option value="subjectGroup">Subject Group</option>
+              </select>
+            </div>
+          </fieldset>
+        </>)}
 
       </div>
     </form>
