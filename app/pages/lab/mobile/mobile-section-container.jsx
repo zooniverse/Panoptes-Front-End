@@ -101,7 +101,6 @@ function drawingTaskHasNoSubtasks({ task }) {
 const validatorFns = {
   single: {
     taskQuestionNotTooLong,
-    taskFeedbackDisabled,
     workflowHasSingleTask,
     workflowNotTooManyShortcuts: workflowHasNoMoreThanXShortcuts(2),
     workflowDoesNotUseGroupedSubjectSelection,
@@ -109,7 +108,6 @@ const validatorFns = {
   },
   multiple: {
     taskQuestionNotTooLong,
-    taskFeedbackDisabled,
     workflowHasSingleTask,
     workflowNotTooManyShortcuts: workflowHasNoMoreThanXShortcuts(2),
     workflowDoesNotUseGroupedSubjectSelection,
