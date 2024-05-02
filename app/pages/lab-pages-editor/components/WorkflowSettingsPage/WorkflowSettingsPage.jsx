@@ -190,6 +190,63 @@ export default function WorkflowSettingsPage() {
             </label>
           </div>
 
+          {showSeparateFramesOptions && (<>
+            <p>Show separate frames as:</p>
+            <ul className="input-group">
+              <li key="separate-frames-as-col">
+                <input
+                  checked={workflow?.configuration?.multi_image_layout === 'col'}
+                  id="separate-frames-as-col"
+                  onChange={doUpdate}
+                  name="configuration.multi_image_layout"
+                  value="col"
+                  type="radio"
+                />
+                <label htmlFor="separate-frames-as-col">
+                  Single column - all frames stacked vertically (recommended for landscape subjects; default for mobile devices)
+                </label>
+              </li>
+              <li key="separate-frames-as-row">
+                <input
+                  checked={workflow?.configuration?.multi_image_layout === 'row'}
+                  id="separate-frames-as-row"
+                  name="configuration.multi_image_layout"
+                  onChange={doUpdate}
+                  value="row"
+                  type="radio"
+                />
+                <label htmlFor="separate-frames-as-row">
+                  Single row - all frames side by side horizontally (recommended only for portrait subjects)
+                </label>
+              </li>
+              <li key="separate-frames-as-grid2">
+                <input
+                  checked={workflow?.configuration?.multi_image_layout === 'grid2'}
+                  id="separate-frames-as-grid2"
+                  name="configuration.multi_image_layout"
+                  onChange={doUpdate}
+                  value="grid2"
+                  type="radio"
+                />
+                <label htmlFor="separate-frames-as-grid2">
+                  Grid - frames distributed evenly over 2 columns
+                </label>
+              </li>
+              <li key="separate-frames-as-grid3">
+                <input
+                  checked={workflow?.configuration?.multi_image_layout === 'grid3'}
+                  id="separate-frames-as-grid3"
+                  name="configuration.multi_image_layout"
+                  onChange={doUpdate}
+                  value="grid3"
+                  type="radio"
+                />
+                <label htmlFor="separate-frames-as-grid3">
+                  Grid - frames distributed evenly over 3 columns
+                </label>
+              </li>
+            </ul>
+          </>)}
         </fieldset>
 
         <hr />
