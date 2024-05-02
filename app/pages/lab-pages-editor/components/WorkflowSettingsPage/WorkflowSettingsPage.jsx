@@ -144,7 +144,7 @@ export default function WorkflowSettingsPage() {
               <option value="5">5</option>
             </select>
             <label htmlFor="playIterations">
-              Play Iterations - choose how many times the images loop
+              Play Iterations <span className="small-info">- choose how many times the images loop</span>
             </label>
           </div>
 
@@ -158,7 +158,7 @@ export default function WorkflowSettingsPage() {
               type="checkbox"
             />
             <label htmlFor="flipbook_autoplay">
-              Autoplay - automatically loop through a subject's images when the page loads
+              Autoplay <span className="small-info">- automatically loop through a subject's images when the page loads</span>
             </label>
           </div>
 
@@ -172,7 +172,7 @@ export default function WorkflowSettingsPage() {
               type="checkbox"
             />
             <label htmlFor="enable_switching_flipbook_and_separate">
-              Allow Separate Frames View - volunteers can choose flipbook or a separate frames view
+              Allow Separate Frames View <span className="small-info">- volunteers can choose flipbook or a separate frames view</span>
             </label>
           </div>
 
@@ -186,7 +186,7 @@ export default function WorkflowSettingsPage() {
               type="checkbox"
             />
             <label htmlFor="multi_image_clone_markers">
-              Clone marks in all frames - for drawing tasks
+              Clone marks in all frames <span className="small-info">- for drawing tasks</span>
             </label>
           </div>
 
@@ -203,7 +203,7 @@ export default function WorkflowSettingsPage() {
                   type="radio"
                 />
                 <label htmlFor="separate-frames-as-col">
-                  Single column - all frames stacked vertically (recommended for landscape subjects; default for mobile devices)
+                  Single column <span className="small-info">- all frames stacked vertically (recommended for landscape subjects; default for mobile devices)</span>
                 </label>
               </li>
               <li key="separate-frames-as-row">
@@ -216,7 +216,7 @@ export default function WorkflowSettingsPage() {
                   type="radio"
                 />
                 <label htmlFor="separate-frames-as-row">
-                  Single row - all frames side by side horizontally (recommended only for portrait subjects)
+                  Single row <span className="small-info">- all frames side by side horizontally (recommended only for portrait subjects)</span>
                 </label>
               </li>
               <li key="separate-frames-as-grid2">
@@ -229,7 +229,7 @@ export default function WorkflowSettingsPage() {
                   type="radio"
                 />
                 <label htmlFor="separate-frames-as-grid2">
-                  Grid - frames distributed evenly over 2 columns
+                  Grid <span className="small-info">- frames distributed evenly over 2 columns</span>
                 </label>
               </li>
               <li key="separate-frames-as-grid3">
@@ -242,7 +242,7 @@ export default function WorkflowSettingsPage() {
                   type="radio"
                 />
                 <label htmlFor="separate-frames-as-grid3">
-                  Grid - frames distributed evenly over 3 columns
+                  Grid <span className="small-info">- frames distributed evenly over 3 columns</span>
                 </label>
               </li>
             </ul>
