@@ -1,5 +1,5 @@
 import { useWorkflowContext } from '../context.js';
-import PlusIcon from '../icons/PlusIcon.jsx'
+import LoadingIcon from '../icons/LoadingIcon.jsx'
 
 export default function WorkflowVersion({}) {
   const { workflow, status } = useWorkflowContext();
@@ -8,8 +8,8 @@ export default function WorkflowVersion({}) {
 
   return (
     <div className="workflow-version">
-      V. {workflow.version} {status}
-      {isBusy && <PlusIcon />}
+      V. {workflow.version}
+      {isBusy && <LoadingIcon alt="Loading" />}
     </div>
   );
 
