@@ -118,8 +118,8 @@ describe('<MobileSectionContainer />', function () {
       testValidationProp('taskInstructionNotTooLong', validationFixtures.taskInstructionTooLong, false);
     });
 
-    it('should check whether the task uses feedback', function () {
-      testValidationProp('taskFeedbackDisabled');
+    it('should check whether the task uses feedback if the task type is drawing', function () {
+      testValidationProp('taskFeedbackDisabled', validationFixtures.workflowHasValidDrawingTask, true);
       testValidationProp('taskFeedbackDisabled', validationFixtures.taskFeedbackEnabled, false);
     });
 
@@ -187,7 +187,6 @@ describe('<MobileSectionContainer />', function () {
     it('should equal false if any of the validations aren\'t met', function () {
       [
         fixtures.validationFixtures.taskQuestionTooLong,
-        fixtures.validationFixtures.taskFeedbackEnabled,
         fixtures.validationFixtures.workflowHasMultipleTasks,
         fixtures.validationFixtures.workflowTooManyShortcuts,
         fixtures.validationFixtures.workflowUsesGroupedSubjectSelection
