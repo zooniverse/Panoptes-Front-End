@@ -97,6 +97,13 @@ const validationFixtures = {
   },
   taskFeedbackEnabled: {
     task: {
+      type: 'drawing',
+      tools: [
+        {
+          type: 'rectangle',
+          details: []
+        }
+      ],
       feedback: {
         enabled: true
       }
