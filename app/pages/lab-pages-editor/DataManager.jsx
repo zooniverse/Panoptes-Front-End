@@ -110,10 +110,11 @@ function DataManager({
 
     return {
       project: apiData.project,
+      status: apiData.status,
       workflow: apiData.workflow,
       update
     };
-  }, [apiData.project, apiData.workflow, updateCounter]);
+  }, [apiData.project, apiData.workflow, apiData.status, updateCounter]);
 
   if (!workflowId) return (<div>ERROR: no Workflow ID specified</div>);
   // if (!workflow) return null
