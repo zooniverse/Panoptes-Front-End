@@ -218,20 +218,31 @@ $fontWeightBoldPlus = 700
     margin-top: $sizeS
 
     // Workflow Title
-    label[for=display_name]
-      display: block
-      font-size: $fontSizeL
-      font-weight: $fontWeightBoldPlus
+    .workflow-title
       grid-column: 1 / span 2
       grid-row: 1
-      text-transform: uppercase
 
-      input
+      > div
+        position: relative
+
+      label[for=display_name]
+        display: block
+        font-size: $fontSizeL
+        font-weight: $fontWeightBoldPlus
+        margin-bottom: $sizeXS
+        text-transform: uppercase
+
+      input[name=display_name]
         border-radius: $sizeXS
         display: block
         font-size: $fontSizeL
-        margin-top: $sizeXS
         width: 100%
+      
+      .workflow-id
+        color: $grey2
+        background: $white
+        position: absolute
+        right: $sizeS
     
     // Group of Config Options/Controls
     fieldset
@@ -294,10 +305,6 @@ $fontWeightBoldPlus = 700
         font-weight: $fontWeightBoldPlus
         text-transform: uppercase
       
-      .workflow-id
-        color: $grey4
-        font-size: $fontSizeS
-
       .status-active, .status-inactive
         font-size: $fontSizeS
         margin-left: $sizeS

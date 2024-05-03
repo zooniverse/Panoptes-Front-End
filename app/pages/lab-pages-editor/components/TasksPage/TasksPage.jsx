@@ -214,7 +214,6 @@ export default function TasksPage() {
     <div className="tasks-page">
       <div className="workflow-title flex-row">
         <h2 className="flex-item">{workflow.display_name}</h2>
-        <span className="workflow-id">{`#${workflow.id}`}</span>
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
       </div>
       <section aria-labelledby="workflow-tasks-heading">

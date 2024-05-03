@@ -47,15 +47,23 @@ export default function WorkflowSettingsPage() {
       className="workflow-settings-page"
       onSubmit={onSubmit}
     >
-      <label htmlFor="display_name">
-        Workflow Name
-        <input
-          type="text"
-          name="display_name"
-          defaultValue={workflow?.display_name || ''}
-          onBlur={doUpdate}
-        />
-      </label>
+      <div className="workflow-title">
+        <label htmlFor="display_name">
+          Workflow Name
+        </label>
+        <div className="flex-row">
+          <div className="flex-item flex-row">
+            <input
+              id="display_name"
+              type="text"
+              name="display_name"
+              defaultValue={workflow?.display_name || ''}
+              onBlur={doUpdate}
+            />
+            <span className="workflow-id">#{workflow.id}</span>
+          </div>
+        </div>
+      </div>
 
       <div className="column-group col-1">
         <fieldset>
