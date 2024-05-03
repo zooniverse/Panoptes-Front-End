@@ -161,11 +161,18 @@ $fontWeightBoldPlus = 700
   .justify-around
     justify-content: space-around
   
+  .position-relative
+    position: relative
+  
   .spacing-bottom-XS
     margin-bottom: $sizeXS
   
   .spacing-bottom-M
     margin-bottom: $sizeM
+  
+  .workflow-version
+    background: red
+    color: $teal
 
   // Component: Workflow Header
   // ---------------------------------------------------------------------------
@@ -221,9 +228,6 @@ $fontWeightBoldPlus = 700
     .workflow-title
       grid-column: 1 / span 2
       grid-row: 1
-
-      > div
-        position: relative
 
       label[for=display_name]
         display: block

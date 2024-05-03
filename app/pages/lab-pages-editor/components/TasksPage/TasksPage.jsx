@@ -13,6 +13,7 @@ import ExperimentalPanel from './ExperimentalPanel.jsx';
 import EditStepDialog from './components/EditStepDialog';
 import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem';
+import WorkflowVersion from '../WorkflowVersion.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
@@ -217,7 +218,10 @@ export default function TasksPage() {
         {(isActive) ? <span className="status-active">Active</span> : <span className="status-inactive">Inactive</span>}
       </div>
       <section aria-labelledby="workflow-tasks-heading">
-        <h3 id="workflow-tasks-heading">Tasks</h3>
+        <div className="flex-row">
+          <h3 id="workflow-tasks-heading" className="flex-item">Tasks</h3>
+          <WorkflowVersion />
+        </div>
         <div className="flex-row">
           <button
             className="flex-item big primary decoration-plus"

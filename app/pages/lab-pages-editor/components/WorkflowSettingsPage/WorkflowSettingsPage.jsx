@@ -1,6 +1,7 @@
 import { useWorkflowContext } from '../../context.js';
 import AssociatedSubjectSets from './components/AssociatedSubjectSets.jsx';
 import AssociatedTutorial from './components/AssociatedTutorial.jsx';
+import WorkflowVersion from '../WorkflowVersion.jsx';
 
 // Use ?showRemovedOptions=true to show options that are technically valid in
 // the API, but removed from the editor.
@@ -52,7 +53,7 @@ export default function WorkflowSettingsPage() {
           Workflow Name
         </label>
         <div className="flex-row">
-          <div className="flex-item flex-row">
+          <div className="flex-item flex-row position-relative">
             <input
               id="display_name"
               type="text"
@@ -62,6 +63,7 @@ export default function WorkflowSettingsPage() {
             />
             <span className="workflow-id">#{workflow.id}</span>
           </div>
+          <WorkflowVersion />
         </div>
       </div>
 
