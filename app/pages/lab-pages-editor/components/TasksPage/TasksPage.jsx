@@ -14,6 +14,7 @@ import EditStepDialog from './components/EditStepDialog';
 import NewTaskDialog from './components/NewTaskDialog.jsx';
 import StepItem from './components/StepItem';
 import WorkflowVersion from '../WorkflowVersion.jsx';
+import WrenchIcon from '../../icons/WrenchIcon.jsx';
 
 export default function TasksPage() {
   const { workflow, update } = useWorkflowContext();
@@ -249,6 +250,12 @@ export default function TasksPage() {
             ))}
           </select>
         </div>
+        {!(workflow.steps?.length > 0) && (
+          <div className="no-tasks-notice">
+            <WrenchIcon />
+            <p>Start by adding tasks to build your Task Funnel here.</p>
+          </div>
+        )}
         <ul className="steps-list" aria-label="Pages/Steps">
           {workflow.steps?.map((step, index) => (
             <StepItem
