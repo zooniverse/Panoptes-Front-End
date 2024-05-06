@@ -100,12 +100,12 @@ export default function WorkflowSettingsPage() {
               onChange={doUpdate}
             >
               <option value="classification_count">Classification count</option>
+              {/* Reason for removal (May 2024): standardisation. PFE/FEM Lab doesn't allow "never retire" option, nor setting the retirement count. */}
               {(showRemovedOptions || workflow?.retirement?.criteria === 'never_retire') &&
                 <option value="never_retire">Never retire</option>
               }
             </select>
-            {/* Reason for removal (May 2024): standardisation. PFE/FEM Lab doesn't allow "never retire" option, nor setting the retirement count. */}
-            {showRemovedOptions && (workflow?.retirement?.criteria === 'classification_count') && (
+            {(workflow?.retirement?.criteria === 'classification_count') && (
               <input
                 aria-label="Retirement count"
                 className="small-width"
