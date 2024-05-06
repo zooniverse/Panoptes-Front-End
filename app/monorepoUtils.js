@@ -53,7 +53,8 @@ export const SLUGS = [
   'victorav/the-koster-seafloor-observatory',
   'victorav/spyfish-aotearoa',
   'bcosentino/squirrelmapper',
-  'embeller/offal-wildlife-watching'
+  'embeller/offal-wildlife-watching',
+  'safmcadmin/fishstory'
 ];
 
 export function usesMonorepo(slug) {
