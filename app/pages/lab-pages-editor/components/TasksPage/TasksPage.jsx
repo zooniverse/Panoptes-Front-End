@@ -25,6 +25,12 @@ export default function TasksPage() {
   const firstStepKey = workflow?.steps?.[0]?.[0] || '';
   const isActive = true; // TODO
 
+  // A linear workflow means every step (except branching steps) will move into
+  // the next step in the workflow.steps array. e.g. step0.next = step1 
+  // A manual (i.e. non-linear) workflow asks the user to explicity spell out
+  // the next step of each step. 
+  const isLinearWorkflow = true;
+
   /*
   Adds a new Task of a specified type (with default settings) to a Step.
   If no Step is specified, a new Step is created.
@@ -265,6 +271,7 @@ export default function TasksPage() {
               allTasks={workflow.tasks}
               deleteStep={deleteStep}
               moveStep={moveStep}
+              isLinearWorkflow={isLinearWorkflow}
               openEditStepDialog={openEditStepDialog}
               setActiveDragItem={setActiveDragItem}
               step={step}
